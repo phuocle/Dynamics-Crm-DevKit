@@ -1,4 +1,5 @@
 ﻿using DynamicsCrm.DevKit.Shared.Models;
+using Microsoft.VisualStudio.TextManager.Interop;
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Tooling.Connector;
 using System;
@@ -234,14 +235,14 @@ namespace DynamicsCrm.DevKit.Shared
                     {
                         tmp += $"{TAB}{TAB}/// <summary>{NEW_LINE}";
                         tmp += $"{TAB}{TAB}/// <para>Display Name = {value.Label?.TrimEnd("\r\n".ToCharArray())}</para>{NEW_LINE}";
-                        tmp += $"{TAB}{TAB}/// <para>Value = {value.Value}</para>{NEW_LINE}";
+                        tmp += $"{TAB}{TAB}/// <para>Value = {int.Parse(value.Value).ToString("#,###")}</para>{NEW_LINE}";
                         if (value.Name3.Length > 0)
                         {
                             var statusCodeComment = $"StateCode.{stateCodeOptions.Where(x => x.Value == value.Name3).FirstOrDefault()?.Name}";
                             tmp += $"{TAB}{TAB}/// <para>{statusCodeComment}</para>{NEW_LINE}";
                         }
                         tmp += $"{TAB}{TAB}/// </summary>{NEW_LINE}";
-                        tmp += $"{TAB}{TAB}{value.Name} = {value.Value},{NEW_LINE}";
+                        tmp += $"{TAB}{TAB}{value.Name} = {CovertToEasyRead(value.Value)},{NEW_LINE}";
                     }
                     tmp = tmp.TrimEnd($",{NEW_LINE}".ToCharArray());
                     tmp += $"{NEW_LINE}";
@@ -251,6 +252,16 @@ namespace DynamicsCrm.DevKit.Shared
             code = code.TrimEnd($",{NEW_LINE}".ToCharArray());
             code += $"{NEW_LINE}";
             return code;
+        }
+
+        private static string CovertToEasyRead(string value)
+        {
+            if (value.Length <= 3) return value;
+            var part = value.Right(3);
+
+
+
+            return value;
         }
 
         private static List<NameValue> GetStateCodeOptions(AttributeMetadata stateCodeAttribute)
@@ -661,6 +672,10 @@ namespace DynamicsCrm.DevKit.Shared
             }
             else if (attribute is MultiSelectPicklistAttributeMetadata)
                 para2 += "MultiSelectPicklist";
+            else if (attribute is PicklistAttributeMetadata)
+            {
+                para2 += $"OptionSet <see cref=\"{RootNamespace}.{Utility.SafeDeclareName(EntityMetadata.SchemaName, GeneratorType.csharp)}OptionSets.{Utility.SafeIdentifier(attribute.SchemaName)}\"/>";
+            }
             else if (attribute is LookupAttributeMetadata lookup)
             {
                 para2 += $"{AttributeTypeCode.Lookup} to ";// {string.Join(", ", lookup.Targets)}";
@@ -681,18 +696,19 @@ namespace DynamicsCrm.DevKit.Shared
             if (attribute.GetMinValue().HasValue) para2 += " - MinValue: " + attribute.GetMinValue().Value.ToString("#,#", CultureInfo.InvariantCulture);
             if (attribute.GetMaxValue().HasValue) para2 += " - MaxValue: " + attribute.GetMaxValue().Value.ToString("#,#", CultureInfo.InvariantCulture);
             var xml = $"{TAB}{TAB}/// <summary>{NEW_LINE}";
+            para3 = attribute?.DisplayName?.UserLocalizedLabel?.Label.TrimNewLine();
+            if (para3 != null && para3.Length > 0)
+            {
+                xml += $"{TAB}{TAB}/// <para>Display Name: {para3}</para>{NEW_LINE}";
+            }
+
             var description = attribute?.Description?.UserLocalizedLabel?.Label;
             if (!string.IsNullOrWhiteSpace(description))
             {
                 para1 = SecurityElement.Escape(description.TrimNewLine());
-                xml += $"{TAB}{TAB}/// <para>{para1}</para>{NEW_LINE}";
+                xml += $"{TAB}{TAB}/// <para>Description: {para1}</para>{NEW_LINE}";
             }
             xml += $"{TAB}{TAB}/// <para>{para2}</para>{NEW_LINE}";
-            para3 = attribute?.DisplayName?.UserLocalizedLabel?.Label.TrimNewLine();
-            if (para3 != null && para3.Length > 0)
-            {
-                xml += $"{TAB}{TAB}/// <para>{para3}</para>{NEW_LINE}";
-            }
             //if (attribute.IsPrimaryName ?? false) para4 = $"Primary Name: {attribute.LogicalName}";
             if (para4.Length > 0)
             {

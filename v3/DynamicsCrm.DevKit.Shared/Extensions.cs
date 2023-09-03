@@ -149,5 +149,23 @@ namespace DynamicsCrm.DevKit.Shared
                 if (processes.Count > 0) XrmHelper.EntitiesProcessForm.AddRange(processes);
             }
         }
+
+        public static string Left(this string input, int count)
+        {
+            if (input == null) return null;
+            return input.Substring(0, Math.Min(input.Length, count));
+        }
+
+        public static string Right(this string input, int count)
+        {
+            if (input == null) return null;
+            return input.Substring(Math.Max(input.Length - count, 0), Math.Min(count, input.Length));
+        }
+
+        public static string Mid(this string input, int start, int count)
+        {
+            if (input == null) return null;
+            return input.Substring(Math.Min(start, input.Length), Math.Min(count, Math.Max(input.Length - start, 0)));
+        }
     }
 }
