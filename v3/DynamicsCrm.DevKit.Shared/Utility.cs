@@ -19,6 +19,7 @@ namespace DynamicsCrm.DevKit.Shared
         {
             return Const.WEB_RESOURCE_EXTENSIONS.Contains(extension);
         }
+
         public static void ForceWriteAllText(string file, string content)
         {
             if (!File.Exists(file))
@@ -37,6 +38,7 @@ namespace DynamicsCrm.DevKit.Shared
                 File.WriteAllText(file, content, System.Text.Encoding.UTF8);
             }
         }
+
         public static bool IsTheSame(string value1, string value2)
         {
             if (value1 == null && value2 == null) return true;
@@ -64,6 +66,26 @@ namespace DynamicsCrm.DevKit.Shared
             try
             {
                 return File.ReadAllText(file);
+            }
+            catch
+            {
+                return string.Empty;
+            }
+        }
+
+        public static string ReadAllTextFromLine6(string file)
+        {
+            try
+            {
+                var lines = File.ReadAllLines(file).ToList();
+                lines.RemoveAt(0);
+                lines.RemoveAt(0);
+                lines.RemoveAt(0);
+                lines.RemoveAt(0);
+                lines.RemoveAt(0);
+                lines.RemoveAt(0);
+                lines.RemoveAt(0);
+                return string.Join("\r\n", lines);
             }
             catch
             {
