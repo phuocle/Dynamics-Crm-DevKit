@@ -2,11 +2,13 @@
 using Microsoft.VisualStudio.TextManager.Interop;
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Tooling.Connector;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Security;
+using System.Workflow.Activities;
 
 namespace DynamicsCrm.DevKit.Shared
 {
@@ -33,12 +35,12 @@ namespace DynamicsCrm.DevKit.Shared
             code += $"using System;{NEW_LINE}";
             code += $"using System.Diagnostics;{NEW_LINE}";
             code += $"using System.Linq;{NEW_LINE}";
-            code += $"{NEW_LINE}";
+            //code += $"{NEW_LINE}";
             code += $"namespace {rootNameSpace}.{@class}OptionSets{NEW_LINE}";
             code += $"{{{NEW_LINE}";
             code += $"{GeneratorEnum()}";
             code += $"}}{NEW_LINE}";
-            code += $"{NEW_LINE}";
+            //code += $"{NEW_LINE}";
             code += $"namespace {rootNameSpace}{NEW_LINE}";
             code += $"{{{NEW_LINE}";
             code += $"{TAB}[DebuggerNonUserCode()]{NEW_LINE}";
@@ -48,51 +50,51 @@ namespace DynamicsCrm.DevKit.Shared
             code += $"{TAB}{TAB}{{{NEW_LINE}";
             code += $"{GeneratorClassFields()}";
             code += $"{TAB}{TAB}}}{NEW_LINE}";
-            code += $"{NEW_LINE}";
+            //code += $"{NEW_LINE}";
             code += $"{TAB}{TAB}public const string EntityLogicalName = \"{EntityMetadata.LogicalName}\";{NEW_LINE}";
-            code += $"{NEW_LINE}";
+            //code += $"{NEW_LINE}";
             code += $"{TAB}{TAB}[System.Obsolete(\"This value is different for each instance. Please don't use it.\")]{NEW_LINE}";
             code += $"{TAB}{TAB}public const int EntityTypeCode = {EntityMetadata.ObjectTypeCode};{NEW_LINE}";
-            code += $"{NEW_LINE}";
+            //code += $"{NEW_LINE}";
             code += $"{TAB}{TAB}public const string EntityCollectionSchemaName = \"{EntityMetadata.CollectionSchemaName}\";{NEW_LINE}";
-            code += $"{NEW_LINE}";
+            //code += $"{NEW_LINE}";
             code += $"{TAB}{TAB}public const string EntityDisplayCollectionName = \"{EntityMetadata.DisplayCollectionName?.UserLocalizedLabel?.Label}\";{NEW_LINE}";
-            code += $"{NEW_LINE}";
+            //code += $"{NEW_LINE}";
             code += $"{TAB}{TAB}public const string DisplayName = \"{EntityMetadata.DisplayName?.UserLocalizedLabel?.Label}\";{NEW_LINE}";
-            code += $"{NEW_LINE}";
+            //code += $"{NEW_LINE}";
             code += $"{TAB}{TAB}public const string EntitySetName = \"{EntityMetadata.EntitySetName}\";{NEW_LINE}";
-            code += $"{NEW_LINE}";
+            //code += $"{NEW_LINE}";
             code += $"{TAB}{TAB}public const string EntityLogicalCollectionName = \"{EntityMetadata.LogicalCollectionName}\";{NEW_LINE}";
-            code += $"{NEW_LINE}";
+            //code += $"{NEW_LINE}";
             code += $"{TAB}{TAB}public const string EntityPrimaryIdAttribute = \"{EntityMetadata.PrimaryIdAttribute}\";{NEW_LINE}";
-            code += $"{NEW_LINE}";
+            //code += $"{NEW_LINE}";
             code += $"{TAB}{TAB}public const string EntityPrimaryImageAttribute = \"{EntityMetadata.PrimaryImageAttribute}\";{NEW_LINE}";
-            code += $"{NEW_LINE}";
+            //code += $"{NEW_LINE}";
             code += $"{TAB}{TAB}public const string EntityPrimaryNameAttribute = \"{EntityMetadata.PrimaryNameAttribute}\";{NEW_LINE}";
-            code += $"{NEW_LINE}";
+            //code += $"{NEW_LINE}";
             code += $"{TAB}{TAB}public const string EntitySchemaName = \"{EntityMetadata.SchemaName}\";{NEW_LINE}";
-            code += $"{NEW_LINE}";
+            //code += $"{NEW_LINE}";
             code += $"{TAB}{TAB}[DebuggerNonUserCode()]{NEW_LINE}";
             code += $"{TAB}{TAB}public {@class}(){NEW_LINE}";
             code += $"{TAB}{TAB}{{{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}Entity = new Entity(EntityLogicalName);{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}PreEntity = CloneThisEntity(Entity);{NEW_LINE}";
             code += $"{TAB}{TAB}}}{NEW_LINE}";
-            code += $"{NEW_LINE}";
+            //code += $"{NEW_LINE}";
             code += $"{TAB}{TAB}[DebuggerNonUserCode()]{NEW_LINE}";
             code += $"{TAB}{TAB}public {@class}(Guid {@class}Id){NEW_LINE}";
             code += $"{TAB}{TAB}{{{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}Entity = new Entity(EntityLogicalName, {@class}Id);{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}PreEntity = CloneThisEntity(Entity);{NEW_LINE}";
             code += $"{TAB}{TAB}}}{NEW_LINE}";
-            code += $"{NEW_LINE}";
+            //code += $"{NEW_LINE}";
             code += $"{TAB}{TAB}[DebuggerNonUserCode()]{NEW_LINE}";
             code += $"{TAB}{TAB}public {@class}(string keyName, object keyValue){NEW_LINE}";
             code += $"{TAB}{TAB}{{{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}Entity = new Entity(EntityLogicalName, keyName, keyValue);{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}PreEntity = CloneThisEntity(Entity);{NEW_LINE}";
             code += $"{TAB}{TAB}}}{NEW_LINE}";
-            code += $"{NEW_LINE}";
+            //code += $"{NEW_LINE}";
             code += $"{TAB}{TAB}/// <summary>{NEW_LINE}";
             code += $"{TAB}{TAB}/// Instance new late bound class <see cref=\"{@class}\"/> with <paramref name=\"targetEntity\"/>.{NEW_LINE}";
             code += $"{TAB}{TAB}/// </summary>{NEW_LINE}";
@@ -104,7 +106,7 @@ namespace DynamicsCrm.DevKit.Shared
             code += $"{TAB}{TAB}{TAB}Entity = targetEntity;{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}PreEntity = CloneThisEntity(Entity);{NEW_LINE}";
             code += $"{TAB}{TAB}}}{NEW_LINE}";
-            code += $"{NEW_LINE}";
+            //code += $"{NEW_LINE}";
             code += $"{TAB}{TAB}/// <summary>{NEW_LINE}";
             code += $"{TAB}{TAB}/// Instance new late bound class <see cref=\"{@class}\"/> with <paramref name=\"preEntity\"/>. Then copy all attributes from <paramref name=\"targetEntity\"/> to <paramref name=\"preEntity\"/>. Existing attribute will be overwritten.{NEW_LINE}";
             code += $"{TAB}{TAB}/// </summary>{NEW_LINE}";
@@ -123,7 +125,7 @@ namespace DynamicsCrm.DevKit.Shared
             code += $"{TAB}{TAB}{TAB}}}{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}PreEntity = CloneThisEntity(Entity);{NEW_LINE}";
             code += $"{TAB}{TAB}}}{NEW_LINE}";
-            code += $"{NEW_LINE}";
+            //code += $"{NEW_LINE}";
             code += $"{TAB}{TAB}/// <summary>{NEW_LINE}";
             code += $"{TAB}{TAB}/// Instance new late bound class <see cref=\"{@class}\"/> with <paramref name=\"preEntity\"/>. Then copy all attributes from <paramref name=\"targetEntity\"/> to <paramref name=\"preEntity\"/>. After that copy all attributes from <paramref name=\"postEntity\"/> to the last result. Existing attribute will be overwritten.{NEW_LINE}";
             code += $"{TAB}{TAB}/// </summary>{NEW_LINE}";
@@ -149,16 +151,16 @@ namespace DynamicsCrm.DevKit.Shared
             code += $"{TAB}{TAB}{TAB}}}{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}PreEntity = CloneThisEntity(Entity);{NEW_LINE}";
             code += $"{TAB}{TAB}}}{NEW_LINE}";
-            code += $"{NEW_LINE}";
+            //code += $"{NEW_LINE}";
             code += $"{TAB}{TAB}[DebuggerNonUserCode()]{NEW_LINE}";
             code += $"{TAB}{TAB}public {@class}(KeyAttributeCollection keys){NEW_LINE}";
             code += $"{TAB}{TAB}{{{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}Entity = new Entity(EntityLogicalName, keys);{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}PreEntity = CloneThisEntity(Entity);{NEW_LINE}";
             code += $"{TAB}{TAB}}}{NEW_LINE}";
-            code += $"{NEW_LINE}";
+            //code += $"{NEW_LINE}";
             code += $"{GeneratorCode()}";
-            code += $"{NEW_LINE}";
+            //code += $"{NEW_LINE}";
             code += $"{GeneratorImageCode()}";
             code = code.TrimEnd($"{NEW_LINE}".ToCharArray());
             code += $"{NEW_LINE}";
@@ -172,6 +174,7 @@ namespace DynamicsCrm.DevKit.Shared
             var code = string.Empty;
             code += $"{TAB}{TAB}/// <summary>{NEW_LINE}";
             code += $"{TAB}{TAB}/// <para>byte[]</para>{NEW_LINE}";
+            code += $"{TAB}{TAB}/// <para>Image</para>{NEW_LINE}";
             code += $"{TAB}{TAB}/// </summary>{NEW_LINE}";
             code += $"{TAB}{TAB}[DebuggerNonUserCode()]{NEW_LINE}";
             code += $"{TAB}{TAB}public byte[] {schemaName}{NEW_LINE}";
@@ -179,16 +182,17 @@ namespace DynamicsCrm.DevKit.Shared
             code += $"{TAB}{TAB}{TAB}get {{ return Entity.GetAttributeValue<byte[]>(\"{logicalName}\"); }}{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}set {{ Entity.Attributes[\"{logicalName}\"] = value; }}{NEW_LINE}";
             code += $"{TAB}{TAB}}}{NEW_LINE}";
-            code += $"{NEW_LINE}";
+            //code += $"{NEW_LINE}";
             code += $"{TAB}{TAB}/// <summary>{NEW_LINE}";
             code += $"{TAB}{TAB}/// <para>ReadOnly - String</para>{NEW_LINE}";
+            code += $"{TAB}{TAB}/// <para>Image</para>{NEW_LINE}";
             code += $"{TAB}{TAB}/// </summary>{NEW_LINE}";
             code += $"{TAB}{TAB}[DebuggerNonUserCode()]{NEW_LINE}";
             code += $"{TAB}{TAB}public string {schemaName}Url{NEW_LINE}";
             code += $"{TAB}{TAB}{{{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}get {{ return Entity.GetAttributeValue<string>(\"{logicalName}_url\"); }}{NEW_LINE}";
             code += $"{TAB}{TAB}}}{NEW_LINE}";
-            code += $"{NEW_LINE}";
+            //code += $"{NEW_LINE}";
             return code;
         }
         private static string GeneratorImageCode()
@@ -208,7 +212,7 @@ namespace DynamicsCrm.DevKit.Shared
                 }
             }
             code = code.TrimEnd($",{NEW_LINE}".ToCharArray());
-            code += $"{NEW_LINE}";
+            //code += $"{NEW_LINE}";
             return code;
         }
 
@@ -218,7 +222,7 @@ namespace DynamicsCrm.DevKit.Shared
             @enum += $"{TAB}public enum [[Enum]]{NEW_LINE}";
             @enum += $"{TAB}{{{NEW_LINE}";
             @enum += $"[[Declare]]";
-            @enum += $"{TAB}}}{NEW_LINE}{NEW_LINE}";
+            @enum += $"{TAB}}}{NEW_LINE}";
             var code = string.Empty;
             var attributes = EntityMetadata.Attributes.OrderBy(x => x.SchemaName);
             var stateCodeAttribute = attributes.Where(x => x.LogicalName == "statecode").FirstOrDefault();
@@ -231,18 +235,20 @@ namespace DynamicsCrm.DevKit.Shared
                     if (attribute.SchemaName.EndsWith("IdType")) continue;
                     var tmp = string.Empty;
                     var values = attribute.OptionSetValues();
+                    if (values.Count == 0) continue;
                     foreach (var value in values)
                     {
                         tmp += $"{TAB}{TAB}/// <summary>{NEW_LINE}";
                         tmp += $"{TAB}{TAB}/// <para>Display Name = {value.Label?.TrimEnd("\r\n".ToCharArray())}</para>{NEW_LINE}";
-                        tmp += $"{TAB}{TAB}/// <para>Value = {int.Parse(value.Value).ToString("#,###")}</para>{NEW_LINE}";
+                        tmp += $"{TAB}{TAB}/// <para>Value = {int.Parse(value.Value).ToString("#,##0")}</para>{NEW_LINE}";
                         if (value.Name3.Length > 0)
                         {
                             var statusCodeComment = $"StateCode.{stateCodeOptions.Where(x => x.Value == value.Name3).FirstOrDefault()?.Name}";
                             tmp += $"{TAB}{TAB}/// <para>{statusCodeComment}</para>{NEW_LINE}";
                         }
                         tmp += $"{TAB}{TAB}/// </summary>{NEW_LINE}";
-                        tmp += $"{TAB}{TAB}{value.Name} = {CovertToEasyRead(value.Value)},{NEW_LINE}";
+                        tmp += $"{TAB}{TAB}{value.Name} = {int.Parse(value.Value).ToString("#,##0").Replace(",", "_")},{NEW_LINE}";
+                        //tmp += $"{TAB}{TAB}{value.Name} = {value.Value},{NEW_LINE}";
                     }
                     tmp = tmp.TrimEnd($",{NEW_LINE}".ToCharArray());
                     tmp += $"{NEW_LINE}";
@@ -254,15 +260,15 @@ namespace DynamicsCrm.DevKit.Shared
             return code;
         }
 
-        private static string CovertToEasyRead(string value)
-        {
-            if (value.Length <= 3) return value;
-            var part = value.Right(3);
+        //private static string CovertToEasyRead(string value)
+        //{
+        //    if (value.Length <= 3) return value;
+        //    var part = value.Right(3);
 
 
 
-            return value;
-        }
+        //    return value;
+        //}
 
         private static List<NameValue> GetStateCodeOptions(AttributeMetadata stateCodeAttribute)
         {
@@ -348,7 +354,7 @@ namespace DynamicsCrm.DevKit.Shared
                 if ((attribute.IsValidForCreate ?? false) || (attribute.IsValidForUpdate ?? false))
                     code += $"{GetSet(attribute)}";
                 code += $"{TAB}{TAB}}}{NEW_LINE}";
-                code += $"{NEW_LINE}";
+                //code += $"{NEW_LINE}";
             }
             code = code.TrimEnd($",{NEW_LINE}".ToCharArray());
             code += $"{NEW_LINE}";
@@ -633,87 +639,123 @@ namespace DynamicsCrm.DevKit.Shared
 
         private static string GetXml(AttributeMetadata attribute)
         {
-            var para1 = string.Empty;
-            var para2 = string.Empty;
-            var para3 = string.Empty;
-            var para4 = string.Empty;
+            var line1 = string.Empty;
+            var line2 = string.Empty;
+            var line3 = string.Empty;
+            var line4 = string.Empty;
+            //var para4 = string.Empty;
             var readOnly = string.Empty;
             if (!(attribute.IsValidForCreate ?? false) && !(attribute.IsValidForUpdate ?? false))
                 readOnly = "ReadOnly";
-            if (readOnly.Length > 0) para2 += readOnly + " - ";
+            if (readOnly.Length > 0) line3 += readOnly + " - ";
             if (attribute.IsPrimaryId ?? false)
                 if ($"{EntityMetadata.LogicalName}id" == attribute.LogicalName)
-                    para2 += "Primary Key - ";
-
+                    line3 += "Primary Key - ";
             if (attribute.IsPrimaryName ?? false)
-                    para2 += "Primary Name - ";
-
-            if (attribute.RequiredLevel?.Value == AttributeRequiredLevel.ApplicationRequired) para2 += "Required - ";
+                    line3 += "Primary Name - ";
+            if (attribute.RequiredLevel?.Value == AttributeRequiredLevel.ApplicationRequired) line3 += "Required - ";
             if (attribute is DateTimeAttributeMetadata datetime)
             {
-                if (datetime.DateTimeBehavior == null)
-                    para2 += "DateTime";
-                else if (datetime.DateTimeBehavior == DateTimeBehavior.DateOnly)
-                    para2 += "DateTimeBehavior: DateOnly - DateTimeFormat: DateOnly";
+                line3 += "Date and Time - ";
+                if (datetime.DateTimeBehavior == DateTimeBehavior.DateOnly)
+                    line3 += "DateTimeBehavior: DateOnly - DateTimeFormat: DateOnly";
                 else if (datetime.DateTimeBehavior == DateTimeBehavior.UserLocal)
                 {
                     if (datetime.Format == DateTimeFormat.DateOnly)
-                        para2 += "DateTimeBehavior: UserLocal - DateTimeFormat: DateOnly";
+                        line3 += "DateTimeBehavior: UserLocal - DateTimeFormat: DateOnly";
                     else if (datetime.Format == DateTimeFormat.DateAndTime)
-                        para2 += "DateTimeBehavior: UserLocal - DateTimeFormat: DateAndTime";
+                        line3 += "DateTimeBehavior: UserLocal - DateTimeFormat: DateAndTime";
                 }
                 else if (datetime.DateTimeBehavior == DateTimeBehavior.TimeZoneIndependent)
                 {
                     if (datetime.Format == DateTimeFormat.DateOnly)
-                        para2 += "DateTimeBehavior: TimeZoneIndependent - DateTimeFormat: DateOnly";
+                        line3 += "DateTimeBehavior: TimeZoneIndependent - DateTimeFormat: DateOnly";
                     else if (datetime.Format == DateTimeFormat.DateAndTime)
-                        para2 += "DateTimeBehavior: TimeZoneIndependent - DateTimeFormat: DateAndTime";
+                        line3 += "DateTimeBehavior: TimeZoneIndependent - DateTimeFormat: DateAndTime";
                 }
             }
             else if (attribute is MultiSelectPicklistAttributeMetadata)
-                para2 += "MultiSelectPicklist";
+            {
+                line3 += $"MultiSelect OptionSet <see cref=\"{RootNamespace}.{Utility.SafeDeclareName(EntityMetadata.SchemaName, GeneratorType.csharp)}OptionSets.{Utility.SafeIdentifier(attribute.SchemaName)}\"/>";
+            }
             else if (attribute is PicklistAttributeMetadata)
             {
-                para2 += $"OptionSet <see cref=\"{RootNamespace}.{Utility.SafeDeclareName(EntityMetadata.SchemaName, GeneratorType.csharp)}OptionSets.{Utility.SafeIdentifier(attribute.SchemaName)}\"/>";
+                line3 += $"OptionSet <see cref=\"{RootNamespace}.{Utility.SafeDeclareName(EntityMetadata.SchemaName, GeneratorType.csharp)}OptionSets.{Utility.SafeIdentifier(attribute.SchemaName)}\"/>";
+            }
+            else if (attribute is StateAttributeMetadata)
+            {
+                line3 += $"Status <see cref=\"{RootNamespace}.{Utility.SafeDeclareName(EntityMetadata.SchemaName, GeneratorType.csharp)}OptionSets.{Utility.SafeIdentifier(attribute.SchemaName)}\"/>";
+            }
+            else if (attribute is StatusAttributeMetadata)
+            {
+                line3 += $"Status Reason <see cref=\"{RootNamespace}.{Utility.SafeDeclareName(EntityMetadata.SchemaName, GeneratorType.csharp)}OptionSets.{Utility.SafeIdentifier(attribute.SchemaName)}\"/>";
             }
             else if (attribute is LookupAttributeMetadata lookup)
             {
-                para2 += $"{AttributeTypeCode.Lookup} to ";// {string.Join(", ", lookup.Targets)}";
+                line3 += $"Lookup to: ";
                 foreach (var target in lookup.Targets)
                 {
-                    para2 += $"<see cref=\"{target}\"/>, ";
+                    line3 += $"<see cref=\"{target}\"/>, ";
                 }
-                para2 = para2.TrimEnd(", ".ToCharArray());
+                line3 = line3.TrimEnd(", ".ToCharArray());
             }
             else if (attribute is BooleanAttributeMetadata boolean)
             {
-                para2 += $"{attribute.AttributeType.ToString()}";
-                para4 = $"[{boolean?.OptionSet?.TrueOption?.Label?.UserLocalizedLabel?.Label}]=true - [{boolean?.OptionSet?.FalseOption?.Label?.UserLocalizedLabel?.Label}]=false";
+                var temp = $"[{boolean?.OptionSet?.TrueOption?.Label?.UserLocalizedLabel?.Label}]=true - [{boolean?.OptionSet?.FalseOption?.Label?.UserLocalizedLabel?.Label}]=false";
+                line3 += $"Two Option - " + temp;
+            }
+            else if (attribute is DoubleAttributeMetadata)
+                line3 += "Decimal Number";
+            else if (attribute is DecimalAttributeMetadata)
+                line3 += "Floating Point Number";
+            else if (attribute is IntegerAttributeMetadata)
+                line3 += "Whole Number";
+            else if (attribute is MoneyAttributeMetadata)
+            {
+                line3 += "Currency";
+            }
+            else if (attribute is MemoAttributeMetadata)
+            {
+                line3 += "Multiple Lines of Text";
+            }
+            else if (attribute is StringAttributeMetadata)
+            {
+                line3 += "Single Line of Text";
+            }
+            else if (attribute is ImageAttributeMetadata)
+            {
+                line3 += "Image";
             }
             else
-                para2 += attribute.AttributeType.ToString();
-            if (attribute.GetMaxLength().HasValue) para2 += " - MaxLength: " + attribute.GetMaxLength().Value.ToString("#,#", CultureInfo.InvariantCulture);
-            if (attribute.GetMinValue().HasValue) para2 += " - MinValue: " + attribute.GetMinValue().Value.ToString("#,#", CultureInfo.InvariantCulture);
-            if (attribute.GetMaxValue().HasValue) para2 += " - MaxValue: " + attribute.GetMaxValue().Value.ToString("#,#", CultureInfo.InvariantCulture);
+                line3 += attribute.AttributeType.ToString();
+            if (attribute.GetMaxLength().HasValue) line3 += " - MaxLength: " + attribute.GetMaxLength().Value.ToString("#,#", CultureInfo.InvariantCulture);
+            if (attribute.GetMinValue().HasValue) line3 += " - MinValue: " + attribute.GetMinValue().Value.ToString("#,#", CultureInfo.InvariantCulture);
+            if (attribute.GetMaxValue().HasValue) line3 += " - MaxValue: " + attribute.GetMaxValue().Value.ToString("#,#", CultureInfo.InvariantCulture);
             var xml = $"{TAB}{TAB}/// <summary>{NEW_LINE}";
-            para3 = attribute?.DisplayName?.UserLocalizedLabel?.Label.TrimNewLine();
-            if (para3 != null && para3.Length > 0)
+            line1 = attribute?.DisplayName?.UserLocalizedLabel?.Label.TrimNewLine();
+            if (line1 != null && line1.Length > 0)
             {
-                xml += $"{TAB}{TAB}/// <para>Display Name: {para3}</para>{NEW_LINE}";
+                xml += $"{TAB}{TAB}/// <para>Display Name: {line1}</para>{NEW_LINE}";
             }
-
             var description = attribute?.Description?.UserLocalizedLabel?.Label;
             if (!string.IsNullOrWhiteSpace(description))
             {
-                para1 = SecurityElement.Escape(description.TrimNewLine());
-                xml += $"{TAB}{TAB}/// <para>Description: {para1}</para>{NEW_LINE}";
+                line2 = SecurityElement.Escape(description.TrimNewLine());
+                xml += $"{TAB}{TAB}/// <para>Description: {line2}</para>{NEW_LINE}";
             }
-            xml += $"{TAB}{TAB}/// <para>{para2}</para>{NEW_LINE}";
-            //if (attribute.IsPrimaryName ?? false) para4 = $"Primary Name: {attribute.LogicalName}";
-            if (para4.Length > 0)
+            xml += $"{TAB}{TAB}/// <para>{line3}</para>{NEW_LINE}";
+            if (attribute.SourceType != null && attribute.SourceType != 0)
             {
-                xml += $"{TAB}{TAB}/// <para>{para4}</para>{NEW_LINE}";
+                if (attribute.SourceType == 1) line4 = "Calculated Field";
+                else if (attribute.SourceType == 2) line4 = "Rollup Field";
+                else if (attribute.SourceType == 3) line4 = "Power-Fx Field";
+                xml += $"{TAB}{TAB}/// <para>{line4}</para>{NEW_LINE}";
             }
+            else if (attribute.SchemaName.EndsWith("_rollup_Date") || attribute.SchemaName.EndsWith("_rollup_State")) {
+                line4 = "Rollup Field";
+                xml += $"{TAB}{TAB}/// <para>{line4}</para>{NEW_LINE}";
+            }
+
             xml += $"{TAB}{TAB}/// </summary>\r\n";
             xml += $"{TAB}{TAB}[DebuggerNonUserCode()]{NEW_LINE}";
             return xml;
