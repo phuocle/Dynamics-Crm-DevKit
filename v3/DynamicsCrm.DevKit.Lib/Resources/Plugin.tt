@@ -5,7 +5,7 @@ using <#=Context.PluginSharedNameSpace#>;
 
 namespace <#=Context.PluginNameSpace#>
 {
-    [CrmPluginRegistration("<#=Context.PluginMessage#>", "<#=Context.PluginLogicalName#>", StageEnum.<#=Context.PluginStage#>, ExecutionModeEnum.<#=Context.PluginExecution#>, "", "<#=Context.PluginNameSpace#>.<#=Context.Class#>", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin<#if(Context.IsNeedDeleteAsyncOperation){#>, DeleteAsyncOperation = true<#}#>)]
+    [CrmPluginRegistration("<#=Context.PluginMessage#>", "<#=Context.PluginLogicalName#>", StageEnum.<#=Context.PluginStage#>, ExecutionModeEnum.<#=Context.PluginExecution#>, "", "<#=Context.PluginNameSpace#>.<#=Context.Class#>", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin<#if(Context.IsNeedDeleteAsyncOperation){#>, DeleteAsyncOperation = true<#}#><#if(Context.PluginMessage=="Create" && Context.PluginStage=="PostOperation"){#>, Image1Name = "PostImage", Image1Alias = "PostImage", Image1Type = ImageTypeEnum.PostImage, Image1Attributes = "*"<#}#><#if(Context.PluginMessage == "Update" || Context.PluginMessage == "Delete"){#>, Image1Alias = "PreImage", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "*"<#}#><#if(Context.PluginMessage=="Update" && Context.PluginStage=="PostOperation"){#>, Image2Alias = "PostImage", Image2Type = ImageTypeEnum.PostImage, Image2Attributes = "*"<#}#>)]
     public class <#=Context.Class#> : IPlugin
     {
         /*
@@ -39,15 +39,21 @@ namespace <#=Context.PluginNameSpace#>
 
         private void ExecutePlugin(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService serviceAdmin, IOrganizationService service, ITracingService tracing)
         {
-<#if(Context.PluginMessage=="Create"||Context.PluginMessage=="Update"){#>
+<#if(Context.PluginMessage=="Create" || Context.PluginMessage=="Update"){#>
             var targetEntity = context.InputParameterOrDefault<Entity>("Target");
+<#}else if(Context.PluginMessage=="CreateMultiple" || Context.PluginMessage=="UpdateMultiple"){#>
+            var targetEntities = context.InputParameterOrDefault<EntityCollection>("Targets");
 <#}else if(Context.PluginMessage=="Delete"){#>
             var targetEntityReference = context.InputParameterOrDefault<EntityReference>("Target");
 <#}else{#>
             //var ??? = context.InputParameterOrDefault<???>("???");
 <#}#>
-            //var preEntity = (Entity)context?.PreEntityImages?["???"];
-            //var postEntity = (Entity)context?.PostEntityImages?["???"];
+<#if(Context.PluginMessage=="Update" || Context.PluginMessage == "Delete"){#>
+            var preEntity = (Entity)context?.PreEntityImages?["PreImage"];
+<#}#>
+<#if((Context.PluginMessage=="Create" && Context.PluginStage=="PostOperation") || (Context.PluginMessage=="Update" && Context.PluginStage=="PostOperation")){#>
+            var postEntity = (Entity)context?.PostEntityImages?["PostImage"];
+<#}#>
             //YOUR PLUGIN-CODE GO HERE
         }
     }

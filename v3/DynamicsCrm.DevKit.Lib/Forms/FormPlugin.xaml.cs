@@ -7,6 +7,7 @@ using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.Xrm.Tooling.Connector;
 using System.Collections.Generic;
 using System.Linq;
+using Community.VisualStudio.Toolkit;
 
 namespace DynamicsCrm.DevKit.Lib.Forms
 {
@@ -16,14 +17,21 @@ namespace DynamicsCrm.DevKit.Lib.Forms
     public partial class FormPlugin : BaseDialogWindow
     {
         public bool IsOOBConnection => CONNECTION.IsOOBConnection;
+
         public CrmServiceClient CrmServiceClient => CONNECTION.CrmServiceClient;
+
         public string DataverseConnectionString => CONNECTION.DataverseConnectionString;
+
         public CrmConnection CrmConnection => CONNECTION.CrmConnection;
 
         public string PluginClass => TextboxClass.Text;
+
         public string PluginMessage => ComboBoxMessage.Text;
+
         public string PluginStage => ComboBoxStage.Text;
+
         public string PluginExecution => ComboBoxExecution.Text;
+
         public string PluginLogicalName
         {
             get
@@ -43,7 +51,9 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         }
 
         public string PluginOrder => "1";
+
         public string PluginOrder2 => "";
+
         public string PluginComment
         {
             get
@@ -78,8 +88,8 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             }
         }
 
-
         private ItemType _ItemType = DynamicsCrm.DevKit.Shared.ItemType.None;
+
         private ItemType ItemType
         {
             get => _ItemType;
@@ -171,8 +181,28 @@ namespace DynamicsCrm.DevKit.Lib.Forms
 
         private void ButtonOK_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            static bool IsValid()
+            bool IsValid()
             {
+                if (ComboBoxEntity.SelectedItem == null)
+                {
+                    VS.MessageBox.ShowError("Please select entity");
+                    return false;
+                }
+                if (ComboBoxMessage.SelectedItem == null)
+                {
+                    VS.MessageBox.ShowError("Please select message");
+                    return false;
+                }
+                if (ComboBoxStage.SelectedItem == null)
+                {
+                    VS.MessageBox.ShowError("Please select stage");
+                    return false;
+                }
+                if (ComboBoxExecution.SelectedItem == null)
+                {
+                    VS.MessageBox.ShowError("Please select execution");
+                    return false;
+                }
                 return true;
             }
             if (IsValid())
@@ -276,7 +306,6 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             else
                 TextboxClass.Text = $"{stage}{entity}{message}{execution}";
         }
-
 
         private void ComboBoxMessage_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
