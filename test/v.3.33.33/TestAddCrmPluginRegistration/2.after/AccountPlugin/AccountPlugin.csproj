@@ -64,6 +64,9 @@
   <ItemGroup>
     <None Include="AccountPlugin.snk" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="JavaScript1.js" />
+  </ItemGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
