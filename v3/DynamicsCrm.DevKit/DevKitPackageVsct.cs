@@ -36,10 +36,10 @@ namespace DynamicsCrm.DevKit
         public const int IDMX_HTM_SOURCE_CSS = 0x0002;
         public const int IDMX_HTM_SOURCE_HTML = 0x0001;
         public const int GroupCommandDeployWebResource = 0x0001;
-        public const int GroupCommandDeployWebResource2 = 0x0003;
+        public const int GroupCommandAddCrmPluginRegistration = 0x0003;
         public const int GroupCommandDeployNewWebResource = 0x0002;
         public const int CommandDeployWebResource = 0x1001;
-        public const int CommandDeployWebResource2 = 0x1003;
+        public const int CommandAddCrmPluginRegistration = 0x1003;
         public const int CommandDeployNewWebResource = 0x1002;
     }
 }

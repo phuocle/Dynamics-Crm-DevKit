@@ -15,7 +15,7 @@ using Microsoft.VisualStudio.Shell.Interop;
 
 namespace DynamicsCrm.DevKit.Commands
 {
-    [Command(PackageIds.CommandDeployWebResource2)]
+    [Command(PackageIds.CommandAddCrmPluginRegistration)]
     public class CommandAddCrmPluginRegistration : BaseCommand<CommandAddCrmPluginRegistration>
     {
         private enum ImageTypeEnum
