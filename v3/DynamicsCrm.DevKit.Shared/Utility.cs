@@ -1,8 +1,10 @@
 ﻿//using Microsoft.CodeAnalysis.CSharp;
 using DynamicsCrm.DevKit.Shared.Models;
+using EnvDTE;
 using Microsoft.CSharp;
 using Microsoft.Xrm.Sdk.Metadata;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.IO.Compression;
@@ -620,6 +622,103 @@ namespace DynamicsCrm.DevKit.Shared
                 }
             }
             return Convert.ToBase64String(compressedBytes);
+        }
+
+        public static bool HasImplementedPlugin(CodeClass @class)
+        {
+            Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
+            foreach (CodeInterface @interface in @class.ImplementedInterfaces)
+            {
+                if (@interface.FullName == "Microsoft.Xrm.Sdk.IPlugin")
+                    return true;
+            }
+            foreach (var @base in @class.Bases)
+            {
+                if (!(@base is CodeClass baseClass)) continue;
+                if (HasImplementedPlugin(baseClass))
+                    return true;
+            }
+            return false;
+        }
+
+        public static bool HasImplementedWorkflow(CodeClass @class)
+        {
+            Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
+            foreach (var @base in @class.Bases)
+            {
+                if (!(@base is CodeClass baseClass)) continue;
+                if (baseClass.FullName == "System.Activities.CodeActivity")
+                    return true;
+                if (HasImplementedWorkflow(baseClass))
+                    return true;
+            }
+            return false;
+        }
+
+        public static bool HasAttributeCrmPluginRegistration(CodeClass @class)
+        {
+            Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
+            foreach (CodeAttribute attribute in @class.Attributes)
+            {
+                if (attribute.Name == "CrmPluginRegistration") return true;
+            }
+            return false;
+        }
+
+        public static bool SharedProjectExist(DTE dte, out string sharedProject)
+        {
+            sharedProject = Utility.GetSharedProject(dte);
+            return Utility.ExistProject(dte, sharedProject);
+        }
+
+        public static string GetSharedProject(DTE dte)
+        {
+            var solutionFullName = dte?.Solution?.FullName;
+            if (solutionFullName.EndsWith(".Test.sln")) solutionFullName = solutionFullName.Substring(0, solutionFullName.Length - ".Test.sln".Length) + ".sln";
+            if (!File.Exists(solutionFullName)) solutionFullName = dte?.Solution?.FullName;
+            var fInfo = new FileInfo(solutionFullName);
+            var parts = fInfo.Name.Split(".".ToCharArray());
+            var value = string.Empty;
+            for (var i = 0; i < parts.Length - 1; i++)
+                value += parts[i] + ".";
+            return value + $"{ProjectType.Shared.ToString()}";
+        }
+
+        public static bool ExistProject(DTE dte, string projectName)
+        {
+            Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
+            var projects = GetProjects(dte.Solution);
+            foreach (Project project in projects)
+            {
+                if (project.ProjectItems == null || project.FileName.Length == 0) continue;
+                if (project.Name == projectName) return true;
+            }
+            return false;
+        }
+
+        private static List<Project> GetProjects(Solution sln)
+        {
+            Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
+            List<Project> list = new List<Project>();
+            if (sln == null) return list;
+            list.AddRange(sln.Projects.Cast<Project>());
+
+            for (int i = 0; i < list.Count; i++)
+                list.AddRange(list[i]?.ProjectItems?.Cast<ProjectItem>().Select(x => x?.SubProject)?.OfType<Project>());
+
+            return list;
+        }
+
+        public static Project GetProject(DTE dte, string projectName)
+        {
+            Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
+            var projects = GetProjects(dte.Solution);
+            foreach (Project project in projects)
+            {
+                if (project.ProjectItems == null || project.FileName.Length == 0) continue;
+                if (project.Name == projectName) return project;
+            }
+            return null;
         }
     }
 }

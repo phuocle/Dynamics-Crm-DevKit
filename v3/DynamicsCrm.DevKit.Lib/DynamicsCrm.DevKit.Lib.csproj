@@ -43,6 +43,8 @@
     <None Remove="Resources\DataProviderUpdate.tt" />
     <None Remove="Resources\download.reports.bat" />
     <None Remove="Resources\download.webresources.bat" />
+    <None Remove="Resources\plugin.deploy.debug.bat" />
+    <None Remove="Resources\plugin.deploy.debug.only.bat" />
     <None Remove="Resources\Plugin.tt" />
     <None Remove="Resources\TestPlugin.tt" />
     <None Remove="Resources\UiTest.tt" />
@@ -51,6 +53,8 @@
     <None Remove="Resources\Workflow.tt" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Resources\plugin.deploy.debug.bat" />
+    <EmbeddedResource Include="Resources\plugin.deploy.debug.only.bat" />
     <EmbeddedResource Include="Resources\TestPlugin.tt">
       <Generator></Generator>
     </EmbeddedResource>

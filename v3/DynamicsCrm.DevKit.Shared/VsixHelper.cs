@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.RightsManagement;
 using System.Threading;
 using System.Threading.Tasks;
 using Project = EnvDTE.Project;
@@ -23,15 +24,18 @@ namespace DynamicsCrm.DevKit.Shared
         {
             public static SolutionItem GetPhysicalFile()
             {
-                return ThreadHelper.JoinableTaskFactory.Run(async () => {
+                return ThreadHelper.JoinableTaskFactory.Run(async () =>
+                {
                     return await GetPhysicalFileAsync();
                 });
             }
+
             public static async Task<SolutionItem> GetPhysicalFileAsync()
             {
                 var selectedItem = await VS.Solutions.GetActiveItemAsync();
                 return selectedItem;
             }
+
             public static string Extension
             {
                 get
@@ -40,6 +44,7 @@ namespace DynamicsCrm.DevKit.Shared
                     return Path.GetExtension(selectedItem.FullPath);
                 }
             }
+
             public static string FullFileName
             {
                 get
@@ -48,6 +53,7 @@ namespace DynamicsCrm.DevKit.Shared
                     return selectedItem.FullPath;
                 }
             }
+
             public static string FileName
             {
                 get
@@ -59,10 +65,12 @@ namespace DynamicsCrm.DevKit.Shared
 
         public static string GetSolutionFolder()
         {
-            return ThreadHelper.JoinableTaskFactory.Run(async () => {
+            return ThreadHelper.JoinableTaskFactory.Run(async () =>
+            {
                 return await GetSolutionFolderAsync();
             });
         }
+
         public static async Task<string> GetSolutionFolderAsync()
         {
             var solution = await VS.Solutions.GetCurrentSolutionAsync();
@@ -71,10 +79,12 @@ namespace DynamicsCrm.DevKit.Shared
 
         public static string GetSolutionName()
         {
-            return ThreadHelper.JoinableTaskFactory.Run(async () => {
+            return ThreadHelper.JoinableTaskFactory.Run(async () =>
+            {
                 return await GetSolutionNameAsync();
             });
         }
+
         public static async Task<string> GetSolutionNameAsync()
         {
             var solution = await VS.Solutions.GetCurrentSolutionAsync();
@@ -83,10 +93,12 @@ namespace DynamicsCrm.DevKit.Shared
 
         public static string GetActiveProjectFolder()
         {
-            return ThreadHelper.JoinableTaskFactory.Run(async () => {
+            return ThreadHelper.JoinableTaskFactory.Run(async () =>
+            {
                 return await GetActiveProjectFolderAsync();
             });
         }
+
         public static async Task<string> GetActiveProjectFolderAsync()
         {
             var project = await VS.Solutions.GetActiveProjectAsync();
@@ -95,7 +107,8 @@ namespace DynamicsCrm.DevKit.Shared
 
         public static void AddExistingFileToActiveProject(string file)
         {
-            ThreadHelper.JoinableTaskFactory.Run(async () => {
+            ThreadHelper.JoinableTaskFactory.Run(async () =>
+            {
                 await AddExistingFileToActiveProjectAsync(file);
             });
         }
@@ -108,10 +121,12 @@ namespace DynamicsCrm.DevKit.Shared
 
         public static Community.VisualStudio.Toolkit.Project GetActiveProject()
         {
-            return ThreadHelper.JoinableTaskFactory.Run(async () => {
+            return ThreadHelper.JoinableTaskFactory.Run(async () =>
+            {
                 return await GetActiveProjectAsync();
             });
         }
+
         public static async Task<Community.VisualStudio.Toolkit.Project> GetActiveProjectAsync()
         {
             return await VS.Solutions.GetActiveProjectAsync();
@@ -119,14 +134,16 @@ namespace DynamicsCrm.DevKit.Shared
 
         public static string GetDynamicsCrmDevKitConfigJsonFileName()
         {
-            return ThreadHelper.JoinableTaskFactory.Run(async () => {
+            return ThreadHelper.JoinableTaskFactory.Run(async () =>
+            {
                 return await GetDynamicsCrmDevKitConfigJsonFileNameAsync();
             });
         }
 
         public static string GetDynamicsCrmDevKitJsonFileName()
         {
-            return ThreadHelper.JoinableTaskFactory.Run(async () => {
+            return ThreadHelper.JoinableTaskFactory.Run(async () =>
+            {
                 return await GetDynamicsCrmDevKitJsonFileNameAsync();
             });
         }
@@ -139,7 +156,8 @@ namespace DynamicsCrm.DevKit.Shared
 
         public static string GetDynamicsCrmDevKitCliJsonFileName()
         {
-            return ThreadHelper.JoinableTaskFactory.Run(async () => {
+            return ThreadHelper.JoinableTaskFactory.Run(async () =>
+            {
                 return await GetDynamicsCrmDevKitCliJsonFileNameAsync();
             });
         }
@@ -155,6 +173,7 @@ namespace DynamicsCrm.DevKit.Shared
             var solution = await VS.Solutions.GetCurrentSolutionAsync();
             return $"{Path.GetDirectoryName(solution.FullPath)}\\{Const.DynamicsCrmDevKitConfigJson}";
         }
+
         public static DevKitConnections GetDevKitConnections()
         {
             var fileName = GetDynamicsCrmDevKitJsonFileName();
@@ -170,6 +189,7 @@ namespace DynamicsCrm.DevKit.Shared
             devKitConnections.CrmConnections ??= new List<CrmConnection>();
             return devKitConnections;
         }
+
         public static void SaveDevKitConnections(DevKitConnections connections)
         {
             var json = JsonHelper.FormatJson(SimpleJson.SerializeObject(connections));
@@ -177,6 +197,7 @@ namespace DynamicsCrm.DevKit.Shared
             if (fileName != null)
                 Utility.ForceWriteAllText(fileName, json);
         }
+
         public static void SaveDefaultCrmConnection(string defaultCrmConnection)
         {
             var devKitConnections = GetDevKitConnections();
@@ -189,7 +210,8 @@ namespace DynamicsCrm.DevKit.Shared
 
         public static bool IsExistProject(string projectName)
         {
-            return ThreadHelper.JoinableTaskFactory.Run(async () => {
+            return ThreadHelper.JoinableTaskFactory.Run(async () =>
+            {
                 return await IsExistProjectAsync(projectName);
             });
         }
@@ -259,7 +281,7 @@ namespace DynamicsCrm.DevKit.Shared
 
         internal static bool IsValidProjectName(string projectName)
         {
-            var list = new List<string>() { "/", "?", ":",  "&",  @"\",  "*",  "\"",  "<",  ">", "|", "#" , "%", "'" };
+            var list = new List<string>() { "/", "?", ":", "&", @"\", "*", "\"", "<", ">", "|", "#", "%", "'" };
             return list.Count(x => projectName.Contains(x)) == 0;
         }
 
@@ -271,7 +293,7 @@ namespace DynamicsCrm.DevKit.Shared
             });
         }
 
-        public static async  Task<List<XrmEntity>> GetAllProjectsAsync()
+        public static async Task<List<XrmEntity>> GetAllProjectsAsync()
         {
             var list = new List<XrmEntity>();
             var projects = await VS.Solutions.GetAllProjectsAsync();
@@ -287,7 +309,8 @@ namespace DynamicsCrm.DevKit.Shared
                     await IsExistProjectAsync($"{project.Name}.Test") ||
                     await IsExistProjectAsync($"{project.Name}.UiTest")
                     ) continue;
-                list.Add(new XrmEntity {
+                list.Add(new XrmEntity
+                {
                     Name = project.Name
                 });
             }
@@ -508,7 +531,8 @@ namespace DynamicsCrm.DevKit.Shared
 
         public static Community.VisualStudio.Toolkit.Project GetProject(string projectName)
         {
-            return ThreadHelper.JoinableTaskFactory.Run(async () => {
+            return ThreadHelper.JoinableTaskFactory.Run(async () =>
+            {
                 return await GetProjectAsync(projectName);
             });
         }
@@ -662,7 +686,8 @@ namespace DynamicsCrm.DevKit.Shared
 
         public static void SetStatusMessage(string message)
         {
-            _ = Task.Factory.StartNew(() => {
+            _ = Task.Factory.StartNew(() =>
+            {
                 ThreadHelper.JoinableTaskFactory.Run(async delegate
                 {
                     await VS.StatusBar.ShowMessageAsync($"{message}");
@@ -672,7 +697,8 @@ namespace DynamicsCrm.DevKit.Shared
 
         public static void ExecuteCommand(string command)
         {
-            _ = Task.Factory.StartNew(() => {
+            _ = Task.Factory.StartNew(() =>
+            {
                 ThreadHelper.JoinableTaskFactory.Run(async delegate
                 {
                     await VS.Commands.ExecuteAsync(command);
@@ -695,7 +721,8 @@ namespace DynamicsCrm.DevKit.Shared
 
         public static bool IsExistItem(string itemText)
         {
-            return ThreadHelper.JoinableTaskFactory.Run(async () => {
+            return ThreadHelper.JoinableTaskFactory.Run(async () =>
+            {
                 return await IsExistItemAsync(itemText);
             });
         }
@@ -704,6 +731,19 @@ namespace DynamicsCrm.DevKit.Shared
         {
             var selectedItem = await VS.Solutions.GetActiveItemAsync();
             return selectedItem.Children.Count(x => x.Text == itemText) > 0;
+        }
+
+        public static DTE GetDTE()
+        {
+            return ThreadHelper.JoinableTaskFactory.Run(async () =>
+            {
+                return await GetDTEAsync();
+            });
+        }
+
+        private static async Task<DTE> GetDTEAsync()
+        {
+            return await VS.GetServiceAsync<DTE, DTE>();
         }
     }
 }

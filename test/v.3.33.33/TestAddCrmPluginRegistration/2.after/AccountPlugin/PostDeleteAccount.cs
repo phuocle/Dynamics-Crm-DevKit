@@ -1,8 +1,10 @@
-﻿using System;
+﻿using SunFlower.Shared;
+using System;
 using Microsoft.Xrm.Sdk;
 
 namespace AccountPlugin
 {
+    [CrmPluginRegistration("Delete", "account", StageEnum.PostOperation, ExecutionModeEnum.Asynchronous, "", "AccountPlugin.PostDeleteAccount", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, DeleteAsyncOperation = true, Description = "AccountPlugin.PostDeleteAccount", UnSecureConfiguration = "AccountPlugin.PostDeleteAccount Configuration", Image1Name = "Image4", Image1Alias = "Alias5", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "name,accountnumber", Image2Name = "Image3", Image2Alias = "Alias3", Image2Type = ImageTypeEnum.PreImage, Image2Attributes = "accountnumber,revenue,accountid", Image3Name = "Image2", Image3Alias = "Alias2", Image3Type = ImageTypeEnum.PreImage, Image3Attributes = "name", Image4Name = "Image1", Image4Alias = "Alias1", Image4Type = ImageTypeEnum.PreImage, Image4Attributes = "accountid,revenue")]
     public class PostDeleteAccount : IPlugin
     {
         public void Execute(IServiceProvider serviceProvider)

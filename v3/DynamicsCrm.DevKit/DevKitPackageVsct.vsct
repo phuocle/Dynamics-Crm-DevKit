@@ -17,7 +17,7 @@
 				<CommandFlag>TextChanges</CommandFlag>
 				<CommandFlag>DefaultInvisible</CommandFlag>
 				<Strings>
-					<ButtonText>Deploy WebResource ...</ButtonText>
+					<ButtonText>Deploy WebResource</ButtonText>
 				</Strings>
 			</Button>
 
@@ -27,7 +27,7 @@
 				<CommandFlag>TextChanges</CommandFlag>
 				<CommandFlag>DefaultInvisible</CommandFlag>
 				<Strings>
-					<ButtonText>Deploy WebResource 22222...</ButtonText>
+					<ButtonText>Add CrmPluginRegistration</ButtonText>
 				</Strings>
 			</Button>
 
@@ -37,7 +37,7 @@
 				<CommandFlag>TextChanges</CommandFlag>
 				<CommandFlag>DefaultInvisible</CommandFlag>
 				<Strings>
-					<ButtonText>Deploy New WebResource ...</ButtonText>
+					<ButtonText>Deploy New WebResource</ButtonText>
 				</Strings>
 			</Button>
 

@@ -1,8 +1,10 @@
-﻿using System;
+﻿using SunFlower.Shared;
+using System;
 using Microsoft.Xrm.Sdk;
 
 namespace AccountPlugin
 {
+    [CrmPluginRegistration("Merge", "account", StageEnum.PreOperation, ExecutionModeEnum.Synchronous, "", "AccountPlugin.PreAccountMergeSynchronous", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, UnSecureConfiguration = "AccountPlugin.PreAccountMergeSynchronous Configuration")]
     public class PreAccountMergeSynchronous : IPlugin
     {
         /*
