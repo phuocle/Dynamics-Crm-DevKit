@@ -11,7 +11,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
-using Microsoft.VisualStudio.Shell.Interop;
 
 namespace DynamicsCrm.DevKit.Commands
 {
@@ -124,6 +123,7 @@ namespace DynamicsCrm.DevKit.Commands
 
         private static List<string> CrmPluginRegistrationDataForWorkflow(DTE dte, string fullName)
         {
+            Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
             var crmServiceClient = AddDeployBatFiles(dte);
             if (crmServiceClient == null) return null;
             var list = new List<string>();
@@ -214,6 +214,7 @@ namespace DynamicsCrm.DevKit.Commands
 
         private static List<string> CrmPluginRegistrationDataForPlugin(DTE dte, string fullName)
         {
+            Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
             var crmServiceClient = AddDeployBatFiles(dte);
             if (crmServiceClient == null) return null;
             var list = new List<string>();

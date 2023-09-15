@@ -667,6 +667,7 @@ namespace DynamicsCrm.DevKit.Shared
 
         public static bool SharedProjectExist(DTE dte, out string sharedProject)
         {
+            Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
             sharedProject = Utility.GetSharedProject(dte);
             return Utility.ExistProject(dte, sharedProject);
         }

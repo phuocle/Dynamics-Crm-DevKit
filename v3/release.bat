@@ -32,16 +32,16 @@ if %MsBuild%=="" (
     echo NuGet pack ...
     echo ************************************************************
 
-	rem cd DynamicsCrm.DevKit.Analyzers\Nuget
-	rem call pack.bat
+	cd DynamicsCrm.DevKit.Analyzers\Nuget
+	call pack.bat
 
-	rem cd ..\..
+	cd ..\..
 	cd DynamicsCrm.DevKit.Cli\Nuget
 	call pack.bat
 
-	rem cd ..\..
-	rem cd DynamicsCrm.DevKit.Tool\Nuget
-	rem call pack.bat
+	cd ..\..
+	cd DynamicsCrm.DevKit.Tool\Nuget
+	call pack.bat
 
 	cd ..\..
 	copy DynamicsCrm.DevKit\bin\Release\DynamicsCrm.DevKit.vsix Published\%VERSION%\DynamicsCrm.DevKit.%VERSION%.vsix
