@@ -5,7 +5,7 @@ using System;
 
 namespace Dev.DevKit.PluginTerritory
 {
-    [CrmPluginRegistration("Create", "territory", StageEnum.PostOperation, ExecutionModeEnum.Synchronous, "", "Dev.DevKit.PluginTerritory.PostTerritoryCreateSynchronous", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, Image1Name = "PostImage", Image1Alias = "PostImage", Image1Type = ImageTypeEnum.PostImage, Image1Attributes = "*")]
+    [CrmPluginRegistration("Create", "territory", StageEnum.PostOperation, ExecutionModeEnum.Synchronous, "", "Dev.DevKit.PluginTerritory.PostTerritoryCreateSynchronous", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, Image1Name = "PostImage", Image1Alias = "PostImage", Image1Type = ImageTypeEnum.PostImage, Image1Attributes = "*", Image2Name = "PreImage", Image2Alias = "PreImage", Image2Type = ImageTypeEnum.PreImage, Image2Attributes = "*")]
     public class PostTerritoryCreateSynchronous : IPlugin
     {
         /*
