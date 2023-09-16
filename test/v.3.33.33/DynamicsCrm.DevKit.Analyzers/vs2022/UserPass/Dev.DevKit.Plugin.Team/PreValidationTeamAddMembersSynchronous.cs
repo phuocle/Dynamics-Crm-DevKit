@@ -5,7 +5,7 @@ using System;
 
 namespace Dev.DevKit.PluginTeam
 {
-    [CrmPluginRegistration("AddMembers", "team", StageEnum.PreValidation, ExecutionModeEnum.Synchronous, "", "Dev.DevKit.PluginTeam.PreValidationTeamAddMembersSynchronous", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin)]
+    [CrmPluginRegistration("AddMembers", "team", StageEnum.PreValidation, ExecutionModeEnum.Synchronous, "", "Dev.DevKit.PluginTeam.PreValidationTeamAddMembersSynchronous", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, Image1Name = "PreImage", Image1Alias = "PreImage", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "*", Image2Name = "PostImage", Image2Alias = "PostImage", Image2Type = ImageTypeEnum.PostImage, Image2Attributes = "*")]
     public class PreValidationTeamAddMembersSynchronous : IPlugin
     {
         /*

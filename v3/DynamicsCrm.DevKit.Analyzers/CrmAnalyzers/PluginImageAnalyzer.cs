@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+//using System.Diagnostics;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -15,26 +16,35 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
         private class Image
         {
             public string ImageType { get; set; }
+
             public string ImageAttributes { get; set; }
+
             public Location Location { get; set; }
         }
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics
         {
-            get {
+            get
+            {
                 return ImmutableArray.Create(
                     DiagnosticDescriptors.PluginImage_PreCreate_PreImage,
                     DiagnosticDescriptors.PluginImage_PreCreate_PostImage,
                     DiagnosticDescriptors.PluginImage_PostCreate_PreImage,
                     DiagnosticDescriptors.PluginImage_PreUpdate_PostImage,
                     DiagnosticDescriptors.PluginImage_PreDelete_PostImage,
-                    DiagnosticDescriptors.PluginImage_PostDelete_PostImage
+                    DiagnosticDescriptors.PluginImage_PostDelete_PostImage,
+                    DiagnosticDescriptors.PluginImage_NotSupportForPostImage,
+                    DiagnosticDescriptors.PluginImage_NotSupportForPreImage
                 );
             }
         }
 
         public override void Initialize(AnalysisContext context)
         {
+            //if (!Debugger.IsAttached)
+            //{
+            //    Debugger.Launch();
+            //}
             context.EnableConcurrentExecution();
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.Analyze | GeneratedCodeAnalysisFlags.ReportDiagnostics);
             if (context == null) throw new ArgumentNullException(nameof(context));
@@ -44,18 +54,19 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
 
         private void AnalyzerPluginImage(SyntaxNodeAnalysisContext context)
         {
-            if (context.Node is AttributeSyntax attribute &&attribute?.Name?.ToFullString() == "CrmPluginRegistration")
+            if (context.Node is AttributeSyntax attribute && attribute?.Name?.ToFullString() == "CrmPluginRegistration")
             {
                 attribute.TryFindArgument(0, "message", out var argurment0);
-                var message = AnalyzerHelper.RemoveQuote(argurment0?.ToFullString()).Trim().ToLower();
-                if (message != "create" && message != "update" && message != "delete") return;
+                var message = AnalyzerHelper.RemoveQuote(argurment0?.ToFullString()).Trim();
                 attribute.TryFindArgument(2, "stage", out var argurment2);
                 var stage = argurment2?.ToFullString();
-                if (message == "create" && stage != null && (stage.EndsWith("StageEnum.PreValidation") || stage.EndsWith("StageEnum.PreOperation")))
+                if (message.ToLower() == "create" && stage != null && (stage.EndsWith("StageEnum.PreValidation") || stage.EndsWith("StageEnum.PreOperation")))
                 {
                     var images = GetImages(attribute.ArgumentList);
-                    if (images.Count > 0) {
-                        foreach (var image in images) {
+                    if (images.Count > 0)
+                    {
+                        foreach (var image in images)
+                        {
                             if (image.ImageType.EndsWith("ImageTypeEnum.PreImage"))
                             {
                                 DiagnosticHelpers.ReportDiagnostic(context, DiagnosticDescriptors.PluginImage_PreCreate_PreImage, image.Location);
@@ -67,7 +78,7 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
                         }
                     }
                 }
-                else if (message == "create" && stage != null && stage.EndsWith("PostOperation"))
+                else if (message.ToLower() == "create".ToLower() && stage != null && stage.EndsWith("PostOperation"))
                 {
                     var images = GetImages(attribute.ArgumentList);
                     if (images.Count > 0)
@@ -81,7 +92,7 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
                         }
                     }
                 }
-                else if (message == "update" && stage != null && (stage.EndsWith("StageEnum.PreValidation") || stage.EndsWith("StageEnum.PreOperation")))
+                else if (message.ToLower() == "update" && stage != null && (stage.EndsWith("StageEnum.PreValidation") || stage.EndsWith("StageEnum.PreOperation")))
                 {
                     var images = GetImages(attribute.ArgumentList);
                     if (images.Count > 0)
@@ -95,7 +106,7 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
                         }
                     }
                 }
-                else if (message == "delete" && stage != null && (stage.EndsWith("StageEnum.PreValidation") || stage.EndsWith("StageEnum.PreOperation")))
+                else if (message.ToLower() == "delete" && stage != null && (stage.EndsWith("StageEnum.PreValidation") || stage.EndsWith("StageEnum.PreOperation")))
                 {
                     var images = GetImages(attribute.ArgumentList);
                     if (images.Count > 0)
@@ -109,7 +120,7 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
                         }
                     }
                 }
-                else if (message == "delete" && stage != null && stage.EndsWith("PostOperation"))
+                else if (message.ToLower() == "delete" && stage != null && stage.EndsWith("PostOperation"))
                 {
                     var images = GetImages(attribute.ArgumentList);
                     if (images.Count > 0)
@@ -119,6 +130,28 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
                             if (image.ImageType.EndsWith("ImageTypeEnum.PostImage"))
                             {
                                 DiagnosticHelpers.ReportDiagnostic(context, DiagnosticDescriptors.PluginImage_PostDelete_PostImage, image.Location);
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    var whiteListMessages = new List<string>() { "Assign", /*"Create",*/ /*"Delete",*/ "DeliverIncoming", "DeliverPromote", "Merge", "Route", "Send", "SetState", "SetStateDynamicEntity", /*"Update",*/ "ExecuteWorkflow" };
+                    if (whiteListMessages.Where(x => x.ToLower() == message).Count() == 0)
+                    {
+                        var images = GetImages(attribute.ArgumentList);
+                        if (images.Count > 0)
+                        {
+                            foreach (var image in images)
+                            {
+                                if (image.ImageType.EndsWith("ImageTypeEnum.PreImage"))
+                                {
+                                    DiagnosticHelpers.ReportDiagnostic(context, DiagnosticDescriptors.PluginImage_NotSupportForPreImage, image.Location, message);
+                                }
+                                if (image.ImageType.EndsWith("ImageTypeEnum.PostImage"))
+                                {
+                                    DiagnosticHelpers.ReportDiagnostic(context, DiagnosticDescriptors.PluginImage_NotSupportForPostImage, image.Location, message);
+                                }
                             }
                         }
                     }

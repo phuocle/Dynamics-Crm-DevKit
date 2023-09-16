@@ -110,6 +110,32 @@ namespace DynamicsCrm.DevKit.Analyzers
             customTags: Array.Empty<string>()
             );
 
+        /// <summary>DEVKIT1003</summary>
+        public static readonly DiagnosticDescriptor PluginImage_NotSupportForPostImage = new DiagnosticDescriptor(
+            id: "DEVKIT1003",
+            title: "Plugin does not support Post Image",
+            messageFormat: "Plugin message: {0} does not support Post Image",
+            category: DiagnosticCategories.Require,
+            defaultSeverity: DiagnosticSeverity.Error,
+            isEnabledByDefault: true,
+            description: "DynamicsCrm.DevKit: Plugin does not support Post Image.",
+            helpLinkUri: $"https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Analyzer-Plugin-Support-Pre-Post-Images",
+            customTags: Array.Empty<string>()
+            );
+
+        /// <summary>DEVKIT1003</summary>
+        public static readonly DiagnosticDescriptor PluginImage_NotSupportForPreImage = new DiagnosticDescriptor(
+            id: "DEVKIT1003",
+            title: "Plugin does not support Pre Image",
+            messageFormat: "Plugin message: {0} does not support Pre Image",
+            category: DiagnosticCategories.Require,
+            defaultSeverity: DiagnosticSeverity.Error,
+            isEnabledByDefault: true,
+            description: "DynamicsCrm.DevKit: Plugin does not support Pre Image.",
+            helpLinkUri: $"https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Analyzer-Plugin-Support-Pre-Post-Images",
+            customTags: Array.Empty<string>()
+            );
+
         /// <summary>DEVKIT1004</summary>
         public static readonly DiagnosticDescriptor DeprecatedRequest = new DiagnosticDescriptor(
             id: "DEVKIT1004",
