@@ -44,6 +44,7 @@ namespace DynamicsCrm.DevKit.Analyzers
             helpLinkUri: $"https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Analyzer-Plugin-Support-Pre-Post-Images",
             customTags: Array.Empty<string>()
             );
+
         /// <summary>DEVKIT1003</summary>
         public static readonly DiagnosticDescriptor PluginImage_PreCreate_PostImage = new DiagnosticDescriptor(
             id: "DEVKIT1003",
@@ -56,6 +57,7 @@ namespace DynamicsCrm.DevKit.Analyzers
             helpLinkUri: $"https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Analyzer-Plugin-Support-Pre-Post-Images",
             customTags: Array.Empty<string>()
             );
+
         /// <summary>DEVKIT1003</summary>
         public static readonly DiagnosticDescriptor PluginImage_PostCreate_PreImage = new DiagnosticDescriptor(
             id: "DEVKIT1003",
@@ -68,6 +70,7 @@ namespace DynamicsCrm.DevKit.Analyzers
             helpLinkUri: $"https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Analyzer-Plugin-Support-Pre-Post-Images",
             customTags: Array.Empty<string>()
             );
+
         /// <summary>DEVKIT1003</summary>
         public static readonly DiagnosticDescriptor PluginImage_PreUpdate_PostImage = new DiagnosticDescriptor(
             id: "DEVKIT1003",
@@ -80,6 +83,7 @@ namespace DynamicsCrm.DevKit.Analyzers
             helpLinkUri: $"https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Analyzer-Plugin-Support-Pre-Post-Images",
             customTags: Array.Empty<string>()
             );
+
         /// <summary>DEVKIT1003</summary>
         public static readonly DiagnosticDescriptor PluginImage_PreDelete_PostImage = new DiagnosticDescriptor(
             id: "DEVKIT1003",
@@ -92,6 +96,7 @@ namespace DynamicsCrm.DevKit.Analyzers
             helpLinkUri: $"https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Analyzer-Plugin-Support-Pre-Post-Images",
             customTags: Array.Empty<string>()
             );
+
         /// <summary>DEVKIT1003</summary>
         public static readonly DiagnosticDescriptor PluginImage_PostDelete_PostImage = new DiagnosticDescriptor(
             id: "DEVKIT1003",
