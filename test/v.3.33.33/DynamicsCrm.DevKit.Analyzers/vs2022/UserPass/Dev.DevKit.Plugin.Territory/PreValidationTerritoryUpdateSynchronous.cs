@@ -5,7 +5,7 @@ using System;
 
 namespace Dev.DevKit.PluginTerritory
 {
-    [CrmPluginRegistration("Update", "territory", StageEnum.PreValidation, ExecutionModeEnum.Synchronous, "", "Dev.DevKit.PluginTerritory.PreValidationTerritoryUpdateSynchronous", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, Image1Name = "PreImage", Image1Alias = "PreImage", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "*")]
+    [CrmPluginRegistration("Update", "territory", StageEnum.PreValidation, ExecutionModeEnum.Synchronous, "*", "Dev.DevKit.PluginTerritory.PreValidationTerritoryUpdateSynchronous", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, Image1Name = "PreImage", Image1Alias = "PreImage", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "*")]
     public class PreValidationTerritoryUpdateSynchronous : IPlugin
     {
         /*
