@@ -17,8 +17,13 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
         {
             get { return ImmutableArray.Create(DiagnosticDescriptors.NotUseColumnSetTrue); }
         }
+
         public override void Initialize(AnalysisContext context)
         {
+            //if (!Debugger.IsAttached)
+            //{
+            //    Debugger.Launch();
+            //}
             context.EnableConcurrentExecution();
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.Analyze | GeneratedCodeAnalysisFlags.ReportDiagnostics);
             if (context == null) throw new ArgumentNullException(nameof(context));
@@ -50,7 +55,7 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
                 }
                 if (objectCreationExpression.Initializer != null)
                 {
-                    foreach(AssignmentExpressionSyntax expression in objectCreationExpression.Initializer.Expressions)
+                    foreach (AssignmentExpressionSyntax expression in objectCreationExpression.Initializer.Expressions)
                     {
                         if (expression?.Right?.ToString() == "true" && expression?.Left?.ToString() == "AllColumns")
                             DiagnosticHelpers.ReportDiagnostic(context, DiagnosticDescriptors.NotUseColumnSetTrue, expression?.GetLocation());

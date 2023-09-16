@@ -54,18 +54,18 @@
     <None Include="deploy.debug.bat" />
     <None Include="deploy.debug.only.bat" />
     <None Include="Dev.DevKit.Plugin.Territory.snk" />
-    <Compile Include="PostTerritoryCreateAsynchronous.cs" />
-    <Compile Include="PostTerritoryCreateSynchronous.cs" />
-    <Compile Include="PostTerritoryDeleteAsynchronous.cs" />
-    <Compile Include="PostTerritoryDeleteSynchronous.cs" />
+    <Compile Include="DEVKIT1003_01.cs" />
+    <Compile Include="DEVKIT1003_02.cs" />
+    <Compile Include="DEVKIT1003_03.cs" />
+    <Compile Include="DEVKIT1003_04.cs" />
     <Compile Include="PostTerritoryUpdateAsynchronous.cs" />
     <Compile Include="PostTerritoryUpdateSynchronous.cs" />
-    <Compile Include="PreTerritoryCreateSynchronous.cs" />
-    <Compile Include="PreTerritoryDeleteSynchronous.cs" />
-    <Compile Include="PreTerritoryUpdateSynchronous.cs" />
-    <Compile Include="PreValidationTerritoryCreateSynchronous.cs" />
-    <Compile Include="PreValidationTerritoryDeleteSynchronous.cs" />
-    <Compile Include="PreValidationTerritoryUpdateSynchronous.cs" />
+    <Compile Include="DEVKIT1003_05.cs" />
+    <Compile Include="DEVKIT1003_06.cs" />
+    <Compile Include="DEVKIT1003_07.cs" />
+    <Compile Include="DEVKIT1003_08.cs" />
+    <Compile Include="DEVKIT1003_09.cs" />
+    <Compile Include="DEVKIT1003_10.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="..\Dev.DevKit.Shared\Dev.DevKit.Shared.projitems" Label="Shared" Condition="Exists('..\Dev.DevKit.Shared\Dev.DevKit.Shared.projitems')" />

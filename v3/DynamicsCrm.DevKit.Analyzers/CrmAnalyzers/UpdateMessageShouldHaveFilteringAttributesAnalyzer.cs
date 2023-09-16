@@ -17,6 +17,10 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
 
         public override void Initialize(AnalysisContext context)
         {
+            //if (!Debugger.IsAttached)
+            //{
+            //    Debugger.Launch();
+            //}
             context.EnableConcurrentExecution();
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.Analyze | GeneratedCodeAnalysisFlags.ReportDiagnostics);
             if (context == null) throw new ArgumentNullException(nameof(context));
@@ -35,11 +39,13 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
                     AnalyzerHelper.RemoveQuote(argurment0?.ToFullString().ToLower()) == "UpdateMultiple".ToLower() ||
                     AnalyzerHelper.RemoveQuote(argurment0?.ToFullString().ToLower()) == "OnExternalUpdated".ToLower()
                 ) &&
-                attribute.TryFindArgument(4, "filteringAttributes", out var argurment4) &&
-                AnalyzerHelper.TestIsEmtpy(argurment4?.ToFullString())
+                attribute.TryFindArgument(4, "filteringAttributes", out var argurment4)
                )
             {
-                DiagnosticHelpers.ReportDiagnostic(context, DiagnosticDescriptors.UpdateMessageShouldHaveFilteringAttributes, argurment4.GetLocation());
+                if (AnalyzerHelper.TestIsEmtpy(argurment4?.ToFullString()))
+                    DiagnosticHelpers.ReportDiagnostic(context, DiagnosticDescriptors.UpdateMessageShouldHaveFilteringAttributes, argurment4.GetLocation());
+                else if (AnalyzerHelper.RemoveQuote(argurment4?.ToFullString()) == "*")
+                    DiagnosticHelpers.ReportDiagnostic(context, DiagnosticDescriptors.UpdateMessageShouldNotUseAllAttributes, argurment4.GetLocation());
             }
         }
     }

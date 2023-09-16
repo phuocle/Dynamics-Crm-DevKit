@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Diagnostics;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -78,6 +79,10 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
 
         public override void Initialize(AnalysisContext context)
         {
+            if (!Debugger.IsAttached)
+            {
+                Debugger.Launch();
+            }
             context.EnableConcurrentExecution();
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.Analyze | GeneratedCodeAnalysisFlags.ReportDiagnostics);
             if (context == null) throw new ArgumentNullException(nameof(context));
@@ -95,6 +100,19 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
                 if (DeprecatedRequests.Contains(typeInfo?.Type?.ToDisplayString()))
                 {
                     DiagnosticHelpers.ReportDiagnostic(context, DiagnosticDescriptors.DeprecatedRequest, objectCreationExpression?.GetLocation());
+                }
+            }
+            if (context.Node is Microsoft.CodeAnalysis.CSharp.Syntax.CastExpressionSyntax castExpressionSyntax)
+            {
+                if (castExpressionSyntax.Expression is IdentifierNameSyntax)
+                {
+                    var semanticModel = context.SemanticModel;
+                    var cancellationToken = context.CancellationToken;
+                    var typeInfo = semanticModel?.GetTypeInfo(castExpressionSyntax.Expression, cancellationToken);
+                    if (DeprecatedRequests.Contains(typeInfo?.Type?.ToDisplayString()))
+                    {
+                        DiagnosticHelpers.ReportDiagnostic(context, DiagnosticDescriptors.DeprecatedRequest, castExpressionSyntax?.GetLocation());
+                    }
                 }
             }
         }

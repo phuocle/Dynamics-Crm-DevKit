@@ -54,7 +54,7 @@
     <None Include="deploy.debug.bat" />
     <None Include="deploy.debug.only.bat" />
     <None Include="Dev.DevKit.Plugin.Team.snk" />
-    <Compile Include="PreValidationTeamAddMembersSynchronous.cs" />
+    <Compile Include="DEVKIT1003.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="..\Dev.DevKit.Shared\Dev.DevKit.Shared.projitems" Label="Shared" Condition="Exists('..\Dev.DevKit.Shared\Dev.DevKit.Shared.projitems')" />

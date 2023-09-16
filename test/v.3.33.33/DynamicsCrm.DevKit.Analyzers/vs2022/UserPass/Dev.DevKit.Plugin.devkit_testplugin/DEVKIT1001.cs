@@ -3,22 +3,21 @@ using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Extensions;
 using System;
 
-namespace Dev.DevKit.PluginTerritory
+namespace Dev.DevKit.Plugindevkit_testplugin
 {
-    [CrmPluginRegistration("Delete", "territory", StageEnum.PreValidation, ExecutionModeEnum.Synchronous, "", "Dev.DevKit.PluginTerritory.PreValidationTerritoryDeleteSynchronous", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, Image1Name = "PreImage", Image1Alias = "PreImage", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "*", Image2Name = "PostImage", Image2Alias = "PostImage", Image2Type = ImageTypeEnum.PostImage, Image2Attributes = "*")]
-    public class PreValidationTerritoryDeleteSynchronous : IPlugin
+    [CrmPluginRegistration("UpdateMultiple", "devkit_testplugin", StageEnum.PreValidation, ExecutionModeEnum.Synchronous, "", "Dev.DevKit.Plugindevkit_testplugin.PreValidationdevkit_testpluginUpdateMultipleSynchronous", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin)]
+    [CrmPluginRegistration("Update", "devkit_testplugin", StageEnum.PreValidation, ExecutionModeEnum.Synchronous, "*", "Dev.DevKit.Plugindevkit_testplugin.PreValidationdevkit_testpluginUpdateMultipleSynchronous", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin)]
+    public class PreValidationdevkit_testpluginUpdateMultipleSynchronous : IPlugin
     {
         /*
         InputParameters:
-            Target                 Microsoft.Xrm.Sdk.EntityReference - require
-            SolutionUniqueName     System.String
-            ConcurrencyBehavior    Microsoft.Xrm.Sdk.ConcurrencyBehavior
+            Targets    Microsoft.Xrm.Sdk.EntityCollection - require
         OutputParameters:
         */
 
         //private readonly string unSecureConfiguration = null;
         //private readonly string secureConfiguration = null;
-        //public PreValidationTerritoryDeleteSynchronous(string unSecureConfiguration, string secureConfiguration)
+        //public PreValidationdevkit_testpluginUpdateMultipleSynchronous(string unSecureConfiguration, string secureConfiguration)
         //{
         //    this.unSecureConfiguration = unSecureConfiguration;
         //    this.secureConfiguration = secureConfiguration;
@@ -32,8 +31,8 @@ namespace Dev.DevKit.PluginTerritory
             var service = serviceFactory.CreateOrganizationService(context.UserId);
             var tracing = (ITracingService)serviceProvider.GetService(typeof(ITracingService));
             if (context.Stage != (int)StageEnum.PreValidation) throw new InvalidPluginExecutionException("Stage does not equals PreValidation");
-            if (context.PrimaryEntityName.ToLower() != "territory") throw new InvalidPluginExecutionException("PrimaryEntityName does not equals territory");
-            if (context.MessageName.ToLower() != "Delete".ToLower()) throw new InvalidPluginExecutionException("MessageName does not equals Delete");
+            if (context.PrimaryEntityName.ToLower() != "devkit_testplugin") throw new InvalidPluginExecutionException("PrimaryEntityName does not equals devkit_testplugin");
+            if (context.MessageName.ToLower() != "UpdateMultiple".ToLower()) throw new InvalidPluginExecutionException("MessageName does not equals UpdateMultiple");
             if (context.Mode != (int)ExecutionModeEnum.Synchronous) throw new InvalidPluginExecutionException("Execution does not equals Synchronous");
 
             //tracing.DebugContext(context);
@@ -43,8 +42,7 @@ namespace Dev.DevKit.PluginTerritory
 
         private void ExecutePlugin(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService serviceAdmin, IOrganizationService service, ITracingService tracing)
         {
-            var targetEntityReference = context.InputParameterOrDefault<EntityReference>("Target");
-            var preEntity = (Entity)context?.PreEntityImages?["PreImage"];
+            var targetEntities = context.InputParameterOrDefault<EntityCollection>("Targets");
             //YOUR PLUGIN-CODE GO HERE
         }
     }
