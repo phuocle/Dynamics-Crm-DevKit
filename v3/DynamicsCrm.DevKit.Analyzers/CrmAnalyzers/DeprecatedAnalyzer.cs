@@ -79,15 +79,15 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
 
         public override void Initialize(AnalysisContext context)
         {
-            if (!Debugger.IsAttached)
-            {
-                Debugger.Launch();
-            }
+            //if (!Debugger.IsAttached)
+            //{
+            //    Debugger.Launch();
+            //}
             context.EnableConcurrentExecution();
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.Analyze | GeneratedCodeAnalysisFlags.ReportDiagnostics);
             if (context == null) throw new ArgumentNullException(nameof(context));
             base.Initialize(context);
-            context.RegisterSyntaxNodeAction(AnalyzerDeprecated, SyntaxKind.ObjectCreationExpression);
+            context.RegisterSyntaxNodeAction(AnalyzerDeprecated, SyntaxKind.ObjectCreationExpression, SyntaxKind.CastExpression, SyntaxKind.AsExpression);
         }
 
         private void AnalyzerDeprecated(SyntaxNodeAnalysisContext context)
@@ -102,17 +102,26 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
                     DiagnosticHelpers.ReportDiagnostic(context, DiagnosticDescriptors.DeprecatedRequest, objectCreationExpression?.GetLocation());
                 }
             }
-            if (context.Node is Microsoft.CodeAnalysis.CSharp.Syntax.CastExpressionSyntax castExpressionSyntax)
+            else if (context.Node is Microsoft.CodeAnalysis.CSharp.Syntax.CastExpressionSyntax castExpressionSyntax)
             {
-                if (castExpressionSyntax.Expression is IdentifierNameSyntax)
+                var semanticModel = context.SemanticModel;
+                var cancellationToken = context.CancellationToken;
+                var typeInfo = semanticModel?.GetTypeInfo(castExpressionSyntax, cancellationToken);
+                if (DeprecatedRequests.Contains(typeInfo?.Type?.ToDisplayString()))
                 {
-                    var semanticModel = context.SemanticModel;
-                    var cancellationToken = context.CancellationToken;
-                    var typeInfo = semanticModel?.GetTypeInfo(castExpressionSyntax.Expression, cancellationToken);
-                    if (DeprecatedRequests.Contains(typeInfo?.Type?.ToDisplayString()))
-                    {
-                        DiagnosticHelpers.ReportDiagnostic(context, DiagnosticDescriptors.DeprecatedRequest, castExpressionSyntax?.GetLocation());
-                    }
+                    var identifierNameSyntax = castExpressionSyntax.Type as IdentifierNameSyntax;
+                    DiagnosticHelpers.ReportDiagnostic(context, DiagnosticDescriptors.DeprecatedRequest, identifierNameSyntax.Identifier.GetLocation());
+                }
+            }
+            else if (context.Node is Microsoft.CodeAnalysis.CSharp.Syntax.BinaryExpressionSyntax binaryExpressionSyntax)
+            {
+
+                var semanticModel = context.SemanticModel;
+                var cancellationToken = context.CancellationToken;
+                var typeInfo = semanticModel?.GetTypeInfo(binaryExpressionSyntax, cancellationToken);
+                if (DeprecatedRequests.Contains(typeInfo?.Type?.ToDisplayString()))
+                {
+                    DiagnosticHelpers.ReportDiagnostic(context, DiagnosticDescriptors.DeprecatedRequest, binaryExpressionSyntax.Right .GetLocation());
                 }
             }
         }
