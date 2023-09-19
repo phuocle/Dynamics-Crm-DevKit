@@ -12,6 +12,7 @@
     <Version>$(FileVersion)</Version>
     <PackageReadmeFile>ReadMe.md</PackageReadmeFile>
     <Title>$(AssemblyName)</Title>
+    <Description>$(AssemblyName)</Description>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="DynamicsCrm.DevKit.Analyzers" Version="2.13.33" PrivateAssets="All" />
