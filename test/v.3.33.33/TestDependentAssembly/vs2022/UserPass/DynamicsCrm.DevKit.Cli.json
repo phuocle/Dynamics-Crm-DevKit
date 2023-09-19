@@ -2,14 +2,15 @@
   "servers": [
     {
       "profile": "DEBUG",
-      "solution": "???",
+      "solution": "TestPluginWorkflowCustomActionCustomApi",
       "folder": "bin\\Debug",
       "includefiles": [
         "Dev.DevKit.Plugin.*.dll",
         "Dev.DevKit.CustomAction.*.dll",
         "Dev.DevKit.Workflow.*.dll",
         "Dev.DevKit.CustomApi.*.dll",
-        "Dev.DevKit.DataProvider.*.dll"
+        "Dev.DevKit.DataProvider.*.dll",
+        "Dev.DevKit.Packages.*.nupkg"
       ],
       "excludefiles": [
         "Dev.DevKit.*.Test.dll"

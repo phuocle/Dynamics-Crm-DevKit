@@ -6,6 +6,7 @@
       "folder": "bin\\Debug",
       "includefiles": [
         "???.Plugin.*.dll",
+        "???.Plugin.*.nupkg",
         "???.CustomAction.*.dll",
         "???.Workflow.*.dll",
         "???.CustomApi.*.dll",
