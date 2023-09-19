@@ -8,15 +8,24 @@
   </PropertyGroup>
   <Import Project="$(PowerAppsTargetsPath)\Microsoft.PowerApps.VisualStudio.Plugin.props" Condition="Exists('$(PowerAppsTargetsPath)\Microsoft.PowerApps.VisualStudio.Plugin.props')" />
   <PropertyGroup>
-    <PackageId>Dev.DevKit.DependentAssembly</PackageId>
+    <PackageId>$(AssemblyName)</PackageId>
     <Version>$(FileVersion)</Version>
+    <PackageReadmeFile>ReadMe.md</PackageReadmeFile>
+    <Title>$(AssemblyName)</Title>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="DynamicsCrm.DevKit.Analyzers" Version="2.13.33" PrivateAssets="All" />
+    <PackageReference Include="DynamicsCrm.DevKit.Cli" Version="2.13.33" PrivateAssets="All" />
     <PackageReference Include="Microsoft.CrmSdk.CoreAssemblies" Version="9.0.2.*" PrivateAssets="All" />
     <PackageReference Include="Microsoft.PowerApps.MSBuild.Plugin" Version="1.*" PrivateAssets="All" />
     <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.*" PrivateAssets="All" />
     <PackageReference Include="Niam.XRM.Framework" Version="9.0.2.451" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="ReadMe.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
   <Import Project="..\Dev.DevKit.Shared\Dev.DevKit.Shared.projitems" Label="Shared" />
   <Import Project="$(PowerAppsTargetsPath)\Microsoft.PowerApps.VisualStudio.Plugin.targets" Condition="Exists('$(PowerAppsTargetsPath)\Microsoft.PowerApps.VisualStudio.Plugin.targets')" />
