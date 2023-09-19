@@ -55,7 +55,8 @@
         Test,
         UiTest,
         SharedTest,
-        Report
+        Report,
+        Package
     }
 
     public enum ItemType

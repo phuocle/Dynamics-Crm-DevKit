@@ -370,6 +370,16 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     LabelProjectName.Content = $"{VsixHelper.GetSolutionName()}.Report";
                     LabelProjectName.Tag = LabelProjectName.Content;
                 }
+                void PackageProject()
+                {
+                    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Package-Project-Template");
+                    HELP.Inlines.Clear();
+                    HELP.Inlines.Add("Package Project Template");
+                    ComboBoxProject.Visibility = System.Windows.Visibility.Hidden;
+                    TextboxProject.Visibility = System.Windows.Visibility.Visible;
+                    LabelProjectName.Content = $"{VsixHelper.GetSolutionName()}";
+                    LabelProjectName.Tag = LabelProjectName.Content;
+                }
                 _ProjectType = value;
                 switch (_ProjectType)
                 {
@@ -417,6 +427,9 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                         break;
                     case ProjectType.Report:
                         ReportProject();
+                        break;
+                    case ProjectType.Package:
+                        PackageProject();
                         break;
                 }
             }
@@ -481,6 +494,8 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         {
             if (
                 ProjectType == ProjectType.Plugin ||
+                ProjectType == ProjectType.Server ||
+                ProjectType == ProjectType.Package ||
                 ProjectType == ProjectType.Workflow ||
                 ProjectType == ProjectType.CustomAction ||
                 ProjectType == ProjectType.CustomApi ||
