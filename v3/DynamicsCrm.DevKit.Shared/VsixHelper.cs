@@ -1,17 +1,14 @@
 ﻿using Community.VisualStudio.Toolkit;
 using DynamicsCrm.DevKit.Shared.Models;
 using EnvDTE;
-using Microsoft.VisualStudio.PlatformUI;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.TemplateWizard;
-using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Tooling.Connector;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Security.RightsManagement;
 using System.Threading;
 using System.Threading.Tasks;
 using Project = EnvDTE.Project;
@@ -24,10 +21,7 @@ namespace DynamicsCrm.DevKit.Shared
         {
             public static SolutionItem GetPhysicalFile()
             {
-                return ThreadHelper.JoinableTaskFactory.Run(async () =>
-                {
-                    return await GetPhysicalFileAsync();
-                });
+                return ThreadHelper.JoinableTaskFactory.Run(GetPhysicalFileAsync);
             }
 
             public static async Task<SolutionItem> GetPhysicalFileAsync()
@@ -65,10 +59,7 @@ namespace DynamicsCrm.DevKit.Shared
 
         public static string GetSolutionFolder()
         {
-            return ThreadHelper.JoinableTaskFactory.Run(async () =>
-            {
-                return await GetSolutionFolderAsync();
-            });
+            return ThreadHelper.JoinableTaskFactory.Run(GetSolutionFolderAsync);
         }
 
         public static async Task<string> GetSolutionFolderAsync()
@@ -79,10 +70,7 @@ namespace DynamicsCrm.DevKit.Shared
 
         public static string GetSolutionName()
         {
-            return ThreadHelper.JoinableTaskFactory.Run(async () =>
-            {
-                return await GetSolutionNameAsync();
-            });
+            return ThreadHelper.JoinableTaskFactory.Run(GetSolutionNameAsync);
         }
 
         public static async Task<string> GetSolutionNameAsync()
@@ -93,10 +81,7 @@ namespace DynamicsCrm.DevKit.Shared
 
         public static string GetActiveProjectFolder()
         {
-            return ThreadHelper.JoinableTaskFactory.Run(async () =>
-            {
-                return await GetActiveProjectFolderAsync();
-            });
+            return ThreadHelper.JoinableTaskFactory.Run(GetActiveProjectFolderAsync);
         }
 
         public static async Task<string> GetActiveProjectFolderAsync()
@@ -121,10 +106,7 @@ namespace DynamicsCrm.DevKit.Shared
 
         public static Community.VisualStudio.Toolkit.Project GetActiveProject()
         {
-            return ThreadHelper.JoinableTaskFactory.Run(async () =>
-            {
-                return await GetActiveProjectAsync();
-            });
+            return ThreadHelper.JoinableTaskFactory.Run(GetActiveProjectAsync);
         }
 
         public static async Task<Community.VisualStudio.Toolkit.Project> GetActiveProjectAsync()
@@ -134,18 +116,12 @@ namespace DynamicsCrm.DevKit.Shared
 
         public static string GetDynamicsCrmDevKitConfigJsonFileName()
         {
-            return ThreadHelper.JoinableTaskFactory.Run(async () =>
-            {
-                return await GetDynamicsCrmDevKitConfigJsonFileNameAsync();
-            });
+            return ThreadHelper.JoinableTaskFactory.Run(GetDynamicsCrmDevKitConfigJsonFileNameAsync);
         }
 
         public static string GetDynamicsCrmDevKitJsonFileName()
         {
-            return ThreadHelper.JoinableTaskFactory.Run(async () =>
-            {
-                return await GetDynamicsCrmDevKitJsonFileNameAsync();
-            });
+            return ThreadHelper.JoinableTaskFactory.Run(GetDynamicsCrmDevKitJsonFileNameAsync);
         }
 
         public static async Task<string> GetDynamicsCrmDevKitJsonFileNameAsync()
@@ -156,10 +132,7 @@ namespace DynamicsCrm.DevKit.Shared
 
         public static string GetDynamicsCrmDevKitCliJsonFileName()
         {
-            return ThreadHelper.JoinableTaskFactory.Run(async () =>
-            {
-                return await GetDynamicsCrmDevKitCliJsonFileNameAsync();
-            });
+            return ThreadHelper.JoinableTaskFactory.Run(GetDynamicsCrmDevKitCliJsonFileNameAsync);
         }
 
         public static async Task<string> GetDynamicsCrmDevKitCliJsonFileNameAsync()
@@ -287,10 +260,7 @@ namespace DynamicsCrm.DevKit.Shared
 
         public static List<XrmEntity> GetAllProjects()
         {
-            return ThreadHelper.JoinableTaskFactory.Run(async () =>
-            {
-                return await GetAllProjectsAsync();
-            });
+            return ThreadHelper.JoinableTaskFactory.Run(GetAllProjectsAsync);
         }
 
         public static async Task<List<XrmEntity>> GetAllProjectsAsync()
@@ -735,10 +705,7 @@ namespace DynamicsCrm.DevKit.Shared
 
         public static DTE GetDTE()
         {
-            return ThreadHelper.JoinableTaskFactory.Run(async () =>
-            {
-                return await GetDTEAsync();
-            });
+            return ThreadHelper.JoinableTaskFactory.Run(GetDTEAsync);
         }
 
         private static async Task<DTE> GetDTEAsync()

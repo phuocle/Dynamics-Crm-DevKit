@@ -202,13 +202,21 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             {
                 var template = string.Empty;
                 if (ItemType == ItemType.Plugin)
-                    template = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.Plugin.tt");
+                {
+                    Textbox.Text = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.Plugin.tt");
+                }
                 else if (ItemType == ItemType.Workflow)
-                    template = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.Workflow.tt");
+                {
+                    Textbox.Text = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.Workflow.tt");
+                }
                 else if (ItemType == ItemType.CustomAction)
-                    template = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.CustomAction.tt");
+                {
+                    Textbox.Text = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.CustomAction.tt");
+                }
                 else if (ItemType == ItemType.CustomApi)
-                    template = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.CustomApi.tt");
+                {
+                    Textbox.Text = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.CustomApi.tt");
+                }
                 else if (ItemType == ItemType.DataProvider)
                 {
                     if ((string)ComboBoxSelect.SelectedItem == "Create")

@@ -330,9 +330,9 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             }
             else
             {
+                ComboBoxExecution.Text = @"Synchronous";
                 if (selected?.Name == @"PreValidation" || selected?.Name == @"PreOperation")
                 {
-                    ComboBoxExecution.Text = @"Synchronous";
                     ComboBoxExecution.IsEnabled = false;
                 }
                 else
