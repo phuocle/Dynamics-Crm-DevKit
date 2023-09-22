@@ -77,7 +77,7 @@
     <None Include="deploy.debug.only.bat" />
     <None Include="deploy.debug.bat" />
     <None Include="ProjectTemplate.csproj" />
-    <None Include="ReadMe.md" />
+    <Content Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
     <VSTemplate Include="CSharpPackageProjectTemplate.vstemplate">

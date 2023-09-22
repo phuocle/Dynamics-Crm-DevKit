@@ -5,6 +5,7 @@ powershell -Command "(Get-Date).ToString('yyyy.MM.dd HH.mm.ss') | Out-File -enco
 powershell -Command "(gc DynamicsCrm.DevKit.Shared\Const.cs) -replace 'xxxx-yy-zz', (gc build.txt) | Out-File -encoding UTF8 DynamicsCrm.DevKit.Shared\Const.cs"
 powershell -Command "(gc DynamicsCrm.DevKit\source.extension.cs) -replace 'xxxx-yy-zz', (gc build.txt) | Out-File -encoding UTF8 DynamicsCrm.DevKit\source.extension.cs"
 powershell -Command "(gc DynamicsCrm.DevKit\source.extension.vsixmanifest) -replace 'xxxx-yy-zz', (gc build.txt) | Out-File -encoding UTF8 DynamicsCrm.DevKit\source.extension.vsixmanifest"
+powershell -Command "(gc ProjectTemplates\CSharp\16.PackageProjectTemplate\ReadMe.txt) -replace 'xxxx.yy.zz HH.mm.ss', (gc build.txt) | Out-File -encoding UTF8 ProjectTemplates\CSharp\16.PackageProjectTemplate\ReadMe.txt"
 
 echo ************************************************************
 echo Building solution: DEPLOY RELEASE MODE - version: %VERSION%

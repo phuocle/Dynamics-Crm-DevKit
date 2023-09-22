@@ -14,6 +14,7 @@
 		<Title>$(AssemblyName)</Title>
 		<Description>$(AssemblyName)</Description>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<IsPublishable>False</IsPublishable>
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
 		<PackageOutputPath>bin\Debug</PackageOutputPath>

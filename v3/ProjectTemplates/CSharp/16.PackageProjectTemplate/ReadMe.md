@@ -1,1 +1,0 @@
-﻿# DynamicsCrm.DevKit

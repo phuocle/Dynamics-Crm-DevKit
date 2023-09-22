@@ -22,7 +22,7 @@
 	</TemplateData>
 	<TemplateContent>
 		<Project File="ProjectTemplate.csproj" ReplaceParameters="true">
-			<ProjectItem ReplaceParameters="false" TargetFileName="ReadMe.md">ReadMe.md</ProjectItem>
+			<ProjectItem ReplaceParameters="false" TargetFileName="ReadMe.txt">ReadMe.txt</ProjectItem>
 			<ProjectItem ReplaceParameters="true" TargetFileName="deploy.debug.bat">deploy.debug.bat</ProjectItem>
 			<ProjectItem ReplaceParameters="true" TargetFileName="deploy.debug.only.bat">deploy.debug.only.bat</ProjectItem>
 		</Project>

@@ -13,6 +13,8 @@
 		<PackageReadmeFile>ReadMe.md</PackageReadmeFile>
 		<Title>$(AssemblyName)</Title>
 		<Description>$(AssemblyName)</Description>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<IsPublishable>False</IsPublishable>
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
 		<PackageOutputPath>bin\Debug\</PackageOutputPath>
@@ -27,7 +29,7 @@
 		<PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.*" PrivateAssets="All" />
 	</ItemGroup>
 	<ItemGroup>
-		<None Update="ReadMe.md">
+		<None Update="ReadMe.txt">
 			<Pack>True</Pack>
 			<PackagePath>\</PackagePath>
 		</None>
