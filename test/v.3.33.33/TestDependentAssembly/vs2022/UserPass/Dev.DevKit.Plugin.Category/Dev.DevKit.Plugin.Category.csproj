@@ -68,4 +68,7 @@
   <ItemGroup>
     <Analyzer Include="..\packages\DynamicsCrm.DevKit.Analyzers.2.13.33\analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />
   </ItemGroup>
+  <PropertyGroup>
+    <PreBuildEvent>echo a</PreBuildEvent>
+  </PropertyGroup>
 </Project>

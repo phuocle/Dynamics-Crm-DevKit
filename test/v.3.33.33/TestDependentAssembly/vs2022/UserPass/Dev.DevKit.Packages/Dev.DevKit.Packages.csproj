@@ -13,7 +13,19 @@
 		<PackageReadmeFile>ReadMe.md</PackageReadmeFile>
 		<Title>$(AssemblyName)</Title>
 		<Description>$(AssemblyName)</Description>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+		<PackageOutputPath>bin\Debug</PackageOutputPath>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+		<PackageOutputPath>..\Release\nupkg</PackageOutputPath>
+	</PropertyGroup>
+	<ItemGroup>
+	  <Compile Remove="Postdevkit_dependentassemblyDeleteAsynchronous.cs" />
+	  <Compile Remove="Postdevkit_dependentassemblyUpdateAsynchronous.cs" />
+	  <Compile Remove="PreValidationdevkit_dependentassemblyDeleteSynchronous.cs" />
+	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="DynamicsCrm.DevKit.Analyzers" Version="2.13.33" PrivateAssets="All" />
 		<PackageReference Include="Microsoft.CrmSdk.CoreAssemblies" Version="9.0.2.50" PrivateAssets="All" />
