@@ -1,19 +1,21 @@
 ﻿using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Entities;
 using DynamicsCrm.DevKit.Shared.Models;
-using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Metadata.Query;
 using Microsoft.Xrm.Sdk.Query;
 using Microsoft.Xrm.Tooling.Connector;
+using NuGet.Packaging;
 using System;
 using System.Activities;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.ServiceModel;
 
 namespace DynamicsCrm.DevKit.Cli.Tasks
@@ -55,6 +57,12 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     TaskType = $"[{nameof(CliType.dataproviders).ToUpper()}]";
                     break;
             }
+        }
+
+        private enum DeployFileType
+        {
+            Dll,
+            Nuget
         }
 
         public string CurrentDirectory { get; set; }
@@ -127,23 +135,34 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         {
             foreach (var file in files)
             {
-                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, ConsoleColor.White, $"{Path.GetFileName(file)}");
-                var types = GetTypes(file);
-                if (!IsValidTypes(file, types)) continue;
-                DeployFile(file, types);
+                if (file.EndsWith(".dll"))
+                    DeployDll(file);
+                else if (file.EndsWith(".nupkg"))
+                    DeployPackage(file);
+                else
+                    CliLog.WriteLineError(ConsoleColor.Yellow, $"Not support file extension: {new FileInfo(file).Extension}");
             }
         }
 
-        private void DeployFile(string file, List<TypeInfo> types)
+        private void DeployDll(string file, DeployFileType deployFileType = DeployFileType.Dll, string nugetFileName = "")
+        {
+            if (deployFileType == DeployFileType.Dll)
+                CliLog.WriteLineWarning(ConsoleColor.Cyan, $"{Path.GetFileName(file)}");
+            var types = GetTypes(file);
+            if (!IsValidTypes(file, types)) return;
+            DeployFile(file, types, deployFileType);
+        }
+
+        private void DeployFile(string file, List<TypeInfo> types, DeployFileType deployFileType)
         {
             var dataProviderEvents = new List<DataProviderEvent>();
-            var pluginAssemblyId = DeployAssembly(file);
+            var pluginAssemblyId = DeployAssembly(file, deployFileType);
             if (pluginAssemblyId == null) return;
             if (Arg?.OnlyUpdateAssembly?.Length > 0) return;
             foreach (var type in types)
             {
                 var attributes = GetCrmPluginRegistrationAttributes(type);
-                var pluginTypeId = DeployPluginType(pluginAssemblyId.Value, type, attributes[0]);
+                var pluginTypeId = DeployPluginType(pluginAssemblyId.Value, type, attributes[0], deployFileType);
                 if (pluginTypeId == null) return;
                 if (IsWorkflowType(type)) continue;
                 foreach (var attribute in attributes)
@@ -545,7 +564,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     }
                     catch (Exception e)
                     {
-                        CliLog.WriteLineError(ConsoleColor.Yellow, $"{e.Message}. Assemply deployed, but the deployment of this assembly stopped.");
+                        CliLog.WriteLineError(ConsoleColor.Yellow, $"{e.Message} Assemply deployed, but the deployment of this assembly stopped.");
                         return Guid.Empty;
                     }
                 }
@@ -564,7 +583,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 {
                     //CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.DoNothing, ConsoleColor.White, $"{imageType.ToString()}Name: ", ConsoleColor.Cyan, imageName, ConsoleColor.White, $" {imageType.ToString()}Alias: ", ConsoleColor.Cyan, imageAliasName);
                     CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.DoNothing, ConsoleColor.White, "Image Type: ", ConsoleColor.Cyan, $"{imageType.ToString()}", ConsoleColor.White, $" Name: ", ConsoleColor.Cyan, imageName, ConsoleColor.White, $" Alias: ", ConsoleColor.Cyan, imageAliasName);
-                    CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE, SPACE, "Image Fields: ", ConsoleColor.Blue, "[", ConsoleColor.Green, attributes ?? "*", ConsoleColor.Blue, "]");
+                    CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE, SPACE, "Image Fields: ", ConsoleColor.Blue, "[", ConsoleColor.Green, imageAttributes ?? "*", ConsoleColor.Blue, "]");
                 }
                 else
                 {
@@ -573,13 +592,13 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         pluginImage["sdkmessageprocessingstepimageid"] = rows.Entities[0].Id;
                         //CliLog.WriteLineWarning(SPACE, SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.Updated, ConsoleColor.White, $"{imageType.ToString()}Name: ", ConsoleColor.Cyan, imageName, ConsoleColor.White, $" {imageType.ToString()}Alias: ", ConsoleColor.Cyan, imageAliasName);
                         CliLog.WriteLineWarning(SPACE, SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.Updated, ConsoleColor.White, "Image Type: ", ConsoleColor.Cyan, $"{imageType.ToString()}", ConsoleColor.White, $" Name: ", ConsoleColor.Cyan, imageName, ConsoleColor.White, $" Alias: ", ConsoleColor.Cyan, imageAliasName);
-                        CliLog.WriteLineWarning(SPACE, SPACE, SPACE, SPACE, SPACE, "Image Fields: ", ConsoleColor.Blue, "[", ConsoleColor.Green, attributes ?? "*", ConsoleColor.Blue, "]");
+                        CliLog.WriteLineWarning(SPACE, SPACE, SPACE, SPACE, SPACE, "Image Fields: ", ConsoleColor.Blue, "[", ConsoleColor.Green, imageAttributes ?? "*", ConsoleColor.Blue, "]");
                     }
                     else if (imageAttributes.Length == 0)
                     {
                         //CliLog.WriteLineWarning(SPACE, SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.Deleted, ConsoleColor.White, $"{imageType.ToString()}Name: ", ConsoleColor.Cyan, imageName, ConsoleColor.White, $" {imageType.ToString()}Alias: ", ConsoleColor.Cyan, imageAliasName);
                         CliLog.WriteLine(SPACE, SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.Deleted, ConsoleColor.White, "Image Type: ", ConsoleColor.Cyan, $"{imageType.ToString()}", ConsoleColor.White, $" Name: ", ConsoleColor.Cyan, imageName, ConsoleColor.White, $" Alias: ", ConsoleColor.Cyan, imageAliasName);
-                        CliLog.WriteLineWarning(SPACE, SPACE, SPACE, SPACE, SPACE, "Image Fields: ", ConsoleColor.Blue, "[", ConsoleColor.Green, attributes ?? "*", ConsoleColor.Blue, "]");
+                        CliLog.WriteLineWarning(SPACE, SPACE, SPACE, SPACE, SPACE, "Image Fields: ", ConsoleColor.Blue, "[", ConsoleColor.Green, imageAttributes ?? "*", ConsoleColor.Blue, "]");
                         CrmServiceClient.Delete("sdkmessageprocessingstepimage", rows.Entities[0].Id);
                         return Guid.NewGuid();
                     }
@@ -601,7 +620,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     }
                     catch (Exception e)
                     {
-                        CliLog.WriteLineError(ConsoleColor.Yellow, $"{e.Message}. Assemply deployed, but the deployment of this assembly stopped.");
+                        CliLog.WriteLineError(ConsoleColor.Yellow, $"{e.Message} Assemply deployed, but the deployment of this assembly stopped.");
                         return Guid.Empty;
                     }
                 }
@@ -739,7 +758,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
                 catch (Exception e)
                 {
-                    CliLog.WriteLineError(ConsoleColor.Yellow, $"{e.Message}. Assemply deployed, but the deployment of this assembly stopped.");
+                    CliLog.WriteLineError(ConsoleColor.Yellow, $"{e.Message} Assemply deployed, but the deployment of this assembly stopped.");
                     return null;
                 }
             }
@@ -836,7 +855,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     }
                     catch (Exception e)
                     {
-                        CliLog.WriteLineError(ConsoleColor.Yellow, $"{e.Message}. Assemply deployed, but the deployment of this assembly stopped.");
+                        CliLog.WriteLineError(ConsoleColor.Yellow, $"{e.Message} Assemply deployed, but the deployment of this assembly stopped.");
                         return null;
                     }
                 }
@@ -934,7 +953,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             return rows.Entities[0];
         }
 
-        private Guid? DeployPluginType(Guid pluginAssemblyId, TypeInfo type, CrmPluginRegistrationAttribute attribute)
+        private Guid? DeployPluginType(Guid pluginAssemblyId, TypeInfo type, CrmPluginRegistrationAttribute attribute, DeployFileType deployFileType)
         {
             var fetchData = new
             {
@@ -962,6 +981,11 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 {
                     CliLog.WriteLineError(ConsoleColor.Yellow, $"Found more than 1 type name {type.FullName}. Assemply deployed, but the deployment of this assembly stopped.");
                     return null;
+                }
+                if (deployFileType == DeployFileType.Nuget)
+                {
+                    CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, ConsoleColor.Green, CliAction.DoNothing, ConsoleColor.White, $"{attribute.PluginType.ToString()} Type: ", ConsoleColor.Cyan, type.FullName);
+                    return rows.Entities[0].Id;
                 }
             }
             var pluginType = new Entity("plugintype");
@@ -1016,7 +1040,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
                 catch (FaultException fe)
                 {
-                    CliLog.WriteLineError(ConsoleColor.Yellow, $"{fe.Message}. Assemply deployed, but the deployment of this assembly stopped.");
+                    CliLog.WriteLineError(ConsoleColor.Yellow, $"{fe.Message} Assemply deployed, but the deployment of this assembly stopped.");
                     return null;
                 }
                 if (IsWorkflowType(type))
@@ -1045,7 +1069,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             return old == @new;
         }
 
-        private Guid? DeployAssembly(string file)
+        private Guid? DeployAssembly(string file, DeployFileType deployFileType)
         {
             var assembly = Assembly.ReflectionOnlyLoadFrom(file);
             var assemblyProperties = assembly.GetName().FullName.Split(",= ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
@@ -1098,7 +1122,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             else
             {
                 var oldContent = rows.Entities[0].GetAttributeValue<string>("content");
-                if (IsEqualsAssembly(oldContent, newContent))
+                if (IsEqualsContent(oldContent, newContent))
                 {
                     CliLog.WriteLine(ConsoleColor.White, "|", SPACE, ConsoleColor.Green, CliAction.DoNothing, ConsoleColor.White, "Assembly ", ConsoleColor.Cyan, assemblyName);
                     return rows.Entities[0].Id;
@@ -1126,7 +1150,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             return rows.Entities[0].Id;
         }
 
-        private bool IsEqualsAssembly(string oldContent, string newContent)
+        private bool IsEqualsContent(string oldContent, string newContent)
         {
             return oldContent == newContent;
         }
@@ -1421,6 +1445,153 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var rows = CrmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
             if (rows.Entities.Count == 0) return (Guid?)null;
             return rows.Entities[0].Id;
+        }
+
+        //=========================================================================
+        private void DeployPackage(string file)
+        {
+            using (PackageArchiveReader packageArchiveReader = new PackageArchiveReader(file))
+            {
+                var folder = $"{CurrentFolder}\\DynamicsCrm.DevKit";
+                var ok = DeployNewOrUpdatePackage(packageArchiveReader, file);
+                if (ok)
+                {
+                    if (Arg?.OnlyUpdateAssembly?.Length > 0) return;
+                    ExtractZip(packageArchiveReader, folder);
+                    var files = Directory.GetFiles(folder).ToList();
+                    var fileName = new FileInfo(file).Name;
+                    DeployPackageFiles(fileName, files);
+                }
+            }
+        }
+
+        private void DeployPackageFiles(string fileName, List<string> files)
+        {
+            foreach (var file in files)
+            {
+                var types = GetTypes(file, files);
+                if (types.Count > 0)
+                {
+                    DeployDll(file, DeployFileType.Nuget, fileName);
+                }
+            }
+        }
+
+        private bool DeployNewOrUpdatePackage(PackageArchiveReader packageArchiveReader, string file)
+        {
+            byte[] inArray = File.ReadAllBytes(file);
+            var name = $"{Prefix}{packageArchiveReader.NuspecReader.GetId()}";
+            var newContent = Convert.ToBase64String(inArray);
+            var fetchData = new
+            {
+                name = name
+            };
+            var fetchXml = $@"
+<fetch>
+  <entity name='pluginpackage'>
+    <attribute name='pluginpackageid' />
+    <attribute name='content' />
+    <filter type='and'>
+      <condition attribute='name' operator='eq' value='{fetchData.name}'/>
+    </filter>
+  </entity>
+</fetch>";
+            var rows = CrmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            if (rows.Entities.Count == 0)
+            {
+                try
+                {
+                    var entity = new Entity("pluginpackage");
+                    entity["name"] = name;
+                    entity["content"] = newContent;
+                    entity["version"] = packageArchiveReader.NuspecReader.GetVersion().ToFullString();
+                    var request = new CreateRequest { Target = entity };
+                    request.Parameters.Add("SolutionUniqueName", Json.solution);
+                    CliLog.WriteLineWarning(ConsoleColor.Cyan, new FileInfo(file).Name);
+                    CrmServiceClient.Execute(request);
+                }
+                catch (FaultException fe)
+                {
+                    CliLog.WriteLineError(ConsoleColor.Yellow, $"{fe.Message} Package deployed, but the deployment of this package stopped.");
+                    return false;
+                }
+            }
+            else
+            {
+                var entity = rows.Entities[0];
+                var oldContent = entity.GetAttributeValue<string>("content");
+                if (IsEqualsContent(oldContent, newContent))
+                {
+                    CliLog.WriteLineWarning(ConsoleColor.Cyan, new FileInfo(file).Name);
+                }
+                else
+                {
+                    try
+                    {
+                        var update = new Entity("pluginpackage");
+                        update["pluginpackageid"] = entity.Id;
+                        update["content"] = newContent;
+                        update["version"] = packageArchiveReader.NuspecReader.GetVersion().ToFullString();
+                        var request = new UpdateRequest { Target = update };
+                        request.Parameters.Add("SolutionUniqueName", Json.solution);
+                        CliLog.WriteLineWarning(ConsoleColor.Cyan, new FileInfo(file).Name);
+                        CrmServiceClient.Execute(request);
+                    }
+                    catch (FaultException fe)
+                    {
+                        CliLog.WriteLineError(ConsoleColor.Yellow, $"{fe.Message} Package deployed, but the deployment of this package stopped.");
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
+        private void ExtractZip(PackageArchiveReader packageArchiveReader, string folder)
+        {
+            var libFiles = packageArchiveReader.GetFiles("lib");
+
+            if (!Directory.Exists(folder))
+            {
+                Directory.CreateDirectory(folder);
+            }
+            else
+            {
+                foreach (FileInfo f in new DirectoryInfo(folder).GetFiles()) { f.Delete(); }
+            }
+            foreach (var libFile in libFiles)
+            {
+                var zip = packageArchiveReader.GetEntry(libFile);
+                zip.ExtractToFile($"{folder}\\{zip.Name}", true);
+            }
+        }
+
+        private List<TypeInfo> GetTypes(string file, List<string> files)
+        {
+            var assemblyFilePath = new FileInfo(file);
+            Assembly assembly = null;
+            foreach (var f in files)
+                assembly = Assembly.ReflectionOnlyLoadFrom(f);
+            AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve += CurrentDomain_ReflectionOnlyAssemblyResolve;
+            assembly = Assembly.ReflectionOnlyLoadFrom(file);
+            AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve -= CurrentDomain_ReflectionOnlyAssemblyResolve;
+            if (assembly == null) return null;
+            AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve += CurrentDomain_ReflectionOnlyAssemblyResolve;
+            var allTypes = assembly.DefinedTypes;
+            AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve -= CurrentDomain_ReflectionOnlyAssemblyResolve;
+            var types = new List<TypeInfo>();
+            foreach (var type in allTypes)
+            {
+                try
+                {
+                    var attributes = type?.GetCustomAttributesData();
+                    if (attributes.Any(a => a.AttributeType.Name == typeof(CrmPluginRegistrationAttribute).Name))
+                        types.Add(type);
+                }
+                catch { }
+            }
+            types = types.OrderBy(x => x.FullName).ToList();
+            return types;
         }
     }
 }

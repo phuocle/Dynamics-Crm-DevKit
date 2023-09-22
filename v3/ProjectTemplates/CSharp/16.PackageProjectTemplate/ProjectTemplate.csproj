@@ -14,6 +14,12 @@
 		<Title>$(AssemblyName)</Title>
 		<Description>$(AssemblyName)</Description>
 	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+		<PackageOutputPath>bin\Debug\</PackageOutputPath>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+		<PackageOutputPath>..\Release\nupkg\</PackageOutputPath>
+	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="DynamicsCrm.DevKit.Analyzers" Version="$DynamicsCrm.DevKit.Analyzers.version$" PrivateAssets="All" />
 		<PackageReference Include="Microsoft.CrmSdk.CoreAssemblies" Version="$Microsoft.CrmSdk.CoreAssemblies.version$" PrivateAssets="All" />

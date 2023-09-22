@@ -5,7 +5,7 @@ using Niam.XRM.Framework.Plugin;
 
 namespace Dev.DevKit.Packages
 {
-    [CrmPluginRegistration("Create", "devkit_dependentassembly", StageEnum.PostOperation, ExecutionModeEnum.Asynchronous, "", "Dev.DevKit.Packages.Postdevkit_dependentassemblyCreateAsynchronous", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, DeleteAsyncOperation = true, Image1Name = "PostImage", Image1Alias = "PostImage", Image1Type = ImageTypeEnum.PostImage, Image1Attributes = "statuscode")]
+    [CrmPluginRegistration("Create", "devkit_dependentassembly", StageEnum.PostOperation, ExecutionModeEnum.Asynchronous, "", "Dev.DevKit.Packages.Postdevkit_dependentassemblyCreateAsynchronous", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, DeleteAsyncOperation = true, Image1Name = "PostImage", Image1Alias = "PostImage", Image1Type = ImageTypeEnum.PostImage, Image1Attributes = "*")]
     public class Postdevkit_dependentassemblyCreateAsynchronous : PluginBase<Entity>, IPlugin
     {
         /*
