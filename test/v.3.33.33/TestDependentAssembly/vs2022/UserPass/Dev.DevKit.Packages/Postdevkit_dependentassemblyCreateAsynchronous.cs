@@ -24,9 +24,7 @@ namespace Dev.DevKit.Packages
         }
         protected override void ExecuteCrmPlugin(IPluginContext<Entity> context)
         {
-            //YOUR CODE GO HERE
-            throw new InvalidPluginExecutionException("BBB");
+            throw new InvalidPluginExecutionException("ABC");
         }
-
     }
 }

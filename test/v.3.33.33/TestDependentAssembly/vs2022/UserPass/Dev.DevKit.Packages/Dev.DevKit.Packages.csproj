@@ -30,16 +30,10 @@
 		<PackageReference Include="Niam.XRM.Framework" Version="9.0.2.451" />
 	</ItemGroup>
 	<ItemGroup>
-		<None Update="plugin.tt">
-		  <Generator></Generator>
-		</None>
 		<None Update="ReadMe.md">
 			<Pack>True</Pack>
 			<PackagePath>\</PackagePath>
 		</None>
-	</ItemGroup>
-	<ItemGroup>
-	  <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
 	</ItemGroup>
 	<Import Project="..\Dev.DevKit.Shared\Dev.DevKit.Shared.projitems" Label="Shared" Condition="Exists('..\Dev.DevKit.Shared\Dev.DevKit.Shared.projitems')" />
 	<Import Project="$(PowerAppsTargetsPath)\Microsoft.PowerApps.VisualStudio.Plugin.targets" Condition="Exists('$(PowerAppsTargetsPath)\Microsoft.PowerApps.VisualStudio.Plugin.targets')" />
