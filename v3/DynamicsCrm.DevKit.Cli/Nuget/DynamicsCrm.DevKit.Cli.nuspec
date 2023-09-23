@@ -34,5 +34,9 @@
 		<file src="..\bin\Release\net48\Newtonsoft.Json.dll" target="tools\Newtonsoft.Json.dll" />
 		<file src="..\bin\Release\net48\Microsoft.VisualStudio.Shell.15.0.dll" target="tools\Microsoft.VisualStudio.Shell.15.0.dll" />
 		<file src="..\bin\Release\net48\Microsoft.VisualStudio.Shell.Framework.dll" target="tools\Microsoft.VisualStudio.Shell.Framework.dll" />
+		<file src="..\bin\Release\net48\NuGet.Packaging.dll" target="tools\NuGet.Packaging.dll" />
+		<file src="..\bin\Release\net48\NuGet.Common.dll" target="tools\NuGet.Common.dll" />
+		<file src="..\bin\Release\net48\NuGet.Frameworks.dll" target="tools\NuGet.Frameworks.dll" />
+		<file src="..\bin\Release\net48\NuGet.Versioning.dll" target="tools\NuGet.Versioning.dll" />
     </files>
 </package>

@@ -14,7 +14,7 @@
 		<Title>$(AssemblyName)</Title>
 		<Description>$(AssemblyName)</Description>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-		<IsPublishable>False</IsPublishable>
+		<IsPublishable>True</IsPublishable>
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
 		<PackageOutputPath>bin\Debug</PackageOutputPath>
@@ -23,22 +23,23 @@
 		<PackageOutputPath>..\Release\nupkg</PackageOutputPath>
 	</PropertyGroup>
 	<ItemGroup>
-	  <Compile Remove="Postdevkit_dependentassemblyDeleteAsynchronous.cs" />
-	  <Compile Remove="Postdevkit_dependentassemblyUpdateAsynchronous.cs" />
-	  <Compile Remove="PreValidationdevkit_dependentassemblyDeleteSynchronous.cs" />
-	</ItemGroup>
-	<ItemGroup>
-		<PackageReference Include="DynamicsCrm.DevKit.Analyzers" Version="2.13.33" PrivateAssets="All" />
+		<PackageReference Include="DynamicsCrm.DevKit.Analyzers" Version="3.33.33.33" PrivateAssets="All" />
 		<PackageReference Include="Microsoft.CrmSdk.CoreAssemblies" Version="9.0.2.50" PrivateAssets="All" />
 		<PackageReference Include="Microsoft.PowerApps.MSBuild.Plugin" Version="1.*" PrivateAssets="All" />
 		<PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.*" PrivateAssets="All" />
 		<PackageReference Include="Niam.XRM.Framework" Version="9.0.2.451" />
 	</ItemGroup>
 	<ItemGroup>
+		<None Update="plugin.tt">
+		  <Generator></Generator>
+		</None>
 		<None Update="ReadMe.md">
 			<Pack>True</Pack>
 			<PackagePath>\</PackagePath>
 		</None>
+	</ItemGroup>
+	<ItemGroup>
+	  <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
 	</ItemGroup>
 	<Import Project="..\Dev.DevKit.Shared\Dev.DevKit.Shared.projitems" Label="Shared" Condition="Exists('..\Dev.DevKit.Shared\Dev.DevKit.Shared.projitems')" />
 	<Import Project="$(PowerAppsTargetsPath)\Microsoft.PowerApps.VisualStudio.Plugin.targets" Condition="Exists('$(PowerAppsTargetsPath)\Microsoft.PowerApps.VisualStudio.Plugin.targets')" />
