@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-//using System.Diagnostics;
+#if DEBUG
+using System.Diagnostics;
+#endif
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -41,10 +43,12 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
 
         public override void Initialize(AnalysisContext context)
         {
-            //if (!Debugger.IsAttached)
-            //{
-            //    Debugger.Launch();
-            //}
+#if DEBUG
+            if (!Debugger.IsAttached)
+            {
+                Debugger.Launch();
+            }
+#endif
             context.EnableConcurrentExecution();
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.Analyze | GeneratedCodeAnalysisFlags.ReportDiagnostics);
             if (context == null) throw new ArgumentNullException(nameof(context));
@@ -136,8 +140,8 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
                 }
                 else
                 {
-                    var whiteListMessages = new List<string>() { "Assign", /*"Create",*/ /*"Delete",*/ "DeliverIncoming", "DeliverPromote", "Merge", "Route", "Send", "SetState", "SetStateDynamicEntity", /*"Update",*/ "ExecuteWorkflow" };
-                    if (whiteListMessages.Where(x => x.ToLower() == message).Count() == 0)
+                    var whiteListMessages = new List<string>() { "Assign", "Create", "Delete", "DeliverIncoming", "DeliverPromote", "Merge", "Route", "Send", "SetState", "SetStateDynamicEntity", "Update", "ExecuteWorkflow" };
+                    if (whiteListMessages.Where(x => x.ToLower() == message.ToLower()).Count() == 0)
                     {
                         var images = GetImages(attribute.ArgumentList);
                         if (images.Count > 0)

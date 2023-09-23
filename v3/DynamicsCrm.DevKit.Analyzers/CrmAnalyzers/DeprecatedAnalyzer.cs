@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+#if DEBUG
 using System.Diagnostics;
+#endif
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -79,10 +81,12 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
 
         public override void Initialize(AnalysisContext context)
         {
+#if DEBUG
             //if (!Debugger.IsAttached)
             //{
             //    Debugger.Launch();
             //}
+#endif
             context.EnableConcurrentExecution();
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.Analyze | GeneratedCodeAnalysisFlags.ReportDiagnostics);
             if (context == null) throw new ArgumentNullException(nameof(context));
