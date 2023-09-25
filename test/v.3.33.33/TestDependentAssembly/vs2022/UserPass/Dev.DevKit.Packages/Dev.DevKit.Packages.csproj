@@ -20,7 +20,7 @@
 		<PackageOutputPath>bin\Debug</PackageOutputPath>
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-		<PackageOutputPath>..\Release\nupkg</PackageOutputPath>
+		<PackageOutputPath>..\Release\dll</PackageOutputPath>
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="DynamicsCrm.DevKit.Analyzers" Version="3.33.33.33" PrivateAssets="All" />

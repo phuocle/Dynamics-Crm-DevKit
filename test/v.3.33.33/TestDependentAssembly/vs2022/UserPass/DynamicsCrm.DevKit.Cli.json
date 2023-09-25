@@ -15,6 +15,22 @@
       "excludefiles": [
         "Dev.DevKit.*.Test.dll"
       ]
+    },
+    {
+      "profile": "RELEASE",
+      "solution": "TestPluginWorkflowCustomActionCustomApi",
+      "folder": "Release\\dll",
+      "includefiles": [
+        "Dev.DevKit.Plugin.*.dll",
+        "Dev.DevKit.CustomAction.*.dll",
+        "Dev.DevKit.Workflow.*.dll",
+        "Dev.DevKit.CustomApi.*.dll",
+        "Dev.DevKit.DataProvider.*.dll",
+        "Dev.DevKit.Packages.*.nupkg"
+      ],
+      "excludefiles": [
+        "Dev.DevKit.*.Test.dll"
+      ]
     }
   ],
   "webresources": [

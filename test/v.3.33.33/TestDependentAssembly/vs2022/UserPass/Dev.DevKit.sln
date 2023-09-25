@@ -5,6 +5,7 @@ VisualStudioVersion = 17.6.33723.286
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8651C61D-45E4-4E34-8E99-6DDBADA7C4C4}"
 	ProjectSection(SolutionItems) = preProject
+		deploy.RELEASE.bat = deploy.RELEASE.bat
 		DynamicsCrm.DevKit.Cli.json = DynamicsCrm.DevKit.Cli.json
 		DynamicsCrm.DevKit.Config.json = DynamicsCrm.DevKit.Config.json
 		DynamicsCrm.DevKit.json = DynamicsCrm.DevKit.json

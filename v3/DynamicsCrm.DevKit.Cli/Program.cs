@@ -57,7 +57,7 @@ namespace DynamicsCrm.DevKit.Cli
 
         private static void ShowHelp()
         {
-            var helpColor = ConsoleColor.Blue;
+            var helpColor = ConsoleColor.Green;
             CliLog.SetupCliLog();
             CliLog.WriteLine(helpColor, "  ____                              _           ____                  ____             _  ___ _     ____ _ _ ");
             CliLog.WriteLine(helpColor, " |  _ \\ _   _ _ __   __ _ _ __ ___ (_) ___ ___ / ___|_ __ _ __ ___   |  _ \\  _____   _| |/ (_) |_  / ___| (_)");
