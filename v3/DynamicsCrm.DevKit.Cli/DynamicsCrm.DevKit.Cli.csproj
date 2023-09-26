@@ -18,6 +18,7 @@
 		<StartupObject>DynamicsCrm.DevKit.Cli.Program</StartupObject>
 		<BaseOutputPath>bin</BaseOutputPath>
 		<DelaySign>False</DelaySign>
+		<ApplicationIcon>icon.ico</ApplicationIcon>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -42,6 +43,10 @@
 
 	<ItemGroup>
 	  <Compile Remove="C:\Users\ple\.nuget\packages\community.visualstudio.toolkit\17.0.76.268-pre\build\AssemblyInfo.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Include="icon.ico" />
 	</ItemGroup>
 
 	<ItemGroup>
