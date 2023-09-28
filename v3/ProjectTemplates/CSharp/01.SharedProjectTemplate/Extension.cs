@@ -1,4 +1,5 @@
 ﻿using $SharedNameSpace$;
+using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Query;
 using System;
 using System.Collections.Generic;
