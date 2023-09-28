@@ -14,7 +14,7 @@ namespace DynamicsCrm.DevKit.Analyzers
             defaultSeverity: DiagnosticSeverity.Error,
             isEnabledByDefault: true,
             description: "DynamicsCrm.DevKit: Update message should have filtering attributes.",
-            helpLinkUri: $"https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Analyzer/DEVKIT1001",
+            helpLinkUri: $"https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DEVKIT1001",
             customTags: Array.Empty<string>()
             );
 
@@ -27,7 +27,7 @@ namespace DynamicsCrm.DevKit.Analyzers
             defaultSeverity: DiagnosticSeverity.Error,
             isEnabledByDefault: true,
             description: "DynamicsCrm.DevKit: Update message should have filtering attributes.",
-            helpLinkUri: $"https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Analyzer/DEVKIT1001",
+            helpLinkUri: $"https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DEVKIT1001",
             customTags: Array.Empty<string>()
             );
 
@@ -40,7 +40,7 @@ namespace DynamicsCrm.DevKit.Analyzers
             defaultSeverity: DiagnosticSeverity.Error,
             isEnabledByDefault: true,
             description: "DynamicsCrm.DevKit: Don't use Microsoft.Xrm.Sdk.Query.ColumnSet(true).",
-            helpLinkUri: $"https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Analyzer/DEVKIT1002",
+            helpLinkUri: $"https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DEVKIT1002",
             customTags: Array.Empty<string>()
             );
 
@@ -53,7 +53,7 @@ namespace DynamicsCrm.DevKit.Analyzers
             defaultSeverity: DiagnosticSeverity.Error,
             isEnabledByDefault: true,
             description: "DynamicsCrm.DevKit: Plugin Pre Create not support Pre Image.",
-            helpLinkUri: $"https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Analyzer/DEVKIT1003",
+            helpLinkUri: $"https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DEVKIT1003",
             customTags: Array.Empty<string>()
             );
 
@@ -66,7 +66,7 @@ namespace DynamicsCrm.DevKit.Analyzers
             defaultSeverity: DiagnosticSeverity.Error,
             isEnabledByDefault: true,
             description: "DynamicsCrm.DevKit: Plugin Pre Create not support Post Image.",
-            helpLinkUri: $"https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Analyzer/DEVKIT1003",
+            helpLinkUri: $"https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DEVKIT1003",
             customTags: Array.Empty<string>()
             );
 
@@ -79,7 +79,7 @@ namespace DynamicsCrm.DevKit.Analyzers
             defaultSeverity: DiagnosticSeverity.Error,
             isEnabledByDefault: true,
             description: "DynamicsCrm.DevKit: Plugin Pre Create not support Post Image.",
-            helpLinkUri: $"https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Analyzer/DEVKIT1003",
+            helpLinkUri: $"https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DEVKIT1003",
             customTags: Array.Empty<string>()
             );
 
@@ -92,7 +92,7 @@ namespace DynamicsCrm.DevKit.Analyzers
             defaultSeverity: DiagnosticSeverity.Error,
             isEnabledByDefault: true,
             description: "DynamicsCrm.DevKit: Plugin Pre Update not support Post Image.",
-            helpLinkUri: $"https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Analyzer/DEVKIT1003",
+            helpLinkUri: $"https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DEVKIT1003",
             customTags: Array.Empty<string>()
             );
 
@@ -105,7 +105,7 @@ namespace DynamicsCrm.DevKit.Analyzers
             defaultSeverity: DiagnosticSeverity.Error,
             isEnabledByDefault: true,
             description: "DynamicsCrm.DevKit: Plugin Pre Delete not support Post Image.",
-            helpLinkUri: $"https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Analyzer/DEVKIT1003",
+            helpLinkUri: $"https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DEVKIT1003",
             customTags: Array.Empty<string>()
             );
 
@@ -118,7 +118,7 @@ namespace DynamicsCrm.DevKit.Analyzers
             defaultSeverity: DiagnosticSeverity.Error,
             isEnabledByDefault: true,
             description: "DynamicsCrm.DevKit: Plugin Post Delete not support Post Image.",
-            helpLinkUri: $"https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Analyzer/DEVKIT1003",
+            helpLinkUri: $"https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DEVKIT1003",
             customTags: Array.Empty<string>()
             );
 
@@ -131,7 +131,7 @@ namespace DynamicsCrm.DevKit.Analyzers
             defaultSeverity: DiagnosticSeverity.Error,
             isEnabledByDefault: true,
             description: "DynamicsCrm.DevKit: Plugin does not support Post Image.",
-            helpLinkUri: $"https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Analyzer/DEVKIT1003",
+            helpLinkUri: $"https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DEVKIT1003",
             customTags: Array.Empty<string>()
             );
 
@@ -144,7 +144,7 @@ namespace DynamicsCrm.DevKit.Analyzers
             defaultSeverity: DiagnosticSeverity.Error,
             isEnabledByDefault: true,
             description: "DynamicsCrm.DevKit: Plugin does not support Pre Image.",
-            helpLinkUri: $"https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Analyzer/DEVKIT1003",
+            helpLinkUri: $"https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DEVKIT1003",
             customTags: Array.Empty<string>()
             );
 
@@ -157,7 +157,7 @@ namespace DynamicsCrm.DevKit.Analyzers
             defaultSeverity: DiagnosticSeverity.Warning,
             isEnabledByDefault: true,
             description: "DynamicsCrm.DevKit: Use the deprecated message.",
-            helpLinkUri: $"https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Analyzer/DEVKIT1004",
+            helpLinkUri: $"https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DEVKIT1004",
             customTags: Array.Empty<string>()
             );
     }
