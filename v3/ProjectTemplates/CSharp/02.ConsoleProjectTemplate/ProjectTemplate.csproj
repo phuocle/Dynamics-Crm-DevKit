@@ -145,4 +145,7 @@
   </ItemGroup>$endif$
   <Import Project="..\$SharedProject$\$SharedProject$.projitems" Label="Shared" Condition="Exists('..\$SharedProject$\$SharedProject$.projitems')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+	<Analyzer Include="..\packages\DynamicsCrm.DevKit.Analyzers.$DynamicsCrm.DevKit.Analyzers.version$\analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />
+  </ItemGroup>
 </Project>
