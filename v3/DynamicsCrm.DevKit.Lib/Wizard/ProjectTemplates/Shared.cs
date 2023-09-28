@@ -49,6 +49,7 @@ namespace DynamicsCrm.DevKit.Lib.Wizard.ProjectTemplates
                     var json = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.DynamicsCrm.DevKit.Cli.json");
                     json = json
                         .Replace("???.Plugin.*.dll", $"{solutionName}.Plugin.*.dll")
+                        .Replace("???.Plugin.*.nupkg", $"{solutionName}.Plugin.*.nupkg")
                         .Replace("???.CustomAction.*.dll", $"{solutionName}.CustomAction.*.dll")
                         .Replace("???.CustomApi.*.dll", $"{solutionName}.CustomApi.*.dll")
                         .Replace("???.Workflow.*.dll", $"{solutionName}.Workflow.*.dll")
