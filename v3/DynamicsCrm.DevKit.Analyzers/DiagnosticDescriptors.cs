@@ -37,7 +37,7 @@ namespace DynamicsCrm.DevKit.Analyzers
             title: "Don't use Microsoft.Xrm.Sdk.Query.ColumnSet(true)",
             messageFormat: "Don't use Microsoft.Xrm.Sdk.Query.ColumnSet(true)",
             category: DiagnosticCategories.Require,
-            defaultSeverity: DiagnosticSeverity.Error,
+            defaultSeverity: DiagnosticSeverity.Warning,
             isEnabledByDefault: true,
             description: "DynamicsCrm.DevKit: Don't use Microsoft.Xrm.Sdk.Query.ColumnSet(true).",
             helpLinkUri: $"https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DEVKIT1002",
