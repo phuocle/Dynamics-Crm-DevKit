@@ -578,10 +578,10 @@ namespace DynamicsCrm.DevKit.Shared
             //code += $"{TAB}{TAB}{TAB}return new {entityMetadata.SchemaName}();{NEW_LINE}";
             //code += $"{TAB}{TAB}}}{NEW_LINE}";
 
-            code += $"{TAB}{TAB}public static {@class} Read_Record(IOrganizationService serviceAdmin, IOrganizationService service, ITracingService tracing, Guid? {@class}Id, Microsoft.Xrm.Sdk.Query.ColumnSet columns = null){NEW_LINE}";
+            code += $"{TAB}{TAB}public static {@class} Read_Record(IOrganizationService serviceAdmin, IOrganizationService service, ITracingService tracing, Guid? {@class}Id, ColumnSet columns = null){NEW_LINE}";
             code += $"{TAB}{TAB}{{{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}if ({@class}Id == null) return new {entityMetadata.SchemaName}();{NEW_LINE}";
-            code += $"{TAB}{TAB}{TAB}if (columns == null) columns = new Microsoft.Xrm.Sdk.Query.ColumnSet(true);{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}if (columns == null) columns = new ColumnSet(true);{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}var entity = serviceAdmin.Retrieve({@class}.EntityLogicalName, {@class}Id.Value, columns);{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}return new {@class}(entity);{NEW_LINE}";
             code += $"{TAB}{TAB}}}{NEW_LINE}";
