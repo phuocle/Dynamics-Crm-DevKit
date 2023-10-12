@@ -12,8 +12,8 @@ echo Building solution: DEPLOY RELEASE MODE - version: %VERSION%
 echo ************************************************************
 
 set MsBuild=""
-if exist "C:\Program Files\Microsoft Visual Studio\2022\Professional\MSBuild\Current\Bin\MSBuild.exe" (
-	set MsBuild="C:\Program Files\Microsoft Visual Studio\2022\Professional\MSBuild\Current\Bin\MSBuild.exe"
+if exist "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\MSBuild\Current\Bin\MSBuild.exe" (
+	set MsBuild="C:\Program Files\Microsoft Visual Studio\2022\Enterprise\MSBuild\Current\Bin\MSBuild.exe"
 )
 if %MsBuild%=="" (
 	echo msbuild.exe not found !!!
