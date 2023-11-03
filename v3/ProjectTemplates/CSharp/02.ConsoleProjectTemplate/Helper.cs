@@ -56,11 +56,12 @@ namespace $NameSpace$.Debug
             entities.AddRange(pluginExecutionContext.OutputParameters.Where(x => x.Value is Entity).Select(x => (Entity)x.Value).ToList());
             entities.AddRange(pluginExecutionContext.PostEntityImages.Select(x => (Entity)x.Value).ToList());
             entities.AddRange(pluginExecutionContext.PreEntityImages.Select(x => (Entity)x.Value).ToList());
-            FixedDateTime(entities);
-            FixedOptionSetValueCollection(entities);
+            FixDateTime(entities);
+            FixOptionSetValueCollection(entities);
+            FixGuid(entities);
         }
 
-        private static void FixedOptionSetValueCollection(List<Entity> entities)
+        private static void FixOptionSetValueCollection(List<Entity> entities)
         {
             foreach (var entity in entities)
             {
@@ -82,7 +83,7 @@ namespace $NameSpace$.Debug
             }
         }
 
-        private static void FixedDateTime(List<Entity> entities)
+        private static void FixDateTime(List<Entity> entities)
         {
             foreach (var entity in entities)
             {
@@ -94,6 +95,25 @@ namespace $NameSpace$.Debug
                         if (str != null && DateTime.TryParse(str, out var dateTime))
                         {
                             entity.Attributes[key] = dateTime;
+                        }
+                    }
+                    catch { }
+                }
+            }
+        }
+
+        private static void FixGuid(List<Entity> entities)
+        {
+            foreach (var entity in entities)
+            {
+                foreach (var key in entity.Attributes.Keys.ToList())
+                {
+                    try
+                    {
+                        var str = entity.GetAttributeValue<string>(key);
+                        if (str != null && Guid.TryParse(str, out var guid))
+                        {
+                            entity.Attributes[key] = guid;
                         }
                     }
                     catch { }
