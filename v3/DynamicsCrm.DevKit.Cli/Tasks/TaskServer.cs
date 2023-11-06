@@ -587,7 +587,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
                 else
                 {
-                    if (attributes != (imageAttributes.Trim() == "*" ? null : imageAttributes) && imageAttributes.Length != 0)
+                    if (attributes == null || (attributes != (imageAttributes.Trim() == "*" ? null : imageAttributes) && imageAttributes.Length != 0))
                     {
                         pluginImage["sdkmessageprocessingstepimageid"] = rows.Entities[0].Id;
                         //CliLog.WriteLineWarning(SPACE, SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.Updated, ConsoleColor.White, $"{imageType.ToString()}Name: ", ConsoleColor.Cyan, imageName, ConsoleColor.White, $" {imageType.ToString()}Alias: ", ConsoleColor.Cyan, imageAliasName);
