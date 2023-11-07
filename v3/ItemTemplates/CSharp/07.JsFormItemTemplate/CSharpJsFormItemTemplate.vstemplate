@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <VSTemplate Version="3.0.0" Type="Item" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
 	<TemplateData>
-		<Name>07. Javadcript Form</Name>
-		<Description>Javadcript Form Template</Description>
+		<Name>07. Javascript Form</Name>
+		<Description>Javascript Form Template</Description>
 		<DefaultName>Javascript.js</DefaultName>
 		<TemplateID>AAAAAAAA-AAAA-AAAA-BBBB-000000000007</TemplateID>
 		<Icon>icon.png</Icon>
