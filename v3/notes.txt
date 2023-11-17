@@ -4,7 +4,7 @@
 4. Pass !Zz3^2
 
 ===
-HOWWO DEBUG DynamicsCrm.DevKit.Analyzers
+HOWTO DEBUG DynamicsCrm.DevKit.Analyzers
 
 1. Open solutiion DynamicsCrm.DevKit.Analyzers.sln in VS instance
 2. Open solutiion DynamicsCrm.DevKit.sln in another VS instance

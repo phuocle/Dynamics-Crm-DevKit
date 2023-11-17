@@ -1179,22 +1179,25 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 name = fileNameWithoutExtension
             };
-            var fetchXml = $@"
+            var fetchXml = $@"<?xml version=""1.0"" encoding=""utf-16""?>
 <fetch>
-  <entity name='plugintype'>
-    <attribute name='typename' />
-    <link-entity name='pluginassembly' from='pluginassemblyid' to='pluginassemblyid'>
-      <filter>
-        <condition attribute='name' operator='eq' value='{fetchData.name}'/>
-      </filter>
+  <entity name=""sdkmessageprocessingstep"">
+    <link-entity name=""plugintype"" from=""plugintypeid"" to=""plugintypeid"" alias=""plugintype"">
+      <attribute name=""typename"" />
+      <link-entity name=""pluginassembly"" from=""pluginassemblyid"" to=""pluginassemblyid"">
+        <filter>
+          <condition attribute=""name"" operator=""eq"" value=""{fetchData.name}"" />
+        </filter>
+      </link-entity>
     </link-entity>
   </entity>
 </fetch>";
+
             var rows = CrmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
             if (rows.Entities.Count == 0) return true;
             foreach (var entity in rows.Entities)
             {
-                var typeName = entity.GetAttributeValue<string>("typename");
+                var typeName = entity.GetAttributeValue<AliasedValue>("plugintype.typename")?.Value.ToString();
                 if (types.Count(x => x.FullName == typeName) == 0)
                 {
                     CliLog.WriteLineError(ConsoleColor.Yellow, $"Type: '{typeName}' not found in the assembly file. This type: '{typeName}' already registered to CRM/CDS. Assemply deployed, but the deployment of this assembly stopped.");
