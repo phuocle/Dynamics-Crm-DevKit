@@ -65,6 +65,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\.editorconfig">
+      <Link>.editorconfig</Link>
+    </None>
     <None Include="source.extension.vsixmanifest">
       <SubType>Designer</SubType>
       <LastGenOutput>source.extension.cs</LastGenOutput>

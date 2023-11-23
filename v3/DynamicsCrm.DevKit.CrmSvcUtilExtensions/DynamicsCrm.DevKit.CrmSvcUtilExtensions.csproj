@@ -102,6 +102,9 @@
   <ItemGroup>
     <Compile Include="CodeWriterFilter .cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <None Include="..\.editorconfig">
+      <Link>.editorconfig</Link>
+    </None>
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
