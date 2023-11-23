@@ -126,7 +126,7 @@ namespace DynamicsCrm.DevKit.Shared
                 json = File.ReadAllText(VsixHelper.GetDynamicsCrmDevKitConfigJsonFileName());
                 cachedJson = SimpleJson.DeserializeObject<CachedJson>(json);
             }
-            var found = cachedJson.WebResources.Where(x => x.File == deployWebResource.File).FirstOrDefault();
+            var found = cachedJson.WebResources.Where(x => x?.File == deployWebResource?.File).FirstOrDefault();
             if (found != null)
             {
                 found.WebResource = deployWebResource.WebResource;
@@ -175,7 +175,7 @@ namespace DynamicsCrm.DevKit.Shared
             var cachedWebResources = new List<DeployWebResource>();
             var cached = GetCached(nameof(VsixCache.WebResources));
             if (cached != null) cachedWebResources = (List<DeployWebResource>)cached;
-            var found = cachedWebResources.Where(x => x.WebResource == selectedWebResource.WebResource).FirstOrDefault();
+            var found = cachedWebResources.Where(x => x?.WebResource == selectedWebResource?.WebResource).FirstOrDefault();
             if (found != null) cachedWebResources.Remove(found);
             cachedWebResources.Add(selectedWebResource);
             SetCached(nameof(VsixCache.WebResources), cachedWebResources);
@@ -194,7 +194,7 @@ namespace DynamicsCrm.DevKit.Shared
             var cached = GetCached(nameof(VsixCache.WebResources));
             if (cached == null) return null;
             var webResources = (List<DeployWebResource>)cached;
-            return webResources.FirstOrDefault(x => x.File == fullFileName);
+            return webResources.FirstOrDefault(x => x?.File == fullFileName);
         }
     }
 }
