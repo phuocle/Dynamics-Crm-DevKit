@@ -668,8 +668,43 @@ namespace DynamicsCrm.DevKit.Shared
             return list.Select(x => new XrmEntity { Name = x }).ToList();
         }
 
+        public static List<NameValue> GetSdkMessagesNone(CrmServiceClient service)
+        {
+            var fetchData = new
+            {
+                categoryname = "None",
+                isprivate = "0",
+                availability = "0",
+                availability2 = "2"
+            };
+            var fetchXml = $@"<?xml version=""1.0"" encoding=""utf-16""?>
+<fetch>
+  <entity name=""sdkmessage"">
+    <all-attributes/>
+    <filter>
+      <condition attribute=""categoryname"" operator=""eq"" value=""{fetchData.categoryname/*None*/}"" />
+      <condition attribute=""isprivate"" operator=""eq"" value=""{fetchData.isprivate/*0*/}"" />
+      <condition attribute=""availability"" operator=""in"">
+        <value>{fetchData.availability/*0*/}</value>
+        <value>{fetchData.availability2/*2*/}</value>
+      </condition>
+    </filter>
+  </entity>
+</fetch>";
+            var rows = service.RetrieveMultiple(new FetchExpression(fetchXml));
+            var messages = (from entity in rows.Entities
+                            select entity["name"].ToString()
+                ).ToList();
+            messages.Sort();
+            var list = new List<NameValue>();
+            foreach (var message in messages)
+                list.Add(new NameValue { Name = message });
+            return list.OrderBy(x => x.Name).ToList();
+        }
+
         public static List<NameValue> GetSdkMessages(CrmServiceClient service, string logicalName)
         {
+            if (logicalName == "none") return GetSdkMessagesNone(service);
             var request = new RetrieveEntityRequest
             {
                 EntityFilters = EntityFilters.Entity,
