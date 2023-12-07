@@ -48,3 +48,4 @@ if %MsBuild%=="" (
 	cd ..\..
 	copy DynamicsCrm.DevKit\bin\Release\DynamicsCrm.DevKit.vsix Published\%VERSION%\DynamicsCrm.DevKit.%VERSION%.vsix
 )
+exit

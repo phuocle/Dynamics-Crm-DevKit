@@ -75,8 +75,8 @@
     },
     "DEBUG.ABC": {
       "commandName": "Project",
-      "commandLineArgs": "/conn:\"AuthType=ClientSecret;Url=https://vus-dev.crm5.dynamics.com;ClientId=690a3a0a-556c-431e-8182-b887295627d5;ClientSecret=A2d7Q~LvCjbsM1Upa1jOtxPh.9Rwf9NapdFPO;\" /json:\"..\\..\\DynamicsCrm.DevKit.Cli.json\" /type:\"generators\" /profile:\"LATEBOUND\"",
-      "workingDirectory": "D:\\azure\\vusvn\\SourceCode\\Hs.Vus.Shared\\Entities"
+      "commandLineArgs": "/sdklogin:\"yes\" /json:\"..\\DynamicsCrm.DevKit.Cli.json\" /type:\"servers\" /profile:\"DEBUG\"",
+      "workingDirectory": "D:\\azure\\vusvn\\Training\\Vus.Training.Plugin.Account"
     }
   }
 }
