@@ -675,7 +675,8 @@ namespace DynamicsCrm.DevKit.Shared
                 categoryname = "None",
                 isprivate = "0",
                 availability = "0",
-                availability2 = "2"
+                availability2 = "2",
+                iscustomprocessingstepallowed = "1",
             };
             var fetchXml = $@"<?xml version=""1.0"" encoding=""utf-16""?>
 <fetch>
@@ -689,6 +690,12 @@ namespace DynamicsCrm.DevKit.Shared
         <value>{fetchData.availability2/*2*/}</value>
       </condition>
     </filter>
+    <link-entity name=""sdkmessagefilter"" from=""sdkmessageid"" to=""sdkmessageid"" link-type=""inner"" alias=""aa"">
+      <attribute name=""name"" />
+      <filter>
+        <condition attribute=""iscustomprocessingstepallowed"" operator=""eq"" value=""{fetchData.iscustomprocessingstepallowed/*1*/}"" />
+      </filter>
+    </link-entity>
   </entity>
 </fetch>";
             var rows = service.RetrieveMultiple(new FetchExpression(fetchXml));
