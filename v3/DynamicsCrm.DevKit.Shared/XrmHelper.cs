@@ -705,7 +705,8 @@ namespace DynamicsCrm.DevKit.Shared
             messages.Sort();
             var list = new List<NameValue>();
             foreach (var message in messages)
-                list.Add(new NameValue { Name = message });
+                if (!list.Any(x => x.Name == message))
+                    list.Add(new NameValue { Name = message });
             return list.OrderBy(x => x.Name).ToList();
         }
 
@@ -753,7 +754,10 @@ namespace DynamicsCrm.DevKit.Shared
             messages.Sort();
             var list = new List<NameValue>();
             foreach (var message in messages)
-                list.Add(new NameValue { Name = message });
+            {
+                if (!list.Any(x => x.Name == message))
+                    list.Add(new NameValue { Name = message });
+            }
             return list.OrderBy(x => x.Name).ToList();
         }
 

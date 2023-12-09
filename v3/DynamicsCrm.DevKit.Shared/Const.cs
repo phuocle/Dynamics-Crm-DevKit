@@ -8,7 +8,7 @@ namespace DynamicsCrm.DevKit.Shared
 #if DEBUG
         public const string Build = "xxxx.yy.zz HH.mm.ss";
 #else
-        public const string Build = "xxxx-yy-zz";
+        public const string Build = "2023.12.08 14.27.46";
 #endif
         public const string CrmString = "Dataverse/CDS";
         public const string DynamicsCrmDevKitJson = "DynamicsCrm.DevKit.json";
