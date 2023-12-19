@@ -33,7 +33,7 @@ namespace DynamicsCrm.DevKit.Shared
             code += $"using System;{NEW_LINE}";
             code += $"using System.Diagnostics;{NEW_LINE}";
             code += $"using System.Linq;{NEW_LINE}";
-            code += $"using System.ServiceModel;{NEW_LINE}";
+            //code += $"using System.ServiceModel;{NEW_LINE}";
             //code += $"{NEW_LINE}";
             code += $"namespace {rootNameSpace}.{@class}OptionSets{NEW_LINE}";
             code += $"{{{NEW_LINE}";
@@ -76,7 +76,7 @@ namespace DynamicsCrm.DevKit.Shared
             code += $"{TAB}{TAB}[DebuggerNonUserCode()]{NEW_LINE}";
             code += $"{TAB}{TAB}public {@class}(){NEW_LINE}";
             code += $"{TAB}{TAB}{{{NEW_LINE}";
-            code += $"{TAB}{TAB}{TAB}Entity = new Entity(EntityLogicalName);{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}Entity = new Entity(EntityLogicalName, Guid.Empty);{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}PreEntity = CloneThisEntity(Entity);{NEW_LINE}";
             code += $"{TAB}{TAB}}}{NEW_LINE}";
             //code += $"{NEW_LINE}";
@@ -97,12 +97,12 @@ namespace DynamicsCrm.DevKit.Shared
             code += $"{TAB}{TAB}/// <summary>{NEW_LINE}";
             code += $"{TAB}{TAB}/// Instance new late bound class <see cref=\"{@class}\"/> with <paramref name=\"targetEntity\"/>.{NEW_LINE}";
             code += $"{TAB}{TAB}/// </summary>{NEW_LINE}";
-            code += $"{TAB}{TAB}/// <exception cref=\"InvalidPluginExecutionException\">when <paramref name=\"targetEntity\"/> is null.</exception>{NEW_LINE}";
+            //code += $"{TAB}{TAB}/// <exception cref=\"InvalidPluginExecutionException\">when <paramref name=\"targetEntity\"/> is null.</exception>{NEW_LINE}";
             code += $"{TAB}{TAB}[DebuggerNonUserCode()]{NEW_LINE}";
             code += $"{TAB}{TAB}public {@class}(Entity targetEntity){NEW_LINE}";
             code += $"{TAB}{TAB}{{{NEW_LINE}";
-            code += $"{TAB}{TAB}{TAB}if (targetEntity == null) throw new InvalidPluginExecutionException($\"new {@class}(targetEntity) with targetEntity = null\");{NEW_LINE}";
-            code += $"{TAB}{TAB}{TAB}Entity = targetEntity;{NEW_LINE}";
+            //code += $"{TAB}{TAB}{TAB}if (targetEntity == null) throw new InvalidPluginExecutionException($\"new {@class}(targetEntity) with targetEntity = null\");{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}Entity = targetEntity ?? new Entity(EntityLogicalName, Guid.Empty);{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}PreEntity = CloneThisEntity(Entity);{NEW_LINE}";
             code += $"{TAB}{TAB}}}{NEW_LINE}";
             //code += $"{NEW_LINE}";
@@ -115,7 +115,7 @@ namespace DynamicsCrm.DevKit.Shared
             code += $"{TAB}{TAB}{{{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}if (targetEntity == null) throw new InvalidPluginExecutionException($\"new {@class}(preEntity, targetEntity) with targetEntity = null\");{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}if (preEntity == null) preEntity = new Entity(targetEntity.LogicalName, targetEntity.Id);{NEW_LINE}";
-            code += $"{TAB}{TAB}{TAB}Entity = preEntity;{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}Entity = CloneThisEntity(preEntity);{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}foreach (var property in targetEntity?.Attributes?.ToList()){NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}{{{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}{TAB}var key = property.Key;{NEW_LINE}";
@@ -135,7 +135,7 @@ namespace DynamicsCrm.DevKit.Shared
             code += $"{TAB}{TAB}{TAB}if (targetEntity == null) throw new InvalidPluginExecutionException($\"new {@class}(preEntity, targetEntity, postEntity) with targetEntity = null\");{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}if (preEntity == null) preEntity = new Entity(targetEntity.LogicalName, targetEntity.Id);{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}if (postEntity == null) postEntity = new Entity(targetEntity.LogicalName, targetEntity.Id);{NEW_LINE}";
-            code += $"{TAB}{TAB}{TAB}Entity = preEntity;{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}Entity = CloneThisEntity(preEntity);{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}foreach (var property in targetEntity?.Attributes?.ToList()){NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}{{{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}{TAB}var key = property.Key;{NEW_LINE}";
