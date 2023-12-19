@@ -59,6 +59,31 @@ namespace $NameSpace$.Debug
             FixDateTime(entities);
             FixOptionSetValueCollection(entities);
             FixGuid(entities);
+            FixEntityReferenceCollection(pluginExecutionContext.InputParameters);
+            FixEntityReferenceCollection(pluginExecutionContext.SharedVariables);
+            FixEntityReferenceCollection(pluginExecutionContext.OutputParameters);
+        }
+
+        private static void FixEntityReferenceCollection(ParameterCollection parameterCollection)
+        {
+            foreach (var key in parameterCollection.Keys.ToList())
+            {
+                if (parameterCollection[key] is Array array)
+                {
+                    var fixCollection = new EntityReferenceCollection();
+                    foreach (var item in array)
+                    {
+                        if (item is EntityReference entityReference)
+                        {
+                            fixCollection.Add(entityReference);
+                        }
+                    }
+                    if (fixCollection.Count > 0)
+                    {
+                        parameterCollection[key] = fixCollection;
+                    }
+                }
+            }
         }
 
         private static void FixOptionSetValueCollection(List<Entity> entities)
