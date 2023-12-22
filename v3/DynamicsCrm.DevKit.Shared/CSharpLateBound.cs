@@ -247,11 +247,11 @@ namespace DynamicsCrm.DevKit.Shared
                     foreach (var value in values)
                     {
                         tmp += $"{TAB}{TAB}/// <summary>{NEW_LINE}";
-                        tmp += $"{TAB}{TAB}/// <para>Display Name = {value.Label?.TrimEnd("\r\n".ToCharArray())}</para>{NEW_LINE}";
-                        tmp += $"{TAB}{TAB}/// <para>Value = {int.Parse(value.Value).ToString("#,##0")}</para>{NEW_LINE}";
+                        tmp += $"{TAB}{TAB}/// <para><strong>Display Name</strong>: {value.Label?.TrimEnd("\r\n".ToCharArray())}</para>{NEW_LINE}";
+                        tmp += $"{TAB}{TAB}/// <para><strong>Value</strong>: {int.Parse(value.Value).ToString("#,##0")}</para>{NEW_LINE}";
                         if (value.Name3.Length > 0)
                         {
-                            var statusCodeComment = $"StateCode.{stateCodeOptions.Where(x => x.Value == value.Name3).FirstOrDefault()?.Name}";
+                            var statusCodeComment = $"<strong>StateCode.{stateCodeOptions.Where(x => x.Value == value.Name3).FirstOrDefault()?.Name}</strong>";
                             tmp += $"{TAB}{TAB}/// <para>{statusCodeComment}</para>{NEW_LINE}";
                         }
                         tmp += $"{TAB}{TAB}/// </summary>{NEW_LINE}";
@@ -654,53 +654,53 @@ namespace DynamicsCrm.DevKit.Shared
             //var para4 = string.Empty;
             var readOnly = string.Empty;
             if (!(attribute.IsValidForCreate ?? false) && !(attribute.IsValidForUpdate ?? false))
-                readOnly = "ReadOnly";
+                readOnly = "<strong>ReadOnly</strong>";
             if (readOnly.Length > 0) line3 += readOnly + " - ";
             if (attribute.IsPrimaryId ?? false)
                 if ($"{EntityMetadata.LogicalName}id" == attribute.LogicalName)
-                    line3 += "Primary Key - ";
+                    line3 += "<strong>Primary Key</strong>: ";
             if (attribute.IsPrimaryName ?? false)
-                    line3 += "Primary Name - ";
+                    line3 += "<strong>Primary Name</strong>: ";
             if (attribute.RequiredLevel?.Value == AttributeRequiredLevel.ApplicationRequired) line3 += "Required - ";
             if (attribute is DateTimeAttributeMetadata datetime)
             {
-                line3 += "Date and Time - ";
+                line3 += "<strong>Date and Time</strong> - ";
                 if (datetime.DateTimeBehavior == DateTimeBehavior.DateOnly)
-                    line3 += "DateTimeBehavior: DateOnly - DateTimeFormat: DateOnly";
+                    line3 += "<strong>DateTimeBehavior</strong>: DateOnly - <strong>DateTimeFormat</strong>: DateOnly";
                 else if (datetime.DateTimeBehavior == DateTimeBehavior.UserLocal)
                 {
                     if (datetime.Format == DateTimeFormat.DateOnly)
-                        line3 += "DateTimeBehavior: UserLocal - DateTimeFormat: DateOnly";
+                        line3 += "<strong>DateTimeBehavior</strong>: UserLocal - <strong>DateTimeFormat</strong>: DateOnly";
                     else if (datetime.Format == DateTimeFormat.DateAndTime)
-                        line3 += "DateTimeBehavior: UserLocal - DateTimeFormat: DateAndTime";
+                        line3 += "<strong>DateTimeBehavior</strong>: UserLocal - <strong>DateTimeFormat</strong>: DateAndTime";
                 }
                 else if (datetime.DateTimeBehavior == DateTimeBehavior.TimeZoneIndependent)
                 {
                     if (datetime.Format == DateTimeFormat.DateOnly)
-                        line3 += "DateTimeBehavior: TimeZoneIndependent - DateTimeFormat: DateOnly";
+                        line3 += "<strong>DateTimeBehavior</strong>: TimeZoneIndependent - <strong>DateTimeFormat</strong>: DateOnly";
                     else if (datetime.Format == DateTimeFormat.DateAndTime)
-                        line3 += "DateTimeBehavior: TimeZoneIndependent - DateTimeFormat: DateAndTime";
+                        line3 += "<strong>DateTimeBehavior</strong>: TimeZoneIndependent - <strong>DateTimeFormat</strong>: DateAndTime";
                 }
             }
             else if (attribute is MultiSelectPicklistAttributeMetadata)
             {
-                line3 += $"MultiSelect OptionSet <see cref=\"{RootNamespace}.{Utility.SafeDeclareName(EntityMetadata.SchemaName, GeneratorType.csharp)}OptionSets.{Utility.SafeIdentifier(attribute.SchemaName)}\"/>";
+                line3 += $"<strong>MultiSelect OptionSet</strong>: <see cref=\"{RootNamespace}.{Utility.SafeDeclareName(EntityMetadata.SchemaName, GeneratorType.csharp)}OptionSets.{Utility.SafeIdentifier(attribute.SchemaName)}\"/>";
             }
             else if (attribute is PicklistAttributeMetadata)
             {
-                line3 += $"OptionSet <see cref=\"{RootNamespace}.{Utility.SafeDeclareName(EntityMetadata.SchemaName, GeneratorType.csharp)}OptionSets.{Utility.SafeIdentifier(attribute.SchemaName)}\"/>";
+                line3 += $"<strong>OptionSet</strong>: <see cref=\"{RootNamespace}.{Utility.SafeDeclareName(EntityMetadata.SchemaName, GeneratorType.csharp)}OptionSets.{Utility.SafeIdentifier(attribute.SchemaName)}\"/>";
             }
             else if (attribute is StateAttributeMetadata)
             {
-                line3 += $"Status <see cref=\"{RootNamespace}.{Utility.SafeDeclareName(EntityMetadata.SchemaName, GeneratorType.csharp)}OptionSets.{Utility.SafeIdentifier(attribute.SchemaName)}\"/>";
+                line3 += $"<strong>Status</strong>: <see cref=\"{RootNamespace}.{Utility.SafeDeclareName(EntityMetadata.SchemaName, GeneratorType.csharp)}OptionSets.{Utility.SafeIdentifier(attribute.SchemaName)}\"/>";
             }
             else if (attribute is StatusAttributeMetadata)
             {
-                line3 += $"Status Reason <see cref=\"{RootNamespace}.{Utility.SafeDeclareName(EntityMetadata.SchemaName, GeneratorType.csharp)}OptionSets.{Utility.SafeIdentifier(attribute.SchemaName)}\"/>";
+                line3 += $"<strong>Status Reason</strong>: <see cref=\"{RootNamespace}.{Utility.SafeDeclareName(EntityMetadata.SchemaName, GeneratorType.csharp)}OptionSets.{Utility.SafeIdentifier(attribute.SchemaName)}\"/>";
             }
             else if (attribute is LookupAttributeMetadata lookup)
             {
-                line3 += $"Lookup to: ";
+                line3 += $"<strong>Lookup</strong>: ";
                 foreach (var target in lookup.Targets)
                 {
                     line3 += $"<see cref=\"{target}\"/>, ";
@@ -709,58 +709,58 @@ namespace DynamicsCrm.DevKit.Shared
             }
             else if (attribute is BooleanAttributeMetadata boolean)
             {
-                var temp = $"[{boolean?.OptionSet?.TrueOption?.Label?.UserLocalizedLabel?.Label}]=true - [{boolean?.OptionSet?.FalseOption?.Label?.UserLocalizedLabel?.Label}]=false";
-                line3 += $"Two Option - " + temp;
+                var temp = $"[<strong>{boolean?.OptionSet?.TrueOption?.Label?.UserLocalizedLabel?.Label}</strong>]: true - [<strong>{boolean?.OptionSet?.FalseOption?.Label?.UserLocalizedLabel?.Label}</strong>]: false";
+                line3 += $"<strong>Two Option</strong> - " + temp;
             }
             else if (attribute is DoubleAttributeMetadata)
-                line3 += "Decimal Number";
+                line3 += "<strong>Decimal Number</strong>";
             else if (attribute is DecimalAttributeMetadata)
-                line3 += "Floating Point Number";
+                line3 += "<strong>Floating Point Number</strong>";
             else if (attribute is IntegerAttributeMetadata)
-                line3 += "Whole Number";
+                line3 += "<strong>Whole Number</strong>";
             else if (attribute is MoneyAttributeMetadata)
             {
-                line3 += "Currency";
+                line3 += "<strong>Currency</strong>";
             }
             else if (attribute is MemoAttributeMetadata)
             {
-                line3 += "Multiple Lines of Text";
+                line3 += "<strong>Multiple Lines of Text</strong>";
             }
             else if (attribute is StringAttributeMetadata)
             {
-                line3 += "Single Line of Text";
+                line3 += "<strong>Single Line of Text</strong>";
             }
             else if (attribute is ImageAttributeMetadata)
             {
-                line3 += "Image";
+                line3 += "<strong>Image</strong>";
             }
             else
-                line3 += attribute.AttributeType.ToString();
-            if (attribute.GetMaxLength().HasValue) line3 += " - MaxLength: " + attribute.GetMaxLength().Value.ToString("#,#", CultureInfo.InvariantCulture);
-            if (attribute.GetMinValue().HasValue) line3 += " - MinValue: " + attribute.GetMinValue().Value.ToString("#,#", CultureInfo.InvariantCulture);
-            if (attribute.GetMaxValue().HasValue) line3 += " - MaxValue: " + attribute.GetMaxValue().Value.ToString("#,#", CultureInfo.InvariantCulture);
+                line3 += "<strong>" + attribute.AttributeType.ToString() + "</strong>";
+            if (attribute.GetMaxLength().HasValue) line3 += " - <strong>MaxLength</strong>: " + attribute.GetMaxLength().Value.ToString("#,#", CultureInfo.InvariantCulture);
+            if (attribute.GetMinValue().HasValue) line3 += " - <strong>MinValue</strong>: " + attribute.GetMinValue().Value.ToString("#,#", CultureInfo.InvariantCulture);
+            if (attribute.GetMaxValue().HasValue) line3 += " - <strong>MaxValue</strong>: " + attribute.GetMaxValue().Value.ToString("#,#", CultureInfo.InvariantCulture);
             var xml = $"{TAB}{TAB}/// <summary>{NEW_LINE}";
             line1 = attribute?.DisplayName?.UserLocalizedLabel?.Label.TrimNewLine();
             if (line1 != null && line1.Length > 0)
             {
-                xml += $"{TAB}{TAB}/// <para>Display Name: {line1}</para>{NEW_LINE}";
+                xml += $"{TAB}{TAB}/// <para><strong>Display Name</strong>: {line1}</para>{NEW_LINE}";
             }
             var description = attribute?.Description?.UserLocalizedLabel?.Label;
             if (!string.IsNullOrWhiteSpace(description))
             {
                 line2 = SecurityElement.Escape(description.TrimNewLine());
-                xml += $"{TAB}{TAB}/// <para>Description: {line2}</para>{NEW_LINE}";
+                xml += $"{TAB}{TAB}/// <para><strong>Description</strong>: {line2}</para>{NEW_LINE}";
             }
             xml += $"{TAB}{TAB}/// <para>{line3}</para>{NEW_LINE}";
             if (attribute.SourceType != null && attribute.SourceType != 0)
             {
-                if (attribute.SourceType == 1) line4 = "Calculated Field";
-                else if (attribute.SourceType == 2) line4 = "Rollup Field";
-                else if (attribute.SourceType == 3) line4 = "Power-Fx Field";
+                if (attribute.SourceType == 1) line4 = "<strong>Calculated Field</strong>";
+                else if (attribute.SourceType == 2) line4 = "<strong>Rollup Field</strong>";
+                else if (attribute.SourceType == 3) line4 = "<strong>Power-Fx Field</strong>";
                 xml += $"{TAB}{TAB}/// <para>{line4}</para>{NEW_LINE}";
             }
             else if (attribute.SchemaName.EndsWith("_rollup_Date") || attribute.SchemaName.EndsWith("_rollup_State")) {
-                line4 = "Rollup Field";
+                line4 = "<strong>Rollup Field</strong>";
                 xml += $"{TAB}{TAB}/// <para>{line4}</para>{NEW_LINE}";
             }
 
