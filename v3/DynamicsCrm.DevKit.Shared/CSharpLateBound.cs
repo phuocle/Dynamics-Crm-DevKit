@@ -29,7 +29,7 @@ namespace DynamicsCrm.DevKit.Shared
             //code += $"// </auto-generated>{NEW_LINE}";
             //code += $"//---------------------------------------------------------------------------------------------------{NEW_LINE}";
             code += $"using Microsoft.Xrm.Sdk;{NEW_LINE}";
-            code += $"using Microsoft.Xrm.Sdk.Query;{NEW_LINE}";
+            //code += $"using Microsoft.Xrm.Sdk.Query;{NEW_LINE}";
             code += $"using System;{NEW_LINE}";
             code += $"using System.Diagnostics;{NEW_LINE}";
             code += $"using System.Linq;{NEW_LINE}";
@@ -158,14 +158,14 @@ namespace DynamicsCrm.DevKit.Shared
             code += $"{TAB}{TAB}{TAB}PreEntity = CloneThisEntity(Entity);{NEW_LINE}";
             code += $"{TAB}{TAB}}}{NEW_LINE}";
 
-            code += $"{TAB}{TAB}[DebuggerNonUserCode()]{NEW_LINE}";
-            code += $"{TAB}{TAB}public static {@class} Read_Record(IOrganizationService serviceAdmin, IOrganizationService service, ITracingService tracing, Guid? {@class}Id, ColumnSet columns = null){NEW_LINE}";
-            code += $"{TAB}{TAB}{{{NEW_LINE}";
-            code += $"{TAB}{TAB}{TAB}if ({@class}Id == null) return new {entityMetadata.SchemaName}();{NEW_LINE}";
-            code += $"{TAB}{TAB}{TAB}if (columns == null) columns = new ColumnSet(true);{NEW_LINE}";
-            code += $"{TAB}{TAB}{TAB}var entity = serviceAdmin.Retrieve(EntityLogicalName, {@class}Id.Value, columns);{NEW_LINE}";
-            code += $"{TAB}{TAB}{TAB}return new {@class}(entity);{NEW_LINE}";
-            code += $"{TAB}{TAB}}}{NEW_LINE}";
+            //code += $"{TAB}{TAB}[DebuggerNonUserCode()]{NEW_LINE}";
+            //code += $"{TAB}{TAB}public static {@class} Read_Record(IOrganizationService serviceAdmin, IOrganizationService service, ITracingService tracing, Guid? {@class}Id, ColumnSet columns = null){NEW_LINE}";
+            //code += $"{TAB}{TAB}{{{NEW_LINE}";
+            //code += $"{TAB}{TAB}{TAB}if ({@class}Id == null) return new {entityMetadata.SchemaName}();{NEW_LINE}";
+            //code += $"{TAB}{TAB}{TAB}if (columns == null) columns = new ColumnSet(true);{NEW_LINE}";
+            //code += $"{TAB}{TAB}{TAB}var entity = serviceAdmin.Retrieve(EntityLogicalName, {@class}Id.Value, columns);{NEW_LINE}";
+            //code += $"{TAB}{TAB}{TAB}return new {@class}(entity);{NEW_LINE}";
+            //code += $"{TAB}{TAB}}}{NEW_LINE}";
             //code += $"{NEW_LINE}";
             code += $"{GeneratorCode()}";
             //code += $"{NEW_LINE}";

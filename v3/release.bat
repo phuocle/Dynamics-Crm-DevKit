@@ -1,7 +1,6 @@
 @echo off
 set /p VERSION=<version.txt
-
-powershell -Command "(Get-Date).ToString('yyyy.MM.dd HH.mm.ss') | Out-File -encoding UTF8 build.txt"
+rem powershell -Command "(Get-Date).ToString('yyyy.MM.dd HH.mm.ss') | Out-File -encoding UTF8 build.txt"
 powershell -Command "(gc DynamicsCrm.DevKit.Shared\Const.cs) -replace 'xxxx-yy-zz', (gc build.txt) | Out-File -encoding UTF8 DynamicsCrm.DevKit.Shared\Const.cs"
 powershell -Command "(gc DynamicsCrm.DevKit\source.extension.cs) -replace 'xxxx-yy-zz', (gc build.txt) | Out-File -encoding UTF8 DynamicsCrm.DevKit\source.extension.cs"
 powershell -Command "(gc DynamicsCrm.DevKit\source.extension.vsixmanifest) -replace 'xxxx-yy-zz', (gc build.txt) | Out-File -encoding UTF8 DynamicsCrm.DevKit\source.extension.vsixmanifest"
@@ -25,7 +24,7 @@ if %MsBuild%=="" (
 	if not exist Published\%VERSION% ( md Published\%VERSION% )
 	call %MsBuild% /nologo /noautorsp /verbosity:minimal -p:Configuration=Release -target:Clean;Build DynamicsCrm.DevKit.sln
 
-	powershell -Command "(gc DynamicsCrm.DevKit.Shared\Const.cs) -replace (gc build.txt), 'xxxx-yy-zz' | Out-File -encoding UTF8 DynamicsCrm.DevKit.Shared\Const.cs"
+	rem powershell -Command "(gc DynamicsCrm.DevKit.Shared\Const.cs) -replace (gc build.txt), 'xxxx-yy-zz' | Out-File -encoding UTF8 DynamicsCrm.DevKit.Shared\Const.cs"
 	powershell -Command "(gc DynamicsCrm.DevKit\source.extension.cs) -replace (gc build.txt), 'xxxx-yy-zz' | Out-File -encoding UTF8 DynamicsCrm.DevKit\source.extension.cs"
 	powershell -Command "(gc DynamicsCrm.DevKit\source.extension.vsixmanifest) -replace (gc build.txt), 'xxxx-yy-zz' | Out-File DynamicsCrm.DevKit\source.extension.vsixmanifest"
 	powershell -Command "(gc ProjectTemplates\CSharp\16.PackageProjectTemplate\ReadMe.md) -replace (gc build.txt), 'xxxx.yy.zz HH.mm.ss' | Out-File -encoding UTF8 ProjectTemplates\CSharp\16.PackageProjectTemplate\ReadMe.md"
