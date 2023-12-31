@@ -34,6 +34,9 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FakeXrmEasy">
+      <HintPath>..\packages\$FakeXrmEasy.Package$.$FakeXrmEasy.Version$\lib\net$FakeXrmEasy.TargetFramework$\FakeXrmEasy.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Crm.Sdk.Proxy">
       <HintPath>..\packages\Microsoft.CrmSdk.CoreAssemblies.$Microsoft.CrmSdk.CoreAssemblies.Version$\lib\net$Microsoft.CrmSdk.CoreAssemblies.TargetFramework$\Microsoft.Crm.Sdk.Proxy.dll</HintPath>
     </Reference>
@@ -47,6 +50,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GeneratedCode.cs" />
     <Compile Include="ProxyTypesAssembly.cs" />
+    <Compile Include="XrmFakedPluginExecutionContextExtension.cs" />
     <None Include="packages.config" />
     <None Include="run.bat" />
   </ItemGroup>

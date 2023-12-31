@@ -27,10 +27,11 @@
       <ProjectItem ReplaceParameters="true" TargetFileName="run.bat">run.bat</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="GeneratedCode.cs">GeneratedCode.cs</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="ProxyTypesAssembly.cs">ProxyTypesAssembly.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="XrmFakedPluginExecutionContextExtension.cs">XrmFakedPluginExecutionContextExtension.cs</ProjectItem>
     </Project>
   </TemplateContent>
   <WizardExtension>
-    <Assembly>DynamicsCrm.DevKit.Wizard, Version=2.13.33.0, Culture=en, PublicKeyToken=98cbb7bd3db31604</Assembly>
+    <Assembly>DynamicsCrm.DevKit.Wizard, Version=3.11.11.0, Culture=en, PublicKeyToken=98cbb7bd3db31604</Assembly>
     <FullClassName>DynamicsCrm.DevKit.Wizard.ProjectTemplates.ProxyTypes</FullClassName>
   </WizardExtension>
 </VSTemplate>

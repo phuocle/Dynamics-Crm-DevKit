@@ -28,14 +28,13 @@
       <ProjectItem ReplaceParameters="false" TargetFileName="Lib\Date.cs">Date.cs</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="Lib\PluginCore.cs">PluginCore.cs</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="Lib\Extension.cs">Extension.cs</ProjectItem>
-      <ProjectItem ReplaceParameters="true" TargetFileName="Lib\Debug.cs">Debug.cs</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="Lib\EntityBase.cs">EntityBase.cs</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="Lib\SimpleJson.cs">SimpleJson.cs</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="Entities\generator.bat">generator.bat</ProjectItem>
     </Project>
   </TemplateContent>
   <WizardExtension>
-    <Assembly>DynamicsCrm.DevKit.Wizard, Version=2.13.33.0, Culture=en, PublicKeyToken=98cbb7bd3db31604</Assembly>
+    <Assembly>DynamicsCrm.DevKit.Wizard, Version=3.11.11.0, Culture=en, PublicKeyToken=98cbb7bd3db31604</Assembly>
     <FullClassName>DynamicsCrm.DevKit.Wizard.ProjectTemplates.Shared</FullClassName>
   </WizardExtension>
 </VSTemplate>

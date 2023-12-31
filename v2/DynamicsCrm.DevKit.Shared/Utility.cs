@@ -8,6 +8,9 @@ using DynamicsCrm.DevKit.Shared.Models;
 using System.Text;
 using Microsoft.CSharp;
 using System.Globalization;
+using Microsoft.Xrm.Sdk.Metadata;
+using DynamicsCrm.DevKit.Shared.Helper;
+using DynamicsCrm.DevKit.Shared.Extensions;
 
 namespace DynamicsCrm.DevKit.Shared
 {
@@ -60,6 +63,8 @@ namespace DynamicsCrm.DevKit.Shared
         public static string GetSolutionName(DTE dte)
         {
             var solutionFullName = dte?.Solution?.FullName;
+            if (solutionFullName.EndsWith(".Test.sln")) solutionFullName = solutionFullName.Substring(0, solutionFullName.Length - ".Test.sln".Length) + ".sln";
+            if (!File.Exists(solutionFullName)) solutionFullName = dte?.Solution?.FullName;
             return Path.GetFileNameWithoutExtension(solutionFullName);
         }
 
@@ -101,7 +106,7 @@ namespace DynamicsCrm.DevKit.Shared
             list.AddRange(sln.Projects.Cast<Project>());
 
             for (int i = 0; i < list.Count; i++)
-                list.AddRange(list[i].ProjectItems.Cast<ProjectItem>().Select(x => x.SubProject).OfType<Project>());
+                list.AddRange(list[i]?.ProjectItems?.Cast<ProjectItem>().Select(x => x?.SubProject)?.OfType<Project>());
 
             return list;
         }
@@ -158,6 +163,8 @@ namespace DynamicsCrm.DevKit.Shared
         public static string GetSharedProject(DTE dte)
         {
             var solutionFullName = dte?.Solution?.FullName;
+            if (solutionFullName.EndsWith(".Test.sln")) solutionFullName = solutionFullName.Substring(0, solutionFullName.Length - ".Test.sln".Length) + ".sln";
+            if (!File.Exists(solutionFullName)) solutionFullName = dte?.Solution?.FullName;
             var fInfo = new FileInfo(solutionFullName);
             var parts = fInfo.Name.Split(".".ToCharArray());
             var value = string.Empty;
@@ -169,6 +176,8 @@ namespace DynamicsCrm.DevKit.Shared
         public static string GetProxyTypesProject(DTE dte)
         {
             var solutionFullName = dte?.Solution?.FullName;
+            if (solutionFullName.EndsWith(".Test.sln")) solutionFullName = solutionFullName.Substring(0, solutionFullName.Length - ".Test.sln".Length) + ".sln";
+            if (!File.Exists(solutionFullName)) solutionFullName = dte?.Solution?.FullName;
             var fInfo = new FileInfo(solutionFullName);
             var parts = fInfo.Name.Split(".".ToCharArray());
             var value = string.Empty;
@@ -727,7 +736,9 @@ namespace DynamicsCrm.DevKit.Shared
                 new NameValue { Name = "Uzbek (Cyrillic)-Uzbekistan", Value = "2115" },
                 new NameValue { Name = "Uzbek (Latin)-Uzbekistan", Value = "1091" },
                 new NameValue { Name = "Vietnamese-Viet Nam", Value = "1066" },
-                new NameValue { Name = "Welsh-United Kingdom", Value = "1106" }
+                new NameValue { Name = "Welsh-United Kingdom", Value = "1106" },
+                new NameValue { Name = "All Languages", Value = "-1" }
+
             };
             return languages;
         }
@@ -794,6 +805,8 @@ namespace DynamicsCrm.DevKit.Shared
         public static string GetProjectName(DTE dte, ProjectType projectType)
         {
             var solutionFullName = dte?.Solution?.FullName;
+            if (solutionFullName.EndsWith(".Test.sln")) solutionFullName = solutionFullName.Substring(0, solutionFullName.Length - ".Test.sln".Length) + ".sln";
+            if (!File.Exists(solutionFullName)) solutionFullName = dte?.Solution?.FullName;
             var fInfo = new FileInfo(solutionFullName);
             var parts = fInfo?.Name?.Split(".".ToCharArray());
             var data = string.Empty;
@@ -830,6 +843,212 @@ namespace DynamicsCrm.DevKit.Shared
             if (value.StartsWith("\""))
                 value = value.Substring(1, value.Length - 2);
             return value;
+        }
+
+        public static string SafeDeclareName(string declareName, GeneratorType generatorType, string schemaName = null, AttributeMetadata attribute = null)
+        {
+            declareName = SafeIdentifier(declareName);
+            if (declareName.ToLower() == schemaName?.ToLower()) return declareName + "1";
+            if (declareName.ToLower() == schemaName?.ToLower() + "id")
+                if (attribute != null && attribute.AttributeType == AttributeTypeCode.Uniqueidentifier)
+                    return declareName;
+                else
+                    return declareName + "1";
+            if (declareName.ToLower() == "EntityLogicalName".ToLower()) return declareName + "1";
+            if (declareName.ToLower() == "EntityTypeCode".ToLower()) return declareName + "1";
+            if (generatorType != GeneratorType.csharp)
+            {
+                if (declareName.ToLower() == "EntityName".ToLower()) return declareName + "1";
+            }
+            if (declareName.ToLower() == "Entity".ToLower()) return declareName + "1";
+            if (declareName.ToLower() == "Id".ToLower()) return declareName + "1";
+            return declareName;
+        }
+
+        public static string SafeIdentifier(string name)
+        {
+            if (name == null) return string.Empty;
+            name = string.Concat(name.Normalize(NormalizationForm.FormD).Where(ch => CharUnicodeInfo.GetUnicodeCategory(ch) != UnicodeCategory.NonSpacingMark)).Normalize(NormalizationForm.FormC);
+            if (Guid.TryParse(name, out var outputGuid) || (name.Length > 38 && Guid.TryParse(name.Substring(0, 38), out var outputGuid2)))
+            {
+                name = name.ToUpper()
+                    .Replace("-", "_")
+                    .Replace("{", string.Empty)
+                    .Replace("}", string.Empty);
+                return "_" + name;
+            }
+            name = GetIdentifier(name);
+            name = name.Trim();
+            //name = name.Replace("~", string.Empty);
+            //name = name.Replace("`", string.Empty);
+            //name = name.Replace("!", string.Empty);
+            //name = name.Replace("@", string.Empty);
+            //name = name.Replace("#", string.Empty);
+            //name = name.Replace("$", string.Empty);
+            //name = name.Replace("%", string.Empty);
+            //name = name.Replace("^", string.Empty);
+            //name = name.Replace("&", string.Empty);
+            //name = name.Replace("＆", string.Empty);
+            //name = name.Replace("|", string.Empty);
+            //name = name.Replace("*", string.Empty);
+            //name = name.Replace("(", string.Empty);
+            //name = name.Replace(")", string.Empty);
+            name = name.Replace("-", "_");
+            //name = name.Replace("{", string.Empty);
+            //name = name.Replace("}", string.Empty);
+            //name = name.Replace("[", string.Empty);
+            //name = name.Replace("]", string.Empty);
+            //name = name.Replace("\"", string.Empty);
+            //name = name.Replace("'", string.Empty);
+            //name = name.Replace("’", string.Empty);
+            //name = name.Replace(":", string.Empty);
+            //name = name.Replace(";", string.Empty);
+            //name = name.Replace("<", string.Empty);
+            //name = name.Replace(",", string.Empty);
+            //name = name.Replace(">", string.Empty);
+            //name = name.Replace(".", string.Empty);
+            //name = name.Replace("?", string.Empty);
+            //name = name.Replace("/", string.Empty);
+            //name = name.Replace("+", string.Empty);
+            //name = name.Replace("=", string.Empty);
+            //name = name.Replace("–", string.Empty);
+            //name = name.Replace("＆", string.Empty);
+            //name = name.Replace("％", string.Empty);
+            //name = name.Replace("\t", string.Empty);
+            //name = name.Replace("…", string.Empty);
+            name = name.Replace(" ", "_");
+            name = name.Replace("____", "_");
+            name = name.Replace("___", "_");
+            name = name.Replace("__", "_");
+            //…
+            if (name.Length == 0) return "_";
+            //var sb = new StringBuilder();
+            //if (!SyntaxFacts.IsIdentifierStartCharacter(name[0]))
+            //{
+            //    if (name.Length == 1) sb.Append("_");
+            //    else if (name[0] != '_') sb.Append("_");
+            //}
+            //foreach (var ch in name)
+            //{
+            //    if (SyntaxFacts.IsIdentifierPartCharacter(ch))
+            //    {
+            //        sb.Append(ch);
+            //    }
+            //}
+            //var result = sb.ToString();
+            //if (SyntaxFacts.GetKeywordKind(result) != SyntaxKind.None)
+            //{
+            //    result = $"_{result}";
+            //}
+            var cs = new CSharpCodeProvider();
+            name = cs.CreateValidIdentifier(name);
+            name = name.Replace("__", "_");
+            if (IsJsKeywords(name) || !IsFirstCharValid(name)) return "_" + name;
+            return name;
+        }
+        private static bool IsJsKeywords(string name)
+        {
+            switch (name)
+            {
+                case "import":
+                    return true;
+                default:
+                    return false;
+            }
+        }
+        private static bool IsFirstCharValid(string name)
+        {
+            var firstchar = name[0];
+            if (firstchar >= '0' && firstchar <= '9') return false;
+            return true;
+        }
+
+        private static string GetIdentifier(string name)
+        {
+            var value = string.Empty;
+            for (int i = 0; i < name.Length; ++i)
+            {
+                if (char.IsLetterOrDigit(name[i]) || name[i] == ' ' || name[i] == '-' || name[i] == '_')
+                    value += name[i];
+            }
+            return value;
+        }
+
+        public static string GetNameSpace(string rootNamespace)
+        {
+            var parts = rootNamespace.Split(".".ToCharArray());
+            var @namespace = parts.Length > 1 ? parts[1] : parts[0];
+            return Utility.SafeIdentifier(@namespace);
+        }
+
+        public static string GeneratorOptionSet(EntityMetadata EntityMetadata)
+        {
+            const string NEW_LINE = "\r\n";
+            const string TAB = "\t";
+            var code = string.Empty;
+            code += $"/** @namespace OptionSet */{NEW_LINE}";
+            code += $"var OptionSet;{NEW_LINE}";
+            code += $"(function (OptionSet) {{{NEW_LINE}";
+            code += $"{TAB}OptionSet.{EntityMetadata.SchemaName} = {{{NEW_LINE}";
+            foreach (var attribute in EntityMetadata.Attributes.OrderBy(x => x.SchemaName))
+            {
+                if (XrmHelper.IsOptionSet(attribute))
+                {
+                    if (attribute.SchemaName == "OwnerIdType") continue;
+                    var values = attribute.OptionSetValues();
+                    if (values.Count == 0)
+                    {
+                        code += $"{TAB}{TAB}{attribute.SchemaName} : {{{NEW_LINE}";
+                        code = code.TrimEnd($",{NEW_LINE}".ToCharArray());
+                        code += $"{NEW_LINE}";
+                        code += $"{TAB}{TAB}}},{NEW_LINE}";
+                    }
+                    else
+                    {
+                        code += $"{TAB}{TAB}{attribute.SchemaName} : {{{NEW_LINE}";
+                        foreach (var value in values)
+                        {
+                            code += $"{TAB}{TAB}{TAB}{value.Name}: {value.Value},{NEW_LINE}";
+                        }
+                        code = code.TrimEnd($",{NEW_LINE}".ToCharArray());
+                        code += $"{NEW_LINE}";
+                        code += $"{TAB}{TAB}}},{NEW_LINE}";
+                    }
+                }
+            }
+            code += $"{TAB}{TAB}RollupState : {{{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}NotCalculated: 0,{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}Calculated: 1,{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}OverflowError: 2,{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}OtherError: 3,{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}RetryLimitExceeded: 4,{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}HierarchicalRecursionLimitReached: 5,{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}LoopDetected: 6{NEW_LINE}";
+            code += $"{TAB}{TAB}}}{NEW_LINE}";
+            code += $"{TAB}}};{NEW_LINE}";
+            code += $"}})(OptionSet || (OptionSet = {{}}));";
+            return code;
+        }
+
+        public static string GetFormName(string formName, string @class)
+        {
+            if (formName.ToLower() == "information") return $"{@class} Information";
+            else if (formName.ToLower() == "wizard") return $"{@class} Wizard";
+            else if (formName.ToLower() == "ai for sales") return $"{@class} AI for Sales";
+            else if (formName.ToLower() == "quick create") return $"{@class} Quick Create";
+            else if (formName.ToLower() == "quickcreate") return $"{@class} QuickCreate";
+            else if (formName.ToLower() == "new form") return $"{@class} New_Form";
+            else if (formName.ToLower() == "adobe sign") return $"{@class} Adobe_Sign";
+            else if (formName.ToLower() == "sales insights") return $"{@class} Sales_Insights";
+            else if (formName.ToLower() == "agreement") return $"{@class} Agreement";
+            else if (formName.ToLower() == "project information") return $"{@class} Project Information";
+            else if (formName.ToLower() == "project quick create") return $"{@class} Project Quick Create";
+            else if (formName.ToLower() == "omnichannel information") return $"{@class} Omnichannel Information";
+            else if (formName.ToLower() == "field service information") return $"{@class} Field Service Information";
+            else if (formName.ToLower() == "main form") return $"{@class} Main Form";
+            else if (formName.ToLower() == "quick create form") return $"{@class} Quick Create Form";
+            else if (formName.ToLower() == "quick create from requirement") return $"{@class} Quick Create from Requirement";
+            return formName;
         }
     }
 }

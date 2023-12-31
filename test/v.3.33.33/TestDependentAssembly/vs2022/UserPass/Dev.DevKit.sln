@@ -1,0 +1,49 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33723.286
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8651C61D-45E4-4E34-8E99-6DDBADA7C4C4}"
+	ProjectSection(SolutionItems) = preProject
+		deploy.RELEASE.bat = deploy.RELEASE.bat
+		DynamicsCrm.DevKit.Cli.json = DynamicsCrm.DevKit.Cli.json
+		DynamicsCrm.DevKit.Config.json = DynamicsCrm.DevKit.Config.json
+		DynamicsCrm.DevKit.json = DynamicsCrm.DevKit.json
+	EndProjectSection
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Dev.DevKit.Shared", "Dev.DevKit.Shared\Dev.DevKit.Shared.shproj", "{FE3E159C-4457-4635-86D0-DCF01670FE0D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.Plugin.Category", "Dev.DevKit.Plugin.Category\Dev.DevKit.Plugin.Category.csproj", "{223A2F4C-367A-4EA6-A2F1-C8E1E36FFA36}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dev.DevKit.Packages", "Dev.DevKit.Packages\Dev.DevKit.Packages.csproj", "{6C95FCD6-597A-4CF5-A5AA-E3E67F3E5E6D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{223A2F4C-367A-4EA6-A2F1-C8E1E36FFA36}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{223A2F4C-367A-4EA6-A2F1-C8E1E36FFA36}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{223A2F4C-367A-4EA6-A2F1-C8E1E36FFA36}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{223A2F4C-367A-4EA6-A2F1-C8E1E36FFA36}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6C95FCD6-597A-4CF5-A5AA-E3E67F3E5E6D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C95FCD6-597A-4CF5-A5AA-E3E67F3E5E6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C95FCD6-597A-4CF5-A5AA-E3E67F3E5E6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C95FCD6-597A-4CF5-A5AA-E3E67F3E5E6D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {478EE8F5-54E1-431D-BEC8-72AC05F5AF8C}
+	EndGlobalSection
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{223a2f4c-367a-4ea6-a2f1-c8e1e36ffa36}*SharedItemsImports = 4
+		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{6c95fcd6-597a-4cf5-a5aa-e3e67f3e5e6d}*SharedItemsImports = 5
+		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{fe3e159c-4457-4635-86d0-dcf01670fe0d}*SharedItemsImports = 13
+	EndGlobalSection
+	GlobalSection(CRMSolutionProperties) = preSolution
+		SolutionIsBoundToCRM = True
+	EndGlobalSection
+EndGlobal

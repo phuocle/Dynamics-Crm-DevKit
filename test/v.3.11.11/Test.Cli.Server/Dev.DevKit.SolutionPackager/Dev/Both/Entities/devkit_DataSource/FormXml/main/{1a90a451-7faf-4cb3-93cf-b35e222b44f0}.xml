@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <systemform>
+    <formid>{1a90a451-7faf-4cb3-93cf-b35e222b44f0}</formid>
+    <IntroducedVersion>1.0.0.0</IntroducedVersion>
+    <FormPresentation>1</FormPresentation>
+    <FormActivationState>1</FormActivationState>
+    <form>
+      <tabs>
+        <tab verticallayout="true" id="{9f79e051-6907-4fb2-bed9-725b16c3e3e0}" IsUserDefined="1">
+          <labels>
+            <label description="General" languagecode="1033" />
+            <label description="Tổng quát" languagecode="1066" />
+          </labels>
+          <columns>
+            <column width="100%">
+              <sections>
+                <section showlabel="false" showbar="false" IsUserDefined="0" id="{0c61c38c-a3ee-42e7-b9a8-0c384a621822}">
+                  <labels>
+                    <label description="General" languagecode="1033" />
+                    <label description="Tổng quát" languagecode="1066" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{2a7855ed-611f-4bb8-9edc-46c67d422326}">
+                        <labels>
+                          <label description="Data Source" languagecode="1033" />
+                        </labels>
+                        <control id="devkit_datasourcename" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="devkit_datasourcename" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+      </tabs>
+    </form>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>1</CanBeDeleted>
+    <LocalizedNames>
+      <LocalizedName description="Information" languagecode="1033" />
+    </LocalizedNames>
+    <Descriptions>
+      <Description description="A form for this entity." languagecode="1033" />
+    </Descriptions>
+  </systemform>
+</forms>

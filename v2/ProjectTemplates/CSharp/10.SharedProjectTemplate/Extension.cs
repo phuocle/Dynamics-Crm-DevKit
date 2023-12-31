@@ -1,17 +1,22 @@
-﻿using Microsoft.Xrm.Sdk.Query;
+﻿using $SharedNameSpace$;
+using Microsoft.Xrm.Sdk.Query;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Xml;
-using $SharedNameSpace$;
 
 namespace Microsoft.Xrm.Sdk
 {
     [System.Diagnostics.DebuggerNonUserCode()]
     public static class Extension
     {
-        public static T RetrieveByGuid<T>(this IOrganizationService service, string entityName, Guid id, ColumnSet columns)
+        public static T Retrieve<T>(this IOrganizationService service, string entityName, Guid id, ColumnSet columns)
         {
             try
             {
@@ -25,7 +30,7 @@ namespace Microsoft.Xrm.Sdk
             }
         }
 
-        public static List<T> RetrieveAll<T>(this IOrganizationService service, string fetchXml) where T : EntityBase
+        public static List<T> RetrieveMultiple<T>(this IOrganizationService service, string fetchXml) where T : EntityBase
         {
             var lists = new List<T>();
             string pagingCookie = null;
@@ -51,7 +56,28 @@ namespace Microsoft.Xrm.Sdk
             return lists;
         }
 
-        private static string CreateXml(string xml, string cookie, int page, int count)
+        public static EntityCollection RetrieveMultiple(this IOrganizationService service, string fetchXml)
+        {
+            var entityCollection = new EntityCollection();
+            string pagingCookie = null;
+            var pageNumber = 1;
+            var fetchCount = 5000;
+            while (true)
+            {
+                fetchXml = CreateXml(fetchXml, pagingCookie, pageNumber, fetchCount);
+                var rows = service.RetrieveMultiple(new FetchExpression(fetchXml));
+                entityCollection.Entities.AddRange(rows.Entities);
+                if (rows.MoreRecords)
+                {
+                    pageNumber++;
+                    pagingCookie = rows.PagingCookie;
+                }
+                else break;
+            }
+            return entityCollection;
+        }
+
+        public static string CreateXml(string xml, string cookie, int page, int count)
         {
             StringReader stringReader = new StringReader(xml);
             XmlTextReader reader = new XmlTextReader(stringReader);
@@ -85,17 +111,24 @@ namespace Microsoft.Xrm.Sdk
 
         public static void LogMessage(this ITracingService tracingService, string message)
         {
-            tracingService.Trace(message);
+            tracingService?.Trace(message);
         }
 
         public static void DebugContext(this ITracingService tracingService, IExecutionContext context)
         {
 #if DEBUG
-            var json = Debug.DebugContext(context);
+            var json = context.ToRemoteExecutionContext().SerializeRemoteExecutionContext();
+            if (json.Length > 9000)
+            {
+                json = $"var json = Helper.Decompress(\"{json.Compress()}\");";
+            }
+            else
+            {
+                json = $"var json = @\"{ json.Replace("\"", "\"\"") }\";";
+            }
             tracingService.LogMessage(json);
 #endif
         }
-
         public static void DebugMessage(this ITracingService tracingService, string message)
         {
 #if DEBUG
@@ -103,25 +136,89 @@ namespace Microsoft.Xrm.Sdk
 #endif
         }
 
-        public static string ToDebug(this DataCollection<Entity> entities)
+        public static RemoteExecutionContext ToRemoteExecutionContext(this IExecutionContext context)
         {
-#if DEBUG
-            var records = new List<object>();
-            foreach (var entity in entities)
-                records.Add(Debug.EntityToObject(entity));
-            return SimpleJson.SerializeObject(records);
-#else
-            return string.Empty;
-#endif
+            var destination = new RemoteExecutionContext();
+            var destFields = destination.GetType()
+                .GetFields(BindingFlags.NonPublic | BindingFlags.Instance)
+                .ToArray();
+            foreach (var sourceProperty in context.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
+            {
+                foreach (var destField in destFields)
+                {
+                    if (sourceProperty.Name == "PreEntityImages" && destField.Name == "_preImages")
+                    {
+                        destField.SetValue(destination, sourceProperty.GetValue(
+                            context, new object[] { }));
+                        break;
+                    }
+                    if (sourceProperty.Name == "PostEntityImages" && destField.Name == "_postImages")
+                    {
+                        destField.SetValue(destination, sourceProperty.GetValue(
+                            context, new object[] { }));
+                        break;
+                    }
+                    if (!destField.Name.ToLower().Contains(sourceProperty.Name.ToLower()) ||
+                        !destField.FieldType.IsAssignableFrom(sourceProperty.PropertyType)) continue;
+                    destField.SetValue(destination, sourceProperty.GetValue(
+                        context, new object[] { }));
+                    break;
+                }
+            }
+            return destination;
         }
 
-        public static string ToDebug(this Entity entity)
+        public static string SerializeRemoteExecutionContext(this RemoteExecutionContext context)
         {
-#if DEBUG
-            return SimpleJson.SerializeObject(Debug.EntityToObject(entity));
-#else
-            return string.Empty;
-#endif
+            var settings = new DataContractJsonSerializerSettings() { DateTimeFormat = new DateTimeFormat("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'") };
+            var serializer = new DataContractJsonSerializer(typeof(RemoteExecutionContext), settings);
+            using (MemoryStream ms = new MemoryStream())
+            {
+                using (StreamReader sr = new StreamReader(ms))
+                {
+                    serializer.WriteObject(ms, context);
+                    ms.Position = 0;
+                    return sr.ReadToEnd();
+                }
+            }
+        }
+
+        public static string Decompress(this string compressedString)
+        {
+            byte[] decompressedBytes;
+            var compressedStream = new MemoryStream(Convert.FromBase64String(compressedString));
+            using (var decompressorStream = new DeflateStream(compressedStream, CompressionMode.Decompress))
+            {
+                using (var decompressedStream = new MemoryStream())
+                {
+                    decompressorStream.CopyTo(decompressedStream);
+                    decompressedBytes = decompressedStream.ToArray();
+                }
+            }
+            return Encoding.UTF8.GetString(decompressedBytes);
+        }
+
+        public static string Compress(this string uncompressedString)
+        {
+            byte[] compressedBytes;
+            using (var uncompressedStream = new MemoryStream(Encoding.UTF8.GetBytes(uncompressedString)))
+            {
+                using (var compressedStream = new MemoryStream())
+                {
+                    using (var compressorStream = new DeflateStream(compressedStream, CompressionLevel.Fastest, true))
+                    {
+                        uncompressedStream.CopyTo(compressorStream);
+                    }
+                    compressedBytes = compressedStream.ToArray();
+                }
+            }
+            return Convert.ToBase64String(compressedBytes);
+        }
+
+        public static Entity GetImage(this EntityImageCollection collection, string imageName)
+        {
+            if (collection.Count == 0) return null;
+            return collection[imageName];
         }
     }
 }

@@ -8,7 +8,7 @@ using System.Linq;
 namespace $NameSpace$
 {
     [DebuggerNonUserCode()]
-    public class EntityBase
+    public abstract class EntityBase
     {
         protected T GetAliasedValue<T>(string name)
         {
@@ -40,12 +40,12 @@ namespace $NameSpace$
             if (optionSetValue != null)
             {
                 return new OptionSetValue(optionSetValue.Value);
-            }$if$($ShortCrmName$==365)
+            }
             var optionSetValueCollection = value as OptionSetValueCollection;
             if (optionSetValueCollection != null)
             {
                 return new OptionSetValueCollection(optionSetValueCollection);
-            }$endif$
+            }
             var entityReferenceValue = value as EntityReference;
             if (entityReferenceValue != null)
             {
@@ -112,9 +112,9 @@ namespace $NameSpace$
         }
 
         public Entity GetUpdateEntity()
-        {   $if$($CrmName$!=2013)
-            var update = Entity.KeyAttributes.Count > 0 ? new Entity(Entity.LogicalName, Entity.KeyAttributes) :  new Entity { Id = Entity.Id, LogicalName = Entity.LogicalName };$else$            var update = new Entity(Entity.LogicalName);
-            update.Id = Entity.Id;$endif$
+        {
+            var update = new Entity(Entity.LogicalName);
+            update.Id = Entity.Id;
             foreach (var property in Entity.Attributes)
             {
                 var key = property.Key;
@@ -137,6 +137,28 @@ namespace $NameSpace$
                 }; ;
             }
             return update;
+        }
+
+        public EntityReference ToEntityReference()
+        {
+            if (Entity == null || Entity.Id == Guid.Empty) return null;
+            return Entity.ToEntityReference();
+        }
+
+        public bool Contains(string field)
+        {
+            return this.Entity.Contains(field);
+        }
+
+        public void Remove(string field)
+        {
+            this.Entity.Attributes.Remove(field);
+        }
+
+        public bool Exist()
+        {
+            if (Entity == null || Entity.Id == Guid.Empty) return false;
+            return true;
         }
     }
 }

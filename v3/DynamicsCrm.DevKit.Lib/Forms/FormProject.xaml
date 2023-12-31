@@ -6,7 +6,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:wpfcontrols="clr-namespace:DynamicsCrm.DevKit.Lib.WpfControls"
         mc:Ignorable="d"
-        WindowStartupLocation="CenterScreen" Icon="/DynamicsCrm.DevKit.Lib;component/Forms/icon-menu.png" ResizeMode="NoResize" Width="500" Height="auto" SizeToContent="Height"
+        WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Width="500" Height="auto" SizeToContent="Height"
     >
     <forms:BaseDialogWindow.Resources>
         <ResourceDictionary>
@@ -16,14 +16,11 @@
         </ResourceDictionary>
     </forms:BaseDialogWindow.Resources>
     <StackPanel>
-        <TextBlock Padding="10,5,10,5">
-            <TextBlock.Background>
-                <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ActiveBorderColorKey}}"/>
-            </TextBlock.Background>
-            <wpfcontrols:ExternalBrowserHyperlink NavigateUri="https://google.com">WIKI: Connections </wpfcontrols:ExternalBrowserHyperlink>
+        <TextBlock Padding="10,5,10,5" Background="Green">
+            <wpfcontrols:ExternalBrowserHyperlink x:Name="HELP" NavigateUri="https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Connection" Foreground="White" >WIKI: Connection</wpfcontrols:ExternalBrowserHyperlink>
         </TextBlock>
-        <wpfcontrols:UserControlConnection x:Name="connection" Connected="Connection_Connected" />
-        <StackPanel IsEnabled="{Binding IsConnected, ElementName=connection}">
+        <wpfcontrols:UserControlConnection x:Name="CONNECTION" Connected="Connection_Connected" />
+        <StackPanel IsEnabled="{Binding IsConnected, ElementName=CONNECTION}">
             <Border Grid.Row="1" Grid.ColumnSpan="2" BorderBrush="Gray" BorderThickness="1" Padding="10,15,10,15" Margin="5,10,5,10">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -31,18 +28,32 @@
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="*"></RowDefinition>
-                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition x:Name="Row0" Height="*"></RowDefinition>
+                        <RowDefinition x:Name="Row1" Height="*"></RowDefinition>
+                        <RowDefinition x:Name="Row2" Height="*"></RowDefinition>
                     </Grid.RowDefinitions>
-                    <Label Grid.Row="0" Grid.Column="0" Margin="0,0,0,5" Content="Project Name" HorizontalAlignment="Left" VerticalAlignment="Center" />
-                    <ComboBox x:Name="comboBoxType" Grid.Row="0" Grid.Column="1" Margin="0,0,0,5"  />
-                    <Label Grid.Row="1" Grid.Column="1" Margin="0,0,0,0" Content="Name" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                    <Label x:Name="LabelLanguage" Visibility="Collapsed" Grid.Row="0" Grid.Column="0" Margin="0,0,0,5" Content="Language" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                    <ComboBox x:Name="ComboBoxLanguage" Visibility="Collapsed" Grid.Row="0" Grid.Column="1" Margin="0,0,0,5" VerticalContentAlignment="Center" IsEditable="False" SelectionChanged="ComboBoxLanguage_SelectionChanged" />
+                    <Label x:Name="LabelProjectItemName" Grid.Row="1" Grid.Column="0" Margin="0,0,0,5" Content="Project Name" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                    <ComboBox x:Name="ComboBoxProject" Grid.Row="1" Grid.Column="1" Margin="0,0,0,5" VerticalContentAlignment="Center" IsEditable="True" TextBoxBase.TextChanged="ComboBoxProject_TextChanged" SelectionChanged="ComboBoxProject_SelectionChanged" />
+                    <TextBox x:Name="TextboxProject" Grid.Row="1" Grid.Column="1" Margin="0,0,0,5" Visibility="Hidden" TextChanged="TextboxProject_TextChanged" VerticalContentAlignment="Center" />
+                    <Label x:Name="LabelProjectName" Grid.Row="2" Grid.Column="1" Margin="0,0,0,0" Content="Name" HorizontalAlignment="Left" VerticalAlignment="Center" />
                 </Grid>
             </Border>
-            <WrapPanel HorizontalAlignment="Right" Margin="10,0,10,10">
-                <Button x:Name="buttonOK" Content="OK" Margin="5,0,5,0" Width="100" Height="30" Click="ButtonOK_Click"/>
-                <Button x:Name="buttonCancel" Content="Cancel" Margin="5,0,5,0" Width="100" Height="30" IsCancel="True" Click="ButtonCancel_Click"/>
-            </WrapPanel>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="130"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <WrapPanel Grid.Row="0" Grid.Column="1" HorizontalAlignment="Right" Margin="10,0,10,10">
+                    <Button x:Name="buttonOK" Content="OK" Margin="5,0,5,0" Width="100" Height="30" Click="ButtonOK_Click"/>
+                    <Button x:Name="buttonCancel" Content="Cancel" Margin="5,0,5,0" Width="100" Height="30" IsCancel="True" Click="ButtonCancel_Click"/>
+                </WrapPanel>
+                <Button Grid.Row="0" Grid.Column="0" x:Name="buttonCustom" Content="Custom" Margin="5,0,5,0" Width="100" Height="30" Click="ButtonCustom_Click" Visibility="Hidden"/>
+            </Grid>
             <ProgressBar x:Name="progressBar" Height="5" IsIndeterminate="True" Visibility="Hidden" />
         </StackPanel>
     </StackPanel>

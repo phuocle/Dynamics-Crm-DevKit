@@ -12,6 +12,9 @@ set MsBuild=""
 if exist "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Current\Bin\MSBuild.exe" (
 	set MsBuild="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Current\Bin\MSBuild.exe"
 )
+if exist "C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\MSBuild\Current\Bin\MSBuild.exe" (
+	set MsBuild="C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\MSBuild\Current\Bin\MSBuild.exe"
+)
 if exist "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\MSBuild.exe" (
 	set MsBuild="C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\MSBuild.exe"
 )
@@ -24,25 +27,25 @@ if %MsBuild%=="" (
 	)
 
 	call %MsBuild% /nologo /noautorsp /verbosity:minimal -p:Configuration=Release -target:Clean;Build DynamicsCrm.DevKit.sln
-    call %MsBuild% /nologo /noautorsp /verbosity:minimal -p:Configuration=Release -target:Clean;Build DynamicsCrm.DevKit.Cli.sln
-	call %MsBuild% /nologo /noautorsp /verbosity:minimal -p:Configuration=Release -target:Clean;Build DynamicsCrm.DevKit.Analyzers.sln
+    rem call %MsBuild% /nologo /noautorsp /verbosity:minimal -p:Configuration=Release -target:Clean;Build DynamicsCrm.DevKit.Cli.sln
+	rem call %MsBuild% /nologo /noautorsp /verbosity:minimal -p:Configuration=Release -target:Clean;Build DynamicsCrm.DevKit.Analyzers.sln
 
-    echo ************************************************************
-    echo NuGet pack ...
-    echo ************************************************************
+    rem echo ************************************************************
+    rem echo NuGet pack ...
+    rem echo ************************************************************
 
-	cd DynamicsCrm.DevKit.Analyzers\Nuget
-	call pack.bat
+	rem cd DynamicsCrm.DevKit.Analyzers\Nuget
+	rem call pack.bat
 
-	cd ..\..
-	cd DynamicsCrm.DevKit.Cli\Nuget
-	call pack.bat
+	rem cd ..\..
+	rem cd DynamicsCrm.DevKit.Cli\Nuget
+	rem call pack.bat
 
-	cd ..\..
-	cd DynamicsCrm.DevKit.Tool\Nuget
-	call pack.bat
+	rem cd ..\..
+	rem cd DynamicsCrm.DevKit.Tool\Nuget
+	rem call pack.bat
 
-	cd ..\..
+	rem cd ..\..
 	copy DynamicsCrm.DevKit\Release\DynamicsCrm.DevKit.vsix Published\%VERSION%\DynamicsCrm.DevKit.%VERSION%.vsix
 
     call DynamicsCrm.DevKit.Console\bin\Debug\DynamicsCrm.DevKit.Console.exe 1

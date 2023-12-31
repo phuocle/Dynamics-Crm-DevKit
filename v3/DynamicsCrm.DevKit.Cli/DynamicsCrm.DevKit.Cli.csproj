@@ -1,0 +1,68 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net48</TargetFramework>
+		<IsPublishable>True</IsPublishable>
+		<SignAssembly>True</SignAssembly>
+		<AssemblyOriginatorKeyFile>..\DynamicsCrm.DevKit.pfx</AssemblyOriginatorKeyFile>
+		<AssemblyVersion>3.33.33.0</AssemblyVersion>
+		<FileVersion>3.33.33.0</FileVersion>
+		<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+		<RepositoryUrl>https://github.com/phuocle/Dynamics-Crm-DevKit</RepositoryUrl>
+		<Company>PhuocLe</Company>
+		<Product>DynamicsCrm.DevKit.Cli</Product>
+		<Copyright>Copyright © PhuocLe 2016 - 2022</Copyright>
+		<PackageProjectUrl>https://github.com/phuocle/Dynamics-Crm-DevKit</PackageProjectUrl>
+		<Version>3.33.33.0</Version>
+		<OutputType>Exe</OutputType>
+		<StartupObject>DynamicsCrm.DevKit.Cli.Program</StartupObject>
+		<BaseOutputPath>bin</BaseOutputPath>
+		<DelaySign>False</DelaySign>
+		<ApplicationIcon>icon.ico</ApplicationIcon>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<PlatformTarget>x64</PlatformTarget>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+		<PlatformTarget>x64</PlatformTarget>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <Compile Remove="images\**" />
+	  <Compile Remove="license\**" />
+	  <Compile Remove="Nuget\**" />
+	  <EmbeddedResource Remove="images\**" />
+	  <EmbeddedResource Remove="license\**" />
+	  <EmbeddedResource Remove="Nuget\**" />
+	  <None Remove="images\**" />
+	  <None Remove="license\**" />
+	  <None Remove="Nuget\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Remove="C:\Users\ple\.nuget\packages\community.visualstudio.toolkit\17.0.76.268-pre\build\AssemblyInfo.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Include="icon.ico" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="CmdLine" Version="1.0.7.509" />
+	  <PackageReference Include="Community.VisualStudio.Toolkit.17" Version="17.0.507" />
+	  <PackageReference Include="Microsoft.CrmSdk.CoreAssemblies" Version="9.0.2.51" />
+	  <PackageReference Include="Microsoft.CrmSdk.Deployment" Version="9.0.2.34" />
+	  <PackageReference Include="Microsoft.CrmSdk.Workflow" Version="9.0.2.51" />
+	  <PackageReference Include="Microsoft.CrmSdk.XrmTooling.CoreAssembly" Version="9.1.1.45" />
+	  <PackageReference Include="NuGet.Packaging" Version="6.7.0" />
+	  <PackageReference Include="NuGet.Protocol" Version="6.7.0" />
+	  <PackageReference Include="System.Text.Json" Version="6.0.8" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\DynamicsCrm.DevKit.CrmSvcUtilExtensions\DynamicsCrm.DevKit.CrmSvcUtilExtensions.csproj" />
+	  <ProjectReference Include="..\DynamicsCrm.DevKit.Lib\DynamicsCrm.DevKit.Lib.csproj" />
+	</ItemGroup>
+</Project>

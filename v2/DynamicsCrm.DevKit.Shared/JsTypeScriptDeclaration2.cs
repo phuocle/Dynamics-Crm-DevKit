@@ -1,477 +1,635 @@
-﻿using System.Collections.Generic;
+﻿using DynamicsCrm.DevKit.Shared.Extensions;
+using DynamicsCrm.DevKit.Shared.Helper;
+using DynamicsCrm.DevKit.Shared.Models;
+using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Metadata;
+using Microsoft.Xrm.Sdk.Query;
+using Microsoft.Xrm.Tooling.Connector;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
-using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Sdk.Metadata;
-using DynamicsCrm.DevKit.Shared.Models;
-using DynamicsCrm.DevKit.Shared.Helper;
-using System;
-using Microsoft.Xrm.Sdk.Query;
-using Microsoft.Xrm.Sdk.Messages;
-using System.Collections.Specialized;
-using Microsoft.Xrm.Tooling.Connector;
 
 namespace DynamicsCrm.DevKit.Shared
 {
     public class JsTypeScriptDeclaration2
     {
-        private CrmServiceClient service = null;
+        private const string NEW_LINE = "\r\n";
+        private const string TAB = "\t";
+        private static CrmServiceClient CrmServiceClient { get; set; }
+        private static EntityMetadata EntityMetadata { get; set; }
+        private static string RootNamespace { get; set; }
+        private static CommentTypeScriptDeclaration Comment { get; set; }
+        private static List<string> FormNames = new List<string>();
 
-        public JsTypeScriptDeclaration2(CrmServiceClient crmService)
+        public static string GetCode(CrmServiceClient crmServiceClient, EntityMetadata entityMetadata, string rootNamespace, CommentTypeScriptDeclaration comment)
         {
-            service = crmService;
-        }
-        private class IdName
-        {
-            public string Id { get; set; }
-            public string Name { get; set; }
-            public string ClassId { get; set; }
-            public string ControlId { get; set; }
-        }
-        public List<SystemForm> ProcessForms { get; internal set; }
-        public bool IsDebugForm { get; internal set; }
-        public string ProjectName { get; internal set; }
-        public string EntityName { get; internal set; }
-        public List<CrmAttribute> Fields { get; internal set; }
-        public DataCollection<Entity> Processes { get; internal set; }
-        public bool IsJsWebApi { get; internal set; }
-        public bool IsDebugWebApi { get; internal set; }
-        private string Class { get { return EntityName; } }
-        public string Intellisense
-        {
-            get
-            {
-                var _d_ts = string.Empty;
-                _d_ts += $"//@ts-check\r\n";
-                _d_ts += $"///<reference path=\"devkit.d.ts\" />\r\n";
-                _d_ts += $"declare namespace {ProjectName} {{\r\n";
-                if (ProcessForms.Count > 0)
-                    _d_ts += GetForm_d_ts();
-                if (IsJsWebApi)
-                    _d_ts += GetWebApi_d_ts();
-
-                _d_ts += $"}}\r\n";
-                _d_ts += GetOptionSet_d_ts();
-                _d_ts += GetSavedComment();
-                return _d_ts;
-            }
-        }
-        private string GetSavedComment()
-        {
+            CrmServiceClient = crmServiceClient;
+            EntityMetadata = entityMetadata;
+            RootNamespace = rootNamespace;
+            Comment = comment;
+            FormNames = new List<string>();
+            var @namespace = Utility.GetNameSpace(RootNamespace);
             var _d_ts = string.Empty;
-            var comment = new CommentTypeScriptDeclaration()
-            {
-                JsForm = ProcessForms.Select(f => FormHelper.GetFormName(f.Name)).ToList<string>(),
-                JsWebApi = IsJsWebApi,
-                IsDebugForm = IsDebugForm,
-                IsDebugWebApi = IsDebugWebApi,
-                JsFormVersion = "v2"
-            };
-            if (comment.Version == null)
-            {
-                comment.Version = Const.Version;
-            }
-            _d_ts += $"//{SimpleJson.SerializeObject(comment)}";
-            _d_ts = _d_ts.Replace("\"", "'");
+            _d_ts += $"//@ts-check{NEW_LINE}";
+            _d_ts += $"///<reference path=\"devkit.d.ts\" />{NEW_LINE}";
+            _d_ts += $"declare namespace {rootNamespace} {{{NEW_LINE}";
+            if (comment.UseForm)
+                _d_ts += GetForm_d_ts(@namespace);
+            if (comment.UseWebApi)
+                _d_ts += GetWebApi_d_ts(@namespace);
+            _d_ts += $"}}{NEW_LINE}";
+            _d_ts += GetOptionSet_d_ts();
+            _d_ts += GetSavedComment();
             return _d_ts;
         }
-        private string GetOptionSet_d_ts()
-        {
-            var _d_ts = string.Empty;
-            _d_ts += $"declare namespace OptionSet {{\r\n";
-            _d_ts += $"\tnamespace {Class} {{\r\n";
-            var fields = Fields.OrderBy(x => x.LogicalName).ToList();
-            foreach (var crmAttribute in fields)
-            {
-                if (!crmAttribute.IsValidForRead) continue;
-                if (crmAttribute.FieldType == AttributeTypeCode.Picklist ||
-                    crmAttribute.FieldType == AttributeTypeCode.State ||
-                    crmAttribute.FieldType == AttributeTypeCode.Status ||
-                    crmAttribute.IsMultiSelectPicklist)
-                {
-                    _d_ts += $"\t\tenum {crmAttribute.SchemaName} {{\r\n";
-                    NameValueCollection values = UpdateOptionSetValues(crmAttribute.OptionSetValues);
-                    foreach (string nvc in values)
-                    {
-                        _d_ts += $"\t\t\t/** {values[nvc]} */\r\n";
-                        _d_ts += $"\t\t\t{nvc},\r\n";
-                    }
-                    _d_ts = _d_ts.TrimEnd(",\r\n".ToCharArray()) + "\r\n";
-                    _d_ts += $"\t\t}}\r\n";
-                }
-            }
-            var optionSet = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Resources.OptionSetWebApi_d_ts.js");
-            _d_ts += optionSet;
-            _d_ts += $"\t}}\r\n";
-            _d_ts += $"}}\r\n";
-            return _d_ts;
-        }
-        private NameValueCollection UpdateOptionSetValues(NameValueCollection optionSetValues)
-        {
-            var values = new NameValueCollection();
-            foreach (string key in optionSetValues.Keys)
-            {
-                if (optionSetValues.GetValues(key).Length > 1)
-                {
-                    for (var i = 0; i < optionSetValues.GetValues(key).Length; i++)
-                    {
-                        var value = optionSetValues.GetValues(key)[i];
-                        values.Add(key + "_" + value, value);
-                    }
-                }
-                else
-                    values.Add(key, optionSetValues[key]);
-            }
-            var newValues = new NameValueCollection();
-            var sortedKeys = values.AllKeys;
-            Array.Sort(sortedKeys);
-            foreach (var key in sortedKeys)
-                newValues.Add(key, values[key]);
-            return newValues;
-        }
-        private string GetWebApi_d_ts()
-        {
-            var _d_ts = string.Empty;
-            _d_ts += $"\tclass {Class}Api {{\r\n";
-            _d_ts += $"\t\t/**\r\n";
-            _d_ts += $"\t\t* DynamicsCrm.DevKit {Class}Api\r\n";
-            _d_ts += $"\t\t* @param entity The entity object\r\n";
-            _d_ts += $"\t\t*/\r\n";
-            _d_ts += $"\t\tconstructor(entity?: any);\r\n";
-            _d_ts += $"\t\t/**\r\n";
-            _d_ts += $"\t\t * Get the value of alias\r\n";
-            _d_ts += $"\t\t * @param alias the alias value\r\n";
-            _d_ts += $"\t\t * @param isMultiOptionSet true if the alias is multi OptionSet\r\n";
-            _d_ts += $"\t\t */\r\n";
-            _d_ts += $"\t\tgetAliasedValue(alias: string, isMultiOptionSet?: boolean): any;\r\n";
-            _d_ts += $"\t\t/**\r\n";
-            _d_ts += $"\t\t * Get the formatted value of alias\r\n";
-            _d_ts += $"\t\t * @param alias the alias value\r\n";
-            _d_ts += $"\t\t * @param isMultiOptionSet true if the alias is multi OptionSet\r\n";
-            _d_ts += $"\t\t */\r\n";
-            _d_ts += $"\t\tgetAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;\r\n";
-            _d_ts += $"\t\t/** The entity object */\r\n";
-            _d_ts += $"\t\tEntity: any;\r\n";
-            _d_ts += $"\t\t/** The entity name */\r\n";
-            _d_ts += $"\t\tEntityName: string;\r\n";
-            _d_ts += $"\t\t/** The entity collection name */\r\n";
-            _d_ts += $"\t\tEntityCollectionName: string;\r\n";
-            _d_ts += $"\t\t/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */\r\n";
-            _d_ts += $"\t\t\"@odata.etag\": string;\r\n";
-            foreach (var crmAttribute in Fields)
-            {
-                if (crmAttribute.SchemaName == "Entity") crmAttribute.SchemaName = "_Entity";
-                else if (crmAttribute.SchemaName == "EntityName") crmAttribute.SchemaName = "_EntityName";
-                if (crmAttribute.IsDeprecated) continue;
-                if (crmAttribute.AttributeOf != null && crmAttribute.FieldType == AttributeTypeCode.Virtual && crmAttribute.LogicalName != "entityimage") continue;
-                if (crmAttribute.FieldType == AttributeTypeCode.EntityName || crmAttribute.FieldType == AttributeTypeCode.PartyList) continue;
-                if (crmAttribute.AttributeOf != null && crmAttribute.AttributeOf.ToLower() + "name" == crmAttribute.LogicalName) continue;
-                if (crmAttribute.AttributeOf != null && crmAttribute.LogicalName.EndsWith("yominame") && !crmAttribute.IsValidForCreate && !crmAttribute.IsValidForUpdate) continue;
 
-                var jdoc = string.Empty;
-                var Readonly = (!crmAttribute.IsValidForCreate && !crmAttribute.IsValidForUpdate) ? "Readonly" : string.Empty;
-                if (crmAttribute.FieldType != AttributeTypeCode.Customer && crmAttribute?.Description?.Length > 0)
-                    jdoc += crmAttribute.Description;
-                if (crmAttribute.FieldType == AttributeTypeCode.Picklist ||
-                    crmAttribute.FieldType == AttributeTypeCode.State ||
-                    crmAttribute.FieldType == AttributeTypeCode.Status
-                    )
+        private static string GetOptionSet_d_ts()
+        {
+            var _d_ts = string.Empty;
+            _d_ts += $"declare namespace OptionSet {{{NEW_LINE}";
+            _d_ts += $"{TAB}namespace {EntityMetadata.SchemaName} {{{NEW_LINE}";
+            foreach (var attribute in EntityMetadata.Attributes.OrderBy(x => x.SchemaName))
+            {
+                if (XrmHelper.IsOptionSet(attribute))
                 {
-                    if (jdoc.Length > 0)
-                        _d_ts += $"\t\t/** {jdoc} */\r\n";
-                    _d_ts += $"\t\t{crmAttribute.SchemaName}: DevKit.WebApi.OptionSetValue{Readonly};\r\n";
-                }
-                else if (crmAttribute.IsMultiSelectPicklist)
-                {
-                    if (jdoc.Length > 0)
-                        _d_ts += $"\t\t/** {jdoc} */\r\n";
-                    _d_ts += $"\t\t{crmAttribute.SchemaName}: DevKit.WebApi.MultiOptionSetValue{Readonly};\r\n";
-                }
-                else if (crmAttribute.FieldType == AttributeTypeCode.Lookup)
-                {
-                    var entities = crmAttribute.EntityReferenceLogicalName.Split(";".ToCharArray());
-                    if (entities.Length == 1)
+                    if (attribute.SchemaName == "OwnerIdType") continue;
+                    var attributeSchemaName = Utility.SafeDeclareName(attribute.SchemaName, GeneratorType.jsform, EntityMetadata.SchemaName);
+                    var values = attribute.OptionSetValues();
+                    if (values.Count == 0)
                     {
-                        if (jdoc.Length > 0)
-                            _d_ts += $"\t\t/** {jdoc} */\r\n";
-                        _d_ts += $"\t\t{crmAttribute.SchemaName}: DevKit.WebApi.LookupValue{Readonly};\r\n";
+                        _d_ts += $"{TAB}{TAB}enum {attributeSchemaName} {{{NEW_LINE}";
+                        _d_ts = _d_ts.TrimEnd($",{NEW_LINE}".ToCharArray());
+                        _d_ts += $"{NEW_LINE}";
+                        _d_ts += $"{TAB}{TAB}}}{NEW_LINE}";
                     }
                     else
                     {
-                        var navigations = crmAttribute.NavigationPropertyName.Split(";".ToCharArray());
-                        if (crmAttribute.LogicalName == "acceptingentityid") navigations = "acceptingentityid_queue;acceptingentityid_systemuser".Split(";".ToCharArray());
-                        if (entities.Length != navigations.Length) continue;
-                        var j = 0;
-                        foreach (var entity in entities)
+                        _d_ts += $"{TAB}{TAB}enum {attributeSchemaName} {{{NEW_LINE}";
+                        foreach (var value in values)
                         {
-                            if (crmAttribute.EntityName == "audit" && entity == "externalparty") continue;
-                            if (crmAttribute.EntityName == "feedback" && navigations[j] == "FeedbackId") navigations[j] = "_FeedbackId";
-                            if (jdoc.Length > 0)
-                                _d_ts += $"\t\t/** {jdoc} */\r\n";
-                            _d_ts += $"\t\t{navigations[j]}: DevKit.WebApi.LookupValue{Readonly};\r\n";
-                            j++;
+                            _d_ts += $"{TAB}{TAB}{TAB}/** {value.Value} */{NEW_LINE}";
+                            _d_ts += $"{TAB}{TAB}{TAB}{value.Name},{NEW_LINE}";
                         }
-                    }
-                }
-                else if (crmAttribute.FieldType == AttributeTypeCode.Customer)
-                {
-                    var entities = crmAttribute.EntityReferenceLogicalName.Split(";".ToCharArray());
-                    var navigations = crmAttribute.NavigationPropertyName.Split(";".ToCharArray());
-                    if (entities.Length == navigations.Length)
-                    {
-                        for (var j = 0; j < entities.Length; j++)
-                        {
-                            if (jdoc.Length > 0)
-                                _d_ts += $"\t\t/** {jdoc} */\r\n";
-                            _d_ts += $"\t\t{navigations[j]}: DevKit.WebApi.LookupValue{Readonly};\r\n";
-                        }
-                    }
-                }
-                else if (crmAttribute.FieldType == AttributeTypeCode.Owner)
-                {
-                    _d_ts += $"\t\t/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */\r\n";
-                    _d_ts += $"\t\tOwnerId_systemuser: DevKit.WebApi.LookupValue{Readonly};\r\n";
-                    _d_ts += $"\t\t/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */\r\n";
-                    _d_ts += $"\t\tOwnerId_team: DevKit.WebApi.LookupValue{Readonly};\r\n";
-                }
-                else if (crmAttribute.FieldType == AttributeTypeCode.Memo ||
-                    crmAttribute.FieldType == AttributeTypeCode.String)
-                {
-                    if (jdoc.Length > 0)
-                        _d_ts += $"\t\t/** {jdoc} */\r\n";
-                    _d_ts += $"\t\t{crmAttribute.SchemaName}: DevKit.WebApi.StringValue{Readonly};\r\n";
-                }
-                else if (crmAttribute.FieldType == AttributeTypeCode.Boolean)
-                {
-                    if (jdoc.Length > 0)
-                        _d_ts += $"\t\t/** {jdoc} */\r\n";
-                    _d_ts += $"\t\t{crmAttribute.SchemaName}: DevKit.WebApi.BooleanValue{Readonly};\r\n";
-                }
-                else if (crmAttribute.FieldType == AttributeTypeCode.DateTime)
-                {
-                    if (crmAttribute.DateTimeBehavior == DateTimeBehavior.DateOnly)
-                    {
-                        if (jdoc.Length > 0)
-                            _d_ts += $"\t\t/** {jdoc} */\r\n";
-                        _d_ts += $"\t\t{crmAttribute.SchemaName}_DateOnly: DevKit.WebApi.DateOnlyValue{Readonly};\r\n";
-                    }
-                    else if (crmAttribute.DateTimeBehavior == DateTimeBehavior.TimeZoneIndependent)
-                    {
-                        if (crmAttribute.DateTimeFormat == DateTimeFormat.DateOnly)
-                        {
-                            if (jdoc.Length > 0)
-                                _d_ts += $"\t\t/** {jdoc} */\r\n";
-                            _d_ts += $"\t\t{crmAttribute.SchemaName}_TimezoneDateOnly: DevKit.WebApi.TimezoneDateOnlyValue{Readonly};\r\n";
-                        }
-                        else
-                        {
-                            if (jdoc.Length > 0)
-                                _d_ts += $"\t\t/** {jdoc} */\r\n";
-                            _d_ts += $"\t\t{crmAttribute.SchemaName}_TimezoneDateAndTime: DevKit.WebApi.TimezoneDateAndTimeValue{Readonly};\r\n";
-                        }
-                    }
-                    else if (crmAttribute.DateTimeBehavior == DateTimeBehavior.UserLocal)
-                    {
-                        if (crmAttribute.DateTimeFormat == DateTimeFormat.DateOnly)
-                        {
-                            if (jdoc.Length > 0)
-                                _d_ts += $"\t\t/** {jdoc} */\r\n";
-                            _d_ts += $"\t\t{crmAttribute.SchemaName}_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue{Readonly};\r\n";
-                        }
-                        else
-                        {
-                            if (jdoc.Length > 0)
-                                _d_ts += $"\t\t/** {jdoc} */\r\n";
-                            _d_ts += $"\t\t{crmAttribute.SchemaName}_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue{Readonly};\r\n";
-                        }
-                    }
-                }
-                else if (crmAttribute.FieldType == AttributeTypeCode.Integer)
-                {
-                    if (jdoc.Length > 0)
-                        _d_ts += $"\t\t/** {jdoc} */\r\n";
-                    _d_ts += $"\t\t{crmAttribute.SchemaName}: DevKit.WebApi.IntegerValue{Readonly};\r\n";
-                }
-                else if (crmAttribute.FieldType == AttributeTypeCode.BigInt)
-                {
-                    if (jdoc.Length > 0)
-                        _d_ts += $"\t\t/** {jdoc} */\r\n";
-                    _d_ts += $"\t\t{crmAttribute.SchemaName}: DevKit.WebApi.BigIntValue{Readonly};\r\n";
-                }
-                else if (crmAttribute.FieldType == AttributeTypeCode.Decimal)
-                {
-                    if (jdoc.Length > 0)
-                        _d_ts += $"\t\t/** {jdoc} */\r\n";
-                    _d_ts += $"\t\t{crmAttribute.SchemaName}: DevKit.WebApi.DecimalValue{Readonly};\r\n";
-                }
-                else if (crmAttribute.FieldType == AttributeTypeCode.Double)
-                {
-                    if (jdoc.Length > 0)
-                        _d_ts += $"\t\t/** {jdoc} */\r\n";
-                    _d_ts += $"\t\t{crmAttribute.SchemaName}: DevKit.WebApi.DoubleValue{Readonly};\r\n";
-                }
-                else if (crmAttribute.FieldType == AttributeTypeCode.Money)
-                {
-                    if (jdoc.Length > 0)
-                        _d_ts += $"\t\t/** {jdoc} */\r\n";
-                    _d_ts += $"\t\t{crmAttribute.SchemaName}: DevKit.WebApi.MoneyValue{Readonly};\r\n";
-                }
-                else if (crmAttribute.FieldType == AttributeTypeCode.Uniqueidentifier)
-                {
-                    if (jdoc.Length > 0)
-                        _d_ts += $"\t\t/** {jdoc} */\r\n";
-                    _d_ts += $"\t\t{crmAttribute.SchemaName}: DevKit.WebApi.GuidValue{Readonly};\r\n";
-                }
-                else if (crmAttribute.FieldType == AttributeTypeCode.CalendarRules)
-                {
-                    if (jdoc.Length > 0)
-                        _d_ts += $"\t\t/** {jdoc} */\r\n";
-                    _d_ts += $"\t\t{crmAttribute.SchemaName}: DevKit.WebApi.EntityCollectionValue{Readonly};\r\n";
-                }
-                else if (crmAttribute.FieldType == AttributeTypeCode.ManagedProperty)
-                {
-                    if (jdoc.Length > 0)
-                        _d_ts += $"\t\t/** {jdoc} */\r\n";
-                    _d_ts += $"\t\t{crmAttribute.SchemaName}: DevKit.WebApi.ManagedPropertyValue{Readonly};\r\n";
-                }
-                else
-                {
-                    if (crmAttribute.SchemaName == "EntityImage" ||
-                        crmAttribute.SchemaName == "FullImageData" ||
-                        crmAttribute.SchemaName == "ImageData")
-                    {
-                        if (jdoc.Length > 0)
-                            _d_ts += $"\t\t/** {jdoc} */\r\n";
-                        _d_ts += $"\t\t{crmAttribute.SchemaName}: DevKit.WebApi.StringValue{Readonly};\r\n";
-                    }
-                    else
-                    {
-                        if (jdoc.Length > 0)
-                            _d_ts += $"\t\t/** {jdoc} */\r\n";
-                        _d_ts += $"\t\t{crmAttribute.SchemaName}: ??????????;\r\n";
+                        _d_ts = _d_ts.TrimEnd($",{NEW_LINE}".ToCharArray());
+                        _d_ts += $"{NEW_LINE}";
+                        _d_ts += $"{TAB}{TAB}}}{NEW_LINE}";
                     }
                 }
             }
-            var hasPartyList = Fields.Where(f => f.FieldType == AttributeTypeCode.PartyList).Any();
-            if (hasPartyList)
-            {
-                _d_ts += $"\t\t/** The array of object that can cast object to ActivityPartyApi class */\r\n"; ;
-                _d_ts += $"\t\tActivityParties: Array<any>;\r\n";
-            }
-            _d_ts += $"\t}}\r\n";
+            _d_ts += $"{TAB}{TAB}enum RollupState {{{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}{TAB}/** 0 - Attribute value is yet to be calculated */{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}{TAB}NotCalculated,{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}{TAB}/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}{TAB}Calculated,{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}{TAB}/** 2 - Attribute value calculation lead to overflow error */{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}{TAB}OverflowError,{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}{TAB}/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}{TAB}OtherError,{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}{TAB}/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}{TAB}RetryLimitExceeded,{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}{TAB}/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}{TAB}HierarchicalRecursionLimitReached,{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}{TAB}/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}{TAB}LoopDetected{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}}}{NEW_LINE}";
+            _d_ts += $"{TAB}}}{NEW_LINE}";
+            _d_ts += $"}}{NEW_LINE}";
             return _d_ts;
         }
-        private string GetForm_d_ts_Header(string formXml)
-        {
-            var xdoc = XDocument.Parse(formXml);
-            var headers = (from x in xdoc.Descendants("header")
-                           .Descendants("rows")
-                           .Descendants("row")
-                           .Descendants("cell")
-                           .Descendants("control")
-                           select new IdName
-                           {
-                               Name = x?.Attribute("datafieldname")?.Value,
-                               Id = x?.Attribute("id").Value,
-                               ClassId = Utility.TrimGuid(x?.Attribute("classid")?.Value?.ToUpper()),
-                               ControlId = x?.Attribute("uniqueid")?.Value
-                           }).ToList();
-            headers = headers.OrderBy(x => x.Name).ToList();
-            if (headers.Count() == 0) return string.Empty;
-            var _d_ts = Get_d_ts_ForListFields(formXml, headers);
-            if (_d_ts.EndsWith(",\r\n")) _d_ts = _d_ts.TrimEnd(",\r\n".ToCharArray()) + "\r\n";
-            return _d_ts;
-        }
-        private string GetForm_d_ts_Navigation(string formXml)
+
+        private static string GetWebApi_d_ts(string @namespace)
         {
             var _d_ts = string.Empty;
-            var xdoc = XDocument.Parse(formXml);
-            var navigations = (from x in xdoc.Descendants("Navigation").Descendants("NavBar")
-                    .Descendants("NavBarByRelationshipItem")
-                               select (string)x?.Attribute("Id")).ToList();
-            navigations.Sort();
-            if (navigations.Count == 0) return string.Empty;
-            navigations.Sort();
-            foreach (var navigation in navigations)
+            _d_ts += $"{TAB}class {EntityMetadata.SchemaName}Api {{{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}/**{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}* DynamicsCrm.DevKit {EntityMetadata.SchemaName}Api{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}* @param entity The entity object{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}*/{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}constructor(entity?: any);{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}/**{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB} * Get the value of alias{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB} * @param alias the alias value{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB} * @param isMultiOptionSet true if the alias is multi OptionSet{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB} */{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}getAliasedValue(alias: string, isMultiOptionSet?: boolean): any;{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}/**{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB} * Get the formatted value of alias{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB} * @param alias the alias value{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB} * @param isMultiOptionSet true if the alias is multi OptionSet{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB} */{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}/** The entity object for Create/Update */{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}Entity: unknown;{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}/** The OData entity object */{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}ODataEntity: unknown;{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}/** The entity name */{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}EntityName: string;{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}/** The entity collection name */{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}EntityCollectionName: string;{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}\"@odata.etag\": string;{NEW_LINE}";
+            foreach (var attribute in EntityMetadata?.Attributes?.OrderBy(x => x.SchemaName))
             {
-                _d_ts += $"\t\t\t{navigation}: DevKit.Controls.NavigationItem,\r\n";
-            }
-            _d_ts = _d_ts.TrimEnd(",\r\n".ToCharArray()) + "\r\n";
-            return _d_ts;
-        }
-        private string GetForm_d_ts_Footer(string formXml)
-        {
-            var xdoc = XDocument.Parse(formXml);
-            var footers = (from x in xdoc.Descendants("footer")
-                           .Descendants("rows")
-                           .Descendants("row")
-                           .Descendants("cell")
-                           .Descendants("control")
-                           select new IdName
-                           {
-                               Name = x?.Attribute("datafieldname")?.Value,
-                               Id = x?.Attribute("id").Value,
-                               ClassId = Utility.TrimGuid(x?.Attribute("classid")?.Value?.ToUpper()),
-                               ControlId = x?.Attribute("uniqueid")?.Value
-                           }).ToList();
-            footers = footers.OrderBy(x => x.Name).ToList();
-            if (footers.Count() == 0) return string.Empty;
-            var _d_ts = Get_d_ts_ForListFields(formXml, footers);
-            if (_d_ts.EndsWith(",\r\n")) _d_ts = _d_ts.TrimEnd(",\r\n".ToCharArray()) + "\r\n";
-            return _d_ts;
-        }
-        private string GetForm_d_ts_Process(string formXml)
-        {
-            if (Processes.Count == 0) return string.Empty;
-            var _d_ts = string.Empty;
-            var part1 = string.Empty;
-            var processes = Processes.OrderBy(x => x.LogicalName);
-            foreach (var entity in processes)
-            {
-                var xaml = entity.GetAttributeValue<string>("xaml");
-                var name = entity.GetAttributeValue<string>("name");
-                name = Utility.SafeName(name);
-                _d_ts += $"\t\tinterface Process{name} {{\r\n";
-                var xdoc = XDocument.Parse(xaml);
-                var ns = xdoc.Root?.GetNamespaceOfPrefix("mxswa");
-                var rows2 = from x in xdoc.Descendants(ns + "Workflow").Elements(ns + "ActivityReference")
-                            select new
+                var attributeSchemaName = Utility.SafeDeclareName(attribute.SchemaName, GeneratorType.jswebapi, EntityMetadata.SchemaName, attribute);
+                if (attribute.AttributeType == AttributeTypeCode.PartyList || attribute.AttributeType == AttributeTypeCode.EntityName) continue;
+                if (attribute.AttributeOf != null && attribute.AttributeTypeName != AttributeTypeDisplayName.ImageType) continue;
+
+                //var Readonly = (!(attribute.IsValidForCreate ?? false) && !(attribute.IsValidForUpdate ?? false)) ? "Readonly" : string.Empty;
+                var @readonly = (!(attribute.IsValidForCreate ?? false) && !(attribute.IsValidForUpdate ?? false)) ? "readonly " : string.Empty;
+                var jdoc = attribute?.Description?.UserLocalizedLabel?.Label ?? string.Empty;
+                switch (attribute.AttributeType)
+                {
+                    case AttributeTypeCode.Picklist:
+                    case AttributeTypeCode.State:
+                    case AttributeTypeCode.Status:
+                        if (attribute is MultiSelectPicklistAttributeMetadata)
+                        {
+                            if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
+                            _d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}: Array<OptionSet.{EntityMetadata.SchemaName}.{attributeSchemaName}>;{NEW_LINE}";
+                        }
+                        else if (attribute is PicklistAttributeMetadata || attribute is StateAttributeMetadata || attribute is StatusAttributeMetadata)
+                        {
+                            if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
+                            _d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}: OptionSet.{EntityMetadata.SchemaName}.{attributeSchemaName};{NEW_LINE}";
+                        }
+                        break;
+                    case AttributeTypeCode.Owner:
+                        _d_ts += $"{TAB}{TAB}/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */{NEW_LINE}";
+                        _d_ts += $"{TAB}{TAB}{@readonly}OwnerId_systemuser: string;\r\n";
+                        _d_ts += $"{TAB}{TAB}/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */{NEW_LINE}";
+                        _d_ts += $"{TAB}{TAB}{@readonly}OwnerId_team: string;\r\n";
+                        break;
+                    case AttributeTypeCode.Lookup:
+                    case AttributeTypeCode.Customer:
+                        if (attribute is LookupAttributeMetadata lookup)
+                        {
+                            if (lookup.Targets.Count() == 1)
                             {
-                                DisplayName = x.Attribute("DisplayName")?.Value,
-                                InnerText = x.ToString()
-                            };
-                var fields = new List<IdName>();
-                foreach (var row in rows2)
-                {
-                    var arr = row.DisplayName.Split(" ".ToCharArray());
-                    if (arr.Length == 1) continue;
-                    const string pattern = @"DataFieldName=""\w*""";
-                    foreach (Match m in Regex.Matches(row.InnerText, pattern))
-                    {
-                        var array = m.Value.Split("=".ToCharArray());
-                        var fieldName = array[1].Substring(1, array[1].Length - 2);
-                        var field = new IdName
+                                if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
+                                _d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}: string;{NEW_LINE}";
+                            }
+                            else
+                            {
+                                if (attribute.LogicalName == "acceptingentityid")
+                                {
+                                    if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
+                                    _d_ts += $"{TAB}{TAB}{@readonly}acceptingentityid_queue: string;{NEW_LINE}";
+                                    if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
+                                    _d_ts += $"{TAB}{TAB}{@readonly}acceptingentityid_systemuser: string;{NEW_LINE}";
+                                }
+                                else
+                                {
+                                    foreach (var entityLogicalName in lookup.Targets.Distinct())
+                                    {
+                                        var navigation = EntityMetadata.ManyToOneRelationships.FirstOrDefault(x => x.ReferencingAttribute == attribute.LogicalName && x.ReferencedEntity == entityLogicalName);
+                                        if (navigation?.ReferencingEntityNavigationPropertyName != null && navigation?.ReferencingEntityNavigationPropertyName.Length > 0)
+                                        {
+                                            var temp = $"{TAB}{TAB}{@readonly}{Utility.SafeDeclareName(navigation?.ReferencingEntityNavigationPropertyName, GeneratorType.jswebapi, EntityMetadata.SchemaName, attribute)}: string;{NEW_LINE}";
+                                            if (!_d_ts.Contains(temp))
+                                            {
+                                                if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
+                                                _d_ts += temp;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        break;
+                    case AttributeTypeCode.Memo:
+                    case AttributeTypeCode.String:
+                        if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
+                        _d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}: string;{NEW_LINE}";
+                        break;
+                    case AttributeTypeCode.Boolean:
+                        if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
+                        _d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}: boolean;{NEW_LINE}";
+                        break;
+                    case AttributeTypeCode.DateTime:
+                        if (attribute is DateTimeAttributeMetadata dateTime)
                         {
-                            ClassId = ControlClassId.SINGLE_LINE_OF_TEXT,
-                            Name = fieldName,
-                            Id = null,
-                            ControlId = null
-                        };
-                        fields.Add(field);
-                    }
+                            if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
+                            if (dateTime.DateTimeBehavior == DateTimeBehavior.DateOnly)
+                                _d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}_DateOnly: Date;{NEW_LINE}";
+                            else if (dateTime.DateTimeBehavior == DateTimeBehavior.TimeZoneIndependent)
+                            {
+                                if (dateTime.Format == DateTimeFormat.DateOnly)
+                                    _d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}_TimezoneDateOnly: Date;{NEW_LINE}";
+                                else
+                                    _d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}_TimezoneDateAndTime: Date;{NEW_LINE}";
+                            }
+                            else
+                            {
+                                if (dateTime.Format == DateTimeFormat.DateOnly)
+                                    _d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}_UtcDateOnly: Date;{NEW_LINE}";
+                                else
+                                    _d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}_UtcDateAndTime: Date;{NEW_LINE}";
+                            }
+                        }
+                        break;
+                    case AttributeTypeCode.Integer:
+                        if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
+                        //_d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}: DevKit.WebApi.IntegerValue{Readonly};{NEW_LINE}";
+                        _d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}: number;{NEW_LINE}";
+                        break;
+                    case AttributeTypeCode.BigInt:
+                        if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
+                        //_d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}: DevKit.WebApi.BigIntValue{Readonly};{NEW_LINE}";
+                        _d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}: number;{NEW_LINE}";
+                        break;
+                    case AttributeTypeCode.Decimal:
+                        if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
+                        //_d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}: DevKit.WebApi.DecimalValue{Readonly};{NEW_LINE}";
+                        _d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}: number;{NEW_LINE}";
+                        break;
+                    case AttributeTypeCode.Double:
+                        if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
+                        //_d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}: DevKit.WebApi.DoubleValue{Readonly};{NEW_LINE}";
+                        _d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}: number;{NEW_LINE}";
+                        break;
+                    case AttributeTypeCode.Money:
+                        if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
+                        //_d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}: DevKit.WebApi.MoneyValue{Readonly};{NEW_LINE}";
+                        _d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}: number;{NEW_LINE}";
+                        break;
+                    case AttributeTypeCode.Uniqueidentifier:
+                        if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
+                        //_d_ts += $"{TAB}{TAB}{attributeSchemaName}: DevKit.WebApi.GuidValue{Readonly};{NEW_LINE}";
+                        _d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}: string;{NEW_LINE}";
+                        break;
+                    case AttributeTypeCode.ManagedProperty:
+                        if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
+                        //_d_ts += $"{TAB}{TAB}{attributeSchemaName}: DevKit.WebApi.ManagedPropertyValue{Readonly};{NEW_LINE}";
+                        _d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}: string;{NEW_LINE}";
+                        break;
+
+                    default:
+                        if (attribute is ImageAttributeMetadata image)
+                        {
+                            if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
+                            if ((image.IsPrimaryImage ?? false) && image.LogicalName != "entityimage")
+                                _d_ts += GetGeneratorImageCode_d_ts("EntityImage", image.LogicalName, @readonly);
+                            _d_ts += GetGeneratorImageCode_d_ts(attributeSchemaName, attribute.LogicalName, @readonly);
+                        }
+                        else if (attribute is FileAttributeMetadata file)
+                        {
+                            if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
+                            _d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}: string;{NEW_LINE}";
+                        }
+                        else if (attribute is MultiSelectPicklistAttributeMetadata)
+                        {
+                            if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
+                            _d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}: Array<OptionSet.{EntityMetadata.SchemaName}.{attributeSchemaName}>;{NEW_LINE}";
+                        }
+                        else
+                            _d_ts += $"{attribute.AttributeType}-{attributeSchemaName}-{attribute.LogicalName};{NEW_LINE}";
+                        break;
                 }
-                fields = fields.OrderBy(f => f.Name).ToList();
-                _d_ts += Get_d_ts_ForListFields(formXml, fields);
-                _d_ts += $"\t\t}}\r\n";
-                part1 += $"\t\t\t{name}: Process{name};\r\n";
             }
-            _d_ts += $"\t\tinterface Process extends DevKit.Controls.IProcess {{\r\n";
-            _d_ts += part1;
-            _d_ts += $"\t\t}}\r\n";
+            if (EntityMetadata.Attributes.Where(f => f.AttributeType == AttributeTypeCode.PartyList).Any())
+            {
+                _d_ts += $"{TAB}{TAB}/** The array of object that can cast object to ActivityPartyApi class */{NEW_LINE}"; ;
+                _d_ts += $"{TAB}{TAB}ActivityParties: Array<unknown>;{NEW_LINE}";
+            }
+            _d_ts += $"{TAB}{TAB}readonly FormattedValue: {{{NEW_LINE}";
+            foreach (var attribute in EntityMetadata?.Attributes?.OrderBy(x => x.SchemaName))
+            {
+                var attributeSchemaName = Utility.SafeDeclareName(attribute.SchemaName, GeneratorType.jswebapi, EntityMetadata.SchemaName, attribute);
+                if (attribute.AttributeType == AttributeTypeCode.PartyList || attribute.AttributeType == AttributeTypeCode.EntityName) continue;
+                if (attribute.AttributeOf != null && attribute.AttributeTypeName != AttributeTypeDisplayName.ImageType) continue;
+
+                var @readonly = "readonly ";
+                var jdoc = attribute?.Description?.UserLocalizedLabel?.Label ?? string.Empty;
+                switch (attribute.AttributeType)
+                {
+                    case AttributeTypeCode.Picklist:
+                    case AttributeTypeCode.State:
+                    case AttributeTypeCode.Status:
+                        if (attribute is MultiSelectPicklistAttributeMetadata)
+                        {
+                            if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
+                            _d_ts += $"{TAB}{TAB}{TAB}{@readonly}{attributeSchemaName}: Array<string>;{NEW_LINE}";
+                        }
+                        else if (attribute is PicklistAttributeMetadata || attribute is StateAttributeMetadata || attribute is StatusAttributeMetadata)
+                        {
+                            if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
+                            _d_ts += $"{TAB}{TAB}{TAB}{@readonly}{attributeSchemaName}: string;{NEW_LINE}";
+                        }
+                        break;
+                    case AttributeTypeCode.Owner:
+                        _d_ts += $"{TAB}{TAB}{TAB}/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */{NEW_LINE}";
+                        _d_ts += $"{TAB}{TAB}{TAB}{@readonly}OwnerId_systemuser: string;\r\n";
+                        _d_ts += $"{TAB}{TAB}{TAB}/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */{NEW_LINE}";
+                        _d_ts += $"{TAB}{TAB}{TAB}{@readonly}OwnerId_team: string;\r\n";
+                        break;
+                    case AttributeTypeCode.Lookup:
+                    case AttributeTypeCode.Customer:
+                        if (attribute is LookupAttributeMetadata lookup)
+                        {
+                            if (lookup.Targets.Count() == 1)
+                            {
+                                if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
+                                _d_ts += $"{TAB}{TAB}{TAB}{@readonly}{attributeSchemaName}: string;{NEW_LINE}";
+                            }
+                            else
+                            {
+                                if (attribute.LogicalName == "acceptingentityid")
+                                {
+                                    if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
+                                    _d_ts += $"{TAB}{TAB}{TAB}{@readonly}acceptingentityid_queue: string;{NEW_LINE}";
+                                    if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
+                                    _d_ts += $"{TAB}{TAB}{TAB}{@readonly}acceptingentityid_systemuser: string;{NEW_LINE}";
+                                }
+                                else
+                                {
+                                    foreach (var entityLogicalName in lookup.Targets.Distinct())
+                                    {
+                                        var navigation = EntityMetadata.ManyToOneRelationships.FirstOrDefault(x => x.ReferencingAttribute == attribute.LogicalName && x.ReferencedEntity == entityLogicalName);
+                                        if (navigation?.ReferencingEntityNavigationPropertyName != null && navigation?.ReferencingEntityNavigationPropertyName.Length > 0)
+                                        {
+                                            var temp = $"{TAB}{TAB}{TAB}{@readonly}{Utility.SafeDeclareName(navigation?.ReferencingEntityNavigationPropertyName, GeneratorType.jswebapi, EntityMetadata.SchemaName, attribute)}: string;{NEW_LINE}";
+                                            if (!_d_ts.Contains(temp))
+                                            {
+                                                if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
+                                                _d_ts += temp;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        break;
+                    case AttributeTypeCode.Memo:
+                    case AttributeTypeCode.String:
+                        if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
+                        _d_ts += $"{TAB}{TAB}{TAB}{@readonly}{attributeSchemaName}: string;{NEW_LINE}";
+                        break;
+                    case AttributeTypeCode.Boolean:
+                        if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
+                        _d_ts += $"{TAB}{TAB}{TAB}{@readonly}{attributeSchemaName}: string;{NEW_LINE}";
+                        break;
+                    case AttributeTypeCode.DateTime:
+                        if (attribute is DateTimeAttributeMetadata dateTime)
+                        {
+                            if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
+                            if (dateTime.DateTimeBehavior == DateTimeBehavior.DateOnly)
+                                _d_ts += $"{TAB}{TAB}{TAB}{@readonly}{attributeSchemaName}_DateOnly: string;{NEW_LINE}";
+                            else if (dateTime.DateTimeBehavior == DateTimeBehavior.TimeZoneIndependent)
+                            {
+                                if (dateTime.Format == DateTimeFormat.DateOnly)
+                                    _d_ts += $"{TAB}{TAB}{TAB}{@readonly}{attributeSchemaName}_TimezoneDateOnly: string;{NEW_LINE}";
+                                else
+                                    _d_ts += $"{TAB}{TAB}{TAB}{@readonly}{attributeSchemaName}_TimezoneDateAndTime: string;{NEW_LINE}";
+                            }
+                            else
+                            {
+                                if (dateTime.Format == DateTimeFormat.DateOnly)
+                                    _d_ts += $"{TAB}{TAB}{TAB}{@readonly}{attributeSchemaName}_UtcDateOnly: string;{NEW_LINE}";
+                                else
+                                    _d_ts += $"{TAB}{TAB}{TAB}{@readonly}{attributeSchemaName}_UtcDateAndTime: string;{NEW_LINE}";
+                            }
+                        }
+                        break;
+                    case AttributeTypeCode.Integer:
+                        if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
+                        //_d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}: DevKit.WebApi.IntegerValue{Readonly};{NEW_LINE}";
+                        _d_ts += $"{TAB}{TAB}{TAB}{@readonly}{attributeSchemaName}: string;{NEW_LINE}";
+                        break;
+                    case AttributeTypeCode.BigInt:
+                        if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
+                        //_d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}: DevKit.WebApi.BigIntValue{Readonly};{NEW_LINE}";
+                        _d_ts += $"{TAB}{TAB}{TAB}{@readonly}{attributeSchemaName}: string;{NEW_LINE}";
+                        break;
+                    case AttributeTypeCode.Decimal:
+                        if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
+                        //_d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}: DevKit.WebApi.DecimalValue{Readonly};{NEW_LINE}";
+                        _d_ts += $"{TAB}{TAB}{TAB}{@readonly}{attributeSchemaName}: string;{NEW_LINE}";
+                        break;
+                    case AttributeTypeCode.Double:
+                        if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
+                        //_d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}: DevKit.WebApi.DoubleValue{Readonly};{NEW_LINE}";
+                        _d_ts += $"{TAB}{TAB}{TAB}{@readonly}{attributeSchemaName}: string;{NEW_LINE}";
+                        break;
+                    case AttributeTypeCode.Money:
+                        if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
+                        //_d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}: DevKit.WebApi.MoneyValue{Readonly};{NEW_LINE}";
+                        _d_ts += $"{TAB}{TAB}{TAB}{@readonly}{attributeSchemaName}: string;{NEW_LINE}";
+                        break;
+                    case AttributeTypeCode.Uniqueidentifier:
+                        if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
+                        //_d_ts += $"{TAB}{TAB}{attributeSchemaName}: DevKit.WebApi.GuidValue{Readonly};{NEW_LINE}";
+                        _d_ts += $"{TAB}{TAB}{TAB}{@readonly}{attributeSchemaName}: string;{NEW_LINE}";
+                        break;
+                    case AttributeTypeCode.ManagedProperty:
+                        if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
+                        //_d_ts += $"{TAB}{TAB}{attributeSchemaName}: DevKit.WebApi.ManagedPropertyValue{Readonly};{NEW_LINE}";
+                        _d_ts += $"{TAB}{TAB}{TAB}{@readonly}{attributeSchemaName}: string;{NEW_LINE}";
+                        break;
+
+                    default:
+                        if (attribute is ImageAttributeMetadata image)
+                        {
+                            if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
+                            if ((image.IsPrimaryImage ?? false) && image.LogicalName != "entityimage")
+                                _d_ts += GetGeneratorImageCode_d_ts_2("EntityImage", image.LogicalName, @readonly);
+                            _d_ts += GetGeneratorImageCode_d_ts_2(attributeSchemaName, attribute.LogicalName, @readonly);
+                        }
+                        else if (attribute is FileAttributeMetadata file)
+                        {
+                            if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
+                            _d_ts += $"{TAB}{TAB}{TAB}{@readonly}{attributeSchemaName}: string;{NEW_LINE}";
+                        }
+                        else if (attribute is MultiSelectPicklistAttributeMetadata)
+                        {
+                            if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
+                            _d_ts += $"{TAB}{TAB}{TAB}{@readonly}{attributeSchemaName}: Array<string>;{NEW_LINE}";
+                        }
+                        else
+                            _d_ts += $"{attribute.AttributeType}-{attributeSchemaName}-{attribute.LogicalName};{NEW_LINE}";
+                        break;
+                }
+            }
+            _d_ts += $"{TAB}{TAB}}}{NEW_LINE}";
+            _d_ts += $"{TAB}}}{NEW_LINE}";
             return _d_ts;
         }
-        private string GetForm_d_ts_Grid(string formXml)
+
+        private static string GetGeneratorImageCode_d_ts(string schemaName, string logicalName, string @readonly)
+        {
+            var _d_ts = string.Empty;
+            _d_ts += $"{TAB}{TAB}{@readonly}{schemaName}: string;{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}{@readonly}{schemaName}_Timestamp: number;{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}{@readonly}{schemaName}_URL: string;{NEW_LINE}";
+            return _d_ts;
+        }
+
+        private static string GetGeneratorImageCode_d_ts_2(string schemaName, string logicalName, string @readonly)
+        {
+            var _d_ts = string.Empty;
+            _d_ts += $"{TAB}{TAB}{TAB}{@readonly}{schemaName}: string;{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}{TAB}{@readonly}{schemaName}_Timestamp: string;{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}{TAB}{@readonly}{schemaName}_URL: string;{NEW_LINE}";
+            return _d_ts;
+        }
+
+        private static string GetForm_d_ts(string @namespace)
+        {
+            var forms = XrmHelper.GetEntityForms(CrmServiceClient, EntityMetadata.LogicalName);
+            if (!forms.Any()) return string.Empty;
+            var _d_ts = string.Empty;
+            foreach (var form in forms.Where(x => x.FormType == FormType.Main).ToList())
+                _d_ts += GetFormMain_d_ts(form, @namespace);
+            foreach (var form in forms.Where(x => x.FormType == FormType.QuickCreate).ToList())
+                _d_ts += GetFormQuickCreate_d_ts(form, @namespace);
+            return _d_ts;
+        }
+
+        private static string GetFormQuickCreate_d_ts(SystemForm form, string @namespace)
+        {
+            var _d_ts = string.Empty;
+            var formName = Utility.SafeIdentifier(Utility.GetFormName(form.Name, EntityMetadata.SchemaName));
+            formName = GetUnquieFormName(formName);
+            _d_ts += $"\tnamespace Form{formName} {{\r\n";
+            var form_d_ts_Body_QuickCreate = GetForm_d_ts_Body(form.FormXml);
+            if (form_d_ts_Body_QuickCreate.Length > 0)
+            {
+                _d_ts += form_d_ts_Body_QuickCreate;
+            }
+            _d_ts += $"\t}}\r\n";
+            _d_ts += $"\tclass Form{formName} extends DevKit.IForm {{\r\n";
+            _d_ts += $"\t\t/**\r\n";
+            _d_ts += $"\t\t* {form.Name} [Quick Create]\r\n";
+            _d_ts += $"\t\t* @param executionContext the execution context\r\n";
+            _d_ts += $"\t\t* @param defaultWebResourceName default resource name. E.g.: \"devkit_/resources/Resource\"\r\n";
+            _d_ts += $"\t\t*/\r\n";
+            _d_ts += $"\t\tconstructor(executionContext: any, defaultWebResourceName?: string);\r\n";
+            _d_ts += $"\t\t/** Utility functions/methods/objects for Dynamics 365 form */\r\n";
+            _d_ts += $"\t\tUtility: DevKit.Utility;\r\n";
+            if (form_d_ts_Body_QuickCreate.Length > 0)
+            {
+                _d_ts += $"\t\t/** The Body section of form {formName} */\r\n";
+                _d_ts += $"\t\tBody: {@namespace}.Form{formName}.Body;\r\n";
+            }
+            _d_ts += $"\t}}\r\n";
+            return _d_ts;
+        }
+
+        private static string GetFormMain_d_ts(SystemForm form, string @namespace)
+        {
+            var _d_ts = string.Empty;
+            var formName = Utility.SafeIdentifier(Utility.GetFormName(form.Name, EntityMetadata.SchemaName));
+            formName = GetUnquieFormName(formName);
+            _d_ts += $"{TAB}namespace Form{formName} {{{NEW_LINE}";
+            var form_d_ts_Header = GetForm_d_ts_Header(form.FormXml);
+            if (form_d_ts_Header.Length > 0)
+            {
+                _d_ts += $"\t\tinterface Header extends DevKit.Controls.IHeader {{\r\n";
+                _d_ts += form_d_ts_Header;
+                _d_ts += $"\t\t}}\r\n";
+            }
+            var form_d_ts_Body = GetForm_d_ts_Body(form.FormXml);
+            if (form_d_ts_Body.Length > 0)
+            {
+                _d_ts += form_d_ts_Body;
+            }
+            var form_d_ts_Footer = GetForm_d_ts_Footer(form.FormXml);
+            if (form_d_ts_Footer.Length > 0)
+            {
+                _d_ts += $"\t\tinterface Footer extends DevKit.Controls.IFooter {{\r\n";
+                _d_ts += form_d_ts_Footer;
+                _d_ts += $"\t\t}}\r\n";
+            }
+            var form_d_ts_Navigation = GetForm_d_ts_Navigation(form.FormXml);
+            if (form_d_ts_Navigation.Length > 0)
+            {
+                _d_ts += $"\t\tinterface Navigation {{\r\n";
+                _d_ts += form_d_ts_Navigation;
+                _d_ts += $"\t\t}}\r\n";
+            }
+            var form_d_ts_QuickForm = GetForm_d_ts_QuickForm(form.FormXml);
+            if (form_d_ts_QuickForm.Length > 0)
+            {
+                _d_ts += form_d_ts_QuickForm;
+            }
+            var form_d_ts_Process = GetForm_d_ts_Process(form.FormXml);
+            //if (form_d_ts_Process.Length > 0)
+            //{
+            _d_ts += form_d_ts_Process;
+            //}
+            var form_d_ts_Grid = GetForm_d_ts_Grid(form.FormXml);
+            if (form_d_ts_Grid.Length > 0)
+            {
+                _d_ts += form_d_ts_Grid;
+            }
+            _d_ts += $"{TAB}}}{NEW_LINE}";
+            _d_ts += $"\tclass Form{formName} extends DevKit.IForm {{\r\n";
+            _d_ts += $"\t\t/**\r\n";
+            _d_ts += $"\t\t* {form.Name} [Main Form]\r\n";
+            _d_ts += $"\t\t* @param executionContext the execution context\r\n";
+            _d_ts += $"\t\t* @param defaultWebResourceName default resource name. E.g.: \"devkit_/resources/Resource\"\r\n";
+            _d_ts += $"\t\t*/\r\n";
+            _d_ts += $"\t\tconstructor(executionContext: any, defaultWebResourceName?: string);\r\n";
+            _d_ts += $"\t\t/** Utility functions/methods/objects for Dynamics 365 form */\r\n";
+            _d_ts += $"\t\tUtility: DevKit.Utility;\r\n";
+            if (form_d_ts_Body.Length > 0)
+            {
+                _d_ts += $"\t\t/** The Body section of form {formName} */\r\n";
+                _d_ts += $"\t\tBody: {@namespace}.Form{formName}.Body;\r\n";
+            }
+            if (form_d_ts_Footer.Length > 0)
+            {
+                _d_ts += $"\t\t/** The Footer section of form {formName} */\r\n";
+                _d_ts += $"\t\tFooter: {@namespace}.Form{formName}.Footer;\r\n";
+            }
+            if (form_d_ts_Header.Length > 0)
+            {
+                _d_ts += $"\t\t/** The Header section of form {formName} */\r\n";
+                _d_ts += $"\t\tHeader: {@namespace}.Form{formName}.Header;\r\n";
+            }
+            if (form_d_ts_Navigation.Length > 0)
+            {
+                _d_ts += $"\t\t/** The Navigation of form {formName} */\r\n";
+                _d_ts += $"\t\tNavigation: {@namespace}.Form{formName}.Navigation;\r\n";
+            }
+            if (form_d_ts_QuickForm.Length > 0)
+            {
+                _d_ts += $"\t\t/** The QuickForm of form {formName} */\r\n";
+                _d_ts += $"\t\tQuickForm: {@namespace}.Form{formName}.QuickForm;\r\n";
+            }
+            //if (form_d_ts_Process.Length > 0)
+            //{
+            _d_ts += $"\t\t/** The Process of form {formName} */\r\n";
+            _d_ts += $"\t\tProcess: {@namespace}.Form{formName}.Process;\r\n";
+            //}
+            if (form_d_ts_Grid.Length > 0)
+            {
+                _d_ts += $"\t\t/** The Grid of form {formName} */\r\n";
+                _d_ts += $"\t\tGrid: {@namespace}.Form{formName}.Grid;\r\n";
+            }
+            _d_ts += $"\t\t/** The SidePanes of form {formName} */\r\n";
+            _d_ts += $"\t\tSidePanes: DevKit.SidePanes;\r\n";
+            _d_ts += $"\t}}\r\n";
+            return _d_ts;
+        }
+
+        private static string GetUnquieFormName(string formName)
+        {
+            if (!FormNames.Any(x => x == formName))
+            {
+                FormNames.Add(formName);
+                return formName;
+            }
+            else
+            {
+                var count = FormNames.Count(x => x == formName) + 1;
+                FormNames.Add(formName);
+                return $"{formName}{count}";
+            }
+        }
+
+        private static string GetForm_d_ts_Grid(string formXml)
         {
             var _d_ts = string.Empty;
             var xdoc = XDocument.Parse(formXml);
@@ -493,7 +651,7 @@ namespace DynamicsCrm.DevKit.Shared
                               ClassId = Utility.TrimGuid(x?.Attribute("classid")?.Value?.ToUpper()),
                               ControlId = x?.Attribute("uniqueid")?.Value
                           }).Distinct().ToList();
-            fields = fields.OrderBy(x => x.Name).ToList();
+            fields = fields.OrderBy(x => x.Id).ToList();
             var temp = string.Empty;
             foreach (var field in fields)
             {
@@ -511,11 +669,58 @@ namespace DynamicsCrm.DevKit.Shared
             }
             return string.Empty;
         }
-        private string GetForm_d_ts_Composite(string formXml)
+
+        private static string GetForm_d_ts_Process(string formXml)
         {
-            return string.Empty;
+            var code = string.Empty;
+            XrmHelper.EntitiesProcessForm.AddIfNotExist(CrmServiceClient, EntityMetadata.LogicalName);
+            var processes = XrmHelper.EntitiesProcessForm.Where(x => x.EntityLogicalName == EntityMetadata.LogicalName).OrderBy(x => x.Name);
+            var _d_ts = string.Empty;
+            var part1 = string.Empty;
+            foreach (var process in processes)
+            {
+                var name = Utility.SafeIdentifier(process.Name);
+                _d_ts += $"\t\tinterface Process{name} {{\r\n";
+                var xdoc = XDocument.Parse(process.xaml);
+                var ns = xdoc.Root?.GetNamespaceOfPrefix("mxswa");
+                var rows2 = from x in xdoc.Descendants(ns + "Workflow").Elements(ns + "ActivityReference")
+                            select new
+                            {
+                                DisplayName = x.Attribute("DisplayName")?.Value,
+                                InnerText = x.ToString()
+                            };
+                var fields = new List<IdName>();
+                foreach (var row in rows2)
+                {
+                    var arr = row.DisplayName.Split(" ".ToCharArray());
+                    if (arr.Length == 1 || arr[1] != EntityMetadata.LogicalName) continue;
+                    const string pattern = @"DataFieldName=""\w*""";
+                    foreach (Match m in Regex.Matches(row.InnerText, pattern))
+                    {
+                        var array = m.Value.Split("=".ToCharArray());
+                        var fieldName = array[1].Substring(1, array[1].Length - 2);
+                        var field = new IdName
+                        {
+                            ClassId = ControlClassId.SINGLE_LINE_OF_TEXT,
+                            Name = fieldName,
+                            Id = null,
+                            ControlId = null
+                        };
+                        fields.Add(field);
+                    }
+                }
+                fields = fields.OrderBy(f => f.Name).ToList();
+                _d_ts += Get_d_ts_ForListFields(formXml, fields, true);
+                _d_ts += $"\t\t}}\r\n";
+                part1 += $"\t\t\t{name}: Process{name};\r\n";
+            }
+            _d_ts += $"\t\tinterface Process extends DevKit.Controls.IProcess {{\r\n";
+            _d_ts += part1;
+            _d_ts += $"\t\t}}\r\n";
+            return _d_ts;
         }
-        private string GetForm_d_ts_QuickForm(string formXml)
+
+        private static string GetForm_d_ts_QuickForm(string formXml)
         {
             var _d_ts = string.Empty;
             var xdoc = XDocument.Parse(formXml);
@@ -563,7 +768,7 @@ namespace DynamicsCrm.DevKit.Shared
             return _d_ts;
         }
 
-        private string GetBodyOfQuickView(string formXml, string id)
+        private static string GetBodyOfQuickView(string formXml, string id)
         {
             var _d_ts = string.Empty;
             _d_ts += $"\t\tinterface quickForm_{id}_Body {{\r\n";
@@ -585,15 +790,15 @@ namespace DynamicsCrm.DevKit.Shared
             var node2 = (from x in node
                             .Descendants("parameters")
                             .Descendants("QuickForms")
-                            select x.Value
+                         select x.Value
                          ).FirstOrDefault();
             if (node2 == null) return string.Empty;
             var xdoc2 = XDocument.Parse(node2);
-            var formId = (from x in xdoc2.Descendants("QuickFormId") select x.Value).FirstOrDefault();
-            if (formId == null) return string.Empty;
+            var quickViewXml = (from x in xdoc2.Descendants("QuickFormId") select new { formId = x.Value, entityLogicalName = x?.Attribute("entityname")?.Value }).FirstOrDefault();
+            if (quickViewXml == null) return string.Empty;
             var quickViewFormXml = string.Empty;
-            var quickViewEntityLogicalName = string.Empty;
-            GetFormXml(formId, out quickViewFormXml, out quickViewEntityLogicalName);
+            //var quickViewEntityLogicalName = string.Empty;
+            GetFormXml(quickViewXml.formId, quickViewXml.entityLogicalName, out quickViewFormXml);
             if (quickViewFormXml == string.Empty) return string.Empty;
             var xdoc3 = XDocument.Parse(quickViewFormXml);
             var fields = (from x in xdoc3
@@ -607,56 +812,81 @@ namespace DynamicsCrm.DevKit.Shared
                           .Descendants("row")
                           .Descendants("cell")
                           .Descendants("control")
-                        select new IdName
-                        {
-                            Name = x?.Attribute("datafieldname")?.Value,
-                            Id = x?.Attribute("id").Value,
-                            ClassId = Utility.TrimGuid(x?.Attribute("classid")?.Value?.ToUpper()),
-                            ControlId = x?.Attribute("uniqueid")?.Value
-                        }).Distinct().ToList();
+                          select new IdName
+                          {
+                              Name = x?.Attribute("datafieldname")?.Value,
+                              Id = x?.Attribute("id").Value,
+                              ClassId = Utility.TrimGuid(x?.Attribute("classid")?.Value?.ToUpper()),
+                              ControlId = x?.Attribute("uniqueid")?.Value
+                          }).Distinct().ToList();
             fields = fields.OrderBy(x => x.Name).ToList();
-            foreach(var field in fields)
+            XrmHelper.EntitiesMetadata.AddIfNotExist(CrmServiceClient, quickViewXml.entityLogicalName);
+            var quickViewMetadata = XrmHelper.EntitiesMetadata.Where(x => x.LogicalName == quickViewXml.entityLogicalName).FirstOrDefault();
+            if (quickViewMetadata == null) return String.Empty;
+            foreach (var field in fields)
             {
-                if (field.ClassId == ControlClassId.SUB_GRID || field.ClassId == ControlClassId.SUB_GRID_PANEL || field.ClassId == ControlClassId.TIMER) continue;
-                var request = new RetrieveAttributeRequest
+                var fieldAttribute = quickViewMetadata.Attributes.Where(x => x.LogicalName == field.Id).FirstOrDefault();
+                if (fieldAttribute != null)
                 {
-                    EntityLogicalName = quickViewEntityLogicalName,
-                    LogicalName = field.Id,
-                    RetrieveAsIfPublished = false
-                };
-                var response = (RetrieveAttributeResponse)service.Execute(request);
-                _d_ts += $"\t\t\t{response.AttributeMetadata.SchemaName}: DevKit.Controls.QuickView;\r\n";
+                    _d_ts += $"\t\t\t{fieldAttribute.SchemaName}: DevKit.Controls.QuickView;\r\n";
+                }
             }
             _d_ts += $"\t\t}}\r\n";
             return _d_ts;
         }
 
-        private void GetFormXml(string formId, out string formXml, out string entityLogicalName)
+        private static void GetFormXml(string formId, string entityLogicalName, out string formXml)
         {
             formXml = string.Empty;
-            entityLogicalName = string.Empty;
-            var fetchData = new
+            XrmHelper.EntitiesFormXml.AddIfNotExist(CrmServiceClient, entityLogicalName);
+            var form = XrmHelper.EntitiesFormXml.FirstOrDefault(x => x.FormType == FormType.QuickView && x.FormId == Guid.Parse(formId));
+            if (form != null)
             {
-                formid = formId
-            };
-            var fetchXml = $@"
-<fetch>
-  <entity name='systemform'>
-    <attribute name='formxml' />
-    <attribute name='objecttypecode' />
-    <filter>
-      <condition attribute='formid' operator='eq' value='{fetchData.formid}'/>
-    </filter>
-  </entity>
-</fetch>";
-            var rows = service.RetrieveMultiple(new FetchExpression(fetchXml));
-            if (rows.Entities.Count != 1) return;
-            var entity = rows.Entities[0];
-            formXml = entity.GetAttributeValue<string>("formxml");
-            entityLogicalName = entity.GetAttributeValue<string>("objecttypecode");
+                formXml = form.FormXml;
+            }
         }
 
-        private string GetForm_d_ts_Body(string formXml)
+        private static string GetForm_d_ts_Navigation(string formXml)
+        {
+            var _d_ts = string.Empty;
+            var xdoc = XDocument.Parse(formXml);
+            var navigations = (from x in xdoc.Descendants("Navigation").Descendants("NavBar")
+                    .Descendants("NavBarByRelationshipItem")
+                               select (string)x?.Attribute("Id")).ToList();
+            navigations.Sort();
+            if (navigations.Count == 0) return string.Empty;
+            navigations.Sort();
+            foreach (var navigation in navigations)
+            {
+                _d_ts += $"\t\t\t{navigation}: DevKit.Controls.NavigationItem,\r\n";
+            }
+            _d_ts = _d_ts.TrimEnd(",\r\n".ToCharArray()) + "\r\n";
+            return _d_ts;
+        }
+
+        private static string GetForm_d_ts_Footer(string formXml)
+        {
+            var xdoc = XDocument.Parse(formXml);
+            var footers = (from x in xdoc.Descendants("footer")
+                           .Descendants("rows")
+                           .Descendants("row")
+                           .Descendants("cell")
+                           .Descendants("control")
+                           select new IdName
+                           {
+                               Name = x?.Attribute("datafieldname")?.Value,
+                               Id = x?.Attribute("id").Value,
+                               ClassId = Utility.TrimGuid(x?.Attribute("classid")?.Value?.ToUpper()),
+                               ControlId = x?.Attribute("uniqueid")?.Value
+                           }).ToList();
+            footers = footers.OrderBy(x => x.Name).ToList();
+            if (footers.Count() == 0) return string.Empty;
+            var _d_ts = Get_d_ts_ForListFields(formXml, footers, false);
+            if (_d_ts.EndsWith(",\r\n")) _d_ts = _d_ts.TrimEnd(",\r\n".ToCharArray()) + "\r\n";
+            return _d_ts;
+        }
+
+        private static string GetForm_d_ts_Body(string formXml)
         {
             var part1 = string.Empty;
             var part2 = string.Empty;
@@ -672,10 +902,10 @@ namespace DynamicsCrm.DevKit.Shared
             rows = rows.OrderBy(x => x.Name).ToList();
             foreach (var row in rows)
             {
-                if (Utility.SafeName(row.Name).Length == 0) continue;
+                if (Utility.SafeIdentifier(row.Name).Length == 0) continue;
                 var tabName = row.Name;
-                if (existTabs.Contains(Utility.SafeName(tabName))) continue; else existTabs.Add(Utility.SafeName(tabName));
-                part1 += $"\t\tinterface tab_{Utility.SafeName(tabName)}_Sections {{\r\n";
+                if (existTabs.Contains(Utility.SafeIdentifier(tabName))) continue; else existTabs.Add(Utility.SafeIdentifier(tabName));
+                part1 += $"\t\tinterface tab_{Utility.SafeIdentifier(tabName)}_Sections {{\r\n";
                 var xdoc2 = XDocument.Parse(row.InnerText);
                 var rows2 = from x2 in xdoc2.Descendants("columns").Descendants("column").Descendants("sections")
                         .Elements("section")
@@ -691,16 +921,16 @@ namespace DynamicsCrm.DevKit.Shared
                     if (row2.name == null) continue;
                     //if (row2.name.StartsWith("ref_pan")) continue;
                     var sectionName = row2.name;
-                    if (existSections.Contains(Utility.SafeName(sectionName))) continue; else existSections.Add(Utility.SafeName(sectionName));
-                    part1 += $"\t\t\t{Utility.SafeName(sectionName)}: DevKit.Controls.Section;\r\n";
+                    if (existSections.Contains(Utility.SafeIdentifier(sectionName))) continue; else existSections.Add(Utility.SafeIdentifier(sectionName));
+                    part1 += $"\t\t\t{Utility.SafeIdentifier(sectionName)}: DevKit.Controls.Section;\r\n";
                 }
                 part1 += $"\t\t}}\r\n";
 
-                part2 += $"\t\tinterface tab_{Utility.SafeName(tabName)} extends DevKit.Controls.ITab {{\r\n";
-                part2 += $"\t\t\tSection: tab_{Utility.SafeName(tabName)}_Sections;\r\n";
+                part2 += $"\t\tinterface tab_{Utility.SafeIdentifier(tabName)} extends DevKit.Controls.ITab {{\r\n";
+                part2 += $"\t\t\tSection: tab_{Utility.SafeIdentifier(tabName)}_Sections;\r\n";
                 part2 += $"\t\t}}\r\n";
 
-                part3 += $"\t\t\t{Utility.SafeName(tabName)}: tab_{Utility.SafeName(tabName)};\r\n";
+                part3 += $"\t\t\t{Utility.SafeIdentifier(tabName)}: tab_{Utility.SafeIdentifier(tabName)};\r\n";
 
             }
             part3 += $"\t\t}}\r\n";
@@ -728,12 +958,35 @@ namespace DynamicsCrm.DevKit.Shared
                             ControlId = x?.Attribute("uniqueid")?.Value
                         }).Distinct().ToList();
             body = body.OrderBy(x => x.Name).ToList();
-            _d_ts += Get_d_ts_ForListFields(formXml, body);
+            _d_ts += Get_d_ts_ForListFields(formXml, body, false);
             if (_d_ts.EndsWith(",\r\n")) _d_ts = _d_ts.TrimEnd(",\r\n".ToCharArray()) + "\r\n";
             _d_ts += $"\t\t}}\r\n";
             return _d_ts;
         }
-        private string Get_d_ts_ForListFields(string formXml, List<IdName> list)
+
+        private static string GetForm_d_ts_Header(string formXml)
+        {
+            var xdoc = XDocument.Parse(formXml);
+            var headers = (from x in xdoc.Descendants("header")
+                           .Descendants("rows")
+                           .Descendants("row")
+                           .Descendants("cell")
+                           .Descendants("control")
+                           select new IdName
+                           {
+                               Name = x?.Attribute("datafieldname")?.Value,
+                               Id = x?.Attribute("id").Value,
+                               ClassId = Utility.TrimGuid(x?.Attribute("classid")?.Value?.ToUpper()),
+                               ControlId = x?.Attribute("uniqueid")?.Value
+                           }).ToList();
+            headers = headers.OrderBy(x => x.Name).ToList();
+            if (headers.Count() == 0) return string.Empty;
+            var _d_ts = Get_d_ts_ForListFields(formXml, headers, false);
+            if (_d_ts.EndsWith(",\r\n")) _d_ts = _d_ts.TrimEnd(",\r\n".ToCharArray()) + "\r\n";
+            return _d_ts;
+        }
+
+        private static string Get_d_ts_ForListFields(string formXml, List<IdName> list, bool isBPF)
         {
             var _d_ts = string.Empty;
             var previousName = string.Empty;
@@ -746,13 +999,16 @@ namespace DynamicsCrm.DevKit.Shared
                 item.ClassId = GetARealClassId(formXml, item.ClassId, item.ControlId);
                 if (item.Name != null && ControlClassId.CONTROLS.Contains(item.ClassId))
                 {
-                    var crmAttribute = Fields.FirstOrDefault(x => x.LogicalName == item.Name);
+                    var crmAttribute = EntityMetadata.Attributes.FirstOrDefault(x => x.LogicalName == item.Name);
                     if (crmAttribute == null) continue;
                     var name = crmAttribute.SchemaName;
                     if (name == previousName)
                     {
-                        previousCount = previousCount + 1;
-                        name = name + "_" + previousCount.ToString();
+                        previousCount++;
+                        if (isBPF)
+                            name = name + "_" + previousCount.ToString();
+                        else
+                            name += previousCount.ToString();
                     }
                     else
                     {
@@ -761,26 +1017,26 @@ namespace DynamicsCrm.DevKit.Shared
                     }
                     previousName = crmAttribute.SchemaName;
                     var jsdoc = string.Empty;
-                    if (crmAttribute?.Description?.Length > 0)
-                        jsdoc = $"\t\t\t/** {crmAttribute.Description} */\r\n";
-                    if (crmAttribute.FieldType == AttributeTypeCode.Memo ||
-                        crmAttribute.FieldType == AttributeTypeCode.String)
+                    if (crmAttribute?.Description?.UserLocalizedLabel?.Label.Length > 0)
+                        jsdoc = $"\t\t\t/** {crmAttribute?.Description?.UserLocalizedLabel?.Label} */\r\n";
+                    if (crmAttribute.AttributeType == AttributeTypeCode.Memo ||
+                        crmAttribute.AttributeType == AttributeTypeCode.String)
                     {
                         _d_ts += $"{jsdoc}\t\t\t{name}: DevKit.Controls.String;\r\n";
                     }
-                    else if (crmAttribute.IsMultiSelectPicklist)
+                    else if (crmAttribute is MultiSelectPicklistAttributeMetadata)
                     {
                         _d_ts += $"{jsdoc}\t\t\t{name}: DevKit.Controls.MultiOptionSet;\r\n";
                     }
-                    else if (crmAttribute.FieldType == AttributeTypeCode.Picklist ||
-                             crmAttribute.FieldType == AttributeTypeCode.State ||
-                             crmAttribute.FieldType == AttributeTypeCode.Status)
+                    else if (crmAttribute.AttributeType == AttributeTypeCode.Picklist ||
+                             crmAttribute.AttributeType == AttributeTypeCode.State ||
+                             crmAttribute.AttributeType == AttributeTypeCode.Status)
                     {
                         _d_ts += $"{jsdoc}\t\t\t{name}: DevKit.Controls.OptionSet;\r\n";
                     }
-                    else if (crmAttribute.FieldType == AttributeTypeCode.DateTime)
+                    else if (crmAttribute is DateTimeAttributeMetadata dateTime)
                     {
-                        if (crmAttribute.DateTimeFormat == DateTimeFormat.DateOnly)
+                        if (dateTime.Format == DateTimeFormat.DateOnly)
                         {
                             _d_ts += $"{jsdoc}\t\t\t{name}: DevKit.Controls.Date;\r\n";
                         }
@@ -789,42 +1045,42 @@ namespace DynamicsCrm.DevKit.Shared
                             _d_ts += $"{jsdoc}\t\t\t{name}: DevKit.Controls.DateTime;\r\n";
                         }
                     }
-                    else if (crmAttribute.FieldType == AttributeTypeCode.Lookup ||
-                             crmAttribute.FieldType == AttributeTypeCode.Owner ||
-                             crmAttribute.FieldType == AttributeTypeCode.Customer ||
-                             crmAttribute.FieldType == AttributeTypeCode.PartyList)
+                    else if (crmAttribute.AttributeType == AttributeTypeCode.Lookup ||
+                             crmAttribute.AttributeType == AttributeTypeCode.Owner ||
+                             crmAttribute.AttributeType == AttributeTypeCode.Customer ||
+                             crmAttribute.AttributeType == AttributeTypeCode.PartyList)
                     {
                         _d_ts += $"{jsdoc}\t\t\t{name}: DevKit.Controls.Lookup;\r\n";
                     }
-                    else if (crmAttribute.FieldType == AttributeTypeCode.Boolean)
+                    else if (crmAttribute.AttributeType == AttributeTypeCode.Boolean)
                     {
                         _d_ts += $"{jsdoc}\t\t\t{name}: DevKit.Controls.Boolean;\r\n";
                     }
-                    else if (crmAttribute.FieldType == AttributeTypeCode.Money)
+                    else if (crmAttribute.AttributeType == AttributeTypeCode.Money)
                     {
                         _d_ts += $"{jsdoc}\t\t\t{name}: DevKit.Controls.Money;\r\n";
                     }
-                    else if (crmAttribute.FieldType == AttributeTypeCode.Integer)
+                    else if (crmAttribute.AttributeType == AttributeTypeCode.Integer)
                     {
                         _d_ts += $"{jsdoc}\t\t\t{name}: DevKit.Controls.Integer;\r\n";
                     }
-                    else if (crmAttribute.FieldType == AttributeTypeCode.Double)
+                    else if (crmAttribute.AttributeType == AttributeTypeCode.Double)
                     {
                         _d_ts += $"{jsdoc}\t\t\t{name}: DevKit.Controls.Double;\r\n";
                     }
-                    else if (crmAttribute.FieldType == AttributeTypeCode.Decimal)
+                    else if (crmAttribute.AttributeType == AttributeTypeCode.Decimal)
                     {
                         _d_ts += $"{jsdoc}\t\t\t{name}: DevKit.Controls.Decimal;\r\n";
                     }
-                    else if (crmAttribute.FieldType == AttributeTypeCode.EntityName)
+                    else if (crmAttribute.AttributeType == AttributeTypeCode.EntityName)
                     {
                         _d_ts += $"{jsdoc}\t\t\t{name}: DevKit.Controls.String;\r\n";
                     }
-                    else if (crmAttribute.FieldType == AttributeTypeCode.Uniqueidentifier)
+                    else if (crmAttribute.AttributeType == AttributeTypeCode.Uniqueidentifier)
                     {
                         _d_ts += $"{jsdoc}\t\t\t{name}: DevKit.Controls.String;\r\n";
                     }
-                    else if (crmAttribute.FieldType == AttributeTypeCode.ManagedProperty)
+                    else if (crmAttribute.AttributeType == AttributeTypeCode.ManagedProperty)
                     {
                         _d_ts += $"{jsdoc}\t\t\t{name}: DevKit.Controls.String;\r\n";
                     }
@@ -892,6 +1148,19 @@ namespace DynamicsCrm.DevKit.Shared
                              item.ClassId == ControlClassId.UNKNOWN_3 ||
                              item.ClassId == ControlClassId.UNKNOWN_4 ||
                              item.ClassId == ControlClassId.UNKNOWN_5 ||
+                             item.ClassId == ControlClassId.UNKNOWN_6 ||
+                             item.ClassId == ControlClassId.UNKNOWN_7 ||
+                             item.ClassId == ControlClassId.UNKNOWN_8 ||
+                             item.ClassId == ControlClassId.UNKNOWN_9 ||
+                             item.ClassId == ControlClassId.UNKNOWN_10 ||
+                             item.ClassId == ControlClassId.UNKNOWN_11 ||
+                             item.ClassId == ControlClassId.UNKNOWN_12 ||
+                             item.ClassId == ControlClassId.UNKNOWN_13 ||
+                             item.ClassId == ControlClassId.UNKNOWN_14 ||
+                             item.ClassId == ControlClassId.UNKNOWN_15 ||
+                             item.ClassId == ControlClassId.UNKNOWN_16 ||
+                             item.ClassId == ControlClassId.UNKNOWN_17 ||
+                             item.ClassId == ControlClassId.UNKNOWN_18 ||
                              item.ClassId == ControlClassId.SUB_GRID ||
                              item.ClassId == ControlClassId.SUB_GRID_PANEL ||
                              item.ClassId == ControlClassId.QUICK_VIEW_FORM ||
@@ -900,7 +1169,7 @@ namespace DynamicsCrm.DevKit.Shared
                              item.ClassId == ControlClassId.CASE_KBSEARCHCONTROL ||
                              item.ClassId == ControlClassId.ATTACHMENT ||
                              item.ClassId == ControlClassId.ISMANAGED ||
-                             item.ClassId == ControlClassId.CONNECTIONROLEOBJECTTYPECODELIST||
+                             item.ClassId == ControlClassId.CONNECTIONROLEOBJECTTYPECODELIST ||
                              item.ClassId == ControlClassId.DYNAMICPROPERTIESLIST_LINKCONTROL ||
                              item.ClassId == ControlClassId.MSDYN_SESSIONTYPE ||
                              item.ClassId == ControlClassId.MSDYN_NAME ||
@@ -926,7 +1195,8 @@ namespace DynamicsCrm.DevKit.Shared
             _d_ts = _d_ts.TrimEnd(",\r\n".ToCharArray()) + "\r\n";
             return _d_ts;
         }
-        private string GetARealClassId(string formXml, string classId, string controlId)
+
+        private static string GetARealClassId(string formXml, string classId, string controlId)
         {
             if (controlId == null || controlId.Length == 0) return classId;
             var xdoc = XDocument.Parse(formXml);
@@ -952,139 +1222,11 @@ namespace DynamicsCrm.DevKit.Shared
             }
             return classId;
         }
-        private string GetForm_d_ts()
+
+        private static string GetSavedComment()
         {
-            var _d_ts = string.Empty;
-            //FORM
-            foreach (var form in ProcessForms)
-            {
-                if (form.IsQuickCreate) continue;
-                form.Name = FormHelper.GetFormName(form.Name, Class);
-                _d_ts += $"\tnamespace Form{Utility.SafeName(form.Name)} {{\r\n";
-                var form_d_ts_Header = GetForm_d_ts_Header(form.FormXml);
-                if (form_d_ts_Header.Length > 0)
-                {
-                    _d_ts += $"\t\tinterface Header extends DevKit.Controls.IHeader {{\r\n";
-                    _d_ts += form_d_ts_Header;
-                    _d_ts += $"\t\t}}\r\n";
-                }
-                var form_d_ts_Body = GetForm_d_ts_Body(form.FormXml);
-                if (form_d_ts_Body.Length > 0)
-                {
-                    _d_ts += form_d_ts_Body;
-                }
-                var form_d_ts_Footer = GetForm_d_ts_Footer(form.FormXml);
-                if (form_d_ts_Footer.Length > 0)
-                {
-                    _d_ts += $"\t\tinterface Footer extends DevKit.Controls.IFooter {{\r\n";
-                    _d_ts += form_d_ts_Footer;
-                    _d_ts += $"\t\t}}\r\n";
-                }
-                var form_d_ts_Navigation = GetForm_d_ts_Navigation(form.FormXml);
-                if (form_d_ts_Navigation.Length > 0)
-                {
-                    _d_ts += $"\t\tinterface Navigation {{\r\n";
-                    _d_ts += form_d_ts_Navigation;
-                    _d_ts += $"\t\t}}\r\n";
-                }
-                var form_d_ts_QuickForm = GetForm_d_ts_QuickForm(form.FormXml);
-                if (form_d_ts_QuickForm.Length > 0)
-                {
-                    _d_ts += form_d_ts_QuickForm;
-                }
-                var form_d_ts_Process = GetForm_d_ts_Process(form.FormXml);
-                if (form_d_ts_Process.Length > 0)
-                {
-                    _d_ts += form_d_ts_Process;
-                }
-                var form_d_ts_Grid = GetForm_d_ts_Grid(form.FormXml);
-                if (form_d_ts_Grid.Length > 0)
-                {
-                    _d_ts += form_d_ts_Grid;
-                }
-                _d_ts += $"\t}}\r\n";
-                var formBase = string.Empty;
-                var formName = Utility.SafeName(form.Name);
-                formBase += $"\tclass Form{formName} extends DevKit.IForm {{\r\n";
-                formBase += $"\t\t/**\r\n";
-                formBase += $"\t\t* DynamicsCrm.DevKit form {formName}\r\n";
-                formBase += $"\t\t* @param executionContext the execution context\r\n";
-                formBase += $"\t\t* @param defaultWebResourceName default resource name. E.g.: \"devkit_/resources/Resource\"\r\n";
-                formBase += $"\t\t*/\r\n";
-                formBase += $"\t\tconstructor(executionContext: any, defaultWebResourceName?: string);\r\n";
-                formBase += $"\t\t/** Utility functions/methods/objects for Dynamics 365 form */\r\n";
-                formBase += $"\t\tUtility: DevKit.Utility;\r\n";
-                if (form_d_ts_Body.Length > 0)
-                {
-                    formBase += $"\t\t/** The Body section of form {formName} */\r\n";
-                    formBase += $"\t\tBody: {ProjectName}.Form{formName}.Body;\r\n";
-                }
-                if (form_d_ts_Footer.Length > 0)
-                {
-                    formBase += $"\t\t/** The Footer section of form {formName} */\r\n";
-                    formBase += $"\t\tFooter: {ProjectName}.Form{formName}.Footer;\r\n";
-                }
-                if (form_d_ts_Header.Length > 0)
-                {
-                    formBase += $"\t\t/** The Header section of form {formName} */\r\n";
-                    formBase += $"\t\tHeader: {ProjectName}.Form{formName}.Header;\r\n";
-                }
-                if (form_d_ts_Navigation.Length > 0)
-                {
-                    formBase += $"\t\t/** The Navigation of form {formName} */\r\n";
-                    formBase += $"\t\tNavigation: {ProjectName}.Form{formName}.Navigation;\r\n";
-                }
-                if (form_d_ts_QuickForm.Length > 0)
-                {
-                    formBase += $"\t\t/** The QuickForm of form {formName} */\r\n";
-                    formBase += $"\t\tQuickForm: {ProjectName}.Form{formName}.QuickForm;\r\n";
-                }
-                if (form_d_ts_Process.Length > 0)
-                {
-                    formBase += $"\t\t/** The Process of form {formName} */\r\n";
-                    formBase += $"\t\tProcess: {ProjectName}.Form{formName}.Process;\r\n";
-                }
-                if (form_d_ts_Grid.Length > 0)
-                {
-                    formBase += $"\t\t/** The Grid of form {formName} */\r\n";
-                    formBase += $"\t\tGrid: {ProjectName}.Form{formName}.Grid;\r\n";
-                }
-                formBase += $"\t\t/** The SidePanes of form {formName} */\r\n";
-                formBase += $"\t\tSidePanes: DevKit.SidePanes;\r\n";
-                formBase += $"\t}}\r\n";
-                _d_ts += formBase;
-            }
-            //QUICK-CREATE
-            foreach (var form in ProcessForms)
-            {
-                if (!form.IsQuickCreate) continue;
-                form.Name = FormHelper.GetFormName(form.Name, Class);
-                _d_ts += $"\tnamespace Form{Utility.SafeName(form.Name)} {{\r\n";
-                var form_d_ts_Body_QuickCreate = GetForm_d_ts_Body(form.FormXml);
-                if (form_d_ts_Body_QuickCreate.Length > 0)
-                {
-                    _d_ts += form_d_ts_Body_QuickCreate;
-                }
-                _d_ts += $"\t}}\r\n";
-                var formBase = string.Empty;
-                var formName = Utility.SafeName(form.Name);
-                formBase += $"\tclass Form{formName} extends DevKit.IForm {{\r\n";
-                formBase += $"\t\t/**\r\n";
-                formBase += $"\t\t* DynamicsCrm.DevKit form {formName}\r\n";
-                formBase += $"\t\t* @param executionContext the execution context\r\n";
-                formBase += $"\t\t* @param defaultWebResourceName default resource name. E.g.: \"devkit_/resources/Resource\"\r\n";
-                formBase += $"\t\t*/\r\n";
-                formBase += $"\t\tconstructor(executionContext: any, defaultWebResourceName?: string);\r\n";
-                formBase += $"\t\t/** Utility functions/methods/objects for Dynamics 365 form */\r\n";
-                formBase += $"\t\tUtility: DevKit.Utility;\r\n";
-                if (form_d_ts_Body_QuickCreate.Length > 0)
-                {
-                    formBase += $"\t\t/** The Body section of form {formName} */\r\n";
-                    formBase += $"\t\tBody: {ProjectName}.Form{formName}.Body;\r\n";
-                }
-                formBase += $"\t}}\r\n";
-                _d_ts += formBase;
-            }
+            var _d_ts = $"//{SimpleJson.SerializeObject(Comment)}";
+            _d_ts = _d_ts.Replace("\"", "'");
             return _d_ts;
         }
     }

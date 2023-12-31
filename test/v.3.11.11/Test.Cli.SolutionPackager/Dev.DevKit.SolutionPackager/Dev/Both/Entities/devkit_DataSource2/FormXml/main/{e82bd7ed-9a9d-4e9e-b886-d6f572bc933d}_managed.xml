@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <systemform>
+    <formid>{e82bd7ed-9a9d-4e9e-b886-d6f572bc933d}</formid>
+    <IntroducedVersion>1.0.0.0</IntroducedVersion>
+    <FormPresentation>1</FormPresentation>
+    <FormActivationState>1</FormActivationState>
+    <form>
+      <tabs>
+        <tab verticallayout="true" id="{c0861a30-1ac0-4cec-8790-e7ebbffeac0c}" IsUserDefined="1">
+          <labels>
+            <label description="General" languagecode="1033" />
+            <label description="Tổng quát" languagecode="1066" />
+          </labels>
+          <columns>
+            <column width="100%">
+              <sections>
+                <section showlabel="false" showbar="false" IsUserDefined="0" id="{dbf23258-fe38-43ae-b43f-f8496ac7e8f9}">
+                  <labels>
+                    <label description="General" languagecode="1033" />
+                    <label description="Tổng quát" languagecode="1066" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{ec4ba118-eb2e-42f0-808f-6841e9cd6bb1}">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="devkit_datasource2name" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="devkit_datasource2name" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+      </tabs>
+    </form>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>1</CanBeDeleted>
+    <LocalizedNames>
+      <LocalizedName description="Information" languagecode="1033" />
+    </LocalizedNames>
+    <Descriptions>
+      <Description description="A form for this entity." languagecode="1033" />
+    </Descriptions>
+  </systemform>
+</forms>

@@ -3,6 +3,7 @@
   <PropertyGroup>
     <MinimumVisualStudioVersion>17.0</MinimumVisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -15,7 +16,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>DynamicsCrm.DevKit</RootNamespace>
     <AssemblyName>DynamicsCrm.DevKit</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <GeneratePkgDefFile>true</GeneratePkgDefFile>
     <UseCodebase>true</UseCodebase>
     <IncludeAssemblyInVSIXContainer>true</IncludeAssemblyInVSIXContainer>
@@ -44,21 +45,32 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Commands\DeployWebResource.cs" />
+    <Compile Include="Commands\CommandAddCrmPluginRegistration.cs" />
+    <Compile Include="Commands\CommandNewWebResource.cs" />
+    <Compile Include="Commands\CommandWebResource.cs" />
+    <Compile Include="DevKitPackageVsct.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DevKitPackageVsct.vsct</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DevKitPackage.cs" />
-    <Compile Include="DevKitPackage.Solution.cs">
-      <DependentUpon>DevKitPackage.cs</DependentUpon>
-    </Compile>
-    <Compile Include="DevKitPackage.Commands.cs">
-      <DependentUpon>DevKitPackage.cs</DependentUpon>
+    <Compile Include="source.extension.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>source.extension.vsixmanifest</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\.editorconfig">
+      <Link>.editorconfig</Link>
+    </None>
     <None Include="source.extension.vsixmanifest">
       <SubType>Designer</SubType>
+      <LastGenOutput>source.extension.cs</LastGenOutput>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -69,8 +81,8 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Community.VisualStudio.Toolkit">
-      <Version>17.0.76.268-pre</Version>
+    <PackageReference Include="Community.VisualStudio.Toolkit.17">
+      <Version>17.0.507</Version>
     </PackageReference>
     <PackageReference Include="Community.VisualStudio.VSCT">
       <Version>16.0.29.6</Version>
@@ -78,35 +90,40 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.CrmSdk.CoreAssemblies">
-      <Version>9.0.2.42</Version>
+      <Version>9.0.2.51</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.CrmSdk.Deployment">
       <Version>9.0.2.34</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.CrmSdk.Workflow">
-      <Version>9.0.2.42</Version>
+      <Version>9.0.2.51</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.CrmSdk.XrmTooling.CoreAssembly">
-      <Version>9.1.0.90</Version>
+      <Version>9.1.1.45</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.CrmSdk.XrmTooling.WpfControls">
-      <Version>9.1.0.90</Version>
+      <Version>9.1.1.45</Version>
     </PackageReference>
-    <PackageReference Include="Microsoft.VisualStudio.SDK" Version="17.0.0-previews-4-31709-430" ExcludeAssets="runtime">
+    <PackageReference Include="Microsoft.VisualStudio.SDK" Version="17.3.32804.24" ExcludeAssets="runtime">
       <IncludeAssets>compile; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="17.0.5232">
+    <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="17.4.2118">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="System.Text.Json">
+      <Version>6.0.8</Version>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <VSCTCompile Include="DevKitPackage.vsct">
+    <VSCTCompile Include="DevKitPackageVsct.vsct">
       <ResourceName>Menus.ctmenu</ResourceName>
+      <Generator>VsctGenerator</Generator>
+      <LastGenOutput>DevKitPackageVsct.cs</LastGenOutput>
     </VSCTCompile>
-    <Content Include="icon-menu.png" />
-    <Content Include="icon.ico" />
-    <Content Include="icon.png">
+    <Content Include="icon16.png" />
+    <Content Include="icon32.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
     <Content Include="License.txt">
@@ -120,6 +137,216 @@
       <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup%3bBuiltProjectOutputGroupDependencies%3bGetCopyToOutputDirectoryItems%3bSatelliteDllsProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
       <IncludeOutputGroupsInVSIXLocalOnly>DebugSymbolsProjectOutputGroup%3b</IncludeOutputGroupsInVSIXLocalOnly>
     </ProjectReference>
+    <ProjectReference Include="..\ItemTemplates\CSharp\01.LateBoundItemTemplate\01.LateBoundItemTemplate.csproj">
+      <Project>{921403BE-B301-40D8-B023-083C4747B50D}</Project>
+      <Name>01.LateBoundItemTemplate</Name>
+      <VSIXSubPath>ItemTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\ItemTemplates\CSharp\02.PluginItemTemplate\02.PluginItemTemplate.csproj">
+      <Project>{6A978468-339C-4BD8-8AFF-481DE2038525}</Project>
+      <Name>02.PluginItemTemplate</Name>
+      <VSIXSubPath>ItemTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\ItemTemplates\CSharp\03.WorkflowItemTemplate\03.WorkflowItemTemplate.csproj">
+      <Project>{6373A171-F07C-4153-BDA2-C3730497889D}</Project>
+      <Name>03.WorkflowItemTemplate</Name>
+      <VSIXSubPath>ItemTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\ItemTemplates\CSharp\04.CustomActionItemTemplate\04.CustomActionItemTemplate.csproj">
+      <Project>{CA29675D-B211-46EC-9B16-2B9A4C2CC869}</Project>
+      <Name>04.CustomActionItemTemplate</Name>
+      <VSIXSubPath>ItemTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\ItemTemplates\CSharp\05.TestItemTemplate\05.TestItemTemplate.csproj">
+      <Project>{B7281E07-25A1-4F0F-9595-A1394211DCD4}</Project>
+      <Name>05.TestItemTemplate</Name>
+      <VSIXSubPath>ItemTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\ItemTemplates\CSharp\06.UiTestItemTemplate\06.UiTesttemTemplate.csproj">
+      <Project>{53392F2B-21C1-41BF-9073-2994B94E101E}</Project>
+      <Name>06.UiTesttemTemplate</Name>
+      <VSIXSubPath>ItemTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\ItemTemplates\CSharp\07.JsFormItemTemplate\07.JsFormItemTemplate.csproj">
+      <Project>{F3432EFE-5FE3-46F4-9335-703E658C022E}</Project>
+      <Name>07.JsFormItemTemplate</Name>
+      <VSIXSubPath>ItemTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\ItemTemplates\CSharp\08.JsWebApiItemTemplate\08.JsWebApiItemTemplate.csproj">
+      <Project>{CCBD1381-E6A6-4A57-9853-E93A27A33F11}</Project>
+      <Name>08.JsWebApiItemTemplate</Name>
+      <VSIXSubPath>ItemTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\ItemTemplates\CSharp\09.DownloadReportsItemTemplate\09.DownloadReportsItemTemplate.csproj">
+      <Project>{4B8313E3-5E55-4326-B181-076BD9F62231}</Project>
+      <Name>09.DownloadReportsItemTemplate</Name>
+      <VSIXSubPath>ItemTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\ItemTemplates\CSharp\10.ResourceStringItemTemplate\10.ResourceStringItemTemplate.csproj">
+      <Project>{AEC3BFCD-934B-48C6-8132-0ACAA0AB42D0}</Project>
+      <Name>10.ResourceStringItemTemplate</Name>
+      <VSIXSubPath>ItemTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\ItemTemplates\CSharp\11.DownloadWebResourcesItemTemplate\11.DownloadWebResourcesItemTemplate.csproj">
+      <Project>{99DD3CAE-6D04-4BDA-BB2D-C4D7B28CA1E0}</Project>
+      <Name>11.DownloadWebResourcesItemTemplate</Name>
+      <VSIXSubPath>ItemTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\ItemTemplates\CSharp\12.JsDevkitItemTemplate\12.JsDevkitItemTemplate.csproj">
+      <Project>{CCBD1381-E6A6-4A57-9853-E93A27A33F12}</Project>
+      <Name>12.JsDevkitItemTemplate</Name>
+      <VSIXSubPath>ItemTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\ItemTemplates\CSharp\13.CustomApiItemTemplate\13.CustomApiItemTemplate.csproj">
+      <Project>{0329193A-A5B9-41D9-BBAF-C0FB0E6BE7CC}</Project>
+      <Name>13.CustomApiItemTemplate</Name>
+      <VSIXSubPath>ItemTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\ItemTemplates\CSharp\14.DataProviderItemTemplate\14.DataProviderItemTemplate.csproj">
+      <Project>{DBC500F9-934B-4A10-9F79-5658731FE77C}</Project>
+      <Name>14.DataProviderItemTemplate</Name>
+      <VSIXSubPath>ItemTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\ProjectTemplates\CSharp\01.SharedProjectTemplate\01.SharedProjectTemplate.csproj">
+      <Project>{4170CD81-A77B-4C9A-BBAE-29DE390A4F9C}</Project>
+      <Name>01.SharedProjectTemplate</Name>
+      <VSIXSubPath>ProjectTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\ProjectTemplates\CSharp\02.ConsoleProjectTemplate\02.ConsoleProjectTemplate.csproj">
+      <Project>{2C597B0B-F648-486D-BC45-593F584B8BCC}</Project>
+      <Name>02.ConsoleProjectTemplate</Name>
+      <VSIXSubPath>ProjectTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\ProjectTemplates\CSharp\03.ServerProjectTemplate\03.ServerProjectTemplate.csproj">
+      <Project>{B7876A9B-2B63-4967-8C44-060E2C65523A}</Project>
+      <Name>03.ServerProjectTemplate</Name>
+      <VSIXSubPath>ProjectTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\ProjectTemplates\CSharp\04.PluginProjectTemplate\04.PluginProjectTemplate.csproj">
+      <Project>{0B6D03EF-0D6A-4DDD-93F4-F68BE1410996}</Project>
+      <Name>04.PluginProjectTemplate</Name>
+      <VSIXSubPath>ProjectTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\ProjectTemplates\CSharp\05.WorkflowProjectTemplate\05.WorkflowProjectTemplate.csproj">
+      <Project>{13291ECF-23B1-4E4A-B9DF-1585EA9560A0}</Project>
+      <Name>05.WorkflowProjectTemplate</Name>
+      <VSIXSubPath>ProjectTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\ProjectTemplates\CSharp\06.CustomActionProjectTemplate\06.CustomActionProjectTemplate.csproj">
+      <Project>{1C97EFE1-D106-42A3-97FF-FC22779C70F0}</Project>
+      <Name>06.CustomActionProjectTemplate</Name>
+      <VSIXSubPath>ProjectTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\ProjectTemplates\CSharp\07.CustomApiProjectTemplate\07.CustomApiProjectTemplate.csproj">
+      <Project>{DBBAE77C-9754-4019-91B5-B16920F709C4}</Project>
+      <Name>07.CustomApiProjectTemplate</Name>
+      <VSIXSubPath>ProjectTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\ProjectTemplates\CSharp\08.DataProviderProjectTemplate\08.DataProviderProjectTemplate.csproj">
+      <Project>{7FCFE909-E28F-40A2-A7C3-0BD6F9A431E8}</Project>
+      <Name>08.DataProviderProjectTemplate</Name>
+      <VSIXSubPath>ProjectTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\ProjectTemplates\CSharp\09.WebResourceProjectTemplate\09.WebResourceProjectTemplate.csproj">
+      <Project>{67F16EA3-09BD-41BD-8CF7-48248C5D7B34}</Project>
+      <Name>09.WebResourceProjectTemplate</Name>
+      <VSIXSubPath>ProjectTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\ProjectTemplates\CSharp\10.SolutionPackagerProjectTemplate\10.SolutionPackagerProjectTemplate.csproj">
+      <Project>{C555420B-02D8-4388-AADF-375A9809ACDA}</Project>
+      <Name>10.SolutionPackagerProjectTemplate</Name>
+      <VSIXSubPath>ProjectTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\ProjectTemplates\CSharp\11.ReportProjectTemplate\11.ReportProjectTemplate.csproj">
+      <Project>{ACFB5F3D-6156-47F4-A879-C9552E7C334C}</Project>
+      <Name>11.ReportProjectTemplate</Name>
+      <VSIXSubPath>ProjectTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\ProjectTemplates\CSharp\12.ProxyTypesProjectTemplate\12.ProxyTypesProjectTemplate.csproj">
+      <Project>{9172E6AA-6AD5-409E-81AF-37C7D03D4A3D}</Project>
+      <Name>12.ProxyTypesProjectTemplate</Name>
+      <VSIXSubPath>ProjectTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\ProjectTemplates\CSharp\13.TestProjectTemplate\13.TestProjectTemplate.csproj">
+      <Project>{547D1385-E9AA-47E5-A94B-D0B50719BBAB}</Project>
+      <Name>13.TestProjectTemplate</Name>
+      <VSIXSubPath>ProjectTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\ProjectTemplates\CSharp\14.TestUiProjectTemplate\14.TestUiProjectTemplate.csproj">
+      <Project>{5259082A-3733-4FBE-B50B-C9BBA22D95AA}</Project>
+      <Name>14.TestUiProjectTemplate</Name>
+      <VSIXSubPath>ProjectTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\ProjectTemplates\CSharp\15.SharedTestProjectTemplate\15.SharedTestProjectTemplate.csproj">
+      <Project>{60C9F3C9-29DB-4714-A5C0-16E3732FCE30}</Project>
+      <Name>15.SharedTestProjectTemplate</Name>
+      <VSIXSubPath>ProjectTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\ProjectTemplates\CSharp\16.PackageProjectTemplate\16.PackageProjectTemplate.csproj">
+      <Project>{9D1F29B5-4A25-4642-879F-577FDE4D5DD6}</Project>
+      <Name>16.PackageProjectTemplate</Name>
+      <VSIXSubPath>ProjectTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="VSPackage.resx">
@@ -130,7 +357,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets" Condition="'$(VSToolsPath)' != ''" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>

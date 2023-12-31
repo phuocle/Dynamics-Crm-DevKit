@@ -1,21 +1,23 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net472</TargetFramework>
+    <TargetFramework>net48</TargetFramework>
     <IsPublishable>True</IsPublishable>
     <SignAssembly>True</SignAssembly>
     <AssemblyOriginatorKeyFile>..\DynamicsCrm.DevKit.pfx</AssemblyOriginatorKeyFile>
-    <AssemblyVersion>3.0.0.0</AssemblyVersion>
-    <FileVersion>3.0.0.0</FileVersion>
+    <AssemblyVersion>3.33.33.33</AssemblyVersion>
+    <FileVersion>3.33.33.33</FileVersion>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
     <RepositoryUrl>https://github.com/phuocle/Dynamics-Crm-DevKit</RepositoryUrl>
     <Company>PhuocLe</Company>
     <Product>DynamicsCrm.DevKit</Product>
-    <Copyright>Copyright © PhuocLe 2016 - 2022</Copyright>
+    <Copyright>Copyright © PhuocLe 2016 - 2036</Copyright>
     <PackageProjectUrl>https://github.com/phuocle/Dynamics-Crm-DevKit</PackageProjectUrl>
-    <Version>3.0.0.0</Version>
+    <Version>3.33.33.33</Version>
   </PropertyGroup>
-
+	<PropertyGroup>
+		<LangVersion>latest</LangVersion>
+	</PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
@@ -25,17 +27,77 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Forms\FormConnection.xaml" />
-    <None Remove="Forms\FormProject.xaml" />
-    <None Remove="Forms\icon-menu.png" />
-    <None Remove="Forms\StyleResourceDictionary.xaml" />
-    <None Remove="WpfControls\UserControlConnection.xaml" />
+    <Compile Remove="C:\Users\ple\.nuget\packages\community.visualstudio.toolkit\17.0.76.268-pre\build\AssemblyInfo.cs" />
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Forms\FormCustom.xaml" />
+    <None Remove="Forms\FormPlugin.xaml" />
+    <None Remove="Forms\FormWebResource.xaml" />
+    <None Remove="Resources\CustomAction.tt" />
+    <None Remove="Resources\CustomApi.tt" />
+    <None Remove="Resources\DataProviderCreate.tt" />
+    <None Remove="Resources\DataProviderDelete.tt" />
+    <None Remove="Resources\DataProviderRetrieve.tt" />
+    <None Remove="Resources\DataProviderRetrieveMultiple.tt" />
+    <None Remove="Resources\DataProviderUpdate.tt" />
+    <None Remove="Resources\download.reports.bat" />
+    <None Remove="Resources\download.webresources.bat" />
+    <None Remove="Resources\plugin.deploy.debug.bat" />
+    <None Remove="Resources\plugin.deploy.debug.only.bat" />
+    <None Remove="Resources\Plugin.tt" />
+    <None Remove="Resources\TestPlugin.tt" />
+    <None Remove="Resources\UiTest.tt" />
+    <None Remove="Resources\WebApi.js" />
+    <None Remove="Resources\WebApi2.js" />
+    <None Remove="Resources\Workflow.tt" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\plugin.deploy.debug.bat" />
+    <EmbeddedResource Include="Resources\plugin.deploy.debug.only.bat" />
+    <EmbeddedResource Include="Resources\TestPlugin.tt">
+      <Generator></Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\DataProviderDelete.tt">
+      <Generator></Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\DataProviderRetrieve.tt">
+      <Generator></Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\DataProviderRetrieveMultiple.tt">
+      <Generator></Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\DataProviderUpdate.tt">
+      <Generator></Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\DataProviderCreate.tt">
+      <Generator></Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\UiTest.tt">
+      <Generator></Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\CustomApi.tt">
+      <Generator></Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\CustomAction.tt">
+      <Generator></Generator>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\devkit.d.ts" />
     <EmbeddedResource Include="Resources\devkit.js" />
+    <EmbeddedResource Include="Resources\download.reports.bat" />
     <EmbeddedResource Include="Resources\DynamicsCrm.DevKit.Cli.json" />
+    <EmbeddedResource Include="Resources\Plugin.tt">
+      <Generator></Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\WebApi.js" />
+    <EmbeddedResource Include="Resources\WebApi2.js" />
+    <EmbeddedResource Include="Resources\download.webresources.bat" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\ReportProjectTemplate.rptproj" />
+    <EmbeddedResource Include="Resources\Workflow.tt">
+      <Generator></Generator>
+    </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>
@@ -43,11 +105,19 @@
       <Generator>XamlIntelliSenseFileGenerator</Generator>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Page>
+    <Page Include="Forms\FormCustom.xaml" />
     <Page Include="Forms\FormLogin.xaml">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <Generator>XamlIntelliSenseFileGenerator</Generator>
     </Page>
+    <Page Include="Forms\FormPlugin.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Forms\FormProject.xaml">
+      <Generator>XamlIntelliSenseFileGenerator</Generator>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Page>
+    <Page Include="Forms\FormWebResource.xaml">
       <Generator>XamlIntelliSenseFileGenerator</Generator>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Page>
@@ -55,24 +125,25 @@
     <Page Include="WpfControls\UserControlConnection.xaml">
       <Generator>XamlIntelliSenseFileGenerator</Generator>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Page>	
+    </Page>
 </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Community.VisualStudio.Toolkit" Version="17.0.76.268-pre" />
-    <PackageReference Include="Microsoft.CrmSdk.XrmTooling.CoreAssembly" Version="9.1.0.90" />
-    <PackageReference Include="Microsoft.CrmSdk.XrmTooling.WpfControls" Version="9.1.0.90" />
-    <PackageReference Include="Microsoft.VisualStudio.SDK" Version="17.0.0-previews-4-31709-430" />
+    <PackageReference Include="CmdLine" Version="1.0.7.509" />
+    <PackageReference Include="Community.VisualStudio.Toolkit.17" Version="17.0.507" />
+    <PackageReference Include="Microsoft.CrmSdk.XrmTooling.CoreAssembly" Version="9.1.1.45" />
+    <PackageReference Include="Microsoft.CrmSdk.XrmTooling.WpfControls" Version="9.1.1.45" />
+    <PackageReference Include="Microsoft.VisualStudio.SDK" Version="17.3.32804.24" />
+    <PackageReference Include="Microsoft.VisualStudio.TemplateWizardInterface" Version="17.3.32804.24" />
+    <PackageReference Include="NuGet.Protocol" Version="6.7.0" />
+    <PackageReference Include="NuGet.Versioning" Version="6.7.0" />
+    <PackageReference Include="System.Text.Json" Version="6.0.8" />
   </ItemGroup>
 
   <ItemGroup>
     <Reference Include="PresentationCore" />
     <Reference Include="System.Xaml" />
     <Reference Include="WindowsBase" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Resource Include="Forms\icon-menu.png" />
   </ItemGroup>
 
   <Import Project="..\DynamicsCrm.DevKit.Shared\DynamicsCrm.DevKit.Shared.projitems" Label="Shared" />

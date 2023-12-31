@@ -86,3 +86,17 @@ public enum TaskType
     DownloadPortalWebResources,
     ProxyTypes
 }
+
+public enum GeneratorType
+{
+    jsform,
+    jswebapi,
+    csharp
+}
+
+public enum FormType
+{
+    Main = 2,
+    QuickCreate = 7,
+    QuickView = 6
+}

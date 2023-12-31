@@ -6,6 +6,7 @@
       "folder": "bin\\Debug",
       "includefiles": [
         "???.Plugin.*.dll",
+        "???.Plugin.*.nupkg",
         "???.CustomAction.*.dll",
         "???.Workflow.*.dll",
         "???.CustomApi.*.dll",
@@ -89,24 +90,21 @@
       "type": "CSharp",
       "rootnamespace": "???",
       "rootfolder": "???",
-      "entities": "folder",
-      "debug": "?"
+      "entities": "folder"
     },
     {
       "profile": "JS-FORM",
       "type": "JsForm",
       "rootnamespace": "???",
       "rootfolder": "???",
-      "entities": "folder",
-      "debug": "?"
+      "entities": "folder"
     },
     {
       "profile": "JS-WEBAPI",
       "type": "JsWebApi",
       "rootnamespace": "???",
       "rootfolder": "???",
-      "entities": "folder",
-      "debug": "?"
+      "entities": "folder"
     }
   ],
   "downloadwebresources": [
@@ -127,6 +125,13 @@
       "namespace": "???",
       "output": "GeneratedCode.cs",
       "entities": "*"
+    }
+  ],
+  "uploadreports": [
+    {
+      "profile": "DEBUG",
+      "solution": "???",
+      "language": [ "???" ]
     }
   ]
 }

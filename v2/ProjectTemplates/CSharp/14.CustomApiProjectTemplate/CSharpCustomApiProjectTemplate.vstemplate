@@ -26,10 +26,11 @@
       <ProjectItem ReplaceParameters="false" TargetFileName="$ProjectName$.snk">key.snk</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="packages.config">_packages.config</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="deploy.debug.bat">deploy.debug.bat</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="deploy.debug.only.bat">deploy.debug.only.bat</ProjectItem>
     </Project>
   </TemplateContent>
   <WizardExtension>
-    <Assembly>DynamicsCrm.DevKit.Wizard, Version=2.13.33.0, Culture=en, PublicKeyToken=98cbb7bd3db31604</Assembly>
+    <Assembly>DynamicsCrm.DevKit.Wizard, Version=3.11.11.0, Culture=en, PublicKeyToken=98cbb7bd3db31604</Assembly>
     <FullClassName>DynamicsCrm.DevKit.Wizard.ProjectTemplates.CustomApi</FullClassName>
   </WizardExtension>
 </VSTemplate>

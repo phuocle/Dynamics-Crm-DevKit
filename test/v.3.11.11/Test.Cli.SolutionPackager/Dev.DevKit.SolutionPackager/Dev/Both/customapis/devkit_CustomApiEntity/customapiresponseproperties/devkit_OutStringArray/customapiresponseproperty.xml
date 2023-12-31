@@ -1,0 +1,11 @@
+<customapiresponseproperty uniquename="devkit_OutStringArray">
+  <description default="This is the OutStringArray">
+    <label description="This is the OutStringArray" languagecode="1033" />
+  </description>
+  <displayname default="OutStringArray">
+    <label description="OutStringArray" languagecode="1033" />
+  </displayname>
+  <iscustomizable>1</iscustomizable>
+  <name>OutStringArray</name>
+  <type>11</type>
+</customapiresponseproperty>

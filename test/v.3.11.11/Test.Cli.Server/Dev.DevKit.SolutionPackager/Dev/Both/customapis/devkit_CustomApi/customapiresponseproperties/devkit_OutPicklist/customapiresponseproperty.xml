@@ -1,0 +1,11 @@
+<customapiresponseproperty uniquename="devkit_OutPicklist">
+  <description default="This is the OutPicklist">
+    <label description="This is the OutPicklist" languagecode="1033" />
+  </description>
+  <displayname default="OutPicklist">
+    <label description="OutPicklist" languagecode="1033" />
+  </displayname>
+  <iscustomizable>1</iscustomizable>
+  <name>OutPicklist</name>
+  <type>9</type>
+</customapiresponseproperty>

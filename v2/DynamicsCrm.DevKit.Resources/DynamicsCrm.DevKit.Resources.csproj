@@ -73,9 +73,6 @@
     <EmbeddedResource Include="workflow.deploy.debug.bat" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="devkit.365.js" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="OptionSetWebApi_d_ts.js" />
   </ItemGroup>
   <ItemGroup>
@@ -89,6 +86,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="WebApi2.js" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

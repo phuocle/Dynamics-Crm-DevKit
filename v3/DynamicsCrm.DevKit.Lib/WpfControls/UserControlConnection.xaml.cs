@@ -23,7 +23,7 @@ namespace DynamicsCrm.DevKit.Lib.WpfControls
             set
             {
                 _isConnected = value;
-                labelInformation.Content = _isConnected ? $"Connected: {XrmHelper.ConnectedUrl(CrmServiceClient)}" : $"Please connect to your Dataverse/CDS";
+                labelInformation.Content = _isConnected ? $"Connected: {XrmHelper.ConnectedUrl(CrmServiceClient)}" : $"Please connect to your Dataverse";
                 if (_isConnected) {
                     var sender = new object();
                     Connected(sender, EventArgs.Empty);
@@ -34,6 +34,8 @@ namespace DynamicsCrm.DevKit.Lib.WpfControls
 
         public bool IsOOBConnection { get; set; }
         public CrmServiceClient CrmServiceClient { get; set; }
+        public string DataverseConnectionString { get; set; }
+        public DynamicsCrm.DevKit.Shared.Models.CrmConnection CrmConnection {get;set; }
 
         public event EventHandler Connected;
 
@@ -50,28 +52,32 @@ namespace DynamicsCrm.DevKit.Lib.WpfControls
             if (result) {
                 if (formConnection.IsOOBConnection)
                 {
-                    var loginForm = new FormLogin();
-                    loginForm.ConnectionToCrmCompleted += loginForm_ConnectionToCrmCompleted;
+                    var loginForm = new FormLogin(false);
+                    loginForm.ConnectionToCrmCompleted += LoginForm_ConnectionToCrmCompleted;
                     loginForm.ShowDialog();
                     if (loginForm.CrmConnectionMgr != null && loginForm.CrmConnectionMgr.CrmSvc != null && loginForm.CrmConnectionMgr.CrmSvc.IsReady)
                     {
                         CrmServiceClient = loginForm.CrmConnectionMgr.CrmSvc;
                         IsOOBConnection = true;
+                        DataverseConnectionString = string.Empty;
                         IsConnected = true;
+                        CrmConnection = null;
                     }
                 }
                 else
                 {
-                    IsOOBConnection = false;
                     CrmServiceClient = formConnection.CrmServiceClient;
+                    IsOOBConnection = false;
+                    DataverseConnectionString = formConnection.DataverseConnectionString;
                     IsConnected = CrmServiceClient != null;
-                }                
+                    CrmConnection = formConnection.CrmConnection;
+                }
             }
             else
                 IsConnected = false;
         }
 
-        private void loginForm_ConnectionToCrmCompleted(object sender, EventArgs e)
+        private void LoginForm_ConnectionToCrmCompleted(object sender, EventArgs e)
         {
             if (sender is FormLogin login)
             {

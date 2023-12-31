@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+    <metadata>
+        <id>DynamicsCrm.DevKit.Cli</id>
+        <title>DynamicsCrm.DevKit.Cli - CLI for DynamicsCrm.DevKit tool</title>
+        <version>3.33.33</version>
+        <authors>PhuocLe</authors>
+        <license type="file">license\LICENSE.txt</license>
+        <projectUrl>https://github.com/phuocle/Dynamics-Crm-DevKit</projectUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>CLI for DynamicsCrm.DevKit tool</description>
+        <language>en-US</language>
+        <tags>Dynamics, Dynamics365, CRM, CLI, DevKit, Analyzers</tags>
+		<icon>images\icon.png</icon>
+    </metadata>
+    <files>
+        <file src="..\bin\Release\net48\DynamicsCrm.DevKit.Cli.exe" target="tools\DynamicsCrm.DevKit.Cli.exe" />
+        <file src="..\bin\Release\net48\DynamicsCrm.DevKit.Cli.exe.config" target="tools\DynamicsCrm.DevKit.Cli.exe.config" />
+        <file src="..\bin\Release\net48\DynamicsCrm.DevKit.Lib.dll" target="tools\DynamicsCrm.DevKit.Lib.dll" />
+        <file src="..\bin\Release\net48\DynamicsCrm.DevKit.CrmSvcUtilExtensions.dll" target="tools\DynamicsCrm.DevKit.CrmSvcUtilExtensions.dll" />
+		<file src="..\bin\Release\net48\CmdLine.dll" target="tools\CmdLine.dll" />
+		<file src="..\license\LICENSE.txt" target="license\LICENSE.txt" />
+		<file src="..\images\icon.png" target="images\icon.png" />
+		<file src="..\bin\Release\net48\Microsoft.Crm.Sdk.Proxy.dll" target="tools\Microsoft.Crm.Sdk.Proxy.dll" />
+		<file src="..\bin\Release\net48\Microsoft.IdentityModel.Clients.ActiveDirectory.dll" target="tools\Microsoft.IdentityModel.Clients.ActiveDirectory.dll" />
+		<file src="..\bin\Release\net48\Microsoft.Xrm.Sdk.dll" target="tools\Microsoft.Xrm.Sdk.dll" />
+		<file src="..\bin\Release\net48\Microsoft.Xrm.Sdk.Workflow.dll" target="tools\Microsoft.Xrm.Sdk.Workflow.dll" />
+		<file src="..\bin\Release\net48\Microsoft.Xrm.Tooling.Connector.dll" target="tools\Microsoft.Xrm.Tooling.Connector.dll" />
+		<file src="..\bin\Release\net48\Microsoft.Xrm.Sdk.Deployment.dll" target="tools\Microsoft.Xrm.Sdk.Deployment.dll" />
+		<file src="..\bin\Release\net48\Microsoft.Rest.ClientRuntime.dll" target="tools\Microsoft.Rest.ClientRuntime.dll" />
+		<file src="..\bin\Release\net48\Microsoft.Xrm.Tooling.CrmConnectControl.dll" target="tools\Microsoft.Xrm.Tooling.CrmConnectControl.dll" />
+		<file src="..\bin\Release\net48\Microsoft.Xrm.Tooling.Ui.Styles.dll" target="tools\Microsoft.Xrm.Tooling.Ui.Styles.dll" />
+		<file src="..\bin\Release\net48\Microsoft.Xrm.Tooling.WebResourceUtility.dll" target="tools\Microsoft.Xrm.Tooling.WebResourceUtility.dll" />
+		<file src="..\bin\Release\net48\Newtonsoft.Json.dll" target="tools\Newtonsoft.Json.dll" />
+		<file src="..\bin\Release\net48\Microsoft.VisualStudio.Shell.15.0.dll" target="tools\Microsoft.VisualStudio.Shell.15.0.dll" />
+		<file src="..\bin\Release\net48\Microsoft.VisualStudio.Shell.Framework.dll" target="tools\Microsoft.VisualStudio.Shell.Framework.dll" />
+		<file src="..\bin\Release\net48\NuGet.Packaging.dll" target="tools\NuGet.Packaging.dll" />
+		<file src="..\bin\Release\net48\NuGet.Common.dll" target="tools\NuGet.Common.dll" />
+		<file src="..\bin\Release\net48\NuGet.Frameworks.dll" target="tools\NuGet.Frameworks.dll" />
+		<file src="..\bin\Release\net48\NuGet.Versioning.dll" target="tools\NuGet.Versioning.dll" />
+    </files>
+</package>

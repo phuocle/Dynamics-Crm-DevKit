@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
+	<TemplateData>
+		<Name>16. Package Project</Name>
+		<Description>Package Project Template</Description>
+		<DefaultName>PackageProject</DefaultName>
+		<TemplateID>DynamicsCrm.DevKit.CSharpPackageProject</TemplateID>
+		<TemplateGroupID>DynamicsCrm.DevKit</TemplateGroupID>
+		<Icon>icon.png</Icon>
+		<ProjectType>CSharp</ProjectType>
+		<RequiredFrameworkVersion>4.0</RequiredFrameworkVersion>
+		<CreateNewFolder>false</CreateNewFolder>
+		<ProvideDefaultName>false</ProvideDefaultName>
+		<LocationField>Disabled</LocationField>
+		<EnableLocationBrowseButton>false</EnableLocationBrowseButton>
+		<EnableEditOfLocationField>false</EnableEditOfLocationField>
+		<CreateInPlace>true</CreateInPlace>
+		<ProjectTypeTag>DynamicsCrm.DevKit</ProjectTypeTag>
+		<LanguageTag>CSharp</LanguageTag>
+		<PlatformTag>Windows</PlatformTag>
+		<SortOrder>260</SortOrder>
+	</TemplateData>
+	<TemplateContent>
+		<Project File="ProjectTemplate.csproj" ReplaceParameters="true">
+			<ProjectItem ReplaceParameters="false" TargetFileName="ReadMe.md">ReadMe.md</ProjectItem>
+			<ProjectItem ReplaceParameters="true" TargetFileName="deploy.debug.bat">deploy.debug.bat</ProjectItem>
+			<ProjectItem ReplaceParameters="true" TargetFileName="deploy.debug.only.bat">deploy.debug.only.bat</ProjectItem>
+		</Project>
+	</TemplateContent>
+	<WizardExtension>
+		<Assembly>DynamicsCrm.DevKit.Lib, Version=3.33.33.33, Culture=Neutral, PublicKeyToken=98cbb7bd3db31604</Assembly>
+		<FullClassName>DynamicsCrm.DevKit.Lib.Wizard.ProjectTemplates.Package</FullClassName>
+	</WizardExtension>
+</VSTemplate>

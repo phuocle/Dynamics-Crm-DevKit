@@ -1,8 +1,12 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using DynamicsCrm.DevKit.Shared.Helper;
 using DynamicsCrm.DevKit.Shared.Models;
+using Microsoft.Xrm.Sdk.Metadata;
+using Microsoft.Xrm.Tooling.Connector;
 
 namespace DynamicsCrm.DevKit.Shared.Extensions
 {
@@ -171,6 +175,118 @@ namespace DynamicsCrm.DevKit.Shared.Extensions
             foreach (var i in ie)
             {
                 action(i);
+            }
+        }
+
+        public static List<NameValue> OptionSetValues(this AttributeMetadata attribute)
+        {
+            var values = new List<NameValue>();
+            if (!XrmHelper.IsOptionSet(attribute)) return values;
+            var options = ((EnumAttributeMetadata)attribute)?.OptionSet?.Options;
+            if (options == null) return values;
+            foreach (var option in options)
+            {
+                var name = option?.Label?.UserLocalizedLabel?.Label ?? String.Empty;
+                name = name.Replace("-", "_");
+                if (name.Length == 0) continue;
+                name = Utility.SafeIdentifier(name);
+                var value = option?.Value ?? -1;
+                if (name.Length == 0 || value == -1) continue;
+                var suffix = string.Empty;
+                if (options.Count(x => Utility.SafeIdentifier(x?.Label?.UserLocalizedLabel?.Label) == name) > 1)
+                {
+                    var count = values.Count(x => x.Name2 == name);
+                    suffix = $"_{value}";
+                }
+                var addValue = new NameValue
+                {
+                    Name = $"{name}{suffix}",
+                    Name2 = $"{name}",
+                    Value = $"{value}",
+                    Label = option?.Label?.UserLocalizedLabel?.Label ?? String.Empty,
+                    Name3 = string.Empty
+                };
+                if (option is StatusOptionMetadata statusOption) addValue.Name3 = statusOption?.State.ToString() ?? string.Empty;
+                values.Add(addValue);
+            }
+            return values.OrderBy(x => x.Name).ToList();
+        }
+
+        public static int? GetMaxLength(this AttributeMetadata attribute)
+        {
+            if (attribute is StringAttributeMetadata attr1)
+                return attr1.MaxLength ?? (int?)null;
+            if (attribute is MemoAttributeMetadata attr2)
+                return attr2.MaxLength ?? (int?)null;
+            return (int?)null;
+        }
+
+        public static decimal? GetMinValue(this AttributeMetadata attribute)
+        {
+            if (attribute is IntegerAttributeMetadata attr1)
+                return attr1.MinValue ?? -1;
+            if (attribute is DecimalAttributeMetadata attr2)
+                return attr2.MinValue ?? -1;
+            if (attribute is MoneyAttributeMetadata attr3)
+                return attr3.MinValue != null ? (decimal)attr3.MinValue.Value : -1;
+            if (attribute is DoubleAttributeMetadata attr)
+                return attr.MinValue != null ? (decimal)attr.MinValue.Value : -1;
+            return (decimal?)null;
+        }
+
+        public static decimal? GetMaxValue(this AttributeMetadata attribute)
+        {
+            if (attribute is IntegerAttributeMetadata attr1)
+                return attr1.MaxValue ?? -1;
+            if (attribute is DecimalAttributeMetadata attr2)
+                return attr2.MaxValue ?? -1;
+            if (attribute is MoneyAttributeMetadata attr3)
+                return attr3.MaxValue != null ? (decimal)attr3.MaxValue.Value : -1;
+            if (attribute is DoubleAttributeMetadata attr)
+                return attr.MaxValue != null ? (decimal)attr.MaxValue.Value : -1;
+            return (decimal?)null;
+        }
+
+        public static string TrimNewLine(this string value)
+        {
+            if (value == null) return null;
+            return value.Trim().Replace("\r\n", "").Replace("\r", "").Replace("\n", "");
+        }
+
+        public static bool IsReadOnly(this AttributeMetadata attribute)
+        {
+            return attribute.SourceType == 1 || attribute.SourceType == 2;
+        }
+        public static void AddIfNotExist(this List<EntityMetadata> entitiesMetadata, CrmServiceClient crmServiceClient, string entityLogicalName)
+        {
+            if (!XrmHelper.EntitiesMetadata.Any(x => x.LogicalName == entityLogicalName))
+            {
+                XrmHelper.EntitiesMetadata.Add(XrmHelper.GetEntityMetadata(crmServiceClient, entityLogicalName));
+            }
+        }
+
+        public static void AddIfNotExist(this List<SystemForm> entitiesFormXml, CrmServiceClient crmServiceClient, string entityLogicalName)
+        {
+            if (!XrmHelper.EntitiesFormXml.Any(x => x.EntityLogicalName == entityLogicalName))
+            {
+                XrmHelper.EntitiesMetadata.AddIfNotExist(crmServiceClient, entityLogicalName);
+                var entityMetadata = XrmHelper.EntitiesMetadata.FirstOrDefault(x => x.LogicalName == entityLogicalName);
+                if (entityMetadata != null)
+                {
+                    var forms = XrmHelper.GetEntityFormXml(crmServiceClient, entityMetadata.ObjectTypeCode);
+                    if (forms.Count > 0) XrmHelper.EntitiesFormXml.AddRange(forms);
+                }
+            }
+        }
+
+        public static void AddIfNotExist(this List<ProcessForm> entitiesProcessForm, CrmServiceClient crmServiceClient, string entityLogicalName)
+        {
+            if (!XrmHelper.EntitiesProcessForm.Any(x => x.EntityLogicalName == entityLogicalName))
+            {
+                XrmHelper.EntitiesMetadata.AddIfNotExist(crmServiceClient, entityLogicalName);
+                var entityMetadata = XrmHelper.EntitiesMetadata.FirstOrDefault(x => x.LogicalName == entityLogicalName);
+                var processes = XrmHelper.GetEntityProcessForm(crmServiceClient, entityMetadata.ObjectTypeCode, entityLogicalName);
+                if (processes.Count > 0) XrmHelper.EntitiesProcessForm.AddRange(processes);
             }
         }
     }

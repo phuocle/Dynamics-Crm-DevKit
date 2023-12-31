@@ -12,8 +12,7 @@ using System.Security;$endif$
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("$ProjectName$")]
 [assembly: AssemblyCopyright("Copyright © $year$")]
-[assembly: AssemblyTrademark("")]
-[assembly: AssemblyCulture("en")]$if$($CrmName$==365)
+[assembly: AssemblyTrademark("")]$if$($CrmName$==365)
 [assembly: SecurityRules(SecurityRuleSet.Level2)]$endif$
 [assembly: ComVisible(false)]
 [assembly: Guid("$guid1$")]

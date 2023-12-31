@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<VSTemplate Version="3.0.0" Type="Item" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
+	<TemplateData>
+		<Name>12. Javascript devkit.js</Name>
+		<Description>Javascript Devkit Template</Description>
+		<DefaultName>Devkit.js</DefaultName>
+		<TemplateID>AAAAAAAA-AAAA-AAAA-BBBB-000000000012</TemplateID>
+		<Icon>icon.png</Icon>
+		<ProjectType>CSharp</ProjectType>
+		<ProjectSubType>Visual C#</ProjectSubType>
+		<AppliesTo>CSharp</AppliesTo>
+		<RequiredFrameworkVersion>4.0</RequiredFrameworkVersion>
+		<NumberOfParentCategoriesToRollUp>0</NumberOfParentCategoriesToRollUp>
+		<SortOrder>220</SortOrder>
+	</TemplateData>
+	<TemplateContent>
+		<ProjectItem ReplaceParameters="true" TargetFileName="devkit.js">devkit.js</ProjectItem>
+		<ProjectItem ReplaceParameters="true" TargetFileName="devkit.d.ts">devkit.d.ts</ProjectItem>
+	</TemplateContent>
+	<WizardExtension>
+		<Assembly>DynamicsCrm.DevKit.Lib, Version=3.33.33.33, Culture=Neutral, PublicKeyToken=98cbb7bd3db31604</Assembly>
+		<FullClassName>DynamicsCrm.DevKit.Lib.Wizard.ItemTemplates.JsDevkit</FullClassName>
+	</WizardExtension>
+</VSTemplate>

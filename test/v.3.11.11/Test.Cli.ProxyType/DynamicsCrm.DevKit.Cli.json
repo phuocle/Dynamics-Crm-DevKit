@@ -1,0 +1,10 @@
+﻿{
+  "proxytypes": [
+    {
+      "profile": "ALL",
+      "namespace": "Dev.DevKit.ProxyTypes",
+      "output": "GeneratedCode.cs",
+      "entities": "*"
+    }
+  ]
+}

@@ -1,0 +1,65 @@
+﻿using FakeXrmEasy.Plugins;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.Xrm.Sdk;
+using System.Linq;
+using <#=Context.PluginSharedNameSpace#>;
+using <#=Context.PluginSharedNameSpace#>.Test;
+using <#=Context.ProxyTypes#>;
+
+namespace <#=Context.PluginNameSpace#>
+{
+    [TestClass]
+    public class <#=Context.Class#>Test : FakeXrmEasyTestBase
+    {
+        private const StageEnum PLUGIN_STAGE = StageEnum.<#=Context.PluginStage#>;
+        private const string PLUGIN_MESSAGE = "<#=Context.PluginMessage#>";
+        private const string PLUGIN_ENTITY_LOGICAL_NAME = "<#=Context.PluginLogicalName#>";
+        private const ExecutionModeEnum PLUGIN_EXECUTION_MODE = ExecutionModeEnum.<#=Context.PluginExecution#>;
+
+        [TestMethod]
+        public void <#=Context.Class#>Test_00()
+        {
+            var pluginContext = _context.GetDefaultPluginContext();
+            Assert.ThrowsException<InvalidPluginExecutionException>(() =>
+            {
+                _context.ExecutePluginWith<<#=Context.Class#>>(pluginContext);
+            }, $"Stage does not equals {PLUGIN_STAGE.ToString()}");
+            pluginContext.Stage = (int)PLUGIN_STAGE;
+            pluginContext.PrimaryEntityName = string.Empty;
+            Assert.ThrowsException<InvalidPluginExecutionException>(() =>
+            {
+                _context.ExecutePluginWith<<#=Context.Class#>>(pluginContext);
+            }, $"PrimaryEntityName does not equals {PLUGIN_ENTITY_LOGICAL_NAME}");
+            pluginContext.PrimaryEntityName = PLUGIN_ENTITY_LOGICAL_NAME;
+            pluginContext.MessageName = string.Empty;
+            Assert.ThrowsException<InvalidPluginExecutionException>(() =>
+            {
+                _context.ExecutePluginWith<<#=Context.Class#>>(pluginContext);
+            }, $"MessageName does not equals  {PLUGIN_MESSAGE}");
+            pluginContext.MessageName = PLUGIN_MESSAGE;
+            pluginContext.Mode = -1;
+            Assert.ThrowsException<InvalidPluginExecutionException>(() =>
+            {
+                _context.ExecutePluginWith<<#=Context.Class#>>(pluginContext);
+            }, $"Execution does not equals  {PLUGIN_EXECUTION_MODE.ToString()}");
+            pluginContext.Mode = (int)PLUGIN_EXECUTION_MODE;
+            var @class = new <#=Context.Class#>();
+            var registeredPlugins = TestHelper.GetRegisteredPlugins(@class);
+            Assert.IsTrue(registeredPlugins.Any(x => x.EntityLogicalName == PLUGIN_ENTITY_LOGICAL_NAME && x.Message == PLUGIN_MESSAGE && x.ExecutionMode == PLUGIN_EXECUTION_MODE && x.Stage == PLUGIN_STAGE));
+        }
+
+        [TestMethod]
+        public void <#=Context.Class#>Test_01()
+        {
+            ///setup
+            //var json = @"";
+            //var remote = TestHelper.DeserializeRemoteExecutionContext(json);
+            //var pluginContext = _context.GetDefaultPluginContext();
+            //pluginContext.SetXrmFakedContextPlugin(remote);
+            ///run
+            //_context.ExecutePluginWith<<#=Context.Class#>> (pluginContext);
+            ///result
+            Assert.IsTrue(true);
+        }
+    }
+}

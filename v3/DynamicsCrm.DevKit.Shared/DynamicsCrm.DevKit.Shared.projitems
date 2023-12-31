@@ -10,14 +10,69 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Const.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CSharpLateBound.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)EncryptDecrypt.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\EntityBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\SdkMessageProcessingStep.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\SdkMessageProcessingStep.generated.cs">
+      <DependentUpon>SdkMessageProcessingStep.cs</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Extensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)JsForm.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)JsonHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)JsTypeScriptDeclaration2.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)JsWebApi2.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\CliAction.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\CommandLineArgs.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\CommentTypeScriptDeclaration.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\ControlClassId.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\CrmConnection.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\CrmPluginRegistrationAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Dependency.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\DevKitConnections.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\DownloadFile.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Enum.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\IdName.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Json.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\JsonBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\JsonDataProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\JsonDataSource.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\JsonDownloadReport.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\JsonDownloadWebResource.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\JsonGenerator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\JsonPlugin.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\JsonProxyType.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\JsonServer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\JsonSolutionPackager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\JsonUploadReport.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\JsonWebResource.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\JsonWorkflow.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\DeployWebResource.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\NameValue.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\NameValueGuid.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\NameValueGuidExtend.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\OldCommentTypeScriptDeclaration.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\PluginInputOutputParameter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\ProcessForm.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\CachedJson.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\SystemForm.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\T4Context.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\WebResourceFile.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\XrmEntity.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)NuGetHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Replacement.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Signing.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SimpleJson.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)T4Callback.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)T4Helper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)XrmSingleton.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utility.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)VsixCache.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)VsixHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)XrmHelper.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="$(MSBuildThisFileDirectory)Entities\DynamicsCrm.DevKit.Cli.json" />
   </ItemGroup>
 </Project>

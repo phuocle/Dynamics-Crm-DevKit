@@ -51,6 +51,7 @@
 	<ItemGroup>
     <None Include="packages.config" />
     <None Include="deploy.debug.bat" />
+    <None Include="deploy.debug.only.bat" />
     <None Include="$ProjectName$.snk" />
 		<Compile Include="Properties\AssemblyInfo.cs" />
 	</ItemGroup>

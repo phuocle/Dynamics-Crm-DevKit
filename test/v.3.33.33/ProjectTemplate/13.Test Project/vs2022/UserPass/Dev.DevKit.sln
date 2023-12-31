@@ -1,0 +1,53 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33723.286
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8651C61D-45E4-4E34-8E99-6DDBADA7C4C4}"
+	ProjectSection(SolutionItems) = preProject
+		DynamicsCrm.DevKit.Cli.json = DynamicsCrm.DevKit.Cli.json
+		DynamicsCrm.DevKit.json = DynamicsCrm.DevKit.json
+	EndProjectSection
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Dev.DevKit.Shared", "Dev.DevKit.Shared\Dev.DevKit.Shared.shproj", "{FE3E159C-4457-4635-86D0-DCF01670FE0D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.ProxyTypes", "Dev.DevKit.ProxyTypes\Dev.DevKit.ProxyTypes.csproj", "{24F931D0-A884-4354-B3C5-47AC3A575D6A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.Plugin.Account", "Dev.DevKit.Plugin.Account\Dev.DevKit.Plugin.Account.csproj", "{4AE523CE-E0C3-47B2-A826-967EA2D07D42}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Dev.DevKit.Shared.Test", "Dev.DevKit.Shared.Test\Dev.DevKit.Shared.Test.shproj", "{383A1BF9-E7E0-4F6A-B67E-F70F17D38BD7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.Plugin.Account.Test", "Dev.DevKit.Plugin.Account.Test\Dev.DevKit.Plugin.Account.Test.csproj", "{BAC08A8C-4C08-42FB-9A6B-20698FFFED6C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{24F931D0-A884-4354-B3C5-47AC3A575D6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24F931D0-A884-4354-B3C5-47AC3A575D6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24F931D0-A884-4354-B3C5-47AC3A575D6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24F931D0-A884-4354-B3C5-47AC3A575D6A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4AE523CE-E0C3-47B2-A826-967EA2D07D42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4AE523CE-E0C3-47B2-A826-967EA2D07D42}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4AE523CE-E0C3-47B2-A826-967EA2D07D42}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4AE523CE-E0C3-47B2-A826-967EA2D07D42}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BAC08A8C-4C08-42FB-9A6B-20698FFFED6C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BAC08A8C-4C08-42FB-9A6B-20698FFFED6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BAC08A8C-4C08-42FB-9A6B-20698FFFED6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BAC08A8C-4C08-42FB-9A6B-20698FFFED6C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {478EE8F5-54E1-431D-BEC8-72AC05F5AF8C}
+	EndGlobalSection
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Dev.DevKit.Shared.Test\Dev.DevKit.Shared.Test.projitems*{383a1bf9-e7e0-4f6a-b67e-f70f17d38bd7}*SharedItemsImports = 13
+		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{4ae523ce-e0c3-47b2-a826-967ea2d07d42}*SharedItemsImports = 4
+		Dev.DevKit.Shared.Test\Dev.DevKit.Shared.Test.projitems*{bac08a8c-4c08-42fb-9a6b-20698fffed6c}*SharedItemsImports = 4
+		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{fe3e159c-4457-4635-86d0-dcf01670fe0d}*SharedItemsImports = 13
+	EndGlobalSection
+EndGlobal

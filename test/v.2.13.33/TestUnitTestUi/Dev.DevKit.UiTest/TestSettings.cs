@@ -12,7 +12,7 @@ namespace Dev.DevKit.UiTest
         public static BrowserOptions Options = new BrowserOptions
         {
             BrowserType = (BrowserType)Enum.Parse(typeof(BrowserType), Type),
-            PrivateMode = true,
+            PrivateMode = false,
             FireEvents = false,
             Headless = false,
             UserAgent = false,
@@ -20,7 +20,8 @@ namespace Dev.DevKit.UiTest
             RemoteBrowserType = (BrowserType)Enum.Parse(typeof(BrowserType), RemoteType),
             RemoteHubServer = new Uri(RemoteHubServerURL),
             UCITestMode = true,
-            StartMaximized = true
+            StartMaximized = true,
+            CookieСontrolsMode = 0
         };
 
         public static string GetRandomString(int minLen, int maxLen)

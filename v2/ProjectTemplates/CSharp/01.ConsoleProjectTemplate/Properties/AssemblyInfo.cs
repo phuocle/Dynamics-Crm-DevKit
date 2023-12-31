@@ -10,10 +10,10 @@ using System.Runtime.InteropServices;
 #endif
 [assembly: AssemblyCompany("PhuocLe")]
 [assembly: AssemblyProduct("DynamicsCrm.DevKit")]
-[assembly: AssemblyCopyright("Copyright © PhuocLe 2016 - 2020")]
+[assembly: AssemblyCopyright("Copyright © PhuocLe 2016 - 2022")]
 [assembly: AssemblyTrademark("PhuocLe")]
 [assembly: AssemblyCulture("en")]
 [assembly: ComVisible(false)]
 [assembly: Guid("2c597b0b-f648-486d-bc45-593f584b8bcc")]
-[assembly: AssemblyVersion("2.13.33.0")]
-[assembly: AssemblyFileVersion("2.13.33.0")]
+[assembly: AssemblyVersion("3.11.11.0")]
+[assembly: AssemblyFileVersion("3.11.11.0")]

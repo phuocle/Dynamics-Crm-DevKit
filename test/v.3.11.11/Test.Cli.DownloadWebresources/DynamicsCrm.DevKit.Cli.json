@@ -1,0 +1,8 @@
+﻿{
+  "downloadwebresources": [
+    {
+      "profile": "DEBUG",
+      "solution": "TestDownloadWebResources"
+    }
+  ]
+}

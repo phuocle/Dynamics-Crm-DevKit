@@ -1,0 +1,12 @@
+﻿{
+  "generators": [
+    {
+      "profile": "LATEBOUND",
+      "rootnamespace": "DynamicsCrm.DevKit.Shared.Entities",
+      "rootfolder": "",
+      "type": "CSharp",
+      "entities": "sdkmessageprocessingstep",
+      "debug": "?"
+    }
+  ]
+}

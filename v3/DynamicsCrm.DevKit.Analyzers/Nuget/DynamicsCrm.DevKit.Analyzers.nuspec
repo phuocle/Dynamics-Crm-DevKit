@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>DynamicsCrm.DevKit.Analyzers</id>
+    <version>3.33.33</version>
+    <title>DynamicsCrm.DevKit.Analyzers</title>
+    <authors>PhuocLe</authors>
+    <license type="file">license\LICENSE.txt</license>
+    <projectUrl>https://github.com/phuocle/Dynamics-Crm-DevKit</projectUrl>
+    <icon>images\icon.png</icon>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>A collection of Dynamics 365 Roslyn Analyzers</description>
+    <language>en-US</language>
+    <tags>Dynamics; Dynamics365; CRM; CLI; DevKit; Analyzers</tags>
+  </metadata>
+  <files>
+    <file src="..\Release\DynamicsCrm.DevKit.Analyzers.dll" target="analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />
+    <file src="..\tools\*.ps1" target="tools\" />
+    <file src="..\license\LICENSE.txt" target="license\LICENSE.txt" />
+    <file src="..\images\icon.png" target="images\icon.png" />
+  </files>
+</package>

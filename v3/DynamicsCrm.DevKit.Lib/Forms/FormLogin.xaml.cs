@@ -15,11 +15,12 @@ namespace DynamicsCrm.DevKit.Lib.Forms
 
         public CrmConnectionManager CrmConnectionMgr { get { return mgr; } }
         public event EventHandler ConnectionToCrmCompleted;
+        public bool IsCli { get; set; }
 
-        public FormLogin()
+        public FormLogin(bool isCli)
         {
             InitializeComponent();
-
+            IsCli = isCli;
             textBlockHeader.Text = Const.WindowTitle;
         }
 
@@ -54,11 +55,14 @@ namespace DynamicsCrm.DevKit.Lib.Forms
 
         private void Mgr_ServerConnectionStatusUpdate(object sender, ServerConnectStatusEventArgs e)
         {
-            ThreadHelper.JoinableTaskFactory.Run(async delegate
-            {
-                await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-                this.Title = string.IsNullOrWhiteSpace(e.StatusMessage) ? e.ErrorMessage : e.StatusMessage;
-            });
+#pragma warning disable VSTHRD001 // Avoid legacy thread switching APIs
+            Dispatcher.Invoke(DispatcherPriority.Normal,
+                new System.Action(() =>
+                {
+                    this.Title = string.IsNullOrWhiteSpace(e.StatusMessage) ? e.ErrorMessage : e.StatusMessage;
+                }
+            ));
+#pragma warning restore VSTHRD001 // Avoid legacy thread switching APIs
         }
 
         private void Mgr_ConnectionCheckComplete(object sender, ServerConnectStatusEventArgs e)
@@ -73,15 +77,16 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     MessageBox.Show("Unable to Login to CRM using cached credentials", "Login Failure");
                 resetUiFlag = true;
                 CrmLoginCtrl.GoBackToLogin();
-
-                ThreadHelper.JoinableTaskFactory.Run(async delegate
-                {
-                    await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-                    this.Title = "Failed to Login with cached credentials.";
-                    MessageBox.Show(this.Title, "Notification from ConnectionManager", MessageBoxButton.OK, MessageBoxImage.Error);
-                    CrmLoginCtrl.IsEnabled = true;
-                });
-
+#pragma warning disable VSTHRD001 // Avoid legacy thread switching APIs
+                Dispatcher.Invoke(DispatcherPriority.Normal,
+                    new System.Action(() =>
+                    {
+                        this.Title = "Failed to Login with cached credentials.";
+                        MessageBox.Show(this.Title, "Notification from ConnectionManager", MessageBoxButton.OK, MessageBoxImage.Error);
+                        CrmLoginCtrl.IsEnabled = true;
+                    }
+                ));
+#pragma warning restore VSTHRD001 // Avoid legacy thread switching APIs
                 resetUiFlag = false;
             }
             else
@@ -94,12 +99,15 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         private void CrmLoginCtrl_ConnectionCheckBegining(object sender, EventArgs e)
         {
             bIsConnectedComplete = false;
-            ThreadHelper.JoinableTaskFactory.Run(async delegate
-            {
-                await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-                Title = "Starting Login Process. ";
-                CrmLoginCtrl.IsEnabled = true;
-            });
+#pragma warning disable VSTHRD001 // Avoid legacy thread switching APIs
+            Dispatcher.Invoke(DispatcherPriority.Normal,
+                new System.Action(() =>
+                {
+                    this.Title = "Starting Login Process. ";
+                    CrmLoginCtrl.IsEnabled = true;
+                }
+            ));
+#pragma warning restore VSTHRD001 // Avoid legacy thread switching APIs
         }
 
         private void CrmLoginCtrl_ConnectionStatusEvent(object sender, ConnectStatusEventArgs e)
@@ -123,13 +131,17 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             resetUiFlag = true;
             bIsConnectedComplete = true;
             CrmLoginCtrl.GoBackToLogin();
-            ThreadHelper.JoinableTaskFactory.Run(async delegate
-            {
-                await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-                this.Title = "Notification from Parent";
-                CrmLoginCtrl.IsEnabled = true;
-            });
-            ConnectionToCrmCompleted?.Invoke(this, null);
+#pragma warning disable VSTHRD001 // Avoid legacy thread switching APIs
+            Dispatcher.Invoke(DispatcherPriority.Normal,
+               new System.Action(() =>
+               {
+                   this.Title = "Notification from Parent";
+                   CrmLoginCtrl.IsEnabled = true;
+               }
+            ));
+#pragma warning restore VSTHRD001 // Avoid legacy thread switching APIs
+            if (ConnectionToCrmCompleted != null)
+                ConnectionToCrmCompleted(this, null);
             resetUiFlag = false;
         }
     }

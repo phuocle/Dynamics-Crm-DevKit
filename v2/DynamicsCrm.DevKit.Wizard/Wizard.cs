@@ -17,8 +17,8 @@ namespace DynamicsCrm.DevKit.Wizard
             replacementsDictionary.Add("$NameSpace$", Utility.SafeNamespace(form.WizardNameSpace));
             replacementsDictionary.Add("$SharedNameSpace$", Utility.GetSharedNameSpace(form.DTE));
             var nameSpace = Utility.SafeNamespace(form.WizardNameSpace);
-            if (nameSpace.Contains($".{ProjectType.Plugin.ToString()}."))
-                replacementsDictionary.Add("$NameSpacePlugin$", nameSpace.Replace($".{ItemType.Plugin.ToString()}.", $".{ItemType.Plugin.ToString()}"));
+            if (nameSpace.Contains($".{ProjectType.Plugin}."))
+                replacementsDictionary.Add("$NameSpacePlugin$", nameSpace.Replace($".{ItemType.Plugin}.", $".{ItemType.Plugin}"));
             else
                 replacementsDictionary.Add("$NameSpacePlugin$", nameSpace);
             replacementsDictionary.Add("$DevKitVersion$", Const.Version);
@@ -117,10 +117,13 @@ namespace DynamicsCrm.DevKit.Wizard
         public static void ProcessItemReplacementsDictionary(Dictionary<string, string> replacementsDictionary, FormItem form)
         {
             replacementsDictionary.Add("$class$", form.Class);
+            replacementsDictionary.Add("$classLogical$", form.Class.ToLower());
             replacementsDictionary.Add("$NameSpace$", replacementsDictionary["$rootnamespace$"]);
             var nameSpace = replacementsDictionary["$rootnamespace$"];
-            if (nameSpace.Contains($".{ProjectType.Plugin.ToString()}."))
-                replacementsDictionary.Add("$NameSpacePlugin$", nameSpace.Replace($".{ItemType.Plugin.ToString()}.", $".{ItemType.Plugin.ToString()}"));
+            if (nameSpace.EndsWith(".Test"))
+                replacementsDictionary.Add("$NameSpaceWithoutTest$", nameSpace.Substring(0, nameSpace.Length - ".Test".Length));
+            if (nameSpace.Contains($".{ProjectType.Plugin}."))
+                replacementsDictionary.Add("$NameSpacePlugin$", nameSpace.Replace($".{ItemType.Plugin}.", $".{ItemType.Plugin}"));
             else
                 replacementsDictionary.Add("$NameSpacePlugin$", nameSpace);
             replacementsDictionary.Add("$SharedNameSpace$", Utility.GetSharedNameSpace(form.DTE));
@@ -129,6 +132,7 @@ namespace DynamicsCrm.DevKit.Wizard
             if (form.ItemType == ItemType.LateBound)
             {
                 replacementsDictionary.Add("$GeneratedLateBoundClass$", form.GeneratedLateBoundClass);
+                replacementsDictionary.Add("$key$", form.key);
             }
             else if (form.ItemType == ItemType.Test)
             {
@@ -137,14 +141,63 @@ namespace DynamicsCrm.DevKit.Wizard
                     var projects = (object[])form.DTE.ActiveSolutionProjects;
                     var project = (Project)projects[0];
                     var logicalname = project.Name.Split(".".ToCharArray())[project.Name.Split(".".ToCharArray()).Length - 2].ToLower();
-                    var execution = form.Class.EndsWith("Asynchronous") ? "Asynchronous" : (form.Class.EndsWith("Synchronous") ? "Synchronous" : "");
-                    var stage = form.Class.StartsWith("PreValidation") ? "PreValidation" : (form.Class.StartsWith("Pre") ? "PreOperation" : (form.Class.StartsWith("Post") ? "PostOperation" : ""));
-                    var stage2 = form.Class.StartsWith("PreValidation") ? "PreValidation" : (form.Class.StartsWith("Pre") ? "Pre" : (form.Class.StartsWith("Post") ? "Post" : ""));
-                    var message = form.Class.Substring(stage2.Length + logicalname.Length);
-                    if (message.Length - execution.Length > 0)
-                        message = message.Substring(0, message.Length - execution.Length);
-                    if (stage == "") stage = "PostOperation";
-                    if (execution == "") execution = "Asynchronous";
+
+                    var temp = form.Class;
+
+                    var execution = string.Empty;
+                    if (temp.Contains("Asynchronous"))
+                    {
+                        execution = "Asynchronous";
+                        temp = temp.Replace("Asynchronous", string.Empty);
+                    }
+                    else if (form.Class.Contains("Synchronous"))
+                    {
+                        execution = "Synchronous";
+                        temp = temp.Replace("Synchronous", string.Empty);
+                    }
+                    var message = string.Empty;
+                    if (temp.Contains("Create"))
+                    {
+                        message = "Create";
+                        temp = temp.Replace("Create", string.Empty);
+                    }
+                    else if (temp.Contains("Update"))
+                    {
+                        message = "Update";
+                        temp = temp.Replace("Update", string.Empty);
+                    }
+                    else if (temp.Contains("Delete"))
+                    {
+                        message = "Delete";
+                        temp = temp.Replace("Delete", string.Empty);
+                    }
+
+                    var stage = string.Empty;
+                    if (temp.StartsWith("PreValidation"))
+                    {
+                        stage = "PreValidation";
+                        temp = temp.Replace("PreValidation", string.Empty);
+                    }
+                    else if (temp.StartsWith("Post"))
+                    {
+                        stage = "PostOperation";
+                        temp = temp.Replace("Post", string.Empty);
+                    }
+                    else if (temp.StartsWith("Pre"))
+                    {
+                        stage = "PreOperation";
+                        temp = temp.Replace("Pre", string.Empty);
+                    }
+
+
+
+                    //var stage  = form.Class.StartsWith("PreValidation") ? "PreValidation" : (form.Class.StartsWith("Pre") ? "PreOperation" : (form.Class.StartsWith("Post") ? "PostOperation" : ""));
+                    //var stage2 = form.Class.StartsWith("PreValidation") ? "PreValidation" : (form.Class.StartsWith("Pre") ? "Pre" : (form.Class.StartsWith("Post") ? "Post" : ""));
+                    //var message = form.Class.Substring(stage2.Length + logicalname.Length);
+                    //if (message.Length - execution.Length > 0)
+                    //    message = message.Substring(0, message.Length - execution.Length);
+                    //if (stage == "") stage = "PostOperation";
+                    //if (execution == "") execution = "Asynchronous";
                     replacementsDictionary.Add("$logicalname$", logicalname);
                     replacementsDictionary.Add("$execution$", execution);
                     replacementsDictionary.Add("$stage_string$", stage);
@@ -167,12 +220,12 @@ namespace DynamicsCrm.DevKit.Wizard
             replacementsDictionary.Add("$PluginExecution$", form.PluginExecution);
             replacementsDictionary.Add("$PluginExecutionInt$", form.PluginExecution == "Synchronous" ? "0" : "1");
             replacementsDictionary.Add("$PluginOrder$", form.PluginOrder);
-            replacementsDictionary.Add("$PluginOrder2$", form.PluginOrder2);
+            replacementsDictionary.Add("$PluginOrder2$", form.PluginOrder == "1" ? string.Empty : form.PluginOrder);
             replacementsDictionary.Add("$NameSpace$", replacementsDictionary["$rootnamespace$"]);
             replacementsDictionary.Add("$SharedNameSpace$", Utility.GetSharedNameSpace(form.DTE));
             var nameSpace = replacementsDictionary["$rootnamespace$"];
-            if (nameSpace.Contains($".{ItemType.Plugin.ToString()}."))
-                replacementsDictionary.Add("$NameSpacePlugin$", nameSpace.Replace($".{ItemType.Plugin.ToString()}.", $".{ItemType.Plugin.ToString()}"));
+            if (nameSpace.Contains($".{ItemType.Plugin}."))
+                replacementsDictionary.Add("$NameSpacePlugin$", nameSpace.Replace($".{ItemType.Plugin}.", $".{ItemType.Plugin}"));
             else
                 replacementsDictionary.Add("$NameSpacePlugin$", nameSpace);
         }

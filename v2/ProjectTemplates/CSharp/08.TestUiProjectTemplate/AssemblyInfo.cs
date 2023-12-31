@@ -13,7 +13,6 @@ using System.Security;
 [assembly: AssemblyProduct("$ProjectName$")]
 [assembly: AssemblyCopyright("Copyright © $year$")]
 [assembly: AssemblyTrademark("")]
-[assembly: AssemblyCulture("en")]
 [assembly: SecurityRules(SecurityRuleSet.Level2)]
 [assembly: ComVisible(false)]
 [assembly: Guid("$guid1$")]

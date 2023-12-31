@@ -1,0 +1,830 @@
+﻿{
+  "_id": { "guid": "8448b78f-8f42-454e-8e2a-f8196b0419af" },
+  "_label": "Account",
+  "_name": "Account",
+  "_entityLogicalName": "account",
+  "_showLabel": true,
+  "_visible": true,
+  "_attributes": [ "name", "name", "accountnumber", "devkit_categorycode", "telephone1", "fax", "websiteurl", "parentaccountid", "tickersymbol", "createdon", "modifiedon", "address1_line1", "address1_line2", "address1_line3", "address1_city", "address1_stateorprovince", "address1_postalcode", "address1_country", "address1_composite", "address1_composite", "address1_line1", "address1_line2", "address1_line3", "address1_city", "address1_stateorprovince", "address1_postalcode", "address1_country", "primarycontactid", "primarycontactid", "industrycode", "sic", "ownershipcode", "description", "preferredcontactmethodcode", "donotemail", "followemail", "donotbulkemail", "donotphone", "donotfax", "donotpostalmail", "transactioncurrencyid", "creditlimit", "creditonhold", "paymenttermscode", "address1_shippingmethodcode", "address1_freighttermscode", "revenue", "numberofemployees", "ownerid", "statecode", "statuscode", "creditlimit", "transactioncurrencyid", "address1_addressid", "address1_addressid", "address2_addressid", "address2_addressid" ],
+  "_sections": {
+    "ACCOUNT_INFORMATION": {
+      "AvailableForPhone": true,
+      "Label": "ACCOUNT INFORMATION",
+      "Name": "ACCOUNT_INFORMATION",
+      "ShowLabel": true,
+      "Visible": true,
+      "Rows": [
+        {
+          "Visible": true,
+          "Cells": [
+            {
+              "AvailableForPhone": true,
+              "ControlName": "name",
+              "ShowLabel": true,
+              "Visible": true
+            }
+          ]
+        },
+        {
+          "Visible": true,
+          "Cells": [
+            {
+              "AvailableForPhone": true,
+              "ControlName": "name1",
+              "ShowLabel": true,
+              "Visible": true
+            }
+          ]
+        },
+        {
+          "Visible": true,
+          "Cells": [
+            {
+              "AvailableForPhone": true,
+              "ControlName": "accountnumber",
+              "ShowLabel": true,
+              "Visible": true
+            }
+          ]
+        },
+        {
+          "Visible": true,
+          "Cells": [
+            {
+              "AvailableForPhone": true,
+              "ControlName": "devkit_categorycode",
+              "ShowLabel": true,
+              "Visible": true
+            }
+          ]
+        },
+        {
+          "Visible": true,
+          "Cells": [
+            {
+              "AvailableForPhone": true,
+              "ControlName": "telephone1",
+              "ShowLabel": true,
+              "Visible": true
+            }
+          ]
+        },
+        {
+          "Visible": true,
+          "Cells": [
+            {
+              "AvailableForPhone": true,
+              "ControlName": "fax",
+              "ShowLabel": true,
+              "Visible": true
+            }
+          ]
+        },
+        {
+          "Visible": true,
+          "Cells": [
+            {
+              "AvailableForPhone": true,
+              "ControlName": "websiteurl",
+              "ShowLabel": true,
+              "Visible": true
+            }
+          ]
+        },
+        {
+          "Visible": true,
+          "Cells": [
+            {
+              "AvailableForPhone": true,
+              "ControlName": "parentaccountid",
+              "ShowLabel": true,
+              "Visible": true
+            }
+          ]
+        },
+        {
+          "Visible": true,
+          "Cells": [
+            {
+              "AvailableForPhone": true,
+              "ControlName": "tickersymbol",
+              "ShowLabel": true,
+              "Visible": true
+            }
+          ]
+        },
+        {
+          "Visible": true,
+          "Cells": [
+            {
+              "AvailableForPhone": true,
+              "ControlName": "createdon",
+              "ShowLabel": true,
+              "Visible": true
+            }
+          ]
+        },
+        {
+          "Visible": true,
+          "Cells": [
+            {
+              "AvailableForPhone": true,
+              "ControlName": "modifiedon",
+              "ShowLabel": true,
+              "Visible": true
+            }
+          ]
+        }
+      ]
+    },
+    "ADDRESS": {
+      "AvailableForPhone": true,
+      "Label": "ADDRESS",
+      "Name": "ADDRESS",
+      "ShowLabel": true,
+      "Visible": true,
+      "Rows": [
+        {
+          "Visible": true,
+          "Cells": [
+            {
+              "AvailableForPhone": true,
+              "ControlName": "address1_composite_compositionLinkControl_address1_line1",
+              "ShowLabel": true,
+              "Visible": true
+            }
+          ]
+        },
+        {
+          "Visible": true,
+          "Cells": [
+            {
+              "AvailableForPhone": true,
+              "ControlName": "address1_composite_compositionLinkControl_address1_line2",
+              "ShowLabel": true,
+              "Visible": true
+            }
+          ]
+        },
+        {
+          "Visible": true,
+          "Cells": [
+            {
+              "AvailableForPhone": true,
+              "ControlName": "address1_composite_compositionLinkControl_address1_line3",
+              "ShowLabel": true,
+              "Visible": true
+            }
+          ]
+        },
+        {
+          "Visible": true,
+          "Cells": [
+            {
+              "AvailableForPhone": true,
+              "ControlName": "address1_composite_compositionLinkControl_address1_city",
+              "ShowLabel": true,
+              "Visible": true
+            }
+          ]
+        },
+        {
+          "Visible": true,
+          "Cells": [
+            {
+              "AvailableForPhone": true,
+              "ControlName": "address1_composite_compositionLinkControl_address1_stateorprovince",
+              "ShowLabel": true,
+              "Visible": true
+            }
+          ]
+        },
+        {
+          "Visible": true,
+          "Cells": [
+            {
+              "AvailableForPhone": true,
+              "ControlName": "address1_composite_compositionLinkControl_address1_postalcode",
+              "ShowLabel": true,
+              "Visible": true
+            }
+          ]
+        },
+        {
+          "Visible": true,
+          "Cells": [
+            {
+              "AvailableForPhone": true,
+              "ControlName": "address1_composite_compositionLinkControl_address1_country",
+              "ShowLabel": true,
+              "Visible": true
+            }
+          ]
+        },
+        {
+          "Visible": true,
+          "Cells": [
+            {
+              "AvailableForPhone": true,
+              "ControlName": "address1_composite",
+              "ShowLabel": true,
+              "Visible": true
+            }
+          ]
+        }
+      ]
+    },
+    "MapSection": {
+      "AvailableForPhone": true,
+      "Name": "MapSection",
+      "ShowLabel": false,
+      "Visible": true,
+      "Rows": [
+        {
+          "Visible": true,
+          "Cells": [
+            {
+              "AvailableForPhone": true,
+              "ControlName": "mapcontrol",
+              "ShowLabel": false,
+              "Visible": true
+            }
+          ]
+        },
+        {
+          "Visible": true,
+          "Cells": []
+        },
+        {
+          "Visible": true,
+          "Cells": []
+        },
+        {
+          "Visible": true,
+          "Cells": []
+        },
+        {
+          "Visible": true,
+          "Cells": []
+        },
+        {
+          "Visible": true,
+          "Cells": []
+        },
+        {
+          "Visible": true,
+          "Cells": []
+        },
+        {
+          "Visible": true,
+          "Cells": []
+        }
+      ]
+    },
+    "SOCIAL_PANE_TAB": {
+      "AvailableForPhone": true,
+      "Label": "SOCIAL PANE",
+      "Name": "SOCIAL_PANE_TAB",
+      "ShowLabel": false,
+      "Visible": true,
+      "Rows": [
+        {
+          "Visible": true,
+          "Cells": [
+            {
+              "AvailableForPhone": true,
+              "ControlName": "notescontrol",
+              "ShowLabel": false,
+              "Visible": true
+            }
+          ]
+        },
+        {
+          "Visible": true,
+          "Cells": []
+        },
+        {
+          "Visible": true,
+          "Cells": []
+        },
+        {
+          "Visible": true,
+          "Cells": []
+        },
+        {
+          "Visible": true,
+          "Cells": []
+        },
+        {
+          "Visible": true,
+          "Cells": []
+        },
+        {
+          "Visible": true,
+          "Cells": []
+        },
+        {
+          "Visible": true,
+          "Cells": []
+        },
+        {
+          "Visible": true,
+          "Cells": []
+        },
+        {
+          "Visible": true,
+          "Cells": []
+        },
+        {
+          "Visible": true,
+          "Cells": []
+        },
+        {
+          "Visible": true,
+          "Cells": []
+        },
+        {
+          "Visible": true,
+          "Cells": []
+        },
+        {
+          "Visible": true,
+          "Cells": []
+        },
+        {
+          "Visible": true,
+          "Cells": []
+        },
+        {
+          "Visible": true,
+          "Cells": []
+        },
+        {
+          "Visible": true,
+          "Cells": []
+        },
+        {
+          "Visible": true,
+          "Cells": []
+        },
+        {
+          "Visible": true,
+          "Cells": []
+        },
+        {
+          "Visible": true,
+          "Cells": []
+        },
+        {
+          "Visible": true,
+          "Cells": []
+        },
+        {
+          "Visible": true,
+          "Cells": []
+        },
+        {
+          "Visible": true,
+          "Cells": []
+        }
+      ]
+    },
+    "Summary_section_6": {
+      "AvailableForPhone": true,
+      "Label": "Assistant",
+      "Name": "Summary_section_6",
+      "ShowLabel": false,
+      "Visible": true,
+      "Rows": [
+        {
+          "Visible": true,
+          "Cells": [
+            {
+              "AvailableForPhone": true,
+              "ControlName": "ActionCards",
+              "ShowLabel": false,
+              "Visible": true
+            }
+          ]
+        },
+        {
+          "Visible": true,
+          "Cells": []
+        },
+        {
+          "Visible": true,
+          "Cells": []
+        },
+        {
+          "Visible": true,
+          "Cells": []
+        },
+        {
+          "Visible": true,
+          "Cells": []
+        },
+        {
+          "Visible": true,
+          "Cells": []
+        }
+      ]
+    },
+    "SUMMARY_TAB_section_6": {
+      "AvailableForPhone": true,
+      "Label": "Section",
+      "Name": "SUMMARY_TAB_section_6",
+      "ShowLabel": false,
+      "Visible": true,
+      "Rows": [
+        {
+          "Visible": true,
+          "Cells": [
+            {
+              "AvailableForPhone": true,
+              "ControlName": "primarycontactid",
+              "ShowLabel": true,
+              "Visible": true
+            }
+          ]
+        },
+        {
+          "Visible": true,
+          "Cells": [
+            {
+              "AvailableForPhone": true,
+              "ControlName": "contactquickform",
+              "ShowLabel": false,
+              "Visible": true
+            }
+          ]
+        },
+        {
+          "Visible": true,
+          "Cells": [
+            {
+              "AvailableForPhone": true,
+              "ControlName": "Contacts",
+              "ShowLabel": true,
+              "Visible": true
+            }
+          ]
+        },
+        {
+          "Visible": true,
+          "Cells": []
+        },
+        {
+          "Visible": true,
+          "Cells": []
+        },
+        {
+          "Visible": true,
+          "Cells": []
+        },
+        {
+          "Visible": true,
+          "Cells": []
+        },
+        {
+          "Visible": true,
+          "Cells": []
+        },
+        {
+          "Visible": true,
+          "Cells": []
+        }
+      ]
+    },
+    "COMPANY_PROFILE": {
+      "AvailableForPhone": true,
+      "Label": "COMPANY PROFILE",
+      "Name": "COMPANY_PROFILE",
+      "ShowLabel": true,
+      "Visible": true,
+      "Rows": [
+        {
+          "Visible": true,
+          "Cells": [
+            {
+              "AvailableForPhone": true,
+              "ControlName": "industrycode",
+              "ShowLabel": true,
+              "Visible": true
+            }
+          ]
+        },
+        {
+          "Visible": true,
+          "Cells": [
+            {
+              "AvailableForPhone": true,
+              "ControlName": "sic",
+              "ShowLabel": true,
+              "Visible": true
+            }
+          ]
+        },
+        {
+          "Visible": true,
+          "Cells": [
+            {
+              "AvailableForPhone": true,
+              "ControlName": "ownershipcode",
+              "ShowLabel": true,
+              "Visible": true
+            }
+          ]
+        },
+        {
+          "Visible": true,
+          "Cells": [
+            {
+              "AvailableForPhone": true,
+              "ControlName": null,
+              "ShowLabel": false,
+              "Visible": true
+            }
+          ]
+        }
+      ]
+    },
+    "DETAILS_TAB_section_6": {
+      "AvailableForPhone": true,
+      "Label": "Description",
+      "Name": "DETAILS_TAB_section_6",
+      "ShowLabel": true,
+      "Visible": true,
+      "Rows": [
+        {
+          "Visible": true,
+          "Cells": [
+            {
+              "AvailableForPhone": true,
+              "ControlName": "description",
+              "ShowLabel": false,
+              "Visible": true
+            }
+          ]
+        },
+        {
+          "Visible": true,
+          "Cells": []
+        },
+        {
+          "Visible": true,
+          "Cells": []
+        }
+      ]
+    },
+    "CONTACT_PREFERENCES": {
+      "AvailableForPhone": true,
+      "Label": "CONTACT PREFERENCES",
+      "Name": "CONTACT_PREFERENCES",
+      "ShowLabel": true,
+      "Visible": true,
+      "Rows": [
+        {
+          "Visible": true,
+          "Cells": [
+            {
+              "AvailableForPhone": true,
+              "ControlName": "preferredcontactmethodcode",
+              "ShowLabel": true,
+              "Visible": true
+            }
+          ]
+        },
+        {
+          "Visible": true,
+          "Cells": [
+            {
+              "AvailableForPhone": true,
+              "ControlName": "donotemail",
+              "ShowLabel": true,
+              "Visible": true
+            }
+          ]
+        },
+        {
+          "Visible": true,
+          "Cells": [
+            {
+              "AvailableForPhone": true,
+              "ControlName": "followemail",
+              "ShowLabel": true,
+              "Visible": true
+            }
+          ]
+        },
+        {
+          "Visible": true,
+          "Cells": [
+            {
+              "AvailableForPhone": true,
+              "ControlName": "donotbulkemail",
+              "ShowLabel": true,
+              "Visible": true
+            }
+          ]
+        },
+        {
+          "Visible": true,
+          "Cells": [
+            {
+              "AvailableForPhone": true,
+              "ControlName": "donotphone",
+              "ShowLabel": true,
+              "Visible": true
+            }
+          ]
+        },
+        {
+          "Visible": true,
+          "Cells": [
+            {
+              "AvailableForPhone": true,
+              "ControlName": "donotfax",
+              "ShowLabel": true,
+              "Visible": true
+            }
+          ]
+        },
+        {
+          "Visible": true,
+          "Cells": [
+            {
+              "AvailableForPhone": true,
+              "ControlName": "donotpostalmail",
+              "ShowLabel": true,
+              "Visible": true
+            }
+          ]
+        }
+      ]
+    },
+    "BILLING": {
+      "AvailableForPhone": true,
+      "Label": "BILLING",
+      "Name": "BILLING",
+      "ShowLabel": true,
+      "Visible": true,
+      "Rows": [
+        {
+          "Visible": true,
+          "Cells": [
+            {
+              "AvailableForPhone": true,
+              "ControlName": "transactioncurrencyid",
+              "ShowLabel": true,
+              "Visible": true
+            }
+          ]
+        },
+        {
+          "Visible": true,
+          "Cells": [
+            {
+              "AvailableForPhone": true,
+              "ControlName": "creditlimit",
+              "ShowLabel": true,
+              "Visible": true
+            }
+          ]
+        },
+        {
+          "Visible": true,
+          "Cells": [
+            {
+              "AvailableForPhone": true,
+              "ControlName": "creditonhold",
+              "ShowLabel": true,
+              "Visible": true
+            }
+          ]
+        },
+        {
+          "Visible": true,
+          "Cells": [
+            {
+              "AvailableForPhone": true,
+              "ControlName": "paymenttermscode",
+              "ShowLabel": true,
+              "Visible": true
+            }
+          ]
+        }
+      ]
+    },
+    "SHIPPING": {
+      "AvailableForPhone": true,
+      "Label": "SHIPPING",
+      "Name": "SHIPPING",
+      "ShowLabel": true,
+      "Visible": true,
+      "Rows": [
+        {
+          "Visible": true,
+          "Cells": [
+            {
+              "AvailableForPhone": true,
+              "ControlName": "address1_shippingmethodcode",
+              "ShowLabel": true,
+              "Visible": true
+            }
+          ]
+        },
+        {
+          "Visible": true,
+          "Cells": [
+            {
+              "AvailableForPhone": true,
+              "ControlName": "address1_freighttermscode",
+              "ShowLabel": true,
+              "Visible": true
+            }
+          ]
+        }
+      ]
+    },
+    "ChildAccounts": {
+      "AvailableForPhone": true,
+      "Label": "CHILD ACCOUNTS",
+      "Name": "ChildAccounts",
+      "ShowLabel": true,
+      "Visible": true,
+      "Rows": [
+        {
+          "Visible": true,
+          "Cells": [
+            {
+              "AvailableForPhone": true,
+              "ControlName": "ChildAccounts",
+              "ShowLabel": false,
+              "Visible": true
+            }
+          ]
+        },
+        {
+          "Visible": true,
+          "Cells": []
+        },
+        {
+          "Visible": true,
+          "Cells": []
+        },
+        {
+          "Visible": true,
+          "Cells": []
+        },
+        {
+          "Visible": true,
+          "Cells": []
+        },
+        {
+          "Visible": true,
+          "Cells": []
+        }
+      ]
+    },
+    "tab_3_section_1": {
+      "AvailableForPhone": true,
+      "Label": "Section",
+      "Name": "tab_3_section_1",
+      "ShowLabel": false,
+      "Visible": true,
+      "Rows": [
+        {
+          "Visible": true,
+          "Cells": [
+            {
+              "AvailableForPhone": true,
+              "ControlName": "IFRAME_PHUOCLE",
+              "ShowLabel": false,
+              "Visible": true
+            }
+          ]
+        },
+        {
+          "Visible": true,
+          "Cells": []
+        },
+        {
+          "Visible": true,
+          "Cells": []
+        },
+        {
+          "Visible": true,
+          "Cells": []
+        },
+        {
+          "Visible": true,
+          "Cells": []
+        },
+        {
+          "Visible": true,
+          "Cells": []
+        }
+      ]
+    }
+  }
+}

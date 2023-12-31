@@ -690,7 +690,7 @@ var devKit = (function () {
         });
         return process;
     }
-    function loadField(field, attribute, control) {
+    function loadField(formContext, field, attribute, control) {
         field.ContentWindow = function (successCallback, errorCallback) {
             if (has(control, 'getContentWindow')) {
                 control.getContentWindow().then(successCallback, errorCallback);
@@ -1081,6 +1081,7 @@ var devKit = (function () {
                 return NULL;
             },
             set: function (value) {
+                if (formContext.ui.getFormType() === 3 || formContext.ui.getFormType() === 4) return;
                 if (has(attribute, 'setValue')) {
                     attribute.setValue(value);
                 }
@@ -1120,6 +1121,7 @@ var devKit = (function () {
                 return EMPTY_BOOL;
             },
             set: function (value) {
+                if (formContext.ui.getFormType() === 3 || formContext.ui.getFormType() === 4) return;
                 if (has(control, 'setDisabled')) {
                     control.setDisabled(value);
                 }
@@ -1212,21 +1214,34 @@ var devKit = (function () {
                 }
                 return (type + field).toLowerCase();
             })();
-            var control = formContext.getControl(logicalName);
+            var control = null;
+            if (formContext.getControl) {
+                control = formContext.getControl(logicalName);
+            }
             if (isNullOrUndefined(control)) {
+                if (formContext.getControl) {
                 control = formContext.getControl(field);
             }
+            }
             var attribute = (function () {
+                var attr = null;
                 if (formContext) {
                     if (formContext.getAttribute) {
-                        var attr = formContext.getAttribute(logicalName);
+                        attr = formContext.getAttribute(logicalName);
                         if (attr) {
                             return attr;
                         }
                     }
                     if (control) {
                         if (control.getAttribute) {
-                            var attr = control.getAttribute();
+                            try {
+                                attr = control.getAttribute();
+                            }
+                            catch {
+                                try {
+                                    attr = formContext.getAttribute(control.controlDescriptor.Id);
+                                } catch { }
+                            }
                             if (attr) {
                                 return attr;
                             }
@@ -1234,7 +1249,7 @@ var devKit = (function () {
                     }
                 }
             })();
-            loadField(body[field], attribute, control);
+            loadField(formContext, body[field], attribute, control);
         }
         if (type === "footer_") {
             Object.defineProperty(body, 'Visible', {
@@ -1517,7 +1532,7 @@ var devKit = (function () {
                             var control = quickViewControl.getControl(field.toLowerCase());
                             var attribute = control.getAttribute();
                             var objField = {};
-                            loadField(objField, attribute, control);
+                            loadField(formContext, objField, attribute, control);
                             obj[field] = objField;
                         }
                     }
@@ -1943,6 +1958,19 @@ var devKit = (function () {
                     return EMPTY_NUMBER;
                 }
             });
+            Object.defineProperty(grids[grid], 'Visible', {
+                get: function () {
+                    if (has(gridControl, 'getVisible')) {
+                        return gridControl.getVisible();
+                    }
+                    return EMPTY_BOOL;
+                },
+                set: function (value) {
+                    if (has(gridControl, 'setVisible')) {
+                        gridControl.setVisible(value);
+                    }
+                }
+            });
         }
         for (var grid in grids) {
             loadGrid(formContext, grids, grid);
@@ -2091,6 +2119,14 @@ var devKit = (function () {
                     get: function () {
                         if (has(client, 'isOffline')) {
                             return client.isOffline();
+                        }
+                        return EMPTY_BOOL;
+                    }
+                });
+                Object.defineProperty(obj, 'IsNetworkAvailable', {
+                    get: function () {
+                        if (has(client, 'isNetworkAvailable')) {
+                            return client.isNetworkAvailable();
                         }
                         return EMPTY_BOOL;
                     }
@@ -2498,6 +2534,12 @@ var devKit = (function () {
     }
     function loadExecutionContext(executionContext) {
         var obj = {};
+        obj.IsInitialLoad = function () {
+            if (has(executionContext, 'getEventArgs')) {
+                return executionContext.getEventArgs().getDataLoadState() === 1;
+            }
+            return EMPTY_BOOL;
+        }
         obj.GetSharedVariable = function (key) {
             if (has(executionContext, 'getSharedVariable')) {
                 return executionContext.getSharedVariable(key);
@@ -2619,19 +2661,37 @@ var devKit = (function () {
     function loadOthers(formContext, form, defaultWebResourceName) {
         form.SidePanes = loadSidePanes();
     }
+    function loadFormDialog(executionContext, fields) { }
     return {
         LoadForm: loadForm,
         LoadProcess: loadProcess,
         LoadFields: loadFields,
+        LoadField: loadField,
         LoadTabs: loadTabs,
         LoadNavigations: loadNavigations,
         LoadQuickForms: loadQuickForms,
         LoadGrids: loadGrids,
         LoadUtility: loadUtility,
         LoadExecutionContext: loadExecutionContext,
-        LoadOthers: loadOthers
+        LoadOthers: loadOthers,
+        LoadFormDialog: loadFormDialog
     }
 })();
+(function (devKit) {
+    devKit.LoadFormDialog = function (executionContext, fields) {
+        var formContext = executionContext.getFormContext();
+        var form = {};
+        for (var i = 0; i < fields.length; i++) {
+            var field = fields[i];
+            var attribute = formContext.data.attributes.get(field);
+            var control = formContext.getControl(field);
+            form[field] = {};
+            devKit.LoadField(form[field], attribute, control);
+        }
+        form.Close = function () { formContext.ui.close(); };
+        return form;
+    }
+})(devKit || (devKit = {}));
 /** @namespace OptionSet */
 var OptionSet;
 (function (OptionSet) {

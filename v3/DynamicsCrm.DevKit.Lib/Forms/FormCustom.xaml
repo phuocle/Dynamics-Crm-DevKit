@@ -1,0 +1,30 @@
+﻿<forms:BaseDialogWindow  xmlns:forms="clr-namespace:DynamicsCrm.DevKit.Lib.Forms"
+        x:Class="DynamicsCrm.DevKit.Lib.Forms.FormCustom"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:wpfcontrols="clr-namespace:DynamicsCrm.DevKit.Lib.WpfControls"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen" ResizeMode="CanResize" Width="536" Height="200" SizeChanged="BaseDialogWindow_SizeChanged" HasMaximizeButton="True" HasMinimizeButton="True"
+    >
+    <forms:BaseDialogWindow.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="StyleResourceDictionary.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </forms:BaseDialogWindow.Resources>
+    <StackPanel x:Name="stackPanel">
+        <TextBlock Padding="10,5,10,5" Background="Green">
+            <wpfcontrols:ExternalBrowserHyperlink x:Name="HELP" NavigateUri="https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Connection" Foreground="White" >WIKI: Connection</wpfcontrols:ExternalBrowserHyperlink>
+        </TextBlock>
+        <TextBox Padding="5,5,5,5" Margin="5,5,5,0" Height="113"  x:Name="Textbox" TextWrapping="Wrap" AcceptsReturn="true" AcceptsTab="True" FontFamily="Courier New" FontSize="14" />
+        <WrapPanel DockPanel.Dock="Bottom" Margin="0,5,5,5" HorizontalAlignment="Right">
+            <ComboBox x:Name="ComboBoxSelect" Margin="5,0,5,0" Width="100" Height="30" VerticalContentAlignment="Center" IsEditable="False" SelectionChanged="ComboBoxSelect_SelectionChanged" Visibility="Hidden" />
+            <Button x:Name="buttonReset" Content="Reset" Margin="5,0,5,0" Height="30" Width="100" Click="ButtonReset_Click"/>
+            <Button x:Name="buttonSave" Content="Save" Margin="5,0,5,0" Width="100" Height="30" Click="ButtonSave_Click"/>
+            <Button x:Name="buttonCancel" Content="Close" Margin="5,0,5,0" Width="100" Height="30" IsCancel="True" Click="ButtonClose_Click"/>
+        </WrapPanel>
+    </StackPanel>
+</forms:BaseDialogWindow>

@@ -1,0 +1,12 @@
+<customapirequestparameter uniquename="devkit_InDateTime">
+  <description default="This is the InDateTime">
+    <label description="This is the InDateTime" languagecode="1033" />
+  </description>
+  <displayname default="InDateTime">
+    <label description="InDateTime" languagecode="1033" />
+  </displayname>
+  <iscustomizable>1</iscustomizable>
+  <isoptional>1</isoptional>
+  <name>InDateTime</name>
+  <type>1</type>
+</customapirequestparameter>

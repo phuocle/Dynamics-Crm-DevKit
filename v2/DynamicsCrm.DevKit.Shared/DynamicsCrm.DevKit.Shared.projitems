@@ -28,11 +28,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)Enum.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helper\FormHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helper\JsonHelper.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)JsForm.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)JsForm2.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)JsTypeScriptDeclaration.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)JsForm3.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)JsTypeScriptDeclaration2.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)JsWebApi.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\OldCommentTypeScriptDeclaration.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)JsWebApi2.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Cli\Dependency.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Cli\DownloadFile.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Cli\Json.cs" />
@@ -57,10 +56,12 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\CrmPluginRegistrationAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\DataSourceCrm.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\DevKitCrmConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\IdName.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\NameValue.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\NameValueGuid.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\NugetPackage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\PluginInputOutputParameter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\ProcessForm.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\SystemForm.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\VisualStudioConfig.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\XrmEntity.cs" />

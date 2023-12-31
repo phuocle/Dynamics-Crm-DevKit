@@ -68,16 +68,17 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
             try
             {
                 DTE = (DTE)automationObject;
-                var form = new FormItemForm(ItemType.JsForm2, DTE, string.Empty, string.Empty);
+                var form = new FormItem(ItemType.JsForm2, DTE, string.Empty, string.Empty);
                 if (form.ShowDialog() == DialogResult.Cancel) throw new WizardCancelledException();
                 //Creating item ...
-                Class = form.Class;
+                Wizard.ProcessItemReplacementsDictionary(replacementsDictionary, form);
+                Class = form.ComboBoxEntityName;
                 SelectedProjectItem = GetProjectItem();
                 if (SelectedProjectItem == null) throw new WizardCancelledException();
                 CurrentFolder = Path.GetDirectoryName(SelectedProjectItem.FileNames[0]);
                 GeneratedJsCode = form.GeneratedJsForm;
                 GeneratedJsFormCode = form.GeneratedJsFormCode;
-                GeneratedJsFormCodeTypeScriptDeclaration2 = form.GeneratedJsFormCodeTypeScriptDeclaration2;
+                GeneratedJsFormCodeTypeScriptDeclaration2 = form.GeneratedJsTypeScriptDeclaration;
             }
             catch
             {
