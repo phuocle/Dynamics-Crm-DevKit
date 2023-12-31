@@ -143,21 +143,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Nuget\DynamicsCrm.DevKit.Analyzers.nuspec" />
-    <None Include="Nuget\pack.bat" />
     <None Include="packages.config" />
-    <None Include="tools\install.ps1" />
-    <None Include="tools\uninstall.ps1" />
   </ItemGroup>
   <ItemGroup>
     <AdditionalFiles Include="AnalyzerReleases.Shipped.md" />
     <AdditionalFiles Include="AnalyzerReleases.Unshipped.md" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="..\version.txt">
-      <Link>Nuget\version.txt</Link>
-    </Content>
-    <Content Include="license\LICENSE.txt" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.3.3.4\analyzers\dotnet\cs\Microsoft.CodeAnalysis.Analyzers.dll" />

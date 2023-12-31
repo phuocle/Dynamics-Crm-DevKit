@@ -30,12 +30,15 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="docs\**" />
 	  <Compile Remove="images\**" />
 	  <Compile Remove="license\**" />
 	  <Compile Remove="Nuget\**" />
+	  <EmbeddedResource Remove="docs\**" />
 	  <EmbeddedResource Remove="images\**" />
 	  <EmbeddedResource Remove="license\**" />
 	  <EmbeddedResource Remove="Nuget\**" />
+	  <None Remove="docs\**" />
 	  <None Remove="images\**" />
 	  <None Remove="license\**" />
 	  <None Remove="Nuget\**" />
