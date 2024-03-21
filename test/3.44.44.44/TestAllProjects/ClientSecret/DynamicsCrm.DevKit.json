@@ -1,0 +1,12 @@
+﻿{
+    "DefaultCrmConnection": "phuocle-devkit",
+    "CrmConnections": [
+        {
+            "Name": "phuocle-devkit",
+            "Url": "https://phuocle-devkit.crm5.dynamics.com/",
+            "UserName": "2e89cd77-600f-4a55-9d96-47b6ad00bbb7",
+            "Password": "SmR8Q~T-kLyllY6eGwvYPndVgxRiogG3Z1GC.cpd",
+            "Type": "ClientSecret"
+        }
+    ]
+}
