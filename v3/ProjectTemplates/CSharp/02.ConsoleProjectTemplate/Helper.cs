@@ -59,6 +59,7 @@ namespace $NameSpace$.Debug
             FixDateTime(entities);
             FixOptionSetValueCollection(entities);
             FixGuid(entities);
+            FixLookup(entities);
             FixEntityReferenceCollection(pluginExecutionContext.InputParameters);
             FixEntityReferenceCollection(pluginExecutionContext.SharedVariables);
             FixEntityReferenceCollection(pluginExecutionContext.OutputParameters);
@@ -139,6 +140,25 @@ namespace $NameSpace$.Debug
                         if (str != null && Guid.TryParse(str, out var guid))
                         {
                             entity.Attributes[key] = guid;
+                        }
+                    }
+                    catch { }
+                }
+            }
+        }
+
+        private static void FixLookup(List<Entity> entities)
+        {
+            foreach (var entity in entities)
+            {
+                foreach (var key in entity.Attributes.Keys.ToList())
+                {
+                    try
+                    {
+                        var er = entity.GetAttributeValue<EntityReference>(key);
+                        if (er != null && er.Name == null)
+                        {
+                            er.Name = "(No Name)";
                         }
                     }
                     catch { }
