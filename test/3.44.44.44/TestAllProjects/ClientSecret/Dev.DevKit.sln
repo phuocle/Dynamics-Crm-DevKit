@@ -13,6 +13,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		DynamicsCrm.DevKit.json = DynamicsCrm.DevKit.json
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.Plugins", "Dev.DevKit.Plugins\Dev.DevKit.Plugins.csproj", "{A5EA1DEA-18AD-40C6-9808-C94103B0E6B1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,6 +25,10 @@ Global
 		{FD21979C-EDA3-493A-99FB-ECB11483CB0D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FD21979C-EDA3-493A-99FB-ECB11483CB0D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FD21979C-EDA3-493A-99FB-ECB11483CB0D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A5EA1DEA-18AD-40C6-9808-C94103B0E6B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5EA1DEA-18AD-40C6-9808-C94103B0E6B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5EA1DEA-18AD-40C6-9808-C94103B0E6B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5EA1DEA-18AD-40C6-9808-C94103B0E6B1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -31,6 +37,7 @@ Global
 		SolutionGuid = {478EE8F5-54E1-431D-BEC8-72AC05F5AF8C}
 	EndGlobalSection
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{a5ea1dea-18ad-40c6-9808-c94103b0e6b1}*SharedItemsImports = 4
 		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{d48ad508-b1f9-4526-afda-e3a14bd7fe65}*SharedItemsImports = 13
 		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{fd21979c-eda3-493a-99fb-ecb11483cb0d}*SharedItemsImports = 4
 	EndGlobalSection
