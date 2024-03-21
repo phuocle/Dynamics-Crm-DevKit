@@ -4,11 +4,11 @@
 		<Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
 		<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
 		<SchemaVersion>2.0</SchemaVersion>
-		<ProjectGuid>$guid1$</ProjectGuid>
+		<ProjectGuid>aea32e0c-f6a7-49b6-ab70-a0a35e666798</ProjectGuid>
 		<OutputType>Library</OutputType>
 		<AppDesignerFolder>Properties</AppDesignerFolder>
-		<RootNamespace>$NameSpacePlugin$</RootNamespace>
-		<AssemblyName>$projectname$</AssemblyName>
+		<RootNamespace>Dev.DevKit.PluginAccount</RootNamespace>
+		<AssemblyName>Dev.DevKit.Plugin.Account</AssemblyName>
 		<TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
 		<FileAlignment>512</FileAlignment>
 	</PropertyGroup>
@@ -35,10 +35,10 @@
 	</PropertyGroup>
 	<ItemGroup>
     <Reference Include="Microsoft.Crm.Sdk.Proxy">
-      <HintPath>..\packages\Microsoft.CrmSdk.CoreAssemblies.$Microsoft.CrmSdk.CoreAssemblies.version$\lib\net$Microsoft.CrmSdk.CoreAssemblies.targetFramework$\Microsoft.Crm.Sdk.Proxy.dll</HintPath>
+      <HintPath>..\packages\Microsoft.CrmSdk.CoreAssemblies.9.0.2.52\lib\net462\Microsoft.Crm.Sdk.Proxy.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Xrm.Sdk">
-      <HintPath>..\packages\Microsoft.CrmSdk.CoreAssemblies.$Microsoft.CrmSdk.CoreAssemblies.version$\lib\net$Microsoft.CrmSdk.CoreAssemblies.targetFramework$\Microsoft.Xrm.Sdk.dll</HintPath>
+      <HintPath>..\packages\Microsoft.CrmSdk.CoreAssemblies.9.0.2.52\lib\net462\Microsoft.Xrm.Sdk.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
@@ -52,18 +52,18 @@
     <None Include="packages.config" />
     <None Include="deploy.debug.bat" />
     <None Include="deploy.debug.only.bat" />
-    <None Include="$projectname$.snk" />
+    <None Include="Dev.DevKit.Plugin.Account.snk" />
 		<Compile Include="Properties\AssemblyInfo.cs" />
 	</ItemGroup>
-  <Import Project="..\$SharedProject$\$SharedProject$.projitems" Label="Shared" Condition="Exists('..\$SharedProject$\$SharedProject$.projitems')" />
+  <Import Project="..\Dev.DevKit.Shared\Dev.DevKit.Shared.projitems" Label="Shared" Condition="Exists('..\Dev.DevKit.Shared\Dev.DevKit.Shared.projitems')" />
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>$projectname$.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>Dev.DevKit.Plugin.Account.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 	<Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <Analyzer Include="..\packages\DynamicsCrm.DevKit.Analyzers.$DynamicsCrm.DevKit.Analyzers.version$\analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />
+    <Analyzer Include="..\packages\DynamicsCrm.DevKit.Analyzers.3.33.33.33\analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />
   </ItemGroup>
-</Project>
+ </Project>
