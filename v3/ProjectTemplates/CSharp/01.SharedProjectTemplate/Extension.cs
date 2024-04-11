@@ -132,7 +132,7 @@ namespace Microsoft.Xrm.Sdk
 
         public static void Delete(this IOrganizationService service, EntityReference entityReference)
         {
-            service.Delete(entityReference.LogicalName, entityReference.Id);
+            service.Delete(entityReference?.LogicalName, entityReference.Id);
         }
 
         public static T Retrieve<T>(this IOrganizationService service, string entityName, Guid id, ColumnSet columns)

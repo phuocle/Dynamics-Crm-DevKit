@@ -41,7 +41,12 @@ namespace $NameSpace$.Debug
             factory.CreateOrganizationService(Arg.Any<Guid?>()).Returns((param) =>
             {
                 var userId = param.ArgAt<Guid?>(0);
-                if (userId != null) service.CallerId = userId.GetValueOrDefault();
+                if (userId != null)
+                {
+                    var clone = service.Clone();
+                    clone.CallerId = userId.GetValueOrDefault();
+                    return clone;
+                }
                 return service;
             });
             serviceProvider.Get<IOrganizationServiceFactory>().Returns(factory);

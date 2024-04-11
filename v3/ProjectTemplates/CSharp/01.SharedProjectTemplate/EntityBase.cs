@@ -51,7 +51,7 @@ namespace $NameSpace$
             {
                 return new EntityReference
                 {
-                    LogicalName = CloneAttribute(entityReferenceValue.LogicalName) as string,
+                    LogicalName = CloneAttribute(entityReferenceValue?.LogicalName) as string,
                     Id = entityReferenceValue.Id,
                     Name = CloneAttribute(entityReferenceValue.Name) as string
                 };
