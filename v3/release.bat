@@ -7,7 +7,7 @@ powershell -Command "(gc DynamicsCrm.DevKit\source.extension.vsixmanifest) -repl
 powershell -Command "(gc ProjectTemplates\CSharp\16.PackageProjectTemplate\ReadMe.md) -replace 'xxxx.yy.zz HH.mm.ss', (gc build.txt) | Out-File -encoding UTF8 ProjectTemplates\CSharp\16.PackageProjectTemplate\ReadMe.md"
 
 echo ************************************************************
-echo Building solution: DEPLOY RELEASE MODE - version: %VERSION%
+echo Building solution: RELEASE MODE - version: %VERSION%
 echo ************************************************************
 
 set MsBuild=""
