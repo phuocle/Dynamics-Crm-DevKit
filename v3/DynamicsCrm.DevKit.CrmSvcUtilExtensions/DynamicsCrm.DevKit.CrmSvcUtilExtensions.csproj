@@ -96,7 +96,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CodeWriterFilter .cs" />
+    <Compile Include="CodeWriterFilter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <None Include="..\.editorconfig">
       <Link>.editorconfig</Link>
