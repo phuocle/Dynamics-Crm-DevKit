@@ -304,7 +304,8 @@ namespace DynamicsCrm.DevKit.Shared
             if (attribute is ImageAttributeMetadata) return false;
             if (attribute.AttributeOf != null) return false;
             if (attribute.AttributeTypeName == AttributeTypeDisplayName.ImageType) return false;
-            //if (XrmHelper.IsOptionSet(attribute) && attribute.OptionSetValues().Count == 0) return false;
+            if (attribute.AttributeType == AttributeTypeCode.EntityName) return true;
+            if (XrmHelper.IsOptionSet(attribute) && attribute.OptionSetValues().Count == 0) return false;
             if (attribute.AttributeType == AttributeTypeCode.Memo ||
                 attribute.AttributeType == AttributeTypeCode.Virtual ||
                 attribute.AttributeType == AttributeTypeCode.EntityName ||
