@@ -304,7 +304,7 @@ namespace DynamicsCrm.DevKit.Shared
             if (attribute is ImageAttributeMetadata) return false;
             if (attribute.AttributeOf != null) return false;
             if (attribute.AttributeTypeName == AttributeTypeDisplayName.ImageType) return false;
-            if (XrmHelper.IsOptionSet(attribute) && attribute.OptionSetValues().Count == 0) return false;
+            //if (XrmHelper.IsOptionSet(attribute) && attribute.OptionSetValues().Count == 0) return false;
             if (attribute.AttributeType == AttributeTypeCode.Memo ||
                 attribute.AttributeType == AttributeTypeCode.Virtual ||
                 attribute.AttributeType == AttributeTypeCode.EntityName ||
@@ -332,6 +332,7 @@ namespace DynamicsCrm.DevKit.Shared
         private static string GeneratorClassFields()
         {
             var code = string.Empty;
+            var t = string.Empty;
             foreach (var attribute in EntityMetadata.Attributes.OrderBy(x => x.SchemaName))
             {
                 if (!IsFieldOk(attribute)) continue;
