@@ -77,7 +77,7 @@ var DevKit;
 			ModifiedOn_UtcDateAndTime: { a: 'modifiedon', r: true },
 			ModifiedOnBehalfBy: { b: 'modifiedonbehalfby', a: '_modifiedonbehalfby_value', c: 'systemusers', d: 'systemuser', r: true },
 			msdyn_Dataflow: { b: 'msdyn_Dataflow', a: '_msdyn_dataflow_value', c: 'msdyn_dataflows', d: 'msdyn_dataflow', r: true },
-			msdyn_dataflow_datalakefolder1: { a: 'msdyn_dataflow_datalakefolder' },
+			msdyn_dataflow_datalakefolder2: { a: 'msdyn_dataflow_datalakefolder' },
 			msdyn_dataflow_datalakefolderId: { a: 'msdyn_dataflow_datalakefolderid' },
 			msdyn_DatalakeFolder: { b: 'msdyn_DatalakeFolder', a: '_msdyn_datalakefolder_value', c: 'datalakefolders', d: 'datalakefolder' },
 			originaldataflowid: { a: 'originaldataflowid' },

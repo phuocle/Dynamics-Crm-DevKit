@@ -76,7 +76,7 @@ var DevKit;
 			Description: { a: 'description' },
 			DVFileSearch: { b: 'dvfilesearch', a: '_dvfilesearch_value', c: 'dvfilesearchs', d: 'dvfilesearch' },
 			DVTableSearch: { b: 'dvtablesearch', a: '_dvtablesearch_value', c: 'dvtablesearchs', d: 'dvtablesearch' },
-			Entity1: { b: 'entity', a: '_entity_value', c: 'entities', d: 'entity' },
+			Entity2: { b: 'entity', a: '_entity_value', c: 'entities', d: 'entity' },
 			ImportSequenceNumber: { a: 'importsequencenumber' },
 			IsConsequential: { a: 'isconsequential' },
 			IsCustomizable: { a: 'iscustomizable' },

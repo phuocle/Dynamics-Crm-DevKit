@@ -38,7 +38,7 @@ declare namespace DevKit {
 		/** Hiển thị người tạo bản ghi thay mặt cho người dùng khác. */
 		readonly CreatedOnBehalfBy: string;
 		/** Tên Thực thể. */
-		EntityName1: string;
+		EntityName2: string;
 		/** điều kiện được biểu thị bằng cú pháp OData $filter */
 		FilterExpression: string;
 		/** Danh sách thuộc tính, phân tách bằng dấu phẩy. Nếu sửa ít nhất một thuộc tính thì URL cuộc gọi lại phải được gọi. */
@@ -95,7 +95,7 @@ declare namespace DevKit {
 			/** Hiển thị người tạo bản ghi thay mặt cho người dùng khác. */
 			readonly CreatedOnBehalfBy: string;
 			/** Tên Thực thể. */
-			readonly EntityName1: string;
+			readonly EntityName2: string;
 			/** điều kiện được biểu thị bằng cú pháp OData $filter */
 			readonly FilterExpression: string;
 			/** Danh sách thuộc tính, phân tách bằng dấu phẩy. Nếu sửa ít nhất một thuộc tính thì URL cuộc gọi lại phải được gọi. */

@@ -64,7 +64,7 @@ var DevKit;
 		}
 		var _ribboncustomization = {
 			ComponentState: { a: 'componentstate', r: true },
-			Entity1: { a: 'entity' },
+			Entity2: { a: 'entity' },
 			IsManaged: { a: 'ismanaged', r: true },
 			OrganizationId: { b: 'organizationid', a: '_organizationid_value', c: 'organizations', d: 'organization', r: true },
 			OverwriteTime_UtcDateOnly: { a: 'overwritetime', r: true },

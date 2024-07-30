@@ -63,7 +63,7 @@ var DevKit;
 			}
 		}
 		var _hierarchysecurityconfiguration = {
-			EntityName1: { a: 'entityname' },
+			EntityName2: { a: 'entityname' },
 			HierarchySecurityModelingSettingId: { a: 'hierarchysecuritymodelingsettingid' },
 			VersionNumber: { a: 'versionnumber' }
 		};

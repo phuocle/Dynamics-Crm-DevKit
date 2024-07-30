@@ -63,7 +63,7 @@ var DevKit;
 			}
 		}
 		var _multientitysearchentities = {
-			EntityName1: { a: 'entityname', r: true },
+			EntityName2: { a: 'entityname', r: true },
 			EntityOrder: { a: 'entityorder', r: true },
 			MultiEntitySearchEntityId: { a: 'multientitysearchentityid', r: true },
 			MultiEntitySearchId: { b: 'multientitysearchid', a: '_multientitysearchid_value', c: 'multientitysearches', d: 'multientitysearch', r: true },

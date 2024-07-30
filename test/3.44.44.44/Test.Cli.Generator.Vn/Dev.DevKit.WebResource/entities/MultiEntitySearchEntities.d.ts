@@ -30,7 +30,7 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Tên thực thể logic của thực thể có mặt trong tìm kiếm nhiều thực thể. */
-		readonly EntityName1: string;
+		readonly EntityName2: string;
 		/** Thứ tự thực thể trong bộ sưu tập kết quả. */
 		readonly EntityOrder: number;
 		/** Cho biết thực thể được dùng cho tìm kiếm nhiều thực thể. */
@@ -40,7 +40,7 @@ declare namespace DevKit {
 		readonly VersionNumber: number;
 		readonly FormattedValue: {
 			/** Tên thực thể logic của thực thể có mặt trong tìm kiếm nhiều thực thể. */
-			readonly EntityName1: string;
+			readonly EntityName2: string;
 			/** Thứ tự thực thể trong bộ sưu tập kết quả. */
 			readonly EntityOrder: string;
 			/** Cho biết thực thể được dùng cho tìm kiếm nhiều thực thể. */

@@ -36,7 +36,7 @@ declare namespace DevKit {
 		/** XML bố cục dành cho đề mục nhóm bối cảnh */
 		ContextGroupXml: string;
 		/** Hệ thống sẽ xuất thực thể áp dụng quy tắc này, cũng là thực thể nhập quy tắc này từ đó. */
-		Entity1: string;
+		Entity2: string;
 		readonly IsManaged: boolean;
 		/** Mã định danh duy nhất của tổ chức. */
 		readonly OrganizationId: string;
@@ -62,7 +62,7 @@ declare namespace DevKit {
 			/** XML bố cục dành cho đề mục nhóm bối cảnh */
 			readonly ContextGroupXml: string;
 			/** Hệ thống sẽ xuất thực thể áp dụng quy tắc này, cũng là thực thể nhập quy tắc này từ đó. */
-			readonly Entity1: string;
+			readonly Entity2: string;
 			readonly IsManaged: string;
 			/** Mã định danh duy nhất của tổ chức. */
 			readonly OrganizationId: string;

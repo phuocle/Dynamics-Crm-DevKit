@@ -42,7 +42,7 @@ declare namespace DevKit {
 		/** CRM record count modified time for entity */
 		CrmRecordCountModifiedTime_UtcDateAndTime: Date;
 		/** Name of the entity */
-		EntityName1: string;
+		EntityName2: string;
 		/** Source of the entity */
 		EntitySource: OptionSet.synapselinkprofileentitystate.EntitySource;
 		/** Type of the entity */
@@ -117,7 +117,7 @@ declare namespace DevKit {
 			/** CRM record count modified time for entity */
 			readonly CrmRecordCountModifiedTime_UtcDateAndTime: string;
 			/** Name of the entity */
-			readonly EntityName1: string;
+			readonly EntityName2: string;
 			/** Source of the entity */
 			readonly EntitySource: string;
 			/** Type of the entity */

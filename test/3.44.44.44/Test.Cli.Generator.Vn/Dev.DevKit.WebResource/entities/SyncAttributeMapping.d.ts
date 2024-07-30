@@ -123,7 +123,7 @@ declare namespace OptionSet {
 			/** 1 */
 			ToExchange
 		}
-		enum EntityTypeCode1 {
+		enum EntityTypeCode {
 		}
 		enum SyncDirection {
 			/** 3 */

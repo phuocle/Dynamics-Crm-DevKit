@@ -154,7 +154,7 @@ declare namespace OptionSet {
 			/** 1 */
 			Huy_phat_hanh
 		}
-		enum EntityName1 {
+		enum EntityName2 {
 		}
 		enum RollupState {
 			/** 0 - Attribute value is yet to be calculated */

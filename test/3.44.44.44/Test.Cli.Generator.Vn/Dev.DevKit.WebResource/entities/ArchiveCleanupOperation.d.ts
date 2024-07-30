@@ -69,7 +69,7 @@ declare namespace DevKit {
 		/** Criteria */
 		Criteria: string;
 		EndTime_UtcDateAndTime: Date;
-		EntityLogicalName1: string;
+		EntityLogicalName: string;
 		FailedCount: number;
 		FromVersion: number;
 		/** Sequence number of the import that created this record. */
@@ -121,7 +121,7 @@ declare namespace DevKit {
 			/** Criteria */
 			readonly Criteria: string;
 			readonly EndTime_UtcDateAndTime: string;
-			readonly EntityLogicalName1: string;
+			readonly EntityLogicalName: string;
 			readonly FailedCount: string;
 			readonly FromVersion: string;
 			/** Sequence number of the import that created this record. */

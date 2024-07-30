@@ -70,7 +70,7 @@ var DevKit;
 			EntityDataProviderId: { b: 'entitydataproviderid', a: '_entitydataproviderid_value', c: 'contacts', d: 'contact' },
 			EntityDataSourceId: { a: 'entitydatasourceid' },
 			EntityDataSourceIdUnique: { a: 'entitydatasourceidunique', r: true },
-			EntityName1: { a: 'entityname' },
+			EntityName2: { a: 'entityname' },
 			IntroducedVersion: { a: 'introducedversion' },
 			IsCustomizable: { a: 'iscustomizable' },
 			IsManaged: { a: 'ismanaged', r: true },

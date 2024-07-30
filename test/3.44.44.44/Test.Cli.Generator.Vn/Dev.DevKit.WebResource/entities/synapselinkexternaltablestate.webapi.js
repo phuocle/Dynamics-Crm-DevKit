@@ -67,7 +67,7 @@ var DevKit;
 			CreatedOn_UtcDateAndTime: { a: 'createdon', r: true },
 			CreatedOnBehalfBy: { b: 'createdonbehalfby', a: '_createdonbehalfby_value', c: 'systemusers', d: 'systemuser', r: true },
 			datalakefolder: { b: 'datalakefolder', a: '_datalakefolder_value', c: 'datalakefolders', d: 'datalakefolder' },
-			EntityName1: { a: 'entityname' },
+			EntityName2: { a: 'entityname' },
 			ImportSequenceNumber: { a: 'importsequencenumber' },
 			LakehouseShortcutState: { a: 'lakehouseshortcutstate' },
 			LastSynchronizedOn_UtcDateAndTime: { a: 'lastsynchronizedon' },

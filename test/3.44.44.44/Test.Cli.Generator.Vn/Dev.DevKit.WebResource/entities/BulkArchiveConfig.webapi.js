@@ -71,7 +71,7 @@ var DevKit;
 			CreatedOn_UtcDateAndTime: { a: 'createdon', r: true },
 			CreatedOnBehalfBy: { b: 'createdonbehalfby', a: '_createdonbehalfby_value', c: 'systemusers', d: 'systemuser', r: true },
 			Criteria: { a: 'criteria' },
-			EntityLogicalName1: { a: 'entitylogicalname' },
+			EntityLogicalName: { a: 'entitylogicalname' },
 			ImportSequenceNumber: { a: 'importsequencenumber' },
 			IsCustomizable: { a: 'iscustomizable' },
 			IsManaged: { a: 'ismanaged', r: true },

@@ -70,7 +70,7 @@ var DevKit;
 			InsertObjectCount: { a: 'insertobjectcount' },
 			StartTime_UtcDateOnly: { a: 'starttime', r: true },
 			SubscriptionId: { b: 'subscriptionid', a: '_subscriptionid_value', c: 'subscriptions', d: 'subscription' },
-			SubscriptionSyncInfoId1: { a: 'subscriptionsyncinfoid', r: true },
+			SubscriptionSyncInfoId2: { a: 'subscriptionsyncinfoid', r: true },
 			SyncResult: { a: 'syncresult' },
 			TimeZoneRuleVersionNumber: { a: 'timezoneruleversionnumber' },
 			UTCConversionTimeZoneCode: { a: 'utcconversiontimezonecode' }

@@ -69,7 +69,7 @@ declare namespace DevKit {
 		/** End time of the operation. */
 		EndTime_UtcDateAndTime: Date;
 		/** Table name on which cleanup operation is going on. */
-		EntityLogicalName1: string;
+		EntityLogicalName: string;
 		/** Failed records in cleanup operation. */
 		FailedCount: number;
 		/** Version number from where cleanup should happen. */
@@ -130,7 +130,7 @@ declare namespace DevKit {
 			/** End time of the operation. */
 			readonly EndTime_UtcDateAndTime: string;
 			/** Table name on which cleanup operation is going on. */
-			readonly EntityLogicalName1: string;
+			readonly EntityLogicalName: string;
 			/** Failed records in cleanup operation. */
 			readonly FailedCount: string;
 			/** Version number from where cleanup should happen. */

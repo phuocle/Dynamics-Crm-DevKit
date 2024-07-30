@@ -94,7 +94,7 @@ declare namespace DevKit {
 		/** Nhập mô tả cho cấu hình tìm kiếm */
 		Description: string;
 		/** thực thể */
-		Entity1: string;
+		Entity2: string;
 		/** XML tìm nạp dữ liệu. */
 		FetchXmlList: string;
 		/** Được Quản lý */
@@ -141,7 +141,7 @@ declare namespace DevKit {
 			/** Nhập mô tả cho cấu hình tìm kiếm */
 			readonly Description: string;
 			/** thực thể */
-			readonly Entity1: string;
+			readonly Entity2: string;
 			/** XML tìm nạp dữ liệu. */
 			readonly FetchXmlList: string;
 			/** Được Quản lý */

@@ -69,7 +69,7 @@ var DevKit;
 			CreatedOnBehalfBy: { b: 'createdonbehalfby', a: '_createdonbehalfby_value', c: 'systemusers', d: 'systemuser', r: true },
 			currentfullsyncfetchxml: { a: 'currentfullsyncfetchxml' },
 			currentfullsyncstate: { a: 'currentfullsyncstate' },
-			entityname1: { b: 'entityname1', a: '_entityname_value', c: 'organizationdatasyncsubscriptionentities', d: 'organizationdatasyncsubscriptionentity' },
+			entityname: { b: 'entityname', a: '_entityname_value', c: 'organizationdatasyncsubscriptionentities', d: 'organizationdatasyncsubscriptionentity' },
 			fullsynconly: { a: 'fullsynconly' },
 			fullsyncpagesdata: { a: 'fullsyncpagesdata' },
 			implicitlastdataversion: { a: 'implicitlastdataversion' },

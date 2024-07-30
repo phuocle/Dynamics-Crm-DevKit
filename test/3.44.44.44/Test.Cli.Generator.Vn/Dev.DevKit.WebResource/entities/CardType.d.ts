@@ -38,7 +38,7 @@ declare namespace DevKit {
 		/** Tên thực thể tùy chỉnh. */
 		CardName: string;
 		/** Giá trị CardType ENUM. */
-		CardType1: number;
+		CardType2: number;
 		/** CardTypeIcon của thẻ. */
 		CardTypeIcon: string;
 		/** Mã định danh duy nhất của phiên bản thực thể */
@@ -106,7 +106,7 @@ declare namespace DevKit {
 			/** Tên thực thể tùy chỉnh. */
 			readonly CardName: string;
 			/** Giá trị CardType ENUM. */
-			readonly CardType1: string;
+			readonly CardType2: string;
 			/** CardTypeIcon của thẻ. */
 			readonly CardTypeIcon: string;
 			/** Mã định danh duy nhất của phiên bản thực thể */

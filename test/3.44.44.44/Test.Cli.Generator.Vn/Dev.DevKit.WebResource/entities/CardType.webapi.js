@@ -67,7 +67,7 @@ var DevKit;
 			AdaptiveCardTemplate: { a: 'adaptivecardtemplate' },
 			BoolCardOption: { a: 'boolcardoption' },
 			CardName: { a: 'cardname' },
-			CardType1: { a: 'cardtype' },
+			CardType2: { a: 'cardtype' },
 			CardTypeIcon: { a: 'cardtypeicon' },
 			CardTypeId: { a: 'cardtypeid' },
 			ClientAvailability: { a: 'clientavailability' },

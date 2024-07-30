@@ -44,7 +44,7 @@ declare namespace DevKit {
 		/** The dependencies for powerfx expressions */
 		Dependencies: string;
 		/** The name of the primary entity on which rule is defined. */
-		EntityLogicalName1: string;
+		EntityLogicalName: string;
 		Expression: string;
 		/** Sequence number of the import that created this record. */
 		ImportSequenceNumber: number;
@@ -111,7 +111,7 @@ declare namespace DevKit {
 			/** The dependencies for powerfx expressions */
 			readonly Dependencies: string;
 			/** The name of the primary entity on which rule is defined. */
-			readonly EntityLogicalName1: string;
+			readonly EntityLogicalName: string;
 			readonly Expression: string;
 			/** Sequence number of the import that created this record. */
 			readonly ImportSequenceNumber: string;

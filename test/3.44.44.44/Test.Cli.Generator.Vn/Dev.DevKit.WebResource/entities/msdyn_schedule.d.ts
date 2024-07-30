@@ -66,7 +66,7 @@ declare namespace DevKit {
 		/** Refresh period for interval based */
 		msdyn_refreshperiod: string;
 		/** Schedule */
-		msdyn_schedule1: string;
+		msdyn_schedule2: string;
 		/** Schedule Refresh disabled reason if any */
 		msdyn_scheduledisabledreason: string;
 		/** Unique identifier for entity instances */
@@ -147,7 +147,7 @@ declare namespace DevKit {
 			/** Refresh period for interval based */
 			readonly msdyn_refreshperiod: string;
 			/** Schedule */
-			readonly msdyn_schedule1: string;
+			readonly msdyn_schedule2: string;
 			/** Schedule Refresh disabled reason if any */
 			readonly msdyn_scheduledisabledreason: string;
 			/** Unique identifier for entity instances */

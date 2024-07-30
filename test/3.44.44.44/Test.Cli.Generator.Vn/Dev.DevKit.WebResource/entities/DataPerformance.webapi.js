@@ -68,7 +68,7 @@ var DevKit;
 			Component: { a: 'component', r: true },
 			Count: { a: 'count', r: true },
 			DataPerformanceId: { a: 'dataperformanceid' },
-			Entity1: { a: 'entity', r: true },
+			Entity2: { a: 'entity', r: true },
 			EstimatedOptimizationImpact: { a: 'estimatedoptimizationimpact', r: true },
 			ExecutionPeriod: { a: 'executionperiod', r: true },
 			LastActionResult: { a: 'lastactionresult', r: true },

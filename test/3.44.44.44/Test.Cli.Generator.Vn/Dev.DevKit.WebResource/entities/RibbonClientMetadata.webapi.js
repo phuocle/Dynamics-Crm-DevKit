@@ -64,7 +64,7 @@ var DevKit;
 		}
 		var _ribbonclientmetadata = {
 			ComponentState: { a: 'componentstate', r: true },
-			EntityLogicalName1: { a: 'entitylogicalname' },
+			EntityLogicalName: { a: 'entitylogicalname' },
 			RibbonContext: { a: 'ribboncontext' },
 			RibbonId: { a: 'ribbonid' },
 			RibbonIdUnique: { a: 'ribbonidunique', r: true },

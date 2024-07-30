@@ -63,7 +63,7 @@ declare namespace DevKit {
 		/** Unique identifier of the delegate user who created the record. */
 		readonly CreatedOnBehalfBy: string;
 		/** Table logical name. */
-		EntityLogicalName1: string;
+		EntityLogicalName: string;
 		/** Total failed records. */
 		FailedCount: number;
 		/** Sequence number of the import that created this record. */
@@ -106,7 +106,7 @@ declare namespace DevKit {
 			/** Unique identifier of the delegate user who created the record. */
 			readonly CreatedOnBehalfBy: string;
 			/** Table logical name. */
-			readonly EntityLogicalName1: string;
+			readonly EntityLogicalName: string;
 			/** Total failed records. */
 			readonly FailedCount: string;
 			/** Sequence number of the import that created this record. */

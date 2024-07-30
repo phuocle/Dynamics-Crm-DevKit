@@ -36,7 +36,7 @@ declare namespace DevKit {
 		/** Id của thực thể phiên bản quy trình sẽ đăng ký. */
 		EntityId: string;
 		/** Tên của thực thể phiên bản quy trình sẽ đăng ký. */
-		EntityName1: string;
+		EntityName2: string;
 		/** Cho biết khả năng sẽ xóa thực thể phiên bản quy trình sẽ đăng ký sau khi xóa đăng ký. */
 		readonly IsDeleted: boolean;
 		/** Cho biết khả năng sẽ sửa đổi thực thể phiên bản quy trình sẽ đăng ký sau khi đã tạo đăng ký. */
@@ -63,7 +63,7 @@ declare namespace DevKit {
 			/** Id của thực thể phiên bản quy trình sẽ đăng ký. */
 			readonly EntityId: string;
 			/** Tên của thực thể phiên bản quy trình sẽ đăng ký. */
-			readonly EntityName1: string;
+			readonly EntityName2: string;
 			/** Cho biết khả năng sẽ xóa thực thể phiên bản quy trình sẽ đăng ký sau khi xóa đăng ký. */
 			readonly IsDeleted: string;
 			/** Cho biết khả năng sẽ sửa đổi thực thể phiên bản quy trình sẽ đăng ký sau khi đã tạo đăng ký. */

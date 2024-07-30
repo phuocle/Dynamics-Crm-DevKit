@@ -66,7 +66,7 @@ declare namespace DevKit {
 		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the record. */
 		readonly CreatedOnBehalfBy: string;
-		EntityLogicalName1: string;
+		EntityLogicalName: string;
 		FailedCount: number;
 		/** Sequence number of the import that created this record. */
 		ImportSequenceNumber: number;
@@ -104,7 +104,7 @@ declare namespace DevKit {
 			readonly CreatedOn_UtcDateAndTime: string;
 			/** Unique identifier of the delegate user who created the record. */
 			readonly CreatedOnBehalfBy: string;
-			readonly EntityLogicalName1: string;
+			readonly EntityLogicalName: string;
 			readonly FailedCount: string;
 			/** Sequence number of the import that created this record. */
 			readonly ImportSequenceNumber: string;

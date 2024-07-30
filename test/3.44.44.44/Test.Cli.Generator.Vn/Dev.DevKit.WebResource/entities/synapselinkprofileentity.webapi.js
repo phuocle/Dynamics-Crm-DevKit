@@ -70,7 +70,7 @@ var DevKit;
 			CreatedOn_UtcDateAndTime: { a: 'createdon', r: true },
 			CreatedOnBehalfBy: { b: 'createdonbehalfby', a: '_createdonbehalfby_value', c: 'systemusers', d: 'systemuser', r: true },
 			Enabled: { a: 'enabled' },
-			EntityName1: { a: 'entityname' },
+			EntityName2: { a: 'entityname' },
 			EntitySource: { a: 'entitysource' },
 			EntityType: { a: 'entitytype' },
 			ExtendedProperties: { a: 'extendedproperties' },

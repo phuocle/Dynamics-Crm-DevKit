@@ -67,7 +67,7 @@ var DevKit;
 			ComponentState: { a: 'componentstate', r: true },
 			CreatedOn_UtcDateAndTime: { a: 'createdon', r: true },
 			DisplayName: { a: 'displayname' },
-			EntityLogicalName1: { a: 'entitylogicalname' },
+			EntityLogicalName: { a: 'entitylogicalname' },
 			IsCustomizable: { a: 'iscustomizable' },
 			IsManaged: { a: 'ismanaged', r: true },
 			IsPrivacyRelated: { a: 'isprivacyrelated' },

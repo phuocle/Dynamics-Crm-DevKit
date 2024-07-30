@@ -69,7 +69,7 @@ var DevKit;
 			CreatedOnBehalfBy: { b: 'createdonbehalfby', a: '_createdonbehalfby_value', c: 'systemusers', d: 'systemuser', r: true },
 			CrmRecordCount: { a: 'crmrecordcount' },
 			CrmRecordCountModifiedTime_UtcDateAndTime: { a: 'crmrecordcountmodifiedtime' },
-			EntityName1: { a: 'entityname' },
+			EntityName2: { a: 'entityname' },
 			EntitySource: { a: 'entitysource' },
 			EntityType: { a: 'entitytype' },
 			ImportSequenceNumber: { a: 'importsequencenumber' },

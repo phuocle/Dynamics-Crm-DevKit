@@ -69,7 +69,7 @@ var DevKit;
 			CreatedOn_UtcDateAndTime: { a: 'createdon', r: true },
 			CreatedOnBehalfBy: { b: 'createdonbehalfby', a: '_createdonbehalfby_value', c: 'systemusers', d: 'systemuser', r: true },
 			Description: { a: 'description' },
-			Entity1: { a: 'entity' },
+			Entity2: { a: 'entity' },
 			FetchXmlList: { a: 'fetchxmllist' },
 			IsManaged: { a: 'ismanaged', r: true },
 			KnowledgeSearchModelId: { a: 'knowledgesearchmodelid' },

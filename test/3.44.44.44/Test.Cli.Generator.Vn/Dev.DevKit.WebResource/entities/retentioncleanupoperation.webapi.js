@@ -68,7 +68,7 @@ var DevKit;
 			CreatedOnBehalfBy: { b: 'createdonbehalfby', a: '_createdonbehalfby_value', c: 'systemusers', d: 'systemuser', r: true },
 			Criteria: { a: 'criteria' },
 			EndTime_UtcDateAndTime: { a: 'endtime' },
-			EntityLogicalName1: { a: 'entitylogicalname' },
+			EntityLogicalName: { a: 'entitylogicalname' },
 			FailedCount: { a: 'failedcount' },
 			FromVersion: { a: 'fromversion' },
 			ImportSequenceNumber: { a: 'importsequencenumber' },

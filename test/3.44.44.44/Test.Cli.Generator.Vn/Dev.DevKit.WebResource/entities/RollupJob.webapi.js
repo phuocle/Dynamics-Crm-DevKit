@@ -67,7 +67,7 @@ var DevKit;
 			PostponeUntil_UtcDateAndTime: { a: 'postponeuntil', r: true },
 			RecordCreatedOn_UtcDateAndTime: { a: 'recordcreatedon', r: true },
 			RetryCount: { a: 'retrycount', r: true },
-			RollupJobId1: { a: 'rollupjobid', r: true },
+			RollupJobId2: { a: 'rollupjobid', r: true },
 			RollupPropertiesId: { b: 'rolluppropertiesid', a: '_rolluppropertiesid_value', c: 'rolluppropertiescollection', d: 'rollupproperties', r: true },
 			SourceEntityTypeCode: { a: 'sourceentitytypecode', r: true },
 			StateCode: { a: 'statecode', r: true },

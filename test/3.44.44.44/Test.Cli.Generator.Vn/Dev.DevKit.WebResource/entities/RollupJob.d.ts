@@ -33,7 +33,7 @@ declare namespace DevKit {
 		readonly PostponeUntil_UtcDateAndTime: Date;
 		readonly RecordCreatedOn_UtcDateAndTime: Date;
 		readonly RetryCount: number;
-		readonly RollupJobId1: number;
+		readonly RollupJobId2: number;
 		readonly RollupPropertiesId: string;
 		readonly SourceEntityTypeCode: number;
 		readonly StateCode: OptionSet.RollupJob.StateCode;
@@ -43,7 +43,7 @@ declare namespace DevKit {
 			readonly PostponeUntil_UtcDateAndTime: string;
 			readonly RecordCreatedOn_UtcDateAndTime: string;
 			readonly RetryCount: string;
-			readonly RollupJobId1: string;
+			readonly RollupJobId2: string;
 			readonly RollupPropertiesId: string;
 			readonly SourceEntityTypeCode: string;
 			readonly StateCode: string;

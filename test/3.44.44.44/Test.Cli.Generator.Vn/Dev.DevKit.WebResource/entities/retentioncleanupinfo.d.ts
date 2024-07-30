@@ -67,7 +67,7 @@ declare namespace DevKit {
 		/** Unique identifier of the delegate user who created the record. */
 		readonly CreatedOnBehalfBy: string;
 		/** Table Name. */
-		EntityLogicalName1: string;
+		EntityLogicalName: string;
 		/** Sequence number of the import that created this record. */
 		ImportSequenceNumber: number;
 		/** Last deletion version number. */
@@ -116,7 +116,7 @@ declare namespace DevKit {
 			/** Unique identifier of the delegate user who created the record. */
 			readonly CreatedOnBehalfBy: string;
 			/** Table Name. */
-			readonly EntityLogicalName1: string;
+			readonly EntityLogicalName: string;
 			/** Sequence number of the import that created this record. */
 			readonly ImportSequenceNumber: string;
 			/** Last deletion version number. */

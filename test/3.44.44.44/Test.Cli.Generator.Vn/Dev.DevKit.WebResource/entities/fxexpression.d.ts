@@ -45,7 +45,7 @@ declare namespace DevKit {
 		/** The dependencies for powerfx expressions */
 		Dependencies: string;
 		/** The name of the primary entity on which expression is defined. */
-		EntityLogicalName1: string;
+		EntityLogicalName: string;
 		Expression: string;
 		/** Unique identifier for entity instances */
 		fxexpressionId: string;
@@ -113,7 +113,7 @@ declare namespace DevKit {
 			/** The dependencies for powerfx expressions */
 			readonly Dependencies: string;
 			/** The name of the primary entity on which expression is defined. */
-			readonly EntityLogicalName1: string;
+			readonly EntityLogicalName: string;
 			readonly Expression: string;
 			/** Unique identifier for entity instances */
 			readonly fxexpressionId: string;

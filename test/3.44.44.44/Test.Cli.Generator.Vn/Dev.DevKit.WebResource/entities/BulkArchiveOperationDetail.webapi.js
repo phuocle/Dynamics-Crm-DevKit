@@ -69,7 +69,7 @@ var DevKit;
 			CreatedBy: { b: 'createdby', a: '_createdby_value', c: 'systemusers', d: 'systemuser', r: true },
 			CreatedOn_UtcDateAndTime: { a: 'createdon', r: true },
 			CreatedOnBehalfBy: { b: 'createdonbehalfby', a: '_createdonbehalfby_value', c: 'systemusers', d: 'systemuser', r: true },
-			EntityLogicalName1: { a: 'entitylogicalname' },
+			EntityLogicalName: { a: 'entitylogicalname' },
 			FailedCount: { a: 'failedcount' },
 			ImportSequenceNumber: { a: 'importsequencenumber' },
 			IsRootEntity: { a: 'isrootentity' },

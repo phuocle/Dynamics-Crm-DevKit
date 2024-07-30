@@ -36,7 +36,7 @@ declare namespace DevKit {
 		/** Mã định danh duy nhất của người dùng đại diện đã tạo wizardaccessprivilege. */
 		readonly CreatedOnBehalfBy: string;
 		/** Tên lôgic của thực thể yêu cầu phải có đặc quyền truy cập. */
-		EntityName1: string;
+		EntityName2: string;
 		/** Mã định danh duy nhất của người dùng đã sửa bản ghi đặc quyền truy cập trình hướng dẫn lần cuối. */
 		readonly ModifiedBy: string;
 		/** Ngày và giờ sửa bản ghi đặc quyền truy cập trình hướng dẫn. */
@@ -60,7 +60,7 @@ declare namespace DevKit {
 			/** Mã định danh duy nhất của người dùng đại diện đã tạo wizardaccessprivilege. */
 			readonly CreatedOnBehalfBy: string;
 			/** Tên lôgic của thực thể yêu cầu phải có đặc quyền truy cập. */
-			readonly EntityName1: string;
+			readonly EntityName2: string;
 			/** Mã định danh duy nhất của người dùng đã sửa bản ghi đặc quyền truy cập trình hướng dẫn lần cuối. */
 			readonly ModifiedBy: string;
 			/** Ngày và giờ sửa bản ghi đặc quyền truy cập trình hướng dẫn. */

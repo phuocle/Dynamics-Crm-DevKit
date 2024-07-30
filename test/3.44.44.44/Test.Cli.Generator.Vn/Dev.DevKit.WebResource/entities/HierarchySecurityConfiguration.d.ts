@@ -30,13 +30,13 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Tên thực thể logic của thực thể được đặt cấu hình cho bảo mật hệ thống cấp bậc. */
-		EntityName1: string;
+		EntityName2: string;
 		/** Cho biết thực thể được dùng cho Cấu hình Kích hoạt Mô hình Bảo mật Hệ thống cấp bậc. */
 		HierarchySecurityModelingSettingId: string;
 		VersionNumber: number;
 		readonly FormattedValue: {
 			/** Tên thực thể logic của thực thể được đặt cấu hình cho bảo mật hệ thống cấp bậc. */
-			readonly EntityName1: string;
+			readonly EntityName2: string;
 			/** Cho biết thực thể được dùng cho Cấu hình Kích hoạt Mô hình Bảo mật Hệ thống cấp bậc. */
 			readonly HierarchySecurityModelingSettingId: string;
 			readonly VersionNumber: string;

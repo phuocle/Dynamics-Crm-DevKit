@@ -79,8 +79,8 @@ declare namespace DevKit {
 		DVTableSearch: string;
 		/** Unique identifier for entity instances */
 		DVTableSearchEntityId: string;
-		Entity1: string;
-		EntityLogicalName1: string;
+		Entity2: string;
+		EntityLogicalName: string;
 		/** Sequence number of the import that created this record. */
 		ImportSequenceNumber: number;
 		/** For internal use only. */
@@ -136,8 +136,8 @@ declare namespace DevKit {
 			readonly DVTableSearch: string;
 			/** Unique identifier for entity instances */
 			readonly DVTableSearchEntityId: string;
-			readonly Entity1: string;
-			readonly EntityLogicalName1: string;
+			readonly Entity2: string;
+			readonly EntityLogicalName: string;
 			/** Sequence number of the import that created this record. */
 			readonly ImportSequenceNumber: string;
 			/** For internal use only. */

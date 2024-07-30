@@ -66,7 +66,7 @@ var DevKit;
 			CreatedBy: { b: 'createdby', a: '_createdby_value', c: 'systemusers', d: 'systemuser', r: true },
 			CreatedOn_UtcDateAndTime: { a: 'createdon', r: true },
 			CreatedOnBehalfBy: { b: 'createdonbehalfby', a: '_createdonbehalfby_value', c: 'systemusers', d: 'systemuser', r: true },
-			entityname1: { a: 'entityname' },
+			entityname: { a: 'entityname' },
 			ImportSequenceNumber: { a: 'importsequencenumber' },
 			ispdfsettingenabled: { a: 'ispdfsettingenabled' },
 			ModifiedBy: { b: 'modifiedby', a: '_modifiedby_value', c: 'systemusers', d: 'systemuser', r: true },

@@ -64,7 +64,7 @@ var DevKit;
 		}
 		var _usersearchfacet = {
 			AttributeName: { a: 'attributename' },
-			EntityName1: { a: 'entityname' },
+			EntityName2: { a: 'entityname' },
 			FacetOrder: { a: 'facetorder' },
 			SystemUserId: { a: 'systemuserid' },
 			UserSearchFacetId: { a: 'usersearchfacetid' }

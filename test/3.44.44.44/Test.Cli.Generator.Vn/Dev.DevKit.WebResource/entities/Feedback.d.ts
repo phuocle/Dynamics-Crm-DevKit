@@ -364,7 +364,7 @@ declare namespace DevKit {
 		/** Hiển thị bản ghi liên kết với phản hồi. */
 		ContactId: string;
 		/** Hiển thị bản ghi liên kết với phản hồi. */
-		FeedbackId1: string;
+		FeedbackId2: string;
 		/** Hiển thị bản ghi liên kết với phản hồi. */
 		KnowledgeArticleId: string;
 		/** Hiển thị nơi gửi phản hồi. */
@@ -443,7 +443,7 @@ declare namespace DevKit {
 			/** Hiển thị bản ghi liên kết với phản hồi. */
 			readonly ContactId: string;
 			/** Hiển thị bản ghi liên kết với phản hồi. */
-			readonly FeedbackId1: string;
+			readonly FeedbackId2: string;
 			/** Hiển thị bản ghi liên kết với phản hồi. */
 			readonly KnowledgeArticleId: string;
 			/** Hiển thị nơi gửi phản hồi. */

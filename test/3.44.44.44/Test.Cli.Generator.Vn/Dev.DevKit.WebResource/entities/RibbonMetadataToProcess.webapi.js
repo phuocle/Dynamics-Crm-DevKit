@@ -65,7 +65,7 @@ var DevKit;
 		var _ribbonmetadatatoprocess = {
 			CompletedOn_UtcDateAndTime: { a: 'completedon', r: true },
 			CreatedOn_UtcDateAndTime: { a: 'createdon', r: true },
-			EntityName1: { a: 'entityname' },
+			EntityName2: { a: 'entityname' },
 			ExceptionMessage: { a: 'exceptionmessage' },
 			IsDbUpdate: { a: 'isdbupdate' },
 			ProcessedOn_UtcDateAndTime: { a: 'processedon', r: true },

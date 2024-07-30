@@ -66,7 +66,7 @@ var DevKit;
 			AsyncOperationId: { b: 'asyncoperationid', a: '_asyncoperationid_value', c: 'asyncoperations', d: 'asyncoperation' },
 			Data: { a: 'data' },
 			EntityId: { a: 'entityid' },
-			EntityName1: { a: 'entityname' },
+			EntityName2: { a: 'entityname' },
 			IsDeleted: { a: 'isdeleted', r: true },
 			IsModified: { a: 'ismodified', r: true },
 			ModifiedOn_UtcDateAndTime: { a: 'modifiedon', r: true },

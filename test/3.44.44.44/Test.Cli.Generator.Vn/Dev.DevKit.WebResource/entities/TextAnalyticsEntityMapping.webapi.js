@@ -64,7 +64,7 @@ var DevKit;
 		}
 		var _textanalyticsentitymapping = {
 			ComponentState: { a: 'componentstate', r: true },
-			Entity1: { a: 'entity' },
+			Entity2: { a: 'entity' },
 			EntityDisplayName: { a: 'entitydisplayname' },
 			EntityPickList: { a: 'entitypicklist' },
 			Field: { a: 'field' },

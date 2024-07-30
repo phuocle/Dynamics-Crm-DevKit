@@ -40,7 +40,7 @@ declare namespace DevKit {
 		/** Unique identifier of the delegate user who created the record. */
 		readonly CreatedOnBehalfBy: string;
 		/** Entity name, if schedule is entity specific */
-		EntityName1: string;
+		EntityName2: string;
 		/** Sequence number of the import that created this record. */
 		ImportSequenceNumber: number;
 		/** For internal use only. */
@@ -101,7 +101,7 @@ declare namespace DevKit {
 			/** Unique identifier of the delegate user who created the record. */
 			readonly CreatedOnBehalfBy: string;
 			/** Entity name, if schedule is entity specific */
-			readonly EntityName1: string;
+			readonly EntityName2: string;
 			/** Sequence number of the import that created this record. */
 			readonly ImportSequenceNumber: string;
 			/** For internal use only. */

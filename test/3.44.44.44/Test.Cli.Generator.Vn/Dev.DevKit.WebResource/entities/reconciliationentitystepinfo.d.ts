@@ -65,7 +65,7 @@ declare namespace DevKit {
 		/** Unique identifier of the delegate user who created the record. */
 		readonly CreatedOnBehalfBy: string;
 		/** Table name */
-		EntityLogicalName1: string;
+		EntityLogicalName: string;
 		/** FileName for reconciliation. */
 		FileName: string;
 		/** FormattedCriteria for running reconciliation. */
@@ -120,7 +120,7 @@ declare namespace DevKit {
 			/** Unique identifier of the delegate user who created the record. */
 			readonly CreatedOnBehalfBy: string;
 			/** Table name */
-			readonly EntityLogicalName1: string;
+			readonly EntityLogicalName: string;
 			/** FileName for reconciliation. */
 			readonly FileName: string;
 			/** FormattedCriteria for running reconciliation. */

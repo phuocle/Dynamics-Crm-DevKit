@@ -73,7 +73,7 @@ declare namespace DevKit {
 		/** Fetch XML format criteria to select records for retention. */
 		Criteria: string;
 		/** Logical name of the table on which retention policy is setup. */
-		EntityLogicalName1: string;
+		EntityLogicalName: string;
 		/** Sequence number of the import that created this record. */
 		ImportSequenceNumber: number;
 		/** For internal use only. */
@@ -146,7 +146,7 @@ declare namespace DevKit {
 			/** Fetch XML format criteria to select records for retention. */
 			readonly Criteria: string;
 			/** Logical name of the table on which retention policy is setup. */
-			readonly EntityLogicalName1: string;
+			readonly EntityLogicalName: string;
 			/** Sequence number of the import that created this record. */
 			readonly ImportSequenceNumber: string;
 			/** For internal use only. */

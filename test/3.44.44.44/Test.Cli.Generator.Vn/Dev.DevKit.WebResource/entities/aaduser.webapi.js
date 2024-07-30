@@ -71,7 +71,7 @@ var DevKit;
 			CreatedDateTime_UtcDateAndTime: { a: 'createddatetime', r: true },
 			DisplayName: { a: 'displayname' },
 			GivenName: { a: 'givenname' },
-			id1: { a: 'id' },
+			id: { a: 'id' },
 			ImAddresses: { a: 'imaddresses' },
 			JobTitle: { a: 'jobtitle' },
 			Mail: { a: 'mail' },

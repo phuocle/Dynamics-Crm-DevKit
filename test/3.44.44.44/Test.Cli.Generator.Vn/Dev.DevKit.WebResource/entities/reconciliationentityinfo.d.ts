@@ -67,7 +67,7 @@ declare namespace DevKit {
 		/** Criteria for running reconciliation. */
 		Criteria: string;
 		/** Table name */
-		EntityLogicalName1: string;
+		EntityLogicalName: string;
 		/** Sequence number of the import that created this record. */
 		ImportSequenceNumber: number;
 		/** Last delta converted version. */
@@ -120,7 +120,7 @@ declare namespace DevKit {
 			/** Criteria for running reconciliation. */
 			readonly Criteria: string;
 			/** Table name */
-			readonly EntityLogicalName1: string;
+			readonly EntityLogicalName: string;
 			/** Sequence number of the import that created this record. */
 			readonly ImportSequenceNumber: string;
 			/** Last delta converted version. */

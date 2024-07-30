@@ -74,7 +74,7 @@ var DevKit;
 			RecordsAttachment_name: { a: 'recordsattachment', r: true },
 			RecordsJson: { a: 'recordsjson' },
 			RelationshipName: { a: 'relationshipname' },
-			revokeinheritedaccessrecordstracker1: { a: 'revokeinheritedaccessrecordstracker' },
+			revokeinheritedaccessrecordstracker2: { a: 'revokeinheritedaccessrecordstracker' },
 			revokeinheritedaccessrecordstrackerId: { a: 'revokeinheritedaccessrecordstrackerid' },
 			statecode: { a: 'statecode' },
 			statuscode: { a: 'statuscode' },

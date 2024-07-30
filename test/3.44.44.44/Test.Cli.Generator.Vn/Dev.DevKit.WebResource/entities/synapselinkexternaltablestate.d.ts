@@ -38,7 +38,7 @@ declare namespace DevKit {
 		/** Unique identifier for Data Lake Folder associated with Synapse Link External Table State. */
 		datalakefolder: string;
 		/** Name of the entity */
-		EntityName1: string;
+		EntityName2: string;
 		/** Sequence number of the import that created this record. */
 		ImportSequenceNumber: number;
 		/** State of lakehouse shortcut creation for an entity */
@@ -97,7 +97,7 @@ declare namespace DevKit {
 			/** Unique identifier for Data Lake Folder associated with Synapse Link External Table State. */
 			readonly datalakefolder: string;
 			/** Name of the entity */
-			readonly EntityName1: string;
+			readonly EntityName2: string;
 			/** Sequence number of the import that created this record. */
 			readonly ImportSequenceNumber: string;
 			/** State of lakehouse shortcut creation for an entity */

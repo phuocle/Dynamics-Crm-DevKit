@@ -95,7 +95,7 @@ declare namespace DevKit {
 		/** Mã định danh duy nhất của đề xuất về hiệu suất. */
 		DataPerformanceId: string;
 		/** Thực thể chính */
-		readonly Entity1: string;
+		readonly Entity2: string;
 		/** Lợi ích chi phí trung bình dự kiến của tối ưu hóa. */
 		readonly EstimatedOptimizationImpact: number;
 		/** Khoảng thời gian thực thi mà chỉ số hiệu suất được tính toán trong khoảng thời gian đó. */
@@ -136,7 +136,7 @@ declare namespace DevKit {
 			/** Mã định danh duy nhất của đề xuất về hiệu suất. */
 			readonly DataPerformanceId: string;
 			/** Thực thể chính */
-			readonly Entity1: string;
+			readonly Entity2: string;
 			/** Lợi ích chi phí trung bình dự kiến của tối ưu hóa. */
 			readonly EstimatedOptimizationImpact: string;
 			/** Khoảng thời gian thực thi mà chỉ số hiệu suất được tính toán trong khoảng thời gian đó. */

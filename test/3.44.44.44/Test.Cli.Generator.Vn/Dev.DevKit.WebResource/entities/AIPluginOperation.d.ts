@@ -94,7 +94,7 @@ declare namespace DevKit {
 		Description: string;
 		DVFileSearch: string;
 		DVTableSearch: string;
-		Entity1: string;
+		Entity2: string;
 		/** Sequence number of the import that created this record. */
 		ImportSequenceNumber: number;
 		/** Defines if the AIPluginOperation is consequential. */
@@ -168,7 +168,7 @@ declare namespace DevKit {
 			readonly Description: string;
 			readonly DVFileSearch: string;
 			readonly DVTableSearch: string;
-			readonly Entity1: string;
+			readonly Entity2: string;
 			/** Sequence number of the import that created this record. */
 			readonly ImportSequenceNumber: string;
 			/** Defines if the AIPluginOperation is consequential. */

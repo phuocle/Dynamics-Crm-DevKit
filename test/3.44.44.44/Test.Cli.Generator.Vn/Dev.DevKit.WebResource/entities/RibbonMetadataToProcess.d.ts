@@ -34,7 +34,7 @@ declare namespace DevKit {
 		/** Cho biết ngày và giờ tạo bản ghi. Ngày và giờ được hiển thị trong múi giờ đã chọn theo tùy chọn Microsoft Dynamics 365. */
 		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Tên Lôgic của Thực thể */
-		EntityName1: string;
+		EntityName2: string;
 		/** Thông báo ngoại lệ */
 		ExceptionMessage: string;
 		/** Là thực thể được tạo qua Bản cập nhật Db */
@@ -57,7 +57,7 @@ declare namespace DevKit {
 			/** Cho biết ngày và giờ tạo bản ghi. Ngày và giờ được hiển thị trong múi giờ đã chọn theo tùy chọn Microsoft Dynamics 365. */
 			readonly CreatedOn_UtcDateAndTime: string;
 			/** Tên Lôgic của Thực thể */
-			readonly EntityName1: string;
+			readonly EntityName2: string;
 			/** Thông báo ngoại lệ */
 			readonly ExceptionMessage: string;
 			/** Là thực thể được tạo qua Bản cập nhật Db */

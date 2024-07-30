@@ -70,7 +70,7 @@ declare namespace DevKit {
 		/** Chỉ sử dụng nội bộ. */
 		readonly ComponentState: OptionSet.TextAnalyticsEntityMapping.ComponentState;
 		/** Thực thể */
-		Entity1: string;
+		Entity2: string;
 		/** Tên Hiển thị của Thực thể */
 		EntityDisplayName: string;
 		/** Chọn Thực thể */
@@ -107,7 +107,7 @@ declare namespace DevKit {
 			/** Chỉ sử dụng nội bộ. */
 			readonly ComponentState: string;
 			/** Thực thể */
-			readonly Entity1: string;
+			readonly Entity2: string;
 			/** Tên Hiển thị của Thực thể */
 			readonly EntityDisplayName: string;
 			/** Chọn Thực thể */

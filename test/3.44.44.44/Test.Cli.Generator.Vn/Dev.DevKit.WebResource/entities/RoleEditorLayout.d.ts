@@ -72,7 +72,7 @@ declare namespace DevKit {
 		/** Display name used for tabs, sections and miscellaneous privileges. */
 		DisplayName: string;
 		/** For ItemType Entity: the logicalname of the entity. */
-		EntityLogicalName1: string;
+		EntityLogicalName: string;
 		/** For internal use only. */
 		IsCustomizable: string;
 		/** Indicates whether the solution component is part of a managed solution. */
@@ -115,7 +115,7 @@ declare namespace DevKit {
 			/** Display name used for tabs, sections and miscellaneous privileges. */
 			readonly DisplayName: string;
 			/** For ItemType Entity: the logicalname of the entity. */
-			readonly EntityLogicalName1: string;
+			readonly EntityLogicalName: string;
 			/** For internal use only. */
 			readonly IsCustomizable: string;
 			/** Indicates whether the solution component is part of a managed solution. */

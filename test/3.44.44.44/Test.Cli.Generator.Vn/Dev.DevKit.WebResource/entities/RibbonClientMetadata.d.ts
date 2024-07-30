@@ -32,7 +32,7 @@ declare namespace DevKit {
 		/** Chỉ sử dụng nội bộ. */
 		readonly ComponentState: number;
 		/** Tên lôgic của thực thể */
-		EntityLogicalName1: string;
+		EntityLogicalName: string;
 		/** Bối cảnh ruy băng */
 		RibbonContext: string;
 		/** Mã định danh duy nhất của siêu dữ liệu máy khách trong ruy băng. */
@@ -50,7 +50,7 @@ declare namespace DevKit {
 			/** Chỉ sử dụng nội bộ. */
 			readonly ComponentState: string;
 			/** Tên lôgic của thực thể */
-			readonly EntityLogicalName1: string;
+			readonly EntityLogicalName: string;
 			/** Bối cảnh ruy băng */
 			readonly RibbonContext: string;
 			/** Mã định danh duy nhất của siêu dữ liệu máy khách trong ruy băng. */

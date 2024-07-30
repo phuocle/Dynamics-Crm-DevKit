@@ -39,7 +39,7 @@ declare namespace DevKit {
 		readonly CreatedOnBehalfBy: string;
 		currentfullsyncfetchxml: string;
 		currentfullsyncstate: OptionSet.organizationdatasyncfnostate.currentfullsyncstate;
-		entityname1: string;
+		entityname: string;
 		fullsynconly: boolean;
 		fullsyncpagesdata: string;
 		implicitlastdataversion: string;
@@ -95,7 +95,7 @@ declare namespace DevKit {
 			readonly CreatedOnBehalfBy: string;
 			readonly currentfullsyncfetchxml: string;
 			readonly currentfullsyncstate: string;
-			readonly entityname1: string;
+			readonly entityname: string;
 			readonly fullsynconly: string;
 			readonly fullsyncpagesdata: string;
 			readonly implicitlastdataversion: string;

@@ -33,8 +33,13 @@
 			var setValue = function (value) {
 				if (isMultiOptionSet) value = value.join(',');
 				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-					value = value.replace('{', '').replace('}', '');
-					upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
+					if (value == null) {
+						upsertEntity[schemaName + '@odata.bind'] = null;
+					}
+					else {
+						value = value.replace('{', '').replace('}', '');
+						upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
+					}
 				} else {
 					upsertEntity[logicalName] = value;
 				}

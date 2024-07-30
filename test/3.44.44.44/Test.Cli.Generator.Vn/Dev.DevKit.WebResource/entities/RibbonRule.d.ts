@@ -38,7 +38,7 @@ declare namespace DevKit {
 		/** Mã định danh duy nhất của người dùng đại diện đã tạo bản ghi. */
 		readonly CreatedOnBehalfBy: string;
 		/** Hệ thống sẽ xuất thực thể áp dụng quy tắc này, cũng là thực thể nhập quy tắc này từ đó. */
-		Entity1: string;
+		Entity2: string;
 		readonly IsManaged: boolean;
 		/** Cho biết người cập nhật bản ghi sau cùng. */
 		readonly ModifiedBy: string;
@@ -78,7 +78,7 @@ declare namespace DevKit {
 			/** Mã định danh duy nhất của người dùng đại diện đã tạo bản ghi. */
 			readonly CreatedOnBehalfBy: string;
 			/** Hệ thống sẽ xuất thực thể áp dụng quy tắc này, cũng là thực thể nhập quy tắc này từ đó. */
-			readonly Entity1: string;
+			readonly Entity2: string;
 			readonly IsManaged: string;
 			/** Cho biết người cập nhật bản ghi sau cùng. */
 			readonly ModifiedBy: string;

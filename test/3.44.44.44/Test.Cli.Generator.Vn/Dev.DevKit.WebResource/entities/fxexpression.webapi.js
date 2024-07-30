@@ -72,7 +72,7 @@ var DevKit;
 			CreatedOn_UtcDateAndTime: { a: 'createdon', r: true },
 			CreatedOnBehalfBy: { b: 'createdonbehalfby', a: '_createdonbehalfby_value', c: 'systemusers', d: 'systemuser', r: true },
 			Dependencies: { a: 'dependencies' },
-			EntityLogicalName1: { a: 'entitylogicalname' },
+			EntityLogicalName: { a: 'entitylogicalname' },
 			Expression: { a: 'expression' },
 			fxexpressionId: { a: 'fxexpressionid' },
 			ImportSequenceNumber: { a: 'importsequencenumber' },

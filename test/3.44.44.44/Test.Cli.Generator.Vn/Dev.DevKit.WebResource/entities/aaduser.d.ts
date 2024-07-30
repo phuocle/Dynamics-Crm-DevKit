@@ -73,7 +73,7 @@ declare namespace DevKit {
 		/** Tên gọi (tên) của người dùng. */
 		GivenName: string;
 		/** Mã định danh duy nhất cho Microsoft Entra ID */
-		id1: string;
+		id: string;
 		/** ImAddresses cho người dùng */
 		ImAddresses: string;
 		/** Chức danh của người dùng. */
@@ -114,7 +114,7 @@ declare namespace DevKit {
 			/** Tên gọi (tên) của người dùng. */
 			readonly GivenName: string;
 			/** Mã định danh duy nhất cho Microsoft Entra ID */
-			readonly id1: string;
+			readonly id: string;
 			/** ImAddresses cho người dùng */
 			readonly ImAddresses: string;
 			/** Chức danh của người dùng. */

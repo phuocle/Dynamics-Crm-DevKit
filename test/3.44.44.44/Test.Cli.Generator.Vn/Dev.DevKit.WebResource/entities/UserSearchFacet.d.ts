@@ -30,13 +30,13 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		AttributeName: string;
-		EntityName1: string;
+		EntityName2: string;
 		FacetOrder: number;
 		SystemUserId: string;
 		UserSearchFacetId: string;
 		readonly FormattedValue: {
 			readonly AttributeName: string;
-			readonly EntityName1: string;
+			readonly EntityName2: string;
 			readonly FacetOrder: string;
 			readonly SystemUserId: string;
 			readonly UserSearchFacetId: string;

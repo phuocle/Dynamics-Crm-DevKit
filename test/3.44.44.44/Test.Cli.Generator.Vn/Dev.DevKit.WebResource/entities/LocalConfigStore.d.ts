@@ -32,7 +32,7 @@ declare namespace DevKit {
 		/** Tên cụm tổ hợp */
 		readonly AssemblyName: string;
 		/** Mã định danh duy nhất của mục nhập LocalConfigStore. */
-		Id1: string;
+		Id: string;
 		readonly IsValueSet: boolean;
 		/** Tên Khóa */
 		readonly KeyName: string;
@@ -44,7 +44,7 @@ declare namespace DevKit {
 			/** Tên cụm tổ hợp */
 			readonly AssemblyName: string;
 			/** Mã định danh duy nhất của mục nhập LocalConfigStore. */
-			readonly Id1: string;
+			readonly Id: string;
 			readonly IsValueSet: string;
 			/** Tên Khóa */
 			readonly KeyName: string;

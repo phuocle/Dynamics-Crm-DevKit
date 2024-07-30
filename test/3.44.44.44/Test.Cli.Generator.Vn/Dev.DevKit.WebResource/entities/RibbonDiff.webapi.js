@@ -67,7 +67,7 @@ var DevKit;
 			ContextGroupId: { a: 'contextgroupid' },
 			DiffId: { a: 'diffid' },
 			DiffType: { a: 'difftype', r: true },
-			Entity1: { a: 'entity' },
+			Entity2: { a: 'entity' },
 			IsAppAware: { a: 'isappaware', r: true },
 			IsManaged: { a: 'ismanaged', r: true },
 			OrganizationId: { b: 'organizationid', a: '_organizationid_value', c: 'organizations', d: 'organization', r: true },

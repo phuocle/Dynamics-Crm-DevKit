@@ -65,7 +65,7 @@ declare namespace DevKit {
 		/** Mã định danh duy nhất của người dùng đại diện đã tạo bản ghi. */
 		readonly CreatedOnBehalfBy: string;
 		/** Tên thực thể. */
-		entityname1: string;
+		entityname: string;
 		/** Số thứ tự của quá trình nhập đã tạo bản ghi này. */
 		ImportSequenceNumber: number;
 		/** Chứa giá trị đúng hoặc sai lần lượt cho các thực thể được bật và đã tắt */
@@ -110,7 +110,7 @@ declare namespace DevKit {
 			/** Mã định danh duy nhất của người dùng đại diện đã tạo bản ghi. */
 			readonly CreatedOnBehalfBy: string;
 			/** Tên thực thể. */
-			readonly entityname1: string;
+			readonly entityname: string;
 			/** Số thứ tự của quá trình nhập đã tạo bản ghi này. */
 			readonly ImportSequenceNumber: string;
 			/** Chứa giá trị đúng hoặc sai lần lượt cho các thực thể được bật và đã tắt */

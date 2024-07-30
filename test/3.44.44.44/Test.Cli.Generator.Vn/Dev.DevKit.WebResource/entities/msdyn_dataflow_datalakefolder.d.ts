@@ -54,7 +54,7 @@ declare namespace DevKit {
 		/** Unique identifier of the delegate user who modified the record. */
 		readonly ModifiedOnBehalfBy: string;
 		readonly msdyn_Dataflow: string;
-		msdyn_dataflow_datalakefolder1: string;
+		msdyn_dataflow_datalakefolder2: string;
 		/** Unique identifier for entity instances */
 		msdyn_dataflow_datalakefolderId: string;
 		msdyn_DatalakeFolder: string;
@@ -113,7 +113,7 @@ declare namespace DevKit {
 			/** Unique identifier of the delegate user who modified the record. */
 			readonly ModifiedOnBehalfBy: string;
 			readonly msdyn_Dataflow: string;
-			readonly msdyn_dataflow_datalakefolder1: string;
+			readonly msdyn_dataflow_datalakefolder2: string;
 			/** Unique identifier for entity instances */
 			readonly msdyn_dataflow_datalakefolderId: string;
 			readonly msdyn_DatalakeFolder: string;

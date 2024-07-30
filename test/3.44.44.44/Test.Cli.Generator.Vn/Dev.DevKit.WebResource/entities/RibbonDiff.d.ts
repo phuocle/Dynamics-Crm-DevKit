@@ -38,7 +38,7 @@ declare namespace DevKit {
 		/** Chỉ định loại định nghĩa ruy băng. */
 		readonly DiffType: OptionSet.RibbonDiff.DiffType;
 		/** Hệ thống sẽ xuất thực thể áp dụng quy tắc này, cũng là thực thể nhập quy tắc này từ đó. */
-		Entity1: string;
+		Entity2: string;
 		/** Thông tin về khả năng ribbondiff có được liên kết với mô-đun ứng dụng hay không. */
 		readonly IsAppAware: boolean;
 		readonly IsManaged: boolean;
@@ -74,7 +74,7 @@ declare namespace DevKit {
 			/** Chỉ định loại định nghĩa ruy băng. */
 			readonly DiffType: string;
 			/** Hệ thống sẽ xuất thực thể áp dụng quy tắc này, cũng là thực thể nhập quy tắc này từ đó. */
-			readonly Entity1: string;
+			readonly Entity2: string;
 			/** Thông tin về khả năng ribbondiff có được liên kết với mô-đun ứng dụng hay không. */
 			readonly IsAppAware: string;
 			readonly IsManaged: string;

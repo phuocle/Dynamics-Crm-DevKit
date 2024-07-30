@@ -260,14 +260,17 @@ namespace DynamicsCrm.DevKit.Shared
                 "LogicalName",
                 "PreEntity"
             };
-            declareName = SafeIdentifier(declareName);
-            foreach (var name in SAFE_DECLARE_NAME)
+            var SAFE_DECLARE_NAME2 = new List<string>
             {
+                "EntityName",
+                "Entity",
+                "EntityCollectionName"
+            };
+            declareName = SafeIdentifier(declareName);
+            var  check = generatorType == GeneratorType.csharp ? SAFE_DECLARE_NAME: SAFE_DECLARE_NAME2;
+            foreach (var name in check)
                 if (name.Equals(declareName))
-                {
                     return declareName + "2";
-                }
-            }
             if (attribute is FileAttributeMetadata) declareName += "_name";
             if (declareName.ToLower() == schemaName?.ToLower()) return declareName + "2";
             if (declareName.ToLower() == schemaName?.ToLower() + "id")
@@ -275,14 +278,6 @@ namespace DynamicsCrm.DevKit.Shared
                     return declareName;
                 else
                     return declareName + "2";
-            //if (declareName.ToLower() == "EntityLogicalName".ToLower()) return declareName + "2";
-            //if (declareName.ToLower() == "EntityTypeCode".ToLower()) return declareName + "2";
-            if (generatorType != GeneratorType.csharp)
-            {
-                if (declareName.ToLower() == "EntityName".ToLower()) return declareName + "2";
-            }
-            //if (declareName.ToLower() == "Entity".ToLower()) return declareName + "2";
-            //if (declareName.ToLower() == "Id".ToLower()) return declareName + "2";
             return declareName;
         }
 

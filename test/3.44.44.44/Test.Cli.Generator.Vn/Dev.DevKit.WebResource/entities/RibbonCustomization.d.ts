@@ -32,7 +32,7 @@ declare namespace DevKit {
 		/** Chỉ sử dụng nội bộ. */
 		readonly ComponentState: OptionSet.RibbonCustomization.ComponentState;
 		/** Xác định ruy băng thực thể áp dụng tùy chỉnh này. Nếu đặt null thì tùy chỉnh sẽ áp dụng cho ruy băng chung. */
-		Entity1: string;
+		Entity2: string;
 		readonly IsManaged: boolean;
 		/** Mã định danh duy nhất của tổ chức. */
 		readonly OrganizationId: string;
@@ -53,7 +53,7 @@ declare namespace DevKit {
 			/** Chỉ sử dụng nội bộ. */
 			readonly ComponentState: string;
 			/** Xác định ruy băng thực thể áp dụng tùy chỉnh này. Nếu đặt null thì tùy chỉnh sẽ áp dụng cho ruy băng chung. */
-			readonly Entity1: string;
+			readonly Entity2: string;
 			readonly IsManaged: string;
 			/** Mã định danh duy nhất của tổ chức. */
 			readonly OrganizationId: string;

@@ -44,7 +44,7 @@ declare namespace DevKit {
 		/** Chỉ sử dụng nội bộ. */
 		readonly EntityDataSourceIdUnique: string;
 		/** Tên Lôgic của Thực thể */
-		EntityName1: string;
+		EntityName2: string;
 		/** Phiên bản có biểu mẫu được đưa vào. */
 		IntroducedVersion: string;
 		/** Thông tin cho biết liệu có thể tùy chỉnh thành phần này hay không. */
@@ -77,7 +77,7 @@ declare namespace DevKit {
 			/** Chỉ sử dụng nội bộ. */
 			readonly EntityDataSourceIdUnique: string;
 			/** Tên Lôgic của Thực thể */
-			readonly EntityName1: string;
+			readonly EntityName2: string;
 			/** Phiên bản có biểu mẫu được đưa vào. */
 			readonly IntroducedVersion: string;
 			/** Thông tin cho biết liệu có thể tùy chỉnh thành phần này hay không. */

@@ -64,7 +64,7 @@ var DevKit;
 		}
 		var _localconfigstore = {
 			AssemblyName: { a: 'assemblyname', r: true },
-			Id1: { a: 'id' },
+			Id: { a: 'id' },
 			IsValueSet: { a: 'isvalueset', r: true },
 			KeyName: { a: 'keyname', r: true },
 			PublicToken: { a: 'publictoken', r: true },

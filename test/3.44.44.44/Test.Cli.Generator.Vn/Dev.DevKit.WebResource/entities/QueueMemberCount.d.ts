@@ -39,7 +39,7 @@ declare namespace DevKit {
 }
 declare namespace OptionSet {
 	namespace QueueMemberCount {
-		enum QueueMemberCount1 {
+		enum QueueMemberCount2 {
 		}
 		enum RollupState {
 			/** 0 - Attribute value is yet to be calculated */

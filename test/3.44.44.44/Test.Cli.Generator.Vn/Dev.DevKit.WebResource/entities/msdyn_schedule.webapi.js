@@ -81,7 +81,7 @@ var DevKit;
 			msdyn_referenceid: { a: 'msdyn_referenceid' },
 			msdyn_refreshpayload: { a: 'msdyn_refreshpayload' },
 			msdyn_refreshperiod: { a: 'msdyn_refreshperiod' },
-			msdyn_schedule1: { a: 'msdyn_schedule' },
+			msdyn_schedule2: { a: 'msdyn_schedule' },
 			msdyn_scheduledisabledreason: { a: 'msdyn_scheduledisabledreason' },
 			msdyn_scheduleId: { a: 'msdyn_scheduleid' },
 			msdyn_scheduleidref: { b: 'msdyn_scheduleidref', a: '_msdyn_scheduleidref_value', c: 'msdyn_dataflows', d: 'msdyn_dataflow', r: true },

@@ -44,7 +44,7 @@ declare namespace DevKit {
 		/** Chỉ sử dụng nội bộ. */
 		SubscriptionId: string;
 		/** Chỉ sử dụng nội bộ. */
-		readonly SubscriptionSyncInfoId1: number;
+		readonly SubscriptionSyncInfoId2: number;
 		/** Chỉ sử dụng nội bộ. */
 		SyncResult: boolean;
 		/** Chỉ sử dụng nội bộ. */
@@ -67,7 +67,7 @@ declare namespace DevKit {
 			/** Chỉ sử dụng nội bộ. */
 			readonly SubscriptionId: string;
 			/** Chỉ sử dụng nội bộ. */
-			readonly SubscriptionSyncInfoId1: string;
+			readonly SubscriptionSyncInfoId2: string;
 			/** Chỉ sử dụng nội bộ. */
 			readonly SyncResult: string;
 			/** Chỉ sử dụng nội bộ. */

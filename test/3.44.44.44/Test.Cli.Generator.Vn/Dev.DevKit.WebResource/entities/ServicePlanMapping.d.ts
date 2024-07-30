@@ -41,7 +41,7 @@ declare namespace DevKit {
 		readonly CreatedOnBehalfBy: string;
 		CustomAPI: string;
 		/** Unique identifier of the table/entity that needs to be enforced. If the entity is not provided in the mapping, it will enforce all tables/entities for the SdkMessage. */
-		Entity1: string;
+		Entity2: string;
 		/** Feature Control to enable/disable the current mapping enforcement(This Feature Control will be controlled by solution owners). */
 		FeatureControl: string;
 		/** Sequence number of the import that created this record. */
@@ -95,7 +95,7 @@ declare namespace DevKit {
 			readonly CreatedOnBehalfBy: string;
 			readonly CustomAPI: string;
 			/** Unique identifier of the table/entity that needs to be enforced. If the entity is not provided in the mapping, it will enforce all tables/entities for the SdkMessage. */
-			readonly Entity1: string;
+			readonly Entity2: string;
 			/** Feature Control to enable/disable the current mapping enforcement(This Feature Control will be controlled by solution owners). */
 			readonly FeatureControl: string;
 			/** Sequence number of the import that created this record. */

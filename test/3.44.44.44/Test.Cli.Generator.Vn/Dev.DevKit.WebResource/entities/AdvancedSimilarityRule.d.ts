@@ -104,7 +104,7 @@ declare namespace DevKit {
 		/** Nhập mô tả cho Quy tắc Tương tự Nâng cao */
 		Description: string;
 		/** thực thể */
-		Entity1: string;
+		Entity2: string;
 		/** Chỉ sử dụng nội bộ. */
 		ExactMatchList: string;
 		/** Chỉ sử dụng nội bộ. */
@@ -159,7 +159,7 @@ declare namespace DevKit {
 			/** Nhập mô tả cho Quy tắc Tương tự Nâng cao */
 			readonly Description: string;
 			/** thực thể */
-			readonly Entity1: string;
+			readonly Entity2: string;
 			/** Chỉ sử dụng nội bộ. */
 			readonly ExactMatchList: string;
 			/** Chỉ sử dụng nội bộ. */

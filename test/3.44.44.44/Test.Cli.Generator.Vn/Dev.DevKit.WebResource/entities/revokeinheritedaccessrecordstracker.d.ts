@@ -49,7 +49,7 @@ declare namespace DevKit {
 		RecordsJson: string;
 		RelationshipName: string;
 		/** The name of the custom entity. */
-		revokeinheritedaccessrecordstracker1: string;
+		revokeinheritedaccessrecordstracker2: string;
 		/** Unique identifier for entity instances */
 		revokeinheritedaccessrecordstrackerId: string;
 		/** Status of the RevokeInheritedAccessRecordsTracker */
@@ -84,7 +84,7 @@ declare namespace DevKit {
 			readonly RecordsJson: string;
 			readonly RelationshipName: string;
 			/** The name of the custom entity. */
-			readonly revokeinheritedaccessrecordstracker1: string;
+			readonly revokeinheritedaccessrecordstracker2: string;
 			/** Unique identifier for entity instances */
 			readonly revokeinheritedaccessrecordstrackerId: string;
 			/** Status of the RevokeInheritedAccessRecordsTracker */
