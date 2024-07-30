@@ -33,7 +33,7 @@
 			var setValue = function (value) {
 				if (isMultiOptionSet) value = value.join(',');
 				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-					if (value == null) {
+					if (value === null) {
 						upsertEntity[schemaName + '@odata.bind'] = null;
 					}
 					else {
