@@ -75,8 +75,8 @@
     },
     "DEBUG.ABC": {
       "commandName": "Project",
-      "commandLineArgs": "/sdklogin:\"yes\" /json:\"..\\..\\DynamicsCrm.DevKit.Cli.json\" /type:\"generators\" /profile:\"JS-WEBAPI\"",
-      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\test\\3.44.44.44\\Test.Cli.Generator.Vn\\Dev.DevKit.WebResource\\entities"
+      "commandLineArgs": "/sdklogin:\"yes\" /json:\"..\\..\\DynamicsCrm.DevKit.Cli.json\" /type:\"generators\" /profile:\"LATEBOUND\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\test\\3.44.44.44\\Test.Cli.Generator.Demo\\Dev.DevKit.Shared\\Entities"
     }
   }
 }

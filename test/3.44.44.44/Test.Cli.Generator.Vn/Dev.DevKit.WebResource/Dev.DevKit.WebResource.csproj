@@ -54,7 +54,6 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <None Include="deploy.debug.bat" />
-    <None Include="packages.config" />
     <None Include="package.json" />
     <Content Include="entities\aaduser.form.js" />
     <Content Include="entities\aaduser.js" />
@@ -2005,11 +2004,9 @@
     <Content Include="entities\workqueueitem.form.js" />
     <Content Include="entities\workqueueitem.js" />
     <Content Include="lib\devkit.js" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <ItemGroup>
-    <Analyzer Include="..\packages\DynamicsCrm.DevKit.Analyzers.3.33.33.34\analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />
-  </ItemGroup>
   <ItemGroup>
     <Folder Include="css\" />
     <Folder Include="html\" />
@@ -2739,6 +2736,9 @@
     <TypeScriptCompile Include="entities\WorkflowWaitSubscription.d.ts" />
     <TypeScriptCompile Include="entities\workqueue.d.ts" />
     <TypeScriptCompile Include="entities\workqueueitem.d.ts" />
+  </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="..\packages\DynamicsCrm.DevKit.Analyzers.3.44.44.44\analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v15.0\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <ProjectExtensions>
