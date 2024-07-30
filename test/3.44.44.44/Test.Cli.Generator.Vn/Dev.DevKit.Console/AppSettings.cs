@@ -10,12 +10,12 @@ namespace Dev.DevKit.Console
             get
             {
                 if (_Service != null) return _Service;
+                CrmServiceClient.MaxConnectionTimeout = new TimeSpan(1, 0, 0);
                 var loginForm = new LoginForm();
                 loginForm.ConnectionToCrmCompleted += loginForm_ConnectionToCrmCompleted;
                 loginForm.ShowDialog();
                 if (loginForm.CrmConnectionMgr != null && loginForm.CrmConnectionMgr.CrmSvc != null && loginForm.CrmConnectionMgr.CrmSvc.IsReady)
                 {
-                    CrmServiceClient.MaxConnectionTimeout = new TimeSpan(1, 0, 0);
                     _Service = loginForm.CrmConnectionMgr.CrmSvc;
                 }
                 return _Service;

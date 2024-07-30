@@ -8,7 +8,7 @@ using System.Linq;
 namespace Dev.DevKit.Shared
 {
     [DebuggerNonUserCode()]
-    public class EntityBase
+    public abstract class EntityBase
     {
         protected T GetAliasedValue<T>(string name)
         {
@@ -24,7 +24,7 @@ namespace Dev.DevKit.Shared
         public Entity Entity { get; set; }
         protected Entity PreEntity { get; set; }
         public Guid Id { get { return Entity.Id; } }
-
+        public string LogicalName { get { return Entity.LogicalName; } }
         protected object CloneAttribute(object value)
         {
             if (value == null)
@@ -113,6 +113,12 @@ namespace Dev.DevKit.Shared
 
         public Entity GetUpdateEntity()
         {
+            string MethodUpdate()
+            {
+                var stackTrace = new System.Diagnostics.StackTrace();
+                System.Reflection.MethodBase method = stackTrace.GetFrame(2).GetMethod();
+                return $"{method?.ReflectedType?.Namespace}.{method?.ReflectedType?.Name}.{method?.Name}";
+            }
             var update = new Entity(Entity.LogicalName);
             update.Id = Entity.Id;
             foreach (var property in Entity.Attributes)
@@ -128,15 +134,31 @@ namespace Dev.DevKit.Shared
                     update[key] = value;
                 }
             }
-            if (update.Attributes.Count == 0)
-            {
-                return new Entity
-                {
-                    Id = Entity.Id,
-                    LogicalName = Entity.LogicalName
-                }; ;
-            }
+            if (update.Attributes.Count == 0) throw new InvalidPluginExecutionException($"Update {Entity.LogicalName} without attributes on method: {MethodUpdate()}");
+            if (Entity.Id == Guid.Empty) throw new InvalidPluginExecutionException($"Update {Entity.LogicalName} without Guid on method: {MethodUpdate()}");
             return update;
+        }
+
+        public EntityReference ToEntityReference()
+        {
+            if (Entity == null || Entity.Id == Guid.Empty) return null;
+            return Entity.ToEntityReference();
+        }
+
+        public bool Contains(string field)
+        {
+            return this.Entity.Contains(field);
+        }
+
+        public void Remove(string field)
+        {
+            this.Entity.Attributes.Remove(field);
+        }
+
+        public bool Exist()
+        {
+            if (Entity == null || Entity.Id == Guid.Empty) return false;
+            return true;
         }
     }
 }

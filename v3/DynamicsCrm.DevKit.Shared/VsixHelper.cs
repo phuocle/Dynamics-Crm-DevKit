@@ -573,9 +573,9 @@ namespace DynamicsCrm.DevKit.Shared
             code += $"  </entity>{NEW_LINE}";
             code += $"</fetch>{NEW_LINE}";
             code += $"\";{NEW_LINE}";
-            code += $"{TAB}{TAB}{TAB}var rows = serviceAdmin.RetrieveMultiple<{entityMetadata.SchemaName}>(fetchXml);{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}var rows = serviceAdmin.RetrieveMultiple<{@class}>(fetchXml);{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}if (rows.Count == 1) return rows[0];{NEW_LINE}";
-            code += $"{TAB}{TAB}{TAB}return new {entityMetadata.SchemaName}();{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}return new {@class}();{NEW_LINE}";
             code += $"{TAB}{TAB}}}{NEW_LINE}";
             code += NEW_LINE;
             //code += $"{TAB}{TAB}public static {@class} Read_Record(IOrganizationService serviceAdmin, IOrganizationService service, ITracingService tracing, Guid? {@class}Id, ColumnSet columns = null){NEW_LINE}";

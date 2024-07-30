@@ -1,4 +1,6 @@
 ﻿{
     "DefaultCrmConnection": null,
-    "CrmConnections": null
+    "CrmConnections": [
+        
+    ]
 }
