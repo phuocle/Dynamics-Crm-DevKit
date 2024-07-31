@@ -5,13 +5,12 @@
   "entityTypesFolder": "Entities",
   "generateActions": true,
   "generateGlobalOptionSets": false,
-  "generateSdkMessages": true,
+  "generateSdkMessages": false,
   "language": "CS",
   "logLevel": "All",
   "messagesTypesFolder": "Messages",
   "namespace": "Dev.DevKit.ProxyTypes",
   "optionSetsTypesFolder": "OptionSets",
-  "serviceContextName": "DataverseContext",
   "suppressGeneratedCodeAttribute": true,
   "suppressINotifyPattern": true
 }
