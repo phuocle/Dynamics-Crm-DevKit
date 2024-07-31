@@ -4,7 +4,7 @@
   "language": "CS",
   "namespace": "Dev.DevKit.ProxyTypes",
   "generateSdkMessages": true,
-  "serviceContextName": "OrgContext",
+  "serviceContextName": "DataverseContext",
   "generateGlobalOptionSets": true,
   "emitFieldsClasses": true,
   "entityTypesFolder": "Entities",
@@ -12,5 +12,12 @@
   "optionSetsTypesFolder": "OptionSets",
   "emitEntityETC": true,
   "emitVirtualAttributes": true,
-  "logLevel":  "All"
+  "logLevel": "All",
+  "codeCustomizationService": "DLaB.ModelBuilderExtensions.CustomizeCodeDomService,DLaB.ModelBuilderExtensions",
+  "codeGenerationService": "DLaB.ModelBuilderExtensions.CodeGenerationService,DLaB.ModelBuilderExtensions",
+  "codeWriterFilterService": "DLaB.ModelBuilderExtensions.CodeWriterFilterService,DLaB.ModelBuilderExtensions",
+  "codeWriterMessageFilterService": "DLaB.ModelBuilderExtensions.CodeWriterMessageFilterService,DLaB.ModelBuilderExtensions",
+  "metadataProviderService": "DLaB.ModelBuilderExtensions.MetadataProviderService,DLaB.ModelBuilderExtensions",
+  "metadataQueryProviderService": "DLaB.ModelBuilderExtensions.MetadataQueryProviderService,DLaB.ModelBuilderExtensions",
+  "namingService": "DLaB.ModelBuilderExtensions.NamingService,DLaB.ModelBuilderExtensions"
 }
