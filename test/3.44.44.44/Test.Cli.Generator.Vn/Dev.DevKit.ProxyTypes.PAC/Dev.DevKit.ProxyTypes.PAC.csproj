@@ -91,6 +91,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <Compile Include="DataverseContext.cs" />
+    <Compile Include="Entities.cs" />
+    <Compile Include="EntityOptionSetEnum.cs" />
+    <Compile Include="Messages.cs" />
+    <Compile Include="OptionSet.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ProxyTypesAssembly.cs" />
     <None Include="builderSettings.json" />
