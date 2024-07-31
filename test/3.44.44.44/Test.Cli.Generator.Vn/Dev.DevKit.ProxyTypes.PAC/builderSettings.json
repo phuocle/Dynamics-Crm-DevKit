@@ -1,12 +1,4 @@
 ﻿{
-  "codeCustomizationService": "DLaB.ModelBuilderExtensions.CustomizeCodeDomService,DLaB.ModelBuilderExtensions",
-  "codeGenerationService": "DLaB.ModelBuilderExtensions.CodeGenerationService,DLaB.ModelBuilderExtensions",
-  "codeWriterFilterService": "DLaB.ModelBuilderExtensions.CodeWriterFilterService,DLaB.ModelBuilderExtensions",
-  "codeWriterMessageFilterService": "DLaB.ModelBuilderExtensions.CodeWriterMessageFilterService,DLaB.ModelBuilderExtensions",
-  "metadataProviderService": "DLaB.ModelBuilderExtensions.MetadataProviderService,DLaB.ModelBuilderExtensions",
-  "metadataQueryProviderService": "DLaB.ModelBuilderExtensions.MetadataQueryProviderService,DLaB.ModelBuilderExtensions",
-  "namingService": "DLaB.ModelBuilderExtensions.NamingService,DLaB.ModelBuilderExtensions",
-
   "emitEntityETC": false,
   "emitFieldsClasses": true,
   "emitVirtualAttributes": true,
