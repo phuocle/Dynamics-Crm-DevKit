@@ -1,0 +1,18 @@
+﻿{
+  "suppressINotifyPattern": true,
+  "suppressGeneratedCodeAttribute": true,
+  "language": "CS",
+  "namespace": "Dev.DevKit.ProxyTypes",
+  "generateSdkMessages": true,
+  "serviceContextName": "OrgContext",
+  "generateGlobalOptionSets": true,
+  "emitFieldsClasses": true,
+  "entityTypesFolder": "Entities",
+  "messagesTypesFolder": "Messages",
+  "optionSetsTypesFolder": "OptionSets",
+  "emitEntityETC": true,
+  "emitVirtualAttributes": true,
+  "entityNamesFilter": [
+    "account"
+  ]
+}

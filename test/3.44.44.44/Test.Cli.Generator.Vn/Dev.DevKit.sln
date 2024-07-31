@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.WebResource", "D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.ProxyTypes", "Dev.DevKit.ProxyTypes\Dev.DevKit.ProxyTypes.csproj", "{24F931D0-A884-4354-B3C5-47AC3A575D6A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.ProxyTypes.PAC", "Dev.DevKit.ProxyTypes.PAC\Dev.DevKit.ProxyTypes.PAC.csproj", "{FCCA851C-A570-4B6E-AE56-78FC9FE12029}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,6 +39,10 @@ Global
 		{24F931D0-A884-4354-B3C5-47AC3A575D6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{24F931D0-A884-4354-B3C5-47AC3A575D6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{24F931D0-A884-4354-B3C5-47AC3A575D6A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FCCA851C-A570-4B6E-AE56-78FC9FE12029}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FCCA851C-A570-4B6E-AE56-78FC9FE12029}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FCCA851C-A570-4B6E-AE56-78FC9FE12029}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FCCA851C-A570-4B6E-AE56-78FC9FE12029}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
