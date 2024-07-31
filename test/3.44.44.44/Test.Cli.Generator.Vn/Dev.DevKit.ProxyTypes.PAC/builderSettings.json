@@ -12,7 +12,5 @@
   "optionSetsTypesFolder": "OptionSets",
   "emitEntityETC": true,
   "emitVirtualAttributes": true,
-  "entityNamesFilter": [
-    "account"
-  ]
+  "logLevel":  "All"
 }
