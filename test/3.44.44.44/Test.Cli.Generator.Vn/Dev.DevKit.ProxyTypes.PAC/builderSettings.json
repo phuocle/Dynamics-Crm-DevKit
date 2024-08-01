@@ -3,14 +3,17 @@
   "emitFieldsClasses": true,
   "emitVirtualAttributes": true,
   "entityTypesFolder": "Entities",
-  "generateActions": true,
+  "generateActions": false,
   "generateGlobalOptionSets": false,
   "generateSdkMessages": false,
   "language": "CS",
   "logLevel": "All",
-  "messagesTypesFolder": "Messages",
   "namespace": "Dev.DevKit.ProxyTypes",
   "optionSetsTypesFolder": "OptionSets",
   "suppressGeneratedCodeAttribute": true,
-  "suppressINotifyPattern": true
+  "suppressINotifyPattern": true,
+
+  "entityNamesFilter": [
+    "account"
+  ]
 }
