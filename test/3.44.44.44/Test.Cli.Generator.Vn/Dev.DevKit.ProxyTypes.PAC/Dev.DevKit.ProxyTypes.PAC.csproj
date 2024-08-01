@@ -91,6 +91,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <Compile Include="Entities\account.cs" />
+    <Compile Include="EntityOptionSetEnum.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ProxyTypesAssembly.cs" />
     <None Include="builderSettings.backup.json" />

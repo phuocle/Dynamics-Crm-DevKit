@@ -1,7 +1,7 @@
 ﻿{
   "emitEntityETC": false,
   "emitFieldsClasses": true,
-  "emitVirtualAttributes": true,
+  "emitVirtualAttributes": false,
   "entityTypesFolder": "Entities",
   "generateActions": false,
   "generateGlobalOptionSets": false,
