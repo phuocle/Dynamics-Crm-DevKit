@@ -51,14 +51,14 @@ namespace <#=Context.PluginNameSpace#>
         [TestMethod]
         public void <#=Context.Class#>Test_01()
         {
-            ///setup
+            ////setup
             //var json = @"";
             //var remote = TestHelper.DeserializeRemoteExecutionContext(json);
             //var pluginContext = _context.GetDefaultPluginContext();
             //pluginContext.SetXrmFakedContextPlugin(remote);
-            ///run
+            ////run
             //_context.ExecutePluginWith<<#=Context.Class#>> (pluginContext);
-            ///result
+            ////result
             Assert.IsTrue(true);
         }
     }
