@@ -193,12 +193,12 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     VS.MessageBox.ShowError("Please select message");
                     return false;
                 }
-                if (ComboBoxStage.SelectedItem == null)
+                if (ComboBoxStage.Visibility == System.Windows.Visibility.Visible && ComboBoxStage.SelectedItem == null)
                 {
                     VS.MessageBox.ShowError("Please select stage");
                     return false;
                 }
-                if (ComboBoxExecution.SelectedItem == null)
+                if (ComboBoxExecution.Visibility == System.Windows.Visibility.Visible && ComboBoxExecution.SelectedItem == null)
                 {
                     VS.MessageBox.ShowError("Please select execution");
                     return false;
