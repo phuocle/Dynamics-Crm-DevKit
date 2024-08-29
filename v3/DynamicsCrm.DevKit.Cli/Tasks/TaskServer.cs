@@ -753,12 +753,14 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     if (fe.Message.Contains("The dependent component Attribute "))
                     {
                         CliLog.WriteLineError(ConsoleColor.Yellow, $"Plugin Step {attribute.Name} have invalid Image Attribute {attribute.FilteringAttributes}. Assemply deployed, but the deployment of this assembly stopped.");
+                        return null;
                     }
+                    CliLog.WriteLineError(ConsoleColor.Yellow, $"Plugin Step {attribute.Name} register failed: {fe.Message.TrimEnd(".".ToCharArray())}. Assemply deployed, but the deployment of this assembly stopped.");
                     return null;
                 }
                 catch (Exception e)
                 {
-                    CliLog.WriteLineError(ConsoleColor.Yellow, $"{e.Message} Assemply deployed, but the deployment of this assembly stopped.");
+                    CliLog.WriteLineError(ConsoleColor.Yellow, $"{e.Message.TrimEnd(".".ToCharArray())}. Assemply deployed, but the deployment of this assembly stopped.");
                     return null;
                 }
             }
