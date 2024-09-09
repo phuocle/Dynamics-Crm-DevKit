@@ -56,9 +56,9 @@ namespace $NameSpace$.Debug
         private static void FixDataAfterDeserialize(RemoteExecutionContext pluginExecutionContext)
         {
             var entities = new List<Entity>();
-            entities.AddRange(pluginExecutionContext.InputParameters.Where(x => x.Value is Entity).Select(x => (Entity)x.Value).ToList());
-            entities.AddRange(pluginExecutionContext.SharedVariables.Where(x => x.Value is Entity).Select(x => (Entity)x.Value).ToList());
-            entities.AddRange(pluginExecutionContext.OutputParameters.Where(x => x.Value is Entity).Select(x => (Entity)x.Value).ToList());
+            FixEntities(pluginExecutionContext.InputParameters, entities);
+            FixEntities(pluginExecutionContext.OutputParameters, entities);
+            FixEntities(pluginExecutionContext.SharedVariables, entities);
             entities.AddRange(pluginExecutionContext.PostEntityImages.Select(x => (Entity)x.Value).ToList());
             entities.AddRange(pluginExecutionContext.PreEntityImages.Select(x => (Entity)x.Value).ToList());
             FixDateTime(entities);
@@ -70,6 +70,14 @@ namespace $NameSpace$.Debug
             FixEntityReferenceCollection(pluginExecutionContext.OutputParameters);
         }
 
+        private static void FixEntities(ParameterCollection inputParameters, List<Entity> entities)
+        {
+            foreach(var item in inputParameters.Where(x => x.Value is Entity || x.Value is EntityCollection))
+            {
+                if (item.Value is Entity e) entities.Add(e);
+                if (item.Value is EntityCollection ec) entities.AddRange(ec.Entities);
+            }
+        }
         private static void FixEntityReferenceCollection(ParameterCollection parameterCollection)
         {
             foreach (var key in parameterCollection.Keys.ToList())
