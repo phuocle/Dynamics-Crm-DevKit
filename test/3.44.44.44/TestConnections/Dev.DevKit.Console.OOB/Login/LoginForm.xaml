@@ -1,4 +1,4 @@
-﻿<Window x:Class="$NameSpace$.LoginForm"
+﻿<Window x:Class="Dev.DevKit.Console.OOB.LoginForm"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:CrmLoginCtrl="clr-namespace:Microsoft.Xrm.Tooling.CrmConnectControl;assembly=Microsoft.Xrm.Tooling.CrmConnectControl"
@@ -20,7 +20,7 @@
     </Window.Resources>
     <Grid>
         <StackPanel>
-            <TextBlock Text="DynamicsCrm.DevKit $DevKitVersion$" Margin="5,0,0,0" FontSize="18" FontWeight="Bold"  />
+            <TextBlock Text="DynamicsCrm.DevKit 3.44.44.44" Margin="5,0,0,0" FontSize="18" FontWeight="Bold"  />
             <CrmLoginCtrl:CrmServerLoginControl Name="CrmLoginCtrl" Grid.Row="1" ShowTitle="False"  Margin="10,0,10,0" VerticalAlignment="Bottom"  />
         </StackPanel>
     </Grid>

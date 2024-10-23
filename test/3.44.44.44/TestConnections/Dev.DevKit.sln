@@ -9,6 +9,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.Console.ClientSe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.Console.UserPass", "Dev.DevKit.Console.UserPass\Dev.DevKit.Console.UserPass.csproj", "{E29F30C1-052C-4E59-AB44-927D386BC304}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D6A1222B-751D-4F67-B2C1-F02B9E5E3C0D}"
+	ProjectSection(SolutionItems) = preProject
+		DynamicsCrm.DevKit.Cli.json = DynamicsCrm.DevKit.Cli.json
+		DynamicsCrm.DevKit.json = DynamicsCrm.DevKit.json
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.Console.OOB", "Dev.DevKit.Console.OOB\Dev.DevKit.Console.OOB.csproj", "{8A415756-7957-4A3B-A9D1-CB1C051EBEC3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,6 +31,10 @@ Global
 		{E29F30C1-052C-4E59-AB44-927D386BC304}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E29F30C1-052C-4E59-AB44-927D386BC304}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E29F30C1-052C-4E59-AB44-927D386BC304}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A415756-7957-4A3B-A9D1-CB1C051EBEC3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A415756-7957-4A3B-A9D1-CB1C051EBEC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A415756-7957-4A3B-A9D1-CB1C051EBEC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A415756-7957-4A3B-A9D1-CB1C051EBEC3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -33,6 +45,7 @@ Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{6970208d-4fdd-4485-a3d1-2e29a2165cf4}*SharedItemsImports = 4
 		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{8145ff9f-31b4-4ad5-97b8-ede00321ed72}*SharedItemsImports = 13
+		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{8a415756-7957-4a3b-a9d1-cb1c051ebec3}*SharedItemsImports = 4
 		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{e29f30c1-052c-4e59-ab44-927d386bc304}*SharedItemsImports = 4
 	EndGlobalSection
 EndGlobal
