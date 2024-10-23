@@ -126,7 +126,7 @@ namespace DynamicsCrm.DevKit.Shared
                 value = value.TrimEnd("/".ToCharArray());
                 condition += $"<condition attribute='name' operator='ends-with' value='{value}'/>" + "\r\n";
             }
-            var fileNameWithoutExtension = "/" + Path.GetFileNameWithoutExtension(fullFileName) + "/";
+            var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fullFileName);
             condition += $"<condition attribute='name' operator='like' value='%{fileNameWithoutExtension}%'/>" + "\r\n";
             var fetchXml = $@"
 <fetch>
