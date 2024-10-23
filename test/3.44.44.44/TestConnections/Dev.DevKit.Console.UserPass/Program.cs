@@ -1,7 +1,7 @@
 ﻿using Microsoft.Crm.Sdk.Messages;
-using Dev.DevKit.Console.ClientSecret.Debug;
+using Dev.DevKit.Console.UserPass.Debug;
 
-namespace Dev.DevKit.Console.ClientSecret
+namespace Dev.DevKit.Console.UserPass
 {
     public class Program
     {
