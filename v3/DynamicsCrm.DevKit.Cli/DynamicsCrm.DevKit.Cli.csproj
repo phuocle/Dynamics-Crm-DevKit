@@ -61,7 +61,7 @@
 	  <PackageReference Include="Microsoft.CrmSdk.XrmTooling.CoreAssembly" Version="9.1.1.65" />
 	  <PackageReference Include="NuGet.Packaging" Version="6.7.1" />
 	  <PackageReference Include="NuGet.Protocol" Version="6.7.1" />
-	  <PackageReference Include="System.Text.Json" Version="8.0.4" />
+	  <PackageReference Include="System.Text.Json" Version="8.0.5" />
 	</ItemGroup>
 
 	<ItemGroup>
