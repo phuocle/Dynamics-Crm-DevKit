@@ -20,7 +20,7 @@ namespace <#=Context.PluginNameSpace#>
             var tracing = (ITracingService)serviceProvider.GetService(typeof(ITracingService));
             <#if(Context.PluginLogicalName!="none"){#>if (context.PrimaryEntityName.ToLower() != "<#=Context.PluginLogicalName#>") throw new InvalidPluginExecutionException("PrimaryEntityName does not equals <#=Context.PluginLogicalName#>");<#}#>
 
-            //tracing.DebugContext(context);
+            tracing.DebugContext(context);
 
             var outputs = ExecuteCustomApi(context, serviceFactory, serviceAdmin, service, tracing);
             foreach (var output in outputs)
