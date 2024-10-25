@@ -59,7 +59,7 @@ namespace DynamicsCrm.DevKit.Lib.Wizard.ItemTemplates
                     }
                     else
                     {
-                        var crmConnectionString = XrmHelper.BuildConnectionString(form.DataverseConnectionString);
+                        var crmConnectionString = XrmHelper.BuildConnectionString2(form.DataverseConnectionString);
                         downloadContent = downloadContent.Replace("$CrmConnectionString$", crmConnectionString);
                     }
                     Utility.ForceWriteAllTextWithoutUTF8(downloadFile, downloadContent);

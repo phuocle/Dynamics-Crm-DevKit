@@ -1,0 +1,94 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ImportExportXml version="9.2.24094.196" SolutionPackageVersion="9.2" languagecode="1033" generatedBy="CrmLive" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" OrganizationVersion="9.2.24094.196" OrganizationSchemaType="Standard" CRMServerServiceabilityVersion="9.2.24101.00178">
+  <SolutionManifest>
+    <UniqueName>CONNECTIONS</UniqueName>
+    <LocalizedNames>
+      <LocalizedName description="CONNECTIONS" languagecode="1033" />
+    </LocalizedNames>
+    <Descriptions>
+      <Description description="This solution used for test all connections support by DynamicsCrm.Devkit" languagecode="1033" />
+    </Descriptions>
+    <Version>1.0.0.0</Version>
+    <Managed>2</Managed>
+    <Publisher>
+      <UniqueName>DEVKIT</UniqueName>
+      <LocalizedNames>
+        <LocalizedName description="DEVKIT" languagecode="1033" />
+      </LocalizedNames>
+      <Descriptions>
+        <Description description="DEVKIT" languagecode="1033" />
+      </Descriptions>
+      <EMailAddress>vanphuoc@gmail.com</EMailAddress>
+      <SupportingWebsiteUrl>https://phuocle.net</SupportingWebsiteUrl>
+      <CustomizationPrefix>devkit</CustomizationPrefix>
+      <CustomizationOptionValuePrefix>44444</CustomizationOptionValuePrefix>
+      <Addresses>
+        <Address>
+          <AddressNumber>1</AddressNumber>
+          <AddressTypeCode>1</AddressTypeCode>
+          <City>Ho Chi Minh</City>
+          <County xsi:nil="true"></County>
+          <Country>VietNam</Country>
+          <Fax xsi:nil="true"></Fax>
+          <FreightTermsCode xsi:nil="true"></FreightTermsCode>
+          <ImportSequenceNumber xsi:nil="true"></ImportSequenceNumber>
+          <Latitude xsi:nil="true"></Latitude>
+          <Line1 xsi:nil="true"></Line1>
+          <Line2 xsi:nil="true"></Line2>
+          <Line3 xsi:nil="true"></Line3>
+          <Longitude xsi:nil="true"></Longitude>
+          <Name xsi:nil="true"></Name>
+          <PostalCode>700000</PostalCode>
+          <PostOfficeBox xsi:nil="true"></PostOfficeBox>
+          <PrimaryContactName xsi:nil="true"></PrimaryContactName>
+          <ShippingMethodCode>1</ShippingMethodCode>
+          <StateOrProvince>N/A</StateOrProvince>
+          <Telephone1>84 0907952232</Telephone1>
+          <Telephone2 xsi:nil="true"></Telephone2>
+          <Telephone3 xsi:nil="true"></Telephone3>
+          <TimeZoneRuleVersionNumber xsi:nil="true"></TimeZoneRuleVersionNumber>
+          <UPSZone xsi:nil="true"></UPSZone>
+          <UTCOffset xsi:nil="true"></UTCOffset>
+          <UTCConversionTimeZoneCode xsi:nil="true"></UTCConversionTimeZoneCode>
+        </Address>
+        <Address>
+          <AddressNumber>2</AddressNumber>
+          <AddressTypeCode>1</AddressTypeCode>
+          <City xsi:nil="true"></City>
+          <County xsi:nil="true"></County>
+          <Country xsi:nil="true"></Country>
+          <Fax xsi:nil="true"></Fax>
+          <FreightTermsCode xsi:nil="true"></FreightTermsCode>
+          <ImportSequenceNumber xsi:nil="true"></ImportSequenceNumber>
+          <Latitude xsi:nil="true"></Latitude>
+          <Line1 xsi:nil="true"></Line1>
+          <Line2 xsi:nil="true"></Line2>
+          <Line3 xsi:nil="true"></Line3>
+          <Longitude xsi:nil="true"></Longitude>
+          <Name xsi:nil="true"></Name>
+          <PostalCode xsi:nil="true"></PostalCode>
+          <PostOfficeBox xsi:nil="true"></PostOfficeBox>
+          <PrimaryContactName xsi:nil="true"></PrimaryContactName>
+          <ShippingMethodCode>1</ShippingMethodCode>
+          <StateOrProvince xsi:nil="true"></StateOrProvince>
+          <Telephone1 xsi:nil="true"></Telephone1>
+          <Telephone2 xsi:nil="true"></Telephone2>
+          <Telephone3 xsi:nil="true"></Telephone3>
+          <TimeZoneRuleVersionNumber xsi:nil="true"></TimeZoneRuleVersionNumber>
+          <UPSZone xsi:nil="true"></UPSZone>
+          <UTCOffset xsi:nil="true"></UTCOffset>
+          <UTCConversionTimeZoneCode xsi:nil="true"></UTCConversionTimeZoneCode>
+        </Address>
+      </Addresses>
+    </Publisher>
+    <RootComponents>
+      <RootComponent type="91" id="{55c8b3af-df91-ef11-8a69-000d3ac831e1}" schemaName="Dev.DevKit.Plugin.ClientSecret.Account, Version=1.0.0.0, Culture=neutral, PublicKeyToken=01b163700350c46f" behavior="0" />
+      <RootComponent type="91" id="{a0baae5b-7e92-ef11-8a68-000d3ac831e1}" schemaName="Dev.DevKit.Plugin.OOB.Account, Version=1.0.0.0, Culture=neutral, PublicKeyToken=5f5f66c58133bc47" behavior="0" />
+      <RootComponent type="91" id="{b33bfc25-7c92-ef11-8a68-000d3ac831e1}" schemaName="Dev.DevKit.Plugin.UserPass.Account, Version=1.0.0.0, Culture=neutral, PublicKeyToken=aad4a8f27dc3945f" behavior="0" />
+      <RootComponent type="92" id="{0ce26c36-7c92-ef11-8a68-000d3ac831e1}" behavior="0" />
+      <RootComponent type="92" id="{59c8b3af-df91-ef11-8a69-000d3ac831e1}" behavior="0" />
+      <RootComponent type="92" id="{a4baae5b-7e92-ef11-8a68-000d3ac831e1}" behavior="0" />
+    </RootComponents>
+    <MissingDependencies />
+  </SolutionManifest>
+</ImportExportXml>

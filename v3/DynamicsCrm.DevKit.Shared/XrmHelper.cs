@@ -84,6 +84,39 @@ namespace DynamicsCrm.DevKit.Shared
             return value;
         }
 
+        public static string BuildConnectionString2(string connectionString)
+        {
+            if (connectionString == null) return string.Empty;
+            if (!connectionString.ToLower().Contains("Password=".ToLower())) return connectionString;
+            var value = string.Empty;
+            var arr = connectionString.Split(";".ToCharArray());
+            foreach (var item in arr)
+            {
+                if (item.ToLower().Contains("Password=".ToLower()))
+                {
+                    var password = string.Empty;
+                    if (item.EndsWith("=="))
+                        password = item.Split("=".ToCharArray())[1] + "==";
+                    else if (item.EndsWith("="))
+                        password = item.Split("=".ToCharArray())[1] + "=";
+                    else
+                        password = item.Split("=".ToCharArray())[1];
+                    value += "Password=" + password + ";";
+                }
+                else
+                    value += item + ";";
+            }
+            value = value.Replace(";;", ";");
+            if (value.ToLower().Contains("AuthType=OAuth".ToLower()))
+            {
+                if (!value.ToLower().Contains("RedirectUri=".ToLower()))
+                {
+                    value += "AppId=51f81489-12ee-4a9e-aaae-a2591f45987d;RedirectUri=app://58145B91-0C36-4500-8554-080854F2AC97;LoginPrompt=Auto;";
+                }
+            }
+            return value;
+        }
+
         public static CrmServiceClient IsConnected(CrmConnection crmConnection)
         {
             var password = crmConnection.Password;

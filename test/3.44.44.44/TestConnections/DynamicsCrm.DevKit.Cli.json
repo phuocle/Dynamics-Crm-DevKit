@@ -67,19 +67,19 @@
   "solutionpackagers": [
     {
       "profile": "Extract-Both",
-      "solution": "???",
+      "solution": "CONNECTIONS",
       "rootfolder": "",
       "solutiontype": "Both",
-      "folder": "???",
+      "folder": "CONNECTIONS",
       "type": "Extract",
       "mapfile": ""
     },
     {
       "profile": "Pack-Both",
-      "solution": "???",
+      "solution": "CONNECTIONS",
       "rootfolder": "",
       "solutiontype": "Both",
-      "folder": "???",
+      "folder": "CONNECTIONS",
       "type": "Pack",
       "mapfile": ""
     }

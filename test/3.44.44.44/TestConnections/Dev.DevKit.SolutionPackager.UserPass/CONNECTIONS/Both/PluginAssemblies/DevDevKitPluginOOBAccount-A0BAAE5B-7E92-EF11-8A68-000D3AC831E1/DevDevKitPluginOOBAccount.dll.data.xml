@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<PluginAssembly FullName="Dev.DevKit.Plugin.OOB.Account, Version=1.0.0.0, Culture=neutral, PublicKeyToken=5f5f66c58133bc47" PluginAssemblyId="a0baae5b-7e92-ef11-8a68-000d3ac831e1" CustomizationLevel="1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <IsolationMode>2</IsolationMode>
+  <SourceType>0</SourceType>
+  <IntroducedVersion>1.0.0.0</IntroducedVersion>
+  <FileName>/PluginAssemblies/DevDevKitPluginOOBAccount-A0BAAE5B-7E92-EF11-8A68-000D3AC831E1/DevDevKitPluginOOBAccount.dll</FileName>
+  <PluginTypes>
+    <PluginType AssemblyQualifiedName="Dev.DevKit.PluginOOB.Account.PostAccountCreateAsynchronous, Dev.DevKit.Plugin.OOB.Account, Version=1.0.0.0, Culture=neutral, PublicKeyToken=5f5f66c58133bc47" PluginTypeId="a3baae5b-7e92-ef11-8a68-000d3ac831e1" Name="Dev.DevKit.PluginOOB.Account.PostAccountCreateAsynchronous">
+      <Description>DynamicsCrm.DevKit v.3.44.44.44 - Build: 2024.10.23 11.10.16</Description>
+      <FriendlyName>Dev.DevKit.PluginOOB.Account.PostAccountCreateAsynchronous</FriendlyName>
+    </PluginType>
+  </PluginTypes>
+</PluginAssembly>
