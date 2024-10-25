@@ -1,12 +1,10 @@
-﻿using Microsoft.Crm.Sdk.Messages;$if$($IsOOBConnection$== 1)
-using System;$endif$
-using $NameSpace$.Debug;
+﻿using Microsoft.Crm.Sdk.Messages;
+using Dev.DevKit.Console.OnPremises.Debug;
 
-namespace $NameSpace$
+namespace Dev.DevKit.Console.OnPremises
 {
     public class Program
-    {$if$($IsOOBConnection$==1)
-        [STAThread]$endif$
+    {
         static void Main()
         {
             CheckWhoAmI();

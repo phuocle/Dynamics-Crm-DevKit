@@ -19,6 +19,9 @@ namespace DynamicsCrm.DevKit.Tool
                 case "nuglify":
                     TaskNUglify.Run();
                     break;
+                case "decrypt":
+                    TaskDecrypt.Run();
+                    break;
             }
         }
     }

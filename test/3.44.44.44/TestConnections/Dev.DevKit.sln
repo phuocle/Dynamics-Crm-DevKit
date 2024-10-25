@@ -29,6 +29,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.SolutionPackager
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.SolutionPackager.UserPass", "Dev.DevKit.SolutionPackager.UserPass\Dev.DevKit.SolutionPackager.UserPass.csproj", "{07228302-8869-44D5-9B0F-E580CDC024D1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.Console.OnPremises", "Dev.DevKit.Console.OnPremises\Dev.DevKit.Console.OnPremises.csproj", "{4A306D16-D886-46CB-AC26-BFF34F931BC1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.Plugin.OnPremises.Account", "Dev.DevKit.Plugin.OnPremises.Account\Dev.DevKit.Plugin.OnPremises.Account.csproj", "{45224D36-107D-4E76-BE3A-B72008C80E6F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -71,6 +75,14 @@ Global
 		{07228302-8869-44D5-9B0F-E580CDC024D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{07228302-8869-44D5-9B0F-E580CDC024D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{07228302-8869-44D5-9B0F-E580CDC024D1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4A306D16-D886-46CB-AC26-BFF34F931BC1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A306D16-D886-46CB-AC26-BFF34F931BC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A306D16-D886-46CB-AC26-BFF34F931BC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A306D16-D886-46CB-AC26-BFF34F931BC1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{45224D36-107D-4E76-BE3A-B72008C80E6F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{45224D36-107D-4E76-BE3A-B72008C80E6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{45224D36-107D-4E76-BE3A-B72008C80E6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{45224D36-107D-4E76-BE3A-B72008C80E6F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -79,7 +91,9 @@ Global
 		SolutionGuid = {478EE8F5-54E1-431D-BEC8-72AC05F5AF8C}
 	EndGlobalSection
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{45224d36-107d-4e76-be3a-b72008c80e6f}*SharedItemsImports = 4
 		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{47c8cff8-f007-4caa-9478-d51f8e60b3f4}*SharedItemsImports = 4
+		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{4a306d16-d886-46cb-ac26-bff34f931bc1}*SharedItemsImports = 4
 		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{594d7b6a-5bd7-4ab3-a661-05b46fdba133}*SharedItemsImports = 4
 		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{6970208d-4fdd-4485-a3d1-2e29a2165cf4}*SharedItemsImports = 4
 		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{8145ff9f-31b4-4ad5-97b8-ede00321ed72}*SharedItemsImports = 13

@@ -1,5 +1,5 @@
 ﻿{
-    "DefaultCrmConnection": "ClientSecret",
+    "DefaultCrmConnection": "OnPremises",
     "CrmConnections": [
         {
             "Name": "ClientSecret",
@@ -14,6 +14,13 @@
             "UserName": "devkit@phuocle.net",
             "Password": "4eqm+cFnhfOPY1ZMz+BdnQ==",
             "Type": "OAuth"
+        },
+        {
+            "Name": "OnPremises",
+            "Url": "*",
+            "UserName": "*",
+            "Password": "*",
+            "Type": "AD"
         }
     ]
 }

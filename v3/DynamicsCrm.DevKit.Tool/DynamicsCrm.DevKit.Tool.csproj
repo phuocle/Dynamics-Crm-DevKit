@@ -59,9 +59,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\DynamicsCrm.DevKit.Shared\EncryptDecrypt.cs">
+      <Link>Shared\EncryptDecrypt.cs</Link>
+    </Compile>
     <Compile Include="Args\CoverageToXmlArgs.cs" />
+    <Compile Include="Args\DecryptArgs.cs" />
     <Compile Include="Args\NUglifyArgs.cs" />
     <Compile Include="Commands\TaskCoverageToXml.cs" />
+    <Compile Include="Commands\TaskDecrypt.cs" />
     <Compile Include="Commands\TaskNUglify.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
