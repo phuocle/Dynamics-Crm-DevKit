@@ -1,4 +1,4 @@
-﻿using $SharedNameSpace$;
+﻿using Dev.DevKit.Shared;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Query;
 using System;
@@ -242,7 +242,7 @@ namespace Microsoft.Xrm.Sdk
             if (json.Length > 10000)
             {
                 json = $"var json = Helper.Decompress(\"{json.Compress()}\");";
-                if (json.Length > 10000) json = "json more than 10,000 chars";
+                if (json.Length > 10000) json = "json MORE THAN 10,000 chars";
             }
             else
             {
@@ -257,6 +257,12 @@ namespace Microsoft.Xrm.Sdk
                 }
             }
             tracingService.LogMessage(json);
+#endif
+        }
+        public static void DebugMessage(this ITracingService tracingService, string message)
+        {
+#if DEBUG
+            tracingService.LogMessage(message);
 #endif
         }
 
@@ -290,8 +296,10 @@ namespace Microsoft.Xrm.Sdk
                         destField.SetValue(destination, sourceProperty.GetValue(context, new object[] { }));
                         break;
                     }
-                    if (!destField.Name.ToLower().Contains(sourceProperty.Name.ToLower()) || !destField.FieldType.IsAssignableFrom(sourceProperty.PropertyType)) continue;
-                    destField.SetValue(destination, sourceProperty.GetValue(context, new object[] { }));
+                    if (!destField.Name.ToLower().Contains(sourceProperty.Name.ToLower()) ||
+                        !destField.FieldType.IsAssignableFrom(sourceProperty.PropertyType)) continue;
+                    destField.SetValue(destination, sourceProperty.GetValue(
+                        context, new object[] { }));
                     break;
                 }
             }
