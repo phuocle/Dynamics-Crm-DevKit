@@ -8,6 +8,7 @@ using Microsoft.Xrm.Tooling.Connector;
 using System.Collections.Generic;
 using System.Linq;
 using Community.VisualStudio.Toolkit;
+using System.Windows.Input;
 
 namespace DynamicsCrm.DevKit.Lib.Forms
 {
@@ -178,58 +179,65 @@ namespace DynamicsCrm.DevKit.Lib.Forms
 
         private void ButtonCustom_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            var solutionName = VsixHelper.GetSolutionName();
-            var pluginSharedNameSpace = $"{solutionName}.Shared";
-            var pluginNameSpace = NameSpace.Contains($".{ItemType.Plugin}.") ? NameSpace.Replace($".{ItemType.Plugin}.", $".{ItemType.Plugin}") : NameSpace;
-            var pluginMessage = this.PluginMessage;
-            var pluginLogicalName = this.PluginLogicalName;
-            var pluginSchemaName = this.PluginSchemaName;
-            var pluginStage = this.PluginStage;
-            var pluginExecution = this.PluginExecution;
-            var pluginComment = this.PluginComment;
-            var pluginClass = this.PluginClass;
-            var t4Context = new T4Context
+            if (IsValid())
             {
-                PluginNameSpace = pluginNameSpace,
-                PluginMessage = pluginMessage,
-                PluginLogicalName = pluginLogicalName,
-                PluginSchemaName = pluginSchemaName,
-                PluginStage = pluginStage,
-                PluginExecution = pluginExecution,
-                Class = pluginClass,
-                PluginComment = pluginComment,
-                PluginSharedNameSpace = pluginSharedNameSpace
-            };
-            var form = new FormCustom(ItemType, t4Context);
-            form.ShowDialog();
+                Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;
+                var solutionName = VsixHelper.GetSolutionName();
+                var pluginSharedNameSpace = $"{solutionName}.Shared";
+                var pluginNameSpace = NameSpace.Contains($".{ItemType.Plugin}.") ? NameSpace.Replace($".{ItemType.Plugin}.", $".{ItemType.Plugin}") : NameSpace;
+                var pluginMessage = this.PluginMessage;
+                var pluginLogicalName = this.PluginLogicalName;
+                var pluginSchemaName = this.PluginSchemaName;
+                var pluginStage = this.PluginStage;
+                var pluginExecution = this.PluginExecution;
+                var pluginComment = this.PluginComment;
+                var pluginClass = this.PluginClass;
+                var t4Context = new T4Context
+                {
+                    PluginNameSpace = pluginNameSpace,
+                    PluginMessage = pluginMessage,
+                    PluginLogicalName = pluginLogicalName,
+                    PluginSchemaName = pluginSchemaName,
+                    PluginStage = pluginStage,
+                    PluginExecution = pluginExecution,
+                    Class = pluginClass,
+                    PluginComment = pluginComment,
+                    PluginSharedNameSpace = pluginSharedNameSpace
+                };
+                var form = new FormCustom(ItemType, t4Context);
+                Mouse.OverrideCursor = null;
+                form.ShowDialog();
+            }
+        }
+
+        bool IsValid()
+        {
+            if (ComboBoxEntity.SelectedItem == null)
+            {
+                VS.MessageBox.ShowError("Please select entity");
+                return false;
+            }
+            if (ComboBoxMessage.SelectedItem == null)
+            {
+                VS.MessageBox.ShowError("Please select message");
+                return false;
+            }
+            if (ComboBoxStage.Visibility == System.Windows.Visibility.Visible && ComboBoxStage.SelectedItem == null)
+            {
+                VS.MessageBox.ShowError("Please select stage");
+                return false;
+            }
+            if (ComboBoxExecution.Visibility == System.Windows.Visibility.Visible && ComboBoxExecution.SelectedItem == null)
+            {
+                VS.MessageBox.ShowError("Please select execution");
+                return false;
+            }
+            return true;
         }
 
         private void ButtonOK_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            bool IsValid()
-            {
-                if (ComboBoxEntity.SelectedItem == null)
-                {
-                    VS.MessageBox.ShowError("Please select entity");
-                    return false;
-                }
-                if (ComboBoxMessage.SelectedItem == null)
-                {
-                    VS.MessageBox.ShowError("Please select message");
-                    return false;
-                }
-                if (ComboBoxStage.Visibility == System.Windows.Visibility.Visible && ComboBoxStage.SelectedItem == null)
-                {
-                    VS.MessageBox.ShowError("Please select stage");
-                    return false;
-                }
-                if (ComboBoxExecution.Visibility == System.Windows.Visibility.Visible && ComboBoxExecution.SelectedItem == null)
-                {
-                    VS.MessageBox.ShowError("Please select execution");
-                    return false;
-                }
-                return true;
-            }
+
             if (IsValid())
             {
                 DialogResult = true;

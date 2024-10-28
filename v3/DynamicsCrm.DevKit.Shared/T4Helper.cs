@@ -172,7 +172,7 @@ namespace DynamicsCrm.DevKit.Shared
             return string.Empty;
         }
 
-        internal static T4Context BuildContext(Dictionary<string, string> replacementsDictionary, Lib.Forms.FormPlugin form)
+        public static T4Context BuildContext(Dictionary<string, string> replacementsDictionary, Lib.Forms.FormPlugin form)
         {
             var nameSpace = replacementsDictionary["$rootnamespace$"];
             var solutionName = VsixHelper.GetSolutionName();
@@ -202,7 +202,7 @@ namespace DynamicsCrm.DevKit.Shared
             return t4Context;
         }
 
-        internal static T4Context BuildContext(ItemType itemType, Dictionary<string, string> replacementsDictionary, FormProject form, string serverType = null)
+        public static T4Context BuildContext(ItemType itemType, Dictionary<string, string> replacementsDictionary, FormProject form, string serverType = null)
         {
             var nameSpace = replacementsDictionary["$rootnamespace$"];
             var solutionName = VsixHelper.GetSolutionName();

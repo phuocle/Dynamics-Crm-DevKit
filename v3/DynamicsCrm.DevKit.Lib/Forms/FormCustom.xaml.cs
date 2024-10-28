@@ -4,6 +4,7 @@ using DynamicsCrm.DevKit.Shared.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Windows.Input;
 
 namespace DynamicsCrm.DevKit.Lib.Forms
 {
@@ -139,9 +140,11 @@ namespace DynamicsCrm.DevKit.Lib.Forms
 
         private void ButtonReview_Click(object sender, System.Windows.RoutedEventArgs e)
         {
+            Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;
             var t4Code = Textbox.Text;
             var code = T4Helper.ProcessTemplate(t4Code, T4Context);
             var form = new FormReview(code);
+            Mouse.OverrideCursor = null;
             form.ShowDialog();
         }
 

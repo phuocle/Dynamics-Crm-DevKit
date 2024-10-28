@@ -30,7 +30,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             {
                 if (ItemType == ItemType.ResourceString) return ProjectName;
                 return ((XrmEntity)ComboBoxProject.SelectedItem)?.Name ?? LabelProjectName.Content?.ToString();
-        }
+            }
         }
         public bool IsOOBConnection => CONNECTION.IsOOBConnection;
         public CrmServiceClient CrmServiceClient => CONNECTION.CrmServiceClient;
@@ -209,7 +209,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             }
         }
         private ProjectType _ProjectType = ProjectType.None;
-        private ProjectType ProjectType  {
+        private ProjectType ProjectType {
             get => _ProjectType;
             set
             {
@@ -448,8 +448,55 @@ namespace DynamicsCrm.DevKit.Lib.Forms
 
         private T4Context GetT4Context()
         {
+            var solutionName = VsixHelper.GetSolutionName();
+            var pluginSharedNameSpace = $"{solutionName}.Shared";
+            var pluginNameSpace = string.Empty;
+            var serverType = this.SelectedClassType.ServerType;
+            if (serverType == "Plugin" || serverType == "Workflow" || serverType == "CustomAction" || serverType == "CustomApi" || serverType == "DataProvider")
+                pluginNameSpace = NameSpace.Contains($".{serverType}.") ? NameSpace.Replace($".{serverType}.", $".{serverType}") : NameSpace;
+            else
+                pluginNameSpace = NameSpace.Contains($".{ItemType.Plugin}.") ? NameSpace.Replace($".{ItemType.Plugin}.", $".{ItemType.Plugin}") : NameSpace;
+            if (ItemType == ItemType.Workflow)
+            {
+                var t4Context = new T4Context
+                {
+                    PluginSharedNameSpace = pluginSharedNameSpace,
+                    PluginNameSpace = pluginNameSpace,
+                    Class = this.ItemName
+                };
+                return t4Context;
+            }
+            else if (ItemType == ItemType.DataProvider)
+            {
+                var t4Context = new T4Context
+                {
+                    PluginSharedNameSpace = pluginSharedNameSpace,
+                    PluginNameSpace = pluginNameSpace,
+                    Class = this.ItemName,
+                    DataSource = this.ItemName
+                };
+                return t4Context;
+            }
+            else if (ItemType == ItemType.Test)
+            {
+                var t4Context = new T4Context
+                {
+                    PluginSharedNameSpace = pluginSharedNameSpace,
+                    PluginNameSpace = pluginNameSpace,
+                    Class = this.ItemName,
+                    DataSource = this.ItemName,
+                    ProxyTypes = $"{solutionName}.ProxyTypes",
+                    PluginStage = this.PluginStage,
+                    PluginMessage = this.PluginMessage,
+                    PluginExecution = this.PluginExecution,
+                    PluginLogicalName = this.PluginLogicalName,
+                };
+                return t4Context;
+            }
             return new T4Context();
         }
+
+        public string NameSpace { get; set; }
 
         public FormProject(ProjectType projectType)
         {

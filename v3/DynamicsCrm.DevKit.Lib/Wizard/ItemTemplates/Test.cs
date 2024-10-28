@@ -29,7 +29,9 @@ namespace DynamicsCrm.DevKit.Lib.Wizard.ItemTemplates
         public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary, WizardRunKind runKind, object[] customParams)
         {
             Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
+            var nameSpace = replacementsDictionary["$rootnamespace$"];
             var form = new FormProject(ItemType.Test, (DTE)automationObject);
+            form.NameSpace = nameSpace;
             var ok = form.ShowModal() ?? false;
             if (ok)
             {
