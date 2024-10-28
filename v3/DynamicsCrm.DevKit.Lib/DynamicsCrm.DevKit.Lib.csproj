@@ -33,6 +33,7 @@
   <ItemGroup>
     <None Remove="Forms\FormCustom.xaml" />
     <None Remove="Forms\FormPlugin.xaml" />
+    <None Remove="Forms\FormReview.xaml" />
     <None Remove="Forms\FormWebResource.xaml" />
     <None Remove="Resources\CustomAction.tt" />
     <None Remove="Resources\CustomApi.tt" />
@@ -116,6 +117,9 @@
     <Page Include="Forms\FormProject.xaml">
       <Generator>XamlIntelliSenseFileGenerator</Generator>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Page>
+    <Page Include="Forms\FormReview.xaml">
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Forms\FormWebResource.xaml">
       <Generator>XamlIntelliSenseFileGenerator</Generator>

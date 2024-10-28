@@ -133,10 +133,13 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             }
         }
 
-        public FormPlugin(ItemType itemType)
+        public string NameSpace { get; set; }
+
+        public FormPlugin(ItemType itemType, string nameSpace)
         {
             InitializeComponent();
             ItemType = itemType;
+            NameSpace = nameSpace;
             LoadComboBoxes();
         }
 
@@ -175,7 +178,29 @@ namespace DynamicsCrm.DevKit.Lib.Forms
 
         private void ButtonCustom_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            var form = new FormCustom(ItemType);
+            var solutionName = VsixHelper.GetSolutionName();
+            var pluginSharedNameSpace = $"{solutionName}.Shared";
+            var pluginNameSpace = NameSpace.Contains($".{ItemType.Plugin}.") ? NameSpace.Replace($".{ItemType.Plugin}.", $".{ItemType.Plugin}") : NameSpace;
+            var pluginMessage = this.PluginMessage;
+            var pluginLogicalName = this.PluginLogicalName;
+            var pluginSchemaName = this.PluginSchemaName;
+            var pluginStage = this.PluginStage;
+            var pluginExecution = this.PluginExecution;
+            var pluginComment = this.PluginComment;
+            var pluginClass = this.PluginClass;
+            var t4Context = new T4Context
+            {
+                PluginNameSpace = pluginNameSpace,
+                PluginMessage = pluginMessage,
+                PluginLogicalName = pluginLogicalName,
+                PluginSchemaName = pluginSchemaName,
+                PluginStage = pluginStage,
+                PluginExecution = pluginExecution,
+                Class = pluginClass,
+                PluginComment = pluginComment,
+                PluginSharedNameSpace = pluginSharedNameSpace
+            };
+            var form = new FormCustom(ItemType, t4Context);
             form.ShowDialog();
         }
 

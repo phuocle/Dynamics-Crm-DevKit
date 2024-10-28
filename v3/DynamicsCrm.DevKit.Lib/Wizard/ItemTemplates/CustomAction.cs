@@ -26,7 +26,8 @@ namespace DynamicsCrm.DevKit.Lib.Wizard.ItemTemplates
 
         public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary, WizardRunKind runKind, object[] customParams)
         {
-            var form = new FormPlugin(ItemType.CustomAction);
+            var nameSpace = replacementsDictionary["$rootnamespace$"];
+            var form = new FormPlugin(ItemType.CustomAction, nameSpace);
             var ok = form.ShowModal() ?? false;
             if (ok)
             {

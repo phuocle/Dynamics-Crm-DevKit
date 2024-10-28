@@ -8,6 +8,7 @@ using Microsoft.VisualStudio.Shell;
 using System.Collections.Generic;
 using ItemType = DynamicsCrm.DevKit.Shared.ItemType;
 using EnvDTE;
+using System;
 
 namespace DynamicsCrm.DevKit.Lib.Forms
 {
@@ -439,11 +440,16 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         {
             if (ItemType != ItemType.None)
             {
-                var form = new FormCustom(ItemType);
+                var T4Context = GetT4Context();
+                var form = new FormCustom(ItemType, T4Context);
                 form.ShowDialog();
             }
         }
 
+        private T4Context GetT4Context()
+        {
+            return new T4Context();
+        }
 
         public FormProject(ProjectType projectType)
         {

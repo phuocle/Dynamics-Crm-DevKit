@@ -1,6 +1,7 @@
 ﻿using Community.VisualStudio.Toolkit;
 using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
+using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -120,10 +121,13 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             }
         }
 
-        public FormCustom(ItemType itemType)
+        public T4Context T4Context { get; set; }
+
+        public FormCustom(ItemType itemType, T4Context t4Context)
         {
             InitializeComponent();
             ItemType = itemType;
+            T4Context = t4Context;
             WindowState = System.Windows.WindowState.Maximized;
         }
 
@@ -131,6 +135,14 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         private void ButtonClose_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             DialogResult = true;
+        }
+
+        private void ButtonReview_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            var t4Code = Textbox.Text;
+            var code = T4Helper.ProcessTemplate(t4Code, T4Context);
+            var form = new FormReview(code);
+            form.ShowDialog();
         }
 
         private void ButtonSave_Click(object sender, System.Windows.RoutedEventArgs e)
