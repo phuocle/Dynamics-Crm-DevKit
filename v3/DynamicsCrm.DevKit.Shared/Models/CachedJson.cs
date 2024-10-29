@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace DynamicsCrm.DevKit.Shared.Models
 {
@@ -7,6 +6,7 @@ namespace DynamicsCrm.DevKit.Shared.Models
     public class CachedJson
     {
         public List<DeployWebResource> WebResources { get; set; }
+        public List<CustomTemplate> CustomTemplates { get; set; }
         public string Plugin { get; set; }
         public string Workflow { get; set; }
         public string CustomAction { get; set; }

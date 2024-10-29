@@ -451,7 +451,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             var solutionName = VsixHelper.GetSolutionName();
             var pluginSharedNameSpace = $"{solutionName}.Shared";
             var pluginNameSpace = string.Empty;
-            var serverType = this.SelectedClassType.ServerType;
+            var serverType = this.SelectedClassType?.ServerType;
             if (serverType == "Plugin" || serverType == "Workflow" || serverType == "CustomAction" || serverType == "CustomApi" || serverType == "DataProvider")
                 pluginNameSpace = NameSpace.Contains($".{serverType}.") ? NameSpace.Replace($".{serverType}.", $".{serverType}") : NameSpace;
             else

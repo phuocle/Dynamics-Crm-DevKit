@@ -32,6 +32,7 @@
 
   <ItemGroup>
     <None Remove="Forms\FormCustom.xaml" />
+    <None Remove="Forms\FormInput.xaml" />
     <None Remove="Forms\FormPlugin.xaml" />
     <None Remove="Forms\FormReview.xaml" />
     <None Remove="Forms\FormWebResource.xaml" />
@@ -107,6 +108,7 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Page>
     <Page Include="Forms\FormCustom.xaml" />
+    <Page Include="Forms\FormInput.xaml" />
     <Page Include="Forms\FormLogin.xaml">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <Generator>XamlIntelliSenseFileGenerator</Generator>
