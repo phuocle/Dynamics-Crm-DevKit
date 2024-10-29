@@ -32,6 +32,8 @@ namespace DynamicsCrm.DevKit.Shared
             {
                 case ItemType.Plugin:
                     return Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.Plugin.tt");
+                case ItemType.Workflow:
+                    return Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.Workflow.tt");
                 default:
                     return string.Empty;
             }

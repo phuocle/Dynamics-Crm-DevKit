@@ -238,7 +238,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     PluginComment = pluginComment,
                     PluginSharedNameSpace = pluginSharedNameSpace
                 };
-                var form = new FormCustom(ItemType, t4Context);
+                var form = new FormCustom(ItemType, t4Context, TemplateTitle);
                 Mouse.OverrideCursor = null;
                 form.ShowDialog();
                 LoadCustomTemplates();

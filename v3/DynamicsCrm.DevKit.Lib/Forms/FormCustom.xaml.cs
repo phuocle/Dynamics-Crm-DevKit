@@ -130,10 +130,6 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             else
                 CachedJson = new CachedJson();
             var customTemplates = CachedJson.CustomTemplates.Where(x => x.Type == ItemType.ToString()).ToList() ?? new List<CustomTemplate>();
-            foreach (var customTemplate in customTemplates)
-            {
-                customTemplate.Body = Utility.Decompress(customTemplate.Body);
-            }
             customTemplates.Insert(0, new CustomTemplate { Type = ItemType.ToString(), Title = "Default", Body = GetDefaultCustomBody(), IsDefault = false });
             return customTemplates;
         }
@@ -142,6 +138,8 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         {
             if (ItemType == ItemType.Plugin)
                 return Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.Plugin.tt");
+            else if (ItemType == ItemType.Workflow)
+                return Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.Workflow.tt");
             return string.Empty;
         }
 
@@ -157,12 +155,12 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         //    }
         //}
 
-        public FormCustom(ItemType itemType, T4Context t4Context)
+        public FormCustom(ItemType itemType, T4Context t4Context, string templateTitle)
         {
             InitializeComponent();
             ItemType = itemType;
             T4Context = t4Context;
-            LoadCustomTemplates();
+            LoadCustomTemplates(templateTitle);
             WindowState = System.Windows.WindowState.Maximized;
         }
 
@@ -448,19 +446,8 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             var save = new CachedJson
             {
                 WebResources = CachedJson.WebResources,
-                CustomTemplates = new List<CustomTemplate>()
+                CustomTemplates = CachedJson.CustomTemplates
             };
-            foreach (var template in CachedJson.CustomTemplates ?? new List<CustomTemplate>())
-            {
-                var t = new CustomTemplate
-                {
-                    Body = Utility.Compress(template.Body),
-                    IsDefault = template.IsDefault,
-                    Title = template.Title,
-                    Type = template.Type,
-                };
-                save.CustomTemplates.Add(t);
-            }
             if (customTemplate != null) save.CustomTemplates.Add(customTemplate);
             var fileName = VsixHelper.GetDynamicsCrmDevKitConfigJsonFileName();
             Utility.ForceWriteAllText(fileName, JsonHelper.FormatJson(SimpleJson.SerializeObject(save)));
@@ -471,7 +458,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             var found = CachedJson.CustomTemplates.FirstOrDefault(x => x.Title == selected.Title);
             if (found != null)
             {
-                found.Body = Textbox.Text;
+                found.Body = Utility.Compress(Textbox.Text);
                 SaveCachedJson();
                 VS.MessageBox.ShowWarning($"Custom template: '{selected.Title}' saved.");
             }
@@ -480,7 +467,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         private void ComboBoxTemplate_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             var selected = (CustomTemplate)ComboBoxTemplate.SelectedItem;
-            Textbox.Text = selected?.Body;
+            Textbox.Text = Utility.Decompress(selected?.Body);
             var isDefault = selected?.Title == "Default";
             buttonDefault.IsEnabled = !isDefault;
             buttonSave2.IsEnabled = !isDefault;
@@ -494,7 +481,8 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             var selected = (CustomTemplate)ComboBoxTemplate.SelectedItem;
             if (VS.MessageBox.ShowConfirm($"Are you sure to set: {selected.Title} to default for custom template {ItemType.ToString()}"))
             {
-                foreach (var customTemplate in CachedJson.CustomTemplates) customTemplate.IsDefault = false;
+                foreach (var customTemplate in CachedJson.CustomTemplates.Where(x => x.Type == ItemType.ToString()).ToList() ?? new List<CustomTemplate>())
+                    customTemplate.IsDefault = false;
                 var found = CachedJson.CustomTemplates.FirstOrDefault(x => x.Title == selected.Title);
                 if (found != null) found.IsDefault = true;
                 SaveCachedJson();

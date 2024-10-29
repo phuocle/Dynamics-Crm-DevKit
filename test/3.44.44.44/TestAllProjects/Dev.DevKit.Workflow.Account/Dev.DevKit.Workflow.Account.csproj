@@ -4,11 +4,11 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{F323B59B-AC77-4E8D-9979-D022BDC81CCB}</ProjectGuid>
+    <ProjectGuid>{F1D28411-33B6-46BC-98C4-F80A517DC72F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Dev.DevKit.Workflow</RootNamespace>
-    <AssemblyName>Dev.DevKit.Workflow</AssemblyName>
+    <RootNamespace>Dev.DevKit.Workflow.Account</RootNamespace>
+    <AssemblyName>Dev.DevKit.Workflow.Account</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -55,7 +55,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <None Include="Dev.DevKit.Workflow.snk" />
+    <Compile Include="SendEmail.cs" />
+    <Compile Include="SendToUsers.cs" />
+    <None Include="Dev.DevKit.Workflow.Account.snk" />
     <None Include="packages.config" />
     <None Include="deploy.debug.bat" />
     <None Include="deploy.debug.only.bat" />
@@ -68,7 +70,7 @@
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>Dev.DevKit.Workflow.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>Dev.DevKit.Workflow.Account.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

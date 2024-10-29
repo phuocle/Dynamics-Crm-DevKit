@@ -618,34 +618,41 @@ namespace DynamicsCrm.DevKit.Shared
 
         public static string Decompress(string compressedString)
         {
-            byte[] decompressedBytes;
-            var compressedStream = new MemoryStream(Convert.FromBase64String(compressedString));
-            using (var decompressorStream = new DeflateStream(compressedStream, CompressionMode.Decompress))
+            try
             {
-                using (var decompressedStream = new MemoryStream())
+                byte[] decompressedBytes;
+                var compressedStream = new MemoryStream(Convert.FromBase64String(compressedString));
+                using (var decompressorStream = new DeflateStream(compressedStream, CompressionMode.Decompress))
                 {
-                    decompressorStream.CopyTo(decompressedStream);
-                    decompressedBytes = decompressedStream.ToArray();
+                    using (var decompressedStream = new MemoryStream())
+                    {
+                        decompressorStream.CopyTo(decompressedStream);
+                        decompressedBytes = decompressedStream.ToArray();
+                    }
                 }
+                return Encoding.UTF8.GetString(decompressedBytes);
             }
-            return Encoding.UTF8.GetString(decompressedBytes);
+            catch { return compressedString; }
         }
 
         public static string Compress(string uncompressedString)
         {
-            byte[] compressedBytes;
-            using (var uncompressedStream = new MemoryStream(Encoding.UTF8.GetBytes(uncompressedString)))
+            try
             {
-                using (var compressedStream = new MemoryStream())
+                byte[] compressedBytes;
+                using (var uncompressedStream = new MemoryStream(Encoding.UTF8.GetBytes(uncompressedString)))
                 {
-                    using (var compressorStream = new DeflateStream(compressedStream, CompressionLevel.Fastest, true))
+                    using (var compressedStream = new MemoryStream())
                     {
-                        uncompressedStream.CopyTo(compressorStream);
+                        using (var compressorStream = new DeflateStream(compressedStream, CompressionLevel.Fastest, true))
+                        {
+                            uncompressedStream.CopyTo(compressorStream);
+                        }
+                        compressedBytes = compressedStream.ToArray();
                     }
-                    compressedBytes = compressedStream.ToArray();
                 }
-            }
-            return Convert.ToBase64String(compressedBytes);
+                return Convert.ToBase64String(compressedBytes);
+            } catch { return uncompressedString; }
         }
 
         public static bool HasImplementedPlugin(CodeClass @class)
