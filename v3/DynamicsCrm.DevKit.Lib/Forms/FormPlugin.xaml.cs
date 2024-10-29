@@ -146,6 +146,14 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             LoadCustomTemplates();
         }
 
+        public string TemplateTitle
+        {
+            get
+            {
+                var selected = (CustomTemplate)ComboBoxTemplate.SelectedItem;
+                return selected.Title;
+            }
+        }
         private void LoadCustomTemplates()
         {
             var templates = GetCustomTemplates();

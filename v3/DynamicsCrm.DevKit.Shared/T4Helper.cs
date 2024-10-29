@@ -8,11 +8,35 @@ using System.Threading.Tasks;
 using System.IO;
 using DynamicsCrm.DevKit.Lib.Forms;
 using NuGet.Protocol.Plugins;
+using System;
+using System.Linq;
 
 namespace DynamicsCrm.DevKit.Shared
 {
     internal class T4Helper
     {
+        public static string GetT4Code2(ItemType itemType, string templateTitle)
+        {
+            if (templateTitle.ToLower() == "default") return DefaultT4Code(itemType);
+            var fileName = VsixHelper.GetDynamicsCrmDevKitConfigJsonFileName();
+            if (!File.Exists(fileName)) return DefaultT4Code(itemType);
+            var CachedJson = SimpleJson.DeserializeObject<CachedJson>(File.ReadAllText(fileName));
+            var found = CachedJson.CustomTemplates.FirstOrDefault(x => x.Type == itemType.ToString() && x.Title == templateTitle);
+            if (found == null) return DefaultT4Code(itemType);
+            return Utility.Decompress(found.Body);
+        }
+
+        private static string DefaultT4Code(ItemType itemType)
+        {
+            switch (itemType)
+            {
+                case ItemType.Plugin:
+                    return Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.Plugin.tt");
+                default:
+                    return string.Empty;
+            }
+        }
+
         public static string GetT4Code(ItemType itemType, string subName = null)
         {
             string T4CodePlugin()
