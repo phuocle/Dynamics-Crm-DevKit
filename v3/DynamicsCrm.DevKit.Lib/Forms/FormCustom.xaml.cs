@@ -418,15 +418,23 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             var form = new FormInput();
             if (form.ShowDialog() ?? false)
             {
-                var save = new CustomTemplate
+                var found = CachedJson.CustomTemplates?.FirstOrDefault(x => x.Title == form.InputValue && x.Type == ItemType.ToString());
+                if (found != null || form.InputValue.ToLower() == "default")
                 {
-                    Body = Utility.Compress(Textbox.Text),
-                    IsDefault = false,
-                    Title = form.InputValue,
-                    Type = ItemType.ToString()
-                };
-                SaveCachedJson(save);
-                ReLoadCustomTemplates(form.InputValue);
+                    VS.MessageBox.ShowError($"An existing custom template named '{form.InputValue}' was found. The save as action failed.");
+                }
+                else
+                {
+                    var save = new CustomTemplate
+                    {
+                        Body = Utility.Compress(Textbox.Text),
+                        IsDefault = false,
+                        Title = form.InputValue,
+                        Type = ItemType.ToString()
+                    };
+                    SaveCachedJson(save);
+                    ReLoadCustomTemplates(form.InputValue);
+                }
             }
         }
 
@@ -466,10 +474,12 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         private void buttonSave2_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             var selected = (CustomTemplate)ComboBoxTemplate.SelectedItem;
-            if (selected.Title == "Default")
+            var found = CachedJson.CustomTemplates?.FirstOrDefault(x => x.Title == selected.Title && x.Type == ItemType.ToString());
+            if (found != null)
             {
-                VS.MessageBox.ShowError("You cannot save the Default custom template. Please use the SaveAs button.");
-                return;
+                found.Body = Textbox.Text;
+                SaveCachedJson();
+                VS.MessageBox.ShowWarning($"Custom template: '{selected.Title}' saved.");
             }
         }
 
@@ -477,6 +487,12 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         {
             var selected = (CustomTemplate)ComboBoxTemplate.SelectedItem;
             Textbox.Text = selected?.Body;
+            var isDefault = selected?.Title == "Default";
+            buttonDefault.IsEnabled = !isDefault;
+            buttonSave2.IsEnabled = !isDefault;
+            buttonSaveAs.IsEnabled = true;
+            buttonDelete.IsEnabled = !isDefault;
+            buttonRename.IsEnabled = !isDefault;
         }
 
         private void buttonDefault_Click(object sender, System.Windows.RoutedEventArgs e)
@@ -516,7 +532,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         private void buttonDelete_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             var selected = (CustomTemplate)ComboBoxTemplate.SelectedItem;
-            if (VS.MessageBox.ShowConfirm($"Are you sure to delete this custom template ${ItemType.ToString()}: '{selected.Title}'"))
+            if (VS.MessageBox.ShowConfirm($"Are you sure to delete this custom template {ItemType.ToString()}: '{selected.Title}'"))
             {
                 var found = CachedJson.CustomTemplates?.FirstOrDefault(x => x.Title == selected.Title && x.Type == ItemType.ToString());
                 if (found != null) CachedJson.CustomTemplates?.Remove(found);
