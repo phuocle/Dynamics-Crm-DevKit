@@ -129,7 +129,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 CachedJson = SimpleJson.DeserializeObject<CachedJson>(File.ReadAllText(fileName));
             else
                 CachedJson = new CachedJson();
-            var customTemplates = CachedJson.CustomTemplates?.Where(x => x.Type == ItemType.ToString()).ToList() ?? new List<CustomTemplate>();
+            var customTemplates = CachedJson.CustomTemplates.Where(x => x.Type == ItemType.ToString()).ToList() ?? new List<CustomTemplate>();
             foreach (var customTemplate in customTemplates)
             {
                 customTemplate.Body = Utility.Decompress(customTemplate.Body);
@@ -147,34 +147,39 @@ namespace DynamicsCrm.DevKit.Lib.Forms
 
         public T4Context T4Context { get; set; }
 
-        private List<CustomTemplate> _CustomTemplates = null;
-        private List<CustomTemplate> CustomTemplates
-        {
-            get
-            {
-                if (_CustomTemplates == null) _CustomTemplates = GetCustomTemplates();
-                return _CustomTemplates;
-            }
-        }
+        //private List<CustomTemplate> _CustomTemplates = null;
+        //private List<CustomTemplate> CustomTemplates
+        //{
+        //    get
+        //    {
+        //        if (_CustomTemplates == null) _CustomTemplates = GetCustomTemplates();
+        //        return _CustomTemplates;
+        //    }
+        //}
 
         public FormCustom(ItemType itemType, T4Context t4Context)
         {
             InitializeComponent();
             ItemType = itemType;
             T4Context = t4Context;
-
             LoadCustomTemplates();
-            ComboBoxTemplate.SelectedItem = CustomTemplates.FirstOrDefault(x => x.IsDefault);
-            if (ComboBoxTemplate.SelectedItem == null) ComboBoxTemplate.SelectedIndex = 0;
-
             WindowState = System.Windows.WindowState.Maximized;
         }
 
-        private void LoadCustomTemplates()
+        private void LoadCustomTemplates(string selectedTitle = null)
         {
             ComboBoxTemplate.ItemsSource = null;
-            ComboBoxTemplate.ItemsSource = CustomTemplates;
+            ComboBoxTemplate.ItemsSource = GetCustomTemplates();
             ComboBoxTemplate.DisplayMemberPath = "Title";
+            if (selectedTitle != null)
+            {
+                ComboBoxTemplate.SelectedItem = CachedJson.CustomTemplates.FirstOrDefault(x => x.Title == selectedTitle);
+            }
+            else
+            {
+                ComboBoxTemplate.SelectedItem = CachedJson.CustomTemplates.FirstOrDefault(x => x.IsDefault);
+            }
+            if (ComboBoxTemplate.SelectedItem == null) ComboBoxTemplate.SelectedIndex = 0;
         }
 
         private void ButtonClose_Click(object sender, System.Windows.RoutedEventArgs e)
@@ -418,7 +423,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             var form = new FormInput();
             if (form.ShowDialog() ?? false)
             {
-                var found = CachedJson.CustomTemplates?.FirstOrDefault(x => x.Title == form.InputValue && x.Type == ItemType.ToString());
+                var found = CachedJson.CustomTemplates.FirstOrDefault(x => x.Title == form.InputValue);
                 if (found != null || form.InputValue.ToLower() == "default")
                 {
                     VS.MessageBox.ShowError($"An existing custom template named '{form.InputValue}' was found. The save as action failed.");
@@ -433,19 +438,8 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                         Type = ItemType.ToString()
                     };
                     SaveCachedJson(save);
-                    ReLoadCustomTemplates(form.InputValue);
+                    LoadCustomTemplates(form.InputValue);
                 }
-            }
-        }
-
-        void ReLoadCustomTemplates(string selectedTitle = null)
-        {
-            _CustomTemplates = null;
-            LoadCustomTemplates();
-            if (selectedTitle != null)
-            {
-                ComboBoxTemplate.SelectedItem = CustomTemplates.FirstOrDefault(x => x.Title == selectedTitle);
-                if (ComboBoxTemplate.SelectedItem == null) ComboBoxTemplate.SelectedIndex = 0;
             }
         }
 
@@ -474,7 +468,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         private void buttonSave2_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             var selected = (CustomTemplate)ComboBoxTemplate.SelectedItem;
-            var found = CachedJson.CustomTemplates?.FirstOrDefault(x => x.Title == selected.Title && x.Type == ItemType.ToString());
+            var found = CachedJson.CustomTemplates.FirstOrDefault(x => x.Title == selected.Title);
             if (found != null)
             {
                 found.Body = Textbox.Text;
@@ -500,8 +494,8 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             var selected = (CustomTemplate)ComboBoxTemplate.SelectedItem;
             if (VS.MessageBox.ShowConfirm($"Are you sure to set: {selected.Title} to default for custom template {ItemType.ToString()}"))
             {
-                foreach (var customTemplate in CustomTemplates) customTemplate.IsDefault = false;
-                var found = CachedJson.CustomTemplates?.FirstOrDefault(x => x.Title == selected.Title && x.Type == ItemType.ToString());
+                foreach (var customTemplate in CachedJson.CustomTemplates) customTemplate.IsDefault = false;
+                var found = CachedJson.CustomTemplates.FirstOrDefault(x => x.Title == selected.Title);
                 if (found != null) found.IsDefault = true;
                 SaveCachedJson();
                 VS.MessageBox.ShowWarning($"The custom template '{selected.Title}' has been set as the default.");
@@ -514,9 +508,9 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             var form = new FormInput(selected.Title);
             if (form.ShowDialog() ?? false)
             {
-                var found = CachedJson.CustomTemplates?.FirstOrDefault(x => x.Title == selected.Title && x.Type == ItemType.ToString());
+                var found = CachedJson.CustomTemplates.FirstOrDefault(x => x.Title == selected.Title);
                 if (found != null) found.Title = form.InputValue;
-                var count = CachedJson.CustomTemplates?.Count(x => x.Title == form.InputValue && x.Type == ItemType.ToString());
+                var count = CachedJson.CustomTemplates.Count(x => x.Title == form.InputValue);
                 if (count > 1)
                 {
                     VS.MessageBox.ShowError($"An existing custom template named '{form.InputValue}' was found. The rename action failed.");
@@ -524,7 +518,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 else
                 {
                     SaveCachedJson();
-                    ReLoadCustomTemplates(form.InputValue);
+                    LoadCustomTemplates(form.InputValue);
                 }
             }
         }
@@ -534,19 +528,18 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             var selected = (CustomTemplate)ComboBoxTemplate.SelectedItem;
             if (VS.MessageBox.ShowConfirm($"Are you sure to delete this custom template {ItemType.ToString()}: '{selected.Title}'"))
             {
-                var found = CachedJson.CustomTemplates?.FirstOrDefault(x => x.Title == selected.Title && x.Type == ItemType.ToString());
-                if (found != null) CachedJson.CustomTemplates?.Remove(found);
-                var haveDefaultValue = CachedJson.CustomTemplates?.FirstOrDefault(x => x.IsDefault);
+                var found = CachedJson.CustomTemplates.FirstOrDefault(x => x.Title == selected.Title);
+                if (found != null) CachedJson.CustomTemplates.Remove(found);
+                var haveDefaultValue = CachedJson.CustomTemplates.FirstOrDefault(x => x.IsDefault);
                 SaveCachedJson();
                 VS.MessageBox.ShowWarning($"The custom template '{selected.Title}' has been deleted.");
                 if (haveDefaultValue != null)
                 {
-                    ReLoadCustomTemplates(haveDefaultValue?.Title);
+                    LoadCustomTemplates(haveDefaultValue.Title);
                 }
                 else
                 {
-                    ReLoadCustomTemplates();
-                    ComboBoxTemplate.SelectedIndex = 0;
+                    LoadCustomTemplates();
                 }
             }
         }
