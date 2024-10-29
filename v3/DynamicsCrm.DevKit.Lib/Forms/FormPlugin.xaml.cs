@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Community.VisualStudio.Toolkit;
 using System.Windows.Input;
+using System.IO;
 
 namespace DynamicsCrm.DevKit.Lib.Forms
 {
@@ -142,6 +143,31 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             ItemType = itemType;
             NameSpace = nameSpace;
             LoadComboBoxes();
+            LoadCustomTemplates();
+        }
+
+        private void LoadCustomTemplates()
+        {
+            var templates = GetCustomTemplates();
+            ComboBoxTemplate.ItemsSource = null;
+            ComboBoxTemplate.ItemsSource = templates;
+            ComboBoxTemplate.DisplayMemberPath = "Title";
+            ComboBoxTemplate.SelectedItem = templates.FirstOrDefault(x => x.IsDefault);
+            if (ComboBoxTemplate.SelectedItem == null) ComboBoxTemplate.SelectedIndex = 0;
+
+            List<CustomTemplate> GetCustomTemplates()
+            {
+                var fileName = VsixHelper.GetDynamicsCrmDevKitConfigJsonFileName();
+                var CachedJson = new CachedJson();
+                if (File.Exists(fileName)) CachedJson = SimpleJson.DeserializeObject<CachedJson>(File.ReadAllText(fileName));
+                var customTemplates = CachedJson.CustomTemplates.Where(x => x.Type == ItemType.ToString()).ToList() ?? new List<CustomTemplate>();
+                foreach (var customTemplate in customTemplates)
+                {
+                    customTemplate.Body = Utility.Decompress(customTemplate.Body);
+                }
+                customTemplates.Insert(0, new CustomTemplate { Type = ItemType.ToString(), Title = "Default", Body = null, IsDefault = false });
+                return customTemplates;
+            }
         }
 
         private void LoadComboBoxes()
@@ -207,6 +233,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 var form = new FormCustom(ItemType, t4Context);
                 Mouse.OverrideCursor = null;
                 form.ShowDialog();
+                LoadCustomTemplates();
             }
         }
 
