@@ -1,8 +1,6 @@
 ﻿using Community.VisualStudio.Toolkit;
 using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
-using Microsoft.VisualStudio.TextManager.Interop;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -164,7 +162,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             InitializeComponent();
             ItemType = itemType;
             T4Context = t4Context;
-            
+
             LoadCustomTemplates();
             ComboBoxTemplate.SelectedItem = CustomTemplates.FirstOrDefault(x => x.IsDefault);
             if (ComboBoxTemplate.SelectedItem == null) ComboBoxTemplate.SelectedIndex = 0;
@@ -420,37 +418,51 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             var form = new FormInput();
             if (form.ShowDialog() ?? false)
             {
-                var save = new CachedJson
+                var save = new CustomTemplate
                 {
-                    WebResources = CachedJson.WebResources,
-                    CustomTemplates = new List<CustomTemplate>()
-                };
-                foreach (var template in CachedJson.CustomTemplates ?? new List<CustomTemplate>())
-                {
-                    var t = new CustomTemplate
-                    {
-                        Body = Utility.Compress(template.Body),
-                        IsDefault = template.IsDefault,
-                        Title = template.Title,
-                        Type = template.Type,
-                    };
-                    save.CustomTemplates.Add(t);
-                }
-                save.CustomTemplates.Add(new CustomTemplate {
                     Body = Utility.Compress(Textbox.Text),
                     IsDefault = false,
                     Title = form.InputValue,
                     Type = ItemType.ToString()
-                });
-                var fileName = VsixHelper.GetDynamicsCrmDevKitConfigJsonFileName();
-                Utility.ForceWriteAllText(fileName, SimpleJson.SerializeObject(save));
-                _CustomTemplates = null;
-                LoadCustomTemplates();
-                ComboBoxTemplate.SelectedItem = CustomTemplates.FirstOrDefault(x => x.Title == form.InputValue);
+                };
+                SaveCachedJson(save);
+                ReLoadCustomTemplates(form.InputValue);
+            }
+        }
+
+        void ReLoadCustomTemplates(string selectedTitle = null)
+        {
+            _CustomTemplates = null;
+            LoadCustomTemplates();
+            if (selectedTitle != null)
+            {
+                ComboBoxTemplate.SelectedItem = CustomTemplates.FirstOrDefault(x => x.Title == selectedTitle);
                 if (ComboBoxTemplate.SelectedItem == null) ComboBoxTemplate.SelectedIndex = 0;
             }
         }
 
+        void SaveCachedJson(CustomTemplate customTemplate = null)
+        {
+            var save = new CachedJson
+            {
+                WebResources = CachedJson.WebResources,
+                CustomTemplates = new List<CustomTemplate>()
+            };
+            foreach (var template in CachedJson.CustomTemplates ?? new List<CustomTemplate>())
+            {
+                var t = new CustomTemplate
+                {
+                    Body = Utility.Compress(template.Body),
+                    IsDefault = template.IsDefault,
+                    Title = template.Title,
+                    Type = template.Type,
+                };
+                save.CustomTemplates.Add(t);
+            }
+            if (customTemplate != null) save.CustomTemplates.Add(customTemplate);
+            var fileName = VsixHelper.GetDynamicsCrmDevKitConfigJsonFileName();
+            Utility.ForceWriteAllText(fileName, JsonHelper.FormatJson(SimpleJson.SerializeObject(save)));
+        }
         private void buttonSave2_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             var selected = (CustomTemplate)ComboBoxTemplate.SelectedItem;
@@ -465,6 +477,62 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         {
             var selected = (CustomTemplate)ComboBoxTemplate.SelectedItem;
             Textbox.Text = selected?.Body;
+        }
+
+        private void buttonDefault_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            var selected = (CustomTemplate)ComboBoxTemplate.SelectedItem;
+            if (VS.MessageBox.ShowConfirm($"Are you sure to set: {selected.Title} to default for custom template {ItemType.ToString()}"))
+            {
+                foreach (var customTemplate in CustomTemplates) customTemplate.IsDefault = false;
+                var found = CachedJson.CustomTemplates?.FirstOrDefault(x => x.Title == selected.Title && x.Type == ItemType.ToString());
+                if (found != null) found.IsDefault = true;
+                SaveCachedJson();
+                VS.MessageBox.ShowWarning($"The custom template '{selected.Title}' has been set as the default.");
+            }
+        }
+
+        private void buttonRename_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            var selected = (CustomTemplate)ComboBoxTemplate.SelectedItem;
+            var form = new FormInput(selected.Title);
+            if (form.ShowDialog() ?? false)
+            {
+                var found = CachedJson.CustomTemplates?.FirstOrDefault(x => x.Title == selected.Title && x.Type == ItemType.ToString());
+                if (found != null) found.Title = form.InputValue;
+                var count = CachedJson.CustomTemplates?.Count(x => x.Title == form.InputValue && x.Type == ItemType.ToString());
+                if (count > 1)
+                {
+                    VS.MessageBox.ShowError($"An existing custom template named '{form.InputValue}' was found. The rename action failed.");
+                }
+                else
+                {
+                    SaveCachedJson();
+                    ReLoadCustomTemplates(form.InputValue);
+                }
+            }
+        }
+
+        private void buttonDelete_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            var selected = (CustomTemplate)ComboBoxTemplate.SelectedItem;
+            if (VS.MessageBox.ShowConfirm($"Are you sure to delete this custom template ${ItemType.ToString()}: '{selected.Title}'"))
+            {
+                var found = CachedJson.CustomTemplates?.FirstOrDefault(x => x.Title == selected.Title && x.Type == ItemType.ToString());
+                if (found != null) CachedJson.CustomTemplates?.Remove(found);
+                var haveDefaultValue = CachedJson.CustomTemplates?.FirstOrDefault(x => x.IsDefault);
+                SaveCachedJson();
+                VS.MessageBox.ShowWarning($"The custom template '{selected.Title}' has been deleted.");
+                if (haveDefaultValue != null)
+                {
+                    ReLoadCustomTemplates(haveDefaultValue?.Title);
+                }
+                else
+                {
+                    ReLoadCustomTemplates();
+                    ComboBoxTemplate.SelectedIndex = 0;
+                }
+            }
         }
     }
 }

@@ -31,12 +31,11 @@
             </Grid.RowDefinitions>
             <WrapPanel Grid.Row="0" Grid.Column="0" DockPanel.Dock="Bottom" Margin="0,5,5,5" HorizontalAlignment="Left">
                 <ComboBox x:Name="ComboBoxTemplate" Margin="5,0,5,0" Width="200" Height="30" VerticalContentAlignment="Center" IsEditable="False" SelectionChanged="ComboBoxTemplate_SelectionChanged"  />
-                <Button x:Name="buttonDefault" Content="Set Default" Margin="5,0,5,0" Height="30" Width="70" />
-                <Button x:Name="buttonLoad" Content="Load" Margin="5,0,5,0" Height="30" Width="50" />
+                <Button x:Name="buttonDefault" Content="Set Default" Margin="5,0,5,0" Height="30" Width="70" Click="buttonDefault_Click" />
                 <Button x:Name="buttonSave2" Content="Save" Margin="5,0,5,0" Height="30" Width="50" Click="buttonSave2_Click" />
                 <Button x:Name="buttonSaveAs" Content="SaveAs" Margin="5,0,5,0" Height="30" Width="50" Click="buttonSaveAs_Click" />
-                <Button x:Name="buttonDelete" Content="Delete" Margin="5,0,5,0" Height="30" Width="50" />
-                <Button x:Name="buttonRename" Content="Rename" Margin="5,0,5,0" Height="30" Width="50" />
+                <Button x:Name="buttonDelete" Content="Delete" Margin="5,0,5,0" Height="30" Width="50" Click="buttonDelete_Click" />
+                <Button x:Name="buttonRename" Content="Rename" Margin="5,0,5,0" Height="30" Width="50" Click="buttonRename_Click" />
             </WrapPanel>
             <WrapPanel Grid.Row="0" Grid.Column="1" DockPanel.Dock="Bottom" Margin="0,5,5,5" HorizontalAlignment="Right">
                 <ComboBox x:Name="ComboBoxSelect" Margin="5,0,5,0" Width="100" Height="30" VerticalContentAlignment="Center" IsEditable="False" SelectionChanged="ComboBoxSelect_SelectionChanged" Visibility="Hidden" />

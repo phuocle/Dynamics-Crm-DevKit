@@ -5,8 +5,8 @@ namespace DynamicsCrm.DevKit.Shared.Models
 
     public class CachedJson
     {
-        public List<DeployWebResource> WebResources { get; set; }
-        public List<CustomTemplate> CustomTemplates { get; set; }
+        public List<DeployWebResource> WebResources { get; set; } = new List<DeployWebResource>();
+        public List<CustomTemplate> CustomTemplates { get; set; } = new List<CustomTemplate> { };
         public string Plugin { get; set; }
         public string Workflow { get; set; }
         public string CustomAction { get; set; }
