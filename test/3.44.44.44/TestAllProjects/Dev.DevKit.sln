@@ -26,6 +26,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.CustomAction", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.CustomApi", "Dev.DevKit.CustomApi\Dev.DevKit.CustomApi.csproj", "{91617C9A-6C3F-4226-A9FF-68419C23DE01}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.ProxyTypes", "Dev.DevKit.ProxyTypes\Dev.DevKit.ProxyTypes.csproj", "{24F931D0-A884-4354-B3C5-47AC3A575D6A}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Dev.DevKit.Shared.Test", "Dev.DevKit.Shared.Test\Dev.DevKit.Shared.Test.shproj", "{A7D8FB6D-0B6A-4C1D-8B3A-9C64DDE23137}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.Plugin.Account.Test", "Dev.DevKit.Plugin.Account.Test\Dev.DevKit.Plugin.Account.Test.csproj", "{D10D2614-8CAC-4E4D-A483-515198ECADA1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -60,6 +66,14 @@ Global
 		{91617C9A-6C3F-4226-A9FF-68419C23DE01}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{91617C9A-6C3F-4226-A9FF-68419C23DE01}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{91617C9A-6C3F-4226-A9FF-68419C23DE01}.Release|Any CPU.Build.0 = Release|Any CPU
+		{24F931D0-A884-4354-B3C5-47AC3A575D6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24F931D0-A884-4354-B3C5-47AC3A575D6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24F931D0-A884-4354-B3C5-47AC3A575D6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24F931D0-A884-4354-B3C5-47AC3A575D6A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D10D2614-8CAC-4E4D-A483-515198ECADA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D10D2614-8CAC-4E4D-A483-515198ECADA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D10D2614-8CAC-4E4D-A483-515198ECADA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D10D2614-8CAC-4E4D-A483-515198ECADA1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -73,6 +87,8 @@ Global
 		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{5af5f04b-03bd-46c6-b174-681a9e927ec6}*SharedItemsImports = 4
 		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{71aa65b1-7f4e-474d-9017-6d9404e87857}*SharedItemsImports = 4
 		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{91617c9a-6c3f-4226-a9ff-68419c23de01}*SharedItemsImports = 4
+		Dev.DevKit.Shared.Test\Dev.DevKit.Shared.Test.projitems*{a7d8fb6d-0b6a-4c1d-8b3a-9c64dde23137}*SharedItemsImports = 13
+		Dev.DevKit.Shared.Test\Dev.DevKit.Shared.Test.projitems*{d10d2614-8cac-4e4d-a483-515198ecada1}*SharedItemsImports = 4
 		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{db38a8b7-ec89-4fdb-9187-5615061e9af0}*SharedItemsImports = 4
 		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{dfb9faa9-00b9-4e32-b613-f046a780169b}*SharedItemsImports = 13
 		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{f1d28411-33b6-46bc-98c4-f80a517dc72f}*SharedItemsImports = 4

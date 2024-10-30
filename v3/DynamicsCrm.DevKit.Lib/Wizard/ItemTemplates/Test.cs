@@ -43,7 +43,7 @@ namespace DynamicsCrm.DevKit.Lib.Wizard.ItemTemplates
                 //replacementsDictionary.Add("$stage_string$", form.SelectedClassType.ServerStage);
 
                 Replacement.SetItem(replacementsDictionary, form);
-                var t4Code = T4Helper.GetT4Code(ItemType.Test, ServerType);
+                var t4Code = T4Helper.GetT4Code2(ItemType.Test, form.TemplateTitle, ServerType);
                 var t4Context = T4Helper.BuildContext(ItemType.Test, replacementsDictionary, form, ServerType);
                 var code = T4Helper.ProcessTemplate(t4Code, t4Context);
                 replacementsDictionary.Add("$test-plugin$", code);

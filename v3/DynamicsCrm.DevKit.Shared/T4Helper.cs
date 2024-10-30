@@ -15,18 +15,18 @@ namespace DynamicsCrm.DevKit.Shared
 {
     internal class T4Helper
     {
-        public static string GetT4Code2(ItemType itemType, string templateTitle)
+        public static string GetT4Code2(ItemType itemType, string templateTitle, string subType = null)
         {
-            if (templateTitle.ToLower() == "default") return DefaultT4Code(itemType);
+            if (templateTitle.ToLower() == "default") return DefaultT4Code(itemType, subType);
             var fileName = VsixHelper.GetDynamicsCrmDevKitConfigJsonFileName();
-            if (!File.Exists(fileName)) return DefaultT4Code(itemType);
+            if (!File.Exists(fileName)) return DefaultT4Code(itemType, subType);
             var CachedJson = SimpleJson.DeserializeObject<CachedJson>(File.ReadAllText(fileName));
             var found = CachedJson.CustomTemplates.FirstOrDefault(x => x.Type == itemType.ToString() && x.Title == templateTitle);
-            if (found == null) return DefaultT4Code(itemType);
+            if (found == null) return DefaultT4Code(itemType, subType);
             return Utility.Decompress(found.Body);
         }
 
-        private static string DefaultT4Code(ItemType itemType)
+        private static string DefaultT4Code(ItemType itemType, string subType)
         {
             switch (itemType)
             {
@@ -38,6 +38,10 @@ namespace DynamicsCrm.DevKit.Shared
                     return Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.CustomAction.tt");
                 case ItemType.CustomApi:
                     return Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.CustomApi.tt");
+                case ItemType.Test:
+                    if (subType == ItemType.Plugin.ToString())
+                        return Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.TestPlugin.tt");
+                    return Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.TestPlugin.tt");
                 default:
                     return string.Empty;
             }
