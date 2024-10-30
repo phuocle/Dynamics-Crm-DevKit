@@ -38,8 +38,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.CustomAction.Tes
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.CustomApi.Test", "Dev.DevKit.CustomApi.Test\Dev.DevKit.CustomApi.Test.csproj", "{AF522B41-9A47-4248-B43D-AD649E207224}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.UiTest", "Dev.DevKit.UiTest\Dev.DevKit.UiTest.csproj", "{127302BA-1269-4708-B719-4A60C1E5ED62}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -94,10 +92,6 @@ Global
 		{AF522B41-9A47-4248-B43D-AD649E207224}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AF522B41-9A47-4248-B43D-AD649E207224}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AF522B41-9A47-4248-B43D-AD649E207224}.Release|Any CPU.Build.0 = Release|Any CPU
-		{127302BA-1269-4708-B719-4A60C1E5ED62}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{127302BA-1269-4708-B719-4A60C1E5ED62}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{127302BA-1269-4708-B719-4A60C1E5ED62}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{127302BA-1269-4708-B719-4A60C1E5ED62}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
