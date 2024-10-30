@@ -1,6 +1,7 @@
 ﻿using Community.VisualStudio.Toolkit;
 using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
+using Microsoft.VisualStudio.Shell;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -130,11 +131,19 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             else
                 CachedJson = new CachedJson();
             var customTemplates = CachedJson.CustomTemplates.Where(x => x.Type == ItemType.ToString()).ToList() ?? new List<CustomTemplate>();
-            customTemplates.Insert(0, new CustomTemplate { Type = ItemType.ToString(), Title = "Default", Body = GetDefaultCustomBody(), IsDefault = false });
+            if (ItemType == ItemType.Test)
+            {
+                customTemplates.Insert(0, new CustomTemplate { Type = ItemType.ToString(), Title = $"Default - {ItemType.CustomApi.ToString()}", Body = GetDefaultCustomBody($"Default - {ItemType.CustomApi.ToString()}"), IsDefault = false });
+                customTemplates.Insert(0, new CustomTemplate { Type = ItemType.ToString(), Title = $"Default - {ItemType.CustomAction.ToString()}", Body = GetDefaultCustomBody($"Default - {ItemType.CustomAction.ToString()}"), IsDefault = false });
+                customTemplates.Insert(0, new CustomTemplate { Type = ItemType.ToString(), Title = $"Default - {ItemType.Workflow.ToString()}", Body = GetDefaultCustomBody($"Default - {ItemType.Workflow.ToString()}"), IsDefault = false });
+                customTemplates.Insert(0, new CustomTemplate { Type = ItemType.ToString(), Title = $"Default - {ItemType.Plugin.ToString()}", Body = GetDefaultCustomBody($"Default - {ItemType.Plugin.ToString()}"), IsDefault = false });
+            }
+            else
+                customTemplates.Insert(0, new CustomTemplate { Type = ItemType.ToString(), Title = "Default", Body = GetDefaultCustomBody(), IsDefault = false });
             return customTemplates;
         }
 
-        private string GetDefaultCustomBody()
+        private string GetDefaultCustomBody(string templateTitle = null)
         {
             if (ItemType == ItemType.Plugin)
                 return Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.Plugin.tt");
@@ -144,6 +153,17 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 return Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.CustomAction.tt");
             else if (ItemType == ItemType.CustomApi)
                 return Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.CustomApi.tt");
+            else if (ItemType == ItemType.Test)
+            {
+                if (templateTitle == $"Default - {ItemType.Plugin.ToString()}")
+                    return Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.TestPlugin.tt");
+                else if (templateTitle == $"Default - {ItemType.Workflow.ToString()}")
+                    return Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.TestWorkflow.tt");
+                else if (templateTitle == $"Default - {ItemType.CustomAction.ToString()}")
+                    return Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.TestCustomAction.tt");
+                else if (templateTitle == $"Default - {ItemType.CustomApi.ToString()}")
+                    return Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.TestCustomApi.tt");
+            }
             return string.Empty;
         }
 
@@ -426,7 +446,14 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             if (form.ShowDialog() ?? false)
             {
                 var found = CachedJson.CustomTemplates.FirstOrDefault(x => x.Title == form.InputValue);
-                if (found != null || form.InputValue.ToLower() == "default")
+                if (
+                    found != null ||
+                    form.InputValue.ToLower() == "default" ||
+                    form.InputValue.ToLower() == $"default - {ItemType.Plugin.ToString()}".ToLower() ||
+                    form.InputValue.ToLower() == $"default - {ItemType.Workflow.ToString()}".ToLower() ||
+                    form.InputValue.ToLower() == $"default - {ItemType.CustomAction.ToString()}".ToLower() ||
+                    form.InputValue.ToLower() == $"default - {ItemType.CustomApi.ToString()}".ToLower()
+                    )
                 {
                     VS.MessageBox.ShowError($"An existing custom template named '{form.InputValue}' was found. The save as action failed.");
                 }
@@ -501,11 +528,24 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             if (form.ShowDialog() ?? false)
             {
                 var found = CachedJson.CustomTemplates.FirstOrDefault(x => x.Title == selected.Title);
+                if (
+                   found != null ||
+                   form.InputValue.ToLower() == "default" ||
+                   form.InputValue.ToLower() == $"default - {ItemType.Plugin.ToString()}".ToLower() ||
+                   form.InputValue.ToLower() == $"default - {ItemType.Workflow.ToString()}".ToLower() ||
+                   form.InputValue.ToLower() == $"default - {ItemType.CustomAction.ToString()}".ToLower() ||
+                   form.InputValue.ToLower() == $"default - {ItemType.CustomApi.ToString()}".ToLower()
+                   )
+                {
+                    VS.MessageBox.ShowError($"An existing custom template named '{form.InputValue}' was found. The save as action failed.");
+                    return;
+                }
                 if (found != null) found.Title = form.InputValue;
                 var count = CachedJson.CustomTemplates.Count(x => x.Title == form.InputValue);
                 if (count > 1)
                 {
                     VS.MessageBox.ShowError($"An existing custom template named '{form.InputValue}' was found. The rename action failed.");
+                    return;
                 }
                 else
                 {
