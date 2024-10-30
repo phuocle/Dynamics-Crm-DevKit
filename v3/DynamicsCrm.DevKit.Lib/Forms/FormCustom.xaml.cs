@@ -140,6 +140,8 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 return Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.Plugin.tt");
             else if (ItemType == ItemType.Workflow)
                 return Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.Workflow.tt");
+            else if (ItemType == ItemType.CustomAction)
+                return Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.CustomAction.tt");
             return string.Empty;
         }
 
