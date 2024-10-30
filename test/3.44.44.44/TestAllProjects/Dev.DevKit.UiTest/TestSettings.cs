@@ -1,7 +1,7 @@
 ﻿using Microsoft.Dynamics365.UIAutomation.Browser;
 using System;
 
-namespace $NameSpace$
+namespace Dev.DevKit.UiTest
 {
     public static class TestSettings
     {
