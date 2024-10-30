@@ -6,7 +6,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:wpfcontrols="clr-namespace:DynamicsCrm.DevKit.Lib.WpfControls"
         mc:Ignorable="d"
-        WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Width="500" Height="auto" SizeToContent="Height"
+        WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Width="500" Height="325"
     >
     <forms:BaseDialogWindow.Resources>
         <ResourceDictionary>
@@ -39,7 +39,7 @@
                     <Label x:Name="LabelMessage" Grid.Row="1" Grid.Column="0" Margin="0,0,0,5" Content="Message" HorizontalAlignment="Left" VerticalAlignment="Center" />
                     <ComboBox x:Name="ComboBoxMessage" Grid.Row="1" Grid.Column="1" Margin="0,0,0,5" VerticalContentAlignment="Center" IsEditable="False" SelectionChanged="ComboBoxMessage_SelectionChanged" />
                     <Label x:Name="LabelStage" Grid.Row="2" Grid.Column="0" Margin="0,0,0,5" Content="Stage" HorizontalAlignment="Left" VerticalAlignment="Center" />
-                    <ComboBox x:Name="ComboBoxStage" Grid.Row="2" Grid.Column="1" Margin="0,0,0,5" VerticalContentAlignment="Center" IsEditable="False" SelectionChanged="ComboBoxStage_SelectionChanged" />
+                    <ComboBox x:Name="ComboBoxStage" Grid.Row="2" Grid.Column="1" Margin="0,0,0,5" VerticalContentAlignment="Center" IsEditable="False" SelectionChanged="ComboBoxStage_SelectionChanged"/>
                     <Label x:Name="LabelExecution" Grid.Row="3" Grid.Column="0" Margin="0,0,0,5" Content="Execution" HorizontalAlignment="Left" VerticalAlignment="Center" />
                     <ComboBox x:Name="ComboBoxExecution" Grid.Row="3" Grid.Column="1" Margin="0,0,0,5" VerticalContentAlignment="Center" IsEditable="False" SelectionChanged="ComboBoxExecution_SelectionChanged" />
                     <Label x:Name="LabelClass" Grid.Row="4" Grid.Column="0" Margin="0,0,0,5" Content="Class" HorizontalAlignment="Left" VerticalAlignment="Center" />

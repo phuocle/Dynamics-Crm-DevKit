@@ -118,6 +118,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     ComboBoxExecution.Visibility = System.Windows.Visibility.Collapsed;
                     LabelStage.Visibility = System.Windows.Visibility.Collapsed;
                     ComboBoxStage.Visibility = System.Windows.Visibility.Collapsed;
+                    Height = 282;
                 }
                 _ItemType = value;
                 switch (_ItemType)

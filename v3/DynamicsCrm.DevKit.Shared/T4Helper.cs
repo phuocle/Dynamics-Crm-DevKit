@@ -36,6 +36,8 @@ namespace DynamicsCrm.DevKit.Shared
                     return Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.Workflow.tt");
                 case ItemType.CustomAction:
                     return Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.CustomAction.tt");
+                case ItemType.CustomApi:
+                    return Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.CustomApi.tt");
                 default:
                     return string.Empty;
             }
