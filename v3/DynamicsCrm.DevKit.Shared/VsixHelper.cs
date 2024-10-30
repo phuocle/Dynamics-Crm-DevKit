@@ -425,10 +425,14 @@ namespace DynamicsCrm.DevKit.Shared
                     var array = attribute.Value.Split(',');
                     pluginAttribute.Message = array[0].Trim();
                     pluginAttribute.EntityLogicalName = array[1].Trim();
-                    Enum.TryParse(array[2].Split('.')[1], out StageEnum stage);
-                    pluginAttribute.Stage = stage;
-                    Enum.TryParse(array[3].Split('.')[1], out ExecutionModeEnum mode);
-                    pluginAttribute.ExecutionMode = mode;
+                    try
+                    {
+                        Enum.TryParse(array[2].Split('.')[1], out StageEnum stage);
+                        pluginAttribute.Stage = stage;
+                        Enum.TryParse(array[3].Split('.')[1], out ExecutionModeEnum mode);
+                        pluginAttribute.ExecutionMode = mode;
+                    }
+                    catch { }
                     return true;
                 }
             }

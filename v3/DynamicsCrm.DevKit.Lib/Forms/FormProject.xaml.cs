@@ -543,7 +543,15 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 {
                     customTemplate.Body = Utility.Decompress(customTemplate.Body);
                 }
-                customTemplates.Insert(0, new CustomTemplate { Type = ItemType.ToString(), Title = "Default", Body = null, IsDefault = false });
+                if (ItemType == ItemType.Test)
+                {
+                    customTemplates.Insert(0, new CustomTemplate { Type = ItemType.ToString(), Title = $"Default - {ItemType.CustomApi.ToString()}", Body = null, IsDefault = false });
+                    customTemplates.Insert(0, new CustomTemplate { Type = ItemType.ToString(), Title = $"Default - {ItemType.CustomAction.ToString()}", Body = null, IsDefault = false });
+                    customTemplates.Insert(0, new CustomTemplate { Type = ItemType.ToString(), Title = $"Default - {ItemType.Workflow.ToString()}", Body = null, IsDefault = false });
+                    customTemplates.Insert(0, new CustomTemplate { Type = ItemType.ToString(), Title = $"Default - {ItemType.Plugin.ToString()}", Body = null, IsDefault = false });
+                }
+                else
+                    customTemplates.Insert(0, new CustomTemplate { Type = ItemType.ToString(), Title = "Default", Body = null, IsDefault = false });
                 return customTemplates;
             }
         }

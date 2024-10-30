@@ -15,18 +15,18 @@ namespace DynamicsCrm.DevKit.Shared
 {
     internal class T4Helper
     {
-        public static string GetT4Code2(ItemType itemType, string templateTitle, string subType = null)
+        public static string GetT4Code2(ItemType itemType, string templateTitle)
         {
-            if (templateTitle.ToLower() == "default") return DefaultT4Code(itemType, subType);
+            if (templateTitle.ToLower() == "default") return DefaultT4Code(itemType, templateTitle);
             var fileName = VsixHelper.GetDynamicsCrmDevKitConfigJsonFileName();
-            if (!File.Exists(fileName)) return DefaultT4Code(itemType, subType);
+            if (!File.Exists(fileName)) return DefaultT4Code(itemType, templateTitle);
             var CachedJson = SimpleJson.DeserializeObject<CachedJson>(File.ReadAllText(fileName));
             var found = CachedJson.CustomTemplates.FirstOrDefault(x => x.Type == itemType.ToString() && x.Title == templateTitle);
-            if (found == null) return DefaultT4Code(itemType, subType);
+            if (found == null) return DefaultT4Code(itemType, templateTitle);
             return Utility.Decompress(found.Body);
         }
 
-        private static string DefaultT4Code(ItemType itemType, string subType)
+        private static string DefaultT4Code(ItemType itemType, string templateTitle)
         {
             switch (itemType)
             {
@@ -39,9 +39,15 @@ namespace DynamicsCrm.DevKit.Shared
                 case ItemType.CustomApi:
                     return Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.CustomApi.tt");
                 case ItemType.Test:
-                    if (subType == ItemType.Plugin.ToString())
+                    if (templateTitle == $"Default - {ItemType.Plugin.ToString()}")
                         return Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.TestPlugin.tt");
-                    return Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.TestPlugin.tt");
+                    else if (templateTitle == $"Default - {ItemType.Workflow.ToString()}")
+                        return Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.TestWorkflow.tt");
+                    else if (templateTitle == $"Default - {ItemType.CustomAction.ToString()}")
+                        return Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.TestCustomAction.tt");
+                    else if (templateTitle == $"Default - {ItemType.CustomApi.ToString()}")
+                        return Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.TestCustomApi.tt");
+                    return string.Empty;
                 default:
                     return string.Empty;
             }

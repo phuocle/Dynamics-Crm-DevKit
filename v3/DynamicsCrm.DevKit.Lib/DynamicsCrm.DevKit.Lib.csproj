@@ -48,7 +48,10 @@
     <None Remove="Resources\plugin.deploy.debug.bat" />
     <None Remove="Resources\plugin.deploy.debug.only.bat" />
     <None Remove="Resources\Plugin.tt" />
+    <None Remove="Resources\TestCustomAction.tt" />
+    <None Remove="Resources\TestCustomApi.tt" />
     <None Remove="Resources\TestPlugin.tt" />
+    <None Remove="Resources\TestWorkflow.tt" />
     <None Remove="Resources\UiTest.tt" />
     <None Remove="Resources\WebApi.js" />
     <None Remove="Resources\WebApi2.js" />
@@ -57,6 +60,15 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\plugin.deploy.debug.bat" />
     <EmbeddedResource Include="Resources\plugin.deploy.debug.only.bat" />
+    <EmbeddedResource Include="Resources\TestCustomApi.tt">
+      <Generator></Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\TestCustomAction.tt">
+      <Generator></Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\TestWorkflow.tt">
+      <Generator></Generator>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\TestPlugin.tt">
       <Generator></Generator>
     </EmbeddedResource>
