@@ -7,8 +7,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.IO;
 using DynamicsCrm.DevKit.Lib.Forms;
-using NuGet.Protocol.Plugins;
-using System;
 using System.Linq;
 
 namespace DynamicsCrm.DevKit.Shared
@@ -48,6 +46,8 @@ namespace DynamicsCrm.DevKit.Shared
                     else if (templateTitle == $"Default - {ItemType.CustomApi.ToString()}")
                         return Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.TestCustomApi.tt");
                     return string.Empty;
+                case ItemType.UiTest:
+                    return Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.UiTest.tt");
                 default:
                     return string.Empty;
             }

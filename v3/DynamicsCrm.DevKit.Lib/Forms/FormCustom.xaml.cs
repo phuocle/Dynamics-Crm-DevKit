@@ -164,6 +164,8 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 else if (templateTitle == $"Default - {ItemType.CustomApi.ToString()}")
                     return Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.TestCustomApi.tt");
             }
+            else if (ItemType == ItemType.UiTest)
+                return Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.UiTest.tt");
             return string.Empty;
         }
 
