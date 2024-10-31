@@ -4,7 +4,7 @@
 	<PropertyGroup>
 		<Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
 		<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-		<ProjectGuid>{f131548b-3a6b-47f7-ad51-dff32dcdf1d8}</ProjectGuid>
+		<ProjectGuid>{226168dc-efae-4927-b71d-1dd61a0fec63}</ProjectGuid>
 		<OutputType>Library</OutputType>
 		<AppDesignerFolder>Properties</AppDesignerFolder>
 		<RootNamespace>Dev.DevKit.Server.Test</RootNamespace>
@@ -105,10 +105,10 @@
 			<HintPath>..\packages\Microsoft.TestPlatform.ObjectModel.17.11.1\lib\net462\Microsoft.VisualStudio.TestPlatform.ObjectModel.dll</HintPath>
 		</Reference>
 		<Reference Include="Microsoft.VisualStudio.TestPlatform.TestFramework, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-			<HintPath>..\packages\MSTest.TestFramework.3.5.2\lib\net462\Microsoft.VisualStudio.TestPlatform.TestFramework.dll</HintPath>
+			<HintPath>..\packages\MSTest.TestFramework.3.6.1\lib\net462\Microsoft.VisualStudio.TestPlatform.TestFramework.dll</HintPath>
 		</Reference>
 		<Reference Include="Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-			<HintPath>..\packages\MSTest.TestFramework.3.5.2\lib\net462\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll</HintPath>
+			<HintPath>..\packages\MSTest.TestFramework.3.6.1\lib\net462\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll</HintPath>
 		</Reference>
 		<Reference Include="Microsoft.Crm.Sdk.Proxy">
 			<HintPath>..\packages\Microsoft.CrmSdk.CoreAssemblies.9.0.2.56\lib\net462\Microsoft.Crm.Sdk.Proxy.dll</HintPath>
