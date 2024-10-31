@@ -12,7 +12,7 @@ using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 using System.Text;
 
-namespace $NameSpace$.Debug
+namespace Dev.DevKit.Console.Debug
 {
     public static class Helper
     {
