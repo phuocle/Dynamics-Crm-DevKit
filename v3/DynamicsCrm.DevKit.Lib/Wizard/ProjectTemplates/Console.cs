@@ -3,11 +3,7 @@ using DynamicsCrm.DevKit.Shared;
 using EnvDTE;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.TemplateWizard;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DynamicsCrm.DevKit.Lib.Wizard.ProjectTemplates
 {
@@ -16,6 +12,7 @@ namespace DynamicsCrm.DevKit.Lib.Wizard.ProjectTemplates
         private object DTE { get; set; }
         private Project Project { get; set; }
         private string ProjectName { get; set; }
+        private bool IsOOBConnection { get; set; }
 
         public void BeforeOpeningFile(ProjectItem projectItem)
         {
@@ -44,6 +41,7 @@ namespace DynamicsCrm.DevKit.Lib.Wizard.ProjectTemplates
             if (!VsixHelper.IsSharedProjectExist()) VsixHelper.ThrowWizardCancelledException(OOBDestinationDirectory);
             var form = new FormProject(DevKit.Shared.ProjectType.Console);
             var ok = form.ShowModal() ?? false;
+            IsOOBConnection = form.IsOOBConnection;
             Replacement.Set(replacementsDictionary, form);
             if (ok)
             {
@@ -58,6 +56,7 @@ namespace DynamicsCrm.DevKit.Lib.Wizard.ProjectTemplates
 
         public bool ShouldAddProjectItem(string filePath)
         {
+            if (filePath.Contains("LoginForm") && !IsOOBConnection) return false;
             return true;
         }
     }

@@ -259,7 +259,12 @@ namespace Microsoft.Xrm.Sdk
             tracingService.LogMessage(json);
 #endif
         }
-
+        public static void DebugMessage(this ITracingService tracingService, string message)
+        {
+#if DEBUG
+            tracingService.LogMessage(message);
+#endif
+        }
         public static void DebugMethod(this ITracingService tracingService)
         {
 #if DEBUG
