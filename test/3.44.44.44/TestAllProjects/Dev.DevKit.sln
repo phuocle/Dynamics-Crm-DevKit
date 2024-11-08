@@ -34,6 +34,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.2.UiTest", "Dev.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.DataProvider", "Dev.DevKit.DataProvider\Dev.DevKit.DataProvider.csproj", "{52BF71F0-8D5E-4C6E-B3D6-CE3E7B436F17}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.SolutionPackager", "Dev.DevKit.SolutionPackager\Dev.DevKit.SolutionPackager.csproj", "{AAF406C3-28B9-4AD1-8309-90C8DE7A21C6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -80,6 +82,10 @@ Global
 		{52BF71F0-8D5E-4C6E-B3D6-CE3E7B436F17}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{52BF71F0-8D5E-4C6E-B3D6-CE3E7B436F17}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{52BF71F0-8D5E-4C6E-B3D6-CE3E7B436F17}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AAF406C3-28B9-4AD1-8309-90C8DE7A21C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AAF406C3-28B9-4AD1-8309-90C8DE7A21C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AAF406C3-28B9-4AD1-8309-90C8DE7A21C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AAF406C3-28B9-4AD1-8309-90C8DE7A21C6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
