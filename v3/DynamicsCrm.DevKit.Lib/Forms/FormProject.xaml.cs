@@ -513,7 +513,19 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             InitializeComponent();
             ItemType = itemType;
             DTE = dte;
-            LoadCustomTemplates();
+            if (ItemType == ItemType.Plugin ||
+                ItemType == ItemType.Workflow ||
+                ItemType == ItemType.CustomAction ||
+                ItemType == ItemType.CustomApi ||
+                ItemType == ItemType.Test ||
+                ItemType == ItemType.UiTest
+                )
+            {
+                LoadCustomTemplates();
+            }
+            else
+                PanelCustom.Visibility = System.Windows.Visibility.Hidden;
+
         }
 
         public string TemplateTitle

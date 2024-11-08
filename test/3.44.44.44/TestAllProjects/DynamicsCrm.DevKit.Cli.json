@@ -58,10 +58,10 @@
   "datasources": [
     {
       "profile": "DEBUG",
-      "solution": "???",
-      "displayname": "???",
-      "pluralname": "???",
-      "name": "???"
+      "solution": "ALL_PROJECTS",
+      "displayname": "Sql DataSource",
+      "pluralname": "Sql DataSources",
+      "name": "devkit_SqlDataSource"
     }
   ],
   "solutionpackagers": [
