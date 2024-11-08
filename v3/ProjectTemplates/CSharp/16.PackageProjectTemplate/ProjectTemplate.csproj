@@ -24,6 +24,7 @@
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="DynamicsCrm.DevKit.Analyzers" Version="$DynamicsCrm.DevKit.Analyzers.version$" PrivateAssets="All" />
+		<PackageReference Include="DynamicsCrm.DevKit.Cli" Version="$DynamicsCrm.DevKit.Cli.version$" />
 		<PackageReference Include="Microsoft.CrmSdk.CoreAssemblies" Version="$Microsoft.CrmSdk.CoreAssemblies.version$" PrivateAssets="All" />
 		<PackageReference Include="Microsoft.PowerApps.MSBuild.Plugin" Version="1.*" PrivateAssets="All" />
 		<PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.*" PrivateAssets="All" />
