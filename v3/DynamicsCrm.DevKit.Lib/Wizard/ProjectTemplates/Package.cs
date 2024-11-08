@@ -41,6 +41,7 @@ namespace DynamicsCrm.DevKit.Lib.Wizard.ProjectTemplates
             var form = new FormProject(ProjectType.Package);
             var ok = form.ShowModal() ?? false;
             Replacement.Set(replacementsDictionary, form);
+            replacementsDictionary["$projectname$"] = form.ProjectName;
             if (ok)
             {
                 DTE = automationObject;
