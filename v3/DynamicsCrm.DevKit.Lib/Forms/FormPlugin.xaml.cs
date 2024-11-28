@@ -102,18 +102,20 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Plugin-Item-Template");
                     HELP.Inlines.Clear();
                     HELP.Inlines.Add("Plugin Item Template");
+                    Height = 344;
                 }
                 void CustomActionItem()
                 {
                     HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Custom-Action-Item-Template");
                     HELP.Inlines.Clear();
                     HELP.Inlines.Add("Custom Action Item Template");
+                    Height = 344;
                 }
                 void CustomApiItem()
                 {
                     HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Custom-Api-Item-Template");
                     HELP.Inlines.Clear();
-                    HELP.Inlines.Add("Custom Action Api Template");
+                    HELP.Inlines.Add("Custom Api Template");
                     LabelExecution.Visibility = System.Windows.Visibility.Collapsed;
                     ComboBoxExecution.Visibility = System.Windows.Visibility.Collapsed;
                     LabelStage.Visibility = System.Windows.Visibility.Collapsed;
@@ -310,7 +312,6 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                             if (found != null)
                             {
                                 ComboBoxEntity.SelectedItem = found;
-                                break;
                             }
                         }
                         progressBar.Visibility = System.Windows.Visibility.Hidden;

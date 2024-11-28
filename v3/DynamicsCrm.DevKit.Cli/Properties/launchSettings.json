@@ -75,8 +75,8 @@
     },
     "DEBUG.ABC": {
       "commandName": "Project",
-      "commandLineArgs": "/sdklogin:\"yes\" /json:\"..\\..\\DynamicsCrm.DevKit.Cli.json\" /type:\"generators\" /profile:\"LATEBOUND\"",
-      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\test\\3.44.44.44\\Test.Cli.Generator.Demo\\Dev.DevKit.Shared\\Entities"
+      "commandLineArgs": "/conn:\"AuthType=ClientSecret;Url=https://contoso-pl-devops-1.crm5.dynamics.com;ClientId=b1b8cf05-cb06-4674-b93e-98c8c9a02e5a;ClientSecret=v+L6+3MvOrVPMNqGn86vi6qEG4qpCCLoLqgeUMjnGkY=;\" /json:\"..\\DynamicsCrm.DevKit.Cli.json\" /type:\"solutionpackagers\" /profile:\"Pack-Both\" /version:\"9.1.0.179\"",
+      "workingDirectory": "D:\\azure\\PL\\DEVOPS_SOURCE\\Abiz.DevOps.SolutionPackager"
     }
   }
 }
