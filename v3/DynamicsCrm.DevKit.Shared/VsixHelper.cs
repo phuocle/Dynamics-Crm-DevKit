@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.TemplateWizard;
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Tooling.Connector;
 using System;
+using System.Activities.Expressions;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -630,6 +631,7 @@ namespace DynamicsCrm.DevKit.Shared
                 code += $"\t\"use strict\";\r\n";
                 code += $"\t/** @type {type} */\r\n";
                 code += $"\tvar form = null;\r\n";
+                code += $"\t/** @param {{any}} executionContext */\r\n";
                 code += $"\tasync function onLoad(executionContext) {{\r\n";
                 code += $"\t\tform = new {type}(executionContext);\r\n";
                 code += $"\t\tregisterEvents();\r\n";

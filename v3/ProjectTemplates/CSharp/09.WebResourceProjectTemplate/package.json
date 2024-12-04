@@ -11,6 +11,6 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@types/xrm": "^9.0.73"
+    "@types/xrm": "^9.0.81"
   }
 }
