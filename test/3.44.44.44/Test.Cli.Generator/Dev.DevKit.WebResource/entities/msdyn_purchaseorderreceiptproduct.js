@@ -1,0 +1,96 @@
+﻿//@ts-check
+///<reference path="msdyn_purchaseorderreceiptproduct.d.ts" />
+"use strict";
+var formmsdyn_purchaseorderreceiptproduct_Information = (function () {
+	"use strict";
+	/** @type DevKit.Formmsdyn_purchaseorderreceiptproduct_Information */
+	var form = null;
+	/** @param {any} executionContext */
+	async function onLoad(executionContext) {
+		form = new DevKit.Formmsdyn_purchaseorderreceiptproduct_Information(executionContext);
+		registerEvents();
+		await onLoadData();
+	}
+	function registerEvents() {
+		if (form.ExecutionContext.IsInitialLoad()) {
+		}
+	}
+	//BEGIN ON LOAD ========================================================
+	async function onLoadData() {
+	}
+	//END ON LOAD ==========================================================
+	//BEGIN ON CHANGE ======================================================
+
+	//END ON CHANGE ========================================================
+	//BEGIN PRE SEARCH =====================================================
+
+	//END PRE SEARCH =======================================================
+	//BEGIN OTHERS =========================================================
+
+	//END OTHERS ===========================================================
+	return {
+		OnLoad: onLoad
+	};
+})();
+var formPurchase_Order_Receipt_Product_Mobile = (function () {
+	"use strict";
+	/** @type DevKit.FormPurchase_Order_Receipt_Product_Mobile */
+	var form = null;
+	/** @param {any} executionContext */
+	async function onLoad(executionContext) {
+		form = new DevKit.FormPurchase_Order_Receipt_Product_Mobile(executionContext);
+		registerEvents();
+		await onLoadData();
+	}
+	function registerEvents() {
+		if (form.ExecutionContext.IsInitialLoad()) {
+		}
+	}
+	//BEGIN ON LOAD ========================================================
+	async function onLoadData() {
+	}
+	//END ON LOAD ==========================================================
+	//BEGIN ON CHANGE ======================================================
+
+	//END ON CHANGE ========================================================
+	//BEGIN PRE SEARCH =====================================================
+
+	//END PRE SEARCH =======================================================
+	//BEGIN OTHERS =========================================================
+
+	//END OTHERS ===========================================================
+	return {
+		OnLoad: onLoad
+	};
+})();
+var formQuick_Create_Purchase_Order_Receipt_Product = (function () {
+	"use strict";
+	/** @type DevKit.FormQuick_Create_Purchase_Order_Receipt_Product */
+	var form = null;
+	/** @param {any} executionContext */
+	async function onLoad(executionContext) {
+		form = new DevKit.FormQuick_Create_Purchase_Order_Receipt_Product(executionContext);
+		registerEvents();
+		await onLoadData();
+	}
+	function registerEvents() {
+		if (form.ExecutionContext.IsInitialLoad()) {
+		}
+	}
+	//BEGIN ON LOAD ========================================================
+	async function onLoadData() {
+	}
+	//END ON LOAD ==========================================================
+	//BEGIN ON CHANGE ======================================================
+
+	//END ON CHANGE ========================================================
+	//BEGIN PRE SEARCH =====================================================
+
+	//END PRE SEARCH =======================================================
+	//BEGIN OTHERS =========================================================
+
+	//END OTHERS ===========================================================
+	return {
+		OnLoad: onLoad
+	};
+})();

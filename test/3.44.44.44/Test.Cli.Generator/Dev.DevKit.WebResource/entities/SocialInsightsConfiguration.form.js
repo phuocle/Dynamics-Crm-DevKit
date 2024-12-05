@@ -1,0 +1,31 @@
+﻿'use strict';
+/** @namespace DevKit */
+var DevKit;
+(function (DevKit) {
+	'use strict';
+})(DevKit || (DevKit = {}));
+/** @namespace OptionSet */
+var OptionSet;
+(function (OptionSet) {
+	OptionSet.SocialInsightsConfiguration = {
+		FormTypeCode : {
+			System_Form: 1030,
+			User_Form: 1031
+		},
+		RegardingObjectTypeCode : {
+		},
+		SocialDataItemType : {
+			Class: 2,
+			Search_Item: 1
+		},
+		RollupState : {
+			NotCalculated: 0,
+			Calculated: 1,
+			OverflowError: 2,
+			OtherError: 3,
+			RetryLimitExceeded: 4,
+			HierarchicalRecursionLimitReached: 5,
+			LoopDetected: 6
+		}
+	};
+})(OptionSet || (OptionSet = {}));
