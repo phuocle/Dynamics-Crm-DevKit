@@ -1,16 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31205.134
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35527.113 d17.12
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5406160E-2C6E-4915-9062-4FA94E43C8BB}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Dev.DevKit.Shared", "Dev.DevKit.Shared\Dev.DevKit.Shared.shproj", "{60CD90EB-B2DB-428F-978D-11A5AF5B76EC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.SolutionPackager.Sdk", "Dev.DevKit.SolutionPackager.Sdk\Dev.DevKit.SolutionPackager.Sdk.csproj", "{4195C7BB-9423-4C4B-B80C-FE853A9BFD4D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7D3283FC-A161-4049-99F2-5F6C63532EB8}"
 	ProjectSection(SolutionItems) = preProject
 		DynamicsCrm.DevKit.Cli.json = DynamicsCrm.DevKit.Cli.json
 		DynamicsCrm.DevKit.json = DynamicsCrm.DevKit.json
-		Notes.txt = Notes.txt
 	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.SolutionPackager", "Dev.DevKit.SolutionPackager\Dev.DevKit.SolutionPackager.csproj", "{1DD89E73-5314-4A94-AF3B-60FD5D2C572E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -18,15 +19,18 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{1DD89E73-5314-4A94-AF3B-60FD5D2C572E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1DD89E73-5314-4A94-AF3B-60FD5D2C572E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1DD89E73-5314-4A94-AF3B-60FD5D2C572E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1DD89E73-5314-4A94-AF3B-60FD5D2C572E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4195C7BB-9423-4C4B-B80C-FE853A9BFD4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4195C7BB-9423-4C4B-B80C-FE853A9BFD4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4195C7BB-9423-4C4B-B80C-FE853A9BFD4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4195C7BB-9423-4C4B-B80C-FE853A9BFD4D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {478EE8F5-54E1-431D-BEC8-72AC05F5AF8C}
+	EndGlobalSection
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{60cd90eb-b2db-428f-978d-11a5af5b76ec}*SharedItemsImports = 13
 	EndGlobalSection
 EndGlobal
