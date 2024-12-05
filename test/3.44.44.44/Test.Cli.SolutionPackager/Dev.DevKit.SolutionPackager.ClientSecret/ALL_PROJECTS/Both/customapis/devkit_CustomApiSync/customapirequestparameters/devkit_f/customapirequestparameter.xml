@@ -1,0 +1,12 @@
+<customapirequestparameter uniquename="devkit_f">
+  <description default="f">
+    <label description="f" languagecode="1033" />
+  </description>
+  <displayname default="f">
+    <label description="f" languagecode="1033" />
+  </displayname>
+  <iscustomizable>1</iscustomizable>
+  <isoptional>0</isoptional>
+  <name>f</name>
+  <type>10</type>
+</customapirequestparameter>
