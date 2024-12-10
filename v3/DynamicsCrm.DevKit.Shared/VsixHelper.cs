@@ -642,7 +642,7 @@ namespace DynamicsCrm.DevKit.Shared
                 code += $"\t\t}}\r\n";
                 code += $"\t}}\r\n";
                 code += $"\t//BEGIN ON LOAD ========================================================\r\n";
-                code += $"\tasync function UiAddLoaded() {{\r\n";
+                code += $"\tasync function UiAddLoaded(executionContext) {{\r\n";
                 code += $"\t}}\r\n";
                 code += $"\t//END ON LOAD ==========================================================\r\n";
                 code += $"\t//BEGIN ON CHANGE ======================================================\r\n";
