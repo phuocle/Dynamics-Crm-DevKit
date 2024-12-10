@@ -13,7 +13,7 @@ using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 using System.Text;
 
-namespace Dev.DevKit.Console.Debug
+namespace Dev.DevKit.Console._2.Debug
 {
     public static class Helper
     {
@@ -102,7 +102,7 @@ namespace Dev.DevKit.Console.Debug
             {
                 foreach (var image in images)
                     FixEntity(image.Value);
-                }
+            }
             void FixEntity(Entity entity)
             {
                 FixLookup();
@@ -118,7 +118,7 @@ namespace Dev.DevKit.Console.Debug
                             var er = entity.GetAttributeValue<EntityReference>(key);
                             if (er != null && er?.Name == null)
                                 er.Name = "(No Name)";
-                            }
+                        }
                         catch { }
                     }
                 }
@@ -131,7 +131,7 @@ namespace Dev.DevKit.Console.Debug
                             var @string = entity.GetAttributeValue<string>(key);
                             if (@string != null && DateTime.TryParseExact(@string, "yyyy-MM-ddTHH:mm:ss.fffZ", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal, out var dateTime))
                                 entity.Attributes[key] = dateTime;
-                            }
+                        }
                         catch { }
                     }
                 }
@@ -144,7 +144,7 @@ namespace Dev.DevKit.Console.Debug
                             var str = entity.GetAttributeValue<string>(key);
                             if (str != null && Guid.TryParse(str, out var guid))
                                 entity.Attributes[key] = guid;
-                            }
+                        }
                         catch { }
                     }
                 }
