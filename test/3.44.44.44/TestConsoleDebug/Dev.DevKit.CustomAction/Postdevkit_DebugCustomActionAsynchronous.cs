@@ -1,5 +1,6 @@
 ﻿using Dev.DevKit.Shared;
 using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Extensions;
 using System;
 
 namespace Dev.DevKit.CustomAction
@@ -59,6 +60,29 @@ namespace Dev.DevKit.CustomAction
         {
             var outputs = new ParameterCollection();
             //YOUR CUSTOM ACTION BEGIN HERE
+            var InputBoolean = context.InputParameterOrDefault<bool?>("InputBoolean");
+            var InputDateTime = context.InputParameterOrDefault<DateTime?>("InputDateTime");
+            var InputDecimal = context.InputParameterOrDefault<decimal?>("InputDecimal");
+            var InputEntity = context.InputParameterOrDefault<Entity>("InputEntity");
+            var InputEntityCollection = context.InputParameterOrDefault<EntityCollection>("InputEntityCollection");
+            var InputEntityReference = context.InputParameterOrDefault<EntityReference>("InputEntityReference");
+            var InputFloat = context.InputParameterOrDefault<float?>("InputFloat");
+            var InputInteger = context.InputParameterOrDefault<int?>("InputInteger");
+            var InputMoney = context.InputParameterOrDefault<Money>("InputMoney");
+            var InputPickList = context.InputParameterOrDefault<OptionSetValue>("InputPickList");
+            var InputString = context.InputParameterOrDefault<string>("InputString");
+
+            tracing.DebugMessage($"InputBoolean = {InputBoolean}");
+            tracing.DebugMessage($"InputDateTime = {InputDateTime}");
+            tracing.DebugMessage($"InputDecimal = {InputDecimal}");
+            tracing.DebugMessage($"InputEntity = {InputEntity}");
+            tracing.DebugMessage($"InputEntityCollection = {InputEntityCollection}");
+            tracing.DebugMessage($"InputEntityReference = {InputEntityReference}");
+            tracing.DebugMessage($"InputFloat = {InputFloat}");
+            tracing.DebugMessage($"InputInteger = {InputInteger}");
+            tracing.DebugMessage($"InputMoney = {InputMoney}");
+            tracing.DebugMessage($"InputPickList = {InputPickList}");
+            tracing.DebugMessage($"InputString = {InputString}");
 
             return outputs;
         }
