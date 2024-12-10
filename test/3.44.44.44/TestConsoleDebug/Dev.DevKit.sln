@@ -47,6 +47,5 @@ Global
 		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{178e88ae-94a1-486b-bd69-86a9e584c694}*SharedItemsImports = 4
 		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{1b0e8d4c-c53f-48fa-88de-55eca1226a7c}*SharedItemsImports = 13
 		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{3ed74c2e-c0b0-4484-9500-fb16db3ec59e}*SharedItemsImports = 4
-		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{49c216a9-24a4-4284-9488-6a5b8f8ffe61}*SharedItemsImports = 4
 	EndGlobalSection
 EndGlobal

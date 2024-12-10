@@ -4,6 +4,7 @@ using Microsoft.Xrm.Sdk.PluginTelemetry;
 using Microsoft.Xrm.Tooling.Connector;
 using NSubstitute;
 using System;
+using System.Globalization;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -67,10 +68,18 @@ namespace Dev.DevKit.Console.Debug
                             FixEntity(entity);
                             break;
                         case EntityCollection entities:
-                            foreach (var entity in entities.Entities) FixEntity(entity);
+                            foreach (var entity in entities.Entities)
+                                FixEntity(entity);
                             break;
                         case string @string:
-                            if (Guid.TryParse(@string, out var guid)) parameters[key] = guid;
+                            if (Guid.TryParse(@string, out var guid))
+                                parameters[key] = guid;
+                            else if (DateTime.TryParseExact(@string, "yyyy-MM-ddTHH:mm:ss.fffZ", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal, out var dateTime))
+                                parameters[key] = dateTime;
+                            break;
+                        case EntityReference entityReference:
+                            if (entityReference.Name == null)
+                                entityReference.Name = "(No Name)";
                             break;
                         case Array array:
                             var entityReferenceCollection = new EntityReferenceCollection();
@@ -81,7 +90,8 @@ namespace Dev.DevKit.Console.Debug
                                     entityReferenceCollection.Add(entityReference);
                                 }
                             }
-                            if (entityReferenceCollection.Count > 0) parameters[key] = entityReferenceCollection;
+                            if (entityReferenceCollection.Count > 0)
+                                parameters[key] = entityReferenceCollection;
                             break;
                     }
                 }
@@ -120,8 +130,8 @@ namespace Dev.DevKit.Console.Debug
                     {
                         try
                         {
-                            var str = entity.GetAttributeValue<string>(key);
-                            if (str != null && DateTime.TryParse(str, out var dateTime))
+                            var @string = entity.GetAttributeValue<string>(key);
+                            if (@string != null && DateTime.TryParseExact(@string, "yyyy-MM-ddTHH:mm:ss.fffZ", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal, out var dateTime))
                             {
                                 entity.Attributes[key] = dateTime;
                             }
@@ -155,7 +165,9 @@ namespace Dev.DevKit.Console.Debug
                             {
                                 var collection = new OptionSetValueCollection();
                                 foreach (var item in array)
-                                    collection.Add(item as OptionSetValue);
+                                {
+                                    if (item is OptionSetValue optionSetValue) collection.Add(optionSetValue);
+                                }
                                 entity.Attributes[key] = collection;
                             }
                         }

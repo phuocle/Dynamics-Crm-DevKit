@@ -80,8 +80,8 @@ namespace Dev.DevKit.CustomAction
             tracing.DebugMessage($"InputEntityReference = {InputEntityReference.Id}");
             tracing.DebugMessage($"InputFloat = {InputFloat}");
             tracing.DebugMessage($"InputInteger = {InputInteger}");
-            tracing.DebugMessage($"InputMoney = {InputMoney}");
-            tracing.DebugMessage($"InputPickList = {InputPickList}");
+            tracing.DebugMessage($"InputMoney = {InputMoney.Value}");
+            tracing.DebugMessage($"InputPickList = {InputPickList.Value}");
             tracing.DebugMessage($"InputString = {InputString}");
 
             return outputs;
