@@ -634,15 +634,15 @@ namespace DynamicsCrm.DevKit.Shared
                 code += $"\t/** @param {{any}} executionContext */\r\n";
                 code += $"\tasync function onLoad(executionContext) {{\r\n";
                 code += $"\t\tform = new {type}(executionContext);\r\n";
+                code += $"\t\tform.UiAddLoaded(UiAddLoaded);\r\n";
                 code += $"\t\tregisterEvents();\r\n";
-                code += $"\t\tawait onLoadData();\r\n";
                 code += $"\t}}\r\n";
                 code += $"\tfunction registerEvents() {{\r\n";
                 code += $"\t\tif (form.ExecutionContext.IsInitialLoad()) {{\r\n";
                 code += $"\t\t}}\r\n";
                 code += $"\t}}\r\n";
                 code += $"\t//BEGIN ON LOAD ========================================================\r\n";
-                code += $"\tasync function onLoadData() {{\r\n";
+                code += $"\tasync function UiAddLoaded() {{\r\n";
                 code += $"\t}}\r\n";
                 code += $"\t//END ON LOAD ==========================================================\r\n";
                 code += $"\t//BEGIN ON CHANGE ======================================================\r\n";

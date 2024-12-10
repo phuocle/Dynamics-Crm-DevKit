@@ -10,6 +10,12 @@ declare namespace DevKit {
              */
             AddOnChange(callback: (executionContext: any) => void): void;
             /**
+             * Adds an event handler to the OnOutputChange event.
+             * @param callback
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/addonoutputchange
+             */
+            AddOnOutputChange(callback: (executionContext: any) => void): void;
+            /**
              * Causes the OnChange event to occur on the attribute so that any script associated to that event can execute
              * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/attributes/fireonchange
              */
@@ -25,6 +31,12 @@ declare namespace DevKit {
              * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/attributes/removeonchange
              */
             RemoveOnChange(callback: (executionContext: any) => void): void;
+            /**
+             * Removes an event handler from the OnOutputChange event.
+             * @param callback Specifies the function to be removed from the RemoveOnOutputChange event
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/removeonoutputchange
+             */
+            RemoveOnOutputChange(callback: (executionContext: any) => void): void;
             /**
              * Displays an error or recommendation notification for a control, and lets you specify actions to execute based on the notification. When you specify an error type of notification, a red "X" icon appears next to the control. When you specify a recommendation type of notification, an "i" icon appears next to the control. On Dynamics 365 for Customer Engagement apps mobile clients, tapping on the icon will display the message, and let you perform the configured action by clicking the Apply button or dismiss the message
              * @param notification The notification to add
@@ -156,7 +168,7 @@ declare namespace DevKit {
              * @param callback The function to be removed from the OnPreProcessStatusChange event
              * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/eventhandlers/removeonpreprocessstatuschange
              */
-            RemoveOnPreProcessStatusChange(callback: () => void): void;
+            RemoveOnPreProcessStatusChange(callback: (executionContext: any) => void): void;
             /**
              * Adds a function as an event handler for the OnPreStageChange event so that it will be called before the business process flow stage changes
              * @param callback The function that runs before the business process flow stage changes. The function will be added to the start of the event handler pipeline. The execution context is automatically passed as the first parameter to the function. See Execution context for more information.
@@ -168,7 +180,7 @@ declare namespace DevKit {
              * @param callback The function to be removed from the OnPreStageChange event
              * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/eventhandlers/removeonprestagechange
              */
-            RemoveOnPreStageChange(callback: () => void): void;
+            RemoveOnPreStageChange(callback: (executionContext: any) => void): void;
             /**
              * Adds a function as an event handler for the OnProcessStatusChange event so that it will be called when the business process flow status changes
              * @param callback The function to be executed when the business process flow status changes. The function will be added to the bottom of the event handler pipeline. The execution context is automatically passed as the first parameter to the function. See Execution context for more information
@@ -180,7 +192,7 @@ declare namespace DevKit {
              * @param callback The function to be removed from the OnProcessStatusChange event
              * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/eventhandlers/removeonprocessstatuschange
              */
-            RemoveOnProcessStatusChange(callback: () => void): void;
+            RemoveOnProcessStatusChange(callback: (executionContext: any) => void): void;
             /**
              * Adds a function as an event handler for the OnStageChange event so that it will be called when the business process flow stage changes
              * @param callback TThe function to be executed when the business process flow stage changes. The function will be added to the bottom of the event handler pipeline. The execution context is automatically passed as the first parameter to the function. See Execution context for more information
@@ -192,7 +204,7 @@ declare namespace DevKit {
              * @param callback The function to be removed from the OnStageChange event
              * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/eventhandlers/removeonstagechange
              */
-            RemoveOnStageChange(callback: () => void): void;
+            RemoveOnStageChange(callback: (executionContext: any) => void): void;
             /**
              * Adds a function as an event handler for the OnStageSelected event so that it will be called when a business process flow stage is selected
              * @param callback The function to be executed when the business process flow stage is selected. The function will be added to the bottom of the event handler pipeline. The execution context is automatically passed as the first parameter to the function. See Execution context for more information
@@ -204,7 +216,7 @@ declare namespace DevKit {
              * @param callback The function to be removed from the OnStageSelected event
              * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/eventhandlers/removeonstageselected
              */
-            RemoveOnStageSelected(callback: () => void): void;
+            RemoveOnStageSelected(callback: (executionContext: any) => void): void;
             /**
              * Asynchronously retrieves the business process flows enabled for an entity that the current user can switch to
              * @param callback The callback function must accept a parameter that contains an object with dictionary properties where the name of the property is the Id of the business process flow and the value of the property is the name of the business process flow. The enabled processes are filtered according to the user’s privileges. The list of enabled processes is the same ones a user can see in the UI if they want to change the process manually
@@ -661,19 +673,19 @@ declare namespace DevKit {
              * @param callback The function to remove from the PostSearch event
              * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/controls/removeonpostsearch
              */
-            RemovePostSearch(callback: () => void): void;
+            RemovePostSearch(callback: (executionContext: any) => void): void;
             /**
              * Removes an event handler from the OnResultOpened event
              * @param callback The function to remove from the OnResultOpened event
              * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/controls/removeonresultopened
              */
-            RemoveResultOpened(callback: () => void): void;
+            RemoveResultOpened(callback: (executionContext: any) => void): void;
             /**
              * Removes an event handler from the OnSelection even
              * @param callback The function to remove from the OnSelection event
              * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/controls/removeonselection
              */
-            RemoveSelection(callback: () => void): void;
+            RemoveSelection(callback: (executionContext: any) => void): void;
             /**
              * Gets the count of results found in the search control
              * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/controls/gettotalresultcount
@@ -877,7 +889,7 @@ declare namespace DevKit {
              * @param callback The function to be removed from the OnLoad event.
              * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/grids/gridcontrol/removeonload
              */
-            RemoveOnLoad(callback: () => void): void;
+            RemoveOnLoad(callback: (executionContext: any) => void): void;
             /**
              * [Read-only and editable grids] Gets the logical name of the entity data displayed in the grid
              * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/grids/gridcontrol/getentityname
@@ -1578,7 +1590,7 @@ declare namespace DevKit {
          * @param callback
          * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/stage/getnavigationbehavior
          */
-        AllowCreateNew(callback: () => boolean): void;
+        AllowCreateNew(callback: (executionContext: any) => boolean): void;
         /**
          * Returns the integer value of the business process flow category
          * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formContext-data-process/stage/getCategory
@@ -1726,6 +1738,11 @@ declare namespace DevKit {
          * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/save-event-arguments/preventdefaultonerror
          */
         SetPreventDefaultOnError(): void;
+        /**
+         * Disables the timeout for the event handler. Instead the event waits until the event handler's promise is fulfilled.
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/save-event-arguments/disableasynctimeout
+         */
+        DisableAsyncTimeout(): void;
         /**
          * Returns a value that indicates the order in which this handler is executed.
          * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/executioncontext/getdepth
@@ -2313,17 +2330,23 @@ declare namespace DevKit {
         */
         AddOnSave(callback: (executionContext: any) => void): void;
         /**
-        * PostSave event occurs after the OnSave event is complete. This event is used to support or execute custom logic using web resources to perform after Save actions when the save event is successful or failed due to server errors
-        * @param callback The function to add to the PostSave event. The execution context is automatically passed as the first parameter to this function
-        * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/events/postsave
-        */
-        AddPostSave(callback: (executionContext: any) => void): void;
-        /**
         * Adds a function to be called when form data is loaded.
         * @param callback The function to be executed when the form data loads. The function will be added to the bottom of the event handler pipeline. The execution context is automatically passed as the first parameter to the function. See Execution context for more information.
         * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-data/addonload
         */
         DataAddOnLoad(callback: (executionContext: any) => void): void;
+        /**
+        * Adds an event handler to the PostSave Event event.
+        * @param callback The function to be added to the PostSave event after the record is saved with success or failure.
+        * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-entity/addonpostsave
+        */
+        AddOnPostSave(callback: (executionContext: any) => void): void;
+        /**
+        * Adds a function to be called on the form Loaded event that happens after the form completes the load process.
+        * @param callback 	The function to be executed on the form Loaded event. The function is added to the bottom of the event handler pipeline. The execution context is automatically passed as the first parameter to the function. For more information, see Execution context.
+        * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui/addloaded
+        */
+        UiAddLoaded(callback: (executionContext: any) => void): void;
         /**
         * Adds a function to be called on the form OnLoad event.
         * @param callback The function to be executed on the form OnLoad event. The function will be added to the bottom of the event handler pipeline. The execution context is automatically passed as the first parameter to the function. See Execution context for more information.
@@ -2384,19 +2407,31 @@ declare namespace DevKit {
          * @param callback The function to be removed for the OnSave event
          * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-data-entity/removeonsave
          */
-        RemoveOnSave(callback: () => void): void;
+        RemoveOnSave(callback: (executionContext: any) => void): void;
         /**
          * Removes a function to be called when form data is loaded.
          * @param callback The function to be removed when the form data loads.
          * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-data/removeonload
          */
-        DataRemoveOnLoad(callback: () => void): void;
+        DataRemoveOnLoad(callback: (executionContext: any) => void): void;
+        /**
+         * Removes an event handler from the PostSave Event event.
+         * @param callback The function to be removed from the PostSave event.
+         * https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-entity/removeonpostsave
+         */
+        RemoveOnPostSave(callback: (executionContext: any) => void): void;
+        /**
+         * Removes a function from the form Loaded event.
+         * @param callback The function to be removed from the form Loaded event.
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui/removeloaded
+         */
+        UiRemoveLoaded(callback: (executionContext: any) => void): void;
         /**
          * Removes a function from the form OnLoad event.
          * @param callback The function to be removed from the form OnLoad event.
          * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui/removeonload
          */
-        UiRemoveOnLoad(callback: () => void): void;
+        UiRemoveOnLoad(callback: (executionContext: any) => void): void;
         /**
          * Saves the record asynchronously with the option to set callback functions to be executed after the save operation is completed. You can also set an object to control how appointment, recurring appointment, or service activity records are processed
          * @param saveOption An object for specifying options for saving the record

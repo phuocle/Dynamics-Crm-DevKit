@@ -74,7 +74,7 @@ var devKit = (function () {
                 contextDataEntity.addOnSave(callback);
             }
         };
-        form.AddPostSave = function (callback) {
+        form.AddOnPostSave = function (callback) {
             if (has(contextDataEntity, 'addOnPostSave')) {
                 contextDataEntity.addOnPostSave(callback);
             }
@@ -82,6 +82,11 @@ var devKit = (function () {
         form.RemoveOnSave = function (callback) {
             if (has(contextDataEntity, 'removeOnSave')) {
                 contextDataEntity.removeOnSave(callback);
+            }
+        };
+        form.RemoveOnPostSave = function (callback) {
+            if (has(contextDataEntity, 'removeOnPostSave')) {
+                contextDataEntity.removeOnPostSave(callback);
             }
         };
         Object.defineProperty(form, 'Attributes', {
@@ -152,6 +157,11 @@ var devKit = (function () {
         if (has(formContext, 'ui')) {
             contextUi = formContext.ui;
         }
+        form.UiAddLoaded = function (callback) {
+            if (has(contextUi, 'addLoaded')) {
+                contextUi.addLoaded(callback);
+            }
+        };
         form.UiAddOnLoad = function (callback) {
             if (has(contextUi, 'addOnLoad')) {
                 contextUi.addOnLoad(callback);
@@ -171,6 +181,11 @@ var devKit = (function () {
         form.RefreshRibbon = function (refreshAll) {
             if (has(contextUi, 'refreshRibbon')) {
                 contextUi.refreshRibbon(refreshAll);
+            }
+        };
+        form.UiRemoveLoaded = function (callback) {
+            if (has(contextUi, 'removeLoaded')) {
+                contextUi.removeLoaded(callback);
             }
         };
         form.UiRemoveOnLoad = function (callback) {
@@ -722,6 +737,11 @@ var devKit = (function () {
                 control.addOnPostSearch(callback);
             }
         };
+        field.AddOnOutputChange = function (callback) {
+            if (has(control, 'addOnOutputChange')) {
+                control.addOnOutputChange(callback);
+            }
+        };
         field.AddResultOpened = function (callback) {
             if (has(control, 'addOnResultOpened')) {
                 control.addOnResultOpened(callback);
@@ -772,6 +792,11 @@ var devKit = (function () {
         field.RemovePostSearch = function (callback) {
             if (has(control, 'removeOnPostSearch')) {
                 control.removeOnPostSearch(callback);
+            }
+        };
+        field.RemoveOnOutputChange = function (callback) {
+            if (has(control, 'removeOnOutputChange')) {
+                control.removeOnOutputChange(callback);
             }
         };
         field.RemoveResultOpened = function (callback) {
@@ -2566,6 +2591,11 @@ var devKit = (function () {
         obj.SetPreventDefaultOnError = function () {
             if (has(executionContext, 'getEventArgs')) {
                 executionContext.getEventArgs().preventDefaultOnError();
+            }
+        }
+        obj.DisableAsyncTimeout = function () {
+            if (has(executionContext, 'getEventArgs')) {
+                executionContext.getEventArgs().disableAsyncTimeout();
             }
         }
         Object.defineProperty(obj, 'Depth', {

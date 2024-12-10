@@ -9,15 +9,15 @@ var formAccount = (function () {
 	async function onLoad(executionContext) {
 		//abcd
 		form = new DevKit.FormAccount(executionContext);
+		form.UiAddLoaded(UiAddLoaded);
 		registerEvents();
-		await onLoadData();
 	}
 	function registerEvents() {
 		if (form.ExecutionContext.IsInitialLoad()) {
 		}
 	}
 	//BEGIN ON LOAD ========================================================
-	async function onLoadData() {
+	async function UiAddLoaded() {
 	}
 	//END ON LOAD ==========================================================
 	//BEGIN ON CHANGE ======================================================
