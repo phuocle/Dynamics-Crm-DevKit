@@ -66,7 +66,7 @@ namespace Dev.DevKit.CustomAction
             var InputEntity = context.InputParameterOrDefault<Entity>("InputEntity");
             var InputEntityCollection = context.InputParameterOrDefault<EntityCollection>("InputEntityCollection");
             var InputEntityReference = context.InputParameterOrDefault<EntityReference>("InputEntityReference");
-            var InputFloat = context.InputParameterOrDefault<float?>("InputFloat");
+            var InputFloat = context.InputParameterOrDefault<double?>("InputFloat");
             var InputInteger = context.InputParameterOrDefault<int?>("InputInteger");
             var InputMoney = context.InputParameterOrDefault<Money>("InputMoney");
             var InputPickList = context.InputParameterOrDefault<OptionSetValue>("InputPickList");
@@ -75,9 +75,9 @@ namespace Dev.DevKit.CustomAction
             tracing.DebugMessage($"InputBoolean = {InputBoolean}");
             tracing.DebugMessage($"InputDateTime = {InputDateTime}");
             tracing.DebugMessage($"InputDecimal = {InputDecimal}");
-            tracing.DebugMessage($"InputEntity = {InputEntity}");
-            tracing.DebugMessage($"InputEntityCollection = {InputEntityCollection}");
-            tracing.DebugMessage($"InputEntityReference = {InputEntityReference}");
+            tracing.DebugMessage($"InputEntity = {InputEntity.Id}");
+            tracing.DebugMessage($"InputEntityCollection = {InputEntityCollection.Entities.Count}");
+            tracing.DebugMessage($"InputEntityReference = {InputEntityReference.Id}");
             tracing.DebugMessage($"InputFloat = {InputFloat}");
             tracing.DebugMessage($"InputInteger = {InputInteger}");
             tracing.DebugMessage($"InputMoney = {InputMoney}");
