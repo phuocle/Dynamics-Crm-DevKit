@@ -4,6 +4,7 @@ using Microsoft.Xrm.Sdk.PluginTelemetry;
 using Microsoft.Xrm.Tooling.Connector;
 using NSubstitute;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.IO.Compression;
@@ -11,6 +12,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 using System.Text;
+using System.Windows.Documents;
 
 namespace Dev.DevKit.Console.Debug
 {
@@ -83,15 +85,16 @@ namespace Dev.DevKit.Console.Debug
                             break;
                         case Array array:
                             var entityReferenceCollection = new EntityReferenceCollection();
+                            var listString = new List<string>();
                             foreach (var item in array)
                             {
                                 if (item is EntityReference entityReference)
-                                {
                                     entityReferenceCollection.Add(entityReference);
-                                }
+                                else if (item is string @string)
+                                    listString.Add(@string);
                             }
-                            if (entityReferenceCollection.Count > 0)
-                                parameters[key] = entityReferenceCollection;
+                            if (entityReferenceCollection.Count > 0) parameters[key] = entityReferenceCollection;
+                            if (listString.Count > 0) parameters[key] = listString.ToArray();
                             break;
                     }
                 }

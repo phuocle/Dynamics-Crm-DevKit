@@ -1,6 +1,8 @@
 ﻿using Dev.DevKit.Shared;
 using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Extensions;
 using System;
+using System.Linq;
 
 namespace Dev.DevKit.CustomAction
 {
@@ -61,6 +63,33 @@ namespace Dev.DevKit.CustomAction
         {
             var outputs = new ParameterCollection();
             //YOUR CUSTOM ACTION BEGIN HERE
+            var InputBoolean = context.InputParameterOrDefault<bool?>("devkit_InputBoolean");
+            var InputDateTime = context.InputParameterOrDefault<DateTime?>("devkit_InputDateTime");
+            var InputDecimal = context.InputParameterOrDefault<decimal?>("devkit_InputDecimal");
+            var InputEntity = context.InputParameterOrDefault<Entity>("devkit_InputEntity");
+            var InputEntityCollection = context.InputParameterOrDefault<EntityCollection>("devkit_InputEntityCollection");
+            var InputEntityReference = context.InputParameterOrDefault<EntityReference>("devkit_InputEntityReference");
+            var InputFloat = context.InputParameterOrDefault<double?>("devkit_InputFloat");
+            var InputInteger = context.InputParameterOrDefault<int?>("devkit_InputInteger");
+            var InputMoney = context.InputParameterOrDefault<Money>("devkit_InputMoney");
+            var InputPickList = context.InputParameterOrDefault<OptionSetValue>("devkit_InputPicklist");
+            var InputString = context.InputParameterOrDefault<string>("devkit_InputString");
+            var InputStringArray = context.InputParameterOrDefault<string[]>("devkit_InputStringArray");
+            var InputGuid = context.InputParameterOrDefault<Guid?>("devkit_InputGuid");
+
+            tracing.DebugMessage($"devkit_InputBoolean = {InputBoolean}");
+            tracing.DebugMessage($"devkit_InputDateTime = {InputDateTime}");
+            tracing.DebugMessage($"devkit_InputDecimal = {InputDecimal}");
+            tracing.DebugMessage($"devkit_InputEntity = {InputEntity.Id}");
+            tracing.DebugMessage($"devkit_InputEntityCollection = {InputEntityCollection.Entities.Count}");
+            tracing.DebugMessage($"devkit_InputEntityReference = {InputEntityReference.Id}");
+            tracing.DebugMessage($"devkit_InputFloat = {InputFloat}");
+            tracing.DebugMessage($"devkit_InputInteger = {InputInteger}");
+            tracing.DebugMessage($"devkit_InputMoney = {InputMoney.Value}");
+            tracing.DebugMessage($"devkit_InputPicklist = {InputPickList.Value}");
+            tracing.DebugMessage($"devkit_InputString = {InputString}");
+            tracing.DebugMessage($"devkit_InputStringArray = {InputStringArray.Length}");
+            tracing.DebugMessage($"devkit_InputGuid = {InputGuid}");
 
             return outputs;
         }
