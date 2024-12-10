@@ -5,6 +5,7 @@ using Microsoft.Xrm.Tooling.Connector;
 using NSubstitute;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -29,7 +30,7 @@ namespace $NameSpace$.Debug
         public static IServiceProvider GetServiceProvider(string json, CrmServiceClient service)
         {
             var pluginExecutionContext = DeserializeRemoteExecutionContext(json);
-            FixDataAfterDeserialize(pluginExecutionContext);
+            FixPluginExecutionContext();
             var serviceProvider = Substitute.For<IServiceProvider>();
             serviceProvider.Get<IPluginExecutionContext>().Returns(pluginExecutionContext);
             serviceProvider.Get<IServiceEndpointNotificationService>().Returns(Substitute.For<IServiceEndpointNotificationService>());
@@ -50,126 +51,120 @@ namespace $NameSpace$.Debug
             });
             serviceProvider.Get<IOrganizationServiceFactory>().Returns(factory);
             return serviceProvider;
-        }
-        private static void FixDataAfterDeserialize(RemoteExecutionContext pluginExecutionContext)
-        {
-            var entities = new List<Entity>();
-            entities.AddRange(GetEntities(pluginExecutionContext.InputParameters));
-            entities.AddRange(GetEntities(pluginExecutionContext.OutputParameters));
-            entities.AddRange(GetEntities(pluginExecutionContext.SharedVariables));
-            entities.AddRange(pluginExecutionContext.PostEntityImages.Select(x => (Entity)x.Value).ToList());
-            entities.AddRange(pluginExecutionContext.PreEntityImages.Select(x => (Entity)x.Value).ToList());
-            FixDateTime(entities);
-            FixOptionSetValueCollection(entities);
-            FixGuid(entities);
-            FixLookup(entities);
-            FixEntityReferenceCollection(pluginExecutionContext.InputParameters);
-            FixEntityReferenceCollection(pluginExecutionContext.SharedVariables);
-            FixEntityReferenceCollection(pluginExecutionContext.OutputParameters);
-        }
-        private static List<Entity> GetEntities(ParameterCollection inputParameters)
-        {
-            var entities = new List<Entity>();
-            foreach (var item in inputParameters.Where(x => x.Value is Entity || x.Value is EntityCollection))
+            void FixPluginExecutionContext()
             {
-                if (item.Value is Entity e) entities.Add(e);
-                if (item.Value is EntityCollection ec) entities.AddRange(ec.Entities);
+                FixParameterCollection(pluginExecutionContext.InputParameters);
+                FixParameterCollection(pluginExecutionContext.SharedVariables);
+                FixParameterCollection(pluginExecutionContext.OutputParameters);
+                FixEntityImageCollection(pluginExecutionContext.PreEntityImages);
+                FixEntityImageCollection(pluginExecutionContext.PostEntityImages);
             }
-            return entities;
-        }
-        private static void FixEntityReferenceCollection(ParameterCollection parameterCollection)
-        {
-            foreach (var key in parameterCollection.Keys.ToList())
+            void FixParameterCollection(ParameterCollection parameters)
             {
-                if (parameterCollection[key] is Array array)
+                foreach (var key in parameters.Keys.ToList())
                 {
-                    var fixCollection = new EntityReferenceCollection();
-                    foreach (var item in array)
+                    switch (parameters[key])
                     {
-                        if (item is EntityReference entityReference)
-                        {
-                            fixCollection.Add(entityReference);
-                        }
-                    }
-                    if (fixCollection.Count > 0)
-                    {
-                        parameterCollection[key] = fixCollection;
-                    }
-                }
-            }
-        }
-        private static void FixOptionSetValueCollection(List<Entity> entities)
-        {
-            foreach (var entity in entities)
-            {
-                foreach (var key in entity.Attributes.Keys.ToList())
-                {
-                    try
-                    {
-                        var array = entity.GetAttributeValue<object[]>(key);
-                        if (array != null)
-                        {
-                            var collection = new OptionSetValueCollection();
+                        case Entity entity:
+                            FixEntity(entity);
+                            break;
+                        case EntityCollection entities:
+                            foreach (var entity in entities.Entities)
+                                FixEntity(entity);
+                            break;
+                        case string @string:
+                            if (Guid.TryParse(@string, out var guid))
+                                parameters[key] = guid;
+                            else if (DateTime.TryParseExact(@string, "yyyy-MM-ddTHH:mm:ss.fffZ", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal, out var dateTime))
+                                parameters[key] = dateTime;
+                            break;
+                        case EntityReference entityReference:
+                            if (entityReference.Name == null)
+                                entityReference.Name = "(No Name)";
+                            break;
+                        case Array array:
+                            var entityReferenceCollection = new EntityReferenceCollection();
+                            var listString = new List<string>();
                             foreach (var item in array)
-                                collection.Add(item as OptionSetValue);
-                            entity.Attributes[key] = collection;
-                        }
+                            {
+                                if (item is EntityReference entityReference)
+                                    entityReferenceCollection.Add(entityReference);
+                                else if (item is string @string)
+                                    listString.Add(@string);
+                            }
+                            if (entityReferenceCollection.Count > 0) parameters[key] = entityReferenceCollection;
+                            if (listString.Count > 0) parameters[key] = listString.ToArray();
+                            break;
                     }
-                    catch { }
                 }
             }
-        }
-        private static void FixDateTime(List<Entity> entities)
-        {
-            foreach (var entity in entities)
+            void FixEntityImageCollection(EntityImageCollection images)
             {
-                foreach (var key in entity.Attributes.Keys.ToList())
-                {
-                    try
-                    {
-                        var str = entity.GetAttributeValue<string>(key);
-                        if (str != null && DateTime.TryParse(str, out var dateTime))
-                        {
-                            entity.Attributes[key] = dateTime;
-                        }
-                    }
-                    catch { }
-                }
+                foreach (var image in images)
+                    FixEntity(image.Value);
             }
-        }
-        private static void FixGuid(List<Entity> entities)
-        {
-            foreach (var entity in entities)
+            void FixEntity(Entity entity)
             {
-                foreach (var key in entity.Attributes.Keys.ToList())
+                FixLookup();
+                FixDateTime();
+                FixGuid();
+                FixOptionSetValueCollection();
+                void FixLookup()
                 {
-                    try
+                    foreach (var key in entity.Attributes.Keys.ToList())
                     {
-                        var str = entity.GetAttributeValue<string>(key);
-                        if (str != null && Guid.TryParse(str, out var guid))
+                        try
                         {
-                            entity.Attributes[key] = guid;
+                            var er = entity.GetAttributeValue<EntityReference>(key);
+                            if (er != null && er?.Name == null)
+                                er.Name = "(No Name)";
                         }
+                        catch { }
                     }
-                    catch { }
                 }
-            }
-        }
-        private static void FixLookup(List<Entity> entities)
-        {
-            foreach (var entity in entities)
-            {
-                foreach (var key in entity.Attributes.Keys.ToList())
+                void FixDateTime()
                 {
-                    try
+                    foreach (var key in entity.Attributes.Keys.ToList())
                     {
-                        var er = entity.GetAttributeValue<EntityReference>(key);
-                        if (er != null && er?.Name == null)
+                        try
                         {
-                            er.Name = "(No Name)";
+                            var @string = entity.GetAttributeValue<string>(key);
+                            if (@string != null && DateTime.TryParseExact(@string, "yyyy-MM-ddTHH:mm:ss.fffZ", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal, out var dateTime))
+                                entity.Attributes[key] = dateTime;
                         }
+                        catch { }
                     }
-                    catch { }
+                }
+                void FixGuid()
+                {
+                    foreach (var key in entity.Attributes.Keys.ToList())
+                    {
+                        try
+                        {
+                            var str = entity.GetAttributeValue<string>(key);
+                            if (str != null && Guid.TryParse(str, out var guid))
+                                entity.Attributes[key] = guid;
+                        }
+                        catch { }
+                    }
+                }
+                void FixOptionSetValueCollection()
+                {
+                    foreach (var key in entity.Attributes.Keys.ToList())
+                    {
+                        try
+                        {
+                            var array = entity.GetAttributeValue<object[]>(key);
+                            if (array != null)
+                            {
+                                var collection = new OptionSetValueCollection();
+                                foreach (var item in array)
+                                    if (item is OptionSetValue optionSetValue) collection.Add(optionSetValue);
+                                entity.Attributes[key] = collection;
+                            }
+                        }
+                        catch { }
+                    }
                 }
             }
         }
