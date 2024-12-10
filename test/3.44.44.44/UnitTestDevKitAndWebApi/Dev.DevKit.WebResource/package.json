@@ -11,6 +11,14 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@types/xrm": "^9.0.81"
+    "@types/requirejs": "^2.1.37",
+    "@types/sinon": "^17.0.3",
+    "@types/sinonjs__fake-timers": "^8.1.5",
+    "@types/xrm": "^9.0.81",
+    "eslint": "^9.16.0",
+    "jasmine": "^5.5.0",
+    "requirejs": "^2.3.7",
+    "sinon": "^19.0.2",
+    "xrm-mock": "^3.6.1"
   }
 }
