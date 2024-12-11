@@ -53,6 +53,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Content Include="test\Account.form.test.js" />
     <Content Include="test\Account.webapi.test.js" />
     <Content Include="chutzpah.json" />
     <Content Include="test\requirejsConfig.js" />

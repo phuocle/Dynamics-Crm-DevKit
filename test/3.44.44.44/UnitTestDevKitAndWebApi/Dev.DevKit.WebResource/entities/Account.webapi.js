@@ -187,7 +187,7 @@ var DevKit;
 			CustomerTypeCode: { a: 'customertypecode', g: 'Integer' },
 			Description: { a: 'description' },
 			devkit_BigInt: { a: 'devkit_bigint', g: 'Integer' },
-			devkit_categorycode: { a: 'devkit_categorycode', g: 'MultiOptionSet' },
+			devkit_CategoryCode: { a: 'devkit_categorycode', g: 'MultiOptionSet' },
 			DoNotBulkEMail: { a: 'donotbulkemail', g: 'Boolean' },
 			DoNotBulkPostalMail: { a: 'donotbulkpostalmail', g: 'Boolean' },
 			DoNotEMail: { a: 'donotemail', g: 'Boolean' },
@@ -368,7 +368,7 @@ var OptionSet;
 			Supplier: 10,
 			Vendor: 11
 		},
-		devkit_categorycode : {
+		devkit_CategoryCode : {
 			Business: 1,
 			Family: 2,
 			Other: 5,

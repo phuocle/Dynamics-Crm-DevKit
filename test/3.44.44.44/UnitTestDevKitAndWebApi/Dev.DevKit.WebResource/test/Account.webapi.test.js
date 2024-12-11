@@ -119,13 +119,13 @@ define(['xrm-mock', 'sinon'], function () {
             expect(webapi.IndustryCode).toBeDefined();
             expect(webapi.IndustryCode).toBe(OptionSet.Account.IndustryCode.Brokers);
             expect(webapi.FormattedValue.IndustryCode).toBe("Brokers");
-            expect(webapi.devkit_categorycode).toBeDefined();
-            expect(webapi.devkit_categorycode.length).toBe(2);
-            expect(webapi.devkit_categorycode[0]).toBe(OptionSet.Account.devkit_categorycode.Business);
-            expect(webapi.devkit_categorycode[1]).toBe(OptionSet.Account.devkit_categorycode.Family);
-            expect(webapi.FormattedValue.devkit_categorycode.length).toBe(2);
-            expect(webapi.FormattedValue.devkit_categorycode[0]).toBe("Business");
-            expect(webapi.FormattedValue.devkit_categorycode[1]).toBe("Family");
+            expect(webapi.devkit_CategoryCode).toBeDefined();
+            expect(webapi.devkit_CategoryCode.length).toBe(2);
+            expect(webapi.devkit_CategoryCode[0]).toBe(OptionSet.Account.devkit_CategoryCode.Business);
+            expect(webapi.devkit_CategoryCode[1]).toBe(OptionSet.Account.devkit_CategoryCode.Family);
+            expect(webapi.FormattedValue.devkit_CategoryCode.length).toBe(2);
+            expect(webapi.FormattedValue.devkit_CategoryCode[0]).toBe("Business");
+            expect(webapi.FormattedValue.devkit_CategoryCode[1]).toBe("Family");
             expect(webapi.CreditLimit).toBeDefined();
             expect(webapi.CreditLimit).toBe(5000);
             expect(webapi.FormattedValue.CreditLimit).toBe("$5,000.00");
@@ -190,7 +190,7 @@ define(['xrm-mock', 'sinon'], function () {
             var webapi = new DevKit.AccountApi();
             webapi.Name = "ACCOUNT NAME";
             webapi.IndustryCode = OptionSet.Account.IndustryCode.Brokers;
-            webapi.devkit_categorycode = [OptionSet.Account.devkit_categorycode.Business, OptionSet.Account.devkit_categorycode.Social];
+            webapi.devkit_CategoryCode = [OptionSet.Account.devkit_CategoryCode.Business, OptionSet.Account.devkit_CategoryCode.Social];
             webapi.DoNotEMail = false;
             webapi.PrimaryContactId = "8d2dbd8c-c9f8-4cb5-8838-f5a916a6098a";
             webapi.CreditLimit = 123.456;
@@ -219,7 +219,7 @@ define(['xrm-mock', 'sinon'], function () {
             var webapi = new DevKit.AccountApi();
             webapi.Name = "ACCOUNT NAME";
             webapi.IndustryCode = OptionSet.Account.IndustryCode.Brokers;
-            webapi.devkit_categorycode = [OptionSet.Account.devkit_categorycode.Business, OptionSet.Account.devkit_categorycode.Social];
+            webapi.devkit_CategoryCode = [OptionSet.Account.devkit_CategoryCode.Business, OptionSet.Account.devkit_CategoryCode.Social];
             webapi.DoNotEMail = false;
             webapi.PrimaryContactId = "8d2dbd8c-c9f8-4cb5-8838-f5a916a6098a";
             webapi.CreditLimit = 123.456;

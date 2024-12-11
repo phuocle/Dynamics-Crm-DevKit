@@ -51,6 +51,7 @@ declare namespace DevKit {
 			CreditOnHold: DevKit.Controls.Boolean;
 			/** Type additional information to describe the account, such as an excerpt from the company's website. */
 			Description: DevKit.Controls.String;
+			devkit_CategoryCode: DevKit.Controls.MultiOptionSet;
 			/** Select whether the account allows bulk email sent through campaigns. If Do Not Allow is selected, the account can be added to marketing lists, but is excluded from email. */
 			DoNotBulkEMail: DevKit.Controls.Boolean;
 			/** Select whether the account allows direct email sent from Microsoft Dynamics 365. */
@@ -693,7 +694,7 @@ declare namespace DevKit {
 		/** Type additional information to describe the account, such as an excerpt from the company's website. */
 		Description: string;
 		devkit_BigInt: number;
-		devkit_categorycode: Array<OptionSet.Account.devkit_categorycode>;
+		devkit_CategoryCode: Array<OptionSet.Account.devkit_CategoryCode>;
 		/** Select whether the account allows bulk email sent through campaigns. If Do Not Allow is selected, the account can be added to marketing lists, but is excluded from email. */
 		DoNotBulkEMail: boolean;
 		/** Select whether the account allows bulk postal mail sent through marketing campaigns or quick campaigns. If Do Not Allow is selected, the account can be added to marketing lists, but will be excluded from the postal mail. */
@@ -993,7 +994,7 @@ declare namespace DevKit {
 			/** Type additional information to describe the account, such as an excerpt from the company's website. */
 			readonly Description: string;
 			readonly devkit_BigInt: string;
-			readonly devkit_categorycode: Array<string>;
+			readonly devkit_CategoryCode: Array<string>;
 			/** Select whether the account allows bulk email sent through campaigns. If Do Not Allow is selected, the account can be added to marketing lists, but is excluded from email. */
 			readonly DoNotBulkEMail: string;
 			/** Select whether the account allows bulk postal mail sent through marketing campaigns or quick campaigns. If Do Not Allow is selected, the account can be added to marketing lists, but will be excluded from the postal mail. */
@@ -1244,7 +1245,7 @@ declare namespace OptionSet {
 			/** 11 */
 			Vendor
 		}
-		enum devkit_categorycode {
+		enum devkit_CategoryCode {
 			/** 1 */
 			Business,
 			/** 2 */

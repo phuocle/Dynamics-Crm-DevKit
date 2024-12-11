@@ -24,6 +24,7 @@ var DevKit;
 			CreditLimit: {},
 			CreditOnHold: {},
 			Description: {},
+			devkit_CategoryCode: {},
 			DoNotBulkEMail: {},
 			DoNotEMail: {},
 			DoNotFax: {},
@@ -465,6 +466,16 @@ var OptionSet;
 			Reseller: 9,
 			Supplier: 10,
 			Vendor: 11
+		},
+		devkit_CategoryCode : {
+			Business: 1,
+			Family: 2,
+			Other: 5,
+			Sales: 4,
+			Sales_Team: 1001,
+			Service: 1002,
+			Social: 3,
+			Stakeholder: 1000
 		},
 		IndustryCode : {
 			Accounting: 1,
