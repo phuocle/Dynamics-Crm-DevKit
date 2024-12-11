@@ -693,6 +693,7 @@ declare namespace DevKit {
 		/** Type additional information to describe the account, such as an excerpt from the company's website. */
 		Description: string;
 		devkit_BigInt: number;
+		devkit_categorycode: Array<OptionSet.Account.devkit_categorycode>;
 		/** Select whether the account allows bulk email sent through campaigns. If Do Not Allow is selected, the account can be added to marketing lists, but is excluded from email. */
 		DoNotBulkEMail: boolean;
 		/** Select whether the account allows bulk postal mail sent through marketing campaigns or quick campaigns. If Do Not Allow is selected, the account can be added to marketing lists, but will be excluded from the postal mail. */
@@ -992,6 +993,7 @@ declare namespace DevKit {
 			/** Type additional information to describe the account, such as an excerpt from the company's website. */
 			readonly Description: string;
 			readonly devkit_BigInt: string;
+			readonly devkit_categorycode: Array<string>;
 			/** Select whether the account allows bulk email sent through campaigns. If Do Not Allow is selected, the account can be added to marketing lists, but is excluded from email. */
 			readonly DoNotBulkEMail: string;
 			/** Select whether the account allows bulk postal mail sent through marketing campaigns or quick campaigns. If Do Not Allow is selected, the account can be added to marketing lists, but will be excluded from the postal mail. */
@@ -1241,6 +1243,24 @@ declare namespace OptionSet {
 			Supplier,
 			/** 11 */
 			Vendor
+		}
+		enum devkit_categorycode {
+			/** 1 */
+			Business,
+			/** 2 */
+			Family,
+			/** 5 */
+			Other,
+			/** 4 */
+			Sales,
+			/** 1001 */
+			Sales_Team,
+			/** 1002 */
+			Service,
+			/** 3 */
+			Social,
+			/** 1000 */
+			Stakeholder
 		}
 		enum IndustryCode {
 			/** 1 */

@@ -104,83 +104,60 @@ define(['xrm-mock', 'sinon'], function () {
             var res = await Xrm.WebApi.retrieveMultipleRecords("account", fetchXml);
 
             //result
-
             expect(res.nextLink).toBeUndefined();
             expect(res.entities.length).toBe(1);
-
             var webapi = new DevKit.AccountApi(res.entities[0]);
-
             expect(webapi['@odata.etag']).toBe(`W/"1012533"`);
             expect(webapi.AccountId).toBe("e295f09c-2aab-eb11-8236-000d3a808ce1");
-
             expect(webapi.Name).toBe("A. Datum Corporation (sample)");
-
             expect(webapi.OwnerId_team).toBeDefined();
             expect(webapi.OwnerId_team).toBeNull();
             expect(webapi.FormattedValue.OwnerId_team).toBe("");
             expect(webapi.OwnerId_systemuser).toBeDefined();
             expect(webapi.OwnerId_systemuser).toBe("27ae35af-15ab-eb11-8236-000d3a80893f");
             expect(webapi.FormattedValue.OwnerId_systemuser).toBe("DEV 2");
-
             expect(webapi.IndustryCode).toBeDefined();
             expect(webapi.IndustryCode).toBe(OptionSet.Account.IndustryCode.Brokers);
             expect(webapi.FormattedValue.IndustryCode).toBe("Brokers");
-
-            //expect(webapi.devkit_CategoryCode).toBeDefined();
-            //expect(webapi.devkit_CategoryCode.Value.length).toBe(2);
-            //expect(webapi.devkit_CategoryCode.Value[0]).toBe(OptionSet.Account.devkit_CategoryCode.Business);
-            //expect(webapi.devkit_CategoryCode.Value[1]).toBe(OptionSet.Account.devkit_CategoryCode.Family);
-            //expect(webapi.devkit_CategoryCode.FormattedValue.length).toBe(2);
-            //expect(webapi.devkit_CategoryCode.FormattedValue[0]).toBe("Business");
-            //expect(webapi.devkit_CategoryCode.FormattedValue[1]).toBe("Family");
-
+            expect(webapi.devkit_categorycode).toBeDefined();
+            expect(webapi.devkit_categorycode.length).toBe(2);
+            expect(webapi.devkit_categorycode[0]).toBe(OptionSet.Account.devkit_categorycode.Business);
+            expect(webapi.devkit_categorycode[1]).toBe(OptionSet.Account.devkit_categorycode.Family);
+            expect(webapi.FormattedValue.devkit_categorycode.length).toBe(2);
+            expect(webapi.FormattedValue.devkit_categorycode[0]).toBe("Business");
+            expect(webapi.FormattedValue.devkit_categorycode[1]).toBe("Family");
             expect(webapi.CreditLimit).toBeDefined();
             expect(webapi.CreditLimit).toBe(5000);
             expect(webapi.FormattedValue.CreditLimit).toBe("$5,000.00");
-            debugger;
             expect(webapi.DoNotEMail).toBeDefined();
             expect(webapi.DoNotEMail).toBeFalsy();
             expect(webapi.FormattedValue.DoNotEMail).toBe("Allow");
-
-            webapi.LastOnHoldTime_UtcDateAndTime = new Date();
-
             expect(webapi.EMailAddress1).toBeDefined();
             expect(webapi.EMailAddress1).toBe("someone9@example.com");
-
             expect(webapi.ModifiedOn_UtcDateAndTime).toBeDefined();
             expect(webapi.ModifiedOn_UtcDateAndTime.getTime()).toBe(new Date("2021-05-11T01:41:28Z").getTime());
             expect(webapi.FormattedValue.ModifiedOn_UtcDateAndTime).toBe("5/11/2021 8:41 AM");
-
             expect(webapi.Telephone1).toBeDefined();
             expect(webapi.Telephone1).toBe("555-0158");
-
             expect(webapi.StateCode).toBeDefined();
             expect(webapi.StateCode).toBe(OptionSet.Account.StateCode.Active);
             expect(webapi.FormattedValue.StateCode).toBe("Active");
-
             expect(webapi.StatusCode).toBeDefined();
             expect(webapi.StatusCode).toBe(OptionSet.Account.StatusCode.Active);
             expect(webapi.FormattedValue.StatusCode).toBe("Active");
-
             expect(webapi.NumberOfEmployees).toBeDefined();
             expect(webapi.NumberOfEmployees).toBe(6200);
             expect(webapi.FormattedValue.NumberOfEmployees).toBe("6,200");
-
             expect(webapi.Fax).toBeDefined();
             expect(webapi.Fax).toBeNull();
-
             expect(webapi.getAliasedValue("c.emailaddress1")).toBe("someone_i@example.com");
             expect(webapi.getAliasedFormattedValue("c.emailaddress1")).toBe("");
-
             expect(webapi.getAliasedValue("c.birthdate")).toBe("1984-11-22");
             expect(webapi.getAliasedFormattedValue("c.birthdate")).toBe("11/22/1984");
-
             expect(webapi.getAliasedValue("c.telephone1")).toBe("555-0108");
             expect(webapi.getAliasedFormattedValue("c.telephone1")).toBe("");
-
             expect(webapi.getAliasedValue("c.fax")).toBeNull();
             expect(webapi.getAliasedFormattedValue("c.fax")).toBe("");
-
             var values = webapi.getAliasedValue("c.devkit_categorycode", true);
             expect(values.length).toBe(2);
             expect(values[0]).toBe(1);
@@ -189,9 +166,7 @@ define(['xrm-mock', 'sinon'], function () {
             expect(formattedValues.length).toBe(2);
             expect(formattedValues[0]).toBe("Business");
             expect(formattedValues[1]).toBe("Social");
-
             expect(webapi.Entity).toBeDefined();
-
             expect(webapi.CreatedBy).toBeNull();
             expect(webapi.FormattedValue.CreatedBy).toBe("");
         });
