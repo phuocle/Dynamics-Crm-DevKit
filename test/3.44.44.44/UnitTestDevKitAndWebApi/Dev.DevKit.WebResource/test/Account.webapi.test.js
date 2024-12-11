@@ -200,53 +200,54 @@ define(['xrm-mock', 'sinon'], function () {
             expect(res.entityType).toBe("account");
         });
     });
-    //describe('WebApi Update Account', () => {
-    //    beforeEach(function () {
-    //        xrmMock.XrmMockGenerator.initialise();
-    //    });
-    //    it("Update Account", async () => {
-    //        //setup
-    //        /** @type {any} */
-    //        var obj =
-    //        {
-    //            id: "8d2dbd8c-c9f8-4cb5-8838-f5a916a6098f",
-    //            entityType: "account"
-    //        };
-    //        sinon.stub(Xrm.WebApi, 'createRecord')
-    //            .withArgs("account")
-    //            .returns(obj);
-    //        //run
-    //        var webapi = new DevKit.AccountApi();
-    //        webapi.Name.Value = "ACCOUNT NAME";
-    //        webapi.IndustryCode.Value = OptionSet.Account.IndustryCode.Brokers;
-    //        webapi.devkit_CategoryCode.Value = [OptionSet.Account.devkit_CategoryCode.Business, OptionSet.Account.IndustryCode.Brokers];
-    //        webapi.DoNotEMail.Value = false;
-    //        webapi.PrimaryContactId.Value = "8d2dbd8c-c9f8-4cb5-8838-f5a916a6098a";
-    //        webapi.CreditLimit.Value = 123.456;
-    //        //result
-    //        var res = await Xrm.WebApi.createRecord(webapi.EntityName, webapi.Entity);
-    //        expect(res.id).toBe("8d2dbd8c-c9f8-4cb5-8838-f5a916a6098f");
-    //        expect(res.entityType).toBe("account");
-    //    });
-    //});
-    //describe("WebApi Delete Account", () => {
-    //    beforeEach(function () {
-    //        xrmMock.XrmMockGenerator.initialise();
-    //    });
-    //    it("Delete Account", async () => {
-    //        /** @type {any} */
-    //        var obj =
-    //        {
-    //            id: "8d2dbd8c-c9f8-4cb5-8838-f5a916a6098f",
-    //            entityType: "account"
-    //        };
-    //        sinon.stub(Xrm.WebApi, 'deleteRecord')
-    //            .withArgs("account", "8d2dbd8c-c9f8-4cb5-8838-f5a916a6098f")
-    //            .returns(obj);
-    //        /** @type {any} */
-    //        var res = await Xrm.WebApi.deleteRecord("account", "8d2dbd8c-c9f8-4cb5-8838-f5a916a6098f");
-    //        expect(res.id).toBe("8d2dbd8c-c9f8-4cb5-8838-f5a916a6098f");
-    //        expect(res.entityType).toBe("account");
-    //    });
-    //});
+    describe('WebApi Update Account', () => {
+        beforeEach(function () {
+            xrmMock.XrmMockGenerator.initialise();
+        });
+        it("Update Account", async () => {
+            //setup
+            /** @type {any} */
+            var obj =
+            {
+                id: "8d2dbd8c-c9f8-4cb5-8838-f5a916a6098f",
+                entityType: "account"
+            };
+            sinon.stub(Xrm.WebApi, 'createRecord')
+                .withArgs("account")
+                .returns(obj);
+            //run
+            var webapi = new DevKit.AccountApi();
+            webapi.Name = "ACCOUNT NAME";
+            webapi.IndustryCode = OptionSet.Account.IndustryCode.Brokers;
+            webapi.devkit_categorycode = [OptionSet.Account.devkit_categorycode.Business, OptionSet.Account.devkit_categorycode.Social];
+            webapi.DoNotEMail = false;
+            webapi.PrimaryContactId = "8d2dbd8c-c9f8-4cb5-8838-f5a916a6098a";
+            webapi.CreditLimit = 123.456;
+            webapi.ParentAccountId = null;
+            //result
+            var res = await Xrm.WebApi.createRecord(webapi.EntityName, webapi.Entity);
+            expect(res.id).toBe("8d2dbd8c-c9f8-4cb5-8838-f5a916a6098f");
+            expect(res.entityType).toBe("account");
+        });
+    });
+    describe("WebApi Delete Account", () => {
+        beforeEach(function () {
+            xrmMock.XrmMockGenerator.initialise();
+        });
+        it("Delete Account", async () => {
+            /** @type {any} */
+            var obj =
+            {
+                id: "8d2dbd8c-c9f8-4cb5-8838-f5a916a6098f",
+                entityType: "account"
+            };
+            sinon.stub(Xrm.WebApi, 'deleteRecord')
+                .withArgs("account", "8d2dbd8c-c9f8-4cb5-8838-f5a916a6098f")
+                .returns(obj);
+            /** @type {any} */
+            var res = await Xrm.WebApi.deleteRecord("account", "8d2dbd8c-c9f8-4cb5-8838-f5a916a6098f");
+            expect(res.id).toBe("8d2dbd8c-c9f8-4cb5-8838-f5a916a6098f");
+            expect(res.entityType).toBe("account");
+        });
+    });
 });
