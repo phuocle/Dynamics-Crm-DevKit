@@ -11,6 +11,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/jasmine": "^5.1.5",
     "@types/requirejs": "^2.1.37",
     "@types/sinon": "^17.0.3",
     "@types/sinonjs__fake-timers": "^8.1.5",

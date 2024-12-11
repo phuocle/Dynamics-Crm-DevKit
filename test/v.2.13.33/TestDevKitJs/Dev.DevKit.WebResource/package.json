@@ -12,6 +12,7 @@
   "license": "ISC",
   "devDependencies": {
     "@types/jasmine": "^3.10.18",
+    "@types/jest": "^29.5.14",
     "@types/requirejs": "^2.1.32",
     "@types/sinon": "^10.0.2",
     "@types/sinonjs__fake-timers": "^6.0.3",

@@ -5,7 +5,7 @@ var DevKit;
 	'use strict';
 	DevKit.AccountApi = function (e) {
 		var f = '@OData.Community.Display.V1.FormattedValue';
-		function webApiField(obj, field, entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
+		function webApiField(obj, field, entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet, type) {
 			var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
 			var getFormattedValue = function () {
 				if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
@@ -28,15 +28,19 @@ var DevKit;
 				}
 				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
 					if (entity[logicalName + l] === undefined || entity[logicalName + l] === entityLogicalName) {
-						return entity[logicalName];
+						return returnGet(entity[logicalName], type);
 					}
 					return null;
 				}
 				if (isMultiOptionSet) {
 					return entity[logicalName].toString().split(',').map(function (item) { return parseInt(item, 10); });
 				}
-				return entity[logicalName];
+				return returnGet(entity[logicalName], type);
 			};
+			var returnGet = function (data, type) {
+				if (type === "date") return parseDate(data);
+				return data;
+			}
 			var setValue = function (value) {
 				if (isMultiOptionSet) value = value.join(',');
 				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
@@ -52,6 +56,14 @@ var DevKit;
 				}
 				entity[logicalName] = value;
 			};
+			var parseDate = function (dateString) {
+				const date = new Date(dateString);
+				if (isNaN(date.getTime())) {
+					return null;
+				} else {
+					return date;
+				}
+			}
 			Object.defineProperty(obj.FormattedValue, field, {
 				get: getFormattedValue
 			});
@@ -173,7 +185,7 @@ var DevKit;
 			Merged: { a: 'merged', r: true },
 			ModifiedBy: { b: 'modifiedby', a: '_modifiedby_value', c: 'systemusers', d: 'systemuser', r: true },
 			ModifiedByExternalParty: { b: 'modifiedbyexternalparty', a: '_modifiedbyexternalparty_value', c: 'externalparties', d: 'externalparty', r: true },
-			ModifiedOn_UtcDateAndTime: { a: 'modifiedon', r: true },
+			ModifiedOn_UtcDateAndTime: { a: 'modifiedon', r: true, t: 'date' },
 			ModifiedOnBehalfBy: { b: 'modifiedonbehalfby', a: '_modifiedonbehalfby_value', c: 'systemusers', d: 'systemuser', r: true },
 			msa_managingpartnerid: { b: 'msa_managingpartnerid', a: '_msa_managingpartnerid_value', c: 'accounts', d: 'account' },
 			Name: { a: 'name' },
@@ -234,7 +246,8 @@ var DevKit;
 			var d = _account[field].d;
 			var g = _account[field].g;
 			var r = _account[field].r;
-			webApiField(account, field, e, a, b, c, d, r, u, g);
+			var t = _account[field].t;
+			webApiField(account, field, e, a, b, c, d, r, u, g, t);
 		}
 		account.Entity = u;
 		account.EntityName = 'account';
