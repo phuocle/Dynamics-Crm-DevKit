@@ -836,10 +836,10 @@ var devKit = (function () {
                 control.addOption(option, index);
             }
         };
-        field.AddNotification = function (title, message, notificationLevel, uniqueId, callback) {
+        field.AddNotification = function (message, notificationLevel, uniqueId, callback) {
             if (has(control, 'addNotification')) {
                 var actions = { message: message, actions: [callback] };
-                var notification = { messages: [title], notificationLevel: notificationLevel, uniqueId: uniqueId, actions: [actions] };
+                var notification = { messages: [message], notificationLevel: notificationLevel, uniqueId: uniqueId, actions: [actions] };
                 return control.addNotification(notification);
             }
             return EMPTY_BOOL;

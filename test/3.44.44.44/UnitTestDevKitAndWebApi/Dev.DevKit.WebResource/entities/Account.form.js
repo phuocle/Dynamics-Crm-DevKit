@@ -35,6 +35,8 @@ var DevKit;
 			IndustryCode: {},
 			mapcontrol: {},
 			Name: {},
+			Name1: {},
+			Name2: {},
 			notescontrol: {},
 			OwnershipCode: {},
 			ParentAccountId: {},

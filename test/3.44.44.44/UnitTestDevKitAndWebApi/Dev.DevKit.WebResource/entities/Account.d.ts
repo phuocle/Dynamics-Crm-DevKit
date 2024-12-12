@@ -71,6 +71,10 @@ declare namespace DevKit {
 			mapcontrol: DevKit.Controls.Map;
 			/** Type the company or business name. */
 			Name: DevKit.Controls.String;
+			/** Type the company or business name. */
+			Name1: DevKit.Controls.String;
+			/** Type the company or business name. */
+			Name2: DevKit.Controls.String;
 			notescontrol: DevKit.Controls.Note;
 			/** Select the account's ownership structure, such as public or private. */
 			OwnershipCode: DevKit.Controls.OptionSet;

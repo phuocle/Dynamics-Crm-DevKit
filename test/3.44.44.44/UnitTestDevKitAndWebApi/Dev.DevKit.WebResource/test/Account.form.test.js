@@ -168,68 +168,84 @@ define(['xrm-mock'], function () {
                 })
             }));
             var executionContext = xrmMock.XrmMockGenerator.formContext;
-            //var form = new DevKit.FormEmail(executionContext);
-            //expect(form.Body.to.IsPartyList).toBeTruthy();
+            var form = new DevKit.FormEmail(executionContext);
+            expect(form.Body.to.IsPartyList).toBeTruthy();
         });
     });
-    //    describe('Controls', () => {
-    //        beforeEach(function () {
-    //            var XrmMockGenerator = xrmMock.XrmMockGenerator.initialise();
-    //            XrmMockGenerator.Panel = new xrmMock.PanelMock();
-    //            XrmMockGenerator.Encoding = new xrmMock.EncodingMock();
-    //            XrmMockGenerator.Device = new xrmMock.DeviceMock();
-    //            XrmMockGenerator.Navigation = new xrmMock.NavigationStaticMock();
-    //        });
-    //        it('standard control type', () => {
-    //            xrmMock.XrmMockGenerator.Attribute.createString({
-    //                attributeType: "string",
-    //                format: "text",
-    //                isDirty: true,
-    //                name: "name",
-    //                requiredLevel: "required",
-    //                value: "LE VAN PHUOC",
-    //                maxLength: 100,
-    //                submitMode: "always"
-    //            },
-    //                [
-    //                    {
-    //                        controlType: "standard",
-    //                        disabled: true,
-    //                        label: "Account Name",
-    //                        name: "name",
-    //                        visible: true
-    //                    },
-    //                    {
-    //                        controlType: "standard",
-    //                        disabled: true,
-    //                        label: "Account Name 2",
-    //                        name: "name_1",
-    //                        visible: false
-    //                    }
-    //                ]
-    //            );
-    //            var executionContext = xrmMock.XrmMockGenerator.formContext;
-    //            var form = new DevKit.FormAccount(executionContext);
-    //            expect(() => { form.Body.Name.AddNotification(null) }).toThrow(new Error("Method not implemented."));
-    //            expect(() => { form.Body.Name.ClearNotification("uniqueId") }).toThrow(new Error("clear notification not implemented"));
-    //            expect(form.Body.Name.Attribute).toBeDefined();
-    //            expect(form.Body.Name.ControlType).toBe(OptionSet.FieldControlType.Standard);
-    //            expect(form.Body.Name.Disabled).toBeTruthy();
-    //            expect(form.Body.Name.Label).toBe("Account Name");
-    //            expect(form.Body.Name.ControlName).toBe("name");
-    //            expect(form.Body.Name_1.ControlName).toBe("name_1");
-    //            expect(form.Body.Name_1.Value).toBe("LE VAN PHUOC");
-    //            expect(form.Body.Name.ControlParent).toBeUndefined();
-    //            expect(form.Body.Name_1.Visible).toBeFalsy(0);
-    //            form.Body.Name.Disabled = false;
-    //            expect(form.Body.Name.Disabled).toBeFalsy();
-    //            expect(form.Body.Name.Focus()).toBeUndefined();
-    //            form.Body.Name.Label = "Account Name New";
-    //            expect(form.Body.Name.Label).toBe("Account Name New");
-    //            expect(() => { form.Body.Name.SetNotification("Field Notification", "uniqueId") }).toThrow(new Error("set notification not implemented"));
-    //            form.Body.Name.Visible = false;
-    //            expect(form.Body.Name.Visible).toBeFalsy();
-    //        });
+        describe('Controls', () => {
+            beforeEach(function () {
+                var XrmMockGenerator = xrmMock.XrmMockGenerator.initialise();
+                XrmMockGenerator.Panel = new xrmMock.PanelMock();
+                XrmMockGenerator.Encoding = new xrmMock.EncodingMock();
+                XrmMockGenerator.Device = new xrmMock.DeviceMock();
+                XrmMockGenerator.Navigation = new xrmMock.NavigationStaticMock();
+            });
+            it('standard control type', () => {
+                const attributeString = xrmMock.XrmMockGenerator.Attribute.createString({
+                    attributeType: "string",
+                    format: "text",
+                    isDirty: true,
+                    name: "name",
+                    requiredLevel: "required",
+                    value: "LE VAN PHUOC",
+                    maxLength: 100,
+                    submitMode: "always"
+                },
+                    [
+                        {
+                            controlType: "standard",
+                            disabled: true,
+                            label: "Account Name",
+                            name: "name",
+                            visible: true
+                        },
+                        {
+                            controlType: "standard",
+                            disabled: true,
+                            label: "Account Name 2",
+                            name: "name1",
+                            visible: false
+                        }
+                    ]
+                );
+
+
+
+                //var executionContext = xrmMock.XrmMockGenerator.formContext;
+                //var form = new DevKit.FormAccount(executionContext);
+
+
+
+                ////var a = executionContext.getControl('name').getNotifications();
+                //form.Body.Name.AddNotification({  messages: ["ABC"], notificationLevel: OptionSet.FieldNotificationLevel.Error, uniqueId: "123", actions: [] });
+                //expect(executionContext.getControl('name').getNotifications().length).toBe(1);
+                //var a = executionContext.getControl('name').getNotifications();
+                //debugger;
+                //form.Body.Name.ClearNotification("123");
+                ////expect(executionContext.getControl('name').getNotifications().length).toBe(0);
+                //a = executionContext.getControl('name').getNotifications();
+                //debugger;
+
+                //expect(() => { form.Body.Name.AddNotification(null) });
+                //expect(() => { form.Body.Name.ClearNotification("uniqueId") }).toThrow(new Error("clear notification not implemented"));
+                //expect(form.Body.Name.Attribute).toBeDefined();
+                //expect(form.Body.Name.ControlType).toBe(OptionSet.FieldControlType.Standard);
+                //expect(form.Body.Name.Disabled).toBeTruthy();
+                //expect(form.Body.Name.Label).toBe("Account Name");
+                //expect(form.Body.Name.ControlName).toBe("name");
+                //expect(form.Body.Name1.ControlName).toBe("name_1");
+                //expect(form.Body.Name1.Value).toBe("LE VAN PHUOC");
+                //expect(form.Body.Name.ControlParent).toBeUndefined();
+                //expect(form.Body.Name1.Visible).toBeFalsy();
+                //form.Body.Name.Disabled = false;
+                //expect(form.Body.Name.Disabled).toBeFalsy();
+                //expect(form.Body.Name.Focus()).toBeUndefined();
+                //form.Body.Name.Label = "Account Name New";
+                //expect(form.Body.Name.Label).toBe("Account Name New");
+                //expect(() => { form.Body.Name.SetNotification("Field Notification", "uniqueId") }).toThrow(new Error("set notification not implemented"));
+                //form.Body.Name.Visible = false;
+                //expect(form.Body.Name.Visible).toBeFalsy();
+            });
     //        it('lookup control type', () => {
     //            var lookup = xrmMock.XrmMockGenerator.Control.createLookup(new xrmMock.LookupControlMock({
     //                name: "primarycontactid",
@@ -589,7 +605,7 @@ define(['xrm-mock'], function () {
     //            expect(() => { form.Body.IFRAME_PHUOCLE.Src = "https://www.phuocle.net" }).toThrow(new Error("setSrc not implemented."));
     //            expect(() => { form.Body.IFRAME_PHUOCLE.Visible = true }).toThrow(new Error("setVisible not implemented."));
     //        });
-    //    });
+        });
     //    describe('Form', () => {
     //        beforeEach(function () {
     //            var XrmMockGenerator = xrmMock.XrmMockGenerator.initialise();

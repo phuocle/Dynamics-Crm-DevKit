@@ -53,6 +53,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Content Include="entities\Email.form.js">
+      <DependentUpon>Email.js</DependentUpon>
+    </Content>
+    <Content Include="entities\Email.js" />
+    <Content Include="entities\Email.webapi.js">
+      <DependentUpon>Email.js</DependentUpon>
+    </Content>
     <Content Include="test\Account.form.test.js" />
     <Content Include="test\Account.webapi.test.js" />
     <Content Include="chutzpah.json" />
@@ -91,6 +98,9 @@
   <ItemGroup>
     <TypeScriptCompile Include="entities\Account.d.ts">
       <DependentUpon>Account.js</DependentUpon>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="entities\Email.d.ts">
+      <DependentUpon>Email.js</DependentUpon>
     </TypeScriptCompile>
   </ItemGroup>
   <ItemGroup>
