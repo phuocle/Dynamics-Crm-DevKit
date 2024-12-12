@@ -95,8 +95,8 @@
     {
       "profile": "JS-FORM",
       "type": "JsForm",
-      "rootnamespace": "???",
-      "rootfolder": "???",
+      "rootnamespace": "DevKit",
+      "rootfolder": "",
       "entities": "folder"
     },
     {
