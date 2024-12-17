@@ -1,21 +1,11 @@
 ﻿{
   "Framework": "jasmine",
-  "FrameworkVersion": "2",
+  "FrameworkVersion": "3",
   "TestHarnessReferenceMode": "AMD",
   "TestHarnessLocationMode": "SettingsFileAdjacent",
   "Engine": "Chrome",
-  "CodeCoverageExecutionMode": "Manual",
-  "CodeCoverageIncludes": [
-    "lib\\devkit.js",
-    "entities\\Account.webapi.js"
-  ],
-  "CodeCoverageExcludes": [
-    "*.form.js",
-    "*.test.js",
-    "requirejsConfig.js",
-    "XrmEnum.js",
-    "*\\node_modules\\*"
-  ],
+  "CodeCoverageExecutionMode": "Never",
+  "RootReferencePathMode": "SettingsFileDirectory",
   "References": [
     {
       "Path": "node_modules/requirejs/require.js",

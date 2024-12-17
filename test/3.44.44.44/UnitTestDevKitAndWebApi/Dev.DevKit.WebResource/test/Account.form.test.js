@@ -1122,35 +1122,32 @@ define(['xrm-mock'], function () {
                 expect(() => { form.Utility.PickFile(null, null, null) }).toThrow(new Error("Not implemented."));
 
                 //var getNavigation = Xrm.Navigation;
-                form.Utility.OpenAlertDialog(null, null, null, null);
-                expect("form.Utility.OpenAlertDialog").toBe("form.Utility.OpenAlertDialog");
+                expect(form.Utility.OpenAlertDialog(null, null, null, null)).toBeUndefined();
+                expect(form.Utility.OpenConfirmDialog(null, null, null, null)).toBeUndefined();
+                expect(form.Utility.OpenErrorDialog(null, null, null)).toBeUndefined();
+                expect(form.Utility.OpenFile(null, null)).toBeUndefined();
+                expect(form.Utility.OpenForm(null, null, null, null)).toBeUndefined();
+                expect(form.Utility.OpenUrl(null, null)).toBeUndefined();
+                expect(form.Utility.OpenWebResource(null, null, null)).toBeUndefined();
+                expect(form.Utility.NavigateTo(null, null, null, null)).toBeUndefined();
 
-                //expect(() => { form.Utility.OpenConfirmDialog(null, null, null, null); }).toThrow(new Error("Navigation methods not implemented. Consider stubbing calls using a tool such as Sinon.JS"));
-                //expect(() => { form.Utility.OpenErrorDialog(null, null, null); }).toThrow(new Error("Navigation methods not implemented. Consider stubbing calls using a tool such as Sinon.JS"));
-                //expect(() => { form.Utility.OpenFile(null, null); }).toThrow(new Error("Navigation methods not implemented. Consider stubbing calls using a tool such as Sinon.JS"));
-                //expect(() => { form.Utility.OpenForm(null, null, null, null); }).toThrow(new Error("Navigation methods not implemented. Consider stubbing calls using a tool such as Sinon.JS"));
-                //expect(() => { form.Utility.OpenUrl(null, null); }).toThrow(new Error("Navigation methods not implemented. Consider stubbing calls using a tool such as Sinon.JS"));
-                //expect(() => { form.Utility.OpenWebResource(null, null, null); }).toThrow(new Error("Navigation methods not implemented. Consider stubbing calls using a tool such as Sinon.JS"));
-                //expect(() => { form.Utility.NavigateTo(null, null, null, null) }).toThrow(new Error("Navigation methods not implemented. Consider stubbing calls using a tool such as Sinon.JS"));
+                //var getApp = Xrm.App;
+                expect(form.Utility.AddGlobalNotification(null, null, null)).toBeUndefined()
+                expect(form.Utility.ClearGlobalNotification(null, null, null)).toBeUndefined();
 
-                ////var getApp = Xrm.App;
-                //expect(() => { form.Utility.AddGlobalNotification(null, null, null) }).toThrow(new Error("Method not implemented."));
-                //expect(() => { form.Utility.ClearGlobalNotification(null, null, null) }).toThrow(new Error("Method not implemented."));
-
-                ////Execution Context
-                //expect(form.ExecutionContext.Depth).toBe(1);
-                //expect(() => { form.ExecutionContext.EventArgs }).toThrow(new Error("no event args given"));
-                //expect(() => { form.ExecutionContext.EventSource }).toThrow(new Error("no event source given"));
-                //expect(form.ExecutionContext.FormContext).toBeDefined();
-                //expect(form.ExecutionContext.GetSharedVariable("A")).toBeUndefined();
-                //expect(form.ExecutionContext.SetSharedVariable("A", "B")).toBeUndefined();
-                //expect(() => { form.ExecutionContext.SaveMode }).toThrow(new Error("no event args given"));
-                //expect(() => { form.ExecutionContext.IsDefaultPrevented() }).toThrow(new Error("no event args given"));
-                //expect(() => { form.ExecutionContext.SetPreventDefault() }).toThrow(new Error("no event args given"));
-
-                //expect(() => { form.ExecutionContext.EntityReference }).toThrow(new Error("no event args given"));
-                //expect(() => { form.ExecutionContext.IsSaveSuccess }).toThrow(new Error("no event args given"));
-                //expect(() => { form.ExecutionContext.SaveErrorInfo }).toThrow(new Error("no event args given"));
+                //Execution Context
+                expect(form.ExecutionContext.Depth).toBe(1);
+                expect(() => { form.ExecutionContext.EventArgs }).toThrow(new Error("executionContext.getEventArgs is not a function"));
+                expect(() => { form.ExecutionContext.EventSource }).toThrow(new Error("no event source given"));
+                expect(form.ExecutionContext.FormContext).toBeDefined();
+                expect(form.ExecutionContext.GetSharedVariable("A")).toBeUndefined();
+                expect(form.ExecutionContext.SetSharedVariable("A", "B")).toBeUndefined();
+                expect(() => { form.ExecutionContext.SaveMode }).toThrow(new Error("executionContext.getEventArgs is not a function"));
+                expect(() => { form.ExecutionContext.IsDefaultPrevented() }).toThrow(new Error("executionContext.getEventArgs is not a function"));
+                expect(() => { form.ExecutionContext.SetPreventDefault() }).toThrow(new Error("executionContext.getEventArgs is not a function"));
+                expect(() => { form.ExecutionContext.EntityReference }).toThrow(new Error("executionContext.getEventArgs is not a function"));
+                expect(() => { form.ExecutionContext.IsSaveSuccess }).toThrow(new Error("executionContext.getEventArgs is not a function"));
+                expect(() => { form.ExecutionContext.SaveErrorInfo }).toThrow(new Error("executionContext.getEventArgs is not a function"));
 
             });
         });
