@@ -603,324 +603,303 @@ define(['xrm-mock'], function () {
     //            expect(() => { form.Body.IFRAME_PHUOCLE.Visible = true }).toThrow(new Error("setVisible not implemented."));
     //        });
         });
-    //    describe('Form', () => {
-    //        beforeEach(function () {
-    //            var XrmMockGenerator = xrmMock.XrmMockGenerator.initialise();
-    //            XrmMockGenerator.Panel = new xrmMock.PanelMock();
-    //            XrmMockGenerator.Encoding = new xrmMock.EncodingMock();
-    //            XrmMockGenerator.Device = new xrmMock.DeviceMock();
-    //            XrmMockGenerator.Navigation = new xrmMock.NavigationStaticMock();
-    //            XrmMockGenerator.App = new xrmMock.AppMock();
-    //        });
-    //        it('Form', () => {
-    //            var attributes = new xrmMock.ItemCollectionMock([
-    //                new xrmMock.AttributeMock({
-    //                    name: "name",
-    //                    isDirty: true
-    //                })
-    //            ]);
-    //            var entity = new xrmMock.EntityMock({
-    //                entityName: "account",
-    //                id: "8d2dbd8c-c9f8-4cb5-8838-f5a916a6098a",
-    //                primaryValue: "LE VAN PHUOC",
-    //                attributes: attributes
-    //            });
-    //            var data = new xrmMock.DataMock(entity);
-    //            var stringControl = new xrmMock.StringControlMock({
-    //                attribute: new xrmMock.StringAttributeMock({
-    //                    name: "name",
-    //                    value: "LE VAN PHUOC"
-    //                }),
-    //                name: "name",
-    //                label: "Account Name"
-    //            });
-    //            var ui = new xrmMock.UiMock({
-    //                formSelector: new xrmMock.FormSelectorMock(new xrmMock.ItemCollectionMock([new xrmMock.FormItemMock({
-    //                    id: "8d2dbd8c-c9f8-4cb5-8838-f5a916a6098a",
-    //                    label: "Account",
-    //                    currentItem: true,
-    //                    formType: XrmEnum.FormType.Update
-    //                })])),
-    //                controls: new xrmMock.ItemCollectionMock([
-    //                    stringControl
-    //                ])
-    //            });
-    //            xrmMock.XrmMockGenerator.formContext = new xrmMock.FormContextMock(data, ui);
+        describe('Form', () => {
+            beforeEach(function () {
+                var XrmMockGenerator = xrmMock.XrmMockGenerator.initialise();
+                XrmMockGenerator.Panel = new xrmMock.PanelMock();
+                XrmMockGenerator.Encoding = new xrmMock.EncodingMock();
+                XrmMockGenerator.Device = new xrmMock.DeviceMock();
+                XrmMockGenerator.Navigation = new xrmMock.NavigationStaticMock();
+                XrmMockGenerator.App = new xrmMock.AppMock();
+            });
+            it('Form', () => {
+                var attributes = new xrmMock.ItemCollectionMock([
+                    new xrmMock.AttributeMock({
+                        name: "name",
+                        isDirty: true
+                    })
+                ]);
+                var entity = new xrmMock.EntityMock({
+                    entityName: "account",
+                    id: "8d2dbd8c-c9f8-4cb5-8838-f5a916a6098a",
+                    primaryValue: "LE VAN PHUOC",
+                    attributes: attributes
+                });
+                var data = new xrmMock.DataMock(entity);
+                var stringControl = new xrmMock.StringControlMock({
+                    attribute: new xrmMock.StringAttributeMock({
+                        name: "name",
+                        value: "LE VAN PHUOC"
+                    }),
+                    name: "name",
+                    label: "Account Name"
+                });
+                var ui = new xrmMock.UiMock({
+                    formSelector: new xrmMock.FormSelectorMock(new xrmMock.ItemCollectionMock([new xrmMock.FormItemMock({
+                        id: "8d2dbd8c-c9f8-4cb5-8838-f5a916a6098a",
+                        label: "Account",
+                        currentItem: true,
+                        formType: XrmEnum.FormType.Update
+                    })])),
+                    controls: new xrmMock.ItemCollectionMock([
+                        stringControl
+                    ])
+                });
+                xrmMock.XrmMockGenerator.formContext = new xrmMock.FormContextMock(data, ui);
 
-    //            var executionContext = xrmMock.XrmMockGenerator.formContext;
-    //            var form = new DevKit.FormAccount(executionContext);
-    //            expect(() => { form.DataXml }).toThrow(new Error("getDataXml not implemented"));
-    //            expect(form.EntityName).toBe("account");
-    //            expect(form.EntityId).toBe("8d2dbd8c-c9f8-4cb5-8838-f5a916a6098a");
-    //            expect(form.PrimaryAttributeValue).toBe("LE VAN PHUOC");
-    //            var formDataAddOnLoad = function () { };
-    //            expect(data.loadEventHandlers.length).toBe(0);
-    //            form.DataAddOnLoad(formDataAddOnLoad);
-    //            expect(() => { form.AddPostSave(null) }).toThrow(new Error("Method not implemented."));
-    //            expect(data.loadEventHandlers.length).toBe(1);
-    //            expect(() => { form.Refresh(true, null, null) }).toThrow(new Error("refresh not implemented"));
-    //            form.DataRemoveOnLoad(formDataAddOnLoad);
-    //            expect(data.loadEventHandlers.length).toBe(0);
-    //            expect(() => { form.Save(null, null, null) }).toThrow(new Error("save not implemented"));
-    //            expect(() => { form.DataIsDirty }).toThrow(new Error("getIsDirty not implemented"));
-    //            expect(() => { form.DataIsValid }).toThrow(new Error("isValid not implemented"));
-    //            expect(entity.saveEventHandlers.length).toBe(0);
-    //            var formAddOnSave = function () { };
-    //            form.AddOnSave(formAddOnSave);
-    //            expect(entity.saveEventHandlers.length).toBe(1);
-    //            form.RemoveOnSave(formAddOnSave);
-    //            expect(entity.saveEventHandlers.length).toBe(0);
-    //            expect(form.Attributes).toBeDefined();
-    //            var e = form.EntityReference;
-    //            expect(e.id).toBe("8d2dbd8c-c9f8-4cb5-8838-f5a916a6098a");
-    //            expect(e.name).toBe("LE VAN PHUOC");
-    //            expect(e.entityType).toBe("account");
-    //            expect(form.EntityIsDirty).toBeTruthy();
-    //            expect(() => { form.EntityIsValid }).toThrow(new Error("isValid not implemented."));
-    //            expect(form.SetFormNotification("A", OptionSet.FormNotificationLevel.Info, "B")).toBeDefined();
-    //            expect(form.ClearFormNotification("B")).toBeTruthy();
-    //            expect(() => { form.Close() }).toThrow(new Error("close not implemented"));
-    //            expect(() => { form.RefreshRibbon() }).toThrow(new Error("refreshRibbon not implemented"));
-    //            expect(() => { form.SetFormEntityName(null); }).toThrow(new Error("setFormEntityName not implemented"));
-    //            expect(form.Controls).toBeDefined();
-    //            expect(form.FormType).toBe(OptionSet.FormType.Update);
-    //            expect(() => { form.ViewPortHeight }).toThrow(new Error("getViewPortHeight not implemented"));
-    //            expect(() => { form.ViewPortWidth }).toThrow(new Error("getViewPortWidth not implemented"));
-    //            expect(() => { form.UiAddOnLoad(null) }).toThrow(new Error("addOnLoad not implemented"));
-    //            expect(() => { form.UiRemoveOnLoad(null) }).toThrow(new Error("removeOnLoad not implemented"));
-    //            form.FormNavigate("Account");
-    //            form.FormSetVisible("Account", true);
-    //            form.FormIsVisible("Account");
-    //            expect(form.FormId).toBe("8d2dbd8c-c9f8-4cb5-8838-f5a916a6098a");
-    //            expect(form.FormLabel).toBe("Account");
-    //        });
-    //    });
-    //    describe('Tab & Section', () => {
-    //        beforeEach(function () {
-    //            var XrmMockGenerator = xrmMock.XrmMockGenerator.initialise();
-    //            XrmMockGenerator.Panel = new xrmMock.PanelMock();
-    //            XrmMockGenerator.Encoding = new xrmMock.EncodingMock();
-    //            XrmMockGenerator.Device = new xrmMock.DeviceMock();
-    //            XrmMockGenerator.Navigation = new xrmMock.NavigationStaticMock();
-    //            XrmMockGenerator.App = new xrmMock.AppMock();
-    //        });
-    //        it('Tab & Section', () => {
-    //            var tab_SUMMARY_TAB_Section_ACCOUNT_INFORMATION = xrmMock.XrmMockGenerator.Section.createSection("ACCOUNT_INFORMATION", "ACCOUNT INFORMATION", true, null, null);
-    //            var tab_SUMMARY_TAB_Section_ADDRESS = xrmMock.XrmMockGenerator.Section.createSection("ADDRESS", "ADDRESS", false, null, null);
-    //            var tab_SUMMARY_TAB = xrmMock.XrmMockGenerator.Tab.createTab("SUMMARY_TAB", "Summary", true, "expanded", null, new xrmMock.ItemCollectionMock([tab_SUMMARY_TAB_Section_ACCOUNT_INFORMATION, tab_SUMMARY_TAB_Section_ADDRESS]));
-    //            var addTabStateChange = function (executionContext) { }
-    //            var executionContext = xrmMock.XrmMockGenerator.formContext;
-    //            var form = new DevKit.FormAccount(executionContext);
-    //            expect(tab_SUMMARY_TAB.tabStateChangeHandlers.length).toBe(0);
-    //            form.Body.Tab.SUMMARY_TAB.AddTabStateChange(addTabStateChange);
-    //            expect(tab_SUMMARY_TAB.tabStateChangeHandlers.length).toBe(1);
-    //            expect(form.Body.Tab.SUMMARY_TAB.DisplayState).toBe(OptionSet.TabDisplayState.Expanded);
-    //            form.Body.Tab.SUMMARY_TAB.DisplayState = OptionSet.TabDisplayState.Collapsed;
-    //            expect(form.Body.Tab.SUMMARY_TAB.DisplayState).toBe(OptionSet.TabDisplayState.Collapsed);
-    //            expect(form.Body.Tab.SUMMARY_TAB.Focus()).toBeUndefined();
-    //            expect(form.Body.Tab.SUMMARY_TAB.Label).toBe("Summary");
-    //            form.Body.Tab.SUMMARY_TAB.Label = "General";
-    //            expect(form.Body.Tab.SUMMARY_TAB.Label).toBe("General");
-    //            expect(form.Body.Tab.SUMMARY_TAB.Name).toBe("SUMMARY_TAB");
-    //            form.Body.Tab.SUMMARY_TAB.RemoveTabStateChange(addTabStateChange);
-    //            expect(tab_SUMMARY_TAB.tabStateChangeHandlers.length).toBe(0);
-    //            expect(form.Body.Tab.SUMMARY_TAB.Visible).toBeTruthy();
-    //            form.Body.Tab.SUMMARY_TAB.Visible = false;
-    //            expect(form.Body.Tab.SUMMARY_TAB.Visible).toBeFalsy();
-    //            expect(form.Body.Tab.SUMMARY_TAB.Section.ACCOUNT_INFORMATION.Label).toBe("ACCOUNT INFORMATION");
-    //            form.Body.Tab.SUMMARY_TAB.Section.ACCOUNT_INFORMATION.Label = "ACCOUNT NOTE";
-    //            expect(form.Body.Tab.SUMMARY_TAB.Section.ACCOUNT_INFORMATION.Label).toBe("ACCOUNT NOTE");
-    //            expect(form.Body.Tab.SUMMARY_TAB.Section.ACCOUNT_INFORMATION.Name).toBe("ACCOUNT_INFORMATION");
-    //            expect(form.Body.Tab.SUMMARY_TAB.Section.ACCOUNT_INFORMATION.Visible).toBeTruthy();
-    //            form.Body.Tab.SUMMARY_TAB.Section.ACCOUNT_INFORMATION.Visible = false;
-    //            expect(form.Body.Tab.SUMMARY_TAB.Section.ACCOUNT_INFORMATION.Visible).toBeFalsy();
-    //            expect(form.Body.Tab.SUMMARY_TAB.Section.ACCOUNT_INFORMATION.Parent).toBeDefined();
-    //            expect(form.Body.Tab.SUMMARY_TAB.Parent).toBeDefined();
-    //            expect(() => { form.Body.Tab.SUMMARY_TAB.ContentType }).toThrow(new Error("Method not implemented."));
-    //            expect(() => { form.Body.Tab.SUMMARY_TAB.ContentType = OptionSet.TabContentType.SingleComponent }).toThrow(new Error("Method not implemented."));
-    //        });
-    //    });
-    //    describe('Header & Footer', () => {
-    //        beforeEach(function () {
-    //            var XrmMockGenerator = xrmMock.XrmMockGenerator.initialise();
-    //            XrmMockGenerator.Panel = new xrmMock.PanelMock();
-    //            XrmMockGenerator.Encoding = new xrmMock.EncodingMock();
-    //            XrmMockGenerator.Device = new xrmMock.DeviceMock();
-    //            XrmMockGenerator.Navigation = new xrmMock.NavigationStaticMock();
-    //            XrmMockGenerator.App = new xrmMock.AppMock();
-    //        });
-    //        it('Header', () => {
-    //            var stringControl = new xrmMock.StringControlMock({
-    //                attribute: new xrmMock.StringAttributeMock({
-    //                    name: "numberofemployees",
-    //                    value: "6200"
-    //                }),
-    //                name: "numberofemployees",
-    //                label: "Number of Employees"
-    //            });
-    //            var stringHeaderControl = new xrmMock.StringControlMock({
-    //                attribute: new xrmMock.StringAttributeMock({
-    //                    name: "numberofemployees",
-    //                    value: "6200"
-    //                }),
-    //                name: "header_numberofemployees",
-    //                label: "Number of Employees"
-    //            });
-    //            var ui = new xrmMock.UiMock({
-    //                formSelector: new xrmMock.FormSelectorMock(new xrmMock.ItemCollectionMock([new xrmMock.FormItemMock({
-    //                    id: "8d2dbd8c-c9f8-4cb5-8838-f5a916a6098a",
-    //                    label: "Account",
-    //                    currentItem: true,
-    //                    formType: XrmEnum.FormType.Update
-    //                })])),
-    //                controls: new xrmMock.ItemCollectionMock([
-    //                    stringControl,
-    //                    stringHeaderControl
-    //                ]),
-    //                footerSection: new xrmMock.FooterSectionMock(true),
-    //                headerSection: new xrmMock.HeaderSectionMock(true, true, true)
-    //            });
-    //            var attributes = new xrmMock.ItemCollectionMock([
-    //                new xrmMock.AttributeMock({
-    //                    name: "numberofemployees",
-    //                    isDirty: true
-    //                })
-    //            ]);
-    //            var entity = new xrmMock.EntityMock({
-    //                attributes: attributes
-    //            });
-    //            var data = new xrmMock.DataMock(entity);
-    //            xrmMock.XrmMockGenerator.formContext = new xrmMock.FormContextMock(data, ui);
-    //            var executionContext = xrmMock.XrmMockGenerator.formContext;
-    //            var form = new DevKit.FormAccount(executionContext);
-    //            expect(form.Header.NumberOfEmployees.Label).toBe("Number of Employees");
-    //            expect(form.Header.NumberOfEmployees.ControlName).toBe("header_numberofemployees");
-    //            expect(form.Header.BodyVisible).toBeTruthy();
-    //            expect(form.Header.CommandBarVisible).toBeTruthy();
-    //            expect(form.Header.TabNavigatorVisible).toBeTruthy();
-    //            expect(form.Footer.Visible).toBeTruthy();
-    //            form.Header.BodyVisible = false;
-    //            form.Header.CommandBarVisible = false;
-    //            form.Header.TabNavigatorVisible = false;
-    //            form.Footer.Visible = false;
-    //            expect(form.Header.BodyVisible).toBeFalsy();
-    //            expect(form.Header.CommandBarVisible).toBeFalsy();
-    //            expect(form.Header.TabNavigatorVisible).toBeFalsy();
-    //            expect(form.Footer.Visible).toBeFalsy();
-    //        });
-    //        it('Footer', () => {
-    //            xrmMock.XrmMockGenerator.Control.createLookup({
-    //                name: "footer_transactioncurrencyid",
-    //                attribute: new xrmMock.LookupAttributeMock({
-    //                    name: "transactioncurrencyid",
-    //                    value: [new xrmMock.LookupValueMock("27ae35af-15ab-eb11-8236-000d3a80893f", "transactioncurrency", "US Dollar", )]
-    //                }),
-    //                label: "Currency"
-    //            });
-    //            var executionContext = xrmMock.XrmMockGenerator.formContext;
-    //            var form = new DevKit.FormAccount(executionContext);
-    //            expect(form.Footer.TransactionCurrencyId.Label).toBe("Currency");
-    //            expect(form.Footer.TransactionCurrencyId.ControlName).toBe("footer_transactioncurrencyid");
-    //            expect(form.Footer.TransactionCurrencyId.Value[0].entityType).toBe("transactioncurrency");
-    //            expect(form.Footer.TransactionCurrencyId.Value[0].id).toBe("27ae35af-15ab-eb11-8236-000d3a80893f");
-    //            expect(form.Footer.TransactionCurrencyId.Value[0].name).toBe("US Dollar");
-    //        });
-    //    });
-    //    describe('Process', () => {
-    //        beforeEach(function () {
-    //            var XrmMockGenerator = xrmMock.XrmMockGenerator.initialise();
-    //            XrmMockGenerator.Panel = new xrmMock.PanelMock();
-    //            XrmMockGenerator.Encoding = new xrmMock.EncodingMock();
-    //            XrmMockGenerator.Device = new xrmMock.DeviceMock();
-    //            XrmMockGenerator.Navigation = new xrmMock.NavigationStaticMock();
-    //            XrmMockGenerator.App = new xrmMock.AppMock();
-    //        });
-    //        it('Process', () => {
-    //            var stage1 = new xrmMock.StageMock("stage1", "Stage 1", XrmEnum.StageStatus.Active, XrmEnum.StageCategory.Identify, [
-    //                new xrmMock.StepMock("Stage1Step_AccountName", "name", true),
-    //                new xrmMock.StepMock("Stage1Step_IndustryCode", "industrycode", false)
-    //            ]);
-    //            var stage2 = new xrmMock.StageMock("stage2", "Stage 2", XrmEnum.StageStatus.Active, XrmEnum.StageCategory.Develop, [
-    //                new xrmMock.StepMock("Stage2Step_NumberOfEmployees", "numberofemployees", false),
-    //                new xrmMock.StepMock("Stage2Step_AnnualRevenue", "revenue", false),
-    //            ]);
-    //            var stage3 = new xrmMock.StageMock("stage3", "Stage 3", XrmEnum.StageStatus.Active, XrmEnum.StageCategory.Close, [
-    //                new xrmMock.StepMock("Stage3Step_Owner", "owner", false)
-    //            ]);
-    //            var processControl = new xrmMock.ProcessControlMock("expanded", new xrmMock.UiCanGetVisibleElementMock(true), new xrmMock.UiCanSetVisibleElementMock());
-    //            var process_BPFAccount = new xrmMock.ProcessMock({ id: "devkit_bpfaccount", name: "BPF Account", rendered: true, stages: new xrmMock.ItemCollectionMock([stage1, stage2, stage3]) });
-    //            var process = new xrmMock.ProcessManagerMock([process_BPFAccount]);
-    //            var ui = new xrmMock.UiMock({
-    //                process: processControl
-    //            });
-    //            xrmMock.XrmMockGenerator.initialise({ process: process, ui: ui });
-    //            var executionContext = xrmMock.XrmMockGenerator.formContext;
-    //            var form = new DevKit.FormAccount(executionContext);
+                var executionContext = xrmMock.XrmMockGenerator.formContext;
+                var form = new DevKit.FormAccount(executionContext);
+                expect(() => { form.DataXml }).toThrow(new Error("getDataXml not implemented"));
+                expect(form.EntityName).toBe("account");
+                expect(form.EntityId).toBe("8d2dbd8c-c9f8-4cb5-8838-f5a916a6098a");
+                expect(form.PrimaryAttributeValue).toBe("LE VAN PHUOC");
+                var formDataAddOnLoad = function () { };
+                expect(data.loadEventHandlers.length).toBe(0);
+                form.DataAddOnLoad(formDataAddOnLoad);
+                expect(form.AddOnPostSave(null)).toBeUndefined();
+                expect(data.loadEventHandlers.length).toBe(1);
+                expect(() => { form.Refresh(true, null, null) }).toThrow(new Error("refresh not implemented"));
+                form.DataRemoveOnLoad(formDataAddOnLoad);
+                expect(data.loadEventHandlers.length).toBe(0);
+                expect(() => { form.Save(null, null, null) }).toThrow(new Error("save not implemented"));
+                expect(() => { form.DataIsDirty }).toThrow(new Error("getIsDirty not implemented"));
+                expect(() => { form.DataIsValid }).toThrow(new Error("isValid not implemented"));
+                expect(entity.saveEventHandlers.length).toBe(0);
+                var formAddOnSave = function () { };
+                form.AddOnSave(formAddOnSave);
+                expect(entity.saveEventHandlers.length).toBe(1);
+                form.RemoveOnSave(formAddOnSave);
+                expect(entity.saveEventHandlers.length).toBe(0);
+                expect(form.Attributes).toBeDefined();
+                var e = form.EntityReference;
+                expect(e.id).toBe("8d2dbd8c-c9f8-4cb5-8838-f5a916a6098a");
+                expect(e.name).toBe("LE VAN PHUOC");
+                expect(e.entityType).toBe("account");
+                expect(form.EntityIsDirty).toBeTruthy();
+                expect(() => { form.EntityIsValid }).toThrow(new Error("isValid not implemented."));
+                expect(form.SetFormNotification("A", OptionSet.FormNotificationLevel.Info, "B")).toBeDefined();
+                expect(form.ClearFormNotification("B")).toBeTruthy();
+                expect(() => { form.Close() }).toThrow(new Error("close not implemented"));
+                expect(() => { form.RefreshRibbon() }).toThrow(new Error("refreshRibbon not implemented"));
+                expect(() => { form.SetFormEntityName(null); }).toThrow(new Error("setFormEntityName not implemented"));
+                expect(form.Controls).toBeDefined();
+                expect(form.FormType).toBe(OptionSet.FormType.Update);
+                expect(() => { form.ViewPortHeight }).toThrow(new Error("getViewPortHeight not implemented"));
+                expect(() => { form.ViewPortWidth }).toThrow(new Error("getViewPortWidth not implemented"));
+                expect(() => { form.UiAddOnLoad(null) }).toThrow(new Error("addOnLoad not implemented"));
+                expect(() => { form.UiRemoveOnLoad(null) }).toThrow(new Error("removeOnLoad not implemented"));
+                expect(() => { form.FormNavigateToFormLabel("Account") }).toThrow(new Error("Form navigation not implemented."));
+                form.FormSetVisible("Account", true);
+                form.FormIsVisible("Account");
+                expect(form.FormId).toBe("8d2dbd8c-c9f8-4cb5-8838-f5a916a6098a");
+                expect(form.FormLabel).toBe("Account");
+            });
+        });
+        describe('Tab & Section', () => {
+            beforeEach(function () {
+                var XrmMockGenerator = xrmMock.XrmMockGenerator.initialise();
+                XrmMockGenerator.Panel = new xrmMock.PanelMock();
+                XrmMockGenerator.Encoding = new xrmMock.EncodingMock();
+                XrmMockGenerator.Device = new xrmMock.DeviceMock();
+                XrmMockGenerator.Navigation = new xrmMock.NavigationStaticMock();
+                XrmMockGenerator.App = new xrmMock.AppMock();
+            });
+            it('Tab & Section', () => {
+                var tab_SUMMARY_TAB_Section_ACCOUNT_INFORMATION = xrmMock.XrmMockGenerator.Section.createSection("ACCOUNT_INFORMATION", "ACCOUNT INFORMATION", true, null, null);
+                var tab_SUMMARY_TAB_Section_ADDRESS = xrmMock.XrmMockGenerator.Section.createSection("ADDRESS", "ADDRESS", false, null, null);
+                var tab_SUMMARY_TAB = xrmMock.XrmMockGenerator.Tab.createTab("SUMMARY_TAB", "Summary", true, "expanded", null, new xrmMock.ItemCollectionMock([tab_SUMMARY_TAB_Section_ACCOUNT_INFORMATION, tab_SUMMARY_TAB_Section_ADDRESS]));
+                var addTabStateChange = function (executionContext) { }
+                var executionContext = xrmMock.XrmMockGenerator.formContext;
+                var form = new DevKit.FormAccount(executionContext);
+                expect(tab_SUMMARY_TAB.tabStateChangeHandlers.length).toBe(0);
+                form.Body.Tab.SUMMARY_TAB.AddTabStateChange(addTabStateChange);
+                expect(tab_SUMMARY_TAB.tabStateChangeHandlers.length).toBe(1);
+                expect(form.Body.Tab.SUMMARY_TAB.DisplayState).toBe(OptionSet.TabDisplayState.Expanded);
+                form.Body.Tab.SUMMARY_TAB.DisplayState = OptionSet.TabDisplayState.Collapsed;
+                expect(form.Body.Tab.SUMMARY_TAB.DisplayState).toBe(OptionSet.TabDisplayState.Collapsed);
+                expect(form.Body.Tab.SUMMARY_TAB.Focus()).toBeUndefined();
+                expect(form.Body.Tab.SUMMARY_TAB.Label).toBe("Summary");
+                form.Body.Tab.SUMMARY_TAB.Label = "General";
+                expect(form.Body.Tab.SUMMARY_TAB.Label).toBe("General");
+                expect(form.Body.Tab.SUMMARY_TAB.Name).toBe("SUMMARY_TAB");
+                form.Body.Tab.SUMMARY_TAB.RemoveTabStateChange(addTabStateChange);
+                expect(tab_SUMMARY_TAB.tabStateChangeHandlers.length).toBe(0);
+                expect(form.Body.Tab.SUMMARY_TAB.Visible).toBeTruthy();
+                form.Body.Tab.SUMMARY_TAB.Visible = false;
+                expect(form.Body.Tab.SUMMARY_TAB.Visible).toBeFalsy();
+                expect(form.Body.Tab.SUMMARY_TAB.Section.ACCOUNT_INFORMATION.Label).toBe("ACCOUNT INFORMATION");
+                form.Body.Tab.SUMMARY_TAB.Section.ACCOUNT_INFORMATION.Label = "ACCOUNT NOTE";
+                expect(form.Body.Tab.SUMMARY_TAB.Section.ACCOUNT_INFORMATION.Label).toBe("ACCOUNT NOTE");
+                expect(form.Body.Tab.SUMMARY_TAB.Section.ACCOUNT_INFORMATION.Name).toBe("ACCOUNT_INFORMATION");
+                expect(form.Body.Tab.SUMMARY_TAB.Section.ACCOUNT_INFORMATION.Visible).toBeTruthy();
+                form.Body.Tab.SUMMARY_TAB.Section.ACCOUNT_INFORMATION.Visible = false;
+                expect(form.Body.Tab.SUMMARY_TAB.Section.ACCOUNT_INFORMATION.Visible).toBeFalsy();
+                expect(form.Body.Tab.SUMMARY_TAB.Section.ACCOUNT_INFORMATION.Parent).toBeDefined();
+                expect(form.Body.Tab.SUMMARY_TAB.Parent).toBeDefined();
+                expect(() => { form.Body.Tab.SUMMARY_TAB.ContentType }).toThrow(new Error("Method not implemented."));
+                expect(() => { form.Body.Tab.SUMMARY_TAB.ContentType = OptionSet.TabContentType.SingleComponent }).toThrow(new Error("Method not implemented."));
+            });
+        });
+        describe('Header', () => {
+            beforeEach(function () {
+                var XrmMockGenerator = xrmMock.XrmMockGenerator.initialise();
+                XrmMockGenerator.Panel = new xrmMock.PanelMock();
+                XrmMockGenerator.Encoding = new xrmMock.EncodingMock();
+                XrmMockGenerator.Device = new xrmMock.DeviceMock();
+                XrmMockGenerator.Navigation = new xrmMock.NavigationStaticMock();
+                XrmMockGenerator.App = new xrmMock.AppMock();
+            });
+            it('Header', () => {
+                var stringControl = new xrmMock.StringControlMock({
+                    attribute: new xrmMock.StringAttributeMock({
+                        name: "numberofemployees",
+                        value: "6200"
+                    }),
+                    name: "numberofemployees",
+                    label: "Number of Employees"
+                });
+                var stringHeaderControl = new xrmMock.StringControlMock({
+                    attribute: new xrmMock.StringAttributeMock({
+                        name: "numberofemployees",
+                        value: "6200"
+                    }),
+                    name: "header_numberofemployees",
+                    label: "Number of Employees"
+                });
+                var ui = new xrmMock.UiMock({
+                    formSelector: new xrmMock.FormSelectorMock(new xrmMock.ItemCollectionMock([new xrmMock.FormItemMock({
+                        id: "8d2dbd8c-c9f8-4cb5-8838-f5a916a6098a",
+                        label: "Account",
+                        currentItem: true,
+                        formType: XrmEnum.FormType.Update
+                    })])),
+                    controls: new xrmMock.ItemCollectionMock([
+                        stringControl,
+                        stringHeaderControl
+                    ]),
+                    headerSection: new xrmMock.HeaderSectionMock(true, true, true)
+                });
+                var attributes = new xrmMock.ItemCollectionMock([
+                    new xrmMock.AttributeMock({
+                        name: "numberofemployees",
+                        isDirty: true
+                    })
+                ]);
+                var entity = new xrmMock.EntityMock({
+                    attributes: attributes
+                });
+                var data = new xrmMock.DataMock(entity);
+                xrmMock.XrmMockGenerator.formContext = new xrmMock.FormContextMock(data, ui);
+                var executionContext = xrmMock.XrmMockGenerator.formContext;
+                var form = new DevKit.FormAccount(executionContext);
+                expect(form.Header.NumberOfEmployees.Label).toBe("Number of Employees");
+                expect(form.Header.NumberOfEmployees.ControlName).toBe("header_numberofemployees");
+                expect(form.Header.BodyVisible).toBeTruthy();
+                expect(form.Header.CommandBarVisible).toBeTruthy();
+                expect(form.Header.TabNavigatorVisible).toBeTruthy();
+                form.Header.BodyVisible = false;
+                form.Header.CommandBarVisible = false;
+                form.Header.TabNavigatorVisible = false;
+                expect(form.Header.BodyVisible).toBeFalsy();
+                expect(form.Header.CommandBarVisible).toBeFalsy();
+                expect(form.Header.TabNavigatorVisible).toBeFalsy();
+            });
+        });
+        //describe('Process', () => {
+        //    beforeEach(function () {
+        //        var XrmMockGenerator = xrmMock.XrmMockGenerator.initialise();
+        //        XrmMockGenerator.Panel = new xrmMock.PanelMock();
+        //        XrmMockGenerator.Encoding = new xrmMock.EncodingMock();
+        //        XrmMockGenerator.Device = new xrmMock.DeviceMock();
+        //        XrmMockGenerator.Navigation = new xrmMock.NavigationStaticMock();
+        //        XrmMockGenerator.App = new xrmMock.AppMock();
+        //    });
+        //    it('Process', () => {
+        //        var stage1 = new xrmMock.StageMock("stage1", "Stage 1", XrmEnum.StageStatus.Active, XrmEnum.StageCategory.Identify, [
+        //            new xrmMock.StepMock("Stage1Step_AccountName", "name", true),
+        //            new xrmMock.StepMock("Stage1Step_IndustryCode", "industrycode", false)
+        //        ]);
+        //        var stage2 = new xrmMock.StageMock("stage2", "Stage 2", XrmEnum.StageStatus.Active, XrmEnum.StageCategory.Develop, [
+        //            new xrmMock.StepMock("Stage2Step_NumberOfEmployees", "numberofemployees", false),
+        //            new xrmMock.StepMock("Stage2Step_AnnualRevenue", "revenue", false),
+        //        ]);
+        //        var stage3 = new xrmMock.StageMock("stage3", "Stage 3", XrmEnum.StageStatus.Active, XrmEnum.StageCategory.Close, [
+        //            new xrmMock.StepMock("Stage3Step_Owner", "owner", false)
+        //        ]);
+        //        var processControl = new xrmMock.ProcessControlMock("expanded", new xrmMock.UiCanGetVisibleElementMock(true), new xrmMock.UiCanSetVisibleElementMock());
+        //        var process_BPFAccount = new xrmMock.ProcessMock({ id: "devkit_bpfaccount", name: "BPF Account", rendered: true, stages: new xrmMock.ItemCollectionMock([stage1, stage2, stage3]) });
+        //        var process = new xrmMock.ProcessManagerMock([process_BPFAccount]);
+        //        var ui = new xrmMock.UiMock({
+        //            process: processControl
+        //        });
+        //        xrmMock.XrmMockGenerator.initialise({ process: process, ui: ui });
+        //        var executionContext = xrmMock.XrmMockGenerator.formContext;
+        //        var form = new DevKit.FormAccount(executionContext);
 
-    //            expect(() => { form.Process.AddOnPreProcessStatusChange(null) }).toThrow(new Error("Method not implemented."));
-    //            expect(() => { form.Process.AddOnPreStageChange(null) }).toThrow(new Error("Method not implemented."));
-    //            expect(() => { form.Process.RemoveOnPreProcessStatusChange(null) }).toThrow(new Error("Method not implemented."));
-    //            expect(() => { form.Process.AddOnProcessStatusChange(null) }).toThrow(new Error("add on process status change not implemented."));
-    //            expect(() => { form.Process.RemoveOnProcessStatusChange(null) }).toThrow(new Error("remove on process status change not implemented."));
-    //            expect(() => { form.Process.AddOnStageChange(null) }).toThrow(new Error("add on stage change not implemented"));
-    //            expect(() => { form.Process.RemoveOnStageChange(null) }).toThrow(new Error("remove on stage change not implemented"));
-    //            expect(() => { form.Process.RemoveOnPreStageChange(null) }).toThrow(new Error("Method not implemented."));
-    //            expect(() => { form.Process.AddOnStageSelected(null) }).toThrow(new Error("add on stage selected not implemented"));
-    //            expect(() => { form.Process.RemoveOnStageSelected(null) }).toThrow(new Error("remove on stage selected not implemented"));
-    //            form.Process.EnabledProcesses(function (process) {
-    //                expect(process.length).toBe(1);
-    //            });
-    //            expect(() => { form.Process.MoveNext(null) }).toThrow(new Error("move next not implemented"));
-    //            expect(() => { form.Process.MovePrevious(null) }).toThrow(new Error("move previous not implemented"));
-    //            expect(() => { form.Process.ProcessInstances(null) }).toThrow(new Error("get process instances not implemented."));
-    //            expect(form.Process.SetActiveStage("stage1", null)).toBeUndefined();
-    //            expect(() => { form.Process.SetActiveProcessInstance(null, null) }).toThrow(new Error("set active process instance not implemented."));
-    //            expect(form.Process.SetActiveProcess(null, null)).toBeUndefined();
-    //            expect(() => { form.Process.Reflow(null, null, null) }).toThrow(new Error("Not implemented."));
-    //            expect(form.Process.ActiveProcess.Id).toBe("devkit_bpfaccount");
-    //            expect(form.Process.ActiveProcess.Name).toBe("BPF Account");
-    //            expect(form.Process.ActiveProcess.IsRendered).toBeTruthy();
-    //            expect(form.Process.ActiveProcess.Stages.getLength()).toBe(3);
-    //            var s1 = form.Process.ActiveProcess.Stages.get(0);
-    //            form.Process.ActiveProcess.Stages.forEach(function (stage, index) {
-    //                expect(stage).toBeDefined();
-    //            });
-    //            expect(() => { s1.AllowCreateNew(function () { return true; }) }).toThrow(new Error("getNavigationBehavior not implemented"));
-    //            expect(s1.Category).toBe(OptionSet.ProcessCategory.Identify);
-    //            expect(() => { s1.EntityName }).toThrow(new Error("get entity name not implemented"));
-    //            expect(s1.Id).toBe("stage1");
-    //            expect(s1.Name).toBe("Stage 1");
-    //            expect(s1.Status).toBe("active");
-    //            expect(s1.Steps.length).toBe(2);
-    //            var ss1 = s1.Steps[0];
-    //            expect(ss1.Attribute).toBe("name");
-    //            expect(ss1.Name).toBe("Stage1Step_AccountName");
-    //            expect(ss1.Required).toBeTruthy();
-    //            expect(() => { ss1.Progress }).toThrow(new Error("getProgress not implemented"));
-    //            expect(() => { ss1.SetProgress(null, null) }).toThrow(new Error("setProgress not implemented"));
-    //            expect(() => { form.Process.ProcessInstances(function (processes) { ; }) }).toThrow(new Error("get process instances not implemented."));
-    //            expect(() => { form.Process.SelectedStage }).toThrow(new Error("get selected not implemented"));
-    //            var activeStage = form.Process.ActiveStage;
-    //            expect(activeStage.Name).toBe("Stage 1");
-    //            expect(form.Process.InstanceId).toBe("devkit_bpfaccount");
-    //            expect(form.Process.InstanceName).toBe("BPF Account");
-    //            expect(() => { form.Process.Status }).toThrow(new Error("get status not implemented."));
-    //            expect(() => { form.Process.Status = OptionSet.ProcessStatus.Finished }).toThrow(new Error("set status not implemented."));
-    //            expect(form.Process.DisplayState).toBe(OptionSet.ProcessDisplayState.Expanded);
-    //            form.Process.DisplayState = OptionSet.ProcessDisplayState.Collapsed;
-    //            expect(form.Process.DisplayState).toBe(OptionSet.ProcessDisplayState.Collapsed);
-    //            expect(form.Process.Visible).toBeTruthy();
-    //            expect(() => { form.Process.Visible = false; }).toThrow(new Error("Method not implemented."));
-    //            expect(form.Process.ActivePath).toBeDefined();
-    //            expect(() => { form.Process.ActivePath.getLength() }).toThrow(new Error("get active path not implemented"));
-    //            expect(() => { form.Process.ActivePath.get(0) }).toThrow(new Error("get active path not implemented"));
-    //            expect(() => {
-    //                form.Process.ActivePath.forEach(function (stage, index) {
+        //        expect(() => { form.Process.AddOnPreProcessStatusChange(null) }).toThrow(new Error("Method not implemented."));
+        //        expect(() => { form.Process.AddOnPreStageChange(null) }).toThrow(new Error("Method not implemented."));
+        //        expect(() => { form.Process.RemoveOnPreProcessStatusChange(null) }).toThrow(new Error("Method not implemented."));
+        //        expect(() => { form.Process.AddOnProcessStatusChange(null) }).toThrow(new Error("add on process status change not implemented."));
+        //        expect(() => { form.Process.RemoveOnProcessStatusChange(null) }).toThrow(new Error("remove on process status change not implemented."));
+        //        expect(() => { form.Process.AddOnStageChange(null) }).toThrow(new Error("add on stage change not implemented"));
+        //        expect(() => { form.Process.RemoveOnStageChange(null) }).toThrow(new Error("remove on stage change not implemented"));
+        //        expect(() => { form.Process.RemoveOnPreStageChange(null) }).toThrow(new Error("Method not implemented."));
+        //        expect(() => { form.Process.AddOnStageSelected(null) }).toThrow(new Error("add on stage selected not implemented"));
+        //        expect(() => { form.Process.RemoveOnStageSelected(null) }).toThrow(new Error("remove on stage selected not implemented"));
+        //        form.Process.EnabledProcesses(function (process) {
+        //            expect(process.length).toBe(1);
+        //        });
+        //        expect(() => { form.Process.MoveNext(null) }).toThrow(new Error("move next not implemented"));
+        //        expect(() => { form.Process.MovePrevious(null) }).toThrow(new Error("move previous not implemented"));
+        //        expect(() => { form.Process.ProcessInstances(null) }).toThrow(new Error("get process instances not implemented."));
+        //        expect(form.Process.SetActiveStage("stage1", null)).toBeUndefined();
+        //        expect(() => { form.Process.SetActiveProcessInstance(null, null) }).toThrow(new Error("set active process instance not implemented."));
+        //        expect(form.Process.SetActiveProcess(null, null)).toBeUndefined();
+        //        expect(() => { form.Process.Reflow(null, null, null) }).toThrow(new Error("Not implemented."));
+        //        expect(form.Process.ActiveProcess.Id).toBe("devkit_bpfaccount");
+        //        expect(form.Process.ActiveProcess.Name).toBe("BPF Account");
+        //        expect(form.Process.ActiveProcess.IsRendered).toBeTruthy();
+        //        expect(form.Process.ActiveProcess.Stages.getLength()).toBe(3);
+        //        var s1 = form.Process.ActiveProcess.Stages.get(0);
+        //        form.Process.ActiveProcess.Stages.forEach(function (stage, index) {
+        //            expect(stage).toBeDefined();
+        //        });
+        //        expect(() => { s1.AllowCreateNew(function () { return true; }) }).toThrow(new Error("getNavigationBehavior not implemented"));
+        //        expect(s1.Category).toBe(OptionSet.ProcessCategory.Identify);
+        //        expect(() => { s1.EntityName }).toThrow(new Error("get entity name not implemented"));
+        //        expect(s1.Id).toBe("stage1");
+        //        expect(s1.Name).toBe("Stage 1");
+        //        expect(s1.Status).toBe("active");
+        //        expect(s1.Steps.length).toBe(2);
+        //        var ss1 = s1.Steps[0];
+        //        expect(ss1.Attribute).toBe("name");
+        //        expect(ss1.Name).toBe("Stage1Step_AccountName");
+        //        expect(ss1.Required).toBeTruthy();
+        //        expect(() => { ss1.Progress }).toThrow(new Error("getProgress not implemented"));
+        //        expect(() => { ss1.SetProgress(null, null) }).toThrow(new Error("setProgress not implemented"));
+        //        expect(() => { form.Process.ProcessInstances(function (processes) { ; }) }).toThrow(new Error("get process instances not implemented."));
+        //        expect(() => { form.Process.SelectedStage }).toThrow(new Error("get selected not implemented"));
+        //        var activeStage = form.Process.ActiveStage;
+        //        expect(activeStage.Name).toBe("Stage 1");
+        //        expect(form.Process.InstanceId).toBe("devkit_bpfaccount");
+        //        expect(form.Process.InstanceName).toBe("BPF Account");
+        //        expect(() => { form.Process.Status }).toThrow(new Error("get status not implemented."));
+        //        expect(() => { form.Process.Status = OptionSet.ProcessStatus.Finished }).toThrow(new Error("set status not implemented."));
+        //        expect(form.Process.DisplayState).toBe(OptionSet.ProcessDisplayState.Expanded);
+        //        form.Process.DisplayState = OptionSet.ProcessDisplayState.Collapsed;
+        //        expect(form.Process.DisplayState).toBe(OptionSet.ProcessDisplayState.Collapsed);
+        //        expect(form.Process.Visible).toBeTruthy();
+        //        expect(() => { form.Process.Visible = false; }).toThrow(new Error("Method not implemented."));
+        //        expect(form.Process.ActivePath).toBeDefined();
+        //        expect(() => { form.Process.ActivePath.getLength() }).toThrow(new Error("get active path not implemented"));
+        //        expect(() => { form.Process.ActivePath.get(0) }).toThrow(new Error("get active path not implemented"));
+        //        expect(() => {
+        //            form.Process.ActivePath.forEach(function (stage, index) {
 
-    //                });
-    //            }).toThrow(new Error("get active path not implemented"));
-    //        });
-    //    });
+        //            });
+        //        }).toThrow(new Error("get active path not implemented"));
+        //    });
+        //});
         describe('Utility', () => {
             beforeEach(function () {
                 var XrmMockGenerator = xrmMock.XrmMockGenerator.initialise();
