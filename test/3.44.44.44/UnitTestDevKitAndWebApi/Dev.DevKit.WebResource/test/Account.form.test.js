@@ -445,7 +445,7 @@ define(['xrm-mock'], function () {
                     label: "CONTACTS",
                     visible: true,
                     entityName: "contact",
-                    contextType: XrmEnum.GridControlContext.FormContextRelated
+                    contextType: XrmEnum.GridControlContext.FormContextRelated,
                 });
 
                 var viewSelector = new xrmMock.ViewSelectorMock(true);
