@@ -102,8 +102,8 @@
     {
       "profile": "JS-WEBAPI",
       "type": "JsWebApi",
-      "rootnamespace": "???",
-      "rootfolder": "???",
+      "rootnamespace": "DevKit",
+      "rootfolder": "",
       "entities": "folder"
     }
   ],
