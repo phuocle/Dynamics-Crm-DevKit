@@ -68,6 +68,7 @@ declare namespace DevKit {
 			Fax: DevKit.Controls.String;
 			/** Information about whether to allow following email activity like opens, attachment views and link clicks for emails sent to the account. */
 			FollowEmail: DevKit.Controls.Boolean;
+			IFRAME_PHUOCLE: DevKit.Controls.IFrame;
 			/** Select the account's primary industry for use in marketing segmentation and demographic analysis. */
 			IndustryCode: DevKit.Controls.OptionSet;
 			mapcontrol: DevKit.Controls.Map;
@@ -113,6 +114,7 @@ declare namespace DevKit {
 			Account_Phonecalls: DevKit.Controls.NavigationItem,
 			Account_Tasks: DevKit.Controls.NavigationItem,
 			adx_invitation_assigntoaccount: DevKit.Controls.NavigationItem,
+			bpf_account_devkit_bpfaccount: DevKit.Controls.NavigationItem,
 			contact_customer_accounts: DevKit.Controls.NavigationItem,
 			msa_account_managingpartner: DevKit.Controls.NavigationItem,
 			msa_contact_managingpartner: DevKit.Controls.NavigationItem
@@ -126,6 +128,15 @@ declare namespace DevKit {
 		}
 		interface QuickForm {
 			contactquickform: quickForm_contactquickform;
+		}
+		interface ProcessBPF_Account {
+			/** Type the company or business name. */
+			Name: DevKit.Controls.String;
+			/** Type the company or business name. */
+			Name_1: DevKit.Controls.String;
+		}
+		interface Process extends DevKit.Controls.IProcess {
+			BPF_Account: ProcessBPF_Account;
 		}
 		interface Grid {
 			ChildAccounts: DevKit.Controls.Grid;
@@ -149,6 +160,8 @@ declare namespace DevKit {
 		Navigation: DevKit.FormAccount.Navigation;
 		/** The QuickForm of form Account */
 		QuickForm: DevKit.FormAccount.QuickForm;
+		/** The Process of form Account */
+		Process: DevKit.FormAccount.Process;
 		/** The Grid of form Account */
 		Grid: DevKit.FormAccount.Grid;
 		/** The SidePanes of form Account */
@@ -251,6 +264,7 @@ declare namespace DevKit {
 			Account_Phonecalls: DevKit.Controls.NavigationItem,
 			Account_Tasks: DevKit.Controls.NavigationItem,
 			adx_invitation_assigntoaccount: DevKit.Controls.NavigationItem,
+			bpf_account_devkit_bpfaccount: DevKit.Controls.NavigationItem,
 			contact_customer_accounts: DevKit.Controls.NavigationItem,
 			msa_account_managingpartner: DevKit.Controls.NavigationItem,
 			msa_contact_managingpartner: DevKit.Controls.NavigationItem
@@ -264,6 +278,15 @@ declare namespace DevKit {
 		}
 		interface QuickForm {
 			contactquickform: quickForm_contactquickform;
+		}
+		interface ProcessBPF_Account {
+			/** Type the company or business name. */
+			Name: DevKit.Controls.String;
+			/** Type the company or business name. */
+			Name_1: DevKit.Controls.String;
+		}
+		interface Process extends DevKit.Controls.IProcess {
+			BPF_Account: ProcessBPF_Account;
 		}
 		interface Grid {
 			Contacts: DevKit.Controls.Grid;
@@ -286,6 +309,8 @@ declare namespace DevKit {
 		Navigation: DevKit.FormAccount_for_Interactive_experience.Navigation;
 		/** The QuickForm of form Account_for_Interactive_experience */
 		QuickForm: DevKit.FormAccount_for_Interactive_experience.QuickForm;
+		/** The Process of form Account_for_Interactive_experience */
+		Process: DevKit.FormAccount_for_Interactive_experience.Process;
 		/** The Grid of form Account_for_Interactive_experience */
 		Grid: DevKit.FormAccount_for_Interactive_experience.Grid;
 		/** The SidePanes of form Account_for_Interactive_experience */
@@ -450,9 +475,19 @@ declare namespace DevKit {
 			Account_Phonecalls: DevKit.Controls.NavigationItem,
 			Account_Tasks: DevKit.Controls.NavigationItem,
 			adx_invitation_assigntoaccount: DevKit.Controls.NavigationItem,
+			bpf_account_devkit_bpfaccount: DevKit.Controls.NavigationItem,
 			contact_customer_accounts: DevKit.Controls.NavigationItem,
 			msa_account_managingpartner: DevKit.Controls.NavigationItem,
 			msa_contact_managingpartner: DevKit.Controls.NavigationItem
+		}
+		interface ProcessBPF_Account {
+			/** Type the company or business name. */
+			Name: DevKit.Controls.String;
+			/** Type the company or business name. */
+			Name_1: DevKit.Controls.String;
+		}
+		interface Process extends DevKit.Controls.IProcess {
+			BPF_Account: ProcessBPF_Account;
 		}
 		interface Grid {
 			accountactivitiesgrid: DevKit.Controls.Grid;
@@ -474,6 +509,8 @@ declare namespace DevKit {
 		Header: DevKit.FormAccount_Information.Header;
 		/** The Navigation of form Account_Information */
 		Navigation: DevKit.FormAccount_Information.Navigation;
+		/** The Process of form Account_Information */
+		Process: DevKit.FormAccount_Information.Process;
 		/** The Grid of form Account_Information */
 		Grid: DevKit.FormAccount_Information.Grid;
 		/** The SidePanes of form Account_Information */

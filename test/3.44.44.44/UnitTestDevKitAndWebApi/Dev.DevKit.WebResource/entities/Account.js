@@ -17,6 +17,7 @@ var formAccount = (function () {
 	}
 	//BEGIN ON LOAD ========================================================
 	async function UiAddLoaded(executionContext) {
+		form.Body.Name.Disabled = true;
 	}
 	//END ON LOAD ==========================================================
 	//BEGIN ON CHANGE ======================================================

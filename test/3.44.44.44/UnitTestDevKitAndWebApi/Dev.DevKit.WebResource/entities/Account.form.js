@@ -33,6 +33,7 @@ var DevKit;
 			DoNotPostalMail: {},
 			Fax: {},
 			FollowEmail: {},
+			IFRAME_PHUOCLE: {},
 			IndustryCode: {},
 			mapcontrol: {},
 			ModifiedOn: {},
@@ -84,6 +85,14 @@ var DevKit;
 		};
 		devKit.LoadFields(formContext, header, "header_");
 		form.Header = header;
+		var process = devKit.LoadProcess(formContext);
+		var _BPF_Account = {
+			Name: {},
+			Name_1: {}
+		}
+		devKit.LoadFields(formContext, _BPF_Account, "header_process_");
+		process.BPF_Account = _BPF_Account;
+		form.Process = process;
 		var quickForm = {
 			contactquickform: {
 				EMailAddress1: {},
@@ -112,6 +121,7 @@ var DevKit;
 			Account_Phonecalls: {},
 			Account_Tasks: {},
 			adx_invitation_assigntoaccount: {},
+			bpf_account_devkit_bpfaccount: {},
 			contact_customer_accounts: {},
 			msa_account_managingpartner: {},
 			msa_contact_managingpartner: {}
@@ -191,6 +201,14 @@ var DevKit;
 		};
 		devKit.LoadFields(formContext, header, "header_");
 		form.Header = header;
+		var process = devKit.LoadProcess(formContext);
+		var _BPF_Account = {
+			Name: {},
+			Name_1: {}
+		}
+		devKit.LoadFields(formContext, _BPF_Account, "header_process_");
+		process.BPF_Account = _BPF_Account;
+		form.Process = process;
 		var quickForm = {
 			contactquickform: {
 				EMailAddress1: {},
@@ -218,6 +236,7 @@ var DevKit;
 			Account_Phonecalls: {},
 			Account_Tasks: {},
 			adx_invitation_assigntoaccount: {},
+			bpf_account_devkit_bpfaccount: {},
 			contact_customer_accounts: {},
 			msa_account_managingpartner: {},
 			msa_contact_managingpartner: {}
@@ -334,6 +353,14 @@ var DevKit;
 		};
 		devKit.LoadFields(formContext, header, "header_");
 		form.Header = header;
+		var process = devKit.LoadProcess(formContext);
+		var _BPF_Account = {
+			Name: {},
+			Name_1: {}
+		}
+		devKit.LoadFields(formContext, _BPF_Account, "header_process_");
+		process.BPF_Account = _BPF_Account;
+		form.Process = process;
 		var grid = {
 			accountactivitiesgrid: {},
 			accountContactsGrid: {},
@@ -354,6 +381,7 @@ var DevKit;
 			Account_Phonecalls: {},
 			Account_Tasks: {},
 			adx_invitation_assigntoaccount: {},
+			bpf_account_devkit_bpfaccount: {},
 			contact_customer_accounts: {},
 			msa_account_managingpartner: {},
 			msa_contact_managingpartner: {}
