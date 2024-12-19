@@ -39,14 +39,10 @@ var devKit = (function () {
             contextData.save(saveOptions).then(successCallback, errorCallback);
         };
         Object.defineProperty(form, 'DataIsDirty', {
-            get: function () {
-                return contextData.getIsDirty();
-            }
+            get() { return contextData.getIsDirty(); }
         });
         Object.defineProperty(form, 'DataIsValid', {
-            get: function () {
-                return contextData.isValid();
-            }
+            get() { return contextData.isValid(); }
         });
         var contextDataEntity = formContext.data.entity;
         form.AddOnSave = function (callback) {
@@ -62,95 +58,46 @@ var devKit = (function () {
             contextDataEntity.removeOnPostSave(callback);
         };
         Object.defineProperty(form, 'Attributes', {
-            get: function () {
-                return contextDataEntity.attributes;
-            }
+            get() { return contextDataEntity.attributes; }
         });
         Object.defineProperty(form, 'DataXml', {
-            get: function () {
-                if (has(contextDataEntity, 'getDataXml')) {
-                    return contextDataEntity.getDataXml();
-                }
-                return EMPTY_STRING;
-            }
+            get() { return contextDataEntity.getDataXml(); }
         });
         Object.defineProperty(form, 'EntityName', {
-            get: function () {
-                if (has(contextDataEntity, 'getEntityName')) {
-                    return contextDataEntity.getEntityName();
-                }
-                return EMPTY_STRING;
-            }
+            get() { return contextDataEntity.getEntityName(); }
         });
         Object.defineProperty(form, 'EntityReference', {
-            get: function () {
-                if (has(contextDataEntity, 'getEntityReference')) {
-                    return contextDataEntity.getEntityReference();
-                }
-                return EMPTY_REFERENCE;
-            }
+            get() { return contextDataEntity.getEntityReference(); }
         });
         Object.defineProperty(form, 'EntityId', {
-            get: function () {
-                if (has(contextDataEntity, 'getId')) {
-                    return contextDataEntity.getId();
-                }
-                return EMPTY_GUID;
-            }
+            get() { return contextDataEntity.getId(); }
         });
         Object.defineProperty(form, 'EntityIsDirty', {
-            get: function () {
-                if (has(contextDataEntity, 'getIsDirty')) {
-                    return contextDataEntity.getIsDirty();
-                }
-                return EMPTY_BOOL;
-            }
+            get() { return contextDataEntity.getIsDirty(); }
         });
         Object.defineProperty(form, 'PrimaryAttributeValue', {
-            get: function () {
-                if (has(contextDataEntity, 'getPrimaryAttributeValue')) {
-                    return contextDataEntity.getPrimaryAttributeValue();
-                }
-                return EMPTY_STRING;
-            }
+            get() { return contextDataEntity.getPrimaryAttributeValue(); }
         });
         Object.defineProperty(form, 'EntityIsValid', {
-            get: function () {
-                if (has(contextDataEntity, 'isValid')) {
-                    return contextDataEntity.isValid();
-                }
-                return EMPTY_BOOL;
-            }
+            get() { return contextDataEntity.isValid(); }
         });
-        var contextUi = NULL;
-        if (has(formContext, 'ui')) {
-            contextUi = formContext.ui;
-        }
+        var contextUi = formContext.ui;
         form.UiAddLoaded = function (callback) {
             if (has(contextUi, 'addLoaded')) {
                 contextUi.addLoaded(callback);
             }
         };
         form.UiAddOnLoad = function (callback) {
-            if (has(contextUi, 'addOnLoad')) {
-                contextUi.addOnLoad(callback);
-            }
+            contextUi.addOnLoad(callback);
         };
         form.ClearFormNotification = function (uniqueId) {
-            if (has(contextUi, 'clearFormNotification')) {
-                return contextUi.clearFormNotification(uniqueId);
-            }
-            return EMPTY_BOOL;
+            return contextUi.clearFormNotification(uniqueId);
         };
         form.Close = function () {
-            if (has(contextUi, 'close')) {
-                contextUi.close();
-            }
+            contextUi.close();
         };
         form.RefreshRibbon = function (refreshAll) {
-            if (has(contextUi, 'refreshRibbon')) {
-                contextUi.refreshRibbon(refreshAll);
-            }
+            contextUi.refreshRibbon(refreshAll);
         };
         form.UiRemoveLoaded = function (callback) {
             if (has(contextUi, 'removeLoaded')) {
@@ -158,57 +105,27 @@ var devKit = (function () {
             }
         };
         form.UiRemoveOnLoad = function (callback) {
-            if (has(contextUi, 'removeOnLoad')) {
-                contextUi.removeOnLoad(callback);
-            }
+            contextUi.removeOnLoad(callback);
         };
         form.SetFormEntityName = function (arg) {
-            if (has(contextUi, 'setFormEntityName')) {
-                contextUi.setFormEntityName(arg);
-            }
+            contextUi.setFormEntityName(arg);
         };
         form.SetFormNotification = function (message, level, uniqueId) {
-            if (has(contextUi, 'setFormNotification')) {
-                return contextUi.setFormNotification(message, level, uniqueId);
-            }
-            return EMPTY_BOOL;
+            return contextUi.setFormNotification(message, level, uniqueId);
         };
         Object.defineProperty(form, 'Controls', {
-            get: function () {
-                if (has(contextUi, 'controls')) {
-                    return contextUi.controls;
-                }
-                return [];
-            }
+            get() { return contextUi.controls; }
         });
         Object.defineProperty(form, 'FormType', {
-            get: function () {
-                if (has(contextUi, 'getFormType')) {
-                    return contextUi.getFormType();
-                }
-                return EMPTY_NUMBER;
-            }
+            get() { return contextUi.getFormType(); }
         });
         Object.defineProperty(form, 'ViewPortHeight', {
-            get: function () {
-                if (has(contextUi, 'getViewPortHeight')) {
-                    return contextUi.getViewPortHeight();
-                }
-                return EMPTY_NUMBER;
-            }
+            get() { return contextUi.getViewPortHeight(); }
         });
         Object.defineProperty(form, 'ViewPortWidth', {
-            get: function () {
-                if (has(contextUi, 'getViewPortWidth')) {
-                    return contextUi.getViewPortWidth();
-                }
-                return EMPTY_NUMBER;
-            }
+            get() { return contextUi.getViewPortWidth(); }
         });
-        var contextUiFormSelector = NULL;
-        if (has(formContext, 'ui.formSelector')) {
-            contextUiFormSelector = formContext.ui.formSelector;
-        }
+        var contextUiFormSelector = formContext.ui.formSelector;
         form.FormNavigateToFormId = function (formId) {
             if (has(contextUiFormSelector, 'items')) {
                 for (var i = 0; i < contextUiFormSelector.items.getLength(); i++) {
@@ -222,14 +139,10 @@ var devKit = (function () {
             }
         };
         form.FormNavigateToFormLabel = function (formLabel) {
-            if (has(contextUiFormSelector, 'items')) {
-                for (var i = 0; i < contextUiFormSelector.items.getLength(); i++) {
-                    if (formLabel === contextUiFormSelector.items.get(i).getLabel()) {
-                        var form = contextUiFormSelector.items.get(i)
-                        if (has(form, 'navigate')) {
-                            form.navigate();
-                        }
-                    }
+            for (var i = 0; i < contextUiFormSelector.items.getLength(); i++) {
+                if (formLabel === contextUiFormSelector.items.get(i).getLabel()) {
+                    var form = contextUiFormSelector.items.get(i)
+                    form.navigate();
                 }
             }
         };
@@ -259,26 +172,10 @@ var devKit = (function () {
             }
         }
         Object.defineProperty(form, 'FormId', {
-            get: function () {
-                if (has(contextUiFormSelector, 'getCurrentItem')) {
-                    var form = contextUiFormSelector.getCurrentItem();
-                    if (has(form, 'getId')) {
-                        return form.getId();
-                    }
-                }
-                return EMPTY_GUID;
-            }
+            get() { return contextUiFormSelector.getCurrentItem().getId(); }
         });
         Object.defineProperty(form, 'FormLabel', {
-            get: function () {
-                if (has(contextUiFormSelector, 'getCurrentItem')) {
-                    var form = contextUiFormSelector.getCurrentItem();
-                    if (has(form, 'getLabel')) {
-                        return form.getLabel();
-                    }
-                }
-                return EMPTY_STRING;
-            }
+            get() { return contextUiFormSelector.getCurrentItem().getLabel(); }
         });
         return form;
     }
@@ -286,7 +183,7 @@ var devKit = (function () {
         var loadStep = function (step) {
             var obj = {};
             Object.defineProperty(obj, 'Attribute', {
-                get: function () {
+                get() {
                     if (has(step, 'getAttribute')) {
                         return step.getAttribute();
                     }
@@ -294,7 +191,7 @@ var devKit = (function () {
                 }
             });
             Object.defineProperty(obj, 'Name', {
-                get: function () {
+                get() {
                     if (has(step, 'getName')) {
                         return step.getName();
                     }
@@ -302,7 +199,7 @@ var devKit = (function () {
                 }
             });
             Object.defineProperty(obj, 'Required', {
-                get: function () {
+                get() {
                     if (has(step, 'isRequired')) {
                         return step.isRequired();
                     }
@@ -310,7 +207,7 @@ var devKit = (function () {
                 }
             });
             Object.defineProperty(obj, 'Progress', {
-                get: function () {
+                get() {
                     if (has(step, 'getProgress')) {
                         return step.getProgress();
                     }
@@ -327,7 +224,7 @@ var devKit = (function () {
         var loadStage = function (stage) {
             var obj = {};
             Object.defineProperty(obj, 'Category', {
-                get: function () {
+                get() {
                     if (has(stage, 'getCategory')) {
                         return stage.getCategory().getValue();
                     }
@@ -335,7 +232,7 @@ var devKit = (function () {
                 }
             });
             Object.defineProperty(obj, 'EntityName', {
-                get: function () {
+                get() {
                     if (has(stage, 'getEntityName')) {
                         return stage.getEntityName();
                     }
@@ -343,7 +240,7 @@ var devKit = (function () {
                 }
             });
             Object.defineProperty(obj, 'Id', {
-                get: function () {
+                get() {
                     if (has(stage, 'getId')) {
                         return stage.getId();
                     }
@@ -351,7 +248,7 @@ var devKit = (function () {
                 }
             });
             Object.defineProperty(obj, 'Name', {
-                get: function () {
+                get() {
                     if (has(stage, 'getName')) {
                         return stage.getName();
                     }
@@ -359,7 +256,7 @@ var devKit = (function () {
                 }
             });
             Object.defineProperty(obj, 'Status', {
-                get: function () {
+                get() {
                     if (has(stage, 'getStatus')) {
                         return stage.getStatus();
                     }
@@ -372,7 +269,7 @@ var devKit = (function () {
                 }
             }
             Object.defineProperty(obj, 'Steps', {
-                get: function () {
+                get() {
                     var obj = [];
                     if (has(stage, 'getSteps')) {
                         var steps = stage.getSteps();
@@ -389,7 +286,7 @@ var devKit = (function () {
         var loadProcess = function (process) {
             var obj = {};
             Object.defineProperty(obj, 'Id', {
-                get: function () {
+                get() {
                     if (has(process, 'getId')) {
                         return process.getId();
                     }
@@ -397,7 +294,7 @@ var devKit = (function () {
                 }
             });
             Object.defineProperty(obj, 'Name', {
-                get: function () {
+                get() {
                     if (has(process, 'getName')) {
                         return process.getName();
                     }
@@ -405,7 +302,7 @@ var devKit = (function () {
                 }
             });
             Object.defineProperty(obj, 'IsRendered', {
-                get: function () {
+                get() {
                     if (has(process, 'isRendered')) {
                         return process.isRendered();
                     }
@@ -413,7 +310,7 @@ var devKit = (function () {
                 }
             });
             Object.defineProperty(obj, 'Stages', {
-                get: function () {
+                get() {
                     var obj = {};
                     obj.getLength = function () {
                         if (has(process, 'getStages')) {
@@ -563,7 +460,7 @@ var devKit = (function () {
             }
         }
         Object.defineProperty(process, 'ActiveProcess', {
-            get: function () {
+            get() {
                 var getActiveProcess = NULL;
                 if (has(getProcess, 'getActiveProcess')) {
                     getActiveProcess = getProcess.getActiveProcess();
@@ -572,7 +469,7 @@ var devKit = (function () {
             }
         });
         Object.defineProperty(process, 'SelectedStage', {
-            get: function () {
+            get() {
                 var selectedStage = NULL;
                 if (has(getProcess, 'getSelectedStage')) {
                     selectedStage = getProcess.getSelectedStage();
@@ -581,7 +478,7 @@ var devKit = (function () {
             }
         });
         Object.defineProperty(process, 'ActiveStage', {
-            get: function () {
+            get() {
                 var activeStage = NULL;
                 if (has(getProcess, 'getActiveStage')) {
                     activeStage = getProcess.getActiveStage();
@@ -590,7 +487,7 @@ var devKit = (function () {
             }
         });
         Object.defineProperty(process, 'InstanceId', {
-            get: function () {
+            get() {
                 if (has(getProcess, 'getInstanceId')) {
                     return getProcess.getInstanceId();
                 }
@@ -598,7 +495,7 @@ var devKit = (function () {
             }
         });
         Object.defineProperty(process, 'InstanceName', {
-            get: function () {
+            get() {
                 if (has(getProcess, 'getInstanceName')) {
                     return getProcess.getInstanceName();
                 }
@@ -606,7 +503,7 @@ var devKit = (function () {
             }
         });
         Object.defineProperty(process, 'Status', {
-            get: function () {
+            get() {
                 if (has(getProcess, 'getStatus')) {
                     return getProcess.getStatus();
                 }
@@ -619,7 +516,7 @@ var devKit = (function () {
             }
         });
         Object.defineProperty(process, 'DisplayState', {
-            get: function () {
+            get() {
                 if (has(getProcessUi, 'getDisplayState')) {
                     return getProcessUi.getDisplayState();
                 }
@@ -632,7 +529,7 @@ var devKit = (function () {
             }
         });
         Object.defineProperty(process, 'Visible', {
-            get: function () {
+            get() {
                 if (has(getProcessUi, 'getVisible')) {
                     return getProcessUi.getVisible();
                 }
@@ -645,7 +542,7 @@ var devKit = (function () {
             }
         });
         Object.defineProperty(process, 'ActivePath', {
-            get: function () {
+            get() {
                 var obj = {};
                 obj.getLength = function () {
                     if (has(getProcess, 'getActivePath')) {
@@ -829,7 +726,7 @@ var devKit = (function () {
             }
         };
         Object.defineProperty(field, 'AttributeType', {
-            get: function () {
+            get() {
                 if (has(attribute, 'getAttributeType')) {
                     return attribute.getAttributeType();
                 }
@@ -837,7 +734,7 @@ var devKit = (function () {
             }
         });
         Object.defineProperty(field, 'Format', {
-            get: function () {
+            get() {
                 if (has(attribute, 'getFormat')) {
                     return attribute.getFormat();
                 }
@@ -845,7 +742,7 @@ var devKit = (function () {
             }
         });
         Object.defineProperty(field, 'InitialValue', {
-            get: function () {
+            get() {
                 if (has(attribute, 'getInitialValue')) {
                     return attribute.getInitialValue();
                 }
@@ -853,7 +750,7 @@ var devKit = (function () {
             }
         });
         Object.defineProperty(field, 'IsDirty', {
-            get: function () {
+            get() {
                 if (has(attribute, 'getIsDirty')) {
                     return attribute.getIsDirty();
                 }
@@ -861,7 +758,7 @@ var devKit = (function () {
             }
         });
         Object.defineProperty(field, 'IsPartyList', {
-            get: function () {
+            get() {
                 if (has(attribute, 'getIsPartyList')) {
                     return attribute.getIsPartyList();
                 }
@@ -869,7 +766,7 @@ var devKit = (function () {
             }
         });
         Object.defineProperty(field, 'Max', {
-            get: function () {
+            get() {
                 if (has(attribute, 'getMax')) {
                     return attribute.getMax();
                 }
@@ -877,7 +774,7 @@ var devKit = (function () {
             }
         });
         Object.defineProperty(field, 'MaxLength', {
-            get: function () {
+            get() {
                 if (has(attribute, 'getMaxLength')) {
                     return attribute.getMaxLength();
                 }
@@ -885,7 +782,7 @@ var devKit = (function () {
             }
         });
         Object.defineProperty(field, 'Min', {
-            get: function () {
+            get() {
                 if (has(attribute, 'getMin')) {
                     return attribute.getMin();
                 }
@@ -893,7 +790,7 @@ var devKit = (function () {
             }
         });
         Object.defineProperty(field, 'AttributeName', {
-            get: function () {
+            get() {
                 if (has(attribute, 'getName')) {
                     return attribute.getName();
                 }
@@ -901,7 +798,7 @@ var devKit = (function () {
             }
         });
         Object.defineProperty(field, 'Options', {
-            get: function () {
+            get() {
                 if (has(attribute, 'getOptions')) {
                     return attribute.getOptions();
                 }
@@ -909,7 +806,7 @@ var devKit = (function () {
             }
         });
         Object.defineProperty(field, 'ControlOptions', {
-            get: function () {
+            get() {
                 if (has(control, 'getOptions')) {
                     return control.getOptions();
                 }
@@ -917,7 +814,7 @@ var devKit = (function () {
             }
         });
         Object.defineProperty(field, 'AttributeParent', {
-            get: function () {
+            get() {
                 if (has(attribute, 'getParent')) {
                     return attribute.getParent();
                 }
@@ -925,7 +822,7 @@ var devKit = (function () {
             }
         });
         Object.defineProperty(field, 'SelectedOption', {
-            get: function () {
+            get() {
                 if (has(attribute, 'getSelectedOption')) {
                     return attribute.getSelectedOption();
                 }
@@ -933,7 +830,7 @@ var devKit = (function () {
             }
         });
         Object.defineProperty(field, 'Text', {
-            get: function () {
+            get() {
                 if (has(attribute, 'getText')) {
                     return attribute.getText();
                 }
@@ -941,7 +838,7 @@ var devKit = (function () {
             }
         });
         Object.defineProperty(field, 'UserPrivilege', {
-            get: function () {
+            get() {
                 if (has(attribute, 'getUserPrivilege')) {
                     return attribute.getUserPrivilege();
                 }
@@ -949,7 +846,7 @@ var devKit = (function () {
             }
         });
         Object.defineProperty(field, 'IsValid', {
-            get: function () {
+            get() {
                 if (has(attribute, 'isValid')) {
                     return attribute.isValid();
                 }
@@ -957,7 +854,7 @@ var devKit = (function () {
             }
         });
         Object.defineProperty(field, 'ControlType', {
-            get: function () {
+            get() {
                 if (has(control, 'getControlType')) {
                     return control.getControlType();
                 }
@@ -965,7 +862,7 @@ var devKit = (function () {
             }
         });
         Object.defineProperty(field, 'InitialUrl', {
-            get: function () {
+            get() {
                 if (has(control, 'getInitialUrl')) {
                     return control.getInitialUrl();
                 }
@@ -973,7 +870,7 @@ var devKit = (function () {
             }
         });
         Object.defineProperty(field, 'ControlName', {
-            get: function () {
+            get() {
                 if (has(control, 'getName')) {
                     return control.getName();
                 }
@@ -981,7 +878,7 @@ var devKit = (function () {
             }
         });
         Object.defineProperty(field, 'Object', {
-            get: function () {
+            get() {
                 if (has(control, 'getObject')) {
                     return control.getObject();
                 }
@@ -989,7 +886,7 @@ var devKit = (function () {
             }
         });
         Object.defineProperty(field, 'ControlParent', {
-            get: function () {
+            get() {
                 if (has(control, 'getParent')) {
                     return control.getParent();
                 }
@@ -997,7 +894,7 @@ var devKit = (function () {
             }
         });
         Object.defineProperty(field, 'State', {
-            get: function () {
+            get() {
                 if (has(control, 'getState')) {
                     return control.getState();
                 }
@@ -1005,7 +902,7 @@ var devKit = (function () {
             }
         });
         Object.defineProperty(field, 'TotalResultCount', {
-            get: function () {
+            get() {
                 if (has(control, 'getTotalResultCount')) {
                     return control.getTotalResultCount();
                 }
@@ -1013,7 +910,7 @@ var devKit = (function () {
             }
         });
         Object.defineProperty(field, 'SelectedResults', {
-            get: function () {
+            get() {
                 if (has(control, 'getSelectedResults')) {
                     return control.getSelectedResults();
                 }
@@ -1021,7 +918,7 @@ var devKit = (function () {
             }
         });
         Object.defineProperty(field, 'Attribute', {
-            get: function () {
+            get() {
                 if (has(control, 'getAttribute')) {
                     return control.getAttribute();
                 }
@@ -1029,7 +926,7 @@ var devKit = (function () {
             }
         });
         Object.defineProperty(field, 'Precision', {
-            get: function () {
+            get() {
                 if (has(attribute, 'getPrecision')) {
                     return attribute.getPrecision();
                 }
@@ -1042,7 +939,7 @@ var devKit = (function () {
             }
         });
         Object.defineProperty(field, 'RequiredLevel', {
-            get: function () {
+            get() {
                 if (has(attribute, 'getRequiredLevel')) {
                     return attribute.getRequiredLevel();
                 }
@@ -1055,7 +952,7 @@ var devKit = (function () {
             }
         });
         Object.defineProperty(field, 'SubmitMode', {
-            get: function () {
+            get() {
                 if (has(attribute, 'getSubmitMode')) {
                     return attribute.getSubmitMode();
                 }
@@ -1068,7 +965,7 @@ var devKit = (function () {
             }
         });
         Object.defineProperty(field, 'Value', {
-            get: function () {
+            get() {
                 if (has(attribute, 'getValue')) {
                     return attribute.getValue();
                 }
@@ -1082,7 +979,7 @@ var devKit = (function () {
             }
         });
         Object.defineProperty(field, 'Data', {
-            get: function () {
+            get() {
                 if (has(control, 'getData')) {
                     return control.getData();
                 }
@@ -1095,7 +992,7 @@ var devKit = (function () {
             }
         });
         Object.defineProperty(field, 'DefaultView', {
-            get: function () {
+            get() {
                 if (has(control, 'getDefaultView')) {
                     return control.getDefaultView();
                 }
@@ -1108,7 +1005,7 @@ var devKit = (function () {
             }
         });
         Object.defineProperty(field, 'Disabled', {
-            get: function () {
+            get() {
                 if (has(control, 'getDisabled')) {
                     return control.getDisabled();
                 }
@@ -1122,7 +1019,7 @@ var devKit = (function () {
             }
         });
         Object.defineProperty(field, 'EntityTypes', {
-            get: function () {
+            get() {
                 if (has(control, 'getEntityTypes')) {
                     return control.getEntityTypes();
                 }
@@ -1135,7 +1032,7 @@ var devKit = (function () {
             }
         });
         Object.defineProperty(field, 'Label', {
-            get: function () {
+            get() {
                 if (has(control, 'getLabel')) {
                     return control.getLabel();
                 }
@@ -1148,7 +1045,7 @@ var devKit = (function () {
             }
         });
         Object.defineProperty(field, 'SearchQuery', {
-            get: function () {
+            get() {
                 if (has(control, 'getSearchQuery')) {
                     return control.getSearchQuery();
                 }
@@ -1161,7 +1058,7 @@ var devKit = (function () {
             }
         });
         Object.defineProperty(field, 'ShowTime', {
-            get: function () {
+            get() {
                 if (has(control, 'getShowTime')) {
                     return control.getShowTime();
                 }
@@ -1174,7 +1071,7 @@ var devKit = (function () {
             }
         });
         Object.defineProperty(field, 'Src', {
-            get: function () {
+            get() {
                 if (has(control, 'getSrc')) {
                     return control.getSrc();
                 }
@@ -1187,7 +1084,7 @@ var devKit = (function () {
             }
         });
         Object.defineProperty(field, 'Visible', {
-            get: function () {
+            get() {
                 if (has(control, 'getVisible')) {
                     return control.getVisible();
                 }
@@ -1247,7 +1144,7 @@ var devKit = (function () {
         }
         if (type === "footer_") {
             Object.defineProperty(body, 'Visible', {
-                get: function () {
+                get() {
                     if (has(formContext, 'ui.footerSection.getVisible')) {
                         return formContext.ui.footerSection.getVisible();
                     }
@@ -1262,7 +1159,7 @@ var devKit = (function () {
         }
         else if (type === "header_") {
             Object.defineProperty(body, 'BodyVisible', {
-                get: function () {
+                get() {
                     if (has(formContext, 'ui.headerSection.getBodyVisible')) {
                         return formContext.ui.headerSection.getBodyVisible();
                     }
@@ -1275,7 +1172,7 @@ var devKit = (function () {
                 }
             });
             Object.defineProperty(body, 'CommandBarVisible', {
-                get: function () {
+                get() {
                     if (has(formContext, 'ui.headerSection.getCommandBarVisible')) {
                         return formContext.ui.headerSection.getCommandBarVisible();
                     }
@@ -1288,7 +1185,7 @@ var devKit = (function () {
                 }
             });
             Object.defineProperty(body, 'TabNavigatorVisible', {
-                get: function () {
+                get() {
                     if (has(formContext, 'ui.headerSection.getTabNavigatorVisible')) {
                         return formContext.ui.headerSection.getTabNavigatorVisible();
                     }
@@ -1314,7 +1211,7 @@ var devKit = (function () {
                 sectionObject = tabObject.sections.get(section);
             }
             Object.defineProperty(sections[section], 'Name', {
-                get: function () {
+                get() {
                     if (has(sectionObject, 'getName')) {
                         return sectionObject.getName();
                     }
@@ -1322,7 +1219,7 @@ var devKit = (function () {
                 }
             });
             Object.defineProperty(sections[section], 'Parent', {
-                get: function () {
+                get() {
                     if (has(sectionObject, 'getParent')) {
                         return sectionObject.getParent();
                     }
@@ -1330,7 +1227,7 @@ var devKit = (function () {
                 }
             });
             Object.defineProperty(sections[section], 'Label', {
-                get: function () {
+                get() {
                     if (has(sectionObject, 'getLabel')) {
                         return sectionObject.getLabel();
                     }
@@ -1343,7 +1240,7 @@ var devKit = (function () {
                 }
             });
             Object.defineProperty(sections[section], 'Visible', {
-                get: function () {
+                get() {
                     if (has(sectionObject, 'getVisible')) {
                         return sectionObject.getVisible();
                     }
@@ -1377,7 +1274,7 @@ var devKit = (function () {
                 }
             };
             Object.defineProperty(tabs[tab], 'Name', {
-                get: function () {
+                get() {
                     if (has(tabObject, 'getName')) {
                         return tabObject.getName();
                     }
@@ -1385,7 +1282,7 @@ var devKit = (function () {
                 }
             });
             Object.defineProperty(tabs[tab], 'Parent', {
-                get: function () {
+                get() {
                     if (has(tabObject, 'getParent')) {
                         return tabObject.getParent();
                     }
@@ -1393,7 +1290,7 @@ var devKit = (function () {
                 }
             });
             Object.defineProperty(tabs[tab], 'DisplayState', {
-                get: function () {
+                get() {
                     if (has(tabObject, 'getDisplayState')) {
                         return tabObject.getDisplayState();
                     }
@@ -1406,7 +1303,7 @@ var devKit = (function () {
                 }
             });
             Object.defineProperty(tabs[tab], 'ContentType', {
-                get: function () {
+                get() {
                     if (has(tabObject, 'getContentType')) {
                         return tabObject.getContentType();
                     }
@@ -1419,7 +1316,7 @@ var devKit = (function () {
                 }
             });
             Object.defineProperty(tabs[tab], 'Label', {
-                get: function () {
+                get() {
                     if (has(tabObject, 'getLabel')) {
                         return tabObject.getLabel();
                     }
@@ -1432,7 +1329,7 @@ var devKit = (function () {
                 }
             });
             Object.defineProperty(tabs[tab], 'Visible', {
-                get: function () {
+                get() {
                     if (has(tabObject, 'getVisible')) {
                         return tabObject.getVisible();
                     }
@@ -1468,7 +1365,7 @@ var devKit = (function () {
                 }
             };
             Object.defineProperty(navigations[navigation], 'Id', {
-                get: function () {
+                get() {
                     if (has(navigationItem, 'getId')) {
                         return navigationItem.getId();
                     }
@@ -1476,7 +1373,7 @@ var devKit = (function () {
                 }
             });
             Object.defineProperty(navigations[navigation], 'Label', {
-                get: function () {
+                get() {
                     if (has(navigationItem, 'getLabel')) {
                         return navigationItem.getLabel();
                     }
@@ -1489,7 +1386,7 @@ var devKit = (function () {
                 }
             });
             Object.defineProperty(navigations[navigation], 'Visible', {
-                get: function () {
+                get() {
                     if (has(navigationItem, 'getVisible')) {
                         return navigationItem.getVisible();
                     }
@@ -1518,7 +1415,7 @@ var devKit = (function () {
                 quickViewControl = formContext.ui.quickForms.get(quickForm);
             }
             Object.defineProperty(quickForms[quickForm], 'Body', {
-                get: function () {
+                get() {
                     var obj = {};
                     for (var i = 0; i < fields.length; i++) {
                         var field = fields[i];
@@ -1561,7 +1458,7 @@ var devKit = (function () {
                 }
             };
             Object.defineProperty(quickForms[quickForm], 'ControlType', {
-                get: function () {
+                get() {
                     if (has(quickViewControl, 'getControlType')) {
                         return quickViewControl.getControlType();
                     }
@@ -1569,7 +1466,7 @@ var devKit = (function () {
                 }
             });
             Object.defineProperty(quickForms[quickForm], 'Disabled', {
-                get: function () {
+                get() {
                     if (has(quickViewControl, 'getDisabled')) {
                         return quickViewControl.getDisabled();
                     }
@@ -1582,7 +1479,7 @@ var devKit = (function () {
                 }
             });
             Object.defineProperty(quickForms[quickForm], 'Label', {
-                get: function () {
+                get() {
                     if (has(quickViewControl, 'getLabel')) {
                         return quickViewControl.getLabel();
                     }
@@ -1595,7 +1492,7 @@ var devKit = (function () {
                 }
             });
             Object.defineProperty(quickForms[quickForm], 'ControlName', {
-                get: function () {
+                get() {
                     if (has(quickViewControl, 'getName')) {
                         return quickViewControl.getName();
                     }
@@ -1603,7 +1500,7 @@ var devKit = (function () {
                 }
             });
             Object.defineProperty(quickForms[quickForm], 'ControlParent', {
-                get: function () {
+                get() {
                     if (has(quickViewControl, 'getParent')) {
                         return quickViewControl.getParent();
                     }
@@ -1611,7 +1508,7 @@ var devKit = (function () {
                 }
             });
             Object.defineProperty(quickForms[quickForm], 'Visible', {
-                get: function () {
+                get() {
                     if (has(quickViewControl, 'getVisible')) {
                         return quickViewControl.getVisible();
                     }
@@ -1632,7 +1529,7 @@ var devKit = (function () {
         var loadGridRow = function (row) {
             var obj = {};
             Object.defineProperty(obj, 'EntityName', {
-                get: function () {
+                get() {
                     if (has(row, 'data.entity.getEntityName')) {
                         return row.data.entity.getEntityName();
                     }
@@ -1640,7 +1537,7 @@ var devKit = (function () {
                 }
             });
             Object.defineProperty(obj, 'EntityReference', {
-                get: function () {
+                get() {
                     if (has(row, 'data.entity.getEntityReference')) {
                         return row.data.entity.getEntityReference();
                     }
@@ -1648,7 +1545,7 @@ var devKit = (function () {
                 }
             });
             Object.defineProperty(obj, 'EntityId', {
-                get: function () {
+                get() {
                     if (has(row, 'data.entity.getId')) {
                         return row.data.entity.getId();
                     }
@@ -1656,7 +1553,7 @@ var devKit = (function () {
                 }
             });
             Object.defineProperty(obj, 'PrimaryAttributeValue', {
-                get: function () {
+                get() {
                     if (has(row, 'data.entity.getPrimaryAttributeValue')) {
                         return row.data.entity.getPrimaryAttributeValue();
                     }
@@ -1664,7 +1561,7 @@ var devKit = (function () {
                 }
             });
             Object.defineProperty(obj, 'Columns', {
-                get: function () {
+                get() {
                     var obj = {};
                     obj.getLength = function () {
                         if (has(row, 'data.entity.attributes')) {
@@ -1714,7 +1611,7 @@ var devKit = (function () {
                 return EMPTY_BOOL;
             };
             Object.defineProperty(obj, 'Name', {
-                get: function () {
+                get() {
                     if (has(col, 'getName')) {
                         return col.getName();
                     }
@@ -1722,7 +1619,7 @@ var devKit = (function () {
                 }
             });
             Object.defineProperty(obj, 'RequiredLevel', {
-                get: function () {
+                get() {
                     if (has(col, 'getRequiredLevel')) {
                         return col.getRequiredLevel();
                     }
@@ -1735,7 +1632,7 @@ var devKit = (function () {
                 }
             });
             Object.defineProperty(obj, 'Value', {
-                get: function () {
+                get() {
                     if (has(col, 'getValue')) {
                         return col.getValue();
                     }
@@ -1748,7 +1645,7 @@ var devKit = (function () {
                 }
             });
             Object.defineProperty(obj, 'Disabled', {
-                get: function () {
+                get() {
                     if (has(col, 'controls.get')) {
                         var control = col.controls.get(0);
                         if (has(control, 'getDisabled')) {
@@ -1767,7 +1664,7 @@ var devKit = (function () {
                 }
             });
             Object.defineProperty(obj, 'Label', {
-                get: function () {
+                get() {
                     if (has(col, 'controls.get')) {
                         var control = col.controls.get(0);
                         if (has(control, 'getLabel')) {
@@ -1816,7 +1713,7 @@ var devKit = (function () {
                 }
             };
             Object.defineProperty(grids[grid], 'EntityName', {
-                get: function () {
+                get() {
                     if (has(gridControl, 'getEntityName')) {
                         return gridControl.getEntityName();
                     }
@@ -1824,7 +1721,7 @@ var devKit = (function () {
                 }
             });
             Object.defineProperty(grids[grid], 'FetchXml', {
-                get: function () {
+                get() {
                     if (has(gridControl, 'getFetchXml')) {
                         return gridControl.getFetchXml();
                     }
@@ -1832,7 +1729,7 @@ var devKit = (function () {
                 }
             });
             Object.defineProperty(grids[grid], 'GridType', {
-                get: function () {
+                get() {
                     if (has(gridControl, 'getGridType')) {
                         return gridControl.getGridType();
                     }
@@ -1840,7 +1737,7 @@ var devKit = (function () {
                 }
             });
             Object.defineProperty(grids[grid], 'Relationship', {
-                get: function () {
+                get() {
                     if (has(gridControl, 'getRelationship')) {
                         return gridControl.getRelationship();
                     }
@@ -1848,14 +1745,14 @@ var devKit = (function () {
                 }
             });
             Object.defineProperty(grids[grid], 'ViewSelector', {
-                get: function () {
+                get() {
                     var viewSelector = NULL;
                     if (has(gridControl, 'getViewSelector')) {
                         viewSelector = gridControl.getViewSelector();
                     }
                     var obj = {};
                     Object.defineProperty(obj, 'CurrentView', {
-                        get: function () {
+                        get() {
                             if (has(viewSelector, 'getCurrentView')) {
                                 return viewSelector.getCurrentView();
                             }
@@ -1868,7 +1765,7 @@ var devKit = (function () {
                         }
                     });
                     Object.defineProperty(obj, 'Visible', {
-                        get: function () {
+                        get() {
                             if (has(viewSelector, 'isVisible')) {
                                 return viewSelector.isVisible();
                             }
@@ -1879,7 +1776,7 @@ var devKit = (function () {
                 }
             });
             Object.defineProperty(grids[grid], 'Rows', {
-                get: function () {
+                get() {
                     var obj = {};
                     var getGrid = NULL;
                     if (has(gridControl, 'getGrid')) {
@@ -1910,7 +1807,7 @@ var devKit = (function () {
                 }
             });
             Object.defineProperty(grids[grid], 'SelectedRows', {
-                get: function () {
+                get() {
                     var obj = {};
                     var getGrid = NULL;
                     if (has(gridControl, 'getGrid')) {
@@ -1941,7 +1838,7 @@ var devKit = (function () {
                 }
             });
             Object.defineProperty(grids[grid], 'TotalRecordCount', {
-                get: function () {
+                get() {
                     var getGrid = NULL;
                     if (has(gridControl, 'getGrid')) {
                         getGrid = gridControl.getGrid();
@@ -1953,7 +1850,7 @@ var devKit = (function () {
                 }
             });
             Object.defineProperty(grids[grid], 'Visible', {
-                get: function () {
+                get() {
                     if (has(gridControl, 'getVisible')) {
                         return gridControl.getVisible();
                     }
@@ -2031,7 +1928,7 @@ var devKit = (function () {
             }
         };
         Object.defineProperty(utility, 'LearningPathAttributeName', {
-            get: function () {
+            get() {
                 if (has(getUtility, 'getLearningPathAttributeName')) {
                     return getUtility.getLearningPathAttributeName();
                 }
@@ -2039,7 +1936,7 @@ var devKit = (function () {
             }
         });
         Object.defineProperty(utility, 'PageContext', {
-            get: function () {
+            get() {
                 if (has(getUtility, 'getPageContext')) {
                     return getUtility.getPageContext();
                 }
@@ -2079,14 +1976,14 @@ var devKit = (function () {
             return EMPTY_STRING;
         };
         Object.defineProperty(utility, 'Client', {
-            get: function () {
+            get() {
                 var obj = {};
                 var client = NULL;
                 if (has(getGlobalContext, 'client')) {
                     client = getGlobalContext.client;
                 }
                 Object.defineProperty(obj, 'ClientName', {
-                    get: function () {
+                    get() {
                         if (has(client, 'getClient')) {
                             return client.getClient();
                         }
@@ -2094,7 +1991,7 @@ var devKit = (function () {
                     }
                 });
                 Object.defineProperty(obj, 'ClientState', {
-                    get: function () {
+                    get() {
                         if (has(client, 'getClientState')) {
                             return client.getClientState();
                         }
@@ -2102,7 +1999,7 @@ var devKit = (function () {
                     }
                 });
                 Object.defineProperty(obj, 'FormFactor', {
-                    get: function () {
+                    get() {
                         if (has(client, 'getFormFactor')) {
                             return client.getFormFactor();
                         }
@@ -2110,7 +2007,7 @@ var devKit = (function () {
                     }
                 });
                 Object.defineProperty(obj, 'IsOffline', {
-                    get: function () {
+                    get() {
                         if (has(client, 'isOffline')) {
                             return client.isOffline();
                         }
@@ -2118,7 +2015,7 @@ var devKit = (function () {
                     }
                 });
                 Object.defineProperty(obj, 'IsNetworkAvailable', {
-                    get: function () {
+                    get() {
                         if (has(client, 'isNetworkAvailable')) {
                             return client.isNetworkAvailable();
                         }
@@ -2129,14 +2026,14 @@ var devKit = (function () {
             }
         });
         Object.defineProperty(utility, 'OrganizationSettings', {
-            get: function () {
+            get() {
                 var obj = {};
                 var organizationSettings = NULL;
                 if (has(getGlobalContext, 'organizationSettings')) {
                     organizationSettings = getGlobalContext.organizationSettings;
                 }
                 Object.defineProperty(obj, 'Attributes', {
-                    get: function () {
+                    get() {
                         if (has(organizationSettings, 'attributes')) {
                             return organizationSettings.attributes;
                         }
@@ -2144,7 +2041,7 @@ var devKit = (function () {
                     }
                 });
                 Object.defineProperty(obj, 'BaseCurrencyId', {
-                    get: function () {
+                    get() {
                         if (has(organizationSettings, 'baseCurrencyId')) {
                             return organizationSettings.baseCurrencyId;
                         }
@@ -2152,7 +2049,7 @@ var devKit = (function () {
                     }
                 });
                 Object.defineProperty(obj, 'BaseCurrency', {
-                    get: function () {
+                    get() {
                         if (has(organizationSettings, 'baseCurrency')) {
                             return organizationSettings.baseCurrency;
                         }
@@ -2161,7 +2058,7 @@ var devKit = (function () {
                 });
 
                 Object.defineProperty(obj, 'DefaultCountryCode', {
-                    get: function () {
+                    get() {
                         if (has(organizationSettings, 'defaultCountryCode')) {
                             return organizationSettings.defaultCountryCode;
                         }
@@ -2169,7 +2066,7 @@ var devKit = (function () {
                     }
                 });
                 Object.defineProperty(obj, 'IsAutoSaveEnabled', {
-                    get: function () {
+                    get() {
                         if (has(organizationSettings, 'isAutoSaveEnabled')) {
                             return organizationSettings.isAutoSaveEnabled;
                         }
@@ -2177,7 +2074,7 @@ var devKit = (function () {
                     }
                 });
                 Object.defineProperty(obj, 'LanguageId', {
-                    get: function () {
+                    get() {
                         if (has(organizationSettings, 'languageId')) {
                             return organizationSettings.languageId;
                         }
@@ -2185,7 +2082,7 @@ var devKit = (function () {
                     }
                 });
                 Object.defineProperty(obj, 'OrganizationId', {
-                    get: function () {
+                    get() {
                         if (has(organizationSettings, 'organizationId')) {
                             return organizationSettings.organizationId;
                         }
@@ -2193,7 +2090,7 @@ var devKit = (function () {
                     }
                 });
                 Object.defineProperty(obj, 'IsTrialOrganization', {
-                    get: function () {
+                    get() {
                         if (has(organizationSettings, 'isTrialOrganization')) {
                             return organizationSettings.isTrialOrganization;
                         }
@@ -2201,7 +2098,7 @@ var devKit = (function () {
                     }
                 });
                 Object.defineProperty(obj, 'OrganizationExpiryDate', {
-                    get: function () {
+                    get() {
                         if (has(organizationSettings, 'organizationExpiryDate')) {
                             return organizationSettings.organizationExpiryDate;
                         }
@@ -2209,7 +2106,7 @@ var devKit = (function () {
                     }
                 });
                 Object.defineProperty(obj, 'UniqueName', {
-                    get: function () {
+                    get() {
                         if (has(organizationSettings, 'uniqueName')) {
                             return organizationSettings.uniqueName;
                         }
@@ -2217,7 +2114,7 @@ var devKit = (function () {
                     }
                 });
                 Object.defineProperty(obj, 'UseSkypeProtocol', {
-                    get: function () {
+                    get() {
                         if (has(organizationSettings, 'useSkypeProtocol')) {
                             return organizationSettings.useSkypeProtocol;
                         }
@@ -2225,7 +2122,7 @@ var devKit = (function () {
                     }
                 });
                 Object.defineProperty(obj, 'FullNameConventionCode', {
-                    get: function () {
+                    get() {
                         if (has(organizationSettings, 'fullNameConventionCode')) {
                             return organizationSettings.fullNameConventionCode;
                         }
@@ -2236,14 +2133,14 @@ var devKit = (function () {
             }
         });
         Object.defineProperty(utility, 'UserSettings', {
-            get: function () {
+            get() {
                 var obj = {};
                 var userSettings = NULL;
                 if (has(getGlobalContext, 'userSettings')) {
                     userSettings = getGlobalContext.userSettings;
                 }
                 Object.defineProperty(obj, 'DateFormattingInfo', {
-                    get: function () {
+                    get() {
                         if (has(userSettings, 'dateFormattingInfo')) {
                             return userSettings.dateFormattingInfo;
                         }
@@ -2251,7 +2148,7 @@ var devKit = (function () {
                     }
                 });
                 Object.defineProperty(obj, 'DefaultDashboardId', {
-                    get: function () {
+                    get() {
                         if (has(userSettings, 'defaultDashboardId')) {
                             return userSettings.defaultDashboardId;
                         }
@@ -2259,7 +2156,7 @@ var devKit = (function () {
                     }
                 });
                 Object.defineProperty(obj, 'IsGuidedHelpEnabled', {
-                    get: function () {
+                    get() {
                         if (has(userSettings, 'isGuidedHelpEnabled')) {
                             return userSettings.isGuidedHelpEnabled;
                         }
@@ -2267,7 +2164,7 @@ var devKit = (function () {
                     }
                 });
                 Object.defineProperty(obj, 'IsHighContrastEnabled', {
-                    get: function () {
+                    get() {
                         if (has(userSettings, 'isHighContrastEnabled')) {
                             return userSettings.isHighContrastEnabled;
                         }
@@ -2275,7 +2172,7 @@ var devKit = (function () {
                     }
                 });
                 Object.defineProperty(obj, 'IsRTL', {
-                    get: function () {
+                    get() {
                         if (has(userSettings, 'isRTL')) {
                             return userSettings.isRTL;
                         }
@@ -2283,7 +2180,7 @@ var devKit = (function () {
                     }
                 });
                 Object.defineProperty(obj, 'LanguageId', {
-                    get: function () {
+                    get() {
                         if (has(userSettings, 'languageId')) {
                             return userSettings.languageId;
                         }
@@ -2291,7 +2188,7 @@ var devKit = (function () {
                     }
                 });
                 Object.defineProperty(obj, 'Roles', {
-                    get: function () {
+                    get() {
                         if (has(userSettings, 'roles')) {
                             return userSettings.roles;
                         }
@@ -2299,7 +2196,7 @@ var devKit = (function () {
                     }
                 });
                 Object.defineProperty(obj, 'SecurityRolePrivileges', {
-                    get: function () {
+                    get() {
                         if (has(userSettings, 'securityRolePrivileges')) {
                             return userSettings.securityRolePrivileges;
                         }
@@ -2307,7 +2204,7 @@ var devKit = (function () {
                     }
                 });
                 Object.defineProperty(obj, 'SecurityRoles', {
-                    get: function () {
+                    get() {
                         if (has(userSettings, 'securityRoles')) {
                             return userSettings.securityRoles;
                         }
@@ -2315,7 +2212,7 @@ var devKit = (function () {
                     }
                 });
                 Object.defineProperty(obj, 'TransactionCurrency', {
-                    get: function () {
+                    get() {
                         if (has(userSettings, 'transactionCurrency')) {
                             return userSettings.transactionCurrency;
                         }
@@ -2323,7 +2220,7 @@ var devKit = (function () {
                     }
                 });
                 Object.defineProperty(obj, 'TransactionCurrencyId', {
-                    get: function () {
+                    get() {
                         if (has(userSettings, 'transactionCurrencyId')) {
                             return userSettings.transactionCurrencyId;
                         }
@@ -2331,7 +2228,7 @@ var devKit = (function () {
                     }
                 });
                 Object.defineProperty(obj, 'UserId', {
-                    get: function () {
+                    get() {
                         if (has(userSettings, 'userId')) {
                             return userSettings.userId;
                         }
@@ -2339,7 +2236,7 @@ var devKit = (function () {
                     }
                 });
                 Object.defineProperty(obj, 'UserName', {
-                    get: function () {
+                    get() {
                         if (has(userSettings, 'userName')) {
                             return userSettings.userName;
                         }
@@ -2347,7 +2244,7 @@ var devKit = (function () {
                     }
                 });
                 Object.defineProperty(obj, 'TimeZoneOffsetMinutes', {
-                    get: function () {
+                    get() {
                         if (has(userSettings, 'getTimeZoneOffsetMinutes')) {
                             return userSettings.getTimeZoneOffsetMinutes();
                         }
@@ -2358,7 +2255,7 @@ var devKit = (function () {
             }
         });
         Object.defineProperty(utility, 'ClientUrl', {
-            get: function () {
+            get() {
                 if (has(getGlobalContext, 'getClientUrl')) {
                     return getGlobalContext.getClientUrl();
                 }
@@ -2366,7 +2263,7 @@ var devKit = (function () {
             }
         });
         Object.defineProperty(utility, 'CurrentAppUrl', {
-            get: function () {
+            get() {
                 if (has(getGlobalContext, 'getCurrentAppUrl')) {
                     return getGlobalContext.getCurrentAppUrl();
                 }
@@ -2374,7 +2271,7 @@ var devKit = (function () {
             }
         });
         Object.defineProperty(utility, 'Version', {
-            get: function () {
+            get() {
                 if (has(getGlobalContext, 'getVersion')) {
                     return getGlobalContext.getVersion();
                 }
@@ -2382,7 +2279,7 @@ var devKit = (function () {
             }
         });
         Object.defineProperty(utility, 'IsOnPremises', {
-            get: function () {
+            get() {
                 if (has(getGlobalContext, 'isOnPremises')) {
                     return getGlobalContext.isOnPremises();
                 }
@@ -2568,7 +2465,7 @@ var devKit = (function () {
             }
         }
         Object.defineProperty(obj, 'Depth', {
-            get: function () {
+            get() {
                 if (has(executionContext, 'getDepth')) {
                     return executionContext.getDepth();
                 }
@@ -2576,7 +2473,7 @@ var devKit = (function () {
             }
         });
         Object.defineProperty(obj, 'EventArgs', {
-            get: function () {
+            get() {
                 if (has(executionContext, 'getEventArgs')) {
                     return executionContext.getEventArgs();
                 }
@@ -2584,7 +2481,7 @@ var devKit = (function () {
             }
         });
         Object.defineProperty(obj, 'EventSource', {
-            get: function () {
+            get() {
                 if (has(executionContext, 'getEventSource')) {
                     return executionContext.getEventSource();
                 }
@@ -2592,7 +2489,7 @@ var devKit = (function () {
             }
         });
         Object.defineProperty(obj, 'FormContext', {
-            get: function () {
+            get() {
                 if (has(executionContext, 'getFormContext')) {
                     return executionContext.getFormContext();
                 }
@@ -2600,7 +2497,7 @@ var devKit = (function () {
             }
         });
         Object.defineProperty(obj, 'SaveMode', {
-            get: function () {
+            get() {
                 if (has(executionContext, 'getEventArgs')) {
                     return executionContext.getEventArgs().getSaveMode();
                 }
@@ -2608,7 +2505,7 @@ var devKit = (function () {
             }
         });
         Object.defineProperty(obj, 'EntityReference', {
-            get: function () {
+            get() {
                 if (has(executionContext, 'getEntityReference')) {
                     return executionContext.getEventArgs().getEntityReference();
                 }
@@ -2616,7 +2513,7 @@ var devKit = (function () {
             }
         });
         Object.defineProperty(obj, 'IsSaveSuccess', {
-            get: function () {
+            get() {
                 if (has(executionContext, 'getIsSaveSuccess')) {
                     return executionContext.getEventArgs().getIsSaveSuccess();
                 }
@@ -2624,7 +2521,7 @@ var devKit = (function () {
             }
         });
         Object.defineProperty(obj, 'SaveErrorInfo', {
-            get: function () {
+            get() {
                 if (has(executionContext, 'getSaveErrorInfo')) {
                     return executionContext.getEventArgs().getSaveErrorInfo();
                 }
@@ -2648,7 +2545,7 @@ var devKit = (function () {
             return Xrm.App.sidePanes.getAllPanes();
         }
         Object.defineProperty(sidePanes, 'DisplayState', {
-            get: function () {
+            get() {
                 return Xrm.App.sidePanes.state;
             },
             set: function (value) {
