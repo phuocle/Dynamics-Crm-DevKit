@@ -167,6 +167,23 @@ describe('devKit', () => {
         form.DataAddOnLoad(formDataAddOnLoad);
         expect(data.loadEventHandlers.length).toBe(1);
         expect(() => { form.Refresh(null, null, null) }).toThrow(new Error("refresh not implemented"));
-
+        form.DataRemoveOnLoad(formDataAddOnLoad);
+        expect(data.loadEventHandlers.length).toBe(0);
+        expect(() => { form.Save(null, null, null) }).toThrow(new Error("save not implemented"));
+        expect(() => { form.DataIsDirty }).toThrow(new Error("getIsDirty not implemented"));
+        expect(() => { form.DataIsValid }).toThrow(new Error("isValid not implemented"));
+        expect(entity.saveEventHandlers.length).toBe(0);
+        var formAddOnSave = function () { };
+        form.AddOnSave(formAddOnSave);
+        expect(entity.saveEventHandlers.length).toBe(1);
+        var formAddOnPostSave = function () { };
+        expect(entity.postSaveEventHandlers.length).toBe(0);
+        form.AddOnPostSave(formAddOnPostSave);
+        expect(entity.postSaveEventHandlers.length).toBe(1);
+        form.RemoveOnSave(formAddOnSave);
+        expect(entity.saveEventHandlers.length).toBe(0);
+        form.RemoveOnPostSave(formAddOnPostSave);
+        expect(entity.postSaveEventHandlers.length).toBe(0);
+        expect(form.Attributes.get('name')).not.toBeNull();
     });
 });

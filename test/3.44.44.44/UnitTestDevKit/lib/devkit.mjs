@@ -25,76 +25,45 @@ var devKit = (function () {
     }
     function loadForm(formContext) {
         var form = {};
-        var contextData = NULL;
-        if (has(formContext, 'data')) {
-            contextData = formContext.data;
-        }
+        var contextData = formContext.data;
         form.DataAddOnLoad = function (callback) {
-            if (has(contextData, 'addOnLoad')) {
-                contextData.addOnLoad(callback);
-            }
+            contextData.addOnLoad(callback);
         };
         form.Refresh = function (save, successCallback, errorCallback) {
-            if (has(contextData, 'refresh')) {
-                contextData.refresh(save).then(successCallback, errorCallback);
-            }
+            contextData.refresh(save).then(successCallback, errorCallback);
         };
         form.DataRemoveOnLoad = function (callback) {
-            if (has(contextData, 'removeOnLoad')) {
-                contextData.removeOnLoad(callback);
-            }
+            contextData.removeOnLoad(callback);
         };
         form.Save = function (saveOptions, successCallback, errorCallback) {
-            if (has(contextData, 'save')) {
-                contextData.save(saveOptions).then(successCallback, errorCallback);
-            }
+            contextData.save(saveOptions).then(successCallback, errorCallback);
         };
         Object.defineProperty(form, 'DataIsDirty', {
             get: function () {
-                if (has(contextData, 'getIsDirty')) {
-                    return contextData.getIsDirty();
-                }
-                return EMPTY_BOOL;
+                return contextData.getIsDirty();
             }
         });
         Object.defineProperty(form, 'DataIsValid', {
             get: function () {
-                if (has(contextData, 'isValid')) {
-                    return contextData.isValid();
-                }
-                return EMPTY_BOOL;
+                return contextData.isValid();
             }
         });
-        var contextDataEntity = NULL;
-        if (has(formContext, 'data.entity')) {
-            contextDataEntity = formContext.data.entity;
-        }
+        var contextDataEntity = formContext.data.entity;
         form.AddOnSave = function (callback) {
-            if (has(contextDataEntity, 'addOnSave')) {
-                contextDataEntity.addOnSave(callback);
-            }
+            contextDataEntity.addOnSave(callback);
         };
         form.AddOnPostSave = function (callback) {
-            if (has(contextDataEntity, 'addOnPostSave')) {
-                contextDataEntity.addOnPostSave(callback);
-            }
+            contextDataEntity.addOnPostSave(callback);
         }
         form.RemoveOnSave = function (callback) {
-            if (has(contextDataEntity, 'removeOnSave')) {
-                contextDataEntity.removeOnSave(callback);
-            }
+            contextDataEntity.removeOnSave(callback);
         };
         form.RemoveOnPostSave = function (callback) {
-            if (has(contextDataEntity, 'removeOnPostSave')) {
-                contextDataEntity.removeOnPostSave(callback);
-            }
+            contextDataEntity.removeOnPostSave(callback);
         };
         Object.defineProperty(form, 'Attributes', {
             get: function () {
-                if (has(contextDataEntity, 'attributes')) {
-                    return contextDataEntity.attributes;
-                }
-                return [];
+                return contextDataEntity.attributes;
             }
         });
         Object.defineProperty(form, 'DataXml', {
