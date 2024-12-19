@@ -1,0 +1,14 @@
+{
+  "devDependencies": {
+    "chai": "^5.1.2",
+    "jsdom": "^25.0.1",
+    "mocha": "^11.0.1",
+    "nyc": "^17.1.0",
+    "sinon": "^19.0.2",
+    "xrm-mock": "^3.6.1"
+  },
+  "scripts": {
+    "test": "mocha",
+    "coverage": "nyc mocha"
+  }
+}

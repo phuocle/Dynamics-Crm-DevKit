@@ -1,0 +1,12 @@
+{
+    "all": true,
+    "include": [
+        "lib/devkit.js"
+    ],
+    "reporter": [
+        "text",
+        "html"
+    ],
+    "sourceMap": false,
+    "instrument": true
+}

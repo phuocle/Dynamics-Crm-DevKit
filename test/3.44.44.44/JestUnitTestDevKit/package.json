@@ -1,0 +1,16 @@
+{
+  "name": "jestunittestdevkit",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "jsdom": "^25.0.1"
+  },
+  "scripts": {
+    "test": "jest"
+  }
+}
