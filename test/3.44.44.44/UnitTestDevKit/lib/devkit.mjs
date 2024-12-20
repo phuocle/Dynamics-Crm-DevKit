@@ -2033,135 +2033,74 @@ var devKit = (function () {
         });
         var getNavigation = Xrm?.Navigation;
         utility.OpenAlertDialog = function (alertStrings, alertOptions, closeCallback, errorCallback) {
-            if (has(getNavigation, 'openAlertDialog')) {
-                getNavigation.openAlertDialog(alertStrings, alertOptions).then(closeCallback, errorCallback);
-            }
+            getNavigation.openAlertDialog(alertStrings, alertOptions).then(closeCallback, errorCallback);
         };
         utility.OpenConfirmDialog = function (confirmStrings, confirmOptions, successCallback, errorCallback) {
-            if (has(getNavigation, 'openConfirmDialog')) {
-                getNavigation.openConfirmDialog(confirmStrings, confirmOptions).then(successCallback, errorCallback);
-            }
+            getNavigation.openConfirmDialog(confirmStrings, confirmOptions).then(successCallback, errorCallback);
         };
         utility.OpenErrorDialog = function (errorOptions, successCallback, errorCallback) {
-            if (has(getNavigation, 'openErrorDialog')) {
-                getNavigation.openErrorDialog(errorOptions).then(successCallback, errorCallback);
-            }
+            getNavigation.openErrorDialog(errorOptions).then(successCallback, errorCallback);
         };
         utility.OpenFile = function (file, openFileOptions) {
-            if (has(getNavigation, 'openFile')) {
-                getNavigation.openFile(file, openFileOptions);
-            }
+            getNavigation.openFile(file, openFileOptions);
         };
         utility.OpenForm = function (entityFormOptions, formParameters, successCallback, errorCallback) {
-            if (has(getNavigation, 'openForm')) {
-                getNavigation.openForm(entityFormOptions, formParameters).then(successCallback, errorCallback);
-            }
+            getNavigation.openForm(entityFormOptions, formParameters).then(successCallback, errorCallback);
         };
         utility.OpenUrl = function (url, openUrlOptions) {
-            if (has(getNavigation, 'openUrl')) {
-                getNavigation.openUrl(url, openUrlOptions);
-            }
+            getNavigation.openUrl(url, openUrlOptions);
         };
         utility.OpenWebResource = function (webResourceName, windowOptions, data) {
-            if (has(getNavigation, 'openWebResource')) {
-                getNavigation.openWebResource(webResourceName, windowOptions, data);
-            }
+            getNavigation.openWebResource(webResourceName, windowOptions, data);
         };
         utility.NavigateTo = function (pageInput, navigationOptions, successCallback, errorCallback) {
-            if (has(getNavigation, 'navigateTo')) {
-                getNavigation.navigateTo(pageInput, navigationOptions).then(successCallback, errorCallback);
-            }
+            getNavigation.navigateTo(pageInput, navigationOptions).then(successCallback, errorCallback);
         };
-        var getPanel = NULL;
-        if (has(Xrm, 'Panel')) {
-            getPanel = Xrm.Panel;
-        }
+        var getPanel =  Xrm?.Panel;
         utility.LoadPanel = function (url, title) {
-            if (has(getPanel, 'loadPanel')) {
-                getPanel.loadPanel(url, title);
-            }
+            getPanel.loadPanel(url, title);
         };
-        var getEncoding = NULL;
-        if (has(Xrm, 'Encoding')) {
-            getEncoding = Xrm.Encoding;
-        }
+        var getEncoding = Xrm?.Encoding;
         utility.XmlAttributeEncode = function (arg) {
-            if (has(getEncoding, 'xmlAttributeEncode')) {
-                return getEncoding.xmlAttributeEncode(arg);
-            }
-            return arg;
+            return getEncoding.xmlAttributeEncode(arg);
         };
         utility.XmlEncode = function (arg) {
-            if (has(getEncoding, 'xmlEncode')) {
-                return getEncoding.xmlEncode(arg);
-            }
-            return arg;
+            return getEncoding.xmlEncode(arg);
         };
         utility.HtmlAttributeEncode = function (arg) {
-            if (has(getEncoding, 'htmlAttributeEncode')) {
-                return getEncoding.htmlAttributeEncode(arg);
-            }
-            return arg;
+            return getEncoding.htmlAttributeEncode(arg);
         };
         utility.HtmlDecode = function (arg) {
-            if (has(getEncoding, 'htmlDecode')) {
-                return getEncoding.htmlDecode(arg);
-            }
-            return arg;
+            return getEncoding.htmlDecode(arg);
         };
         utility.HtmlEncode = function (arg) {
-            if (has(getEncoding, 'htmlEncode')) {
-                return getEncoding.htmlEncode(arg);
-            }
-            return arg;
+            return getEncoding.htmlEncode(arg);
         };
-        var getDevice = NULL;
-        if (has(Xrm, 'Device')) {
-            getDevice = Xrm.Device;
-        }
+        var getDevice = Xrm?.Device;
         utility.CaptureAudio = function (successCallback, errorCallback) {
-            if (has(getDevice, 'captureAudio')) {
-                getDevice.captureAudio().then(successCallback, errorCallback);
-            }
+            getDevice.captureAudio().then(successCallback, errorCallback);
         };
         utility.CaptureImage = function (imageOptions, successCallback, errorCallback) {
-            if (has(getDevice, 'captureImage')) {
-                getDevice.captureImage(imageOptions).then(successCallback, errorCallback);
-            }
+            getDevice.captureImage(imageOptions).then(successCallback, errorCallback);
         };
         utility.CaptureVideo = function (successCallback, errorCallback) {
-            if (has(getDevice, 'captureVideo')) {
-                getDevice.captureVideo().then(successCallback, errorCallback);
-            }
+            getDevice.captureVideo().then(successCallback, errorCallback);
         };
         utility.BarcodeValue = function (successCallback, errorCallback) {
-            if (has(getDevice, 'getBarcodeValue')) {
-                getDevice.getBarcodeValue().then(successCallback, errorCallback);
-            }
+            getDevice.getBarcodeValue().then(successCallback, errorCallback);
         };
         utility.CurrentPosition = function (successCallback, errorCallback) {
-            if (has(getDevice, 'getCurrentPosition')) {
-                getDevice.getCurrentPosition().then(successCallback, errorCallback);
-            }
+            getDevice.getCurrentPosition().then(successCallback, errorCallback);
         };
         utility.PickFile = function (pickFileOptions, successCallback, errorCallback) {
-            if (has(getDevice, 'pickFile')) {
-                getDevice.pickFile(pickFileOptions).then(successCallback, errorCallback);
-            }
+            getDevice.pickFile(pickFileOptions).then(successCallback, errorCallback);
         };
-        var getApp = NULL;
-        if (has(Xrm, 'App')) {
-            getApp = Xrm.App;
-        }
+        var getApp = Xrm?.App;
         utility.AddGlobalNotification = function (notification, successCallback, errorCallback) {
-            if (has(getApp, 'addGlobalNotification')) {
-                getApp.addGlobalNotification(notification).then(successCallback, errorCallback);
-            }
+            getApp.addGlobalNotification(notification).then(successCallback, errorCallback);
         }
         utility.ClearGlobalNotification = function (uniqueId, successCallback, errorCallback) {
-            if (has(getApp, 'clearGlobalNotification')) {
-                getApp.clearGlobalNotification(uniqueId).then(successCallback, errorCallback);
-            }
+            getApp.clearGlobalNotification(uniqueId).then(successCallback, errorCallback);
         }
         return utility;
     }

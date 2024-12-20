@@ -1,7 +1,7 @@
 import { OptionSet, devKit } from '../lib/devkit.mjs';
 import {
     XrmMockGenerator, ContextMock, UserSettingsMock, ClientContextMock, LookupValueMock, DataMock, EntityMock, ItemCollectionMock, AttributeMock, StringControlMock,
-    StringAttributeMock, UiMock, FormSelectorMock, FormItemMock, FormContextMock, OrganizationSettingsMock, EventContextMock
+    StringAttributeMock, UiMock, FormSelectorMock, FormItemMock, FormContextMock, OrganizationSettingsMock, EventContextMock, PanelMock, EncodingMock
 } from 'xrm-mock';
 beforeAll(() => {
     XrmMockGenerator.initialise();
@@ -224,7 +224,6 @@ describe('devKit', () => {
         expect(() => { form.FormIsVisible("8d2dbd8c-c9f8-4cb5-8838-f5a916a6098b") }).toThrow(new Error("getVisible not implemented."));
     });
     test('devKit.LoadUtility', () => {
-
         var context = new ContextMock({
             clientContext: new ClientContextMock("Web", "Online"),
             clientUrl: "https://clienturl.fake",
@@ -402,5 +401,35 @@ describe('devKit', () => {
         expect(form.Utility.UserSettings.UserId).toBe("DEVKIT-USERID");
         expect(form.Utility.UserSettings.UserName).toBe("DEVKIT-USERNAME")
         expect(() => { form.Utility.UserSettings.TimeZoneOffsetMinutes }).toThrow(new Error("Not implemented"));
+
+        expect(form.Utility.ClientUrl).toBe("https://clienturl.fake");
+        expect(form.Utility.Version).toBe("10.0.0.0");
+
+        expect(form.Utility.OpenAlertDialog(null, null, null, null)).toBeUndefined();
+        expect(form.Utility.OpenConfirmDialog(null, null, null, null)).toBeUndefined();
+        expect(form.Utility.OpenErrorDialog(null, null, null)).toBeUndefined();
+        expect(form.Utility.OpenFile(null, null)).toBeUndefined();
+        expect(form.Utility.OpenForm(null, null, null, null)).toBeUndefined();
+        expect(form.Utility.OpenUrl(null, null)).toBeUndefined();
+        expect(form.Utility.OpenWebResource(null, null, null)).toBeUndefined();
+        expect(form.Utility.NavigateTo(null, null, null, null)).toBeUndefined();
+
+        expect(() => { form.Utility.LoadPanel("url", "title"); }).toThrow(new Error("Not implemented."));
+        expect(() => { form.Utility.XmlAttributeEncode("code"); }).toThrow(new Error("Not implemented"));
+        expect(() => { form.Utility.XmlEncode("code"); }).toThrow(new Error("Not implemented"));
+        expect(() => { form.Utility.HtmlAttributeEncode("code"); }).toThrow(new Error("Not implemented"));
+        expect(() => { form.Utility.HtmlDecode("code"); }).toThrow(new Error("Not implemented"));
+        expect(() => { form.Utility.HtmlEncode("code"); }).toThrow(new Error("Not implemented"));
+
+        expect(() => { form.Utility.CaptureAudio(null, null) }).toThrow(new Error("Not implemented."));
+        expect(() => { form.Utility.CaptureImage(null, null, null) }).toThrow(new Error("Not implemented."));
+        expect(() => { form.Utility.CaptureVideo(null, null) }).toThrow(new Error("Not implemented."));
+        expect(() => { form.Utility.BarcodeValue(null, null) }).toThrow(new Error("Not implemented."));
+        expect(() => { form.Utility.CurrentPosition(null, null) }).toThrow(new Error("Not implemented."));
+        expect(() => { form.Utility.PickFile(null, null, null) }).toThrow(new Error("Not implemented."));
+
+        expect(form.Utility.AddGlobalNotification(null, null, null)).toBeUndefined()
+        expect(form.Utility.ClearGlobalNotification(null, null, null)).toBeUndefined();
+
     });
 });
