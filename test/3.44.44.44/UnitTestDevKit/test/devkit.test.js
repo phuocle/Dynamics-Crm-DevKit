@@ -442,4 +442,24 @@ describe('devKit', () => {
         form.SidePanes.DisplayState = 1;
         expect(form.SidePanes.DisplayState).toBe(1);
     });
+    test('devKit.LoadExecutionContext', () => {
+        var executionContext = XrmMockGenerator.eventContext;
+        var form = {};
+        form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+        expect(form.ExecutionContext.Depth).toBe(1);
+        expect(() => { form.ExecutionContext.EventArgs }).toThrow(new Error("executionContext.getEventArgs is not a function"));
+        expect(() => { form.ExecutionContext.EventSource }).toThrow(new Error("no event source given"));
+        expect(form.ExecutionContext.FormContext).toBeDefined();
+        expect(form.ExecutionContext.GetSharedVariable("A")).toBeUndefined();
+        expect(form.ExecutionContext.SetSharedVariable("A", "B")).toBeUndefined();
+        expect(() => { form.ExecutionContext.SaveMode }).toThrow(new Error("executionContext.getEventArgs is not a function"));
+        expect(() => { form.ExecutionContext.IsDefaultPrevented() }).toThrow(new Error("executionContext.getEventArgs is not a function"));
+        expect(() => { form.ExecutionContext.SetPreventDefault() }).toThrow(new Error("executionContext.getEventArgs is not a function"));
+        expect(() => { form.ExecutionContext.EntityReference }).toThrow(new Error("executionContext.getEventArgs is not a function"));
+        expect(() => { form.ExecutionContext.IsSaveSuccess }).toThrow(new Error("executionContext.getEventArgs is not a function"));
+        expect(() => { form.ExecutionContext.SaveErrorInfo }).toThrow(new Error("executionContext.getEventArgs is not a function"));
+        expect(() => { form.ExecutionContext.SetPreventDefaultOnError() }).toThrow(new Error("executionContext.getEventArgs is not a function"));
+        expect(() => { form.ExecutionContext.DisableAsyncTimeout() }).toThrow(new Error("executionContext.getEventArgs is not a function"));
+        expect(() => { form.ExecutionContext.IsInitialLoad() }).toThrow(new Error("executionContext.getEventArgs is not a function"));
+    });
 });

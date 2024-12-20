@@ -2107,107 +2107,49 @@ var devKit = (function () {
     function loadExecutionContext(executionContext) {
         var obj = {};
         obj.IsInitialLoad = function () {
-            if (has(executionContext, 'getEventArgs')) {
-                return executionContext.getEventArgs().getDataLoadState() === 1;
-            }
-            return EMPTY_BOOL;
+            return executionContext.getEventArgs().getDataLoadState() === 1;
         }
         obj.GetSharedVariable = function (key) {
-            if (has(executionContext, 'getSharedVariable')) {
-                return executionContext.getSharedVariable(key);
-            }
-            return NULL;
+            return executionContext.getSharedVariable(key);
         }
         obj.SetSharedVariable = function (key, value) {
-            if (has(executionContext, 'setSharedVariable')) {
-                return executionContext.setSharedVariable(key, value);
-            }
-            return NULL;
+            return executionContext.setSharedVariable(key, value);
         }
         obj.IsDefaultPrevented = function () {
-            if (has(executionContext, 'getEventArgs')) {
-                return executionContext.getEventArgs().isDefaultPrevented();
-            }
-            return EMPTY_BOOL;
+            return executionContext.getEventArgs().isDefaultPrevented();
         }
         obj.SetPreventDefault = function () {
-            if (has(executionContext, 'getEventArgs')) {
-                executionContext.getEventArgs().preventDefault();
-            }
+            executionContext.getEventArgs().preventDefault();
         }
         obj.SetPreventDefaultOnError = function () {
-            if (has(executionContext, 'getEventArgs')) {
-                executionContext.getEventArgs().preventDefaultOnError();
-            }
+            executionContext.getEventArgs().preventDefaultOnError();
         }
         obj.DisableAsyncTimeout = function () {
-            if (has(executionContext, 'getEventArgs')) {
-                executionContext.getEventArgs().disableAsyncTimeout();
-            }
+            executionContext.getEventArgs().disableAsyncTimeout();
         }
         Object.defineProperty(obj, 'Depth', {
-            get() {
-                if (has(executionContext, 'getDepth')) {
-                    return executionContext.getDepth();
-                }
-                return EMPTY_NUMBER;
-            }
+            get() { return executionContext.getDepth(); }
         });
         Object.defineProperty(obj, 'EventArgs', {
-            get() {
-                if (has(executionContext, 'getEventArgs')) {
-                    return executionContext.getEventArgs();
-                }
-                return {};
-            }
+            get() { return executionContext.getEventArgs(); }
         });
         Object.defineProperty(obj, 'EventSource', {
-            get() {
-                if (has(executionContext, 'getEventSource')) {
-                    return executionContext.getEventSource();
-                }
-                return {};
-            }
+            get() { return executionContext.getEventSource(); }
         });
         Object.defineProperty(obj, 'FormContext', {
-            get() {
-                if (has(executionContext, 'getFormContext')) {
-                    return executionContext.getFormContext();
-                }
-                return {};
-            }
+            get() { return executionContext.getFormContext(); }
         });
         Object.defineProperty(obj, 'SaveMode', {
-            get() {
-                if (has(executionContext, 'getEventArgs')) {
-                    return executionContext.getEventArgs().getSaveMode();
-                }
-                return 1;
-            }
+            get() { return executionContext.getEventArgs().getSaveMode(); }
         });
         Object.defineProperty(obj, 'EntityReference', {
-            get() {
-                if (has(executionContext, 'getEntityReference')) {
-                    return executionContext.getEventArgs().getEntityReference();
-                }
-                return {};
-            }
+            get() { return executionContext.getEventArgs().getEntityReference(); }
         });
         Object.defineProperty(obj, 'IsSaveSuccess', {
-            get() {
-                if (has(executionContext, 'getIsSaveSuccess')) {
-                    return executionContext.getEventArgs().getIsSaveSuccess();
-                }
-                return false;
-            }
+            get() { return executionContext.getEventArgs().getIsSaveSuccess(); }
         });
         Object.defineProperty(obj, 'SaveErrorInfo', {
-            get() {
-                if (has(executionContext, 'getSaveErrorInfo')) {
-                    return executionContext.getEventArgs().getSaveErrorInfo();
-                }
-                return {};
-            }
+            get() { return executionContext.getEventArgs().getSaveErrorInfo(); }
         });
         return obj;
     }
@@ -2234,7 +2176,19 @@ var devKit = (function () {
     function loadOthers(formContext, form, defaultWebResourceName) {
         form.SidePanes = loadSidePanes();
     }
-    function loadFormDialog(executionContext, fields) { }
+    function loadFormDialog(executionContext, fields) {
+        var formContext = executionContext.getFormContext();
+        var form = {};
+        for (var i = 0; i < fields.length; i++) {
+            var field = fields[i];
+            var attribute = formContext.data.attributes.get(field);
+            var control = formContext.getControl(field);
+            form[field] = {};
+            devKit.LoadField(form[field], attribute, control);
+        }
+        form.Close = function () { formContext.ui.close(); };
+        return form;
+    }
     return {
         LoadForm: loadForm,
         LoadProcess: loadProcess,
@@ -2250,21 +2204,6 @@ var devKit = (function () {
         LoadFormDialog: loadFormDialog
     }
 })();
-(function (devKit) {
-    devKit.LoadFormDialog = function (executionContext, fields) {
-        var formContext = executionContext.getFormContext();
-        var form = {};
-        for (var i = 0; i < fields.length; i++) {
-            var field = fields[i];
-            var attribute = formContext.data.attributes.get(field);
-            var control = formContext.getControl(field);
-            form[field] = {};
-            devKit.LoadField(form[field], attribute, control);
-        }
-        form.Close = function () { formContext.ui.close(); };
-        return form;
-    }
-})(devKit || (devKit = {}));
 /** @namespace OptionSet */
 var OptionSet;
 (function (OptionSet) {
