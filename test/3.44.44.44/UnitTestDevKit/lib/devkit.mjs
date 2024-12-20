@@ -1908,49 +1908,21 @@ var devKit = (function () {
         Object.defineProperty(utility, 'Client', {
             get() {
                 var obj = {};
-                var client = NULL;
-                if (has(getGlobalContext, 'client')) {
-                    client = getGlobalContext.client;
-                }
+                var client = getGlobalContext?.client;
                 Object.defineProperty(obj, 'ClientName', {
-                    get() {
-                        if (has(client, 'getClient')) {
-                            return client.getClient();
-                        }
-                        return 'Web';
-                    }
+                    get() { return client.getClient(); }
                 });
                 Object.defineProperty(obj, 'ClientState', {
-                    get() {
-                        if (has(client, 'getClientState')) {
-                            return client.getClientState();
-                        }
-                        return 'Online';
-                    }
+                    get() { return client.getClientState(); }
                 });
                 Object.defineProperty(obj, 'FormFactor', {
-                    get() {
-                        if (has(client, 'getFormFactor')) {
-                            return client.getFormFactor();
-                        }
-                        return EMPTY_NUMBER;
-                    }
+                    get() { return client.getFormFactor(); }
                 });
                 Object.defineProperty(obj, 'IsOffline', {
-                    get() {
-                        if (has(client, 'isOffline')) {
-                            return client.isOffline();
-                        }
-                        return EMPTY_BOOL;
-                    }
+                    get() { return client.isOffline(); }
                 });
                 Object.defineProperty(obj, 'IsNetworkAvailable', {
-                    get() {
-                        if (has(client, 'isNetworkAvailable')) {
-                            return client.isNetworkAvailable();
-                        }
-                        return EMPTY_BOOL;
-                    }
+                    get() { return client.isNetworkAvailable(); }
                 });
                 return obj;
             }
@@ -1958,106 +1930,42 @@ var devKit = (function () {
         Object.defineProperty(utility, 'OrganizationSettings', {
             get() {
                 var obj = {};
-                var organizationSettings = NULL;
-                if (has(getGlobalContext, 'organizationSettings')) {
-                    organizationSettings = getGlobalContext.organizationSettings;
-                }
+                var organizationSettings = getGlobalContext?.organizationSettings;
                 Object.defineProperty(obj, 'Attributes', {
-                    get() {
-                        if (has(organizationSettings, 'attributes')) {
-                            return organizationSettings.attributes;
-                        }
-                        return {};
-                    }
+                    get() { return organizationSettings.attributes; }
                 });
                 Object.defineProperty(obj, 'BaseCurrencyId', {
-                    get() {
-                        if (has(organizationSettings, 'baseCurrencyId')) {
-                            return organizationSettings.baseCurrencyId;
-                        }
-                        return EMPTY_GUID;
-                    }
+                    get() { return organizationSettings.baseCurrencyId; }
                 });
                 Object.defineProperty(obj, 'BaseCurrency', {
-                    get() {
-                        if (has(organizationSettings, 'baseCurrency')) {
-                            return organizationSettings.baseCurrency;
-                        }
-                        return EMPTY_REFERENCE;
-                    }
+                    get() {  return organizationSettings.baseCurrency; }
                 });
-
                 Object.defineProperty(obj, 'DefaultCountryCode', {
-                    get() {
-                        if (has(organizationSettings, 'defaultCountryCode')) {
-                            return organizationSettings.defaultCountryCode;
-                        }
-                        return NULL;
-                    }
+                    get() { return organizationSettings.defaultCountryCode; }
                 });
                 Object.defineProperty(obj, 'IsAutoSaveEnabled', {
-                    get() {
-                        if (has(organizationSettings, 'isAutoSaveEnabled')) {
-                            return organizationSettings.isAutoSaveEnabled;
-                        }
-                        return EMPTY_BOOL;
-                    }
+                    get() { return organizationSettings.isAutoSaveEnabled; }
                 });
                 Object.defineProperty(obj, 'LanguageId', {
-                    get() {
-                        if (has(organizationSettings, 'languageId')) {
-                            return organizationSettings.languageId;
-                        }
-                        return 1033;
-                    }
+                    get() { return organizationSettings.languageId; }
                 });
                 Object.defineProperty(obj, 'OrganizationId', {
-                    get() {
-                        if (has(organizationSettings, 'organizationId')) {
-                            return organizationSettings.organizationId;
-                        }
-                        return EMPTY_STRING;
-                    }
+                    get() { return organizationSettings.organizationId; }
                 });
                 Object.defineProperty(obj, 'IsTrialOrganization', {
-                    get() {
-                        if (has(organizationSettings, 'isTrialOrganization')) {
-                            return organizationSettings.isTrialOrganization;
-                        }
-                        return EMPTY_BOOL;
-                    }
+                    get() { return organizationSettings.isTrialOrganization; }
                 });
                 Object.defineProperty(obj, 'OrganizationExpiryDate', {
-                    get() {
-                        if (has(organizationSettings, 'organizationExpiryDate')) {
-                            return organizationSettings.organizationExpiryDate;
-                        }
-                        return NULL;
-                    }
+                    get() { return organizationSettings.organizationExpiryDate; }
                 });
                 Object.defineProperty(obj, 'UniqueName', {
-                    get() {
-                        if (has(organizationSettings, 'uniqueName')) {
-                            return organizationSettings.uniqueName;
-                        }
-                        return EMPTY_STRING;
-                    }
+                    get() { return organizationSettings.uniqueName; }
                 });
                 Object.defineProperty(obj, 'UseSkypeProtocol', {
-                    get() {
-                        if (has(organizationSettings, 'useSkypeProtocol')) {
-                            return organizationSettings.useSkypeProtocol;
-                        }
-                        return EMPTY_BOOL;
-                    }
+                    get() { return organizationSettings.useSkypeProtocol; }
                 });
                 Object.defineProperty(obj, 'FullNameConventionCode', {
-                    get() {
-                        if (has(organizationSettings, 'fullNameConventionCode')) {
-                            return organizationSettings.fullNameConventionCode;
-                        }
-                        return EMPTY_NUMBER;
-                    }
+                    get() { return organizationSettings.fullNameConventionCode; }
                 });
                 return obj;
             }
@@ -2065,121 +1973,48 @@ var devKit = (function () {
         Object.defineProperty(utility, 'UserSettings', {
             get() {
                 var obj = {};
-                var userSettings = NULL;
-                if (has(getGlobalContext, 'userSettings')) {
-                    userSettings = getGlobalContext.userSettings;
-                }
+                var userSettings = getGlobalContext?.userSettings;
                 Object.defineProperty(obj, 'DateFormattingInfo', {
-                    get() {
-                        if (has(userSettings, 'dateFormattingInfo')) {
-                            return userSettings.dateFormattingInfo;
-                        }
-                        return {};
-                    }
+                    get() { return userSettings.dateFormattingInfo; }
                 });
                 Object.defineProperty(obj, 'DefaultDashboardId', {
-                    get() {
-                        if (has(userSettings, 'defaultDashboardId')) {
-                            return userSettings.defaultDashboardId;
-                        }
-                        return EMPTY_GUID;
-                    }
+                    get() { return userSettings.defaultDashboardId; }
                 });
                 Object.defineProperty(obj, 'IsGuidedHelpEnabled', {
-                    get() {
-                        if (has(userSettings, 'isGuidedHelpEnabled')) {
-                            return userSettings.isGuidedHelpEnabled;
-                        }
-                        return EMPTY_BOOL;
-                    }
+                    get() { return userSettings.isGuidedHelpEnabled; }
                 });
                 Object.defineProperty(obj, 'IsHighContrastEnabled', {
-                    get() {
-                        if (has(userSettings, 'isHighContrastEnabled')) {
-                            return userSettings.isHighContrastEnabled;
-                        }
-                        return EMPTY_BOOL;
-                    }
+                    get() { return userSettings.isHighContrastEnabled; }
                 });
                 Object.defineProperty(obj, 'IsRTL', {
-                    get() {
-                        if (has(userSettings, 'isRTL')) {
-                            return userSettings.isRTL;
-                        }
-                        return EMPTY_BOOL;
-                    }
+                    get() { return userSettings.isRTL; }
                 });
                 Object.defineProperty(obj, 'LanguageId', {
-                    get() {
-                        if (has(userSettings, 'languageId')) {
-                            return userSettings.languageId;
-                        }
-                        return 1033;
-                    }
+                    get() { return userSettings.languageId; }
                 });
                 Object.defineProperty(obj, 'Roles', {
-                    get() {
-                        if (has(userSettings, 'roles')) {
-                            return userSettings.roles;
-                        }
-                        return [];
-                    }
+                    get() { return userSettings.roles; }
                 });
                 Object.defineProperty(obj, 'SecurityRolePrivileges', {
-                    get() {
-                        if (has(userSettings, 'securityRolePrivileges')) {
-                            return userSettings.securityRolePrivileges;
-                        }
-                        return [];
-                    }
+                    get() { return userSettings.securityRolePrivileges; }
                 });
                 Object.defineProperty(obj, 'SecurityRoles', {
-                    get() {
-                        if (has(userSettings, 'securityRoles')) {
-                            return userSettings.securityRoles;
-                        }
-                        return [];
-                    }
+                    get() { return userSettings.securityRoles; }
                 });
                 Object.defineProperty(obj, 'TransactionCurrency', {
-                    get() {
-                        if (has(userSettings, 'transactionCurrency')) {
-                            return userSettings.transactionCurrency;
-                        }
-                        return EMPTY_REFERENCE;
-                    }
+                    get() { return userSettings.transactionCurrency; }
                 });
                 Object.defineProperty(obj, 'TransactionCurrencyId', {
-                    get() {
-                        if (has(userSettings, 'transactionCurrencyId')) {
-                            return userSettings.transactionCurrencyId;
-                        }
-                        return EMPTY_STRING;
-                    }
+                    get() { return userSettings.transactionCurrencyId; }
                 });
                 Object.defineProperty(obj, 'UserId', {
-                    get() {
-                        if (has(userSettings, 'userId')) {
-                            return userSettings.userId;
-                        }
-                        return EMPTY_STRING;
-                    }
+                    get() { return userSettings.userId; }
                 });
                 Object.defineProperty(obj, 'UserName', {
-                    get() {
-                        if (has(userSettings, 'userName')) {
-                            return userSettings.userName;
-                        }
-                        return EMPTY_STRING;
-                    }
+                    get() { return userSettings.userName; }
                 });
                 Object.defineProperty(obj, 'TimeZoneOffsetMinutes', {
-                    get() {
-                        if (has(userSettings, 'getTimeZoneOffsetMinutes')) {
-                            return userSettings.getTimeZoneOffsetMinutes();
-                        }
-                        return EMPTY_NUMBER;
-                    }
+                    get() { return userSettings.getTimeZoneOffsetMinutes(); }
                 });
                 return obj;
             }
