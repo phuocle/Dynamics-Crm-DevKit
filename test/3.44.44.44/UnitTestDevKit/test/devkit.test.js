@@ -223,4 +223,20 @@ describe('devKit', () => {
         expect(() => { form.FormSetVisible("8d2dbd8c-c9f8-4cb5-8838-f5a916a6098b", false) }).toThrow(new Error("setVisible not implemented."));
         expect(() => { form.FormIsVisible("8d2dbd8c-c9f8-4cb5-8838-f5a916a6098b") }).toThrow(new Error("getVisible not implemented."));
     });
+    test('devKit.LoadForm', () => {
+
+        var form = {};
+        form.Utility = devKit.LoadUtility("web-resource-language");
+        expect(() => { form.Utility.LearningPathAttributeName }).toThrow(new Error("Method not implemented."));
+        expect(() => { form.Utility.ShowProgressIndicator("Waiting") }).toThrow(new Error("Method not implemented."));
+        expect(() => { form.Utility.CloseProgressIndicator() }).toThrow(new Error("Method not implemented."));
+        expect(() => { form.Utility.EntityMetadata("devkit_webapi", null, null, null) }).toThrow(new Error("Method not implemented."));
+        expect(() => { form.Utility.ResourceString("resourcename", "key") }).toThrow(new Error("Method not implemented."));
+        expect(() => { form.Utility.AllowedStatusTransitions(null, null, null, null) }).toThrow(new Error("Method not implemented."));
+        expect(() => { form.Utility.Resource(null) }).toThrow(new Error("Method not implemented."));
+        expect(() => { form.Utility.InvokeProcessAction("name", null, null, null) }).toThrow(new Error("Method not implemented."));
+        expect(() => { form.Utility.LookupObjects(null, null, null); }).toThrow(new Error("Method not implemented."));
+        expect(() => { form.Utility.RefreshParentGrid(null) }).toThrow(new Error("Method not implemented."));
+        expect(() => { form.Utility.PageContext }).toThrow(new Error("Method not implemented."));
+    });
 });

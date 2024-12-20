@@ -1421,6 +1421,24 @@ declare namespace DevKit {
         /** The type of operation for the privilege */
         readonly PrivilegeType: OptionSet.PrivilegeType
     }
+    interface EntityMainFormDescriptor {
+        /** List of all the columns on the main form.*/
+        readonly Attributes: Array<string>;
+        /** The logical name of the specified table. */
+        readonly EntityLogicalName: string;
+        /** The form ID of the specified table. */
+        readonly Id: string;
+        /** The label of the specified table. */
+        readonly Label: string;
+        /** The display name of the specified table. */
+        readonly Name: string;
+        /** The sections name of the specified table. */
+        readonly Sections: string;
+        /** Indicates whether to show the label of the specified table or not. */
+        readonly ShowLabel: boolean;
+        /** Indicates whether the form is visible or not. */
+        readonly Visible: boolean;
+    }
     interface EntityMetadata {
         /** Whether a custom activity should appear in the activity menus in the Web application. 0 indicates that the custom activity doesn't appear; 1 indicates that it does appear */
         readonly ActivityTypeMask: number;
@@ -1842,7 +1860,7 @@ declare namespace DevKit {
          * @param formId The form ID of the entity.
          * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-utility/getentitymainformdescriptor
          */
-        EntityMainFormDescriptor(entityName: string, formId: string): any;
+        EntityMainFormDescriptor(entityName: string, formId: string): DevKit.EntityMainFormDescriptor;
         /**
          * Invokes the device camera to scan the barcode information, such as a product number. Note: This method is supported only for the mobile clients.
          * @param successCallback A function to call when the barcode value is returned as a String.

@@ -1849,111 +1849,61 @@ var devKit = (function () {
     }
     function loadUtility(defaultWebResourceName) {
         var utility = {};
-        var getUtility = NULL;
-        if (has(Xrm, 'Utility')) {
-            getUtility = Xrm.Utility;
-        }
+        var getUtility = Xrm?.Utility;
         utility.CloseProgressIndicator = function () {
-            if (has(getUtility, 'closeProgressIndicator')) {
-                getUtility.closeProgressIndicator();
-            }
+            getUtility.closeProgressIndicator();
         };
         utility.AllowedStatusTransitions = function (entityName, stateCode, successCallback, errorCallback) {
-            if (has(getUtility, 'getAllowedStatusTransitions')) {
-                getUtility.getAllowedStatusTransitions(entityName, stateCode).then(successCallback, errorCallback);
-            }
+            getUtility.getAllowedStatusTransitions(entityName, stateCode).then(successCallback, errorCallback);
         };
         utility.EntityMainFormDescriptor = function (entityName, formId) {
-            if (has(getUtility, 'getEntityMainFormDescriptor')) {
-                return getUtility.getEntityMainFormDescriptor(entityName, formId);
-            }
-            return NULL;
+            return getUtility.getEntityMainFormDescriptor(entityName, formId);
         };
         utility.EntityMetadata = function (entityName, attributes, successCallback, errorCallback) {
-            if (has(getUtility, 'getEntityMetadata')) {
-                getUtility.getEntityMetadata(entityName, attributes).then(successCallback, errorCallback);
-            }
+            getUtility.getEntityMetadata(entityName, attributes).then(successCallback, errorCallback);
         };
         utility.ResourceString = function (webResourceName, key) {
-            if (has(getUtility, 'getResourceString')) {
-                return getUtility.getResourceString(webResourceName, key);
-            }
+            return getUtility.getResourceString(webResourceName, key);
         };
         utility.Resource = function (key) {
             if (!isNullOrUndefined(defaultWebResourceName)) {
-                if (has(getUtility, 'getResourceString')) {
-                    return getUtility.getResourceString(defaultWebResourceName, key);
-                }
+                return getUtility.getResourceString(defaultWebResourceName, key);
             }
             return EMPTY_STRING;
         };
         utility.InvokeProcessAction = function (name, parameters, successCallback, errorCallback) {
-            if (has(getUtility, 'invokeProcessAction')) {
-                getUtility.invokeProcessAction(name, parameters).then(successCallback, errorCallback);
-            }
+            getUtility.invokeProcessAction(name, parameters).then(successCallback, errorCallback);
         };
         utility.LookupObjects = function (lookupOptions, successCallback, errorCallback) {
-            if (has(getUtility, 'lookupObjects')) {
-                getUtility.lookupObjects(lookupOptions).then(successCallback, errorCallback);
-            }
+            getUtility.lookupObjects(lookupOptions).then(successCallback, errorCallback);
         };
         utility.RefreshParentGrid = function (lookupOptions) {
-            if (has(getUtility, 'refreshParentGrid')) {
-                getUtility.refreshParentGrid(lookupOptions);
-            }
+            getUtility.refreshParentGrid(lookupOptions);
         };
         utility.ShowProgressIndicator = function (message) {
-            if (has(getUtility, 'showProgressIndicator')) {
-                getUtility.showProgressIndicator(message);
-            }
+            getUtility.showProgressIndicator(message);
         };
         Object.defineProperty(utility, 'LearningPathAttributeName', {
-            get() {
-                if (has(getUtility, 'getLearningPathAttributeName')) {
-                    return getUtility.getLearningPathAttributeName();
-                }
-                return EMPTY_STRING;
-            }
+            get() { return getUtility.getLearningPathAttributeName(); }
         });
         Object.defineProperty(utility, 'PageContext', {
-            get() {
-                if (has(getUtility, 'getPageContext')) {
-                    return getUtility.getPageContext();
-                }
-                return NULL;
-            }
+            get() { return getUtility.getPageContext(); }
         });
-        var getGlobalContext = NULL;
-        if (has(Xrm, 'Utility.getGlobalContext')) {
-            getGlobalContext = Xrm.Utility.getGlobalContext();
-        }
+        var getGlobalContext = Xrm?.Utility?.getGlobalContext();
         utility.AdvancedConfigSetting = function (setting) {
-            if (has(getGlobalContext, 'getAdvancedConfigSetting')) {
-                return getGlobalContext.getAdvancedConfigSetting(setting);
-            }
-            return EMPTY_NUMBER;
+            return getGlobalContext.getAdvancedConfigSetting(setting);
         };
         utility.CurrentAppName = function (successCallback, errorCallback) {
-            if (has(getGlobalContext, 'getCurrentAppName')) {
-                getGlobalContext.getCurrentAppName().then(successCallback, errorCallback);
-            }
+            getGlobalContext.getCurrentAppName().then(successCallback, errorCallback);
         };
         utility.CurrentAppProperties = function (successCallback, errorCallback) {
-            if (has(getGlobalContext, 'getCurrentAppProperties')) {
-                getGlobalContext.getCurrentAppProperties().then(successCallback, errorCallback);
-            }
+            getGlobalContext.getCurrentAppProperties().then(successCallback, errorCallback);
         };
         utility.WebResourceUrl = function (webResourceName) {
-            if (has(getGlobalContext, 'getWebResourceUrl')) {
-                return getGlobalContext.getWebResourceUrl(webResourceName);
-            }
-            return EMPTY_STRING;
+            return getGlobalContext.getWebResourceUrl(webResourceName);
         };
         utility.PrependOrgName = function (sPath) {
-            if (has(getGlobalContext, 'prependOrgName')) {
-                return getGlobalContext.prependOrgName(sPath);
-            }
-            return EMPTY_STRING;
+            return getGlobalContext.prependOrgName(sPath);
         };
         Object.defineProperty(utility, 'Client', {
             get() {
@@ -2235,41 +2185,18 @@ var devKit = (function () {
             }
         });
         Object.defineProperty(utility, 'ClientUrl', {
-            get() {
-                if (has(getGlobalContext, 'getClientUrl')) {
-                    return getGlobalContext.getClientUrl();
-                }
-                return EMPTY_STRING;
-            }
+            get() { return getGlobalContext.getClientUrl(); }
         });
         Object.defineProperty(utility, 'CurrentAppUrl', {
-            get() {
-                if (has(getGlobalContext, 'getCurrentAppUrl')) {
-                    return getGlobalContext.getCurrentAppUrl();
-                }
-                return EMPTY_STRING;
-            }
+            get() { return getGlobalContext.getCurrentAppUrl(); }
         });
         Object.defineProperty(utility, 'Version', {
-            get() {
-                if (has(getGlobalContext, 'getVersion')) {
-                    return getGlobalContext.getVersion();
-                }
-                return EMPTY_STRING;
-            }
+            get() { return getGlobalContext.getVersion(); }
         });
         Object.defineProperty(utility, 'IsOnPremises', {
-            get() {
-                if (has(getGlobalContext, 'isOnPremises')) {
-                    return getGlobalContext.isOnPremises();
-                }
-                return EMPTY_BOOL;
-            }
+            get() { return getGlobalContext.isOnPremises(); }
         });
-        var getNavigation = NULL;
-        if (has(Xrm, 'Navigation')) {
-            getNavigation = Xrm.Navigation;
-        }
+        var getNavigation = Xrm?.Navigation;
         utility.OpenAlertDialog = function (alertStrings, alertOptions, closeCallback, errorCallback) {
             if (has(getNavigation, 'openAlertDialog')) {
                 getNavigation.openAlertDialog(alertStrings, alertOptions).then(closeCallback, errorCallback);
