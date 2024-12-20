@@ -2226,12 +2226,8 @@ var devKit = (function () {
             return Xrm.App.sidePanes.getAllPanes();
         }
         Object.defineProperty(sidePanes, 'DisplayState', {
-            get() {
-                return Xrm.App.sidePanes.state;
-            },
-            set: function (value) {
-                Xrm.App.sidePanes.state = value;
-            }
+            get() { return Xrm.App.sidePanes.state;},
+            set(value) { Xrm.App.sidePanes.state = value; }
         });
         return sidePanes;
     }
