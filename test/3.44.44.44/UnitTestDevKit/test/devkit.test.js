@@ -1,7 +1,8 @@
 import { OptionSet, devKit } from '../lib/devkit.mjs';
 import {
     XrmMockGenerator, ContextMock, UserSettingsMock, ClientContextMock, LookupValueMock, DataMock, EntityMock, ItemCollectionMock, AttributeMock, StringControlMock,
-    StringAttributeMock, UiMock, FormSelectorMock, FormItemMock, FormContextMock, OrganizationSettingsMock, EventContextMock, PanelMock, EncodingMock
+    StringAttributeMock, UiMock, FormSelectorMock, FormItemMock, FormContextMock, OrganizationSettingsMock, EventContextMock, StageMock, StepMock, ProcessControlMock,
+    UiCanGetVisibleElementMock, UiCanSetVisibleElementMock, ProcessMock, ProcessManagerMock
 } from 'xrm-mock';
 beforeAll(() => {
     XrmMockGenerator.initialise();
@@ -461,5 +462,91 @@ describe('devKit', () => {
         expect(() => { form.ExecutionContext.SetPreventDefaultOnError() }).toThrow(new Error("executionContext.getEventArgs is not a function"));
         expect(() => { form.ExecutionContext.DisableAsyncTimeout() }).toThrow(new Error("executionContext.getEventArgs is not a function"));
         expect(() => { form.ExecutionContext.IsInitialLoad() }).toThrow(new Error("executionContext.getEventArgs is not a function"));
+    });
+    test('devKit.LoadProcess', () => {
+        //setup
+        var stage1 = new StageMock("stage1", "Stage 1", OptionSet.ProcessStatus.Active, OptionSet.ProcessCategory.Identify, [
+            new StepMock("Stage1Step_AccountName", "name", true),
+            new StepMock("Stage1Step_IndustryCode", "industrycode", false)
+        ]);
+        var stage2 = new StageMock("stage2", "Stage 2", OptionSet.ProcessStatus.Active, OptionSet.ProcessCategory.Develop, [
+            new StepMock("Stage2Step_NumberOfEmployees", "numberofemployees", false),
+            new StepMock("Stage2Step_AnnualRevenue", "revenue", false),
+        ]);
+        var stage3 = new StageMock("stage3", "Stage 3", OptionSet.ProcessStatus.Active, OptionSet.ProcessCategory.Close, [
+            new StepMock("Stage3Step_Owner", "owner", false)
+        ]);
+        var processControl = new ProcessControlMock("expanded", new UiCanGetVisibleElementMock(true), new UiCanSetVisibleElementMock());
+        var process_BPFAccount = new ProcessMock({ id: "devkit_bpfaccount", name: "BPF Account", rendered: true, stages: new ItemCollectionMock([stage1, stage2, stage3]) });
+        var process = new ProcessManagerMock([process_BPFAccount]);
+        var ui = new UiMock({
+            process: processControl
+        });
+        XrmMockGenerator.initialise({ process: process, ui: ui });
+        //run
+        var process = devKit.LoadProcess(XrmMockGenerator.formContext);
+        var _BPF_Account = {
+            Name: {},
+            Name_1: {}
+        }
+        devKit.LoadFields(XrmMockGenerator.formContext, _BPF_Account, "header_process_");
+        process.BPF_Account = _BPF_Account;
+        var form = {};
+        form.Process = process;
+        //test
+        expect(() => { form.Process.AddOnPreProcessStatusChange(null) }).toThrow(new Error("Method not implemented."));
+        expect(() => { form.Process.AddOnPreStageChange(null) }).toThrow(new Error("Method not implemented."));
+        expect(() => { form.Process.RemoveOnPreProcessStatusChange(null) }).toThrow(new Error("Method not implemented."));
+        expect(() => { form.Process.AddOnProcessStatusChange(null) }).toThrow(new Error("add on process status change not implemented."));
+        expect(() => { form.Process.RemoveOnProcessStatusChange(null) }).toThrow(new Error("remove on process status change not implemented."));
+        expect(() => { form.Process.AddOnStageChange(null) }).toThrow(new Error("add on stage change not implemented"));
+        expect(() => { form.Process.RemoveOnStageChange(null) }).toThrow(new Error("remove on stage change not implemented"));
+        expect(() => { form.Process.RemoveOnPreStageChange(null) }).toThrow(new Error("Method not implemented."));
+        expect(() => { form.Process.AddOnStageSelected(null) }).toThrow(new Error("add on stage selected not implemented"));
+        expect(() => { form.Process.RemoveOnStageSelected(null) }).toThrow(new Error("remove on stage selected not implemented"));
+        form.Process.EnabledProcesses(function (process) { expect(process.length).toBe(1); });
+        expect(() => { form.Process.MoveNext(null) }).toThrow(new Error("move next not implemented"));
+        expect(() => { form.Process.MovePrevious(null) }).toThrow(new Error("move previous not implemented"));
+        expect(() => { form.Process.ProcessInstances(null) }).toThrow(new Error("get process instances not implemented."));
+        expect(form.Process.SetActiveStage("stage1", null)).toBeUndefined();
+        expect(() => { form.Process.SetActiveProcessInstance(null, null) }).toThrow(new Error("set active process instance not implemented."));
+        expect(form.Process.SetActiveProcess(null, null)).toBeUndefined();
+        expect(() => { form.Process.Reflow(null, null, null) }).toThrow(new Error("Not implemented."));
+        expect(form.Process.ActiveProcess.Id).toBe("devkit_bpfaccount");
+        expect(form.Process.ActiveProcess.Name).toBe("BPF Account");
+        expect(form.Process.ActiveProcess.IsRendered).toBeTruthy();
+        expect(form.Process.ActiveProcess.Stages.getLength()).toBe(3);
+        var s1 = form.Process.ActiveProcess.Stages.get(0);
+        form.Process.ActiveProcess.Stages.forEach(function (stage, index) { expect(stage).toBeDefined(); });
+        expect(() => { s1.AllowCreateNew(function () { return true; }) }).toThrow(new Error("getNavigationBehavior not implemented"));
+        expect(s1.Category).toBe(OptionSet.ProcessCategory.Identify);
+        expect(() => { s1.EntityName }).toThrow(new Error("get entity name not implemented"));
+        expect(s1.Id).toBe("stage1");
+        expect(s1.Name).toBe("Stage 1");
+        expect(s1.Status).toBe("active");
+        expect(s1.Steps.length).toBe(2);
+        var ss1 = s1.Steps[0];
+        expect(ss1.Attribute).toBe("name");
+        expect(ss1.Name).toBe("Stage1Step_AccountName");
+        expect(ss1.Required).toBeTruthy();
+        expect(() => { ss1.Progress }).toThrow(new Error("getProgress not implemented"));
+        expect(() => { ss1.SetProgress(null, null) }).toThrow(new Error("setProgress not implemented"));
+        expect(() => { form.Process.ProcessInstances(function (processes) { ; }) }).toThrow(new Error("get process instances not implemented."));
+        expect(() => { form.Process.SelectedStage }).toThrow(new Error("get selected not implemented"));
+        var activeStage = form.Process.ActiveStage;
+        expect(activeStage.Name).toBe("Stage 1");
+        expect(form.Process.InstanceId).toBe("devkit_bpfaccount");
+        expect(form.Process.InstanceName).toBe("BPF Account");
+        expect(() => { form.Process.Status }).toThrow(new Error("get status not implemented."));
+        expect(() => { form.Process.Status = OptionSet.ProcessStatus.Finished }).toThrow(new Error("set status not implemented."));
+        expect(form.Process.DisplayState).toBe(OptionSet.ProcessDisplayState.Expanded);
+        form.Process.DisplayState = OptionSet.ProcessDisplayState.Collapsed;
+        expect(form.Process.DisplayState).toBe(OptionSet.ProcessDisplayState.Collapsed);
+        expect(form.Process.Visible).toBeTruthy();
+        expect(() => { form.Process.Visible = false; }).toThrow(new Error("Method not implemented."));
+        expect(form.Process.ActivePath).toBeDefined();
+        expect(() => { form.Process.ActivePath.getLength() }).toThrow(new Error("get active path not implemented"));
+        expect(() => { form.Process.ActivePath.get(0) }).toThrow(new Error("get active path not implemented"));
+        expect(() => { form.Process.ActivePath.forEach(function (stage, index) {});}).toThrow(new Error("get active path not implemented"));
     });
 });
