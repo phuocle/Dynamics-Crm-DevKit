@@ -83,9 +83,7 @@ var devKit = (function () {
         });
         var contextUi = formContext.ui;
         form.UiAddLoaded = function (callback) {
-            if (has(contextUi, 'addLoaded')) {
-                contextUi.addLoaded(callback);
-            }
+            contextUi.addLoaded(callback);
         };
         form.UiAddOnLoad = function (callback) {
             contextUi.addOnLoad(callback);
@@ -100,9 +98,7 @@ var devKit = (function () {
             contextUi.refreshRibbon(refreshAll);
         };
         form.UiRemoveLoaded = function (callback) {
-            if (has(contextUi, 'removeLoaded')) {
-                contextUi.removeLoaded(callback);
-            }
+            contextUi.removeLoaded(callback);
         };
         form.UiRemoveOnLoad = function (callback) {
             contextUi.removeOnLoad(callback);
@@ -125,16 +121,11 @@ var devKit = (function () {
         Object.defineProperty(form, 'ViewPortWidth', {
             get() { return contextUi.getViewPortWidth(); }
         });
-        var contextUiFormSelector = formContext.ui.formSelector;
+        var contextUiFormSelector = formContext?.ui?.formSelector;
         form.FormNavigateToFormId = function (formId) {
-            if (has(contextUiFormSelector, 'items')) {
-                for (var i = 0; i < contextUiFormSelector.items.getLength(); i++) {
-                    if (formId === contextUiFormSelector.items.get(i).getId()) {
-                        var form = contextUiFormSelector.items.get(i)
-                        if (has(form, 'navigate')) {
-                            form.navigate();
-                        }
-                    }
+            for (var i = 0; i < contextUiFormSelector?.items?.getLength(); i++) {
+                if (formId === contextUiFormSelector?.items?.get(i)?.getId()) {
+                    contextUiFormSelector?.items?.get(i)?.navigate();
                 }
             }
         };
@@ -147,27 +138,16 @@ var devKit = (function () {
             }
         };
         form.FormIsVisible = function (formId) {
-            if (has(contextUiFormSelector, 'items')) {
-                for (var i = 0; i < contextUiFormSelector.items.getLength(); i++) {
-                    if (formId === contextUiFormSelector.items.get(i).getId()) {
-                        var form = contextUiFormSelector.items.get(i)
-                        if (has(form, 'getVisible')) {
-                            return form.getVisible();
-                        }
-                    }
+            for (var i = 0; i < contextUiFormSelector.items.getLength(); i++) {
+                if (formId === contextUiFormSelector.items.get(i).getId()) {
+                    return contextUiFormSelector.items.get(i).getVisible();
                 }
             }
-            return EMPTY_BOOL;
         }
         form.FormSetVisible = function (formId, value) {
-            if (has(contextUiFormSelector, 'items')) {
-                for (var i = 0; i < contextUiFormSelector.items.getLength(); i++) {
-                    if (formId === contextUiFormSelector.items.get(i).getId()) {
-                        var form = contextUiFormSelector.items.get(i)
-                        if (has(form, 'setVisible')) {
-                            form.setVisible(value);
-                        }
-                    }
+            for (var i = 0; i < contextUiFormSelector.items.getLength(); i++) {
+                if (formId === contextUiFormSelector.items.get(i).getId()) {
+                    contextUiFormSelector.items.get(i).setVisible(value);
                 }
             }
         }

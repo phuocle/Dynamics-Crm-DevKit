@@ -148,12 +148,20 @@ describe('devKit', () => {
             label: "Account Name"
         });
         var ui = new UiMock({
-            formSelector: new FormSelectorMock(new ItemCollectionMock([new FormItemMock({
-                id: "8d2dbd8c-c9f8-4cb5-8838-f5a916a6098a",
-                label: "Account",
-                currentItem: true,
-                formType: OptionSet.FormType.Update
-            })])),
+            formSelector: new FormSelectorMock(new ItemCollectionMock([
+                new FormItemMock({
+                    id: "8d2dbd8c-c9f8-4cb5-8838-f5a916a6098a",
+                    label: "Account",
+                    currentItem: true,
+                    formType: OptionSet.FormType.Update
+                }),
+                new FormItemMock({
+                    id: "8d2dbd8c-c9f8-4cb5-8838-f5a916a6098b",
+                    label: "Contact",
+                    currentItem: false,
+                    formType: OptionSet.FormType.Create
+                })
+            ])),
             controls: new ItemCollectionMock([
                 stringControl
             ])
@@ -202,12 +210,17 @@ describe('devKit', () => {
         expect(() => { form.ViewPortWidth }).toThrow(new Error("getViewPortWidth not implemented"));
         expect(() => { form.UiAddOnLoad(null) }).toThrow(new Error("addOnLoad not implemented"));
         expect(() => { form.UiRemoveOnLoad(null) }).toThrow(new Error("removeOnLoad not implemented"));
+        expect(() => { form.UiAddLoaded(null) }).toThrow(new Error("addLoaded not implemented"));
+        expect(() => { form.UiRemoveLoaded(null) }).toThrow(new Error("removeLoaded not implemented"));
         expect(form.Controls).toBeDefined();
         expect(form.FormId).toBe("8d2dbd8c-c9f8-4cb5-8838-f5a916a6098a");
         expect(form.FormLabel).toBe("Account");
         expect(() => { form.SetFormEntityName(null); }).toThrow(new Error("setFormEntityName not implemented"));
         expect(() => { form.Close() }).toThrow(new Error("close not implemented"));
         expect(() => { form.RefreshRibbon() }).toThrow(new Error("refreshRibbon not implemented"));
-        expect(() => { form.FormNavigateToFormLabel("Account") }).toThrow(new Error("Form navigation not implemented."));
+        expect(() => { form.FormNavigateToFormLabel("Contact") }).toThrow(new Error("Form navigation not implemented."));
+        expect(() => { form.FormNavigateToFormId("8d2dbd8c-c9f8-4cb5-8838-f5a916a6098b") }).toThrow(new Error("Form navigation not implemented."));
+        expect(() => { form.FormSetVisible("8d2dbd8c-c9f8-4cb5-8838-f5a916a6098b", false) }).toThrow(new Error("setVisible not implemented."));
+        expect(() => { form.FormIsVisible("8d2dbd8c-c9f8-4cb5-8838-f5a916a6098b") }).toThrow(new Error("getVisible not implemented."));
     });
 });
