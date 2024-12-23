@@ -2,7 +2,8 @@ import { OptionSet, devKit } from '../lib/devkit.mjs';
 import {
     XrmMockGenerator, ContextMock, UserSettingsMock, ClientContextMock, LookupValueMock, DataMock, EntityMock, ItemCollectionMock, AttributeMock, StringControlMock,
     StringAttributeMock, UiMock, FormSelectorMock, FormItemMock, FormContextMock, OrganizationSettingsMock, EventContextMock, StageMock, StepMock, ProcessControlMock,
-    UiCanGetVisibleElementMock, UiCanSetVisibleElementMock, ProcessMock, ProcessManagerMock
+    UiCanGetVisibleElementMock, UiCanSetVisibleElementMock, ProcessMock, ProcessManagerMock, LookupAttributeMock, LookupControlMock, OptionSetAttributeMock,
+    QuickFormControlMock, GridControlMock, GridRowDataMock, GridRowMock, GridMock, RelationshipMock, ViewSelectorMock, IframeControlMock
 } from 'xrm-mock';
 beforeAll(() => {
     XrmMockGenerator.initialise();
@@ -548,5 +549,460 @@ describe('devKit', () => {
         expect(() => { form.Process.ActivePath.getLength() }).toThrow(new Error("get active path not implemented"));
         expect(() => { form.Process.ActivePath.get(0) }).toThrow(new Error("get active path not implemented"));
         expect(() => { form.Process.ActivePath.forEach(function (stage, index) {});}).toThrow(new Error("get active path not implemented"));
+    });
+    test('devKit.LoadField', () => {
+        //setup
+        XrmMockGenerator.Attribute.createString({
+            attributeType: "string",
+            format: "text",
+            isDirty: true,
+            name: "name",
+            requiredLevel: "required",
+            value: "LE VAN PHUOC",
+            maxLength: 100,
+            submitMode: "always"
+        },
+            [
+                {
+                    controlType: "standard",
+                    disabled: true,
+                    label: "Account Name",
+                    name: "name",
+                    visible: true
+                },
+                {
+                    controlType: "standard",
+                    disabled: true,
+                    label: "Account Name 2",
+                    name: "name1",
+                    visible: false
+                }
+            ]
+        );
+        const lookup = XrmMockGenerator.Control.createLookup(new LookupControlMock({
+            name: "primarycontactid",
+            attribute: new LookupAttributeMock({
+                name: "primarycontactid",
+                isPartyList: false,
+                value: [new LookupValueMock("8d2dbd8c-c9f8-4cb5-8838-f5a916a6098a", "contact", "NGUYEN VAN MINH")]
+            }),
+            views: [
+                {
+                    entityName: "contact",
+                    fetchXml: "<fetchxml/>",
+                    layoutXml: "<layoutxml/>",
+                    viewDisplayName: "Active Contacts",
+                    viewId: "DefaultViewId",
+                    isDefault: true
+                },
+                {
+                    entityName: "contact",
+                    fetchXml: "<fetchxml2/>",
+                    layoutXml: "<layoutxml2/>",
+                    viewDisplayName: "All Contacts",
+                    viewId: "DefaultViewId2",
+                    isDefault: false
+                }
+            ],
+            disabled: false,
+            label: "Primary Contact",
+            visible: true
+        }));
+        XrmMockGenerator.Attribute.createDate("createdon", new Date());
+        XrmMockGenerator.Attribute.createDate("modifiedon", new Date());
+        XrmMockGenerator.Control.createOptionSet({
+            name: "industrycode",
+            disabled: true,
+            label: "Industry",
+            visible: true,
+            attribute: new OptionSetAttributeMock({
+                name: "industrycode",
+                options: [
+                    { text: "Accounting", value: 1 },
+                    { text: "Brokers", value: 4 },
+                    { text: "Consulting", value: 7 },
+                    { text: "Entertainment_Retail", value: 14 },
+                    { text: "Financial", value: 16 },
+                    { text: "Insurance", value: 20 }
+                ]
+            }),
+            options: [
+                { text: "Accounting", value: 1 },
+                { text: "Brokers", value: 4 },
+                { text: "Consulting", value: 7 },
+                { text: "Entertainment_Retail", value: 14 },
+                { text: "Financial", value: 16 },
+                { text: "Insurance", value: 20 }
+            ]
+        });
+        XrmMockGenerator.Control.createLookup(new LookupControlMock({
+            name: "to",
+            attribute: new LookupAttributeMock({
+                name: "to",
+                isPartyList: true
+            })
+        }));
+        var executionContext = XrmMockGenerator.formContext;
+        //run
+        var body = {
+            Name: {},
+            Name1: {},
+            PrimaryContactId: {},
+            CreatedOn: {},
+            ModifiedOn: {},
+            IndustryCode: {},
+            to: {}
+        };
+        devKit.LoadFields(executionContext, body);
+        var form = {};
+        form.Body = body;
+        //test
+        form.Body.Name.AddNotification({  messages: ["ABC"], notificationLevel: OptionSet.FieldNotificationLevel.Error, uniqueId: "123", actions: [] });
+        expect("form.Body.Name.AddNotification").toBe("form.Body.Name.AddNotification");
+        form.Body.Name.ClearNotification("123");
+        expect("form.Body.Name.ClearNotification").toBe("form.Body.Name.ClearNotification");
+        expect(form.Body.Name.Attribute).toBeDefined();
+        expect(form.Body.Name.ControlType).toBe(OptionSet.FieldControlType.Standard);
+        expect(form.Body.Name.Disabled).toBeTruthy();
+        expect(form.Body.Name.Label).toBe("Account Name");
+        expect(form.Body.Name.ControlName).toBe("name");
+        expect(form.Body.Name1.ControlName).toBe("name1");
+        expect(form.Body.Name1.Value).toBe("LE VAN PHUOC");
+        expect(form.Body.Name.ControlParent).toBeUndefined();
+        expect(form.Body.Name1.Visible).toBeFalsy();
+        form.Body.Name.Disabled = false;
+        expect(form.Body.Name.Disabled).toBeFalsy();
+        expect(form.Body.Name.Focus()).toBeUndefined();
+        form.Body.Name.Label = "Account Name New";
+        expect(form.Body.Name.Label).toBe("Account Name New");
+        form.Body.Name.SetNotification("Field Notification", "uniqueId");
+        expect("form.Body.Name.SetNotification").toBe("form.Body.Name.SetNotification");
+        form.Body.Name.Visible = false;
+        expect(form.Body.Name.Visible).toBeFalsy();
+
+        expect(lookup.filters.length).toBe(0);
+        var abc_LookupAddPreSearch = () => {
+            var filter = `
+<filter type="and">
+<condition attribute="name" operator="eq" value="name" />
+</filter>
+`;
+            form.Body.PrimaryContactId.AddCustomFilter(filter, "contact");
+        }
+        var ab_AddLookupTagClick = () => { };
+        form.Body.PrimaryContactId.AddPreSearch(abc_LookupAddPreSearch);
+        abc_LookupAddPreSearch();
+        expect(lookup.filters.length).toBe(1);
+        expect(lookup.views.length).toBe(2);
+        form.Body.PrimaryContactId.AddCustomView("viewid", "enttiyName", "viewDisplayName", "fetchXml", "layoutXml", false);
+        expect(lookup.views.length).toBe(3);
+        form.Body.PrimaryContactId.AddNotification({ messages: ["ABC"], notificationLevel: OptionSet.FieldNotificationLevel.Error, uniqueId: "123", actions: [] });
+        expect("form.Body.PrimaryContactId.AddNotification").toBe("form.Body.PrimaryContactId.AddNotification");
+        form.Body.PrimaryContactId.AddLookupTagClick(ab_AddLookupTagClick);
+        expect("form.Body.PrimaryContactId.AddLookupTagClick").toBe("form.Body.PrimaryContactId.AddLookupTagClick");
+        form.Body.PrimaryContactId.ClearNotification("123");
+        expect("form.Body.PrimaryContactId.ClearNotification").toBe("form.Body.PrimaryContactId.ClearNotification");
+        expect(form.Body.PrimaryContactId.Attribute).toBeDefined();
+        expect(form.Body.PrimaryContactId.ControlType).toBe(OptionSet.FieldControlType.Lookup);
+        expect(form.Body.PrimaryContactId.DefaultView).toBe("DefaultViewId");
+        expect(form.Body.PrimaryContactId.Disabled).toBeFalsy();
+        expect(form.Body.PrimaryContactId.EntityTypes).toBeDefined();
+        expect(form.Body.PrimaryContactId.Label).toBe("Primary Contact");
+        expect(form.Body.PrimaryContactId.ControlName).toBe("primarycontactid");
+        expect(form.Body.PrimaryContactId.ControlParent).toBeUndefined();
+        expect(form.Body.PrimaryContactId.Visible).toBeTruthy();
+        form.Body.PrimaryContactId.RemoveLookupTagClick(ab_AddLookupTagClick);
+        expect("form.Body.PrimaryContactId.RemoveLookupTagClick").toBe("form.Body.PrimaryContactId.RemoveLookupTagClick");
+        form.Body.PrimaryContactId.RemovePreSearch(abc_LookupAddPreSearch);
+        expect("form.Body.PrimaryContactId.RemovePreSearch").toBe("form.Body.PrimaryContactId.RemovePreSearch");
+        form.Body.PrimaryContactId.DefaultView = "DefaultViewId2";
+        expect(form.Body.PrimaryContactId.DefaultView).toBe("DefaultViewId2");
+        form.Body.PrimaryContactId.Disabled = true;
+        expect(form.Body.PrimaryContactId.Disabled).toBeTruthy();
+        form.Body.PrimaryContactId.EntityTypes = ["account"];
+        expect("form.Body.PrimaryContactId.EntityTypes").toBe("form.Body.PrimaryContactId.EntityTypes");
+        expect(form.Body.PrimaryContactId.Focus()).toBeUndefined();
+        form.Body.PrimaryContactId.Label = "Primary Contact New";
+        expect(form.Body.PrimaryContactId.Label).toBe("Primary Contact New");
+        form.Body.PrimaryContactId.SetNotification("Field Notification", "uniqueId");
+        expect("form.Body.PrimaryContactId.SetNotification").toBe("form.Body.PrimaryContactId.SetNotification");
+        form.Body.PrimaryContactId.Visible = false;
+        expect(form.Body.PrimaryContactId.Visible).toBeFalsy();
+
+        expect(form.Body.CreatedOn.ControlName).toBe("createdon");
+        expect(form.Body.ModifiedOn.ControlName).toBe("modifiedon");
+        form.Body.ModifiedOn.ShowTime = true;
+        expect(form.Body.ModifiedOn.ShowTime).toBeTruthy();
+        form.Body.ModifiedOn.ShowTime = false;
+        expect(form.Body.ModifiedOn.ShowTime).toBeFalsy();
+
+
+        form.Body.IndustryCode.AddNotification({ messages: ["ABC"], notificationLevel: OptionSet.FieldNotificationLevel.Error, uniqueId: "123", actions: [] });
+        expect("form.Body.IndustryCode.AddNotification").toBe("form.Body.IndustryCode.AddNotification");
+        expect(form.Body.IndustryCode.Options.length).toBe(6);
+        expect(form.Body.IndustryCode.AddOption("Others", 999999, 6)).toBeUndefined();
+        expect(form.Body.IndustryCode.ControlOptions.length).toBe(7);
+        form.Body.IndustryCode.ClearNotification("123");
+        expect("form.Body.IndustryCode.ClearNotification").toBe("form.Body.IndustryCode.ClearNotification");
+        expect(form.Body.IndustryCode.ClearOptions()).toBeUndefined();
+        expect(form.Body.IndustryCode.ControlOptions.length).toBe(0);
+        expect(form.Body.IndustryCode.Attribute).toBeDefined();
+        expect(form.Body.IndustryCode.ControlType).toBe(OptionSet.FieldControlType.OptionSet);
+        expect(form.Body.IndustryCode.Disabled).toBeTruthy();
+        expect(form.Body.IndustryCode.Label).toBe("Industry");
+        expect(form.Body.IndustryCode.ControlName).toBe("industrycode");
+        expect(form.Body.IndustryCode.ControlParent).toBeUndefined();
+        expect(form.Body.IndustryCode.Visible).toBeTruthy();
+        form.Body.IndustryCode.AddOption("New Option 999", 999, 0);
+        form.Body.IndustryCode.AddOption("New Option 998", 998, 0);
+        form.Body.IndustryCode.AddOption("New Option 997", 997, 0);
+        expect(form.Body.IndustryCode.ControlOptions.length).toBe(3);
+        expect(form.Body.IndustryCode.RemoveOption(1));
+        expect(form.Body.IndustryCode.ControlOptions.length).toBe(2);
+        form.Body.IndustryCode.Disabled = false;
+        expect(form.Body.IndustryCode.Disabled).toBeFalsy();
+        expect(form.Body.IndustryCode.Focus()).toBeUndefined();
+        form.Body.IndustryCode.Label = "Industry New";
+        expect(form.Body.IndustryCode.Label).toBe("Industry New");
+        form.Body.IndustryCode.SetNotification("Field Notification", "uniqueId");
+        expect("form.Body.IndustryCode.SetNotification").toBe("form.Body.IndustryCode.SetNotification");
+        form.Body.IndustryCode.Visible = false;
+        expect(form.Body.IndustryCode.Visible).toBeFalsy();
+
+        expect(form.Body.to.IsPartyList).toBeTruthy();
+    });
+    test('devKit.LoadField - quickform', () => {
+        //setup
+        var attributes = new ItemCollectionMock([
+            new AttributeMock({
+                name: "name"
+            })
+        ]);
+        var entity = new EntityMock({
+            attributes: attributes
+        });
+        var data = new DataMock(entity);
+        var quickform = new QuickFormControlMock({
+            name: "contactquickform",
+            controlType: "quickform",
+            label: "Contact Quick Form",
+            visible: true
+        });
+        var ui = new UiMock({
+            quickForms: new ItemCollectionMock([quickform])
+        });
+        XrmMockGenerator.formContext = new FormContextMock(data, ui);
+        var executionContext = XrmMockGenerator.formContext;
+        //run
+        var form = {};
+        var quickForm = {
+            contactquickform: {
+                EMailAddress1: {},
+                Telephone1: {}
+            }
+        };
+        devKit.LoadQuickForms(executionContext, quickForm);
+        form.QuickForm = quickForm;
+        //test
+        expect(() => { form.QuickForm.contactquickform .Controls() }).toThrow(new Error("Method not implemented."));
+        expect(form.QuickForm.contactquickform.ControlType).toBe(OptionSet.FieldControlType.QuickForm);
+        expect(() => { form.QuickForm.contactquickform.Disabled }).toThrow(new Error("Method not implemented."));
+        expect(form.QuickForm.contactquickform.Label).toBe("Contact Quick Form");
+        expect(form.QuickForm.contactquickform.ControlName).toBe("contactquickform");
+        expect(form.QuickForm.contactquickform.ControlParent).toBeUndefined();
+        expect(form.QuickForm.contactquickform.Visible).toBeTruthy();
+        expect(form.QuickForm.contactquickform.IsLoaded()).toBeTruthy();
+        expect(() => { form.QuickForm.contactquickform.Refresh() }).toThrow(new Error("Method not implemented."));
+        expect(() => { form.QuickForm.contactquickform.Disabled = true }).toThrow(new Error("Method not implemented."));
+        expect(() => { form.QuickForm.contactquickform.Focus() }).toThrow(new Error("Method not implemented."));
+        form.QuickForm.contactquickform.Label = "Contact Quick Form New";
+        expect(form.QuickForm.contactquickform.Label).toBe("Contact Quick Form New");
+        expect(() => { form.QuickForm.contactquickform.Visible = false }).toThrow(new Error("Method not implemented."));
+        expect(() => { form.QuickForm.contactquickform.Body.EMailAddress1 }).toThrow(new Error("Method not implemented."));
+        expect(() => { form.QuickForm.contactquickform.Body.Telephone1 }).toThrow(new Error("Method not implemented."));
+    });
+    test('devKit.LoadField - subgrid', () => {
+        var attributes = new ItemCollectionMock([
+            new AttributeMock({
+                name: "name"
+            })
+        ]);
+        var entity = new EntityMock({
+            attributes: attributes
+        });
+        var data = new DataMock(entity);
+
+        var grid = new GridControlMock({
+            name: "Contacts",
+            controlType: "subgrid",
+            label: "CONTACTS",
+            visible: true,
+            entityName: "contact",
+            contextType: 4 //XrmEnum.GridControlContext.FormContextRelated,
+        });
+
+        var viewSelector = new ViewSelectorMock(true);
+        viewSelector.setCurrentView(new LookupValueMock("GUID-CONTACTS-I-FOLLOW", "1039", "Contacts I Follow"));
+        grid.viewSelector = viewSelector;
+
+        var relationship = new RelationshipMock({
+            name: "name",
+            attributeName: "attributeName",
+            navigationPropertyName: "navigationPropertyName",
+            relationshipType: 0, //XrmEnum.RelationshipType.OneToMany,
+            roleType: 2 //XrmEnum.RoleType.AssociationEntity
+        });
+        grid.relationship = relationship;
+
+        var row1Entity = new EntityMock({
+            id: "ROW1-GUID",
+            primaryValue: "ROW1-VALUE",
+            entityName: "contact",
+            attributes: new ItemCollectionMock([
+                new StringAttributeMock({ name: "abc_col1", value: "ROW1-COL1", requiredLevel: "recommended", controls: new ItemCollectionMock([new StringControlMock({ attribute: null, name: 'abc_col1', disabled: true })]) }),
+                new StringAttributeMock({ name: "abc_col2", value: "ROW1-COL2" }),
+                new StringAttributeMock({ name: "abc_col3", value: "ROW1-COL3" }),
+            ])
+        });
+        var row1 = new GridRowMock(new DataMock(row1Entity), new GridRowDataMock(null));
+        var row2 = new GridRowMock(new DataMock(null), new GridRowDataMock(null));
+        var rows = new ItemCollectionMock([row1, row2]);
+        var selectedRows = new ItemCollectionMock([row1]);
+        grid.grid = new GridMock(rows, selectedRows);
+
+        var ui = new UiMock({
+            controls: new ItemCollectionMock([grid])
+        });
+        XrmMockGenerator.formContext = new FormContextMock(data, ui);
+        var executionContext = XrmMockGenerator.formContext;
+
+        var form = {};
+        var _grid = {
+            ChildAccounts: {},
+            Contacts: {},
+        };
+        devKit.LoadGrids(executionContext, _grid);
+        form.Grid = _grid;
+
+        var ContactsAddOnLoad = function (executionContext) { }
+        expect(grid.onLoadHandlers.length).toBe(0);
+        form.Grid.Contacts.AddOnLoad(ContactsAddOnLoad);
+        expect(grid.onLoadHandlers.length).toBe(1);
+        expect(form.Grid.Contacts.EntityName).toBe("contact");
+        expect(() => { form.Grid.Contacts.FetchXml }).toThrow(new Error("getFetchXml not implemented."));
+        expect(() => { form.Grid.Contacts.GridType }).toThrow(new Error("getGridType not implemented."));
+        expect(form.Grid.Contacts.Relationship).toBeDefined();
+        expect(form.Grid.Contacts.Relationship.attributeName).toBe("attributeName");
+        expect(form.Grid.Contacts.Relationship.name).toBe("name");
+        expect(form.Grid.Contacts.Relationship.navigationPropertyName).toBe("navigationPropertyName");
+        expect(form.Grid.Contacts.Relationship.relationshipType).toBe(0/*XrmEnum.RelationshipType.OneToMany*/);
+        expect(form.Grid.Contacts.Relationship.roleType).toBe(2/*XrmEnum.RoleType.AssociationEntity*/);
+        expect(() => { form.Grid.Contacts.Url(0); }).toThrow(new Error("getUrl not implemented."));
+        expect(form.Grid.Contacts.ViewSelector.CurrentView.entityType).toBe("1039");
+        expect(form.Grid.Contacts.ViewSelector.CurrentView.id).toBe("GUID-CONTACTS-I-FOLLOW");
+        expect(form.Grid.Contacts.ViewSelector.CurrentView.name).toBe("Contacts I Follow");
+        var newCurrentView = {
+            entityType: "1039",
+            id: "GUID-NEW",
+            name: "NAME-NEW"
+        };
+        form.Grid.Contacts.ViewSelector.CurrentView = newCurrentView;
+        expect(form.Grid.Contacts.ViewSelector.CurrentView.entityType).toBe("1039");
+        expect(form.Grid.Contacts.ViewSelector.CurrentView.id).toBe("GUID-NEW");
+        expect(form.Grid.Contacts.ViewSelector.CurrentView.name).toBe("NAME-NEW");
+        expect(form.Grid.Contacts.ViewSelector.Visible).toBeTruthy();
+        expect(() => { form.Grid.Contacts.Refresh(); }).toThrow(new Error("Method not implemented."));
+        expect(() => { form.Grid.Contacts.RefreshRibbon(); }).toThrow(new Error("Method not implemented."));
+        expect(() => { form.Grid.Contacts.OpenRelatedGrid(); }).toThrow(new Error("openRelatedGrid not implemented."));
+        form.Grid.Contacts.RemoveOnLoad(ContactsAddOnLoad);
+        expect(grid.onLoadHandlers.length).toBe(0);
+        expect(form.Grid.Contacts.Rows.getLength()).toBe(2);
+        var row0 = form.Grid.Contacts.Rows.get(0);
+        expect(row0.EntityId).toBe("ROW1-GUID")
+        expect(row0.EntityName).toBe("contact");
+        expect(row0.PrimaryAttributeValue).toBe("ROW1-VALUE");
+        expect(row0.EntityReference.id).toBe("ROW1-GUID");
+        expect(row0.EntityReference.entityType).toBe("contact");
+        expect(row0.EntityReference.name).toBe("ROW1-VALUE");
+        expect(row0.Columns).toBeDefined();
+        expect(row0.Columns.getLength()).toBe(3);
+        var row0col0 = row0.Columns.get("abc_col1");
+        expect(row0col0).toBeDefined();
+        expect(row0col0.Value).toBe("ROW1-COL1");
+        row0col0.Value = "ROW1-COL1-NEW";
+        expect(row0col0.Value).toBe("ROW1-COL1-NEW");
+        expect(row0col0.Name).toBe("abc_col1");
+        expect(row0col0.RequiredLevel).toBe(OptionSet.FieldRequiredLevel.Recommended);
+        row0col0.RequiredLevel = OptionSet.FieldRequiredLevel.Required;
+        expect(row0col0.RequiredLevel).toBe(OptionSet.FieldRequiredLevel.Required);
+        expect(row0col0.Disabled).toBeTruthy();
+        row0col0.Disabled = false;
+        expect(row0col0.Disabled).toBeFalsy();
+        expect(row0col0.Label).toBe("abc_col1");
+        form.Grid.Contacts.Rows.forEach(function (row, index) {
+            expect(row).toBeDefined();
+            row.Columns.forEach(function (column, index) {
+                expect(column).toBeDefined();
+            });
+        });
+        var rowNotExist = form.Grid.Contacts.Rows.get(4);
+        expect(rowNotExist).toBeDefined();
+        var columnNotExist = row0.Columns.get("col_not_exisit");
+        expect(columnNotExist).toBeDefined();
+        expect(form.Grid.Contacts.TotalRecordCount).toBe(2);
+        expect(form.Grid.Contacts.SelectedRows.getLength()).toBe(1);
+        expect(form.Grid.Contacts.SelectedRows.get(0)).toBeDefined();
+        form.Grid.Contacts.SelectedRows.forEach(function (row, index) {
+            expect(row).toBeDefined();
+        });
+    });
+    test('iframe control type', () => {
+        //setup
+        var attributes = new ItemCollectionMock([
+            new AttributeMock({
+                name: "name"
+            })
+        ]);
+        var entity = new EntityMock({
+            attributes: attributes
+        });
+        var data = new DataMock(entity);
+        var frame = new IframeControlMock({
+            name: "IFRAME_PHUOCLE",
+            controlType: "iframe",
+            label: "PHUOCLE",
+            visible: true
+        });
+        var ui = new UiMock({
+            controls: new ItemCollectionMock([
+                frame
+            ])
+        });
+        XrmMockGenerator.formContext = new FormContextMock(data, ui);
+        var executionContext = XrmMockGenerator.formContext;
+        //run
+        var form = {};
+        var body = {
+            IFRAME_PHUOCLE: {}
+        };
+        devKit.LoadFields(executionContext, body);
+        form.Body = body;
+        //result
+        expect(() => { form.Body.IFRAME_PHUOCLE.ContentWindow(null, null) }).toThrow(new Error("getContentWindow not implemented."));
+        expect(form.Body.IFRAME_PHUOCLE.ControlType).toBe(OptionSet.FieldControlType.Iframe);
+        expect(() => { form.Body.IFRAME_PHUOCLE.Disabled }).toThrow(new Error("getDisabled not implemented."));
+        expect(() => { form.Body.IFRAME_PHUOCLE.InitialUrl }).toThrow(new Error("getInitialUrl not implemented."));
+        expect(form.Body.IFRAME_PHUOCLE.Label).toBe("PHUOCLE");
+        expect(form.Body.IFRAME_PHUOCLE.ControlName).toBe("IFRAME_PHUOCLE");
+        expect(() => { form.Body.IFRAME_PHUOCLE.Object }).toThrow(new Error("getObject not implemented."));
+        expect(form.Body.IFRAME_PHUOCLE.ControlParent).toBeUndefined();
+        expect(() => { form.Body.IFRAME_PHUOCLE.Src }).toThrow(new Error("getSrc not implemented."));
+        expect(form.Body.IFRAME_PHUOCLE.Visible).toBeTruthy();
+        expect(() => { form.Body.IFRAME_PHUOCLE.Disabled = true }).toThrow(new Error("setDisabled not implemented."));
+        expect(() => { form.Body.IFRAME_PHUOCLE.Focus() }).toThrow(new Error("setFocus not implemented."));
+        form.Body.IFRAME_PHUOCLE.Label = "PHUOCLE New";
+        expect(form.Body.IFRAME_PHUOCLE.Label).toBe("PHUOCLE New");
+        expect(() => { form.Body.IFRAME_PHUOCLE.Src = "https://phuocle.net" }).toThrow(new Error("setSrc not implemented."));
+        expect(() => { form.Body.IFRAME_PHUOCLE.Visible = true }).toThrow(new Error("setVisible not implemented."));
     });
 });

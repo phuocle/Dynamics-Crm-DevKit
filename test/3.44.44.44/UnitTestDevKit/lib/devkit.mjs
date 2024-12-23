@@ -372,527 +372,280 @@ var devKit = (function () {
     }
     function loadField(formContext, field, attribute, control) {
         field.ContentWindow = function (successCallback, errorCallback) {
-            if (has(control, 'getContentWindow')) {
-                control.getContentWindow().then(successCallback, errorCallback);
-            }
+            control.getContentWindow().then(successCallback, errorCallback);
         }
         field.Option = function (value) {
-            if (has(attribute, 'getOption')) {
-                return attribute.getOption(value);
-            }
-            return { text: EMPTY_STRING, value: EMPTY_NUMBER };
+            return attribute.getOption(value);
         };
         field.RemoveOnChange = function (callback) {
-            if (has(attribute, 'removeOnChange')) {
-                attribute.removeOnChange(callback);
-            }
+            attribute.removeOnChange(callback);
         };
         field.AddCustomFilter = function (filter, entityLogicaName) {
-            if (has(control, 'addCustomFilter')) {
-                control.addCustomFilter(filter, entityLogicaName);
-            }
+            control.addCustomFilter(filter, entityLogicaName);
         };
         field.AddCustomView = function (viewId, entityName, viewDisplayName, fetchXml, layoutXml, isDefault) {
-            if (has(control, 'addCustomView')) {
-                control.addCustomView(viewId, entityName, viewDisplayName, fetchXml, layoutXml, isDefault);
-            }
+            control.addCustomView(viewId, entityName, viewDisplayName, fetchXml, layoutXml, isDefault);
         };
         field.AddPostSearch = function (callback) {
-            if (has(control, 'addOnPostSearch')) {
-                control.addOnPostSearch(callback);
-            }
+            control.addOnPostSearch(callback);
         };
         field.AddOnOutputChange = function (callback) {
-            if (has(control, 'addOnOutputChange')) {
-                control.addOnOutputChange(callback);
-            }
+            control.addOnOutputChange(callback);
         };
         field.AddResultOpened = function (callback) {
-            if (has(control, 'addOnResultOpened')) {
-                control.addOnResultOpened(callback);
-            }
+            control.addOnResultOpened(callback);
         };
         field.AddSelection = function (callback) {
-            if (has(control, 'addOnSelection')) {
-                control.addOnSelection(callback);
-            }
+            control.addOnSelection(callback);
         };
         field.AddPreSearch = function (callback) {
-            if (has(control, 'addPreSearch')) {
-                control.addPreSearch(callback);
-            }
+            control.addPreSearch(callback);
         };
         field.ClearNotification = function (uniqueId) {
-            if (has(control, 'clearNotification')) {
-                return control.clearNotification(uniqueId);
-            }
-            return EMPTY_BOOL;
+            return control.clearNotification(uniqueId);
         };
         field.ClearOptions = function () {
-            if (has(control, 'clearOptions')) {
-                control.clearOptions();
-            }
+            control.clearOptions();
         };
         field.AddOnChange = function (callback) {
-            if (has(attribute, 'addOnChange')) {
-                attribute.addOnChange(callback);
-            }
+            attribute.addOnChange(callback);
         };
         field.FireOnChange = function () {
-            if (has(attribute, 'fireOnChange')) {
-                attribute.fireOnChange();
-            }
+            attribute.fireOnChange();
         };
         field.OpenSearchResult = function (resultNumber, mode) {
-            if (has(control, 'openSearchResult')) {
-                return control.openSearchResult(resultNumber, mode);
-            }
-            return EMPTY_BOOL;
+            return control.openSearchResult(resultNumber, mode);
         };
         field.Refresh = function () {
-            if (has(control, 'refresh')) {
-                control.refresh();
-            }
+            control.refresh();
         };
         field.RemovePostSearch = function (callback) {
-            if (has(control, 'removeOnPostSearch')) {
-                control.removeOnPostSearch(callback);
-            }
+            control.removeOnPostSearch(callback);
         };
         field.RemoveOnOutputChange = function (callback) {
-            if (has(control, 'removeOnOutputChange')) {
-                control.removeOnOutputChange(callback);
-            }
+            control.removeOnOutputChange(callback);
         };
         field.RemoveResultOpened = function (callback) {
-            if (has(control, 'removeOnResultOpened')) {
-                control.removeOnResultOpened(callback);
-            }
+            control.removeOnResultOpened(callback);
         };
         field.RemoveSelection = function (callback) {
-            if (has(control, 'removeOnSelection')) {
-                control.removeOnSelection(callback);
-            }
+            control.removeOnSelection(callback);
         };
         field.RemoveOption = function (value) {
-            if (has(control, 'removeOption')) {
-                control.removeOption(value);
-            }
+            control.removeOption(value);
         };
         field.RemovePreSearch = function (callback) {
-            if (has(control, 'removePreSearch')) {
-                control.removePreSearch(callback);
-            }
+            control.removePreSearch(callback);
         };
         field.Focus = function () {
-            if (has(control, 'setFocus')) {
-                control.setFocus();
-            }
+            control.setFocus();
         };
         field.SetNotification = function (message, uniqueId) {
-            if (has(control, 'setNotification')) {
-                return control.setNotification(message, uniqueId);
-            }
-            return EMPTY_BOOL;
+            return control.setNotification(message, uniqueId);
         };
         field.AddOption = function (text, value, index) {
-            if (has(control, 'addOption')) {
-                var option = { text: text, value: value };
-                control.addOption(option, index);
-            }
+            var option = { text: text, value: value };
+            control.addOption(option, index);
         };
         field.AddNotification = function (message, notificationLevel, uniqueId, callback) {
-            if (has(control, 'addNotification')) {
-                var actions = { message: message, actions: [callback] };
-                var notification = { messages: [message], notificationLevel: notificationLevel, uniqueId: uniqueId, actions: [actions] };
-                return control.addNotification(notification);
-            }
-            return EMPTY_BOOL;
+            var actions = { message: message, actions: [callback] };
+            var notification = { messages: [message], notificationLevel: notificationLevel, uniqueId: uniqueId, actions: [actions] };
+            return control.addNotification(notification);
         };
         field.AddLookupTagClick = function (callback) {
-            if (has(control, 'addOnLookupTagClick')) {
-                control.addOnLookupTagClick(callback);
-            }
+            control.addOnLookupTagClick(callback);
         };
         field.RemoveLookupTagClick = function (callback) {
-            if (has(control, 'removeOnLookupTagClick')) {
-                control.removeOnLookupTagClick(callback);
-            }
+            control.removeOnLookupTagClick(callback);
         };
         field.SetIsValid = function (valid, message) {
-            if (has(attribute, 'setIsValid')) {
-                attribute.setIsValid(valid, message);
-            }
+            attribute.setIsValid(valid, message);
         };
         Object.defineProperty(field, 'AttributeType', {
-            get() {
-                if (has(attribute, 'getAttributeType')) {
-                    return attribute.getAttributeType();
-                }
-                return 'string';
-            }
+            get() { return attribute.getAttributeType(); }
         });
         Object.defineProperty(field, 'Format', {
-            get() {
-                if (has(attribute, 'getFormat')) {
-                    return attribute.getFormat();
-                }
-                return NULL;
-            }
+            get() { return attribute.getFormat(); }
         });
         Object.defineProperty(field, 'InitialValue', {
-            get() {
-                if (has(attribute, 'getInitialValue')) {
-                    return attribute.getInitialValue();
-                }
-                return EMPTY_NUMBER;
-            }
+            get() { return attribute.getInitialValue(); }
         });
         Object.defineProperty(field, 'IsDirty', {
-            get() {
-                if (has(attribute, 'getIsDirty')) {
-                    return attribute.getIsDirty();
-                }
-                return EMPTY_BOOL;
-            }
+            get() { return attribute.getIsDirty(); }
         });
         Object.defineProperty(field, 'IsPartyList', {
-            get() {
-                if (has(attribute, 'getIsPartyList')) {
-                    return attribute.getIsPartyList();
-                }
-                return EMPTY_BOOL;
-            }
+            get() { return attribute.getIsPartyList(); }
         });
         Object.defineProperty(field, 'Max', {
-            get() {
-                if (has(attribute, 'getMax')) {
-                    return attribute.getMax();
-                }
-                return EMPTY_NUMBER;
-            }
+            get() { return attribute.getMax(); }
         });
         Object.defineProperty(field, 'MaxLength', {
-            get() {
-                if (has(attribute, 'getMaxLength')) {
-                    return attribute.getMaxLength();
-                }
-                return EMPTY_NUMBER;
-            }
+            get() { return attribute.getMaxLength(); }
         });
         Object.defineProperty(field, 'Min', {
-            get() {
-                if (has(attribute, 'getMin')) {
-                    return attribute.getMin();
-                }
-                return EMPTY_NUMBER;
-            }
+            get() { return attribute.getMin(); }
         });
         Object.defineProperty(field, 'AttributeName', {
-            get() {
-                if (has(attribute, 'getName')) {
-                    return attribute.getName();
-                }
-                return EMPTY_STRING;
-            }
+            get() { return attribute.getName(); }
         });
         Object.defineProperty(field, 'Options', {
-            get() {
-                if (has(attribute, 'getOptions')) {
-                    return attribute.getOptions();
-                }
-                return [];
-            }
+            get() { return attribute.getOptions(); }
         });
         Object.defineProperty(field, 'ControlOptions', {
-            get() {
-                if (has(control, 'getOptions')) {
-                    return control.getOptions();
-                }
-                return [];
-            }
+            get() { return control.getOptions(); }
         });
         Object.defineProperty(field, 'AttributeParent', {
-            get() {
-                if (has(attribute, 'getParent')) {
-                    return attribute.getParent();
-                }
-                return NULL;
-            }
+            get() { return attribute.getParent(); }
         });
         Object.defineProperty(field, 'SelectedOption', {
-            get() {
-                if (has(attribute, 'getSelectedOption')) {
-                    return attribute.getSelectedOption();
-                }
-                return { text: EMPTY_STRING, value: EMPTY_NUMBER };
-            }
+            get() { return attribute.getSelectedOption(); }
         });
         Object.defineProperty(field, 'Text', {
-            get() {
-                if (has(attribute, 'getText')) {
-                    return attribute.getText();
-                }
-                return EMPTY_STRING;
-            }
+            get() { return attribute.getText(); }
         });
         Object.defineProperty(field, 'UserPrivilege', {
-            get() {
-                if (has(attribute, 'getUserPrivilege')) {
-                    return attribute.getUserPrivilege();
-                }
-                return { canRead: EMPTY_BOOL, canUpdate: EMPTY_BOOL, canCreate: EMPTY_BOOL };
-            }
+            get() { return attribute.getUserPrivilege(); }
         });
         Object.defineProperty(field, 'IsValid', {
-            get() {
-                if (has(attribute, 'isValid')) {
-                    return attribute.isValid();
-                }
-                return EMPTY_BOOL;
-            }
+            get() { return attribute.isValid(); }
         });
         Object.defineProperty(field, 'ControlType', {
-            get() {
-                if (has(control, 'getControlType')) {
-                    return control.getControlType();
-                }
-                return 'standard';
-            }
+            get() { return control.getControlType(); }
         });
         Object.defineProperty(field, 'InitialUrl', {
-            get() {
-                if (has(control, 'getInitialUrl')) {
-                    return control.getInitialUrl();
-                }
-                return EMPTY_STRING;
-            }
+            get() { return control.getInitialUrl(); }
         });
         Object.defineProperty(field, 'ControlName', {
-            get() {
-                if (has(control, 'getName')) {
-                    return control.getName();
-                }
-                return EMPTY_STRING;
-            }
+            get() { return control.getName(); }
         });
         Object.defineProperty(field, 'Object', {
-            get() {
-                if (has(control, 'getObject')) {
-                    return control.getObject();
-                }
-                return {};
-            }
+            get() { return control.getObject(); }
         });
         Object.defineProperty(field, 'ControlParent', {
-            get() {
-                if (has(control, 'getParent')) {
-                    return control.getParent();
-                }
-                return NULL;
-            }
+            get() { return control.getParent(); }
         });
         Object.defineProperty(field, 'State', {
-            get() {
-                if (has(control, 'getState')) {
-                    return control.getState();
-                }
-                return 1;
-            }
+            get() { return control.getState(); }
         });
         Object.defineProperty(field, 'TotalResultCount', {
             get() {
-                if (has(control, 'getTotalResultCount')) {
-                    return control.getTotalResultCount();
-                }
-                return EMPTY_NUMBER;
+                return control.getTotalResultCount();
             }
         });
         Object.defineProperty(field, 'SelectedResults', {
             get() {
-                if (has(control, 'getSelectedResults')) {
                     return control.getSelectedResults();
-                }
-                return {};
             }
         });
         Object.defineProperty(field, 'Attribute', {
             get() {
-                if (has(control, 'getAttribute')) {
                     return control.getAttribute();
-                }
-                return {};
             }
         });
         Object.defineProperty(field, 'Precision', {
             get() {
-                if (has(attribute, 'getPrecision')) {
                     return attribute.getPrecision();
-                }
-                return EMPTY_NUMBER;
             },
-            set: function (value) {
-                if (has(attribute, 'setPrecision')) {
+            set(value) {
                     attribute.setPrecision(value);
-                }
             }
         });
         Object.defineProperty(field, 'RequiredLevel', {
             get() {
-                if (has(attribute, 'getRequiredLevel')) {
                     return attribute.getRequiredLevel();
-                }
-                return 'none';
             },
-            set: function (value) {
-                if (has(attribute, 'setRequiredLevel')) {
+            set(value) {
                     attribute.setRequiredLevel(value);
-                }
             }
         });
         Object.defineProperty(field, 'SubmitMode', {
             get() {
-                if (has(attribute, 'getSubmitMode')) {
                     return attribute.getSubmitMode();
-                }
-                return 'always';
             },
-            set: function (value) {
-                if (has(attribute, 'setSubmitMode')) {
+            set(value) {
                     attribute.setSubmitMode(value);
-                }
             }
         });
         Object.defineProperty(field, 'Value', {
             get() {
-                if (has(attribute, 'getValue')) {
                     return attribute.getValue();
-                }
-                return NULL;
             },
-            set: function (value) {
+            set(value) {
                 if (formContext.ui.getFormType() === 3 || formContext.ui.getFormType() === 4) return;
-                if (has(attribute, 'setValue')) {
                     attribute.setValue(value);
-                }
             }
         });
         Object.defineProperty(field, 'Data', {
             get() {
-                if (has(control, 'getData')) {
                     return control.getData();
-                }
-                return EMPTY_STRING;
             },
-            set: function (value) {
-                if (has(control, 'setData')) {
+            set(value) {
                     control.setData(value);
-                }
             }
         });
         Object.defineProperty(field, 'DefaultView', {
             get() {
-                if (has(control, 'getDefaultView')) {
                     return control.getDefaultView();
-                }
-                return EMPTY_GUID;
             },
-            set: function (value) {
-                if (has(control, 'setDefaultView')) {
+            set(value) {
                     control.setDefaultView(value);
-                }
             }
         });
         Object.defineProperty(field, 'Disabled', {
             get() {
-                if (has(control, 'getDisabled')) {
                     return control.getDisabled();
-                }
-                return EMPTY_BOOL;
             },
-            set: function (value) {
+            set(value) {
                 if (formContext.ui.getFormType() === 3 || formContext.ui.getFormType() === 4) return;
-                if (has(control, 'setDisabled')) {
                     control.setDisabled(value);
-                }
             }
         });
         Object.defineProperty(field, 'EntityTypes', {
             get() {
-                if (has(control, 'getEntityTypes')) {
                     return control.getEntityTypes();
-                }
-                return [];
             },
-            set: function (value) {
-                if (has(control, 'setEntityTypes')) {
+            set(value) {
                     control.setEntityTypes(value);
-                }
             }
         });
         Object.defineProperty(field, 'Label', {
             get() {
-                if (has(control, 'getLabel')) {
                     return control.getLabel();
-                }
-                return EMPTY_STRING;
             },
-            set: function (value) {
-                if (has(control, 'setLabel')) {
+            set(value) {
                     control.setLabel(value);
-                }
             }
         });
         Object.defineProperty(field, 'SearchQuery', {
             get() {
-                if (has(control, 'getSearchQuery')) {
                     return control.getSearchQuery();
-                }
-                return EMPTY_STRING;
             },
-            set: function (value) {
-                if (has(control, 'setSearchQuery')) {
+            set(value) {
                     control.setSearchQuery(value);
-                }
             }
         });
         Object.defineProperty(field, 'ShowTime', {
             get() {
-                if (has(control, 'getShowTime')) {
                     return control.getShowTime();
-                }
-                return EMPTY_BOOL;
             },
-            set: function (value) {
-                if (has(control, 'setShowTime')) {
+            set(value) {
                     control.setShowTime(value);
-                }
             }
         });
         Object.defineProperty(field, 'Src', {
             get() {
-                if (has(control, 'getSrc')) {
                     return control.getSrc();
-                }
-                return EMPTY_STRING;
             },
-            set: function (value) {
-                if (has(control, 'setSrc')) {
+            set(value) {
                     control.setSrc(value);
-                }
             }
         });
         Object.defineProperty(field, 'Visible', {
             get() {
-                if (has(control, 'getVisible')) {
                     return control.getVisible();
-                }
-                return EMPTY_BOOL;
             },
-            set: function (value) {
-                if (has(control, 'setVisible')) {
+            set(value) {
                     control.setVisible(value);
-                }
             }
         });
     }
@@ -910,8 +663,8 @@ var devKit = (function () {
             }
             if (isNullOrUndefined(control)) {
                 if (formContext.getControl) {
-                control = formContext.getControl(field);
-            }
+                    control = formContext.getControl(field);
+                }
             }
             var attribute = (function () {
                 var attr = null;
@@ -949,7 +702,7 @@ var devKit = (function () {
                     }
                     return EMPTY_BOOL;
                 },
-                set: function (value) {
+                set(value) {
                     if (has(formContext, 'ui.footerSection.setVisible')) {
                         formContext.ui.footerSection.setVisible(value);
                     }
@@ -964,7 +717,7 @@ var devKit = (function () {
                     }
                     return EMPTY_BOOL;
                 },
-                set: function (value) {
+                set(value) {
                     if (has(formContext, 'ui.headerSection.setBodyVisible')) {
                         formContext.ui.headerSection.setBodyVisible(value);
                     }
@@ -977,7 +730,7 @@ var devKit = (function () {
                     }
                     return EMPTY_BOOL;
                 },
-                set: function (value) {
+                set(value) {
                     if (has(formContext, 'ui.headerSection.setCommandBarVisible')) {
                         formContext.ui.headerSection.setCommandBarVisible(value);
                     }
@@ -990,7 +743,7 @@ var devKit = (function () {
                     }
                     return EMPTY_BOOL;
                 },
-                set: function (value) {
+                set(value) {
                     if (has(formContext, 'ui.headerSection.setTabNavigatorVisible')) {
                         formContext.ui.headerSection.setTabNavigatorVisible(value);
                     }
@@ -1032,7 +785,7 @@ var devKit = (function () {
                     }
                     return EMPTY_STRING;
                 },
-                set: function (value) {
+                set(value) {
                     if (has(sectionObject, 'setLabel')) {
                         sectionObject.setLabel(value);
                     }
@@ -1045,7 +798,7 @@ var devKit = (function () {
                     }
                     return EMPTY_BOOL;
                 },
-                set: function (value) {
+                set(value) {
                     if (has(sectionObject, 'setVisible')) {
                         sectionObject.setVisible(value);
                     }
@@ -1095,7 +848,7 @@ var devKit = (function () {
                     }
                     return 'expanded';
                 },
-                set: function (value) {
+                set(value) {
                     if (has(tabObject, 'setDisplayState')) {
                         tabObject.setDisplayState(value);
                     }
@@ -1108,7 +861,7 @@ var devKit = (function () {
                     }
                     return 'cardSections';
                 },
-                set: function (value) {
+                set(value) {
                     if (has(tabObject, 'setContentType')) {
                         tabObject.setContentType(value);
                     }
@@ -1121,7 +874,7 @@ var devKit = (function () {
                     }
                     return EMPTY_STRING;
                 },
-                set: function (value) {
+                set(value) {
                     if (has(tabObject, 'setLabel')) {
                         tabObject.setLabel(value);
                     }
@@ -1134,7 +887,7 @@ var devKit = (function () {
                     }
                     return EMPTY_BOOL;
                 },
-                set: function (value) {
+                set(value) {
                     if (has(tabObject, 'setVisible')) {
                         tabObject.setVisible(value);
                     }
@@ -1178,7 +931,7 @@ var devKit = (function () {
                     }
                     return EMPTY_STRING;
                 },
-                set: function (value) {
+                set(value) {
                     if (has(navigationItem, 'setLabel')) {
                         navigationItem.setLabel(value);
                     }
@@ -1191,7 +944,7 @@ var devKit = (function () {
                     }
                     return EMPTY_BOOL;
                 },
-                set: function (value) {
+                set(value) {
                     if (has(navigationItem, 'setVisible')) {
                         navigationItem.setVisible(value);
                     }
@@ -1271,7 +1024,7 @@ var devKit = (function () {
                     }
                     return EMPTY_BOOL;
                 },
-                set: function (value) {
+                set(value) {
                     if (has(quickViewControl, 'setDisabled')) {
                         quickViewControl.setDisabled(value);
                     }
@@ -1284,7 +1037,7 @@ var devKit = (function () {
                     }
                     return EMPTY_STRING;
                 },
-                set: function (value) {
+                set(value) {
                     if (has(quickViewControl, 'setLabel')) {
                         quickViewControl.setLabel(value);
                     }
@@ -1313,7 +1066,7 @@ var devKit = (function () {
                     }
                     return EMPTY_BOOL;
                 },
-                set: function (value) {
+                set(value) {
                     if (has(quickViewControl, 'setVisible')) {
                         quickViewControl.setVisible(value);
                     }
@@ -1424,7 +1177,7 @@ var devKit = (function () {
                     }
                     return 'none';
                 },
-                set: function (value) {
+                set(value) {
                     if (has(col, 'setRequiredLevel')) {
                         col.setRequiredLevel(value);
                     }
@@ -1437,7 +1190,7 @@ var devKit = (function () {
                     }
                     return EMPTY_STRING;
                 },
-                set: function (value) {
+                set(value) {
                     if (has(col, 'setValue')) {
                         col.setValue(value);
                     }
@@ -1453,7 +1206,7 @@ var devKit = (function () {
                     }
                     return EMPTY_BOOL;
                 },
-                set: function (value) {
+                set(value) {
                     if (has(col, 'controls.get')) {
                         var control = col.controls.get(0);
                         if (has(control, 'setDisabled')) {
@@ -1557,7 +1310,7 @@ var devKit = (function () {
                             }
                             return EMPTY_REFERENCE;
                         },
-                        set: function (value) {
+                        set(value) {
                             if (has(viewSelector, 'getCurrentView')) {
                                 viewSelector.setCurrentView(value);
                             }
@@ -1655,7 +1408,7 @@ var devKit = (function () {
                     }
                     return EMPTY_BOOL;
                 },
-                set: function (value) {
+                set(value) {
                     if (has(gridControl, 'setVisible')) {
                         gridControl.setVisible(value);
                     }
@@ -1757,7 +1510,7 @@ var devKit = (function () {
                     get() { return organizationSettings.baseCurrencyId; }
                 });
                 Object.defineProperty(obj, 'BaseCurrency', {
-                    get() {  return organizationSettings.baseCurrency; }
+                    get() { return organizationSettings.baseCurrency; }
                 });
                 Object.defineProperty(obj, 'DefaultCountryCode', {
                     get() { return organizationSettings.defaultCountryCode; }
@@ -1875,7 +1628,7 @@ var devKit = (function () {
         utility.NavigateTo = function (pageInput, navigationOptions, successCallback, errorCallback) {
             getNavigation.navigateTo(pageInput, navigationOptions).then(successCallback, errorCallback);
         };
-        var getPanel =  Xrm?.Panel;
+        var getPanel = Xrm?.Panel;
         utility.LoadPanel = function (url, title) {
             getPanel.loadPanel(url, title);
         };
@@ -1987,7 +1740,7 @@ var devKit = (function () {
             return Xrm.App.sidePanes.getAllPanes();
         }
         Object.defineProperty(sidePanes, 'DisplayState', {
-            get() { return Xrm.App.sidePanes.state;},
+            get() { return Xrm.App.sidePanes.state; },
             set(value) { Xrm.App.sidePanes.state = value; }
         });
         return sidePanes;
