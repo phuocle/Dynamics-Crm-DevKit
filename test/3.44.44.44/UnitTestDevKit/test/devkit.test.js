@@ -3,7 +3,7 @@ import {
     XrmMockGenerator, ContextMock, UserSettingsMock, ClientContextMock, LookupValueMock, DataMock, EntityMock, ItemCollectionMock, AttributeMock, StringControlMock,
     StringAttributeMock, UiMock, FormSelectorMock, FormItemMock, FormContextMock, OrganizationSettingsMock, EventContextMock, StageMock, StepMock, ProcessControlMock,
     UiCanGetVisibleElementMock, UiCanSetVisibleElementMock, ProcessMock, ProcessManagerMock, LookupAttributeMock, LookupControlMock, OptionSetAttributeMock,
-    QuickFormControlMock, GridControlMock, GridRowDataMock, GridRowMock, GridMock, RelationshipMock, ViewSelectorMock, IframeControlMock
+    QuickFormControlMock, GridControlMock, GridRowDataMock, GridRowMock, GridMock, RelationshipMock, ViewSelectorMock, IframeControlMock, HeaderSectionMock
 } from 'xrm-mock';
 beforeAll(() => {
     XrmMockGenerator.initialise();
@@ -1059,5 +1059,119 @@ describe('devKit', () => {
         expect(form.Body.IFRAME_PHUOCLE.Label).toBe("PHUOCLE New");
         expect(() => { form.Body.IFRAME_PHUOCLE.Src = "https://phuocle.net" }).toThrow(new Error("setSrc not implemented."));
         expect(() => { form.Body.IFRAME_PHUOCLE.Visible = true }).toThrow(new Error("setVisible not implemented."));
+    });
+    test('Tab & Section', () => {
+        //setup
+        XrmMockGenerator.initialise();
+        var tab_SUMMARY_TAB_Section_ACCOUNT_INFORMATION = XrmMockGenerator.Section.createSection("ACCOUNT_INFORMATION", "ACCOUNT INFORMATION", true, null, null);
+        var tab_SUMMARY_TAB_Section_ADDRESS = XrmMockGenerator.Section.createSection("ADDRESS", "ADDRESS", false, null, null);
+        var tab_SUMMARY_TAB = XrmMockGenerator.Tab.createTab("SUMMARY_TAB", "Summary", true, "expanded", null, new ItemCollectionMock([tab_SUMMARY_TAB_Section_ACCOUNT_INFORMATION, tab_SUMMARY_TAB_Section_ADDRESS]));
+        var executionContext = XrmMockGenerator.formContext;
+        //run
+        var form = {};
+        var body = {};
+        var tab = {
+            SUMMARY_TAB: {
+                Section: {
+                    ACCOUNT_INFORMATION: {},
+                    ADDRESS: {}
+                }
+            }
+        };
+        devKit.LoadTabs(executionContext, tab);
+        body.Tab = tab;
+        form.Body = body;
+        //test
+        var addTabStateChange = function (executionContext) { }
+        expect(tab_SUMMARY_TAB.tabStateChangeHandlers.length).toBe(0);
+        form.Body.Tab.SUMMARY_TAB.AddTabStateChange(addTabStateChange);
+        expect(tab_SUMMARY_TAB.tabStateChangeHandlers.length).toBe(1);
+        expect(form.Body.Tab.SUMMARY_TAB.DisplayState).toBe(OptionSet.TabDisplayState.Expanded);
+        form.Body.Tab.SUMMARY_TAB.DisplayState = OptionSet.TabDisplayState.Collapsed;
+        expect(form.Body.Tab.SUMMARY_TAB.DisplayState).toBe(OptionSet.TabDisplayState.Collapsed);
+        expect(form.Body.Tab.SUMMARY_TAB.Focus()).toBeUndefined();
+        expect(form.Body.Tab.SUMMARY_TAB.Label).toBe("Summary");
+        form.Body.Tab.SUMMARY_TAB.Label = "General";
+        expect(form.Body.Tab.SUMMARY_TAB.Label).toBe("General");
+        expect(form.Body.Tab.SUMMARY_TAB.Name).toBe("SUMMARY_TAB");
+        form.Body.Tab.SUMMARY_TAB.RemoveTabStateChange(addTabStateChange);
+        expect(tab_SUMMARY_TAB.tabStateChangeHandlers.length).toBe(0);
+        expect(form.Body.Tab.SUMMARY_TAB.Visible).toBeTruthy();
+        form.Body.Tab.SUMMARY_TAB.Visible = false;
+        expect(form.Body.Tab.SUMMARY_TAB.Visible).toBeFalsy();
+        expect(form.Body.Tab.SUMMARY_TAB.Section.ACCOUNT_INFORMATION.Label).toBe("ACCOUNT INFORMATION");
+        form.Body.Tab.SUMMARY_TAB.Section.ACCOUNT_INFORMATION.Label = "ACCOUNT NOTE";
+        expect(form.Body.Tab.SUMMARY_TAB.Section.ACCOUNT_INFORMATION.Label).toBe("ACCOUNT NOTE");
+        expect(form.Body.Tab.SUMMARY_TAB.Section.ACCOUNT_INFORMATION.Name).toBe("ACCOUNT_INFORMATION");
+        expect(form.Body.Tab.SUMMARY_TAB.Section.ACCOUNT_INFORMATION.Visible).toBeTruthy();
+        form.Body.Tab.SUMMARY_TAB.Section.ACCOUNT_INFORMATION.Visible = false;
+        expect(form.Body.Tab.SUMMARY_TAB.Section.ACCOUNT_INFORMATION.Visible).toBeFalsy();
+        expect(form.Body.Tab.SUMMARY_TAB.Section.ACCOUNT_INFORMATION.Parent).toBeDefined();
+        expect(form.Body.Tab.SUMMARY_TAB.Parent).toBeDefined();
+        expect(() => { form.Body.Tab.SUMMARY_TAB.ContentType }).toThrow(new Error("Method not implemented."));
+        expect(() => { form.Body.Tab.SUMMARY_TAB.ContentType = OptionSet.TabContentType.SingleComponent }).toThrow(new Error("Method not implemented."));
+    });
+    test('Footer & Headerr', () => {
+        //setup
+        var stringControl = new StringControlMock({
+            attribute: new StringAttributeMock({
+                name: "numberofemployees",
+                value: "6200"
+            }),
+            name: "numberofemployees",
+            label: "Number of Employees"
+        });
+        var stringHeaderControl = new StringControlMock({
+            attribute: new StringAttributeMock({
+                name: "numberofemployees",
+                value: "6200"
+            }),
+            name: "header_numberofemployees",
+            label: "Number of Employees"
+        });
+        var ui = new UiMock({
+            formSelector: new FormSelectorMock(new ItemCollectionMock([new FormItemMock({
+                id: "8d2dbd8c-c9f8-4cb5-8838-f5a916a6098a",
+                label: "Account",
+                currentItem: true,
+                formType: OptionSet.FormType.Update
+            })])),
+            controls: new ItemCollectionMock([
+                stringControl,
+                stringHeaderControl
+            ]),
+            headerSection: new HeaderSectionMock(true, true, true)
+        });
+        var attributes = new ItemCollectionMock([
+            new AttributeMock({
+                name: "numberofemployees",
+                isDirty: true
+            })
+        ]);
+        var entity = new EntityMock({
+            attributes: attributes
+        });
+        var data = new DataMock(entity);
+        XrmMockGenerator.formContext = new FormContextMock(data, ui);
+        var executionContext = XrmMockGenerator.formContext;
+        //run
+        var form = {};
+        var header = {
+            NumberOfEmployees: {},
+        };
+        devKit.LoadFields(executionContext, header, "header_");
+        form.Header = header;
+        //result
+        expect(form.Header.NumberOfEmployees.Label).toBe("Number of Employees");
+        expect(form.Header.NumberOfEmployees.ControlName).toBe("header_numberofemployees");
+        expect(form.Header.BodyVisible).toBeTruthy();
+        expect(form.Header.CommandBarVisible).toBeTruthy();
+        expect(form.Header.TabNavigatorVisible).toBeTruthy();
+        form.Header.BodyVisible = false;
+        form.Header.CommandBarVisible = false;
+        form.Header.TabNavigatorVisible = false;
+        expect(form.Header.BodyVisible).toBeFalsy();
+        expect(form.Header.CommandBarVisible).toBeFalsy();
+        expect(form.Header.TabNavigatorVisible).toBeFalsy();
     });
 });

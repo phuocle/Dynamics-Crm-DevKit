@@ -686,14 +686,7 @@ var devKit = (function () {
             })();
             loadField(formContext, body[field], attribute, control);
         }
-        if (type === "footer_") {
-            var getFooterSection = formContext?.ui?.footerSection;
-            Object.defineProperty(body, 'Visible', {
-                get() { return getFooterSection?.getVisible(); },
-                set(value) { getFooterSection?.setVisible(value); }
-            });
-        }
-        else if (type === "header_") {
+        if (type === "header_") {
             var getHeaderSection = formContext?.ui?.headerSection;
             Object.defineProperty(body, 'BodyVisible', {
                 get() { return getHeaderSection?.getBodyVisible(); },

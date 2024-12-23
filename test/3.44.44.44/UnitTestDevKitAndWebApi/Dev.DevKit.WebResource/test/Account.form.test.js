@@ -689,6 +689,9 @@ define(['xrm-mock'], function () {
                 form.FormIsVisible("Account");
                 expect(form.FormId).toBe("8d2dbd8c-c9f8-4cb5-8838-f5a916a6098a");
                 expect(form.FormLabel).toBe("Account");
+
+                //form.Navigation.Account_Emails.
+
             });
         });
         describe('Tab & Section', () => {
