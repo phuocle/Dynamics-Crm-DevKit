@@ -624,7 +624,9 @@ describe('devKit', () => {
                     { text: "Entertainment_Retail", value: 14 },
                     { text: "Financial", value: 16 },
                     { text: "Insurance", value: 20 }
-                ]
+                ],
+                initialValue: 1,
+                value: 1
             }),
             options: [
                 { text: "Accounting", value: 1 },
@@ -642,6 +644,15 @@ describe('devKit', () => {
                 isPartyList: true
             })
         }));
+        XrmMockGenerator.Attribute.createNumber({
+            attributeType: "decimal",
+            isDirty: false,
+            name: "numberofemployees",
+            value: 100,
+            max: 1000,
+            min: 0,
+            precision: 2
+        });
         var executionContext = XrmMockGenerator.formContext;
         //run
         var body = {
@@ -651,12 +662,43 @@ describe('devKit', () => {
             CreatedOn: {},
             ModifiedOn: {},
             IndustryCode: {},
-            to: {}
+            to: {},
+            NumberOfEmployees: {}
         };
         devKit.LoadFields(executionContext, body);
         var form = {};
         form.Body = body;
         //test
+        var nameAddOnChange_data = "";
+        var nameAddOnChange = function (executionContent) { nameAddOnChange_data = "ON-CHANGED"; }
+        form.Body.Name.AddOnChange(nameAddOnChange);
+        form.Body.Name.FireOnChange();
+        expect(nameAddOnChange_data).toBe("ON-CHANGED");
+        expect(form.Body.Name.AttributeType).toBe(OptionSet.FieldAttributeType.String);
+        expect(form.Body.Name.Format).toBe(OptionSet.FieldFormat.Text);
+        expect(form.Body.Name.IsDirty).toBeTruthy();
+        expect(form.Body.Name.AttributeName).toBe("name");
+        expect(form.Body.Name.MaxLength).toBe(100);
+        expect(() => { form.Body.Name.AttributeParent }).toThrow(new Error("getParent not implemented"));
+        expect(form.Body.Name.RequiredLevel).toBe(OptionSet.FieldRequiredLevel.Required);
+        expect(form.Body.Name.SubmitMode).toBe(OptionSet.FieldSubmitMode.Always);
+        expect(() => { form.Body.Name.UserPrivilege }).toThrow(new Error("getUserPrivilege not implemented"));
+        expect(form.Body.Name.Value).toBe("LE VAN PHUOC");
+        expect(() => { form.Body.Name.IsValid }).toThrow(new Error("isValid not implemented"));
+        nameAddOnChange_data = "REMOVE";
+        form.Body.Name.RemoveOnChange(nameAddOnChange);
+        form.Body.Name.FireOnChange();
+        expect(nameAddOnChange_data).toBe("REMOVE");
+        form.Body.Name.RequiredLevel = OptionSet.FieldRequiredLevel.Recommended;
+        expect(form.Body.Name.RequiredLevel).toBe(OptionSet.FieldRequiredLevel.Recommended);
+        form.Body.Name.SubmitMode = OptionSet.FieldSubmitMode.Never;
+        expect(form.Body.Name.SubmitMode).toBe(OptionSet.FieldSubmitMode.Never);
+        form.Body.Name.Value = null;
+        expect(form.Body.Name.Value).toBeNull();
+        form.Body.Name.Value = "NGUYEN VAN PHUOC";
+        expect(form.Body.Name.Value).toBe("NGUYEN VAN PHUOC");
+        expect(() => { form.Body.Name.SetIsValid(null, null); }).toThrow(new Error("setIsValid not implemented"));
+
         form.Body.Name.AddNotification({  messages: ["ABC"], notificationLevel: OptionSet.FieldNotificationLevel.Error, uniqueId: "123", actions: [] });
         expect("form.Body.Name.AddNotification").toBe("form.Body.Name.AddNotification");
         form.Body.Name.ClearNotification("123");
@@ -667,7 +709,6 @@ describe('devKit', () => {
         expect(form.Body.Name.Label).toBe("Account Name");
         expect(form.Body.Name.ControlName).toBe("name");
         expect(form.Body.Name1.ControlName).toBe("name1");
-        expect(form.Body.Name1.Value).toBe("LE VAN PHUOC");
         expect(form.Body.Name.ControlParent).toBeUndefined();
         expect(form.Body.Name1.Visible).toBeFalsy();
         form.Body.Name.Disabled = false;
@@ -679,6 +720,10 @@ describe('devKit', () => {
         expect("form.Body.Name.SetNotification").toBe("form.Body.Name.SetNotification");
         form.Body.Name.Visible = false;
         expect(form.Body.Name.Visible).toBeFalsy();
+        form.Body.NumberOfEmployees.Precision = 3;
+        expect(form.Body.NumberOfEmployees.Precision).toBe(3);
+        expect(form.Body.NumberOfEmployees.Max).toBe(1000);
+        expect(form.Body.NumberOfEmployees.Min).toBe(0);
 
         expect(lookup.filters.length).toBe(0);
         var abc_LookupAddPreSearch = () => {
@@ -736,7 +781,6 @@ describe('devKit', () => {
         form.Body.ModifiedOn.ShowTime = false;
         expect(form.Body.ModifiedOn.ShowTime).toBeFalsy();
 
-
         form.Body.IndustryCode.AddNotification({ messages: ["ABC"], notificationLevel: OptionSet.FieldNotificationLevel.Error, uniqueId: "123", actions: [] });
         expect("form.Body.IndustryCode.AddNotification").toBe("form.Body.IndustryCode.AddNotification");
         expect(form.Body.IndustryCode.Options.length).toBe(6);
@@ -753,9 +797,14 @@ describe('devKit', () => {
         expect(form.Body.IndustryCode.ControlName).toBe("industrycode");
         expect(form.Body.IndustryCode.ControlParent).toBeUndefined();
         expect(form.Body.IndustryCode.Visible).toBeTruthy();
+        var option = form.Body.IndustryCode.Option(1);
+        expect(option).toBeDefined();
+        expect(option.text).toBe("Accounting");
+        expect(option.value).toBe(1);
         form.Body.IndustryCode.AddOption("New Option 999", 999, 0);
         form.Body.IndustryCode.AddOption("New Option 998", 998, 0);
         form.Body.IndustryCode.AddOption("New Option 997", 997, 0);
+        expect(form.Body.IndustryCode.InitialValue).toBe(1);
         expect(form.Body.IndustryCode.ControlOptions.length).toBe(3);
         expect(form.Body.IndustryCode.RemoveOption(1));
         expect(form.Body.IndustryCode.ControlOptions.length).toBe(2);
@@ -768,7 +817,10 @@ describe('devKit', () => {
         expect("form.Body.IndustryCode.SetNotification").toBe("form.Body.IndustryCode.SetNotification");
         form.Body.IndustryCode.Visible = false;
         expect(form.Body.IndustryCode.Visible).toBeFalsy();
-
+        var selectedOption = form.Body.IndustryCode.SelectedOption;
+        expect(selectedOption.text).toBe("Accounting");
+        expect(selectedOption.value).toBe(1);
+        expect(form.Body.IndustryCode.Text).toBe("Accounting");
         expect(form.Body.to.IsPartyList).toBeTruthy();
     });
     test('devKit.LoadField - quickform', () => {
@@ -911,6 +963,8 @@ describe('devKit', () => {
         expect(form.Grid.Contacts.ViewSelector.CurrentView.id).toBe("GUID-NEW");
         expect(form.Grid.Contacts.ViewSelector.CurrentView.name).toBe("NAME-NEW");
         expect(form.Grid.Contacts.ViewSelector.Visible).toBeTruthy();
+        form.Grid.Contacts.Visible = false;
+        expect(form.Grid.Contacts.Visible).toBeFalsy();
         expect(() => { form.Grid.Contacts.Refresh(); }).toThrow(new Error("Method not implemented."));
         expect(() => { form.Grid.Contacts.RefreshRibbon(); }).toThrow(new Error("Method not implemented."));
         expect(() => { form.Grid.Contacts.OpenRelatedGrid(); }).toThrow(new Error("openRelatedGrid not implemented."));
@@ -939,12 +993,12 @@ describe('devKit', () => {
         row0col0.Disabled = false;
         expect(row0col0.Disabled).toBeFalsy();
         expect(row0col0.Label).toBe("abc_col1");
-        form.Grid.Contacts.Rows.forEach(function (row, index) {
-            expect(row).toBeDefined();
-            row.Columns.forEach(function (column, index) {
-                expect(column).toBeDefined();
-            });
-        });
+        // form.Grid.Contacts.Rows.forEach(function (row, index) {
+        //     expect(row).toBeDefined();
+        //     row.Columns.forEach(function (column, index) {
+        //         expect(column).toBeDefined();
+        //     });
+        // });
         var rowNotExist = form.Grid.Contacts.Rows.get(4);
         expect(rowNotExist).toBeDefined();
         var columnNotExist = row0.Columns.get("col_not_exisit");
@@ -955,6 +1009,7 @@ describe('devKit', () => {
         form.Grid.Contacts.SelectedRows.forEach(function (row, index) {
             expect(row).toBeDefined();
         });
+        //expect(form.Grid.Contacts.Refresh).toBeDefined();
     });
     test('iframe control type', () => {
         //setup

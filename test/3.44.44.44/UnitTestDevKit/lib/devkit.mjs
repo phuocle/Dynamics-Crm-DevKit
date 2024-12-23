@@ -534,118 +534,118 @@ var devKit = (function () {
         });
         Object.defineProperty(field, 'SelectedResults', {
             get() {
-                    return control.getSelectedResults();
+                return control.getSelectedResults();
             }
         });
         Object.defineProperty(field, 'Attribute', {
             get() {
-                    return control.getAttribute();
+                return control.getAttribute();
             }
         });
         Object.defineProperty(field, 'Precision', {
             get() {
-                    return attribute.getPrecision();
+                return attribute.getPrecision();
             },
             set(value) {
-                    attribute.setPrecision(value);
+                attribute.setPrecision(value);
             }
         });
         Object.defineProperty(field, 'RequiredLevel', {
             get() {
-                    return attribute.getRequiredLevel();
+                return attribute.getRequiredLevel();
             },
             set(value) {
-                    attribute.setRequiredLevel(value);
+                attribute.setRequiredLevel(value);
             }
         });
         Object.defineProperty(field, 'SubmitMode', {
             get() {
-                    return attribute.getSubmitMode();
+                return attribute.getSubmitMode();
             },
             set(value) {
-                    attribute.setSubmitMode(value);
+                attribute.setSubmitMode(value);
             }
         });
         Object.defineProperty(field, 'Value', {
             get() {
-                    return attribute.getValue();
+                return attribute.getValue();
             },
             set(value) {
                 if (formContext.ui.getFormType() === 3 || formContext.ui.getFormType() === 4) return;
-                    attribute.setValue(value);
+                attribute.setValue(value);
             }
         });
         Object.defineProperty(field, 'Data', {
             get() {
-                    return control.getData();
+                return control.getData();
             },
             set(value) {
-                    control.setData(value);
+                control.setData(value);
             }
         });
         Object.defineProperty(field, 'DefaultView', {
             get() {
-                    return control.getDefaultView();
+                return control.getDefaultView();
             },
             set(value) {
-                    control.setDefaultView(value);
+                control.setDefaultView(value);
             }
         });
         Object.defineProperty(field, 'Disabled', {
             get() {
-                    return control.getDisabled();
+                return control.getDisabled();
             },
             set(value) {
                 if (formContext.ui.getFormType() === 3 || formContext.ui.getFormType() === 4) return;
-                    control.setDisabled(value);
+                control.setDisabled(value);
             }
         });
         Object.defineProperty(field, 'EntityTypes', {
             get() {
-                    return control.getEntityTypes();
+                return control.getEntityTypes();
             },
             set(value) {
-                    control.setEntityTypes(value);
+                control.setEntityTypes(value);
             }
         });
         Object.defineProperty(field, 'Label', {
             get() {
-                    return control.getLabel();
+                return control.getLabel();
             },
             set(value) {
-                    control.setLabel(value);
+                control.setLabel(value);
             }
         });
         Object.defineProperty(field, 'SearchQuery', {
             get() {
-                    return control.getSearchQuery();
+                return control.getSearchQuery();
             },
             set(value) {
-                    control.setSearchQuery(value);
+                control.setSearchQuery(value);
             }
         });
         Object.defineProperty(field, 'ShowTime', {
             get() {
-                    return control.getShowTime();
+                return control.getShowTime();
             },
             set(value) {
-                    control.setShowTime(value);
+                control.setShowTime(value);
             }
         });
         Object.defineProperty(field, 'Src', {
             get() {
-                    return control.getSrc();
+                return control.getSrc();
             },
             set(value) {
-                    control.setSrc(value);
+                control.setSrc(value);
             }
         });
         Object.defineProperty(field, 'Visible', {
             get() {
-                    return control.getVisible();
+                return control.getVisible();
             },
             set(value) {
-                    control.setVisible(value);
+                control.setVisible(value);
             }
         });
     }
@@ -657,15 +657,7 @@ var devKit = (function () {
                 }
                 return (type + field).toLowerCase();
             })();
-            var control = null;
-            if (formContext.getControl) {
-                control = formContext.getControl(logicalName);
-            }
-            if (isNullOrUndefined(control)) {
-                if (formContext.getControl) {
-                    control = formContext.getControl(field);
-                }
-            }
+            var control = formContext?.getControl(logicalName) ?? formContext?.getControl(field);
             var attribute = (function () {
                 var attr = null;
                 if (formContext) {
@@ -695,202 +687,111 @@ var devKit = (function () {
             loadField(formContext, body[field], attribute, control);
         }
         if (type === "footer_") {
+            var getFooterSection = formContext?.ui?.footerSection;
             Object.defineProperty(body, 'Visible', {
-                get() {
-                    if (has(formContext, 'ui.footerSection.getVisible')) {
-                        return formContext.ui.footerSection.getVisible();
-                    }
-                    return EMPTY_BOOL;
-                },
-                set(value) {
-                    if (has(formContext, 'ui.footerSection.setVisible')) {
-                        formContext.ui.footerSection.setVisible(value);
-                    }
-                }
+                get() { return getFooterSection?.getVisible(); },
+                set(value) { getFooterSection?.setVisible(value); }
             });
         }
         else if (type === "header_") {
+            var getHeaderSection = formContext?.ui?.headerSection;
             Object.defineProperty(body, 'BodyVisible', {
-                get() {
-                    if (has(formContext, 'ui.headerSection.getBodyVisible')) {
-                        return formContext.ui.headerSection.getBodyVisible();
-                    }
-                    return EMPTY_BOOL;
-                },
-                set(value) {
-                    if (has(formContext, 'ui.headerSection.setBodyVisible')) {
-                        formContext.ui.headerSection.setBodyVisible(value);
-                    }
-                }
+                get() { return getHeaderSection?.getBodyVisible(); },
+                set(value) { getHeaderSection?.setBodyVisible(value); }
             });
             Object.defineProperty(body, 'CommandBarVisible', {
-                get() {
-                    if (has(formContext, 'ui.headerSection.getCommandBarVisible')) {
-                        return formContext.ui.headerSection.getCommandBarVisible();
-                    }
-                    return EMPTY_BOOL;
-                },
-                set(value) {
-                    if (has(formContext, 'ui.headerSection.setCommandBarVisible')) {
-                        formContext.ui.headerSection.setCommandBarVisible(value);
-                    }
-                }
+                get() { return getHeaderSection?.getCommandBarVisible(); },
+                set(value) { getHeaderSection?.setCommandBarVisible(value); }
             });
             Object.defineProperty(body, 'TabNavigatorVisible', {
-                get() {
-                    if (has(formContext, 'ui.headerSection.getTabNavigatorVisible')) {
-                        return formContext.ui.headerSection.getTabNavigatorVisible();
-                    }
-                    return EMPTY_BOOL;
-                },
-                set(value) {
-                    if (has(formContext, 'ui.headerSection.setTabNavigatorVisible')) {
-                        formContext.ui.headerSection.setTabNavigatorVisible(value);
-                    }
-                }
+                get() { return getHeaderSection?.getTabNavigatorVisible(); },
+                set(value) { getHeaderSection?.setTabNavigatorVisible(value); }
             });
         }
         return body;
     }
     function loadTabs(formContext, tabs) {
         var loadSection = function (formContext, tab, sections, section) {
-            var tabObject = NULL;
-            if (has(formContext, 'ui.tabs.get')) {
-                tabObject = formContext.ui.tabs.get(tab);
-            }
-            var sectionObject = NULL;
-            if (has(tabObject, 'sections.get')) {
-                sectionObject = tabObject.sections.get(section);
-            }
+            var tabObject = formContext?.ui?.tabs?.get(tab);
+            var sectionObject = tabObject?.sections?.get(section);
             Object.defineProperty(sections[section], 'Name', {
                 get() {
-                    if (has(sectionObject, 'getName')) {
-                        return sectionObject.getName();
-                    }
-                    return EMPTY_STRING;
+                    return sectionObject.getName();
                 }
             });
             Object.defineProperty(sections[section], 'Parent', {
                 get() {
-                    if (has(sectionObject, 'getParent')) {
-                        return sectionObject.getParent();
-                    }
-                    return NULL;
+                    return sectionObject.getParent();
                 }
             });
             Object.defineProperty(sections[section], 'Label', {
                 get() {
-                    if (has(sectionObject, 'getLabel')) {
-                        return sectionObject.getLabel();
-                    }
-                    return EMPTY_STRING;
+                    return sectionObject.getLabel();
                 },
                 set(value) {
-                    if (has(sectionObject, 'setLabel')) {
-                        sectionObject.setLabel(value);
-                    }
+                    sectionObject.setLabel(value);
                 }
             });
             Object.defineProperty(sections[section], 'Visible', {
                 get() {
-                    if (has(sectionObject, 'getVisible')) {
-                        return sectionObject.getVisible();
-                    }
-                    return EMPTY_BOOL;
+                    return sectionObject.getVisible();
                 },
                 set(value) {
-                    if (has(sectionObject, 'setVisible')) {
-                        sectionObject.setVisible(value);
-                    }
+                    sectionObject.setVisible(value);
                 }
             });
         }
         var loadTab = function (formContext, tabs, tab) {
-            var tabObject = NULL;
-            if (has(formContext, 'ui.tabs.get')) {
-                tabObject = formContext.ui.tabs.get(tab);
-            }
+            var tabObject = formContext?.ui?.tabs?.get(tab);
             tabs[tab].AddTabStateChange = function (callback) {
-                if (has(tabObject, 'addTabStateChange')) {
-                    tabObject.addTabStateChange(callback);
-                }
+                tabObject.addTabStateChange(callback);
             };
             tabs[tab].Focus = function () {
-                if (has(tabObject, 'setFocus')) {
-                    tabObject.setFocus();
-                }
+                tabObject.setFocus();
             };
             tabs[tab].RemoveTabStateChange = function (callback) {
-                if (has(tabObject, 'removeTabStateChange')) {
-                    tabObject.removeTabStateChange(callback);
-                }
+                tabObject.removeTabStateChange(callback);
             };
             Object.defineProperty(tabs[tab], 'Name', {
                 get() {
-                    if (has(tabObject, 'getName')) {
-                        return tabObject.getName();
-                    }
-                    return EMPTY_STRING;
+                    return tabObject.getName();
                 }
             });
             Object.defineProperty(tabs[tab], 'Parent', {
                 get() {
-                    if (has(tabObject, 'getParent')) {
-                        return tabObject.getParent();
-                    }
-                    return NULL;
+                    return tabObject.getParent();
                 }
             });
             Object.defineProperty(tabs[tab], 'DisplayState', {
                 get() {
-                    if (has(tabObject, 'getDisplayState')) {
-                        return tabObject.getDisplayState();
-                    }
-                    return 'expanded';
+                    return tabObject.getDisplayState();
                 },
                 set(value) {
-                    if (has(tabObject, 'setDisplayState')) {
-                        tabObject.setDisplayState(value);
-                    }
+                    tabObject.setDisplayState(value);
                 }
             });
             Object.defineProperty(tabs[tab], 'ContentType', {
                 get() {
-                    if (has(tabObject, 'getContentType')) {
-                        return tabObject.getContentType();
-                    }
-                    return 'cardSections';
+                    return tabObject.getContentType();
                 },
                 set(value) {
-                    if (has(tabObject, 'setContentType')) {
-                        tabObject.setContentType(value);
-                    }
+                    tabObject.setContentType(value);
                 }
             });
             Object.defineProperty(tabs[tab], 'Label', {
                 get() {
-                    if (has(tabObject, 'getLabel')) {
-                        return tabObject.getLabel();
-                    }
-                    return EMPTY_STRING;
+                    return tabObject.getLabel();
                 },
                 set(value) {
-                    if (has(tabObject, 'setLabel')) {
-                        tabObject.setLabel(value);
-                    }
+                    tabObject.setLabel(value);
                 }
             });
             Object.defineProperty(tabs[tab], 'Visible', {
                 get() {
-                    if (has(tabObject, 'getVisible')) {
-                        return tabObject.getVisible();
-                    }
-                    return EMPTY_BOOL;
+                    return tabObject.getVisible();
                 },
                 set(value) {
-                    if (has(tabObject, 'setVisible')) {
-                        tabObject.setVisible(value);
-                    }
+                    tabObject.setVisible(value);
                 }
             });
             for (var section in tabs[tab].Section) {
@@ -912,42 +813,27 @@ var devKit = (function () {
                 }
             }
             navigations[navigation].Focus = function () {
-                if (has(navigationItem, 'setFocus')) {
-                    navigationItem.setFocus();
-                }
+                navigationItem.setFocus();
             };
             Object.defineProperty(navigations[navigation], 'Id', {
                 get() {
-                    if (has(navigationItem, 'getId')) {
-                        return navigationItem.getId();
-                    }
-                    return EMPTY_STRING;
+                    return navigationItem.getId();
                 }
             });
             Object.defineProperty(navigations[navigation], 'Label', {
                 get() {
-                    if (has(navigationItem, 'getLabel')) {
-                        return navigationItem.getLabel();
-                    }
-                    return EMPTY_STRING;
+                    return navigationItem.getLabel();
                 },
                 set(value) {
-                    if (has(navigationItem, 'setLabel')) {
-                        navigationItem.setLabel(value);
-                    }
+                    navigationItem.setLabel(value);
                 }
             });
             Object.defineProperty(navigations[navigation], 'Visible', {
                 get() {
-                    if (has(navigationItem, 'getVisible')) {
-                        return navigationItem.getVisible();
-                    }
-                    return EMPTY_BOOL;
+                    return navigationItem.getVisible();
                 },
                 set(value) {
-                    if (has(navigationItem, 'setVisible')) {
-                        navigationItem.setVisible(value);
-                    }
+                    navigationItem.setVisible(value);
                 }
             });
         }
@@ -957,15 +843,12 @@ var devKit = (function () {
     }
     function loadQuickForms(formContext, quickForms) {
         var loadQuickForm = function (formContext, quickForms, quickForm) {
-            var quickViewControl = NULL;
             var fields = [];
             for (var field in quickForms[quickForm]) {
                 fields.push(field);
                 delete quickForms[quickForm][field];
             }
-            if (has(formContext, 'ui.quickForms.get')) {
-                quickViewControl = formContext.ui.quickForms.get(quickForm);
-            }
+            var quickViewControl = formContext.ui.quickForms.get(quickForm);
             Object.defineProperty(quickForms[quickForm], 'Body', {
                 get() {
                     var obj = {};
@@ -983,93 +866,59 @@ var devKit = (function () {
                 }
             });
             quickForms[quickForm].Controls = function (arg) {
-                if (has(quickViewControl, 'getControl')) {
-                    if (arg === undefined) {
-                        return quickViewControl.getControl();
-                    }
-                    else {
-                        return quickViewControl.getControl(arg);
-                    }
+                if (arg === undefined) {
+                    return quickViewControl.getControl();
                 }
-                return [];
+                else {
+                    return quickViewControl.getControl(arg);
+                }
             };
             quickForms[quickForm].IsLoaded = function () {
-                if (has(quickViewControl, 'isLoaded')) {
-                    return quickViewControl.isLoaded();
-                }
-                return EMPTY_BOOL;
+                return quickViewControl.isLoaded();
             };
             quickForms[quickForm].Refresh = function () {
-                if (has(quickViewControl, 'refresh')) {
-                    quickViewControl.refresh();
-                }
+                quickViewControl.refresh();
             };
             quickForms[quickForm].Focus = function () {
-                if (has(quickViewControl, 'setFocus')) {
-                    quickViewControl.setFocus();
-                }
+                quickViewControl.setFocus();
             };
             Object.defineProperty(quickForms[quickForm], 'ControlType', {
                 get() {
-                    if (has(quickViewControl, 'getControlType')) {
-                        return quickViewControl.getControlType();
-                    }
-                    return EMPTY_STRING;
+                    return quickViewControl.getControlType();
                 }
             });
             Object.defineProperty(quickForms[quickForm], 'Disabled', {
                 get() {
-                    if (has(quickViewControl, 'getDisabled')) {
-                        return quickViewControl.getDisabled();
-                    }
-                    return EMPTY_BOOL;
+                    return quickViewControl.getDisabled();
                 },
                 set(value) {
-                    if (has(quickViewControl, 'setDisabled')) {
-                        quickViewControl.setDisabled(value);
-                    }
+                    quickViewControl.setDisabled(value);
                 }
             });
             Object.defineProperty(quickForms[quickForm], 'Label', {
                 get() {
-                    if (has(quickViewControl, 'getLabel')) {
-                        return quickViewControl.getLabel();
-                    }
-                    return EMPTY_STRING;
+                    return quickViewControl.getLabel();
                 },
                 set(value) {
-                    if (has(quickViewControl, 'setLabel')) {
-                        quickViewControl.setLabel(value);
-                    }
+                    quickViewControl.setLabel(value);
                 }
             });
             Object.defineProperty(quickForms[quickForm], 'ControlName', {
                 get() {
-                    if (has(quickViewControl, 'getName')) {
-                        return quickViewControl.getName();
-                    }
-                    return EMPTY_STRING;
+                    return quickViewControl.getName();
                 }
             });
             Object.defineProperty(quickForms[quickForm], 'ControlParent', {
                 get() {
-                    if (has(quickViewControl, 'getParent')) {
-                        return quickViewControl.getParent();
-                    }
-                    return NULL;
+                    return quickViewControl.getParent();
                 }
             });
             Object.defineProperty(quickForms[quickForm], 'Visible', {
                 get() {
-                    if (has(quickViewControl, 'getVisible')) {
-                        return quickViewControl.getVisible();
-                    }
-                    return EMPTY_BOOL;
+                    return quickViewControl.getVisible();
                 },
                 set(value) {
-                    if (has(quickViewControl, 'setVisible')) {
-                        quickViewControl.setVisible(value);
-                    }
+                    quickViewControl.setVisible(value);
                 }
             });
         }
@@ -1082,59 +931,39 @@ var devKit = (function () {
             var obj = {};
             Object.defineProperty(obj, 'EntityName', {
                 get() {
-                    if (has(row, 'data.entity.getEntityName')) {
-                        return row.data.entity.getEntityName();
-                    }
-                    return EMPTY_STRING;
+                    return row.data.entity.getEntityName();
                 }
             });
             Object.defineProperty(obj, 'EntityReference', {
                 get() {
-                    if (has(row, 'data.entity.getEntityReference')) {
-                        return row.data.entity.getEntityReference();
-                    }
-                    return EMPTY_REFERENCE;
+                    return row.data.entity.getEntityReference();
                 }
             });
             Object.defineProperty(obj, 'EntityId', {
                 get() {
-                    if (has(row, 'data.entity.getId')) {
-                        return row.data.entity.getId();
-                    }
-                    return EMPTY_GUID;
+                    return row.data.entity.getId();
                 }
             });
             Object.defineProperty(obj, 'PrimaryAttributeValue', {
                 get() {
-                    if (has(row, 'data.entity.getPrimaryAttributeValue')) {
-                        return row.data.entity.getPrimaryAttributeValue();
-                    }
-                    return EMPTY_STRING;
+                    return row.data.entity.getPrimaryAttributeValue();
                 }
             });
             Object.defineProperty(obj, 'Columns', {
                 get() {
                     var obj = {};
                     obj.getLength = function () {
-                        if (has(row, 'data.entity.attributes')) {
-                            return row.data.entity.attributes.getLength();
-                        }
-                        return EMPTY_NUMBER;
+                        return row.data.entity.attributes.getLength();
                     }
                     obj.get = function (index) {
-                        if (has(row, 'data.entity.attributes')) {
-                            var column = row.data.entity.attributes.get(index);
-                            return loadGridColumn(column);
-                        }
-                        return loadGridColumn({});
+                        var column = row.data.entity.attributes.get(index);
+                        return loadGridColumn(column);
                     }
                     obj.forEach = function (callback) {
-                        if (has(row, 'data.entity.attributes')) {
-                            var columns = row.data.entity.attributes;
-                            for (var index = 0; index < columns.getLength(); index++) {
-                                var column = columns.get(index);
-                                callback(loadGridColumn(column), index);
-                            }
+                        var columns = row.data.entity.attributes;
+                        for (var index = 0; index < columns.getLength(); index++) {
+                            var column = columns.get(index);
+                            callback(loadGridColumn(column), index);
                         }
                     }
                     return obj;
@@ -1145,183 +974,107 @@ var devKit = (function () {
         var loadGridColumn = function (col) {
             var obj = {};
             obj.SetNotification = function (message, uniqueId) {
-                if (has(col, 'controls.get')) {
-                    var control = col.controls.get(0);
-                    if (has(control, 'setNotification')) {
-                        return control.setNotification(message, uniqueId);
-                    }
-                }
-                return EMPTY_BOOL;
+                var control = col.controls.get(0);
+                return control.setNotification(message, uniqueId);
             };
             obj.ClearNotification = function (uniqueId) {
-                if (has(col, 'controls.get')) {
-                    var control = col.controls.get(0);
-                    if (has(control, 'clearNotification')) {
-                        return control.clearNotification(uniqueId);
-                    }
-                }
-                return EMPTY_BOOL;
+                var control = col.controls.get(0);
+                return control.clearNotification(uniqueId);
             };
             Object.defineProperty(obj, 'Name', {
                 get() {
-                    if (has(col, 'getName')) {
-                        return col.getName();
-                    }
-                    return EMPTY_STRING;
+                    return col.getName();
                 }
             });
             Object.defineProperty(obj, 'RequiredLevel', {
                 get() {
-                    if (has(col, 'getRequiredLevel')) {
-                        return col.getRequiredLevel();
-                    }
-                    return 'none';
+                    return col.getRequiredLevel();
                 },
                 set(value) {
-                    if (has(col, 'setRequiredLevel')) {
-                        col.setRequiredLevel(value);
-                    }
+                    col.setRequiredLevel(value);
                 }
             });
             Object.defineProperty(obj, 'Value', {
                 get() {
-                    if (has(col, 'getValue')) {
-                        return col.getValue();
-                    }
-                    return EMPTY_STRING;
+                    return col.getValue();
                 },
                 set(value) {
-                    if (has(col, 'setValue')) {
-                        col.setValue(value);
-                    }
+                    col.setValue(value);
                 }
             });
             Object.defineProperty(obj, 'Disabled', {
                 get() {
-                    if (has(col, 'controls.get')) {
-                        var control = col.controls.get(0);
-                        if (has(control, 'getDisabled')) {
-                            return control.getDisabled();
-                        }
-                    }
-                    return EMPTY_BOOL;
+                    var control = col.controls.get(0);
+                    return control.getDisabled();
                 },
                 set(value) {
-                    if (has(col, 'controls.get')) {
-                        var control = col.controls.get(0);
-                        if (has(control, 'setDisabled')) {
-                            control.setDisabled(value);
-                        }
-                    }
+                    var control = col.controls.get(0);
+                    control.setDisabled(value);
                 }
             });
             Object.defineProperty(obj, 'Label', {
                 get() {
-                    if (has(col, 'controls.get')) {
-                        var control = col.controls.get(0);
-                        if (has(control, 'getLabel')) {
-                            return control.getLabel();
-                        }
-                    }
-                    return EMPTY_STRING;
+                    var control = col.controls.get(0);
+                    return control.getLabel();
                 }
             });
             return obj;
         }
         var loadGrid = function (formContext, grids, grid) {
-            var gridControl = NULL;
-            if (has(formContext, 'getControl')) {
-                gridControl = formContext.getControl(grid);
-            }
+            var gridControl = formContext.getControl(grid);
             grids[grid].AddOnLoad = function (callback) {
-                if (has(gridControl, 'addOnLoad')) {
-                    gridControl.addOnLoad(callback);
-                }
+                gridControl.addOnLoad(callback);
             };
             grids[grid].RemoveOnLoad = function (callback) {
-                if (has(gridControl, 'removeOnLoad')) {
-                    gridControl.removeOnLoad(callback);
-                }
+                gridControl.removeOnLoad(callback);
             };
             grids[grid].Url = function (client) {
-                if (has(gridControl, 'getUrl')) {
-                    return gridControl.getUrl(client);
-                }
-                return EMPTY_STRING;
+                return gridControl.getUrl(client);
             };
             grids[grid].Refresh = function () {
-                if (has(gridControl, 'refresh')) {
-                    gridControl.refresh();
-                }
+                gridControl.refresh();
             };
             grids[grid].RefreshRibbon = function () {
-                if (has(gridControl, 'refreshRibbon')) {
-                    gridControl.refreshRibbon();
-                }
+                gridControl.refreshRibbon();
             };
             grids[grid].OpenRelatedGrid = function () {
-                if (has(gridControl, 'openRelatedGrid')) {
-                    gridControl.openRelatedGrid();
-                }
+                gridControl.openRelatedGrid();
             };
             Object.defineProperty(grids[grid], 'EntityName', {
                 get() {
-                    if (has(gridControl, 'getEntityName')) {
-                        return gridControl.getEntityName();
-                    }
-                    return EMPTY_STRING;
+                    return gridControl.getEntityName();
                 }
             });
             Object.defineProperty(grids[grid], 'FetchXml', {
                 get() {
-                    if (has(gridControl, 'getFetchXml')) {
-                        return gridControl.getFetchXml();
-                    }
-                    return EMPTY_STRING;
+                    return gridControl.getFetchXml();
                 }
             });
             Object.defineProperty(grids[grid], 'GridType', {
                 get() {
-                    if (has(gridControl, 'getGridType')) {
-                        return gridControl.getGridType();
-                    }
-                    return 2;
+                    return gridControl.getGridType();
                 }
             });
             Object.defineProperty(grids[grid], 'Relationship', {
                 get() {
-                    if (has(gridControl, 'getRelationship')) {
-                        return gridControl.getRelationship();
-                    }
-                    return {};
+                    return gridControl.getRelationship();
                 }
             });
             Object.defineProperty(grids[grid], 'ViewSelector', {
                 get() {
-                    var viewSelector = NULL;
-                    if (has(gridControl, 'getViewSelector')) {
-                        viewSelector = gridControl.getViewSelector();
-                    }
+                    var viewSelector = gridControl.getViewSelector();
                     var obj = {};
                     Object.defineProperty(obj, 'CurrentView', {
                         get() {
-                            if (has(viewSelector, 'getCurrentView')) {
-                                return viewSelector.getCurrentView();
-                            }
-                            return EMPTY_REFERENCE;
+                            return viewSelector.getCurrentView();
                         },
                         set(value) {
-                            if (has(viewSelector, 'getCurrentView')) {
-                                viewSelector.setCurrentView(value);
-                            }
+                            viewSelector.setCurrentView(value);
                         }
                     });
                     Object.defineProperty(obj, 'Visible', {
                         get() {
-                            if (has(viewSelector, 'isVisible')) {
-                                return viewSelector.isVisible();
-                            }
-                            return EMPTY_BOOL;
+                            return viewSelector.isVisible();
                         },
                     });
                     return obj;
@@ -1330,29 +1083,18 @@ var devKit = (function () {
             Object.defineProperty(grids[grid], 'Rows', {
                 get() {
                     var obj = {};
-                    var getGrid = NULL;
-                    if (has(gridControl, 'getGrid')) {
-                        getGrid = gridControl.getGrid();
-                    }
+                    var getGrid = gridControl.getGrid();
                     obj.getLength = function () {
-                        if (has(getGrid, 'getRows')) {
-                            return getGrid.getRows().getLength();
-                        }
-                        return EMPTY_NUMBER;
+                        return getGrid.getRows().getLength();
                     }
                     obj.get = function (index) {
-                        if (has(getGrid, 'getRows')) {
-                            return loadGridRow(getGrid.getRows().get(index));
-                        }
-                        return loadGridRow({});
+                        return loadGridRow(getGrid.getRows().get(index));
                     }
                     obj.forEach = function (callback) {
-                        if (has(getGrid, 'getRows')) {
-                            var rows = getGrid.getRows();
-                            for (var index = 0; index < rows.getLength(); index++) {
-                                var row = rows.get(index);
-                                callback(loadGridRow(row), index);
-                            }
+                        var rows = getGrid.getRows();
+                        for (var index = 0; index < rows.getLength(); index++) {
+                            var row = rows.get(index);
+                            callback(loadGridRow(row), index);
                         }
                     }
                     return obj;
@@ -1361,29 +1103,18 @@ var devKit = (function () {
             Object.defineProperty(grids[grid], 'SelectedRows', {
                 get() {
                     var obj = {};
-                    var getGrid = NULL;
-                    if (has(gridControl, 'getGrid')) {
-                        getGrid = gridControl.getGrid();
-                    }
+                    var getGrid = gridControl.getGrid();
                     obj.getLength = function () {
-                        if (has(getGrid, 'getSelectedRows')) {
-                            return getGrid.getSelectedRows().getLength();
-                        }
-                        return EMPTY_NUMBER;
+                        return getGrid.getSelectedRows().getLength();
                     }
                     obj.get = function (index) {
-                        if (has(getGrid, 'getSelectedRows')) {
-                            return loadGridRow(getGrid.getSelectedRows().get(index));
-                        }
-                        return loadGridRow({});
+                        return loadGridRow(getGrid.getSelectedRows().get(index));
                     }
                     obj.forEach = function (callback) {
-                        if (has(getGrid, 'getSelectedRows')) {
-                            var rows = getGrid.getSelectedRows();
-                            for (var index = 0; index < rows.getLength(); index++) {
-                                var row = rows.get(index);
-                                callback(loadGridRow(row), index);
-                            }
+                        var rows = getGrid.getSelectedRows();
+                        for (var index = 0; index < rows.getLength(); index++) {
+                            var row = rows.get(index);
+                            callback(loadGridRow(row), index);
                         }
                     }
                     return obj;
@@ -1391,27 +1122,16 @@ var devKit = (function () {
             });
             Object.defineProperty(grids[grid], 'TotalRecordCount', {
                 get() {
-                    var getGrid = NULL;
-                    if (has(gridControl, 'getGrid')) {
-                        getGrid = gridControl.getGrid();
-                    }
-                    if (has(getGrid, 'getTotalRecordCount')) {
-                        return getGrid.getTotalRecordCount();
-                    }
-                    return EMPTY_NUMBER;
+                    var getGrid = gridControl.getGrid();
+                    return getGrid.getTotalRecordCount();
                 }
             });
             Object.defineProperty(grids[grid], 'Visible', {
                 get() {
-                    if (has(gridControl, 'getVisible')) {
-                        return gridControl.getVisible();
-                    }
-                    return EMPTY_BOOL;
+                    return gridControl.getVisible();
                 },
                 set(value) {
-                    if (has(gridControl, 'setVisible')) {
-                        gridControl.setVisible(value);
-                    }
+                    gridControl.setVisible(value);
                 }
             });
         }
