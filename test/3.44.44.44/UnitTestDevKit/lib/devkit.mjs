@@ -7,17 +7,6 @@ var devKit = (function () {
     var EMPTY_NUMBER = 0;
     var EMPTY_BOOL = false;
     var NULL = null;
-    function has(obj, key) {
-        if (isNullOrUndefined(obj)) return EMPTY_BOOL;
-        if (Object.keys(obj).length === 0 && obj.constructor === Object) return EMPTY_BOOL;
-        return key.split('.').every(function (x) {
-            if (typeof obj != 'object' || obj === NULL || !x in obj) {
-                return EMPTY_BOOL;
-            }
-            obj = obj[x];
-            return !EMPTY_BOOL;
-        });
-    }
     function isNullOrUndefined(obj) {
         if (obj === NULL) return !EMPTY_BOOL;
         if (obj === undefined) return !EMPTY_BOOL;
@@ -1460,19 +1449,19 @@ var devKit = (function () {
     function loadOthers(formContext, form, defaultWebResourceName) {
         form.SidePanes = loadSidePanes();
     }
-    function loadFormDialog(executionContext, fields) {
-        var formContext = executionContext.getFormContext();
-        var form = {};
-        for (var i = 0; i < fields.length; i++) {
-            var field = fields[i];
-            var attribute = formContext.data.attributes.get(field);
-            var control = formContext.getControl(field);
-            form[field] = {};
-            devKit.LoadField(form[field], attribute, control);
-        }
-        form.Close = function () { formContext.ui.close(); };
-        return form;
-    }
+    // function loadFormDialog(executionContext, fields) {
+    //     var formContext = isNullOrUndefined(executionContext.getFormContext) ? executionContext : executionContext.getFormContext();
+    //     var form = {};
+    //     for (var i = 0; i < fields.length; i++) {
+    //         var field = fields[i];
+    //         var attribute = formContext.data.attributes.get(field);
+    //         var control = formContext.getControl(field);
+    //         form[field] = {};
+    //         devKit.LoadField(form[field], attribute, control);
+    //     }
+    //     form.Close = function () { formContext.ui.close(); };
+    //     return form;
+    // }
     return {
         LoadForm: loadForm,
         LoadProcess: loadProcess,
@@ -1485,7 +1474,7 @@ var devKit = (function () {
         LoadUtility: loadUtility,
         LoadExecutionContext: loadExecutionContext,
         LoadOthers: loadOthers,
-        LoadFormDialog: loadFormDialog
+        //LoadFormDialog: loadFormDialog
     }
 })();
 /** @namespace OptionSet */

@@ -738,7 +738,6 @@ define(['xrm-mock'], function () {
                 expect(() => { form.Body.Tab.SUMMARY_TAB.ContentType }).toThrow(new Error("Method not implemented."));
                 expect(() => { form.Body.Tab.SUMMARY_TAB.ContentType = OptionSet.TabContentType.SingleComponent }).toThrow(new Error("Method not implemented."));
 
-                //form.Navigation.Account_Emails.Focus();
             });
         });
         describe('Header', () => {

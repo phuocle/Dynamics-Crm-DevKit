@@ -4,7 +4,7 @@ import {
     StringAttributeMock, UiMock, FormSelectorMock, FormItemMock, FormContextMock, OrganizationSettingsMock, EventContextMock, StageMock, StepMock, ProcessControlMock,
     UiCanGetVisibleElementMock, UiCanSetVisibleElementMock, ProcessMock, ProcessManagerMock, LookupAttributeMock, LookupControlMock, OptionSetAttributeMock,
     QuickFormControlMock, GridControlMock, GridRowDataMock, GridRowMock, GridMock, RelationshipMock, ViewSelectorMock, IframeControlMock, HeaderSectionMock, NavigationMock, NavigationItemMock, UiStandardElementMock,
-    UiFocusableMock
+    UiFocusableMock, TimerControlMock, KbSearchControlMock
 } from 'xrm-mock';
 beforeAll(() => {
     XrmMockGenerator.initialise();
@@ -774,7 +774,12 @@ describe('devKit', () => {
         expect("form.Body.PrimaryContactId.SetNotification").toBe("form.Body.PrimaryContactId.SetNotification");
         form.Body.PrimaryContactId.Visible = false;
         expect(form.Body.PrimaryContactId.Visible).toBeFalsy();
-
+        expect(lookup.outChangedEventHandlers.length).toBe(0);
+        var ab_AddOnOutputChange = () => { };
+        form.Body.PrimaryContactId.AddOnOutputChange(ab_AddOnOutputChange);
+        expect(lookup.outChangedEventHandlers.length).toBe(1);
+        form.Body.PrimaryContactId.RemoveOnOutputChange(ab_AddOnOutputChange);
+        expect(lookup.outChangedEventHandlers.length).toBe(0);
         expect(form.Body.CreatedOn.ControlName).toBe("createdon");
         expect(form.Body.ModifiedOn.ControlName).toBe("modifiedon");
         form.Body.ModifiedOn.ShowTime = true;
@@ -1060,6 +1065,8 @@ describe('devKit', () => {
         expect(form.Body.IFRAME_PHUOCLE.Label).toBe("PHUOCLE New");
         expect(() => { form.Body.IFRAME_PHUOCLE.Src = "https://phuocle.net" }).toThrow(new Error("setSrc not implemented."));
         expect(() => { form.Body.IFRAME_PHUOCLE.Visible = true }).toThrow(new Error("setVisible not implemented."));
+        expect(() => { var a = form.Body.IFRAME_PHUOCLE.Data; }).toThrow(new Error("getData not implemented."));
+        expect(() => { form.Body.IFRAME_PHUOCLE.Data = "b"; }).toThrow(new Error("setData not implemented."));
     });
     test('Tab & Section', () => {
         //setup
@@ -1240,4 +1247,74 @@ describe('devKit', () => {
         form.Navigation.Account_Emails.Focus();
         expect(1).toBe(1);
     });
+    test('Timer', () => {
+        //setup
+        XrmMockGenerator.initialise();
+        XrmMockGenerator.Control.addControl(new TimerControlMock({ controlType: "timercontrol", name: "timmer" }));
+        var executionContext = XrmMockGenerator.formContext;
+        //run
+        var form = {};
+        var body = {
+            TIMMER: {}
+        };
+        devKit.LoadFields(executionContext, body);
+        form.Body = body;
+        //test
+        expect(() => { form.Body.TIMMER.State }).toThrow(new Error("Method not implemented."));
+        expect(() => { form.Body.TIMMER.Refresh() }).toThrow(new Error("Not implemented."));
+    });
+    test('Knowledge', () => {
+        //setup
+        XrmMockGenerator.initialise();
+        XrmMockGenerator.Control.addControl(new KbSearchControlMock({ controlType: "kbsearch", name: "kb" }));
+        var executionContext = XrmMockGenerator.formContext;
+        //run
+        var form = {};
+        var body = {
+            KB: {}
+        };
+        devKit.LoadFields(executionContext, body);
+        form.Body = body;
+        //test
+        expect(() => { form.Body.KB.TotalResultCount }).toThrow(new Error("Method not implemented."));
+        expect(() => { form.Body.KB.SelectedResults }).toThrow(new Error("Method not implemented."));
+        expect(() => { form.Body.KB.AddPostSearch(null) }).toThrow(new Error("Method not implemented."));
+        expect(() => { form.Body.KB.RemovePostSearch(null) }).toThrow(new Error("Method not implemented."));
+        expect(() => { form.Body.KB.AddResultOpened(null) }).toThrow(new Error("Method not implemented."));
+        expect(() => { form.Body.KB.RemoveResultOpened(null) }).toThrow(new Error("Method not implemented."));
+        expect(() => { form.Body.KB.AddSelection(null) }).toThrow(new Error("Method not implemented."));
+        expect(() => { form.Body.KB.RemoveSelection(null) }).toThrow(new Error("Method not implemented."));
+        expect(() => { form.Body.KB.OpenSearchResult(null, null) }).toThrow(new Error("Method not implemented."));
+        expect(() => { var a = form.Body.KB.SearchQuery; }).toThrow(new Error("Method not implemented."));
+        expect(() => { form.Body.KB.SearchQuery = "b"; }).toThrow(new Error("Method not implemented."));
+    });
+    // test('devKit.LoadFormDialog', () => {
+    //     //setup
+    //     var attributes = new ItemCollectionMock([
+    //         new AttributeMock({
+    //             name: "name",
+    //             value: "LE VAN PHUOC"
+    //         })
+    //     ]);
+    //     var entity = new EntityMock({
+    //         attributes: attributes
+    //     });
+    //     var data = new DataMock(entity);
+    //     var stringControl = new StringControlMock({
+    //         attribute: new StringAttributeMock({
+    //             name: "name",
+    //             value: "LE VAN PHUOC"
+    //         }),
+    //         name: "name",
+    //         label: "Account Name"
+    //     });
+    //     var ui = new UiMock({
+    //         controls: new ItemCollectionMock([
+    //             stringControl
+    //         ])
+    //     });
+    //     XrmMockGenerator.formContext = new FormContextMock(data, ui);
+    //     var executionContext = XrmMockGenerator.formContext;
+    //     var form = devKit.LoadFormDialog(executionContext, ["name"]);
+    // });
 });
