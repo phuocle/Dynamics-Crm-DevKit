@@ -798,11 +798,9 @@ var devKit = (function () {
     function loadNavigations(formContext, navigations) {
         var loadNavigation = function (formContext, navigations, navigation) {
             var navigationItem = NULL;
-            if (has(formContext, 'ui.navigation.items.get')) {
-                for (var i = 0; i < formContext.ui.navigation.items.getLength(); i++) {
-                    if (navigation === formContext.ui.navigation.items.get(i).getId()) {
-                        navigationItem = formContext.ui.navigation.items.get(i);
-                    }
+            for (var i = 0; i < formContext.ui.navigation.items.getLength(); i++) {
+                if (navigation === formContext.ui.navigation.items.get(i).getId()) {
+                    navigationItem = formContext.ui.navigation.items.get(i);
                 }
             }
             navigations[navigation].Focus = function () {
@@ -810,6 +808,7 @@ var devKit = (function () {
             };
             Object.defineProperty(navigations[navigation], 'Id', {
                 get() {
+
                     return navigationItem.getId();
                 }
             });

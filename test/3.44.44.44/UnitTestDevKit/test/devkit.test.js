@@ -3,7 +3,8 @@ import {
     XrmMockGenerator, ContextMock, UserSettingsMock, ClientContextMock, LookupValueMock, DataMock, EntityMock, ItemCollectionMock, AttributeMock, StringControlMock,
     StringAttributeMock, UiMock, FormSelectorMock, FormItemMock, FormContextMock, OrganizationSettingsMock, EventContextMock, StageMock, StepMock, ProcessControlMock,
     UiCanGetVisibleElementMock, UiCanSetVisibleElementMock, ProcessMock, ProcessManagerMock, LookupAttributeMock, LookupControlMock, OptionSetAttributeMock,
-    QuickFormControlMock, GridControlMock, GridRowDataMock, GridRowMock, GridMock, RelationshipMock, ViewSelectorMock, IframeControlMock, HeaderSectionMock
+    QuickFormControlMock, GridControlMock, GridRowDataMock, GridRowMock, GridMock, RelationshipMock, ViewSelectorMock, IframeControlMock, HeaderSectionMock, NavigationMock, NavigationItemMock, UiStandardElementMock,
+    UiFocusableMock
 } from 'xrm-mock';
 beforeAll(() => {
     XrmMockGenerator.initialise();
@@ -1111,7 +1112,7 @@ describe('devKit', () => {
         expect(() => { form.Body.Tab.SUMMARY_TAB.ContentType }).toThrow(new Error("Method not implemented."));
         expect(() => { form.Body.Tab.SUMMARY_TAB.ContentType = OptionSet.TabContentType.SingleComponent }).toThrow(new Error("Method not implemented."));
     });
-    test('Footer & Headerr', () => {
+    test('Footer & Header', () => {
         //setup
         var stringControl = new StringControlMock({
             attribute: new StringAttributeMock({
@@ -1173,5 +1174,70 @@ describe('devKit', () => {
         expect(form.Header.BodyVisible).toBeFalsy();
         expect(form.Header.CommandBarVisible).toBeFalsy();
         expect(form.Header.TabNavigatorVisible).toBeFalsy();
+    });
+    test('Navigation', () => {
+        //setup
+        var stringControl = new StringControlMock({
+            attribute: new StringAttributeMock({
+                name: "numberofemployees",
+                value: "6200"
+            }),
+            name: "numberofemployees",
+            label: "Number of Employees"
+        });
+        var stringHeaderControl = new StringControlMock({
+            attribute: new StringAttributeMock({
+                name: "numberofemployees",
+                value: "6200"
+            }),
+            name: "header_numberofemployees",
+            label: "Number of Employees"
+        });
+        var b = UiStandardElementMock.create("Account", true);
+        var a = new NavigationItemMock("Account_Emails", b, new UiFocusableMock(true));
+
+        var ui = new UiMock({
+            formSelector: new FormSelectorMock(new ItemCollectionMock([new FormItemMock({
+                id: "8d2dbd8c-c9f8-4cb5-8838-f5a916a6098a",
+                label: "Account",
+                currentItem: true,
+                formType: OptionSet.FormType.Update
+            })])),
+            controls: new ItemCollectionMock([
+                stringControl,
+                stringHeaderControl
+            ]),
+            headerSection: new HeaderSectionMock(true, true, true),
+            navigation: new NavigationMock(new ItemCollectionMock([ a ]))
+        });
+        var attributes = new ItemCollectionMock([
+            new AttributeMock({
+                name: "numberofemployees",
+                isDirty: true
+            })
+        ]);
+        var entity = new EntityMock({
+            attributes: attributes
+        });
+        var data = new DataMock(entity);
+        XrmMockGenerator.formContext = new FormContextMock(data, ui);
+        var executionContext = XrmMockGenerator.formContext;
+        //run
+        var form = {};
+        var navigation = {
+            Account_Emails: {},
+        };
+        devKit.LoadNavigations(executionContext, navigation);
+        form.Navigation = navigation;
+        //result
+        expect(form.Navigation.Account_Emails.Id).toBe("Account_Emails");
+        expect(form.Navigation.Account_Emails.Label).toBe("Account");
+        form.Navigation.Account_Emails.Label = "ABC";
+        expect(form.Navigation.Account_Emails.Label).toBe("ABC");
+        expect(form.Navigation.Account_Emails.Visible).toBeTruthy();
+        form.Navigation.Account_Emails.Visible = false;
+        expect(form.Navigation.Account_Emails.Visible).toBeFalsy();
+        form.Navigation.Account_Emails.Focus();
+        expect(1).toBe(1);
     });
 });
