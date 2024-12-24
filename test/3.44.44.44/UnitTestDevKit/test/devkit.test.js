@@ -4,7 +4,7 @@ import {
     StringAttributeMock, UiMock, FormSelectorMock, FormItemMock, FormContextMock, OrganizationSettingsMock, EventContextMock, StageMock, StepMock, ProcessControlMock,
     UiCanGetVisibleElementMock, UiCanSetVisibleElementMock, ProcessMock, ProcessManagerMock, LookupAttributeMock, LookupControlMock, OptionSetAttributeMock,
     QuickFormControlMock, GridControlMock, GridRowDataMock, GridRowMock, GridMock, RelationshipMock, ViewSelectorMock, IframeControlMock, HeaderSectionMock, NavigationMock, NavigationItemMock, UiStandardElementMock,
-    UiFocusableMock, TimerControlMock, KbSearchControlMock
+    UiFocusableMock, TimerControlMock, KbSearchControlMock, SaveEventArgumentsMock
 } from 'xrm-mock';
 beforeAll(() => {
     XrmMockGenerator.initialise();
@@ -292,6 +292,7 @@ describe('devKit', () => {
             isAutoSaveEnabled: true,
             orgLcid: 1033,
             timeZoneOffset: 7,
+            onPremise: true
         });
         context.userSettings = new UserSettingsMock({
             isGuidedHelpEnabled: true,
@@ -355,7 +356,7 @@ describe('devKit', () => {
             },
             isTrialOrganization: false,
             organizationExpiryDate: null,
-            fullNameConventionCode: OptionSet.FullNameConventionCode.FirstName_LastName,
+            fullNameConventionCode: OptionSet.FullNameConventionCode.FirstName_LastName
         });
 
         XrmMockGenerator.context = context;
@@ -383,9 +384,8 @@ describe('devKit', () => {
         expect(form.Utility.CurrentAppProperties(null, null)).toBeUndefined();
         expect(form.Utility.CurrentAppUrl).toBeUndefined();
         expect(form.Utility.WebResourceUrl(null)).toBeUndefined();
-        //expect(() => { form.Utility.IsOnPremises; }).toThrow(new Error("getGlobalContext.isOnPremises is not a function"));
+        expect(form.Utility.IsOnPremises).toBeTruthy();
         expect(form.Utility.PrependOrgName("abc-")).toBe("abc-OrgUniqueName");
-
         expect(form.Utility.Client.ClientName).toBe(OptionSet.ClientName.Web);
         expect(form.Utility.Client.ClientState).toBe(OptionSet.ClientState.Online);
         expect(() => { form.Utility.Client.FormFactor }).toThrow(new Error("Method not implemented."));
@@ -497,24 +497,25 @@ describe('devKit', () => {
         expect(form.SidePanes.DisplayState).toBe(1);
     });
     test('devKit.LoadExecutionContext', () => {
-        var executionContext = XrmMockGenerator.eventContext;
+        var save = new SaveEventArgumentsMock(1);
+        var executionContext = new EventContextMock({ formContext: XrmMockGenerator.formContext, context: XrmMockGenerator.context, saveEvent: save });
         var form = {};
         form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
         expect(form.ExecutionContext.Depth).toBe(1);
-        //expect(() => { form.ExecutionContext.EventArgs }).toThrow(new Error("executionContext.getEventArgs is not a function"));
+        expect(() => { form.ExecutionContext.EventArgs }).toThrow(new Error("executionContext?.getEventArgs is not a function"));
         expect(() => { form.ExecutionContext.EventSource }).toThrow(new Error("no event source given"));
         expect(form.ExecutionContext.FormContext).toBeDefined();
         expect(form.ExecutionContext.GetSharedVariable("A")).toBeUndefined();
         expect(form.ExecutionContext.SetSharedVariable("A", "B")).toBeUndefined();
-        // expect(() => { form.ExecutionContext.SaveMode }).toThrow(new Error("executionContext.getEventArgs is not a function"));
-        // expect(() => { form.ExecutionContext.IsDefaultPrevented() }).toThrow(new Error("executionContext.getEventArgs is not a function"));
-        // expect(() => { form.ExecutionContext.SetPreventDefault() }).toThrow(new Error("executionContext.getEventArgs is not a function"));
-        // expect(() => { form.ExecutionContext.EntityReference }).toThrow(new Error("executionContext.getEventArgs is not a function"));
-        // expect(() => { form.ExecutionContext.IsSaveSuccess }).toThrow(new Error("executionContext.getEventArgs is not a function"));
-        // expect(() => { form.ExecutionContext.SaveErrorInfo }).toThrow(new Error("executionContext.getEventArgs is not a function"));
-        // expect(() => { form.ExecutionContext.SetPreventDefaultOnError() }).toThrow(new Error("executionContext.getEventArgs is not a function"));
-        // expect(() => { form.ExecutionContext.DisableAsyncTimeout() }).toThrow(new Error("executionContext.getEventArgs is not a function"));
-        // expect(() => { form.ExecutionContext.IsInitialLoad() }).toThrow(new Error("executionContext.getEventArgs is not a function"));
+        expect(() => { form.ExecutionContext.SaveMode }).toThrow(new Error("executionContext?.getEventArgs is not a function"));
+        expect(() => { form.ExecutionContext.IsDefaultPrevented() }).toThrow(new Error("executionContext?.getEventArgs is not a function"));
+        expect(() => { form.ExecutionContext.SetPreventDefault() }).toThrow(new Error("executionContext?.getEventArgs is not a function"));
+        expect(() => { form.ExecutionContext.EntityReference }).toThrow(new Error("executionContext?.getEventArgs is not a function"));
+        expect(() => { form.ExecutionContext.IsSaveSuccess }).toThrow(new Error("executionContext?.getEventArgs is not a function"));
+        expect(() => { form.ExecutionContext.SaveErrorInfo }).toThrow(new Error("executionContext?.getEventArgs is not a function"));
+        expect(() => { form.ExecutionContext.SetPreventDefaultOnError() }).toThrow(new Error("executionContext?.getEventArgs is not a function"));
+        expect(() => { form.ExecutionContext.DisableAsyncTimeout() }).toThrow(new Error("executionContext?.getEventArgs is not a function"));
+        expect(() => { form.ExecutionContext.IsInitialLoad() }).toThrow(new Error("executionContext?.getEventArgs is not a function"));
     });
     test('devKit.LoadProcess', () => {
         //setup
@@ -561,6 +562,7 @@ describe('devKit', () => {
         expect(() => { form.Process.MoveNext(null) }).toThrow(new Error("move next not implemented"));
         expect(() => { form.Process.MovePrevious(null) }).toThrow(new Error("move previous not implemented"));
         expect(() => { form.Process.ProcessInstances(null) }).toThrow(new Error("get process instances not implemented."));
+        //form.Process.ProcessInstances(function (processes) { expect(processes.length).toBe(1); });
         expect(form.Process.SetActiveStage("stage1", null)).toBeUndefined();
         expect(() => { form.Process.SetActiveProcessInstance(null, null) }).toThrow(new Error("set active process instance not implemented."));
         expect(form.Process.SetActiveProcess(null, null)).toBeUndefined();
@@ -914,6 +916,7 @@ describe('devKit', () => {
         form.QuickForm = quickForm;
         //test
         expect(() => { form.QuickForm.contactquickform.Controls('telephone1') }).toThrow(new Error("Method not implemented."));
+        expect(() => { form.QuickForm.contactquickform.Controls() }).toThrow(new Error("Method not implemented."));
         expect(form.QuickForm.contactquickform.ControlType).toBe(OptionSet.FieldControlType.QuickForm);
         expect(() => { form.QuickForm.contactquickform.Disabled }).toThrow(new Error("Method not implemented."));
         expect(form.QuickForm.contactquickform.Label).toBe("Contact Quick Form");
@@ -1368,6 +1371,7 @@ describe('devKit', () => {
         XrmMockGenerator.formContext = new FormContextMock(data, ui);
         var executionContext = XrmMockGenerator.formContext;
         var form = devKit.LoadFormDialog(executionContext, ["name"]);
-        //expect(form.name.Value).toBe("LE VAN PHUOC");
+        expect(form.name.Value).toBe("LE VAN PHUOC");
+        expect(() => { form.Close(); }).toThrow(new Error("close not implemented"));
     });
 });

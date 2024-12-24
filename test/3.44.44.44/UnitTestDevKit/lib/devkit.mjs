@@ -574,37 +574,18 @@ var devKit = (function () {
     function loadFields(formContext, body, type) {
         for (var field in body) {
             var logicalName = (function () {
-                if (type === undefined) {
-                    return field?.toLowerCase();
-                }
+                if (type === undefined) return field?.toLowerCase();
                 return (type + field)?.toLowerCase();
             })();
             var control = formContext?.getControl(logicalName) ?? formContext?.getControl(field);
             var attribute = (function () {
-                var attr = null;
-                if (formContext) {
-                    if (formContext.getAttribute) {
-                        attr = formContext?.getAttribute(logicalName);
-                        if (attr) {
-                            return attr;
-                        }
-                    }
-                    if (control) {
-                        if (control?.getAttribute) {
-                            try {
-                                attr = control?.getAttribute();
-                            }
-                            catch {
-                                try {
-                                    attr = formContext?.getAttribute(control?.controlDescriptor?.Id);
-                                } catch { }
-                            }
-                            if (attr) {
-                                return attr;
-                            }
-                        }
-                    }
+                var attr = formContext?.getAttribute(logicalName);
+                if (attr) return attr;
+                if (control?.getAttribute) {
+                    attr = control?.getAttribute();
+                    if (attr) return attr;
                 }
+                return null;
             })();
             loadField(formContext, body[field], attribute, control);
         }
@@ -1263,15 +1244,14 @@ var devKit = (function () {
     function loadOthers(formContext, form, defaultWebResourceName) {
         form.SidePanes = loadSidePanes();
     }
-    function loadFormDialog(executionContext, fields) {
-        var formContext = executionContext?.getFormContext === undefined ? executionContext : executionContext?.getFormContext();
+    function loadFormDialog(formContext, fields) {
         var form = {};
         for (var i = 0; i < fields?.length; i++) {
             var field = fields[i];
             var attribute = formContext?.data?.entity?.attributes?.get(field);
             var control = formContext?.getControl(field);
             form[field] = {};
-            devKit.LoadField(form[field], attribute, control);
+            devKit.LoadField(formContext, form[field], attribute, control);
         }
         form.Close = function () { formContext?.ui?.close(); };
         return form;
