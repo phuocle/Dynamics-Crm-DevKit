@@ -428,6 +428,8 @@ define(['xrm-mock'], function () {
                 expect(() => { form.QuickForm.contactquickform.Visible = false }).toThrow(new Error("Method not implemented."));
                 expect(() => { form.QuickForm.contactquickform.Body.EMailAddress1 }).toThrow(new Error("Method not implemented."));
                 expect(() => { form.QuickForm.contactquickform.Body.Telephone1 }).toThrow(new Error("Method not implemented."));
+
+                form.QuickForm.contactquickform.Controls
             });
             it('subgrid control type', () => {
                 var attributes = new xrmMock.ItemCollectionMock([
