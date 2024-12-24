@@ -226,6 +226,58 @@ describe('devKit', () => {
         expect(() => { form.FormSetVisible("8d2dbd8c-c9f8-4cb5-8838-f5a916a6098b", false) }).toThrow(new Error("setVisible not implemented."));
         expect(() => { form.FormIsVisible("8d2dbd8c-c9f8-4cb5-8838-f5a916a6098b") }).toThrow(new Error("getVisible not implemented."));
     });
+    test('From ReadOnly || Disabled', () => {
+        //setup
+        var attributes = new ItemCollectionMock([
+            new AttributeMock({
+                name: "name",
+                isDirty: true
+            })
+        ]);
+        var entity = new EntityMock({
+            entityName: "account",
+            id: "8d2dbd8c-c9f8-4cb5-8838-f5a916a6098a",
+            primaryValue: "LE VAN PHUOC",
+            attributes: attributes
+        });
+        var data = new DataMock(entity);
+        var stringControl = new StringControlMock({
+            attribute: new StringAttributeMock({
+                name: "name",
+                value: "LE VAN PHUOC"
+            }),
+            name: "name",
+            label: "Account Name",
+            disabled: false
+        });
+        var ui = new UiMock({
+            formSelector: new FormSelectorMock(new ItemCollectionMock([
+                new FormItemMock({
+                    id: "8d2dbd8c-c9f8-4cb5-8838-f5a916a6098a",
+                    label: "Account",
+                    currentItem: true,
+                    formType: OptionSet.FormType.Disabled
+                })
+            ])),
+            controls: new ItemCollectionMock([
+                stringControl
+            ])
+        });
+        XrmMockGenerator.formContext = new FormContextMock(data, ui);
+        var executionContext = XrmMockGenerator.formContext;
+        //run
+        var form = devKit.LoadForm(executionContext);
+        var body = {
+            Name: {}
+        };
+        devKit.LoadFields(executionContext, body);
+        form.Body = body;
+        //test
+        expect(form.FormType).toBe(OptionSet.FormType.Disabled);
+        form.Body.Name.Value = "ABCD";
+        form.Body.Name.Disabled = true;
+        expect(form.Body.Name.Disabled).toBeFalsy();
+    });
     test('devKit.LoadUtility', () => {
         var context = new ContextMock({
             clientContext: new ClientContextMock("Web", "Online"),
@@ -993,18 +1045,20 @@ describe('devKit', () => {
         expect(row0col0.Value).toBe("ROW1-COL1-NEW");
         expect(row0col0.Name).toBe("abc_col1");
         expect(row0col0.RequiredLevel).toBe(OptionSet.FieldRequiredLevel.Recommended);
+        row0col0.SetNotification("Field Notification", "uniqueId");
+        row0col0.ClearNotification("uniqueId");
         row0col0.RequiredLevel = OptionSet.FieldRequiredLevel.Required;
         expect(row0col0.RequiredLevel).toBe(OptionSet.FieldRequiredLevel.Required);
         expect(row0col0.Disabled).toBeTruthy();
         row0col0.Disabled = false;
         expect(row0col0.Disabled).toBeFalsy();
         expect(row0col0.Label).toBe("abc_col1");
-        // form.Grid.Contacts.Rows.forEach(function (row, index) {
-        //     expect(row).toBeDefined();
-        //     row.Columns.forEach(function (column, index) {
-        //         expect(column).toBeDefined();
-        //     });
-        // });
+        form.Grid.Contacts.Rows.forEach(function (row, index) {
+            expect(row).toBeDefined();
+            row.Columns.forEach(function (column, index) {
+                expect(column).toBeDefined();
+            });
+        });
         var rowNotExist = form.Grid.Contacts.Rows.get(4);
         expect(rowNotExist).toBeDefined();
         var columnNotExist = row0.Columns.get("col_not_exisit");
@@ -1202,7 +1256,6 @@ describe('devKit', () => {
         });
         var b = UiStandardElementMock.create("Account", true);
         var a = new NavigationItemMock("Account_Emails", b, new UiFocusableMock(true));
-
         var ui = new UiMock({
             formSelector: new FormSelectorMock(new ItemCollectionMock([new FormItemMock({
                 id: "8d2dbd8c-c9f8-4cb5-8838-f5a916a6098a",
@@ -1288,33 +1341,34 @@ describe('devKit', () => {
         expect(() => { var a = form.Body.KB.SearchQuery; }).toThrow(new Error("Method not implemented."));
         expect(() => { form.Body.KB.SearchQuery = "b"; }).toThrow(new Error("Method not implemented."));
     });
-    // test('devKit.LoadFormDialog', () => {
-    //     //setup
-    //     var attributes = new ItemCollectionMock([
-    //         new AttributeMock({
-    //             name: "name",
-    //             value: "LE VAN PHUOC"
-    //         })
-    //     ]);
-    //     var entity = new EntityMock({
-    //         attributes: attributes
-    //     });
-    //     var data = new DataMock(entity);
-    //     var stringControl = new StringControlMock({
-    //         attribute: new StringAttributeMock({
-    //             name: "name",
-    //             value: "LE VAN PHUOC"
-    //         }),
-    //         name: "name",
-    //         label: "Account Name"
-    //     });
-    //     var ui = new UiMock({
-    //         controls: new ItemCollectionMock([
-    //             stringControl
-    //         ])
-    //     });
-    //     XrmMockGenerator.formContext = new FormContextMock(data, ui);
-    //     var executionContext = XrmMockGenerator.formContext;
-    //     var form = devKit.LoadFormDialog(executionContext, ["name"]);
-    // });
+    test('devKit.LoadFormDialog', () => {
+        //setup
+        var attributes = new ItemCollectionMock([
+            new AttributeMock({
+                name: "name",
+                value: "LE VAN PHUOC"
+            })
+        ]);
+        var entity = new EntityMock({
+            attributes: attributes
+        });
+        var data = new DataMock(entity);
+        var stringControl = new StringControlMock({
+            attribute: new StringAttributeMock({
+                name: "name",
+                value: "LE VAN PHUOC"
+            }),
+            name: "name",
+            label: "Account Name"
+        });
+        var ui = new UiMock({
+            controls: new ItemCollectionMock([
+                stringControl
+            ])
+        });
+        XrmMockGenerator.formContext = new FormContextMock(data, ui);
+        var executionContext = XrmMockGenerator.formContext;
+        var form = devKit.LoadFormDialog(executionContext, ["name"]);
+        //expect(form.name.Value).toBe("LE VAN PHUOC");
+    });
 });
