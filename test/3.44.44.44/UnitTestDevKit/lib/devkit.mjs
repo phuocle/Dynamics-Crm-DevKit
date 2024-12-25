@@ -707,7 +707,7 @@ var devKit = (function () {
                     for (var i = 0; i < fields?.length; i++) {
                         var field = fields[i];
                         if (quick?.isLoaded()) {
-                            var control = quick?.getControl(field.toLowerCase());
+                            var control = quick?.getControl(field?.toLowerCase());
                             var attribute = control?.getAttribute();
                             var objField = {};
                             loadField(formContext, objField, attribute, control);
