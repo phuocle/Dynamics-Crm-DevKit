@@ -380,7 +380,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     HELP.Inlines.Add("Package Project Template");
                     ComboBoxProject.Visibility = System.Windows.Visibility.Hidden;
                     TextboxProject.Visibility = System.Windows.Visibility.Visible;
-                    LabelProjectName.Content = $"{VsixHelper.GetSolutionName()}";
+                    LabelProjectName.Content = $"{VsixHelper.GetSolutionName()}.Package";
                     LabelProjectName.Tag = LabelProjectName.Content;
                 }
                 _ProjectType = value;
