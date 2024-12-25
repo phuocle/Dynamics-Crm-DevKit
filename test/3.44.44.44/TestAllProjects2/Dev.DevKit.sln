@@ -30,6 +30,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.WebResource", "D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.SolutionPackager", "Dev.DevKit.SolutionPackager\Dev.DevKit.SolutionPackager.csproj", "{76AABF36-FD3B-4E86-ADC8-071CC89DCB22}"
 EndProject
+Project("{F14B399A-7131-4C87-9E4B-1186C45EF12D}") = "Dev.DevKit.Report", "Dev.DevKit.Report\Dev.DevKit.Report.rptproj", "{587DB9CC-2272-4F3E-A82D-A9B6559918A1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -72,6 +74,12 @@ Global
 		{76AABF36-FD3B-4E86-ADC8-071CC89DCB22}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{76AABF36-FD3B-4E86-ADC8-071CC89DCB22}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{76AABF36-FD3B-4E86-ADC8-071CC89DCB22}.Release|Any CPU.Build.0 = Release|Any CPU
+		{587DB9CC-2272-4F3E-A82D-A9B6559918A1}.Debug|Any CPU.ActiveCfg = Debug
+		{587DB9CC-2272-4F3E-A82D-A9B6559918A1}.Debug|Any CPU.Build.0 = Debug
+		{587DB9CC-2272-4F3E-A82D-A9B6559918A1}.Debug|Any CPU.Deploy.0 = Debug
+		{587DB9CC-2272-4F3E-A82D-A9B6559918A1}.Release|Any CPU.ActiveCfg = Release
+		{587DB9CC-2272-4F3E-A82D-A9B6559918A1}.Release|Any CPU.Build.0 = Release
+		{587DB9CC-2272-4F3E-A82D-A9B6559918A1}.Release|Any CPU.Deploy.0 = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
