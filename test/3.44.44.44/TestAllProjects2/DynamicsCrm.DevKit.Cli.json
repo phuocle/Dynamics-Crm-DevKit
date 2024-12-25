@@ -88,8 +88,8 @@
     {
       "profile": "LATEBOUND",
       "type": "CSharp",
-      "rootnamespace": "???",
-      "rootfolder": "???",
+      "rootnamespace": "Dev.DevKit.Shared",
+      "rootfolder": "",
       "entities": "folder"
     },
     {
