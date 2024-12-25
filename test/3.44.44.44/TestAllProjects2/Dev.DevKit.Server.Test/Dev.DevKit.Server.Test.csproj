@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">	
 	<Import Project="..\packages\MSTest.TestAdapter.3.7.0\build\net462\MSTest.TestAdapter.props" Condition="Exists('..\packages\MSTest.TestAdapter.3.7.0\build\net462\MSTest.TestAdapter.props')" />
 	<Import Project="..\packages\Microsoft.Testing.Platform.MSBuild.1.5.0\build\Microsoft.Testing.Platform.MSBuild.props" Condition="Exists('..\packages\Microsoft.Testing.Platform.MSBuild.1.5.0\build\Microsoft.Testing.Platform.MSBuild.props')" />
 	<Import Project="..\packages\Microsoft.Testing.Extensions.Telemetry.1.5.0\build\netstandard2.0\Microsoft.Testing.Extensions.Telemetry.props" Condition="Exists('..\packages\Microsoft.Testing.Extensions.Telemetry.1.5.0\build\netstandard2.0\Microsoft.Testing.Extensions.Telemetry.props')" />
@@ -8,11 +8,11 @@
 	<PropertyGroup>
 		<Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
 		<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-		<ProjectGuid>{$guid1$}</ProjectGuid>
+		<ProjectGuid>{fa882bc5-ef14-475b-ac9c-f23c9020f047}</ProjectGuid>
 		<OutputType>Library</OutputType>
 		<AppDesignerFolder>Properties</AppDesignerFolder>
-		<RootNamespace>$NameSpace$</RootNamespace>
-		<AssemblyName>$projectname$</AssemblyName>
+		<RootNamespace>Dev.DevKit.Server.Test</RootNamespace>
+		<AssemblyName>Dev.DevKit.Server.Test</AssemblyName>
 		<TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
 		<FileAlignment>512</FileAlignment>
 		<ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -115,16 +115,16 @@
 			<HintPath>..\packages\MSTest.TestFramework.3.7.0\lib\net462\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll</HintPath>
 		</Reference>
 		<Reference Include="Microsoft.Crm.Sdk.Proxy">
-			<HintPath>..\packages\Microsoft.CrmSdk.CoreAssemblies.$Microsoft.CrmSdk.CoreAssemblies.version$\lib\net$Microsoft.CrmSdk.CoreAssemblies.targetFramework$\Microsoft.Crm.Sdk.Proxy.dll</HintPath>
+			<HintPath>..\packages\Microsoft.CrmSdk.CoreAssemblies.9.0.2.56\lib\net462\Microsoft.Crm.Sdk.Proxy.dll</HintPath>
 		</Reference>
 		<Reference Include="Microsoft.Xrm.Sdk">
-			<HintPath>..\packages\Microsoft.CrmSdk.CoreAssemblies.$Microsoft.CrmSdk.CoreAssemblies.version$\lib\net$Microsoft.CrmSdk.CoreAssemblies.targetFramework$\Microsoft.Xrm.Sdk.dll</HintPath>
+			<HintPath>..\packages\Microsoft.CrmSdk.CoreAssemblies.9.0.2.56\lib\net462\Microsoft.Xrm.Sdk.dll</HintPath>
 		</Reference>
 		<Reference Include="Microsoft.Xrm.Sdk.Workflow">
-			<HintPath>..\packages\Microsoft.CrmSdk.Workflow.$Microsoft.CrmSdk.Workflow.version$\lib\net$Microsoft.CrmSdk.Workflow.targetFramework$\Microsoft.Xrm.Sdk.Workflow.dll</HintPath>
+			<HintPath>..\packages\Microsoft.CrmSdk.Workflow.9.0.2.56\lib\net462\Microsoft.Xrm.Sdk.Workflow.dll</HintPath>
 		</Reference>
 		<Reference Include="Microsoft.Xrm.Sdk.Deployment">
-			<HintPath>..\packages\Microsoft.CrmSdk.Deployment.$Microsoft.CrmSdk.Deployment.version$\lib\net$Microsoft.CrmSdk.Deployment.targetFramework$\Microsoft.Xrm.Sdk.Deployment.dll</HintPath>
+			<HintPath>..\packages\Microsoft.CrmSdk.Deployment.9.0.2.34\lib\net462\Microsoft.Xrm.Sdk.Deployment.dll</HintPath>
 		</Reference>
 		<Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
 			<HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -224,18 +224,18 @@
 	<Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
 	<Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 	<ItemGroup>
-		<ProjectReference Include="..\$ProjectNameTested$\$ProjectNameTested$.csproj">
-			<Name>$ProjectNameTested$</Name>
+		<ProjectReference Include="..\Dev.DevKit.Server\Dev.DevKit.Server.csproj">
+			<Name>Dev.DevKit.Server</Name>
 		</ProjectReference>
-		<ProjectReference Include="..\$ProjectProxyTypes$\$ProjectProxyTypes$.csproj">
-			<Name>$ProjectProxyTypes$</Name>
+		<ProjectReference Include="..\Dev.DevKit.ProxyTypes\Dev.DevKit.ProxyTypes.csproj">
+			<Name>Dev.DevKit.ProxyTypes</Name>
 		</ProjectReference>
 	</ItemGroup>
 	<ItemGroup>
 		<Analyzer Include="..\packages\MSTest.Analyzers.3.7.0\analyzers\dotnet\cs\MSTest.Analyzers.CodeFixes.dll" />
 		<Analyzer Include="..\packages\MSTest.Analyzers.3.7.0\analyzers\dotnet\MSTest.Analyzers.dll" />
 	</ItemGroup>
-	<Import Project="..\$SharedTestProject$\$SharedTestProject$.projitems" Label="Shared" Condition="Exists('..\$SharedTestProject$\$SharedTestProject$.projitems')" />
+	<Import Project="..\Dev.DevKit.Shared.Test\Dev.DevKit.Shared.Test.projitems" Label="Shared" Condition="Exists('..\Dev.DevKit.Shared.Test\Dev.DevKit.Shared.Test.projitems')" />
 	<Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
 		<PropertyGroup>
 			<ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
