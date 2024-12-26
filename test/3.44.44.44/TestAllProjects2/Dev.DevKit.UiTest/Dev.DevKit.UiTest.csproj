@@ -197,6 +197,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountUiTest.cs" />
+    <Compile Include="LoginUiTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestSettings.cs" />
     <Compile Include="AppSettings.cs" />

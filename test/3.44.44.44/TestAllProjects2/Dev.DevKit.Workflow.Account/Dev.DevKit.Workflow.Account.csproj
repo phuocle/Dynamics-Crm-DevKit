@@ -54,6 +54,8 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Action1.cs" />
+    <Compile Include="Action2.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <None Include="Dev.DevKit.Workflow.Account.snk" />
     <None Include="packages.config" />

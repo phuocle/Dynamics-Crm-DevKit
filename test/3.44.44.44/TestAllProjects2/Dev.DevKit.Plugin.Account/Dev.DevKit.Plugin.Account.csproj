@@ -54,6 +54,8 @@
     <None Include="deploy.debug.bat" />
     <None Include="deploy.debug.only.bat" />
     <None Include="Dev.DevKit.Plugin.Account.snk" />
+    <Compile Include="PostAccountCreateAsynchronous.cs" />
+    <Compile Include="PreAccountCreateSynchronous.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

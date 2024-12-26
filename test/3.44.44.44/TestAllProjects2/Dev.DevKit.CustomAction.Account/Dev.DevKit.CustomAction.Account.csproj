@@ -54,6 +54,8 @@
     <None Include="Dev.DevKit.CustomAction.Account.snk" />
     <None Include="deploy.debug.bat" />
     <None Include="deploy.debug.only.bat" />
+    <Compile Include="PostNonedevkit_CustomActionSyncAsynchronous.cs" />
+    <Compile Include="PreValidationNonedevkit_CustomActionSyncSynchronous.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
