@@ -54,6 +54,7 @@
     <None Include="Dev.DevKit.CustomApi.Account.snk" />
     <None Include="deploy.debug.bat" />
     <None Include="deploy.debug.only.bat" />
+    <Compile Include="devkit_CustomApiSyncRequest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

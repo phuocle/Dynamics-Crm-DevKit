@@ -47,10 +47,10 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             }
         }
 
-        public string PluginMessage => SelectedClassType.ServerMessage;
-        public string PluginStage => SelectedClassType.ServerStage;
-        public string PluginExecution => SelectedClassType.ServerMode;
-        public string PluginLogicalName => SelectedClassType.LogicalName;
+        public string PluginMessage => SelectedClassType?.ServerMessage;
+        public string PluginStage => SelectedClassType?.ServerStage;
+        public string PluginExecution => SelectedClassType?.ServerMode;
+        public string PluginLogicalName => SelectedClassType?.LogicalName;
 
         private ItemType _ItemType = DynamicsCrm.DevKit.Shared.ItemType.None;
         private ItemType ItemType
@@ -442,10 +442,13 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         {
             if (ItemType != ItemType.None)
             {
-                var T4Context = GetT4Context();
-                var form = new FormCustom(ItemType, T4Context, TemplateTitle);
-                form.ShowDialog();
-                LoadCustomTemplates();
+                if (IsValid())
+                {
+                    var T4Context = GetT4Context();
+                    var form = new FormCustom(ItemType, T4Context, TemplateTitle);
+                    form.ShowDialog();
+                    LoadCustomTemplates();
+                }
             }
         }
 
@@ -573,27 +576,33 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             DialogResult = false;
         }
 
+        bool IsValid()
+        {
+            if (VsixHelper.IsExistProject(ProjectName))
+            {
+                VS.MessageBox.ShowError($"Project: {ProjectName} exist.");
+                return false;
+            }
+            if (!VsixHelper.IsValidProjectName(ProjectName))
+            {
+                VS.MessageBox.ShowError("Invalid enter project name");
+                return false;
+            }
+            if (VsixHelper.IsExistItem(ProjectName))
+            {
+                VS.MessageBox.ShowError($"Item: {ProjectName} exist.");
+                return false;
+            }
+            if (ComboBoxProject.IsEnabled && ComboBoxProject.SelectedItem == null)
+            {
+                VS.MessageBox.ShowError("Please select item.");
+                return false;
+            }
+            return true;
+        }
+
         private void ButtonOK_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            bool IsValid()
-            {
-                if (VsixHelper.IsExistProject(ProjectName))
-                {
-                    VS.MessageBox.ShowError($"Project: {ProjectName} exist.");
-                    return false;
-                }
-                if (!VsixHelper.IsValidProjectName(ProjectName))
-                {
-                    VS.MessageBox.ShowError("Invalid enter project name");
-                    return false;
-                }
-                if (VsixHelper.IsExistItem(ProjectName))
-                {
-                    VS.MessageBox.ShowError($"Item: {ProjectName} exist.");
-                    return false;
-                }
-                return true;
-            }
             if (IsValid())
             {
                 DialogResult = true;

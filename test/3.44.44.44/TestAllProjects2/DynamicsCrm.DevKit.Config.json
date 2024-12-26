@@ -1,6 +1,6 @@
 ﻿{
     "WebResources": [
-        
+
     ],
     "CustomTemplates": [
         {
@@ -14,21 +14,24 @@
             "Title": "DevKitWorkflow",
             "Body": "lVZNb9s4ED1vgPwHwrkogCweFruHNHGRtd2u0aYubLdpEfRAUxOVqERq+eHELfrfOzQpRVbdpKuDJZEzj2/mPVKmlEym78mr2YpczxevXryeXx8fOSNkQZZbY6HKLrkVG2EFmGfNzJXgWhl1a7MPusqW+Zdfz2TXSn+5LdVdG3J+cjFW0sK9zd6WrhBy+ZlpyN+wCpY143AywtDjI4nvxr+TnxI6ocdH346PCF43Y10FuAUUwljNrFAyGXSSxyUz5mQ0SMkvRnszAa6zGM7PjCp3yFcqh6l0WD2T+VrdpySEr7Y1kIvOS9uA00+Bae3WpeCEezbd2iI9ckbGiB27vg05sUhfKKWfra3NGaW54iarWim4qijIoTM032LzBDd//v0X5c5YVYEegixYARVIS3PYQKlq0PQuikNZng8rsCxnlg1DzrCZHLLggMglkFi6ulbaQk5msnaWzp3FG7FYvjkja6XKlEyYhZWoIP1jAlxUzA8prB5SMpVW2O0CbkGD5DggpE3JlZKwTcm89totwb5npcM5VBP96E3h1/YXpTcTuGWutMkgPgQeZJcyaHodY3cUk8HudjiiZbJiugBEZZwrJ20faQH/OYFuvdSF872MmsZ1Li0yXTusuoeClhMyRyn0lqO4PdToiJlsUM977RmF4na1kW8ECT4jxv98f6opUZaDXQlzyeCRmMgMI1pqQYwRCVlPUKq1ssC9S9QGtBY5kI0SOZneA8c2JV2nx0OBwG4ODRAHTh9k72wD3/EN06QxaZN98VN+9hLs9N6CNIh5PmvOo5gwSk7xuPFozeVRDeiN4PACna/0Fvdzn1QPdK4LJsXX3cmw3Mt9FP8yr4RE9P3lsrEG3DkHMBPpyvIRvv8Hqte47B2SmOWHwPEs5f578GQXViEwNiBUvt9bSiNYNoG1K6IGSY+LJ7GfF/3SaJf05Uj7PsBDY0+G9n3X8vYtJZFPt+69TVVrsUEx9mzb0vgd++I3o4lvPNorFyMOaN14r1/Hodim2FjcYyG42L5MbQceOt7bZpT6LVFr/N75Qxt9kISn014hz7O3TdCswo+NeX4zwJF//N8JMCYkDT719luEV8b+Bn4b9bAADj25wsf5u0X7/2Y4nk+m5OWc/DtdTLtOQ+H9IYC37z8A",
             "IsDefault": true
+        },
+        {
+            "Type": "CustomAction",
+            "Title": "DevKitCustomAction",
+            "Body": "lVbBbts4EL0HyD+w8UUqDBm9tmmArOLtGm3iIHKKLYoeGGnsECuRLkk5cYv++w5FSqJlWU4EAxal4cx7M8M3mkyupl/J59mCxPfJYn5NLuPFbH5zelIqxlck2SoNxYd6ec1SKZRY6uhfWURJ9l/z5nz0MRZcw7OObvNyxXjySCVkN7SAZE1TGF2g6ekJx7Uya7K3wTM9Pfl9ekLw+h7Lwrq7gxVTWlLNBA/O9jZfg1J0hVHOxmT/7RexYinNTYTKItFoO+VlEe05ql6NLsZk+gxpaaJdi+yAbWNi7M96I3uk/FhxTpWqoLwbk5kSecWriZRQnj2I5zGx3BfbNZCP3iKKS6VFcZkafOcjtgzq3M/UDUB2BTlouFRbns7XYJMW/jYo+96gay1LOB/9GV2EP2zi1+VDzlKSGpx+qRxw8p7MLDZr7splSjZ5ax+Z+73sxqIogOvRRWvzdmL6wlibazJZS7ahGogEmgmebwlW3XRiyRMsiARkumSr0pJC6LzMc2wtu33IgXrhdsvcg+44B0NAxjXMniihj87P1MSA1o9MRYfI9T7fYdu46AmM2el5urP9j598V/SNYJlrfwhmCcgNS+FWig3LQKLHnbVHzqNmUG2oJKmVBAQSuH5pzozr2LDjL/oE2oUMNPa9WB7cGXpM6oDO29801UJuq7hzuaKc/apOmPPsXr8k9sDugfiXWcF4lf4qWS5eFGNTa+hxGZguHvD3Glcu59E95mKW9TlFGU3NkTJVWdh7l5iXZKSzoxuALUlQQ6jElLzBOIzr8LjqhngapHgiHJ7IjG9ozjKrMk3XTJ9TWNsZYJ1nAhThQhP4WdJ8R6vsVifoZ0M4byUrqNxOuWZ6ayQ7Wogv4glkEBr0xwbKq2DvxSJHKeyOryEibgy+hEI7MVuyryLixTpOoY02CB9HbdMuTc2bsehpcqctcHC9pnUa18eBN6Y4rQ30Vssr5bWnJ7qCh3LlFK3u/n1ro4ii1OtSKzx71jP4o7zeitPEqqwTjmZd6UqzGuPcrk5yN6dLgUKTPpKgjUhQj1xsT7INh45sm0f+GZ5XgG+pxGOhQarI0KSMq8C6iz7DNuy4PODWPK6loev2e+vtBybHrb7SvISOzBsvOLbMX315y92B5r4lGvSxyHOovpp6039gRtWg8VOtR7vrWdMtWZ9tXVdXxyETDLartE2xW+6d0rXVNv1lRLSHeNBtlsnk2/z+bvfzn/w1/TS7If9M76bdlpegS9n0klcbVwT8w9//",
+            "IsDefault": true
+        },
+        {
+            "Type": "Test",
+            "Title": "DevKitTestPlugin",
+            "Body": "3VZdb9owFH1H4j9YME1B2pL2dSuoDLIODShq0q7TNKEsccFrsFPboWQV/312bPJJabu3Li+I+N7j63NPzrVlDe0r8HXkAtd2XDAbX56Nps1GzBBegM/eLbymK9tjiTkL4wXC7ONubYJ8Shi54eYVYrEXOjwOEDFdyLhLSMjMS4y4/CeA9iQJWNMJbrMVJ2EcrswxwnfZu5N2d0Awhxuud3eWHoXB1FtBJ/J82O69IDStbG88JZvETSLIUrxmAwt8JvFBrYDC1s3GQ7MBxPNDHnIQeoz9VC+i+FeIfODLV0WINKbdk+HgQ5Fb+eaTx6BK17ASOqJo7XEIfIJFjsO9BbRxvNJdmjtu/8wG3XzBrBWc5qTnknjyKWMyTmWjVdvnE9txFGSrhjSBjIn9272WIFFBHQazp+7I/T4fn5+NBv3xfNqfyFrrwGOyQL4XSmoPgdsb6MccETwhQYkF+9oeXLqj8+l8cj6UW9Qi67RkIbrlu/OkvZxAviSBbmZKmWromqDgkX7Oj46MTk5LoYUyf+1REKWfj5azKHIuepoq+wzyIbzx4pCrL0yHGJ0CzRKkzxik3HSXlNwze+PDSJJxMsJrL0SBys2Ola33DKMDur28NAlVKU++yspREFDhfUN8eVJQglZwzyidplrp9h1400qFBwICGcCEA3gnLIKBBy20VLmmS5xUfkZn26qClHYwFVoXGAjzThGjQlI5a0bRyqOJjTniidSX4F0J3rRXEU8qya+M4frpHmN7z5f4FOF18O7OJPagVYgsd0Ebx3/Hf/FcVeYzoWtHfYruIlZGtM49TK4wQ6Hq98eVqFem5cy4ao6RMVm2+Rd4h5wXgqKidZSxKtRJtz5Vw7sLMLzfY/k1c5Y5FC6QuMOIC8pMXZXEpnKyf4FhBKkpfP6iGmGofarep5s3Yi6NoVHDNfs4MTbC1cHGVN5WGKGgm+lnz4cK3r4VSVpthdDd4E+Xs2Yo5nK88qBNY7UxZzGpsXeKB9o2G/n0+ff5enxgvlriYZDHUb6RnGmWJdvymxEsOnHaKt5b8mUKV0TcsEqtGkIxapEYq3/gRbqcMbIbzhK0eMgcr+R9AjYbrM+d85ZVgjAdyMVdWd7EA727kpfQhay8XoVl0RhXmcjKeNZ8B4cHvOSbQiauLOVtyrrlQrzF6oQQJE3iZ/sX",
+            "IsDefault": true
+        },
+        {
+            "Type": "CustomApi",
+            "Title": "DevKitCustomApi",
+            "Body": "lVVdb5swFH2PlP/ghheoIvK+tpE6yjrUj0RJWm2q+uDCDbUGdmabtFnV/z47NgQIzTqeML73nOtz7zGj0UV4j66iBQru5ovJDTqfRv1eIQhN0XwjJOQn5fKGxJwJtpT+D5778+RXtXPqnAWMSniV/jQrUkLnz5hDcotzmK9wDM5YhfZ7VK2FXqO9hFpov/fW7yH1PAQ8N3AzSImQHEvCqDvYS74BIXCqWGbwuwAhB0N0IEjtGtTFZgV+UAjJ8vMVOXXI0m2e4pqlJMaZru3obEAZhYH35oyHKKSSyE1tG511MNb2nbEq6N0Ze4/maKviKSMxijMsRF2MQH9wxugLikyNJtwKokUZHZtP+n1PiIDlOVDpjHcxxyOtvI7Wj+VdM5Kg8BXiQoIbzYGvSQxTztYkAY5Ec+3t0mt1aLQ15ig2fVcCuLZkg6s6ZcX0Wnj+JUhL6UrVArb8MNNTY6OJykcTWrRvOJaMb7a8E55iSv5sx8Mi2+3PcB/IPsB/nuSEKvZmOX7AAUvogHRpkWUH8P4Hymru3ynyKOkCVV6JtYN1Vxbm3QrzGUVaGW2CzzuFLJFbFjvlJMd8Y6yjLeUv2DV7Ae566Ojf9vGQfObsBVF4QRFd44wkxiHVuIWvMazMDbHHhRIGAlEmkbohcNbwnIFpmtU72dq1bh09g1ZW/wKeitSOd3lArdL+tLJCrgopVCOs3ar7pswbtkaoWm8nrFoNS/J2N5ZMjVz8jFxtDkOH1GRa4pp5SxPVmzLZljfFXPVDAhe+PhQmVLgm37+CjdeBobHKxrYxHnapj+rcdnWPswJqdn6vq7XiZK1sg6pCApZlEOtm7uv2wTVT1jNEUYf9yuuiadfu2LIhtgFdcGWIAmiaperSbhQ6Lk2jiZ4KPc4dp3bbXR6Nfk7uZtU/OlhEk1v0NbyMbtH3cBbWxdS94SALXg1BU3a9r9R//ws=",
+            "IsDefault": true
         }
-    ],
-    "Plugin": null,
-    "Workflow": null,
-    "CustomAction": null,
-    "CustomApi": null,
-    "UiTest": null,
-    "DataProviderCreate": null,
-    "DataProviderUpdate": null,
-    "DataProviderDelete": null,
-    "DataProviderRetrieve": null,
-    "DataProviderRetrieveMultiple": null,
-    "TestPlugin": null,
-    "TestWorkflow": null,
-    "TestCustomAction": null,
-    "TestCustomApi": null,
-    "TestDataProvider": null
+    ]
 }
