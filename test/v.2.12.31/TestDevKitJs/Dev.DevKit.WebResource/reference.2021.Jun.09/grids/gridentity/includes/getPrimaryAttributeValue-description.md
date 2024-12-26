@@ -1,1 +1,0 @@
-Returns the primary column value for the record in the row.

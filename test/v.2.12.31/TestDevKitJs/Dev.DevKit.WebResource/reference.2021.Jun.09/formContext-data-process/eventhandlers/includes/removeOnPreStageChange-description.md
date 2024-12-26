@@ -1,1 +1,0 @@
-Removes an event handler from the [OnPreStageChange](../../../events/onprestagechange.md) event.

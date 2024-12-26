@@ -1,1 +1,0 @@
-Gets a string for the value of the primary column of the table.

@@ -1,1 +1,0 @@
-Adds a function as an event handler for the [OnPreStageChange](../../../events/onprestagechange.md) event so that it will be called **before** the business process flow stage changes.

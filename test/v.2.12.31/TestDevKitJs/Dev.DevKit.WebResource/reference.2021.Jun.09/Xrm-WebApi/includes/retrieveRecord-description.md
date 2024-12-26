@@ -1,1 +1,0 @@
-Retrieves a table record.

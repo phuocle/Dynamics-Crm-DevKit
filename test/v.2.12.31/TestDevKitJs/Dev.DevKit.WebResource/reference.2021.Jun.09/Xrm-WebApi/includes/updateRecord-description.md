@@ -1,1 +1,0 @@
-Updates a table record.
