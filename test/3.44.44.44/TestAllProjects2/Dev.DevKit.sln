@@ -37,6 +37,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.ProxyTypes", "De
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.Package", "Dev.DevKit.Package\Dev.DevKit.Package.csproj", "{29A38949-1695-4DF7-AB96-11900AACA671}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.Plugin.Account.Test", "Dev.DevKit.Plugin.Account.Test\Dev.DevKit.Plugin.Account.Test.csproj", "{89A2A15A-77BE-472D-95EC-F2B9204D3207}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.UiTest", "Dev.DevKit.UiTest\Dev.DevKit.UiTest.csproj", "{884619E3-BC8B-409D-89C9-6F574013A029}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -93,6 +97,14 @@ Global
 		{29A38949-1695-4DF7-AB96-11900AACA671}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{29A38949-1695-4DF7-AB96-11900AACA671}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{29A38949-1695-4DF7-AB96-11900AACA671}.Release|Any CPU.Build.0 = Release|Any CPU
+		{89A2A15A-77BE-472D-95EC-F2B9204D3207}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89A2A15A-77BE-472D-95EC-F2B9204D3207}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89A2A15A-77BE-472D-95EC-F2B9204D3207}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89A2A15A-77BE-472D-95EC-F2B9204D3207}.Release|Any CPU.Build.0 = Release|Any CPU
+		{884619E3-BC8B-409D-89C9-6F574013A029}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{884619E3-BC8B-409D-89C9-6F574013A029}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{884619E3-BC8B-409D-89C9-6F574013A029}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{884619E3-BC8B-409D-89C9-6F574013A029}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -105,6 +117,7 @@ Global
 		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{29a38949-1695-4df7-ab96-11900aaca671}*SharedItemsImports = 5
 		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{3588711e-5fa4-4651-be8a-69ad677a1111}*SharedItemsImports = 4
 		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{459ea6a5-87ce-433e-957e-aa66cb7ec44c}*SharedItemsImports = 4
+		Dev.DevKit.Shared.Test\Dev.DevKit.Shared.Test.projitems*{89a2a15a-77be-472d-95ec-f2b9204d3207}*SharedItemsImports = 4
 		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{8a2121ef-8d38-43b9-8580-a5b0892e2183}*SharedItemsImports = 4
 		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{98aedc98-83b4-4d53-8b43-195705e124c1}*SharedItemsImports = 4
 		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{c1766fed-1ff4-4afd-9d7c-38acdbd324a8}*SharedItemsImports = 4
