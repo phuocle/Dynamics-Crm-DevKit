@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<savedqueries xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <savedquery>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>0</CanBeDeleted>
+    <isquickfindquery>0</isquickfindquery>
+    <isprivate>0</isprivate>
+    <isdefault>1</isdefault>
+    <savedqueryid>{20f82097-794f-e6dd-23b6-9f3349b6c736}</savedqueryid>
+    <layoutxml>
+      <grid name="resultset" jump="devkit_sqldatasourcename" select="1" icon="1" preview="1">
+        <row name="result" id="devkit_sqldatasourceid">
+          <cell name="devkit_sqldatasourcename" width="300" />
+        </row>
+      </grid>
+    </layoutxml>
+    <querytype>1048576</querytype>
+    <fetchxml>
+      <fetch version="1.0" mapping="logical">
+        <entity name="devkit_sqldatasource">
+          <attribute name="devkit_sqldatasourceid" />
+          <attribute name="devkit_sqldatasourcename" />
+        </entity>
+      </fetch>
+    </fetchxml>
+    <IntroducedVersion>1.0.0.0</IntroducedVersion>
+    <LocalizedNames>
+      <LocalizedName description="Sql DataSources Copilot View" languagecode="1033" />
+    </LocalizedNames>
+  </savedquery>
+</savedqueries>

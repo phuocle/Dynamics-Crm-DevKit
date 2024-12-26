@@ -304,6 +304,7 @@ namespace DynamicsCrm.DevKit.Shared
             if (attribute is ImageAttributeMetadata) return false;
             if (attribute.AttributeOf != null) return false;
             if (attribute.AttributeTypeName == AttributeTypeDisplayName.ImageType) return false;
+            if (attribute.AttributeType == AttributeTypeCode.EntityName) return true;
             if (XrmHelper.IsOptionSet(attribute) && attribute.OptionSetValues().Count == 0) return false;
             if (attribute.AttributeType == AttributeTypeCode.Memo ||
                 attribute.AttributeType == AttributeTypeCode.Virtual ||
@@ -332,6 +333,7 @@ namespace DynamicsCrm.DevKit.Shared
         private static string GeneratorClassFields()
         {
             var code = string.Empty;
+            var t = string.Empty;
             foreach (var attribute in EntityMetadata.Attributes.OrderBy(x => x.SchemaName))
             {
                 if (!IsFieldOk(attribute)) continue;
@@ -660,7 +662,7 @@ namespace DynamicsCrm.DevKit.Shared
                 if ($"{EntityMetadata.LogicalName}id" == attribute.LogicalName)
                     line3 += "<strong>Primary Key</strong>: ";
             if (attribute.IsPrimaryName ?? false)
-                    line3 += "<strong>Primary Name</strong>: ";
+                line3 += "<strong>Primary Name</strong>: ";
             if (attribute.RequiredLevel?.Value == AttributeRequiredLevel.ApplicationRequired) line3 += "Required - ";
             if (attribute is DateTimeAttributeMetadata datetime)
             {
@@ -682,21 +684,65 @@ namespace DynamicsCrm.DevKit.Shared
                         line3 += "<strong>DateTimeBehavior</strong>: TimeZoneIndependent - <strong>DateTimeFormat</strong>: DateAndTime";
                 }
             }
-            else if (attribute is MultiSelectPicklistAttributeMetadata)
+            else if (attribute is MultiSelectPicklistAttributeMetadata multiple)
             {
                 line3 += $"<strong>MultiSelect OptionSet</strong>: <see cref=\"{RootNamespace}.{Utility.SafeDeclareName(EntityMetadata.SchemaName, GeneratorType.csharp)}OptionSets.{Utility.SafeIdentifier(attribute.SchemaName)}\"/>";
+                if (multiple.DefaultFormValue != null && multiple.DefaultFormValue != -1)
+                {
+                    var option = multiple.OptionSetValues().FirstOrDefault(x => x.Value == multiple.DefaultFormValue.ToString());
+                    if (option != null)
+                    {
+                        line4 = $"<strong>Default Value</strong>: <see cref=\"{RootNamespace}.{Utility.SafeDeclareName(EntityMetadata.SchemaName, GeneratorType.csharp)}OptionSets.{Utility.SafeIdentifier(attribute.SchemaName)}.{option.Name}\"/>";
+                    }
+                }
+                else
+                {
+                    line4 = $"<strong>Default Value</strong>: <see langword=\"null\"/>";
+                }
             }
-            else if (attribute is PicklistAttributeMetadata)
+            else if (attribute is PicklistAttributeMetadata picklist)
             {
                 line3 += $"<strong>OptionSet</strong>: <see cref=\"{RootNamespace}.{Utility.SafeDeclareName(EntityMetadata.SchemaName, GeneratorType.csharp)}OptionSets.{Utility.SafeIdentifier(attribute.SchemaName)}\"/>";
+                if (picklist.DefaultFormValue != null && picklist.DefaultFormValue != -1)
+                {
+                    var option = picklist.OptionSetValues().FirstOrDefault(x => x.Value == picklist.DefaultFormValue.ToString());
+                    if (option != null)
+                    {
+                        line4 = $"<strong>Default Value</strong>: <see cref=\"{RootNamespace}.{Utility.SafeDeclareName(EntityMetadata.SchemaName, GeneratorType.csharp)}OptionSets.{Utility.SafeIdentifier(attribute.SchemaName)}.{option.Name}\"/>";
+                    }
+                }
+                else
+                {
+                    line4 = $"<strong>Default Value</strong>: <see langword=\"null\"/>";
+                }
             }
-            else if (attribute is StateAttributeMetadata)
+            else if (attribute is StateAttributeMetadata state)
             {
                 line3 += $"<strong>Status</strong>: <see cref=\"{RootNamespace}.{Utility.SafeDeclareName(EntityMetadata.SchemaName, GeneratorType.csharp)}OptionSets.{Utility.SafeIdentifier(attribute.SchemaName)}\"/>";
+                if (state.DefaultFormValue != null && state.DefaultFormValue != -1)
+                {
+                    var option = state.OptionSetValues().FirstOrDefault(x => x.Value == state.DefaultFormValue.ToString());
+                    if (option != null)
+                    {
+                        line4 = $"<strong>Default Value</strong>: <see cref=\"{RootNamespace}.{Utility.SafeDeclareName(EntityMetadata.SchemaName, GeneratorType.csharp)}OptionSets.{Utility.SafeIdentifier(attribute.SchemaName)}.{option.Name}\"/>";
+                    }
+                }
             }
-            else if (attribute is StatusAttributeMetadata)
+            else if (attribute is StatusAttributeMetadata status)
             {
                 line3 += $"<strong>Status Reason</strong>: <see cref=\"{RootNamespace}.{Utility.SafeDeclareName(EntityMetadata.SchemaName, GeneratorType.csharp)}OptionSets.{Utility.SafeIdentifier(attribute.SchemaName)}\"/>";
+                if (status.DefaultFormValue != null && status.DefaultFormValue != -1)
+                {
+                    var option = status.OptionSetValues().FirstOrDefault(x => x.Value == status.DefaultFormValue.ToString());
+                    if (option != null)
+                    {
+                        line4 = $"<strong>Default Value</strong>: <see cref=\"{RootNamespace}.{Utility.SafeDeclareName(EntityMetadata.SchemaName, GeneratorType.csharp)}OptionSets.{Utility.SafeIdentifier(attribute.SchemaName)}.{option.Name}\"/>";
+                    }
+                }
+                else
+                {
+                    line4 = $"<strong>Default Value</strong>: <see langword=\"null\"/>";
+                }
             }
             else if (attribute is LookupAttributeMetadata lookup)
             {
@@ -711,6 +757,13 @@ namespace DynamicsCrm.DevKit.Shared
             {
                 var temp = $"[<strong>{boolean?.OptionSet?.TrueOption?.Label?.UserLocalizedLabel?.Label}</strong>]: true - [<strong>{boolean?.OptionSet?.FalseOption?.Label?.UserLocalizedLabel?.Label}</strong>]: false";
                 line3 += $"<strong>Two Option</strong> - " + temp;
+                if (boolean.DefaultValue != null)
+                {
+                    if (boolean.DefaultValue ?? false)
+                        line4 = $"<strong>Default Value</strong> [<strong>{boolean?.OptionSet?.TrueOption?.Label?.UserLocalizedLabel?.Label}</strong>]: true";
+                    else
+                        line4 = $"<strong>Default Value</strong> [<strong>{boolean?.OptionSet?.FalseOption?.Label?.UserLocalizedLabel?.Label}</strong>]: false";
+                }
             }
             else if (attribute is DoubleAttributeMetadata)
                 line3 += "<strong>Decimal Number</strong>";
@@ -761,6 +814,9 @@ namespace DynamicsCrm.DevKit.Shared
             }
             else if (attribute.SchemaName.EndsWith("_rollup_Date") || attribute.SchemaName.EndsWith("_rollup_State")) {
                 line4 = "<strong>Rollup Field</strong>";
+                xml += $"{TAB}{TAB}/// <para>{line4}</para>{NEW_LINE}";
+            }
+            else if (line4.Length > 0) {
                 xml += $"{TAB}{TAB}/// <para>{line4}</para>{NEW_LINE}";
             }
 

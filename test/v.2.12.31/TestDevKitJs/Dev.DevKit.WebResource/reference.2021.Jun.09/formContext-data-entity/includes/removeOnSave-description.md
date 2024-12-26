@@ -1,1 +1,0 @@
-Removes a function to be called when the record is saved.

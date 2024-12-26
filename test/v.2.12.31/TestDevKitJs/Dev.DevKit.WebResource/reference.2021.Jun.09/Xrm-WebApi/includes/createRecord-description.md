@@ -1,1 +1,0 @@
-Creates a table record.

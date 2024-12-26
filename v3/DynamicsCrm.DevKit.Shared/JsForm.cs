@@ -394,7 +394,7 @@ namespace DynamicsCrm.DevKit.Shared
                           .Descendants("control")
                           select new IdName
                           {
-                              Name = x?.Attribute("datafieldname")?.Value,
+                              Name = Utility.SafeIdentifier(x?.Attribute("datafieldname")?.Value),
                               Id = x?.Attribute("id").Value,
                               ClassId = Utility.TrimGuid(x?.Attribute("classid")?.Value?.ToUpper()),
                               ControlId = x?.Attribute("uniqueid")?.Value
@@ -470,7 +470,7 @@ namespace DynamicsCrm.DevKit.Shared
                           .Descendants("control")
                           select new IdName
                           {
-                              Name = x?.Attribute("datafieldname")?.Value,
+                              Name = Utility.SafeIdentifier(x?.Attribute("datafieldname")?.Value),
                               Id = x?.Attribute("id").Value,
                               ClassId = Utility.TrimGuid(x?.Attribute("classid")?.Value?.ToUpper()),
                               ControlId = x?.Attribute("uniqueid")?.Value
@@ -626,12 +626,12 @@ namespace DynamicsCrm.DevKit.Shared
                 var crmAttribute = EntityMetadata.Attributes.FirstOrDefault(x => x.LogicalName == item);
                 if (crmAttribute == null)
                 {
-                    if (listExist.Contains(item)) continue; else listExist.Add(item);
-                    code += $"{TAB}{TAB}{TAB}{item}: {{}},{NEW_LINE}";
+                    if (listExist.Contains(item)) continue; else listExist.Add(Utility.SafeIdentifier(item));
+                    code += $"{TAB}{TAB}{TAB}{Utility.SafeIdentifier(item)}: {{}},{NEW_LINE}";
                 }
                 else
                 {
-                    var name = crmAttribute.SchemaName;
+                    var name = Utility.SafeIdentifier(crmAttribute.SchemaName);
                     if (name == previousName)
                     {
                         previousCount++;
@@ -646,7 +646,7 @@ namespace DynamicsCrm.DevKit.Shared
                         previousCount = 0;
                     }
                     code += $"{TAB}{TAB}{TAB}{name}: {{}},{NEW_LINE}";
-                    previousName = crmAttribute.SchemaName;
+                    previousName = Utility.SafeIdentifier(crmAttribute.SchemaName);
                 }
             }
             code = $"{code.TrimEnd($",{NEW_LINE}".ToCharArray())}{NEW_LINE}";

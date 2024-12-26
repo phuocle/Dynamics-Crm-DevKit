@@ -8,6 +8,9 @@ using Microsoft.VisualStudio.Shell;
 using System.Collections.Generic;
 using ItemType = DynamicsCrm.DevKit.Shared.ItemType;
 using EnvDTE;
+using System;
+using System.Linq;
+using System.IO;
 
 namespace DynamicsCrm.DevKit.Lib.Forms
 {
@@ -29,7 +32,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             {
                 if (ItemType == ItemType.ResourceString) return ProjectName;
                 return ((XrmEntity)ComboBoxProject.SelectedItem)?.Name ?? LabelProjectName.Content?.ToString();
-        }
+            }
         }
         public bool IsOOBConnection => CONNECTION.IsOOBConnection;
         public CrmServiceClient CrmServiceClient => CONNECTION.CrmServiceClient;
@@ -44,10 +47,10 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             }
         }
 
-        public string PluginMessage => SelectedClassType.ServerMessage;
-        public string PluginStage => SelectedClassType.ServerStage;
-        public string PluginExecution => SelectedClassType.ServerMode;
-        public string PluginLogicalName => SelectedClassType.LogicalName;
+        public string PluginMessage => SelectedClassType?.ServerMessage;
+        public string PluginStage => SelectedClassType?.ServerStage;
+        public string PluginExecution => SelectedClassType?.ServerMode;
+        public string PluginLogicalName => SelectedClassType?.LogicalName;
 
         private ItemType _ItemType = DynamicsCrm.DevKit.Shared.ItemType.None;
         private ItemType ItemType
@@ -208,7 +211,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             }
         }
         private ProjectType _ProjectType = ProjectType.None;
-        private ProjectType ProjectType  {
+        private ProjectType ProjectType {
             get => _ProjectType;
             set
             {
@@ -377,7 +380,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     HELP.Inlines.Add("Package Project Template");
                     ComboBoxProject.Visibility = System.Windows.Visibility.Hidden;
                     TextboxProject.Visibility = System.Windows.Visibility.Visible;
-                    LabelProjectName.Content = $"{VsixHelper.GetSolutionName()}";
+                    LabelProjectName.Content = $"{VsixHelper.GetSolutionName()}.Package";
                     LabelProjectName.Tag = LabelProjectName.Content;
                 }
                 _ProjectType = value;
@@ -437,18 +440,87 @@ namespace DynamicsCrm.DevKit.Lib.Forms
 
         private void ButtonCustom_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            if (ItemType != ItemType.None)
+            if (PanelCustom.Visibility != System.Windows.Visibility.Hidden)
             {
-                var form = new FormCustom(ItemType);
-                form.ShowDialog();
+                if (IsValid())
+                {
+                    var T4Context = GetT4Context();
+                    var form = new FormCustom(ItemType, T4Context, TemplateTitle);
+                    form.ShowDialog();
+                    LoadCustomTemplates();
+                }
+            }
+            bool IsValid()
+            {
+                if (ItemType == ItemType.Workflow || ItemType == ItemType.Test || ItemType == ItemType.UiTest)
+                {
+                    if(ItemType == ItemType.Test && ComboBoxProject.SelectedItem == null)
+                    {
+                        VS.MessageBox.ShowError($"Please select class first.");
+                        return false;
+                    }
+                }
+                return true;
             }
         }
 
+        private T4Context GetT4Context()
+        {
+            var solutionName = VsixHelper.GetSolutionName();
+            var pluginSharedNameSpace = $"{solutionName}.Shared";
+            var pluginNameSpace = string.Empty;
+            var serverType = this.SelectedClassType?.ServerType;
+            if (serverType == "Plugin" || serverType == "Workflow" || serverType == "CustomAction" || serverType == "CustomApi" || serverType == "DataProvider")
+                pluginNameSpace = NameSpace.Contains($".{serverType}.") ? NameSpace.Replace($".{serverType}.", $".{serverType}") : NameSpace;
+            else
+                pluginNameSpace = NameSpace.Contains($".{ItemType.Plugin}.") ? NameSpace.Replace($".{ItemType.Plugin}.", $".{ItemType.Plugin}") : NameSpace;
+            if (ItemType == ItemType.Workflow)
+            {
+                var t4Context = new T4Context
+                {
+                    PluginSharedNameSpace = pluginSharedNameSpace,
+                    PluginNameSpace = pluginNameSpace,
+                    Class = this.ItemName
+                };
+                return t4Context;
+            }
+            else if (ItemType == ItemType.DataProvider)
+            {
+                var t4Context = new T4Context
+                {
+                    PluginSharedNameSpace = pluginSharedNameSpace,
+                    PluginNameSpace = pluginNameSpace,
+                    Class = this.ItemName,
+                    DataSource = this.ItemName
+                };
+                return t4Context;
+            }
+            else if (ItemType == ItemType.Test || ItemType == ItemType.UiTest)
+            {
+                var t4Context = new T4Context
+                {
+                    PluginSharedNameSpace = pluginSharedNameSpace,
+                    PluginNameSpace = pluginNameSpace,
+                    Class = this.ItemName,
+                    DataSource = this.ItemName,
+                    ProxyTypes = $"{solutionName}.ProxyTypes",
+                    PluginStage = this.PluginStage,
+                    PluginMessage = this.PluginMessage,
+                    PluginExecution = this.PluginExecution,
+                    PluginLogicalName = this.PluginLogicalName,
+                };
+                return t4Context;
+            }
+            return new T4Context();
+        }
+
+        public string NameSpace { get; set; }
 
         public FormProject(ProjectType projectType)
         {
             InitializeComponent();
             ProjectType = projectType;
+            PanelCustom.Visibility = System.Windows.Visibility.Hidden;
         }
 
         public FormProject(ItemType itemType, DTE dte = null)
@@ -456,6 +528,53 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             InitializeComponent();
             ItemType = itemType;
             DTE = dte;
+            if (ItemType == ItemType.Workflow || ItemType == ItemType.Test || ItemType == ItemType.UiTest)
+            {
+                LoadCustomTemplates();
+            }
+            else
+                PanelCustom.Visibility = System.Windows.Visibility.Hidden;
+
+        }
+
+        public string TemplateTitle
+        {
+            get
+            {
+                var selected = (CustomTemplate)ComboBoxTemplate.SelectedItem;
+                return selected.Title;
+            }
+        }
+        private void LoadCustomTemplates()
+        {
+            var templates = GetCustomTemplates();
+            ComboBoxTemplate.ItemsSource = null;
+            ComboBoxTemplate.ItemsSource = templates;
+            ComboBoxTemplate.DisplayMemberPath = "Title";
+            ComboBoxTemplate.SelectedItem = templates.FirstOrDefault(x => x.IsDefault);
+            if (ComboBoxTemplate.SelectedItem == null) ComboBoxTemplate.SelectedIndex = 0;
+
+            List<CustomTemplate> GetCustomTemplates()
+            {
+                var fileName = VsixHelper.GetDynamicsCrmDevKitConfigJsonFileName();
+                var CachedJson = new CachedJson();
+                if (File.Exists(fileName)) CachedJson = SimpleJson.DeserializeObject<CachedJson>(File.ReadAllText(fileName));
+                var customTemplates = CachedJson.CustomTemplates.Where(x => x.Type == ItemType.ToString()).ToList() ?? new List<CustomTemplate>();
+                foreach (var customTemplate in customTemplates)
+                {
+                    customTemplate.Body = Utility.Decompress(customTemplate.Body);
+                }
+                if (ItemType == ItemType.Test)
+                {
+                    customTemplates.Insert(0, new CustomTemplate { Type = ItemType.ToString(), Title = $"Default - {ItemType.CustomApi.ToString()}", Body = null, IsDefault = false });
+                    customTemplates.Insert(0, new CustomTemplate { Type = ItemType.ToString(), Title = $"Default - {ItemType.CustomAction.ToString()}", Body = null, IsDefault = false });
+                    customTemplates.Insert(0, new CustomTemplate { Type = ItemType.ToString(), Title = $"Default - {ItemType.Workflow.ToString()}", Body = null, IsDefault = false });
+                    customTemplates.Insert(0, new CustomTemplate { Type = ItemType.ToString(), Title = $"Default - {ItemType.Plugin.ToString()}", Body = null, IsDefault = false });
+                }
+                else
+                    customTemplates.Insert(0, new CustomTemplate { Type = ItemType.ToString(), Title = "Default", Body = null, IsDefault = false });
+                return customTemplates;
+            }
         }
 
         private void ButtonCancel_Click(object sender, System.Windows.RoutedEventArgs e)
@@ -463,8 +582,13 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             DialogResult = false;
         }
 
+
         private void ButtonOK_Click(object sender, System.Windows.RoutedEventArgs e)
         {
+            if (IsValid())
+            {
+                DialogResult = true;
+            }
             bool IsValid()
             {
                 if (VsixHelper.IsExistProject(ProjectName))
@@ -483,10 +607,6 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     return false;
                 }
                 return true;
-            }
-            if (IsValid())
-            {
-                DialogResult = true;
             }
         }
 

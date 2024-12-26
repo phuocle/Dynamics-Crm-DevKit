@@ -46,8 +46,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>lib\Microsoft.VisualStudio.Coverage.Analysis.dll</HintPath>
     </Reference>
-    <Reference Include="NUglify, Version=1.21.0.0, Culture=neutral, PublicKeyToken=15bc7810aec21b5e, processorArchitecture=MSIL">
-      <HintPath>..\packages\NUglify.1.21.0\lib\net40\NUglify.dll</HintPath>
+    <Reference Include="NUglify, Version=1.21.9.0, Culture=neutral, PublicKeyToken=15bc7810aec21b5e, processorArchitecture=MSIL">
+      <HintPath>..\packages\NUglify.1.21.9\lib\net40\NUglify.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -59,9 +59,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\DynamicsCrm.DevKit.Shared\EncryptDecrypt.cs">
+      <Link>Shared\EncryptDecrypt.cs</Link>
+    </Compile>
     <Compile Include="Args\CoverageToXmlArgs.cs" />
+    <Compile Include="Args\DecryptArgs.cs" />
     <Compile Include="Args\NUglifyArgs.cs" />
     <Compile Include="Commands\TaskCoverageToXml.cs" />
+    <Compile Include="Commands\TaskDecrypt.cs" />
     <Compile Include="Commands\TaskNUglify.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -69,19 +74,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="Nuget\DynamicsCrm.DevKit.Tool.nuspec" />
-    <None Include="Nuget\pack.bat" />
     <None Include="..\DynamicsCrm.DevKit.pfx">
       <Link>DynamicsCrm.DevKit.pfx</Link>
     </None>
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="lib\Microsoft.VisualStudio.Coverage.Analysis.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="lib\Microsoft.VisualStudio.Coverage.Interop.dll" />
-    <Content Include="license\LICENSE.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

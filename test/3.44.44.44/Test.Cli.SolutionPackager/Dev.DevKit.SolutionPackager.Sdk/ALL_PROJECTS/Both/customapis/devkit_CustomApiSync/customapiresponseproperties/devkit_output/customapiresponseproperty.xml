@@ -1,0 +1,11 @@
+<customapiresponseproperty uniquename="devkit_output">
+  <description default="output">
+    <label description="output" languagecode="1033" />
+  </description>
+  <displayname default="output">
+    <label description="output" languagecode="1033" />
+  </displayname>
+  <iscustomizable>1</iscustomizable>
+  <name>output</name>
+  <type>10</type>
+</customapiresponseproperty>

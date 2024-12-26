@@ -1,0 +1,58 @@
+﻿{
+    "WebResources": [
+        
+    ],
+    "CustomTemplates": [
+        {
+            "Type": "Plugin",
+            "Title": "PLUGIN ABC",
+            "Body": "nVffb+M2DH4v0P9BS4BDUmQ2ro9bm6JLsy5A2wRNC2w43INrMzlhjuTJctrsrv/7qB9WlMR23OWhtS2K5EdSH6kip2xJ5ptcwurX05NCv97TWPCcL2Twp1gF8+Tv+pVg/CaB5ZSz3AlddC9HnEl4k8EsLZaUzb9FApKHaAXzLIqhO0TR0xOG77l6JwcbPNHTk++nJwR/X0ZiZdQ9wpLmUkQSrfY6B5vvIc+jJVrpDMjh6h1f0jhKlQUtMZcoO2bFKjhQpJe6wwEZv0FcKGv3PKmRdSJKvlNp2QPl2xqlUZ5rVz4PyCTnqcblLM0jlrzwtwEx2J82GZBL78WG+KJLF70y6pP8ASC5gRQkXOcbFk8zMOHqf1f+Va2gUikKuOi+d4c7yoxdG9TLy85IQCShQz59IqU9m2UVSRSY8Vw6gx1jcbLCtc8qAmhHS+gvGCezcp3SKK9esoi1nHrWuVI29BenQEpBXwoJWssZ5r0RB7lEN56zRCP58WMPiQWrhUysqmEIqEOxv1INwkr9TwwY6hLBx3NxXpuL8/pcnFfD2MvF+XVVLvpfzTHOipeUxiRWVe8ffHsMyC9kYsrJiNvDrwggPDOf1PPBWR3x1QqY7A63MmehYhklrX5hmAm6xnwTrN+Es3RDkEMU+RVsjsdbAFbzgi4Lc1CwFlmRpkhUZnuTgrzldoPcc91i7jU5MijdrLDS973zIxUqp+U3mgd14Cq/76B1KioMY3Qqvu5sf1fBD8PZ3fPt5IFc/za68bNhq2DNaWLZFXqTOYg1jWEm+JomINDEzruH1sOq3FxHgsSm46BnPVtAjpItTfX39AW3IK3JnkRi4YvanX0PWmnQavs9iiUXG213KpYRo/9qArea7XIb2w27G+xfJyvKdD50sKy9wLB0hcqeKusGfR9RZWMePGMsJkmVUuzSsTpjKitP5tkGpk1E9nbsG6AL0itd0L2a/IR2KJP94029j8dD8FfC4JVM2DpKaWJox1XN+C2GzIwYRnnCsbkwLgn8U0TpDnl5DRA7eZOfM0FXkdiMmaRyozg4eOJ3/BVEr6+8PzavfMjtA1vkKITd6agJiO2RbSBsB7It2A8B8Wwdh7C11ug+TnKuXFzO3dTlkfReWXSHH3LdqT7uuBO1JbQld03F5vQEN/BSLC2jldWvgO5KG11gfC/FsJUYRrUk4d41h7i3AQ6C+tT68dN0rvxQv7KT+vRtTdVwb0nPOOpUcFLJofvuVcmWGKzPTSJobJdBHLBtsLCTtJp262bE7RCmBt2tXhUm1ZZkJJYgzXFHFizpasKyQs4igQQgQUzFDSyiIpUXRnDY6zzpfZpKcJSFNAfiDfgm2LbS3Ux+jxpoluJsftRbJ3rUa6on6nZ+j3iaQqw40yHI20Lw5uzmKD7CAgQwvDa2Dafb4bzynTpIWxiqxF1dXbUwgFKoFP+WGlUNNBZUObLXpWj/0nEYjEzgHUi1D9VVzVPf5ucqmJWL+maSX33p4BdzS/mKLKGvRdZDd12srqb2NzxVbrXKSrxtryjVBZnhHaMBtFvdoi4vJR0PtjqU5S8M/5o+PxIzn/48mt6Mye2U/DF+HG8jjqSnxPHf+38=",
+            "IsDefault": true
+        },
+        {
+            "Type": "Workflow",
+            "Title": "WORKFLOW ABC",
+            "Body": "lVZdb9MwFH1m0v6D1b1kUho/IHgYW1FpC1QwitrBQBMPrnMXLBI7+KOsIP4714mTpaHbIA9Lbd97fO49x86cETIjq62xUCRjbsVGWAHm2eGBq1bOBdfKqGubfNJFskq/3b2SXCr97TpXP9qQ06OziZIWbmzyPneZkKuvTEP6jhWwKhmHoxGGHh5IHBs/Jn8ldEIPD34dHhB8ria6qOGWkAljNbNCyWjQSZ7kzJij0SAmd8z2Vmq4zma4Pjcqr5DPVQoz6bB6JtO1uolJHX6xLYGcdQZtA46/1ExLt84FJ9yz6dYW6JETMkHs0PVtnROK9IVS+tXa0pxQmipukqKVgquCghw6Q9MtNk9w8/jpE8qdsaoAPQSZsQwKkJamsIFclaDpjyAOZWk6LMCylFk2rHOGzeKQ1Q4IXGoSK1eWSltIyVyWztKFs/giFss3J2StVB6TKbNwIQqIH02Bi4L5KYXVQ0xm0gq7XcI1aJAcJ4S0MTlXErYxWZReuxXYjyx3uIZqoh+9Kfze/qH0agrXzOU2GoQfNQ9SpQyaXofYimI0qF77I1omF0xngKiMc+Wk7SMt4bsT6NaxzpzvZdA07DO2yHTtsOoeClpOyBSl0FuO4vZQgyPmskE97bVnVBdX1UZ+EST4jBj/5/dDTQmy7O1KvRYN7okJzDCipVaLMSJ11h2UKL1cLN+8fLu4JOMXky7JUisL3PtGbUBrkQLZKJGS2Q1wbFzU9X64JghUa2iJMHF8a4TOwfAabJgmjW2b7LO/8pNXYGc3FqRBzNN5c0OFhFF0jBeQR2sej2pAbwSHl3gWlN7iCe+T6oEudMak+FndFaud3Hvxx2khJKLvbpdMNOBZ2oMZSZfn9/D9H6he45IPSGKe7gPH25X7L8SDXbioA0MD6sp3e0tpAEumsHZZ0CDqcfEkdvOCXxrtor4ccd8HeI3syNCOq5a3o5gEPt26d45ZqcUGxdixbUvjX+yLX5EmvvFor1yM2KN1471+Hftim2JDcfeF4Ga7MrUduO1475hR6o9EqfEL6K9x9EFU/zruFfI8ed8EzQv8/JjnVwOceeH/jQBj6qTBl955C/DK2H/Ab6NuN8CpB3f4vPiwJM0lNZwspjPyakFez5azrtNQeH8J4Ov3Hw==",
+            "IsDefault": true
+        },
+        {
+            "Type": "CustomAction",
+            "Title": "CUSTOM ACTION ABC",
+            "Body": "lVZNb9s4EL0HyH9g44tUGBJ63U0DuKq3NdrEQewstih6YKSxQ6xEuiTlxFv0v+9QpCRaluXEMGCTGs5788E3KhXja7LYKQ3Fn+dnZbW8ZqkUSqx09I8sokX2b/PkcvQ+EVzDs45u83LN+OKRSshuaAGLDU1hdIWm52cc18qsycEBz/T87Nf5GcHP90QW1t0drJnSkmomeHBxcPgalKJrRLkYk8OnX8WapTQ3CJXFQqPtlJdFdOCoejS6GpPpM6SlQbsW2RHbxsTYX/Qie0H5WElOlaqovBuTmRJ5FVeDtKA8exDPY2JjX+42QN57iygplRbFJDX8LkdsFdS5n6kbgOwj5KBhonY8nW/AJi38ZVj2PUHXWpZwOfo9ugp/2MRvyoecpSQ1PP1SOeLkDzKz3Ky5K5cpWfzWbpn/B9lNRFEA16Or1uZtbPrCWJtPHG8k21INRALNBM93BKtuOrHkCyyIBIx0xdalDQqp8zLPsbXs8SEH6oXHbeQedRdzMERkXNPsQQl9dn6mYkNaPzIVHQuud38v2sZFDzBmp2d37/hvk/w4Tu4Xy/k1mSTL2fyGTD4kfk1cL2wFy9ytgGC2ALllKdxKsWUZSATaW3sxexEbslsqSWqVAvkFro2aq+QaOez4iz6BdpCBxusgVkdPhl6ANaDz9hdNtZC7Cncu15Sz/6qL5zy7xy/BHjg9gD/JCsarqlTJcnhRgr2uocdlYJp7wN9rXLmcR/eYi1nW5xTVNTU3zVRlaf+7xLwkI50TXQC2IkFNodJY8gZxGNfhaTEO8ZJI8UQ4PJEZ39KcZVZ8mq6ZPqewsaPBOs8EKMKFJvCzpPmehNmjTucvhnjeSlZQuZtyzfTOKHm0FF/FE8ggNOxPzZlX0T7AIidD2J9qQ4G46fiSENpB2gb7qkA8rNMhtGiD9HECN+3S1LyZlp5Ud9oC59lrWqdxfZp4Y4pD3FBvJb4SZHt7oo/wUK6dotXdf2htFFGUelNqhXfPegZ/wtdHcchYlXXC0awrXWlWYxzn1U3u5nQlUGjSRxK0iAT1yGF7km1i6Mi22fLv8LwifEslXgsNUkUmTMq4Cqy76Avswo7LI27Ndi0NXbffW28/MDlu9TfNS+jIvPGC08z81B9vWc25er9+xWjYJyLPoXqZ6k3/kRlVk8Y3uB7trmdNt2R9tnVdXR2HTBBsX2mbYrexd0rXVtv0lxHRnsCDbrPE8bf5/R3ZfzP4MP00uyGfp3fTbstL0KVsesmrjSsC/uD3fw==",
+            "IsDefault": true
+        },
+        {
+            "Type": "CustomApi",
+            "Title": "CUSTOM API ABC",
+            "Body": "lVRdT9swFH2v1P9gmpcEVen7gEol61g0oFVbpk2IB5PcBmuJndlOoUP899m1kyZp6Fie4o97zvW599xCEJqg5VZIyM76vWK3vCERZ4Ktpf+DZ/4y/lWdnDsXAaMSXqQ/T4uE0OUT5hDf4gyWOY7AGaur/R5Va6HX6CCgdrXfe+33kPruA54ZuAUkREiOJWHUHRwE34AQOFEsC/hdgJCDITpySZ0a1NU2Bz8ohGTZJCfnDlm7zVdcs4REONW5nVwMKKMw8F6d8RBNqSRyWztGFx2MtXNnrBJ6c8beg3laXjymJEJRioWoixHoDWeMPqHQ5GiuW0G0KKNTs6X/D4QIWJYBlc54f+d0pJUfjYK75Wp2gybzEE0uA72nEfRnc9kwEqPpC0SFBDdcAt+QCOacbUgMHInm2tuH13LTaBvMUWR6QYni2mcYXFU9K7DXwvOvQFpKV6qysPW7kZ5qJU1UfprQon3BkWR8u+Od8QRT8mfXMhbZHn+E+0j0Ef5JnBGq2Jvp+AEHLKED0qVFmh7B+x8oq7l/p8jDuAtU+SfSrtZVWZl/K8xHFGlFtAk+7h6yRm6Z7JyTDPOtsZO2mb9i1+wZuOuhk39bykPyibNnROEZhXSDUxIb11TtNn2JIDdT44ALxQwEokwiNTVw2vChgWka2DvbWbhuHd2DVlb/MzwWiW3v8oFapcNuZYXMCylUIazdqhlUxg1bLVStdx1WrYYlebsaa6ZaLnpCrjaHoUOqMy1xzbyliepFme3Sm2Ou6iGBC18/ChMqXBPvf4Ot14GhscrCtjHu96EP6t129R2nBdTs/FZXK+dko2yDqkQClqYQ6WIe6vbOmCnzGaKww37luGjatftuWRBbgC648ooCaJqlqtK+FTqGptFEd4Vu545Xu+0qj0Y/Z3cLVE72YBXObtHl9Cq8RV+ni2ldTF0bDrLgVRM0ZdfnSv23vw==",
+            "IsDefault": true
+        },
+        {
+            "Type": "Test",
+            "Title": "Test Plugin ABC",
+            "Body": "3Vbfb9owEH5H4n+wYKqCtIXudSuojGYdElDUpFunaUJZ4oLXYKe2Q8kq/vf5R0ichNJ2b11eEPbdd+fvPt85YQgvwGf/Fl7TleOz1J5FyQJh9rHZSNTeBAWUMHLD7a+IJX7k8iRExPYg4x4hEbOvMOLynwDa4yRgbTe8zXfclHG4sscI3+VrJ+3ekGAONzyL7i59CsOpv4Ju7Aew3X+Bqcpsrz0lm9RLY8gUXrOBBT6T+KCWgBG62XhoNoD4fshDDiOfsZ96IU5+RSgAgVwyIZRNuy/NwQeTW7nyyWdQu2ewEjqmaO1zCAKChY/L/QV0cLICs/HV+Wg6d73BuQN6xYZdS1j5qHNJPPmVMRmnstAZ4MRxXQ3ZqiFNIGMifrvfEiRqqMNgztQbed/n44vz0XAwnk8HE5lrHXhMFijwI0ntIXBnA4OEI4InJCyx4Fw7wytvdDGdTy7OZIiaZZ2W3CQr+e48qpYTyJckzIqpKNMFXRMUPlLP+fGx1SloMUoo/dc+BbG6PpmcRZJzUVOl7HPIz+CNn0Rc37DMxOoYNEuQAWOQcttbUnLPnE0AY0nGyQiv/QiF2jc/Vr7ft6wO6PWL1CRUJT25lKejIaDG+4b48sRQQqbgvlU6TTXT7VvwpqWEB0ICGcCEA3gnWgQDD6ZybY+4Sn5WZ9uqgpQi2BqtByyEecfEqJBU9ppRtPJp6mCOeCr1JXjXgredVczTivMrY7h+usfY3nMTnyK8Dt7bNYk9aBUiy1XIGsd/x795rirzudCzjvoU3SZWTnTme5hc0QyFqt+9r1i9Mi3njavWMXImy23+Bb1DzgtBkdk6ylgV6mS3PtXDuwcwvN/T8mvNWfpQuEDiDSMeKDP9VBJB5WT/AqMYUlv0+cuqhaXjVHtfVrwR82gCrRquPcCptRFdHWxs3duMEQp6uX72XFRwdCScMrUZprvBr7bzYmjmCrzyoFW2WWPObdSTpGMeaNtsFNPn3+fr+wPztSs+BnkSF4HkTOt2ZVl+M4JFJU5b5rul2KZwRcQLq1SqMyhGLRJj9Q+8VNs5I7vhLEHNQxZ4pd4nYPPB+tw53+2WIGwXcvFWli/xMIuu5SV0ITOvZ9Ht0gRXmcjTeNZ8B4cHvOSbQiaeLOUwZd1yIV4zOyEESZP42f4F",
+            "IsDefault": true
+        },
+        {
+            "Type": "UiTest",
+            "Title": "UITEST ABC",
+            "Body": "nVPBauMwEL0H8g+ivShQ1MOyvXRTSL17CGzagu3dhVKKak+zAkcy0ihpKP33nbHVjRsKJdXB1kh6z0/vjWMwdinybUBYnY9HcVCqHKroDW7/ry9M5V1wj6i+b61emSp8OfuqyvksoltpNM6qWWtUmc0PgVx6twng34H8MiHqJsdYG6cKCFg41wRVWoNckXICjUenp+W8+JEXYnaZcU3SILS6AvHteJo5i/CE6qaJS2OvaCvnreOL8eh5PBI0bpkra3QId/1CGx8aU4mKl4YU3RkGMiqBedp6s9YIwoOunW22ojMOcvTs7X2ky7EkMU0+K9L0aJbR95a9qRba6iV48rHNAfmK4faoTAxHd6pwQ3I5IQNYAo8PZLR0m43z9edl3CSGA2WU3oj7J7/i91RY2Aiayb7lDrfCN/3nO3PlhA3YWdBFuQD86+qUZWdMn+famVpw1nKyQwxi5KNr7Sl3AxaT1N/wkHW1ZORrJOq65W4PQ/sZ3v8+klnowpRhYvnTFbJnngw+z6A9CbzUg9W1bYyFn44aV3VPmXw82XUVTV+T3VfDTLNAvYNqHgofQSI99k+97MxIU3q9/AM=",
+            "IsDefault": true
+        }
+    ],
+    "Plugin": null,
+    "Workflow": null,
+    "CustomAction": null,
+    "CustomApi": null,
+    "UiTest": null,
+    "DataProviderCreate": null,
+    "DataProviderUpdate": null,
+    "DataProviderDelete": null,
+    "DataProviderRetrieve": null,
+    "DataProviderRetrieveMultiple": null,
+    "TestPlugin": null,
+    "TestWorkflow": null,
+    "TestCustomAction": null,
+    "TestCustomApi": null,
+    "TestDataProvider": null
+}

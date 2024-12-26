@@ -1,1 +1,0 @@
-Returns all the process instances for the table record that the calling user has access to.

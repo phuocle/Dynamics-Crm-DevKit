@@ -69,7 +69,7 @@ namespace DynamicsCrm.DevKit.Shared
             replacements.Add("$NameSpace$", Utility.SafeNamespace(form.ProjectName));
             replacements.Add("$NameSpacePlugin$", replacements["$NameSpace$"].Replace(".Plugin.", ".Plugin"));
             replacements.Add("$IsOOBConnection$", form.IsOOBConnection ? "1" : "0");
-            replacements.Add("$CrmConnectionString$", XrmHelper.BuildConnectionString(form.DataverseConnectionString));
+            replacements.Add("$CrmConnectionString$", XrmHelper.BuildConnectionString2(form.DataverseConnectionString));
             replacements.Add("$ClientId$", form?.CrmConnection?.Type == "ClientSecret" ? "ClientId" : "Username");
             replacements.Add("$ClientSecret$", form?.CrmConnection?.Type == "ClientSecret" ? "ClientSecret" : "Password");
             replacements.Add("$AuthTypeValue$", form?.CrmConnection?.Type ?? string.Empty);

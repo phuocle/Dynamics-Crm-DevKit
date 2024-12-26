@@ -1,0 +1,118 @@
+﻿'use strict';
+/** @namespace DevKit */
+var DevKit;
+(function (DevKit) {
+	'use strict';
+})(DevKit || (DevKit = {}));
+/** @namespace OptionSet */
+var OptionSet;
+(function (OptionSet) {
+	OptionSet.ProcessStage = {
+		OperationKind : {
+			AddToTime: 473330011,
+			Alert: 473330005,
+			ApiConnection: 473330004,
+			AzureMonitorAlert: 473330013,
+			Button: 473330003,
+			ConvertTimeZone: 473330008,
+			CurrentTime: 473330007,
+			EventGrid: 473330006,
+			FormatNumber: 473330024,
+			Geofence: 473330019,
+			GetFutureTime: 473330009,
+			GetPastTime: 473330010,
+			Http: 473330000,
+			IndexOf: 473330021,
+			JsonToJson: 473330015,
+			JsonToText: 473330016,
+			ODataOpenApiConnection: 473330020,
+			PowerApp: 473330001,
+			PowerAppV2: 473330002,
+			PowerPages: 473330026,
+			SecurityCenterAlert: 473330014,
+			Skills: 473330025,
+			Substring: 473330022,
+			SubtractFromTime: 473330012,
+			TeamsWebhook: 473330027,
+			VirtualAgent: 473330023,
+			XmlToJson: 473330017,
+			XmlToText: 473330018
+		},
+		OperationType : {
+			ApiApp: 473330001,
+			ApiConnection: 473330006,
+			ApiConnectionNotification: 473330050,
+			ApiConnectionWebhook: 473330009,
+			ApiManagement: 473330016,
+			AppendToArrayVariable: 473330037,
+			AppendToStringVariable: 473330038,
+			As2Decode: 473330045,
+			As2Encode: 473330046,
+			Batch: 473330039,
+			Changeset: 473330051,
+			Compose: 473330013,
+			DecrementVariable: 473330035,
+			Expression: 473330042,
+			FlatFileDecoding: 473330025,
+			FlatFileEncoding: 473330018,
+			Flow: 473330004,
+			Foreach: 473330022,
+			Function: 473330015,
+			Http: 473330000,
+			HttpWebhook: 473330012,
+			If: 473330021,
+			IncrementVariable: 473330034,
+			InitializeVariable: 473330033,
+			IntegrationAccountArtifactLookup: 473330027,
+			JavascriptCode: 473330044,
+			Join: 473330031,
+			Liquid: 473330043,
+			Manual: 473330008,
+			OpenApiConnection: 473330007,
+			OpenApiConnectionWebhook: 473330010,
+			ParseJson: 473330029,
+			Query: 473330014,
+			Recurrence: 473330002,
+			Request: 473330020,
+			Response: 473330011,
+			RosettaNetDecode: 473330048,
+			RosettaNetEncode: 473330047,
+			RosettaNetWaitForResponse: 473330049,
+			Scope: 473330019,
+			Select: 473330032,
+			SendToBatch: 473330040,
+			SetVariable: 473330036,
+			SlidingWindow: 473330041,
+			SwiftEncode: 473330052,
+			Switch: 473330028,
+			Table: 473330030,
+			Terminate: 473330026,
+			Until: 473330023,
+			Wait: 473330005,
+			Workflow: 473330003,
+			XmlValidation: 473330017,
+			Xslt: 473330024
+		},
+		PrimaryEntityTypeCode : {
+		},
+		StageCategory : {
+			Approval: 7,
+			Close: 3,
+			Develop: 1,
+			Identify: 4,
+			Propose: 2,
+			Qualify: 0,
+			Research: 5,
+			Resolve: 6
+		},
+		RollupState : {
+			NotCalculated: 0,
+			Calculated: 1,
+			OverflowError: 2,
+			OtherError: 3,
+			RetryLimitExceeded: 4,
+			HierarchicalRecursionLimitReached: 5,
+			LoopDetected: 6
+		}
+	};
+})(OptionSet || (OptionSet = {}));

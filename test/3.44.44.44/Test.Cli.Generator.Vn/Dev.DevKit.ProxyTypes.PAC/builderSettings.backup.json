@@ -1,0 +1,25 @@
+﻿{
+  "codeCustomizationService": "DLaB.ModelBuilderExtensions.CustomizeCodeDomService,DLaB.ModelBuilderExtensions",
+  "codeGenerationService": "DLaB.ModelBuilderExtensions.CodeGenerationService,DLaB.ModelBuilderExtensions",
+  "codeWriterFilterService": "DLaB.ModelBuilderExtensions.CodeWriterFilterService,DLaB.ModelBuilderExtensions",
+  "codeWriterMessageFilterService": "DLaB.ModelBuilderExtensions.CodeWriterMessageFilterService,DLaB.ModelBuilderExtensions",
+  "metadataProviderService": "DLaB.ModelBuilderExtensions.MetadataProviderService,DLaB.ModelBuilderExtensions",
+  "metadataQueryProviderService": "DLaB.ModelBuilderExtensions.MetadataQueryProviderService,DLaB.ModelBuilderExtensions",
+  "namingService": "DLaB.ModelBuilderExtensions.NamingService,DLaB.ModelBuilderExtensions",
+
+  "emitEntityETC": false,
+  "emitFieldsClasses": true,
+  "emitVirtualAttributes": true,
+  "entityTypesFolder": "Entities",
+  "generateActions": true,
+  "generateGlobalOptionSets": false,
+  "generateSdkMessages": true,
+  "language": "CS",
+  "logLevel": "All",
+  "messagesTypesFolder": "Messages",
+  "namespace": "Dev.DevKit.ProxyTypes",
+  "optionSetsTypesFolder": "OptionSets",
+  "serviceContextName": "DataverseContext",
+  "suppressGeneratedCodeAttribute": true,
+  "suppressINotifyPattern": true
+}

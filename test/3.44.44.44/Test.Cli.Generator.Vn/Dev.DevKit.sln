@@ -1,0 +1,64 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32112.339
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{0372AD35-DF35-4FB9-AC79-FF67076839E4}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		DynamicsCrm.DevKit.Cli.json = DynamicsCrm.DevKit.Cli.json
+		DynamicsCrm.DevKit.json = DynamicsCrm.DevKit.json
+		notes.txt = notes.txt
+	EndProjectSection
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Dev.DevKit.Shared", "Dev.DevKit.Shared\Dev.DevKit.Shared.shproj", "{364597E2-DB79-449E-A13C-5A9A2AD9F5E2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.Console", "Dev.DevKit.Console\Dev.DevKit.Console.csproj", "{DDAF57DF-1DF4-4FE0-8F52-4ED91DACF6A6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.WebResource", "Dev.DevKit.WebResource\Dev.DevKit.WebResource.csproj", "{D8CB6CF7-60C1-4C20-BD06-6755D6B3FC75}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.ProxyTypes", "Dev.DevKit.ProxyTypes\Dev.DevKit.ProxyTypes.csproj", "{24F931D0-A884-4354-B3C5-47AC3A575D6A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.ProxyTypes.PAC", "Dev.DevKit.ProxyTypes.PAC\Dev.DevKit.ProxyTypes.PAC.csproj", "{FCCA851C-A570-4B6E-AE56-78FC9FE12029}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.Console.PAC", "Dev.DevKit.Console.PAC\Dev.DevKit.Console.PAC.csproj", "{36AE556E-F7F3-4CBD-A817-421BEF588AC5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DDAF57DF-1DF4-4FE0-8F52-4ED91DACF6A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DDAF57DF-1DF4-4FE0-8F52-4ED91DACF6A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DDAF57DF-1DF4-4FE0-8F52-4ED91DACF6A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DDAF57DF-1DF4-4FE0-8F52-4ED91DACF6A6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D8CB6CF7-60C1-4C20-BD06-6755D6B3FC75}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D8CB6CF7-60C1-4C20-BD06-6755D6B3FC75}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D8CB6CF7-60C1-4C20-BD06-6755D6B3FC75}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D8CB6CF7-60C1-4C20-BD06-6755D6B3FC75}.Release|Any CPU.Build.0 = Release|Any CPU
+		{24F931D0-A884-4354-B3C5-47AC3A575D6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24F931D0-A884-4354-B3C5-47AC3A575D6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24F931D0-A884-4354-B3C5-47AC3A575D6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24F931D0-A884-4354-B3C5-47AC3A575D6A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FCCA851C-A570-4B6E-AE56-78FC9FE12029}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FCCA851C-A570-4B6E-AE56-78FC9FE12029}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FCCA851C-A570-4B6E-AE56-78FC9FE12029}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FCCA851C-A570-4B6E-AE56-78FC9FE12029}.Release|Any CPU.Build.0 = Release|Any CPU
+		{36AE556E-F7F3-4CBD-A817-421BEF588AC5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{36AE556E-F7F3-4CBD-A817-421BEF588AC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{36AE556E-F7F3-4CBD-A817-421BEF588AC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{36AE556E-F7F3-4CBD-A817-421BEF588AC5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {478EE8F5-54E1-431D-BEC8-72AC05F5AF8C}
+	EndGlobalSection
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{364597e2-db79-449e-a13c-5a9a2ad9f5e2}*SharedItemsImports = 13
+		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{36ae556e-f7f3-4cbd-a817-421bef588ac5}*SharedItemsImports = 4
+		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{ddaf57df-1df4-4fe0-8f52-4ed91dacf6a6}*SharedItemsImports = 4
+	EndGlobalSection
+EndGlobal

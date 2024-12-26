@@ -26,12 +26,13 @@ namespace DynamicsCrm.DevKit.Lib.Wizard.ItemTemplates
 
         public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary, WizardRunKind runKind, object[] customParams)
         {
-            var form = new FormPlugin(ItemType.CustomAction);
+            var nameSpace = replacementsDictionary["$rootnamespace$"];
+            var form = new FormPlugin(ItemType.CustomAction, nameSpace);
             var ok = form.ShowModal() ?? false;
             if (ok)
             {
                 Replacement.SetItem(replacementsDictionary, form);
-                var t4Code = T4Helper.GetT4Code(ItemType.CustomAction);
+                var t4Code = T4Helper.GetT4Code2(ItemType.CustomAction, form.TemplateTitle);
                 var t4Context = T4Helper.BuildContext(replacementsDictionary, form);
                 var code = T4Helper.ProcessTemplate(t4Code, t4Context);
                 replacementsDictionary.Add("$customaction$", code);

@@ -53,7 +53,7 @@ namespace DynamicsCrm.DevKit.Shared
                 {
                     LogicalName = CloneAttribute(entityReferenceValue.LogicalName) as string,
                     Id = entityReferenceValue.Id,
-                    Name = CloneAttribute(entityReferenceValue.Name) as string
+                    Name = CloneAttribute(entityReferenceValue?.Name) as string
                 };
             }
             var booleanManagedValue = value as BooleanManagedProperty;

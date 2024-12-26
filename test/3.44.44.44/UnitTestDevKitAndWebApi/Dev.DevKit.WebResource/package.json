@@ -1,0 +1,25 @@
+{
+  "private": true,
+  "name": "dev.devkit.webresource",
+  "version": "1.0.0",
+  "description": "dev.devkit.webresource",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {},
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/jasmine": "^5.1.5",
+    "@types/requirejs": "^2.1.37",
+    "@types/sinon": "^17.0.3",
+    "@types/sinonjs__fake-timers": "^8.1.5",
+    "@types/xrm": "^9.0.81",
+    "eslint": "^9.16.0",
+    "jasmine": "^5.5.0",
+    "requirejs": "^2.3.7",
+    "sinon": "^19.0.2",
+    "xrm-mock": "^3.6.1"
+  }
+}

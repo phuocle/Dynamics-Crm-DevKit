@@ -66,4 +66,4 @@
   <ItemGroup>
     <Analyzer Include="..\packages\DynamicsCrm.DevKit.Analyzers.$DynamicsCrm.DevKit.Analyzers.version$\analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />
   </ItemGroup>
- </Project>
+</Project>

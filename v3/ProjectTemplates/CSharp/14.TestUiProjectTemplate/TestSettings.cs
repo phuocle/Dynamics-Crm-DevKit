@@ -1,4 +1,5 @@
 ﻿using Microsoft.Dynamics365.UIAutomation.Browser;
+using System;
 
 namespace $NameSpace$
 {

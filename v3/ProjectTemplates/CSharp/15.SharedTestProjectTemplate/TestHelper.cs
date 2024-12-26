@@ -47,11 +47,37 @@ namespace $NameSpace$
             entities.AddRange(pluginExecutionContext.OutputParameters.Where(x => x.Value is Entity).Select(x => (Entity)x.Value).ToList());
             entities.AddRange(pluginExecutionContext.PostEntityImages.Select(x => (Entity)x.Value).ToList());
             entities.AddRange(pluginExecutionContext.PreEntityImages.Select(x => (Entity)x.Value).ToList());
-            FixedDateTime(entities);
-            FixedOptionSetValueCollection(entities);
+            FixDateTime(entities);
+            FixOptionSetValueCollection(entities);
+            FixGuid(entities);
+            FixEntityReferenceCollection(pluginExecutionContext.InputParameters);
+            FixEntityReferenceCollection(pluginExecutionContext.SharedVariables);
+            FixEntityReferenceCollection(pluginExecutionContext.OutputParameters);
         }
 
-        private static void FixedOptionSetValueCollection(List<Entity> entities)
+        private static void FixEntityReferenceCollection(ParameterCollection parameterCollection)
+        {
+            foreach (var key in parameterCollection.Keys.ToList())
+            {
+                if (parameterCollection[key] is Array array)
+                {
+                    var fixCollection = new EntityReferenceCollection();
+                    foreach (var item in array)
+                    {
+                        if (item is EntityReference entityReference)
+                        {
+                            fixCollection.Add(entityReference);
+                        }
+                    }
+                    if (fixCollection.Count > 0)
+                    {
+                        parameterCollection[key] = fixCollection;
+                    }
+                }
+            }
+        }
+
+        private static void FixOptionSetValueCollection(List<Entity> entities)
         {
             foreach (var entity in entities)
             {
@@ -73,7 +99,7 @@ namespace $NameSpace$
             }
         }
 
-        private static void FixedDateTime(List<Entity> entities)
+        private static void FixDateTime(List<Entity> entities)
         {
             foreach (var entity in entities)
             {
@@ -85,6 +111,25 @@ namespace $NameSpace$
                         if (str != null && DateTime.TryParse(str, out var dateTime))
                         {
                             entity.Attributes[key] = dateTime;
+                        }
+                    }
+                    catch { }
+                }
+            }
+        }
+
+        private static void FixGuid(List<Entity> entities)
+        {
+            foreach (var entity in entities)
+            {
+                foreach (var key in entity.Attributes.Keys.ToList())
+                {
+                    try
+                    {
+                        var str = entity.GetAttributeValue<string>(key);
+                        if (str != null && Guid.TryParse(str, out var guid))
+                        {
+                            entity.Attributes[key] = guid;
                         }
                     }
                     catch { }

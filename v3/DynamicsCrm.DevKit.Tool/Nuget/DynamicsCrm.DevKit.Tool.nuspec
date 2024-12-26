@@ -3,7 +3,7 @@
   <metadata>
     <id>DynamicsCrm.DevKit.Tool</id>
     <title>DynamicsCrm.DevKit.Tool - Tool for DynamicsCrm.DevKit tool</title>
-    <version>3.33.33</version>
+    <version>3.44.44.44</version>
     <authors>PhuocLe</authors>
     <license type="file">license\LICENSE.txt</license>
     <projectUrl>https://github.com/phuocle/Dynamics-Crm-DevKit</projectUrl>
@@ -11,7 +11,8 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Tool for DynamicsCrm.DevKit tool</description>
     <language>en-US</language>
-    <tags>Dynamics, Dynamics365, CRM, Tool, DevKit, Analyzers</tags>
+	<tags>Dynamics, Dynamics365, DynamicsCrm, Crm, Cli, DevKit, Analyzer, Dataverse</tags>
+	<readme>docs\README.md</readme>
   </metadata>
   <files>
     <file src="..\images\icon.png" target="images\icon.png" />
@@ -20,6 +21,7 @@
     <file src="..\Release\CmdLine.dll" target="tools\CmdLine.dll" />
     <file src="..\Release\NUglify.dll" target="tools\NUglify.dll" />
     <file src="..\license\LICENSE.txt" target="license\LICENSE.txt" />
+	<file src="..\docs\README.md" target="docs\README.md" />
     <file src="..\Release\Microsoft.VisualStudio.Coverage.Analysis.dll" target="tools\Microsoft.VisualStudio.Coverage.Analysis.dll" />
     <file src="..\Release\Microsoft.VisualStudio.Coverage.Interop.dll" target="tools\Microsoft.VisualStudio.Coverage.Interop.dll" />
   </files>

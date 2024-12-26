@@ -160,5 +160,17 @@ namespace DynamicsCrm.DevKit.Analyzers
             helpLinkUri: $"https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DEVKIT1004",
             customTags: Array.Empty<string>()
             );
+        /// <summary>DEVKIT1005</summary>
+        public static readonly DiagnosticDescriptor EntityReferenceMaybeNull = new DiagnosticDescriptor(
+            id: "DEVKIT1005",
+            title: "Entity Reference maybe null",
+            messageFormat: "Entity Reference maybe null",
+            category: DiagnosticCategories.Require,
+            defaultSeverity: DiagnosticSeverity.Error,
+            isEnabledByDefault: true,
+            description: "Entity Reference maybe null.",
+            helpLinkUri: $"https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DEVKIT1005",
+            customTags: Array.Empty<string>()
+            );
     }
 }

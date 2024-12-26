@@ -127,16 +127,30 @@ namespace DynamicsCrm.DevKit.Shared
                     attribute.AttributeTypeName == AttributeTypeDisplayName.FileType
                 )
                 {
-                    code += $"{TAB}{TAB}{TAB}{attributeSchemaName}: {{ {a}{r} }},{NEW_LINE}";
+                    var g = "";
+                    if (attribute.AttributeType == AttributeTypeCode.Integer ||
+                         attribute.AttributeType == AttributeTypeCode.BigInt ||
+                         attribute.AttributeType == AttributeTypeCode.Picklist ||
+                         attribute.AttributeType == AttributeTypeCode.Status ||
+                         attribute.AttributeType == AttributeTypeCode.State)
+                        g = ", g: 'Integer'";
+                    else if (attribute.AttributeType == AttributeTypeCode.Double ||
+                               attribute.AttributeType == AttributeTypeCode.Decimal ||
+                               attribute.AttributeType == AttributeTypeCode.Money)
+                        g = ", g: 'Number'";
+                    else if (attribute.AttributeType == AttributeTypeCode.Boolean)
+                        g = ", g: 'Boolean'";
+                    code += $"{TAB}{TAB}{TAB}{attributeSchemaName}: {{ {a}{r}{g} }},{NEW_LINE}";
                 }
                 else if (attribute.AttributeType == AttributeTypeCode.DateTime)
                 {
                     var suffix = GetSuffix(attribute);
-                    code += $"{TAB}{TAB}{TAB}{attributeSchemaName}{suffix}: {{ {a}{r} }},{NEW_LINE}";
+                    var g = ", g: 'DateTime'";
+                    code += $"{TAB}{TAB}{TAB}{attributeSchemaName}{suffix}: {{ {a}{r}{g} }},{NEW_LINE}";
                 }
                 else if (attribute is MultiSelectPicklistAttributeMetadata)
                 {
-                    var g = (attribute is MultiSelectPicklistAttributeMetadata) ? $", g: true" : $"";
+                    var g = (attribute is MultiSelectPicklistAttributeMetadata) ? $", g: 'MultiOptionSet'" : $"";
                     code += $"{TAB}{TAB}{TAB}{attributeSchemaName}: {{ {a}{g}{r} }},{NEW_LINE}";
                 }
                 else if (attribute.AttributeType == AttributeTypeCode.Owner)

@@ -756,7 +756,7 @@ namespace DynamicsCrm.DevKit.Shared
                           .Descendants("control")
                           select new IdName
                           {
-                              Name = x?.Attribute("datafieldname")?.Value,
+                              Name = Utility.SafeIdentifier(x?.Attribute("datafieldname")?.Value),
                               Id = x?.Attribute("id").Value,
                               ClassId = Utility.TrimGuid(x?.Attribute("classid")?.Value?.ToUpper()),
                               ControlId = x?.Attribute("uniqueid")?.Value
@@ -812,7 +812,7 @@ namespace DynamicsCrm.DevKit.Shared
                         var field = new IdName
                         {
                             ClassId = ControlClassId.SINGLE_LINE_OF_TEXT,
-                            Name = fieldName,
+                            Name = Utility.SafeIdentifier(fieldName),
                             Id = null,
                             ControlId = null
                         };
@@ -850,7 +850,7 @@ namespace DynamicsCrm.DevKit.Shared
                           .Descendants("control")
                           select new IdName
                           {
-                              Name = x?.Attribute("datafieldname")?.Value,
+                              Name = Utility.SafeIdentifier(x?.Attribute("datafieldname")?.Value),
                               Id = x?.Attribute("id").Value,
                               ClassId = Utility.TrimGuid(x?.Attribute("classid")?.Value?.ToUpper()),
                               ControlId = x?.Attribute("uniqueid")?.Value
@@ -927,7 +927,7 @@ namespace DynamicsCrm.DevKit.Shared
                           .Descendants("control")
                           select new IdName
                           {
-                              Name = x?.Attribute("datafieldname")?.Value,
+                              Name = Utility.SafeIdentifier(x?.Attribute("datafieldname")?.Value),
                               Id = x?.Attribute("id").Value,
                               ClassId = Utility.TrimGuid(x?.Attribute("classid")?.Value?.ToUpper()),
                               ControlId = x?.Attribute("uniqueid")?.Value
@@ -979,7 +979,7 @@ namespace DynamicsCrm.DevKit.Shared
         "customeraddress", "customerrelationship", "activityparty", "actioncard", "connection", "fileattachment", "owner", "createdby", "createdonbehalfby", "modifiedby", "modifiedonbehalfby"
         };
 
-            foreach (var relationship in EntityMetadata.OneToManyRelationships.OrderBy(x => x.SchemaName))
+            foreach (var relationship in EntityMetadata.OneToManyRelationships.OrderBy(x => Utility.SafeIdentifier(x.SchemaName)))
             {
                 if (BlackList.Contains(relationship.ReferencingEntity)) continue;
                 if (BlackList.Contains(relationship.ReferencedEntity)) continue;
@@ -990,7 +990,7 @@ namespace DynamicsCrm.DevKit.Shared
                     (relationship.IsValidForAdvancedFind ?? false)
                     )
                 {
-                    _d_ts += $"\t\t\t{relationship.SchemaName}: DevKit.Controls.NavigationItem,\r\n";
+                    _d_ts += $"\t\t\t{Utility.SafeIdentifier(relationship.SchemaName)}: DevKit.Controls.NavigationItem,\r\n";
                 }
             }
 
@@ -1085,12 +1085,12 @@ namespace DynamicsCrm.DevKit.Shared
                           .Descendants("control")
                         select new IdName
                         {
-                            Name = x?.Attribute("datafieldname")?.Value ?? x?.Attribute("id")?.Value,
+                            Name = Utility.SafeIdentifier(x?.Attribute("datafieldname")?.Value) ?? Utility.SafeIdentifier(x?.Attribute("id")?.Value),
                             Id = x?.Attribute("id").Value,
                             ClassId = Utility.TrimGuid(x?.Attribute("classid")?.Value?.ToUpper()),
                             ControlId = x?.Attribute("uniqueid")?.Value
                         }).Distinct().ToList();
-            body = body.OrderBy(x => x.Name).ToList();
+            body = body.OrderBy(x => x.Id).ToList();
             _d_ts += Get_d_ts_ForListFields(formXml, body, false, ref FormAll_BodyFields);
             if (_d_ts.EndsWith(",\r\n")) _d_ts = _d_ts.TrimEnd(",\r\n".ToCharArray()) + "\r\n";
             _d_ts += $"\t\t}}\r\n";
@@ -1113,8 +1113,8 @@ namespace DynamicsCrm.DevKit.Shared
                            .Descendants("control")
                            select new IdName
                            {
-                               Name = x?.Attribute("datafieldname")?.Value,
-                               Id = x?.Attribute("id").Value,
+                               Name = Utility.SafeIdentifier(x?.Attribute("datafieldname")?.Value),
+                               Id = Utility.SafeIdentifier(x?.Attribute("id").Value),
                                ClassId = Utility.TrimGuid(x?.Attribute("classid")?.Value?.ToUpper()),
                                ControlId = x?.Attribute("uniqueid")?.Value
                            }).ToList();
@@ -1137,7 +1137,8 @@ namespace DynamicsCrm.DevKit.Shared
             var previousCount = 0;
 
             var listVirtualControls = new List<string>();
-
+            foreach (var item in list) item.Id = Utility.SafeIdentifier(item.Id);
+            //list = list.OrderBy(x => x.Id).ToList();
             foreach (var item in list)
             {
                 var _d_ts = string.Empty;
@@ -1146,7 +1147,7 @@ namespace DynamicsCrm.DevKit.Shared
                 {
                     var crmAttribute = EntityMetadata.Attributes.FirstOrDefault(x => x.LogicalName == item.Name);
                     if (crmAttribute == null) continue;
-                    var name = crmAttribute.SchemaName;
+                    var name = Utility.SafeIdentifier(crmAttribute.SchemaName);
                     if (name == previousName)
                     {
                         previousCount = previousCount + 1;
@@ -1160,7 +1161,7 @@ namespace DynamicsCrm.DevKit.Shared
                         previousName = string.Empty;
                         previousCount = 0;
                     }
-                    previousName = crmAttribute.SchemaName;
+                    previousName = Utility.SafeIdentifier(crmAttribute.SchemaName);
                     var jsdoc = string.Empty;
                     if (crmAttribute?.Description?.UserLocalizedLabel?.Label.Length > 0)
                         jsdoc = $"\t\t\t/** {crmAttribute?.Description?.UserLocalizedLabel?.Label} */\r\n";
@@ -1337,7 +1338,11 @@ namespace DynamicsCrm.DevKit.Shared
                         _d_ts += $"\t\t\t{item.Name}: DevKit.Controls.ELSE3???;//{item.Id} - {item.ClassId} -- FOR DEBUG \r\n";
                 }
                 code += _d_ts;
-                if (!allFields.Any(x => x == _d_ts)) allFields.Add(_d_ts);
+                if (!allFields.Any(x => x == _d_ts))
+                {
+                    allFields.Add(_d_ts);
+                    allFields.Sort();
+                }
             }
             code = code.TrimEnd(",\r\n".ToCharArray()) + "\r\n";
             return code;

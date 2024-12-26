@@ -1,0 +1,925 @@
+﻿'use strict';
+/** @namespace DevKit */
+var DevKit;
+(function (DevKit) {
+	'use strict';
+	DevKit.FormOpportunity_Field_Service_Information = function(executionContext, defaultWebResourceName) {
+		var formContext = null;
+		if (executionContext !== undefined) {
+			if (executionContext.getFormContext === undefined) {
+				formContext = executionContext;
+			}
+			else {
+				formContext = executionContext.getFormContext();
+			}
+		}
+		var form = devKit.LoadForm(formContext);
+		var body = {
+			BudgetAmount: {},
+			CloseProbability: {},
+			Competitors: {},
+			CurrentSituation: {},
+			CustomerNeed: {},
+			Description: {},
+			DiscountAmount: {},
+			DiscountPercentage: {},
+			FreightAmount: {},
+			IsRevenueSystemCalculated: {},
+			msdyn_OrderType: {},
+			msdyn_WorkOrderType: {},
+			Name: {},
+			notescontrol: {},
+			opportunityproductsGrid: {},
+			OpportunityRatingCode: {},
+			OpportunityServicesGrid: {},
+			ParentAccountId: {},
+			ParentContactId: {},
+			PriceLevelId: {},
+			ProposedSolution: {},
+			PurchaseProcess: {},
+			PurchaseTimeframe: {},
+			Pursuit_Team: {},
+			quote: {},
+			SalesStageCode: {},
+			Stakeholders: {},
+			TotalAmount: {},
+			TotalAmountLessFreight: {},
+			TotalLineItemAmount: {},
+			TotalTax: {},
+			TransactionCurrencyId: {}
+		};
+		devKit.LoadFields(formContext, body);
+		var tab = {
+			opportunity_line_items: {
+				Section: {
+					opportunityproducts: {},
+					ServiceMaintenanceLines: {},
+					totals: {}
+				}
+			},
+			QUOTES: {
+				Section: {
+					opportunityquotes: {},
+					QUOTES_section_2: {}
+				}
+			},
+			Summary: {
+				Section: {
+					Notes_pane: {},
+					Opportunity_details: {},
+					opportunity_information: {},
+					Social_pane: {}
+				}
+			},
+			tab_4: {
+				Section: {
+					tab_4_section_2: {}
+				}
+			}
+		};
+		devKit.LoadTabs(formContext, tab);
+		body.Tab = tab;
+		form.Body = body;
+		var header = {
+			EstimatedCloseDate: {},
+			EstimatedValue: {},
+			OwnerId: {},
+			StatusCode: {}
+		};
+		devKit.LoadFields(formContext, header, "header_");
+		form.Header = header;
+		var process = devKit.LoadProcess(formContext);
+		var _Lead_to_Opportunity_Sales_Process = {
+			CompleteFinalProposal: {},
+			CompleteInternalReview: {},
+			CustomerNeed: {},
+			DevelopProposal: {},
+			FileDebrief: {},
+			FinalDecisionDate: {},
+			IdentifyCompetitors: {},
+			IdentifyCustomerContacts: {},
+			IdentifyPursuitTeam: {},
+			PresentFinalProposal: {},
+			PresentProposal: {},
+			ProposedSolution: {},
+			SendThankYouNote: {}
+		}
+		devKit.LoadFields(formContext, _Lead_to_Opportunity_Sales_Process, "header_process_");
+		process.Lead_to_Opportunity_Sales_Process = _Lead_to_Opportunity_Sales_Process;
+		var _Sales_Process = {
+			BudgetAmount: {},
+			CompleteFinalProposal: {},
+			CompleteInternalReview: {},
+			CustomerNeed: {},
+			DecisionMaker: {},
+			Description: {},
+			DevelopProposal: {},
+			FileDebrief: {},
+			FinalDecisionDate: {},
+			IdentifyCompetitors: {},
+			IdentifyCustomerContacts: {},
+			IdentifyPursuitTeam: {},
+			ParentAccountId: {},
+			ParentContactId: {},
+			PresentFinalProposal: {},
+			PresentProposal: {},
+			ProposedSolution: {},
+			PurchaseProcess: {},
+			PurchaseTimeframe: {},
+			SendThankYouNote: {}
+		}
+		devKit.LoadFields(formContext, _Sales_Process, "header_process_");
+		process.Sales_Process = _Sales_Process;
+		form.Process = process;
+		var grid = {
+			Competitors: {},
+			opportunityproductsGrid: {},
+			OpportunityServicesGrid: {},
+			Pursuit_Team: {},
+			quote: {},
+			Stakeholders: {},
+		};
+		devKit.LoadGrids(formContext, grid);
+		form.Grid = grid;
+		var navigation = {
+			lead_qualifying_opportunity: {},
+			lk_leadtoopportunitysalesprocess_opportunityid: {},
+			lk_opportunitysalesprocess_opportunityid: {},
+			msdyn_msdyn_salescopilotinsight_opportunity_msdyn_targetentityid: {},
+			msdyn_opportunity_dailyopportunitykpiitem_entityid: {},
+			msdyn_opportunity_msdyn_mostcontacted_regardingObjectId: {},
+			msdyn_opportunity_msdyn_mostcontactedby_regardingObjectId: {},
+			msdyn_opportunity_msdyn_opportunitykpiitem_opportunityid: {},
+			msdyn_opportunity_msdyn_salesroutingrun_targetobject: {},
+			msdyn_opportunity_msdyn_timespent_opplookup: {},
+			msdyn_opportunity_msdyn_workorder: {},
+			msdyn_playbookinstance_opportunity: {},
+			msdyn_sabackupdiagnostic_opportunity_msdyn_target: {},
+			msdyn_salesroutingdiagnostic_opportunity_msdyn_target: {},
+			msdyn_salessuggestion_opportunity_qualifiedrecord: {},
+			msdyn_sequencetarget_opportunity_msdyn_target: {},
+			msdyncrm_opportunity_msdyncrm_leadtoopportunity: {},
+			opportunity_adx_inviteredemptions: {},
+			opportunity_adx_portalcomments: {},
+			Opportunity_Appointments: {},
+			opportunity_customer_opportunity_roles: {},
+			Opportunity_Emails: {},
+			opportunity_invoices: {},
+			opportunity_msdyn_bookingalerts: {},
+			opportunity_msdyn_copilottranscripts: {},
+			opportunity_msdyn_ocliveworkitems: {},
+			opportunity_msdyn_ocoutboundmessages: {},
+			opportunity_msdyn_ocsessions: {},
+			opportunity_msdyn_ocvoicemails: {},
+			opportunity_msfp_alerts: {},
+			opportunity_msfp_surveyinvites: {},
+			opportunity_msfp_surveyresponses: {},
+			Opportunity_OpportunityClose: {},
+			opportunity_OpportunityCloses: {},
+			opportunity_OrderCloses: {},
+			Opportunity_Phonecalls: {},
+			opportunity_Posts: {},
+			opportunity_QuoteCloses: {},
+			opportunity_quotes: {},
+			opportunity_sales_orders: {},
+			Opportunity_ServiceAppointments: {},
+			Opportunity_Tasks: {},
+			opportunity_Teams: {},
+			product_opportunities: {}
+		};
+		devKit.LoadNavigations(formContext, navigation);
+		form.Navigation = navigation;
+		form.Utility = devKit.LoadUtility(defaultWebResourceName);
+		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
+		return form;
+	};
+	DevKit.FormLead_qualification_opportunity_form = function(executionContext, defaultWebResourceName) {
+		var formContext = null;
+		if (executionContext !== undefined) {
+			if (executionContext.getFormContext === undefined) {
+				formContext = executionContext;
+			}
+			else {
+				formContext = executionContext.getFormContext();
+			}
+		}
+		var form = devKit.LoadForm(formContext);
+		var body = {
+			BudgetAmount: {},
+			CurrentSituation: {},
+			CustomerNeed: {},
+			Description: {},
+			EstimatedCloseDate: {},
+			msdyn_forecastcategory: {},
+			Name: {},
+			OwnerId: {},
+			ProposedSolution: {},
+			PurchaseProcess: {},
+			PurchaseTimeframe: {},
+			TransactionCurrencyId: {}
+		};
+		devKit.LoadFields(formContext, body);
+		var tab = {
+			Summary: {
+				Section: {
+					Opportunity_details: {},
+					opportunity_information: {}
+				}
+			}
+		};
+		devKit.LoadTabs(formContext, tab);
+		body.Tab = tab;
+		form.Body = body;
+		var header = {
+			OwnerId: {}
+		};
+		devKit.LoadFields(formContext, header, "header_");
+		form.Header = header;
+		var process = devKit.LoadProcess(formContext);
+		var _Lead_to_Opportunity_Sales_Process = {
+			CompleteFinalProposal: {},
+			CompleteInternalReview: {},
+			CustomerNeed: {},
+			DevelopProposal: {},
+			FileDebrief: {},
+			FinalDecisionDate: {},
+			IdentifyCompetitors: {},
+			IdentifyCustomerContacts: {},
+			IdentifyPursuitTeam: {},
+			PresentFinalProposal: {},
+			PresentProposal: {},
+			ProposedSolution: {},
+			SendThankYouNote: {}
+		}
+		devKit.LoadFields(formContext, _Lead_to_Opportunity_Sales_Process, "header_process_");
+		process.Lead_to_Opportunity_Sales_Process = _Lead_to_Opportunity_Sales_Process;
+		var _Sales_Process = {
+			BudgetAmount: {},
+			CompleteFinalProposal: {},
+			CompleteInternalReview: {},
+			CustomerNeed: {},
+			DecisionMaker: {},
+			Description: {},
+			DevelopProposal: {},
+			FileDebrief: {},
+			FinalDecisionDate: {},
+			IdentifyCompetitors: {},
+			IdentifyCustomerContacts: {},
+			IdentifyPursuitTeam: {},
+			ParentAccountId: {},
+			ParentContactId: {},
+			PresentFinalProposal: {},
+			PresentProposal: {},
+			ProposedSolution: {},
+			PurchaseProcess: {},
+			PurchaseTimeframe: {},
+			SendThankYouNote: {}
+		}
+		devKit.LoadFields(formContext, _Sales_Process, "header_process_");
+		process.Sales_Process = _Sales_Process;
+		form.Process = process;
+		var navigation = {
+			lead_qualifying_opportunity: {},
+			lk_leadtoopportunitysalesprocess_opportunityid: {},
+			lk_opportunitysalesprocess_opportunityid: {},
+			msdyn_msdyn_salescopilotinsight_opportunity_msdyn_targetentityid: {},
+			msdyn_opportunity_dailyopportunitykpiitem_entityid: {},
+			msdyn_opportunity_msdyn_mostcontacted_regardingObjectId: {},
+			msdyn_opportunity_msdyn_mostcontactedby_regardingObjectId: {},
+			msdyn_opportunity_msdyn_opportunitykpiitem_opportunityid: {},
+			msdyn_opportunity_msdyn_salesroutingrun_targetobject: {},
+			msdyn_opportunity_msdyn_timespent_opplookup: {},
+			msdyn_opportunity_msdyn_workorder: {},
+			msdyn_playbookinstance_opportunity: {},
+			msdyn_sabackupdiagnostic_opportunity_msdyn_target: {},
+			msdyn_salesroutingdiagnostic_opportunity_msdyn_target: {},
+			msdyn_salessuggestion_opportunity_qualifiedrecord: {},
+			msdyn_sequencetarget_opportunity_msdyn_target: {},
+			msdyncrm_opportunity_msdyncrm_leadtoopportunity: {},
+			opportunity_adx_inviteredemptions: {},
+			opportunity_adx_portalcomments: {},
+			Opportunity_Appointments: {},
+			opportunity_customer_opportunity_roles: {},
+			Opportunity_Emails: {},
+			opportunity_invoices: {},
+			opportunity_msdyn_bookingalerts: {},
+			opportunity_msdyn_copilottranscripts: {},
+			opportunity_msdyn_ocliveworkitems: {},
+			opportunity_msdyn_ocoutboundmessages: {},
+			opportunity_msdyn_ocsessions: {},
+			opportunity_msdyn_ocvoicemails: {},
+			opportunity_msfp_alerts: {},
+			opportunity_msfp_surveyinvites: {},
+			opportunity_msfp_surveyresponses: {},
+			Opportunity_OpportunityClose: {},
+			opportunity_OpportunityCloses: {},
+			opportunity_OrderCloses: {},
+			Opportunity_Phonecalls: {},
+			opportunity_Posts: {},
+			opportunity_QuoteCloses: {},
+			opportunity_quotes: {},
+			opportunity_sales_orders: {},
+			Opportunity_ServiceAppointments: {},
+			Opportunity_Tasks: {},
+			opportunity_Teams: {},
+			product_opportunities: {}
+		};
+		devKit.LoadNavigations(formContext, navigation);
+		form.Navigation = navigation;
+		form.Utility = devKit.LoadUtility(defaultWebResourceName);
+		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
+		return form;
+	};
+	DevKit.FormOpportunity = function(executionContext, defaultWebResourceName) {
+		var formContext = null;
+		if (executionContext !== undefined) {
+			if (executionContext.getFormContext === undefined) {
+				formContext = executionContext;
+			}
+			else {
+				formContext = executionContext.getFormContext();
+			}
+		}
+		var form = devKit.LoadForm(formContext);
+		var body = {
+			ActionCards: {},
+			BudgetAmount: {},
+			CadenceWidgetControl: {},
+			Competitors: {},
+			CopilotSummaryWidget: {},
+			CurrentSituation: {},
+			CustomerNeed: {},
+			Description: {},
+			DiscountAmount: {},
+			DiscountPercentage: {},
+			DocumentsSubGrid: {},
+			DynamicPropertiesList_LinkControl: {},
+			FreightAmount: {},
+			IsRevenueSystemCalculated: {},
+			msdyn_forecastcategory: {},
+			msdyn_OrderType: {},
+			msdyn_WorkOrderType: {},
+			Name: {},
+			notescontrol: {},
+			opportunityproductsGrid: {},
+			ParentContactId: {},
+			PriceLevelId: {},
+			ProductSuggestions_LinkControl: {},
+			ProposedSolution: {},
+			PurchaseProcess: {},
+			PurchaseTimeframe: {},
+			Pursuit_Team: {},
+			quote: {},
+			Stakeholders: {},
+			TotalAmount: {},
+			TotalAmountLessFreight: {},
+			TotalLineItemAmount: {},
+			TotalTax: {},
+			TransactionCurrencyId: {}
+		};
+		devKit.LoadFields(formContext, body);
+		var tab = {
+			documents_sharepoint: {
+				Section: {
+					documents_sharepoint_section: {}
+				}
+			},
+			FieldService: {
+				Section: {
+					tab_4_section_1: {},
+					tab_4_section_2: {}
+				}
+			},
+			Product_Line_Items: {
+				Section: {
+					DynamicProperties: {},
+					opportunityproducts: {},
+					suggestionsection: {},
+					totals: {}
+				}
+			},
+			QUOTES: {
+				Section: {
+					opportunityquotes: {}
+				}
+			},
+			Summary: {
+				Section: {
+					Competitors_Section: {},
+					Notes_pane: {},
+					Opportunity_details: {},
+					opportunity_information: {},
+					Record_Summary_Widget: {},
+					Social_pane: {},
+					Summary_CadenceWidget: {},
+					Summary_section_6: {}
+				}
+			}
+		};
+		devKit.LoadTabs(formContext, tab);
+		body.Tab = tab;
+		form.Body = body;
+		var header = {
+			EstimatedCloseDate: {},
+			EstimatedValue: {},
+			OwnerId: {},
+			ParentAccountId: {}
+		};
+		devKit.LoadFields(formContext, header, "header_");
+		form.Header = header;
+		var process = devKit.LoadProcess(formContext);
+		var _Lead_to_Opportunity_Sales_Process = {
+			CompleteFinalProposal: {},
+			CompleteInternalReview: {},
+			CustomerNeed: {},
+			DevelopProposal: {},
+			FileDebrief: {},
+			FinalDecisionDate: {},
+			IdentifyCompetitors: {},
+			IdentifyCustomerContacts: {},
+			IdentifyPursuitTeam: {},
+			PresentFinalProposal: {},
+			PresentProposal: {},
+			ProposedSolution: {},
+			SendThankYouNote: {}
+		}
+		devKit.LoadFields(formContext, _Lead_to_Opportunity_Sales_Process, "header_process_");
+		process.Lead_to_Opportunity_Sales_Process = _Lead_to_Opportunity_Sales_Process;
+		var _Sales_Process = {
+			BudgetAmount: {},
+			CompleteFinalProposal: {},
+			CompleteInternalReview: {},
+			CustomerNeed: {},
+			DecisionMaker: {},
+			Description: {},
+			DevelopProposal: {},
+			FileDebrief: {},
+			FinalDecisionDate: {},
+			IdentifyCompetitors: {},
+			IdentifyCustomerContacts: {},
+			IdentifyPursuitTeam: {},
+			ParentAccountId: {},
+			ParentContactId: {},
+			PresentFinalProposal: {},
+			PresentProposal: {},
+			ProposedSolution: {},
+			PurchaseProcess: {},
+			PurchaseTimeframe: {},
+			SendThankYouNote: {}
+		}
+		devKit.LoadFields(formContext, _Sales_Process, "header_process_");
+		process.Sales_Process = _Sales_Process;
+		form.Process = process;
+		var grid = {
+			Competitors: {},
+			DocumentsSubGrid: {},
+			opportunityproductsGrid: {},
+			quote: {},
+		};
+		devKit.LoadGrids(formContext, grid);
+		form.Grid = grid;
+		var navigation = {
+			lead_qualifying_opportunity: {},
+			lk_leadtoopportunitysalesprocess_opportunityid: {},
+			lk_opportunitysalesprocess_opportunityid: {},
+			msdyn_msdyn_salescopilotinsight_opportunity_msdyn_targetentityid: {},
+			msdyn_opportunity_dailyopportunitykpiitem_entityid: {},
+			msdyn_opportunity_msdyn_mostcontacted_regardingObjectId: {},
+			msdyn_opportunity_msdyn_mostcontactedby_regardingObjectId: {},
+			msdyn_opportunity_msdyn_opportunitykpiitem_opportunityid: {},
+			msdyn_opportunity_msdyn_salesroutingrun_targetobject: {},
+			msdyn_opportunity_msdyn_timespent_opplookup: {},
+			msdyn_opportunity_msdyn_workorder: {},
+			msdyn_playbookinstance_opportunity: {},
+			msdyn_sabackupdiagnostic_opportunity_msdyn_target: {},
+			msdyn_salesroutingdiagnostic_opportunity_msdyn_target: {},
+			msdyn_salessuggestion_opportunity_qualifiedrecord: {},
+			msdyn_sequencetarget_opportunity_msdyn_target: {},
+			msdyncrm_opportunity_msdyncrm_leadtoopportunity: {},
+			opportunity_adx_inviteredemptions: {},
+			opportunity_adx_portalcomments: {},
+			Opportunity_Appointments: {},
+			opportunity_customer_opportunity_roles: {},
+			Opportunity_Emails: {},
+			opportunity_invoices: {},
+			opportunity_msdyn_bookingalerts: {},
+			opportunity_msdyn_copilottranscripts: {},
+			opportunity_msdyn_ocliveworkitems: {},
+			opportunity_msdyn_ocoutboundmessages: {},
+			opportunity_msdyn_ocsessions: {},
+			opportunity_msdyn_ocvoicemails: {},
+			opportunity_msfp_alerts: {},
+			opportunity_msfp_surveyinvites: {},
+			opportunity_msfp_surveyresponses: {},
+			Opportunity_OpportunityClose: {},
+			opportunity_OpportunityCloses: {},
+			opportunity_OrderCloses: {},
+			Opportunity_Phonecalls: {},
+			opportunity_Posts: {},
+			opportunity_QuoteCloses: {},
+			opportunity_quotes: {},
+			opportunity_sales_orders: {},
+			Opportunity_ServiceAppointments: {},
+			Opportunity_Tasks: {},
+			opportunity_Teams: {},
+			product_opportunities: {}
+		};
+		devKit.LoadNavigations(formContext, navigation);
+		form.Navigation = navigation;
+		form.Utility = devKit.LoadUtility(defaultWebResourceName);
+		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
+		return form;
+	};
+	DevKit.FormOpportunity_Sales_Insights = function(executionContext, defaultWebResourceName) {
+		var formContext = null;
+		if (executionContext !== undefined) {
+			if (executionContext.getFormContext === undefined) {
+				formContext = executionContext;
+			}
+			else {
+				formContext = executionContext.getFormContext();
+			}
+		}
+		var form = devKit.LoadForm(formContext);
+		var body = {
+			ActionCards: {},
+			BudgetAmount: {},
+			CadenceWidgetControl: {},
+			cc_1626253475424: {},
+			Competitors: {},
+			CurrentSituation: {},
+			CustomerNeed: {},
+			Description: {},
+			DiscountAmount: {},
+			DiscountPercentage: {},
+			DynamicPropertiesList_LinkControl: {},
+			FreightAmount: {},
+			Healthwidget: {},
+			IsRevenueSystemCalculated: {},
+			Name: {},
+			notescontrol: {},
+			opportunityproductsGrid: {},
+			ParentContactId: {},
+			PriceLevelId: {},
+			ProductSuggestions_LinkControl: {},
+			ProposedSolution: {},
+			PurchaseProcess: {},
+			PurchaseTimeframe: {},
+			Pursuit_Team: {},
+			quote: {},
+			RICONTAINER_CHARTS: {},
+			Stakeholders: {},
+			TotalAmount: {},
+			TotalAmountLessFreight: {},
+			TotalLineItemAmount: {},
+			TotalTax: {},
+			TransactionCurrencyId: {}
+		};
+		devKit.LoadFields(formContext, body);
+		var tab = {
+			Product_Line_Items: {
+				Section: {
+					DynamicProperties: {},
+					opportunityproducts: {},
+					suggestionsection: {},
+					totals: {}
+				}
+			},
+			QUOTES: {
+				Section: {
+					opportunityquotes: {}
+				}
+			},
+			RAV2: {
+				Section: {
+					RAV2_section_1: {}
+				}
+			},
+			RELATIONSHIP_ANALYTICS_TAB: {
+				Section: {
+					Activity_Analysis_section_2: {}
+				}
+			},
+			Summary: {
+				Section: {
+					Notes_pane: {},
+					Opportunity_details: {},
+					opportunity_information: {},
+					PredictiveScoreSection: {},
+					Social_pane: {},
+					Summary_CadenceWidget: {},
+					Summary_section_6: {},
+					Summary_section_7: {}
+				}
+			}
+		};
+		devKit.LoadTabs(formContext, tab);
+		body.Tab = tab;
+		form.Body = body;
+		var header = {
+			EstimatedCloseDate: {},
+			EstimatedValue: {},
+			OwnerId: {},
+			ParentAccountId: {}
+		};
+		devKit.LoadFields(formContext, header, "header_");
+		form.Header = header;
+		var process = devKit.LoadProcess(formContext);
+		var _Lead_to_Opportunity_Sales_Process = {
+			CompleteFinalProposal: {},
+			CompleteInternalReview: {},
+			CustomerNeed: {},
+			DevelopProposal: {},
+			FileDebrief: {},
+			FinalDecisionDate: {},
+			IdentifyCompetitors: {},
+			IdentifyCustomerContacts: {},
+			IdentifyPursuitTeam: {},
+			PresentFinalProposal: {},
+			PresentProposal: {},
+			ProposedSolution: {},
+			SendThankYouNote: {}
+		}
+		devKit.LoadFields(formContext, _Lead_to_Opportunity_Sales_Process, "header_process_");
+		process.Lead_to_Opportunity_Sales_Process = _Lead_to_Opportunity_Sales_Process;
+		var _Sales_Process = {
+			BudgetAmount: {},
+			CompleteFinalProposal: {},
+			CompleteInternalReview: {},
+			CustomerNeed: {},
+			DecisionMaker: {},
+			Description: {},
+			DevelopProposal: {},
+			FileDebrief: {},
+			FinalDecisionDate: {},
+			IdentifyCompetitors: {},
+			IdentifyCustomerContacts: {},
+			IdentifyPursuitTeam: {},
+			ParentAccountId: {},
+			ParentContactId: {},
+			PresentFinalProposal: {},
+			PresentProposal: {},
+			ProposedSolution: {},
+			PurchaseProcess: {},
+			PurchaseTimeframe: {},
+			SendThankYouNote: {}
+		}
+		devKit.LoadFields(formContext, _Sales_Process, "header_process_");
+		process.Sales_Process = _Sales_Process;
+		form.Process = process;
+		var grid = {
+			Competitors: {},
+			opportunityproductsGrid: {},
+			Pursuit_Team: {},
+			quote: {},
+			Stakeholders: {},
+		};
+		devKit.LoadGrids(formContext, grid);
+		form.Grid = grid;
+		var navigation = {
+			lead_qualifying_opportunity: {},
+			lk_leadtoopportunitysalesprocess_opportunityid: {},
+			lk_opportunitysalesprocess_opportunityid: {},
+			msdyn_msdyn_salescopilotinsight_opportunity_msdyn_targetentityid: {},
+			msdyn_opportunity_dailyopportunitykpiitem_entityid: {},
+			msdyn_opportunity_msdyn_mostcontacted_regardingObjectId: {},
+			msdyn_opportunity_msdyn_mostcontactedby_regardingObjectId: {},
+			msdyn_opportunity_msdyn_opportunitykpiitem_opportunityid: {},
+			msdyn_opportunity_msdyn_salesroutingrun_targetobject: {},
+			msdyn_opportunity_msdyn_timespent_opplookup: {},
+			msdyn_opportunity_msdyn_workorder: {},
+			msdyn_playbookinstance_opportunity: {},
+			msdyn_sabackupdiagnostic_opportunity_msdyn_target: {},
+			msdyn_salesroutingdiagnostic_opportunity_msdyn_target: {},
+			msdyn_salessuggestion_opportunity_qualifiedrecord: {},
+			msdyn_sequencetarget_opportunity_msdyn_target: {},
+			msdyncrm_opportunity_msdyncrm_leadtoopportunity: {},
+			opportunity_adx_inviteredemptions: {},
+			opportunity_adx_portalcomments: {},
+			Opportunity_Appointments: {},
+			opportunity_customer_opportunity_roles: {},
+			Opportunity_Emails: {},
+			opportunity_invoices: {},
+			opportunity_msdyn_bookingalerts: {},
+			opportunity_msdyn_copilottranscripts: {},
+			opportunity_msdyn_ocliveworkitems: {},
+			opportunity_msdyn_ocoutboundmessages: {},
+			opportunity_msdyn_ocsessions: {},
+			opportunity_msdyn_ocvoicemails: {},
+			opportunity_msfp_alerts: {},
+			opportunity_msfp_surveyinvites: {},
+			opportunity_msfp_surveyresponses: {},
+			Opportunity_OpportunityClose: {},
+			opportunity_OpportunityCloses: {},
+			opportunity_OrderCloses: {},
+			Opportunity_Phonecalls: {},
+			opportunity_Posts: {},
+			opportunity_QuoteCloses: {},
+			opportunity_quotes: {},
+			opportunity_sales_orders: {},
+			Opportunity_ServiceAppointments: {},
+			Opportunity_Tasks: {},
+			opportunity_Teams: {},
+			product_opportunities: {}
+		};
+		devKit.LoadNavigations(formContext, navigation);
+		form.Navigation = navigation;
+		form.Utility = devKit.LoadUtility(defaultWebResourceName);
+		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
+		return form;
+	};
+	DevKit.FormOpportunity2 = function(executionContext, defaultWebResourceName) {
+		var formContext = null;
+		if (executionContext !== undefined)
+		{
+			if (executionContext.getFormContext === undefined) {
+				formContext = executionContext;
+			}
+			else {
+				formContext = executionContext.getFormContext();
+			}
+		}
+		var form = devKit.LoadForm(formContext);
+		var body = {
+			BudgetAmount: {},
+			CustomerNeed: {},
+			EstimatedCloseDate: {},
+			EstimatedValue: {},
+			msdyn_OrderType: {},
+			Name: {},
+			ParentAccountId: {},
+			ParentContactId: {}
+		};
+		devKit.LoadFields(formContext, body);
+		var tab = {
+			newOpportunity: {
+				Section: {
+					quickOpportunity_column1: {},
+					quickOpportunity_column2: {},
+					quickOpportunity_column3: {}
+				}
+			}
+		};
+		devKit.LoadTabs(formContext, tab);
+		body.Tab = tab;
+		form.Body = body;
+		form.Utility = devKit.LoadUtility(defaultWebResourceName);
+		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
+		return form;
+	};
+})(DevKit || (DevKit = {}));
+/** @namespace OptionSet */
+var OptionSet;
+(function (OptionSet) {
+	OptionSet.Opportunity = {
+		BudgetStatus : {
+			Can_Buy: 2,
+			May_Buy: 1,
+			No_Committed_Budget: 0,
+			Will_Buy: 3
+		},
+		CustomerIdType : {
+		},
+		InitialCommunication : {
+			Contacted: 0,
+			Not_Contacted: 1
+		},
+		msdyn_forecastcategory : {
+			Best_case: 100000002,
+			Committed: 100000003,
+			Lost: 100000006,
+			Omitted: 100000004,
+			Pipeline: 100000001,
+			Won: 100000005
+		},
+		msdyn_OpportunityGrade : {
+			Grade_A: 0,
+			Grade_B: 1,
+			Grade_C: 2,
+			Grade_D: 3
+		},
+		msdyn_OpportunityScoreTrend : {
+			Declining: 2,
+			Improving: 0,
+			Not_enough_info: 3,
+			Steady: 1
+		},
+		msdyn_OrderType : {
+			Item_based: 192350000,
+			Service_Maintenance_Based: 690970002
+		},
+		Need : {
+			Good_to_have: 2,
+			Must_have: 0,
+			No_need: 3,
+			Should_have: 1
+		},
+		OpportunityRatingCode : {
+			Cold: 3,
+			Hot: 1,
+			Warm: 2
+		},
+		PricingErrorCode : {
+			Base_Currency_Attribute_Overflow: 36,
+			Base_Currency_Attribute_Underflow: 37,
+			Detail_Error: 1,
+			Discount_Type_Invalid_State: 27,
+			Inactive_Discount_Type: 33,
+			Inactive_Price_Level: 3,
+			Invalid_Current_Cost: 20,
+			Invalid_Discount: 28,
+			Invalid_Discount_Type: 26,
+			Invalid_Price: 19,
+			Invalid_Price_Level_Amount: 17,
+			Invalid_Price_Level_Currency: 34,
+			Invalid_Price_Level_Percentage: 18,
+			Invalid_Pricing_Code: 9,
+			Invalid_Pricing_Precision: 30,
+			Invalid_Product: 7,
+			Invalid_Quantity: 29,
+			Invalid_Rounding_Amount: 24,
+			Invalid_Rounding_Option: 23,
+			Invalid_Rounding_Policy: 22,
+			Invalid_Standard_Cost: 21,
+			Missing_Current_Cost: 15,
+			Missing_Price: 14,
+			Missing_Price_Level: 2,
+			Missing_Price_Level_Amount: 12,
+			Missing_Price_Level_Percentage: 13,
+			Missing_Pricing_Code: 8,
+			Missing_Product: 6,
+			Missing_Product_Default_UOM: 31,
+			Missing_Product_UOM_Schedule: 32,
+			Missing_Quantity: 4,
+			Missing_Standard_Cost: 16,
+			Missing_Unit_Price: 5,
+			Missing_UOM: 10,
+			None: 0,
+			Price_Attribute_Out_Of_Range: 35,
+			Price_Calculation_Error: 25,
+			Product_Not_In_Price_Level: 11,
+			Transaction_currency_is_not_set_for_the_product_price_list_item: 38
+		},
+		PriorityCode : {
+			Default_Value: 1
+		},
+		PurchaseProcess : {
+			Committee: 1,
+			Individual: 0,
+			Unknown: 2
+		},
+		PurchaseTimeframe : {
+			Immediate: 0,
+			Next_Quarter: 2,
+			This_Quarter: 1,
+			This_Year: 3,
+			Unknown: 4
+		},
+		SalesStage : {
+			Close: 3,
+			Develop: 1,
+			Propose: 2,
+			Qualify: 0
+		},
+		SalesStageCode : {
+			Default_Value: 1
+		},
+		SkipPriceCalculation : {
+			DoPriceCalcAlways: 0,
+			SkipPriceCalcOnRetrieve: 1
+		},
+		StateCode : {
+			Lost: 2,
+			Open: 0,
+			Won: 1
+		},
+		StatusCode : {
+			Canceled: 4,
+			In_Progress: 1,
+			On_Hold: 2,
+			Out_Sold: 5,
+			Won: 3
+		},
+		TimeLine : {
+			Immediate: 0,
+			Next_Quarter: 2,
+			Not_known: 4,
+			This_Quarter: 1,
+			This_Year: 3
+		},
+		RollupState : {
+			NotCalculated: 0,
+			Calculated: 1,
+			OverflowError: 2,
+			OtherError: 3,
+			RetryLimitExceeded: 4,
+			HierarchicalRecursionLimitReached: 5,
+			LoopDetected: 6
+		}
+	};
+})(OptionSet || (OptionSet = {}));

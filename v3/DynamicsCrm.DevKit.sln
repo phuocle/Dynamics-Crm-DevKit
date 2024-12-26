@@ -10,8 +10,10 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{CC9B5ABC-FD05-46AB-BE73-A94B1F911426}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+		build-yyyy.txt = build-yyyy.txt
 		build.txt = build.txt
 		notes.txt = notes.txt
+		release-yyyy.bat = release-yyyy.bat
 		release.bat = release.bat
 		version.txt = version.txt
 	EndProjectSection

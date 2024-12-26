@@ -199,7 +199,7 @@ namespace DynamicsCrm.DevKit.Commands
             }
             else
             {
-                var crmConnectionString = XrmHelper.BuildConnectionString(formConnection.DataverseConnectionString);
+                var crmConnectionString = XrmHelper.BuildConnectionString2(formConnection.DataverseConnectionString);
                 plugin_deploy_debug_bat = plugin_deploy_debug_bat
                     .Replace("$CrmConnectionString$", crmConnectionString)
                     .Replace("$ProjectName$", Path.GetFileNameWithoutExtension(dte.ActiveDocument.ProjectItem.ContainingProject.FullName));

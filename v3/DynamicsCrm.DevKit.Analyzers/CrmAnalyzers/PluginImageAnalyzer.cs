@@ -44,10 +44,10 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
         public override void Initialize(AnalysisContext context)
         {
 #if DEBUG
-            if (!Debugger.IsAttached)
-            {
-                Debugger.Launch();
-            }
+            //if (!Debugger.IsAttached)
+            //{
+            //    Debugger.Launch();
+            //}
 #endif
             context.EnableConcurrentExecution();
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.Analyze | GeneratedCodeAnalysisFlags.ReportDiagnostics);

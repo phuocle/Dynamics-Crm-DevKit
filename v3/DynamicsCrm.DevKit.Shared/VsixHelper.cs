@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.TemplateWizard;
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Tooling.Connector;
 using System;
+using System.Activities.Expressions;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -425,10 +426,14 @@ namespace DynamicsCrm.DevKit.Shared
                     var array = attribute.Value.Split(',');
                     pluginAttribute.Message = array[0].Trim();
                     pluginAttribute.EntityLogicalName = array[1].Trim();
-                    Enum.TryParse(array[2].Split('.')[1], out StageEnum stage);
-                    pluginAttribute.Stage = stage;
-                    Enum.TryParse(array[3].Split('.')[1], out ExecutionModeEnum mode);
-                    pluginAttribute.ExecutionMode = mode;
+                    try
+                    {
+                        Enum.TryParse(array[2].Split('.')[1], out StageEnum stage);
+                        pluginAttribute.Stage = stage;
+                        Enum.TryParse(array[3].Split('.')[1], out ExecutionModeEnum mode);
+                        pluginAttribute.ExecutionMode = mode;
+                    }
+                    catch { }
                     return true;
                 }
             }
@@ -573,9 +578,9 @@ namespace DynamicsCrm.DevKit.Shared
             code += $"  </entity>{NEW_LINE}";
             code += $"</fetch>{NEW_LINE}";
             code += $"\";{NEW_LINE}";
-            code += $"{TAB}{TAB}{TAB}var rows = serviceAdmin.RetrieveMultiple<{entityMetadata.SchemaName}>(fetchXml);{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}var rows = serviceAdmin.RetrieveMultiple<{@class}>(fetchXml);{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}if (rows.Count == 1) return rows[0];{NEW_LINE}";
-            code += $"{TAB}{TAB}{TAB}return new {entityMetadata.SchemaName}();{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}return new {@class}();{NEW_LINE}";
             code += $"{TAB}{TAB}}}{NEW_LINE}";
             code += NEW_LINE;
             //code += $"{TAB}{TAB}public static {@class} Read_Record(IOrganizationService serviceAdmin, IOrganizationService service, ITracingService tracing, Guid? {@class}Id, ColumnSet columns = null){NEW_LINE}";
@@ -626,17 +631,18 @@ namespace DynamicsCrm.DevKit.Shared
                 code += $"\t\"use strict\";\r\n";
                 code += $"\t/** @type {type} */\r\n";
                 code += $"\tvar form = null;\r\n";
+                code += $"\t/** @param {{any}} executionContext */\r\n";
                 code += $"\tasync function onLoad(executionContext) {{\r\n";
                 code += $"\t\tform = new {type}(executionContext);\r\n";
+                code += $"\t\tform.UiAddLoaded(UiAddLoaded);\r\n";
                 code += $"\t\tregisterEvents();\r\n";
-                code += $"\t\tawait onLoadData();\r\n";
                 code += $"\t}}\r\n";
                 code += $"\tfunction registerEvents() {{\r\n";
                 code += $"\t\tif (form.ExecutionContext.IsInitialLoad()) {{\r\n";
                 code += $"\t\t}}\r\n";
                 code += $"\t}}\r\n";
                 code += $"\t//BEGIN ON LOAD ========================================================\r\n";
-                code += $"\tasync function onLoadData() {{\r\n";
+                code += $"\tasync function UiAddLoaded(executionContext) {{\r\n";
                 code += $"\t}}\r\n";
                 code += $"\t//END ON LOAD ==========================================================\r\n";
                 code += $"\t//BEGIN ON CHANGE ======================================================\r\n";

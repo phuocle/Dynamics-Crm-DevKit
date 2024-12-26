@@ -8,6 +8,8 @@ using Microsoft.Xrm.Tooling.Connector;
 using System.Collections.Generic;
 using System.Linq;
 using Community.VisualStudio.Toolkit;
+using System.Windows.Input;
+using System.IO;
 
 namespace DynamicsCrm.DevKit.Lib.Forms
 {
@@ -100,22 +102,25 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Plugin-Item-Template");
                     HELP.Inlines.Clear();
                     HELP.Inlines.Add("Plugin Item Template");
+                    Height = 344;
                 }
                 void CustomActionItem()
                 {
                     HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Custom-Action-Item-Template");
                     HELP.Inlines.Clear();
                     HELP.Inlines.Add("Custom Action Item Template");
+                    Height = 344;
                 }
                 void CustomApiItem()
                 {
                     HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Custom-Api-Item-Template");
                     HELP.Inlines.Clear();
-                    HELP.Inlines.Add("Custom Action Api Template");
+                    HELP.Inlines.Add("Custom Api Template");
                     LabelExecution.Visibility = System.Windows.Visibility.Collapsed;
                     ComboBoxExecution.Visibility = System.Windows.Visibility.Collapsed;
                     LabelStage.Visibility = System.Windows.Visibility.Collapsed;
                     ComboBoxStage.Visibility = System.Windows.Visibility.Collapsed;
+                    Height = 282;
                 }
                 _ItemType = value;
                 switch (_ItemType)
@@ -133,11 +138,50 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             }
         }
 
-        public FormPlugin(ItemType itemType)
+        public string NameSpace { get; set; }
+
+        public FormPlugin(ItemType itemType, string nameSpace)
         {
             InitializeComponent();
             ItemType = itemType;
+            NameSpace = nameSpace;
             LoadComboBoxes();
+            LoadCustomTemplates();
+        }
+
+        public string TemplateTitle
+        {
+            get
+            {
+                var selected = (CustomTemplate)ComboBoxTemplate.SelectedItem;
+                return selected.Title;
+            }
+        }
+        private void LoadCustomTemplates()
+        {
+            if (ItemType == ItemType.Plugin || ItemType == ItemType.CustomAction || ItemType == ItemType.CustomApi)
+            {
+                var templates = GetCustomTemplates();
+                ComboBoxTemplate.ItemsSource = null;
+                ComboBoxTemplate.ItemsSource = templates;
+                ComboBoxTemplate.DisplayMemberPath = "Title";
+                ComboBoxTemplate.SelectedItem = templates.FirstOrDefault(x => x.IsDefault);
+                if (ComboBoxTemplate.SelectedItem == null) ComboBoxTemplate.SelectedIndex = 0;
+
+                List<CustomTemplate> GetCustomTemplates()
+                {
+                    var fileName = VsixHelper.GetDynamicsCrmDevKitConfigJsonFileName();
+                    var CachedJson = new CachedJson();
+                    if (File.Exists(fileName)) CachedJson = SimpleJson.DeserializeObject<CachedJson>(File.ReadAllText(fileName));
+                    var customTemplates = CachedJson.CustomTemplates.Where(x => x.Type == ItemType.ToString()).ToList() ?? new List<CustomTemplate>();
+                    foreach (var customTemplate in customTemplates)
+                    {
+                        customTemplate.Body = Utility.Decompress(customTemplate.Body);
+                    }
+                    customTemplates.Insert(0, new CustomTemplate { Type = ItemType.ToString(), Title = "Default", Body = null, IsDefault = false });
+                    return customTemplates;
+                }
+            }
         }
 
         private void LoadComboBoxes()
@@ -175,36 +219,69 @@ namespace DynamicsCrm.DevKit.Lib.Forms
 
         private void ButtonCustom_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            var form = new FormCustom(ItemType);
-            form.ShowDialog();
+            if (IsValid())
+            {
+                if (ItemType == ItemType.Plugin || ItemType == ItemType.CustomAction || ItemType == ItemType.CustomApi)
+                {
+                    Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;
+                    var solutionName = VsixHelper.GetSolutionName();
+                    var pluginSharedNameSpace = $"{solutionName}.Shared";
+                    var pluginNameSpace = NameSpace.Contains($".{ItemType.Plugin}.") ? NameSpace.Replace($".{ItemType.Plugin}.", $".{ItemType.Plugin}") : NameSpace;
+                    var pluginMessage = this.PluginMessage;
+                    var pluginLogicalName = this.PluginLogicalName;
+                    var pluginSchemaName = this.PluginSchemaName;
+                    var pluginStage = this.PluginStage;
+                    var pluginExecution = this.PluginExecution;
+                    var pluginComment = this.PluginComment;
+                    var pluginClass = this.PluginClass;
+                    var t4Context = new T4Context
+                    {
+                        PluginNameSpace = pluginNameSpace,
+                        PluginMessage = pluginMessage,
+                        PluginLogicalName = pluginLogicalName,
+                        PluginSchemaName = pluginSchemaName,
+                        PluginStage = pluginStage,
+                        PluginExecution = pluginExecution,
+                        Class = pluginClass,
+                        PluginComment = pluginComment,
+                        PluginSharedNameSpace = pluginSharedNameSpace
+                    };
+                    var form = new FormCustom(ItemType, t4Context, TemplateTitle);
+                    Mouse.OverrideCursor = null;
+                    form.ShowDialog();
+                    LoadCustomTemplates();
+                }
+            }
+        }
+
+        bool IsValid()
+        {
+            if (ComboBoxEntity.SelectedItem == null)
+            {
+                VS.MessageBox.ShowError("Please select entity");
+                return false;
+            }
+            if (ComboBoxMessage.SelectedItem == null)
+            {
+                VS.MessageBox.ShowError("Please select message");
+                return false;
+            }
+            if (ComboBoxStage.Visibility == System.Windows.Visibility.Visible && ComboBoxStage.SelectedItem == null)
+            {
+                VS.MessageBox.ShowError("Please select stage");
+                return false;
+            }
+            if (ComboBoxExecution.Visibility == System.Windows.Visibility.Visible && ComboBoxExecution.SelectedItem == null)
+            {
+                VS.MessageBox.ShowError("Please select execution");
+                return false;
+            }
+            return true;
         }
 
         private void ButtonOK_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            bool IsValid()
-            {
-                if (ComboBoxEntity.SelectedItem == null)
-                {
-                    VS.MessageBox.ShowError("Please select entity");
-                    return false;
-                }
-                if (ComboBoxMessage.SelectedItem == null)
-                {
-                    VS.MessageBox.ShowError("Please select message");
-                    return false;
-                }
-                if (ComboBoxStage.SelectedItem == null)
-                {
-                    VS.MessageBox.ShowError("Please select stage");
-                    return false;
-                }
-                if (ComboBoxExecution.SelectedItem == null)
-                {
-                    VS.MessageBox.ShowError("Please select execution");
-                    return false;
-                }
-                return true;
-            }
+
             if (IsValid())
             {
                 DialogResult = true;
@@ -241,7 +318,6 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                             if (found != null)
                             {
                                 ComboBoxEntity.SelectedItem = found;
-                                break;
                             }
                         }
                         progressBar.Visibility = System.Windows.Visibility.Hidden;

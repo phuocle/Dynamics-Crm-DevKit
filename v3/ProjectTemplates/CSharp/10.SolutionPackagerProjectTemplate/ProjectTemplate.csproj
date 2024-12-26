@@ -41,7 +41,4 @@
     <None Include="Pack-Both.bat" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <ItemGroup>
-    <Analyzer Include="..\packages\DynamicsCrm.DevKit.Analyzers.$DynamicsCrm.DevKit.Analyzers.version$\analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />
-  </ItemGroup>
 </Project>

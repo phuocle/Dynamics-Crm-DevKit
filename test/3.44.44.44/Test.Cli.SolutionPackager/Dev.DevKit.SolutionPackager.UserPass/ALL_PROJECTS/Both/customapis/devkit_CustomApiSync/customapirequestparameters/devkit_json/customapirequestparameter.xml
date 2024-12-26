@@ -1,0 +1,12 @@
+<customapirequestparameter uniquename="devkit_json">
+  <description default="json for the f function">
+    <label description="json for the f function" languagecode="1033" />
+  </description>
+  <displayname default="json">
+    <label description="json" languagecode="1033" />
+  </displayname>
+  <iscustomizable>1</iscustomizable>
+  <isoptional>1</isoptional>
+  <name>json</name>
+  <type>10</type>
+</customapirequestparameter>

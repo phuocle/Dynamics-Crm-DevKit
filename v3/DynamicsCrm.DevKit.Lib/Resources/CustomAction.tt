@@ -31,7 +31,7 @@ namespace <#=Context.PluginNameSpace#>
             if (context.MessageName.ToLower() != "<#=Context.PluginMessage#>".ToLower()) throw new InvalidPluginExecutionException("MessageName does not equals <#=Context.PluginMessage#>");
             if (context.Mode != (int)ExecutionModeEnum.<#=Context.PluginExecution#>) throw new InvalidPluginExecutionException("Execution does not equals <#=Context.PluginExecution#>");
 
-            //tracing.DebugContext(context);
+            tracing.DebugContext(context);
 
             var outputs = ExecuteCustomAction(context, serviceFactory, serviceAdmin, service, tracing);
             foreach (var output in outputs)

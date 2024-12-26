@@ -1,0 +1,1 @@
+﻿ CrmSvcUtil.exe /interactivelogin /nologo /SuppressGeneratedCodeAttribute /generateActions /emitfieldsclasses /generateGlobalOptionSets /namespace:"Dev.DevKit.ProxyTypes" /out:"GeneratedCode.cs"

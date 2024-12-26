@@ -1,1 +1,0 @@
-Returns the command bar visibility.

@@ -9,7 +9,7 @@ namespace $NameSpace$
         [STAThread]$endif$
         static void Main()
         {
-            //CheckWhoAmI();
+            CheckWhoAmI();
             //DebugPlugin();
         }
 
@@ -23,9 +23,9 @@ namespace $NameSpace$
 
         private static void CheckWhoAmI()
         {
-            //var UserId = ((WhoAmIResponse)AppSettings.Service.Execute(new WhoAmIRequest())).UserId;
-            //System.Console.WriteLine(UserId);
-            //System.Console.ReadKey();
+            var UserId = ((WhoAmIResponse)AppSettings.Service.Execute(new WhoAmIRequest())).UserId;
+            System.Console.WriteLine(UserId);
+            System.Console.ReadKey();
         }
     }
 }

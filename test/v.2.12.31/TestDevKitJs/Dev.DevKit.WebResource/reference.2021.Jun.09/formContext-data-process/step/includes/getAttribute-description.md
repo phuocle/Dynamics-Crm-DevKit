@@ -1,1 +1,0 @@
-Returns the logical name of the column associated to the step.

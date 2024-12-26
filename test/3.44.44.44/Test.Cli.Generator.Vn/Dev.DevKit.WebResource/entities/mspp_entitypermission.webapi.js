@@ -1,0 +1,161 @@
+﻿'use strict';
+/** @namespace DevKit */
+var DevKit;
+(function (DevKit) {
+	'use strict';
+	DevKit.mspp_entitypermissionApi = function (e) {
+		var f = '@OData.Community.Display.V1.FormattedValue';
+		function webApiField(obj, field, entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
+			var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
+			var getFormattedValue = function () {
+				if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
+					return '';
+				}
+				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+					if (entity[logicalName + l] === entityLogicalName) {
+						return entity[logicalName + f];
+					}
+					return '';
+				}
+				if (isMultiOptionSet) {
+					return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
+				}
+				return entity[logicalName + f];
+			};
+			var getValue = function () {
+				if (entity[logicalName] === undefined || entity[logicalName] === null) {
+					return null;
+				}
+				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+					if (entity[logicalName + l] === undefined || entity[logicalName + l] === entityLogicalName) {
+						return entity[logicalName];
+					}
+					return null;
+				}
+				if (isMultiOptionSet) {
+					return entity[logicalName].toString().split(',').map(function (item) { return parseInt(item, 10); });
+				}
+				return entity[logicalName];
+			};
+			var setValue = function (value) {
+				if (isMultiOptionSet) value = value.join(',');
+				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+					if (value === null) {
+						upsertEntity[schemaName + '@odata.bind'] = null;
+					}
+					else {
+						value = value.replace('{', '').replace('}', '');
+						upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
+					}
+				} else {
+					upsertEntity[logicalName] = value;
+				}
+				entity[logicalName] = value;
+			};
+			Object.defineProperty(obj.FormattedValue, field, {
+				get: getFormattedValue
+			});
+			if (readOnly) {
+				Object.defineProperty(obj, field, {
+					get: getValue
+				});
+			}
+			else {
+				Object.defineProperty(obj, field, {
+					get: getValue,
+					set: setValue
+				});
+			}
+		}
+		var _mspp_entitypermission = {
+			mspp_accountrelationship: { a: 'mspp_accountrelationship' },
+			mspp_append: { a: 'mspp_append' },
+			mspp_appendto: { a: 'mspp_appendto' },
+			mspp_contactrelationship: { a: 'mspp_contactrelationship' },
+			mspp_create: { a: 'mspp_create' },
+			mspp_createdby: { b: 'mspp_createdby', a: '_mspp_createdby_value', c: 'systemusers', d: 'systemuser' },
+			mspp_createdon_UtcDateAndTime: { a: 'mspp_createdon' },
+			mspp_delete: { a: 'mspp_delete' },
+			mspp_entitylogicalname: { a: 'mspp_entitylogicalname' },
+			mspp_entityname: { a: 'mspp_entityname' },
+			mspp_entitypermissionId: { a: 'mspp_entitypermissionid' },
+			mspp_modifiedby: { b: 'mspp_modifiedby', a: '_mspp_modifiedby_value', c: 'systemusers', d: 'systemuser' },
+			mspp_modifiedon_UtcDateAndTime: { a: 'mspp_modifiedon' },
+			mspp_parententitypermission: { b: 'mspp_parententitypermission', a: '_mspp_parententitypermission_value', c: 'mspp_entitypermissions', d: 'mspp_entitypermission' },
+			mspp_parentrelationship: { a: 'mspp_parentrelationship' },
+			mspp_read: { a: 'mspp_read' },
+			mspp_scope: { a: 'mspp_scope' },
+			mspp_websiteid: { b: 'mspp_websiteid', a: '_mspp_websiteid_value', c: 'mspp_websites', d: 'mspp_website' },
+			mspp_write: { a: 'mspp_write' },
+			statecode: { a: 'statecode' },
+			statuscode: { a: 'statuscode' }
+		};
+		if (e === undefined) e = {};
+		var u = {};
+		var mspp_entitypermission = {};
+		mspp_entitypermission.ODataEntity = e;
+		mspp_entitypermission.FormattedValue = {};
+		for (var field in _mspp_entitypermission) {
+			var a = _mspp_entitypermission[field].a;
+			var b = _mspp_entitypermission[field].b;
+			var c = _mspp_entitypermission[field].c;
+			var d = _mspp_entitypermission[field].d;
+			var g = _mspp_entitypermission[field].g;
+			var r = _mspp_entitypermission[field].r;
+			webApiField(mspp_entitypermission, field, e, a, b, c, d, r, u, g);
+		}
+		mspp_entitypermission.Entity = u;
+		mspp_entitypermission.EntityName = 'mspp_entitypermission';
+		mspp_entitypermission.EntityCollectionName = 'mspp_entitypermissions';
+		mspp_entitypermission['@odata.etag'] = e['@odata.etag'];
+		mspp_entitypermission.getAliasedValue = function (alias, isMultiOptionSet = false) {
+			if (e[alias] === undefined || e[alias] === null) {
+				return null;
+			}
+			if (isMultiOptionSet) {
+				return e[alias].toString().split(',').map(function (item) { return parseInt(item, 10); });
+			}
+			return e[alias];
+		}
+		mspp_entitypermission.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
+			if (e[alias + f] === undefined || e[alias + f] === null) {
+				return '';
+			}
+			if (isMultiOptionSet) {
+				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
+			}
+			return e[alias + f];
+		}
+		return mspp_entitypermission;
+	};
+})(DevKit || (DevKit = {}));
+/** @namespace OptionSet */
+var OptionSet;
+(function (OptionSet) {
+	OptionSet.mspp_entitypermission = {
+		mspp_scope : {
+			Ban_than: 756150004,
+			Chinh: 756150003,
+			Khach_hang: 756150002,
+			Nguoi_lien_he: 756150001,
+			Toan_cau: 756150000
+		},
+		statecode : {
+			Hien_hoat: 0,
+			Khong_hoat_dong: 1
+		},
+		statuscode : {
+			Hien_hoat: 1,
+			Khong_hoat_dong: 2
+		},
+		RollupState : {
+			NotCalculated: 0,
+			Calculated: 1,
+			OverflowError: 2,
+			OtherError: 3,
+			RetryLimitExceeded: 4,
+			HierarchicalRecursionLimitReached: 5,
+			LoopDetected: 6
+		}
+	};
+})(OptionSet || (OptionSet = {}));

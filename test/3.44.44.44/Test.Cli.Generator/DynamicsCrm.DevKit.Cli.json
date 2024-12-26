@@ -1,0 +1,137 @@
+﻿{
+  "servers": [
+    {
+      "profile": "DEBUG",
+      "solution": "???",
+      "folder": "bin\\Debug",
+      "includefiles": [
+        "Dev.DevKit.Plugin.*.dll",
+        "Dev.DevKit.Plugin.*.nupkg",
+        "Dev.DevKit.CustomAction.*.dll",
+        "Dev.DevKit.Workflow.*.dll",
+        "Dev.DevKit.CustomApi.*.dll",
+        "Dev.DevKit.DataProvider.*.dll"
+      ],
+      "excludefiles": [
+        "Dev.DevKit.*.Test.dll"
+      ]
+    }
+  ],
+  "webresources": [
+    {
+      "profile": "DEBUG",
+      "solution": "???",
+      "rootfolder": "",
+      "includefiles": [
+        "css\\**.css",
+        "entities\\*.js",
+        "html\\**.html",
+        "images\\**.png",
+        "js\\**.js",
+        "lib\\**.js",
+        "resources\\*.resx"
+      ],
+      "excludefiles": [
+        "test\\**.js"
+      ],
+      "dependencies": [
+        {
+          "webresources": [
+            "???_/entities/[entity].js"
+          ],
+          "dependencies": [
+            "???_/entities/[entity].form.js",
+            "???_/entities/[entity].webapi.js"
+          ]
+        },
+        {
+          "webresources": [
+            "???_/entities/[entity].form.js"
+          ],
+          "dependencies": [
+            "???_/lib/devkit.js"
+          ]
+        }
+      ]
+    }
+  ],
+  "datasources": [
+    {
+      "profile": "DEBUG",
+      "solution": "???",
+      "displayname": "???",
+      "pluralname": "???",
+      "name": "???"
+    }
+  ],
+  "solutionpackagers": [
+    {
+      "profile": "Extract-Both",
+      "solution": "???",
+      "rootfolder": "",
+      "solutiontype": "Both",
+      "folder": "???",
+      "type": "Extract",
+      "mapfile": ""
+    },
+    {
+      "profile": "Pack-Both",
+      "solution": "???",
+      "rootfolder": "",
+      "solutiontype": "Both",
+      "folder": "???",
+      "type": "Pack",
+      "mapfile": ""
+    }
+  ],
+  "generators": [
+    {
+      "profile": "LATEBOUND",
+      "type": "CSharp",
+      "rootnamespace": "Dev.DevKit.Shared.Entities",
+      "rootfolder": "",
+      "entities": "*"
+    },
+    {
+      "profile": "JS-FORM",
+      "type": "JsForm",
+      "rootnamespace": "DevKit",
+      "rootfolder": "",
+      "entities": "*"
+    },
+    {
+      "profile": "JS-WEBAPI",
+      "type": "JsWebApi",
+      "rootnamespace": "DevKit",
+      "rootfolder": "",
+      "entities": "*"
+    }
+  ],
+  "downloadwebresources": [
+    {
+      "profile": "DEBUG",
+      "solution": "???"
+    }
+  ],
+  "downloadreports": [
+    {
+      "profile": "DEBUG",
+      "solution": "???"
+    }
+  ],
+  "proxytypes": [
+    {
+      "profile": "ALL",
+      "namespace": "Dev.DevKit.ProxyTypes",
+      "output": "GeneratedCode.cs",
+      "entities": "*"
+    }
+  ],
+  "uploadreports": [
+    {
+      "profile": "DEBUG",
+      "solution": "???",
+      "language": [ "???" ]
+    }
+  ]
+}

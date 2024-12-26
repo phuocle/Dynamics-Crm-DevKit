@@ -29,7 +29,9 @@ namespace DynamicsCrm.DevKit.Lib.Wizard.ItemTemplates
         public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary, WizardRunKind runKind, object[] customParams)
         {
             Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
+            var nameSpace = replacementsDictionary["$rootnamespace$"];
             var form = new FormProject(ItemType.Test, (DTE)automationObject);
+            form.NameSpace = nameSpace;
             var ok = form.ShowModal() ?? false;
             if (ok)
             {
@@ -41,18 +43,17 @@ namespace DynamicsCrm.DevKit.Lib.Wizard.ItemTemplates
                 //replacementsDictionary.Add("$stage_string$", form.SelectedClassType.ServerStage);
 
                 Replacement.SetItem(replacementsDictionary, form);
-                var t4Code = T4Helper.GetT4Code(ItemType.Test, ServerType);
+                var t4Code = T4Helper.GetT4Code2(ItemType.Test, form.TemplateTitle);
                 var t4Context = T4Helper.BuildContext(ItemType.Test, replacementsDictionary, form, ServerType);
                 var code = T4Helper.ProcessTemplate(t4Code, t4Context);
-                replacementsDictionary.Add("$test-plugin$", code);
+                replacementsDictionary.Add("$test$", code);
             }
             else
                 VsixHelper.ThrowWizardCancelledException();
         }
         public bool ShouldAddProjectItem(string filePath)
         {
-            if (ServerType.Length == 0) return false;
-            return filePath.ToLower().Contains(ServerType.ToLower());
+            return true;
         }
     }
 }

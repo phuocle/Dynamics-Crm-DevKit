@@ -5,15 +5,15 @@
     <IsPublishable>True</IsPublishable>
     <SignAssembly>True</SignAssembly>
     <AssemblyOriginatorKeyFile>..\DynamicsCrm.DevKit.pfx</AssemblyOriginatorKeyFile>
-    <AssemblyVersion>3.33.33.33</AssemblyVersion>
-    <FileVersion>3.33.33.33</FileVersion>
+    <AssemblyVersion>3.44.44.44</AssemblyVersion>
+    <FileVersion>3.44.44.44</FileVersion>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
     <RepositoryUrl>https://github.com/phuocle/Dynamics-Crm-DevKit</RepositoryUrl>
     <Company>PhuocLe</Company>
     <Product>DynamicsCrm.DevKit</Product>
     <Copyright>Copyright © PhuocLe 2016 - 2036</Copyright>
     <PackageProjectUrl>https://github.com/phuocle/Dynamics-Crm-DevKit</PackageProjectUrl>
-    <Version>3.33.33.33</Version>
+    <Version>3.44.44.44</Version>
   </PropertyGroup>
 	<PropertyGroup>
 		<LangVersion>latest</LangVersion>
@@ -32,7 +32,9 @@
 
   <ItemGroup>
     <None Remove="Forms\FormCustom.xaml" />
+    <None Remove="Forms\FormInput.xaml" />
     <None Remove="Forms\FormPlugin.xaml" />
+    <None Remove="Forms\FormReview.xaml" />
     <None Remove="Forms\FormWebResource.xaml" />
     <None Remove="Resources\CustomAction.tt" />
     <None Remove="Resources\CustomApi.tt" />
@@ -46,7 +48,10 @@
     <None Remove="Resources\plugin.deploy.debug.bat" />
     <None Remove="Resources\plugin.deploy.debug.only.bat" />
     <None Remove="Resources\Plugin.tt" />
+    <None Remove="Resources\TestCustomAction.tt" />
+    <None Remove="Resources\TestCustomApi.tt" />
     <None Remove="Resources\TestPlugin.tt" />
+    <None Remove="Resources\TestWorkflow.tt" />
     <None Remove="Resources\UiTest.tt" />
     <None Remove="Resources\WebApi.js" />
     <None Remove="Resources\WebApi2.js" />
@@ -55,6 +60,15 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\plugin.deploy.debug.bat" />
     <EmbeddedResource Include="Resources\plugin.deploy.debug.only.bat" />
+    <EmbeddedResource Include="Resources\TestCustomApi.tt">
+      <Generator></Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\TestCustomAction.tt">
+      <Generator></Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\TestWorkflow.tt">
+      <Generator></Generator>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\TestPlugin.tt">
       <Generator></Generator>
     </EmbeddedResource>
@@ -106,6 +120,7 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Page>
     <Page Include="Forms\FormCustom.xaml" />
+    <Page Include="Forms\FormInput.xaml" />
     <Page Include="Forms\FormLogin.xaml">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <Generator>XamlIntelliSenseFileGenerator</Generator>
@@ -116,6 +131,9 @@
     <Page Include="Forms\FormProject.xaml">
       <Generator>XamlIntelliSenseFileGenerator</Generator>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Page>
+    <Page Include="Forms\FormReview.xaml">
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Forms\FormWebResource.xaml">
       <Generator>XamlIntelliSenseFileGenerator</Generator>
@@ -130,14 +148,14 @@
 
   <ItemGroup>
     <PackageReference Include="CmdLine" Version="1.0.7.509" />
-    <PackageReference Include="Community.VisualStudio.Toolkit.17" Version="17.0.507" />
-    <PackageReference Include="Microsoft.CrmSdk.XrmTooling.CoreAssembly" Version="9.1.1.45" />
-    <PackageReference Include="Microsoft.CrmSdk.XrmTooling.WpfControls" Version="9.1.1.45" />
+    <PackageReference Include="Community.VisualStudio.Toolkit.17" Version="17.0.527" />
+    <PackageReference Include="Microsoft.CrmSdk.XrmTooling.CoreAssembly" Version="9.1.1.65" />
+    <PackageReference Include="Microsoft.CrmSdk.XrmTooling.WpfControls" Version="9.1.1.65" />
     <PackageReference Include="Microsoft.VisualStudio.SDK" Version="17.3.32804.24" />
     <PackageReference Include="Microsoft.VisualStudio.TemplateWizardInterface" Version="17.3.32804.24" />
-    <PackageReference Include="NuGet.Protocol" Version="6.7.0" />
-    <PackageReference Include="NuGet.Versioning" Version="6.7.0" />
-    <PackageReference Include="System.Text.Json" Version="6.0.8" />
+    <PackageReference Include="NuGet.Protocol" Version="6.7.1" />
+    <PackageReference Include="NuGet.Versioning" Version="6.7.1" />
+    <PackageReference Include="System.Text.Json" Version="8.0.5" />
   </ItemGroup>
 
   <ItemGroup>

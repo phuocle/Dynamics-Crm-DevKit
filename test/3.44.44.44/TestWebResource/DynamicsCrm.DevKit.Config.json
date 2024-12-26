@@ -1,0 +1,31 @@
+﻿{
+    "WebResources": [
+        {
+            "File": "\\Dev.DevKit.WebResource\\entities\\Account.js",
+            "WebResource": "devkit_/entities/Account.js"
+        }
+    ],
+    "CustomTemplates": [
+        {
+            "Type": "Plugin",
+            "Title": "Default 2",
+            "Body": "nVffb+I4EH6v1P/BB9IKKi5o+3jXUlWU7SG1BZVWutNqH9JkYK0Lds52aLnd/u83/hEnQBLSy0NL4vF8843Hn8eZpGxFFlupYP376UlmXu9pJLjkSxX8KdbBIv67fiSYvClgknImvdFF93LMmYI3FcyTbEXZ4nsoIH4I17BIwwi6IzQ9PWH4LvU7OZhQMj09+XF6QvD5OhZr6+4RVlQqESpE7XUOJt+DlOEKUToDcjh6x1c0ChONYCwWCm0nLFsHB47MUHc0IJM3iDKNds/jGltvou07lcglUmWscRJKaUL5PCBTyRPDyyMtQha/8LcBsdyftimQy9KLS/FFly57edan8gEgvoEEFFzLLYtmKdh09X/o+KpG0KkSGVx037ujHWcW1yX18rIzFhAq6JBPn0iO51ZZZxIN5lwqD9ixiNM1jn3WGUAcY2G+YJ7syHVCQ1k95BgbO/3brJXGMF+8A6UEfckUGC9nuO6NPMglhvGcxobJz597TBxZY2RzVU1DQB2L/ZFqEs7qf3LAVOcMPr4W57VrcV6/FufVNPbW4vy6ai363+w2TrOXhEYk0lVf3vhuG5DfyNSWkzV3m18LwPDMftK/D/bqmK/XwFR3VNicDU9PhviQm8mX6+e7J3JO9GthMBymgm6wBAiWdMxZsiUoK1oPM7bAHS8AC3xJV5ndO1ieLEsS1C4dgX7qHciW020ySmxcGnpNgQzyMCtQ+uXoyskb6oDVdyqDOnKV33fYehcVwJidiq8709+16msf+nF1sOE0dvoKvekCxIZGMBd8Q2MQ6HHnvUSuRE1724SCRPbMwUB6roS8KDuh6u/5C25BOcieQmnhy9qZ/RKTHNB5+xJGioutwZ2JVcjov0bCnWc33Aa7YXYD/nW8psyk3yTL4QVWpytc9nQVN/j7iCuX8+AZczGNq5ziOR3pLaVX5cn+dolpk5G9GfsAdEl6eQjmtCa/IA5lqn/8WO/jbhD8lTB4JVO2CRMaW+HxVTN5iyC1TYZ1HnM8XhhXBP7JwmRHvkpHIJ7lTXHOBV2HYjthiqqtVuHgid/xVxC9vo7+WMfyobAPsMhRCrv9URMRd0q2oVC0ZAXZDxEpYR2nUKA1ho+9nC8Xv+a+7ypp8l5ZdEcfCt27Ph64N3UlVKillhy3k4IbeMlWTtHy6tdEd62tL7Cx52Z4clhFdSLh342G+LdBjlXO3656u4OzLN8OqkZ7c3nGZqdCk3IN3Q+vyjbn4GJuMkGwXQXxxIpk4UnSqt+t6xKLNky3uoXf/JRQoViBstsdVTCXqylLMzUPBQqAAjETN7AMs0RdWMNRr/Nk5hkpwWYWEgmk1OLbZLtK9135PXqgaYLd+dFovenRqKnpqdvFPeZJApHWTM9AtqVQ6rSbs/gISxDA8OLYNp1+ho+qHNTBsg2Hup+4urpqAYBW6BT/5h51DTQWVN601y3R/rXjMBmpwFuQPj70qWp/9d36XAXzfNDcTeTV1w5+sfeUb6gS5mLkIvQXxupqan/H0+VW6yzn2/aSUl2QKd4yGkj70YJ1fi3plGjrTZk/w+Ffs+dHMr97vp0+/Dqe3UzI7Yz8MXmcFBlH0dPm+O/9Pw==",
+            "IsDefault": false
+        }
+    ],
+    "Plugin": null,
+    "Workflow": null,
+    "CustomAction": null,
+    "CustomApi": null,
+    "UiTest": null,
+    "DataProviderCreate": null,
+    "DataProviderUpdate": null,
+    "DataProviderDelete": null,
+    "DataProviderRetrieve": null,
+    "DataProviderRetrieveMultiple": null,
+    "TestPlugin": null,
+    "TestWorkflow": null,
+    "TestCustomAction": null,
+    "TestCustomApi": null,
+    "TestDataProvider": null
+}

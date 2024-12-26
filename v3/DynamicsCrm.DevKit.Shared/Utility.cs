@@ -4,6 +4,8 @@ using EnvDTE;
 using Microsoft.CSharp;
 using Microsoft.Xrm.Sdk.Metadata;
 using System;
+using System.Activities.Expressions;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -236,24 +238,46 @@ namespace DynamicsCrm.DevKit.Shared
             }
         }
 
+
         public static string SafeDeclareName(string declareName, GeneratorType generatorType, string schemaName = null, AttributeMetadata attribute = null)
         {
+            var SAFE_DECLARE_NAME = new List<string>
+            {
+                "EntityLogicalName",
+                "EntityTypeCode",
+                "EntityCollectionSchemaName",
+                "EntityDisplayCollectionName",
+                "DisplayName",
+                "EntitySetName",
+                "EntityLogicalCollectionName",
+                "EntityPrimaryIdAttribute",
+                "EntityPrimaryImageAttribute",
+                "EntityPrimaryNameAttribute",
+                "EntitySchemaName",
+                "EntityName",
+                "Entity",
+                "Id",
+                "LogicalName",
+                "PreEntity"
+            };
+            var SAFE_DECLARE_NAME2 = new List<string>
+            {
+                "EntityName",
+                "Entity",
+                "EntityCollectionName"
+            };
             declareName = SafeIdentifier(declareName);
+            var  check = generatorType == GeneratorType.csharp ? SAFE_DECLARE_NAME: SAFE_DECLARE_NAME2;
+            foreach (var name in check)
+                if (name.Equals(declareName))
+                    return declareName + "2";
             if (attribute is FileAttributeMetadata) declareName += "_name";
-            if (declareName.ToLower() == schemaName?.ToLower()) return declareName + "1";
+            if (declareName.ToLower() == schemaName?.ToLower()) return declareName + "2";
             if (declareName.ToLower() == schemaName?.ToLower() + "id")
                 if (attribute != null && attribute.AttributeType == AttributeTypeCode.Uniqueidentifier)
                     return declareName;
                 else
-                    return declareName + "1";
-            if (declareName.ToLower() == "EntityLogicalName".ToLower()) return declareName + "1";
-            if (declareName.ToLower() == "EntityTypeCode".ToLower()) return declareName + "1";
-            if (generatorType != GeneratorType.csharp)
-            {
-                if (declareName.ToLower() == "EntityName".ToLower()) return declareName + "1";
-            }
-            if (declareName.ToLower() == "Entity".ToLower()) return declareName + "1";
-            if (declareName.ToLower() == "Id".ToLower()) return declareName + "1";
+                    return declareName + "2";
             return declareName;
         }
 
@@ -594,34 +618,41 @@ namespace DynamicsCrm.DevKit.Shared
 
         public static string Decompress(string compressedString)
         {
-            byte[] decompressedBytes;
-            var compressedStream = new MemoryStream(Convert.FromBase64String(compressedString));
-            using (var decompressorStream = new DeflateStream(compressedStream, CompressionMode.Decompress))
+            try
             {
-                using (var decompressedStream = new MemoryStream())
+                byte[] decompressedBytes;
+                var compressedStream = new MemoryStream(Convert.FromBase64String(compressedString));
+                using (var decompressorStream = new DeflateStream(compressedStream, CompressionMode.Decompress))
                 {
-                    decompressorStream.CopyTo(decompressedStream);
-                    decompressedBytes = decompressedStream.ToArray();
+                    using (var decompressedStream = new MemoryStream())
+                    {
+                        decompressorStream.CopyTo(decompressedStream);
+                        decompressedBytes = decompressedStream.ToArray();
+                    }
                 }
+                return Encoding.UTF8.GetString(decompressedBytes);
             }
-            return Encoding.UTF8.GetString(decompressedBytes);
+            catch { return compressedString; }
         }
 
         public static string Compress(string uncompressedString)
         {
-            byte[] compressedBytes;
-            using (var uncompressedStream = new MemoryStream(Encoding.UTF8.GetBytes(uncompressedString)))
+            try
             {
-                using (var compressedStream = new MemoryStream())
+                byte[] compressedBytes;
+                using (var uncompressedStream = new MemoryStream(Encoding.UTF8.GetBytes(uncompressedString)))
                 {
-                    using (var compressorStream = new DeflateStream(compressedStream, CompressionLevel.Fastest, true))
+                    using (var compressedStream = new MemoryStream())
                     {
-                        uncompressedStream.CopyTo(compressorStream);
+                        using (var compressorStream = new DeflateStream(compressedStream, CompressionLevel.Fastest, true))
+                        {
+                            uncompressedStream.CopyTo(compressorStream);
+                        }
+                        compressedBytes = compressedStream.ToArray();
                     }
-                    compressedBytes = compressedStream.ToArray();
                 }
-            }
-            return Convert.ToBase64String(compressedBytes);
+                return Convert.ToBase64String(compressedBytes);
+            } catch { return uncompressedString; }
         }
 
         public static bool HasImplementedPlugin(CodeClass @class)

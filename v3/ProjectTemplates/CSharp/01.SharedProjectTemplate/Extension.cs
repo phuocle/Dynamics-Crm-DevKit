@@ -132,7 +132,7 @@ namespace Microsoft.Xrm.Sdk
 
         public static void Delete(this IOrganizationService service, EntityReference entityReference)
         {
-            service.Delete(entityReference.LogicalName, entityReference.Id);
+            service.Delete(entityReference?.LogicalName, entityReference.Id);
         }
 
         public static T Retrieve<T>(this IOrganizationService service, string entityName, Guid id, ColumnSet columns)
@@ -242,7 +242,7 @@ namespace Microsoft.Xrm.Sdk
             if (json.Length > 10000)
             {
                 json = $"var json = Helper.Decompress(\"{json.Compress()}\");";
-                if (json.Length > 10000) json = "json MORE THAN 10,000 chars";
+                if (json.Length > 10000) json = "json more than 10,000 chars";
             }
             else
             {
@@ -265,7 +265,6 @@ namespace Microsoft.Xrm.Sdk
             tracingService.LogMessage(message);
 #endif
         }
-
         public static void DebugMethod(this ITracingService tracingService)
         {
 #if DEBUG
@@ -288,20 +287,16 @@ namespace Microsoft.Xrm.Sdk
                 {
                     if (sourceProperty.Name == "PreEntityImages" && destField.Name == "_preImages")
                     {
-                        destField.SetValue(destination, sourceProperty.GetValue(
-                            context, new object[] { }));
+                        destField.SetValue(destination, sourceProperty.GetValue(context, new object[] { }));
                         break;
                     }
                     if (sourceProperty.Name == "PostEntityImages" && destField.Name == "_postImages")
                     {
-                        destField.SetValue(destination, sourceProperty.GetValue(
-                            context, new object[] { }));
+                        destField.SetValue(destination, sourceProperty.GetValue(context, new object[] { }));
                         break;
                     }
-                    if (!destField.Name.ToLower().Contains(sourceProperty.Name.ToLower()) ||
-                        !destField.FieldType.IsAssignableFrom(sourceProperty.PropertyType)) continue;
-                    destField.SetValue(destination, sourceProperty.GetValue(
-                        context, new object[] { }));
+                    if (!destField.Name.ToLower().Contains(sourceProperty.Name.ToLower()) || !destField.FieldType.IsAssignableFrom(sourceProperty.PropertyType)) continue;
+                    destField.SetValue(destination, sourceProperty.GetValue(context, new object[] { }));
                     break;
                 }
             }
@@ -321,84 +316,6 @@ namespace Microsoft.Xrm.Sdk
                     return sr.ReadToEnd();
                 }
             }
-        }
-
-        public static RemoteExecutionContext DeserializeRemoteExecutionContext(string json)
-        {
-            var settings = new DataContractJsonSerializerSettings() { DateTimeFormat = new DateTimeFormat("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'") };
-            var remoteExecutionContext = Activator.CreateInstance<RemoteExecutionContext>();
-            var ms = new MemoryStream(Encoding.Unicode.GetBytes(json));
-            var serializer = new System.Runtime.Serialization.Json.DataContractJsonSerializer(remoteExecutionContext.GetType(), settings);
-            remoteExecutionContext = (RemoteExecutionContext)serializer.ReadObject(ms);
-            ms.Close();
-            FixDataAfterDeserialize(remoteExecutionContext);
-            return remoteExecutionContext;
-        }
-
-        private static void FixDataAfterDeserialize(RemoteExecutionContext pluginExecutionContext)
-        {
-            var entities = new List<Entity>();
-            entities.AddRange(pluginExecutionContext.InputParameters.Where(x => x.Value is Entity).Select(x => (Entity)x.Value).ToList());
-            entities.AddRange(pluginExecutionContext.SharedVariables.Where(x => x.Value is Entity).Select(x => (Entity)x.Value).ToList());
-            entities.AddRange(pluginExecutionContext.OutputParameters.Where(x => x.Value is Entity).Select(x => (Entity)x.Value).ToList());
-            entities.AddRange(pluginExecutionContext.PostEntityImages.Select(x => (Entity)x.Value).ToList());
-            entities.AddRange(pluginExecutionContext.PreEntityImages.Select(x => (Entity)x.Value).ToList());
-            FixedDateTime(entities);
-            FixedOptionSetValueCollection(entities);
-        }
-
-        private static void FixedOptionSetValueCollection(List<Entity> entities)
-        {
-            foreach (var entity in entities)
-            {
-                foreach (var key in entity.Attributes.Keys.ToList())
-                {
-                    try
-                    {
-                        var array = entity.GetAttributeValue<object[]>(key);
-                        if (array != null)
-                        {
-                            var collection = new OptionSetValueCollection();
-                            foreach (var item in array)
-                                collection.Add(item as OptionSetValue);
-                            entity.Attributes[key] = collection;
-                        }
-                    }
-                    catch { }
-                }
-            }
-        }
-
-        private static void FixedDateTime(List<Entity> entities)
-        {
-            foreach (var entity in entities)
-            {
-                foreach (var key in entity.Attributes.Keys.ToList())
-                {
-                    try
-                    {
-                        var str = entity.GetAttributeValue<string>(key);
-                        if (str != null && DateTime.TryParse(str, out var dateTime))
-                        {
-                            entity.Attributes[key] = dateTime;
-                        }
-                    }
-                    catch { }
-                }
-            }
-        }
-
-        public static Entity DeserializeEntity(string json)
-        {
-            var settings = new DataContractJsonSerializerSettings() { DateTimeFormat = new DateTimeFormat("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'") };
-            var obj = Activator.CreateInstance<Entity>();
-            MemoryStream ms = new MemoryStream(Encoding.Unicode.GetBytes(json));
-            System.Runtime.Serialization.Json.DataContractJsonSerializer serializer = new System.Runtime.Serialization.Json.DataContractJsonSerializer(obj.GetType(), settings);
-            obj = (Entity)serializer.ReadObject(ms);
-            ms.Close();
-            FixedDateTime(new List<Entity> { obj });
-            FixedOptionSetValueCollection(new List<Entity> { obj });
-            return obj;
         }
 
         public static string Decompress(this string compressedString)
