@@ -9,6 +9,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomWorkflow", "CustomWor
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "SunFlower.Shared", "SunFlower.Shared\SunFlower.Shared.shproj", "{65A50529-593B-4F90-AFEE-F59D08EA617D}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7318E03F-5258-4B2A-A5A1-96BAE58550F3}"
+	ProjectSection(SolutionItems) = preProject
+		DynamicsCrm.DevKit.Cli.json = DynamicsCrm.DevKit.Cli.json
+		DynamicsCrm.DevKit.json = DynamicsCrm.DevKit.json
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

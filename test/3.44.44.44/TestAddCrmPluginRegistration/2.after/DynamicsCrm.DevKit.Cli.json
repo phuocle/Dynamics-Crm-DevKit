@@ -2,7 +2,7 @@
   "servers": [
     {
       "profile": "DEBUG",
-      "solution": "???",
+      "solution": "TestAddCrmPluginRegistration",
       "folder": "bin\\Debug",
       "includefiles": [
         "SunFlower.Plugin.*.dll",
@@ -10,7 +10,9 @@
         "SunFlower.CustomAction.*.dll",
         "SunFlower.Workflow.*.dll",
         "SunFlower.CustomApi.*.dll",
-        "SunFlower.DataProvider.*.dll"
+        "SunFlower.DataProvider.*.dll",
+        "AccountPlugin.dll",
+        "CustomWorkflow.dll"
       ],
       "excludefiles": [
         "SunFlower.*.Test.dll"
