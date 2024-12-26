@@ -1,0 +1,12 @@
+﻿{
+    "DefaultCrmConnection": "ClientSecret",
+    "CrmConnections": [
+        {
+            "Name": "ClientSecret",
+            "Url": "https://dynamics-crm-devkit.crm5.dynamics.com",
+            "UserName": "1a60a5c2-d04c-4b26-8f86-9d6ce0616799",
+            "Password": "~je8Q~4DL221zUgKOaHq-EWMlowkpl3KEbZItccL",
+            "Type": "ClientSecret"
+        }
+    ]
+}

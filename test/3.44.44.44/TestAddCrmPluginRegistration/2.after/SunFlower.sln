@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.421
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35527.113 d17.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AccountPlugin", "AccountPlugin\AccountPlugin.csproj", "{2065A8EA-E72F-4764-8198-C2DF2A9A5F5F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomWorkflow", "CustomWorkflow\CustomWorkflow.csproj", "{600EB6AE-E8A6-4AC3-9E46-700B25167DB4}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "SunFlower.Shared", "SunFlower.Shared\SunFlower.Shared.shproj", "{65A50529-593B-4F90-AFEE-F59D08EA617D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,5 +29,10 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {17C31529-95AA-4981-8EDC-824C95E92C5F}
+	EndGlobalSection
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		SunFlower.Shared\SunFlower.Shared.projitems*{2065a8ea-e72f-4764-8198-c2df2a9a5f5f}*SharedItemsImports = 4
+		SunFlower.Shared\SunFlower.Shared.projitems*{600eb6ae-e8a6-4ac3-9e46-700b25167db4}*SharedItemsImports = 4
+		SunFlower.Shared\SunFlower.Shared.projitems*{65a50529-593b-4f90-afee-f59d08ea617d}*SharedItemsImports = 13
 	EndGlobalSection
 EndGlobal

@@ -61,9 +61,13 @@
     <Compile Include="SendUsersMail.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="deploy.debug.bat" />
+    <None Include="deploy.debug.only.bat" />
     <None Include="Key.snk" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="..\Paz.LuckeyMonkey.Shared\Paz.LuckeyMonkey.Shared.projitems" Label="Shared" Condition="Exists('..\Paz.LuckeyMonkey.Shared\Paz.LuckeyMonkey.Shared.projitems')" />
+  <Import Project="..\SunFlower.Shared\SunFlower.Shared.projitems" Label="Shared" />
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
