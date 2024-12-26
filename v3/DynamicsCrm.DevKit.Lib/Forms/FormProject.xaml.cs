@@ -440,7 +440,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
 
         private void ButtonCustom_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            if (ItemType != ItemType.None)
+            if (PanelCustom.Visibility != System.Windows.Visibility.Hidden)
             {
                 if (IsValid())
                 {
@@ -449,6 +449,18 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     form.ShowDialog();
                     LoadCustomTemplates();
                 }
+            }
+            bool IsValid()
+            {
+                if (ItemType == ItemType.Workflow || ItemType == ItemType.Test || ItemType == ItemType.UiTest)
+                {
+                    if(ItemType == ItemType.Test && ComboBoxProject.SelectedItem == null)
+                    {
+                        VS.MessageBox.ShowError($"Please select class first.");
+                        return false;
+                    }
+                }
+                return true;
             }
         }
 
@@ -483,7 +495,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 };
                 return t4Context;
             }
-            else if (ItemType == ItemType.Test)
+            else if (ItemType == ItemType.Test || ItemType == ItemType.UiTest)
             {
                 var t4Context = new T4Context
                 {
@@ -516,13 +528,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             InitializeComponent();
             ItemType = itemType;
             DTE = dte;
-            if (ItemType == ItemType.Plugin ||
-                ItemType == ItemType.Workflow ||
-                ItemType == ItemType.CustomAction ||
-                ItemType == ItemType.CustomApi ||
-                ItemType == ItemType.Test ||
-                ItemType == ItemType.UiTest
-                )
+            if (ItemType == ItemType.Workflow || ItemType == ItemType.Test || ItemType == ItemType.UiTest)
             {
                 LoadCustomTemplates();
             }
@@ -576,36 +582,31 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             DialogResult = false;
         }
 
-        bool IsValid()
-        {
-            if (VsixHelper.IsExistProject(ProjectName))
-            {
-                VS.MessageBox.ShowError($"Project: {ProjectName} exist.");
-                return false;
-            }
-            if (!VsixHelper.IsValidProjectName(ProjectName))
-            {
-                VS.MessageBox.ShowError("Invalid enter project name");
-                return false;
-            }
-            if (VsixHelper.IsExistItem(ProjectName))
-            {
-                VS.MessageBox.ShowError($"Item: {ProjectName} exist.");
-                return false;
-            }
-            if (ComboBoxProject.IsEnabled && ComboBoxProject.SelectedItem == null)
-            {
-                VS.MessageBox.ShowError("Please select item.");
-                return false;
-            }
-            return true;
-        }
 
         private void ButtonOK_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             if (IsValid())
             {
                 DialogResult = true;
+            }
+            bool IsValid()
+            {
+                if (VsixHelper.IsExistProject(ProjectName))
+                {
+                    VS.MessageBox.ShowError($"Project: {ProjectName} exist.");
+                    return false;
+                }
+                if (!VsixHelper.IsValidProjectName(ProjectName))
+                {
+                    VS.MessageBox.ShowError("Invalid enter project name");
+                    return false;
+                }
+                if (VsixHelper.IsExistItem(ProjectName))
+                {
+                    VS.MessageBox.ShowError($"Item: {ProjectName} exist.");
+                    return false;
+                }
+                return true;
             }
         }
 

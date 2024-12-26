@@ -159,25 +159,28 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         }
         private void LoadCustomTemplates()
         {
-            var templates = GetCustomTemplates();
-            ComboBoxTemplate.ItemsSource = null;
-            ComboBoxTemplate.ItemsSource = templates;
-            ComboBoxTemplate.DisplayMemberPath = "Title";
-            ComboBoxTemplate.SelectedItem = templates.FirstOrDefault(x => x.IsDefault);
-            if (ComboBoxTemplate.SelectedItem == null) ComboBoxTemplate.SelectedIndex = 0;
-
-            List<CustomTemplate> GetCustomTemplates()
+            if (ItemType == ItemType.Plugin || ItemType == ItemType.CustomAction || ItemType == ItemType.CustomApi)
             {
-                var fileName = VsixHelper.GetDynamicsCrmDevKitConfigJsonFileName();
-                var CachedJson = new CachedJson();
-                if (File.Exists(fileName)) CachedJson = SimpleJson.DeserializeObject<CachedJson>(File.ReadAllText(fileName));
-                var customTemplates = CachedJson.CustomTemplates.Where(x => x.Type == ItemType.ToString()).ToList() ?? new List<CustomTemplate>();
-                foreach (var customTemplate in customTemplates)
+                var templates = GetCustomTemplates();
+                ComboBoxTemplate.ItemsSource = null;
+                ComboBoxTemplate.ItemsSource = templates;
+                ComboBoxTemplate.DisplayMemberPath = "Title";
+                ComboBoxTemplate.SelectedItem = templates.FirstOrDefault(x => x.IsDefault);
+                if (ComboBoxTemplate.SelectedItem == null) ComboBoxTemplate.SelectedIndex = 0;
+
+                List<CustomTemplate> GetCustomTemplates()
                 {
-                    customTemplate.Body = Utility.Decompress(customTemplate.Body);
+                    var fileName = VsixHelper.GetDynamicsCrmDevKitConfigJsonFileName();
+                    var CachedJson = new CachedJson();
+                    if (File.Exists(fileName)) CachedJson = SimpleJson.DeserializeObject<CachedJson>(File.ReadAllText(fileName));
+                    var customTemplates = CachedJson.CustomTemplates.Where(x => x.Type == ItemType.ToString()).ToList() ?? new List<CustomTemplate>();
+                    foreach (var customTemplate in customTemplates)
+                    {
+                        customTemplate.Body = Utility.Decompress(customTemplate.Body);
+                    }
+                    customTemplates.Insert(0, new CustomTemplate { Type = ItemType.ToString(), Title = "Default", Body = null, IsDefault = false });
+                    return customTemplates;
                 }
-                customTemplates.Insert(0, new CustomTemplate { Type = ItemType.ToString(), Title = "Default", Body = null, IsDefault = false });
-                return customTemplates;
             }
         }
 
@@ -218,33 +221,36 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         {
             if (IsValid())
             {
-                Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;
-                var solutionName = VsixHelper.GetSolutionName();
-                var pluginSharedNameSpace = $"{solutionName}.Shared";
-                var pluginNameSpace = NameSpace.Contains($".{ItemType.Plugin}.") ? NameSpace.Replace($".{ItemType.Plugin}.", $".{ItemType.Plugin}") : NameSpace;
-                var pluginMessage = this.PluginMessage;
-                var pluginLogicalName = this.PluginLogicalName;
-                var pluginSchemaName = this.PluginSchemaName;
-                var pluginStage = this.PluginStage;
-                var pluginExecution = this.PluginExecution;
-                var pluginComment = this.PluginComment;
-                var pluginClass = this.PluginClass;
-                var t4Context = new T4Context
+                if (ItemType == ItemType.Plugin || ItemType == ItemType.CustomAction || ItemType == ItemType.CustomApi)
                 {
-                    PluginNameSpace = pluginNameSpace,
-                    PluginMessage = pluginMessage,
-                    PluginLogicalName = pluginLogicalName,
-                    PluginSchemaName = pluginSchemaName,
-                    PluginStage = pluginStage,
-                    PluginExecution = pluginExecution,
-                    Class = pluginClass,
-                    PluginComment = pluginComment,
-                    PluginSharedNameSpace = pluginSharedNameSpace
-                };
-                var form = new FormCustom(ItemType, t4Context, TemplateTitle);
-                Mouse.OverrideCursor = null;
-                form.ShowDialog();
-                LoadCustomTemplates();
+                    Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;
+                    var solutionName = VsixHelper.GetSolutionName();
+                    var pluginSharedNameSpace = $"{solutionName}.Shared";
+                    var pluginNameSpace = NameSpace.Contains($".{ItemType.Plugin}.") ? NameSpace.Replace($".{ItemType.Plugin}.", $".{ItemType.Plugin}") : NameSpace;
+                    var pluginMessage = this.PluginMessage;
+                    var pluginLogicalName = this.PluginLogicalName;
+                    var pluginSchemaName = this.PluginSchemaName;
+                    var pluginStage = this.PluginStage;
+                    var pluginExecution = this.PluginExecution;
+                    var pluginComment = this.PluginComment;
+                    var pluginClass = this.PluginClass;
+                    var t4Context = new T4Context
+                    {
+                        PluginNameSpace = pluginNameSpace,
+                        PluginMessage = pluginMessage,
+                        PluginLogicalName = pluginLogicalName,
+                        PluginSchemaName = pluginSchemaName,
+                        PluginStage = pluginStage,
+                        PluginExecution = pluginExecution,
+                        Class = pluginClass,
+                        PluginComment = pluginComment,
+                        PluginSharedNameSpace = pluginSharedNameSpace
+                    };
+                    var form = new FormCustom(ItemType, t4Context, TemplateTitle);
+                    Mouse.OverrideCursor = null;
+                    form.ShowDialog();
+                    LoadCustomTemplates();
+                }
             }
         }
 

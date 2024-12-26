@@ -32,6 +32,7 @@
             <WrapPanel Grid.Row="0" Grid.Column="0" DockPanel.Dock="Bottom" Margin="0,5,5,5" HorizontalAlignment="Left">
                 <ComboBox x:Name="ComboBoxTemplate" Margin="5,0,5,0" Width="200" Height="30" VerticalContentAlignment="Center" IsEditable="False" SelectionChanged="ComboBoxTemplate_SelectionChanged"  />
                 <Button x:Name="buttonDefault" Content="Set Default" Margin="5,0,5,0" Height="30" Width="70" Click="buttonDefault_Click" />
+                <!--<Button x:Name="buttonReset" Content="Reset" Margin="5,0,5,0" Height="30" Width="50" Click="ButtonReset_Click"/>-->
                 <Button x:Name="buttonSave2" Content="Save" Margin="5,0,5,0" Height="30" Width="50" Click="buttonSave2_Click" />
                 <Button x:Name="buttonSaveAs" Content="SaveAs" Margin="5,0,5,0" Height="30" Width="50" Click="buttonSaveAs_Click" />
                 <Button x:Name="buttonDelete" Content="Delete" Margin="5,0,5,0" Height="30" Width="50" Click="buttonDelete_Click" />
@@ -40,8 +41,6 @@
             <WrapPanel Grid.Row="0" Grid.Column="1" DockPanel.Dock="Bottom" Margin="0,5,5,5" HorizontalAlignment="Right">
                 <ComboBox x:Name="ComboBoxSelect" Margin="5,0,5,0" Width="100" Height="30" VerticalContentAlignment="Center" IsEditable="False" SelectionChanged="ComboBoxSelect_SelectionChanged" Visibility="Hidden" />
                 <Button x:Name="buttonReview" Content="Review" Margin="5,0,5,0" Height="30" Width="50" Click="ButtonReview_Click"/>
-                <Button x:Name="buttonReset" Content="Reset" Margin="5,0,5,0" Height="30" Width="50" Click="ButtonReset_Click"/>
-                <Button x:Name="buttonSave" Content="Save" Margin="5,0,5,0" Width="50" Height="30" Click="ButtonSave_Click"/>
                 <Button x:Name="buttonCancel" Content="Close" Margin="5,0,5,0" Width="50" Height="30" IsCancel="True" Click="ButtonClose_Click"/>
             </WrapPanel>
         </Grid>

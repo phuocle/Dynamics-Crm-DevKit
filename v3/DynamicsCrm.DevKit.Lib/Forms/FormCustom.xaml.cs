@@ -221,69 +221,6 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             form.ShowDialog();
         }
 
-        private void ButtonSave_Click(object sender, System.Windows.RoutedEventArgs e)
-        {
-            //var fileName = VsixHelper.GetDynamicsCrmDevKitConfigJsonFileName();
-            //CachedJson cachedJson = new CachedJson();
-            //if (File.Exists(fileName)) cachedJson = SimpleJson.DeserializeObject<CachedJson>(File.ReadAllText(fileName));
-            //if (ItemType == ItemType.Plugin)
-            //    cachedJson.Plugin = Utility.Compress(Textbox.Text);
-            //else if (ItemType == ItemType.Workflow)
-            //    cachedJson.Workflow = Utility.Compress(Textbox.Text);
-            //else if (ItemType == ItemType.CustomAction)
-            //    cachedJson.CustomAction = Utility.Compress(Textbox.Text);
-            //else if (ItemType == ItemType.CustomApi)
-            //    cachedJson.CustomApi = Utility.Compress(Textbox.Text);
-            //else if (ItemType == ItemType.DataProvider)
-            //{
-            //    if ((string)ComboBoxSelect.SelectedItem == "Create")
-            //    {
-            //        cachedJson.DataProviderCreate = Utility.Compress(Textbox.Text);
-            //    }
-            //    else if ((string)ComboBoxSelect.SelectedItem == "Update")
-            //    {
-            //        cachedJson.DataProviderUpdate = Utility.Compress(Textbox.Text);
-            //    }
-            //    else if ((string)ComboBoxSelect.SelectedItem == "Delete")
-            //    {
-            //        cachedJson.DataProviderDelete = Utility.Compress(Textbox.Text);
-            //    }
-            //    else if ((string)ComboBoxSelect.SelectedItem == "Retrieve")
-            //    {
-            //        cachedJson.DataProviderRetrieve = Utility.Compress(Textbox.Text);
-            //    }
-            //    else if ((string)ComboBoxSelect.SelectedItem == "RetrieveMultiple")
-            //    {
-            //        cachedJson.DataProviderRetrieveMultiple = Utility.Compress(Textbox.Text);
-            //    }
-            //}
-            //else if (ItemType == ItemType.Test)
-            //{
-            //    if ((string)ComboBoxSelect.SelectedItem == "Plugin")
-            //    {
-            //        cachedJson.TestPlugin = Utility.Compress(Textbox.Text);
-            //    }
-            //    else if ((string)ComboBoxSelect.SelectedItem == "Workflow")
-            //    {
-            //        cachedJson.TestWorkflow = Utility.Compress(Textbox.Text);
-            //    }
-            //    else if ((string)ComboBoxSelect.SelectedItem == "CustomAcion")
-            //    {
-            //        cachedJson.TestCustomAction = Utility.Compress(Textbox.Text);
-            //    }
-            //    else if ((string)ComboBoxSelect.SelectedItem == "CustomApi")
-            //    {
-            //        cachedJson.TestCustomApi = Utility.Compress(Textbox.Text);
-            //    }
-            //    else if ((string)ComboBoxSelect.SelectedItem == "DataProvider")
-            //    {
-            //        cachedJson.TestDataProvider = Utility.Compress(Textbox.Text);
-            //    }
-            //}
-            //Utility.ForceWriteAllText(fileName, SimpleJson.SerializeObject(cachedJson));
-            //VS.MessageBox.Show("Saved !!!");
-        }
-
         private void ButtonReset_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             if (VS.MessageBox.ShowConfirm("This will reset the template to original setting.", "Do you want to continue?"))
@@ -350,6 +287,10 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     {
                         Textbox.Text = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.TestDataProvider.tt");
                     }
+                }
+                else if (ItemType == ItemType.UiTest)
+                {
+                    Textbox.Text = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.UiTest.tt");
                 }
             }
         }
@@ -501,7 +442,11 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         {
             var selected = (CustomTemplate)ComboBoxTemplate.SelectedItem;
             Textbox.Text = Utility.Decompress(selected?.Body);
-            var isDefault = selected?.Title == "Default";
+            var isDefault = selected?.Title == "Default" ||
+                            selected?.Title == $"Default - {ItemType.CustomApi.ToString()}" ||
+                            selected?.Title == $"Default - {ItemType.CustomAction.ToString()}" ||
+                            selected?.Title == $"Default - {ItemType.Workflow.ToString()}" ||
+                            selected?.Title == $"Default - {ItemType.Plugin.ToString()}";
             buttonDefault.IsEnabled = !isDefault;
             buttonSave2.IsEnabled = !isDefault;
             buttonSaveAs.IsEnabled = true;
