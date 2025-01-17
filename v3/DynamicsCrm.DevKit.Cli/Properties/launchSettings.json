@@ -75,8 +75,8 @@
     },
     "DEBUG.ABC": {
       "commandName": "Project",
-      "commandLineArgs": "/conn:\"AuthType=ClientSecret;Url=https://contoso-pl-devops-1.crm5.dynamics.com;ClientId=b1b8cf05-cb06-4674-b93e-98c8c9a02e5a;ClientSecret=v+L6+3MvOrVPMNqGn86vi6qEG4qpCCLoLqgeUMjnGkY=;\" /json:\"..\\DynamicsCrm.DevKit.Cli.json\" /type:\"solutionpackagers\" /profile:\"Pack-Both\" /version:\"9.1.0.179\"",
-      "workingDirectory": "D:\\azure\\PL\\DEVOPS_SOURCE\\Abiz.DevOps.SolutionPackager"
+      "commandLineArgs": "/conn:\"AuthType=ClientSecret;Url=https://contoso-pl-crmgridplus-2-dev.crm5.dynamics.com;ClientId=b1b8cf05-cb06-4674-b93e-98c8c9a02e5a;ClientSecret=v+L6+3MvOrVPMNqGn86vi6qEG4qpCCLoLqgeUMjnGkY=;\" /json:\"..\\DynamicsCrm.DevKit.Cli.json\" /type:\"servers\" /profile:\"DEBUG\" /onlyupdateassembly:\"true\"",
+      "workingDirectory": "D:\\azure\\phuocle\\CDS-CRMGRIDPLUS\\CRMGRIDPLUS-UCI\\src\\CrmGridPlus2.CustomAction"
     }
   }
 }

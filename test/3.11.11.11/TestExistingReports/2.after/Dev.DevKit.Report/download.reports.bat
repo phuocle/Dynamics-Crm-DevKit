@@ -4,5 +4,5 @@ for /f "delims=" %%d in ('dir /a:d /o:-n /s ..\packages\DynamicsCrm.DevKit.Cli.*
     goto break
 )
 :break
-set CrmConnection="AuthType=ClientSecret;Url=https://dynamicscrm-devkit-sep-2021.crm.dynamics.com;ClientId=baaf08d8-d8f9-4930-97fa-874ffb09f31c;ClientSecret=wUc7Q~3Pq06KQw42gKcl0y9ClyUaiEp_5Lo12;"
+set CrmConnection="AuthType=ClientSecret;Url=https://dynamics-crm-devkit.crm5.dynamics.com;ClientId=1a60a5c2-d04c-4b26-8f86-9d6ce0616799;ClientSecret=~je8Q~4DL221zUgKOaHq-EWMlowkpl3KEbZItccL;"
 "%DynamicsCrmDevKitCli%\tools\DynamicsCrm.DevKit.Cli.exe" /conn:%CrmConnection% /json:"..\DynamicsCrm.DevKit.Cli.json" /type:"downloadreports" /profile:"DEBUG"

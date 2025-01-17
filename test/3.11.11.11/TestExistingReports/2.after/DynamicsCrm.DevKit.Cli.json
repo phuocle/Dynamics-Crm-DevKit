@@ -118,7 +118,7 @@
   "downloadreports": [
     {
       "profile": "DEBUG",
-      "solution": "TEL_WO_ReportDefinitions"
+      "solution": "TestExistingReports"
     }
   ],
   "proxytypes": [
