@@ -153,8 +153,8 @@
     <PackageReference Include="Microsoft.CrmSdk.XrmTooling.WpfControls" Version="9.1.1.65" />
     <PackageReference Include="Microsoft.VisualStudio.SDK" Version="17.3.32804.24" />
     <PackageReference Include="Microsoft.VisualStudio.TemplateWizardInterface" Version="17.3.32804.24" />
-    <PackageReference Include="NuGet.Protocol" Version="6.7.1" />
-    <PackageReference Include="NuGet.Versioning" Version="6.7.1" />
+    <PackageReference Include="NuGet.Protocol" Version="6.13.2" />
+    <PackageReference Include="NuGet.Versioning" Version="6.13.2" />
     <PackageReference Include="System.Text.Json" Version="8.0.5" />
   </ItemGroup>
 
