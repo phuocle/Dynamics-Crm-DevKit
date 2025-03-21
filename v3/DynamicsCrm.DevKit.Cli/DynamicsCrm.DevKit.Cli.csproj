@@ -55,13 +55,13 @@
 	<ItemGroup>
 	  <PackageReference Include="CmdLine" Version="1.0.7.509" />
 	  <PackageReference Include="Community.VisualStudio.Toolkit.17" Version="17.0.527" />
-	  <PackageReference Include="Microsoft.CrmSdk.CoreAssemblies" Version="9.0.2.56" />
+	  <PackageReference Include="Microsoft.CrmSdk.CoreAssemblies" Version="9.0.2.59" />
 	  <PackageReference Include="Microsoft.CrmSdk.Deployment" Version="9.0.2.34" />
-	  <PackageReference Include="Microsoft.CrmSdk.Workflow" Version="9.0.2.56" />
+	  <PackageReference Include="Microsoft.CrmSdk.Workflow" Version="9.0.2.59" />
 	  <PackageReference Include="Microsoft.CrmSdk.XrmTooling.CoreAssembly" Version="9.1.1.65" />
 	  <PackageReference Include="NuGet.Packaging" Version="6.13.2" />
 	  <PackageReference Include="NuGet.Protocol" Version="6.13.2" />
-	  <PackageReference Include="System.Text.Json" Version="8.0.5" />
+	  <PackageReference Include="System.Text.Json" Version="9.0.3" />
 	</ItemGroup>
 
 	<ItemGroup>

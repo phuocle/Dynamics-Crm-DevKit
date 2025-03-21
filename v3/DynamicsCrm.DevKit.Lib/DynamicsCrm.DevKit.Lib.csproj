@@ -155,7 +155,7 @@
     <PackageReference Include="Microsoft.VisualStudio.TemplateWizardInterface" Version="17.3.32804.24" />
     <PackageReference Include="NuGet.Protocol" Version="6.13.2" />
     <PackageReference Include="NuGet.Versioning" Version="6.13.2" />
-    <PackageReference Include="System.Text.Json" Version="8.0.5" />
+    <PackageReference Include="System.Text.Json" Version="9.0.3" />
   </ItemGroup>
 
   <ItemGroup>
