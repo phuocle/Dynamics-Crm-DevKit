@@ -30,7 +30,7 @@
 		</Project>
 	</TemplateContent>
 	<WizardExtension>
-		<Assembly>DynamicsCrm.DevKit.Lib, Version=3.44.44.44, Culture=Neutral, PublicKeyToken=98cbb7bd3db31604</Assembly>
+		<Assembly>DynamicsCrm.DevKit.Lib, Version=3.45.67.89, Culture=Neutral, PublicKeyToken=98cbb7bd3db31604</Assembly>
 		<FullClassName>DynamicsCrm.DevKit.Lib.Wizard.ProjectTemplates.Plugin</FullClassName>
 	</WizardExtension>
 </VSTemplate>

@@ -3,67 +3,67 @@
     "TaskDataSource.sdk.dev2-devkit": {
       "commandName": "Project",
       "commandLineArgs": "/sdklogin:\"yes\" /json:\"..\\DynamicsCrm.DevKit.Cli.json\" /type:\"datasources\" /profile:\"DEBUG\"",
-      "workingDirectory": "C:\\src\\github\\phuocle\\Dynamics-Crm-DevKit\\test\\v.3.44.44.44\\Test.Cli.Server\\Dev.DevKit.DataProvider"
+      "workingDirectory": "C:\\src\\github\\phuocle\\Dynamics-Crm-DevKit\\test\\v.3.45.67.89\\Test.Cli.Server\\Dev.DevKit.DataProvider"
     },
     "TaskDownloadReport.sdk.dev2-devkit": {
       "commandName": "Project",
       "commandLineArgs": "/sdklogin:\"yes\" /json:\"..\\DynamicsCrm.DevKit.Cli.json\" /type:\"downloadreports\" /profile:\"DEBUG\"",
-      "workingDirectory": "C:\\src\\github\\phuocle\\Dynamics-Crm-DevKit\\test\\v.3.44.44.44\\Test.Cli.DownloadReports\\Dev.DevKit.Report"
+      "workingDirectory": "C:\\src\\github\\phuocle\\Dynamics-Crm-DevKit\\test\\v.3.45.67.89\\Test.Cli.DownloadReports\\Dev.DevKit.Report"
     },
     "TaskDownloadWebResource.sdk.dev2-devkit": {
       "commandName": "Project",
       "commandLineArgs": "/sdklogin:\"yes\" /json:\"..\\DynamicsCrm.DevKit.Cli.json\" /type:\"downloadwebresources\" /profile:\"DEBUG\"",
-      "workingDirectory": "C:\\src\\github\\phuocle\\Dynamics-Crm-DevKit\\test\\v.3.44.44.44\\Test.Cli.DownloadWebresources\\Dev.DevKit.WebResource"
+      "workingDirectory": "C:\\src\\github\\phuocle\\Dynamics-Crm-DevKit\\test\\v.3.45.67.89\\Test.Cli.DownloadWebresources\\Dev.DevKit.WebResource"
     },
     "TaskGenerator.C#.sdk.DEMO.CRM890649": {
       "commandName": "Project",
       "commandLineArgs": "/sdklogin:\"yes\" /json:\"..\\..\\DynamicsCrm.DevKit.Cli.json\" /type:\"generators\" /profile:\"LATEBOUND\"",
-      "workingDirectory": "C:\\src\\github\\phuocle\\Dynamics-Crm-DevKit\\test\\v.3.44.44.44\\Test.Cli.Generator\\Dev.DevKit.Shared\\Entities"
+      "workingDirectory": "C:\\src\\github\\phuocle\\Dynamics-Crm-DevKit\\test\\v.3.45.67.89\\Test.Cli.Generator\\Dev.DevKit.Shared\\Entities"
     },
     "TaskGenerator.Form.sdk.DEMO.CRM890649": {
       "commandName": "Project",
       "commandLineArgs": "/sdklogin:\"yes\" /json:\"..\\..\\DynamicsCrm.DevKit.Cli.json\" /type:\"generators\" /profile:\"JS-FORM\"",
-      "workingDirectory": "C:\\src\\github\\phuocle\\Dynamics-Crm-DevKit\\test\\v.3.44.44.44\\Test.Cli.Generator\\Dev.DevKit.WebResource\\entities"
+      "workingDirectory": "C:\\src\\github\\phuocle\\Dynamics-Crm-DevKit\\test\\v.3.45.67.89\\Test.Cli.Generator\\Dev.DevKit.WebResource\\entities"
     },
     "TaskGenerator.WebApi.sdk.DEMO.CRM890649": {
       "commandName": "Project",
       "commandLineArgs": "/sdklogin:\"yes\" /json:\"..\\..\\DynamicsCrm.DevKit.Cli.json\" /type:\"generators\" /profile:\"JS-WEBAPI\"",
-      "workingDirectory": "C:\\src\\github\\phuocle\\Dynamics-Crm-DevKit\\test\\v.3.44.44.44\\Test.Cli.Generator\\Dev.DevKit.WebResource\\entities"
+      "workingDirectory": "C:\\src\\github\\phuocle\\Dynamics-Crm-DevKit\\test\\v.3.45.67.89\\Test.Cli.Generator\\Dev.DevKit.WebResource\\entities"
     },
     "TaskProxyType.sdk.DEMO.CRM890649": {
       "commandName": "Project",
       "commandLineArgs": "/sdklogin:\"yes\" /json:\"..\\DynamicsCrm.DevKit.Cli.json\" /type:\"proxytypes\" /profile:\"ALL\" /version:\"9.1.0.110\"",
-      "workingDirectory": "C:\\src\\github\\phuocle\\Dynamics-Crm-DevKit\\test\\v.3.44.44.44\\Test.Cli.ProxyType\\Dev.DevKit.ProxyTypes"
+      "workingDirectory": "C:\\src\\github\\phuocle\\Dynamics-Crm-DevKit\\test\\v.3.45.67.89\\Test.Cli.ProxyType\\Dev.DevKit.ProxyTypes"
     },
     "TaskServer.sdk.dev2-devkit.release": {
       "commandName": "Project",
       "commandLineArgs": "/sdklogin:\"yes\" /json:\"DynamicsCrm.DevKit.Cli.json\" /type:\"servers\" /profile:\"RELEASE\"",
-      "workingDirectory": "C:\\src\\github\\phuocle\\Dynamics-Crm-DevKit\\test\\v.3.44.44.44\\Test.Cli.Server"
+      "workingDirectory": "C:\\src\\github\\phuocle\\Dynamics-Crm-DevKit\\test\\v.3.45.67.89\\Test.Cli.Server"
     },
     "TaskServer.sdk.dev2-devkit.release.onlydll": {
       "commandName": "Project",
       "commandLineArgs": "/sdklogin:\"yes\" /json:\"DynamicsCrm.DevKit.Cli.json\" /type:\"servers\" /profile:\"RELEASE\" /OnlyUpdateAssembly:\"true\"",
-      "workingDirectory": "C:\\src\\github\\phuocle\\Dynamics-Crm-DevKit\\test\\v.3.44.44.44\\Test.Cli.Server"
+      "workingDirectory": "C:\\src\\github\\phuocle\\Dynamics-Crm-DevKit\\test\\v.3.45.67.89\\Test.Cli.Server"
     },
     "TaskSolutionPackager.sdk.dev2-devkit.Extract-Both": {
       "commandName": "Project",
       "commandLineArgs": "/sdklogin:\"yes\" /json:\"..\\DynamicsCrm.DevKit.Cli.json\" /type:\"solutionpackagers\" /profile:\"Extract-Both\" /version:\"9.1.0.108\"",
-      "workingDirectory": "C:\\src\\github\\phuocle\\Dynamics-Crm-DevKit\\test\\v.3.44.44.44\\Test.Cli.SolutionPackager\\Dev.DevKit.SolutionPackager"
+      "workingDirectory": "C:\\src\\github\\phuocle\\Dynamics-Crm-DevKit\\test\\v.3.45.67.89\\Test.Cli.SolutionPackager\\Dev.DevKit.SolutionPackager"
     },
     "TaskSolutionPackager.sdk.dev2-devkit.Pack-Both": {
       "commandName": "Project",
       "commandLineArgs": "/sdklogin:\"yes\" /json:\"..\\DynamicsCrm.DevKit.Cli.json\" /type:\"solutionpackagers\" /profile:\"Pack-Both\" /version:\"9.1.0.108\"",
-      "workingDirectory": "C:\\src\\github\\phuocle\\Dynamics-Crm-DevKit\\test\\v.3.44.44.44\\Test.Cli.SolutionPackager\\Dev.DevKit.SolutionPackager"
+      "workingDirectory": "C:\\src\\github\\phuocle\\Dynamics-Crm-DevKit\\test\\v.3.45.67.89\\Test.Cli.SolutionPackager\\Dev.DevKit.SolutionPackager"
     },
     "TaskUploadReport.sdk.dev2-devkit": {
       "commandName": "Project",
       "commandLineArgs": "/sdklogin:\"yes\" /json:\"..\\DynamicsCrm.DevKit.Cli.json\" /type:\"uploadreports\" /profile:\"DEBUG\"",
-      "workingDirectory": "C:\\src\\github\\phuocle\\Dynamics-Crm-DevKit\\test\\v.3.44.44.44\\Test.Cli.UploadReports\\Dev.DevKit.Report"
+      "workingDirectory": "C:\\src\\github\\phuocle\\Dynamics-Crm-DevKit\\test\\v.3.45.67.89\\Test.Cli.UploadReports\\Dev.DevKit.Report"
     },
     "TaskWebResource.sdk.dev2-devkit": {
       "commandName": "Project",
       "commandLineArgs": "/sdklogin:\"yes\" /json:\"..\\DynamicsCrm.DevKit.Cli.json\" /type:\"webresources\" /profile:\"DEBUG\"",
-      "workingDirectory": "C:\\src\\github\\phuocle\\Dynamics-Crm-DevKit\\test\\v.3.44.44.44\\Test.Cli.WebResource\\Dev.DevKit.WebResource"
+      "workingDirectory": "C:\\src\\github\\phuocle\\Dynamics-Crm-DevKit\\test\\v.3.45.67.89\\Test.Cli.WebResource\\Dev.DevKit.WebResource"
     },
     "NO ARGS": {
       "commandName": "Project"
@@ -71,7 +71,7 @@
     "TaskServer.sdk.dev2-devkit.debug.spkl": {
       "commandName": "Project",
       "commandLineArgs": "/sdklogin:\"yes\" /json:\"..\\DynamicsCrm.DevKit.Cli.json\" /type:\"servers\" /profile:\"DEBUG\"",
-      "workingDirectory": "C:\\src\\github\\Dynamics-Crm-DevKit\\test\\v.3.44.44.44\\Test.Cli.Server\\Dev.DevKit.Plugin.PhoneCall"
+      "workingDirectory": "C:\\src\\github\\Dynamics-Crm-DevKit\\test\\v.3.45.67.89\\Test.Cli.Server\\Dev.DevKit.Plugin.PhoneCall"
     },
     "DEBUG.ABC": {
       "commandName": "Project",
