@@ -47,7 +47,9 @@
 	<ItemGroup>
 	  <Content Include="icon.ico" />
 	</ItemGroup>
-
+	<PropertyGroup>
+		<NoWarn>CVSTBLD002</NoWarn>
+	</PropertyGroup>
 	<ItemGroup>
 	  <PackageReference Include="CmdLine" Version="1.0.7.509" />
 	  <PackageReference Include="Community.VisualStudio.Toolkit.17" Version="17.0.533" />
