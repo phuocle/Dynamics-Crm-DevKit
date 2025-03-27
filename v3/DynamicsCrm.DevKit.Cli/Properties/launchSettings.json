@@ -75,8 +75,8 @@
     },
     "DEBUG.ABC": {
       "commandName": "Project",
-      "commandLineArgs": "/conn:\"AuthType=ClientSecret;Url=https://contoso-pl-crmgridplus-2-dev.crm5.dynamics.com;ClientId=b1b8cf05-cb06-4674-b93e-98c8c9a02e5a;ClientSecret=v+L6+3MvOrVPMNqGn86vi6qEG4qpCCLoLqgeUMjnGkY=;\" /json:\"..\\DynamicsCrm.DevKit.Cli.json\" /type:\"servers\" /profile:\"DEBUG\" /onlyupdateassembly:\"true\"",
-      "workingDirectory": "D:\\azure\\phuocle\\CDS-CRMGRIDPLUS\\CRMGRIDPLUS-UCI\\src\\CrmGridPlus2.CustomAction"
+      "commandLineArgs": "/conn:\"AuthType=ClientSecret;Url=https://poc-tfsvn-a.crm5.dynamics.com;ClientId=8ac4b17e-a9e3-4472-9848-8f4d2d6ac144;ClientSecret=Cqu8Q~BjA_FppFQSbvFj61ZbhyFyIh4tnnvNccCN;\" /json:\"..\\DynamicsCrm.DevKit.Cli.json\" /type:\"servers\" /profile:\"DEBUG\"",
+      "workingDirectory": "D:\\azure\\phuoclenet\\POC-TFSVN\\src\\Hs.Tfsvn.Server"
     }
   }
 }
