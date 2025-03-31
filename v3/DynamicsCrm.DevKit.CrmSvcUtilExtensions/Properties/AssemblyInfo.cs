@@ -14,5 +14,5 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTrademark("PhuocLe")]
 [assembly: ComVisible(false)]
 [assembly: Guid("af511858-3072-45d7-932d-c0d98470914e")]
-[assembly: AssemblyVersion("3.44.44.44")]
-[assembly: AssemblyFileVersion("3.44.44.44")]
+[assembly: AssemblyVersion("3.45.67.89")]
+[assembly: AssemblyFileVersion("3.45.67.89")]

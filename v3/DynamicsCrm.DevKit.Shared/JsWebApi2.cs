@@ -56,24 +56,24 @@ namespace DynamicsCrm.DevKit.Shared
             code += $"{TAB}{TAB}{logicalName}.Entity = u;{NEW_LINE}";
             code += $"{TAB}{TAB}{logicalName}.EntityName = '{EntityMetadata.LogicalName}';{NEW_LINE}";
             code += $"{TAB}{TAB}{logicalName}.EntityCollectionName = '{EntityMetadata.LogicalCollectionName}';{NEW_LINE}";
-            code += $"{TAB}{TAB}{logicalName}['@odata.etag'] = e['@odata.etag'];{NEW_LINE}";
+            code += $"{TAB}{TAB}{logicalName}['@odata.etag'] = e?.['@odata.etag'];{NEW_LINE}";
             code += $"{TAB}{TAB}{logicalName}.getAliasedValue = function (alias, isMultiOptionSet = false) {{{NEW_LINE}";
-            code += $"{TAB}{TAB}{TAB}if (e[alias] === undefined || e[alias] === null) {{{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}if (e?.[alias] === undefined || e?.[alias] === null) {{{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}{TAB}return null;{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}}}{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}if (isMultiOptionSet) {{{NEW_LINE}";
-            code += $"{TAB}{TAB}{TAB}{TAB}return e[alias].toString().split(',').map(function (item) {{ return parseInt(item, 10); }});{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}{TAB}return e?.[alias].toString().split(',').map(function (item) {{ return parseInt(item, 10); }});{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}}}{NEW_LINE}";
-            code += $"{TAB}{TAB}{TAB}return e[alias];{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}return e?.[alias];{NEW_LINE}";
             code += $"{TAB}{TAB}}}{NEW_LINE}";
             code += $"{TAB}{TAB}{logicalName}.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {{{NEW_LINE}";
-            code += $"{TAB}{TAB}{TAB}if (e[alias + f] === undefined || e[alias + f] === null) {{{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}if (e?.[alias + f] === undefined || e?.[alias + f] === null) {{{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}{TAB}return '';{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}}}{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}if (isMultiOptionSet) {{{NEW_LINE}";
-            code += $"{TAB}{TAB}{TAB}{TAB}return e[alias + f].toString().split(';').map(function (item) {{ return item.trim(); }});{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}{TAB}return e?.[alias + f]?.toString()?.split(';').map(function (item) {{ return item?.trim(); }});{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}}}{NEW_LINE}";
-            code += $"{TAB}{TAB}{TAB}return e[alias + f];{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}return e?.[alias + f];{NEW_LINE}";
             code += $"{TAB}{TAB}}}{NEW_LINE}";
             code += $"{TAB}{TAB}return {logicalName};{NEW_LINE}";
             code += $"{TAB}}};{NEW_LINE}";
@@ -90,7 +90,7 @@ namespace DynamicsCrm.DevKit.Shared
             {
                 var logicalName = (EntityMetadata.IsCustomEntity ?? false) ? $"{EntityMetadata.SchemaName}_activity_parties" : $"{EntityMetadata.LogicalName}_activity_parties";
                 code += $"{TAB}{TAB}Object.defineProperty({EntityMetadata.LogicalName}, 'ActivityParties', {{{NEW_LINE}";
-                code += $"{TAB}{TAB}{TAB}get: function () {{ return e['{logicalName}']; }},{NEW_LINE}";
+                code += $"{TAB}{TAB}{TAB}get: function () {{ return e?.['{logicalName}']; }},{NEW_LINE}";
                 code += $"{TAB}{TAB}{TAB}set: function (value) {{{NEW_LINE}";
                 code += $"{TAB}{TAB}{TAB}{TAB}e['{logicalName}'] = value;{NEW_LINE}";
                 code += $"{TAB}{TAB}{TAB}{TAB}u['{logicalName}'] = value;{NEW_LINE}";
@@ -241,7 +241,6 @@ namespace DynamicsCrm.DevKit.Shared
                     return "_TimezoneDateOnly";
                 return "_TimezoneDateAndTime";
             }
-
         }
     }
 }

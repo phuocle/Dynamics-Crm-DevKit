@@ -1,7 +1,0 @@
-<views>
-  <view v0="savedquery" v1="account" v2="{00000000-0000-0000-00AA-000010001001}">
-    <column c0="name" c1="true">
-      <if i0="name" i1="containsdata" i2="" i3="" i4="../../pl_/i/1/10.png" i5="" i6="String" />
-    </column>
-  </view>
-</views>
