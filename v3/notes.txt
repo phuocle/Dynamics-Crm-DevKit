@@ -11,3 +11,16 @@ HOWTO DEBUG DynamicsCrm.DevKit.Analyzers
 3. Uncomment the code, attach to debugger in (1)
 4. Run debug in (1), and ask instance debug => then select instance (2)
 5. Now you can debug :)
+
+=== HowTo Release DynamicsCrm.DevKit
+1. Update file build-yyyy.txt to correct build date-time
+2. Run release-yyyy.bat
+3. PR dev code to master branch
+4. Create release in github
+5. Create another branch for next release
+6. Use vanphuoc@outlook.com to release .nupkg package
+	1. DynamicsCrm.DevKit.Analyzers.x.xx.xx.xx.nupkg
+	2. DynamicsCrm.DevKit.Cli.x.xx.xx.xx.nupkg
+	3. DynamicsCrm.DevKit.Tool.x.xx.xx.xx.nupkg
+7. Use vanphuoc@outlook.com to release .vsix package
+	1. DynamicsCrm.DevKit.x.xx.xx.vsix
