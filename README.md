@@ -42,16 +42,16 @@
 # DynamicsCrm.DevKit Keys
 
 ## Deploy server project(s)
-![Deploy.Server](/v2/images/deploy.server.gif)
+![Deploy.Server](/v3/images/deploy.server.gif)
 
 ## Form intellisense
-![Form](/v2/images/form.gif)
+![Form](/v3/images/form.gif)
 
 ## Deploy webresource from Visual Studio
-![Form](/v2/images/webresouce.gif)
+![Form](/v3/images/webresouce.gif)
 
 ## Deploy report from Visual Studio
-![Form](/v2/images/report.gif)
+![Form](/v3/images/report.gif)
 
 ## And more ...
 * [Wiki](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki)
