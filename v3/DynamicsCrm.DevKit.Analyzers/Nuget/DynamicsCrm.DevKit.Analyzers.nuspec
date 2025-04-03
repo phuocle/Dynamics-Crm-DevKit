@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>DynamicsCrm.DevKit.Analyzers</id>
-    <version>3.45.67.89</version>
+    <version>3.55.55.55</version>
     <title>DynamicsCrm.DevKit.Analyzers</title>
     <authors>PhuocLe</authors>
     <license type="file">license\LICENSE.txt</license>

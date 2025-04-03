@@ -33,7 +33,7 @@
 		</Project>
 	</TemplateContent>
 	<WizardExtension>
-		<Assembly>DynamicsCrm.DevKit.Lib, Version=3.45.67.89, Culture=Neutral, PublicKeyToken=98cbb7bd3db31604</Assembly>
+		<Assembly>DynamicsCrm.DevKit.Lib, Version=3.55.55.55, Culture=Neutral, PublicKeyToken=98cbb7bd3db31604</Assembly>
 		<FullClassName>DynamicsCrm.DevKit.Lib.Wizard.ProjectTemplates.SharedTest</FullClassName>
 	</WizardExtension>
 </VSTemplate>

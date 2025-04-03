@@ -6,8 +6,8 @@
 ===
 HOWTO DEBUG DynamicsCrm.DevKit.Analyzers
 
-1. Open solutiion DynamicsCrm.DevKit.Analyzers.sln in VS instance
-2. Open solutiion DynamicsCrm.DevKit.sln in another VS instance
+1. Open solution DynamicsCrm.DevKit.Analyzers.sln in VS instance
+2. Open solution DynamicsCrm.DevKit.sln in another VS instance
 3. Uncomment the code, attach to debugger in (1)
 4. Run debug in (1), and ask instance debug => then select instance (2)
 5. Now you can debug :)

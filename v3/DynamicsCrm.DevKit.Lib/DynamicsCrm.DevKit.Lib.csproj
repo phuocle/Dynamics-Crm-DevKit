@@ -5,15 +5,15 @@
     <IsPublishable>True</IsPublishable>
     <SignAssembly>True</SignAssembly>
     <AssemblyOriginatorKeyFile>..\DynamicsCrm.DevKit.pfx</AssemblyOriginatorKeyFile>
-    <AssemblyVersion>3.45.67.89</AssemblyVersion>
-    <FileVersion>3.45.67.89</FileVersion>
+    <AssemblyVersion>3.55.55.55</AssemblyVersion>
+    <FileVersion>3.55.55.55</FileVersion>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
     <RepositoryUrl>https://github.com/phuocle/Dynamics-Crm-DevKit</RepositoryUrl>
     <Company>PhuocLe</Company>
     <Product>DynamicsCrm.DevKit</Product>
     <Copyright>Copyright © PhuocLe 2016 - 2036</Copyright>
     <PackageProjectUrl>https://github.com/phuocle/Dynamics-Crm-DevKit</PackageProjectUrl>
-    <Version>3.45.67.89</Version>
+    <Version>3.55.55.55</Version>
   </PropertyGroup>
 	<PropertyGroup>
 		<LangVersion>latest</LangVersion>
