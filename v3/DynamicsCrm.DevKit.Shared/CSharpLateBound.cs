@@ -255,7 +255,7 @@ namespace DynamicsCrm.DevKit.Shared
                             tmp += $"{TAB}{TAB}/// <para>{statusCodeComment}</para>{NEW_LINE}";
                         }
                         tmp += $"{TAB}{TAB}/// </summary>{NEW_LINE}";
-                        tmp += $"{TAB}{TAB}{value.Name} = {int.Parse(value.Value).ToString("#,##0").Replace(",", "_")},{NEW_LINE}";
+                        tmp += $"{TAB}{TAB}{value.Name} = {int.Parse(value.Value).ToString("#,##0", CultureInfo.InvariantCulture).Replace(",", "_")},{NEW_LINE}";
                         //tmp += $"{TAB}{TAB}{value.Name} = {value.Value},{NEW_LINE}";
                     }
                     tmp = tmp.TrimEnd($",{NEW_LINE}".ToCharArray());
