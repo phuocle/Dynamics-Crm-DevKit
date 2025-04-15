@@ -1249,7 +1249,7 @@ var devKit = (function () {
         var form = {};
         for (var i = 0; i < fields?.length; i++) {
             var field = fields[i];
-            var attribute = formContext?.data?.entity?.attributes?.get(field);
+            var attribute = formContext?.data?.attributes?.get(field);
             var control = formContext?.getControl(field);
             form[field] = {};
             devKit.LoadField(formContext, form[field], attribute, control);
