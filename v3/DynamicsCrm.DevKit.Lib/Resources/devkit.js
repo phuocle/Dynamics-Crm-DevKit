@@ -1244,7 +1244,8 @@ var devKit = (function () {
     function loadOthers(formContext, form, defaultWebResourceName) {
         form.SidePanes = loadSidePanes();
     }
-    function loadFormDialog(formContext, fields) {
+    function loadFormDialog(executionContext, fields) {
+        var formContext = executionContext?.getFormContext() ?? executionContext;
         var form = {};
         for (var i = 0; i < fields?.length; i++) {
             var field = fields[i];
