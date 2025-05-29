@@ -1,6 +1,6 @@
 ﻿		function webApiField(obj, field, entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, type) {
-			var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
-			var getFormattedValue = function () {
+			const l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
+			const getFormattedValue = function () {
 				if (entity?.[logicalName + f] === undefined || entity?.[logicalName + f] === null) {
 					return '';
 				}
@@ -15,7 +15,7 @@
 				}
 				return entity?.[logicalName + f];
 			};
-			var getValue = function () {
+			const getValue = function () {
 				if (entity?.[logicalName] === undefined || entity?.[logicalName] === null) {
 					return null;
 				}
@@ -30,59 +30,55 @@
 				}
 				return returnGet(entity?.[logicalName], type);
 			};
-			var returnGet = function (data, type) {
-				var parseDate = function (dateString) {
-					const date = new Date(dateString);
-					if (isNaN(date?.getTime())) {
+			const returnGet = function (data, type) {
+				const parseDate = function (dateString) {
+					const timestamp = Date.parse(dateString);
+					if (isNaN(timestamp)) {
 						return null;
-					} else {
-						return date;
 					}
-				}
-				var parseBoolean = function (booleanString) {
+					return new Date(timestamp);
+				};
+				const parseBoolean = function (booleanString) {
 					if (typeof booleanString !== 'string') return false;
 					const lowerStr = booleanString?.trim()?.toLowerCase();
 					const trueValues = ["true", "1", "yes", "y"];
 					const falseValues = ["false", "0", "no", "n"];
-					if (trueValues?.includes(lowerStr)) {
+					if (trueValues.includes(lowerStr)) {
 						return true;
-					} else if (falseValues?.includes(lowerStr)) {
-						return false;
-					} else {
+					}
+					if (falseValues.includes(lowerStr)) {
 						return false;
 					}
+					return false;
 				};
 				if (data === null || data === undefined) return null;
 				if (type === null || type === undefined) return data;
 				if (type === "DateTime") {
 					const date = parseDate(data);
-					if (isNaN(date?.getTime())) return null;
-					return date;
+					return isNaN(date?.getTime()) ? null : date;
 				}
 				else if (type === "Integer") {
-					const int = parseInt(data);
-					if (isNaN(int)) return null;
-					return int;
+					const int = parseInt(data, 10);
+					return isNaN(int) ? null : int;
 				}
 				else if (type === "Number") {
 					const double = Number(data);
-					if (isNaN(double)) return null;
-					return double;
+					return isNaN(double) ? null : double;
 				}
 				else if (type === "Boolean") {
 					return parseBoolean(data);
 				}
 				return data;
-			}
-			var setValue = function (value) {
+			};
+			const setValue = function (value) {
 				if (type === 'MultiOptionSet') value = value?.join(',');
 				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName?.length > 0) {
 					if (value === null) {
 						upsertEntity[schemaName + '@odata.bind'] = null;
 					}
 					else {
-						value = value?.replace('{', '')?.replace('}', '');
-						upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
+						const cleanValue = typeof value === 'string' ? value.replace(/[{}]/g, '') : value;
+						upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + cleanValue + ')';
 					}
 				} else {
 					upsertEntity[logicalName] = value;
