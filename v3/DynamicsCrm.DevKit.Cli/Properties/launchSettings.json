@@ -75,8 +75,8 @@
     },
     "DEBUG.ABC": {
       "commandName": "Project",
-      "commandLineArgs": "/conn:\"AuthType=ClientSecret;Url=https://hitachi-hsapvn-dev.crm5.dynamics.com;ClientId=b1b8cf05-cb06-4674-b93e-98c8c9a02e5a;ClientSecret=v+L6+3MvOrVPMNqGn86vi6qEG4qpCCLoLqgeUMjnGkY=;\" /json:\"..\\..\\DynamicsCrm.DevKit.Cli.json\" /type:\"generators\" /profile:\"JS-WEBAPI\"",
-      "workingDirectory": "D:\\azure\\PL\\HSAPVN\\src\\Hs.Hsap.WebResource\\entities"
+      "commandLineArgs": "/conn:\"AuthType=ClientSecret;Url=https://tfsvn-dev.crm5.dynamics.com;ClientId=38260599-034b-466f-8e5b-66d06dd94896;ClientSecret=2QO8Q~jFSYz~qRD4CjUGaFHeNvLgrc-ZvO4T0csx;\" /json:\"..\\..\\DynamicsCrm.DevKit.Cli.json\" /type:\"generators\" /profile:\"JS-WEBAPI\"",
+      "workingDirectory": "D:\\azure\\TFSVN\\CRM\\src\\Hs.Tfsvn.WebResource\\entities"
     }
   }
 }
