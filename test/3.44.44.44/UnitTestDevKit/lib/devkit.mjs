@@ -185,7 +185,8 @@ var devKit = (function () {
         getter(process, 'InstanceName', () => getProcess?.getInstanceName());
         getterSetter(process, 'Status', () => getProcess?.getStatus(), value => { getProcess?.setStatus(value); });
         getterSetter(process, 'DisplayState', () => getProcessUi?.getDisplayState(), value => { getProcessUi?.setDisplayState(value); });
-        getterSetter(process, 'Visible', () => getProcessUi?.getVisible(), value => { getProcessUi?.setVisible(value); }); getter(process, 'ActivePath', () => {
+        getterSetter(process, 'Visible', () => getProcessUi?.getVisible(), value => { getProcessUi?.setVisible(value); });
+        getter(process, 'ActivePath', () => {
             var activePathObj = {};
             activePathObj.getLength = () => getProcess?.getActivePath()?.getLength();
             activePathObj.get = index => {
@@ -279,7 +280,8 @@ var devKit = (function () {
         getterSetter(field, 'Label', () => control?.getLabel(), value => { control?.setLabel(value); });
         getterSetter(field, 'SearchQuery', () => control?.getSearchQuery(), value => { control?.setSearchQuery(value); });
         getterSetter(field, 'ShowTime', () => control?.getShowTime(), value => { control?.setShowTime(value); });
-        getterSetter(field, 'Src', () => control?.getSrc(), value => { control?.setSrc(value); });        getterSetter(field, 'Visible', () => control?.getVisible(), value => { control?.setVisible(value); });
+        getterSetter(field, 'Src', () => control?.getSrc(), value => { control?.setSrc(value); });
+        getterSetter(field, 'Visible', () => control?.getVisible(), value => { control?.setVisible(value); });
     }
     function loadFields(formContext, body, type) {
         for (var field in body) {
@@ -295,9 +297,9 @@ var devKit = (function () {
             getterSetter(body, 'BodyVisible', () => getHeaderSection?.getBodyVisible(), value => { getHeaderSection?.setBodyVisible(value); });
             getterSetter(body, 'CommandBarVisible', () => getHeaderSection?.getCommandBarVisible(), value => { getHeaderSection?.setCommandBarVisible(value); });
             getterSetter(body, 'TabNavigatorVisible', () => getHeaderSection?.getTabNavigatorVisible(), value => { getHeaderSection?.setTabNavigatorVisible(value); });
-        }        return body;
+        }
+        return body;
     }
-
     function loadTabs(formContext, tabs) {
         const loadSection = (formContext, tab, sections, section) => {
             const tabObject = formContext?.ui?.tabs?.get(tab);
@@ -316,20 +318,20 @@ var devKit = (function () {
             getter(tabs[tab], 'Parent', () => tabObject?.getParent());
             getterSetter(tabs[tab], 'DisplayState', () => tabObject?.getDisplayState(), value => { tabObject?.setDisplayState(value); });
             getterSetter(tabs[tab], 'ContentType', () => tabObject?.getContentType(), value => { tabObject?.setContentType(value); });
-            getterSetter(tabs[tab], 'Label', () => tabObject?.getLabel(), value => { tabObject?.setLabel(value); }); getterSetter(tabs[tab], 'Visible', () => tabObject?.getVisible(), value => { tabObject?.setVisible(value); });
-
+            getterSetter(tabs[tab], 'Label', () => tabObject?.getLabel(), value => { tabObject?.setLabel(value); });
+            getterSetter(tabs[tab], 'Visible', () => tabObject?.getVisible(), value => { tabObject?.setVisible(value); });
             for (const section in tabs[tab].Section) {
                 loadSection(formContext, tab, tabs[tab].Section, section);
             }
         }
         for (const tab in tabs) {
-            loadTab(formContext, tabs, tab);        }
+            loadTab(formContext, tabs, tab);
+        }
     }
     function loadNavigations(formContext, navigations) {
         const getNavigationItem = (navigation) => {
             const navItems = formContext?.ui?.navigation?.items;
             if (!navItems) return null;
-
             const length = navItems.getLength();
             for (let i = 0; i < length; i++) {
                 const item = navItems.get(i);
@@ -351,11 +353,7 @@ var devKit = (function () {
         }
     }
     function loadQuickForms(formContext, quickForms) {
-        const excludedFields = new Set([
-            "Body", "Controls", "IsLoaded", "Refresh", "Focus",
-            "ControlType", "Disabled", "Label", "ControlName",
-            "ControlParent", "Visible"
-        ]);
+        const excludedFields = new Set([ "Body", "Controls", "IsLoaded", "Refresh", "Focus", "ControlType", "Disabled", "Label", "ControlName", "ControlParent", "Visible" ]);
         const loadQuickForm = (formContext, quickForms, quickForm) => {
             const fields = Object.keys(quickForms[quickForm]).filter(field => !excludedFields.has(field));
             const quick = formContext?.ui?.quickForms?.get(quickForm);
@@ -411,7 +409,6 @@ var devKit = (function () {
             getter(obj, 'Label', () => col?.controls?.get(0)?.getLabel());
             return obj;
         }
-
         const loadGrid = (formContext, grids, grid) => {
             const gridControl = formContext?.getControl(grid);
             grids[grid].AddOnLoad = callback => gridControl?.addOnLoad(callback);
@@ -567,7 +564,6 @@ var devKit = (function () {
         utility.AddGlobalNotification = function (notification, successCallback, errorCallback) { getApp?.addGlobalNotification(notification)?.then(successCallback, errorCallback); };
         utility.ClearGlobalNotification = function (uniqueId, successCallback, errorCallback) { getApp?.clearGlobalNotification(uniqueId)?.then(successCallback, errorCallback); };        return utility;
     }
-
     function loadExecutionContext(executionContext) {
         const obj = {};
         obj.IsInitialLoad = () => executionContext?.getEventArgs()?.getDataLoadState() === 1;
@@ -594,8 +590,8 @@ var devKit = (function () {
         sidePanes.GetSelected = () => Xrm?.App?.sidePanes?.getSelectedPane();
         sidePanes.GetAll = () => Xrm?.App?.sidePanes?.getAllPanes();
         getterSetter(sidePanes, 'DisplayState', () => Xrm?.App?.sidePanes?.state, value => { Xrm.App.sidePanes.state = value; });
-        return sidePanes;    }
-
+        return sidePanes;
+    }
     function loadOthers(formContext, form, defaultWebResourceName) {
         form.SidePanes = loadSidePanes();
     }
