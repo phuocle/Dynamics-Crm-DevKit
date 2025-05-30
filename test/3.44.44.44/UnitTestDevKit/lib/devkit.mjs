@@ -1,6 +1,15 @@
 'use strict';
 var devKit = (function () {
     'use strict';
+
+    function defineGetter(obj, prop, getter) {
+        Object.defineProperty(obj, prop, {
+            get: getter,
+            enumerable: true, // Optional: make it enumerable by default
+            configurable: true // Optional: make it configurable by default
+        });
+    }
+
     function loadForm(formContext) {
         var form = {};
         var contextData = formContext?.data;
@@ -16,12 +25,8 @@ var devKit = (function () {
         form.Save = function (saveOptions, successCallback, errorCallback) {
             contextData?.save(saveOptions)?.then(successCallback, errorCallback);
         };
-        Object.defineProperty(form, 'DataIsDirty', {
-            get() { return contextData?.getIsDirty(); }
-        });
-        Object.defineProperty(form, 'DataIsValid', {
-            get() { return contextData?.isValid(); }
-        });
+        defineGetter(form, 'DataIsDirty', () => contextData?.getIsDirty());
+        defineGetter(form, 'DataIsValid', () => contextData?.isValid());
         var contextDataEntity = formContext?.data?.entity;
         form.AddOnSave = function (callback) {
             contextDataEntity?.addOnSave(callback);
@@ -35,30 +40,14 @@ var devKit = (function () {
         form.RemoveOnPostSave = function (callback) {
             contextDataEntity?.removeOnPostSave(callback);
         };
-        Object.defineProperty(form, 'Attributes', {
-            get() { return contextDataEntity?.attributes; }
-        });
-        Object.defineProperty(form, 'DataXml', {
-            get() { return contextDataEntity?.getDataXml(); }
-        });
-        Object.defineProperty(form, 'EntityName', {
-            get() { return contextDataEntity?.getEntityName(); }
-        });
-        Object.defineProperty(form, 'EntityReference', {
-            get() { return contextDataEntity?.getEntityReference(); }
-        });
-        Object.defineProperty(form, 'EntityId', {
-            get() { return contextDataEntity?.getId(); }
-        });
-        Object.defineProperty(form, 'EntityIsDirty', {
-            get() { return contextDataEntity?.getIsDirty(); }
-        });
-        Object.defineProperty(form, 'PrimaryAttributeValue', {
-            get() { return contextDataEntity?.getPrimaryAttributeValue(); }
-        });
-        Object.defineProperty(form, 'EntityIsValid', {
-            get() { return contextDataEntity?.isValid(); }
-        });
+        defineGetter(form, 'Attributes', () => contextDataEntity?.attributes);
+        defineGetter(form, 'DataXml', () => contextDataEntity?.getDataXml());
+        defineGetter(form, 'EntityName', () => contextDataEntity?.getEntityName());
+        defineGetter(form, 'EntityReference', () => contextDataEntity?.getEntityReference());
+        defineGetter(form, 'EntityId', () => contextDataEntity?.getId());
+        defineGetter(form, 'EntityIsDirty', () => contextDataEntity?.getIsDirty());
+        defineGetter(form, 'PrimaryAttributeValue', () => contextDataEntity?.getPrimaryAttributeValue());
+        defineGetter(form, 'EntityIsValid', () => contextDataEntity?.isValid());
         var contextUi = formContext?.ui;
         form.UiAddLoaded = function (callback) {
             contextUi?.addLoaded(callback);
@@ -87,18 +76,10 @@ var devKit = (function () {
         form.SetFormNotification = function (message, level, uniqueId) {
             return contextUi?.setFormNotification(message, level, uniqueId);
         };
-        Object.defineProperty(form, 'Controls', {
-            get() { return contextUi?.controls; }
-        });
-        Object.defineProperty(form, 'FormType', {
-            get() { return contextUi?.getFormType(); }
-        });
-        Object.defineProperty(form, 'ViewPortHeight', {
-            get() { return contextUi?.getViewPortHeight(); }
-        });
-        Object.defineProperty(form, 'ViewPortWidth', {
-            get() { return contextUi?.getViewPortWidth(); }
-        });
+        defineGetter(form, 'Controls', () => contextUi?.controls);
+        defineGetter(form, 'FormType', () => contextUi?.getFormType());
+        defineGetter(form, 'ViewPortHeight', () => contextUi?.getViewPortHeight());
+        defineGetter(form, 'ViewPortWidth', () => contextUi?.getViewPortWidth());
         var contextUiFormSelector = formContext?.ui?.formSelector;
         form.FormNavigateToFormId = function (formId) {
             for (var i = 0; i < contextUiFormSelector?.items?.getLength(); i++) {
@@ -128,29 +109,17 @@ var devKit = (function () {
                 }
             }
         }
-        Object.defineProperty(form, 'FormId', {
-            get() { return contextUiFormSelector?.getCurrentItem()?.getId(); }
-        });
-        Object.defineProperty(form, 'FormLabel', {
-            get() { return contextUiFormSelector?.getCurrentItem()?.getLabel(); }
-        });
+        defineGetter(form, 'FormId', () => contextUiFormSelector?.getCurrentItem()?.getId());
+        defineGetter(form, 'FormLabel', () => contextUiFormSelector?.getCurrentItem()?.getLabel());
         return form;
     }
     function loadProcess(formContext) {
         var loadStep = function (step) {
             var obj = {};
-            Object.defineProperty(obj, 'Attribute', {
-                get() { return step?.getAttribute(); }
-            });
-            Object.defineProperty(obj, 'Name', {
-                get() { return step?.getName(); }
-            });
-            Object.defineProperty(obj, 'Required', {
-                get() { return step?.isRequired(); }
-            });
-            Object.defineProperty(obj, 'Progress', {
-                get() { return step?.getProgress(); }
-            });
+            defineGetter(obj, 'Attribute', () => step?.getAttribute());
+            defineGetter(obj, 'Name', () => step?.getName());
+            defineGetter(obj, 'Required', () => step?.isRequired());
+            defineGetter(obj, 'Progress', () => step?.getProgress());
             obj.SetProgress = function (stepProgress, message) {
                 step?.setProgress(stepProgress, message);
             }
@@ -158,21 +127,11 @@ var devKit = (function () {
         }
         var loadStage = function (stage) {
             var obj = {};
-            Object.defineProperty(obj, 'Category', {
-                get() { return stage?.getCategory()?.getValue(); }
-            });
-            Object.defineProperty(obj, 'EntityName', {
-                get() { return stage?.getEntityName(); }
-            });
-            Object.defineProperty(obj, 'Id', {
-                get() { return stage?.getId(); }
-            });
-            Object.defineProperty(obj, 'Name', {
-                get() { return stage?.getName(); }
-            });
-            Object.defineProperty(obj, 'Status', {
-                get() { return stage?.getStatus(); }
-            });
+            defineGetter(obj, 'Category', () => stage?.getCategory()?.getValue());
+            defineGetter(obj, 'EntityName', () => stage?.getEntityName());
+            defineGetter(obj, 'Id', () => stage?.getId());
+            defineGetter(obj, 'Name', () => stage?.getName());
+            defineGetter(obj, 'Status', () => stage?.getStatus());
             obj.AllowCreateNew = function (callback) {
                 stage.getNavigationBehavior().allowCreateNew = callback;
             }
@@ -191,17 +150,11 @@ var devKit = (function () {
         }
         var loadProcess = function (process) {
             var obj = {};
-            Object.defineProperty(obj, 'Id', {
-                get() { return process?.getId(); }
-            });
-            Object.defineProperty(obj, 'Name', {
-                get() { return process?.getName(); }
-            });
-            Object.defineProperty(obj, 'IsRendered', {
-                get() { return process?.isRendered(); }
-            });
+            defineGetter(obj, 'Id', () => process?.getId());
+            defineGetter(obj, 'Name', () => process?.getName());
+            defineGetter(obj, 'IsRendered', () => process?.isRendered());
             Object.defineProperty(obj, 'Stages', {
-                get() {
+                get: () => {
                     var obj = {};
                     obj.getLength = function () {
                         return process?.getStages()?.getLength();
@@ -300,35 +253,25 @@ var devKit = (function () {
         process.Reflow = function (updateUi, parentStage, nextStage) {
             getProcessUi?.reflow(updateUi, parentStage, nextStage);
         }
-        Object.defineProperty(process, 'ActiveProcess', {
-            get() { return loadProcess(getProcess?.getActiveProcess()); }
-        });
-        Object.defineProperty(process, 'SelectedStage', {
-            get() { return loadStage(getProcess?.getSelectedStage()); }
-        });
-        Object.defineProperty(process, 'ActiveStage', {
-            get() { return loadStage(getProcess?.getActiveStage()); }
-        });
-        Object.defineProperty(process, 'InstanceId', {
-            get() { return getProcess?.getInstanceId(); }
-        });
-        Object.defineProperty(process, 'InstanceName', {
-            get() { return getProcess?.getInstanceName(); }
-        });
+        defineGetter(process, 'ActiveProcess', () => loadProcess(getProcess?.getActiveProcess()));
+        defineGetter(process, 'SelectedStage', () => loadStage(getProcess?.getSelectedStage()));
+        defineGetter(process, 'ActiveStage', () => loadStage(getProcess?.getActiveStage()));
+        defineGetter(process, 'InstanceId', () => getProcess?.getInstanceId());
+        defineGetter(process, 'InstanceName', () => getProcess?.getInstanceName());
         Object.defineProperty(process, 'Status', {
-            get() { return getProcess?.getStatus(); },
+            get: () => getProcess?.getStatus(),
             set(value) { getProcess?.setStatus(value); }
         });
         Object.defineProperty(process, 'DisplayState', {
-            get() { return getProcessUi?.getDisplayState(); },
+            get: () => getProcessUi?.getDisplayState(),
             set(value) { getProcessUi?.setDisplayState(value); }
         });
         Object.defineProperty(process, 'Visible', {
-            get() { return getProcessUi?.getVisible(); },
+            get: () => getProcessUi?.getVisible(),
             set(value) { getProcessUi?.setVisible(value); }
         });
         Object.defineProperty(process, 'ActivePath', {
-            get() {
+            get: () => {
                 var obj = {};
                 obj.getLength = function () { return getProcess?.getActivePath()?.getLength(); }
                 obj.get = function (index) {
@@ -437,137 +380,87 @@ var devKit = (function () {
         field.SetIsValid = function (valid, message) {
             attribute?.setIsValid(valid, message);
         };
-        Object.defineProperty(field, 'AttributeType', {
-            get() { return attribute?.getAttributeType(); }
-        });
-        Object.defineProperty(field, 'Format', {
-            get() { return attribute?.getFormat(); }
-        });
-        Object.defineProperty(field, 'InitialValue', {
-            get() { return attribute?.getInitialValue(); }
-        });
-        Object.defineProperty(field, 'IsDirty', {
-            get() { return attribute?.getIsDirty(); }
-        });
-        Object.defineProperty(field, 'IsPartyList', {
-            get() { return attribute?.getIsPartyList(); }
-        });
-        Object.defineProperty(field, 'Max', {
-            get() { return attribute?.getMax(); }
-        });
-        Object.defineProperty(field, 'MaxLength', {
-            get() { return attribute?.getMaxLength(); }
-        });
-        Object.defineProperty(field, 'Min', {
-            get() { return attribute?.getMin(); }
-        });
-        Object.defineProperty(field, 'AttributeName', {
-            get() { return attribute?.getName(); }
-        });
-        Object.defineProperty(field, 'Options', {
-            get() { return attribute?.getOptions(); }
-        });
-        Object.defineProperty(field, 'ControlOptions', {
-            get() { return control?.getOptions(); }
-        });
-        Object.defineProperty(field, 'AttributeParent', {
-            get() { return attribute?.getParent(); }
-        });
-        Object.defineProperty(field, 'SelectedOption', {
-            get() { return attribute?.getSelectedOption(); }
-        });
-        Object.defineProperty(field, 'Text', {
-            get() { return attribute?.getText(); }
-        });
-        Object.defineProperty(field, 'UserPrivilege', {
-            get() { return attribute?.getUserPrivilege(); }
-        });
-        Object.defineProperty(field, 'IsValid', {
-            get() { return attribute?.isValid(); }
-        });
-        Object.defineProperty(field, 'ControlType', {
-            get() { return control?.getControlType(); }
-        });
-        Object.defineProperty(field, 'InitialUrl', {
-            get() { return control?.getInitialUrl(); }
-        });
-        Object.defineProperty(field, 'ControlName', {
-            get() { return control?.getName(); }
-        });
-        Object.defineProperty(field, 'Object', {
-            get() { return control?.getObject(); }
-        });
-        Object.defineProperty(field, 'ControlParent', {
-            get() { return control?.getParent(); }
-        });
-        Object.defineProperty(field, 'State', {
-            get() { return control?.getState(); }
-        });
-        Object.defineProperty(field, 'TotalResultCount', {
-            get() { return control?.getTotalResultCount(); }
-        });
-        Object.defineProperty(field, 'SelectedResults', {
-            get() { return control?.getSelectedResults(); }
-        });
-        Object.defineProperty(field, 'Attribute', {
-            get() { return control?.getAttribute(); }
-        });
+        defineGetter(field, 'AttributeType', () => attribute?.getAttributeType());
+        defineGetter(field, 'Format', () => attribute?.getFormat());
+        defineGetter(field, 'InitialValue', () => attribute?.getInitialValue());
+        defineGetter(field, 'IsDirty', () => attribute?.getIsDirty());
+        defineGetter(field, 'IsPartyList', () => attribute?.getIsPartyList());
+        defineGetter(field, 'Max', () => attribute?.getMax());
+        defineGetter(field, 'MaxLength', () => attribute?.getMaxLength());
+        defineGetter(field, 'Min', () => attribute?.getMin());
+        defineGetter(field, 'AttributeName', () => attribute?.getName());
+        defineGetter(field, 'Options', () => attribute?.getOptions());
+        defineGetter(field, 'ControlOptions', () => control?.getOptions());
+        defineGetter(field, 'AttributeParent', () => attribute?.getParent());
+        defineGetter(field, 'SelectedOption', () => attribute?.getSelectedOption());
+        defineGetter(field, 'Text', () => attribute?.getText());
+        defineGetter(field, 'UserPrivilege', () => attribute?.getUserPrivilege());
+        defineGetter(field, 'IsValid', () => attribute?.isValid());
+        defineGetter(field, 'ControlType', () => control?.getControlType());
+        defineGetter(field, 'InitialUrl', () => control?.getInitialUrl());
+        defineGetter(field, 'ControlName', () => control?.getName());
+        defineGetter(field, 'Object', () => control?.getObject());
+        defineGetter(field, 'ControlParent', () => control?.getParent());
+        defineGetter(field, 'State', () => control?.getState());
+        defineGetter(field, 'TotalResultCount', () => control?.getTotalResultCount());
+        defineGetter(field, 'SelectedResults', () => control?.getSelectedResults());
+        defineGetter(field, 'Attribute', () => control?.getAttribute());
         Object.defineProperty(field, 'Precision', {
-            get() { return attribute?.getPrecision(); },
+            get: () => attribute?.getPrecision(),
             set(value) { attribute?.setPrecision(value); }
         });
         Object.defineProperty(field, 'RequiredLevel', {
-            get() { return attribute?.getRequiredLevel(); },
+            get: () => attribute?.getRequiredLevel(),
             set(value) { attribute?.setRequiredLevel(value); }
         });
         Object.defineProperty(field, 'SubmitMode', {
-            get() { return attribute?.getSubmitMode(); },
+            get: () => attribute?.getSubmitMode(),
             set(value) { attribute?.setSubmitMode(value); }
         });
         Object.defineProperty(field, 'Value', {
-            get() { return attribute?.getValue(); },
+            get: () => attribute?.getValue(),
             set(value) {
                 if (formContext?.ui?.getFormType() === 3 || formContext?.ui?.getFormType() === 4) return;
                 attribute?.setValue(value);
             }
         });
         Object.defineProperty(field, 'Data', {
-            get() { return control?.getData(); },
+            get: () => control?.getData(),
             set(value) { control?.setData(value); }
         });
         Object.defineProperty(field, 'DefaultView', {
-            get() { return control?.getDefaultView(); },
+            get: () => control?.getDefaultView(),
             set(value) { control?.setDefaultView(value); }
         });
         Object.defineProperty(field, 'Disabled', {
-            get() { return control?.getDisabled(); },
+            get: () => control?.getDisabled(),
             set(value) {
                 if (formContext?.ui?.getFormType() === 3 || formContext?.ui?.getFormType() === 4) return;
                 control?.setDisabled(value);
             }
         });
         Object.defineProperty(field, 'EntityTypes', {
-            get() { return control?.getEntityTypes(); },
+            get: () => control?.getEntityTypes(),
             set(value) { control?.setEntityTypes(value); }
         });
         Object.defineProperty(field, 'Label', {
-            get() { return control?.getLabel(); },
+            get: () => control?.getLabel(),
             set(value) { control?.setLabel(value); }
         });
         Object.defineProperty(field, 'SearchQuery', {
-            get() { return control?.getSearchQuery(); },
+            get: () => control?.getSearchQuery(),
             set(value) { control?.setSearchQuery(value); }
         });
         Object.defineProperty(field, 'ShowTime', {
-            get() { return control?.getShowTime(); },
+            get: () => control?.getShowTime(),
             set(value) { control?.setShowTime(value); }
         });
         Object.defineProperty(field, 'Src', {
-            get() { return control?.getSrc(); },
+            get: () => control?.getSrc(),
             set(value) { control?.setSrc(value); }
         });
         Object.defineProperty(field, 'Visible', {
-            get() { return control?.getVisible(); },
+            get: () => control?.getVisible(),
             set(value) { control?.setVisible(value); }
         });
     }
