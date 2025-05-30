@@ -15,7 +15,6 @@ var devKit = (function () {
             enumerable: true,
             configurable: true        });
     }
-
     function loadForm(formContext) {
         const form = {};
         const contextData = formContext?.data;
@@ -25,7 +24,6 @@ var devKit = (function () {
         form.Save = (saveOptions, successCallback, errorCallback) => contextData?.save(saveOptions)?.then(successCallback, errorCallback);
         defineGetter(form, 'DataIsDirty', () => contextData?.getIsDirty());
         defineGetter(form, 'DataIsValid', () => contextData?.isValid());
-
         const contextDataEntity = formContext?.data?.entity;
         form.AddOnSave = callback => contextDataEntity?.addOnSave(callback);
         form.AddOnPostSave = callback => contextDataEntity?.addOnPostSave(callback);
@@ -39,7 +37,6 @@ var devKit = (function () {
         defineGetter(form, 'EntityIsDirty', () => contextDataEntity?.getIsDirty());
         defineGetter(form, 'PrimaryAttributeValue', () => contextDataEntity?.getPrimaryAttributeValue());
         defineGetter(form, 'EntityIsValid', () => contextDataEntity?.isValid());
-
         const contextUi = formContext?.ui;
         form.UiAddLoaded = callback => contextUi?.addLoaded(callback);
         form.UiAddOnLoad = callback => contextUi?.addOnLoad(callback);
@@ -54,7 +51,6 @@ var devKit = (function () {
         defineGetter(form, 'FormType', () => contextUi?.getFormType());
         defineGetter(form, 'ViewPortHeight', () => contextUi?.getViewPortHeight());
         defineGetter(form, 'ViewPortWidth', () => contextUi?.getViewPortWidth());
-
         const contextUiFormSelector = formContext?.ui?.formSelector;
         const findFormItem = (criteria, value) => {
             const length = contextUiFormSelector?.items?.getLength() ?? 0;
@@ -66,26 +62,22 @@ var devKit = (function () {
             }
             return null;
         };
-
         form.FormNavigateToFormId = formId => {
             findFormItem(item => item.getId(), formId)?.navigate();
         };
-
         form.FormNavigateToFormLabel = formLabel => {
             findFormItem(item => item.getLabel(), formLabel)?.navigate();
         };
-
         form.FormIsVisible = formId => {
             return findFormItem(item => item.getId(), formId)?.getVisible();
         }
-
         form.FormSetVisible = (formId, value) => {
             findFormItem(item => item.getId(), formId)?.setVisible(value);
         }
         defineGetter(form, 'FormId', () => contextUiFormSelector?.getCurrentItem()?.getId());
-        defineGetter(form, 'FormLabel', () => contextUiFormSelector?.getCurrentItem()?.getLabel());        return form;
+        defineGetter(form, 'FormLabel', () => contextUiFormSelector?.getCurrentItem()?.getLabel());
+        return form;
     }
-
     function loadProcess(formContext) {
         const loadStep = step => {
             const obj = {};
@@ -96,7 +88,6 @@ var devKit = (function () {
             obj.SetProgress = (stepProgress, message) => step?.setProgress(stepProgress, message);
             return obj;
         }
-
         const loadStage = stage => {
             const obj = {};
             defineGetter(obj, 'Category', () => stage?.getCategory()?.getValue());
@@ -108,7 +99,6 @@ var devKit = (function () {
             defineGetter(obj, 'Steps', () => {
                 const steps = stage?.getSteps();
                 if (!steps) return [];
-
                 const stepsArray = [];
                 const length = steps.length || 0;
                 for (let index = 0; index < length; index++) {
@@ -118,7 +108,6 @@ var devKit = (function () {
             });
             return obj;
         }
-
         const loadProcessInner = process => {
             const obj = {};
             defineGetter(obj, 'Id', () => process?.getId());
@@ -143,7 +132,6 @@ var devKit = (function () {
             });
             return obj;
         }
-
         const process = {};
         const getProcess = formContext?.data?.process;
         const getProcessUi = formContext?.ui?.process;
@@ -293,7 +281,6 @@ var devKit = (function () {
         defineGetterSetter(field, 'ShowTime', () => control?.getShowTime(), value => { control?.setShowTime(value); });
         defineGetterSetter(field, 'Src', () => control?.getSrc(), value => { control?.setSrc(value); });        defineGetterSetter(field, 'Visible', () => control?.getVisible(), value => { control?.setVisible(value); });
     }
-
     function loadFields(formContext, body, type) {
         for (var field in body) {
             const logicalName = type === undefined ? field?.toLowerCase() : (type + field)?.toLowerCase();
@@ -301,10 +288,8 @@ var devKit = (function () {
             if (!attribute && control?.getAttribute) {
                 attribute = control.getAttribute();
             }
-
             loadField(formContext, body[field], attribute, control);
         }
-
         if (type === "header_") {
             const getHeaderSection = formContext?.ui?.headerSection;
             defineGetterSetter(body, 'BodyVisible', () => getHeaderSection?.getBodyVisible(), value => { getHeaderSection?.setBodyVisible(value); });
@@ -322,7 +307,6 @@ var devKit = (function () {
             defineGetterSetter(sections[section], 'Label', () => sectionObject?.getLabel(), value => sectionObject?.setLabel(value));
             defineGetterSetter(sections[section], 'Visible', () => sectionObject?.getVisible(), value => sectionObject?.setVisible(value));
         }
-
         const loadTab = (formContext, tabs, tab) => {
             const tabObject = formContext?.ui?.tabs?.get(tab);
             tabs[tab].AddTabStateChange = callback => tabObject?.addTabStateChange(callback);
@@ -338,11 +322,9 @@ var devKit = (function () {
                 loadSection(formContext, tab, tabs[tab].Section, section);
             }
         }
-
         for (const tab in tabs) {
             loadTab(formContext, tabs, tab);        }
     }
-
     function loadNavigations(formContext, navigations) {
         const getNavigationItem = (navigation) => {
             const navItems = formContext?.ui?.navigation?.items;
@@ -357,7 +339,6 @@ var devKit = (function () {
             }
             return null;
         };
-
         const loadNavigation = (formContext, navigations, navigation) => {
             const navigationItem = getNavigationItem(navigation);
             navigations[navigation].Focus = () => navigationItem?.setFocus();
@@ -365,21 +346,18 @@ var devKit = (function () {
             defineGetterSetter(navigations[navigation], 'Label', () => navigationItem?.getLabel(), value => navigationItem?.setLabel(value));
             defineGetterSetter(navigations[navigation], 'Visible', () => navigationItem?.getVisible(), value => navigationItem?.setVisible(value));
         }
-
         for (var navigation in navigations) {
-            loadNavigation(formContext, navigations, navigation);        }
+            loadNavigation(formContext, navigations, navigation);
+        }
     }
-
     function loadQuickForms(formContext, quickForms) {
         const excludedFields = new Set([
             "Body", "Controls", "IsLoaded", "Refresh", "Focus",
             "ControlType", "Disabled", "Label", "ControlName",
             "ControlParent", "Visible"
         ]);
-
         const loadQuickForm = (formContext, quickForms, quickForm) => {
             const fields = Object.keys(quickForms[quickForm]).filter(field => !excludedFields.has(field));
-
             const quick = formContext?.ui?.quickForms?.get(quickForm);
             defineGetter(quickForms[quickForm], 'Body', () => loadFormDialog(quick, fields));
             quickForms[quickForm].Controls = arg => quick?.getControl(arg);
@@ -393,7 +371,6 @@ var devKit = (function () {
             defineGetter(quickForms[quickForm], 'ControlParent', () => quick?.getParent());
             defineGetterSetter(quickForms[quickForm], 'Visible', () => quick?.getVisible(), value => { quick?.setVisible(value); });
         }
-
         for (var quickForm in quickForms) {
             loadQuickForm(formContext, quickForms, quickForm);
         }
@@ -453,7 +430,8 @@ var devKit = (function () {
                 defineGetterSetter(obj, 'CurrentView', () => viewSelector?.getCurrentView(), value => viewSelector?.setCurrentView(value));
                 defineGetter(obj, 'Visible', () => viewSelector?.isVisible());
                 return obj;
-            }); const createCollectionObject = (getItemsFn, processItemFn) => {
+            });
+            const createCollectionObject = (getItemsFn, processItemFn) => {
                 const obj = {};
                 obj.getLength = () => getItemsFn()?.getLength();
                 obj.get = index => processItemFn(getItemsFn()?.get(index));
@@ -466,7 +444,6 @@ var devKit = (function () {
                 };
                 return obj;
             };
-
             defineGetter(grids[grid], 'Rows', () => {
                 const gridInstance = formContext?.getControl(grid)?.getGrid();
                 return createCollectionObject(
@@ -474,7 +451,6 @@ var devKit = (function () {
                     row => loadGridRow(row)
                 );
             });
-
             defineGetter(grids[grid], 'SelectedRows', () => {
                 const gridInstance = formContext?.getControl(grid)?.getGrid();
                 return createCollectionObject(
@@ -482,15 +458,13 @@ var devKit = (function () {
                     row => loadGridRow(row?.getData())
                 );
             });
-
             defineGetter(grids[grid], 'TotalRecordCount', () => gridControl?.getGrid()?.getTotalRecordCount());
             defineGetterSetter(grids[grid], 'Visible', () => gridControl?.getVisible(), value => { gridControl?.setVisible(value); });
         }
-
         for (const grid in grids) {
-            loadGrid(formContext, grids, grid);        }
+            loadGrid(formContext, grids, grid);
+        }
     }
-
     function loadUtility(defaultWebResourceName) {
         const utility = {};
         const getUtility = Xrm?.Utility;
@@ -506,7 +480,6 @@ var devKit = (function () {
         utility.ShowProgressIndicator = message => getUtility?.showProgressIndicator(message);
         defineGetter(utility, 'LearningPathAttributeName', () => getUtility?.getLearningPathAttributeName());
         defineGetter(utility, 'PageContext', () => getUtility?.getPageContext());
-
         const getGlobalContext = Xrm?.Utility?.getGlobalContext();
         utility.AdvancedConfigSetting = setting => getGlobalContext?.getAdvancedConfigSetting(setting);
         utility.CurrentAppName = function (successCallback, errorCallback) {
@@ -566,7 +539,6 @@ var devKit = (function () {
         defineGetter(utility, 'CurrentAppUrl', () => getGlobalContext?.getCurrentAppUrl());
         defineGetter(utility, 'Version', () => getGlobalContext?.getVersion());
         defineGetter(utility, 'IsOnPremises', () => getGlobalContext?.isOnPremises());
-
         const getNavigation = Xrm?.Navigation;
         utility.OpenAlertDialog = function (alertStrings, alertOptions, closeCallback, errorCallback) { getNavigation?.openAlertDialog(alertStrings, alertOptions)?.then(closeCallback, errorCallback); };
         utility.OpenConfirmDialog = function (confirmStrings, confirmOptions, successCallback, errorCallback) { getNavigation?.openConfirmDialog(confirmStrings, confirmOptions)?.then(successCallback, errorCallback); };
@@ -576,17 +548,14 @@ var devKit = (function () {
         utility.OpenUrl = (url, openUrlOptions) => getNavigation?.openUrl(url, openUrlOptions);
         utility.OpenWebResource = (webResourceName, windowOptions, data) => getNavigation?.openWebResource(webResourceName, windowOptions, data);
         utility.NavigateTo = function (pageInput, navigationOptions, successCallback, errorCallback) { getNavigation?.navigateTo(pageInput, navigationOptions)?.then(successCallback, errorCallback); };
-
         const getPanel = Xrm?.Panel;
         utility.LoadPanel = (url, title) => getPanel?.loadPanel(url, title);
-
         const getEncoding = Xrm?.Encoding;
         utility.XmlAttributeEncode = arg => getEncoding?.xmlAttributeEncode(arg);
         utility.XmlEncode = arg => getEncoding?.xmlEncode(arg);
         utility.HtmlAttributeEncode = arg => getEncoding?.htmlAttributeEncode(arg);
         utility.HtmlDecode = arg => getEncoding?.htmlDecode(arg);
         utility.HtmlEncode = arg => getEncoding?.htmlEncode(arg);
-
         const getDevice = Xrm?.Device;
         utility.CaptureAudio = function (successCallback, errorCallback) { getDevice?.captureAudio()?.then(successCallback, errorCallback); };
         utility.CaptureImage = function (imageOptions, successCallback, errorCallback) { getDevice?.captureImage(imageOptions)?.then(successCallback, errorCallback); };
@@ -594,7 +563,6 @@ var devKit = (function () {
         utility.BarcodeValue = function (successCallback, errorCallback) { getDevice?.getBarcodeValue()?.then(successCallback, errorCallback); };
         utility.CurrentPosition = function (successCallback, errorCallback) { getDevice?.getCurrentPosition()?.then(successCallback, errorCallback); };
         utility.PickFile = function (pickFileOptions, successCallback, errorCallback) { getDevice?.pickFile(pickFileOptions)?.then(successCallback, errorCallback); };
-
         const getApp = Xrm?.App;
         utility.AddGlobalNotification = function (notification, successCallback, errorCallback) { getApp?.addGlobalNotification(notification)?.then(successCallback, errorCallback); };
         utility.ClearGlobalNotification = function (uniqueId, successCallback, errorCallback) { getApp?.clearGlobalNotification(uniqueId)?.then(successCallback, errorCallback); };        return utility;
@@ -616,9 +584,9 @@ var devKit = (function () {
         defineGetter(obj, 'SaveMode', () => executionContext?.getEventArgs()?.getSaveMode());
         defineGetter(obj, 'EntityReference', () => executionContext?.getEventArgs()?.getEntityReference());
         defineGetter(obj, 'IsSaveSuccess', () => executionContext?.getEventArgs()?.getIsSaveSuccess());
-        defineGetter(obj, 'SaveErrorInfo', () => executionContext?.getEventArgs()?.getSaveErrorInfo());        return obj;
+        defineGetter(obj, 'SaveErrorInfo', () => executionContext?.getEventArgs()?.getSaveErrorInfo());
+        return obj;
     }
-
     function loadSidePanes() {
         const sidePanes = {};
         sidePanes.Create = function (paneOptions, successCallback) { Xrm?.App?.sidePanes?.createPane(paneOptions)?.then(successCallback); };
@@ -631,7 +599,6 @@ var devKit = (function () {
     function loadOthers(formContext, form, defaultWebResourceName) {
         form.SidePanes = loadSidePanes();
     }
-
     function loadFormDialog(formContext, fields) {
         const form = {};
         const fieldsLength = fields?.length || 0;
@@ -826,5 +793,4 @@ var OptionSet;
         LastNameFirstName: 7
     };
 })(OptionSet || (OptionSet = {}));
-
 export { devKit, OptionSet };
