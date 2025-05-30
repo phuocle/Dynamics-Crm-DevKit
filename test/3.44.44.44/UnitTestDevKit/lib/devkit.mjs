@@ -1,5 +1,5 @@
 'use strict';
-var devKit = (function () {
+const devKit = (function () {
     'use strict';
     function getter(obj, prop, getter) {
         Object.defineProperty(obj, prop, {
@@ -13,7 +13,8 @@ var devKit = (function () {
             get: getter,
             set: setter,
             enumerable: true,
-            configurable: true        });
+            configurable: true
+        });
     }
     function loadForm(formContext) {
         const form = {};
@@ -128,16 +129,16 @@ var devKit = (function () {
             return obj;
         }
         getter(process, 'ActivePath', () => {
-            var activePathObj = {};
+            const activePathObj = {};
             activePathObj.get = index => {
-                var stage = getProcess?.getActivePath()?.get(index);
+                const stage = getProcess?.getActivePath()?.get(index);
                 return loadStage(stage);
             }
             activePathObj.getLength = () => getProcess?.getActivePath()?.getLength();
             activePathObj.forEach = callback => {
-                var stages = getProcess?.getActivePath();
-                for (var index = 0; index < stages?.getLength(); index++) {
-                    var stage = stages?.get(index);
+                const stages = getProcess?.getActivePath();
+                for (let index = 0; index < stages?.getLength(); index++) {
+                    const stage = stages?.get(index);
                     callback(loadStage(stage), index);
                 }
             }
@@ -158,8 +159,8 @@ var devKit = (function () {
         process.AddOnStageSelected = callback => getProcess?.addOnStageSelected(callback);
         process.EnabledProcesses = callback => {
             getProcess?.getEnabledProcesses(enabledProcesses => {
-                var processes = [];
-                for (var processId in enabledProcesses) {
+                const processes = [];
+                for (const processId in enabledProcesses) {
                     processes.push({ ProcessId: processId, ProcessName: enabledProcesses[processId] });
                 }
                 callback(processes);
@@ -169,9 +170,9 @@ var devKit = (function () {
         process.MovePrevious = callback => getProcess?.movePrevious(callback);
         process.ProcessInstances = callback => {
             getProcess?.getProcessInstances(processInstances => {
-                var processes = [];
-                for (var processId in processInstances) {
-                    var process = processInstances[processId];
+                const processes = [];
+                for (const processId in processInstances) {
+                    const process = processInstances[processId];
                     processes.push({
                         ProcessId: process.ProcessDefinitionID,
                         ProcessName: process.ProcessDefinitionName,
@@ -245,8 +246,8 @@ var devKit = (function () {
         field.AddCustomView = (viewId, entityName, viewDisplayName, fetchXml, layoutXml, isDefault) => control?.addCustomView(viewId, entityName, viewDisplayName, fetchXml, layoutXml, isDefault);
         field.AddLookupTagClick = callback => control?.addOnLookupTagClick(callback);
         field.AddNotification = (message, notificationLevel, uniqueId, callback) => {
-            var actions = { message: message, actions: [callback] };
-            var notification = { messages: [message], notificationLevel: notificationLevel, uniqueId: uniqueId, actions: [actions] };
+            const actions = { message: message, actions: [callback] };
+            const notification = { messages: [message], notificationLevel: notificationLevel, uniqueId: uniqueId, actions: [actions] };
             return control?.addNotification(notification);
         };
         field.AddOnChange = callback => attribute?.addOnChange(callback);
@@ -276,7 +277,7 @@ var devKit = (function () {
         field.SetNotification = (message, uniqueId) => control?.setNotification(message, uniqueId);
     }
     function loadFields(formContext, body, type) {
-        for (var field in body) {
+        for (const field in body) {
             const logicalName = type === undefined ? field?.toLowerCase() : (type + field)?.toLowerCase();
             const control = formContext?.getControl(logicalName) ?? formContext?.getControl(field); let attribute = formContext?.getAttribute(logicalName);
             if (!attribute && control?.getAttribute) {
@@ -309,7 +310,6 @@ var devKit = (function () {
             getterSetter(tabs[tab], 'DisplayState', () => tabObject?.getDisplayState(), value => { tabObject?.setDisplayState(value); });
             getterSetter(tabs[tab], 'Label', () => tabObject?.getLabel(), value => { tabObject?.setLabel(value); });
             getterSetter(tabs[tab], 'Visible', () => tabObject?.getVisible(), value => { tabObject?.setVisible(value); });
-
             tabs[tab].AddTabStateChange = callback => tabObject?.addTabStateChange(callback);
             tabs[tab].Focus = () => tabObject?.setFocus();
             tabs[tab].RemoveTabStateChange = callback => tabObject?.removeTabStateChange(callback);
@@ -339,10 +339,9 @@ var devKit = (function () {
             getter(navigations[navigation], 'Id', () => navigationItem?.getId());
             getterSetter(navigations[navigation], 'Label', () => navigationItem?.getLabel(), value => navigationItem?.setLabel(value));
             getterSetter(navigations[navigation], 'Visible', () => navigationItem?.getVisible(), value => navigationItem?.setVisible(value));
-
             navigations[navigation].Focus = () => navigationItem?.setFocus();
         }
-        for (var navigation in navigations) {
+        for (const navigation in navigations) {
             loadNavigation(formContext, navigations, navigation);
         }
     }
@@ -363,24 +362,24 @@ var devKit = (function () {
             quickForms[quickForm].IsLoaded = () => quick?.isLoaded();
             quickForms[quickForm].Refresh = () => quick?.refresh();
         }
-        for (var quickForm in quickForms) {
+        for (const quickForm in quickForms) {
             loadQuickForm(formContext, quickForms, quickForm);
         }
     }
     function loadGrids(formContext, grids) {
         const loadGridRow = row => {
-            var obj = {};
+            const obj = {};
             getter(obj, 'Columns', () => {
-                var columnsObj = {};
+                const columnsObj = {};
                 columnsObj.getLength = () => row?.data?.entity?.attributes?.getLength();
                 columnsObj.get = index => {
-                    var column = row?.data?.entity?.attributes?.get(index);
+                    const column = row?.data?.entity?.attributes?.get(index);
                     return loadGridColumn(column);
                 };
                 columnsObj.forEach = callback => {
-                    var columns = row?.data?.entity?.attributes;
-                    for (var index = 0; index < columns?.getLength(); index++) {
-                        var column = columns?.get(index);
+                    const columns = row?.data?.entity?.attributes;
+                    for (let index = 0; index < columns?.getLength(); index++) {
+                        const column = columns?.get(index);
                         callback(loadGridColumn(column), index);
                     }
                 };
@@ -393,7 +392,7 @@ var devKit = (function () {
             return obj;
         }
         const loadGridColumn = col => {
-            var obj = {};
+            const obj = {};
             getter(obj, 'Label', () => col?.controls?.get(0)?.getLabel());
             getter(obj, 'Name', () => col?.getName());
             getterSetter(obj, 'Disabled', () => col?.controls?.get(0)?.getDisabled(), value => { col?.controls?.get(0)?.setDisabled(value); });
@@ -551,7 +550,8 @@ var devKit = (function () {
         utility.Resource = key => getUtility?.getResourceString(defaultWebResourceName, key);
         utility.ResourceString = (webResourceName, key) => getUtility?.getResourceString(webResourceName, key);
         utility.ShowProgressIndicator = message => getUtility?.showProgressIndicator(message);
-        utility.WebResourceUrl = webResourceName => getGlobalContext?.getWebResourceUrl(webResourceName);        utility.XmlAttributeEncode = arg => getEncoding?.xmlAttributeEncode(arg);
+        utility.WebResourceUrl = webResourceName => getGlobalContext?.getWebResourceUrl(webResourceName);
+        utility.XmlAttributeEncode = arg => getEncoding?.xmlAttributeEncode(arg);
         utility.XmlEncode = arg => getEncoding?.xmlEncode(arg);
         return utility;
     }
@@ -611,10 +611,9 @@ var devKit = (function () {
         LoadUtility: loadUtility,
         LoadExecutionContext: loadExecutionContext,
         LoadOthers: loadOthers,
-        LoadFormDialog: loadFormDialog
-    }
+        LoadFormDialog: loadFormDialog    }
 })();
-var OptionSet;
+let OptionSet;
 (function (OptionSet) {
     OptionSet.FormType = {
         Undefined: 0,
