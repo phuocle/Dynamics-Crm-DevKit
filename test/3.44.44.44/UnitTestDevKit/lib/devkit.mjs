@@ -22,33 +22,17 @@ var devKit = (function () {
     function loadForm(formContext) {
         var form = {};
         var contextData = formContext?.data;
-        form.DataAddOnLoad = callback => {
-            contextData?.addOnLoad(callback);
-        };
-        form.Refresh = (save, successCallback, errorCallback) => {
-            contextData?.refresh(save)?.then(successCallback, errorCallback);
-        };
-        form.DataRemoveOnLoad = callback => {
-            contextData?.removeOnLoad(callback);
-        };
-        form.Save = (saveOptions, successCallback, errorCallback) => {
-            contextData?.save(saveOptions)?.then(successCallback, errorCallback);
-        };
+        form.DataAddOnLoad = callback => contextData?.addOnLoad(callback);
+        form.Refresh = (save, successCallback, errorCallback) => contextData?.refresh(save)?.then(successCallback, errorCallback);
+        form.DataRemoveOnLoad = callback => contextData?.removeOnLoad(callback);
+        form.Save = (saveOptions, successCallback, errorCallback) => contextData?.save(saveOptions)?.then(successCallback, errorCallback);
         defineGetter(form, 'DataIsDirty', () => contextData?.getIsDirty());
         defineGetter(form, 'DataIsValid', () => contextData?.isValid());
         var contextDataEntity = formContext?.data?.entity;
-        form.AddOnSave = function (callback) {
-            contextDataEntity?.addOnSave(callback);
-        };
-        form.AddOnPostSave = function (callback) {
-            contextDataEntity?.addOnPostSave(callback);
-        }
-        form.RemoveOnSave = function (callback) {
-            contextDataEntity?.removeOnSave(callback);
-        };
-        form.RemoveOnPostSave = function (callback) {
-            contextDataEntity?.removeOnPostSave(callback);
-        };
+        form.AddOnSave = callback => contextDataEntity?.addOnSave(callback);
+        form.AddOnPostSave = callback => contextDataEntity?.addOnPostSave(callback);
+        form.RemoveOnSave = callback => contextDataEntity?.removeOnSave(callback);
+        form.RemoveOnPostSave = callback => contextDataEntity?.removeOnPostSave(callback);
         defineGetter(form, 'Attributes', () => contextDataEntity?.attributes);
         defineGetter(form, 'DataXml', () => contextDataEntity?.getDataXml());
         defineGetter(form, 'EntityName', () => contextDataEntity?.getEntityName());
@@ -58,33 +42,15 @@ var devKit = (function () {
         defineGetter(form, 'PrimaryAttributeValue', () => contextDataEntity?.getPrimaryAttributeValue());
         defineGetter(form, 'EntityIsValid', () => contextDataEntity?.isValid());
         var contextUi = formContext?.ui;
-        form.UiAddLoaded = callback => {
-            contextUi?.addLoaded(callback);
-        };
-        form.UiAddOnLoad = callback => {
-            contextUi?.addOnLoad(callback);
-        };
-        form.ClearFormNotification = uniqueId => {
-            return contextUi?.clearFormNotification(uniqueId);
-        };
-        form.Close = () => {
-            contextUi?.close();
-        };
-        form.RefreshRibbon = refreshAll => {
-            contextUi?.refreshRibbon(refreshAll);
-        };
-        form.UiRemoveLoaded = callback => {
-            contextUi?.removeLoaded(callback);
-        };
-        form.UiRemoveOnLoad = callback => {
-            contextUi?.removeOnLoad(callback);
-        };
-        form.SetFormEntityName = arg => {
-            contextUi?.setFormEntityName(arg);
-        };
-        form.SetFormNotification = (message, level, uniqueId) => {
-            return contextUi?.setFormNotification(message, level, uniqueId);
-        };
+        form.UiAddLoaded = callback => contextUi?.addLoaded(callback);
+        form.UiAddOnLoad = callback => contextUi?.addOnLoad(callback);
+        form.ClearFormNotification = uniqueId => contextUi?.clearFormNotification(uniqueId);
+        form.Close = () => contextUi?.close();
+        form.RefreshRibbon = refreshAll => contextUi?.refreshRibbon(refreshAll);
+        form.UiRemoveLoaded = callback => contextUi?.removeLoaded(callback);
+        form.UiRemoveOnLoad = callback => contextUi?.removeOnLoad(callback);
+        form.SetFormEntityName = arg => contextUi?.setFormEntityName(arg);
+        form.SetFormNotification = (message, level, uniqueId) => contextUi?.setFormNotification(message, level, uniqueId);
         defineGetter(form, 'Controls', () => contextUi?.controls);
         defineGetter(form, 'FormType', () => contextUi?.getFormType());
         defineGetter(form, 'ViewPortHeight', () => contextUi?.getViewPortHeight());
@@ -123,27 +89,23 @@ var devKit = (function () {
         return form;
     }
     function loadProcess(formContext) {
-        var loadStep = function (step) {
+        const loadStep = step => {
             var obj = {};
             defineGetter(obj, 'Attribute', () => step?.getAttribute());
             defineGetter(obj, 'Name', () => step?.getName());
             defineGetter(obj, 'Required', () => step?.isRequired());
             defineGetter(obj, 'Progress', () => step?.getProgress());
-            obj.SetProgress = (stepProgress, message) => {
-                step?.setProgress(stepProgress, message);
-            }
+            obj.SetProgress = (stepProgress, message) => step?.setProgress(stepProgress, message);
             return obj;
         }
-        var loadStage = function (stage) {
+        const loadStage = stage => {
             var obj = {};
             defineGetter(obj, 'Category', () => stage?.getCategory()?.getValue());
             defineGetter(obj, 'EntityName', () => stage?.getEntityName());
             defineGetter(obj, 'Id', () => stage?.getId());
             defineGetter(obj, 'Name', () => stage?.getName());
             defineGetter(obj, 'Status', () => stage?.getStatus());
-            obj.AllowCreateNew = callback => {
-                stage.getNavigationBehavior().allowCreateNew = callback;
-            }
+            obj.AllowCreateNew = callback => stage.getNavigationBehavior().allowCreateNew = callback;
             defineGetter(obj, 'Steps', () => {
                 var stepsArray = []; // Renamed to avoid conflict with outer 'obj'
                 var steps = stage?.getSteps();
@@ -155,16 +117,14 @@ var devKit = (function () {
             });
             return obj;
         }
-        var loadProcess = function (process) {
+        const loadProcessInner = process => { // Renamed to avoid conflict with outer function name
             var obj = {};
             defineGetter(obj, 'Id', () => process?.getId());
             defineGetter(obj, 'Name', () => process?.getName());
             defineGetter(obj, 'IsRendered', () => process?.isRendered());
             defineGetter(obj, 'Stages', () => {
                 var stagesObj = {}; // Renamed to avoid conflict
-                stagesObj.getLength = () => {
-                    return process?.getStages()?.getLength();
-                }
+                stagesObj.getLength = () => process?.getStages()?.getLength();
                 stagesObj.get = index => {
                     var stage = process?.getStages()?.get(index);
                     return loadStage(stage);
@@ -183,36 +143,16 @@ var devKit = (function () {
         var process = {};
         var getProcess = formContext?.data?.process;
         var getProcessUi = formContext?.ui?.process;
-        process.AddOnPreProcessStatusChange = callback => {
-            getProcess?.addOnPreProcessStatusChange(callback);
-        };
-        process.RemoveOnPreProcessStatusChange = callback => {
-            getProcess?.removeOnPreProcessStatusChange(callback);
-        };
-        process.AddOnPreStageChange = callback => {
-            getProcess?.addOnPreStageChange(callback);
-        };
-        process.RemoveOnPreStageChange = callback => {
-            getProcess?.removeOnPreStageChange(callback);
-        };
-        process.AddOnProcessStatusChange = callback => {
-            getProcess?.addOnProcessStatusChange(callback);
-        };
-        process.RemoveOnProcessStatusChange = callback => {
-            getProcess?.removeOnProcessStatusChange(callback);
-        };
-        process.AddOnStageChange = callback => {
-            getProcess?.addOnStageChange(callback);
-        };
-        process.RemoveOnStageChange = callback => {
-            getProcess?.removeOnStageChange(callback);
-        };
-        process.AddOnStageSelected = callback => {
-            getProcess?.addOnStageSelected(callback);
-        };
-        process.RemoveOnStageSelected = callback => {
-            getProcess?.removeOnStageSelected(callback);
-        };
+        process.AddOnPreProcessStatusChange = callback => getProcess?.addOnPreProcessStatusChange(callback);
+        process.RemoveOnPreProcessStatusChange = callback => getProcess?.removeOnPreProcessStatusChange(callback);
+        process.AddOnPreStageChange = callback => getProcess?.addOnPreStageChange(callback);
+        process.RemoveOnPreStageChange = callback => getProcess?.removeOnPreStageChange(callback);
+        process.AddOnProcessStatusChange = callback => getProcess?.addOnProcessStatusChange(callback);
+        process.RemoveOnProcessStatusChange = callback => getProcess?.removeOnProcessStatusChange(callback);
+        process.AddOnStageChange = callback => getProcess?.addOnStageChange(callback);
+        process.RemoveOnStageChange = callback => getProcess?.removeOnStageChange(callback);
+        process.AddOnStageSelected = callback => getProcess?.addOnStageSelected(callback);
+        process.RemoveOnStageSelected = callback => getProcess?.removeOnStageSelected(callback);
         process.EnabledProcesses = callback => {
             getProcess?.getEnabledProcesses(enabledProcesses => {
                 var processes = [];
@@ -222,12 +162,8 @@ var devKit = (function () {
                 callback(processes);
             });
         };
-        process.MoveNext = callback => {
-            getProcess?.moveNext(callback);
-        };
-        process.MovePrevious = callback => {
-            getProcess?.movePrevious(callback);
-        };
+        process.MoveNext = callback => getProcess?.moveNext(callback);
+        process.MovePrevious = callback => getProcess?.movePrevious(callback);
         process.ProcessInstances = callback => {
             getProcess?.getProcessInstances(processInstances => {
                 var processes = [];
@@ -246,19 +182,11 @@ var devKit = (function () {
                 callback(processes);
             });
         };
-        process.SetActiveStage = (stageId, callback) => {
-            getProcess?.setActiveStage(stageId, callback);
-        };
-        process.SetActiveProcessInstance = (processInstanceId, callback) => {
-            getProcess?.setActiveProcessInstance(processInstanceId, callback);
-        };
-        process.SetActiveProcess = (processId, callback) => {
-            getProcess?.setActiveProcess(processId, callback);
-        };
-        process.Reflow = (updateUi, parentStage, nextStage) => {
-            getProcessUi?.reflow(updateUi, parentStage, nextStage);
-        }
-        defineGetter(process, 'ActiveProcess', () => loadProcess(getProcess?.getActiveProcess()));
+        process.SetActiveStage = (stageId, callback) => getProcess?.setActiveStage(stageId, callback);
+        process.SetActiveProcessInstance = (processInstanceId, callback) => getProcess?.setActiveProcessInstance(processInstanceId, callback);
+        process.SetActiveProcess = (processId, callback) => getProcess?.setActiveProcess(processId, callback);
+        process.Reflow = (updateUi, parentStage, nextStage) => getProcessUi?.reflow(updateUi, parentStage, nextStage);
+        defineGetter(process, 'ActiveProcess', () => loadProcessInner(getProcess?.getActiveProcess())); // Use renamed inner function
         defineGetter(process, 'SelectedStage', () => loadStage(getProcess?.getSelectedStage()));
         defineGetter(process, 'ActiveStage', () => loadStage(getProcess?.getActiveStage()));
         defineGetter(process, 'InstanceId', () => getProcess?.getInstanceId());
@@ -268,7 +196,7 @@ var devKit = (function () {
         defineGetterSetter(process, 'Visible', () => getProcessUi?.getVisible(), value => { getProcessUi?.setVisible(value); });
         defineGetter(process, 'ActivePath', () => {
             var activePathObj = {}; // Renamed to avoid conflict
-            activePathObj.getLength = () => { return getProcess?.getActivePath()?.getLength(); }
+            activePathObj.getLength = () => getProcess?.getActivePath()?.getLength();
             activePathObj.get = index => {
                 var stage = getProcess?.getActivePath()?.get(index);
                 return loadStage(stage);
@@ -285,95 +213,39 @@ var devKit = (function () {
         return process;
     }
     function loadField(formContext, field, attribute, control) {
-        field.ContentWindow = (successCallback, errorCallback) => {
-            control?.getContentWindow()?.then(successCallback, errorCallback);
-        }
-        field.Option = value => {
-            return attribute?.getOption(value);
-        };
-        field.RemoveOnChange = callback => {
-            attribute?.removeOnChange(callback);
-        };
-        field.AddCustomFilter = (filter, entityLogicaName) => {
-            control?.addCustomFilter(filter, entityLogicaName);
-        };
-        field.AddCustomView = (viewId, entityName, viewDisplayName, fetchXml, layoutXml, isDefault) => {
-            control?.addCustomView(viewId, entityName, viewDisplayName, fetchXml, layoutXml, isDefault);
-        };
-        field.AddPostSearch = callback => {
-            control?.addOnPostSearch(callback);
-        };
-        field.AddOnOutputChange = callback => {
-            control?.addOnOutputChange(callback);
-        };
-        field.AddResultOpened = callback => {
-            control?.addOnResultOpened(callback);
-        };
-        field.AddSelection = callback => {
-            control?.addOnSelection(callback);
-        };
-        field.AddPreSearch = callback => {
-            control?.addPreSearch(callback);
-        };
-        field.ClearNotification = uniqueId => {
-            return control?.clearNotification(uniqueId);
-        };
-        field.ClearOptions = () => {
-            control?.clearOptions();
-        };
-        field.AddOnChange = callback => {
-            attribute?.addOnChange(callback);
-        };
-        field.FireOnChange = () => {
-            attribute?.fireOnChange();
-        };
-        field.OpenSearchResult = (resultNumber, mode) => {
-            return control?.openSearchResult(resultNumber, mode);
-        };
-        field.Refresh = () => {
-            control?.refresh();
-        };
-        field.RemovePostSearch = callback => {
-            control?.removeOnPostSearch(callback);
-        };
-        field.RemoveOnOutputChange = callback => {
-            control?.removeOnOutputChange(callback);
-        };
-        field.RemoveResultOpened = callback => {
-            control?.removeOnResultOpened(callback);
-        };
-        field.RemoveSelection = callback => {
-            control?.removeOnSelection(callback);
-        };
-        field.RemoveOption = value => {
-            control?.removeOption(value);
-        };
-        field.RemovePreSearch = callback => {
-            control?.removePreSearch(callback);
-        };
-        field.Focus = () => {
-            control?.setFocus();
-        };
-        field.SetNotification = (message, uniqueId) => {
-            return control?.setNotification(message, uniqueId);
-        };
-        field.AddOption = (text, value, index) => {
-            control?.addOption({ text: text, value: value }, index);
-        };
+        field.ContentWindow = (successCallback, errorCallback) => control?.getContentWindow()?.then(successCallback, errorCallback);
+        field.Option = value => attribute?.getOption(value);
+        field.RemoveOnChange = callback => attribute?.removeOnChange(callback);
+        field.AddCustomFilter = (filter, entityLogicaName) => control?.addCustomFilter(filter, entityLogicaName);
+        field.AddCustomView = (viewId, entityName, viewDisplayName, fetchXml, layoutXml, isDefault) => control?.addCustomView(viewId, entityName, viewDisplayName, fetchXml, layoutXml, isDefault);
+        field.AddPostSearch = callback => control?.addOnPostSearch(callback);
+        field.AddOnOutputChange = callback => control?.addOnOutputChange(callback);
+        field.AddResultOpened = callback => control?.addOnResultOpened(callback);
+        field.AddSelection = callback => control?.addOnSelection(callback);
+        field.AddPreSearch = callback => control?.addPreSearch(callback);
+        field.ClearNotification = uniqueId => control?.clearNotification(uniqueId);
+        field.ClearOptions = () => control?.clearOptions();
+        field.AddOnChange = callback => attribute?.addOnChange(callback);
+        field.FireOnChange = () => attribute?.fireOnChange();
+        field.OpenSearchResult = (resultNumber, mode) => control?.openSearchResult(resultNumber, mode);
+        field.Refresh = () => control?.refresh();
+        field.RemovePostSearch = callback => control?.removeOnPostSearch(callback);
+        field.RemoveOnOutputChange = callback => control?.removeOnOutputChange(callback);
+        field.RemoveResultOpened = callback => control?.removeOnResultOpened(callback);
+        field.RemoveSelection = callback => control?.removeOnSelection(callback);
+        field.RemoveOption = value => control?.removeOption(value);
+        field.RemovePreSearch = callback => control?.removePreSearch(callback);
+        field.Focus = () => control?.setFocus();
+        field.SetNotification = (message, uniqueId) => control?.setNotification(message, uniqueId);
+        field.AddOption = (text, value, index) => control?.addOption({ text: text, value: value }, index);
         field.AddNotification = (message, notificationLevel, uniqueId, callback) => {
             var actions = { message: message, actions: [callback] };
             var notification = { messages: [message], notificationLevel: notificationLevel, uniqueId: uniqueId, actions: [actions] };
             return control?.addNotification(notification);
         };
-        field.AddLookupTagClick = callback => {
-            control?.addOnLookupTagClick(callback);
-        };
-        field.RemoveLookupTagClick = callback => {
-            control?.removeOnLookupTagClick(callback);
-        };
-        field.SetIsValid = (valid, message) => {
-            attribute?.setIsValid(valid, message);
-        };
+        field.AddLookupTagClick = callback => control?.addOnLookupTagClick(callback);
+        field.RemoveLookupTagClick = callback => control?.removeOnLookupTagClick(callback);
+        field.SetIsValid = (valid, message) => attribute?.setIsValid(valid, message);
         defineGetter(field, 'AttributeType', () => attribute?.getAttributeType());
         defineGetter(field, 'Format', () => attribute?.getFormat());
         defineGetter(field, 'InitialValue', () => attribute?.getInitialValue());
@@ -446,25 +318,19 @@ var devKit = (function () {
         return body;
     }
     function loadTabs(formContext, tabs) {
-        var loadSection = function (formContext, tab, sections, section) {
+        const loadSection = (formContext, tab, sections, section) => {
             var tabObject = formContext?.ui?.tabs?.get(tab);
             var sectionObject = tabObject?.sections?.get(section);
             defineGetter(sections[section], 'Name', () => sectionObject?.getName());
             defineGetter(sections[section], 'Parent', () => sectionObject?.getParent());
-            defineGetterSetter(sections[section], 'Label', () => sectionObject?.getLabel(), value => { sectionObject?.setLabel(value); });
-            defineGetterSetter(sections[section], 'Visible', () => sectionObject?.getVisible(), value => { sectionObject?.setVisible(value); });
+            defineGetterSetter(sections[section], 'Label', () => sectionObject?.getLabel(), value => sectionObject?.setLabel(value));
+            defineGetterSetter(sections[section], 'Visible', () => sectionObject?.getVisible(), value => sectionObject?.setVisible(value));
         }
-        var loadTab = function (formContext, tabs, tab) {
+        const loadTab = (formContext, tabs, tab) => {
             var tabObject = formContext?.ui?.tabs?.get(tab);
-            tabs[tab].AddTabStateChange = callback => {
-                tabObject?.addTabStateChange(callback);
-            };
-            tabs[tab].Focus = () => {
-                tabObject?.setFocus();
-            };
-            tabs[tab].RemoveTabStateChange = callback => {
-                tabObject?.removeTabStateChange(callback);
-            };
+            tabs[tab].AddTabStateChange = callback => tabObject?.addTabStateChange(callback);
+            tabs[tab].Focus = () => tabObject?.setFocus();
+            tabs[tab].RemoveTabStateChange = callback => tabObject?.removeTabStateChange(callback);
             defineGetter(tabs[tab], 'Name', () => tabObject?.getName());
             defineGetter(tabs[tab], 'Parent', () => tabObject?.getParent());
             defineGetterSetter(tabs[tab], 'DisplayState', () => tabObject?.getDisplayState(), value => { tabObject?.setDisplayState(value); });
@@ -480,14 +346,12 @@ var devKit = (function () {
         }
     }
     function loadNavigations(formContext, navigations) {
-        var loadNavigation = function (formContext, navigations, navigation) {
+        const loadNavigation = (formContext, navigations, navigation) => {
             var navigationItem = null;
             for (var i = 0; i < formContext?.ui?.navigation?.items?.getLength(); i++) {
                 if (navigation === formContext?.ui?.navigation?.items?.get(i)?.getId()) { navigationItem = formContext?.ui?.navigation?.items?.get(i); break; }
             }
-            navigations[navigation].Focus = () => {
-                navigationItem?.setFocus();
-            };
+            navigations[navigation].Focus = () => navigationItem?.setFocus();
             defineGetter(navigations[navigation], 'Id', () => navigationItem?.getId());
             defineGetterSetter(navigations[navigation], 'Label', () => navigationItem?.getLabel(), value => navigationItem?.setLabel(value));
             defineGetterSetter(navigations[navigation], 'Visible', () => navigationItem?.getVisible(), value => navigationItem?.setVisible(value));
@@ -497,7 +361,7 @@ var devKit = (function () {
         }
     }
     function loadQuickForms(formContext, quickForms) {
-        var loadQuickForm = function (formContext, quickForms, quickForm) {
+        const loadQuickForm = (formContext, quickForms, quickForm) => {
             var fields = [];
             for (var field in quickForms[quickForm]) {
                 if (field === "Body") continue;
@@ -515,18 +379,10 @@ var devKit = (function () {
             }
             var quick = formContext?.ui?.quickForms?.get(quickForm);
             defineGetter(quickForms[quickForm], 'Body', () => loadFormDialog(quick, fields));
-            quickForms[quickForm].Controls = arg => {
-                return quick?.getControl(arg);
-            };
-            quickForms[quickForm].IsLoaded = () => {
-                return quick?.isLoaded();
-            };
-            quickForms[quickForm].Refresh = () => {
-                quick?.refresh();
-            };
-            quickForms[quickForm].Focus = () => {
-                quick?.setFocus();
-            };
+            quickForms[quickForm].Controls = arg => quick?.getControl(arg);
+            quickForms[quickForm].IsLoaded = () => quick?.isLoaded();
+            quickForms[quickForm].Refresh = () => quick?.refresh();
+            quickForms[quickForm].Focus = () => quick?.setFocus();
             defineGetter(quickForms[quickForm], 'ControlType', () => quick?.getControlType());
             defineGetterSetter(quickForms[quickForm], 'Disabled', () => quick?.getDisabled(), value => { quick?.setDisabled(value); });
             defineGetterSetter(quickForms[quickForm], 'Label', () => quick?.getLabel(), value => { quick?.setLabel(value); });
@@ -539,7 +395,7 @@ var devKit = (function () {
         }
     }
     function loadGrids(formContext, grids) {
-        var loadGridRow = function (row) {
+        const loadGridRow = row => {
             var obj = {};
             defineGetter(obj, 'EntityName', () => row?.data?.entity?.getEntityName());
             defineGetter(obj, 'EntityReference', () => row?.data?.entity?.getEntityReference());
@@ -563,14 +419,10 @@ var devKit = (function () {
             });
             return obj;
         }
-        var loadGridColumn = function (col) {
+        const loadGridColumn = col => {
             var obj = {};
-            obj.SetNotification = function (message, uniqueId) {
-                return col?.controls?.get(0)?.setNotification(message, uniqueId);
-            };
-            obj.ClearNotification = function (uniqueId) {
-                return col?.controls?.get(0)?.clearNotification(uniqueId);
-            };
+            obj.SetNotification = (message, uniqueId) => col?.controls?.get(0)?.setNotification(message, uniqueId);
+            obj.ClearNotification = uniqueId => col?.controls?.get(0)?.clearNotification(uniqueId);
             defineGetter(obj, 'Name', () => col?.getName());
             defineGetterSetter(obj, 'RequiredLevel', () => col?.getRequiredLevel(), value => { col?.setRequiredLevel(value); });
             defineGetterSetter(obj, 'Value', () => col?.getValue(), value => { col?.setValue(value); });
@@ -578,26 +430,14 @@ var devKit = (function () {
             defineGetter(obj, 'Label', () => col?.controls?.get(0)?.getLabel());
             return obj;
         }
-        var loadGrid = function (formContext, grids, grid) {
+        const loadGrid = (formContext, grids, grid) => {
             var gridControl = formContext?.getControl(grid);
-            grids[grid].AddOnLoad = callback => {
-                gridControl?.addOnLoad(callback);
-            };
-            grids[grid].RemoveOnLoad = callback => {
-                gridControl?.removeOnLoad(callback);
-            };
-            grids[grid].Url = client => {
-                return gridControl?.getUrl(client);
-            };
-            grids[grid].Refresh = () => {
-                gridControl?.refresh();
-            };
-            grids[grid].RefreshRibbon = () => {
-                gridControl?.refreshRibbon();
-            };
-            grids[grid].OpenRelatedGrid = () => {
-                gridControl?.openRelatedGrid();
-            };
+            grids[grid].AddOnLoad = callback => gridControl?.addOnLoad(callback);
+            grids[grid].RemoveOnLoad = callback => gridControl?.removeOnLoad(callback);
+            grids[grid].Url = client => gridControl?.getUrl(client);
+            grids[grid].Refresh = () => gridControl?.refresh();
+            grids[grid].RefreshRibbon = () => gridControl?.refreshRibbon();
+            grids[grid].OpenRelatedGrid = () => gridControl?.openRelatedGrid();
             defineGetter(grids[grid], 'EntityName', () => gridControl?.getEntityName());
             defineGetter(grids[grid], 'FetchXml', () => gridControl?.getFetchXml());
             defineGetter(grids[grid], 'GridType', () => gridControl?.getGridType());
@@ -650,54 +490,28 @@ var devKit = (function () {
     function loadUtility(defaultWebResourceName) {
         var utility = {};
         var getUtility = Xrm?.Utility;
-        utility.CloseProgressIndicator = () => {
-            getUtility?.closeProgressIndicator();
-        };
-        utility.AllowedStatusTransitions = (entityName, stateCode, successCallback, errorCallback) => {
-            getUtility?.getAllowedStatusTransitions(entityName, stateCode)?.then(successCallback, errorCallback);
-        };
-        utility.EntityMainFormDescriptor = (entityName, formId) => {
-            return getUtility?.getEntityMainFormDescriptor(entityName, formId);
-        };
-        utility.EntityMetadata = (entityName, attributes, successCallback, errorCallback) => {
-            getUtility?.getEntityMetadata(entityName, attributes)?.then(successCallback, errorCallback);
-        };
-        utility.ResourceString = (webResourceName, key) => {
-            return getUtility?.getResourceString(webResourceName, key);
-        };
-        utility.Resource = key => {
-            return getUtility?.getResourceString(defaultWebResourceName, key);
-        };
-        utility.InvokeProcessAction = (name, parameters, successCallback, errorCallback) => {
-            getUtility?.invokeProcessAction(name, parameters)?.then(successCallback, errorCallback);
-        };
-        utility.LookupObjects = (lookupOptions, successCallback, errorCallback) => {
-            getUtility?.lookupObjects(lookupOptions)?.then(successCallback, errorCallback);
-        };
-        utility.RefreshParentGrid = lookupOptions => {
-            getUtility?.refreshParentGrid(lookupOptions);
-        };
-        utility.ShowProgressIndicator = message => {
-            getUtility?.showProgressIndicator(message);
-        };
+        utility.CloseProgressIndicator = () => getUtility?.closeProgressIndicator();
+        utility.AllowedStatusTransitions = function (entityName, stateCode, successCallback, errorCallback) { getUtility?.getAllowedStatusTransitions(entityName, stateCode)?.then(successCallback, errorCallback); };
+        utility.EntityMainFormDescriptor = (entityName, formId) => getUtility?.getEntityMainFormDescriptor(entityName, formId);
+        utility.EntityMetadata = function (entityName, attributes, successCallback, errorCallback) { getUtility?.getEntityMetadata(entityName, attributes)?.then(successCallback, errorCallback); };
+        utility.ResourceString = (webResourceName, key) => getUtility?.getResourceString(webResourceName, key);
+        utility.Resource = key => getUtility?.getResourceString(defaultWebResourceName, key);
+        utility.InvokeProcessAction = function (name, parameters, successCallback, errorCallback) { getUtility?.invokeProcessAction(name, parameters)?.then(successCallback, errorCallback); };
+        utility.LookupObjects = function (lookupOptions, successCallback, errorCallback) { getUtility?.lookupObjects(lookupOptions)?.then(successCallback, errorCallback); };
+        utility.RefreshParentGrid = lookupOptions => getUtility?.refreshParentGrid(lookupOptions);
+        utility.ShowProgressIndicator = message => getUtility?.showProgressIndicator(message);
         defineGetter(utility, 'LearningPathAttributeName', () => getUtility?.getLearningPathAttributeName());
         defineGetter(utility, 'PageContext', () => getUtility?.getPageContext());
         var getGlobalContext = Xrm?.Utility?.getGlobalContext();
-        utility.AdvancedConfigSetting = setting => {
-            return getGlobalContext?.getAdvancedConfigSetting(setting);
-        };
-        utility.CurrentAppName = (successCallback, errorCallback) => {
+        utility.AdvancedConfigSetting = setting => getGlobalContext?.getAdvancedConfigSetting(setting);
+        utility.CurrentAppName = function (successCallback, errorCallback) {
             getGlobalContext?.getCurrentAppName()?.then(successCallback, errorCallback);
         };
-        utility.CurrentAppProperties = (successCallback, errorCallback) => {
+        utility.CurrentAppProperties = function (successCallback, errorCallback) {
             getGlobalContext?.getCurrentAppProperties()?.then(successCallback, errorCallback);
         };
-        utility.WebResourceUrl = webResourceName => {
-            return getGlobalContext?.getWebResourceUrl(webResourceName);
-        };
-        utility.PrependOrgName = sPath => {
-            return getGlobalContext?.prependOrgName(sPath);
-        };
+        utility.WebResourceUrl = webResourceName => getGlobalContext?.getWebResourceUrl(webResourceName);
+        utility.PrependOrgName = sPath => getGlobalContext?.prependOrgName(sPath);
         defineGetter(utility, 'Client', () => {
             var obj = {};
             var client = getGlobalContext?.client;
@@ -749,101 +563,43 @@ var devKit = (function () {
         defineGetter(utility, 'Version', () => getGlobalContext?.getVersion());
         defineGetter(utility, 'IsOnPremises', () => getGlobalContext?.isOnPremises());
         var getNavigation = Xrm?.Navigation;
-        utility.OpenAlertDialog = (alertStrings, alertOptions, closeCallback, errorCallback) => {
-            getNavigation?.openAlertDialog(alertStrings, alertOptions)?.then(closeCallback, errorCallback);
-        };
-        utility.OpenConfirmDialog = (confirmStrings, confirmOptions, successCallback, errorCallback) => {
-            getNavigation?.openConfirmDialog(confirmStrings, confirmOptions)?.then(successCallback, errorCallback);
-        };
-        utility.OpenErrorDialog = (errorOptions, successCallback, errorCallback) => {
-            getNavigation?.openErrorDialog(errorOptions)?.then(successCallback, errorCallback);
-        };
-        utility.OpenFile = (file, openFileOptions) => {
-            getNavigation?.openFile(file, openFileOptions);
-        };
-        utility.OpenForm = (entityFormOptions, formParameters, successCallback, errorCallback) => {
-            getNavigation?.openForm(entityFormOptions, formParameters)?.then(successCallback, errorCallback);
-        };
-        utility.OpenUrl = (url, openUrlOptions) => {
-            getNavigation?.openUrl(url, openUrlOptions);
-        };
-        utility.OpenWebResource = (webResourceName, windowOptions, data) => {
-            getNavigation?.openWebResource(webResourceName, windowOptions, data);
-        };
-        utility.NavigateTo = (pageInput, navigationOptions, successCallback, errorCallback) => {
-            getNavigation?.navigateTo(pageInput, navigationOptions)?.then(successCallback, errorCallback);
-        };
+        utility.OpenAlertDialog = function (alertStrings, alertOptions, closeCallback, errorCallback) { getNavigation?.openAlertDialog(alertStrings, alertOptions)?.then(closeCallback, errorCallback); };
+        utility.OpenConfirmDialog = function (confirmStrings, confirmOptions, successCallback, errorCallback) { getNavigation?.openConfirmDialog(confirmStrings, confirmOptions)?.then(successCallback, errorCallback); };
+        utility.OpenErrorDialog = function (errorOptions, successCallback, errorCallback) { getNavigation?.openErrorDialog(errorOptions)?.then(successCallback, errorCallback); };
+        utility.OpenFile = (file, openFileOptions) => getNavigation?.openFile(file, openFileOptions);
+        utility.OpenForm = function (entityFormOptions, formParameters, successCallback, errorCallback) { getNavigation?.openForm(entityFormOptions, formParameters)?.then(successCallback, errorCallback); };
+        utility.OpenUrl = (url, openUrlOptions) => getNavigation?.openUrl(url, openUrlOptions);
+        utility.OpenWebResource = (webResourceName, windowOptions, data) => getNavigation?.openWebResource(webResourceName, windowOptions, data);
+        utility.NavigateTo = function (pageInput, navigationOptions, successCallback, errorCallback) { getNavigation?.navigateTo(pageInput, navigationOptions)?.then(successCallback, errorCallback); };
         var getPanel = Xrm?.Panel;
-        utility.LoadPanel = (url, title) => {
-            getPanel?.loadPanel(url, title);
-        };
+        utility.LoadPanel = (url, title) => getPanel?.loadPanel(url, title);
         var getEncoding = Xrm?.Encoding;
-        utility.XmlAttributeEncode = arg => {
-            return getEncoding?.xmlAttributeEncode(arg);
-        };
-        utility.XmlEncode = arg => {
-            return getEncoding?.xmlEncode(arg);
-        };
-        utility.HtmlAttributeEncode = arg => {
-            return getEncoding?.htmlAttributeEncode(arg);
-        };
-        utility.HtmlDecode = arg => {
-            return getEncoding?.htmlDecode(arg);
-        };
-        utility.HtmlEncode = arg => {
-            return getEncoding?.htmlEncode(arg);
-        };
+        utility.XmlAttributeEncode = arg => getEncoding?.xmlAttributeEncode(arg);
+        utility.XmlEncode = arg => getEncoding?.xmlEncode(arg);
+        utility.HtmlAttributeEncode = arg => getEncoding?.htmlAttributeEncode(arg);
+        utility.HtmlDecode = arg => getEncoding?.htmlDecode(arg);
+        utility.HtmlEncode = arg => getEncoding?.htmlEncode(arg);
         var getDevice = Xrm?.Device;
-        utility.CaptureAudio = (successCallback, errorCallback) => {
-            getDevice?.captureAudio()?.then(successCallback, errorCallback);
-        };
-        utility.CaptureImage = (imageOptions, successCallback, errorCallback) => {
-            getDevice?.captureImage(imageOptions)?.then(successCallback, errorCallback);
-        };
-        utility.CaptureVideo = (successCallback, errorCallback) => {
-            getDevice?.captureVideo()?.then(successCallback, errorCallback);
-        };
-        utility.BarcodeValue = (successCallback, errorCallback) => {
-            getDevice?.getBarcodeValue()?.then(successCallback, errorCallback);
-        };
-        utility.CurrentPosition = (successCallback, errorCallback) => {
-            getDevice?.getCurrentPosition()?.then(successCallback, errorCallback);
-        };
-        utility.PickFile = (pickFileOptions, successCallback, errorCallback) => {
-            getDevice?.pickFile(pickFileOptions)?.then(successCallback, errorCallback);
-        };
+        utility.CaptureAudio = function (successCallback, errorCallback) { getDevice?.captureAudio()?.then(successCallback, errorCallback); };
+        utility.CaptureImage = function (imageOptions, successCallback, errorCallback) { getDevice?.captureImage(imageOptions)?.then(successCallback, errorCallback); };
+        utility.CaptureVideo = function (successCallback, errorCallback) { getDevice?.captureVideo()?.then(successCallback, errorCallback); };
+        utility.BarcodeValue = function (successCallback, errorCallback) { getDevice?.getBarcodeValue()?.then(successCallback, errorCallback); };
+        utility.CurrentPosition = function (successCallback, errorCallback) { getDevice?.getCurrentPosition()?.then(successCallback, errorCallback); };
+        utility.PickFile = function (pickFileOptions, successCallback, errorCallback) { getDevice?.pickFile(pickFileOptions)?.then(successCallback, errorCallback); };
         var getApp = Xrm?.App;
-        utility.AddGlobalNotification = (notification, successCallback, errorCallback) => {
-            getApp?.addGlobalNotification(notification)?.then(successCallback, errorCallback);
-        }
-        utility.ClearGlobalNotification = (uniqueId, successCallback, errorCallback) => {
-            getApp?.clearGlobalNotification(uniqueId)?.then(successCallback, errorCallback);
-        }
+        utility.AddGlobalNotification = function (notification, successCallback, errorCallback) { getApp?.addGlobalNotification(notification)?.then(successCallback, errorCallback); };
+        utility.ClearGlobalNotification = function (uniqueId, successCallback, errorCallback) { getApp?.clearGlobalNotification(uniqueId)?.then(successCallback, errorCallback); };
         return utility;
     }
     function loadExecutionContext(executionContext) {
         var obj = {};
-        obj.IsInitialLoad = () => {
-            return executionContext?.getEventArgs()?.getDataLoadState() === 1;
-        }
-        obj.GetSharedVariable = key => {
-            return executionContext?.getSharedVariable(key);
-        }
-        obj.SetSharedVariable = (key, value) => {
-            return executionContext?.setSharedVariable(key, value);
-        }
-        obj.IsDefaultPrevented = () => {
-            return executionContext?.getEventArgs()?.isDefaultPrevented();
-        }
-        obj.SetPreventDefault = () => {
-            executionContext?.getEventArgs()?.preventDefault();
-        }
-        obj.SetPreventDefaultOnError = () => {
-            executionContext?.getEventArgs()?.preventDefaultOnError();
-        }
-        obj.DisableAsyncTimeout = () => {
-            executionContext?.getEventArgs()?.disableAsyncTimeout();
-        }
+        obj.IsInitialLoad = () => executionContext?.getEventArgs()?.getDataLoadState() === 1;
+        obj.GetSharedVariable = key => executionContext?.getSharedVariable(key);
+        obj.SetSharedVariable = (key, value) => executionContext?.setSharedVariable(key, value);
+        obj.IsDefaultPrevented = () => executionContext?.getEventArgs()?.isDefaultPrevented();
+        obj.SetPreventDefault = () => executionContext?.getEventArgs()?.preventDefault();
+        obj.SetPreventDefaultOnError = () => executionContext?.getEventArgs()?.preventDefaultOnError();
+        obj.DisableAsyncTimeout = () => executionContext?.getEventArgs()?.disableAsyncTimeout();
         defineGetter(obj, 'Depth', () => executionContext?.getDepth());
         defineGetter(obj, 'EventArgs', () => executionContext?.getEventArgs());
         defineGetter(obj, 'EventSource', () => executionContext?.getEventSource());
@@ -856,18 +612,10 @@ var devKit = (function () {
     }
     function loadSidePanes() {
         var sidePanes = {};
-        sidePanes.Create = (paneOptions, successCallback) => {
-            Xrm?.App?.sidePanes?.createPane(paneOptions)?.then(successCallback);
-        }
-        sidePanes.Get = paneId => {
-            return Xrm?.App?.sidePanes?.getPane(paneId);
-        }
-        sidePanes.GetSelected = () => {
-            return Xrm?.App?.sidePanes?.getSelectedPane();
-        }
-        sidePanes.GetAll = () => {
-            return Xrm?.App?.sidePanes?.getAllPanes();
-        }
+        sidePanes.Create = function (paneOptions, successCallback) { Xrm?.App?.sidePanes?.createPane(paneOptions)?.then(successCallback); };
+        sidePanes.Get = paneId => Xrm?.App?.sidePanes?.getPane(paneId);
+        sidePanes.GetSelected = () => Xrm?.App?.sidePanes?.getSelectedPane();
+        sidePanes.GetAll = () => Xrm?.App?.sidePanes?.getAllPanes();
         defineGetterSetter(sidePanes, 'DisplayState', () => Xrm?.App?.sidePanes?.state, value => { Xrm.App.sidePanes.state = value; });
         return sidePanes;
     }
@@ -883,7 +631,7 @@ var devKit = (function () {
             form[field] = {};
             devKit.LoadField(formContext, form[field], attribute, control);
         }
-        form.Close = () => { formContext?.ui?.close(); };
+        form.Close = () => formContext?.ui?.close();
         return form;
     }
     return {
