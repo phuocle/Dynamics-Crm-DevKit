@@ -10,6 +10,15 @@ var devKit = (function () {
         });
     }
 
+    function defineGetterSetter(obj, prop, getter, setter) {
+        Object.defineProperty(obj, prop, {
+            get: getter,
+            set: setter,
+            enumerable: true, // Optional: make it enumerable by default
+            configurable: true // Optional: make it configurable by default
+        });
+    }
+
     function loadForm(formContext) {
         var form = {};
         var contextData = formContext?.data;
@@ -258,18 +267,9 @@ var devKit = (function () {
         defineGetter(process, 'ActiveStage', () => loadStage(getProcess?.getActiveStage()));
         defineGetter(process, 'InstanceId', () => getProcess?.getInstanceId());
         defineGetter(process, 'InstanceName', () => getProcess?.getInstanceName());
-        Object.defineProperty(process, 'Status', {
-            get: () => getProcess?.getStatus(),
-            set(value) { getProcess?.setStatus(value); }
-        });
-        Object.defineProperty(process, 'DisplayState', {
-            get: () => getProcessUi?.getDisplayState(),
-            set(value) { getProcessUi?.setDisplayState(value); }
-        });
-        Object.defineProperty(process, 'Visible', {
-            get: () => getProcessUi?.getVisible(),
-            set(value) { getProcessUi?.setVisible(value); }
-        });
+        defineGetterSetter(process, 'Status', () => getProcess?.getStatus(), value => { getProcess?.setStatus(value); });
+        defineGetterSetter(process, 'DisplayState', () => getProcessUi?.getDisplayState(), value => { getProcessUi?.setDisplayState(value); });
+        defineGetterSetter(process, 'Visible', () => getProcessUi?.getVisible(), value => { getProcessUi?.setVisible(value); });
         Object.defineProperty(process, 'ActivePath', {
             get: () => {
                 var obj = {};
@@ -405,64 +405,25 @@ var devKit = (function () {
         defineGetter(field, 'TotalResultCount', () => control?.getTotalResultCount());
         defineGetter(field, 'SelectedResults', () => control?.getSelectedResults());
         defineGetter(field, 'Attribute', () => control?.getAttribute());
-        Object.defineProperty(field, 'Precision', {
-            get: () => attribute?.getPrecision(),
-            set(value) { attribute?.setPrecision(value); }
+        defineGetterSetter(field, 'Precision', () => attribute?.getPrecision(), value => { attribute?.setPrecision(value); });
+        defineGetterSetter(field, 'RequiredLevel', () => attribute?.getRequiredLevel(), value => { attribute?.setRequiredLevel(value); });
+        defineGetterSetter(field, 'SubmitMode', () => attribute?.getSubmitMode(), value => { attribute?.setSubmitMode(value); });
+        defineGetterSetter(field, 'Value', () => attribute?.getValue(), value => {
+            if (formContext?.ui?.getFormType() === 3 || formContext?.ui?.getFormType() === 4) return;
+            attribute?.setValue(value);
         });
-        Object.defineProperty(field, 'RequiredLevel', {
-            get: () => attribute?.getRequiredLevel(),
-            set(value) { attribute?.setRequiredLevel(value); }
+        defineGetterSetter(field, 'Data', () => control?.getData(), value => { control?.setData(value); });
+        defineGetterSetter(field, 'DefaultView', () => control?.getDefaultView(), value => { control?.setDefaultView(value); });
+        defineGetterSetter(field, 'Disabled', () => control?.getDisabled(), value => {
+            if (formContext?.ui?.getFormType() === 3 || formContext?.ui?.getFormType() === 4) return;
+            control?.setDisabled(value);
         });
-        Object.defineProperty(field, 'SubmitMode', {
-            get: () => attribute?.getSubmitMode(),
-            set(value) { attribute?.setSubmitMode(value); }
-        });
-        Object.defineProperty(field, 'Value', {
-            get: () => attribute?.getValue(),
-            set(value) {
-                if (formContext?.ui?.getFormType() === 3 || formContext?.ui?.getFormType() === 4) return;
-                attribute?.setValue(value);
-            }
-        });
-        Object.defineProperty(field, 'Data', {
-            get: () => control?.getData(),
-            set(value) { control?.setData(value); }
-        });
-        Object.defineProperty(field, 'DefaultView', {
-            get: () => control?.getDefaultView(),
-            set(value) { control?.setDefaultView(value); }
-        });
-        Object.defineProperty(field, 'Disabled', {
-            get: () => control?.getDisabled(),
-            set(value) {
-                if (formContext?.ui?.getFormType() === 3 || formContext?.ui?.getFormType() === 4) return;
-                control?.setDisabled(value);
-            }
-        });
-        Object.defineProperty(field, 'EntityTypes', {
-            get: () => control?.getEntityTypes(),
-            set(value) { control?.setEntityTypes(value); }
-        });
-        Object.defineProperty(field, 'Label', {
-            get: () => control?.getLabel(),
-            set(value) { control?.setLabel(value); }
-        });
-        Object.defineProperty(field, 'SearchQuery', {
-            get: () => control?.getSearchQuery(),
-            set(value) { control?.setSearchQuery(value); }
-        });
-        Object.defineProperty(field, 'ShowTime', {
-            get: () => control?.getShowTime(),
-            set(value) { control?.setShowTime(value); }
-        });
-        Object.defineProperty(field, 'Src', {
-            get: () => control?.getSrc(),
-            set(value) { control?.setSrc(value); }
-        });
-        Object.defineProperty(field, 'Visible', {
-            get: () => control?.getVisible(),
-            set(value) { control?.setVisible(value); }
-        });
+        defineGetterSetter(field, 'EntityTypes', () => control?.getEntityTypes(), value => { control?.setEntityTypes(value); });
+        defineGetterSetter(field, 'Label', () => control?.getLabel(), value => { control?.setLabel(value); });
+        defineGetterSetter(field, 'SearchQuery', () => control?.getSearchQuery(), value => { control?.setSearchQuery(value); });
+        defineGetterSetter(field, 'ShowTime', () => control?.getShowTime(), value => { control?.setShowTime(value); });
+        defineGetterSetter(field, 'Src', () => control?.getSrc(), value => { control?.setSrc(value); });
+        defineGetterSetter(field, 'Visible', () => control?.getVisible(), value => { control?.setVisible(value); });
     }
     function loadFields(formContext, body, type) {
         for (var field in body) {
@@ -484,18 +445,9 @@ var devKit = (function () {
         }
         if (type === "header_") {
             var getHeaderSection = formContext?.ui?.headerSection;
-            Object.defineProperty(body, 'BodyVisible', {
-                get() { return getHeaderSection?.getBodyVisible(); },
-                set(value) { getHeaderSection?.setBodyVisible(value); }
-            });
-            Object.defineProperty(body, 'CommandBarVisible', {
-                get() { return getHeaderSection?.getCommandBarVisible(); },
-                set(value) { getHeaderSection?.setCommandBarVisible(value); }
-            });
-            Object.defineProperty(body, 'TabNavigatorVisible', {
-                get() { return getHeaderSection?.getTabNavigatorVisible(); },
-                set(value) { getHeaderSection?.setTabNavigatorVisible(value); }
-            });
+            defineGetterSetter(body, 'BodyVisible', () => getHeaderSection?.getBodyVisible(), value => { getHeaderSection?.setBodyVisible(value); });
+            defineGetterSetter(body, 'CommandBarVisible', () => getHeaderSection?.getCommandBarVisible(), value => { getHeaderSection?.setCommandBarVisible(value); });
+            defineGetterSetter(body, 'TabNavigatorVisible', () => getHeaderSection?.getTabNavigatorVisible(), value => { getHeaderSection?.setTabNavigatorVisible(value); });
         }
         return body;
     }
@@ -509,13 +461,10 @@ var devKit = (function () {
             Object.defineProperty(sections[section], 'Parent', {
                 get() { return sectionObject?.getParent(); }
             });
-            Object.defineProperty(sections[section], 'Label', {
-                get() { return sectionObject?.getLabel(); },
-                set(value) { sectionObject?.setLabel(value); }
-            });
+            defineGetterSetter(sections[section], 'Label', () => sectionObject?.getLabel(), value => { sectionObject?.setLabel(value); });
             Object.defineProperty(sections[section], 'Visible', {
                 get() { return sectionObject?.getVisible(); },
-                set(value) { sectionObject?.setVisible(value); }
+                set(value) { sectionObject?.setVisible(value); } // Assuming this was the intended logic for the placeholder {…}
             });
         }
         var loadTab = function (formContext, tabs, tab) {
