@@ -18,39 +18,8 @@ var devKit = (function () {
     function loadForm(formContext) {
         const form = {};
         const contextData = formContext?.data;
-        form.DataAddOnLoad = callback => contextData?.addOnLoad(callback);
-        form.Refresh = (save, successCallback, errorCallback) => contextData?.refresh(save)?.then(successCallback, errorCallback);
-        form.DataRemoveOnLoad = callback => contextData?.removeOnLoad(callback);
-        form.Save = (saveOptions, successCallback, errorCallback) => contextData?.save(saveOptions)?.then(successCallback, errorCallback);
-        getter(form, 'DataIsDirty', () => contextData?.getIsDirty());
-        getter(form, 'DataIsValid', () => contextData?.isValid());
         const contextDataEntity = formContext?.data?.entity;
-        form.AddOnSave = callback => contextDataEntity?.addOnSave(callback);
-        form.AddOnPostSave = callback => contextDataEntity?.addOnPostSave(callback);
-        form.RemoveOnSave = callback => contextDataEntity?.removeOnSave(callback);
-        form.RemoveOnPostSave = callback => contextDataEntity?.removeOnPostSave(callback);
-        getter(form, 'Attributes', () => contextDataEntity?.attributes);
-        getter(form, 'DataXml', () => contextDataEntity?.getDataXml());
-        getter(form, 'EntityName', () => contextDataEntity?.getEntityName());
-        getter(form, 'EntityReference', () => contextDataEntity?.getEntityReference());
-        getter(form, 'EntityId', () => contextDataEntity?.getId());
-        getter(form, 'EntityIsDirty', () => contextDataEntity?.getIsDirty());
-        getter(form, 'PrimaryAttributeValue', () => contextDataEntity?.getPrimaryAttributeValue());
-        getter(form, 'EntityIsValid', () => contextDataEntity?.isValid());
         const contextUi = formContext?.ui;
-        form.UiAddLoaded = callback => contextUi?.addLoaded(callback);
-        form.UiAddOnLoad = callback => contextUi?.addOnLoad(callback);
-        form.ClearFormNotification = uniqueId => contextUi?.clearFormNotification(uniqueId);
-        form.Close = () => contextUi?.close();
-        form.RefreshRibbon = refreshAll => contextUi?.refreshRibbon(refreshAll);
-        form.UiRemoveLoaded = callback => contextUi?.removeLoaded(callback);
-        form.UiRemoveOnLoad = callback => contextUi?.removeOnLoad(callback);
-        form.SetFormEntityName = arg => contextUi?.setFormEntityName(arg);
-        form.SetFormNotification = (message, level, uniqueId) => contextUi?.setFormNotification(message, level, uniqueId);
-        getter(form, 'Controls', () => contextUi?.controls);
-        getter(form, 'FormType', () => contextUi?.getFormType());
-        getter(form, 'ViewPortHeight', () => contextUi?.getViewPortHeight());
-        getter(form, 'ViewPortWidth', () => contextUi?.getViewPortWidth());
         const contextUiFormSelector = formContext?.ui?.formSelector;
         const findFormItem = (criteria, value) => {
             const length = contextUiFormSelector?.items?.getLength() ?? 0;
@@ -62,29 +31,55 @@ var devKit = (function () {
             }
             return null;
         };
-        form.FormNavigateToFormId = formId => {
-            findFormItem(item => item.getId(), formId)?.navigate();
-        };
-        form.FormNavigateToFormLabel = formLabel => {
-            findFormItem(item => item.getLabel(), formLabel)?.navigate();
-        };
-        form.FormIsVisible = formId => {
-            return findFormItem(item => item.getId(), formId)?.getVisible();
-        }
-        form.FormSetVisible = (formId, value) => {
-            findFormItem(item => item.getId(), formId)?.setVisible(value);
-        }
+        getter(form, 'Attributes', () => contextDataEntity?.attributes);
+        getter(form, 'Controls', () => contextUi?.controls);
+        getter(form, 'DataIsDirty', () => contextData?.getIsDirty());
+        getter(form, 'DataIsValid', () => contextData?.isValid());
+        getter(form, 'DataXml', () => contextDataEntity?.getDataXml());
+        getter(form, 'EntityId', () => contextDataEntity?.getId());
+        getter(form, 'EntityIsDirty', () => contextDataEntity?.getIsDirty());
+        getter(form, 'EntityIsValid', () => contextDataEntity?.isValid());
+        getter(form, 'EntityName', () => contextDataEntity?.getEntityName());
+        getter(form, 'EntityReference', () => contextDataEntity?.getEntityReference());
         getter(form, 'FormId', () => contextUiFormSelector?.getCurrentItem()?.getId());
         getter(form, 'FormLabel', () => contextUiFormSelector?.getCurrentItem()?.getLabel());
+        getter(form, 'FormType', () => contextUi?.getFormType());
+        getter(form, 'PrimaryAttributeValue', () => contextDataEntity?.getPrimaryAttributeValue());
+        getter(form, 'ViewPortHeight', () => contextUi?.getViewPortHeight());
+        getter(form, 'ViewPortWidth', () => contextUi?.getViewPortWidth());
+        form.AddOnPostSave = callback => contextDataEntity?.addOnPostSave(callback);
+        form.AddOnSave = callback => contextDataEntity?.addOnSave(callback);
+        form.ClearFormNotification = uniqueId => contextUi?.clearFormNotification(uniqueId);
+        form.Close = () => contextUi?.close();
+        form.DataAddOnLoad = callback => contextData?.addOnLoad(callback);
+        form.DataRemoveOnLoad = callback => contextData?.removeOnLoad(callback);
+        form.FormIsVisible = formId => { return findFormItem(item => item.getId(), formId)?.getVisible(); }
+        form.FormNavigateToFormId = formId => { findFormItem(item => item.getId(), formId)?.navigate(); };
+        form.FormNavigateToFormLabel = formLabel => { findFormItem(item => item.getLabel(), formLabel)?.navigate(); };
+        form.FormSetVisible = (formId, value) => { findFormItem(item => item.getId(), formId)?.setVisible(value); }
+        form.Refresh = (save, successCallback, errorCallback) => contextData?.refresh(save)?.then(successCallback, errorCallback);
+        form.RefreshRibbon = refreshAll => contextUi?.refreshRibbon(refreshAll);
+        form.RemoveOnPostSave = callback => contextDataEntity?.removeOnPostSave(callback);
+        form.RemoveOnSave = callback => contextDataEntity?.removeOnSave(callback);
+        form.Save = (saveOptions, successCallback, errorCallback) => contextData?.save(saveOptions)?.then(successCallback, errorCallback);
+        form.SetFormEntityName = arg => contextUi?.setFormEntityName(arg);
+        form.SetFormNotification = (message, level, uniqueId) => contextUi?.setFormNotification(message, level, uniqueId);
+        form.UiAddLoaded = callback => contextUi?.addLoaded(callback);
+        form.UiAddOnLoad = callback => contextUi?.addOnLoad(callback);
+        form.UiRemoveLoaded = callback => contextUi?.removeLoaded(callback);
+        form.UiRemoveOnLoad = callback => contextUi?.removeOnLoad(callback);
         return form;
     }
     function loadProcess(formContext) {
+        const process = {};
+        const getProcess = formContext?.data?.process;
+        const getProcessUi = formContext?.ui?.process;
         const loadStep = step => {
             const obj = {};
             getter(obj, 'Attribute', () => step?.getAttribute());
             getter(obj, 'Name', () => step?.getName());
-            getter(obj, 'Required', () => step?.isRequired());
             getter(obj, 'Progress', () => step?.getProgress());
+            getter(obj, 'Required', () => step?.isRequired());
             obj.SetProgress = (stepProgress, message) => step?.setProgress(stepProgress, message);
             return obj;
         }
@@ -95,7 +90,6 @@ var devKit = (function () {
             getter(obj, 'Id', () => stage?.getId());
             getter(obj, 'Name', () => stage?.getName());
             getter(obj, 'Status', () => stage?.getStatus());
-            obj.AllowCreateNew = callback => stage.getNavigationBehavior().allowCreateNew = callback;
             getter(obj, 'Steps', () => {
                 const steps = stage?.getSteps();
                 if (!steps) return [];
@@ -106,21 +100,22 @@ var devKit = (function () {
                 }
                 return stepsArray;
             });
+            obj.AllowCreateNew = callback => stage.getNavigationBehavior().allowCreateNew = callback;
             return obj;
         }
         const loadProcessInner = process => {
             const obj = {};
             getter(obj, 'Id', () => process?.getId());
-            getter(obj, 'Name', () => process?.getName());
             getter(obj, 'IsRendered', () => process?.isRendered());
+            getter(obj, 'Name', () => process?.getName());
             getter(obj, 'Stages', () => {
                 const processStages = process?.getStages();
                 const stagesObj = {};
-                stagesObj.getLength = () => processStages?.getLength();
                 stagesObj.get = index => {
                     const stage = processStages?.get(index);
                     return loadStage(stage);
                 }
+                stagesObj.getLength = () => processStages?.getLength();
                 stagesObj.forEach = callback => {
                     const length = processStages?.getLength() || 0;
                     for (let index = 0; index < length; index++) {
@@ -132,19 +127,35 @@ var devKit = (function () {
             });
             return obj;
         }
-        const process = {};
-        const getProcess = formContext?.data?.process;
-        const getProcessUi = formContext?.ui?.process;
+        getter(process, 'ActivePath', () => {
+            var activePathObj = {};
+            activePathObj.get = index => {
+                var stage = getProcess?.getActivePath()?.get(index);
+                return loadStage(stage);
+            }
+            activePathObj.getLength = () => getProcess?.getActivePath()?.getLength();
+            activePathObj.forEach = callback => {
+                var stages = getProcess?.getActivePath();
+                for (var index = 0; index < stages?.getLength(); index++) {
+                    var stage = stages?.get(index);
+                    callback(loadStage(stage), index);
+                }
+            }
+            return activePathObj;
+        });
+        getter(process, 'ActiveProcess', () => loadProcessInner(getProcess?.getActiveProcess()));
+        getter(process, 'ActiveStage', () => loadStage(getProcess?.getActiveStage()));
+        getter(process, 'InstanceId', () => getProcess?.getInstanceId());
+        getter(process, 'InstanceName', () => getProcess?.getInstanceName());
+        getter(process, 'SelectedStage', () => loadStage(getProcess?.getSelectedStage()));
+        getterSetter(process, 'DisplayState', () => getProcessUi?.getDisplayState(), value => { getProcessUi?.setDisplayState(value); });
+        getterSetter(process, 'Status', () => getProcess?.getStatus(), value => { getProcess?.setStatus(value); });
+        getterSetter(process, 'Visible', () => getProcessUi?.getVisible(), value => { getProcessUi?.setVisible(value); });
         process.AddOnPreProcessStatusChange = callback => getProcess?.addOnPreProcessStatusChange(callback);
-        process.RemoveOnPreProcessStatusChange = callback => getProcess?.removeOnPreProcessStatusChange(callback);
         process.AddOnPreStageChange = callback => getProcess?.addOnPreStageChange(callback);
-        process.RemoveOnPreStageChange = callback => getProcess?.removeOnPreStageChange(callback);
         process.AddOnProcessStatusChange = callback => getProcess?.addOnProcessStatusChange(callback);
-        process.RemoveOnProcessStatusChange = callback => getProcess?.removeOnProcessStatusChange(callback);
         process.AddOnStageChange = callback => getProcess?.addOnStageChange(callback);
-        process.RemoveOnStageChange = callback => getProcess?.removeOnStageChange(callback);
         process.AddOnStageSelected = callback => getProcess?.addOnStageSelected(callback);
-        process.RemoveOnStageSelected = callback => getProcess?.removeOnStageSelected(callback);
         process.EnabledProcesses = callback => {
             getProcess?.getEnabledProcesses(enabledProcesses => {
                 var processes = [];
@@ -174,102 +185,43 @@ var devKit = (function () {
                 callback(processes);
             });
         };
-        process.SetActiveStage = (stageId, callback) => getProcess?.setActiveStage(stageId, callback);
-        process.SetActiveProcessInstance = (processInstanceId, callback) => getProcess?.setActiveProcessInstance(processInstanceId, callback);
-        process.SetActiveProcess = (processId, callback) => getProcess?.setActiveProcess(processId, callback);
         process.Reflow = (updateUi, parentStage, nextStage) => getProcessUi?.reflow(updateUi, parentStage, nextStage);
-        getter(process, 'ActiveProcess', () => loadProcessInner(getProcess?.getActiveProcess()));
-        getter(process, 'SelectedStage', () => loadStage(getProcess?.getSelectedStage()));
-        getter(process, 'ActiveStage', () => loadStage(getProcess?.getActiveStage()));
-        getter(process, 'InstanceId', () => getProcess?.getInstanceId());
-        getter(process, 'InstanceName', () => getProcess?.getInstanceName());
-        getterSetter(process, 'Status', () => getProcess?.getStatus(), value => { getProcess?.setStatus(value); });
-        getterSetter(process, 'DisplayState', () => getProcessUi?.getDisplayState(), value => { getProcessUi?.setDisplayState(value); });
-        getterSetter(process, 'Visible', () => getProcessUi?.getVisible(), value => { getProcessUi?.setVisible(value); });
-        getter(process, 'ActivePath', () => {
-            var activePathObj = {};
-            activePathObj.getLength = () => getProcess?.getActivePath()?.getLength();
-            activePathObj.get = index => {
-                var stage = getProcess?.getActivePath()?.get(index);
-                return loadStage(stage);
-            }
-            activePathObj.forEach = callback => {
-                var stages = getProcess?.getActivePath();
-                for (var index = 0; index < stages?.getLength(); index++) {
-                    var stage = stages?.get(index);
-                    callback(loadStage(stage), index);
-                }
-            }
-            return activePathObj;
-        });
+        process.RemoveOnPreProcessStatusChange = callback => getProcess?.removeOnPreProcessStatusChange(callback);
+        process.RemoveOnPreStageChange = callback => getProcess?.removeOnPreStageChange(callback);
+        process.RemoveOnProcessStatusChange = callback => getProcess?.removeOnProcessStatusChange(callback);
+        process.RemoveOnStageChange = callback => getProcess?.removeOnStageChange(callback);
+        process.RemoveOnStageSelected = callback => getProcess?.removeOnStageSelected(callback);
+        process.SetActiveProcess = (processId, callback) => getProcess?.setActiveProcess(processId, callback);
+        process.SetActiveProcessInstance = (processInstanceId, callback) => getProcess?.setActiveProcessInstance(processInstanceId, callback);
+        process.SetActiveStage = (stageId, callback) => getProcess?.setActiveStage(stageId, callback);
         return process;
     }
     function loadField(formContext, field, attribute, control) {
-        field.ContentWindow = (successCallback, errorCallback) => control?.getContentWindow()?.then(successCallback, errorCallback);
-        field.Option = value => attribute?.getOption(value);
-        field.RemoveOnChange = callback => attribute?.removeOnChange(callback);
-        field.AddCustomFilter = (filter, entityLogicaName) => control?.addCustomFilter(filter, entityLogicaName);
-        field.AddCustomView = (viewId, entityName, viewDisplayName, fetchXml, layoutXml, isDefault) => control?.addCustomView(viewId, entityName, viewDisplayName, fetchXml, layoutXml, isDefault);
-        field.AddPostSearch = callback => control?.addOnPostSearch(callback);
-        field.AddOnOutputChange = callback => control?.addOnOutputChange(callback);
-        field.AddResultOpened = callback => control?.addOnResultOpened(callback);
-        field.AddSelection = callback => control?.addOnSelection(callback);
-        field.AddPreSearch = callback => control?.addPreSearch(callback);
-        field.ClearNotification = uniqueId => control?.clearNotification(uniqueId);
-        field.ClearOptions = () => control?.clearOptions();
-        field.AddOnChange = callback => attribute?.addOnChange(callback);
-        field.FireOnChange = () => attribute?.fireOnChange();
-        field.OpenSearchResult = (resultNumber, mode) => control?.openSearchResult(resultNumber, mode);
-        field.Refresh = () => control?.refresh();
-        field.RemovePostSearch = callback => control?.removeOnPostSearch(callback);
-        field.RemoveOnOutputChange = callback => control?.removeOnOutputChange(callback);
-        field.RemoveResultOpened = callback => control?.removeOnResultOpened(callback);
-        field.RemoveSelection = callback => control?.removeOnSelection(callback);
-        field.RemoveOption = value => control?.removeOption(value);
-        field.RemovePreSearch = callback => control?.removePreSearch(callback);
-        field.Focus = () => control?.setFocus();
-        field.SetNotification = (message, uniqueId) => control?.setNotification(message, uniqueId);
-        field.AddOption = (text, value, index) => control?.addOption({ text: text, value: value }, index);
-        field.AddNotification = (message, notificationLevel, uniqueId, callback) => {
-            var actions = { message: message, actions: [callback] };
-            var notification = { messages: [message], notificationLevel: notificationLevel, uniqueId: uniqueId, actions: [actions] };
-            return control?.addNotification(notification);
-        };
-        field.AddLookupTagClick = callback => control?.addOnLookupTagClick(callback);
-        field.RemoveLookupTagClick = callback => control?.removeOnLookupTagClick(callback);
-        field.SetIsValid = (valid, message) => attribute?.setIsValid(valid, message);
+        getter(field, 'Attribute', () => control?.getAttribute());
+        getter(field, 'AttributeName', () => attribute?.getName());
+        getter(field, 'AttributeParent', () => attribute?.getParent());
         getter(field, 'AttributeType', () => attribute?.getAttributeType());
+        getter(field, 'ControlName', () => control?.getName());
+        getter(field, 'ControlOptions', () => control?.getOptions());
+        getter(field, 'ControlParent', () => control?.getParent());
+        getter(field, 'ControlType', () => control?.getControlType());
         getter(field, 'Format', () => attribute?.getFormat());
+        getter(field, 'InitialUrl', () => control?.getInitialUrl());
         getter(field, 'InitialValue', () => attribute?.getInitialValue());
         getter(field, 'IsDirty', () => attribute?.getIsDirty());
         getter(field, 'IsPartyList', () => attribute?.getIsPartyList());
+        getter(field, 'IsValid', () => attribute?.isValid());
         getter(field, 'Max', () => attribute?.getMax());
         getter(field, 'MaxLength', () => attribute?.getMaxLength());
         getter(field, 'Min', () => attribute?.getMin());
-        getter(field, 'AttributeName', () => attribute?.getName());
-        getter(field, 'Options', () => attribute?.getOptions());
-        getter(field, 'ControlOptions', () => control?.getOptions());
-        getter(field, 'AttributeParent', () => attribute?.getParent());
-        getter(field, 'SelectedOption', () => attribute?.getSelectedOption());
-        getter(field, 'Text', () => attribute?.getText());
-        getter(field, 'UserPrivilege', () => attribute?.getUserPrivilege());
-        getter(field, 'IsValid', () => attribute?.isValid());
-        getter(field, 'ControlType', () => control?.getControlType());
-        getter(field, 'InitialUrl', () => control?.getInitialUrl());
-        getter(field, 'ControlName', () => control?.getName());
         getter(field, 'Object', () => control?.getObject());
-        getter(field, 'ControlParent', () => control?.getParent());
-        getter(field, 'State', () => control?.getState());
-        getter(field, 'TotalResultCount', () => control?.getTotalResultCount());
+        getter(field, 'Options', () => attribute?.getOptions());
+        getter(field, 'SelectedOption', () => attribute?.getSelectedOption());
         getter(field, 'SelectedResults', () => control?.getSelectedResults());
-        getter(field, 'Attribute', () => control?.getAttribute());
-        getterSetter(field, 'Precision', () => attribute?.getPrecision(), value => { attribute?.setPrecision(value); });
-        getterSetter(field, 'RequiredLevel', () => attribute?.getRequiredLevel(), value => { attribute?.setRequiredLevel(value); });
-        getterSetter(field, 'SubmitMode', () => attribute?.getSubmitMode(), value => { attribute?.setSubmitMode(value); });
-        getterSetter(field, 'Value', () => attribute?.getValue(), value => {
-            if (formContext?.ui?.getFormType() === 3 || formContext?.ui?.getFormType() === 4) return;
-            attribute?.setValue(value);
-        });
+        getter(field, 'State', () => control?.getState());
+        getter(field, 'Text', () => attribute?.getText());
+        getter(field, 'TotalResultCount', () => control?.getTotalResultCount());
+        getter(field, 'UserPrivilege', () => attribute?.getUserPrivilege());
         getterSetter(field, 'Data', () => control?.getData(), value => { control?.setData(value); });
         getterSetter(field, 'DefaultView', () => control?.getDefaultView(), value => { control?.setDefaultView(value); });
         getterSetter(field, 'Disabled', () => control?.getDisabled(), value => {
@@ -278,10 +230,50 @@ var devKit = (function () {
         });
         getterSetter(field, 'EntityTypes', () => control?.getEntityTypes(), value => { control?.setEntityTypes(value); });
         getterSetter(field, 'Label', () => control?.getLabel(), value => { control?.setLabel(value); });
+        getterSetter(field, 'Precision', () => attribute?.getPrecision(), value => { attribute?.setPrecision(value); });
+        getterSetter(field, 'RequiredLevel', () => attribute?.getRequiredLevel(), value => { attribute?.setRequiredLevel(value); });
         getterSetter(field, 'SearchQuery', () => control?.getSearchQuery(), value => { control?.setSearchQuery(value); });
         getterSetter(field, 'ShowTime', () => control?.getShowTime(), value => { control?.setShowTime(value); });
         getterSetter(field, 'Src', () => control?.getSrc(), value => { control?.setSrc(value); });
+        getterSetter(field, 'SubmitMode', () => attribute?.getSubmitMode(), value => { attribute?.setSubmitMode(value); });
+        getterSetter(field, 'Value', () => attribute?.getValue(), value => {
+            if (formContext?.ui?.getFormType() === 3 || formContext?.ui?.getFormType() === 4) return;
+            attribute?.setValue(value);
+        });
         getterSetter(field, 'Visible', () => control?.getVisible(), value => { control?.setVisible(value); });
+        field.AddCustomFilter = (filter, entityLogicaName) => control?.addCustomFilter(filter, entityLogicaName);
+        field.AddCustomView = (viewId, entityName, viewDisplayName, fetchXml, layoutXml, isDefault) => control?.addCustomView(viewId, entityName, viewDisplayName, fetchXml, layoutXml, isDefault);
+        field.AddLookupTagClick = callback => control?.addOnLookupTagClick(callback);
+        field.AddNotification = (message, notificationLevel, uniqueId, callback) => {
+            var actions = { message: message, actions: [callback] };
+            var notification = { messages: [message], notificationLevel: notificationLevel, uniqueId: uniqueId, actions: [actions] };
+            return control?.addNotification(notification);
+        };
+        field.AddOnChange = callback => attribute?.addOnChange(callback);
+        field.AddOnOutputChange = callback => control?.addOnOutputChange(callback);
+        field.AddOption = (text, value, index) => control?.addOption({ text: text, value: value }, index);
+        field.AddPostSearch = callback => control?.addOnPostSearch(callback);
+        field.AddPreSearch = callback => control?.addPreSearch(callback);
+        field.AddResultOpened = callback => control?.addOnResultOpened(callback);
+        field.AddSelection = callback => control?.addOnSelection(callback);
+        field.ClearNotification = uniqueId => control?.clearNotification(uniqueId);
+        field.ClearOptions = () => control?.clearOptions();
+        field.ContentWindow = (successCallback, errorCallback) => control?.getContentWindow()?.then(successCallback, errorCallback);
+        field.FireOnChange = () => attribute?.fireOnChange();
+        field.Focus = () => control?.setFocus();
+        field.OpenSearchResult = (resultNumber, mode) => control?.openSearchResult(resultNumber, mode);
+        field.Option = value => attribute?.getOption(value);
+        field.Refresh = () => control?.refresh();
+        field.RemoveLookupTagClick = callback => control?.removeOnLookupTagClick(callback);
+        field.RemoveOnChange = callback => attribute?.removeOnChange(callback);
+        field.RemoveOnOutputChange = callback => control?.removeOnOutputChange(callback);
+        field.RemoveOption = value => control?.removeOption(value);
+        field.RemovePostSearch = callback => control?.removeOnPostSearch(callback);
+        field.RemovePreSearch = callback => control?.removePreSearch(callback);
+        field.RemoveResultOpened = callback => control?.removeOnResultOpened(callback);
+        field.RemoveSelection = callback => control?.removeOnSelection(callback);
+        field.SetIsValid = (valid, message) => attribute?.setIsValid(valid, message);
+        field.SetNotification = (message, uniqueId) => control?.setNotification(message, uniqueId);
     }
     function loadFields(formContext, body, type) {
         for (var field in body) {
@@ -311,15 +303,16 @@ var devKit = (function () {
         }
         const loadTab = (formContext, tabs, tab) => {
             const tabObject = formContext?.ui?.tabs?.get(tab);
+            getter(tabs[tab], 'Name', () => tabObject?.getName());
+            getter(tabs[tab], 'Parent', () => tabObject?.getParent());
+            getterSetter(tabs[tab], 'ContentType', () => tabObject?.getContentType(), value => { tabObject?.setContentType(value); });
+            getterSetter(tabs[tab], 'DisplayState', () => tabObject?.getDisplayState(), value => { tabObject?.setDisplayState(value); });
+            getterSetter(tabs[tab], 'Label', () => tabObject?.getLabel(), value => { tabObject?.setLabel(value); });
+            getterSetter(tabs[tab], 'Visible', () => tabObject?.getVisible(), value => { tabObject?.setVisible(value); });
+
             tabs[tab].AddTabStateChange = callback => tabObject?.addTabStateChange(callback);
             tabs[tab].Focus = () => tabObject?.setFocus();
             tabs[tab].RemoveTabStateChange = callback => tabObject?.removeTabStateChange(callback);
-            getter(tabs[tab], 'Name', () => tabObject?.getName());
-            getter(tabs[tab], 'Parent', () => tabObject?.getParent());
-            getterSetter(tabs[tab], 'DisplayState', () => tabObject?.getDisplayState(), value => { tabObject?.setDisplayState(value); });
-            getterSetter(tabs[tab], 'ContentType', () => tabObject?.getContentType(), value => { tabObject?.setContentType(value); });
-            getterSetter(tabs[tab], 'Label', () => tabObject?.getLabel(), value => { tabObject?.setLabel(value); });
-            getterSetter(tabs[tab], 'Visible', () => tabObject?.getVisible(), value => { tabObject?.setVisible(value); });
             for (const section in tabs[tab].Section) {
                 loadSection(formContext, tab, tabs[tab].Section, section);
             }
@@ -343,10 +336,11 @@ var devKit = (function () {
         };
         const loadNavigation = (formContext, navigations, navigation) => {
             const navigationItem = getNavigationItem(navigation);
-            navigations[navigation].Focus = () => navigationItem?.setFocus();
             getter(navigations[navigation], 'Id', () => navigationItem?.getId());
             getterSetter(navigations[navigation], 'Label', () => navigationItem?.getLabel(), value => navigationItem?.setLabel(value));
             getterSetter(navigations[navigation], 'Visible', () => navigationItem?.getVisible(), value => navigationItem?.setVisible(value));
+
+            navigations[navigation].Focus = () => navigationItem?.setFocus();
         }
         for (var navigation in navigations) {
             loadNavigation(formContext, navigations, navigation);
@@ -358,16 +352,16 @@ var devKit = (function () {
             const fields = Object.keys(quickForms[quickForm]).filter(field => !excludedFields.has(field));
             const quick = formContext?.ui?.quickForms?.get(quickForm);
             getter(quickForms[quickForm], 'Body', () => loadFormDialog(quick, fields));
-            quickForms[quickForm].Controls = arg => quick?.getControl(arg);
-            quickForms[quickForm].IsLoaded = () => quick?.isLoaded();
-            quickForms[quickForm].Refresh = () => quick?.refresh();
-            quickForms[quickForm].Focus = () => quick?.setFocus();
+            getter(quickForms[quickForm], 'ControlName', () => quick?.getName());
+            getter(quickForms[quickForm], 'ControlParent', () => quick?.getParent());
             getter(quickForms[quickForm], 'ControlType', () => quick?.getControlType());
             getterSetter(quickForms[quickForm], 'Disabled', () => quick?.getDisabled(), value => { quick?.setDisabled(value); });
             getterSetter(quickForms[quickForm], 'Label', () => quick?.getLabel(), value => { quick?.setLabel(value); });
-            getter(quickForms[quickForm], 'ControlName', () => quick?.getName());
-            getter(quickForms[quickForm], 'ControlParent', () => quick?.getParent());
             getterSetter(quickForms[quickForm], 'Visible', () => quick?.getVisible(), value => { quick?.setVisible(value); });
+            quickForms[quickForm].Controls = arg => quick?.getControl(arg);
+            quickForms[quickForm].Focus = () => quick?.setFocus();
+            quickForms[quickForm].IsLoaded = () => quick?.isLoaded();
+            quickForms[quickForm].Refresh = () => quick?.refresh();
         }
         for (var quickForm in quickForms) {
             loadQuickForm(formContext, quickForms, quickForm);
@@ -376,10 +370,6 @@ var devKit = (function () {
     function loadGrids(formContext, grids) {
         const loadGridRow = row => {
             var obj = {};
-            getter(obj, 'EntityName', () => row?.data?.entity?.getEntityName());
-            getter(obj, 'EntityReference', () => row?.data?.entity?.getEntityReference());
-            getter(obj, 'EntityId', () => row?.data?.entity?.getId());
-            getter(obj, 'PrimaryAttributeValue', () => row?.data?.entity?.getPrimaryAttributeValue());
             getter(obj, 'Columns', () => {
                 var columnsObj = {};
                 columnsObj.getLength = () => row?.data?.entity?.attributes?.getLength();
@@ -396,38 +386,25 @@ var devKit = (function () {
                 };
                 return columnsObj;
             });
+            getter(obj, 'EntityId', () => row?.data?.entity?.getId());
+            getter(obj, 'EntityName', () => row?.data?.entity?.getEntityName());
+            getter(obj, 'EntityReference', () => row?.data?.entity?.getEntityReference());
+            getter(obj, 'PrimaryAttributeValue', () => row?.data?.entity?.getPrimaryAttributeValue());
             return obj;
         }
         const loadGridColumn = col => {
             var obj = {};
-            obj.SetNotification = (message, uniqueId) => col?.controls?.get(0)?.setNotification(message, uniqueId);
-            obj.ClearNotification = uniqueId => col?.controls?.get(0)?.clearNotification(uniqueId);
+            getter(obj, 'Label', () => col?.controls?.get(0)?.getLabel());
             getter(obj, 'Name', () => col?.getName());
+            getterSetter(obj, 'Disabled', () => col?.controls?.get(0)?.getDisabled(), value => { col?.controls?.get(0)?.setDisabled(value); });
             getterSetter(obj, 'RequiredLevel', () => col?.getRequiredLevel(), value => { col?.setRequiredLevel(value); });
             getterSetter(obj, 'Value', () => col?.getValue(), value => { col?.setValue(value); });
-            getterSetter(obj, 'Disabled', () => col?.controls?.get(0)?.getDisabled(), value => { col?.controls?.get(0)?.setDisabled(value); });
-            getter(obj, 'Label', () => col?.controls?.get(0)?.getLabel());
+            obj.ClearNotification = uniqueId => col?.controls?.get(0)?.clearNotification(uniqueId);
+            obj.SetNotification = (message, uniqueId) => col?.controls?.get(0)?.setNotification(message, uniqueId);
             return obj;
         }
         const loadGrid = (formContext, grids, grid) => {
             const gridControl = formContext?.getControl(grid);
-            grids[grid].AddOnLoad = callback => gridControl?.addOnLoad(callback);
-            grids[grid].RemoveOnLoad = callback => gridControl?.removeOnLoad(callback);
-            grids[grid].Url = client => gridControl?.getUrl(client);
-            grids[grid].Refresh = () => gridControl?.refresh();
-            grids[grid].RefreshRibbon = () => gridControl?.refreshRibbon();
-            grids[grid].OpenRelatedGrid = () => gridControl?.openRelatedGrid();
-            getter(grids[grid], 'EntityName', () => gridControl?.getEntityName());
-            getter(grids[grid], 'FetchXml', () => gridControl?.getFetchXml());
-            getter(grids[grid], 'GridType', () => gridControl?.getGridType());
-            getter(grids[grid], 'Relationship', () => gridControl?.getRelationship());
-            getter(grids[grid], 'ViewSelector', () => {
-                const viewSelector = gridControl?.getViewSelector();
-                const obj = {};
-                getterSetter(obj, 'CurrentView', () => viewSelector?.getCurrentView(), value => viewSelector?.setCurrentView(value));
-                getter(obj, 'Visible', () => viewSelector?.isVisible());
-                return obj;
-            });
             const createCollectionObject = (getItemsFn, processItemFn) => {
                 const obj = {};
                 obj.getLength = () => getItemsFn()?.getLength();
@@ -441,6 +418,10 @@ var devKit = (function () {
                 };
                 return obj;
             };
+            getter(grids[grid], 'EntityName', () => gridControl?.getEntityName());
+            getter(grids[grid], 'FetchXml', () => gridControl?.getFetchXml());
+            getter(grids[grid], 'GridType', () => gridControl?.getGridType());
+            getter(grids[grid], 'Relationship', () => gridControl?.getRelationship());
             getter(grids[grid], 'Rows', () => {
                 const gridInstance = formContext?.getControl(grid)?.getGrid();
                 return createCollectionObject(
@@ -456,7 +437,20 @@ var devKit = (function () {
                 );
             });
             getter(grids[grid], 'TotalRecordCount', () => gridControl?.getGrid()?.getTotalRecordCount());
+            getter(grids[grid], 'ViewSelector', () => {
+                const viewSelector = gridControl?.getViewSelector();
+                const obj = {};
+                getter(obj, 'Visible', () => viewSelector?.isVisible());
+                getterSetter(obj, 'CurrentView', () => viewSelector?.getCurrentView(), value => viewSelector?.setCurrentView(value));
+                return obj;
+            });
             getterSetter(grids[grid], 'Visible', () => gridControl?.getVisible(), value => { gridControl?.setVisible(value); });
+            grids[grid].AddOnLoad = callback => gridControl?.addOnLoad(callback);
+            grids[grid].OpenRelatedGrid = () => gridControl?.openRelatedGrid();
+            grids[grid].Refresh = () => gridControl?.refresh();
+            grids[grid].RefreshRibbon = () => gridControl?.refreshRibbon();
+            grids[grid].RemoveOnLoad = callback => gridControl?.removeOnLoad(callback);
+            grids[grid].Url = client => gridControl?.getUrl(client);
         }
         for (const grid in grids) {
             loadGrid(formContext, grids, grid);
@@ -464,55 +458,45 @@ var devKit = (function () {
     }
     function loadUtility(defaultWebResourceName) {
         const utility = {};
-        const getUtility = Xrm?.Utility;
-        utility.CloseProgressIndicator = () => getUtility?.closeProgressIndicator();
-        utility.AllowedStatusTransitions = function (entityName, stateCode, successCallback, errorCallback) { getUtility?.getAllowedStatusTransitions(entityName, stateCode)?.then(successCallback, errorCallback); };
-        utility.EntityMainFormDescriptor = (entityName, formId) => getUtility?.getEntityMainFormDescriptor(entityName, formId);
-        utility.EntityMetadata = function (entityName, attributes, successCallback, errorCallback) { getUtility?.getEntityMetadata(entityName, attributes)?.then(successCallback, errorCallback); };
-        utility.ResourceString = (webResourceName, key) => getUtility?.getResourceString(webResourceName, key);
-        utility.Resource = key => getUtility?.getResourceString(defaultWebResourceName, key);
-        utility.InvokeProcessAction = function (name, parameters, successCallback, errorCallback) { getUtility?.invokeProcessAction(name, parameters)?.then(successCallback, errorCallback); };
-        utility.LookupObjects = function (lookupOptions, successCallback, errorCallback) { getUtility?.lookupObjects(lookupOptions)?.then(successCallback, errorCallback); };
-        utility.RefreshParentGrid = lookupOptions => getUtility?.refreshParentGrid(lookupOptions);
-        utility.ShowProgressIndicator = message => getUtility?.showProgressIndicator(message);
-        getter(utility, 'LearningPathAttributeName', () => getUtility?.getLearningPathAttributeName());
-        getter(utility, 'PageContext', () => getUtility?.getPageContext());
+        const getApp = Xrm?.App;
+        const getDevice = Xrm?.Device;
+        const getEncoding = Xrm?.Encoding;
         const getGlobalContext = Xrm?.Utility?.getGlobalContext();
-        utility.AdvancedConfigSetting = setting => getGlobalContext?.getAdvancedConfigSetting(setting);
-        utility.CurrentAppName = function (successCallback, errorCallback) {
-            getGlobalContext?.getCurrentAppName()?.then(successCallback, errorCallback);
-        };
-        utility.CurrentAppProperties = function (successCallback, errorCallback) {
-            getGlobalContext?.getCurrentAppProperties()?.then(successCallback, errorCallback);
-        };
-        utility.WebResourceUrl = webResourceName => getGlobalContext?.getWebResourceUrl(webResourceName);
-        utility.PrependOrgName = sPath => getGlobalContext?.prependOrgName(sPath); getter(utility, 'Client', () => {
+        const getNavigation = Xrm?.Navigation;
+        const getPanel = Xrm?.Panel;
+        const getUtility = Xrm?.Utility;
+        getter(utility, 'Client', () => {
             const obj = {};
             const client = getGlobalContext?.client;
             getter(obj, 'ClientName', () => client?.getClient());
             getter(obj, 'ClientState', () => client?.getClientState());
             getter(obj, 'FormFactor', () => client?.getFormFactor());
-            getter(obj, 'IsOffline', () => client?.isOffline());
             getter(obj, 'IsNetworkAvailable', () => client?.isNetworkAvailable());
+            getter(obj, 'IsOffline', () => client?.isOffline());
             return obj;
         });
+        getter(utility, 'ClientUrl', () => getGlobalContext?.getClientUrl());
+        getter(utility, 'CurrentAppUrl', () => getGlobalContext?.getCurrentAppUrl());
+        getter(utility, 'IsOnPremises', () => getGlobalContext?.isOnPremises());
+        getter(utility, 'LearningPathAttributeName', () => getUtility?.getLearningPathAttributeName());
         getter(utility, 'OrganizationSettings', () => {
             const obj = {};
             const organizationSettings = getGlobalContext?.organizationSettings;
             getter(obj, 'Attributes', () => organizationSettings?.attributes);
-            getter(obj, 'BaseCurrencyId', () => organizationSettings?.baseCurrencyId);
             getter(obj, 'BaseCurrency', () => organizationSettings?.baseCurrency);
+            getter(obj, 'BaseCurrencyId', () => organizationSettings?.baseCurrencyId);
             getter(obj, 'DefaultCountryCode', () => organizationSettings?.defaultCountryCode);
+            getter(obj, 'FullNameConventionCode', () => organizationSettings?.fullNameConventionCode);
             getter(obj, 'IsAutoSaveEnabled', () => organizationSettings?.isAutoSaveEnabled);
-            getter(obj, 'LanguageId', () => organizationSettings?.languageId);
-            getter(obj, 'OrganizationId', () => organizationSettings?.organizationId);
             getter(obj, 'IsTrialOrganization', () => organizationSettings?.isTrialOrganization);
+            getter(obj, 'LanguageId', () => organizationSettings?.languageId);
             getter(obj, 'OrganizationExpiryDate', () => organizationSettings?.organizationExpiryDate);
+            getter(obj, 'OrganizationId', () => organizationSettings?.organizationId);
             getter(obj, 'UniqueName', () => organizationSettings?.uniqueName);
             getter(obj, 'UseSkypeProtocol', () => organizationSettings?.useSkypeProtocol);
-            getter(obj, 'FullNameConventionCode', () => organizationSettings?.fullNameConventionCode);
             return obj;
         });
+        getter(utility, 'PageContext', () => getUtility?.getPageContext());
         getter(utility, 'UserSettings', () => {
             const obj = {};
             const userSettings = getGlobalContext?.userSettings;
@@ -525,18 +509,35 @@ var devKit = (function () {
             getter(obj, 'Roles', () => userSettings?.roles);
             getter(obj, 'SecurityRolePrivileges', () => userSettings?.securityRolePrivileges);
             getter(obj, 'SecurityRoles', () => userSettings?.securityRoles);
+            getter(obj, 'TimeZoneOffsetMinutes', () => userSettings?.getTimeZoneOffsetMinutes());
             getter(obj, 'TransactionCurrency', () => userSettings?.transactionCurrency);
             getter(obj, 'TransactionCurrencyId', () => userSettings?.transactionCurrencyId);
             getter(obj, 'UserId', () => userSettings?.userId);
             getter(obj, 'UserName', () => userSettings?.userName);
-            getter(obj, 'TimeZoneOffsetMinutes', () => userSettings?.getTimeZoneOffsetMinutes());
             return obj;
         });
-        getter(utility, 'ClientUrl', () => getGlobalContext?.getClientUrl());
-        getter(utility, 'CurrentAppUrl', () => getGlobalContext?.getCurrentAppUrl());
         getter(utility, 'Version', () => getGlobalContext?.getVersion());
-        getter(utility, 'IsOnPremises', () => getGlobalContext?.isOnPremises());
-        const getNavigation = Xrm?.Navigation;
+        utility.AddGlobalNotification = function (notification, successCallback, errorCallback) { getApp?.addGlobalNotification(notification)?.then(successCallback, errorCallback); };
+        utility.AdvancedConfigSetting = setting => getGlobalContext?.getAdvancedConfigSetting(setting);
+        utility.AllowedStatusTransitions = function (entityName, stateCode, successCallback, errorCallback) { getUtility?.getAllowedStatusTransitions(entityName, stateCode)?.then(successCallback, errorCallback); };
+        utility.BarcodeValue = function (successCallback, errorCallback) { getDevice?.getBarcodeValue()?.then(successCallback, errorCallback); };
+        utility.CaptureAudio = function (successCallback, errorCallback) { getDevice?.captureAudio()?.then(successCallback, errorCallback); };
+        utility.CaptureImage = function (imageOptions, successCallback, errorCallback) { getDevice?.captureImage(imageOptions)?.then(successCallback, errorCallback); };
+        utility.CaptureVideo = function (successCallback, errorCallback) { getDevice?.captureVideo()?.then(successCallback, errorCallback); };
+        utility.ClearGlobalNotification = function (uniqueId, successCallback, errorCallback) { getApp?.clearGlobalNotification(uniqueId)?.then(successCallback, errorCallback); };
+        utility.CloseProgressIndicator = () => getUtility?.closeProgressIndicator();
+        utility.CurrentAppName = function (successCallback, errorCallback) { getGlobalContext?.getCurrentAppName()?.then(successCallback, errorCallback); }
+        utility.CurrentAppProperties = function (successCallback, errorCallback) { getGlobalContext?.getCurrentAppProperties()?.then(successCallback, errorCallback); };
+        utility.CurrentPosition = function (successCallback, errorCallback) { getDevice?.getCurrentPosition()?.then(successCallback, errorCallback); };
+        utility.EntityMainFormDescriptor = (entityName, formId) => getUtility?.getEntityMainFormDescriptor(entityName, formId);
+        utility.EntityMetadata = function (entityName, attributes, successCallback, errorCallback) { getUtility?.getEntityMetadata(entityName, attributes)?.then(successCallback, errorCallback); };
+        utility.HtmlAttributeEncode = arg => getEncoding?.htmlAttributeEncode(arg);
+        utility.HtmlDecode = arg => getEncoding?.htmlDecode(arg);
+        utility.HtmlEncode = arg => getEncoding?.htmlEncode(arg);
+        utility.InvokeProcessAction = function (name, parameters, successCallback, errorCallback) { getUtility?.invokeProcessAction(name, parameters)?.then(successCallback, errorCallback); };
+        utility.LoadPanel = (url, title) => getPanel?.loadPanel(url, title);
+        utility.LookupObjects = function (lookupOptions, successCallback, errorCallback) { getUtility?.lookupObjects(lookupOptions)?.then(successCallback, errorCallback); };
+        utility.NavigateTo = function (pageInput, navigationOptions, successCallback, errorCallback) { getNavigation?.navigateTo(pageInput, navigationOptions)?.then(successCallback, errorCallback); };
         utility.OpenAlertDialog = function (alertStrings, alertOptions, closeCallback, errorCallback) { getNavigation?.openAlertDialog(alertStrings, alertOptions)?.then(closeCallback, errorCallback); };
         utility.OpenConfirmDialog = function (confirmStrings, confirmOptions, successCallback, errorCallback) { getNavigation?.openConfirmDialog(confirmStrings, confirmOptions)?.then(successCallback, errorCallback); };
         utility.OpenErrorDialog = function (errorOptions, successCallback, errorCallback) { getNavigation?.openErrorDialog(errorOptions)?.then(successCallback, errorCallback); };
@@ -544,52 +545,42 @@ var devKit = (function () {
         utility.OpenForm = function (entityFormOptions, formParameters, successCallback, errorCallback) { getNavigation?.openForm(entityFormOptions, formParameters)?.then(successCallback, errorCallback); };
         utility.OpenUrl = (url, openUrlOptions) => getNavigation?.openUrl(url, openUrlOptions);
         utility.OpenWebResource = (webResourceName, windowOptions, data) => getNavigation?.openWebResource(webResourceName, windowOptions, data);
-        utility.NavigateTo = function (pageInput, navigationOptions, successCallback, errorCallback) { getNavigation?.navigateTo(pageInput, navigationOptions)?.then(successCallback, errorCallback); };
-        const getPanel = Xrm?.Panel;
-        utility.LoadPanel = (url, title) => getPanel?.loadPanel(url, title);
-        const getEncoding = Xrm?.Encoding;
-        utility.XmlAttributeEncode = arg => getEncoding?.xmlAttributeEncode(arg);
-        utility.XmlEncode = arg => getEncoding?.xmlEncode(arg);
-        utility.HtmlAttributeEncode = arg => getEncoding?.htmlAttributeEncode(arg);
-        utility.HtmlDecode = arg => getEncoding?.htmlDecode(arg);
-        utility.HtmlEncode = arg => getEncoding?.htmlEncode(arg);
-        const getDevice = Xrm?.Device;
-        utility.CaptureAudio = function (successCallback, errorCallback) { getDevice?.captureAudio()?.then(successCallback, errorCallback); };
-        utility.CaptureImage = function (imageOptions, successCallback, errorCallback) { getDevice?.captureImage(imageOptions)?.then(successCallback, errorCallback); };
-        utility.CaptureVideo = function (successCallback, errorCallback) { getDevice?.captureVideo()?.then(successCallback, errorCallback); };
-        utility.BarcodeValue = function (successCallback, errorCallback) { getDevice?.getBarcodeValue()?.then(successCallback, errorCallback); };
-        utility.CurrentPosition = function (successCallback, errorCallback) { getDevice?.getCurrentPosition()?.then(successCallback, errorCallback); };
         utility.PickFile = function (pickFileOptions, successCallback, errorCallback) { getDevice?.pickFile(pickFileOptions)?.then(successCallback, errorCallback); };
-        const getApp = Xrm?.App;
-        utility.AddGlobalNotification = function (notification, successCallback, errorCallback) { getApp?.addGlobalNotification(notification)?.then(successCallback, errorCallback); };
-        utility.ClearGlobalNotification = function (uniqueId, successCallback, errorCallback) { getApp?.clearGlobalNotification(uniqueId)?.then(successCallback, errorCallback); };        return utility;
+        utility.PrependOrgName = sPath => getGlobalContext?.prependOrgName(sPath);
+        utility.RefreshParentGrid = lookupOptions => getUtility?.refreshParentGrid(lookupOptions);
+        utility.Resource = key => getUtility?.getResourceString(defaultWebResourceName, key);
+        utility.ResourceString = (webResourceName, key) => getUtility?.getResourceString(webResourceName, key);
+        utility.ShowProgressIndicator = message => getUtility?.showProgressIndicator(message);
+        utility.WebResourceUrl = webResourceName => getGlobalContext?.getWebResourceUrl(webResourceName);        utility.XmlAttributeEncode = arg => getEncoding?.xmlAttributeEncode(arg);
+        utility.XmlEncode = arg => getEncoding?.xmlEncode(arg);
+        return utility;
     }
     function loadExecutionContext(executionContext) {
         const obj = {};
-        obj.IsInitialLoad = () => executionContext?.getEventArgs()?.getDataLoadState() === 1;
-        obj.GetSharedVariable = key => executionContext?.getSharedVariable(key);
-        obj.SetSharedVariable = (key, value) => executionContext?.setSharedVariable(key, value);
-        obj.IsDefaultPrevented = () => executionContext?.getEventArgs()?.isDefaultPrevented();
-        obj.SetPreventDefault = () => executionContext?.getEventArgs()?.preventDefault();
-        obj.SetPreventDefaultOnError = () => executionContext?.getEventArgs()?.preventDefaultOnError();
-        obj.DisableAsyncTimeout = () => executionContext?.getEventArgs()?.disableAsyncTimeout();
         getter(obj, 'Depth', () => executionContext?.getDepth());
+        getter(obj, 'EntityReference', () => executionContext?.getEventArgs()?.getEntityReference());
         getter(obj, 'EventArgs', () => executionContext?.getEventArgs());
         getter(obj, 'EventSource', () => executionContext?.getEventSource());
         getter(obj, 'FormContext', () => executionContext?.getFormContext());
-        getter(obj, 'SaveMode', () => executionContext?.getEventArgs()?.getSaveMode());
-        getter(obj, 'EntityReference', () => executionContext?.getEventArgs()?.getEntityReference());
         getter(obj, 'IsSaveSuccess', () => executionContext?.getEventArgs()?.getIsSaveSuccess());
         getter(obj, 'SaveErrorInfo', () => executionContext?.getEventArgs()?.getSaveErrorInfo());
+        getter(obj, 'SaveMode', () => executionContext?.getEventArgs()?.getSaveMode());
+        obj.DisableAsyncTimeout = () => executionContext?.getEventArgs()?.disableAsyncTimeout();
+        obj.GetSharedVariable = key => executionContext?.getSharedVariable(key);
+        obj.IsDefaultPrevented = () => executionContext?.getEventArgs()?.isDefaultPrevented();
+        obj.IsInitialLoad = () => executionContext?.getEventArgs()?.getDataLoadState() === 1;
+        obj.SetPreventDefault = () => executionContext?.getEventArgs()?.preventDefault();
+        obj.SetPreventDefaultOnError = () => executionContext?.getEventArgs()?.preventDefaultOnError();
+        obj.SetSharedVariable = (key, value) => executionContext?.setSharedVariable(key, value);
         return obj;
     }
     function loadSidePanes() {
         const sidePanes = {};
+        getterSetter(sidePanes, 'DisplayState', () => Xrm?.App?.sidePanes?.state, value => { Xrm.App.sidePanes.state = value; });
         sidePanes.Create = function (paneOptions, successCallback) { Xrm?.App?.sidePanes?.createPane(paneOptions)?.then(successCallback); };
         sidePanes.Get = paneId => Xrm?.App?.sidePanes?.getPane(paneId);
-        sidePanes.GetSelected = () => Xrm?.App?.sidePanes?.getSelectedPane();
         sidePanes.GetAll = () => Xrm?.App?.sidePanes?.getAllPanes();
-        getterSetter(sidePanes, 'DisplayState', () => Xrm?.App?.sidePanes?.state, value => { Xrm.App.sidePanes.state = value; });
+        sidePanes.GetSelected = () => Xrm?.App?.sidePanes?.getSelectedPane();
         return sidePanes;
     }
     function loadOthers(formContext, form, defaultWebResourceName) {
