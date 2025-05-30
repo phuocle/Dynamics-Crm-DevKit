@@ -13,9 +13,10 @@ var devKit = (function () {
             get: getter,
             set: setter,
             enumerable: true,
-            configurable: true
-        });
-    }    function loadForm(formContext) {
+            configurable: true        });
+    }
+
+    function loadForm(formContext) {
         const form = {};
         const contextData = formContext?.data;
         form.DataAddOnLoad = callback => contextData?.addOnLoad(callback);
@@ -54,7 +55,7 @@ var devKit = (function () {
         defineGetter(form, 'ViewPortHeight', () => contextUi?.getViewPortHeight());
         defineGetter(form, 'ViewPortWidth', () => contextUi?.getViewPortWidth());
 
-        const contextUiFormSelector = formContext?.ui?.formSelector;// Helper function to find form item by criteria
+        const contextUiFormSelector = formContext?.ui?.formSelector;
         const findFormItem = (criteria, value) => {
             const length = contextUiFormSelector?.items?.getLength() ?? 0;
             for (let i = 0; i < length; i++) {
@@ -82,9 +83,10 @@ var devKit = (function () {
             findFormItem(item => item.getId(), formId)?.setVisible(value);
         }
         defineGetter(form, 'FormId', () => contextUiFormSelector?.getCurrentItem()?.getId());
-        defineGetter(form, 'FormLabel', () => contextUiFormSelector?.getCurrentItem()?.getLabel());
-        return form;
-    }    function loadProcess(formContext) {
+        defineGetter(form, 'FormLabel', () => contextUiFormSelector?.getCurrentItem()?.getLabel());        return form;
+    }
+
+    function loadProcess(formContext) {
         const loadStep = step => {
             const obj = {};
             defineGetter(obj, 'Attribute', () => step?.getAttribute());
@@ -139,7 +141,8 @@ var devKit = (function () {
                 }
                 return stagesObj;
             });
-            return obj;        }
+            return obj;
+        }
 
         const process = {};
         const getProcess = formContext?.data?.process;
@@ -194,7 +197,7 @@ var devKit = (function () {
         defineGetter(process, 'InstanceName', () => getProcess?.getInstanceName());
         defineGetterSetter(process, 'Status', () => getProcess?.getStatus(), value => { getProcess?.setStatus(value); });
         defineGetterSetter(process, 'DisplayState', () => getProcessUi?.getDisplayState(), value => { getProcessUi?.setDisplayState(value); });
-        defineGetterSetter(process, 'Visible', () => getProcessUi?.getVisible(), value => { getProcessUi?.setVisible(value); });        defineGetter(process, 'ActivePath', () => {
+        defineGetterSetter(process, 'Visible', () => getProcessUi?.getVisible(), value => { getProcessUi?.setVisible(value); }); defineGetter(process, 'ActivePath', () => {
             var activePathObj = {};
             activePathObj.getLength = () => getProcess?.getActivePath()?.getLength();
             activePathObj.get = index => {
@@ -288,15 +291,13 @@ var devKit = (function () {
         defineGetterSetter(field, 'Label', () => control?.getLabel(), value => { control?.setLabel(value); });
         defineGetterSetter(field, 'SearchQuery', () => control?.getSearchQuery(), value => { control?.setSearchQuery(value); });
         defineGetterSetter(field, 'ShowTime', () => control?.getShowTime(), value => { control?.setShowTime(value); });
-        defineGetterSetter(field, 'Src', () => control?.getSrc(), value => { control?.setSrc(value); });
-        defineGetterSetter(field, 'Visible', () => control?.getVisible(), value => { control?.setVisible(value); });
-    }    function loadFields(formContext, body, type) {
+        defineGetterSetter(field, 'Src', () => control?.getSrc(), value => { control?.setSrc(value); });        defineGetterSetter(field, 'Visible', () => control?.getVisible(), value => { control?.setVisible(value); });
+    }
+
+    function loadFields(formContext, body, type) {
         for (var field in body) {
             const logicalName = type === undefined ? field?.toLowerCase() : (type + field)?.toLowerCase();
-            const control = formContext?.getControl(logicalName) ?? formContext?.getControl(field);
-
-            // Optimized attribute resolution
-            let attribute = formContext?.getAttribute(logicalName);
+            const control = formContext?.getControl(logicalName) ?? formContext?.getControl(field); let attribute = formContext?.getAttribute(logicalName);
             if (!attribute && control?.getAttribute) {
                 attribute = control.getAttribute();
             }
@@ -309,9 +310,10 @@ var devKit = (function () {
             defineGetterSetter(body, 'BodyVisible', () => getHeaderSection?.getBodyVisible(), value => { getHeaderSection?.setBodyVisible(value); });
             defineGetterSetter(body, 'CommandBarVisible', () => getHeaderSection?.getCommandBarVisible(), value => { getHeaderSection?.setCommandBarVisible(value); });
             defineGetterSetter(body, 'TabNavigatorVisible', () => getHeaderSection?.getTabNavigatorVisible(), value => { getHeaderSection?.setTabNavigatorVisible(value); });
-        }
-        return body;
-    }    function loadTabs(formContext, tabs) {
+        }        return body;
+    }
+
+    function loadTabs(formContext, tabs) {
         const loadSection = (formContext, tab, sections, section) => {
             const tabObject = formContext?.ui?.tabs?.get(tab);
             const sectionObject = tabObject?.sections?.get(section);
@@ -330,21 +332,18 @@ var devKit = (function () {
             defineGetter(tabs[tab], 'Parent', () => tabObject?.getParent());
             defineGetterSetter(tabs[tab], 'DisplayState', () => tabObject?.getDisplayState(), value => { tabObject?.setDisplayState(value); });
             defineGetterSetter(tabs[tab], 'ContentType', () => tabObject?.getContentType(), value => { tabObject?.setContentType(value); });
-            defineGetterSetter(tabs[tab], 'Label', () => tabObject?.getLabel(), value => { tabObject?.setLabel(value); });
-            defineGetterSetter(tabs[tab], 'Visible', () => tabObject?.getVisible(), value => { tabObject?.setVisible(value); });
+            defineGetterSetter(tabs[tab], 'Label', () => tabObject?.getLabel(), value => { tabObject?.setLabel(value); }); defineGetterSetter(tabs[tab], 'Visible', () => tabObject?.getVisible(), value => { tabObject?.setVisible(value); });
 
-            // Process sections efficiently
             for (const section in tabs[tab].Section) {
                 loadSection(formContext, tab, tabs[tab].Section, section);
             }
         }
 
-        // Process tabs efficiently
         for (const tab in tabs) {
-            loadTab(formContext, tabs, tab);
-        }
-    }function loadNavigations(formContext, navigations) {
-        // Cache navigation items for better performance
+            loadTab(formContext, tabs, tab);        }
+    }
+
+    function loadNavigations(formContext, navigations) {
         const getNavigationItem = (navigation) => {
             const navItems = formContext?.ui?.navigation?.items;
             if (!navItems) return null;
@@ -368,10 +367,10 @@ var devKit = (function () {
         }
 
         for (var navigation in navigations) {
-            loadNavigation(formContext, navigations, navigation);
-        }
-    }    function loadQuickForms(formContext, quickForms) {
-        // Predefined set of excluded field names for better performance
+            loadNavigation(formContext, navigations, navigation);        }
+    }
+
+    function loadQuickForms(formContext, quickForms) {
         const excludedFields = new Set([
             "Body", "Controls", "IsLoaded", "Refresh", "Focus",
             "ControlType", "Disabled", "Label", "ControlName",
@@ -454,10 +453,7 @@ var devKit = (function () {
                 defineGetterSetter(obj, 'CurrentView', () => viewSelector?.getCurrentView(), value => viewSelector?.setCurrentView(value));
                 defineGetter(obj, 'Visible', () => viewSelector?.isVisible());
                 return obj;
-            });
-
-            // Helper function to create collection-like object
-            const createCollectionObject = (getItemsFn, processItemFn) => {
+            }); const createCollectionObject = (getItemsFn, processItemFn) => {
                 const obj = {};
                 obj.getLength = () => getItemsFn()?.getLength();
                 obj.get = index => processItemFn(getItemsFn()?.get(index));
@@ -492,9 +488,10 @@ var devKit = (function () {
         }
 
         for (const grid in grids) {
-            loadGrid(formContext, grids, grid);
-        }
-    }    function loadUtility(defaultWebResourceName) {
+            loadGrid(formContext, grids, grid);        }
+    }
+
+    function loadUtility(defaultWebResourceName) {
         const utility = {};
         const getUtility = Xrm?.Utility;
         utility.CloseProgressIndicator = () => getUtility?.closeProgressIndicator();
@@ -519,7 +516,7 @@ var devKit = (function () {
             getGlobalContext?.getCurrentAppProperties()?.then(successCallback, errorCallback);
         };
         utility.WebResourceUrl = webResourceName => getGlobalContext?.getWebResourceUrl(webResourceName);
-        utility.PrependOrgName = sPath => getGlobalContext?.prependOrgName(sPath);        defineGetter(utility, 'Client', () => {
+        utility.PrependOrgName = sPath => getGlobalContext?.prependOrgName(sPath); defineGetter(utility, 'Client', () => {
             const obj = {};
             const client = getGlobalContext?.client;
             defineGetter(obj, 'ClientName', () => client?.getClient());
@@ -600,9 +597,10 @@ var devKit = (function () {
 
         const getApp = Xrm?.App;
         utility.AddGlobalNotification = function (notification, successCallback, errorCallback) { getApp?.addGlobalNotification(notification)?.then(successCallback, errorCallback); };
-        utility.ClearGlobalNotification = function (uniqueId, successCallback, errorCallback) { getApp?.clearGlobalNotification(uniqueId)?.then(successCallback, errorCallback); };
-        return utility;
-    }    function loadExecutionContext(executionContext) {
+        utility.ClearGlobalNotification = function (uniqueId, successCallback, errorCallback) { getApp?.clearGlobalNotification(uniqueId)?.then(successCallback, errorCallback); };        return utility;
+    }
+
+    function loadExecutionContext(executionContext) {
         const obj = {};
         obj.IsInitialLoad = () => executionContext?.getEventArgs()?.getDataLoadState() === 1;
         obj.GetSharedVariable = key => executionContext?.getSharedVariable(key);
@@ -618,20 +616,23 @@ var devKit = (function () {
         defineGetter(obj, 'SaveMode', () => executionContext?.getEventArgs()?.getSaveMode());
         defineGetter(obj, 'EntityReference', () => executionContext?.getEventArgs()?.getEntityReference());
         defineGetter(obj, 'IsSaveSuccess', () => executionContext?.getEventArgs()?.getIsSaveSuccess());
-        defineGetter(obj, 'SaveErrorInfo', () => executionContext?.getEventArgs()?.getSaveErrorInfo());
-        return obj;
-    }    function loadSidePanes() {
+        defineGetter(obj, 'SaveErrorInfo', () => executionContext?.getEventArgs()?.getSaveErrorInfo());        return obj;
+    }
+
+    function loadSidePanes() {
         const sidePanes = {};
         sidePanes.Create = function (paneOptions, successCallback) { Xrm?.App?.sidePanes?.createPane(paneOptions)?.then(successCallback); };
         sidePanes.Get = paneId => Xrm?.App?.sidePanes?.getPane(paneId);
         sidePanes.GetSelected = () => Xrm?.App?.sidePanes?.getSelectedPane();
         sidePanes.GetAll = () => Xrm?.App?.sidePanes?.getAllPanes();
         defineGetterSetter(sidePanes, 'DisplayState', () => Xrm?.App?.sidePanes?.state, value => { Xrm.App.sidePanes.state = value; });
-        return sidePanes;
-    }
+        return sidePanes;    }
+
     function loadOthers(formContext, form, defaultWebResourceName) {
         form.SidePanes = loadSidePanes();
-    }    function loadFormDialog(formContext, fields) {
+    }
+
+    function loadFormDialog(formContext, fields) {
         const form = {};
         const fieldsLength = fields?.length || 0;
         for (let i = 0; i < fieldsLength; i++) {
