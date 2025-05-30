@@ -5,8 +5,8 @@ var devKit = (function () {
     function defineGetter(obj, prop, getter) {
         Object.defineProperty(obj, prop, {
             get: getter,
-            enumerable: true, // Optional: make it enumerable by default
-            configurable: true // Optional: make it configurable by default
+            enumerable: true,
+            configurable: true
         });
     }
 
@@ -14,8 +14,8 @@ var devKit = (function () {
         Object.defineProperty(obj, prop, {
             get: getter,
             set: setter,
-            enumerable: true, // Optional: make it enumerable by default
-            configurable: true // Optional: make it configurable by default
+            enumerable: true,
+            configurable: true
         });
     }
 
@@ -107,7 +107,7 @@ var devKit = (function () {
             defineGetter(obj, 'Status', () => stage?.getStatus());
             obj.AllowCreateNew = callback => stage.getNavigationBehavior().allowCreateNew = callback;
             defineGetter(obj, 'Steps', () => {
-                var stepsArray = []; // Renamed to avoid conflict with outer 'obj'
+                var stepsArray = [];
                 var steps = stage?.getSteps();
                 for (var index = 0; index < steps?.length; index++) {
                     var step = steps[index];
@@ -117,13 +117,13 @@ var devKit = (function () {
             });
             return obj;
         }
-        const loadProcessInner = process => { // Renamed to avoid conflict with outer function name
+        const loadProcessInner = process => {
             var obj = {};
             defineGetter(obj, 'Id', () => process?.getId());
             defineGetter(obj, 'Name', () => process?.getName());
             defineGetter(obj, 'IsRendered', () => process?.isRendered());
             defineGetter(obj, 'Stages', () => {
-                var stagesObj = {}; // Renamed to avoid conflict
+                var stagesObj = {};
                 stagesObj.getLength = () => process?.getStages()?.getLength();
                 stagesObj.get = index => {
                     var stage = process?.getStages()?.get(index);
@@ -186,7 +186,7 @@ var devKit = (function () {
         process.SetActiveProcessInstance = (processInstanceId, callback) => getProcess?.setActiveProcessInstance(processInstanceId, callback);
         process.SetActiveProcess = (processId, callback) => getProcess?.setActiveProcess(processId, callback);
         process.Reflow = (updateUi, parentStage, nextStage) => getProcessUi?.reflow(updateUi, parentStage, nextStage);
-        defineGetter(process, 'ActiveProcess', () => loadProcessInner(getProcess?.getActiveProcess())); // Use renamed inner function
+        defineGetter(process, 'ActiveProcess', () => loadProcessInner(getProcess?.getActiveProcess()));
         defineGetter(process, 'SelectedStage', () => loadStage(getProcess?.getSelectedStage()));
         defineGetter(process, 'ActiveStage', () => loadStage(getProcess?.getActiveStage()));
         defineGetter(process, 'InstanceId', () => getProcess?.getInstanceId());
@@ -195,7 +195,7 @@ var devKit = (function () {
         defineGetterSetter(process, 'DisplayState', () => getProcessUi?.getDisplayState(), value => { getProcessUi?.setDisplayState(value); });
         defineGetterSetter(process, 'Visible', () => getProcessUi?.getVisible(), value => { getProcessUi?.setVisible(value); });
         defineGetter(process, 'ActivePath', () => {
-            var activePathObj = {}; // Renamed to avoid conflict
+            var activePathObj = {};
             activePathObj.getLength = () => getProcess?.getActivePath()?.getLength();
             activePathObj.get = index => {
                 var stage = getProcess?.getActivePath()?.get(index);
@@ -649,7 +649,6 @@ var devKit = (function () {
         LoadFormDialog: loadFormDialog
     }
 })();
-/** @namespace OptionSet */
 var OptionSet;
 (function (OptionSet) {
     OptionSet.FormType = {
