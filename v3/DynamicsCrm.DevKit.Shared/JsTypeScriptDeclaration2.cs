@@ -1,4 +1,5 @@
 ﻿using DynamicsCrm.DevKit.Shared.Models;
+using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
@@ -81,8 +82,8 @@ namespace DynamicsCrm.DevKit.Shared
                         _d_ts += $"{TAB}{TAB}enum {attributeSchemaName} {{{NEW_LINE}";
                         foreach (var value in values)
                         {
-                            _d_ts += $"{TAB}{TAB}{TAB}/** {value.Value} */{NEW_LINE}";
-                            _d_ts += $"{TAB}{TAB}{TAB}{value.Name},{NEW_LINE}";
+                            _d_ts += $"{TAB}{TAB}{TAB}/** {value.Name} = {value.Value}*/{NEW_LINE}";
+                            _d_ts += $"{TAB}{TAB}{TAB}{value.Name} = {value.Value},{NEW_LINE}";
                         }
                         _d_ts = _d_ts.TrimEnd($",{NEW_LINE}".ToCharArray());
                         _d_ts += $"{NEW_LINE}";
@@ -91,19 +92,19 @@ namespace DynamicsCrm.DevKit.Shared
                 }
             }
             _d_ts += $"{TAB}{TAB}enum RollupState {{{NEW_LINE}";
-            _d_ts += $"{TAB}{TAB}{TAB}/** 0 - Attribute value is yet to be calculated */{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}{TAB}/** NotCalculated = 0 - Attribute value is yet to be calculated */{NEW_LINE}";
             _d_ts += $"{TAB}{TAB}{TAB}NotCalculated,{NEW_LINE}";
-            _d_ts += $"{TAB}{TAB}{TAB}/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}{TAB}/** Calculated = 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */{NEW_LINE}";
             _d_ts += $"{TAB}{TAB}{TAB}Calculated,{NEW_LINE}";
-            _d_ts += $"{TAB}{TAB}{TAB}/** 2 - Attribute value calculation lead to overflow error */{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}{TAB}/** OverflowError = 2 - Attribute value calculation lead to overflow error */{NEW_LINE}";
             _d_ts += $"{TAB}{TAB}{TAB}OverflowError,{NEW_LINE}";
-            _d_ts += $"{TAB}{TAB}{TAB}/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}{TAB}/** OtherError = 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */{NEW_LINE}";
             _d_ts += $"{TAB}{TAB}{TAB}OtherError,{NEW_LINE}";
-            _d_ts += $"{TAB}{TAB}{TAB}/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}{TAB}/** RetryLimitExceeded = 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */{NEW_LINE}";
             _d_ts += $"{TAB}{TAB}{TAB}RetryLimitExceeded,{NEW_LINE}";
-            _d_ts += $"{TAB}{TAB}{TAB}/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}{TAB}/** HierarchicalRecursionLimitReached = 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */{NEW_LINE}";
             _d_ts += $"{TAB}{TAB}{TAB}HierarchicalRecursionLimitReached,{NEW_LINE}";
-            _d_ts += $"{TAB}{TAB}{TAB}/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}{TAB}/** LoopDetected = 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */{NEW_LINE}";
             _d_ts += $"{TAB}{TAB}{TAB}LoopDetected{NEW_LINE}";
             _d_ts += $"{TAB}{TAB}}}{NEW_LINE}";
             _d_ts += $"{TAB}}}{NEW_LINE}";
@@ -117,31 +118,33 @@ namespace DynamicsCrm.DevKit.Shared
             _d_ts += $"{TAB}class {EntityMetadata.SchemaName}Api {{{NEW_LINE}";
             _d_ts += $"{TAB}{TAB}/**{NEW_LINE}";
             _d_ts += $"{TAB}{TAB}* DynamicsCrm.DevKit {EntityMetadata.SchemaName}Api{NEW_LINE}";
-            _d_ts += $"{TAB}{TAB}* @param entity The entity object{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}* @param entity The entity object from OData response{NEW_LINE}";
             _d_ts += $"{TAB}{TAB}*/{NEW_LINE}";
-            _d_ts += $"{TAB}{TAB}constructor(entity?: any);{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}constructor(entity?: Record<string, any>) : {@namespace}.{EntityMetadata.SchemaName}Api;{NEW_LINE}";
             _d_ts += $"{TAB}{TAB}/**{NEW_LINE}";
-            _d_ts += $"{TAB}{TAB} * Get the value of alias{NEW_LINE}";
-            _d_ts += $"{TAB}{TAB} * @param alias the alias value{NEW_LINE}";
-            _d_ts += $"{TAB}{TAB} * @param isMultiOptionSet true if the alias is multi OptionSet{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB} * Get the raw value of an aliased field{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB} * @param alias The alias field name{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB} * @param isMultiOptionSet True if the field is a multi-option set{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB} * @returns The raw value or null if not found{NEW_LINE}";
             _d_ts += $"{TAB}{TAB} */{NEW_LINE}";
             _d_ts += $"{TAB}{TAB}getAliasedValue(alias: string, isMultiOptionSet?: boolean): any;{NEW_LINE}";
             _d_ts += $"{TAB}{TAB}/**{NEW_LINE}";
-            _d_ts += $"{TAB}{TAB} * Get the formatted value of alias{NEW_LINE}";
-            _d_ts += $"{TAB}{TAB} * @param alias the alias value{NEW_LINE}";
-            _d_ts += $"{TAB}{TAB} * @param isMultiOptionSet true if the alias is multi OptionSet{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB} * Get the formatted value of an aliased field{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB} * @param alias The alias field name{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB} * @param isMultiOptionSet True if the field is a multi-option set{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB} * @returns The formatted value or empty string if not found{NEW_LINE}";
             _d_ts += $"{TAB}{TAB} */{NEW_LINE}";
-            _d_ts += $"{TAB}{TAB}getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;{NEW_LINE}";
-            _d_ts += $"{TAB}{TAB}/** The entity object for Create/Update */{NEW_LINE}";
-            _d_ts += $"{TAB}{TAB}Entity: unknown;{NEW_LINE}";
-            _d_ts += $"{TAB}{TAB}/** The OData entity object */{NEW_LINE}";
-            _d_ts += $"{TAB}{TAB}ODataEntity: unknown;{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string | string[];{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}/** The entity object for Create/Update operations*/{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}readonly Entity: Record<string, any>;{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}/** The OData entity object containing raw data*/{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}readonly ODataEntity: Record<string, any>;{NEW_LINE}";
             _d_ts += $"{TAB}{TAB}/** The entity name */{NEW_LINE}";
-            _d_ts += $"{TAB}{TAB}EntityName: string;{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}readonly EntityName: string;{NEW_LINE}";
             _d_ts += $"{TAB}{TAB}/** The entity collection name */{NEW_LINE}";
-            _d_ts += $"{TAB}{TAB}EntityCollectionName: string;{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}readonly EntityCollectionName: string;{NEW_LINE}";
             _d_ts += $"{TAB}{TAB}/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */{NEW_LINE}";
-            _d_ts += $"{TAB}{TAB}\"@odata.etag\": string;{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}readonly \"@odata.etag\": string;{NEW_LINE}";
             foreach (var attribute in EntityMetadata?.Attributes?.OrderBy(x => x.SchemaName))
             {
                 var attributeSchemaName = Utility.SafeDeclareName(attribute.SchemaName, GeneratorType.jswebapi, EntityMetadata.SchemaName, attribute);
@@ -159,19 +162,19 @@ namespace DynamicsCrm.DevKit.Shared
                         if (attribute is MultiSelectPicklistAttributeMetadata)
                         {
                             if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
-                            _d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}: Array<OptionSet.{EntityMetadata.SchemaName}.{attributeSchemaName}>;{NEW_LINE}";
+                            _d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}: Array<OptionSet.{EntityMetadata.SchemaName}.{attributeSchemaName}> | null;{NEW_LINE}";
                         }
                         else if (attribute is PicklistAttributeMetadata || attribute is StateAttributeMetadata || attribute is StatusAttributeMetadata)
                         {
                             if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
-                            _d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}: OptionSet.{EntityMetadata.SchemaName}.{attributeSchemaName};{NEW_LINE}";
+                            _d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}: OptionSet.{EntityMetadata.SchemaName}.{attributeSchemaName} | null;{NEW_LINE}";
                         }
                         break;
                     case AttributeTypeCode.Owner:
                         _d_ts += $"{TAB}{TAB}/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */{NEW_LINE}";
-                        _d_ts += $"{TAB}{TAB}{@readonly}OwnerId_systemuser: string;\r\n";
+                        _d_ts += $"{TAB}{TAB}{@readonly}OwnerId_systemuser: string | null;\r\n";
                         _d_ts += $"{TAB}{TAB}/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */{NEW_LINE}";
-                        _d_ts += $"{TAB}{TAB}{@readonly}OwnerId_team: string;\r\n";
+                        _d_ts += $"{TAB}{TAB}{@readonly}OwnerId_team: string | null;\r\n";
                         break;
                     case AttributeTypeCode.Lookup:
                     case AttributeTypeCode.Customer:
@@ -180,16 +183,16 @@ namespace DynamicsCrm.DevKit.Shared
                             if (lookup.Targets.Count() == 1)
                             {
                                 if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
-                                _d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}: string;{NEW_LINE}";
+                                _d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}: string | null;{NEW_LINE}";
                             }
                             else
                             {
                                 if (attribute.LogicalName == "acceptingentityid")
                                 {
                                     if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
-                                    _d_ts += $"{TAB}{TAB}{@readonly}acceptingentityid_queue: string;{NEW_LINE}";
+                                    _d_ts += $"{TAB}{TAB}{@readonly}acceptingentityid_queue: string | null;{NEW_LINE}";
                                     if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
-                                    _d_ts += $"{TAB}{TAB}{@readonly}acceptingentityid_systemuser: string;{NEW_LINE}";
+                                    _d_ts += $"{TAB}{TAB}{@readonly}acceptingentityid_systemuser: string | null;{NEW_LINE}";
                                 }
                                 else
                                 {
@@ -198,7 +201,7 @@ namespace DynamicsCrm.DevKit.Shared
                                         var navigation = EntityMetadata.ManyToOneRelationships.FirstOrDefault(x => x.ReferencingAttribute == attribute.LogicalName && x.ReferencedEntity == entityLogicalName);
                                         if (navigation?.ReferencingEntityNavigationPropertyName != null && navigation?.ReferencingEntityNavigationPropertyName.Length > 0)
                                         {
-                                            var temp = $"{TAB}{TAB}{@readonly}{Utility.SafeDeclareName(navigation?.ReferencingEntityNavigationPropertyName, GeneratorType.jswebapi, EntityMetadata.SchemaName, attribute)}: string;{NEW_LINE}";
+                                            var temp = $"{TAB}{TAB}{@readonly}{Utility.SafeDeclareName(navigation?.ReferencingEntityNavigationPropertyName, GeneratorType.jswebapi, EntityMetadata.SchemaName, attribute)}: string | null;{NEW_LINE}";
                                             if (!_d_ts.Contains(temp))
                                             {
                                                 if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
@@ -213,68 +216,68 @@ namespace DynamicsCrm.DevKit.Shared
                     case AttributeTypeCode.Memo:
                     case AttributeTypeCode.String:
                         if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
-                        _d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}: string;{NEW_LINE}";
+                        _d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}: string | null;{NEW_LINE}";
                         break;
                     case AttributeTypeCode.Boolean:
                         if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
-                        _d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}: boolean;{NEW_LINE}";
+                        _d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}: boolean | null;{NEW_LINE}";
                         break;
                     case AttributeTypeCode.DateTime:
                         if (attribute is DateTimeAttributeMetadata dateTime)
                         {
                             if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
                             if (dateTime.DateTimeBehavior == DateTimeBehavior.DateOnly)
-                                _d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}_DateOnly: Date;{NEW_LINE}";
+                                _d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}_DateOnly: Date | null;{NEW_LINE}";
                             else if (dateTime.DateTimeBehavior == DateTimeBehavior.TimeZoneIndependent)
                             {
                                 if (dateTime.Format == DateTimeFormat.DateOnly)
-                                    _d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}_TimezoneDateOnly: Date;{NEW_LINE}";
+                                    _d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}_TimezoneDateOnly: Date | null;{NEW_LINE}";
                                 else
-                                    _d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}_TimezoneDateAndTime: Date;{NEW_LINE}";
+                                    _d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}_TimezoneDateAndTime: Date | null;{NEW_LINE}";
                             }
                             else
                             {
                                 if (dateTime.Format == DateTimeFormat.DateOnly)
-                                    _d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}_UtcDateOnly: Date;{NEW_LINE}";
+                                    _d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}_UtcDateOnly: Date | null;{NEW_LINE}";
                                 else
-                                    _d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}_UtcDateAndTime: Date;{NEW_LINE}";
+                                    _d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}_UtcDateAndTime: Date | null;{NEW_LINE}";
                             }
                         }
                         break;
                     case AttributeTypeCode.Integer:
                         if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
                         //_d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}: DevKit.WebApi.IntegerValue{Readonly};{NEW_LINE}";
-                        _d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}: number;{NEW_LINE}";
+                        _d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}: number | null;{NEW_LINE}";
                         break;
                     case AttributeTypeCode.BigInt:
                         if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
                         //_d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}: DevKit.WebApi.BigIntValue{Readonly};{NEW_LINE}";
-                        _d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}: number;{NEW_LINE}";
+                        _d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}: number | null;{NEW_LINE}";
                         break;
                     case AttributeTypeCode.Decimal:
                         if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
                         //_d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}: DevKit.WebApi.DecimalValue{Readonly};{NEW_LINE}";
-                        _d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}: number;{NEW_LINE}";
+                        _d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}: number | null;{NEW_LINE}";
                         break;
                     case AttributeTypeCode.Double:
                         if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
                         //_d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}: DevKit.WebApi.DoubleValue{Readonly};{NEW_LINE}";
-                        _d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}: number;{NEW_LINE}";
+                        _d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}: number | null;{NEW_LINE}";
                         break;
                     case AttributeTypeCode.Money:
                         if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
                         //_d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}: DevKit.WebApi.MoneyValue{Readonly};{NEW_LINE}";
-                        _d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}: number;{NEW_LINE}";
+                        _d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}: number | null;{NEW_LINE}";
                         break;
                     case AttributeTypeCode.Uniqueidentifier:
                         if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
                         //_d_ts += $"{TAB}{TAB}{attributeSchemaName}: DevKit.WebApi.GuidValue{Readonly};{NEW_LINE}";
-                        _d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}: string;{NEW_LINE}";
+                        _d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}: string | null;{NEW_LINE}";
                         break;
                     case AttributeTypeCode.ManagedProperty:
                         if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
                         //_d_ts += $"{TAB}{TAB}{attributeSchemaName}: DevKit.WebApi.ManagedPropertyValue{Readonly};{NEW_LINE}";
-                        _d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}: string;{NEW_LINE}";
+                        _d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}: string | null;{NEW_LINE}";
                         break;
 
                     default:
@@ -288,23 +291,27 @@ namespace DynamicsCrm.DevKit.Shared
                         else if (attribute is FileAttributeMetadata file)
                         {
                             if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
-                            _d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}: string;{NEW_LINE}";
+                            _d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}: string | null;{NEW_LINE}";
                         }
                         else if (attribute is MultiSelectPicklistAttributeMetadata)
                         {
                             if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
-                            _d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}: Array<OptionSet.{EntityMetadata.SchemaName}.{attributeSchemaName}>;{NEW_LINE}";
+                            _d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}: Array<OptionSet.{EntityMetadata.SchemaName}.{attributeSchemaName}> | null;{NEW_LINE}";
                         }
                         else
-                            _d_ts += $"{attribute.AttributeType}-{attributeSchemaName}-{attribute.LogicalName};{NEW_LINE}";
+                            _d_ts += $"{attribute.AttributeType}-{attributeSchemaName}-{attribute.LogicalName} | null;{NEW_LINE}";
                         break;
                 }
             }
             if (EntityMetadata.Attributes.Where(f => f.AttributeType == AttributeTypeCode.PartyList).Any())
             {
                 _d_ts += $"{TAB}{TAB}/** The array of object that can cast object to ActivityPartyApi class */{NEW_LINE}"; ;
-                _d_ts += $"{TAB}{TAB}ActivityParties: Array<unknown>;{NEW_LINE}";
+                _d_ts += $"{TAB}{TAB}ActivityParties: Array<Record<string, any>> | null;{NEW_LINE}";
             }
+            _d_ts += $"{TAB}{TAB}/**{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}* Formatted values for all fields{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}* Contains the display-formatted values for fields that have formatting applied{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}*/{NEW_LINE}";
             _d_ts += $"{TAB}{TAB}readonly FormattedValue: {{{NEW_LINE}";
             foreach (var attribute in EntityMetadata?.Attributes?.OrderBy(x => x.SchemaName))
             {
@@ -471,9 +478,9 @@ namespace DynamicsCrm.DevKit.Shared
         private static string GetGeneratorImageCode_d_ts(string schemaName, string logicalName, string @readonly)
         {
             var _d_ts = string.Empty;
-            _d_ts += $"{TAB}{TAB}{@readonly}{schemaName}: string;{NEW_LINE}";
-            _d_ts += $"{TAB}{TAB}{@readonly}{schemaName}_Timestamp: number;{NEW_LINE}";
-            _d_ts += $"{TAB}{TAB}{@readonly}{schemaName}_URL: string;{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}{@readonly}{schemaName}: string | null;{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}{@readonly}{schemaName}_Timestamp: number | null;{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}{@readonly}{schemaName}_URL: string | null;{NEW_LINE}";
             return _d_ts;
         }
 
