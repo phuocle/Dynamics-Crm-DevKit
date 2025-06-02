@@ -997,7 +997,7 @@ namespace DynamicsCrm.DevKit.Shared
                     (relationship.IsValidForAdvancedFind ?? false)
                     )
                 {
-                    _d_ts += $"\t\t\t{Utility.SafeIdentifier(relationship.SchemaName)}: DevKit.Controls.NavigationItem,\r\n";
+                    _d_ts += $"\t\t\t{Utility.SafeIdentifier(relationship.SchemaName)}: DevKit.Controls.NavigationItem;\r\n";
                 }
             }
 
