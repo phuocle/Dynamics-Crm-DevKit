@@ -613,7 +613,7 @@ const devKit = (function () {
         LoadFormDialog: loadFormDialog
     }
 })();
-let OptionSet;
+var OptionSet;
 (function (OptionSet) {
     OptionSet.FormType = {
         Undefined: 0,

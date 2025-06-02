@@ -1,9 +1,9 @@
 ﻿'use strict';
-/** @namespace DevKit */
-var DevKit;
-(function (DevKit) {
+/** @namespace Tfsvn */
+var Tfsvn;
+(function (Tfsvn) {
 	'use strict';
-	DevKit.FormAccount = function(executionContext, defaultWebResourceName) {
+	Tfsvn.FormAccount = function(executionContext, defaultWebResourceName) {
 		var formContext = null;
 		if (executionContext !== undefined) {
 			if (executionContext.getFormContext === undefined) {
@@ -15,40 +15,43 @@ var DevKit;
 		}
 		var form = devKit.LoadForm(formContext);
 		var body = {
+			accountcasessgrid: {},
+			AccountNumber: {},
 			ActionCards: {},
 			Address1_Composite: {},
 			Address1_FreightTermsCode: {},
+			Address1_Line1: {},
 			Address1_ShippingMethodCode: {},
 			ChildAccounts: {},
 			Contacts: {},
-			CreatedOn: {},
 			CreditLimit: {},
 			CreditOnHold: {},
 			Description: {},
-			devkit_CategoryCode: {},
+			DocumentsSubGrid: {},
 			DoNotBulkEMail: {},
 			DoNotEMail: {},
 			DoNotFax: {},
 			DoNotPhone: {},
 			DoNotPostalMail: {},
+			DoNotSendMM: {},
 			Fax: {},
 			FollowEmail: {},
-			IFRAME_PHUOCLE: {},
+			hs_tax_id: {},
 			IndustryCode: {},
-			mapcontrol: {},
-			ModifiedOn: {},
+			LastUsedInCampaign: {},
+			loan_chart_by_status: {},
 			Name: {},
-			Name1: {},
 			notescontrol: {},
+			OriginatingLeadId: {},
 			OwnershipCode: {},
 			ParentAccountId: {},
 			PaymentTermsCode: {},
 			PreferredContactMethodCode: {},
 			PrimaryContactId: {},
-			PrimaryContactId1: {},
 			SIC: {},
+			Subgrid_loan_list: {},
 			Telephone1: {},
-			TickerSymbol: {},
+			Telephone11: {},
 			TransactionCurrencyId: {},
 			WebSiteURL: {}
 		};
@@ -61,17 +64,34 @@ var DevKit;
 					COMPANY_PROFILE: {},
 					CONTACT_PREFERENCES: {},
 					DETAILS_TAB_section_6: {},
+					MARKETING: {},
 					SHIPPING: {}
+				}
+			},
+			documents_sharepoint: {
+				Section: {
+					documents_sharepoint_section: {}
 				}
 			},
 			SUMMARY_TAB: {
 				Section: {
 					ACCOUNT_INFORMATION: {},
 					ADDRESS: {},
-					MapSection: {},
 					SOCIAL_PANE_TAB: {},
-					Summary_section_6: {},
-					SUMMARY_TAB_section_6: {}
+					SUMMARY_TAB_ADDRESSINPUT_SECTION: {},
+					SUMMARY_TAB_section_6: {},
+					SUMMARY_TAB_section_8: {}
+				}
+			},
+			tab_5: {
+				Section: {
+					Summary_section_6: {}
+				}
+			},
+			tab_loan_info: {
+				Section: {
+					_section_913: {},
+					tab_4_section_loan_list: {}
 				}
 			}
 		};
@@ -79,31 +99,18 @@ var DevKit;
 		body.Tab = tab;
 		form.Body = body;
 		var header = {
-			NumberOfEmployees: {},
-			OwnerId: {},
-			Revenue: {}
+			AccountNumber: {},
+			OwnerId: {}
 		};
 		devKit.LoadFields(formContext, header, "header_");
 		form.Header = header;
-		var process = devKit.LoadProcess(formContext);
-		var _BPF_Account = {
-			Name: {},
-			Name_1: {}
-		}
-		devKit.LoadFields(formContext, _BPF_Account, "header_process_");
-		process.BPF_Account = _BPF_Account;
-		form.Process = process;
-		var quickForm = {
-			contactquickform: {
-				EMailAddress1: {},
-				Telephone1: {}
-			}
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
 		var grid = {
+			accountcasessgrid: {},
 			ChildAccounts: {},
 			Contacts: {},
+			DocumentsSubGrid: {},
+			loan_chart_by_status: {},
+			Subgrid_loan_list: {},
 		};
 		devKit.LoadGrids(formContext, grid);
 		form.Grid = grid;
@@ -111,20 +118,92 @@ var DevKit;
 			account_adx_inviteredemptions: {},
 			account_adx_portalcomments: {},
 			Account_Appointments: {},
+			account_bookableresource_AccountId: {},
+			account_BulkOperations: {},
+			account_CampaignResponses: {},
+			account_customer_opportunity_roles: {},
 			Account_Email_EmailSender: {},
 			Account_Email_SendersAccount: {},
 			Account_Emails: {},
+			account_entitlement_Account: {},
+			account_entitlement_Customer: {},
+			account_hs_zns_messages: {},
+			account_IncidentResolutions: {},
+			account_msdyn_bookingalerts: {},
+			account_msdyn_copilottranscripts: {},
+			account_msdyn_ocliveworkitems: {},
+			account_msdyn_ocoutboundmessages: {},
+			account_msdyn_ocsessions: {},
+			account_msdyn_ocvoicemails: {},
+			account_msdyn_orgchartnode_msdyn_parentrecord: {},
 			account_msfp_alerts: {},
 			account_msfp_surveyinvites: {},
 			account_msfp_surveyresponses: {},
+			account_OpportunityCloses: {},
+			account_OrderCloses: {},
 			account_parent_account: {},
 			Account_Phonecalls: {},
+			account_Posts: {},
+			account_QuoteCloses: {},
+			Account_ServiceAppointments: {},
 			Account_Tasks: {},
 			adx_invitation_assigntoaccount: {},
-			bpf_account_devkit_bpfaccount: {},
 			contact_customer_accounts: {},
+			contract_billingcustomer_accounts: {},
+			contract_customer_accounts: {},
+			contractlineitem_customer_accounts: {},
+			hs_account_contact_customer_id: {},
+			hs_account_hs_interaction_id: {},
+			hs_account_hs_loan_account_id: {},
+			hs_hs_custom_template_account_hs_object1_id: {},
+			hs_hs_custom_template_account_hs_object2_id: {},
+			hs_hs_custom_template_account_hs_object3_id: {},
+			hs_hs_custom_template_account_hs_object4_id: {},
+			hs_hs_custom_template_account_hs_object5_id: {},
+			hs_hs_zns_message_account_hs_object1_id: {},
+			hs_hs_zns_message_account_hs_object2_id: {},
+			hs_hs_zns_message_account_hs_object3_id: {},
+			hs_hs_zns_message_account_hs_object4_id: {},
+			hs_hs_zns_message_account_hs_object5_id: {},
+			hs_hs_zns_message_account_hs_object6_id: {},
+			hs_loan_account_account_id_account: {},
+			incident_customer_accounts: {},
+			invoice_customer_accounts: {},
+			lead_customer_accounts: {},
+			lead_parent_account: {},
 			msa_account_managingpartner: {},
-			msa_contact_managingpartner: {}
+			msa_contact_managingpartner: {},
+			msdyn_account_dailyaccountkpiitem_entityid: {},
+			msdyn_account_msdyn_accountkpiitem_accountid: {},
+			msdyn_account_msdyn_actual_AccountCustomer: {},
+			msdyn_account_msdyn_actual_AccountVendor: {},
+			msdyn_account_msdyn_aicontactsuggestion_sourcerecord: {},
+			msdyn_account_msdyn_customerasset_Account: {},
+			msdyn_account_msdyn_iotdevice_Account: {},
+			msdyn_account_msdyn_liveconversation_Customer: {},
+			msdyn_account_msdyn_mostcontacted_regardingObjectId: {},
+			msdyn_account_msdyn_mostcontactedby_regardingObjectId: {},
+			msdyn_account_msdyn_ocliveworkitem_Customer: {},
+			msdyn_account_msdyn_ocvoicemail_Customer: {},
+			msdyn_account_msdyn_salesroutingrun_targetobject: {},
+			msdyn_account_msdyn_warranty_WarrantyHolder: {},
+			msdyn_account_msdyn_warranty_WarrantyProvider: {},
+			msdyn_msdyn_conversationparticipantinsights_account_msdyn_User: {},
+			msdyn_msdyn_lastagent_account_msdyn_recordId: {},
+			msdyn_msdyn_preferredagent_account_msdyn_recordId: {},
+			msdyn_msdyn_salescopilotinsight_account_msdyn_targetentityid: {},
+			msdyn_playbookinstance_account: {},
+			msdyn_sabackupdiagnostic_account_msdyn_target: {},
+			msdyn_salesaccelerationinsights_account: {},
+			msdyn_salesroutingdiagnostic_account_msdyn_target: {},
+			msdyn_salessuggestion_account: {},
+			msdyn_sequencetarget_account_msdyn_target: {},
+			msdyn_swarm_account: {},
+			opportunity_customer_accounts: {},
+			opportunity_parent_account: {},
+			order_customer_accounts: {},
+			quote_customer_accounts: {},
+			SourceAccount_BulkOperationLogs: {}
 		};
 		devKit.LoadNavigations(formContext, navigation);
 		form.Navigation = navigation;
@@ -133,7 +212,7 @@ var DevKit;
 		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
-})(DevKit || (DevKit = {}));
+})(Tfsvn || (Tfsvn = {}));
 /** @namespace OptionSet */
 var OptionSet;
 (function (OptionSet) {
@@ -195,16 +274,6 @@ var OptionSet;
 			Reseller: 9,
 			Supplier: 10,
 			Vendor: 11
-		},
-		devkit_CategoryCode : {
-			Business: 1,
-			Family: 2,
-			Other: 5,
-			Sales: 4,
-			Sales_Team: 1001,
-			Service: 1002,
-			Social: 3,
-			Stakeholder: 1000
 		},
 		IndustryCode : {
 			Accounting: 1,

@@ -1,6 +1,5 @@
 'use strict';
 const devKit = (function () {
-    'use strict';
     function getter(obj, prop, getter) {
         Object.defineProperty(obj, prop, {
             get: getter,

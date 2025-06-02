@@ -2,94 +2,89 @@
 /** @namespace DevKit */
 var DevKit;
 (function (DevKit) {
-	'use strict';
 	DevKit.AccountApi = function (e) {
-		var f = '@OData.Community.Display.V1.FormattedValue';
+		const f = '@OData.Community.Display.V1.FormattedValue';
 		function webApiField(obj, field, entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, type) {
-			var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
-			var getFormattedValue = function () {
-				if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
+			const l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
+			const getFormattedValue = function () {
+				if (entity?.[logicalName + f] === undefined || entity?.[logicalName + f] === null) {
 					return '';
 				}
 				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-					if (entity[logicalName + l] === entityLogicalName) {
-						return entity[logicalName + f];
+					if (entity?.[logicalName + l] === entityLogicalName) {
+						return entity?.[logicalName + f];
 					}
 					return '';
 				}
 				if (type === 'MultiOptionSet') {
-					return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
+					return entity?.[logicalName + f]?.toString()?.split(';').map(function (item) { return item?.trim(); });
 				}
-				return entity[logicalName + f];
+				return entity?.[logicalName + f];
 			};
-			var getValue = function () {
-				if (entity[logicalName] === undefined || entity[logicalName] === null) {
+			const getValue = function () {
+				if (entity?.[logicalName] === undefined || entity?.[logicalName] === null) {
 					return null;
 				}
 				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-					if (entity[logicalName + l] === undefined || entity[logicalName + l] === entityLogicalName) {
-						return returnGet(entity[logicalName], type);
+					if (entity?.[logicalName + l] === undefined || entity?.[logicalName + l] === entityLogicalName) {
+						return returnGet(entity?.[logicalName], type);
 					}
 					return null;
 				}
 				if (type === 'MultiOptionSet') {
-					return entity[logicalName].toString().split(',').map(function (item) { return parseInt(item, 10); });
+					return entity?.[logicalName]?.toString()?.split(',').map(function (item) { return parseInt(item, 10); });
 				}
-				return returnGet(entity[logicalName], type);
+				return returnGet(entity?.[logicalName], type);
 			};
-			var returnGet = function (data, type) {
-				var parseDate = function (dateString) {
-					const date = new Date(dateString);
-					if (isNaN(date.getTime())) {
+			const returnGet = function (data, type) {
+				const parseDate = function (dateString) {
+					const timestamp = Date.parse(dateString);
+					if (isNaN(timestamp)) {
 						return null;
-					} else {
-						return date;
 					}
-				}
-				var parseBoolean = function (booleanString) {
+					return new Date(timestamp);
+				};
+				const parseBoolean = function (booleanString) {
 					if (typeof booleanString !== 'string') return false;
-					const lowerStr = booleanString.trim().toLowerCase();
+					const lowerStr = booleanString?.trim()?.toLowerCase();
 					const trueValues = ["true", "1", "yes", "y"];
 					const falseValues = ["false", "0", "no", "n"];
 					if (trueValues.includes(lowerStr)) {
 						return true;
-					} else if (falseValues.includes(lowerStr)) {
-						return false;
-					} else {
+					}
+					if (falseValues.includes(lowerStr)) {
 						return false;
 					}
+					return false;
 				};
 				if (data === null || data === undefined) return null;
 				if (type === null || type === undefined) return data;
 				if (type === "DateTime") {
 					const date = parseDate(data);
-					if (isNaN(date.getTime())) return null;
-					return date;
+					return isNaN(date?.getTime()) ? null : date;
 				}
 				else if (type === "Integer") {
-					const int = parseInt(data);
-					if (isNaN(int)) return null;
-					return int;
+					const int = parseInt(data, 10);
+					return isNaN(int) ? null : int;
 				}
 				else if (type === "Number") {
 					const double = Number(data);
-					if (isNaN(double)) return null;
-					return double;
+					return isNaN(double) ? null : double;
 				}
 				else if (type === "Boolean") {
 					return parseBoolean(data);
 				}
 				return data;
-			}
-			var setValue = function (value) {
-				if (type === 'MultiOptionSet') value = value.join(',');
-				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+			};
+			const setValue = function (value) {
+				if (type === 'MultiOptionSet') value = value?.join(',');
+				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName?.length > 0) {
 					if (value === null) {
 						upsertEntity[schemaName + '@odata.bind'] = null;
 					}
 					else {
-						value = value.replace('{', '').replace('}', '');
-						upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
+						const cleanValue = typeof value === 'string' ? value.replace(/[{}]/g, '') : value;
+						upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + cleanValue + ')';
 					}
 				} else {
 					upsertEntity[logicalName] = value;
@@ -111,7 +106,7 @@ var DevKit;
 				});
 			}
 		}
-		var _account = {
+		const _account = {
 			AccountCategoryCode: { a: 'accountcategorycode', g: 'Integer' },
 			AccountClassificationCode: { a: 'accountclassificationcode', g: 'Integer' },
 			AccountId: { a: 'accountid' },
@@ -268,41 +263,36 @@ var DevKit;
 			YomiName: { a: 'yominame' }
 		};
 		if (e === undefined) e = {};
-		var u = {};
-		var account = {};
+		const u = {};
+		const account = {};
 		account.ODataEntity = e;
 		account.FormattedValue = {};
-		for (var field in _account) {
-			var a = _account[field].a;
-			var b = _account[field].b;
-			var c = _account[field].c;
-			var d = _account[field].d;
-			var g = _account[field].g;
-			var r = _account[field].r;
-			webApiField(account, field, e, a, b, c, d, r, u, g);
+		for (const field in _account) {
+			const fieldConfig = _account[field];
+			webApiField(account, field, e, fieldConfig.a, fieldConfig.b, fieldConfig.c, fieldConfig.d, fieldConfig.r, u, fieldConfig.g);
 		}
 		account.Entity = u;
 		account.EntityName = 'account';
 		account.EntityCollectionName = 'accounts';
-		account['@odata.etag'] = e['@odata.etag'];
+		account['@odata.etag'] = e?.['@odata.etag'];
 		account.getAliasedValue = function (alias, isMultiOptionSet = false) {
-			if (e[alias] === undefined || e[alias] === null) {
+			if (e?.[alias] === undefined || e?.[alias] === null) {
 				return null;
 			}
 			if (isMultiOptionSet) {
-				return e[alias].toString().split(',').map(function (item) { return parseInt(item, 10); });
+				return e?.[alias].toString().split(',').map(function (item) { return parseInt(item, 10); });
 			}
-			return e[alias];
-		}
+			return e?.[alias];
+		};
 		account.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
-			if (e[alias + f] === undefined || e[alias + f] === null) {
+			if (e?.[alias + f] === undefined || e?.[alias + f] === null) {
 				return '';
 			}
 			if (isMultiOptionSet) {
-				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
+				return e?.[alias + f]?.toString()?.split(';').map(function (item) { return item?.trim(); });
 			}
-			return e[alias + f];
-		}
+			return e?.[alias + f];
+		};
 		return account;
 	};
 })(DevKit || (DevKit = {}));
@@ -310,27 +300,27 @@ var DevKit;
 var OptionSet;
 (function (OptionSet) {
 	OptionSet.Account = {
-		AccountCategoryCode : {
+		AccountCategoryCode: {
 			Preferred_Customer: 1,
 			Standard: 2
 		},
-		AccountClassificationCode : {
+		AccountClassificationCode: {
 			Default_Value: 1
 		},
-		AccountRatingCode : {
+		AccountRatingCode: {
 			Default_Value: 1
 		},
-		Address1_AddressTypeCode : {
+		Address1_AddressTypeCode: {
 			Bill_To: 1,
 			Other: 4,
 			Primary: 3,
 			Ship_To: 2
 		},
-		Address1_FreightTermsCode : {
+		Address1_FreightTermsCode: {
 			FOB: 1,
 			No_Charge: 2
 		},
-		Address1_ShippingMethodCode : {
+		Address1_ShippingMethodCode: {
 			Airborne: 1,
 			DHL: 2,
 			FedEx: 3,
@@ -339,22 +329,22 @@ var OptionSet;
 			UPS: 4,
 			Will_Call: 7
 		},
-		Address2_AddressTypeCode : {
+		Address2_AddressTypeCode: {
 			Default_Value: 1
 		},
-		Address2_FreightTermsCode : {
+		Address2_FreightTermsCode: {
 			Default_Value: 1
 		},
-		Address2_ShippingMethodCode : {
+		Address2_ShippingMethodCode: {
 			Default_Value: 1
 		},
-		BusinessTypeCode : {
+		BusinessTypeCode: {
 			Default_Value: 1
 		},
-		CustomerSizeCode : {
+		CustomerSizeCode: {
 			Default_Value: 1
 		},
-		CustomerTypeCode : {
+		CustomerTypeCode: {
 			Competitor: 1,
 			Consultant: 2,
 			Customer: 3,
@@ -413,19 +403,19 @@ var OptionSet;
 			Vehicle_Retail: 32,
 			Wholesale: 33
 		},
-		OwnershipCode : {
+		OwnershipCode: {
 			Other: 4,
 			Private: 2,
 			Public: 1,
 			Subsidiary: 3
 		},
-		PaymentTermsCode : {
+		PaymentTermsCode: {
 			_2_10_Net_30: 2,
 			Net_30: 1,
 			Net_45: 3,
 			Net_60: 4
 		},
-		PreferredAppointmentDayCode : {
+		PreferredAppointmentDayCode: {
 			Friday: 5,
 			Monday: 1,
 			Saturday: 6,
@@ -434,33 +424,33 @@ var OptionSet;
 			Tuesday: 2,
 			Wednesday: 3
 		},
-		PreferredAppointmentTimeCode : {
+		PreferredAppointmentTimeCode: {
 			Afternoon: 2,
 			Evening: 3,
 			Morning: 1
 		},
-		PreferredContactMethodCode : {
+		PreferredContactMethodCode: {
 			Any: 1,
 			Email: 2,
 			Fax: 4,
 			Mail: 5,
 			Phone: 3
 		},
-		ShippingMethodCode : {
+		ShippingMethodCode: {
 			Default_Value: 1
 		},
-		StateCode : {
+		StateCode: {
 			Active: 0,
 			Inactive: 1
 		},
-		StatusCode : {
+		StatusCode: {
 			Active: 1,
 			Inactive: 2
 		},
-		TerritoryCode : {
+		TerritoryCode: {
 			Default_Value: 1
 		},
-		RollupState : {
+		RollupState: {
 			NotCalculated: 0,
 			Calculated: 1,
 			OverflowError: 2,
