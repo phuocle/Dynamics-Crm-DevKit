@@ -30,31 +30,6 @@ namespace DynamicsCrm.DevKit.Cli
             }
         }
 
-        private static void ShowHelp2()
-        {
-            var helpColor = ConsoleColor.Green;
-            var colorBox = ConsoleColor.Blue;
-
-            CliLog.SetupCliLog();
-            CliLog.Write(colorBox, "╔");
-            CliLog.Write(colorBox, new string('═', 114));
-            CliLog.WriteLine(colorBox, "╗");
-            CliLog.WriteLine(colorBox, "║  ", helpColor, "  ____                              _           ____                  ____             _  ___ _     ____ _ _ ", colorBox, "   ║");
-            CliLog.WriteLine(colorBox, "║  ", helpColor, " |  _ \\ _   _ _ __   __ _ _ __ ___ (_) ___ ___ / ___|_ __ _ __ ___   |  _ \\  _____   _| |/ (_) |_  / ___| (_)", colorBox, "   ║");
-            CliLog.WriteLine(colorBox, "║  ", helpColor, " | | | | | | | '_ \\ / _` | '_ ` _ \\| |/ __/ __| |   | '__| '_ ` _ \\  | | | |/ _ \\ \\ / / ' /| | __|| |   | | |", colorBox, "   ║");
-            CliLog.WriteLine(colorBox, "║  ", helpColor, " | |_| | |_| | | | | (_| | | | | | | | (__\\__ \\ |___| |  | | | | | |_| |_| |  __/\\ V /| . \\| | |_ | |___| | |", colorBox, "   ║");
-            CliLog.WriteLine(colorBox, "║  ", helpColor, " |____/ \\__, |_| |_|\\__,_|_| |_| |_|_|\\___|___/\\____|_|  |_| |_| |_(_)____/ \\___| \\_/ |_|\\_\\_|\\__(_)____|_|_|", colorBox, "   ║");
-            CliLog.Write(colorBox, "║  ", helpColor, "        |___/            ", ConsoleColor.White, "https://github.com/phuocle/Dynamics-Crm-DevKit ");
-            CliLog.WriteSuccess(ConsoleColor.White, Const.Version);
-            CliLog.Write(ConsoleColor.White, " Build: ");
-            CliLog.WriteSuccess(ConsoleColor.White, Const.Build);
-            CliLog.WriteLine(colorBox, "   ║");
-            CliLog.Write(colorBox, "╚");
-            CliLog.Write(colorBox, new string('═', 114));
-            CliLog.WriteLine(colorBox, "╝");
-            //CliLog.WriteLine(ConsoleColor.Black, "█");
-        }
-
         private static void ShowHelp()
         {
             var helpColor = ConsoleColor.Blue;
