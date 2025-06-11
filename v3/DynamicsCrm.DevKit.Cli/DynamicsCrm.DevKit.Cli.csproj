@@ -11,7 +11,7 @@
 		<RepositoryUrl>https://github.com/phuocle/Dynamics-Crm-DevKit</RepositoryUrl>
 		<Company>PhuocLe</Company>
 		<Product>DynamicsCrm.DevKit.Cli</Product>
-		<Copyright>Copyright © PhuocLe 2016 - 2022</Copyright>
+		<Copyright>Copyright © PhuocLe 2016 - 2026</Copyright>
 		<PackageProjectUrl>https://github.com/phuocle/Dynamics-Crm-DevKit</PackageProjectUrl>
 		<Version>3.55.55.55</Version>
 		<OutputType>Exe</OutputType>
