@@ -1,11 +1,8 @@
-﻿//using Microsoft.CodeAnalysis.CSharp;
-using DynamicsCrm.DevKit.Shared.Models;
+﻿using DynamicsCrm.DevKit.Shared.Models;
 using EnvDTE;
 using Microsoft.CSharp;
 using Microsoft.Xrm.Sdk.Metadata;
 using System;
-using System.Activities.Expressions;
-using System.CodeDom;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -13,7 +10,6 @@ using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using static DynamicsCrm.DevKit.Shared.XrmHelper;
 
 namespace DynamicsCrm.DevKit.Shared
 {

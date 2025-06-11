@@ -1,11 +1,7 @@
 ﻿using DynamicsCrm.DevKit.Lib.Forms;
-using DynamicsCrm.DevKit.Shared.Models;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Windows.Forms;
 
 namespace DynamicsCrm.DevKit.Shared
 {
