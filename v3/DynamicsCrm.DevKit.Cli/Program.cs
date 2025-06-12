@@ -50,7 +50,7 @@ namespace DynamicsCrm.DevKit.Cli
             CliLog.WriteLine(colorBox, "  ║");
             CliLog.Write(colorBox, "╚");
             CliLog.Write(colorBox, new string('═', 112));
-            CliLog.WriteLine(colorBox, "╝");
+            CliLog.Write(colorBox, "╝");
             CliLog.WriteLine(ConsoleColor.Black, "█");
             CliLog.WriteLine(ConsoleColor.White, "|");
         }
