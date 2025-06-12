@@ -2,7 +2,7 @@
 {
     public static class CliAction
     {
-        public const string DO_NOTHING = "[:: DO NOTHING ::] ";
+        public const string DO_NOTHING = "[:: SKIPPED ::] ";
         public const string DEPLOYED = "[>> DEPLOYED <<] ";
         public const string DOWNLOADED = "[vv DOWNLOADED vv] ";
         public const string DUPLICATED = "[## DUPLICATED ##] ";
