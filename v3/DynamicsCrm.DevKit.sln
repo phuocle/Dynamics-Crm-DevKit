@@ -68,7 +68,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "12.JsDevkitItemTemplate", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "03.WorkflowItemTemplate", "ItemTemplates\CSharp\03.WorkflowItemTemplate\03.WorkflowItemTemplate.csproj", "{6373A171-F07C-4153-BDA2-C3730497889D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "06.UiTesttemTemplate", "ItemTemplates\CSharp\06.UiTestItemTemplate\06.UiTesttemTemplate.csproj", "{53392F2B-21C1-41BF-9073-2994B94E101E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "06.UiTestItemTemplate", "ItemTemplates\CSharp\06.UiTestItemTemplate\06.UiTestItemTemplate.csproj", "{53392F2B-21C1-41BF-9073-2994B94E101E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "15.SharedTestProjectTemplate", "ProjectTemplates\CSharp\15.SharedTestProjectTemplate\15.SharedTestProjectTemplate.csproj", "{60C9F3C9-29DB-4714-A5C0-16E3732FCE30}"
 EndProject

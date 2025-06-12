@@ -178,9 +178,9 @@
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
     </ProjectReference>
-    <ProjectReference Include="..\ItemTemplates\CSharp\06.UiTestItemTemplate\06.UiTesttemTemplate.csproj">
+    <ProjectReference Include="..\ItemTemplates\CSharp\06.UiTestItemTemplate\06.UiTestItemTemplate.csproj">
       <Project>{53392F2B-21C1-41BF-9073-2994B94E101E}</Project>
-      <Name>06.UiTesttemTemplate</Name>
+      <Name>06.UiTestItemTemplate</Name>
       <VSIXSubPath>ItemTemplates</VSIXSubPath>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
