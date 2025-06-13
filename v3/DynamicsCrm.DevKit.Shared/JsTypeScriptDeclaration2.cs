@@ -1,15 +1,10 @@
 ﻿using DynamicsCrm.DevKit.Shared.Models;
-using Microsoft.VisualStudio.Shell.Interop;
-using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
-using Microsoft.Xrm.Sdk.Query;
 using Microsoft.Xrm.Tooling.Connector;
 using System;
 using System.Collections.Generic;
-using System.IdentityModel.Metadata;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Windows.Forms;
 using System.Xml.Linq;
 
 namespace DynamicsCrm.DevKit.Shared
