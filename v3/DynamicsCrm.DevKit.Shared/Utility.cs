@@ -748,5 +748,32 @@ namespace DynamicsCrm.DevKit.Shared
             }
             return null;
         }
+
+        public static string GetTestRunSettingsFile(DTE dte)
+        {
+            var solutionFullName = dte?.Solution?.FullName;
+            var dir = Path.GetDirectoryName(solutionFullName);
+            var file = $"{dir}\\VisualStudioTest.runsettings";
+            return file;
+        }
+
+        public static bool ProxyTypesProjectExist(DTE dte)
+        {
+            var proxyTypesProjectName = Utility.GetProxyTypesProject(dte);
+            return Utility.ExistProject(dte, proxyTypesProjectName);
+        }
+
+        public static string GetProxyTypesProject(DTE dte)
+        {
+            var solutionFullName = dte?.Solution?.FullName;
+            if (solutionFullName.EndsWith(".Test.sln")) solutionFullName = solutionFullName.Substring(0, solutionFullName.Length - ".Test.sln".Length) + ".sln";
+            if (!File.Exists(solutionFullName)) solutionFullName = dte?.Solution?.FullName;
+            var fInfo = new FileInfo(solutionFullName);
+            var parts = fInfo.Name.Split(".".ToCharArray());
+            var value = string.Empty;
+            for (var i = 0; i < parts.Length - 1; i++)
+                value += parts[i] + ".";
+            return value + $"{ProjectType.ProxyTypes.ToString()}";
+        }
     }
 }

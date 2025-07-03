@@ -53,6 +53,7 @@
     <None Remove="Resources\TestPlugin.tt" />
     <None Remove="Resources\TestWorkflow.tt" />
     <None Remove="Resources\UiTest.tt" />
+    <None Remove="Resources\VsTest.runsettings" />
     <None Remove="Resources\WebApi.js" />
     <None Remove="Resources\WebApi2.js" />
     <None Remove="Resources\Workflow.tt" />
@@ -103,6 +104,7 @@
     <EmbeddedResource Include="Resources\Plugin.tt">
       <Generator></Generator>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\VsTest.runsettings" />
     <EmbeddedResource Include="Resources\WebApi.js" />
     <EmbeddedResource Include="Resources\WebApi2.js" />
     <EmbeddedResource Include="Resources\download.webresources.bat" />

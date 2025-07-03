@@ -36,6 +36,7 @@ namespace DynamicsCrm.DevKit.Lib.Wizard.ProjectTemplates
 
         public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary, WizardRunKind runKind, object[] customParams)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
             var OOBDestinationDirectory = replacementsDictionary["$destinationdirectory$"];
             if (!VsixHelper.IsProxyTypesProjectExist()) VsixHelper.ThrowWizardCancelledException(OOBDestinationDirectory);
             if (!VsixHelper.IsSharedTestProjectExist()) VsixHelper.ThrowWizardCancelledException(OOBDestinationDirectory);
@@ -46,6 +47,17 @@ namespace DynamicsCrm.DevKit.Lib.Wizard.ProjectTemplates
             {
                 DTE = automationObject;
                 ProjectName = form.ProjectName;
+                var runsettings = Utility.GetTestRunSettingsFile((DTE)DTE);
+                if (!System.IO.File.Exists(runsettings))
+                {
+                    var text = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.VsTest.runsettings");
+                    if (text.Length > 0)
+                    {
+                        text = text.Replace("[[ProxyTypes.dll]]", Utility.GetProxyTypesProject((DTE)DTE) + ".dll");
+                        text = text.Replace("[[Namespace]]", replacementsDictionary["$specifiedsolutionname$"]);
+                        Utility.ForceWriteAllText(runsettings, text);
+                    }
+                }
             }
             else
             {
