@@ -31,44 +31,41 @@
 				return returnGet(entity?.[logicalName], type);
 			};
 			const returnGet = function (data, type) {
-				const parseDate = function (dateString) {
-					const timestamp = Date.parse(dateString);
-					if (isNaN(timestamp)) {
-						return null;
-					}
-					return new Date(timestamp);
-				};
-				const parseBoolean = function (booleanString) {
-					if (typeof booleanString !== 'string') return false;
-					const lowerStr = booleanString?.trim()?.toLowerCase();
-					const trueValues = ["true", "1", "yes", "y"];
-					const falseValues = ["false", "0", "no", "n"];
-					if (trueValues.includes(lowerStr)) {
-						return true;
-					}
-					if (falseValues.includes(lowerStr)) {
-						return false;
-					}
-					return false;
-				};
 				if (data === null || data === undefined) return null;
 				if (type === null || type === undefined) return data;
-				if (type === "DateTime") {
-					const date = parseDate(data);
-					return isNaN(date?.getTime()) ? null : date;
-				}
-				else if (type === "Integer") {
-					const int = parseInt(data, 10);
-					return isNaN(int) ? null : int;
-				}
-				else if (type === "Number") {
-					const double = Number(data);
-					return isNaN(double) ? null : double;
-				}
-				else if (type === "Boolean") {
-					return parseBoolean(data);
-				}
-				return data;
+				const typeParsers = {
+					DateTime: function (value) {
+						if (value === null || value === undefined) return null;
+						if (value instanceof Date) return isNaN(value.getTime()) ? null : value;
+						const trimmedString = String(value).trim();
+						if (trimmedString === '') return null;
+						const timestamp = Date.parse(trimmedString);
+						if (isNaN(timestamp)) return null;
+						const parsedDate = new Date(timestamp);
+						return isNaN(parsedDate.getTime()) ? null : parsedDate;
+					},
+					Integer: function (value) {
+						const parsed = parseInt(value, 10);
+						return isNaN(parsed) ? null : parsed;
+					},
+					Number: function (value) {
+						const parsed = Number(value);
+						return isNaN(parsed) ? null : parsed;
+					},
+					Boolean: function (value) {
+						if (value === null || value === undefined) return null;
+						if (typeof value === 'boolean') return value;
+						if (typeof value === 'number') return value !== 0;
+						const stringValue = String(value).trim().toLowerCase();
+						const trueValues = ["true", "1", "yes", "y"];
+						const falseValues = ["false", "0", "no", "n"];
+						if (trueValues.includes(stringValue)) return true;
+						if (falseValues.includes(stringValue)) return false;
+						return false;
+					}
+				};
+				const parser = typeParsers[type];
+				return parser ? parser(data) : data;
 			};
 			const setValue = function (value) {
 				if (type === 'MultiOptionSet') value = value?.join(',');

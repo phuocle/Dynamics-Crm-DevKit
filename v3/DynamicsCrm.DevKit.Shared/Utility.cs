@@ -1,6 +1,7 @@
 ﻿using DynamicsCrm.DevKit.Shared.Models;
 using EnvDTE;
 using Microsoft.CSharp;
+using Microsoft.VisualStudio.Shell;
 using Microsoft.Xrm.Sdk.Metadata;
 using System;
 using System.Collections.Generic;
@@ -759,6 +760,7 @@ namespace DynamicsCrm.DevKit.Shared
 
         public static bool ProxyTypesProjectExist(DTE dte)
         {
+            Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
             var proxyTypesProjectName = Utility.GetProxyTypesProject(dte);
             return Utility.ExistProject(dte, proxyTypesProjectName);
         }
