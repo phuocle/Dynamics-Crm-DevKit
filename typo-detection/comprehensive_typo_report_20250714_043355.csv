@@ -1,0 +1,5 @@
+File,Line,Column,Typo,Correction,Context,Severity,Confidence,Line Content
+"../v3/DynamicsCrm.DevKit.Shared/JsTypeScriptDeclaration.cs",126,108,"dependant","dependent","comment","medium",0.95,"_d_ts += $""{TAB}{TAB}/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */{NEW_LINE}"";"
+"../v3/DynamicsCrm.DevKit.Shared/XrmHelper.cs",294,17,"respone","response","code","medium",0.95,"var respone = (RetrieveAllEntitiesResponse)crmServiceClient.Execute(request);"
+"../v3/DynamicsCrm.DevKit.Shared/XrmHelper.cs",305,17,"respone","response","code","medium",0.95,"var respone = (RetrieveAllEntitiesResponse)crmServiceClient.Execute(request);"
+"../v3/DynamicsCrm.DevKit.Shared/JsTypeScriptDeclaration2.cs",143,108,"dependant","dependent","comment","medium",0.95,"_d_ts += $""{TAB}{TAB}/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */{NEW_LINE}"";"

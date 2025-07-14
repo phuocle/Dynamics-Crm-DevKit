@@ -1,0 +1,78 @@
+{
+  "timestamp": "2025-07-14T04:36:44.025249",
+  "scanner": "Comprehensive Typo Detection System",
+  "statistics": {
+    "files_scanned": 320,
+    "typos_found": 4,
+    "files_with_typos": 3,
+    "corrections_applied": 0,
+    "files_modified": 0
+  },
+  "findings": [
+    {
+      "file": "../v3/DynamicsCrm.DevKit.Shared/JsTypeScriptDeclaration.cs",
+      "line": 126,
+      "column": 108,
+      "typo": "dependant",
+      "correction": "dependent",
+      "context": "comment",
+      "severity": "medium",
+      "confidence": 0.95,
+      "line_content": "_d_ts += $\"{TAB}{TAB}/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */{NEW_LINE}\";",
+      "before": "            _d_ts += $\"{TAB}{TAB}/** The @odata.etag is then used to build a cache of the response that is ",
+      "after": " on the fields that are retrieved */{NEW_LINE}\";"
+    },
+    {
+      "file": "../v3/DynamicsCrm.DevKit.Shared/XrmHelper.cs",
+      "line": 294,
+      "column": 17,
+      "typo": "respone",
+      "correction": "response",
+      "context": "code",
+      "severity": "medium",
+      "confidence": 0.95,
+      "line_content": "var respone = (RetrieveAllEntitiesResponse)crmServiceClient.Execute(request);",
+      "before": "            var ",
+      "after": " = (RetrieveAllEntitiesResponse)crmServiceClient.Execute(request);"
+    },
+    {
+      "file": "../v3/DynamicsCrm.DevKit.Shared/XrmHelper.cs",
+      "line": 305,
+      "column": 17,
+      "typo": "respone",
+      "correction": "response",
+      "context": "code",
+      "severity": "medium",
+      "confidence": 0.95,
+      "line_content": "var respone = (RetrieveAllEntitiesResponse)crmServiceClient.Execute(request);",
+      "before": "            var ",
+      "after": " = (RetrieveAllEntitiesResponse)crmServiceClient.Execute(request);"
+    },
+    {
+      "file": "../v3/DynamicsCrm.DevKit.Shared/JsTypeScriptDeclaration2.cs",
+      "line": 143,
+      "column": 108,
+      "typo": "dependant",
+      "correction": "dependent",
+      "context": "comment",
+      "severity": "medium",
+      "confidence": 0.95,
+      "line_content": "_d_ts += $\"{TAB}{TAB}/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */{NEW_LINE}\";",
+      "before": "            _d_ts += $\"{TAB}{TAB}/** The @odata.etag is then used to build a cache of the response that is ",
+      "after": " on the fields that are retrieved */{NEW_LINE}\";"
+    }
+  ],
+  "typos_searched": 224,
+  "summary": {
+    "file_types": {
+      ".cs": 4
+    },
+    "contexts": {
+      "comment": 2,
+      "code": 2
+    },
+    "severities": {
+      "medium": 4
+    }
+  }
+}

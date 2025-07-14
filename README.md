@@ -48,7 +48,7 @@
 ![Form](/v3/images/form.gif)
 
 ## Deploy webresource from Visual Studio
-![Form](/v3/images/webresouce.gif)
+![Form](/v3/images/webresource.gif)
 
 ## Deploy report from Visual Studio
 ![Form](/v3/images/report.gif)
