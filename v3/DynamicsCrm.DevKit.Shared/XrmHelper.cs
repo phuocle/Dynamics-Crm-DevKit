@@ -291,8 +291,8 @@ namespace DynamicsCrm.DevKit.Shared
                 EntityFilters = EntityFilters.All,
                 RetrieveAsIfPublished = true
             };
-            var respone = (RetrieveAllEntitiesResponse)crmServiceClient.Execute(request);
-            return respone.EntityMetadata.ToList();
+            var response = (RetrieveAllEntitiesResponse)crmServiceClient.Execute(request);
+            return response.EntityMetadata.ToList();
         }
 
         public static List<string> GetAllEntitiesSchema(CrmServiceClient crmServiceClient)
@@ -302,8 +302,8 @@ namespace DynamicsCrm.DevKit.Shared
                 EntityFilters = EntityFilters.All,
                 RetrieveAsIfPublished = true
             };
-            var respone = (RetrieveAllEntitiesResponse)crmServiceClient.Execute(request);
-            return respone.EntityMetadata.ToList().Select(x => x.SchemaName).ToList();
+            var response = (RetrieveAllEntitiesResponse)crmServiceClient.Execute(request);
+            return response.EntityMetadata.ToList().Select(x => x.SchemaName).ToList();
         }
 
         public static List<EntityMetadata> GetEntitiesMetadata(CrmServiceClient crmServiceClient, List<string> schemaNames)

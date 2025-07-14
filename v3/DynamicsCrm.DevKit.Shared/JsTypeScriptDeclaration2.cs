@@ -138,7 +138,7 @@ namespace DynamicsCrm.DevKit.Shared
             _d_ts += $"{TAB}{TAB}readonly EntityName: string;{NEW_LINE}";
             _d_ts += $"{TAB}{TAB}/** The entity collection name */{NEW_LINE}";
             _d_ts += $"{TAB}{TAB}readonly EntityCollectionName: string;{NEW_LINE}";
-            _d_ts += $"{TAB}{TAB}/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}/** The @odata.etag is then used to build a cache of the response that is dependent on the fields that are retrieved */{NEW_LINE}";
             _d_ts += $"{TAB}{TAB}readonly \"@odata.etag\": string;{NEW_LINE}";
             foreach (var attribute in EntityMetadata?.Attributes?.OrderBy(x => x.SchemaName))
             {
