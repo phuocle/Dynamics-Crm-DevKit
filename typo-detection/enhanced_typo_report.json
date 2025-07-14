@@ -1,0 +1,15 @@
+{
+  "timestamp": "2025-07-14T04:16:08.098681",
+  "statistics": {
+    "files_scanned": 15273,
+    "typos_found": 0,
+    "corrections_applied": 0,
+    "files_modified": 0
+  },
+  "findings": [],
+  "summary": {
+    "files": {},
+    "contexts": {},
+    "severities": {}
+  }
+}

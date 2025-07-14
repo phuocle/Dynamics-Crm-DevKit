@@ -1,0 +1,107 @@
+{
+  "timestamp": "2025-07-14T04:25:26.778194",
+  "scanner": "Targeted Typo Scanner",
+  "statistics": {
+    "files_scanned": 278,
+    "typos_found": 6,
+    "files_with_typos": 3
+  },
+  "findings": [
+    {
+      "file": "../v3/DynamicsCrm.DevKit.Shared/JsTypeScriptDeclaration.cs",
+      "line": 126,
+      "column": 108,
+      "typo": "dependant",
+      "correction": "dependent",
+      "context": "comment",
+      "severity": "medium",
+      "confidence": 0.95,
+      "line_content": "_d_ts += $\"{TAB}{TAB}/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */{NEW_LINE}\";",
+      "before": "            _d_ts += $\"{TAB}{TAB}/** The @odata.etag is then used to build a cache of the response that is ",
+      "after": " on the fields that are retrieved */{NEW_LINE}\";"
+    },
+    {
+      "file": "../v3/DynamicsCrm.DevKit.Shared/JsTypeScriptDeclaration2.cs",
+      "line": 143,
+      "column": 108,
+      "typo": "dependant",
+      "correction": "dependent",
+      "context": "comment",
+      "severity": "medium",
+      "confidence": 0.95,
+      "line_content": "_d_ts += $\"{TAB}{TAB}/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */{NEW_LINE}\";",
+      "before": "            _d_ts += $\"{TAB}{TAB}/** The @odata.etag is then used to build a cache of the response that is ",
+      "after": " on the fields that are retrieved */{NEW_LINE}\";"
+    },
+    {
+      "file": "../v3/DynamicsCrm.DevKit.Shared/XrmHelper.cs",
+      "line": 294,
+      "column": 17,
+      "typo": "respone",
+      "correction": "response",
+      "context": "code",
+      "severity": "medium",
+      "confidence": 0.95,
+      "line_content": "var respone = (RetrieveAllEntitiesResponse)crmServiceClient.Execute(request);",
+      "before": "            var ",
+      "after": " = (RetrieveAllEntitiesResponse)crmServiceClient.Execute(request);"
+    },
+    {
+      "file": "../v3/DynamicsCrm.DevKit.Shared/XrmHelper.cs",
+      "line": 295,
+      "column": 20,
+      "typo": "respone",
+      "correction": "response",
+      "context": "text",
+      "severity": "medium",
+      "confidence": 0.95,
+      "line_content": "return respone.EntityMetadata.ToList();",
+      "before": "            return ",
+      "after": ".EntityMetadata.ToList();"
+    },
+    {
+      "file": "../v3/DynamicsCrm.DevKit.Shared/XrmHelper.cs",
+      "line": 305,
+      "column": 17,
+      "typo": "respone",
+      "correction": "response",
+      "context": "code",
+      "severity": "medium",
+      "confidence": 0.95,
+      "line_content": "var respone = (RetrieveAllEntitiesResponse)crmServiceClient.Execute(request);",
+      "before": "            var ",
+      "after": " = (RetrieveAllEntitiesResponse)crmServiceClient.Execute(request);"
+    },
+    {
+      "file": "../v3/DynamicsCrm.DevKit.Shared/XrmHelper.cs",
+      "line": 306,
+      "column": 20,
+      "typo": "respone",
+      "correction": "response",
+      "context": "text",
+      "severity": "medium",
+      "confidence": 0.95,
+      "line_content": "return respone.EntityMetadata.ToList().Select(x => x.SchemaName).ToList();",
+      "before": "            return ",
+      "after": ".EntityMetadata.ToList().Select(x => x.SchemaName).ToList();"
+    }
+  ],
+  "typos_searched": 234,
+  "summary": {
+    "file_types": {
+      ".cs": 6
+    },
+    "contexts": {
+      "comment": 2,
+      "code": 2,
+      "text": 2
+    },
+    "severities": {
+      "medium": 6
+    },
+    "typo_counts": {
+      "dependant": 2,
+      "respone": 4
+    }
+  }
+}
