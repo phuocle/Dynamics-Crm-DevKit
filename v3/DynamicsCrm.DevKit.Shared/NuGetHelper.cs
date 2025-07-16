@@ -33,7 +33,7 @@ namespace DynamicsCrm.DevKit.Shared
             SourceRepository repository = Repository.Factory.GetCoreV3("https://api.nuget.org/v3/index.json");
             FindPackageByIdResource resource = await repository.GetResourceAsync<FindPackageByIdResource>();
             IEnumerable<NuGetVersion> versions = await resource.GetAllVersionsAsync(nuget, cache, logger, cancellationToken);
-            return versions.ToList();
+            return versions.Where(v => !v.IsPrerelease).ToList();
         }
 
         internal static string GetTargetFramework(string nuget, NuGetVersion version)

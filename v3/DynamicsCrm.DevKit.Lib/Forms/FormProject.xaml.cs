@@ -238,6 +238,16 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     LabelProjectName.Content = $"{VsixHelper.GetSolutionName()}.Console";
                     LabelProjectName.Tag = LabelProjectName.Content;
                 }
+                void ConsoleCoreProject()
+                {
+                    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Console-Core-Project-Template");
+                    HELP.Inlines.Clear();
+                    HELP.Inlines.Add("Console Core Project Template");
+                    ComboBoxProject.Visibility = System.Windows.Visibility.Hidden;
+                    TextboxProject.Visibility = System.Windows.Visibility.Visible;
+                    LabelProjectName.Content = $"{VsixHelper.GetSolutionName()}.Console";
+                    LabelProjectName.Tag = LabelProjectName.Content;
+                }
                 void ServerProject()
                 {
                     HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Server-Project-Template");
@@ -392,6 +402,9 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     case ProjectType.Console:
                         ConsoleProject();
                         break;
+                    case ProjectType.ConsoleCore:
+                        ConsoleCoreProject();
+                        break;
                     case ProjectType.Server:
                         ServerProject();
                         break;
@@ -515,12 +528,14 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         }
 
         public string NameSpace { get; set; }
+        public bool IsUseOOBConnection { get; set; }
 
-        public FormProject(ProjectType projectType)
+        public FormProject(ProjectType projectType, bool IsUseOOBConnection = true)
         {
             InitializeComponent();
             ProjectType = projectType;
             PanelCustom.Visibility = System.Windows.Visibility.Hidden;
+            this.IsUseOOBConnection = IsUseOOBConnection;
         }
 
         public FormProject(ItemType itemType, DTE dte = null)

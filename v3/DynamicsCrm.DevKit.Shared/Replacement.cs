@@ -115,6 +115,17 @@ namespace DynamicsCrm.DevKit.Shared
             var versionMicrosoftCrmSdkCoreTools = NuGetHelper.ListPackageVersions("Microsoft.CrmSdk.CoreTools").Last();
             replacements.Add("$Microsoft.CrmSdk.CoreTools.version$", versionMicrosoftCrmSdkCoreTools.OriginalVersion);
 
+            var versionMicrosoftPowerPlatformDataverseClient = NuGetHelper.ListPackageVersions("Microsoft.PowerPlatform.Dataverse.Client").Last();
+            replacements.Add("$Microsoft.PowerPlatform.Dataverse.Client.version$", versionMicrosoftPowerPlatformDataverseClient.OriginalVersion);
+
+            var versionNSubstitute = NuGetHelper.ListPackageVersions("NSubstitute").Last();
+            replacements.Add("$NSubstitute.version$", versionNSubstitute.OriginalVersion);
+
+            var versionMicrosoftExtensionsConfiguration = NuGetHelper.ListPackageVersions("Microsoft.Extensions.Configuration").Last();
+            replacements.Add("$Microsoft.Extensions.Configuration.version$", versionMicrosoftExtensionsConfiguration.OriginalVersion);
+            var versionMicrosoftExtensionsConfigurationJson = NuGetHelper.ListPackageVersions("Microsoft.Extensions.Configuration.Json").Last();
+            replacements.Add("$Microsoft.Extensions.Configuration.Json.version$", versionMicrosoftExtensionsConfigurationJson.OriginalVersion);
+
             //var versionDynamics365UIAutomationApi = NuGetHelper.ListPackageVersions("Dynamics365.UIAutomation.Api").Last();
             //replacements.Add("$Dynamics365.UIAutomation.Api.version$", versionDynamics365UIAutomationApi.OriginalVersion);
             //replacements.Add("$Dynamics365.UIAutomation.Api.targetFramework$", NuGetHelper.GetTargetFramework("Dynamics365.UIAutomation.Api", versionDynamics365UIAutomationApi));

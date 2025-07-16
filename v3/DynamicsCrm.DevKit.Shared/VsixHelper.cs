@@ -203,8 +203,57 @@ namespace DynamicsCrm.DevKit.Shared
             var oldProjectFolder = Path.GetDirectoryName(project.FullName);
             var newProjectFolder = Directory.GetParent(oldProjectFolder).FullName + "\\" + projectName;
             var projectFileName = Path.GetFileName(project.FullName);
+
+            // Step 1: Close all documents in the project
+            try
+            {
+                foreach (Document doc in DTE.Documents)
+                {
+                    if (doc.FullName.StartsWith(oldProjectFolder, StringComparison.OrdinalIgnoreCase))
+                    {
+                        doc.Close(vsSaveChanges.vsSaveChangesPrompt);
+                    }
+                }
+            }
+            catch { } // Ignore errors during document closing
+
+            // Step 2: Remove project from solution
             DTE.Solution.Remove(project);
-            Directory.Move(oldProjectFolder, newProjectFolder);
+
+            // Step 3: Force cleanup
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+            GC.Collect();
+
+            // Step 4: Retry directory move with exponential backoff
+            var maxRetries = 5;
+            var delay = 500;
+
+            for (int i = 0; i < maxRetries; i++)
+            {
+                try
+                {
+                    Directory.Move(oldProjectFolder, newProjectFolder);
+                    break;
+                }
+                catch (IOException ex) when (ex.Message.Contains("being used by another process"))
+                {
+                    if (i == maxRetries - 1)
+                    {
+                        // Log or show error message with helpful information
+                        throw new IOException($"Unable to move project folder after {maxRetries} attempts. " +
+                            $"Please close Visual Studio, manually rename the folder from '{oldProjectFolder}' to '{newProjectFolder}', " +
+                            $"and then reopen the solution.", ex);
+                    }
+
+                    System.Threading.Thread.Sleep(delay);
+                    delay = Math.Min(delay * 2, 5000); // Cap at 5 seconds
+
+                    GC.Collect();
+                    GC.WaitForPendingFinalizers();
+                }
+            }
+
             DTE.Solution.AddFromFile(newProjectFolder + "\\" + projectFileName);
             DTE.Solution.SaveAs(DTE.Solution.FullName);
         }

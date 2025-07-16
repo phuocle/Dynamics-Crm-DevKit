@@ -13,11 +13,12 @@ namespace DynamicsCrm.DevKit.Lib.Forms
 {
     public partial class FormConnection : BaseDialogWindow
     {
-        public FormConnection()
+        public FormConnection(bool IsUseOOBConnection = true)
         {
             InitializeComponent();
             FixMicrosoftXrmToolingUiStyles();
             LoadConnections();
+            if (!IsUseOOBConnection) radioButtonOOBConnection.Visibility = System.Windows.Visibility.Hidden;
         }
 
         private void FixMicrosoftXrmToolingUiStyles()
