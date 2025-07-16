@@ -116,10 +116,8 @@ namespace $NameSpace$
             {
                 "CLIENTSECRET" => BuildClientSecretConnectionString(dataverseSettings, url),
                 "OAUTH" => BuildOAuthConnectionString(dataverseSettings, url),
-                "CERTIFICATE" => BuildCertificateConnectionString(dataverseSettings, url),
                 "AD" => BuildAdConnectionString(dataverseSettings, url),
-                "OFFICE365" => BuildOffice365ConnectionString(dataverseSettings, url),
-                _ => throw new InvalidOperationException($"Unsupported AuthType: {authType}. Supported types are: ClientSecret, OAuth, Certificate, AD, Office365")
+                _ => throw new InvalidOperationException($"Unsupported AuthType: {authType}. Supported types are: ClientSecret, OAuth, AD")
             };
         }
 
@@ -149,14 +147,6 @@ namespace $NameSpace$
             return connectionString;
         }
 
-        private static string BuildCertificateConnectionString(IConfigurationSection settings, string url)
-        {
-            var clientId = GetAppSettingValue(settings, "ClientId");
-            var thumbprint = GetAppSettingValue(settings, "Thumbprint");
-            var storeName = GetAppSettingValue(settings, "StoreName");
-            return $"AuthType=Certificate;Url={url};ClientId={clientId};Thumbprint={thumbprint};StoreName={storeName};";
-        }
-
         private static string BuildAdConnectionString(IConfigurationSection settings, string url)
         {
             var username = GetAppSettingValue(settings, "Username");
@@ -167,14 +157,6 @@ namespace $NameSpace$
             var user = userParts[1];
             if (string.IsNullOrWhiteSpace(domain) || string.IsNullOrWhiteSpace(user)) throw new InvalidOperationException("Domain and username cannot be empty for AD authentication");
             return $"AuthType=AD;Url={url};Domain={domain};Username={user};Password={password};";
-        }
-
-        private static string BuildOffice365ConnectionString(IConfigurationSection settings, string url)
-        {
-            var username = GetAppSettingValue(settings, "Username");
-            var password = GetAppSettingValue(settings, "Password");
-            if (!username.Contains('@') || username.Length < 5) throw new InvalidOperationException("Username must be a valid email address for Office365 authentication");
-            return $"AuthType=Office365;Url={url};Username={username};Password={password};";
         }
 
         private static string GetAppSettingValue(IConfigurationSection settings, string key)

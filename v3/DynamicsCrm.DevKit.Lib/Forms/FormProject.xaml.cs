@@ -536,6 +536,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             ProjectType = projectType;
             PanelCustom.Visibility = System.Windows.Visibility.Hidden;
             this.IsUseOOBConnection = IsUseOOBConnection;
+            CONNECTION.IsUseOOBConnection = IsUseOOBConnection;
         }
 
         public FormProject(ItemType itemType, DTE dte = null)
@@ -543,6 +544,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             InitializeComponent();
             ItemType = itemType;
             DTE = dte;
+            CONNECTION.IsUseOOBConnection = true; // Default to true for ItemType constructor
             if (ItemType == ItemType.Workflow || ItemType == ItemType.Test || ItemType == ItemType.UiTest)
             {
                 LoadCustomTemplates();

@@ -145,6 +145,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             InitializeComponent();
             ItemType = itemType;
             NameSpace = nameSpace;
+            CONNECTION.IsUseOOBConnection = true; // Default to true for FormPlugin
             LoadComboBoxes();
             LoadCustomTemplates();
         }

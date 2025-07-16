@@ -38,7 +38,7 @@ namespace DynamicsCrm.DevKit.Lib.Wizard.ProjectTemplates
         {
             var OOBDestinationDirectory = replacementsDictionary["$destinationdirectory$"];
             if (!VsixHelper.IsSharedProjectExist()) VsixHelper.ThrowWizardCancelledException(OOBDestinationDirectory);
-            var form = new FormProject(DevKit.Shared.ProjectType.ConsoleCore);
+            var form = new FormProject(DevKit.Shared.ProjectType.ConsoleCore, false);
             var ok = form.ShowModal() ?? false;
             Replacement.Set(replacementsDictionary, form);
             if (ok)

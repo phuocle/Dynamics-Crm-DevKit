@@ -36,6 +36,7 @@ namespace DynamicsCrm.DevKit.Lib.WpfControls
         public CrmServiceClient CrmServiceClient { get; set; }
         public string DataverseConnectionString { get; set; }
         public DynamicsCrm.DevKit.Shared.Models.CrmConnection CrmConnection {get;set; }
+        public bool IsUseOOBConnection { get; set; } = true;
 
         public event EventHandler Connected;
 
@@ -47,7 +48,7 @@ namespace DynamicsCrm.DevKit.Lib.WpfControls
 
         private void ButtonConnection_Click(object sender, RoutedEventArgs e)
         {
-            var formConnection = new FormConnection();
+            var formConnection = new FormConnection(IsUseOOBConnection);
             var result = formConnection.ShowModal() ?? false;
             if (result) {
                 if (formConnection.IsOOBConnection)
