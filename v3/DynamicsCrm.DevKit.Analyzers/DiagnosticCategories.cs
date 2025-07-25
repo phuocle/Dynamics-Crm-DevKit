@@ -5,6 +5,6 @@
         public const string General = "General";
         public const string Performance = "Performance";
         public const string Usage = "Usage";
-        public const string Require = "Require";
+        public const string Category = "DynamicsCrm.DevKit";
     }
 }
