@@ -4,7 +4,7 @@ namespace DynamicsCrm.DevKit.Shared
 {
     public class Const
     {
-        public const string Version = "3.55.55.55";
+        public const string Version = "3.66.66.66";
         public const string Build = "xxxx.yy.zz HH.mm.ss";
         public const string CrmString = "Dataverse/CDS";
         public const string DynamicsCrmDevKitJson = "DynamicsCrm.DevKit.json";

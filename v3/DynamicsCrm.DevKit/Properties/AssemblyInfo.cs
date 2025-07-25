@@ -14,5 +14,5 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCopyright("Copyright © PhuocLe 2016 - 2026")]
 [assembly: AssemblyTrademark("PhuocLe")]
 [assembly: ComVisible(false)]
-[assembly: AssemblyVersion("3.55.55.55")]
-[assembly: AssemblyFileVersion("3.55.55.55")]
+[assembly: AssemblyVersion("3.66.66.66")]
+[assembly: AssemblyFileVersion("3.66.66.66")]
