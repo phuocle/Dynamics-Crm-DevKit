@@ -1,8 +1,9 @@
 
-# DynamicsCrm.DevKit v.3.44.44.44 contains:
-* [16 Visual Studio projects template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Projects-Template)
+# DynamicsCrm.DevKit v.3.66.66.66 contains:
+* [17 Visual Studio projects template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Projects-Template)
     * [01. Shared Project](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Shared-Project-Template)
-    * [02. Console Shared Project](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Console-Project-Template)
+    * [02. Console Project](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Console-Project-Template)
+    * [02A. Console Core Project](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Console-Core-Project-Template) 
     * [03. Server Project](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Server-Project-Template)
     * [04. Plugin Project](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Plugin-Project-Template)
     * [05. Workflow Project](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Workflow-Project-Template)
