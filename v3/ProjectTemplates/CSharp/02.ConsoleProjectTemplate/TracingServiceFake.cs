@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xrm.Sdk;
 
-namespace $NameSpace$.Debug
+namespace $NameSpace$.Lib
 {
     public class TracingServiceFake : ITracingService
     {

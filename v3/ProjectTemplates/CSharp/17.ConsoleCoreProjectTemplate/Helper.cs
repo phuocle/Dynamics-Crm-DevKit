@@ -20,7 +20,8 @@ namespace $NameSpace$.Lib
             using (var ms = new MemoryStream(Encoding.Unicode.GetBytes(jsonString)))
             {
                 var serializer = new DataContractJsonSerializer(obj.GetType(), settings);
-                obj = (RemoteExecutionContext?)serializer.ReadObject(ms) ?? obj;
+                var deserialized = serializer.ReadObject(ms);
+                obj = deserialized != null ? (RemoteExecutionContext)deserialized : obj;
             }
             return obj;
         }
@@ -76,18 +77,20 @@ namespace $NameSpace$.Lib
                                 parameters[key] = dateTime;
                             break;
                         case EntityReference entityReference:
-                            if (entityReference != null && entityReference.Name == null)
+                            if (entityReference?.Name == null)
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
                                 entityReference.Name = "(No Name)";
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
                             break;
                         case Array array:
                             var entityReferenceCollection = new EntityReferenceCollection();
                             var listString = new List<string>();
                             foreach (var item in array)
                             {
-                                if (item is EntityReference entityReference)
-                                    entityReferenceCollection.Add(entityReference);
-                                else if (item is string @string)
-                                    listString.Add(@string);
+                                if (item is EntityReference entityRef)
+                                    entityReferenceCollection.Add(entityRef);
+                                else if (item is string str)
+                                    listString.Add(str);
                             }
                             if (entityReferenceCollection.Count > 0) parameters[key] = entityReferenceCollection;
                             if (listString.Count > 0) parameters[key] = listString.ToArray();
@@ -113,8 +116,10 @@ namespace $NameSpace$.Lib
                         try
                         {
                             var er = entity.GetAttributeValue<EntityReference>(key);
-                            if (er != null && er.Name == null)
+                            if (er?.Name == null)
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
                                 er.Name = "(No Name)";
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
                         }
                         catch { }
                     }

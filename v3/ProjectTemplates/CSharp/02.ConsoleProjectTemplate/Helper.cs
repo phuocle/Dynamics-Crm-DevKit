@@ -1,15 +1,19 @@
-﻿using Microsoft.PowerPlatform.Dataverse.Client;
-using Microsoft.Xrm.Sdk;
+﻿using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Extensions;
 using Microsoft.Xrm.Sdk.PluginTelemetry;
+using Microsoft.Xrm.Tooling.Connector;
 using NSubstitute;
+using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.IO.Compression;
+using System.Linq;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 using System.Text;
 
-namespace $NameSpace$.Debug
+namespace $NameSpace$.Lib
 {
     public static class Helper
     {
@@ -20,11 +24,12 @@ namespace $NameSpace$.Debug
             using (var ms = new MemoryStream(Encoding.Unicode.GetBytes(jsonString)))
             {
                 var serializer = new DataContractJsonSerializer(obj.GetType(), settings);
-                obj = (RemoteExecutionContext?)serializer.ReadObject(ms) ?? obj;
+                var deserialized = serializer.ReadObject(ms);
+                obj = deserialized != null ? (RemoteExecutionContext)deserialized : obj;
             }
             return obj;
         }
-        public static IServiceProvider GetServiceProvider(string json, ServiceClient service)
+        public static IServiceProvider GetServiceProvider(string json, CrmServiceClient service)
         {
             var pluginExecutionContext = DeserializeRemoteExecutionContext(json);
             FixPluginExecutionContext();
@@ -76,7 +81,7 @@ namespace $NameSpace$.Debug
                                 parameters[key] = dateTime;
                             break;
                         case EntityReference entityReference:
-                            if (entityReference != null && entityReference.Name == null)
+                            if (entityReference?.Name == null)
                                 entityReference.Name = "(No Name)";
                             break;
                         case Array array:
@@ -113,7 +118,7 @@ namespace $NameSpace$.Debug
                         try
                         {
                             var er = entity.GetAttributeValue<EntityReference>(key);
-                            if (er != null && er.Name == null)
+                            if (er?.Name == null)
                                 er.Name = "(No Name)";
                         }
                         catch { }
@@ -171,9 +176,11 @@ namespace $NameSpace$.Debug
             var compressedStream = new MemoryStream(Convert.FromBase64String(compressedString));
             using (var decompressorStream = new DeflateStream(compressedStream, CompressionMode.Decompress))
             {
-                using var decompressedStream = new MemoryStream();
-                decompressorStream.CopyTo(decompressedStream);
-                decompressedBytes = decompressedStream.ToArray();
+                using (var decompressedStream = new MemoryStream())
+                {
+                    decompressorStream.CopyTo(decompressedStream);
+                    decompressedBytes = decompressedStream.ToArray();
+                }
             }
             return Encoding.UTF8.GetString(decompressedBytes);
         }

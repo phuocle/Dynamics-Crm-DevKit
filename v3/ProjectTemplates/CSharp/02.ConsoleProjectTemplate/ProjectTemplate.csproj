@@ -31,7 +31,6 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>x64</PlatformTarget>
-    <NoWarn>CS8032</NoWarn>
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <PropertyGroup>
@@ -133,8 +132,8 @@
     </Compile>$endif$
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Debug\Helper.cs" />
-    <Compile Include="Debug\TracingServiceFake.cs" />
+    <Compile Include="Lib\Helper.cs" />
+    <Compile Include="Lib\TracingServiceFake.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
