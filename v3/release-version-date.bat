@@ -10,7 +10,7 @@ powershell -Command "(gc DynamicsCrm.DevKit\source.extension.vsixmanifest) -repl
 powershell -Command "(gc DynamicsCrm.DevKit\VSPackage.resx) -replace 'xxxx.yy.zz HH.mm.ss', (gc date.txt) | Out-File -encoding UTF8 DynamicsCrm.DevKit\VSPackage.resx"
 powershell -Command "(gc ProjectTemplates\CSharp\16.PackageProjectTemplate\ReadMe.md) -replace 'xxxx.yy.zz HH.mm.ss', (gc date.txt) | Out-File -encoding UTF8 ProjectTemplates\CSharp\16.PackageProjectTemplate\ReadMe.md"
 powershell -Command "(gc ProjectTemplates\CSharp\16.PackageProjectTemplate\ReadMe.md) -replace 'x.xx.xx.xx', (gc version.txt) | Out-File -encoding UTF8 ProjectTemplates\CSharp\16.PackageProjectTemplate\ReadMe.md"
-powershell -Command "(gc DynamicsCrm.DevKit.Lib\FormLogin.xaml) -replace 'x.xx.xx.xx', (gc version.txt) | Out-File -encoding UTF8 DynamicsCrm.DevKit.Lib\FormLogin.xaml"
+powershell -Command "(gc DynamicsCrm.DevKit.Lib\Forms\FormLogin.xaml) -replace 'x.xx.xx.xx', (gc version.txt) | Out-File -encoding UTF8 DynamicsCrm.DevKit.Lib\Forms\FormLogin.xaml"
 powershell -Command "(gc ..\README.md) -replace 'x.xx.xx.xx', (gc version.txt) | Out-File -encoding UTF8 ..\README.md"
 
 echo ************************************************************
@@ -40,7 +40,7 @@ if %MsBuild%=="" (
 	powershell -Command "(gc DynamicsCrm.DevKit\VSPackage.resx) -replace (gc date.txt), 'xxxx.yy.zz HH.mm.ss'  | Out-File -encoding UTF8 DynamicsCrm.DevKit\VSPackage.resx"
 	powershell -Command "(gc ProjectTemplates\CSharp\16.PackageProjectTemplate\ReadMe.md) -replace (gc date.txt), 'xxxx.yy.zz HH.mm.ss' | Out-File -encoding UTF8 ProjectTemplates\CSharp\16.PackageProjectTemplate\ReadMe.md"
 	powershell -Command "(gc ProjectTemplates\CSharp\16.PackageProjectTemplate\ReadMe.md) -replace (gc version.txt), 'x.xx.xx.xx' | Out-File -encoding UTF8 ProjectTemplates\CSharp\16.PackageProjectTemplate\ReadMe.md"
-	powershell -Command "(gc DynamicsCrm.DevKit.Lib\FormLogin.xaml) -replace (gc version.txt), 'x.xx.xx.xx' | Out-File -encoding UTF8 DynamicsCrm.DevKit.Lib\FormLogin.xaml"
+	powershell -Command "(gc DynamicsCrm.DevKit.Lib\Forms\FormLogin.xaml) -replace (gc version.txt), 'x.xx.xx.xx' | Out-File -encoding UTF8 DynamicsCrm.DevKit.Lib\Forms\FormLogin.xaml"
 	powershell -Command "(gc ..\README.md) -replace (gc version.txt), 'x.xx.xx.xx' | Out-File -encoding UTF8 ..\README.md"
 
     echo ************************************************************
