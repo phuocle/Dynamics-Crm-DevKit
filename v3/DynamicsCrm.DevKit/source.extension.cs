@@ -11,7 +11,7 @@ namespace DynamicsCrm.DevKit
         public const string Name = "DynamicsCrm.DevKit";
         public const string Description = @"A collection of projects/items template for develop Dynamics 365 CRM/CDS/Dataverse (Build: xxxx.yy.zz HH.mm.ss)";
         public const string Language = "en-US";
-        public const string Version = "3.66.66.66";
+        public const string Version = "x.xx.xx.xx";
         public const string Author = "PhuocLe";
         public const string Tags = "Dynamics; Dynamics 365; Dynamics CRM; Tool; JavaScript; CDS";
     }

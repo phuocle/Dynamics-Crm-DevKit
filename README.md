@@ -1,5 +1,5 @@
 
-# DynamicsCrm.DevKit v.3.66.66.66 contains:
+# DynamicsCrm.DevKit v.x.xx.xx.xx contains:
 * [17 Visual Studio projects template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Projects-Template)
     * [01. Shared Project](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Shared-Project-Template)
     * [02. Console Project](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Console-Project-Template)
