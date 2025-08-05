@@ -79,7 +79,8 @@ namespace DynamicsCrm.DevKit.Cli
             CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "DynamicsCrm.DevKit.Cli.json ", ConsoleColor.Blue, "Path=", ConsoleColor.White, arguments.JsonFile);
             if (arguments.IsSdkLogin)
             {
-                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Arguments: ", ConsoleColor.Blue, "/sdklogin:", ConsoleColor.White, "\"yes\"" + "\"");
+                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Arguments: ", ConsoleColor.Blue, "/sdklogin:", ConsoleColor.White, "\"yes\"");
+                CliLog.WriteLine(ConsoleColor.White, "|           ", ConsoleColor.Blue, "/url:", ConsoleColor.White, "\"" + arguments.Url + "\"");
                 CliLog.WriteLine(ConsoleColor.White, "|           ", ConsoleColor.Blue, "/json:", ConsoleColor.White, "\"" + arguments.Json + "\"");
                 CliLog.WriteLine(ConsoleColor.White, "|           ", ConsoleColor.Blue, "/type:", ConsoleColor.White, "\"" + arguments.Type + "\"");
                 CliLog.WriteLine(ConsoleColor.White, "|           ", ConsoleColor.Blue, "/profile:", ConsoleColor.White, "\"" + arguments.Profile + "\"");
@@ -108,6 +109,7 @@ namespace DynamicsCrm.DevKit.Cli
             }
             if (IsNeedServiceClient(arguments))
             {
+                ServiceClient.MaxConnectionTimeout = new TimeSpan(1, 0, 0);
                 if (arguments.IsSdkLogin)
                 {
                     var ignoreCliTypes = new List<string>() { nameof(CliType.proxytypes) };
@@ -171,24 +173,52 @@ namespace DynamicsCrm.DevKit.Cli
 
         private static bool IsConnectedDynamics365BySdkLogin(string url)
         {
-            //ServiceClient.MaxConnectionTimeout = new TimeSpan(1, 0, 0);
-            //var loginForm = new FormLogin(true);
-            //loginForm.ConnectionToCrmCompleted += loginForm_ConnectionToCrmCompleted;
-            //loginForm.ShowDialog();
-            //if (loginForm.CrmConnectionMgr != null && loginForm.CrmConnectionMgr.CrmSvc != null && loginForm.CrmConnectionMgr.CrmSvc.IsReady)
-            //{
-            //    CrmServiceClient = loginForm.CrmConnectionMgr.CrmSvc;
-            //    return true;
-            //}
-            return false;
-        }
-
-        private static void loginForm_ConnectionToCrmCompleted(object sender, EventArgs e)
-        {
-            //if (sender is FormLogin login)
-            //{
-            //    login.Close();
-            //}
+            try
+            {
+                CliLog.WriteLine(ConsoleColor.White, "|");
+                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Starting OAuth authentication...");
+                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Yellow, "Please complete authentication in the browser window that will open.");
+                // Use interactive OAuth authentication with browser login
+                // This will open a browser window for the user to authenticate
+                var serviceClient = new ServiceClient(
+                    userId: null, // Will prompt for user ID in browser
+                    password: null, // Will prompt for password in browser
+                    hostUri: new Uri(url),
+                    useUniqueInstance: true,
+                    clientId: "51f81489-12ee-4a9e-aaae-a2591f45987d", // Default Dynamics 365 CLI app ID
+                    redirectUri: new Uri("app://58145B91-0C36-4500-8554-080854F2AC97"), // Default redirect URI
+                    promptBehavior: Microsoft.PowerPlatform.Dataverse.Client.Auth.PromptBehavior.Always, // Always prompt for authentication
+                    useDefaultCreds: false,
+                    tokenCacheStorePath: null, // Use in-memory cache
+                    logger: null
+                );
+                // Check if connection was successful
+                if (serviceClient != null && serviceClient.IsReady)
+                {
+                    ServiceClient = serviceClient;
+                    CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "OAuth authentication successful!");
+                    return true;
+                }
+                else
+                {
+                    CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Red, "OAuth authentication failed - service not ready");
+                    if (!string.IsNullOrEmpty(serviceClient?.LastError))
+                    {
+                        CliLog.WriteLineError(ConsoleColor.Red, $"Error: {serviceClient.LastError}");
+                    }
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Red, "OAuth authentication failed with exception:");
+                CliLog.WriteLineError(ConsoleColor.Red, ex.Message);
+                if (ex.InnerException != null)
+                {
+                    CliLog.WriteLineError(ConsoleColor.Red, $"Inner Exception: {ex.InnerException.Message}");
+                }
+                return false;
+            }
         }
     }
 }

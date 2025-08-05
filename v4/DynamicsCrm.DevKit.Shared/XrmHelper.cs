@@ -125,7 +125,7 @@ namespace DynamicsCrm.DevKit.Shared
         public static ServiceClient IsConnected(string connectionString, out string error)
         {
             error = null;
-            ServiceClient.MaxConnectionTimeout = new TimeSpan(1, 0, 0);
+            //ServiceClient.MaxConnectionTimeout = new TimeSpan(1, 0, 0);
             var crmServiceClient = new ServiceClient(connectionString);
             //if (crmServiceClient.LastCrmError?.Length != 0)
             //{
