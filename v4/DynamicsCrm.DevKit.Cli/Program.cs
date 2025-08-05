@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-//System.Collections.Immutable
 namespace DynamicsCrm.DevKit.Cli
 {
     public class Program
@@ -143,7 +142,7 @@ namespace DynamicsCrm.DevKit.Cli
                 CliLog.Write(ConsoleColor.White, "|", ConsoleColor.Green, "Connected: ");
                 CliLog.WriteSuccess(ConsoleColor.White, XrmHelper.ConnectedUrl(CrmServiceClient));
                 CliLog.Write(ConsoleColor.Green, " with connection timeout: ");
-                //CliLog.Write(ConsoleColor.White, CrmServiceClient.MaxConnectionTimeout.TotalSeconds.ToString("#,###"));
+                CliLog.Write(ConsoleColor.White, ServiceClient.MaxConnectionTimeout.TotalSeconds.ToString("#,###"));
                 CliLog.WriteLine(ConsoleColor.Green, " (seconds)");
             }
             CliLog.WriteLine(ConsoleColor.White, "|");
@@ -165,7 +164,7 @@ namespace DynamicsCrm.DevKit.Cli
 
         private static bool IsConnectedDynamics365BySdkLogin()
         {
-            //CrmServiceClient.MaxConnectionTimeout = new TimeSpan(1, 0, 0);
+            //ServiceClient.MaxConnectionTimeout = new TimeSpan(1, 0, 0);
             //var loginForm = new FormLogin(true);
             //loginForm.ConnectionToCrmCompleted += loginForm_ConnectionToCrmCompleted;
             //loginForm.ShowDialog();

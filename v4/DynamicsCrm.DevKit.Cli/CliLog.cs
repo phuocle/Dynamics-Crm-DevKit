@@ -90,8 +90,8 @@ namespace DynamicsCrm.DevKit.Cli
 
         private static string FormatValue(object value)
         {
-            value = value.ToString().Replace("|", "▌");
-            return value.ToString();
+            value = value?.ToString()?.Replace("|", "▌");
+            return value?.ToString() ?? string.Empty;
         }
 
         public static void WriteLineWarning(params object[] values)
@@ -144,6 +144,7 @@ namespace DynamicsCrm.DevKit.Cli
             Console.BackgroundColor = ConsoleColor.DarkGreen;
             foreach (var value in values)
             {
+                if (value == null) continue;
                 if (value is ConsoleColor color)
                     Console.ForegroundColor = color;
                 else
