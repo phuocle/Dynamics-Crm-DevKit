@@ -1,5 +1,4 @@
 ﻿using DynamicsCrm.DevKit.Shared.Models;
-using EnvDTE;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk.Metadata;
 using System;
@@ -7,9 +6,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Windows.Documents;
 using System.Windows.Forms;
-using System.Windows.Navigation;
 using System.Xml.Linq;
 using static DynamicsCrm.DevKit.Shared.Entities.SdkMessageProcessingStep;
 

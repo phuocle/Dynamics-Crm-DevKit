@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Security.RightsManagement;
 using System.Text;
 
 namespace DynamicsCrm.DevKit.Shared.Models
