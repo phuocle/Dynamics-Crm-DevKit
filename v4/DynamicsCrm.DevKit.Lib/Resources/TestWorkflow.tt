@@ -1,0 +1,35 @@
+﻿using System.Collections.Generic;
+using FakeXrmEasy;
+using FakeXrmEasy.CodeActivities;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using <#=Context.ProxyTypes#>;
+
+namespace <#=Context.PluginNameSpace#>
+{
+    [TestClass]
+    public class <#=Context.Class#>Test
+    {
+        public static XrmFakedContext Context { get; set; }
+        public static XrmFakedWorkflowContext Workflow { get; set; }
+
+        [ClassInitialize()]
+        public static void ClassInit(TestContext context)
+        {
+            Context = new XrmFakedContext();
+            Context.ProxyTypesAssembly = Assembly.GetAssembly(typeof(ProxyTypesAssembly));
+            Workflow = Context.GetDefaultWorkflowContext();
+        }
+
+        [TestMethod]
+        public void _01_ExecuteWorkflow()
+        {
+            //setup
+            //var json = "";
+            //Plugin.SetDebugContext(json);
+            //run
+            //Context.ExecutePluginWith<<#=Context.Class#>>(Plugin);
+            //result
+            Assert.IsTrue(true);
+        }
+    }
+}

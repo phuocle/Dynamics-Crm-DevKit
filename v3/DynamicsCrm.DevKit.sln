@@ -11,11 +11,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 		build.txt = build.txt
-		notes.txt = notes.txt
 		date.txt = date.txt
+		notes.txt = notes.txt
 		..\README.md = ..\README.md
-		version.txt = version.txt
 		release-version-date.bat = release-version-date.bat
+		version.txt = version.txt
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DynamicsCrm.DevKit.Lib", "DynamicsCrm.DevKit.Lib\DynamicsCrm.DevKit.Lib.csproj", "{0BD4ADA6-CF1E-4123-B30E-C9D33298BCCD}"
