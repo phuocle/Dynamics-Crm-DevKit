@@ -1,4 +1,5 @@
 ﻿using DynamicsCrm.DevKit.Shared.Models;
+using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Tooling.Connector;
 using System;
@@ -10,12 +11,12 @@ namespace DynamicsCrm.DevKit.Shared
     {
         private const string NEW_LINE = "\r\n";
         private const string TAB = "\t";
-        private static CrmServiceClient CrmServiceClient { get; set; }
+        private static ServiceClient CrmServiceClient { get; set; }
         private static EntityMetadata EntityMetadata { get; set; }
         private static string RootNamespace { get; set; }
         private static CommentTypeScriptDeclaration Comment { get; set; }
 
-        public static string GetCode(CrmServiceClient crmServiceClient, EntityMetadata entityMetadata, string rootNamespace, CommentTypeScriptDeclaration comment, out string dts)
+        public static string GetCode(ServiceClient crmServiceClient, EntityMetadata entityMetadata, string rootNamespace, CommentTypeScriptDeclaration comment, out string dts)
         {
             CrmServiceClient = crmServiceClient;
             EntityMetadata = entityMetadata;

@@ -7,6 +7,7 @@ using DynamicsCrm.DevKit.Shared.Models;
 using EnvDTE;
 using MessagePack.Internal;
 using Microsoft.Crm.Sdk.Messages;
+using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
@@ -117,7 +118,7 @@ namespace DynamicsCrm.DevKit.Shared
             return value;
         }
 
-        public static CrmServiceClient IsConnected(CrmConnection crmConnection)
+        public static ServiceClient IsConnected(CrmConnection crmConnection)
         {
             var password = crmConnection.Password;
             if (crmConnection.Type != "ClientSecret") password = EncryptDecrypt.DecryptString(password);
@@ -125,24 +126,25 @@ namespace DynamicsCrm.DevKit.Shared
             return IsConnected(connectionString, out _);
         }
 
-        public static CrmServiceClient IsConnected(string connectionString, out string error)
+        public static ServiceClient IsConnected(string connectionString, out string error)
         {
             error = null;
             CrmServiceClient.MaxConnectionTimeout = new TimeSpan(1, 0, 0);
-            var crmServiceClient = new CrmServiceClient(connectionString);
-            if (crmServiceClient.LastCrmError?.Length != 0)
-            {
-                error = crmServiceClient.LastCrmError;
-                return null;
-            }
+            var crmServiceClient = new ServiceClient(connectionString);
+            //if (crmServiceClient.LastCrmError?.Length != 0)
+            //{
+            //    error = crmServiceClient.LastCrmError;
+            //    return null;
+            //}
             return crmServiceClient;
         }
 
-        public static string ConnectedUrl(CrmServiceClient crmServiceClient)
+        public static string ConnectedUrl(ServiceClient crmServiceClient)
         {
-            var url = new Uri(crmServiceClient?.CrmConnectOrgUriActual?.AbsoluteUri).GetLeftPart(UriPartial.Authority);
-            url = url.Replace(".api.", ".");
-            return url;
+            //var url = new Uri(crmServiceClient?.CrmConnectOrgUriActual?.AbsoluteUri).GetLeftPart(UriPartial.Authority);
+            //url = url.Replace(".api.", ".");
+            //return url;
+            return null;
         }
 
         public static List<DeployWebResource> GetWebResources(CrmServiceClient service, string fullFileName)
@@ -205,7 +207,7 @@ namespace DynamicsCrm.DevKit.Shared
             return value.Replace(";;", ";");
         }
 
-        public static (bool IsOk, Guid SolutionId, string Prefix) IsExistSolution(CrmServiceClient crmServiceClient, string solutionuniquename)
+        public static (bool IsOk, Guid SolutionId, string Prefix) IsExistSolution(ServiceClient crmServiceClient, string solutionuniquename)
         {
             var fetchData = new
             {
@@ -232,7 +234,7 @@ namespace DynamicsCrm.DevKit.Shared
             return (true, solutionId, prefix);
         }
 
-        public static List<DownloadFile> GetReportsBySolution(CrmServiceClient crmServiceClient, string solution)
+        public static List<DownloadFile> GetReportsBySolution(ServiceClient crmServiceClient, string solution)
         {
             var fetchData = new
             {
@@ -277,14 +279,14 @@ namespace DynamicsCrm.DevKit.Shared
             return list;
         }
 
-        public static void DeployReport(CrmServiceClient crmServiceClient, Guid reportId, string fullFileName)
+        public static void DeployReport(ServiceClient crmServiceClient, Guid reportId, string fullFileName)
         {
             var update = new Entity("report", reportId);
             update["bodytext"] = File.ReadAllText(fullFileName);
             crmServiceClient.Update(update);
         }
 
-        public static List<EntityMetadata> GetEntitiesMetadata(CrmServiceClient crmServiceClient)
+        public static List<EntityMetadata> GetEntitiesMetadata(ServiceClient crmServiceClient)
         {
             var request = new RetrieveAllEntitiesRequest
             {
@@ -295,7 +297,7 @@ namespace DynamicsCrm.DevKit.Shared
             return response.EntityMetadata.ToList();
         }
 
-        public static List<string> GetAllEntitiesSchema(CrmServiceClient crmServiceClient)
+        public static List<string> GetAllEntitiesSchema(ServiceClient crmServiceClient)
         {
             var request = new RetrieveAllEntitiesRequest
             {
@@ -306,7 +308,7 @@ namespace DynamicsCrm.DevKit.Shared
             return response.EntityMetadata.ToList().Select(x => x.SchemaName).ToList();
         }
 
-        public static List<EntityMetadata> GetEntitiesMetadata(CrmServiceClient crmServiceClient, List<string> schemaNames)
+        public static List<EntityMetadata> GetEntitiesMetadata(ServiceClient crmServiceClient, List<string> schemaNames)
         {
             var request = new ExecuteMultipleRequest()
             {
@@ -339,7 +341,7 @@ namespace DynamicsCrm.DevKit.Shared
             return list;
         }
 
-        public static EntityMetadata GetEntityMetadata(CrmServiceClient crmServiceClient, string entityLogicalName)
+        public static EntityMetadata GetEntityMetadata(ServiceClient crmServiceClient, string entityLogicalName)
         {
             return GetEntitiesMetadata(crmServiceClient, new List<string> { entityLogicalName }).FirstOrDefault(); ;
         }
@@ -348,7 +350,7 @@ namespace DynamicsCrm.DevKit.Shared
         {
             return attribute is EnumAttributeMetadata;
         }
-        public static void ReadEntitiesMetadata(CrmServiceClient crmServiceClient)
+        public static void ReadEntitiesMetadata(ServiceClient crmServiceClient)
         {
             if (XrmHelper.EntitiesMetadata.Count == 0)
             {
@@ -356,7 +358,7 @@ namespace DynamicsCrm.DevKit.Shared
             }
         }
 
-        public static void ReadEntitiesFormXml(CrmServiceClient crmServiceClient)
+        public static void ReadEntitiesFormXml(ServiceClient crmServiceClient)
         {
             if (XrmHelper.EntitiesFormXml.Count == 0)
             {
@@ -364,7 +366,7 @@ namespace DynamicsCrm.DevKit.Shared
             }
         }
 
-        public static List<ProcessForm> GetEntityProcessForm(CrmServiceClient crmServiceClient, int? objectTypeCode, string logicalName)
+        public static List<ProcessForm> GetEntityProcessForm(ServiceClient crmServiceClient, int? objectTypeCode, string logicalName)
         {
             var fetchData = new
             {
@@ -401,7 +403,7 @@ namespace DynamicsCrm.DevKit.Shared
             }).ToList();
         }
 
-        public static List<SystemForm> GetEntityFormXml(CrmServiceClient crmServiceClient, int? objectTypeCode)
+        public static List<SystemForm> GetEntityFormXml(ServiceClient crmServiceClient, int? objectTypeCode)
         {
             var fetchData = new
             {
@@ -447,7 +449,7 @@ namespace DynamicsCrm.DevKit.Shared
             return forms.OrderBy(x => x.EntityLogicalName).ThenBy(x => x.Name).ToList();
         }
 
-        public static List<SystemForm> GetEntitiesFormXml(CrmServiceClient crmServiceClient)
+        public static List<SystemForm> GetEntitiesFormXml(ServiceClient crmServiceClient)
         {
             var fetchData = new
             {
@@ -490,7 +492,7 @@ namespace DynamicsCrm.DevKit.Shared
             return forms.OrderBy(x => x.EntityLogicalName).ThenBy(x => x.Name).ToList();
         }
 
-        public static CommentTypeScriptDeclaration GetComment(CrmServiceClient crmServiceClient, string entityLogicalName, string dtsFile)
+        public static CommentTypeScriptDeclaration GetComment(ServiceClient crmServiceClient, string entityLogicalName, string dtsFile)
         {
             if (File.Exists(dtsFile))
             {
@@ -530,7 +532,7 @@ namespace DynamicsCrm.DevKit.Shared
             }
         }
 
-        public static List<SystemForm> GetEntityForms(CrmServiceClient crmServiceClient, string entityLogicalName)
+        public static List<SystemForm> GetEntityForms(ServiceClient crmServiceClient, string entityLogicalName)
         {
             XrmHelper.EntitiesFormXml.AddIfNotExist(crmServiceClient, entityLogicalName);
             var forms = XrmHelper.EntitiesFormXml

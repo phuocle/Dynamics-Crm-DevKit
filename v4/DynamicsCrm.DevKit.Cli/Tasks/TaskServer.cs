@@ -1,6 +1,7 @@
 ﻿using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Entities;
 using DynamicsCrm.DevKit.Shared.Models;
+using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
@@ -69,7 +70,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
         public string TaskType { get; set; }
 
-        public CrmServiceClient CrmServiceClient { get; set; }
+        public ServiceClient CrmServiceClient { get; set; }
 
         public CommandLineArgs Arg { get; set; }
 

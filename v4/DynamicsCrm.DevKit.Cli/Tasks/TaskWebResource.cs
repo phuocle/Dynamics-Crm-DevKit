@@ -1,6 +1,7 @@
 ﻿using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.Crm.Sdk.Messages;
+using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
 using Microsoft.Xrm.Tooling.Connector;
@@ -24,7 +25,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         }
         public string CurrentDirectory { get; set; }
         public string TaskType => $"[{nameof(CliType.webresources).ToUpper()}]";
-        public CrmServiceClient CrmServiceClient { get; set; }
+        public ServiceClient CrmServiceClient { get; set; }
         public CommandLineArgs Arg { get; set; }
         private JsonWebResource Json { get; set; }
         private bool IsOk { get; set; }

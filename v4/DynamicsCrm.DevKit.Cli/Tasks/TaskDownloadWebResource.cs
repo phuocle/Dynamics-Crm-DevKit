@@ -1,5 +1,6 @@
 ﻿using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
+using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Tooling.Connector;
 using System;
 using System.IO;
@@ -17,7 +18,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         }
         public string CurrentDirectory { get; set; }
         public string TaskType => $"[{nameof(CliType.downloadwebresources).ToUpper()}]";
-        public CrmServiceClient CrmServiceClient { get; set; }
+        public ServiceClient CrmServiceClient { get; set; }
         public CommandLineArgs Arg { get; set; }
         private JsonDownloadWebResource Json { get; set; }
         public bool IsValid()

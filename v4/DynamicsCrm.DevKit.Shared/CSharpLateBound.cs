@@ -1,4 +1,5 @@
 ﻿using DynamicsCrm.DevKit.Shared.Models;
+using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Tooling.Connector;
 using System;
@@ -16,7 +17,7 @@ namespace DynamicsCrm.DevKit.Shared
         private static EntityMetadata EntityMetadata { get; set; }
         private static string RootNamespace { get; set; }
 
-        public static string GetCode(CrmServiceClient crmServiceClient, EntityMetadata entityMetadata, string rootNameSpace)
+        public static string GetCode(ServiceClient crmServiceClient, EntityMetadata entityMetadata, string rootNameSpace)
         {
             EntityMetadata = entityMetadata;
             RootNamespace = rootNameSpace;

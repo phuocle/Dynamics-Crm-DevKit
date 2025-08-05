@@ -1,4 +1,5 @@
-﻿using Microsoft.Xrm.Sdk.Metadata;
+﻿using Microsoft.PowerPlatform.Dataverse.Client;
+using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Tooling.Connector;
 using System.Collections.Generic;
 
@@ -8,7 +9,7 @@ namespace DynamicsCrm.DevKit.Shared
     {
         private XrmSingleton() { }
         private static XrmSingleton _instance;
-        public static XrmSingleton GetInstance(CrmServiceClient crmServiceClient)
+        public static XrmSingleton GetInstance(ServiceClient crmServiceClient)
         {
             if (_instance == null)
             {
@@ -18,7 +19,7 @@ namespace DynamicsCrm.DevKit.Shared
             return _instance;
         }
 
-        private static CrmServiceClient CrmServiceClient { get; set; }
+        private static ServiceClient CrmServiceClient { get; set; }
 
         private static List<EntityMetadata> _EntitiesMetadata = null;
         public static List<EntityMetadata> EntitiesMetadata

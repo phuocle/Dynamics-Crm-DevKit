@@ -1,4 +1,5 @@
 ﻿using DynamicsCrm.DevKit.Shared.Models;
+using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Tooling.Connector;
 using System;
@@ -21,7 +22,7 @@ namespace DynamicsCrm.DevKit.Shared
 
         private const string TAB = "\t";
 
-        private static CrmServiceClient CrmServiceClient { get; set; }
+        private static ServiceClient CrmServiceClient { get; set; }
 
         private static EntityMetadata EntityMetadata { get; set; }
 
@@ -31,7 +32,7 @@ namespace DynamicsCrm.DevKit.Shared
 
         private static List<string> FormNames = new List<string>();
 
-        public static string GetCode(CrmServiceClient crmServiceClient, EntityMetadata entityMetadata, string rootNamespace, CommentTypeScriptDeclaration comment)
+        public static string GetCode(ServiceClient crmServiceClient, EntityMetadata entityMetadata, string rootNamespace, CommentTypeScriptDeclaration comment)
         {
             CrmServiceClient = crmServiceClient;
             EntityMetadata = entityMetadata;

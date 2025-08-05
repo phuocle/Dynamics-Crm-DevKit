@@ -1,5 +1,6 @@
 ﻿using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
+using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Tooling.Connector;
 using System;
 using System.IO;
@@ -20,7 +21,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         private JsonUploadReport Json { get; set; }
 
         public string CurrentDirectory { get; set; }
-        public CrmServiceClient CrmServiceClient { get; set; }
+        public ServiceClient CrmServiceClient { get; set; }
         public string TaskType => $"[{nameof(CliType.uploadreports).ToUpper()}]";
 
         public bool IsValid()

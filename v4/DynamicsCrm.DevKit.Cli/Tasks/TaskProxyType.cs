@@ -1,6 +1,6 @@
 ﻿using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
-using Microsoft.Xrm.Tooling.Connector;
+using Microsoft.PowerPlatform.Dataverse.Client;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -27,7 +27,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
         public string CurrentDirectory { get; set; }
         public string TaskType => $"[{nameof(CliType.proxytypes).ToUpper()}]";
-        public CrmServiceClient CrmServiceClient { get; set; }
+        public ServiceClient CrmServiceClient { get; set; }
         private string Version { get; set; }
         private string CrmSvcUtil { get; set; }
         private bool IsSdkLogin { get; set; }

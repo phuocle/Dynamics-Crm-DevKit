@@ -1,7 +1,7 @@
 ﻿using CmdLine;
 using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
-using Microsoft.Xrm.Tooling.Connector;
+using Microsoft.PowerPlatform.Dataverse.Client;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -12,7 +12,7 @@ namespace DynamicsCrm.DevKit.Cli
 {
     public class Program
     {
-        private static CrmServiceClient CrmServiceClient { get; set; }
+        private static ServiceClient CrmServiceClient { get; set; }
 
         [STAThread]
         public static void Main(string[] args)
@@ -143,7 +143,7 @@ namespace DynamicsCrm.DevKit.Cli
                 CliLog.Write(ConsoleColor.White, "|", ConsoleColor.Green, "Connected: ");
                 CliLog.WriteSuccess(ConsoleColor.White, XrmHelper.ConnectedUrl(CrmServiceClient));
                 CliLog.Write(ConsoleColor.Green, " with connection timeout: ");
-                CliLog.Write(ConsoleColor.White, CrmServiceClient.MaxConnectionTimeout.TotalSeconds.ToString("#,###"));
+                //CliLog.Write(ConsoleColor.White, CrmServiceClient.MaxConnectionTimeout.TotalSeconds.ToString("#,###"));
                 CliLog.WriteLine(ConsoleColor.Green, " (seconds)");
             }
             CliLog.WriteLine(ConsoleColor.White, "|");

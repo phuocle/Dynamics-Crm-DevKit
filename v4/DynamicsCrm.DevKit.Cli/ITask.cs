@@ -1,5 +1,5 @@
 ﻿using DynamicsCrm.DevKit.Shared.Models;
-using Microsoft.Xrm.Tooling.Connector;
+using Microsoft.PowerPlatform.Dataverse.Client;
 
 namespace DynamicsCrm.DevKit.Cli
 {
@@ -7,7 +7,7 @@ namespace DynamicsCrm.DevKit.Cli
     {
         string CurrentDirectory { get; set; }
         string TaskType { get; }
-        CrmServiceClient CrmServiceClient { get; set; }
+        ServiceClient CrmServiceClient { get; set; }
         CommandLineArgs Arg { get; set; }
         void Run();
         bool IsValid();

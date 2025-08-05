@@ -1,6 +1,7 @@
 ﻿using Community.VisualStudio.Toolkit;
 using DynamicsCrm.DevKit.Shared.Models;
 using EnvDTE;
+using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.VisualStudio.Shell;
 //using Microsoft.VisualStudio.TemplateWizard;
 using Microsoft.Xrm.Sdk.Metadata;
@@ -650,7 +651,7 @@ namespace DynamicsCrm.DevKit.Shared
             return code;
         }
 
-        public static string GetDefaultFileWithForm(CrmServiceClient CrmServiceClient, EntityMetadata entityMetadata, string rootnamespace)
+        public static string GetDefaultFileWithForm(ServiceClient CrmServiceClient, EntityMetadata entityMetadata, string rootnamespace)
         {
             string GetUnquieFormName(List<string> FormNames, string formName)
             {

@@ -1,5 +1,5 @@
 ﻿using CmdLine;
-using Microsoft.Xrm.Tooling.Connector;
+using Microsoft.PowerPlatform.Dataverse.Client;
 using System.IO;
 
 namespace DynamicsCrm.DevKit.Shared.Models
@@ -43,6 +43,6 @@ namespace DynamicsCrm.DevKit.Shared.Models
         }
 
         public bool IsSdkLogin => SdkLogin?.ToLower() == "yes";
-        public CrmServiceClient CrmServiceClient { get; set; }
+        public ServiceClient CrmServiceClient { get; set; }
     }
 }

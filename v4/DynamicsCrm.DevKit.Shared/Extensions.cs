@@ -1,4 +1,5 @@
 ﻿using DynamicsCrm.DevKit.Shared.Models;
+using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Tooling.Connector;
 using System;
@@ -117,7 +118,7 @@ namespace DynamicsCrm.DevKit.Shared
             return attribute.SourceType == 1 || attribute.SourceType == 2;
         }
 
-        public static void AddIfNotExist(this List<EntityMetadata> entitiesMetadata, CrmServiceClient crmServiceClient, string entityLogicalName)
+        public static void AddIfNotExist(this List<EntityMetadata> entitiesMetadata, ServiceClient crmServiceClient, string entityLogicalName)
         {
             if (!XrmHelper.EntitiesMetadata.Any(x => x.LogicalName == entityLogicalName))
             {
@@ -125,7 +126,7 @@ namespace DynamicsCrm.DevKit.Shared
             }
         }
 
-        public static void AddIfNotExist(this List<SystemForm> entitiesFormXml, CrmServiceClient crmServiceClient, string entityLogicalName)
+        public static void AddIfNotExist(this List<SystemForm> entitiesFormXml, ServiceClient crmServiceClient, string entityLogicalName)
         {
             if (!XrmHelper.EntitiesFormXml.Any(x => x.EntityLogicalName == entityLogicalName))
             {
@@ -139,7 +140,7 @@ namespace DynamicsCrm.DevKit.Shared
             }
         }
 
-        public static void AddIfNotExist(this List<ProcessForm> entitiesProcessForm, CrmServiceClient crmServiceClient, string entityLogicalName)
+        public static void AddIfNotExist(this List<ProcessForm> entitiesProcessForm, ServiceClient crmServiceClient, string entityLogicalName)
         {
             if (!XrmHelper.EntitiesProcessForm.Any(x => x.EntityLogicalName == entityLogicalName))
             {
