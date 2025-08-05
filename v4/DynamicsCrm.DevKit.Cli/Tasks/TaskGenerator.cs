@@ -81,6 +81,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     ReadEntitiesMetadata(CrmServiceClient);
                 else
                     XrmHelper.EntitiesMetadata = XrmHelper.GetEntitiesMetadata(CrmServiceClient, schemaNames);
+                schemaNames = XrmHelper.EntitiesMetadata.Select(x => x.SchemaName).ToList();
                 if (Json.type.ToLower() == nameof(GeneratorType.csharp))
                     GeneratorLateBound(schemaNames);
                 else if (Json.type.ToLower() == nameof(GeneratorType.jsform))

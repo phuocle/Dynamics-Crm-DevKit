@@ -139,17 +139,17 @@ namespace DynamicsCrm.DevKit.Shared
         {
             if (crmServiceClient?.ConnectedOrgUriActual == null)
                 return null;
-            
+
             var uri = crmServiceClient.ConnectedOrgUriActual;
             var url = uri.GetLeftPart(UriPartial.Authority);
-            
+
             // Convert API endpoint URL to web interface URL if needed
             // Example: https://contoso.api.crm.dynamics.com -> https://contoso.crm.dynamics.com
             if (url.Contains(".api."))
             {
                 url = url.Replace(".api.", ".");
             }
-            
+
             return url;
         }
 
