@@ -16,7 +16,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         {
             this.Arg = arg;
             this.Json = json;
-            CrmServiceClient = arg.CrmServiceClient;
+            ServiceClient = arg.ServiceClient;
             CurrentDirectory = arg.CurrentDirectory;
             Version = arg.Version;
             IsSdkLogin = arg.IsSdkLogin;
@@ -27,7 +27,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
         public string CurrentDirectory { get; set; }
         public string TaskType => $"[{nameof(CliType.proxytypes).ToUpper()}]";
-        public ServiceClient CrmServiceClient { get; set; }
+        public ServiceClient ServiceClient { get; set; }
         private string Version { get; set; }
         private string CrmSvcUtil { get; set; }
         private bool IsSdkLogin { get; set; }

@@ -13,12 +13,12 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         {
             this.Arg = arg;
             this.Json = json;
-            CrmServiceClient = arg.CrmServiceClient;
+            ServiceClient = arg.ServiceClient;
             CurrentDirectory = arg.CurrentDirectory;
         }
         public CommandLineArgs Arg { get; set; }
         public string CurrentDirectory { get; set; }
-        public ServiceClient CrmServiceClient { get; set; }
+        public ServiceClient ServiceClient { get; set; }
         public string TaskType => $"[{nameof(CliType.downloadreports).ToUpper()}]";
         private JsonDownloadReport Json { get; set; }
         public bool IsValid()
@@ -33,7 +33,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'solution' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
                 return false;
             }
-            if (!XrmHelper.IsExistSolution(CrmServiceClient, Json.solution).IsOk)
+            if (!XrmHelper.IsExistSolution(ServiceClient, Json.solution).IsOk)
             {
                 CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} solution '{Json.solution}' not exist");
                 return false;
@@ -59,7 +59,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             CliLog.WriteLine(ConsoleColor.White, "|");
             if (IsValid())
             {
-                var reportFiles = XrmHelper.GetReportsBySolution(CrmServiceClient, Json.solution);
+                var reportFiles = XrmHelper.GetReportsBySolution(ServiceClient, Json.solution);
                 if (reportFiles.Count == 0)
                 {
                     CliLog.WriteLineWarning(ConsoleColor.Green, "Not found any reports to download");

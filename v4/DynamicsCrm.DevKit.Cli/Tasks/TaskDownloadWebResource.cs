@@ -12,12 +12,12 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         {
             this.Arg = arg;
             this.Json = json;
-            CrmServiceClient = arg.CrmServiceClient;
+            ServiceClient = arg.ServiceClient;
             CurrentDirectory = arg.CurrentDirectory;
         }
         public string CurrentDirectory { get; set; }
         public string TaskType => $"[{nameof(CliType.downloadwebresources).ToUpper()}]";
-        public ServiceClient CrmServiceClient { get; set; }
+        public ServiceClient ServiceClient { get; set; }
         public CommandLineArgs Arg { get; set; }
         private JsonDownloadWebResource Json { get; set; }
         public bool IsValid()
@@ -32,7 +32,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'solution' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
                 return false;
             }
-            if (!XrmHelper.IsExistSolution(CrmServiceClient, Json.solution).IsOk)
+            if (!XrmHelper.IsExistSolution(ServiceClient, Json.solution).IsOk)
             {
                 CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} solution '{Json.solution}' not exist");
                 return false;

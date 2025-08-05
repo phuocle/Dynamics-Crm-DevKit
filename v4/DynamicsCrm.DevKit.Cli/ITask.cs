@@ -7,7 +7,7 @@ namespace DynamicsCrm.DevKit.Cli
     {
         string CurrentDirectory { get; set; }
         string TaskType { get; }
-        ServiceClient CrmServiceClient { get; set; }
+        ServiceClient ServiceClient { get; set; }
         CommandLineArgs Arg { get; set; }
         void Run();
         bool IsValid();

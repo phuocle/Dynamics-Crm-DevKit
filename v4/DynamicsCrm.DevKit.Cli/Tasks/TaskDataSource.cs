@@ -21,11 +21,11 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         {
             this.Arg = arg;
             this.Json = json;
-            CrmServiceClient = arg.CrmServiceClient;
+            ServiceClient = arg.ServiceClient;
             CurrentDirectory = arg.CurrentDirectory;
         }
         public string CurrentDirectory { get; set; }
-        public ServiceClient CrmServiceClient { get; set; }
+        public ServiceClient ServiceClient { get; set; }
         public string TaskType => $"[{nameof(CliType.datasources).ToUpper()}]";
         public CommandLineArgs Arg { get; set; }
         private JsonDataSource Json { get; set; }
@@ -81,7 +81,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'name' can cannot contain space character.");
                 return false;
             }
-            (IsOk, SolutionId, Prefix) = XrmHelper.IsExistSolution(CrmServiceClient, Json.solution);
+            (IsOk, SolutionId, Prefix) = XrmHelper.IsExistSolution(ServiceClient, Json.solution);
             if (!IsOk)
             {
                 CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} solution '{Json.solution}' not exist");
@@ -119,7 +119,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 Query = entityQueryExpression
             };
-            var response = (RetrieveMetadataChangesResponse)CrmServiceClient.Execute(request);
+            var response = (RetrieveMetadataChangesResponse)ServiceClient.Execute(request);
             foreach (EntityMetadata entityMetadata in response.EntityMetadata)
                 if (entityMetadata.LogicalName == logicalname)
                     return true;
@@ -151,7 +151,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
     <attribute name='languagecode' />
   </entity>
 </fetch>";
-            var rows = CrmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            var rows = ServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
             if (rows.Entities.Count != 1) return 1033;
             var entity = rows.Entities[0];
             return entity.GetAttributeValue<int?>("languagecode") ?? 1033;
@@ -221,14 +221,14 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 request.Parameters["SolutionUniqueName"] = Json.solution;
             else
                 request.Parameters.Add("SolutionUniqueName", Json.solution);
-            var response = (CreateEntityResponse)CrmServiceClient.Execute(request);
+            var response = (CreateEntityResponse)ServiceClient.Execute(request);
             var entityId = response.EntityId;
             var retrieveEntityRequest = new RetrieveEntityRequest()
             {
                 EntityFilters = EntityFilters.All,
                 MetadataId = entityId
             };
-            EntityMetadata entityMetadata = ((RetrieveEntityResponse)CrmServiceClient.Execute(retrieveEntityRequest)).EntityMetadata;
+            EntityMetadata entityMetadata = ((RetrieveEntityResponse)ServiceClient.Execute(retrieveEntityRequest)).EntityMetadata;
 
             //Update field Id
             var requestId = new RetrieveAttributeRequest()
@@ -236,7 +236,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 EntityLogicalName = entityMetadata.LogicalName,
                 LogicalName = string.Format("{0}id", entityMetadata.LogicalName)
             };
-            var attributeMetadataId = ((RetrieveAttributeResponse)CrmServiceClient.Execute(requestId)).AttributeMetadata;
+            var attributeMetadataId = ((RetrieveAttributeResponse)ServiceClient.Execute(requestId)).AttributeMetadata;
             attributeMetadataId.ExternalName = $"{DataSourceName}Id";
             var updateRequestId = new UpdateAttributeRequest()
             {
@@ -244,14 +244,14 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 EntityName = entityMetadata.LogicalName,
                 MergeLabels = false
             };
-            CrmServiceClient.Execute(updateRequestId);
+            ServiceClient.Execute(updateRequestId);
             //Update field name
             var requestName = new RetrieveAttributeRequest()
             {
                 EntityLogicalName = entityMetadata.LogicalName,
                 LogicalName = string.Format("{0}name", DataSourceName.ToLower())
             };
-            var attributeMetadataName = ((RetrieveAttributeResponse)CrmServiceClient.Execute(requestName)).AttributeMetadata;
+            var attributeMetadataName = ((RetrieveAttributeResponse)ServiceClient.Execute(requestName)).AttributeMetadata;
             attributeMetadataName.ExternalName = $"{DataSourceName}Name";
             var updateRequestName = new UpdateAttributeRequest()
             {
@@ -259,12 +259,12 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 EntityName = entityMetadata.LogicalName,
                 MergeLabels = false
             };
-            CrmServiceClient.Execute(updateRequestName);
+            ServiceClient.Execute(updateRequestName);
 
             try
             {
                 PublishAllXmlRequest publishAllXmlRequest = new PublishAllXmlRequest();
-                PublishAllXmlResponse publishAllXmlResponse = (PublishAllXmlResponse)CrmServiceClient.Execute(publishAllXmlRequest);
+                PublishAllXmlResponse publishAllXmlResponse = (PublishAllXmlResponse)ServiceClient.Execute(publishAllXmlRequest);
             }
             catch
             {

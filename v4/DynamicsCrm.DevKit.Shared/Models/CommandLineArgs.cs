@@ -46,6 +46,6 @@ namespace DynamicsCrm.DevKit.Shared.Models
         }
 
         public bool IsSdkLogin => SdkLogin?.ToLower() == "yes";
-        public ServiceClient CrmServiceClient { get; set; }
+        public ServiceClient ServiceClient { get; set; }
     }
 }

@@ -19,7 +19,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         {
             this.Arg = arg;
             this.Json = json;
-            CrmServiceClient = arg.CrmServiceClient;
+            ServiceClient = arg.ServiceClient;
             CurrentDirectory = arg.CurrentDirectory;
 
             TaskType = $"[{nameof(CliType.generators).ToUpper()} - {json.type.ToUpper()}]";
@@ -31,7 +31,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
         public string CurrentDirectory { get; set; }
 
-        public ServiceClient CrmServiceClient { get; set; }
+        public ServiceClient ServiceClient { get; set; }
 
         public string TaskType { get; set; }
 
@@ -78,9 +78,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 var schemaNames = GetSchemaNames();
                 if (schemaNames.Count > 500)
-                    ReadEntitiesMetadata(CrmServiceClient);
+                    ReadEntitiesMetadata(ServiceClient);
                 else
-                    XrmHelper.EntitiesMetadata = XrmHelper.GetEntitiesMetadata(CrmServiceClient, schemaNames);
+                    XrmHelper.EntitiesMetadata = XrmHelper.GetEntitiesMetadata(ServiceClient, schemaNames);
                 schemaNames = XrmHelper.EntitiesMetadata.Select(x => x.SchemaName).ToList();
                 if (Json.type.ToLower() == nameof(GeneratorType.csharp))
                     GeneratorLateBound(schemaNames);
@@ -107,7 +107,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Filter by: ", ConsoleColor.White, "json.entities", ConsoleColor.Green, " with values: ", ConsoleColor.White, Json.entities.Trim());
                 CliLog.WriteLine(ConsoleColor.White, "|");
-                ReadEntitiesMetadata(CrmServiceClient);
+                ReadEntitiesMetadata(ServiceClient);
                 return XrmHelper.EntitiesMetadata
                     .Select(x => x.SchemaName)
                     .ToList();
@@ -148,7 +148,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var dtsFile = Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}.d.ts");
                     var oldCode = Utility.ReadAllText(fileEndsWith);
                     var oldDTS = Utility.ReadAllText(dtsFile);
-                    var comment = XrmHelper.GetComment(CrmServiceClient, entityMetadata.LogicalName, dtsFile);
+                    var comment = XrmHelper.GetComment(ServiceClient, entityMetadata.LogicalName, dtsFile);
                     if (IsAll)
                     {
                         if (!File.Exists(dtsFile)) comment.UseForm = false;
@@ -165,7 +165,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     //if (Json.version == null) comment.WebApiVersion = null;
                     //if (Json.version == "2") comment.WebApiVersion = "2";
                     //if (comment.WebApiVersion == "2")
-                    newCode = JsWebApi2.GetCode(CrmServiceClient, entityMetadata, Json.rootnamespace, comment, out newDTS);
+                    newCode = JsWebApi2.GetCode(ServiceClient, entityMetadata, Json.rootnamespace, comment, out newDTS);
                     //else
                     //    newCode = JsWebApi.GetCode(CrmServiceClient, entityMetadata, Json.rootnamespace, comment, out newDTS);
                     if (Utility.IsTheSame(oldCode, newCode))
@@ -226,7 +226,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var dtsFile = Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}.d.ts");
                     var oldCode = Utility.ReadAllText(fileEndsWith);
                     var oldDTS = Utility.ReadAllText(dtsFile);
-                    var comment = XrmHelper.GetComment(CrmServiceClient, entityMetadata.LogicalName, dtsFile);
+                    var comment = XrmHelper.GetComment(ServiceClient, entityMetadata.LogicalName, dtsFile);
                     if (IsAll)
                     {
                         comment.UseForm = true;
@@ -238,7 +238,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         i++;
                         continue;
                     }
-                    var newCode = JsForm.GetCode(CrmServiceClient, entityMetadata, Json.rootnamespace, comment, out var newDTS);
+                    var newCode = JsForm.GetCode(ServiceClient, entityMetadata, Json.rootnamespace, comment, out var newDTS);
                     if (Utility.IsTheSame(oldCode, newCode))
                     {
                         if (oldCode?.Length > 0 && newCode?.Length > 0 && !Utility.IsTheSame(oldDTS, newDTS))
@@ -265,7 +265,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                             Utility.ForceWriteAllText(dtsFile, newDTS);
                             if (!File.Exists(file))
                             {
-                                Utility.ForceWriteAllText(file, VsixHelper.GetDefaultFileWithForm(CrmServiceClient, entityMetadata, Json.rootnamespace));
+                                Utility.ForceWriteAllText(file, VsixHelper.GetDefaultFileWithForm(ServiceClient, entityMetadata, Json.rootnamespace));
                             }
                             CliLog.WriteLineWarning(ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.CREATED, ConsoleColor.White, $"{schemaName}{endsWith}");
                         }
@@ -296,7 +296,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var fileEndsWith = Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}{endsWith}");
                     //var oldCode = Utility.ReadAllText(fileEndsWith);
                     var oldCode = Utility.ReadAllTextFromLine6(fileEndsWith);
-                    var newCode = CSharpLateBound.GetCode(CrmServiceClient, entityMetadata, Json.rootnamespace);
+                    var newCode = CSharpLateBound.GetCode(ServiceClient, entityMetadata, Json.rootnamespace);
                     if (newCode == String.Empty || Utility.IsTheSame(oldCode, newCode))
                     {
                         CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, $"{schemaName}{endsWith}");

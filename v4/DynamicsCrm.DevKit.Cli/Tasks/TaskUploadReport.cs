@@ -13,14 +13,14 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         {
             this.Arg = arg;
             this.Json = json;
-            CrmServiceClient = arg.CrmServiceClient;
+            ServiceClient = arg.ServiceClient;
             CurrentDirectory = arg.CurrentDirectory;
         }
         public CommandLineArgs Arg { get; set; }
         private JsonUploadReport Json { get; set; }
 
         public string CurrentDirectory { get; set; }
-        public ServiceClient CrmServiceClient { get; set; }
+        public ServiceClient ServiceClient { get; set; }
         public string TaskType => $"[{nameof(CliType.uploadreports).ToUpper()}]";
 
         public bool IsValid()
@@ -35,7 +35,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'solution' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
                 return false;
             }
-            if (!XrmHelper.IsExistSolution(CrmServiceClient, Json.solution).IsOk)
+            if (!XrmHelper.IsExistSolution(ServiceClient, Json.solution).IsOk)
             {
                 CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} solution '{Json.solution}' not exist");
                 return false;
@@ -78,7 +78,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         CliLog.WriteLine(ConsoleColor.White, "|");
                         CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Found: ", ConsoleColor.Blue, totalUploadFiles, " ", ConsoleColor.White, language,  ConsoleColor.Green, " .rdl files");
                         CliLog.WriteLine(ConsoleColor.White, "|");
-                        var reportFiles = XrmHelper.GetReportsBySolution(CrmServiceClient, Json.solution);
+                        var reportFiles = XrmHelper.GetReportsBySolution(ServiceClient, Json.solution);
                         var i = 1;
                         foreach (var file in files)
                         {
@@ -97,7 +97,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                                 }
                                 else
                                 {
-                                    XrmHelper.DeployReport(CrmServiceClient, report.ObjectId, file);
+                                    XrmHelper.DeployReport(ServiceClient, report.ObjectId, file);
                                     CliLog.WriteLineWarning(ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.DEPLOYED, ConsoleColor.White, language, ConsoleColor.Green, " report ", ConsoleColor.White, ".." + file.Substring(CurrentDirectory.Length), ConsoleColor.Green, " to ", ConsoleColor.White, fileName, ConsoleColor.Green, " report file name");
                                 }
                             }

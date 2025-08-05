@@ -18,7 +18,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         {
             this.Arg = arg;
             this.Json = json;
-            CrmServiceClient = arg.CrmServiceClient;
+            ServiceClient = arg.ServiceClient;
             CurrentDirectory = arg.CurrentDirectory;
             Version = arg.Version;
             IsSdkLogin = arg.IsSdkLogin;
@@ -28,7 +28,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         private JsonSolutionPackager Json { get; set; }
         public string CurrentDirectory { get; set; }
         public string TaskType => $"[{nameof(CliType.solutionpackagers).ToUpper()}]";
-        public ServiceClient CrmServiceClient { get; set; }
+        public ServiceClient ServiceClient { get; set; }
         private string Version { get; set; }
         private string SolutionPackagerExe { get; set; }
         private bool IsSdkLogin { get; set; }
@@ -98,7 +98,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             if (Json.type.ToLower() == "Extract".ToLower())
             {
-                if (!XrmHelper.IsExistSolution(CrmServiceClient, Json.solution).IsOk)
+                if (!XrmHelper.IsExistSolution(ServiceClient, Json.solution).IsOk)
                 {
                     CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} solution '{Json.solution}' not exist");
                     return false;
@@ -213,7 +213,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             wait.Start();
 
             var crmVersion = GetCrmVersionFromInstance();
-            var response = (ExportSolutionResponse)CrmServiceClient.Execute(request);
+            var response = (ExportSolutionResponse)ServiceClient.Execute(request);
 
             wait.Abort();
             var fileName = FormatSolutionVersionString(Json.solution, System.Version.Parse(crmVersion), Json.solutiontype);
@@ -247,7 +247,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
     </filter>
   </entity>
 </fetch>";
-            var rows = CrmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            var rows = ServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
             if (rows.Entities.Count != 1) return "1.0.0.0";
             var solution = rows.Entities[0];
             return solution.GetAttributeValue<string>("version");

@@ -139,11 +139,11 @@ namespace DynamicsCrm.DevKit.Cli
                         return false;
                     }
                 }
-                arguments.CrmServiceClient = ServiceClient;
+                arguments.ServiceClient = ServiceClient;
             }
             else
             {
-                arguments.CrmServiceClient = null;
+                arguments.ServiceClient = null;
             }
             if (ServiceClient != null)
             {
