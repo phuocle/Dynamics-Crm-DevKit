@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "generators.LateBound": {
+    "generators.LateBound.ClientSecret": {
       "commandName": "Project",
       "commandLineArgs": "/conn:\"AuthType=ClientSecret;Url=https://hitachi-hsapvn-dev.crm5.dynamics.com;ClientId=b1b8cf05-cb06-4674-b93e-98c8c9a02e5a;ClientSecret=v+L6+3MvOrVPMNqGn86vi6qEG4qpCCLoLqgeUMjnGkY=;\" /json:\"..\\..\\DynamicsCrm.DevKit.Cli.json\" /type:\"generators\" /profile:\"LATEBOUND\"",
       "workingDirectory": "D:\\azure\\PL\\HSAPVN\\src\\Hs.Hsap.Shared\\Entities"

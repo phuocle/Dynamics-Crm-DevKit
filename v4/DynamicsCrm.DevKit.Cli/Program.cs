@@ -11,7 +11,7 @@ namespace DynamicsCrm.DevKit.Cli
 {
     public class Program
     {
-        private static ServiceClient CrmServiceClient { get; set; }
+        private static ServiceClient ServiceClient { get; set; }
 
         [STAThread]
         public static void Main(string[] args)
@@ -68,7 +68,7 @@ namespace DynamicsCrm.DevKit.Cli
 
         private static bool IsValid(CommandLineArgs arguments)
         {
-            CrmServiceClient = null;
+            ServiceClient = null;
             CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Current Directory ", ConsoleColor.Blue, "Path=", ConsoleColor.White, arguments.CurrentDirectory);
             CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "DynamicsCrm.DevKit.Cli.exe ", ConsoleColor.Blue, "Path=", ConsoleColor.White, Assembly.GetExecutingAssembly().Location);
             if (!File.Exists(arguments.JsonFile))
@@ -106,7 +106,7 @@ namespace DynamicsCrm.DevKit.Cli
                 CliLog.WriteLineError(ConsoleColor.Yellow, $"/profile: required !!!");
                 return false;
             }
-            if (IsNeedCrmServiceClient(arguments))
+            if (IsNeedServiceClient(arguments))
             {
                 if (arguments.IsSdkLogin)
                 {
@@ -123,24 +123,24 @@ namespace DynamicsCrm.DevKit.Cli
                 }
                 else
                 {
-                    CrmServiceClient = XrmHelper.IsConnected(XrmHelper.BuildConnectionString(arguments.Connection), out var error);
-                    if (CrmServiceClient == null)
+                    ServiceClient = XrmHelper.IsConnected(XrmHelper.BuildConnectionString(arguments.Connection), out var error);
+                    if (ServiceClient == null)
                     {
                         CliLog.WriteLineError(ConsoleColor.Yellow, error);
                         return false;
                     }
                 }
-                arguments.CrmServiceClient = CrmServiceClient;
+                arguments.CrmServiceClient = ServiceClient;
             }
             else
             {
                 arguments.CrmServiceClient = null;
             }
-            if (CrmServiceClient != null)
+            if (ServiceClient != null)
             {
                 CliLog.WriteLine(ConsoleColor.White, "|");
                 CliLog.Write(ConsoleColor.White, "|", ConsoleColor.Green, "Connected: ");
-                CliLog.WriteSuccess(ConsoleColor.White, XrmHelper.ConnectedUrl(CrmServiceClient));
+                CliLog.WriteSuccess(ConsoleColor.White, XrmHelper.ConnectedUrl(ServiceClient));
                 CliLog.Write(ConsoleColor.Green, " with connection timeout: ");
                 CliLog.Write(ConsoleColor.White, ServiceClient.MaxConnectionTimeout.TotalSeconds.ToString("#,###"));
                 CliLog.WriteLine(ConsoleColor.Green, " (seconds)");
@@ -149,7 +149,7 @@ namespace DynamicsCrm.DevKit.Cli
             return true;
         }
 
-        private static bool IsNeedCrmServiceClient(CommandLineArgs arguments)
+        private static bool IsNeedServiceClient(CommandLineArgs arguments)
         {
             if (arguments.IsSdkLogin && arguments.Type.ToLower() == nameof(CliType.proxytypes))
                 return false;
