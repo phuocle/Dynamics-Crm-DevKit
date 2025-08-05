@@ -1,5 +1,4 @@
 ﻿using CmdLine;
-using DynamicsCrm.DevKit.Lib.Forms;
 using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.Xrm.Tooling.Connector;
@@ -166,24 +165,24 @@ namespace DynamicsCrm.DevKit.Cli
 
         private static bool IsConnectedDynamics365BySdkLogin()
         {
-            CrmServiceClient.MaxConnectionTimeout = new TimeSpan(1, 0, 0);
-            var loginForm = new FormLogin(true);
-            loginForm.ConnectionToCrmCompleted += loginForm_ConnectionToCrmCompleted;
-            loginForm.ShowDialog();
-            if (loginForm.CrmConnectionMgr != null && loginForm.CrmConnectionMgr.CrmSvc != null && loginForm.CrmConnectionMgr.CrmSvc.IsReady)
-            {
-                CrmServiceClient = loginForm.CrmConnectionMgr.CrmSvc;
-                return true;
-            }
+            //CrmServiceClient.MaxConnectionTimeout = new TimeSpan(1, 0, 0);
+            //var loginForm = new FormLogin(true);
+            //loginForm.ConnectionToCrmCompleted += loginForm_ConnectionToCrmCompleted;
+            //loginForm.ShowDialog();
+            //if (loginForm.CrmConnectionMgr != null && loginForm.CrmConnectionMgr.CrmSvc != null && loginForm.CrmConnectionMgr.CrmSvc.IsReady)
+            //{
+            //    CrmServiceClient = loginForm.CrmConnectionMgr.CrmSvc;
+            //    return true;
+            //}
             return false;
         }
 
         private static void loginForm_ConnectionToCrmCompleted(object sender, EventArgs e)
         {
-            if (sender is FormLogin login)
-            {
-                login.Close();
-            }
+            //if (sender is FormLogin login)
+            //{
+            //    login.Close();
+            //}
         }
     }
 }

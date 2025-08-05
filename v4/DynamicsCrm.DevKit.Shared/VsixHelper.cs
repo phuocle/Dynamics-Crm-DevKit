@@ -2,7 +2,7 @@
 using DynamicsCrm.DevKit.Shared.Models;
 using EnvDTE;
 using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.TemplateWizard;
+//using Microsoft.VisualStudio.TemplateWizard;
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Tooling.Connector;
 using System;
@@ -10,6 +10,7 @@ using System.Activities.Expressions;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading;
 using System.Threading.Tasks;
 using Project = EnvDTE.Project;
@@ -150,18 +151,19 @@ namespace DynamicsCrm.DevKit.Shared
 
         public static DevKitConnections GetDevKitConnections()
         {
-            var fileName = GetDynamicsCrmDevKitJsonFileName();
-            if (fileName == null || !File.Exists(fileName))
-            {
-                return new DevKitConnections()
-                {
-                    CrmConnections = new List<CrmConnection>()
-                };
-            }
-            var json = File.ReadAllText(fileName);
-            var devKitConnections = SimpleJson.DeserializeObject<DevKitConnections>(json);
-            devKitConnections.CrmConnections ??= new List<CrmConnection>();
-            return devKitConnections;
+            //var fileName = GetDynamicsCrmDevKitJsonFileName();
+            //if (fileName == null || !File.Exists(fileName))
+            //{
+            //    return new DevKitConnections()
+            //    {
+            //        CrmConnections = new List<CrmConnection>()
+            //    };
+            //}
+            //var json = File.ReadAllText(fileName);
+            //var devKitConnections = SimpleJson.DeserializeObject<DevKitConnections>(json);
+            //devKitConnections.CrmConnections ??= new List<CrmConnection>();
+            //return devKitConnections;
+            return null;
         }
 
         public static void SaveDevKitConnections(DevKitConnections connections)
@@ -294,12 +296,12 @@ namespace DynamicsCrm.DevKit.Shared
         internal static void ThrowWizardCancelledException(string OOBDestinationDirectory)
         {
             Utility.TryDeleteDirectory(OOBDestinationDirectory);
-            throw new WizardCancelledException();
+            //throw new WizardCancelledException();
         }
 
         internal static void ThrowWizardCancelledException()
         {
-            throw new WizardCancelledException();
+            //throw new WizardCancelledException();
         }
 
         internal static bool IsValidProjectName(string projectName)
@@ -434,15 +436,15 @@ namespace DynamicsCrm.DevKit.Shared
 
         public static bool HasImplementedWorkflow(CodeClass @class)
         {
-            ThreadHelper.ThrowIfNotOnUIThread();
-            foreach (var @base in @class.Bases)
-            {
-                if (@base is not CodeClass baseClass) continue;
-                if (baseClass.FullName == "System.Activities.CodeActivity")
-                    return true;
-                if (HasImplementedWorkflow(baseClass))
-                    return true;
-            }
+            //ThreadHelper.ThrowIfNotOnUIThread();
+            //foreach (var @base in @class.Bases)
+            //{
+            //    if (@base is not CodeClass baseClass) continue;
+            //    if (baseClass.FullName == "System.Activities.CodeActivity")
+            //        return true;
+            //    if (HasImplementedWorkflow(baseClass))
+            //        return true;
+            //}
             return false;
         }
 
@@ -491,18 +493,18 @@ namespace DynamicsCrm.DevKit.Shared
 
         public static bool HasImplementedPlugin(CodeClass @class)
         {
-            ThreadHelper.ThrowIfNotOnUIThread();
-            foreach (CodeInterface @interface in @class.ImplementedInterfaces)
-            {
-                if (@interface.FullName == "Microsoft.Xrm.Sdk.IPlugin")
-                    return true;
-            }
-            foreach (var @base in @class.Bases)
-            {
-                if (@base is not CodeClass baseClass) continue;
-                if (HasImplementedPlugin(baseClass))
-                    return true;
-            }
+            //ThreadHelper.ThrowIfNotOnUIThread();
+            //foreach (CodeInterface @interface in @class.ImplementedInterfaces)
+            //{
+            //    if (@interface.FullName == "Microsoft.Xrm.Sdk.IPlugin")
+            //        return true;
+            //}
+            //foreach (var @base in @class.Bases)
+            //{
+            //    if (@base is not CodeClass baseClass) continue;
+            //    if (HasImplementedPlugin(baseClass))
+            //        return true;
+            //}
             return false;
         }
 
@@ -542,15 +544,16 @@ namespace DynamicsCrm.DevKit.Shared
 
         private static List<Project> GetProjects(EnvDTE.Solution sln)
         {
-            ThreadHelper.ThrowIfNotOnUIThread();
-            List<Project> list = new();
-            if (sln == null) return list;
-            list.AddRange(sln.Projects.Cast<Project>());
+            //ThreadHelper.ThrowIfNotOnUIThread();
+            //List<Project> list = new();
+            //if (sln == null) return list;
+            //list.AddRange(sln.Projects.Cast<Project>());
 
-            for (int i = 0; i < list.Count; i++)
-                list.AddRange(list[i]?.ProjectItems?.Cast<ProjectItem>().Select(x => x?.SubProject)?.OfType<Project>());
+            //for (int i = 0; i < list.Count; i++)
+            //    list.AddRange(list[i]?.ProjectItems?.Cast<ProjectItem>().Select(x => x?.SubProject)?.OfType<Project>());
 
-            return list;
+            //return list;
+            return null;
         }
 
         public static Community.VisualStudio.Toolkit.Project GetProject(string projectName)

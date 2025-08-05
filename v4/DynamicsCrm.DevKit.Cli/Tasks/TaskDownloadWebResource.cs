@@ -53,36 +53,36 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         }
         public void Run()
         {
-            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "START ");
-            CliLog.WriteLine(ConsoleColor.White, "|");
-            if (IsValid())
-            {
-                var webResourcesFiles = XrmHelper.GetWebResourcesBySolution(CrmServiceClient, Json.solution);
-                if (webResourcesFiles.Count == 0)
-                {
-                    CliLog.WriteLineWarning(ConsoleColor.Green, "Not found any webresource to download");
-                }
-                else
-                {
-                    var totalDownloadFiles = webResourcesFiles.Count;
-                    var len = totalDownloadFiles.ToString().Length;
-                    CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Found: ", ConsoleColor.Blue, totalDownloadFiles, ConsoleColor.Green, " webresources");
-                    CliLog.WriteLine(ConsoleColor.White, "|");
-                    var i = 1;
-                    foreach (var webResourceFile in webResourcesFiles)
-                    {
-                        var fileName = Path.Combine(CurrentDirectory, Json.solution, webResourceFile.FileName);
-                        var directoryName = Path.GetDirectoryName(fileName);
-                        if (!Directory.Exists(directoryName)) Directory.CreateDirectory(directoryName ?? throw new InvalidOperationException());
-                        byte[] decode = Convert.FromBase64String(webResourceFile.Content);
-                        File.WriteAllBytes(fileName, decode);
-                        CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.DOWNLOADED, ConsoleColor.White, webResourceFile.FileName, ConsoleColor.Green, " to: ", ConsoleColor.White, ".." + fileName.Substring(CurrentDirectory.Length));
-                        i++;
-                    }
-                }
-            }
-            CliLog.WriteLine(ConsoleColor.White, "|");
-            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "END ");
+            //CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "START ");
+            //CliLog.WriteLine(ConsoleColor.White, "|");
+            //if (IsValid())
+            //{
+            //    var webResourcesFiles = XrmHelper.GetWebResourcesBySolution(CrmServiceClient, Json.solution);
+            //    if (webResourcesFiles.Count == 0)
+            //    {
+            //        CliLog.WriteLineWarning(ConsoleColor.Green, "Not found any webresource to download");
+            //    }
+            //    else
+            //    {
+            //        var totalDownloadFiles = webResourcesFiles.Count;
+            //        var len = totalDownloadFiles.ToString().Length;
+            //        CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Found: ", ConsoleColor.Blue, totalDownloadFiles, ConsoleColor.Green, " webresources");
+            //        CliLog.WriteLine(ConsoleColor.White, "|");
+            //        var i = 1;
+            //        foreach (var webResourceFile in webResourcesFiles)
+            //        {
+            //            var fileName = Path.Combine(CurrentDirectory, Json.solution, webResourceFile.FileName);
+            //            var directoryName = Path.GetDirectoryName(fileName);
+            //            if (!Directory.Exists(directoryName)) Directory.CreateDirectory(directoryName ?? throw new InvalidOperationException());
+            //            byte[] decode = Convert.FromBase64String(webResourceFile.Content);
+            //            File.WriteAllBytes(fileName, decode);
+            //            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.DOWNLOADED, ConsoleColor.White, webResourceFile.FileName, ConsoleColor.Green, " to: ", ConsoleColor.White, ".." + fileName.Substring(CurrentDirectory.Length));
+            //            i++;
+            //        }
+            //    }
+            //}
+            //CliLog.WriteLine(ConsoleColor.White, "|");
+            //CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "END ");
         }
     }
 }
