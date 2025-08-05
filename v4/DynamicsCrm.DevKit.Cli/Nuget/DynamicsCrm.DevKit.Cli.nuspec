@@ -24,6 +24,21 @@
 
         <!-- Dataverse/CRM connectivity (modern SDK) -->
         <file src="..\bin\Release\net48\Microsoft.PowerPlatform.Dataverse.Client.dll" target="tools\Microsoft.PowerPlatform.Dataverse.Client.dll" />
+		<file src="..\bin\Release\net48\Microsoft.Bcl.AsyncInterfaces.dll" target="tools\Microsoft.Bcl.AsyncInterfaces.dll" />
+		<file src="..\bin\Release\net48\Microsoft.Crm.Sdk.Proxy.dll" target="tools\Microsoft.Crm.Sdk.Proxy.dll" />
+		<file src="..\bin\Release\net48\Microsoft.Extensions.Caching.Abstractions.dll" target="tools\Microsoft.Extensions.Caching.Abstractions.dll" />
+		<file src="..\bin\Release\net48\Microsoft.Extensions.Caching.Memory.dll" target="tools\Microsoft.Extensions.Caching.Memory.dll" />
+		<file src="..\bin\Release\net48\Microsoft.Extensions.DependencyInjection.Abstractions.dll" target="tools\Microsoft.Extensions.DependencyInjection.Abstractions.dll" />
+		<file src="..\bin\Release\net48\Microsoft.Extensions.DependencyInjection.dll" target="tools\Microsoft.Extensions.DependencyInjection.dll" />
+		<file src="..\bin\Release\net48\Microsoft.Extensions.Http.dll" target="tools\Microsoft.Extensions.Http.dll" />
+		<file src="..\bin\Release\net48\Microsoft.Extensions.Logging.Abstractions.dll" target="tools\Microsoft.Extensions.Logging.Abstractions.dll" />
+		<file src="..\bin\Release\net48\Microsoft.Extensions.Logging.dll" target="tools\Microsoft.Extensions.Logging.dll" />
+		<file src="..\bin\Release\net48\Microsoft.Extensions.Options.dll" target="tools\Microsoft.Extensions.Options.dll" />
+		<file src="..\bin\Release\net48\Microsoft.Extensions.Primitives.dll" target="tools\Microsoft.Extensions.Primitives.dll" />
+		<file src="..\bin\Release\net48\Microsoft.Identity.Client.dll" target="tools\Microsoft.Identity.Client.dll" />
+		<file src="..\bin\Release\net48\Microsoft.IdentityModel.Abstractions.dll" target="tools\Microsoft.IdentityModel.Abstractions.dll" />
+		<file src="..\bin\Release\net48\Microsoft.Xrm.Sdk.dll" target="tools\Microsoft.Xrm.Sdk.dll" />
+		<file src="..\bin\Release\net48\System.Threading.Tasks.Extensions.dll" target="tools\System.Threading.Tasks.Extensions.dll" />
 
         <!-- NuGet package management -->
         <file src="..\bin\Release\net48\NuGet.Packaging.dll" target="tools\NuGet.Packaging.dll" />
@@ -34,9 +49,6 @@
 
         <!-- Visual Studio Shell Framework (minimal required) -->
         <file src="..\bin\Release\net48\Microsoft.VisualStudio.Shell.Framework.dll" target="tools\Microsoft.VisualStudio.Shell.Framework.dll" />
-
-        <!-- JSON serialization -->
-        <file src="..\bin\Release\net48\Newtonsoft.Json.dll" target="tools\Newtonsoft.Json.dll" />
 
         <!-- Documentation and assets -->
         <file src="..\license\LICENSE.txt" target="license\LICENSE.txt" />
