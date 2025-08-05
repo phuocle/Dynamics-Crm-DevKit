@@ -2,9 +2,7 @@
 using EnvDTE;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk.Metadata;
-using Microsoft.Xrm.Tooling.Connector;
 using System;
-using System.Activities.Expressions;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;

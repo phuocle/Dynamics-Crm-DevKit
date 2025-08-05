@@ -1,6 +1,5 @@
 ﻿using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk.Metadata;
-using Microsoft.Xrm.Tooling.Connector;
 using System.Collections.Generic;
 
 namespace DynamicsCrm.DevKit.Shared

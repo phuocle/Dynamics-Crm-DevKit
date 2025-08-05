@@ -2,18 +2,13 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Xml;
 using DynamicsCrm.DevKit.Shared.Models;
-using EnvDTE;
-using MessagePack.Internal;
-using Microsoft.Crm.Sdk.Messages;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Metadata.Query;
 using Microsoft.Xrm.Sdk.Query;
-using Microsoft.Xrm.Tooling.Connector;
 
 namespace DynamicsCrm.DevKit.Shared
 {
@@ -129,7 +124,7 @@ namespace DynamicsCrm.DevKit.Shared
         public static ServiceClient IsConnected(string connectionString, out string error)
         {
             error = null;
-            CrmServiceClient.MaxConnectionTimeout = new TimeSpan(1, 0, 0);
+            ServiceClient.MaxConnectionTimeout = new TimeSpan(1, 0, 0);
             var crmServiceClient = new ServiceClient(connectionString);
             //if (crmServiceClient.LastCrmError?.Length != 0)
             //{
@@ -147,7 +142,7 @@ namespace DynamicsCrm.DevKit.Shared
             return null;
         }
 
-        public static List<DeployWebResource> GetWebResources(CrmServiceClient service, string fullFileName)
+        public static List<DeployWebResource> GetWebResources(ServiceClient service, string fullFileName)
         {
             var parts = fullFileName.Split(@"\".ToCharArray());
             var condition = string.Empty;
@@ -605,7 +600,7 @@ namespace DynamicsCrm.DevKit.Shared
         //    };
         //}
 
-        public static List<NameValueGuidExtend> GetAllSolutions(CrmServiceClient crmServiceClient)
+        public static List<NameValueGuidExtend> GetAllSolutions(ServiceClient crmServiceClient)
         {
             var fetchData = new
             {
@@ -649,7 +644,7 @@ namespace DynamicsCrm.DevKit.Shared
             return list;
         }
 
-        public static List<XrmEntity> GetAllEntities(CrmServiceClient service)
+        public static List<XrmEntity> GetAllEntities(ServiceClient service)
         {
             var request = new RetrieveAllEntitiesRequest
             {
@@ -672,7 +667,7 @@ namespace DynamicsCrm.DevKit.Shared
             return entities;
         }
 
-        public static List<XrmEntity> GetAllDataSource(CrmServiceClient crmServiceClient)
+        public static List<XrmEntity> GetAllDataSource(ServiceClient crmServiceClient)
         {
             var list = new List<string>();
             var filterExpression = new MetadataFilterExpression();
@@ -703,7 +698,7 @@ namespace DynamicsCrm.DevKit.Shared
             return list.Select(x => new XrmEntity { Name = x }).ToList();
         }
 
-        public static List<NameValue> GetSdkMessagesNone(CrmServiceClient service)
+        public static List<NameValue> GetSdkMessagesNone(ServiceClient service)
         {
             var fetchData = new
             {
@@ -745,7 +740,7 @@ namespace DynamicsCrm.DevKit.Shared
             return list.OrderBy(x => x.Name).ToList();
         }
 
-        public static List<NameValue> GetSdkMessages(CrmServiceClient service, string logicalName)
+        public static List<NameValue> GetSdkMessages(ServiceClient service, string logicalName)
         {
             if (logicalName == "none") return GetSdkMessagesNone(service);
             var request = new RetrieveEntityRequest
@@ -796,7 +791,7 @@ namespace DynamicsCrm.DevKit.Shared
             return list.OrderBy(x => x.Name).ToList();
         }
 
-        public static List<PluginInputOutputParameter> GetPluginInputOutputParameters(CrmServiceClient service, string entityName, string requestName)
+        public static List<PluginInputOutputParameter> GetPluginInputOutputParameters(ServiceClient service, string entityName, string requestName)
         {
             var fetchData = new
             {
@@ -885,7 +880,7 @@ namespace DynamicsCrm.DevKit.Shared
             return list;
         }
 
-        public static List<NameValue> GetCustomActionMessages(CrmServiceClient service, string logicalName)
+        public static List<NameValue> GetCustomActionMessages(ServiceClient service, string logicalName)
         {
             var request = new RetrieveEntityRequest
             {
@@ -929,7 +924,7 @@ namespace DynamicsCrm.DevKit.Shared
             return list;
         }
 
-        public static List<NameValue> GetCustomApiMessages(CrmServiceClient service, string entity)
+        public static List<NameValue> GetCustomApiMessages(ServiceClient service, string entity)
         {
             var conditionEntity = string.Empty;
             if (entity != "none")
@@ -956,7 +951,7 @@ namespace DynamicsCrm.DevKit.Shared
             return rows.Entities.Select(x => x.GetAttributeValue<EntityReference>("sdkmessageid")?.Name).Select(y => new NameValue { Name = y }).OrderBy(z => z.Name).ToList();
         }
 
-        public static List<NameValue> GetAllCustomActions(CrmServiceClient service)
+        public static List<NameValue> GetAllCustomActions(ServiceClient service)
         {
             var fetchData = new
             {
@@ -1004,7 +999,7 @@ namespace DynamicsCrm.DevKit.Shared
                 .ToList();
         }
 
-        private static string GetSchemaName(CrmServiceClient service, string logicalName)
+        private static string GetSchemaName(ServiceClient service, string logicalName)
         {
             if (logicalName == null || logicalName == "none") return "None";
             var request = new RetrieveEntityRequest
