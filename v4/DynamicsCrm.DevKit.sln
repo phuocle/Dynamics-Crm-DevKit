@@ -7,6 +7,11 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "DynamicsCrm.DevKit.Shared",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DynamicsCrm.DevKit.Cli", "DynamicsCrm.DevKit.Cli\DynamicsCrm.DevKit.Cli.csproj", "{E81879B8-B13E-4856-8653-CE3F3415C512}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{089100B1-113F-4E66-888A-E83F3999EAFD}"
+	ProjectSection(SolutionItems) = preProject
+		version.txt = version.txt
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
