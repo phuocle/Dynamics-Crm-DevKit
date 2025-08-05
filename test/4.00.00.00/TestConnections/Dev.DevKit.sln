@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.Console.Core.Use
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.Plugin.Account.UserPass", "Dev.DevKit.Plugin.Account.UserPass\Dev.DevKit.Plugin.Account.UserPass.csproj", "{D900F49E-609E-4148-9E8B-181D0C8AC576}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.Plugin.Account.OOB", "Dev.DevKit.Plugin.Account.OOB\Dev.DevKit.Plugin.Account.OOB.csproj", "{579F1509-DEBE-4028-BCFE-98BC8209B341}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +37,10 @@ Global
 		{D900F49E-609E-4148-9E8B-181D0C8AC576}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D900F49E-609E-4148-9E8B-181D0C8AC576}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D900F49E-609E-4148-9E8B-181D0C8AC576}.Release|Any CPU.Build.0 = Release|Any CPU
+		{579F1509-DEBE-4028-BCFE-98BC8209B341}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{579F1509-DEBE-4028-BCFE-98BC8209B341}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{579F1509-DEBE-4028-BCFE-98BC8209B341}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{579F1509-DEBE-4028-BCFE-98BC8209B341}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -43,6 +49,7 @@ Global
 		SolutionGuid = {478EE8F5-54E1-431D-BEC8-72AC05F5AF8C}
 	EndGlobalSection
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{579f1509-debe-4028-bcfe-98bc8209b341}*SharedItemsImports = 4
 		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{77ca48fe-c842-46bb-b647-aeb5fc5c6035}*SharedItemsImports = 13
 		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{d900f49e-609e-4148-9e8b-181d0c8ac576}*SharedItemsImports = 4
 	EndGlobalSection
