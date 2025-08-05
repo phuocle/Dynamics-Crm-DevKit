@@ -113,10 +113,17 @@ namespace DynamicsCrm.DevKit.Cli
                     var ignoreCliTypes = new List<string>() { nameof(CliType.proxytypes) };
                     if (!ignoreCliTypes.Any(x => arguments.Type == x))
                     {
-                        if (!IsConnectedDynamics365BySdkLogin())
+                        if (!string.IsNullOrEmpty(arguments.Url)) {
+                            if (!IsConnectedDynamics365BySdkLogin(arguments.Url))
+                            {
+                                CliLog.WriteLine(ConsoleColor.White, "|");
+                                CliLog.WriteLineError(ConsoleColor.Yellow, $" OOB Login failed !!!");
+                                return false;
+                            }
+                        }
+                        else
                         {
-                            CliLog.WriteLine(ConsoleColor.White, "|");
-                            CliLog.WriteLineError(ConsoleColor.Yellow, $" OOB Login failed !!!");
+                            CliLog.WriteLineError(ConsoleColor.Yellow, $"/url: required !!!");
                             return false;
                         }
                     }
@@ -162,7 +169,7 @@ namespace DynamicsCrm.DevKit.Cli
             return true;
         }
 
-        private static bool IsConnectedDynamics365BySdkLogin()
+        private static bool IsConnectedDynamics365BySdkLogin(string url)
         {
             //ServiceClient.MaxConnectionTimeout = new TimeSpan(1, 0, 0);
             //var loginForm = new FormLogin(true);

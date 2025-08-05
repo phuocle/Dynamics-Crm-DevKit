@@ -12,7 +12,7 @@
     },
     "generators.LateBound.OOB": {
       "commandName": "Project",
-      "commandLineArgs": "/sdklogin:\"yes\" /json:\"..\\..\\DynamicsCrm.DevKit.Cli.json\" /type:\"generators\" /profile:\"LATEBOUND\"",
+      "commandLineArgs": "/sdklogin:\"yes\" /url:\"https://dynamics-crm-devkit.crm5.dynamics.com\" /json:\"..\\..\\DynamicsCrm.DevKit.Cli.json\" /type:\"generators\" /profile:\"LATEBOUND\"",
       "workingDirectory": "D:\\azure\\PL\\HSAPVN\\src\\Hs.Hsap.Shared\\Entities"
     }
   }
