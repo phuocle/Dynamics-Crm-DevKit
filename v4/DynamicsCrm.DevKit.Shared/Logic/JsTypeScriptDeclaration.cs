@@ -9,7 +9,7 @@ using System.Xml.Linq;
 
 namespace DynamicsCrm.DevKit.Shared.Logic
 {
-    public class JsTypeScriptDeclaration2
+    public class JsTypeScriptDeclaration
     {
         private static List<string> FormAll_HeaderFields = new List<string>();
 
@@ -21,7 +21,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
 
         private const string TAB = "\t";
 
-        private static ServiceClient CrmServiceClient { get; set; }
+        private static ServiceClient ServiceClient { get; set; }
 
         private static EntityMetadata EntityMetadata { get; set; }
 
@@ -33,7 +33,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
 
         public static string GetCode(ServiceClient crmServiceClient, EntityMetadata entityMetadata, string rootNamespace, CommentTypeScriptDeclaration comment)
         {
-            CrmServiceClient = crmServiceClient;
+            ServiceClient = crmServiceClient;
             EntityMetadata = entityMetadata;
             RootNamespace = rootNamespace;
             Comment = comment;
@@ -489,7 +489,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
 
         private static string GetForm_d_ts(string @namespace)
         {
-            var forms = XrmHelper.GetEntityForms(CrmServiceClient, EntityMetadata.LogicalName);
+            var forms = XrmHelper.GetEntityForms(ServiceClient, EntityMetadata.LogicalName);
             if (!forms.Any()) return string.Empty;
             var _d_ts = string.Empty;
             foreach (var form in forms.Where(x => x.FormType == XrmHelper.FormType.Main).ToList())
@@ -701,7 +701,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
         private static string GetForm_d_ts_Process(string formXml)
         {
             var code = string.Empty;
-            XrmHelper.EntitiesProcessForm.AddIfNotExist(CrmServiceClient, EntityMetadata.LogicalName);
+            XrmHelper.EntitiesProcessForm.AddIfNotExist(ServiceClient, EntityMetadata.LogicalName);
             var processes = XrmHelper.EntitiesProcessForm.Where(x => x.EntityLogicalName == EntityMetadata.LogicalName).OrderBy(x => x.Name);
             var _d_ts = string.Empty;
             var part1 = string.Empty;
@@ -851,7 +851,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                               ControlId = x?.Attribute("uniqueid")?.Value
                           }).Distinct().ToList();
             fields = fields.OrderBy(x => x.Name).ToList();
-            XrmHelper.EntitiesMetadata.AddIfNotExist(CrmServiceClient, quickViewXml.entityLogicalName);
+            XrmHelper.EntitiesMetadata.AddIfNotExist(ServiceClient, quickViewXml.entityLogicalName);
             var quickViewMetadata = XrmHelper.EntitiesMetadata.Where(x => x.LogicalName == quickViewXml.entityLogicalName).FirstOrDefault();
             if (quickViewMetadata == null) return String.Empty;
             foreach (var field in fields)
@@ -869,7 +869,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
         private static void GetFormXml(string formId, string entityLogicalName, out string formXml)
         {
             formXml = string.Empty;
-            XrmHelper.EntitiesFormXml.AddIfNotExist(CrmServiceClient, entityLogicalName);
+            XrmHelper.EntitiesFormXml.AddIfNotExist(ServiceClient, entityLogicalName);
             var form = XrmHelper.EntitiesFormXml.FirstOrDefault(x => x.FormType == XrmHelper.FormType.QuickView && x.FormId == Guid.Parse(formId));
             if (form != null)
             {

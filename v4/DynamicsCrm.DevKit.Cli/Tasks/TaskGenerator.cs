@@ -159,7 +159,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var newCode = string.Empty;
                     var newDTS = string.Empty;
 
-                    newCode = JsWebApi2.GetCode(ServiceClient, entityMetadata, Json.rootnamespace, comment, out newDTS);
+                    newCode = JsWebApi.GetCode(ServiceClient, entityMetadata, Json.rootnamespace, comment, out newDTS);
 
                     if (Helper.IsTheSame(oldCode, newCode))
                     {

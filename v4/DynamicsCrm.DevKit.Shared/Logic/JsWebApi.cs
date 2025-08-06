@@ -6,22 +6,22 @@ using System.Linq;
 
 namespace DynamicsCrm.DevKit.Shared.Logic
 {
-    public static class JsWebApi2
+    public static class JsWebApi
     {
         private const string NEW_LINE = "\r\n";
         private const string TAB = "\t";
-        private static ServiceClient CrmServiceClient { get; set; }
+        private static ServiceClient ServiceClient { get; set; }
         private static EntityMetadata EntityMetadata { get; set; }
         private static string RootNamespace { get; set; }
         private static CommentTypeScriptDeclaration Comment { get; set; }
 
         public static string GetCode(ServiceClient crmServiceClient, EntityMetadata entityMetadata, string rootNamespace, CommentTypeScriptDeclaration comment, out string dts)
         {
-            CrmServiceClient = crmServiceClient;
+            ServiceClient = crmServiceClient;
             EntityMetadata = entityMetadata;
             RootNamespace = rootNamespace;
             Comment = comment;
-            dts = JsTypeScriptDeclaration2.GetCode(crmServiceClient, entityMetadata, rootNamespace, comment);
+            dts = JsTypeScriptDeclaration.GetCode(crmServiceClient, entityMetadata, rootNamespace, comment);
 
             var code = string.Empty;
             var @namespace = Helper.GetNameSpace(RootNamespace);
@@ -160,7 +160,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                     if (lookup.Targets.Count() == 1)
                     {
                         var entityLogicalName = lookup.Targets[0];
-                        XrmHelper.EntitiesMetadata.AddIfNotExist(CrmServiceClient, entityLogicalName);
+                        XrmHelper.EntitiesMetadata.AddIfNotExist(ServiceClient, entityLogicalName);
                         var entityMetadata = XrmHelper.EntitiesMetadata.First(x => x.LogicalName == entityLogicalName);
                         var b = $"b: '{((attribute.IsCustomAttribute ?? false) ? attributeSchemaName : attribute.LogicalName)}'";
                         var c = $"c: '{entityMetadata.LogicalCollectionName}'";
@@ -180,7 +180,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                             {
                                 var navigation = EntityMetadata.ManyToOneRelationships.FirstOrDefault(x => x.ReferencingAttribute == attribute.LogicalName && x.ReferencedEntity == entityLogicalName);
                                 var b = $"b: '{navigation?.ReferencingEntityNavigationPropertyName}'";
-                                XrmHelper.EntitiesMetadata.AddIfNotExist(CrmServiceClient, entityLogicalName);
+                                XrmHelper.EntitiesMetadata.AddIfNotExist(ServiceClient, entityLogicalName);
                                 var c = $"c: '{XrmHelper.EntitiesMetadata.First(x => x.LogicalName == entityLogicalName)?.LogicalCollectionName}'";
                                 var d = $"d: '{entityLogicalName}'";
                                 if (navigation?.ReferencingEntityNavigationPropertyName != null && navigation?.ReferencingEntityNavigationPropertyName?.Length > 0)

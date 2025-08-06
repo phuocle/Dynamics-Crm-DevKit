@@ -17,8 +17,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Enum.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logic\JsForm.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Logic\JsTypeScriptDeclaration2.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Logic\JsWebApi2.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Logic\JsTypeScriptDeclaration.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Logic\JsWebApi.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\CliAction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\CommandLineArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\CommentTypeScriptDeclaration.cs" />
