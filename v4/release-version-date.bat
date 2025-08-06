@@ -46,10 +46,10 @@ if %MsBuild%=="" (
     echo NuGet pack ...
     echo ************************************************************
 
-	rem cd DynamicsCrm.DevKit.Analyzers\Nuget
-	rem call pack.bat
+	cd DynamicsCrm.DevKit.Analyzers\Nuget
+	call pack.bat
 
-	rem cd ..\..
+	cd ..\..
 	cd DynamicsCrm.DevKit.Cli\Nuget
 	call pack.bat
 

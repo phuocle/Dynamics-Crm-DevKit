@@ -16,13 +16,13 @@
   </metadata>
   <files>
     <file src="..\images\icon.png" target="images\icon.png" />
-    <file src="..\Release\DynamicsCrm.DevKit.Tool.exe" target="tools\DynamicsCrm.DevKit.Tool.exe" />
-    <file src="..\Release\DynamicsCrm.DevKit.Tool.exe.config" target="tools\DynamicsCrm.DevKit.Tool.exe.config" />
-    <file src="..\Release\CmdLine.dll" target="tools\CmdLine.dll" />
-    <file src="..\Release\NUglify.dll" target="tools\NUglify.dll" />
+    <file src="..\bin\Release\net48\DynamicsCrm.DevKit.Tool.exe" target="tools\DynamicsCrm.DevKit.Tool.exe" />
+    <file src="..\bin\Release\net48\DynamicsCrm.DevKit.Tool.exe.config" target="tools\DynamicsCrm.DevKit.Tool.exe.config" />
+    <file src="..\bin\Release\net48\CmdLine.dll" target="tools\CmdLine.dll" />
+    <file src="..\bin\Release\net48\NUglify.dll" target="tools\NUglify.dll" />
     <file src="..\license\LICENSE.txt" target="license\LICENSE.txt" />
 	<file src="..\docs\README.md" target="docs\README.md" />
-    <file src="..\Release\Microsoft.VisualStudio.Coverage.Analysis.dll" target="tools\Microsoft.VisualStudio.Coverage.Analysis.dll" />
-    <file src="..\Release\Microsoft.VisualStudio.Coverage.Interop.dll" target="tools\Microsoft.VisualStudio.Coverage.Interop.dll" />
+    <file src="..\bin\Release\net48\Microsoft.VisualStudio.Coverage.Analysis.dll" target="tools\Microsoft.VisualStudio.Coverage.Analysis.dll" />
+    <file src="..\bin\Release\net48\Microsoft.VisualStudio.Coverage.Interop.dll" target="tools\Microsoft.VisualStudio.Coverage.Interop.dll" />
   </files>
 </package>
