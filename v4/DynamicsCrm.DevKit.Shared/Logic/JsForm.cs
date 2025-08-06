@@ -3,14 +3,11 @@ using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk.Metadata;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Windows.Forms;
 using System.Xml.Linq;
-using static DynamicsCrm.DevKit.Shared.Entities.SdkMessageProcessingStep;
 
-namespace DynamicsCrm.DevKit.Shared
+namespace DynamicsCrm.DevKit.Shared.Logic
 {
     public static class JsForm
     {

@@ -10,16 +10,16 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Const.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)CSharpLateBound.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Logic\CSharpLateBound.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)EncryptDecrypt.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\EntityBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\SdkMessageProcessingStep.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\SdkMessageProcessingStep.generated.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Enum.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)JsForm.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)JsTypeScriptDeclaration2.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)JsWebApi2.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Logic\JsForm.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Logic\JsTypeScriptDeclaration2.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Logic\JsWebApi2.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\CliAction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\CommandLineArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\CommentTypeScriptDeclaration.cs" />
@@ -55,10 +55,12 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\XrmEntity.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SimpleJson.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utility.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)VsixHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)XrmHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="$(MSBuildThisFileDirectory)Entities\DynamicsCrm.DevKit.Cli.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)Logic\" />
   </ItemGroup>
 </Project>

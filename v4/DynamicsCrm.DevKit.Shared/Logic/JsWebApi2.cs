@@ -4,7 +4,7 @@ using Microsoft.Xrm.Sdk.Metadata;
 using System;
 using System.Linq;
 
-namespace DynamicsCrm.DevKit.Shared
+namespace DynamicsCrm.DevKit.Shared.Logic
 {
     public static class JsWebApi2
     {

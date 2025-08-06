@@ -1,5 +1,6 @@
 ﻿using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Entities.SdkMessageProcessingStepOptionSets;
+using DynamicsCrm.DevKit.Shared.Logic;
 using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.PowerPlatform.Dataverse.Client;
@@ -191,7 +192,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                             Utility.ForceWriteAllText(dtsFile, newDTS);
                             if (!File.Exists(file))
                             {
-                                Utility.ForceWriteAllText(file, VsixHelper.GetDefaultFileWithWebApi(entityMetadata.SchemaName));
+                                Utility.ForceWriteAllText(file, Utility.GetDefaultFileWithWebApi(entityMetadata.SchemaName));
                             }
                             CliLog.WriteLineWarning(ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.CREATED, ConsoleColor.White, $"{schemaName}{endsWith}");
                         }
@@ -262,7 +263,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                             Utility.ForceWriteAllText(dtsFile, newDTS);
                             if (!File.Exists(file))
                             {
-                                Utility.ForceWriteAllText(file, VsixHelper.GetDefaultFileWithForm(ServiceClient, entityMetadata, Json.rootnamespace));
+                                Utility.ForceWriteAllText(file, Utility.GetDefaultFileWithForm(ServiceClient, entityMetadata, Json.rootnamespace));
                             }
                             CliLog.WriteLineWarning(ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.CREATED, ConsoleColor.White, $"{schemaName}{endsWith}");
                         }
@@ -321,7 +322,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                             Utility.ForceWriteAllText(fileEndsWith, newCode);
                             if (!File.Exists(file))
                             {
-                                Utility.ForceWriteAllText(file, VsixHelper.GetDefaultFileWithCs(entityMetadata, Json.rootnamespace));
+                                Utility.ForceWriteAllText(file, Utility.GetDefaultFileWithCs(entityMetadata, Json.rootnamespace));
                             }
                             CliLog.WriteLineWarning(ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.CREATED, ConsoleColor.White, $"{schemaName}{endsWith}");
                         }

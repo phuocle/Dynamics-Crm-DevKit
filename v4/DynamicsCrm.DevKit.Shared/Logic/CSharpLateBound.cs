@@ -7,7 +7,7 @@ using System.Globalization;
 using System.Linq;
 using System.Security;
 
-namespace DynamicsCrm.DevKit.Shared
+namespace DynamicsCrm.DevKit.Shared.Logic
 {
     public static class CSharpLateBound
     {
