@@ -1,5 +1,8 @@
 ﻿using Community.VisualStudio.Toolkit;
+using DynamicsCrm.DevKit.Shared;
+using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.VisualStudio.Shell;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -26,6 +29,34 @@ namespace DynamicsCrm.DevKit
                     return Path.GetExtension(selectedItem.FullPath);
                 }
             }
+        }
+
+        public static async Task<string> GetDynamicsCrmDevKitJsonFileNameAsync()
+        {
+            var solution = await VS.Solutions.GetCurrentSolutionAsync();
+            return $"{Path.GetDirectoryName(solution.FullPath)}\\{Const.DynamicsCrmDevKitJson}";
+        }
+
+        public static string GetDynamicsCrmDevKitJsonFileName()
+        {
+            return ThreadHelper.JoinableTaskFactory.Run(GetDynamicsCrmDevKitJsonFileNameAsync);
+        }
+
+
+        public static DevKitConnections GetDevKitConnections()
+        {
+            var fileName = GetDynamicsCrmDevKitJsonFileName();
+            if (fileName == null || !File.Exists(fileName))
+            {
+                return new DevKitConnections()
+                {
+                    CrmConnections = new List<CrmConnection>()
+                };
+            }
+            var json = File.ReadAllText(fileName);
+            var devKitConnections = SimpleJson.DeserializeObject<DevKitConnections>(json);
+            devKitConnections.CrmConnections ??= new List<CrmConnection>();
+            return devKitConnections;
         }
     }
 }
