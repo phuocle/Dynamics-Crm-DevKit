@@ -12,7 +12,7 @@
 		</Groups>
 		<Buttons>
 			<Button guid="GuidSetDeployWebResource" id="CommandDeployWebResource" type="Button" priority="0x0001">
-				<Icon guid="guidImages" id="bmpPicPL" />
+				<Icon guid="guidImages" id="bmpPic" />
 				<CommandFlag>DynamicVisibility</CommandFlag>
 				<CommandFlag>TextChanges</CommandFlag>
 				<CommandFlag>DefaultInvisible</CommandFlag>
@@ -20,9 +20,8 @@
 					<ButtonText>Deploy WebResource</ButtonText>
 				</Strings>
 			</Button>
-
 			<Button guid="GuidSetDeployWebResource" id="CommandAddCrmPluginRegistration" type="Button" priority="0x0003">
-				<Icon guid="guidImages" id="bmpPicPL" />
+				<Icon guid="guidImages" id="bmpPic" />
 				<CommandFlag>DynamicVisibility</CommandFlag>
 				<CommandFlag>TextChanges</CommandFlag>
 				<CommandFlag>DefaultInvisible</CommandFlag>
@@ -30,9 +29,8 @@
 					<ButtonText>Add CrmPluginRegistration</ButtonText>
 				</Strings>
 			</Button>
-
 			<Button guid="GuidSetDeployWebResource" id="CommandDeployNewWebResource" type="Button" priority="0x0002">
-				<Icon guid="guidImages" id="bmpPicPL" />
+				<Icon guid="guidImages" id="bmpPic" />
 				<CommandFlag>DynamicVisibility</CommandFlag>
 				<CommandFlag>TextChanges</CommandFlag>
 				<CommandFlag>DefaultInvisible</CommandFlag>
@@ -40,10 +38,9 @@
 					<ButtonText>Deploy New WebResource</ButtonText>
 				</Strings>
 			</Button>
-
 		</Buttons>
 		<Bitmaps>
-			<Bitmap guid="guidImages" href="icon16.png" usedList="bmpPicPL"/>
+			<Bitmap guid="guidImages" href="icon16.png" usedList="bmpPic"/>
 		</Bitmaps>
 	</Commands>
 
@@ -63,15 +60,12 @@
 		<CommandPlacement guid="GuidSetDeployWebResource" id="CommandDeployWebResource" priority="0x0001" >
 			<Parent guid="GuidSetDeployWebResource" id="GroupCommandDeployWebResource"/>
 		</CommandPlacement>
-
 		<CommandPlacement guid="GuidSetDeployWebResource" id="GroupCommandAddCrmPluginRegistration" priority="0xFFFF">
 			<Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_CODEWIN"/>
 		</CommandPlacement>
 		<CommandPlacement guid="GuidSetDeployWebResource" id="CommandAddCrmPluginRegistration" priority="0x0003" >
 			<Parent guid="GuidSetDeployWebResource" id="GroupCommandAddCrmPluginRegistration"/>
 		</CommandPlacement>
-
-
 		<CommandPlacement guid="GuidSetDeployWebResource" id="GroupCommandDeployNewWebResource" priority="0xFFFF">
 			<Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_ITEMNODE"/>
 		</CommandPlacement>
@@ -83,7 +77,7 @@
 	<Symbols>
 		<GuidSymbol name="DynamicsCrmDevKit" value="{525190A4-9C61-4AA5-8319-7C5FB75DAE58}" />
 		<GuidSymbol name="guidImages" value="{68759F95-6F1D-4A77-87EA-192FC8D811F1}" >
-			<IDSymbol name="bmpPicPL" value="1" />
+			<IDSymbol name="bmpPic" value="1" />
 		</GuidSymbol>
 		<GuidSymbol name="CssEditorWindows" value="{64DA400E-B4AD-4D67-AA92-4B7ACB01ECD5}">
 			<IDSymbol name="IDMX_HTM_SOURCE_CSS" value="0x002" />

@@ -34,7 +34,7 @@ namespace DynamicsCrm.DevKit.Commands
 
         protected override async Task ExecuteAsync(OleMenuCmdEventArgs e)
         {
-            //await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
             //var dte = await VS.GetServiceAsync<DTE, DTE>();
             //var textDocument = (TextDocument)dte.ActiveDocument.Object();
@@ -60,7 +60,7 @@ namespace DynamicsCrm.DevKit.Commands
             //if (Utility.HasImplementedPlugin(@class))
             //{
             //    var attributes = CrmPluginRegistrationDataForPlugin(dte, currentClass.FullName);
-            //    if (attributes != null)
+            //    if (attributes != nSull)
             //    {
             //        if (attributes.Count > 0)
             //        {
@@ -114,6 +114,8 @@ namespace DynamicsCrm.DevKit.Commands
             //{
             //    this.Command.Visible = false;
             //}
+
+            this.Command.Visible = false;
         }
 
         private static List<string> CrmPluginRegistrationDataForWorkflow(DTE dte, string fullName)

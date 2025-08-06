@@ -1,6 +1,4 @@
 ﻿using Community.VisualStudio.Toolkit;
-using DynamicsCrm.DevKit.Shared;
-using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.VisualStudio.Shell;
 using System;
 using System.IO;
@@ -13,7 +11,7 @@ namespace DynamicsCrm.DevKit.Commands
     {
         protected override async Task ExecuteAsync(OleMenuCmdEventArgs e)
         {
-            //await VS.StatusBar.StartAnimationAsync(StatusAnimation.Deploy);
+            await VS.StatusBar.StartAnimationAsync(StatusAnimation.Deploy);
             //var vsixSessionCache = new VsixSessionCache();
             //var serviceCache = vsixSessionCache.GetCrmServiceClient();
             //if (serviceCache != null)
@@ -33,7 +31,7 @@ namespace DynamicsCrm.DevKit.Commands
             //        }
             //    }
             //}
-            //await VS.StatusBar.EndAnimationAsync(StatusAnimation.Deploy);
+            await VS.StatusBar.EndAnimationAsync(StatusAnimation.Deploy);
         }
 
         //private static async Task DeployWebResourceAsync(CrmServiceClient service, DeployWebResource deployWebResource)
@@ -98,7 +96,7 @@ namespace DynamicsCrm.DevKit.Commands
 
         protected override void BeforeQueryStatus(EventArgs e)
         {
-            //this.Command.Visible = Utility.IsWebResourceExtension(VsixHelper.SelectedItem.Extension);
+            this.Command.Visible = Helper.IsWebResourceExtension(VsixHelper.SelectedItem.Extension);
         }
     }
 }
