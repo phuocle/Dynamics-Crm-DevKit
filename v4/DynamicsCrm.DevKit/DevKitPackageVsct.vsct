@@ -1,0 +1,103 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CommandTable xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<Extern href="stdidcmd.h"/>
+	<Extern href="vsshlids.h"/>
+	<Include href="KnownImageIds.vsct"/>
+	<Include href="VSGlobals.vsct"/>
+	<Commands package="DynamicsCrmDevKit">
+		<Groups>
+			<Group guid="GuidSetDeployWebResource" id="GroupCommandDeployWebResource" />
+			<Group guid="GuidSetDeployWebResource" id="GroupCommandAddCrmPluginRegistration" />
+			<Group guid="GuidSetDeployWebResource" id="GroupCommandDeployNewWebResource" />
+		</Groups>
+		<Buttons>
+			<Button guid="GuidSetDeployWebResource" id="CommandDeployWebResource" type="Button" priority="0x0001">
+				<Icon guid="guidImages" id="bmpPicPL" />
+				<CommandFlag>DynamicVisibility</CommandFlag>
+				<CommandFlag>TextChanges</CommandFlag>
+				<CommandFlag>DefaultInvisible</CommandFlag>
+				<Strings>
+					<ButtonText>Deploy WebResource</ButtonText>
+				</Strings>
+			</Button>
+
+			<Button guid="GuidSetDeployWebResource" id="CommandAddCrmPluginRegistration" type="Button" priority="0x0003">
+				<Icon guid="guidImages" id="bmpPicPL" />
+				<CommandFlag>DynamicVisibility</CommandFlag>
+				<CommandFlag>TextChanges</CommandFlag>
+				<CommandFlag>DefaultInvisible</CommandFlag>
+				<Strings>
+					<ButtonText>Add CrmPluginRegistration</ButtonText>
+				</Strings>
+			</Button>
+
+			<Button guid="GuidSetDeployWebResource" id="CommandDeployNewWebResource" type="Button" priority="0x0002">
+				<Icon guid="guidImages" id="bmpPicPL" />
+				<CommandFlag>DynamicVisibility</CommandFlag>
+				<CommandFlag>TextChanges</CommandFlag>
+				<CommandFlag>DefaultInvisible</CommandFlag>
+				<Strings>
+					<ButtonText>Deploy New WebResource</ButtonText>
+				</Strings>
+			</Button>
+
+		</Buttons>
+		<Bitmaps>
+			<Bitmap guid="guidImages" href="icon16.png" usedList="bmpPicPL"/>
+		</Bitmaps>
+	</Commands>
+
+	<CommandPlacements>
+		<CommandPlacement guid="GuidSetDeployWebResource" id="GroupCommandDeployWebResource" priority="0xFFFF">
+			<Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_CODEWIN"/>
+		</CommandPlacement>
+		<CommandPlacement guid="GuidSetDeployWebResource" id="GroupCommandDeployWebResource" priority="0xFFFF">
+			<Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_ITEMNODE"/>
+		</CommandPlacement>
+		<CommandPlacement guid="GuidSetDeployWebResource" id="GroupCommandDeployWebResource" priority="0xFFFF">
+			<Parent guid="CssEditorWindows" id="IDMX_HTM_SOURCE_CSS" />
+		</CommandPlacement>
+		<CommandPlacement guid="GuidSetDeployWebResource" id="GroupCommandDeployWebResource" priority="0xFFFF">
+			<Parent guid="HtmlEditorWindows" id="IDMX_HTM_SOURCE_HTML"/>
+		</CommandPlacement>
+		<CommandPlacement guid="GuidSetDeployWebResource" id="CommandDeployWebResource" priority="0x0001" >
+			<Parent guid="GuidSetDeployWebResource" id="GroupCommandDeployWebResource"/>
+		</CommandPlacement>
+
+		<CommandPlacement guid="GuidSetDeployWebResource" id="GroupCommandAddCrmPluginRegistration" priority="0xFFFF">
+			<Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_CODEWIN"/>
+		</CommandPlacement>
+		<CommandPlacement guid="GuidSetDeployWebResource" id="CommandAddCrmPluginRegistration" priority="0x0003" >
+			<Parent guid="GuidSetDeployWebResource" id="GroupCommandAddCrmPluginRegistration"/>
+		</CommandPlacement>
+
+
+		<CommandPlacement guid="GuidSetDeployWebResource" id="GroupCommandDeployNewWebResource" priority="0xFFFF">
+			<Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_ITEMNODE"/>
+		</CommandPlacement>
+		<CommandPlacement guid="GuidSetDeployWebResource" id="CommandDeployNewWebResource" priority="0x0002" >
+			<Parent guid="GuidSetDeployWebResource" id="GroupCommandDeployNewWebResource"/>
+		</CommandPlacement>
+	</CommandPlacements>
+
+	<Symbols>
+		<GuidSymbol name="DynamicsCrmDevKit" value="{525190A4-9C61-4AA5-8319-7C5FB75DAE58}" />
+		<GuidSymbol name="guidImages" value="{68759F95-6F1D-4A77-87EA-192FC8D811F1}" >
+			<IDSymbol name="bmpPicPL" value="1" />
+		</GuidSymbol>
+		<GuidSymbol name="CssEditorWindows" value="{64DA400E-B4AD-4D67-AA92-4B7ACB01ECD5}">
+			<IDSymbol name="IDMX_HTM_SOURCE_CSS" value="0x002" />
+		</GuidSymbol>
+		<GuidSymbol name="HtmlEditorWindows" value="{78F03954-2FB8-4087-8CE7-59D71710B3BB}">
+			<IDSymbol name="IDMX_HTM_SOURCE_HTML" value="1"/>
+		</GuidSymbol>
+		<GuidSymbol name="GuidSetDeployWebResource" value="{525190A4-9C61-4AA5-8319-7C5FB75DAE58}">
+			<IDSymbol name="GroupCommandDeployWebResource" value="0x0001" />
+			<IDSymbol name="GroupCommandAddCrmPluginRegistration" value="0x0003" />
+			<IDSymbol name="GroupCommandDeployNewWebResource" value="0x0002" />
+			<IDSymbol name="CommandDeployWebResource" value="0x1001" />
+			<IDSymbol name="CommandAddCrmPluginRegistration" value="0x1003" />
+			<IDSymbol name="CommandDeployNewWebResource" value="0x1002" />
+		</GuidSymbol>
+	</Symbols>
+</CommandTable>
