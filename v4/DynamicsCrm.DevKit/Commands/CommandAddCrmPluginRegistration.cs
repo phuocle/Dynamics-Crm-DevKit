@@ -2,9 +2,6 @@
 using EnvDTE;
 using EnvDTE80;
 using Microsoft.VisualStudio.Shell;
-using Microsoft.Xrm.Sdk.Query;
-using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Tooling.Connector;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -174,43 +171,43 @@ namespace DynamicsCrm.DevKit.Commands
             return new List<string>();
         }
 
-        private static CrmServiceClient AddDeployBatFiles(DTE dte)
-        {
-            //ThreadHelper.ThrowIfNotOnUIThread();
-            //var formConnection = new FormConnection();
-            //var result = formConnection.ShowModal() ?? false;
-            //if (!result) return null;
-            //var plugin_deploy_debug_bat = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.plugin.deploy.debug.bat");
-            //var plugin_deploy_debug_only_bat = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.plugin.deploy.debug.only.bat");
+        //private static CrmServiceClient AddDeployBatFiles(DTE dte)
+        //{
+        //    //ThreadHelper.ThrowIfNotOnUIThread();
+        //    //var formConnection = new FormConnection();
+        //    //var result = formConnection.ShowModal() ?? false;
+        //    //if (!result) return null;
+        //    //var plugin_deploy_debug_bat = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.plugin.deploy.debug.bat");
+        //    //var plugin_deploy_debug_only_bat = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.plugin.deploy.debug.only.bat");
 
-            //if (formConnection.IsOOBConnection)
-            //{
-            //    plugin_deploy_debug_bat = plugin_deploy_debug_bat
-            //        .Replace("set CrmConnection=\"$CrmConnectionString$\"\r\n", string.Empty)
-            //        .Replace("/conn:%CrmConnection%", "/sdklogin:\"yes\"")
-            //        .Replace("$ProjectName$", Path.GetFileNameWithoutExtension(dte.ActiveDocument.ProjectItem.ContainingProject.FullName));
-            //    plugin_deploy_debug_only_bat = plugin_deploy_debug_only_bat
-            //        .Replace("set CrmConnection=\"$CrmConnectionString$\"\r\n", string.Empty)
-            //        .Replace("/conn:%CrmConnection%", "/sdklogin:\"yes\"")
-            //        .Replace("$ProjectName$", Path.GetFileNameWithoutExtension(dte.ActiveDocument.ProjectItem.ContainingProject.FullName));
-            //    AddDeployBatFileToProject(dte, "deploy.debug.bat", plugin_deploy_debug_bat);
-            //    AddDeployBatFileToProject(dte, "deploy.debug.only.bat", plugin_deploy_debug_only_bat);
-            //}
-            //else
-            //{
-            //    var crmConnectionString = XrmHelper.BuildConnectionString2(formConnection.DataverseConnectionString);
-            //    plugin_deploy_debug_bat = plugin_deploy_debug_bat
-            //        .Replace("$CrmConnectionString$", crmConnectionString)
-            //        .Replace("$ProjectName$", Path.GetFileNameWithoutExtension(dte.ActiveDocument.ProjectItem.ContainingProject.FullName));
-            //    plugin_deploy_debug_only_bat = plugin_deploy_debug_only_bat
-            //        .Replace("$CrmConnectionString$", crmConnectionString)
-            //        .Replace("$ProjectName$", Path.GetFileNameWithoutExtension(dte.ActiveDocument.ProjectItem.ContainingProject.FullName));
-            //    AddDeployBatFileToProject(dte, "deploy.debug.bat", plugin_deploy_debug_bat);
-            //    AddDeployBatFileToProject(dte, "deploy.debug.only.bat", plugin_deploy_debug_only_bat);
-            //}
-            //return formConnection.CrmServiceClient;
-            return null;
-        }
+        //    //if (formConnection.IsOOBConnection)
+        //    //{
+        //    //    plugin_deploy_debug_bat = plugin_deploy_debug_bat
+        //    //        .Replace("set CrmConnection=\"$CrmConnectionString$\"\r\n", string.Empty)
+        //    //        .Replace("/conn:%CrmConnection%", "/sdklogin:\"yes\"")
+        //    //        .Replace("$ProjectName$", Path.GetFileNameWithoutExtension(dte.ActiveDocument.ProjectItem.ContainingProject.FullName));
+        //    //    plugin_deploy_debug_only_bat = plugin_deploy_debug_only_bat
+        //    //        .Replace("set CrmConnection=\"$CrmConnectionString$\"\r\n", string.Empty)
+        //    //        .Replace("/conn:%CrmConnection%", "/sdklogin:\"yes\"")
+        //    //        .Replace("$ProjectName$", Path.GetFileNameWithoutExtension(dte.ActiveDocument.ProjectItem.ContainingProject.FullName));
+        //    //    AddDeployBatFileToProject(dte, "deploy.debug.bat", plugin_deploy_debug_bat);
+        //    //    AddDeployBatFileToProject(dte, "deploy.debug.only.bat", plugin_deploy_debug_only_bat);
+        //    //}
+        //    //else
+        //    //{
+        //    //    var crmConnectionString = XrmHelper.BuildConnectionString2(formConnection.DataverseConnectionString);
+        //    //    plugin_deploy_debug_bat = plugin_deploy_debug_bat
+        //    //        .Replace("$CrmConnectionString$", crmConnectionString)
+        //    //        .Replace("$ProjectName$", Path.GetFileNameWithoutExtension(dte.ActiveDocument.ProjectItem.ContainingProject.FullName));
+        //    //    plugin_deploy_debug_only_bat = plugin_deploy_debug_only_bat
+        //    //        .Replace("$CrmConnectionString$", crmConnectionString)
+        //    //        .Replace("$ProjectName$", Path.GetFileNameWithoutExtension(dte.ActiveDocument.ProjectItem.ContainingProject.FullName));
+        //    //    AddDeployBatFileToProject(dte, "deploy.debug.bat", plugin_deploy_debug_bat);
+        //    //    AddDeployBatFileToProject(dte, "deploy.debug.only.bat", plugin_deploy_debug_only_bat);
+        //    //}
+        //    //return formConnection.CrmServiceClient;
+        //    return null;
+        //}
 
         private static List<string> CrmPluginRegistrationDataForPlugin(DTE dte, string fullName)
         {
@@ -343,61 +340,61 @@ namespace DynamicsCrm.DevKit.Commands
             return new List<string>();
         }
 
-        private static T GetAliasedValue<T>(Entity entity, string name)
-        {
-            var aliased = entity.GetAttributeValue<AliasedValue>(name);
-            if (aliased == null) return default(T);
-            if (typeof(T) == typeof(EntityReference) && aliased.Value is Guid)
-                return (T)(object)new EntityReference(aliased.EntityLogicalName, (Guid)aliased.Value);
-            if (typeof(T) == typeof(Guid) && aliased.Value is EntityReference)
-                return (T)(object)((EntityReference)aliased.Value).Id;
-            return (T)aliased.Value;
-        }
+        //private static T GetAliasedValue<T>(Entity entity, string name)
+        //{
+        //    var aliased = entity.GetAttributeValue<AliasedValue>(name);
+        //    if (aliased == null) return default(T);
+        //    if (typeof(T) == typeof(EntityReference) && aliased.Value is Guid)
+        //        return (T)(object)new EntityReference(aliased.EntityLogicalName, (Guid)aliased.Value);
+        //    if (typeof(T) == typeof(Guid) && aliased.Value is EntityReference)
+        //        return (T)(object)((EntityReference)aliased.Value).Id;
+        //    return (T)aliased.Value;
+        //}
 
-        private static List<CrmPluginImage> GetPluginImages(CrmServiceClient crmServiceClient, string fullName, Guid sdkMessageProcessingStepId)
-        {
-            var list = new List<CrmPluginImage>();
-            var fetchData = new
-            {
-                ismanaged = "0",
-                iscustomizable = "1",
-                sdkmessageprocessingstepid = sdkMessageProcessingStepId,
-                typename = fullName
-            };
-            var fetchXml = $@"
-<fetch>
-  <entity name='sdkmessageprocessingstepimage'>
-    <attribute name='entityalias' />
-    <attribute name='name' />
-    <attribute name='imagetype' />
-    <attribute name='attributes' />
-    <filter type='and'>
-      <condition attribute='ismanaged' operator='eq' value='{fetchData.ismanaged}'/>
-      <condition attribute='iscustomizable' operator='eq' value='{fetchData.iscustomizable}'/>
-      <condition attribute='sdkmessageprocessingstepid' operator='eq' value='{fetchData.sdkmessageprocessingstepid}'/>
-    </filter>
-    <link-entity name='sdkmessageprocessingstep' from='sdkmessageprocessingstepid' to='sdkmessageprocessingstepid' link-type='inner' alias='a'>
-      <link-entity name='plugintype' from='plugintypeid' to='plugintypeid' link-type='inner' alias='b'>
-        <filter type='and'>
-          <condition attribute='typename' operator='eq' value='{fetchData.typename}'/>
-        </filter>
-      </link-entity>
-    </link-entity>
-  </entity>
-</fetch>";
-            var rows = crmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
-            foreach (var row in rows.Entities)
-            {
-                list.Add(new CrmPluginImage
-                {
-                    Alias = row.GetAttributeValue<string>("entityalias"),
-                    Name = row.GetAttributeValue<string>("name"),
-                    Attributes = row.GetAttributeValue<string>("attributes"),
-                    Type = (ImageTypeEnum)row.GetAttributeValue<OptionSetValue>("imagetype").Value
-                });
-            }
-            return list;
-        }
+//        private static List<CrmPluginImage> GetPluginImages(CrmServiceClient crmServiceClient, string fullName, Guid sdkMessageProcessingStepId)
+//        {
+//            var list = new List<CrmPluginImage>();
+//            var fetchData = new
+//            {
+//                ismanaged = "0",
+//                iscustomizable = "1",
+//                sdkmessageprocessingstepid = sdkMessageProcessingStepId,
+//                typename = fullName
+//            };
+//            var fetchXml = $@"
+//<fetch>
+//  <entity name='sdkmessageprocessingstepimage'>
+//    <attribute name='entityalias' />
+//    <attribute name='name' />
+//    <attribute name='imagetype' />
+//    <attribute name='attributes' />
+//    <filter type='and'>
+//      <condition attribute='ismanaged' operator='eq' value='{fetchData.ismanaged}'/>
+//      <condition attribute='iscustomizable' operator='eq' value='{fetchData.iscustomizable}'/>
+//      <condition attribute='sdkmessageprocessingstepid' operator='eq' value='{fetchData.sdkmessageprocessingstepid}'/>
+//    </filter>
+//    <link-entity name='sdkmessageprocessingstep' from='sdkmessageprocessingstepid' to='sdkmessageprocessingstepid' link-type='inner' alias='a'>
+//      <link-entity name='plugintype' from='plugintypeid' to='plugintypeid' link-type='inner' alias='b'>
+//        <filter type='and'>
+//          <condition attribute='typename' operator='eq' value='{fetchData.typename}'/>
+//        </filter>
+//      </link-entity>
+//    </link-entity>
+//  </entity>
+//</fetch>";
+//            var rows = crmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+//            foreach (var row in rows.Entities)
+//            {
+//                list.Add(new CrmPluginImage
+//                {
+//                    Alias = row.GetAttributeValue<string>("entityalias"),
+//                    Name = row.GetAttributeValue<string>("name"),
+//                    Attributes = row.GetAttributeValue<string>("attributes"),
+//                    Type = (ImageTypeEnum)row.GetAttributeValue<OptionSetValue>("imagetype").Value
+//                });
+//            }
+//            return list;
+//        }
 
         private static void AddDeployBatFileToProject(DTE dte, string fileName, string content)
         {
