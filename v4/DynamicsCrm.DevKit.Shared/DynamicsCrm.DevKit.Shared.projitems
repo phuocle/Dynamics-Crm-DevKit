@@ -11,9 +11,6 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Const.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logic\CSharpLateBound.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Entities\EntityBase.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Entities\SdkMessageProcessingStep.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Entities\SdkMessageProcessingStep.generated.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Enum.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logic\JsForm.cs" />
@@ -55,9 +52,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)SimpleJson.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)XrmHelper.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="$(MSBuildThisFileDirectory)Entities\DynamicsCrm.DevKit.Cli.json" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Logic\" />

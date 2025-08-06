@@ -173,6 +173,7 @@ namespace DynamicsCrm.DevKit.Shared
         {
             return attribute is EnumAttributeMetadata;
         }
+
         public static void ReadEntitiesMetadata(ServiceClient service)
         {
             if (XrmHelper.EntitiesMetadata.Count == 0)

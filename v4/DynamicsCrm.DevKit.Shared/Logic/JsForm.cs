@@ -53,14 +53,14 @@ namespace DynamicsCrm.DevKit.Shared.Logic
 
         private static List<string> FormNames;
 
-        public static string GetCode(ServiceClient crmServiceClient, EntityMetadata entityMetadata, string rootNamespace, CommentTypeScriptDeclaration comment, out string dts)
+        public static string GetCode(ServiceClient service, EntityMetadata entityMetadata, string rootNamespace, CommentTypeScriptDeclaration comment, out string dts)
         {
             FormNames = new List<string>();
-            ServiceClient = crmServiceClient;
+            ServiceClient = service;
             EntityMetadata = entityMetadata;
             RootNamespace = rootNamespace;
             Comment = comment;
-            var forms = XrmHelper.GetEntityForms(crmServiceClient, entityMetadata.LogicalName);
+            var forms = XrmHelper.GetEntityForms(service, entityMetadata.LogicalName);
 
             var code = string.Empty;
             var @namespace = Helper.GetNameSpace(RootNamespace);
@@ -79,7 +79,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code += $"}})({@namespace} || ({@namespace} = {{}}));{NEW_LINE}";
             code += $"{Helper.GeneratorOptionSet(EntityMetadata)}";
 
-            dts = JsTypeScriptDeclaration.GetCode(crmServiceClient, entityMetadata, rootNamespace, comment);
+            dts = JsTypeScriptDeclaration.GetCode(service, entityMetadata, rootNamespace, comment);
 
             return code;
         }

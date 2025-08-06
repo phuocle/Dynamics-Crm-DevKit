@@ -16,7 +16,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
         private static EntityMetadata EntityMetadata { get; set; }
         private static string RootNamespace { get; set; }
 
-        public static string GetCode(ServiceClient crmServiceClient, EntityMetadata entityMetadata, string rootNameSpace)
+        public static string GetCode(ServiceClient service, EntityMetadata entityMetadata, string rootNameSpace)
         {
             EntityMetadata = entityMetadata;
             RootNamespace = rootNameSpace;

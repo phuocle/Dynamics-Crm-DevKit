@@ -15,13 +15,13 @@ namespace DynamicsCrm.DevKit.Shared.Logic
         private static string RootNamespace { get; set; }
         private static CommentTypeScriptDeclaration Comment { get; set; }
 
-        public static string GetCode(ServiceClient crmServiceClient, EntityMetadata entityMetadata, string rootNamespace, CommentTypeScriptDeclaration comment, out string dts)
+        public static string GetCode(ServiceClient service, EntityMetadata entityMetadata, string rootNamespace, CommentTypeScriptDeclaration comment, out string dts)
         {
-            ServiceClient = crmServiceClient;
+            ServiceClient = service;
             EntityMetadata = entityMetadata;
             RootNamespace = rootNamespace;
             Comment = comment;
-            dts = JsTypeScriptDeclaration.GetCode(crmServiceClient, entityMetadata, rootNamespace, comment);
+            dts = JsTypeScriptDeclaration.GetCode(service, entityMetadata, rootNamespace, comment);
 
             var code = string.Empty;
             var @namespace = Helper.GetNameSpace(RootNamespace);

@@ -31,9 +31,9 @@ namespace DynamicsCrm.DevKit.Shared.Logic
 
         private static List<string> FormNames = new List<string>();
 
-        public static string GetCode(ServiceClient crmServiceClient, EntityMetadata entityMetadata, string rootNamespace, CommentTypeScriptDeclaration comment)
+        public static string GetCode(ServiceClient service, EntityMetadata entityMetadata, string rootNamespace, CommentTypeScriptDeclaration comment)
         {
-            ServiceClient = crmServiceClient;
+            ServiceClient = service;
             EntityMetadata = entityMetadata;
             RootNamespace = rootNamespace;
             Comment = comment;
