@@ -729,5 +729,10 @@ namespace DynamicsCrm.DevKit.Shared
             }
             return value;
         }
+
+        public static bool IsWebResourceExtension(string extension)
+        {
+            return Const.WEB_RESOURCE_EXTENSIONS.Contains(extension);
+        }
     }
 }

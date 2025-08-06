@@ -1,4 +1,5 @@
 ﻿using Community.VisualStudio.Toolkit;
+using DynamicsCrm.DevKit.Shared;
 using Microsoft.VisualStudio.Shell;
 using System;
 using System.IO;

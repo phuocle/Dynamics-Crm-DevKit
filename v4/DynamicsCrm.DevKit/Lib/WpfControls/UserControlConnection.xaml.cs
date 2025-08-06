@@ -38,7 +38,7 @@ namespace DynamicsCrm.DevKit.Lib.WpfControls
         public DynamicsCrm.DevKit.Shared.Models.CrmConnection CrmConnection {get;set; }
         public bool IsUseOOBConnection { get; set; } = true;
 
-        public event EventHandler Connected;
+        //public event EventHandler Connected;
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected void NotifyPropertyChanged(string propertyName)

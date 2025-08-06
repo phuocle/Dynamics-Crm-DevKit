@@ -30,9 +30,8 @@
 		<PackageReference Include="Microsoft.CrmSdk.CoreTools" Version="9.1.0.179" />
 	</ItemGroup>
 	<ItemGroup>
-		<Reference Include="CrmSvcUtil.exe">
-			<HintPath>..\packages\Microsoft.CrmSdk.CoreTools.9.1.0.179\content\bin\coretools\CrmSvcUtil.exe</HintPath>
-			<Private>False</Private>
-		</Reference>
+	  <Reference Include="CrmSvcUtil">
+	    <HintPath>lib\CrmSvcUtil.exe</HintPath>
+	  </Reference>
 	</ItemGroup>
 </Project>

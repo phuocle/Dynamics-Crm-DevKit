@@ -42,7 +42,6 @@ namespace DynamicsCrm.DevKit
             return ThreadHelper.JoinableTaskFactory.Run(GetDynamicsCrmDevKitJsonFileNameAsync);
         }
 
-
         public static DevKitConnections GetDevKitConnections()
         {
             var fileName = GetDynamicsCrmDevKitJsonFileName();
@@ -57,6 +56,24 @@ namespace DynamicsCrm.DevKit
             var devKitConnections = SimpleJson.DeserializeObject<DevKitConnections>(json);
             devKitConnections.CrmConnections ??= new List<CrmConnection>();
             return devKitConnections;
+        }
+
+        public static void SaveDefaultCrmConnection(string defaultCrmConnection)
+        {
+            var devKitConnections = GetDevKitConnections();
+            if (devKitConnections != null)
+            {
+                devKitConnections.DefaultCrmConnection = defaultCrmConnection;
+                SaveDevKitConnections(devKitConnections);
+            }
+        }
+
+        public static void SaveDevKitConnections(DevKitConnections connections)
+        {
+            var json = JsonHelper.FormatJson(SimpleJson.SerializeObject(connections));
+            var fileName = GetDynamicsCrmDevKitJsonFileName();
+            if (fileName != null)
+                Helper.ForceWriteAllText(fileName, json);
         }
     }
 }

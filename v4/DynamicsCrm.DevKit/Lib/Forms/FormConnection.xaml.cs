@@ -4,6 +4,7 @@ using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.VisualStudio.Shell;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 
@@ -39,29 +40,22 @@ namespace DynamicsCrm.DevKit.Lib.Forms
 
         private void ButtonOK_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            //if (IsOOBConnection)
-            //{
-            //    VsixHelper.SaveDefaultCrmConnection(null);
-            //    DialogResult = true;
-            //    Close();
-            //}
-            //else
-            //{
-            //    stackPanelForm.IsEnabled = false;
-            //    progressBar.Visibility = System.Windows.Visibility.Visible;
-            //    CrmConnection = comboBoxSavedConnection.SelectedItem as CrmConnection;
-            //    VsixHelper.SaveDefaultCrmConnection(CrmConnection.Name);
-            //    _ = Task.Factory.StartNew(() => {
-            //        CrmServiceClient = XrmHelper.IsConnected(CrmConnection);
-            //        ThreadHelper.JoinableTaskFactory.Run(async delegate
-            //        {
-            //            DataverseConnectionString = XrmHelper.BuildConnectionString(CrmConnection);
-            //            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-            //            DialogResult = true;
-            //            Close();
-            //        });
-            //    }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default);
-            //}
+           
+                //stackPanelForm.IsEnabled = false;
+                //progressBar.Visibility = System.Windows.Visibility.Visible;
+                //CrmConnection = comboBoxSavedConnection.SelectedItem as CrmConnection;
+                //VsixHelper.SaveDefaultCrmConnection(CrmConnection.Name);
+                //_ = Task.Factory.StartNew(() =>
+                //{
+                //    CrmServiceClient = XrmHelper.IsConnected(CrmConnection);
+                //    ThreadHelper.JoinableTaskFactory.Run(async delegate
+                //    {
+                //        DataverseConnectionString = XrmHelper.BuildConnectionString(CrmConnection);
+                //        await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                //        DialogResult = true;
+                //        Close();
+                //    });
+                //}, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default);
         }
 
         private void ButtonCheckConnection_Click(object sender, System.Windows.RoutedEventArgs e)
