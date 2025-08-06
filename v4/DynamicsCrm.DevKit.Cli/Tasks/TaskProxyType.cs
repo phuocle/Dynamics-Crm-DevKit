@@ -152,7 +152,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             else
             {
-                command.Append($"/connectionstring:\"{XrmHelper.BuildConnectionString(Connection)}\" ");
+                command.Append($"/connectionstring:\"{Helper.BuildConnectionString(Connection)}\" ");
             }
             command.Append($"/nologo ");
             command.Append($"/SuppressGeneratedCodeAttribute ");
@@ -181,7 +181,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             else
             {
-                command.Append($"/connectionstring:\"{XrmHelper.BuildConnectionStringLog(Connection)}\" ");
+                command.Append($"/connectionstring:\"{Helper.BuildConnectionStringLog(Connection)}\" ");
             }
             if (Json.entities != null && Json.entities.Length > 0)
             {

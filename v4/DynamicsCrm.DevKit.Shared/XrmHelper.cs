@@ -13,112 +13,24 @@ namespace DynamicsCrm.DevKit.Shared
 {
     public static class XrmHelper
     {
-        public enum FormType
-        {
-            Main = 2,
-            QuickCreate = 7,
-            QuickView = 6
-        };
         public static List<EntityMetadata> EntitiesMetadata { get; set; } = new List<EntityMetadata>();
-
         public static List<SystemForm> EntitiesFormXml { get; set; } = new List<SystemForm>();
         public static List<ProcessForm> EntitiesProcessForm { get; set; } = new List<ProcessForm>();
 
-        public static string BuildConnectionString(string type, string url, string user, string pass)
+        public static string ConnectedUrl(ServiceClient service)
         {
-            if (type == "ClientSecret")
-                return $"AuthType=ClientSecret;Url={url};ClientId={user};ClientSecret={pass};";
-            else if (type == "AD")
-            {
-                var arr = user.Split("\\".ToCharArray());
-                if (arr.Length != 2)
-                    throw new Exception("Please enter User name like: contoso\\jsmith");
-                var domain = arr[0];
-                user = arr[1];
-                return $"AuthType={type};Url={url};Domain={domain};Username={user};Password={pass};";
-            }
-            return $"AuthType=OAuth;Url={url};Username={user};Password={pass};AppId=51f81489-12ee-4a9e-aaae-a2591f45987d;RedirectUri=app://58145B91-0C36-4500-8554-080854F2AC97;LoginPrompt=Auto";
-        }
-
-        public static string BuildConnectionString(string connectionString)
-        {
-            if (connectionString == null) return string.Empty;
-            if (!connectionString.ToLower().Contains("Password=".ToLower())) return connectionString;
-            var value = string.Empty;
-            var arr = connectionString.Split(";".ToCharArray());
-            foreach (var item in arr)
-            {
-                if (item.ToLower().Contains("Password=".ToLower()))
-                {
-                    var password = string.Empty;
-                    if (item.EndsWith("=="))
-                        password = item.Split("=".ToCharArray())[1] + "==";
-                    else if (item.EndsWith("="))
-                        password = item.Split("=".ToCharArray())[1] + "=";
-                    else
-                        password = item.Split("=".ToCharArray())[1];
-                    password = Helper.DecryptString(password);
-                    value += "Password=" + password + ";";
-                }
-                else
-                    value += item + ";";
-            }
-            value = value.Replace(";;", ";");
-            if (value.ToLower().Contains("AuthType=OAuth".ToLower()))
-            {
-                if (!value.ToLower().Contains("RedirectUri=".ToLower()))
-                {
-                    value += "AppId=51f81489-12ee-4a9e-aaae-a2591f45987d;RedirectUri=app://58145B91-0C36-4500-8554-080854F2AC97;LoginPrompt=Auto;";
-                }
-            }
-            return value;
-        }
-
-        public static ServiceClient IsConnected(string connectionString, out string error)
-        {
-            error = null;
-
-            var crmServiceClient = new ServiceClient(connectionString);
-
-            return crmServiceClient;
-        }
-
-        public static string ConnectedUrl(ServiceClient crmServiceClient)
-        {
-            if (crmServiceClient?.ConnectedOrgUriActual == null)
+            if (service?.ConnectedOrgUriActual == null)
                 return null;
-
-            var uri = crmServiceClient.ConnectedOrgUriActual;
+            var uri = service.ConnectedOrgUriActual;
             var url = uri.GetLeftPart(UriPartial.Authority);
-
             if (url.Contains(".api."))
             {
                 url = url.Replace(".api.", ".");
             }
-
             return url;
         }
 
-        public static string BuildConnectionStringLog(string connectionString)
-        {
-            if (!connectionString.ToLower().Contains("Password=".ToLower()) &&
-                !connectionString.ToLower().Contains("ClientSecret=".ToLower())
-                ) return connectionString;
-            var value = string.Empty;
-            var arr = connectionString.Split(";".ToCharArray());
-            foreach (var item in arr)
-            {
-                if (item.ToLower().Contains("Password=".ToLower()))
-                    value += "Password=********;";
-                else if (item.ToLower().Contains("ClientSecret=".ToLower()))
-                    value += "ClientSecret=********;";
-                else
-                    value += item + ";";
-            }
-            return value.Replace(";;", ";");
-        }
-
-        public static (bool IsOk, Guid SolutionId, string Prefix) IsExistSolution(ServiceClient crmServiceClient, string solutionuniquename)
+        public static (bool IsOk, Guid SolutionId, string Prefix) IsExistSolution(ServiceClient service, string solutionuniquename)
         {
             var fetchData = new
             {
@@ -137,7 +49,7 @@ namespace DynamicsCrm.DevKit.Shared
   </entity>
 </fetch>";
 
-            var rows = crmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            var rows = service.RetrieveMultiple(new FetchExpression(fetchXml));
             if (rows.Entities.Count != 1) return (false, Guid.Empty, string.Empty);
             var entity = rows.Entities[0];
             var solutionId = entity.Id;
@@ -145,7 +57,7 @@ namespace DynamicsCrm.DevKit.Shared
             return (true, solutionId, prefix);
         }
 
-        public static List<DownloadFile> GetReportsBySolution(ServiceClient crmServiceClient, string solution)
+        public static List<DownloadFile> GetReportsBySolution(ServiceClient service, string solution)
         {
             var fetchData = new
             {
@@ -175,7 +87,7 @@ namespace DynamicsCrm.DevKit.Shared
   </entity>
 </fetch>";
 
-            var rows = crmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            var rows = service.RetrieveMultiple(new FetchExpression(fetchXml));
             var list = new List<DownloadFile>();
             foreach (var entity in rows.Entities)
             {
@@ -190,36 +102,36 @@ namespace DynamicsCrm.DevKit.Shared
             return list;
         }
 
-        public static void DeployReport(ServiceClient crmServiceClient, Guid reportId, string fullFileName)
+        public static void DeployReport(ServiceClient service, Guid reportId, string fullFileName)
         {
             var update = new Entity("report", reportId);
             update["bodytext"] = File.ReadAllText(fullFileName);
-            crmServiceClient.Update(update);
+            service.Update(update);
         }
 
-        public static List<EntityMetadata> GetEntitiesMetadata(ServiceClient crmServiceClient)
+        public static List<EntityMetadata> GetEntitiesMetadata(ServiceClient service)
         {
             var request = new RetrieveAllEntitiesRequest
             {
                 EntityFilters = EntityFilters.All,
                 RetrieveAsIfPublished = true
             };
-            var response = (RetrieveAllEntitiesResponse)crmServiceClient.Execute(request);
+            var response = (RetrieveAllEntitiesResponse)service.Execute(request);
             return response.EntityMetadata.ToList();
         }
 
-        public static List<string> GetAllEntitiesSchema(ServiceClient crmServiceClient)
+        public static List<string> GetAllEntitiesSchema(ServiceClient service)
         {
             var request = new RetrieveAllEntitiesRequest
             {
                 EntityFilters = EntityFilters.All,
                 RetrieveAsIfPublished = true
             };
-            var response = (RetrieveAllEntitiesResponse)crmServiceClient.Execute(request);
+            var response = (RetrieveAllEntitiesResponse)service.Execute(request);
             return response.EntityMetadata.ToList().Select(x => x.SchemaName).ToList();
         }
 
-        public static List<EntityMetadata> GetEntitiesMetadata(ServiceClient crmServiceClient, List<string> schemaNames)
+        public static List<EntityMetadata> GetEntitiesMetadata(ServiceClient service, List<string> schemaNames)
         {
             var request = new ExecuteMultipleRequest()
             {
@@ -233,7 +145,7 @@ namespace DynamicsCrm.DevKit.Shared
             foreach (var schemaName in schemaNames)
                 request.Requests.Add(new RetrieveEntityRequest { EntityFilters = EntityFilters.All, LogicalName = schemaName.ToLower() });
             var list = new List<EntityMetadata>();
-            ExecuteMultipleResponse response = (ExecuteMultipleResponse)crmServiceClient.Execute(request);
+            ExecuteMultipleResponse response = (ExecuteMultipleResponse)service.Execute(request);
             foreach (var result in response.Responses)
             {
                 if (result.Fault == null)
@@ -252,32 +164,32 @@ namespace DynamicsCrm.DevKit.Shared
             return list;
         }
 
-        public static EntityMetadata GetEntityMetadata(ServiceClient crmServiceClient, string entityLogicalName)
+        public static EntityMetadata GetEntityMetadata(ServiceClient service, string entityLogicalName)
         {
-            return GetEntitiesMetadata(crmServiceClient, new List<string> { entityLogicalName }).FirstOrDefault(); ;
+            return GetEntitiesMetadata(service, new List<string> { entityLogicalName }).FirstOrDefault(); ;
         }
 
         public static bool IsOptionSet(AttributeMetadata attribute)
         {
             return attribute is EnumAttributeMetadata;
         }
-        public static void ReadEntitiesMetadata(ServiceClient crmServiceClient)
+        public static void ReadEntitiesMetadata(ServiceClient service)
         {
             if (XrmHelper.EntitiesMetadata.Count == 0)
             {
-                XrmHelper.EntitiesMetadata = XrmHelper.GetEntitiesMetadata(crmServiceClient);
+                XrmHelper.EntitiesMetadata = XrmHelper.GetEntitiesMetadata(service);
             }
         }
 
-        public static void ReadEntitiesFormXml(ServiceClient crmServiceClient)
+        public static void ReadEntitiesFormXml(ServiceClient service)
         {
             if (XrmHelper.EntitiesFormXml.Count == 0)
             {
-                XrmHelper.EntitiesFormXml = XrmHelper.GetEntitiesFormXml(crmServiceClient);
+                XrmHelper.EntitiesFormXml = XrmHelper.GetEntitiesFormXml(service);
             }
         }
 
-        public static List<ProcessForm> GetEntityProcessForm(ServiceClient crmServiceClient, int? objectTypeCode, string logicalName)
+        public static List<ProcessForm> GetEntityProcessForm(ServiceClient service, int? objectTypeCode, string logicalName)
         {
             var fetchData = new
             {
@@ -305,7 +217,7 @@ namespace DynamicsCrm.DevKit.Shared
     </filter>
   </entity>
 </fetch>";
-            var rows = crmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            var rows = service.RetrieveMultiple(new FetchExpression(fetchXml));
             return rows.Entities.Select(x => new ProcessForm
             {
                 EntityLogicalName = logicalName,
@@ -314,7 +226,7 @@ namespace DynamicsCrm.DevKit.Shared
             }).ToList();
         }
 
-        public static List<SystemForm> GetEntityFormXml(ServiceClient crmServiceClient, int? objectTypeCode)
+        public static List<SystemForm> GetEntityFormXml(ServiceClient service, int? objectTypeCode)
         {
             var fetchData = new
             {
@@ -345,7 +257,7 @@ namespace DynamicsCrm.DevKit.Shared
     </filter>
   </entity>
 </fetch>";
-            var rows = crmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            var rows = service.RetrieveMultiple(new FetchExpression(fetchXml));
             if (rows.Entities.Count == 0) return new List<SystemForm>();
             var forms = rows.Entities.Select(x => new SystemForm
             {
@@ -360,7 +272,7 @@ namespace DynamicsCrm.DevKit.Shared
             return forms.OrderBy(x => x.EntityLogicalName).ThenBy(x => x.Name).ToList();
         }
 
-        public static List<SystemForm> GetEntitiesFormXml(ServiceClient crmServiceClient)
+        public static List<SystemForm> GetEntitiesFormXml(ServiceClient service)
         {
             var fetchData = new
             {
@@ -389,7 +301,7 @@ namespace DynamicsCrm.DevKit.Shared
     </filter>
   </entity>
 </fetch>";
-            var rows = crmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            var rows = service.RetrieveMultiple(new FetchExpression(fetchXml));
             var forms = rows.Entities.Select(x => new SystemForm
             {
                 Name = x.GetAttributeValue<string>("name"),
@@ -403,7 +315,7 @@ namespace DynamicsCrm.DevKit.Shared
             return forms.OrderBy(x => x.EntityLogicalName).ThenBy(x => x.Name).ToList();
         }
 
-        public static CommentTypeScriptDeclaration GetComment(ServiceClient crmServiceClient, string entityLogicalName, string dtsFile)
+        public static CommentTypeScriptDeclaration GetComment(ServiceClient service, string entityLogicalName, string dtsFile)
         {
             if (File.Exists(dtsFile))
             {
@@ -433,7 +345,7 @@ namespace DynamicsCrm.DevKit.Shared
             }
             else
             {
-                XrmHelper.EntitiesFormXml.AddIfNotExist(crmServiceClient, entityLogicalName);
+                XrmHelper.EntitiesFormXml.AddIfNotExist(service, entityLogicalName);
                 return new CommentTypeScriptDeclaration
                 {
                     UseForm = XrmHelper.EntitiesFormXml.Any(x => x.EntityLogicalName == entityLogicalName),
@@ -443,57 +355,14 @@ namespace DynamicsCrm.DevKit.Shared
             }
         }
 
-        public static List<SystemForm> GetEntityForms(ServiceClient crmServiceClient, string entityLogicalName)
+        public static List<SystemForm> GetEntityForms(ServiceClient service, string entityLogicalName)
         {
-            XrmHelper.EntitiesFormXml.AddIfNotExist(crmServiceClient, entityLogicalName);
+            XrmHelper.EntitiesFormXml.AddIfNotExist(service, entityLogicalName);
             var forms = XrmHelper.EntitiesFormXml
-                .Where(x => x.EntityLogicalName == entityLogicalName && (x.FormType == XrmHelper.FormType.Main || x.FormType == XrmHelper.FormType.QuickCreate))
+                .Where(x => x.EntityLogicalName == entityLogicalName && (x.FormType == FormType.Main || x.FormType == FormType.QuickCreate))
                 .OrderBy(x => x.Name)
                 .ToList();
             return forms;
         }
-
-        public static List<NameValue> GetSdkMessagesNone(ServiceClient service)
-        {
-            var fetchData = new
-            {
-                categoryname = "None",
-                isprivate = "0",
-                availability = "0",
-                availability2 = "2",
-                iscustomprocessingstepallowed = "1",
-            };
-            var fetchXml = $@"<?xml version=""1.0"" encoding=""utf-16""?>
-<fetch>
-  <entity name=""sdkmessage"">
-    <all-attributes/>
-    <filter>
-      <condition attribute=""categoryname"" operator=""eq"" value=""{fetchData.categoryname/*None*/}"" />
-      <condition attribute=""isprivate"" operator=""eq"" value=""{fetchData.isprivate/*0*/}"" />
-      <condition attribute=""availability"" operator=""in"">
-        <value>{fetchData.availability/*0*/}</value>
-        <value>{fetchData.availability2/*2*/}</value>
-      </condition>
-    </filter>
-    <link-entity name=""sdkmessagefilter"" from=""sdkmessageid"" to=""sdkmessageid"" link-type=""inner"" alias=""aa"">
-      <attribute name=""name"" />
-      <filter>
-        <condition attribute=""iscustomprocessingstepallowed"" operator=""eq"" value=""{fetchData.iscustomprocessingstepallowed/*1*/}"" />
-      </filter>
-    </link-entity>
-  </entity>
-</fetch>";
-            var rows = service.RetrieveMultiple(new FetchExpression(fetchXml));
-            var messages = (from entity in rows.Entities
-                            select entity["name"].ToString()
-                ).ToList();
-            messages.Sort();
-            var list = new List<NameValue>();
-            foreach (var message in messages)
-                if (!list.Any(x => x.Name == message))
-                    list.Add(new NameValue { Name = message });
-            return list.OrderBy(x => x.Name).ToList();
-        }
-
     }
 }

@@ -492,10 +492,10 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             var forms = XrmHelper.GetEntityForms(ServiceClient, EntityMetadata.LogicalName);
             if (!forms.Any()) return string.Empty;
             var _d_ts = string.Empty;
-            foreach (var form in forms.Where(x => x.FormType == XrmHelper.FormType.Main).ToList())
+            foreach (var form in forms.Where(x => x.FormType == FormType.Main).ToList())
                 _d_ts += GetFormMain_d_ts(form, @namespace);
 
-            foreach (var form in forms.Where(x => x.FormType == XrmHelper.FormType.QuickCreate).ToList())
+            foreach (var form in forms.Where(x => x.FormType == FormType.QuickCreate).ToList())
                 _d_ts += GetFormQuickCreate_d_ts(form, @namespace);
             return _d_ts;
         }
@@ -870,7 +870,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
         {
             formXml = string.Empty;
             XrmHelper.EntitiesFormXml.AddIfNotExist(ServiceClient, entityLogicalName);
-            var form = XrmHelper.EntitiesFormXml.FirstOrDefault(x => x.FormType == XrmHelper.FormType.QuickView && x.FormId == Guid.Parse(formId));
+            var form = XrmHelper.EntitiesFormXml.FirstOrDefault(x => x.FormType == FormType.QuickView && x.FormId == Guid.Parse(formId));
             if (form != null)
             {
                 formXml = form.FormXml;

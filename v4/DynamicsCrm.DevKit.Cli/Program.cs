@@ -92,7 +92,7 @@ namespace DynamicsCrm.DevKit.Cli
                     CliLog.WriteLineError(ConsoleColor.Yellow, $"/conn: required !!!");
                     return false;
                 }
-                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Arguments: ", ConsoleColor.Blue, "/conn:", ConsoleColor.White, "\"" + XrmHelper.BuildConnectionStringLog(arguments.Connection) + "\"");
+                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Arguments: ", ConsoleColor.Blue, "/conn:", ConsoleColor.White, "\"" + Helper.BuildConnectionStringLog(arguments.Connection) + "\"");
                 CliLog.WriteLine(ConsoleColor.White, "|           ", ConsoleColor.Blue, "/json:", ConsoleColor.White, "\"" + arguments.Json + "\"");
                 CliLog.WriteLine(ConsoleColor.White, "|           ", ConsoleColor.Blue, "/type:", ConsoleColor.White, "\"" + arguments.Type + "\"");
                 CliLog.WriteLine(ConsoleColor.White, "|           ", ConsoleColor.Blue, "/profile:", ConsoleColor.White, "\"" + arguments.Profile + "\"");
@@ -132,7 +132,7 @@ namespace DynamicsCrm.DevKit.Cli
                 }
                 else
                 {
-                    ServiceClient = XrmHelper.IsConnected(XrmHelper.BuildConnectionString(arguments.Connection), out var error);
+                    ServiceClient = Helper.IsConnected(Helper.BuildConnectionString(arguments.Connection), out var error);
                     if (ServiceClient == null)
                     {
                         CliLog.WriteLineError(ConsoleColor.Yellow, error);

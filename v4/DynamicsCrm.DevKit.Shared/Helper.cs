@@ -668,5 +668,66 @@ namespace DynamicsCrm.DevKit.Shared
             return code;
         }
 
+        public static string BuildConnectionStringLog(string connectionString)
+        {
+            if (!connectionString.ToLower().Contains("Password=".ToLower()) &&
+                !connectionString.ToLower().Contains("ClientSecret=".ToLower())
+                ) return connectionString;
+            var value = string.Empty;
+            var arr = connectionString.Split(";".ToCharArray());
+            foreach (var item in arr)
+            {
+                if (item.ToLower().Contains("Password=".ToLower()))
+                    value += "Password=********;";
+                else if (item.ToLower().Contains("ClientSecret=".ToLower()))
+                    value += "ClientSecret=********;";
+                else
+                    value += item + ";";
+            }
+            return value.Replace(";;", ";");
+        }
+
+        public static ServiceClient IsConnected(string connectionString, out string error)
+        {
+            error = null;
+
+            var crmServiceClient = new ServiceClient(connectionString);
+
+            return crmServiceClient;
+        }
+
+        public static string BuildConnectionString(string connectionString)
+        {
+            if (connectionString == null) return string.Empty;
+            if (!connectionString.ToLower().Contains("Password=".ToLower())) return connectionString;
+            var value = string.Empty;
+            var arr = connectionString.Split(";".ToCharArray());
+            foreach (var item in arr)
+            {
+                if (item.ToLower().Contains("Password=".ToLower()))
+                {
+                    var password = string.Empty;
+                    if (item.EndsWith("=="))
+                        password = item.Split("=".ToCharArray())[1] + "==";
+                    else if (item.EndsWith("="))
+                        password = item.Split("=".ToCharArray())[1] + "=";
+                    else
+                        password = item.Split("=".ToCharArray())[1];
+                    password = Helper.DecryptString(password);
+                    value += "Password=" + password + ";";
+                }
+                else
+                    value += item + ";";
+            }
+            value = value.Replace(";;", ";");
+            if (value.ToLower().Contains("AuthType=OAuth".ToLower()))
+            {
+                if (!value.ToLower().Contains("RedirectUri=".ToLower()))
+                {
+                    value += "AppId=51f81489-12ee-4a9e-aaae-a2591f45987d;RedirectUri=app://58145B91-0C36-4500-8554-080854F2AC97;LoginPrompt=Auto;";
+                }
+            }
+            return value;
+        }
     }
 }

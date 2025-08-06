@@ -1,5 +1,12 @@
 ﻿namespace DynamicsCrm.DevKit.Shared
 {
+    public enum FormType
+    {
+        Main = 2,
+        QuickCreate = 7,
+        QuickView = 6
+    }
+
     public enum CliType
     {
         proxytypes,

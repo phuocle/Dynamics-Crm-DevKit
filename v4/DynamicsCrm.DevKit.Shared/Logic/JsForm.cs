@@ -390,7 +390,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
         {
             formXml = string.Empty;
             XrmHelper.EntitiesFormXml.AddIfNotExist(ServiceClient, entityLogicalName);
-            var form = XrmHelper.EntitiesFormXml.FirstOrDefault(x => x.FormType == XrmHelper.FormType.QuickView && x.FormId == Guid.Parse(formId));
+            var form = XrmHelper.EntitiesFormXml.FirstOrDefault(x => x.FormType == FormType.QuickView && x.FormId == Guid.Parse(formId));
             if (form != null)
             {
                 formXml = form.FormXml;
