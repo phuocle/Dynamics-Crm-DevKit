@@ -1,5 +1,4 @@
 ﻿using DynamicsCrm.DevKit.Shared.Models;
-using EnvDTE;
 using Microsoft.CSharp;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk.Metadata;
@@ -539,62 +538,6 @@ namespace DynamicsCrm.DevKit.Shared
                 if (isPlugin && attribute.EntityLogicalName?.ToLower() == "none") attribute.PluginType = PluginType.CustomAction;
             }
             return attribute;
-        }
-
-        public static bool HasImplementedPlugin(CodeClass @class)
-        {
-            Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
-            foreach (CodeInterface @interface in @class.ImplementedInterfaces)
-            {
-                if (@interface.FullName == "Microsoft.Xrm.Sdk.IPlugin")
-                    return true;
-            }
-            foreach (var @base in @class.Bases)
-            {
-                if (!(@base is CodeClass baseClass)) continue;
-                if (HasImplementedPlugin(baseClass))
-                    return true;
-            }
-            return false;
-        }
-
-        public static bool HasImplementedWorkflow(CodeClass @class)
-        {
-            Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
-            foreach (var @base in @class.Bases)
-            {
-                if (!(@base is CodeClass baseClass)) continue;
-                if (baseClass.FullName == "System.Activities.CodeActivity")
-                    return true;
-                if (HasImplementedWorkflow(baseClass))
-                    return true;
-            }
-            return false;
-        }
-
-        public static bool ExistProject(DTE dte, string projectName)
-        {
-            Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
-            var projects = GetProjects(dte.Solution);
-            foreach (Project project in projects)
-            {
-                if (project.ProjectItems == null || project.FileName.Length == 0) continue;
-                if (project.Name == projectName) return true;
-            }
-            return false;
-        }
-
-        private static List<Project> GetProjects(Solution sln)
-        {
-            Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
-            List<Project> list = new List<Project>();
-            if (sln == null) return list;
-            list.AddRange(sln.Projects.Cast<Project>());
-
-            for (int i = 0; i < list.Count; i++)
-                list.AddRange(list[i]?.ProjectItems?.Cast<ProjectItem>().Select(x => x?.SubProject)?.OfType<Project>());
-
-            return list;
         }
 
         public static string GetDefaultFileWithCs(EntityMetadata entityMetadata, string @namespace)
