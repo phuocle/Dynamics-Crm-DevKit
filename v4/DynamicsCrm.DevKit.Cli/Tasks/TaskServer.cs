@@ -905,8 +905,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             if (alreadyChanged) return true;
             _new["statuscode"] = attribute.Action == PluginStepOperationEnum.Activate ? new OptionSetValue(1) : new OptionSetValue(2);
             _new["statecode"] = attribute.Action == PluginStepOperationEnum.Activate ? new OptionSetValue(0) : new OptionSetValue(1);
-            var old = new SdkMessageProcessingStep(_old);
-            var @new = new SdkMessageProcessingStep(_new);
+            var old = ReadFromEntity(_old);
+            var @new = ReadFromEntity(_new);
             if (
                 old.Name != @new.Name ||
                 (old.Configuration ?? string.Empty) != @new.Configuration ||
@@ -924,6 +924,27 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 return true;
             return false;
             ;
+
+            SdkMessageProcessingStep ReadFromEntity(Entity entity)
+            {
+                return new SdkMessageProcessingStep
+                {
+                    Name = entity.GetAttributeValue<string>("name"),
+                    Configuration = entity.GetAttributeValue<string>("configuration"),
+                    Description = entity.GetAttributeValue<string>("description"),
+                    Mode = entity.GetAttributeValue<OptionSetValue>("mode"),
+                    Rank = entity.GetAttributeValue<int?>("rank"),
+                    Stage = entity.GetAttributeValue<OptionSetValue>("stage"),
+                    AsyncAutoDelete = entity.GetAttributeValue<bool?>("asyncautodelete"),
+                    StatusCode = entity.GetAttributeValue<OptionSetValue>("statuscode"),
+                    StateCode = entity.GetAttributeValue<OptionSetValue>("statecode"),
+                    SdkMessageFilterId = entity.GetAttributeValue<EntityReference>("sdkmessagefilterid"),
+                    SdkMessageId = entity.GetAttributeValue<EntityReference>("sdkmessageid"),
+                    FilteringAttributes = entity.GetAttributeValue<string>("filteringattributes"),
+                    ImpersonatingUserId = entity.GetAttributeValue<EntityReference>("impersonatinguserid"),
+                    SupportedDeployment = entity.GetAttributeValue<OptionSetValue>("supporteddeployment")
+                };
+            }
         }
 
         private Entity GetSecureEntity(Guid pluginStepId)

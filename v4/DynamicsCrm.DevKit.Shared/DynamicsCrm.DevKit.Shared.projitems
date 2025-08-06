@@ -46,6 +46,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\OldCommentTypeScriptDeclaration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\PluginInputOutputParameter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\ProcessForm.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\ReadSdkMessageProcessingStep.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\SystemForm.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\WebResourceFile.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\XrmEntity.cs" />
