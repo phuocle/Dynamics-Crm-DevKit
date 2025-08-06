@@ -10,7 +10,6 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Xml.Linq;
-
 namespace DynamicsCrm.DevKit.Cli.Tasks
 {
     public class TaskWebResource : ITask

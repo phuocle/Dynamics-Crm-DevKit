@@ -4,7 +4,6 @@ using Microsoft.PowerPlatform.Dataverse.Client;
 using System;
 using System.IO;
 using System.Linq;
-
 namespace DynamicsCrm.DevKit.Cli.Tasks
 {
     public class TaskUploadReport : ITask

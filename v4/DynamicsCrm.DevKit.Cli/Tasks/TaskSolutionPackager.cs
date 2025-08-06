@@ -9,7 +9,6 @@ using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
-
 namespace DynamicsCrm.DevKit.Cli.Tasks
 {
     public class TaskSolutionPackager : ITask

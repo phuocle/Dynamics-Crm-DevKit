@@ -12,7 +12,6 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using Label = Microsoft.Xrm.Sdk.Label;
 using ParameterCollection = Microsoft.Xrm.Sdk.ParameterCollection;
-
 namespace DynamicsCrm.DevKit.Cli.Tasks
 {
     public class TaskDataSource : ITask

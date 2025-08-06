@@ -1,17 +1,12 @@
 ﻿using DynamicsCrm.DevKit.Shared;
-using DynamicsCrm.DevKit.Shared.Entities.SdkMessageProcessingStepOptionSets;
 using DynamicsCrm.DevKit.Shared.Logic;
 using DynamicsCrm.DevKit.Shared.Models;
-using Microsoft.Crm.Sdk.Messages;
 using Microsoft.PowerPlatform.Dataverse.Client;
-using Microsoft.Xrm.Sdk.Metadata;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
-
 namespace DynamicsCrm.DevKit.Cli.Tasks
 {
     public class TaskGenerator : ITask
