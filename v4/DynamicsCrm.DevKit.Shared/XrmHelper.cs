@@ -42,10 +42,10 @@ namespace DynamicsCrm.DevKit.Shared
             return $"AuthType=OAuth;Url={url};Username={user};Password={pass};AppId=51f81489-12ee-4a9e-aaae-a2591f45987d;RedirectUri=app://58145B91-0C36-4500-8554-080854F2AC97;LoginPrompt=Auto";
         }
 
-        public static string BuildConnectionString(CrmConnection crmConnection)
-        {
-            return BuildConnectionString(crmConnection.Type, crmConnection.Url, crmConnection.UserName, crmConnection.Password);
-        }
+        //public static string BuildConnectionString(CrmConnection crmConnection)
+        //{
+        //    return BuildConnectionString(crmConnection.Type, crmConnection.Url, crmConnection.UserName, crmConnection.Password);
+        //}
 
         public static string BuildConnectionString(string connectionString)
         {
@@ -81,46 +81,46 @@ namespace DynamicsCrm.DevKit.Shared
             return value;
         }
 
-        public static string BuildConnectionString2(string connectionString)
-        {
-            if (connectionString == null) return string.Empty;
-            if (!connectionString.ToLower().Contains("Password=".ToLower())) return connectionString;
-            var value = string.Empty;
-            var arr = connectionString.Split(";".ToCharArray());
-            foreach (var item in arr)
-            {
-                if (item.ToLower().Contains("Password=".ToLower()))
-                {
-                    var password = string.Empty;
-                    if (item.EndsWith("=="))
-                        password = item.Split("=".ToCharArray())[1] + "==";
-                    else if (item.EndsWith("="))
-                        password = item.Split("=".ToCharArray())[1] + "=";
-                    else
-                        password = item.Split("=".ToCharArray())[1];
-                    value += "Password=" + password + ";";
-                }
-                else
-                    value += item + ";";
-            }
-            value = value.Replace(";;", ";");
-            if (value.ToLower().Contains("AuthType=OAuth".ToLower()))
-            {
-                if (!value.ToLower().Contains("RedirectUri=".ToLower()))
-                {
-                    value += "AppId=51f81489-12ee-4a9e-aaae-a2591f45987d;RedirectUri=app://58145B91-0C36-4500-8554-080854F2AC97;LoginPrompt=Auto;";
-                }
-            }
-            return value;
-        }
+        //public static string BuildConnectionString2(string connectionString)
+        //{
+        //    if (connectionString == null) return string.Empty;
+        //    if (!connectionString.ToLower().Contains("Password=".ToLower())) return connectionString;
+        //    var value = string.Empty;
+        //    var arr = connectionString.Split(";".ToCharArray());
+        //    foreach (var item in arr)
+        //    {
+        //        if (item.ToLower().Contains("Password=".ToLower()))
+        //        {
+        //            var password = string.Empty;
+        //            if (item.EndsWith("=="))
+        //                password = item.Split("=".ToCharArray())[1] + "==";
+        //            else if (item.EndsWith("="))
+        //                password = item.Split("=".ToCharArray())[1] + "=";
+        //            else
+        //                password = item.Split("=".ToCharArray())[1];
+        //            value += "Password=" + password + ";";
+        //        }
+        //        else
+        //            value += item + ";";
+        //    }
+        //    value = value.Replace(";;", ";");
+        //    if (value.ToLower().Contains("AuthType=OAuth".ToLower()))
+        //    {
+        //        if (!value.ToLower().Contains("RedirectUri=".ToLower()))
+        //        {
+        //            value += "AppId=51f81489-12ee-4a9e-aaae-a2591f45987d;RedirectUri=app://58145B91-0C36-4500-8554-080854F2AC97;LoginPrompt=Auto;";
+        //        }
+        //    }
+        //    return value;
+        //}
 
-        public static ServiceClient IsConnected(CrmConnection crmConnection)
-        {
-            var password = crmConnection.Password;
-            if (crmConnection.Type != "ClientSecret") password = EncryptDecrypt.DecryptString(password);
-            var connectionString = BuildConnectionString(crmConnection.Type, crmConnection.Url, crmConnection.UserName, password);
-            return IsConnected(connectionString, out _);
-        }
+        //public static ServiceClient IsConnected(CrmConnection crmConnection)
+        //{
+        //    var password = crmConnection.Password;
+        //    if (crmConnection.Type != "ClientSecret") password = EncryptDecrypt.DecryptString(password);
+        //    var connectionString = BuildConnectionString(crmConnection.Type, crmConnection.Url, crmConnection.UserName, password);
+        //    return IsConnected(connectionString, out _);
+        //}
 
         public static ServiceClient IsConnected(string connectionString, out string error)
         {
@@ -153,46 +153,46 @@ namespace DynamicsCrm.DevKit.Shared
             return url;
         }
 
-        public static List<DeployWebResource> GetWebResources(ServiceClient service, string fullFileName)
-        {
-            var parts = fullFileName.Split(@"\".ToCharArray());
-            var condition = string.Empty;
-            for (var i = parts.Length - 1; i > 0; i--)
-            {
-                var value = "/";
-                for (var j = i; j < parts.Length; j++)
-                {
-                    value += parts[j] + "/";
-                }
-                value = value.TrimEnd("/".ToCharArray());
-                condition += $"<condition attribute='name' operator='ends-with' value='{value}'/>" + "\r\n";
-            }
-            var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fullFileName);
-            condition += $"<condition attribute='name' operator='like' value='%{fileNameWithoutExtension}%'/>" + "\r\n";
-            var fetchXml = $@"
-<fetch>
-  <entity name='webresource'>
-    <attribute name='webresourceid' />
-    <attribute name='name' />
-    <attribute name='ismanaged' />
-    <filter type='or'>
-      {condition}
-    </filter>
-  </entity>
-</fetch>";
-            var rows = service.RetrieveMultiple(new FetchExpression(fetchXml));
-            var webResources = new List<DeployWebResource>();
-            foreach (var entity in rows.Entities)
-            {
-                webResources.Add(new DeployWebResource
-                {
-                    WebResource = entity.GetAttributeValue<string>("name") ?? string.Empty,
-                    WebResourceId = entity.Id,
-                    IsManaged = entity.GetAttributeValue<bool?>("ismanaged") ?? false
-                });
-            }
-            return webResources;
-        }
+//        public static List<DeployWebResource> GetWebResources(ServiceClient service, string fullFileName)
+//        {
+//            var parts = fullFileName.Split(@"\".ToCharArray());
+//            var condition = string.Empty;
+//            for (var i = parts.Length - 1; i > 0; i--)
+//            {
+//                var value = "/";
+//                for (var j = i; j < parts.Length; j++)
+//                {
+//                    value += parts[j] + "/";
+//                }
+//                value = value.TrimEnd("/".ToCharArray());
+//                condition += $"<condition attribute='name' operator='ends-with' value='{value}'/>" + "\r\n";
+//            }
+//            var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fullFileName);
+//            condition += $"<condition attribute='name' operator='like' value='%{fileNameWithoutExtension}%'/>" + "\r\n";
+//            var fetchXml = $@"
+//<fetch>
+//  <entity name='webresource'>
+//    <attribute name='webresourceid' />
+//    <attribute name='name' />
+//    <attribute name='ismanaged' />
+//    <filter type='or'>
+//      {condition}
+//    </filter>
+//  </entity>
+//</fetch>";
+//            var rows = service.RetrieveMultiple(new FetchExpression(fetchXml));
+//            var webResources = new List<DeployWebResource>();
+//            foreach (var entity in rows.Entities)
+//            {
+//                webResources.Add(new DeployWebResource
+//                {
+//                    WebResource = entity.GetAttributeValue<string>("name") ?? string.Empty,
+//                    WebResourceId = entity.Id,
+//                    IsManaged = entity.GetAttributeValue<bool?>("ismanaged") ?? false
+//                });
+//            }
+//            return webResources;
+//        }
 
         public static string BuildConnectionStringLog(string connectionString)
         {
@@ -611,103 +611,103 @@ namespace DynamicsCrm.DevKit.Shared
         //    };
         //}
 
-        public static List<NameValueGuidExtend> GetAllSolutions(ServiceClient crmServiceClient)
-        {
-            var fetchData = new
-            {
-                ismanaged = "0",
-                uniquename = "Default",
-                uniquename2 = "Active",
-                uniquename3 = "Basic"
-            };
-            var fetchXml = $@"
-<fetch>
-  <entity name='solution'>
-    <attribute name='solutionid' />
-    <attribute name='uniquename' />
-    <filter>
-      <condition attribute='ismanaged' operator='eq' value='{fetchData.ismanaged/*0*/}'/>
-      <condition attribute='uniquename' operator='neq' value='{fetchData.uniquename/*Default*/}'/>
-      <condition attribute='uniquename' operator='neq' value='{fetchData.uniquename2/*Active*/}'/>
-      <condition attribute='uniquename' operator='neq' value='{fetchData.uniquename3/*Basic*/}'/>
-    </filter>
-    <order attribute='uniquename' />
-    <link-entity name='publisher' from='publisherid' to='publisherid' alias='p'>
-      <attribute name='customizationprefix' />
-      <filter>
-        <condition attribute='customizationprefix' operator='not-null' />
-      </filter>
-    </link-entity>
-  </entity>
-</fetch>";
-            var rows = crmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
-            var list = new List<NameValueGuidExtend>();
-            foreach (var entity in rows.Entities)
-            {
-                list.Add(new NameValueGuidExtend
-                {
-                    Name = entity.GetAttributeValue<string>("uniquename") ?? string.Empty,
-                    Value = entity.Id,
-                    SolutionPrefix = entity.GetAttributeValue<AliasedValue>("p.customizationprefix")?.Value.ToString() ?? string.Empty,
-                    SolutionUniqueName = entity.GetAttributeValue<string>("uniquename") ?? string.Empty
-                });
-            }
-            return list;
-        }
+//        public static List<NameValueGuidExtend> GetAllSolutions(ServiceClient crmServiceClient)
+//        {
+//            var fetchData = new
+//            {
+//                ismanaged = "0",
+//                uniquename = "Default",
+//                uniquename2 = "Active",
+//                uniquename3 = "Basic"
+//            };
+//            var fetchXml = $@"
+//<fetch>
+//  <entity name='solution'>
+//    <attribute name='solutionid' />
+//    <attribute name='uniquename' />
+//    <filter>
+//      <condition attribute='ismanaged' operator='eq' value='{fetchData.ismanaged/*0*/}'/>
+//      <condition attribute='uniquename' operator='neq' value='{fetchData.uniquename/*Default*/}'/>
+//      <condition attribute='uniquename' operator='neq' value='{fetchData.uniquename2/*Active*/}'/>
+//      <condition attribute='uniquename' operator='neq' value='{fetchData.uniquename3/*Basic*/}'/>
+//    </filter>
+//    <order attribute='uniquename' />
+//    <link-entity name='publisher' from='publisherid' to='publisherid' alias='p'>
+//      <attribute name='customizationprefix' />
+//      <filter>
+//        <condition attribute='customizationprefix' operator='not-null' />
+//      </filter>
+//    </link-entity>
+//  </entity>
+//</fetch>";
+//            var rows = crmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+//            var list = new List<NameValueGuidExtend>();
+//            foreach (var entity in rows.Entities)
+//            {
+//                list.Add(new NameValueGuidExtend
+//                {
+//                    Name = entity.GetAttributeValue<string>("uniquename") ?? string.Empty,
+//                    Value = entity.Id,
+//                    SolutionPrefix = entity.GetAttributeValue<AliasedValue>("p.customizationprefix")?.Value.ToString() ?? string.Empty,
+//                    SolutionUniqueName = entity.GetAttributeValue<string>("uniquename") ?? string.Empty
+//                });
+//            }
+//            return list;
+//        }
 
-        public static List<XrmEntity> GetAllEntities(ServiceClient service)
-        {
-            var request = new RetrieveAllEntitiesRequest
-            {
-                EntityFilters = EntityFilters.Entity,
-                RetrieveAsIfPublished = true
-            };
-            var response = (RetrieveAllEntitiesResponse)service.Execute(request);
-            var entities = new List<XrmEntity>();
-            foreach (var entity in response.EntityMetadata)
-                entities.Add(new XrmEntity
-                {
-                    Name = entity.SchemaName,
-                    LogicalName = entity.LogicalName,
-                    SchemaName = entity.SchemaName,
-                    HasImage = !string.IsNullOrEmpty(entity.PrimaryImageAttribute),
-                    EntityTypeCode = entity.ObjectTypeCode ?? -1,
-                    IsCustomEntity = entity.IsCustomEntity ?? false
-                });
-            entities = entities.OrderBy(entity => entity.Name).ToList();
-            return entities;
-        }
+        //public static List<XrmEntity> GetAllEntities(ServiceClient service)
+        //{
+        //    var request = new RetrieveAllEntitiesRequest
+        //    {
+        //        EntityFilters = EntityFilters.Entity,
+        //        RetrieveAsIfPublished = true
+        //    };
+        //    var response = (RetrieveAllEntitiesResponse)service.Execute(request);
+        //    var entities = new List<XrmEntity>();
+        //    foreach (var entity in response.EntityMetadata)
+        //        entities.Add(new XrmEntity
+        //        {
+        //            Name = entity.SchemaName,
+        //            LogicalName = entity.LogicalName,
+        //            SchemaName = entity.SchemaName,
+        //            HasImage = !string.IsNullOrEmpty(entity.PrimaryImageAttribute),
+        //            EntityTypeCode = entity.ObjectTypeCode ?? -1,
+        //            IsCustomEntity = entity.IsCustomEntity ?? false
+        //        });
+        //    entities = entities.OrderBy(entity => entity.Name).ToList();
+        //    return entities;
+        //}
 
-        public static List<XrmEntity> GetAllDataSource(ServiceClient crmServiceClient)
-        {
-            var list = new List<string>();
-            var filterExpression = new MetadataFilterExpression();
-            filterExpression.Conditions.Add(new MetadataConditionExpression("DataProviderId", MetadataConditionOperator.Equals, Guid.Parse("B2112A7E-B26C-42F7-9B63-9A809A9D716F")));
-            var propertiesExpression = new MetadataPropertiesExpression(new string[7]
-            {
-                "DataProviderId",
-                "LogicalName",
-                "SchemaName",
-                "MetadataId",
-                "DisplayName",
-                "ExternalName",
-                "DisplayCollectionName"
-            });
-            var entityQueryExpression = new EntityQueryExpression
-            {
-                Criteria = new MetadataFilterExpression()
-            };
-            entityQueryExpression.Criteria = filterExpression;
-            entityQueryExpression.Properties = propertiesExpression;
-            var request = new RetrieveMetadataChangesRequest
-            {
-                Query = entityQueryExpression
-            };
-            var response = (RetrieveMetadataChangesResponse)crmServiceClient.Execute(request);
-            foreach (EntityMetadata entityMetadata in response.EntityMetadata)
-                list.Add(entityMetadata.LogicalName);
-            return list.Select(x => new XrmEntity { Name = x }).ToList();
-        }
+        //public static List<XrmEntity> GetAllDataSource(ServiceClient crmServiceClient)
+        //{
+        //    var list = new List<string>();
+        //    var filterExpression = new MetadataFilterExpression();
+        //    filterExpression.Conditions.Add(new MetadataConditionExpression("DataProviderId", MetadataConditionOperator.Equals, Guid.Parse("B2112A7E-B26C-42F7-9B63-9A809A9D716F")));
+        //    var propertiesExpression = new MetadataPropertiesExpression(new string[7]
+        //    {
+        //        "DataProviderId",
+        //        "LogicalName",
+        //        "SchemaName",
+        //        "MetadataId",
+        //        "DisplayName",
+        //        "ExternalName",
+        //        "DisplayCollectionName"
+        //    });
+        //    var entityQueryExpression = new EntityQueryExpression
+        //    {
+        //        Criteria = new MetadataFilterExpression()
+        //    };
+        //    entityQueryExpression.Criteria = filterExpression;
+        //    entityQueryExpression.Properties = propertiesExpression;
+        //    var request = new RetrieveMetadataChangesRequest
+        //    {
+        //        Query = entityQueryExpression
+        //    };
+        //    var response = (RetrieveMetadataChangesResponse)crmServiceClient.Execute(request);
+        //    foreach (EntityMetadata entityMetadata in response.EntityMetadata)
+        //        list.Add(entityMetadata.LogicalName);
+        //    return list.Select(x => new XrmEntity { Name = x }).ToList();
+        //}
 
         public static List<NameValue> GetSdkMessagesNone(ServiceClient service)
         {
@@ -751,428 +751,428 @@ namespace DynamicsCrm.DevKit.Shared
             return list.OrderBy(x => x.Name).ToList();
         }
 
-        public static List<NameValue> GetSdkMessages(ServiceClient service, string logicalName)
-        {
-            if (logicalName == "none") return GetSdkMessagesNone(service);
-            var request = new RetrieveEntityRequest
-            {
-                EntityFilters = EntityFilters.Entity,
-                LogicalName = logicalName
-            };
-            var response = (RetrieveEntityResponse)service.Execute(request);
-            var fetchData = new
-            {
-                categoryname = "CustomOperation",
-                categoryname2 = "CustomApi",
-                isprivate = "0",
-                primaryobjecttypecode = response.EntityMetadata.ObjectTypeCode,
-                iscustomprocessingstepallowed = "1"
-            };
-            var fetchXml = $@"<?xml version=""1.0"" encoding=""utf-16""?
-<fetch>
-  <entity name=""sdkmessage"">
-    <all-attributes />
-    <attribute name=""name"" />
-    <filter>
-      <condition attribute=""categoryname"" operator=""ne"" value=""{fetchData.categoryname/*CustomOperation*/}"" />
-      <condition attribute=""categoryname"" operator=""ne"" value=""{fetchData.categoryname2/*CustomApi*/}"" />
-      <condition attribute=""isprivate"" operator=""eq"" value=""{fetchData.isprivate/*0*/}"" />
-    </filter>
-    <order attribute=""name"" />
-    <link-entity name=""sdkmessagefilter"" from=""sdkmessageid"" to=""sdkmessageid"">
-      <filter type=""and"">
-        <condition attribute=""primaryobjecttypecode"" operator=""eq"" value=""{fetchData.primaryobjecttypecode/*1*/}"" />
-        <condition attribute=""iscustomprocessingstepallowed"" operator=""eq"" value=""{fetchData.iscustomprocessingstepallowed/*1*/}"" />
-      </filter>
-    </link-entity>
-  </entity>
-</fetch>";
+//        public static List<NameValue> GetSdkMessages(ServiceClient service, string logicalName)
+//        {
+//            if (logicalName == "none") return GetSdkMessagesNone(service);
+//            var request = new RetrieveEntityRequest
+//            {
+//                EntityFilters = EntityFilters.Entity,
+//                LogicalName = logicalName
+//            };
+//            var response = (RetrieveEntityResponse)service.Execute(request);
+//            var fetchData = new
+//            {
+//                categoryname = "CustomOperation",
+//                categoryname2 = "CustomApi",
+//                isprivate = "0",
+//                primaryobjecttypecode = response.EntityMetadata.ObjectTypeCode,
+//                iscustomprocessingstepallowed = "1"
+//            };
+//            var fetchXml = $@"<?xml version=""1.0"" encoding=""utf-16""?
+//<fetch>
+//  <entity name=""sdkmessage"">
+//    <all-attributes />
+//    <attribute name=""name"" />
+//    <filter>
+//      <condition attribute=""categoryname"" operator=""ne"" value=""{fetchData.categoryname/*CustomOperation*/}"" />
+//      <condition attribute=""categoryname"" operator=""ne"" value=""{fetchData.categoryname2/*CustomApi*/}"" />
+//      <condition attribute=""isprivate"" operator=""eq"" value=""{fetchData.isprivate/*0*/}"" />
+//    </filter>
+//    <order attribute=""name"" />
+//    <link-entity name=""sdkmessagefilter"" from=""sdkmessageid"" to=""sdkmessageid"">
+//      <filter type=""and"">
+//        <condition attribute=""primaryobjecttypecode"" operator=""eq"" value=""{fetchData.primaryobjecttypecode/*1*/}"" />
+//        <condition attribute=""iscustomprocessingstepallowed"" operator=""eq"" value=""{fetchData.iscustomprocessingstepallowed/*1*/}"" />
+//      </filter>
+//    </link-entity>
+//  </entity>
+//</fetch>";
 
-            var rows = service.RetrieveMultiple(new FetchExpression(fetchXml));
-            var messages = (from entity in rows.Entities
-                            select entity["name"].ToString()
-                ).ToList();
-            messages.Sort();
-            var list = new List<NameValue>();
-            foreach (var message in messages)
-            {
-                if (!list.Any(x => x.Name == message))
-                    list.Add(new NameValue { Name = message });
-            }
-            return list.OrderBy(x => x.Name).ToList();
-        }
+//            var rows = service.RetrieveMultiple(new FetchExpression(fetchXml));
+//            var messages = (from entity in rows.Entities
+//                            select entity["name"].ToString()
+//                ).ToList();
+//            messages.Sort();
+//            var list = new List<NameValue>();
+//            foreach (var message in messages)
+//            {
+//                if (!list.Any(x => x.Name == message))
+//                    list.Add(new NameValue { Name = message });
+//            }
+//            return list.OrderBy(x => x.Name).ToList();
+//        }
 
-        public static List<PluginInputOutputParameter> GetPluginInputOutputParameters(ServiceClient service, string entityName, string requestName)
-        {
-            var fetchData = new
-            {
-                name = requestName,
-                name2 = $"{requestName + entityName}",
-                endpoint = "api/data"
-            };
-            var fetchXml = $@"
-<fetch>
-  <entity name='sdkmessagerequest'>
-    <filter type='or'>
-      <condition attribute='name' operator='eq' value='{fetchData.name}'/>
-      <condition attribute='name' operator='eq' value='{fetchData.name2}'/>
-    </filter>
-    <link-entity name='sdkmessagepair' from='sdkmessagepairid' to='sdkmessagepairid'>
-      <filter type='and'>
-        <condition attribute='endpoint' operator='eq' value='{fetchData.endpoint}'/>
-      </filter>
-    </link-entity>
-    <link-entity name='sdkmessagerequestfield' from='sdkmessagerequestid' to='sdkmessagerequestid' link-type='inner' alias='f'>
-      <attribute name='name' />
-      <attribute name='clrparser' />
-      <attribute name='optional' />
-      <attribute name='position' />
-    </link-entity>
-  </entity>
-</fetch>";
-            var rows = service.RetrieveMultiple(new FetchExpression(fetchXml));
-            var list = new List<PluginInputOutputParameter>();
-            var sdkMessageRequestId = Guid.Empty;
-            foreach (var row in rows.Entities)
-            {
-                var name = (string)row.GetAttributeValue<AliasedValue>("f.name")?.Value ?? string.Empty;
-                var clrparser = (string)row.GetAttributeValue<AliasedValue>("f.clrparser")?.Value ?? string.Empty;
-                var optional = (bool?)row.GetAttributeValue<AliasedValue>("f.optional")?.Value ?? false;
-                var position = (int?)row.GetAttributeValue<AliasedValue>("f.position")?.Value ?? -1;
-                list.Add(new PluginInputOutputParameter
-                {
-                    Name = name,
-                    Position = position,
-                    Require = optional,
-                    Type = clrparser.Split(",".ToCharArray())[0],
-                    ParameterType = ParameterType.Input
-                });
-                sdkMessageRequestId = row.Id;
-            }
+//        public static List<PluginInputOutputParameter> GetPluginInputOutputParameters(ServiceClient service, string entityName, string requestName)
+//        {
+//            var fetchData = new
+//            {
+//                name = requestName,
+//                name2 = $"{requestName + entityName}",
+//                endpoint = "api/data"
+//            };
+//            var fetchXml = $@"
+//<fetch>
+//  <entity name='sdkmessagerequest'>
+//    <filter type='or'>
+//      <condition attribute='name' operator='eq' value='{fetchData.name}'/>
+//      <condition attribute='name' operator='eq' value='{fetchData.name2}'/>
+//    </filter>
+//    <link-entity name='sdkmessagepair' from='sdkmessagepairid' to='sdkmessagepairid'>
+//      <filter type='and'>
+//        <condition attribute='endpoint' operator='eq' value='{fetchData.endpoint}'/>
+//      </filter>
+//    </link-entity>
+//    <link-entity name='sdkmessagerequestfield' from='sdkmessagerequestid' to='sdkmessagerequestid' link-type='inner' alias='f'>
+//      <attribute name='name' />
+//      <attribute name='clrparser' />
+//      <attribute name='optional' />
+//      <attribute name='position' />
+//    </link-entity>
+//  </entity>
+//</fetch>";
+//            var rows = service.RetrieveMultiple(new FetchExpression(fetchXml));
+//            var list = new List<PluginInputOutputParameter>();
+//            var sdkMessageRequestId = Guid.Empty;
+//            foreach (var row in rows.Entities)
+//            {
+//                var name = (string)row.GetAttributeValue<AliasedValue>("f.name")?.Value ?? string.Empty;
+//                var clrparser = (string)row.GetAttributeValue<AliasedValue>("f.clrparser")?.Value ?? string.Empty;
+//                var optional = (bool?)row.GetAttributeValue<AliasedValue>("f.optional")?.Value ?? false;
+//                var position = (int?)row.GetAttributeValue<AliasedValue>("f.position")?.Value ?? -1;
+//                list.Add(new PluginInputOutputParameter
+//                {
+//                    Name = name,
+//                    Position = position,
+//                    Require = optional,
+//                    Type = clrparser.Split(",".ToCharArray())[0],
+//                    ParameterType = ParameterType.Input
+//                });
+//                sdkMessageRequestId = row.Id;
+//            }
 
-            var fetchData2 = new
-            {
-                sdkmessagerequestid = sdkMessageRequestId
-            };
-            var fetchXml2 = $@"
-<fetch>
-  <entity name='sdkmessageresponse'>
-    <filter type='and'>
-      <condition attribute='sdkmessagerequestid' operator='eq' value='{fetchData2.sdkmessagerequestid}'/>
-    </filter>
-    <link-entity name='sdkmessageresponsefield' from='sdkmessageresponseid' to='sdkmessageresponseid' link-type='inner' alias='f'>
-      <attribute name='name' />
-      <attribute name='clrformatter' />
-      <attribute name='position' />
-    </link-entity>
-  </entity>
-</fetch>";
-            var rows2 = service.RetrieveMultiple(new FetchExpression(fetchXml2));
-            foreach (var row in rows2.Entities)
-            {
-                var name = (string)row.GetAttributeValue<AliasedValue>("f.name")?.Value ?? string.Empty;
-                var clrformatter = (string)row.GetAttributeValue<AliasedValue>("f.clrformatter")?.Value ??
-                                   string.Empty;
-                var optional = false;
-                var position = (int?)row.GetAttributeValue<AliasedValue>("f.position")?.Value ?? -1;
-                list.Add(new PluginInputOutputParameter
-                {
-                    Name = name,
-                    Position = position,
-                    Require = optional,
-                    Type = clrformatter.Split(",".ToCharArray())[0],
-                    ParameterType = ParameterType.Output
-                });
-            }
-            list = list
-                .OrderBy(order => order.ParameterType)
-                .ThenBy(order => order.Position)
-                .ToList();
-            return list;
-        }
+//            var fetchData2 = new
+//            {
+//                sdkmessagerequestid = sdkMessageRequestId
+//            };
+//            var fetchXml2 = $@"
+//<fetch>
+//  <entity name='sdkmessageresponse'>
+//    <filter type='and'>
+//      <condition attribute='sdkmessagerequestid' operator='eq' value='{fetchData2.sdkmessagerequestid}'/>
+//    </filter>
+//    <link-entity name='sdkmessageresponsefield' from='sdkmessageresponseid' to='sdkmessageresponseid' link-type='inner' alias='f'>
+//      <attribute name='name' />
+//      <attribute name='clrformatter' />
+//      <attribute name='position' />
+//    </link-entity>
+//  </entity>
+//</fetch>";
+//            var rows2 = service.RetrieveMultiple(new FetchExpression(fetchXml2));
+//            foreach (var row in rows2.Entities)
+//            {
+//                var name = (string)row.GetAttributeValue<AliasedValue>("f.name")?.Value ?? string.Empty;
+//                var clrformatter = (string)row.GetAttributeValue<AliasedValue>("f.clrformatter")?.Value ??
+//                                   string.Empty;
+//                var optional = false;
+//                var position = (int?)row.GetAttributeValue<AliasedValue>("f.position")?.Value ?? -1;
+//                list.Add(new PluginInputOutputParameter
+//                {
+//                    Name = name,
+//                    Position = position,
+//                    Require = optional,
+//                    Type = clrformatter.Split(",".ToCharArray())[0],
+//                    ParameterType = ParameterType.Output
+//                });
+//            }
+//            list = list
+//                .OrderBy(order => order.ParameterType)
+//                .ThenBy(order => order.Position)
+//                .ToList();
+//            return list;
+//        }
 
-        public static List<NameValue> GetCustomActionMessages(ServiceClient service, string logicalName)
-        {
-            var request = new RetrieveEntityRequest
-            {
-                EntityFilters = EntityFilters.Entity,
-                LogicalName = logicalName
-            };
-            var response = (RetrieveEntityResponse)service.Execute(request);
-            var fetchData = new
-            {
-                categoryname = "CustomOperation",
-                primaryobjecttypecode = response.EntityMetadata.ObjectTypeCode,
-                iscustomprocessingstepallowed = "1"
-            };
-            var fetchXml = $@"<?xml version=""1.0"" encoding=""utf-16""?
-<fetch>
-  <entity name=""sdkmessage"">
-    <all-attributes />
-    <attribute name=""name"" />
-    <filter>
-      <condition attribute=""categoryname"" operator=""eq"" value=""{fetchData.categoryname/*CustomOperation*/}"" />
-    </filter>
-    <order attribute=""name"" />
-    <link-entity name=""sdkmessagefilter"" from=""sdkmessageid"" to=""sdkmessageid"">
-      <filter type=""and"">
-        <condition attribute=""primaryobjecttypecode"" operator=""eq"" value=""{fetchData.primaryobjecttypecode/*1*/}"" />
-        <condition attribute=""iscustomprocessingstepallowed"" operator=""eq"" value=""{fetchData.iscustomprocessingstepallowed/*1*/}"" />
-      </filter>
-    </link-entity>
-  </entity>
-</fetch>";
-            var rows = service.RetrieveMultiple(new FetchExpression(fetchXml));
-            var messages = (from entity in rows.Entities
-                            select entity["name"].ToString()
-                ).ToList();
-            messages.Sort();
-            var list = new List<NameValue>();
-            foreach (var message in messages)
-            {
-                list.Add(new NameValue { Name = message });
-            }
-            return list;
-        }
+//        public static List<NameValue> GetCustomActionMessages(ServiceClient service, string logicalName)
+//        {
+//            var request = new RetrieveEntityRequest
+//            {
+//                EntityFilters = EntityFilters.Entity,
+//                LogicalName = logicalName
+//            };
+//            var response = (RetrieveEntityResponse)service.Execute(request);
+//            var fetchData = new
+//            {
+//                categoryname = "CustomOperation",
+//                primaryobjecttypecode = response.EntityMetadata.ObjectTypeCode,
+//                iscustomprocessingstepallowed = "1"
+//            };
+//            var fetchXml = $@"<?xml version=""1.0"" encoding=""utf-16""?
+//<fetch>
+//  <entity name=""sdkmessage"">
+//    <all-attributes />
+//    <attribute name=""name"" />
+//    <filter>
+//      <condition attribute=""categoryname"" operator=""eq"" value=""{fetchData.categoryname/*CustomOperation*/}"" />
+//    </filter>
+//    <order attribute=""name"" />
+//    <link-entity name=""sdkmessagefilter"" from=""sdkmessageid"" to=""sdkmessageid"">
+//      <filter type=""and"">
+//        <condition attribute=""primaryobjecttypecode"" operator=""eq"" value=""{fetchData.primaryobjecttypecode/*1*/}"" />
+//        <condition attribute=""iscustomprocessingstepallowed"" operator=""eq"" value=""{fetchData.iscustomprocessingstepallowed/*1*/}"" />
+//      </filter>
+//    </link-entity>
+//  </entity>
+//</fetch>";
+//            var rows = service.RetrieveMultiple(new FetchExpression(fetchXml));
+//            var messages = (from entity in rows.Entities
+//                            select entity["name"].ToString()
+//                ).ToList();
+//            messages.Sort();
+//            var list = new List<NameValue>();
+//            foreach (var message in messages)
+//            {
+//                list.Add(new NameValue { Name = message });
+//            }
+//            return list;
+//        }
 
-        public static List<NameValue> GetCustomApiMessages(ServiceClient service, string entity)
-        {
-            var conditionEntity = string.Empty;
-            if (entity != "none")
-                conditionEntity = $"<condition attribute='boundentitylogicalname' operator='eq' value='{entity}'/>";
-            else
-                conditionEntity = $"<condition attribute='boundentitylogicalname' operator='null' />";
-            var fetchData = new
-            {
-                statecode = "0"
-            };
-            var fetchXml = $@"
-<fetch>
-  <entity name='customapi'>
-    <attribute name='name' />
-    <attribute name='sdkmessageid' />
-    <attribute name='boundentitylogicalname' />
-    <filter>
-      <condition attribute='statecode' operator='eq' value='{fetchData.statecode}'/>
-      {conditionEntity}
-    </filter>
-  </entity>
-</fetch>";
-            var rows = service.RetrieveMultiple(new FetchExpression(fetchXml));
-            return rows.Entities.Select(x => x.GetAttributeValue<EntityReference>("sdkmessageid")?.Name).Select(y => new NameValue { Name = y }).OrderBy(z => z.Name).ToList();
-        }
+//        public static List<NameValue> GetCustomApiMessages(ServiceClient service, string entity)
+//        {
+//            var conditionEntity = string.Empty;
+//            if (entity != "none")
+//                conditionEntity = $"<condition attribute='boundentitylogicalname' operator='eq' value='{entity}'/>";
+//            else
+//                conditionEntity = $"<condition attribute='boundentitylogicalname' operator='null' />";
+//            var fetchData = new
+//            {
+//                statecode = "0"
+//            };
+//            var fetchXml = $@"
+//<fetch>
+//  <entity name='customapi'>
+//    <attribute name='name' />
+//    <attribute name='sdkmessageid' />
+//    <attribute name='boundentitylogicalname' />
+//    <filter>
+//      <condition attribute='statecode' operator='eq' value='{fetchData.statecode}'/>
+//      {conditionEntity}
+//    </filter>
+//  </entity>
+//</fetch>";
+//            var rows = service.RetrieveMultiple(new FetchExpression(fetchXml));
+//            return rows.Entities.Select(x => x.GetAttributeValue<EntityReference>("sdkmessageid")?.Name).Select(y => new NameValue { Name = y }).OrderBy(z => z.Name).ToList();
+//        }
 
-        public static List<NameValue> GetAllCustomActions(ServiceClient service)
-        {
-            var fetchData = new
-            {
-                customizationlevel = "1",
-                primaryobjecttypecode = "none",
-                endpoint = "api/data"
-            };
-            var fetchXml = $@"
-<fetch>
-  <entity name='sdkmessagerequest'>
-    <attribute name='name' />
-    <attribute name='primaryobjecttypecode' />
-    <filter type='and'>
-      <condition attribute='customizationlevel' operator='eq' value='{fetchData.customizationlevel}'/>
-    </filter>
-    <link-entity name='sdkmessagepair' from='sdkmessagepairid' to='sdkmessagepairid' link-type='inner'>
-      <filter type='and'>
-        <condition attribute='endpoint' operator='eq' value='{fetchData.endpoint}'/>
-      </filter>
-    </link-entity>
-  </entity>
-</fetch>";
-            var rows = service.RetrieveMultiple(new FetchExpression(fetchXml));
-            var list2 = new List<Entity>();
-            foreach (var entity in rows.Entities)
-            {
-                var primaryobjecttypecode = entity.GetAttributeValue<string>("primaryobjecttypecode");
-                if (primaryobjecttypecode == null || primaryobjecttypecode == "none")
-                    list2.Add(entity);
-            }
-            var list = new List<XrmEntity>();
-            foreach (var entity in list2)
-            {
-                list.Add(new XrmEntity
-                {
-                    LogicalName = entity.GetAttributeValue<string>("name"),
-                    Name = GetSchemaName(service, entity.GetAttributeValue<string>("primaryobjecttypecode"))
-                });
-            }
-            var json = SimpleJson.SerializeObject(list);
-            return list
-                .Where(x => x.Name.ToLower() == "none")
-                .Select(x => new NameValue { Name = x.LogicalName })
-                .OrderBy(x => x.Name)
-                .ToList();
-        }
+//        public static List<NameValue> GetAllCustomActions(ServiceClient service)
+//        {
+//            var fetchData = new
+//            {
+//                customizationlevel = "1",
+//                primaryobjecttypecode = "none",
+//                endpoint = "api/data"
+//            };
+//            var fetchXml = $@"
+//<fetch>
+//  <entity name='sdkmessagerequest'>
+//    <attribute name='name' />
+//    <attribute name='primaryobjecttypecode' />
+//    <filter type='and'>
+//      <condition attribute='customizationlevel' operator='eq' value='{fetchData.customizationlevel}'/>
+//    </filter>
+//    <link-entity name='sdkmessagepair' from='sdkmessagepairid' to='sdkmessagepairid' link-type='inner'>
+//      <filter type='and'>
+//        <condition attribute='endpoint' operator='eq' value='{fetchData.endpoint}'/>
+//      </filter>
+//    </link-entity>
+//  </entity>
+//</fetch>";
+//            var rows = service.RetrieveMultiple(new FetchExpression(fetchXml));
+//            var list2 = new List<Entity>();
+//            foreach (var entity in rows.Entities)
+//            {
+//                var primaryobjecttypecode = entity.GetAttributeValue<string>("primaryobjecttypecode");
+//                if (primaryobjecttypecode == null || primaryobjecttypecode == "none")
+//                    list2.Add(entity);
+//            }
+//            var list = new List<XrmEntity>();
+//            foreach (var entity in list2)
+//            {
+//                list.Add(new XrmEntity
+//                {
+//                    LogicalName = entity.GetAttributeValue<string>("name"),
+//                    Name = GetSchemaName(service, entity.GetAttributeValue<string>("primaryobjecttypecode"))
+//                });
+//            }
+//            var json = SimpleJson.SerializeObject(list);
+//            return list
+//                .Where(x => x.Name.ToLower() == "none")
+//                .Select(x => new NameValue { Name = x.LogicalName })
+//                .OrderBy(x => x.Name)
+//                .ToList();
+//        }
 
-        private static string GetSchemaName(ServiceClient service, string logicalName)
-        {
-            if (logicalName == null || logicalName == "none") return "None";
-            var request = new RetrieveEntityRequest
-            {
-                EntityFilters = EntityFilters.Entity,
-                LogicalName = logicalName
-            };
-            var response = (RetrieveEntityResponse)service.Execute(request);
-            return response.EntityMetadata.SchemaName;
-        }
+        //private static string GetSchemaName(ServiceClient service, string logicalName)
+        //{
+        //    if (logicalName == null || logicalName == "none") return "None";
+        //    var request = new RetrieveEntityRequest
+        //    {
+        //        EntityFilters = EntityFilters.Entity,
+        //        LogicalName = logicalName
+        //    };
+        //    var response = (RetrieveEntityResponse)service.Execute(request);
+        //    return response.EntityMetadata.SchemaName;
+        //}
 
-        public static List<NameValue> GetProvisionedLanguages(ServiceClient service, bool isAllLanguage = false)
-        {
-            List<NameValue> GetLanguages()
-            {
-                var languages = new List<NameValue>
-            {
-                new NameValue { Name = "Afrikaans-South Africa", Value = "1078" },
-                new NameValue { Name = "Albanian-Albania", Value = "1052" },
-                new NameValue { Name = "Arabic-Algeria", Value = "5121" },
-                new NameValue { Name = "Arabic-Bahrain", Value = "15361" },
-                new NameValue { Name = "Arabic-Egypt", Value = "3073" },
-                new NameValue { Name = "Arabic-Iraq", Value = "2049" },
-                new NameValue { Name = "Arabic-Jordan", Value = "11265" },
-                new NameValue { Name = "Arabic-Kuwait", Value = "13313" },
-                new NameValue { Name = "Arabic-Lebanon", Value = "12289" },
-                new NameValue { Name = "Arabic-Libya", Value = "4097" },
-                new NameValue { Name = "Arabic-Morocco", Value = "6145" },
-                new NameValue { Name = "Arabic-Oman", Value = "8193" },
-                new NameValue { Name = "Arabic-Qatar", Value = "16385" },
-                new NameValue { Name = "Arabic-Saudi Arabia", Value = "1025" },
-                new NameValue { Name = "Arabic-Syria", Value = "10241" },
-                new NameValue { Name = "Arabic-Tunisia", Value = "7169" },
-                new NameValue { Name = "Arabic-U.A.E.", Value = "14337" },
-                new NameValue { Name = "Arabic-Yemen", Value = "9217" },
-                new NameValue { Name = "Armenian-Armenia", Value = "1067" },
-                new NameValue { Name = "Azeri (Cyrillic)-Azerbaijan", Value = "2092" },
-                new NameValue { Name = "Azeri (Latin)-Azerbaijan", Value = "1068" },
-                new NameValue { Name = "Basque-Spain", Value = "1069" },
-                new NameValue { Name = "Belarusian-Belarus", Value = "1059" },
-                new NameValue { Name = "Bulgarian-Bulgaria", Value = "1026" },
-                new NameValue { Name = "Catalan-Spain", Value = "1027" },
-                new NameValue { Name = "Chinese-Hong Kong S.A.R.", Value = "3076" },
-                new NameValue { Name = "Chinese-Macau S.A.R.", Value = "5124" },
-                new NameValue { Name = "Chinese-People's Republic of China", Value = "2052" },
-                new NameValue { Name = "Chinese-Singapore", Value = "4100" },
-                new NameValue { Name = "Chinese-Taiwan", Value = "1028" },
-                new NameValue { Name = "Croatian-Croatia", Value = "1050" },
-                new NameValue { Name = "Czech-Czech Republic", Value = "1029" },
-                new NameValue { Name = "Danish-Denmark", Value = "1030" },
-                new NameValue { Name = "Divehi-Maldives", Value = "1125" },
-                new NameValue { Name = "Dutch-Belgium", Value = "2067" },
-                new NameValue { Name = "Dutch-Netherlands", Value = "1043" },
-                new NameValue { Name = "English-Australia", Value = "3081" },
-                new NameValue { Name = "English-Belize", Value = "10249" },
-                new NameValue { Name = "English-Canada", Value = "4105" },
-                new NameValue { Name = "English-Caribbean", Value = "9225" },
-                new NameValue { Name = "English-Ireland", Value = "6153" },
-                new NameValue { Name = "English-Jamaica", Value = "8201" },
-                new NameValue { Name = "English-New Zealand", Value = "5129" },
-                new NameValue { Name = "English-Republic of the Philippines", Value = "13321" },
-                new NameValue { Name = "English-South Africa", Value = "7177" },
-                new NameValue { Name = "English-Trinidad and Tobago", Value = "11273" },
-                new NameValue { Name = "English-United Kingdom", Value = "2057" },
-                new NameValue { Name = "English-United States", Value = "1033" },
-                new NameValue { Name = "English-Zimbabwe", Value = "12297" },
-                new NameValue { Name = "Estonian-Estonia", Value = "1061" },
-                new NameValue { Name = "Faroese-Faeroe Islands", Value = "1080" },
-                new NameValue { Name = "Farsi-Iran", Value = "1065" },
-                new NameValue { Name = "Finnish-Finland", Value = "1035" },
-                new NameValue { Name = "French-Belgium", Value = "2060" },
-                new NameValue { Name = "French-Canada", Value = "3084" },
-                new NameValue { Name = "French-France", Value = "1036" },
-                new NameValue { Name = "French-Luxembourg", Value = "5132" },
-                new NameValue { Name = "French-Principality of Monaco", Value = "6156" },
-                new NameValue { Name = "French-Switzerland", Value = "4108" },
-                new NameValue { Name = "FYRO Macedonian-Former Yugoslav Republic of Macedonia", Value = "1071" },
-                new NameValue { Name = "Galician-Spain", Value = "1110" },
-                new NameValue { Name = "Georgian-Georgia", Value = "1079" },
-                new NameValue { Name = "German-Austria", Value = "3079" },
-                new NameValue { Name = "German-Germany", Value = "1031" },
-                new NameValue { Name = "German-Liechtenstein", Value = "5127" },
-                new NameValue { Name = "German-Luxembourg", Value = "4103" },
-                new NameValue { Name = "German-Switzerland", Value = "2055" },
-                new NameValue { Name = "Greek-Greece", Value = "1032" },
-                new NameValue { Name = "Gujarati-India", Value = "1095" },
-                new NameValue { Name = "Hebrew-Israel", Value = "1037" },
-                new NameValue { Name = "Hindi-India", Value = "1081" },
-                new NameValue { Name = "Hungarian-Hungary", Value = "1038" },
-                new NameValue { Name = "Icelandic-Iceland", Value = "1039" },
-                new NameValue { Name = "Indonesian-Indonesia", Value = "1057" },
-                new NameValue { Name = "Italian-Italy", Value = "1040" },
-                new NameValue { Name = "Italian-Switzerland", Value = "2064" },
-                new NameValue { Name = "Japanese-Japan", Value = "1041" },
-                new NameValue { Name = "Kannada-India", Value = "1099" },
-                new NameValue { Name = "Kazakh-Kazakhstan", Value = "1087" },
-                new NameValue { Name = "Konkani-India", Value = "1111" },
-                new NameValue { Name = "Korean-Korea", Value = "1042" },
-                new NameValue { Name = "Kyrgyz-Kyrgyzstan", Value = "1088" },
-                new NameValue { Name = "Latvian-Latvia", Value = "1062" },
-                new NameValue { Name = "Lithuanian-Lithuania", Value = "1063" },
-                new NameValue { Name = "Malay-Brunei Darussalam", Value = "2110" },
-                new NameValue { Name = "Malay-Malaysia", Value = "1086" },
-                new NameValue { Name = "Marathi-India", Value = "1102" },
-                new NameValue { Name = "Mongolian-Mongolia", Value = "1104" },
-                new NameValue { Name = "Norwegian (Bokmål)-Norway", Value = "1044" },
-                new NameValue { Name = "Norwegian (Nynorsk)-Norway", Value = "2068" },
-                new NameValue { Name = "Polish-Poland", Value = "1045" },
-                new NameValue { Name = "Portuguese-Brazil", Value = "1046" },
-                new NameValue { Name = "Portuguese-Portugal", Value = "2070" },
-                new NameValue { Name = "Punjabi-India", Value = "1094" },
-                new NameValue { Name = "Romanian-Romania", Value = "1048" },
-                new NameValue { Name = "Russian-Russia", Value = "1049" },
-                new NameValue { Name = "Sanskrit-India", Value = "1103" },
-                new NameValue { Name = "Serbian (Cyrillic)-Serbia and Montenegro", Value = "3098" },
-                new NameValue { Name = "Serbian (Latin)-Serbia and Montenegro", Value = "2074" },
-                new NameValue { Name = "Slovak-Slovakia", Value = "1051" },
-                new NameValue { Name = "Slovenian-Slovenia", Value = "1060" },
-                new NameValue { Name = "Spanish-Argentina", Value = "11274" },
-                new NameValue { Name = "Spanish-Bolivia", Value = "16394" },
-                new NameValue { Name = "Spanish-Chile", Value = "13322" },
-                new NameValue { Name = "Spanish-Colombia", Value = "9226" },
-                new NameValue { Name = "Spanish-Costa Rica", Value = "5130" },
-                new NameValue { Name = "Spanish-Dominican Republic", Value = "7178" },
-                new NameValue { Name = "Spanish-Ecuador", Value = "12298" },
-                new NameValue { Name = "Spanish-El Salvador", Value = "17418" },
-                new NameValue { Name = "Spanish-Guatemala", Value = "4106" },
-                new NameValue { Name = "Spanish-Honduras", Value = "18442" },
-                new NameValue { Name = "Spanish-Mexico", Value = "2058" },
-                new NameValue { Name = "Spanish-Nicaragua", Value = "19466" },
-                new NameValue { Name = "Spanish-Panama", Value = "6154" },
-                new NameValue { Name = "Spanish-Paraguay", Value = "15370" },
-                new NameValue { Name = "Spanish-Peru", Value = "10250" },
-                new NameValue { Name = "Spanish-Puerto Rico", Value = "20490" },
-                new NameValue { Name = "Spanish-Spain", Value = "1034" },
-                new NameValue { Name = "Spanish-Uruguay", Value = "14346" },
-                new NameValue { Name = "Spanish-Venezuela", Value = "8202" },
-                new NameValue { Name = "Spanish - Modern Sort-Spain", Value = "3082" },
-                new NameValue { Name = "Swahili-Kenya", Value = "1089" },
-                new NameValue { Name = "Swedish-Finland", Value = "2077" },
-                new NameValue { Name = "Swedish-Sweden", Value = "1053" },
-                new NameValue { Name = "Syriac-Syria", Value = "1114" },
-                new NameValue { Name = "Tamil-India", Value = "1097" },
-                new NameValue { Name = "Tatar-Tatarstan", Value = "1092" },
-                new NameValue { Name = "Telugu-India", Value = "1098" },
-                new NameValue { Name = "Thai-Thailand", Value = "1054" },
-                new NameValue { Name = "Turkish-Turkey", Value = "1055" },
-                new NameValue { Name = "Ukrainian-Ukraine", Value = "1058" },
-                new NameValue { Name = "Urdu-Islamic Republic of Pakistan", Value = "1056" },
-                new NameValue { Name = "Uzbek (Cyrillic)-Uzbekistan", Value = "2115" },
-                new NameValue { Name = "Uzbek (Latin)-Uzbekistan", Value = "1091" },
-                new NameValue { Name = "Vietnamese-Viet Nam", Value = "1066" },
-                new NameValue { Name = "Welsh-United Kingdom", Value = "1106" },
-                new NameValue { Name = "All Languages", Value = "-1" }
-            };
-                return languages;
-            }
-            var request = new RetrieveProvisionedLanguagesRequest();
-            var response = (RetrieveProvisionedLanguagesResponse)service.Execute(request);
-            var list = response.RetrieveProvisionedLanguages.ToList();
-            if (isAllLanguage) list.Add(-1);
-            return GetLanguages().Where(x => list.Contains(int.Parse(x.Value))).ToList();
-        }
+        //public static List<NameValue> GetProvisionedLanguages(ServiceClient service, bool isAllLanguage = false)
+        //{
+        //    List<NameValue> GetLanguages()
+        //    {
+        //        var languages = new List<NameValue>
+        //    {
+        //        new NameValue { Name = "Afrikaans-South Africa", Value = "1078" },
+        //        new NameValue { Name = "Albanian-Albania", Value = "1052" },
+        //        new NameValue { Name = "Arabic-Algeria", Value = "5121" },
+        //        new NameValue { Name = "Arabic-Bahrain", Value = "15361" },
+        //        new NameValue { Name = "Arabic-Egypt", Value = "3073" },
+        //        new NameValue { Name = "Arabic-Iraq", Value = "2049" },
+        //        new NameValue { Name = "Arabic-Jordan", Value = "11265" },
+        //        new NameValue { Name = "Arabic-Kuwait", Value = "13313" },
+        //        new NameValue { Name = "Arabic-Lebanon", Value = "12289" },
+        //        new NameValue { Name = "Arabic-Libya", Value = "4097" },
+        //        new NameValue { Name = "Arabic-Morocco", Value = "6145" },
+        //        new NameValue { Name = "Arabic-Oman", Value = "8193" },
+        //        new NameValue { Name = "Arabic-Qatar", Value = "16385" },
+        //        new NameValue { Name = "Arabic-Saudi Arabia", Value = "1025" },
+        //        new NameValue { Name = "Arabic-Syria", Value = "10241" },
+        //        new NameValue { Name = "Arabic-Tunisia", Value = "7169" },
+        //        new NameValue { Name = "Arabic-U.A.E.", Value = "14337" },
+        //        new NameValue { Name = "Arabic-Yemen", Value = "9217" },
+        //        new NameValue { Name = "Armenian-Armenia", Value = "1067" },
+        //        new NameValue { Name = "Azeri (Cyrillic)-Azerbaijan", Value = "2092" },
+        //        new NameValue { Name = "Azeri (Latin)-Azerbaijan", Value = "1068" },
+        //        new NameValue { Name = "Basque-Spain", Value = "1069" },
+        //        new NameValue { Name = "Belarusian-Belarus", Value = "1059" },
+        //        new NameValue { Name = "Bulgarian-Bulgaria", Value = "1026" },
+        //        new NameValue { Name = "Catalan-Spain", Value = "1027" },
+        //        new NameValue { Name = "Chinese-Hong Kong S.A.R.", Value = "3076" },
+        //        new NameValue { Name = "Chinese-Macau S.A.R.", Value = "5124" },
+        //        new NameValue { Name = "Chinese-People's Republic of China", Value = "2052" },
+        //        new NameValue { Name = "Chinese-Singapore", Value = "4100" },
+        //        new NameValue { Name = "Chinese-Taiwan", Value = "1028" },
+        //        new NameValue { Name = "Croatian-Croatia", Value = "1050" },
+        //        new NameValue { Name = "Czech-Czech Republic", Value = "1029" },
+        //        new NameValue { Name = "Danish-Denmark", Value = "1030" },
+        //        new NameValue { Name = "Divehi-Maldives", Value = "1125" },
+        //        new NameValue { Name = "Dutch-Belgium", Value = "2067" },
+        //        new NameValue { Name = "Dutch-Netherlands", Value = "1043" },
+        //        new NameValue { Name = "English-Australia", Value = "3081" },
+        //        new NameValue { Name = "English-Belize", Value = "10249" },
+        //        new NameValue { Name = "English-Canada", Value = "4105" },
+        //        new NameValue { Name = "English-Caribbean", Value = "9225" },
+        //        new NameValue { Name = "English-Ireland", Value = "6153" },
+        //        new NameValue { Name = "English-Jamaica", Value = "8201" },
+        //        new NameValue { Name = "English-New Zealand", Value = "5129" },
+        //        new NameValue { Name = "English-Republic of the Philippines", Value = "13321" },
+        //        new NameValue { Name = "English-South Africa", Value = "7177" },
+        //        new NameValue { Name = "English-Trinidad and Tobago", Value = "11273" },
+        //        new NameValue { Name = "English-United Kingdom", Value = "2057" },
+        //        new NameValue { Name = "English-United States", Value = "1033" },
+        //        new NameValue { Name = "English-Zimbabwe", Value = "12297" },
+        //        new NameValue { Name = "Estonian-Estonia", Value = "1061" },
+        //        new NameValue { Name = "Faroese-Faeroe Islands", Value = "1080" },
+        //        new NameValue { Name = "Farsi-Iran", Value = "1065" },
+        //        new NameValue { Name = "Finnish-Finland", Value = "1035" },
+        //        new NameValue { Name = "French-Belgium", Value = "2060" },
+        //        new NameValue { Name = "French-Canada", Value = "3084" },
+        //        new NameValue { Name = "French-France", Value = "1036" },
+        //        new NameValue { Name = "French-Luxembourg", Value = "5132" },
+        //        new NameValue { Name = "French-Principality of Monaco", Value = "6156" },
+        //        new NameValue { Name = "French-Switzerland", Value = "4108" },
+        //        new NameValue { Name = "FYRO Macedonian-Former Yugoslav Republic of Macedonia", Value = "1071" },
+        //        new NameValue { Name = "Galician-Spain", Value = "1110" },
+        //        new NameValue { Name = "Georgian-Georgia", Value = "1079" },
+        //        new NameValue { Name = "German-Austria", Value = "3079" },
+        //        new NameValue { Name = "German-Germany", Value = "1031" },
+        //        new NameValue { Name = "German-Liechtenstein", Value = "5127" },
+        //        new NameValue { Name = "German-Luxembourg", Value = "4103" },
+        //        new NameValue { Name = "German-Switzerland", Value = "2055" },
+        //        new NameValue { Name = "Greek-Greece", Value = "1032" },
+        //        new NameValue { Name = "Gujarati-India", Value = "1095" },
+        //        new NameValue { Name = "Hebrew-Israel", Value = "1037" },
+        //        new NameValue { Name = "Hindi-India", Value = "1081" },
+        //        new NameValue { Name = "Hungarian-Hungary", Value = "1038" },
+        //        new NameValue { Name = "Icelandic-Iceland", Value = "1039" },
+        //        new NameValue { Name = "Indonesian-Indonesia", Value = "1057" },
+        //        new NameValue { Name = "Italian-Italy", Value = "1040" },
+        //        new NameValue { Name = "Italian-Switzerland", Value = "2064" },
+        //        new NameValue { Name = "Japanese-Japan", Value = "1041" },
+        //        new NameValue { Name = "Kannada-India", Value = "1099" },
+        //        new NameValue { Name = "Kazakh-Kazakhstan", Value = "1087" },
+        //        new NameValue { Name = "Konkani-India", Value = "1111" },
+        //        new NameValue { Name = "Korean-Korea", Value = "1042" },
+        //        new NameValue { Name = "Kyrgyz-Kyrgyzstan", Value = "1088" },
+        //        new NameValue { Name = "Latvian-Latvia", Value = "1062" },
+        //        new NameValue { Name = "Lithuanian-Lithuania", Value = "1063" },
+        //        new NameValue { Name = "Malay-Brunei Darussalam", Value = "2110" },
+        //        new NameValue { Name = "Malay-Malaysia", Value = "1086" },
+        //        new NameValue { Name = "Marathi-India", Value = "1102" },
+        //        new NameValue { Name = "Mongolian-Mongolia", Value = "1104" },
+        //        new NameValue { Name = "Norwegian (Bokmål)-Norway", Value = "1044" },
+        //        new NameValue { Name = "Norwegian (Nynorsk)-Norway", Value = "2068" },
+        //        new NameValue { Name = "Polish-Poland", Value = "1045" },
+        //        new NameValue { Name = "Portuguese-Brazil", Value = "1046" },
+        //        new NameValue { Name = "Portuguese-Portugal", Value = "2070" },
+        //        new NameValue { Name = "Punjabi-India", Value = "1094" },
+        //        new NameValue { Name = "Romanian-Romania", Value = "1048" },
+        //        new NameValue { Name = "Russian-Russia", Value = "1049" },
+        //        new NameValue { Name = "Sanskrit-India", Value = "1103" },
+        //        new NameValue { Name = "Serbian (Cyrillic)-Serbia and Montenegro", Value = "3098" },
+        //        new NameValue { Name = "Serbian (Latin)-Serbia and Montenegro", Value = "2074" },
+        //        new NameValue { Name = "Slovak-Slovakia", Value = "1051" },
+        //        new NameValue { Name = "Slovenian-Slovenia", Value = "1060" },
+        //        new NameValue { Name = "Spanish-Argentina", Value = "11274" },
+        //        new NameValue { Name = "Spanish-Bolivia", Value = "16394" },
+        //        new NameValue { Name = "Spanish-Chile", Value = "13322" },
+        //        new NameValue { Name = "Spanish-Colombia", Value = "9226" },
+        //        new NameValue { Name = "Spanish-Costa Rica", Value = "5130" },
+        //        new NameValue { Name = "Spanish-Dominican Republic", Value = "7178" },
+        //        new NameValue { Name = "Spanish-Ecuador", Value = "12298" },
+        //        new NameValue { Name = "Spanish-El Salvador", Value = "17418" },
+        //        new NameValue { Name = "Spanish-Guatemala", Value = "4106" },
+        //        new NameValue { Name = "Spanish-Honduras", Value = "18442" },
+        //        new NameValue { Name = "Spanish-Mexico", Value = "2058" },
+        //        new NameValue { Name = "Spanish-Nicaragua", Value = "19466" },
+        //        new NameValue { Name = "Spanish-Panama", Value = "6154" },
+        //        new NameValue { Name = "Spanish-Paraguay", Value = "15370" },
+        //        new NameValue { Name = "Spanish-Peru", Value = "10250" },
+        //        new NameValue { Name = "Spanish-Puerto Rico", Value = "20490" },
+        //        new NameValue { Name = "Spanish-Spain", Value = "1034" },
+        //        new NameValue { Name = "Spanish-Uruguay", Value = "14346" },
+        //        new NameValue { Name = "Spanish-Venezuela", Value = "8202" },
+        //        new NameValue { Name = "Spanish - Modern Sort-Spain", Value = "3082" },
+        //        new NameValue { Name = "Swahili-Kenya", Value = "1089" },
+        //        new NameValue { Name = "Swedish-Finland", Value = "2077" },
+        //        new NameValue { Name = "Swedish-Sweden", Value = "1053" },
+        //        new NameValue { Name = "Syriac-Syria", Value = "1114" },
+        //        new NameValue { Name = "Tamil-India", Value = "1097" },
+        //        new NameValue { Name = "Tatar-Tatarstan", Value = "1092" },
+        //        new NameValue { Name = "Telugu-India", Value = "1098" },
+        //        new NameValue { Name = "Thai-Thailand", Value = "1054" },
+        //        new NameValue { Name = "Turkish-Turkey", Value = "1055" },
+        //        new NameValue { Name = "Ukrainian-Ukraine", Value = "1058" },
+        //        new NameValue { Name = "Urdu-Islamic Republic of Pakistan", Value = "1056" },
+        //        new NameValue { Name = "Uzbek (Cyrillic)-Uzbekistan", Value = "2115" },
+        //        new NameValue { Name = "Uzbek (Latin)-Uzbekistan", Value = "1091" },
+        //        new NameValue { Name = "Vietnamese-Viet Nam", Value = "1066" },
+        //        new NameValue { Name = "Welsh-United Kingdom", Value = "1106" },
+        //        new NameValue { Name = "All Languages", Value = "-1" }
+        //    };
+        //        return languages;
+        //    }
+        //    var request = new RetrieveProvisionedLanguagesRequest();
+        //    var response = (RetrieveProvisionedLanguagesResponse)service.Execute(request);
+        //    var list = response.RetrieveProvisionedLanguages.ToList();
+        //    if (isAllLanguage) list.Add(-1);
+        //    return GetLanguages().Where(x => list.Contains(int.Parse(x.Value))).ToList();
+        //}
     }
 }

@@ -16,10 +16,10 @@ namespace DynamicsCrm.DevKit.Shared
 {
     public static class Utility
     {
-        public static bool IsWebResourceExtension(string extension)
-        {
-            return Const.WEB_RESOURCE_EXTENSIONS.Contains(extension);
-        }
+        //public static bool IsWebResourceExtension(string extension)
+        //{
+        //    return Const.WEB_RESOURCE_EXTENSIONS.Contains(extension);
+        //}
 
         public static void ForceWriteAllText(string file, string content)
         {
@@ -380,51 +380,51 @@ namespace DynamicsCrm.DevKit.Shared
             }
         }
 
-        public static void TryDeleteDirectory(string directory)
-        {
-            if (Directory.Exists(directory))
-            {
-                try
-                {
-                    Directory.Delete(directory, true);
-                }
-                catch
-                {
-                }
-            }
-        }
+        //public static void TryDeleteDirectory(string directory)
+        //{
+        //    if (Directory.Exists(directory))
+        //    {
+        //        try
+        //        {
+        //            Directory.Delete(directory, true);
+        //        }
+        //        catch
+        //        {
+        //        }
+        //    }
+        //}
 
-        public static void TryDeleteFile(string file)
-        {
-            if (File.Exists(file))
-            {
-                try
-                {
-                    File.Delete(file);
-                }
-                catch
-                {
-                }
-            }
-        }
+        //public static void TryDeleteFile(string file)
+        //{
+        //    if (File.Exists(file))
+        //    {
+        //        try
+        //        {
+        //            File.Delete(file);
+        //        }
+        //        catch
+        //        {
+        //        }
+        //    }
+        //}
 
-        public static string SafeNamespace(string @namespace)
-        {
-            if (@namespace == null || @namespace.Length == 0) return string.Empty;
-            var items = @namespace.Split('.');
-            for (var i = 0; i < items.Length; i++)
-            {
-                if (int.TryParse(items[i], out _))
-                {
-                    items[i] = $"_{items[i]}";
-                }
-                else if (int.TryParse(items[i].Substring(0, 1), out _))
-                {
-                    items[i] = $"_{items[i]}";
-                }
-            }
-            return string.Join(".", items);
-        }
+        //public static string SafeNamespace(string @namespace)
+        //{
+        //    if (@namespace == null || @namespace.Length == 0) return string.Empty;
+        //    var items = @namespace.Split('.');
+        //    for (var i = 0; i < items.Length; i++)
+        //    {
+        //        if (int.TryParse(items[i], out _))
+        //        {
+        //            items[i] = $"_{items[i]}";
+        //        }
+        //        else if (int.TryParse(items[i].Substring(0, 1), out _))
+        //        {
+        //            items[i] = $"_{items[i]}";
+        //        }
+        //    }
+        //    return string.Join(".", items);
+        //}
 
         public static CrmPluginRegistrationAttribute ConvertAttributeToCrmPluginRegistration(CustomAttributeData data)
         {
@@ -596,61 +596,61 @@ namespace DynamicsCrm.DevKit.Shared
             return attribute;
         }
 
-        public static void ForceWriteAllTextWithoutUTF8(string file, string content)
-        {
-            if (!File.Exists(file))
-            {
-                File.WriteAllText(file, content);
-            }
-            else
-            {
-                var attributes = File.GetAttributes(file);
-                if ((attributes & FileAttributes.ReadOnly) == FileAttributes.ReadOnly)
-                {
-                    File.SetAttributes(file, attributes & ~FileAttributes.ReadOnly);
-                }
-                File.WriteAllText(file, content);
-            }
-        }
+        //public static void ForceWriteAllTextWithoutUTF8(string file, string content)
+        //{
+        //    if (!File.Exists(file))
+        //    {
+        //        File.WriteAllText(file, content);
+        //    }
+        //    else
+        //    {
+        //        var attributes = File.GetAttributes(file);
+        //        if ((attributes & FileAttributes.ReadOnly) == FileAttributes.ReadOnly)
+        //        {
+        //            File.SetAttributes(file, attributes & ~FileAttributes.ReadOnly);
+        //        }
+        //        File.WriteAllText(file, content);
+        //    }
+        //}
 
-        public static string Decompress(string compressedString)
-        {
-            try
-            {
-                byte[] decompressedBytes;
-                var compressedStream = new MemoryStream(Convert.FromBase64String(compressedString));
-                using (var decompressorStream = new DeflateStream(compressedStream, CompressionMode.Decompress))
-                {
-                    using (var decompressedStream = new MemoryStream())
-                    {
-                        decompressorStream.CopyTo(decompressedStream);
-                        decompressedBytes = decompressedStream.ToArray();
-                    }
-                }
-                return Encoding.UTF8.GetString(decompressedBytes);
-            }
-            catch { return compressedString; }
-        }
+        //public static string Decompress(string compressedString)
+        //{
+        //    try
+        //    {
+        //        byte[] decompressedBytes;
+        //        var compressedStream = new MemoryStream(Convert.FromBase64String(compressedString));
+        //        using (var decompressorStream = new DeflateStream(compressedStream, CompressionMode.Decompress))
+        //        {
+        //            using (var decompressedStream = new MemoryStream())
+        //            {
+        //                decompressorStream.CopyTo(decompressedStream);
+        //                decompressedBytes = decompressedStream.ToArray();
+        //            }
+        //        }
+        //        return Encoding.UTF8.GetString(decompressedBytes);
+        //    }
+        //    catch { return compressedString; }
+        //}
 
-        public static string Compress(string uncompressedString)
-        {
-            try
-            {
-                byte[] compressedBytes;
-                using (var uncompressedStream = new MemoryStream(Encoding.UTF8.GetBytes(uncompressedString)))
-                {
-                    using (var compressedStream = new MemoryStream())
-                    {
-                        using (var compressorStream = new DeflateStream(compressedStream, CompressionLevel.Fastest, true))
-                        {
-                            uncompressedStream.CopyTo(compressorStream);
-                        }
-                        compressedBytes = compressedStream.ToArray();
-                    }
-                }
-                return Convert.ToBase64String(compressedBytes);
-            } catch { return uncompressedString; }
-        }
+        //public static string Compress(string uncompressedString)
+        //{
+        //    try
+        //    {
+        //        byte[] compressedBytes;
+        //        using (var uncompressedStream = new MemoryStream(Encoding.UTF8.GetBytes(uncompressedString)))
+        //        {
+        //            using (var compressedStream = new MemoryStream())
+        //            {
+        //                using (var compressorStream = new DeflateStream(compressedStream, CompressionLevel.Fastest, true))
+        //                {
+        //                    uncompressedStream.CopyTo(compressorStream);
+        //                }
+        //                compressedBytes = compressedStream.ToArray();
+        //            }
+        //        }
+        //        return Convert.ToBase64String(compressedBytes);
+        //    } catch { return uncompressedString; }
+        //}
 
         public static bool HasImplementedPlugin(CodeClass @class)
         {
@@ -683,35 +683,35 @@ namespace DynamicsCrm.DevKit.Shared
             return false;
         }
 
-        public static bool HasAttributeCrmPluginRegistration(CodeClass @class)
-        {
-            Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
-            foreach (CodeAttribute attribute in @class.Attributes)
-            {
-                if (attribute.Name == "CrmPluginRegistration") return true;
-            }
-            return false;
-        }
+        //public static bool HasAttributeCrmPluginRegistration(CodeClass @class)
+        //{
+        //    Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
+        //    foreach (CodeAttribute attribute in @class.Attributes)
+        //    {
+        //        if (attribute.Name == "CrmPluginRegistration") return true;
+        //    }
+        //    return false;
+        //}
 
-        public static bool SharedProjectExist(DTE dte, out string sharedProject)
-        {
-            Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
-            sharedProject = Utility.GetSharedProject(dte);
-            return Utility.ExistProject(dte, sharedProject);
-        }
+        //public static bool SharedProjectExist(DTE dte, out string sharedProject)
+        //{
+        //    Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
+        //    sharedProject = Utility.GetSharedProject(dte);
+        //    return Utility.ExistProject(dte, sharedProject);
+        //}
 
-        public static string GetSharedProject(DTE dte)
-        {
-            var solutionFullName = dte?.Solution?.FullName;
-            if (solutionFullName.EndsWith(".Test.sln")) solutionFullName = solutionFullName.Substring(0, solutionFullName.Length - ".Test.sln".Length) + ".sln";
-            if (!File.Exists(solutionFullName)) solutionFullName = dte?.Solution?.FullName;
-            var fInfo = new FileInfo(solutionFullName);
-            var parts = fInfo.Name.Split(".".ToCharArray());
-            var value = string.Empty;
-            for (var i = 0; i < parts.Length - 1; i++)
-                value += parts[i] + ".";
-            return value + $"{ProjectType.Shared.ToString()}";
-        }
+        //public static string GetSharedProject(DTE dte)
+        //{
+        //    var solutionFullName = dte?.Solution?.FullName;
+        //    if (solutionFullName.EndsWith(".Test.sln")) solutionFullName = solutionFullName.Substring(0, solutionFullName.Length - ".Test.sln".Length) + ".sln";
+        //    if (!File.Exists(solutionFullName)) solutionFullName = dte?.Solution?.FullName;
+        //    var fInfo = new FileInfo(solutionFullName);
+        //    var parts = fInfo.Name.Split(".".ToCharArray());
+        //    var value = string.Empty;
+        //    for (var i = 0; i < parts.Length - 1; i++)
+        //        value += parts[i] + ".";
+        //    return value + $"{ProjectType.Shared.ToString()}";
+        //}
 
         public static bool ExistProject(DTE dte, string projectName)
         {
@@ -738,44 +738,44 @@ namespace DynamicsCrm.DevKit.Shared
             return list;
         }
 
-        public static Project GetProject(DTE dte, string projectName)
-        {
-            Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
-            var projects = GetProjects(dte.Solution);
-            foreach (Project project in projects)
-            {
-                if (project.ProjectItems == null || project.FileName.Length == 0) continue;
-                if (project.Name == projectName) return project;
-            }
-            return null;
-        }
+        //public static Project GetProject(DTE dte, string projectName)
+        //{
+        //    Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
+        //    var projects = GetProjects(dte.Solution);
+        //    foreach (Project project in projects)
+        //    {
+        //        if (project.ProjectItems == null || project.FileName.Length == 0) continue;
+        //        if (project.Name == projectName) return project;
+        //    }
+        //    return null;
+        //}
 
-        public static string GetTestRunSettingsFile(DTE dte)
-        {
-            var solutionFullName = dte?.Solution?.FullName;
-            var dir = Path.GetDirectoryName(solutionFullName);
-            var file = $"{dir}\\VisualStudioTest.runsettings";
-            return file;
-        }
+        //public static string GetTestRunSettingsFile(DTE dte)
+        //{
+        //    var solutionFullName = dte?.Solution?.FullName;
+        //    var dir = Path.GetDirectoryName(solutionFullName);
+        //    var file = $"{dir}\\VisualStudioTest.runsettings";
+        //    return file;
+        //}
 
-        public static bool ProxyTypesProjectExist(DTE dte)
-        {
-            Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
-            var proxyTypesProjectName = Utility.GetProxyTypesProject(dte);
-            return Utility.ExistProject(dte, proxyTypesProjectName);
-        }
+        //public static bool ProxyTypesProjectExist(DTE dte)
+        //{
+        //    Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
+        //    var proxyTypesProjectName = Utility.GetProxyTypesProject(dte);
+        //    return Utility.ExistProject(dte, proxyTypesProjectName);
+        //}
 
-        public static string GetProxyTypesProject(DTE dte)
-        {
-            var solutionFullName = dte?.Solution?.FullName;
-            if (solutionFullName.EndsWith(".Test.sln")) solutionFullName = solutionFullName.Substring(0, solutionFullName.Length - ".Test.sln".Length) + ".sln";
-            if (!File.Exists(solutionFullName)) solutionFullName = dte?.Solution?.FullName;
-            var fInfo = new FileInfo(solutionFullName);
-            var parts = fInfo.Name.Split(".".ToCharArray());
-            var value = string.Empty;
-            for (var i = 0; i < parts.Length - 1; i++)
-                value += parts[i] + ".";
-            return value + $"{ProjectType.ProxyTypes.ToString()}";
-        }
+        //public static string GetProxyTypesProject(DTE dte)
+        //{
+        //    var solutionFullName = dte?.Solution?.FullName;
+        //    if (solutionFullName.EndsWith(".Test.sln")) solutionFullName = solutionFullName.Substring(0, solutionFullName.Length - ".Test.sln".Length) + ".sln";
+        //    if (!File.Exists(solutionFullName)) solutionFullName = dte?.Solution?.FullName;
+        //    var fInfo = new FileInfo(solutionFullName);
+        //    var parts = fInfo.Name.Split(".".ToCharArray());
+        //    var value = string.Empty;
+        //    for (var i = 0; i < parts.Length - 1; i++)
+        //        value += parts[i] + ".";
+        //    return value + $"{ProjectType.ProxyTypes.ToString()}";
+        //}
     }
 }
