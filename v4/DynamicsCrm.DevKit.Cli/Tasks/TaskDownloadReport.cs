@@ -77,13 +77,13 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         var fileName = Path.Combine(CurrentDirectory, Json.solution, reportFile.Language, reportFile.FileName);
                         if (!File.Exists(fileName))
                         {
-                            Utility.ForceWriteAllText(fileName, reportFile.Content);
+                            Helper.ForceWriteAllText(fileName, reportFile.Content);
                             CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.DOWNLOADED, ConsoleColor.White, reportFile.Language, ConsoleColor.Green, " report file name ", ConsoleColor.White, reportFile.FileName, ConsoleColor.Green, " to: ", ConsoleColor.White, ".." + fileName.Substring(CurrentDirectory.Length));
                         }
                         else
                         {
-                            var newFileName = Utility.GeNextFileName(fileName);
-                            Utility.ForceWriteAllText(newFileName, reportFile.Content);
+                            var newFileName = Helper.GeNextFileName(fileName);
+                            Helper.ForceWriteAllText(newFileName, reportFile.Content);
                             CliLog.WriteLineWarning(ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.DOWNLOADED, ConsoleColor.White, reportFile.Language, ConsoleColor.Green, " report file name ", ConsoleColor.White, reportFile.FileName, ConsoleColor.Magenta, $" {CliAction.DUPLICATED}", ConsoleColor.Green, "to: ", ConsoleColor.White, newFileName);
                         }
                         i++;

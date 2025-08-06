@@ -11,7 +11,6 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Const.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logic\CSharpLateBound.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)EncryptDecrypt.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\EntityBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\SdkMessageProcessingStep.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\SdkMessageProcessingStep.generated.cs" />
@@ -54,7 +53,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\WebResourceFile.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\XrmEntity.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SimpleJson.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Utility.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)XrmHelper.cs" />
   </ItemGroup>
   <ItemGroup>

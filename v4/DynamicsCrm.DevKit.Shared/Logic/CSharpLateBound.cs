@@ -21,7 +21,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             EntityMetadata = entityMetadata;
             RootNamespace = rootNameSpace;
             var code = string.Empty;
-            var @class = Utility.SafeDeclareName(entityMetadata.SchemaName, GeneratorType.csharp);
+            var @class = Helper.SafeDeclareName(entityMetadata.SchemaName, GeneratorType.csharp);
 
             code += $"using Microsoft.Xrm.Sdk;{NEW_LINE}";
 
@@ -245,7 +245,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                     }
                     tmp = tmp.TrimEnd($",{NEW_LINE}".ToCharArray());
                     tmp += $"{NEW_LINE}";
-                    code += @enum.Replace("[[Enum]]", Utility.SafeIdentifier(attribute.SchemaName)).Replace("[[Declare]]", tmp);
+                    code += @enum.Replace("[[Enum]]", Helper.SafeIdentifier(attribute.SchemaName)).Replace("[[Declare]]", tmp);
                 }
             }
             code = code.TrimEnd($",{NEW_LINE}".ToCharArray());
@@ -264,7 +264,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                 var name = option?.Label?.UserLocalizedLabel?.Label ?? String.Empty;
                 name = name.Replace("-", "_");
                 if (name.Length == 0) continue;
-                name = Utility.SafeIdentifier(name);
+                name = Helper.SafeIdentifier(name);
                 values.Add(new NameValue
                 {
                     Name = $"{name}",
@@ -333,7 +333,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                 code += $"{GetXml(attribute)}";
                 if (!string.IsNullOrWhiteSpace(attribute.DeprecatedVersion))
                     code += $"{TAB}{TAB}[System.Obsolete(\"Deprecated from version: {attribute.DeprecatedVersion}\")]{NEW_LINE}";
-                code += $"{TAB}{TAB}public {DeclareType(attribute)} {Utility.SafeDeclareName(attribute.SchemaName, GeneratorType.csharp, EntityMetadata.SchemaName, attribute)}{utc}{NEW_LINE}";
+                code += $"{TAB}{TAB}public {DeclareType(attribute)} {Helper.SafeDeclareName(attribute.SchemaName, GeneratorType.csharp, EntityMetadata.SchemaName, attribute)}{utc}{NEW_LINE}";
                 code += $"{TAB}{TAB}{{{NEW_LINE}";
                 code += $"{GetGet(attribute)}";
                 if ((attribute.IsValidForCreate ?? false) || (attribute.IsValidForUpdate ?? false))
@@ -355,7 +355,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                 case AttributeTypeCode.Picklist:
                 case AttributeTypeCode.State:
                 case AttributeTypeCode.Status:
-                    return $"{RootNamespace}.{Utility.SafeDeclareName(EntityMetadata.SchemaName, GeneratorType.csharp)}OptionSets.{Utility.SafeIdentifier(attribute.SchemaName)}?";
+                    return $"{RootNamespace}.{Helper.SafeDeclareName(EntityMetadata.SchemaName, GeneratorType.csharp)}OptionSets.{Helper.SafeIdentifier(attribute.SchemaName)}?";
                 case AttributeTypeCode.BigInt:
                     return $"long?";
                 case AttributeTypeCode.Integer:
@@ -394,7 +394,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                 case AttributeTypeCode.EntityName:
                 case AttributeTypeCode.String:
                     if (attribute is MultiSelectPicklistAttributeMetadata)
-                        return $"System.Collections.Generic.List<{RootNamespace}.{Utility.SafeDeclareName(EntityMetadata.SchemaName, GeneratorType.csharp)}OptionSets.{attribute.SchemaName}>";
+                        return $"System.Collections.Generic.List<{RootNamespace}.{Helper.SafeDeclareName(EntityMetadata.SchemaName, GeneratorType.csharp)}OptionSets.{attribute.SchemaName}>";
                     else
                         return $"string";
                 case AttributeTypeCode.PartyList:
@@ -535,7 +535,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                     code += $"{TAB}{TAB}{TAB}{{{NEW_LINE}";
                     code += $"{TAB}{TAB}{TAB}{TAB}var value = Entity.GetAttributeValue<OptionSetValue>(Fields.{attribute.SchemaName});{NEW_LINE}";
                     code += $"{TAB}{TAB}{TAB}{TAB}if (value == null) return null;{NEW_LINE}";
-                    code += $"{TAB}{TAB}{TAB}{TAB}return ({RootNamespace}.{Utility.SafeDeclareName(EntityMetadata.SchemaName, GeneratorType.csharp)}OptionSets.{Utility.SafeIdentifier(attribute.SchemaName)})value.Value;{NEW_LINE}";
+                    code += $"{TAB}{TAB}{TAB}{TAB}return ({RootNamespace}.{Helper.SafeDeclareName(EntityMetadata.SchemaName, GeneratorType.csharp)}OptionSets.{Helper.SafeIdentifier(attribute.SchemaName)})value.Value;{NEW_LINE}";
                     code += $"{TAB}{TAB}{TAB}}}{NEW_LINE}";
                     return code;
                 case AttributeTypeCode.BigInt:
@@ -591,13 +591,13 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                     {
                         code += $"{TAB}{TAB}{TAB}get{NEW_LINE}";
                         code += $"{TAB}{TAB}{TAB}{{{NEW_LINE}";
-                        code += $"{TAB}{TAB}{TAB}{TAB}var data = new System.Collections.Generic.List<{RootNamespace}.{Utility.SafeDeclareName(EntityMetadata.SchemaName, GeneratorType.csharp)}OptionSets.{attribute.SchemaName}>();{NEW_LINE}";
+                        code += $"{TAB}{TAB}{TAB}{TAB}var data = new System.Collections.Generic.List<{RootNamespace}.{Helper.SafeDeclareName(EntityMetadata.SchemaName, GeneratorType.csharp)}OptionSets.{attribute.SchemaName}>();{NEW_LINE}";
                         code += $"{TAB}{TAB}{TAB}{TAB}var items = Entity.GetAttributeValue<OptionSetValueCollection>(Fields.{attribute.SchemaName});{NEW_LINE}";
                         code += $"{TAB}{TAB}{TAB}{TAB}if (items != null){NEW_LINE}";
                         code += $"{TAB}{TAB}{TAB}{TAB}{{\r\n";
                         code += $"{TAB}{TAB}{TAB}{TAB}{TAB}foreach (OptionSetValue item in items){NEW_LINE}";
                         code += $"{TAB}{TAB}{TAB}{TAB}{TAB}{{{NEW_LINE}";
-                        code += $"{TAB}{TAB}{TAB}{TAB}{TAB}{TAB}data.Add(({RootNamespace}.{Utility.SafeDeclareName(EntityMetadata.SchemaName, GeneratorType.csharp)}OptionSets.{attribute.SchemaName})item.Value);{NEW_LINE}";
+                        code += $"{TAB}{TAB}{TAB}{TAB}{TAB}{TAB}data.Add(({RootNamespace}.{Helper.SafeDeclareName(EntityMetadata.SchemaName, GeneratorType.csharp)}OptionSets.{attribute.SchemaName})item.Value);{NEW_LINE}";
                         code += $"{TAB}{TAB}{TAB}{TAB}{TAB}}}{NEW_LINE}";
                         code += $"{TAB}{TAB}{TAB}{TAB}}}{NEW_LINE}";
                         code += $"{TAB}{TAB}{TAB}{TAB}return data;{NEW_LINE}";
@@ -661,13 +661,13 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             }
             else if (attribute is MultiSelectPicklistAttributeMetadata multiple)
             {
-                line3 += $"<strong>MultiSelect OptionSet</strong>: <see cref=\"{RootNamespace}.{Utility.SafeDeclareName(EntityMetadata.SchemaName, GeneratorType.csharp)}OptionSets.{Utility.SafeIdentifier(attribute.SchemaName)}\"/>";
+                line3 += $"<strong>MultiSelect OptionSet</strong>: <see cref=\"{RootNamespace}.{Helper.SafeDeclareName(EntityMetadata.SchemaName, GeneratorType.csharp)}OptionSets.{Helper.SafeIdentifier(attribute.SchemaName)}\"/>";
                 if (multiple.DefaultFormValue != null && multiple.DefaultFormValue != -1)
                 {
                     var option = multiple.OptionSetValues().FirstOrDefault(x => x.Value == multiple.DefaultFormValue.ToString());
                     if (option != null)
                     {
-                        line4 = $"<strong>Default Value</strong>: <see cref=\"{RootNamespace}.{Utility.SafeDeclareName(EntityMetadata.SchemaName, GeneratorType.csharp)}OptionSets.{Utility.SafeIdentifier(attribute.SchemaName)}.{option.Name}\"/>";
+                        line4 = $"<strong>Default Value</strong>: <see cref=\"{RootNamespace}.{Helper.SafeDeclareName(EntityMetadata.SchemaName, GeneratorType.csharp)}OptionSets.{Helper.SafeIdentifier(attribute.SchemaName)}.{option.Name}\"/>";
                     }
                 }
                 else
@@ -677,13 +677,13 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             }
             else if (attribute is PicklistAttributeMetadata picklist)
             {
-                line3 += $"<strong>OptionSet</strong>: <see cref=\"{RootNamespace}.{Utility.SafeDeclareName(EntityMetadata.SchemaName, GeneratorType.csharp)}OptionSets.{Utility.SafeIdentifier(attribute.SchemaName)}\"/>";
+                line3 += $"<strong>OptionSet</strong>: <see cref=\"{RootNamespace}.{Helper.SafeDeclareName(EntityMetadata.SchemaName, GeneratorType.csharp)}OptionSets.{Helper.SafeIdentifier(attribute.SchemaName)}\"/>";
                 if (picklist.DefaultFormValue != null && picklist.DefaultFormValue != -1)
                 {
                     var option = picklist.OptionSetValues().FirstOrDefault(x => x.Value == picklist.DefaultFormValue.ToString());
                     if (option != null)
                     {
-                        line4 = $"<strong>Default Value</strong>: <see cref=\"{RootNamespace}.{Utility.SafeDeclareName(EntityMetadata.SchemaName, GeneratorType.csharp)}OptionSets.{Utility.SafeIdentifier(attribute.SchemaName)}.{option.Name}\"/>";
+                        line4 = $"<strong>Default Value</strong>: <see cref=\"{RootNamespace}.{Helper.SafeDeclareName(EntityMetadata.SchemaName, GeneratorType.csharp)}OptionSets.{Helper.SafeIdentifier(attribute.SchemaName)}.{option.Name}\"/>";
                     }
                 }
                 else
@@ -693,25 +693,25 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             }
             else if (attribute is StateAttributeMetadata state)
             {
-                line3 += $"<strong>Status</strong>: <see cref=\"{RootNamespace}.{Utility.SafeDeclareName(EntityMetadata.SchemaName, GeneratorType.csharp)}OptionSets.{Utility.SafeIdentifier(attribute.SchemaName)}\"/>";
+                line3 += $"<strong>Status</strong>: <see cref=\"{RootNamespace}.{Helper.SafeDeclareName(EntityMetadata.SchemaName, GeneratorType.csharp)}OptionSets.{Helper.SafeIdentifier(attribute.SchemaName)}\"/>";
                 if (state.DefaultFormValue != null && state.DefaultFormValue != -1)
                 {
                     var option = state.OptionSetValues().FirstOrDefault(x => x.Value == state.DefaultFormValue.ToString());
                     if (option != null)
                     {
-                        line4 = $"<strong>Default Value</strong>: <see cref=\"{RootNamespace}.{Utility.SafeDeclareName(EntityMetadata.SchemaName, GeneratorType.csharp)}OptionSets.{Utility.SafeIdentifier(attribute.SchemaName)}.{option.Name}\"/>";
+                        line4 = $"<strong>Default Value</strong>: <see cref=\"{RootNamespace}.{Helper.SafeDeclareName(EntityMetadata.SchemaName, GeneratorType.csharp)}OptionSets.{Helper.SafeIdentifier(attribute.SchemaName)}.{option.Name}\"/>";
                     }
                 }
             }
             else if (attribute is StatusAttributeMetadata status)
             {
-                line3 += $"<strong>Status Reason</strong>: <see cref=\"{RootNamespace}.{Utility.SafeDeclareName(EntityMetadata.SchemaName, GeneratorType.csharp)}OptionSets.{Utility.SafeIdentifier(attribute.SchemaName)}\"/>";
+                line3 += $"<strong>Status Reason</strong>: <see cref=\"{RootNamespace}.{Helper.SafeDeclareName(EntityMetadata.SchemaName, GeneratorType.csharp)}OptionSets.{Helper.SafeIdentifier(attribute.SchemaName)}\"/>";
                 if (status.DefaultFormValue != null && status.DefaultFormValue != -1)
                 {
                     var option = status.OptionSetValues().FirstOrDefault(x => x.Value == status.DefaultFormValue.ToString());
                     if (option != null)
                     {
-                        line4 = $"<strong>Default Value</strong>: <see cref=\"{RootNamespace}.{Utility.SafeDeclareName(EntityMetadata.SchemaName, GeneratorType.csharp)}OptionSets.{Utility.SafeIdentifier(attribute.SchemaName)}.{option.Name}\"/>";
+                        line4 = $"<strong>Default Value</strong>: <see cref=\"{RootNamespace}.{Helper.SafeDeclareName(EntityMetadata.SchemaName, GeneratorType.csharp)}OptionSets.{Helper.SafeIdentifier(attribute.SchemaName)}.{option.Name}\"/>";
                     }
                 }
                 else

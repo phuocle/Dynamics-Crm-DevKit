@@ -57,7 +57,7 @@ namespace DynamicsCrm.DevKit.Shared
                         password = item.Split("=".ToCharArray())[1] + "=";
                     else
                         password = item.Split("=".ToCharArray())[1];
-                    password = EncryptDecrypt.DecryptString(password);
+                    password = Helper.DecryptString(password);
                     value += "Password=" + password + ";";
                 }
                 else

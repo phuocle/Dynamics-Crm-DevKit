@@ -23,11 +23,11 @@ namespace DynamicsCrm.DevKit.Shared
                 var name = option?.Label?.UserLocalizedLabel?.Label ?? String.Empty;
                 name = name.Replace("-", "_");
                 if (name.Length == 0) continue;
-                name = Utility.SafeIdentifier(name);
+                name = Helper.SafeIdentifier(name);
                 var value = option?.Value ?? -1;
                 if (name.Length == 0 || value == -1) continue;
                 var suffix = string.Empty;
-                if (options.Count(x => Utility.SafeIdentifier(x?.Label?.UserLocalizedLabel?.Label) == name) > 1)
+                if (options.Count(x => Helper.SafeIdentifier(x?.Label?.UserLocalizedLabel?.Label) == name) > 1)
                 {
                     var count = values.Count(x => x.Name2 == name);
                     suffix = $"_{value}";

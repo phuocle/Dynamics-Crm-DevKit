@@ -2,21 +2,67 @@
 using EnvDTE;
 using Microsoft.CSharp;
 using Microsoft.PowerPlatform.Dataverse.Client;
-using Microsoft.VisualStudio.Shell;
 using Microsoft.Xrm.Sdk.Metadata;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace DynamicsCrm.DevKit.Shared
 {
-    public static class Utility
+    public static class Helper
     {
+        private const string initVector = "ikols9i3edkdosad";
+
+        private const int keysize = 256;
+
+        public static string EncryptString(string plainText)
+        {
+            string passPhrase = "PL.DynamicsCrm.DevKit";
+            byte[] initVectorBytes = Encoding.UTF8.GetBytes(initVector);
+            byte[] plainTextBytes = Encoding.UTF8.GetBytes(plainText);
+            PasswordDeriveBytes password = new PasswordDeriveBytes(passPhrase, null);
+            byte[] keyBytes = password.GetBytes(keysize / 8);
+            RijndaelManaged symmetricKey = new RijndaelManaged();
+            symmetricKey.Mode = CipherMode.CBC;
+            ICryptoTransform encryptor = symmetricKey.CreateEncryptor(keyBytes, initVectorBytes);
+            MemoryStream memoryStream = new MemoryStream();
+            CryptoStream cryptoStream = new CryptoStream(memoryStream, encryptor, CryptoStreamMode.Write);
+            cryptoStream.Write(plainTextBytes, 0, plainTextBytes.Length);
+            cryptoStream.FlushFinalBlock();
+            byte[] cipherTextBytes = memoryStream.ToArray();
+            memoryStream.Close();
+            cryptoStream.Close();
+            return Convert.ToBase64String(cipherTextBytes);
+        }
+
+        public static string DecryptString(string cipherText)
+        {
+            try
+            {
+                if (cipherText == null) return string.Empty;
+                string passPhrase = "PL.DynamicsCrm.DevKit";
+                byte[] initVectorBytes = Encoding.UTF8.GetBytes(initVector);
+                byte[] cipherTextBytes = Convert.FromBase64String(cipherText);
+                PasswordDeriveBytes password = new PasswordDeriveBytes(passPhrase, null);
+                byte[] keyBytes = password.GetBytes(keysize / 8);
+                RijndaelManaged symmetricKey = new RijndaelManaged();
+                symmetricKey.Mode = CipherMode.CBC;
+                ICryptoTransform decryptor = symmetricKey.CreateDecryptor(keyBytes, initVectorBytes);
+                MemoryStream memoryStream = new MemoryStream(cipherTextBytes);
+                CryptoStream cryptoStream = new CryptoStream(memoryStream, decryptor, CryptoStreamMode.Read);
+                byte[] plainTextBytes = new byte[cipherTextBytes.Length];
+                int decryptedByteCount = cryptoStream.Read(plainTextBytes, 0, plainTextBytes.Length);
+                memoryStream.Close();
+                cryptoStream.Close();
+                return Encoding.UTF8.GetString(plainTextBytes, 0, decryptedByteCount);
+            }
+            catch { return cipherText; }
+        }
 
         public static void ForceWriteAllText(string file, string content)
         {
@@ -227,7 +273,7 @@ namespace DynamicsCrm.DevKit.Shared
         {
             var parts = rootNamespace.Split(".".ToCharArray());
             var @namespace = parts.Length > 1 ? parts[1] : parts[0];
-            return Utility.SafeIdentifier(@namespace);
+            return Helper.SafeIdentifier(@namespace);
         }
 
         public static string GetFormName(string formName, string @class)
@@ -556,7 +602,7 @@ namespace DynamicsCrm.DevKit.Shared
             const string NEW_LINE = "\r\n";
             const string TAB = "\t";
             var code = string.Empty;
-            var @class = Utility.SafeDeclareName(entityMetadata.SchemaName, GeneratorType.csharp);
+            var @class = Helper.SafeDeclareName(entityMetadata.SchemaName, GeneratorType.csharp);
             var key = (entityMetadata.IsActivity ?? false) ? "activityid" : $"{@class.ToLower()}id";
             code += $"using Microsoft.Xrm.Sdk;{NEW_LINE}";
 
@@ -625,7 +671,7 @@ namespace DynamicsCrm.DevKit.Shared
             }
             var forms = XrmHelper.GetEntityForms(CrmServiceClient, entityMetadata.LogicalName);
             if (!forms.Any()) return GetDefaultFileWithWebApi(entityMetadata.SchemaName);
-            var @namespace = Utility.GetNameSpace(rootnamespace);
+            var @namespace = Helper.GetNameSpace(rootnamespace);
             var code = string.Empty;
             code += $"//@ts-check\r\n";
             code += $"///<reference path=\"{entityMetadata.SchemaName}.d.ts\" />\r\n";
@@ -633,10 +679,10 @@ namespace DynamicsCrm.DevKit.Shared
             var formNames = new List<string>();
             foreach (var form in forms)
             {
-                var formName = Utility.GetFormName(form.Name, entityMetadata.SchemaName);
+                var formName = Helper.GetFormName(form.Name, entityMetadata.SchemaName);
                 formName = GetUnquieFormName(formNames, formName);
-                var type = $"{@namespace}.Form{Utility.SafeIdentifier(formName)}";
-                code += $"var form{Utility.SafeIdentifier(formName)} = (function () {{\r\n";
+                var type = $"{@namespace}.Form{Helper.SafeIdentifier(formName)}";
+                code += $"var form{Helper.SafeIdentifier(formName)} = (function () {{\r\n";
                 code += $"\t\"use strict\";\r\n";
                 code += $"\t/** @type {type} */\r\n";
                 code += $"\tvar form = null;\r\n";

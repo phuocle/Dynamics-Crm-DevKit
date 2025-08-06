@@ -38,7 +38,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             RootNamespace = rootNamespace;
             Comment = comment;
             FormNames = new List<string>();
-            var @namespace = Utility.GetNameSpace(RootNamespace);
+            var @namespace = Helper.GetNameSpace(RootNamespace);
             var _d_ts = string.Empty;
             _d_ts += $"//@ts-check{NEW_LINE}";
             _d_ts += $"///<reference path=\"devkit.d.ts\" />{NEW_LINE}";
@@ -63,7 +63,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                 if (XrmHelper.IsOptionSet(attribute))
                 {
                     if (attribute.SchemaName == "OwnerIdType") continue;
-                    var attributeSchemaName = Utility.SafeDeclareName(attribute.SchemaName, GeneratorType.jsform, EntityMetadata.SchemaName);
+                    var attributeSchemaName = Helper.SafeDeclareName(attribute.SchemaName, GeneratorType.jsform, EntityMetadata.SchemaName);
                     var values = attribute.OptionSetValues();
                     if (values.Count == 0)
                     {
@@ -142,7 +142,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             _d_ts += $"{TAB}{TAB}readonly \"@odata.etag\": string;{NEW_LINE}";
             foreach (var attribute in EntityMetadata?.Attributes?.OrderBy(x => x.SchemaName))
             {
-                var attributeSchemaName = Utility.SafeDeclareName(attribute.SchemaName, GeneratorType.jswebapi, EntityMetadata.SchemaName, attribute);
+                var attributeSchemaName = Helper.SafeDeclareName(attribute.SchemaName, GeneratorType.jswebapi, EntityMetadata.SchemaName, attribute);
                 if (attribute.AttributeType == AttributeTypeCode.PartyList || attribute.AttributeType == AttributeTypeCode.EntityName) continue;
                 if (attribute.AttributeOf != null && attribute.AttributeTypeName != AttributeTypeDisplayName.ImageType) continue;
 
@@ -195,7 +195,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                                         var navigation = EntityMetadata.ManyToOneRelationships.FirstOrDefault(x => x.ReferencingAttribute == attribute.LogicalName && x.ReferencedEntity == entityLogicalName);
                                         if (navigation?.ReferencingEntityNavigationPropertyName != null && navigation?.ReferencingEntityNavigationPropertyName.Length > 0)
                                         {
-                                            var temp = $"{TAB}{TAB}{@readonly}{Utility.SafeDeclareName(navigation?.ReferencingEntityNavigationPropertyName, GeneratorType.jswebapi, EntityMetadata.SchemaName, attribute)}: string | null;{NEW_LINE}";
+                                            var temp = $"{TAB}{TAB}{@readonly}{Helper.SafeDeclareName(navigation?.ReferencingEntityNavigationPropertyName, GeneratorType.jswebapi, EntityMetadata.SchemaName, attribute)}: string | null;{NEW_LINE}";
                                             if (!_d_ts.Contains(temp))
                                             {
                                                 if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
@@ -309,7 +309,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             _d_ts += $"{TAB}{TAB}readonly FormattedValue: {{{NEW_LINE}";
             foreach (var attribute in EntityMetadata?.Attributes?.OrderBy(x => x.SchemaName))
             {
-                var attributeSchemaName = Utility.SafeDeclareName(attribute.SchemaName, GeneratorType.jswebapi, EntityMetadata.SchemaName, attribute);
+                var attributeSchemaName = Helper.SafeDeclareName(attribute.SchemaName, GeneratorType.jswebapi, EntityMetadata.SchemaName, attribute);
                 if (attribute.AttributeType == AttributeTypeCode.PartyList || attribute.AttributeType == AttributeTypeCode.EntityName) continue;
                 if (attribute.AttributeOf != null && attribute.AttributeTypeName != AttributeTypeDisplayName.ImageType) continue;
 
@@ -362,7 +362,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                                         var navigation = EntityMetadata.ManyToOneRelationships.FirstOrDefault(x => x.ReferencingAttribute == attribute.LogicalName && x.ReferencedEntity == entityLogicalName);
                                         if (navigation?.ReferencingEntityNavigationPropertyName != null && navigation?.ReferencingEntityNavigationPropertyName.Length > 0)
                                         {
-                                            var temp = $"{TAB}{TAB}{TAB}{@readonly}{Utility.SafeDeclareName(navigation?.ReferencingEntityNavigationPropertyName, GeneratorType.jswebapi, EntityMetadata.SchemaName, attribute)}: string;{NEW_LINE}";
+                                            var temp = $"{TAB}{TAB}{TAB}{@readonly}{Helper.SafeDeclareName(navigation?.ReferencingEntityNavigationPropertyName, GeneratorType.jswebapi, EntityMetadata.SchemaName, attribute)}: string;{NEW_LINE}";
                                             if (!_d_ts.Contains(temp))
                                             {
                                                 if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
@@ -503,7 +503,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
         private static string GetFormQuickCreate_d_ts(SystemForm form, string @namespace)
         {
             var _d_ts = string.Empty;
-            var formName = Utility.SafeIdentifier(Utility.GetFormName(form.Name, EntityMetadata.SchemaName));
+            var formName = Helper.SafeIdentifier(Helper.GetFormName(form.Name, EntityMetadata.SchemaName));
             formName = GetUnquieFormName(formName);
             _d_ts += $"\tnamespace Form{formName} {{\r\n";
             var form_d_ts_Body_QuickCreate = GetForm_d_ts_Body(form.FormXml);
@@ -533,7 +533,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
         private static string GetFormMain_d_ts(SystemForm form, string @namespace)
         {
             var _d_ts = string.Empty;
-            var formName = Utility.SafeIdentifier(Utility.GetFormName(form.Name, EntityMetadata.SchemaName));
+            var formName = Helper.SafeIdentifier(Helper.GetFormName(form.Name, EntityMetadata.SchemaName));
             formName = GetUnquieFormName(formName);
             _d_ts += $"{TAB}namespace Form{formName} {{{NEW_LINE}";
             var form_d_ts_Header = GetForm_d_ts_Header(form.FormXml);
@@ -674,9 +674,9 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                           .Descendants("control")
                           select new IdName
                           {
-                              Name = Utility.SafeIdentifier(x?.Attribute("datafieldname")?.Value),
+                              Name = Helper.SafeIdentifier(x?.Attribute("datafieldname")?.Value),
                               Id = x?.Attribute("id").Value,
-                              ClassId = Utility.TrimGuid(x?.Attribute("classid")?.Value?.ToUpper()),
+                              ClassId = Helper.TrimGuid(x?.Attribute("classid")?.Value?.ToUpper()),
                               ControlId = x?.Attribute("uniqueid")?.Value
                           }).Distinct().ToList();
             fields = fields.OrderBy(x => x.Id).ToList();
@@ -707,7 +707,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             var part1 = string.Empty;
             foreach (var process in processes)
             {
-                var name = Utility.SafeIdentifier(process.Name);
+                var name = Helper.SafeIdentifier(process.Name);
                 _d_ts += $"\t\tinterface Process{name} {{\r\n";
                 var xdoc = XDocument.Parse(process.xaml);
                 var ns = xdoc.Root?.GetNamespaceOfPrefix("mxswa");
@@ -730,7 +730,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                         var field = new IdName
                         {
                             ClassId = ControlClassId.SINGLE_LINE_OF_TEXT,
-                            Name = Utility.SafeIdentifier(fieldName),
+                            Name = Helper.SafeIdentifier(fieldName),
                             Id = null,
                             ControlId = null
                         };
@@ -768,9 +768,9 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                           .Descendants("control")
                           select new IdName
                           {
-                              Name = Utility.SafeIdentifier(x?.Attribute("datafieldname")?.Value),
+                              Name = Helper.SafeIdentifier(x?.Attribute("datafieldname")?.Value),
                               Id = x?.Attribute("id").Value,
-                              ClassId = Utility.TrimGuid(x?.Attribute("classid")?.Value?.ToUpper()),
+                              ClassId = Helper.TrimGuid(x?.Attribute("classid")?.Value?.ToUpper()),
                               ControlId = x?.Attribute("uniqueid")?.Value
                           }).Distinct().ToList();
             fields = fields.OrderBy(x => x.Name).ToList();
@@ -845,9 +845,9 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                           .Descendants("control")
                           select new IdName
                           {
-                              Name = Utility.SafeIdentifier(x?.Attribute("datafieldname")?.Value),
+                              Name = Helper.SafeIdentifier(x?.Attribute("datafieldname")?.Value),
                               Id = x?.Attribute("id").Value,
-                              ClassId = Utility.TrimGuid(x?.Attribute("classid")?.Value?.ToUpper()),
+                              ClassId = Helper.TrimGuid(x?.Attribute("classid")?.Value?.ToUpper()),
                               ControlId = x?.Attribute("uniqueid")?.Value
                           }).Distinct().ToList();
             fields = fields.OrderBy(x => x.Name).ToList();
@@ -886,7 +886,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
         "customeraddress", "customerrelationship", "activityparty", "actioncard", "connection", "fileattachment", "owner", "createdby", "createdonbehalfby", "modifiedby", "modifiedonbehalfby"
         };
 
-            foreach (var relationship in EntityMetadata.OneToManyRelationships.OrderBy(x => Utility.SafeIdentifier(x.SchemaName)))
+            foreach (var relationship in EntityMetadata.OneToManyRelationships.OrderBy(x => Helper.SafeIdentifier(x.SchemaName)))
             {
                 if (BlackList.Contains(relationship.ReferencingEntity)) continue;
                 if (BlackList.Contains(relationship.ReferencedEntity)) continue;
@@ -897,7 +897,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                     (relationship.IsValidForAdvancedFind ?? false)
                     )
                 {
-                    _d_ts += $"\t\t\t{Utility.SafeIdentifier(relationship.SchemaName)}: DevKit.Controls.NavigationItem;\r\n";
+                    _d_ts += $"\t\t\t{Helper.SafeIdentifier(relationship.SchemaName)}: DevKit.Controls.NavigationItem;\r\n";
                 }
             }
 
@@ -921,10 +921,10 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             rows = rows.OrderBy(x => x.Name).ToList();
             foreach (var row in rows)
             {
-                if (Utility.SafeIdentifier(row.Name).Length == 0) continue;
+                if (Helper.SafeIdentifier(row.Name).Length == 0) continue;
                 var tabName = row.Name;
-                if (existTabs.Contains(Utility.SafeIdentifier(tabName))) continue; else existTabs.Add(Utility.SafeIdentifier(tabName));
-                part1 += $"\t\tinterface tab_{Utility.SafeIdentifier(tabName)}_Sections {{\r\n";
+                if (existTabs.Contains(Helper.SafeIdentifier(tabName))) continue; else existTabs.Add(Helper.SafeIdentifier(tabName));
+                part1 += $"\t\tinterface tab_{Helper.SafeIdentifier(tabName)}_Sections {{\r\n";
                 var xdoc2 = XDocument.Parse(row.InnerText);
                 var rows2 = from x2 in xdoc2.Descendants("columns").Descendants("column").Descendants("sections")
                         .Elements("section")
@@ -940,16 +940,16 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                     if (row2.name == null) continue;
 
                     var sectionName = row2.name;
-                    if (existSections.Contains(Utility.SafeIdentifier(sectionName))) continue; else existSections.Add(Utility.SafeIdentifier(sectionName));
-                    part1 += $"\t\t\t{Utility.SafeIdentifier(sectionName)}: DevKit.Controls.Section;\r\n";
+                    if (existSections.Contains(Helper.SafeIdentifier(sectionName))) continue; else existSections.Add(Helper.SafeIdentifier(sectionName));
+                    part1 += $"\t\t\t{Helper.SafeIdentifier(sectionName)}: DevKit.Controls.Section;\r\n";
                 }
                 part1 += $"\t\t}}\r\n";
 
-                part2 += $"\t\tinterface tab_{Utility.SafeIdentifier(tabName)} extends DevKit.Controls.ITab {{\r\n";
-                part2 += $"\t\t\tSection: tab_{Utility.SafeIdentifier(tabName)}_Sections;\r\n";
+                part2 += $"\t\tinterface tab_{Helper.SafeIdentifier(tabName)} extends DevKit.Controls.ITab {{\r\n";
+                part2 += $"\t\t\tSection: tab_{Helper.SafeIdentifier(tabName)}_Sections;\r\n";
                 part2 += $"\t\t}}\r\n";
 
-                part3 += $"\t\t\t{Utility.SafeIdentifier(tabName)}: tab_{Utility.SafeIdentifier(tabName)};\r\n";
+                part3 += $"\t\t\t{Helper.SafeIdentifier(tabName)}: tab_{Helper.SafeIdentifier(tabName)};\r\n";
             }
             part3 += $"\t\t}}\r\n";
             var _d_ts = string.Empty;
@@ -970,9 +970,9 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                           .Descendants("control")
                         select new IdName
                         {
-                            Name = Utility.SafeIdentifier(x?.Attribute("datafieldname")?.Value) ?? Utility.SafeIdentifier(x?.Attribute("id")?.Value),
+                            Name = Helper.SafeIdentifier(x?.Attribute("datafieldname")?.Value) ?? Helper.SafeIdentifier(x?.Attribute("id")?.Value),
                             Id = x?.Attribute("id").Value,
-                            ClassId = Utility.TrimGuid(x?.Attribute("classid")?.Value?.ToUpper()),
+                            ClassId = Helper.TrimGuid(x?.Attribute("classid")?.Value?.ToUpper()),
                             ControlId = x?.Attribute("uniqueid")?.Value
                         }).Distinct().ToList();
             body = body.OrderBy(x => x.Id).ToList();
@@ -998,9 +998,9 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                            .Descendants("control")
                            select new IdName
                            {
-                               Name = Utility.SafeIdentifier(x?.Attribute("datafieldname")?.Value),
-                               Id = Utility.SafeIdentifier(x?.Attribute("id").Value),
-                               ClassId = Utility.TrimGuid(x?.Attribute("classid")?.Value?.ToUpper()),
+                               Name = Helper.SafeIdentifier(x?.Attribute("datafieldname")?.Value),
+                               Id = Helper.SafeIdentifier(x?.Attribute("id").Value),
+                               ClassId = Helper.TrimGuid(x?.Attribute("classid")?.Value?.ToUpper()),
                                ControlId = x?.Attribute("uniqueid")?.Value
                            }).ToList();
             headers = headers.OrderBy(x => x.Name).ToList();
@@ -1022,7 +1022,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             var previousCount = 0;
 
             var listVirtualControls = new List<string>();
-            foreach (var item in list) item.Id = Utility.SafeIdentifier(item.Id);
+            foreach (var item in list) item.Id = Helper.SafeIdentifier(item.Id);
 
             foreach (var item in list)
             {
@@ -1032,7 +1032,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                 {
                     var crmAttribute = EntityMetadata.Attributes.FirstOrDefault(x => x.LogicalName == item.Name);
                     if (crmAttribute == null) continue;
-                    var name = Utility.SafeIdentifier(crmAttribute.SchemaName);
+                    var name = Helper.SafeIdentifier(crmAttribute.SchemaName);
                     if (name == previousName)
                     {
                         previousCount = previousCount + 1;
@@ -1046,7 +1046,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                         previousName = string.Empty;
                         previousCount = 0;
                     }
-                    previousName = Utility.SafeIdentifier(crmAttribute.SchemaName);
+                    previousName = Helper.SafeIdentifier(crmAttribute.SchemaName);
                     var jsdoc = string.Empty;
                     if (crmAttribute?.Description?.UserLocalizedLabel?.Label.Length > 0)
                         jsdoc = $"\t\t\t/** {crmAttribute?.Description?.UserLocalizedLabel?.Label} */\r\n";

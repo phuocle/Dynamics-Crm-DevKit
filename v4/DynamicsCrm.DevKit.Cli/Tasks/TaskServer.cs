@@ -1239,7 +1239,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var list = new List<CrmPluginRegistrationAttribute>();
             var attributes = type.GetCustomAttributesData();
             foreach (var attribute in attributes)
-                list.Add(Utility.ConvertAttributeToCrmPluginRegistration(attribute));
+                list.Add(Helper.ConvertAttributeToCrmPluginRegistration(attribute));
             return list;
         }
 

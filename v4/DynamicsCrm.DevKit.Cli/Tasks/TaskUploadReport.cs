@@ -91,7 +91,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                             else
                             {
                                 var report = reports.First();
-                                if (Utility.IsTheSame(report.Content, File.ReadAllText(file)))
+                                if (Helper.IsTheSame(report.Content, File.ReadAllText(file)))
                                 {
                                     CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, language, ConsoleColor.Green, " report ", ConsoleColor.White, ".." + file.Substring(CurrentDirectory.Length), ConsoleColor.Green, " to ", ConsoleColor.White, fileName, ConsoleColor.Green, " report file name");
                                 }

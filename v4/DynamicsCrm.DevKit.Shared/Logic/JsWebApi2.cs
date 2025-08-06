@@ -24,8 +24,8 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             dts = JsTypeScriptDeclaration2.GetCode(crmServiceClient, entityMetadata, rootNamespace, comment);
 
             var code = string.Empty;
-            var @namespace = Utility.GetNameSpace(RootNamespace);
-            var logicalName = Utility.SafeIdentifier(entityMetadata.LogicalName);
+            var @namespace = Helper.GetNameSpace(RootNamespace);
+            var logicalName = Helper.SafeIdentifier(entityMetadata.LogicalName);
 
             code += $"'use strict';{NEW_LINE}";
             code += $"/** @namespace {@namespace} */{NEW_LINE}";
@@ -34,7 +34,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
 
             code += $"{TAB}{@namespace}.{entityMetadata.SchemaName}Api = function (e) {{{NEW_LINE}";
             code += $"{TAB}{TAB}const f = '@OData.Community.Display.V1.FormattedValue';{NEW_LINE}";
-            code += $"{Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.WebApi2.js")}";
+            code += $"{Helper.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.WebApi2.js")}";
             code += $"{TAB}{TAB}const _{logicalName} = {{{NEW_LINE}";
             code += $"{GeneratorCode()}";
             code += $"{TAB}{TAB}}};{NEW_LINE}";
@@ -74,7 +74,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code += $"{TAB}{TAB}return {logicalName};{NEW_LINE}";
             code += $"{TAB}}};{NEW_LINE}";
             code += $"}})({@namespace} || ({@namespace} = {{}}));{NEW_LINE}";
-            code += $"{Utility.GeneratorOptionSet(EntityMetadata)}";
+            code += $"{Helper.GeneratorOptionSet(EntityMetadata)}";
 
             return code;
         }
@@ -102,7 +102,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
 
             foreach (var attribute in EntityMetadata?.Attributes?.OrderBy(x => x.SchemaName))
             {
-                var attributeSchemaName = Utility.SafeDeclareName(attribute.SchemaName, GeneratorType.jswebapi, EntityMetadata.SchemaName, attribute);
+                var attributeSchemaName = Helper.SafeDeclareName(attribute.SchemaName, GeneratorType.jswebapi, EntityMetadata.SchemaName, attribute);
                 if (attribute.AttributeType == AttributeTypeCode.PartyList || attribute.AttributeType == AttributeTypeCode.EntityName) continue;
                 if (attribute.AttributeOf != null && attribute.AttributeTypeName != AttributeTypeDisplayName.ImageType) continue;
                 var a = $"a: '{attribute.LogicalName}'";
@@ -185,9 +185,9 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                                 var d = $"d: '{entityLogicalName}'";
                                 if (navigation?.ReferencingEntityNavigationPropertyName != null && navigation?.ReferencingEntityNavigationPropertyName?.Length > 0)
                                 {
-                                    var temp = $"{TAB}{TAB}{TAB}{Utility.SafeDeclareName(navigation?.ReferencingEntityNavigationPropertyName, GeneratorType.jswebapi, EntityMetadata.SchemaName, attribute)}: {{ {b}, {a},";
+                                    var temp = $"{TAB}{TAB}{TAB}{Helper.SafeDeclareName(navigation?.ReferencingEntityNavigationPropertyName, GeneratorType.jswebapi, EntityMetadata.SchemaName, attribute)}: {{ {b}, {a},";
                                     if (!code.Contains(temp))
-                                        code += $"{TAB}{TAB}{TAB}{Utility.SafeDeclareName(navigation?.ReferencingEntityNavigationPropertyName, GeneratorType.jswebapi, EntityMetadata.SchemaName, attribute)}: {{ {b}, {a}, {c}, {d}{r} }},{NEW_LINE}";
+                                        code += $"{TAB}{TAB}{TAB}{Helper.SafeDeclareName(navigation?.ReferencingEntityNavigationPropertyName, GeneratorType.jswebapi, EntityMetadata.SchemaName, attribute)}: {{ {b}, {a}, {c}, {d}{r} }},{NEW_LINE}";
                                 }
                             }
                         }
