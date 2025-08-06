@@ -58,4 +58,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)VsixHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)XrmHelper.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="$(MSBuildThisFileDirectory)Entities\DynamicsCrm.DevKit.Cli.json" />
+  </ItemGroup>
 </Project>

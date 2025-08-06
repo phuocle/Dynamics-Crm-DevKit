@@ -11,7 +11,7 @@
 		<RepositoryUrl>https://github.com/phuocle/Dynamics-Crm-DevKit</RepositoryUrl>
 		<Company>PhuocLe</Company>
 		<Product>DynamicsCrm.DevKit.Cli</Product>
-		<Copyright>Copyright © PhuocLe 2016 - 2026</Copyright>
+		<Copyright>Copyright © PhuocLe 2016 - 2030</Copyright>
 		<PackageProjectUrl>https://github.com/phuocle/Dynamics-Crm-DevKit</PackageProjectUrl>
 		<Version>4.00.00.00</Version>
 		<OutputType>Exe</OutputType>
@@ -20,21 +20,17 @@
 		<DelaySign>False</DelaySign>
 		<ApplicationIcon>icon.ico</ApplicationIcon>
 	</PropertyGroup>
-
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
 		<PlatformTarget>x64</PlatformTarget>
 	</PropertyGroup>
-
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
 		<PlatformTarget>x64</PlatformTarget>
 	</PropertyGroup>
-
 	<ItemGroup>
 	  <Compile Remove="Nuget\**" />
 	  <EmbeddedResource Remove="Nuget\**" />
 	  <None Remove="Nuget\**" />
 	</ItemGroup>
-
 	<ItemGroup>
 	  <Content Include="icon.ico" />
 	</ItemGroup>
@@ -53,7 +49,4 @@
 	  <PackageReference Include="NuGet.Protocol" Version="6.14.0" />
 	</ItemGroup>
 	<Import Project="..\DynamicsCrm.DevKit.Shared\DynamicsCrm.DevKit.Shared.projitems" Label="Shared" />
-	<ItemGroup>
-	  <AdditionalFiles Remove="D:\.nuget\packages\microsoft.visualstudio.sdk.analyzers\17.7.79\build\AdditionalFiles\BannedSymbols.txt" />
-	</ItemGroup>
 </Project>
