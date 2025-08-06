@@ -18,6 +18,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicsCrm.DevKit.Tool", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicsCrm.DevKit.Analyzers", "DynamicsCrm.DevKit.Analyzers\DynamicsCrm.DevKit.Analyzers.csproj", "{BBCF5C40-7EE8-489A-A585-A9E0457D778C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicsCrm.DevKit.CrmSvcUtilExtensions", "DynamicsCrm.DevKit.CrmSvcUtilExtensions\DynamicsCrm.DevKit.CrmSvcUtilExtensions.csproj", "{AF511858-3072-45D7-932D-C0D98470914E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -64,6 +66,18 @@ Global
 		{BBCF5C40-7EE8-489A-A585-A9E0457D778C}.Release|arm64.Build.0 = Release|Any CPU
 		{BBCF5C40-7EE8-489A-A585-A9E0457D778C}.Release|x86.ActiveCfg = Release|Any CPU
 		{BBCF5C40-7EE8-489A-A585-A9E0457D778C}.Release|x86.Build.0 = Release|Any CPU
+		{AF511858-3072-45D7-932D-C0D98470914E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF511858-3072-45D7-932D-C0D98470914E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF511858-3072-45D7-932D-C0D98470914E}.Debug|arm64.ActiveCfg = Debug|Any CPU
+		{AF511858-3072-45D7-932D-C0D98470914E}.Debug|arm64.Build.0 = Debug|Any CPU
+		{AF511858-3072-45D7-932D-C0D98470914E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{AF511858-3072-45D7-932D-C0D98470914E}.Debug|x86.Build.0 = Debug|Any CPU
+		{AF511858-3072-45D7-932D-C0D98470914E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF511858-3072-45D7-932D-C0D98470914E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF511858-3072-45D7-932D-C0D98470914E}.Release|arm64.ActiveCfg = Release|Any CPU
+		{AF511858-3072-45D7-932D-C0D98470914E}.Release|arm64.Build.0 = Release|Any CPU
+		{AF511858-3072-45D7-932D-C0D98470914E}.Release|x86.ActiveCfg = Release|Any CPU
+		{AF511858-3072-45D7-932D-C0D98470914E}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
