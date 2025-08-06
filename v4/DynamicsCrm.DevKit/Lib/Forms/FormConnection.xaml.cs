@@ -3,6 +3,7 @@ using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.VisualStudio.Shell;
+using System;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
@@ -29,8 +30,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         //        Assembly.LoadFrom(checkFile);
         //}
 
-        public ServiceClient CrmServiceClient { get; set; }
-        public string DataverseConnectionString { get; set; } = string.Empty;
+        public ServiceClient ServiceClient { get; set; }
         public CrmConnection CrmConnection { get; set; }
 
         private void ButtonCancel_Click(object sender, System.Windows.RoutedEventArgs e)
@@ -47,24 +47,31 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 stackPanelForm.IsEnabled = false;
                 progressBar.Visibility = System.Windows.Visibility.Visible;
                 CrmConnection = selectedConnection;
-                VsixHelper.SaveDefaultCrmConnection(CrmConnection.Name);
-                
+                VsixHelper.SaveDefaultCrmConnection(CrmConnection.Name);                
                 _ = Task.Factory.StartNew(async () =>
                 {
-                    CrmServiceClient = await CacheHelper.CreateServiceClientAsync(CrmConnection);
-                    await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-                    
-                    if (CrmServiceClient != null && CrmServiceClient.IsReady)
+                    try
                     {
-                        DataverseConnectionString = CacheHelper.GetConnectedUrl(CrmServiceClient);
-                        DialogResult = true;
-                        Close();
+                        ServiceClient = Helper.CreateServiceClient(CrmConnection);
+                        await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();                        
+                        if (ServiceClient != null && ServiceClient.IsReady)
+                        {
+                            DialogResult = true;
+                            Close();
+                        }
+                        else
+                        {
+                            stackPanelForm.IsEnabled = true;
+                            progressBar.Visibility = System.Windows.Visibility.Hidden;
+                            await VS.MessageBox.ShowErrorAsync("Failed to connect. Please check your connection settings.");
+                        }
                     }
-                    else
+                    catch (Exception ex)
                     {
+                        await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
                         stackPanelForm.IsEnabled = true;
                         progressBar.Visibility = System.Windows.Visibility.Hidden;
-                        await VS.MessageBox.ShowErrorAsync("Failed to connect. Please check your connection settings.");
+                        await VS.MessageBox.ShowErrorAsync($"Connection failed: {ex.Message}");
                     }
                 }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default);
             }
@@ -80,46 +87,46 @@ namespace DynamicsCrm.DevKit.Lib.Forms
 
         private void ButtonCheckConnection_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            if (!IsValid()) return;
-            var crmConnection = new CrmConnection
-            {
-                Name = textboxName.Text,
-                Password = comboBoxType.Text == "ClientSecret" ? textboxPassword.Password : textboxPassword.Password, // Note: Consider encryption for production
-                Type = comboBoxType.Text,
-                Url = textboxUrl.Text,
-                UserName = textboxUser.Text
-            };
-            stackPanelForm.IsEnabled = false;
-            progressBar.Visibility = System.Windows.Visibility.Visible;
+            //if (!IsValid()) return;
+            //var crmConnection = new CrmConnection
+            //{
+            //    Name = textboxName.Text,
+            //    Password = comboBoxType.Text == "ClientSecret" ? textboxPassword.Password : textboxPassword.Password, // Note: Consider encryption for production
+            //    Type = comboBoxType.Text,
+            //    Url = textboxUrl.Text,
+            //    UserName = textboxUser.Text
+            //};
+            //stackPanelForm.IsEnabled = false;
+            //progressBar.Visibility = System.Windows.Visibility.Visible;
             
-            _ = Task.Factory.StartNew(async () =>
-            {
-                var crmServiceClient = await CacheHelper.CreateServiceClientAsync(crmConnection);
-                await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-                stackPanelForm.IsEnabled = true;
-                progressBar.Visibility = System.Windows.Visibility.Hidden;
+            //_ = Task.Factory.StartNew(async () =>
+            //{
+            //    var crmServiceClient = await CacheHelper.CreateServiceClientAsync(crmConnection);
+            //    await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+            //    stackPanelForm.IsEnabled = true;
+            //    progressBar.Visibility = System.Windows.Visibility.Hidden;
                 
-                if (crmServiceClient != null && crmServiceClient.IsReady)
-                {
-                    var devKitConnections = VsixHelper.GetDevKitConnections();
-                    devKitConnections.DefaultCrmConnection = crmConnection.Name;
+            //    if (crmServiceClient != null && crmServiceClient.IsReady)
+            //    {
+            //        var devKitConnections = VsixHelper.GetDevKitConnections();
+            //        devKitConnections.DefaultCrmConnection = crmConnection.Name;
                     
-                    // Check if connection already exists, if not add it
-                    if (!devKitConnections.CrmConnections.Any(x => x.Name == crmConnection.Name))
-                    {
-                        devKitConnections.CrmConnections.Add(crmConnection);
-                    }
+            //        // Check if connection already exists, if not add it
+            //        if (!devKitConnections.CrmConnections.Any(x => x.Name == crmConnection.Name))
+            //        {
+            //            devKitConnections.CrmConnections.Add(crmConnection);
+            //        }
                     
-                    VsixHelper.SaveDevKitConnections(devKitConnections);
-                    LoadConnections();
-                    ClearData();
-                    await VS.MessageBox.ShowAsync("Connection test successful!");
-                }
-                else
-                {
-                    await VS.MessageBox.ShowErrorAsync(@"Something wrong with your connection. Please try it again");
-                }
-            }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default);
+            //        VsixHelper.SaveDevKitConnections(devKitConnections);
+            //        LoadConnections();
+            //        ClearData();
+            //        await VS.MessageBox.ShowAsync("Connection test successful!");
+            //    }
+            //    else
+            //    {
+            //        await VS.MessageBox.ShowErrorAsync(@"Something wrong with your connection. Please try it again");
+            //    }
+            //}, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default);
         }
 
         public void ClearData()
@@ -150,11 +157,11 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             var devKitConnections = VsixHelper.GetDevKitConnections();
             comboBoxSavedConnection.DisplayMemberPath = "Name";
             comboBoxSavedConnection.ItemsSource = devKitConnections.CrmConnections;
-            //if (devKitConnections.DefaultCrmConnection != null)
-            //{
-            //    comboBoxSavedConnection.SelectedItem = devKitConnections.CrmConnections.FirstOrDefault(x => x.Name == devKitConnections.DefaultCrmConnection);
-            //    buttonOK.IsEnabled = comboBoxSavedConnection.Items.Count > 0;
-            //}
+            if (devKitConnections.DefaultCrmConnection != null)
+            {
+                comboBoxSavedConnection.SelectedItem = devKitConnections.CrmConnections.FirstOrDefault(x => x.Name == devKitConnections.DefaultCrmConnection);
+                buttonOK.IsEnabled = comboBoxSavedConnection.Items.Count > 0;
+            }
             //else
             //{
             //    radioButtonOOBConnection.IsChecked = true;
@@ -209,17 +216,6 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             if (selectedText == null) return;
             labelUser.Content = selectedText == "ClientSecret" ? "Client Id" : "User Name";
             labelPassword.Content = selectedText == "ClientSecret" ? "Client Secret" : "Password";
-        }
-
-        private void RadioButtonOOBConnection_Checked(object sender, System.Windows.RoutedEventArgs e)
-        {
-            buttonOK.IsEnabled = true;
-        }
-
-        private void RadioButtonConnection_Checked(object sender, System.Windows.RoutedEventArgs e)
-        {
-            if (comboBoxSavedConnection == null) return;
-            buttonOK.IsEnabled = comboBoxSavedConnection.Items?.Count > 0;
         }
     }
 }

@@ -696,6 +696,73 @@ namespace DynamicsCrm.DevKit.Shared
             return crmServiceClient;
         }
 
+        public static ServiceClient CreateServiceClient(CrmConnection crmConnection)
+        {
+            if (crmConnection == null)
+                throw new ArgumentNullException(nameof(crmConnection));
+            if (string.IsNullOrEmpty(crmConnection.Url))
+                throw new ArgumentException("URL is required", nameof(crmConnection));
+            if (string.IsNullOrEmpty(crmConnection.Type))
+                throw new ArgumentException("Authentication type is required", nameof(crmConnection));
+            string connectionString = BuildConnectionString(crmConnection);
+            try
+            {
+                var serviceClient = new ServiceClient(connectionString);
+                if (serviceClient != null && serviceClient.IsReady)
+                {
+                    return serviceClient;
+                }
+                else
+                {
+                    throw new InvalidOperationException("Failed to connect to Dataverse. Please check your connection settings.");
+                }
+            }
+            catch (Exception ex) when (!(ex is InvalidOperationException))
+            {
+                throw new InvalidOperationException($"Error creating Dataverse connection: {ex.Message}", ex);
+            }
+        }
+
+        public static string BuildConnectionString(CrmConnection crmConnection)
+        {
+            if (crmConnection == null) return string.Empty;
+            var type = crmConnection.Type;
+            var url = crmConnection.Url;
+            var userName = crmConnection.UserName;
+            var password = DecryptString(crmConnection.Password);
+            switch (type.ToUpperInvariant())
+            {
+                case "CLIENTSECRET":
+                    return $"AuthType=ClientSecret;Url={url};ClientId={userName};ClientSecret={password};";
+                case "AD":
+                    if (string.IsNullOrEmpty(userName) || !userName.Contains("\\"))
+                        throw new ArgumentException("For AD authentication, username must be in format 'domain\\username'");
+                    var parts = userName.Split('\\');
+                    if (parts.Length != 2)
+                        throw new ArgumentException("For AD authentication, username must be in format 'domain\\username'");
+                    var domain = parts[0];
+                    var user = parts[1];
+                    return $"AuthType=AD;Url={url};Domain={domain};Username={user};Password={password};";
+                case "OAUTH":
+                default:
+                    var connectionString = $"AuthType=OAuth;Url={url};Username={userName};Password={password};";
+                    // Add default OAuth app registration if not present
+                    if (!connectionString.ToLower().Contains("appid="))
+                    {
+                        connectionString += "AppId=51f81489-12ee-4a9e-aaae-a2591f45987d;";
+                    }
+                    if (!connectionString.ToLower().Contains("redirecturi="))
+                    {
+                        connectionString += "RedirectUri=app://58145B91-0C36-4500-8554-080854F2AC97;";
+                    }
+                    if (!connectionString.ToLower().Contains("loginprompt="))
+                    {
+                        connectionString += "LoginPrompt=Auto;";
+                    }
+                    return connectionString;
+            }
+        }
+
         public static string BuildConnectionString(string connectionString)
         {
             if (connectionString == null) return string.Empty;

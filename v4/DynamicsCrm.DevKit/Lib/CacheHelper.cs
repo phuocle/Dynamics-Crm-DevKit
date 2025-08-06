@@ -5,6 +5,7 @@ using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.VisualStudio.Shell;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,8 +17,14 @@ namespace DynamicsCrm.DevKit.Lib
     /// </summary>
     public static class CacheHelper
     {
-        private static readonly Dictionary<string, ServiceClient> _serviceClientCache = new Dictionary<string, ServiceClient>();
-        private static readonly object _cacheLock = new object();
+        // Using ConcurrentDictionary for better thread safety and performance
+        private static readonly ConcurrentDictionary<string, ServiceClient> _serviceClientCache = new ConcurrentDictionary<string, ServiceClient>();
+        
+        // Keep a separate collection to track connection timestamps for potential expiration
+        private static readonly ConcurrentDictionary<string, DateTime> _connectionTimestamps = new ConcurrentDictionary<string, DateTime>();
+        
+        // Connection timeout in minutes (optional enhancement)
+        private static readonly int ConnectionTimeoutMinutes = 60;
 
         /// <summary>
         /// Gets a cached ServiceClient or prompts user to connect if not available
@@ -36,39 +43,49 @@ namespace DynamicsCrm.DevKit.Lib
         public static async Task<ServiceClient> GetServiceClientAsync(string connectionName)
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-            // Get the connection name to use for caching
+            
             var cacheKey = connectionName ?? "default";
+            
             // Check if we have a cached ServiceClient
-            lock (_cacheLock)
+            if (_serviceClientCache.TryGetValue(cacheKey, out var cachedClient))
             {
-                if (_serviceClientCache.TryGetValue(cacheKey, out var cachedClient))
+                // Verify the cached client is still connected and not expired
+                if (cachedClient != null && cachedClient.IsReady && !IsConnectionExpired(cacheKey))
                 {
-                    // Verify the cached client is still connected
-                    if (cachedClient != null && cachedClient.IsReady)
-                    {
-                        return cachedClient;
-                    }
-                    else
-                    {
-                        // Remove invalid cached client
-                        _serviceClientCache.Remove(cacheKey);
-                        cachedClient?.Dispose();
-                    }
+                    return cachedClient;
+                }
+                else
+                {
+                    // Remove invalid or expired cached client
+                    RemoveFromCache(connectionName);
                 }
             }
+
             // No valid cached client, prompt user for connection
             var serviceClient = await PromptForConnectionAsync(connectionName);
             
             if (serviceClient != null)
             {
-                // Cache the new ServiceClient
-                lock (_cacheLock)
-                {
-                    _serviceClientCache[cacheKey] = serviceClient;
-                }
+                // Cache the new ServiceClient with timestamp
+                _serviceClientCache[cacheKey] = serviceClient;
+                _connectionTimestamps[cacheKey] = DateTime.UtcNow;
             }
 
             return serviceClient;
+        }
+
+        /// <summary>
+        /// Checks if a connection has expired based on timestamp
+        /// </summary>
+        /// <param name="cacheKey">The cache key to check</param>
+        /// <returns>True if connection is expired</returns>
+        private static bool IsConnectionExpired(string cacheKey)
+        {
+            if (_connectionTimestamps.TryGetValue(cacheKey, out var timestamp))
+            {
+                return DateTime.UtcNow.Subtract(timestamp).TotalMinutes > ConnectionTimeoutMinutes;
+            }
+            return true; // If no timestamp found, consider it expired
         }
 
         /// <summary>
@@ -85,9 +102,9 @@ namespace DynamicsCrm.DevKit.Lib
                 var formConnection = new FormConnection(true);
                 var result = formConnection.ShowModal() ?? false;
 
-                if (result && formConnection.CrmServiceClient != null)
+                if (result && formConnection.ServiceClient != null)
                 {
-                    return formConnection.CrmServiceClient;
+                    return formConnection.ServiceClient;
                 }
             }
             catch (Exception ex)
@@ -172,20 +189,10 @@ namespace DynamicsCrm.DevKit.Lib
         /// </summary>
         public static void ClearCache()
         {
-            lock (_cacheLock)
+            var keys = new List<string>(_serviceClientCache.Keys);
+            foreach (var key in keys)
             {
-                foreach (var client in _serviceClientCache.Values)
-                {
-                    try
-                    {
-                        client?.Dispose();
-                    }
-                    catch
-                    {
-                        // Ignore disposal errors
-                    }
-                }
-                _serviceClientCache.Clear();
+                RemoveFromCache(key);
             }
         }
 
@@ -197,21 +204,19 @@ namespace DynamicsCrm.DevKit.Lib
         {
             var cacheKey = connectionName ?? "default";
 
-            lock (_cacheLock)
+            if (_serviceClientCache.TryRemove(cacheKey, out var client))
             {
-                if (_serviceClientCache.TryGetValue(cacheKey, out var client))
+                try
                 {
-                    try
-                    {
-                        client?.Dispose();
-                    }
-                    catch
-                    {
-                        // Ignore disposal errors
-                    }
-                    _serviceClientCache.Remove(cacheKey);
+                    client?.Dispose();
+                }
+                catch
+                {
+                    // Ignore disposal errors
                 }
             }
+            
+            _connectionTimestamps.TryRemove(cacheKey, out _);
         }
 
         /// <summary>
@@ -223,12 +228,9 @@ namespace DynamicsCrm.DevKit.Lib
         {
             var cacheKey = connectionName ?? "default";
 
-            lock (_cacheLock)
+            if (_serviceClientCache.TryGetValue(cacheKey, out var client))
             {
-                if (_serviceClientCache.TryGetValue(cacheKey, out var client))
-                {
-                    return client != null && client.IsReady;
-                }
+                return client != null && client.IsReady && !IsConnectionExpired(cacheKey);
             }
 
             return false;

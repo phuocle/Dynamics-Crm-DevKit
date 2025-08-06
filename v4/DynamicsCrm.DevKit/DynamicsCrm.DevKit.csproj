@@ -110,6 +110,9 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Caching.Abstractions">
+      <Version>9.0.8</Version>
+    </PackageReference>
     <PackageReference Include="Microsoft.PowerPlatform.Dataverse.Client">
       <Version>1.2.9</Version>
     </PackageReference>
