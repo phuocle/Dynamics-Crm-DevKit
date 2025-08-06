@@ -65,6 +65,7 @@
       <Generator>VsctGenerator</Generator>
       <LastGenOutput>DevKitPackageVsct.cs</LastGenOutput>
     </VSCTCompile>
+    <Compile Include="Lib\CacheHelper.cs" />
     <Compile Include="Lib\Forms\BaseDialogWindow.cs" />
     <Compile Include="Lib\Forms\FormConnection.xaml.cs">
       <DependentUpon>FormConnection.xaml</DependentUpon>

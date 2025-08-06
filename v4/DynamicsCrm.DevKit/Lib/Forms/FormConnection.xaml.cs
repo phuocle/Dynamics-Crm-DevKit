@@ -3,6 +3,7 @@ using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.VisualStudio.Shell;
+using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
@@ -40,64 +41,85 @@ namespace DynamicsCrm.DevKit.Lib.Forms
 
         private void ButtonOK_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-           
-                //stackPanelForm.IsEnabled = false;
-                //progressBar.Visibility = System.Windows.Visibility.Visible;
-                //CrmConnection = comboBoxSavedConnection.SelectedItem as CrmConnection;
-                //VsixHelper.SaveDefaultCrmConnection(CrmConnection.Name);
-                //_ = Task.Factory.StartNew(() =>
-                //{
-                //    CrmServiceClient = XrmHelper.IsConnected(CrmConnection);
-                //    ThreadHelper.JoinableTaskFactory.Run(async delegate
-                //    {
-                //        DataverseConnectionString = XrmHelper.BuildConnectionString(CrmConnection);
-                //        await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-                //        DialogResult = true;
-                //        Close();
-                //    });
-                //}, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default);
+            // Check if user has selected a saved connection
+            if (comboBoxSavedConnection.SelectedItem is CrmConnection selectedConnection)
+            {
+                stackPanelForm.IsEnabled = false;
+                progressBar.Visibility = System.Windows.Visibility.Visible;
+                CrmConnection = selectedConnection;
+                VsixHelper.SaveDefaultCrmConnection(CrmConnection.Name);
+                
+                _ = Task.Factory.StartNew(async () =>
+                {
+                    CrmServiceClient = await CacheHelper.CreateServiceClientAsync(CrmConnection);
+                    await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                    
+                    if (CrmServiceClient != null && CrmServiceClient.IsReady)
+                    {
+                        DataverseConnectionString = CacheHelper.GetConnectedUrl(CrmServiceClient);
+                        DialogResult = true;
+                        Close();
+                    }
+                    else
+                    {
+                        stackPanelForm.IsEnabled = true;
+                        progressBar.Visibility = System.Windows.Visibility.Hidden;
+                        await VS.MessageBox.ShowErrorAsync("Failed to connect. Please check your connection settings.");
+                    }
+                }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default);
+            }
+            else
+            {
+                // If no connection selected, show message
+                ThreadHelper.JoinableTaskFactory.Run(async () =>
+                {
+                    await VS.MessageBox.ShowErrorAsync("Please select a connection or create a new one.");
+                });
+            }
         }
 
         private void ButtonCheckConnection_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            //if (!IsValid()) return;
-            //var crmConnection = new CrmConnection
-            //{
-            //    Name = textboxName.Text,
-            //    Password = comboBoxType.Text == "ClientSecret" ? textboxPassword.Password : EncryptDecrypt.EncryptString(textboxPassword.Password),
-            //    Type = comboBoxType.Text,
-            //    Url = textboxUrl.Text,
-            //    UserName = textboxUser.Text
-            //};
-            //stackPanelForm.IsEnabled = false;
-            //progressBar.Visibility = System.Windows.Visibility.Visible;
-            //_ = Task.Factory.StartNew(() =>
-            //{
-            //    var crmServiceClient = XrmHelper.IsConnected(crmConnection);
-            //    ThreadHelper.JoinableTaskFactory.Run(async delegate
-            //    {
-            //        await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-            //        stackPanelForm.IsEnabled = true;
-            //        progressBar.Visibility = System.Windows.Visibility.Hidden;
-            //    });
-            //    if (crmServiceClient != null)
-            //    {
-            //        var devKitConnections = VsixHelper.GetDevKitConnections();
-            //        devKitConnections.DefaultCrmConnection = crmConnection.Name;
-            //        devKitConnections.CrmConnections.Add(crmConnection);
-            //        VsixHelper.SaveDevKitConnections(devKitConnections);
-            //        LoadConnections();
-            //        ClearData();
-            //    }
-            //    else
-            //    {
-            //        ThreadHelper.JoinableTaskFactory.Run(async delegate
-            //        {
-            //            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-            //            await VS.MessageBox.ShowErrorAsync(@"Something wrong with your connection. Please try it again");
-            //        });
-            //    }
-            //}, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default);
+            if (!IsValid()) return;
+            var crmConnection = new CrmConnection
+            {
+                Name = textboxName.Text,
+                Password = comboBoxType.Text == "ClientSecret" ? textboxPassword.Password : textboxPassword.Password, // Note: Consider encryption for production
+                Type = comboBoxType.Text,
+                Url = textboxUrl.Text,
+                UserName = textboxUser.Text
+            };
+            stackPanelForm.IsEnabled = false;
+            progressBar.Visibility = System.Windows.Visibility.Visible;
+            
+            _ = Task.Factory.StartNew(async () =>
+            {
+                var crmServiceClient = await CacheHelper.CreateServiceClientAsync(crmConnection);
+                await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                stackPanelForm.IsEnabled = true;
+                progressBar.Visibility = System.Windows.Visibility.Hidden;
+                
+                if (crmServiceClient != null && crmServiceClient.IsReady)
+                {
+                    var devKitConnections = VsixHelper.GetDevKitConnections();
+                    devKitConnections.DefaultCrmConnection = crmConnection.Name;
+                    
+                    // Check if connection already exists, if not add it
+                    if (!devKitConnections.CrmConnections.Any(x => x.Name == crmConnection.Name))
+                    {
+                        devKitConnections.CrmConnections.Add(crmConnection);
+                    }
+                    
+                    VsixHelper.SaveDevKitConnections(devKitConnections);
+                    LoadConnections();
+                    ClearData();
+                    await VS.MessageBox.ShowAsync("Connection test successful!");
+                }
+                else
+                {
+                    await VS.MessageBox.ShowErrorAsync(@"Something wrong with your connection. Please try it again");
+                }
+            }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default);
         }
 
         public void ClearData()
