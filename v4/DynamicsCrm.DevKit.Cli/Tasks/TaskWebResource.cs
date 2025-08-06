@@ -139,7 +139,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             CliLog.WriteLineWarning(ConsoleColor.Green, "PUBLISHED WEBRESOURCES");
         }
 
-
         private void UpdateDependency(Dependency dependency, int current)
         {
             var len = Dependencies.Count.ToString().Length;

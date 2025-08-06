@@ -162,12 +162,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     }
                     var newCode = string.Empty;
                     var newDTS = string.Empty;
-                    //if (Json.version == null) comment.WebApiVersion = null;
-                    //if (Json.version == "2") comment.WebApiVersion = "2";
-                    //if (comment.WebApiVersion == "2")
+
                     newCode = JsWebApi2.GetCode(ServiceClient, entityMetadata, Json.rootnamespace, comment, out newDTS);
-                    //else
-                    //    newCode = JsWebApi.GetCode(CrmServiceClient, entityMetadata, Json.rootnamespace, comment, out newDTS);
+
                     if (Utility.IsTheSame(oldCode, newCode))
                     {
                         if (oldCode?.Length > 0 && newCode?.Length > 0 && !Utility.IsTheSame(oldDTS, newDTS))
@@ -294,7 +291,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 {
                     var file = Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}.cs");
                     var fileEndsWith = Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}{endsWith}");
-                    //var oldCode = Utility.ReadAllText(fileEndsWith);
+
                     var oldCode = Utility.ReadAllTextFromLine6(fileEndsWith);
                     var newCode = CSharpLateBound.GetCode(ServiceClient, entityMetadata, Json.rootnamespace);
                     if (newCode == String.Empty || Utility.IsTheSame(oldCode, newCode))

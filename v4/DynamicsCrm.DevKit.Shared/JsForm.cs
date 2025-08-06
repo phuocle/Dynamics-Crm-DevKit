@@ -64,12 +64,7 @@ namespace DynamicsCrm.DevKit.Shared
             RootNamespace = rootNamespace;
             Comment = comment;
             var forms = XrmHelper.GetEntityForms(crmServiceClient, entityMetadata.LogicalName);
-            //if (!forms.Any())
-            //{
-            //    comment.UseForm = false;
-            //    dts = JsTypeScriptDeclaration.GetCode(crmServiceClient, entityMetadata, rootNamespace, comment);
-            //    return String.Empty;
-            //}
+
             var code = string.Empty;
             var @namespace = Utility.GetNameSpace(RootNamespace);
             var logicalName = entityMetadata.LogicalName;
@@ -83,13 +78,12 @@ namespace DynamicsCrm.DevKit.Shared
                 code += GetMainFormCode(form, @namespace);
             foreach (var form in forms.Where(x => x.IsQuickCreate))
                 code += GetQuickCreateFormCode(form, @namespace);
-            //code += GetMainFormCode_AllFields(@namespace);
+
             code += $"}})({@namespace} || ({@namespace} = {{}}));{NEW_LINE}";
             code += $"{Utility.GeneratorOptionSet(EntityMetadata)}";
-            //if (comment.WebApiVersion == "2")
+
             dts = JsTypeScriptDeclaration2.GetCode(crmServiceClient, entityMetadata, rootNamespace, comment);
-            //else
-            //    dts = JsTypeScriptDeclaration.GetCode(crmServiceClient, entityMetadata, rootNamespace, comment);
+
             return code;
         }
 
@@ -162,15 +156,7 @@ namespace DynamicsCrm.DevKit.Shared
                 code += $"{TAB}{TAB}devKit.LoadFields(formContext, header, \"header_\");{NEW_LINE}";
                 code += $"{TAB}{TAB}form.Header = header;{NEW_LINE}";
             }
-            //var codeFooter = GetJsCodeFooter(form.FormXml);
-            //if (codeFooter.Length > 0)
-            //{
-            //    code += $"\t\tvar footer = {{\r\n";
-            //    code += codeFooter;
-            //    code += $"\t\t}};\r\n";
-            //    code += $"\t\tdevKit.LoadFields(formContext, footer, \"footer_\");\r\n";
-            //    code += $"\t\tform.Footer = footer;\r\n";
-            //}
+
             var codeProcess = GetJsProcessCode_AllFields();
             if (codeProcess.Length > 0)
             {
@@ -249,15 +235,7 @@ namespace DynamicsCrm.DevKit.Shared
                 code += $"\t\tdevKit.LoadFields(formContext, header, \"header_\");\r\n";
                 code += $"\t\tform.Header = header;\r\n";
             }
-            //var codeFooter = GetJsCodeFooter(form.FormXml);
-            //if (codeFooter.Length > 0)
-            //{
-            //    code += $"\t\tvar footer = {{\r\n";
-            //    code += codeFooter;
-            //    code += $"\t\t}};\r\n";
-            //    code += $"\t\tdevKit.LoadFields(formContext, footer, \"footer_\");\r\n";
-            //    code += $"\t\tform.Footer = footer;\r\n";
-            //}
+
             var codeProcess = GetJsProcessCode();
             if (codeProcess.Length > 0)
             {
@@ -369,11 +347,11 @@ namespace DynamicsCrm.DevKit.Shared
                          ).FirstOrDefault();
             if (node2 == null) return string.Empty;
             var xdoc2 = XDocument.Parse(node2);
-            //<QuickFormIds><QuickFormId entityname="contact">29DE27BC-A257-4F29-99CF-BAB4A84E688F</QuickFormId></QuickFormIds>
+
             var quickViewXml = (from x in xdoc2.Descendants("QuickFormId") select new { formId = x.Value, entityLogicalName = x?.Attribute("entityname")?.Value }).FirstOrDefault();
             if (quickViewXml == null) return string.Empty;
             var quickViewFormXml = string.Empty;
-            //var quickViewEntityLogicalName = string.Empty;
+
             GetFormXml(quickViewXml.formId, quickViewXml.entityLogicalName, out quickViewFormXml);
             if (quickViewFormXml == string.Empty) return string.Empty;
             var xdoc3 = XDocument.Parse(quickViewFormXml);
@@ -504,20 +482,6 @@ namespace DynamicsCrm.DevKit.Shared
         };
 
             var code = string.Empty;
-            //var xdoc = XDocument.Parse(formXml);
-            //var navigations = (from x in xdoc.Descendants("Navigation").Descendants("NavBar")
-            //        .Descendants("NavBarByRelationshipItem")
-            //                   select (string)x?.Attribute("Id")).ToList();
-            //navigations.Sort();
-            //if (navigations.Count == 0) return string.Empty;
-            //foreach (var navigation in navigations)
-            //{
-            //    code += $"\t\t\t{navigation}: {{}},\r\n";
-            //    if (!FormAll_Navigations.Any(x => x == navigation))
-            //    {
-            //        FormAll_Navigations.Add(navigation);
-            //    }
-            //}
 
             foreach (var relationship in EntityMetadata.OneToManyRelationships.OrderBy(x => x.SchemaName))
             {
@@ -530,7 +494,7 @@ namespace DynamicsCrm.DevKit.Shared
                     (relationship.IsValidForAdvancedFind ?? false)
                     )
                 {
-                    //_d_ts += $"\t\t\t{relationship.SchemaName}: DevKit.Controls.NavigationItem,\r\n";
+
                     code += $"\t\t\t{relationship.SchemaName}: {{}},\r\n";
                 }
             }

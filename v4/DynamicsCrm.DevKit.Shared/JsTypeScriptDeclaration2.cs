@@ -146,7 +146,6 @@ namespace DynamicsCrm.DevKit.Shared
                 if (attribute.AttributeType == AttributeTypeCode.PartyList || attribute.AttributeType == AttributeTypeCode.EntityName) continue;
                 if (attribute.AttributeOf != null && attribute.AttributeTypeName != AttributeTypeDisplayName.ImageType) continue;
 
-                //var Readonly = (!(attribute.IsValidForCreate ?? false) && !(attribute.IsValidForUpdate ?? false)) ? "Readonly" : string.Empty;
                 var @readonly = (!(attribute.IsValidForCreate ?? false) && !(attribute.IsValidForUpdate ?? false)) ? "readonly " : string.Empty;
                 var jdoc = attribute?.Description?.UserLocalizedLabel?.Label ?? string.Empty;
                 switch (attribute.AttributeType)
@@ -241,37 +240,37 @@ namespace DynamicsCrm.DevKit.Shared
                         break;
                     case AttributeTypeCode.Integer:
                         if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
-                        //_d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}: DevKit.WebApi.IntegerValue{Readonly};{NEW_LINE}";
+
                         _d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}: number | null;{NEW_LINE}";
                         break;
                     case AttributeTypeCode.BigInt:
                         if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
-                        //_d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}: DevKit.WebApi.BigIntValue{Readonly};{NEW_LINE}";
+
                         _d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}: number | null;{NEW_LINE}";
                         break;
                     case AttributeTypeCode.Decimal:
                         if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
-                        //_d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}: DevKit.WebApi.DecimalValue{Readonly};{NEW_LINE}";
+
                         _d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}: number | null;{NEW_LINE}";
                         break;
                     case AttributeTypeCode.Double:
                         if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
-                        //_d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}: DevKit.WebApi.DoubleValue{Readonly};{NEW_LINE}";
+
                         _d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}: number | null;{NEW_LINE}";
                         break;
                     case AttributeTypeCode.Money:
                         if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
-                        //_d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}: DevKit.WebApi.MoneyValue{Readonly};{NEW_LINE}";
+
                         _d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}: number | null;{NEW_LINE}";
                         break;
                     case AttributeTypeCode.Uniqueidentifier:
                         if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
-                        //_d_ts += $"{TAB}{TAB}{attributeSchemaName}: DevKit.WebApi.GuidValue{Readonly};{NEW_LINE}";
+
                         _d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}: string | null;{NEW_LINE}";
                         break;
                     case AttributeTypeCode.ManagedProperty:
                         if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
-                        //_d_ts += $"{TAB}{TAB}{attributeSchemaName}: DevKit.WebApi.ManagedPropertyValue{Readonly};{NEW_LINE}";
+
                         _d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}: string | null;{NEW_LINE}";
                         break;
 
@@ -408,37 +407,37 @@ namespace DynamicsCrm.DevKit.Shared
                         break;
                     case AttributeTypeCode.Integer:
                         if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
-                        //_d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}: DevKit.WebApi.IntegerValue{Readonly};{NEW_LINE}";
+
                         _d_ts += $"{TAB}{TAB}{TAB}{@readonly}{attributeSchemaName}: string;{NEW_LINE}";
                         break;
                     case AttributeTypeCode.BigInt:
                         if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
-                        //_d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}: DevKit.WebApi.BigIntValue{Readonly};{NEW_LINE}";
+
                         _d_ts += $"{TAB}{TAB}{TAB}{@readonly}{attributeSchemaName}: string;{NEW_LINE}";
                         break;
                     case AttributeTypeCode.Decimal:
                         if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
-                        //_d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}: DevKit.WebApi.DecimalValue{Readonly};{NEW_LINE}";
+
                         _d_ts += $"{TAB}{TAB}{TAB}{@readonly}{attributeSchemaName}: string;{NEW_LINE}";
                         break;
                     case AttributeTypeCode.Double:
                         if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
-                        //_d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}: DevKit.WebApi.DoubleValue{Readonly};{NEW_LINE}";
+
                         _d_ts += $"{TAB}{TAB}{TAB}{@readonly}{attributeSchemaName}: string;{NEW_LINE}";
                         break;
                     case AttributeTypeCode.Money:
                         if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
-                        //_d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}: DevKit.WebApi.MoneyValue{Readonly};{NEW_LINE}";
+
                         _d_ts += $"{TAB}{TAB}{TAB}{@readonly}{attributeSchemaName}: string;{NEW_LINE}";
                         break;
                     case AttributeTypeCode.Uniqueidentifier:
                         if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
-                        //_d_ts += $"{TAB}{TAB}{attributeSchemaName}: DevKit.WebApi.GuidValue{Readonly};{NEW_LINE}";
+
                         _d_ts += $"{TAB}{TAB}{TAB}{@readonly}{attributeSchemaName}: string;{NEW_LINE}";
                         break;
                     case AttributeTypeCode.ManagedProperty:
                         if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
-                        //_d_ts += $"{TAB}{TAB}{attributeSchemaName}: DevKit.WebApi.ManagedPropertyValue{Readonly};{NEW_LINE}";
+
                         _d_ts += $"{TAB}{TAB}{TAB}{@readonly}{attributeSchemaName}: string;{NEW_LINE}";
                         break;
 
@@ -495,7 +494,7 @@ namespace DynamicsCrm.DevKit.Shared
             var _d_ts = string.Empty;
             foreach (var form in forms.Where(x => x.FormType == XrmHelper.FormType.Main).ToList())
                 _d_ts += GetFormMain_d_ts(form, @namespace);
-            //_d_ts += GetFormMain_d_ts__AllFields(@namespace);
+
             foreach (var form in forms.Where(x => x.FormType == XrmHelper.FormType.QuickCreate).ToList())
                 _d_ts += GetFormQuickCreate_d_ts(form, @namespace);
             return _d_ts;
@@ -549,13 +548,7 @@ namespace DynamicsCrm.DevKit.Shared
             {
                 _d_ts += form_d_ts_Body;
             }
-            //var form_d_ts_Footer = GetForm_d_ts_Footer(form.FormXml);
-            //if (form_d_ts_Footer.Length > 0)
-            //{
-            //    _d_ts += $"\t\tinterface Footer extends DevKit.Controls.IFooter {{\r\n";
-            //    _d_ts += form_d_ts_Footer;
-            //    _d_ts += $"\t\t}}\r\n";
-            //}
+
             var form_d_ts_Navigation = GetForm_d_ts_Navigation(form.FormXml);
             if (form_d_ts_Navigation.Length > 0)
             {
@@ -593,11 +586,7 @@ namespace DynamicsCrm.DevKit.Shared
                 _d_ts += $"\t\t/** The Body section of form {formName} */\r\n";
                 _d_ts += $"\t\tBody: {@namespace}.Form{formName}.Body;\r\n";
             }
-            //if (form_d_ts_Footer.Length > 0)
-            //{
-            //    _d_ts += $"\t\t/** The Footer section of form {formName} */\r\n";
-            //    _d_ts += $"\t\tFooter: {@namespace}.Form{formName}.Footer;\r\n";
-            //}
+
             if (form_d_ts_Header.Length > 0)
             {
                 _d_ts += $"\t\t/** The Header section of form {formName} */\r\n";
@@ -646,80 +635,7 @@ namespace DynamicsCrm.DevKit.Shared
             {
                 _d_ts += form_d_ts_Body;
             }
-            //var form_d_ts_Footer = GetForm_d_ts_Footer(form.FormXml);
-            //if (form_d_ts_Footer.Length > 0)
-            //{
-            //    _d_ts += $"\t\tinterface Footer extends DevKit.Controls.IFooter {{\r\n";
-            //    _d_ts += form_d_ts_Footer;
-            //    _d_ts += $"\t\t}}\r\n";
-            //}
-            //var form_d_ts_Navigation = GetForm_d_ts_Navigation(form.FormXml);
-            //if (form_d_ts_Navigation.Length > 0)
-            //{
-            //    _d_ts += $"\t\tinterface Navigation {{\r\n";
-            //    _d_ts += form_d_ts_Navigation;
-            //    _d_ts += $"\t\t}}\r\n";
-            //}
-            //var form_d_ts_QuickForm = GetForm_d_ts_QuickForm(form.FormXml);
-            //if (form_d_ts_QuickForm.Length > 0)
-            //{
-            //    _d_ts += form_d_ts_QuickForm;
-            //}
-            //var form_d_ts_Process = GetForm_d_ts_Process(form.FormXml);
-            //if (form_d_ts_Process.Length > 0)
-            //{
-            //    _d_ts += form_d_ts_Process;
-            //}
-            //var form_d_ts_Grid = GetForm_d_ts_Grid(form.FormXml);
-            //if (form_d_ts_Grid.Length > 0)
-            //{
-            //    _d_ts += form_d_ts_Grid;
-            //}
-            //_d_ts += $"{TAB}}}{NEW_LINE}";
-            //_d_ts += $"\tclass Form{formName} extends DevKit.IForm {{\r\n";
-            //_d_ts += $"\t\t/**\r\n";
-            //_d_ts += $"\t\t* {form.Name} [Main Form]\r\n";
-            //_d_ts += $"\t\t* @param executionContext the execution context\r\n";
-            //_d_ts += $"\t\t* @param defaultWebResourceName default resource name. E.g.: \"devkit_/resources/Resource\"\r\n";
-            //_d_ts += $"\t\t*/\r\n";
-            //_d_ts += $"\t\tconstructor(executionContext: any, defaultWebResourceName?: string);\r\n";
-            //_d_ts += $"\t\t/** Utility functions/methods/objects for Dynamics 365 form */\r\n";
-            //_d_ts += $"\t\tUtility: DevKit.Utility;\r\n";
-            //if (form_d_ts_Body.Length > 0)
-            //{
-            //    _d_ts += $"\t\t/** The Body section of form {formName} */\r\n";
-            //    _d_ts += $"\t\tBody: {@namespace}.Form{formName}.Body;\r\n";
-            //}
-            //if (form_d_ts_Footer.Length > 0)
-            //{
-            //    _d_ts += $"\t\t/** The Footer section of form {formName} */\r\n";
-            //    _d_ts += $"\t\tFooter: {@namespace}.Form{formName}.Footer;\r\n";
-            //}
-            //if (form_d_ts_Header.Length > 0)
-            //{
-            //    _d_ts += $"\t\t/** The Header section of form {formName} */\r\n";
-            //    _d_ts += $"\t\tHeader: {@namespace}.Form{formName}.Header;\r\n";
-            //}
-            //if (form_d_ts_Navigation.Length > 0)
-            //{
-            //    _d_ts += $"\t\t/** The Navigation of form {formName} */\r\n";
-            //    _d_ts += $"\t\tNavigation: {@namespace}.Form{formName}.Navigation;\r\n";
-            //}
-            //if (form_d_ts_QuickForm.Length > 0)
-            //{
-            //    _d_ts += $"\t\t/** The QuickForm of form {formName} */\r\n";
-            //    _d_ts += $"\t\tQuickForm: {@namespace}.Form{formName}.QuickForm;\r\n";
-            //}
-            //if (form_d_ts_Process.Length > 0)
-            //{
-            //    _d_ts += $"\t\t/** The Process of form {formName} */\r\n";
-            //    _d_ts += $"\t\tProcess: {@namespace}.Form{formName}.Process;\r\n";
-            //}
-            //if (form_d_ts_Grid.Length > 0)
-            //{
-            //    _d_ts += $"\t\t/** The Grid of form {formName} */\r\n";
-            //    _d_ts += $"\t\tGrid: {@namespace}.Form{formName}.Grid;\r\n";
-            //}
+
             _d_ts += $"\t\t/** The SidePanes of form {formName} */\r\n";
             _d_ts += $"\t\tSidePanes: DevKit.SidePanes;\r\n";
             _d_ts += $"\t}}\r\n";
@@ -912,7 +828,7 @@ namespace DynamicsCrm.DevKit.Shared
             var quickViewXml = (from x in xdoc2.Descendants("QuickFormId") select new { formId = x.Value, entityLogicalName = x?.Attribute("entityname")?.Value }).FirstOrDefault();
             if (quickViewXml == null) return string.Empty;
             var quickViewFormXml = string.Empty;
-            //var quickViewEntityLogicalName = string.Empty;
+
             GetFormXml(quickViewXml.formId, quickViewXml.entityLogicalName, out quickViewFormXml);
             if (quickViewFormXml == string.Empty) return string.Empty;
             var xdoc3 = XDocument.Parse(quickViewFormXml);
@@ -964,17 +880,6 @@ namespace DynamicsCrm.DevKit.Shared
         private static string GetForm_d_ts_Navigation(string formXml)
         {
             var _d_ts = string.Empty;
-            //var xdoc = XDocument.Parse(formXml);
-            //var navigations = (from x in xdoc.Descendants("Navigation").Descendants("NavBar")
-            //        .Descendants("NavBarByRelationshipItem")
-            //                   select (string)x?.Attribute("Id")).ToList();
-            //navigations.Sort();
-            //if (navigations.Count == 0) return string.Empty;
-            //navigations.Sort();
-            //foreach (var navigation in navigations)
-            //{
-            //    _d_ts += $"\t\t\t{navigation}: DevKit.Controls.NavigationItem,\r\n";
-            //}
 
             List<string> BlackList = new List<string> { "asyncoperation", "bulkdeletefailure", "mailboxtrackingfolder", "principalobjectattributeaccess", "processsession", "syncerror", "userentityinstancedata", "duplicaterecord",
         "sharepointdocumentlocation", "sharepointdocument", "chat", "fax", "letter", "recurringappointmentmaster", "socialactivity", "activitypointer", "annotation", "slakpiinstance", "socialprofile", "postrole", "postregarding", "postfollow",
@@ -999,28 +904,6 @@ namespace DynamicsCrm.DevKit.Shared
             _d_ts = _d_ts.TrimEnd(",\r\n".ToCharArray()) + "\r\n";
             return _d_ts;
         }
-
-        //private static string GetForm_d_ts_Footer(string formXml)
-        //{
-        //    var xdoc = XDocument.Parse(formXml);
-        //    var footers = (from x in xdoc.Descendants("footer")
-        //                   .Descendants("rows")
-        //                   .Descendants("row")
-        //                   .Descendants("cell")
-        //                   .Descendants("control")
-        //                   select new IdName
-        //                   {
-        //                       Name = x?.Attribute("datafieldname")?.Value,
-        //                       Id = x?.Attribute("id").Value,
-        //                       ClassId = Utility.TrimGuid(x?.Attribute("classid")?.Value?.ToUpper()),
-        //                       ControlId = x?.Attribute("uniqueid")?.Value
-        //                   }).ToList();
-        //    footers = footers.OrderBy(x => x.Name).ToList();
-        //    if (footers.Count() == 0) return string.Empty;
-        //    var _d_ts = Get_d_ts_ForListFields(formXml, footers, false);
-        //    if (_d_ts.EndsWith(",\r\n")) _d_ts = _d_ts.TrimEnd(",\r\n".ToCharArray()) + "\r\n";
-        //    return _d_ts;
-        //}
 
         private static string GetForm_d_ts_Body(string formXml)
         {
@@ -1055,7 +938,7 @@ namespace DynamicsCrm.DevKit.Shared
                 {
                     if (row2 == null) continue;
                     if (row2.name == null) continue;
-                    //if (row2.name.StartsWith("ref_pan")) continue;
+
                     var sectionName = row2.name;
                     if (existSections.Contains(Utility.SafeIdentifier(sectionName))) continue; else existSections.Add(Utility.SafeIdentifier(sectionName));
                     part1 += $"\t\t\t{Utility.SafeIdentifier(sectionName)}: DevKit.Controls.Section;\r\n";
@@ -1140,7 +1023,7 @@ namespace DynamicsCrm.DevKit.Shared
 
             var listVirtualControls = new List<string>();
             foreach (var item in list) item.Id = Utility.SafeIdentifier(item.Id);
-            //list = list.OrderBy(x => x.Id).ToList();
+
             foreach (var item in list)
             {
                 var _d_ts = string.Empty;

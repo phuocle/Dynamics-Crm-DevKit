@@ -541,7 +541,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         Target = pluginImage
                     };
                     request.Parameters.Add("SolutionUniqueName", Json.solution);
-                    //CliLog.WriteLineWarning(SPACE, SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.Register, ConsoleColor.White, $"{imageType.ToString()}Name: ", ConsoleColor.Cyan, imageName, ConsoleColor.White, $" {imageType.ToString()}Alias: ", ConsoleColor.Cyan, imageAliasName);
+
                     CliLog.WriteLineWarning(SPACE, SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.REGISTER, ConsoleColor.White, "Image Type: ", ConsoleColor.Cyan, $"{imageType.ToString()}", ConsoleColor.White, $" Name: ", ConsoleColor.Cyan, imageName, ConsoleColor.White, $" Alias: ", ConsoleColor.Cyan, imageAliasName);
                     CliLog.WriteLineWarning(SPACE, SPACE, SPACE, SPACE, SPACE, "Image Fields: ", ConsoleColor.Blue, "[", ConsoleColor.Green, imageAttributes ?? "*", ConsoleColor.Blue, "]");
                     try
@@ -580,7 +580,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     attributes == (imageAttributes.Trim() == "*" ? null : imageAttributes) &&
                     imagetype == (int)imageType)
                 {
-                    //CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.DoNothing, ConsoleColor.White, $"{imageType.ToString()}Name: ", ConsoleColor.Cyan, imageName, ConsoleColor.White, $" {imageType.ToString()}Alias: ", ConsoleColor.Cyan, imageAliasName);
+
                     CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, "Image Type: ", ConsoleColor.Cyan, $"{imageType.ToString()}", ConsoleColor.White, $" Name: ", ConsoleColor.Cyan, imageName, ConsoleColor.White, $" Alias: ", ConsoleColor.Cyan, imageAliasName);
                     CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE, SPACE, "Image Fields: ", ConsoleColor.Blue, "[", ConsoleColor.Green, imageAttributes ?? "*", ConsoleColor.Blue, "]");
                 }
@@ -589,13 +589,13 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     if (attributes == null || (attributes != (imageAttributes.Trim() == "*" ? null : imageAttributes) && imageAttributes.Length != 0))
                     {
                         pluginImage["sdkmessageprocessingstepimageid"] = rows.Entities[0].Id;
-                        //CliLog.WriteLineWarning(SPACE, SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.Updated, ConsoleColor.White, $"{imageType.ToString()}Name: ", ConsoleColor.Cyan, imageName, ConsoleColor.White, $" {imageType.ToString()}Alias: ", ConsoleColor.Cyan, imageAliasName);
+
                         CliLog.WriteLineWarning(SPACE, SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.UPDATED, ConsoleColor.White, "Image Type: ", ConsoleColor.Cyan, $"{imageType.ToString()}", ConsoleColor.White, $" Name: ", ConsoleColor.Cyan, imageName, ConsoleColor.White, $" Alias: ", ConsoleColor.Cyan, imageAliasName);
                         CliLog.WriteLineWarning(SPACE, SPACE, SPACE, SPACE, SPACE, "Image Fields: ", ConsoleColor.Blue, "[", ConsoleColor.Green, imageAttributes ?? "*", ConsoleColor.Blue, "]");
                     }
                     else if (imageAttributes.Length == 0)
                     {
-                        //CliLog.WriteLineWarning(SPACE, SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.Deleted, ConsoleColor.White, $"{imageType.ToString()}Name: ", ConsoleColor.Cyan, imageName, ConsoleColor.White, $" {imageType.ToString()}Alias: ", ConsoleColor.Cyan, imageAliasName);
+
                         CliLog.WriteLine(SPACE, SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.DELETED, ConsoleColor.White, "Image Type: ", ConsoleColor.Cyan, $"{imageType.ToString()}", ConsoleColor.White, $" Name: ", ConsoleColor.Cyan, imageName, ConsoleColor.White, $" Alias: ", ConsoleColor.Cyan, imageAliasName);
                         CliLog.WriteLineWarning(SPACE, SPACE, SPACE, SPACE, SPACE, "Image Fields: ", ConsoleColor.Blue, "[", ConsoleColor.Green, imageAttributes ?? "*", ConsoleColor.Blue, "]");
                         ServiceClient.Delete("sdkmessageprocessingstepimage", rows.Entities[0].Id);
@@ -719,7 +719,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 ["sdkmessageid"] = sdkMessageId,
                 ["filteringattributes"] = attribute.FilteringAttributes?.Replace(" ", ""),
                 ["impersonatinguserid"] = impersonatingUserId != null ? new EntityReference("systemuser", impersonatingUserId.Value) : null,
-                ["supporteddeployment"] = (attribute.Server && attribute.Offline) ? new OptionSetValue(2/*Both*/) : (!attribute.Server && attribute.Offline ? new OptionSetValue(1/*Offline*/) : new OptionSetValue(0/*Server*/)),
+                ["supporteddeployment"] = (attribute.Server && attribute.Offline) ? new OptionSetValue(2) : (!attribute.Server && attribute.Offline ? new OptionSetValue(1) : new OptionSetValue(0)),
                 ["description"] = attribute.Description
             };
 
@@ -769,7 +769,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 pluginStep["sdkmessageprocessingstepid"] = pluginStepId.Value;
                 var hasChangedPluginStep = false;
                 var secureEntity = GetSecureEntity(pluginStepId.Value);
-                if (attribute.SecureConfiguration?.Trim().Length == 0 && secureEntity != null) //delete secure value
+                if (attribute.SecureConfiguration?.Trim().Length == 0 && secureEntity != null)
                 {
                     var sdkmessageprocessingstepsecureconfigid = (Guid?)secureEntity.GetAttributeValue<AliasedValue>("s.sdkmessageprocessingstepsecureconfigid")?.Value;
                     if (sdkmessageprocessingstepsecureconfigid.HasValue)
@@ -778,7 +778,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         hasChangedPluginStep = true;
                     }
                 }
-                else if (attribute.SecureConfiguration?.Trim().Length > 0 && secureEntity != null) //exist secure
+                else if (attribute.SecureConfiguration?.Trim().Length > 0 && secureEntity != null)
                 {
                     var sdkmessageprocessingstepsecureconfigid = (Guid?)secureEntity.GetAttributeValue<AliasedValue>("s.sdkmessageprocessingstepsecureconfigid")?.Value;
                     if (sdkmessageprocessingstepsecureconfigid.HasValue)
@@ -793,7 +793,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         }
                     }
                 }
-                else if (attribute.SecureConfiguration?.Trim().Length > 0 && secureEntity == null) //create the secure
+                else if (attribute.SecureConfiguration?.Trim().Length > 0 && secureEntity == null)
                 {
                     var create = new Entity("sdkmessageprocessingstepsecureconfig");
                     create["secureconfig"] = attribute.SecureConfiguration;
@@ -1451,7 +1451,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             return rows.Entities[0].Id;
         }
 
-        //=========================================================================
         private void DeployPackage(string file)
         {
             using (PackageArchiveReader packageArchiveReader = new PackageArchiveReader(file))

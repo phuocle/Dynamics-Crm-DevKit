@@ -178,21 +178,20 @@ namespace DynamicsCrm.DevKit.Cli
                 CliLog.WriteLine(ConsoleColor.White, "|");
                 CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Starting OAuth authentication...");
                 CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Yellow, "Please complete authentication in the browser window that will open.");
-                // Use interactive OAuth authentication with browser login
-                // This will open a browser window for the user to authenticate
+
                 var serviceClient = new ServiceClient(
-                    userId: null, // Will prompt for user ID in browser
-                    password: null, // Will prompt for password in browser
+                    userId: null,
+                    password: null,
                     hostUri: new Uri(url),
                     useUniqueInstance: true,
-                    clientId: "51f81489-12ee-4a9e-aaae-a2591f45987d", // Default Dynamics 365 CLI app ID
-                    redirectUri: new Uri("app://58145B91-0C36-4500-8554-080854F2AC97"), // Default redirect URI
-                    promptBehavior: Microsoft.PowerPlatform.Dataverse.Client.Auth.PromptBehavior.Always, // Always prompt for authentication
+                    clientId: "51f81489-12ee-4a9e-aaae-a2591f45987d",
+                    redirectUri: new Uri("app://58145B91-0C36-4500-8554-080854F2AC97"),
+                    promptBehavior: Microsoft.PowerPlatform.Dataverse.Client.Auth.PromptBehavior.Always,
                     useDefaultCreds: false,
-                    tokenCacheStorePath: null, // Use in-memory cache
+                    tokenCacheStorePath: null,
                     logger: null
                 );
-                // Check if connection was successful
+
                 if (serviceClient != null && serviceClient.IsReady)
                 {
                     ServiceClient = serviceClient;

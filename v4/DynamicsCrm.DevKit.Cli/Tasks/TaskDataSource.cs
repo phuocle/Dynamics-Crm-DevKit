@@ -230,7 +230,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             };
             EntityMetadata entityMetadata = ((RetrieveEntityResponse)ServiceClient.Execute(retrieveEntityRequest)).EntityMetadata;
 
-            //Update field Id
             var requestId = new RetrieveAttributeRequest()
             {
                 EntityLogicalName = entityMetadata.LogicalName,
@@ -245,7 +244,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 MergeLabels = false
             };
             ServiceClient.Execute(updateRequestId);
-            //Update field name
+
             var requestName = new RetrieveAttributeRequest()
             {
                 EntityLogicalName = entityMetadata.LogicalName,

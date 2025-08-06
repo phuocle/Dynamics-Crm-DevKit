@@ -31,7 +31,7 @@ namespace DynamicsCrm.DevKit.Shared
             code += $"/** @namespace {@namespace} */{NEW_LINE}";
             code += $"var {@namespace};{NEW_LINE}";
             code += $"(function ({@namespace}) {{{NEW_LINE}";
-            //code += $"{TAB}'use strict';{NEW_LINE}";
+
             code += $"{TAB}{@namespace}.{entityMetadata.SchemaName}Api = function (e) {{{NEW_LINE}";
             code += $"{TAB}{TAB}const f = '@OData.Community.Display.V1.FormattedValue';{NEW_LINE}";
             code += $"{Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.WebApi2.js")}";
@@ -44,12 +44,7 @@ namespace DynamicsCrm.DevKit.Shared
             code += $"{TAB}{TAB}{logicalName}.ODataEntity = e;{NEW_LINE}";
             code += $"{TAB}{TAB}{logicalName}.FormattedValue = {{}};{NEW_LINE}";
             code += $"{TAB}{TAB}for (const field in _{logicalName}) {{{NEW_LINE}";
-            //code += $"{TAB}{TAB}{TAB}var a = _{logicalName}[field].a;{NEW_LINE}";
-            //code += $"{TAB}{TAB}{TAB}var b = _{logicalName}[field].b;{NEW_LINE}";
-            //code += $"{TAB}{TAB}{TAB}var c = _{logicalName}[field].c;{NEW_LINE}";
-            //code += $"{TAB}{TAB}{TAB}var d = _{logicalName}[field].d;{NEW_LINE}";
-            //code += $"{TAB}{TAB}{TAB}var g = _{logicalName}[field].g;{NEW_LINE}";
-            //code += $"{TAB}{TAB}{TAB}var r = _{logicalName}[field].r;{NEW_LINE}";
+
             code += $"{TAB}{TAB}{TAB}const fieldConfig = _{logicalName}[field];{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}webApiField({logicalName}, field, e, fieldConfig.a, fieldConfig.b, fieldConfig.c, fieldConfig.d, fieldConfig.r, u, fieldConfig.g);{NEW_LINE}";
             code += $"{TAB}{TAB}}}{NEW_LINE}";
@@ -213,7 +208,6 @@ namespace DynamicsCrm.DevKit.Shared
             code += $"{NEW_LINE}";
             return code;
         }
-
 
         private static string GetGeneratorImageCode(string schemaName, string logicalName)
         {

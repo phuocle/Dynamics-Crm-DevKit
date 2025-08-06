@@ -5,15 +5,14 @@ using System.Text;
 
 namespace DynamicsCrm.DevKit.Shared
 {
-    //https://tekeye.uk/visual_studio/encrypt-decrypt-c-sharp-string
+
     public static class EncryptDecrypt
     {
-        // This size of the IV (in bytes) must = (keysize / 8).  Default keysize is 256, so the IV must be
-        // 32 bytes long.  Using a 16 character string here gives us 32 bytes when converted to a byte array.
+
         private const string initVector = "ikols9i3edkdosad";
-        // This constant is used to determine the keysize of the encryption algorithm
+
         private const int keysize = 256;
-        //Encrypt
+
         public static string EncryptString(string plainText)
         {
             string passPhrase = "PL.DynamicsCrm.DevKit";
@@ -33,7 +32,7 @@ namespace DynamicsCrm.DevKit.Shared
             cryptoStream.Close();
             return Convert.ToBase64String(cipherTextBytes);
         }
-        //Decrypt
+
         public static string DecryptString(string cipherText)
         {
             try

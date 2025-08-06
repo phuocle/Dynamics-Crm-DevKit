@@ -11,13 +11,6 @@ namespace DynamicsCrm.DevKit.Shared
 {
     public static class Extensions
     {
-        //public static void ForEach<T>(this IEnumerable<T> ie, Action<T> action)
-        //{
-        //    foreach (var i in ie)
-        //    {
-        //        action(i);
-        //    }
-        //}
 
         public static List<NameValue> OptionSetValues(this AttributeMetadata attribute)
         {
@@ -52,24 +45,6 @@ namespace DynamicsCrm.DevKit.Shared
             }
             return values.OrderBy(x => x.Name).ToList();
         }
-
-        //public static string GetEntityReferenceLogicalName(this AttributeMetadata attribute)
-        //{
-        //    if (attribute.AttributeType == AttributeTypeCode.Owner)
-        //    {
-        //        return "systemuser;team";
-        //    }
-        //    else if (attribute.AttributeType == AttributeTypeCode.Lookup || attribute.AttributeType == AttributeTypeCode.Customer || attribute.AttributeType == AttributeTypeCode.PartyList)
-        //    {
-        //        var lookup = (LookupAttributeMetadata)attribute;
-        //        var value = string.Empty;
-        //        foreach (var target in lookup.Targets)
-        //            value += target + ";";
-        //        if (value.Length > 0) value = value.Substring(0, value.Length - 1);
-        //        return value;
-        //    }
-        //    return string.Empty;
-        //}
 
         public static int? GetMaxLength(this AttributeMetadata attribute)
         {
@@ -150,22 +125,5 @@ namespace DynamicsCrm.DevKit.Shared
             }
         }
 
-        //public static string Left(this string input, int count)
-        //{
-        //    if (input == null) return null;
-        //    return input.Substring(0, Math.Min(input.Length, count));
-        //}
-
-        //public static string Right(this string input, int count)
-        //{
-        //    if (input == null) return null;
-        //    return input.Substring(Math.Max(input.Length - count, 0), Math.Min(count, input.Length));
-        //}
-
-        //public static string Mid(this string input, int start, int count)
-        //{
-        //    if (input == null) return null;
-        //    return input.Substring(Math.Min(start, input.Length), Math.Min(count, Math.Max(input.Length - start, 0)));
-        //}
     }
 }
