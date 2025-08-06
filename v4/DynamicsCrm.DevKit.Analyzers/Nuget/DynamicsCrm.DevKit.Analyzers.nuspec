@@ -15,7 +15,7 @@
 	<readme>docs\README.md</readme>
   </metadata>
   <files>
-    <file src="..\bin\Release\netstandard2.1\DynamicsCrm.DevKit.Analyzers.dll" target="analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />
+    <file src="..\bin\Release\netstandard2.0\DynamicsCrm.DevKit.Analyzers.dll" target="analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />
     <file src="..\tools\*.ps1" target="tools\" />
     <file src="..\license\LICENSE.txt" target="license\LICENSE.txt" />
 	<file src="..\docs\README.md" target="docs\README.md" />
