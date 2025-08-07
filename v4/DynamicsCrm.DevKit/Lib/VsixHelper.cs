@@ -54,7 +54,8 @@ namespace DynamicsCrm.DevKit
             }
             var json = File.ReadAllText(fileName);
             var devKitConnections = SimpleJson.DeserializeObject<DevKitConnections>(json);
-            devKitConnections.CrmConnections ??= new List<CrmConnection>();
+            if (devKitConnections.CrmConnections == null)
+                devKitConnections.CrmConnections = new List<CrmConnection>();
             return devKitConnections;
         }
 
