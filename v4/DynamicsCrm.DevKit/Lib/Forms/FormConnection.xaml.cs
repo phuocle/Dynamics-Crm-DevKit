@@ -51,7 +51,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 VsixHelper.SaveDefaultCrmConnection(CrmConnection.Name);
                 //ServiceClient = Helper.CreateServiceClient(CrmConnection);
                 var connectionString = "AuthType=ClientSecret;Url=https://hitachi-hsapvn-dev.crm5.dynamics.com;ClientId=b1b8cf05-cb06-4674-b93e-98c8c9a02e5a;ClientSecret=v+L6+3MvOrVPMNqGn86vi6qEG4qpCCLoLqgeUMjnGkY=;";
-                ServiceClient = new ServiceClient(connectionString, null);
+                ServiceClient = new ServiceClient(connectionString);
                 var t = string.Empty;
                 //_ = Task.Factory.StartNew(async () =>
                 //{
