@@ -705,8 +705,11 @@ namespace DynamicsCrm.DevKit.Shared
             if (string.IsNullOrEmpty(crmConnection.Type))
                 throw new ArgumentException("Authentication type is required", nameof(crmConnection));
             string connectionString = BuildConnectionString(crmConnection);
-            try
-            {
+
+            connectionString = "AuthType=ClientSecret;Url=https://hitachi-hsapvn-dev.crm5.dynamics.com;ClientId=b1b8cf05-cb06-4674-b93e-98c8c9a02e5a;ClientSecret=v+L6+3MvOrVPMNqGn86vi6qEG4qpCCLoLqgeUMjnGkY=;";
+
+            //try
+            //{
                 var serviceClient = new ServiceClient(connectionString);
                 if (serviceClient != null && serviceClient.IsReady)
                 {
@@ -716,11 +719,11 @@ namespace DynamicsCrm.DevKit.Shared
                 {
                     throw new InvalidOperationException("Failed to connect to Dataverse. Please check your connection settings.");
                 }
-            }
-            catch (Exception ex) when (!(ex is InvalidOperationException))
-            {
-                throw new InvalidOperationException($"Error creating Dataverse connection: {ex.Message}", ex);
-            }
+            //}
+            //catch (Exception ex) when (!(ex is InvalidOperationException))
+            //{
+            //    throw new InvalidOperationException($"Error creating Dataverse connection: {ex.Message}", ex);
+            //}
         }
 
         public static string BuildConnectionString(CrmConnection crmConnection)
