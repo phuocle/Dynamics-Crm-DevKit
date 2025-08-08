@@ -21,7 +21,7 @@ namespace DynamicsCrm.DevKit.Commands
             await VS.StatusBar.StartAnimationAsync(StatusAnimation.Deploy);
 
             var connectionString = "AuthType=ClientSecret;Url=https://hitachi-hsapvn-dev.crm5.dynamics.com;ClientId=b1b8cf05-cb06-4674-b93e-98c8c9a02e5a;ClientSecret=v+L6+3MvOrVPMNqGn86vi6qEG4qpCCLoLqgeUMjnGkY=;";
-            //var ServiceClient = new ServiceClient(connectionString);
+            var ServiceClient = new ServiceClient(connectionString);
 
             var serviceClient = await CacheHelper.GetServiceClientAsync();
             if (serviceClient != null)
