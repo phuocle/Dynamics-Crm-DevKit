@@ -108,13 +108,12 @@ namespace DynamicsCrm.DevKit
                 // Check if source folder exists
                 if (Directory.Exists(sourceDllFolder))
                 {
-                    // Get ALL DLL files from source folder, including subdirectories if any
-                    var dllFiles = Directory.GetFiles(sourceDllFolder, "*.dll", SearchOption.AllDirectories);
+                    // Get DLL files from source folder only (no subdirectories)
+                    var dllFiles = Directory.GetFiles(sourceDllFolder, "*.dll", SearchOption.TopDirectoryOnly);
 
                     WriteDebugLog($"DynamicsCrm.DevKit: Found {dllFiles.Length} DLL files in {sourceDllFolder}");
 
                     int copiedCount = 0;
-                    int skippedCount = 0;
                     int failedCount = 0;
 
                     foreach (var sourceFile in dllFiles)
@@ -124,10 +123,10 @@ namespace DynamicsCrm.DevKit
                             var fileName = Path.GetFileName(sourceFile);
                             var targetFile = Path.Combine(vsixLocation, fileName);
 
-                            // Always copy and overwrite - remove the time check condition
+                            // Always copy and overwrite
                             File.Copy(sourceFile, targetFile, overwrite: true);
                             copiedCount++;
-                            WriteDebugLog($"DynamicsCrm.DevKit: Copied {fileName} to VSIX location (overwrite=true)");
+                            WriteDebugLog($"DynamicsCrm.DevKit: Copied {fileName} to VSIX location");
                         }
                         catch (UnauthorizedAccessException ex)
                         {
