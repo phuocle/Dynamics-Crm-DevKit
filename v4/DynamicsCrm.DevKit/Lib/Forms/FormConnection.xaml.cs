@@ -6,7 +6,6 @@ using Microsoft.VisualStudio.Shell;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Controls;
-using System.Threading;
 
 namespace DynamicsCrm.DevKit.Lib.Forms
 {
@@ -101,10 +100,6 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 await LoadConnectionsAsync();
                 await ClearDataAsync();
             }
-            else
-            {
-                await VS.MessageBox.ShowErrorAsync(@"Something wrong with your connection. Please try it again");
-            }
 
             stackPanelForm.IsEnabled = true;
             progressBar.Visibility = System.Windows.Visibility.Hidden;
@@ -163,7 +158,15 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 await VS.MessageBox.ShowErrorAsync($"Please enter {labelUser.Content}");
                 textboxUser.Focus();
                 return false;
+            }            
+            var selectedType = ((ComboBoxItem)comboBoxType.SelectedItem).Content?.ToString();
+            if (selectedType == "AD" && !textboxUser.Text.Contains("\\"))
+            {
+                await VS.MessageBox.ShowErrorAsync("For AD authentication, username must be in format 'domain\\username'");
+                textboxUser.Focus();
+                return false;
             }
+            
             if (string.IsNullOrEmpty(textboxPassword.Password))
             {
                 await VS.MessageBox.ShowErrorAsync($"Please enter {labelPassword.Content}");
