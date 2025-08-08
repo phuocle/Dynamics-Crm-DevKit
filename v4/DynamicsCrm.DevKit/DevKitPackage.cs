@@ -72,47 +72,13 @@ namespace DynamicsCrm.DevKit
             try
             {
                 var vsixLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-                PreloadCriticalAssemblies(vsixLocation);
-                AppDomain.CurrentDomain.AssemblyResolve += OnAssemblyResolve;
-                _assembliesLoaded = true;
-            }
-            catch (Exception ex)
-            {
-                WriteDebugLog($"DynamicsCrm.DevKit: Error in LoadRequiredAssemblies: {ex.Message}");
-            }
-        }
 
-        private void LoadRequiredAssemblies()
-        {
-            if (_assembliesLoaded) return;
-
-            try
-            {
-                // Get the current assembly location (VSIX installation folder)
-                var vsixLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-
-                WriteDebugLog($"DynamicsCrm.DevKit: VSIX location: {vsixLocation}");
-
-                // Since DLLs are included in VSIX package, they should be in the same directory
-                // No need to copy files - just verify they exist and preload critical assemblies
-                var dllFiles = Directory.GetFiles(Path.Combine(vsixLocation, "dll"), "*.dll", SearchOption.TopDirectoryOnly);
-                WriteDebugLog($"DynamicsCrm.DevKit: Found {dllFiles.Length} DLL files in VSIX location");
-
-                // Log available DLL files for debugging
-                foreach (var dllFile in dllFiles)
-                {
-                    var fileName = Path.GetFileName(dllFile);
-                    WriteDebugLog($"DynamicsCrm.DevKit: Available DLL: {fileName}");
-                }
-
-                // Preload critical assemblies to avoid version conflicts
+                // Preload only the most critical assemblies that VS might conflict with
                 PreloadCriticalAssemblies(vsixLocation);
 
-                // Set up assembly resolve event handler for runtime loading
+                // Handle any other assemblies at runtime
                 AppDomain.CurrentDomain.AssemblyResolve += OnAssemblyResolve;
                 _assembliesLoaded = true;
-
-                WriteDebugLog("DynamicsCrm.DevKit: Assembly loading setup completed successfully");
             }
             catch (Exception ex)
             {
@@ -122,20 +88,15 @@ namespace DynamicsCrm.DevKit
 
         private void PreloadCriticalAssemblies(string vsixLocation)
         {
-            // List of critical assemblies that should be preloaded to avoid version conflicts
+            // Only preload assemblies that VS is likely to have different versions of
             var criticalAssemblies = new[]
             {
                 "Microsoft.Extensions.DependencyInjection.dll",
                 "Microsoft.Extensions.DependencyInjection.Abstractions.dll",
                 "Microsoft.Extensions.Caching.Memory.dll",
                 "Microsoft.Extensions.Caching.Abstractions.dll",
-                "Microsoft.Extensions.Options.dll",
-                "Microsoft.Extensions.Logging.dll",
-                "Microsoft.Extensions.Logging.Abstractions.dll",
-                "Microsoft.Extensions.Configuration.dll",
-                "Microsoft.Extensions.Configuration.Abstractions.dll",
-                "Microsoft.Extensions.Primitives.dll",
-                "Microsoft.PowerPlatform.Dataverse.Client.dll"
+                "Microsoft.PowerPlatform.Dataverse.Client.dll",
+                "System.Runtime.CompilerServices.Unsafe.dll" // Add this if you have it
             };
 
             WriteDebugLog("DynamicsCrm.DevKit: Starting preload of critical assemblies...");
@@ -145,43 +106,38 @@ namespace DynamicsCrm.DevKit
                 try
                 {
                     var assemblyPath = Path.Combine(vsixLocation, assemblyFileName);
-
                     if (File.Exists(assemblyPath))
                     {
-                        // Check if assembly is already loaded
                         var assemblyName = Path.GetFileNameWithoutExtension(assemblyFileName);
-                        var loadedAssemblies = AppDomain.CurrentDomain.GetAssemblies();
-                        bool alreadyLoaded = false;
 
-                        foreach (var loadedAssembly in loadedAssemblies)
-                        {
-                            if (loadedAssembly.GetName().Name == assemblyName)
-                            {
-                                alreadyLoaded = true;
-                                WriteDebugLog($"DynamicsCrm.DevKit: Critical assembly already loaded: {assemblyName} (Version: {loadedAssembly.GetName().Version})");
-                                break;
-                            }
-                        }
-
-                        if (!alreadyLoaded)
+                        // Only load if not already loaded
+                        if (!IsAssemblyLoaded(assemblyName))
                         {
                             var assembly = Assembly.LoadFrom(assemblyPath);
                             WriteDebugLog($"DynamicsCrm.DevKit: Preloaded critical assembly: {assemblyName} (Version: {assembly.GetName().Version})");
                         }
-                    }
-                    else
-                    {
-                        WriteDebugLog($"DynamicsCrm.DevKit: Critical assembly not found: {assemblyFileName}");
+                        else
+                        {
+                            WriteDebugLog($"DynamicsCrm.DevKit: Critical assembly already loaded: {assemblyName}");
+                        }
                     }
                 }
                 catch (Exception ex)
                 {
                     WriteDebugLog($"DynamicsCrm.DevKit: Failed to preload {assemblyFileName}: {ex.Message}");
-                    // Continue with other assemblies
                 }
             }
+        }
 
-            WriteDebugLog("DynamicsCrm.DevKit: Finished preloading critical assemblies.");
+        private bool IsAssemblyLoaded(string assemblyName)
+        {
+            var loadedAssemblies = AppDomain.CurrentDomain.GetAssemblies();
+            foreach (var assembly in loadedAssemblies)
+            {
+                if (assembly.GetName().Name == assemblyName)
+                    return true;
+            }
+            return false;
         }
 
         private Assembly OnAssemblyResolve(object sender, ResolveEventArgs args)
