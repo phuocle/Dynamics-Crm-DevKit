@@ -17,7 +17,7 @@ namespace DynamicsCrm.DevKit.Shared
         public static List<SystemForm> EntitiesFormXml { get; set; } = new List<SystemForm>();
         public static List<ProcessForm> EntitiesProcessForm { get; set; } = new List<ProcessForm>();
 
-        public static string ConnectedUrl(ServiceClient service)
+        public static string GetConnectedUrl(ServiceClient service)
         {
             if (service?.ConnectedOrgUriActual == null)
                 return null;

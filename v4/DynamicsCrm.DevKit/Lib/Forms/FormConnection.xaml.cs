@@ -3,10 +3,7 @@ using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.VisualStudio.Shell;
-using System;
 using System.Linq;
-using System.Reflection;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 
@@ -14,40 +11,34 @@ namespace DynamicsCrm.DevKit.Lib.Forms
 {
     public partial class FormConnection : BaseDialogWindow
     {
-        public FormConnection(bool IsUseOOBConnection = true)
+        public FormConnection()
         {
             InitializeComponent();
-            //FixMicrosoftXrmToolingUiStyles();
             LoadConnections();
         }
-
-        //private void FixMicrosoftXrmToolingUiStyles()
-        //{
-        //    var executingAssembly = Assembly.GetExecutingAssembly();
-        //    var fInfo = new System.IO.FileInfo(executingAssembly.Location);
-        //    var checkFile = $"{fInfo.Directory.FullName}\\Microsoft.Xrm.Tooling.Ui.Styles.dll";
-        //    if (System.IO.File.Exists(checkFile))
-        //        Assembly.LoadFrom(checkFile);
-        //}
-
+        
         public ServiceClient ServiceClient { get; set; }
         public CrmConnection CrmConnection { get; set; }
 
         private void ButtonCancel_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            if (this.IsLoaded && this.IsVisible)
-                DialogResult = false;
+            if (this.IsLoaded && this.IsVisible) DialogResult = false;
             Close();
         }
 
-        private async void ButtonOK_Click(object sender, System.Windows.RoutedEventArgs e)
+        private void ButtonOK_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            _ = ButtonOK_ClickAsync(sender, e);
+        }
+
+        private async Task ButtonOK_ClickAsync(object sender, System.Windows.RoutedEventArgs e)
         {
             if (comboBoxSavedConnection.SelectedItem is CrmConnection selectedConnection)
             {
                 stackPanelForm.IsEnabled = false;
                 progressBar.Visibility = System.Windows.Visibility.Visible;
                 CrmConnection = selectedConnection;
-                VsixHelper.SaveDefaultCrmConnection(CrmConnection.Name);                
+                await VsixHelper.SaveDefaultCrmConnectionAsync(CrmConnection.Name);                
                 ServiceClient = await VsixHelper.CreateServiceClientAsync(CrmConnection);                    
                 if (ServiceClient != null && ServiceClient.IsReady)
                 {
@@ -58,13 +49,12 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 {
                     stackPanelForm.IsEnabled = true;
                     progressBar.Visibility = System.Windows.Visibility.Hidden;
-                    await VS.MessageBox.ShowErrorAsync("Failed to connect. Please check your connection settings.");
                 }                
             }
             else
             {
                 await VS.MessageBox.ShowErrorAsync("Please select a connection or create a new one.");
-            }
+            }            
         }
 
         private void ButtonCheckConnection_Click(object sender, System.Windows.RoutedEventArgs e)
@@ -111,21 +101,21 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             //}, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default);
         }
 
-        public void ClearData()
-        {
-            ThreadHelper.JoinableTaskFactory.Run(async () => {
-                await ClearDataAsync();
-            });
-        }
-        public async Task ClearDataAsync()
-        {
-            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-            comboBoxType.SelectedIndex = -1;
-            textboxName.Text = null;
-            textboxUrl.Text = null;
-            textboxUser.Text = null;
-            textboxPassword.Password = null;
-        }
+        //public void ClearData()
+        //{
+        //    ThreadHelper.JoinableTaskFactory.Run(async () => {
+        //        await ClearDataAsync();
+        //    });
+        //}
+        //public async Task ClearDataAsync()
+        //{
+        //    await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+        //    comboBoxType.SelectedIndex = -1;
+        //    textboxName.Text = null;
+        //    textboxUrl.Text = null;
+        //    textboxUser.Text = null;
+        //    textboxPassword.Password = null;
+        //}
         public void LoadConnections()
         {
             ThreadHelper.JoinableTaskFactory.Run(async () =>
@@ -136,7 +126,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         public async Task LoadConnectionsAsync()
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-            var devKitConnections = VsixHelper.GetDevKitConnections();
+            var devKitConnections = await VsixHelper.GetDevKitConnectionsAsync();
             comboBoxSavedConnection.DisplayMemberPath = "Name";
             comboBoxSavedConnection.ItemsSource = devKitConnections.CrmConnections;
             if (devKitConnections.DefaultCrmConnection != null)
@@ -144,11 +134,6 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 comboBoxSavedConnection.SelectedItem = devKitConnections.CrmConnections.FirstOrDefault(x => x.Name == devKitConnections.DefaultCrmConnection);
                 buttonOK.IsEnabled = comboBoxSavedConnection.Items.Count > 0;
             }
-            //else
-            //{
-            //    radioButtonOOBConnection.IsChecked = true;
-            //    buttonOK.IsEnabled = true;
-            //}
         }
         private bool IsValid()
         {

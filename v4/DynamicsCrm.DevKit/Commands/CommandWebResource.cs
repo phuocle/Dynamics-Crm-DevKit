@@ -1,12 +1,7 @@
 ﻿using Community.VisualStudio.Toolkit;
 using DynamicsCrm.DevKit.Lib;
 using DynamicsCrm.DevKit.Shared;
-using DynamicsCrm.DevKit.Shared.Models;
-using Microsoft.Crm.Sdk.Messages;
-using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.VisualStudio.Shell;
-using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Sdk.Messages;
 using System;
 using System.IO;
 using System.Threading.Tasks;
@@ -22,7 +17,7 @@ namespace DynamicsCrm.DevKit.Commands
             var serviceClient = await CacheHelper.GetServiceClientAsync();
             if (serviceClient != null)
             {
-                await VS.StatusBar.ShowMessageAsync($"[{CacheHelper.GetConnectedUrl(serviceClient)}]: Connected");
+                await VS.StatusBar.ShowMessageAsync($"[{XrmHelper.GetConnectedUrl(serviceClient)}]: Connected");
                 var t = string.Empty;
 
                 // TODO: Implement web resource deployment logic
@@ -43,9 +38,8 @@ namespace DynamicsCrm.DevKit.Commands
             }
             else
             {
-                await VS.StatusBar.ShowMessageAsync("Connection failed or cancelled by user");
+                await VS.MessageBox.ShowErrorAsync("Connection cancelled by user");
             }
-
             await VS.StatusBar.EndAnimationAsync(StatusAnimation.Deploy);
         }
 

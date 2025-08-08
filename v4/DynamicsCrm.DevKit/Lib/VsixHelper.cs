@@ -37,16 +37,11 @@ namespace DynamicsCrm.DevKit
         {
             var solution = await VS.Solutions.GetCurrentSolutionAsync();
             return $"{Path.GetDirectoryName(solution.FullPath)}\\{Const.DynamicsCrmDevKitJson}";
-        }
+        }       
 
-        public static string GetDynamicsCrmDevKitJsonFileName()
+        public static async Task<DevKitConnections> GetDevKitConnectionsAsync()
         {
-            return ThreadHelper.JoinableTaskFactory.Run(GetDynamicsCrmDevKitJsonFileNameAsync);
-        }
-
-        public static DevKitConnections GetDevKitConnections()
-        {
-            var fileName = GetDynamicsCrmDevKitJsonFileName();
+            var fileName = await GetDynamicsCrmDevKitJsonFileNameAsync();
             if (fileName == null || !File.Exists(fileName))
             {
                 return new DevKitConnections()
@@ -54,29 +49,31 @@ namespace DynamicsCrm.DevKit
                     CrmConnections = new List<CrmConnection>()
                 };
             }
-            var json = File.ReadAllText(fileName);
+            var json = await Task.Run(() => File.ReadAllText(fileName));
             var devKitConnections = SimpleJson.DeserializeObject<DevKitConnections>(json);
             if (devKitConnections.CrmConnections == null)
                 devKitConnections.CrmConnections = new List<CrmConnection>();
             return devKitConnections;
         }
 
-        public static void SaveDefaultCrmConnection(string defaultCrmConnection)
+        public static async Task SaveDefaultCrmConnectionAsync(string defaultCrmConnection)
         {
-            var devKitConnections = GetDevKitConnections();
+            var devKitConnections = await GetDevKitConnectionsAsync();
             if (devKitConnections != null)
             {
                 devKitConnections.DefaultCrmConnection = defaultCrmConnection;
-                SaveDevKitConnections(devKitConnections);
+                await SaveDevKitConnectionsAsync(devKitConnections);
             }
         }
 
-        public static void SaveDevKitConnections(DevKitConnections connections)
+        public static async Task SaveDevKitConnectionsAsync(DevKitConnections connections)
         {
             var json = JsonHelper.FormatJson(SimpleJson.SerializeObject(connections));
-            var fileName = GetDynamicsCrmDevKitJsonFileName();
+            var fileName = await GetDynamicsCrmDevKitJsonFileNameAsync();
             if (fileName != null)
-                Helper.ForceWriteAllText(fileName, json);
+            {
+                await Task.Run(() => Helper.ForceWriteAllText(fileName, json));
+            }
         }
 
         public static async Task<ServiceClient> CreateServiceClientAsync(CrmConnection crmConnection)
