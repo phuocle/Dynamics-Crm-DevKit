@@ -119,6 +119,9 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="System.Runtime.CompilerServices.Unsafe.dll">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
     <VSCTCompile Include="DevKitPackageVsct.vsct">
       <ResourceName>Menus.ctmenu</ResourceName>
       <Generator>VsctGenerator</Generator>

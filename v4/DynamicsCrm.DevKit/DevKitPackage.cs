@@ -24,10 +24,12 @@ namespace DynamicsCrm.DevKit
             await JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
 
             // Load assemblies before registering commands
-            LoadRequiredAssemblies();
-
+            //LoadRequiredAssemblies();
+            LoadRequiredAssemblies2();
             await this.RegisterCommandsAsync();
         }
+
+
 
         /// <summary>
         /// Enhanced logging method that outputs to multiple destinations
@@ -64,110 +66,13 @@ namespace DynamicsCrm.DevKit
 #endif
         }
 
-        private void LoadRequiredAssemblies()
+        private void LoadRequiredAssemblies2()
         {
             if (_assembliesLoaded) return;
-
             try
             {
-                // Get the current assembly location (VSIX installation folder)
                 var vsixLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-
-                // Try to find dll folder - first check hardcoded path for testing
-                var sourceDllFolder = @"D:\github\Dynamics-Crm-DevKit\v4\DynamicsCrm.DevKit\dll";
-
-                // If hardcoded path doesn't exist, try to find it relative to the assembly location
-                if (!Directory.Exists(sourceDllFolder))
-                {
-                    // Try to find the dll folder in the VSIX package itself
-                    var possibleDllFolder = Path.Combine(vsixLocation, "dll");
-                    if (Directory.Exists(possibleDllFolder))
-                    {
-                        sourceDllFolder = possibleDllFolder;
-                    }
-                    else
-                    {
-                        // Look for dll folder in parent directories (development scenario)
-                        var currentDir = vsixLocation;
-                        for (int i = 0; i < 5; i++) // Check up to 5 levels up
-                        {
-                            var parentDir = Directory.GetParent(currentDir)?.FullName;
-                            if (parentDir == null) break;
-
-                            var testDllFolder = Path.Combine(parentDir, "DynamicsCrm.DevKit", "dll");
-                            if (Directory.Exists(testDllFolder))
-                            {
-                                sourceDllFolder = testDllFolder;
-                                break;
-                            }
-                            currentDir = parentDir;
-                        }
-                    }
-                }
-
-                // Check if source folder exists
-                if (Directory.Exists(sourceDllFolder))
-                {
-                    // Get DLL files from source folder only (no subdirectories)
-                    var dllFiles = Directory.GetFiles(sourceDllFolder, "*.dll", SearchOption.TopDirectoryOnly);
-
-                    WriteDebugLog($"DynamicsCrm.DevKit: Found {dllFiles.Length} DLL files in {sourceDllFolder}");
-
-                    int copiedCount = 0;
-                    int skippedCount = 0;
-                    int failedCount = 0;
-
-                    foreach (var sourceFile in dllFiles)
-                    {
-                        try
-                        {
-                            var fileName = Path.GetFileName(sourceFile);
-                            var targetFile = Path.Combine(vsixLocation, fileName);
-
-                            // Skip copying if target file already exists
-                            if (File.Exists(targetFile))
-                            {
-                                skippedCount++;
-                                WriteDebugLog($"DynamicsCrm.DevKit: Skipped {fileName} - already exists in VSIX location");
-                                continue;
-                            }
-
-                            // Copy file only if it doesn't exist
-                            File.Copy(sourceFile, targetFile, overwrite: false);
-                            copiedCount++;
-                            WriteDebugLog($"DynamicsCrm.DevKit: Copied {fileName} to VSIX location");
-                        }
-                        catch (UnauthorizedAccessException ex)
-                        {
-                            // File might be in use, try to handle it gracefully
-                            failedCount++;
-                            WriteDebugLog($"DynamicsCrm.DevKit: Access denied copying {sourceFile}: {ex.Message}");
-                        }
-                        catch (IOException ex)
-                        {
-                            // File might be locked, try to handle it gracefully
-                            failedCount++;
-                            WriteDebugLog($"DynamicsCrm.DevKit: IO error copying {sourceFile}: {ex.Message}");
-                        }
-                        catch (Exception ex)
-                        {
-                            // Log error but continue with other files
-                            failedCount++;
-                            WriteDebugLog($"DynamicsCrm.DevKit: Failed to copy {sourceFile}: {ex.Message}");
-                        }
-                    }
-
-                    WriteDebugLog($"DynamicsCrm.DevKit: Copy summary - Copied: {copiedCount}, Skipped: {skippedCount}, Failed: {failedCount}, Total: {dllFiles.Length}");
-
-                    // Preload critical assemblies to avoid version conflicts
-                    PreloadCriticalAssemblies(vsixLocation, sourceDllFolder);
-                }
-                else
-                {
-                    WriteDebugLog($"DynamicsCrm.DevKit: Could not find dll folder. Checked: {sourceDllFolder}");
-                }
-
-                // Set up assembly resolve event handler for runtime loading
+                PreloadCriticalAssemblies(vsixLocation);
                 AppDomain.CurrentDomain.AssemblyResolve += OnAssemblyResolve;
                 _assembliesLoaded = true;
             }
@@ -177,7 +82,45 @@ namespace DynamicsCrm.DevKit
             }
         }
 
-        private void PreloadCriticalAssemblies(string vsixLocation, string sourceDllFolder)
+        private void LoadRequiredAssemblies()
+        {
+            if (_assembliesLoaded) return;
+
+            try
+            {
+                // Get the current assembly location (VSIX installation folder)
+                var vsixLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+
+                WriteDebugLog($"DynamicsCrm.DevKit: VSIX location: {vsixLocation}");
+
+                // Since DLLs are included in VSIX package, they should be in the same directory
+                // No need to copy files - just verify they exist and preload critical assemblies
+                var dllFiles = Directory.GetFiles(Path.Combine(vsixLocation, "dll"), "*.dll", SearchOption.TopDirectoryOnly);
+                WriteDebugLog($"DynamicsCrm.DevKit: Found {dllFiles.Length} DLL files in VSIX location");
+
+                // Log available DLL files for debugging
+                foreach (var dllFile in dllFiles)
+                {
+                    var fileName = Path.GetFileName(dllFile);
+                    WriteDebugLog($"DynamicsCrm.DevKit: Available DLL: {fileName}");
+                }
+
+                // Preload critical assemblies to avoid version conflicts
+                PreloadCriticalAssemblies(vsixLocation);
+
+                // Set up assembly resolve event handler for runtime loading
+                AppDomain.CurrentDomain.AssemblyResolve += OnAssemblyResolve;
+                _assembliesLoaded = true;
+
+                WriteDebugLog("DynamicsCrm.DevKit: Assembly loading setup completed successfully");
+            }
+            catch (Exception ex)
+            {
+                WriteDebugLog($"DynamicsCrm.DevKit: Error in LoadRequiredAssemblies: {ex.Message}");
+            }
+        }
+
+        private void PreloadCriticalAssemblies(string vsixLocation)
         {
             // List of critical assemblies that should be preloaded to avoid version conflicts
             var criticalAssemblies = new[]
@@ -202,10 +145,6 @@ namespace DynamicsCrm.DevKit
                 try
                 {
                     var assemblyPath = Path.Combine(vsixLocation, assemblyFileName);
-                    if (!File.Exists(assemblyPath))
-                    {
-                        assemblyPath = Path.Combine(sourceDllFolder, assemblyFileName);
-                    }
 
                     if (File.Exists(assemblyPath))
                     {
@@ -266,7 +205,7 @@ namespace DynamicsCrm.DevKit
                     }
                 }
 
-                // Look for the assembly in the VSIX location first
+                // Look for the assembly in the VSIX location
                 var vsixLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
                 var assemblyPath = Path.Combine(vsixLocation, assemblyName + ".dll");
 
@@ -274,17 +213,6 @@ namespace DynamicsCrm.DevKit
                 {
                     var assembly = Assembly.LoadFrom(assemblyPath);
                     WriteDebugLog($"DynamicsCrm.DevKit: Loading {assemblyName} from VSIX location (Version: {assembly.GetName().Version})");
-                    return assembly;
-                }
-
-                // Fallback: try to load from the hardcoded dll folder
-                var sourceDllFolder = @"D:\github\Dynamics-Crm-DevKit\v4\DynamicsCrm.DevKit\dll";
-                var fallbackPath = Path.Combine(sourceDllFolder, assemblyName + ".dll");
-
-                if (File.Exists(fallbackPath))
-                {
-                    var assembly = Assembly.LoadFrom(fallbackPath);
-                    WriteDebugLog($"DynamicsCrm.DevKit: Loading {assemblyName} from fallback location (Version: {assembly.GetName().Version})");
                     return assembly;
                 }
 
