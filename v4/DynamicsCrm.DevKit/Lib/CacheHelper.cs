@@ -53,7 +53,7 @@ namespace DynamicsCrm.DevKit.Lib
         private static async Task<ServiceClient> PromptForConnectionAsync(string connectionName)
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-            var formConnection = new FormConnection(true);
+            var formConnection = new FormConnection();
             var result = formConnection.ShowModal() ?? false;
             if (result && formConnection.ServiceClient != null)
             {

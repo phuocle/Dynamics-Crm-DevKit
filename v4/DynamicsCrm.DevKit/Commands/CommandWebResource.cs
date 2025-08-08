@@ -17,7 +17,7 @@ namespace DynamicsCrm.DevKit.Commands
             var serviceClient = await CacheHelper.GetServiceClientAsync();
             if (serviceClient != null)
             {
-                await VS.StatusBar.ShowMessageAsync($"[{XrmHelper.GetConnectedUrl(serviceClient)}]: Connected");
+                await VS.StatusBar.ShowMessageAsync($"[{XrmHelper.GetConnectedUrl(serviceClient)}]");
                 var t = string.Empty;
 
                 // TODO: Implement web resource deployment logic

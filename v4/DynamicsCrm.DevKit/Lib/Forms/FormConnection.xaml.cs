@@ -135,45 +135,45 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 buttonOK.IsEnabled = comboBoxSavedConnection.Items.Count > 0;
             }
         }
-        private bool IsValid()
-        {
-            if (comboBoxType.Text.Length == 0)
-            {
-                VS.MessageBox.ShowError($"Please select Type");
-                comboBoxType.Focus();
-                return false;
-            }
-            if (textboxName.Text.Length == 0)
-            {
-                VS.MessageBox.ShowError($"Please enter {Const.CrmString} Name");
-                textboxName.Focus();
-                return false;
-            }
-            if (textboxUrl.Text.Length == 0)
-            {
-                VS.MessageBox.ShowError("Please enter Url");
-                textboxUrl.Focus();
-                return false;
-            }
-            if (textboxUser.Text.Length == 0)
-            {
-                VS.MessageBox.ShowError($"Please enter {labelUser.Content}");
-                textboxUser.Focus();
-                return false;
-            }
-            if (textboxPassword.Password.Length == 0)
-            {
-                VS.MessageBox.ShowError($"Please enter {labelPassword.Content}");
-                textboxPassword.Focus();
-                return false;
-            }
-            //if (VsixHelper.GetDevKitConnections().CrmConnections.Any(x => x.Name == textboxName.Text)) {
-            //    VS.MessageBox.ShowError($"Name already used");
-            //    textboxName.Focus();
-            //    return false;
-            //}
-            return true;
-        }
+        //private bool IsValid()
+        //{
+        //    if (comboBoxType.Text.Length == 0)
+        //    {
+        //        VS.MessageBox.ShowError($"Please select Type");
+        //        comboBoxType.Focus();
+        //        return false;
+        //    }
+        //    if (textboxName.Text.Length == 0)
+        //    {
+        //        VS.MessageBox.ShowError($"Please enter {Const.CrmString} Name");
+        //        textboxName.Focus();
+        //        return false;
+        //    }
+        //    if (textboxUrl.Text.Length == 0)
+        //    {
+        //        VS.MessageBox.ShowError("Please enter Url");
+        //        textboxUrl.Focus();
+        //        return false;
+        //    }
+        //    if (textboxUser.Text.Length == 0)
+        //    {
+        //        VS.MessageBox.ShowError($"Please enter {labelUser.Content}");
+        //        textboxUser.Focus();
+        //        return false;
+        //    }
+        //    if (textboxPassword.Password.Length == 0)
+        //    {
+        //        VS.MessageBox.ShowError($"Please enter {labelPassword.Content}");
+        //        textboxPassword.Focus();
+        //        return false;
+        //    }
+        //    //if (VsixHelper.GetDevKitConnections().CrmConnections.Any(x => x.Name == textboxName.Text)) {
+        //    //    VS.MessageBox.ShowError($"Name already used");
+        //    //    textboxName.Focus();
+        //    //    return false;
+        //    //}
+        //    return true;
+        //}
 
         private void ComboBoxType_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
