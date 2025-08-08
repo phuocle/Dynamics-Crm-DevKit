@@ -51,14 +51,12 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     CrmConnection = selectedConnection;
                     await VsixHelper.SaveDefaultCrmConnectionAsync(CrmConnection.Name);
                     
-                    using (var serviceClient = await VsixHelper.CreateServiceClientAsync(CrmConnection))
+                    var serviceClient = await VsixHelper.CreateServiceClientAsync(CrmConnection);
+                    if (serviceClient?.IsReady == true)
                     {
-                        if (serviceClient?.IsReady == true)
-                        {
-                            ServiceClient = serviceClient;
-                            CloseDialog(true);
-                            return;
-                        }
+                        ServiceClient = serviceClient;
+                        CloseDialog(true);
+                        return;
                     }
                     
                     await SetUIBusyStateAsync(false);
@@ -90,18 +88,16 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 var crmConnection = CreateCrmConnectionFromInput();
                 await SetUIBusyStateAsync(true);
 
-                using (var crmServiceClient = await VsixHelper.CreateServiceClientAsync(crmConnection))
+                var crmServiceClient = await VsixHelper.CreateServiceClientAsync(crmConnection);
+                if (crmServiceClient?.IsReady == true)
                 {
-                    if (crmServiceClient?.IsReady == true)
-                    {
-                        await SaveConnectionAsync(crmConnection);
-                        await LoadConnectionsAsync();
-                        await ClearFormDataAsync();
-                    }
-                    else
-                    {
-                        await VS.MessageBox.ShowErrorAsync(ERROR_CONNECTION_FAILED);
-                    }
+                    await SaveConnectionAsync(crmConnection);
+                    await LoadConnectionsAsync();
+                    await ClearFormDataAsync();
+                }
+                else
+                {
+                    await VS.MessageBox.ShowErrorAsync(ERROR_CONNECTION_FAILED);
                 }
             }
             catch (Exception ex)
