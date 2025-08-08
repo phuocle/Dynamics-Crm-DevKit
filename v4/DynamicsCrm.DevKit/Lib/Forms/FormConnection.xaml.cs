@@ -3,6 +3,7 @@ using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.VisualStudio.Shell;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Controls;
@@ -11,10 +12,19 @@ namespace DynamicsCrm.DevKit.Lib.Forms
 {
     public partial class FormConnection : BaseDialogWindow
     {
+        private const string ERROR_SELECT_CONNECTION = "Please select a connection or create a new one.";
+        private const string ERROR_SELECT_TYPE = "Please select Type";
+        private const string ERROR_ENTER_NAME = "Please enter Name";
+        private const string ERROR_ENTER_URL = "Please enter Url";
+        private const string ERROR_ENTER_USER = "Please enter {0}";
+        private const string ERROR_ENTER_PASSWORD = "Please enter {0}";
+        private const string ERROR_AD_USERNAME_FORMAT = "For AD authentication, username must be in format 'domain\\username'";
+        private const string ERROR_CONNECTION_FAILED = "Failed to connect create ServiceClient. Please check your connection settings.";
+
         public FormConnection()
         {
             InitializeComponent();
-            LoadConnections();
+            _ = LoadConnectionsAsync();
         }
         
         public ServiceClient ServiceClient { get; set; }
@@ -22,50 +32,91 @@ namespace DynamicsCrm.DevKit.Lib.Forms
 
         private void ButtonCancel_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            if (this.IsLoaded && this.IsVisible) DialogResult = false;
-            Close();
+            CloseDialog(false);
         }
 
         private void ButtonOK_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            _ = ButtonOK_ClickAsync(sender, e);
+            _ = ButtonOK_ClickAsync();
         }
 
-        private async Task ButtonOK_ClickAsync(object sender, System.Windows.RoutedEventArgs e)
+        private async Task ButtonOK_ClickAsync()
         {
-            if (comboBoxSavedConnection.SelectedItem is CrmConnection selectedConnection)
+            try
             {
-                stackPanelForm.IsEnabled = false;
-                progressBar.Visibility = System.Windows.Visibility.Visible;
-                CrmConnection = selectedConnection;
-                await VsixHelper.SaveDefaultCrmConnectionAsync(CrmConnection.Name);                
-                ServiceClient = await VsixHelper.CreateServiceClientAsync(CrmConnection);                    
-                if (ServiceClient != null && ServiceClient.IsReady)
+                if (comboBoxSavedConnection.SelectedItem is CrmConnection selectedConnection)
                 {
-                    if (this.IsLoaded && this.IsVisible) DialogResult = true;
-                    Close();
+                    await SetUIBusyStateAsync(true);
+                    
+                    CrmConnection = selectedConnection;
+                    await VsixHelper.SaveDefaultCrmConnectionAsync(CrmConnection.Name);
+                    
+                    using (var serviceClient = await VsixHelper.CreateServiceClientAsync(CrmConnection))
+                    {
+                        if (serviceClient?.IsReady == true)
+                        {
+                            ServiceClient = serviceClient;
+                            CloseDialog(true);
+                            return;
+                        }
+                    }
+                    
+                    await SetUIBusyStateAsync(false);
+                    await VS.MessageBox.ShowErrorAsync(ERROR_CONNECTION_FAILED);
                 }
                 else
                 {
-                    stackPanelForm.IsEnabled = true;
-                    progressBar.Visibility = System.Windows.Visibility.Hidden;
-                }                
+                    await VS.MessageBox.ShowErrorAsync(ERROR_SELECT_CONNECTION);
+                }
             }
-            else
+            catch (Exception ex)
             {
-                await VS.MessageBox.ShowErrorAsync("Please select a connection or create a new one.");
-            }            
+                await SetUIBusyStateAsync(false);
+                await VS.MessageBox.ShowErrorAsync($"An error occurred: {ex.Message}");
+            }
         }
 
         private void ButtonCheckConnection_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            _ = ButtonCheckConnection_ClickAsync(sender, e);
+            _ = ButtonCheckConnection_ClickAsync();
         }
 
-        private async Task ButtonCheckConnection_ClickAsync(object sender, System.Windows.RoutedEventArgs e)
+        private async Task ButtonCheckConnection_ClickAsync()
         {
-            if (!await IsValidAsync()) return;
-            var crmConnection = new CrmConnection
+            try
+            {
+                if (!await IsValidAsync()) return;
+
+                var crmConnection = CreateCrmConnectionFromInput();
+                await SetUIBusyStateAsync(true);
+
+                using (var crmServiceClient = await VsixHelper.CreateServiceClientAsync(crmConnection))
+                {
+                    if (crmServiceClient?.IsReady == true)
+                    {
+                        await SaveConnectionAsync(crmConnection);
+                        await LoadConnectionsAsync();
+                        await ClearFormDataAsync();
+                    }
+                    else
+                    {
+                        await VS.MessageBox.ShowErrorAsync(ERROR_CONNECTION_FAILED);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                await VS.MessageBox.ShowErrorAsync($"An error occurred while testing connection: {ex.Message}");
+            }
+            finally
+            {
+                await SetUIBusyStateAsync(false);
+            }
+        }
+
+        private CrmConnection CreateCrmConnectionFromInput()
+        {
+            return new CrmConnection
             {
                 Name = textboxName.Text,
                 Password = textboxPassword.Password,
@@ -73,117 +124,130 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 Url = textboxUrl.Text,
                 UserName = textboxUser.Text
             };
-            stackPanelForm.IsEnabled = false;
-            progressBar.Visibility = System.Windows.Visibility.Visible;
-            var crmServiceClient = await VsixHelper.CreateServiceClientAsync(crmConnection);
-            if (crmServiceClient != null && crmServiceClient.IsReady)
-            {   
-                crmConnection.Password = Helper.EncryptString(crmConnection.Password);
-                var devKitConnections = await VsixHelper.GetDevKitConnectionsAsync();
-                devKitConnections.DefaultCrmConnection = crmConnection.Name;
-                if (!devKitConnections.CrmConnections.Any(x => x.Name == crmConnection.Name))
-                {
-                    devKitConnections.CrmConnections.Add(crmConnection);
-                }
-                else
-                {
-                    var existingConnection = devKitConnections.CrmConnections.FirstOrDefault(x => x.Name == crmConnection.Name);
-                    if (existingConnection != null)
-                    {
-                        existingConnection.Password = crmConnection.Password;
-                        existingConnection.Type = crmConnection.Type;
-                        existingConnection.Url = crmConnection.Url;
-                        existingConnection.UserName = crmConnection.UserName;
-                    }
-                }
-                await VsixHelper.SaveDevKitConnectionsAsync(devKitConnections);
-                await LoadConnectionsAsync();
-                await ClearDataAsync();
+        }
+
+        private async Task SaveConnectionAsync(CrmConnection crmConnection)
+        {
+            crmConnection.Password = Helper.EncryptString(crmConnection.Password);
+            var devKitConnections = await VsixHelper.GetDevKitConnectionsAsync();
+            devKitConnections.DefaultCrmConnection = crmConnection.Name;
+
+            var existingConnection = devKitConnections.CrmConnections.FirstOrDefault(x => x.Name == crmConnection.Name);
+            if (existingConnection != null)
+            {
+                UpdateExistingConnection(existingConnection, crmConnection);
+            }
+            else
+            {
+                devKitConnections.CrmConnections.Add(crmConnection);
             }
 
-            stackPanelForm.IsEnabled = true;
-            progressBar.Visibility = System.Windows.Visibility.Hidden;
+            await VsixHelper.SaveDevKitConnectionsAsync(devKitConnections);
         }
-        public async Task ClearDataAsync()
+
+        private static void UpdateExistingConnection(CrmConnection existing, CrmConnection updated)
+        {
+            existing.Password = updated.Password;
+            existing.Type = updated.Type;
+            existing.Url = updated.Url;
+            existing.UserName = updated.UserName;
+        }
+
+        private async Task ClearFormDataAsync()
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
             comboBoxType.SelectedIndex = -1;
-            textboxName.Text = null;
-            textboxUrl.Text = null;
-            textboxUser.Text = null;
-            textboxPassword.Password = null;
+            textboxName.Text = string.Empty;
+            textboxUrl.Text = string.Empty;
+            textboxUser.Text = string.Empty;
+            textboxPassword.Password = string.Empty;
         }
-        public void LoadConnections()
+
+        private async Task LoadConnectionsAsync()
         {
-            ThreadHelper.JoinableTaskFactory.Run(async () =>
+            try
             {
-                await LoadConnectionsAsync();
-            });
-        }
-        public async Task LoadConnectionsAsync()
-        {
-            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-            var devKitConnections = await VsixHelper.GetDevKitConnectionsAsync();
-            comboBoxSavedConnection.DisplayMemberPath = "Name";
-            comboBoxSavedConnection.ItemsSource = devKitConnections.CrmConnections;
-            if (devKitConnections.DefaultCrmConnection != null)
-            {
-                comboBoxSavedConnection.SelectedItem = devKitConnections.CrmConnections.FirstOrDefault(x => x.Name == devKitConnections.DefaultCrmConnection);
+                await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                var devKitConnections = await VsixHelper.GetDevKitConnectionsAsync();
+                
+                comboBoxSavedConnection.DisplayMemberPath = "Name";
+                comboBoxSavedConnection.ItemsSource = devKitConnections.CrmConnections;
+                
+                if (!string.IsNullOrEmpty(devKitConnections.DefaultCrmConnection))
+                {
+                    comboBoxSavedConnection.SelectedItem = devKitConnections.CrmConnections
+                        .FirstOrDefault(x => x.Name == devKitConnections.DefaultCrmConnection);
+                }
+                
                 buttonOK.IsEnabled = comboBoxSavedConnection.Items.Count > 0;
+            }
+            catch (Exception ex)
+            {
+                await VS.MessageBox.ShowErrorAsync($"Failed to load connections: {ex.Message}");
             }
         }
 
         private async Task<bool> IsValidAsync()
         {
-            if (comboBoxType.SelectedItem == null)
+            var validationRules = new[]
             {
-                await VS.MessageBox.ShowErrorAsync($"Please select Type");
-                comboBoxType.Focus();
-                return false;
+                new { IsValid = comboBoxType.SelectedItem != null, Message = ERROR_SELECT_TYPE, Control = (Control)comboBoxType },
+                new { IsValid = !string.IsNullOrEmpty(textboxName.Text), Message = ERROR_ENTER_NAME, Control = (Control)textboxName },
+                new { IsValid = !string.IsNullOrEmpty(textboxUrl.Text), Message = ERROR_ENTER_URL, Control = (Control)textboxUrl },
+                new { IsValid = !string.IsNullOrEmpty(textboxUser.Text), Message = string.Format(ERROR_ENTER_USER, labelUser.Content), Control = (Control)textboxUser },
+                new { IsValid = !string.IsNullOrEmpty(textboxPassword.Password), Message = string.Format(ERROR_ENTER_PASSWORD, labelPassword.Content), Control = (Control)textboxPassword }
+            };
+
+            foreach (var rule in validationRules)
+            {
+                if (!rule.IsValid)
+                {
+                    await VS.MessageBox.ShowErrorAsync(rule.Message);
+                    rule.Control.Focus();
+                    return false;
+                }
             }
-            if (string.IsNullOrEmpty(textboxName.Text))
-            {
-                await VS.MessageBox.ShowErrorAsync($"Please enter Name");
-                textboxName.Focus();
-                return false;
-            }
-            if (string.IsNullOrEmpty(textboxUrl.Text))
-            {
-                await VS.MessageBox.ShowErrorAsync("Please enter Url");
-                textboxUrl.Focus();
-                return false;
-            }
-            if (string.IsNullOrEmpty(textboxUser.Text))
-            {
-                await VS.MessageBox.ShowErrorAsync($"Please enter {labelUser.Content}");
-                textboxUser.Focus();
-                return false;
-            }            
+
+            // Special validation for AD authentication
             var selectedType = ((ComboBoxItem)comboBoxType.SelectedItem).Content?.ToString();
             if (selectedType == "AD" && !textboxUser.Text.Contains("\\"))
             {
-                await VS.MessageBox.ShowErrorAsync("For AD authentication, username must be in format 'domain\\username'");
+                await VS.MessageBox.ShowErrorAsync(ERROR_AD_USERNAME_FORMAT);
                 textboxUser.Focus();
                 return false;
             }
-            
-            if (string.IsNullOrEmpty(textboxPassword.Password))
-            {
-                await VS.MessageBox.ShowErrorAsync($"Please enter {labelPassword.Content}");
-                textboxPassword.Focus();
-                return false;
-            }
+
             return true;
+        }
+
+        private async Task SetUIBusyStateAsync(bool isBusy)
+        {
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+            stackPanelForm.IsEnabled = !isBusy;
+            progressBar.Visibility = isBusy ? System.Windows.Visibility.Visible : System.Windows.Visibility.Hidden;
+        }
+
+        private void CloseDialog(bool result)
+        {
+            if (IsLoaded && IsVisible)
+            {
+                DialogResult = result;
+            }
+            Close();
         }
 
         private void ComboBoxType_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            var comboBox = (ComboBox)sender;
-            if (comboBox?.SelectedItem == null) return;
+            if (!(sender is ComboBox comboBox) || comboBox.SelectedItem == null) 
+                return;
+
             var selectedText = ((ComboBoxItem)comboBox.SelectedItem).Content?.ToString();
-            if (selectedText == null) return;
-            labelUser.Content = selectedText == "ClientSecret" ? "Client Id" : "User Name";
-            labelPassword.Content = selectedText == "ClientSecret" ? "Client Secret" : "Password";
+            if (string.IsNullOrEmpty(selectedText)) 
+                return;
+
+            var isClientSecret = selectedText == "ClientSecret";
+            labelUser.Content = isClientSecret ? "Client Id" : "User Name";
+            labelPassword.Content = isClientSecret ? "Client Secret" : "Password";
         }
     }
 }
