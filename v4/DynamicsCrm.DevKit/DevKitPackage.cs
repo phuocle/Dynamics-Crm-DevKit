@@ -114,6 +114,7 @@ namespace DynamicsCrm.DevKit
                     WriteDebugLog($"DynamicsCrm.DevKit: Found {dllFiles.Length} DLL files in {sourceDllFolder}");
 
                     int copiedCount = 0;
+                    int skippedCount = 0;
                     int failedCount = 0;
 
                     foreach (var sourceFile in dllFiles)
@@ -123,8 +124,16 @@ namespace DynamicsCrm.DevKit
                             var fileName = Path.GetFileName(sourceFile);
                             var targetFile = Path.Combine(vsixLocation, fileName);
 
-                            // Always copy and overwrite
-                            File.Copy(sourceFile, targetFile, overwrite: true);
+                            // Skip copying if target file already exists
+                            if (File.Exists(targetFile))
+                            {
+                                skippedCount++;
+                                WriteDebugLog($"DynamicsCrm.DevKit: Skipped {fileName} - already exists in VSIX location");
+                                continue;
+                            }
+
+                            // Copy file only if it doesn't exist
+                            File.Copy(sourceFile, targetFile, overwrite: false);
                             copiedCount++;
                             WriteDebugLog($"DynamicsCrm.DevKit: Copied {fileName} to VSIX location");
                         }
@@ -148,7 +157,7 @@ namespace DynamicsCrm.DevKit
                         }
                     }
 
-                    WriteDebugLog($"DynamicsCrm.DevKit: Copy summary - Copied: {copiedCount}, Failed: {failedCount}, Total: {dllFiles.Length}");
+                    WriteDebugLog($"DynamicsCrm.DevKit: Copy summary - Copied: {copiedCount}, Skipped: {skippedCount}, Failed: {failedCount}, Total: {dllFiles.Length}");
 
                     // Preload critical assemblies to avoid version conflicts
                     PreloadCriticalAssemblies(vsixLocation, sourceDllFolder);
