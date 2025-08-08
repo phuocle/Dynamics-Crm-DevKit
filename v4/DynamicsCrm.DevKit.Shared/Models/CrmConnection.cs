@@ -1,6 +1,4 @@
-﻿using System.Runtime.Serialization;
-
-namespace DynamicsCrm.DevKit.Shared.Models
+﻿namespace DynamicsCrm.DevKit.Shared.Models
 {
     public class CrmConnection
     {
@@ -9,10 +7,5 @@ namespace DynamicsCrm.DevKit.Shared.Models
         public string UserName { get; set; }
         public string Password { get; set; }
         public string Type { get; set; } = "OAuth";
-
-        public override string ToString()
-        {
-            return Name;
-        }
     }
 }

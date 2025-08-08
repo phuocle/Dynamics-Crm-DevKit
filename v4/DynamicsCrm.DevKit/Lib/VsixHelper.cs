@@ -1,7 +1,9 @@
 ﻿using Community.VisualStudio.Toolkit;
 using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
+using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.VisualStudio.Shell;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
@@ -75,6 +77,20 @@ namespace DynamicsCrm.DevKit
             var fileName = GetDynamicsCrmDevKitJsonFileName();
             if (fileName != null)
                 Helper.ForceWriteAllText(fileName, json);
+        }
+
+        public static async Task<ServiceClient> CreateServiceClientAsync(CrmConnection crmConnection)
+        {
+            string connectionString = Helper.BuildConnectionString(crmConnection);
+            try
+            {
+                return new ServiceClient(connectionString);
+            }
+            catch
+            {
+                await VS.MessageBox.ShowErrorAsync("Failed to connect create ServiceClient. Please check your connection settings.");
+            }
+            return null;
         }
     }
 }

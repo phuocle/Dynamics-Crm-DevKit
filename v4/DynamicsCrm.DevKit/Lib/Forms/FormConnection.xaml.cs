@@ -40,46 +40,30 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             Close();
         }
 
-        private void ButtonOK_Click(object sender, System.Windows.RoutedEventArgs e)
+        private async void ButtonOK_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             if (comboBoxSavedConnection.SelectedItem is CrmConnection selectedConnection)
             {
                 stackPanelForm.IsEnabled = false;
                 progressBar.Visibility = System.Windows.Visibility.Visible;
                 CrmConnection = selectedConnection;
-                VsixHelper.SaveDefaultCrmConnection(CrmConnection.Name);
-                try
+                VsixHelper.SaveDefaultCrmConnection(CrmConnection.Name);                
+                ServiceClient = await VsixHelper.CreateServiceClientAsync(CrmConnection);                    
+                if (ServiceClient != null && ServiceClient.IsReady)
                 {
-                    ServiceClient = Helper.CreateServiceClient(CrmConnection);
-                    if (ServiceClient != null && ServiceClient.IsReady)
-                    {
-                        if (this.IsLoaded && this.IsVisible) DialogResult = true;
-                        Close();
-                    }
-                    else
-                    {
-                        stackPanelForm.IsEnabled = true;
-                        progressBar.Visibility = System.Windows.Visibility.Hidden;
-                        ThreadHelper.JoinableTaskFactory.Run(async () =>
-                        {
-                            await VS.MessageBox.ShowErrorAsync("Failed to connect. Please check your connection settings.");
-                        });
-                    }
+                    if (this.IsLoaded && this.IsVisible) DialogResult = true;
+                    Close();
                 }
-                catch
+                else
                 {
-                    ThreadHelper.JoinableTaskFactory.Run(async () =>
-                    {
-                        await VS.MessageBox.ShowErrorAsync("Failed to connect. Please check your connection settings.");
-                    });
-                }
+                    stackPanelForm.IsEnabled = true;
+                    progressBar.Visibility = System.Windows.Visibility.Hidden;
+                    await VS.MessageBox.ShowErrorAsync("Failed to connect. Please check your connection settings.");
+                }                
             }
             else
             {
-                ThreadHelper.JoinableTaskFactory.Run(async () =>
-                {
-                    await VS.MessageBox.ShowErrorAsync("Please select a connection or create a new one.");
-                });
+                await VS.MessageBox.ShowErrorAsync("Please select a connection or create a new one.");
             }
         }
 
