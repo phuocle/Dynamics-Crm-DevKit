@@ -19,14 +19,11 @@ namespace DynamicsCrm.DevKit.Commands
         protected override async Task ExecuteAsync(OleMenuCmdEventArgs e)
         {
             await VS.StatusBar.StartAnimationAsync(StatusAnimation.Deploy);
-
-            var connectionString = "AuthType=ClientSecret;Url=https://hitachi-hsapvn-dev.crm5.dynamics.com;ClientId=b1b8cf05-cb06-4674-b93e-98c8c9a02e5a;ClientSecret=v+L6+3MvOrVPMNqGn86vi6qEG4qpCCLoLqgeUMjnGkY=;";
-            var ServiceClient = new ServiceClient(connectionString);
-
             var serviceClient = await CacheHelper.GetServiceClientAsync();
             if (serviceClient != null)
             {
                 await VS.StatusBar.ShowMessageAsync($"[{CacheHelper.GetConnectedUrl(serviceClient)}]: Connected");
+                var t = string.Empty;
 
                 // TODO: Implement web resource deployment logic
                 // This is a placeholder implementation showing how to use the cached ServiceClient

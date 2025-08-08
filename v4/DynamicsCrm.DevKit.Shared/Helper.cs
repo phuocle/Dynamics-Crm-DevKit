@@ -698,18 +698,12 @@ namespace DynamicsCrm.DevKit.Shared
 
         public static ServiceClient CreateServiceClient(CrmConnection crmConnection)
         {
-            if (crmConnection == null)
-                throw new ArgumentNullException(nameof(crmConnection));
-            if (string.IsNullOrEmpty(crmConnection.Url))
-                throw new ArgumentException("URL is required", nameof(crmConnection));
-            if (string.IsNullOrEmpty(crmConnection.Type))
-                throw new ArgumentException("Authentication type is required", nameof(crmConnection));
+            if (crmConnection == null) throw new ArgumentNullException(nameof(crmConnection));
+            if (string.IsNullOrEmpty(crmConnection.Url)) throw new ArgumentException("URL is required", nameof(crmConnection));
+            if (string.IsNullOrEmpty(crmConnection.Type)) throw new ArgumentException("Authentication type is required", nameof(crmConnection));
             string connectionString = BuildConnectionString(crmConnection);
-
-            connectionString = "AuthType=ClientSecret;Url=https://hitachi-hsapvn-dev.crm5.dynamics.com;ClientId=b1b8cf05-cb06-4674-b93e-98c8c9a02e5a;ClientSecret=v+L6+3MvOrVPMNqGn86vi6qEG4qpCCLoLqgeUMjnGkY=;";
-
-            //try
-            //{
+            try
+            {
                 var serviceClient = new ServiceClient(connectionString);
                 if (serviceClient != null && serviceClient.IsReady)
                 {
@@ -719,11 +713,11 @@ namespace DynamicsCrm.DevKit.Shared
                 {
                     throw new InvalidOperationException("Failed to connect to Dataverse. Please check your connection settings.");
                 }
-            //}
-            //catch (Exception ex) when (!(ex is InvalidOperationException))
-            //{
-            //    throw new InvalidOperationException($"Error creating Dataverse connection: {ex.Message}", ex);
-            //}
+            }
+            catch (Exception ex) when (!(ex is InvalidOperationException))
+            {
+                throw new InvalidOperationException($"Error creating Dataverse connection: {ex.Message}", ex);
+            }
         }
 
         public static string BuildConnectionString(CrmConnection crmConnection)
@@ -749,7 +743,6 @@ namespace DynamicsCrm.DevKit.Shared
                 case "OAUTH":
                 default:
                     var connectionString = $"AuthType=OAuth;Url={url};Username={userName};Password={password};";
-                    // Add default OAuth app registration if not present
                     if (!connectionString.ToLower().Contains("appid="))
                     {
                         connectionString += "AppId=51f81489-12ee-4a9e-aaae-a2591f45987d;";

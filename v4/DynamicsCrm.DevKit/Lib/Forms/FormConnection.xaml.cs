@@ -42,47 +42,40 @@ namespace DynamicsCrm.DevKit.Lib.Forms
 
         private void ButtonOK_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            // Check if user has selected a saved connection
             if (comboBoxSavedConnection.SelectedItem is CrmConnection selectedConnection)
             {
                 stackPanelForm.IsEnabled = false;
                 progressBar.Visibility = System.Windows.Visibility.Visible;
                 CrmConnection = selectedConnection;
                 VsixHelper.SaveDefaultCrmConnection(CrmConnection.Name);
-                //ServiceClient = Helper.CreateServiceClient(CrmConnection);
-                var connectionString = "AuthType=ClientSecret;Url=https://hitachi-hsapvn-dev.crm5.dynamics.com;ClientId=b1b8cf05-cb06-4674-b93e-98c8c9a02e5a;ClientSecret=v+L6+3MvOrVPMNqGn86vi6qEG4qpCCLoLqgeUMjnGkY=;";
-                ServiceClient = new ServiceClient(connectionString);
-                var t = string.Empty;
-                //_ = Task.Factory.StartNew(async () =>
-                //{
-                //    try
-                //    {
-                //        ServiceClient = Helper.CreateServiceClient(CrmConnection);
-                //        await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();                        
-                //        if (ServiceClient != null && ServiceClient.IsReady)
-                //        {
-                //            DialogResult = true;
-                //            Close();
-                //        }
-                //        else
-                //        {
-                //            stackPanelForm.IsEnabled = true;
-                //            progressBar.Visibility = System.Windows.Visibility.Hidden;
-                //            await VS.MessageBox.ShowErrorAsync("Failed to connect. Please check your connection settings.");
-                //        }
-                //    }
-                //    catch (Exception ex)
-                //    {
-                //        await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-                //        stackPanelForm.IsEnabled = true;
-                //        progressBar.Visibility = System.Windows.Visibility.Hidden;
-                //        await VS.MessageBox.ShowErrorAsync($"Connection failed: {ex.Message}");
-                //    }
-                //}, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default);
+                try
+                {
+                    ServiceClient = Helper.CreateServiceClient(CrmConnection);
+                    if (ServiceClient != null && ServiceClient.IsReady)
+                    {
+                        if (this.IsLoaded && this.IsVisible) DialogResult = true;
+                        Close();
+                    }
+                    else
+                    {
+                        stackPanelForm.IsEnabled = true;
+                        progressBar.Visibility = System.Windows.Visibility.Hidden;
+                        ThreadHelper.JoinableTaskFactory.Run(async () =>
+                        {
+                            await VS.MessageBox.ShowErrorAsync("Failed to connect. Please check your connection settings.");
+                        });
+                    }
+                }
+                catch
+                {
+                    ThreadHelper.JoinableTaskFactory.Run(async () =>
+                    {
+                        await VS.MessageBox.ShowErrorAsync("Failed to connect. Please check your connection settings.");
+                    });
+                }
             }
             else
             {
-                // If no connection selected, show message
                 ThreadHelper.JoinableTaskFactory.Run(async () =>
                 {
                     await VS.MessageBox.ShowErrorAsync("Please select a connection or create a new one.");
