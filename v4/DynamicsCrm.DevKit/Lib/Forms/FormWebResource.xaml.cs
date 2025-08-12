@@ -25,7 +25,14 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             set 
             {
                 _FullFileName = value;
-                textboxNewWebResource.Text = _FullFileName.Replace(@"\", "/");
+                if (IsNew)
+                {
+                    ThreadHelper.JoinableTaskFactory.Run(async () => { 
+                        var fullFileName = await VsixHelper.SelectedItem.GetFullFileNameAsync();
+                        var fullFileNameForCrm = fullFileName.Substring((await VsixHelper.GetActiveProjectFolderAsync()).Length);
+                        textboxNewWebResource.Text = fullFileNameForCrm.Replace("\\", "/");
+                    });
+                }
             }
         }
         public DeployWebResource SelectedWebResource

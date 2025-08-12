@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using DynamicsCrm.DevKit.Shared.Models;
+﻿using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace DynamicsCrm.DevKit.Shared
 {
@@ -425,6 +425,89 @@ namespace DynamicsCrm.DevKit.Shared
             }
         }
 
+        public static async Task<Guid> DeployNewWebResourceAsync(ServiceClient serviceClient, string fullFileName, string webResourceName)
+        {
+            try
+            {
+                var fileContent = Convert.ToBase64String(File.ReadAllBytes(fullFileName));
+                var webResource = new Entity("webresource")
+                {
+                    ["name"] = webResourceName,
+                    ["displayname"] = webResourceName,
+                    ["content"] = fileContent
+                };
+                var webResourceFileInfo = new FileInfo(fullFileName);
+                var fileType = WebResourceWebResourceType.ScriptJScript;
+                switch (webResourceFileInfo.Extension.ToLower().TrimStart('.'))
+                {
+                    case "html":
+                    case "htm":
+                        fileType = WebResourceWebResourceType.WebpageHtml;
+                        break;
+                    case "js":
+                        fileType = WebResourceWebResourceType.ScriptJScript;
+                        break;
+                    case "png":
+                        fileType = WebResourceWebResourceType.PngFormat;
+                        break;
+                    case "gif":
+                        fileType = WebResourceWebResourceType.GifFormat;
+                        break;
+                    case "jpg":
+                    case "jpeg":
+                        fileType = WebResourceWebResourceType.JpgFormat;
+                        break;
+                    case "css":
+                        fileType = WebResourceWebResourceType.StyleSheetCss;
+                        break;
+                    case "ico":
+                        fileType = WebResourceWebResourceType.IcoFormat;
+                        break;
+                    case "xml":
+                        fileType = WebResourceWebResourceType.DataXml;
+                        break;
+                    case "xsl":
+                    case "xslt":
+                        fileType = WebResourceWebResourceType.StyleSheetXsl;
+                        break;
+                    case "xap":
+                        fileType = WebResourceWebResourceType.SilverlightXap;
+                        break;
+                    case "resx":
+                        fileType = WebResourceWebResourceType.StringResx;
+                        break;
+                    case "svg":
+                        fileType = WebResourceWebResourceType.SvgFormat;
+                        break;
+                }
+                webResource["webresourcetype"] = new OptionSetValue((int)fileType);
+                if (fileType == WebResourceWebResourceType.StringResx)
+                {
+                    var fileName = webResourceFileInfo.Name.Substring(0, webResourceFileInfo.Name.Length - webResourceFileInfo.Extension.Length);
+                    var arr = fileName.Split(".".ToCharArray());
+                    if (int.TryParse(arr[arr.Length - 1], out var languagecode))
+                    {
+                        var req = new RetrieveProvisionedLanguagesRequest();
+                        var res = (RetrieveProvisionedLanguagesResponse) await serviceClient.ExecuteAsync(req);
+                        if (res.RetrieveProvisionedLanguages.Contains(languagecode))
+                        {
+                            webResource["languagecode"] = languagecode;
+                        }
+                        else
+                        {
+                            throw new Exception($"Language code not found: {languagecode}");
+                        }
+                    }
+                }
+                var webResourceId = await serviceClient.CreateAsync(webResource);
+                return webResourceId;
+            }
+            catch
+            {
+                return Guid.Empty;
+            }
+        }
+
         public static async Task<bool> PublishWebResourceAsync(ServiceClient service, Guid webResourceId)
         {
             try
@@ -438,6 +521,50 @@ namespace DynamicsCrm.DevKit.Shared
             {
                 return false;
             }
+        }
+
+        public static async Task<List<NameValueGuidExtend>> GetSolutionsAsync(ServiceClient serviceClient)
+        {
+            var fetchData = new
+            {
+                ismanaged = "0",
+                uniquename = "Default",
+                uniquename2 = "Active",
+                uniquename3 = "Basic"
+            };
+            var fetchXml = $@"
+<fetch>
+  <entity name='solution'>
+    <attribute name='solutionid' />
+    <attribute name='uniquename' />
+    <filter>
+      <condition attribute='ismanaged' operator='eq' value='{fetchData.ismanaged/*0*/}'/>
+      <condition attribute='uniquename' operator='neq' value='{fetchData.uniquename/*Default*/}'/>
+      <condition attribute='uniquename' operator='neq' value='{fetchData.uniquename2/*Active*/}'/>
+      <condition attribute='uniquename' operator='neq' value='{fetchData.uniquename3/*Basic*/}'/>
+    </filter>
+    <order attribute='uniquename' />
+    <link-entity name='publisher' from='publisherid' to='publisherid' alias='p'>
+      <attribute name='customizationprefix' />
+      <filter>
+        <condition attribute='customizationprefix' operator='not-null' />
+      </filter>
+    </link-entity>
+  </entity>
+</fetch>";
+            var rows = await serviceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
+            var list = new List<NameValueGuidExtend>();
+            foreach (var entity in rows.Entities)
+            {
+                list.Add(new NameValueGuidExtend
+                {
+                    Name = entity.GetAttributeValue<string>("uniquename") ?? string.Empty,
+                    Value = entity.Id,
+                    SolutionPrefix = entity.GetAttributeValue<AliasedValue>("p.customizationprefix")?.Value.ToString() ?? string.Empty,
+                    SolutionUniqueName = entity.GetAttributeValue<string>("uniquename") ?? string.Empty
+                });
+            }
+            return list;
         }
     }
 }

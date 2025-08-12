@@ -96,7 +96,7 @@ namespace DynamicsCrm.DevKit
             {   
                 configJson.WebResources.Add(deployWebResource); 
             }
-            configJson.WebResources = configJson.WebResources.OrderBy(x => x.File).ToList();
+            configJson.WebResources = configJson.WebResources.OrderBy(x => x.WebResource).ToList();
             var json = JsonHelper.FormatJson(SimpleJson.SerializeObject(configJson));
             Helper.ForceWriteAllText(fileName, json);
         }
@@ -129,6 +129,12 @@ namespace DynamicsCrm.DevKit
         {
             var solution = await VS.Solutions.GetCurrentSolutionAsync();
             return Path.GetDirectoryName(solution.FullPath);
+        }
+
+        public static async Task<string> GetActiveProjectFolderAsync()
+        {
+            var project = await VS.Solutions.GetActiveProjectAsync();
+            return $"{Path.GetDirectoryName(project.FullPath)}";
         }
     }
 }
