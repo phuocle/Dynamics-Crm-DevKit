@@ -22,11 +22,11 @@ namespace DynamicsCrm.DevKit
         protected override async Task InitializeAsync(CancellationToken cancellationToken, IProgress<ServiceProgressData> progress)
         {
             await JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
-            LoadRequiredAssemblies2();
+            LoadRequiredAssemblies();
             await this.RegisterCommandsAsync();
         }
 
-        private void LoadRequiredAssemblies2()
+        private void LoadRequiredAssemblies()
         {
             if (_assembliesLoaded) return;
             try
