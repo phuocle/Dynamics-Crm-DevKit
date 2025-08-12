@@ -2,8 +2,6 @@
 using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.PowerPlatform.Dataverse.Client;
-using Microsoft.VisualStudio.Shell;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -15,40 +13,27 @@ namespace DynamicsCrm.DevKit
     {
         public static class SelectedItem
         {
-            public static async Task<SolutionItem> GetPhysicalFileAsync()
+            public static async Task<SolutionItem> GetSolutionItemAsync()
             {
                 var selectedItem = await VS.Solutions.GetActiveItemAsync();
                 return selectedItem;
             }
-            public static string Extension
+            public static async Task<string> GetExtensionAsync()
             {
-                get
-                {
-                    var selectedItem = GetPhysicalFile();
-                    return Path.GetExtension(selectedItem.FullPath);
-                }
+                var selectedItem = await GetSolutionItemAsync();
+                return Path.GetExtension(selectedItem.FullPath);
             }
 
-            public static SolutionItem GetPhysicalFile()
+            public static async Task<string> GetFullFileNameAsync()
             {
-                return ThreadHelper.JoinableTaskFactory.Run(async () => await GetPhysicalFileAsync());
+                var selectedItem = await GetSolutionItemAsync();
+                return selectedItem.FullPath;
             }
 
-            public static string FullFileName
+            public static async Task<string> GetFileNameAsync()
             {
-                get
-                {
-                    var selectedItem = GetPhysicalFile();
-                    return selectedItem.FullPath;
-                }
-            }
-
-            public static string FileName
-            {
-                get
-                {
-                    return Path.GetFileName(FullFileName);
-                }
+                var fullFileName = await GetFullFileNameAsync();
+                return Path.GetFileName(fullFileName);
             }
         }
 
@@ -111,7 +96,7 @@ namespace DynamicsCrm.DevKit
             {   
                 configJson.WebResources.Add(deployWebResource); 
             }
-            configJson.WebResources.OrderBy(x => x.File).ToList();
+            configJson.WebResources = configJson.WebResources.OrderBy(x => x.File).ToList();
             var json = JsonHelper.FormatJson(SimpleJson.SerializeObject(configJson));
             Helper.ForceWriteAllText(fileName, json);
         }

@@ -419,7 +419,7 @@ namespace DynamicsCrm.DevKit.Shared
                 var response = await service.ExecuteAsync(request);
                 return true;
             }
-            catch(Exception ex)
+            catch
             {
                 return false;
             }

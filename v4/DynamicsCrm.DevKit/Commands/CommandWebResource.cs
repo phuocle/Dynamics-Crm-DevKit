@@ -21,26 +21,27 @@ namespace DynamicsCrm.DevKit.Commands
             if (serviceClient != null)
             {
                 await VS.StatusBar.ShowMessageAsync($"[{XrmHelper.GetConnectedUrl(serviceClient)}] >>> Connected <<<");
-                var fullFileName = VsixHelper.SelectedItem.FullFileName.Substring((await VsixHelper.GetSolutionFolderAsync()).Length);
-                var deployWebResourceCache = CacheHelper.GetWebResource(fullFileName);
+                var fullFileName = await VsixHelper.SelectedItem.GetFullFileNameAsync();
+                var fullFileNameForCrm = fullFileName.Substring((await VsixHelper.GetSolutionFolderAsync()).Length);
+                var deployWebResourceCache = CacheHelper.GetWebResource(fullFileNameForCrm);
                 if (deployWebResourceCache != null)
-                    await DeployWebResourceAsync(serviceClient, deployWebResourceCache);
-                 else
-                 {
-                    var webResources = XrmHelper.GetWebResources(serviceClient, fullFileName);
-                    var form = new FormWebResource(webResources, fullFileName);
+                    await DeployWebResourceAsync(serviceClient, deployWebResourceCache, fullFileName);
+                else
+                {
+                    var webResources = XrmHelper.GetWebResources(serviceClient, fullFileNameForCrm);
+                    var form = new FormWebResource(webResources, fullFileNameForCrm);
                     var ok = form.ShowModal() ?? false;
                     if (ok)
                     {
-                        CacheHelper.SetWebResourceCache(fullFileName, form.SelectedWebResource);
+                        CacheHelper.SetWebResourceCache(fullFileNameForCrm, form.SelectedWebResource);
                         await VsixHelper.SaveDynamicsCrmDevKitConfigJsonAsync(form.SelectedWebResource);
-                        await DeployWebResourceAsync(serviceClient, form.SelectedWebResource);
+                        await DeployWebResourceAsync(serviceClient, form.SelectedWebResource, fullFileName);
                     }
                     else
                     {
                         await VS.MessageBox.ShowErrorAsync("No web resource selected for deployment.");
                     }
-                 }
+                }
             }
             else
             {
@@ -49,10 +50,10 @@ namespace DynamicsCrm.DevKit.Commands
             await VS.StatusBar.EndAnimationAsync(StatusAnimation.Deploy);
         }
 
-        private static async Task DeployWebResourceAsync(ServiceClient serviceClient, DeployWebResource deployWebResource)
+        private static async Task DeployWebResourceAsync(ServiceClient serviceClient, DeployWebResource deployWebResource, string fullFileName)
         {
             await VS.StatusBar.ShowMessageAsync($"[{XrmHelper.GetConnectedUrl(serviceClient)}] >>> Deploying ... <<<");
-            var ok = await XrmHelper.DeployWebResourceAsync(serviceClient, VsixHelper.SelectedItem.FullFileName, deployWebResource.WebResourceId);
+            var ok = await XrmHelper.DeployWebResourceAsync(serviceClient, fullFileName, deployWebResource.WebResourceId);
             if (ok)
             {
                 await VS.StatusBar.ShowMessageAsync($"[{XrmHelper.GetConnectedUrl(serviceClient)}] >>> Deployed <<<");
@@ -61,7 +62,7 @@ namespace DynamicsCrm.DevKit.Commands
                 var ok2 = await XrmHelper.PublishWebResourceAsync(serviceClient, deployWebResource.WebResourceId);
                 if (ok2)
                 {
-                    await VS.StatusBar.ShowMessageAsync($"[{XrmHelper.GetConnectedUrl(serviceClient)}] >>> Published from: [{VsixHelper.SelectedItem.FullFileName}] to: [{deployWebResource.WebResource}] <<<");
+                    await VS.StatusBar.ShowMessageAsync($"[{XrmHelper.GetConnectedUrl(serviceClient)}] >>> Published from: [{fullFileName}] to: [{deployWebResource.WebResource}] <<<");
                 }
                 else
                 {
@@ -76,7 +77,11 @@ namespace DynamicsCrm.DevKit.Commands
 
         protected override void BeforeQueryStatus(EventArgs e)
         {
-            this.Command.Visible = Helper.IsWebResourceExtension(VsixHelper.SelectedItem.Extension);
+            this.Command.Visible = ThreadHelper.JoinableTaskFactory.Run(async () =>
+            {
+                var extension = await VsixHelper.SelectedItem.GetExtensionAsync();
+                return Helper.IsWebResourceExtension(extension);
+            });
         }
     }
 }
