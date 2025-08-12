@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.Shell;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace DynamicsCrm.DevKit
@@ -14,10 +15,6 @@ namespace DynamicsCrm.DevKit
     {
         public static class SelectedItem
         {
-            public static SolutionItem GetPhysicalFile()
-            {
-                return ThreadHelper.JoinableTaskFactory.Run(GetPhysicalFileAsync);
-            }
             public static async Task<SolutionItem> GetPhysicalFileAsync()
             {
                 var selectedItem = await VS.Solutions.GetActiveItemAsync();
@@ -31,13 +28,41 @@ namespace DynamicsCrm.DevKit
                     return Path.GetExtension(selectedItem.FullPath);
                 }
             }
+
+            public static SolutionItem GetPhysicalFile()
+            {
+                return ThreadHelper.JoinableTaskFactory.Run(async () => await GetPhysicalFileAsync());
+            }
+
+            public static string FullFileName
+            {
+                get
+                {
+                    var selectedItem = GetPhysicalFile();
+                    return selectedItem.FullPath;
+                }
+            }
+
+            public static string FileName
+            {
+                get
+                {
+                    return Path.GetFileName(FullFileName);
+                }
+            }
         }
 
         public static async Task<string> GetDynamicsCrmDevKitJsonFileNameAsync()
         {
             var solution = await VS.Solutions.GetCurrentSolutionAsync();
             return $"{Path.GetDirectoryName(solution.FullPath)}\\{Const.DynamicsCrmDevKitJson}";
-        }       
+        }
+
+        public static async Task<string> GetDynamicsCrmDevKitConfigJsonFileNameAsync()
+        {
+            var solution = await VS.Solutions.GetCurrentSolutionAsync();
+            return $"{Path.GetDirectoryName(solution.FullPath)}\\{Const.DynamicsCrmDevKitConfigJson}";
+        }
 
         public static async Task<DevKitConnections> GetDevKitConnectionsAsync()
         {
@@ -66,6 +91,31 @@ namespace DynamicsCrm.DevKit
             }
         }
 
+        public static async Task SaveDynamicsCrmDevKitConfigJsonAsync(DeployWebResource deployWebResource)
+        {
+            var configJson = new ConfigJson();
+            var fileName = await GetDynamicsCrmDevKitConfigJsonFileNameAsync();
+            if (File.Exists(fileName))
+            {
+                configJson.WebResources = SimpleJson.DeserializeObject<ConfigJson>(await Task.Run(() => File.ReadAllText(fileName))).WebResources;
+            }
+            var found = configJson.WebResources.Where(x => x?.File == deployWebResource?.File).FirstOrDefault();
+            if (found != null)
+            {
+                if (found.WebResource != deployWebResource.WebResource)
+                    found.WebResource = deployWebResource.WebResource;
+                else
+                    return;                
+            }
+            else
+            {   
+                configJson.WebResources.Add(deployWebResource); 
+            }
+            configJson.WebResources.OrderBy(x => x.File).ToList();
+            var json = JsonHelper.FormatJson(SimpleJson.SerializeObject(configJson));
+            Helper.ForceWriteAllText(fileName, json);
+        }
+
         public static async Task SaveDevKitConnectionsAsync(DevKitConnections connections)
         {
             var json = JsonHelper.FormatJson(SimpleJson.SerializeObject(connections));
@@ -88,6 +138,12 @@ namespace DynamicsCrm.DevKit
                 await VS.MessageBox.ShowErrorAsync("Failed to connect create ServiceClient. Please check your connection settings.");
             }
             return null;
+        }
+
+        public static async Task<string> GetSolutionFolderAsync()
+        {
+            var solution = await VS.Solutions.GetCurrentSolutionAsync();
+            return Path.GetDirectoryName(solution.FullPath);
         }
     }
 }

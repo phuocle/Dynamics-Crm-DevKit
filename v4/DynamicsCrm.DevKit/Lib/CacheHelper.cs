@@ -1,4 +1,5 @@
 using DynamicsCrm.DevKit.Lib.Forms;
+using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.VisualStudio.Shell;
 using System;
@@ -13,6 +14,8 @@ namespace DynamicsCrm.DevKit.Lib
         private static readonly ConcurrentDictionary<string, ServiceClient> _serviceClientCache = new ConcurrentDictionary<string, ServiceClient>();        
         private static readonly ConcurrentDictionary<string, DateTime> _connectionTimestamps = new ConcurrentDictionary<string, DateTime>();        
         private static readonly int ConnectionTimeoutMinutes = 60;
+        private static readonly ConcurrentDictionary<string, DeployWebResource> _webResourceCache = new ConcurrentDictionary<string, DeployWebResource>();
+
         public static async Task<ServiceClient> GetServiceClientAsync()
         {
             return await GetServiceClientAsync(null);
@@ -86,5 +89,19 @@ namespace DynamicsCrm.DevKit.Lib
             }            
             _connectionTimestamps.TryRemove(cacheKey, out _);
         }        
+
+        public static DeployWebResource GetWebResource(string fullFileName)
+        {
+            if (_webResourceCache.TryGetValue(fullFileName, out var cached))
+            {
+                return cached;
+            }
+            return null;
+        }
+
+        public static void SetWebResourceCache(string fullFileName, DeployWebResource resource)
+        {
+            _webResourceCache[fullFileName] = resource;
+        }
     }
 }

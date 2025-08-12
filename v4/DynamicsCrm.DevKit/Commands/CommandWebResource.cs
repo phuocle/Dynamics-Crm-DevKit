@@ -1,6 +1,9 @@
 ﻿using Community.VisualStudio.Toolkit;
 using DynamicsCrm.DevKit.Lib;
+using DynamicsCrm.DevKit.Lib.Forms;
 using DynamicsCrm.DevKit.Shared;
+using DynamicsCrm.DevKit.Shared.Models;
+using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.VisualStudio.Shell;
 using System;
 using System.IO;
@@ -17,24 +20,27 @@ namespace DynamicsCrm.DevKit.Commands
             var serviceClient = await CacheHelper.GetServiceClientAsync();
             if (serviceClient != null)
             {
-                await VS.StatusBar.ShowMessageAsync($"[{XrmHelper.GetConnectedUrl(serviceClient)}]");
-                var t = string.Empty;
-
-                // TODO: Implement web resource deployment logic
-                // This is a placeholder implementation showing how to use the cached ServiceClient
-                // var fullFileName = VsixHelper.SelectedItem.FullFileName.Substring((await GetSolutionFolderAsync()).Length);
-                // var deployWebResourceCache = vsixSessionCache.GetWebResource(fullFileName);
-                // if (deployWebResourceCache != null)
-                //     await DeployWebResourceAsync(serviceClient, deployWebResourceCache);
-                // else
-                // {
-                //     var webResources = XrmHelper.GetWebResources(serviceClient, fullFileName);
-                //     var deployWebResource = vsixSessionCache.GetExistingWebResource(serviceClient, webResources, fullFileName);
-                //     if (deployWebResource != null)
-                //     {
-                //         await DeployWebResourceAsync(serviceClient, deployWebResource);
-                //     }
-                // }
+                await VS.StatusBar.ShowMessageAsync($"[{XrmHelper.GetConnectedUrl(serviceClient)}] >>> Connected <<<");
+                var fullFileName = VsixHelper.SelectedItem.FullFileName.Substring((await VsixHelper.GetSolutionFolderAsync()).Length);
+                var deployWebResourceCache = CacheHelper.GetWebResource(fullFileName);
+                if (deployWebResourceCache != null)
+                    await DeployWebResourceAsync(serviceClient, deployWebResourceCache);
+                 else
+                 {
+                    var webResources = XrmHelper.GetWebResources(serviceClient, fullFileName);
+                    var form = new FormWebResource(webResources, fullFileName);
+                    var ok = form.ShowModal() ?? false;
+                    if (ok)
+                    {
+                        CacheHelper.SetWebResourceCache(fullFileName, form.SelectedWebResource);
+                        await VsixHelper.SaveDynamicsCrmDevKitConfigJsonAsync(form.SelectedWebResource);
+                        await DeployWebResourceAsync(serviceClient, form.SelectedWebResource);
+                    }
+                    else
+                    {
+                        await VS.MessageBox.ShowErrorAsync("No web resource selected for deployment.");
+                    }
+                 }
             }
             else
             {
@@ -43,69 +49,30 @@ namespace DynamicsCrm.DevKit.Commands
             await VS.StatusBar.EndAnimationAsync(StatusAnimation.Deploy);
         }
 
-        private static async Task<string> GetSolutionFolderAsync()
+        private static async Task DeployWebResourceAsync(ServiceClient serviceClient, DeployWebResource deployWebResource)
         {
-            var solution = await VS.Solutions.GetCurrentSolutionAsync();
-            return Path.GetDirectoryName(solution.FullPath);
+            await VS.StatusBar.ShowMessageAsync($"[{XrmHelper.GetConnectedUrl(serviceClient)}] >>> Deploying ... <<<");
+            var ok = await XrmHelper.DeployWebResourceAsync(serviceClient, VsixHelper.SelectedItem.FullFileName, deployWebResource.WebResourceId);
+            if (ok)
+            {
+                await VS.StatusBar.ShowMessageAsync($"[{XrmHelper.GetConnectedUrl(serviceClient)}] >>> Deployed <<<");
+                await Helper.DelayAsync(2);
+                await VS.StatusBar.ShowMessageAsync($"[{XrmHelper.GetConnectedUrl(serviceClient)}] >>> Publishing ... <<<");
+                var ok2 = await XrmHelper.PublishWebResourceAsync(serviceClient, deployWebResource.WebResourceId);
+                if (ok2)
+                {
+                    await VS.StatusBar.ShowMessageAsync($"[{XrmHelper.GetConnectedUrl(serviceClient)}] >>> Published from: [{VsixHelper.SelectedItem.FullFileName}] to: [{deployWebResource.WebResource}] <<<");
+                }
+                else
+                {
+                    await VS.StatusBar.ShowMessageAsync($"[{XrmHelper.GetConnectedUrl(serviceClient)}] >>> Publishing Failed <<<");
+                }
+            }
+            else
+            {
+                await VS.StatusBar.ShowMessageAsync($"[{XrmHelper.GetConnectedUrl(serviceClient)}] >>> Deploying Failed <<<");
+            }
         }
-
-        //private static async Task DeployWebResourceAsync(ServiceClient service, DeployWebResource deployWebResource)
-        //{
-        //    await VS.StatusBar.ShowMessageAsync($"Deploying ...");
-        //    var ok = await DeployWebResourceAsync(service, deployWebResource.File, deployWebResource.WebResourceId);
-        //    await VS.StatusBar.ShowMessageAsync($"Deployed !!!");
-        //    if (ok)
-        //    {
-        //        await VS.StatusBar.ShowMessageAsync($"Publishing ...");
-        //        var ok2 = await PublishWebResourceAsync(service, deployWebResource.WebResourceId);
-        //        if (ok2)
-        //            await VS.StatusBar.ShowMessageAsync($"[{CacheHelper.GetConnectedUrl(service)}]: Deployed/Published [{VsixHelper.SelectedItem.GetPhysicalFile().Name}] to [{deployWebResource.WebResource}]");
-        //        else
-        //            await VS.StatusBar.ShowMessageAsync($"Publishing failed !!!");
-        //    }
-        //    else
-        //    {
-        //        await VS.StatusBar.ShowMessageAsync($"[{CacheHelper.GetConnectedUrl(service)}]: Deploying failed !!!");
-        //    }
-        //}
-
-        //private static async Task<bool> DeployWebResourceAsync(ServiceClient service, string fullFileName, Guid webResourceId)
-        //{
-        //    return await Task.Run(async () =>
-        //    {
-        //        try
-        //        {
-        //            var solutionFolder = await GetSolutionFolderAsync();
-        //            fullFileName = $"{solutionFolder}\\{fullFileName}";
-        //            var webResource = new Entity("webresource") { Id = webResourceId };
-        //            webResource["content"] = Convert.ToBase64String(File.ReadAllBytes(fullFileName));
-        //            var request = new UpdateRequest { Target = webResource };
-        //            var response = (UpdateResponse)service.Execute(request);
-        //            return true;
-        //        }
-        //        catch
-        //        {
-        //            return false;
-        //        }
-        //    });
-        //}
-
-        //private static async Task<bool> PublishWebResourceAsync(ServiceClient service, Guid webResourceId)
-        //{
-        //    return await Task.Run(() => {
-        //        try
-        //        {
-        //            var publishXml = $"<importexportxml><webresources><webresource>{webResourceId}</webresource></webresources></importexportxml>";
-        //            var request = new PublishXmlRequest { ParameterXml = publishXml };
-        //            var response = (PublishXmlResponse)service.Execute(request);
-        //            return true;
-        //        }
-        //        catch
-        //        {
-        //            return false;
-        //        }
-        //    });
-        //}
 
         protected override void BeforeQueryStatus(EventArgs e)
         {

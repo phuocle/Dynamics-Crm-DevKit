@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using DynamicsCrm.DevKit.Shared.Models;
+using Microsoft.Crm.Sdk.Messages;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
@@ -364,6 +366,78 @@ namespace DynamicsCrm.DevKit.Shared
                 .OrderBy(x => x.Name)
                 .ToList();
             return forms;
+        }
+
+        public static List<DeployWebResource> GetWebResources(ServiceClient serviceClient, string fullFileName)
+        {
+            var parts = fullFileName.Split(@"\".ToCharArray());
+            var condition = string.Empty;
+            for (var i = parts.Length - 1; i > 0; i--)
+            {
+                var value = "/";
+                for (var j = i; j < parts.Length; j++)
+                {
+                    value += parts[j] + "/";
+                }
+                value = value.TrimEnd("/".ToCharArray());
+                condition += $"<condition attribute='name' operator='ends-with' value='{value}'/>" + "\r\n";
+            }
+            var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fullFileName);
+            condition += $"<condition attribute='name' operator='like' value='%{fileNameWithoutExtension}%'/>" + "\r\n";
+            var fetchXml = $@"
+<fetch>
+  <entity name='webresource'>
+    <attribute name='webresourceid' />
+    <attribute name='name' />
+    <attribute name='ismanaged' />
+    <filter type='or'>
+      {condition}
+    </filter>
+  </entity>
+</fetch>";
+            var rows = serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            var webResources = new List<DeployWebResource>();
+            foreach (var entity in rows.Entities)
+            {
+                webResources.Add(new DeployWebResource
+                {
+                    WebResource = entity.GetAttributeValue<string>("name") ?? string.Empty,
+                    WebResourceId = entity.Id,
+                    IsManaged = entity.GetAttributeValue<bool?>("ismanaged") ?? false
+                });
+            }
+            return webResources;
+        }
+
+        public static async Task<bool> DeployWebResourceAsync(ServiceClient service, string fullFileName, Guid webResourceId)
+        {
+            try
+            {
+                var webResource = new Entity("webresource") { Id = webResourceId };
+                webResource["content"] = Convert.ToBase64String(File.ReadAllBytes(fullFileName));
+                var request = new UpdateRequest { Target = webResource };
+                var response = await service.ExecuteAsync(request);
+                return true;
+            }
+            catch(Exception ex)
+            {
+                return false;
+            }
+        }
+
+        public static async Task<bool> PublishWebResourceAsync(ServiceClient service, Guid webResourceId)
+        {
+            try
+            {
+                var publishXml = $"<importexportxml><webresources><webresource>{webResourceId}</webresource></webresources></importexportxml>";
+                var request = new PublishXmlRequest { ParameterXml = publishXml };
+                var response = await service.ExecuteAsync(request);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }

@@ -10,6 +10,7 @@ using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace DynamicsCrm.DevKit.Shared
 {
@@ -772,6 +773,11 @@ namespace DynamicsCrm.DevKit.Shared
         public static bool IsWebResourceExtension(string extension)
         {
             return Const.WEB_RESOURCE_EXTENSIONS.Contains(extension);
+        }
+
+        public static async Task DelayAsync(int delayInSeconds)
+        {
+            await Task.Delay(delayInSeconds * 1000);
         }
     }
 }

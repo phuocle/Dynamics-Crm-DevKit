@@ -64,6 +64,9 @@
     <Compile Include="Lib\Forms\FormConnection.xaml.cs">
       <DependentUpon>FormConnection.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Lib\Forms\FormWebResource.xaml.cs">
+      <DependentUpon>FormWebResource.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Lib\JsonHelper.cs" />
     <Compile Include="Lib\VsixHelper.cs" />
     <Compile Include="Lib\WpfControls\ExternalBrowserHyperlink.cs" />
@@ -145,6 +148,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Lib\Forms\FormConnection.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Lib\Forms\FormWebResource.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
