@@ -6,7 +6,6 @@ using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.VisualStudio.Shell;
 using System;
-using System.IO;
 using System.Threading.Tasks;
 
 namespace DynamicsCrm.DevKit.Commands
@@ -62,7 +61,7 @@ namespace DynamicsCrm.DevKit.Commands
                 var ok2 = await XrmHelper.PublishWebResourceAsync(serviceClient, deployWebResource.WebResourceId);
                 if (ok2)
                 {
-                    await VS.StatusBar.ShowMessageAsync($"[{XrmHelper.GetConnectedUrl(serviceClient)}] >>> Published from: [{fullFileName}] to: [{deployWebResource.WebResource}] <<<");
+                    await VS.StatusBar.ShowMessageAsync($"[{XrmHelper.GetConnectedUrl(serviceClient)}] >>> [{fullFileName}] published to: [{deployWebResource.WebResource}] <<<");
                 }
                 else
                 {

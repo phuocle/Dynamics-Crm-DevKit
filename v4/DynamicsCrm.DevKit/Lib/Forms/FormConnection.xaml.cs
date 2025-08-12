@@ -86,8 +86,8 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 var crmConnection = CreateCrmConnectionFromInput();
                 await SetUIBusyStateAsync(true);
 
-                var crmServiceClient = await VsixHelper.CreateServiceClientAsync(crmConnection);
-                if (crmServiceClient?.IsReady == true)
+                var serviceClient = await VsixHelper.CreateServiceClientAsync(crmConnection);
+                if (serviceClient?.IsReady == true)
                 {
                     await SaveConnectionAsync(crmConnection);
                     await LoadConnectionsAsync();
@@ -202,7 +202,6 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 }
             }
 
-            // Special validation for AD authentication
             var selectedType = ((ComboBoxItem)comboBoxType.SelectedItem).Content?.ToString();
             if (selectedType == "AD" && !textboxUser.Text.Contains("\\"))
             {
