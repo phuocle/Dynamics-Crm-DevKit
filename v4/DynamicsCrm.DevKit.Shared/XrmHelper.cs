@@ -75,11 +75,11 @@ namespace DynamicsCrm.DevKit.Shared
     <order attribute='filename' />
     <link-entity name='solutioncomponent' from='objectid' to='reportid' link-type='inner' alias='sc'>
       <filter type='and'>
-        <condition attribute='componenttype' operator='eq' value='{fetchData.componenttype}'/>
+        <condition attribute='componenttype' operator='eq' value='{fetchData.componenttype}'/
       </filter>
       <link-entity name='solution' from='solutionid' to='solutionid' link-type='inner' alias='s'>
         <filter type='and'>
-          <condition attribute='uniquename' operator='eq' value='{fetchData.uniquename}'/>
+          <condition attribute='uniquename' operator='eq' value='{fetchData.uniquename}'/
         </filter>
       </link-entity>
     </link-entity>
@@ -368,18 +368,18 @@ namespace DynamicsCrm.DevKit.Shared
             return forms;
         }
 
-        public static List<DeployWebResource> GetWebResources(ServiceClient serviceClient, string fullFileName)
+        public static async Task<List<DeployWebResource>> GetWebResourcesAsync(ServiceClient serviceClient, string fullFileName)
         {
-            var parts = fullFileName.Split(@"\".ToCharArray());
+            var parts = fullFileName.Split(new[] { '\\', '/' }, StringSplitOptions.RemoveEmptyEntries);
             var condition = string.Empty;
-            for (var i = parts.Length - 1; i > 0; i--)
+            for (var i = parts.Length - 1; i >= 0; i--)
             {
                 var value = "/";
                 for (var j = i; j < parts.Length; j++)
                 {
                     value += parts[j] + "/";
                 }
-                value = value.TrimEnd("/".ToCharArray());
+                value = value.TrimEnd('/');
                 condition += $"<condition attribute='name' operator='ends-with' value='{value}'/>" + "\r\n";
             }
             var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fullFileName);
@@ -395,7 +395,7 @@ namespace DynamicsCrm.DevKit.Shared
     </filter>
   </entity>
 </fetch>";
-            var rows = serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            var rows = await serviceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
             var webResources = new List<DeployWebResource>();
             foreach (var entity in rows.Entities)
             {

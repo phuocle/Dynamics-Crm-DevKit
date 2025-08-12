@@ -28,7 +28,7 @@ namespace DynamicsCrm.DevKit.Commands
                     await DeployWebResourceAsync(serviceClient, deployWebResourceCache, fullFileName);
                 else
                 {
-                    var webResources = XrmHelper.GetWebResources(serviceClient, fullFileNameForCrm);
+                    var webResources = await XrmHelper.GetWebResourcesAsync(serviceClient, fullFileNameForCrm);
                     var form = new FormWebResource(webResources, fullFileNameForCrm);
                     var ok = form.ShowModal() ?? false;
                     if (ok)
