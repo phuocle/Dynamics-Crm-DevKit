@@ -46,12 +46,10 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             {
                 if (comboBoxSavedConnection.SelectedItem is CrmConnection selectedConnection)
                 {
-                    await SetUIBusyStateAsync(true);
-                    
+                    await SetUIBusyStateAsync(true);                    
                     CrmConnection = selectedConnection;
                     await VsixHelper.SaveDefaultCrmConnectionAsync(CrmConnection.Name);
-                    
-                    var serviceClient = await VsixHelper.CreateServiceClientAsync(CrmConnection);
+                    var serviceClient = await Task.Run(() => VsixHelper.CreateServiceClientAsync(selectedConnection));
                     if (serviceClient?.IsReady == true)
                     {
                         ServiceClient = serviceClient;
