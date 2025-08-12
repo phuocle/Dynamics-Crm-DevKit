@@ -32,7 +32,7 @@ namespace DynamicsCrm.DevKit.Shared
             return url;
         }
 
-        public static (bool IsOk, Guid SolutionId, string Prefix) IsExistSolution(ServiceClient service, string solutionuniquename)
+        public static (bool IsOk, Guid SolutionId, string Prefix) IsExistSolution(ServiceClient serviceClient, string solutionuniquename)
         {
             var fetchData = new
             {
@@ -51,7 +51,7 @@ namespace DynamicsCrm.DevKit.Shared
   </entity>
 </fetch>";
 
-            var rows = service.RetrieveMultiple(new FetchExpression(fetchXml));
+            var rows = serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
             if (rows.Entities.Count != 1) return (false, Guid.Empty, string.Empty);
             var entity = rows.Entities[0];
             var solutionId = entity.Id;

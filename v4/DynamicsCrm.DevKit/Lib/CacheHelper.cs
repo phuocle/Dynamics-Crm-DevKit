@@ -11,10 +11,10 @@ namespace DynamicsCrm.DevKit.Lib
 {
     public static class CacheHelper
     {
-        private static readonly ConcurrentDictionary<string, ServiceClient> _serviceClientCache = new ConcurrentDictionary<string, ServiceClient>();        
-        private static readonly ConcurrentDictionary<string, DateTime> _connectionTimestamps = new ConcurrentDictionary<string, DateTime>();        
-        private static readonly int ConnectionTimeoutMinutes = 60;
+        private static readonly ConcurrentDictionary<string, ServiceClient> _serviceClientCache = new ConcurrentDictionary<string, ServiceClient>();
         private static readonly ConcurrentDictionary<string, DeployWebResource> _webResourceCache = new ConcurrentDictionary<string, DeployWebResource>();
+        private static readonly ConcurrentDictionary<string, DateTime> _connectionTimestamps = new ConcurrentDictionary<string, DateTime>();        
+        private static readonly int ConnectionTimeoutMinutes = 60;        
 
         public static async Task<ServiceClient> GetServiceClientAsync()
         {

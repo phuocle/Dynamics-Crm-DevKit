@@ -1,4 +1,5 @@
 ﻿using Community.VisualStudio.Toolkit;
+using DynamicsCrm.DevKit.Shared;
 using Microsoft.VisualStudio.Shell;
 using System;
 using System.IO;
@@ -165,8 +166,11 @@ namespace DynamicsCrm.DevKit.Commands
 
         protected override void BeforeQueryStatus(EventArgs e)
         {
-            //this.Command.Visible = Utility.IsWebResourceExtension(VsixHelper.SelectedItem.Extension);
-            this.Command.Visible = false;
+            this.Command.Visible = ThreadHelper.JoinableTaskFactory.Run(async () =>
+            {
+                var extension = await VsixHelper.SelectedItem.GetExtensionAsync();
+                return Helper.IsWebResourceExtension(extension);
+            });
         }
     }
 }
