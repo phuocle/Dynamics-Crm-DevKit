@@ -103,7 +103,11 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 endsWith = ".webapi.js";
             if (Json.entities != null && (Json.entities.Trim().ToLower() == "*" || Json.entities.Trim().ToLower() == "all"))
             {
-                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Filter by: ", ConsoleColor.White, "json.entities", ConsoleColor.Green, " with values: ", ConsoleColor.White, Json.entities.Trim());
+                CliLog.Write(ConsoleColor.White, "|", ConsoleColor.Green, "Filter by: ");
+                CliLog.WriteSuccess(ConsoleColor.White, "json.entities");
+                CliLog.Write(ConsoleColor.Green, " with values: ");
+                CliLog.WriteSuccess(ConsoleColor.White, Json.entities.Trim());
+                CliLog.WriteLine();
                 CliLog.WriteLine(ConsoleColor.White, "|");
                 await ReadEntitiesMetadataAsync(ServiceClient);
                 return XrmHelper.EntitiesMetadata
@@ -112,7 +116,11 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             else if (Json.entities == null || Json.entities.Trim().Length == 0 || Json.entities.Trim().ToLower() == "folder")
             {
-                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Filter by: ", ConsoleColor.White, "current folder", ConsoleColor.Green, " with pattern values: ", ConsoleColor.White, $"*{endsWith}");
+                CliLog.Write(ConsoleColor.White, "|", ConsoleColor.Green, "Filter by: ");
+                CliLog.WriteSuccess(ConsoleColor.White, "current folder");
+                CliLog.Write(ConsoleColor.Green, " with pattern values: ");
+                CliLog.WriteSuccess(ConsoleColor.White, $"*{endsWith}");
+                CliLog.WriteLine();
                 CliLog.WriteLine(ConsoleColor.White, "|");
                 var pattern = $"*{endsWith}";
                 return Directory
@@ -122,7 +130,11 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             else
             {
-                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Filter by: ", ConsoleColor.White, "json.entities", ConsoleColor.Green, " with values: ", ConsoleColor.White, Json.entities.Trim());
+                CliLog.Write(ConsoleColor.White, "|", ConsoleColor.Green, "Filter by: ");
+                CliLog.WriteSuccess(ConsoleColor.White, "json.entities");
+                CliLog.Write(ConsoleColor.Green, " with values: ");
+                CliLog.WriteSuccess(ConsoleColor.White, Json.entities.Trim());
+                CliLog.WriteLine();
                 CliLog.WriteLine(ConsoleColor.White, "|");
                 return Json.entities.Split(",".ToCharArray()).ToList();
             }

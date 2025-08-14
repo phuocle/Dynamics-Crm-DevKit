@@ -111,7 +111,6 @@ namespace DynamicsCrm.DevKit.Cli
             }
             if (IsNeedServiceClient(arguments))
             {
-                ServiceClient.MaxConnectionTimeout = new TimeSpan(1, 0, 0);
                 if (arguments.IsSdkLogin)
                 {
                     var ignoreCliTypes = new List<string>() { nameof(CliType.proxytypes) };
@@ -150,11 +149,12 @@ namespace DynamicsCrm.DevKit.Cli
             }
             if (ServiceClient != null)
             {
+                ServiceClient.MaxConnectionTimeout = new TimeSpan(1, 0, 0);
                 CliLog.WriteLine(ConsoleColor.White, "|");
                 CliLog.Write(ConsoleColor.White, "|", ConsoleColor.Green, "Connected: ");
                 CliLog.WriteSuccess(ConsoleColor.White, ServiceClient.ConnectedUrl());
                 CliLog.Write(ConsoleColor.Green, " with connection timeout: ");
-                CliLog.Write(ConsoleColor.White, ServiceClient.MaxConnectionTimeout.TotalSeconds.ToString("#,###"));
+                CliLog.WriteSuccess(ConsoleColor.White, ServiceClient.MaxConnectionTimeout.TotalSeconds.ToString("#,###"));
                 CliLog.WriteLine(ConsoleColor.Green, " (seconds)");
             }
             CliLog.WriteLine(ConsoleColor.White, "|");
@@ -197,14 +197,14 @@ namespace DynamicsCrm.DevKit.Cli
 
                 // Wait a bit for the connection to establish
                 await Task.Delay(100);
-                
+
                 if (serviceClient != null && serviceClient.IsReady)
                 {
                     ServiceClient = serviceClient;
                     CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "OAuth authentication successful!");
                     return true;
                 }
-                
+
                 // Wait up to 30 seconds for connection to establish
                 var timeout = TimeSpan.FromSeconds(30);
                 var start = DateTime.Now;
@@ -212,7 +212,7 @@ namespace DynamicsCrm.DevKit.Cli
                 {
                     await Task.Delay(500);
                 }
-                
+
                 if (serviceClient?.IsReady == true)
                 {
                     ServiceClient = serviceClient;
