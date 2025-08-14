@@ -80,7 +80,7 @@ namespace DynamicsCrm.DevKit.Shared
             return false;
         }
 
-        public static async Task<List<DownloadFile>> GetReportsBySolutionAsync(ServiceClient service, string solution)
+        public static async Task<List<DownloadFile>> GetReportsBySolutionAsync(ServiceClient serviceClient, string solution)
         {
             var fetchData = new
             {
@@ -110,7 +110,7 @@ namespace DynamicsCrm.DevKit.Shared
   </entity>
 </fetch>";
 
-            var rows = await service.RetrieveMultipleAsync(new FetchExpression(fetchXml));
+            var rows = await serviceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
             var list = new List<DownloadFile>();
             foreach (var entity in rows.Entities)
             {
@@ -125,36 +125,36 @@ namespace DynamicsCrm.DevKit.Shared
             return list;
         }
 
-        public static async Task DeployReportAsync(ServiceClient service, Guid reportId, string fullFileName)
+        public static async Task DeployReportAsync(ServiceClient serviceClient, Guid reportId, string fullFileName)
         {
             var update = new Entity("report", reportId);
             update["bodytext"] = File.ReadAllText(fullFileName);
-            await service.UpdateAsync(update);
+            await serviceClient.UpdateAsync(update);
         }
 
-        public static async Task<List<EntityMetadata>> GetEntitiesMetadataAsync(ServiceClient service)
+        public static async Task<List<EntityMetadata>> GetEntitiesMetadataAsync(ServiceClient serviceClient)
         {
             var request = new RetrieveAllEntitiesRequest
             {
                 EntityFilters = EntityFilters.All,
                 RetrieveAsIfPublished = true
             };
-            var response = (RetrieveAllEntitiesResponse)await service.ExecuteAsync(request);
-            return response.EntityMetadata.ToList();
+            var response = (RetrieveAllEntitiesResponse)await serviceClient.ExecuteAsync(request);
+            return [.. response.EntityMetadata];
         }
 
-        public static async Task<List<string>> GetAllEntitiesSchemaAsync(ServiceClient service)
+        public static async Task<List<string>> GetAllEntitiesSchemaAsync(ServiceClient serviceClient)
         {
             var request = new RetrieveAllEntitiesRequest
             {
                 EntityFilters = EntityFilters.All,
                 RetrieveAsIfPublished = true
             };
-            var response = (RetrieveAllEntitiesResponse)await service.ExecuteAsync(request);
-            return response.EntityMetadata.ToList().Select(x => x.SchemaName).ToList();
+            var response = (RetrieveAllEntitiesResponse)await serviceClient.ExecuteAsync(request);
+            return [.. response.EntityMetadata.ToList().Select(x => x.SchemaName)];
         }
 
-        public static async Task<List<EntityMetadata>> GetEntitiesMetadataAsync(ServiceClient service, List<string> schemaNames)
+        public static async Task<List<EntityMetadata>> GetEntitiesMetadataAsync(ServiceClient serviceClient, List<string> schemaNames)
         {
             var request = new ExecuteMultipleRequest()
             {
@@ -168,7 +168,7 @@ namespace DynamicsCrm.DevKit.Shared
             foreach (var schemaName in schemaNames)
                 request.Requests.Add(new RetrieveEntityRequest { EntityFilters = EntityFilters.All, LogicalName = schemaName.ToLower() });
             var list = new List<EntityMetadata>();
-            ExecuteMultipleResponse response = (ExecuteMultipleResponse)await service.ExecuteAsync(request);
+            ExecuteMultipleResponse response = (ExecuteMultipleResponse)await serviceClient.ExecuteAsync(request);
             foreach (var result in response.Responses)
             {
                 if (result.Fault == null)
@@ -187,29 +187,29 @@ namespace DynamicsCrm.DevKit.Shared
             return list;
         }
 
-        public static async Task<EntityMetadata> GetEntityMetadataAsync(ServiceClient service, string entityLogicalName)
+        public static async Task<EntityMetadata> GetEntityMetadataAsync(ServiceClient serviceClient, string entityLogicalName)
         {
-            var entities = await GetEntitiesMetadataAsync(service, new List<string> { entityLogicalName });
+            var entities = await GetEntitiesMetadataAsync(serviceClient, new List<string> { entityLogicalName });
             return entities.FirstOrDefault();
         }
 
-        public static async Task ReadEntitiesMetadataAsync(ServiceClient service)
+        public static async Task ReadEntitiesMetadataAsync(ServiceClient serviceClient)
         {
             if (XrmHelper.EntitiesMetadata.Count == 0)
             {
-                XrmHelper.EntitiesMetadata = await XrmHelper.GetEntitiesMetadataAsync(service);
+                XrmHelper.EntitiesMetadata = await XrmHelper.GetEntitiesMetadataAsync(serviceClient);
             }
         }
 
-        public static async Task ReadEntitiesFormXmlAsync(ServiceClient service)
+        public static async Task ReadEntitiesFormXmlAsync(ServiceClient serviceClient)
         {
             if (XrmHelper.EntitiesFormXml.Count == 0)
             {
-                XrmHelper.EntitiesFormXml = await XrmHelper.GetEntitiesFormXmlAsync(service);
+                XrmHelper.EntitiesFormXml = await XrmHelper.GetEntitiesFormXmlAsync(serviceClient);
             }
         }
 
-        public static async Task<List<SystemForm>> GetEntityFormXmlAsync(ServiceClient service, int? objectTypeCode)
+        public static async Task<List<SystemForm>> GetEntityFormXmlAsync(ServiceClient serviceClient, int? objectTypeCode)
         {
             var fetchData = new
             {
@@ -240,8 +240,8 @@ namespace DynamicsCrm.DevKit.Shared
     </filter>
   </entity>
 </fetch>";
-            var rows = await service.RetrieveMultipleAsync(new FetchExpression(fetchXml));
-            if (rows.Entities.Count == 0) return new List<SystemForm>();
+            var rows = await serviceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
+            if (rows.Entities.Count == 0) return [];
             var forms = rows.Entities.Select(x => new SystemForm
             {
                 Name = x.GetAttributeValue<string>("name"),
@@ -252,10 +252,10 @@ namespace DynamicsCrm.DevKit.Shared
                 FormType = (FormType)x.GetAttributeValue<OptionSetValue>("type")?.Value,
                 FormId = x.GetAttributeValue<Guid?>("formid")
             });
-            return forms.OrderBy(x => x.EntityLogicalName).ThenBy(x => x.Name).ToList();
+            return [.. forms.OrderBy(x => x.EntityLogicalName).ThenBy(x => x.Name)];
         }
 
-        public static async Task<List<SystemForm>> GetEntitiesFormXmlAsync(ServiceClient service)
+        public static async Task<List<SystemForm>> GetEntitiesFormXmlAsync(ServiceClient serviceClient)
         {
             var fetchData = new
             {
@@ -284,7 +284,7 @@ namespace DynamicsCrm.DevKit.Shared
     </filter>
   </entity>
 </fetch>";
-            var rows = await service.RetrieveMultipleAsync(new FetchExpression(fetchXml));
+            var rows = await serviceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
             var forms = rows.Entities.Select(x => new SystemForm
             {
                 Name = x.GetAttributeValue<string>("name"),
@@ -295,10 +295,10 @@ namespace DynamicsCrm.DevKit.Shared
                 FormType = (FormType)x.GetAttributeValue<OptionSetValue>("type")?.Value,
                 FormId = x.GetAttributeValue<Guid?>("formid")
             });
-            return forms.OrderBy(x => x.EntityLogicalName).ThenBy(x => x.Name).ToList();
+            return [.. forms.OrderBy(x => x.EntityLogicalName).ThenBy(x => x.Name)];
         }
 
-        public static async Task<CommentTypeScriptDeclaration> GetCommentAsync(ServiceClient service, string entityLogicalName, string dtsFile)
+        public static async Task<CommentTypeScriptDeclaration> GetCommentAsync(ServiceClient serviceClient, string entityLogicalName, string dtsFile)
         {
             if (File.Exists(dtsFile))
             {
@@ -328,7 +328,7 @@ namespace DynamicsCrm.DevKit.Shared
             }
             else
             {
-                await XrmHelper.EntitiesFormXml.AddIfNotExistAsync(service, entityLogicalName);
+                await XrmHelper.EntitiesFormXml.AddIfNotExistAsync(serviceClient, entityLogicalName);
                 return new CommentTypeScriptDeclaration
                 {
                     UseForm = XrmHelper.EntitiesFormXml.Any(x => x.EntityLogicalName == entityLogicalName),
@@ -338,9 +338,9 @@ namespace DynamicsCrm.DevKit.Shared
             }
         }
 
-        public static async Task<List<SystemForm>> GetEntityFormsAsync(ServiceClient service, string entityLogicalName)
+        public static async Task<List<SystemForm>> GetEntityFormsAsync(ServiceClient serviceClient, string entityLogicalName)
         {
-            await XrmHelper.EntitiesFormXml.AddIfNotExistAsync(service, entityLogicalName);
+            await XrmHelper.EntitiesFormXml.AddIfNotExistAsync(serviceClient, entityLogicalName);
             var forms = XrmHelper.EntitiesFormXml
                 .Where(x => x.EntityLogicalName == entityLogicalName && (x.FormType == FormType.Main || x.FormType == FormType.QuickCreate))
                 .OrderBy(x => x.Name)
@@ -389,14 +389,14 @@ namespace DynamicsCrm.DevKit.Shared
             return webResources;
         }
 
-        public static async Task<bool> DeployWebResourceAsync(ServiceClient service, string fullFileName, Guid webResourceId)
+        public static async Task<bool> DeployWebResourceAsync(ServiceClient serviceClient, string fullFileName, Guid webResourceId)
         {
             try
             {
                 var webResource = new Entity("webresource") { Id = webResourceId };
                 webResource["content"] = Convert.ToBase64String(File.ReadAllBytes(fullFileName));
                 var request = new UpdateRequest { Target = webResource };
-                var response = await service.ExecuteAsync(request);
+                var response = await serviceClient.ExecuteAsync(request);
                 return true;
             }
             catch
@@ -488,13 +488,13 @@ namespace DynamicsCrm.DevKit.Shared
             }
         }
 
-        public static async Task<bool> PublishWebResourceAsync(ServiceClient service, Guid webResourceId)
+        public static async Task<bool> PublishWebResourceAsync(ServiceClient serviceClient, Guid webResourceId)
         {
             try
             {
                 var publishXml = $"<importexportxml><webresources><webresource>{webResourceId}</webresource></webresources></importexportxml>";
                 var request = new PublishXmlRequest { ParameterXml = publishXml };
-                var response = await service.ExecuteAsync(request);
+                var response = await serviceClient.ExecuteAsync(request);
                 return true;
             }
             catch
