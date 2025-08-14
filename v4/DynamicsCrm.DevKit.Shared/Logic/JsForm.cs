@@ -15,14 +15,6 @@ namespace DynamicsCrm.DevKit.Shared.Logic
         private const string NEW_LINE = "\r\n";
         private const string TAB = "\t";
 
-        private static List<string> FormAll_Fields = new List<string>();
-        private static List<string> FormAll_Header_Fields = new List<string>();
-        private static List<TabSection> FormAll_TabSections = new List<TabSection>();
-        private static List<ProcessFields> FormAll_Processes = new List<ProcessFields>();
-        private static List<string> FormAll_QuickForms = new List<string>();
-        private static List<string> FormAll_Grids = new List<string>();
-        private static List<string> FormAll_Navigations = new List<string>();
-
         private class TabSection
         {
             public string Tab { get; set; }
@@ -216,10 +208,6 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                 code += $"{TAB}{TAB}{TAB}}},{NEW_LINE}";
             }
             code = code.TrimEnd(",{NEW_LINE}".ToCharArray()) + "{NEW_LINE}";
-            if (!FormAll_QuickForms.Any(x => x == code))
-            {
-                FormAll_QuickForms.Add(code);
-            }
             return code;
         }
 
@@ -357,10 +345,6 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                 var classId = GetARealClassId(formXml, field.ClassId, field.ControlId);
                 if (classId != ControlClassId.SUB_GRID && classId != ControlClassId.SUB_GRID_PANEL) continue;
                 code += $"{TAB}{TAB}{TAB}{field.Id}: {{}},{NEW_LINE}";
-                if (!FormAll_Grids.Any(x => x == field.Id))
-                {
-                    FormAll_Grids.Add(field.Id);
-                }
             }
             return code;
         }
@@ -432,10 +416,6 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                 code += $"{TAB}{TAB}}}{NEW_LINE}";
                 code += $"{TAB}{TAB}devKit.LoadFields(formContext, _{name}, \"header_process_\");{NEW_LINE}";
                 code += $"{TAB}{TAB}process.{name} = _{name};{NEW_LINE}";
-                if (!FormAll_Processes.Any(x => x.ProcessName == name))
-                {
-                    FormAll_Processes.Add(new ProcessFields { ProcessName = name, Fields = fields });
-                }
             }
             return code;
         }
@@ -487,7 +467,6 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                            select x.Attribute("datafieldname")?.Value).ToList();
             headers.Sort();
             if (headers.Count == 0) return string.Empty;
-            FormAll_Header_Fields = FormAll_Header_Fields.Concat(headers).ToList();
             var code = GetJsForListFields(headers, false);
             code = $"{code.TrimEnd($",{NEW_LINE}".ToCharArray())}{NEW_LINE}";
             if (code == NEW_LINE) return string.Empty;
@@ -535,14 +514,6 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                     if (existSections.Contains(Helper.SafeIdentifier(section.Name))) continue; else existSections.Add(Helper.SafeIdentifier(section.Name));
                     var sectionName = Helper.SafeIdentifier(section.Name);
                     code += $"{TAB}{TAB}{TAB}{TAB}{TAB}{sectionName}: {{}},{NEW_LINE}";
-                    if (!FormAll_TabSections.Any(x => x.Tab == tabName && x.Section == sectionName))
-                    {
-                        FormAll_TabSections.Add(new TabSection
-                        {
-                            Tab = tabName,
-                            Section = sectionName
-                        });
-                    }
                 }
                 code = code.TrimEnd(",{NEW_LINE}".ToCharArray()) + "{NEW_LINE}";
                 code += $"{TAB}{TAB}{TAB}{TAB}}}{NEW_LINE}";
@@ -564,7 +535,6 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                           }).Distinct();
             var list = (from field in fields where field.FieldName != null select (string)field.FieldName).ToList<string>();
             list.Sort();
-            FormAll_Fields = FormAll_Fields.Concat(list).ToList();
             return GetJsForListFields(list, false);
         }
 
@@ -577,7 +547,6 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                           select (string)x.Attribute("datafieldname")).ToList();
             fields.Sort();
             if (fields.Count == 0) return string.Empty;
-            FormAll_Fields = FormAll_Fields.Concat(fields).ToList();
             return GetJsForListFields(fields, false);
         }
 
