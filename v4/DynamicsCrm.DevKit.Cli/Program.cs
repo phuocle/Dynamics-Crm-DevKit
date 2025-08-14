@@ -58,7 +58,7 @@ namespace DynamicsCrm.DevKit.Cli
         static async Task RunCliAsync(CommandLineArgs arguments)
         {
             ShowHelp();
-            if (IsValid(arguments))
+            if (await IsValidAsync(arguments))
             {
                 await CliTask.RunAsync(arguments);
             }
@@ -68,7 +68,7 @@ namespace DynamicsCrm.DevKit.Cli
 #endif
         }
 
-        private static bool IsValid(CommandLineArgs arguments)
+        private static async Task<bool> IsValidAsync(CommandLineArgs arguments)
         {
             ServiceClient = null;
             CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Current Directory ", ConsoleColor.Blue, "Path=", ConsoleColor.White, arguments.CurrentDirectory);
@@ -118,7 +118,7 @@ namespace DynamicsCrm.DevKit.Cli
                     if (!ignoreCliTypes.Any(x => arguments.Type == x))
                     {
                         if (!string.IsNullOrEmpty(arguments.Url)) {
-                            if (!IsConnectedDynamics365BySdkLogin(arguments.Url))
+                            if (!await IsConnectedDynamics365BySdkLoginAsync(arguments.Url))
                             {
                                 CliLog.WriteLine(ConsoleColor.White, "|");
                                 CliLog.WriteLineError(ConsoleColor.Yellow, $" OOB Login failed !!!");
@@ -134,10 +134,11 @@ namespace DynamicsCrm.DevKit.Cli
                 }
                 else
                 {
-                    ServiceClient = Helper.IsConnected(Helper.BuildConnectionString(arguments.Connection), out var error);
+                    var result = await Helper.IsConnectedAsync(Helper.BuildConnectionString(arguments.Connection));
+                    ServiceClient = result.serviceClient;
                     if (ServiceClient == null)
                     {
-                        CliLog.WriteLineError(ConsoleColor.Yellow, error);
+                        CliLog.WriteLineError(ConsoleColor.Yellow, result.error ?? "Unknown connection error");
                         return false;
                     }
                 }
@@ -173,7 +174,7 @@ namespace DynamicsCrm.DevKit.Cli
             return true;
         }
 
-        private static bool IsConnectedDynamics365BySdkLogin(string url)
+        private static async Task<bool> IsConnectedDynamics365BySdkLoginAsync(string url)
         {
             try
             {
@@ -194,7 +195,25 @@ namespace DynamicsCrm.DevKit.Cli
                     logger: null
                 );
 
+                // Wait a bit for the connection to establish
+                await Task.Delay(100);
+                
                 if (serviceClient != null && serviceClient.IsReady)
+                {
+                    ServiceClient = serviceClient;
+                    CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "OAuth authentication successful!");
+                    return true;
+                }
+                
+                // Wait up to 30 seconds for connection to establish
+                var timeout = TimeSpan.FromSeconds(30);
+                var start = DateTime.Now;
+                while (serviceClient != null && !serviceClient.IsReady && DateTime.Now - start < timeout)
+                {
+                    await Task.Delay(500);
+                }
+                
+                if (serviceClient?.IsReady == true)
                 {
                     ServiceClient = serviceClient;
                     CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "OAuth authentication successful!");

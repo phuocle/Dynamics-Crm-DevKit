@@ -65,10 +65,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
 
             if (WebResourcesToPublish.Count > 0)
-                PublishWebResources();
+                await PublishWebResourcesAsync();
         }
 
-        private void PublishWebResources()
+        private async Task PublishWebResourcesAsync()
         {
             var guids = WebResourcesToPublish.Select(g => g.ToString());
             var webresources = string.Join("</webresource><webresource>", guids);
@@ -81,7 +81,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             };
             CliLog.WriteLine(ConsoleColor.White, "|");
             CliLog.WriteLineWarning(ConsoleColor.Green, "PUBLISHING WEBRESOURCES");
-            ServiceClient.Execute(publish);
+            await ServiceClient.ExecuteAsync(publish);
             CliLog.WriteLine(ConsoleColor.White, "|");
             CliLog.WriteLineWarning(ConsoleColor.Green, "PUBLISHED WEBRESOURCES");
         }

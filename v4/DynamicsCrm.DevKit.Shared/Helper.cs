@@ -688,6 +688,46 @@ namespace DynamicsCrm.DevKit.Shared
             return value.Replace(";;", ";");
         }
 
+        public static async Task<(ServiceClient serviceClient, string error)> IsConnectedAsync(string connectionString)
+        {
+            try
+            {
+                var crmServiceClient = new ServiceClient(connectionString);
+
+                // Wait a bit for the connection to establish
+                await Task.Delay(100);
+
+                if (crmServiceClient.IsReady)
+                {
+                    return (crmServiceClient, null);
+                }
+
+                // Wait up to 30 seconds for connection to establish
+                var timeout = TimeSpan.FromSeconds(30);
+                var start = DateTime.Now;
+                while (!crmServiceClient.IsReady && DateTime.Now - start < timeout)
+                {
+                    await Task.Delay(500);
+                }
+
+                if (crmServiceClient.IsReady)
+                {
+                    return (crmServiceClient, null);
+                }
+                else
+                {
+                    var error = !string.IsNullOrEmpty(crmServiceClient.LastError)
+                        ? crmServiceClient.LastError
+                        : "Unable to connect to Dynamics 365. Connection timeout.";
+                    return (null, error);
+                }
+            }
+            catch (Exception ex)
+            {
+                return (null, ex.Message);
+            }
+        }
+
         public static ServiceClient IsConnected(string connectionString, out string error)
         {
             error = null;
