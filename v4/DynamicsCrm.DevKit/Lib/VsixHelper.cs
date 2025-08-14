@@ -98,17 +98,14 @@ namespace DynamicsCrm.DevKit
             }
             configJson.WebResources = configJson.WebResources.OrderBy(x => x.WebResource).ToList();
             var json = JsonHelper.FormatJson(SimpleJson.SerializeObject(configJson));
-            Helper.ForceWriteAllText(fileName, json);
+            await Helper.ForceWriteAllTextAsync(fileName, json);
         }
 
         public static async Task SaveDevKitConnectionsAsync(DevKitConnections connections)
         {
             var json = JsonHelper.FormatJson(SimpleJson.SerializeObject(connections));
             var fileName = await GetDynamicsCrmDevKitJsonFileNameAsync();
-            if (fileName != null)
-            {
-                await Task.Run(() => Helper.ForceWriteAllText(fileName, json));
-            }
+            if (fileName != null && File.Exists(fileName)) await Helper.ForceWriteAllTextAsync(fileName, json);
         }
 
         public static async Task<ServiceClient> CreateServiceClientAsync(CrmConnection crmConnection)

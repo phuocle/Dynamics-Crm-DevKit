@@ -23,15 +23,6 @@ namespace DynamicsCrm.DevKit.Shared
         public static List<SystemForm> EntitiesFormXml { get; set; } = new List<SystemForm>();
         public static List<ProcessForm> EntitiesProcessForm { get; set; } = new List<ProcessForm>();
 
-        public static string GetConnectedUrl(ServiceClient service)
-        {
-            if (service?.ConnectedOrgUriActual == null) return null;
-            var uri = service.ConnectedOrgUriActual;
-            var url = uri.GetLeftPart(UriPartial.Authority);
-            if (url.Contains(".api.")) url = url.Replace(".api.", ".");
-            return url;
-        }
-
         public static async Task<(bool IsOk, Guid SolutionId, string Prefix)> IsExistSolutionAsync(ServiceClient serviceClient, string solutionuniquename)
         {
             var fetchData = new

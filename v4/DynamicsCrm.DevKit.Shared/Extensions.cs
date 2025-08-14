@@ -130,6 +130,13 @@ namespace DynamicsCrm.DevKit.Shared
                 if (processes.Count > 0) XrmHelper.EntitiesProcessForm.AddRange(processes);
             }
         }
-
+        public static string ConnectedUrl(this ServiceClient service)
+        {
+            if (service?.ConnectedOrgUriActual == null) return null;
+            var uri = service.ConnectedOrgUriActual;
+            var url = uri.GetLeftPart(UriPartial.Authority);
+            if (url.Contains(".api.")) url = url.Replace(".api.", ".");
+            return url;
+        }
     }
 }

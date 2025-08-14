@@ -152,7 +152,7 @@ namespace DynamicsCrm.DevKit.Cli
             {
                 CliLog.WriteLine(ConsoleColor.White, "|");
                 CliLog.Write(ConsoleColor.White, "|", ConsoleColor.Green, "Connected: ");
-                CliLog.WriteSuccess(ConsoleColor.White, XrmHelper.GetConnectedUrl(ServiceClient));
+                CliLog.WriteSuccess(ConsoleColor.White, ServiceClient.ConnectedUrl());
                 CliLog.Write(ConsoleColor.Green, " with connection timeout: ");
                 CliLog.Write(ConsoleColor.White, ServiceClient.MaxConnectionTimeout.TotalSeconds.ToString("#,###"));
                 CliLog.WriteLine(ConsoleColor.Green, " (seconds)");
