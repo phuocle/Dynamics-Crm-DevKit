@@ -151,7 +151,7 @@ namespace DynamicsCrm.DevKit.Shared
             }
         }
 
-        public static async Task<string> ReadEmbeddedResourceAsync(string path)
+        public static string ReadEmbeddedResource(string path)
         {
             try
             {
@@ -162,7 +162,7 @@ namespace DynamicsCrm.DevKit.Shared
                 using (var stream = assembly.GetManifestResourceStream(path))
                 using (var reader = new StreamReader(stream ?? throw new InvalidOperationException()))
                 {
-                    data = await reader.ReadToEndAsync();
+                    data = reader.ReadToEnd();
                 }
                 return data;
             }
@@ -170,6 +170,19 @@ namespace DynamicsCrm.DevKit.Shared
             {
             }
             return string.Empty;
+        }
+
+        public static async Task<string> ReadEmbeddedResourceAsync(string path)
+        {
+            string data;
+            var assembly = typeof(Helper).Assembly;
+            Stream resourceStream = assembly.GetManifestResourceStream(path); ;
+            using (resourceStream)
+            using (var reader = new StreamReader(resourceStream))
+            {
+                data = await reader.ReadToEndAsync();
+            }
+            return data;
         }
 
         public static string GetSchemaNameFromFile(string file, string endsWith)
