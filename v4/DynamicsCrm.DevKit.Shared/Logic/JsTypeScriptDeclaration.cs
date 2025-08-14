@@ -14,9 +14,6 @@ namespace DynamicsCrm.DevKit.Shared.Logic
     {
         private const string NEW_LINE = "\r\n";
         private const string TAB = "{TAB}";
-        private static List<string> FormAll_HeaderFields = new List<string>();
-        private static List<string> FormAll_BodyFields = new List<string>();
-        private static List<string> FormAll_ProcessFields = new List<string>();
         private static ServiceClient ServiceClient { get; set; }
         private static EntityMetadata EntityMetadata { get; set; }
         private static string RootNamespace { get; set; }
@@ -609,30 +606,6 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             return _d_ts;
         }
 
-        private static string GetFormMain_d_ts__AllFields(string @namespace)
-        {
-            var _d_ts = string.Empty;
-            var formName = $"Form___{EntityMetadata.LogicalName}___All";
-            _d_ts += $"{TAB}namespace {formName} {{{NEW_LINE}";
-            var form_d_ts_Header = GetForm_d_ts_Header_AllFields();
-            if (form_d_ts_Header.Length > 0)
-            {
-                _d_ts += $"{TAB}{TAB}interface Header extends DevKit.Controls.IHeader {{{NEW_LINE}";
-                _d_ts += form_d_ts_Header;
-                _d_ts += $"{TAB}{TAB}}}{NEW_LINE}";
-            }
-            var form_d_ts_Body = GetForm_d_ts_Body_AllFields();
-            if (form_d_ts_Body.Length > 0)
-            {
-                _d_ts += form_d_ts_Body;
-            }
-
-            _d_ts += $"{TAB}{TAB}/** The SidePanes of form {formName} */{NEW_LINE}";
-            _d_ts += $"{TAB}{TAB}SidePanes: DevKit.SidePanes;{NEW_LINE}";
-            _d_ts += $"{TAB}}}{NEW_LINE}";
-            return _d_ts;
-        }
-
         private static string GetUnquieFormName(string formName)
         {
             if (!FormNames.Contains(formName))
@@ -729,7 +702,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                     }
                 }
                 fields = fields.OrderBy(f => f.Name).ToList();
-                _d_ts += Get_d_ts_ForListFields(formXml, fields, true, ref FormAll_ProcessFields);
+                _d_ts += Get_d_ts_ForListFields(formXml, fields, true);
                 _d_ts += $"{TAB}{TAB}}}{NEW_LINE}";
                 part1 += $"{TAB}{TAB}{TAB}{name}: Process{name};{NEW_LINE}";
             }
@@ -965,16 +938,10 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                             ControlId = x?.Attribute("uniqueid")?.Value
                         }).Distinct().ToList();
             body = body.OrderBy(x => x.Id).ToList();
-            _d_ts += Get_d_ts_ForListFields(formXml, body, false, ref FormAll_BodyFields);
+            _d_ts += Get_d_ts_ForListFields(formXml, body, false);
             if (_d_ts.EndsWith(",{NEW_LINE}")) _d_ts = _d_ts.TrimEnd(",{NEW_LINE}".ToCharArray()) + "{NEW_LINE}";
             _d_ts += $"{TAB}{TAB}}}{NEW_LINE}";
             return _d_ts;
-        }
-
-        private static string GetForm_d_ts_Body_AllFields()
-        {
-            var code = string.Empty;
-            return string.Join(NEW_LINE, FormAll_BodyFields);
         }
 
         private static string GetForm_d_ts_Header(string formXml)
@@ -994,17 +961,12 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                            }).ToList();
             headers = headers.OrderBy(x => x.Name).ToList();
             if (headers.Count() == 0) return string.Empty;
-            var _d_ts = Get_d_ts_ForListFields(formXml, headers, false, ref FormAll_HeaderFields);
+            var _d_ts = Get_d_ts_ForListFields(formXml, headers, false);
             if (_d_ts.EndsWith(",{NEW_LINE}")) _d_ts = _d_ts.TrimEnd(",{NEW_LINE}".ToCharArray()) + "{NEW_LINE}";
             return _d_ts;
         }
 
-        private static string GetForm_d_ts_Header_AllFields()
-        {
-            return string.Join(NEW_LINE, FormAll_HeaderFields);
-        }
-
-        private static string Get_d_ts_ForListFields(string formXml, List<IdName> list, bool isBPF, ref List<string> allFields)
+        private static string Get_d_ts_ForListFields(string formXml, List<IdName> list, bool isBPF)
         {
             var code = string.Empty;
             var previousName = string.Empty;
@@ -1212,11 +1174,6 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                         _d_ts += $"{TAB}{TAB}{TAB}{item.Name}: DevKit.Controls.ELSE3???;//{item.Id} - {item.ClassId} -- FOR DEBUG {NEW_LINE}";
                 }
                 code += _d_ts;
-                if (!allFields.Any(x => x == _d_ts))
-                {
-                    allFields.Add(_d_ts);
-                    allFields.Sort();
-                }
             }
             code = code.TrimEnd(",{NEW_LINE}".ToCharArray()) + "{NEW_LINE}";
             return code;

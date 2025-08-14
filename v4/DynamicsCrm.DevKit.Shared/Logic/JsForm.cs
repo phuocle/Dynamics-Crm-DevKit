@@ -61,12 +61,9 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                 code += await GetMainFormCodeAsync(form, @namespace);
             foreach (var form in forms.Where(x => x.IsQuickCreate))
                 code += GetQuickCreateFormCode(form, @namespace);
-
             code += $"}})({@namespace} || ({@namespace} = {{}}));{NEW_LINE}";
             code += $"{Helper.GeneratorOptionSet(EntityMetadata)}";
-
             var dts = await JsTypeScriptDeclaration.GetCodeAsync(service, entityMetadata, rootNamespace, comment);
-
             return (code, dts);
         }
 
@@ -140,7 +137,6 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                 code += $"{TAB}{TAB}devKit.LoadFields(formContext, header, \"header_\");{NEW_LINE}";
                 code += $"{TAB}{TAB}form.Header = header;{NEW_LINE}";
             }
-
             var codeProcess = await GetJsProcessCodeAsync();
             if (codeProcess.Length > 0)
             {
@@ -198,7 +194,6 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             var quickForms = (from f in fields
                               where f.QuickForms.Count() != 0
                               select f.id).ToList();
-
             quickForms.Sort();
             if (quickForms.Count == 0) return string.Empty;
             foreach (var quickForm in quickForms)
@@ -240,7 +235,6 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             var quickViewXml = (from x in xdoc2.Descendants("QuickFormId") select new { formId = x.Value, entityLogicalName = x?.Attribute("entityname")?.Value }).FirstOrDefault();
             if (quickViewXml == null) return string.Empty;
             var quickViewFormXml = string.Empty;
-
             await GetFormXmlAsync(quickViewXml.formId, quickViewXml.entityLogicalName);
             if (quickViewFormXml == string.Empty) return string.Empty;
             var xdoc3 = XDocument.Parse(quickViewFormXml);
@@ -357,7 +351,6 @@ namespace DynamicsCrm.DevKit.Shared.Logic
         };
 
             var code = string.Empty;
-
             foreach (var relationship in EntityMetadata.OneToManyRelationships.OrderBy(x => x.SchemaName))
             {
                 if (BlackList.Contains(relationship.ReferencingEntity)) continue;
@@ -369,11 +362,9 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                     (relationship.IsValidForAdvancedFind ?? false)
                     )
                 {
-
                     code += $"{TAB}{TAB}{TAB}{relationship.SchemaName}: {{}},{NEW_LINE}";
                 }
             }
-
             code = code.TrimEnd(",{NEW_LINE}".ToCharArray()) + "{NEW_LINE}";
             return code;
         }
@@ -388,7 +379,6 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             {
                 var name = Helper.SafeIdentifier(process.Name);
                 code += $"{TAB}{TAB}var _{name} = {{{NEW_LINE}";
-
                 var xdoc = XDocument.Parse(process.xaml);
                 var ns = xdoc.Root?.GetNamespaceOfPrefix("mxswa");
                 var rows2 = from x in xdoc.Descendants(ns + "Workflow").Elements(ns + "ActivityReference")
@@ -410,7 +400,6 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                         fields.Add(fieldName);
                     }
                 }
-
                 fields.Sort();
                 code += GetJsForListFields(fields, true);
                 code += $"{TAB}{TAB}}}{NEW_LINE}";
