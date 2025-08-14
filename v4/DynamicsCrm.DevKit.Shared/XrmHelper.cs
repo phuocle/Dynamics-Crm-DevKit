@@ -25,14 +25,10 @@ namespace DynamicsCrm.DevKit.Shared
 
         public static string GetConnectedUrl(ServiceClient service)
         {
-            if (service?.ConnectedOrgUriActual == null)
-                return null;
+            if (service?.ConnectedOrgUriActual == null) return null;
             var uri = service.ConnectedOrgUriActual;
             var url = uri.GetLeftPart(UriPartial.Authority);
-            if (url.Contains(".api."))
-            {
-                url = url.Replace(".api.", ".");
-            }
+            if (url.Contains(".api.")) url = url.Replace(".api.", ".");
             return url;
         }
 
