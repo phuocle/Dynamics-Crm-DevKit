@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 namespace DynamicsCrm.DevKit.Cli.Tasks
 {
@@ -30,67 +31,13 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         private Guid SolutionId { get; set; }
         private string Prefix { get; set; }
         private List<Guid> WebResourcesToPublish { get; } = new List<Guid>();
-        public bool IsValid()
+        public async Task<bool> IsValidAsync()
         {
-            if (Json == null)
-            {
-                CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'profile' not found: '{Arg.Profile}'. Please check DynamicsCrm.DevKit.Cli.json file.");
-                return false;
-            }
-            if (Json.solution == "???" || (Json.solution != null && Json?.solution?.Trim().Length == 0))
-            {
-                CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'solution' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
-                return false;
-            }
-            (IsOk, SolutionId, Prefix) = XrmHelper.IsExistSolution(ServiceClient, Json.solution);
-            if (!IsOk)
-            {
-                CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} solution '{Json.solution}' not exist");
-                return false;
-            }
-            if (IsSupportWebResourceDependency)
-            {
-                foreach (var dependency in Dependencies)
-                {
-                    var check = dependency.dependencies.Where(x => x.StartsWith("???_/")).Any();
-                    if (check)
-                    {
-                        CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} Found ???_/ in webresource dependencies. Please check DynamicsCrm.DevKit.Cli.json file.");
-                        return false;
-                    }
-                    var check2 = dependency.webresources.Where(x => x.StartsWith("???_/")).Any();
-                    if (check2)
-                    {
-                        CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} Found ???_/ in webresource dependencies. Please check DynamicsCrm.DevKit.Cli.json file.");
-                        return false;
-                    }
-                }
-            }
+            await Helper.DelayAsync(1);
             return true;
         }
 
-        public void Run()
-        {
-            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "START ");
-            CliLog.WriteLine(ConsoleColor.White, "|");
-
-            if (IsValid())
-            {
-                if (WebResourceFiles.Count == 0)
-                {
-                    CliLog.WriteLineWarning(ConsoleColor.Green, "Not found any webresource files to deploy");
-                }
-                else
-                {
-                    DeployWebResourceFiles();
-                }
-            }
-
-            CliLog.WriteLine(ConsoleColor.White, "|");
-            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "END ");
-        }
-
-        private void DeployWebResourceFiles()
+        private async Task DeployWebResourceFilesAsync()
         {
             CliLog.WriteLineWarning(ConsoleColor.Yellow, "DEPLOYING WEBRESOURCES");
             CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Found: ", ConsoleColor.Yellow, WebResourceFiles.Count, ConsoleColor.Green, " webresources");
@@ -98,20 +45,21 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var i = 1;
             foreach (var webResourceFile in WebResourceFiles)
             {
-                DeployWebResourceFile(webResourceFile, i);
+                await DeployWebResourceFileAsync(webResourceFile, i);
                 i++;
             }
 
-            if (IsSupportWebResourceDependency && Dependencies.Count > 0)
+            var dependencies = await GetDependenciesAsync();
+            if (await IsSupportWebResourceDependencyAsync() && dependencies.Count > 0)
             {
                 CliLog.WriteLine(ConsoleColor.White, "|");
                 CliLog.WriteLineWarning(ConsoleColor.Yellow, "DEPLOYING WEBRESOURCES DEPENDENCIES");
-                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Found: ", ConsoleColor.Yellow, Dependencies.Count, ConsoleColor.Green, " dependencies");
+                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Found: ", ConsoleColor.Yellow, dependencies.Count, ConsoleColor.Green, " dependencies");
                 CliLog.WriteLine(ConsoleColor.White, "|");
                 var j = 1;
-                foreach (var dependency in Dependencies)
+                foreach (var dependency in dependencies)
                 {
-                    UpdateDependency(dependency, j);
+                    await UpdateDependencyAsync(dependency, j);
                     j++;
                 }
             }
@@ -138,13 +86,16 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             CliLog.WriteLineWarning(ConsoleColor.Green, "PUBLISHED WEBRESOURCES");
         }
 
-        private void UpdateDependency(Dependency dependency, int current)
+        private async Task UpdateDependencyAsync(Dependency dependency, int current)
         {
-            var len = Dependencies.Count.ToString().Length;
-            List<string> dependencies = dependency.dependencies;
-            dependencies = dependencies.Distinct().ToList();
-            dependency.dependencies = dependencies;
-            var dependencyXml = GetDependencyXml(dependency.dependencies, out var foundDependencies);
+            var dependencies = await GetDependenciesAsync();
+            var len = dependencies.Count.ToString().Length;
+            List<string> dependencyList = dependency.dependencies;
+            dependencyList = dependencyList.Distinct().ToList();
+            dependency.dependencies = dependencyList;
+            var result = await GetDependencyXmlAsync(dependency.dependencies);
+            var dependencyXml = result.dependencyXml;
+            var foundDependencies = result.foundDependencies;
             foreach (var webResourceName in dependency.webresources)
             {
                 var fetchXml = $@"
@@ -156,7 +107,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
     </filter>
   </entity>
 </fetch>";
-                var rows = ServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+                var rows = await ServiceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
                 string existingDependencyXml;
                 if (rows.Entities.Count > 0)
                     existingDependencyXml = rows.Entities[0].GetAttributeValue<string>("dependencyxml");
@@ -165,7 +116,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     CliLog.WriteLineError(ConsoleColor.Yellow, ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", current) + ": ", ConsoleColor.Green, CliAction.NOT_EXISTING, ConsoleColor.White, webResourceName);
                     return;
                 }
-                if (!IsTheSameDependencyXml(dependency.dependencies, existingDependencyXml))
+                if (!await IsTheSameDependencyXmlAsync(dependency.dependencies, existingDependencyXml))
                 {
                     var webResourceId = rows.Entities[0].Id;
                     var entity = new Entity("webresource", webResourceId)
@@ -175,7 +126,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     CliLog.WriteLineWarning(ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", current) + ": ", ConsoleColor.Green, CliAction.UPDATED, ConsoleColor.White, $"{webResourceName}", ConsoleColor.Green, " dependencies ", ConsoleColor.White, "with");
                     foreach (var d in foundDependencies)
                         CliLog.WriteLineWarning(ConsoleColor.White, "\t" + d);
-                    ServiceClient.Update(entity);
+                    await ServiceClient.UpdateAsync(entity);
                     if (!WebResourcesToPublish.Contains(webResourceId))
                         WebResourcesToPublish.Add(webResourceId);
                 }
@@ -188,7 +139,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
         }
 
-        private bool IsTheSameDependencyXml(List<string> dependencies, string existingDependencyXml)
+        private async Task<bool> IsTheSameDependencyXmlAsync(List<string> dependencies, string existingDependencyXml)
         {
             if (existingDependencyXml == null) return false;
             var i = 0;
@@ -201,7 +152,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
                 else
                 {
-                    if (!IsExistWebResource(dependency))
+                    if (!await IsExistWebResourceAsync(dependency))
                     {
                         j++;
                     }
@@ -214,7 +165,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             return false;
         }
 
-        private bool IsExistWebResource(string webResourceName)
+        private async Task<bool> IsExistWebResourceAsync(string webResourceName)
         {
             var fetchXml = $@"
 <fetch>
@@ -225,14 +176,14 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
     </filter>
   </entity>
 </fetch>";
-            var rows = ServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            var rows = await ServiceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
             return rows.Entities.Count > 0;
         }
 
-        private string GetDependencyXml(List<string> dependencies, out List<string> foundDependencies)
+        private async Task<(string dependencyXml, List<string> foundDependencies)> GetDependencyXmlAsync(List<string> dependencies)
         {
             var library = string.Empty;
-            foundDependencies = new List<string>();
+            var foundDependencies = new List<string>();
             foreach (var dependency in dependencies)
             {
                 var fetchData = new
@@ -253,7 +204,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
     </filter>
   </entity>
 </fetch>";
-                var rows = ServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+                var rows = await ServiceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
                 if (rows.Entities.Count > 0)
                 {
                     var entity = rows.Entities[0];
@@ -266,13 +217,13 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     foundDependencies.Add(dependency);
                 }
             }
-            if (library.Length == 0) return library;
+            if (library.Length == 0) return (library, foundDependencies);
             var dependencyXml = $"<Dependencies><Dependency componentType='WebResource'>{library}</Dependency></Dependencies>";
             dependencyXml = dependencyXml.Replace("'", "\"");
-            return dependencyXml;
+            return (dependencyXml, foundDependencies);
         }
 
-        private void DeployWebResourceFile(WebResourceFile webResourceFile, int current)
+        private async Task DeployWebResourceFileAsync(WebResourceFile webResourceFile, int current)
         {
             var len = WebResourceFiles.Count.ToString().Length;
             if (webResourceFile.uniquename.StartsWith("/")) webResourceFile.uniquename = webResourceFile.uniquename.Substring(1);
@@ -295,7 +246,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
     </filter>
   </entity>
 </fetch>";
-            var rows = ServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            var rows = await ServiceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
             var content = string.Empty;
             var webResourceId = Guid.Empty;
             if (rows.Entities.Count > 0)
@@ -341,7 +292,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             if (fileContent == content)
             {
                 CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", current) + ": ", ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, webResourceFile.file.Substring(CurrentDirectory.Length + 1));
-                AddWebResourceToSolution(new Entity("webresource")
+                await AddWebResourceToSolutionAsync(new Entity("webresource")
                 {
                     ["name"] = webResourceFile.uniquename,
                     ["webresourceid"] = webResourceId
@@ -408,7 +359,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     if (int.TryParse(arr[arr.Length - 1], out var languagecode))
                     {
                         var req = new RetrieveProvisionedLanguagesRequest();
-                        var res = (RetrieveProvisionedLanguagesResponse)ServiceClient.Execute(req);
+                        var res = (RetrieveProvisionedLanguagesResponse)await ServiceClient.ExecuteAsync(req);
                         if (res.RetrieveProvisionedLanguages.Contains(languagecode))
                             webResource["languagecode"] = languagecode;
                         else
@@ -420,21 +371,21 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 if (webResourceId == Guid.Empty)
                 {
                     CliLog.WriteLineWarning(ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", current) + ": ", ConsoleColor.Green, CliAction.CREATED, ConsoleColor.White, $"{webResourceFile.uniquename}", ConsoleColor.Green, " = ", ConsoleColor.White, $"{webResourceFile.file.Substring(CurrentDirectory.Length + 1)}");
-                    webResourceId = ServiceClient.Create(webResource);
+                    webResourceId = await ServiceClient.CreateAsync(webResource);
                     webResource["webresourceid"] = webResourceId;
                 }
                 else
                 {
                     webResource["webresourceid"] = webResourceId;
                     CliLog.WriteLineWarning(ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", current) + ": ", ConsoleColor.Green, CliAction.UPDATED, ConsoleColor.White, $"{webResourceFile.uniquename}", ConsoleColor.Green, " = ", ConsoleColor.White, $"{webResourceFile.file.Substring(CurrentDirectory.Length + 1)}");
-                    ServiceClient.Update(webResource);
+                    await ServiceClient.UpdateAsync(webResource);
                 }
                 WebResourcesToPublish.Add(webResourceId);
-                AddWebResourceToSolution(webResource);
+                await AddWebResourceToSolutionAsync(webResource);
             }
         }
 
-        private void AddWebResourceToSolution(Entity webResource)
+        private async Task AddWebResourceToSolutionAsync(Entity webResource)
         {
             var fetchData = new
             {
@@ -457,7 +408,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
     </link-entity>
   </entity>
 </fetch>";
-            var rows = ServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            var rows = await ServiceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
             if (rows.Entities.Count != 0) return;
             var request = new AddSolutionComponentRequest
             {
@@ -467,54 +418,48 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 SolutionUniqueName = Json.solution
             };
             CliLog.WriteLineWarning("\t", ConsoleColor.Green, CliAction.ADDED, ConsoleColor.White, $"{webResource["name"]} ", ConsoleColor.Green, "to solution: ", ConsoleColor.White, $"{Json.solution}");
-            ServiceClient.Execute(request);
+            await ServiceClient.ExecuteAsync(request);
         }
 
         private bool? _isSupportWebResourceDependency = (bool?)null;
-        private bool IsSupportWebResourceDependency
+        private async Task<bool> IsSupportWebResourceDependencyAsync()
         {
-            get
-            {
-                if (_isSupportWebResourceDependency != null) return _isSupportWebResourceDependency.Value;
-                var request = new RetrieveVersionRequest();
-                var response = (RetrieveVersionResponse)ServiceClient.Execute(request);
-                var version = new Version(response.Version);
-                _isSupportWebResourceDependency = version >= new Version("9.0");
-                return _isSupportWebResourceDependency.Value;
-            }
+            if (_isSupportWebResourceDependency != null) return _isSupportWebResourceDependency.Value;
+            var request = new RetrieveVersionRequest();
+            var response = (RetrieveVersionResponse)await ServiceClient.ExecuteAsync(request);
+            var version = new Version(response.Version);
+            _isSupportWebResourceDependency = version >= new Version("9.0");
+            return _isSupportWebResourceDependency.Value;
         }
 
         private List<Dependency> _dependencies = null;
-        private List<Dependency> Dependencies
+        private async Task<List<Dependency>> GetDependenciesAsync()
         {
-            get
+            if (_dependencies != null) return _dependencies;
+            _dependencies = new List<Dependency>();
+            var dependencies = await TransformPatternAsync(Json.dependencies, WebResourceFiles);
+            foreach (var dependency in dependencies)
             {
-                if (_dependencies != null) return _dependencies;
-                _dependencies = new List<Dependency>();
-                var dependencies = TransformPattern(Json.dependencies, WebResourceFiles);
-                foreach (var dependency in dependencies)
+                foreach (var webResource in dependency.webresources)
                 {
-                    foreach (var webResource in dependency.webresources)
+                    var found = _dependencies.FirstOrDefault(d => d.webresources.Contains(webResource));
+                    if (found == null)
                     {
-                        var found = _dependencies.FirstOrDefault(d => d.webresources.Contains(webResource));
-                        if (found == null)
+                        _dependencies.Add(new Dependency
                         {
-                            _dependencies.Add(new Dependency
-                            {
-                                webresources = new List<string>() { webResource },
-                                dependencies = dependency.dependencies
-                            });
-                        }
-                        else
-                        {
-                            var temp = new List<string>(found.dependencies);
-                            temp.AddRange(dependency.dependencies);
-                            found.dependencies = temp;
-                        }
+                            webresources = new List<string>() { webResource },
+                            dependencies = dependency.dependencies
+                        });
+                    }
+                    else
+                    {
+                        var temp = new List<string>(found.dependencies);
+                        temp.AddRange(dependency.dependencies);
+                        found.dependencies = temp;
                     }
                 }
-                return _dependencies;
             }
+            return _dependencies;
         }
 
         private List<WebResourceFile> _webResourceFiles = null;
@@ -579,7 +524,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             return Directory.GetFiles(folder, pattern, SearchOption.AllDirectories).ToList();
         }
 
-        private List<Dependency> TransformPattern(IEnumerable<Dependency> dependencies, IEnumerable<WebResourceFile> webResourceFiles)
+        private async Task<List<Dependency>> TransformPatternAsync(IEnumerable<Dependency> dependencies, IEnumerable<WebResourceFile> webResourceFiles)
         {
             var list = new List<Dependency>();
             var forms = webResourceFiles
@@ -597,7 +542,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 var wait = new Thread(() => CliLog.Waiting("Reading entities Metadata "));
                 wait.Start();
-                var allEntities = XrmHelper.GetAllEntitiesSchema(ServiceClient);
+                var allEntities = await XrmHelper.GetAllEntitiesSchemaAsync(ServiceClient);
                 wait.Abort();
                 foreach (var webResourceFile in webResourceFiles)
                 {
@@ -606,7 +551,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     if (entity != null)
                     {
                         entities.Add(entity);
-                    }
+                      }
                 }
                 CliLog.WriteLine();
                 CliLog.WriteLine(ConsoleColor.White, "|");
@@ -633,5 +578,24 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             return list;
         }
 
+        public async Task RunAsync()
+        {
+            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "START ");
+            CliLog.WriteLine(ConsoleColor.White, "|");
+            if (await IsValidAsync())
+            {
+                if (WebResourceFiles.Count == 0)
+                {
+                    CliLog.WriteLineWarning(ConsoleColor.Green, "Not found any webresource files to deploy");
+                }
+                else
+                {
+                    await DeployWebResourceFilesAsync();
+                }
+            }
+
+            CliLog.WriteLine(ConsoleColor.White, "|");
+            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "END ");
+        }
     }
 }

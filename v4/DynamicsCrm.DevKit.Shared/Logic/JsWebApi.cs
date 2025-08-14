@@ -3,6 +3,7 @@ using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk.Metadata;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace DynamicsCrm.DevKit.Shared.Logic
 {
@@ -15,28 +16,25 @@ namespace DynamicsCrm.DevKit.Shared.Logic
         private static string RootNamespace { get; set; }
         private static CommentTypeScriptDeclaration Comment { get; set; }
 
-        public static string GetCode(ServiceClient service, EntityMetadata entityMetadata, string rootNamespace, CommentTypeScriptDeclaration comment, out string dts)
+        public static async Task<(string code, string dts)> GetCodeAsync(ServiceClient serviceClient, EntityMetadata entityMetadata, string rootNamespace, CommentTypeScriptDeclaration comment)
         {
-            ServiceClient = service;
+            ServiceClient = serviceClient;
             EntityMetadata = entityMetadata;
             RootNamespace = rootNamespace;
             Comment = comment;
-            dts = JsTypeScriptDeclaration.GetCode(service, entityMetadata, rootNamespace, comment);
-
+            var dts = await JsTypeScriptDeclaration.GetCodeAsync(serviceClient, entityMetadata, rootNamespace, comment);
             var code = string.Empty;
             var @namespace = Helper.GetNameSpace(RootNamespace);
             var logicalName = Helper.SafeIdentifier(entityMetadata.LogicalName);
-
             code += $"'use strict';{NEW_LINE}";
             code += $"/** @namespace {@namespace} */{NEW_LINE}";
             code += $"var {@namespace};{NEW_LINE}";
             code += $"(function ({@namespace}) {{{NEW_LINE}";
-
             code += $"{TAB}{@namespace}.{entityMetadata.SchemaName}Api = function (e) {{{NEW_LINE}";
             code += $"{TAB}{TAB}const f = '@OData.Community.Display.V1.FormattedValue';{NEW_LINE}";
             code += $"{Helper.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.WebApi2.js")}";
             code += $"{TAB}{TAB}const _{logicalName} = {{{NEW_LINE}";
-            code += $"{GeneratorCode()}";
+            code += $"{await GeneratorCodeAsync()}";
             code += $"{TAB}{TAB}}};{NEW_LINE}";
             code += $"{TAB}{TAB}if (e === undefined) e = {{}};{NEW_LINE}";
             code += $"{TAB}{TAB}const u = {{}};{NEW_LINE}";
@@ -44,7 +42,6 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code += $"{TAB}{TAB}{logicalName}.ODataEntity = e;{NEW_LINE}";
             code += $"{TAB}{TAB}{logicalName}.FormattedValue = {{}};{NEW_LINE}";
             code += $"{TAB}{TAB}for (const field in _{logicalName}) {{{NEW_LINE}";
-
             code += $"{TAB}{TAB}{TAB}const fieldConfig = _{logicalName}[field];{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}webApiField({logicalName}, field, e, fieldConfig.a, fieldConfig.b, fieldConfig.c, fieldConfig.d, fieldConfig.r, u, fieldConfig.g);{NEW_LINE}";
             code += $"{TAB}{TAB}}}{NEW_LINE}";
@@ -75,8 +72,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code += $"{TAB}}};{NEW_LINE}";
             code += $"}})({@namespace} || ({@namespace} = {{}}));{NEW_LINE}";
             code += $"{Helper.GeneratorOptionSet(EntityMetadata)}";
-
-            return code;
+            return (code, dts);
         }
 
         private static string GeneratorActivityPartyCode()
@@ -96,10 +92,9 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             return code;
         }
 
-        private static string GeneratorCode()
+        private static async Task<string> GeneratorCodeAsync()
         {
             var code = string.Empty;
-
             foreach (var attribute in EntityMetadata?.Attributes?.OrderBy(x => x.SchemaName))
             {
                 var attributeSchemaName = Helper.SafeDeclareName(attribute.SchemaName, GeneratorType.jswebapi, EntityMetadata.SchemaName, attribute);
@@ -160,7 +155,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                     if (lookup.Targets.Count() == 1)
                     {
                         var entityLogicalName = lookup.Targets[0];
-                        XrmHelper.EntitiesMetadata.AddIfNotExist(ServiceClient, entityLogicalName);
+                        await XrmHelper.EntitiesMetadata.AddIfNotExistAsync(ServiceClient, entityLogicalName);
                         var entityMetadata = XrmHelper.EntitiesMetadata.First(x => x.LogicalName == entityLogicalName);
                         var b = $"b: '{((attribute.IsCustomAttribute ?? false) ? attributeSchemaName : attribute.LogicalName)}'";
                         var c = $"c: '{entityMetadata.LogicalCollectionName}'";
@@ -180,7 +175,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                             {
                                 var navigation = EntityMetadata.ManyToOneRelationships.FirstOrDefault(x => x.ReferencingAttribute == attribute.LogicalName && x.ReferencedEntity == entityLogicalName);
                                 var b = $"b: '{navigation?.ReferencingEntityNavigationPropertyName}'";
-                                XrmHelper.EntitiesMetadata.AddIfNotExist(ServiceClient, entityLogicalName);
+                                await XrmHelper.EntitiesMetadata.AddIfNotExistAsync(ServiceClient, entityLogicalName);
                                 var c = $"c: '{XrmHelper.EntitiesMetadata.First(x => x.LogicalName == entityLogicalName)?.LogicalCollectionName}'";
                                 var d = $"d: '{entityLogicalName}'";
                                 if (navigation?.ReferencingEntityNavigationPropertyName != null && navigation?.ReferencingEntityNavigationPropertyName?.Length > 0)

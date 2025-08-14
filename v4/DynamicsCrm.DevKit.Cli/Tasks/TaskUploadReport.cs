@@ -4,6 +4,7 @@ using Microsoft.PowerPlatform.Dataverse.Client;
 using System;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 namespace DynamicsCrm.DevKit.Cli.Tasks
 {
     public class TaskUploadReport : ITask
@@ -22,7 +23,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         public ServiceClient ServiceClient { get; set; }
         public string TaskType => $"[{nameof(CliType.uploadreports).ToUpper()}]";
 
-        public bool IsValid()
+        public async Task<bool> IsValidAsync()
         {
             if (Json == null)
             {
@@ -34,7 +35,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'solution' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
                 return false;
             }
-            if (!XrmHelper.IsExistSolution(ServiceClient, Json.solution).IsOk)
+            var solutionExists = await XrmHelper.IsExistSolutionAsync(ServiceClient, Json.solution);
+            if (!solutionExists.IsOk)
             {
                 CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} solution '{Json.solution}' not exist");
                 return false;
@@ -56,11 +58,11 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             return true;
         }
 
-        public void Run()
+        public async Task RunAsync()
         {
             CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "START ");
 
-            if (IsValid())
+            if (await IsValidAsync())
             {
                 foreach (var language in Json.languages)
                 {
@@ -77,7 +79,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         CliLog.WriteLine(ConsoleColor.White, "|");
                         CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Found: ", ConsoleColor.Blue, totalUploadFiles, " ", ConsoleColor.White, language,  ConsoleColor.Green, " .rdl files");
                         CliLog.WriteLine(ConsoleColor.White, "|");
-                        var reportFiles = XrmHelper.GetReportsBySolution(ServiceClient, Json.solution);
+                        var reportFiles = await XrmHelper.GetReportsBySolutionAsync(ServiceClient, Json.solution);
                         var i = 1;
                         foreach (var file in files)
                         {
@@ -96,7 +98,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                                 }
                                 else
                                 {
-                                    XrmHelper.DeployReport(ServiceClient, report.ObjectId, file);
+                                    await XrmHelper.DeployReportAsync(ServiceClient, report.ObjectId, file);
                                     CliLog.WriteLineWarning(ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.DEPLOYED, ConsoleColor.White, language, ConsoleColor.Green, " report ", ConsoleColor.White, ".." + file.Substring(CurrentDirectory.Length), ConsoleColor.Green, " to ", ConsoleColor.White, fileName, ConsoleColor.Green, " report file name");
                                 }
                             }

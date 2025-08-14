@@ -4,6 +4,7 @@ using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
+using Microsoft.Xrm.Sdk.Metadata.Query;
 using Microsoft.Xrm.Sdk.Query;
 using System;
 using System.Collections.Generic;
@@ -21,7 +22,7 @@ namespace DynamicsCrm.DevKit.Shared
 
         public static string GetConnectedUrl(ServiceClient service)
         {
-            if (service?.ConnectedOrgUriActual == null)
+                                                                                                                                                                                                        if (service?.ConnectedOrgUriActual == null)
                 return null;
             var uri = service.ConnectedOrgUriActual;
             var url = uri.GetLeftPart(UriPartial.Authority);
@@ -32,7 +33,7 @@ namespace DynamicsCrm.DevKit.Shared
             return url;
         }
 
-        public static (bool IsOk, Guid SolutionId, string Prefix) IsExistSolution(ServiceClient serviceClient, string solutionuniquename)
+        public static async Task<(bool IsOk, Guid SolutionId, string Prefix)> IsExistSolutionAsync(ServiceClient serviceClient, string solutionuniquename)
         {
             var fetchData = new
             {
@@ -51,7 +52,7 @@ namespace DynamicsCrm.DevKit.Shared
   </entity>
 </fetch>";
 
-            var rows = serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            var rows = await serviceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
             if (rows.Entities.Count != 1) return (false, Guid.Empty, string.Empty);
             var entity = rows.Entities[0];
             var solutionId = entity.Id;
@@ -59,7 +60,37 @@ namespace DynamicsCrm.DevKit.Shared
             return (true, solutionId, prefix);
         }
 
-        public static List<DownloadFile> GetReportsBySolution(ServiceClient service, string solution)
+        public static async Task<bool> IsExistDataSourceAsync(ServiceClient serviceClient, string logicalname)
+        {
+            logicalname = logicalname.ToLower();
+            var filterExpression = new MetadataFilterExpression();
+            filterExpression.Conditions.Add(new MetadataConditionExpression("DataProviderId", MetadataConditionOperator.Equals, Guid.Parse("B2112A7E-B26C-42F7-9B63-9A809A9D716F")));
+            var propertiesExpression = new MetadataPropertiesExpression(new string[7]
+            {
+                "DataProviderId",
+                "LogicalName",
+                "SchemaName",
+                "MetadataId",
+                "DisplayName",
+                "ExternalName",
+                "DisplayCollectionName"
+            });
+            var entityQueryExpression = new EntityQueryExpression();
+            entityQueryExpression.Criteria = new MetadataFilterExpression();
+            entityQueryExpression.Criteria = filterExpression;
+            entityQueryExpression.Properties = propertiesExpression;
+            var request = new RetrieveMetadataChangesRequest
+            {
+                Query = entityQueryExpression
+            };
+            var response = (RetrieveMetadataChangesResponse)await serviceClient.ExecuteAsync(request);
+            foreach (EntityMetadata entityMetadata in response.EntityMetadata)
+                if (entityMetadata.LogicalName == logicalname)
+                    return true;
+            return false;
+        }
+
+        public static async Task<List<DownloadFile>> GetReportsBySolutionAsync(ServiceClient service, string solution)
         {
             var fetchData = new
             {
@@ -89,7 +120,7 @@ namespace DynamicsCrm.DevKit.Shared
   </entity>
 </fetch>";
 
-            var rows = service.RetrieveMultiple(new FetchExpression(fetchXml));
+            var rows = await service.RetrieveMultipleAsync(new FetchExpression(fetchXml));
             var list = new List<DownloadFile>();
             foreach (var entity in rows.Entities)
             {
@@ -104,36 +135,36 @@ namespace DynamicsCrm.DevKit.Shared
             return list;
         }
 
-        public static void DeployReport(ServiceClient service, Guid reportId, string fullFileName)
+        public static async Task DeployReportAsync(ServiceClient service, Guid reportId, string fullFileName)
         {
             var update = new Entity("report", reportId);
             update["bodytext"] = File.ReadAllText(fullFileName);
-            service.Update(update);
+            await service.UpdateAsync(update);
         }
 
-        public static List<EntityMetadata> GetEntitiesMetadata(ServiceClient service)
+        public static async Task<List<EntityMetadata>> GetEntitiesMetadataAsync(ServiceClient service)
         {
             var request = new RetrieveAllEntitiesRequest
             {
                 EntityFilters = EntityFilters.All,
                 RetrieveAsIfPublished = true
             };
-            var response = (RetrieveAllEntitiesResponse)service.Execute(request);
+            var response = (RetrieveAllEntitiesResponse)await service.ExecuteAsync(request);
             return response.EntityMetadata.ToList();
         }
 
-        public static List<string> GetAllEntitiesSchema(ServiceClient service)
+        public static async Task<List<string>> GetAllEntitiesSchemaAsync(ServiceClient service)
         {
             var request = new RetrieveAllEntitiesRequest
             {
                 EntityFilters = EntityFilters.All,
                 RetrieveAsIfPublished = true
             };
-            var response = (RetrieveAllEntitiesResponse)service.Execute(request);
+            var response = (RetrieveAllEntitiesResponse)await service.ExecuteAsync(request);
             return response.EntityMetadata.ToList().Select(x => x.SchemaName).ToList();
         }
 
-        public static List<EntityMetadata> GetEntitiesMetadata(ServiceClient service, List<string> schemaNames)
+        public static async Task<List<EntityMetadata>> GetEntitiesMetadataAsync(ServiceClient service, List<string> schemaNames)
         {
             var request = new ExecuteMultipleRequest()
             {
@@ -147,7 +178,7 @@ namespace DynamicsCrm.DevKit.Shared
             foreach (var schemaName in schemaNames)
                 request.Requests.Add(new RetrieveEntityRequest { EntityFilters = EntityFilters.All, LogicalName = schemaName.ToLower() });
             var list = new List<EntityMetadata>();
-            ExecuteMultipleResponse response = (ExecuteMultipleResponse)service.Execute(request);
+            ExecuteMultipleResponse response = (ExecuteMultipleResponse)await service.ExecuteAsync(request);
             foreach (var result in response.Responses)
             {
                 if (result.Fault == null)
@@ -166,70 +197,29 @@ namespace DynamicsCrm.DevKit.Shared
             return list;
         }
 
-        public static EntityMetadata GetEntityMetadata(ServiceClient service, string entityLogicalName)
+        public static async Task<EntityMetadata> GetEntityMetadataAsync(ServiceClient service, string entityLogicalName)
         {
-            return GetEntitiesMetadata(service, new List<string> { entityLogicalName }).FirstOrDefault(); ;
+            var entities = await GetEntitiesMetadataAsync(service, new List<string> { entityLogicalName });
+            return entities.FirstOrDefault();
         }
 
-        public static bool IsOptionSet(AttributeMetadata attribute)
-        {
-            return attribute is EnumAttributeMetadata;
-        }
-
-        public static void ReadEntitiesMetadata(ServiceClient service)
+        public static async Task ReadEntitiesMetadataAsync(ServiceClient service)
         {
             if (XrmHelper.EntitiesMetadata.Count == 0)
             {
-                XrmHelper.EntitiesMetadata = XrmHelper.GetEntitiesMetadata(service);
+                XrmHelper.EntitiesMetadata = await XrmHelper.GetEntitiesMetadataAsync(service);
             }
         }
 
-        public static void ReadEntitiesFormXml(ServiceClient service)
+        public static async Task ReadEntitiesFormXmlAsync(ServiceClient service)
         {
             if (XrmHelper.EntitiesFormXml.Count == 0)
             {
-                XrmHelper.EntitiesFormXml = XrmHelper.GetEntitiesFormXml(service);
+                XrmHelper.EntitiesFormXml = await XrmHelper.GetEntitiesFormXmlAsync(service);
             }
         }
 
-        public static List<ProcessForm> GetEntityProcessForm(ServiceClient service, int? objectTypeCode, string logicalName)
-        {
-            var fetchData = new
-            {
-                category = "4",
-                statecode = "1",
-                businessprocesstype = "0",
-                xaml = $"%: {logicalName}%",
-                primaryentity = objectTypeCode ?? -1,
-            };
-            var fetchXml = $@"
-<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
-  <entity name='workflow'>
-    <attribute name='name' />
-    <attribute name='uniquename' />
-    <attribute name='xaml' />
-    <attribute name='primaryentity' />
-    <filter type='and'>
-      <condition attribute='category' operator='eq' value='{fetchData.category/*4*/}'/>
-      <condition attribute='statecode' operator='eq' value='{fetchData.statecode/*1*/}'/>
-      <condition attribute='businessprocesstype' operator='eq' value='{fetchData.businessprocesstype/*0*/}'/>
-      <filter type='or'>
-        <condition attribute='xaml' operator='like' value='{fetchData.xaml/*%: contact%*/}'/>
-        <condition attribute='primaryentity' operator='eq' value='{fetchData.primaryentity/*2*/}'/>
-      </filter>
-    </filter>
-  </entity>
-</fetch>";
-            var rows = service.RetrieveMultiple(new FetchExpression(fetchXml));
-            return rows.Entities.Select(x => new ProcessForm
-            {
-                EntityLogicalName = logicalName,
-                Name = x.GetAttributeValue<string>("name"),
-                xaml = x.GetAttributeValue<string>("xaml")
-            }).ToList();
-        }
-
-        public static List<SystemForm> GetEntityFormXml(ServiceClient service, int? objectTypeCode)
+        public static async Task<List<SystemForm>> GetEntityFormXmlAsync(ServiceClient service, int? objectTypeCode)
         {
             var fetchData = new
             {
@@ -260,7 +250,7 @@ namespace DynamicsCrm.DevKit.Shared
     </filter>
   </entity>
 </fetch>";
-            var rows = service.RetrieveMultiple(new FetchExpression(fetchXml));
+            var rows = await service.RetrieveMultipleAsync(new FetchExpression(fetchXml));
             if (rows.Entities.Count == 0) return new List<SystemForm>();
             var forms = rows.Entities.Select(x => new SystemForm
             {
@@ -275,7 +265,7 @@ namespace DynamicsCrm.DevKit.Shared
             return forms.OrderBy(x => x.EntityLogicalName).ThenBy(x => x.Name).ToList();
         }
 
-        public static List<SystemForm> GetEntitiesFormXml(ServiceClient service)
+        public static async Task<List<SystemForm>> GetEntitiesFormXmlAsync(ServiceClient service)
         {
             var fetchData = new
             {
@@ -304,7 +294,7 @@ namespace DynamicsCrm.DevKit.Shared
     </filter>
   </entity>
 </fetch>";
-            var rows = service.RetrieveMultiple(new FetchExpression(fetchXml));
+            var rows = await service.RetrieveMultipleAsync(new FetchExpression(fetchXml));
             var forms = rows.Entities.Select(x => new SystemForm
             {
                 Name = x.GetAttributeValue<string>("name"),
@@ -318,7 +308,7 @@ namespace DynamicsCrm.DevKit.Shared
             return forms.OrderBy(x => x.EntityLogicalName).ThenBy(x => x.Name).ToList();
         }
 
-        public static CommentTypeScriptDeclaration GetComment(ServiceClient service, string entityLogicalName, string dtsFile)
+        public static async Task<CommentTypeScriptDeclaration> GetCommentAsync(ServiceClient service, string entityLogicalName, string dtsFile)
         {
             if (File.Exists(dtsFile))
             {
@@ -348,7 +338,7 @@ namespace DynamicsCrm.DevKit.Shared
             }
             else
             {
-                XrmHelper.EntitiesFormXml.AddIfNotExist(service, entityLogicalName);
+                await XrmHelper.EntitiesFormXml.AddIfNotExistAsync(service, entityLogicalName);
                 return new CommentTypeScriptDeclaration
                 {
                     UseForm = XrmHelper.EntitiesFormXml.Any(x => x.EntityLogicalName == entityLogicalName),
@@ -358,9 +348,9 @@ namespace DynamicsCrm.DevKit.Shared
             }
         }
 
-        public static List<SystemForm> GetEntityForms(ServiceClient service, string entityLogicalName)
+        public static async Task<List<SystemForm>> GetEntityFormsAsync(ServiceClient service, string entityLogicalName)
         {
-            XrmHelper.EntitiesFormXml.AddIfNotExist(service, entityLogicalName);
+            await XrmHelper.EntitiesFormXml.AddIfNotExistAsync(service, entityLogicalName);
             var forms = XrmHelper.EntitiesFormXml
                 .Where(x => x.EntityLogicalName == entityLogicalName && (x.FormType == FormType.Main || x.FormType == FormType.QuickCreate))
                 .OrderBy(x => x.Name)
@@ -565,6 +555,187 @@ namespace DynamicsCrm.DevKit.Shared
                 });
             }
             return list;
+        }
+
+        public static async Task<int> GetLanguageCodeAsync(ServiceClient serviceClient)
+        {
+            var fetchXml = $@"
+<fetch>
+  <entity name='organization'>
+    <attribute name='languagecode' />
+  </entity>
+</fetch>";
+            var rows = await serviceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
+            if (rows.Entities.Count != 1) return 1033;
+            var entity = rows.Entities[0];
+            return entity.GetAttributeValue<int?>("languagecode") ?? 1033;
+        }
+
+        public static async Task<List<DownloadFile>> GetWebResourcesBySolutionAsync(ServiceClient serviceClient, string solution)
+        {
+            var fetchData = new
+            {
+                uniquename = solution
+            };
+            var fetchXml = $@"
+<fetch>
+  <entity name='webresource'>
+    <attribute name='name' />
+    <attribute name='webresourcetype' />
+    <attribute name='content' />
+    <order attribute='name' />
+    <link-entity name='solutioncomponent' from='objectid' to='webresourceid' link-type='inner' alias='sc'>
+      <link-entity name='solution' from='solutionid' to='solutionid' link-type='inner' alias='s'>
+        <filter type='and'>
+          <condition attribute='uniquename' operator='eq' value='{fetchData.uniquename}'/>
+        </filter>
+      </link-entity>
+    </link-entity>
+  </entity>
+</fetch>";
+            var rows = await serviceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
+            var list = new List<DownloadFile>();
+            foreach (var entity in rows.Entities)
+            {
+                var name = entity.GetAttributeValue<string>("name");
+                var webresourcetype = (WebResourceWebResourceType)entity.GetAttributeValue<OptionSetValue>("webresourcetype").Value;
+                var content = entity.GetAttributeValue<string>("content");
+                var extension = Helper.GetExtension(webresourcetype);
+                if (name.StartsWith("/")) name = name.Substring(1);
+                if (name.EndsWith(extension)) name = name.Substring(0, name.Length - extension.Length);
+                var fileName = $"{name.Replace("/", "\\")}{extension}";
+                list.Add(new DownloadFile
+                {
+                    Content = content,
+                    FileName = fileName,
+                    ObjectId = entity.Id
+                });
+            }
+            return list;
+        }
+
+        public static async Task<List<ProcessForm>> GetEntityProcessFormAsync(ServiceClient serviceClient, int? objectTypeCode, string logicalName)
+        {
+            var fetchData = new
+            {
+                category = "4",
+                statecode = "1",
+                businessprocesstype = "0",
+                xaml = $"%: {logicalName}%",
+                primaryentity = objectTypeCode ?? -1,
+            };
+            var fetchXml = $@"
+<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+  <entity name='workflow'>
+    <attribute name='name' />
+    <attribute name='uniquename' />
+    <attribute name='xaml' />
+    <attribute name='primaryentity' />
+    <filter type='and'>
+      <condition attribute='category' operator='eq' value='{fetchData.category/*4*/}'/>
+      <condition attribute='statecode' operator='eq' value='{fetchData.statecode/*1*/}'/>
+      <condition attribute='businessprocesstype' operator='eq' value='{fetchData.businessprocesstype/*0*/}'/>
+      <filter type='or'>
+        <condition attribute='xaml' operator='like' value='{fetchData.xaml/*%: contact%*/}'/>
+        <condition attribute='primaryentity' operator='eq' value='{fetchData.primaryentity/*2*/}'/>
+      </filter>
+    </filter>
+  </entity>
+</fetch>";
+            var rows = await serviceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
+            return rows.Entities.Select(x => new ProcessForm
+            {
+                EntityLogicalName = logicalName,
+                Name = x.GetAttributeValue<string>("name"),
+                xaml = x.GetAttributeValue<string>("xaml")
+            }).ToList();
+        }
+
+        public static async Task<string> GetDefaultFileWithFormAsync(ServiceClient serviceClient, EntityMetadata entityMetadata, string rootnamespace)
+        {
+            string GetUnquieFormName(List<string> FormNames, string formName)
+            {
+                if (!FormNames.Contains(formName))
+                {
+                    FormNames.Add(formName);
+                    return formName;
+                }
+                else
+                {
+                    var count = FormNames.Count(x => x == formName) + 1;
+                    FormNames.Add(formName);
+                    return $"{formName}{count}";
+                }
+            }
+            var forms = await XrmHelper.GetEntityFormsAsync(serviceClient, entityMetadata.LogicalName);
+            if (!forms.Any()) return Helper.GetDefaultFileWithWebApi(entityMetadata.SchemaName);
+            var @namespace = Helper.GetNameSpace(rootnamespace);
+            var code = string.Empty;
+            code += $"//@ts-check\r\n";
+            code += $"///<reference path=\"{entityMetadata.SchemaName}.d.ts\" />\r\n";
+            code += "\"use strict\";\r\n";
+            var formNames = new List<string>();
+            foreach (var form in forms)
+            {
+                var formName = Helper.GetFormName(form.Name, entityMetadata.SchemaName);
+                formName = GetUnquieFormName(formNames, formName);
+                var type = $"{@namespace}.Form{Helper.SafeIdentifier(formName)}";
+                code += $"var form{Helper.SafeIdentifier(formName)} = (function () {{\r\n";
+                code += $"\t\"use strict\";\r\n";
+                code += $"\t/** @type {type} */\r\n";
+                code += $"\tvar form = null;\r\n";
+                code += $"\t/** @param {{any}} executionContext */\r\n";
+                code += $"\tasync function onLoad(executionContext) {{\r\n";
+                code += $"\t\tform = new {type}(executionContext);\r\n";
+                code += $"\t\tregisterEvents();\r\n";
+                code += $"\t\tform.UiAddLoaded(UiAddLoaded);\r\n";
+                code += $"\t}}\r\n";
+                code += $"\tfunction registerEvents() {{\r\n";
+                code += $"\t\tif (form.ExecutionContext.IsInitialLoad()) {{\r\n";
+                code += $"\t\t}}\r\n";
+                code += $"\t}}\r\n";
+                code += $"\t//BEGIN ON LOAD ========================================================\r\n";
+                code += $"\tasync function UiAddLoaded(executionContext) {{\r\n";
+                code += $"\t}}\r\n";
+                code += $"\t//END ON LOAD ==========================================================\r\n";
+                code += $"\t//BEGIN ON CHANGE ======================================================\r\n";
+                code += $"\r\n";
+                code += $"\t//END ON CHANGE ========================================================\r\n";
+                code += $"\t//BEGIN PRE SEARCH =====================================================\r\n";
+                code += $"\r\n";
+                code += $"\t//END PRE SEARCH =======================================================\r\n";
+                code += $"\t//BEGIN OTHERS =========================================================\r\n";
+                code += $"\r\n";
+                code += $"\t//END OTHERS ===========================================================\r\n";
+                code += $"\treturn {{\r\n\t\tOnLoad: onLoad\r\n\t}};\r\n";
+                code += $"}})();\r\n";
+            }
+            code = code.TrimEnd("\r\n".ToCharArray());
+            return code;
+        }
+
+        public static async Task<ServiceClient> IsConnectedAsync(string connectionString)
+        {
+            try
+            {
+                var serviceClient = new ServiceClient(connectionString);
+                await Task.Delay(100);
+                if (serviceClient.IsReady)
+                {
+                    return serviceClient;
+                }
+                var timeout = TimeSpan.FromSeconds(30);
+                var start = DateTime.Now;
+                while (!serviceClient.IsReady && DateTime.Now - start < timeout)
+                {
+                    await Task.Delay(500);
+                }
+                return serviceClient.IsReady ? serviceClient : null;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
     }
 }

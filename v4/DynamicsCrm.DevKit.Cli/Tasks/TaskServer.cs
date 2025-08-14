@@ -14,6 +14,7 @@ using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
 using System.ServiceModel;
+using System.Threading.Tasks;
 
 namespace DynamicsCrm.DevKit.Cli.Tasks
 {
@@ -80,7 +81,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
         private string CurrentFolder => $"{CurrentDirectory}\\{Json.folder}";
 
-        public bool IsValid()
+        public async Task<bool> IsValidAsync()
         {
             if (Json == null)
             {
@@ -97,7 +98,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'solution' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
                 return false;
             }
-            (IsOk, SolutionId, Prefix) = XrmHelper.IsExistSolution(ServiceClient, Json.solution);
+            (IsOk, SolutionId, Prefix) = await XrmHelper.IsExistSolutionAsync(ServiceClient, Json.solution);
             if (!IsOk)
             {
                 CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} solution '{Json.solution}' not exist");
@@ -106,60 +107,37 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             return true;
         }
 
-        public void Run()
-        {
-            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "START ");
-            CliLog.WriteLine(ConsoleColor.White, "|");
-
-            if (IsValid())
-            {
-                var files = GetFiles(CurrentFolder, Json.includefiles, Json.excludefiles);
-                if (files.Count == 0)
-                {
-                    CliLog.WriteLineWarning(ConsoleColor.Green, "Not found any files to deploy");
-                }
-                else
-                {
-                    DeployFiles(files);
-                }
-            }
-
-            CliLog.WriteLine(ConsoleColor.White, "|");
-            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "END ");
-        }
-
-        private void DeployFiles(List<string> files)
+        private async Task DeployFilesAsync(List<string> files)
         {
             foreach (var file in files)
             {
                 if (file.EndsWith(".dll"))
-                    DeployDll(file);
+                    await DeployDllAsync(file);
                 else if (file.EndsWith(".nupkg"))
-                    DeployPackage(file);
+                    await DeployPackageAsync(file);
                 else
                     CliLog.WriteLineError(ConsoleColor.Yellow, $"Not support file extension: {new FileInfo(file).Extension}");
             }
         }
 
-        private void DeployDll(string file, DeployFileType deployFileType = DeployFileType.Dll, string nugetFileName = "")
+        private async Task DeployDllAsync(string file, DeployFileType deployFileType = DeployFileType.Dll, string nugetFileName = "")
         {
-            if (deployFileType == DeployFileType.Dll)
-                CliLog.WriteLineWarning(ConsoleColor.Cyan, $"{Path.GetFileName(file)}");
+            if (deployFileType == DeployFileType.Dll) CliLog.WriteLineWarning(ConsoleColor.Cyan, $"{Path.GetFileName(file)}");
             var types = GetTypes(file);
-            if (!IsValidTypes(file, types)) return;
-            DeployFile(file, types, deployFileType);
+            if (!await IsValidTypesAsync(file, types)) return;
+            await DeployFileAsync(file, types, deployFileType);
         }
 
-        private void DeployFile(string file, List<TypeInfo> types, DeployFileType deployFileType)
+        private async Task DeployFileAsync(string file, List<TypeInfo> types, DeployFileType deployFileType)
         {
             var dataProviderEvents = new List<DataProviderEvent>();
-            var pluginAssemblyId = DeployAssembly(file, deployFileType);
+            var pluginAssemblyId = await DeployAssemblyAsync(file, deployFileType);
             if (pluginAssemblyId == null) return;
             if (Arg?.OnlyUpdateAssembly?.Length > 0) return;
             foreach (var type in types)
             {
                 var attributes = GetCrmPluginRegistrationAttributes(type);
-                var pluginTypeId = DeployPluginType(pluginAssemblyId.Value, type, attributes[0], deployFileType);
+                var pluginTypeId = await DeployPluginTypeAsync(pluginAssemblyId.Value, type, attributes[0], deployFileType);
                 if (pluginTypeId == null) return;
                 if (IsWorkflowType(type)) continue;
                 foreach (var attribute in attributes)
@@ -168,13 +146,13 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     {
                         case PluginType.Plugin:
                         case PluginType.CustomAction:
-                            var pluginStepId = DeployPluginStep(pluginTypeId.Value, type, attribute);
+                            var pluginStepId = await DeployPluginStepAsync(pluginTypeId.Value, type, attribute);
                             if (pluginStepId == null) return;
                             if (attribute.PluginType == PluginType.Plugin && HasPluginImage(attribute))
                             {
                                 if (IsSupportPluginImage(attribute))
                                 {
-                                    var pluginImageId = DeployPluginImage(pluginStepId.Value, type, attribute);
+                                    var pluginImageId = await DeployPluginImageAsync(pluginStepId.Value, type, attribute);
                                     if (pluginImageId == null) return;
                                 }
                                 else
@@ -193,7 +171,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                             });
                             break;
                         case PluginType.CustomApi:
-                            DeployCustomApiStep(pluginTypeId.Value, type.FullName, attribute);
+                            await DeployCustomApiStepAsync(pluginTypeId.Value, type.FullName, attribute);
                             break;
                         default:
                             break;
@@ -208,18 +186,18 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 foreach (var dataSource in dataSources)
                 {
                     if (dataSource.DataSource == null) continue;
-                    if (IsValidDataProvider(dataProviderEvents, dataSource.DataSource))
+                    if (await IsValidDataProviderAsync(dataProviderEvents, dataSource.DataSource))
                     {
-                        RegisterDataProvider(dataProviderEvents, dataSource.DataSource);
+                        await RegisterDataProviderAsync(dataProviderEvents, dataSource.DataSource);
                     }
                 }
             }
         }
 
-        private bool IsValidDataProvider(List<DataProviderEvent> dataProviderEvents, string dataSource)
+        private async Task<bool> IsValidDataProviderAsync(List<DataProviderEvent> dataProviderEvents, string dataSource)
         {
             var checkDataSource = dataSource.ToLower().StartsWith(Prefix.ToLower()) ? dataSource : $"{Prefix?.ToLower()}{dataSource}";
-            if (!IsExistDataSource($"{checkDataSource}"))
+            if (!await IsExistDataSourceAsync($"{checkDataSource}"))
             {
                 CliLog.WriteLineError(ConsoleColor.Yellow, $"DataSource {dataSource} with prefix {Prefix.ToLower()} not exist ({checkDataSource}). Assemply deployed, but the deployment of this assembly stopped.");
                 return false;
@@ -260,7 +238,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             return true;
         }
 
-        private void RegisterDataProvider(List<DataProviderEvent> dataProviderEvents, string dataSource)
+        private async Task RegisterDataProviderAsync(List<DataProviderEvent> dataProviderEvents, string dataSource)
         {
             var events = string.Empty;
             var logicalNameDataSource = dataSource.ToLower().StartsWith(Prefix.ToLower()) ? dataSource.ToLower() : $"{Prefix?.ToLower()}{dataSource}".ToLower();
@@ -313,7 +291,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
             }
             events = events.TrimEnd(", ".ToCharArray());
-            var entityDataProvider = GetEntityDataProviderId(logicalNameDataSource);
+            var entityDataProvider = await GetEntityDataProviderIdAsync(logicalNameDataSource);
             if (entityDataProvider == null)
             {
                 var request = new CreateRequest();
@@ -323,7 +301,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 request.Parameters.Add("SuppressDuplicateDetection", true);
                 request.Parameters.Add("SolutionUniqueName", Json.solution);
                 CliLog.WriteLineWarning(SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.REGISTER, ConsoleColor.White, $"DataSource ", ConsoleColor.Cyan, $"{logicalNameDataSource}", ConsoleColor.White, " linked with events ", ConsoleColor.Cyan, events);
-                ServiceClient.Execute(request);
+                await ServiceClient.ExecuteAsync(request);
             }
             else
             {
@@ -346,7 +324,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         Target = entity
                     };
                     CliLog.WriteLineWarning(SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.UPDATED, ConsoleColor.White, $"DataSource ", ConsoleColor.Cyan, $"{logicalNameDataSource}", ConsoleColor.White, " linked with events ", ConsoleColor.Cyan, events);
-                    ServiceClient.Execute(request);
+                    await ServiceClient.ExecuteAsync(request);
                 }
                 else
                 {
@@ -355,7 +333,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
         }
 
-        private Entity GetEntityDataProviderId(string dataSource)
+        private async Task<Entity> GetEntityDataProviderIdAsync(string dataSource)
         {
             var fetchData = new
             {
@@ -375,7 +353,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
     </filter>
   </entity>
 </fetch>";
-            var rows = ServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            var rows = await ServiceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
             if (rows.Entities.Count != 1) return null;
             return rows.Entities[0];
         }
@@ -385,7 +363,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             return ServiceClient.ConnectedOrgVersion >= new Version("9.1.0.18950");
         }
 
-        private bool IsExistDataSource(string logicalname)
+        private async Task<bool> IsExistDataSourceAsync(string logicalname)
         {
             var filterExpression = new MetadataFilterExpression();
             logicalname = logicalname.ToLower();
@@ -408,14 +386,14 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 Query = entityQueryExpression
             };
-            var response = (RetrieveMetadataChangesResponse)ServiceClient.Execute(request);
+            var response = (RetrieveMetadataChangesResponse)await ServiceClient.ExecuteAsync(request);
             foreach (EntityMetadata entityMetadata in response.EntityMetadata)
                 if (entityMetadata.LogicalName == logicalname)
                     return true;
             return false;
         }
 
-        private void DeployCustomApiStep(Guid pluginTypeId, string pluginTypeName, CrmPluginRegistrationAttribute attribute)
+        private async Task DeployCustomApiStepAsync(Guid pluginTypeId, string pluginTypeName, CrmPluginRegistrationAttribute attribute)
         {
             var fetchData = new
             {
@@ -432,7 +410,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
   </entity>
 </fetch>
 ";
-            var rows = ServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            var rows = await ServiceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
             if (rows.Entities.Count != 1)
             {
                 CliLog.WriteLineError(ConsoleColor.Yellow, $"Custom Api with message {attribute.Message} not found. Assemply deployed, but the deployment of this assembly stopped.");
@@ -447,7 +425,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     CliLog.WriteLineWarning(SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.UPDATED, CliAction.DEACTIVATED, ConsoleColor.White, $"{attribute.PluginType.ToString()} Message: ", ConsoleColor.Cyan, attribute.Message, ConsoleColor.White, " with type: ", ConsoleColor.Cyan, pluginTypeName);
                     var update = new Entity("customapi", rows.Entities[0].Id);
                     update["plugintypeid"] = null;
-                    ServiceClient.Update(update);
+                    await ServiceClient.UpdateAsync(update);
                 }
             }
             else
@@ -464,26 +442,26 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     CliLog.WriteLineWarning(SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.REGISTER, ConsoleColor.White, $"{attribute.PluginType.ToString()} Message: ", ConsoleColor.Cyan, attribute.Message, ConsoleColor.White, " with type: ", ConsoleColor.Cyan, pluginTypeName);
                     var update = new Entity("customapi", rows.Entities[0].Id);
                     update["plugintypeid"] = new EntityReference("plugintype", pluginTypeId);
-                    ServiceClient.Update(update);
+                    await ServiceClient.UpdateAsync(update);
                 }
             }
         }
 
-        private Guid? DeployPluginImage(Guid pluginStepId, TypeInfo type, CrmPluginRegistrationAttribute attribute)
+        private async Task<Guid?> DeployPluginImageAsync(Guid pluginStepId, TypeInfo type, CrmPluginRegistrationAttribute attribute)
         {
             Guid? check = null;
-            if (attribute?.Image1Name?.Length > 0) check = DeployPluginImage(attribute.Message, attribute.Image1Name, attribute.Image1Alias, attribute.Image1Type, attribute.Image1Attributes, pluginStepId, attribute.Name);
+            if (attribute?.Image1Name?.Length > 0) check = await DeployPluginImageAsync(attribute.Message, attribute.Image1Name, attribute.Image1Alias, attribute.Image1Type, attribute.Image1Attributes, pluginStepId, attribute.Name);
             if (check == Guid.Empty) return null;
-            if (attribute?.Image2Name?.Length > 0) check = DeployPluginImage(attribute.Message, attribute.Image2Name, attribute.Image2Alias, attribute.Image2Type, attribute.Image2Attributes, pluginStepId, attribute.Name);
+            if (attribute?.Image2Name?.Length > 0) check = await DeployPluginImageAsync(attribute.Message, attribute.Image2Name, attribute.Image2Alias, attribute.Image2Type, attribute.Image2Attributes, pluginStepId, attribute.Name);
             if (check == Guid.Empty) return null;
-            if (attribute?.Image3Name?.Length > 0) check = DeployPluginImage(attribute.Message, attribute.Image3Name, attribute.Image3Alias, attribute.Image3Type, attribute.Image3Attributes, pluginStepId, attribute.Name);
+            if (attribute?.Image3Name?.Length > 0) check = await DeployPluginImageAsync(attribute.Message, attribute.Image3Name, attribute.Image3Alias, attribute.Image3Type, attribute.Image3Attributes, pluginStepId, attribute.Name);
             if (check == Guid.Empty) return null;
-            if (attribute?.Image4Name?.Length > 0) check = DeployPluginImage(attribute.Message, attribute.Image4Name, attribute.Image4Alias, attribute.Image4Type, attribute.Image4Attributes, pluginStepId, attribute.Name);
+            if (attribute?.Image4Name?.Length > 0) check = await DeployPluginImageAsync(attribute.Message, attribute.Image4Name, attribute.Image4Alias, attribute.Image4Type, attribute.Image4Attributes, pluginStepId, attribute.Name);
             if (check == Guid.Empty) return null;
             return check;
         }
 
-        private Guid DeployPluginImage(string message, string imageName, string imageAliasName, ImageTypeEnum imageType, string imageAttributes, Guid pluginStepId, string pluginStepName)
+        private async Task<Guid> DeployPluginImageAsync(string message, string imageName, string imageAliasName, ImageTypeEnum imageType, string imageAttributes, Guid pluginStepId, string pluginStepName)
         {
             if (imageAliasName.Length == 0) imageAliasName = imageName;
             imageAttributes = imageAttributes?.Replace(" ", string.Empty);
@@ -508,7 +486,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
     </filter>
   </entity>
 </fetch>";
-            var rows = ServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            var rows = await ServiceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
             if (rows.Entities.Count > 0)
             {
                 if (rows.Entities.Count > 0 && rows.Entities.Count != 1)
@@ -544,7 +522,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     CliLog.WriteLineWarning(SPACE, SPACE, SPACE, SPACE, SPACE, "Image Fields: ", ConsoleColor.Blue, "[", ConsoleColor.Green, imageAttributes ?? "*", ConsoleColor.Blue, "]");
                     try
                     {
-                        var response = (CreateResponse)ServiceClient.Execute(request);
+                        var response = (CreateResponse)await ServiceClient.ExecuteAsync(request);
                         return response.id;
                     }
                     catch (FaultException fe)
@@ -596,12 +574,12 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
                         CliLog.WriteLine(SPACE, SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.DELETED, ConsoleColor.White, "Image Type: ", ConsoleColor.Cyan, $"{imageType.ToString()}", ConsoleColor.White, $" Name: ", ConsoleColor.Cyan, imageName, ConsoleColor.White, $" Alias: ", ConsoleColor.Cyan, imageAliasName);
                         CliLog.WriteLineWarning(SPACE, SPACE, SPACE, SPACE, SPACE, "Image Fields: ", ConsoleColor.Blue, "[", ConsoleColor.Green, imageAttributes ?? "*", ConsoleColor.Blue, "]");
-                        ServiceClient.Delete("sdkmessageprocessingstepimage", rows.Entities[0].Id);
+                        await ServiceClient.DeleteAsync("sdkmessageprocessingstepimage", rows.Entities[0].Id);
                         return Guid.NewGuid();
                     }
                     try
                     {
-                        ServiceClient.Update(pluginImage);
+                        await ServiceClient.UpdateAsync(pluginImage);
                     }
                     catch (FaultException fe)
                     {
@@ -659,7 +637,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             return false;
         }
 
-        private Guid? DeployPluginStep(Guid pluginTypeId, TypeInfo type, CrmPluginRegistrationAttribute attribute)
+        private async Task<Guid?> DeployPluginStepAsync(Guid pluginTypeId, TypeInfo type, CrmPluginRegistrationAttribute attribute)
         {
             Guid? pluginStepId = null;
             if (attribute?.Message?.ToLower() == "update")
@@ -691,7 +669,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
     </filter>
   </entity>
 </fetch>";
-            var rows = ServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            var rows = await ServiceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
             if (rows.Entities.Count > 0)
             {
                 if (rows.Entities.Count > 0 && rows.Entities.Count != 1)
@@ -700,9 +678,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     return null;
                 }
             }
-            var sdkMessageFilterId = GetSdkMessageFilterId(attribute.EntityLogicalName, attribute.Message);
-            var sdkMessageId = GetSdkMessageId(attribute.EntityLogicalName, attribute.Message);
-            var impersonatingUserId = GetImpersonatingUserId(attribute.RunAs);
+            var sdkMessageFilterId = await GetSdkMessageFilterIdAsync(attribute.EntityLogicalName, attribute.Message);
+            var sdkMessageId = await GetSdkMessageIdAsync(attribute.EntityLogicalName, attribute.Message);
+            var impersonatingUserId = await GetImpersonatingUserIdAsync(attribute.RunAs);
             if (attribute.ExecutionMode == 0) attribute.DeleteAsyncOperation = false;
             var pluginStep = new Entity("sdkmessageprocessingstep")
             {
@@ -727,7 +705,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 {
                     var secureEntity = new Entity("sdkmessageprocessingstepsecureconfig");
                     secureEntity["secureconfig"] = attribute.SecureConfiguration;
-                    var sdkmessageprocessingstepsecureconfigid = ServiceClient.Create(secureEntity);
+                    var sdkmessageprocessingstepsecureconfigid = await ServiceClient.CreateAsync(secureEntity);
                     pluginStep["sdkmessageprocessingstepsecureconfigid"] = new EntityReference("sdkmessageprocessingstepsecureconfig", sdkmessageprocessingstepsecureconfigid);
                 }
                 var request = new CreateRequest
@@ -742,7 +720,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
                 try
                 {
-                    var response = (CreateResponse)ServiceClient.Execute(request);
+                    var response = (CreateResponse)await ServiceClient.ExecuteAsync(request);
                     pluginStepId = response.id;
                 }
                 catch (FaultException fe)
@@ -766,13 +744,13 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 pluginStepId = rows.Entities[0].Id;
                 pluginStep["sdkmessageprocessingstepid"] = pluginStepId.Value;
                 var hasChangedPluginStep = false;
-                var secureEntity = GetSecureEntity(pluginStepId.Value);
+                var secureEntity = await GetSecureEntityAsync(pluginStepId.Value);
                 if (attribute.SecureConfiguration?.Trim().Length == 0 && secureEntity != null)
                 {
                     var sdkmessageprocessingstepsecureconfigid = (Guid?)secureEntity.GetAttributeValue<AliasedValue>("s.sdkmessageprocessingstepsecureconfigid")?.Value;
                     if (sdkmessageprocessingstepsecureconfigid.HasValue)
                     {
-                        ServiceClient.Delete("sdkmessageprocessingstepsecureconfig", sdkmessageprocessingstepsecureconfigid.Value);
+                        await ServiceClient.DeleteAsync("sdkmessageprocessingstepsecureconfig", sdkmessageprocessingstepsecureconfigid.Value);
                         hasChangedPluginStep = true;
                     }
                 }
@@ -786,7 +764,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         {
                             var update = new Entity("sdkmessageprocessingstepsecureconfig", sdkmessageprocessingstepsecureconfigid.Value);
                             update["secureconfig"] = attribute.SecureConfiguration;
-                            ServiceClient.Update(update);
+                            await ServiceClient.UpdateAsync(update);
                             hasChangedPluginStep = true;
                         }
                     }
@@ -795,7 +773,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 {
                     var create = new Entity("sdkmessageprocessingstepsecureconfig");
                     create["secureconfig"] = attribute.SecureConfiguration;
-                    var sdkmessageprocessingstepsecureconfigid = ServiceClient.Create(secureEntity);
+                    var sdkmessageprocessingstepsecureconfigid = await ServiceClient.CreateAsync(secureEntity);
                     pluginStep["sdkmessageprocessingstepsecureconfigid"] = new EntityReference("sdkmessageprocessingstepsecureconfig", sdkmessageprocessingstepsecureconfigid);
                     hasChangedPluginStep = true;
                 }
@@ -842,7 +820,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     }
                     try
                     {
-                        ServiceClient.Execute(request);
+                        await ServiceClient.ExecuteAsync(request);
                     }
                     catch (FaultException fe)
                     {
@@ -875,7 +853,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 var update = new Entity("sdkmessageprocessingstep", pluginStepId.Value);
                 update["statecode"] = new OptionSetValue(1);
                 update["statuscode"] = new OptionSetValue(2);
-                ServiceClient.Update(update);
+                await ServiceClient.UpdateAsync(update);
                 CliLog.WriteLineWarning(SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.DEACTIVATED, ConsoleColor.White, $"Plugin {attribute.Message} Step: ", ConsoleColor.Cyan, attribute.Name);
                 if (attribute.Message.ToLower() == "update")
                 {
@@ -890,7 +868,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 var update = new Entity("sdkmessageprocessingstep", pluginStepId.Value);
                 update["statecode"] = new OptionSetValue(0);
                 update["statuscode"] = new OptionSetValue(1);
-                ServiceClient.Update(update);
+                await ServiceClient.UpdateAsync(update);
                 CliLog.WriteLineWarning(SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.ACTIVATED, ConsoleColor.White, $"Plugin {attribute.Message} Step: ", ConsoleColor.Cyan, attribute.Name);
                 if (attribute.Message.ToLower() == "update")
                 {
@@ -923,8 +901,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 old.SupportedDeployment != @new.SupportedDeployment)
                 return true;
             return false;
-            ;
-
             SdkMessageProcessingStep ReadFromEntity(Entity entity)
             {
                 return new SdkMessageProcessingStep
@@ -947,7 +923,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
         }
 
-        private Entity GetSecureEntity(Guid pluginStepId)
+        private async Task<Entity> GetSecureEntityAsync(Guid pluginStepId)
         {
             var fetchData = new
             {
@@ -968,12 +944,12 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
   </entity>
 </fetch>";
 
-            var rows = ServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            var rows = await ServiceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
             if (rows.Entities.Count != 1) return null;
             return rows.Entities[0];
         }
 
-        private Guid? DeployPluginType(Guid pluginAssemblyId, TypeInfo type, CrmPluginRegistrationAttribute attribute, DeployFileType deployFileType)
+        private async Task<Guid?> DeployPluginTypeAsync(Guid pluginAssemblyId, TypeInfo type, CrmPluginRegistrationAttribute attribute, DeployFileType deployFileType)
         {
             var fetchData = new
             {
@@ -994,7 +970,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
     </filter>
   </entity>
 </fetch>";
-            var rows = ServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            var rows = await ServiceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
             if (rows.Entities.Count > 0)
             {
                 if (rows.Entities.Count > 0 && rows.Entities.Count != 1)
@@ -1043,7 +1019,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 };
                 request.Parameters.Add("SolutionUniqueName", Json.solution);
                 CliLog.WriteLineWarning(SPACE, ConsoleColor.Green, CliAction.REGISTER, ConsoleColor.White, $"{attribute.PluginType.ToString()} Type: ", ConsoleColor.Cyan, type.FullName);
-                var response = (CreateResponse)ServiceClient.Execute(request);
+                var response = (CreateResponse)await ServiceClient.ExecuteAsync(request);
                 return response.id;
             }
             else
@@ -1056,7 +1032,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 request.Parameters.Add("SolutionUniqueName", Json.solution);
                 try
                 {
-                    ServiceClient.Execute(request);
+                    await ServiceClient.ExecuteAsync(request);
                 }
                 catch (FaultException fe)
                 {
@@ -1066,7 +1042,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 if (IsWorkflowType(type))
                 {
                     var old = rows.Entities[0].GetAttributeValue<string>("customworkflowactivityinfo");
-                    var @new = ServiceClient.Retrieve("plugintype", rows.Entities[0].Id, new ColumnSet("customworkflowactivityinfo")).GetAttributeValue<string>("customworkflowactivityinfo");
+                    var @new = (await ServiceClient.RetrieveAsync("plugintype", rows.Entities[0].Id, new ColumnSet("customworkflowactivityinfo"))).GetAttributeValue<string>("customworkflowactivityinfo");
                     if (IsEqualsWorkflowType(old, @new))
                     {
                         CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, $"{attribute.PluginType.ToString()} Type: ", ConsoleColor.Cyan, type.FullName);
@@ -1089,7 +1065,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             return old == @new;
         }
 
-        private Guid? DeployAssembly(string file, DeployFileType deployFileType)
+        private async Task<Guid?> DeployAssemblyAsync(string file, DeployFileType deployFileType)
         {
             var assembly = Assembly.ReflectionOnlyLoadFrom(file);
             var assemblyProperties = assembly.GetName().FullName.Split(",= ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
@@ -1108,7 +1084,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
     </filter>
   </entity>
 </fetch>";
-            var rows = ServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            var rows = await ServiceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
             if (rows.Entities.Count > 0)
             {
                 if (rows.Entities.Count > 0 && rows.Entities.Count != 1)
@@ -1136,7 +1112,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 };
                 request.Parameters.Add("SolutionUniqueName", Json.solution);
                 CliLog.WriteLineWarning(SPACE, ConsoleColor.Green, CliAction.REGISTER, ConsoleColor.White, "Assembly ", ConsoleColor.Cyan, assemblyName);
-                var response = (CreateResponse)ServiceClient.Execute(request);
+                var response = (CreateResponse)await ServiceClient.ExecuteAsync(request);
                 return response.id;
             }
             else
@@ -1158,7 +1134,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     CliLog.WriteLineWarning(SPACE, ConsoleColor.Green, CliAction.UPDATED, ConsoleColor.White, "Assembly ", ConsoleColor.Cyan, assemblyName);
                     try
                     {
-                        ServiceClient.Execute(request);
+                        await ServiceClient.ExecuteAsync(request);
                     }
                     catch (FaultException fe)
                     {
@@ -1175,7 +1151,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             return oldContent == newContent;
         }
 
-        private bool IsValidTypes(string file, List<TypeInfo> types)
+        private async Task<bool> IsValidTypesAsync(string file, List<TypeInfo> types)
         {
             if (types.Count == 0)
             {
@@ -1186,14 +1162,14 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 return false;
             }
-            if (!IsValidTypesWithCDS(types, Path.GetFileNameWithoutExtension(file)))
+            if (!await IsValidTypesWithCDSAsync(types, Path.GetFileNameWithoutExtension(file)))
             {
                 return false;
             }
             return true;
         }
 
-        private bool IsValidTypesWithCDS(List<TypeInfo> types, string fileNameWithoutExtension)
+        private async Task<bool> IsValidTypesWithCDSAsync(List<TypeInfo> types, string fileNameWithoutExtension)
         {
             var fetchData = new
             {
@@ -1213,7 +1189,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
   </entity>
 </fetch>";
 
-            var rows = ServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            var rows = await ServiceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
             if (rows.Entities.Count == 0) return true;
             foreach (var entity in rows.Entities)
             {
@@ -1365,12 +1341,12 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             return new OptionSetValue(2);
         }
 
-        private EntityReference GetSdkMessageFilterId(string entityLogicalName, string message)
+        private async Task<EntityReference> GetSdkMessageFilterIdAsync(string entityLogicalName, string message)
         {
             if (entityLogicalName?.Length == 0 || entityLogicalName?.ToLower() == "none") return null;
             var fetchData = new
             {
-                primaryobjecttypecode = GetPrimaryObjectTypeCode(entityLogicalName),
+                primaryobjecttypecode = await GetPrimaryObjectTypeCodeAsync(entityLogicalName),
                 name = message
             };
             var fetchXml = $@"
@@ -1387,11 +1363,11 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
     </link-entity>
   </entity>
 </fetch>";
-            var rows = ServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            var rows = await ServiceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
             return rows.Entities.Count == 0 ? null : new EntityReference("sdkmessagefilter", rows.Entities[0].Id);
         }
 
-        private int? GetPrimaryObjectTypeCode(string entityName)
+        private async Task<int?> GetPrimaryObjectTypeCodeAsync(string entityName)
         {
             if (entityName?.Length == 0) return null;
             var request = new RetrieveEntityRequest
@@ -1399,11 +1375,11 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 EntityFilters = EntityFilters.Entity,
                 LogicalName = entityName.ToLower()
             };
-            var response = (RetrieveEntityResponse)ServiceClient.Execute(request);
+            var response = (RetrieveEntityResponse)await ServiceClient.ExecuteAsync(request);
             return response.EntityMetadata.ObjectTypeCode ?? 0;
         }
 
-        private EntityReference GetSdkMessageId(string entityLogicalName, string message)
+        private async Task<EntityReference> GetSdkMessageIdAsync(string entityLogicalName, string message)
         {
             if (entityLogicalName?.Length == 0) return null;
             string fetchXml;
@@ -1428,7 +1404,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 var fetchData = new
                 {
                     name = message,
-                    primaryobjecttypecode = GetPrimaryObjectTypeCode(entityLogicalName)
+                    primaryobjecttypecode = await GetPrimaryObjectTypeCodeAsync(entityLogicalName)
                 };
                 fetchXml = $@"
 <fetch>
@@ -1445,11 +1421,11 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
   </entity>
 </fetch>";
             }
-            var rows = ServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            var rows = await ServiceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
             return rows.Entities.Count == 0 ? null : new EntityReference("sdkmessage", rows.Entities[0].Id);
         }
 
-        private Guid? GetImpersonatingUserId(string runAs)
+        private async Task<Guid?> GetImpersonatingUserIdAsync(string runAs)
         {
             if (runAs.Length == 0) return (Guid?)null;
             var fetchData = new
@@ -1465,41 +1441,41 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
     </filter>
   </entity>
 </fetch>";
-            var rows = ServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            var rows = await ServiceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
             if (rows.Entities.Count == 0) return (Guid?)null;
             return rows.Entities[0].Id;
         }
 
-        private void DeployPackage(string file)
+        private async Task DeployPackageAsync(string file)
         {
             using (PackageArchiveReader packageArchiveReader = new PackageArchiveReader(file))
             {
                 var folder = $"{CurrentFolder}\\DynamicsCrm.DevKit";
-                var ok = DeployNewOrUpdatePackage(packageArchiveReader, file);
+                var ok = await DeployNewOrUpdatePackageAsync(packageArchiveReader, file);
                 if (ok)
                 {
                     if (Arg?.OnlyUpdateAssembly?.Length > 0) return;
                     ExtractZip(packageArchiveReader, folder);
                     var files = Directory.GetFiles(folder).ToList();
                     var fileName = new FileInfo(file).Name;
-                    DeployPackageFiles(fileName, files);
+                    await DeployPackageFilesAsync(fileName, files);
                 }
             }
         }
 
-        private void DeployPackageFiles(string fileName, List<string> files)
+        private async Task DeployPackageFilesAsync(string fileName, List<string> files)
         {
             foreach (var file in files)
             {
                 var types = GetTypes(file, files);
                 if (types.Count > 0)
                 {
-                    DeployDll(file, DeployFileType.Nuget, fileName);
+                    await DeployDllAsync(file, DeployFileType.Nuget, fileName);
                 }
             }
         }
 
-        private bool DeployNewOrUpdatePackage(PackageArchiveReader packageArchiveReader, string file)
+        private async Task<bool> DeployNewOrUpdatePackageAsync(PackageArchiveReader packageArchiveReader, string file)
         {
             byte[] inArray = File.ReadAllBytes(file);
             var name = $"{Prefix}{packageArchiveReader.NuspecReader.GetId()}";
@@ -1518,7 +1494,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
     </filter>
   </entity>
 </fetch>";
-            var rows = ServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            var rows = await ServiceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
             if (rows.Entities.Count == 0)
             {
                 try
@@ -1530,7 +1506,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var request = new CreateRequest { Target = entity };
                     request.Parameters.Add("SolutionUniqueName", Json.solution);
                     CliLog.WriteLineWarning(ConsoleColor.Cyan, new FileInfo(file).Name);
-                    ServiceClient.Execute(request);
+                    await ServiceClient.ExecuteAsync(request);
                 }
                 catch (FaultException fe)
                 {
@@ -1557,7 +1533,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         var request = new UpdateRequest { Target = update };
                         request.Parameters.Add("SolutionUniqueName", Json.solution);
                         CliLog.WriteLineWarning(ConsoleColor.Cyan, new FileInfo(file).Name);
-                        ServiceClient.Execute(request);
+                        await ServiceClient.ExecuteAsync(request);
                     }
                     catch (FaultException fe)
                     {
@@ -1614,6 +1590,26 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             types = types.OrderBy(x => x.FullName).ToList();
             return types;
+        }
+
+        public async Task RunAsync()
+        {
+            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "START ");
+            CliLog.WriteLine(ConsoleColor.White, "|");
+            if (await IsValidAsync())
+            {
+                var files = GetFiles(CurrentFolder, Json.includefiles, Json.excludefiles);
+                if (files.Count == 0)
+                {
+                    CliLog.WriteLineWarning(ConsoleColor.Green, "Not found any files to deploy");
+                }
+                else
+                {
+                    await DeployFilesAsync(files);
+                }
+            }
+            CliLog.WriteLine(ConsoleColor.White, "|");
+            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "END ");
         }
     }
 }

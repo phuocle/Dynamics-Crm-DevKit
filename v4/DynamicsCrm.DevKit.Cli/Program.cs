@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
+
 namespace DynamicsCrm.DevKit.Cli
 {
     public class Program
@@ -14,7 +16,7 @@ namespace DynamicsCrm.DevKit.Cli
         private static ServiceClient ServiceClient { get; set; }
 
         [STAThread]
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             if (args.Count() == 0)
             {
@@ -24,7 +26,7 @@ namespace DynamicsCrm.DevKit.Cli
             else
             {
                 var arguments = CommandLine.Parse<CommandLineArgs>();
-                RunCli(arguments);
+                await RunCliAsync(arguments);
             }
         }
 
@@ -53,12 +55,12 @@ namespace DynamicsCrm.DevKit.Cli
             CliLog.WriteLine(ConsoleColor.White, "|");
         }
 
-        static void RunCli(CommandLineArgs arguments)
+        static async Task RunCliAsync(CommandLineArgs arguments)
         {
             ShowHelp();
             if (IsValid(arguments))
             {
-                CliTask.Run(arguments);
+                await CliTask.RunAsync(arguments);
             }
             CliLog.WriteLine(ConsoleColor.White, "|");
 #if DEBUG

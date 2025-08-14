@@ -5,24 +5,22 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 
 namespace DynamicsCrm.DevKit.Shared.Logic
 {
     public static class JsForm
     {
+        private const string NEW_LINE = "\r\n";
+        private const string TAB = "\t";
+
         private static List<string> FormAll_Fields = new List<string>();
-
         private static List<string> FormAll_Header_Fields = new List<string>();
-
         private static List<TabSection> FormAll_TabSections = new List<TabSection>();
-
         private static List<ProcessFields> FormAll_Processes = new List<ProcessFields>();
-
         private static List<string> FormAll_QuickForms = new List<string>();
-
         private static List<string> FormAll_Grids = new List<string>();
-
         private static List<string> FormAll_Navigations = new List<string>();
 
         private class TabSection
@@ -39,10 +37,6 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             public List<string> Fields { get; set; }
         }
 
-        private const string NEW_LINE = "\r\n";
-
-        private const string TAB = "\t";
-
         private static ServiceClient ServiceClient { get; set; }
 
         private static EntityMetadata EntityMetadata { get; set; }
@@ -53,14 +47,14 @@ namespace DynamicsCrm.DevKit.Shared.Logic
 
         private static List<string> FormNames;
 
-        public static string GetCode(ServiceClient service, EntityMetadata entityMetadata, string rootNamespace, CommentTypeScriptDeclaration comment, out string dts)
+        public static async Task<(string code, string dts)> GetCodeAsync(ServiceClient service, EntityMetadata entityMetadata, string rootNamespace, CommentTypeScriptDeclaration comment)
         {
             FormNames = new List<string>();
             ServiceClient = service;
             EntityMetadata = entityMetadata;
             RootNamespace = rootNamespace;
             Comment = comment;
-            var forms = XrmHelper.GetEntityForms(service, entityMetadata.LogicalName);
+            var forms = await XrmHelper.GetEntityFormsAsync(service, entityMetadata.LogicalName);
 
             var code = string.Empty;
             var @namespace = Helper.GetNameSpace(RootNamespace);
@@ -72,16 +66,16 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code += $"(function ({@namespace}) {{{NEW_LINE}";
             code += $"{TAB}'use strict';{NEW_LINE}";
             foreach (var form in forms.Where(x => !x.IsQuickCreate))
-                code += GetMainFormCode(form, @namespace);
+                code += await GetMainFormCodeAsync(form, @namespace);
             foreach (var form in forms.Where(x => x.IsQuickCreate))
                 code += GetQuickCreateFormCode(form, @namespace);
 
             code += $"}})({@namespace} || ({@namespace} = {{}}));{NEW_LINE}";
             code += $"{Helper.GeneratorOptionSet(EntityMetadata)}";
 
-            dts = JsTypeScriptDeclaration.GetCode(service, entityMetadata, rootNamespace, comment);
+            var dts = await JsTypeScriptDeclaration.GetCodeAsync(service, entityMetadata, rootNamespace, comment);
 
-            return code;
+            return (code, dts);
         }
 
         private static string GetQuickCreateFormCode(SystemForm form, string @namespace)
@@ -89,18 +83,18 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             var code = string.Empty;
             var formName = Helper.GetFormName(form.Name, EntityMetadata.SchemaName);
             formName = GetUnquieFormName(formName);
-            code += $"\t{@namespace}.Form{Helper.SafeIdentifier(formName)} = function(executionContext, defaultWebResourceName) {{\r\n";
-            code += $"\t\tvar formContext = null;\r\n";
-            code += $"\t\tif (executionContext !== undefined)\r\n";
-            code += $"\t\t{{\r\n";
-            code += $"\t\t\tif (executionContext.getFormContext === undefined) {{\r\n";
-            code += $"\t\t\t\tformContext = executionContext;\r\n";
-            code += $"\t\t\t}}\r\n";
-            code += $"\t\t\telse {{\r\n";
-            code += $"\t\t\t\tformContext = executionContext.getFormContext();\r\n";
-            code += $"\t\t\t}}\r\n";
-            code += $"\t\t}}\r\n";
-            code += $"\t\tvar form = devKit.LoadForm(formContext);\r\n";
+            code += $"{TAB}{@namespace}.Form{Helper.SafeIdentifier(formName)} = function(executionContext, defaultWebResourceName) {{{NEW_LINE}";
+            code += $"{TAB}{TAB}var formContext = null;{NEW_LINE}";
+            code += $"{TAB}{TAB}if (executionContext !== undefined){NEW_LINE}";
+            code += $"{TAB}{TAB}{{{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}if (executionContext.getFormContext === undefined) {{{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}{TAB}formContext = executionContext;{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}}}{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}else {{{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}{TAB}formContext = executionContext.getFormContext();{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}}}{NEW_LINE}";
+            code += $"{TAB}{TAB}}}{NEW_LINE}";
+            code += $"{TAB}{TAB}var form = devKit.LoadForm(formContext);{NEW_LINE}";
             code += $"{TAB}{TAB}var body = {{{NEW_LINE}";
             code += GetJsQuickViewCodeBody(form.FormXml);
             code += $"{TAB}{TAB}}};{NEW_LINE}";
@@ -111,93 +105,15 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code += $"{TAB}{TAB}devKit.LoadTabs(formContext, tab);{NEW_LINE}";
             code += $"{TAB}{TAB}body.Tab = tab;{NEW_LINE}";
             code += $"{TAB}{TAB}form.Body = body;{NEW_LINE}";
-            code += $"\t\tform.Utility = devKit.LoadUtility(defaultWebResourceName);\r\n";
-            code += $"\t\tform.ExecutionContext = devKit.LoadExecutionContext(executionContext);\r\n";
-            code += $"\t\tdevKit.LoadOthers(formContext, form, defaultWebResourceName);\r\n";
-            code += $"\t\treturn form;\r\n";
-            code += $"\t}};\r\n";
+            code += $"{TAB}{TAB}form.Utility = devKit.LoadUtility(defaultWebResourceName);{NEW_LINE}";
+            code += $"{TAB}{TAB}form.ExecutionContext = devKit.LoadExecutionContext(executionContext);{NEW_LINE}";
+            code += $"{TAB}{TAB}devKit.LoadOthers(formContext, form, defaultWebResourceName);{NEW_LINE}";
+            code += $"{TAB}{TAB}return form;{NEW_LINE}";
+            code += $"{TAB}}};{NEW_LINE}";
             return code;
         }
 
-        private static string GetMainFormCode_AllFields(string @namespace)
-        {
-            var code = string.Empty;
-            var formName = $"Form___{EntityMetadata.LogicalName}___All";
-            code += $"{TAB}{@namespace}.{formName} = function(executionContext, defaultWebResourceName) {{{NEW_LINE}";
-            code += $"{TAB}{TAB}var formContext = null;{NEW_LINE}";
-            code += $"{TAB}{TAB}if (executionContext !== undefined) {{{NEW_LINE}";
-            code += $"{TAB}{TAB}{TAB}if (executionContext.getFormContext === undefined) {{{NEW_LINE}";
-            code += $"{TAB}{TAB}{TAB}{TAB}formContext = executionContext;{NEW_LINE}";
-            code += $"{TAB}{TAB}{TAB}}}{NEW_LINE}";
-            code += $"{TAB}{TAB}{TAB}else {{{NEW_LINE}";
-            code += $"{TAB}{TAB}{TAB}{TAB}formContext = executionContext.getFormContext();{NEW_LINE}";
-            code += $"{TAB}{TAB}{TAB}}}{NEW_LINE}";
-            code += $"{TAB}{TAB}}}{NEW_LINE}";
-            code += $"{TAB}{TAB}var form = devKit.LoadForm(formContext);{NEW_LINE}";
-            code += $"{TAB}{TAB}var body = {{{NEW_LINE}";
-            code += GetJsCodeBody_AllFields();
-            code += $"{TAB}{TAB}}};{NEW_LINE}";
-            code += $"{TAB}{TAB}devKit.LoadFields(formContext, body);{NEW_LINE}";
-            code += $"{TAB}{TAB}var tab = {{{NEW_LINE}";
-            code += GetJsCodeTabs_AllFields();
-            code += $"{TAB}{TAB}}};{NEW_LINE}";
-            code += $"{TAB}{TAB}devKit.LoadTabs(formContext, tab);{NEW_LINE}";
-            code += $"{TAB}{TAB}body.Tab = tab;{NEW_LINE}";
-            code += $"{TAB}{TAB}form.Body = body;{NEW_LINE}";
-            var codeHeader = GetJsCodeHeader_AllFields();
-            if (codeHeader.Length > 0)
-            {
-                code += $"{TAB}{TAB}var header = {{{NEW_LINE}";
-                code += codeHeader;
-                code += $"{TAB}{TAB}}};{NEW_LINE}";
-                code += $"{TAB}{TAB}devKit.LoadFields(formContext, header, \"header_\");{NEW_LINE}";
-                code += $"{TAB}{TAB}form.Header = header;{NEW_LINE}";
-            }
-
-            var codeProcess = GetJsProcessCode_AllFields();
-            if (codeProcess.Length > 0)
-            {
-                code += $"{TAB}{TAB}var process = devKit.LoadProcess(formContext);{NEW_LINE}";
-                code += codeProcess;
-                code += $"{TAB}{TAB}form.Process = process;{NEW_LINE}";
-            }
-
-            var codeQuickForm = GetJsQuickFormCode_AllFields();
-            if (codeQuickForm.Length > 0)
-            {
-                code += $"\t\tvar quickForm = {{\r\n";
-                code += codeQuickForm;
-                code += $"\t\t}};\r\n";
-                code += $"\t\tdevKit.LoadQuickForms(formContext, quickForm);\r\n";
-                code += $"\t\tform.QuickForm = quickForm;\r\n";
-            }
-            var codeGrid = GetJsGridCode_AllFields();
-            if (codeGrid.Length > 0)
-            {
-                code += $"\t\tvar grid = {{\r\n";
-                code += codeGrid;
-                code += $"\t\t}};\r\n";
-                code += $"\t\tdevKit.LoadGrids(formContext, grid);\r\n";
-                code += $"\t\tform.Grid = grid;\r\n";
-            }
-            var codeNavigation = GetJsNavigationCode_AllFields();
-            if (codeNavigation.Length > 0)
-            {
-                code += $"\t\tvar navigation = {{\r\n";
-                code += codeNavigation;
-                code += $"\t\t}};\r\n";
-                code += $"\t\tdevKit.LoadNavigations(formContext, navigation);\r\n";
-                code += $"\t\tform.Navigation = navigation;\r\n";
-            }
-            code += $"\t\tform.Utility = devKit.LoadUtility(defaultWebResourceName);\r\n";
-            code += $"\t\tform.ExecutionContext = devKit.LoadExecutionContext(executionContext);\r\n";
-            code += $"\t\tdevKit.LoadOthers(formContext, form, defaultWebResourceName);\r\n";
-            code += $"\t\treturn form;\r\n";
-            code += $"\t}};\r\n";
-            return code;
-        }
-
-        private static string GetMainFormCode(SystemForm form, string @namespace)
+        private static async Task<string> GetMainFormCodeAsync(SystemForm form, string @namespace)
         {
             var code = string.Empty;
             var formName = Helper.GetFormName(form.Name, EntityMetadata.SchemaName);
@@ -226,56 +142,56 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             var codeHeader = GetJsCodeHeader(form.FormXml);
             if (codeHeader.Length > 0)
             {
-                code += $"\t\tvar header = {{\r\n";
+                code += $"{TAB}{TAB}var header = {{{NEW_LINE}";
                 code += codeHeader;
-                code += $"\t\t}};\r\n";
-                code += $"\t\tdevKit.LoadFields(formContext, header, \"header_\");\r\n";
-                code += $"\t\tform.Header = header;\r\n";
+                code += $"{TAB}{TAB}}};{NEW_LINE}";
+                code += $"{TAB}{TAB}devKit.LoadFields(formContext, header, \"header_\");{NEW_LINE}";
+                code += $"{TAB}{TAB}form.Header = header;{NEW_LINE}";
             }
 
-            var codeProcess = GetJsProcessCode();
+            var codeProcess = await GetJsProcessCodeAsync();
             if (codeProcess.Length > 0)
             {
-                code += $"\t\tvar process = devKit.LoadProcess(formContext);\r\n";
+                code += $"{TAB}{TAB}var process = devKit.LoadProcess(formContext);{NEW_LINE}";
                 code += codeProcess;
-                code += $"\t\tform.Process = process;\r\n";
+                code += $"{TAB}{TAB}form.Process = process;{NEW_LINE}";
             }
-            var codeQuickForm = GetJsQuickFormCode(form.FormXml);
+            var codeQuickForm = await GetJsQuickFormCodeAsync(form.FormXml);
             if (codeQuickForm.Length > 0)
             {
-                code += $"\t\tvar quickForm = {{\r\n";
+                code += $"{TAB}{TAB}var quickForm = {{{NEW_LINE}";
                 code += codeQuickForm;
-                code += $"\t\t}};\r\n";
-                code += $"\t\tdevKit.LoadQuickForms(formContext, quickForm);\r\n";
-                code += $"\t\tform.QuickForm = quickForm;\r\n";
+                code += $"{TAB}{TAB}}};{NEW_LINE}";
+                code += $"{TAB}{TAB}devKit.LoadQuickForms(formContext, quickForm);{NEW_LINE}";
+                code += $"{TAB}{TAB}form.QuickForm = quickForm;{NEW_LINE}";
             }
             var codeGrid = GetJsGridCode(form.FormXml);
             if (codeGrid.Length > 0)
             {
-                code += $"\t\tvar grid = {{\r\n";
+                code += $"{TAB}{TAB}var grid = {{{NEW_LINE}";
                 code += codeGrid;
-                code += $"\t\t}};\r\n";
-                code += $"\t\tdevKit.LoadGrids(formContext, grid);\r\n";
-                code += $"\t\tform.Grid = grid;\r\n";
+                code += $"{TAB}{TAB}}};{NEW_LINE}";
+                code += $"{TAB}{TAB}devKit.LoadGrids(formContext, grid);{NEW_LINE}";
+                code += $"{TAB}{TAB}form.Grid = grid;{NEW_LINE}";
             }
             var codeNavigation = GetJsNavigationCode(form.FormXml);
             if (codeNavigation.Length > 0)
             {
-                code += $"\t\tvar navigation = {{\r\n";
+                code += $"{TAB}{TAB}var navigation = {{{NEW_LINE}";
                 code += codeNavigation;
-                code += $"\t\t}};\r\n";
-                code += $"\t\tdevKit.LoadNavigations(formContext, navigation);\r\n";
-                code += $"\t\tform.Navigation = navigation;\r\n";
+                code += $"{TAB}{TAB}}};{NEW_LINE}";
+                code += $"{TAB}{TAB}devKit.LoadNavigations(formContext, navigation);{NEW_LINE}";
+                code += $"{TAB}{TAB}form.Navigation = navigation;{NEW_LINE}";
             }
-            code += $"\t\tform.Utility = devKit.LoadUtility(defaultWebResourceName);\r\n";
-            code += $"\t\tform.ExecutionContext = devKit.LoadExecutionContext(executionContext);\r\n";
-            code += $"\t\tdevKit.LoadOthers(formContext, form, defaultWebResourceName);\r\n";
-            code += $"\t\treturn form;\r\n";
-            code += $"\t}};\r\n";
+            code += $"{TAB}{TAB}form.Utility = devKit.LoadUtility(defaultWebResourceName);{NEW_LINE}";
+            code += $"{TAB}{TAB}form.ExecutionContext = devKit.LoadExecutionContext(executionContext);{NEW_LINE}";
+            code += $"{TAB}{TAB}devKit.LoadOthers(formContext, form, defaultWebResourceName);{NEW_LINE}";
+            code += $"{TAB}{TAB}return form;{NEW_LINE}";
+            code += $"{TAB}}};{NEW_LINE}";
             return code;
         }
 
-        private static string GetJsQuickFormCode(string formXml)
+        private static async Task<string> GetJsQuickFormCodeAsync(string formXml)
         {
             var code = string.Empty;
             var xdoc = XDocument.Parse(formXml);
@@ -295,11 +211,11 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             if (quickForms.Count == 0) return string.Empty;
             foreach (var quickForm in quickForms)
             {
-                code += $"\t\t\t{quickForm}: {{\r\n";
-                code += GetBodyOfQuickView(formXml, quickForm);
-                code += $"\t\t\t}},\r\n";
+                code += $"{TAB}{TAB}{TAB}{quickForm}: {{{NEW_LINE}";
+                code += await GetBodyOfQuickViewAsync(formXml, quickForm);
+                code += $"{TAB}{TAB}{TAB}}},{NEW_LINE}";
             }
-            code = code.TrimEnd(",\r\n".ToCharArray()) + "\r\n";
+            code = code.TrimEnd(",{NEW_LINE}".ToCharArray()) + "{NEW_LINE}";
             if (!FormAll_QuickForms.Any(x => x == code))
             {
                 FormAll_QuickForms.Add(code);
@@ -307,19 +223,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             return code;
         }
 
-        private static string GetJsQuickFormCode_AllFields()
-        {
-            var code = string.Empty;
-            foreach (var item in FormAll_QuickForms)
-            {
-                var temp = item.TrimEnd(",\r\n".ToCharArray());
-                code += $"{temp},{NEW_LINE}";
-            }
-            code = code.TrimEnd($",{NEW_LINE}".ToCharArray()) + "\r\n";
-            return code;
-        }
-
-        private static string GetBodyOfQuickView(string formXml, string id)
+        private static async Task<string> GetBodyOfQuickViewAsync(string formXml, string id)
         {
             var code = string.Empty;
             var xdoc = XDocument.Parse(formXml);
@@ -349,7 +253,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             if (quickViewXml == null) return string.Empty;
             var quickViewFormXml = string.Empty;
 
-            GetFormXml(quickViewXml.formId, quickViewXml.entityLogicalName, out quickViewFormXml);
+            await GetFormXmlAsync(quickViewXml.formId, quickViewXml.entityLogicalName);
             if (quickViewFormXml == string.Empty) return string.Empty;
             var xdoc3 = XDocument.Parse(quickViewFormXml);
             var fields = (from x in xdoc3
@@ -371,7 +275,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                               ControlId = x?.Attribute("uniqueid")?.Value
                           }).Distinct().ToList();
             fields = fields.OrderBy(x => x.Name).ToList();
-            XrmHelper.EntitiesMetadata.AddIfNotExist(ServiceClient, quickViewXml.entityLogicalName);
+            await XrmHelper.EntitiesMetadata.AddIfNotExistAsync(ServiceClient, quickViewXml.entityLogicalName);
             var quickViewMetadata = XrmHelper.EntitiesMetadata.Where(x => x.LogicalName == quickViewXml.entityLogicalName).FirstOrDefault();
             if (quickViewMetadata == null) return String.Empty;
             foreach (var field in fields)
@@ -379,22 +283,22 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                 var fieldAttribute = quickViewMetadata.Attributes.Where(x => x.LogicalName == field.Id).FirstOrDefault();
                 if (fieldAttribute != null)
                 {
-                    code += $"\t\t\t\t{fieldAttribute.SchemaName}: {{}},\r\n";
+                    code += $"{TAB}{TAB}{TAB}{TAB}{fieldAttribute.SchemaName}: {{}},{NEW_LINE}";
                 }
             }
-            code = code.TrimEnd(",\r\n".ToCharArray()) + "\r\n";
+            code = code.TrimEnd(",{NEW_LINE}".ToCharArray()) + "{NEW_LINE}";
             return code;
         }
 
-        private static void GetFormXml(string formId, string entityLogicalName, out string formXml)
+        private static async Task<string> GetFormXmlAsync(string formId, string entityLogicalName)
         {
-            formXml = string.Empty;
-            XrmHelper.EntitiesFormXml.AddIfNotExist(ServiceClient, entityLogicalName);
+            await XrmHelper.EntitiesFormXml.AddIfNotExistAsync(ServiceClient, entityLogicalName);
             var form = XrmHelper.EntitiesFormXml.FirstOrDefault(x => x.FormType == FormType.QuickView && x.FormId == Guid.Parse(formId));
             if (form != null)
             {
-                formXml = form.FormXml;
+                return form.FormXml;
             }
+            return string.Empty;
         }
 
         private static string GetARealClassId(string formXml, string classId, string controlId)
@@ -452,21 +356,11 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             {
                 var classId = GetARealClassId(formXml, field.ClassId, field.ControlId);
                 if (classId != ControlClassId.SUB_GRID && classId != ControlClassId.SUB_GRID_PANEL) continue;
-                code += $"\t\t\t{field.Id}: {{}},\r\n";
+                code += $"{TAB}{TAB}{TAB}{field.Id}: {{}},{NEW_LINE}";
                 if (!FormAll_Grids.Any(x => x == field.Id))
                 {
                     FormAll_Grids.Add(field.Id);
                 }
-            }
-            return code;
-        }
-
-        private static string GetJsGridCode_AllFields()
-        {
-            var code = string.Empty;
-            foreach (var item in FormAll_Grids)
-            {
-                code += $"\t\t\t{item}: {{}},\r\n";
             }
             return code;
         }
@@ -492,34 +386,24 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                     )
                 {
 
-                    code += $"\t\t\t{relationship.SchemaName}: {{}},\r\n";
+                    code += $"{TAB}{TAB}{TAB}{relationship.SchemaName}: {{}},{NEW_LINE}";
                 }
             }
 
-            code = code.TrimEnd(",\r\n".ToCharArray()) + "\r\n";
+            code = code.TrimEnd(",{NEW_LINE}".ToCharArray()) + "{NEW_LINE}";
             return code;
         }
 
-        private static string GetJsNavigationCode_AllFields()
+        private static async Task<string> GetJsProcessCodeAsync()
         {
             var code = string.Empty;
-            foreach (var item in FormAll_Navigations)
-            {
-                code += $"\t\t\t{item}: {{}},\r\n";
-            }
-            return code;
-        }
-
-        private static string GetJsProcessCode()
-        {
-            var code = string.Empty;
-            XrmHelper.EntitiesProcessForm.AddIfNotExist(ServiceClient, EntityMetadata.LogicalName);
+            await XrmHelper.EntitiesProcessForm.AddIfNotExistAsync(ServiceClient, EntityMetadata.LogicalName);
             var processes = XrmHelper.EntitiesProcessForm.Where(x => x.EntityLogicalName == EntityMetadata.LogicalName).OrderBy(x => x.Name);
             if (processes.Count() == 0) return string.Empty;
             foreach (var process in processes)
             {
                 var name = Helper.SafeIdentifier(process.Name);
-                code += $"\t\tvar _{name} = {{\r\n";
+                code += $"{TAB}{TAB}var _{name} = {{{NEW_LINE}";
 
                 var xdoc = XDocument.Parse(process.xaml);
                 var ns = xdoc.Root?.GetNamespaceOfPrefix("mxswa");
@@ -545,28 +429,13 @@ namespace DynamicsCrm.DevKit.Shared.Logic
 
                 fields.Sort();
                 code += GetJsForListFields(fields, true);
-                code += $"\t\t}}\r\n";
-                code += $"\t\tdevKit.LoadFields(formContext, _{name}, \"header_process_\");\r\n";
-                code += $"\t\tprocess.{name} = _{name};\r\n";
+                code += $"{TAB}{TAB}}}{NEW_LINE}";
+                code += $"{TAB}{TAB}devKit.LoadFields(formContext, _{name}, \"header_process_\");{NEW_LINE}";
+                code += $"{TAB}{TAB}process.{name} = _{name};{NEW_LINE}";
                 if (!FormAll_Processes.Any(x => x.ProcessName == name))
                 {
                     FormAll_Processes.Add(new ProcessFields { ProcessName = name, Fields = fields });
                 }
-            }
-            return code;
-        }
-
-        private static string GetJsProcessCode_AllFields()
-        {
-            var code = string.Empty;
-            foreach (var process in FormAll_Processes)
-            {
-                var name = process.ProcessName;
-                code += $"\t\tvar _{name} = {{\r\n";
-                code += GetJsForListFields(process.Fields, true);
-                code += $"\t\t}}\r\n";
-                code += $"\t\tdevKit.LoadFields(formContext, _{name}, \"header_process_\");\r\n";
-                code += $"\t\tprocess.{name} = _{name};\r\n";
             }
             return code;
         }
@@ -625,51 +494,6 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             return code;
         }
 
-        private static string GetJsCodeHeader_AllFields()
-        {
-            FormAll_Header_Fields = FormAll_Header_Fields.Distinct().ToList();
-            FormAll_Header_Fields.Sort();
-            var code = GetJsForListFields(FormAll_Header_Fields, false);
-            code = $"{code.TrimEnd($",{NEW_LINE}".ToCharArray())}{NEW_LINE}";
-            if (code == NEW_LINE) return string.Empty;
-            return code;
-        }
-
-        private static string GetJsCodeFooter(string formXml)
-        {
-            var xdoc = XDocument.Parse(formXml);
-            var footers = (from x in xdoc.Descendants("footer").Descendants("rows").Descendants("row")
-                    .Descendants("cell").Descendants("control")
-                           select x.Attribute("datafieldname")?.Value).ToList();
-            footers.Sort();
-            if (footers.Count == 0) return string.Empty;
-            var code = GetJsForListFields(footers, false);
-            code = $"{code.TrimEnd($",{NEW_LINE}".ToCharArray())}{NEW_LINE}";
-            if (code == NEW_LINE) return string.Empty;
-            return code;
-        }
-
-        private static string GetJsCodeTabs_AllFields()
-        {
-            var code = string.Empty;
-            var tabs = FormAll_TabSections.Select(x => x.Tab).Distinct().ToList();
-            tabs.Sort();
-            foreach (var tab in tabs)
-            {
-                var sections = FormAll_TabSections.Where(x => x.Tab == tab).ToList();
-                sections = sections.OrderBy(x => x.Section).ToList();
-                code += $"{TAB}{TAB}{TAB}{tab}: {{{NEW_LINE}";
-                code += $"{TAB}{TAB}{TAB}{TAB}Section: {{{NEW_LINE}";
-                foreach (var secion in sections)
-                    code += $"{TAB}{TAB}{TAB}{TAB}{TAB}{secion.Section}: {{}},{NEW_LINE}";
-                code = code.TrimEnd(",\r\n".ToCharArray()) + "\r\n";
-                code += $"{TAB}{TAB}{TAB}{TAB}}}{NEW_LINE}";
-                code += $"{TAB}{TAB}{TAB}}},{NEW_LINE}";
-            }
-            code = code.TrimEnd(",\r\n".ToCharArray()) + "\r\n";
-            return code;
-        }
-
         private static string GetJsCodeTabs(string formXml)
         {
             var code = string.Empty;
@@ -688,8 +512,8 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                 if (Helper.SafeIdentifier(tab.Name).Length == 0) continue;
                 if (existTabs.Contains(Helper.SafeIdentifier(tab.Name))) continue; else existTabs.Add(Helper.SafeIdentifier(tab.Name));
                 var tabName = Helper.SafeIdentifier(tab.Name);
-                code += $"\t\t\t{tabName}: {{\r\n";
-                code += $"\t\t\t\tSection: {{\r\n";
+                code += $"{TAB}{TAB}{TAB}{tabName}: {{{NEW_LINE}";
+                code += $"{TAB}{TAB}{TAB}{TAB}Section: {{{NEW_LINE}";
                 var xdoc2 = XDocument.Parse(tab.InnerText);
                 var sections = from x2 in xdoc2
                                .Descendants("columns")
@@ -710,7 +534,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                     if (Helper.SafeIdentifier(section.Name).Length == 0) continue;
                     if (existSections.Contains(Helper.SafeIdentifier(section.Name))) continue; else existSections.Add(Helper.SafeIdentifier(section.Name));
                     var sectionName = Helper.SafeIdentifier(section.Name);
-                    code += $"\t\t\t\t\t{sectionName}: {{}},\r\n";
+                    code += $"{TAB}{TAB}{TAB}{TAB}{TAB}{sectionName}: {{}},{NEW_LINE}";
                     if (!FormAll_TabSections.Any(x => x.Tab == tabName && x.Section == sectionName))
                     {
                         FormAll_TabSections.Add(new TabSection
@@ -720,11 +544,11 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                         });
                     }
                 }
-                code = code.TrimEnd(",\r\n".ToCharArray()) + "\r\n";
-                code += $"\t\t\t\t}}\r\n";
-                code += $"\t\t\t}},\r\n";
+                code = code.TrimEnd(",{NEW_LINE}".ToCharArray()) + "{NEW_LINE}";
+                code += $"{TAB}{TAB}{TAB}{TAB}}}{NEW_LINE}";
+                code += $"{TAB}{TAB}{TAB}}},{NEW_LINE}";
             }
-            code = code.TrimEnd(",\r\n".ToCharArray()) + "\r\n";
+            code = code.TrimEnd(",{NEW_LINE}".ToCharArray()) + "{NEW_LINE}";
             return code;
         }
 
@@ -742,13 +566,6 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             list.Sort();
             FormAll_Fields = FormAll_Fields.Concat(list).ToList();
             return GetJsForListFields(list, false);
-        }
-
-        private static string GetJsCodeBody_AllFields()
-        {
-            FormAll_Fields = FormAll_Fields.Distinct().ToList();
-            FormAll_Fields.Sort();
-            return GetJsForListFields(FormAll_Fields, false);
         }
 
         private static string GetJsQuickViewCodeBody(string formXml)

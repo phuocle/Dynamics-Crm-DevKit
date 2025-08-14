@@ -9,6 +9,7 @@ using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Threading.Tasks;
 namespace DynamicsCrm.DevKit.Cli.Tasks
 {
     public class TaskSolutionPackager : ITask
@@ -33,7 +34,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         private bool IsSdkLogin { get; set; }
         private string Connection { get; set; }
         private string SolutionXmlFile => $"{CurrentDirectory}\\{Json.folder}\\{Json.solutiontype}\\Other\\Solution.xml";
-        public bool IsValid()
+        public async Task<bool> IsValidAsync()
         {
             if (Json == null)
             {
@@ -97,7 +98,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             if (Json.type.ToLower() == "Extract".ToLower())
             {
-                if (!XrmHelper.IsExistSolution(ServiceClient, Json.solution).IsOk)
+                var (IsOk, SolutionId, Prefix) = await XrmHelper.IsExistSolutionAsync(ServiceClient, Json.solution);
+                if (!IsOk)
                 {
                     CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} solution '{Json.solution}' not exist");
                     return false;
@@ -106,89 +108,17 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             return true;
         }
 
-        public void Run()
-        {
-            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "START ");
-            CliLog.WriteLine(ConsoleColor.White, "|");
-
-            if (IsValid())
-            {
-                var solutionZipFile = GetSolutionZipFile();
-                if (Json.type.ToLower().Trim() == "Pack".ToLower())
-                {
-                    if (Json.solutiontype.ToLower().Trim() == "Both".ToLower())
-                    {
-                        CliLog.Write(ConsoleColor.White, "| ", ConsoleColor.Green, $"{Json.type}ing", ConsoleColor.White, " solution: ", ConsoleColor.Green, Json.solution, ConsoleColor.White, " to: ");
-                        CliLog.WriteSuccess(ConsoleColor.White, ".." + solutionZipFile.Substring(CurrentDirectory.Length));
-                        CliLog.Write(ConsoleColor.White, " and ");
-                        var solutionZipFileManaged = $"{Path.GetDirectoryName(solutionZipFile)}\\{ Path.GetFileNameWithoutExtension(solutionZipFile)}_managed.zip";
-                        CliLog.WriteSuccess(ConsoleColor.White, ".." + solutionZipFileManaged.Substring(CurrentDirectory.Length));
-                        CliLog.WriteLine(ConsoleColor.Black, "█");
-                    }
-                    else
-                    {
-                        CliLog.Write(ConsoleColor.White, "| ", ConsoleColor.Green, $"{Json.type}ing", ConsoleColor.White, " solution: ", ConsoleColor.Green, Json.solution, ConsoleColor.White, " to: ");
-                        CliLog.WriteSuccess(ConsoleColor.White, solutionZipFile);
-                        CliLog.WriteLine(ConsoleColor.Black, "█");
-                    }
-                }
-                else
-                {
-                    CliLog.WriteLine(ConsoleColor.White, "|");
-                    CliLog.Write(ConsoleColor.White, "| ", ConsoleColor.Green, $"{Json.type}ing", ConsoleColor.White, " solution: ", ConsoleColor.Green, Json.solution, ConsoleColor.White, " to: ");
-                    CliLog.WriteSuccess(ConsoleColor.White, $"..\\{Json.folder}\\{Json.solutiontype}");
-                    CliLog.WriteLine(ConsoleColor.Black, "█");
-                }
-
-                RunSolutionPackager(solutionZipFile);
-            }
-
-            CliLog.WriteLine(ConsoleColor.White, "|");
-            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "END ");
-        }
-
-        private void RunSolutionPackager(string solutionZipFile)
-        {
-            var command = CreateCommandArgs(solutionZipFile);
-            var path = "\"" + SolutionPackagerExe + "\"";
-            CliLog.WriteLine();
-            CliLog.WriteLine();
-            CliLog.WriteLine(ConsoleColor.White, path + " " + command);
-            CliLog.WriteLine();
-            CliLog.WriteLine();
-
-            var process = new Process
-            {
-                StartInfo = new ProcessStartInfo(path)
-                {
-                    Arguments = command,
-                    UseShellExecute = false,
-                    RedirectStandardOutput = true,
-                    RedirectStandardError = true,
-                    CreateNoWindow = true
-                }
-            };
-            process.Start();
-            while (!process.StandardOutput.EndOfStream)
-            {
-                var line = process.StandardOutput.ReadLine();
-                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.White, line);
-            }
-            process.WaitForExit();
-
-        }
-
-        private string GetSolutionZipFile()
+        private async Task<string> GetSolutionZipFileAsync()
         {
             if (Json.type.ToLower().Trim() == "Extract".ToLower())
             {
                 if (Json.solutiontype.ToLower().Trim() == "Both".ToLower())
                 {
-                    ExportSolution("Managed");
-                    return ExportSolution("Unmanaged");
+                    await ExportSolutionAsync("Managed");
+                    return await ExportSolutionAsync("Unmanaged");
                 }
                 else {
-                    return ExportSolution(Json.solutiontype);
+                    return await ExportSolutionAsync(Json.solutiontype);
                 }
             }
             else
@@ -200,7 +130,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
         }
 
-        private string ExportSolution(string solutionType)
+        private async Task<string> ExportSolutionAsync(string solutionType)
         {
             var timer = Stopwatch.StartNew();
             var request = new ExportSolutionRequest
@@ -211,8 +141,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var wait = new Thread(() => CliLog.Waiting($"Export {solutionType} solution: {Json.solution} "));
             wait.Start();
 
-            var crmVersion = GetCrmVersionFromInstance();
-            var response = (ExportSolutionResponse)ServiceClient.Execute(request);
+            var crmVersion = await GetCrmVersionFromInstanceAsync();
+            var response = (ExportSolutionResponse)await ServiceClient.ExecuteAsync(request);
 
             wait.Abort();
             var fileName = FormatSolutionVersionString(Json.solution, System.Version.Parse(crmVersion), Json.solutiontype);
@@ -231,7 +161,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             return solutionFile;
         }
 
-        private string GetCrmVersionFromInstance()
+        private async Task<string> GetCrmVersionFromInstanceAsync()
         {
             var fetchData = new
             {
@@ -246,7 +176,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
     </filter>
   </entity>
 </fetch>";
-            var rows = ServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            var rows = await ServiceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
             if (rows.Entities.Count != 1) return "1.0.0.0";
             var solution = rows.Entities[0];
             return solution.GetAttributeValue<string>("version");
@@ -311,6 +241,78 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 result.Append("_managed");
             result.Append(".zip");
             return result.ToString();
+        }
+
+        public async Task RunAsync()
+        {
+            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "START ");
+            CliLog.WriteLine(ConsoleColor.White, "|");
+
+            if (await IsValidAsync())
+            {
+                var solutionZipFile = await GetSolutionZipFileAsync();
+                if (Json.type.ToLower().Trim() == "Pack".ToLower())
+                {
+                    if (Json.solutiontype.ToLower().Trim() == "Both".ToLower())
+                    {
+                        CliLog.Write(ConsoleColor.White, "| ", ConsoleColor.Green, $"{Json.type}ing", ConsoleColor.White, " solution: ", ConsoleColor.Green, Json.solution, ConsoleColor.White, " to: ");
+                        CliLog.WriteSuccess(ConsoleColor.White, ".." + solutionZipFile.Substring(CurrentDirectory.Length));
+                        CliLog.Write(ConsoleColor.White, " and ");
+                        var solutionZipFileManaged = $"{Path.GetDirectoryName(solutionZipFile)}\\{Path.GetFileNameWithoutExtension(solutionZipFile)}_managed.zip";
+                        CliLog.WriteSuccess(ConsoleColor.White, ".." + solutionZipFileManaged.Substring(CurrentDirectory.Length));
+                        CliLog.WriteLine(ConsoleColor.Black, "█");
+                    }
+                    else
+                    {
+                        CliLog.Write(ConsoleColor.White, "| ", ConsoleColor.Green, $"{Json.type}ing", ConsoleColor.White, " solution: ", ConsoleColor.Green, Json.solution, ConsoleColor.White, " to: ");
+                        CliLog.WriteSuccess(ConsoleColor.White, solutionZipFile);
+                        CliLog.WriteLine(ConsoleColor.Black, "█");
+                    }
+                }
+                else
+                {
+                    CliLog.WriteLine(ConsoleColor.White, "|");
+                    CliLog.Write(ConsoleColor.White, "| ", ConsoleColor.Green, $"{Json.type}ing", ConsoleColor.White, " solution: ", ConsoleColor.Green, Json.solution, ConsoleColor.White, " to: ");
+                    CliLog.WriteSuccess(ConsoleColor.White, $"..\\{Json.folder}\\{Json.solutiontype}");
+                    CliLog.WriteLine(ConsoleColor.Black, "█");
+                }
+
+                RunSolutionPackager(solutionZipFile);
+            }
+
+            CliLog.WriteLine(ConsoleColor.White, "|");
+            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "END ");
+        }
+
+        private void RunSolutionPackager(string solutionZipFile)
+        {
+            var command = CreateCommandArgs(solutionZipFile);
+            var path = "\"" + SolutionPackagerExe + "\"";
+            CliLog.WriteLine();
+            CliLog.WriteLine();
+            CliLog.WriteLine(ConsoleColor.White, path + " " + command);
+            CliLog.WriteLine();
+            CliLog.WriteLine();
+
+            var process = new Process
+            {
+                StartInfo = new ProcessStartInfo(path)
+                {
+                    Arguments = command,
+                    UseShellExecute = false,
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                    CreateNoWindow = true
+                }
+            };
+            process.Start();
+            while (!process.StandardOutput.EndOfStream)
+            {
+                var line = process.StandardOutput.ReadLine();
+                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.White, line);
+            }
+            process.WaitForExit();
+
         }
     }
 }

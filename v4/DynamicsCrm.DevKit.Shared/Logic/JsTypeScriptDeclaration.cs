@@ -6,32 +6,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
+using System.Threading.Tasks;
 
 namespace DynamicsCrm.DevKit.Shared.Logic
 {
     public class JsTypeScriptDeclaration
     {
-        private static List<string> FormAll_HeaderFields = new List<string>();
-
-        private static List<string> FormAll_BodyFields = new List<string>();
-
-        private static List<string> FormAll_ProcessFields = new List<string>();
-
         private const string NEW_LINE = "\r\n";
-
-        private const string TAB = "\t";
-
+        private const string TAB = "{TAB}";
+        private static List<string> FormAll_HeaderFields = new List<string>();
+        private static List<string> FormAll_BodyFields = new List<string>();
+        private static List<string> FormAll_ProcessFields = new List<string>();
         private static ServiceClient ServiceClient { get; set; }
-
         private static EntityMetadata EntityMetadata { get; set; }
-
         private static string RootNamespace { get; set; }
-
         private static CommentTypeScriptDeclaration Comment { get; set; }
-
         private static List<string> FormNames = new List<string>();
 
-        public static string GetCode(ServiceClient service, EntityMetadata entityMetadata, string rootNamespace, CommentTypeScriptDeclaration comment)
+        public static async Task<string> GetCodeAsync(ServiceClient service, EntityMetadata entityMetadata, string rootNamespace, CommentTypeScriptDeclaration comment)
         {
             ServiceClient = service;
             EntityMetadata = entityMetadata;
@@ -44,7 +36,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             _d_ts += $"///<reference path=\"devkit.d.ts\" />{NEW_LINE}";
             _d_ts += $"declare namespace {@namespace} {{{NEW_LINE}";
             if (comment.UseForm)
-                _d_ts += GetForm_d_ts(@namespace);
+                _d_ts += await GetForm_d_tsAsync(@namespace);
             if (comment.UseWebApi)
                 _d_ts += GetWebApi_d_ts(@namespace);
             _d_ts += $"}}{NEW_LINE}";
@@ -60,7 +52,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             _d_ts += $"{TAB}namespace {EntityMetadata.SchemaName} {{{NEW_LINE}";
             foreach (var attribute in EntityMetadata.Attributes.OrderBy(x => x.SchemaName))
             {
-                if (XrmHelper.IsOptionSet(attribute))
+                if (Helper.IsOptionSet(attribute))
                 {
                     if (attribute.SchemaName == "OwnerIdType") continue;
                     var attributeSchemaName = Helper.SafeDeclareName(attribute.SchemaName, GeneratorType.jsform, EntityMetadata.SchemaName);
@@ -166,9 +158,9 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                         break;
                     case AttributeTypeCode.Owner:
                         _d_ts += $"{TAB}{TAB}/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */{NEW_LINE}";
-                        _d_ts += $"{TAB}{TAB}{@readonly}OwnerId_systemuser: string | null;\r\n";
+                        _d_ts += $"{TAB}{TAB}{@readonly}OwnerId_systemuser: string | null;{NEW_LINE}";
                         _d_ts += $"{TAB}{TAB}/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */{NEW_LINE}";
-                        _d_ts += $"{TAB}{TAB}{@readonly}OwnerId_team: string | null;\r\n";
+                        _d_ts += $"{TAB}{TAB}{@readonly}OwnerId_team: string | null;{NEW_LINE}";
                         break;
                     case AttributeTypeCode.Lookup:
                     case AttributeTypeCode.Customer:
@@ -333,9 +325,9 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                         break;
                     case AttributeTypeCode.Owner:
                         _d_ts += $"{TAB}{TAB}{TAB}/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */{NEW_LINE}";
-                        _d_ts += $"{TAB}{TAB}{TAB}{@readonly}OwnerId_systemuser: string;\r\n";
+                        _d_ts += $"{TAB}{TAB}{TAB}{@readonly}OwnerId_systemuser: string;{NEW_LINE}";
                         _d_ts += $"{TAB}{TAB}{TAB}/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */{NEW_LINE}";
-                        _d_ts += $"{TAB}{TAB}{TAB}{@readonly}OwnerId_team: string;\r\n";
+                        _d_ts += $"{TAB}{TAB}{TAB}{@readonly}OwnerId_team: string;{NEW_LINE}";
                         break;
                     case AttributeTypeCode.Lookup:
                     case AttributeTypeCode.Customer:
@@ -487,14 +479,13 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             return _d_ts;
         }
 
-        private static string GetForm_d_ts(string @namespace)
+        private static async Task<string> GetForm_d_tsAsync(string @namespace)
         {
-            var forms = XrmHelper.GetEntityForms(ServiceClient, EntityMetadata.LogicalName);
+            var forms = await XrmHelper.GetEntityFormsAsync(ServiceClient, EntityMetadata.LogicalName);
             if (!forms.Any()) return string.Empty;
             var _d_ts = string.Empty;
             foreach (var form in forms.Where(x => x.FormType == FormType.Main).ToList())
-                _d_ts += GetFormMain_d_ts(form, @namespace);
-
+                _d_ts += await GetFormMain_d_tsAsync(form, @namespace);
             foreach (var form in forms.Where(x => x.FormType == FormType.QuickCreate).ToList())
                 _d_ts += GetFormQuickCreate_d_ts(form, @namespace);
             return _d_ts;
@@ -505,32 +496,32 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             var _d_ts = string.Empty;
             var formName = Helper.SafeIdentifier(Helper.GetFormName(form.Name, EntityMetadata.SchemaName));
             formName = GetUnquieFormName(formName);
-            _d_ts += $"\tnamespace Form{formName} {{\r\n";
+            _d_ts += $"{TAB}namespace Form{formName} {{{NEW_LINE}";
             var form_d_ts_Body_QuickCreate = GetForm_d_ts_Body(form.FormXml);
             if (form_d_ts_Body_QuickCreate.Length > 0)
             {
                 _d_ts += form_d_ts_Body_QuickCreate;
             }
-            _d_ts += $"\t}}\r\n";
-            _d_ts += $"\tclass Form{formName} extends DevKit.IForm {{\r\n";
-            _d_ts += $"\t\t/**\r\n";
-            _d_ts += $"\t\t* {form.Name} [Quick Create]\r\n";
-            _d_ts += $"\t\t* @param executionContext the execution context\r\n";
-            _d_ts += $"\t\t* @param defaultWebResourceName default resource name. E.g.: \"devkit_/resources/Resource\"\r\n";
-            _d_ts += $"\t\t*/\r\n";
-            _d_ts += $"\t\tconstructor(executionContext: any, defaultWebResourceName?: string);\r\n";
-            _d_ts += $"\t\t/** Utility functions/methods/objects for Dynamics 365 form */\r\n";
-            _d_ts += $"\t\tUtility: DevKit.Utility;\r\n";
+            _d_ts += $"{TAB}}}{NEW_LINE}";
+            _d_ts += $"{TAB}class Form{formName} extends DevKit.IForm {{{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}/**{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}* {form.Name} [Quick Create]{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}* @param executionContext the execution context{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}* @param defaultWebResourceName default resource name. E.g.: \"devkit_/resources/Resource\"{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}*/{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}constructor(executionContext: any, defaultWebResourceName?: string);{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}/** Utility functions/methods/objects for Dynamics 365 form */{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}Utility: DevKit.Utility;{NEW_LINE}";
             if (form_d_ts_Body_QuickCreate.Length > 0)
             {
-                _d_ts += $"\t\t/** The Body section of form {formName} */\r\n";
-                _d_ts += $"\t\tBody: {@namespace}.Form{formName}.Body;\r\n";
+                _d_ts += $"{TAB}{TAB}/** The Body section of form {formName} */{NEW_LINE}";
+                _d_ts += $"{TAB}{TAB}Body: {@namespace}.Form{formName}.Body;{NEW_LINE}";
             }
-            _d_ts += $"\t}}\r\n";
+            _d_ts += $"{TAB}}}{NEW_LINE}";
             return _d_ts;
         }
 
-        private static string GetFormMain_d_ts(SystemForm form, string @namespace)
+        private static async Task<string> GetFormMain_d_tsAsync(SystemForm form, string @namespace)
         {
             var _d_ts = string.Empty;
             var formName = Helper.SafeIdentifier(Helper.GetFormName(form.Name, EntityMetadata.SchemaName));
@@ -539,9 +530,9 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             var form_d_ts_Header = GetForm_d_ts_Header(form.FormXml);
             if (form_d_ts_Header.Length > 0)
             {
-                _d_ts += $"\t\tinterface Header extends DevKit.Controls.IHeader {{\r\n";
+                _d_ts += $"{TAB}{TAB}interface Header extends DevKit.Controls.IHeader {{{NEW_LINE}";
                 _d_ts += form_d_ts_Header;
-                _d_ts += $"\t\t}}\r\n";
+                _d_ts += $"{TAB}{TAB}}}{NEW_LINE}";
             }
             var form_d_ts_Body = GetForm_d_ts_Body(form.FormXml);
             if (form_d_ts_Body.Length > 0)
@@ -552,16 +543,16 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             var form_d_ts_Navigation = GetForm_d_ts_Navigation(form.FormXml);
             if (form_d_ts_Navigation.Length > 0)
             {
-                _d_ts += $"\t\tinterface Navigation {{\r\n";
+                _d_ts += $"{TAB}{TAB}interface Navigation {{{NEW_LINE}";
                 _d_ts += form_d_ts_Navigation;
-                _d_ts += $"\t\t}}\r\n";
+                _d_ts += $"{TAB}{TAB}}}{NEW_LINE}";
             }
-            var form_d_ts_QuickForm = GetForm_d_ts_QuickForm(form.FormXml);
+            var form_d_ts_QuickForm = await GetForm_d_ts_QuickFormAsync(form.FormXml);
             if (form_d_ts_QuickForm.Length > 0)
             {
                 _d_ts += form_d_ts_QuickForm;
             }
-            var form_d_ts_Process = GetForm_d_ts_Process(form.FormXml);
+            var form_d_ts_Process = await GetForm_d_ts_ProcessAsync(form.FormXml);
             if (form_d_ts_Process.Length > 0)
             {
                 _d_ts += form_d_ts_Process;
@@ -572,49 +563,49 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                 _d_ts += form_d_ts_Grid;
             }
             _d_ts += $"{TAB}}}{NEW_LINE}";
-            _d_ts += $"\tclass Form{formName} extends DevKit.IForm {{\r\n";
-            _d_ts += $"\t\t/**\r\n";
-            _d_ts += $"\t\t* {form.Name} [Main Form]\r\n";
-            _d_ts += $"\t\t* @param executionContext the execution context\r\n";
-            _d_ts += $"\t\t* @param defaultWebResourceName default resource name. E.g.: \"devkit_/resources/Resource\"\r\n";
-            _d_ts += $"\t\t*/\r\n";
-            _d_ts += $"\t\tconstructor(executionContext: any, defaultWebResourceName?: string);\r\n";
-            _d_ts += $"\t\t/** Utility functions/methods/objects for Dynamics 365 form */\r\n";
-            _d_ts += $"\t\tUtility: DevKit.Utility;\r\n";
+            _d_ts += $"{TAB}class Form{formName} extends DevKit.IForm {{{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}/**{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}* {form.Name} [Main Form]{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}* @param executionContext the execution context{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}* @param defaultWebResourceName default resource name. E.g.: \"devkit_/resources/Resource\"{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}*/{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}constructor(executionContext: any, defaultWebResourceName?: string);{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}/** Utility functions/methods/objects for Dynamics 365 form */{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}Utility: DevKit.Utility;{NEW_LINE}";
             if (form_d_ts_Body.Length > 0)
             {
-                _d_ts += $"\t\t/** The Body section of form {formName} */\r\n";
-                _d_ts += $"\t\tBody: {@namespace}.Form{formName}.Body;\r\n";
+                _d_ts += $"{TAB}{TAB}/** The Body section of form {formName} */{NEW_LINE}";
+                _d_ts += $"{TAB}{TAB}Body: {@namespace}.Form{formName}.Body;{NEW_LINE}";
             }
 
             if (form_d_ts_Header.Length > 0)
             {
-                _d_ts += $"\t\t/** The Header section of form {formName} */\r\n";
-                _d_ts += $"\t\tHeader: {@namespace}.Form{formName}.Header;\r\n";
+                _d_ts += $"{TAB}{TAB}/** The Header section of form {formName} */{NEW_LINE}";
+                _d_ts += $"{TAB}{TAB}Header: {@namespace}.Form{formName}.Header;{NEW_LINE}";
             }
             if (form_d_ts_Navigation.Length > 0)
             {
-                _d_ts += $"\t\t/** The Navigation of form {formName} */\r\n";
-                _d_ts += $"\t\tNavigation: {@namespace}.Form{formName}.Navigation;\r\n";
+                _d_ts += $"{TAB}{TAB}/** The Navigation of form {formName} */{NEW_LINE}";
+                _d_ts += $"{TAB}{TAB}Navigation: {@namespace}.Form{formName}.Navigation;{NEW_LINE}";
             }
             if (form_d_ts_QuickForm.Length > 0)
             {
-                _d_ts += $"\t\t/** The QuickForm of form {formName} */\r\n";
-                _d_ts += $"\t\tQuickForm: {@namespace}.Form{formName}.QuickForm;\r\n";
+                _d_ts += $"{TAB}{TAB}/** The QuickForm of form {formName} */{NEW_LINE}";
+                _d_ts += $"{TAB}{TAB}QuickForm: {@namespace}.Form{formName}.QuickForm;{NEW_LINE}";
             }
             if (form_d_ts_Process.Length > 0)
             {
-                _d_ts += $"\t\t/** The Process of form {formName} */\r\n";
-                _d_ts += $"\t\tProcess: {@namespace}.Form{formName}.Process;\r\n";
+                _d_ts += $"{TAB}{TAB}/** The Process of form {formName} */{NEW_LINE}";
+                _d_ts += $"{TAB}{TAB}Process: {@namespace}.Form{formName}.Process;{NEW_LINE}";
             }
             if (form_d_ts_Grid.Length > 0)
             {
-                _d_ts += $"\t\t/** The Grid of form {formName} */\r\n";
-                _d_ts += $"\t\tGrid: {@namespace}.Form{formName}.Grid;\r\n";
+                _d_ts += $"{TAB}{TAB}/** The Grid of form {formName} */{NEW_LINE}";
+                _d_ts += $"{TAB}{TAB}Grid: {@namespace}.Form{formName}.Grid;{NEW_LINE}";
             }
-            _d_ts += $"\t\t/** The SidePanes of form {formName} */\r\n";
-            _d_ts += $"\t\tSidePanes: DevKit.SidePanes;\r\n";
-            _d_ts += $"\t}}\r\n";
+            _d_ts += $"{TAB}{TAB}/** The SidePanes of form {formName} */{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}SidePanes: DevKit.SidePanes;{NEW_LINE}";
+            _d_ts += $"{TAB}}}{NEW_LINE}";
             return _d_ts;
         }
 
@@ -626,9 +617,9 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             var form_d_ts_Header = GetForm_d_ts_Header_AllFields();
             if (form_d_ts_Header.Length > 0)
             {
-                _d_ts += $"\t\tinterface Header extends DevKit.Controls.IHeader {{\r\n";
+                _d_ts += $"{TAB}{TAB}interface Header extends DevKit.Controls.IHeader {{{NEW_LINE}";
                 _d_ts += form_d_ts_Header;
-                _d_ts += $"\t\t}}\r\n";
+                _d_ts += $"{TAB}{TAB}}}{NEW_LINE}";
             }
             var form_d_ts_Body = GetForm_d_ts_Body_AllFields();
             if (form_d_ts_Body.Length > 0)
@@ -636,9 +627,9 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                 _d_ts += form_d_ts_Body;
             }
 
-            _d_ts += $"\t\t/** The SidePanes of form {formName} */\r\n";
-            _d_ts += $"\t\tSidePanes: DevKit.SidePanes;\r\n";
-            _d_ts += $"\t}}\r\n";
+            _d_ts += $"{TAB}{TAB}/** The SidePanes of form {formName} */{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}SidePanes: DevKit.SidePanes;{NEW_LINE}";
+            _d_ts += $"{TAB}}}{NEW_LINE}";
             return _d_ts;
         }
 
@@ -685,30 +676,30 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             {
                 var classId = GetARealClassId(formXml, field.ClassId, field.ControlId);
                 if (classId != ControlClassId.SUB_GRID && classId != ControlClassId.SUB_GRID_PANEL) continue;
-                if (temp.Contains($"\t\t\t{field.Id}: DevKit.Controls.Grid;\r\n")) continue;
-                temp += $"\t\t\t{field.Id}: DevKit.Controls.Grid;\r\n";
+                if (temp.Contains($"{TAB}{TAB}{TAB}{field.Id}: DevKit.Controls.Grid;{NEW_LINE}")) continue;
+                temp += $"{TAB}{TAB}{TAB}{field.Id}: DevKit.Controls.Grid;{NEW_LINE}";
             }
             if (temp.Length > 0)
             {
-                _d_ts += $"\t\tinterface Grid {{\r\n";
+                _d_ts += $"{TAB}{TAB}interface Grid {{{NEW_LINE}";
                 _d_ts += temp;
-                _d_ts += $"\t\t}}\r\n";
+                _d_ts += $"{TAB}{TAB}}}{NEW_LINE}";
                 return _d_ts;
             }
             return string.Empty;
         }
 
-        private static string GetForm_d_ts_Process(string formXml)
+        private static async Task<string> GetForm_d_ts_ProcessAsync(string formXml)
         {
             var code = string.Empty;
-            XrmHelper.EntitiesProcessForm.AddIfNotExist(ServiceClient, EntityMetadata.LogicalName);
+            await XrmHelper.EntitiesProcessForm.AddIfNotExistAsync(ServiceClient, EntityMetadata.LogicalName);
             var processes = XrmHelper.EntitiesProcessForm.Where(x => x.EntityLogicalName == EntityMetadata.LogicalName).OrderBy(x => x.Name);
             var _d_ts = string.Empty;
             var part1 = string.Empty;
             foreach (var process in processes)
             {
                 var name = Helper.SafeIdentifier(process.Name);
-                _d_ts += $"\t\tinterface Process{name} {{\r\n";
+                _d_ts += $"{TAB}{TAB}interface Process{name} {{{NEW_LINE}";
                 var xdoc = XDocument.Parse(process.xaml);
                 var ns = xdoc.Root?.GetNamespaceOfPrefix("mxswa");
                 var rows2 = from x in xdoc.Descendants(ns + "Workflow").Elements(ns + "ActivityReference")
@@ -739,19 +730,19 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                 }
                 fields = fields.OrderBy(f => f.Name).ToList();
                 _d_ts += Get_d_ts_ForListFields(formXml, fields, true, ref FormAll_ProcessFields);
-                _d_ts += $"\t\t}}\r\n";
-                part1 += $"\t\t\t{name}: Process{name};\r\n";
+                _d_ts += $"{TAB}{TAB}}}{NEW_LINE}";
+                part1 += $"{TAB}{TAB}{TAB}{name}: Process{name};{NEW_LINE}";
             }
             if (part1.Length > 0)
             {
-                _d_ts += $"\t\tinterface Process extends DevKit.Controls.IProcess {{\r\n";
+                _d_ts += $"{TAB}{TAB}interface Process extends DevKit.Controls.IProcess {{{NEW_LINE}";
                 _d_ts += part1;
-                _d_ts += $"\t\t}}\r\n";
+                _d_ts += $"{TAB}{TAB}}}{NEW_LINE}";
             }
             return _d_ts;
         }
 
-        private static string GetForm_d_ts_QuickForm(string formXml)
+        private static async Task<string> GetForm_d_ts_QuickFormAsync(string formXml)
         {
             var _d_ts = string.Empty;
             var xdoc = XDocument.Parse(formXml);
@@ -781,28 +772,28 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             {
                 var classId = GetARealClassId(formXml, field.ClassId, field.ControlId);
                 if (classId != ControlClassId.QUICK_VIEW_FORM) continue;
-                temp2 += GetBodyOfQuickView(formXml, field.Id);
-                temp1 += $"\t\tinterface quickForm_{field.Id} extends DevKit.Controls.IQuickView {{\r\n";
-                temp1 += $"\t\t\tBody: quickForm_{field.Id}_Body;\r\n";
-                temp1 += $"\t\t}}\r\n";
-                temp += $"\t\t\t{field.Id}: quickForm_{field.Id};\r\n";
+                temp2 += await GetBodyOfQuickViewAsync(formXml, field.Id);
+                temp1 += $"{TAB}{TAB}interface quickForm_{field.Id} extends DevKit.Controls.IQuickView {{{NEW_LINE}";
+                temp1 += $"{TAB}{TAB}{TAB}Body: quickForm_{field.Id}_Body;{NEW_LINE}";
+                temp1 += $"{TAB}{TAB}}}{NEW_LINE}";
+                temp += $"{TAB}{TAB}{TAB}{field.Id}: quickForm_{field.Id};{NEW_LINE}";
             }
             if (temp.Length > 0)
             {
                 _d_ts += temp2;
                 _d_ts += temp1;
-                _d_ts += $"\t\tinterface QuickForm {{\r\n";
+                _d_ts += $"{TAB}{TAB}interface QuickForm {{{NEW_LINE}";
                 _d_ts += temp;
-                _d_ts += $"\t\t}}\r\n";
+                _d_ts += $"{TAB}{TAB}}}{NEW_LINE}";
                 return _d_ts;
             }
             return _d_ts;
         }
 
-        private static string GetBodyOfQuickView(string formXml, string id)
+        private static async Task<string> GetBodyOfQuickViewAsync(string formXml, string id)
         {
             var _d_ts = string.Empty;
-            _d_ts += $"\t\tinterface quickForm_{id}_Body {{\r\n";
+            _d_ts += $"{TAB}{TAB}interface quickForm_{id}_Body {{{NEW_LINE}";
             var xdoc = XDocument.Parse(formXml);
             var node = from x in xdoc
                           .Descendants("tabs")
@@ -827,9 +818,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             var xdoc2 = XDocument.Parse(node2);
             var quickViewXml = (from x in xdoc2.Descendants("QuickFormId") select new { formId = x.Value, entityLogicalName = x?.Attribute("entityname")?.Value }).FirstOrDefault();
             if (quickViewXml == null) return string.Empty;
-            var quickViewFormXml = string.Empty;
-
-            GetFormXml(quickViewXml.formId, quickViewXml.entityLogicalName, out quickViewFormXml);
+            var quickViewFormXml = await GetFormXmlAsync(quickViewXml.formId, quickViewXml.entityLogicalName);
             if (quickViewFormXml == string.Empty) return string.Empty;
             var xdoc3 = XDocument.Parse(quickViewFormXml);
             var fields = (from x in xdoc3
@@ -851,7 +840,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                               ControlId = x?.Attribute("uniqueid")?.Value
                           }).Distinct().ToList();
             fields = fields.OrderBy(x => x.Name).ToList();
-            XrmHelper.EntitiesMetadata.AddIfNotExist(ServiceClient, quickViewXml.entityLogicalName);
+            await XrmHelper.EntitiesMetadata.AddIfNotExistAsync(ServiceClient, quickViewXml.entityLogicalName);
             var quickViewMetadata = XrmHelper.EntitiesMetadata.Where(x => x.LogicalName == quickViewXml.entityLogicalName).FirstOrDefault();
             if (quickViewMetadata == null) return String.Empty;
             foreach (var field in fields)
@@ -859,22 +848,22 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                 var fieldAttribute = quickViewMetadata.Attributes.Where(x => x.LogicalName == field.Id).FirstOrDefault();
                 if (fieldAttribute != null)
                 {
-                    _d_ts += $"\t\t\t{fieldAttribute.SchemaName}: DevKit.Controls.QuickView;\r\n";
+                    _d_ts += $"{TAB}{TAB}{TAB}{fieldAttribute.SchemaName}: DevKit.Controls.QuickView;{NEW_LINE}";
                 }
             }
-            _d_ts += $"\t\t}}\r\n";
+            _d_ts += $"{TAB}{TAB}}}{NEW_LINE}";
             return _d_ts;
         }
 
-        private static void GetFormXml(string formId, string entityLogicalName, out string formXml)
+        private static async Task<string> GetFormXmlAsync(string formId, string entityLogicalName)
         {
-            formXml = string.Empty;
-            XrmHelper.EntitiesFormXml.AddIfNotExist(ServiceClient, entityLogicalName);
+            await XrmHelper.EntitiesFormXml.AddIfNotExistAsync(ServiceClient, entityLogicalName);
             var form = XrmHelper.EntitiesFormXml.FirstOrDefault(x => x.FormType == FormType.QuickView && x.FormId == Guid.Parse(formId));
             if (form != null)
             {
-                formXml = form.FormXml;
+                return form.FormXml;
             }
+            return string.Empty;
         }
 
         private static string GetForm_d_ts_Navigation(string formXml)
@@ -897,11 +886,11 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                     (relationship.IsValidForAdvancedFind ?? false)
                     )
                 {
-                    _d_ts += $"\t\t\t{Helper.SafeIdentifier(relationship.SchemaName)}: DevKit.Controls.NavigationItem;\r\n";
+                    _d_ts += $"{TAB}{TAB}{TAB}{Helper.SafeIdentifier(relationship.SchemaName)}: DevKit.Controls.NavigationItem;{NEW_LINE}";
                 }
             }
 
-            _d_ts = _d_ts.TrimEnd(",\r\n".ToCharArray()) + "\r\n";
+            _d_ts = _d_ts.TrimEnd(",{NEW_LINE}".ToCharArray()) + "{NEW_LINE}";
             return _d_ts;
         }
 
@@ -909,7 +898,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
         {
             var part1 = string.Empty;
             var part2 = string.Empty;
-            var part3 = $"\t\tinterface Tabs {{\r\n";
+            var part3 = $"{TAB}{TAB}interface Tabs {{{NEW_LINE}";
             var xdoc = XDocument.Parse(formXml);
             var rows = from x in xdoc.Descendants("tabs").Elements("tab")
                        select new
@@ -924,7 +913,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                 if (Helper.SafeIdentifier(row.Name).Length == 0) continue;
                 var tabName = row.Name;
                 if (existTabs.Contains(Helper.SafeIdentifier(tabName))) continue; else existTabs.Add(Helper.SafeIdentifier(tabName));
-                part1 += $"\t\tinterface tab_{Helper.SafeIdentifier(tabName)}_Sections {{\r\n";
+                part1 += $"{TAB}{TAB}interface tab_{Helper.SafeIdentifier(tabName)}_Sections {{{NEW_LINE}";
                 var xdoc2 = XDocument.Parse(row.InnerText);
                 var rows2 = from x2 in xdoc2.Descendants("columns").Descendants("column").Descendants("sections")
                         .Elements("section")
@@ -941,22 +930,22 @@ namespace DynamicsCrm.DevKit.Shared.Logic
 
                     var sectionName = row2.name;
                     if (existSections.Contains(Helper.SafeIdentifier(sectionName))) continue; else existSections.Add(Helper.SafeIdentifier(sectionName));
-                    part1 += $"\t\t\t{Helper.SafeIdentifier(sectionName)}: DevKit.Controls.Section;\r\n";
+                    part1 += $"{TAB}{TAB}{TAB}{Helper.SafeIdentifier(sectionName)}: DevKit.Controls.Section;{NEW_LINE}";
                 }
-                part1 += $"\t\t}}\r\n";
+                part1 += $"{TAB}{TAB}}}{NEW_LINE}";
 
-                part2 += $"\t\tinterface tab_{Helper.SafeIdentifier(tabName)} extends DevKit.Controls.ITab {{\r\n";
-                part2 += $"\t\t\tSection: tab_{Helper.SafeIdentifier(tabName)}_Sections;\r\n";
-                part2 += $"\t\t}}\r\n";
+                part2 += $"{TAB}{TAB}interface tab_{Helper.SafeIdentifier(tabName)} extends DevKit.Controls.ITab {{{NEW_LINE}";
+                part2 += $"{TAB}{TAB}{TAB}Section: tab_{Helper.SafeIdentifier(tabName)}_Sections;{NEW_LINE}";
+                part2 += $"{TAB}{TAB}}}{NEW_LINE}";
 
-                part3 += $"\t\t\t{Helper.SafeIdentifier(tabName)}: tab_{Helper.SafeIdentifier(tabName)};\r\n";
+                part3 += $"{TAB}{TAB}{TAB}{Helper.SafeIdentifier(tabName)}: tab_{Helper.SafeIdentifier(tabName)};{NEW_LINE}";
             }
-            part3 += $"\t\t}}\r\n";
+            part3 += $"{TAB}{TAB}}}{NEW_LINE}";
             var _d_ts = string.Empty;
             _d_ts = $"{part1}{part2}{part3}";
-            _d_ts += $"\t\tinterface Body {{\r\n";
+            _d_ts += $"{TAB}{TAB}interface Body {{{NEW_LINE}";
             if (part1.Length > 0 && part2.Length > 0)
-                _d_ts += $"\t\t\tTab: Tabs;\r\n";
+                _d_ts += $"{TAB}{TAB}{TAB}Tab: Tabs;{NEW_LINE}";
             var body = (from x in xdoc
                           .Descendants("tabs")
                           .Descendants("tab")
@@ -977,8 +966,8 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                         }).Distinct().ToList();
             body = body.OrderBy(x => x.Id).ToList();
             _d_ts += Get_d_ts_ForListFields(formXml, body, false, ref FormAll_BodyFields);
-            if (_d_ts.EndsWith(",\r\n")) _d_ts = _d_ts.TrimEnd(",\r\n".ToCharArray()) + "\r\n";
-            _d_ts += $"\t\t}}\r\n";
+            if (_d_ts.EndsWith(",{NEW_LINE}")) _d_ts = _d_ts.TrimEnd(",{NEW_LINE}".ToCharArray()) + "{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}}}{NEW_LINE}";
             return _d_ts;
         }
 
@@ -1006,7 +995,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             headers = headers.OrderBy(x => x.Name).ToList();
             if (headers.Count() == 0) return string.Empty;
             var _d_ts = Get_d_ts_ForListFields(formXml, headers, false, ref FormAll_HeaderFields);
-            if (_d_ts.EndsWith(",\r\n")) _d_ts = _d_ts.TrimEnd(",\r\n".ToCharArray()) + "\r\n";
+            if (_d_ts.EndsWith(",{NEW_LINE}")) _d_ts = _d_ts.TrimEnd(",{NEW_LINE}".ToCharArray()) + "{NEW_LINE}";
             return _d_ts;
         }
 
@@ -1049,31 +1038,31 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                     previousName = Helper.SafeIdentifier(crmAttribute.SchemaName);
                     var jsdoc = string.Empty;
                     if (crmAttribute?.Description?.UserLocalizedLabel?.Label.Length > 0)
-                        jsdoc = $"\t\t\t/** {crmAttribute?.Description?.UserLocalizedLabel?.Label} */\r\n";
+                        jsdoc = $"{TAB}{TAB}{TAB}/** {crmAttribute?.Description?.UserLocalizedLabel?.Label} */{NEW_LINE}";
                     if (crmAttribute.AttributeType == AttributeTypeCode.Memo ||
                         crmAttribute.AttributeType == AttributeTypeCode.String)
                     {
-                        _d_ts += $"{jsdoc}\t\t\t{name}: DevKit.Controls.String;\r\n";
+                        _d_ts += $"{jsdoc}{TAB}{TAB}{TAB}{name}: DevKit.Controls.String;{NEW_LINE}";
                     }
                     else if (crmAttribute is MultiSelectPicklistAttributeMetadata)
                     {
-                        _d_ts += $"{jsdoc}\t\t\t{name}: DevKit.Controls.MultiOptionSet;\r\n";
+                        _d_ts += $"{jsdoc}{TAB}{TAB}{TAB}{name}: DevKit.Controls.MultiOptionSet;{NEW_LINE}";
                     }
                     else if (crmAttribute.AttributeType == AttributeTypeCode.Picklist ||
                              crmAttribute.AttributeType == AttributeTypeCode.State ||
                              crmAttribute.AttributeType == AttributeTypeCode.Status)
                     {
-                        _d_ts += $"{jsdoc}\t\t\t{name}: DevKit.Controls.OptionSet;\r\n";
+                        _d_ts += $"{jsdoc}{TAB}{TAB}{TAB}{name}: DevKit.Controls.OptionSet;{NEW_LINE}";
                     }
                     else if (crmAttribute is DateTimeAttributeMetadata dateTime)
                     {
                         if (dateTime.Format == DateTimeFormat.DateOnly)
                         {
-                            _d_ts += $"{jsdoc}\t\t\t{name}: DevKit.Controls.Date;\r\n";
+                            _d_ts += $"{jsdoc}{TAB}{TAB}{TAB}{name}: DevKit.Controls.Date;{NEW_LINE}";
                         }
                         else
                         {
-                            _d_ts += $"{jsdoc}\t\t\t{name}: DevKit.Controls.DateTime;\r\n";
+                            _d_ts += $"{jsdoc}{TAB}{TAB}{TAB}{name}: DevKit.Controls.DateTime;{NEW_LINE}";
                         }
                     }
                     else if (crmAttribute.AttributeType == AttributeTypeCode.Lookup ||
@@ -1081,43 +1070,43 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                              crmAttribute.AttributeType == AttributeTypeCode.Customer ||
                              crmAttribute.AttributeType == AttributeTypeCode.PartyList)
                     {
-                        _d_ts += $"{jsdoc}\t\t\t{name}: DevKit.Controls.Lookup;\r\n";
+                        _d_ts += $"{jsdoc}{TAB}{TAB}{TAB}{name}: DevKit.Controls.Lookup;{NEW_LINE}";
                     }
                     else if (crmAttribute.AttributeType == AttributeTypeCode.Boolean)
                     {
-                        _d_ts += $"{jsdoc}\t\t\t{name}: DevKit.Controls.Boolean;\r\n";
+                        _d_ts += $"{jsdoc}{TAB}{TAB}{TAB}{name}: DevKit.Controls.Boolean;{NEW_LINE}";
                     }
                     else if (crmAttribute.AttributeType == AttributeTypeCode.Money)
                     {
-                        _d_ts += $"{jsdoc}\t\t\t{name}: DevKit.Controls.Money;\r\n";
+                        _d_ts += $"{jsdoc}{TAB}{TAB}{TAB}{name}: DevKit.Controls.Money;{NEW_LINE}";
                     }
                     else if (crmAttribute.AttributeType == AttributeTypeCode.Integer)
                     {
-                        _d_ts += $"{jsdoc}\t\t\t{name}: DevKit.Controls.Integer;\r\n";
+                        _d_ts += $"{jsdoc}{TAB}{TAB}{TAB}{name}: DevKit.Controls.Integer;{NEW_LINE}";
                     }
                     else if (crmAttribute.AttributeType == AttributeTypeCode.Double)
                     {
-                        _d_ts += $"{jsdoc}\t\t\t{name}: DevKit.Controls.Double;\r\n";
+                        _d_ts += $"{jsdoc}{TAB}{TAB}{TAB}{name}: DevKit.Controls.Double;{NEW_LINE}";
                     }
                     else if (crmAttribute.AttributeType == AttributeTypeCode.Decimal)
                     {
-                        _d_ts += $"{jsdoc}\t\t\t{name}: DevKit.Controls.Decimal;\r\n";
+                        _d_ts += $"{jsdoc}{TAB}{TAB}{TAB}{name}: DevKit.Controls.Decimal;{NEW_LINE}";
                     }
                     else if (crmAttribute.AttributeType == AttributeTypeCode.EntityName)
                     {
-                        _d_ts += $"{jsdoc}\t\t\t{name}: DevKit.Controls.String;\r\n";
+                        _d_ts += $"{jsdoc}{TAB}{TAB}{TAB}{name}: DevKit.Controls.String;{NEW_LINE}";
                     }
                     else if (crmAttribute.AttributeType == AttributeTypeCode.Uniqueidentifier)
                     {
-                        _d_ts += $"{jsdoc}\t\t\t{name}: DevKit.Controls.String;\r\n";
+                        _d_ts += $"{jsdoc}{TAB}{TAB}{TAB}{name}: DevKit.Controls.String;{NEW_LINE}";
                     }
                     else if (crmAttribute.AttributeType == AttributeTypeCode.ManagedProperty)
                     {
-                        _d_ts += $"{jsdoc}\t\t\t{name}: DevKit.Controls.String;\r\n";
+                        _d_ts += $"{jsdoc}{TAB}{TAB}{TAB}{name}: DevKit.Controls.String;{NEW_LINE}";
                     }
                     else
                     {
-                        _d_ts += $"\t\t\t{item.Name}: DevKit.Controls.ELSE1???;//{item.Id} - {item.ClassId} -- FOR DEBUG \r\n";
+                        _d_ts += $"{TAB}{TAB}{TAB}{item.Name}: DevKit.Controls.ELSE1???;//{item.Id} - {item.ClassId} -- FOR DEBUG {NEW_LINE}";
                     }
                 }
                 else if (ControlClassId.VIRTUAL_CONTROLS.Contains(item.ClassId))
@@ -1128,51 +1117,51 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                         listVirtualControls.Add(item.Id);
                     if (item.ClassId == ControlClassId.IFRAME)
                     {
-                        _d_ts += $"\t\t\t{item.Id}: DevKit.Controls.IFrame;\r\n";
+                        _d_ts += $"{TAB}{TAB}{TAB}{item.Id}: DevKit.Controls.IFrame;{NEW_LINE}";
                     }
                     else if (item.ClassId == ControlClassId.WEB_RESOURCE)
                     {
-                        _d_ts += $"\t\t\t{item.Id}: DevKit.Controls.WebResource;\r\n";
+                        _d_ts += $"{TAB}{TAB}{TAB}{item.Id}: DevKit.Controls.WebResource;{NEW_LINE}";
                     }
                     else if (item.Id.ToLower() == "notescontrol" && item.ClassId == ControlClassId.NOTE)
                     {
-                        _d_ts += $"\t\t\t{item.Id}: DevKit.Controls.Note;\r\n";
+                        _d_ts += $"{TAB}{TAB}{TAB}{item.Id}: DevKit.Controls.Note;{NEW_LINE}";
                     }
                     else if (item.ClassId == ControlClassId.EMAIL_ENGAGEMENT_ACTIONS)
                     {
-                        _d_ts += $"\t\t\t{item.Id}: DevKit.Controls.EmailEngagement;\r\n";
+                        _d_ts += $"{TAB}{TAB}{TAB}{item.Id}: DevKit.Controls.EmailEngagement;{NEW_LINE}";
                     }
                     else if (item.ClassId == ControlClassId.EMAIL_RECIPIENT_ACTIVITY)
                     {
-                        _d_ts += $"\t\t\t{item.Id}: DevKit.Controls.EmailRecipient;\r\n";
+                        _d_ts += $"{TAB}{TAB}{TAB}{item.Id}: DevKit.Controls.EmailRecipient;{NEW_LINE}";
                     }
                     else if (item.ClassId == ControlClassId.TIMER)
                     {
-                        _d_ts += $"\t\t\t{item.Id}: DevKit.Controls.Timer;\r\n";
+                        _d_ts += $"{TAB}{TAB}{TAB}{item.Id}: DevKit.Controls.Timer;{NEW_LINE}";
                     }
                     else if (item.ClassId == ControlClassId.ACI_WIDGET)
                     {
-                        _d_ts += $"\t\t\t{item.Id}: DevKit.Controls.AciWidget;\r\n";
+                        _d_ts += $"{TAB}{TAB}{TAB}{item.Id}: DevKit.Controls.AciWidget;{NEW_LINE}";
                     }
                     else if (item.ClassId == ControlClassId.MAP_CONTROL)
                     {
-                        _d_ts += $"\t\t\t{item.Id}: DevKit.Controls.Map;\r\n";
+                        _d_ts += $"{TAB}{TAB}{TAB}{item.Id}: DevKit.Controls.Map;{NEW_LINE}";
                     }
                     else if (item.ClassId == ControlClassId.ACTION_CARDS)
                     {
-                        _d_ts += $"\t\t\t{item.Id}: DevKit.Controls.ActionCards;\r\n";
+                        _d_ts += $"{TAB}{TAB}{TAB}{item.Id}: DevKit.Controls.ActionCards;{NEW_LINE}";
                     }
                     else if (item.ClassId == ControlClassId.POWERBI)
                     {
-                        _d_ts += $"\t\t\t{item.Id}: DevKit.Controls.PowerBi;\r\n";
+                        _d_ts += $"{TAB}{TAB}{TAB}{item.Id}: DevKit.Controls.PowerBi;{NEW_LINE}";
                     }
                     else if (item.ClassId == ControlClassId.FILE)
                     {
-                        _d_ts += $"\t\t\t{item.Id}: DevKit.Controls.File;\r\n";
+                        _d_ts += $"{TAB}{TAB}{TAB}{item.Id}: DevKit.Controls.File;{NEW_LINE}";
                     }
                     else if (item.ClassId == ControlClassId.IMAGE)
                     {
-                        _d_ts += $"\t\t\t{item.Id}: DevKit.Controls.Image;\r\n";
+                        _d_ts += $"{TAB}{TAB}{TAB}{item.Id}: DevKit.Controls.Image;{NEW_LINE}";
                     }
                     else if (item.ClassId == ControlClassId.UNKNOWN_1 ||
                              item.ClassId == ControlClassId.UNKNOWN_2 ||
@@ -1214,13 +1203,13 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                         continue;
                     else
                     {
-                        _d_ts += $"\t\t\t{item.Name}: DevKit.Controls.ELSE2???;//{item.Id} - {item.ClassId} -- FOR DEBUG \r\n";
+                        _d_ts += $"{TAB}{TAB}{TAB}{item.Name}: DevKit.Controls.ELSE2???;//{item.Id} - {item.ClassId} -- FOR DEBUG {NEW_LINE}";
                     }
                 }
                 else
                 {
                     if (item.Name != null)
-                        _d_ts += $"\t\t\t{item.Name}: DevKit.Controls.ELSE3???;//{item.Id} - {item.ClassId} -- FOR DEBUG \r\n";
+                        _d_ts += $"{TAB}{TAB}{TAB}{item.Name}: DevKit.Controls.ELSE3???;//{item.Id} - {item.ClassId} -- FOR DEBUG {NEW_LINE}";
                 }
                 code += _d_ts;
                 if (!allFields.Any(x => x == _d_ts))
@@ -1229,7 +1218,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                     allFields.Sort();
                 }
             }
-            code = code.TrimEnd(",\r\n".ToCharArray()) + "\r\n";
+            code = code.TrimEnd(",{NEW_LINE}".ToCharArray()) + "{NEW_LINE}";
             return code;
         }
 

@@ -4,6 +4,7 @@ using Microsoft.Xrm.Sdk.Metadata;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace DynamicsCrm.DevKit.Shared
 {
@@ -20,7 +21,7 @@ namespace DynamicsCrm.DevKit.Shared
         public static List<NameValue> OptionSetValues(this AttributeMetadata attribute)
         {
             var values = new List<NameValue>();
-            if (!XrmHelper.IsOptionSet(attribute)) return values;
+            if (!Helper.IsOptionSet(attribute)) return values;
             var options = ((EnumAttributeMetadata)attribute)?.OptionSet?.Options;
             if (options == null) return values;
             foreach (var option in options)
@@ -97,35 +98,35 @@ namespace DynamicsCrm.DevKit.Shared
             return attribute.SourceType == 1 || attribute.SourceType == 2;
         }
 
-        public static void AddIfNotExist(this List<EntityMetadata> entitiesMetadata, ServiceClient crmServiceClient, string entityLogicalName)
+        public static async Task AddIfNotExistAsync(this List<EntityMetadata> entitiesMetadata, ServiceClient crmServiceClient, string entityLogicalName)
         {
             if (!XrmHelper.EntitiesMetadata.Any(x => x.LogicalName == entityLogicalName))
             {
-                XrmHelper.EntitiesMetadata.Add(XrmHelper.GetEntityMetadata(crmServiceClient, entityLogicalName));
+                XrmHelper.EntitiesMetadata.Add(await XrmHelper.GetEntityMetadataAsync(crmServiceClient, entityLogicalName));
             }
         }
 
-        public static void AddIfNotExist(this List<SystemForm> entitiesFormXml, ServiceClient crmServiceClient, string entityLogicalName)
+        public static async Task AddIfNotExistAsync(this List<SystemForm> entitiesFormXml, ServiceClient crmServiceClient, string entityLogicalName)
         {
             if (!XrmHelper.EntitiesFormXml.Any(x => x.EntityLogicalName == entityLogicalName))
             {
-                XrmHelper.EntitiesMetadata.AddIfNotExist(crmServiceClient, entityLogicalName);
+                await XrmHelper.EntitiesMetadata.AddIfNotExistAsync(crmServiceClient, entityLogicalName);
                 var entityMetadata = XrmHelper.EntitiesMetadata.FirstOrDefault(x => x.LogicalName == entityLogicalName);
                 if (entityMetadata != null)
                 {
-                    var forms = XrmHelper.GetEntityFormXml(crmServiceClient, entityMetadata.ObjectTypeCode);
+                    var forms = await XrmHelper.GetEntityFormXmlAsync(crmServiceClient, entityMetadata.ObjectTypeCode);
                     if (forms.Count > 0) XrmHelper.EntitiesFormXml.AddRange(forms);
                 }
             }
         }
 
-        public static void AddIfNotExist(this List<ProcessForm> entitiesProcessForm, ServiceClient crmServiceClient, string entityLogicalName)
+        public static async Task AddIfNotExistAsync(this List<ProcessForm> entitiesProcessForm, ServiceClient crmServiceClient, string entityLogicalName)
         {
             if (!XrmHelper.EntitiesProcessForm.Any(x => x.EntityLogicalName == entityLogicalName))
             {
-                XrmHelper.EntitiesMetadata.AddIfNotExist(crmServiceClient, entityLogicalName);
+                await XrmHelper.EntitiesMetadata.AddIfNotExistAsync(crmServiceClient, entityLogicalName);
                 var entityMetadata = XrmHelper.EntitiesMetadata.FirstOrDefault(x => x.LogicalName == entityLogicalName);
-                var processes = XrmHelper.GetEntityProcessForm(crmServiceClient, entityMetadata.ObjectTypeCode, entityLogicalName);
+                var processes = await XrmHelper.GetEntityProcessFormAsync(crmServiceClient, entityMetadata.ObjectTypeCode, entityLogicalName);
                 if (processes.Count > 0) XrmHelper.EntitiesProcessForm.AddRange(processes);
             }
         }

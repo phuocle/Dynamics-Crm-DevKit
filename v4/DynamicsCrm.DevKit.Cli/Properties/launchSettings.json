@@ -14,6 +14,11 @@
       "commandName": "Project",
       "commandLineArgs": "/sdklogin:\"yes\" /url:\"https://dynamics-crm-devkit.crm5.dynamics.com\" /json:\"..\\..\\DynamicsCrm.DevKit.Cli.json\" /type:\"generators\" /profile:\"LATEBOUND\"",
       "workingDirectory": "D:\\azure\\PL\\HSAPVN\\src\\Hs.Hsap.Shared\\Entities"
+    },
+    "NoArgs": {
+      "commandName": "Project",
+      "commandLineArgs": "",
+      "workingDirectory": "D:\\azure\\PL\\HSAPVN\\src\\Hs.Hsap.Shared\\Entities"
     }
   }
 }

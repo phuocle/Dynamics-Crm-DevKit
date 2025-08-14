@@ -308,7 +308,7 @@ namespace DynamicsCrm.DevKit.Shared
             code += $"{TAB}OptionSet.{EntityMetadata.SchemaName} = {{{NEW_LINE}";
             foreach (var attribute in EntityMetadata.Attributes.OrderBy(x => x.SchemaName))
             {
-                if (XrmHelper.IsOptionSet(attribute))
+                if (Helper.IsOptionSet(attribute))
                 {
                     if (attribute.SchemaName == "OwnerIdType") continue;
                     var values = attribute.OptionSetValues();
@@ -597,7 +597,7 @@ namespace DynamicsCrm.DevKit.Shared
             return code;
         }
 
-        public static string GetDefaultFileWithForm(ServiceClient CrmServiceClient, EntityMetadata entityMetadata, string rootnamespace)
+        public static async Task<string> GetDefaultFileWithFormAsync(ServiceClient CrmServiceClient, EntityMetadata entityMetadata, string rootnamespace)
         {
             string GetUnquieFormName(List<string> FormNames, string formName)
             {
@@ -613,7 +613,7 @@ namespace DynamicsCrm.DevKit.Shared
                     return $"{formName}{count}";
                 }
             }
-            var forms = XrmHelper.GetEntityForms(CrmServiceClient, entityMetadata.LogicalName);
+            var forms = await XrmHelper.GetEntityFormsAsync(CrmServiceClient, entityMetadata.LogicalName);
             if (!forms.Any()) return GetDefaultFileWithWebApi(entityMetadata.SchemaName);
             var @namespace = Helper.GetNameSpace(rootnamespace);
             var code = string.Empty;
@@ -778,6 +778,31 @@ namespace DynamicsCrm.DevKit.Shared
         public static async Task DelayAsync(int delayInSeconds)
         {
             await Task.Delay(delayInSeconds * 1000);
+        }
+
+        public static bool IsOptionSet(AttributeMetadata attribute)
+        {
+            return attribute is EnumAttributeMetadata;
+        }
+
+        public static string GetExtension(WebResourceWebResourceType webresourcetype)
+        {
+            return webresourcetype switch
+            {
+                WebResourceWebResourceType.WebpageHtml => ".html",
+                WebResourceWebResourceType.ScriptJScript => ".js",
+                WebResourceWebResourceType.PngFormat => ".png",
+                WebResourceWebResourceType.GifFormat => ".gif",
+                WebResourceWebResourceType.JpgFormat => ".jpg",
+                WebResourceWebResourceType.StyleSheetCss => ".css",
+                WebResourceWebResourceType.IcoFormat => ".ico",
+                WebResourceWebResourceType.DataXml => ".xml",
+                WebResourceWebResourceType.StyleSheetXsl => ".xsl",
+                WebResourceWebResourceType.SilverlightXap => ".xap",
+                WebResourceWebResourceType.StringResx => ".resx",
+                WebResourceWebResourceType.SvgFormat => ".svg",
+                _ => ".html",
+            };
         }
     }
 }

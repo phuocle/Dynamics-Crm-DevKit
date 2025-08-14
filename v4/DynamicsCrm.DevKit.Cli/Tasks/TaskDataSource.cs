@@ -5,11 +5,10 @@ using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
-using Microsoft.Xrm.Sdk.Metadata.Query;
 using Microsoft.Xrm.Sdk.Query;
 using System;
 using System.Text.RegularExpressions;
-using System.Threading;
+using System.Threading.Tasks;
 using Label = Microsoft.Xrm.Sdk.Label;
 using ParameterCollection = Microsoft.Xrm.Sdk.ParameterCollection;
 namespace DynamicsCrm.DevKit.Cli.Tasks
@@ -32,7 +31,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         private Guid SolutionId { get; set; }
         private string Prefix { get; set; }
         private string DataSourceName { get; set; }
-        public bool IsValid()
+
+        public async Task<bool> IsValidAsync()
         {
             if (Json == null)
             {
@@ -80,14 +80,14 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'name' can cannot contain space character.");
                 return false;
             }
-            (IsOk, SolutionId, Prefix) = XrmHelper.IsExistSolution(ServiceClient, Json.solution);
+            (IsOk, SolutionId, Prefix) = await XrmHelper.IsExistSolutionAsync(ServiceClient, Json.solution);
             if (!IsOk)
             {
                 CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} solution '{Json.solution}' not exist");
                 return false;
             }
             DataSourceName = Json.name.ToLower().StartsWith(Prefix.ToLower()) ? Json.name : $"{Prefix}{Json.name}";
-            if (IsExistDataSource(DataSourceName))
+            if (await XrmHelper.IsExistDataSourceAsync(ServiceClient, DataSourceName))
             {
                 CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} name '{DataSourceName}' exist");
                 return false;
@@ -95,70 +95,28 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             return true;
         }
 
-        private bool IsExistDataSource(string logicalname)
+        public bool IsValid()
         {
-            logicalname = logicalname.ToLower();
-            var filterExpression = new MetadataFilterExpression();
-            filterExpression.Conditions.Add(new MetadataConditionExpression("DataProviderId", MetadataConditionOperator.Equals, Guid.Parse("B2112A7E-B26C-42F7-9B63-9A809A9D716F")));
-            var propertiesExpression = new MetadataPropertiesExpression(new string[7]
-            {
-                "DataProviderId",
-                "LogicalName",
-                "SchemaName",
-                "MetadataId",
-                "DisplayName",
-                "ExternalName",
-                "DisplayCollectionName"
-            });
-            var entityQueryExpression = new EntityQueryExpression();
-            entityQueryExpression.Criteria = new MetadataFilterExpression();
-            entityQueryExpression.Criteria = filterExpression;
-            entityQueryExpression.Properties = propertiesExpression;
-            var request = new RetrieveMetadataChangesRequest
-            {
-                Query = entityQueryExpression
-            };
-            var response = (RetrieveMetadataChangesResponse)ServiceClient.Execute(request);
-            foreach (EntityMetadata entityMetadata in response.EntityMetadata)
-                if (entityMetadata.LogicalName == logicalname)
-                    return true;
-            return false;
+            return true;
         }
 
-        public void Run()
+        public async Task RunAsync()
         {
             CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "START ");
             CliLog.WriteLine(ConsoleColor.White, "|");
-            if (IsValid())
+            if (await IsValidAsync())
             {
-                var wait = new Thread(() => CliLog.Waiting($"Creating Data Source: {DataSourceName} "));
-                wait.Start();
-                RegisterDataSource();
-                wait.Abort();
-                CliLog.WriteLine("");
-                CliLog.WriteLine(ConsoleColor.White, "| ", $"Created Data Source: {DataSourceName} ");
+                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, $"Creating Data Source: {DataSourceName}...");
+                await RegisterDataSourceAsync();
+                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, $"Created Data Source: {DataSourceName}");
             }
             CliLog.WriteLine(ConsoleColor.White, "|");
             CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "END ");
         }
 
-        private int GetLanguageCode()
+        public async Task RegisterDataSourceAsync()
         {
-            var fetchXml = $@"
-<fetch>
-  <entity name='organization'>
-    <attribute name='languagecode' />
-  </entity>
-</fetch>";
-            var rows = ServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
-            if (rows.Entities.Count != 1) return 1033;
-            var entity = rows.Entities[0];
-            return entity.GetAttributeValue<int?>("languagecode") ?? 1033;
-        }
-
-        public void RegisterDataSource()
-        {
-            var languageCode = GetLanguageCode();
+            var languageCode = await XrmHelper.GetLanguageCodeAsync(ServiceClient);
             var propertyFalse = new BooleanManagedProperty(false);
             var propertyTrue = new BooleanManagedProperty(true);
 
@@ -220,21 +178,21 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 request.Parameters["SolutionUniqueName"] = Json.solution;
             else
                 request.Parameters.Add("SolutionUniqueName", Json.solution);
-            var response = (CreateEntityResponse)ServiceClient.Execute(request);
+            var response = (CreateEntityResponse)await ServiceClient.ExecuteAsync(request);
             var entityId = response.EntityId;
             var retrieveEntityRequest = new RetrieveEntityRequest()
             {
                 EntityFilters = EntityFilters.All,
                 MetadataId = entityId
             };
-            EntityMetadata entityMetadata = ((RetrieveEntityResponse)ServiceClient.Execute(retrieveEntityRequest)).EntityMetadata;
+            EntityMetadata entityMetadata = ((RetrieveEntityResponse)await ServiceClient.ExecuteAsync(retrieveEntityRequest)).EntityMetadata;
 
             var requestId = new RetrieveAttributeRequest()
             {
                 EntityLogicalName = entityMetadata.LogicalName,
                 LogicalName = string.Format("{0}id", entityMetadata.LogicalName)
             };
-            var attributeMetadataId = ((RetrieveAttributeResponse)ServiceClient.Execute(requestId)).AttributeMetadata;
+            var attributeMetadataId = ((RetrieveAttributeResponse)await ServiceClient.ExecuteAsync(requestId)).AttributeMetadata;
             attributeMetadataId.ExternalName = $"{DataSourceName}Id";
             var updateRequestId = new UpdateAttributeRequest()
             {
@@ -242,14 +200,14 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 EntityName = entityMetadata.LogicalName,
                 MergeLabels = false
             };
-            ServiceClient.Execute(updateRequestId);
+            await ServiceClient.ExecuteAsync(updateRequestId);
 
             var requestName = new RetrieveAttributeRequest()
             {
                 EntityLogicalName = entityMetadata.LogicalName,
                 LogicalName = string.Format("{0}name", DataSourceName.ToLower())
             };
-            var attributeMetadataName = ((RetrieveAttributeResponse)ServiceClient.Execute(requestName)).AttributeMetadata;
+            var attributeMetadataName = ((RetrieveAttributeResponse)await ServiceClient.ExecuteAsync(requestName)).AttributeMetadata;
             attributeMetadataName.ExternalName = $"{DataSourceName}Name";
             var updateRequestName = new UpdateAttributeRequest()
             {
@@ -257,15 +215,16 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 EntityName = entityMetadata.LogicalName,
                 MergeLabels = false
             };
-            ServiceClient.Execute(updateRequestName);
+            await ServiceClient.ExecuteAsync(updateRequestName);
 
             try
             {
                 PublishAllXmlRequest publishAllXmlRequest = new PublishAllXmlRequest();
-                PublishAllXmlResponse publishAllXmlResponse = (PublishAllXmlResponse)ServiceClient.Execute(publishAllXmlRequest);
+                PublishAllXmlResponse publishAllXmlResponse = (PublishAllXmlResponse)await ServiceClient.ExecuteAsync(publishAllXmlRequest);
             }
             catch
             {
+                // Ignore publish errors as they are not critical
             }
         }
     }

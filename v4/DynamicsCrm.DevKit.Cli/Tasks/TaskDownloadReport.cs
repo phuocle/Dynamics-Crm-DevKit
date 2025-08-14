@@ -4,6 +4,7 @@ using Microsoft.PowerPlatform.Dataverse.Client;
 using System;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 namespace DynamicsCrm.DevKit.Cli.Tasks
 {
     public class TaskDownloadReport : ITask
@@ -20,7 +21,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         public ServiceClient ServiceClient { get; set; }
         public string TaskType => $"[{nameof(CliType.downloadreports).ToUpper()}]";
         private JsonDownloadReport Json { get; set; }
-        public bool IsValid()
+
+        public async Task<bool> IsValidAsync()
         {
             if (Json == null)
             {
@@ -32,7 +34,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'solution' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
                 return false;
             }
-            if (!XrmHelper.IsExistSolution(ServiceClient, Json.solution).IsOk)
+            var solutionExists = await XrmHelper.IsExistSolutionAsync(ServiceClient, Json.solution);
+            if (!solutionExists.IsOk)
             {
                 CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} solution '{Json.solution}' not exist");
                 return false;
@@ -52,13 +55,18 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             return true;
         }
 
-        public void Run()
+        public bool IsValid()
+        {
+            return true;
+        }
+
+        public async Task RunAsync()
         {
             CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "START ");
             CliLog.WriteLine(ConsoleColor.White, "|");
-            if (IsValid())
+            if (await IsValidAsync())
             {
-                var reportFiles = XrmHelper.GetReportsBySolution(ServiceClient, Json.solution);
+                var reportFiles = await XrmHelper.GetReportsBySolutionAsync(ServiceClient, Json.solution);
                 if (reportFiles.Count == 0)
                 {
                     CliLog.WriteLineWarning(ConsoleColor.Green, "Not found any reports to download");

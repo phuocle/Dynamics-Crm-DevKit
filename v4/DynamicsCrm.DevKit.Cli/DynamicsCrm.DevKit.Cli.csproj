@@ -1,5 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
+		<LangVersion>latest</LangVersion>
 		<TargetFramework>net48</TargetFramework>
 		<IsPublishable>True</IsPublishable>
 		<SignAssembly>True</SignAssembly>

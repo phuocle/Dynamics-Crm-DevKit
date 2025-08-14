@@ -1,11 +1,13 @@
 ﻿using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.PowerPlatform.Dataverse.Client;
+using Microsoft.VisualStudio.Shell.Interop;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Text;
+using System.Threading.Tasks;
 namespace DynamicsCrm.DevKit.Cli.Tasks
 {
     public class TaskProxyType : ITask
@@ -32,7 +34,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         private bool IsSdkLogin { get; set; }
         private string Connection { get; set; }
 
-        public bool IsValid()
+        public async Task<bool> IsValidAsync()
         {
             if (Json == null)
             {
@@ -54,6 +56,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} Not found CrmSvcUtil.exe file.");
                 return false;
             }
+            await Helper.DelayAsync(1);
             return true;
         }
 
@@ -73,21 +76,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
         }
 
-        public void Run()
-        {
-            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "START ");
-            CliLog.WriteLine(ConsoleColor.White, "|");
-
-            if (IsValid())
-            {
-                CopyFile();
-                RunProxyType();
-            }
-
-            CliLog.WriteLine(ConsoleColor.White, "|");
-            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "END ");
-        }
-
         private void CopyFile()
         {
             var fileExecuting = Assembly.GetExecutingAssembly().Location;
@@ -97,50 +85,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var fiCrmSvcUtil = new FileInfo(CrmSvcUtil);
             var fileToCopy = Path.Combine(fiCrmSvcUtil.DirectoryName, "DynamicsCrm.DevKit.CrmSvcUtilExtensions.dll");
             if (!File.Exists(fileToCopy))File.Copy(fileCrmSvcUtilExtension, fileToCopy);
-        }
-
-        private void RunProxyType()
-        {
-            var path = "\"" + CrmSvcUtil + "\"";
-            CliLog.Write(ConsoleColor.White, "|", ConsoleColor.Green, "Executing", ConsoleColor.White, " CrmSvcUtil");
-            if (Json.entities == "*" || Json.entities.ToLower() == "all")
-            {
-                CliLog.WriteLine(ConsoleColor.Green, " with ", ConsoleColor.White, "all entities");
-            }
-            else
-            {
-                CliLog.WriteLine(ConsoleColor.Green, " with entities filter: ", ConsoleColor.White, Json.entities);
-            }
-            CliLog.WriteLine();
-            CliLog.WriteLine(ConsoleColor.White, " " + path + " " + CreateCommandArgsLog());
-            CliLog.WriteLine();
-            var process = new Process
-            {
-                StartInfo = new ProcessStartInfo(path)
-                {
-                    Arguments = CreateCommandArgs(),
-                    UseShellExecute = false,
-                    RedirectStandardOutput = true,
-                    RedirectStandardError = true,
-                    CreateNoWindow = true
-                }
-            };
-            if (Json.entities != null && Json.entities.Length > 0)
-            {
-                if (Json.entities != "*" && Json.entities.ToLower() != "all")
-                {
-                    process.StartInfo.EnvironmentVariables.Add(ENVIRONMENT_ENTITIES, string.Join(",", Json.entities));
-                }
-            }
-
-            process.Start();
-
-            while (!process.StandardOutput.EndOfStream)
-            {
-                var line = process.StandardOutput.ReadLine();
-                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.White, line);
-            }
-            process.WaitForExit();
         }
 
         private string CreateCommandArgs()
@@ -201,5 +145,71 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             return command.ToString();
         }
 
+        public async Task RunAsync()
+        {
+            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "START ");
+            CliLog.WriteLine(ConsoleColor.White, "|");
+
+            if (await IsValidAsync())
+            {
+                CopyFile();
+                await RunProxyTypeAsync();
+            }
+
+            CliLog.WriteLine(ConsoleColor.White, "|");
+            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "END ");
+        }
+
+        private async Task RunProxyTypeAsync()
+        {
+            var path = "\"" + CrmSvcUtil + "\"";
+            CliLog.Write(ConsoleColor.White, "|", ConsoleColor.Green, "Executing", ConsoleColor.White, " CrmSvcUtil");
+            if (Json.entities == "*" || Json.entities.ToLower() == "all")
+            {
+                CliLog.WriteLine(ConsoleColor.Green, " with ", ConsoleColor.White, "all entities");
+            }
+            else
+            {
+                CliLog.WriteLine(ConsoleColor.Green, " with entities filter: ", ConsoleColor.White, Json.entities);
+            }
+            CliLog.WriteLine();
+            CliLog.WriteLine(ConsoleColor.White, " " + path + " " + CreateCommandArgsLog());
+            CliLog.WriteLine();
+
+            var process = new Process
+            {
+                StartInfo = new ProcessStartInfo(path)
+                {
+                    Arguments = CreateCommandArgs(),
+                    UseShellExecute = false,
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                    CreateNoWindow = true
+                }
+            };
+
+            if (Json.entities != null && Json.entities.Length > 0)
+            {
+                if (Json.entities != "*" && Json.entities.ToLower() != "all")
+                {
+                    process.StartInfo.EnvironmentVariables.Add(ENVIRONMENT_ENTITIES, string.Join(",", Json.entities));
+                }
+            }
+
+            process.Start();
+
+            // Read output asynchronously
+            var outputTask = Task.Run(async () =>
+            {
+                while (!process.StandardOutput.EndOfStream)
+                {
+                    var line = await process.StandardOutput.ReadLineAsync();
+                    CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.White, line);
+                }
+            });
+
+            await outputTask;
+            await Task.Run(() => process.WaitForExit());
+        }
     }
 }
