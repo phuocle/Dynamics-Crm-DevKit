@@ -202,7 +202,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                 code += await GetBodyOfQuickViewAsync(formXml, quickForm);
                 code += $"{TAB}{TAB}{TAB}}},{NEW_LINE}";
             }
-            code = code.TrimEnd(",{NEW_LINE}".ToCharArray()) + "{NEW_LINE}";
+            code = code.TrimEnd($",{NEW_LINE}".ToCharArray()) + $"{NEW_LINE}";
             return code;
         }
 
@@ -268,7 +268,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                     code += $"{TAB}{TAB}{TAB}{TAB}{fieldAttribute.SchemaName}: {{}},{NEW_LINE}";
                 }
             }
-            code = code.TrimEnd(",{NEW_LINE}".ToCharArray()) + "{NEW_LINE}";
+            code = code.TrimEnd($",{NEW_LINE}".ToCharArray()) + $"{NEW_LINE}";
             return code;
         }
 
@@ -365,7 +365,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                     code += $"{TAB}{TAB}{TAB}{relationship.SchemaName}: {{}},{NEW_LINE}";
                 }
             }
-            code = code.TrimEnd(",{NEW_LINE}".ToCharArray()) + "{NEW_LINE}";
+            code = code.TrimEnd($",{NEW_LINE}".ToCharArray()) + $"{NEW_LINE}";
             return code;
         }
 
@@ -504,11 +504,11 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                     var sectionName = Helper.SafeIdentifier(section.Name);
                     code += $"{TAB}{TAB}{TAB}{TAB}{TAB}{sectionName}: {{}},{NEW_LINE}";
                 }
-                code = code.TrimEnd(",{NEW_LINE}".ToCharArray()) + "{NEW_LINE}";
+                code = code.TrimEnd($",{NEW_LINE}".ToCharArray()) + $"{NEW_LINE}";
                 code += $"{TAB}{TAB}{TAB}{TAB}}}{NEW_LINE}";
                 code += $"{TAB}{TAB}{TAB}}},{NEW_LINE}";
             }
-            code = code.TrimEnd(",{NEW_LINE}".ToCharArray()) + "{NEW_LINE}";
+            code = code.TrimEnd($",{NEW_LINE}".ToCharArray()) + $"{NEW_LINE}";
             return code;
         }
 
