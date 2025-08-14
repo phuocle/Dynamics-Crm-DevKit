@@ -13,7 +13,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
     public class JsTypeScriptDeclaration
     {
         private const string NEW_LINE = "\r\n";
-        private const string TAB = "{TAB}";
+        private const string TAB = "\t";
         private static ServiceClient ServiceClient { get; set; }
         private static EntityMetadata EntityMetadata { get; set; }
         private static string RootNamespace { get; set; }
@@ -863,7 +863,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                 }
             }
 
-            _d_ts = _d_ts.TrimEnd(",{NEW_LINE}".ToCharArray()) + "{NEW_LINE}";
+            _d_ts = _d_ts.TrimEnd($",{NEW_LINE}".ToCharArray()) + $"{NEW_LINE}";
             return _d_ts;
         }
 
@@ -939,7 +939,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                         }).Distinct().ToList();
             body = body.OrderBy(x => x.Id).ToList();
             _d_ts += Get_d_ts_ForListFields(formXml, body, false);
-            if (_d_ts.EndsWith(",{NEW_LINE}")) _d_ts = _d_ts.TrimEnd(",{NEW_LINE}".ToCharArray()) + "{NEW_LINE}";
+            if (_d_ts.EndsWith(",{NEW_LINE}")) _d_ts = _d_ts.TrimEnd($",{NEW_LINE}".ToCharArray()) + $"{NEW_LINE}";
             _d_ts += $"{TAB}{TAB}}}{NEW_LINE}";
             return _d_ts;
         }
@@ -962,7 +962,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             headers = headers.OrderBy(x => x.Name).ToList();
             if (headers.Count() == 0) return string.Empty;
             var _d_ts = Get_d_ts_ForListFields(formXml, headers, false);
-            if (_d_ts.EndsWith(",{NEW_LINE}")) _d_ts = _d_ts.TrimEnd(",{NEW_LINE}".ToCharArray()) + "{NEW_LINE}";
+            if (_d_ts.EndsWith(",{NEW_LINE}")) _d_ts = _d_ts.TrimEnd($",{NEW_LINE}".ToCharArray()) + $"{NEW_LINE}";
             return _d_ts;
         }
 
@@ -1175,7 +1175,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                 }
                 code += _d_ts;
             }
-            code = code.TrimEnd(",{NEW_LINE}".ToCharArray()) + "{NEW_LINE}";
+            code = code.TrimEnd($",{NEW_LINE}".ToCharArray()) + $"{NEW_LINE}";
             return code;
         }
 
