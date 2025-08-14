@@ -55,11 +55,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             return true;
         }
 
-        public bool IsValid()
-        {
-            return true;
-        }
-
         public async Task RunAsync()
         {
             CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "START ");

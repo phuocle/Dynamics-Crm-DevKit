@@ -5,7 +5,6 @@ using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
-using Microsoft.Xrm.Sdk.Query;
 using System;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -92,11 +91,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} name '{DataSourceName}' exist");
                 return false;
             }
-            return true;
-        }
-
-        public bool IsValid()
-        {
             return true;
         }
 

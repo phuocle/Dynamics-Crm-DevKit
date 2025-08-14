@@ -16,13 +16,16 @@ namespace DynamicsCrm.DevKit.Shared
 {
     public static class XrmHelper
     {
+        private const string NEW_LINE = "\r\n";
+        private const string TAB = "\t";
+
         public static List<EntityMetadata> EntitiesMetadata { get; set; } = new List<EntityMetadata>();
         public static List<SystemForm> EntitiesFormXml { get; set; } = new List<SystemForm>();
         public static List<ProcessForm> EntitiesProcessForm { get; set; } = new List<ProcessForm>();
 
         public static string GetConnectedUrl(ServiceClient service)
         {
-                                                                                                                                                                                                        if (service?.ConnectedOrgUriActual == null)
+            if (service?.ConnectedOrgUriActual == null)
                 return null;
             var uri = service.ConnectedOrgUriActual;
             var url = uri.GetLeftPart(UriPartial.Authority);
@@ -370,10 +373,10 @@ namespace DynamicsCrm.DevKit.Shared
                     value += parts[j] + "/";
                 }
                 value = value.TrimEnd('/');
-                condition += $"<condition attribute='name' operator='ends-with' value='{value}'/>" + "\r\n";
+                condition += $"<condition attribute='name' operator='ends-with' value='{value}'/>" + "{NEW_LINE}";
             }
             var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fullFileName);
-            condition += $"<condition attribute='name' operator='like' value='%{fileNameWithoutExtension}%'/>" + "\r\n";
+            condition += $"<condition attribute='name' operator='like' value='%{fileNameWithoutExtension}%'/>" + "{NEW_LINE}";
             var fetchXml = $@"
 <fetch>
   <entity name='webresource'>
@@ -478,7 +481,7 @@ namespace DynamicsCrm.DevKit.Shared
                     if (int.TryParse(arr[arr.Length - 1], out var languagecode))
                     {
                         var req = new RetrieveProvisionedLanguagesRequest();
-                        var res = (RetrieveProvisionedLanguagesResponse) await serviceClient.ExecuteAsync(req);
+                        var res = (RetrieveProvisionedLanguagesResponse)await serviceClient.ExecuteAsync(req);
                         if (res.RetrieveProvisionedLanguages.Contains(languagecode))
                         {
                             webResource["languagecode"] = languagecode;
@@ -671,46 +674,46 @@ namespace DynamicsCrm.DevKit.Shared
             if (!forms.Any()) return Helper.GetDefaultFileWithWebApi(entityMetadata.SchemaName);
             var @namespace = Helper.GetNameSpace(rootnamespace);
             var code = string.Empty;
-            code += $"//@ts-check\r\n";
-            code += $"///<reference path=\"{entityMetadata.SchemaName}.d.ts\" />\r\n";
-            code += "\"use strict\";\r\n";
+            code += $"//@ts-check{NEW_LINE}";
+            code += $"///<reference path=\"{entityMetadata.SchemaName}.d.ts\" />{NEW_LINE}";
+            code += "\"use strict\";{NEW_LINE}";
             var formNames = new List<string>();
             foreach (var form in forms)
             {
                 var formName = Helper.GetFormName(form.Name, entityMetadata.SchemaName);
                 formName = GetUnquieFormName(formNames, formName);
                 var type = $"{@namespace}.Form{Helper.SafeIdentifier(formName)}";
-                code += $"var form{Helper.SafeIdentifier(formName)} = (function () {{\r\n";
-                code += $"\t\"use strict\";\r\n";
-                code += $"\t/** @type {type} */\r\n";
-                code += $"\tvar form = null;\r\n";
-                code += $"\t/** @param {{any}} executionContext */\r\n";
-                code += $"\tasync function onLoad(executionContext) {{\r\n";
-                code += $"\t\tform = new {type}(executionContext);\r\n";
-                code += $"\t\tregisterEvents();\r\n";
-                code += $"\t\tform.UiAddLoaded(UiAddLoaded);\r\n";
-                code += $"\t}}\r\n";
-                code += $"\tfunction registerEvents() {{\r\n";
-                code += $"\t\tif (form.ExecutionContext.IsInitialLoad()) {{\r\n";
-                code += $"\t\t}}\r\n";
-                code += $"\t}}\r\n";
-                code += $"\t//BEGIN ON LOAD ========================================================\r\n";
-                code += $"\tasync function UiAddLoaded(executionContext) {{\r\n";
-                code += $"\t}}\r\n";
-                code += $"\t//END ON LOAD ==========================================================\r\n";
-                code += $"\t//BEGIN ON CHANGE ======================================================\r\n";
-                code += $"\r\n";
-                code += $"\t//END ON CHANGE ========================================================\r\n";
-                code += $"\t//BEGIN PRE SEARCH =====================================================\r\n";
-                code += $"\r\n";
-                code += $"\t//END PRE SEARCH =======================================================\r\n";
-                code += $"\t//BEGIN OTHERS =========================================================\r\n";
-                code += $"\r\n";
-                code += $"\t//END OTHERS ===========================================================\r\n";
-                code += $"\treturn {{\r\n\t\tOnLoad: onLoad\r\n\t}};\r\n";
-                code += $"}})();\r\n";
+                code += $"var form{Helper.SafeIdentifier(formName)} = (function () {{{NEW_LINE}";
+                code += $"{TAB}\"use strict\";{NEW_LINE}";
+                code += $"{TAB}/** @type {type} */{NEW_LINE}";
+                code += $"{TAB}var form = null;{NEW_LINE}";
+                code += $"{TAB}/** @param {{any}} executionContext */{NEW_LINE}";
+                code += $"{TAB}async function onLoad(executionContext) {{{NEW_LINE}";
+                code += $"{TAB}{TAB}form = new {type}(executionContext);{NEW_LINE}";
+                code += $"{TAB}{TAB}registerEvents();{NEW_LINE}";
+                code += $"{TAB}{TAB}form.UiAddLoaded(UiAddLoaded);{NEW_LINE}";
+                code += $"{TAB}}}{NEW_LINE}";
+                code += $"{TAB}function registerEvents() {{{NEW_LINE}";
+                code += $"{TAB}{TAB}if (form.ExecutionContext.IsInitialLoad()) {{{NEW_LINE}";
+                code += $"{TAB}{TAB}}}{NEW_LINE}";
+                code += $"{TAB}}}{NEW_LINE}";
+                code += $"{TAB}//BEGIN ON LOAD ========================================================{NEW_LINE}";
+                code += $"{TAB}async function UiAddLoaded(executionContext) {{{NEW_LINE}";
+                code += $"{TAB}}}{NEW_LINE}";
+                code += $"{TAB}//END ON LOAD =========================================================={NEW_LINE}";
+                code += $"{TAB}//BEGIN ON CHANGE ======================================================{NEW_LINE}";
+                code += $"{NEW_LINE}";
+                code += $"{TAB}//END ON CHANGE ========================================================{NEW_LINE}";
+                code += $"{TAB}//BEGIN PRE SEARCH ====================================================={NEW_LINE}";
+                code += $"{NEW_LINE}";
+                code += $"{TAB}//END PRE SEARCH ======================================================={NEW_LINE}";
+                code += $"{TAB}//BEGIN OTHERS ========================================================={NEW_LINE}";
+                code += $"{NEW_LINE}";
+                code += $"{TAB}//END OTHERS ==========================================================={NEW_LINE}";
+                code += $"{TAB}return {{{NEW_LINE}{TAB}{TAB}OnLoad: onLoad{NEW_LINE}{TAB}}};{NEW_LINE}";
+                code += $"}})();{NEW_LINE}";
             }
-            code = code.TrimEnd("\r\n".ToCharArray());
+            code = code.TrimEnd("{NEW_LINE}".ToCharArray());
             return code;
         }
 
