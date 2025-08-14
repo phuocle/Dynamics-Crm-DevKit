@@ -8,9 +8,9 @@
         <license type="file">license\LICENSE.txt</license>
         <projectUrl>https://github.com/phuocle/Dynamics-Crm-DevKit</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
-        <description>CLI for DynamicsCrm.DevKit tool</description>
+        <description>Command Line Interface (CLI) for DynamicsCrm.DevKit, a comprehensive toolkit for Dynamics 365/Dataverse development. This tool helps automate common development tasks such as deploying plugins, workflows, web resources, and reports directly from the command line.</description>
         <language>en-US</language>
-        <tags>Dynamics, Dynamics365, DynamicsCrm, Crm, Cli, DevKit, Analyzer, Dataverse</tags>
+        <tags>Dynamics, Dynamics365, DynamicsCrm, Crm, Cli, DevKit, Analyzer, Dataverse, PowerPlatform, Xrm</tags>
 		<icon>images\icon.png</icon>
 		<readme>docs\README.md</readme>
     </metadata>
@@ -39,6 +39,15 @@
 		<file src="..\bin\Release\net48\Microsoft.IdentityModel.Abstractions.dll" target="tools\Microsoft.IdentityModel.Abstractions.dll" />
 		<file src="..\bin\Release\net48\Microsoft.Xrm.Sdk.dll" target="tools\Microsoft.Xrm.Sdk.dll" />
 		<file src="..\bin\Release\net48\System.Threading.Tasks.Extensions.dll" target="tools\System.Threading.Tasks.Extensions.dll" />
+		<file src="..\bin\Release\net48\System.Text.Json.dll" target="tools\System.Text.Json.dll" />
+		<file src="..\bin\Release\net48\System.Text.Encodings.Web.dll" target="tools\System.Text.Encodings.Web.dll" />
+		<file src="..\bin\Release\net48\System.Runtime.CompilerServices.Unsafe.dll" target="tools\System.Runtime.CompilerServices.Unsafe.dll" />
+		<file src="..\bin\Release\net48\System.Numerics.Vectors.dll" target="tools\System.Numerics.Vectors.dll" />
+		<file src="..\bin\Release\net48\System.Memory.dll" target="tools\System.Memory.dll" />
+		<file src="..\bin\Release\net48\System.IO.Pipelines.dll" target="tools\System.IO.Pipelines.dll" />
+		<file src="..\bin\Release\net48\System.Diagnostics.DiagnosticSource.dll" target="tools\System.Diagnostics.DiagnosticSource.dll" />
+		<file src="..\bin\Release\net48\System.Buffers.dll" target="tools\System.Buffers.dll" />
+		<file src="..\bin\Release\net48\Microsoft.Identity.Client.Extensions.Msal.dll" target="tools\Microsoft.Identity.Client.Extensions.Msal.dll" />
 
         <!-- NuGet package management -->
         <file src="..\bin\Release\net48\NuGet.Packaging.dll" target="tools\NuGet.Packaging.dll" />
@@ -49,6 +58,9 @@
 
         <!-- Visual Studio Shell Framework (minimal required) -->
         <file src="..\bin\Release\net48\Microsoft.VisualStudio.Shell.Framework.dll" target="tools\Microsoft.VisualStudio.Shell.Framework.dll" />
+        <file src="..\bin\Release\net48\Microsoft.VisualStudio.Threading.dll" target="tools\Microsoft.VisualStudio.Threading.dll" />
+        <file src="..\bin\Release\net48\Microsoft.VisualStudio.Validation.dll" target="tools\Microsoft.VisualStudio.Validation.dll" />
+        <file src="..\bin\Release\net48\StreamJsonRpc.dll" target="tools\StreamJsonRpc.dll" />
 
         <!-- Documentation and assets -->
         <file src="..\license\LICENSE.txt" target="license\LICENSE.txt" />
