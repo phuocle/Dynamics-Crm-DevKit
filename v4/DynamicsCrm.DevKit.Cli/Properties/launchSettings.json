@@ -10,7 +10,14 @@
       "commandLineArgs": "/conn:\"AuthType=ClientSecret;Url=https://hitachi-hsapvn-dev.crm5.dynamics.com;ClientId=b1b8cf05-cb06-4674-b93e-98c8c9a02e5a;ClientSecret=v+L6+3MvOrVPMNqGn86vi6qEG4qpCCLoLqgeUMjnGkY=;\" /json:\"..\\..\\DynamicsCrm.DevKit.Cli.json\" /type:\"generators\" /profile:\"JS-FORM\"",
       "workingDirectory": "D:\\azure\\PL\\HSAPVN\\src\\Hs.Hsap.WebResource\\entities"
     },
+    "generators.JsWebApi.ClientSecret": {
+      "commandName": "Project",
+      "commandLineArgs": "/conn:\"AuthType=ClientSecret;Url=https://hitachi-hsapvn-dev.crm5.dynamics.com;ClientId=b1b8cf05-cb06-4674-b93e-98c8c9a02e5a;ClientSecret=v+L6+3MvOrVPMNqGn86vi6qEG4qpCCLoLqgeUMjnGkY=;\" /json:\"..\\..\\DynamicsCrm.DevKit.Cli.json\" /type:\"generators\" /profile:\"JS-WEBAPI\"",
+      "workingDirectory": "D:\\azure\\PL\\HSAPVN\\src\\Hs.Hsap.WebResource\\entities"
+    },
+
     "generators.LateBound.UserPass": {
+
       "commandName": "Project",
       "commandLineArgs": "/conn:\"AuthType=OAuth;Url=https://dynamics-crm-devkit.crm5.dynamics.com;Username=devkit@phuocle.net;Password=Cyt@67C2Ua;AppId=51f81489-12ee-4a9e-aaae-a2591f45987d;RedirectUri=app://58145B91-0C36-4500-8554-080854F2AC97;LoginPrompt=Auto;\" /json:\"..\\..\\DynamicsCrm.DevKit.Cli.json\" /type:\"generators\" /profile:\"LATEBOUND\"",
       "workingDirectory": "D:\\azure\\PL\\HSAPVN\\src\\Hs.Hsap.Shared\\Entities"
