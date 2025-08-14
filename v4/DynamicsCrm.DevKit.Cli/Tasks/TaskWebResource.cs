@@ -113,7 +113,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     existingDependencyXml = rows.Entities[0].GetAttributeValue<string>("dependencyxml");
                 else
                 {
-                    CliLog.WriteLineError(ConsoleColor.Yellow, ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", current) + ": ", ConsoleColor.Green, CliAction.NOT_EXISTING, ConsoleColor.White, webResourceName);
+                    CliLog.WriteLineError(ConsoleColor.Yellow, ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", current) + ": ", ConsoleColor.Green, CliAction.NOT_FOUND, ConsoleColor.White, webResourceName);
                     return;
                 }
                 if (!await IsTheSameDependencyXmlAsync(dependency.dependencies, existingDependencyXml))

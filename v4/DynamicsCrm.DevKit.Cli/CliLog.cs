@@ -28,7 +28,7 @@ namespace DynamicsCrm.DevKit.Cli
             Console.ForegroundColor = oldConsoleColor;
         }
 
-        public static void WriteLine2(params object[] values)
+        public static void WriteLineNoFormat(params object[] values)
         {
             var oldConsoleColor = Console.ForegroundColor;
             foreach (var value in values)
@@ -168,7 +168,7 @@ namespace DynamicsCrm.DevKit.Cli
             Console.ForegroundColor = oldConsoleColor;
         }
 
-        public static void Write2(params object[] values)
+        public static void WriteNoFormat(params object[] values)
         {
             var oldConsoleColor = Console.ForegroundColor;
             foreach (var value in values)
