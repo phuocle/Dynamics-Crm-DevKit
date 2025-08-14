@@ -339,22 +339,50 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
         private async Task ReadEntitiesMetadataAsync(ServiceClient serviceClient)
         {
-            if (XrmHelper.EntitiesMetadata.Count == 0 &&
-                XrmHelper.EntitiesFormXml.Count == 0 &&
-                XrmHelper.EntitiesProcessForm.Count == 0)
+            if (XrmHelper.EntitiesMetadata.Count == 0 && XrmHelper.EntitiesFormXml.Count == 0 && XrmHelper.EntitiesProcessForm.Count == 0)
             {
-                var wait = new Thread(() => CliLog.Waiting("Reading entities Metadata "));
-                wait.Start();
-                await XrmHelper.ReadEntitiesMetadataAsync(serviceClient);
-                wait.Abort();
+                using (var cancellationTokenSource = new CancellationTokenSource())
+                {
+                    var waitingTask = Task.Run(() => CliLog.WaitingWithCancellation("Reading entities Metadata ", cancellationTokenSource.Token), cancellationTokenSource.Token);
+                    try
+                    {
+                        await XrmHelper.ReadEntitiesMetadataAsync(serviceClient);
+                    }
+                    finally
+                    {
+                        cancellationTokenSource.Cancel();
+                        try
+                        {
+                            await waitingTask;
+                        }
+                        catch (OperationCanceledException)
+                        {
+                        }
+                    }
+                }
                 CliLog.WriteLine();
                 if (Json.type.ToLower() != nameof(GeneratorType.csharp))
                 {
                     IsAll = true;
-                    wait = new Thread(() => CliLog.Waiting("Reading entities FormXml "));
-                    wait.Start();
-                    await XrmHelper.ReadEntitiesMetadataAsync(serviceClient);
-                    wait.Abort();
+                    using (var cancellationTokenSource = new CancellationTokenSource())
+                    {
+                        var waitingTask = Task.Run(() => CliLog.WaitingWithCancellation("Reading entities FormXml ", cancellationTokenSource.Token), cancellationTokenSource.Token);
+                        try
+                        {
+                            await XrmHelper.ReadEntitiesFormXmlAsync(serviceClient);
+                        }
+                        finally
+                        {
+                            cancellationTokenSource.Cancel();
+                            try
+                            {
+                                await waitingTask;
+                            }
+                            catch (OperationCanceledException)
+                            {
+                            }
+                        }
+                    }
                     CliLog.WriteLine();
                 }
                 CliLog.WriteLine(ConsoleColor.White, "|");

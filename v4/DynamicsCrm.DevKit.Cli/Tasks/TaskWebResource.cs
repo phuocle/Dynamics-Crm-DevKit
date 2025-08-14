@@ -540,18 +540,33 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var entities = forms.Concat(webApis).Distinct().ToList();
             if (entities.Count == 0)
             {
-                var wait = new Thread(() => CliLog.Waiting("Reading entities Metadata "));
-                wait.Start();
-                var allEntities = await XrmHelper.GetAllEntitiesSchemaAsync(ServiceClient);
-                wait.Abort();
-                foreach (var webResourceFile in webResourceFiles)
+                using (var cancellationTokenSource = new CancellationTokenSource())
                 {
-                    var fInfo = new FileInfo(webResourceFile.file);
-                    var entity = allEntities.FirstOrDefault(x => x == fInfo.Name.Substring(0, fInfo.Name.Length - fInfo.Extension.Length));
-                    if (entity != null)
+                    var waitingTask = Task.Run(() => CliLog.WaitingWithCancellation("Reading entities Metadata ", cancellationTokenSource.Token), cancellationTokenSource.Token);
+                    try
                     {
-                        entities.Add(entity);
-                      }
+                        var allEntities = await XrmHelper.GetAllEntitiesSchemaAsync(ServiceClient);
+                        foreach (var webResourceFile in webResourceFiles)
+                        {
+                            var fInfo = new FileInfo(webResourceFile.file);
+                            var entity = allEntities.FirstOrDefault(x => x == fInfo.Name.Substring(0, fInfo.Name.Length - fInfo.Extension.Length));
+                            if (entity != null)
+                            {
+                                entities.Add(entity);
+                            }
+                        }
+                    }
+                    finally
+                    {
+                        cancellationTokenSource.Cancel();
+                        try
+                        {
+                            await waitingTask;
+                        }
+                        catch (OperationCanceledException)
+                        {
+                        }
+                    }
                 }
                 CliLog.WriteLine();
                 CliLog.WriteLine(ConsoleColor.White, "|");

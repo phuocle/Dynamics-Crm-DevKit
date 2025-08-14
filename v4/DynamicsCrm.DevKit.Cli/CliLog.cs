@@ -188,17 +188,48 @@ namespace DynamicsCrm.DevKit.Cli
         {
             Write(ConsoleColor.White, "▌" + " ", message);
             int counter = 0;
-            while (true)
+            try
             {
-                switch (counter % 4)
+                while (true)
                 {
-                    case 0: Console.Write("."); counter = 0; break;
-                    case 1: Console.Write("."); break;
-                    case 2: Console.Write("."); break;
-                    case 3: Console.Write("."); break;
+                    switch (counter % 4)
+                    {
+                        case 0: Console.Write("."); counter = 0; break;
+                        case 1: Console.Write("."); break;
+                        case 2: Console.Write("."); break;
+                        case 3: Console.Write("."); break;
+                    }
+                    counter++;
+                    Thread.Sleep(1000);
                 }
-                counter++;
-                Thread.Sleep(1000);
+            }
+            catch (ThreadAbortException)
+            {
+                // Handle thread abort gracefully
+            }
+        }
+
+        public static void WaitingWithCancellation(string message = "", CancellationToken cancellationToken = default)
+        {
+            Write(ConsoleColor.White, "▌" + " ", message);
+            int counter = 0;
+            try
+            {
+                while (!cancellationToken.IsCancellationRequested)
+                {
+                    switch (counter % 4)
+                    {
+                        case 0: Console.Write("."); counter = 0; break;
+                        case 1: Console.Write("."); break;
+                        case 2: Console.Write("."); break;
+                        case 3: Console.Write("."); break;
+                    }
+                    counter++;
+                    cancellationToken.WaitHandle.WaitOne(1000);
+                }
+            }
+            catch (OperationCanceledException)
+            {
             }
         }
     }
