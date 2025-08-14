@@ -64,13 +64,16 @@ namespace DynamicsCrm.DevKit.Shared
             catch { return cipherText; }
         }
 
-        public static void ForceWriteAllText(string file, string content)
+        public static async Task ForceWriteAllTextAsync(string file, string content)
         {
             if (!File.Exists(file))
             {
                 var fInfo = new FileInfo(file);
                 if (!fInfo.Directory.Exists) fInfo.Directory.Create();
-                File.WriteAllText(file, content, System.Text.Encoding.UTF8);
+                using (var writer = new StreamWriter(file, false, System.Text.Encoding.UTF8))
+                {
+                    await writer.WriteAsync(content);
+                }
             }
             else
             {
@@ -79,7 +82,10 @@ namespace DynamicsCrm.DevKit.Shared
                 {
                     File.SetAttributes(file, attributes & ~FileAttributes.ReadOnly);
                 }
-                File.WriteAllText(file, content, System.Text.Encoding.UTF8);
+                using (var writer = new StreamWriter(file, false, System.Text.Encoding.UTF8))
+                {
+                    await writer.WriteAsync(content);
+                }
             }
         }
 
@@ -105,11 +111,14 @@ namespace DynamicsCrm.DevKit.Shared
             return path;
         }
 
-        public static string ReadAllText(string file)
+        public static async Task<string> ReadAllTextAsync(string file)
         {
             try
             {
-                return File.ReadAllText(file);
+                using (var reader = new StreamReader(file))
+                {
+                    return await reader.ReadToEndAsync();
+                }
             }
             catch
             {
@@ -117,18 +126,23 @@ namespace DynamicsCrm.DevKit.Shared
             }
         }
 
-        public static string ReadAllTextFromLine6(string file)
+        public static async Task<string> ReadAllTextFromLine6Async(string file)
         {
             try
             {
-                var lines = File.ReadAllLines(file).ToList();
-                lines.RemoveAt(0);
-                lines.RemoveAt(0);
-                lines.RemoveAt(0);
-                lines.RemoveAt(0);
-                lines.RemoveAt(0);
-                lines.RemoveAt(0);
-                lines.RemoveAt(0);
+                var lines = new List<string>();
+                using (var reader = new StreamReader(file))
+                {
+                    string line;
+                    while ((line = await reader.ReadLineAsync()) != null)
+                    {
+                        lines.Add(line);
+                    }
+                }
+                for (int i = 0; i < 7 && lines.Count > 0; i++)
+                {
+                    lines.RemoveAt(0);
+                }
                 return string.Join("\r\n", lines);
             }
             catch
@@ -137,7 +151,7 @@ namespace DynamicsCrm.DevKit.Shared
             }
         }
 
-        public static string ReadEmbeddedResource(string path)
+        public static async Task<string> ReadEmbeddedResourceAsync(string path)
         {
             try
             {
@@ -148,7 +162,7 @@ namespace DynamicsCrm.DevKit.Shared
                 using (var stream = assembly.GetManifestResourceStream(path))
                 using (var reader = new StreamReader(stream ?? throw new InvalidOperationException()))
                 {
-                    data = reader.ReadToEnd();
+                    data = await reader.ReadToEndAsync();
                 }
                 return data;
             }
@@ -354,7 +368,7 @@ namespace DynamicsCrm.DevKit.Shared
             return guid;
         }
 
-        public static string WriteTempFile(string filename, byte[] solutionBytes)
+        public static async Task<string> WriteTempFileAsync(string filename, byte[] solutionBytes)
         {
             try
             {
@@ -362,7 +376,10 @@ namespace DynamicsCrm.DevKit.Shared
                 var tempFile = Path.Combine(tempFolder, filename);
                 if (File.Exists(tempFile))
                     File.Delete(tempFile);
-                File.WriteAllBytes(tempFile, solutionBytes);
+                using (var stream = new FileStream(tempFile, FileMode.Create, FileAccess.Write, FileShare.None, bufferSize: 4096, useAsync: true))
+                {
+                    await stream.WriteAsync(solutionBytes, 0, solutionBytes.Length);
+                }
                 return tempFile;
             }
             catch

@@ -76,15 +76,19 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
         }
 
-        private void CopyFile()
+        private async Task CopyFileAsync()
         {
+            await Helper.DelayAsync(0);
             var fileExecuting = Assembly.GetExecutingAssembly().Location;
             var fiFileExecuting = new FileInfo(fileExecuting);
             var fileCrmSvcUtilExtension = Path.Combine(fiFileExecuting.DirectoryName, "DynamicsCrm.DevKit.CrmSvcUtilExtensions.dll");
             if (!File.Exists(fileCrmSvcUtilExtension)) throw new Exception("Not found DynamicsCrm.DevKit.CrmSvcUtilExtensions.dll");
             var fiCrmSvcUtil = new FileInfo(CrmSvcUtil);
             var fileToCopy = Path.Combine(fiCrmSvcUtil.DirectoryName, "DynamicsCrm.DevKit.CrmSvcUtilExtensions.dll");
-            if (!File.Exists(fileToCopy))File.Copy(fileCrmSvcUtilExtension, fileToCopy);
+            if (!File.Exists(fileToCopy))
+            {
+                File.Copy(fileCrmSvcUtilExtension, fileToCopy);
+            }
         }
 
         private string CreateCommandArgs()
@@ -152,7 +156,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
             if (await IsValidAsync())
             {
-                CopyFile();
+                await CopyFileAsync();
                 await RunProxyTypeAsync();
             }
 

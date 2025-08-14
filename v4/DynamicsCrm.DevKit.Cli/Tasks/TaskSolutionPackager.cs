@@ -123,7 +123,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             else
             {
-                var crmVersion = GetCrmVersionFromSolutionFolder();
+                var crmVersion = await GetCrmVersionFromSolutionFolderAsync();
                 var fileName = FormatSolutionVersionString(Json.solution, System.Version.Parse(crmVersion), Json.solutiontype);
                 var solutionFile = Path.Combine(CurrentDirectory, Json.folder, "Solutions-Pack", fileName);
                 return solutionFile;
@@ -149,7 +149,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var solutionFile = Path.Combine(CurrentDirectory, Json.folder, "Solutions-Extract", fileName);
             if (solutionType.ToLower() == "Managed".ToLower())
                 solutionFile = $"{Path.GetDirectoryName(solutionFile)}\\{Path.GetFileNameWithoutExtension(solutionFile)}_managed.zip";
-            var tempFile = Helper.WriteTempFile(fileName, response.ExportSolutionFile);
+            var tempFile = await Helper.WriteTempFileAsync(fileName, response.ExportSolutionFile);
             var dir = Path.GetDirectoryName(solutionFile);
             if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
             File.Copy(tempFile, solutionFile, true);
@@ -182,11 +182,12 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             return solution.GetAttributeValue<string>("version");
         }
 
-        private string GetCrmVersionFromSolutionFolder()
+        private async Task<string> GetCrmVersionFromSolutionFolderAsync()
         {
             string pattern = @"<Version>\d+\.\d+\.\d+\.\d+<\/Version>";
             RegexOptions options = RegexOptions.Multiline;
-            foreach (Match m in Regex.Matches(Helper.ReadAllText(SolutionXmlFile), pattern, options))
+            var fileContent = await Helper.ReadAllTextAsync(SolutionXmlFile);
+            foreach (Match m in Regex.Matches(fileContent, pattern, options))
             {
                 var version = m.Value;
                 version = version.Replace("<Version>", string.Empty).Replace("</Version>", string.Empty);
