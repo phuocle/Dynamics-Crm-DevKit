@@ -56,13 +56,12 @@ namespace DynamicsCrm.DevKit
             {
                 return new DevKitConnections()
                 {
-                    CrmConnections = new List<CrmConnection>()
+                    CrmConnections = []
                 };
             }
             var json = await Task.Run(() => File.ReadAllText(fileName));
             var devKitConnections = SimpleJson.DeserializeObject<DevKitConnections>(json);
-            if (devKitConnections.CrmConnections == null)
-                devKitConnections.CrmConnections = new List<CrmConnection>();
+            devKitConnections.CrmConnections ??= [];
             return devKitConnections;
         }
 
@@ -96,7 +95,7 @@ namespace DynamicsCrm.DevKit
             {   
                 configJson.WebResources.Add(deployWebResource); 
             }
-            configJson.WebResources = configJson.WebResources.OrderBy(x => x.WebResource).ToList();
+            configJson.WebResources = [.. configJson.WebResources.OrderBy(x => x.WebResource)];
             var json = JsonHelper.FormatJson(SimpleJson.SerializeObject(configJson));
             await FileHelper.ForceWriteAllTextAsync(fileName, json);
         }

@@ -68,7 +68,6 @@
     <Compile Include="Lib\Forms\FormWebResource.xaml.cs">
       <DependentUpon>FormWebResource.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Lib\JsonHelper.cs" />
     <Compile Include="Lib\VsixHelper.cs" />
     <Compile Include="Lib\WpfControls\ExternalBrowserHyperlink.cs" />
     <Compile Include="Lib\WpfControls\UserControlConnection.xaml.cs">
