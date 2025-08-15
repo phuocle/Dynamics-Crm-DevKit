@@ -5,7 +5,7 @@ using System.Activities;
 
 namespace CustomWorkflow
 {
-    [CrmPluginRegistration("SendUsersMailB", "SendUsersMailB", "", "CustomWorkflow", IsolationModeEnum.Sandbox, PluginType = PluginType.Workflow)]
+    [CrmPluginRegistration("SendUsersMailB", "SendUsersMailB", "DynamicsCrm.DevKit v.3.44.44.44 - Build: 2024.12.31 23.59.59", "CustomWorkflow", IsolationModeEnum.Sandbox, PluginType = PluginType.Workflow)]
     public class SendUsersMail : BaseCodeActivity
     {
         [Input("List UserIds")]

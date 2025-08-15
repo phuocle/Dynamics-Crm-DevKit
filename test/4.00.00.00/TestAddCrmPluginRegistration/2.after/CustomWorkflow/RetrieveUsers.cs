@@ -5,7 +5,7 @@ using Microsoft.Xrm.Sdk.Workflow;
 
 namespace CustomWorkflow
 {
-    [CrmPluginRegistration("RetrieveUsers", "RetrieveUsers", "", "CustomWorkflow", IsolationModeEnum.Sandbox, PluginType = PluginType.Workflow)]
+    [CrmPluginRegistration("RetrieveUsers", "RetrieveUsers", "DynamicsCrm.DevKit v.3.44.44.44 - Build: 2024.12.31 23.59.59", "CustomWorkflow", IsolationModeEnum.Sandbox, PluginType = PluginType.Workflow)]
     public class RetrieveUsers : CodeActivity
     {
         [Input("Email Template Title")]
