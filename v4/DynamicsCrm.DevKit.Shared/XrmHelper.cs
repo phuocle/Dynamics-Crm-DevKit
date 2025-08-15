@@ -128,7 +128,7 @@ namespace DynamicsCrm.DevKit.Shared
         public static async Task DeployReportAsync(ServiceClient serviceClient, Guid reportId, string fullFileName)
         {
             var update = new Entity("report", reportId);
-            update["bodytext"] = await Helper.ReadAllTextAsync(fullFileName);
+            update["bodytext"] = await FileHelper.ReadAllTextAsync(fullFileName);
             await serviceClient.UpdateAsync(update);
         }
 

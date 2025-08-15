@@ -167,7 +167,7 @@ namespace DynamicsCrm.DevKit.Cli
                 return false;
             if (arguments.Type.ToLower() == nameof(CliType.solutionpackagers))
             {
-                var json = SimpleJson.DeserializeObject<Json>(await Helper.ReadAllTextAsync(arguments.JsonFile));
+                var json = SimpleJson.DeserializeObject<Json>(await FileHelper.ReadAllTextAsync(arguments.JsonFile));
                 var jsonSolutionPackager = json.solutionpackagers.FirstOrDefault(x => x.profile == arguments.Profile);
                 if (jsonSolutionPackager?.type?.ToLower() == "Pack".ToLower()) return false;
             }

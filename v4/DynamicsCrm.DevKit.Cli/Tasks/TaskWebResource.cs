@@ -288,7 +288,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     }
                 }
             }
-            var fileContent = Convert.ToBase64String(await Helper.ReadAllBytesAsync(webResourceFile.file));
+            var fileContent = Convert.ToBase64String(await FileHelper.ReadAllBytesAsync(webResourceFile.file));
             if (fileContent == content)
             {
                 CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", current) + ": ", ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, webResourceFile.file.Substring(CurrentDirectory.Length + 1));

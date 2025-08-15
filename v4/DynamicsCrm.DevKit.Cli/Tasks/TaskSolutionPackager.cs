@@ -149,7 +149,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var solutionFile = Path.Combine(CurrentDirectory, Json.folder, "Solutions-Extract", fileName);
             if (solutionType.ToLower() == "Managed".ToLower())
                 solutionFile = $"{Path.GetDirectoryName(solutionFile)}\\{Path.GetFileNameWithoutExtension(solutionFile)}_managed.zip";
-            var tempFile = await Helper.WriteTempFileAsync(fileName, response.ExportSolutionFile);
+            var tempFile = await FileHelper.WriteTempFileAsync(fileName, response.ExportSolutionFile);
             var dir = Path.GetDirectoryName(solutionFile);
             if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
             File.Copy(tempFile, solutionFile, true);
@@ -186,7 +186,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         {
             string pattern = @"<Version>\d+\.\d+\.\d+\.\d+<\/Version>";
             RegexOptions options = RegexOptions.Multiline;
-            var fileContent = await Helper.ReadAllTextAsync(SolutionXmlFile);
+            var fileContent = await FileHelper.ReadAllTextAsync(SolutionXmlFile);
             foreach (Match m in Regex.Matches(fileContent, pattern, options))
             {
                 var version = m.Value;

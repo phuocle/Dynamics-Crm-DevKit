@@ -156,8 +156,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var file = Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}.js");
                     var fileEndsWith = Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}{endsWith}");
                     var dtsFile = Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}.d.ts");
-                    var oldCode = await Helper.ReadAllTextAsync(fileEndsWith);
-                    var oldDTS = await Helper.ReadAllTextAsync(dtsFile);
+                    var oldCode = await FileHelper.ReadAllTextAsync(fileEndsWith);
+                    var oldDTS = await FileHelper.ReadAllTextAsync(dtsFile);
                     var comment = await XrmHelper.GetCommentAsync(ServiceClient, entityMetadata.LogicalName, dtsFile);
                     if (IsAll)
                     {
@@ -181,7 +181,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     {
                         if (oldCode?.Length > 0 && newCode?.Length > 0 && !Helper.IsTheSame(oldDTS, newDTS))
                         {
-                            await Helper.ForceWriteAllTextAsync(dtsFile, newDTS);
+                            await FileHelper.ForceWriteAllTextAsync(dtsFile, newDTS);
                             CliLog.WriteLineWarning(ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.UPDATED, ConsoleColor.White, $"{schemaName}{endsWith}");
                         }
                         else
@@ -193,17 +193,17 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     {
                         if (File.Exists(fileEndsWith))
                         {
-                            await Helper.ForceWriteAllTextAsync(fileEndsWith, newCode);
-                            await Helper.ForceWriteAllTextAsync(dtsFile, newDTS);
+                            await FileHelper.ForceWriteAllTextAsync(fileEndsWith, newCode);
+                            await FileHelper.ForceWriteAllTextAsync(dtsFile, newDTS);
                             CliLog.WriteLineWarning(ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.UPDATED, ConsoleColor.White, $"{schemaName}{endsWith}");
                         }
                         else
                         {
-                            await Helper.ForceWriteAllTextAsync(fileEndsWith, newCode);
-                            await Helper.ForceWriteAllTextAsync(dtsFile, newDTS);
+                            await FileHelper.ForceWriteAllTextAsync(fileEndsWith, newCode);
+                            await FileHelper.ForceWriteAllTextAsync(dtsFile, newDTS);
                             if (!File.Exists(file))
                             {
-                                await Helper.ForceWriteAllTextAsync(file, Helper.GetDefaultFileWithWebApi(entityMetadata.SchemaName));
+                                await FileHelper.ForceWriteAllTextAsync(file, Helper.GetDefaultFileWithWebApi(entityMetadata.SchemaName));
                             }
                             CliLog.WriteLineWarning(ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.CREATED, ConsoleColor.White, $"{schemaName}{endsWith}");
                         }
@@ -233,8 +233,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var file = Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}.js");
                     var fileEndsWith = Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}{endsWith}");
                     var dtsFile = Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}.d.ts");
-                    var oldCode = await Helper.ReadAllTextAsync(fileEndsWith);
-                    var oldDTS = await Helper.ReadAllTextAsync(dtsFile);
+                    var oldCode = await FileHelper.ReadAllTextAsync(fileEndsWith);
+                    var oldDTS = await FileHelper.ReadAllTextAsync(dtsFile);
                     var comment = await XrmHelper.GetCommentAsync(ServiceClient, entityMetadata.LogicalName, dtsFile);
                     if (IsAll)
                     {
@@ -254,7 +254,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     {
                         if (oldCode?.Length > 0 && newCode?.Length > 0 && !Helper.IsTheSame(oldDTS, newDTS))
                         {
-                            await Helper.ForceWriteAllTextAsync(dtsFile, newDTS);
+                            await FileHelper.ForceWriteAllTextAsync(dtsFile, newDTS);
                             CliLog.WriteLineWarning(ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.UPDATED, ConsoleColor.White, $"{schemaName}{endsWith}");
                         }
                         else
@@ -266,17 +266,17 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     {
                         if (File.Exists(fileEndsWith))
                         {
-                            await Helper.ForceWriteAllTextAsync(fileEndsWith, newCode);
-                            await Helper.ForceWriteAllTextAsync(dtsFile, newDTS);
+                            await FileHelper.ForceWriteAllTextAsync(fileEndsWith, newCode);
+                            await FileHelper.ForceWriteAllTextAsync(dtsFile, newDTS);
                             CliLog.WriteLineWarning(ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.UPDATED, ConsoleColor.White, $"{schemaName}{endsWith}");
                         }
                         else
                         {
-                            await Helper.ForceWriteAllTextAsync(fileEndsWith, newCode);
-                            await Helper.ForceWriteAllTextAsync(dtsFile, newDTS);
+                            await FileHelper.ForceWriteAllTextAsync(fileEndsWith, newCode);
+                            await FileHelper.ForceWriteAllTextAsync(dtsFile, newDTS);
                             if (!File.Exists(file))
                             {
-                                await Helper.ForceWriteAllTextAsync(file, await XrmHelper.GetDefaultFileWithFormAsync(ServiceClient, entityMetadata, Json.rootnamespace));
+                                await FileHelper.ForceWriteAllTextAsync(file, await XrmHelper.GetDefaultFileWithFormAsync(ServiceClient, entityMetadata, Json.rootnamespace));
                             }
                             CliLog.WriteLineWarning(ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.CREATED, ConsoleColor.White, $"{schemaName}{endsWith}");
                         }
@@ -306,7 +306,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var file = Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}.cs");
                     var fileEndsWith = Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}{endsWith}");
 
-                    var oldCode = await Helper.ReadAllTextFromLine6Async(fileEndsWith);
+                    var oldCode = await FileHelper.ReadAllTextFromLine6Async(fileEndsWith);
                     var newCode = CSharpLateBound.GetCode(ServiceClient, entityMetadata, Json.rootnamespace);
                     if (newCode == String.Empty || Helper.IsTheSame(oldCode, newCode))
                     {
@@ -327,15 +327,15 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         newCode = $"{code}{newCode}";
                         if (File.Exists(fileEndsWith))
                         {
-                            await Helper.ForceWriteAllTextAsync(fileEndsWith, newCode);
+                            await FileHelper.ForceWriteAllTextAsync(fileEndsWith, newCode);
                             CliLog.WriteLineWarning(ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.UPDATED, ConsoleColor.White, $"{schemaName}{endsWith}");
                         }
                         else
                         {
-                            await Helper.ForceWriteAllTextAsync(fileEndsWith, newCode);
+                            await FileHelper.ForceWriteAllTextAsync(fileEndsWith, newCode);
                             if (!File.Exists(file))
                             {
-                                await Helper.ForceWriteAllTextAsync(file, Helper.GetDefaultFileWithCs(entityMetadata, Json.rootnamespace));
+                                await FileHelper.ForceWriteAllTextAsync(file, Helper.GetDefaultFileWithCs(entityMetadata, Json.rootnamespace));
                             }
                             CliLog.WriteLineWarning(ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.CREATED, ConsoleColor.White, $"{schemaName}{endsWith}");
                         }
