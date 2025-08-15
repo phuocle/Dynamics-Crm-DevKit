@@ -32,7 +32,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         private const string SPACE = "  ";
         public bool IsOk { get; set; }
         public Guid SolutionId { get; set; }
-        public string Prefix { get; set; }
+        public string SolutionPrefix { get; set; }
         public TaskServer(CommandLineArgs arg, Json json)
         {
             this.Arg = arg;
@@ -94,7 +94,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'solution' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
                 return false;
             }
-            (IsOk, SolutionId, Prefix) = await XrmHelper.IsExistSolutionAsync(ServiceClient, Json.solution);
+            (IsOk, SolutionId, SolutionPrefix) = await XrmHelper.IsExistSolutionAsync(ServiceClient, Json.solution);
             if (!IsOk)
             {
                 CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} solution '{Json.solution}' not exist");
@@ -192,10 +192,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
         private async Task<bool> IsValidDataProviderAsync(List<DataProviderEvent> dataProviderEvents, string dataSource)
         {
-            var checkDataSource = dataSource.ToLower().StartsWith(Prefix.ToLower()) ? dataSource : $"{Prefix?.ToLower()}{dataSource}";
+            var checkDataSource = dataSource.ToLower().StartsWith(SolutionPrefix.ToLower()) ? dataSource : $"{SolutionPrefix?.ToLower()}{dataSource}";
             if (!await IsExistDataSourceAsync($"{checkDataSource}"))
             {
-                CliLog.WriteLineError(ConsoleColor.Yellow, $"DataSource {dataSource} with prefix {Prefix.ToLower()} not exist ({checkDataSource}). Assemply deployed, but the deployment of this assembly stopped.");
+                CliLog.WriteLineError(ConsoleColor.Yellow, $"DataSource {dataSource} with prefix {SolutionPrefix.ToLower()} not exist ({checkDataSource}). Assemply deployed, but the deployment of this assembly stopped.");
                 return false;
             }
             var countRetrieve = dataProviderEvents.Count(x => x.Message == "Retrieve" && x.DataSource == dataSource);
@@ -237,7 +237,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         private async Task RegisterDataProviderAsync(List<DataProviderEvent> dataProviderEvents, string dataSource)
         {
             var events = string.Empty;
-            var logicalNameDataSource = dataSource.ToLower().StartsWith(Prefix.ToLower()) ? dataSource.ToLower() : $"{Prefix?.ToLower()}{dataSource}".ToLower();
+            var logicalNameDataSource = dataSource.ToLower().StartsWith(SolutionPrefix.ToLower()) ? dataSource.ToLower() : $"{SolutionPrefix?.ToLower()}{dataSource}".ToLower();
             var entity = new Entity("entitydataprovider");
             entity.Attributes.Add("name", logicalNameDataSource);
             entity.Attributes.Add("datasourcelogicalname", logicalNameDataSource);
@@ -1474,7 +1474,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         private async Task<bool> DeployNewOrUpdatePackageAsync(PackageArchiveReader packageArchiveReader, string file)
         {
             byte[] inArray = File.ReadAllBytes(file);
-            var name = $"{Prefix}{packageArchiveReader.NuspecReader.GetId()}";
+            var name = $"{SolutionPrefix}{packageArchiveReader.NuspecReader.GetId()}";
             var newContent = Convert.ToBase64String(inArray);
             var fetchData = new
             {

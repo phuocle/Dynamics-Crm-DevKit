@@ -29,7 +29,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         private JsonWebResource Json { get; set; }
         public bool IsOk { get; set; }
         public Guid SolutionId { get; set; }
-        public string Prefix { get; set; }
+        public string SolutionPrefix { get; set; }
         private List<Guid> WebResourcesToPublish { get; } = new List<Guid>();
         public async Task<bool> IsValidAsync()
         {
@@ -490,8 +490,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var name = file
                         .Substring($"{CurrentDirectory}\\{Json.rootfolder}\\".Replace(@"\\", @"\").Length)
                         .Replace("\\", "/");
-                    if (!name.StartsWith(Prefix))
-                        name = Prefix + "/" + name;
+                    if (!name.StartsWith(SolutionPrefix))
+                        name = SolutionPrefix + "/" + name;
                     var webResourceFile = new WebResourceFile
                     {
                         file = file,

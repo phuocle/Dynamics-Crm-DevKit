@@ -23,7 +23,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         private JsonDownloadWebResource Json { get; set; }
         public bool IsOk { get; set; }
         public Guid SolutionId { get; set; }
-        public string Prefix { get; set; }
+        public string SolutionPrefix { get; set; }
         public async Task<bool> IsValidAsync()
         {
             if (Json == null)

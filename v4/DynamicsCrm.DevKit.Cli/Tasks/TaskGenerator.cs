@@ -37,7 +37,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         private static bool IsAll { get; set; } = false;
         public bool IsOk { get; set; }
         public Guid SolutionId { get; set; }
-        public string Prefix { get; set; }
+        public string SolutionPrefix { get; set; }
         public async Task<bool> IsValidAsync()
         {
             if (Json == null)

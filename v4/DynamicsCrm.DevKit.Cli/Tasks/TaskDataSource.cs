@@ -28,7 +28,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         private JsonDataSource Json { get; set; }
         public bool IsOk { get; set; }
         public Guid SolutionId { get; set; }
-        public string Prefix { get; set; }
+        public string SolutionPrefix { get; set; }
         private string DataSourceName { get; set; }
 
         public async Task<bool> IsValidAsync()
@@ -79,13 +79,13 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'name' can cannot contain space character.");
                 return false;
             }
-            (IsOk, SolutionId, Prefix) = await XrmHelper.IsExistSolutionAsync(ServiceClient, Json.solution);
+            (IsOk, SolutionId, SolutionPrefix) = await XrmHelper.IsExistSolutionAsync(ServiceClient, Json.solution);
             if (!IsOk)
             {
                 CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} solution '{Json.solution}' not exist");
                 return false;
             }
-            DataSourceName = Json.name.ToLower().StartsWith(Prefix.ToLower()) ? Json.name : $"{Prefix}{Json.name}";
+            DataSourceName = Json.name.ToLower().StartsWith(SolutionPrefix.ToLower()) ? Json.name : $"{SolutionPrefix}{Json.name}";
             if (await XrmHelper.IsExistDataSourceAsync(ServiceClient, DataSourceName))
             {
                 CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} name '{DataSourceName}' exist");

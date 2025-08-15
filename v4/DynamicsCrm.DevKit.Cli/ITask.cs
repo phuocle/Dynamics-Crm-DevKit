@@ -15,6 +15,6 @@ namespace DynamicsCrm.DevKit.Cli
         Task<bool> IsValidAsync();
         bool IsOk { get; set; }
         Guid SolutionId { get; set; }
-        string Prefix { get; set; }
+        string SolutionPrefix { get; set; }
     }
 }
