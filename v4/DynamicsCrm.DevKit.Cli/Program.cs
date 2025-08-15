@@ -109,7 +109,7 @@ namespace DynamicsCrm.DevKit.Cli
                 CliLog.WriteLineError(ConsoleColor.Yellow, $"/profile: required !!!");
                 return false;
             }
-            if (IsNeedServiceClient(arguments))
+            if (await IsNeedServiceClientAsync(arguments))
             {
                 if (arguments.IsSdkLogin)
                 {
@@ -161,13 +161,13 @@ namespace DynamicsCrm.DevKit.Cli
             return true;
         }
 
-        private static bool IsNeedServiceClient(CommandLineArgs arguments)
+        private static async Task<bool> IsNeedServiceClientAsync(CommandLineArgs arguments)
         {
             if (arguments.IsSdkLogin && arguments.Type.ToLower() == nameof(CliType.proxytypes))
                 return false;
             if (arguments.Type.ToLower() == nameof(CliType.solutionpackagers))
             {
-                var json = SimpleJson.DeserializeObject<Json>(File.ReadAllText(arguments.JsonFile));
+                var json = SimpleJson.DeserializeObject<Json>(await Helper.ReadAllTextAsync(arguments.JsonFile));
                 var jsonSolutionPackager = json.solutionpackagers.FirstOrDefault(x => x.profile == arguments.Profile);
                 if (jsonSolutionPackager?.type?.ToLower() == "Pack".ToLower()) return false;
             }

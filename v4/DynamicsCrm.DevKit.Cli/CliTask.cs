@@ -12,7 +12,7 @@ namespace DynamicsCrm.DevKit.Cli
     {
         internal static async Task RunAsync(CommandLineArgs arg)
         {
-            var json = SimpleJson.DeserializeObject<Json>(File.ReadAllText(arg.JsonFile));
+            var json = SimpleJson.DeserializeObject<Json>(await Helper.ReadAllTextAsync(arg.JsonFile));
             switch (arg.Type)
             {
                 case nameof(CliType.downloadreports):

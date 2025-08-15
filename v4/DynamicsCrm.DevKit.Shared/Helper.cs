@@ -126,6 +126,23 @@ namespace DynamicsCrm.DevKit.Shared
             }
         }
 
+        public static async Task<byte[]> ReadAllBytesAsync(string path)
+        {
+            try
+            {
+                using (var fileStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read, bufferSize: 4096, useAsync: true))
+                {
+                    var buffer = new byte[fileStream.Length];
+                    await fileStream.ReadAsync(buffer, 0, buffer.Length);
+                    return buffer;
+                }
+            }
+            catch
+            {
+                return new byte[0];
+            }
+        }
+
         public static async Task<string> ReadAllTextFromLine6Async(string file)
         {
             try
