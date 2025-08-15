@@ -32,7 +32,7 @@ namespace DynamicsCrm.DevKit.Cli
 
         private static void ShowHelp()
         {
-            var helpColor = ConsoleColor.Blue;
+            var helpColor = ConsoleColor.White;
             var colorBox = ConsoleColor.Green;
             CliLog.SetupCliLog();
             CliLog.Write(colorBox, "╔");
@@ -43,9 +43,9 @@ namespace DynamicsCrm.DevKit.Cli
             CliLog.WriteLineNoFormat(colorBox, "║ ", helpColor, " | | | | | | | '_ \\ / _` | '_ ` _ \\| |/ __/ __| |   | '__| '_ ` _ \\  | | | |/ _ \\ \\ / / ' /| | __|| |   | | |", colorBox, "  ║");
             CliLog.WriteLineNoFormat(colorBox, "║ ", helpColor, " | |_| | |_| | | | | (_| | | | | | | | (__\\__ \\ |___| |  | | | | | |_| |_| |  __/\\ V /| . \\| | |_ | |___| | |", colorBox, "  ║");
             CliLog.WriteLineNoFormat(colorBox, "║ ", helpColor, " |____/ \\__, |_| |_|\\__,_|_| |_| |_|_|\\___|___/\\____|_|  |_| |_| |_(_)____/ \\___| \\_/ |_|\\_\\_|\\__(_)____|_|_|", colorBox, "  ║");
-            CliLog.WriteNoFormat(colorBox, "║ ", helpColor, "        |___/            ", ConsoleColor.White, "https://github.com/phuocle/Dynamics-Crm-DevKit ");
+            CliLog.WriteNoFormat(colorBox, "║ ", helpColor, "        |___/            ", ConsoleColor.Green, "https://github.com/phuocle/Dynamics-Crm-DevKit ");
             CliLog.WriteSuccess(ConsoleColor.White, Const.Version);
-            CliLog.Write(ConsoleColor.White, " Build: ");
+            CliLog.Write(ConsoleColor.Green, " Build: ");
             CliLog.WriteSuccess(ConsoleColor.White, Const.Build);
             CliLog.WriteLine(colorBox, "  ║");
             CliLog.Write(colorBox, "╚");

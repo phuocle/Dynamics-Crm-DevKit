@@ -260,13 +260,13 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         CliLog.Write(ConsoleColor.White, " and ");
                         var solutionZipFileManaged = $"{Path.GetDirectoryName(solutionZipFile)}\\{Path.GetFileNameWithoutExtension(solutionZipFile)}_managed.zip";
                         CliLog.WriteSuccess(ConsoleColor.White, ".." + solutionZipFileManaged.Substring(CurrentDirectory.Length));
-                        CliLog.WriteLine(ConsoleColor.Black, "█");
+                        CliLog.WriteLine(ConsoleColor.Black, "|");
                     }
                     else
                     {
                         CliLog.Write(ConsoleColor.White, "| ", ConsoleColor.Green, $"{Json.type}ing", ConsoleColor.White, " solution: ", ConsoleColor.Green, Json.solution, ConsoleColor.White, " to: ");
                         CliLog.WriteSuccess(ConsoleColor.White, solutionZipFile);
-                        CliLog.WriteLine(ConsoleColor.Black, "█");
+                        CliLog.WriteLine(ConsoleColor.Black, "|");
                     }
                 }
                 else
@@ -274,7 +274,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     CliLog.WriteLine(ConsoleColor.White, "|");
                     CliLog.Write(ConsoleColor.White, "| ", ConsoleColor.Green, $"{Json.type}ing", ConsoleColor.White, " solution: ", ConsoleColor.Green, Json.solution, ConsoleColor.White, " to: ");
                     CliLog.WriteSuccess(ConsoleColor.White, $"..\\{Json.folder}\\{Json.solutiontype}");
-                    CliLog.WriteLine(ConsoleColor.Black, "█");
+                    CliLog.WriteLine(ConsoleColor.Black, "|");
                 }
 
                 RunSolutionPackager(solutionZipFile);
