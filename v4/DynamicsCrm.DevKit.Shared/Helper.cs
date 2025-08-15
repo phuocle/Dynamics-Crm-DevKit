@@ -25,13 +25,15 @@ namespace DynamicsCrm.DevKit.Shared
             string passPhrase = "PL.DynamicsCrm.DevKit";
             byte[] initVectorBytes = Encoding.UTF8.GetBytes(initVector);
             byte[] plainTextBytes = Encoding.UTF8.GetBytes(plainText);
-            PasswordDeriveBytes password = new PasswordDeriveBytes(passPhrase, null);
+            PasswordDeriveBytes password = new(passPhrase, null);
             byte[] keyBytes = password.GetBytes(keysize / 8);
-            RijndaelManaged symmetricKey = new RijndaelManaged();
-            symmetricKey.Mode = CipherMode.CBC;
+            RijndaelManaged symmetricKey = new()
+            {
+                Mode = CipherMode.CBC
+            };
             ICryptoTransform encryptor = symmetricKey.CreateEncryptor(keyBytes, initVectorBytes);
-            MemoryStream memoryStream = new MemoryStream();
-            CryptoStream cryptoStream = new CryptoStream(memoryStream, encryptor, CryptoStreamMode.Write);
+            MemoryStream memoryStream = new();
+            CryptoStream cryptoStream = new(memoryStream, encryptor, CryptoStreamMode.Write);
             cryptoStream.Write(plainTextBytes, 0, plainTextBytes.Length);
             cryptoStream.FlushFinalBlock();
             byte[] cipherTextBytes = memoryStream.ToArray();
@@ -48,13 +50,15 @@ namespace DynamicsCrm.DevKit.Shared
                 string passPhrase = "PL.DynamicsCrm.DevKit";
                 byte[] initVectorBytes = Encoding.UTF8.GetBytes(initVector);
                 byte[] cipherTextBytes = Convert.FromBase64String(cipherText);
-                PasswordDeriveBytes password = new PasswordDeriveBytes(passPhrase, null);
+                PasswordDeriveBytes password = new(passPhrase, null);
                 byte[] keyBytes = password.GetBytes(keysize / 8);
-                RijndaelManaged symmetricKey = new RijndaelManaged();
-                symmetricKey.Mode = CipherMode.CBC;
+                RijndaelManaged symmetricKey = new()
+                {
+                    Mode = CipherMode.CBC
+                };
                 ICryptoTransform decryptor = symmetricKey.CreateDecryptor(keyBytes, initVectorBytes);
-                MemoryStream memoryStream = new MemoryStream(cipherTextBytes);
-                CryptoStream cryptoStream = new CryptoStream(memoryStream, decryptor, CryptoStreamMode.Read);
+                MemoryStream memoryStream = new(cipherTextBytes);
+                CryptoStream cryptoStream = new(memoryStream, decryptor, CryptoStreamMode.Read);
                 byte[] plainTextBytes = new byte[cipherTextBytes.Length];
                 int decryptedByteCount = cryptoStream.Read(plainTextBytes, 0, plainTextBytes.Length);
                 memoryStream.Close();
@@ -166,13 +170,11 @@ namespace DynamicsCrm.DevKit.Shared
 
         private static bool IsJsKeywords(string name)
         {
-            switch (name)
+            return name switch
             {
-                case "import":
-                    return true;
-                default:
-                    return false;
-            }
+                "import" => true,
+                _ => false,
+            };
         }
 
         public static string SafeDeclareName(string declareName, GeneratorType generatorType, string schemaName = null, AttributeMetadata attribute = null)

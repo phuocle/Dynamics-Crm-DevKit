@@ -231,7 +231,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
 
         private void ComboBoxType_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            if (!(sender is ComboBox comboBox) || comboBox.SelectedItem == null) 
+            if (sender is not ComboBox comboBox || comboBox.SelectedItem == null) 
                 return;
 
             var selectedText = ((ComboBoxItem)comboBox.SelectedItem).Content?.ToString();

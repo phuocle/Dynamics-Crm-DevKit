@@ -1,0 +1,3 @@
+Url: https://dev2-devkit.crm5.dynamics.com/main.aspx
+User: dev2@pldevkit.onmicrosoft.com
+Pass: Xx

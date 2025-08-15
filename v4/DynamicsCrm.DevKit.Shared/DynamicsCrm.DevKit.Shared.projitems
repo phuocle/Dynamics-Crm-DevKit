@@ -63,4 +63,8 @@
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\WebApi.js" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\plugin.deploy.debug.bat" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\plugin.deploy.debug.only.bat" />
+  </ItemGroup>
 </Project>

@@ -12,10 +12,8 @@ namespace DynamicsCrm.DevKit.Shared
             {
                 var fInfo = new FileInfo(file);
                 if (!fInfo.Directory.Exists) fInfo.Directory.Create();
-                using (var writer = new StreamWriter(file, false, System.Text.Encoding.UTF8))
-                {
-                    await writer.WriteAsync(content);
-                }
+                using var writer = new StreamWriter(file, false, System.Text.Encoding.UTF8);
+                await writer.WriteAsync(content);
             }
             else
             {
@@ -24,10 +22,29 @@ namespace DynamicsCrm.DevKit.Shared
                 {
                     File.SetAttributes(file, attributes & ~FileAttributes.ReadOnly);
                 }
-                using (var writer = new StreamWriter(file, false, System.Text.Encoding.UTF8))
+                using var writer = new StreamWriter(file, false, System.Text.Encoding.UTF8);
+                await writer.WriteAsync(content);
+            }
+        }
+
+        public static async Task ForceWriteAllTextWithoutUTF8Async(string file, string content)
+        {
+            if (!File.Exists(file))
+            {
+                var fInfo = new FileInfo(file);
+                if (!fInfo.Directory.Exists) fInfo.Directory.Create();
+                using var writer = new StreamWriter(file, false);
+                await writer.WriteAsync(content);
+            }
+            else
+            {
+                var attributes = File.GetAttributes(file);
+                if ((attributes & FileAttributes.ReadOnly) == FileAttributes.ReadOnly)
                 {
-                    await writer.WriteAsync(content);
+                    File.SetAttributes(file, attributes & ~FileAttributes.ReadOnly);
                 }
+                using var writer = new StreamWriter(file, false);
+                await writer.WriteAsync(content);
             }
         }
 
@@ -49,10 +66,8 @@ namespace DynamicsCrm.DevKit.Shared
         {
             try
             {
-                using (var reader = new StreamReader(file))
-                {
-                    return await reader.ReadToEndAsync();
-                }
+                using var reader = new StreamReader(file);
+                return await reader.ReadToEndAsync();
             }
             catch
             {
@@ -64,16 +79,14 @@ namespace DynamicsCrm.DevKit.Shared
         {
             try
             {
-                using (var fileStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read, bufferSize: 4096, useAsync: true))
-                {
-                    var buffer = new byte[fileStream.Length];
-                    await fileStream.ReadAsync(buffer, 0, buffer.Length);
-                    return buffer;
-                }
+                using var fileStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read, bufferSize: 4096, useAsync: true);
+                var buffer = new byte[fileStream.Length];
+                await fileStream.ReadAsync(buffer, 0, buffer.Length);
+                return buffer;
             }
             catch
             {
-                return new byte[0];
+                return [];
             }
         }
 

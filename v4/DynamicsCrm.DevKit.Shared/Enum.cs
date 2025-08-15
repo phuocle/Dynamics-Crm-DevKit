@@ -50,4 +50,26 @@
         Input,
         Output
     }
+
+    public enum ProjectType
+    {
+        None,
+        Shared,
+        Console,
+        ConsoleCore,
+        Server,
+        Plugin,
+        Workflow,
+        CustomAction,
+        CustomApi,
+        DataProvider,
+        WebResource,
+        SolutionPackager,
+        ProxyTypes,
+        Test,
+        UiTest,
+        SharedTest,
+        Report,
+        Package
+    }
 }
