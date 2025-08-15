@@ -27,9 +27,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         public ServiceClient ServiceClient { get; set; }
         public CommandLineArgs Arg { get; set; }
         private JsonWebResource Json { get; set; }
-        private bool IsOk { get; set; }
-        private Guid SolutionId { get; set; }
-        private string Prefix { get; set; }
+        public bool IsOk { get; set; }
+        public Guid SolutionId { get; set; }
+        public string Prefix { get; set; }
         private List<Guid> WebResourcesToPublish { get; } = new List<Guid>();
         public async Task<bool> IsValidAsync()
         {

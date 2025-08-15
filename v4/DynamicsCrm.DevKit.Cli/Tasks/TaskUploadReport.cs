@@ -18,7 +18,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         }
         public CommandLineArgs Arg { get; set; }
         private JsonUploadReport Json { get; set; }
-
+        public bool IsOk { get; set; }
+        public Guid SolutionId { get; set; }
+        public string Prefix { get; set; }
         public string CurrentDirectory { get; set; }
         public ServiceClient ServiceClient { get; set; }
         public string TaskType => $"[{nameof(CliType.uploadreports).ToUpper()}]";

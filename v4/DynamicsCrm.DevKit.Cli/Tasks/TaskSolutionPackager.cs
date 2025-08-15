@@ -24,6 +24,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             IsSdkLogin = arg.IsSdkLogin;
             Connection = arg.Connection;
         }
+        public bool IsOk { get; set; }
+        public Guid SolutionId { get; set; }
+        public string Prefix { get; set; }
         public CommandLineArgs Arg { get; set; }
         private JsonSolutionPackager Json { get; set; }
         public string CurrentDirectory { get; set; }
@@ -98,7 +101,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             if (Json.type.ToLower() == "Extract".ToLower())
             {
-                var (IsOk, SolutionId, Prefix) = await XrmHelper.IsExistSolutionAsync(ServiceClient, Json.solution);
+                (IsOk, SolutionId, Prefix) = await XrmHelper.IsExistSolutionAsync(ServiceClient, Json.solution);
                 if (!IsOk)
                 {
                     CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} solution '{Json.solution}' not exist");

@@ -32,7 +32,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         private string CrmSvcUtil { get; set; }
         private bool IsSdkLogin { get; set; }
         private string Connection { get; set; }
-
+        public bool IsOk { get; set; }
+        public Guid SolutionId { get; set; }
+        public string Prefix { get; set; }
         public async Task<bool> IsValidAsync()
         {
             if (Json == null)

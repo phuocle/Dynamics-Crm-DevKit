@@ -1,5 +1,6 @@
 ﻿using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.PowerPlatform.Dataverse.Client;
+using System;
 using System.Threading.Tasks;
 
 namespace DynamicsCrm.DevKit.Cli
@@ -12,5 +13,8 @@ namespace DynamicsCrm.DevKit.Cli
         CommandLineArgs Arg { get; set; }
         Task RunAsync();
         Task<bool> IsValidAsync();
+        bool IsOk { get; set; }
+        Guid SolutionId { get; set; }
+        string Prefix { get; set; }
     }
 }

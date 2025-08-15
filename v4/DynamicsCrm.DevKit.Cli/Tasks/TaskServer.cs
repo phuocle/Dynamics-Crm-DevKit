@@ -30,7 +30,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         }
 
         private const string SPACE = "  ";
-
+        public bool IsOk { get; set; }
+        public Guid SolutionId { get; set; }
+        public string Prefix { get; set; }
         public TaskServer(CommandLineArgs arg, Json json)
         {
             this.Arg = arg;
@@ -72,12 +74,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         public CommandLineArgs Arg { get; set; }
 
         private JsonServer Json { get; }
-
-        private bool IsOk { get; set; }
-
-        private Guid SolutionId { get; set; }
-
-        private string Prefix { get; set; }
 
         private string CurrentFolder => $"{CurrentDirectory}\\{Json.folder}";
 

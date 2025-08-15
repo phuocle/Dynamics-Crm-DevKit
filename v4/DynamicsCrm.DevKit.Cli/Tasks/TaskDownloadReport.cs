@@ -21,7 +21,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         public ServiceClient ServiceClient { get; set; }
         public string TaskType => $"[{nameof(CliType.downloadreports).ToUpper()}]";
         private JsonDownloadReport Json { get; set; }
-
+        public bool IsOk { get; set; }
+        public Guid SolutionId { get; set; }
+        public string Prefix { get; set; }
         public async Task<bool> IsValidAsync()
         {
             if (Json == null)

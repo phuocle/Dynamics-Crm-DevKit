@@ -26,9 +26,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         public string TaskType => $"[{nameof(CliType.datasources).ToUpper()}]";
         public CommandLineArgs Arg { get; set; }
         private JsonDataSource Json { get; set; }
-        private bool IsOk { get; set; }
-        private Guid SolutionId { get; set; }
-        private string Prefix { get; set; }
+        public bool IsOk { get; set; }
+        public Guid SolutionId { get; set; }
+        public string Prefix { get; set; }
         private string DataSourceName { get; set; }
 
         public async Task<bool> IsValidAsync()
