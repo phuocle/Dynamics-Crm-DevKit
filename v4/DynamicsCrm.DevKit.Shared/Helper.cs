@@ -299,7 +299,7 @@ namespace DynamicsCrm.DevKit.Shared
         public static string TrimGuid(string guid)
         {
             if (guid == null) return null;
-            if (Guid.TryParse(guid, out var guidType))
+            if (Guid.TryParse(guid, out _))
                 return guid.Replace("{", string.Empty).Replace("}", string.Empty);
             return guid;
         }

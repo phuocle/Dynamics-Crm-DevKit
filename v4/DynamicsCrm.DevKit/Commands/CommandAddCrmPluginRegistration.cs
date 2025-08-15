@@ -324,10 +324,10 @@ namespace DynamicsCrm.DevKit.Commands
         {
             var aliased = entity.GetAttributeValue<AliasedValue>(name);
             if (aliased == null) return default;
-            if (typeof(T) == typeof(EntityReference) && aliased.Value is Guid)
-                return (T)(object)new EntityReference(aliased.EntityLogicalName, (Guid)aliased.Value);
-            if (typeof(T) == typeof(Guid) && aliased.Value is EntityReference)
-                return (T)(object)((EntityReference)aliased.Value).Id;
+            if (typeof(T) == typeof(EntityReference) && aliased.Value is Guid guid)
+                return (T)(object)new EntityReference(aliased.EntityLogicalName, guid);
+            if (typeof(T) == typeof(Guid) && aliased.Value is EntityReference reference)
+                return (T)(object)reference.Id;
             return (T)aliased.Value;
         }
 
