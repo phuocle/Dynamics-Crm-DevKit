@@ -9,29 +9,20 @@ using System.Text;
 using System.Threading.Tasks;
 namespace DynamicsCrm.DevKit.Cli.Tasks
 {
-    public class TaskProxyType : ITask
+    public class TaskProxyType(CommandLineArgs arg, JsonProxyType json) : ITask
     {
         private const string ENVIRONMENT_ENTITIES = "DynamicsCrm.DevKit.CrmSvcUtilExtensions.Entities";
-        public TaskProxyType(CommandLineArgs arg, JsonProxyType json)
-        {
-            this.Arg = arg;
-            this.Json = json;
-            ServiceClient = arg.ServiceClient;
-            CurrentDirectory = arg.CurrentDirectory;
-            Version = arg.Version;
-            IsSdkLogin = arg.IsSdkLogin;
-            Connection = arg.Connection;
-        }
-        public CommandLineArgs Arg { get; set; }
-        public JsonProxyType Json { get; set; }
 
-        public string CurrentDirectory { get; set; }
+        public CommandLineArgs Arg { get; set; } = arg;
+        public JsonProxyType Json { get; set; } = json;
+
+        public string CurrentDirectory { get; set; } = arg.CurrentDirectory;
         public string TaskType => $"[{nameof(CliType.proxytypes).ToUpper()}]";
-        public ServiceClient ServiceClient { get; set; }
-        private string Version { get; set; }
+        public ServiceClient ServiceClient { get; set; } = arg.ServiceClient;
+        private string Version { get; set; } = arg.Version;
         private string CrmSvcUtil { get; set; }
-        private bool IsSdkLogin { get; set; }
-        private string Connection { get; set; }
+        private bool IsSdkLogin { get; set; } = arg.IsSdkLogin;
+        private string Connection { get; set; } = arg.Connection;
         public bool IsOk { get; set; }
         public Guid SolutionId { get; set; }
         public string SolutionPrefix { get; set; }

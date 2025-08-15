@@ -12,20 +12,13 @@ using Label = Microsoft.Xrm.Sdk.Label;
 using ParameterCollection = Microsoft.Xrm.Sdk.ParameterCollection;
 namespace DynamicsCrm.DevKit.Cli.Tasks
 {
-    public class TaskDataSource : ITask
+    public class TaskDataSource(CommandLineArgs arg, JsonDataSource json) : ITask
     {
-        public TaskDataSource(CommandLineArgs arg, JsonDataSource json)
-        {
-            this.Arg = arg;
-            this.Json = json;
-            ServiceClient = arg.ServiceClient;
-            CurrentDirectory = arg.CurrentDirectory;
-        }
-        public string CurrentDirectory { get; set; }
-        public ServiceClient ServiceClient { get; set; }
+        public string CurrentDirectory { get; set; } = arg.CurrentDirectory;
+        public ServiceClient ServiceClient { get; set; } = arg.ServiceClient;
         public string TaskType => $"[{nameof(CliType.datasources).ToUpper()}]";
-        public CommandLineArgs Arg { get; set; }
-        private JsonDataSource Json { get; set; }
+        public CommandLineArgs Arg { get; set; } = arg;
+        private JsonDataSource Json { get; set; } = json;
         public bool IsOk { get; set; }
         public Guid SolutionId { get; set; }
         public string SolutionPrefix { get; set; }
@@ -166,8 +159,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     CanChangeHierarchicalRelationship = propertyFalse
                 }
             };
-            if (request.Parameters == null)
-                request.Parameters = new ParameterCollection();
+            request.Parameters ??= [];
             if (request.Parameters.ContainsKey("SolutionUniqueName"))
                 request.Parameters["SolutionUniqueName"] = Json.solution;
             else
@@ -195,7 +187,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 MergeLabels = false
             };
             await ServiceClient.ExecuteAsync(updateRequestId);
-
             var requestName = new RetrieveAttributeRequest()
             {
                 EntityLogicalName = entityMetadata.LogicalName,
@@ -213,12 +204,11 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
             try
             {
-                PublishAllXmlRequest publishAllXmlRequest = new PublishAllXmlRequest();
+                PublishAllXmlRequest publishAllXmlRequest = new();
                 PublishAllXmlResponse publishAllXmlResponse = (PublishAllXmlResponse)await ServiceClient.ExecuteAsync(publishAllXmlRequest);
             }
             catch
             {
-                // Ignore publish errors as they are not critical
             }
         }
     }

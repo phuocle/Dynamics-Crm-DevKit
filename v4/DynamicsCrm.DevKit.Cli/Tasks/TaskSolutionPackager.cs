@@ -12,30 +12,20 @@ using System.Threading;
 using System.Threading.Tasks;
 namespace DynamicsCrm.DevKit.Cli.Tasks
 {
-    public class TaskSolutionPackager : ITask
+    public class TaskSolutionPackager(CommandLineArgs arg, JsonSolutionPackager json) : ITask
     {
-        public TaskSolutionPackager(CommandLineArgs arg, JsonSolutionPackager json)
-        {
-            this.Arg = arg;
-            this.Json = json;
-            ServiceClient = arg.ServiceClient;
-            CurrentDirectory = arg.CurrentDirectory;
-            Version = arg.Version;
-            IsSdkLogin = arg.IsSdkLogin;
-            Connection = arg.Connection;
-        }
         public bool IsOk { get; set; }
         public Guid SolutionId { get; set; }
         public string SolutionPrefix { get; set; }
-        public CommandLineArgs Arg { get; set; }
-        private JsonSolutionPackager Json { get; set; }
-        public string CurrentDirectory { get; set; }
+        public CommandLineArgs Arg { get; set; } = arg;
+        private JsonSolutionPackager Json { get; set; } = json;
+        public string CurrentDirectory { get; set; } = arg.CurrentDirectory;
         public string TaskType => $"[{nameof(CliType.solutionpackagers).ToUpper()}]";
-        public ServiceClient ServiceClient { get; set; }
-        private string Version { get; set; }
+        public ServiceClient ServiceClient { get; set; } = arg.ServiceClient;
+        private string Version { get; set; } = arg.Version;
         private string SolutionPackagerExe { get; set; }
-        private bool IsSdkLogin { get; set; }
-        private string Connection { get; set; }
+        private bool IsSdkLogin { get; set; } = arg.IsSdkLogin;
+        private string Connection { get; set; } = arg.Connection;
         private string SolutionXmlFile => $"{CurrentDirectory}\\{Json.folder}\\{Json.solutiontype}\\Other\\Solution.xml";
         public async Task<bool> IsValidAsync()
         {

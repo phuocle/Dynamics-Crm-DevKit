@@ -10,27 +10,17 @@ using System.Threading;
 using System.Threading.Tasks;
 namespace DynamicsCrm.DevKit.Cli.Tasks
 {
-    public class TaskGenerator : ITask
+    public class TaskGenerator(CommandLineArgs arg, JsonGenerator json) : ITask
     {
-        public TaskGenerator(CommandLineArgs arg, JsonGenerator json)
-        {
-            this.Arg = arg;
-            this.Json = json;
-            ServiceClient = arg.ServiceClient;
-            CurrentDirectory = arg.CurrentDirectory;
+        public CommandLineArgs Arg { get; set; } = arg;
 
-            TaskType = $"[{nameof(CliType.generators).ToUpper()} - {json.type.ToUpper()}]";
-        }
+        private JsonGenerator Json { get; set; } = json;
 
-        public CommandLineArgs Arg { get; set; }
+        public string CurrentDirectory { get; set; } = arg.CurrentDirectory;
 
-        private JsonGenerator Json { get; set; }
+        public ServiceClient ServiceClient { get; set; } = arg.ServiceClient;
 
-        public string CurrentDirectory { get; set; }
-
-        public ServiceClient ServiceClient { get; set; }
-
-        public string TaskType { get; set; }
+        public string TaskType { get; set; } = $"[{nameof(CliType.generators).ToUpper()} - {json.type.ToUpper()}]";
 
         private string CurrentFolder => $"{CurrentDirectory}\\{Json.rootfolder}";
 
@@ -81,7 +71,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     await ReadEntitiesMetadataAsync(ServiceClient);
                 else
                     XrmHelper.EntitiesMetadata = await XrmHelper.GetEntitiesMetadataAsync(ServiceClient, schemaNames);
-                schemaNames = XrmHelper.EntitiesMetadata.Select(x => x.SchemaName).ToList();
+                schemaNames = [.. XrmHelper.EntitiesMetadata.Select(x => x.SchemaName)];
                 if (Json.type.ToLower() == nameof(GeneratorType.csharp))
                     await GeneratorLateBoundAsync(schemaNames);
                 else if (Json.type.ToLower() == nameof(GeneratorType.jsform))
@@ -112,9 +102,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 CliLog.WriteLine();
                 CliLog.WriteLine(ConsoleColor.White, "|");
                 await ReadEntitiesMetadataAsync(ServiceClient);
-                return XrmHelper.EntitiesMetadata
-                    .Select(x => x.SchemaName)
-                    .ToList();
+                return [.. XrmHelper.EntitiesMetadata.Select(x => x.SchemaName)];
             }
             else if (Json.entities == null || Json.entities.Trim().Length == 0 || Json.entities.Trim().ToLower() == "folder")
             {
@@ -125,10 +113,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 CliLog.WriteLine();
                 CliLog.WriteLine(ConsoleColor.White, "|");
                 var pattern = $"*{endsWith}";
-                return Directory
+                return [.. Directory
                     .GetFiles(CurrentFolder, pattern)
-                    .Select(x => Helper.GetSchemaNameFromFile(x, endsWith))
-                    .ToList();
+                    .Select(x => Helper.GetSchemaNameFromFile(x, endsWith))];
             }
             else
             {
@@ -138,7 +125,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 CliLog.WriteSuccess(ConsoleColor.White, Json.entities.Trim());
                 CliLog.WriteLine();
                 CliLog.WriteLine(ConsoleColor.White, "|");
-                return Json.entities.Split(",".ToCharArray()).ToList();
+                return [.. Json.entities.Split(",".ToCharArray())];
             }
         }
 
@@ -172,13 +159,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         i++;
                         continue;
                     }
-                    var newCode = string.Empty;
-                    var newDTS = string.Empty;
-
-                    var result = await JsWebApi.GetCodeAsync(ServiceClient, entityMetadata, Json.rootnamespace, comment);
-                    newCode = result.code;
-                    newDTS = result.dts;
-
+                    var (newCode, newDTS) = await JsWebApi.GetCodeAsync(ServiceClient, entityMetadata, Json.rootnamespace, comment);
                     if (Helper.IsTheSame(oldCode, newCode))
                     {
                         if (oldCode?.Length > 0 && newCode?.Length > 0 && !Helper.IsTheSame(oldDTS, newDTS))
@@ -249,9 +230,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         i++;
                         continue;
                     }
-                    var result = await JsForm.GetCodeAsync(ServiceClient, entityMetadata, Json.rootnamespace, comment);
-                    var newCode = result.code;
-                    var newDTS = result.dts;
+                    var (newCode, newDTS) = await JsForm.GetCodeAsync(ServiceClient, entityMetadata, Json.rootnamespace, comment);
                     if (Helper.IsTheSame(oldCode, newCode))
                     {
                         if (oldCode?.Length > 0 && newCode?.Length > 0 && !Helper.IsTheSame(oldDTS, newDTS))
@@ -323,7 +302,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         code += $"// <auto-generated>{NEW_LINE}";
                         code += $"//{TAB}{TAB}Changes to this file may cause incorrect behavior and will be lost if the code is regenerated.{NEW_LINE}";
                         code += $"//{TAB}{TAB}Generated by DynamicsCrm.DevKit - https://github.com/phuocle/Dynamics-Crm-DevKit{NEW_LINE}";
-                        code += $"//{TAB}{TAB}Last Modified: {DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}{NEW_LINE}";
+                        code += $"//{TAB}{TAB}Last Modified: {DateTime.Now:yyyy-MM-dd HH:mm:ss}{NEW_LINE}";
                         code += $"// </auto-generated>{NEW_LINE}";
                         code += $"//---------------------------------------------------------------------------------------------------{NEW_LINE}";
                         newCode = $"{code}{newCode}";

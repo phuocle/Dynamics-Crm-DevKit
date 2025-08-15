@@ -7,22 +7,15 @@ using System.Linq;
 using System.Threading.Tasks;
 namespace DynamicsCrm.DevKit.Cli.Tasks
 {
-    public class TaskUploadReport : ITask
+    public class TaskUploadReport(CommandLineArgs arg, JsonUploadReport json) : ITask
     {
-        public TaskUploadReport(CommandLineArgs arg, JsonUploadReport json)
-        {
-            this.Arg = arg;
-            this.Json = json;
-            ServiceClient = arg.ServiceClient;
-            CurrentDirectory = arg.CurrentDirectory;
-        }
-        public CommandLineArgs Arg { get; set; }
-        private JsonUploadReport Json { get; set; }
+        public CommandLineArgs Arg { get; set; } = arg;
+        private JsonUploadReport Json { get; set; } = json;
         public bool IsOk { get; set; }
         public Guid SolutionId { get; set; }
         public string SolutionPrefix { get; set; }
-        public string CurrentDirectory { get; set; }
-        public ServiceClient ServiceClient { get; set; }
+        public string CurrentDirectory { get; set; } = arg.CurrentDirectory;
+        public ServiceClient ServiceClient { get; set; } = arg.ServiceClient;
         public string TaskType => $"[{nameof(CliType.uploadreports).ToUpper()}]";
 
         public async Task<bool> IsValidAsync()

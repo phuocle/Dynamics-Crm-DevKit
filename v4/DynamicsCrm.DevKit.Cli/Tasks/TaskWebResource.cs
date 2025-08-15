@@ -13,24 +13,17 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 namespace DynamicsCrm.DevKit.Cli.Tasks
 {
-    public class TaskWebResource : ITask
+    public class TaskWebResource(CommandLineArgs arg, JsonWebResource json) : ITask
     {
-        public TaskWebResource(CommandLineArgs arg, JsonWebResource json)
-        {
-            this.Arg = arg;
-            this.Json = json;
-            ServiceClient = arg.ServiceClient;
-            CurrentDirectory = arg.CurrentDirectory;
-        }
-        public string CurrentDirectory { get; set; }
+        public string CurrentDirectory { get; set; } = arg.CurrentDirectory;
         public string TaskType => $"[{nameof(CliType.webresources).ToUpper()}]";
-        public ServiceClient ServiceClient { get; set; }
-        public CommandLineArgs Arg { get; set; }
-        private JsonWebResource Json { get; set; }
+        public ServiceClient ServiceClient { get; set; } = arg.ServiceClient;
+        public CommandLineArgs Arg { get; set; } = arg;
+        private JsonWebResource Json { get; set; } = json;
         public bool IsOk { get; set; }
         public Guid SolutionId { get; set; }
         public string SolutionPrefix { get; set; }
-        private List<Guid> WebResourcesToPublish { get; } = new List<Guid>();
+        private List<Guid> WebResourcesToPublish { get; } = [];
         public async Task<bool> IsValidAsync()
         {
             await Helper.DelayAsync(1);
@@ -91,7 +84,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var dependencies = await GetDependenciesAsync();
             var len = dependencies.Count.ToString().Length;
             List<string> dependencyList = dependency.dependencies;
-            dependencyList = dependencyList.Distinct().ToList();
+            dependencyList = [.. dependencyList.Distinct()];
             dependency.dependencies = dependencyList;
             var result = await GetDependencyXmlAsync(dependency.dependencies);
             var dependencyXml = result.dependencyXml;
@@ -436,7 +429,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         private async Task<List<Dependency>> GetDependenciesAsync()
         {
             if (_dependencies != null) return _dependencies;
-            _dependencies = new List<Dependency>();
+            _dependencies = [];
             var dependencies = await TransformPatternAsync(Json.dependencies, WebResourceFiles);
             foreach (var dependency in dependencies)
             {
@@ -447,7 +440,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     {
                         _dependencies.Add(new Dependency
                         {
-                            webresources = new List<string>() { webResource },
+                            webresources = [webResource],
                             dependencies = dependency.dependencies
                         });
                     }
@@ -468,7 +461,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             get
             {
                 if (_webResourceFiles != null) return _webResourceFiles;
-                _webResourceFiles = new List<WebResourceFile>();
+                _webResourceFiles = [];
                 var includeFiles = new List<string>();
                 foreach (var pattern in Json.includefiles)
                 {
@@ -476,7 +469,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     filePattern = filePattern.Replace(@"\\", @"\");
                     includeFiles.AddRange(GetFiles(filePattern));
                 }
-                includeFiles = includeFiles.Distinct().ToList();
+                includeFiles = [.. includeFiles.Distinct()];
                 var excludeFiles = new List<string>();
                 foreach (var pattern in Json.excludefiles)
                 {
@@ -501,7 +494,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     };
                     _webResourceFiles.Add(webResourceFile);
                 }
-                _webResourceFiles = _webResourceFiles.Where(i => IsSupportedExtensions(i.file)).OrderBy(x => x.uniquename).ToList();
+                _webResourceFiles = [.. _webResourceFiles.Where(i => IsSupportedExtensions(i.file)).OrderBy(x => x.uniquename)];
                 return _webResourceFiles;
             }
         }
@@ -518,10 +511,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         {
             var folder = filePattern.Substring(0, filePattern.LastIndexOf("\\", StringComparison.Ordinal));
             var pattern = filePattern.Substring(folder.Length + 1);
-            if (!pattern.Contains("**")) return Directory.Exists(folder) ? Directory.GetFiles(folder, pattern, SearchOption.TopDirectoryOnly).ToList() : new List<string>();
+            if (!pattern.Contains("**")) return Directory.Exists(folder) ? [.. Directory.GetFiles(folder, pattern, SearchOption.TopDirectoryOnly)] : [];
             pattern = pattern.Replace("**", "*");
-            if (!Directory.Exists(folder)) return new List<string>();
-            return Directory.GetFiles(folder, pattern, SearchOption.AllDirectories).ToList();
+            if (!Directory.Exists(folder)) return [];
+            return [.. Directory.GetFiles(folder, pattern, SearchOption.AllDirectories)];
         }
 
         private async Task<List<Dependency>> TransformPatternAsync(IEnumerable<Dependency> dependencies, IEnumerable<WebResourceFile> webResourceFiles)
@@ -584,8 +577,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     {
                         list.Add(new Dependency
                         {
-                            dependencies = dependency.dependencies.Select(s => s.Replace("[entity]", entity)).ToList(),
-                            webresources = dependency.webresources.Select(s => s.Replace("[entity]", entity)).ToList(),
+                            dependencies = [.. dependency.dependencies.Select(s => s.Replace("[entity]", entity))],
+                            webresources = [.. dependency.webresources.Select(s => s.Replace("[entity]", entity))],
                         });
                     }
                 }

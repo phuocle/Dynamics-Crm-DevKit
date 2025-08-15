@@ -7,20 +7,13 @@ using System.Linq;
 using System.Threading.Tasks;
 namespace DynamicsCrm.DevKit.Cli.Tasks
 {
-    public class TaskDownloadReport : ITask
+    public class TaskDownloadReport(CommandLineArgs arg, JsonDownloadReport json) : ITask
     {
-        public TaskDownloadReport(CommandLineArgs arg, JsonDownloadReport json)
-        {
-            this.Arg = arg;
-            this.Json = json;
-            ServiceClient = arg.ServiceClient;
-            CurrentDirectory = arg.CurrentDirectory;
-        }
-        public CommandLineArgs Arg { get; set; }
-        public string CurrentDirectory { get; set; }
-        public ServiceClient ServiceClient { get; set; }
+        public CommandLineArgs Arg { get; set; } = arg;
+        public string CurrentDirectory { get; set; } = arg.CurrentDirectory;
+        public ServiceClient ServiceClient { get; set; } = arg.ServiceClient;
         public string TaskType => $"[{nameof(CliType.downloadreports).ToUpper()}]";
-        private JsonDownloadReport Json { get; set; }
+        private JsonDownloadReport Json { get; set; } = json;
         public bool IsOk { get; set; }
         public Guid SolutionId { get; set; }
         public string SolutionPrefix { get; set; }
@@ -75,7 +68,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Found: ", ConsoleColor.Blue, totalDownloadFiles, ConsoleColor.Green, " reports");
                     CliLog.WriteLine(ConsoleColor.White, "|");
                     var i = 1;
-                    reportFiles = reportFiles.OrderBy(x => x.Language).ToList();
+                    reportFiles = [.. reportFiles.OrderBy(x => x.Language)];
                     foreach (var reportFile in reportFiles)
                     {
                         var fileName = Path.Combine(CurrentDirectory, Json.solution, reportFile.Language, reportFile.FileName);

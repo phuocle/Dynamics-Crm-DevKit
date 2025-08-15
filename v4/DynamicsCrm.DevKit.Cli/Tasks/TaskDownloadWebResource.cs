@@ -7,20 +7,13 @@ using System.Linq;
 using System.Threading.Tasks;
 namespace DynamicsCrm.DevKit.Cli.Tasks
 {
-    public class TaskDownloadWebResource : ITask
+    public class TaskDownloadWebResource(CommandLineArgs arg, JsonDownloadWebResource json) : ITask
     {
-        public TaskDownloadWebResource(CommandLineArgs arg, JsonDownloadWebResource json)
-        {
-            this.Arg = arg;
-            this.Json = json;
-            ServiceClient = arg.ServiceClient;
-            CurrentDirectory = arg.CurrentDirectory;
-        }
-        public string CurrentDirectory { get; set; }
+        public string CurrentDirectory { get; set; } = arg.CurrentDirectory;
         public string TaskType => $"[{nameof(CliType.downloadwebresources).ToUpper()}]";
-        public ServiceClient ServiceClient { get; set; }
-        public CommandLineArgs Arg { get; set; }
-        private JsonDownloadWebResource Json { get; set; }
+        public ServiceClient ServiceClient { get; set; } = arg.ServiceClient;
+        public CommandLineArgs Arg { get; set; } = arg;
+        private JsonDownloadWebResource Json { get; set; } = json;
         public bool IsOk { get; set; }
         public Guid SolutionId { get; set; }
         public string SolutionPrefix { get; set; }
