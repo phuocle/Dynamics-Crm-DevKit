@@ -179,36 +179,6 @@ namespace DynamicsCrm.DevKit.Cli
             Console.ForegroundColor = oldConsoleColor;
         }
 
-        public static void Waiting()
-        {
-            Waiting("");
-        }
-
-        public static void Waiting(string message = "")
-        {
-            Write(ConsoleColor.White, "▌" + " ", message);
-            int counter = 0;
-            try
-            {
-                while (true)
-                {
-                    switch (counter % 4)
-                    {
-                        case 0: Console.Write("."); counter = 0; break;
-                        case 1: Console.Write("."); break;
-                        case 2: Console.Write("."); break;
-                        case 3: Console.Write("."); break;
-                    }
-                    counter++;
-                    Thread.Sleep(1000);
-                }
-            }
-            catch (ThreadAbortException)
-            {
-                // Handle thread abort gracefully
-            }
-        }
-
         public static void WaitingWithCancellation(string message = "", CancellationToken cancellationToken = default)
         {
             Write(ConsoleColor.White, "▌" + " ", message);

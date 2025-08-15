@@ -138,13 +138,12 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 Managed = solutionType.ToLower() == "Managed".ToLower(),
                 SolutionName = Json.solution
             };
-            var wait = new Thread(() => CliLog.Waiting($"Export {solutionType} solution: {Json.solution} "));
-            wait.Start();
-
+            using var cancellationTokenSource = new CancellationTokenSource();
+            var waitingTask = Task.Run(() => CliLog.WaitingWithCancellation($"Export {solutionType} solution: {Json.solution} ", cancellationTokenSource.Token));
             var crmVersion = await GetCrmVersionFromInstanceAsync();
             var response = (ExportSolutionResponse)await ServiceClient.ExecuteAsync(request);
-
-            wait.Abort();
+            cancellationTokenSource.Cancel();
+            try { await waitingTask; } catch (OperationCanceledException) { }
             var fileName = FormatSolutionVersionString(Json.solution, System.Version.Parse(crmVersion), Json.solutiontype);
             var solutionFile = Path.Combine(CurrentDirectory, Json.folder, "Solutions-Extract", fileName);
             if (solutionType.ToLower() == "Managed".ToLower())
@@ -157,7 +156,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             CliLog.WriteSuccess(ConsoleColor.White, ".." + solutionFile.Substring(CurrentDirectory.Length));
             CliLog.Write(ConsoleColor.White, " take: ");
             CliLog.WriteSuccess(ConsoleColor.White, $"{timer.Elapsed:c}");
-            CliLog.WriteLine(ConsoleColor.Black, "█");
+            CliLog.WriteLine(ConsoleColor.Black, "|");
             return solutionFile;
         }
 
