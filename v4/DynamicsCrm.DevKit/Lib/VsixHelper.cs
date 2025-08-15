@@ -143,13 +143,6 @@ namespace DynamicsCrm.DevKit
             return (exists, sharedProject);
         }
 
-        public static bool SharedProjectExist(DTE dte, out string sharedProject)
-        {
-            Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
-            sharedProject = VsixHelper.GetSharedProject(dte);
-            return VsixHelper.ExistProject(dte, sharedProject);
-        }
-
         public static async Task<string> GetSharedProjectAsync()
         {
             var solution = await VS.Solutions.GetCurrentSolutionAsync();
@@ -173,50 +166,12 @@ namespace DynamicsCrm.DevKit
             return value + $"{ProjectType.Shared}";
         }
 
-        public static string GetSharedProject(DTE dte)
-        {
-            var solutionFullName = dte?.Solution?.FullName;
-            if (solutionFullName.EndsWith(".Test.sln")) solutionFullName = solutionFullName.Substring(0, solutionFullName.Length - ".Test.sln".Length) + ".sln";
-            if (!File.Exists(solutionFullName)) solutionFullName = dte?.Solution?.FullName;
-            var fInfo = new FileInfo(solutionFullName);
-            var parts = fInfo.Name.Split(".".ToCharArray());
-            var value = string.Empty;
-            for (var i = 0; i < parts.Length - 1; i++)
-                value += parts[i] + ".";
-            return value + $"{ProjectType.Shared}";
-        }
-
         public static async Task<bool> ExistProjectAsync(string projectName)
         {
             if (string.IsNullOrEmpty(projectName))
                 return false;
             var projects = await VS.Solutions.GetAllProjectsAsync(ProjectStateFilter.All);
             return projects.Any(x => x.Name == projectName);
-        }
-
-        public static bool ExistProject(DTE dte, string projectName)
-        {
-            Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
-            var projects = GetProjects(dte.Solution);
-            foreach (EnvDTE.Project project in projects)
-            {
-                if (project.ProjectItems == null || project.FileName.Length == 0) continue;
-                if (project.Name == projectName) return true;
-            }
-            return false;
-        }
-
-        private static List<EnvDTE.Project> GetProjects(EnvDTE.Solution sln)
-        {
-            Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
-            List<EnvDTE.Project> list = [];
-            if (sln == null) return list;
-            list.AddRange(sln.Projects.Cast<EnvDTE.Project>());
-
-            for (int i = 0; i < list.Count; i++)
-                list.AddRange(list[i]?.ProjectItems?.Cast<ProjectItem>().Select(x => x?.SubProject)?.OfType<EnvDTE.Project>());
-
-            return list;
         }
 
         public static bool HasImplementedPlugin(CodeClass @class)
