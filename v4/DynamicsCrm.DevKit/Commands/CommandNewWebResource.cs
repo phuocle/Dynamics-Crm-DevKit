@@ -65,7 +65,7 @@ namespace DynamicsCrm.DevKit.Commands
         {
             int wait = 2;
             await VS.StatusBar.ShowMessageAsync($"[{serviceClient.ConnectedUrl()}] >>> Deploying ... <<<");
-            var webResouceId = await XrmHelper.DeployNewWebResourceAsync(serviceClient, fullFileName, deployWebResource.WebResource);
+            var (webResouceId, message) = await XrmHelper.DeployNewWebResourceAsync(serviceClient, fullFileName, deployWebResource.WebResource);
             if (webResouceId != Guid.Empty)
             {
                 await VS.StatusBar.ShowMessageAsync($"[{serviceClient.ConnectedUrl()}] >>> Deployed <<<");
@@ -77,19 +77,21 @@ namespace DynamicsCrm.DevKit.Commands
                 await VS.StatusBar.ShowMessageAsync($"[{serviceClient.ConnectedUrl()}] >>> Added to solution <<<");
                 await Helper.DelayAsync(wait);
                 await VS.StatusBar.ShowMessageAsync($"[{serviceClient.ConnectedUrl()}] >>> Publishing ... <<<");
-                var ok2 = await XrmHelper.PublishWebResourceAsync(serviceClient, webResouceId);
+                var (ok2, message2) = await XrmHelper.PublishWebResourceAsync(serviceClient, webResouceId);
                 if (ok2)
                 {
                     await VS.StatusBar.ShowMessageAsync($"[{serviceClient.ConnectedUrl()}] >>> [{fullFileName}] published to: [{deployWebResource.WebResource}] <<<");
                 }
                 else
                 {
-                    await VS.StatusBar.ShowMessageAsync($"[{serviceClient.ConnectedUrl()}] >>> Publishing Failed <<<");
+                    await VS.StatusBar.ShowMessageAsync($"[{serviceClient.ConnectedUrl()}] >>> Publishing Failed with message: {message2} <<<");
+                    await VS.MessageBox.ShowErrorAsync($"[{serviceClient.ConnectedUrl()}] >>> Publishing Failed with message: {message2} <<<");
                 }
             }
             else
             {
-                await VS.StatusBar.ShowMessageAsync($"[{serviceClient.ConnectedUrl()}] >>> Deploying Failed <<<");
+                await VS.StatusBar.ShowMessageAsync($"[{serviceClient.ConnectedUrl()}] >>> Deploying Failed with message: {message} <<<");
+                await VS.MessageBox.ShowErrorAsync($"[{serviceClient.ConnectedUrl()}] >>> Deploying Failed with message: {message} <<<");
             }
             return webResouceId;
         }

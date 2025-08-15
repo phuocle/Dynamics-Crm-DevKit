@@ -389,7 +389,7 @@ namespace DynamicsCrm.DevKit.Shared
             return webResources;
         }
 
-        public static async Task<bool> DeployWebResourceAsync(ServiceClient serviceClient, string fullFileName, Guid webResourceId)
+        public static async Task<(bool ok, string message)> DeployWebResourceAsync(ServiceClient serviceClient, string fullFileName, Guid webResourceId)
         {
             try
             {
@@ -397,15 +397,15 @@ namespace DynamicsCrm.DevKit.Shared
                 webResource["content"] = Convert.ToBase64String(File.ReadAllBytes(fullFileName));
                 var request = new UpdateRequest { Target = webResource };
                 var response = await serviceClient.ExecuteAsync(request);
-                return true;
+                return (true, string.Empty);
             }
-            catch
+            catch(Exception e)
             {
-                return false;
+                return (false, e.Message);
             }
         }
 
-        public static async Task<Guid> DeployNewWebResourceAsync(ServiceClient serviceClient, string fullFileName, string webResourceName)
+        public static async Task<(Guid webResourceId, string message)> DeployNewWebResourceAsync(ServiceClient serviceClient, string fullFileName, string webResourceName)
         {
             try
             {
@@ -480,26 +480,26 @@ namespace DynamicsCrm.DevKit.Shared
                     }
                 }
                 var webResourceId = await serviceClient.CreateAsync(webResource);
-                return webResourceId;
+                return (webResourceId, string.Empty);
             }
-            catch
+            catch (Exception e)
             {
-                return Guid.Empty;
+                return (Guid.Empty, e.Message);
             }
         }
 
-        public static async Task<bool> PublishWebResourceAsync(ServiceClient serviceClient, Guid webResourceId)
+        public static async Task<(bool ok, string message)> PublishWebResourceAsync(ServiceClient serviceClient, Guid webResourceId)
         {
             try
             {
                 var publishXml = $"<importexportxml><webresources><webresource>{webResourceId}</webresource></webresources></importexportxml>";
                 var request = new PublishXmlRequest { ParameterXml = publishXml };
                 var response = await serviceClient.ExecuteAsync(request);
-                return true;
+                return (true, string.Empty);
             }
-            catch
+            catch(Exception e)
             {
-                return false;
+                return (false, e.Message);
             }
         }
 

@@ -55,25 +55,27 @@ namespace DynamicsCrm.DevKit.Commands
         {
             int wait = 2;
             await VS.StatusBar.ShowMessageAsync($"[{serviceClient.ConnectedUrl()}] >>> Deploying ... <<<");
-            var ok = await XrmHelper.DeployWebResourceAsync(serviceClient, fullFileName, deployWebResource.WebResourceId);
+            var (ok, message) = await XrmHelper.DeployWebResourceAsync(serviceClient, fullFileName, deployWebResource.WebResourceId);
             if (ok)
             {
                 await VS.StatusBar.ShowMessageAsync($"[{serviceClient.ConnectedUrl()}] >>> Deployed <<<");
                 await Helper.DelayAsync(wait);
                 await VS.StatusBar.ShowMessageAsync($"[{serviceClient.ConnectedUrl()}] >>> Publishing ... <<<");
-                var ok2 = await XrmHelper.PublishWebResourceAsync(serviceClient, deployWebResource.WebResourceId);
+                var (ok2, message2) = await XrmHelper.PublishWebResourceAsync(serviceClient, deployWebResource.WebResourceId);
                 if (ok2)
                 {
                     await VS.StatusBar.ShowMessageAsync($"[{serviceClient.ConnectedUrl()}] >>> [{fullFileName}] published to: [{deployWebResource.WebResource}] <<<");
                 }
                 else
                 {
-                    await VS.StatusBar.ShowMessageAsync($"[{serviceClient.ConnectedUrl()}] >>> Publishing Failed <<<");
+                    await VS.StatusBar.ShowMessageAsync($"[{serviceClient.ConnectedUrl()}] >>> Publishing Failed with message: {message2} <<<");
+                    await VS.MessageBox.ShowErrorAsync($"[{serviceClient.ConnectedUrl()}] >>> Publishing Failed with message: {message2} <<<");
                 }
             }
             else
             {
-                await VS.StatusBar.ShowMessageAsync($"[{serviceClient.ConnectedUrl()}] >>> Deploying Failed <<<");
+                await VS.StatusBar.ShowMessageAsync($"[{serviceClient.ConnectedUrl()}] >>> Deploying Failed with message: {message} <<<");
+                await VS.MessageBox.ShowErrorAsync($"[{serviceClient.ConnectedUrl()}] >>> Deploying Failed with message: {message} <<<");
             }
         }
 
