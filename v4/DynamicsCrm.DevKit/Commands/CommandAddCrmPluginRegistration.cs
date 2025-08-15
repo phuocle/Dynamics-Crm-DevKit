@@ -40,9 +40,9 @@ namespace DynamicsCrm.DevKit.Commands
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
             var dte = await VS.GetServiceAsync<DTE, DTE>();
             if (dte?.ActiveDocument == null) return;
-            var textDocument = (TextDocument)dte.ActiveDocument.Object();
-            var activePoint = textDocument.Selection.ActivePoint;
-            var currentClass = dte.ActiveDocument.ProjectItem.FileCodeModel.CodeElementFromPoint(activePoint, vsCMElement.vsCMElementClass);
+            var textDocument = (TextDocument)dte?.ActiveDocument?.Object();
+            var activePoint = textDocument?.Selection?.ActivePoint;
+            var currentClass = dte?.ActiveDocument?.ProjectItem?.FileCodeModel?.CodeElementFromPoint(activePoint, vsCMElement.vsCMElementClass);
             if (currentClass is not CodeClass @class) return;
             var (isSharedProjectExist, sharedProjectName) = await VsixHelper.IsSharedProjectExistAsync();
             if (!isSharedProjectExist)
@@ -105,8 +105,8 @@ namespace DynamicsCrm.DevKit.Commands
                 await Microsoft.VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
                 var dte = await VS.GetServiceAsync<DTE, DTE>();
                 if (!(dte?.ActiveDocument?.Language?.Equals("CSharp", StringComparison.OrdinalIgnoreCase)) ?? false) return;
-                var textDocument = (TextDocument)dte.ActiveDocument.Object();
-                var activePoint = textDocument.Selection.ActivePoint;
+                var textDocument = (TextDocument)dte?.ActiveDocument?.Object();
+                var activePoint = textDocument?.Selection?.ActivePoint;
                 var currentClass = dte?.ActiveDocument?.ProjectItem?.FileCodeModel?.CodeElementFromPoint(activePoint, vsCMElement.vsCMElementClass);
                 if (currentClass == null) return;
                 if (currentClass is not CodeClass @class) return;
@@ -182,10 +182,10 @@ namespace DynamicsCrm.DevKit.Commands
             var crmConnectionString = Helper.BuildConnectionString(formConnection.CrmConnection);
             plugin_deploy_debug_bat = plugin_deploy_debug_bat
                 .Replace("$CrmConnectionString$", crmConnectionString)
-                .Replace("$ProjectName$", Path.GetFileNameWithoutExtension(dte.ActiveDocument.ProjectItem.ContainingProject.FullName));
+                .Replace("$ProjectName$", Path.GetFileNameWithoutExtension(dte?.ActiveDocument?.ProjectItem?.ContainingProject?.FullName));
             plugin_deploy_debug_only_bat = plugin_deploy_debug_only_bat
                 .Replace("$CrmConnectionString$", crmConnectionString)
-                .Replace("$ProjectName$", Path.GetFileNameWithoutExtension(dte.ActiveDocument.ProjectItem.ContainingProject.FullName));
+                .Replace("$ProjectName$", Path.GetFileNameWithoutExtension(dte?.ActiveDocument?.ProjectItem?.ContainingProject?.FullName));
             await AddDeployBatFileToProjectAsync(dte, "deploy.debug.bat", plugin_deploy_debug_bat);
             await AddDeployBatFileToProjectAsync(dte, "deploy.debug.only.bat", plugin_deploy_debug_only_bat);
             return formConnection.ServiceClient;
@@ -379,17 +379,17 @@ namespace DynamicsCrm.DevKit.Commands
         private static async Task AddDeployBatFileToProjectAsync(DTE dte, string fileName, string content)
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-            var deploy = $"{Path.GetDirectoryName(dte.ActiveDocument.ProjectItem.ContainingProject.FullName)}\\{fileName}";
+            var deploy = $"{Path.GetDirectoryName(dte?.ActiveDocument?.ProjectItem?.ContainingProject?.FullName)}\\{fileName}";
             if (File.Exists(deploy)) return;
             await DynamicsCrm.DevKit.Shared.FileHelper.ForceWriteAllTextWithoutUTF8Async(deploy, content);
-            dte.ActiveDocument.ProjectItem.ContainingProject.ProjectItems.AddFromFile(deploy);
-            dte.ActiveDocument.ProjectItem.ContainingProject.Save();
+            dte?.ActiveDocument?.ProjectItem?.ContainingProject?.ProjectItems?.AddFromFile(deploy);
+            dte?.ActiveDocument?.ProjectItem?.ContainingProject?.Save();
         }
 
         private static async Task AddImportSharedProjectIfNeedAsync(DTE dte, string sharedProjectName)
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-            if (dte.ActiveDocument.ProjectItem.FileCodeModel is not FileCodeModel2 fileCodeModel2) return;
+            if (dte?.ActiveDocument?.ProjectItem?.FileCodeModel is not FileCodeModel2 fileCodeModel2) return;
             var foundNamespace = false;
             foreach (var element in fileCodeModel2.CodeElements)
             {
@@ -407,15 +407,15 @@ namespace DynamicsCrm.DevKit.Commands
         private static async Task<bool> IsAddReferenceToSharedProjectAsync(DTE dte, string sharedProjectName)
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-            dte.ActiveDocument.ProjectItem.ContainingProject.Save();
-            var content = await DynamicsCrm.DevKit.Shared.FileHelper.ReadAllTextAsync(dte.ActiveDocument.ProjectItem.ContainingProject.FullName);
+            dte?.ActiveDocument?.ProjectItem?.ContainingProject?.Save();
+            var content = await DynamicsCrm.DevKit.Shared.FileHelper.ReadAllTextAsync(dte?.ActiveDocument?.ProjectItem?.ContainingProject?.FullName);
             return content.IndexOf($"{sharedProjectName}.projitems") > 0;
         }
 
         private static async Task<bool> IsAddPackagesConfigAndInstallAsync(DTE dte)
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-            var package = $"{Path.GetDirectoryName(dte.ActiveDocument.ProjectItem.ContainingProject.FullName)}\\packages.config";
+            var package = $"{Path.GetDirectoryName(dte?.ActiveDocument?.ProjectItem?.ContainingProject?.FullName)}\\packages.config";
             if (!File.Exists(package)) return false;
             var context = await DynamicsCrm.DevKit.Shared.FileHelper.ReadAllTextAsync(package);
             return context.IndexOf("DynamicsCrm.DevKit.Cli") > 0;

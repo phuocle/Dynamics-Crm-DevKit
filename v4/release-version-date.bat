@@ -57,6 +57,6 @@ if %MsBuild%=="" (
 	cd DynamicsCrm.DevKit.Tool\Nuget
 	call pack.bat
 
-	rem cd ..\..
-	rem copy DynamicsCrm.DevKit\bin\Release\DynamicsCrm.DevKit.vsix Published\%VERSION%\DynamicsCrm.DevKit.%VERSION%.vsix
+	cd ..\..
+	copy DynamicsCrm.DevKit\bin\Release\DynamicsCrm.DevKit.vsix Published\%VERSION%\DynamicsCrm.DevKit.%VERSION%.vsix
 )
