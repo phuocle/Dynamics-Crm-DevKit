@@ -8,6 +8,16 @@
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\CodeSharing\Microsoft.CodeSharing.Common.Default.props" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\CodeSharing\Microsoft.CodeSharing.Common.props" />
   <PropertyGroup />
+  <ItemGroup>
+    <None Include="Entities\generator.bat" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Lib\Date.cs" />
+    <Compile Include="Lib\EntityBase.cs" />
+    <Compile Include="Lib\Extension.cs" />
+    <Compile Include="Lib\PluginCore.cs" />
+    <Compile Include="Lib\SimpleJson.cs" />
+  </ItemGroup>
   <Import Project="$NameSpace$.projitems" Label="Shared" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\CodeSharing\Microsoft.CodeSharing.CSharp.targets" />
 </Project>
