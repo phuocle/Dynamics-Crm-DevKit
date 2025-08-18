@@ -727,5 +727,28 @@ namespace DynamicsCrm.DevKit.Shared
                 return null;
             }
         }
+
+        public static T GetAliasedValue<T>(Entity entity, string name)
+        {
+            var aliased = entity.GetAttributeValue<AliasedValue>(name);
+            if (aliased == null) return default;
+            if (typeof(T) == typeof(EntityReference) && aliased.Value is Guid guid)
+                return (T)(object)new EntityReference(aliased.EntityLogicalName, guid);
+            if (typeof(T) == typeof(Guid) && aliased.Value is EntityReference reference)
+                return (T)(object)reference.Id;
+            return (T)aliased.Value;
+        }
+
+        public static async Task AddWebResourceToSolutionAsync(ServiceClient serviceClient, Guid webResourceId, string solutionUniqueName)
+        {
+            var request = new AddSolutionComponentRequest
+            {
+                AddRequiredComponents = true,
+                ComponentType = 61,
+                ComponentId = webResourceId,
+                SolutionUniqueName = solutionUniqueName
+            };
+            await serviceClient.ExecuteAsync(request);
+        }
     }
 }

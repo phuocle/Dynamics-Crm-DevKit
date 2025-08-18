@@ -3,7 +3,6 @@ using DynamicsCrm.DevKit.Lib;
 using DynamicsCrm.DevKit.Lib.Forms;
 using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
-using Microsoft.Crm.Sdk.Messages;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.VisualStudio.Shell;
 using System;
@@ -49,18 +48,6 @@ namespace DynamicsCrm.DevKit.Commands
             await VS.StatusBar.EndAnimationAsync(StatusAnimation.Deploy);
         }
 
-        private static async Task AddWebResourceToSolutionAsync(ServiceClient serviceClient, Guid webResourceId, string solutionUniqueName)
-        {
-            var request = new AddSolutionComponentRequest
-            {
-                AddRequiredComponents = true,
-                ComponentType = 61,
-                ComponentId = webResourceId,
-                SolutionUniqueName = solutionUniqueName
-            };
-            await serviceClient.ExecuteAsync(request);
-        }
-
         private static async Task<Guid> DeployNewWebResourceAsync(ServiceClient serviceClient, DeployWebResource deployWebResource, string fullFileName)
         {
             int wait = 2;
@@ -72,20 +59,20 @@ namespace DynamicsCrm.DevKit.Commands
                 await Helper.DelayAsync(wait);
                 await VS.StatusBar.ShowMessageAsync($"[{serviceClient.ConnectedUrl()}] >>> Adding to solution ... <<<");
                 await Helper.DelayAsync(wait);
-                await AddWebResourceToSolutionAsync(serviceClient, webResouceId, deployWebResource.SolutionUniqueName);
+                await XrmHelper.AddWebResourceToSolutionAsync(serviceClient, webResouceId, deployWebResource.SolutionUniqueName);
                 await Helper.DelayAsync(wait);
                 await VS.StatusBar.ShowMessageAsync($"[{serviceClient.ConnectedUrl()}] >>> Added to solution <<<");
                 await Helper.DelayAsync(wait);
                 await VS.StatusBar.ShowMessageAsync($"[{serviceClient.ConnectedUrl()}] >>> Publishing ... <<<");
-                var (ok2, message2) = await XrmHelper.PublishWebResourceAsync(serviceClient, webResouceId);
-                if (ok2)
+                var (ok, message) = await XrmHelper.PublishWebResourceAsync(serviceClient, webResouceId);
+                if (ok)
                 {
                     await VS.StatusBar.ShowMessageAsync($"[{serviceClient.ConnectedUrl()}] >>> [{fullFileName}] published to: [{deployWebResource.WebResource}] <<<");
                 }
                 else
                 {
-                    await VS.StatusBar.ShowMessageAsync($"[{serviceClient.ConnectedUrl()}] >>> Publishing Failed with message: {message2} <<<");
-                    await VS.MessageBox.ShowErrorAsync($"[{serviceClient.ConnectedUrl()}] >>> Publishing Failed with message: {message2} <<<");
+                    await VS.StatusBar.ShowMessageAsync($"[{serviceClient.ConnectedUrl()}] >>> Publishing Failed with message: {message} <<<");
+                    await VS.MessageBox.ShowErrorAsync($"[{serviceClient.ConnectedUrl()}] >>> Publishing Failed with message: {message} <<<");
                 }
             }
             else

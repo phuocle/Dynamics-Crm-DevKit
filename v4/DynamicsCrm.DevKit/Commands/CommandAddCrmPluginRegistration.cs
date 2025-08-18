@@ -10,6 +10,7 @@ using Microsoft.Xrm.Sdk.Query;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace DynamicsCrm.DevKit.Commands
@@ -157,7 +158,7 @@ namespace DynamicsCrm.DevKit.Commands
                 var friendlyname = row.GetAttributeValue<string>("friendlyname");
                 var description = row.GetAttributeValue<string>("description");
                 var workflowactivitygroupname = row.GetAttributeValue<string>("workflowactivitygroupname");
-                var isolationMode = GetAliasedValue<OptionSetValue>(row, "a.isolationmode").Value;
+                var isolationMode = XrmHelper.GetAliasedValue<OptionSetValue>(row, "a.isolationmode").Value;
                 var isolationModeName = isolationMode == 0 ? "IsolationModeEnum.None" : "IsolationModeEnum.Sandbox";
                 var attribute = string.Empty;
                 attribute += $"\"{name}\"";
@@ -245,8 +246,8 @@ namespace DynamicsCrm.DevKit.Commands
             if (rows.Entities.Count == 0) return list;
             foreach (var row in rows.Entities)
             {
-                var message = GetAliasedValue<string>(row, "m.name");
-                var entity = GetAliasedValue<string>(row, "f.primaryobjecttypecode");
+                var message = XrmHelper.GetAliasedValue<string>(row, "m.name");
+                var entity = XrmHelper.GetAliasedValue<string>(row, "f.primaryobjecttypecode");
                 var stage = row.GetAttributeValue<OptionSetValue>("stage").Value;
                 var stageName = stage == 10 ? "StageEnum.PreValidation" : (stage == 20 ? "StageEnum.PreOperation" : "StageEnum.PostOperation");
                 var mode = row.GetAttributeValue<OptionSetValue>("mode").Value;
@@ -254,14 +255,14 @@ namespace DynamicsCrm.DevKit.Commands
                 var filteringAttributes = row.GetAttributeValue<string>("filteringattributes");
                 var name = row.GetAttributeValue<string>("name");
                 var rank = row.GetAttributeValue<int>("rank");
-                var isolationMode = GetAliasedValue<OptionSetValue>(row, "p.isolationmode").Value;
+                var isolationMode = XrmHelper.GetAliasedValue<OptionSetValue>(row, "p.isolationmode").Value;
                 var isolationModeName = isolationMode == 0 ? "IsolationModeEnum.None" : "IsolationModeEnum.Sandbox";
                 var asyncautodelete = row.GetAttributeValue<bool>("asyncautodelete");
                 var description = row.GetAttributeValue<string>("description");
                 var supportedDeployment = row.GetAttributeValue<OptionSetValue>("supporteddeployment").Value;
                 var status = row.GetAttributeValue<OptionSetValue>("statecode").Value;
                 var configuration = row.GetAttributeValue<string>("configuration");
-                var secureconfig = GetAliasedValue<string>(row, "s.secureconfig");
+                var secureconfig = XrmHelper.GetAliasedValue<string>(row, "s.secureconfig");
                 var impersonatinguserid = row.GetAttributeValue<EntityReference>("impersonatinguserid");
 
                 var attribute = string.Empty;
@@ -318,17 +319,6 @@ namespace DynamicsCrm.DevKit.Commands
                 list.Add(attribute);
             }
             return list;
-        }
-
-        private static T GetAliasedValue<T>(Entity entity, string name)
-        {
-            var aliased = entity.GetAttributeValue<AliasedValue>(name);
-            if (aliased == null) return default;
-            if (typeof(T) == typeof(EntityReference) && aliased.Value is Guid guid)
-                return (T)(object)new EntityReference(aliased.EntityLogicalName, guid);
-            if (typeof(T) == typeof(Guid) && aliased.Value is EntityReference reference)
-                return (T)(object)reference.Id;
-            return (T)aliased.Value;
         }
 
         private static async Task<List<CrmPluginImage>> GetPluginImagesAsync(ServiceClient serviceClient, string fullName, Guid sdkMessageProcessingStepId)
@@ -407,9 +397,26 @@ namespace DynamicsCrm.DevKit.Commands
         private static async Task<bool> IsAddReferenceToSharedProjectAsync(DTE dte, string sharedProjectName)
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-            dte?.ActiveDocument?.ProjectItem?.ContainingProject?.Save();
-            var content = await DynamicsCrm.DevKit.Shared.FileHelper.ReadAllTextAsync(dte?.ActiveDocument?.ProjectItem?.ContainingProject?.FullName);
-            return content.IndexOf($"{sharedProjectName}.projitems") > 0;
+            try
+            {
+                dte?.ActiveDocument?.ProjectItem?.ContainingProject?.Save();
+                var projectPath = dte?.ActiveDocument?.ProjectItem?.ContainingProject?.FullName;
+                if (string.IsNullOrEmpty(projectPath) || !File.Exists(projectPath))
+                    return false;
+                var content = await DynamicsCrm.DevKit.Shared.FileHelper.ReadAllTextAsync(projectPath);
+                var checks = new[]
+                {
+                    $"{sharedProjectName}.projitems",
+                    $"\\{sharedProjectName}\\{sharedProjectName}.projitems",
+                    $"Include=\"{sharedProjectName}.projitems\"",
+                    $"Project=\"{sharedProjectName}.projitems\""
+                };
+                return checks.Any(check => content.IndexOf(check, StringComparison.OrdinalIgnoreCase) >= 0);
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         private static async Task<bool> IsAddPackagesConfigAndInstallAsync(DTE dte)
