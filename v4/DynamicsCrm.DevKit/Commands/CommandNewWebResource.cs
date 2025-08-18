@@ -64,15 +64,15 @@ namespace DynamicsCrm.DevKit.Commands
                 await VS.StatusBar.ShowMessageAsync($"[{serviceClient.ConnectedUrl()}] >>> Added to solution <<<");
                 await Helper.DelayAsync(wait);
                 await VS.StatusBar.ShowMessageAsync($"[{serviceClient.ConnectedUrl()}] >>> Publishing ... <<<");
-                var (ok, message) = await XrmHelper.PublishWebResourceAsync(serviceClient, webResouceId);
-                if (ok)
+                var (ok2, message2) = await XrmHelper.PublishWebResourceAsync(serviceClient, webResouceId);
+                if (ok2)
                 {
                     await VS.StatusBar.ShowMessageAsync($"[{serviceClient.ConnectedUrl()}] >>> [{fullFileName}] published to: [{deployWebResource.WebResource}] <<<");
                 }
                 else
                 {
-                    await VS.StatusBar.ShowMessageAsync($"[{serviceClient.ConnectedUrl()}] >>> Publishing Failed with message: {message} <<<");
-                    await VS.MessageBox.ShowErrorAsync($"[{serviceClient.ConnectedUrl()}] >>> Publishing Failed with message: {message} <<<");
+                    await VS.StatusBar.ShowMessageAsync($"[{serviceClient.ConnectedUrl()}] >>> Publishing Failed with message: {message2} <<<");
+                    await VS.MessageBox.ShowErrorAsync($"[{serviceClient.ConnectedUrl()}] >>> Publishing Failed with message: {message2} <<<");
                 }
             }
             else

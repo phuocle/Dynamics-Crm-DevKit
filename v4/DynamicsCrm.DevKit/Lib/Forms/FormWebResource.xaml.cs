@@ -9,9 +9,6 @@ using System.Windows.Controls;
 
 namespace DynamicsCrm.DevKit.Lib.Forms
 {
-    /// <summary>
-    /// Interaction logic for FormConnection.xaml
-    /// </summary>
     public partial class FormWebResource : BaseDialogWindow
     {
         public List<DeployWebResource> WebResources { get; }
