@@ -10,7 +10,7 @@
     <ProjectType>CSharp</ProjectType>
     <RequiredFrameworkVersion>4.0</RequiredFrameworkVersion>
     <CreateNewFolder>true</CreateNewFolder>
-    <ProvideDefaultName>true</ProvideDefaultName>
+    <ProvideDefaultName>false</ProvideDefaultName>
     <LocationField>Disabled</LocationField>
     <EnableLocationBrowseButton>false</EnableLocationBrowseButton>
     <EnableEditOfLocationField>false</EnableEditOfLocationField>
@@ -21,10 +21,10 @@
     <SortOrder>110</SortOrder>
   </TemplateData>
   <TemplateContent>
-    <Project TargetFileName="Shared.shproj" File="Shared.shproj" ReplaceParameters="true">
+    <Project TargetFileName="$safeprojectname$.shproj" File="Shared.shproj" ReplaceParameters="true">
       <Folder Name="Lib" TargetFolderName="Lib" />
       <Folder Name="Entities" TargetFolderName="Entities" />
-      <ProjectItem TargetFileName="$NameSpace$.projitems" ReplaceParameters="true">Shared.projitems</ProjectItem>
+      <ProjectItem TargetFileName="$safeprojectname$.projitems" ReplaceParameters="true">Shared.projitems</ProjectItem>
       <ProjectItem ReplaceParameters="false" TargetFileName="Lib\Date.cs">Date.cs</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="Lib\PluginCore.cs">PluginCore.cs</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="Lib\Extension.cs">Extension.cs</ProjectItem>

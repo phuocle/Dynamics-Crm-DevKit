@@ -2,7 +2,9 @@
 using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
 using EnvDTE;
+using EnvDTE80;
 using Microsoft.PowerPlatform.Dataverse.Client;
+using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -203,6 +205,168 @@ namespace DynamicsCrm.DevKit
                 if (attribute.Name == "CrmPluginRegistration") return true;
             }
             return false;
+        }
+
+        public static void FixProjectFolder(object dte, EnvDTE.Project project, string projectName)
+        {
+            Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
+            if (dte == null || project == null || string.IsNullOrEmpty(projectName))
+                return;
+
+            try
+            {
+                var currentProjectPath = Path.GetDirectoryName(project.FullName);
+                if (string.IsNullOrEmpty(currentProjectPath))
+                    return;
+                var currentFolderName = Path.GetFileName(currentProjectPath);
+                if (string.Equals(currentFolderName, projectName, StringComparison.OrdinalIgnoreCase))
+                    return;
+                var solutionDirectory = Directory.GetParent(currentProjectPath)?.FullName;
+                if (string.IsNullOrEmpty(solutionDirectory))
+                    return;
+                var newProjectPath = Path.Combine(solutionDirectory, projectName);
+                var dte2 = (DTE2)dte;
+
+                // STEP 1: Completely unload the project to release all file handles
+                var solutionFullPath = dte2.Solution.FullName;
+                var projectFullPath = project.FullName;
+
+                // Save solution first
+                dte2.Solution.SaveAs(solutionFullPath);
+
+                // Remove project from solution completely
+                dte2.Solution.Remove(project);
+
+                // Force garbage collection to release any remaining handles
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
+                GC.Collect();
+
+                // STEP 2: Use retry logic for the move operation
+                var moveSuccess = RetryFileOperation(() =>
+                {
+                    // Clean up target directory if it exists
+                    if (Directory.Exists(newProjectPath))
+                    {
+                        DeleteDirectoryWithRetry(newProjectPath);
+                    }
+
+                    // Move the directory
+                    Directory.Move(currentProjectPath, newProjectPath);
+                    return true;
+                }, maxRetries: 5, delayMs: 500);
+
+                if (!moveSuccess)
+                {
+                    System.Diagnostics.Debug.WriteLine("Failed to move project directory after multiple retries");
+                    return;
+                }
+
+                // STEP 3: Rename project files
+                RenameProjectFiles(newProjectPath, currentFolderName, projectName);
+
+                // STEP 4: Add project back to solution with new path
+                var newProjectFile = Path.Combine(newProjectPath, projectName + ".shproj");
+                if (File.Exists(newProjectFile))
+                {
+                    // Use retry for adding project back
+                    RetryFileOperation(() =>
+                    {
+                        Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
+                        dte2.Solution.AddFromFile(newProjectFile);
+                        return true;
+                    }, maxRetries: 3, delayMs: 200);
+                }
+
+                // Save the solution with the updated project
+                dte2.Solution.SaveAs(solutionFullPath);
+            }
+            catch (Exception ex)
+            {
+                // Log error but don't fail the wizard
+                System.Diagnostics.Debug.WriteLine($"FixProjectFolder error: {ex.Message}");
+            }
+
+            bool RetryFileOperation(Func<bool> operation, int maxRetries = 3, int delayMs = 500)
+            {
+                for (int i = 0; i < maxRetries; i++)
+                {
+                    try
+                    {
+                        return operation();
+                    }
+                    catch (IOException) when (i < maxRetries - 1)
+                    {
+                        // Wait before retry, with exponential backoff
+                        System.Threading.Thread.Sleep(delayMs * (i + 1));
+
+                        // Force garbage collection between retries
+                        GC.Collect();
+                        GC.WaitForPendingFinalizers();
+                    }
+                    catch (UnauthorizedAccessException) when (i < maxRetries - 1)
+                    {
+                        // Wait before retry for access issues
+                        System.Threading.Thread.Sleep(delayMs * (i + 1));
+
+                        // Force garbage collection between retries
+                        GC.Collect();
+                        GC.WaitForPendingFinalizers();
+                    }
+                }
+                return false;
+            }
+            void DeleteDirectoryWithRetry(string path)
+            {
+                RetryFileOperation(() =>
+                {
+                    if (Directory.Exists(path))
+                    {
+                        // First, remove read-only attributes from all files
+                        foreach (var file in Directory.GetFiles(path, "*", SearchOption.AllDirectories))
+                        {
+                            File.SetAttributes(file, FileAttributes.Normal);
+                        }
+                        Directory.Delete(path, true);
+                    }
+                    return true;
+                }, maxRetries: 3, delayMs: 300);
+            }
+            void RenameProjectFiles(string projectPath, string oldName, string newName)
+            {
+                try
+                {
+                    // Rename .shproj file
+                    var oldProjectFile = Path.Combine(projectPath, oldName + ".shproj");
+                    var newProjectFile = Path.Combine(projectPath, newName + ".shproj");
+
+                    if (File.Exists(oldProjectFile) && !string.Equals(oldProjectFile, newProjectFile, StringComparison.OrdinalIgnoreCase))
+                    {
+                        RetryFileOperation(() =>
+                        {
+                            File.Move(oldProjectFile, newProjectFile);
+                            return true;
+                        });
+                    }
+
+                    // Rename .projitems file
+                    var oldProjItemsFile = Path.Combine(projectPath, oldName + ".projitems");
+                    var newProjItemsFile = Path.Combine(projectPath, newName + ".projitems");
+
+                    if (File.Exists(oldProjItemsFile) && !string.Equals(oldProjItemsFile, newProjItemsFile, StringComparison.OrdinalIgnoreCase))
+                    {
+                        RetryFileOperation(() =>
+                        {
+                            File.Move(oldProjItemsFile, newProjItemsFile);
+                            return true;
+                        });
+                    }
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"RenameProjectFiles error: {ex.Message}");
+                }
+            }
         }
     }
 }
