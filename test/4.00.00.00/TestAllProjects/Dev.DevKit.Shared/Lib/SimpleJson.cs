@@ -67,12 +67,12 @@ using System.Globalization;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text;
-using ABCD.Shared.Reflection;
+using Dev.DevKit.Shared.Reflection;
 
 // ReSharper disable LoopCanBeConvertedToQuery
 // ReSharper disable RedundantExplicitArrayCreation
 // ReSharper disable SuggestUseVarKeywordEvident
-namespace ABCD.Shared
+namespace Dev.DevKit.Shared
 {
     /// <summary>
     /// Represents the json array.
@@ -487,7 +487,7 @@ namespace ABCD.Shared
     }
 }
 
-namespace $NameSpace$
+namespace Dev.DevKit.Shared
 {
     /// <summary>
     /// This class encodes and decodes JSON strings.

@@ -1,11 +1,11 @@
-﻿using Microsoft.Xrm.Sdk;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using Microsoft.Xrm.Sdk;
 
-namespace ABCD.Shared
+namespace Dev.DevKit.Shared
 {
     [DebuggerNonUserCode()]
     public abstract class EntityBase

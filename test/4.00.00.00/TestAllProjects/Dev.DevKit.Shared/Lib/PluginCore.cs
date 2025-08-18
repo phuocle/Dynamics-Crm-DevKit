@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 
-namespace $NameSpace$
+namespace Dev.DevKit.Shared
 {
     public enum ImageType
     {
@@ -48,7 +48,7 @@ namespace $NameSpace$
         CustomAction = 2,
         DataProvider = 3,
         CustomApi = 4
-	}
+    }
 
     [DebuggerNonUserCode()]
     [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = true)]
@@ -77,10 +77,10 @@ namespace $NameSpace$
 
         public CrmPluginRegistrationAttribute(string name, string message, PluginType pluginType)
         {
-			Name = name;
+            Name = name;
             Message = message;
             PluginType = pluginType;
-		}
+        }
 
         public string RunAs { get; set; } = string.Empty;
         public string FriendlyName { get; set; } = string.Empty;
