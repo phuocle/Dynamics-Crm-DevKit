@@ -134,15 +134,6 @@ namespace DynamicsCrm.DevKit
             return $"{Path.GetDirectoryName(project.FullPath)}";
         }
 
-        public static async Task<(bool exists, string sharedProject)> IsSharedProjectExistAsync()
-        {
-            var sharedProject = await GetSharedProjectAsync();
-            if (string.IsNullOrEmpty(sharedProject))
-                return (false, string.Empty);
-            var exists = await ExistProjectAsync(sharedProject);
-            return (exists, sharedProject);
-        }
-
         public static async Task<string> GetSharedProjectAsync()
         {
             var solution = await VS.Solutions.GetCurrentSolutionAsync();
@@ -166,7 +157,7 @@ namespace DynamicsCrm.DevKit
             return value + $"{ProjectType.Shared}";
         }
 
-        public static async Task<bool> ExistProjectAsync(string projectName)
+        public static async Task<bool> IsProjectExistAsync(string projectName)
         {
             if (string.IsNullOrEmpty(projectName))
                 return false;

@@ -44,8 +44,8 @@ namespace DynamicsCrm.DevKit.Commands
             var activePoint = textDocument?.Selection?.ActivePoint;
             var currentClass = dte?.ActiveDocument?.ProjectItem?.FileCodeModel?.CodeElementFromPoint(activePoint, vsCMElement.vsCMElementClass);
             if (currentClass is not CodeClass @class) return;
-            var (isSharedProjectExist, sharedProjectName) = await VsixHelper.IsSharedProjectExistAsync();
-            if (!isSharedProjectExist)
+            var sharedProjectName = await VsixHelper.GetSharedProjectAsync();
+            if (!(await VsixHelper.IsProjectExistAsync(sharedProjectName)))
             {
                 await VS.MessageBox.ShowErrorAsync($"Please add DynamicsCrm.DevKit Shared project.", $"Thank you !!!");
                 return;

@@ -8,3 +8,6 @@
 
 # For Markdown file (.md)
 * Use markdown.instructions.md in the same folder with this file
+
+# For Solution
+* Scan the files for the loaded project in the open solution.
