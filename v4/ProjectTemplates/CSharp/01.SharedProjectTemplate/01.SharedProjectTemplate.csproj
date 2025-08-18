@@ -84,7 +84,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shared.projitems" />
     <None Include="Shared.shproj" />
   </ItemGroup>
   <ItemGroup>

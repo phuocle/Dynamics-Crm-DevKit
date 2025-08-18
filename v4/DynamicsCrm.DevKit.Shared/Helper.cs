@@ -777,5 +777,23 @@ namespace DynamicsCrm.DevKit.Shared
                 _ => ".html",
             };
         }
+
+        public static string SafeNamespace(string @namespace)
+        {
+            if (@namespace == null || @namespace.Length == 0) return string.Empty;
+            var items = @namespace.Split('.');
+            for (var i = 0; i < items.Length; i++)
+            {
+                if (int.TryParse(items[i], out _))
+                {
+                    items[i] = $"_{items[i]}";
+                }
+                else if (int.TryParse(items[i].Substring(0, 1), out _))
+                {
+                    items[i] = $"_{items[i]}";
+                }
+            }
+            return string.Join(".", items);
+        }
     }
 }

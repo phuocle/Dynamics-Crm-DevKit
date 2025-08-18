@@ -128,6 +128,23 @@ namespace DynamicsCrm.DevKit
             var solution = await VS.Solutions.GetCurrentSolutionAsync();
             return Path.GetDirectoryName(solution.FullPath);
         }
+        public static async Task<string> GetSolutionNameAsync()
+        {
+            var solution = await VS.Solutions.GetCurrentSolutionAsync();
+            return Path.GetFileNameWithoutExtension(solution.FullPath);
+        }
+
+        public static string GetSolutionName(object dte)
+        {
+            Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
+            if (dte == null) return string.Empty;
+            
+            var dte2 = (DTE2)dte;
+            var solutionFullPath = dte2.Solution?.FullName;
+            if (string.IsNullOrEmpty(solutionFullPath)) return string.Empty;
+            
+            return Path.GetFileNameWithoutExtension(solutionFullPath);
+        }
 
         public static async Task<string> GetActiveProjectFolderAsync()
         {

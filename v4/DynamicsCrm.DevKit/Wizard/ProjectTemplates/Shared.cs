@@ -1,7 +1,9 @@
-﻿using EnvDTE;
+﻿using DynamicsCrm.DevKit.Shared;
+using EnvDTE;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.TemplateWizard;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace DynamicsCrm.DevKit.Wizard.ProjectTemplates
 {
@@ -34,8 +36,14 @@ namespace DynamicsCrm.DevKit.Wizard.ProjectTemplates
 
         public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary, WizardRunKind runKind, object[] customParams)
         {
-            ProjectName = "ABCD.Shared";
+            ThreadHelper.ThrowIfNotOnUIThread();
+            var solutionName = VsixHelper.GetSolutionName(automationObject);
+            ProjectName = $"{solutionName}.Shared";
             DTE = automationObject;
+            replacementsDictionary["$NameSpace$"] = Helper.SafeNamespace(ProjectName);
+            replacementsDictionary["$SafeProjectName$"] = ProjectName;
+            replacementsDictionary["$SharedNameSpace$"] = $"{ProjectName}.Shared";
+            replacementsDictionary["$DevKitVersion$"] = Const.VersionBuild;
         }
 
         public bool ShouldAddProjectItem(string filePath)
