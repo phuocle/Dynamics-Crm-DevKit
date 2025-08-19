@@ -22,7 +22,7 @@ namespace DynamicsCrm.DevKit.Lib
         {
             var solutionName = await VsixHelper.GetSolutionNameAsync();
             replacements["$DevKitVersion$"] = Const.VersionBuild;
-            replacements["$SharedNameSpace$"] = "{solutionName}.Shared";
+            replacements["$SharedNameSpace$"] = $"{solutionName}.Shared";
             replacements["$SharedProject$"] = $"{solutionName}.Shared";
             replacements["$SharedTestProject$"] = $"{solutionName}.Shared.Test";
             replacements["$ProjectProxyTypes$"] = $"{solutionName}.ProxyTypes";            
