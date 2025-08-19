@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 namespace DynamicsCrm.DevKit.Wizard.ProjectTemplates
 {
-    public class Shared : IWizard
+    internal class Console : IWizard
     {
         private object DTE { get; set; }
         private Project Project { get; set; }
@@ -38,7 +38,7 @@ namespace DynamicsCrm.DevKit.Wizard.ProjectTemplates
         public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary, WizardRunKind runKind, object[] customParams)
         {
             var OOBDestinationDirectory = replacementsDictionary["$destinationdirectory$"];
-            var form = new FormProject(ProjectType.Shared);
+            var form = new FormProject(ProjectType.Console);
             var ok = form.ShowModal() ?? false;
             if (ok)
             {
@@ -47,7 +47,6 @@ namespace DynamicsCrm.DevKit.Wizard.ProjectTemplates
                     ProjectName = form.ProjectName;
                     DTE = automationObject;
                     await Replacement.SetAsync(replacementsDictionary, form);
-                    await VsixHelper.AddDynamicsCrmDevKitCliJsonAsync();
                 });
             }
             else

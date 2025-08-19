@@ -6,6 +6,7 @@ using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.VisualStudio.Shell;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using ItemType = DynamicsCrm.DevKit.Shared.ItemType;
 
@@ -219,16 +220,17 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     LabelProjectName.Content = $"{solutionName}.Shared";
                     LabelProjectName.Tag = LabelProjectName.Content;
                 }
-                //void ConsoleProject()
-                //{
-                //    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Console-Project-Template");
-                //    HELP.Inlines.Clear();
-                //    HELP.Inlines.Add("Console Project Template");
-                //    ComboBoxProject.Visibility = System.Windows.Visibility.Hidden;
-                //    TextboxProject.Visibility = System.Windows.Visibility.Visible;
-                //    LabelProjectName.Content = $"{VsixHelper.GetSolutionName()}.Console";
-                //    LabelProjectName.Tag = LabelProjectName.Content;
-                //}
+                async Task ConsoleProjectAsync()
+                {
+                    var solutionName = await VsixHelper.GetSolutionNameAsync();
+                    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Console-Project-Template");
+                    HELP.Inlines.Clear();
+                    HELP.Inlines.Add("Console Project Template");
+                    ComboBoxProject.Visibility = System.Windows.Visibility.Hidden;
+                    TextboxProject.Visibility = System.Windows.Visibility.Visible;
+                    LabelProjectName.Content = $"{solutionName}.Console";
+                    LabelProjectName.Tag = LabelProjectName.Content;
+                }
                 //void ConsoleCoreProject()
                 //{
                 //    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Console-Core-Project-Template");
@@ -392,9 +394,9 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                         case ProjectType.Shared:
                             await SharedProjectAsync();
                             break;
-                            //case ProjectType.Console:
-                            //    ConsoleProject();
-                            //    break;
+                        case ProjectType.Console:
+                            await ConsoleProjectAsync();
+                            break;
                             //case ProjectType.ConsoleCore:
                             //    ConsoleCoreProject();
                             //    break;
@@ -523,7 +525,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
 
         public string NameSpace { get; set; }
 
-        public FormProject(ProjectType projectType, bool IsUseOOBConnection = true)
+        public FormProject(ProjectType projectType)
         {
             InitializeComponent();
             ProjectType = projectType;
@@ -643,7 +645,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             //    {
             //        ThreadHelper.JoinableTaskFactory.Run(async delegate
             //        {
-            //            var items = XrmHelper.GetAllEntities(CrmServiceClient);
+            //            var items = await XrmHelper.GetAllEntities(CrmServiceClient);
             //            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
             //            ComboBoxProject.DisplayMemberPath = "Name";
             //            ComboBoxProject.ItemsSource = items;

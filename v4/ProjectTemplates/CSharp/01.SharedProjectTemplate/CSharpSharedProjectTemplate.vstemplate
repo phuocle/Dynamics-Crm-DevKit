@@ -9,8 +9,8 @@
 		<Icon>icon.png</Icon>
 		<ProjectType>CSharp</ProjectType>
 		<RequiredFrameworkVersion>4.0</RequiredFrameworkVersion>
-		<CreateNewFolder>true</CreateNewFolder>
-		<ProvideDefaultName>true</ProvideDefaultName>
+		<CreateNewFolder>false</CreateNewFolder>
+		<ProvideDefaultName>false</ProvideDefaultName>
 		<LocationField>Disabled</LocationField>
 		<EnableLocationBrowseButton>false</EnableLocationBrowseButton>
 		<EnableEditOfLocationField>false</EnableEditOfLocationField>
@@ -21,7 +21,7 @@
 		<SortOrder>110</SortOrder>
 	</TemplateData>
 	<TemplateContent>
-    <Project TargetFileName="$SafeProjectName$.shproj" File="Shared.shproj" ReplaceParameters="true">
+		<Project TargetFileName="$SafeProjectName$.shproj" File="Shared.shproj" ReplaceParameters="true">
 			<Folder Name="Lib" TargetFolderName="Lib" />
 			<Folder Name="Entities" TargetFolderName="Entities" />
 			<ProjectItem ReplaceParameters="false" TargetFileName="Lib\Date.cs">Date.cs</ProjectItem>

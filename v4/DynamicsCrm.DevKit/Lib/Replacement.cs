@@ -11,11 +11,11 @@ namespace DynamicsCrm.DevKit.Lib
         {
             await AddCommonReplacementsAsync(replacements);
 
-            replacements["$destinationdirectory$"] = $"{replacements["$solutiondirectory$"]}\\{form.ProjectName}";
+            replacements["$destinationdirectory$"] = $"{replacements?["$solutiondirectory$"]}\\{form.ProjectName}";
             replacements["ProjectName"] = form.ProjectName;
             replacements["$SafeProjectName$"] = form.ProjectName;
-            replacements["$NameSpace$"] = Helper.SafeNamespace(form.ProjectName);
             replacements["$ConnectionString$"] = Helper.BuildConnectionString(form.CrmConnection, true);
+            replacements["$NameSpace$"] = Helper.SafeNamespace(form.ProjectName);
         }
 
         private static async Task AddCommonReplacementsAsync(Dictionary<string, string> replacements)
