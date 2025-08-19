@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<PropertyGroup Label="Globals">
+		<ProjectGuid>b8be29d9-0954-4a03-a082-17067baa8b88</ProjectGuid>
+		<MinimumVisualStudioVersion>14.0</MinimumVisualStudioVersion>
+	</PropertyGroup>
+	<Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+	<Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\CodeSharing\Microsoft.CodeSharing.Common.Default.props" />
+	<Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\CodeSharing\Microsoft.CodeSharing.Common.props" />
+	<PropertyGroup />
+	<ItemGroup>
+		<None Include="Entities\generator.bat" />
+	</ItemGroup>
+	<ItemGroup>
+		<Compile Include="Lib\Date.cs" />
+		<Compile Include="Lib\EntityBase.cs" />
+		<Compile Include="Lib\Extension.cs" />
+		<Compile Include="Lib\PluginCore.cs" />
+		<Compile Include="Lib\SimpleJson.cs" />
+	</ItemGroup>
+	<Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\CodeSharing\Microsoft.CodeSharing.CSharp.targets" />
+</Project>
+<!-- v.x.xx.xx.xx - Build: xxxx.yy.zz HH.mm.ss -->

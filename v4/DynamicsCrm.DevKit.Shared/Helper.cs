@@ -670,13 +670,14 @@ namespace DynamicsCrm.DevKit.Shared
             return crmServiceClient;
         }
 
-        public static string BuildConnectionString(CrmConnection crmConnection)
+        public static string BuildConnectionString(CrmConnection crmConnection, bool isEncrypt = false)
         {
             if (crmConnection == null) return string.Empty;
             var type = crmConnection.Type;
             var url = crmConnection.Url;
             var userName = crmConnection.UserName;
             var password = DecryptString(crmConnection.Password);
+            if (isEncrypt) password = Helper.EncryptString(password);
             switch (type.ToUpperInvariant())
             {
                 case "CLIENTSECRET":

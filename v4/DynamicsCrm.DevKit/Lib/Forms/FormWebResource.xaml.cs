@@ -107,7 +107,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         {
             return ThreadHelper.JoinableTaskFactory.Run(async () =>
             {
-                var fileName = await VsixHelper.GetDynamicsCrmDevKitConfigJsonFileNameAsync();
+                var fileName = await VsixHelper.GetDynamicsCrmDevKitConfigJsonFullFileNameAsync();
                 if (File.Exists(fileName))
                 {
                     var json = File.ReadAllText(fileName);

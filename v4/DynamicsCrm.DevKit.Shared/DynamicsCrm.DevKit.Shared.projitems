@@ -68,4 +68,7 @@
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\plugin.deploy.debug.bat" />
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\plugin.deploy.debug.only.bat" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\DynamicsCrm.DevKit.Cli.json" />
+  </ItemGroup>
 </Project>

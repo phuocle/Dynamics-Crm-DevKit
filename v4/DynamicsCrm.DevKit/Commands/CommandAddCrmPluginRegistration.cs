@@ -178,8 +178,8 @@ namespace DynamicsCrm.DevKit.Commands
             var formConnection = new FormConnection();
             var result = formConnection.ShowModal() ?? false;
             if (!result) return null;
-            var plugin_deploy_debug_bat = await Helper.ReadEmbeddedResourceAsync($"{typeof(DevKitPackage).Assembly.GetName().Name}.Resources.plugin.deploy.debug.bat");
-            var plugin_deploy_debug_only_bat = await Helper.ReadEmbeddedResourceAsync($"{typeof(DevKitPackage).Assembly.GetName().Name}.Resources.plugin.deploy.debug.only.bat");
+            var plugin_deploy_debug_bat = await VsixHelper.ReadEmbeddedResourceAsync("plugin.deploy.debug.bat");
+            var plugin_deploy_debug_only_bat = await VsixHelper.ReadEmbeddedResourceAsync("plugin.deploy.debug.only.bat");
             var crmConnectionString = Helper.BuildConnectionString(formConnection.CrmConnection);
             plugin_deploy_debug_bat = plugin_deploy_debug_bat
                 .Replace("$CrmConnectionString$", crmConnectionString)

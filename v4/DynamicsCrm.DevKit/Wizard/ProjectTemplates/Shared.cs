@@ -1,4 +1,5 @@
-﻿using DynamicsCrm.DevKit.Lib.Forms;
+﻿using DynamicsCrm.DevKit.Lib;
+using DynamicsCrm.DevKit.Lib.Forms;
 using DynamicsCrm.DevKit.Shared;
 using EnvDTE;
 using Microsoft.VisualStudio.Shell;
@@ -41,16 +42,13 @@ namespace DynamicsCrm.DevKit.Wizard.ProjectTemplates
             var ok = form.ShowModal() ?? false;
             if (ok)
             {
-                //ThreadHelper.JoinableTaskFactory.Run(async () =>
-                //{
-                //    //var solutionName = await VsixHelper.GetSolutionName(automationObject);
-                //    //ProjectName = $"{solutionName}.Shared";
-                //    //DTE = automationObject;
-                //    //replacementsDictionary["$NameSpace$"] = Helper.SafeNamespace(ProjectName);
-                //    //replacementsDictionary["$SafeProjectName$"] = ProjectName;
-                //    //replacementsDictionary["$SharedNameSpace$"] = $"{ProjectName}.Shared";
-                //    //replacementsDictionary["$DevKitVersion$"] = Const.VersionBuild;
-                //});
+                ThreadHelper.JoinableTaskFactory.Run(async () =>
+                {
+                    ProjectName = form.ProjectName;
+                    DTE = automationObject;
+                    await Replacement.SetAsync(replacementsDictionary, form);
+                    await VsixHelper.AddDynamicsCrmDevKitCliJsonAsync();
+                });
 
             }
             else

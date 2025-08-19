@@ -41,13 +41,19 @@ namespace DynamicsCrm.DevKit
             }
         }
 
-        public static async Task<string> GetDynamicsCrmDevKitJsonFileNameAsync()
+        public static async Task<string> GetDynamicsCrmDevKitJsonFullFileNameAsync()
         {
             var solution = await VS.Solutions.GetCurrentSolutionAsync();
             return $"{Path.GetDirectoryName(solution.FullPath)}\\{Const.DynamicsCrmDevKitJson}";
         }
 
-        public static async Task<string> GetDynamicsCrmDevKitConfigJsonFileNameAsync()
+
+        public static async Task<string> GetDynamicsCrmDevKitJsonCliJsonFullFileNameAsync()
+        {
+            var solution = await VS.Solutions.GetCurrentSolutionAsync();
+            return $"{Path.GetDirectoryName(solution.FullPath)}\\{Const.DynamicsCrmDevKitCliJson}";
+        }
+        public static async Task<string> GetDynamicsCrmDevKitConfigJsonFullFileNameAsync()
         {
             var solution = await VS.Solutions.GetCurrentSolutionAsync();
             return $"{Path.GetDirectoryName(solution.FullPath)}\\{Const.DynamicsCrmDevKitConfigJson}";
@@ -55,7 +61,7 @@ namespace DynamicsCrm.DevKit
 
         public static async Task<DevKitConnections> GetDevKitConnectionsAsync()
         {
-            var fileName = await GetDynamicsCrmDevKitJsonFileNameAsync();
+            var fileName = await GetDynamicsCrmDevKitJsonFullFileNameAsync();
             if (fileName == null || !File.Exists(fileName))
             {
                 return new DevKitConnections()
@@ -82,7 +88,7 @@ namespace DynamicsCrm.DevKit
         public static async Task SaveDynamicsCrmDevKitConfigJsonAsync(DeployWebResource deployWebResource)
         {
             var configJson = new ConfigJson();
-            var fileName = await GetDynamicsCrmDevKitConfigJsonFileNameAsync();
+            var fileName = await GetDynamicsCrmDevKitConfigJsonFullFileNameAsync();
             if (File.Exists(fileName))
             {
                 configJson.WebResources = SimpleJson.DeserializeObject<ConfigJson>(await Task.Run(() => File.ReadAllText(fileName))).WebResources;
@@ -107,7 +113,7 @@ namespace DynamicsCrm.DevKit
         public static async Task SaveDevKitConnectionsAsync(DevKitConnections connections)
         {
             var json = JsonHelper.FormatJson(SimpleJson.SerializeObject(connections));
-            var fileName = await GetDynamicsCrmDevKitJsonFileNameAsync();
+            var fileName = await GetDynamicsCrmDevKitJsonFullFileNameAsync();
             if (fileName != null && File.Exists(fileName)) await FileHelper.ForceWriteAllTextAsync(fileName, json);
         }
 
@@ -396,6 +402,29 @@ namespace DynamicsCrm.DevKit
         {
             Helper.TryDeleteDirectory(OOBDestinationDirectory);
             throw new WizardCancelledException();
+        }
+
+        internal static async Task AddDynamicsCrmDevKitCliJsonAsync()
+        {
+            if (!File.Exists(await VsixHelper.GetDynamicsCrmDevKitJsonCliJsonFullFileNameAsync()))
+            {
+                var solutionName = await VsixHelper.GetSolutionNameAsync();
+                var json = await VsixHelper.ReadEmbeddedResourceAsync(Const.DynamicsCrmDevKitCliJson);
+                json = json
+                        .Replace("???.Plugin.*.dll", $"{solutionName}.Plugin.*.dll")
+                        .Replace("???.Plugin.*.nupkg", $"{solutionName}.Plugin.*.nupkg")
+                        .Replace("???.CustomAction.*.dll", $"{solutionName}.CustomAction.*.dll")
+                        .Replace("???.CustomApi.*.dll", $"{solutionName}.CustomApi.*.dll")
+                        .Replace("???.Workflow.*.dll", $"{solutionName}.Workflow.*.dll")
+                        .Replace("???.DataProvider.*.dll", $"{solutionName}.DataProvider.*.dll")
+                        .Replace("???.*.Test.dll", $"{solutionName}.*.Test.dll");
+                await FileHelper.ForceWriteAllTextAsync(await VsixHelper.GetDynamicsCrmDevKitJsonCliJsonFullFileNameAsync(), json);
+            }
+        }
+
+        internal static async Task<string> ReadEmbeddedResourceAsync(string path)
+        {
+            return await Helper.ReadEmbeddedResourceAsync($"{typeof(DevKitPackage).Assembly.GetName().Name}.Resources.{path}");
         }
     }
 }

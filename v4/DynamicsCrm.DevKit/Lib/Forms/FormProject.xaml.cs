@@ -4,6 +4,7 @@ using DynamicsCrm.DevKit.Shared.Models;
 using EnvDTE;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.VisualStudio.Shell;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ItemType = DynamicsCrm.DevKit.Shared.ItemType;
@@ -208,16 +209,15 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 async Task SharedProjectAsync()
                 {
                     var solutionName = await VsixHelper.GetSolutionNameAsync();
-                    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Shared-Project-Template");
+                    HELP.NavigateUri = new Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Shared-Project-Template");
                     HELP.Inlines.Clear();
                     HELP.Inlines.Add("Shared Project Template");
-                    LabelProjectName.Visibility = System.Windows.Visibility.Collapsed;
-                    var items = new List<XrmEntity> { new() { Name = $"{solutionName}.Shared" } };
-                    ComboBoxProject.DisplayMemberPath = "Name";
-                    ComboBoxProject.ItemsSource = items;
-                    ComboBoxProject.SelectedIndex = 0;
-                    ComboBoxProject.IsEnabled = false;
+                    ComboBoxProject.Visibility = System.Windows.Visibility.Hidden;
+                    TextboxProject.Visibility = System.Windows.Visibility.Visible;
+                    TextboxProject.IsEnabled = false;
+                    TextboxProject.Text = $"{solutionName}.Shared";
                     LabelProjectName.Content = $"{solutionName}.Shared";
+                    LabelProjectName.Tag = LabelProjectName.Content;
                 }
                 //void ConsoleProject()
                 //{
