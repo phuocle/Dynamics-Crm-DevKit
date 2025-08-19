@@ -72,4 +72,22 @@
         Report,
         Package
     }
+
+    public enum ItemType
+    {
+        None,
+        LateBound,
+        JsForm,
+        JsWebApi,
+        Workflow,
+        UiTest,
+        Test,
+        Plugin,
+        CustomApi,
+        CustomAction,
+        DownloadWebResources,
+        DataProvider,
+        ResourceString,
+        DownloadReports
+    }
 }

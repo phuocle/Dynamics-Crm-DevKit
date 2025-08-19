@@ -51,6 +51,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\ProcessForm.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\ReadSdkMessageProcessingStep.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\SystemForm.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\T4Context.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\WebResourceFile.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\XrmEntity.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SimpleJson.cs" />

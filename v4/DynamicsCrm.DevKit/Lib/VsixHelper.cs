@@ -4,6 +4,7 @@ using DynamicsCrm.DevKit.Shared.Models;
 using EnvDTE;
 using EnvDTE80;
 using Microsoft.PowerPlatform.Dataverse.Client;
+using Microsoft.VisualStudio.TemplateWizard;
 using System;
 using System.IO;
 using System.Linq;
@@ -137,12 +138,10 @@ namespace DynamicsCrm.DevKit
         public static string GetSolutionName(object dte)
         {
             Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
-            if (dte == null) return string.Empty;
-            
+            if (dte == null) return string.Empty;            
             var dte2 = (DTE2)dte;
             var solutionFullPath = dte2.Solution?.FullName;
-            if (string.IsNullOrEmpty(solutionFullPath)) return string.Empty;
-            
+            if (string.IsNullOrEmpty(solutionFullPath)) return string.Empty;            
             return Path.GetFileNameWithoutExtension(solutionFullPath);
         }
 
@@ -384,6 +383,12 @@ namespace DynamicsCrm.DevKit
                     System.Diagnostics.Debug.WriteLine($"RenameProjectFiles error: {ex.Message}");
                 }
             }
+        }
+
+        internal static void ThrowWizardCancelledException(string OOBDestinationDirectory)
+        {
+            Helper.TryDeleteDirectory(OOBDestinationDirectory);
+            throw new WizardCancelledException();
         }
     }
 }

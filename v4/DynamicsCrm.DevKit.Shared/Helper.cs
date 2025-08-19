@@ -795,5 +795,19 @@ namespace DynamicsCrm.DevKit.Shared
             }
             return string.Join(".", items);
         }
+
+        public static void TryDeleteDirectory(string directory)
+        {
+            if (Directory.Exists(directory))
+            {
+                try
+                {
+                    Directory.Delete(directory, true);
+                }
+                catch
+                {
+                }
+            }
+        }
     }
 }

@@ -1,9 +1,9 @@
-﻿using DynamicsCrm.DevKit.Shared;
+﻿using DynamicsCrm.DevKit.Lib.Forms;
+using DynamicsCrm.DevKit.Shared;
 using EnvDTE;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.TemplateWizard;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace DynamicsCrm.DevKit.Wizard.ProjectTemplates
 {
@@ -36,14 +36,27 @@ namespace DynamicsCrm.DevKit.Wizard.ProjectTemplates
 
         public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary, WizardRunKind runKind, object[] customParams)
         {
-            ThreadHelper.ThrowIfNotOnUIThread();
-            var solutionName = VsixHelper.GetSolutionName(automationObject);
-            ProjectName = $"{solutionName}.Shared";
-            DTE = automationObject;
-            replacementsDictionary["$NameSpace$"] = Helper.SafeNamespace(ProjectName);
-            replacementsDictionary["$SafeProjectName$"] = ProjectName;
-            replacementsDictionary["$SharedNameSpace$"] = $"{ProjectName}.Shared";
-            replacementsDictionary["$DevKitVersion$"] = Const.VersionBuild;
+            var OOBDestinationDirectory = replacementsDictionary["$destinationdirectory$"];
+            var form = new FormProject(ProjectType.Shared);
+            var ok = form.ShowModal() ?? false;
+            if (ok)
+            {
+                //ThreadHelper.JoinableTaskFactory.Run(async () =>
+                //{
+                //    //var solutionName = await VsixHelper.GetSolutionName(automationObject);
+                //    //ProjectName = $"{solutionName}.Shared";
+                //    //DTE = automationObject;
+                //    //replacementsDictionary["$NameSpace$"] = Helper.SafeNamespace(ProjectName);
+                //    //replacementsDictionary["$SafeProjectName$"] = ProjectName;
+                //    //replacementsDictionary["$SharedNameSpace$"] = $"{ProjectName}.Shared";
+                //    //replacementsDictionary["$DevKitVersion$"] = Const.VersionBuild;
+                //});
+
+            }
+            else
+            {
+                VsixHelper.ThrowWizardCancelledException(OOBDestinationDirectory);
+            }
         }
 
         public bool ShouldAddProjectItem(string filePath)

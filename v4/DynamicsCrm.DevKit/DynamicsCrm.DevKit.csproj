@@ -65,6 +65,9 @@
     <Compile Include="Lib\Forms\FormConnection.xaml.cs">
       <DependentUpon>FormConnection.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Lib\Forms\FormProject.xaml.cs">
+      <DependentUpon>FormProject.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Lib\Forms\FormWebResource.xaml.cs">
       <DependentUpon>FormWebResource.xaml</DependentUpon>
     </Compile>
@@ -152,6 +155,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Lib\Forms\FormConnection.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Lib\Forms\FormProject.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
