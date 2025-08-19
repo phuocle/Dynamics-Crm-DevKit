@@ -6,6 +6,7 @@ using EnvDTE80;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.VisualStudio.TemplateWizard;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -182,6 +183,12 @@ namespace DynamicsCrm.DevKit
             return projects.Any(x => x.Name == projectName);
         }
 
+
+        internal static bool IsValidProjectName(string projectName)
+        {
+            var list = new List<string>() { "/", "?", ":", "&", @"\", "*", "\"", "<", ">", "|", "#", "%", "'" };
+            return list.Count(x => projectName.Contains(x)) == 0;
+        }
         public static bool HasImplementedPlugin(CodeClass @class)
         {
             Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();

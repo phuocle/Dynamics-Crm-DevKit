@@ -1,4 +1,5 @@
-﻿using DynamicsCrm.DevKit.Shared;
+﻿using Community.VisualStudio.Toolkit;
+using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
 using EnvDTE;
 using Microsoft.PowerPlatform.Dataverse.Client;
@@ -14,13 +15,8 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         public ServiceClient ServiceClient => CONNECTION.ServiceClient;
         public CrmConnection CrmConnection => CONNECTION.CrmConnection;
 
-        //public string ProjectName
-        //{
-        //    get
-        //    {
-        //        return LabelProjectName.Content?.ToString();
-        //    }
-        //}
+        public string ProjectName => LabelProjectName.Content?.ToString() ?? string.Empty;
+
         //public string ItemName
         //{
         //    get
@@ -594,32 +590,38 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             DialogResult = false;
         }
 
+        private async Task ButtonOK_ClickAsync()
+        {
+            if (await IsValidAsync())
+            {
+                DialogResult = true;
+            }
+            async Task<bool> IsValidAsync()
+            {
+                if (ProjectType != ProjectType.None)
+                {
+                    if (await VsixHelper.IsProjectExistAsync(ProjectName))
+                    {
+                        await VS.MessageBox.ShowErrorAsync($"Project: {ProjectName} exist.");
+                        return false;
+                    }
+                    if (!VsixHelper.IsValidProjectName(ProjectName))
+                    {
+                        await VS.MessageBox.ShowErrorAsync("Invalid enter project name");
+                        return false;
+                    }                    
+                }
+                if (ItemType != ItemType.None)
+                {
+                    
+                }
+                return true;
+            }
+        }
 
         private void ButtonOK_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            //if (IsValid())
-            //{
-            //    DialogResult = true;
-            //}
-            //bool IsValid()
-            //{
-            //    if (VsixHelper.IsExistProject(ProjectName))
-            //    {
-            //        VS.MessageBox.ShowError($"Project: {ProjectName} exist.");
-            //        return false;
-            //    }
-            //    if (!VsixHelper.IsValidProjectName(ProjectName))
-            //    {
-            //        VS.MessageBox.ShowError("Invalid enter project name");
-            //        return false;
-            //    }
-            //    if (VsixHelper.IsExistItem(ProjectName))
-            //    {
-            //        VS.MessageBox.ShowError($"Item: {ProjectName} exist.");
-            //        return false;
-            //    }
-            //    return true;
-            //}
+            _ = ButtonOK_ClickAsync();            
         }
 
         private void Connection_Connected(object sender, System.EventArgs e)
@@ -704,28 +706,28 @@ namespace DynamicsCrm.DevKit.Lib.Forms
 
         private void TextboxProject_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
-            //if (TextboxProject.Text.Length == 0)
-            //{
-            //    if (ProjectType == ProjectType.UiTest)
-            //        LabelProjectName.Content = $"{LabelProjectName?.Tag}.UiTest";
-            //    else if (ItemType == ItemType.Workflow)
-            //        LabelProjectName.Content = $"_";
-            //    else if (ItemType == ItemType.UiTest)
-            //        LabelProjectName.Content = $"_UiTest";
-            //    else
-            //        LabelProjectName.Content = $"{LabelProjectName?.Tag}";
-            //}
-            //else
-            //{
-            //    if (ProjectType == ProjectType.UiTest)
-            //        LabelProjectName.Content = $"{LabelProjectName?.Tag}.{TextboxProject?.Text}.UiTest";
-            //    else if (ItemType == ItemType.Workflow)
-            //        LabelProjectName.Content = $"{TextboxProject?.Text}";
-            //    else if (ItemType == ItemType.UiTest)
-            //        LabelProjectName.Content = $"{TextboxProject?.Text}UiTest";
-            //    else
-            //        LabelProjectName.Content = $"{LabelProjectName?.Tag}.{TextboxProject?.Text}";
-            //}
+            if (TextboxProject.Text.Length == 0)
+            {
+                if (ProjectType == ProjectType.UiTest)
+                    LabelProjectName.Content = $"{LabelProjectName?.Tag}.UiTest";
+                else if (ItemType == ItemType.Workflow)
+                    LabelProjectName.Content = $"_";
+                else if (ItemType == ItemType.UiTest)
+                    LabelProjectName.Content = $"_UiTest";
+                else
+                    LabelProjectName.Content = $"{LabelProjectName?.Tag}";
+            }
+            else
+            {
+                if (ProjectType == ProjectType.UiTest)
+                    LabelProjectName.Content = $"{LabelProjectName?.Tag}.{TextboxProject?.Text}.UiTest";
+                else if (ItemType == ItemType.Workflow)
+                    LabelProjectName.Content = $"{TextboxProject?.Text}";
+                else if (ItemType == ItemType.UiTest)
+                    LabelProjectName.Content = $"{TextboxProject?.Text}UiTest";
+                else
+                    LabelProjectName.Content = $"{LabelProjectName?.Tag}.{TextboxProject?.Text}";
+            }
         }
 
         private void ComboBoxProject_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
