@@ -4,7 +4,7 @@ using System.Configuration;
 
 namespace $NameSpace$
 {
-        public static class AppSettings
+    public static class AppSettings
     {
         private static ServiceClient _Service = null;
         public static ServiceClient Service
@@ -12,8 +12,8 @@ namespace $NameSpace$
             get
             {
                 if (_Service != null) return _Service;
-                ServiceClient.MaxConnectionTimeout = new TimeSpan(1, 0, 0);
                 _Service = new ServiceClient(ConnectionString);
+                ServiceClient.MaxConnectionTimeout = new TimeSpan(1, 0, 0);
                 return _Service;
             }
         }
@@ -35,12 +35,10 @@ namespace $NameSpace$
                         var parts = UserName.Split('\\');
                         if (parts.Length != 2)
                             throw new ArgumentException("For AD authentication, username must be in format 'domain\\username'");
-                        var domain = parts[0];
-                        var user = parts[1];
-                        return $"AuthType=AD;Url={Url};Domain={domain};Username={user};Password={Password};";
+                        return $"AuthType=AD;Url={Url};Domain={parts[0]};Username={parts[1]};Password={Password};";
                     case "OAUTH":
                     default:
-                        var connectionString = $"AuthType=OAuth;Url={Url} ;Username= {UserName} ;Password= {Password};";
+                        var connectionString = $"AuthType=OAuth;Url={Url};Username={UserName};Password={Password};";
                         if (!connectionString.ToLower().Contains("appid="))
                         {
                             connectionString += "AppId=51f81489-12ee-4a9e-aaae-a2591f45987d;";
