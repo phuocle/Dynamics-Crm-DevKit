@@ -11,7 +11,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		DynamicsCrm.DevKit.json = DynamicsCrm.DevKit.json
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.Console", "Dev.DevKit.Console\Dev.DevKit.Console.csproj", "{B7C908B4-B1BD-4A9F-B055-0C9AF08DB08D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.Console", "Dev.DevKit.Console\Dev.DevKit.Console.csproj", "{C6B1DE74-0BCC-49C9-8041-CD796C4DAB5D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,10 +19,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{B7C908B4-B1BD-4A9F-B055-0C9AF08DB08D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B7C908B4-B1BD-4A9F-B055-0C9AF08DB08D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B7C908B4-B1BD-4A9F-B055-0C9AF08DB08D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B7C908B4-B1BD-4A9F-B055-0C9AF08DB08D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C6B1DE74-0BCC-49C9-8041-CD796C4DAB5D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6B1DE74-0BCC-49C9-8041-CD796C4DAB5D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6B1DE74-0BCC-49C9-8041-CD796C4DAB5D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6B1DE74-0BCC-49C9-8041-CD796C4DAB5D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -32,6 +32,6 @@ Global
 	EndGlobalSection
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{9c1ce2e5-6633-4798-ac50-94e189ca12c5}*SharedItemsImports = 13
-		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{b7c908b4-b1bd-4a9f-b055-0c9af08db08d}*SharedItemsImports = 4
+		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{c6b1de74-0bcc-49c9-8041-cd796c4dab5d}*SharedItemsImports = 4
 	EndGlobalSection
 EndGlobal

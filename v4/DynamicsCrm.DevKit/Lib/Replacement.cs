@@ -12,6 +12,7 @@ namespace DynamicsCrm.DevKit.Lib
         internal static async Task SetAsync(Dictionary<string, string> replacements, FormProject form)
         {
             await AddCommonReplacementsAsync(replacements);
+            await AddNuGetAsync(replacements);
             SetConnectionValues(replacements, form.CrmConnection);
 
             replacements["$destinationdirectory$"] = $"{replacements?["$solutiondirectory$"]}\\{form.ProjectName}";
@@ -19,6 +20,12 @@ namespace DynamicsCrm.DevKit.Lib
             replacements["$SafeProjectName$"] = form.ProjectName;
             replacements["$ConnectionString$"] = Helper.BuildConnectionString(form.CrmConnection, true);
             replacements["$NameSpace$"] = Helper.SafeNamespace(form.ProjectName)    ;
+        }
+
+        private static async Task AddNuGetAsync(Dictionary<string, string> replacements)
+        {
+            await NuGetHelper.SetReplacementAsync(replacements, "DynamicsCrm.DevKit.Analyzers");
+            await NuGetHelper.SetReplacementAsync(replacements, "Microsoft.PowerPlatform.Dataverse.Client");
         }
 
         private static void SetConnectionValues(Dictionary<string, string> replacements, CrmConnection crmConnection)
