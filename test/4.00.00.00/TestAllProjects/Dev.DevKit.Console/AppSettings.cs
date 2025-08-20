@@ -2,7 +2,7 @@
 using System.Configuration;
 using Microsoft.Xrm.Tooling.Connector;
 
-namespace $NameSpace$
+namespace Dev.DevKit.Console
 {
     public static class AppSettings
     {
