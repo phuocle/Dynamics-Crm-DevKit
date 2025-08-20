@@ -4,11 +4,11 @@ namespace Dev.DevKit.Console.Lib
 {
     public class TracingServiceFake : ITracingService
     {
-        public ITracingService crmTracingService;
+        public ITracingService tracingService;
 
         public void Trace(string format, params object[] args)
         {
-            if (crmTracingService == null)
+            if (tracingService == null)
             {
                 try
                 {
@@ -23,7 +23,7 @@ namespace Dev.DevKit.Console.Lib
             }
             else
             {
-                crmTracingService.Trace(format, args);
+                tracingService.Trace(format, args);
             }
         }
     }

@@ -4,7 +4,7 @@ using System.Configuration;
 
 namespace Dev.DevKit.Console
 {
-    public static class AppSettings
+        public static class AppSettings
     {
         private static ServiceClient _Service = null;
         public static ServiceClient Service

@@ -11,15 +11,14 @@ namespace DynamicsCrm.DevKit.Lib
     {
         internal static async Task SetAsync(Dictionary<string, string> replacements, FormProject form)
         {
-            var projectName = Helper.SafeIdentifier(form.ProjectName);
             await AddCommonReplacementsAsync(replacements);
             SetConnectionValues(replacements, form.CrmConnection);
 
             replacements["$destinationdirectory$"] = $"{replacements?["$solutiondirectory$"]}\\{form.ProjectName}";
-            replacements["$ProjectName$"] = projectName;
-            replacements["$SafeProjectName$"] = projectName;
+            replacements["$ProjectName$"] = form.ProjectName;
+            replacements["$SafeProjectName$"] = form.ProjectName;
             replacements["$ConnectionString$"] = Helper.BuildConnectionString(form.CrmConnection, true);
-            replacements["$NameSpace$"] = projectName;
+            replacements["$NameSpace$"] = Helper.SafeNamespace(form.ProjectName)    ;
         }
 
         private static void SetConnectionValues(Dictionary<string, string> replacements, CrmConnection crmConnection)
