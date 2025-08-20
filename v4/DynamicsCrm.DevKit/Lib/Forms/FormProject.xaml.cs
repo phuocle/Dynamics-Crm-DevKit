@@ -231,16 +231,17 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     LabelProjectName.Content = $"{solutionName}.Console";
                     LabelProjectName.Tag = LabelProjectName.Content;
                 }
-                //void ConsoleCoreProject()
-                //{
-                //    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Console-Core-Project-Template");
-                //    HELP.Inlines.Clear();
-                //    HELP.Inlines.Add("Console Core Project Template");
-                //    ComboBoxProject.Visibility = System.Windows.Visibility.Hidden;
-                //    TextboxProject.Visibility = System.Windows.Visibility.Visible;
-                //    LabelProjectName.Content = $"{VsixHelper.GetSolutionName()}.Console";
-                //    LabelProjectName.Tag = LabelProjectName.Content;
-                //}
+                async Task ConsoleCoreProjectAsync()
+                {
+                    var solutionName = await VsixHelper.GetSolutionNameAsync();
+                    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Console-Core-Project-Template");
+                    HELP.Inlines.Clear();
+                    HELP.Inlines.Add("Console Core Project Template");
+                    ComboBoxProject.Visibility = System.Windows.Visibility.Hidden;
+                    TextboxProject.Visibility = System.Windows.Visibility.Visible;
+                    LabelProjectName.Content = $"{solutionName}.ConsoleCore";
+                    LabelProjectName.Tag = LabelProjectName.Content;
+                }
                 //void ServerProject()
                 //{
                 //    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Server-Project-Template");
@@ -397,9 +398,9 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                         case ProjectType.Console:
                             await ConsoleProjectAsync();
                             break;
-                            //case ProjectType.ConsoleCore:
-                            //    ConsoleCoreProject();
-                            //    break;
+                        case ProjectType.ConsoleCore:
+                            await ConsoleCoreProjectAsync();
+                            break;
                             //case ProjectType.Server:
                             //    ServerProject();
                             //    break;

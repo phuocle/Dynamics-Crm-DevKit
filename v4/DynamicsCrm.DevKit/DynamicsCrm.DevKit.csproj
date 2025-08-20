@@ -84,6 +84,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>source.extension.vsixmanifest</DependentUpon>
     </Compile>
+    <Compile Include="Wizard\ProjectTemplates\ConsoleCore.cs" />
     <Compile Include="Wizard\ProjectTemplates\Console.cs" />
     <Compile Include="Wizard\ProjectTemplates\Shared.cs" />
   </ItemGroup>
@@ -191,6 +192,13 @@
     <ProjectReference Include="..\ProjectTemplates\CSharp\02.ConsoleProjectTemplate\02.ConsoleProjectTemplate.csproj">
       <Project>{2C597B0B-F648-486D-BC45-593F584B8BCC}</Project>
       <Name>02.ConsoleProjectTemplate</Name>
+      <VSIXSubPath>ProjectTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\ProjectTemplates\CSharp\17.ConsoleCoreProjectTemplate\17.ConsoleCoreProjectTemplate.csproj">
+      <Project>{E782F991-AFB7-4C71-B92A-373C6C018731}</Project>
+      <Name>17.ConsoleCoreProjectTemplate</Name>
       <VSIXSubPath>ProjectTemplates</VSIXSubPath>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
