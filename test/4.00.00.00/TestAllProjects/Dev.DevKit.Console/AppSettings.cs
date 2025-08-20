@@ -1,37 +1,60 @@
-﻿using System;
+﻿using Microsoft.PowerPlatform.Dataverse.Client;
+using System;
 using System.Configuration;
-using Microsoft.Xrm.Tooling.Connector;
 
 namespace Dev.DevKit.Console
 {
     public static class AppSettings
     {
-        private static CrmServiceClient _Service = null;
-        public static CrmServiceClient Service
+        private static ServiceClient _Service = null;
+        public static ServiceClient Service
         {
             get
             {
                 if (_Service != null) return _Service;
-                CrmServiceClient.MaxConnectionTimeout = new TimeSpan(1, 0, 0);
-                _Service = new CrmServiceClient(ConnectionString);
+                ServiceClient.MaxConnectionTimeout = new TimeSpan(1, 0, 0);
+                _Service = new ServiceClient(ConnectionString);
                 return _Service;
             }
         }
         private static string AuthType { get { return ConfigurationManager.AppSettings["AuthType"]; } }
         private static string Url { get { return ConfigurationManager.AppSettings["Url"]; } }
-        private static string UserName { get { return ConfigurationManager.AppSettings["$ClientId$"]; } }
-        private static string Password { get { return ConfigurationManager.AppSettings["$ClientSecret$"]; } }
+        private static string UserName { get { return ConfigurationManager.AppSettings["UserName"]; } }
+        private static string Password { get { return ConfigurationManager.AppSettings["Password"]; } }
         private static string ConnectionString
         {
             get
             {
-                if (AuthType == "ClientSecret")
-                    return $"AuthType=ClientSecret;Url={Url};ClientId={UserName};ClientSecret={Password};";
-                if (AuthType == "OAuth")
-                    return $"AuthType=OAuth;Url={Url};Username={UserName};Password={Password};AppId=51f81489-12ee-4a9e-aaae-a2591f45987d;RedirectUri=app://58145B91-0C36-4500-8554-080854F2AC97;LoginPrompt=Auto";
-                var arr = UserName.Split("\\".ToCharArray());
-                if (arr.Length != 2) throw new Exception("Please enter UserName like: contoso\\jsmith");
-                return $"AuthType=AD;Url={Url};Domain={arr[0]};Username={arr[1]};Password={Password};";
+                switch (AuthType.ToUpperInvariant())
+                {
+                    case "CLIENTSECRET":
+                        return $"AuthType=ClientSecret;Url={Url};ClientId={UserName};ClientSecret={Password};";
+                    case "AD":
+                        if (string.IsNullOrEmpty(UserName) || !UserName.Contains("\\"))
+                            throw new ArgumentException("For AD authentication, username must be in format 'domain\\username'");
+                        var parts = UserName.Split('\\');
+                        if (parts.Length != 2)
+                            throw new ArgumentException("For AD authentication, username must be in format 'domain\\username'");
+                        var domain = parts[0];
+                        var user = parts[1];
+                        return $"AuthType=AD;Url={Url};Domain={domain};Username={user};Password={Password};";
+                    case "OAUTH":
+                    default:
+                        var connectionString = $"AuthType=OAuth;Url={Url} ;Username= {UserName} ;Password= {Password};";
+                        if (!connectionString.ToLower().Contains("appid="))
+                        {
+                            connectionString += "AppId=51f81489-12ee-4a9e-aaae-a2591f45987d;";
+                        }
+                        if (!connectionString.ToLower().Contains("redirecturi="))
+                        {
+                            connectionString += "RedirectUri=app://58145B91-0C36-4500-8554-080854F2AC97;";
+                        }
+                        if (!connectionString.ToLower().Contains("loginprompt="))
+                        {
+                            connectionString += "LoginPrompt=Auto;";
+                        }
+                        return connectionString;
+                }
             }
         }
     }

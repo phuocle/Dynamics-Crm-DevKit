@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Crm.Sdk.Messages;
+using System;
 
 namespace Dev.DevKit.Console
 {

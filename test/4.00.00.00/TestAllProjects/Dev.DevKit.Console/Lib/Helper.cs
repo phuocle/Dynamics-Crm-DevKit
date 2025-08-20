@@ -1,7 +1,7 @@
-﻿using Microsoft.Xrm.Sdk;
+﻿using Microsoft.PowerPlatform.Dataverse.Client;
+using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Extensions;
 using Microsoft.Xrm.Sdk.PluginTelemetry;
-using Microsoft.Xrm.Tooling.Connector;
 using NSubstitute;
 using System;
 using System.Collections.Generic;
@@ -29,7 +29,7 @@ namespace Dev.DevKit.Console.Lib
             }
             return obj;
         }
-        public static IServiceProvider GetServiceProvider(string json, CrmServiceClient service)
+        public static IServiceProvider GetServiceProvider(string json, ServiceClient service)
         {
             var pluginExecutionContext = DeserializeRemoteExecutionContext(json);
             FixPluginExecutionContext();
