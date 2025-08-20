@@ -3,7 +3,7 @@
 namespace $NameSpace$
 {
     public class Program
-
+    {
         [STAThread]
         static void Main()
         {

@@ -4,6 +4,7 @@ using DynamicsCrm.DevKit.Shared.Models;
 using EnvDTE;
 using EnvDTE80;
 using Microsoft.PowerPlatform.Dataverse.Client;
+using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.TemplateWizard;
 using System;
 using System.Collections.Generic;
@@ -238,164 +239,107 @@ namespace DynamicsCrm.DevKit
 
         public static void FixProjectFolder(object dte, EnvDTE.Project project, string projectName)
         {
-            Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
-            if (dte == null || project == null || string.IsNullOrEmpty(projectName))
-                return;
+            ThreadHelper.ThrowIfNotOnUIThread();
+            var serviceClient = (EnvDTE.DTE)dte;
+            var oldProjectFolder = Path.GetDirectoryName(project.FullName);
+            var newProjectFolder = Path.Combine(Directory.GetParent(oldProjectFolder).FullName, projectName);
+            var projectFileName = Path.GetFileName(project.FullName);
 
             try
             {
-                var currentProjectPath = Path.GetDirectoryName(project.FullName);
-                if (string.IsNullOrEmpty(currentProjectPath))
-                    return;
-                var currentFolderName = Path.GetFileName(currentProjectPath);
-                if (string.Equals(currentFolderName, projectName, StringComparison.OrdinalIgnoreCase))
-                    return;
-                var solutionDirectory = Directory.GetParent(currentProjectPath)?.FullName;
-                if (string.IsNullOrEmpty(solutionDirectory))
-                    return;
-                var newProjectPath = Path.Combine(solutionDirectory, projectName);
-                var dte2 = (DTE2)dte;
-
-                // STEP 1: Completely unload the project to release all file handles
-                var solutionFullPath = dte2.Solution.FullName;
-                var projectFullPath = project.FullName;
-
-                // Save solution first
-                dte2.Solution.SaveAs(solutionFullPath);
-
-                // Remove project from solution completely
-                dte2.Solution.Remove(project);
-
-                // Force garbage collection to release any remaining handles
-                GC.Collect();
-                GC.WaitForPendingFinalizers();
-                GC.Collect();
-
-                // STEP 2: Use retry logic for the move operation
-                var moveSuccess = RetryFileOperation(() =>
-                {
-                    // Clean up target directory if it exists
-                    if (Directory.Exists(newProjectPath))
-                    {
-                        DeleteDirectoryWithRetry(newProjectPath);
-                    }
-
-                    // Move the directory
-                    Directory.Move(currentProjectPath, newProjectPath);
-                    return true;
-                }, maxRetries: 5, delayMs: 500);
-
-                if (!moveSuccess)
-                {
-                    System.Diagnostics.Debug.WriteLine("Failed to move project directory after multiple retries");
-                    return;
-                }
-
-                // STEP 3: Rename project files
-                RenameProjectFiles(newProjectPath, currentFolderName, projectName);
-
-                // STEP 4: Add project back to solution with new path
-                var newProjectFile = Path.Combine(newProjectPath, projectName + ".shproj");
-                if (File.Exists(newProjectFile))
-                {
-                    // Use retry for adding project back
-                    RetryFileOperation(() =>
-                    {
-                        Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
-                        dte2.Solution.AddFromFile(newProjectFile);
-                        return true;
-                    }, maxRetries: 3, delayMs: 200);
-                }
-
-                // Save the solution with the updated project
-                dte2.Solution.SaveAs(solutionFullPath);
-            }
-            catch (Exception ex)
-            {
-                // Log error but don't fail the wizard
-                System.Diagnostics.Debug.WriteLine($"FixProjectFolder error: {ex.Message}");
-            }
-
-            bool RetryFileOperation(Func<bool> operation, int maxRetries = 3, int delayMs = 500)
-            {
-                for (int i = 0; i < maxRetries; i++)
-                {
-                    try
-                    {
-                        return operation();
-                    }
-                    catch (IOException) when (i < maxRetries - 1)
-                    {
-                        // Wait before retry, with exponential backoff
-                        System.Threading.Thread.Sleep(delayMs * (i + 1));
-
-                        // Force garbage collection between retries
-                        GC.Collect();
-                        GC.WaitForPendingFinalizers();
-                    }
-                    catch (UnauthorizedAccessException) when (i < maxRetries - 1)
-                    {
-                        // Wait before retry for access issues
-                        System.Threading.Thread.Sleep(delayMs * (i + 1));
-
-                        // Force garbage collection between retries
-                        GC.Collect();
-                        GC.WaitForPendingFinalizers();
-                    }
-                }
-                return false;
-            }
-            void DeleteDirectoryWithRetry(string path)
-            {
-                RetryFileOperation(() =>
-                {
-                    if (Directory.Exists(path))
-                    {
-                        // First, remove read-only attributes from all files
-                        foreach (var file in Directory.GetFiles(path, "*", SearchOption.AllDirectories))
-                        {
-                            File.SetAttributes(file, FileAttributes.Normal);
-                        }
-                        Directory.Delete(path, true);
-                    }
-                    return true;
-                }, maxRetries: 3, delayMs: 300);
-            }
-            void RenameProjectFiles(string projectPath, string oldName, string newName)
-            {
+                // Step 1: Close all documents in the project with better error handling
+                var documentsToClose = new List<Document>();
                 try
                 {
-                    // Rename .shproj file
-                    var oldProjectFile = Path.Combine(projectPath, oldName + ".shproj");
-                    var newProjectFile = Path.Combine(projectPath, newName + ".shproj");
-
-                    if (File.Exists(oldProjectFile) && !string.Equals(oldProjectFile, newProjectFile, StringComparison.OrdinalIgnoreCase))
+                    foreach (Document doc in serviceClient.Documents)
                     {
-                        RetryFileOperation(() =>
+                        if (doc.FullName.StartsWith(oldProjectFolder, StringComparison.OrdinalIgnoreCase))
                         {
-                            File.Move(oldProjectFile, newProjectFile);
-                            return true;
-                        });
+                            documentsToClose.Add(doc);
+                        }
                     }
 
-                    // Rename .projitems file
-                    var oldProjItemsFile = Path.Combine(projectPath, oldName + ".projitems");
-                    var newProjItemsFile = Path.Combine(projectPath, newName + ".projitems");
-
-                    if (File.Exists(oldProjItemsFile) && !string.Equals(oldProjItemsFile, newProjItemsFile, StringComparison.OrdinalIgnoreCase))
+                    foreach (var doc in documentsToClose)
                     {
-                        RetryFileOperation(() =>
+                        try
                         {
-                            File.Move(oldProjItemsFile, newProjItemsFile);
-                            return true;
-                        });
+                            doc.Close(vsSaveChanges.vsSaveChangesPrompt);
+                        }
+                        catch (Exception ex)
+                        {
+                            System.Diagnostics.Debug.WriteLine($"Failed to close document {doc.FullName}: {ex.Message}");
+                        }
                     }
                 }
                 catch (Exception ex)
                 {
-                    System.Diagnostics.Debug.WriteLine($"RenameProjectFiles error: {ex.Message}");
+                    System.Diagnostics.Debug.WriteLine($"Error during document closure: {ex.Message}");
+                }
+
+                // Step 2: Remove project from solution
+                serviceClient.Solution.Remove(project);
+
+                // Step 3: Move directory with improved retry logic
+                MoveDirectoryWithRetry(oldProjectFolder, newProjectFolder);
+
+                // Step 4: Re-add project to solution
+                var newProjectPath = Path.Combine(newProjectFolder, projectFileName);
+                serviceClient.Solution.AddFromFile(newProjectPath);
+                serviceClient.Solution.SaveAs(serviceClient.Solution.FullName);
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException($"Failed to fix project folder: {ex.Message}", ex);
+            }
+        }
+
+        private static void MoveDirectoryWithRetry(string oldPath, string newPath)
+        {
+            const int maxRetries = 5;
+            const int baseDelayMs = 500;
+            const int maxDelayMs = 5000;
+
+            for (int attempt = 0; attempt < maxRetries; attempt++)
+            {
+                try
+                {
+                    // Ensure target directory doesn't exist
+                    if (Directory.Exists(newPath))
+                    {
+                        throw new InvalidOperationException($"Target directory already exists: {newPath}");
+                    }
+
+                    Directory.Move(oldPath, newPath);
+                    return; // Success
+                }
+                catch (IOException ex) when (ex.Message.Contains("being used by another process") && attempt < maxRetries - 1)
+                {
+                    // Calculate exponential backoff delay
+                    var delay = Math.Min(baseDelayMs * (int)Math.Pow(2, attempt), maxDelayMs);
+                    
+                    System.Diagnostics.Debug.WriteLine($"Directory move attempt {attempt + 1} failed, retrying in {delay}ms: {ex.Message}");
+                    
+                    System.Threading.Thread.Sleep(delay);
+                    
+                    // Force garbage collection to release any file handles
+                    GC.Collect();
+                    GC.WaitForPendingFinalizers();
+                    GC.Collect();
+                }
+                catch (Exception ex)
+                {
+                    // For non-recoverable exceptions, provide detailed error message
+                    throw new InvalidOperationException(
+                        $"Unable to move project folder from '{oldPath}' to '{newPath}' after {attempt + 1} attempts. " +
+                        $"Error: {ex.Message}. Please ensure no files are in use and try again.", ex);
                 }
             }
+
+            // If we get here, all retries failed
+            throw new InvalidOperationException(
+                $"Unable to move project folder after {maxRetries} attempts. " +
+                $"Please close Visual Studio, manually rename the folder from '{oldPath}' to '{newPath}', " +
+                $"and then reopen the solution.");
         }
 
         internal static void ThrowWizardCancelledException(string OOBDestinationDirectory)
