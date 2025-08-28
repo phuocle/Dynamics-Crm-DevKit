@@ -40,8 +40,9 @@ namespace DynamicsCrm.DevKit.Wizard.ProjectTemplates
             {
                 ThreadHelper.JoinableTaskFactory.Run(async () =>
                 {
+                    await Microsoft.VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
                     ProjectName = form.ProjectName;
-                    DTE = automationObject;
+                    DTE = (EnvDTE.DTE)automationObject;
                     await Replacement.SetAsync(replacementsDictionary, form);
                     await VsixHelper.AddDynamicsCrmDevKitCliJsonAsync();
                 });

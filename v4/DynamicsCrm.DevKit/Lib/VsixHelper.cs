@@ -237,10 +237,9 @@ namespace DynamicsCrm.DevKit
             return false;
         }
 
-        public static void FixProjectFolder(object dte, EnvDTE.Project project, string projectName)
+        public static void FixProjectFolder(EnvDTE.DTE dte, EnvDTE.Project project, string projectName)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            var serviceClient = (EnvDTE.DTE)dte;
             var oldProjectFolder = Path.GetDirectoryName(project.FullName);
             var newProjectFolder = Path.Combine(Directory.GetParent(oldProjectFolder).FullName, projectName);
             var projectFileName = Path.GetFileName(project.FullName);
@@ -251,7 +250,7 @@ namespace DynamicsCrm.DevKit
                 var documentsToClose = new List<Document>();
                 try
                 {
-                    foreach (Document doc in serviceClient.Documents)
+                    foreach (Document doc in dte.Documents)
                     {
                         if (doc.FullName.StartsWith(oldProjectFolder, StringComparison.OrdinalIgnoreCase))
                         {
@@ -277,15 +276,15 @@ namespace DynamicsCrm.DevKit
                 }
 
                 // Step 2: Remove project from solution
-                serviceClient.Solution.Remove(project);
+                dte.Solution.Remove(project);
 
                 // Step 3: Move directory with improved retry logic
                 MoveDirectoryWithRetry(oldProjectFolder, newProjectFolder);
 
                 // Step 4: Re-add project to solution
                 var newProjectPath = Path.Combine(newProjectFolder, projectFileName);
-                serviceClient.Solution.AddFromFile(newProjectPath);
-                serviceClient.Solution.SaveAs(serviceClient.Solution.FullName);
+                dte.Solution.AddFromFile(newProjectPath);
+                dte.Solution.SaveAs(dte.Solution.FullName);
             }
             catch (Exception ex)
             {
