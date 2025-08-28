@@ -8,12 +8,8 @@ using System.Collections.Generic;
 
 namespace DynamicsCrm.DevKit.Wizard.ProjectTemplates
 {
-    internal class Console : IWizard
+    internal class Console : ProjectTemplateBase, IWizard
     {
-        private object DTE { get; set; }
-        private Project Project { get; set; }
-        private string ProjectName { get; set; }
-
         public void BeforeOpeningFile(ProjectItem projectItem)
         {
         }

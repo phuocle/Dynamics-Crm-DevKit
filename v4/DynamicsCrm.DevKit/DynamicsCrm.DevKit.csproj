@@ -86,6 +86,7 @@
     </Compile>
     <Compile Include="Wizard\ProjectTemplates\ConsoleCore.cs" />
     <Compile Include="Wizard\ProjectTemplates\Console.cs" />
+    <Compile Include="Wizard\ProjectTemplates\ProjectTemplateBase.cs" />
     <Compile Include="Wizard\ProjectTemplates\Shared.cs" />
   </ItemGroup>
   <ItemGroup>
