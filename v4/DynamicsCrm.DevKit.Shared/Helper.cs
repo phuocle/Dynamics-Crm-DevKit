@@ -76,27 +76,6 @@ namespace DynamicsCrm.DevKit.Shared
             return string.Equals(value1, value2, StringComparison.OrdinalIgnoreCase);
         }
 
-        public static string ReadEmbeddedResource(string path)
-        {
-            try
-            {
-                string data;
-                var executingAssembly = Assembly.GetExecutingAssembly();
-                var directoryName = Path.GetDirectoryName(executingAssembly.Location);
-                var assembly = Assembly.LoadFile(Path.Combine(directoryName, Const.DynamicsCrmDevKitLibDll));
-                using (var stream = assembly.GetManifestResourceStream(path))
-                using (var reader = new StreamReader(stream ?? throw new InvalidOperationException()))
-                {
-                    data = reader.ReadToEnd();
-                }
-                return data;
-            }
-            catch
-            {
-            }
-            return string.Empty;
-        }
-
         public static async Task<string> ReadEmbeddedResourceAsync(string path)
         {
             string data;

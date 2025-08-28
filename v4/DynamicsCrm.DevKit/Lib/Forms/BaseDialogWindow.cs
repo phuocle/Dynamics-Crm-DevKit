@@ -11,7 +11,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
 
         public BaseDialogWindow()
         {
-            Title = $"DynamicsCrm.DevKit { Const.VersionBuild }";
+            Title = $"{Const.DynamicsCrmDevKit} { Const.VersionBuild }";
             HasMinimizeButton = false;
             HasMaximizeButton = false;
         }

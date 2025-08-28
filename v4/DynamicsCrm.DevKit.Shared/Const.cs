@@ -5,12 +5,12 @@
         public const string Version = "x.xx.xx.xx";
         public const string Build = "xxxx.yy.zz HH.mm.ss";
         public const string CrmString = "Dataverse/CDS";
-        public const string DynamicsCrmDevKitJson = "DynamicsCrm.DevKit.json";
-        public const string DynamicsCrmDevKitCliJson = "DynamicsCrm.DevKit.Cli.json";
-        public const string DynamicsCrmDevKitConfigJson = "DynamicsCrm.DevKit.Config.json";
-        public const string DynamicsCrmDevKitLibDll = "DynamicsCrm.DevKit.Lib.dll";
+        public const string DynamicsCrmDevKit = "DynamicsCrm.DevKit";
+        public const string DynamicsCrmDevKitJson = $"{Const.DynamicsCrmDevKit}.json";
+        public const string DynamicsCrmDevKitCliJson = $"{Const.DynamicsCrmDevKit}.Cli.json";
+        public const string DynamicsCrmDevKitConfigJson = $"{Const.DynamicsCrmDevKit}.Config.json";
         public static readonly string VersionBuild = $"v.{Version} - Build: {Build}";
-        public static readonly string WindowTitle = $"DynamicsCrm.DevKit { Const.VersionBuild }";
+        public static readonly string WindowTitle = $"{Const.DynamicsCrmDevKit} { Const.VersionBuild }";
         public static readonly string[] WEB_RESOURCE_EXTENSIONS = { ".htm", ".html", ".css", ".js", ".xml", ".png", ".jpg", ".gif", ".xap", ".xsl", "xslt.", ".ico", ".svg", ".resx" };
     }
 }
