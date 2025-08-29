@@ -90,6 +90,7 @@
     <Compile Include="Wizard\ProjectTemplates\ProjectTemplateBase.cs" />
     <Compile Include="Wizard\ProjectTemplates\ProxyTypes.cs" />
     <Compile Include="Wizard\ProjectTemplates\Server.cs" />
+    <Compile Include="Wizard\ProjectTemplates\SharedTest.cs" />
     <Compile Include="Wizard\ProjectTemplates\Shared.cs" />
     <Compile Include="Wizard\ProjectTemplates\WebResource.cs" />
   </ItemGroup>
@@ -218,6 +219,13 @@
     <ProjectReference Include="..\ProjectTemplates\CSharp\12.ProxyTypesProjectTemplate\12.ProxyTypesProjectTemplate.csproj">
       <Project>{9172E6AA-6AD5-409E-81AF-37C7D03D4A3D}</Project>
       <Name>12.ProxyTypesProjectTemplate</Name>
+      <VSIXSubPath>ProjectTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\ProjectTemplates\CSharp\15.SharedTestProjectTemplate\15.SharedTestProjectTemplate.csproj">
+      <Project>{60C9F3C9-29DB-4714-A5C0-16E3732FCE30}</Project>
+      <Name>15.SharedTestProjectTemplate</Name>
       <VSIXSubPath>ProjectTemplates</VSIXSubPath>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>

@@ -330,6 +330,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     TextboxProject.IsEnabled = false;
                     ComboBoxProject.Visibility = System.Windows.Visibility.Hidden;
                     TextboxProject.Visibility = System.Windows.Visibility.Visible;
+                    TextboxProject.Text = $"{solutionName}.ProxyTypes";
                     LabelProjectName.Content = $"{solutionName}.ProxyTypes";
                     LabelProjectName.Tag = LabelProjectName.Content;
                 }
@@ -354,19 +355,20 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 //    LabelProjectName.Content = $"{VsixHelper.GetSolutionName()}.UiTest";
                 //    LabelProjectName.Tag = $"{VsixHelper.GetSolutionName()}";
                 //}
-                //void SharedTestProject()
-                //{
-                //    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Shared-Test-Project-Template");
-                //    HELP.Inlines.Clear();
-                //    HELP.Inlines.Add("Shared Test Project Template");
-                //    LabelProjectName.Visibility = System.Windows.Visibility.Collapsed;
-                //    var items = new List<XrmEntity> { new XrmEntity { Name = $"{VsixHelper.GetSolutionName()}.Shared.Test" } };
-                //    ComboBoxProject.DisplayMemberPath = "Name";
-                //    ComboBoxProject.ItemsSource = items;
-                //    ComboBoxProject.SelectedIndex = 0;
-                //    ComboBoxProject.IsEnabled = false;
-                //    LabelProjectName.Content = $"{VsixHelper.GetSolutionName()}.Shared.Test";
-                //}
+                async Task SharedTestProjectAsync()
+                {
+                    var solutionName = await VsixHelper.GetSolutionNameAsync();
+                    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Shared-Test-Project-Template");
+                    HELP.Inlines.Clear();
+                    HELP.Inlines.Add("Shared Test Project Template");
+                    ComboBoxProject.Visibility = System.Windows.Visibility.Hidden;
+                    TextboxProject.Visibility = System.Windows.Visibility.Visible;
+                    TextboxProject.IsEnabled = false;
+                    TextboxProject.Text = $"{solutionName}.Shared.Test";
+                    LabelProjectName.Content = $"{solutionName}.Shared.Test";
+                    LabelProjectName.Tag = LabelProjectName.Content;
+
+                }
                 //void ReportProject()
                 //{
                 //    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Report-Project-Template");
@@ -428,15 +430,15 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                         case ProjectType.ProxyTypes:
                             await ProxyTypesProjectAsync();
                             break;
-                            //case ProjectType.Test:
-                            //    TestProject();
-                            //    break;
-                            //case ProjectType.UiTest:
-                            //    UiTest();
-                            //    break;
-                            //case ProjectType.SharedTest:
-                            //    SharedTestProject();
-                            //    break;
+                        //case ProjectType.Test:
+                        //    TestProject();
+                        //    break;
+                        //case ProjectType.UiTest:
+                        //    UiTest();
+                        //    break;
+                        case ProjectType.SharedTest:
+                            await SharedTestProjectAsync();
+                            break;
                             //case ProjectType.Report:
                             //    ReportProject();
                             //    break;

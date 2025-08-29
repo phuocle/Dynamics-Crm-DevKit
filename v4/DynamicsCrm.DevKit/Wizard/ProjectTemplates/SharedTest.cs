@@ -6,11 +6,10 @@ using EnvDTE;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.TemplateWizard;
 using System.Collections.Generic;
-using System.IO;
 
 namespace DynamicsCrm.DevKit.Wizard.ProjectTemplates
 {
-    internal class Server : ProjectTemplateBase, IWizard
+    public class SharedTest : ProjectTemplateBase, IWizard
     {
         public void BeforeOpeningFile(ProjectItem projectItem)
         {
@@ -21,7 +20,6 @@ namespace DynamicsCrm.DevKit.Wizard.ProjectTemplates
             ThreadHelper.ThrowIfNotOnUIThread();
             project.Name = ProjectName;
             Project = project;
-            SigningHelper.GenerateKey(project, Path.GetDirectoryName(Project.FullName), $"{ProjectName}.snk");
         }
 
         public void ProjectItemFinishedGenerating(ProjectItem projectItem)
@@ -39,13 +37,7 @@ namespace DynamicsCrm.DevKit.Wizard.ProjectTemplates
             ThreadHelper.JoinableTaskFactory.Run(async () =>
             {
                 var OOBDestinationDirectory = replacementsDictionary["$destinationdirectory$"];
-                var sharedProjectName = await VsixHelper.GetSharedProjectAsync();
-                if (!(await VsixHelper.IsProjectExistAsync(sharedProjectName)))
-                {
-                    await VS.MessageBox.ShowErrorAsync($"Please add {Const.DynamicsCrmDevKit} Shared project.", $"Thank you !!!");
-                    VsixHelper.ThrowWizardCancelledException(OOBDestinationDirectory);
-                }
-                var form = new FormProject(ProjectType.Server);
+                var form = new FormProject(ProjectType.SharedTest);
                 var ok = form.ShowModal() ?? false;
                 if (ok)
                 {
@@ -58,6 +50,7 @@ namespace DynamicsCrm.DevKit.Wizard.ProjectTemplates
                     }
                     DTE = (EnvDTE.DTE)automationObject;
                     await Replacement.SetAsync(replacementsDictionary, form);
+                    await VsixHelper.AddDynamicsCrmDevKitCliJsonAsync();
                 }
                 else
                 {
