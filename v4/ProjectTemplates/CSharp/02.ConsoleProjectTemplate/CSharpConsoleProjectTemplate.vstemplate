@@ -1,38 +1,33 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
-	<TemplateData>
-		<Name>02. Console Project</Name>
-		<Description>This template creates a Console project targeting .NET Framework 4.6.2 and is designed for use with Microsoft.PowerPlatform.Dataverse.Client. It provides a classic .NET setup for Dataverse development.</Description>
-		<DefaultName>ConsoleProject</DefaultName>
-		<TemplateID>DynamicsCrm.DevKit.CSharpConsoleProject</TemplateID>
-		<TemplateGroupID>DynamicsCrm.DevKit</TemplateGroupID>
-		<Icon>icon.png</Icon>
-		<ProjectType>CSharp</ProjectType>
-		<RequiredFrameworkVersion>4.0</RequiredFrameworkVersion>
-		<CreateNewFolder>false</CreateNewFolder>
-		<ProvideDefaultName>false</ProvideDefaultName>
-		<LocationField>Disabled</LocationField>
-		<EnableLocationBrowseButton>false</EnableLocationBrowseButton>
-		<EnableEditOfLocationField>false</EnableEditOfLocationField>
-		<CreateInPlace>true</CreateInPlace>
-		<ProjectTypeTag>DynamicsCrm.DevKit</ProjectTypeTag>
-		<LanguageTag>CSharp</LanguageTag>
-		<PlatformTag>Windows</PlatformTag>
-		<SortOrder>120</SortOrder>
-	</TemplateData>
-	<TemplateContent>
-		<Project TargetFileName="$SafeProjectName$.csproj" File="ProjectTemplate.csproj" ReplaceParameters="true">
-			<ProjectItem ReplaceParameters="true" TargetFileName="Properties\AssemblyInfo.cs">AssemblyInfo.cs</ProjectItem>
-			<ProjectItem ReplaceParameters="true">AppSettings.cs</ProjectItem>
-			<ProjectItem ReplaceParameters="true">Program.cs</ProjectItem>
-			<ProjectItem ReplaceParameters="true" TargetFileName="packages.config">_packages.config</ProjectItem>
-			<ProjectItem ReplaceParameters="true" TargetFileName="App.config">App.config</ProjectItem>
-			<ProjectItem ReplaceParameters="true" TargetFileName="Lib\Helper.cs">Helper.cs</ProjectItem>
-			<ProjectItem ReplaceParameters="true" TargetFileName="Lib\TracingServiceFake.cs">TracingServiceFake.cs</ProjectItem>
-		</Project>
-	</TemplateContent>
-	<WizardExtension>
-		<Assembly>DynamicsCrm.DevKit, Version=4.00.00.00, Culture=Neutral, PublicKeyToken=null</Assembly>
-		<FullClassName>DynamicsCrm.DevKit.Wizard.ProjectTemplates.Console</FullClassName>
-	</WizardExtension>
+  <TemplateData>
+    <Name>02. Console Project</Name>
+    <Description>This template creates a Console project targeting .NET Framework 4.6.2 and is designed for use with Microsoft.PowerPlatform.Dataverse.Client. It provides a classic .NET setup for Dataverse development.</Description>
+    <DefaultName>ConsoleProject</DefaultName>
+    <TemplateID>DynamicsCrm.DevKit.CSharpConsoleProject</TemplateID>
+    <TemplateGroupID>DynamicsCrm.DevKit</TemplateGroupID>
+    <Icon>icon.png</Icon>
+    <ProjectType>CSharp</ProjectType>
+    <RequiredFrameworkVersion>4.0</RequiredFrameworkVersion>
+    <CreateInPlace>true</CreateInPlace>
+    <ProjectTypeTag>DynamicsCrm.DevKit</ProjectTypeTag>
+    <LanguageTag>CSharp</LanguageTag>
+    <PlatformTag>Windows</PlatformTag>
+    <SortOrder>120</SortOrder>
+  </TemplateData>
+  <TemplateContent>
+    <Project TargetFileName="$SafeProjectName$.csproj" File="ProjectTemplate.csproj" ReplaceParameters="true">
+      <ProjectItem ReplaceParameters="true" TargetFileName="Properties\AssemblyInfo.cs">AssemblyInfo.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true">AppSettings.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true">Program.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="packages.config">_packages.config</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="App.config">App.config</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Lib\Helper.cs">Helper.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Lib\TracingServiceFake.cs">TracingServiceFake.cs</ProjectItem>
+    </Project>
+  </TemplateContent>
+  <WizardExtension>
+    <Assembly>DynamicsCrm.DevKit, Version=4.00.00.00, Culture=Neutral, PublicKeyToken=null</Assembly>
+    <FullClassName>DynamicsCrm.DevKit.Wizard.ProjectTemplates.Console</FullClassName>
+  </WizardExtension>
 </VSTemplate>
