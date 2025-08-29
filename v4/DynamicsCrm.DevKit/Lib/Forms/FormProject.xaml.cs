@@ -345,16 +345,17 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     LabelProjectName.Content = $"{solutionName}.Test";
                     LabelProjectName.Tag = $"{solutionName}";
                 }
-                //void UiTest()
-                //{
-                //    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Ui-Test-Project-Template");
-                //    HELP.Inlines.Clear();
-                //    HELP.Inlines.Add("Ui Test Project Template");
-                //    ComboBoxProject.Visibility = System.Windows.Visibility.Hidden;
-                //    TextboxProject.Visibility = System.Windows.Visibility.Visible;
-                //    LabelProjectName.Content = $"{VsixHelper.GetSolutionName()}.UiTest";
-                //    LabelProjectName.Tag = $"{VsixHelper.GetSolutionName()}";
-                //}
+                async Task UiTestAsync()
+                {
+                    var solutionName = await VsixHelper.GetSolutionNameAsync();
+                    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Ui-Test-Project-Template");
+                    HELP.Inlines.Clear();
+                    HELP.Inlines.Add("Ui Test Project Template");
+                    ComboBoxProject.Visibility = System.Windows.Visibility.Hidden;
+                    TextboxProject.Visibility = System.Windows.Visibility.Visible;
+                    LabelProjectName.Content = $"{solutionName}.UiTest";
+                    LabelProjectName.Tag = $"{solutionName}";
+                }
                 async Task SharedTestProjectAsync()
                 {
                     var solutionName = await VsixHelper.GetSolutionNameAsync();
@@ -433,9 +434,9 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                         case ProjectType.Test:
                             await TestProjectAsync();
                             break;
-                        //case ProjectType.UiTest:
-                        //    UiTest();
-                        //    break;
+                        case ProjectType.UiTest:
+                            await UiTestAsync();
+                            break;
                         case ProjectType.SharedTest:
                             await SharedTestProjectAsync();
                             break;
@@ -720,12 +721,19 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 //else if (ItemType == ItemType.UiTest)
                 //    LabelProjectName.Content = $"_UiTest";
                 //else
+                if (ProjectType == ProjectType.Test)
+                    LabelProjectName.Content = $"{LabelProjectName?.Tag}.{ProjectType.Test}";
+                else if (ProjectType == ProjectType.UiTest)
+                    LabelProjectName.Content = $"{LabelProjectName?.Tag}.{ProjectType.UiTest}";
+                else
                     LabelProjectName.Content = $"{LabelProjectName?.Tag}";
             }
             else
             {
                 if (ProjectType == ProjectType.Test)
                     LabelProjectName.Content = $"{LabelProjectName?.Tag}.{TextboxProject?.Text}.{ProjectType.Test}";
+                else if (ProjectType == ProjectType.UiTest)
+                    LabelProjectName.Content = $"{LabelProjectName?.Tag}.{TextboxProject?.Text}.{ProjectType.UiTest}";
                 //else if (ItemType == ItemType.Workflow)
                 //    LabelProjectName.Content = $"{TextboxProject?.Text}";
                 //else if (ItemType == ItemType.UiTest)

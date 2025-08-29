@@ -85,6 +85,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>source.extension.vsixmanifest</DependentUpon>
     </Compile>
+    <Compile Include="Wizard\ProjectTemplates\UiTest.cs" />
     <Compile Include="Wizard\ProjectTemplates\Test.cs" />
     <Compile Include="Wizard\ProjectTemplates\ConsoleCore.cs" />
     <Compile Include="Wizard\ProjectTemplates\Console.cs" />
@@ -227,6 +228,13 @@
     <ProjectReference Include="..\ProjectTemplates\CSharp\13.TestProjectTemplate\13.TestProjectTemplate.csproj">
       <Project>{547D1385-E9AA-47E5-A94B-D0B50719BBAB}</Project>
       <Name>13.TestProjectTemplate</Name>
+      <VSIXSubPath>ProjectTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\ProjectTemplates\CSharp\14.TestUiProjectTemplate\14.TestUiProjectTemplate.csproj">
+      <Project>{5259082A-3733-4FBE-B50B-C9BBA22D95AA}</Project>
+      <Name>14.TestUiProjectTemplate</Name>
       <VSIXSubPath>ProjectTemplates</VSIXSubPath>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
