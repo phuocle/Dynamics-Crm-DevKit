@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
+  <TemplateData>
+    <Name>13. Test Project</Name>
+    <Description>Accelerates Dataverse development by providing a robust test project template, pre-configured with FakeXrmEasy for seamless unit testing and mocking of Dataverse plugins, workflows, and custom logic.</Description>
+    <DefaultName>TestProject</DefaultName>
+    <TemplateID>DynamicsCrm.DevKit.</TemplateID>
+    <TemplateGroupID>DynamicsCrm.DevKit.CSharpTestProject</TemplateGroupID>
+    <Icon>icon.png</Icon>
+    <ProjectType>CSharp</ProjectType>
+    <RequiredFrameworkVersion>4.0</RequiredFrameworkVersion>
+    <CreateInPlace>true</CreateInPlace>
+    <ProjectTypeTag>DynamicsCrm.DevKit</ProjectTypeTag>
+    <LanguageTag>CSharp</LanguageTag>
+    <PlatformTag>Windows</PlatformTag>
+    <SortOrder>230</SortOrder>
+  </TemplateData>
+  <TemplateContent>
+    <Project File="ProjectTemplate.csproj" ReplaceParameters="true">
+      <ProjectItem ReplaceParameters="true" TargetFileName="Properties\AssemblyInfo.cs">AssemblyInfo.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="packages.config">_packages.config</ProjectItem>
+      <ProjectItem ReplaceParameters="false" TargetFileName="app.config">app.config</ProjectItem>
+    </Project>
+  </TemplateContent>
+  <WizardExtension>
+    <Assembly>DynamicsCrm.DevKit, Version=4.00.00.00, Culture=Neutral, PublicKeyToken=null</Assembly>
+    <FullClassName>DynamicsCrm.DevKit.Wizard.ProjectTemplates.Test</FullClassName>
+  </WizardExtension>
+</VSTemplate>

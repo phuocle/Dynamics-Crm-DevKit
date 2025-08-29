@@ -27,6 +27,7 @@
 			<ProjectItem TargetFileName="$NameSpace$.projitems" ReplaceParameters="true">Shared.projitems</ProjectItem>
 			<ProjectItem ReplaceParameters="true" TargetFileName="Lib\Guids.cs">Guids.cs</ProjectItem>
 			<ProjectItem ReplaceParameters="true" TargetFileName="Lib\Extension.cs">Extension.cs</ProjectItem>
+			<ProjectItem ReplaceParameters="true" TargetFileName="Lib\FakerHelper.cs">FakerHelper.cs</ProjectItem>
 			<ProjectItem ReplaceParameters="true" TargetFileName="Lib\TestHelper.cs">TestHelper.cs</ProjectItem>
 			<ProjectItem ReplaceParameters="true" TargetFileName="FakeXrmEasyTestBase.cs">FakeXrmEasyTestBase.cs</ProjectItem>
 			<ProjectItem ReplaceParameters="true" TargetFileName="Executor\CalculateRollupFieldRequestExecutor.cs">CalculateRollupFieldRequestExecutor.cs</ProjectItem>

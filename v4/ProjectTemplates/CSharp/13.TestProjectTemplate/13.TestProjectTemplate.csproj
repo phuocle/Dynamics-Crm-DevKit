@@ -38,11 +38,11 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectTypeGuids>{82b43b9b-a64c-4715-b499-d71e9ca2bd60};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <ProjectGuid>{60C9F3C9-29DB-4714-A5C0-16E3732FCE30}</ProjectGuid>
+    <ProjectGuid>{547D1385-E9AA-47E5-A94B-D0B50719BBAB}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CSharpSharedTestProjectTemplate</RootNamespace>
-    <AssemblyName>CSharpSharedTestProjectTemplate</AssemblyName>
+    <RootNamespace>CSharpTestProjectTemplate</RootNamespace>
+    <AssemblyName>CSharpTestProjectTemplate</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <GeneratePkgDefFile>false</GeneratePkgDefFile>
@@ -75,20 +75,16 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <None Include="Guids.cs" />
-    <None Include="Extension.cs" />
-    <Content Include="TestHelper.cs" />
-    <Content Include="FakeXrmEasyTestBase.cs" />
-    <Content Include="CalculateRollupFieldRequestExecutor.cs" />
-    <None Include="FakerHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shared.projitems" />
-    <None Include="Shared.shproj" />
+    <None Include="app.config" />
+    <None Include="AssemblyInfo.cs" />
+    <None Include="ProjectTemplate.csproj" />
+    <None Include="_packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <VSTemplate Include="CSharpSharedTestProjectTemplate.vstemplate">
+    <VSTemplate Include="CSharpTestProjectTemplate.vstemplate">
       <OutputSubPath>DynamicsCrm.DevKit</OutputSubPath>
       <SubType>Designer</SubType>
     </VSTemplate>
