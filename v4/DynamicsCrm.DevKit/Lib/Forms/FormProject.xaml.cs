@@ -311,16 +311,17 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     LabelProjectName.Content = $"{solutionName}.WebResource";
                     LabelProjectName.Tag = LabelProjectName.Content;
                 }
-                //void SolutionPackagerProject()
-                //{
-                //    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Solution-Packager-Project-Template");
-                //    HELP.Inlines.Clear();
-                //    HELP.Inlines.Add("Solution Packager Project Template");
-                //    ComboBoxProject.Visibility = System.Windows.Visibility.Hidden;
-                //    TextboxProject.Visibility = System.Windows.Visibility.Visible;
-                //    LabelProjectName.Content = $"{VsixHelper.GetSolutionName()}.SolutionPackager";
-                //    LabelProjectName.Tag = LabelProjectName.Content;
-                //}
+                async Task SolutionPackagerProjectAsync()
+                {
+                    var solutionName = await VsixHelper.GetSolutionNameAsync();
+                    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Solution-Packager-Project-Template");
+                    HELP.Inlines.Clear();
+                    HELP.Inlines.Add("Solution Packager Project Template");
+                    ComboBoxProject.Visibility = System.Windows.Visibility.Hidden;
+                    TextboxProject.Visibility = System.Windows.Visibility.Visible;
+                    LabelProjectName.Content = $"{solutionName}.SolutionPackager";
+                    LabelProjectName.Tag = LabelProjectName.Content;
+                }
                 async Task ProxyTypesProjectAsync()
                 {
                     var solutionName = await VsixHelper.GetSolutionNameAsync();
@@ -426,9 +427,9 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                         case ProjectType.WebResource:
                             await WebResourceProjectAsync();
                             break;
-                        //case ProjectType.SolutionPackager:
-                        //    SolutionPackagerProject();
-                        //    break;
+                        case ProjectType.SolutionPackager:
+                            await SolutionPackagerProjectAsync();
+                            break;
                         case ProjectType.ProxyTypes:
                             await ProxyTypesProjectAsync();
                             break;
