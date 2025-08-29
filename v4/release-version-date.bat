@@ -28,7 +28,7 @@ if %MsBuild%=="" (
 		del Published\%VERSION%\*.* /f /q
 	)
 	if not exist Published\%VERSION% ( md Published\%VERSION% )
-	call %MsBuild% /nologo /noautorsp /verbosity:minimal -p:Configuration=Release -target:Clean;Build DynamicsCrm.DevKit.sln
+	call %MsBuild% /nologo /noautorsp /verbosity:minimal -p:Configuration=Release -target:Clean;Build DynamicsCrm.DevKit.AllInOne.sln
 
 	powershell -Command "(gc DynamicsCrm.DevKit.Shared\Const.cs) -replace (gc date.txt), 'xxxx.yy.zz HH.mm.ss' | Out-File -encoding UTF8 DynamicsCrm.DevKit.Shared\Const.cs"
 	powershell -Command "(gc DynamicsCrm.DevKit.Shared\Const.cs) -replace (gc version.txt), 'x.xx.xx.xx' | Out-File -encoding UTF8 DynamicsCrm.DevKit.Shared\Const.cs"
