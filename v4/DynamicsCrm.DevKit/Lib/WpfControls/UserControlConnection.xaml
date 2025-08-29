@@ -8,6 +8,6 @@
     </UserControl.Background>
     <WrapPanel>
         <Button x:Name="buttonConnection" Content="Connection ..." Margin="10,0,0,0" Padding="5,0,5,0" Click="ButtonConnection_Click" ></Button>
-        <Label x:Name="labelInformation" Content="Connected: https://......" Foreground="White"></Label>
+        <Label x:Name="labelInformation" Content="Please connect to your Dataverse" Foreground="White"></Label>
     </WrapPanel>
 </UserControl>

@@ -14,6 +14,7 @@ namespace DynamicsCrm.DevKit.Lib
             await AddCommonReplacementsAsync(replacements);
             await AddNuGetAsync(replacements);
             SetConnectionValues(replacements, form.CrmConnection);
+            await SetEmbeddedResourceAsync(replacements);
             replacements["$destinationdirectory$"] = $"{replacements?["$solutiondirectory$"]}\\{form.ProjectName}";
             replacements["$ProjectName$"] = form.ProjectName;
             replacements["$SafeProjectName$"] = form.ProjectName;
@@ -21,10 +22,21 @@ namespace DynamicsCrm.DevKit.Lib
             replacements["$NameSpace$"] = Helper.SafeNamespace(form.ProjectName);
         }
 
+        private static async Task SetEmbeddedResourceAsync(Dictionary<string, string> replacements)
+        {
+            var plugin_deploy_debug_bat = await VsixHelper.ReadEmbeddedResourceAsync("plugin.deploy.debug.bat");
+            var plugin_deploy_debug_only_bat = await VsixHelper.ReadEmbeddedResourceAsync("plugin.deploy.debug.only.bat");
+
+            replacements["$deploy.debug.bat$"] = plugin_deploy_debug_bat;
+            replacements["$deploy.debug.only.bat$"] = plugin_deploy_debug_only_bat;
+        }
+
         private static async Task AddNuGetAsync(Dictionary<string, string> replacements)
         {
             await NuGetHelper.SetReplacementAsync(replacements, "DynamicsCrm.DevKit.Analyzers");
             await NuGetHelper.SetReplacementAsync(replacements, "DynamicsCrm.DevKit.Cli");
+            await NuGetHelper.SetReplacementAsync(replacements, "Microsoft.CrmSdk.CoreAssemblies");
+            await NuGetHelper.SetReplacementAsync(replacements, "Microsoft.CrmSdk.Workflow");
         }
 
         private static void SetConnectionValues(Dictionary<string, string> replacements, CrmConnection crmConnection)

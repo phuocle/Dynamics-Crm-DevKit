@@ -5,8 +5,6 @@ using EnvDTE;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.VisualStudio.Shell;
 using System;
-using System.Collections.Generic;
-using System.Threading;
 using System.Threading.Tasks;
 using ItemType = DynamicsCrm.DevKit.Shared.ItemType;
 
@@ -242,16 +240,17 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     LabelProjectName.Content = $"{solutionName}.ConsoleCore";
                     LabelProjectName.Tag = LabelProjectName.Content;
                 }
-                //void ServerProject()
-                //{
-                //    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Server-Project-Template");
-                //    HELP.Inlines.Clear();
-                //    HELP.Inlines.Add("Server Project Template");
-                //    ComboBoxProject.Visibility = System.Windows.Visibility.Hidden;
-                //    TextboxProject.Visibility = System.Windows.Visibility.Visible;
-                //    LabelProjectName.Content = $"{VsixHelper.GetSolutionName()}";
-                //    LabelProjectName.Tag = LabelProjectName.Content;
-                //}
+                async Task ServerProjectAsync()
+                {
+                    var solutionName = await VsixHelper.GetSolutionNameAsync();
+                    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Server-Project-Template");
+                    HELP.Inlines.Clear();
+                    HELP.Inlines.Add("Server Project Template");
+                    ComboBoxProject.Visibility = System.Windows.Visibility.Hidden;
+                    TextboxProject.Visibility = System.Windows.Visibility.Visible;
+                    LabelProjectName.Content = $"{solutionName}";
+                    LabelProjectName.Tag = LabelProjectName.Content;
+                }
                 //void PluginProject()
                 //{
                 //    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Plugin-Project-Template");
@@ -401,9 +400,9 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                         case ProjectType.ConsoleCore:
                             await ConsoleCoreProjectAsync();
                             break;
-                            //case ProjectType.Server:
-                            //    ServerProject();
-                            //    break;
+                        case ProjectType.Server:
+                            await ServerProjectAsync();
+                            break;
                             //case ProjectType.Plugin:
                             //    PluginProject();
                             //    break;
@@ -532,7 +531,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             ProjectType = projectType;
         }
 
-        public FormProject(ItemType itemType, DTE dte = null)
+        public FormProject(ItemType itemType)
         {
             InitializeComponent();
             //ItemType = itemType;

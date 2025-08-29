@@ -33,24 +33,26 @@ namespace DynamicsCrm.DevKit.Wizard.ProjectTemplates
 
         public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary, WizardRunKind runKind, object[] customParams)
         {
-            var OOBDestinationDirectory = replacementsDictionary["$destinationdirectory$"];
-            var form = new FormProject(ProjectType.Shared);
-            var ok = form.ShowModal() ?? false;
-            if (ok)
+            ThreadHelper.JoinableTaskFactory.Run(async () =>
             {
-                ThreadHelper.JoinableTaskFactory.Run(async () =>
+                var OOBDestinationDirectory = replacementsDictionary["$destinationdirectory$"];
+                var form = new FormProject(ProjectType.Shared);
+                var ok = form.ShowModal() ?? false;
+                if (ok)
                 {
+
                     await Microsoft.VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
                     ProjectName = form.ProjectName;
                     DTE = (EnvDTE.DTE)automationObject;
                     await Replacement.SetAsync(replacementsDictionary, form);
                     await VsixHelper.AddDynamicsCrmDevKitCliJsonAsync();
-                });
-            }
-            else
-            {
-                VsixHelper.ThrowWizardCancelledException(OOBDestinationDirectory);
-            }
+
+                }
+                else
+                {
+                    VsixHelper.ThrowWizardCancelledException(OOBDestinationDirectory);
+                }
+            });
         }
 
         public bool ShouldAddProjectItem(string filePath)

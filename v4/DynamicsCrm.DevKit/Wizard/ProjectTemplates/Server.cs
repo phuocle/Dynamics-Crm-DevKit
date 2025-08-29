@@ -1,14 +1,16 @@
-﻿using DynamicsCrm.DevKit.Lib;
+﻿using Community.VisualStudio.Toolkit;
+using DynamicsCrm.DevKit.Lib;
 using DynamicsCrm.DevKit.Lib.Forms;
 using DynamicsCrm.DevKit.Shared;
 using EnvDTE;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.TemplateWizard;
 using System.Collections.Generic;
+using System.IO;
 
 namespace DynamicsCrm.DevKit.Wizard.ProjectTemplates
 {
-    internal class Console : ProjectTemplateBase, IWizard
+    internal class Server : ProjectTemplateBase, IWizard
     {
         public void BeforeOpeningFile(ProjectItem projectItem)
         {
@@ -19,6 +21,7 @@ namespace DynamicsCrm.DevKit.Wizard.ProjectTemplates
             ThreadHelper.ThrowIfNotOnUIThread();
             project.Name = ProjectName;
             Project = project;
+            SigningHelper.GenerateKey(project, Path.GetDirectoryName(Project.FullName), $"{ProjectName}.snk");
         }
 
         public void ProjectItemFinishedGenerating(ProjectItem projectItem)
@@ -36,16 +39,20 @@ namespace DynamicsCrm.DevKit.Wizard.ProjectTemplates
             ThreadHelper.JoinableTaskFactory.Run(async () =>
             {
                 var OOBDestinationDirectory = replacementsDictionary["$destinationdirectory$"];
-                var form = new FormProject(ProjectType.Console);
+                var sharedProjectName = await VsixHelper.GetSharedProjectAsync();
+                if (!(await VsixHelper.IsProjectExistAsync(sharedProjectName)))
+                {
+                    await VS.MessageBox.ShowErrorAsync($"Please add {Const.DynamicsCrmDevKit} Shared project.", $"Thank you !!!");
+                    VsixHelper.ThrowWizardCancelledException(OOBDestinationDirectory);
+                }
+                var form = new FormProject(ProjectType.Server);
                 var ok = form.ShowModal() ?? false;
                 if (ok)
                 {
-
                     await Microsoft.VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
                     ProjectName = form.ProjectName;
                     DTE = (EnvDTE.DTE)automationObject;
                     await Replacement.SetAsync(replacementsDictionary, form);
-
                 }
                 else
                 {

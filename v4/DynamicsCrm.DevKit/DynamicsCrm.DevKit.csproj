@@ -72,6 +72,7 @@
       <DependentUpon>FormWebResource.xaml</DependentUpon>
     </Compile>
     <Compile Include="Lib\Replacement.cs" />
+    <Compile Include="Lib\SigningHelper.cs" />
     <Compile Include="Lib\VsixHelper.cs" />
     <Compile Include="Lib\WpfControls\ExternalBrowserHyperlink.cs" />
     <Compile Include="Lib\WpfControls\UserControlConnection.xaml.cs">
@@ -87,6 +88,7 @@
     <Compile Include="Wizard\ProjectTemplates\ConsoleCore.cs" />
     <Compile Include="Wizard\ProjectTemplates\Console.cs" />
     <Compile Include="Wizard\ProjectTemplates\ProjectTemplateBase.cs" />
+    <Compile Include="Wizard\ProjectTemplates\Server.cs" />
     <Compile Include="Wizard\ProjectTemplates\Shared.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -193,6 +195,13 @@
     <ProjectReference Include="..\ProjectTemplates\CSharp\02.ConsoleProjectTemplate\02.ConsoleProjectTemplate.csproj">
       <Project>{2C597B0B-F648-486D-BC45-593F584B8BCC}</Project>
       <Name>02.ConsoleProjectTemplate</Name>
+      <VSIXSubPath>ProjectTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\ProjectTemplates\CSharp\03.ServerProjectTemplate\03.ServerProjectTemplate.csproj">
+      <Project>{B7876A9B-2B63-4967-8C44-060E2C65523A}</Project>
+      <Name>03.ServerProjectTemplate</Name>
       <VSIXSubPath>ProjectTemplates</VSIXSubPath>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
