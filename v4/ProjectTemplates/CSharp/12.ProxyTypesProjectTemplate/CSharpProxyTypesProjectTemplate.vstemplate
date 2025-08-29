@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
+	<TemplateData>
+		<Name>12. ProxyTypes Project</Name>
+		<Description>Custom project template for generating early bound proxy types for use with Fake Xrm Easy in Dynamics 365 development.</Description>
+		<DefaultName>ProxyTypesProject</DefaultName>
+		<TemplateID>DynamicsCrm.DevKit.CSharpProxyTypesProject</TemplateID>
+		<TemplateGroupID>DynamicsCrm.DevKit</TemplateGroupID>
+		<Icon>icon.png</Icon>
+		<ProjectType>CSharp</ProjectType>
+		<RequiredFrameworkVersion>4.0</RequiredFrameworkVersion>
+		<CreateNewFolder>false</CreateNewFolder>
+		<LocationField>Disabled</LocationField>
+		<EnableLocationBrowseButton>false</EnableLocationBrowseButton>
+		<CreateInPlace>true</CreateInPlace>
+		<ProjectTypeTag>DynamicsCrm.DevKit</ProjectTypeTag>
+		<LanguageTag>CSharp</LanguageTag>
+		<PlatformTag>Windows</PlatformTag>
+		<SortOrder>220</SortOrder>
+	</TemplateData>
+	<TemplateContent>
+		<Project TargetFileName="$SafeProjectName$.csproj" File="ProjectTemplate.csproj" ReplaceParameters="true">
+			<ProjectItem ReplaceParameters="true" TargetFileName="Properties\AssemblyInfo.cs">AssemblyInfo.cs</ProjectItem>
+			<ProjectItem ReplaceParameters="true" TargetFileName="packages.config">_packages.config</ProjectItem>
+			<ProjectItem ReplaceParameters="true" TargetFileName="run.bat">run.bat</ProjectItem>
+			<ProjectItem ReplaceParameters="true" TargetFileName="GeneratedCode.cs">GeneratedCode.cs</ProjectItem>
+			<ProjectItem ReplaceParameters="true" TargetFileName="ProxyTypesAssembly.cs">ProxyTypesAssembly.cs</ProjectItem>
+		</Project>
+	</TemplateContent>
+	<WizardExtension>
+		<Assembly>DynamicsCrm.DevKit, Version=4.00.00.00, Culture=Neutral, PublicKeyToken=null</Assembly>
+		<FullClassName>DynamicsCrm.DevKit.Wizard.ProjectTemplates.ProxyTypes</FullClassName>
+	</WizardExtension>
+</VSTemplate>

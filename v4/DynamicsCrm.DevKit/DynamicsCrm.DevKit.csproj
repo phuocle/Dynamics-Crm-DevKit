@@ -88,6 +88,7 @@
     <Compile Include="Wizard\ProjectTemplates\ConsoleCore.cs" />
     <Compile Include="Wizard\ProjectTemplates\Console.cs" />
     <Compile Include="Wizard\ProjectTemplates\ProjectTemplateBase.cs" />
+    <Compile Include="Wizard\ProjectTemplates\ProxyTypes.cs" />
     <Compile Include="Wizard\ProjectTemplates\Server.cs" />
     <Compile Include="Wizard\ProjectTemplates\Shared.cs" />
     <Compile Include="Wizard\ProjectTemplates\WebResource.cs" />
@@ -210,6 +211,13 @@
     <ProjectReference Include="..\ProjectTemplates\CSharp\09.WebResourceProjectTemplate\09.WebResourceProjectTemplate.csproj">
       <Project>{67F16EA3-09BD-41BD-8CF7-48248C5D7B34}</Project>
       <Name>09.WebResourceProjectTemplate</Name>
+      <VSIXSubPath>ProjectTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\ProjectTemplates\CSharp\12.ProxyTypesProjectTemplate\12.ProxyTypesProjectTemplate.csproj">
+      <Project>{9172E6AA-6AD5-409E-81AF-37C7D03D4A3D}</Project>
+      <Name>12.ProxyTypesProjectTemplate</Name>
       <VSIXSubPath>ProjectTemplates</VSIXSubPath>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>

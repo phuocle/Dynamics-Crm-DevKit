@@ -51,6 +51,11 @@ namespace DynamicsCrm.DevKit.Wizard.ProjectTemplates
                 {
                     await Microsoft.VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
                     ProjectName = form.ProjectName;
+                    if (!(await VsixHelper.IsProjectExistAsync(ProjectName)))
+                    {
+                        await VS.MessageBox.ShowErrorAsync($"Project: {ProjectName} exist !!!.", $"Thank you !!!");
+                        VsixHelper.ThrowWizardCancelledException(OOBDestinationDirectory);
+                    }
                     DTE = (EnvDTE.DTE)automationObject;
                     await Replacement.SetAsync(replacementsDictionary, form);
                 }

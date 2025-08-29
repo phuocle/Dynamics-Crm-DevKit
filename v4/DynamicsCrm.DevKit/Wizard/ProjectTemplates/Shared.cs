@@ -1,4 +1,5 @@
-﻿using DynamicsCrm.DevKit.Lib;
+﻿using Community.VisualStudio.Toolkit;
+using DynamicsCrm.DevKit.Lib;
 using DynamicsCrm.DevKit.Lib.Forms;
 using DynamicsCrm.DevKit.Shared;
 using EnvDTE;
@@ -40,13 +41,16 @@ namespace DynamicsCrm.DevKit.Wizard.ProjectTemplates
                 var ok = form.ShowModal() ?? false;
                 if (ok)
                 {
-
                     await Microsoft.VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
                     ProjectName = form.ProjectName;
+                    if (!(await VsixHelper.IsProjectExistAsync(ProjectName)))
+                    {
+                        await VS.MessageBox.ShowErrorAsync($"Project: {ProjectName} exist !!!.", $"Thank you !!!");
+                        VsixHelper.ThrowWizardCancelledException(OOBDestinationDirectory);
+                    }
                     DTE = (EnvDTE.DTE)automationObject;
                     await Replacement.SetAsync(replacementsDictionary, form);
                     await VsixHelper.AddDynamicsCrmDevKitCliJsonAsync();
-
                 }
                 else
                 {

@@ -41,6 +41,7 @@ namespace DynamicsCrm.DevKit.Lib
             await NuGetHelper.SetReplacementAsync(replacements, "DynamicsCrm.DevKit.Cli");
             await NuGetHelper.SetReplacementAsync(replacements, "Microsoft.CrmSdk.CoreAssemblies");
             await NuGetHelper.SetReplacementAsync(replacements, "Microsoft.CrmSdk.Workflow");
+            await NuGetHelper.SetReplacementAsync(replacements, "Microsoft.CrmSdk.CoreTools");
         }
 
         private static void SetConnectionValues(Dictionary<string, string> replacements, CrmConnection crmConnection)

@@ -9,7 +9,7 @@ using System.Collections.Generic;
 
 namespace DynamicsCrm.DevKit.Wizard.ProjectTemplates
 {
-    internal class WebResource : ProjectTemplateBase, IWizard
+    internal class ProxyTypes : ProjectTemplateBase, IWizard
     {
         public void BeforeOpeningFile(ProjectItem projectItem)
         {
@@ -37,13 +37,13 @@ namespace DynamicsCrm.DevKit.Wizard.ProjectTemplates
             ThreadHelper.JoinableTaskFactory.Run(async () =>
             {
                 var OOBDestinationDirectory = replacementsDictionary["$destinationdirectory$"];
-                var form = new FormProject(ProjectType.WebResource);
+                var form = new FormProject(ProjectType.ProxyTypes);
                 var ok = form.ShowModal() ?? false;
                 if (ok)
                 {
                     await Microsoft.VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
                     ProjectName = form.ProjectName;
-                    if (!(await VsixHelper.IsProjectExistAsync(ProjectName)))
+                    if (await VsixHelper.IsProjectExistAsync(ProjectName))
                     {
                         await VS.MessageBox.ShowErrorAsync($"Project: {ProjectName} exist !!!.", $"Thank you !!!");
                         VsixHelper.ThrowWizardCancelledException(OOBDestinationDirectory);
