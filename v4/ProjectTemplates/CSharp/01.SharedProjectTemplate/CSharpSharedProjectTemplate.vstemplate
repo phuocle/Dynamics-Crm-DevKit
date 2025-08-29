@@ -2,7 +2,7 @@
 <VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
 	<TemplateData>
 		<Name>01. Shared Project</Name>
-		<Description>Shared Project Template</Description>
+		<Description>Shared Project Template for DynamicsCrm.DevKit. Provides a foundational structure for Dynamics CRM development, including core utility classes, extension methods, and a simple json handler.</Description>
 		<DefaultName>SharedProject</DefaultName>
 		<TemplateID>DynamicsCrm.DevKit.CSharpSharedProject</TemplateID>
 		<TemplateGroupID>DynamicsCrm.DevKit</TemplateGroupID>
