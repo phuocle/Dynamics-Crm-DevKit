@@ -15,6 +15,6 @@ using System.Security;
 [assembly: AssemblyTrademark("")]
 [assembly: SecurityRules(SecurityRuleSet.Level2)]
 [assembly: ComVisible(false)]
-[assembly: Guid("ec2c2f4d-24d7-4d25-9ffc-500d1b233674")]
+[assembly: Guid("4b1d490c-2c71-4a6d-a6e3-374923a21316")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]

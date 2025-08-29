@@ -61,6 +61,7 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="AssemblyInfo.cs" />
+    <None Include="UiTest.runsettings" />
     <None Include="TestSettings.cs" />
     <None Include="ProjectTemplate.csproj" />
     <None Include="_packages.config" />
