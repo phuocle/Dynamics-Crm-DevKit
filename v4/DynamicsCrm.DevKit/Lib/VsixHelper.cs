@@ -2,7 +2,6 @@
 using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
 using EnvDTE;
-using EnvDTE80;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.TemplateWizard;
@@ -141,16 +140,6 @@ namespace DynamicsCrm.DevKit
         {
             var solution = await VS.Solutions.GetCurrentSolutionAsync();
             return Path.GetFileNameWithoutExtension(solution.FullPath);
-        }
-
-        public static string GetSolutionName(object dte)
-        {
-            Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
-            if (dte == null) return string.Empty;            
-            var dte2 = (DTE2)dte;
-            var solutionFullPath = dte2.Solution?.FullName;
-            if (string.IsNullOrEmpty(solutionFullPath)) return string.Empty;            
-            return Path.GetFileNameWithoutExtension(solutionFullPath);
         }
 
         public static async Task<string> GetActiveProjectFolderAsync()
