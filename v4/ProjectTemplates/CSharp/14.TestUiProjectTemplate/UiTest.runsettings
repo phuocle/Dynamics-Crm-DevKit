@@ -6,14 +6,12 @@
     <Parameter name="RemoteBrowserType" value="Chrome" />
     <Parameter name="RemoteHubServer" value="http://localhost:4444/wd/hub" />
   </TestRunParameters>
-
   <!-- MSTest adapter settings -->
   <MSTest>
     <DeploymentEnabled>true</DeploymentEnabled>
     <SettingsFile>$ProjectName$\App.config</SettingsFile>
     <ForcedLegacyMode>true</ForcedLegacyMode>
   </MSTest>
-
   <!-- Default test timeout -->
   <RunConfiguration>
     <TestSessionTimeout>10800000</TestSessionTimeout>

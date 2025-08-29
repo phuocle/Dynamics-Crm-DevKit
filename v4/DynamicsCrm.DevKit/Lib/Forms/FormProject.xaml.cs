@@ -380,16 +380,17 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 //    LabelProjectName.Content = $"{VsixHelper.GetSolutionName()}.Report";
                 //    LabelProjectName.Tag = LabelProjectName.Content;
                 //}
-                //void PackageProject()
-                //{
-                //    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Package-Project-Template");
-                //    HELP.Inlines.Clear();
-                //    HELP.Inlines.Add("Package Project Template");
-                //    ComboBoxProject.Visibility = System.Windows.Visibility.Hidden;
-                //    TextboxProject.Visibility = System.Windows.Visibility.Visible;
-                //    LabelProjectName.Content = $"{VsixHelper.GetSolutionName()}.Package";
-                //    LabelProjectName.Tag = LabelProjectName.Content;
-                //}
+                async Task PackageProjectAsync()
+                {
+                    var solutionName = await VsixHelper.GetSolutionNameAsync();
+                    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Package-Project-Template");
+                    HELP.Inlines.Clear();
+                    HELP.Inlines.Add("Package Project Template");
+                    ComboBoxProject.Visibility = System.Windows.Visibility.Hidden;
+                    TextboxProject.Visibility = System.Windows.Visibility.Visible;
+                    LabelProjectName.Content = $"{solutionName}.{ProjectType.Package}";
+                    LabelProjectName.Tag = LabelProjectName.Content;
+                }
                 ThreadHelper.JoinableTaskFactory.Run(async () =>
                 {
                     _ProjectType = value;
@@ -440,12 +441,12 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                         case ProjectType.SharedTest:
                             await SharedTestProjectAsync();
                             break;
-                            //case ProjectType.Report:
-                            //    ReportProject();
-                            //    break;
-                            //case ProjectType.Package:
-                            //    PackageProject();
-                            //    break;
+                        //case ProjectType.Report:
+                        //    ReportProject();
+                        //    break;
+                        case ProjectType.Package:
+                            await PackageProjectAsync();
+                            break;
                     }
                 });
             }

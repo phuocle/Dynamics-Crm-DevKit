@@ -28,6 +28,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.Server.Test", "D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.UiTest", "Dev.DevKit.UiTest\Dev.DevKit.UiTest.csproj", "{4B1D490C-2C71-4A6D-A6E3-374923A21316}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.Package", "Dev.DevKit.Package\Dev.DevKit.Package.csproj", "{20A8CD1F-5995-5455-BF65-8B5DA5C023B7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -62,6 +64,10 @@ Global
 		{4B1D490C-2C71-4A6D-A6E3-374923A21316}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4B1D490C-2C71-4A6D-A6E3-374923A21316}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4B1D490C-2C71-4A6D-A6E3-374923A21316}.Release|Any CPU.Build.0 = Release|Any CPU
+		{20A8CD1F-5995-5455-BF65-8B5DA5C023B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{20A8CD1F-5995-5455-BF65-8B5DA5C023B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{20A8CD1F-5995-5455-BF65-8B5DA5C023B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{20A8CD1F-5995-5455-BF65-8B5DA5C023B7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -70,6 +76,7 @@ Global
 		SolutionGuid = {478EE8F5-54E1-431D-BEC8-72AC05F5AF8C}
 	EndGlobalSection
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{20a8cd1f-5995-5455-bf65-8b5da5c023b7}*SharedItemsImports = 5
 		Dev.DevKit.Shared.Test\Dev.DevKit.Shared.Test.projitems*{2d21597d-c5c3-44fa-873d-da94e8a91850}*SharedItemsImports = 13
 		Dev.DevKit.Shared.Test\Dev.DevKit.Shared.Test.projitems*{38a32cc5-9fa6-487b-a30a-08e7a036e1f2}*SharedItemsImports = 4
 		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{7e6f85ec-85d5-4bae-b059-fdf09ba1dd05}*SharedItemsImports = 4
