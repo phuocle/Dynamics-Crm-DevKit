@@ -72,4 +72,18 @@
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\DynamicsCrm.DevKit.Cli.json" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\webresource.deploy.debug.bat" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\devkit.d.ts" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\devkit.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\generator.form.bat" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\generator.webapi.bat" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\package.json" />
+  </ItemGroup>
 </Project>

@@ -90,6 +90,7 @@
     <Compile Include="Wizard\ProjectTemplates\ProjectTemplateBase.cs" />
     <Compile Include="Wizard\ProjectTemplates\Server.cs" />
     <Compile Include="Wizard\ProjectTemplates\Shared.cs" />
+    <Compile Include="Wizard\ProjectTemplates\WebResource.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="source.extension.vsixmanifest">
@@ -202,6 +203,13 @@
     <ProjectReference Include="..\ProjectTemplates\CSharp\03.ServerProjectTemplate\03.ServerProjectTemplate.csproj">
       <Project>{B7876A9B-2B63-4967-8C44-060E2C65523A}</Project>
       <Name>03.ServerProjectTemplate</Name>
+      <VSIXSubPath>ProjectTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\ProjectTemplates\CSharp\09.WebResourceProjectTemplate\09.WebResourceProjectTemplate.csproj">
+      <Project>{67F16EA3-09BD-41BD-8CF7-48248C5D7B34}</Project>
+      <Name>09.WebResourceProjectTemplate</Name>
       <VSIXSubPath>ProjectTemplates</VSIXSubPath>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>

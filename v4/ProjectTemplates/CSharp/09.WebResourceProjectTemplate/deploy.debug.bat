@@ -1,0 +1,1 @@
+$webresource.deploy.debug.bat$

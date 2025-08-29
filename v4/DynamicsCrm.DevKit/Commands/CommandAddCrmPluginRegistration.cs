@@ -182,10 +182,10 @@ namespace DynamicsCrm.DevKit.Commands
             var plugin_deploy_debug_only_bat = await VsixHelper.ReadEmbeddedResourceAsync("plugin.deploy.debug.only.bat");
             var crmConnectionString = Helper.BuildConnectionString(formConnection.CrmConnection);
             plugin_deploy_debug_bat = plugin_deploy_debug_bat
-                .Replace("$CrmConnectionString$", crmConnectionString)
+                .Replace("$ConnectionString$", crmConnectionString)
                 .Replace("$ProjectName$", Path.GetFileNameWithoutExtension(dte?.ActiveDocument?.ProjectItem?.ContainingProject?.FullName));
             plugin_deploy_debug_only_bat = plugin_deploy_debug_only_bat
-                .Replace("$CrmConnectionString$", crmConnectionString)
+                .Replace("$ConnectionString$", crmConnectionString)
                 .Replace("$ProjectName$", Path.GetFileNameWithoutExtension(dte?.ActiveDocument?.ProjectItem?.ContainingProject?.FullName));
             await AddDeployBatFileToProjectAsync(dte, "deploy.debug.bat", plugin_deploy_debug_bat);
             await AddDeployBatFileToProjectAsync(dte, "deploy.debug.only.bat", plugin_deploy_debug_only_bat);

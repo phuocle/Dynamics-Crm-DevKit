@@ -2,7 +2,7 @@
 <VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
   <TemplateData>
     <Name>03. Server Project</Name>
-    <Description>This template creates a Dataverse server-side project for plugins, workflows, custom actions, and custom web api implementations.</Description>
+    <Description>This template creates a Dataverse server-side project for plugins, workflows, custom actions, custom web api, and data provider implementations.</Description>
     <DefaultName>ServerProject</DefaultName>
     <TemplateID>DynamicsCrm.DevKit.CSharpServerProject</TemplateID>
     <TemplateGroupID>DynamicsCrm.DevKit</TemplateGroupID>

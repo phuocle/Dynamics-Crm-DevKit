@@ -17,6 +17,7 @@ namespace DynamicsCrm.DevKit.Lib
             await SetEmbeddedResourceAsync(replacements);
             replacements["$destinationdirectory$"] = $"{replacements?["$solutiondirectory$"]}\\{form.ProjectName}";
             replacements["$ProjectName$"] = form.ProjectName;
+            replacements["$LogicalProjectName$"] = form.ProjectName.ToLower();
             replacements["$SafeProjectName$"] = form.ProjectName;
             replacements["$ConnectionString$"] = Helper.BuildConnectionString(form.CrmConnection, true);
             replacements["$NameSpace$"] = Helper.SafeNamespace(form.ProjectName);
@@ -24,11 +25,14 @@ namespace DynamicsCrm.DevKit.Lib
 
         private static async Task SetEmbeddedResourceAsync(Dictionary<string, string> replacements)
         {
-            var plugin_deploy_debug_bat = await VsixHelper.ReadEmbeddedResourceAsync("plugin.deploy.debug.bat");
-            var plugin_deploy_debug_only_bat = await VsixHelper.ReadEmbeddedResourceAsync("plugin.deploy.debug.only.bat");
-
-            replacements["$deploy.debug.bat$"] = plugin_deploy_debug_bat;
-            replacements["$deploy.debug.only.bat$"] = plugin_deploy_debug_only_bat;
+            replacements["$deploy.debug.bat$"] = await VsixHelper.ReadEmbeddedResourceAsync("plugin.deploy.debug.bat");
+            replacements["$deploy.debug.only.bat$"] = await VsixHelper.ReadEmbeddedResourceAsync("plugin.deploy.debug.only.bat");
+            replacements["$webresource.deploy.debug.bat$"] = await VsixHelper.ReadEmbeddedResourceAsync("webresource.deploy.debug.bat");
+            replacements["$devkit.d.ts$"] = await VsixHelper.ReadEmbeddedResourceAsync("devkit.d.ts");
+            replacements["$devkit.js$"] = await VsixHelper.ReadEmbeddedResourceAsync("devkit.js");
+            replacements["$generator.form.bat$"] = await VsixHelper.ReadEmbeddedResourceAsync("generator.form.bat");
+            replacements["$generator.webapi.bat$"] = await VsixHelper.ReadEmbeddedResourceAsync("generator.webapi.bat");
+            replacements["$package.json$"] = await VsixHelper.ReadEmbeddedResourceAsync("package.json");
         }
 
         private static async Task AddNuGetAsync(Dictionary<string, string> replacements)
