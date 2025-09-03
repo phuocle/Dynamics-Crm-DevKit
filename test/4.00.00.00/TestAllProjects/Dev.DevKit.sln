@@ -20,6 +20,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.Server", "Dev.De
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.WebResource", "Dev.DevKit.WebResource\Dev.DevKit.WebResource.csproj", "{2AA692E7-E1C2-43B7-9C7F-ECC23CC4E17F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.SolutionPackager", "Dev.DevKit.SolutionPackager\Dev.DevKit.SolutionPackager.csproj", "{D8CAEFD8-854D-4412-BD97-30F7D80EE680}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,6 +44,10 @@ Global
 		{2AA692E7-E1C2-43B7-9C7F-ECC23CC4E17F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2AA692E7-E1C2-43B7-9C7F-ECC23CC4E17F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2AA692E7-E1C2-43B7-9C7F-ECC23CC4E17F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D8CAEFD8-854D-4412-BD97-30F7D80EE680}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D8CAEFD8-854D-4412-BD97-30F7D80EE680}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D8CAEFD8-854D-4412-BD97-30F7D80EE680}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D8CAEFD8-854D-4412-BD97-30F7D80EE680}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
