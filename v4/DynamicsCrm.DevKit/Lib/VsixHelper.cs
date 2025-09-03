@@ -114,7 +114,7 @@ namespace DynamicsCrm.DevKit
         {
             var json = JsonHelper.FormatJson(SimpleJson.SerializeObject(connections));
             var fileName = await GetDynamicsCrmDevKitJsonFullFileNameAsync();
-            if (fileName != null && File.Exists(fileName)) await FileHelper.ForceWriteAllTextAsync(fileName, json);
+            await FileHelper.ForceWriteAllTextAsync(fileName, json);
         }
 
         public static async Task<ServiceClient> CreateServiceClientAsync(CrmConnection crmConnection)
