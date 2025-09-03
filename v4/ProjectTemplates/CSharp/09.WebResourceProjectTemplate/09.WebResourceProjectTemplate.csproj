@@ -87,7 +87,7 @@
     <None Include="ProjectTemplate.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <VSTemplate Include="CSharpWebResource2ProjectTemplate.vstemplate">
+    <VSTemplate Include="CSharpWebResourceProjectTemplate.vstemplate">
       <OutputSubPath>DynamicsCrm.DevKit</OutputSubPath>
       <SubType>Designer</SubType>
     </VSTemplate>

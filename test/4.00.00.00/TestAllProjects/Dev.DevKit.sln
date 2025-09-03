@@ -18,6 +18,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.ConsoleCore", "D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.Server", "Dev.DevKit.Server\Dev.DevKit.Server.csproj", "{04E7E75D-C82A-41EC-BE42-6EE51AFC6CE8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.WebResource", "Dev.DevKit.WebResource\Dev.DevKit.WebResource.csproj", "{2AA692E7-E1C2-43B7-9C7F-ECC23CC4E17F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,6 +38,10 @@ Global
 		{04E7E75D-C82A-41EC-BE42-6EE51AFC6CE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{04E7E75D-C82A-41EC-BE42-6EE51AFC6CE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{04E7E75D-C82A-41EC-BE42-6EE51AFC6CE8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2AA692E7-E1C2-43B7-9C7F-ECC23CC4E17F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2AA692E7-E1C2-43B7-9C7F-ECC23CC4E17F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2AA692E7-E1C2-43B7-9C7F-ECC23CC4E17F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2AA692E7-E1C2-43B7-9C7F-ECC23CC4E17F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
