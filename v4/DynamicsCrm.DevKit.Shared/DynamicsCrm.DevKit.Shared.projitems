@@ -63,6 +63,7 @@
     <Folder Include="$(MSBuildThisFileDirectory)Logic\" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\generator.latebound.bat" />
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\WebApi.js" />
   </ItemGroup>
   <ItemGroup>

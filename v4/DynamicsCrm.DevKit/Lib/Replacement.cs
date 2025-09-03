@@ -33,6 +33,7 @@ namespace DynamicsCrm.DevKit.Lib
             replacements["$generator.form.bat$"] = await VsixHelper.ReadEmbeddedResourceAsync("generator.form.bat");
             replacements["$generator.webapi.bat$"] = await VsixHelper.ReadEmbeddedResourceAsync("generator.webapi.bat");
             replacements["$package.json$"] = await VsixHelper.ReadEmbeddedResourceAsync("package.json");
+            replacements["$generator.latebound.bat$"] = await VsixHelper.ReadEmbeddedResourceAsync("generator.latebound.bat");
         }
 
         private static async Task AddNuGetAsync(Dictionary<string, string> replacements)
