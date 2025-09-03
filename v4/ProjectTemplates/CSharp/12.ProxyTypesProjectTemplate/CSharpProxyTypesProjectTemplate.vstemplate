@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
 	<TemplateData>
-		<Name>12. ProxyTypes Project</Name>
+		<Name>07. ProxyTypes Project</Name>
 		<Description>Custom project template for generating early bound proxy types for use with FakeXrmEasy in Dynamics 365 development.</Description>
 		<DefaultName>ProxyTypesProject</DefaultName>
 		<TemplateID>DynamicsCrm.DevKit.CSharpProxyTypesProject</TemplateID>
