@@ -49,7 +49,7 @@ namespace DynamicsCrm.DevKit.Lib
             replacements["$AuthTypeValue$"] = crmConnection.Type;
             replacements["$UrlValue$"] = crmConnection.Url;
             replacements["$UserNameValue$"] = crmConnection.UserName ?? string.Empty;
-            replacements["$PasswordValue$"] = crmConnection.Password ?? string.Empty;
+            replacements["$PasswordValue$"] = Helper.DecryptString(crmConnection.Password) ?? string.Empty;
         }
 
         private static async Task AddCommonReplacementsAsync(Dictionary<string, string> replacements)

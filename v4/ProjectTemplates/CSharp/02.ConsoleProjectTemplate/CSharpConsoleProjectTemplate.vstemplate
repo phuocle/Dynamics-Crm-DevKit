@@ -2,7 +2,7 @@
 <VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
   <TemplateData>
     <Name>02. Console Project</Name>
-    <Description>This template creates a Console project targeting .NET Framework 4.6.2 and is designed for use with Microsoft.PowerPlatform.Dataverse.Client. It provides a classic .NET setup for Dataverse development.</Description>
+    <Description>This template creates a Console project targeting .NET Framework 4.6.2 and is designed for use with Microsoft.PowerPlatform.Dataverse.Client.</Description>
     <DefaultName>ConsoleProject</DefaultName>
     <TemplateID>DynamicsCrm.DevKit.CSharpConsoleProject</TemplateID>
     <TemplateGroupID>DynamicsCrm.DevKit</TemplateGroupID>
