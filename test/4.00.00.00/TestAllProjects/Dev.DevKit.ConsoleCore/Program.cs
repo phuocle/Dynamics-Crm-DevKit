@@ -1,7 +1,7 @@
 ﻿using Microsoft.Crm.Sdk.Messages;
 using System;
 
-namespace $NameSpace$
+namespace Dev.DevKit.ConsoleCore
 {
     public class Program
     {

@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
   <TemplateData>
-    <Name>02A. Console Core Project</Name>
-    <Description>This template creates a Console Core project targeting net9.0 and is designed for use with Microsoft.PowerPlatform.Dataverse.Client. It provides a modern .NET Core setup for Dataverse development.</Description>
+    <Name>03. Console Core Project</Name>
+    <Description>This template creates a Console Core project targeting net9.0 and is designed for use with Microsoft.PowerPlatform.Dataverse.Client.</Description>
     <DefaultName>ConsoleCoreProject</DefaultName>
     <TemplateID>DynamicsCrm.DevKit.CSharpConsoleCoreProject</TemplateID>
     <TemplateGroupID>DynamicsCrm.DevKit</TemplateGroupID>
