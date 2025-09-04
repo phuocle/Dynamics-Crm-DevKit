@@ -37,7 +37,14 @@
                     <Label x:Name="LabelProjectItemName" Grid.Row="1" Grid.Column="0" Margin="0,0,0,5" Content="Project Name" HorizontalAlignment="Left" VerticalAlignment="Center" />
                     <ComboBox x:Name="ComboBoxProject" Grid.Row="1" Grid.Column="1" Margin="0,0,0,5" VerticalContentAlignment="Center" IsEditable="True" TextBoxBase.TextChanged="ComboBoxProject_TextChanged" SelectionChanged="ComboBoxProject_SelectionChanged" />
                     <TextBox x:Name="TextboxProject" Grid.Row="1" Grid.Column="1" Margin="0,0,0,5" Visibility="Hidden" TextChanged="TextboxProject_TextChanged" VerticalContentAlignment="Center" />
-                    <Label x:Name="LabelProjectName" Grid.Row="2" Grid.Column="1" Margin="0,0,0,0" Content="Name" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                    <!-- Display panel for project name with edit link -->
+                    <StackPanel x:Name="PanelProjectNameDisplay" Grid.Row="2" Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                        <Label x:Name="LabelProjectName" Margin="0,0,6,0" Content="Name" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                        <TextBlock VerticalAlignment="Center" IsEnabled="{Binding IsEnabled, ElementName=TextboxProject}">
+                            <Hyperlink x:Name="EditProjectNameLink" IsEnabled="{Binding IsEnabled, ElementName=TextboxProject}" Click="EditProjectName_Click">Edit</Hyperlink>
+                        </TextBlock>
+                    </StackPanel>
+                    <TextBox x:Name="TextBoxProjectNameInline" Grid.Row="2" Grid.Column="1" Visibility="Collapsed" VerticalContentAlignment="Center" Margin="0,0,0,5" KeyDown="TextBoxProjectNameInline_KeyDown" Height="27"/>
                 </Grid>
             </Border>
             <Grid>

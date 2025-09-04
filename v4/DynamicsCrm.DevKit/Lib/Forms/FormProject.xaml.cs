@@ -5,6 +5,10 @@ using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.VisualStudio.Shell;
 using System;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Documents;
+using System.Windows.Input;
 using ItemType = DynamicsCrm.DevKit.Shared.ItemType;
 
 namespace DynamicsCrm.DevKit.Lib.Forms
@@ -802,6 +806,50 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         private void ComboBoxLanguage_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             //UpdateResouceString();
+        }
+
+        private void EditProjectName_Click(object sender, RoutedEventArgs e)
+        {
+            if (TextboxProject.IsEnabled == false)
+            {
+                return;
+            }
+            // Enter edit mode
+            TextBoxProjectNameInline.Text = LabelProjectName.Content?.ToString() ?? string.Empty;
+            PanelProjectNameDisplay.Visibility = Visibility.Collapsed;
+            TextBoxProjectNameInline.Visibility = Visibility.Visible;
+            buttonOK.IsEnabled = false;
+            TextBoxProjectNameInline.Focus();
+            TextBoxProjectNameInline.SelectAll();
+        }
+
+        private void ExitEditMode(bool apply)
+        {
+            if (apply)
+            {
+                var newValue = TextBoxProjectNameInline.Text?.Trim() ?? string.Empty;
+                if (!string.IsNullOrEmpty(newValue))
+                {
+                    LabelProjectName.Content = newValue;
+                }
+            }
+            TextBoxProjectNameInline.Visibility = Visibility.Collapsed;
+            PanelProjectNameDisplay.Visibility = Visibility.Visible;
+            buttonOK.IsEnabled = true;
+        }
+
+        private void TextBoxProjectNameInline_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                ExitEditMode(apply: true);
+                e.Handled = true;
+            }
+            else if (e.Key == Key.Escape)
+            {
+                ExitEditMode(apply: false);
+                e.Handled = true;
+            }
         }
     }
 }
