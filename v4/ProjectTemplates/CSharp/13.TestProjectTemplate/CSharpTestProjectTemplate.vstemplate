@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
   <TemplateData>
-    <Name>13. Test Project</Name>
+    <Name>09. Test Project</Name>
     <Description>Accelerates Dataverse development by providing a robust test project template, pre-configured with FakeXrmEasy for seamless unit testing and mocking of Dataverse plugins, workflows, and custom logic.</Description>
     <DefaultName>TestProject</DefaultName>
     <TemplateID>DynamicsCrm.DevKit.</TemplateID>
@@ -13,7 +13,7 @@
     <ProjectTypeTag>DynamicsCrm.DevKit</ProjectTypeTag>
     <LanguageTag>CSharp</LanguageTag>
     <PlatformTag>Windows</PlatformTag>
-    <SortOrder>230</SortOrder>
+    <SortOrder>180</SortOrder>
   </TemplateData>
   <TemplateContent>
 	  <Project TargetFileName="$SafeProjectName$.csproj" File="ProjectTemplate.csproj" ReplaceParameters="true">

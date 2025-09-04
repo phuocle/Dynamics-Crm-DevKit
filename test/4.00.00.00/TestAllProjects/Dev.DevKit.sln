@@ -24,6 +24,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.SolutionPackager
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.ProxyTypes", "Dev.DevKit.ProxyTypes\Dev.DevKit.ProxyTypes.csproj", "{24F931D0-A884-4354-B3C5-47AC3A575D6A}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Dev.DevKit.Shared.Test", "Dev.DevKit.Shared.Test\Dev.DevKit.Shared.Test.shproj", "{A0BA18AC-222D-4B27-8C52-F6D600D7A532}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.Test", "Dev.DevKit.Test\Dev.DevKit.Test.csproj", "{821F498A-D076-411B-8EB3-9C0676E00B6F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -54,6 +58,10 @@ Global
 		{24F931D0-A884-4354-B3C5-47AC3A575D6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{24F931D0-A884-4354-B3C5-47AC3A575D6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{24F931D0-A884-4354-B3C5-47AC3A575D6A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{821F498A-D076-411B-8EB3-9C0676E00B6F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{821F498A-D076-411B-8EB3-9C0676E00B6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{821F498A-D076-411B-8EB3-9C0676E00B6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{821F498A-D076-411B-8EB3-9C0676E00B6F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -64,6 +72,8 @@ Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{04e7e75d-c82a-41ec-be42-6ee51afc6ce8}*SharedItemsImports = 4
 		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{2e37f5a4-d496-40a6-9246-6ab2fde0dc2c}*SharedItemsImports = 4
+		Dev.DevKit.Shared.Test\Dev.DevKit.Shared.Test.projitems*{821f498a-d076-411b-8eb3-9c0676e00b6f}*SharedItemsImports = 4
 		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{884c0b67-2d59-46d2-aad3-d2d1043020e1}*SharedItemsImports = 13
+		Dev.DevKit.Shared.Test\Dev.DevKit.Shared.Test.projitems*{a0ba18ac-222d-4b27-8c52-f6d600d7a532}*SharedItemsImports = 13
 	EndGlobalSection
 EndGlobal

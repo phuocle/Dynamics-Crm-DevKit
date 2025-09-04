@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
 	<TemplateData>
-		<Name>05. WebResource Project</Name>
+		<Name>06. WebResource Project</Name>
 		<Description>Template for Dataverse Web Resources using devkit.js and DynamicsCrm.DevKit tooling.</Description>
 		<DefaultName>WebResourceProject</DefaultName>
 		<TemplateID>DynamicsCrm.DevKit.CSharpWebResourceProject</TemplateID>
@@ -13,7 +13,7 @@
 		<ProjectTypeTag>DynamicsCrm.DevKit</ProjectTypeTag>
 		<LanguageTag>CSharp</LanguageTag>
 		<PlatformTag>Windows</PlatformTag>
-		<SortOrder>190</SortOrder>
+		<SortOrder>150</SortOrder>
 	</TemplateData>
 	<TemplateContent>
 		<Project TargetFileName="$SafeProjectName$.csproj" File="ProjectTemplate.csproj" ReplaceParameters="true">
