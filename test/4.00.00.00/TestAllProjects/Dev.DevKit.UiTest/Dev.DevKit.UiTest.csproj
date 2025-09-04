@@ -7,11 +7,11 @@
 	<PropertyGroup>
 		<Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
 		<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-		<ProjectGuid>{$guid1$}</ProjectGuid>
+		<ProjectGuid>{fec1b0fc-019c-4248-ba70-d179836cd5c9}</ProjectGuid>
 		<OutputType>Library</OutputType>
 		<AppDesignerFolder>Properties</AppDesignerFolder>
-		<RootNamespace>$NameSpace$</RootNamespace>
-		<AssemblyName>$ProjectName$</AssemblyName>
+		<RootNamespace>Dev.DevKit.UiTest</RootNamespace>
+		<AssemblyName>Dev.DevKit.UiTest</AssemblyName>
 		<TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
 		<FileAlignment>512</FileAlignment>
 		<ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -265,14 +265,14 @@
 		<Compile Include="AppSettings.cs" />
 		<None Include="App.config" />
 		<None Include="packages.config" />
-		<None Include="$ProjectName$.runsettings" />
+		<None Include="Dev.DevKit.UiTest.runsettings" />
 	</ItemGroup>
 	<ItemGroup>
 		<Analyzer Include="..\packages\MSTest.Analyzers.3.10.3\analyzers\dotnet\cs\MSTest.Analyzers.CodeFixes.dll" />
 		<Analyzer Include="..\packages\MSTest.Analyzers.3.10.3\analyzers\dotnet\cs\MSTest.Analyzers.dll" />
 	</ItemGroup>
 	<ItemGroup>
-		<Analyzer Include="..\packages\DynamicsCrm.DevKit.Analyzers.$DynamicsCrm.DevKit.Analyzers.Version$\analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />
+		<Analyzer Include="..\packages\DynamicsCrm.DevKit.Analyzers.3.55.55.55\analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />
 	</ItemGroup>
 	<Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
 	<Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
@@ -298,4 +298,4 @@
 	<Import Project="..\packages\MSTest.TestAdapter.3.10.3\build\net462\MSTest.TestAdapter.targets" Condition="Exists('..\packages\MSTest.TestAdapter.3.10.3\build\net462\MSTest.TestAdapter.targets')" />
 	<Import Project="..\packages\MSTest.TestFramework.3.10.3\build\net462\MSTest.TestFramework.targets" Condition="Exists('..\packages\MSTest.TestFramework.3.10.3\build\net462\MSTest.TestFramework.targets')" />
 </Project>
-<!-- $DevKitVersion$ -->
+<!-- v.x.xx.xx.xx - Build: xxxx.yy.zz HH.mm.ss -->
