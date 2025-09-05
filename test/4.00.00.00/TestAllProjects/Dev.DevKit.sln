@@ -30,6 +30,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.Package", "Dev.D
 EndProject
 Project("{F14B399A-7131-4C87-9E4B-1186C45EF12D}") = "Dev.DevKit.Report", "Dev.DevKit.Report\Dev.DevKit.Report.rptproj", "{44C72FF2-9813-24A6-661A-F3C0D238C0C1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.Test", "Dev.DevKit.Test\Dev.DevKit.Test.csproj", "{11D461E4-7699-4BC3-8F43-A605A1AE26F8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.UiTest", "Dev.DevKit.UiTest\Dev.DevKit.UiTest.csproj", "{2B2F55F2-74E4-4BE5-86CC-5EBA35682130}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -70,6 +74,14 @@ Global
 		{44C72FF2-9813-24A6-661A-F3C0D238C0C1}.Release|Any CPU.ActiveCfg = Release
 		{44C72FF2-9813-24A6-661A-F3C0D238C0C1}.Release|Any CPU.Build.0 = Release
 		{44C72FF2-9813-24A6-661A-F3C0D238C0C1}.Release|Any CPU.Deploy.0 = Release
+		{11D461E4-7699-4BC3-8F43-A605A1AE26F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11D461E4-7699-4BC3-8F43-A605A1AE26F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11D461E4-7699-4BC3-8F43-A605A1AE26F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11D461E4-7699-4BC3-8F43-A605A1AE26F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B2F55F2-74E4-4BE5-86CC-5EBA35682130}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B2F55F2-74E4-4BE5-86CC-5EBA35682130}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B2F55F2-74E4-4BE5-86CC-5EBA35682130}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B2F55F2-74E4-4BE5-86CC-5EBA35682130}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -79,6 +91,7 @@ Global
 	EndGlobalSection
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{04e7e75d-c82a-41ec-be42-6ee51afc6ce8}*SharedItemsImports = 4
+		Dev.DevKit.Shared.Test\Dev.DevKit.Shared.Test.projitems*{11d461e4-7699-4bc3-8f43-a605a1ae26f8}*SharedItemsImports = 4
 		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{20a8cd1f-5995-5455-bf65-8b5da5c023b7}*SharedItemsImports = 5
 		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{2e37f5a4-d496-40a6-9246-6ab2fde0dc2c}*SharedItemsImports = 4
 		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{884c0b67-2d59-46d2-aad3-d2d1043020e1}*SharedItemsImports = 13
