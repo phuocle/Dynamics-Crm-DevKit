@@ -7,6 +7,7 @@ using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Metadata.Query;
 using Microsoft.Xrm.Sdk.Query;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -749,6 +750,22 @@ namespace DynamicsCrm.DevKit.Shared
                 SolutionUniqueName = solutionUniqueName
             };
             await serviceClient.ExecuteAsync(request);
+        }
+
+        internal static List<XrmEntity> GetListXrmEntity(List<EntityMetadata> entitiesMetadata)
+        {
+            var entities = new List<XrmEntity>();
+            foreach (var entity in entitiesMetadata)
+            {
+                entities.Add(new XrmEntity
+                {
+                    Name = entity.SchemaName,
+                    LogicalName = entity.LogicalName,
+                    SchemaName = entity.SchemaName,
+                });
+            }
+            entities = [.. entities.OrderBy(entity => entity.Name)];
+            return entities;
         }
     }
 }
