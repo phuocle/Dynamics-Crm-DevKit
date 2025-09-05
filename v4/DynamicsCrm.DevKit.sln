@@ -35,6 +35,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "11.SolutionPackagerProjectT
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "12.ReportProjectTemplate", "ProjectTemplates\CSharp\12.ReportProjectTemplate\12.ReportProjectTemplate.csproj", "{ACFB5F3D-6156-47F4-A879-C9552E7C334C}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ItemTemplates", "ItemTemplates", "{FDA40398-2868-42FA-865C-48E84171A584}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CSharp", "CSharp", "{EF5CD537-0126-4B83-9BEC-0C18C23D4129}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "01.LateBoundItemTemplate", "ItemTemplates\CSharp\01.LateBoundItemTemplate\01.LateBoundItemTemplate.csproj", "{921403BE-B301-40D8-B023-083C4747B50D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -201,6 +207,18 @@ Global
 		{ACFB5F3D-6156-47F4-A879-C9552E7C334C}.Release|arm64.Build.0 = Release|arm64
 		{ACFB5F3D-6156-47F4-A879-C9552E7C334C}.Release|x86.ActiveCfg = Release|x86
 		{ACFB5F3D-6156-47F4-A879-C9552E7C334C}.Release|x86.Build.0 = Release|x86
+		{921403BE-B301-40D8-B023-083C4747B50D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{921403BE-B301-40D8-B023-083C4747B50D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{921403BE-B301-40D8-B023-083C4747B50D}.Debug|arm64.ActiveCfg = Debug|arm64
+		{921403BE-B301-40D8-B023-083C4747B50D}.Debug|arm64.Build.0 = Debug|arm64
+		{921403BE-B301-40D8-B023-083C4747B50D}.Debug|x86.ActiveCfg = Debug|x86
+		{921403BE-B301-40D8-B023-083C4747B50D}.Debug|x86.Build.0 = Debug|x86
+		{921403BE-B301-40D8-B023-083C4747B50D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{921403BE-B301-40D8-B023-083C4747B50D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{921403BE-B301-40D8-B023-083C4747B50D}.Release|arm64.ActiveCfg = Release|arm64
+		{921403BE-B301-40D8-B023-083C4747B50D}.Release|arm64.Build.0 = Release|arm64
+		{921403BE-B301-40D8-B023-083C4747B50D}.Release|x86.ActiveCfg = Release|x86
+		{921403BE-B301-40D8-B023-083C4747B50D}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -219,6 +237,8 @@ Global
 		{5259082A-3733-4FBE-B50B-C9BBA22D95AA} = {E6054C60-8020-4AFF-8865-F276D775C495}
 		{C555420B-02D8-4388-AADF-375A9809ACDA} = {E6054C60-8020-4AFF-8865-F276D775C495}
 		{ACFB5F3D-6156-47F4-A879-C9552E7C334C} = {E6054C60-8020-4AFF-8865-F276D775C495}
+		{EF5CD537-0126-4B83-9BEC-0C18C23D4129} = {FDA40398-2868-42FA-865C-48E84171A584}
+		{921403BE-B301-40D8-B023-083C4747B50D} = {EF5CD537-0126-4B83-9BEC-0C18C23D4129}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {04C975FA-0E86-4259-8245-7DFA47D873BB}

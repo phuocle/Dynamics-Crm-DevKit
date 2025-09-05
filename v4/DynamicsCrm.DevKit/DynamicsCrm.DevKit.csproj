@@ -85,6 +85,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>source.extension.vsixmanifest</DependentUpon>
     </Compile>
+    <Compile Include="Wizard\ItemTemplates\LateBound.cs" />
+    <Compile Include="Wizard\ItemTemplates\ItemTemplateBase.cs" />
     <Compile Include="Wizard\ProjectTemplates\Report.cs" />
     <Compile Include="Wizard\ProjectTemplates\SolutionPackager.cs" />
     <Compile Include="Wizard\ProjectTemplates\Package.cs" />
@@ -193,6 +195,13 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ItemTemplates\CSharp\01.LateBoundItemTemplate\01.LateBoundItemTemplate.csproj">
+      <Project>{921403BE-B301-40D8-B023-083C4747B50D}</Project>
+      <Name>01.LateBoundItemTemplate</Name>
+      <VSIXSubPath>ItemTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
     <ProjectReference Include="..\ProjectTemplates\CSharp\01.SharedProjectTemplate\01.SharedProjectTemplate.csproj">
       <Project>{4170CD81-A77B-4C9A-BBAE-29DE390A4F9C}</Project>
       <Name>01.SharedProjectTemplate</Name>
@@ -278,6 +287,7 @@
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="..\DynamicsCrm.DevKit.Shared\DynamicsCrm.DevKit.Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets" Condition="'$(VSToolsPath)' != ''" />
