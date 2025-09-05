@@ -331,9 +331,9 @@ namespace DynamicsCrm.DevKit
                 $"and then reopen the solution.");
         }
 
-        internal static void ThrowWizardCancelledException(string OOBDestinationDirectory)
+        internal static void ThrowWizardCancelledException(string OOBDestinationDirectory = null)
         {
-            Helper.TryDeleteDirectory(OOBDestinationDirectory);
+            if (OOBDestinationDirectory != null) Helper.TryDeleteDirectory(OOBDestinationDirectory);
             throw new WizardCancelledException();
         }
 

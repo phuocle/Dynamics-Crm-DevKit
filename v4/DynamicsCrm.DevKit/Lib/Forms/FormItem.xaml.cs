@@ -3,6 +3,8 @@ using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.VisualStudio.Shell;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace DynamicsCrm.DevKit.Lib.Forms
 {
@@ -15,9 +17,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         {
             get
             {
-                //if (ItemType == ItemType.ResourceString) return ProjectName;
-                //return ((XrmEntity)ComboBoxProject.SelectedItem)?.Name ?? LabelProjectName.Content?.ToString();
-                return string.Empty;
+                return ((XrmEntity)ComboBox.SelectedItem)?.SchemaName ?? LabelItemNameLatest.Content?.ToString();
             }
         }
         
@@ -32,11 +32,11 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Late-Bound-Class-Item-Template");
                     HELP.Inlines.Clear();
                     HELP.Inlines.Add("Late Bound Class Item Template");
-                    ComboBoxProject.Visibility = System.Windows.Visibility.Visible;
-                    ComboBoxProject.IsEditable = false;
-                    TextboxProject.Visibility = System.Windows.Visibility.Hidden;
-                    LabelProjectName.Visibility = System.Windows.Visibility.Collapsed;
-                    LabelProjectItemName.Content = "Item Name";
+                    ComboBox.Visibility = System.Windows.Visibility.Visible;
+                    ComboBox.IsEditable = false;
+                    Textbox.Visibility = System.Windows.Visibility.Hidden;
+                    LabelItemNameLatest.Visibility = System.Windows.Visibility.Collapsed;
+                    LabelItemName.Content = "Item Name";
                 }
                 //void JsFormItem()
                 //{
@@ -260,11 +260,8 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         {
             InitializeComponent();
             ItemType = itemType;
-            //CONNECTION.IsUseOOBConnection = true; // Default to true for ItemType constructor
             //if (ItemType == ItemType.Workflow || ItemType == ItemType.Test || ItemType == ItemType.UiTest)
-            //{
             //    LoadCustomTemplates();
-            //}
             //else
             //    PanelCustom.Visibility = System.Windows.Visibility.Hidden;
 
@@ -318,29 +315,29 @@ namespace DynamicsCrm.DevKit.Lib.Forms
 
         private void ButtonOK_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            //if (IsValid())
-            //{
-            //    DialogResult = true;
-            //}
-            //bool IsValid()
-            //{
-            //    if (VsixHelper.IsExistProject(ProjectName))
-            //    {
-            //        VS.MessageBox.ShowError($"Project: {ProjectName} exist.");
-            //        return false;
-            //    }
-            //    if (!VsixHelper.IsValidProjectName(ProjectName))
-            //    {
-            //        VS.MessageBox.ShowError("Invalid enter project name");
-            //        return false;
-            //    }
-            //    if (VsixHelper.IsExistItem(ProjectName))
-            //    {
-            //        VS.MessageBox.ShowError($"Item: {ProjectName} exist.");
-            //        return false;
-            //    }
-            //    return true;
-            //}
+            if (IsValid())
+            {
+                DialogResult = true;
+            }
+            bool IsValid()
+            {
+                //if (VsixHelper.IsExistProject(ProjectName))
+                //{
+                //    VS.MessageBox.ShowError($"Project: {ProjectName} exist.");
+                //    return false;
+                //}
+                //if (!VsixHelper.IsValidProjectName(ProjectName))
+                //{
+                //    VS.MessageBox.ShowError("Invalid enter project name");
+                //    return false;
+                //}
+                //if (VsixHelper.IsExistItem(ProjectName))
+                //{
+                //    VS.MessageBox.ShowError($"Item: {ProjectName} exist.");
+                //    return false;
+                //}
+                return true;
+            }
         }
 
         private void Connection_Connected(object sender, System.EventArgs e)
@@ -349,16 +346,22 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 ItemType == ItemType.LateBound
                 )
             {
+                StackPanelMain.IsEnabled = false;
                 progressBar.Visibility = System.Windows.Visibility.Visible;
-                ThreadHelper.JoinableTaskFactory.Run(async () =>
+                _ = Task.Factory.StartNew(() =>
                 {
-                    await XrmHelper.ReadEntitiesMetadataAsync(ServiceClient);
-                    var items = XrmHelper.GetListXrmEntity(XrmHelper.EntitiesMetadata);
-                    ComboBoxProject.DisplayMemberPath = "Name";
-                    ComboBoxProject.ItemsSource = items;
-                    buttonOK.IsEnabled = items.Count > 0;
-                    progressBar.Visibility = System.Windows.Visibility.Hidden;
-                });
+                    ThreadHelper.JoinableTaskFactory.Run(async () =>
+                    {
+                        await XrmHelper.ReadEntitiesMetadataAsync(ServiceClient);
+                        var items = XrmHelper.GetListXrmEntity(XrmHelper.EntitiesMetadata);
+                        await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                        ComboBox.DisplayMemberPath = Const.SchemaName;
+                        ComboBox.ItemsSource = items;
+                        buttonOK.IsEnabled = items.Count > 0;
+                        StackPanelMain.IsEnabled = true;
+                        progressBar.Visibility = System.Windows.Visibility.Hidden;
+                    });
+                }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default);
             }
             //else if (
             //    ProjectType == ProjectType.Test

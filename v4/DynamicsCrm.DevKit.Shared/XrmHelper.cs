@@ -759,7 +759,6 @@ namespace DynamicsCrm.DevKit.Shared
             {
                 entities.Add(new XrmEntity
                 {
-                    Name = entity.SchemaName,
                     LogicalName = entity.LogicalName,
                     SchemaName = entity.SchemaName,
                 });

@@ -9,6 +9,14 @@ namespace DynamicsCrm.DevKit.Lib
 {
     public class Replacement
     {
+        internal static async Task SetAsync(Dictionary<string, string> replacements, FormItem form)
+        {
+            await AddCommonReplacementsAsync(replacements);
+            SetConnectionValues(replacements, form.CrmConnection);
+
+            replacements["$SchemaName$"] = form.ItemName;
+        }
+
         internal static async Task SetAsync(Dictionary<string, string> replacements, FormProject form)
         {
             await AddCommonReplacementsAsync(replacements);

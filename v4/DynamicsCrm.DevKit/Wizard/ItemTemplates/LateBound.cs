@@ -1,4 +1,6 @@
-﻿using DynamicsCrm.DevKit.Shared;
+﻿using DynamicsCrm.DevKit.Lib;
+using DynamicsCrm.DevKit.Lib.Forms;
+using DynamicsCrm.DevKit.Shared;
 using EnvDTE;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.TemplateWizard;
@@ -39,14 +41,33 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
 
         public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary, WizardRunKind runKind, object[] customParams)
         {
-            ItemName = "Account";
+            //ItemName = "Account";
 
             _Class_ = $"//{DateTime.Now}";
             _GeneratedClass_ = $"////{DateTime.Now}";
 
-            replacementsDictionary["$SchemaName$"] = ItemName;
-            replacementsDictionary["$Class$"] = _Class_;
-            replacementsDictionary["$GeneratedClass$"] = _GeneratedClass_;
+            //replacementsDictionary["$SchemaName$"] = ItemName;
+            //replacementsDictionary["$Class$"] = _Class_;
+            //replacementsDictionary["$GeneratedClass$"] = _GeneratedClass_;
+
+
+            ThreadHelper.JoinableTaskFactory.Run(async () =>
+            {
+                var form = new FormItem(ItemType.LateBound);
+                var ok = form.ShowModal() ?? false;
+                if (ok)
+                {
+                    await Microsoft.VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                    ItemName = form.ItemName;
+
+                    await Replacement.SetAsync(replacementsDictionary, form);
+                }
+                else
+                {
+                    VsixHelper.ThrowWizardCancelledException();
+                }
+            });
+
         }
 
         public bool ShouldAddProjectItem(string filePath)
