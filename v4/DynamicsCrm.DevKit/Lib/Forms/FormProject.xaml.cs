@@ -131,6 +131,11 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 async Task ReportProjectAsync()
                 {
                     var solutionName = await VsixHelper.GetSolutionNameAsync();
+                    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Report-Project-Template");
+                    HELP.Inlines.Clear();
+                    HELP.Inlines.Add("Report Project Template");
+                    LabelProjectName.Content = $"{solutionName}.Report";
+                    LabelProjectName.Tag = LabelProjectName.Content;
                 }
                 ThreadHelper.JoinableTaskFactory.Run(async () =>
                 {

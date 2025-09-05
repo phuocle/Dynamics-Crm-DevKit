@@ -85,6 +85,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>source.extension.vsixmanifest</DependentUpon>
     </Compile>
+    <Compile Include="Wizard\ProjectTemplates\Report.cs" />
     <Compile Include="Wizard\ProjectTemplates\SolutionPackager.cs" />
     <Compile Include="Wizard\ProjectTemplates\Package.cs" />
     <Compile Include="Wizard\ProjectTemplates\UiTest.cs" />
@@ -223,6 +224,13 @@
     <ProjectReference Include="..\ProjectTemplates\CSharp\10.SolutionPackagerProjectTemplate\10.SolutionPackagerProjectTemplate.csproj">
       <Project>{C555420B-02D8-4388-AADF-375A9809ACDA}</Project>
       <Name>10.SolutionPackagerProjectTemplate</Name>
+      <VSIXSubPath>ProjectTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\ProjectTemplates\CSharp\11.ReportProjectTemplate\11.ReportProjectTemplate.csproj">
+      <Project>{ACFB5F3D-6156-47F4-A879-C9552E7C334C}</Project>
+      <Name>11.ReportProjectTemplate</Name>
       <VSIXSubPath>ProjectTemplates</VSIXSubPath>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
