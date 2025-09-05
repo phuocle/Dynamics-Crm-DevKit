@@ -6,6 +6,7 @@ using EnvDTE;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.TemplateWizard;
 using System.Collections.Generic;
+using System.IO;
 
 namespace DynamicsCrm.DevKit.Wizard.ProjectTemplates
 {
@@ -29,7 +30,19 @@ namespace DynamicsCrm.DevKit.Wizard.ProjectTemplates
         public void RunFinished()
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            VsixHelper.FixProjectFolder(DTE, Project, ProjectName);
+            var project = VsixHelper.FixProjectFolder(DTE, Project, ProjectName);
+            ThreadHelper.JoinableTaskFactory.Run(async () =>
+            {
+                await Microsoft.VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                var reportFile = Path.Combine(Path.GetDirectoryName(project.FullName), Path.GetFileNameWithoutExtension(project.FullName) + ".rptproj");
+                var csFile = Path.Combine(Path.GetDirectoryName(project.FullName), Path.GetFileNameWithoutExtension(project.FullName) + ".csproj");
+                this.DTE.Solution.Remove(project);
+                var content = await VsixHelper.ReadEmbeddedResourceAsync("ReportProjectTemplate.rptproj");
+                content= content.Replace("$DevKitVersion$", Const.VersionBuild);
+                await FileHelper.ForceWriteAllTextAsync(reportFile, content);
+                this.DTE.Solution.AddFromFile(reportFile);
+                Helper.TryDeleteFile(csFile);
+            });
         }
 
         public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary, WizardRunKind runKind, object[] customParams)

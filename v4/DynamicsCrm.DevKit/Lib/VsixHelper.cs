@@ -226,7 +226,7 @@ namespace DynamicsCrm.DevKit
             return false;
         }
 
-        public static void FixProjectFolder(EnvDTE.DTE dte, EnvDTE.Project project, string projectName)
+        public static EnvDTE.Project FixProjectFolder(EnvDTE.DTE dte, EnvDTE.Project project, string projectName)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
             var oldProjectFolder = Path.GetDirectoryName(project.FullName);
@@ -272,8 +272,9 @@ namespace DynamicsCrm.DevKit
 
                 // Step 4: Re-add project to solution
                 var newProjectPath = Path.Combine(newProjectFolder, projectFileName);
-                dte.Solution.AddFromFile(newProjectPath);
+                var p = dte.Solution.AddFromFile(newProjectPath);
                 dte.Solution.SaveAs(dte.Solution.FullName);
+                return p;
             }
             catch (Exception ex)
             {

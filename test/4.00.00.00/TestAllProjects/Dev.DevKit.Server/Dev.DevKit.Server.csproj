@@ -4,7 +4,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>04e7e75d-c82a-41ec-be42-6ee51afc6ce8</ProjectGuid>
+    <ProjectGuid>{04E7E75D-C82A-41EC-BE42-6EE51AFC6CE8}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Dev.DevKit.Server</RootNamespace>
@@ -26,7 +26,8 @@
     <OutputPath>..\Release\dll\</OutputPath>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <DefineConstants></DefineConstants>
+    <DefineConstants>
+    </DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>x64</PlatformTarget>

@@ -19,7 +19,7 @@
         <TextBlock Padding="10,5,10,5" Background="Green">
             <wpfcontrols:ExternalBrowserHyperlink x:Name="HELP" NavigateUri="https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Connection" Foreground="White" >WIKI: Connection</wpfcontrols:ExternalBrowserHyperlink>
         </TextBlock>
-        <wpfcontrols:UserControlConnection x:Name="CONNECTION" Connected="Connection_Connected" />
+        <wpfcontrols:UserControlConnection x:Name="CONNECTION" />
         <StackPanel IsEnabled="{Binding IsConnected, ElementName=CONNECTION}">
             <Border Grid.Row="1" Grid.ColumnSpan="2" BorderBrush="Gray" BorderThickness="1" Padding="10,15,10,15" Margin="5,10,5,10">
                 <Grid>

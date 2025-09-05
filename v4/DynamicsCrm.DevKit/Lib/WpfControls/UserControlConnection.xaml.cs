@@ -27,7 +27,7 @@ namespace DynamicsCrm.DevKit.Lib.WpfControls
                 if (_isConnected)
                 {
                     var sender = new object();
-                    Connected(sender, EventArgs.Empty);
+                    Connected?.Invoke(sender, EventArgs.Empty);
                 }
                 NotifyPropertyChanged(nameof(IsConnected));
             }

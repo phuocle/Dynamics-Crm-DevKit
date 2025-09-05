@@ -789,5 +789,14 @@ namespace DynamicsCrm.DevKit.Shared
                 }
             }
         }
+
+        public static void TryDeleteFile(string file)
+        {
+            try
+            {
+                if (File.Exists(file)) File.Delete(file);
+            }
+            catch { }
+        }
     }
 }

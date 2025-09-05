@@ -21,14 +21,14 @@
 		<SortOrder>210</SortOrder>
 	</TemplateData>
 	<TemplateContent>
-		<Project File="ProjectTemplate.csproj" ReplaceParameters="true">
-			<ProjectItem TargetFileName="notes.txt">notes.txt</ProjectItem>
-			<ProjectItem TargetFileName="ReportTemplate.rdl">ReportTemplate.rdl</ProjectItem>
+		<Project TargetFileName="$SafeProjectName$.csproj" File="ProjectTemplate.csproj" ReplaceParameters="true">
+			<ProjectItem ReplaceParameters="true" TargetFileName="notes.txt">notes.txt</ProjectItem>
+			<ProjectItem ReplaceParameters="true" TargetFileName="ReportTemplate.rdl">ReportTemplate.rdl</ProjectItem>
 			<ProjectItem ReplaceParameters="true" TargetFileName="download.reports.bat">download.reports.bat</ProjectItem>
 		</Project>
 	</TemplateContent>
 	<WizardExtension>
-		<Assembly>DynamicsCrm.DevKit.Lib, Version=3.66.66.66, Culture=Neutral, PublicKeyToken=98cbb7bd3db31604</Assembly>
-		<FullClassName>DynamicsCrm.DevKit.Lib.Wizard.ProjectTemplates.Report</FullClassName>
+		<Assembly>DynamicsCrm.DevKit, Version=4.00.00.00, Culture=Neutral, PublicKeyToken=null</Assembly>
+		<FullClassName>DynamicsCrm.DevKit.Wizard.ProjectTemplates.Report</FullClassName>
 	</WizardExtension>
 </VSTemplate>
