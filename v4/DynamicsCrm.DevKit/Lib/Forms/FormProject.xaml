@@ -32,7 +32,7 @@
                         <RowDefinition x:Name="Row1" Height="*"></RowDefinition>
                         <RowDefinition x:Name="Row2" Height="*"></RowDefinition>
                     </Grid.RowDefinitions>
-                    <Label x:Name="LabelProjectItemName" Grid.Row="1" Grid.Column="0" Margin="0,0,0,5" Content="Project Name" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                    <Label x:Name="LabelProjectItemName" Grid.Row="1" Grid.Column="0" Margin="0,0,0,5" Content="Name" HorizontalAlignment="Left" VerticalAlignment="Center" />
                     <TextBox x:Name="TextboxProject" Grid.Row="1" Grid.Column="1" Margin="0,0,0,5" TextChanged="TextboxProject_TextChanged" VerticalContentAlignment="Center" />
                     <StackPanel x:Name="PanelProjectNameDisplay" Grid.Row="2" Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
                         <Label x:Name="LabelProjectName" Margin="0,0,6,0" Content="Name" HorizontalAlignment="Left" VerticalAlignment="Center" />
@@ -40,6 +40,7 @@
                             <Hyperlink x:Name="EditProjectNameLink" IsEnabled="{Binding IsEnabled, ElementName=TextboxProject}" Click="EditProjectName_Click">Edit</Hyperlink>
                         </TextBlock>
                     </StackPanel>
+                    <Label x:Name="LabelFinalProjectItemName" Grid.Row="2" Grid.Column="0" Margin="0,0,0,5" Content="Project Name" HorizontalAlignment="Left" VerticalAlignment="Center" />
                     <TextBox x:Name="TextBoxProjectNameInline" Grid.Row="2" Grid.Column="1" Visibility="Collapsed" VerticalContentAlignment="Center" Margin="0,0,0,5" KeyDown="TextBoxProjectNameInline_KeyDown" Height="27"/>
                 </Grid>
             </Border>

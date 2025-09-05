@@ -60,57 +60,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     HELP.Inlines.Add("Server Project Template");
                     LabelProjectName.Content = $"{solutionName}";
                     LabelProjectName.Tag = LabelProjectName.Content;
-                }
-                //void PluginProject()
-                //{
-                //    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Plugin-Project-Template");
-                //    HELP.Inlines.Clear();
-                //    HELP.Inlines.Add("Plugin Project Template");
-                //    ComboBoxProject.Visibility = System.Windows.Visibility.Visible;
-                //    TextboxProject.Visibility = System.Windows.Visibility.Hidden;
-                //    LabelProjectName.Content = $"{VsixHelper.GetSolutionName()}.Plugin";
-                //    LabelProjectName.Tag = LabelProjectName.Content;
-                //}
-                //void WorkflowProject()
-                //{
-                //    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Workflow-Project-Template");
-                //    HELP.Inlines.Clear();
-                //    HELP.Inlines.Add("Workflow Project Template");
-                //    ComboBoxProject.Visibility = System.Windows.Visibility.Visible;
-                //    TextboxProject.Visibility = System.Windows.Visibility.Hidden;
-                //    LabelProjectName.Content = $"{VsixHelper.GetSolutionName()}.Workflow";
-                //    LabelProjectName.Tag = LabelProjectName.Content;
-                //}
-                //void CustomActionProject()
-                //{
-                //    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Custom-Action-Project-Template");
-                //    HELP.Inlines.Clear();
-                //    HELP.Inlines.Add("Custom Action Project Template");
-                //    ComboBoxProject.Visibility = System.Windows.Visibility.Visible;
-                //    TextboxProject.Visibility = System.Windows.Visibility.Hidden;
-                //    LabelProjectName.Content = $"{VsixHelper.GetSolutionName()}.CustomAction";
-                //    LabelProjectName.Tag = LabelProjectName.Content;
-                //}
-                //void CustomApiProject()
-                //{
-                //    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Custom-Api-Project-Template");
-                //    HELP.Inlines.Clear();
-                //    HELP.Inlines.Add("Custom Api Project Template");
-                //    ComboBoxProject.Visibility = System.Windows.Visibility.Visible;
-                //    TextboxProject.Visibility = System.Windows.Visibility.Hidden;
-                //    LabelProjectName.Content = $"{VsixHelper.GetSolutionName()}.CustomApi";
-                //    LabelProjectName.Tag = LabelProjectName.Content;
-                //}
-                //void DataProviderProject()
-                //{
-                //    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Data-Provider-Project-Template");
-                //    HELP.Inlines.Clear();
-                //    HELP.Inlines.Add("Data Provider Project Template");
-                //    ComboBoxProject.Visibility = System.Windows.Visibility.Hidden;
-                //    TextboxProject.Visibility = System.Windows.Visibility.Visible;
-                //    LabelProjectName.Content = $"{VsixHelper.GetSolutionName()}.DataProvider";
-                //    LabelProjectName.Tag = LabelProjectName.Content;
-                //}
+                }                
                 async Task WebResourceProjectAsync()
                 {
                     var solutionName = await VsixHelper.GetSolutionNameAsync();
@@ -168,18 +118,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     TextboxProject.Text = $"{solutionName}.Shared.Test";
                     LabelProjectName.Content = $"{solutionName}.Shared.Test";
                     LabelProjectName.Tag = LabelProjectName.Content;
-
                 }
-                //void ReportProject()
-                //{
-                //    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Report-Project-Template");
-                //    HELP.Inlines.Clear();
-                //    HELP.Inlines.Add("Report Project Template");
-                //    ComboBoxProject.Visibility = System.Windows.Visibility.Hidden;
-                //    TextboxProject.Visibility = System.Windows.Visibility.Visible;
-                //    LabelProjectName.Content = $"{VsixHelper.GetSolutionName()}.Report";
-                //    LabelProjectName.Tag = LabelProjectName.Content;
-                //}
                 async Task PackageProjectAsync()
                 {
                     var solutionName = await VsixHelper.GetSolutionNameAsync();
@@ -188,6 +127,10 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     HELP.Inlines.Add("Package Project Template");
                     LabelProjectName.Content = $"{solutionName}.{ProjectType.Package}";
                     LabelProjectName.Tag = LabelProjectName.Content;
+                }
+                async Task ReportProjectAsync()
+                {
+                    var solutionName = await VsixHelper.GetSolutionNameAsync();
                 }
                 ThreadHelper.JoinableTaskFactory.Run(async () =>
                 {
@@ -206,21 +149,6 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                         case ProjectType.Server:
                             await ServerProjectAsync();
                             break;
-                        //case ProjectType.Plugin:
-                        //    PluginProject();
-                        //    break;
-                        //case ProjectType.Workflow:
-                        //    WorkflowProject();
-                        //    break;
-                        //case ProjectType.CustomAction:
-                        //    CustomActionProject();
-                        //    break;
-                        //case ProjectType.CustomApi:
-                        //    CustomApiProject();
-                        //    break;
-                        //case ProjectType.DataProvider:
-                        //    DataProviderProject();
-                        //    break;
                         case ProjectType.WebResource:
                             await WebResourceProjectAsync();
                             break;
@@ -239,9 +167,9 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                         case ProjectType.SharedTest:
                             await SharedTestProjectAsync();
                             break;
-                        //case ProjectType.Report:
-                        //    ReportProject();
-                        //    break;
+                        case ProjectType.Report:
+                            await ReportProjectAsync();
+                            break;
                         case ProjectType.Package:
                             await PackageProjectAsync();
                             break;
