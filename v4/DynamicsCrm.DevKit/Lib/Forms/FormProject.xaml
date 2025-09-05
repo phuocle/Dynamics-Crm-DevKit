@@ -32,12 +32,8 @@
                         <RowDefinition x:Name="Row1" Height="*"></RowDefinition>
                         <RowDefinition x:Name="Row2" Height="*"></RowDefinition>
                     </Grid.RowDefinitions>
-                    <Label x:Name="LabelLanguage" Visibility="Collapsed" Grid.Row="0" Grid.Column="0" Margin="0,0,0,5" Content="Language" HorizontalAlignment="Left" VerticalAlignment="Center" />
-                    <ComboBox x:Name="ComboBoxLanguage" Visibility="Collapsed" Grid.Row="0" Grid.Column="1" Margin="0,0,0,5" VerticalContentAlignment="Center" IsEditable="False" SelectionChanged="ComboBoxLanguage_SelectionChanged" />
                     <Label x:Name="LabelProjectItemName" Grid.Row="1" Grid.Column="0" Margin="0,0,0,5" Content="Project Name" HorizontalAlignment="Left" VerticalAlignment="Center" />
-                    <ComboBox x:Name="ComboBoxProject" Grid.Row="1" Grid.Column="1" Margin="0,0,0,5" VerticalContentAlignment="Center" IsEditable="True" TextBoxBase.TextChanged="ComboBoxProject_TextChanged" SelectionChanged="ComboBoxProject_SelectionChanged" />
-                    <TextBox x:Name="TextboxProject" Grid.Row="1" Grid.Column="1" Margin="0,0,0,5" Visibility="Hidden" TextChanged="TextboxProject_TextChanged" VerticalContentAlignment="Center" />
-                    <!-- Display panel for project name with edit link -->
+                    <TextBox x:Name="TextboxProject" Grid.Row="1" Grid.Column="1" Margin="0,0,0,5" TextChanged="TextboxProject_TextChanged" VerticalContentAlignment="Center" />
                     <StackPanel x:Name="PanelProjectNameDisplay" Grid.Row="2" Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
                         <Label x:Name="LabelProjectName" Margin="0,0,6,0" Content="Name" HorizontalAlignment="Left" VerticalAlignment="Center" />
                         <TextBlock VerticalAlignment="Center" IsEnabled="{Binding IsEnabled, ElementName=TextboxProject}">
@@ -58,11 +54,6 @@
                 <WrapPanel Grid.Row="0" Grid.Column="1" HorizontalAlignment="Right" Margin="5,0,8,10">
                     <Button x:Name="buttonOK" Content="OK" Margin="0,0,0,0" Width="80" Height="30" Click="ButtonOK_Click"/>
                     <Button x:Name="buttonCancel" Content="Cancel" Margin="5,0,0,0" Width="80" Height="30" IsCancel="True" Click="ButtonCancel_Click"/>
-                </WrapPanel>
-                <WrapPanel Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" Margin="0,0,0,10" x:Name="PanelCustom" Visibility="Hidden" >
-                    <Label Content="Template" Margin="0,0,0,0"/>
-                    <ComboBox x:Name="ComboBoxTemplate" Margin="0,0,5,0" Width="180" Height="30" VerticalContentAlignment="Center" IsEditable="False" />
-                    <Button  x:Name="buttonCustom" Content="..." Margin="0,0,5,0" Width="30" Height="30" Click="ButtonCustom_Click" HorizontalAlignment="Left"/>
                 </WrapPanel>
             </Grid>
             <ProgressBar x:Name="progressBar" Height="5" IsIndeterminate="True" Visibility="Hidden" />
