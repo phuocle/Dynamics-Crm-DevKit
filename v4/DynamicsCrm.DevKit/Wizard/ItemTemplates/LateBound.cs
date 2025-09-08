@@ -41,11 +41,17 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
                     if (!Helper.IsTheSame(oldCode, newCode))
                     {
                         await FileHelper.ForceWriteAllTextAsync(FullFilePath, _GeneratedClass_);
+                        await VS.StatusBar.ShowMessageAsync($"Late bound: {ItemName}.generated.cs up to date!!!");
+                    }
+                    else
+                    {
+                        await VS.StatusBar.ShowMessageAsync($"Late bound: {ItemName}.generated.cs not change!!!");
                     }
                 }
                 else if (FilePath == $"{ItemName}.generated.cs" && !IsFilePathExist)
                 {
                     ProjectItem.Properties.Item("DependentUpon").Value = $"{ItemName}.cs";
+                    await VS.StatusBar.ShowMessageAsync($"Late bound: {ItemName}.generated.cs created!!!");
                 }
             });
         }

@@ -73,6 +73,8 @@ namespace DynamicsCrm.DevKit.Shared
             if (value1 == null && value2 == null) return true;
             if (value1 != null && value2 == null) return false;
             if (value1 == null && value2 != null) return false;
+            value1 = value1.Replace("\r\n", string.Empty).Replace("\r", string.Empty).Replace("\t", string.Empty).Replace(" ", string.Empty).Trim();
+            value2 = value2.Replace("\r\n", string.Empty).Replace("\r", string.Empty).Replace("\t", string.Empty).Replace(" ", string.Empty).Trim();
             return string.Equals(value1, value2, StringComparison.OrdinalIgnoreCase);
         }
 
