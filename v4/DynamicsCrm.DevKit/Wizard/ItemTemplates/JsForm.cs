@@ -35,7 +35,7 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
         private async Task<bool> IsJsWebApiExistAsync()
         {
             var selectedItem = await VsixHelper.SelectedItem.GetSolutionItemAsync();
-            return System.IO.File.Exists(System.IO.Path.Combine(selectedItem.FullPath, ".webapi.js"));
+            return System.IO.File.Exists(System.IO.Path.Combine(selectedItem.FullPath, $"{ItemName}.webapi.js"));
         }
 
         public void RunFinished()

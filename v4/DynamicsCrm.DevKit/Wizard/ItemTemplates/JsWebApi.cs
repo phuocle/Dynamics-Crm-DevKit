@@ -34,7 +34,7 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
         private async Task<bool> IsJsFormExistAsync()
         {
             var selectedItem = await VsixHelper.SelectedItem.GetSolutionItemAsync();
-            return System.IO.File.Exists(System.IO.Path.Combine(selectedItem.FullPath, ".form.js"));
+            return System.IO.File.Exists(System.IO.Path.Combine(selectedItem.FullPath, $"{ItemName}.form.js"));
         }
 
         public void RunFinished()
