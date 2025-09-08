@@ -25,7 +25,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code += $"using Microsoft.Xrm.Sdk;{NEW_LINE}";
             code += $"using System;{NEW_LINE}";
             code += $"using System.Diagnostics;{NEW_LINE}";
-            code += $"using System.Linq;{NEW_LINE}";
+            code += $"using System.Linq;{NEW_LINE}{NEW_LINE}";
             code += $"namespace {rootNameSpace}.{@class}OptionSets{NEW_LINE}";
             code += $"{{{NEW_LINE}";
             code += $"{GeneratorEnum()}";
