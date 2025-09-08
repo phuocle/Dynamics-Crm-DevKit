@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace DynamicsCrm.DevKit
@@ -358,6 +359,32 @@ namespace DynamicsCrm.DevKit
         internal static async Task<string> ReadEmbeddedResourceAsync(string path)
         {
             return await Helper.ReadEmbeddedResourceAsync($"{typeof(DevKitPackage).Assembly.GetName().Name}.Resources.{path}");
+        }
+
+        internal static async Task ExecuteCommandAsync(string command)
+        {
+            await VS.Commands.ExecuteAsync(command);
+        }
+
+        internal static ProjectItem GetProjectItem(EnvDTE.DTE DTE, string projectItemName)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+            var selectItem = DTE.SelectedItems.Item(1);
+            ProjectItems projectItems = null;
+            if (selectItem.Project != null)
+            {
+                projectItems = selectItem.Project.ProjectItems;
+            }
+            else if (selectItem.ProjectItem != null)
+            {
+                projectItems = selectItem.ProjectItem.ProjectItems;
+            }
+            foreach (ProjectItem projectItem in projectItems)
+            {
+                if (projectItem.Name == projectItemName)
+                    return projectItem;
+            }
+            return null;
         }
     }
 }

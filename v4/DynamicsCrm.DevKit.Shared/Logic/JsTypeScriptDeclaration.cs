@@ -17,28 +17,23 @@ namespace DynamicsCrm.DevKit.Shared.Logic
         private static ServiceClient ServiceClient { get; set; }
         private static EntityMetadata EntityMetadata { get; set; }
         private static string RootNamespace { get; set; }
-        private static CommentTypeScriptDeclaration Comment { get; set; }
         private static List<string> FormNames = new List<string>();
 
-        public static async Task<string> GetCodeAsync(ServiceClient service, EntityMetadata entityMetadata, string rootNamespace, CommentTypeScriptDeclaration comment)
+        public static async Task<string> GetCodeAsync(ServiceClient service, EntityMetadata entityMetadata, string rootNamespace, bool isJsFormExist, bool isJsWebApiExist)
         {
             ServiceClient = service;
             EntityMetadata = entityMetadata;
             RootNamespace = rootNamespace;
-            Comment = comment;
             FormNames = new List<string>();
             var @namespace = Helper.GetNameSpace(RootNamespace);
             var _d_ts = string.Empty;
             _d_ts += $"//@ts-check{NEW_LINE}";
             _d_ts += $"///<reference path=\"devkit.d.ts\" />{NEW_LINE}";
             _d_ts += $"declare namespace {@namespace} {{{NEW_LINE}";
-            if (comment.UseForm)
-                _d_ts += await GetForm_d_tsAsync(@namespace);
-            if (comment.UseWebApi)
-                _d_ts += GetWebApi_d_ts(@namespace);
+            if (isJsFormExist) _d_ts += await GetForm_d_tsAsync(@namespace);
+            if (isJsWebApiExist) _d_ts += GetWebApi_d_ts(@namespace);
             _d_ts += $"}}{NEW_LINE}";
             _d_ts += GetOptionSet_d_ts();
-            _d_ts += GetSavedComment();
             return _d_ts;
         }
 
@@ -92,7 +87,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             _d_ts += $"{TAB}{TAB}{TAB}LoopDetected{NEW_LINE}";
             _d_ts += $"{TAB}{TAB}}}{NEW_LINE}";
             _d_ts += $"{TAB}}}{NEW_LINE}";
-            _d_ts += $"}}{NEW_LINE}";
+            _d_ts += $"}}";
             return _d_ts;
         }
 
@@ -1204,14 +1199,6 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                 }
             }
             return classId;
-        }
-
-        private static string GetSavedComment()
-        {
-            var _d_ts = string.Empty;
-            _d_ts = $"//{SimpleJson.SerializeObject(Comment)}";
-            _d_ts = _d_ts.Replace("\"", "'");
-            return _d_ts;
         }
     }
 }

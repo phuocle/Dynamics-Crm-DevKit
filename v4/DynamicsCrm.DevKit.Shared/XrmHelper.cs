@@ -664,7 +664,7 @@ namespace DynamicsCrm.DevKit.Shared
             var code = string.Empty;
             code += $"//@ts-check{NEW_LINE}";
             code += $"///<reference path=\"{entityMetadata.SchemaName}.d.ts\" />{NEW_LINE}";
-            code += "\"use strict\";{NEW_LINE}";
+            code += $"\"use strict\";{NEW_LINE}";
             var formNames = new List<string>();
             foreach (var form in forms)
             {
@@ -701,7 +701,7 @@ namespace DynamicsCrm.DevKit.Shared
                 code += $"{TAB}return {{{NEW_LINE}{TAB}{TAB}OnLoad: onLoad{NEW_LINE}{TAB}}};{NEW_LINE}";
                 code += $"}})();{NEW_LINE}";
             }
-            code = code.TrimEnd("{NEW_LINE}".ToCharArray());
+            code = code.TrimEnd($"{NEW_LINE}".ToCharArray());
             return code;
         }
 

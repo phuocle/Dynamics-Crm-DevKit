@@ -1,5 +1,4 @@
-﻿using DynamicsCrm.DevKit.Shared.Models;
-using Microsoft.PowerPlatform.Dataverse.Client;
+﻿using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk.Metadata;
 using System;
 using System.Linq;
@@ -14,15 +13,13 @@ namespace DynamicsCrm.DevKit.Shared.Logic
         private static ServiceClient ServiceClient { get; set; }
         private static EntityMetadata EntityMetadata { get; set; }
         private static string RootNamespace { get; set; }
-        private static CommentTypeScriptDeclaration Comment { get; set; }
 
-        public static async Task<(string code, string dts)> GetCodeAsync(ServiceClient serviceClient, EntityMetadata entityMetadata, string rootNamespace, CommentTypeScriptDeclaration comment)
+        public static async Task<(string code, string dts)> GetCodeAsync(ServiceClient serviceClient, EntityMetadata entityMetadata, string rootNamespace, bool isJsFormExist)
         {
             ServiceClient = serviceClient;
             EntityMetadata = entityMetadata;
             RootNamespace = rootNamespace;
-            Comment = comment;
-            var dts = await JsTypeScriptDeclaration.GetCodeAsync(serviceClient, entityMetadata, rootNamespace, comment);
+            var dts = await JsTypeScriptDeclaration.GetCodeAsync(serviceClient, entityMetadata, rootNamespace, isJsFormExist, true);
             var code = string.Empty;
             var @namespace = Helper.GetNameSpace(RootNamespace);
             var logicalName = Helper.SafeIdentifier(entityMetadata.LogicalName);

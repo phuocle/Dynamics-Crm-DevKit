@@ -35,17 +35,15 @@ namespace DynamicsCrm.DevKit.Shared.Logic
 
         private static string RootNamespace { get; set; }
 
-        private static CommentTypeScriptDeclaration Comment { get; set; }
 
         private static List<string> FormNames;
 
-        public static async Task<(string code, string dts)> GetCodeAsync(ServiceClient service, EntityMetadata entityMetadata, string rootNamespace, CommentTypeScriptDeclaration comment)
+        public static async Task<(string code, string dts)> GetJsFormCodeAsync(ServiceClient service, EntityMetadata entityMetadata, string rootNamespace, bool isJsWebApiExist)
         {
             FormNames = new List<string>();
             ServiceClient = service;
             EntityMetadata = entityMetadata;
             RootNamespace = rootNamespace;
-            Comment = comment;
             var forms = await XrmHelper.GetEntityFormsAsync(service, entityMetadata.LogicalName);
 
             var code = string.Empty;
@@ -63,7 +61,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                 code += GetQuickCreateFormCode(form, @namespace);
             code += $"}})({@namespace} || ({@namespace} = {{}}));{NEW_LINE}";
             code += $"{Helper.GeneratorOptionSet(EntityMetadata)}";
-            var dts = await JsTypeScriptDeclaration.GetCodeAsync(service, entityMetadata, rootNamespace, comment);
+            var dts = await JsTypeScriptDeclaration.GetCodeAsync(service, entityMetadata, rootNamespace, true, isJsWebApiExist);
             return (code, dts);
         }
 

@@ -2,7 +2,6 @@
 using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.VisualStudio.Shell;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -36,19 +35,19 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     ComboBox.IsEditable = false;
                     Textbox.Visibility = System.Windows.Visibility.Hidden;
                     LabelItemNameLatest.Visibility = System.Windows.Visibility.Collapsed;
-                    LabelItemName.Content = "Item Name";
+                    LabelItemName.Content = "Entity";
                 }
-                //void JsFormItem()
-                //{
-                //    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/JavaScript-Form-Item-Template");
-                //    HELP.Inlines.Clear();
-                //    HELP.Inlines.Add("JavaScript Form Item Template");
-                //    ComboBoxProject.Visibility = System.Windows.Visibility.Visible;
-                //    ComboBoxProject.IsEditable = false;
-                //    TextboxProject.Visibility = System.Windows.Visibility.Hidden;
-                //    LabelProjectName.Visibility = System.Windows.Visibility.Collapsed;
-                //    LabelProjectItemName.Content = "Item Name";
-                //}
+                void JsFormItem()
+                {
+                    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/JavaScript-Form-Item-Template");
+                    HELP.Inlines.Clear();
+                    HELP.Inlines.Add("JavaScript Form Item Template");
+                    ComboBox.Visibility = System.Windows.Visibility.Visible;
+                    ComboBox.IsEditable = false;
+                    Textbox.Visibility = System.Windows.Visibility.Hidden;
+                    LabelItemNameLatest.Visibility = System.Windows.Visibility.Collapsed;
+                    LabelItemName.Content = "Entity";
+                }
                 //void JsWebApiItem()
                 //{
                 //    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/JavaScript-WebApi-Item-Template");
@@ -149,33 +148,33 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     case ItemType.LateBound:
                         LateBoundItem();
                         break;
-                    //case ItemType.JsForm:
-                    //    JsFormItem();
-                    //    break;
-                    //case ItemType.JsWebApi:
-                    //    JsWebApiItem();
-                    //    break;
-                    //case ItemType.Workflow:
-                    //    WorkflowItem();
-                    //    break;
-                    //case ItemType.UiTest:
-                    //    UiTestItem();
-                    //    break;
-                    //case ItemType.Test:
-                    //    TestItem();
-                    //    break;
-                    //case ItemType.DownloadWebResources:
-                    //    DownloadWebResourcesItem();
-                    //    break;
-                    //case ItemType.DataProvider:
-                    //    DataProviderItem();
-                    //    break;
-                    //case ItemType.ResourceString:
-                    //    ResourceStringItem();
-                    //    break;
-                    //case ItemType.DownloadReports:
-                    //    DownloadReportsItem();
-                    //    break;
+                    case ItemType.JsForm:
+                        JsFormItem();
+                        break;
+                        //case ItemType.JsWebApi:
+                        //    JsWebApiItem();
+                        //    break;
+                        //case ItemType.Workflow:
+                        //    WorkflowItem();
+                        //    break;
+                        //case ItemType.UiTest:
+                        //    UiTestItem();
+                        //    break;
+                        //case ItemType.Test:
+                        //    TestItem();
+                        //    break;
+                        //case ItemType.DownloadWebResources:
+                        //    DownloadWebResourcesItem();
+                        //    break;
+                        //case ItemType.DataProvider:
+                        //    DataProviderItem();
+                        //    break;
+                        //case ItemType.ResourceString:
+                        //    ResourceStringItem();
+                        //    break;
+                        //case ItemType.DownloadReports:
+                        //    DownloadReportsItem();
+                        //    break;
                 }
             }
         }
@@ -343,7 +342,8 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         private void Connection_Connected(object sender, System.EventArgs e)
         {
             if (
-                ItemType == ItemType.LateBound
+                ItemType == ItemType.LateBound ||
+                ItemType == ItemType.JsForm
                 )
             {
                 StackPanelMain.IsEnabled = false;
@@ -499,7 +499,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
 
         private void ComboBoxLanguage_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            UpdateResouceString();
+            //UpdateResouceString();
         }
     }
 }

@@ -6,6 +6,7 @@ using DynamicsCrm.DevKit.Shared.Logic;
 using EnvDTE;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.TemplateWizard;
+using Microsoft.Xrm.Sdk.Metadata;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -15,6 +16,8 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
     {
         private string _Class_ { get; set; } = string.Empty;
         private string _GeneratedClass_ { get; set; } = string.Empty;
+        private EntityMetadata EntityMetadata { get; set; }
+
         public void BeforeOpeningFile(ProjectItem projectItem)
         {
         }
@@ -67,9 +70,9 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
                     await Microsoft.VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
                     await VS.StatusBar.StartAnimationAsync(StatusAnimation.Deploy);
                     ItemName = form.ItemName;
-                    var entityMetadata = XrmHelper.EntitiesMetadata.FirstOrDefault(x => x.SchemaName == ItemName);
-                    _Class_ = Helper.GetDefaultFileWithCs(entityMetadata, replacementsDictionary["$rootnamespace$"]);
-                    _GeneratedClass_ = CSharpLateBound.GetCode(form.ServiceClient, entityMetadata, replacementsDictionary["$rootnamespace$"]);
+                    EntityMetadata = XrmHelper.EntitiesMetadata.FirstOrDefault(x => x.SchemaName == ItemName);
+                    _Class_ = Helper.GetDefaultFileWithCs(EntityMetadata, replacementsDictionary["$rootnamespace$"]);
+                    _GeneratedClass_ = CSharpLateBound.GetCode(form.ServiceClient, EntityMetadata, replacementsDictionary["$rootnamespace$"]);
                     replacementsDictionary["$Class$"] = _Class_;
                     replacementsDictionary["$GeneratedClass$"] = _GeneratedClass_;
                     await Replacement.SetAsync(replacementsDictionary, form);
@@ -90,7 +93,7 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
                 var selectedItem = await VsixHelper.SelectedItem.GetSolutionItemAsync();
                 FilePath = filePath == "Class.cs" ? $"{ItemName}.cs" : $"{ItemName}.generated.cs";
                 FullFilePath = System.IO.Path.Combine(selectedItem.FullPath, FilePath);
-                IsFilePathExist = System.IO.File.Exists(FullFilePath) == true;
+                IsFilePathExist = System.IO.File.Exists(FullFilePath);
                 return !IsFilePathExist;
             });
         }
