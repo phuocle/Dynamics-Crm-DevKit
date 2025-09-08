@@ -22,7 +22,7 @@
 	</TemplateData>
 	<TemplateContent>
 		<Project TargetFileName="$SafeProjectName$.csproj" File="ProjectTemplate.csproj" ReplaceParameters="true">
-			<ProjectItem ReplaceParameters="true" TargetFileName="notes.txt">notes.txt</ProjectItem>
+			<ProjectItem ReplaceParameters="true" TargetFileName="notes.md">notes.md</ProjectItem>
 			<ProjectItem ReplaceParameters="true" TargetFileName="ReportTemplate.rdl">ReportTemplate.rdl</ProjectItem>
 			<ProjectItem ReplaceParameters="true" TargetFileName="download.reports.bat">download.reports.bat</ProjectItem>
 		</Project>
