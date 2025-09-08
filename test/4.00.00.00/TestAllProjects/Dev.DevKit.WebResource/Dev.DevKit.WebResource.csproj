@@ -61,6 +61,9 @@
     <Content Include="entities\Account.webapi.js">
       <DependentUpon>Account.js</DependentUpon>
     </Content>
+    <Content Include="entities\Contact.form.js">
+      <DependentUpon>Contact.js</DependentUpon>
+    </Content>
     <Content Include="entities\Contact.js" />
     <Content Include="entities\Contact.webapi.js">
       <DependentUpon>Contact.js</DependentUpon>
