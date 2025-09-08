@@ -348,6 +348,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             {
                 StackPanelMain.IsEnabled = false;
                 progressBar.Visibility = System.Windows.Visibility.Visible;
+                CONNECTION.SetIsEnabledButtonConnection(false);
                 _ = Task.Factory.StartNew(() =>
                 {
                     ThreadHelper.JoinableTaskFactory.Run(async () =>
@@ -360,6 +361,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                         buttonOK.IsEnabled = items.Count > 0;
                         StackPanelMain.IsEnabled = true;
                         progressBar.Visibility = System.Windows.Visibility.Hidden;
+                        CONNECTION.SetIsEnabledButtonConnection(true);
                     });
                 }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default);
             }

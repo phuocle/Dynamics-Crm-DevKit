@@ -65,6 +65,8 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
                     var entityMetadata = XrmHelper.EntitiesMetadata.FirstOrDefault(x => x.SchemaName == ItemName);
                     _Class_ = Helper.GetDefaultFileWithCs(entityMetadata, replacementsDictionary["$rootnamespace$"]);
                     _GeneratedClass_ = CSharpLateBound.GetCode(form.ServiceClient, entityMetadata, replacementsDictionary["$rootnamespace$"]);
+                    replacementsDictionary["$Class$"] = _Class_;
+                    replacementsDictionary["$GeneratedClass$"] = _GeneratedClass_;
                     await Replacement.SetAsync(replacementsDictionary, form);
                 }
                 else

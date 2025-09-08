@@ -35,7 +35,6 @@ namespace DynamicsCrm.DevKit.Lib.WpfControls
 
         public ServiceClient ServiceClient { get; set; }
         public CrmConnection CrmConnection { get; set; }
-        public bool IsUseOOBConnection { get; set; } = true;
 
         public event EventHandler Connected;
 
@@ -43,6 +42,11 @@ namespace DynamicsCrm.DevKit.Lib.WpfControls
         protected void NotifyPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public void SetIsEnabledButtonConnection(bool value)
+        {
+            buttonConnection.IsEnabled = value;
         }
 
         private void ButtonConnection_Click(object sender, RoutedEventArgs e)
