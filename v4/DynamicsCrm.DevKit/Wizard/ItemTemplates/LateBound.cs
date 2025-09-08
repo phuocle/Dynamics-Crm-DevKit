@@ -1,11 +1,15 @@
 ﻿using DynamicsCrm.DevKit.Lib;
 using DynamicsCrm.DevKit.Lib.Forms;
 using DynamicsCrm.DevKit.Shared;
+using DynamicsCrm.DevKit.Shared.Logic;
+using DynamicsCrm.DevKit.Shared.Models;
 using EnvDTE;
+using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.TemplateWizard;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
 {
@@ -13,7 +17,6 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
     {
         private string _Class_ { get; set; } = string.Empty;
         private string _GeneratedClass_ { get; set; } = string.Empty;
-
         public void BeforeOpeningFile(ProjectItem projectItem)
         {
         }
@@ -32,25 +35,25 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
         {
             ThreadHelper.JoinableTaskFactory.Run(async () =>
             {
+                await Microsoft.VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
                 if (FilePath == $"{ItemName}.generated.cs" && IsFilePathExist)
                 {
-                    await FileHelper.ForceWriteAllTextAsync(FullFilePath, _GeneratedClass_);
+                    var oldCode = await FileHelper.ReadAllTextFromLine6Async(FullFilePath);
+                    var newCode = await Helper.ReadContentFromLine6Async(_GeneratedClass_);
+                    if (!Helper.IsTheSame(oldCode, newCode))
+                    {
+                        await FileHelper.ForceWriteAllTextAsync(FullFilePath, _GeneratedClass_);
+                    }
+                }
+                else if (FilePath == $"{ItemName}.generated.cs" && !IsFilePathExist)
+                {
+                    ProjectItem.Properties.Item("DependentUpon").Value = $"{ItemName}.cs";
                 }
             });
         }
 
         public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary, WizardRunKind runKind, object[] customParams)
         {
-            //ItemName = "Account";
-
-            _Class_ = $"//{DateTime.Now}";
-            _GeneratedClass_ = $"////{DateTime.Now}";
-
-            //replacementsDictionary["$SchemaName$"] = ItemName;
-            //replacementsDictionary["$Class$"] = _Class_;
-            //replacementsDictionary["$GeneratedClass$"] = _GeneratedClass_;
-
-
             ThreadHelper.JoinableTaskFactory.Run(async () =>
             {
                 var form = new FormItem(ItemType.LateBound);
@@ -59,7 +62,9 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
                 {
                     await Microsoft.VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
                     ItemName = form.ItemName;
-
+                    var entityMetadata = XrmHelper.EntitiesMetadata.FirstOrDefault(x => x.SchemaName == ItemName);
+                    _Class_ = Helper.GetDefaultFileWithCs(entityMetadata, replacementsDictionary["$rootnamespace$"]);
+                    _GeneratedClass_ = CSharpLateBound.GetCode(form.ServiceClient, entityMetadata, replacementsDictionary["$rootnamespace$"]);
                     await Replacement.SetAsync(replacementsDictionary, form);
                 }
                 else

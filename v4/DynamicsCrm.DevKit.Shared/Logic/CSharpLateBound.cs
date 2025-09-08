@@ -133,7 +133,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code += $"{NEW_LINE}";
             code += $"{TAB}}}{NEW_LINE}";
             code += $"}}";
-            return code;
+            return $"{Helper.GetDefaultHeaderForGeneratedCs()}{code}";
         }
 
         private static string GetGeneratorImageCode(string schemaName, string logicalName)
