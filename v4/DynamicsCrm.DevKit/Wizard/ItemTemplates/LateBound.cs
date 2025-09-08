@@ -17,6 +17,7 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
         private string _Class_ { get; set; } = string.Empty;
         private string _GeneratedClass_ { get; set; } = string.Empty;
         private EntityMetadata EntityMetadata { get; set; }
+        private ProjectItem ProjectItem { get; set; } = null;
 
         public void BeforeOpeningFile(ProjectItem projectItem)
         {
@@ -28,6 +29,7 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
 
         public void ProjectItemFinishedGenerating(ProjectItem projectItem)
         {
+            ProjectItem = projectItem;
         }
 
         public void RunFinished()
@@ -47,11 +49,7 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
                 }
                 else
                 {
-                    var LateBoundProjectItem = await VsixHelper.GetProjectItemAsync($"{ItemName}.cs");
-                    var LateBoundGeneratedProjectItem = await VsixHelper.GetProjectItemAsync($"{ItemName}.generated.cs");
-                    var LateBoundGeneratedProjectItemFullPath = LateBoundGeneratedProjectItem.FileNames[0];
-                    LateBoundGeneratedProjectItem.Remove();
-                    LateBoundProjectItem.ProjectItems.AddFromFile(LateBoundGeneratedProjectItemFullPath);
+                    ProjectItem.Properties.Item("DependentUpon").Value = $"{ItemName}.cs";
                 }
                 await VS.StatusBar.ShowMessageAsync($"{ItemName}.generated.cs up to date!!!");
                 await VsixHelper.ExecuteCommandAsync("File.SaveAll");
