@@ -48,17 +48,17 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     LabelItemNameLatest.Visibility = System.Windows.Visibility.Collapsed;
                     LabelItemName.Content = "Entity";
                 }
-                //void JsWebApiItem()
-                //{
-                //    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/JavaScript-WebApi-Item-Template");
-                //    HELP.Inlines.Clear();
-                //    HELP.Inlines.Add("JavaScript WebApi Item Template");
-                //    ComboBoxProject.Visibility = System.Windows.Visibility.Visible;
-                //    ComboBoxProject.IsEditable = false;
-                //    TextboxProject.Visibility = System.Windows.Visibility.Hidden;
-                //    LabelProjectName.Visibility = System.Windows.Visibility.Collapsed;
-                //    LabelProjectItemName.Content = "Item Name";
-                //}
+                void JsWebApiItem()
+                {
+                    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/JavaScript-WebApi-Item-Template");
+                    HELP.Inlines.Clear();
+                    HELP.Inlines.Add("JavaScript WebApi Item Template");
+                    ComboBox.Visibility = System.Windows.Visibility.Visible;
+                    ComboBox.IsEditable = false;
+                    Textbox.Visibility = System.Windows.Visibility.Hidden;
+                    LabelItemNameLatest.Visibility = System.Windows.Visibility.Collapsed;
+                    LabelItemName.Content = "Entity";
+                }
                 //void WorkflowItem()
                 //{
                 //    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Workflow-Item-Template");
@@ -151,9 +151,9 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     case ItemType.JsForm:
                         JsFormItem();
                         break;
-                        //case ItemType.JsWebApi:
-                        //    JsWebApiItem();
-                        //    break;
+                    case ItemType.JsWebApi:
+                        JsWebApiItem();
+                        break;
                         //case ItemType.Workflow:
                         //    WorkflowItem();
                         //    break;
@@ -343,7 +343,8 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         {
             if (
                 ItemType == ItemType.LateBound ||
-                ItemType == ItemType.JsForm
+                ItemType == ItemType.JsForm ||
+                ItemType == ItemType.JsWebApi
                 )
             {
                 StackPanelMain.IsEnabled = false;

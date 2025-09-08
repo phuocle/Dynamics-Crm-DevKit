@@ -11,13 +11,13 @@ using System.Linq;
 
 namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
 {
-    internal class JsForm : ItemTemplateBase, IWizard
+    internal class JsWebApi : ItemTemplateBase, IWizard
     {
         private string _Javascript_ { get; set; } = string.Empty;
-        private string _JavascriptForm_ { get; set; } = string.Empty;
+        private string _JavascriptWebApi_ { get; set; } = string.Empty;
         private string _Javascriptdts_ { get; set; } = string.Empty;
         private EntityMetadata EntityMetadata { get; set; }
-        private bool IsJsWebApiExist { get; set; } = false;
+        private bool IsJsFormExist { get; set; } = false;
 
         public void BeforeOpeningFile(ProjectItem projectItem)
         {
@@ -37,19 +37,19 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
             {
                 await Microsoft.VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
                 await VS.StatusBar.StartAnimationAsync(StatusAnimation.Deploy);
-                var JavascriptFormProjectItem = await VsixHelper.GetProjectItemAsync($"{ItemName}.form.js");
-                var JavascriptFormProjectItemFullPath = JavascriptFormProjectItem.FileNames[0];
+                var JavascriptWebApiProjectItem = await VsixHelper.GetProjectItemAsync($"{ItemName}.webapi.js");
+                var JavascriptWebApiProjectItemFullPath = JavascriptWebApiProjectItem.FileNames[0];
                 var JavascriptdtsProjectItem = await VsixHelper.GetProjectItemAsync($"{ItemName}.d.ts");
                 var JavascriptdtsProjectItemFullPath = JavascriptdtsProjectItem.FileNames[0];
-                await FileHelper.ForceWriteAllTextAsync(JavascriptFormProjectItemFullPath, _JavascriptForm_);
+                await FileHelper.ForceWriteAllTextAsync(JavascriptWebApiProjectItemFullPath, _JavascriptWebApi_);
                 await FileHelper.ForceWriteAllTextAsync(JavascriptdtsProjectItemFullPath, _Javascriptdts_);
                 var JavascriptProjectItem = await VsixHelper.GetProjectItemAsync($"{ItemName}.js");
-                JavascriptFormProjectItem.Remove();
-                JavascriptProjectItem.ProjectItems.AddFromFile(JavascriptFormProjectItemFullPath);
+                JavascriptWebApiProjectItem.Remove();
+                JavascriptProjectItem.ProjectItems.AddFromFile(JavascriptWebApiProjectItemFullPath);
                 JavascriptdtsProjectItem.Remove();
                 JavascriptProjectItem.ProjectItems.AddFromFile(JavascriptdtsProjectItemFullPath);
                 await VsixHelper.ExecuteCommandAsync("File.SaveAll");
-                await VS.StatusBar.ShowMessageAsync($"{ItemName}.form.js up to date!!!");
+                await VS.StatusBar.ShowMessageAsync($"{ItemName}.webapi.js up to date!!!");
                 await VS.StatusBar.EndAnimationAsync(StatusAnimation.Deploy);
             });
         }
@@ -58,7 +58,7 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
         {
             ThreadHelper.JoinableTaskFactory.Run(async () =>
             {
-                var form = new FormItem(ItemType.JsForm);
+                var form = new FormItem(ItemType.JsWebApi);
                 var ok = form.ShowModal() ?? false;
                 if (ok)
                 {
@@ -66,9 +66,9 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
                     await VS.StatusBar.StartAnimationAsync(StatusAnimation.Deploy);
                     ItemName = form.ItemName;
                     EntityMetadata = XrmHelper.EntitiesMetadata.FirstOrDefault(x => x.SchemaName == ItemName);
-                    _Javascript_ = await XrmHelper.GetDefaultFileWithFormAsync(form.ServiceClient, EntityMetadata, replacementsDictionary["$rootnamespace$"]);
+                    _Javascript_ = await XrmHelper.GetDefaultFileWithWebApiAsync(ItemName);
                     replacementsDictionary["$Javascript$"] = _Javascript_;
-                    (_JavascriptForm_, _Javascriptdts_) = await DynamicsCrm.DevKit.Shared.Logic.JsForm.GetJsFormCodeAsync(form.ServiceClient, EntityMetadata, replacementsDictionary["$rootnamespace$"], IsJsWebApiExist);
+                    (_JavascriptWebApi_, _Javascriptdts_) = await DynamicsCrm.DevKit.Shared.Logic.JsWebApi.GetJsWebApiCodeAsync(form.ServiceClient, EntityMetadata, replacementsDictionary["$rootnamespace$"], IsJsFormExist);
                     await Replacement.SetAsync(replacementsDictionary, form);
                     await VS.StatusBar.EndAnimationAsync(StatusAnimation.Deploy);
                 }
@@ -77,7 +77,6 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
                     VsixHelper.ThrowWizardCancelledException();
                 }
             });
-
         }
 
         public bool ShouldAddProjectItem(string filePath)
@@ -93,13 +92,13 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
                         FilePath = $"{ItemName}.d.ts";
                         break;
                     default:
-                        FilePath = $"{ItemName}.form.js";
+                        FilePath = $"{ItemName}.webapi.js";
                         break;
                 }
                 var selectedItem = await VsixHelper.SelectedItem.GetSolutionItemAsync();
                 FullFilePath = System.IO.Path.Combine(selectedItem.FullPath, FilePath);
                 IsFilePathExist = System.IO.File.Exists(FullFilePath);
-                IsJsWebApiExist = System.IO.File.Exists(System.IO.Path.Combine(selectedItem.FullPath, ".webapi.js"));
+                IsJsFormExist = System.IO.File.Exists(System.IO.Path.Combine(selectedItem.FullPath, ".form.js"));
                 return !IsFilePathExist;
             });
         }

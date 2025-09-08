@@ -705,6 +705,16 @@ namespace DynamicsCrm.DevKit.Shared
             return code;
         }
 
+        public static async Task<string> GetDefaultFileWithWebApiAsync(string schemaName)
+        {
+            await Helper.DelayAsync(1);
+            const string NEW_LINE = "\r\n";
+            var code = string.Empty;
+            code += $"//@ts-check{NEW_LINE}";
+            code += $"///<reference path=\"{schemaName}.d.ts\" />{NEW_LINE}";
+            return code;
+        }
+
         public static async Task<ServiceClient> IsConnectedAsync(string connectionString)
         {
             try

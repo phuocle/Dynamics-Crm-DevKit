@@ -14,7 +14,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
         private static EntityMetadata EntityMetadata { get; set; }
         private static string RootNamespace { get; set; }
 
-        public static async Task<(string code, string dts)> GetCodeAsync(ServiceClient serviceClient, EntityMetadata entityMetadata, string rootNamespace, bool isJsFormExist)
+        public static async Task<(string code, string dts)> GetJsWebApiCodeAsync(ServiceClient serviceClient, EntityMetadata entityMetadata, string rootNamespace, bool isJsFormExist)
         {
             ServiceClient = serviceClient;
             EntityMetadata = entityMetadata;

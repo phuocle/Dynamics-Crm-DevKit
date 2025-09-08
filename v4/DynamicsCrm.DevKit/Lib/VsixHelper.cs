@@ -183,7 +183,7 @@ namespace DynamicsCrm.DevKit
 
         internal static bool IsValidProjectName(string projectName)
         {
-            var list = new List<string>() { "/", "?", ":", "&", @"\", "*", "\"", "<", ">", "|", "#", "%", "'" };
+            var list = new List<string>() { "/", "?", ":", "&", @"\\", "*", "\"", "<", ">", "|", "#", "%", "'" };
             return list.Count(x => projectName.Contains(x)) == 0;
         }
         public static bool HasImplementedPlugin(CodeClass @class)
@@ -366,23 +366,30 @@ namespace DynamicsCrm.DevKit
             await VS.Commands.ExecuteAsync(command);
         }
 
-        internal static ProjectItem GetProjectItem(EnvDTE.DTE DTE, string projectItemName)
+        internal static async Task<ProjectItem> GetProjectItemAsync(string projectItemName)
         {
-            ThreadHelper.ThrowIfNotOnUIThread();
-            var selectItem = DTE.SelectedItems.Item(1);
-            ProjectItems projectItems = null;
-            if (selectItem.Project != null)
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+            if (string.IsNullOrWhiteSpace(projectItemName)) return null;
+            var dte = await VS.GetServiceAsync<EnvDTE.DTE, EnvDTE.DTE>();
+            if (dte == null || dte.SelectedItems == null || dte.SelectedItems.Count == 0) return null;
+            try { EnvDTE.SelectedItem dteSelectedItem = dte.SelectedItems.Item(1); } catch { return null; }
+            ProjectItems rootItems = null;
+            if (((EnvDTE.SelectedItem)null).Project != null) rootItems = ((EnvDTE.SelectedItem)null).Project.ProjectItems;
+            else if (((EnvDTE.SelectedItem)null).ProjectItem != null) rootItems = ((EnvDTE.SelectedItem)null).ProjectItem.ProjectItems;
+            if (rootItems == null) return null;
+            var queue = new Queue<ProjectItems>();
+            queue.Enqueue(rootItems);
+            while (queue.Count > 0)
             {
-                projectItems = selectItem.Project.ProjectItems;
-            }
-            else if (selectItem.ProjectItem != null)
-            {
-                projectItems = selectItem.ProjectItem.ProjectItems;
-            }
-            foreach (ProjectItem projectItem in projectItems)
-            {
-                if (projectItem.Name == projectItemName)
-                    return projectItem;
+                var items = queue.Dequeue();
+                foreach (ProjectItem item in items)
+                {
+                    if (item == null) continue;
+                    if (string.Equals(item.Name, projectItemName, StringComparison.OrdinalIgnoreCase))
+                        return item;
+                    if (item.ProjectItems != null && item.ProjectItems.Count > 0)
+                        queue.Enqueue(item.ProjectItems);
+                }
             }
             return null;
         }

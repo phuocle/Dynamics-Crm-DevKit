@@ -35,6 +35,7 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
             ThreadHelper.JoinableTaskFactory.Run(async () =>
             {
                 await Microsoft.VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                await VS.StatusBar.StartAnimationAsync(StatusAnimation.Deploy);
                 if (IsFilePathExist)
                 {
                     var oldCode = await FileHelper.ReadAllTextFromLine6Async(FullFilePath);
@@ -43,18 +44,18 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
                     {
                         await FileHelper.ForceWriteAllTextAsync(FullFilePath, _GeneratedClass_);
                     }
-                    await VS.StatusBar.ShowMessageAsync($"{ItemName}.generated.cs up to date!!!");
                 }
                 else
                 {
-                    var LateBoundProjectItem = VsixHelper.GetProjectItem(this.DTE, $"{ItemName}.cs");
-                    var LateBoundGeneratedProjectItem = VsixHelper.GetProjectItem(this.DTE, $"{ItemName}.generated.cs");
+                    var LateBoundProjectItem = await VsixHelper.GetProjectItemAsync($"{ItemName}.cs");
+                    var LateBoundGeneratedProjectItem = await VsixHelper.GetProjectItemAsync($"{ItemName}.generated.cs");
                     var LateBoundGeneratedProjectItemFullPath = LateBoundGeneratedProjectItem.FileNames[0];
                     LateBoundGeneratedProjectItem.Remove();
                     LateBoundProjectItem.ProjectItems.AddFromFile(LateBoundGeneratedProjectItemFullPath);
-                    await VS.StatusBar.ShowMessageAsync($"{ItemName}.cs, {ItemName}.generated.cs created!!!");
-                    await VsixHelper.ExecuteCommandAsync("File.SaveAll");
                 }
+                await VS.StatusBar.ShowMessageAsync($"{ItemName}.generated.cs up to date!!!");
+                await VsixHelper.ExecuteCommandAsync("File.SaveAll");
+                await VS.StatusBar.EndAnimationAsync(StatusAnimation.Deploy);
             });
         }
 

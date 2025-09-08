@@ -88,6 +88,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>source.extension.vsixmanifest</DependentUpon>
     </Compile>
+    <Compile Include="Wizard\ItemTemplates\JsWebApi.cs" />
     <Compile Include="Wizard\ItemTemplates\JsForm.cs" />
     <Compile Include="Wizard\ItemTemplates\LateBound.cs" />
     <Compile Include="Wizard\ItemTemplates\ItemTemplateBase.cs" />
@@ -213,6 +214,13 @@
     <ProjectReference Include="..\ItemTemplates\CSharp\02.JsFormItemTemplate\02.JsFormItemTemplate.csproj">
       <Project>{F3432EFE-5FE3-46F4-9335-703E658C022E}</Project>
       <Name>02.JsFormItemTemplate</Name>
+      <VSIXSubPath>ItemTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\ItemTemplates\CSharp\03.JsWebApiItemTemplate\03.JsWebApiItemTemplate.csproj">
+      <Project>{CCBD1381-E6A6-4A57-9853-E93A27A33F11}</Project>
+      <Name>03.JsWebApiItemTemplate</Name>
       <VSIXSubPath>ItemTemplates</VSIXSubPath>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
