@@ -8,6 +8,7 @@ using Microsoft.VisualStudio.TemplateWizard;
 using Microsoft.Xrm.Sdk.Metadata;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
 {
@@ -17,7 +18,7 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
         private string _JavascriptForm_ { get; set; } = string.Empty;
         private string _Javascriptdts_ { get; set; } = string.Empty;
         private EntityMetadata EntityMetadata { get; set; }
-        private bool IsJsWebApiExist { get; set; } = false;
+
 
         public void BeforeOpeningFile(ProjectItem projectItem)
         {
@@ -29,6 +30,12 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
 
         public void ProjectItemFinishedGenerating(ProjectItem projectItem)
         {
+        }
+
+        private async Task<bool> IsJsWebApiExistAsync()
+        {
+            var selectedItem = await VsixHelper.SelectedItem.GetSolutionItemAsync();
+            return System.IO.File.Exists(System.IO.Path.Combine(selectedItem.FullPath, ".webapi.js"));
         }
 
         public void RunFinished()
@@ -68,7 +75,7 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
                     EntityMetadata = XrmHelper.EntitiesMetadata.FirstOrDefault(x => x.SchemaName == ItemName);
                     _Javascript_ = await XrmHelper.GetDefaultFileWithFormAsync(form.ServiceClient, EntityMetadata, replacementsDictionary["$rootnamespace$"]);
                     replacementsDictionary["$Javascript$"] = _Javascript_;
-                    (_JavascriptForm_, _Javascriptdts_) = await DynamicsCrm.DevKit.Shared.Logic.JsForm.GetJsFormCodeAsync(form.ServiceClient, EntityMetadata, replacementsDictionary["$rootnamespace$"], IsJsWebApiExist);
+                    (_JavascriptForm_, _Javascriptdts_) = await DynamicsCrm.DevKit.Shared.Logic.JsForm.GetJsFormCodeAsync(form.ServiceClient, EntityMetadata, replacementsDictionary["$rootnamespace$"], await IsJsWebApiExistAsync());
                     await Replacement.SetAsync(replacementsDictionary, form);
                     await VS.StatusBar.EndAnimationAsync(StatusAnimation.Deploy);
                 }
@@ -99,7 +106,6 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
                 var selectedItem = await VsixHelper.SelectedItem.GetSolutionItemAsync();
                 FullFilePath = System.IO.Path.Combine(selectedItem.FullPath, FilePath);
                 IsFilePathExist = System.IO.File.Exists(FullFilePath);
-                IsJsWebApiExist = System.IO.File.Exists(System.IO.Path.Combine(selectedItem.FullPath, ".webapi.js"));
                 return !IsFilePathExist;
             });
         }

@@ -54,6 +54,10 @@
     <None Include="deploy.debug.bat" />
     <None Include="packages.config" />
     <None Include="package.json" />
+    <Content Include="entities\Account.form.js">
+      <DependentUpon>Account.js</DependentUpon>
+    </Content>
+    <Content Include="entities\Account.js" />
     <Content Include="lib\devkit.js" />
     <Content Include="entities\devkit.d.ts" />
     <None Include="entities\generator.form.bat" />
@@ -69,6 +73,11 @@
     <Folder Include="images\" />
     <Folder Include="js\" />
     <Folder Include="resources\" />
+  </ItemGroup>
+  <ItemGroup>
+    <TypeScriptCompile Include="entities\Account.d.ts">
+      <DependentUpon>Account.js</DependentUpon>
+    </TypeScriptCompile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v15.0\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
 </Project>

@@ -372,10 +372,10 @@ namespace DynamicsCrm.DevKit
             if (string.IsNullOrWhiteSpace(projectItemName)) return null;
             var dte = await VS.GetServiceAsync<EnvDTE.DTE, EnvDTE.DTE>();
             if (dte == null || dte.SelectedItems == null || dte.SelectedItems.Count == 0) return null;
-            try { EnvDTE.SelectedItem dteSelectedItem = dte.SelectedItems.Item(1); } catch { return null; }
+            EnvDTE.SelectedItem dteSelectedItem = dte.SelectedItems.Item(1);
             ProjectItems rootItems = null;
-            if (((EnvDTE.SelectedItem)null).Project != null) rootItems = ((EnvDTE.SelectedItem)null).Project.ProjectItems;
-            else if (((EnvDTE.SelectedItem)null).ProjectItem != null) rootItems = ((EnvDTE.SelectedItem)null).ProjectItem.ProjectItems;
+            if (dteSelectedItem.Project != null) rootItems = dteSelectedItem.Project.ProjectItems;
+            else if (dteSelectedItem.ProjectItem != null) rootItems = dteSelectedItem.ProjectItem.ProjectItems;
             if (rootItems == null) return null;
             var queue = new Queue<ProjectItems>();
             queue.Enqueue(rootItems);
