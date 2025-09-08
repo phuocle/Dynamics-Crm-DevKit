@@ -24,12 +24,10 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
 
         public void ProjectFinishedGenerating(EnvDTE.Project project)
         {
-            Project = project;
         }
 
         public void ProjectItemFinishedGenerating(ProjectItem projectItem)
         {
-            ProjectItem = projectItem;
         }
 
         public void RunFinished()
@@ -37,24 +35,25 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
             ThreadHelper.JoinableTaskFactory.Run(async () =>
             {
                 await Microsoft.VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-                if (FilePath == $"{ItemName}.generated.cs" && IsFilePathExist)
+                if (IsFilePathExist)
                 {
                     var oldCode = await FileHelper.ReadAllTextFromLine6Async(FullFilePath);
                     var newCode = await Helper.ReadContentFromLine6Async(_GeneratedClass_);
                     if (!Helper.IsTheSame(oldCode, newCode))
                     {
                         await FileHelper.ForceWriteAllTextAsync(FullFilePath, _GeneratedClass_);
-                        await VS.StatusBar.ShowMessageAsync($"Late bound: {ItemName}.generated.cs up to date!!!");
                     }
-                    else
-                    {
-                        await VS.StatusBar.ShowMessageAsync($"Late bound: {ItemName}.generated.cs not change!!!");
-                    }
+                    await VS.StatusBar.ShowMessageAsync($"{ItemName}.generated.cs up to date!!!");
                 }
-                else if (FilePath == $"{ItemName}.generated.cs" && !IsFilePathExist)
+                else
                 {
-                    ProjectItem.Properties.Item("DependentUpon").Value = $"{ItemName}.cs";
-                    await VS.StatusBar.ShowMessageAsync($"Late bound: {ItemName}.generated.cs created!!!");
+                    var LateBoundProjectItem = VsixHelper.GetProjectItem(this.DTE, $"{ItemName}.cs");
+                    var LateBoundGeneratedProjectItem = VsixHelper.GetProjectItem(this.DTE, $"{ItemName}.generated.cs");
+                    var LateBoundGeneratedProjectItemFullPath = LateBoundGeneratedProjectItem.FileNames[0];
+                    LateBoundGeneratedProjectItem.Remove();
+                    LateBoundProjectItem.ProjectItems.AddFromFile(LateBoundGeneratedProjectItemFullPath);
+                    await VS.StatusBar.ShowMessageAsync($"{ItemName}.cs, {ItemName}.generated.cs created!!!");
+                    await VsixHelper.ExecuteCommandAsync("File.SaveAll");
                 }
             });
         }

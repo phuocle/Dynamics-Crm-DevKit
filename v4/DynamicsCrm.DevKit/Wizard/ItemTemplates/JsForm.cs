@@ -8,7 +8,6 @@ using Microsoft.VisualStudio.TemplateWizard;
 using Microsoft.Xrm.Sdk.Metadata;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
 {
@@ -19,20 +18,17 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
         private string _Javascriptdts_ { get; set; } = string.Empty;
         private EntityMetadata EntityMetadata { get; set; }
         private bool IsJsWebApiExist { get; set; } = false;
-        //private ProjectItem ProjectItemForm { get; set; }
-        //private ProjectItem ProjectItemdts { get; set; }
+
         public void BeforeOpeningFile(ProjectItem projectItem)
         {
         }
 
         public void ProjectFinishedGenerating(EnvDTE.Project project)
         {
-            Project = project;
         }
 
         public void ProjectItemFinishedGenerating(ProjectItem projectItem)
         {
-            ProjectItem = projectItem;
         }
 
         public void RunFinished()
@@ -40,20 +36,23 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
             ThreadHelper.JoinableTaskFactory.Run(async () =>
             {
                 await Microsoft.VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-                if (!IsFilePathExist)
+                var JavascriptFormProjectItem = VsixHelper.GetProjectItem(this.DTE, $"{ItemName}.form.js");
+                var JavascriptFormProjectItemFullPath = JavascriptFormProjectItem.FileNames[0];
+                var JavascriptdtsProjectItem = VsixHelper.GetProjectItem(this.DTE, $"{ItemName}.d.ts");
+                var JavascriptdtsProjectItemFullPath = JavascriptdtsProjectItem.FileNames[0];
+                if (IsFilePathExist)
                 {
-                    var JavascriptFormProjectItem = VsixHelper.GetProjectItem(this.DTE, $"{ItemName}.form.js");
-                    var JavascriptFormProjectItemFullPath = JavascriptFormProjectItem.FileNames[0];
-                    JavascriptFormProjectItem.Remove();
-
-                    var JavascriptdtsProjectItem = VsixHelper.GetProjectItem(this.DTE, $"{ItemName}.d.ts");
-                    var JavascriptdtsProjectItemFullPath = JavascriptdtsProjectItem.FileNames[0];
-                    JavascriptdtsProjectItem.Remove();
-
+                    await FileHelper.ForceWriteAllTextAsync(JavascriptFormProjectItemFullPath, _JavascriptForm_);
+                    await FileHelper.ForceWriteAllTextAsync(JavascriptdtsProjectItemFullPath, _Javascriptdts_);
+                    await VS.StatusBar.ShowMessageAsync($"{ItemName}.form.js, {ItemName}.d.ts up to date!!!");
+                }
+                else
+                {
                     var JavascriptProjectItem = VsixHelper.GetProjectItem(this.DTE, $"{ItemName}.js");
+                    JavascriptFormProjectItem.Remove();
                     JavascriptProjectItem.ProjectItems.AddFromFile(JavascriptFormProjectItemFullPath);
-                    JavascriptdtsProjectItem.ProjectItems.AddFromFile(JavascriptdtsProjectItemFullPath);
-
+                    JavascriptdtsProjectItem.Remove();
+                    JavascriptProjectItem.ProjectItems.AddFromFile(JavascriptdtsProjectItemFullPath);
                     await VS.StatusBar.ShowMessageAsync($"{ItemName}.js, {ItemName}.form.js, {ItemName}.d.ts created!!!");
                     await VsixHelper.ExecuteCommandAsync("File.SaveAll");
                 }
