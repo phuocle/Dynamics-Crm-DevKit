@@ -1,13 +1,11 @@
-﻿using DynamicsCrm.DevKit.Lib;
+﻿using Community.VisualStudio.Toolkit;
+using DynamicsCrm.DevKit.Lib;
 using DynamicsCrm.DevKit.Lib.Forms;
 using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Logic;
-using DynamicsCrm.DevKit.Shared.Models;
 using EnvDTE;
-using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.TemplateWizard;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -21,7 +19,7 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
         {
         }
 
-        public void ProjectFinishedGenerating(Project project)
+        public void ProjectFinishedGenerating(EnvDTE.Project project)
         {
             Project = project;
         }
@@ -61,6 +59,7 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
                 if (ok)
                 {
                     await Microsoft.VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                    await VS.StatusBar.StartAnimationAsync(StatusAnimation.Deploy);
                     ItemName = form.ItemName;
                     var entityMetadata = XrmHelper.EntitiesMetadata.FirstOrDefault(x => x.SchemaName == ItemName);
                     _Class_ = Helper.GetDefaultFileWithCs(entityMetadata, replacementsDictionary["$rootnamespace$"]);
@@ -68,6 +67,7 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
                     replacementsDictionary["$Class$"] = _Class_;
                     replacementsDictionary["$GeneratedClass$"] = _GeneratedClass_;
                     await Replacement.SetAsync(replacementsDictionary, form);
+                    await VS.StatusBar.EndAnimationAsync(StatusAnimation.Deploy);
                 }
                 else
                 {
