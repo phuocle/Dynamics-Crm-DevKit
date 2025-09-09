@@ -81,7 +81,8 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
                     ItemName = form.ItemName;
                     EntityMetadata = XrmHelper.EntitiesMetadata.FirstOrDefault(x => x.SchemaName == ItemName);
                     _Class_ = Helper.GetDefaultFileWithCs(EntityMetadata, replacementsDictionary["$rootnamespace$"]);
-                    _GeneratedClass_ = CSharpLateBound.GetCsCode(form.ServiceClient, EntityMetadata, replacementsDictionary["$rootnamespace$"], await VsixHelper.GetSharedProjectAsync());
+                    var sharedNamespace = await VsixHelper.IsAddToSharedProjectAsync() ? null : await VsixHelper.GetSharedProjectAsync();
+                    _GeneratedClass_ = CSharpLateBound.GetCsCode(form.ServiceClient, EntityMetadata, replacementsDictionary["$rootnamespace$"], sharedNamespace);
                     replacementsDictionary["$Class$"] = _Class_;
                     replacementsDictionary["$GeneratedClass$"] = _GeneratedClass_;
                     await Replacement.SetAsync(replacementsDictionary, form);

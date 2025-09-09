@@ -1,4 +1,6 @@
 ﻿using EnvDTE;
+using Microsoft.VisualStudio.Shell;
+using Community.VisualStudio.Toolkit;
 
 namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
 {
@@ -8,5 +10,6 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
         protected string FilePath { get; set; }
         protected bool IsFilePathExist { get; set; } = false;
         protected string FullFilePath {get;set; }
+
     }
 }

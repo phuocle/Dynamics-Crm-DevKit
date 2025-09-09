@@ -58,6 +58,10 @@
     <None Include="Dev.DevKit.Server.snk" />
     <None Include="deploy.debug.bat" />
     <None Include="deploy.debug.only.bat" />
+    <Compile Include="Entities\SystemUser.cs" />
+    <Compile Include="Entities\SystemUser.generated.cs">
+      <DependentUpon>SystemUser.cs</DependentUpon>
+    </Compile>
     <Compile Include="Entities\Team.cs" />
     <Compile Include="Entities\Team.generated.cs">
       <DependentUpon>Team.cs</DependentUpon>

@@ -376,5 +376,23 @@ namespace DynamicsCrm.DevKit
             }
             return null;
         }
+
+        public static async Task<bool> IsAddToSharedProjectAsync()
+        {            
+            await Microsoft.VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+            var sharedProjectName = await DynamicsCrm.DevKit.VsixHelper.GetSharedProjectAsync();
+            var activeProject = await VS.Solutions.GetActiveProjectAsync();
+            if (activeProject != null && activeProject.Name == sharedProjectName) return true;
+            var dte = await VS.GetServiceAsync<DTE, DTE>();
+            if (dte?.SelectedItems == null || dte.SelectedItems.Count == 0) return false;
+            EnvDTE.SelectedItem selectedItem = dte.SelectedItems.Item(1);
+            string projectName = null;
+            if (selectedItem.Project != null)
+                projectName = selectedItem.Project.Name;
+            else if (selectedItem.ProjectItem?.ContainingProject != null)
+                projectName = selectedItem.ProjectItem.ContainingProject.Name;
+            if (string.IsNullOrEmpty(projectName)) return false;
+            return projectName == sharedProjectName;
+        }
     }
 }
