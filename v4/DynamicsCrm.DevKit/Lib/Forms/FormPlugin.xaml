@@ -6,7 +6,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:wpfcontrols="clr-namespace:DynamicsCrm.DevKit.Lib.WpfControls"
         mc:Ignorable="d"
-        WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Width="500" Height="325"
+        WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Width="500" Height="329"
     >
     <forms:BaseDialogWindow.Resources>
         <ResourceDictionary>
@@ -20,7 +20,7 @@
             <wpfcontrols:ExternalBrowserHyperlink x:Name="HELP" NavigateUri="https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Connection" Foreground="White" >WIKI: Connection</wpfcontrols:ExternalBrowserHyperlink>
         </TextBlock>
         <wpfcontrols:UserControlConnection x:Name="CONNECTION" Connected="Connection_Connected" />
-        <StackPanel IsEnabled="{Binding IsConnected, ElementName=CONNECTION}" Height="247" x:Name="StackPanelMain">
+        <StackPanel IsEnabled="{Binding IsConnected, ElementName=CONNECTION}" x:Name="StackPanelMain">
             <Border Grid.Row="1" Grid.ColumnSpan="2" BorderBrush="Gray" BorderThickness="1" Padding="10,15,10,15" Margin="5,10,5,10">
                 <Grid>
                     <Grid.ColumnDefinitions>

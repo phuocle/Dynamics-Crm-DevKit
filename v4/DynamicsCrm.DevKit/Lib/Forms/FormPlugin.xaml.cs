@@ -97,7 +97,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Plugin-Item-Template");
                     HELP.Inlines.Clear();
                     HELP.Inlines.Add("Plugin Item Template");
-                    Height = 354;
+                    Height = 358;
                 }
                 void CustomActionItem()
                 {
@@ -327,9 +327,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 ItemType == ItemType.CustomApi
                 )
             {
-                StackPanelMain.IsEnabled = false;
-                progressBar.Visibility = System.Windows.Visibility.Visible;
-                CONNECTION.SetIsEnabledButtonConnection(false);
+                LockUi(true);
                 _ = Task.Factory.StartNew(() =>
                 {
                     ThreadHelper.JoinableTaskFactory.Run(async () =>
@@ -340,27 +338,50 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                         ComboBoxEntity.DisplayMemberPath = Const.SchemaName;
                         ComboBoxEntity.ItemsSource = items;
                         buttonOK.IsEnabled = items.Count > 0;
-                        StackPanelMain.IsEnabled = true;
-                        progressBar.Visibility = System.Windows.Visibility.Hidden;
-                        CONNECTION.SetIsEnabledButtonConnection(true);
+                        LockUi(false);
                     });
                 }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default);
             }
 
         }
 
+        private void LockUi(bool value)
+        {
+            if (value)
+            {
+                StackPanelMain.IsEnabled = false;
+                progressBar.Visibility = System.Windows.Visibility.Visible;
+                CONNECTION.SetIsEnabledButtonConnection(false);
+            }
+            else
+            {
+                StackPanelMain.IsEnabled = true;
+                progressBar.Visibility = System.Windows.Visibility.Hidden;
+                CONNECTION.SetIsEnabledButtonConnection(true);
+            }
+        }
+
         private void ComboBoxEntity_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             if (ItemType == ItemType.Plugin)
             {
-                //var selectedEntity = (XrmEntity)ComboBoxEntity.SelectedItem;
-                //var items = XrmHelper.GetSdkMessages(CrmServiceClient, selectedEntity.LogicalName);
-                //ComboBoxMessage.DisplayMemberPath = "Name";
-                //ComboBoxMessage.ItemsSource = items;
-                //ComboBoxMessage.SelectedItem = null;
-                //ComboBoxStage.SelectedItem = null;
-                //ComboBoxExecution.SelectedItem = null;
-                //TextboxClass.Text = null;
+                LockUi(true);
+                _ = Task.Factory.StartNew(() =>
+                {
+                    ThreadHelper.JoinableTaskFactory.Run(async () =>
+                    {
+                        await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                        var selectedEntity = (XrmEntity)ComboBoxEntity.SelectedItem;
+                        var items = await XrmHelper.GetSdkMessagesAsync(ServiceClient, selectedEntity.LogicalName);
+                        ComboBoxMessage.DisplayMemberPath = "Name";
+                        ComboBoxMessage.ItemsSource = items;
+                        ComboBoxMessage.SelectedItem = null;
+                        ComboBoxStage.SelectedItem = null;
+                        ComboBoxExecution.SelectedItem = null;
+                        TextboxClass.Text = null;
+                        LockUi(false);
+                    });
+                }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default);
             }
             else if (ItemType == ItemType.CustomAction)
             {

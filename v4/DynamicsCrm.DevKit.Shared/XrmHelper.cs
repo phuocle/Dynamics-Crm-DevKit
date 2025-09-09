@@ -868,5 +868,96 @@ namespace DynamicsCrm.DevKit.Shared
                 .ToList();
             return list;
         }
+        public static async Task<List<NameValue>> GetSdkMessagesAsync(ServiceClient service, string logicalName)
+        {
+            if (logicalName == "none") return await GetSdkMessagesNoneAsync(service);
+            var request = new RetrieveEntityRequest
+            {
+                EntityFilters = EntityFilters.Entity,
+                LogicalName = logicalName
+            };
+            var response = (RetrieveEntityResponse)await service.ExecuteAsync(request);
+            var fetchData = new
+            {
+                categoryname = "CustomOperation",
+                categoryname2 = "CustomApi",
+                isprivate = "0",
+                primaryobjecttypecode = response.EntityMetadata.ObjectTypeCode,
+                iscustomprocessingstepallowed = "1"
+            };
+            var fetchXml = $@"<?xml version=""1.0"" encoding=""utf-16""?>
+<fetch>
+  <entity name=""sdkmessage"">
+    <all-attributes />
+    <attribute name=""name"" />
+    <filter>
+      <condition attribute=""categoryname"" operator=""ne"" value=""{fetchData.categoryname/*CustomOperation*/}"" />
+      <condition attribute=""categoryname"" operator=""ne"" value=""{fetchData.categoryname2/*CustomApi*/}"" />
+      <condition attribute=""isprivate"" operator=""eq"" value=""{fetchData.isprivate/*0*/}"" />
+    </filter>
+    <order attribute=""name"" />
+    <link-entity name=""sdkmessagefilter"" from=""sdkmessageid"" to=""sdkmessageid"">
+      <filter type=""and"">
+        <condition attribute=""primaryobjecttypecode"" operator=""eq"" value=""{fetchData.primaryobjecttypecode/*1*/}"" />
+        <condition attribute=""iscustomprocessingstepallowed"" operator=""eq"" value=""{fetchData.iscustomprocessingstepallowed/*1*/}"" />
+      </filter>
+    </link-entity>
+  </entity>
+</fetch>";
+
+            var rows = await service.RetrieveMultipleAsync(new FetchExpression(fetchXml));
+            var messages = (from entity in rows.Entities
+                            select entity["name"].ToString()
+                ).ToList();
+            messages.Sort();
+            var list = new List<NameValue>();
+            foreach (var message in messages)
+            {
+                if (!list.Any(x => x.Name == message))
+                    list.Add(new NameValue { Name = message });
+            }
+            return [.. list.OrderBy(x => x.Name)];
+        }
+        public static async Task<List<NameValue>> GetSdkMessagesNoneAsync(ServiceClient service)
+        {
+            var fetchData = new
+            {
+                categoryname = "None",
+                isprivate = "0",
+                availability = "0",
+                availability2 = "2",
+                iscustomprocessingstepallowed = "1",
+            };
+            var fetchXml = $@"<?xml version=""1.0"" encoding=""utf-16""?>
+<fetch>
+  <entity name=""sdkmessage"">
+    <all-attributes/>
+    <filter>
+      <condition attribute=""categoryname"" operator=""eq"" value=""{fetchData.categoryname/*None*/}"" />
+      <condition attribute=""isprivate"" operator=""eq"" value=""{fetchData.isprivate/*0*/}"" />
+      <condition attribute=""availability"" operator=""in"">
+        <value>{fetchData.availability/*0*/}</value>
+        <value>{fetchData.availability2/*2*/}</value>
+      </condition>
+    </filter>
+    <link-entity name=""sdkmessagefilter"" from=""sdkmessageid"" to=""sdkmessageid"" link-type=""inner"" alias=""aa"">
+      <attribute name=""name"" />
+      <filter>
+        <condition attribute=""iscustomprocessingstepallowed"" operator=""eq"" value=""{fetchData.iscustomprocessingstepallowed/*1*/}"" />
+      </filter>
+    </link-entity>
+  </entity>
+</fetch>";
+            var rows = await service.RetrieveMultipleAsync(new FetchExpression(fetchXml));
+            var messages = (from entity in rows.Entities
+                            select entity["name"].ToString()
+                ).ToList();
+            messages.Sort();
+            var list = new List<NameValue>();
+            foreach (var message in messages)
+                if (!list.Any(x => x.Name == message))
+                    list.Add(new NameValue { Name = message });
+            return [.. list.OrderBy(x => x.Name)];
+        }
     }
 }
