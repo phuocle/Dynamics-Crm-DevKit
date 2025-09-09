@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <VSTemplate Version="3.0.0" Type="Item" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
 	<TemplateData>
-		<Name>02. C# Plugin Class</Name>
+		<Name>04. C# Plugin Class</Name>
 		<Description>Dataverse plug-in class implementing IPlugin: includes Execute skeleton with tracing, context extraction, and secure/unsecure config placeholders.</Description>
 		<DefaultName>Class.cs</DefaultName>
 		<TemplateID>AAAAAAAA-AAAA-AAAA-BBBB-000000000002</TemplateID>
@@ -11,7 +11,7 @@
 		<AppliesTo>CSharp</AppliesTo>
 		<RequiredFrameworkVersion>4.0</RequiredFrameworkVersion>
 		<NumberOfParentCategoriesToRollUp>0</NumberOfParentCategoriesToRollUp>
-		<SortOrder>120</SortOrder>
+		<SortOrder>140</SortOrder>
 	</TemplateData>
 	<TemplateContent>
 		<ProjectItem ReplaceParameters="true" TargetFileName="$PluginClass$$PluginOrder2$.cs">Class.cs</ProjectItem>

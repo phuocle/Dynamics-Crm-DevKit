@@ -11,7 +11,7 @@
 		<AppliesTo>CSharp</AppliesTo>
 		<RequiredFrameworkVersion>4.0</RequiredFrameworkVersion>
 		<NumberOfParentCategoriesToRollUp>0</NumberOfParentCategoriesToRollUp>
-		<SortOrder>170</SortOrder>
+		<SortOrder>120</SortOrder>
 	</TemplateData>
 	<TemplateContent>
 		<ProjectItem ReplaceParameters="true" OpenInEditor="false" TargetFileName="$SchemaName$.js">Javascript.js</ProjectItem>

@@ -79,6 +79,8 @@
   <ItemGroup>
     <Analyzer Include="..\packages\DynamicsCrm.DevKit.Analyzers.3.55.55.55\analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Account\" />
+  </ItemGroup>
 </Project>
 <!-- v.x.xx.xx.xx - Build: xxxx.yy.zz HH.mm.ss -->

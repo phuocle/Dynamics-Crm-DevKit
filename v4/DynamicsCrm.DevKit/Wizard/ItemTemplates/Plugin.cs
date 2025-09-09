@@ -33,7 +33,7 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
         {
             ThreadHelper.JoinableTaskFactory.Run(async () =>
             {
-                var form = new FormItem(ItemType.Plugin);
+                var form = new FormPlugin(ItemType.Plugin, replacementsDictionary["$rootnamespace$"]);
                 var ok = form.ShowModal() ?? false;
                 if (ok)
                 {

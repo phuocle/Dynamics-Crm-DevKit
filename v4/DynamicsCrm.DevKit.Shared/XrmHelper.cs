@@ -771,6 +771,9 @@ namespace DynamicsCrm.DevKit.Shared
                 {
                     LogicalName = entity.LogicalName,
                     SchemaName = entity.SchemaName,
+                    HasImage = !string.IsNullOrEmpty(entity.PrimaryImageAttribute),
+                    EntityTypeCode = entity.ObjectTypeCode ?? -1,
+                    IsCustomEntity = entity.IsCustomEntity ?? false
                 });
             }
             entities = [.. entities.OrderBy(entity => entity.Name)];

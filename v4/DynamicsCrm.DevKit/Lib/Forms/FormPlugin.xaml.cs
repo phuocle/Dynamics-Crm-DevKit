@@ -13,13 +13,10 @@ using Microsoft.PowerPlatform.Dataverse.Client;
 
 namespace DynamicsCrm.DevKit.Lib.Forms
 {
-    /// <summary>
-    /// Interaction logic for FormConnection.xaml
-    /// </summary>
     public partial class FormPlugin : BaseDialogWindow
     {
 
-        public ServiceClient CrmServiceClient => CONNECTION.ServiceClient;
+        public ServiceClient ServiceClient => CONNECTION.ServiceClient;
 
 
         public CrmConnection CrmConnection => CONNECTION.CrmConnection;
@@ -60,7 +57,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             {
                 var selected = (XrmEntity)ComboBoxEntity.SelectedItem;
                 var message = ComboBoxMessage.Text;
-                var list = XrmHelper.GetPluginInputOutputParameters(CrmServiceClient, selected.LogicalName, message);
+                var list = XrmHelper.GetPluginInputOutputParameters(ServiceClient, selected.LogicalName, message);
                 if (list.Count == 0) return string.Empty;
                 var max = list.OrderByDescending(s => s.Name.Length).First().Name.Length + 4;
                 var code = string.Empty;
@@ -100,7 +97,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Plugin-Item-Template");
                     HELP.Inlines.Clear();
                     HELP.Inlines.Add("Plugin Item Template");
-                    Height = 344;
+                    Height = 354;
                 }
                 void CustomActionItem()
                 {
@@ -289,40 +286,67 @@ namespace DynamicsCrm.DevKit.Lib.Forms
 
         private void Connection_Connected(object sender, System.EventArgs e)
         {
+            //if (
+            //    ItemType == ItemType.Plugin ||
+            //    ItemType == ItemType.CustomAction ||
+            //    ItemType == ItemType.CustomApi
+            //    )
+            //{
+            //    progressBar.Visibility = System.Windows.Visibility.Visible;
+            //    _ = Task.Factory.StartNew(() =>
+            //    {
+            //        //ThreadHelper.JoinableTaskFactory.Run(async delegate
+            //        //{
+            //        //    var items = XrmHelper.GetAllEntities(CrmServiceClient);
+            //        //    await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+            //        //    ComboBoxEntity.DisplayMemberPath = "Name";
+            //        //    if (ItemType == ItemType.Plugin || ItemType == ItemType.CustomAction || ItemType == ItemType.CustomApi)
+            //        //    {
+            //        //        items.Insert(0, new XrmEntity { Name = "None", LogicalName = "none", EntityTypeCode = -1, HasImage = false, IsCustomEntity = false });
+            //        //    }
+            //        //    ComboBoxEntity.ItemsSource = items;
+            //        //    buttonOK.IsEnabled = items.Count > 0;
+            //        //    var activeProject = await VsixHelper.GetActiveProjectAsync();
+            //        //    var parts = activeProject.Name.Split('.');
+            //        //    foreach (var part in parts)
+            //        //    {
+            //        //        var found = items.FirstOrDefault(x => x.LogicalName.ToLower() == part.ToLower());
+            //        //        if (found != null)
+            //        //        {
+            //        //            ComboBoxEntity.SelectedItem = found;
+            //        //        }
+            //        //    }
+            //        //    progressBar.Visibility = System.Windows.Visibility.Hidden;
+            //        //});
+            //    }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default);
+            //}
+
             if (
                 ItemType == ItemType.Plugin ||
                 ItemType == ItemType.CustomAction ||
                 ItemType == ItemType.CustomApi
                 )
             {
+                StackPanelMain.IsEnabled = false;
                 progressBar.Visibility = System.Windows.Visibility.Visible;
+                CONNECTION.SetIsEnabledButtonConnection(false);
                 _ = Task.Factory.StartNew(() =>
                 {
-                    //ThreadHelper.JoinableTaskFactory.Run(async delegate
-                    //{
-                    //    var items = XrmHelper.GetAllEntities(CrmServiceClient);
-                    //    await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-                    //    ComboBoxEntity.DisplayMemberPath = "Name";
-                    //    if (ItemType == ItemType.Plugin || ItemType == ItemType.CustomAction || ItemType == ItemType.CustomApi)
-                    //    {
-                    //        items.Insert(0, new XrmEntity { Name = "None", LogicalName = "none", EntityTypeCode = -1, HasImage = false, IsCustomEntity = false });
-                    //    }
-                    //    ComboBoxEntity.ItemsSource = items;
-                    //    buttonOK.IsEnabled = items.Count > 0;
-                    //    var activeProject = await VsixHelper.GetActiveProjectAsync();
-                    //    var parts = activeProject.Name.Split('.');
-                    //    foreach (var part in parts)
-                    //    {
-                    //        var found = items.FirstOrDefault(x => x.LogicalName.ToLower() == part.ToLower());
-                    //        if (found != null)
-                    //        {
-                    //            ComboBoxEntity.SelectedItem = found;
-                    //        }
-                    //    }
-                    //    progressBar.Visibility = System.Windows.Visibility.Hidden;
-                    //});
+                    ThreadHelper.JoinableTaskFactory.Run(async () =>
+                    {
+                        await XrmHelper.ReadEntitiesMetadataAsync(ServiceClient);
+                        var items = XrmHelper.GetListXrmEntity(XrmHelper.EntitiesMetadata);
+                        await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                        ComboBoxEntity.DisplayMemberPath = Const.SchemaName;
+                        ComboBoxEntity.ItemsSource = items;
+                        buttonOK.IsEnabled = items.Count > 0;
+                        StackPanelMain.IsEnabled = true;
+                        progressBar.Visibility = System.Windows.Visibility.Hidden;
+                        CONNECTION.SetIsEnabledButtonConnection(true);
+                    });
                 }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default);
             }
+
         }
 
         private void ComboBoxEntity_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)

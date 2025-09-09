@@ -94,4 +94,19 @@
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\ReportProjectTemplate.rptproj" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\tt\CustomAction.tt" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\tt\CustomApi.tt" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\tt\DataProviderCreate.tt" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\tt\DataProviderDelete.tt" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\tt\DataProviderRetrieve.tt" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\tt\DataProviderRetrieveMultiple.tt" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\tt\DataProviderUpdate.tt" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\tt\TestCustomAction.tt" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\tt\TestCustomApi.tt" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\tt\TestPlugin.tt" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\tt\TestWorkflow.tt" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\tt\UiTest.tt" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\tt\Workflow.tt" />
+  </ItemGroup>
 </Project>
