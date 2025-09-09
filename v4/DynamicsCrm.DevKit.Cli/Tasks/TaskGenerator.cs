@@ -147,9 +147,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var dtsFile = Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}.d.ts");
                     var oldCode = await FileHelper.ReadAllTextAsync(fileEndsWith);
                     var oldDTS = await FileHelper.ReadAllTextAsync(dtsFile);
+                    var isJsExist = File.Exists(file);
                     var isJsFormExist = File.Exists(Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}.form.js"));
                     var isJsWebApiExist = File.Exists(Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}.webapi.js"));
-                    if (!isJsWebApiExist)
+                    if (isJsExist && !isJsWebApiExist)
                     {
                         CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, $"{schemaName}{endsWith}");
                         i++;
@@ -214,9 +215,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var dtsFile = Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}.d.ts");
                     var oldCode = await FileHelper.ReadAllTextAsync(fileEndsWith);
                     var oldDTS = await FileHelper.ReadAllTextAsync(dtsFile);
+                    var isJsExist = File.Exists(file);
                     var isJsFormExist = File.Exists(Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}.form.js"));
                     var isJsWebApiExist = File.Exists(Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}.webapi.js"));
-                    if (!isJsFormExist)
+                    if (isJsExist && !isJsFormExist)
                     {
                         CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, $"{schemaName}{endsWith}");
                         i++;

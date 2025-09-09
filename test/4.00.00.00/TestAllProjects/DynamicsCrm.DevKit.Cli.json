@@ -108,11 +108,25 @@
       "entities": "folder"
     },
     {
+      "profile": "JS-FORM2",
+      "type": "JsForm",
+      "rootnamespace": "Dev.DevKit",
+      "rootfolder": "",
+      "entities": "Account,Contact,Team"
+    },
+    {
       "profile": "JS-WEBAPI",
       "type": "JsWebApi",
       "rootnamespace": "Dev.DevKit",
       "rootfolder": "",
       "entities": "folder"
+    },
+    {
+      "profile": "JS-WEBAPI2",
+      "type": "JsWebApi",
+      "rootnamespace": "Dev.DevKit",
+      "rootfolder": "",
+      "entities": "Account,Contact,SystemUser"
     }
   ],
   "downloadwebresources": [
