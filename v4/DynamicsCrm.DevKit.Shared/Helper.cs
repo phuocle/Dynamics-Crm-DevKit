@@ -600,21 +600,29 @@ namespace DynamicsCrm.DevKit.Shared
 
         public static string BuildConnectionStringLog(string connectionString)
         {
-            if (!connectionString.ToLower().Contains("Password=".ToLower()) &&
-                !connectionString.ToLower().Contains("ClientSecret=".ToLower())
-                ) return connectionString;
-            var value = string.Empty;
-            var arr = connectionString.Split(";".ToCharArray());
-            foreach (var item in arr)
+            if (string.IsNullOrWhiteSpace(connectionString)) return string.Empty;
+            var crmConn = ParseConnectionString(connectionString);
+            if (crmConn == null) return string.Empty;
+            var full = BuildConnectionString(crmConn);
+            var parts = full.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+            var sb = new StringBuilder();
+            foreach (var part in parts)
             {
-                if (item.ToLower().Contains("Password=".ToLower()))
-                    value += "Password=********;";
-                else if (item.ToLower().Contains("ClientSecret=".ToLower()))
-                    value += "ClientSecret=********;";
+                var kv = part.Split(new[] { '=' }, 2, StringSplitOptions.None);
+                if (kv.Length != 2)
+                {
+                    sb.Append(part).Append(';');
+                    continue;
+                }
+                var key = kv[0];
+                if (key.Equals("Password", StringComparison.OrdinalIgnoreCase))
+                    sb.Append("Password=********;");
+                else if (key.Equals("ClientSecret", StringComparison.OrdinalIgnoreCase))
+                    sb.Append("ClientSecret=********;");
                 else
-                    value += item + ";";
+                    sb.Append(part).Append(';');
             }
-            return value.Replace(";;", ";");
+            return sb.ToString().Replace(";;", ";");
         }
 
         public static async Task<(ServiceClient serviceClient, string error)> IsConnectedAsync(string connectionString)
