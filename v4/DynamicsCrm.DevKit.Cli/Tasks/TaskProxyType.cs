@@ -1,5 +1,6 @@
 ﻿using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
+using Microsoft.Build.Framework.XamlTypes;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using System;
 using System.Diagnostics;
@@ -92,7 +93,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             else
             {
-                command.Append($"/connectionstring:\"{Helper.BuildConnectionString(Connection)}\" ");
+                var crmConn = Helper.ParseConnectionString(Connection);
+                var decryptedConnString = Helper.BuildConnectionString(crmConn);
+                command.Append($"/connectionstring:\"{decryptedConnString}\" ");
             }
             command.Append($"/nologo ");
             command.Append($"/SuppressGeneratedCodeAttribute ");

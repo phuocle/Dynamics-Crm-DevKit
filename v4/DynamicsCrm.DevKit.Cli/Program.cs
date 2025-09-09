@@ -133,7 +133,9 @@ namespace DynamicsCrm.DevKit.Cli
                 }
                 else
                 {
-                    var result = await Helper.IsConnectedAsync(Helper.BuildConnectionString(arguments.Connection));
+                    var crmConn = Helper.ParseConnectionString(arguments.Connection);
+                    var decryptedConnString = Helper.BuildConnectionString(crmConn);
+                    var result = await Helper.IsConnectedAsync(decryptedConnString);
                     ServiceClient = result.serviceClient;
                     if (ServiceClient == null)
                     {

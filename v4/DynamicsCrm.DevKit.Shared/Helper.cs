@@ -691,57 +691,64 @@ namespace DynamicsCrm.DevKit.Shared
                 default:
                     var connectionString = $"AuthType=OAuth;Url={url};Username={userName};Password={password};";
                     if (!connectionString.ToLower().Contains("appid="))
-                    {
                         connectionString += "AppId=51f81489-12ee-4a9e-aaae-a2591f45987d;";
-                    }
                     if (!connectionString.ToLower().Contains("redirecturi="))
-                    {
                         connectionString += "RedirectUri=app://58145B91-0C36-4500-8554-080854F2AC97;";
-                    }
                     if (!connectionString.ToLower().Contains("loginprompt="))
-                    {
                         connectionString += "LoginPrompt=Auto;";
-                    }
                     return connectionString;
             }
         }
 
-        public static string BuildConnectionString(string connectionString)
+        /// <summary>
+        /// Parse a raw connection string (with plain or encrypted Password/ClientSecret) into a CrmConnection.
+        /// Returned CrmConnection stores the secret encrypted so the ONLY place to build a runtime usable
+        /// connection string is BuildConnectionString(CrmConnection,...).
+        /// </summary>
+        public static CrmConnection ParseConnectionString(string connectionString)
         {
-            // connectionString has encrypted Password and/or ClientSecret values -> decrypt them
-            if (string.IsNullOrWhiteSpace(connectionString)) return string.Empty;
+            if (string.IsNullOrWhiteSpace(connectionString)) return null;
+            string authType = null;
+            string url = null;
+            string username = null; // user or clientid
+            string domain = null;
+            string secretOrPassword = null;
 
             var parts = connectionString.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
-            var sb = new StringBuilder();
             foreach (var part in parts)
             {
                 var kv = part.Split(new[] { '=' }, 2, StringSplitOptions.None);
-                if (kv.Length != 2)
-                {
-                    sb.Append(part).Append(';');
-                    continue;
-                }
+                if (kv.Length != 2) continue;
                 var key = kv[0].Trim();
                 var value = kv[1];
-                if (key.Equals("Password", StringComparison.OrdinalIgnoreCase) ||
-                    key.Equals("ClientSecret", StringComparison.OrdinalIgnoreCase))
-                {
-                    value = DecryptString(value);
-                }
-                sb.Append(key).Append('=').Append(value).Append(';');
+                if (key.Equals("AuthType", StringComparison.OrdinalIgnoreCase)) authType = value;
+                else if (key.Equals("Url", StringComparison.OrdinalIgnoreCase)) url = value;
+                else if (key.Equals("ClientId", StringComparison.OrdinalIgnoreCase)) username = value;
+                else if (key.Equals("Username", StringComparison.OrdinalIgnoreCase)) username = value;
+                else if (key.Equals("Domain", StringComparison.OrdinalIgnoreCase)) domain = value;
+                else if (key.Equals("Password", StringComparison.OrdinalIgnoreCase)) secretOrPassword = value;
+                else if (key.Equals("ClientSecret", StringComparison.OrdinalIgnoreCase)) secretOrPassword = value;
             }
-            var result = sb.ToString();
-            // Ensure OAuth defaults if AuthType=OAuth present
-            if (result.IndexOf("AuthType=OAuth", StringComparison.OrdinalIgnoreCase) >= 0)
+            if (string.IsNullOrWhiteSpace(authType)) authType = "OAuth";
+            if (!string.IsNullOrEmpty(domain) && !string.IsNullOrEmpty(username) && authType.Equals("AD", StringComparison.OrdinalIgnoreCase))
+                username = domain + "\\" + username;
+
+            // Ensure we store encrypted
+            string storedPassword;
+            var decryptedAttempt = DecryptString(secretOrPassword);
+            if (decryptedAttempt != secretOrPassword)
+                storedPassword = secretOrPassword; // already encrypted
+            else
+                storedPassword = string.IsNullOrEmpty(secretOrPassword) ? string.Empty : EncryptString(secretOrPassword);
+
+            return new CrmConnection
             {
-                if (result.IndexOf("AppId=", StringComparison.OrdinalIgnoreCase) < 0)
-                    result += "AppId=51f81489-12ee-4a9e-aaae-a2591f45987d;";
-                if (result.IndexOf("RedirectUri=", StringComparison.OrdinalIgnoreCase) < 0)
-                    result += "RedirectUri=app://58145B91-0C36-4500-8554-080854F2AC97;";
-                if (result.IndexOf("LoginPrompt=", StringComparison.OrdinalIgnoreCase) < 0)
-                    result += "LoginPrompt=Auto;";
-            }
-            return result.Replace(";;", ";");
+                Name = string.Empty,
+                Type = authType,
+                Url = url,
+                UserName = username,
+                Password = storedPassword
+            };
         }
 
         public static bool IsWebResourceExtension(string extension)
