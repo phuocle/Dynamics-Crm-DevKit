@@ -65,8 +65,17 @@
     <Compile Include="Lib\Forms\FormConnection.xaml.cs">
       <DependentUpon>FormConnection.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Lib\Forms\FormCustom.xaml.cs">
+      <DependentUpon>FormCustom.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Lib\Forms\FormInput.xaml.cs">
+      <DependentUpon>FormInput.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Lib\Forms\FormItem.xaml.cs">
       <DependentUpon>FormItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Lib\Forms\FormPlugin.xaml.cs">
+      <DependentUpon>FormPlugin.xaml</DependentUpon>
     </Compile>
     <Compile Include="Lib\Forms\FormProject.xaml.cs">
       <DependentUpon>FormProject.xaml</DependentUpon>
@@ -88,6 +97,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>source.extension.vsixmanifest</DependentUpon>
     </Compile>
+    <Compile Include="Wizard\ItemTemplates\Plugin.cs" />
     <Compile Include="Wizard\ItemTemplates\JsWebApi.cs" />
     <Compile Include="Wizard\ItemTemplates\JsForm.cs" />
     <Compile Include="Wizard\ItemTemplates\LateBound.cs" />
@@ -182,7 +192,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Lib\Forms\FormCustom.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Lib\Forms\FormInput.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Lib\Forms\FormItem.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Lib\Forms\FormPlugin.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -221,6 +243,13 @@
     <ProjectReference Include="..\ItemTemplates\CSharp\03.JsWebApiItemTemplate\03.JsWebApiItemTemplate.csproj">
       <Project>{CCBD1381-E6A6-4A57-9853-E93A27A33F11}</Project>
       <Name>03.JsWebApiItemTemplate</Name>
+      <VSIXSubPath>ItemTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\ItemTemplates\CSharp\04.PluginItemTemplate\04.PluginItemTemplate.csproj">
+      <Project>{6A978468-339C-4BD8-8AFF-481DE2038525}</Project>
+      <Name>04.PluginItemTemplate</Name>
       <VSIXSubPath>ItemTemplates</VSIXSubPath>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
