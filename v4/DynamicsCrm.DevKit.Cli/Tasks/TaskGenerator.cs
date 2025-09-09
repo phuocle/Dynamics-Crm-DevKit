@@ -147,19 +147,15 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var dtsFile = Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}.d.ts");
                     var oldCode = await FileHelper.ReadAllTextAsync(fileEndsWith);
                     var oldDTS = await FileHelper.ReadAllTextAsync(dtsFile);
-                    var comment = await XrmHelper.GetCommentAsync(ServiceClient, entityMetadata.LogicalName, dtsFile);
-                    if (IsAll)
-                    {
-                        if (!File.Exists(dtsFile)) comment.UseForm = false;
-                        comment.UseWebApi = true;
-                    }
-                    if (!comment.UseWebApi)
+                    var isJsFormExist = File.Exists(Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}.form.js"));
+                    var isJsWebApiExist = File.Exists(Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}.webapi.js"));
+                    if (!isJsWebApiExist)
                     {
                         CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, $"{schemaName}{endsWith}");
                         i++;
                         continue;
                     }
-                    var (newCode, newDTS) = await JsWebApi.GetCodeAsync(ServiceClient, entityMetadata, Json.rootnamespace, comment);
+                    var (newCode, newDTS) = await JsWebApi.GetJsWebApiCodeAsync(ServiceClient, entityMetadata, Json.rootnamespace, isJsFormExist);
                     if (Helper.IsTheSame(oldCode, newCode))
                     {
                         if (oldCode?.Length > 0 && newCode?.Length > 0 && !Helper.IsTheSame(oldDTS, newDTS))
@@ -218,19 +214,15 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var dtsFile = Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}.d.ts");
                     var oldCode = await FileHelper.ReadAllTextAsync(fileEndsWith);
                     var oldDTS = await FileHelper.ReadAllTextAsync(dtsFile);
-                    var comment = await XrmHelper.GetCommentAsync(ServiceClient, entityMetadata.LogicalName, dtsFile);
-                    if (IsAll)
-                    {
-                        comment.UseForm = true;
-                        if (!File.Exists(dtsFile)) comment.UseWebApi = false;
-                    }
-                    if (!comment.UseForm)
+                    var isJsFormExist = File.Exists(Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}.form.js"));
+                    var isJsWebApiExist = File.Exists(Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}.webapi.js"));
+                    if (!isJsFormExist)
                     {
                         CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, $"{schemaName}{endsWith}");
                         i++;
                         continue;
                     }
-                    var (newCode, newDTS) = await JsForm.GetCodeAsync(ServiceClient, entityMetadata, Json.rootnamespace, comment);
+                    var (newCode, newDTS) = await JsForm.GetJsFormCodeAsync(ServiceClient, entityMetadata, Json.rootnamespace, isJsWebApiExist);
                     if (Helper.IsTheSame(oldCode, newCode))
                     {
                         if (oldCode?.Length > 0 && newCode?.Length > 0 && !Helper.IsTheSame(oldDTS, newDTS))
@@ -286,9 +278,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 {
                     var file = Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}.cs");
                     var fileEndsWith = Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}{endsWith}");
-
                     var oldCode = await FileHelper.ReadAllTextFromLine6Async(fileEndsWith);
-                    var _GeneratedClass_ = CSharpLateBound.GetCode(ServiceClient, entityMetadata, Json.rootnamespace);
+                    if (Json.@namespace != null && Json.@namespace.Trim().Length == 0) Json.@namespace = null;
+                    var _GeneratedClass_ = CSharpLateBound.GetCsCode(ServiceClient, entityMetadata, Json.rootnamespace, Json.@namespace);
                     var newCode = await Helper.ReadContentFromLine6Async(_GeneratedClass_);
                     if (Helper.IsTheSame(oldCode, newCode))
                     {

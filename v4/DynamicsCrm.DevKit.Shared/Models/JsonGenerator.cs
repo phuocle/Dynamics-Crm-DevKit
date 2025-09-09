@@ -8,5 +8,6 @@
         public string debug { get; set; }
         public string entities { get; set; }
         public string version { get; set; }
-    }
+        public string @namespace { get; set; } = null;
+}
 }

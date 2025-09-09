@@ -89,6 +89,7 @@
       "profile": "LATEBOUND",
       "type": "CSharp",
       "rootnamespace": "???",
+      "namespace": "",
       "rootfolder": "???",
       "entities": "folder"
     },
