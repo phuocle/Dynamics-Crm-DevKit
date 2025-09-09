@@ -49,7 +49,18 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
                 }
                 else
                 {
-                    ProjectItem.Properties.Item("DependentUpon").Value = $"{ItemName}.cs";
+                    try
+                    {
+                        ProjectItem.Properties.Item("DependentUpon").Value = $"{ItemName}.cs";
+                    }
+                    catch
+                    {
+                        var LateBoundProjectItem = await VsixHelper.GetProjectItemAsync($"{ItemName}.cs");
+                        var LateBoundGeneratedProjectItem = await VsixHelper.GetProjectItemAsync($"{ItemName}.generated.cs");
+                        var LateBoundGeneratedProjectItemFullPath = LateBoundGeneratedProjectItem.FileNames[0];
+                        LateBoundGeneratedProjectItem.Remove();
+                        LateBoundProjectItem.ProjectItems.AddFromFile(LateBoundGeneratedProjectItemFullPath);
+                    }
                 }
                 await VS.StatusBar.ShowMessageAsync($"{ItemName}.generated.cs up to date!!!");
                 await VsixHelper.ExecuteCommandAsync("File.SaveAll");
@@ -70,7 +81,7 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
                     ItemName = form.ItemName;
                     EntityMetadata = XrmHelper.EntitiesMetadata.FirstOrDefault(x => x.SchemaName == ItemName);
                     _Class_ = Helper.GetDefaultFileWithCs(EntityMetadata, replacementsDictionary["$rootnamespace$"]);
-                    _GeneratedClass_ = CSharpLateBound.GetCode(form.ServiceClient, EntityMetadata, replacementsDictionary["$rootnamespace$"]);
+                    _GeneratedClass_ = CSharpLateBound.GetCsCode(form.ServiceClient, EntityMetadata, replacementsDictionary["$rootnamespace$"], await VsixHelper.GetSharedProjectAsync());
                     replacementsDictionary["$Class$"] = _Class_;
                     replacementsDictionary["$GeneratedClass$"] = _GeneratedClass_;
                     await Replacement.SetAsync(replacementsDictionary, form);

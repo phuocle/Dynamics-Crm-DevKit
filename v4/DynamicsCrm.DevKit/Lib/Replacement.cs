@@ -66,10 +66,10 @@ namespace DynamicsCrm.DevKit.Lib
         {
             var solutionName = await VsixHelper.GetSolutionNameAsync();
             replacements["$DevKitVersion$"] = Const.VersionBuild;
-            replacements["$SharedNameSpace$"] = $"{solutionName}.Shared";
-            replacements["$SharedProject$"] = $"{solutionName}.Shared";
-            replacements["$SharedTestProject$"] = $"{solutionName}.Shared.Test";
-            replacements["$ProjectProxyTypes$"] = $"{solutionName}.ProxyTypes";            
+            replacements["$SharedNameSpace$"] = $"{solutionName}.{ProjectType.Shared}";
+            replacements["$SharedProject$"] = await VsixHelper.GetSharedProjectAsync();
+            replacements["$SharedTestProject$"] = $"{solutionName}.{ProjectType.Shared}.{ProjectType.Test}";
+            replacements["$ProjectProxyTypes$"] = $"{solutionName}.{ProjectType.ProxyTypes}";            
         }
     }
 }

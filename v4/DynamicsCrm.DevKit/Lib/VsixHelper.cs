@@ -151,25 +151,8 @@ namespace DynamicsCrm.DevKit
 
         public static async Task<string> GetSharedProjectAsync()
         {
-            var solution = await VS.Solutions.GetCurrentSolutionAsync();
-            var solutionFullName = solution?.FullPath;
-            if (string.IsNullOrEmpty(solutionFullName))
-                return string.Empty;
-                
-            if (solutionFullName.EndsWith(".Test.sln")) 
-                solutionFullName = solutionFullName.Substring(0, solutionFullName.Length - ".Test.sln".Length) + ".sln";
-            if (!File.Exists(solutionFullName)) 
-                solutionFullName = solution?.FullPath;
-                
-            if (string.IsNullOrEmpty(solutionFullName))
-                return string.Empty;
-                
-            var fInfo = new FileInfo(solutionFullName);
-            var parts = fInfo.Name.Split(".".ToCharArray());
-            var value = string.Empty;
-            for (var i = 0; i < parts.Length - 1; i++)
-                value += parts[i] + ".";
-            return value + $"{ProjectType.Shared}";
+            var solutionName = await VsixHelper.GetSolutionNameAsync();
+            return $"{solutionName}.{ProjectType.Shared}";
         }
 
         public static async Task<bool> IsProjectExistAsync(string projectName)

@@ -16,7 +16,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
         private static EntityMetadata EntityMetadata { get; set; }
         private static string RootNamespace { get; set; }
 
-        public static string GetCode(ServiceClient service, EntityMetadata entityMetadata, string rootNameSpace)
+        public static string GetCsCode(ServiceClient service, EntityMetadata entityMetadata, string rootNameSpace, string shareProject = null)
         {
             EntityMetadata = entityMetadata;
             RootNamespace = rootNameSpace;
@@ -33,7 +33,8 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code += $"namespace {rootNameSpace}{NEW_LINE}";
             code += $"{{{NEW_LINE}";
             code += $"{TAB}[DebuggerNonUserCode()]{NEW_LINE}";
-            code += $"{TAB}public partial class {@class} : EntityBase{NEW_LINE}";
+            if (shareProject != null) shareProject += ".";
+            code += $"{TAB}public partial class {@class} : {shareProject}EntityBase{NEW_LINE}";
             code += $"{TAB}{{{NEW_LINE}";
             code += $"{TAB}{TAB}public struct Fields{NEW_LINE}";
             code += $"{TAB}{TAB}{{{NEW_LINE}";
@@ -565,7 +566,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                         code += $"{TAB}{TAB}{TAB}{TAB}var data = new System.Collections.Generic.List<{RootNamespace}.{Helper.SafeDeclareName(EntityMetadata.SchemaName, GeneratorType.csharp)}OptionSets.{attribute.SchemaName}>();{NEW_LINE}";
                         code += $"{TAB}{TAB}{TAB}{TAB}var items = Entity.GetAttributeValue<OptionSetValueCollection>(Fields.{attribute.SchemaName});{NEW_LINE}";
                         code += $"{TAB}{TAB}{TAB}{TAB}if (items != null){NEW_LINE}";
-                        code += $"{TAB}{TAB}{TAB}{TAB}{{\r\n";
+                        code += $"{TAB}{TAB}{TAB}{TAB}{{{NEW_LINE}";
                         code += $"{TAB}{TAB}{TAB}{TAB}{TAB}foreach (OptionSetValue item in items){NEW_LINE}";
                         code += $"{TAB}{TAB}{TAB}{TAB}{TAB}{{{NEW_LINE}";
                         code += $"{TAB}{TAB}{TAB}{TAB}{TAB}{TAB}data.Add(({RootNamespace}.{Helper.SafeDeclareName(EntityMetadata.SchemaName, GeneratorType.csharp)}OptionSets.{attribute.SchemaName})item.Value);{NEW_LINE}";
