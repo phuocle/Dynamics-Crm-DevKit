@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xrm.Sdk;
 using System;
-using Dev.DevKit.Shared;
 
 namespace Dev.DevKit.Server.Entities
 {
