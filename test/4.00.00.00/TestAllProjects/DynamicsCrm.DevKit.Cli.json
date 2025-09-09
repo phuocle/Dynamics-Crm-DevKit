@@ -93,6 +93,14 @@
       "entities": "folder"
     },
     {
+      "profile": "SERVER",
+      "type": "CSharp",
+      "rootnamespace": "Dev.DevKit.Server.Entities",
+      "namespace": "Dev.DevKit.Shared",
+      "rootfolder": "",
+      "entities": "folder"
+    },
+    {
       "profile": "JS-FORM",
       "type": "JsForm",
       "rootnamespace": "???",
