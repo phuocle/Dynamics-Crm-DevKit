@@ -61,13 +61,14 @@
     <Content Include="entities\Account.webapi.js">
       <DependentUpon>Account.js</DependentUpon>
     </Content>
-    <Content Include="entities\Contact.form.js">
-      <DependentUpon>Contact.js</DependentUpon>
+    <Content Include="entities\SystemUser.js" />
+    <Content Include="entities\SystemUser.webapi.js">
+      <DependentUpon>SystemUser.js</DependentUpon>
     </Content>
-    <Content Include="entities\Contact.js" />
-    <Content Include="entities\Contact.webapi.js">
-      <DependentUpon>Contact.js</DependentUpon>
+    <Content Include="entities\Team.form.js">
+      <DependentUpon>Team.js</DependentUpon>
     </Content>
+    <Content Include="entities\Team.js" />
     <Content Include="lib\devkit.js" />
     <Content Include="entities\devkit.d.ts" />
     <None Include="entities\generator.form.bat" />
@@ -88,8 +89,11 @@
     <TypeScriptCompile Include="entities\Account.d.ts">
       <DependentUpon>Account.js</DependentUpon>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="entities\Contact.d.ts">
-      <DependentUpon>Contact.js</DependentUpon>
+    <TypeScriptCompile Include="entities\SystemUser.d.ts">
+      <DependentUpon>SystemUser.js</DependentUpon>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="entities\Team.d.ts">
+      <DependentUpon>Team.js</DependentUpon>
     </TypeScriptCompile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v15.0\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />

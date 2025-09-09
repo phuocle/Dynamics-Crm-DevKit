@@ -12,13 +12,13 @@
     },
     "generators.JsForm.ClientSecret": {
       "commandName": "Project",
-      "commandLineArgs": "/conn:\"AuthType=ClientSecret;Url=https://hitachi-hsapvn-dev.crm5.dynamics.com;ClientId=b1b8cf05-cb06-4674-b93e-98c8c9a02e5a;ClientSecret=v+L6+3MvOrVPMNqGn86vi6qEG4qpCCLoLqgeUMjnGkY=;\" /json:\"..\\..\\DynamicsCrm.DevKit.Cli.json\" /type:\"generators\" /profile:\"JS-FORM\"",
-      "workingDirectory": "D:\\azure\\PL\\HSAPVN\\src\\Hs.Hsap.WebResource\\entities"
+      "commandLineArgs": "/conn:\"AuthType=ClientSecret;Url=https://dynamics-crm-devkit.crm5.dynamics.com;ClientId=1a60a5c2-d04c-4b26-8f86-9d6ce0616799;ClientSecret=4Y11hDyKJYQTqXC9cRDXnoJ2DytZDs/jYI1byYwKli57mRfjHcCPu6Qx5sxgtCWQ;\" /json:\"..\\..\\DynamicsCrm.DevKit.Cli.json\" /type:\"generators\" /profile:\"JS-FORM\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\test\\4.00.00.00\\TestAllProjects\\Dev.DevKit.WebResource\\entities"
     },
     "generators.JsWebApi.ClientSecret": {
       "commandName": "Project",
-      "commandLineArgs": "/conn:\"AuthType=ClientSecret;Url=https://hitachi-hsapvn-dev.crm5.dynamics.com;ClientId=b1b8cf05-cb06-4674-b93e-98c8c9a02e5a;ClientSecret=v+L6+3MvOrVPMNqGn86vi6qEG4qpCCLoLqgeUMjnGkY=;\" /json:\"..\\..\\DynamicsCrm.DevKit.Cli.json\" /type:\"generators\" /profile:\"JS-WEBAPI\"",
-      "workingDirectory": "D:\\azure\\PL\\HSAPVN\\src\\Hs.Hsap.WebResource\\entities"
+      "commandLineArgs": "/conn:\"AuthType=ClientSecret;Url=https://dynamics-crm-devkit.crm5.dynamics.com;ClientId=1a60a5c2-d04c-4b26-8f86-9d6ce0616799;ClientSecret=4Y11hDyKJYQTqXC9cRDXnoJ2DytZDs/jYI1byYwKli57mRfjHcCPu6Qx5sxgtCWQ;\" /json:\"..\\..\\DynamicsCrm.DevKit.Cli.json\" /type:\"generators\" /profile:\"JS-WEBAPI\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\test\\4.00.00.00\\TestAllProjects\\Dev.DevKit.WebResource\\entities"
     },
     "generators.LateBound.UserPass": {
       "commandName": "Project",
