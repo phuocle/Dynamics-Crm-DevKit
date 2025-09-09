@@ -1,22 +1,15 @@
-﻿using Community.VisualStudio.Toolkit;
-using DynamicsCrm.DevKit.Shared;
+﻿using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.VisualStudio.Shell;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Windows.Input;
 
 namespace DynamicsCrm.DevKit.Lib.Forms
 {
-    /// <summary>
-    /// Interaction logic for FormConnection.xaml
-    /// </summary>
     public partial class FormCustom : BaseDialogWindow
     {
         private ItemType _ItemType = DynamicsCrm.DevKit.Shared.ItemType.None;
 
-        //private CachedJson CachedJson { get; set; }
         private ItemType ItemType
         {
             get => _ItemType;
@@ -121,66 +114,11 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                         break;
                 }
             }
-        }
-
-        private List<CustomTemplate> GetCustomTemplates()
-        {
-            //var fileName = VsixHelper.GetDynamicsCrmDevKitConfigJsonFileName();
-            //if (File.Exists(fileName))
-            //    CachedJson = SimpleJson.DeserializeObject<CachedJson>(File.ReadAllText(fileName));
-            //else
-            //    CachedJson = new CachedJson();
-            //var customTemplates = CachedJson.CustomTemplates.Where(x => x.Type == ItemType.ToString()).ToList() ?? new List<CustomTemplate>();
-            //if (ItemType == ItemType.Test)
-            //{
-            //    customTemplates.Insert(0, new CustomTemplate { Type = ItemType.ToString(), Title = $"Default - {ItemType.CustomApi.ToString()}", Body = GetDefaultCustomBody($"Default - {ItemType.CustomApi.ToString()}"), IsDefault = false });
-            //    customTemplates.Insert(0, new CustomTemplate { Type = ItemType.ToString(), Title = $"Default - {ItemType.CustomAction.ToString()}", Body = GetDefaultCustomBody($"Default - {ItemType.CustomAction.ToString()}"), IsDefault = false });
-            //    customTemplates.Insert(0, new CustomTemplate { Type = ItemType.ToString(), Title = $"Default - {ItemType.Workflow.ToString()}", Body = GetDefaultCustomBody($"Default - {ItemType.Workflow.ToString()}"), IsDefault = false });
-            //    customTemplates.Insert(0, new CustomTemplate { Type = ItemType.ToString(), Title = $"Default - {ItemType.Plugin.ToString()}", Body = GetDefaultCustomBody($"Default - {ItemType.Plugin.ToString()}"), IsDefault = false });
-            //}
-            //else
-            //    customTemplates.Insert(0, new CustomTemplate { Type = ItemType.ToString(), Title = "Default", Body = GetDefaultCustomBody(), IsDefault = false });
-            //return customTemplates;
-            return new List<CustomTemplate>();
-        }
-
-        private string GetDefaultCustomBody(string templateTitle = null)
-        {
-            //if (ItemType == ItemType.Plugin)
-            //    return Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.Plugin.tt");
-            //else if (ItemType == ItemType.Workflow)
-            //    return Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.Workflow.tt");
-            //else if (ItemType == ItemType.CustomAction)
-            //    return Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.CustomAction.tt");
-            //else if (ItemType == ItemType.CustomApi)
-            //    return Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.CustomApi.tt");
-            //else if (ItemType == ItemType.Test)
-            //{
-            //    if (templateTitle == $"Default - {ItemType.Plugin.ToString()}")
-            //        return Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.TestPlugin.tt");
-            //    else if (templateTitle == $"Default - {ItemType.Workflow.ToString()}")
-            //        return Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.TestWorkflow.tt");
-            //    else if (templateTitle == $"Default - {ItemType.CustomAction.ToString()}")
-            //        return Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.TestCustomAction.tt");
-            //    else if (templateTitle == $"Default - {ItemType.CustomApi.ToString()}")
-            //        return Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.TestCustomApi.tt");
-            //}
-            //else if (ItemType == ItemType.UiTest)
-            //    return Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.UiTest.tt");
-            return string.Empty;
-        }
+        }        
 
         public T4Context T4Context { get; set; }
 
-        //private List<CustomTemplate> _CustomTemplates = null;
-        //private List<CustomTemplate> CustomTemplates
-        //{
-        //    get
-        //    {
-        //        if (_CustomTemplates == null) _CustomTemplates = GetCustomTemplates();
-        //        return _CustomTemplates;
-        //    }
-        //}
+        private List<CustomTemplate> CustomTemplates { get; set; }
 
         public FormCustom(ItemType itemType, T4Context t4Context, string templateTitle)
         {
@@ -193,18 +131,22 @@ namespace DynamicsCrm.DevKit.Lib.Forms
 
         private void LoadCustomTemplates(string selectedTitle = null)
         {
-            //ComboBoxTemplate.ItemsSource = null;
-            //ComboBoxTemplate.ItemsSource = GetCustomTemplates();
-            //ComboBoxTemplate.DisplayMemberPath = "Title";
-            //if (selectedTitle != null)
-            //{
-            //    ComboBoxTemplate.SelectedItem = CachedJson.CustomTemplates.FirstOrDefault(x => x.Title == selectedTitle);
-            //}
-            //else
-            //{
-            //    ComboBoxTemplate.SelectedItem = CachedJson.CustomTemplates.FirstOrDefault(x => x.IsDefault);
-            //}
-            //if (ComboBoxTemplate.SelectedItem == null) ComboBoxTemplate.SelectedIndex = 0;
+            ThreadHelper.JoinableTaskFactory.Run(async () =>
+            {
+                CustomTemplates = await VsixHelper.GetCustomTemplatesAsync(ItemType);
+                ComboBoxTemplate.ItemsSource = null;
+                ComboBoxTemplate.ItemsSource = CustomTemplates;
+                ComboBoxTemplate.DisplayMemberPath = "Title";
+                if (selectedTitle != null)
+                {
+                    ComboBoxTemplate.SelectedItem = CustomTemplates.FirstOrDefault(x => x.Title == selectedTitle);
+                }
+                else
+                {
+                    ComboBoxTemplate.SelectedItem = CustomTemplates.FirstOrDefault(x => x.IsDefault);
+                }
+                if (ComboBoxTemplate.SelectedItem == null) ComboBoxTemplate.SelectedIndex = 0;
+            });
         }
 
         private void ButtonClose_Click(object sender, System.Windows.RoutedEventArgs e)
