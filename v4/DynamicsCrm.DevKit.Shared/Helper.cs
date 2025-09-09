@@ -708,36 +708,40 @@ namespace DynamicsCrm.DevKit.Shared
 
         public static string BuildConnectionString(string connectionString)
         {
-            if (connectionString == null) return string.Empty;
-            if (!connectionString.ToLower().Contains("Password=".ToLower())) return connectionString;
-            var value = string.Empty;
-            var arr = connectionString.Split(";".ToCharArray());
-            foreach (var item in arr)
+            // connectionString has encrypted Password and/or ClientSecret values -> decrypt them
+            if (string.IsNullOrWhiteSpace(connectionString)) return string.Empty;
+
+            var parts = connectionString.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+            var sb = new StringBuilder();
+            foreach (var part in parts)
             {
-                if (item.ToLower().Contains("Password=".ToLower()))
+                var kv = part.Split(new[] { '=' }, 2, StringSplitOptions.None);
+                if (kv.Length != 2)
                 {
-                    var password = string.Empty;
-                    if (item.EndsWith("=="))
-                        password = item.Split("=".ToCharArray())[1] + "==";
-                    else if (item.EndsWith("="))
-                        password = item.Split("=".ToCharArray())[1] + "=";
-                    else
-                        password = item.Split("=".ToCharArray())[1];
-                    password = Helper.DecryptString(password);
-                    value += "Password=" + password + ";";
+                    sb.Append(part).Append(';');
+                    continue;
                 }
-                else
-                    value += item + ";";
+                var key = kv[0].Trim();
+                var value = kv[1];
+                if (key.Equals("Password", StringComparison.OrdinalIgnoreCase) ||
+                    key.Equals("ClientSecret", StringComparison.OrdinalIgnoreCase))
+                {
+                    value = DecryptString(value);
+                }
+                sb.Append(key).Append('=').Append(value).Append(';');
             }
-            value = value.Replace(";;", ";");
-            if (value.ToLower().Contains("AuthType=OAuth".ToLower()))
+            var result = sb.ToString();
+            // Ensure OAuth defaults if AuthType=OAuth present
+            if (result.IndexOf("AuthType=OAuth", StringComparison.OrdinalIgnoreCase) >= 0)
             {
-                if (!value.ToLower().Contains("RedirectUri=".ToLower()))
-                {
-                    value += "AppId=51f81489-12ee-4a9e-aaae-a2591f45987d;RedirectUri=app://58145B91-0C36-4500-8554-080854F2AC97;LoginPrompt=Auto;";
-                }
+                if (result.IndexOf("AppId=", StringComparison.OrdinalIgnoreCase) < 0)
+                    result += "AppId=51f81489-12ee-4a9e-aaae-a2591f45987d;";
+                if (result.IndexOf("RedirectUri=", StringComparison.OrdinalIgnoreCase) < 0)
+                    result += "RedirectUri=app://58145B91-0C36-4500-8554-080854F2AC97;";
+                if (result.IndexOf("LoginPrompt=", StringComparison.OrdinalIgnoreCase) < 0)
+                    result += "LoginPrompt=Auto;";
             }
-            return value;
+            return result.Replace(";;", ";");
         }
 
         public static bool IsWebResourceExtension(string extension)
