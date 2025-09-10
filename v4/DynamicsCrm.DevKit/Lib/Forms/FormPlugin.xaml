@@ -6,7 +6,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:wpfcontrols="clr-namespace:DynamicsCrm.DevKit.Lib.WpfControls"
         mc:Ignorable="d"
-        WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Width="500" SizeToContent="Height" MinHeight="300" SnapsToDevicePixels="True" UseLayoutRounding="True">
+        WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Width="500" SizeToContent="Height" SnapsToDevicePixels="True" UseLayoutRounding="True">
     <forms:BaseDialogWindow.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

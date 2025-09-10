@@ -17,167 +17,185 @@ namespace DynamicsCrm.DevKit.Lib.Forms
 
         public string ProjectName => LabelProjectName.Content?.ToString() ?? string.Empty;
 
+        // Simple UI lock helper (consistent with FormPlugin/FormConnection)
+        private void LockUi(bool value)
+        {
+            StackPanelMain.IsEnabled = !value;
+            progressBar.Visibility = value ? Visibility.Visible : Visibility.Hidden;
+            CONNECTION.SetIsEnabledButtonConnection(!value);
+        }
+
         private ProjectType _ProjectType = ProjectType.None;
         private ProjectType ProjectType
         {
             get => _ProjectType;
             set
             {
-                async Task SharedProjectAsync()
-                {
-                    var solutionName = await VsixHelper.GetSolutionNameAsync();
-                    HELP.NavigateUri = new Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Shared-Project-Template");
-                    HELP.Inlines.Clear();
-                    HELP.Inlines.Add("Shared Project Template");
-                    TextboxProject.IsEnabled = false;
-                    TextboxProject.Text = $"{solutionName}.Shared";
-                    LabelProjectName.Content = $"{solutionName}.Shared";
-                    LabelProjectName.Tag = LabelProjectName.Content;
-                }
-                async Task ConsoleProjectAsync()
-                {
-                    var solutionName = await VsixHelper.GetSolutionNameAsync();
-                    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Console-Project-Template");
-                    HELP.Inlines.Clear();
-                    HELP.Inlines.Add("Console Project Template");
-                    LabelProjectName.Content = $"{solutionName}.Console";
-                    LabelProjectName.Tag = LabelProjectName.Content;
-                }
-                async Task ConsoleCoreProjectAsync()
-                {
-                    var solutionName = await VsixHelper.GetSolutionNameAsync();
-                    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Console-Core-Project-Template");
-                    HELP.Inlines.Clear();
-                    HELP.Inlines.Add("Console Core Project Template");
-                    LabelProjectName.Content = $"{solutionName}.ConsoleCore";
-                    LabelProjectName.Tag = LabelProjectName.Content;
-                }
-                async Task ServerProjectAsync()
-                {
-                    var solutionName = await VsixHelper.GetSolutionNameAsync();
-                    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Server-Project-Template");
-                    HELP.Inlines.Clear();
-                    HELP.Inlines.Add("Server Project Template");
-                    LabelProjectName.Content = $"{solutionName}";
-                    LabelProjectName.Tag = LabelProjectName.Content;
-                }                
-                async Task WebResourceProjectAsync()
-                {
-                    var solutionName = await VsixHelper.GetSolutionNameAsync();
-                    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/WebResource-Project-Template");
-                    HELP.Inlines.Clear();
-                    HELP.Inlines.Add("WebResource Project Template");
-                    LabelProjectName.Content = $"{solutionName}.WebResource";
-                    LabelProjectName.Tag = LabelProjectName.Content;
-                }
-                async Task SolutionPackagerProjectAsync()
-                {
-                    var solutionName = await VsixHelper.GetSolutionNameAsync();
-                    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Solution-Packager-Project-Template");
-                    HELP.Inlines.Clear();
-                    HELP.Inlines.Add("Solution Packager Project Template");
-                    LabelProjectName.Content = $"{solutionName}.SolutionPackager";
-                    LabelProjectName.Tag = LabelProjectName.Content;
-                }
-                async Task ProxyTypesProjectAsync()
-                {
-                    var solutionName = await VsixHelper.GetSolutionNameAsync();
-                    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/ProxyTypes-Project-Template");
-                    HELP.Inlines.Clear();
-                    HELP.Inlines.Add("ProxyTypes Project Template");
-                    TextboxProject.IsEnabled = false;
-                    TextboxProject.Text = $"{solutionName}.ProxyTypes";
-                    LabelProjectName.Content = $"{solutionName}.ProxyTypes";
-                    LabelProjectName.Tag = LabelProjectName.Content;
-                }
-                async Task TestProjectAsync()
-                {
-                    var solutionName = await VsixHelper.GetSolutionNameAsync();
-                    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Test-Project-Template");
-                    HELP.Inlines.Clear();
-                    HELP.Inlines.Add("Test Project Template");
-                    LabelProjectName.Content = $"{solutionName}.Test";
-                    LabelProjectName.Tag = $"{solutionName}";
-                }
-                async Task UiTestAsync()
-                {
-                    var solutionName = await VsixHelper.GetSolutionNameAsync();
-                    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Ui-Test-Project-Template");
-                    HELP.Inlines.Clear();
-                    HELP.Inlines.Add("Ui Test Project Template");
-                    LabelProjectName.Content = $"{solutionName}.UiTest";
-                    LabelProjectName.Tag = $"{solutionName}";
-                }
-                async Task SharedTestProjectAsync()
-                {
-                    var solutionName = await VsixHelper.GetSolutionNameAsync();
-                    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Shared-Test-Project-Template");
-                    HELP.Inlines.Clear();
-                    HELP.Inlines.Add("Shared Test Project Template");
-                    TextboxProject.IsEnabled = false;
-                    TextboxProject.Text = $"{solutionName}.Shared.Test";
-                    LabelProjectName.Content = $"{solutionName}.Shared.Test";
-                    LabelProjectName.Tag = LabelProjectName.Content;
-                }
-                async Task PackageProjectAsync()
-                {
-                    var solutionName = await VsixHelper.GetSolutionNameAsync();
-                    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Package-Project-Template");
-                    HELP.Inlines.Clear();
-                    HELP.Inlines.Add("Package Project Template");
-                    LabelProjectName.Content = $"{solutionName}.{ProjectType.Package}";
-                    LabelProjectName.Tag = LabelProjectName.Content;
-                }
-                async Task ReportProjectAsync()
-                {
-                    var solutionName = await VsixHelper.GetSolutionNameAsync();
-                    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Report-Project-Template");
-                    HELP.Inlines.Clear();
-                    HELP.Inlines.Add("Report Project Template");
-                    LabelProjectName.Content = $"{solutionName}.Report";
-                    LabelProjectName.Tag = LabelProjectName.Content;
-                }
+                // Wrap the async initialization with a UI lock so user cannot interact while calculating names
+                LockUi(true);
                 ThreadHelper.JoinableTaskFactory.Run(async () =>
                 {
-                    _ProjectType = value;
-                    switch (_ProjectType)
+                    try
                     {
-                        case ProjectType.Shared:
-                            await SharedProjectAsync();
-                            break;
-                        case ProjectType.Console:
-                            await ConsoleProjectAsync();
-                            break;
-                        case ProjectType.ConsoleCore:
-                            await ConsoleCoreProjectAsync();
-                            break;
-                        case ProjectType.Server:
-                            await ServerProjectAsync();
-                            break;
-                        case ProjectType.WebResource:
-                            await WebResourceProjectAsync();
-                            break;
-                        case ProjectType.SolutionPackager:
-                            await SolutionPackagerProjectAsync();
-                            break;
-                        case ProjectType.ProxyTypes:
-                            await ProxyTypesProjectAsync();
-                            break;
-                        case ProjectType.Test:
-                            await TestProjectAsync();
-                            break;
-                        case ProjectType.UiTest:
-                            await UiTestAsync();
-                            break;
-                        case ProjectType.SharedTest:
-                            await SharedTestProjectAsync();
-                            break;
-                        case ProjectType.Report:
-                            await ReportProjectAsync();
-                            break;
-                        case ProjectType.Package:
-                            await PackageProjectAsync();
-                            break;
+                        async Task SharedProjectAsync()
+                        {
+                            var solutionName = await VsixHelper.GetSolutionNameAsync();
+                            HELP.NavigateUri = new Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Shared-Project-Template");
+                            HELP.Inlines.Clear();
+                            HELP.Inlines.Add("Shared Project Template");
+                            TextboxProject.IsEnabled = false;
+                            TextboxProject.Text = $"{solutionName}.Shared";
+                            LabelProjectName.Content = $"{solutionName}.Shared";
+                            LabelProjectName.Tag = LabelProjectName.Content;
+                        }
+                        async Task ConsoleProjectAsync()
+                        {
+                            var solutionName = await VsixHelper.GetSolutionNameAsync();
+                            HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Console-Project-Template");
+                            HELP.Inlines.Clear();
+                            HELP.Inlines.Add("Console Project Template");
+                            LabelProjectName.Content = $"{solutionName}.Console";
+                            LabelProjectName.Tag = LabelProjectName.Content;
+                        }
+                        async Task ConsoleCoreProjectAsync()
+                        {
+                            var solutionName = await VsixHelper.GetSolutionNameAsync();
+                            HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Console-Core-Project-Template");
+                            HELP.Inlines.Clear();
+                            HELP.Inlines.Add("Console Core Project Template");
+                            LabelProjectName.Content = $"{solutionName}.ConsoleCore";
+                            LabelProjectName.Tag = LabelProjectName.Content;
+                        }
+                        async Task ServerProjectAsync()
+                        {
+                            var solutionName = await VsixHelper.GetSolutionNameAsync();
+                            HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Server-Project-Template");
+                            HELP.Inlines.Clear();
+                            HELP.Inlines.Add("Server Project Template");
+                            LabelProjectName.Content = $"{solutionName}";
+                            LabelProjectName.Tag = LabelProjectName.Content;
+                        }                
+                        async Task WebResourceProjectAsync()
+                        {
+                            var solutionName = await VsixHelper.GetSolutionNameAsync();
+                            HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/WebResource-Project-Template");
+                            HELP.Inlines.Clear();
+                            HELP.Inlines.Add("WebResource Project Template");
+                            LabelProjectName.Content = $"{solutionName}.WebResource";
+                            LabelProjectName.Tag = LabelProjectName.Content;
+                        }
+                        async Task SolutionPackagerProjectAsync()
+                        {
+                            var solutionName = await VsixHelper.GetSolutionNameAsync();
+                            HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Solution-Packager-Project-Template");
+                            HELP.Inlines.Clear();
+                            HELP.Inlines.Add("Solution Packager Project Template");
+                            LabelProjectName.Content = $"{solutionName}.SolutionPackager";
+                            LabelProjectName.Tag = LabelProjectName.Content;
+                        }
+                        async Task ProxyTypesProjectAsync()
+                        {
+                            var solutionName = await VsixHelper.GetSolutionNameAsync();
+                            HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/ProxyTypes-Project-Template");
+                            HELP.Inlines.Clear();
+                            HELP.Inlines.Add("ProxyTypes Project Template");
+                            TextboxProject.IsEnabled = false;
+                            TextboxProject.Text = $"{solutionName}.ProxyTypes";
+                            LabelProjectName.Content = $"{solutionName}.ProxyTypes";
+                            LabelProjectName.Tag = LabelProjectName.Content;
+                        }
+                        async Task TestProjectAsync()
+                        {
+                            var solutionName = await VsixHelper.GetSolutionNameAsync();
+                            HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Test-Project-Template");
+                            HELP.Inlines.Clear();
+                            HELP.Inlines.Add("Test Project Template");
+                            LabelProjectName.Content = $"{solutionName}.Test";
+                            LabelProjectName.Tag = $"{solutionName}";
+                        }
+                        async Task UiTestAsync()
+                        {
+                            var solutionName = await VsixHelper.GetSolutionNameAsync();
+                            HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Ui-Test-Project-Template");
+                            HELP.Inlines.Clear();
+                            HELP.Inlines.Add("Ui Test Project Template");
+                            LabelProjectName.Content = $"{solutionName}.UiTest";
+                            LabelProjectName.Tag = $"{solutionName}";
+                        }
+                        async Task SharedTestProjectAsync()
+                        {
+                            var solutionName = await VsixHelper.GetSolutionNameAsync();
+                            HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Shared-Test-Project-Template");
+                            HELP.Inlines.Clear();
+                            HELP.Inlines.Add("Shared Test Project Template");
+                            TextboxProject.IsEnabled = false;
+                            TextboxProject.Text = $"{solutionName}.Shared.Test";
+                            LabelProjectName.Content = $"{solutionName}.Shared.Test";
+                            LabelProjectName.Tag = LabelProjectName.Content;
+                        }
+                        async Task PackageProjectAsync()
+                        {
+                            var solutionName = await VsixHelper.GetSolutionNameAsync();
+                            HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Package-Project-Template");
+                            HELP.Inlines.Clear();
+                            HELP.Inlines.Add("Package Project Template");
+                            LabelProjectName.Content = $"{solutionName}.{ProjectType.Package}";
+                            LabelProjectName.Tag = LabelProjectName.Content;
+                        }
+                        async Task ReportProjectAsync()
+                        {
+                            var solutionName = await VsixHelper.GetSolutionNameAsync();
+                            HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Report-Project-Template");
+                            HELP.Inlines.Clear();
+                            HELP.Inlines.Add("Report Project Template");
+                            LabelProjectName.Content = $"{solutionName}.Report";
+                            LabelProjectName.Tag = LabelProjectName.Content;
+                        }
+
+                        _ProjectType = value;
+                        switch (_ProjectType)
+                        {
+                            case ProjectType.Shared:
+                                await SharedProjectAsync();
+                                break;
+                            case ProjectType.Console:
+                                await ConsoleProjectAsync();
+                                break;
+                            case ProjectType.ConsoleCore:
+                                await ConsoleCoreProjectAsync();
+                                break;
+                            case ProjectType.Server:
+                                await ServerProjectAsync();
+                                break;
+                            case ProjectType.WebResource:
+                                await WebResourceProjectAsync();
+                                break;
+                            case ProjectType.SolutionPackager:
+                                await SolutionPackagerProjectAsync();
+                                break;
+                            case ProjectType.ProxyTypes:
+                                await ProxyTypesProjectAsync();
+                                break;
+                            case ProjectType.Test:
+                                await TestProjectAsync();
+                                break;
+                            case ProjectType.UiTest:
+                                await UiTestAsync();
+                                break;
+                            case ProjectType.SharedTest:
+                                await SharedTestProjectAsync();
+                                break;
+                            case ProjectType.Report:
+                                await ReportProjectAsync();
+                                break;
+                            case ProjectType.Package:
+                                await PackageProjectAsync();
+                                break;
+                        }
+                    }
+                    finally
+                    {
+                        LockUi(false);
                     }
                 });
             }

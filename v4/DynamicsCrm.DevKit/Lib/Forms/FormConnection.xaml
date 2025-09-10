@@ -6,8 +6,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:wpfcontrols="clr-namespace:DynamicsCrm.DevKit.Lib.WpfControls"
         mc:Ignorable="d"
-        WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Width="500" Height="auto" SizeToContent="Height"
-    >
+        WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Width="500" SizeToContent="Height" SnapsToDevicePixels="True" UseLayoutRounding="True">
     <forms:BaseDialogWindow.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -15,37 +14,50 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </forms:BaseDialogWindow.Resources>
-    <StackPanel>
-        <TextBlock Padding="10,5,10,5" Background="Green">
+
+    <!-- Use Grid layout (like FormPlugin) so we can pin the progress bar at the bottom regardless of content height -->
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/> <!-- Header row -->
+            <RowDefinition Height="*"/>    <!-- Main form content grows -->
+            <RowDefinition Height="5"/>    <!-- Fixed progress bar height -->
+        </Grid.RowDefinitions>
+
+        <!-- Header / Help link -->
+        <TextBlock Grid.Row="0" Padding="10,5,10,5" Background="Green">
             <wpfcontrols:ExternalBrowserHyperlink NavigateUri="https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Connection" Foreground="White">WIKI: Connection</wpfcontrols:ExternalBrowserHyperlink>
         </TextBlock>
-        <StackPanel x:Name="stackPanelForm">
-            <StackPanel x:Name="stackPanelConnectionString" Margin="10,10,10,10" IsEnabled="{Binding IsChecked, ElementName=radioButtonConnection}">
-                <Border  BorderThickness="1">
-                    <Grid Margin="0,5,0,0" >
+
+        <!-- Main form area wrapped in StackPanel so existing code-behind (stackPanelForm) continues to work -->
+        <StackPanel Grid.Row="1" x:Name="stackPanelForm">
+            <!-- Connection string section (was stackPanelConnectionString) -->
+            <StackPanel x:Name="stackPanelConnectionString" Margin="10" IsEnabled="{Binding IsChecked, ElementName=radioButtonConnection}">
+                <Border BorderThickness="1">
+                    <Grid Margin="0,5,0,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="*"></RowDefinition>
-                            <RowDefinition Height="*"></RowDefinition>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
                         <Label Grid.Row="0" Grid.Column="0" Content="Saved Connections" HorizontalAlignment="Left" VerticalAlignment="Center" />
                         <ComboBox x:Name="comboBoxSavedConnection" Grid.Row="0" Grid.Column="1" Margin="0,0,5,0" />
-                        <Border Grid.Row="1" Grid.ColumnSpan="2" BorderBrush="Gray" BorderThickness="1" Padding="10,10,10,10" Margin="5,5,5,5">
+                        <Border Grid.Row="1" Grid.ColumnSpan="2" BorderBrush="Gray" BorderThickness="1" Padding="10" Margin="5">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="80"/>
                                     <ColumnDefinition/>
                                 </Grid.ColumnDefinitions>
+                                <!-- Use Auto rows for natural height (prevents height clipping in different DPI) -->
                                 <Grid.RowDefinitions>
-                                    <RowDefinition Height="*"></RowDefinition>
-                                    <RowDefinition Height="*"></RowDefinition>
-                                    <RowDefinition Height="*"></RowDefinition>
-                                    <RowDefinition Height="*"></RowDefinition>
-                                    <RowDefinition Height="*"></RowDefinition>
-                                    <RowDefinition Height="*"></RowDefinition>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>
                                 <Label Grid.Row="0" Grid.Column="0" Margin="0,0,0,5" Content="Type" HorizontalAlignment="Left" VerticalAlignment="Center" />
                                 <ComboBox x:Name="comboBoxType" Grid.Row="0" Grid.Column="1" Margin="0,0,0,5" SelectionChanged="ComboBoxType_SelectionChanged">
@@ -54,24 +66,27 @@
                                     <ComboBoxItem Name="OAuth">OAuth</ComboBoxItem>
                                 </ComboBox>
                                 <Label Grid.Row="1" Grid.Column="0" Margin="0,0,0,5" Content="Name" HorizontalAlignment="Left" VerticalAlignment="Center" />
-                                <TextBox x:Name="textboxName" Grid.Row="1" Grid.Column="1" Margin="0,0,0,5"  HorizontalContentAlignment="Left" VerticalContentAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Stretch" Padding="0,5,0,5" />
+                                <TextBox x:Name="textboxName" Grid.Row="1" Grid.Column="1" Margin="0,0,0,5"  HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Padding="0,5" />
                                 <Label Grid.Row="2" Grid.Column="0" Margin="0,0,0,5" Content="Url" HorizontalAlignment="Left" VerticalAlignment="Center" />
-                                <TextBox x:Name="textboxUrl" Grid.Row="2" Grid.Column="1" Margin="0,0,0,5"  HorizontalContentAlignment="Left" VerticalContentAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Stretch" Padding="0,5,0,5" />
+                                <TextBox x:Name="textboxUrl" Grid.Row="2" Grid.Column="1" Margin="0,0,0,5"  HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Padding="0,5" />
                                 <Label x:Name="labelUser" Grid.Row="3" Grid.Column="0" Margin="0,0,0,5" Content="User Name" HorizontalAlignment="Left" VerticalAlignment="Center" />
-                                <TextBox x:Name="textboxUser" Grid.Row="3" Grid.Column="1" Margin="0,0,0,5"  HorizontalContentAlignment="Left" VerticalContentAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Stretch" Padding="0,5,0,5" />
+                                <TextBox x:Name="textboxUser" Grid.Row="3" Grid.Column="1" Margin="0,0,0,5"  HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Padding="0,5" />
                                 <Label x:Name="labelPassword" Grid.Row="4" Grid.Column="0" Margin="0,0,0,5" Content="Password" HorizontalAlignment="Left" VerticalAlignment="Center" />
-                                <PasswordBox x:Name="textboxPassword" Grid.Row="4" Grid.Column="1" Margin="0,0,0,5"  HorizontalContentAlignment="Left" VerticalContentAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Stretch" Padding="0,5,0,5" PasswordChar="*" />
+                                <PasswordBox x:Name="textboxPassword" Grid.Row="4" Grid.Column="1" Margin="0,0,0,5"  HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Padding="0,5" PasswordChar="*" />
                                 <Button x:Name="buttonCheckConnection" Grid.Row="5" Grid.Column="1" Content="Check Connection ?" Width="200" Height="30" HorizontalAlignment="Left" Click="ButtonCheckConnection_Click"/>
                             </Grid>
                         </Border>
                     </Grid>
                 </Border>
             </StackPanel>
+            <!-- Buttons -->
             <WrapPanel HorizontalAlignment="Right" Margin="10,0,10,10">
                 <Button x:Name="buttonOK" Content="OK" Margin="5,0,5,0" Width="100" Height="30" Click="ButtonOK_Click" />
                 <Button x:Name="buttonCancel" Content="Cancel" Margin="5,0,5,0" Width="100" Height="30" IsCancel="True" Click="ButtonCancel_Click"/>
             </WrapPanel>
         </StackPanel>
-        <ProgressBar x:Name="progressBar" Height="5" IsIndeterminate="True" Visibility="Hidden" />
-    </StackPanel>
+
+        <!-- Progress bar is in its own fixed-height row so it always sticks to the bottom of the window -->
+        <ProgressBar Grid.Row="2" x:Name="progressBar" Height="5" IsIndeterminate="True" Visibility="Hidden" HorizontalAlignment="Stretch"/>
+    </Grid>
 </forms:BaseDialogWindow>

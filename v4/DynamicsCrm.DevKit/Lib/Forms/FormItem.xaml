@@ -6,8 +6,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:wpfcontrols="clr-namespace:DynamicsCrm.DevKit.Lib.WpfControls"
         mc:Ignorable="d"
-        WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Width="500" Height="auto" SizeToContent="Height"
-    >
+        WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Width="500" SizeToContent="Height" SnapsToDevicePixels="True" UseLayoutRounding="True">
     <forms:BaseDialogWindow.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -15,50 +14,71 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </forms:BaseDialogWindow.Resources>
-    <StackPanel>
-        <TextBlock Padding="10,5,10,5" Background="Green">
-            <wpfcontrols:ExternalBrowserHyperlink x:Name="HELP" NavigateUri="https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Connection" Foreground="White" >WIKI: Connection</wpfcontrols:ExternalBrowserHyperlink>
+
+    <!-- Consistent 4-row Grid layout (same pattern as FormPlugin) so progress bar is always fixed at bottom -->
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/> <!-- Row 0: Header / Help link -->
+            <RowDefinition Height="Auto"/> <!-- Row 1: Connection control -->
+            <RowDefinition Height="*"/>    <!-- Row 2: Main interactive content -->
+            <RowDefinition Height="5"/>    <!-- Row 3: Fixed progress bar -->
+        </Grid.RowDefinitions>
+
+        <!-- HEADER / HELP -->
+        <TextBlock Grid.Row="0" Padding="10,5,10,5" Background="Green">
+            <wpfcontrols:ExternalBrowserHyperlink x:Name="HELP" NavigateUri="https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Connection" Foreground="White">WIKI: Connection</wpfcontrols:ExternalBrowserHyperlink>
         </TextBlock>
-        <wpfcontrols:UserControlConnection x:Name="CONNECTION" Connected="Connection_Connected" />
-        <StackPanel IsEnabled="{Binding IsConnected, ElementName=CONNECTION}" x:Name="StackPanelMain">
-            <Border Grid.Row="1" Grid.ColumnSpan="2" BorderBrush="Gray" BorderThickness="1" Padding="10,15,10,15" Margin="5,10,5,10">
+
+        <!-- CONNECTION (enables main content once connected) -->
+        <wpfcontrols:UserControlConnection Grid.Row="1" x:Name="CONNECTION" Connected="Connection_Connected" />
+
+        <!-- MAIN CONTENT AREA -->
+        <StackPanel Grid.Row="2" IsEnabled="{Binding IsConnected, ElementName=CONNECTION}" x:Name="StackPanelMain">
+            <!-- Border group housing selection controls -->
+            <Border BorderBrush="Gray" BorderThickness="1" Padding="10,15,10,15" Margin="5,10,5,10">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="100"/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition x:Name="Row0" Height="*"></RowDefinition>
-                        <RowDefinition x:Name="Row1" Height="*"></RowDefinition>
-                        <RowDefinition x:Name="Row2" Height="*"></RowDefinition>
+                        <!-- Keep row names for potential future re-use / dynamic visibility -->
+                        <RowDefinition x:Name="Row0" Height="*" />
+                        <RowDefinition x:Name="Row1" Height="*" />
+                        <RowDefinition x:Name="Row2" Height="*" />
                     </Grid.RowDefinitions>
-                    <!--<Label x:Name="LabelLanguage" Visibility="Collapsed" Grid.Row="0" Grid.Column="0" Margin="0,0,0,5" Content="Language" HorizontalAlignment="Left" VerticalAlignment="Center" />
-                    <ComboBox x:Name="ComboBoxLanguage" Visibility="Collapsed" Grid.Row="0" Grid.Column="1" Margin="0,0,0,5" VerticalContentAlignment="Center" IsEditable="False" SelectionChanged="ComboBoxLanguage_SelectionChanged" />-->
+                    <!-- NOTE: Language controls intentionally left commented in code-behind; keep spacing consistent -->
                     <Label x:Name="LabelItemName" Grid.Row="1" Grid.Column="0" Margin="0,0,0,5" Content="Project Name" HorizontalAlignment="Left" VerticalAlignment="Center" />
                     <ComboBox x:Name="ComboBox" Grid.Row="1" Grid.Column="1" Margin="0,0,0,5" VerticalContentAlignment="Center" IsEditable="True" TextBoxBase.TextChanged="ComboBoxProject_TextChanged" SelectionChanged="ComboBoxProject_SelectionChanged" />
                     <TextBox x:Name="Textbox" Grid.Row="1" Grid.Column="1" Margin="0,0,0,5" Visibility="Hidden" TextChanged="TextboxProject_TextChanged" VerticalContentAlignment="Center" />
                     <Label x:Name="LabelItemNameLatest" Grid.Row="2" Grid.Column="1" Margin="0,0,0,0" Content="Name" HorizontalAlignment="Left" VerticalAlignment="Center" />
                 </Grid>
             </Border>
+
+            <!-- ACTION BUTTONS / TEMPLATE PICKER (mirrors FormPlugin pattern) -->
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="300"/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
+                <!-- OK / Cancel -->
                 <WrapPanel Grid.Row="0" Grid.Column="1" HorizontalAlignment="Right" Margin="5,0,8,10">
-                    <Button x:Name="buttonOK" Content="OK" Margin="0,0,0,0" Width="80" Height="30" Click="ButtonOK_Click"/>
-                    <Button x:Name="buttonCancel" Content="Cancel" Margin="5,0,0,0" Width="80" Height="30" IsCancel="True" Click="ButtonCancel_Click"/>
+                    <Button x:Name="buttonOK" Content="OK" Width="80" Height="30" Click="ButtonOK_Click" />
+                    <Button x:Name="buttonCancel" Content="Cancel" Margin="5,0,0,0" Width="80" Height="30" IsCancel="True" Click="ButtonCancel_Click" />
                 </WrapPanel>
-                <WrapPanel Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" Margin="0,0,0,10" x:Name="PanelCustom" Visibility="Hidden" >
-                    <Label Content="Template" Margin="0,0,0,0"/>
+                <!-- Custom template controls (currently hidden) -->
+                <WrapPanel Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" Margin="0,0,0,10" x:Name="PanelCustom" Visibility="Hidden">
+                    <Label Content="Template" />
                     <ComboBox x:Name="ComboBoxTemplate" Margin="0,0,5,0" Width="180" Height="30" VerticalContentAlignment="Center" IsEditable="False" />
-                    <Button  x:Name="buttonCustom" Content="..." Margin="0,0,5,0" Width="30" Height="30" Click="ButtonCustom_Click" HorizontalAlignment="Left"/>
+                    <Button x:Name="buttonCustom" Content="..." Margin="0,0,5,0" Width="30" Height="30" Click="ButtonCustom_Click" />
                 </WrapPanel>
             </Grid>
-            <ProgressBar x:Name="progressBar" Height="5" IsIndeterminate="True" Visibility="Hidden" />
         </StackPanel>
-    </StackPanel>
+
+        <!-- FIXED BOTTOM PROGRESS BAR (always visible position-wise; visibility toggled in code-behind) -->
+        <ProgressBar Grid.Row="3" x:Name="progressBar" Height="5" IsIndeterminate="True" Visibility="Hidden" HorizontalAlignment="Stretch" />
+    </Grid>
 </forms:BaseDialogWindow>
