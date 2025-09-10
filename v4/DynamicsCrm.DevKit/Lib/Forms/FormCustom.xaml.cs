@@ -120,33 +120,30 @@ namespace DynamicsCrm.DevKit.Lib.Forms
 
         private List<CustomTemplate> CustomTemplates { get; set; }
 
-        public FormCustom(ItemType itemType, T4Context t4Context, string templateTitle)
+        public FormCustom(List<CustomTemplate> customTemplates, string templateTitle, ItemType itemType, T4Context t4Context)
         {
             InitializeComponent();
             ItemType = itemType;
             T4Context = t4Context;
+            CustomTemplates = customTemplates;
             LoadCustomTemplates(templateTitle);
             WindowState = System.Windows.WindowState.Maximized;
         }
 
         private void LoadCustomTemplates(string selectedTitle = null)
         {
-            ThreadHelper.JoinableTaskFactory.Run(async () =>
+            ComboBoxTemplate.ItemsSource = null;
+            ComboBoxTemplate.ItemsSource = CustomTemplates;
+            ComboBoxTemplate.DisplayMemberPath = "Title";
+            if (selectedTitle != null)
             {
-                CustomTemplates = await VsixHelper.GetCustomTemplatesAsync(ItemType);
-                ComboBoxTemplate.ItemsSource = null;
-                ComboBoxTemplate.ItemsSource = CustomTemplates;
-                ComboBoxTemplate.DisplayMemberPath = "Title";
-                if (selectedTitle != null)
-                {
-                    ComboBoxTemplate.SelectedItem = CustomTemplates.FirstOrDefault(x => x.Title == selectedTitle);
-                }
-                else
-                {
-                    ComboBoxTemplate.SelectedItem = CustomTemplates.FirstOrDefault(x => x.IsDefault);
-                }
-                if (ComboBoxTemplate.SelectedItem == null) ComboBoxTemplate.SelectedIndex = 0;
-            });
+                ComboBoxTemplate.SelectedItem = CustomTemplates.FirstOrDefault(x => x.Title == selectedTitle);
+            }
+            else
+            {
+                ComboBoxTemplate.SelectedItem = CustomTemplates.FirstOrDefault(x => x.IsDefault);
+            }
+            if (ComboBoxTemplate.SelectedItem == null) ComboBoxTemplate.SelectedIndex = 0;
         }
 
         private void ButtonClose_Click(object sender, System.Windows.RoutedEventArgs e)

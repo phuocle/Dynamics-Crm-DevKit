@@ -17,33 +17,53 @@ namespace DynamicsCrm.DevKit.Lib.Forms
     {
 
         public ServiceClient ServiceClient => CONNECTION.ServiceClient;
-
-
         public CrmConnection CrmConnection => CONNECTION.CrmConnection;
+        private List<CustomTemplate> CustomTemplates { get; set; } = new List<CustomTemplate>();
 
-        public string PluginClass => TextboxClass.Text;
-
-        public string PluginMessage => ComboBoxMessage.Text;
-
-        public string PluginStage => ComboBoxStage.Text;
-
-        public string PluginExecution => ComboBoxExecution.Text;
+        public string PluginClass => TextboxClass.Text ?? string.Empty;
+        public string PluginSchemaName
+        {
+            get
+            {
+                if (ComboBoxEntity?.SelectedItem is XrmEntity entity)
+                    return entity.SchemaName ?? string.Empty;
+                return string.Empty;
+            }
+        }
+        public string PluginMessage
+        {
+            get
+            {
+                if (ComboBoxMessage?.SelectedItem is NameValue message)
+                    return message.Name ?? string.Empty;
+                return string.Empty;
+            }
+        }
+        public string PluginStage
+        {
+            get
+            {
+                if (ComboBoxStage?.SelectedItem is NameValue stage)
+                    return stage.Value ?? string.Empty;
+                return string.Empty;
+            }
+        }
+        public string PluginExecution
+        {
+            get
+            {
+                if (ComboBoxExecution?.SelectedItem is NameValue execution)
+                    return execution.Name ?? string.Empty;
+                return string.Empty;
+            }
+        }
 
         public string PluginLogicalName
         {
             get
             {
                 var selected = (XrmEntity)ComboBoxEntity.SelectedItem;
-                return selected.LogicalName;
-            }
-        }
-
-        public string PluginSchemaName
-        {
-            get
-            {
-                var selected = (XrmEntity)ComboBoxEntity.SelectedItem;
-                return selected.SchemaName;
+                return selected.LogicalName ?? string.Empty;
             }
         }
 
@@ -97,7 +117,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Plugin-Item-Template");
                     HELP.Inlines.Clear();
                     HELP.Inlines.Add("Plugin Item Template");
-                    Height = 358;
+                    Height = 344;
                 }
                 void CustomActionItem()
                 {
@@ -141,7 +161,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             ItemType = itemType;
             NameSpace = nameSpace;
             LoadComboBoxes();
-            LoadCustomTemplates();
+            _ = LoadCustomTemplatesAsync();
         }
 
         public string TemplateTitle
@@ -152,35 +172,31 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 return selected.Title;
             }
         }
-        private void LoadCustomTemplates()
+        private async Task LoadCustomTemplatesAsync()
         {
             if (ItemType == ItemType.Plugin || ItemType == ItemType.CustomAction || ItemType == ItemType.CustomApi)
             {
-                var templates = GetCustomTemplates();
+                CustomTemplates = await VsixHelper.GetCustomTemplatesAsync(ItemType);
                 ComboBoxTemplate.ItemsSource = null;
-                ComboBoxTemplate.ItemsSource = templates;
+                ComboBoxTemplate.ItemsSource = CustomTemplates;
                 ComboBoxTemplate.DisplayMemberPath = "Title";
-                ComboBoxTemplate.SelectedItem = templates.FirstOrDefault(x => x.IsDefault);
+                ComboBoxTemplate.SelectedItem = CustomTemplates.FirstOrDefault(x => x.IsDefault);
                 if (ComboBoxTemplate.SelectedItem == null) ComboBoxTemplate.SelectedIndex = 0;
-                List<CustomTemplate> GetCustomTemplates()
-                {
-                    return ThreadHelper.JoinableTaskFactory.Run(async () =>
-                    {
-                        return await VsixHelper.GetCustomTemplatesAsync(ItemType);
-                    });
-                }
             }
         }
 
         private void LoadComboBoxes()
         {
+            loadStage();
+            loadExecution();
+
             void loadStage()
             {
                 var items = new List<NameValue>()
                 {
-                    new NameValue { Name = "PreValidation" },
-                    new NameValue { Name = "PreOperation" },
-                    new NameValue { Name = "PostOperation" }
+                    new NameValue { Name = "PreValidation", Value = "PreValidation" },
+                    new NameValue { Name = "PreOperation", Value = "Pre" },
+                    new NameValue { Name = "PostOperation", Value = "Post" }
                 };
                 ComboBoxStage.DisplayMemberPath = "Name";
                 ComboBoxStage.ItemsSource = items;
@@ -195,9 +211,6 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 ComboBoxExecution.DisplayMemberPath = "Name";
                 ComboBoxExecution.ItemsSource = items;
             }
-
-            loadStage();
-            loadExecution();
         }
 
         private void ButtonCancel_Click(object sender, System.Windows.RoutedEventArgs e)
@@ -205,11 +218,15 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             DialogResult = false;
         }
 
-        private void ButtonCustom_Click(object sender, System.Windows.RoutedEventArgs e)
+        private async Task ButtonCustom_ClickAsync()
         {
             if (IsValid())
             {
-                if (ItemType == ItemType.Plugin || ItemType == ItemType.CustomAction || ItemType == ItemType.CustomApi)
+                if (
+                    ItemType == ItemType.Plugin || 
+                    ItemType == ItemType.CustomAction || 
+                    ItemType == ItemType.CustomApi
+                    )
                 {
                     //Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;
                     //var solutionName = "";// VsixHelper.GetSolutionName();
@@ -234,12 +251,17 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                         PluginMessage = "Create",
                         PluginStage = "PreOperation",
                     };
-                    var form = new FormCustom(ItemType, t4Context, TemplateTitle);
+                    var form = new FormCustom(CustomTemplates, TemplateTitle, ItemType, t4Context);
                     Mouse.OverrideCursor = null;
                     form.ShowDialog();
-                    LoadCustomTemplates();
+                    await LoadCustomTemplatesAsync();
                 }
             }
+        }
+
+        private void ButtonCustom_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            _ = ButtonCustom_ClickAsync();            
         }
 
         bool IsValid()
@@ -269,7 +291,6 @@ namespace DynamicsCrm.DevKit.Lib.Forms
 
         private void ButtonOK_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-
             if (IsValid())
             {
                 DialogResult = true;
@@ -278,41 +299,6 @@ namespace DynamicsCrm.DevKit.Lib.Forms
 
         private void Connection_Connected(object sender, System.EventArgs e)
         {
-            //if (
-            //    ItemType == ItemType.Plugin ||
-            //    ItemType == ItemType.CustomAction ||
-            //    ItemType == ItemType.CustomApi
-            //    )
-            //{
-            //    progressBar.Visibility = System.Windows.Visibility.Visible;
-            //    _ = Task.Factory.StartNew(() =>
-            //    {
-            //        //ThreadHelper.JoinableTaskFactory.Run(async delegate
-            //        //{
-            //        //    var items = XrmHelper.GetAllEntities(CrmServiceClient);
-            //        //    await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-            //        //    ComboBoxEntity.DisplayMemberPath = "Name";
-            //        //    if (ItemType == ItemType.Plugin || ItemType == ItemType.CustomAction || ItemType == ItemType.CustomApi)
-            //        //    {
-            //        //        items.Insert(0, new XrmEntity { Name = "None", LogicalName = "none", EntityTypeCode = -1, HasImage = false, IsCustomEntity = false });
-            //        //    }
-            //        //    ComboBoxEntity.ItemsSource = items;
-            //        //    buttonOK.IsEnabled = items.Count > 0;
-            //        //    var activeProject = await VsixHelper.GetActiveProjectAsync();
-            //        //    var parts = activeProject.Name.Split('.');
-            //        //    foreach (var part in parts)
-            //        //    {
-            //        //        var found = items.FirstOrDefault(x => x.LogicalName.ToLower() == part.ToLower());
-            //        //        if (found != null)
-            //        //        {
-            //        //            ComboBoxEntity.SelectedItem = found;
-            //        //        }
-            //        //    }
-            //        //    progressBar.Visibility = System.Windows.Visibility.Hidden;
-            //        //});
-            //    }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default);
-            //}
-
             if (
                 ItemType == ItemType.Plugin ||
                 ItemType == ItemType.CustomAction ||
@@ -334,7 +320,6 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     });
                 }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default);
             }
-
         }
 
         private void LockUi(bool value)
@@ -371,6 +356,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                         ComboBoxStage.SelectedItem = null;
                         ComboBoxExecution.SelectedItem = null;
                         TextboxClass.Text = null;
+                        UpdateClassName();
                         LockUi(false);
                     });
                 }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default);
@@ -400,23 +386,15 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 //ComboBoxStage.SelectedItem = null;
                 //ComboBoxExecution.SelectedItem = null;
                 //TextboxClass.Text = null;
-            }
+            }            
         }
 
         private void UpdateClassName()
         {
-            var selectedStage = (NameValue)ComboBoxStage.SelectedItem;
-            var stage = selectedStage?.Name == "PreValidation" ? "PreValidation" : (selectedStage?.Name == "PreOperation" ? "Pre" : "Post");
-            var selectedEntity = (XrmEntity)ComboBoxEntity.SelectedItem;
-            var entity = selectedEntity?.Name;
-            var selectedMessage = (NameValue)ComboBoxMessage.SelectedItem;
-            var message = selectedMessage?.Name;
-            var selectedExecution = (NameValue)ComboBoxExecution.SelectedItem;
-            var execution = selectedExecution?.Name;
             if (ItemType == ItemType.CustomApi)
-                TextboxClass.Text = $"{message}Request";
+                TextboxClass.Text = $"{PluginMessage}Request";
             else
-                TextboxClass.Text = $"{stage}{entity}{message}{execution}";
+                TextboxClass.Text = $"{PluginStage}{PluginSchemaName}{PluginMessage}{PluginExecution}";
         }
 
         private void ComboBoxMessage_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)

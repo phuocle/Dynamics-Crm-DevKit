@@ -6,8 +6,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:wpfcontrols="clr-namespace:DynamicsCrm.DevKit.Lib.WpfControls"
         mc:Ignorable="d"
-        WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Width="500" Height="329"
-    >
+        WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Width="500" Height="329">
     <forms:BaseDialogWindow.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -15,12 +14,24 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </forms:BaseDialogWindow.Resources>
-    <StackPanel>
-        <TextBlock Padding="10,5,10,5" Background="Green">
-            <wpfcontrols:ExternalBrowserHyperlink x:Name="HELP" NavigateUri="https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Connection" Foreground="White" >WIKI: Connection</wpfcontrols:ExternalBrowserHyperlink>
+
+    <!-- Layout to keep progress bar fixed at bottom -->
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/> <!-- Header -->
+            <RowDefinition Height="Auto"/> <!-- Connection -->
+            <RowDefinition Height="*"/>    <!-- Main content -->
+            <RowDefinition Height="5"/>    <!-- Progress bar -->
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Padding="10,5,10,5" Background="Green">
+            <wpfcontrols:ExternalBrowserHyperlink x:Name="HELP" NavigateUri="https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Connection" Foreground="White">WIKI: Connection</wpfcontrols:ExternalBrowserHyperlink>
         </TextBlock>
-        <wpfcontrols:UserControlConnection x:Name="CONNECTION" Connected="Connection_Connected" />
-        <StackPanel IsEnabled="{Binding IsConnected, ElementName=CONNECTION}" x:Name="StackPanelMain">
+
+        <wpfcontrols:UserControlConnection Grid.Row="1" x:Name="CONNECTION" Connected="Connection_Connected" />
+
+        <!-- Main interactive area (kept same name so code-behind works) -->
+        <StackPanel Grid.Row="2" IsEnabled="{Binding IsConnected, ElementName=CONNECTION}" x:Name="StackPanelMain">
             <Border Grid.Row="1" Grid.ColumnSpan="2" BorderBrush="Gray" BorderThickness="1" Padding="10,15,10,15" Margin="5,10,5,10">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -28,11 +39,11 @@
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="*"></RowDefinition>
-                        <RowDefinition Height="*"></RowDefinition>
-                        <RowDefinition Height="*"></RowDefinition>
-                        <RowDefinition Height="*"></RowDefinition>
-                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     <Label x:Name="LabelEntity" Grid.Row="0" Grid.Column="0" Margin="0,0,0,5" Content="Entity" HorizontalAlignment="Left" VerticalAlignment="Center" />
                     <ComboBox x:Name="ComboBoxEntity" Grid.Row="0" Grid.Column="1" Margin="0,0,0,5" VerticalContentAlignment="Center" IsEditable="False" SelectionChanged="ComboBoxEntity_SelectionChanged" />
@@ -52,7 +63,7 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <WrapPanel Grid.Row="0" Grid.Column="1" HorizontalAlignment="Right" Margin="5,0,8,10">
                     <Button x:Name="buttonOK" Content="OK" Margin="0,0,0,0" Width="80" Height="30" Click="ButtonOK_Click"/>
@@ -64,7 +75,9 @@
                     <Button  x:Name="buttonCustom" Content="..." Margin="0,0,5,0" Width="30" Height="30" Click="ButtonCustom_Click" HorizontalAlignment="Left"/>
                 </WrapPanel>
             </Grid>
-            <ProgressBar x:Name="progressBar" Height="5" IsIndeterminate="True" Visibility="Hidden" />
         </StackPanel>
-    </StackPanel>
+
+        <!-- Fixed bottom progress bar -->
+        <ProgressBar Grid.Row="3" x:Name="progressBar" Height="5" IsIndeterminate="True" Visibility="Hidden" HorizontalAlignment="Stretch" />
+    </Grid>
 </forms:BaseDialogWindow>
