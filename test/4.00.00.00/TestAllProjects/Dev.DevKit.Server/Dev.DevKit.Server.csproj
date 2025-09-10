@@ -58,6 +58,7 @@
     <None Include="Dev.DevKit.Server.snk" />
     <None Include="deploy.debug.bat" />
     <None Include="deploy.debug.only.bat" />
+    <Compile Include="Account\PostAccountUpdateAsynchronous.cs" />
     <Compile Include="Entities\SystemUser.cs" />
     <Compile Include="Entities\SystemUser.generated.cs">
       <DependentUpon>SystemUser.cs</DependentUpon>
@@ -79,8 +80,6 @@
   <ItemGroup>
     <Analyzer Include="..\packages\DynamicsCrm.DevKit.Analyzers.3.55.55.55\analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Account\" />
-  </ItemGroup>
+  <ItemGroup />
 </Project>
 <!-- v.x.xx.xx.xx - Build: xxxx.yy.zz HH.mm.ss -->

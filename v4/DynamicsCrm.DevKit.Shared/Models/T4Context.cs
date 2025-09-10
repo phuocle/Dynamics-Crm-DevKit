@@ -12,7 +12,7 @@ namespace DynamicsCrm.DevKit.Shared.Models
         public string PluginSchemaName { get; set; }
         public string PluginStage { get; set; }
         public string PluginExecution { get; set; }
-        public string PluginOrder { get; set; }
+        public int PluginOrder { get; set; }
         public string PluginComment { get; set; }
         public string Class { get; set; }
         public string PluginSharedNameSpace { get; set; }
