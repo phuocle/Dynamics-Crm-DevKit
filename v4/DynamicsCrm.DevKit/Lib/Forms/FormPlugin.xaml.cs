@@ -82,14 +82,12 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Plugin-Item-Template");
                     HELP.Inlines.Clear();
                     HELP.Inlines.Add("Plugin Item Template");
-                    //Height = 344;
                 }
                 void CustomActionItem()
                 {
                     HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Custom-Action-Item-Template");
                     HELP.Inlines.Clear();
                     HELP.Inlines.Add("Custom Action Item Template");
-                    Height = 344;
                 }
                 void CustomApiItem()
                 {
@@ -100,7 +98,6 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     ComboBoxExecution.Visibility = System.Windows.Visibility.Collapsed;
                     LabelStage.Visibility = System.Windows.Visibility.Collapsed;
                     ComboBoxStage.Visibility = System.Windows.Visibility.Collapsed;
-                    Height = 282;
                 }
                 _ItemType = value;
                 switch (_ItemType)
@@ -306,29 +303,11 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             }
             else if (ItemType == ItemType.CustomAction)
             {
-                //var selectedEntity = (XrmEntity)ComboBoxEntity.SelectedItem;
-                //var items = new List<NameValue>();
-                //if (selectedEntity.LogicalName == "none")
-                //    items = XrmHelper.GetAllCustomActions(CrmServiceClient);
-                //else
-                //    items = XrmHelper.GetCustomActionMessages(CrmServiceClient, selectedEntity.LogicalName);
-                //ComboBoxMessage.DisplayMemberPath = "Name";
-                //ComboBoxMessage.ItemsSource = items;
-                //ComboBoxMessage.SelectedItem = null;
-                //ComboBoxStage.SelectedItem = null;
-                //ComboBoxExecution.SelectedItem = null;
-                //TextboxClass.Text = null;
+                // custom action logic intentionally removed
             }
             else if (ItemType == ItemType.CustomApi)
             {
-                //var selectedEntity = (XrmEntity)ComboBoxEntity.SelectedItem;
-                //var items = XrmHelper.GetCustomApiMessages(CrmServiceClient, selectedEntity.LogicalName);
-                //ComboBoxMessage.DisplayMemberPath = "Name";
-                //ComboBoxMessage.ItemsSource = items;
-                //ComboBoxMessage.SelectedItem = null;
-                //ComboBoxStage.SelectedItem = null;
-                //ComboBoxExecution.SelectedItem = null;
-                //TextboxClass.Text = null;
+                // custom api logic intentionally removed
             }            
         }
 
