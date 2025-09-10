@@ -44,7 +44,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             get
             {
                 if (ComboBoxStage?.SelectedItem is NameValue stage)
-                    return stage.Value ?? string.Empty;
+                    return stage.Name ?? string.Empty;
                 return string.Empty;
             }
         }
@@ -337,7 +337,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             if (ItemType == ItemType.CustomApi)
                 TextboxClass.Text = $"{PluginMessage}Request";
             else
-                TextboxClass.Text = $"{PluginStage}{PluginSchemaName}{PluginMessage}{PluginExecution}";
+                TextboxClass.Text = $"{PluginStage.Replace("Operation", string.Empty)}{PluginSchemaName}{PluginMessage}{PluginExecution}";
         }
 
         private void ComboBoxMessage_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)

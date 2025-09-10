@@ -7,6 +7,7 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.TemplateWizard;
 using Microsoft.Xrm.Sdk.Metadata;
 using System.Collections.Generic;
+using System.Windows.Input;
 
 namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
 {
@@ -39,6 +40,7 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
                 var ok = form.ShowModal() ?? false;
                 if (ok)
                 {
+                    Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;
                     await Microsoft.VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
                     await VS.StatusBar.StartAnimationAsync(StatusAnimation.Deploy);
                     var t4Code = await T4Helper.GetT4CodeAsync(ItemType.Plugin, form.CustomTemplate);
@@ -46,8 +48,9 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
                     var code = await T4Helper.ProcessTemplateAsync(t4Code, t4Context);
                     replacementsDictionary.Add("$plugin$", code);
                     replacementsDictionary.Add("$Class$", form.Class);
-                    replacementsDictionary.Add("", form.PluginOrder == 1 ? string.Empty : $"{form.PluginOrder}");
+                    replacementsDictionary.Add("$PluginOrder$", form.PluginOrder == 1 ? string.Empty : $"{form.PluginOrder}");
                     await VS.StatusBar.EndAnimationAsync(StatusAnimation.Deploy);
+                    Mouse.OverrideCursor = null;
                 }
                 else
                 {
