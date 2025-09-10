@@ -1,4 +1,5 @@
-﻿using DynamicsCrm.DevKit.Lib;
+﻿using Community.VisualStudio.Toolkit;
+using DynamicsCrm.DevKit.Lib;
 using DynamicsCrm.DevKit.Lib.Forms;
 using DynamicsCrm.DevKit.Shared;
 using EnvDTE;
@@ -39,14 +40,14 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
                 if (ok)
                 {
                     await Microsoft.VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-                    //await VS.StatusBar.StartAnimationAsync(StatusAnimation.Deploy);
-                    //ItemName = form.ItemName;
-                    //EntityMetadata = XrmHelper.EntitiesMetadata.FirstOrDefault(x => x.SchemaName == ItemName);
-                    //_Javascript_ = await XrmHelper.GetDefaultFileWithFormAsync(form.ServiceClient, EntityMetadata, replacementsDictionary["$rootnamespace$"]);
-                    //replacementsDictionary["$Javascript$"] = _Javascript_;
-                    //(_JavascriptForm_, _Javascriptdts_) = await DynamicsCrm.DevKit.Shared.Logic.JsForm.GetJsFormCodeAsync(form.ServiceClient, EntityMetadata, replacementsDictionary["$rootnamespace$"], await IsJsWebApiExistAsync());
-                    //await Replacement.SetAsync(replacementsDictionary, form);
-                    //await VS.StatusBar.EndAnimationAsync(StatusAnimation.Deploy);
+                    await VS.StatusBar.StartAnimationAsync(StatusAnimation.Deploy);
+                    var t4Code = await T4Helper.GetT4CodeAsync(ItemType.Plugin, form.CustomTemplate);
+                    var t4Context = await T4Helper.BuildContextAsync(form);
+                    var code = await T4Helper.ProcessTemplateAsync(t4Code, t4Context);
+                    replacementsDictionary.Add("$plugin$", code);
+                    replacementsDictionary.Add("$Class$", form.Class);
+                    replacementsDictionary.Add("", form.PluginOrder == 1 ? string.Empty : $"{form.PluginOrder}");
+                    await VS.StatusBar.EndAnimationAsync(StatusAnimation.Deploy);
                 }
                 else
                 {

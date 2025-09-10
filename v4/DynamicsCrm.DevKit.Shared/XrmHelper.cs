@@ -400,7 +400,7 @@ namespace DynamicsCrm.DevKit.Shared
                 var response = await serviceClient.ExecuteAsync(request);
                 return (true, string.Empty);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return (false, e.Message);
             }
@@ -498,7 +498,7 @@ namespace DynamicsCrm.DevKit.Shared
                 var response = await serviceClient.ExecuteAsync(request);
                 return (true, string.Empty);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return (false, e.Message);
             }
@@ -780,7 +780,7 @@ namespace DynamicsCrm.DevKit.Shared
             return entities;
         }
 
-        public static List<PluginInputOutputParameter> GetPluginInputOutputParameters(ServiceClient service, string entityName, string requestName)
+        public static async Task<List<PluginInputOutputParameter>> GetPluginInputOutputParametersAsync(ServiceClient service, string entityName, string requestName)
         {
             var fetchData = new
             {
@@ -808,7 +808,7 @@ namespace DynamicsCrm.DevKit.Shared
     </link-entity>
   </entity>
 </fetch>";
-            var rows = service.RetrieveMultiple(new FetchExpression(fetchXml));
+            var rows = await service.RetrieveMultipleAsync(new FetchExpression(fetchXml));
             var list = new List<PluginInputOutputParameter>();
             var sdkMessageRequestId = Guid.Empty;
             foreach (var row in rows.Entities)
@@ -845,7 +845,7 @@ namespace DynamicsCrm.DevKit.Shared
     </link-entity>
   </entity>
 </fetch>";
-            var rows2 = service.RetrieveMultiple(new FetchExpression(fetchXml2));
+            var rows2 = await service.RetrieveMultipleAsync(new FetchExpression(fetchXml2));
             foreach (var row in rows2.Entities)
             {
                 var name = (string)row.GetAttributeValue<AliasedValue>("f.name")?.Value ?? string.Empty;
@@ -862,10 +862,9 @@ namespace DynamicsCrm.DevKit.Shared
                     ParameterType = ParameterType.Output
                 });
             }
-            list = list
+            list = [.. list
                 .OrderBy(order => order.ParameterType)
-                .ThenBy(order => order.Position)
-                .ToList();
+                .ThenBy(order => order.Position)];
             return list;
         }
         public static async Task<List<NameValue>> GetSdkMessagesAsync(ServiceClient service, string logicalName)
@@ -958,6 +957,35 @@ namespace DynamicsCrm.DevKit.Shared
                 if (!list.Any(x => x.Name == message))
                     list.Add(new NameValue { Name = message });
             return [.. list.OrderBy(x => x.Name)];
+        }
+
+        public static async Task<string> GetPluginCommentAsync(ServiceClient service, string pluginLogicalName, string pluginMessage)
+        {
+            var list = await XrmHelper.GetPluginInputOutputParametersAsync(service, pluginLogicalName, pluginMessage);
+            if (list.Count == 0) return string.Empty;
+            var max = list.OrderByDescending(s => s.Name.Length).First().Name.Length + 4;
+            var code = string.Empty;
+            code += $"{TAB}{TAB}InputParameters:{NEW_LINE}";
+            var inputParameters = string.Empty;
+            foreach (var item in list.Where(where => where.ParameterType == ParameterType.Input))
+            {
+                var @string = new string(' ', max - item.Name.Length);
+                inputParameters +=
+                    $"{TAB}{TAB}{TAB}{item.Name}{@string}{item.Type}{(!item.Require ? " - require" : string.Empty)}{NEW_LINE}";
+            }
+            code += inputParameters;
+            code += $"{TAB}{TAB}OutputParameters:{NEW_LINE}";
+            var outputParameters = string.Empty;
+            foreach (var item in list.Where(where => where.ParameterType == ParameterType.Output))
+            {
+                var @string = new string(' ', max - item.Name.Length);
+                outputParameters +=
+                    $"{TAB}{TAB}{TAB}{item.Name}{@string}{item.Type}{(!item.Require ? " - require" : string.Empty)}{NEW_LINE}";
+            }
+            code += outputParameters;
+            code = code.TrimEnd($"{NEW_LINE}".ToCharArray());
+            code = code.Replace($"{TAB}", "    ");
+            return code;
         }
     }
 }

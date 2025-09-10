@@ -8,14 +8,14 @@ using System.Collections.Generic;
 using System.Linq;
 using Community.VisualStudio.Toolkit;
 using System.Windows.Input;
-using System.IO;
 using Microsoft.PowerPlatform.Dataverse.Client;
 
 namespace DynamicsCrm.DevKit.Lib.Forms
 {
     public partial class FormPlugin : BaseDialogWindow
     {
-
+        private const string TAB = "\t";
+        private const string NEW_LINE = "\r\n";
         public ServiceClient ServiceClient => CONNECTION.ServiceClient;
         public CrmConnection CrmConnection => CONNECTION.CrmConnection;
         private List<CustomTemplate> CustomTemplates { get; set; } = new List<CustomTemplate>();
@@ -67,43 +67,8 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             }
         }
 
-        public string PluginOrder => "1";
+        public int PluginOrder => 1;
 
-        public string PluginOrder2 => "";
-
-        public string PluginComment
-        {
-            get
-            {
-                var selected = (XrmEntity)ComboBoxEntity.SelectedItem;
-                var message = ComboBoxMessage.Text;
-                var list = XrmHelper.GetPluginInputOutputParameters(ServiceClient, selected.LogicalName, message);
-                if (list.Count == 0) return string.Empty;
-                var max = list.OrderByDescending(s => s.Name.Length).First().Name.Length + 4;
-                var code = string.Empty;
-                code += $"InputParameters:\r\n";
-                var inputParameters = string.Empty;
-                foreach (var item in list.Where(where => where.ParameterType == ParameterType.Input))
-                {
-                    var @string = new string(' ', max - item.Name.Length);
-                    inputParameters +=
-                        $"\t\t\t{item.Name}{@string}{item.Type}{(!item.Require ? " - require" : string.Empty)}\r\n";
-                }
-                code += inputParameters;
-                code += $"\t\tOutputParameters:\r\n";
-                var outputParameters = string.Empty;
-                foreach (var item in list.Where(where => where.ParameterType == ParameterType.Output))
-                {
-                    var @string = new string(' ', max - item.Name.Length);
-                    outputParameters +=
-                        $"\t\t\t{item.Name}{@string}{item.Type}{(!item.Require ? " - require" : string.Empty)}\r\n";
-                }
-                code += outputParameters;
-                code = code.TrimEnd("\r\n".ToCharArray());
-                code = code.Replace("\t", "    ");
-                return code;
-            }
-        }
 
         private ItemType _ItemType = DynamicsCrm.DevKit.Shared.ItemType.None;
 
@@ -117,7 +82,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Plugin-Item-Template");
                     HELP.Inlines.Clear();
                     HELP.Inlines.Add("Plugin Item Template");
-                    Height = 344;
+                    //Height = 344;
                 }
                 void CustomActionItem()
                 {
@@ -164,7 +129,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             _ = LoadCustomTemplatesAsync();
         }
 
-        public string TemplateTitle
+        public string CustomTemplate
         {
             get
             {
@@ -228,22 +193,8 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     ItemType == ItemType.CustomApi
                     )
                 {
-                    Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;
-                    var t4Context = new T4Context
-                    {
-                        PluginComment = PluginComment,
-                        PluginNameSpace = PluginNameSpace,
-                        PluginExecution = PluginExecution,
-                        PluginMessage = PluginMessage,
-                        PluginStage = PluginStage,
-                        PluginSchemaName = PluginSchemaName,
-                        Class = Class,
-                        PluginLogicalName = PluginLogicalName,
-                        PluginSharedNameSpace = await VsixHelper.GetSharedProjectAsync(),
-                        DataSource = "DataSource",
-                        ProxyTypes = "ProxyTypes"
-                    };
-                    var form = new FormCustom(CustomTemplates, TemplateTitle, ItemType, t4Context);
+                    Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;                    
+                    var form = new FormCustom(CustomTemplates, CustomTemplate, ItemType, await T4Helper.BuildContextAsync(this));
                     Mouse.OverrideCursor = null;
                     form.ShowDialog();
                     await LoadCustomTemplatesAsync();

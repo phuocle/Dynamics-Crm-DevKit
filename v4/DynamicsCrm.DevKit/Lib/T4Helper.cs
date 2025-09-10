@@ -1,29 +1,32 @@
 ﻿using Community.VisualStudio.Toolkit;
+using DynamicsCrm.DevKit.Lib.Forms;
+using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.TextTemplating.VSHost;
 using Microsoft.VisualStudio.TextTemplating;
+using Microsoft.VisualStudio.TextTemplating.VSHost;
+using NuGet.Protocol.Plugins;
+using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.IO;
-using DynamicsCrm.DevKit.Lib.Forms;
 using System.Linq;
-using DynamicsCrm.DevKit.Shared;
+using System.Threading.Tasks;
 
 namespace DynamicsCrm.DevKit.Lib
 {
     internal class T4Helper
     {
-        //public static string GetT4Code2(ItemType itemType, string templateTitle)
-        //{
-        //    if (templateTitle.ToLower() == "default") return DefaultT4Code(itemType, templateTitle);
-        //    var fileName = VsixHelper.GetDynamicsCrmDevKitConfigJsonFileName();
-        //    if (!File.Exists(fileName)) return DefaultT4Code(itemType, templateTitle);
-        //    var CachedJson = SimpleJson.DeserializeObject<CachedJson>(File.ReadAllText(fileName));
-        //    var found = CachedJson.CustomTemplates.FirstOrDefault(x => x.Type == itemType.ToString() && x.Title == templateTitle);
-        //    if (found == null) return DefaultT4Code(itemType, templateTitle);
-        //    return Utility.Decompress(found.Body);
-        //}
+        public static async Task<string> GetT4CodeAsync(ItemType itemType, string templateTitle)
+        {
+            if (string.Equals(templateTitle, "Default", StringComparison.OrdinalIgnoreCase)) return await VsixHelper.GetDefaultCustomTemplateAsync(itemType, templateTitle);
+            //var fileName = VsixHelper.GetDynamicsCrmDevKitConfigJsonFileName();
+            //if (!File.Exists(fileName)) return DefaultT4Code(itemType, templateTitle);
+            //var CachedJson = SimpleJson.DeserializeObject<CachedJson>(File.ReadAllText(fileName));
+            //var found = CachedJson.CustomTemplates.FirstOrDefault(x => x.Type == itemType.ToString() && x.Title == templateTitle);
+            //if (found == null) return DefaultT4Code(itemType, templateTitle);
+            //return Utility.Decompress(found.Body);
+            return string.Empty;
+        }
 
         //private static string DefaultT4Code(ItemType itemType, string templateTitle)
         //{
@@ -311,6 +314,26 @@ namespace DynamicsCrm.DevKit.Lib
             var code = t4.ProcessTemplate("", t4code, cb);
             if (cb.errorMessages.Count > 0) return string.Join("\r\n", cb.errorMessages);
             return code;
+        }
+
+        internal static async Task<T4Context> BuildContextAsync(FormPlugin form)
+        {
+            var t4Context = new T4Context
+            {
+                PluginComment = await XrmHelper.GetPluginCommentAsync(form.ServiceClient, form.PluginLogicalName, form.PluginMessage),
+                PluginNameSpace = form.PluginNameSpace,
+                PluginExecution = form.PluginExecution,
+                PluginMessage = form.PluginMessage,
+                PluginStage = form.PluginStage,
+                PluginSchemaName = form.PluginSchemaName,
+                PluginOrder = form.PluginOrder,
+                Class = form.Class,
+                PluginLogicalName = form.PluginLogicalName,
+                PluginSharedNameSpace = await VsixHelper.GetSharedProjectAsync(),
+                DataSource = "DataSource",
+                ProxyTypes = "ProxyTypes"
+            };
+            return t4Context;
         }
     }
 }

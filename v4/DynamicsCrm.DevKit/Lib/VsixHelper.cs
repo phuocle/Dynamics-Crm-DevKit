@@ -405,41 +405,40 @@ namespace DynamicsCrm.DevKit.Lib
             }
             if (itemType == ItemType.Test)
             {
-                customTemplates.Insert(0, new CustomTemplate { Type = $"{itemType}", Title = $"Default - {ItemType.CustomApi}", Body = await GetDefaultCustomBodyAsync($"Default - {ItemType.CustomApi}"), IsDefault = false });
-                customTemplates.Insert(0, new CustomTemplate { Type = $"{itemType}", Title = $"Default - {ItemType.CustomAction}", Body = await GetDefaultCustomBodyAsync($"Default - {ItemType.CustomAction}"), IsDefault = false });
-                customTemplates.Insert(0, new CustomTemplate { Type = $"{itemType}", Title = $"Default - {ItemType.Workflow}", Body = await GetDefaultCustomBodyAsync($"Default - {ItemType.Workflow}"), IsDefault = false });
-                customTemplates.Insert(0, new CustomTemplate { Type = $"{itemType}", Title = $"Default - {ItemType.Plugin}", Body = await GetDefaultCustomBodyAsync($"Default - {ItemType.Plugin}"), IsDefault = false });
+                customTemplates.Insert(0, new CustomTemplate { Type = $"{itemType}", Title = $"Default - {ItemType.CustomApi}", Body = await GetDefaultCustomTemplateAsync(itemType, $"Default - {ItemType.CustomApi}"), IsDefault = false });
+                customTemplates.Insert(0, new CustomTemplate { Type = $"{itemType}", Title = $"Default - {ItemType.CustomAction}", Body = await GetDefaultCustomTemplateAsync(itemType,$"Default - {ItemType.CustomAction}"), IsDefault = false });
+                customTemplates.Insert(0, new CustomTemplate { Type = $"{itemType}", Title = $"Default - {ItemType.Workflow}", Body = await GetDefaultCustomTemplateAsync(itemType, $"Default - {ItemType.Workflow}"), IsDefault = false });
+                customTemplates.Insert(0, new CustomTemplate { Type = $"{itemType}", Title = $"Default - {ItemType.Plugin}", Body = await GetDefaultCustomTemplateAsync(itemType, $"Default - {ItemType.Plugin}"), IsDefault = false });
             }
             else
-                customTemplates.Insert(0, new CustomTemplate { Type = $"{itemType}", Title = "Default", Body = await GetDefaultCustomBodyAsync(), IsDefault = false });
+                customTemplates.Insert(0, new CustomTemplate { Type = $"{itemType}", Title = "Default", Body = await GetDefaultCustomTemplateAsync(itemType), IsDefault = false });
             return customTemplates;
+        }
 
-            async Task<string> GetDefaultCustomBodyAsync(string templateTitle = null)
+        internal static async Task<string> GetDefaultCustomTemplateAsync(ItemType itemType, string templateTitle = null)
+        {
+            if (itemType == ItemType.Plugin)
+                return await VsixHelper.ReadEmbeddedResourceAsync("tt.Plugin.tt");
+            else if (itemType == ItemType.Workflow)
+                return await VsixHelper.ReadEmbeddedResourceAsync("tt.Workflow.tt");
+            else if (itemType == ItemType.CustomAction)
+                return await VsixHelper.ReadEmbeddedResourceAsync("tt.CustomAction.tt");
+            else if (itemType == ItemType.CustomApi)
+                return await VsixHelper.ReadEmbeddedResourceAsync("tt.CustomApi.tt");
+            else if (itemType == ItemType.Test)
             {
-                if (itemType == ItemType.Plugin)
-                    return await VsixHelper.ReadEmbeddedResourceAsync("tt.Plugin.tt");
-                else if (itemType == ItemType.Workflow)
-                    return await VsixHelper.ReadEmbeddedResourceAsync("tt.Workflow.tt");
-                else if (itemType == ItemType.CustomAction)
-                    return await VsixHelper.ReadEmbeddedResourceAsync("tt.CustomAction.tt");
-                else if (itemType == ItemType.CustomApi)
-                    return await VsixHelper.ReadEmbeddedResourceAsync("tt.CustomApi.tt");
-                else if (itemType == ItemType.Test)
-                {
-                    if (templateTitle == $"Default - {ItemType.Plugin.ToString()}")
-                        return await VsixHelper.ReadEmbeddedResourceAsync("tt.TestPlugin.tt");
-                    else if (templateTitle == $"Default - {ItemType.Workflow.ToString()}")
-                        return await VsixHelper.ReadEmbeddedResourceAsync("tt.TestWorkflow.tt");
-                    else if (templateTitle == $"Default - {ItemType.CustomAction.ToString()}")
-                        return await VsixHelper.ReadEmbeddedResourceAsync("tt.TestCustomAction.tt");
-                    else if (templateTitle == $"Default - {ItemType.CustomApi.ToString()}")
-                        return await VsixHelper.ReadEmbeddedResourceAsync("tt.TestCustomApi.tt");
-                }
-                else if (itemType == ItemType.UiTest)
-                    return await VsixHelper.ReadEmbeddedResourceAsync("tt.UiTest.tt");
-                return string.Empty;
+                if (templateTitle == $"Default - {ItemType.Plugin}")
+                    return await VsixHelper.ReadEmbeddedResourceAsync("tt.TestPlugin.tt");
+                else if (templateTitle == $"Default - {ItemType.Workflow}")
+                    return await VsixHelper.ReadEmbeddedResourceAsync("tt.TestWorkflow.tt");
+                else if (templateTitle == $"Default - {ItemType.CustomAction}")
+                    return await VsixHelper.ReadEmbeddedResourceAsync("tt.TestCustomAction.tt");
+                else if (templateTitle == $"Default - {ItemType.CustomApi}")
+                    return await VsixHelper.ReadEmbeddedResourceAsync("tt.TestCustomApi.tt");
             }
-
+            else if (itemType == ItemType.UiTest)
+                return await VsixHelper.ReadEmbeddedResourceAsync("tt.UiTest.tt");
+            return string.Empty;
         }
     }
 }
