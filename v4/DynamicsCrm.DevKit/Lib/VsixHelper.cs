@@ -12,7 +12,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace DynamicsCrm.DevKit
+namespace DynamicsCrm.DevKit.Lib
 {
     public class VsixHelper
     {
@@ -380,7 +380,7 @@ namespace DynamicsCrm.DevKit
         public static async Task<bool> IsAddToSharedProjectAsync()
         {            
             await Microsoft.VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-            var sharedProjectName = await DynamicsCrm.DevKit.VsixHelper.GetSharedProjectAsync();
+            var sharedProjectName = await VsixHelper.GetSharedProjectAsync();
             var activeProject = await VS.Solutions.GetActiveProjectAsync();
             if (activeProject != null && activeProject.Name == sharedProjectName) return true;
             var dte = await VS.GetServiceAsync<DTE, DTE>();
@@ -402,10 +402,6 @@ namespace DynamicsCrm.DevKit
             {
                 customTemplates = SimpleJson.DeserializeObject<ConfigJson>(await Task.Run(() => File.ReadAllText(fileName))).CustomTemplates;
                 customTemplates = [.. customTemplates.Where(x => x.Type == $"{itemType}")];
-                foreach (var customTemplate in customTemplates)
-                {
-                    customTemplate.Body = Helper.Decompress(customTemplate.Body);
-                }
             }
             if (itemType == ItemType.Test)
             {

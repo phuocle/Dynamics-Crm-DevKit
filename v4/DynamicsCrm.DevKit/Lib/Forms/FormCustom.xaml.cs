@@ -3,11 +3,14 @@ using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.VisualStudio.Shell;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace DynamicsCrm.DevKit.Lib.Forms
 {
     public partial class FormCustom : BaseDialogWindow
     {
+        private string T4Code => Textbox.Text;
         private ItemType _ItemType = DynamicsCrm.DevKit.Shared.ItemType.None;
 
         private ItemType ItemType
@@ -135,14 +138,9 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             ComboBoxTemplate.ItemsSource = null;
             ComboBoxTemplate.ItemsSource = CustomTemplates;
             ComboBoxTemplate.DisplayMemberPath = "Title";
-            if (selectedTitle != null)
-            {
-                ComboBoxTemplate.SelectedItem = CustomTemplates.FirstOrDefault(x => x.Title == selectedTitle);
-            }
-            else
-            {
-                ComboBoxTemplate.SelectedItem = CustomTemplates.FirstOrDefault(x => x.IsDefault);
-            }
+            ComboBoxTemplate.SelectedItem = selectedTitle != null
+                ? CustomTemplates.FirstOrDefault(x => x.Title == selectedTitle)
+                : CustomTemplates.FirstOrDefault(x => x.IsDefault);
             if (ComboBoxTemplate.SelectedItem == null) ComboBoxTemplate.SelectedIndex = 0;
         }
 
@@ -153,13 +151,18 @@ namespace DynamicsCrm.DevKit.Lib.Forms
 
         private void ButtonReview_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            //Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;
-            //var t4Code = Textbox.Text;
-            //var code = T4Helper.ProcessTemplate(t4Code, T4Context);
-            //var form = new FormReview(code);
-            //Mouse.OverrideCursor = null;
-            //form.ShowDialog();
+            _ = ButtonReview_ClickAsync();
+            async Task ButtonReview_ClickAsync()
+            {
+                Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;
+                var code = await T4Helper.ProcessTemplateAsync(T4Code, T4Context);
+                var form = new FormReview(code);
+                Mouse.OverrideCursor = null;
+                form.ShowDialog();
+            }    
         }
+
+        
 
         private void ButtonReset_Click(object sender, System.Windows.RoutedEventArgs e)
         {
@@ -380,18 +383,18 @@ namespace DynamicsCrm.DevKit.Lib.Forms
 
         private void ComboBoxTemplate_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            //var selected = (CustomTemplate)ComboBoxTemplate.SelectedItem;
-            //Textbox.Text = Utility.Decompress(selected?.Body);
-            //var isDefault = selected?.Title == "Default" ||
-            //                selected?.Title == $"Default - {ItemType.CustomApi.ToString()}" ||
-            //                selected?.Title == $"Default - {ItemType.CustomAction.ToString()}" ||
-            //                selected?.Title == $"Default - {ItemType.Workflow.ToString()}" ||
-            //                selected?.Title == $"Default - {ItemType.Plugin.ToString()}";
-            //buttonDefault.IsEnabled = !isDefault;
-            //buttonSave2.IsEnabled = !isDefault;
-            //buttonSaveAs.IsEnabled = true;
-            //buttonDelete.IsEnabled = !isDefault;
-            //buttonRename.IsEnabled = !isDefault;
+            var selected = (CustomTemplate)ComboBoxTemplate.SelectedItem;
+            Textbox.Text = Helper.Decompress(selected?.Body);
+            var isDefault = selected?.Title == "Default" ||
+                            selected?.Title == $"Default - {ItemType.CustomApi}" ||
+                            selected?.Title == $"Default - {ItemType.CustomAction}" ||
+                            selected?.Title == $"Default - {ItemType.Workflow}" ||
+                            selected?.Title == $"Default - {ItemType.Plugin}";
+            buttonDefault.IsEnabled = !isDefault;
+            buttonSave2.IsEnabled = !isDefault;
+            buttonSaveAs.IsEnabled = true;
+            buttonDelete.IsEnabled = !isDefault;
+            buttonRename.IsEnabled = !isDefault;
         }
 
         private void buttonDefault_Click(object sender, System.Windows.RoutedEventArgs e)

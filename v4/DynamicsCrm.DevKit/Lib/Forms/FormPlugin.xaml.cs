@@ -20,7 +20,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         public CrmConnection CrmConnection => CONNECTION.CrmConnection;
         private List<CustomTemplate> CustomTemplates { get; set; } = new List<CustomTemplate>();
 
-        public string PluginClass => TextboxClass.Text ?? string.Empty;
+        public string Class => TextboxClass.Text ?? string.Empty;
         public string PluginSchemaName
         {
             get
@@ -153,13 +153,13 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             }
         }
 
-        public string NameSpace { get; set; }
+        public string PluginNameSpace { get; set; }
 
         public FormPlugin(ItemType itemType, string nameSpace)
         {
             InitializeComponent();
             ItemType = itemType;
-            NameSpace = nameSpace;
+            PluginNameSpace = nameSpace;
             LoadComboBoxes();
             _ = LoadCustomTemplatesAsync();
         }
@@ -228,28 +228,20 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     ItemType == ItemType.CustomApi
                     )
                 {
-                    //Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;
-                    //var solutionName = "";// VsixHelper.GetSolutionName();
-                    //var pluginSharedNameSpace = $"{solutionName}.Shared";
-                    //var pluginNameSpace = NameSpace.Contains($".{ItemType.Plugin}.") ? NameSpace.Replace($".{ItemType.Plugin}.", $".{ItemType.Plugin}") : NameSpace;
-                    //var pluginMessage = this.PluginMessage;
-                    //var pluginLogicalName = this.PluginLogicalName;
-                    //var pluginSchemaName = this.PluginSchemaName;
-                    //var pluginStage = this.PluginStage;
-                    //var pluginExecution = this.PluginExecution;
-                    //var pluginComment = this.PluginComment;
-                    //var pluginClass = this.PluginClass;
-
+                    Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;
                     var t4Context = new T4Context
                     {
-                        Comment = "//ABC Comment",
-                        EntityLogicalName = "account",
-                        EntitySchemaName = "Account",
-                        NameSpace = "Dev.DevKit.Account",
-                        PluginClass = "PreAccountCreateSynchronous",
-                        PluginExecution = "Synchronous",
-                        PluginMessage = "Create",
-                        PluginStage = "PreOperation",
+                        PluginComment = PluginComment,
+                        PluginNameSpace = PluginNameSpace,
+                        PluginExecution = PluginExecution,
+                        PluginMessage = PluginMessage,
+                        PluginStage = PluginStage,
+                        PluginSchemaName = PluginSchemaName,
+                        Class = Class,
+                        PluginLogicalName = PluginLogicalName,
+                        PluginSharedNameSpace = await VsixHelper.GetSharedProjectAsync(),
+                        DataSource = "DataSource",
+                        ProxyTypes = "ProxyTypes"
                     };
                     var form = new FormCustom(CustomTemplates, TemplateTitle, ItemType, t4Context);
                     Mouse.OverrideCursor = null;
