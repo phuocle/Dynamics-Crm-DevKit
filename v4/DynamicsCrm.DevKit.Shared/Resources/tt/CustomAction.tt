@@ -4,8 +4,8 @@ using <#=Context.PluginSharedNameSpace#>;
 
 namespace <#=Context.PluginNameSpace#>
 {
-    [CrmPluginRegistration("<#=Context.PluginMessage#>", "<#=Context.PluginLogicalName#>", StageEnum.<#=Context.PluginStage#>, ExecutionModeEnum.<#=Context.PluginExecution#>, "", "<#=Context.PluginNameSpace#>.<#=Context.Class#><#=Context.PluginOrder#>", <#=Context.PluginOrder#>, IsolationModeEnum.Sandbox, PluginType = PluginType.CustomAction<#if(Context.PluginExecution=="Asynchronous"){#>, DeleteAsyncOperation = true<#}#>)]
-    public class <#=Context.Class#> : IPlugin
+    [CrmPluginRegistration("<#=Context.PluginMessage#>", "<#=Context.PluginLogicalName#>", StageEnum.<#=Context.PluginStage#>, ExecutionModeEnum.<#=Context.PluginExecution#>, "", "<#=Context.PluginNameSpace#>.<#=Context.Class#><#if(Context.PluginOrder!=1){#><#=Context.PluginOrder#><#}#>", <#=Context.PluginOrder#>, IsolationModeEnum.Sandbox, PluginType = PluginType.CustomAction<#if(Context.PluginExecution=="Asynchronous"){#>, DeleteAsyncOperation = true<#}#>)]
+    public class <#=Context.Class#><#if(Context.PluginOrder!=1){#><#=Context.PluginOrder#><#}#> : IPlugin
     {
         /*
 <#=Context.PluginComment#>
@@ -13,7 +13,7 @@ namespace <#=Context.PluginNameSpace#>
 
         //private readonly string unSecureConfiguration = null;
         //private readonly string secureConfiguration = null;
-        //public <#=Context.Class#><#=Context.PluginOrder#>(string unSecureConfiguration, string secureConfiguration)
+        //public <#=Context.Class#><#if(Context.PluginOrder!=1){#><#=Context.PluginOrder#><#}#>(string unSecureConfiguration, string secureConfiguration)
         //{
         //    this.unSecureConfiguration = unSecureConfiguration;
         //    this.secureConfiguration = secureConfiguration;

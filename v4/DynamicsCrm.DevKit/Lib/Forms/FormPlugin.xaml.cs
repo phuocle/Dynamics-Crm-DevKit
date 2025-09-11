@@ -265,7 +265,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                         var items = XrmHelper.GetListXrmEntity(XrmHelper.EntitiesMetadata);
                         if (ItemType == ItemType.CustomAction || ItemType == ItemType.CustomApi) 
                         {
-                            items.Insert(0, new XrmEntity { Name = "None", LogicalName = "none", EntityTypeCode = -1, HasImage = false, IsCustomEntity = false });
+                            items.Insert(0, new XrmEntity { Name = "None", SchemaName = "None", LogicalName = "none", EntityTypeCode = -1, HasImage = false, IsCustomEntity = false });
                         }
                         await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
                         ComboBoxEntity.DisplayMemberPath = Const.SchemaName;

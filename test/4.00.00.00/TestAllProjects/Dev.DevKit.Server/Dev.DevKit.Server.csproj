@@ -62,6 +62,8 @@
     <Compile Include="Account\PostAccountAssignAsynchronous3.cs" />
     <Compile Include="Account\PostAccountAssignAsynchronous4.cs" />
     <Compile Include="Account\PostAccountUpdateAsynchronous.cs" />
+    <Compile Include="CustomAction\PostNonedevkit_CustomActionSyncAsynchronous.cs" />
+    <Compile Include="CustomAction\PostNonedevkit_CustomActionSyncAsynchronous2.cs" />
     <Compile Include="Entities\SystemUser.cs" />
     <Compile Include="Entities\SystemUser.generated.cs">
       <DependentUpon>SystemUser.cs</DependentUpon>
