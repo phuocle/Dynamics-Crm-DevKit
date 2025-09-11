@@ -440,5 +440,36 @@ namespace DynamicsCrm.DevKit.Lib
                 return await VsixHelper.ReadEmbeddedResourceAsync("tt.UiTest.tt");
             return string.Empty;
         }
+
+        internal static async Task SaveCustomTemplatesAsync(CustomTemplate save)
+        {
+            var fileName = await GetDynamicsCrmDevKitConfigJsonFullFileNameAsync();
+            if (File.Exists(fileName))
+            {
+                var configJson = SimpleJson.DeserializeObject<ConfigJson>(await Task.Run(() => File.ReadAllText(fileName)));
+                var found = configJson.CustomTemplates.Where(x => x.Type == save.Type && x.Title == save.Title).FirstOrDefault();
+                if (found != null)
+                {
+                    found.IsDefault = save.IsDefault;
+                    found.Body = save.Body;
+                }
+                else
+                {
+                    configJson.CustomTemplates.Add(save);
+                    configJson.CustomTemplates = [.. configJson.CustomTemplates.OrderBy(x => x.Type).ThenBy(x => x.Title)];
+                }
+                var json = JsonHelper.FormatJson(SimpleJson.SerializeObject(configJson));
+                await FileHelper.ForceWriteAllTextAsync(fileName, json);
+            }
+            else
+            {
+                var configJson = new ConfigJson
+                {
+                    CustomTemplates = [save]
+                };
+                var json = JsonHelper.FormatJson(SimpleJson.SerializeObject(configJson));
+                await FileHelper.ForceWriteAllTextAsync(fileName, json);
+            }
+        }
     }
 }

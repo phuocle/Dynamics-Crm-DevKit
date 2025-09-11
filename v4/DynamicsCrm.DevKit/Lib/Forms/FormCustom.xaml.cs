@@ -1,4 +1,5 @@
-﻿using DynamicsCrm.DevKit.Shared;
+﻿using Community.VisualStudio.Toolkit;
+using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.VisualStudio.Shell;
 using System.Collections.Generic;
@@ -328,34 +329,40 @@ namespace DynamicsCrm.DevKit.Lib.Forms
 
         private void buttonSaveAs_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            //var form = new FormInput();
-            //if (form.ShowDialog() ?? false)
-            //{
-            //    var found = CachedJson.CustomTemplates.FirstOrDefault(x => x.Title == form.InputValue);
-            //    if (
-            //        found != null ||
-            //        form.InputValue.ToLower() == "default" ||
-            //        form.InputValue.ToLower() == $"default - {ItemType.Plugin.ToString()}".ToLower() ||
-            //        form.InputValue.ToLower() == $"default - {ItemType.Workflow.ToString()}".ToLower() ||
-            //        form.InputValue.ToLower() == $"default - {ItemType.CustomAction.ToString()}".ToLower() ||
-            //        form.InputValue.ToLower() == $"default - {ItemType.CustomApi.ToString()}".ToLower()
-            //        )
-            //    {
-            //        VS.MessageBox.ShowError($"An existing custom template named '{form.InputValue}' was found. The save as action failed.");
-            //    }
-            //    else
-            //    {
-            //        var save = new CustomTemplate
-            //        {
-            //            Body = Utility.Compress(Textbox.Text),
-            //            IsDefault = false,
-            //            Title = form.InputValue,
-            //            Type = ItemType.ToString()
-            //        };
-            //        SaveCachedJson(save);
-            //        LoadCustomTemplates(form.InputValue);
-            //    }
-            //}
+            _ = buttonSaveAs_ClickAsync();
+            async Task buttonSaveAs_ClickAsync()
+            {
+
+                var form = new FormInput();
+                if (form.ShowDialog() ?? false)
+                {
+                    var found = CustomTemplates.FirstOrDefault(x => x.Title == form.InputValue);
+                    if (
+                        found != null ||
+                        form.InputValue.ToLower() == "default" ||
+                        form.InputValue.ToLower() == $"default - {ItemType.Plugin}".ToLower() ||
+                        form.InputValue.ToLower() == $"default - {ItemType.Workflow}".ToLower() ||
+                        form.InputValue.ToLower() == $"default - {ItemType.CustomAction}".ToLower() ||
+                        form.InputValue.ToLower() == $"default - {ItemType.CustomApi}".ToLower()
+                        )
+                    {
+                        await VS.MessageBox.ShowErrorAsync($"An existing custom template named '{form.InputValue}' was found. The save as action failed.");
+                    }
+                    else
+                    {
+                        var save = new CustomTemplate
+                        {
+                            Body = Helper.Compress(Textbox.Text),
+                            IsDefault = false,
+                            Title = form.InputValue,
+                            Type = ItemType.ToString()
+                        };
+                        await VsixHelper.SaveCustomTemplatesAsync(save);
+                        CustomTemplates = await VsixHelper.GetCustomTemplatesAsync(ItemType);
+                        LoadCustomTemplates(form.InputValue);
+                    }
+                }
+            }
         }
 
         void SaveCachedJson(CustomTemplate customTemplate = null)
