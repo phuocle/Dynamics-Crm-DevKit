@@ -263,6 +263,10 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     {
                         await XrmHelper.ReadEntitiesMetadataAsync(ServiceClient);
                         var items = XrmHelper.GetListXrmEntity(XrmHelper.EntitiesMetadata);
+                        if (ItemType == ItemType.CustomAction || ItemType == ItemType.CustomApi) 
+                        {
+                            items.Insert(0, new XrmEntity { Name = "None", LogicalName = "none", EntityTypeCode = -1, HasImage = false, IsCustomEntity = false });
+                        }
                         await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
                         ComboBoxEntity.DisplayMemberPath = Const.SchemaName;
                         ComboBoxEntity.ItemsSource = items;
@@ -314,7 +318,26 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             }
             else if (ItemType == ItemType.CustomAction)
             {
-                // custom action logic intentionally removed
+                LockUi(true);
+                _ = Task.Factory.StartNew(() =>
+                {
+                    ThreadHelper.JoinableTaskFactory.Run(async () =>
+                    {
+                        await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                        var selectedEntity = (XrmEntity)ComboBoxEntity.SelectedItem;
+                        if (selectedEntity.LogicalName == "none")
+                            ComboBoxMessage.ItemsSource = await XrmHelper.GetCustomActionsAsync(ServiceClient);
+                        else
+                            ComboBoxMessage.ItemsSource = await XrmHelper.GetCustomActionsAsync(ServiceClient, selectedEntity.LogicalName);
+                        ComboBoxMessage.DisplayMemberPath = "Name";                        
+                        ComboBoxMessage.SelectedItem = null;
+                        ComboBoxStage.SelectedItem = null;
+                        ComboBoxExecution.SelectedItem = null;
+                        TextboxClass.Text = null;
+                        UpdateClassName();
+                        LockUi(false);
+                    });
+                }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default);
             }
             else if (ItemType == ItemType.CustomApi)
             {

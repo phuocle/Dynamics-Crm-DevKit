@@ -987,5 +987,108 @@ namespace DynamicsCrm.DevKit.Shared
             code = code.Replace($"{TAB}", "    ");
             return code;
         }
+
+        internal static async Task<List<NameValue>> GetCustomActionsAsync(ServiceClient service)
+        {
+            var fetchData = new
+            {
+                customizationlevel = "1",
+                primaryobjecttypecode = "none",
+                endpoint = "api/data"
+            };
+            var fetchXml = $@"
+<fetch>
+  <entity name='sdkmessagerequest'>
+    <attribute name='name' />
+    <attribute name='primaryobjecttypecode' />
+    <filter type='and'>
+      <condition attribute='customizationlevel' operator='eq' value='{fetchData.customizationlevel}'/>
+    </filter>
+    <link-entity name='sdkmessagepair' from='sdkmessagepairid' to='sdkmessagepairid' link-type='inner'>
+      <filter type='and'>
+        <condition attribute='endpoint' operator='eq' value='{fetchData.endpoint}'/>
+      </filter>
+    </link-entity>
+  </entity>
+</fetch>";
+            var rows = await service.RetrieveMultipleAsync(new FetchExpression(fetchXml));
+            var list2 = new List<Entity>();
+            foreach (var entity in rows.Entities)
+            {
+                var primaryobjecttypecode = entity.GetAttributeValue<string>("primaryobjecttypecode");
+                if (primaryobjecttypecode == null || primaryobjecttypecode == "none")
+                    list2.Add(entity);
+            }
+            var list = new List<XrmEntity>();
+            foreach (var entity in list2)
+            {
+                list.Add(new XrmEntity
+                {
+                    LogicalName = entity.GetAttributeValue<string>("name"),
+                    Name = await GetSchemaNameAsync(service, entity.GetAttributeValue<string>("primaryobjecttypecode"))
+                });
+            }
+            var json = SimpleJson.SerializeObject(list);
+            return [.. list
+                .Where(x => x.Name.ToLower() == "none")
+                .Select(x => new NameValue { Name = x.LogicalName })
+                .OrderBy(x => x.Name)];
+        }
+
+        private static async Task<string> GetSchemaNameAsync(ServiceClient service, string logicalName)
+        {
+            if (logicalName == null || logicalName == "none") return "None";
+            var request = new RetrieveEntityRequest
+            {
+                EntityFilters = EntityFilters.Entity,
+                LogicalName = logicalName
+            };
+            var response = (RetrieveEntityResponse)await service.ExecuteAsync(request);
+            return response.EntityMetadata.SchemaName;
+        }
+
+        internal static async Task<List<NameValue>> GetCustomActionsAsync(ServiceClient service, string logicalName)
+        {
+            var request = new RetrieveEntityRequest
+            {
+                EntityFilters = EntityFilters.Entity,
+                LogicalName = logicalName
+            };
+            var response = (RetrieveEntityResponse)await service.ExecuteAsync(request);
+            var fetchData = new
+            {
+                categoryname = "CustomOperation",
+                primaryobjecttypecode = response.EntityMetadata.ObjectTypeCode,
+                iscustomprocessingstepallowed = "1"
+            };
+            var fetchXml = $@"<?xml version=""1.0"" encoding=""utf-16""?>
+<fetch>
+  <entity name=""sdkmessage"">
+    <all-attributes />
+    <attribute name=""name"" />
+    <filter>
+      <condition attribute=""categoryname"" operator=""eq"" value=""{fetchData.categoryname/*CustomOperation*/}"" />
+    </filter>
+    <order attribute=""name"" />
+    <link-entity name=""sdkmessagefilter"" from=""sdkmessageid"" to=""sdkmessageid"">
+      <filter type=""and"">
+        <condition attribute=""primaryobjecttypecode"" operator=""eq"" value=""{fetchData.primaryobjecttypecode/*1*/}"" />
+        <condition attribute=""iscustomprocessingstepallowed"" operator=""eq"" value=""{fetchData.iscustomprocessingstepallowed/*1*/}"" />
+      </filter>
+    </link-entity>
+  </entity>
+</fetch>";
+            var rows = await service.RetrieveMultipleAsync(new FetchExpression(fetchXml));
+            var messages = (from entity in rows.Entities
+                            select entity["name"].ToString()
+                ).ToList();
+            messages.Sort();
+            var list = new List<NameValue>();
+            foreach (var message in messages)
+            {
+                list.Add(new NameValue { Name = message });
+            }
+            return list;
+        }
     }
 }

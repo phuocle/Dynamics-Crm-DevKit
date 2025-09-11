@@ -309,9 +309,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     }
                 }
             }
-        }
-
-        
+        }       
 
         private void ComboBoxTemplate_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
