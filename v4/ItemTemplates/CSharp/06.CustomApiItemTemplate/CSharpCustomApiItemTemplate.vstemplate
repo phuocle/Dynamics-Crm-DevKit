@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <VSTemplate Version="3.0.0" Type="Item" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
 	<TemplateData>
-		<Name>16. C# Custom Api Class</Name>
+		<Name>06. C# Custom Api Class</Name>
 		<Description>Dataverse Custom API handler implementing IPlugin: includes Execute skeleton with tracing, bound/unbound target support, Custom API input/output parameter handling, and secure/unsecure config placeholders.</Description>
 		<DefaultName>Class.cs</DefaultName>
 		<TemplateID>AAAAAAAA-AAAA-AAAA-BBBB-000000000014</TemplateID>

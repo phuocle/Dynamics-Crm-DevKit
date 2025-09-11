@@ -1,14 +1,18 @@
-﻿using System;
+﻿using Dev.DevKit.Shared;
 using Microsoft.Xrm.Sdk;
-using <#=Context.PluginSharedNameSpace#>;
+using System;
 
-namespace <#=Context.PluginNameSpace#>
+namespace Dev.DevKit.Server.CustomApi
 {
-    [CrmPluginRegistration("<#=Context.Class#><#if(Context.PluginOrder!=1){#><#=Context.PluginOrder#><#}#>", "<#=Context.PluginMessage#>", PluginType.CustomApi<#if(Context.PluginLogicalName!="none"){#>, EntityLogicalName = "<#=Context.PluginLogicalName#>"<#}#>)]
-    public class <#=Context.Class#><#if(Context.PluginOrder!=1){#><#=Context.PluginOrder#><#}#> : IPlugin
+    [CrmPluginRegistration("devkit_CustomApiSyncRequest", "devkit_CustomApiSync", PluginType.CustomApi)]
+    public class devkit_CustomApiSyncRequest : IPlugin
     {
         /*
-<#=Context.PluginComment#>
+        InputParameters:
+            devkit_f         System.String - require
+            devkit_json      System.String
+        OutputParameters:
+            devkit_output    System.String - require
         */
 
         public void Execute(IServiceProvider serviceProvider)
@@ -18,7 +22,6 @@ namespace <#=Context.PluginNameSpace#>
             var serviceFactory = (IOrganizationServiceFactory)serviceProvider.GetService(typeof(IOrganizationServiceFactory));
             var serviceAdmin = serviceFactory.CreateOrganizationService(null);
             var service = serviceFactory.CreateOrganizationService(context.UserId);
-            <#if(Context.PluginLogicalName!="none"){#>if (context.PrimaryEntityName.ToLower() != "<#=Context.PluginLogicalName#>") throw new InvalidPluginExecutionException("PrimaryEntityName does not equals <#=Context.PluginLogicalName#>");<#}#>
 
             tracing?.DebugContext(context);
 

@@ -359,8 +359,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         {
             if (ItemType == ItemType.CustomApi) 
             {
-                var order = PluginOrder == 1 ? string.Empty : PluginOrder.ToString();
-                TextboxClass.Text = $"{PluginMessage}{order}Request";
+                TextboxClass.Text = $"{PluginMessage}Request";
             }
             else
                 TextboxClass.Text = $"{PluginStage.Replace("Operation", string.Empty)}{PluginSchemaName}{PluginMessage}{PluginExecution}";

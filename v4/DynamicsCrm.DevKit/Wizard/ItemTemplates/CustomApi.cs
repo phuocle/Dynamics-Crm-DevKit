@@ -46,7 +46,7 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
                     var t4Code = await T4Helper.GetT4CodeAsync(ItemType.CustomApi, form.CustomTemplate);
                     var t4Context = await T4Helper.BuildContextAsync(form);
                     var code = await T4Helper.ProcessTemplateAsync(t4Code, t4Context);
-                    replacementsDictionary.Add("$customapi", code);
+                    replacementsDictionary.Add("$customapi$", code);
                     replacementsDictionary.Add("$Class$", form.Class);
                     replacementsDictionary.Add("$PluginOrder$", form.PluginOrder == 1 ? string.Empty : $"{form.PluginOrder}");
                     await VS.StatusBar.EndAnimationAsync(StatusAnimation.Deploy);
