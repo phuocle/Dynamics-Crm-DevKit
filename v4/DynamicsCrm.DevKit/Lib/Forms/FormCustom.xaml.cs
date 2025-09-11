@@ -2,9 +2,11 @@
 using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.VisualStudio.Shell;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using System.Windows.Input;
 
 namespace DynamicsCrm.DevKit.Lib.Forms
@@ -13,18 +15,20 @@ namespace DynamicsCrm.DevKit.Lib.Forms
     {
         private string T4Code => Textbox.Text;
         private ItemType _ItemType = DynamicsCrm.DevKit.Shared.ItemType.None;
-
+        private readonly HashSet<string> DEFAULTS = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+        {
+            "Default",
+            $"Default - {ItemType.Plugin}",
+            $"Default - {ItemType.Workflow}",
+            $"Default - {ItemType.CustomAction}",
+            $"Default - {ItemType.CustomApi}"
+        };
         private ItemType ItemType
         {
             get => _ItemType;
             set
             {
                 _ItemType = value;
-                //var fileName = VsixHelper.GetDynamicsCrmDevKitConfigJsonFileName();
-                //if (File.Exists(fileName))
-                //    CachedJson = SimpleJson.DeserializeObject<CachedJson>(File.ReadAllText(fileName));
-                //else
-                //    CachedJson = new CachedJson();
                 void PluginItem()
                 {
                     HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Plugin-Item-Template-Customize");
@@ -36,40 +40,24 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Workflow-Item-Template-Customize");
                     HELP.Inlines.Clear();
                     HELP.Inlines.Add("Workflow Item Template Customize");
-                    //if (cachedJson.Workflow != null)
-                    //    Textbox.Text = Utility.Decompress(cachedJson.Workflow);
-                    //else
-                    //    Textbox.Text = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.Workflow.tt");
                 }
                 void CustomActionItem()
                 {
                     HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Custom-Action-Item-Template-Customize");
                     HELP.Inlines.Clear();
                     HELP.Inlines.Add("Custom Action Item Template Customize");
-                    //if (cachedJson.CustomAction != null)
-                    //    Textbox.Text = Utility.Decompress(cachedJson.CustomAction);
-                    //else
-                    //    Textbox.Text = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.CustomAction.tt");
                 }
                 void CustomApiItem()
                 {
                     HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Custom-Api-Item-Template-Customize");
                     HELP.Inlines.Clear();
                     HELP.Inlines.Add("Custom Api Item Template Customize");
-                    //if (cachedJson.CustomApi != null)
-                    //    Textbox.Text = Utility.Decompress(cachedJson.CustomApi);
-                    //else
-                    //    Textbox.Text = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.CustomApi.tt");
                 }
                 void UiTestItem()
                 {
                     HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Ui-Test-Item-Template-Customize");
                     HELP.Inlines.Clear();
                     HELP.Inlines.Add("UI Test Item Template Customize");
-                    //if (cachedJson.CustomApi != null)
-                    //    Textbox.Text = Utility.Decompress(cachedJson.UiTest);
-                    //else
-                    //    Textbox.Text = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.UiTest.tt");
                 }
                 void DataProviderItem()
                 {
@@ -161,82 +149,6 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 Mouse.OverrideCursor = null;
                 form.ShowDialog();
             }    
-        }
-
-        
-
-        private void ButtonReset_Click(object sender, System.Windows.RoutedEventArgs e)
-        {
-            //if (VS.MessageBox.ShowConfirm("This will reset the template to original setting.", "Do you want to continue?"))
-            //{
-            //    var template = string.Empty;
-            //    if (ItemType == ItemType.Plugin)
-            //    {
-            //        Textbox.Text = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.Plugin.tt");
-            //    }
-            //    else if (ItemType == ItemType.Workflow)
-            //    {
-            //        Textbox.Text = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.Workflow.tt");
-            //    }
-            //    else if (ItemType == ItemType.CustomAction)
-            //    {
-            //        Textbox.Text = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.CustomAction.tt");
-            //    }
-            //    else if (ItemType == ItemType.CustomApi)
-            //    {
-            //        Textbox.Text = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.CustomApi.tt");
-            //    }
-            //    else if (ItemType == ItemType.DataProvider)
-            //    {
-            //        if ((string)ComboBoxSelect.SelectedItem == "Create")
-            //        {
-            //            Textbox.Text = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.DataProviderCreate.tt");
-            //        }
-            //        else if ((string)ComboBoxSelect.SelectedItem == "Update")
-            //        {
-            //            Textbox.Text = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.DataProviderUpdate.tt");
-            //        }
-            //        else if ((string)ComboBoxSelect.SelectedItem == "Delete")
-            //        {
-            //            Textbox.Text = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.DataProviderDelete.tt");
-            //        }
-            //        else if ((string)ComboBoxSelect.SelectedItem == "Retrieve")
-            //        {
-            //            Textbox.Text = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.DataProviderRetrieve.tt");
-            //        }
-            //        else if ((string)ComboBoxSelect.SelectedItem == "RetrieveMultiple")
-            //        {
-            //            Textbox.Text = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.DataProviderRetrieveMultiple.tt");
-            //        }
-            //    }
-            //    else if (ItemType == ItemType.Test)
-            //    {
-            //        if ((string)ComboBoxSelect.SelectedItem == "Plugin")
-            //        {
-            //            Textbox.Text = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.TestPlugin.tt");
-            //        }
-            //        else if ((string)ComboBoxSelect.SelectedItem == "Workflow")
-            //        {
-            //            Textbox.Text = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.TestWorkflow.tt");
-            //        }
-            //        else if ((string)ComboBoxSelect.SelectedItem == "CustomAction")
-            //        {
-            //            Textbox.Text = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.TestCustomAction.tt");
-            //        }
-            //        else if ((string)ComboBoxSelect.SelectedItem == "CustomApi")
-            //        {
-            //            Textbox.Text = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.TestCustomApi.tt");
-            //        }
-            //        else if ((string)ComboBoxSelect.SelectedItem == "DataProvider")
-            //        {
-            //            Textbox.Text = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.TestDataProvider.tt");
-            //        }
-            //    }
-            //    else if (ItemType == ItemType.UiTest)
-            //    {
-            //        Textbox.Text = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.UiTest.tt");
-            //    }
-            //}
         }
 
         private void BaseDialogWindow_SizeChanged(object sender, System.Windows.SizeChangedEventArgs e)
@@ -332,24 +244,17 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             _ = buttonSaveAs_ClickAsync();
             async Task buttonSaveAs_ClickAsync()
             {
-
                 var form = new FormInput();
                 if (form.ShowDialog() ?? false)
                 {
                     var found = CustomTemplates.FirstOrDefault(x => x.Title == form.InputValue);
-                    if (
-                        found != null ||
-                        form.InputValue.ToLower() == "default" ||
-                        form.InputValue.ToLower() == $"default - {ItemType.Plugin}".ToLower() ||
-                        form.InputValue.ToLower() == $"default - {ItemType.Workflow}".ToLower() ||
-                        form.InputValue.ToLower() == $"default - {ItemType.CustomAction}".ToLower() ||
-                        form.InputValue.ToLower() == $"default - {ItemType.CustomApi}".ToLower()
-                        )
+                    if (found != null || DEFAULTS.Contains(form.InputValue))
                     {
                         await VS.MessageBox.ShowErrorAsync($"An existing custom template named '{form.InputValue}' was found. The save as action failed.");
                     }
                     else
                     {
+                        Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;
                         var save = new CustomTemplate
                         {
                             Body = Helper.Compress(Textbox.Text),
@@ -360,33 +265,61 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                         await VsixHelper.SaveCustomTemplatesAsync(save);
                         CustomTemplates = await VsixHelper.GetCustomTemplatesAsync(ItemType);
                         LoadCustomTemplates(form.InputValue);
+                        Mouse.OverrideCursor = null;
+                        await VS.MessageBox.ShowAsync($"Custom template: '{form.InputValue}' saved as.", icon: Microsoft.VisualStudio.Shell.Interop.OLEMSGICON.OLEMSGICON_INFO, buttons: Microsoft.VisualStudio.Shell.Interop.OLEMSGBUTTON.OLEMSGBUTTON_OK, defaultButton: Microsoft.VisualStudio.Shell.Interop.OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
+                    }
+                }
+            }
+        }
+        
+        private void buttonSave_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            _ = buttonSave_ClickAsync();
+            async Task buttonSave_ClickAsync()
+            {   
+                var selected = (CustomTemplate)ComboBoxTemplate.SelectedItem;
+                var found = CustomTemplates.FirstOrDefault(x => x.Title == selected.Title);
+                if (found != null)
+                {
+                    Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;
+                    found.Body = Helper.Compress(Textbox.Text);
+                    await VsixHelper.SaveCustomTemplatesAsync(found);
+                    CustomTemplates = await VsixHelper.GetCustomTemplatesAsync(ItemType);
+                    LoadCustomTemplates(found.Title);
+                    Mouse.OverrideCursor = null;
+                    await VS.MessageBox.ShowAsync($"Custom template: '{selected.Title}' saved.", icon: Microsoft.VisualStudio.Shell.Interop.OLEMSGICON.OLEMSGICON_INFO, buttons: Microsoft.VisualStudio.Shell.Interop.OLEMSGBUTTON.OLEMSGBUTTON_OK, defaultButton: Microsoft.VisualStudio.Shell.Interop.OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
+                }
+            }
+        }
+
+        private void buttonDefault_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            _ = buttonDefault_ClickAsync();
+            async Task buttonDefault_ClickAsync()
+            {
+                var selected = (CustomTemplate)ComboBoxTemplate.SelectedItem;
+                var ok = await VS.MessageBox.ShowConfirmAsync($"Are you sure to set: {selected.Title} to default for custom template {ItemType}");
+                if (ok)
+                {
+                    var fileName = await VsixHelper.GetDynamicsCrmDevKitConfigJsonFullFileNameAsync();
+                    if (System.IO.File.Exists(fileName))
+                    {
+                        Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;
+                        var configJson = SimpleJson.DeserializeObject<ConfigJson>(await Task.Run(() => System.IO.File.ReadAllText(fileName)));
+                        foreach(var item in configJson.CustomTemplates.Where(x => x.Type == ItemType.ToString()))
+                            item.IsDefault = false;
+                        var found = configJson.CustomTemplates.Where(x => x.Type == selected.Type && x.Title == selected.Title).FirstOrDefault();
+                        found.IsDefault = true;
+                        var json = JsonHelper.FormatJson(SimpleJson.SerializeObject(configJson));
+                        await FileHelper.ForceWriteAllTextAsync(fileName, json);
+                        Mouse.OverrideCursor = null;
+                        await VS.MessageBox.ShowAsync($"Custom template: '{selected.Title}' is default now.", icon: Microsoft.VisualStudio.Shell.Interop.OLEMSGICON.OLEMSGICON_INFO, buttons: Microsoft.VisualStudio.Shell.Interop.OLEMSGBUTTON.OLEMSGBUTTON_OK, defaultButton: Microsoft.VisualStudio.Shell.Interop.OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
                     }
                 }
             }
         }
 
-        void SaveCachedJson(CustomTemplate customTemplate = null)
-        {
-            //var save = new CachedJson
-            //{
-            //    WebResources = CachedJson.WebResources,
-            //    CustomTemplates = CachedJson.CustomTemplates
-            //};
-            //if (customTemplate != null) save.CustomTemplates.Add(customTemplate);
-            //var fileName = VsixHelper.GetDynamicsCrmDevKitConfigJsonFileName();
-            //Utility.ForceWriteAllText(fileName, JsonHelper.FormatJson(SimpleJson.SerializeObject(save)));
-        }
-        private void buttonSave2_Click(object sender, System.Windows.RoutedEventArgs e)
-        {
-            //var selected = (CustomTemplate)ComboBoxTemplate.SelectedItem;
-            //var found = CachedJson.CustomTemplates.FirstOrDefault(x => x.Title == selected.Title);
-            //if (found != null)
-            //{
-            //    found.Body = Utility.Compress(Textbox.Text);
-            //    SaveCachedJson();
-            //    VS.MessageBox.ShowWarning($"Custom template: '{selected.Title}' saved.");
-            //}
-        }
+        
 
         private void ComboBoxTemplate_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
@@ -398,79 +331,77 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                             selected?.Title == $"Default - {ItemType.Workflow}" ||
                             selected?.Title == $"Default - {ItemType.Plugin}";
             buttonDefault.IsEnabled = !isDefault;
-            buttonSave2.IsEnabled = !isDefault;
+            buttonSave.IsEnabled = !isDefault;
             buttonSaveAs.IsEnabled = true;
             buttonDelete.IsEnabled = !isDefault;
             buttonRename.IsEnabled = !isDefault;
-        }
-
-        private void buttonDefault_Click(object sender, System.Windows.RoutedEventArgs e)
-        {
-            //var selected = (CustomTemplate)ComboBoxTemplate.SelectedItem;
-            //if (VS.MessageBox.ShowConfirm($"Are you sure to set: {selected.Title} to default for custom template {ItemType.ToString()}"))
-            //{
-            //    foreach (var customTemplate in CachedJson.CustomTemplates.Where(x => x.Type == ItemType.ToString()).ToList() ?? new List<CustomTemplate>())
-            //        customTemplate.IsDefault = false;
-            //    var found = CachedJson.CustomTemplates.FirstOrDefault(x => x.Title == selected.Title);
-            //    if (found != null) found.IsDefault = true;
-            //    SaveCachedJson();
-            //    VS.MessageBox.ShowWarning($"The custom template '{selected.Title}' has been set as the default.");
-            //}
-        }
+        }        
 
         private void buttonRename_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            //var selected = (CustomTemplate)ComboBoxTemplate.SelectedItem;
-            //var form = new FormInput(selected.Title);
-            //if (form.ShowDialog() ?? false)
-            //{
-            //    var found = CachedJson.CustomTemplates.FirstOrDefault(x => x.Title == selected.Title);
-            //    if (
-            //       found != null ||
-            //       form.InputValue.ToLower() == "default" ||
-            //       form.InputValue.ToLower() == $"default - {ItemType.Plugin.ToString()}".ToLower() ||
-            //       form.InputValue.ToLower() == $"default - {ItemType.Workflow.ToString()}".ToLower() ||
-            //       form.InputValue.ToLower() == $"default - {ItemType.CustomAction.ToString()}".ToLower() ||
-            //       form.InputValue.ToLower() == $"default - {ItemType.CustomApi.ToString()}".ToLower()
-            //       )
-            //    {
-            //        VS.MessageBox.ShowError($"An existing custom template named '{form.InputValue}' was found. The save as action failed.");
-            //        return;
-            //    }
-            //    if (found != null) found.Title = form.InputValue;
-            //    var count = CachedJson.CustomTemplates.Count(x => x.Title == form.InputValue);
-            //    if (count > 1)
-            //    {
-            //        VS.MessageBox.ShowError($"An existing custom template named '{form.InputValue}' was found. The rename action failed.");
-            //        return;
-            //    }
-            //    else
-            //    {
-            //        SaveCachedJson();
-            //        LoadCustomTemplates(form.InputValue);
-            //    }
-            //}
+            _ = buttonRename_ClickAsync();
+            async Task buttonRename_ClickAsync()
+            {
+                var selected = (CustomTemplate)ComboBoxTemplate.SelectedItem;
+                var form = new FormInput(selected.Title);
+                if (form.ShowDialog() ?? false)
+                {
+                    var fileName = await VsixHelper.GetDynamicsCrmDevKitConfigJsonFullFileNameAsync();
+                    if (System.IO.File.Exists(fileName))
+                    {                        
+                        var configJson = SimpleJson.DeserializeObject<ConfigJson>(await Task.Run(() => System.IO.File.ReadAllText(fileName)));
+                        if (DEFAULTS.Contains(form.InputValue) || configJson.CustomTemplates.Any(x => x.Title.Equals(form.InputValue, StringComparison.OrdinalIgnoreCase)))
+                        {
+                            await VS.MessageBox.ShowErrorAsync($"An existing custom template named '{form.InputValue}' was found. The rename action failed.");
+                            return;
+                        }
+                        Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;
+                        var found = configJson.CustomTemplates.Where(x => x.Type == selected.Type && x.Title == selected.Title).FirstOrDefault();                        
+                        found.Title = form.InputValue;
+                        configJson.CustomTemplates = [.. configJson.CustomTemplates.OrderBy(x => x.Type).ThenBy(x => x.Title)];
+                        var json = JsonHelper.FormatJson(SimpleJson.SerializeObject(configJson));
+                        await FileHelper.ForceWriteAllTextAsync(fileName, json);
+                        Mouse.OverrideCursor = null;
+                        await VS.MessageBox.ShowAsync($"Custom template: '{selected.Title}' renamed to: '{form.InputValue}'.", icon: Microsoft.VisualStudio.Shell.Interop.OLEMSGICON.OLEMSGICON_INFO, buttons: Microsoft.VisualStudio.Shell.Interop.OLEMSGBUTTON.OLEMSGBUTTON_OK, defaultButton: Microsoft.VisualStudio.Shell.Interop.OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
+                    }
+                }
+            }
         }
 
         private void buttonDelete_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            //var selected = (CustomTemplate)ComboBoxTemplate.SelectedItem;
-            //if (VS.MessageBox.ShowConfirm($"Are you sure to delete this custom template {ItemType.ToString()}: '{selected.Title}'"))
-            //{
-            //    var found = CachedJson.CustomTemplates.FirstOrDefault(x => x.Title == selected.Title);
-            //    if (found != null) CachedJson.CustomTemplates.Remove(found);
-            //    var haveDefaultValue = CachedJson.CustomTemplates.FirstOrDefault(x => x.IsDefault);
-            //    SaveCachedJson();
-            //    VS.MessageBox.ShowWarning($"The custom template '{selected.Title}' has been deleted.");
-            //    if (haveDefaultValue != null)
-            //    {
-            //        LoadCustomTemplates(haveDefaultValue.Title);
-            //    }
-            //    else
-            //    {
-            //        LoadCustomTemplates();
-            //    }
-            //}
+            _ = buttonDelete_ClickAsync();
+            async Task buttonDelete_ClickAsync()
+            {
+                var selected = (CustomTemplate)ComboBoxTemplate.SelectedItem;
+                var ok = await VS.MessageBox.ShowConfirmAsync($"Are you sure to delete this custom template {ItemType}: '{selected.Title}'");
+                if (ok)
+                {
+                    var fileName = await VsixHelper.GetDynamicsCrmDevKitConfigJsonFullFileNameAsync();
+                    if (System.IO.File.Exists(fileName))
+                    {
+                        Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;
+                        var configJson = SimpleJson.DeserializeObject<ConfigJson>(await Task.Run(() => System.IO.File.ReadAllText(fileName)));
+                        var found = configJson.CustomTemplates.Where(x => x.Type == selected.Type && x.Title == selected.Title).FirstOrDefault();
+                        if (found != null) configJson.CustomTemplates.Remove(found);
+                        configJson.CustomTemplates = [.. configJson.CustomTemplates.OrderBy(x => x.Type).ThenBy(x => x.Title)];
+                        var json = JsonHelper.FormatJson(SimpleJson.SerializeObject(configJson));
+                        await FileHelper.ForceWriteAllTextAsync(fileName, json);                        
+                        CustomTemplates = await VsixHelper.GetCustomTemplatesAsync(ItemType);
+                        var haveDefaultValue = CustomTemplates.FirstOrDefault(x => x.IsDefault);
+                        if (haveDefaultValue != null)
+                        {
+                            LoadCustomTemplates(haveDefaultValue.Title);
+                        }
+                        else
+                        {
+                            LoadCustomTemplates();
+                        }
+                        Mouse.OverrideCursor = null;
+                        await VS.MessageBox.ShowAsync($"The custom template '{selected.Title}' has been deleted.", icon: Microsoft.VisualStudio.Shell.Interop.OLEMSGICON.OLEMSGICON_INFO, buttons: Microsoft.VisualStudio.Shell.Interop.OLEMSGBUTTON.OLEMSGBUTTON_OK, defaultButton: Microsoft.VisualStudio.Shell.Interop.OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
+                    }
+                }
+            }
         }
     }
 }
