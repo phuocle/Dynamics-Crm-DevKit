@@ -44,6 +44,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         {
             get
             {
+                if (ComboBoxStage.Visibility == System.Windows.Visibility.Collapsed) return string.Empty;
                 if (ComboBoxStage?.SelectedItem is NameValue stage)
                     return stage.Name ?? string.Empty;
                 return string.Empty;
@@ -53,6 +54,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         {
             get
             {
+                if (ComboBoxExecution.Visibility == System.Windows.Visibility.Collapsed) return string.Empty;
                 if (ComboBoxExecution?.SelectedItem is NameValue execution)
                     return execution.Name ?? string.Empty;
                 return string.Empty;
@@ -195,11 +197,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         {
             if (IsValid())
             {
-                if (
-                    ItemType == ItemType.Plugin || 
-                    ItemType == ItemType.CustomAction || 
-                    ItemType == ItemType.CustomApi
-                    )
+                if (ItemType == ItemType.Plugin || ItemType == ItemType.CustomAction || ItemType == ItemType.CustomApi)
                 {
                     Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;                    
                     var form = new FormCustom(CustomTemplates, CustomTemplate, ItemType, await T4Helper.BuildContextAsync(this));
@@ -250,11 +248,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
 
         private void Connection_Connected(object sender, System.EventArgs e)
         {
-            if (
-                ItemType == ItemType.Plugin ||
-                ItemType == ItemType.CustomAction ||
-                ItemType == ItemType.CustomApi
-                )
+            if (ItemType == ItemType.Plugin || ItemType == ItemType.CustomAction || ItemType == ItemType.CustomApi)
             {
                 LockUi(true);
                 _ = Task.Factory.StartNew(() =>
@@ -341,14 +335,33 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             }
             else if (ItemType == ItemType.CustomApi)
             {
-                // custom api logic intentionally removed
+                LockUi(true);
+                _ = Task.Factory.StartNew(() =>
+                {
+                    ThreadHelper.JoinableTaskFactory.Run(async () =>
+                    {
+                        await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                        var selectedEntity = (XrmEntity)ComboBoxEntity.SelectedItem;
+                        ComboBoxMessage.ItemsSource = await XrmHelper.GetCustomApisAsync(ServiceClient, selectedEntity.LogicalName);
+                        ComboBoxMessage.DisplayMemberPath = "Name";
+                        ComboBoxMessage.SelectedItem = null;
+                        ComboBoxStage.SelectedItem = null;
+                        ComboBoxExecution.SelectedItem = null;
+                        TextboxClass.Text = null;
+                        UpdateClassName();
+                        LockUi(false);
+                    });
+                }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default);
             }            
         }
 
         private void UpdateClassName()
         {
-            if (ItemType == ItemType.CustomApi)
-                TextboxClass.Text = $"{PluginMessage}Request";
+            if (ItemType == ItemType.CustomApi) 
+            {
+                var order = PluginOrder == 1 ? string.Empty : PluginOrder.ToString();
+                TextboxClass.Text = $"{PluginMessage}{order}Request";
+            }
             else
                 TextboxClass.Text = $"{PluginStage.Replace("Operation", string.Empty)}{PluginSchemaName}{PluginMessage}{PluginExecution}";
         }

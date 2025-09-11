@@ -9,6 +9,7 @@ using Microsoft.Xrm.Sdk.Query;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IdentityModel.Metadata;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -1089,6 +1090,33 @@ namespace DynamicsCrm.DevKit.Shared
                 list.Add(new NameValue { Name = message });
             }
             return list;
+        }
+
+        internal static async Task<List<NameValue>> GetCustomApisAsync(ServiceClient service, string entity)
+        {
+            var conditionEntity = string.Empty;
+            if (entity != "none")
+                conditionEntity = $"<condition attribute='boundentitylogicalname' operator='eq' value='{entity}'/>";
+            else
+                conditionEntity = $"<condition attribute='boundentitylogicalname' operator='null' />";
+            var fetchData = new
+            {
+                statecode = "0"
+            };
+            var fetchXml = $@"
+<fetch>
+  <entity name='customapi'>
+    <attribute name='name' />
+    <attribute name='sdkmessageid' />
+    <attribute name='boundentitylogicalname' />
+    <filter>
+      <condition attribute='statecode' operator='eq' value='{fetchData.statecode}'/>
+      {conditionEntity}
+    </filter>
+  </entity>
+</fetch>";
+            var rows = await service.RetrieveMultipleAsync(new FetchExpression(fetchXml));
+            return [.. rows.Entities.Select(x => x.GetAttributeValue<EntityReference>("sdkmessageid")?.Name).Select(y => new NameValue { Name = y }).OrderBy(z => z.Name)];
         }
     }
 }

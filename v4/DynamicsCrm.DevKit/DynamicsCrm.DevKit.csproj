@@ -102,6 +102,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>source.extension.vsixmanifest</DependentUpon>
     </Compile>
+    <Compile Include="Wizard\ItemTemplates\CustomApi.cs" />
     <Compile Include="Wizard\ItemTemplates\CustomAction.cs" />
     <Compile Include="Wizard\ItemTemplates\Plugin.cs" />
     <Compile Include="Wizard\ItemTemplates\JsWebApi.cs" />
@@ -267,6 +268,13 @@
     <ProjectReference Include="..\ItemTemplates\CSharp\05.CustomActionItemTemplate\05.CustomActionItemTemplate.csproj">
       <Project>{CA29675D-B211-46EC-9B16-2B9A4C2CC869}</Project>
       <Name>05.CustomActionItemTemplate</Name>
+      <VSIXSubPath>ItemTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\ItemTemplates\CSharp\06.CustomApiItemTemplate\06.CustomApiItemTemplate.csproj">
+      <Project>{0329193A-A5B9-41D9-BBAF-C0FB0E6BE7CC}</Project>
+      <Name>06.CustomApiItemTemplate</Name>
       <VSIXSubPath>ItemTemplates</VSIXSubPath>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
