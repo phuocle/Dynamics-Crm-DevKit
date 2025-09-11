@@ -1,14 +1,15 @@
-﻿using ItemType = DynamicsCrm.DevKit.Shared.ItemType;
+﻿using Community.VisualStudio.Toolkit;
 using DynamicsCrm.DevKit.Shared;
-using System.Threading.Tasks;
-using System.Threading;
-using Microsoft.VisualStudio.Shell;
 using DynamicsCrm.DevKit.Shared.Models;
+using Microsoft.PowerPlatform.Dataverse.Client;
+using Microsoft.VisualStudio.Shell;
 using System.Collections.Generic;
 using System.Linq;
-using Community.VisualStudio.Toolkit;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 using System.Windows.Input;
-using Microsoft.PowerPlatform.Dataverse.Client;
+using ItemType = DynamicsCrm.DevKit.Shared.ItemType;
 
 namespace DynamicsCrm.DevKit.Lib.Forms
 {
@@ -57,7 +58,6 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 return string.Empty;
             }
         }
-
         public string PluginLogicalName
         {
             get
@@ -66,9 +66,20 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 return selected.LogicalName ?? string.Empty;
             }
         }
-
-        public int PluginOrder => 1;
-
+        public int PluginOrder
+        {
+            get
+            {
+                return ThreadHelper.JoinableTaskFactory.Run(async () => await VsixHelper.PluginOrderAsync(Class));                
+            }
+        }
+        public string PluginComment
+        {
+            get
+            {
+                return ThreadHelper.JoinableTaskFactory.Run(async () => await XrmHelper.GetPluginCommentAsync(ServiceClient, PluginLogicalName, PluginMessage));
+            }
+        }
 
         private ItemType _ItemType = DynamicsCrm.DevKit.Shared.ItemType.None;
 

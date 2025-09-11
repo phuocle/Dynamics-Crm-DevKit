@@ -1,4 +1,7 @@
-﻿namespace DynamicsCrm.DevKit.Shared
+﻿using System;
+using System.Collections.Generic;
+
+namespace DynamicsCrm.DevKit.Shared
 {
     public class Const
     {
@@ -13,5 +16,13 @@
         public static readonly string WindowTitle = $"{Const.DynamicsCrmDevKit} { Const.VersionBuild }";
         public static readonly string[] WEB_RESOURCE_EXTENSIONS = { ".htm", ".html", ".css", ".js", ".xml", ".png", ".jpg", ".gif", ".xap", ".xsl", "xslt.", ".ico", ".svg", ".resx" };
         public const string SchemaName = "SchemaName";
+        public static readonly HashSet<string> DEFAULTS = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+        {
+            "Default",
+            $"Default - {ItemType.Plugin}",
+            $"Default - {ItemType.Workflow}",
+            $"Default - {ItemType.CustomAction}",
+            $"Default - {ItemType.CustomApi}"
+        };
     }
 }

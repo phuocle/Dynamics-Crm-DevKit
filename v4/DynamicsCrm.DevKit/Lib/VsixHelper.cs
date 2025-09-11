@@ -470,6 +470,50 @@ namespace DynamicsCrm.DevKit.Lib
                 var json = JsonHelper.FormatJson(SimpleJson.SerializeObject(configJson));
                 await FileHelper.ForceWriteAllTextAsync(fileName, json);
             }
+        }        
+
+        internal static async Task<int> PluginOrderAsync(string @class)
+        {
+            var baseName = @class?.Trim();
+            if (string.IsNullOrWhiteSpace(baseName)) return 1;
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+            var dte = await VS.GetServiceAsync<DTE, DTE>();
+            if (dte?.SelectedItems == null || dte.SelectedItems.Count == 0) return 1;
+            EnvDTE.SelectedItem selectedItem = dte.SelectedItems.Item(1);
+            ProjectItems containerItems = null;
+            if (selectedItem.ProjectItem != null)
+            {
+                var kind = selectedItem.ProjectItem.Kind;
+                if (!string.Equals(kind, EnvDTE.Constants.vsProjectItemKindPhysicalFile, StringComparison.OrdinalIgnoreCase))
+                {
+                    containerItems = selectedItem.ProjectItem.ProjectItems;
+                }
+            }
+            else if (selectedItem.Project != null)
+            {
+                containerItems = selectedItem.Project.ProjectItems;
+            }
+            if (containerItems == null) return 1;
+            int maxFound = 0;
+            foreach (ProjectItem item in containerItems)
+            {
+                if (item == null) continue;
+                string name = item.Name;
+                if (string.IsNullOrEmpty(name)) continue;
+                var nameWithoutExt = System.IO.Path.GetFileNameWithoutExtension(name);
+                if (nameWithoutExt.Equals(baseName, StringComparison.OrdinalIgnoreCase))
+                {
+                    if (maxFound < 1) maxFound = 1;
+                    continue;
+                }
+                if (nameWithoutExt.StartsWith(baseName, StringComparison.OrdinalIgnoreCase))
+                {
+                    var suffix = nameWithoutExt.Substring(baseName.Length);
+                    if (int.TryParse(suffix, out int number) && number > maxFound)
+                        maxFound = number;
+                }
+            }
+            return maxFound == 0 ? 1 : maxFound + 1;
         }
     }
 }

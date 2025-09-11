@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.Windows.Input;
 
 namespace DynamicsCrm.DevKit.Lib.Forms
@@ -15,14 +14,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
     {
         private string T4Code => Textbox.Text;
         private ItemType _ItemType = DynamicsCrm.DevKit.Shared.ItemType.None;
-        private readonly HashSet<string> DEFAULTS = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
-        {
-            "Default",
-            $"Default - {ItemType.Plugin}",
-            $"Default - {ItemType.Workflow}",
-            $"Default - {ItemType.CustomAction}",
-            $"Default - {ItemType.CustomApi}"
-        };
+
         private ItemType ItemType
         {
             get => _ItemType;
@@ -248,7 +240,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 if (form.ShowDialog() ?? false)
                 {
                     var found = CustomTemplates.FirstOrDefault(x => x.Title == form.InputValue);
-                    if (found != null || DEFAULTS.Contains(form.InputValue))
+                    if (found != null || Const.DEFAULTS.Contains(form.InputValue))
                     {
                         await VS.MessageBox.ShowErrorAsync($"An existing custom template named '{form.InputValue}' was found. The save as action failed.");
                     }
@@ -350,7 +342,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     if (System.IO.File.Exists(fileName))
                     {                        
                         var configJson = SimpleJson.DeserializeObject<ConfigJson>(await Task.Run(() => System.IO.File.ReadAllText(fileName)));
-                        if (DEFAULTS.Contains(form.InputValue) || configJson.CustomTemplates.Any(x => x.Title.Equals(form.InputValue, StringComparison.OrdinalIgnoreCase)))
+                        if (Const.DEFAULTS.Contains(form.InputValue) || configJson.CustomTemplates.Any(x => x.Title.Equals(form.InputValue, StringComparison.OrdinalIgnoreCase)))
                         {
                             await VS.MessageBox.ShowErrorAsync($"An existing custom template named '{form.InputValue}' was found. The rename action failed.");
                             return;

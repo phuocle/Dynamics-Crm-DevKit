@@ -2,13 +2,9 @@
 using DynamicsCrm.DevKit.Lib.Forms;
 using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
-using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.TextTemplating;
 using Microsoft.VisualStudio.TextTemplating.VSHost;
-using NuGet.Protocol.Plugins;
-using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -18,14 +14,11 @@ namespace DynamicsCrm.DevKit.Lib
     {
         public static async Task<string> GetT4CodeAsync(ItemType itemType, string templateTitle)
         {
-            if (string.Equals(templateTitle, "Default", StringComparison.OrdinalIgnoreCase)) return await VsixHelper.GetDefaultCustomTemplateAsync(itemType, templateTitle);
-            //var fileName = VsixHelper.GetDynamicsCrmDevKitConfigJsonFileName();
-            //if (!File.Exists(fileName)) return DefaultT4Code(itemType, templateTitle);
-            //var CachedJson = SimpleJson.DeserializeObject<CachedJson>(File.ReadAllText(fileName));
-            //var found = CachedJson.CustomTemplates.FirstOrDefault(x => x.Type == itemType.ToString() && x.Title == templateTitle);
-            //if (found == null) return DefaultT4Code(itemType, templateTitle);
-            //return Utility.Decompress(found.Body);
-            return string.Empty;
+            if (Const.DEFAULTS.Contains(templateTitle)) return await VsixHelper.GetDefaultCustomTemplateAsync(itemType, templateTitle);
+            var customTempaltes = await VsixHelper.GetCustomTemplatesAsync(itemType);
+            var found = customTempaltes.FirstOrDefault(x => x.Type == itemType.ToString() && x.Title == templateTitle);
+            if (found == null) return await VsixHelper.GetDefaultCustomTemplateAsync(itemType, templateTitle);
+            return Helper.Decompress(found.Body);
         }
 
         //private static string DefaultT4Code(ItemType itemType, string templateTitle)
@@ -320,7 +313,7 @@ namespace DynamicsCrm.DevKit.Lib
         {
             var t4Context = new T4Context
             {
-                PluginComment = await XrmHelper.GetPluginCommentAsync(form.ServiceClient, form.PluginLogicalName, form.PluginMessage),
+                PluginComment =  form.PluginComment,
                 PluginNameSpace = form.PluginNameSpace,
                 PluginExecution = form.PluginExecution,
                 PluginMessage = form.PluginMessage,
