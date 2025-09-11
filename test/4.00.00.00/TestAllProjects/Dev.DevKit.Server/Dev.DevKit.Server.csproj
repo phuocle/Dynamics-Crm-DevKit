@@ -59,7 +59,8 @@
     <None Include="deploy.debug.bat" />
     <None Include="deploy.debug.only.bat" />
     <Compile Include="Account\PostAccountAssignAsynchronous.cs" />
-    <Compile Include="Account\PostAccountAssignAsynchronous2.cs" />
+    <Compile Include="Account\PostAccountAssignAsynchronous3.cs" />
+    <Compile Include="Account\PostAccountAssignAsynchronous4.cs" />
     <Compile Include="Account\PostAccountUpdateAsynchronous.cs" />
     <Compile Include="Entities\SystemUser.cs" />
     <Compile Include="Entities\SystemUser.generated.cs">
