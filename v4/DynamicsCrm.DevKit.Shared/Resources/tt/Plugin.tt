@@ -24,10 +24,10 @@ namespace <#=Context.PluginNameSpace#>
         {
             var context = (IPluginExecutionContext)serviceProvider.GetService(typeof(IPluginExecutionContext));
             var tracing = (ITracingService)serviceProvider.GetService(typeof(ITracingService));
-            if (context.Stage != (int)StageEnum.<#=Context.PluginStage#>) throw new InvalidPluginExecutionException("Stage does not equals <#=Context.PluginStage#>");
-            if (!string.Equals(context.PrimaryEntityName, "<#=Context.PluginLogicalName#>", StringComparison.OrdinalIgnoreCase)) throw new InvalidPluginExecutionException("PrimaryEntityName does not equals <#=Context.PluginLogicalName#>");
+            if (!int.Equals(context.Stage, (int)StageEnum.<#=Context.PluginStage#>)) throw new InvalidPluginExecutionException("Stage does not equals <#=Context.PluginStage#>");
             if (!string.Equals(context.MessageName, "<#=Context.PluginMessage#>", StringComparison.OrdinalIgnoreCase)) throw new InvalidPluginExecutionException("MessageName does not equals <#=Context.PluginMessage#>");
-            if (context.Mode != (int)ExecutionModeEnum.<#=Context.PluginExecution#>) throw new InvalidPluginExecutionException("Execution does not equals <#=Context.PluginExecution#>");
+            if (!string.Equals(context.PrimaryEntityName, "<#=Context.PluginLogicalName#>", StringComparison.OrdinalIgnoreCase)) throw new InvalidPluginExecutionException("PrimaryEntityName does not equals <#=Context.PluginLogicalName#>");
+            if (!int.Equals(context.Mode, (int)ExecutionModeEnum.<#=Context.PluginExecution#>)) throw new InvalidPluginExecutionException("Execution does not equals <#=Context.PluginExecution#>");
             var serviceFactory = (IOrganizationServiceFactory)serviceProvider.GetService(typeof(IOrganizationServiceFactory));
             var serviceAdmin = serviceFactory.CreateOrganizationService(null);
             var service = serviceFactory.CreateOrganizationService(context.UserId);
@@ -55,6 +55,7 @@ namespace <#=Context.PluginNameSpace#>
             context.PostEntityImages.TryGetValue("PostImage", out Entity postEntity);
 <#}#>
             //YOUR PLUGIN-CODE GO HERE
+
         }
     }
 }
