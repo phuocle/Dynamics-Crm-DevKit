@@ -54,6 +54,7 @@
     <None Include="deploy.debug.bat" />
     <None Include="packages.config" />
     <None Include="package.json" />
+    <Content Include="css\devkit.js" />
     <Content Include="entities\Account.form.js">
       <DependentUpon>Account.js</DependentUpon>
     </Content>
@@ -79,13 +80,13 @@
     <Analyzer Include="..\packages\DynamicsCrm.DevKit.Analyzers.3.55.55.55\analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="css\" />
     <Folder Include="html\" />
     <Folder Include="images\" />
     <Folder Include="js\" />
     <Folder Include="resources\" />
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="css\devkit.d.ts" />
     <TypeScriptCompile Include="entities\Account.d.ts">
       <DependentUpon>Account.js</DependentUpon>
     </TypeScriptCompile>

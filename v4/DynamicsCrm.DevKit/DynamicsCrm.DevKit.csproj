@@ -108,6 +108,7 @@
     <Compile Include="Wizard\ItemTemplates\ResourceString.cs" />
     <Compile Include="Wizard\ItemTemplates\Test.cs" />
     <Compile Include="Wizard\ItemTemplates\UiTest.cs" />
+    <Compile Include="Wizard\ItemTemplates\JsDevkit.cs" />
     <Compile Include="Wizard\ItemTemplates\Workflow.cs" />
     <Compile Include="Wizard\ItemTemplates\Plugin.cs" />
     <Compile Include="Wizard\ItemTemplates\JsWebApi.cs" />
@@ -315,6 +316,13 @@
     <ProjectReference Include="..\ItemTemplates\CSharp\11.ResourceStringItemTemplate\11.ResourceStringItemTemplate.csproj">
       <Project>{AEC3BFCD-934B-48C6-8132-0ACAA0AB42D0}</Project>
       <Name>11.ResourceStringItemTemplate</Name>
+      <VSIXSubPath>ItemTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\ItemTemplates\CSharp\12.JsDevkitItemTemplate\12.JsDevkitItemTemplate.csproj">
+      <Project>{CCBD1381-E6A6-4A57-9853-E93A27A33F12}</Project>
+      <Name>12.JsDevkitItemTemplate</Name>
       <VSIXSubPath>ItemTemplates</VSIXSubPath>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>

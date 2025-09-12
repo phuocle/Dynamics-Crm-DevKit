@@ -1,23 +1,24 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <VSTemplate Version="3.0.0" Type="Item" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
 	<TemplateData>
-		<Name>11. Resource String</Name>
-		<Description>Creates a Dataverse localization resource (.resx) file for centralizing multi-language strings used across plugins, custom APIs, workflows, tests, and client scripts.</Description>
+		<Name>12. JavaScript devkit.js</Name>
+		<Description>Creates devkit.js + devkit.d.ts to migrate existing Dynamics 365 client scripts to the DevKit pattern: consolidated entry point, strong IntelliSense via TypeScript declarations, consistent namespaces, and upgrade-safe structure for form/event logic.</Description>
+		<DefaultName>devkit.js</DefaultName>
+		<TemplateID>AAAAAAAA-AAAA-AAAA-BBBB-000000000012</TemplateID>
 		<Icon>icon.png</Icon>
-		<TemplateID>AAAAAAAA-AAAA-AAAA-BBBB-000000000010</TemplateID>
 		<ProjectType>CSharp</ProjectType>
 		<ProjectSubType>Visual C#</ProjectSubType>
 		<AppliesTo>CSharp</AppliesTo>
 		<RequiredFrameworkVersion>4.0</RequiredFrameworkVersion>
 		<NumberOfParentCategoriesToRollUp>0</NumberOfParentCategoriesToRollUp>
-		<DefaultName>ResourceString.resx</DefaultName>
-		<SortOrder>210</SortOrder>
+		<SortOrder>220</SortOrder>
 	</TemplateData>
 	<TemplateContent>
-		<ProjectItem ReplaceParameters="true" TargetFileName="$Class$$PluginOrder$.$LanguageCode$.resx">ResourceString.resx</ProjectItem>
+		<ProjectItem ReplaceParameters="true" TargetFileName="devkit.js">devkit.js</ProjectItem>
+		<ProjectItem ReplaceParameters="true" TargetFileName="devkit.d.ts">devkit.d.ts</ProjectItem>
 	</TemplateContent>
 	<WizardExtension>
 		<Assembly>DynamicsCrm.DevKit, Version=4.00.00.00, Culture=Neutral, PublicKeyToken=null</Assembly>
-		<FullClassName>DynamicsCrm.DevKit.Wizard.ItemTemplates.ResourceString</FullClassName>
+		<FullClassName>DynamicsCrm.DevKit.Wizard.ItemTemplates.JsDevkit</FullClassName>
 	</WizardExtension>
 </VSTemplate>
