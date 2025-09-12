@@ -15,7 +15,7 @@ namespace DynamicsCrm.DevKit.Lib
         public static async Task<string> GetT4CodeAsync(ItemType itemType, string templateTitle, string subType = null)
         {
             var customTempaltes = await VsixHelper.GetCustomTemplatesAsync(itemType);
-            var found = customTempaltes.FirstOrDefault(x => x.Type == itemType.ToString() && x.SubType == subType && x.Title == templateTitle);
+            var found = customTempaltes.FirstOrDefault(x => x.Type == itemType.ToString() && x.Title == templateTitle);
             if (found == null) return await VsixHelper.GetDefaultCustomTemplateBodyAsync(itemType, subType);
             return Helper.Decompress(found.Body);            
         }        

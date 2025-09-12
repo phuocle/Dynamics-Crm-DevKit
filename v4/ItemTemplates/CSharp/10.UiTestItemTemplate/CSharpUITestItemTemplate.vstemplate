@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<VSTemplate Version="3.0.0" Type="Item" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
+	<TemplateData>
+		<Name>10. C# Ui Test Class</Name>
+		<Description>Dataverse UI Test class scaffold using the EasyRepro framework. Generates a ready-to-run browser automation test file with placeholders for authentication, initialization, resilient waits, and cleanup so you can quickly author repeatable end-to-end UI tests.</Description>
+		<DefaultName>Class.cs</DefaultName>
+		<TemplateID>AAAAAAAA-AAAA-AAAA-BBBB-000000000006</TemplateID>
+		<Icon>icon.png</Icon>
+		<ProjectType>CSharp</ProjectType>
+		<ProjectSubType>Visual C#</ProjectSubType>
+		<AppliesTo>CSharp</AppliesTo>
+		<RequiredFrameworkVersion>4.0</RequiredFrameworkVersion>
+		<NumberOfParentCategoriesToRollUp>0</NumberOfParentCategoriesToRollUp>
+		<SortOrder>200</SortOrder>
+	</TemplateData>
+	<TemplateContent>
+		<ProjectItem ReplaceParameters="true" TargetFileName="$Class$$PluginOrder$.cs">Class.cs</ProjectItem>
+	</TemplateContent>
+	<WizardExtension>
+		<Assembly>DynamicsCrm.DevKit, Version=4.00.00.00, Culture=Neutral, PublicKeyToken=null</Assembly>
+		<FullClassName>DynamicsCrm.DevKit.Wizard.ItemTemplates.UiTest</FullClassName>
+	</WizardExtension>
+</VSTemplate>

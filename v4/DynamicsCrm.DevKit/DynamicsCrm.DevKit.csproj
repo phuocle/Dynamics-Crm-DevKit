@@ -105,6 +105,7 @@
     <Compile Include="Wizard\ItemTemplates\CustomApi.cs" />
     <Compile Include="Wizard\ItemTemplates\CustomAction.cs" />
     <Compile Include="Wizard\ItemTemplates\DataProvider.cs" />
+    <Compile Include="Wizard\ItemTemplates\UiTest.cs" />
     <Compile Include="Wizard\ItemTemplates\Workflow.cs" />
     <Compile Include="Wizard\ItemTemplates\Plugin.cs" />
     <Compile Include="Wizard\ItemTemplates\JsWebApi.cs" />
@@ -291,6 +292,13 @@
     <ProjectReference Include="..\ItemTemplates\CSharp\08.DataProviderItemTemplate\08.DataProviderItemTemplate.csproj">
       <Project>{DBC500F9-934B-4A10-9F79-5658731FE77C}</Project>
       <Name>08.DataProviderItemTemplate</Name>
+      <VSIXSubPath>ItemTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\ItemTemplates\CSharp\10.UiTestItemTemplate\10.UiTestItemTemplate.csproj">
+      <Project>{53392F2B-21C1-41BF-9073-2994B94E101E}</Project>
+      <Name>10.UiTestItemTemplate</Name>
       <VSIXSubPath>ItemTemplates</VSIXSubPath>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>

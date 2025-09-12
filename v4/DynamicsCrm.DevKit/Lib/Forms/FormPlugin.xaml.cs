@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using System.Windows.Input;
 using ItemType = DynamicsCrm.DevKit.Shared.ItemType;
 
@@ -144,6 +145,20 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     LabelEntity.Content = "Data Source";
                     TemplatePanel.Visibility = System.Windows.Visibility.Hidden;
                 }
+                void UiTestItem()
+                {
+                    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Ui-Test-Item-Template");
+                    HELP.Inlines.Clear();
+                    HELP.Inlines.Add("Ui Test Item Template");
+                    LabelExecution.Visibility = System.Windows.Visibility.Collapsed;
+                    ComboBoxExecution.Visibility = System.Windows.Visibility.Collapsed;
+                    LabelStage.Visibility = System.Windows.Visibility.Collapsed;
+                    ComboBoxStage.Visibility = System.Windows.Visibility.Collapsed;
+                    LabelEntity.Visibility = System.Windows.Visibility.Collapsed;
+                    ComboBoxEntity.Visibility = System.Windows.Visibility.Collapsed;
+                    LabelMessage.Visibility = System.Windows.Visibility.Collapsed;
+                    ComboBoxMessage.Visibility = System.Windows.Visibility.Collapsed;
+                }
                 _ItemType = value;
                 switch (_ItemType)
                 {
@@ -161,6 +176,9 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                         break;
                     case ItemType.DataProvider:
                         DataProviderItem();
+                        break;
+                    case ItemType.UiTest:
+                        UiTestItem();
                         break;
                 }
             }
@@ -187,7 +205,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         }
         private async Task LoadCustomTemplatesAsync()
         {
-            if (ItemType == ItemType.Plugin || ItemType == ItemType.CustomAction || ItemType == ItemType.CustomApi || ItemType == ItemType.Workflow)
+            if (ItemType == ItemType.Plugin || ItemType == ItemType.CustomAction || ItemType == ItemType.CustomApi || ItemType == ItemType.Workflow || ItemType == ItemType.UiTest)
             {
                 CustomTemplates = await VsixHelper.GetCustomTemplatesAsync(ItemType);
                 ComboBoxTemplate.ItemsSource = null;
@@ -235,7 +253,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         {
             if (IsValid())
             {
-                if (ItemType == ItemType.Plugin || ItemType == ItemType.CustomAction || ItemType == ItemType.CustomApi || ItemType == ItemType.Workflow)
+                if (ItemType == ItemType.Plugin || ItemType == ItemType.CustomAction || ItemType == ItemType.CustomApi || ItemType == ItemType.Workflow || ItemType == ItemType.UiTest)
                 {
                     Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;                    
                     var form = new FormCustom(CustomTemplates, CustomTemplate, ItemType, await T4Helper.BuildContextAsync(this));
@@ -274,6 +292,11 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             if (ComboBoxExecution.Visibility == System.Windows.Visibility.Visible && ComboBoxExecution.SelectedItem == null)
             {
                 VS.MessageBox.ShowError("Please select execution");
+                return false;
+            }
+            if (TextboxClass.Visibility == System.Windows.Visibility.Visible && string.IsNullOrEmpty(TextboxClass.Text))
+            {
+                VS.MessageBox.ShowError("Please enter class");
                 return false;
             }
             return true;

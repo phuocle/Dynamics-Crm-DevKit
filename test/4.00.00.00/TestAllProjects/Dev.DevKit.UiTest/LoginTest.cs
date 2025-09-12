@@ -1,14 +1,15 @@
-﻿using System;
-using System.Security;
-using Microsoft.Dynamics365.UIAutomation.Api.UCI;
+﻿using Microsoft.Dynamics365.UIAutomation.Api.UCI;
 using Microsoft.Dynamics365.UIAutomation.Browser;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using System.Security;
 
-namespace <#=Context.PluginNameSpace#>
+namespace Dev.DevKit.UiTest
 {
     [TestClass]
-    public class <#=Context.Class#><#if(Context.PluginOrder!=1){#><#=Context.PluginOrder#><#}#>
+    public class LoginTest
     {
+        //UiTest1
         private readonly SecureString _username = System.Configuration.ConfigurationManager.AppSettings["UiTestUserName"].ToSecureString();
         private readonly SecureString _password = System.Configuration.ConfigurationManager.AppSettings["UiTestPassword"].ToSecureString();
         private readonly Uri _xrmUri = new Uri(System.Configuration.ConfigurationManager.AppSettings["Url"].ToString());
