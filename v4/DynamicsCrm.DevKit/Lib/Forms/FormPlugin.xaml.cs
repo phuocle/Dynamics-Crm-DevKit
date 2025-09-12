@@ -30,6 +30,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 return string.Empty;
             }
         }
+        public string DataSource => PluginLogicalName;
         public string PluginMessage
         {
             get

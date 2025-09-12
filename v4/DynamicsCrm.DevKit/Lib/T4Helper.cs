@@ -322,7 +322,7 @@ namespace DynamicsCrm.DevKit.Lib
                 Class = form.Class,
                 PluginLogicalName = form.PluginLogicalName,
                 PluginSharedNameSpace = await VsixHelper.GetSharedProjectAsync(),
-                DataSource = "DataSource",
+                DataSource = form.DataSource,
                 ProxyTypes = "ProxyTypes"
             };
             return t4Context;

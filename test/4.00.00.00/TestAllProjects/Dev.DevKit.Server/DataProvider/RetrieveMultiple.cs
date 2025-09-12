@@ -6,7 +6,7 @@ using System;
 
 namespace Dev.DevKit.Server.DataProvider
 {
-    [CrmPluginRegistration("Dev.DevKit.Server.DataProvider.RetrieveMultiple", "RetrieveMultiple", PluginType.DataProvider, DataSource = "DataSource")]
+    [CrmPluginRegistration("Dev.DevKit.Server.DataProvider.RetrieveMultiple", "RetrieveMultiple", PluginType.DataProvider, DataSource = "devkit_sqldatasource")]
     public class RetrieveMultiple : IPlugin
     {
         /*
@@ -30,14 +30,14 @@ namespace Dev.DevKit.Server.DataProvider
         public void Execute(IServiceProvider serviceProvider)
         {
             var context = (IPluginExecutionContext)serviceProvider.GetService(typeof(IPluginExecutionContext));
+            var tracing = (ITracingService)serviceProvider.GetService(typeof(ITracingService));
             var serviceFactory = (IOrganizationServiceFactory)serviceProvider.GetService(typeof(IOrganizationServiceFactory));
             var serviceAdmin = serviceFactory.CreateOrganizationService(null);
             var service = serviceFactory.CreateOrganizationService(context.UserId);
-            var tracing = (ITracingService)serviceProvider.GetService(typeof(ITracingService));
             var retriever = serviceProvider.Get<IEntityDataSourceRetrieverService>();
             var dataSource = retriever.RetrieveEntityDataSource();
 
-            tracing.DebugContext(context);
+            tracing?.DebugContext(context);
 
             ExecutePlugin(context, serviceFactory, serviceAdmin, service, tracing, dataSource);
         }

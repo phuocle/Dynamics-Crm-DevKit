@@ -409,15 +409,7 @@ namespace DynamicsCrm.DevKit.Lib
                 customTemplates.Insert(0, new CustomTemplate { Type = $"{itemType}", Title = $"Default - {ItemType.CustomAction}", Body = await GetDefaultCustomTemplateBodyAsync(itemType,$"{ItemType.CustomAction}"), IsDefault = false });
                 customTemplates.Insert(0, new CustomTemplate { Type = $"{itemType}", Title = $"Default - {ItemType.Workflow}", Body = await GetDefaultCustomTemplateBodyAsync(itemType, $"{ItemType.Workflow}"), IsDefault = false });
                 customTemplates.Insert(0, new CustomTemplate { Type = $"{itemType}", Title = $"Default - {ItemType.Plugin}", Body = await GetDefaultCustomTemplateBodyAsync(itemType, $"{ItemType.Plugin}"), IsDefault = false });
-            }
-            else if (itemType == ItemType.DataProvider)
-            {
-                customTemplates.Insert(0, new CustomTemplate { Type = $"{itemType}", Title = $"Default - RetrieveMultiple", Body = await GetDefaultCustomTemplateBodyAsync(itemType, $"RetrieveMultiple"), IsDefault = false });
-                customTemplates.Insert(0, new CustomTemplate { Type = $"{itemType}", Title = $"Default - Retrieve", Body = await GetDefaultCustomTemplateBodyAsync(itemType, $"Retrieve"), IsDefault = false });
-                customTemplates.Insert(0, new CustomTemplate { Type = $"{itemType}", Title = $"Default - Delete", Body = await GetDefaultCustomTemplateBodyAsync(itemType, $"Delete"), IsDefault = false });
-                customTemplates.Insert(0, new CustomTemplate { Type = $"{itemType}", Title = $"Default - Update", Body = await GetDefaultCustomTemplateBodyAsync(itemType, $"Update"), IsDefault = false });
-                customTemplates.Insert(0, new CustomTemplate { Type = $"{itemType}", Title = $"Default - Create", Body = await GetDefaultCustomTemplateBodyAsync(itemType, $"Create"), IsDefault = false });                                                             
-            }
+            }            
             else
                 customTemplates.Insert(0, new CustomTemplate { Type = $"{itemType}", Title = "Default", Body = await GetDefaultCustomTemplateBodyAsync(itemType), IsDefault = false });
             return customTemplates;
