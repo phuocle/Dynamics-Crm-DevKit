@@ -1,14 +1,14 @@
-﻿using FakeXrmEasy.Plugins;
+﻿using Dev.DevKit.Shared;
+using Dev.DevKit.Shared.Test;
+using FakeXrmEasy.Plugins;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xrm.Sdk;
 using System.Linq;
-using <#=Context.PluginSharedNameSpace#>;
-using <#=Context.PluginSharedNameSpace#>.Test;
 
-namespace <#=Context.PluginNameSpace#>
+namespace Dev.DevKit.Test.Plugin.Account
 {
     [TestClass]
-    public class <#=Context.Class#>Test : FakeXrmEasyTestBase
+    public class AccountCreateTest : FakeXrmEasyTestBase
     {
         private const StageEnum PLUGIN_STAGE = StageEnum.???;
         private const string PLUGIN_MESSAGE = "???";
@@ -16,34 +16,34 @@ namespace <#=Context.PluginNameSpace#>
         private const ExecutionModeEnum PLUGIN_EXECUTION_MODE = ExecutionModeEnum.???;
 
         [TestMethod]
-        public void <#=Context.Class#>Test_00()
+        public void AccountCreateTest_00()
         {
             var pluginContext = _context.GetDefaultPluginContext();
 
             Assert.ThrowsExactly<InvalidPluginExecutionException>(() =>
             {
-                _context.ExecutePluginWith<???>(pluginContext);
+                _context.ExecutePluginWith <???> (pluginContext);
             }, $"Stage does not equals {PLUGIN_STAGE}");
 
             pluginContext.Stage = (int)PLUGIN_STAGE;
             pluginContext.MessageName = string.Empty;
             Assert.ThrowsExactly<InvalidPluginExecutionException>(() =>
             {
-                _context.ExecutePluginWith<???>(pluginContext);
+                _context.ExecutePluginWith <???> (pluginContext);
             }, $"MessageName does not equals {PLUGIN_MESSAGE}");
 
             pluginContext.MessageName = PLUGIN_MESSAGE;
             pluginContext.PrimaryEntityName = string.Empty;
             Assert.ThrowsExactly<InvalidPluginExecutionException>(() =>
             {
-                _context.ExecutePluginWith<???>(pluginContext);
+                _context.ExecutePluginWith <???> (pluginContext);
             }, $"PrimaryEntityName does not equals {PLUGIN_ENTITY_LOGICAL_NAME}");
 
             pluginContext.PrimaryEntityName = PLUGIN_ENTITY_LOGICAL_NAME;
             pluginContext.Mode = -1;
             Assert.ThrowsExactly<InvalidPluginExecutionException>(() =>
             {
-                _context.ExecutePluginWith<???>(pluginContext);
+                _context.ExecutePluginWith <???> (pluginContext);
             }, $"Execution does not equals {PLUGIN_EXECUTION_MODE}");
 
             pluginContext.Mode = (int)PLUGIN_EXECUTION_MODE;
@@ -53,7 +53,7 @@ namespace <#=Context.PluginNameSpace#>
         }
 
         [TestMethod]
-        public void <#=Context.Class#>Test_01()
+        public void AccountCreateTest_01()
         {
             ////setup
             //var json = @"";

@@ -2,7 +2,6 @@
 using FakeXrmEasy;
 using FakeXrmEasy.CodeActivities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using <#=Context.ProxyTypes#>;
 
 namespace <#=Context.PluginNameSpace#>
 {

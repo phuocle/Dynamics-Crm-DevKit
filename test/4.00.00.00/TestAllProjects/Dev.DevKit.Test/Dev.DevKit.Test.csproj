@@ -257,7 +257,10 @@
     <Analyzer Include="..\packages\DynamicsCrm.DevKit.Analyzers.3.55.55.55\analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Plugin\Account\" />
+    <Folder Include="Workflow\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Plugin\Account\AccountCreateTest.cs" />
   </ItemGroup>
   <Import Project="..\Dev.DevKit.Shared.Test\Dev.DevKit.Shared.Test.projitems" Label="Shared" Condition="Exists('..\Dev.DevKit.Shared.Test\Dev.DevKit.Shared.Test.projitems')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
