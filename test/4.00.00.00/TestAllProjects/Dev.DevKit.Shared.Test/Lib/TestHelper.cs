@@ -157,5 +157,19 @@ namespace Dev.DevKit.Shared.Test
             }
             return Encoding.UTF8.GetString(decompressedBytes);
         }
+
+        internal static List<CrmPluginRegistrationAttribute> GetRegisteredPlugins(object obj)
+        {
+            var registeredPlugins = new List<CrmPluginRegistrationAttribute>();
+            foreach (var attribute in System.Attribute.GetCustomAttributes(obj.GetType()))
+            {
+                if (attribute.GetType().Equals(typeof(CrmPluginRegistrationAttribute)))
+                {
+                    var registeredPlugin = attribute as CrmPluginRegistrationAttribute;
+                    registeredPlugins.Add(registeredPlugin);
+                }
+            }
+            return registeredPlugins;
+        }
     }
 }

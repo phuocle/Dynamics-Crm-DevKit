@@ -159,6 +159,20 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     LabelMessage.Visibility = System.Windows.Visibility.Collapsed;
                     ComboBoxMessage.Visibility = System.Windows.Visibility.Collapsed;
                 }
+                void TestItem()
+                {
+                    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Test-Item-Template");
+                    HELP.Inlines.Clear();
+                    HELP.Inlines.Add("Test Item Template");
+                    LabelExecution.Visibility = System.Windows.Visibility.Collapsed;
+                    ComboBoxExecution.Visibility = System.Windows.Visibility.Collapsed;
+                    LabelStage.Visibility = System.Windows.Visibility.Collapsed;
+                    ComboBoxStage.Visibility = System.Windows.Visibility.Collapsed;
+                    LabelEntity.Visibility = System.Windows.Visibility.Collapsed;
+                    ComboBoxEntity.Visibility = System.Windows.Visibility.Collapsed;
+                    LabelMessage.Visibility = System.Windows.Visibility.Collapsed;
+                    ComboBoxMessage.Visibility = System.Windows.Visibility.Collapsed;
+                }
                 _ItemType = value;
                 switch (_ItemType)
                 {
@@ -179,6 +193,9 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                         break;
                     case ItemType.UiTest:
                         UiTestItem();
+                        break;
+                    case ItemType.Test:
+                        TestItem();
                         break;
                 }
             }
@@ -205,7 +222,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         }
         private async Task LoadCustomTemplatesAsync()
         {
-            if (ItemType == ItemType.Plugin || ItemType == ItemType.CustomAction || ItemType == ItemType.CustomApi || ItemType == ItemType.Workflow || ItemType == ItemType.UiTest)
+            if (ItemType == ItemType.Plugin || ItemType == ItemType.CustomAction || ItemType == ItemType.CustomApi || ItemType == ItemType.Workflow || ItemType == ItemType.UiTest || ItemType == ItemType.Test)
             {
                 CustomTemplates = await VsixHelper.GetCustomTemplatesAsync(ItemType);
                 ComboBoxTemplate.ItemsSource = null;
@@ -253,7 +270,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         {
             if (IsValid())
             {
-                if (ItemType == ItemType.Plugin || ItemType == ItemType.CustomAction || ItemType == ItemType.CustomApi || ItemType == ItemType.Workflow || ItemType == ItemType.UiTest)
+                if (ItemType == ItemType.Plugin || ItemType == ItemType.CustomAction || ItemType == ItemType.CustomApi || ItemType == ItemType.Workflow || ItemType == ItemType.UiTest || ItemType == ItemType.Test)
                 {
                     Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;                    
                     var form = new FormCustom(CustomTemplates, CustomTemplate, ItemType, await T4Helper.BuildContextAsync(this));
