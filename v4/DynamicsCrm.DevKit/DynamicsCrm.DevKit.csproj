@@ -104,6 +104,7 @@
     </Compile>
     <Compile Include="Wizard\ItemTemplates\CustomApi.cs" />
     <Compile Include="Wizard\ItemTemplates\CustomAction.cs" />
+    <Compile Include="Wizard\ItemTemplates\Workflow.cs" />
     <Compile Include="Wizard\ItemTemplates\Plugin.cs" />
     <Compile Include="Wizard\ItemTemplates\JsWebApi.cs" />
     <Compile Include="Wizard\ItemTemplates\JsForm.cs" />
@@ -275,6 +276,13 @@
     <ProjectReference Include="..\ItemTemplates\CSharp\06.CustomApiItemTemplate\06.CustomApiItemTemplate.csproj">
       <Project>{0329193A-A5B9-41D9-BBAF-C0FB0E6BE7CC}</Project>
       <Name>06.CustomApiItemTemplate</Name>
+      <VSIXSubPath>ItemTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\ItemTemplates\CSharp\07.WorkflowItemTemplate\07.WorkflowItemTemplate.csproj">
+      <Project>{6373A171-F07C-4153-BDA2-C3730497889D}</Project>
+      <Name>07.WorkflowItemTemplate</Name>
       <VSIXSubPath>ItemTemplates</VSIXSubPath>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>

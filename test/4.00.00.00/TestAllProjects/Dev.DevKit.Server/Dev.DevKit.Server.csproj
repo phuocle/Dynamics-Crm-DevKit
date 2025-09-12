@@ -54,6 +54,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Workflow\SendEmail.cs" />
     <None Include="packages.config" />
     <None Include="Dev.DevKit.Server.snk" />
     <None Include="deploy.debug.bat" />

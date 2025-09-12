@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.Windows.Input;
 using ItemType = DynamicsCrm.DevKit.Shared.ItemType;
 
@@ -20,12 +19,12 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         public ServiceClient ServiceClient => CONNECTION.ServiceClient;
         public CrmConnection CrmConnection => CONNECTION.CrmConnection;
         private List<CustomTemplate> CustomTemplates { get; set; } = new List<CustomTemplate>();
-
         public string Class => TextboxClass.Text ?? string.Empty;
         public string PluginSchemaName
         {
             get
             {
+                if (ComboBoxEntity.Visibility == System.Windows.Visibility.Collapsed) return string.Empty;
                 if (ComboBoxEntity?.SelectedItem is XrmEntity entity)
                     return entity.SchemaName ?? string.Empty;
                 return string.Empty;
@@ -35,6 +34,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         {
             get
             {
+                if (ComboBoxMessage.Visibility == System.Windows.Visibility.Collapsed) return string.Empty;
                 if (ComboBoxMessage?.SelectedItem is NameValue message)
                     return message.Name ?? string.Empty;
                 return string.Empty;
@@ -64,6 +64,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         {
             get
             {
+                if (ComboBoxEntity.Visibility == System.Windows.Visibility.Collapsed) return string.Empty;  
                 var selected = (XrmEntity)ComboBoxEntity.SelectedItem;
                 return selected.LogicalName ?? string.Empty;
             }
@@ -112,6 +113,20 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     LabelStage.Visibility = System.Windows.Visibility.Collapsed;
                     ComboBoxStage.Visibility = System.Windows.Visibility.Collapsed;
                 }
+                void WorkflowItem()
+                {
+                    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Workflow-Item-Template");
+                    HELP.Inlines.Clear();
+                    HELP.Inlines.Add("Workflow Item Template");
+                    LabelExecution.Visibility = System.Windows.Visibility.Collapsed;
+                    ComboBoxExecution.Visibility = System.Windows.Visibility.Collapsed;
+                    LabelStage.Visibility = System.Windows.Visibility.Collapsed;
+                    ComboBoxStage.Visibility = System.Windows.Visibility.Collapsed;
+                    LabelEntity.Visibility = System.Windows.Visibility.Collapsed;
+                    ComboBoxEntity.Visibility = System.Windows.Visibility.Collapsed;
+                    LabelMessage.Visibility = System.Windows.Visibility.Collapsed;
+                    ComboBoxMessage.Visibility = System.Windows.Visibility.Collapsed;
+                }
                 _ItemType = value;
                 switch (_ItemType)
                 {
@@ -123,6 +138,9 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                         break;
                     case ItemType.CustomApi:
                         CustomApiItem();
+                        break;
+                    case ItemType.Workflow:
+                        WorkflowItem();
                         break;
                 }
             }
@@ -149,7 +167,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         }
         private async Task LoadCustomTemplatesAsync()
         {
-            if (ItemType == ItemType.Plugin || ItemType == ItemType.CustomAction || ItemType == ItemType.CustomApi)
+            if (ItemType == ItemType.Plugin || ItemType == ItemType.CustomAction || ItemType == ItemType.CustomApi || ItemType == ItemType.Workflow)
             {
                 CustomTemplates = await VsixHelper.GetCustomTemplatesAsync(ItemType);
                 ComboBoxTemplate.ItemsSource = null;
@@ -197,7 +215,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         {
             if (IsValid())
             {
-                if (ItemType == ItemType.Plugin || ItemType == ItemType.CustomAction || ItemType == ItemType.CustomApi)
+                if (ItemType == ItemType.Plugin || ItemType == ItemType.CustomAction || ItemType == ItemType.CustomApi || ItemType == ItemType.Workflow)
                 {
                     Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;                    
                     var form = new FormCustom(CustomTemplates, CustomTemplate, ItemType, await T4Helper.BuildContextAsync(this));
@@ -215,12 +233,12 @@ namespace DynamicsCrm.DevKit.Lib.Forms
 
         bool IsValid()
         {
-            if (ComboBoxEntity.SelectedItem == null)
+            if (ComboBoxEntity.Visibility == System.Windows.Visibility.Visible && ComboBoxEntity.SelectedItem == null)
             {
                 VS.MessageBox.ShowError("Please select entity");
                 return false;
             }
-            if (ComboBoxMessage.SelectedItem == null)
+            if (ComboBoxMessage.Visibility == System.Windows.Visibility.Visible && ComboBoxMessage.SelectedItem == null)
             {
                 VS.MessageBox.ShowError("Please select message");
                 return false;

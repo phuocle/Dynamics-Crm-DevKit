@@ -962,6 +962,7 @@ namespace DynamicsCrm.DevKit.Shared
 
         public static async Task<string> GetPluginCommentAsync(ServiceClient service, string pluginLogicalName, string pluginMessage)
         {
+            if (string.IsNullOrEmpty(pluginLogicalName) || string.IsNullOrEmpty(pluginMessage)) return string.Empty;
             var list = await XrmHelper.GetPluginInputOutputParametersAsync(service, pluginLogicalName, pluginMessage);
             if (list.Count == 0) return string.Empty;
             var max = list.OrderByDescending(s => s.Name.Length).First().Name.Length + 4;

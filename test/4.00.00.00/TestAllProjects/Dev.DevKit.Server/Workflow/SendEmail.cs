@@ -1,15 +1,15 @@
-﻿using System.Activities;
+﻿using Dev.DevKit.Shared;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Workflow;
-using <#=Context.PluginSharedNameSpace#>;
+using System.Activities;
 
-namespace <#=Context.PluginNameSpace#>
+namespace Dev.DevKit.Server.Workflow
 {
-    [CrmPluginRegistration("<#=Context.Class#><#if(Context.PluginOrder!=1){#><#=Context.PluginOrder#><#}#>", "<#=Context.Class#><#if(Context.PluginOrder!=1){#><#=Context.PluginOrder#><#}#>", "", "<#=Context.PluginNameSpace#>", IsolationModeEnum.Sandbox, PluginType = PluginType.Workflow)]
-    public class <#=Context.Class#><#if(Context.PluginOrder!=1){#><#=Context.PluginOrder#><#}#> : CodeActivity
+    [CrmPluginRegistration("SendEmail", "SendEmail", "", "Dev.DevKit.Server.Workflow", IsolationModeEnum.Sandbox, PluginType = PluginType.Workflow)]
+    public class SendEmail : CodeActivity
     {
-        // https://learn.microsoft.com/en-us/power-apps/developer/data-platform/workflow/workflow-extensions#add-parameters
-        // Supported Input/Output types: bool, DateTime, Decimal, Double, EntityReference, int, Money, OptionSetValue, string
+        //https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/workflow/add-metadata-custom-workflow-activity
+        //Supported Input/Output types: bool, DateTime,	Decimal, Double, EntityReference, int, Money, OptionSetValue, string
 
         //[Default("Default Input Value")]
         //[Input("Input Value")]
