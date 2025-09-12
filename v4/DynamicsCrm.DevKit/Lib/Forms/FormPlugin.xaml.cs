@@ -127,6 +127,22 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     LabelMessage.Visibility = System.Windows.Visibility.Collapsed;
                     ComboBoxMessage.Visibility = System.Windows.Visibility.Collapsed;
                 }
+                void DataProviderItem()
+                {
+                    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Data-Provider-Item-Template");
+                    HELP.Inlines.Clear();
+                    HELP.Inlines.Add("Data Provider Item Template");
+                    LabelExecution.Visibility = System.Windows.Visibility.Collapsed;
+                    ComboBoxExecution.Visibility = System.Windows.Visibility.Collapsed;
+                    LabelStage.Visibility = System.Windows.Visibility.Collapsed;
+                    ComboBoxStage.Visibility = System.Windows.Visibility.Collapsed;                    
+                    LabelMessage.Visibility = System.Windows.Visibility.Collapsed;
+                    ComboBoxMessage.Visibility = System.Windows.Visibility.Collapsed;
+                    LabelClass.Visibility = System.Windows.Visibility.Collapsed;
+                    TextboxClass.Visibility = System.Windows.Visibility.Collapsed;
+                    LabelEntity.Content = "Data Source";
+                    TemplatePanel.Visibility = System.Windows.Visibility.Hidden;
+                }
                 _ItemType = value;
                 switch (_ItemType)
                 {
@@ -141,6 +157,9 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                         break;
                     case ItemType.Workflow:
                         WorkflowItem();
+                        break;
+                    case ItemType.DataProvider:
+                        DataProviderItem();
                         break;
                 }
             }
@@ -162,7 +181,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             get
             {
                 var selected = (CustomTemplate)ComboBoxTemplate.SelectedItem;
-                return selected.Title;
+                return selected.Title ?? string.Empty;
             }
         }
         private async Task LoadCustomTemplatesAsync()
@@ -235,7 +254,10 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         {
             if (ComboBoxEntity.Visibility == System.Windows.Visibility.Visible && ComboBoxEntity.SelectedItem == null)
             {
-                VS.MessageBox.ShowError("Please select entity");
+                if (ItemType == ItemType.DataProvider)
+                    VS.MessageBox.ShowError("Please select Data Source");
+                else
+                    VS.MessageBox.ShowError("Please select Entity");
                 return false;
             }
             if (ComboBoxMessage.Visibility == System.Windows.Visibility.Visible && ComboBoxMessage.SelectedItem == null)
@@ -281,6 +303,22 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                         }
                         await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
                         ComboBoxEntity.DisplayMemberPath = Const.SchemaName;
+                        ComboBoxEntity.ItemsSource = items;
+                        buttonOK.IsEnabled = items.Count > 0;
+                        LockUi(false);
+                    });
+                }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default);
+            }
+            else if (ItemType == ItemType.DataProvider)
+            {
+                LockUi(true);
+                _ = Task.Factory.StartNew(() =>
+                {
+                    ThreadHelper.JoinableTaskFactory.Run(async () =>
+                    {
+                        var items = await XrmHelper.GetAllDataSourceAsync(ServiceClient);
+                        await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                        ComboBoxEntity.DisplayMemberPath = Const.LogicalName;
                         ComboBoxEntity.ItemsSource = items;
                         buttonOK.IsEnabled = items.Count > 0;
                         LockUi(false);

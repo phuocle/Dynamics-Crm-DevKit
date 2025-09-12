@@ -405,17 +405,25 @@ namespace DynamicsCrm.DevKit.Lib
             }
             if (itemType == ItemType.Test)
             {
-                customTemplates.Insert(0, new CustomTemplate { Type = $"{itemType}", Title = $"Default - {ItemType.CustomApi}", Body = await GetDefaultCustomTemplateAsync(itemType, $"Default - {ItemType.CustomApi}"), IsDefault = false });
-                customTemplates.Insert(0, new CustomTemplate { Type = $"{itemType}", Title = $"Default - {ItemType.CustomAction}", Body = await GetDefaultCustomTemplateAsync(itemType,$"Default - {ItemType.CustomAction}"), IsDefault = false });
-                customTemplates.Insert(0, new CustomTemplate { Type = $"{itemType}", Title = $"Default - {ItemType.Workflow}", Body = await GetDefaultCustomTemplateAsync(itemType, $"Default - {ItemType.Workflow}"), IsDefault = false });
-                customTemplates.Insert(0, new CustomTemplate { Type = $"{itemType}", Title = $"Default - {ItemType.Plugin}", Body = await GetDefaultCustomTemplateAsync(itemType, $"Default - {ItemType.Plugin}"), IsDefault = false });
+                customTemplates.Insert(0, new CustomTemplate { Type = $"{itemType}", Title = $"Default - {ItemType.CustomApi}", Body = await GetDefaultCustomTemplateBodyAsync(itemType, $"{ItemType.CustomApi}"), IsDefault = false });
+                customTemplates.Insert(0, new CustomTemplate { Type = $"{itemType}", Title = $"Default - {ItemType.CustomAction}", Body = await GetDefaultCustomTemplateBodyAsync(itemType,$"{ItemType.CustomAction}"), IsDefault = false });
+                customTemplates.Insert(0, new CustomTemplate { Type = $"{itemType}", Title = $"Default - {ItemType.Workflow}", Body = await GetDefaultCustomTemplateBodyAsync(itemType, $"{ItemType.Workflow}"), IsDefault = false });
+                customTemplates.Insert(0, new CustomTemplate { Type = $"{itemType}", Title = $"Default - {ItemType.Plugin}", Body = await GetDefaultCustomTemplateBodyAsync(itemType, $"{ItemType.Plugin}"), IsDefault = false });
+            }
+            else if (itemType == ItemType.DataProvider)
+            {
+                customTemplates.Insert(0, new CustomTemplate { Type = $"{itemType}", Title = $"Default - RetrieveMultiple", Body = await GetDefaultCustomTemplateBodyAsync(itemType, $"RetrieveMultiple"), IsDefault = false });
+                customTemplates.Insert(0, new CustomTemplate { Type = $"{itemType}", Title = $"Default - Retrieve", Body = await GetDefaultCustomTemplateBodyAsync(itemType, $"Retrieve"), IsDefault = false });
+                customTemplates.Insert(0, new CustomTemplate { Type = $"{itemType}", Title = $"Default - Delete", Body = await GetDefaultCustomTemplateBodyAsync(itemType, $"Delete"), IsDefault = false });
+                customTemplates.Insert(0, new CustomTemplate { Type = $"{itemType}", Title = $"Default - Update", Body = await GetDefaultCustomTemplateBodyAsync(itemType, $"Update"), IsDefault = false });
+                customTemplates.Insert(0, new CustomTemplate { Type = $"{itemType}", Title = $"Default - Create", Body = await GetDefaultCustomTemplateBodyAsync(itemType, $"Create"), IsDefault = false });                                                             
             }
             else
-                customTemplates.Insert(0, new CustomTemplate { Type = $"{itemType}", Title = "Default", Body = await GetDefaultCustomTemplateAsync(itemType), IsDefault = false });
+                customTemplates.Insert(0, new CustomTemplate { Type = $"{itemType}", Title = "Default", Body = await GetDefaultCustomTemplateBodyAsync(itemType), IsDefault = false });
             return customTemplates;
         }
 
-        internal static async Task<string> GetDefaultCustomTemplateAsync(ItemType itemType, string templateTitle = null)
+        internal static async Task<string> GetDefaultCustomTemplateBodyAsync(ItemType itemType, string subType = null)
         {
             if (itemType == ItemType.Plugin)
                 return await VsixHelper.ReadEmbeddedResourceAsync("tt.Plugin.tt");
@@ -427,17 +435,30 @@ namespace DynamicsCrm.DevKit.Lib
                 return await VsixHelper.ReadEmbeddedResourceAsync("tt.CustomApi.tt");
             else if (itemType == ItemType.Test)
             {
-                if (templateTitle == $"Default - {ItemType.Plugin}")
+                if (subType == $"{ItemType.Plugin}")
                     return await VsixHelper.ReadEmbeddedResourceAsync("tt.TestPlugin.tt");
-                else if (templateTitle == $"Default - {ItemType.Workflow}")
+                else if (subType == $"{ItemType.Workflow}")
                     return await VsixHelper.ReadEmbeddedResourceAsync("tt.TestWorkflow.tt");
-                else if (templateTitle == $"Default - {ItemType.CustomAction}")
+                else if (subType == $"{ItemType.CustomAction}")
                     return await VsixHelper.ReadEmbeddedResourceAsync("tt.TestCustomAction.tt");
-                else if (templateTitle == $"Default - {ItemType.CustomApi}")
+                else if (subType == $"{ItemType.CustomApi}")
                     return await VsixHelper.ReadEmbeddedResourceAsync("tt.TestCustomApi.tt");
             }
             else if (itemType == ItemType.UiTest)
                 return await VsixHelper.ReadEmbeddedResourceAsync("tt.UiTest.tt");
+            else if (itemType == ItemType.DataProvider)
+            {
+                if (subType == $"Create")
+                    return await VsixHelper.ReadEmbeddedResourceAsync("tt.DataProviderCreate.tt");
+                else if (subType == $"Update")
+                    return await VsixHelper.ReadEmbeddedResourceAsync("tt.DataProviderUpdate.tt");
+                else if (subType == $"Delete")
+                    return await VsixHelper.ReadEmbeddedResourceAsync("tt.DataProviderDelete.tt");
+                else if (subType == $"Retrieve")
+                    return await VsixHelper.ReadEmbeddedResourceAsync("tt.DataProviderRetrieve.tt");
+                else if (subType == $"RetrieveMultiple")
+                    return await VsixHelper.ReadEmbeddedResourceAsync("tt.DataProviderRetrieveMultiple.tt");
+            }    
             return string.Empty;
         }
 

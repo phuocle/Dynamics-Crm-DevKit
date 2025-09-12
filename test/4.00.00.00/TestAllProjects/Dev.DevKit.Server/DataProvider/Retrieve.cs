@@ -1,27 +1,28 @@
-﻿using Microsoft.Xrm.Sdk;
+﻿using Dev.DevKit.Shared;
+using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Extensions;
-using Microsoft.Xrm.Sdk.Query;
 using System;
-using <#=Context.PluginSharedNameSpace#>;
 
-namespace <#=Context.PluginNameSpace#>
+namespace Dev.DevKit.Server.DataProvider
 {
-    [CrmPluginRegistration("<#=Context.PluginNameSpace#>.RetrieveMultiple", "RetrieveMultiple", PluginType.DataProvider, DataSource = "<#=Context.DataSource#>")]
-    public class RetrieveMultiple : IPlugin
+    [CrmPluginRegistration("Dev.DevKit.Server.DataProvider.Retrieve", "Retrieve", PluginType.DataProvider, DataSource = "DataSource")]
+    public class Retrieve : IPlugin
     {
         /*
           InputParameters:
-              Query                 Microsoft.Xrm.Sdk.Query.QueryBase - require
-              AppModuleId           System.Guid
-              IsAppModuleContext    System.Boolean
+              Target                  Microsoft.Xrm.Sdk.EntityReference - require
+              ColumnSet               Microsoft.Xrm.Sdk.Query.ColumnSet - require
+              RelatedEntitiesQuery    Microsoft.Xrm.Sdk.RelationshipQueryCollection
+              ReturnNotifications     System.Boolean
            OutputParameters:
-              EntityCollection      Microsoft.Xrm.Sdk.EntityCollection - require
+              Entity                  Microsoft.Xrm.Sdk.Entity - require
+              Notifications            - require
         */
 
         //private readonly string unSecureConfiguration = null;
         //private readonly string secureConfiguration = null;
 
-        //public RetrieveMultiple(string unSecureConfiguration, string secureConfiguration)
+        //public Retrieve(string unSecureConfiguration, string secureConfiguration)
         //{
         //    this.unSecureConfiguration = unSecureConfiguration;
         //    this.secureConfiguration = secureConfiguration;
@@ -30,14 +31,14 @@ namespace <#=Context.PluginNameSpace#>
         public void Execute(IServiceProvider serviceProvider)
         {
             var context = (IPluginExecutionContext)serviceProvider.GetService(typeof(IPluginExecutionContext));
-            var tracing = (ITracingService)serviceProvider.GetService(typeof(ITracingService));
             var serviceFactory = (IOrganizationServiceFactory)serviceProvider.GetService(typeof(IOrganizationServiceFactory));
             var serviceAdmin = serviceFactory.CreateOrganizationService(null);
             var service = serviceFactory.CreateOrganizationService(context.UserId);
+            var tracing = (ITracingService)serviceProvider.GetService(typeof(ITracingService));
             var retriever = serviceProvider.Get<IEntityDataSourceRetrieverService>();
             var dataSource = retriever.RetrieveEntityDataSource();
 
-            tracing?.DebugContext(context);
+            tracing.DebugContext(context);
 
             ExecutePlugin(context, serviceFactory, serviceAdmin, service, tracing, dataSource);
         }
@@ -47,22 +48,11 @@ namespace <#=Context.PluginNameSpace#>
             //Get Parameter from DataSource
             //var ??? = dataSource.GetAttributeValue<string>("???");
             //var ??? = dataSource.GetAttributeValue<int>("???");
+            var target = context.InputParameterOrDefault<EntityReference>("Target");
+            var entity = new Entity("???", target.Id);
             //YOUR CODE ...
-            var query = context?.InputParameters?["Query"];
-            var entities = new EntityCollection();
-            entities.EntityName = context.PrimaryEntityName;
-            if (query is QueryExpression qe)
-            {
-                //UCI grid return QueryExpression
-            }
-            else if (query is FetchExpression fe)
-            {
-                //Advanced Find, Classic grid return FetchExpression
-            }
-            else
-                throw new InvalidPluginExecutionException("Something wrong with Query");
 
-            context.OutputParameters["BusinessEntityCollection"] = entities;
+            context.OutputParameters["BusinessEntity"] = entity;
         }
     }
 }

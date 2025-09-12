@@ -54,6 +54,11 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataProvider\Create.cs" />
+    <Compile Include="DataProvider\Delete.cs" />
+    <Compile Include="DataProvider\Retrieve.cs" />
+    <Compile Include="DataProvider\RetrieveMultiple.cs" />
+    <Compile Include="DataProvider\Update.cs" />
     <Compile Include="Workflow\SendEmail.cs" />
     <None Include="packages.config" />
     <None Include="Dev.DevKit.Server.snk" />

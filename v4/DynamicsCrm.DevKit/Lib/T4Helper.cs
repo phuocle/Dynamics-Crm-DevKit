@@ -12,14 +12,13 @@ namespace DynamicsCrm.DevKit.Lib
 {
     internal class T4Helper
     {
-        public static async Task<string> GetT4CodeAsync(ItemType itemType, string templateTitle)
+        public static async Task<string> GetT4CodeAsync(ItemType itemType, string templateTitle, string subType = null)
         {
-            if (Const.DEFAULTS.Contains(templateTitle)) return await VsixHelper.GetDefaultCustomTemplateAsync(itemType, templateTitle);
             var customTempaltes = await VsixHelper.GetCustomTemplatesAsync(itemType);
-            var found = customTempaltes.FirstOrDefault(x => x.Type == itemType.ToString() && x.Title == templateTitle);
-            if (found == null) return await VsixHelper.GetDefaultCustomTemplateAsync(itemType, templateTitle);
-            return Helper.Decompress(found.Body);
-        }
+            var found = customTempaltes.FirstOrDefault(x => x.Type == itemType.ToString() && x.SubType == subType && x.Title == templateTitle);
+            if (found == null) return await VsixHelper.GetDefaultCustomTemplateBodyAsync(itemType, subType);
+            return Helper.Decompress(found.Body);            
+        }        
 
         //private static string DefaultT4Code(ItemType itemType, string templateTitle)
         //{
@@ -328,5 +327,7 @@ namespace DynamicsCrm.DevKit.Lib
             };
             return t4Context;
         }
+
+
     }
 }
