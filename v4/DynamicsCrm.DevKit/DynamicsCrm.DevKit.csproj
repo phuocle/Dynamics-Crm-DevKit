@@ -105,6 +105,7 @@
     <Compile Include="Wizard\ItemTemplates\CustomApi.cs" />
     <Compile Include="Wizard\ItemTemplates\CustomAction.cs" />
     <Compile Include="Wizard\ItemTemplates\DataProvider.cs" />
+    <Compile Include="Wizard\ItemTemplates\ResourceString.cs" />
     <Compile Include="Wizard\ItemTemplates\Test.cs" />
     <Compile Include="Wizard\ItemTemplates\UiTest.cs" />
     <Compile Include="Wizard\ItemTemplates\Workflow.cs" />
@@ -307,6 +308,13 @@
     <ProjectReference Include="..\ItemTemplates\CSharp\10.UiTestItemTemplate\10.UiTestItemTemplate.csproj">
       <Project>{53392F2B-21C1-41BF-9073-2994B94E101E}</Project>
       <Name>10.UiTestItemTemplate</Name>
+      <VSIXSubPath>ItemTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\ItemTemplates\CSharp\11.ResourceStringItemTemplate\11.ResourceStringItemTemplate.csproj">
+      <Project>{AEC3BFCD-934B-48C6-8132-0ACAA0AB42D0}</Project>
+      <Name>11.ResourceStringItemTemplate</Name>
       <VSIXSubPath>ItemTemplates</VSIXSubPath>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>

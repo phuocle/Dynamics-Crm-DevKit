@@ -71,6 +71,9 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 return selected.LogicalName ?? string.Empty;
             }
         }
+
+        public string LanguageCode => PluginLogicalName;
+
         public int PluginOrder
         {
             get
@@ -173,6 +176,21 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     LabelMessage.Visibility = System.Windows.Visibility.Collapsed;
                     ComboBoxMessage.Visibility = System.Windows.Visibility.Collapsed;
                 }
+                void ResourceStringItem()
+                {
+                    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Resource-String-Item-Template");
+                    HELP.Inlines.Clear();
+                    HELP.Inlines.Add("Resource String Item Template");
+                    LabelExecution.Visibility = System.Windows.Visibility.Collapsed;
+                    ComboBoxExecution.Visibility = System.Windows.Visibility.Collapsed;
+                    LabelStage.Visibility = System.Windows.Visibility.Collapsed;
+                    ComboBoxStage.Visibility = System.Windows.Visibility.Collapsed;
+                    LabelMessage.Visibility = System.Windows.Visibility.Collapsed;
+                    ComboBoxMessage.Visibility = System.Windows.Visibility.Collapsed;
+                    TemplatePanel.Visibility = System.Windows.Visibility.Hidden;
+                    LabelClass.Content = "Resouce";
+                    LabelEntity.Content = "Language";
+                }
                 _ItemType = value;
                 switch (_ItemType)
                 {
@@ -197,6 +215,9 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     case ItemType.Test:
                         TestItem();
                         break;
+                    case ItemType.ResourceString:
+                        ResourceStringItem();
+                        break;
                 }
             }
         }
@@ -219,7 +240,8 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 var selected = (CustomTemplate)ComboBoxTemplate.SelectedItem;
                 return selected.Title ?? string.Empty;
             }
-        }
+        }        
+
         private async Task LoadCustomTemplatesAsync()
         {
             if (ItemType == ItemType.Plugin || ItemType == ItemType.CustomAction || ItemType == ItemType.CustomApi || ItemType == ItemType.Workflow || ItemType == ItemType.UiTest || ItemType == ItemType.Test)
@@ -290,30 +312,27 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         {
             if (ComboBoxEntity.Visibility == System.Windows.Visibility.Visible && ComboBoxEntity.SelectedItem == null)
             {
-                if (ItemType == ItemType.DataProvider)
-                    VS.MessageBox.ShowError("Please select Data Source");
-                else
-                    VS.MessageBox.ShowError("Please select Entity");
+                VS.MessageBox.ShowError($"Please select {LabelEntity.Content}");
                 return false;
             }
             if (ComboBoxMessage.Visibility == System.Windows.Visibility.Visible && ComboBoxMessage.SelectedItem == null)
             {
-                VS.MessageBox.ShowError("Please select message");
+                VS.MessageBox.ShowError($"Please select {LabelMessage.Content}");
                 return false;
             }
             if (ComboBoxStage.Visibility == System.Windows.Visibility.Visible && ComboBoxStage.SelectedItem == null)
             {
-                VS.MessageBox.ShowError("Please select stage");
+                VS.MessageBox.ShowError($"Please select {LabelStage.Content}");
                 return false;
             }
             if (ComboBoxExecution.Visibility == System.Windows.Visibility.Visible && ComboBoxExecution.SelectedItem == null)
             {
-                VS.MessageBox.ShowError("Please select execution");
+                VS.MessageBox.ShowError($"Please select {LabelExecution.Content}");
                 return false;
             }
             if (TextboxClass.Visibility == System.Windows.Visibility.Visible && string.IsNullOrEmpty(TextboxClass.Text))
             {
-                VS.MessageBox.ShowError("Please enter class");
+                VS.MessageBox.ShowError($"Please enter {LabelClass.Content}");
                 return false;
             }
             return true;
@@ -360,6 +379,22 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                         var items = await XrmHelper.GetAllDataSourceAsync(ServiceClient);
                         await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
                         ComboBoxEntity.DisplayMemberPath = Const.LogicalName;
+                        ComboBoxEntity.ItemsSource = items;
+                        buttonOK.IsEnabled = items.Count > 0;
+                        LockUi(false);
+                    });
+                }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default);
+            }
+            else if (ItemType == ItemType.ResourceString)
+            {
+                LockUi(true);
+                _ = Task.Factory.StartNew(() =>
+                {
+                    ThreadHelper.JoinableTaskFactory.Run(async () =>
+                    {
+                        var items = await XrmHelper.GetProvisionedLanguagesAsync(ServiceClient);
+                        await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                        ComboBoxEntity.DisplayMemberPath = Const.SchemaName;
                         ComboBoxEntity.ItemsSource = items;
                         buttonOK.IsEnabled = items.Count > 0;
                         LockUi(false);
