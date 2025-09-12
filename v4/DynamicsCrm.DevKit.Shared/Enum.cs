@@ -88,6 +88,7 @@
         DownloadWebResources,
         DataProvider,
         ResourceString,
-        DownloadReports
+        DownloadReports,
+        BatFile
     }
 }

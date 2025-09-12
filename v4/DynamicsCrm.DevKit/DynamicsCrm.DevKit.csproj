@@ -104,6 +104,7 @@
     </Compile>
     <Compile Include="Wizard\ItemTemplates\CustomApi.cs" />
     <Compile Include="Wizard\ItemTemplates\CustomAction.cs" />
+    <Compile Include="Wizard\ItemTemplates\BatFile.cs" />
     <Compile Include="Wizard\ItemTemplates\DataProvider.cs" />
     <Compile Include="Wizard\ItemTemplates\ResourceString.cs" />
     <Compile Include="Wizard\ItemTemplates\Test.cs" />
@@ -323,6 +324,13 @@
     <ProjectReference Include="..\ItemTemplates\CSharp\12.JsDevkitItemTemplate\12.JsDevkitItemTemplate.csproj">
       <Project>{CCBD1381-E6A6-4A57-9853-E93A27A33F12}</Project>
       <Name>12.JsDevkitItemTemplate</Name>
+      <VSIXSubPath>ItemTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\ItemTemplates\CSharp\13.BatFileItemTemplate\13.BatFileItemTemplate.csproj">
+      <Project>{99DD3CAE-6D04-4BDA-BB2D-C4D7B28CA1E0}</Project>
+      <Name>13.BatFileItemTemplate</Name>
       <VSIXSubPath>ItemTemplates</VSIXSubPath>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>

@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.Windows.Input;
 using ItemType = DynamicsCrm.DevKit.Shared.ItemType;
 
@@ -73,6 +72,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         }
 
         public string LanguageCode => PluginLogicalName;
+        public string BatFileName => PluginLogicalName;
 
         public int PluginOrder
         {
@@ -191,6 +191,22 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     LabelClass.Content = "Resouce";
                     LabelEntity.Content = "Language";
                 }
+                void BatFileItem()
+                {
+                    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Bat-File-Item-Template");
+                    HELP.Inlines.Clear();
+                    HELP.Inlines.Add("Bat File Item Template");
+                    LabelExecution.Visibility = System.Windows.Visibility.Collapsed;
+                    ComboBoxExecution.Visibility = System.Windows.Visibility.Collapsed;
+                    LabelStage.Visibility = System.Windows.Visibility.Collapsed;
+                    ComboBoxStage.Visibility = System.Windows.Visibility.Collapsed;
+                    LabelMessage.Visibility = System.Windows.Visibility.Collapsed;
+                    ComboBoxMessage.Visibility = System.Windows.Visibility.Collapsed;
+                    LabelClass.Visibility = System.Windows.Visibility.Collapsed;
+                    TextboxClass.Visibility = System.Windows.Visibility.Collapsed;
+                    LabelEntity.Content = "Bat File";
+                    TemplatePanel.Visibility = System.Windows.Visibility.Hidden;
+                }
                 _ItemType = value;
                 switch (_ItemType)
                 {
@@ -217,6 +233,9 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                         break;
                     case ItemType.ResourceString:
                         ResourceStringItem();
+                        break;
+                    case ItemType.BatFile:
+                        BatFileItem();
                         break;
                 }
             }
@@ -400,6 +419,18 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                         LockUi(false);
                     });
                 }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default);
+            }
+            else if (ItemType == ItemType.BatFile)
+            {
+                var items = new List<XrmEntity>()
+                {
+                    new XrmEntity { SchemaName = "download.reports.bat", LogicalName = "download.reports.bat" },
+                    new XrmEntity { SchemaName = "download.webresources.bat", LogicalName = "download.webresources.bat" },
+                    new XrmEntity { SchemaName = "deploy.datasource.bat", LogicalName = "deploy.datasource.bat" }
+                };
+                ComboBoxEntity.DisplayMemberPath = Const.SchemaName;
+                ComboBoxEntity.ItemsSource = items;
+                buttonOK.IsEnabled = items.Count > 0;
             }
         }
 
