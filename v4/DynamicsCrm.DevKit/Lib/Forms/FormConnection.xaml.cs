@@ -18,7 +18,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         private const string ERROR_ENTER_URL = "Please enter Url";
         private const string ERROR_ENTER_USER = "Please enter {0}";
         private const string ERROR_ENTER_PASSWORD = "Please enter {0}";
-        private const string ERROR_AD_USERNAME_FORMAT = "For AD authentication, username must be in format 'domain\\username'";
+        private const string ERROR_AD_USERNAME_FORMAT = "For AD authentication, username must be in format 'domain\\\\username'";
         private const string ERROR_CONNECTION_FAILED = "Failed to connect create ServiceClient. Please check your connection settings.";
 
         public FormConnection()
@@ -245,9 +245,26 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             if (string.IsNullOrEmpty(selectedText))
                 return;
 
-            var isClientSecret = selectedText == "ClientSecret";
-            labelUser.Content = isClientSecret ? "Client Id" : "User Name";
-            labelPassword.Content = isClientSecret ? "Client Secret" : "Password";
+            switch (selectedText)
+            {
+                case "AD":
+                    labelUser.Content = "User Domain";
+                    labelPassword.Content = "Password";
+                    break;
+                case "OAuth":
+                    labelUser.Content = "Username";
+                    labelPassword.Content = "Password";
+                    break;
+                case "ClientSecret":
+                    labelUser.Content = "Client Id";
+                    labelPassword.Content = "Secret Value";
+                    break;
+                default:
+                    labelUser.Content = "User";
+                    labelPassword.Content = "Password";
+                    break;
+            }
+
             var isOAuth = selectedText == "OAuth";
             checkBoxDontSavePassword.Visibility = isOAuth ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
             if (!isOAuth)
