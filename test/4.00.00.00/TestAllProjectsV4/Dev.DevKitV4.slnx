@@ -15,8 +15,14 @@
   <Project Path="Dev.DevKitV4.Edit.ConsoleCore.ClientSecret/Dev.DevKitV4.Edit.ConsoleCore.ClientSecret.csproj" />
   <Project Path="Dev.DevKitV4.Edit.ConsoleCore.OOB/Dev.DevKitV4.Edit.ConsoleCore.OOB.csproj" />
   <Project Path="Dev.DevKitV4.Edit.ConsoleCore.UserPass/Dev.DevKitV4.Edit.ConsoleCore.UserPass.csproj" />
+  <Project Path="Dev.DevKitV4.Server.CustomAction.Account/Dev.DevKitV4.Server.CustomAction.Account.csproj" Id="96630aaa-fe04-47e0-b052-acf81f5f0156" />
+  <Project Path="Dev.DevKitV4.Server.CustomActions/Dev.DevKitV4.Server.CustomActions.csproj" Id="cb8a8038-5389-416a-a1f8-aef89e06b03d" />
+  <Project Path="Dev.DevKitV4.Server.CustomApi.Account/Dev.DevKitV4.Server.CustomApi.Account.csproj" Id="818a6368-0d4b-4fe9-bc81-cb043293e13e" />
+  <Project Path="Dev.DevKitV4.Server.CustomApis/Dev.DevKitV4.Server.CustomApis.csproj" Id="b8361a3d-bbb0-4b3c-bb1c-ea8120de0904" />
   <Project Path="Dev.DevKitV4.Server.Plugin.Account/Dev.DevKitV4.Server.Plugin.Account.csproj" Id="74017463-0aa8-4458-a72a-ccd7fef0f6dc" />
   <Project Path="Dev.DevKitV4.Server.Plugins/Dev.DevKitV4.Server.Plugins.csproj" Id="ac0cadb9-9d4a-4be7-8083-d23e8b8f569b" />
+  <Project Path="Dev.DevKitV4.Server.Workflow.Account/Dev.DevKitV4.Server.Workflow.Account.csproj" Id="d5796bae-b47f-428b-b2fb-67bb10ac63ec" />
+  <Project Path="Dev.DevKitV4.Server.Workflows/Dev.DevKitV4.Server.Workflows.csproj" Id="03085c8e-d728-4101-ac6d-d23bc57f7507" />
   <Project Path="Dev.DevKitV4.Server/Dev.DevKitV4.Server.csproj" Id="7e8d2951-a96d-47ee-b5d9-f4ed74c11ab6" />
   <Project Path="Dev.DevKitV4.Shared/Dev.DevKitV4.Shared.shproj" />
 </Solution>
