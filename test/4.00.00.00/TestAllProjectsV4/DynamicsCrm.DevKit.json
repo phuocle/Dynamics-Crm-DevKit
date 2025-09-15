@@ -1,5 +1,5 @@
 ﻿{
-    "DefaultCrmConnection": "aaa",
+    "DefaultCrmConnection": "https://dynamics-crm-devkit.crm5.dynamics.com",
     "CrmConnections": [
         {
             "Name": "https://dynamics-crm-devkit.crm5.dynamics.com",

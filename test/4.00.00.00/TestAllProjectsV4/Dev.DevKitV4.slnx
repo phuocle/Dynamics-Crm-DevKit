@@ -1,0 +1,7 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="DynamicsCrm.DevKit.Cli.json" />
+    <File Path="DynamicsCrm.DevKit.json" />
+  </Folder>
+  <Project Path="Dev.DevKitV4.Shared/Dev.DevKitV4.Shared.shproj" />
+</Solution>
