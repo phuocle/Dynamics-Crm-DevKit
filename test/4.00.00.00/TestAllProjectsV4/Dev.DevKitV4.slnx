@@ -1,5 +1,6 @@
 <Solution>
   <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
     <File Path="DynamicsCrm.DevKit.Cli.json" />
     <File Path="DynamicsCrm.DevKit.json" />
   </Folder>
@@ -29,7 +30,5 @@
   <Project Path="Dev.DevKitV4.Shared.Test/Dev.DevKitV4.Shared.Test.shproj" Id="adcc5f7b-9902-44f7-a2b0-6feddf42d4eb" />
   <Project Path="Dev.DevKitV4.Shared/Dev.DevKitV4.Shared.shproj" />
   <Project Path="Dev.DevKitV4.SolutionPackager/Dev.DevKitV4.SolutionPackager.csproj" Id="aa578e62-a6a5-4371-959c-650f6c838ae4" />
-  <Project Path="Dev.DevKitV4.Test/Dev.DevKitV4.Test.csproj" Id="1c3ece5e-a7f7-4c7c-be0b-b9b6e28625fd" />
-  <Project Path="Dev.DevKitV4.UiTest/Dev.DevKitV4.UiTest.csproj" Id="548110c7-ca55-4925-82f3-8d2e38675f9a" />
   <Project Path="Dev.DevKitV4.WebResource/Dev.DevKitV4.WebResource.csproj" Id="441a3265-4789-4465-874c-0bc7f4c6cc33" />
 </Solution>
