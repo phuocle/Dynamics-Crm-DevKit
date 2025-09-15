@@ -1,22 +1,22 @@
 ﻿{
-    "DefaultCrmConnection": "devkit@phuocle.net2",
+    "DefaultCrmConnection": "devkit@phuocle.net",
     "CrmConnections": [
         {
-            "Name": "https://dynamics-crm-devkit.crm5.dynamics.com",
+            "Name": "ClientSecret",
             "Url": "https://dynamics-crm-devkit.crm5.dynamics.com",
             "UserName": "1a60a5c2-d04c-4b26-8f86-9d6ce0616799",
             "Password": "4Y11hDyKJYQTqXC9cRDXnoJ2DytZDs/jYI1byYwKli57mRfjHcCPu6Qx5sxgtCWQ",
             "Type": "ClientSecret"
         },
         {
-            "Name": "devkit@phuocle.net",
+            "Name": "UserPass",
             "Url": "https://dynamics-crm-devkit.crm5.dynamics.com",
             "UserName": "devkit@phuocle.net",
             "Password": "4eqm+cFnhfOPY1ZMz+BdnQ==",
             "Type": "OAuth"
         },
         {
-            "Name": "devkit@phuocle.net2",
+            "Name": "OOB",
             "Url": "https://dynamics-crm-devkit.crm5.dynamics.com",
             "UserName": "devkit@phuocle.net",
             "Password": "",

@@ -3,8 +3,11 @@
     <File Path="DynamicsCrm.DevKit.Cli.json" />
     <File Path="DynamicsCrm.DevKit.json" />
   </Folder>
-  <Project Path="Dev.DevKitV4.Console.SavedUserPass/Dev.DevKitV4.Console.SavedUserPass.csproj" Id="018140ac-ccbe-4782-b088-ae0ea1e4b007" />
-  <Project Path="Dev.DevKitV4.Console/Dev.DevKitV4.Console.csproj" Id="4f13a124-2eb2-4ee1-91c7-b568569ccfb9" />
-  <Project Path="Dev.DevKitV4.NotSavedUserPass/Dev.DevKitV4.NotSavedUserPass.csproj" Id="4d667cba-9992-4cb6-aa4c-8cd9f3e90002" />
+  <Project Path="Dev.DevKitV4.ClientSecret.Console.Edit/Dev.DevKitV4.ClientSecret.Console.Edit.csproj" Id="5dabf407-befe-4bcb-bacc-8b9e6d2ceb26" />
+  <Project Path="Dev.DevKitV4.Console.ClientSecret/Dev.DevKitV4.Console.ClientSecret.csproj" Id="834949b3-f19d-451b-980d-8065103b36dd" />
+  <Project Path="Dev.DevKitV4.Console.OOB/Dev.DevKitV4.Console.OOB.csproj" Id="d96869d5-f10f-4ade-a694-b76b6f5f3bce" />
+  <Project Path="Dev.DevKitV4.Console.UserPass/Dev.DevKitV4.Console.UserPass.csproj" Id="bda61796-8df4-4230-8f57-cf8868b1f152" />
+  <Project Path="Dev.DevKitV4.OOB.Console/Dev.DevKitV4.OOB.Console.csproj" Id="501b8da4-bc26-4754-aa51-e0a41797971f" />
   <Project Path="Dev.DevKitV4.Shared/Dev.DevKitV4.Shared.shproj" />
+  <Project Path="Dev.DevKitV4.UserPass.Console/Dev.DevKitV4.UserPass.Console.csproj" Id="3a745a9e-6265-4ce0-ad16-2ecfffaebe2a" />
 </Solution>
