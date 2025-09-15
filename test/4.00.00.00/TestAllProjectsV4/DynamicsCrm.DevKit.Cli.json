@@ -88,10 +88,10 @@
     {
       "profile": "LATEBOUND",
       "type": "CSharp",
-      "rootnamespace": "???",
+      "rootnamespace": "Dev.DevKitV4.Shared.Entities",
       "namespace": "",
-      "rootfolder": "???",
-      "entities": "folder"
+      "rootfolder": "",
+      "entities": "*"
     },
     {
       "profile": "JS-FORM",
