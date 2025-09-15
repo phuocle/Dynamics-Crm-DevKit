@@ -52,19 +52,19 @@ if %MsBuild%=="" (
 	rem cd ..\..
 	rem copy DynamicsCrm.DevKit\bin\Release\DynamicsCrm.DevKit.vsix Published\%VERSION%\DynamicsCrm.DevKit.%VERSION%.vsix
 
-	rem powershell -Command "(gc DynamicsCrm.DevKit.Shared\Const.cs) -replace (gc version.txt), 'x.xx.xx.xx' | Out-File -encoding UTF8 DynamicsCrm.DevKit.Shared\Const.cs"
-	rem powershell -Command "(gc DynamicsCrm.DevKit.Cli\docs\README.md) -replace (gc version.txt), 'x.xx.xx.xx' | Out-File -encoding UTF8 DynamicsCrm.DevKit.Cli\docs\README.md"
-	rem powershell -Command "(gc DynamicsCrm.DevKit\source.extension.cs) -replace (gc version.txt), 'x.xx.xx.xx' | Out-File -encoding UTF8 DynamicsCrm.DevKit\source.extension.cs"
-	rem powershell -Command "(gc ProjectTemplates\CSharp\05.PackageProjectTemplate\ReadMe.md) -replace (gc version.txt), 'x.xx.xx.xx' | Out-File -encoding UTF8 ProjectTemplates\CSharp\05.PackageProjectTemplate\ReadMe.md"
-	rem powershell -Command "(gc ProjectTemplates\CSharp\12.ReportProjectTemplate\notes.md) -replace (gc version.txt), 'x.xx.xx.xx' | Out-File -encoding UTF8 ProjectTemplates\CSharp\12.ReportProjectTemplate\notes.md"
+	powershell -Command "(gc DynamicsCrm.DevKit.Shared\Const.cs) -replace (gc version.txt), 'x.xx.xx.xx' | Out-File -encoding UTF8 DynamicsCrm.DevKit.Shared\Const.cs"
+	powershell -Command "(gc DynamicsCrm.DevKit.Cli\docs\README.md) -replace (gc version.txt), 'x.xx.xx.xx' | Out-File -encoding UTF8 DynamicsCrm.DevKit.Cli\docs\README.md"
+	powershell -Command "(gc DynamicsCrm.DevKit\source.extension.cs) -replace (gc version.txt), 'x.xx.xx.xx' | Out-File -encoding UTF8 DynamicsCrm.DevKit\source.extension.cs"
+	powershell -Command "(gc ProjectTemplates\CSharp\05.PackageProjectTemplate\ReadMe.md) -replace (gc version.txt), 'x.xx.xx.xx' | Out-File -encoding UTF8 ProjectTemplates\CSharp\05.PackageProjectTemplate\ReadMe.md"
+	powershell -Command "(gc ProjectTemplates\CSharp\12.ReportProjectTemplate\notes.md) -replace (gc version.txt), 'x.xx.xx.xx' | Out-File -encoding UTF8 ProjectTemplates\CSharp\12.ReportProjectTemplate\notes.md"
 
-	rem powershell -Command "(gc DynamicsCrm.DevKit.Cli\docs\README.md) -replace (gc date.txt), 'x.xx.xx.xx' | Out-File -encoding UTF8 DynamicsCrm.DevKit.Cli\docs\README.md"
-	rem powershell -Command "(gc DynamicsCrm.DevKit.Shared\Const.cs) -replace (gc date.txt), 'xxxx.yy.zz HH.mm.ss' | Out-File -encoding UTF8 DynamicsCrm.DevKit.Shared\Const.cs"
-	rem powershell -Command "(gc DynamicsCrm.DevKit\source.extension.vsixmanifest) -replace (gc date.txt), 'xxxx.yy.zz HH.mm.ss' | Out-File DynamicsCrm.DevKit\source.extension.vsixmanifest"
-	rem powershell -Command "(gc DynamicsCrm.DevKit\VSPackage.resx) -replace (gc date.txt), 'xxxx.yy.zz HH.mm.ss'  | Out-File -encoding UTF8 DynamicsCrm.DevKit\VSPackage.resx"
-	rem powershell -Command "(gc DynamicsCrm.DevKit\source.extension.cs) -replace (gc date.txt), 'xxxx.yy.zz HH.mm.ss' | Out-File -encoding UTF8 DynamicsCrm.DevKit\source.extension.cs"
-	rem powershell -Command "(gc DynamicsCrm.DevKit.Cli\docs\README.md) -replace (gc date.txt), 'x.xx.xx.xx' | Out-File -encoding UTF8 DynamicsCrm.DevKit.Cli\docs\README.md"
-	rem powershell -Command "(gc ProjectTemplates\CSharp\05.PackageProjectTemplate\ReadMe.md) -replace (gc date.txt), 'x.xx.xx.xx' | Out-File -encoding UTF8 ProjectTemplates\CSharp\05.PackageProjectTemplate\ReadMe.md"
-	rem powershell -Command "(gc ProjectTemplates\CSharp\12.ReportProjectTemplate\notes.md) -replace (gc date.txt), 'x.xx.xx.xx' | Out-File -encoding UTF8 ProjectTemplates\CSharp\12.ReportProjectTemplate\notes.md"
+	powershell -Command "(gc DynamicsCrm.DevKit.Cli\docs\README.md) -replace (gc date.txt), 'x.xx.xx.xx' | Out-File -encoding UTF8 DynamicsCrm.DevKit.Cli\docs\README.md"
+	powershell -Command "(gc DynamicsCrm.DevKit.Shared\Const.cs) -replace (gc date.txt), 'xxxx.yy.zz HH.mm.ss' | Out-File -encoding UTF8 DynamicsCrm.DevKit.Shared\Const.cs"
+	powershell -Command "(gc DynamicsCrm.DevKit\source.extension.vsixmanifest) -replace (gc date.txt), 'xxxx.yy.zz HH.mm.ss' | Out-File DynamicsCrm.DevKit\source.extension.vsixmanifest"
+	powershell -Command "(gc DynamicsCrm.DevKit\VSPackage.resx) -replace (gc date.txt), 'xxxx.yy.zz HH.mm.ss'  | Out-File -encoding UTF8 DynamicsCrm.DevKit\VSPackage.resx"
+	powershell -Command "(gc DynamicsCrm.DevKit\source.extension.cs) -replace (gc date.txt), 'xxxx.yy.zz HH.mm.ss' | Out-File -encoding UTF8 DynamicsCrm.DevKit\source.extension.cs"
+	powershell -Command "(gc DynamicsCrm.DevKit.Cli\docs\README.md) -replace (gc date.txt), 'x.xx.xx.xx' | Out-File -encoding UTF8 DynamicsCrm.DevKit.Cli\docs\README.md"
+	powershell -Command "(gc ProjectTemplates\CSharp\05.PackageProjectTemplate\ReadMe.md) -replace (gc date.txt), 'x.xx.xx.xx' | Out-File -encoding UTF8 ProjectTemplates\CSharp\05.PackageProjectTemplate\ReadMe.md"
+	powershell -Command "(gc ProjectTemplates\CSharp\12.ReportProjectTemplate\notes.md) -replace (gc date.txt), 'x.xx.xx.xx' | Out-File -encoding UTF8 ProjectTemplates\CSharp\12.ReportProjectTemplate\notes.md"
 
 )
