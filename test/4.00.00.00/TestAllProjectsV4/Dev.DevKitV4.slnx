@@ -30,5 +30,7 @@
   <Project Path="Dev.DevKitV4.Shared.Test/Dev.DevKitV4.Shared.Test.shproj" Id="adcc5f7b-9902-44f7-a2b0-6feddf42d4eb" />
   <Project Path="Dev.DevKitV4.Shared/Dev.DevKitV4.Shared.shproj" />
   <Project Path="Dev.DevKitV4.SolutionPackager/Dev.DevKitV4.SolutionPackager.csproj" Id="aa578e62-a6a5-4371-959c-650f6c838ae4" />
+  <Project Path="Dev.DevKitV4.Test/Dev.DevKitV4.Test.csproj" Id="9c05cbb0-bedd-42e5-af65-39aa18721a7a" />
+  <Project Path="Dev.DevKitV4.UiTest/Dev.DevKitV4.UiTest.csproj" Id="3dc67f7d-e2d0-4afe-aa41-db55e1fb386d" />
   <Project Path="Dev.DevKitV4.WebResource/Dev.DevKitV4.WebResource.csproj" Id="441a3265-4789-4465-874c-0bc7f4c6cc33" />
 </Solution>
