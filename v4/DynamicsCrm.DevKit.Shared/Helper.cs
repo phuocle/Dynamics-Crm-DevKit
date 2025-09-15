@@ -1,6 +1,7 @@
 ﻿using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.CSharp;
 using Microsoft.PowerPlatform.Dataverse.Client;
+using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
 using System;
 using System.Collections.Generic;
@@ -23,6 +24,7 @@ namespace DynamicsCrm.DevKit.Shared
 
         public static string EncryptString(string plainText)
         {
+            if (string.IsNullOrEmpty(plainText)) return string.Empty;
             string passPhrase = "PL.DynamicsCrm.DevKit";
             byte[] initVectorBytes = Encoding.UTF8.GetBytes(initVector);
             byte[] plainTextBytes = Encoding.UTF8.GetBytes(plainText);
@@ -47,7 +49,7 @@ namespace DynamicsCrm.DevKit.Shared
         {
             try
             {
-                if (cipherText == null) return string.Empty;
+                if (string.IsNullOrEmpty(cipherText)) return string.Empty;
                 string passPhrase = "PL.DynamicsCrm.DevKit";
                 byte[] initVectorBytes = Encoding.UTF8.GetBytes(initVector);
                 byte[] cipherTextBytes = Convert.FromBase64String(cipherText);
@@ -700,11 +702,17 @@ namespace DynamicsCrm.DevKit.Shared
                 default:
                     var connectionString = $"AuthType=OAuth;Url={url};Username={userName};Password={password};";
                     if (!connectionString.ToLower().Contains("appid="))
+                    {
                         connectionString += "AppId=51f81489-12ee-4a9e-aaae-a2591f45987d;";
+                    }
                     if (!connectionString.ToLower().Contains("redirecturi="))
+                    {
                         connectionString += "RedirectUri=app://58145B91-0C36-4500-8554-080854F2AC97;";
+                    }
                     if (!connectionString.ToLower().Contains("loginprompt="))
+                    {
                         connectionString += "LoginPrompt=Auto;";
+                    }
                     return connectionString;
             }
         }

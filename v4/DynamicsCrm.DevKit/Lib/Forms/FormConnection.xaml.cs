@@ -122,7 +122,14 @@ namespace DynamicsCrm.DevKit.Lib.Forms
 
         private async Task SaveConnectionAsync(CrmConnection crmConnection)
         {
-            crmConnection.Password = Helper.EncryptString(crmConnection.Password);
+            if (checkBoxDontSavePassword.IsChecked == true)
+            {
+                crmConnection.Password = string.Empty;
+            }
+            else
+            {
+                crmConnection.Password = Helper.EncryptString(crmConnection.Password);
+            }
             var devKitConnections = await VsixHelper.GetDevKitConnectionsAsync();
             devKitConnections.DefaultCrmConnection = crmConnection.Name;
 
@@ -189,7 +196,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 new { IsValid = !string.IsNullOrEmpty(textboxName.Text), Message = ERROR_ENTER_NAME, Control = (Control)textboxName },
                 new { IsValid = !string.IsNullOrEmpty(textboxUrl.Text), Message = ERROR_ENTER_URL, Control = (Control)textboxUrl },
                 new { IsValid = !string.IsNullOrEmpty(textboxUser.Text), Message = string.Format(ERROR_ENTER_USER, labelUser.Content), Control = (Control)textboxUser },
-                new { IsValid = !string.IsNullOrEmpty(textboxPassword.Password), Message = string.Format(ERROR_ENTER_PASSWORD, labelPassword.Content), Control = (Control)textboxPassword }
+                new { IsValid = checkBoxDontSavePassword.IsVisible && checkBoxDontSavePassword.IsChecked == true || !string.IsNullOrEmpty(textboxPassword.Password), Message = string.Format(ERROR_ENTER_PASSWORD, labelPassword.Content), Control = (Control)textboxPassword }
             };
 
             foreach (var rule in validationRules)
@@ -231,16 +238,37 @@ namespace DynamicsCrm.DevKit.Lib.Forms
 
         private void ComboBoxType_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            if (sender is not ComboBox comboBox || comboBox.SelectedItem == null) 
+            if (sender is not ComboBox comboBox || comboBox.SelectedItem == null)
                 return;
 
             var selectedText = ((ComboBoxItem)comboBox.SelectedItem).Content?.ToString();
-            if (string.IsNullOrEmpty(selectedText)) 
+            if (string.IsNullOrEmpty(selectedText))
                 return;
 
             var isClientSecret = selectedText == "ClientSecret";
             labelUser.Content = isClientSecret ? "Client Id" : "User Name";
             labelPassword.Content = isClientSecret ? "Client Secret" : "Password";
+            var isOAuth = selectedText == "OAuth";
+            checkBoxDontSavePassword.Visibility = isOAuth ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
+            if (!isOAuth)
+            {
+                checkBoxDontSavePassword.IsChecked = false;
+                textboxPassword.Visibility = System.Windows.Visibility.Visible;
+                labelPassword.Visibility = System.Windows.Visibility.Visible;
+            }
+        }
+
+        private void CheckBoxDontSavePassword_Checked(object sender, System.Windows.RoutedEventArgs e)
+        {
+            textboxPassword.Visibility = System.Windows.Visibility.Collapsed;
+            labelPassword.Visibility = System.Windows.Visibility.Collapsed;
+            textboxPassword.Password = string.Empty;
+        }
+
+        private void CheckBoxDontSavePassword_Unchecked(object sender, System.Windows.RoutedEventArgs e)
+        {
+            textboxPassword.Visibility = System.Windows.Visibility.Visible;
+            labelPassword.Visibility = System.Windows.Visibility.Visible;
         }
     }
 }
