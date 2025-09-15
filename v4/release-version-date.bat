@@ -38,19 +38,19 @@ if %MsBuild%=="" (
     echo NuGet pack ...
     echo ************************************************************
 
-	rem cd DynamicsCrm.DevKit.Analyzers\Nuget
-	rem call pack.bat
+	cd DynamicsCrm.DevKit.Analyzers\Nuget
+	call pack.bat
 
-	rem cd ..\..
-	rem cd DynamicsCrm.DevKit.Cli\Nuget
-	rem call pack.bat
+	cd ..\..
+	cd DynamicsCrm.DevKit.Cli\Nuget
+	call pack.bat
 
-	rem cd ..\..
-	rem cd DynamicsCrm.DevKit.Tool\Nuget
-	rem call pack.bat
+	cd ..\..
+	cd DynamicsCrm.DevKit.Tool\Nuget
+	call pack.bat
 
-	rem cd ..\..
-	rem copy DynamicsCrm.DevKit\bin\Release\DynamicsCrm.DevKit.vsix Published\%VERSION%\DynamicsCrm.DevKit.%VERSION%.vsix
+	cd ..\..
+	copy DynamicsCrm.DevKit\bin\Release\DynamicsCrm.DevKit.vsix Published\%VERSION%\DynamicsCrm.DevKit.%VERSION%.vsix
 
 	powershell -Command "(gc DynamicsCrm.DevKit.Shared\Const.cs) -replace (gc version.txt), 'x.xx.xx.xx' | Out-File -encoding UTF8 DynamicsCrm.DevKit.Shared\Const.cs"
 	powershell -Command "(gc DynamicsCrm.DevKit.Cli\docs\README.md) -replace (gc version.txt), 'x.xx.xx.xx' | Out-File -encoding UTF8 DynamicsCrm.DevKit.Cli\docs\README.md"
