@@ -6,8 +6,14 @@
   <Project Path="Dev.DevKitV4.Console.ClientSecret/Dev.DevKitV4.Console.ClientSecret.csproj" Id="834949b3-f19d-451b-980d-8065103b36dd" />
   <Project Path="Dev.DevKitV4.Console.OOB/Dev.DevKitV4.Console.OOB.csproj" Id="d96869d5-f10f-4ade-a694-b76b6f5f3bce" />
   <Project Path="Dev.DevKitV4.Console.UserPass/Dev.DevKitV4.Console.UserPass.csproj" Id="bda61796-8df4-4230-8f57-cf8868b1f152" />
+  <Project Path="Dev.DevKitV4.ConsoleCore.ClientSecret/Dev.DevKitV4.ConsoleCore.ClientSecret.csproj" />
+  <Project Path="Dev.DevKitV4.ConsoleCore.OOB/Dev.DevKitV4.ConsoleCore.OOB.csproj" />
+  <Project Path="Dev.DevKitV4.ConsoleCore.UserPass/Dev.DevKitV4.ConsoleCore.UserPass.csproj" />
   <Project Path="Dev.DevKitV4.Edit.Console.ClientSecret/Dev.DevKitV4.Edit.Console.ClientSecret.csproj" Id="94785c94-9c69-4e1a-b6b6-a96b8e8e7fdc" />
   <Project Path="Dev.DevKitV4.Edit.Console.OOB/Dev.DevKitV4.Edit.Console.OOB.csproj" Id="23192f60-ae84-4205-9e34-26099eb4fb05" />
   <Project Path="Dev.DevKitV4.Edit.Console.UserPass/Dev.DevKitV4.Edit.Console.UserPass.csproj" Id="5ebac940-c656-4226-8ab4-ee59ec1d7694" />
+  <Project Path="Dev.DevKitV4.Edit.ConsoleCore.ClientSecret/Dev.DevKitV4.Edit.ConsoleCore.ClientSecret.csproj" />
+  <Project Path="Dev.DevKitV4.Edit.ConsoleCore.OOB/Dev.DevKitV4.Edit.ConsoleCore.OOB.csproj" />
+  <Project Path="Dev.DevKitV4.Edit.ConsoleCore.UserPass/Dev.DevKitV4.Edit.ConsoleCore.UserPass.csproj" />
   <Project Path="Dev.DevKitV4.Shared/Dev.DevKitV4.Shared.shproj" />
 </Solution>
