@@ -1,5 +1,5 @@
 ﻿{
-    "DefaultCrmConnection": "https://dynamics-crm-devkit.crm5.dynamics.com",
+    "DefaultCrmConnection": "devkit@phuocle.net",
     "CrmConnections": [
         {
             "Name": "https://dynamics-crm-devkit.crm5.dynamics.com",

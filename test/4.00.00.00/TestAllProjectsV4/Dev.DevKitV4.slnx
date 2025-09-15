@@ -3,6 +3,7 @@
     <File Path="DynamicsCrm.DevKit.Cli.json" />
     <File Path="DynamicsCrm.DevKit.json" />
   </Folder>
+  <Project Path="Dev.DevKitV4.Console.SavedUserPass/Dev.DevKitV4.Console.SavedUserPass.csproj" Id="018140ac-ccbe-4782-b088-ae0ea1e4b007" />
   <Project Path="Dev.DevKitV4.Console/Dev.DevKitV4.Console.csproj" Id="4f13a124-2eb2-4ee1-91c7-b568569ccfb9" />
   <Project Path="Dev.DevKitV4.Shared/Dev.DevKitV4.Shared.shproj" />
 </Solution>
