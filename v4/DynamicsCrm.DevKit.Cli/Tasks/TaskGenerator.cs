@@ -289,7 +289,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var fileEndsWith = Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}{endsWith}");
                     var oldCode = await FileHelper.ReadAllTextFromLine6Async(fileEndsWith);
                     if (Json.@namespace != null && Json.@namespace.Trim().Length == 0) Json.@namespace = null;
-                    var _GeneratedClass_ = CSharpEarlyBound.GetCsCode(ServiceClient, entityMetadata, Json.rootnamespace, Json.@namespace);
+                    var _GeneratedClass_ = CSharpEarlyBound.GetCsCode(ServiceClient, entityMetadata, Json.rootnamespace, Json.@namespace, CurrentFolder);
                     var newCode = await Helper.ReadContentFromLine6Async(_GeneratedClass_);
                     if (File.Exists(fileEndsWith) && Helper.IsTheSame(oldCode, newCode))
                     {
