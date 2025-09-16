@@ -91,7 +91,7 @@
       "rootnamespace": "Dev.DevKitV4.Shared.Entities",
       "namespace": "",
       "rootfolder": "",
-      "entities": "*"
+      "entities": "account"
     },
     {
       "profile": "JS-FORM",
@@ -123,7 +123,7 @@
   "proxytypes": [
     {
       "profile": "ALL",
-      "namespace": "???",
+      "namespace": "Dev.DevKitV4.ProxyTypes",
       "output": "GeneratedCode.cs",
       "entities": "*"
     }

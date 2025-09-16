@@ -20,4 +20,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Lib\EntityBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\SimpleJson.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)Entities\generator.bat" />
+  </ItemGroup>
 </Project>
