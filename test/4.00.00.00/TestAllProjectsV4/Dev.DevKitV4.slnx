@@ -33,4 +33,5 @@
   <Project Path="Dev.DevKitV4.Test/Dev.DevKitV4.Test.csproj" Id="9c05cbb0-bedd-42e5-af65-39aa18721a7a" />
   <Project Path="Dev.DevKitV4.UiTest/Dev.DevKitV4.UiTest.csproj" Id="3dc67f7d-e2d0-4afe-aa41-db55e1fb386d" />
   <Project Path="Dev.DevKitV4.WebResource/Dev.DevKitV4.WebResource.csproj" Id="441a3265-4789-4465-874c-0bc7f4c6cc33" />
+  <Project Path="SharedProject1/SharedProject1.shproj" Id="3c43e93d-5212-4c19-8cbf-fe2a5072736c" />
 </Solution>

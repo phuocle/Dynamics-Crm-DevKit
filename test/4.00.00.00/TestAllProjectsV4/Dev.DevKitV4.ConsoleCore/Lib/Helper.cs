@@ -1,19 +1,19 @@
-﻿using Microsoft.Xrm.Sdk;
-using System;
-using System.Collections.Generic;
+﻿using Microsoft.PowerPlatform.Dataverse.Client;
+using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Extensions;
+using Microsoft.Xrm.Sdk.PluginTelemetry;
+using NSubstitute;
 using System.Globalization;
-using System.IO;
 using System.IO.Compression;
-using System.Linq;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 using System.Text;
 
-namespace Dev.DevKitV4.Shared.Test
+namespace Dev.DevKitV4.ConsoleCore.Lib
 {
-    public static class TestHelper
+    public static class Helper
     {
-        public static RemoteExecutionContext DeserializeRemoteExecutionContext(string jsonString)
+        private static RemoteExecutionContext DeserializeRemoteExecutionContext(string jsonString)
         {
             var settings = new DataContractJsonSerializerSettings { DateTimeFormat = new DateTimeFormat("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'") };
             var obj = Activator.CreateInstance<RemoteExecutionContext>();
@@ -23,10 +23,33 @@ namespace Dev.DevKitV4.Shared.Test
                 var deserialized = serializer.ReadObject(ms);
                 obj = deserialized != null ? (RemoteExecutionContext)deserialized : obj;
             }
-            FixPluginExecutionContext(obj);
             return obj;
-
-            void FixPluginExecutionContext(RemoteExecutionContext pluginExecutionContext)
+        }
+        public static IServiceProvider GetServiceProvider(string json, ServiceClient service)
+        {
+            var pluginExecutionContext = DeserializeRemoteExecutionContext(json);
+            FixPluginExecutionContext();
+            var serviceProvider = Substitute.For<IServiceProvider>();
+            serviceProvider.Get<IPluginExecutionContext>().Returns(pluginExecutionContext);
+            serviceProvider.Get<IServiceEndpointNotificationService>().Returns(Substitute.For<IServiceEndpointNotificationService>());
+            serviceProvider.Get<IExecutionContext>().Returns(Substitute.For<IExecutionContext>());
+            serviceProvider.Get<ITracingService>().Returns(Substitute.For<TracingServiceFake>());
+            serviceProvider.Get<ILogger>().Returns(Substitute.For<ILogger>());
+            var factory = Substitute.For<IOrganizationServiceFactory>();
+            factory.CreateOrganizationService(Arg.Any<Guid?>()).Returns((param) =>
+            {
+                var userId = param.ArgAt<Guid?>(0);
+                if (userId != null)
+                {
+                    var clone = service.Clone();
+                    clone.CallerId = userId.GetValueOrDefault();
+                    return clone;
+                }
+                return service;
+            });
+            serviceProvider.Get<IOrganizationServiceFactory>().Returns(factory);
+            return serviceProvider;
+            void FixPluginExecutionContext()
             {
                 FixParameterCollection(pluginExecutionContext.InputParameters);
                 FixParameterCollection(pluginExecutionContext.SharedVariables);
@@ -55,17 +78,19 @@ namespace Dev.DevKitV4.Shared.Test
                             break;
                         case EntityReference entityReference:
                             if (entityReference?.Name == null)
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
                                 entityReference.Name = "(No Name)";
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
                             break;
                         case Array array:
                             var entityReferenceCollection = new EntityReferenceCollection();
                             var listString = new List<string>();
                             foreach (var item in array)
                             {
-                                if (item is EntityReference entityReference)
-                                    entityReferenceCollection.Add(entityReference);
-                                else if (item is string @string)
-                                    listString.Add(@string);
+                                if (item is EntityReference entityRef)
+                                    entityReferenceCollection.Add(entityRef);
+                                else if (item is string str)
+                                    listString.Add(str);
                             }
                             if (entityReferenceCollection.Count > 0) parameters[key] = entityReferenceCollection;
                             if (listString.Count > 0) parameters[key] = listString.ToArray();
@@ -92,7 +117,9 @@ namespace Dev.DevKitV4.Shared.Test
                         {
                             var er = entity.GetAttributeValue<EntityReference>(key);
                             if (er?.Name == null)
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
                                 er.Name = "(No Name)";
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
                         }
                         catch { }
                     }
@@ -149,11 +176,9 @@ namespace Dev.DevKitV4.Shared.Test
             var compressedStream = new MemoryStream(Convert.FromBase64String(compressedString));
             using (var decompressorStream = new DeflateStream(compressedStream, CompressionMode.Decompress))
             {
-                using (var decompressedStream = new MemoryStream())
-                {
-                    decompressorStream.CopyTo(decompressedStream);
-                    decompressedBytes = decompressedStream.ToArray();
-                }
+                using var decompressedStream = new MemoryStream();
+                decompressorStream.CopyTo(decompressedStream);
+                decompressedBytes = decompressedStream.ToArray();
             }
             return Encoding.UTF8.GetString(decompressedBytes);
         }

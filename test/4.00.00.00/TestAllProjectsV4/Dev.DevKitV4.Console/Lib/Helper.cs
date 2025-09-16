@@ -1,4 +1,8 @@
-﻿using Microsoft.Xrm.Sdk;
+﻿using Microsoft.PowerPlatform.Dataverse.Client;
+using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Extensions;
+using Microsoft.Xrm.Sdk.PluginTelemetry;
+using NSubstitute;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -9,11 +13,11 @@ using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 using System.Text;
 
-namespace Dev.DevKitV4.Shared.Test
+namespace Dev.DevKitV4.Console.Lib
 {
-    public static class TestHelper
+    public static class Helper
     {
-        public static RemoteExecutionContext DeserializeRemoteExecutionContext(string jsonString)
+        private static RemoteExecutionContext DeserializeRemoteExecutionContext(string jsonString)
         {
             var settings = new DataContractJsonSerializerSettings { DateTimeFormat = new DateTimeFormat("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'") };
             var obj = Activator.CreateInstance<RemoteExecutionContext>();
@@ -23,10 +27,33 @@ namespace Dev.DevKitV4.Shared.Test
                 var deserialized = serializer.ReadObject(ms);
                 obj = deserialized != null ? (RemoteExecutionContext)deserialized : obj;
             }
-            FixPluginExecutionContext(obj);
             return obj;
-
-            void FixPluginExecutionContext(RemoteExecutionContext pluginExecutionContext)
+        }
+        public static IServiceProvider GetServiceProvider(string json, ServiceClient service)
+        {
+            var pluginExecutionContext = DeserializeRemoteExecutionContext(json);
+            FixPluginExecutionContext();
+            var serviceProvider = Substitute.For<IServiceProvider>();
+            serviceProvider.Get<IPluginExecutionContext>().Returns(pluginExecutionContext);
+            serviceProvider.Get<IServiceEndpointNotificationService>().Returns(Substitute.For<IServiceEndpointNotificationService>());
+            serviceProvider.Get<IExecutionContext>().Returns(Substitute.For<IExecutionContext>());
+            serviceProvider.Get<ITracingService>().Returns(Substitute.For<TracingServiceFake>());
+            serviceProvider.Get<ILogger>().Returns(Substitute.For<ILogger>());
+            var factory = Substitute.For<IOrganizationServiceFactory>();
+            factory.CreateOrganizationService(Arg.Any<Guid?>()).Returns((param) =>
+            {
+                var userId = param.ArgAt<Guid?>(0);
+                if (userId != null)
+                {
+                    var clone = service.Clone();
+                    clone.CallerId = userId.GetValueOrDefault();
+                    return clone;
+                }
+                return service;
+            });
+            serviceProvider.Get<IOrganizationServiceFactory>().Returns(factory);
+            return serviceProvider;
+            void FixPluginExecutionContext()
             {
                 FixParameterCollection(pluginExecutionContext.InputParameters);
                 FixParameterCollection(pluginExecutionContext.SharedVariables);
