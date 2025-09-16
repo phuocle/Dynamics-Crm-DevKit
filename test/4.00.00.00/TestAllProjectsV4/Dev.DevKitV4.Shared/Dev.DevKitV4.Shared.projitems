@@ -12,6 +12,13 @@
     <Folder Include="$(MSBuildThisFileDirectory)Lib\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Entities2\DataverseContext.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities2\Entities\Account.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities2\EntityOptionSetEnum.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities2\OptionSets\OptionSets.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities3\Entities\account.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities3\EntityOptionSetEnum.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities3\OptionSets\connectionrole_category.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Account.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Account.generated.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Date.cs" />
