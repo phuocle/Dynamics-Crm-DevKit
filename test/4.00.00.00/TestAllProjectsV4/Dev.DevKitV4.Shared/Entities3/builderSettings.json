@@ -1,0 +1,17 @@
+﻿{
+  "suppressINotifyPattern": false,
+  "suppressGeneratedCodeAttribute": false,
+  "language": "CS",
+  "namespace": "Dev.DevKitV4.Shared.Entities3",
+  "generateSdkMessages": false,
+  "generateGlobalOptionSets": false,
+  "emitFieldsClasses": true,
+  "entityTypesFolder": "Entities",
+  "messagesTypesFolder": "Messages",
+  "optionSetsTypesFolder": "OptionSets",
+  "entityNamesFilter": [
+    "account"
+  ],
+  "emitEntityETC": true,
+  "emitVirtualAttributes": true
+}
