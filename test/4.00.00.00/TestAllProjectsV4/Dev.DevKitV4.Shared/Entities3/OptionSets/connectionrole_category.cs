@@ -17,7 +17,6 @@ namespace Dev.DevKitV4.Shared.Entities3
 	/// Categories for connection roles.
 	/// </summary>
 	[System.Runtime.Serialization.DataContractAttribute()]
-	[System.CodeDom.Compiler.GeneratedCodeAttribute("Dataverse Model Builder", "2.0.0.16")]
 	public enum connectionrole_category
 	{
 		

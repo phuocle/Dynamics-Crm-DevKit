@@ -17,7 +17,6 @@ namespace Dev.DevKitV4.Shared.Entities3
 	/// Drop-down list for selecting the category of the account.
 	/// </summary>
 	[System.Runtime.Serialization.DataContractAttribute()]
-	[System.CodeDom.Compiler.GeneratedCodeAttribute("Dataverse Model Builder", "2.0.0.16")]
 	public enum account_accountcategorycode
 	{
 		
@@ -32,7 +31,6 @@ namespace Dev.DevKitV4.Shared.Entities3
 	/// Drop-down list for classifying an account.
 	/// </summary>
 	[System.Runtime.Serialization.DataContractAttribute()]
-	[System.CodeDom.Compiler.GeneratedCodeAttribute("Dataverse Model Builder", "2.0.0.16")]
 	public enum account_accountclassificationcode
 	{
 		
@@ -44,7 +42,6 @@ namespace Dev.DevKitV4.Shared.Entities3
 	/// Drop-down list for selecting account ratings.
 	/// </summary>
 	[System.Runtime.Serialization.DataContractAttribute()]
-	[System.CodeDom.Compiler.GeneratedCodeAttribute("Dataverse Model Builder", "2.0.0.16")]
 	public enum account_accountratingcode
 	{
 		
@@ -56,7 +53,6 @@ namespace Dev.DevKitV4.Shared.Entities3
 	/// Type of address for address 1, such as billing, shipping, or primary address.
 	/// </summary>
 	[System.Runtime.Serialization.DataContractAttribute()]
-	[System.CodeDom.Compiler.GeneratedCodeAttribute("Dataverse Model Builder", "2.0.0.16")]
 	public enum account_address1_addresstypecode
 	{
 		
@@ -77,7 +73,6 @@ namespace Dev.DevKitV4.Shared.Entities3
 	/// Freight terms for address 1.
 	/// </summary>
 	[System.Runtime.Serialization.DataContractAttribute()]
-	[System.CodeDom.Compiler.GeneratedCodeAttribute("Dataverse Model Builder", "2.0.0.16")]
 	public enum account_address1_freighttermscode
 	{
 		
@@ -92,7 +87,6 @@ namespace Dev.DevKitV4.Shared.Entities3
 	/// Method of shipment for address 1.
 	/// </summary>
 	[System.Runtime.Serialization.DataContractAttribute()]
-	[System.CodeDom.Compiler.GeneratedCodeAttribute("Dataverse Model Builder", "2.0.0.16")]
 	public enum account_address1_shippingmethodcode
 	{
 		
@@ -122,7 +116,6 @@ namespace Dev.DevKitV4.Shared.Entities3
 	/// Type of address for address 2, such as billing, shipping, or primary address.
 	/// </summary>
 	[System.Runtime.Serialization.DataContractAttribute()]
-	[System.CodeDom.Compiler.GeneratedCodeAttribute("Dataverse Model Builder", "2.0.0.16")]
 	public enum account_address2_addresstypecode
 	{
 		
@@ -134,7 +127,6 @@ namespace Dev.DevKitV4.Shared.Entities3
 	/// Freight terms for address 2.
 	/// </summary>
 	[System.Runtime.Serialization.DataContractAttribute()]
-	[System.CodeDom.Compiler.GeneratedCodeAttribute("Dataverse Model Builder", "2.0.0.16")]
 	public enum account_address2_freighttermscode
 	{
 		
@@ -146,7 +138,6 @@ namespace Dev.DevKitV4.Shared.Entities3
 	/// Method of shipment for address 2.
 	/// </summary>
 	[System.Runtime.Serialization.DataContractAttribute()]
-	[System.CodeDom.Compiler.GeneratedCodeAttribute("Dataverse Model Builder", "2.0.0.16")]
 	public enum account_address2_shippingmethodcode
 	{
 		
@@ -158,7 +149,6 @@ namespace Dev.DevKitV4.Shared.Entities3
 	/// Type of business associated with the account.
 	/// </summary>
 	[System.Runtime.Serialization.DataContractAttribute()]
-	[System.CodeDom.Compiler.GeneratedCodeAttribute("Dataverse Model Builder", "2.0.0.16")]
 	public enum account_businesstypecode
 	{
 		
@@ -170,7 +160,6 @@ namespace Dev.DevKitV4.Shared.Entities3
 	/// Size of the account.
 	/// </summary>
 	[System.Runtime.Serialization.DataContractAttribute()]
-	[System.CodeDom.Compiler.GeneratedCodeAttribute("Dataverse Model Builder", "2.0.0.16")]
 	public enum account_customersizecode
 	{
 		
@@ -182,7 +171,6 @@ namespace Dev.DevKitV4.Shared.Entities3
 	/// Type of the account.
 	/// </summary>
 	[System.Runtime.Serialization.DataContractAttribute()]
-	[System.CodeDom.Compiler.GeneratedCodeAttribute("Dataverse Model Builder", "2.0.0.16")]
 	public enum account_customertypecode
 	{
 		
@@ -227,7 +215,6 @@ namespace Dev.DevKitV4.Shared.Entities3
 	/// Type of industry with which the account is associated.
 	/// </summary>
 	[System.Runtime.Serialization.DataContractAttribute()]
-	[System.CodeDom.Compiler.GeneratedCodeAttribute("Dataverse Model Builder", "2.0.0.16")]
 	public enum account_industrycode
 	{
 		
@@ -335,7 +322,6 @@ namespace Dev.DevKitV4.Shared.Entities3
 	/// Type of company ownership, such as public or private.
 	/// </summary>
 	[System.Runtime.Serialization.DataContractAttribute()]
-	[System.CodeDom.Compiler.GeneratedCodeAttribute("Dataverse Model Builder", "2.0.0.16")]
 	public enum account_ownershipcode
 	{
 		
@@ -356,7 +342,6 @@ namespace Dev.DevKitV4.Shared.Entities3
 	/// Payment terms for the account.
 	/// </summary>
 	[System.Runtime.Serialization.DataContractAttribute()]
-	[System.CodeDom.Compiler.GeneratedCodeAttribute("Dataverse Model Builder", "2.0.0.16")]
 	public enum account_paymenttermscode
 	{
 		
@@ -377,7 +362,6 @@ namespace Dev.DevKitV4.Shared.Entities3
 	/// Day of the week that the account prefers for scheduling service activities.
 	/// </summary>
 	[System.Runtime.Serialization.DataContractAttribute()]
-	[System.CodeDom.Compiler.GeneratedCodeAttribute("Dataverse Model Builder", "2.0.0.16")]
 	public enum account_preferredappointmentdaycode
 	{
 		
@@ -407,7 +391,6 @@ namespace Dev.DevKitV4.Shared.Entities3
 	/// Time of day that the account prefers for scheduling service activities.
 	/// </summary>
 	[System.Runtime.Serialization.DataContractAttribute()]
-	[System.CodeDom.Compiler.GeneratedCodeAttribute("Dataverse Model Builder", "2.0.0.16")]
 	public enum account_preferredappointmenttimecode
 	{
 		
@@ -425,7 +408,6 @@ namespace Dev.DevKitV4.Shared.Entities3
 	/// Preferred contact method for the account.
 	/// </summary>
 	[System.Runtime.Serialization.DataContractAttribute()]
-	[System.CodeDom.Compiler.GeneratedCodeAttribute("Dataverse Model Builder", "2.0.0.16")]
 	public enum account_preferredcontactmethodcode
 	{
 		
@@ -449,7 +431,6 @@ namespace Dev.DevKitV4.Shared.Entities3
 	/// Method of shipment for the account.
 	/// </summary>
 	[System.Runtime.Serialization.DataContractAttribute()]
-	[System.CodeDom.Compiler.GeneratedCodeAttribute("Dataverse Model Builder", "2.0.0.16")]
 	public enum account_shippingmethodcode
 	{
 		
@@ -461,7 +442,6 @@ namespace Dev.DevKitV4.Shared.Entities3
 	/// Status of the account.
 	/// </summary>
 	[System.Runtime.Serialization.DataContractAttribute()]
-	[System.CodeDom.Compiler.GeneratedCodeAttribute("Dataverse Model Builder", "2.0.0.16")]
 	public enum account_statecode
 	{
 		
@@ -476,7 +456,6 @@ namespace Dev.DevKitV4.Shared.Entities3
 	/// Reason for the status of the account.
 	/// </summary>
 	[System.Runtime.Serialization.DataContractAttribute()]
-	[System.CodeDom.Compiler.GeneratedCodeAttribute("Dataverse Model Builder", "2.0.0.16")]
 	public enum account_statuscode
 	{
 		
@@ -491,7 +470,6 @@ namespace Dev.DevKitV4.Shared.Entities3
 	/// Territory to which the account belongs.
 	/// </summary>
 	[System.Runtime.Serialization.DataContractAttribute()]
-	[System.CodeDom.Compiler.GeneratedCodeAttribute("Dataverse Model Builder", "2.0.0.16")]
 	public enum account_territorycode
 	{
 		
@@ -504,8 +482,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 	/// </summary>
 	[System.Runtime.Serialization.DataContractAttribute()]
 	[Microsoft.Xrm.Sdk.Client.EntityLogicalNameAttribute("account")]
-	[System.CodeDom.Compiler.GeneratedCodeAttribute("Dataverse Model Builder", "2.0.0.16")]
-	public partial class Account : Microsoft.Xrm.Sdk.Entity, System.ComponentModel.INotifyPropertyChanging, System.ComponentModel.INotifyPropertyChanged
+	public partial class Account : Microsoft.Xrm.Sdk.Entity
 	{
 		
 		/// <summary>
@@ -754,26 +731,6 @@ namespace Dev.DevKitV4.Shared.Entities3
 		
 		public const int EntityTypeCode = 1;
 		
-		public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-		
-		public event System.ComponentModel.PropertyChangingEventHandler PropertyChanging;
-		
-		private void OnPropertyChanged(string propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
-			}
-		}
-		
-		private void OnPropertyChanging(string propertyName)
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, new System.ComponentModel.PropertyChangingEventArgs(propertyName));
-			}
-		}
-		
 		/// <summary>
 		/// Select a category to indicate whether the customer account is standard or preferred.
 		/// </summary>
@@ -786,9 +743,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("AccountCategoryCode");
 				this.SetAttributeValue("accountcategorycode", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
-				this.OnPropertyChanged("AccountCategoryCode");
 			}
 		}
 		
@@ -820,9 +775,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("AccountClassificationCode");
 				this.SetAttributeValue("accountclassificationcode", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
-				this.OnPropertyChanged("AccountClassificationCode");
 			}
 		}
 		
@@ -854,7 +807,6 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("AccountId");
 				this.SetAttributeValue("accountid", value);
 				if (value.HasValue)
 				{
@@ -864,7 +816,6 @@ namespace Dev.DevKitV4.Shared.Entities3
 				{
 					base.Id = System.Guid.Empty;
 				}
-				this.OnPropertyChanged("AccountId");
 			}
 		}
 		
@@ -893,9 +844,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("AccountNumber");
 				this.SetAttributeValue("accountnumber", value);
-				this.OnPropertyChanged("AccountNumber");
 			}
 		}
 		
@@ -911,9 +860,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("AccountRatingCode");
 				this.SetAttributeValue("accountratingcode", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
-				this.OnPropertyChanged("AccountRatingCode");
 			}
 		}
 		
@@ -945,9 +892,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("Address1_AddressId");
 				this.SetAttributeValue("address1_addressid", value);
-				this.OnPropertyChanged("Address1_AddressId");
 			}
 		}
 		
@@ -963,9 +908,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("Address1_AddressTypeCode");
 				this.SetAttributeValue("address1_addresstypecode", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
-				this.OnPropertyChanged("Address1_AddressTypeCode");
 			}
 		}
 		
@@ -997,9 +940,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("Address1_City");
 				this.SetAttributeValue("address1_city", value);
-				this.OnPropertyChanged("Address1_City");
 			}
 		}
 		
@@ -1027,9 +968,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("Address1_Country");
 				this.SetAttributeValue("address1_country", value);
-				this.OnPropertyChanged("Address1_Country");
 			}
 		}
 		
@@ -1045,9 +984,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("Address1_County");
 				this.SetAttributeValue("address1_county", value);
-				this.OnPropertyChanged("Address1_County");
 			}
 		}
 		
@@ -1063,9 +1000,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("Address1_Fax");
 				this.SetAttributeValue("address1_fax", value);
-				this.OnPropertyChanged("Address1_Fax");
 			}
 		}
 		
@@ -1081,9 +1016,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("Address1_FreightTermsCode");
 				this.SetAttributeValue("address1_freighttermscode", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
-				this.OnPropertyChanged("Address1_FreightTermsCode");
 			}
 		}
 		
@@ -1115,9 +1048,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("Address1_Latitude");
 				this.SetAttributeValue("address1_latitude", value);
-				this.OnPropertyChanged("Address1_Latitude");
 			}
 		}
 		
@@ -1133,9 +1064,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("Address1_Line1");
 				this.SetAttributeValue("address1_line1", value);
-				this.OnPropertyChanged("Address1_Line1");
 			}
 		}
 		
@@ -1151,9 +1080,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("Address1_Line2");
 				this.SetAttributeValue("address1_line2", value);
-				this.OnPropertyChanged("Address1_Line2");
 			}
 		}
 		
@@ -1169,9 +1096,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("Address1_Line3");
 				this.SetAttributeValue("address1_line3", value);
-				this.OnPropertyChanged("Address1_Line3");
 			}
 		}
 		
@@ -1187,9 +1112,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("Address1_Longitude");
 				this.SetAttributeValue("address1_longitude", value);
-				this.OnPropertyChanged("Address1_Longitude");
 			}
 		}
 		
@@ -1205,9 +1128,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("Address1_Name");
 				this.SetAttributeValue("address1_name", value);
-				this.OnPropertyChanged("Address1_Name");
 			}
 		}
 		
@@ -1223,9 +1144,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("Address1_PostalCode");
 				this.SetAttributeValue("address1_postalcode", value);
-				this.OnPropertyChanged("Address1_PostalCode");
 			}
 		}
 		
@@ -1241,9 +1160,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("Address1_PostOfficeBox");
 				this.SetAttributeValue("address1_postofficebox", value);
-				this.OnPropertyChanged("Address1_PostOfficeBox");
 			}
 		}
 		
@@ -1259,9 +1176,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("Address1_PrimaryContactName");
 				this.SetAttributeValue("address1_primarycontactname", value);
-				this.OnPropertyChanged("Address1_PrimaryContactName");
 			}
 		}
 		
@@ -1277,9 +1192,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("Address1_ShippingMethodCode");
 				this.SetAttributeValue("address1_shippingmethodcode", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
-				this.OnPropertyChanged("Address1_ShippingMethodCode");
 			}
 		}
 		
@@ -1311,9 +1224,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("Address1_StateOrProvince");
 				this.SetAttributeValue("address1_stateorprovince", value);
-				this.OnPropertyChanged("Address1_StateOrProvince");
 			}
 		}
 		
@@ -1329,9 +1240,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("Address1_Telephone1");
 				this.SetAttributeValue("address1_telephone1", value);
-				this.OnPropertyChanged("Address1_Telephone1");
 			}
 		}
 		
@@ -1347,9 +1256,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("Address1_Telephone2");
 				this.SetAttributeValue("address1_telephone2", value);
-				this.OnPropertyChanged("Address1_Telephone2");
 			}
 		}
 		
@@ -1365,9 +1272,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("Address1_Telephone3");
 				this.SetAttributeValue("address1_telephone3", value);
-				this.OnPropertyChanged("Address1_Telephone3");
 			}
 		}
 		
@@ -1383,9 +1288,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("Address1_UPSZone");
 				this.SetAttributeValue("address1_upszone", value);
-				this.OnPropertyChanged("Address1_UPSZone");
 			}
 		}
 		
@@ -1401,9 +1304,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("Address1_UTCOffset");
 				this.SetAttributeValue("address1_utcoffset", value);
-				this.OnPropertyChanged("Address1_UTCOffset");
 			}
 		}
 		
@@ -1419,9 +1320,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("Address2_AddressId");
 				this.SetAttributeValue("address2_addressid", value);
-				this.OnPropertyChanged("Address2_AddressId");
 			}
 		}
 		
@@ -1437,9 +1336,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("Address2_AddressTypeCode");
 				this.SetAttributeValue("address2_addresstypecode", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
-				this.OnPropertyChanged("Address2_AddressTypeCode");
 			}
 		}
 		
@@ -1471,9 +1368,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("Address2_City");
 				this.SetAttributeValue("address2_city", value);
-				this.OnPropertyChanged("Address2_City");
 			}
 		}
 		
@@ -1501,9 +1396,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("Address2_Country");
 				this.SetAttributeValue("address2_country", value);
-				this.OnPropertyChanged("Address2_Country");
 			}
 		}
 		
@@ -1519,9 +1412,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("Address2_County");
 				this.SetAttributeValue("address2_county", value);
-				this.OnPropertyChanged("Address2_County");
 			}
 		}
 		
@@ -1537,9 +1428,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("Address2_Fax");
 				this.SetAttributeValue("address2_fax", value);
-				this.OnPropertyChanged("Address2_Fax");
 			}
 		}
 		
@@ -1555,9 +1444,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("Address2_FreightTermsCode");
 				this.SetAttributeValue("address2_freighttermscode", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
-				this.OnPropertyChanged("Address2_FreightTermsCode");
 			}
 		}
 		
@@ -1589,9 +1476,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("Address2_Latitude");
 				this.SetAttributeValue("address2_latitude", value);
-				this.OnPropertyChanged("Address2_Latitude");
 			}
 		}
 		
@@ -1607,9 +1492,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("Address2_Line1");
 				this.SetAttributeValue("address2_line1", value);
-				this.OnPropertyChanged("Address2_Line1");
 			}
 		}
 		
@@ -1625,9 +1508,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("Address2_Line2");
 				this.SetAttributeValue("address2_line2", value);
-				this.OnPropertyChanged("Address2_Line2");
 			}
 		}
 		
@@ -1643,9 +1524,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("Address2_Line3");
 				this.SetAttributeValue("address2_line3", value);
-				this.OnPropertyChanged("Address2_Line3");
 			}
 		}
 		
@@ -1661,9 +1540,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("Address2_Longitude");
 				this.SetAttributeValue("address2_longitude", value);
-				this.OnPropertyChanged("Address2_Longitude");
 			}
 		}
 		
@@ -1679,9 +1556,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("Address2_Name");
 				this.SetAttributeValue("address2_name", value);
-				this.OnPropertyChanged("Address2_Name");
 			}
 		}
 		
@@ -1697,9 +1572,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("Address2_PostalCode");
 				this.SetAttributeValue("address2_postalcode", value);
-				this.OnPropertyChanged("Address2_PostalCode");
 			}
 		}
 		
@@ -1715,9 +1588,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("Address2_PostOfficeBox");
 				this.SetAttributeValue("address2_postofficebox", value);
-				this.OnPropertyChanged("Address2_PostOfficeBox");
 			}
 		}
 		
@@ -1733,9 +1604,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("Address2_PrimaryContactName");
 				this.SetAttributeValue("address2_primarycontactname", value);
-				this.OnPropertyChanged("Address2_PrimaryContactName");
 			}
 		}
 		
@@ -1751,9 +1620,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("Address2_ShippingMethodCode");
 				this.SetAttributeValue("address2_shippingmethodcode", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
-				this.OnPropertyChanged("Address2_ShippingMethodCode");
 			}
 		}
 		
@@ -1785,9 +1652,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("Address2_StateOrProvince");
 				this.SetAttributeValue("address2_stateorprovince", value);
-				this.OnPropertyChanged("Address2_StateOrProvince");
 			}
 		}
 		
@@ -1803,9 +1668,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("Address2_Telephone1");
 				this.SetAttributeValue("address2_telephone1", value);
-				this.OnPropertyChanged("Address2_Telephone1");
 			}
 		}
 		
@@ -1821,9 +1684,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("Address2_Telephone2");
 				this.SetAttributeValue("address2_telephone2", value);
-				this.OnPropertyChanged("Address2_Telephone2");
 			}
 		}
 		
@@ -1839,9 +1700,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("Address2_Telephone3");
 				this.SetAttributeValue("address2_telephone3", value);
-				this.OnPropertyChanged("Address2_Telephone3");
 			}
 		}
 		
@@ -1857,9 +1716,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("Address2_UPSZone");
 				this.SetAttributeValue("address2_upszone", value);
-				this.OnPropertyChanged("Address2_UPSZone");
 			}
 		}
 		
@@ -1875,9 +1732,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("Address2_UTCOffset");
 				this.SetAttributeValue("address2_utcoffset", value);
-				this.OnPropertyChanged("Address2_UTCOffset");
 			}
 		}
 		
@@ -1890,9 +1745,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("Adx_CreatedByIPAddress");
 				this.SetAttributeValue("adx_createdbyipaddress", value);
-				this.OnPropertyChanged("Adx_CreatedByIPAddress");
 			}
 		}
 		
@@ -1905,9 +1758,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("Adx_CreatedByUsername");
 				this.SetAttributeValue("adx_createdbyusername", value);
-				this.OnPropertyChanged("Adx_CreatedByUsername");
 			}
 		}
 		
@@ -1920,9 +1771,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("Adx_ModifiedByIPAddress");
 				this.SetAttributeValue("adx_modifiedbyipaddress", value);
-				this.OnPropertyChanged("Adx_ModifiedByIPAddress");
 			}
 		}
 		
@@ -1935,9 +1784,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("Adx_ModifiedByUsername");
 				this.SetAttributeValue("adx_modifiedbyusername", value);
-				this.OnPropertyChanged("Adx_ModifiedByUsername");
 			}
 		}
 		
@@ -2025,9 +1872,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("BusinessTypeCode");
 				this.SetAttributeValue("businesstypecode", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
-				this.OnPropertyChanged("BusinessTypeCode");
 			}
 		}
 		
@@ -2203,9 +2048,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("CreditLimit");
 				this.SetAttributeValue("creditlimit", value);
-				this.OnPropertyChanged("CreditLimit");
 			}
 		}
 		
@@ -2233,9 +2076,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("CreditOnHold");
 				this.SetAttributeValue("creditonhold", value);
-				this.OnPropertyChanged("CreditOnHold");
 			}
 		}
 		
@@ -2267,9 +2108,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("CustomerSizeCode");
 				this.SetAttributeValue("customersizecode", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
-				this.OnPropertyChanged("CustomerSizeCode");
 			}
 		}
 		
@@ -2301,9 +2140,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("CustomerTypeCode");
 				this.SetAttributeValue("customertypecode", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
-				this.OnPropertyChanged("CustomerTypeCode");
 			}
 		}
 		
@@ -2335,9 +2172,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("Description");
 				this.SetAttributeValue("description", value);
-				this.OnPropertyChanged("Description");
 			}
 		}
 		
@@ -2350,9 +2185,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("devkit_BigInt");
 				this.SetAttributeValue("devkit_bigint", value);
-				this.OnPropertyChanged("devkit_BigInt");
 			}
 		}
 		
@@ -2365,9 +2198,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("devkit_CategoryCode");
 				this.SetAttributeValue("devkit_categorycode", EntityOptionSetEnum.GetMultiEnum(this, "devkit_categorycode", value));
-				this.OnPropertyChanged("devkit_CategoryCode");
 			}
 		}
 		
@@ -2399,9 +2230,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("DoNotBulkEMail");
 				this.SetAttributeValue("donotbulkemail", value);
-				this.OnPropertyChanged("DoNotBulkEMail");
 			}
 		}
 		
@@ -2433,9 +2262,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("DoNotBulkPostalMail");
 				this.SetAttributeValue("donotbulkpostalmail", value);
-				this.OnPropertyChanged("DoNotBulkPostalMail");
 			}
 		}
 		
@@ -2467,9 +2294,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("DoNotEMail");
 				this.SetAttributeValue("donotemail", value);
-				this.OnPropertyChanged("DoNotEMail");
 			}
 		}
 		
@@ -2501,9 +2326,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("DoNotFax");
 				this.SetAttributeValue("donotfax", value);
-				this.OnPropertyChanged("DoNotFax");
 			}
 		}
 		
@@ -2535,9 +2358,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("DoNotPhone");
 				this.SetAttributeValue("donotphone", value);
-				this.OnPropertyChanged("DoNotPhone");
 			}
 		}
 		
@@ -2569,9 +2390,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("DoNotPostalMail");
 				this.SetAttributeValue("donotpostalmail", value);
-				this.OnPropertyChanged("DoNotPostalMail");
 			}
 		}
 		
@@ -2619,9 +2438,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("DoNotSendMM");
 				this.SetAttributeValue("donotsendmm", value);
-				this.OnPropertyChanged("DoNotSendMM");
 			}
 		}
 		
@@ -2637,9 +2454,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("EMailAddress1");
 				this.SetAttributeValue("emailaddress1", value);
-				this.OnPropertyChanged("EMailAddress1");
 			}
 		}
 		
@@ -2655,9 +2470,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("EMailAddress2");
 				this.SetAttributeValue("emailaddress2", value);
-				this.OnPropertyChanged("EMailAddress2");
 			}
 		}
 		
@@ -2673,9 +2486,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("EMailAddress3");
 				this.SetAttributeValue("emailaddress3", value);
-				this.OnPropertyChanged("EMailAddress3");
 			}
 		}
 		
@@ -2691,9 +2502,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("EntityImage");
 				this.SetAttributeValue("entityimage", value);
-				this.OnPropertyChanged("EntityImage");
 			}
 		}
 		
@@ -2751,9 +2560,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("Fax");
 				this.SetAttributeValue("fax", value);
-				this.OnPropertyChanged("Fax");
 			}
 		}
 		
@@ -2769,9 +2576,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("FollowEmail");
 				this.SetAttributeValue("followemail", value);
-				this.OnPropertyChanged("FollowEmail");
 			}
 		}
 		
@@ -2803,9 +2608,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("FtpSiteURL");
 				this.SetAttributeValue("ftpsiteurl", value);
-				this.OnPropertyChanged("FtpSiteURL");
 			}
 		}
 		
@@ -2821,9 +2624,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("ImportSequenceNumber");
 				this.SetAttributeValue("importsequencenumber", value);
-				this.OnPropertyChanged("ImportSequenceNumber");
 			}
 		}
 		
@@ -2839,9 +2640,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("IndustryCode");
 				this.SetAttributeValue("industrycode", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
-				this.OnPropertyChanged("IndustryCode");
 			}
 		}
 		
@@ -2889,9 +2688,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("LastOnHoldTime");
 				this.SetAttributeValue("lastonholdtime", value);
-				this.OnPropertyChanged("LastOnHoldTime");
 			}
 		}
 		
@@ -2907,9 +2704,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("LastUsedInCampaign");
 				this.SetAttributeValue("lastusedincampaign", value);
-				this.OnPropertyChanged("LastUsedInCampaign");
 			}
 		}
 		
@@ -2925,9 +2720,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("MarketCap");
 				this.SetAttributeValue("marketcap", value);
-				this.OnPropertyChanged("MarketCap");
 			}
 		}
 		
@@ -2955,9 +2748,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("MarketingOnly");
 				this.SetAttributeValue("marketingonly", value);
-				this.OnPropertyChanged("MarketingOnly");
 			}
 		}
 		
@@ -3205,9 +2996,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("msa_managingpartnerid");
 				this.SetAttributeValue("msa_managingpartnerid", value);
-				this.OnPropertyChanged("msa_managingpartnerid");
 			}
 		}
 		
@@ -3255,9 +3044,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("Name");
 				this.SetAttributeValue("name", value);
-				this.OnPropertyChanged("Name");
 			}
 		}
 		
@@ -3273,9 +3060,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("NumberOfEmployees");
 				this.SetAttributeValue("numberofemployees", value);
-				this.OnPropertyChanged("NumberOfEmployees");
 			}
 		}
 		
@@ -3303,9 +3088,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("OverriddenCreatedOn");
 				this.SetAttributeValue("overriddencreatedon", value);
-				this.OnPropertyChanged("OverriddenCreatedOn");
 			}
 		}
 		
@@ -3321,9 +3104,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("OwnerId");
 				this.SetAttributeValue("ownerid", value);
-				this.OnPropertyChanged("OwnerId");
 			}
 		}
 		
@@ -3371,9 +3152,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("OwnershipCode");
 				this.SetAttributeValue("ownershipcode", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
-				this.OnPropertyChanged("OwnershipCode");
 			}
 		}
 		
@@ -3457,9 +3236,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("ParentAccountId");
 				this.SetAttributeValue("parentaccountid", value);
-				this.OnPropertyChanged("ParentAccountId");
 			}
 		}
 		
@@ -3507,9 +3284,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("ParticipatesInWorkflow");
 				this.SetAttributeValue("participatesinworkflow", value);
-				this.OnPropertyChanged("ParticipatesInWorkflow");
 			}
 		}
 		
@@ -3541,9 +3316,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("PaymentTermsCode");
 				this.SetAttributeValue("paymenttermscode", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
-				this.OnPropertyChanged("PaymentTermsCode");
 			}
 		}
 		
@@ -3575,9 +3348,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("PreferredAppointmentDayCode");
 				this.SetAttributeValue("preferredappointmentdaycode", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
-				this.OnPropertyChanged("PreferredAppointmentDayCode");
 			}
 		}
 		
@@ -3609,9 +3380,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("PreferredAppointmentTimeCode");
 				this.SetAttributeValue("preferredappointmenttimecode", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
-				this.OnPropertyChanged("PreferredAppointmentTimeCode");
 			}
 		}
 		
@@ -3643,9 +3412,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("PreferredContactMethodCode");
 				this.SetAttributeValue("preferredcontactmethodcode", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
-				this.OnPropertyChanged("PreferredContactMethodCode");
 			}
 		}
 		
@@ -3677,9 +3444,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("PreferredSystemUserId");
 				this.SetAttributeValue("preferredsystemuserid", value);
-				this.OnPropertyChanged("PreferredSystemUserId");
 			}
 		}
 		
@@ -3727,9 +3492,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("PrimaryContactId");
 				this.SetAttributeValue("primarycontactid", value);
-				this.OnPropertyChanged("PrimaryContactId");
 			}
 		}
 		
@@ -3777,9 +3540,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("PrimarySatoriId");
 				this.SetAttributeValue("primarysatoriid", value);
-				this.OnPropertyChanged("PrimarySatoriId");
 			}
 		}
 		
@@ -3795,9 +3556,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("PrimaryTwitterId");
 				this.SetAttributeValue("primarytwitterid", value);
-				this.OnPropertyChanged("PrimaryTwitterId");
 			}
 		}
 		
@@ -3813,9 +3572,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("ProcessId");
 				this.SetAttributeValue("processid", value);
-				this.OnPropertyChanged("ProcessId");
 			}
 		}
 		
@@ -3831,9 +3588,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("Revenue");
 				this.SetAttributeValue("revenue", value);
-				this.OnPropertyChanged("Revenue");
 			}
 		}
 		
@@ -3861,9 +3616,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("SharesOutstanding");
 				this.SetAttributeValue("sharesoutstanding", value);
-				this.OnPropertyChanged("SharesOutstanding");
 			}
 		}
 		
@@ -3879,9 +3632,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("ShippingMethodCode");
 				this.SetAttributeValue("shippingmethodcode", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
-				this.OnPropertyChanged("ShippingMethodCode");
 			}
 		}
 		
@@ -3913,9 +3664,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("SIC");
 				this.SetAttributeValue("sic", value);
-				this.OnPropertyChanged("SIC");
 			}
 		}
 		
@@ -3931,9 +3680,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("SLAId");
 				this.SetAttributeValue("slaid", value);
-				this.OnPropertyChanged("SLAId");
 			}
 		}
 		
@@ -3993,9 +3740,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("StageId");
 				this.SetAttributeValue("stageid", value);
-				this.OnPropertyChanged("StageId");
 			}
 		}
 		
@@ -4011,9 +3756,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("StateCode");
 				this.SetAttributeValue("statecode", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
-				this.OnPropertyChanged("StateCode");
 			}
 		}
 		
@@ -4045,9 +3788,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("StatusCode");
 				this.SetAttributeValue("statuscode", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
-				this.OnPropertyChanged("StatusCode");
 			}
 		}
 		
@@ -4079,9 +3820,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("StockExchange");
 				this.SetAttributeValue("stockexchange", value);
-				this.OnPropertyChanged("StockExchange");
 			}
 		}
 		
@@ -4097,9 +3836,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("Telephone1");
 				this.SetAttributeValue("telephone1", value);
-				this.OnPropertyChanged("Telephone1");
 			}
 		}
 		
@@ -4115,9 +3852,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("Telephone2");
 				this.SetAttributeValue("telephone2", value);
-				this.OnPropertyChanged("Telephone2");
 			}
 		}
 		
@@ -4133,9 +3868,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("Telephone3");
 				this.SetAttributeValue("telephone3", value);
-				this.OnPropertyChanged("Telephone3");
 			}
 		}
 		
@@ -4151,9 +3884,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("TerritoryCode");
 				this.SetAttributeValue("territorycode", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
-				this.OnPropertyChanged("TerritoryCode");
 			}
 		}
 		
@@ -4185,9 +3916,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("TickerSymbol");
 				this.SetAttributeValue("tickersymbol", value);
-				this.OnPropertyChanged("TickerSymbol");
 			}
 		}
 		
@@ -4215,9 +3944,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("TimeZoneRuleVersionNumber");
 				this.SetAttributeValue("timezoneruleversionnumber", value);
-				this.OnPropertyChanged("TimeZoneRuleVersionNumber");
 			}
 		}
 		
@@ -4233,9 +3960,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("TransactionCurrencyId");
 				this.SetAttributeValue("transactioncurrencyid", value);
-				this.OnPropertyChanged("TransactionCurrencyId");
 			}
 		}
 		
@@ -4267,9 +3992,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("TraversedPath");
 				this.SetAttributeValue("traversedpath", value);
-				this.OnPropertyChanged("TraversedPath");
 			}
 		}
 		
@@ -4285,9 +4008,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("UTCConversionTimeZoneCode");
 				this.SetAttributeValue("utcconversiontimezonecode", value);
-				this.OnPropertyChanged("UTCConversionTimeZoneCode");
 			}
 		}
 		
@@ -4315,9 +4036,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("WebSiteURL");
 				this.SetAttributeValue("websiteurl", value);
-				this.OnPropertyChanged("WebSiteURL");
 			}
 		}
 		
@@ -4333,9 +4052,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("YomiName");
 				this.SetAttributeValue("yominame", value);
-				this.OnPropertyChanged("YomiName");
 			}
 		}
 		
@@ -4351,9 +4068,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("Referencedaccount_master_account");
 				this.SetRelatedEntities<Dev.DevKitV4.Shared.Entities3.Account>("account_master_account", Microsoft.Xrm.Sdk.EntityRole.Referenced, value);
-				this.OnPropertyChanged("Referencedaccount_master_account");
 			}
 		}
 		
@@ -4369,9 +4084,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("Referencedaccount_parent_account");
 				this.SetRelatedEntities<Dev.DevKitV4.Shared.Entities3.Account>("account_parent_account", Microsoft.Xrm.Sdk.EntityRole.Referenced, value);
-				this.OnPropertyChanged("Referencedaccount_parent_account");
 			}
 		}
 		
@@ -4387,9 +4100,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("Referencedmsa_account_managingpartner");
 				this.SetRelatedEntities<Dev.DevKitV4.Shared.Entities3.Account>("msa_account_managingpartner", Microsoft.Xrm.Sdk.EntityRole.Referenced, value);
-				this.OnPropertyChanged("Referencedmsa_account_managingpartner");
 			}
 		}
 		
@@ -4419,9 +4130,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("Referencingaccount_parent_account");
 				this.SetRelatedEntity<Dev.DevKitV4.Shared.Entities3.Account>("account_parent_account", Microsoft.Xrm.Sdk.EntityRole.Referencing, value);
-				this.OnPropertyChanged("Referencingaccount_parent_account");
 			}
 		}
 		
@@ -4438,9 +4147,7 @@ namespace Dev.DevKitV4.Shared.Entities3
 			}
 			set
 			{
-				this.OnPropertyChanging("Referencingmsa_account_managingpartner");
 				this.SetRelatedEntity<Dev.DevKitV4.Shared.Entities3.Account>("msa_account_managingpartner", Microsoft.Xrm.Sdk.EntityRole.Referencing, value);
-				this.OnPropertyChanged("Referencingmsa_account_managingpartner");
 			}
 		}
 	}

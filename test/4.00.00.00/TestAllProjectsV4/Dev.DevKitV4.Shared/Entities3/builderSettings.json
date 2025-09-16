@@ -1,6 +1,6 @@
 ﻿{
-  "suppressINotifyPattern": false,
-  "suppressGeneratedCodeAttribute": false,
+  "suppressINotifyPattern": true,
+  "suppressGeneratedCodeAttribute": true,
   "language": "CS",
   "namespace": "Dev.DevKitV4.Shared.Entities3",
   "generateSdkMessages": false,
