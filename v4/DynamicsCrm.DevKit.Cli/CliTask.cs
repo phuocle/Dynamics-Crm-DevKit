@@ -54,6 +54,10 @@ namespace DynamicsCrm.DevKit.Cli
                     var dataSource = new TaskDataSource(arg, json.datasources.FirstOrDefault(x => x.profile == arg.Profile));
                     await dataSource.RunAsync();
                     break;
+                case nameof(CliType.earlybound):
+                    var earlyBound = new TaskEarlyBound(arg, json.earlybound.FirstOrDefault(x => x.profile == arg.Profile));
+                    await earlyBound.RunAsync();
+                    break;
                 default:
                     CliLog.WriteLineError(ConsoleColor.Yellow, $"/type:{arg.Type} not support");
                     break;

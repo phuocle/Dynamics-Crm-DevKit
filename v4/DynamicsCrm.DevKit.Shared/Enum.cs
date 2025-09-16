@@ -20,7 +20,8 @@
         plugins,
         workflows,
         dataproviders,
-        uploadreports
+        uploadreports,
+        earlybound,
     }
     public enum GeneratorType
     {
