@@ -93,6 +93,13 @@
       "entities": "folder"
     },
     {
+      "profile": "EARLYBOUND",
+      "type": "EarlyBound",
+      "rootnamespace": "Dev.DevKit.Shared.Entities",
+      "rootfolder": "",
+      "entities": "Account"
+    },
+    {
       "profile": "SERVER",
       "type": "CSharp",
       "rootnamespace": "Dev.DevKit.Server.Entities",

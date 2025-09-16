@@ -27,7 +27,8 @@
     {
         jsform,
         jswebapi,
-        csharp
+        csharp,
+        earlybound
     }
 
     public enum WebResourceWebResourceType
