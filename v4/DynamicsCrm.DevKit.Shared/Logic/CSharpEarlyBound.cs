@@ -49,8 +49,8 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             //    var text = File.ReadAllText(file);
             //    return text;
             //}
-           // var logger = new ConsoleLogger();
-            var modelbuilder = new ModelBuilder(null);
+            var logger = new ConsoleLogger();
+            var modelbuilder = new ModelBuilder();
 
             //var SettingsTemplateFile = "D:\\github\\Dynamics-Crm-DevKit\\test\\4.00.00.00\\TestAllProjectsV4\\Dev.DevKitV4.Shared\\Entities3\\builderSettings.json";
             //var OutDirectory = "D:\\github\\Dynamics-Crm-DevKit\\test\\4.00.00.00\\TestAllProjectsV4\\Dev.DevKitV4.Shared\\Entities3";
@@ -60,13 +60,22 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             var arguments = new[]
             {
                 "/outdirectory:D:\\github\\Dynamics-Crm-DevKit\\test\\4.00.00.00\\TestAllProjectsV4\\Dev.DevKitV4.Shared\\Entities3",
-                "/settingsTemplateFile:D:\\github\\Dynamics-Crm-DevKit\\test\\4.00.00.00\\TestAllProjectsV4\\Dev.DevKitV4.Shared\\Entities3\\builderSettings.json",
-                "/splitfiles"
+                "/splitfiles",
+                "/emitfieldsclasses",
+                "/emitentityetc",
+                "/emitvirtualattributes",
+                "/suppressgeneratedcodeattribute",
+                "/suppressinotifypattern",
+                "/namespace :Dev.DevKitV4.Shared.Entities3",
+                "/entitynamesfilter:account",
             };
             //if (a[0] == arguments[0] && a[1] == arguments[1] && a[2] == arguments[2])
             //{
             //    var b1 = string.Empty;
             //}
+
+            modelbuilder.Parameters.CodeCustomizationService = "DynamicsCrm.DevKit.Shared.ModelBuilderExtensions.NamingService,DynamicsCrm.DevKit.Cli";
+            modelbuilder.Parameters.CodeCustomizationService = "DynamicsCrm.DevKit.Shared.ModelBuilderExtensions.CustomizeCodeDomService,DynamicsCrm.DevKit.Cli";
 
             modelbuilder.Parameters.LoadArguments(arguments);
 

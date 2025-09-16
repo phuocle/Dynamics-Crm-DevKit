@@ -9,40 +9,37 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Dev.DevKitV4.Shared.Entities3
+
+
+/// <summary>
+/// Categories for connection roles.
+/// </summary>
+[System.Runtime.Serialization.DataContractAttribute()]
+public enum connectionrole_category
 {
 	
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	Business = 1,
 	
-	/// <summary>
-	/// Categories for connection roles.
-	/// </summary>
-	[System.Runtime.Serialization.DataContractAttribute()]
-	public enum connectionrole_category
-	{
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		Business = 1,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		Family = 2,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		Social = 3,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		Sales = 4,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		Other = 5,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		Stakeholder = 1000,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		SalesTeam = 1001,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		Service = 1002,
-	}
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	Family = 2,
+	
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	Social = 3,
+	
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	Sales = 4,
+	
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	Other = 5,
+	
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	Stakeholder = 1000,
+	
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	SalesTeam = 1001,
+	
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	Service = 1002,
 }
 #pragma warning restore CS1591

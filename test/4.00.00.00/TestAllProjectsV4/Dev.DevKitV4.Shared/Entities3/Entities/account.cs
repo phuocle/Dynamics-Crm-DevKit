@@ -9,482 +9,480 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Dev.DevKitV4.Shared.Entities3
+
+
+/// <summary>
+/// Drop-down list for selecting the category of the account.
+/// </summary>
+[System.Runtime.Serialization.DataContractAttribute()]
+public enum account_accountcategorycode
 {
 	
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	PreferredCustomer = 1,
 	
-	/// <summary>
-	/// Drop-down list for selecting the category of the account.
-	/// </summary>
-	[System.Runtime.Serialization.DataContractAttribute()]
-	public enum account_accountcategorycode
-	{
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		PreferredCustomer = 1,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		Standard = 2,
-	}
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	Standard = 2,
+}
+
+/// <summary>
+/// Drop-down list for classifying an account.
+/// </summary>
+[System.Runtime.Serialization.DataContractAttribute()]
+public enum account_accountclassificationcode
+{
 	
-	/// <summary>
-	/// Drop-down list for classifying an account.
-	/// </summary>
-	[System.Runtime.Serialization.DataContractAttribute()]
-	public enum account_accountclassificationcode
-	{
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		DefaultValue = 1,
-	}
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	DefaultValue = 1,
+}
+
+/// <summary>
+/// Drop-down list for selecting account ratings.
+/// </summary>
+[System.Runtime.Serialization.DataContractAttribute()]
+public enum account_accountratingcode
+{
 	
-	/// <summary>
-	/// Drop-down list for selecting account ratings.
-	/// </summary>
-	[System.Runtime.Serialization.DataContractAttribute()]
-	public enum account_accountratingcode
-	{
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		DefaultValue = 1,
-	}
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	DefaultValue = 1,
+}
+
+/// <summary>
+/// Type of address for address 1, such as billing, shipping, or primary address.
+/// </summary>
+[System.Runtime.Serialization.DataContractAttribute()]
+public enum account_address1_addresstypecode
+{
 	
-	/// <summary>
-	/// Type of address for address 1, such as billing, shipping, or primary address.
-	/// </summary>
-	[System.Runtime.Serialization.DataContractAttribute()]
-	public enum account_address1_addresstypecode
-	{
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		BillTo = 1,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		ShipTo = 2,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		Primary = 3,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		Other = 4,
-	}
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	BillTo = 1,
 	
-	/// <summary>
-	/// Freight terms for address 1.
-	/// </summary>
-	[System.Runtime.Serialization.DataContractAttribute()]
-	public enum account_address1_freighttermscode
-	{
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		FOB = 1,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		NoCharge = 2,
-	}
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	ShipTo = 2,
 	
-	/// <summary>
-	/// Method of shipment for address 1.
-	/// </summary>
-	[System.Runtime.Serialization.DataContractAttribute()]
-	public enum account_address1_shippingmethodcode
-	{
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		Airborne = 1,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		DHL = 2,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		FedEx = 3,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		UPS = 4,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		PostalMail = 5,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		FullLoad = 6,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		WillCall = 7,
-	}
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	Primary = 3,
 	
-	/// <summary>
-	/// Type of address for address 2, such as billing, shipping, or primary address.
-	/// </summary>
-	[System.Runtime.Serialization.DataContractAttribute()]
-	public enum account_address2_addresstypecode
-	{
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		DefaultValue = 1,
-	}
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	Other = 4,
+}
+
+/// <summary>
+/// Freight terms for address 1.
+/// </summary>
+[System.Runtime.Serialization.DataContractAttribute()]
+public enum account_address1_freighttermscode
+{
 	
-	/// <summary>
-	/// Freight terms for address 2.
-	/// </summary>
-	[System.Runtime.Serialization.DataContractAttribute()]
-	public enum account_address2_freighttermscode
-	{
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		DefaultValue = 1,
-	}
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	FOB = 1,
 	
-	/// <summary>
-	/// Method of shipment for address 2.
-	/// </summary>
-	[System.Runtime.Serialization.DataContractAttribute()]
-	public enum account_address2_shippingmethodcode
-	{
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		DefaultValue = 1,
-	}
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	NoCharge = 2,
+}
+
+/// <summary>
+/// Method of shipment for address 1.
+/// </summary>
+[System.Runtime.Serialization.DataContractAttribute()]
+public enum account_address1_shippingmethodcode
+{
 	
-	/// <summary>
-	/// Type of business associated with the account.
-	/// </summary>
-	[System.Runtime.Serialization.DataContractAttribute()]
-	public enum account_businesstypecode
-	{
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		DefaultValue = 1,
-	}
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	Airborne = 1,
 	
-	/// <summary>
-	/// Size of the account.
-	/// </summary>
-	[System.Runtime.Serialization.DataContractAttribute()]
-	public enum account_customersizecode
-	{
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		DefaultValue = 1,
-	}
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	DHL = 2,
 	
-	/// <summary>
-	/// Type of the account.
-	/// </summary>
-	[System.Runtime.Serialization.DataContractAttribute()]
-	public enum account_customertypecode
-	{
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		Competitor = 1,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		Consultant = 2,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		Customer = 3,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		Investor = 4,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		Partner = 5,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		Influencer = 6,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		Press = 7,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		Prospect = 8,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		Reseller = 9,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		Supplier = 10,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		Vendor = 11,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		Other = 12,
-	}
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	FedEx = 3,
 	
-	/// <summary>
-	/// Type of industry with which the account is associated.
-	/// </summary>
-	[System.Runtime.Serialization.DataContractAttribute()]
-	public enum account_industrycode
-	{
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		Accounting = 1,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		AgricultureandNonpetrolNaturalResourceExtraction = 2,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		BroadcastingPrintingandPublishing = 3,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		Brokers = 4,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		BuildingSupplyRetail = 5,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		BusinessServices = 6,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		Consulting = 7,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		ConsumerServices = 8,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		DesignDirectionandCreativeManagement = 9,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		DistributorsDispatchersandProcessors = 10,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		DoctorsOfficesandClinics = 11,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		DurableManufacturing = 12,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		EatingandDrinkingPlaces = 13,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		EntertainmentRetail = 14,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		EquipmentRentalandLeasing = 15,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		Financial = 16,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		FoodandTobaccoProcessing = 17,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		InboundCapitalIntensiveProcessing = 18,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		InboundRepairandServices = 19,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		Insurance = 20,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		LegalServices = 21,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		NonDurableMerchandiseRetail = 22,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		OutboundConsumerService = 23,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		PetrochemicalExtractionandDistribution = 24,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		ServiceRetail = 25,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		SIGAffiliations = 26,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		SocialServices = 27,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		SpecialOutboundTradeContractors = 28,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		SpecialtyRealty = 29,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		Transportation = 30,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		UtilityCreationandDistribution = 31,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		VehicleRetail = 32,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		Wholesale = 33,
-	}
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	UPS = 4,
 	
-	/// <summary>
-	/// Type of company ownership, such as public or private.
-	/// </summary>
-	[System.Runtime.Serialization.DataContractAttribute()]
-	public enum account_ownershipcode
-	{
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		Public = 1,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		Private = 2,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		Subsidiary = 3,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		Other = 4,
-	}
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	PostalMail = 5,
 	
-	/// <summary>
-	/// Payment terms for the account.
-	/// </summary>
-	[System.Runtime.Serialization.DataContractAttribute()]
-	public enum account_paymenttermscode
-	{
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		Net30 = 1,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		_210Net30 = 2,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		Net45 = 3,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		Net60 = 4,
-	}
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	FullLoad = 6,
 	
-	/// <summary>
-	/// Day of the week that the account prefers for scheduling service activities.
-	/// </summary>
-	[System.Runtime.Serialization.DataContractAttribute()]
-	public enum account_preferredappointmentdaycode
-	{
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		Sunday = 0,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		Monday = 1,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		Tuesday = 2,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		Wednesday = 3,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		Thursday = 4,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		Friday = 5,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		Saturday = 6,
-	}
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	WillCall = 7,
+}
+
+/// <summary>
+/// Type of address for address 2, such as billing, shipping, or primary address.
+/// </summary>
+[System.Runtime.Serialization.DataContractAttribute()]
+public enum account_address2_addresstypecode
+{
 	
-	/// <summary>
-	/// Time of day that the account prefers for scheduling service activities.
-	/// </summary>
-	[System.Runtime.Serialization.DataContractAttribute()]
-	public enum account_preferredappointmenttimecode
-	{
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		Morning = 1,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		Afternoon = 2,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		Evening = 3,
-	}
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	DefaultValue = 1,
+}
+
+/// <summary>
+/// Freight terms for address 2.
+/// </summary>
+[System.Runtime.Serialization.DataContractAttribute()]
+public enum account_address2_freighttermscode
+{
 	
-	/// <summary>
-	/// Preferred contact method for the account.
-	/// </summary>
-	[System.Runtime.Serialization.DataContractAttribute()]
-	public enum account_preferredcontactmethodcode
-	{
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		Any = 1,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		Email = 2,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		Phone = 3,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		Fax = 4,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		Mail = 5,
-	}
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	DefaultValue = 1,
+}
+
+/// <summary>
+/// Method of shipment for address 2.
+/// </summary>
+[System.Runtime.Serialization.DataContractAttribute()]
+public enum account_address2_shippingmethodcode
+{
 	
-	/// <summary>
-	/// Method of shipment for the account.
-	/// </summary>
-	[System.Runtime.Serialization.DataContractAttribute()]
-	public enum account_shippingmethodcode
-	{
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		DefaultValue = 1,
-	}
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	DefaultValue = 1,
+}
+
+/// <summary>
+/// Type of business associated with the account.
+/// </summary>
+[System.Runtime.Serialization.DataContractAttribute()]
+public enum account_businesstypecode
+{
 	
-	/// <summary>
-	/// Status of the account.
-	/// </summary>
-	[System.Runtime.Serialization.DataContractAttribute()]
-	public enum account_statecode
-	{
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		Active = 0,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		Inactive = 1,
-	}
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	DefaultValue = 1,
+}
+
+/// <summary>
+/// Size of the account.
+/// </summary>
+[System.Runtime.Serialization.DataContractAttribute()]
+public enum account_customersizecode
+{
 	
-	/// <summary>
-	/// Reason for the status of the account.
-	/// </summary>
-	[System.Runtime.Serialization.DataContractAttribute()]
-	public enum account_statuscode
-	{
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		Active = 1,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		Inactive = 2,
-	}
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	DefaultValue = 1,
+}
+
+/// <summary>
+/// Type of the account.
+/// </summary>
+[System.Runtime.Serialization.DataContractAttribute()]
+public enum account_customertypecode
+{
 	
-	/// <summary>
-	/// Territory to which the account belongs.
-	/// </summary>
-	[System.Runtime.Serialization.DataContractAttribute()]
-	public enum account_territorycode
-	{
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		DefaultValue = 1,
-	}
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	Competitor = 1,
 	
-	/// <summary>
-	/// Business that represents a customer or potential customer. The company that is billed in business transactions.
-	/// </summary>
-	[System.Runtime.Serialization.DataContractAttribute()]
-	[Microsoft.Xrm.Sdk.Client.EntityLogicalNameAttribute("account")]
-	public partial class Account : Microsoft.Xrm.Sdk.Entity
-	{
-		
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	Consultant = 2,
+	
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	Customer = 3,
+	
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	Investor = 4,
+	
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	Partner = 5,
+	
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	Influencer = 6,
+	
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	Press = 7,
+	
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	Prospect = 8,
+	
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	Reseller = 9,
+	
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	Supplier = 10,
+	
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	Vendor = 11,
+	
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	Other = 12,
+}
+
+/// <summary>
+/// Type of industry with which the account is associated.
+/// </summary>
+[System.Runtime.Serialization.DataContractAttribute()]
+public enum account_industrycode
+{
+	
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	Accounting = 1,
+	
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	AgricultureandNonpetrolNaturalResourceExtraction = 2,
+	
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	BroadcastingPrintingandPublishing = 3,
+	
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	Brokers = 4,
+	
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	BuildingSupplyRetail = 5,
+	
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	BusinessServices = 6,
+	
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	Consulting = 7,
+	
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	ConsumerServices = 8,
+	
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	DesignDirectionandCreativeManagement = 9,
+	
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	DistributorsDispatchersandProcessors = 10,
+	
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	DoctorsOfficesandClinics = 11,
+	
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	DurableManufacturing = 12,
+	
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	EatingandDrinkingPlaces = 13,
+	
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	EntertainmentRetail = 14,
+	
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	EquipmentRentalandLeasing = 15,
+	
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	Financial = 16,
+	
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	FoodandTobaccoProcessing = 17,
+	
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	InboundCapitalIntensiveProcessing = 18,
+	
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	InboundRepairandServices = 19,
+	
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	Insurance = 20,
+	
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	LegalServices = 21,
+	
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	NonDurableMerchandiseRetail = 22,
+	
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	OutboundConsumerService = 23,
+	
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	PetrochemicalExtractionandDistribution = 24,
+	
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	ServiceRetail = 25,
+	
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	SIGAffiliations = 26,
+	
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	SocialServices = 27,
+	
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	SpecialOutboundTradeContractors = 28,
+	
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	SpecialtyRealty = 29,
+	
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	Transportation = 30,
+	
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	UtilityCreationandDistribution = 31,
+	
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	VehicleRetail = 32,
+	
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	Wholesale = 33,
+}
+
+/// <summary>
+/// Type of company ownership, such as public or private.
+/// </summary>
+[System.Runtime.Serialization.DataContractAttribute()]
+public enum account_ownershipcode
+{
+	
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	Public = 1,
+	
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	Private = 2,
+	
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	Subsidiary = 3,
+	
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	Other = 4,
+}
+
+/// <summary>
+/// Payment terms for the account.
+/// </summary>
+[System.Runtime.Serialization.DataContractAttribute()]
+public enum account_paymenttermscode
+{
+	
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	Net30 = 1,
+	
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	_210Net30 = 2,
+	
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	Net45 = 3,
+	
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	Net60 = 4,
+}
+
+/// <summary>
+/// Day of the week that the account prefers for scheduling service activities.
+/// </summary>
+[System.Runtime.Serialization.DataContractAttribute()]
+public enum account_preferredappointmentdaycode
+{
+	
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	Sunday = 0,
+	
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	Monday = 1,
+	
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	Tuesday = 2,
+	
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	Wednesday = 3,
+	
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	Thursday = 4,
+	
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	Friday = 5,
+	
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	Saturday = 6,
+}
+
+/// <summary>
+/// Time of day that the account prefers for scheduling service activities.
+/// </summary>
+[System.Runtime.Serialization.DataContractAttribute()]
+public enum account_preferredappointmenttimecode
+{
+	
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	Morning = 1,
+	
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	Afternoon = 2,
+	
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	Evening = 3,
+}
+
+/// <summary>
+/// Preferred contact method for the account.
+/// </summary>
+[System.Runtime.Serialization.DataContractAttribute()]
+public enum account_preferredcontactmethodcode
+{
+	
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	Any = 1,
+	
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	Email = 2,
+	
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	Phone = 3,
+	
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	Fax = 4,
+	
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	Mail = 5,
+}
+
+/// <summary>
+/// Method of shipment for the account.
+/// </summary>
+[System.Runtime.Serialization.DataContractAttribute()]
+public enum account_shippingmethodcode
+{
+	
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	DefaultValue = 1,
+}
+
+/// <summary>
+/// Status of the account.
+/// </summary>
+[System.Runtime.Serialization.DataContractAttribute()]
+public enum account_statecode
+{
+	
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	Active = 0,
+	
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	Inactive = 1,
+}
+
+/// <summary>
+/// Reason for the status of the account.
+/// </summary>
+[System.Runtime.Serialization.DataContractAttribute()]
+public enum account_statuscode
+{
+	
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	Active = 1,
+	
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	Inactive = 2,
+}
+
+/// <summary>
+/// Territory to which the account belongs.
+/// </summary>
+[System.Runtime.Serialization.DataContractAttribute()]
+public enum account_territorycode
+{
+	
+	[System.Runtime.Serialization.EnumMemberAttribute()]
+	DefaultValue = 1,
+}
+
+/// <summary>
+/// Business that represents a customer or potential customer. The company that is billed in business transactions.
+/// </summary>
+[System.Runtime.Serialization.DataContractAttribute()]
+[Microsoft.Xrm.Sdk.Client.EntityLogicalNameAttribute("account")]
+public partial class Account : Microsoft.Xrm.Sdk.Entity
+{
+	
 		/// <summary>
 		/// Available fields, a the time of codegen, for the account entity
 		/// </summary>
@@ -714,3441 +712,3440 @@ namespace Dev.DevKitV4.Shared.Entities3
 			public const string Referencingaccount_parent_account = "account_parent_account";
 			public const string Referencingmsa_account_managingpartner = "msa_account_managingpartner";
 		}
-		
-		/// <summary>
-		/// Default Constructor.
-		/// </summary>
-		public Account() : 
-				base(EntityLogicalName)
+	
+	/// <summary>
+	/// Default Constructor.
+	/// </summary>
+	public Account() : 
+			base(EntityLogicalName)
+	{
+	}
+	
+	public const string EntityLogicalName = "account";
+	
+	public const string EntityLogicalCollectionName = "accounts";
+	
+	public const string EntitySetName = "accounts";
+	
+	public const int EntityTypeCode = 1;
+	
+	/// <summary>
+	/// Select a category to indicate whether the customer account is standard or preferred.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("accountcategorycode")]
+	public virtual account_accountcategorycode? AccountCategoryCode
+	{
+		get
 		{
+			return ((account_accountcategorycode?)(EntityOptionSetEnum.GetEnum(this, "accountcategorycode")));
 		}
-		
-		public const string EntityLogicalName = "account";
-		
-		public const string EntityLogicalCollectionName = "accounts";
-		
-		public const string EntitySetName = "accounts";
-		
-		public const int EntityTypeCode = 1;
-		
-		/// <summary>
-		/// Select a category to indicate whether the customer account is standard or preferred.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("accountcategorycode")]
-		public virtual account_accountcategorycode? AccountCategoryCode
+		set
 		{
-			get
+			this.SetAttributeValue("accountcategorycode", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
+		}
+	}
+	
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("accountcategorycodename")]
+	public string AccountCategoryCodeName
+	{
+		get
+		{
+			if (this.FormattedValues.Contains("accountcategorycode"))
 			{
-				return ((account_accountcategorycode?)(EntityOptionSetEnum.GetEnum(this, "accountcategorycode")));
+				return this.FormattedValues["accountcategorycode"];
 			}
-			set
+			else
 			{
-				this.SetAttributeValue("accountcategorycode", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
+				return default(string);
 			}
 		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("accountcategorycodename")]
-		public string AccountCategoryCodeName
+	}
+	
+	/// <summary>
+	/// Select a classification code to indicate the potential value of the customer account based on the projected return on investment, cooperation level, sales cycle length or other criteria.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("accountclassificationcode")]
+	public virtual account_accountclassificationcode? AccountClassificationCode
+	{
+		get
 		{
-			get
-			{
-				if (this.FormattedValues.Contains("accountcategorycode"))
-				{
-					return this.FormattedValues["accountcategorycode"];
-				}
-				else
-				{
-					return default(string);
-				}
-			}
+			return ((account_accountclassificationcode?)(EntityOptionSetEnum.GetEnum(this, "accountclassificationcode")));
+		}
+		set
+		{
+			this.SetAttributeValue("accountclassificationcode", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
 		}
-		
-		/// <summary>
-		/// Select a classification code to indicate the potential value of the customer account based on the projected return on investment, cooperation level, sales cycle length or other criteria.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("accountclassificationcode")]
-		public virtual account_accountclassificationcode? AccountClassificationCode
+	}
+	
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("accountclassificationcodename")]
+	public string AccountClassificationCodeName
+	{
+		get
 		{
-			get
+			if (this.FormattedValues.Contains("accountclassificationcode"))
 			{
-				return ((account_accountclassificationcode?)(EntityOptionSetEnum.GetEnum(this, "accountclassificationcode")));
+				return this.FormattedValues["accountclassificationcode"];
 			}
-			set
+			else
 			{
-				this.SetAttributeValue("accountclassificationcode", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
+				return default(string);
 			}
 		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("accountclassificationcodename")]
-		public string AccountClassificationCodeName
+	}
+	
+	/// <summary>
+	/// Unique identifier of the account.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("accountid")]
+	public System.Nullable<System.Guid> AccountId
+	{
+		get
 		{
-			get
-			{
-				if (this.FormattedValues.Contains("accountclassificationcode"))
-				{
-					return this.FormattedValues["accountclassificationcode"];
-				}
-				else
-				{
-					return default(string);
-				}
-			}
+			return this.GetAttributeValue<System.Nullable<System.Guid>>("accountid");
 		}
-		
-		/// <summary>
-		/// Unique identifier of the account.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("accountid")]
-		public System.Nullable<System.Guid> AccountId
+		set
 		{
-			get
+			this.SetAttributeValue("accountid", value);
+			if (value.HasValue)
 			{
-				return this.GetAttributeValue<System.Nullable<System.Guid>>("accountid");
+				base.Id = value.Value;
 			}
-			set
+			else
 			{
-				this.SetAttributeValue("accountid", value);
-				if (value.HasValue)
-				{
-					base.Id = value.Value;
-				}
-				else
-				{
-					base.Id = System.Guid.Empty;
-				}
+				base.Id = System.Guid.Empty;
 			}
 		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("accountid")]
-		public override System.Guid Id
+	}
+	
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("accountid")]
+	public override System.Guid Id
+	{
+		get
 		{
-			get
-			{
-				return base.Id;
-			}
-			set
-			{
-				this.AccountId = value;
-			}
+			return base.Id;
 		}
-		
-		/// <summary>
-		/// Type an ID number or code for the account to quickly search and identify the account in system views.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("accountnumber")]
-		public string AccountNumber
+		set
 		{
-			get
-			{
-				return this.GetAttributeValue<string>("accountnumber");
-			}
-			set
-			{
-				this.SetAttributeValue("accountnumber", value);
-			}
+			this.AccountId = value;
 		}
-		
-		/// <summary>
-		/// Select a rating to indicate the value of the customer account.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("accountratingcode")]
-		public virtual account_accountratingcode? AccountRatingCode
+	}
+	
+	/// <summary>
+	/// Type an ID number or code for the account to quickly search and identify the account in system views.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("accountnumber")]
+	public string AccountNumber
+	{
+		get
 		{
-			get
-			{
-				return ((account_accountratingcode?)(EntityOptionSetEnum.GetEnum(this, "accountratingcode")));
-			}
-			set
-			{
-				this.SetAttributeValue("accountratingcode", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
-			}
+			return this.GetAttributeValue<string>("accountnumber");
 		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("accountratingcodename")]
-		public string AccountRatingCodeName
+		set
 		{
-			get
-			{
-				if (this.FormattedValues.Contains("accountratingcode"))
-				{
-					return this.FormattedValues["accountratingcode"];
-				}
-				else
-				{
-					return default(string);
-				}
-			}
+			this.SetAttributeValue("accountnumber", value);
 		}
-		
-		/// <summary>
-		/// Unique identifier for address 1.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address1_addressid")]
-		public System.Nullable<System.Guid> Address1_AddressId
+	}
+	
+	/// <summary>
+	/// Select a rating to indicate the value of the customer account.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("accountratingcode")]
+	public virtual account_accountratingcode? AccountRatingCode
+	{
+		get
 		{
-			get
-			{
-				return this.GetAttributeValue<System.Nullable<System.Guid>>("address1_addressid");
-			}
-			set
-			{
-				this.SetAttributeValue("address1_addressid", value);
-			}
+			return ((account_accountratingcode?)(EntityOptionSetEnum.GetEnum(this, "accountratingcode")));
+		}
+		set
+		{
+			this.SetAttributeValue("accountratingcode", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
 		}
-		
-		/// <summary>
-		/// Select the primary address type.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address1_addresstypecode")]
-		public virtual account_address1_addresstypecode? Address1_AddressTypeCode
+	}
+	
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("accountratingcodename")]
+	public string AccountRatingCodeName
+	{
+		get
 		{
-			get
+			if (this.FormattedValues.Contains("accountratingcode"))
 			{
-				return ((account_address1_addresstypecode?)(EntityOptionSetEnum.GetEnum(this, "address1_addresstypecode")));
+				return this.FormattedValues["accountratingcode"];
 			}
-			set
+			else
 			{
-				this.SetAttributeValue("address1_addresstypecode", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
+				return default(string);
 			}
 		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address1_addresstypecodename")]
-		public string Address1_AddressTypeCodeName
+	}
+	
+	/// <summary>
+	/// Unique identifier for address 1.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address1_addressid")]
+	public System.Nullable<System.Guid> Address1_AddressId
+	{
+		get
 		{
-			get
-			{
-				if (this.FormattedValues.Contains("address1_addresstypecode"))
-				{
-					return this.FormattedValues["address1_addresstypecode"];
-				}
-				else
-				{
-					return default(string);
-				}
-			}
+			return this.GetAttributeValue<System.Nullable<System.Guid>>("address1_addressid");
 		}
-		
-		/// <summary>
-		/// Type the city for the primary address.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address1_city")]
-		public string Address1_City
+		set
 		{
-			get
-			{
-				return this.GetAttributeValue<string>("address1_city");
-			}
-			set
-			{
-				this.SetAttributeValue("address1_city", value);
-			}
+			this.SetAttributeValue("address1_addressid", value);
 		}
-		
-		/// <summary>
-		/// Shows the complete primary address.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address1_composite")]
-		public string Address1_Composite
+	}
+	
+	/// <summary>
+	/// Select the primary address type.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address1_addresstypecode")]
+	public virtual account_address1_addresstypecode? Address1_AddressTypeCode
+	{
+		get
 		{
-			get
-			{
-				return this.GetAttributeValue<string>("address1_composite");
-			}
+			return ((account_address1_addresstypecode?)(EntityOptionSetEnum.GetEnum(this, "address1_addresstypecode")));
 		}
-		
-		/// <summary>
-		/// Type the country or region for the primary address.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address1_country")]
-		public string Address1_Country
+		set
 		{
-			get
-			{
-				return this.GetAttributeValue<string>("address1_country");
-			}
-			set
-			{
-				this.SetAttributeValue("address1_country", value);
-			}
+			this.SetAttributeValue("address1_addresstypecode", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
 		}
-		
-		/// <summary>
-		/// Type the county for the primary address.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address1_county")]
-		public string Address1_County
+	}
+	
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address1_addresstypecodename")]
+	public string Address1_AddressTypeCodeName
+	{
+		get
 		{
-			get
+			if (this.FormattedValues.Contains("address1_addresstypecode"))
 			{
-				return this.GetAttributeValue<string>("address1_county");
+				return this.FormattedValues["address1_addresstypecode"];
 			}
-			set
+			else
 			{
-				this.SetAttributeValue("address1_county", value);
+				return default(string);
 			}
 		}
-		
-		/// <summary>
-		/// Type the fax number associated with the primary address.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address1_fax")]
-		public string Address1_Fax
+	}
+	
+	/// <summary>
+	/// Type the city for the primary address.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address1_city")]
+	public string Address1_City
+	{
+		get
 		{
-			get
-			{
-				return this.GetAttributeValue<string>("address1_fax");
-			}
-			set
-			{
-				this.SetAttributeValue("address1_fax", value);
-			}
+			return this.GetAttributeValue<string>("address1_city");
 		}
-		
-		/// <summary>
-		/// Select the freight terms for the primary address to make sure shipping orders are processed correctly.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address1_freighttermscode")]
-		public virtual account_address1_freighttermscode? Address1_FreightTermsCode
+		set
 		{
-			get
-			{
-				return ((account_address1_freighttermscode?)(EntityOptionSetEnum.GetEnum(this, "address1_freighttermscode")));
-			}
-			set
-			{
-				this.SetAttributeValue("address1_freighttermscode", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
-			}
+			this.SetAttributeValue("address1_city", value);
 		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address1_freighttermscodename")]
-		public string Address1_FreightTermsCodeName
+	}
+	
+	/// <summary>
+	/// Shows the complete primary address.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address1_composite")]
+	public string Address1_Composite
+	{
+		get
 		{
-			get
-			{
-				if (this.FormattedValues.Contains("address1_freighttermscode"))
-				{
-					return this.FormattedValues["address1_freighttermscode"];
-				}
-				else
-				{
-					return default(string);
-				}
-			}
+			return this.GetAttributeValue<string>("address1_composite");
 		}
-		
-		/// <summary>
-		/// Type the latitude value for the primary address for use in mapping and other applications.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address1_latitude")]
-		public System.Nullable<double> Address1_Latitude
+	}
+	
+	/// <summary>
+	/// Type the country or region for the primary address.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address1_country")]
+	public string Address1_Country
+	{
+		get
 		{
-			get
-			{
-				return this.GetAttributeValue<System.Nullable<double>>("address1_latitude");
-			}
-			set
-			{
-				this.SetAttributeValue("address1_latitude", value);
-			}
+			return this.GetAttributeValue<string>("address1_country");
 		}
-		
-		/// <summary>
-		/// Type the first line of the primary address.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address1_line1")]
-		public string Address1_Line1
+		set
 		{
-			get
-			{
-				return this.GetAttributeValue<string>("address1_line1");
-			}
-			set
-			{
-				this.SetAttributeValue("address1_line1", value);
-			}
+			this.SetAttributeValue("address1_country", value);
 		}
-		
-		/// <summary>
-		/// Type the second line of the primary address.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address1_line2")]
-		public string Address1_Line2
+	}
+	
+	/// <summary>
+	/// Type the county for the primary address.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address1_county")]
+	public string Address1_County
+	{
+		get
 		{
-			get
-			{
-				return this.GetAttributeValue<string>("address1_line2");
-			}
-			set
-			{
-				this.SetAttributeValue("address1_line2", value);
-			}
+			return this.GetAttributeValue<string>("address1_county");
 		}
-		
-		/// <summary>
-		/// Type the third line of the primary address.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address1_line3")]
-		public string Address1_Line3
+		set
 		{
-			get
-			{
-				return this.GetAttributeValue<string>("address1_line3");
-			}
-			set
-			{
-				this.SetAttributeValue("address1_line3", value);
-			}
+			this.SetAttributeValue("address1_county", value);
 		}
-		
-		/// <summary>
-		/// Type the longitude value for the primary address for use in mapping and other applications.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address1_longitude")]
-		public System.Nullable<double> Address1_Longitude
+	}
+	
+	/// <summary>
+	/// Type the fax number associated with the primary address.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address1_fax")]
+	public string Address1_Fax
+	{
+		get
 		{
-			get
-			{
-				return this.GetAttributeValue<System.Nullable<double>>("address1_longitude");
-			}
-			set
-			{
-				this.SetAttributeValue("address1_longitude", value);
-			}
+			return this.GetAttributeValue<string>("address1_fax");
 		}
-		
-		/// <summary>
-		/// Type a descriptive name for the primary address, such as Corporate Headquarters.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address1_name")]
-		public string Address1_Name
+		set
 		{
-			get
-			{
-				return this.GetAttributeValue<string>("address1_name");
-			}
-			set
-			{
-				this.SetAttributeValue("address1_name", value);
-			}
+			this.SetAttributeValue("address1_fax", value);
 		}
-		
-		/// <summary>
-		/// Type the ZIP Code or postal code for the primary address.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address1_postalcode")]
-		public string Address1_PostalCode
+	}
+	
+	/// <summary>
+	/// Select the freight terms for the primary address to make sure shipping orders are processed correctly.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address1_freighttermscode")]
+	public virtual account_address1_freighttermscode? Address1_FreightTermsCode
+	{
+		get
 		{
-			get
-			{
-				return this.GetAttributeValue<string>("address1_postalcode");
-			}
-			set
-			{
-				this.SetAttributeValue("address1_postalcode", value);
-			}
+			return ((account_address1_freighttermscode?)(EntityOptionSetEnum.GetEnum(this, "address1_freighttermscode")));
 		}
-		
-		/// <summary>
-		/// Type the post office box number of the primary address.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address1_postofficebox")]
-		public string Address1_PostOfficeBox
+		set
 		{
-			get
-			{
-				return this.GetAttributeValue<string>("address1_postofficebox");
-			}
-			set
-			{
-				this.SetAttributeValue("address1_postofficebox", value);
-			}
+			this.SetAttributeValue("address1_freighttermscode", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
 		}
-		
-		/// <summary>
-		/// Type the name of the main contact at the account's primary address.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address1_primarycontactname")]
-		public string Address1_PrimaryContactName
+	}
+	
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address1_freighttermscodename")]
+	public string Address1_FreightTermsCodeName
+	{
+		get
 		{
-			get
+			if (this.FormattedValues.Contains("address1_freighttermscode"))
 			{
-				return this.GetAttributeValue<string>("address1_primarycontactname");
+				return this.FormattedValues["address1_freighttermscode"];
 			}
-			set
+			else
 			{
-				this.SetAttributeValue("address1_primarycontactname", value);
+				return default(string);
 			}
 		}
-		
-		/// <summary>
-		/// Select a shipping method for deliveries sent to this address.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address1_shippingmethodcode")]
-		public virtual account_address1_shippingmethodcode? Address1_ShippingMethodCode
+	}
+	
+	/// <summary>
+	/// Type the latitude value for the primary address for use in mapping and other applications.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address1_latitude")]
+	public System.Nullable<double> Address1_Latitude
+	{
+		get
 		{
-			get
-			{
-				return ((account_address1_shippingmethodcode?)(EntityOptionSetEnum.GetEnum(this, "address1_shippingmethodcode")));
-			}
-			set
-			{
-				this.SetAttributeValue("address1_shippingmethodcode", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
-			}
+			return this.GetAttributeValue<System.Nullable<double>>("address1_latitude");
 		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address1_shippingmethodcodename")]
-		public string Address1_ShippingMethodCodeName
+		set
 		{
-			get
-			{
-				if (this.FormattedValues.Contains("address1_shippingmethodcode"))
-				{
-					return this.FormattedValues["address1_shippingmethodcode"];
-				}
-				else
-				{
-					return default(string);
-				}
-			}
+			this.SetAttributeValue("address1_latitude", value);
 		}
-		
-		/// <summary>
-		/// Type the state or province of the primary address.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address1_stateorprovince")]
-		public string Address1_StateOrProvince
+	}
+	
+	/// <summary>
+	/// Type the first line of the primary address.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address1_line1")]
+	public string Address1_Line1
+	{
+		get
 		{
-			get
-			{
-				return this.GetAttributeValue<string>("address1_stateorprovince");
-			}
-			set
-			{
-				this.SetAttributeValue("address1_stateorprovince", value);
-			}
+			return this.GetAttributeValue<string>("address1_line1");
 		}
-		
-		/// <summary>
-		/// Type the main phone number associated with the primary address.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address1_telephone1")]
-		public string Address1_Telephone1
+		set
 		{
-			get
-			{
-				return this.GetAttributeValue<string>("address1_telephone1");
-			}
-			set
-			{
-				this.SetAttributeValue("address1_telephone1", value);
-			}
+			this.SetAttributeValue("address1_line1", value);
 		}
-		
-		/// <summary>
-		/// Type a second phone number associated with the primary address.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address1_telephone2")]
-		public string Address1_Telephone2
+	}
+	
+	/// <summary>
+	/// Type the second line of the primary address.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address1_line2")]
+	public string Address1_Line2
+	{
+		get
 		{
-			get
-			{
-				return this.GetAttributeValue<string>("address1_telephone2");
-			}
-			set
-			{
-				this.SetAttributeValue("address1_telephone2", value);
-			}
+			return this.GetAttributeValue<string>("address1_line2");
 		}
-		
-		/// <summary>
-		/// Type a third phone number associated with the primary address.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address1_telephone3")]
-		public string Address1_Telephone3
+		set
 		{
-			get
-			{
-				return this.GetAttributeValue<string>("address1_telephone3");
-			}
-			set
-			{
-				this.SetAttributeValue("address1_telephone3", value);
-			}
+			this.SetAttributeValue("address1_line2", value);
 		}
-		
-		/// <summary>
-		/// Type the UPS zone of the primary address to make sure shipping charges are calculated correctly and deliveries are made promptly, if shipped by UPS.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address1_upszone")]
-		public string Address1_UPSZone
+	}
+	
+	/// <summary>
+	/// Type the third line of the primary address.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address1_line3")]
+	public string Address1_Line3
+	{
+		get
 		{
-			get
-			{
-				return this.GetAttributeValue<string>("address1_upszone");
-			}
-			set
-			{
-				this.SetAttributeValue("address1_upszone", value);
-			}
+			return this.GetAttributeValue<string>("address1_line3");
 		}
-		
-		/// <summary>
-		/// Select the time zone, or UTC offset, for this address so that other people can reference it when they contact someone at this address.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address1_utcoffset")]
-		public System.Nullable<int> Address1_UTCOffset
+		set
 		{
-			get
-			{
-				return this.GetAttributeValue<System.Nullable<int>>("address1_utcoffset");
-			}
-			set
-			{
-				this.SetAttributeValue("address1_utcoffset", value);
-			}
+			this.SetAttributeValue("address1_line3", value);
 		}
-		
-		/// <summary>
-		/// Unique identifier for address 2.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address2_addressid")]
-		public System.Nullable<System.Guid> Address2_AddressId
+	}
+	
+	/// <summary>
+	/// Type the longitude value for the primary address for use in mapping and other applications.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address1_longitude")]
+	public System.Nullable<double> Address1_Longitude
+	{
+		get
 		{
-			get
-			{
-				return this.GetAttributeValue<System.Nullable<System.Guid>>("address2_addressid");
-			}
-			set
-			{
-				this.SetAttributeValue("address2_addressid", value);
-			}
+			return this.GetAttributeValue<System.Nullable<double>>("address1_longitude");
 		}
-		
-		/// <summary>
-		/// Select the secondary address type.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address2_addresstypecode")]
-		public virtual account_address2_addresstypecode? Address2_AddressTypeCode
+		set
 		{
-			get
-			{
-				return ((account_address2_addresstypecode?)(EntityOptionSetEnum.GetEnum(this, "address2_addresstypecode")));
-			}
-			set
-			{
-				this.SetAttributeValue("address2_addresstypecode", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
-			}
+			this.SetAttributeValue("address1_longitude", value);
 		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address2_addresstypecodename")]
-		public string Address2_AddressTypeCodeName
+	}
+	
+	/// <summary>
+	/// Type a descriptive name for the primary address, such as Corporate Headquarters.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address1_name")]
+	public string Address1_Name
+	{
+		get
 		{
-			get
-			{
-				if (this.FormattedValues.Contains("address2_addresstypecode"))
-				{
-					return this.FormattedValues["address2_addresstypecode"];
-				}
-				else
-				{
-					return default(string);
-				}
-			}
+			return this.GetAttributeValue<string>("address1_name");
 		}
-		
-		/// <summary>
-		/// Type the city for the secondary address.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address2_city")]
-		public string Address2_City
+		set
 		{
-			get
-			{
-				return this.GetAttributeValue<string>("address2_city");
-			}
-			set
-			{
-				this.SetAttributeValue("address2_city", value);
-			}
+			this.SetAttributeValue("address1_name", value);
 		}
-		
-		/// <summary>
-		/// Shows the complete secondary address.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address2_composite")]
-		public string Address2_Composite
+	}
+	
+	/// <summary>
+	/// Type the ZIP Code or postal code for the primary address.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address1_postalcode")]
+	public string Address1_PostalCode
+	{
+		get
 		{
-			get
-			{
-				return this.GetAttributeValue<string>("address2_composite");
-			}
+			return this.GetAttributeValue<string>("address1_postalcode");
 		}
-		
-		/// <summary>
-		/// Type the country or region for the secondary address.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address2_country")]
-		public string Address2_Country
+		set
 		{
-			get
-			{
-				return this.GetAttributeValue<string>("address2_country");
-			}
-			set
-			{
-				this.SetAttributeValue("address2_country", value);
-			}
+			this.SetAttributeValue("address1_postalcode", value);
 		}
-		
-		/// <summary>
-		/// Type the county for the secondary address.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address2_county")]
-		public string Address2_County
+	}
+	
+	/// <summary>
+	/// Type the post office box number of the primary address.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address1_postofficebox")]
+	public string Address1_PostOfficeBox
+	{
+		get
 		{
-			get
-			{
-				return this.GetAttributeValue<string>("address2_county");
-			}
-			set
-			{
-				this.SetAttributeValue("address2_county", value);
-			}
+			return this.GetAttributeValue<string>("address1_postofficebox");
 		}
-		
-		/// <summary>
-		/// Type the fax number associated with the secondary address.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address2_fax")]
-		public string Address2_Fax
+		set
 		{
-			get
-			{
-				return this.GetAttributeValue<string>("address2_fax");
-			}
-			set
-			{
-				this.SetAttributeValue("address2_fax", value);
-			}
+			this.SetAttributeValue("address1_postofficebox", value);
 		}
-		
-		/// <summary>
-		/// Select the freight terms for the secondary address to make sure shipping orders are processed correctly.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address2_freighttermscode")]
-		public virtual account_address2_freighttermscode? Address2_FreightTermsCode
+	}
+	
+	/// <summary>
+	/// Type the name of the main contact at the account's primary address.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address1_primarycontactname")]
+	public string Address1_PrimaryContactName
+	{
+		get
 		{
-			get
-			{
-				return ((account_address2_freighttermscode?)(EntityOptionSetEnum.GetEnum(this, "address2_freighttermscode")));
-			}
-			set
-			{
-				this.SetAttributeValue("address2_freighttermscode", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
-			}
+			return this.GetAttributeValue<string>("address1_primarycontactname");
 		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address2_freighttermscodename")]
-		public string Address2_FreightTermsCodeName
+		set
 		{
-			get
-			{
-				if (this.FormattedValues.Contains("address2_freighttermscode"))
-				{
-					return this.FormattedValues["address2_freighttermscode"];
-				}
-				else
-				{
-					return default(string);
-				}
-			}
+			this.SetAttributeValue("address1_primarycontactname", value);
 		}
-		
-		/// <summary>
-		/// Type the latitude value for the secondary address for use in mapping and other applications.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address2_latitude")]
-		public System.Nullable<double> Address2_Latitude
+	}
+	
+	/// <summary>
+	/// Select a shipping method for deliveries sent to this address.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address1_shippingmethodcode")]
+	public virtual account_address1_shippingmethodcode? Address1_ShippingMethodCode
+	{
+		get
 		{
-			get
-			{
-				return this.GetAttributeValue<System.Nullable<double>>("address2_latitude");
-			}
-			set
-			{
-				this.SetAttributeValue("address2_latitude", value);
-			}
+			return ((account_address1_shippingmethodcode?)(EntityOptionSetEnum.GetEnum(this, "address1_shippingmethodcode")));
 		}
-		
-		/// <summary>
-		/// Type the first line of the secondary address.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address2_line1")]
-		public string Address2_Line1
+		set
 		{
-			get
-			{
-				return this.GetAttributeValue<string>("address2_line1");
-			}
-			set
-			{
-				this.SetAttributeValue("address2_line1", value);
-			}
+			this.SetAttributeValue("address1_shippingmethodcode", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
 		}
-		
-		/// <summary>
-		/// Type the second line of the secondary address.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address2_line2")]
-		public string Address2_Line2
+	}
+	
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address1_shippingmethodcodename")]
+	public string Address1_ShippingMethodCodeName
+	{
+		get
 		{
-			get
+			if (this.FormattedValues.Contains("address1_shippingmethodcode"))
 			{
-				return this.GetAttributeValue<string>("address2_line2");
+				return this.FormattedValues["address1_shippingmethodcode"];
 			}
-			set
+			else
 			{
-				this.SetAttributeValue("address2_line2", value);
+				return default(string);
 			}
 		}
-		
-		/// <summary>
-		/// Type the third line of the secondary address.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address2_line3")]
-		public string Address2_Line3
+	}
+	
+	/// <summary>
+	/// Type the state or province of the primary address.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address1_stateorprovince")]
+	public string Address1_StateOrProvince
+	{
+		get
 		{
-			get
-			{
-				return this.GetAttributeValue<string>("address2_line3");
-			}
-			set
-			{
-				this.SetAttributeValue("address2_line3", value);
-			}
+			return this.GetAttributeValue<string>("address1_stateorprovince");
 		}
-		
-		/// <summary>
-		/// Type the longitude value for the secondary address for use in mapping and other applications.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address2_longitude")]
-		public System.Nullable<double> Address2_Longitude
+		set
 		{
-			get
-			{
-				return this.GetAttributeValue<System.Nullable<double>>("address2_longitude");
-			}
-			set
-			{
-				this.SetAttributeValue("address2_longitude", value);
-			}
+			this.SetAttributeValue("address1_stateorprovince", value);
 		}
-		
-		/// <summary>
-		/// Type a descriptive name for the secondary address, such as Corporate Headquarters.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address2_name")]
-		public string Address2_Name
+	}
+	
+	/// <summary>
+	/// Type the main phone number associated with the primary address.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address1_telephone1")]
+	public string Address1_Telephone1
+	{
+		get
 		{
-			get
-			{
-				return this.GetAttributeValue<string>("address2_name");
-			}
-			set
-			{
-				this.SetAttributeValue("address2_name", value);
-			}
+			return this.GetAttributeValue<string>("address1_telephone1");
 		}
-		
-		/// <summary>
-		/// Type the ZIP Code or postal code for the secondary address.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address2_postalcode")]
-		public string Address2_PostalCode
+		set
 		{
-			get
-			{
-				return this.GetAttributeValue<string>("address2_postalcode");
-			}
-			set
-			{
-				this.SetAttributeValue("address2_postalcode", value);
-			}
+			this.SetAttributeValue("address1_telephone1", value);
 		}
-		
-		/// <summary>
-		/// Type the post office box number of the secondary address.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address2_postofficebox")]
-		public string Address2_PostOfficeBox
+	}
+	
+	/// <summary>
+	/// Type a second phone number associated with the primary address.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address1_telephone2")]
+	public string Address1_Telephone2
+	{
+		get
 		{
-			get
-			{
-				return this.GetAttributeValue<string>("address2_postofficebox");
-			}
-			set
-			{
-				this.SetAttributeValue("address2_postofficebox", value);
-			}
+			return this.GetAttributeValue<string>("address1_telephone2");
 		}
-		
-		/// <summary>
-		/// Type the name of the main contact at the account's secondary address.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address2_primarycontactname")]
-		public string Address2_PrimaryContactName
+		set
 		{
-			get
-			{
-				return this.GetAttributeValue<string>("address2_primarycontactname");
-			}
-			set
-			{
-				this.SetAttributeValue("address2_primarycontactname", value);
-			}
+			this.SetAttributeValue("address1_telephone2", value);
 		}
-		
-		/// <summary>
-		/// Select a shipping method for deliveries sent to this address.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address2_shippingmethodcode")]
-		public virtual account_address2_shippingmethodcode? Address2_ShippingMethodCode
+	}
+	
+	/// <summary>
+	/// Type a third phone number associated with the primary address.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address1_telephone3")]
+	public string Address1_Telephone3
+	{
+		get
 		{
-			get
-			{
-				return ((account_address2_shippingmethodcode?)(EntityOptionSetEnum.GetEnum(this, "address2_shippingmethodcode")));
-			}
-			set
-			{
-				this.SetAttributeValue("address2_shippingmethodcode", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
-			}
+			return this.GetAttributeValue<string>("address1_telephone3");
 		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address2_shippingmethodcodename")]
-		public string Address2_ShippingMethodCodeName
+		set
 		{
-			get
-			{
-				if (this.FormattedValues.Contains("address2_shippingmethodcode"))
-				{
-					return this.FormattedValues["address2_shippingmethodcode"];
-				}
-				else
-				{
-					return default(string);
-				}
-			}
+			this.SetAttributeValue("address1_telephone3", value);
 		}
-		
-		/// <summary>
-		/// Type the state or province of the secondary address.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address2_stateorprovince")]
-		public string Address2_StateOrProvince
+	}
+	
+	/// <summary>
+	/// Type the UPS zone of the primary address to make sure shipping charges are calculated correctly and deliveries are made promptly, if shipped by UPS.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address1_upszone")]
+	public string Address1_UPSZone
+	{
+		get
 		{
-			get
-			{
-				return this.GetAttributeValue<string>("address2_stateorprovince");
-			}
-			set
-			{
-				this.SetAttributeValue("address2_stateorprovince", value);
-			}
+			return this.GetAttributeValue<string>("address1_upszone");
 		}
-		
-		/// <summary>
-		/// Type the main phone number associated with the secondary address.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address2_telephone1")]
-		public string Address2_Telephone1
+		set
 		{
-			get
-			{
-				return this.GetAttributeValue<string>("address2_telephone1");
-			}
-			set
-			{
-				this.SetAttributeValue("address2_telephone1", value);
-			}
+			this.SetAttributeValue("address1_upszone", value);
 		}
-		
-		/// <summary>
-		/// Type a second phone number associated with the secondary address.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address2_telephone2")]
-		public string Address2_Telephone2
+	}
+	
+	/// <summary>
+	/// Select the time zone, or UTC offset, for this address so that other people can reference it when they contact someone at this address.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address1_utcoffset")]
+	public System.Nullable<int> Address1_UTCOffset
+	{
+		get
 		{
-			get
-			{
-				return this.GetAttributeValue<string>("address2_telephone2");
-			}
-			set
-			{
-				this.SetAttributeValue("address2_telephone2", value);
-			}
+			return this.GetAttributeValue<System.Nullable<int>>("address1_utcoffset");
 		}
-		
-		/// <summary>
-		/// Type a third phone number associated with the secondary address.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address2_telephone3")]
-		public string Address2_Telephone3
+		set
 		{
-			get
-			{
-				return this.GetAttributeValue<string>("address2_telephone3");
-			}
-			set
-			{
-				this.SetAttributeValue("address2_telephone3", value);
-			}
+			this.SetAttributeValue("address1_utcoffset", value);
 		}
-		
-		/// <summary>
-		/// Type the UPS zone of the secondary address to make sure shipping charges are calculated correctly and deliveries are made promptly, if shipped by UPS.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address2_upszone")]
-		public string Address2_UPSZone
+	}
+	
+	/// <summary>
+	/// Unique identifier for address 2.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address2_addressid")]
+	public System.Nullable<System.Guid> Address2_AddressId
+	{
+		get
 		{
-			get
-			{
-				return this.GetAttributeValue<string>("address2_upszone");
-			}
-			set
-			{
-				this.SetAttributeValue("address2_upszone", value);
-			}
+			return this.GetAttributeValue<System.Nullable<System.Guid>>("address2_addressid");
 		}
-		
-		/// <summary>
-		/// Select the time zone, or UTC offset, for this address so that other people can reference it when they contact someone at this address.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address2_utcoffset")]
-		public System.Nullable<int> Address2_UTCOffset
+		set
 		{
-			get
-			{
-				return this.GetAttributeValue<System.Nullable<int>>("address2_utcoffset");
-			}
-			set
-			{
-				this.SetAttributeValue("address2_utcoffset", value);
-			}
+			this.SetAttributeValue("address2_addressid", value);
 		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("adx_createdbyipaddress")]
-		public string Adx_CreatedByIPAddress
+	}
+	
+	/// <summary>
+	/// Select the secondary address type.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address2_addresstypecode")]
+	public virtual account_address2_addresstypecode? Address2_AddressTypeCode
+	{
+		get
 		{
-			get
-			{
-				return this.GetAttributeValue<string>("adx_createdbyipaddress");
-			}
-			set
-			{
-				this.SetAttributeValue("adx_createdbyipaddress", value);
-			}
+			return ((account_address2_addresstypecode?)(EntityOptionSetEnum.GetEnum(this, "address2_addresstypecode")));
 		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("adx_createdbyusername")]
-		public string Adx_CreatedByUsername
+		set
 		{
-			get
-			{
-				return this.GetAttributeValue<string>("adx_createdbyusername");
-			}
-			set
-			{
-				this.SetAttributeValue("adx_createdbyusername", value);
-			}
+			this.SetAttributeValue("address2_addresstypecode", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
 		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("adx_modifiedbyipaddress")]
-		public string Adx_ModifiedByIPAddress
+	}
+	
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address2_addresstypecodename")]
+	public string Address2_AddressTypeCodeName
+	{
+		get
 		{
-			get
+			if (this.FormattedValues.Contains("address2_addresstypecode"))
 			{
-				return this.GetAttributeValue<string>("adx_modifiedbyipaddress");
+				return this.FormattedValues["address2_addresstypecode"];
 			}
-			set
+			else
 			{
-				this.SetAttributeValue("adx_modifiedbyipaddress", value);
+				return default(string);
 			}
 		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("adx_modifiedbyusername")]
-		public string Adx_ModifiedByUsername
+	}
+	
+	/// <summary>
+	/// Type the city for the secondary address.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address2_city")]
+	public string Address2_City
+	{
+		get
 		{
-			get
-			{
-				return this.GetAttributeValue<string>("adx_modifiedbyusername");
-			}
-			set
-			{
-				this.SetAttributeValue("adx_modifiedbyusername", value);
-			}
+			return this.GetAttributeValue<string>("address2_city");
 		}
-		
-		/// <summary>
-		/// For system use only.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("aging30")]
-		public Microsoft.Xrm.Sdk.Money Aging30
+		set
 		{
-			get
-			{
-				return this.GetAttributeValue<Microsoft.Xrm.Sdk.Money>("aging30");
-			}
+			this.SetAttributeValue("address2_city", value);
 		}
-		
-		/// <summary>
-		/// The base currency equivalent of the aging 30 field.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("aging30_base")]
-		public Microsoft.Xrm.Sdk.Money Aging30_Base
+	}
+	
+	/// <summary>
+	/// Shows the complete secondary address.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address2_composite")]
+	public string Address2_Composite
+	{
+		get
 		{
-			get
-			{
-				return this.GetAttributeValue<Microsoft.Xrm.Sdk.Money>("aging30_base");
-			}
+			return this.GetAttributeValue<string>("address2_composite");
 		}
-		
-		/// <summary>
-		/// For system use only.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("aging60")]
-		public Microsoft.Xrm.Sdk.Money Aging60
+	}
+	
+	/// <summary>
+	/// Type the country or region for the secondary address.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address2_country")]
+	public string Address2_Country
+	{
+		get
 		{
-			get
-			{
-				return this.GetAttributeValue<Microsoft.Xrm.Sdk.Money>("aging60");
-			}
+			return this.GetAttributeValue<string>("address2_country");
 		}
-		
-		/// <summary>
-		/// The base currency equivalent of the aging 60 field.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("aging60_base")]
-		public Microsoft.Xrm.Sdk.Money Aging60_Base
+		set
 		{
-			get
-			{
-				return this.GetAttributeValue<Microsoft.Xrm.Sdk.Money>("aging60_base");
-			}
+			this.SetAttributeValue("address2_country", value);
 		}
-		
-		/// <summary>
-		/// For system use only.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("aging90")]
-		public Microsoft.Xrm.Sdk.Money Aging90
+	}
+	
+	/// <summary>
+	/// Type the county for the secondary address.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address2_county")]
+	public string Address2_County
+	{
+		get
 		{
-			get
-			{
-				return this.GetAttributeValue<Microsoft.Xrm.Sdk.Money>("aging90");
-			}
+			return this.GetAttributeValue<string>("address2_county");
 		}
-		
-		/// <summary>
-		/// The base currency equivalent of the aging 90 field.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("aging90_base")]
-		public Microsoft.Xrm.Sdk.Money Aging90_Base
+		set
 		{
-			get
-			{
-				return this.GetAttributeValue<Microsoft.Xrm.Sdk.Money>("aging90_base");
-			}
+			this.SetAttributeValue("address2_county", value);
+		}
+	}
+	
+	/// <summary>
+	/// Type the fax number associated with the secondary address.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address2_fax")]
+	public string Address2_Fax
+	{
+		get
+		{
+			return this.GetAttributeValue<string>("address2_fax");
+		}
+		set
+		{
+			this.SetAttributeValue("address2_fax", value);
+		}
+	}
+	
+	/// <summary>
+	/// Select the freight terms for the secondary address to make sure shipping orders are processed correctly.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address2_freighttermscode")]
+	public virtual account_address2_freighttermscode? Address2_FreightTermsCode
+	{
+		get
+		{
+			return ((account_address2_freighttermscode?)(EntityOptionSetEnum.GetEnum(this, "address2_freighttermscode")));
 		}
-		
-		/// <summary>
-		/// Select the legal designation or other business type of the account for contracts or reporting purposes.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("businesstypecode")]
-		public virtual account_businesstypecode? BusinessTypeCode
+		set
 		{
-			get
+			this.SetAttributeValue("address2_freighttermscode", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
+		}
+	}
+	
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address2_freighttermscodename")]
+	public string Address2_FreightTermsCodeName
+	{
+		get
+		{
+			if (this.FormattedValues.Contains("address2_freighttermscode"))
 			{
-				return ((account_businesstypecode?)(EntityOptionSetEnum.GetEnum(this, "businesstypecode")));
+				return this.FormattedValues["address2_freighttermscode"];
 			}
-			set
+			else
 			{
-				this.SetAttributeValue("businesstypecode", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
+				return default(string);
 			}
 		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("businesstypecodename")]
-		public string BusinessTypeCodeName
+	}
+	
+	/// <summary>
+	/// Type the latitude value for the secondary address for use in mapping and other applications.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address2_latitude")]
+	public System.Nullable<double> Address2_Latitude
+	{
+		get
 		{
-			get
-			{
-				if (this.FormattedValues.Contains("businesstypecode"))
-				{
-					return this.FormattedValues["businesstypecode"];
-				}
-				else
-				{
-					return default(string);
-				}
-			}
+			return this.GetAttributeValue<System.Nullable<double>>("address2_latitude");
 		}
-		
-		/// <summary>
-		/// Shows who created the record.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("createdby")]
-		public Microsoft.Xrm.Sdk.EntityReference CreatedBy
+		set
 		{
-			get
-			{
-				return this.GetAttributeValue<Microsoft.Xrm.Sdk.EntityReference>("createdby");
-			}
+			this.SetAttributeValue("address2_latitude", value);
 		}
-		
-		/// <summary>
-		/// Shows the external party who created the record.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("createdbyexternalparty")]
-		public Microsoft.Xrm.Sdk.EntityReference CreatedByExternalParty
+	}
+	
+	/// <summary>
+	/// Type the first line of the secondary address.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address2_line1")]
+	public string Address2_Line1
+	{
+		get
 		{
-			get
-			{
-				return this.GetAttributeValue<Microsoft.Xrm.Sdk.EntityReference>("createdbyexternalparty");
-			}
+			return this.GetAttributeValue<string>("address2_line1");
 		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("createdbyexternalpartyname")]
-		public string CreatedByExternalPartyName
+		set
 		{
-			get
-			{
-				if (this.FormattedValues.Contains("createdbyexternalparty"))
-				{
-					return this.FormattedValues["createdbyexternalparty"];
-				}
-				else
-				{
-					return default(string);
-				}
-			}
+			this.SetAttributeValue("address2_line1", value);
 		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("createdbyexternalpartyyominame")]
-		public string CreatedByExternalPartyYomiName
+	}
+	
+	/// <summary>
+	/// Type the second line of the secondary address.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address2_line2")]
+	public string Address2_Line2
+	{
+		get
 		{
-			get
-			{
-				if (this.FormattedValues.Contains("createdbyexternalparty"))
-				{
-					return this.FormattedValues["createdbyexternalparty"];
-				}
-				else
-				{
-					return default(string);
-				}
-			}
+			return this.GetAttributeValue<string>("address2_line2");
 		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("createdbyname")]
-		public string CreatedByName
+		set
 		{
-			get
-			{
-				if (this.FormattedValues.Contains("createdby"))
-				{
-					return this.FormattedValues["createdby"];
-				}
-				else
-				{
-					return default(string);
-				}
-			}
+			this.SetAttributeValue("address2_line2", value);
 		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("createdbyyominame")]
-		public string CreatedByYomiName
+	}
+	
+	/// <summary>
+	/// Type the third line of the secondary address.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address2_line3")]
+	public string Address2_Line3
+	{
+		get
 		{
-			get
-			{
-				if (this.FormattedValues.Contains("createdby"))
-				{
-					return this.FormattedValues["createdby"];
-				}
-				else
-				{
-					return default(string);
-				}
-			}
+			return this.GetAttributeValue<string>("address2_line3");
 		}
-		
-		/// <summary>
-		/// Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("createdon")]
-		public System.Nullable<System.DateTime> CreatedOn
+		set
 		{
-			get
-			{
-				return this.GetAttributeValue<System.Nullable<System.DateTime>>("createdon");
-			}
+			this.SetAttributeValue("address2_line3", value);
 		}
-		
-		/// <summary>
-		/// Shows who created the record on behalf of another user.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("createdonbehalfby")]
-		public Microsoft.Xrm.Sdk.EntityReference CreatedOnBehalfBy
+	}
+	
+	/// <summary>
+	/// Type the longitude value for the secondary address for use in mapping and other applications.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address2_longitude")]
+	public System.Nullable<double> Address2_Longitude
+	{
+		get
 		{
-			get
-			{
-				return this.GetAttributeValue<Microsoft.Xrm.Sdk.EntityReference>("createdonbehalfby");
-			}
+			return this.GetAttributeValue<System.Nullable<double>>("address2_longitude");
 		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("createdonbehalfbyname")]
-		public string CreatedOnBehalfByName
+		set
 		{
-			get
-			{
-				if (this.FormattedValues.Contains("createdonbehalfby"))
-				{
-					return this.FormattedValues["createdonbehalfby"];
-				}
-				else
-				{
-					return default(string);
-				}
-			}
+			this.SetAttributeValue("address2_longitude", value);
 		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("createdonbehalfbyyominame")]
-		public string CreatedOnBehalfByYomiName
+	}
+	
+	/// <summary>
+	/// Type a descriptive name for the secondary address, such as Corporate Headquarters.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address2_name")]
+	public string Address2_Name
+	{
+		get
 		{
-			get
-			{
-				if (this.FormattedValues.Contains("createdonbehalfby"))
-				{
-					return this.FormattedValues["createdonbehalfby"];
-				}
-				else
-				{
-					return default(string);
-				}
-			}
+			return this.GetAttributeValue<string>("address2_name");
 		}
-		
-		/// <summary>
-		/// Type the credit limit of the account. This is a useful reference when you address invoice and accounting issues with the customer.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("creditlimit")]
-		public Microsoft.Xrm.Sdk.Money CreditLimit
+		set
 		{
-			get
-			{
-				return this.GetAttributeValue<Microsoft.Xrm.Sdk.Money>("creditlimit");
-			}
-			set
-			{
-				this.SetAttributeValue("creditlimit", value);
-			}
+			this.SetAttributeValue("address2_name", value);
 		}
-		
-		/// <summary>
-		/// Shows the credit limit converted to the system's default base currency for reporting purposes.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("creditlimit_base")]
-		public Microsoft.Xrm.Sdk.Money CreditLimit_Base
+	}
+	
+	/// <summary>
+	/// Type the ZIP Code or postal code for the secondary address.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address2_postalcode")]
+	public string Address2_PostalCode
+	{
+		get
 		{
-			get
-			{
-				return this.GetAttributeValue<Microsoft.Xrm.Sdk.Money>("creditlimit_base");
-			}
+			return this.GetAttributeValue<string>("address2_postalcode");
+		}
+		set
+		{
+			this.SetAttributeValue("address2_postalcode", value);
+		}
+	}
+	
+	/// <summary>
+	/// Type the post office box number of the secondary address.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address2_postofficebox")]
+	public string Address2_PostOfficeBox
+	{
+		get
+		{
+			return this.GetAttributeValue<string>("address2_postofficebox");
+		}
+		set
+		{
+			this.SetAttributeValue("address2_postofficebox", value);
+		}
+	}
+	
+	/// <summary>
+	/// Type the name of the main contact at the account's secondary address.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address2_primarycontactname")]
+	public string Address2_PrimaryContactName
+	{
+		get
+		{
+			return this.GetAttributeValue<string>("address2_primarycontactname");
+		}
+		set
+		{
+			this.SetAttributeValue("address2_primarycontactname", value);
+		}
+	}
+	
+	/// <summary>
+	/// Select a shipping method for deliveries sent to this address.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address2_shippingmethodcode")]
+	public virtual account_address2_shippingmethodcode? Address2_ShippingMethodCode
+	{
+		get
+		{
+			return ((account_address2_shippingmethodcode?)(EntityOptionSetEnum.GetEnum(this, "address2_shippingmethodcode")));
+		}
+		set
+		{
+			this.SetAttributeValue("address2_shippingmethodcode", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
 		}
-		
-		/// <summary>
-		/// Select whether the credit for the account is on hold. This is a useful reference while addressing the invoice and accounting issues with the customer.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("creditonhold")]
-		public System.Nullable<bool> CreditOnHold
+	}
+	
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address2_shippingmethodcodename")]
+	public string Address2_ShippingMethodCodeName
+	{
+		get
 		{
-			get
+			if (this.FormattedValues.Contains("address2_shippingmethodcode"))
 			{
-				return this.GetAttributeValue<System.Nullable<bool>>("creditonhold");
+				return this.FormattedValues["address2_shippingmethodcode"];
 			}
-			set
+			else
 			{
-				this.SetAttributeValue("creditonhold", value);
+				return default(string);
 			}
 		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("creditonholdname")]
-		public string CreditOnHoldName
+	}
+	
+	/// <summary>
+	/// Type the state or province of the secondary address.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address2_stateorprovince")]
+	public string Address2_StateOrProvince
+	{
+		get
 		{
-			get
-			{
-				if (this.FormattedValues.Contains("creditonhold"))
-				{
-					return this.FormattedValues["creditonhold"];
-				}
-				else
-				{
-					return default(string);
-				}
-			}
+			return this.GetAttributeValue<string>("address2_stateorprovince");
+		}
+		set
+		{
+			this.SetAttributeValue("address2_stateorprovince", value);
+		}
+	}
+	
+	/// <summary>
+	/// Type the main phone number associated with the secondary address.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address2_telephone1")]
+	public string Address2_Telephone1
+	{
+		get
+		{
+			return this.GetAttributeValue<string>("address2_telephone1");
+		}
+		set
+		{
+			this.SetAttributeValue("address2_telephone1", value);
+		}
+	}
+	
+	/// <summary>
+	/// Type a second phone number associated with the secondary address.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address2_telephone2")]
+	public string Address2_Telephone2
+	{
+		get
+		{
+			return this.GetAttributeValue<string>("address2_telephone2");
+		}
+		set
+		{
+			this.SetAttributeValue("address2_telephone2", value);
 		}
-		
-		/// <summary>
-		/// Select the size category or range of the account for segmentation and reporting purposes.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("customersizecode")]
-		public virtual account_customersizecode? CustomerSizeCode
+	}
+	
+	/// <summary>
+	/// Type a third phone number associated with the secondary address.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address2_telephone3")]
+	public string Address2_Telephone3
+	{
+		get
 		{
-			get
+			return this.GetAttributeValue<string>("address2_telephone3");
+		}
+		set
+		{
+			this.SetAttributeValue("address2_telephone3", value);
+		}
+	}
+	
+	/// <summary>
+	/// Type the UPS zone of the secondary address to make sure shipping charges are calculated correctly and deliveries are made promptly, if shipped by UPS.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address2_upszone")]
+	public string Address2_UPSZone
+	{
+		get
+		{
+			return this.GetAttributeValue<string>("address2_upszone");
+		}
+		set
+		{
+			this.SetAttributeValue("address2_upszone", value);
+		}
+	}
+	
+	/// <summary>
+	/// Select the time zone, or UTC offset, for this address so that other people can reference it when they contact someone at this address.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address2_utcoffset")]
+	public System.Nullable<int> Address2_UTCOffset
+	{
+		get
+		{
+			return this.GetAttributeValue<System.Nullable<int>>("address2_utcoffset");
+		}
+		set
+		{
+			this.SetAttributeValue("address2_utcoffset", value);
+		}
+	}
+	
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("adx_createdbyipaddress")]
+	public string Adx_CreatedByIPAddress
+	{
+		get
+		{
+			return this.GetAttributeValue<string>("adx_createdbyipaddress");
+		}
+		set
+		{
+			this.SetAttributeValue("adx_createdbyipaddress", value);
+		}
+	}
+	
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("adx_createdbyusername")]
+	public string Adx_CreatedByUsername
+	{
+		get
+		{
+			return this.GetAttributeValue<string>("adx_createdbyusername");
+		}
+		set
+		{
+			this.SetAttributeValue("adx_createdbyusername", value);
+		}
+	}
+	
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("adx_modifiedbyipaddress")]
+	public string Adx_ModifiedByIPAddress
+	{
+		get
+		{
+			return this.GetAttributeValue<string>("adx_modifiedbyipaddress");
+		}
+		set
+		{
+			this.SetAttributeValue("adx_modifiedbyipaddress", value);
+		}
+	}
+	
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("adx_modifiedbyusername")]
+	public string Adx_ModifiedByUsername
+	{
+		get
+		{
+			return this.GetAttributeValue<string>("adx_modifiedbyusername");
+		}
+		set
+		{
+			this.SetAttributeValue("adx_modifiedbyusername", value);
+		}
+	}
+	
+	/// <summary>
+	/// For system use only.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("aging30")]
+	public Microsoft.Xrm.Sdk.Money Aging30
+	{
+		get
+		{
+			return this.GetAttributeValue<Microsoft.Xrm.Sdk.Money>("aging30");
+		}
+	}
+	
+	/// <summary>
+	/// The base currency equivalent of the aging 30 field.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("aging30_base")]
+	public Microsoft.Xrm.Sdk.Money Aging30_Base
+	{
+		get
+		{
+			return this.GetAttributeValue<Microsoft.Xrm.Sdk.Money>("aging30_base");
+		}
+	}
+	
+	/// <summary>
+	/// For system use only.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("aging60")]
+	public Microsoft.Xrm.Sdk.Money Aging60
+	{
+		get
+		{
+			return this.GetAttributeValue<Microsoft.Xrm.Sdk.Money>("aging60");
+		}
+	}
+	
+	/// <summary>
+	/// The base currency equivalent of the aging 60 field.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("aging60_base")]
+	public Microsoft.Xrm.Sdk.Money Aging60_Base
+	{
+		get
+		{
+			return this.GetAttributeValue<Microsoft.Xrm.Sdk.Money>("aging60_base");
+		}
+	}
+	
+	/// <summary>
+	/// For system use only.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("aging90")]
+	public Microsoft.Xrm.Sdk.Money Aging90
+	{
+		get
+		{
+			return this.GetAttributeValue<Microsoft.Xrm.Sdk.Money>("aging90");
+		}
+	}
+	
+	/// <summary>
+	/// The base currency equivalent of the aging 90 field.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("aging90_base")]
+	public Microsoft.Xrm.Sdk.Money Aging90_Base
+	{
+		get
+		{
+			return this.GetAttributeValue<Microsoft.Xrm.Sdk.Money>("aging90_base");
+		}
+	}
+	
+	/// <summary>
+	/// Select the legal designation or other business type of the account for contracts or reporting purposes.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("businesstypecode")]
+	public virtual account_businesstypecode? BusinessTypeCode
+	{
+		get
+		{
+			return ((account_businesstypecode?)(EntityOptionSetEnum.GetEnum(this, "businesstypecode")));
+		}
+		set
+		{
+			this.SetAttributeValue("businesstypecode", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
+		}
+	}
+	
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("businesstypecodename")]
+	public string BusinessTypeCodeName
+	{
+		get
+		{
+			if (this.FormattedValues.Contains("businesstypecode"))
 			{
-				return ((account_customersizecode?)(EntityOptionSetEnum.GetEnum(this, "customersizecode")));
+				return this.FormattedValues["businesstypecode"];
 			}
-			set
+			else
 			{
-				this.SetAttributeValue("customersizecode", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
+				return default(string);
 			}
 		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("customersizecodename")]
-		public string CustomerSizeCodeName
+	}
+	
+	/// <summary>
+	/// Shows who created the record.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("createdby")]
+	public Microsoft.Xrm.Sdk.EntityReference CreatedBy
+	{
+		get
 		{
-			get
-			{
-				if (this.FormattedValues.Contains("customersizecode"))
-				{
-					return this.FormattedValues["customersizecode"];
-				}
-				else
-				{
-					return default(string);
-				}
-			}
+			return this.GetAttributeValue<Microsoft.Xrm.Sdk.EntityReference>("createdby");
+		}
+	}
+	
+	/// <summary>
+	/// Shows the external party who created the record.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("createdbyexternalparty")]
+	public Microsoft.Xrm.Sdk.EntityReference CreatedByExternalParty
+	{
+		get
+		{
+			return this.GetAttributeValue<Microsoft.Xrm.Sdk.EntityReference>("createdbyexternalparty");
 		}
-		
-		/// <summary>
-		/// Select the category that best describes the relationship between the account and your organization.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("customertypecode")]
-		public virtual account_customertypecode? CustomerTypeCode
+	}
+	
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("createdbyexternalpartyname")]
+	public string CreatedByExternalPartyName
+	{
+		get
 		{
-			get
+			if (this.FormattedValues.Contains("createdbyexternalparty"))
 			{
-				return ((account_customertypecode?)(EntityOptionSetEnum.GetEnum(this, "customertypecode")));
+				return this.FormattedValues["createdbyexternalparty"];
 			}
-			set
+			else
 			{
-				this.SetAttributeValue("customertypecode", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
+				return default(string);
 			}
 		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("customertypecodename")]
-		public string CustomerTypeCodeName
+	}
+	
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("createdbyexternalpartyyominame")]
+	public string CreatedByExternalPartyYomiName
+	{
+		get
 		{
-			get
+			if (this.FormattedValues.Contains("createdbyexternalparty"))
+			{
+				return this.FormattedValues["createdbyexternalparty"];
+			}
+			else
 			{
-				if (this.FormattedValues.Contains("customertypecode"))
-				{
-					return this.FormattedValues["customertypecode"];
-				}
-				else
-				{
-					return default(string);
-				}
+				return default(string);
 			}
 		}
-		
-		/// <summary>
-		/// Type additional information to describe the account, such as an excerpt from the company's website.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("description")]
-		public string Description
+	}
+	
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("createdbyname")]
+	public string CreatedByName
+	{
+		get
 		{
-			get
+			if (this.FormattedValues.Contains("createdby"))
 			{
-				return this.GetAttributeValue<string>("description");
+				return this.FormattedValues["createdby"];
 			}
-			set
+			else
 			{
-				this.SetAttributeValue("description", value);
+				return default(string);
 			}
 		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("devkit_bigint")]
-		public System.Nullable<long> devkit_BigInt
+	}
+	
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("createdbyyominame")]
+	public string CreatedByYomiName
+	{
+		get
 		{
-			get
+			if (this.FormattedValues.Contains("createdby"))
 			{
-				return this.GetAttributeValue<System.Nullable<long>>("devkit_bigint");
+				return this.FormattedValues["createdby"];
 			}
-			set
+			else
 			{
-				this.SetAttributeValue("devkit_bigint", value);
+				return default(string);
 			}
+		}
+	}
+	
+	/// <summary>
+	/// Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("createdon")]
+	public System.Nullable<System.DateTime> CreatedOn
+	{
+		get
+		{
+			return this.GetAttributeValue<System.Nullable<System.DateTime>>("createdon");
+		}
+	}
+	
+	/// <summary>
+	/// Shows who created the record on behalf of another user.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("createdonbehalfby")]
+	public Microsoft.Xrm.Sdk.EntityReference CreatedOnBehalfBy
+	{
+		get
+		{
+			return this.GetAttributeValue<Microsoft.Xrm.Sdk.EntityReference>("createdonbehalfby");
 		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("devkit_categorycode")]
-		public virtual System.Collections.Generic.IEnumerable<connectionrole_category> devkit_CategoryCode
+	}
+	
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("createdonbehalfbyname")]
+	public string CreatedOnBehalfByName
+	{
+		get
 		{
-			get
+			if (this.FormattedValues.Contains("createdonbehalfby"))
 			{
-				return EntityOptionSetEnum.GetMultiEnum<connectionrole_category>(this, "devkit_categorycode");
+				return this.FormattedValues["createdonbehalfby"];
 			}
-			set
+			else
 			{
-				this.SetAttributeValue("devkit_categorycode", EntityOptionSetEnum.GetMultiEnum(this, "devkit_categorycode", value));
+				return default(string);
 			}
 		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("devkit_categorycodename")]
-		public string devkit_categorycodeName
+	}
+	
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("createdonbehalfbyyominame")]
+	public string CreatedOnBehalfByYomiName
+	{
+		get
 		{
-			get
+			if (this.FormattedValues.Contains("createdonbehalfby"))
+			{
+				return this.FormattedValues["createdonbehalfby"];
+			}
+			else
 			{
-				if (this.FormattedValues.Contains("devkit_categorycode"))
-				{
-					return this.FormattedValues["devkit_categorycode"];
-				}
-				else
-				{
-					return default(string);
-				}
+				return default(string);
 			}
+		}
+	}
+	
+	/// <summary>
+	/// Type the credit limit of the account. This is a useful reference when you address invoice and accounting issues with the customer.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("creditlimit")]
+	public Microsoft.Xrm.Sdk.Money CreditLimit
+	{
+		get
+		{
+			return this.GetAttributeValue<Microsoft.Xrm.Sdk.Money>("creditlimit");
+		}
+		set
+		{
+			this.SetAttributeValue("creditlimit", value);
+		}
+	}
+	
+	/// <summary>
+	/// Shows the credit limit converted to the system's default base currency for reporting purposes.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("creditlimit_base")]
+	public Microsoft.Xrm.Sdk.Money CreditLimit_Base
+	{
+		get
+		{
+			return this.GetAttributeValue<Microsoft.Xrm.Sdk.Money>("creditlimit_base");
+		}
+	}
+	
+	/// <summary>
+	/// Select whether the credit for the account is on hold. This is a useful reference while addressing the invoice and accounting issues with the customer.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("creditonhold")]
+	public System.Nullable<bool> CreditOnHold
+	{
+		get
+		{
+			return this.GetAttributeValue<System.Nullable<bool>>("creditonhold");
+		}
+		set
+		{
+			this.SetAttributeValue("creditonhold", value);
 		}
-		
-		/// <summary>
-		/// Select whether the account allows bulk email sent through campaigns. If Do Not Allow is selected, the account can be added to marketing lists, but is excluded from email.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("donotbulkemail")]
-		public System.Nullable<bool> DoNotBulkEMail
+	}
+	
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("creditonholdname")]
+	public string CreditOnHoldName
+	{
+		get
 		{
-			get
+			if (this.FormattedValues.Contains("creditonhold"))
 			{
-				return this.GetAttributeValue<System.Nullable<bool>>("donotbulkemail");
+				return this.FormattedValues["creditonhold"];
 			}
-			set
+			else
 			{
-				this.SetAttributeValue("donotbulkemail", value);
+				return default(string);
 			}
 		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("donotbulkemailname")]
-		public string DoNotBulkEMailName
+	}
+	
+	/// <summary>
+	/// Select the size category or range of the account for segmentation and reporting purposes.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("customersizecode")]
+	public virtual account_customersizecode? CustomerSizeCode
+	{
+		get
 		{
-			get
-			{
-				if (this.FormattedValues.Contains("donotbulkemail"))
-				{
-					return this.FormattedValues["donotbulkemail"];
-				}
-				else
-				{
-					return default(string);
-				}
-			}
+			return ((account_customersizecode?)(EntityOptionSetEnum.GetEnum(this, "customersizecode")));
+		}
+		set
+		{
+			this.SetAttributeValue("customersizecode", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
 		}
-		
-		/// <summary>
-		/// Select whether the account allows bulk postal mail sent through marketing campaigns or quick campaigns. If Do Not Allow is selected, the account can be added to marketing lists, but will be excluded from the postal mail.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("donotbulkpostalmail")]
-		public System.Nullable<bool> DoNotBulkPostalMail
+	}
+	
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("customersizecodename")]
+	public string CustomerSizeCodeName
+	{
+		get
 		{
-			get
+			if (this.FormattedValues.Contains("customersizecode"))
 			{
-				return this.GetAttributeValue<System.Nullable<bool>>("donotbulkpostalmail");
+				return this.FormattedValues["customersizecode"];
 			}
-			set
+			else
 			{
-				this.SetAttributeValue("donotbulkpostalmail", value);
+				return default(string);
 			}
 		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("donotbulkpostalmailname")]
-		public string DoNotBulkPostalMailName
+	}
+	
+	/// <summary>
+	/// Select the category that best describes the relationship between the account and your organization.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("customertypecode")]
+	public virtual account_customertypecode? CustomerTypeCode
+	{
+		get
 		{
-			get
-			{
-				if (this.FormattedValues.Contains("donotbulkpostalmail"))
-				{
-					return this.FormattedValues["donotbulkpostalmail"];
-				}
-				else
-				{
-					return default(string);
-				}
-			}
+			return ((account_customertypecode?)(EntityOptionSetEnum.GetEnum(this, "customertypecode")));
+		}
+		set
+		{
+			this.SetAttributeValue("customertypecode", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
 		}
-		
-		/// <summary>
-		/// Select whether the account allows direct email sent from Microsoft Dynamics 365.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("donotemail")]
-		public System.Nullable<bool> DoNotEMail
+	}
+	
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("customertypecodename")]
+	public string CustomerTypeCodeName
+	{
+		get
 		{
-			get
+			if (this.FormattedValues.Contains("customertypecode"))
 			{
-				return this.GetAttributeValue<System.Nullable<bool>>("donotemail");
+				return this.FormattedValues["customertypecode"];
 			}
-			set
+			else
 			{
-				this.SetAttributeValue("donotemail", value);
+				return default(string);
 			}
 		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("donotemailname")]
-		public string DoNotEMailName
+	}
+	
+	/// <summary>
+	/// Type additional information to describe the account, such as an excerpt from the company's website.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("description")]
+	public string Description
+	{
+		get
 		{
-			get
-			{
-				if (this.FormattedValues.Contains("donotemail"))
-				{
-					return this.FormattedValues["donotemail"];
-				}
-				else
-				{
-					return default(string);
-				}
-			}
+			return this.GetAttributeValue<string>("description");
+		}
+		set
+		{
+			this.SetAttributeValue("description", value);
+		}
+	}
+	
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("devkit_bigint")]
+	public System.Nullable<long> devkit_BigInt
+	{
+		get
+		{
+			return this.GetAttributeValue<System.Nullable<long>>("devkit_bigint");
 		}
-		
-		/// <summary>
-		/// Select whether the account allows faxes. If Do Not Allow is selected, the account will be excluded from fax activities distributed in marketing campaigns.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("donotfax")]
-		public System.Nullable<bool> DoNotFax
+		set
 		{
-			get
+			this.SetAttributeValue("devkit_bigint", value);
+		}
+	}
+	
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("devkit_categorycode")]
+	public virtual System.Collections.Generic.IEnumerable<connectionrole_category> devkit_CategoryCode
+	{
+		get
+		{
+			return EntityOptionSetEnum.GetMultiEnum<connectionrole_category>(this, "devkit_categorycode");
+		}
+		set
+		{
+			this.SetAttributeValue("devkit_categorycode", EntityOptionSetEnum.GetMultiEnum(this, "devkit_categorycode", value));
+		}
+	}
+	
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("devkit_categorycodename")]
+	public string devkit_categorycodeName
+	{
+		get
+		{
+			if (this.FormattedValues.Contains("devkit_categorycode"))
 			{
-				return this.GetAttributeValue<System.Nullable<bool>>("donotfax");
+				return this.FormattedValues["devkit_categorycode"];
 			}
-			set
+			else
 			{
-				this.SetAttributeValue("donotfax", value);
+				return default(string);
 			}
 		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("donotfaxname")]
-		public string DoNotFaxName
+	}
+	
+	/// <summary>
+	/// Select whether the account allows bulk email sent through campaigns. If Do Not Allow is selected, the account can be added to marketing lists, but is excluded from email.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("donotbulkemail")]
+	public System.Nullable<bool> DoNotBulkEMail
+	{
+		get
 		{
-			get
-			{
-				if (this.FormattedValues.Contains("donotfax"))
-				{
-					return this.FormattedValues["donotfax"];
-				}
-				else
-				{
-					return default(string);
-				}
-			}
+			return this.GetAttributeValue<System.Nullable<bool>>("donotbulkemail");
 		}
-		
-		/// <summary>
-		/// Select whether the account allows phone calls. If Do Not Allow is selected, the account will be excluded from phone call activities distributed in marketing campaigns.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("donotphone")]
-		public System.Nullable<bool> DoNotPhone
+		set
 		{
-			get
+			this.SetAttributeValue("donotbulkemail", value);
+		}
+	}
+	
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("donotbulkemailname")]
+	public string DoNotBulkEMailName
+	{
+		get
+		{
+			if (this.FormattedValues.Contains("donotbulkemail"))
 			{
-				return this.GetAttributeValue<System.Nullable<bool>>("donotphone");
+				return this.FormattedValues["donotbulkemail"];
 			}
-			set
+			else
 			{
-				this.SetAttributeValue("donotphone", value);
+				return default(string);
 			}
 		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("donotphonename")]
-		public string DoNotPhoneName
+	}
+	
+	/// <summary>
+	/// Select whether the account allows bulk postal mail sent through marketing campaigns or quick campaigns. If Do Not Allow is selected, the account can be added to marketing lists, but will be excluded from the postal mail.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("donotbulkpostalmail")]
+	public System.Nullable<bool> DoNotBulkPostalMail
+	{
+		get
 		{
-			get
-			{
-				if (this.FormattedValues.Contains("donotphone"))
-				{
-					return this.FormattedValues["donotphone"];
-				}
-				else
-				{
-					return default(string);
-				}
-			}
+			return this.GetAttributeValue<System.Nullable<bool>>("donotbulkpostalmail");
+		}
+		set
+		{
+			this.SetAttributeValue("donotbulkpostalmail", value);
 		}
-		
-		/// <summary>
-		/// Select whether the account allows direct mail. If Do Not Allow is selected, the account will be excluded from letter activities distributed in marketing campaigns.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("donotpostalmail")]
-		public System.Nullable<bool> DoNotPostalMail
+	}
+	
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("donotbulkpostalmailname")]
+	public string DoNotBulkPostalMailName
+	{
+		get
 		{
-			get
+			if (this.FormattedValues.Contains("donotbulkpostalmail"))
 			{
-				return this.GetAttributeValue<System.Nullable<bool>>("donotpostalmail");
+				return this.FormattedValues["donotbulkpostalmail"];
 			}
-			set
+			else
 			{
-				this.SetAttributeValue("donotpostalmail", value);
+				return default(string);
 			}
 		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("donotpostalmailname")]
-		public string DoNotPostalMailName
+	}
+	
+	/// <summary>
+	/// Select whether the account allows direct email sent from Microsoft Dynamics 365.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("donotemail")]
+	public System.Nullable<bool> DoNotEMail
+	{
+		get
 		{
-			get
-			{
-				if (this.FormattedValues.Contains("donotpostalmail"))
-				{
-					return this.FormattedValues["donotpostalmail"];
-				}
-				else
-				{
-					return default(string);
-				}
-			}
+			return this.GetAttributeValue<System.Nullable<bool>>("donotemail");
 		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("donotsendmarketingmaterialname")]
-		public string DoNotSendMarketingMaterialName
+		set
 		{
-			get
-			{
-				if (this.FormattedValues.Contains("donotsendmm"))
-				{
-					return this.FormattedValues["donotsendmm"];
-				}
-				else
-				{
-					return default(string);
-				}
-			}
+			this.SetAttributeValue("donotemail", value);
 		}
-		
-		/// <summary>
-		/// Select whether the account accepts marketing materials, such as brochures or catalogs.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("donotsendmm")]
-		public System.Nullable<bool> DoNotSendMM
+	}
+	
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("donotemailname")]
+	public string DoNotEMailName
+	{
+		get
 		{
-			get
+			if (this.FormattedValues.Contains("donotemail"))
 			{
-				return this.GetAttributeValue<System.Nullable<bool>>("donotsendmm");
+				return this.FormattedValues["donotemail"];
 			}
-			set
+			else
 			{
-				this.SetAttributeValue("donotsendmm", value);
+				return default(string);
 			}
+		}
+	}
+	
+	/// <summary>
+	/// Select whether the account allows faxes. If Do Not Allow is selected, the account will be excluded from fax activities distributed in marketing campaigns.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("donotfax")]
+	public System.Nullable<bool> DoNotFax
+	{
+		get
+		{
+			return this.GetAttributeValue<System.Nullable<bool>>("donotfax");
+		}
+		set
+		{
+			this.SetAttributeValue("donotfax", value);
 		}
-		
-		/// <summary>
-		/// Type the primary email address for the account.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("emailaddress1")]
-		public string EMailAddress1
+	}
+	
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("donotfaxname")]
+	public string DoNotFaxName
+	{
+		get
 		{
-			get
+			if (this.FormattedValues.Contains("donotfax"))
 			{
-				return this.GetAttributeValue<string>("emailaddress1");
+				return this.FormattedValues["donotfax"];
 			}
-			set
+			else
 			{
-				this.SetAttributeValue("emailaddress1", value);
+				return default(string);
 			}
+		}
+	}
+	
+	/// <summary>
+	/// Select whether the account allows phone calls. If Do Not Allow is selected, the account will be excluded from phone call activities distributed in marketing campaigns.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("donotphone")]
+	public System.Nullable<bool> DoNotPhone
+	{
+		get
+		{
+			return this.GetAttributeValue<System.Nullable<bool>>("donotphone");
+		}
+		set
+		{
+			this.SetAttributeValue("donotphone", value);
 		}
-		
-		/// <summary>
-		/// Type the secondary email address for the account.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("emailaddress2")]
-		public string EMailAddress2
+	}
+	
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("donotphonename")]
+	public string DoNotPhoneName
+	{
+		get
 		{
-			get
+			if (this.FormattedValues.Contains("donotphone"))
 			{
-				return this.GetAttributeValue<string>("emailaddress2");
+				return this.FormattedValues["donotphone"];
 			}
-			set
+			else
 			{
-				this.SetAttributeValue("emailaddress2", value);
+				return default(string);
 			}
+		}
+	}
+	
+	/// <summary>
+	/// Select whether the account allows direct mail. If Do Not Allow is selected, the account will be excluded from letter activities distributed in marketing campaigns.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("donotpostalmail")]
+	public System.Nullable<bool> DoNotPostalMail
+	{
+		get
+		{
+			return this.GetAttributeValue<System.Nullable<bool>>("donotpostalmail");
+		}
+		set
+		{
+			this.SetAttributeValue("donotpostalmail", value);
 		}
-		
-		/// <summary>
-		/// Type an alternate email address for the account.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("emailaddress3")]
-		public string EMailAddress3
+	}
+	
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("donotpostalmailname")]
+	public string DoNotPostalMailName
+	{
+		get
 		{
-			get
+			if (this.FormattedValues.Contains("donotpostalmail"))
 			{
-				return this.GetAttributeValue<string>("emailaddress3");
+				return this.FormattedValues["donotpostalmail"];
 			}
-			set
+			else
 			{
-				this.SetAttributeValue("emailaddress3", value);
+				return default(string);
 			}
 		}
-		
-		/// <summary>
-		/// Shows the default image for the record.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("entityimage")]
-		public byte[] EntityImage
+	}
+	
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("donotsendmarketingmaterialname")]
+	public string DoNotSendMarketingMaterialName
+	{
+		get
 		{
-			get
+			if (this.FormattedValues.Contains("donotsendmm"))
 			{
-				return this.GetAttributeValue<byte[]>("entityimage");
+				return this.FormattedValues["donotsendmm"];
 			}
-			set
+			else
 			{
-				this.SetAttributeValue("entityimage", value);
+				return default(string);
 			}
 		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("entityimage_timestamp")]
-		public System.Nullable<long> EntityImage_Timestamp
+	}
+	
+	/// <summary>
+	/// Select whether the account accepts marketing materials, such as brochures or catalogs.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("donotsendmm")]
+	public System.Nullable<bool> DoNotSendMM
+	{
+		get
 		{
-			get
-			{
-				return this.GetAttributeValue<System.Nullable<long>>("entityimage_timestamp");
-			}
+			return this.GetAttributeValue<System.Nullable<bool>>("donotsendmm");
 		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("entityimage_url")]
-		public string EntityImage_URL
+		set
 		{
-			get
-			{
-				return this.GetAttributeValue<string>("entityimage_url");
-			}
+			this.SetAttributeValue("donotsendmm", value);
 		}
-		
-		/// <summary>
-		/// For internal use only.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("entityimageid")]
-		public System.Nullable<System.Guid> EntityImageId
+	}
+	
+	/// <summary>
+	/// Type the primary email address for the account.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("emailaddress1")]
+	public string EMailAddress1
+	{
+		get
 		{
-			get
-			{
-				return this.GetAttributeValue<System.Nullable<System.Guid>>("entityimageid");
-			}
+			return this.GetAttributeValue<string>("emailaddress1");
 		}
-		
-		/// <summary>
-		/// Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("exchangerate")]
-		public System.Nullable<decimal> ExchangeRate
+		set
 		{
-			get
-			{
-				return this.GetAttributeValue<System.Nullable<decimal>>("exchangerate");
-			}
+			this.SetAttributeValue("emailaddress1", value);
 		}
-		
-		/// <summary>
-		/// Type the fax number for the account.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("fax")]
-		public string Fax
+	}
+	
+	/// <summary>
+	/// Type the secondary email address for the account.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("emailaddress2")]
+	public string EMailAddress2
+	{
+		get
 		{
-			get
-			{
-				return this.GetAttributeValue<string>("fax");
-			}
-			set
-			{
-				this.SetAttributeValue("fax", value);
-			}
+			return this.GetAttributeValue<string>("emailaddress2");
 		}
-		
-		/// <summary>
-		/// Information about whether to allow following email activity like opens, attachment views and link clicks for emails sent to the account.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("followemail")]
-		public System.Nullable<bool> FollowEmail
+		set
 		{
-			get
-			{
-				return this.GetAttributeValue<System.Nullable<bool>>("followemail");
-			}
-			set
-			{
-				this.SetAttributeValue("followemail", value);
-			}
+			this.SetAttributeValue("emailaddress2", value);
 		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("followemailname")]
-		public string FollowEmailName
+	}
+	
+	/// <summary>
+	/// Type an alternate email address for the account.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("emailaddress3")]
+	public string EMailAddress3
+	{
+		get
 		{
-			get
-			{
-				if (this.FormattedValues.Contains("followemail"))
-				{
-					return this.FormattedValues["followemail"];
-				}
-				else
-				{
-					return default(string);
-				}
-			}
+			return this.GetAttributeValue<string>("emailaddress3");
+		}
+		set
+		{
+			this.SetAttributeValue("emailaddress3", value);
+		}
+	}
+	
+	/// <summary>
+	/// Shows the default image for the record.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("entityimage")]
+	public byte[] EntityImage
+	{
+		get
+		{
+			return this.GetAttributeValue<byte[]>("entityimage");
+		}
+		set
+		{
+			this.SetAttributeValue("entityimage", value);
+		}
+	}
+	
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("entityimage_timestamp")]
+	public System.Nullable<long> EntityImage_Timestamp
+	{
+		get
+		{
+			return this.GetAttributeValue<System.Nullable<long>>("entityimage_timestamp");
+		}
+	}
+	
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("entityimage_url")]
+	public string EntityImage_URL
+	{
+		get
+		{
+			return this.GetAttributeValue<string>("entityimage_url");
+		}
+	}
+	
+	/// <summary>
+	/// For internal use only.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("entityimageid")]
+	public System.Nullable<System.Guid> EntityImageId
+	{
+		get
+		{
+			return this.GetAttributeValue<System.Nullable<System.Guid>>("entityimageid");
+		}
+	}
+	
+	/// <summary>
+	/// Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("exchangerate")]
+	public System.Nullable<decimal> ExchangeRate
+	{
+		get
+		{
+			return this.GetAttributeValue<System.Nullable<decimal>>("exchangerate");
+		}
+	}
+	
+	/// <summary>
+	/// Type the fax number for the account.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("fax")]
+	public string Fax
+	{
+		get
+		{
+			return this.GetAttributeValue<string>("fax");
+		}
+		set
+		{
+			this.SetAttributeValue("fax", value);
+		}
+	}
+	
+	/// <summary>
+	/// Information about whether to allow following email activity like opens, attachment views and link clicks for emails sent to the account.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("followemail")]
+	public System.Nullable<bool> FollowEmail
+	{
+		get
+		{
+			return this.GetAttributeValue<System.Nullable<bool>>("followemail");
+		}
+		set
+		{
+			this.SetAttributeValue("followemail", value);
 		}
-		
-		/// <summary>
-		/// Type the URL for the account's FTP site to enable users to access data and share documents.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ftpsiteurl")]
-		public string FtpSiteURL
+	}
+	
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("followemailname")]
+	public string FollowEmailName
+	{
+		get
 		{
-			get
+			if (this.FormattedValues.Contains("followemail"))
 			{
-				return this.GetAttributeValue<string>("ftpsiteurl");
+				return this.FormattedValues["followemail"];
 			}
-			set
+			else
 			{
-				this.SetAttributeValue("ftpsiteurl", value);
+				return default(string);
 			}
+		}
+	}
+	
+	/// <summary>
+	/// Type the URL for the account's FTP site to enable users to access data and share documents.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ftpsiteurl")]
+	public string FtpSiteURL
+	{
+		get
+		{
+			return this.GetAttributeValue<string>("ftpsiteurl");
+		}
+		set
+		{
+			this.SetAttributeValue("ftpsiteurl", value);
+		}
+	}
+	
+	/// <summary>
+	/// Unique identifier of the data import or data migration that created this record.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("importsequencenumber")]
+	public System.Nullable<int> ImportSequenceNumber
+	{
+		get
+		{
+			return this.GetAttributeValue<System.Nullable<int>>("importsequencenumber");
+		}
+		set
+		{
+			this.SetAttributeValue("importsequencenumber", value);
+		}
+	}
+	
+	/// <summary>
+	/// Select the account's primary industry for use in marketing segmentation and demographic analysis.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("industrycode")]
+	public virtual account_industrycode? IndustryCode
+	{
+		get
+		{
+			return ((account_industrycode?)(EntityOptionSetEnum.GetEnum(this, "industrycode")));
+		}
+		set
+		{
+			this.SetAttributeValue("industrycode", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
 		}
-		
-		/// <summary>
-		/// Unique identifier of the data import or data migration that created this record.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("importsequencenumber")]
-		public System.Nullable<int> ImportSequenceNumber
+	}
+	
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("industrycodename")]
+	public string IndustryCodeName
+	{
+		get
 		{
-			get
+			if (this.FormattedValues.Contains("industrycode"))
 			{
-				return this.GetAttributeValue<System.Nullable<int>>("importsequencenumber");
+				return this.FormattedValues["industrycode"];
 			}
-			set
+			else
 			{
-				this.SetAttributeValue("importsequencenumber", value);
+				return default(string);
 			}
 		}
-		
-		/// <summary>
-		/// Select the account's primary industry for use in marketing segmentation and demographic analysis.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("industrycode")]
-		public virtual account_industrycode? IndustryCode
+	}
+	
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("isprivatename")]
+	public string IsPrivateName
+	{
+		get
 		{
-			get
+			if (this.FormattedValues.Contains("isprivate"))
 			{
-				return ((account_industrycode?)(EntityOptionSetEnum.GetEnum(this, "industrycode")));
+				return this.FormattedValues["isprivate"];
 			}
-			set
+			else
 			{
-				this.SetAttributeValue("industrycode", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
+				return default(string);
 			}
 		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("industrycodename")]
-		public string IndustryCodeName
+	}
+	
+	/// <summary>
+	/// Contains the date and time stamp of the last on hold time.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("lastonholdtime")]
+	public System.Nullable<System.DateTime> LastOnHoldTime
+	{
+		get
 		{
-			get
-			{
-				if (this.FormattedValues.Contains("industrycode"))
-				{
-					return this.FormattedValues["industrycode"];
-				}
-				else
-				{
-					return default(string);
-				}
-			}
+			return this.GetAttributeValue<System.Nullable<System.DateTime>>("lastonholdtime");
+		}
+		set
+		{
+			this.SetAttributeValue("lastonholdtime", value);
+		}
+	}
+	
+	/// <summary>
+	/// Shows the date when the account was last included in a marketing campaign or quick campaign.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("lastusedincampaign")]
+	public System.Nullable<System.DateTime> LastUsedInCampaign
+	{
+		get
+		{
+			return this.GetAttributeValue<System.Nullable<System.DateTime>>("lastusedincampaign");
+		}
+		set
+		{
+			this.SetAttributeValue("lastusedincampaign", value);
+		}
+	}
+	
+	/// <summary>
+	/// Type the market capitalization of the account to identify the company's equity, used as an indicator in financial performance analysis.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("marketcap")]
+	public Microsoft.Xrm.Sdk.Money MarketCap
+	{
+		get
+		{
+			return this.GetAttributeValue<Microsoft.Xrm.Sdk.Money>("marketcap");
+		}
+		set
+		{
+			this.SetAttributeValue("marketcap", value);
+		}
+	}
+	
+	/// <summary>
+	/// Shows the market capitalization converted to the system's default base currency.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("marketcap_base")]
+	public Microsoft.Xrm.Sdk.Money MarketCap_Base
+	{
+		get
+		{
+			return this.GetAttributeValue<Microsoft.Xrm.Sdk.Money>("marketcap_base");
+		}
+	}
+	
+	/// <summary>
+	/// Whether is only for marketing
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("marketingonly")]
+	public System.Nullable<bool> MarketingOnly
+	{
+		get
+		{
+			return this.GetAttributeValue<System.Nullable<bool>>("marketingonly");
 		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("isprivatename")]
-		public string IsPrivateName
+		set
 		{
-			get
-			{
-				if (this.FormattedValues.Contains("isprivate"))
-				{
-					return this.FormattedValues["isprivate"];
-				}
-				else
-				{
-					return default(string);
-				}
-			}
+			this.SetAttributeValue("marketingonly", value);
 		}
-		
-		/// <summary>
-		/// Contains the date and time stamp of the last on hold time.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("lastonholdtime")]
-		public System.Nullable<System.DateTime> LastOnHoldTime
+	}
+	
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("marketingonlyname")]
+	public string MarketingOnlyName
+	{
+		get
 		{
-			get
+			if (this.FormattedValues.Contains("marketingonly"))
 			{
-				return this.GetAttributeValue<System.Nullable<System.DateTime>>("lastonholdtime");
+				return this.FormattedValues["marketingonly"];
 			}
-			set
+			else
 			{
-				this.SetAttributeValue("lastonholdtime", value);
+				return default(string);
 			}
 		}
-		
-		/// <summary>
-		/// Shows the date when the account was last included in a marketing campaign or quick campaign.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("lastusedincampaign")]
-		public System.Nullable<System.DateTime> LastUsedInCampaign
+	}
+	
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("masteraccountidname")]
+	public string MasterAccountIdName
+	{
+		get
 		{
-			get
+			if (this.FormattedValues.Contains("masterid"))
 			{
-				return this.GetAttributeValue<System.Nullable<System.DateTime>>("lastusedincampaign");
+				return this.FormattedValues["masterid"];
 			}
-			set
+			else
 			{
-				this.SetAttributeValue("lastusedincampaign", value);
+				return default(string);
 			}
 		}
-		
-		/// <summary>
-		/// Type the market capitalization of the account to identify the company's equity, used as an indicator in financial performance analysis.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("marketcap")]
-		public Microsoft.Xrm.Sdk.Money MarketCap
+	}
+	
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("masteraccountidyominame")]
+	public string MasterAccountIdYomiName
+	{
+		get
 		{
-			get
+			if (this.FormattedValues.Contains("masterid"))
 			{
-				return this.GetAttributeValue<Microsoft.Xrm.Sdk.Money>("marketcap");
+				return this.FormattedValues["masterid"];
 			}
-			set
+			else
 			{
-				this.SetAttributeValue("marketcap", value);
+				return default(string);
 			}
 		}
-		
-		/// <summary>
-		/// Shows the market capitalization converted to the system's default base currency.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("marketcap_base")]
-		public Microsoft.Xrm.Sdk.Money MarketCap_Base
+	}
+	
+	/// <summary>
+	/// Shows the master account that the account was merged with.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("masterid")]
+	public Microsoft.Xrm.Sdk.EntityReference MasterId
+	{
+		get
 		{
-			get
-			{
-				return this.GetAttributeValue<Microsoft.Xrm.Sdk.Money>("marketcap_base");
-			}
+			return this.GetAttributeValue<Microsoft.Xrm.Sdk.EntityReference>("masterid");
 		}
-		
-		/// <summary>
-		/// Whether is only for marketing
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("marketingonly")]
-		public System.Nullable<bool> MarketingOnly
+	}
+	
+	/// <summary>
+	/// Shows whether the account has been merged with another account.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("merged")]
+	public System.Nullable<bool> Merged
+	{
+		get
 		{
-			get
-			{
-				return this.GetAttributeValue<System.Nullable<bool>>("marketingonly");
-			}
-			set
-			{
-				this.SetAttributeValue("marketingonly", value);
-			}
+			return this.GetAttributeValue<System.Nullable<bool>>("merged");
 		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("marketingonlyname")]
-		public string MarketingOnlyName
+	}
+	
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("mergedname")]
+	public string MergedName
+	{
+		get
 		{
-			get
+			if (this.FormattedValues.Contains("merged"))
 			{
-				if (this.FormattedValues.Contains("marketingonly"))
-				{
-					return this.FormattedValues["marketingonly"];
-				}
-				else
-				{
-					return default(string);
-				}
+				return this.FormattedValues["merged"];
 			}
-		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("masteraccountidname")]
-		public string MasterAccountIdName
-		{
-			get
+			else
 			{
-				if (this.FormattedValues.Contains("masterid"))
-				{
-					return this.FormattedValues["masterid"];
-				}
-				else
-				{
-					return default(string);
-				}
+				return default(string);
 			}
 		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("masteraccountidyominame")]
-		public string MasterAccountIdYomiName
+	}
+	
+	/// <summary>
+	/// Shows who last updated the record.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("modifiedby")]
+	public Microsoft.Xrm.Sdk.EntityReference ModifiedBy
+	{
+		get
 		{
-			get
-			{
-				if (this.FormattedValues.Contains("masterid"))
-				{
-					return this.FormattedValues["masterid"];
-				}
-				else
-				{
-					return default(string);
-				}
-			}
+			return this.GetAttributeValue<Microsoft.Xrm.Sdk.EntityReference>("modifiedby");
 		}
-		
-		/// <summary>
-		/// Shows the master account that the account was merged with.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("masterid")]
-		public Microsoft.Xrm.Sdk.EntityReference MasterId
+	}
+	
+	/// <summary>
+	/// Shows the external party who modified the record.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("modifiedbyexternalparty")]
+	public Microsoft.Xrm.Sdk.EntityReference ModifiedByExternalParty
+	{
+		get
 		{
-			get
-			{
-				return this.GetAttributeValue<Microsoft.Xrm.Sdk.EntityReference>("masterid");
-			}
+			return this.GetAttributeValue<Microsoft.Xrm.Sdk.EntityReference>("modifiedbyexternalparty");
 		}
-		
-		/// <summary>
-		/// Shows whether the account has been merged with another account.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("merged")]
-		public System.Nullable<bool> Merged
+	}
+	
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("modifiedbyexternalpartyname")]
+	public string ModifiedByExternalPartyName
+	{
+		get
 		{
-			get
+			if (this.FormattedValues.Contains("modifiedbyexternalparty"))
 			{
-				return this.GetAttributeValue<System.Nullable<bool>>("merged");
+				return this.FormattedValues["modifiedbyexternalparty"];
 			}
-		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("mergedname")]
-		public string MergedName
-		{
-			get
+			else
 			{
-				if (this.FormattedValues.Contains("merged"))
-				{
-					return this.FormattedValues["merged"];
-				}
-				else
-				{
-					return default(string);
-				}
+				return default(string);
 			}
 		}
-		
-		/// <summary>
-		/// Shows who last updated the record.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("modifiedby")]
-		public Microsoft.Xrm.Sdk.EntityReference ModifiedBy
+	}
+	
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("modifiedbyexternalpartyyominame")]
+	public string ModifiedByExternalPartyYomiName
+	{
+		get
 		{
-			get
+			if (this.FormattedValues.Contains("modifiedbyexternalparty"))
 			{
-				return this.GetAttributeValue<Microsoft.Xrm.Sdk.EntityReference>("modifiedby");
+				return this.FormattedValues["modifiedbyexternalparty"];
 			}
-		}
-		
-		/// <summary>
-		/// Shows the external party who modified the record.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("modifiedbyexternalparty")]
-		public Microsoft.Xrm.Sdk.EntityReference ModifiedByExternalParty
-		{
-			get
+			else
 			{
-				return this.GetAttributeValue<Microsoft.Xrm.Sdk.EntityReference>("modifiedbyexternalparty");
+				return default(string);
 			}
 		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("modifiedbyexternalpartyname")]
-		public string ModifiedByExternalPartyName
+	}
+	
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("modifiedbyname")]
+	public string ModifiedByName
+	{
+		get
 		{
-			get
+			if (this.FormattedValues.Contains("modifiedby"))
 			{
-				if (this.FormattedValues.Contains("modifiedbyexternalparty"))
-				{
-					return this.FormattedValues["modifiedbyexternalparty"];
-				}
-				else
-				{
-					return default(string);
-				}
+				return this.FormattedValues["modifiedby"];
 			}
-		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("modifiedbyexternalpartyyominame")]
-		public string ModifiedByExternalPartyYomiName
-		{
-			get
+			else
 			{
-				if (this.FormattedValues.Contains("modifiedbyexternalparty"))
-				{
-					return this.FormattedValues["modifiedbyexternalparty"];
-				}
-				else
-				{
-					return default(string);
-				}
+				return default(string);
 			}
 		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("modifiedbyname")]
-		public string ModifiedByName
+	}
+	
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("modifiedbyyominame")]
+	public string ModifiedByYomiName
+	{
+		get
 		{
-			get
+			if (this.FormattedValues.Contains("modifiedby"))
 			{
-				if (this.FormattedValues.Contains("modifiedby"))
-				{
-					return this.FormattedValues["modifiedby"];
-				}
-				else
-				{
-					return default(string);
-				}
+				return this.FormattedValues["modifiedby"];
 			}
-		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("modifiedbyyominame")]
-		public string ModifiedByYomiName
-		{
-			get
+			else
 			{
-				if (this.FormattedValues.Contains("modifiedby"))
-				{
-					return this.FormattedValues["modifiedby"];
-				}
-				else
-				{
-					return default(string);
-				}
+				return default(string);
 			}
 		}
-		
-		/// <summary>
-		/// Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("modifiedon")]
-		public System.Nullable<System.DateTime> ModifiedOn
+	}
+	
+	/// <summary>
+	/// Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("modifiedon")]
+	public System.Nullable<System.DateTime> ModifiedOn
+	{
+		get
 		{
-			get
-			{
-				return this.GetAttributeValue<System.Nullable<System.DateTime>>("modifiedon");
-			}
+			return this.GetAttributeValue<System.Nullable<System.DateTime>>("modifiedon");
 		}
-		
-		/// <summary>
-		/// Shows who created the record on behalf of another user.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("modifiedonbehalfby")]
-		public Microsoft.Xrm.Sdk.EntityReference ModifiedOnBehalfBy
+	}
+	
+	/// <summary>
+	/// Shows who created the record on behalf of another user.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("modifiedonbehalfby")]
+	public Microsoft.Xrm.Sdk.EntityReference ModifiedOnBehalfBy
+	{
+		get
 		{
-			get
-			{
-				return this.GetAttributeValue<Microsoft.Xrm.Sdk.EntityReference>("modifiedonbehalfby");
-			}
+			return this.GetAttributeValue<Microsoft.Xrm.Sdk.EntityReference>("modifiedonbehalfby");
 		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("modifiedonbehalfbyname")]
-		public string ModifiedOnBehalfByName
+	}
+	
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("modifiedonbehalfbyname")]
+	public string ModifiedOnBehalfByName
+	{
+		get
 		{
-			get
+			if (this.FormattedValues.Contains("modifiedonbehalfby"))
 			{
-				if (this.FormattedValues.Contains("modifiedonbehalfby"))
-				{
-					return this.FormattedValues["modifiedonbehalfby"];
-				}
-				else
-				{
-					return default(string);
-				}
+				return this.FormattedValues["modifiedonbehalfby"];
 			}
-		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("modifiedonbehalfbyyominame")]
-		public string ModifiedOnBehalfByYomiName
-		{
-			get
+			else
 			{
-				if (this.FormattedValues.Contains("modifiedonbehalfby"))
-				{
-					return this.FormattedValues["modifiedonbehalfby"];
-				}
-				else
-				{
-					return default(string);
-				}
+				return default(string);
 			}
 		}
-		
-		/// <summary>
-		/// Unique identifier for Account associated with Account.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("msa_managingpartnerid")]
-		public Microsoft.Xrm.Sdk.EntityReference msa_managingpartnerid
+	}
+	
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("modifiedonbehalfbyyominame")]
+	public string ModifiedOnBehalfByYomiName
+	{
+		get
 		{
-			get
+			if (this.FormattedValues.Contains("modifiedonbehalfby"))
 			{
-				return this.GetAttributeValue<Microsoft.Xrm.Sdk.EntityReference>("msa_managingpartnerid");
+				return this.FormattedValues["modifiedonbehalfby"];
 			}
-			set
+			else
 			{
-				this.SetAttributeValue("msa_managingpartnerid", value);
+				return default(string);
 			}
 		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("msa_managingpartneridname")]
-		public string msa_managingpartneridName
+	}
+	
+	/// <summary>
+	/// Unique identifier for Account associated with Account.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("msa_managingpartnerid")]
+	public Microsoft.Xrm.Sdk.EntityReference msa_managingpartnerid
+	{
+		get
 		{
-			get
-			{
-				if (this.FormattedValues.Contains("msa_managingpartnerid"))
-				{
-					return this.FormattedValues["msa_managingpartnerid"];
-				}
-				else
-				{
-					return default(string);
-				}
-			}
+			return this.GetAttributeValue<Microsoft.Xrm.Sdk.EntityReference>("msa_managingpartnerid");
 		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("msa_managingpartneridyominame")]
-		public string msa_managingpartneridYomiName
+		set
 		{
-			get
-			{
-				if (this.FormattedValues.Contains("msa_managingpartnerid"))
-				{
-					return this.FormattedValues["msa_managingpartnerid"];
-				}
-				else
-				{
-					return default(string);
-				}
-			}
+			this.SetAttributeValue("msa_managingpartnerid", value);
 		}
-		
-		/// <summary>
-		/// Type the company or business name.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("name")]
-		public string Name
+	}
+	
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("msa_managingpartneridname")]
+	public string msa_managingpartneridName
+	{
+		get
 		{
-			get
+			if (this.FormattedValues.Contains("msa_managingpartnerid"))
 			{
-				return this.GetAttributeValue<string>("name");
+				return this.FormattedValues["msa_managingpartnerid"];
 			}
-			set
+			else
 			{
-				this.SetAttributeValue("name", value);
+				return default(string);
 			}
 		}
-		
-		/// <summary>
-		/// Type the number of employees that work at the account for use in marketing segmentation and demographic analysis.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("numberofemployees")]
-		public System.Nullable<int> NumberOfEmployees
+	}
+	
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("msa_managingpartneridyominame")]
+	public string msa_managingpartneridYomiName
+	{
+		get
 		{
-			get
+			if (this.FormattedValues.Contains("msa_managingpartnerid"))
 			{
-				return this.GetAttributeValue<System.Nullable<int>>("numberofemployees");
+				return this.FormattedValues["msa_managingpartnerid"];
 			}
-			set
+			else
 			{
-				this.SetAttributeValue("numberofemployees", value);
+				return default(string);
 			}
 		}
-		
-		/// <summary>
-		/// Shows how long, in minutes, that the record was on hold.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("onholdtime")]
-		public System.Nullable<int> OnHoldTime
+	}
+	
+	/// <summary>
+	/// Type the company or business name.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("name")]
+	public string Name
+	{
+		get
 		{
-			get
-			{
-				return this.GetAttributeValue<System.Nullable<int>>("onholdtime");
-			}
+			return this.GetAttributeValue<string>("name");
 		}
-		
-		/// <summary>
-		/// Date and time that the record was migrated.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("overriddencreatedon")]
-		public System.Nullable<System.DateTime> OverriddenCreatedOn
+		set
 		{
-			get
-			{
-				return this.GetAttributeValue<System.Nullable<System.DateTime>>("overriddencreatedon");
-			}
-			set
-			{
-				this.SetAttributeValue("overriddencreatedon", value);
-			}
+			this.SetAttributeValue("name", value);
 		}
-		
-		/// <summary>
-		/// Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ownerid")]
-		public Microsoft.Xrm.Sdk.EntityReference OwnerId
+	}
+	
+	/// <summary>
+	/// Type the number of employees that work at the account for use in marketing segmentation and demographic analysis.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("numberofemployees")]
+	public System.Nullable<int> NumberOfEmployees
+	{
+		get
 		{
-			get
-			{
-				return this.GetAttributeValue<Microsoft.Xrm.Sdk.EntityReference>("ownerid");
-			}
-			set
-			{
-				this.SetAttributeValue("ownerid", value);
-			}
+			return this.GetAttributeValue<System.Nullable<int>>("numberofemployees");
 		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("owneridname")]
-		public string OwnerIdName
+		set
 		{
-			get
-			{
-				if (this.FormattedValues.Contains("ownerid"))
-				{
-					return this.FormattedValues["ownerid"];
-				}
-				else
-				{
-					return default(string);
-				}
-			}
+			this.SetAttributeValue("numberofemployees", value);
 		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("owneridyominame")]
-		public string OwnerIdYomiName
+	}
+	
+	/// <summary>
+	/// Shows how long, in minutes, that the record was on hold.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("onholdtime")]
+	public System.Nullable<int> OnHoldTime
+	{
+		get
 		{
-			get
-			{
-				if (this.FormattedValues.Contains("ownerid"))
-				{
-					return this.FormattedValues["ownerid"];
-				}
-				else
-				{
-					return default(string);
-				}
-			}
+			return this.GetAttributeValue<System.Nullable<int>>("onholdtime");
 		}
-		
-		/// <summary>
-		/// Select the account's ownership structure, such as public or private.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ownershipcode")]
-		public virtual account_ownershipcode? OwnershipCode
+	}
+	
+	/// <summary>
+	/// Date and time that the record was migrated.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("overriddencreatedon")]
+	public System.Nullable<System.DateTime> OverriddenCreatedOn
+	{
+		get
 		{
-			get
-			{
-				return ((account_ownershipcode?)(EntityOptionSetEnum.GetEnum(this, "ownershipcode")));
-			}
-			set
-			{
-				this.SetAttributeValue("ownershipcode", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
-			}
+			return this.GetAttributeValue<System.Nullable<System.DateTime>>("overriddencreatedon");
 		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ownershipcodename")]
-		public string OwnershipCodeName
+		set
 		{
-			get
-			{
-				if (this.FormattedValues.Contains("ownershipcode"))
-				{
-					return this.FormattedValues["ownershipcode"];
-				}
-				else
-				{
-					return default(string);
-				}
-			}
+			this.SetAttributeValue("overriddencreatedon", value);
 		}
-		
-		/// <summary>
-		/// Shows the business unit that the record owner belongs to.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("owningbusinessunit")]
-		public Microsoft.Xrm.Sdk.EntityReference OwningBusinessUnit
+	}
+	
+	/// <summary>
+	/// Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ownerid")]
+	public Microsoft.Xrm.Sdk.EntityReference OwnerId
+	{
+		get
 		{
-			get
-			{
-				return this.GetAttributeValue<Microsoft.Xrm.Sdk.EntityReference>("owningbusinessunit");
-			}
+			return this.GetAttributeValue<Microsoft.Xrm.Sdk.EntityReference>("ownerid");
 		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("owningbusinessunitname")]
-		public string OwningBusinessUnitName
+		set
 		{
-			get
-			{
-				if (this.FormattedValues.Contains("owningbusinessunit"))
-				{
-					return this.FormattedValues["owningbusinessunit"];
-				}
-				else
-				{
-					return default(string);
-				}
-			}
+			this.SetAttributeValue("ownerid", value);
 		}
-		
-		/// <summary>
-		/// Unique identifier of the team who owns the account.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("owningteam")]
-		public Microsoft.Xrm.Sdk.EntityReference OwningTeam
+	}
+	
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("owneridname")]
+	public string OwnerIdName
+	{
+		get
 		{
-			get
+			if (this.FormattedValues.Contains("ownerid"))
 			{
-				return this.GetAttributeValue<Microsoft.Xrm.Sdk.EntityReference>("owningteam");
+				return this.FormattedValues["ownerid"];
 			}
-		}
-		
-		/// <summary>
-		/// Unique identifier of the user who owns the account.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("owninguser")]
-		public Microsoft.Xrm.Sdk.EntityReference OwningUser
-		{
-			get
+			else
 			{
-				return this.GetAttributeValue<Microsoft.Xrm.Sdk.EntityReference>("owninguser");
+				return default(string);
 			}
 		}
-		
-		/// <summary>
-		/// Choose the parent account associated with this account to show parent and child businesses in reporting and analytics.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("parentaccountid")]
-		public Microsoft.Xrm.Sdk.EntityReference ParentAccountId
+	}
+	
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("owneridyominame")]
+	public string OwnerIdYomiName
+	{
+		get
 		{
-			get
+			if (this.FormattedValues.Contains("ownerid"))
 			{
-				return this.GetAttributeValue<Microsoft.Xrm.Sdk.EntityReference>("parentaccountid");
+				return this.FormattedValues["ownerid"];
 			}
-			set
+			else
 			{
-				this.SetAttributeValue("parentaccountid", value);
+				return default(string);
 			}
 		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("parentaccountidname")]
-		public string ParentAccountIdName
+	}
+	
+	/// <summary>
+	/// Select the account's ownership structure, such as public or private.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ownershipcode")]
+	public virtual account_ownershipcode? OwnershipCode
+	{
+		get
 		{
-			get
-			{
-				if (this.FormattedValues.Contains("parentaccountid"))
-				{
-					return this.FormattedValues["parentaccountid"];
-				}
-				else
-				{
-					return default(string);
-				}
-			}
+			return ((account_ownershipcode?)(EntityOptionSetEnum.GetEnum(this, "ownershipcode")));
 		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("parentaccountidyominame")]
-		public string ParentAccountIdYomiName
+		set
 		{
-			get
-			{
-				if (this.FormattedValues.Contains("parentaccountid"))
-				{
-					return this.FormattedValues["parentaccountid"];
-				}
-				else
-				{
-					return default(string);
-				}
-			}
+			this.SetAttributeValue("ownershipcode", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
 		}
-		
-		/// <summary>
-		/// For system use only. Legacy Microsoft Dynamics CRM 3.0 workflow data.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("participatesinworkflow")]
-		public System.Nullable<bool> ParticipatesInWorkflow
+	}
+	
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ownershipcodename")]
+	public string OwnershipCodeName
+	{
+		get
 		{
-			get
+			if (this.FormattedValues.Contains("ownershipcode"))
 			{
-				return this.GetAttributeValue<System.Nullable<bool>>("participatesinworkflow");
+				return this.FormattedValues["ownershipcode"];
 			}
-			set
+			else
 			{
-				this.SetAttributeValue("participatesinworkflow", value);
+				return default(string);
 			}
 		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("participatesinworkflowname")]
-		public string ParticipatesInWorkflowName
+	}
+	
+	/// <summary>
+	/// Shows the business unit that the record owner belongs to.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("owningbusinessunit")]
+	public Microsoft.Xrm.Sdk.EntityReference OwningBusinessUnit
+	{
+		get
 		{
-			get
-			{
-				if (this.FormattedValues.Contains("participatesinworkflow"))
-				{
-					return this.FormattedValues["participatesinworkflow"];
-				}
-				else
-				{
-					return default(string);
-				}
-			}
+			return this.GetAttributeValue<Microsoft.Xrm.Sdk.EntityReference>("owningbusinessunit");
 		}
-		
-		/// <summary>
-		/// Select the payment terms to indicate when the customer needs to pay the total amount.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("paymenttermscode")]
-		public virtual account_paymenttermscode? PaymentTermsCode
+	}
+	
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("owningbusinessunitname")]
+	public string OwningBusinessUnitName
+	{
+		get
 		{
-			get
+			if (this.FormattedValues.Contains("owningbusinessunit"))
 			{
-				return ((account_paymenttermscode?)(EntityOptionSetEnum.GetEnum(this, "paymenttermscode")));
+				return this.FormattedValues["owningbusinessunit"];
 			}
-			set
+			else
 			{
-				this.SetAttributeValue("paymenttermscode", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
+				return default(string);
 			}
 		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("paymenttermscodename")]
-		public string PaymentTermsCodeName
+	}
+	
+	/// <summary>
+	/// Unique identifier of the team who owns the account.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("owningteam")]
+	public Microsoft.Xrm.Sdk.EntityReference OwningTeam
+	{
+		get
 		{
-			get
-			{
-				if (this.FormattedValues.Contains("paymenttermscode"))
-				{
-					return this.FormattedValues["paymenttermscode"];
-				}
-				else
-				{
-					return default(string);
-				}
-			}
+			return this.GetAttributeValue<Microsoft.Xrm.Sdk.EntityReference>("owningteam");
 		}
-		
-		/// <summary>
-		/// Select the preferred day of the week for service appointments.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("preferredappointmentdaycode")]
-		public virtual account_preferredappointmentdaycode? PreferredAppointmentDayCode
+	}
+	
+	/// <summary>
+	/// Unique identifier of the user who owns the account.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("owninguser")]
+	public Microsoft.Xrm.Sdk.EntityReference OwningUser
+	{
+		get
 		{
-			get
-			{
-				return ((account_preferredappointmentdaycode?)(EntityOptionSetEnum.GetEnum(this, "preferredappointmentdaycode")));
-			}
-			set
-			{
-				this.SetAttributeValue("preferredappointmentdaycode", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
-			}
+			return this.GetAttributeValue<Microsoft.Xrm.Sdk.EntityReference>("owninguser");
 		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("preferredappointmentdaycodename")]
-		public string PreferredAppointmentDayCodeName
+	}
+	
+	/// <summary>
+	/// Choose the parent account associated with this account to show parent and child businesses in reporting and analytics.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("parentaccountid")]
+	public Microsoft.Xrm.Sdk.EntityReference ParentAccountId
+	{
+		get
 		{
-			get
-			{
-				if (this.FormattedValues.Contains("preferredappointmentdaycode"))
-				{
-					return this.FormattedValues["preferredappointmentdaycode"];
-				}
-				else
-				{
-					return default(string);
-				}
-			}
+			return this.GetAttributeValue<Microsoft.Xrm.Sdk.EntityReference>("parentaccountid");
 		}
-		
-		/// <summary>
-		/// Select the preferred time of day for service appointments.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("preferredappointmenttimecode")]
-		public virtual account_preferredappointmenttimecode? PreferredAppointmentTimeCode
+		set
 		{
-			get
-			{
-				return ((account_preferredappointmenttimecode?)(EntityOptionSetEnum.GetEnum(this, "preferredappointmenttimecode")));
-			}
-			set
-			{
-				this.SetAttributeValue("preferredappointmenttimecode", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
-			}
+			this.SetAttributeValue("parentaccountid", value);
 		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("preferredappointmenttimecodename")]
-		public string PreferredAppointmentTimeCodeName
+	}
+	
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("parentaccountidname")]
+	public string ParentAccountIdName
+	{
+		get
 		{
-			get
+			if (this.FormattedValues.Contains("parentaccountid"))
+			{
+				return this.FormattedValues["parentaccountid"];
+			}
+			else
 			{
-				if (this.FormattedValues.Contains("preferredappointmenttimecode"))
-				{
-					return this.FormattedValues["preferredappointmenttimecode"];
-				}
-				else
-				{
-					return default(string);
-				}
+				return default(string);
 			}
 		}
-		
-		/// <summary>
-		/// Select the preferred method of contact.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("preferredcontactmethodcode")]
-		public virtual account_preferredcontactmethodcode? PreferredContactMethodCode
+	}
+	
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("parentaccountidyominame")]
+	public string ParentAccountIdYomiName
+	{
+		get
 		{
-			get
+			if (this.FormattedValues.Contains("parentaccountid"))
 			{
-				return ((account_preferredcontactmethodcode?)(EntityOptionSetEnum.GetEnum(this, "preferredcontactmethodcode")));
+				return this.FormattedValues["parentaccountid"];
 			}
-			set
+			else
 			{
-				this.SetAttributeValue("preferredcontactmethodcode", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
+				return default(string);
 			}
 		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("preferredcontactmethodcodename")]
-		public string PreferredContactMethodCodeName
+	}
+	
+	/// <summary>
+	/// For system use only. Legacy Microsoft Dynamics CRM 3.0 workflow data.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("participatesinworkflow")]
+	public System.Nullable<bool> ParticipatesInWorkflow
+	{
+		get
 		{
-			get
-			{
-				if (this.FormattedValues.Contains("preferredcontactmethodcode"))
-				{
-					return this.FormattedValues["preferredcontactmethodcode"];
-				}
-				else
-				{
-					return default(string);
-				}
-			}
+			return this.GetAttributeValue<System.Nullable<bool>>("participatesinworkflow");
+		}
+		set
+		{
+			this.SetAttributeValue("participatesinworkflow", value);
 		}
-		
-		/// <summary>
-		/// Choose the preferred service representative for reference when you schedule service activities for the account.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("preferredsystemuserid")]
-		public Microsoft.Xrm.Sdk.EntityReference PreferredSystemUserId
+	}
+	
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("participatesinworkflowname")]
+	public string ParticipatesInWorkflowName
+	{
+		get
 		{
-			get
+			if (this.FormattedValues.Contains("participatesinworkflow"))
 			{
-				return this.GetAttributeValue<Microsoft.Xrm.Sdk.EntityReference>("preferredsystemuserid");
+				return this.FormattedValues["participatesinworkflow"];
 			}
-			set
+			else
 			{
-				this.SetAttributeValue("preferredsystemuserid", value);
+				return default(string);
 			}
 		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("preferredsystemuseridname")]
-		public string PreferredSystemUserIdName
+	}
+	
+	/// <summary>
+	/// Select the payment terms to indicate when the customer needs to pay the total amount.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("paymenttermscode")]
+	public virtual account_paymenttermscode? PaymentTermsCode
+	{
+		get
 		{
-			get
-			{
-				if (this.FormattedValues.Contains("preferredsystemuserid"))
-				{
-					return this.FormattedValues["preferredsystemuserid"];
-				}
-				else
-				{
-					return default(string);
-				}
-			}
+			return ((account_paymenttermscode?)(EntityOptionSetEnum.GetEnum(this, "paymenttermscode")));
 		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("preferredsystemuseridyominame")]
-		public string PreferredSystemUserIdYomiName
+		set
 		{
-			get
-			{
-				if (this.FormattedValues.Contains("preferredsystemuserid"))
-				{
-					return this.FormattedValues["preferredsystemuserid"];
-				}
-				else
-				{
-					return default(string);
-				}
-			}
+			this.SetAttributeValue("paymenttermscode", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
 		}
-		
-		/// <summary>
-		/// Choose the primary contact for the account to provide quick access to contact details.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("primarycontactid")]
-		public Microsoft.Xrm.Sdk.EntityReference PrimaryContactId
+	}
+	
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("paymenttermscodename")]
+	public string PaymentTermsCodeName
+	{
+		get
 		{
-			get
+			if (this.FormattedValues.Contains("paymenttermscode"))
 			{
-				return this.GetAttributeValue<Microsoft.Xrm.Sdk.EntityReference>("primarycontactid");
+				return this.FormattedValues["paymenttermscode"];
 			}
-			set
+			else
 			{
-				this.SetAttributeValue("primarycontactid", value);
+				return default(string);
 			}
 		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("primarycontactidname")]
-		public string PrimaryContactIdName
+	}
+	
+	/// <summary>
+	/// Select the preferred day of the week for service appointments.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("preferredappointmentdaycode")]
+	public virtual account_preferredappointmentdaycode? PreferredAppointmentDayCode
+	{
+		get
 		{
-			get
-			{
-				if (this.FormattedValues.Contains("primarycontactid"))
-				{
-					return this.FormattedValues["primarycontactid"];
-				}
-				else
-				{
-					return default(string);
-				}
-			}
+			return ((account_preferredappointmentdaycode?)(EntityOptionSetEnum.GetEnum(this, "preferredappointmentdaycode")));
 		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("primarycontactidyominame")]
-		public string PrimaryContactIdYomiName
+		set
 		{
-			get
-			{
-				if (this.FormattedValues.Contains("primarycontactid"))
-				{
-					return this.FormattedValues["primarycontactid"];
-				}
-				else
-				{
-					return default(string);
-				}
-			}
+			this.SetAttributeValue("preferredappointmentdaycode", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
 		}
-		
-		/// <summary>
-		/// Primary Satori ID for Account
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("primarysatoriid")]
-		public string PrimarySatoriId
+	}
+	
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("preferredappointmentdaycodename")]
+	public string PreferredAppointmentDayCodeName
+	{
+		get
 		{
-			get
+			if (this.FormattedValues.Contains("preferredappointmentdaycode"))
 			{
-				return this.GetAttributeValue<string>("primarysatoriid");
+				return this.FormattedValues["preferredappointmentdaycode"];
 			}
-			set
+			else
 			{
-				this.SetAttributeValue("primarysatoriid", value);
+				return default(string);
 			}
 		}
-		
-		/// <summary>
-		/// Primary Twitter ID for Account
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("primarytwitterid")]
-		public string PrimaryTwitterId
+	}
+	
+	/// <summary>
+	/// Select the preferred time of day for service appointments.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("preferredappointmenttimecode")]
+	public virtual account_preferredappointmenttimecode? PreferredAppointmentTimeCode
+	{
+		get
 		{
-			get
-			{
-				return this.GetAttributeValue<string>("primarytwitterid");
-			}
-			set
-			{
-				this.SetAttributeValue("primarytwitterid", value);
-			}
+			return ((account_preferredappointmenttimecode?)(EntityOptionSetEnum.GetEnum(this, "preferredappointmenttimecode")));
+		}
+		set
+		{
+			this.SetAttributeValue("preferredappointmenttimecode", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
 		}
-		
-		/// <summary>
-		/// Shows the ID of the process.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("processid")]
-		public System.Nullable<System.Guid> ProcessId
+	}
+	
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("preferredappointmenttimecodename")]
+	public string PreferredAppointmentTimeCodeName
+	{
+		get
 		{
-			get
+			if (this.FormattedValues.Contains("preferredappointmenttimecode"))
 			{
-				return this.GetAttributeValue<System.Nullable<System.Guid>>("processid");
+				return this.FormattedValues["preferredappointmenttimecode"];
 			}
-			set
+			else
 			{
-				this.SetAttributeValue("processid", value);
+				return default(string);
 			}
+		}
+	}
+	
+	/// <summary>
+	/// Select the preferred method of contact.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("preferredcontactmethodcode")]
+	public virtual account_preferredcontactmethodcode? PreferredContactMethodCode
+	{
+		get
+		{
+			return ((account_preferredcontactmethodcode?)(EntityOptionSetEnum.GetEnum(this, "preferredcontactmethodcode")));
+		}
+		set
+		{
+			this.SetAttributeValue("preferredcontactmethodcode", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
 		}
-		
-		/// <summary>
-		/// Type the annual revenue for the account, used as an indicator in financial performance analysis.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("revenue")]
-		public Microsoft.Xrm.Sdk.Money Revenue
+	}
+	
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("preferredcontactmethodcodename")]
+	public string PreferredContactMethodCodeName
+	{
+		get
 		{
-			get
+			if (this.FormattedValues.Contains("preferredcontactmethodcode"))
 			{
-				return this.GetAttributeValue<Microsoft.Xrm.Sdk.Money>("revenue");
+				return this.FormattedValues["preferredcontactmethodcode"];
 			}
-			set
+			else
 			{
-				this.SetAttributeValue("revenue", value);
+				return default(string);
 			}
 		}
-		
-		/// <summary>
-		/// Shows the annual revenue converted to the system's default base currency. The calculations use the exchange rate specified in the Currencies area.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("revenue_base")]
-		public Microsoft.Xrm.Sdk.Money Revenue_Base
+	}
+	
+	/// <summary>
+	/// Choose the preferred service representative for reference when you schedule service activities for the account.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("preferredsystemuserid")]
+	public Microsoft.Xrm.Sdk.EntityReference PreferredSystemUserId
+	{
+		get
 		{
-			get
-			{
-				return this.GetAttributeValue<Microsoft.Xrm.Sdk.Money>("revenue_base");
-			}
+			return this.GetAttributeValue<Microsoft.Xrm.Sdk.EntityReference>("preferredsystemuserid");
+		}
+		set
+		{
+			this.SetAttributeValue("preferredsystemuserid", value);
 		}
-		
-		/// <summary>
-		/// Type the number of shares available to the public for the account. This number is used as an indicator in financial performance analysis.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("sharesoutstanding")]
-		public System.Nullable<int> SharesOutstanding
+	}
+	
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("preferredsystemuseridname")]
+	public string PreferredSystemUserIdName
+	{
+		get
 		{
-			get
+			if (this.FormattedValues.Contains("preferredsystemuserid"))
 			{
-				return this.GetAttributeValue<System.Nullable<int>>("sharesoutstanding");
+				return this.FormattedValues["preferredsystemuserid"];
 			}
-			set
+			else
 			{
-				this.SetAttributeValue("sharesoutstanding", value);
+				return default(string);
 			}
 		}
-		
-		/// <summary>
-		/// Select a shipping method for deliveries sent to the account's address to designate the preferred carrier or other delivery option.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("shippingmethodcode")]
-		public virtual account_shippingmethodcode? ShippingMethodCode
+	}
+	
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("preferredsystemuseridyominame")]
+	public string PreferredSystemUserIdYomiName
+	{
+		get
 		{
-			get
+			if (this.FormattedValues.Contains("preferredsystemuserid"))
 			{
-				return ((account_shippingmethodcode?)(EntityOptionSetEnum.GetEnum(this, "shippingmethodcode")));
+				return this.FormattedValues["preferredsystemuserid"];
 			}
-			set
+			else
 			{
-				this.SetAttributeValue("shippingmethodcode", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
+				return default(string);
 			}
 		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("shippingmethodcodename")]
-		public string ShippingMethodCodeName
+	}
+	
+	/// <summary>
+	/// Choose the primary contact for the account to provide quick access to contact details.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("primarycontactid")]
+	public Microsoft.Xrm.Sdk.EntityReference PrimaryContactId
+	{
+		get
 		{
-			get
-			{
-				if (this.FormattedValues.Contains("shippingmethodcode"))
-				{
-					return this.FormattedValues["shippingmethodcode"];
-				}
-				else
-				{
-					return default(string);
-				}
-			}
+			return this.GetAttributeValue<Microsoft.Xrm.Sdk.EntityReference>("primarycontactid");
+		}
+		set
+		{
+			this.SetAttributeValue("primarycontactid", value);
 		}
-		
-		/// <summary>
-		/// Type the Standard Industrial Classification (SIC) code that indicates the account's primary industry of business, for use in marketing segmentation and demographic analysis.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("sic")]
-		public string SIC
+	}
+	
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("primarycontactidname")]
+	public string PrimaryContactIdName
+	{
+		get
 		{
-			get
+			if (this.FormattedValues.Contains("primarycontactid"))
 			{
-				return this.GetAttributeValue<string>("sic");
+				return this.FormattedValues["primarycontactid"];
 			}
-			set
+			else
 			{
-				this.SetAttributeValue("sic", value);
+				return default(string);
 			}
 		}
-		
-		/// <summary>
-		/// Choose the service level agreement (SLA) that you want to apply to the Account record.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("slaid")]
-		public Microsoft.Xrm.Sdk.EntityReference SLAId
+	}
+	
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("primarycontactidyominame")]
+	public string PrimaryContactIdYomiName
+	{
+		get
 		{
-			get
+			if (this.FormattedValues.Contains("primarycontactid"))
 			{
-				return this.GetAttributeValue<Microsoft.Xrm.Sdk.EntityReference>("slaid");
+				return this.FormattedValues["primarycontactid"];
 			}
-			set
+			else
 			{
-				this.SetAttributeValue("slaid", value);
+				return default(string);
 			}
 		}
-		
-		/// <summary>
-		/// Last SLA that was applied to this case. This field is for internal use only.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("slainvokedid")]
-		public Microsoft.Xrm.Sdk.EntityReference SLAInvokedId
+	}
+	
+	/// <summary>
+	/// Primary Satori ID for Account
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("primarysatoriid")]
+	public string PrimarySatoriId
+	{
+		get
 		{
-			get
-			{
-				return this.GetAttributeValue<Microsoft.Xrm.Sdk.EntityReference>("slainvokedid");
-			}
+			return this.GetAttributeValue<string>("primarysatoriid");
 		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("slainvokedidname")]
-		public string SLAInvokedIdName
+		set
 		{
-			get
-			{
-				if (this.FormattedValues.Contains("slainvokedid"))
-				{
-					return this.FormattedValues["slainvokedid"];
-				}
-				else
-				{
-					return default(string);
-				}
-			}
+			this.SetAttributeValue("primarysatoriid", value);
 		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("slaname")]
-		public string SLAName
+	}
+	
+	/// <summary>
+	/// Primary Twitter ID for Account
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("primarytwitterid")]
+	public string PrimaryTwitterId
+	{
+		get
 		{
-			get
-			{
-				if (this.FormattedValues.Contains("slaid"))
-				{
-					return this.FormattedValues["slaid"];
-				}
-				else
-				{
-					return default(string);
-				}
-			}
+			return this.GetAttributeValue<string>("primarytwitterid");
 		}
-		
-		/// <summary>
-		/// Shows the ID of the stage.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("stageid")]
-		public System.Nullable<System.Guid> StageId
+		set
 		{
-			get
-			{
-				return this.GetAttributeValue<System.Nullable<System.Guid>>("stageid");
-			}
-			set
-			{
-				this.SetAttributeValue("stageid", value);
-			}
+			this.SetAttributeValue("primarytwitterid", value);
 		}
-		
-		/// <summary>
-		/// Shows whether the account is active or inactive. Inactive accounts are read-only and can't be edited unless they are reactivated.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("statecode")]
-		public virtual account_statecode? StateCode
+	}
+	
+	/// <summary>
+	/// Shows the ID of the process.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("processid")]
+	public System.Nullable<System.Guid> ProcessId
+	{
+		get
 		{
-			get
-			{
-				return ((account_statecode?)(EntityOptionSetEnum.GetEnum(this, "statecode")));
-			}
-			set
-			{
-				this.SetAttributeValue("statecode", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
-			}
+			return this.GetAttributeValue<System.Nullable<System.Guid>>("processid");
 		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("statecodename")]
-		public string StateCodeName
+		set
 		{
-			get
-			{
-				if (this.FormattedValues.Contains("statecode"))
-				{
-					return this.FormattedValues["statecode"];
-				}
-				else
-				{
-					return default(string);
-				}
-			}
+			this.SetAttributeValue("processid", value);
 		}
-		
-		/// <summary>
-		/// Select the account's status.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("statuscode")]
-		public virtual account_statuscode? StatusCode
+	}
+	
+	/// <summary>
+	/// Type the annual revenue for the account, used as an indicator in financial performance analysis.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("revenue")]
+	public Microsoft.Xrm.Sdk.Money Revenue
+	{
+		get
 		{
-			get
-			{
-				return ((account_statuscode?)(EntityOptionSetEnum.GetEnum(this, "statuscode")));
-			}
-			set
-			{
-				this.SetAttributeValue("statuscode", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
-			}
+			return this.GetAttributeValue<Microsoft.Xrm.Sdk.Money>("revenue");
 		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("statuscodename")]
-		public string StatusCodeName
+		set
 		{
-			get
-			{
-				if (this.FormattedValues.Contains("statuscode"))
-				{
-					return this.FormattedValues["statuscode"];
-				}
-				else
-				{
-					return default(string);
-				}
-			}
+			this.SetAttributeValue("revenue", value);
 		}
-		
-		/// <summary>
-		/// Type the stock exchange at which the account is listed to track their stock and financial performance of the company.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("stockexchange")]
-		public string StockExchange
+	}
+	
+	/// <summary>
+	/// Shows the annual revenue converted to the system's default base currency. The calculations use the exchange rate specified in the Currencies area.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("revenue_base")]
+	public Microsoft.Xrm.Sdk.Money Revenue_Base
+	{
+		get
 		{
-			get
-			{
-				return this.GetAttributeValue<string>("stockexchange");
-			}
-			set
-			{
-				this.SetAttributeValue("stockexchange", value);
-			}
+			return this.GetAttributeValue<Microsoft.Xrm.Sdk.Money>("revenue_base");
 		}
-		
-		/// <summary>
-		/// Type the main phone number for this account.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("telephone1")]
-		public string Telephone1
+	}
+	
+	/// <summary>
+	/// Type the number of shares available to the public for the account. This number is used as an indicator in financial performance analysis.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("sharesoutstanding")]
+	public System.Nullable<int> SharesOutstanding
+	{
+		get
 		{
-			get
-			{
-				return this.GetAttributeValue<string>("telephone1");
-			}
-			set
-			{
-				this.SetAttributeValue("telephone1", value);
-			}
+			return this.GetAttributeValue<System.Nullable<int>>("sharesoutstanding");
 		}
-		
-		/// <summary>
-		/// Type a second phone number for this account.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("telephone2")]
-		public string Telephone2
+		set
 		{
-			get
-			{
-				return this.GetAttributeValue<string>("telephone2");
-			}
-			set
-			{
-				this.SetAttributeValue("telephone2", value);
-			}
+			this.SetAttributeValue("sharesoutstanding", value);
 		}
-		
-		/// <summary>
-		/// Type a third phone number for this account.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("telephone3")]
-		public string Telephone3
+	}
+	
+	/// <summary>
+	/// Select a shipping method for deliveries sent to the account's address to designate the preferred carrier or other delivery option.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("shippingmethodcode")]
+	public virtual account_shippingmethodcode? ShippingMethodCode
+	{
+		get
 		{
-			get
-			{
-				return this.GetAttributeValue<string>("telephone3");
-			}
-			set
-			{
-				this.SetAttributeValue("telephone3", value);
-			}
+			return ((account_shippingmethodcode?)(EntityOptionSetEnum.GetEnum(this, "shippingmethodcode")));
+		}
+		set
+		{
+			this.SetAttributeValue("shippingmethodcode", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
 		}
-		
-		/// <summary>
-		/// Select a region or territory for the account for use in segmentation and analysis.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("territorycode")]
-		public virtual account_territorycode? TerritoryCode
+	}
+	
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("shippingmethodcodename")]
+	public string ShippingMethodCodeName
+	{
+		get
 		{
-			get
+			if (this.FormattedValues.Contains("shippingmethodcode"))
 			{
-				return ((account_territorycode?)(EntityOptionSetEnum.GetEnum(this, "territorycode")));
+				return this.FormattedValues["shippingmethodcode"];
 			}
-			set
+			else
 			{
-				this.SetAttributeValue("territorycode", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
+				return default(string);
 			}
 		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("territorycodename")]
-		public string TerritoryCodeName
+	}
+	
+	/// <summary>
+	/// Type the Standard Industrial Classification (SIC) code that indicates the account's primary industry of business, for use in marketing segmentation and demographic analysis.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("sic")]
+	public string SIC
+	{
+		get
 		{
-			get
-			{
-				if (this.FormattedValues.Contains("territorycode"))
-				{
-					return this.FormattedValues["territorycode"];
-				}
-				else
-				{
-					return default(string);
-				}
-			}
+			return this.GetAttributeValue<string>("sic");
 		}
-		
-		/// <summary>
-		/// Type the stock exchange symbol for the account to track financial performance of the company. You can click the code entered in this field to access the latest trading information from MSN Money.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("tickersymbol")]
-		public string TickerSymbol
+		set
 		{
-			get
-			{
-				return this.GetAttributeValue<string>("tickersymbol");
-			}
-			set
-			{
-				this.SetAttributeValue("tickersymbol", value);
-			}
+			this.SetAttributeValue("sic", value);
 		}
-		
-		/// <summary>
-		/// Total time spent for emails (read and write) and meetings by me in relation to account record.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("timespentbymeonemailandmeetings")]
-		public string TimeSpentByMeOnEmailAndMeetings
+	}
+	
+	/// <summary>
+	/// Choose the service level agreement (SLA) that you want to apply to the Account record.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("slaid")]
+	public Microsoft.Xrm.Sdk.EntityReference SLAId
+	{
+		get
 		{
-			get
-			{
-				return this.GetAttributeValue<string>("timespentbymeonemailandmeetings");
-			}
+			return this.GetAttributeValue<Microsoft.Xrm.Sdk.EntityReference>("slaid");
+		}
+		set
+		{
+			this.SetAttributeValue("slaid", value);
+		}
+	}
+	
+	/// <summary>
+	/// Last SLA that was applied to this case. This field is for internal use only.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("slainvokedid")]
+	public Microsoft.Xrm.Sdk.EntityReference SLAInvokedId
+	{
+		get
+		{
+			return this.GetAttributeValue<Microsoft.Xrm.Sdk.EntityReference>("slainvokedid");
 		}
-		
-		/// <summary>
-		/// For internal use only.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("timezoneruleversionnumber")]
-		public System.Nullable<int> TimeZoneRuleVersionNumber
+	}
+	
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("slainvokedidname")]
+	public string SLAInvokedIdName
+	{
+		get
 		{
-			get
+			if (this.FormattedValues.Contains("slainvokedid"))
 			{
-				return this.GetAttributeValue<System.Nullable<int>>("timezoneruleversionnumber");
+				return this.FormattedValues["slainvokedid"];
 			}
-			set
+			else
 			{
-				this.SetAttributeValue("timezoneruleversionnumber", value);
+				return default(string);
 			}
 		}
-		
-		/// <summary>
-		/// Choose the local currency for the record to make sure budgets are reported in the correct currency.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("transactioncurrencyid")]
-		public Microsoft.Xrm.Sdk.EntityReference TransactionCurrencyId
+	}
+	
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("slaname")]
+	public string SLAName
+	{
+		get
 		{
-			get
+			if (this.FormattedValues.Contains("slaid"))
 			{
-				return this.GetAttributeValue<Microsoft.Xrm.Sdk.EntityReference>("transactioncurrencyid");
+				return this.FormattedValues["slaid"];
 			}
-			set
+			else
 			{
-				this.SetAttributeValue("transactioncurrencyid", value);
+				return default(string);
 			}
 		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("transactioncurrencyidname")]
-		public string TransactionCurrencyIdName
+	}
+	
+	/// <summary>
+	/// Shows the ID of the stage.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("stageid")]
+	public System.Nullable<System.Guid> StageId
+	{
+		get
 		{
-			get
-			{
-				if (this.FormattedValues.Contains("transactioncurrencyid"))
-				{
-					return this.FormattedValues["transactioncurrencyid"];
-				}
-				else
-				{
-					return default(string);
-				}
-			}
+			return this.GetAttributeValue<System.Nullable<System.Guid>>("stageid");
 		}
-		
-		/// <summary>
-		/// For internal use only.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("traversedpath")]
-		public string TraversedPath
+		set
 		{
-			get
-			{
-				return this.GetAttributeValue<string>("traversedpath");
-			}
-			set
-			{
-				this.SetAttributeValue("traversedpath", value);
-			}
+			this.SetAttributeValue("stageid", value);
 		}
-		
-		/// <summary>
-		/// Time zone code that was in use when the record was created.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("utcconversiontimezonecode")]
-		public System.Nullable<int> UTCConversionTimeZoneCode
+	}
+	
+	/// <summary>
+	/// Shows whether the account is active or inactive. Inactive accounts are read-only and can't be edited unless they are reactivated.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("statecode")]
+	public virtual account_statecode? StateCode
+	{
+		get
 		{
-			get
-			{
-				return this.GetAttributeValue<System.Nullable<int>>("utcconversiontimezonecode");
-			}
-			set
-			{
-				this.SetAttributeValue("utcconversiontimezonecode", value);
-			}
+			return ((account_statecode?)(EntityOptionSetEnum.GetEnum(this, "statecode")));
 		}
-		
-		/// <summary>
-		/// Version number of the account.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("versionnumber")]
-		public System.Nullable<long> VersionNumber
+		set
 		{
-			get
-			{
-				return this.GetAttributeValue<System.Nullable<long>>("versionnumber");
-			}
+			this.SetAttributeValue("statecode", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
 		}
-		
-		/// <summary>
-		/// Type the account's website URL to get quick details about the company profile.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("websiteurl")]
-		public string WebSiteURL
+	}
+	
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("statecodename")]
+	public string StateCodeName
+	{
+		get
 		{
-			get
+			if (this.FormattedValues.Contains("statecode"))
 			{
-				return this.GetAttributeValue<string>("websiteurl");
+				return this.FormattedValues["statecode"];
 			}
-			set
+			else
 			{
-				this.SetAttributeValue("websiteurl", value);
+				return default(string);
 			}
 		}
-		
-		/// <summary>
-		/// Type the phonetic spelling of the company name, if specified in Japanese, to make sure the name is pronounced correctly in phone calls and other communications.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("yominame")]
-		public string YomiName
+	}
+	
+	/// <summary>
+	/// Select the account's status.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("statuscode")]
+	public virtual account_statuscode? StatusCode
+	{
+		get
 		{
-			get
-			{
-				return this.GetAttributeValue<string>("yominame");
-			}
-			set
-			{
-				this.SetAttributeValue("yominame", value);
-			}
+			return ((account_statuscode?)(EntityOptionSetEnum.GetEnum(this, "statuscode")));
 		}
-		
-		/// <summary>
-		/// 1:N account_master_account
-		/// </summary>
-		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("account_master_account", Microsoft.Xrm.Sdk.EntityRole.Referenced)]
-		public System.Collections.Generic.IEnumerable<Dev.DevKitV4.Shared.Entities3.Account> Referencedaccount_master_account
+		set
 		{
-			get
-			{
-				return this.GetRelatedEntities<Dev.DevKitV4.Shared.Entities3.Account>("account_master_account", Microsoft.Xrm.Sdk.EntityRole.Referenced);
-			}
-			set
-			{
-				this.SetRelatedEntities<Dev.DevKitV4.Shared.Entities3.Account>("account_master_account", Microsoft.Xrm.Sdk.EntityRole.Referenced, value);
-			}
+			this.SetAttributeValue("statuscode", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
 		}
-		
-		/// <summary>
-		/// 1:N account_parent_account
-		/// </summary>
-		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("account_parent_account", Microsoft.Xrm.Sdk.EntityRole.Referenced)]
-		public System.Collections.Generic.IEnumerable<Dev.DevKitV4.Shared.Entities3.Account> Referencedaccount_parent_account
+	}
+	
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("statuscodename")]
+	public string StatusCodeName
+	{
+		get
 		{
-			get
+			if (this.FormattedValues.Contains("statuscode"))
 			{
-				return this.GetRelatedEntities<Dev.DevKitV4.Shared.Entities3.Account>("account_parent_account", Microsoft.Xrm.Sdk.EntityRole.Referenced);
+				return this.FormattedValues["statuscode"];
 			}
-			set
+			else
 			{
-				this.SetRelatedEntities<Dev.DevKitV4.Shared.Entities3.Account>("account_parent_account", Microsoft.Xrm.Sdk.EntityRole.Referenced, value);
+				return default(string);
 			}
 		}
-		
-		/// <summary>
-		/// 1:N msa_account_managingpartner
-		/// </summary>
-		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("msa_account_managingpartner", Microsoft.Xrm.Sdk.EntityRole.Referenced)]
-		public System.Collections.Generic.IEnumerable<Dev.DevKitV4.Shared.Entities3.Account> Referencedmsa_account_managingpartner
+	}
+	
+	/// <summary>
+	/// Type the stock exchange at which the account is listed to track their stock and financial performance of the company.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("stockexchange")]
+	public string StockExchange
+	{
+		get
 		{
-			get
-			{
-				return this.GetRelatedEntities<Dev.DevKitV4.Shared.Entities3.Account>("msa_account_managingpartner", Microsoft.Xrm.Sdk.EntityRole.Referenced);
-			}
-			set
-			{
-				this.SetRelatedEntities<Dev.DevKitV4.Shared.Entities3.Account>("msa_account_managingpartner", Microsoft.Xrm.Sdk.EntityRole.Referenced, value);
-			}
+			return this.GetAttributeValue<string>("stockexchange");
 		}
-		
-		/// <summary>
-		/// N:1 account_master_account
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("masterid")]
-		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("account_master_account", Microsoft.Xrm.Sdk.EntityRole.Referencing)]
-		public Dev.DevKitV4.Shared.Entities3.Account Referencingaccount_master_account
+		set
 		{
-			get
-			{
-				return this.GetRelatedEntity<Dev.DevKitV4.Shared.Entities3.Account>("account_master_account", Microsoft.Xrm.Sdk.EntityRole.Referencing);
-			}
+			this.SetAttributeValue("stockexchange", value);
+		}
+	}
+	
+	/// <summary>
+	/// Type the main phone number for this account.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("telephone1")]
+	public string Telephone1
+	{
+		get
+		{
+			return this.GetAttributeValue<string>("telephone1");
+		}
+		set
+		{
+			this.SetAttributeValue("telephone1", value);
+		}
+	}
+	
+	/// <summary>
+	/// Type a second phone number for this account.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("telephone2")]
+	public string Telephone2
+	{
+		get
+		{
+			return this.GetAttributeValue<string>("telephone2");
+		}
+		set
+		{
+			this.SetAttributeValue("telephone2", value);
+		}
+	}
+	
+	/// <summary>
+	/// Type a third phone number for this account.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("telephone3")]
+	public string Telephone3
+	{
+		get
+		{
+			return this.GetAttributeValue<string>("telephone3");
+		}
+		set
+		{
+			this.SetAttributeValue("telephone3", value);
+		}
+	}
+	
+	/// <summary>
+	/// Select a region or territory for the account for use in segmentation and analysis.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("territorycode")]
+	public virtual account_territorycode? TerritoryCode
+	{
+		get
+		{
+			return ((account_territorycode?)(EntityOptionSetEnum.GetEnum(this, "territorycode")));
+		}
+		set
+		{
+			this.SetAttributeValue("territorycode", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
 		}
-		
-		/// <summary>
-		/// N:1 account_parent_account
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("parentaccountid")]
-		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("account_parent_account", Microsoft.Xrm.Sdk.EntityRole.Referencing)]
-		public Dev.DevKitV4.Shared.Entities3.Account Referencingaccount_parent_account
+	}
+	
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("territorycodename")]
+	public string TerritoryCodeName
+	{
+		get
 		{
-			get
+			if (this.FormattedValues.Contains("territorycode"))
 			{
-				return this.GetRelatedEntity<Dev.DevKitV4.Shared.Entities3.Account>("account_parent_account", Microsoft.Xrm.Sdk.EntityRole.Referencing);
+				return this.FormattedValues["territorycode"];
 			}
-			set
+			else
 			{
-				this.SetRelatedEntity<Dev.DevKitV4.Shared.Entities3.Account>("account_parent_account", Microsoft.Xrm.Sdk.EntityRole.Referencing, value);
+				return default(string);
 			}
+		}
+	}
+	
+	/// <summary>
+	/// Type the stock exchange symbol for the account to track financial performance of the company. You can click the code entered in this field to access the latest trading information from MSN Money.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("tickersymbol")]
+	public string TickerSymbol
+	{
+		get
+		{
+			return this.GetAttributeValue<string>("tickersymbol");
+		}
+		set
+		{
+			this.SetAttributeValue("tickersymbol", value);
+		}
+	}
+	
+	/// <summary>
+	/// Total time spent for emails (read and write) and meetings by me in relation to account record.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("timespentbymeonemailandmeetings")]
+	public string TimeSpentByMeOnEmailAndMeetings
+	{
+		get
+		{
+			return this.GetAttributeValue<string>("timespentbymeonemailandmeetings");
+		}
+	}
+	
+	/// <summary>
+	/// For internal use only.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("timezoneruleversionnumber")]
+	public System.Nullable<int> TimeZoneRuleVersionNumber
+	{
+		get
+		{
+			return this.GetAttributeValue<System.Nullable<int>>("timezoneruleversionnumber");
+		}
+		set
+		{
+			this.SetAttributeValue("timezoneruleversionnumber", value);
+		}
+	}
+	
+	/// <summary>
+	/// Choose the local currency for the record to make sure budgets are reported in the correct currency.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("transactioncurrencyid")]
+	public Microsoft.Xrm.Sdk.EntityReference TransactionCurrencyId
+	{
+		get
+		{
+			return this.GetAttributeValue<Microsoft.Xrm.Sdk.EntityReference>("transactioncurrencyid");
+		}
+		set
+		{
+			this.SetAttributeValue("transactioncurrencyid", value);
 		}
-		
-		/// <summary>
-		/// N:1 msa_account_managingpartner
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("msa_managingpartnerid")]
-		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("msa_account_managingpartner", Microsoft.Xrm.Sdk.EntityRole.Referencing)]
-		public Dev.DevKitV4.Shared.Entities3.Account Referencingmsa_account_managingpartner
+	}
+	
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("transactioncurrencyidname")]
+	public string TransactionCurrencyIdName
+	{
+		get
 		{
-			get
+			if (this.FormattedValues.Contains("transactioncurrencyid"))
 			{
-				return this.GetRelatedEntity<Dev.DevKitV4.Shared.Entities3.Account>("msa_account_managingpartner", Microsoft.Xrm.Sdk.EntityRole.Referencing);
+				return this.FormattedValues["transactioncurrencyid"];
 			}
-			set
+			else
 			{
-				this.SetRelatedEntity<Dev.DevKitV4.Shared.Entities3.Account>("msa_account_managingpartner", Microsoft.Xrm.Sdk.EntityRole.Referencing, value);
+				return default(string);
 			}
+		}
+	}
+	
+	/// <summary>
+	/// For internal use only.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("traversedpath")]
+	public string TraversedPath
+	{
+		get
+		{
+			return this.GetAttributeValue<string>("traversedpath");
+		}
+		set
+		{
+			this.SetAttributeValue("traversedpath", value);
+		}
+	}
+	
+	/// <summary>
+	/// Time zone code that was in use when the record was created.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("utcconversiontimezonecode")]
+	public System.Nullable<int> UTCConversionTimeZoneCode
+	{
+		get
+		{
+			return this.GetAttributeValue<System.Nullable<int>>("utcconversiontimezonecode");
+		}
+		set
+		{
+			this.SetAttributeValue("utcconversiontimezonecode", value);
+		}
+	}
+	
+	/// <summary>
+	/// Version number of the account.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("versionnumber")]
+	public System.Nullable<long> VersionNumber
+	{
+		get
+		{
+			return this.GetAttributeValue<System.Nullable<long>>("versionnumber");
+		}
+	}
+	
+	/// <summary>
+	/// Type the account's website URL to get quick details about the company profile.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("websiteurl")]
+	public string WebSiteURL
+	{
+		get
+		{
+			return this.GetAttributeValue<string>("websiteurl");
+		}
+		set
+		{
+			this.SetAttributeValue("websiteurl", value);
+		}
+	}
+	
+	/// <summary>
+	/// Type the phonetic spelling of the company name, if specified in Japanese, to make sure the name is pronounced correctly in phone calls and other communications.
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("yominame")]
+	public string YomiName
+	{
+		get
+		{
+			return this.GetAttributeValue<string>("yominame");
+		}
+		set
+		{
+			this.SetAttributeValue("yominame", value);
+		}
+	}
+	
+	/// <summary>
+	/// 1:N account_master_account
+	/// </summary>
+	[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("account_master_account", Microsoft.Xrm.Sdk.EntityRole.Referenced)]
+	public System.Collections.Generic.IEnumerable<Account> Referencedaccount_master_account
+	{
+		get
+		{
+			return this.GetRelatedEntities<Account>("account_master_account", Microsoft.Xrm.Sdk.EntityRole.Referenced);
+		}
+		set
+		{
+			this.SetRelatedEntities<Account>("account_master_account", Microsoft.Xrm.Sdk.EntityRole.Referenced, value);
+		}
+	}
+	
+	/// <summary>
+	/// 1:N account_parent_account
+	/// </summary>
+	[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("account_parent_account", Microsoft.Xrm.Sdk.EntityRole.Referenced)]
+	public System.Collections.Generic.IEnumerable<Account> Referencedaccount_parent_account
+	{
+		get
+		{
+			return this.GetRelatedEntities<Account>("account_parent_account", Microsoft.Xrm.Sdk.EntityRole.Referenced);
+		}
+		set
+		{
+			this.SetRelatedEntities<Account>("account_parent_account", Microsoft.Xrm.Sdk.EntityRole.Referenced, value);
+		}
+	}
+	
+	/// <summary>
+	/// 1:N msa_account_managingpartner
+	/// </summary>
+	[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("msa_account_managingpartner", Microsoft.Xrm.Sdk.EntityRole.Referenced)]
+	public System.Collections.Generic.IEnumerable<Account> Referencedmsa_account_managingpartner
+	{
+		get
+		{
+			return this.GetRelatedEntities<Account>("msa_account_managingpartner", Microsoft.Xrm.Sdk.EntityRole.Referenced);
+		}
+		set
+		{
+			this.SetRelatedEntities<Account>("msa_account_managingpartner", Microsoft.Xrm.Sdk.EntityRole.Referenced, value);
+		}
+	}
+	
+	/// <summary>
+	/// N:1 account_master_account
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("masterid")]
+	[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("account_master_account", Microsoft.Xrm.Sdk.EntityRole.Referencing)]
+	public Account Referencingaccount_master_account
+	{
+		get
+		{
+			return this.GetRelatedEntity<Account>("account_master_account", Microsoft.Xrm.Sdk.EntityRole.Referencing);
+		}
+	}
+	
+	/// <summary>
+	/// N:1 account_parent_account
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("parentaccountid")]
+	[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("account_parent_account", Microsoft.Xrm.Sdk.EntityRole.Referencing)]
+	public Account Referencingaccount_parent_account
+	{
+		get
+		{
+			return this.GetRelatedEntity<Account>("account_parent_account", Microsoft.Xrm.Sdk.EntityRole.Referencing);
+		}
+		set
+		{
+			this.SetRelatedEntity<Account>("account_parent_account", Microsoft.Xrm.Sdk.EntityRole.Referencing, value);
+		}
+	}
+	
+	/// <summary>
+	/// N:1 msa_account_managingpartner
+	/// </summary>
+	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("msa_managingpartnerid")]
+	[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("msa_account_managingpartner", Microsoft.Xrm.Sdk.EntityRole.Referencing)]
+	public Account Referencingmsa_account_managingpartner
+	{
+		get
+		{
+			return this.GetRelatedEntity<Account>("msa_account_managingpartner", Microsoft.Xrm.Sdk.EntityRole.Referencing);
+		}
+		set
+		{
+			this.SetRelatedEntity<Account>("msa_account_managingpartner", Microsoft.Xrm.Sdk.EntityRole.Referencing, value);
 		}
 	}
 }

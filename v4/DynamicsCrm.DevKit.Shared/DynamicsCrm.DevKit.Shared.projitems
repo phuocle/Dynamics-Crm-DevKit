@@ -12,7 +12,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Const.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)FileHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)JsonHelper.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Logic\ArgumentBuilder.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logic\CSharpEarlyBound.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logic\CSharpLateBound.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Enum.cs" />
@@ -20,6 +19,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Logic\JsForm.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logic\JsTypeScriptDeclaration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logic\JsWebApi.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ModelBuilderExtensions\CustomizeCodeDomService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ModelBuilderExtensions\NamingService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\CliAction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\CommentTypeScriptDeclaration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\ConfigJson.cs" />
