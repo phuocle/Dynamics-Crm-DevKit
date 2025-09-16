@@ -66,5 +66,8 @@
         <file src="..\license\LICENSE.txt" target="license\LICENSE.txt" />
         <file src="..\docs\README.md" target="docs\README.md" />
         <file src="..\images\icon.png" target="images\icon.png" />
+
+		<!-- DynamicsCrm.DevKit.CrmSvcUtilExtensions.dll -->
+		<file src="..\..\DynamicsCrm.DevKit.CrmSvcUtilExtensions\bin\Release\net48\DynamicsCrm.DevKit.CrmSvcUtilExtensions.dll" target="tools\DynamicsCrm.DevKit.CrmSvcUtilExtensions.dll" />
     </files>
 </package>
