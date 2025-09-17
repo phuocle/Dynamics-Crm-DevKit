@@ -6,7 +6,7 @@ using System;
 
 namespace Dev.DevKitV4.Package.Contact
 {
-    [CrmPluginRegistration("Create", "contact", StageEnum.PreOperation, ExecutionModeEnum.Synchronous, "", "Dev.DevKitV4.Package.Contact.PreContactCreateSynchronousPackage", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin)]
+    [CrmPluginRegistration("Create", "contact", StageEnum.PreOperation, ExecutionModeEnum.Synchronous, "", "Dev.DevKitV4.Package.Contact.PreContactCreateSynchronousPackage", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, Action = PluginStepOperationEnum.Deactivate)]
     public class PreContactCreateSynchronousPackage : PluginBase<Entity>, IPlugin
     {
         /*
