@@ -28,12 +28,19 @@
 		<PackageReference Include="Microsoft.CrmSdk.CoreAssemblies" Version="9.0.2.59" PrivateAssets="All" />
 		<PackageReference Include="Microsoft.PowerApps.MSBuild.Plugin" Version="1.*" PrivateAssets="All" />
 		<PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.*" PrivateAssets="All" />
+		<PackageReference Include="Niam.XRM.Framework" Version="9.0.2.27" />
 	</ItemGroup>
 	<ItemGroup>
+		<None Update="Niam.XRM.Framework.tt">
+		  <Generator></Generator>
+		</None>
 		<None Update="ReadMe.md">
 			<Pack>True</Pack>
 			<PackagePath>\</PackagePath>
 		</None>
+	</ItemGroup>
+	<ItemGroup>
+	  <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
 	</ItemGroup>
 	<Import Project="..\Dev.DevKitV4.Shared\Dev.DevKitV4.Shared.projitems" Label="Shared" Condition="Exists('..\Dev.DevKitV4.Shared\Dev.DevKitV4.Shared.projitems')" />
 	<Import Project="$(PowerAppsTargetsPath)\Microsoft.PowerApps.VisualStudio.Plugin.targets" Condition="Exists('$(PowerAppsTargetsPath)\Microsoft.PowerApps.VisualStudio.Plugin.targets')" />
