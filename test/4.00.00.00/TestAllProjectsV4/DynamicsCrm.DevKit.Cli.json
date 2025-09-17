@@ -94,6 +94,14 @@
       "entities": "account"
     },
     {
+      "profile": "EARLYBOUND",
+      "type": "EarlyBound",
+      "rootnamespace": "Dev.DevKitV4.Shared.Entities4",
+      "namespace": "",
+      "rootfolder": "",
+      "entities": "account"
+    },
+    {
       "profile": "JS-FORM",
       "type": "JsForm",
       "rootnamespace": "???",
@@ -125,7 +133,7 @@
       "profile": "ALL",
       "namespace": "Dev.DevKitV4.ProxyTypes",
       "output": "GeneratedCode.cs",
-      "entities": "*"
+      "entities": "account"
     }
   ],
   "uploadreports": [

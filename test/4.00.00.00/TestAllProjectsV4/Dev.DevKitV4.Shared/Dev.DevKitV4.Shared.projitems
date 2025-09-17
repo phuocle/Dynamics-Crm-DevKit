@@ -9,6 +9,7 @@
     <Import_RootNamespace>Dev.DevKitV4.Shared</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)Entities4\" />
     <Folder Include="$(MSBuildThisFileDirectory)Lib\" />
   </ItemGroup>
   <ItemGroup>

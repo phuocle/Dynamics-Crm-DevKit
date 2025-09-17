@@ -19,6 +19,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Logic\JsForm.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logic\JsTypeScriptDeclaration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logic\JsWebApi.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ModelBuilderExtensions\CodeGenerationService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ModelBuilderExtensions\CustomizeCodeDomService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ModelBuilderExtensions\NamingService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\CliAction.cs" />

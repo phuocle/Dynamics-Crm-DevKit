@@ -15,464 +15,464 @@
 /// Drop-down list for selecting the category of the account.
 /// </summary>
 [System.Runtime.Serialization.DataContractAttribute()]
-public enum account_accountcategorycode
+public enum FFFFF_account_accountcategorycode
 {
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	PreferredCustomer = 1,
+	EEEEE_PreferredCustomer = 1,
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	Standard = 2,
+	EEEEE_Standard = 2,
 }
 
 /// <summary>
 /// Drop-down list for classifying an account.
 /// </summary>
 [System.Runtime.Serialization.DataContractAttribute()]
-public enum account_accountclassificationcode
+public enum FFFFF_account_accountclassificationcode
 {
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	DefaultValue = 1,
+	EEEEE_DefaultValue = 1,
 }
 
 /// <summary>
 /// Drop-down list for selecting account ratings.
 /// </summary>
 [System.Runtime.Serialization.DataContractAttribute()]
-public enum account_accountratingcode
+public enum FFFFF_account_accountratingcode
 {
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	DefaultValue = 1,
+	EEEEE_DefaultValue = 1,
 }
 
 /// <summary>
 /// Type of address for address 1, such as billing, shipping, or primary address.
 /// </summary>
 [System.Runtime.Serialization.DataContractAttribute()]
-public enum account_address1_addresstypecode
+public enum FFFFF_account_address1_addresstypecode
 {
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	BillTo = 1,
+	EEEEE_BillTo = 1,
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	ShipTo = 2,
+	EEEEE_ShipTo = 2,
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	Primary = 3,
+	EEEEE_Primary = 3,
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	Other = 4,
+	EEEEE_Other = 4,
 }
 
 /// <summary>
 /// Freight terms for address 1.
 /// </summary>
 [System.Runtime.Serialization.DataContractAttribute()]
-public enum account_address1_freighttermscode
+public enum FFFFF_account_address1_freighttermscode
 {
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	FOB = 1,
+	EEEEE_FOB = 1,
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	NoCharge = 2,
+	EEEEE_NoCharge = 2,
 }
 
 /// <summary>
 /// Method of shipment for address 1.
 /// </summary>
 [System.Runtime.Serialization.DataContractAttribute()]
-public enum account_address1_shippingmethodcode
+public enum FFFFF_account_address1_shippingmethodcode
 {
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	Airborne = 1,
+	EEEEE_Airborne = 1,
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	DHL = 2,
+	EEEEE_DHL = 2,
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	FedEx = 3,
+	EEEEE_FedEx = 3,
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	UPS = 4,
+	EEEEE_UPS = 4,
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	PostalMail = 5,
+	EEEEE_PostalMail = 5,
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	FullLoad = 6,
+	EEEEE_FullLoad = 6,
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	WillCall = 7,
+	EEEEE_WillCall = 7,
 }
 
 /// <summary>
 /// Type of address for address 2, such as billing, shipping, or primary address.
 /// </summary>
 [System.Runtime.Serialization.DataContractAttribute()]
-public enum account_address2_addresstypecode
+public enum FFFFF_account_address2_addresstypecode
 {
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	DefaultValue = 1,
+	EEEEE_DefaultValue = 1,
 }
 
 /// <summary>
 /// Freight terms for address 2.
 /// </summary>
 [System.Runtime.Serialization.DataContractAttribute()]
-public enum account_address2_freighttermscode
+public enum FFFFF_account_address2_freighttermscode
 {
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	DefaultValue = 1,
+	EEEEE_DefaultValue = 1,
 }
 
 /// <summary>
 /// Method of shipment for address 2.
 /// </summary>
 [System.Runtime.Serialization.DataContractAttribute()]
-public enum account_address2_shippingmethodcode
+public enum FFFFF_account_address2_shippingmethodcode
 {
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	DefaultValue = 1,
+	EEEEE_DefaultValue = 1,
 }
 
 /// <summary>
 /// Type of business associated with the account.
 /// </summary>
 [System.Runtime.Serialization.DataContractAttribute()]
-public enum account_businesstypecode
+public enum FFFFF_account_businesstypecode
 {
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	DefaultValue = 1,
+	EEEEE_DefaultValue = 1,
 }
 
 /// <summary>
 /// Size of the account.
 /// </summary>
 [System.Runtime.Serialization.DataContractAttribute()]
-public enum account_customersizecode
+public enum FFFFF_account_customersizecode
 {
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	DefaultValue = 1,
+	EEEEE_DefaultValue = 1,
 }
 
 /// <summary>
 /// Type of the account.
 /// </summary>
 [System.Runtime.Serialization.DataContractAttribute()]
-public enum account_customertypecode
+public enum FFFFF_account_customertypecode
 {
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	Competitor = 1,
+	EEEEE_Competitor = 1,
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	Consultant = 2,
+	EEEEE_Consultant = 2,
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	Customer = 3,
+	EEEEE_Customer = 3,
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	Investor = 4,
+	EEEEE_Investor = 4,
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	Partner = 5,
+	EEEEE_Partner = 5,
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	Influencer = 6,
+	EEEEE_Influencer = 6,
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	Press = 7,
+	EEEEE_Press = 7,
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	Prospect = 8,
+	EEEEE_Prospect = 8,
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	Reseller = 9,
+	EEEEE_Reseller = 9,
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	Supplier = 10,
+	EEEEE_Supplier = 10,
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	Vendor = 11,
+	EEEEE_Vendor = 11,
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	Other = 12,
+	EEEEE_Other = 12,
 }
 
 /// <summary>
 /// Type of industry with which the account is associated.
 /// </summary>
 [System.Runtime.Serialization.DataContractAttribute()]
-public enum account_industrycode
+public enum FFFFF_account_industrycode
 {
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	Accounting = 1,
+	EEEEE_Accounting = 1,
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	AgricultureandNonpetrolNaturalResourceExtraction = 2,
+	EEEEE_AgricultureandNonpetrolNaturalResourceExtraction = 2,
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	BroadcastingPrintingandPublishing = 3,
+	EEEEE_BroadcastingPrintingandPublishing = 3,
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	Brokers = 4,
+	EEEEE_Brokers = 4,
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	BuildingSupplyRetail = 5,
+	EEEEE_BuildingSupplyRetail = 5,
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	BusinessServices = 6,
+	EEEEE_BusinessServices = 6,
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	Consulting = 7,
+	EEEEE_Consulting = 7,
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	ConsumerServices = 8,
+	EEEEE_ConsumerServices = 8,
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	DesignDirectionandCreativeManagement = 9,
+	EEEEE_DesignDirectionandCreativeManagement = 9,
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	DistributorsDispatchersandProcessors = 10,
+	EEEEE_DistributorsDispatchersandProcessors = 10,
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	DoctorsOfficesandClinics = 11,
+	EEEEE_DoctorsOfficesandClinics = 11,
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	DurableManufacturing = 12,
+	EEEEE_DurableManufacturing = 12,
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	EatingandDrinkingPlaces = 13,
+	EEEEE_EatingandDrinkingPlaces = 13,
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	EntertainmentRetail = 14,
+	EEEEE_EntertainmentRetail = 14,
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	EquipmentRentalandLeasing = 15,
+	EEEEE_EquipmentRentalandLeasing = 15,
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	Financial = 16,
+	EEEEE_Financial = 16,
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	FoodandTobaccoProcessing = 17,
+	EEEEE_FoodandTobaccoProcessing = 17,
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	InboundCapitalIntensiveProcessing = 18,
+	EEEEE_InboundCapitalIntensiveProcessing = 18,
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	InboundRepairandServices = 19,
+	EEEEE_InboundRepairandServices = 19,
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	Insurance = 20,
+	EEEEE_Insurance = 20,
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	LegalServices = 21,
+	EEEEE_LegalServices = 21,
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	NonDurableMerchandiseRetail = 22,
+	EEEEE_NonDurableMerchandiseRetail = 22,
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	OutboundConsumerService = 23,
+	EEEEE_OutboundConsumerService = 23,
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	PetrochemicalExtractionandDistribution = 24,
+	EEEEE_PetrochemicalExtractionandDistribution = 24,
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	ServiceRetail = 25,
+	EEEEE_ServiceRetail = 25,
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	SIGAffiliations = 26,
+	EEEEE_SIGAffiliations = 26,
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	SocialServices = 27,
+	EEEEE_SocialServices = 27,
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	SpecialOutboundTradeContractors = 28,
+	EEEEE_SpecialOutboundTradeContractors = 28,
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	SpecialtyRealty = 29,
+	EEEEE_SpecialtyRealty = 29,
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	Transportation = 30,
+	EEEEE_Transportation = 30,
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	UtilityCreationandDistribution = 31,
+	EEEEE_UtilityCreationandDistribution = 31,
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	VehicleRetail = 32,
+	EEEEE_VehicleRetail = 32,
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	Wholesale = 33,
+	EEEEE_Wholesale = 33,
 }
 
 /// <summary>
 /// Type of company ownership, such as public or private.
 /// </summary>
 [System.Runtime.Serialization.DataContractAttribute()]
-public enum account_ownershipcode
+public enum FFFFF_account_ownershipcode
 {
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	Public = 1,
+	EEEEE_Public = 1,
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	Private = 2,
+	EEEEE_Private = 2,
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	Subsidiary = 3,
+	EEEEE_Subsidiary = 3,
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	Other = 4,
+	EEEEE_Other = 4,
 }
 
 /// <summary>
 /// Payment terms for the account.
 /// </summary>
 [System.Runtime.Serialization.DataContractAttribute()]
-public enum account_paymenttermscode
+public enum FFFFF_account_paymenttermscode
 {
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	Net30 = 1,
+	EEEEE_Net30 = 1,
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	_210Net30 = 2,
+	EEEEE__210Net30 = 2,
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	Net45 = 3,
+	EEEEE_Net45 = 3,
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	Net60 = 4,
+	EEEEE_Net60 = 4,
 }
 
 /// <summary>
 /// Day of the week that the account prefers for scheduling service activities.
 /// </summary>
 [System.Runtime.Serialization.DataContractAttribute()]
-public enum account_preferredappointmentdaycode
+public enum FFFFF_account_preferredappointmentdaycode
 {
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	Sunday = 0,
+	EEEEE_Sunday = 0,
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	Monday = 1,
+	EEEEE_Monday = 1,
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	Tuesday = 2,
+	EEEEE_Tuesday = 2,
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	Wednesday = 3,
+	EEEEE_Wednesday = 3,
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	Thursday = 4,
+	EEEEE_Thursday = 4,
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	Friday = 5,
+	EEEEE_Friday = 5,
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	Saturday = 6,
+	EEEEE_Saturday = 6,
 }
 
 /// <summary>
 /// Time of day that the account prefers for scheduling service activities.
 /// </summary>
 [System.Runtime.Serialization.DataContractAttribute()]
-public enum account_preferredappointmenttimecode
+public enum FFFFF_account_preferredappointmenttimecode
 {
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	Morning = 1,
+	EEEEE_Morning = 1,
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	Afternoon = 2,
+	EEEEE_Afternoon = 2,
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	Evening = 3,
+	EEEEE_Evening = 3,
 }
 
 /// <summary>
 /// Preferred contact method for the account.
 /// </summary>
 [System.Runtime.Serialization.DataContractAttribute()]
-public enum account_preferredcontactmethodcode
+public enum FFFFF_account_preferredcontactmethodcode
 {
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	Any = 1,
+	EEEEE_Any = 1,
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	Email = 2,
+	EEEEE_Email = 2,
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	Phone = 3,
+	EEEEE_Phone = 3,
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	Fax = 4,
+	EEEEE_Fax = 4,
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	Mail = 5,
+	EEEEE_Mail = 5,
 }
 
 /// <summary>
 /// Method of shipment for the account.
 /// </summary>
 [System.Runtime.Serialization.DataContractAttribute()]
-public enum account_shippingmethodcode
+public enum FFFFF_account_shippingmethodcode
 {
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	DefaultValue = 1,
+	EEEEE_DefaultValue = 1,
 }
 
 /// <summary>
 /// Status of the account.
 /// </summary>
 [System.Runtime.Serialization.DataContractAttribute()]
-public enum account_statecode
+public enum FFFFF_account_statecode
 {
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	Active = 0,
+	EEEEE_Active = 0,
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	Inactive = 1,
+	EEEEE_Inactive = 1,
 }
 
 /// <summary>
 /// Reason for the status of the account.
 /// </summary>
 [System.Runtime.Serialization.DataContractAttribute()]
-public enum account_statuscode
+public enum FFFFF_account_statuscode
 {
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	Active = 1,
+	EEEEE_Active = 1,
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	Inactive = 2,
+	EEEEE_Inactive = 2,
 }
 
 /// <summary>
 /// Territory to which the account belongs.
 /// </summary>
 [System.Runtime.Serialization.DataContractAttribute()]
-public enum account_territorycode
+public enum FFFFF_account_territorycode
 {
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	DefaultValue = 1,
+	EEEEE_DefaultValue = 1,
 }
 
 /// <summary>
@@ -480,7 +480,7 @@ public enum account_territorycode
 /// </summary>
 [System.Runtime.Serialization.DataContractAttribute()]
 [Microsoft.Xrm.Sdk.Client.EntityLogicalNameAttribute("account")]
-public partial class Account : Microsoft.Xrm.Sdk.Entity
+public partial class BBBBB_Account : Microsoft.Xrm.Sdk.Entity
 {
 	
 		/// <summary>
@@ -488,235 +488,235 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 		/// </summary>
 		public partial class Fields
 		{
-			public const string AccountCategoryCode = "accountcategorycode";
-			public const string AccountCategoryCodeName = "accountcategorycodename";
-			public const string AccountClassificationCode = "accountclassificationcode";
-			public const string AccountClassificationCodeName = "accountclassificationcodename";
-			public const string AccountId = "accountid";
+			public const string AAAAA_AccountCategoryCode = "accountcategorycode";
+			public const string AAAAA_AccountCategoryCodeName = "accountcategorycodename";
+			public const string AAAAA_AccountClassificationCode = "accountclassificationcode";
+			public const string AAAAA_AccountClassificationCodeName = "accountclassificationcodename";
+			public const string AAAAA_AccountId = "accountid";
 			public const string Id = "accountid";
-			public const string AccountNumber = "accountnumber";
-			public const string AccountRatingCode = "accountratingcode";
-			public const string AccountRatingCodeName = "accountratingcodename";
-			public const string Address1_AddressId = "address1_addressid";
-			public const string Address1_AddressTypeCode = "address1_addresstypecode";
-			public const string Address1_AddressTypeCodeName = "address1_addresstypecodename";
-			public const string Address1_City = "address1_city";
-			public const string Address1_Composite = "address1_composite";
-			public const string Address1_Country = "address1_country";
-			public const string Address1_County = "address1_county";
-			public const string Address1_Fax = "address1_fax";
-			public const string Address1_FreightTermsCode = "address1_freighttermscode";
-			public const string Address1_FreightTermsCodeName = "address1_freighttermscodename";
-			public const string Address1_Latitude = "address1_latitude";
-			public const string Address1_Line1 = "address1_line1";
-			public const string Address1_Line2 = "address1_line2";
-			public const string Address1_Line3 = "address1_line3";
-			public const string Address1_Longitude = "address1_longitude";
-			public const string Address1_Name = "address1_name";
-			public const string Address1_PostalCode = "address1_postalcode";
-			public const string Address1_PostOfficeBox = "address1_postofficebox";
-			public const string Address1_PrimaryContactName = "address1_primarycontactname";
-			public const string Address1_ShippingMethodCode = "address1_shippingmethodcode";
-			public const string Address1_ShippingMethodCodeName = "address1_shippingmethodcodename";
-			public const string Address1_StateOrProvince = "address1_stateorprovince";
-			public const string Address1_Telephone1 = "address1_telephone1";
-			public const string Address1_Telephone2 = "address1_telephone2";
-			public const string Address1_Telephone3 = "address1_telephone3";
-			public const string Address1_UPSZone = "address1_upszone";
-			public const string Address1_UTCOffset = "address1_utcoffset";
-			public const string Address2_AddressId = "address2_addressid";
-			public const string Address2_AddressTypeCode = "address2_addresstypecode";
-			public const string Address2_AddressTypeCodeName = "address2_addresstypecodename";
-			public const string Address2_City = "address2_city";
-			public const string Address2_Composite = "address2_composite";
-			public const string Address2_Country = "address2_country";
-			public const string Address2_County = "address2_county";
-			public const string Address2_Fax = "address2_fax";
-			public const string Address2_FreightTermsCode = "address2_freighttermscode";
-			public const string Address2_FreightTermsCodeName = "address2_freighttermscodename";
-			public const string Address2_Latitude = "address2_latitude";
-			public const string Address2_Line1 = "address2_line1";
-			public const string Address2_Line2 = "address2_line2";
-			public const string Address2_Line3 = "address2_line3";
-			public const string Address2_Longitude = "address2_longitude";
-			public const string Address2_Name = "address2_name";
-			public const string Address2_PostalCode = "address2_postalcode";
-			public const string Address2_PostOfficeBox = "address2_postofficebox";
-			public const string Address2_PrimaryContactName = "address2_primarycontactname";
-			public const string Address2_ShippingMethodCode = "address2_shippingmethodcode";
-			public const string Address2_ShippingMethodCodeName = "address2_shippingmethodcodename";
-			public const string Address2_StateOrProvince = "address2_stateorprovince";
-			public const string Address2_Telephone1 = "address2_telephone1";
-			public const string Address2_Telephone2 = "address2_telephone2";
-			public const string Address2_Telephone3 = "address2_telephone3";
-			public const string Address2_UPSZone = "address2_upszone";
-			public const string Address2_UTCOffset = "address2_utcoffset";
-			public const string Adx_CreatedByIPAddress = "adx_createdbyipaddress";
-			public const string Adx_CreatedByUsername = "adx_createdbyusername";
-			public const string Adx_ModifiedByIPAddress = "adx_modifiedbyipaddress";
-			public const string Adx_ModifiedByUsername = "adx_modifiedbyusername";
-			public const string Aging30 = "aging30";
-			public const string Aging30_Base = "aging30_base";
-			public const string Aging60 = "aging60";
-			public const string Aging60_Base = "aging60_base";
-			public const string Aging90 = "aging90";
-			public const string Aging90_Base = "aging90_base";
-			public const string BusinessTypeCode = "businesstypecode";
-			public const string BusinessTypeCodeName = "businesstypecodename";
-			public const string CreatedBy = "createdby";
-			public const string CreatedByExternalParty = "createdbyexternalparty";
-			public const string CreatedByExternalPartyName = "createdbyexternalpartyname";
-			public const string CreatedByExternalPartyYomiName = "createdbyexternalpartyyominame";
-			public const string CreatedByName = "createdbyname";
-			public const string CreatedByYomiName = "createdbyyominame";
-			public const string CreatedOn = "createdon";
-			public const string CreatedOnBehalfBy = "createdonbehalfby";
-			public const string CreatedOnBehalfByName = "createdonbehalfbyname";
-			public const string CreatedOnBehalfByYomiName = "createdonbehalfbyyominame";
-			public const string CreditLimit = "creditlimit";
-			public const string CreditLimit_Base = "creditlimit_base";
-			public const string CreditOnHold = "creditonhold";
-			public const string CreditOnHoldName = "creditonholdname";
-			public const string CustomerSizeCode = "customersizecode";
-			public const string CustomerSizeCodeName = "customersizecodename";
-			public const string CustomerTypeCode = "customertypecode";
-			public const string CustomerTypeCodeName = "customertypecodename";
-			public const string Description = "description";
-			public const string devkit_BigInt = "devkit_bigint";
-			public const string devkit_CategoryCode = "devkit_categorycode";
-			public const string devkit_categorycodeName = "devkit_categorycodename";
-			public const string DoNotBulkEMail = "donotbulkemail";
-			public const string DoNotBulkEMailName = "donotbulkemailname";
-			public const string DoNotBulkPostalMail = "donotbulkpostalmail";
-			public const string DoNotBulkPostalMailName = "donotbulkpostalmailname";
-			public const string DoNotEMail = "donotemail";
-			public const string DoNotEMailName = "donotemailname";
-			public const string DoNotFax = "donotfax";
-			public const string DoNotFaxName = "donotfaxname";
-			public const string DoNotPhone = "donotphone";
-			public const string DoNotPhoneName = "donotphonename";
-			public const string DoNotPostalMail = "donotpostalmail";
-			public const string DoNotPostalMailName = "donotpostalmailname";
-			public const string DoNotSendMarketingMaterialName = "donotsendmarketingmaterialname";
-			public const string DoNotSendMM = "donotsendmm";
-			public const string EMailAddress1 = "emailaddress1";
-			public const string EMailAddress2 = "emailaddress2";
-			public const string EMailAddress3 = "emailaddress3";
-			public const string EntityImage = "entityimage";
-			public const string EntityImage_Timestamp = "entityimage_timestamp";
-			public const string EntityImage_URL = "entityimage_url";
-			public const string EntityImageId = "entityimageid";
-			public const string ExchangeRate = "exchangerate";
-			public const string Fax = "fax";
-			public const string FollowEmail = "followemail";
-			public const string FollowEmailName = "followemailname";
-			public const string FtpSiteURL = "ftpsiteurl";
-			public const string ImportSequenceNumber = "importsequencenumber";
-			public const string IndustryCode = "industrycode";
-			public const string IndustryCodeName = "industrycodename";
-			public const string IsPrivateName = "isprivatename";
-			public const string LastOnHoldTime = "lastonholdtime";
-			public const string LastUsedInCampaign = "lastusedincampaign";
-			public const string MarketCap = "marketcap";
-			public const string MarketCap_Base = "marketcap_base";
-			public const string MarketingOnly = "marketingonly";
-			public const string MarketingOnlyName = "marketingonlyname";
-			public const string MasterAccountIdName = "masteraccountidname";
-			public const string MasterAccountIdYomiName = "masteraccountidyominame";
-			public const string MasterId = "masterid";
-			public const string Merged = "merged";
-			public const string MergedName = "mergedname";
-			public const string ModifiedBy = "modifiedby";
-			public const string ModifiedByExternalParty = "modifiedbyexternalparty";
-			public const string ModifiedByExternalPartyName = "modifiedbyexternalpartyname";
-			public const string ModifiedByExternalPartyYomiName = "modifiedbyexternalpartyyominame";
-			public const string ModifiedByName = "modifiedbyname";
-			public const string ModifiedByYomiName = "modifiedbyyominame";
-			public const string ModifiedOn = "modifiedon";
-			public const string ModifiedOnBehalfBy = "modifiedonbehalfby";
-			public const string ModifiedOnBehalfByName = "modifiedonbehalfbyname";
-			public const string ModifiedOnBehalfByYomiName = "modifiedonbehalfbyyominame";
-			public const string msa_managingpartnerid = "msa_managingpartnerid";
-			public const string msa_managingpartneridName = "msa_managingpartneridname";
-			public const string msa_managingpartneridYomiName = "msa_managingpartneridyominame";
-			public const string Name = "name";
-			public const string NumberOfEmployees = "numberofemployees";
-			public const string OnHoldTime = "onholdtime";
-			public const string OverriddenCreatedOn = "overriddencreatedon";
-			public const string OwnerId = "ownerid";
-			public const string OwnerIdName = "owneridname";
-			public const string OwnerIdYomiName = "owneridyominame";
-			public const string OwnershipCode = "ownershipcode";
-			public const string OwnershipCodeName = "ownershipcodename";
-			public const string OwningBusinessUnit = "owningbusinessunit";
-			public const string OwningBusinessUnitName = "owningbusinessunitname";
-			public const string OwningTeam = "owningteam";
-			public const string OwningUser = "owninguser";
-			public const string ParentAccountId = "parentaccountid";
-			public const string ParentAccountIdName = "parentaccountidname";
-			public const string ParentAccountIdYomiName = "parentaccountidyominame";
-			public const string ParticipatesInWorkflow = "participatesinworkflow";
-			public const string ParticipatesInWorkflowName = "participatesinworkflowname";
-			public const string PaymentTermsCode = "paymenttermscode";
-			public const string PaymentTermsCodeName = "paymenttermscodename";
-			public const string PreferredAppointmentDayCode = "preferredappointmentdaycode";
-			public const string PreferredAppointmentDayCodeName = "preferredappointmentdaycodename";
-			public const string PreferredAppointmentTimeCode = "preferredappointmenttimecode";
-			public const string PreferredAppointmentTimeCodeName = "preferredappointmenttimecodename";
-			public const string PreferredContactMethodCode = "preferredcontactmethodcode";
-			public const string PreferredContactMethodCodeName = "preferredcontactmethodcodename";
-			public const string PreferredSystemUserId = "preferredsystemuserid";
-			public const string PreferredSystemUserIdName = "preferredsystemuseridname";
-			public const string PreferredSystemUserIdYomiName = "preferredsystemuseridyominame";
-			public const string PrimaryContactId = "primarycontactid";
-			public const string PrimaryContactIdName = "primarycontactidname";
-			public const string PrimaryContactIdYomiName = "primarycontactidyominame";
-			public const string PrimarySatoriId = "primarysatoriid";
-			public const string PrimaryTwitterId = "primarytwitterid";
-			public const string ProcessId = "processid";
-			public const string Revenue = "revenue";
-			public const string Revenue_Base = "revenue_base";
-			public const string SharesOutstanding = "sharesoutstanding";
-			public const string ShippingMethodCode = "shippingmethodcode";
-			public const string ShippingMethodCodeName = "shippingmethodcodename";
-			public const string SIC = "sic";
-			public const string SLAId = "slaid";
-			public const string SLAInvokedId = "slainvokedid";
-			public const string SLAInvokedIdName = "slainvokedidname";
-			public const string SLAName = "slaname";
-			public const string StageId = "stageid";
-			public const string StateCode = "statecode";
-			public const string StateCodeName = "statecodename";
-			public const string StatusCode = "statuscode";
-			public const string StatusCodeName = "statuscodename";
-			public const string StockExchange = "stockexchange";
-			public const string Telephone1 = "telephone1";
-			public const string Telephone2 = "telephone2";
-			public const string Telephone3 = "telephone3";
-			public const string TerritoryCode = "territorycode";
-			public const string TerritoryCodeName = "territorycodename";
-			public const string TickerSymbol = "tickersymbol";
-			public const string TimeSpentByMeOnEmailAndMeetings = "timespentbymeonemailandmeetings";
-			public const string TimeZoneRuleVersionNumber = "timezoneruleversionnumber";
-			public const string TransactionCurrencyId = "transactioncurrencyid";
-			public const string TransactionCurrencyIdName = "transactioncurrencyidname";
-			public const string TraversedPath = "traversedpath";
-			public const string UTCConversionTimeZoneCode = "utcconversiontimezonecode";
-			public const string VersionNumber = "versionnumber";
-			public const string WebSiteURL = "websiteurl";
-			public const string YomiName = "yominame";
-			public const string Referencedaccount_master_account = "Referencedaccount_master_account";
-			public const string Referencedaccount_parent_account = "Referencedaccount_parent_account";
-			public const string Referencedmsa_account_managingpartner = "Referencedmsa_account_managingpartner";
-			public const string Referencingaccount_master_account = "account_master_account";
-			public const string Referencingaccount_parent_account = "account_parent_account";
-			public const string Referencingmsa_account_managingpartner = "msa_account_managingpartner";
+			public const string AAAAA_AccountNumber = "accountnumber";
+			public const string AAAAA_AccountRatingCode = "accountratingcode";
+			public const string AAAAA_AccountRatingCodeName = "accountratingcodename";
+			public const string AAAAA_Address1_AddressId = "address1_addressid";
+			public const string AAAAA_Address1_AddressTypeCode = "address1_addresstypecode";
+			public const string AAAAA_Address1_AddressTypeCodeName = "address1_addresstypecodename";
+			public const string AAAAA_Address1_City = "address1_city";
+			public const string AAAAA_Address1_Composite = "address1_composite";
+			public const string AAAAA_Address1_Country = "address1_country";
+			public const string AAAAA_Address1_County = "address1_county";
+			public const string AAAAA_Address1_Fax = "address1_fax";
+			public const string AAAAA_Address1_FreightTermsCode = "address1_freighttermscode";
+			public const string AAAAA_Address1_FreightTermsCodeName = "address1_freighttermscodename";
+			public const string AAAAA_Address1_Latitude = "address1_latitude";
+			public const string AAAAA_Address1_Line1 = "address1_line1";
+			public const string AAAAA_Address1_Line2 = "address1_line2";
+			public const string AAAAA_Address1_Line3 = "address1_line3";
+			public const string AAAAA_Address1_Longitude = "address1_longitude";
+			public const string AAAAA_Address1_Name = "address1_name";
+			public const string AAAAA_Address1_PostalCode = "address1_postalcode";
+			public const string AAAAA_Address1_PostOfficeBox = "address1_postofficebox";
+			public const string AAAAA_Address1_PrimaryContactName = "address1_primarycontactname";
+			public const string AAAAA_Address1_ShippingMethodCode = "address1_shippingmethodcode";
+			public const string AAAAA_Address1_ShippingMethodCodeName = "address1_shippingmethodcodename";
+			public const string AAAAA_Address1_StateOrProvince = "address1_stateorprovince";
+			public const string AAAAA_Address1_Telephone1 = "address1_telephone1";
+			public const string AAAAA_Address1_Telephone2 = "address1_telephone2";
+			public const string AAAAA_Address1_Telephone3 = "address1_telephone3";
+			public const string AAAAA_Address1_UPSZone = "address1_upszone";
+			public const string AAAAA_Address1_UTCOffset = "address1_utcoffset";
+			public const string AAAAA_Address2_AddressId = "address2_addressid";
+			public const string AAAAA_Address2_AddressTypeCode = "address2_addresstypecode";
+			public const string AAAAA_Address2_AddressTypeCodeName = "address2_addresstypecodename";
+			public const string AAAAA_Address2_City = "address2_city";
+			public const string AAAAA_Address2_Composite = "address2_composite";
+			public const string AAAAA_Address2_Country = "address2_country";
+			public const string AAAAA_Address2_County = "address2_county";
+			public const string AAAAA_Address2_Fax = "address2_fax";
+			public const string AAAAA_Address2_FreightTermsCode = "address2_freighttermscode";
+			public const string AAAAA_Address2_FreightTermsCodeName = "address2_freighttermscodename";
+			public const string AAAAA_Address2_Latitude = "address2_latitude";
+			public const string AAAAA_Address2_Line1 = "address2_line1";
+			public const string AAAAA_Address2_Line2 = "address2_line2";
+			public const string AAAAA_Address2_Line3 = "address2_line3";
+			public const string AAAAA_Address2_Longitude = "address2_longitude";
+			public const string AAAAA_Address2_Name = "address2_name";
+			public const string AAAAA_Address2_PostalCode = "address2_postalcode";
+			public const string AAAAA_Address2_PostOfficeBox = "address2_postofficebox";
+			public const string AAAAA_Address2_PrimaryContactName = "address2_primarycontactname";
+			public const string AAAAA_Address2_ShippingMethodCode = "address2_shippingmethodcode";
+			public const string AAAAA_Address2_ShippingMethodCodeName = "address2_shippingmethodcodename";
+			public const string AAAAA_Address2_StateOrProvince = "address2_stateorprovince";
+			public const string AAAAA_Address2_Telephone1 = "address2_telephone1";
+			public const string AAAAA_Address2_Telephone2 = "address2_telephone2";
+			public const string AAAAA_Address2_Telephone3 = "address2_telephone3";
+			public const string AAAAA_Address2_UPSZone = "address2_upszone";
+			public const string AAAAA_Address2_UTCOffset = "address2_utcoffset";
+			public const string AAAAA_Adx_CreatedByIPAddress = "adx_createdbyipaddress";
+			public const string AAAAA_Adx_CreatedByUsername = "adx_createdbyusername";
+			public const string AAAAA_Adx_ModifiedByIPAddress = "adx_modifiedbyipaddress";
+			public const string AAAAA_Adx_ModifiedByUsername = "adx_modifiedbyusername";
+			public const string AAAAA_Aging30 = "aging30";
+			public const string AAAAA_Aging30_Base = "aging30_base";
+			public const string AAAAA_Aging60 = "aging60";
+			public const string AAAAA_Aging60_Base = "aging60_base";
+			public const string AAAAA_Aging90 = "aging90";
+			public const string AAAAA_Aging90_Base = "aging90_base";
+			public const string AAAAA_BusinessTypeCode = "businesstypecode";
+			public const string AAAAA_BusinessTypeCodeName = "businesstypecodename";
+			public const string AAAAA_CreatedBy = "createdby";
+			public const string AAAAA_CreatedByExternalParty = "createdbyexternalparty";
+			public const string AAAAA_CreatedByExternalPartyName = "createdbyexternalpartyname";
+			public const string AAAAA_CreatedByExternalPartyYomiName = "createdbyexternalpartyyominame";
+			public const string AAAAA_CreatedByName = "createdbyname";
+			public const string AAAAA_CreatedByYomiName = "createdbyyominame";
+			public const string AAAAA_CreatedOn = "createdon";
+			public const string AAAAA_CreatedOnBehalfBy = "createdonbehalfby";
+			public const string AAAAA_CreatedOnBehalfByName = "createdonbehalfbyname";
+			public const string AAAAA_CreatedOnBehalfByYomiName = "createdonbehalfbyyominame";
+			public const string AAAAA_CreditLimit = "creditlimit";
+			public const string AAAAA_CreditLimit_Base = "creditlimit_base";
+			public const string AAAAA_CreditOnHold = "creditonhold";
+			public const string AAAAA_CreditOnHoldName = "creditonholdname";
+			public const string AAAAA_CustomerSizeCode = "customersizecode";
+			public const string AAAAA_CustomerSizeCodeName = "customersizecodename";
+			public const string AAAAA_CustomerTypeCode = "customertypecode";
+			public const string AAAAA_CustomerTypeCodeName = "customertypecodename";
+			public const string AAAAA_Description = "description";
+			public const string AAAAA_devkit_BigInt = "devkit_bigint";
+			public const string AAAAA_devkit_CategoryCode = "devkit_categorycode";
+			public const string AAAAA_devkit_categorycodeName = "devkit_categorycodename";
+			public const string AAAAA_DoNotBulkEMail = "donotbulkemail";
+			public const string AAAAA_DoNotBulkEMailName = "donotbulkemailname";
+			public const string AAAAA_DoNotBulkPostalMail = "donotbulkpostalmail";
+			public const string AAAAA_DoNotBulkPostalMailName = "donotbulkpostalmailname";
+			public const string AAAAA_DoNotEMail = "donotemail";
+			public const string AAAAA_DoNotEMailName = "donotemailname";
+			public const string AAAAA_DoNotFax = "donotfax";
+			public const string AAAAA_DoNotFaxName = "donotfaxname";
+			public const string AAAAA_DoNotPhone = "donotphone";
+			public const string AAAAA_DoNotPhoneName = "donotphonename";
+			public const string AAAAA_DoNotPostalMail = "donotpostalmail";
+			public const string AAAAA_DoNotPostalMailName = "donotpostalmailname";
+			public const string AAAAA_DoNotSendMarketingMaterialName = "donotsendmarketingmaterialname";
+			public const string AAAAA_DoNotSendMM = "donotsendmm";
+			public const string AAAAA_EMailAddress1 = "emailaddress1";
+			public const string AAAAA_EMailAddress2 = "emailaddress2";
+			public const string AAAAA_EMailAddress3 = "emailaddress3";
+			public const string AAAAA_EntityImage = "entityimage";
+			public const string AAAAA_EntityImage_Timestamp = "entityimage_timestamp";
+			public const string AAAAA_EntityImage_URL = "entityimage_url";
+			public const string AAAAA_EntityImageId = "entityimageid";
+			public const string AAAAA_ExchangeRate = "exchangerate";
+			public const string AAAAA_Fax = "fax";
+			public const string AAAAA_FollowEmail = "followemail";
+			public const string AAAAA_FollowEmailName = "followemailname";
+			public const string AAAAA_FtpSiteURL = "ftpsiteurl";
+			public const string AAAAA_ImportSequenceNumber = "importsequencenumber";
+			public const string AAAAA_IndustryCode = "industrycode";
+			public const string AAAAA_IndustryCodeName = "industrycodename";
+			public const string AAAAA_IsPrivateName = "isprivatename";
+			public const string AAAAA_LastOnHoldTime = "lastonholdtime";
+			public const string AAAAA_LastUsedInCampaign = "lastusedincampaign";
+			public const string AAAAA_MarketCap = "marketcap";
+			public const string AAAAA_MarketCap_Base = "marketcap_base";
+			public const string AAAAA_MarketingOnly = "marketingonly";
+			public const string AAAAA_MarketingOnlyName = "marketingonlyname";
+			public const string AAAAA_MasterAccountIdName = "masteraccountidname";
+			public const string AAAAA_MasterAccountIdYomiName = "masteraccountidyominame";
+			public const string AAAAA_MasterId = "masterid";
+			public const string AAAAA_Merged = "merged";
+			public const string AAAAA_MergedName = "mergedname";
+			public const string AAAAA_ModifiedBy = "modifiedby";
+			public const string AAAAA_ModifiedByExternalParty = "modifiedbyexternalparty";
+			public const string AAAAA_ModifiedByExternalPartyName = "modifiedbyexternalpartyname";
+			public const string AAAAA_ModifiedByExternalPartyYomiName = "modifiedbyexternalpartyyominame";
+			public const string AAAAA_ModifiedByName = "modifiedbyname";
+			public const string AAAAA_ModifiedByYomiName = "modifiedbyyominame";
+			public const string AAAAA_ModifiedOn = "modifiedon";
+			public const string AAAAA_ModifiedOnBehalfBy = "modifiedonbehalfby";
+			public const string AAAAA_ModifiedOnBehalfByName = "modifiedonbehalfbyname";
+			public const string AAAAA_ModifiedOnBehalfByYomiName = "modifiedonbehalfbyyominame";
+			public const string AAAAA_msa_managingpartnerid = "msa_managingpartnerid";
+			public const string AAAAA_msa_managingpartneridName = "msa_managingpartneridname";
+			public const string AAAAA_msa_managingpartneridYomiName = "msa_managingpartneridyominame";
+			public const string AAAAA_Name = "name";
+			public const string AAAAA_NumberOfEmployees = "numberofemployees";
+			public const string AAAAA_OnHoldTime = "onholdtime";
+			public const string AAAAA_OverriddenCreatedOn = "overriddencreatedon";
+			public const string AAAAA_OwnerId = "ownerid";
+			public const string AAAAA_OwnerIdName = "owneridname";
+			public const string AAAAA_OwnerIdYomiName = "owneridyominame";
+			public const string AAAAA_OwnershipCode = "ownershipcode";
+			public const string AAAAA_OwnershipCodeName = "ownershipcodename";
+			public const string AAAAA_OwningBusinessUnit = "owningbusinessunit";
+			public const string AAAAA_OwningBusinessUnitName = "owningbusinessunitname";
+			public const string AAAAA_OwningTeam = "owningteam";
+			public const string AAAAA_OwningUser = "owninguser";
+			public const string AAAAA_ParentAccountId = "parentaccountid";
+			public const string AAAAA_ParentAccountIdName = "parentaccountidname";
+			public const string AAAAA_ParentAccountIdYomiName = "parentaccountidyominame";
+			public const string AAAAA_ParticipatesInWorkflow = "participatesinworkflow";
+			public const string AAAAA_ParticipatesInWorkflowName = "participatesinworkflowname";
+			public const string AAAAA_PaymentTermsCode = "paymenttermscode";
+			public const string AAAAA_PaymentTermsCodeName = "paymenttermscodename";
+			public const string AAAAA_PreferredAppointmentDayCode = "preferredappointmentdaycode";
+			public const string AAAAA_PreferredAppointmentDayCodeName = "preferredappointmentdaycodename";
+			public const string AAAAA_PreferredAppointmentTimeCode = "preferredappointmenttimecode";
+			public const string AAAAA_PreferredAppointmentTimeCodeName = "preferredappointmenttimecodename";
+			public const string AAAAA_PreferredContactMethodCode = "preferredcontactmethodcode";
+			public const string AAAAA_PreferredContactMethodCodeName = "preferredcontactmethodcodename";
+			public const string AAAAA_PreferredSystemUserId = "preferredsystemuserid";
+			public const string AAAAA_PreferredSystemUserIdName = "preferredsystemuseridname";
+			public const string AAAAA_PreferredSystemUserIdYomiName = "preferredsystemuseridyominame";
+			public const string AAAAA_PrimaryContactId = "primarycontactid";
+			public const string AAAAA_PrimaryContactIdName = "primarycontactidname";
+			public const string AAAAA_PrimaryContactIdYomiName = "primarycontactidyominame";
+			public const string AAAAA_PrimarySatoriId = "primarysatoriid";
+			public const string AAAAA_PrimaryTwitterId = "primarytwitterid";
+			public const string AAAAA_ProcessId = "processid";
+			public const string AAAAA_Revenue = "revenue";
+			public const string AAAAA_Revenue_Base = "revenue_base";
+			public const string AAAAA_SharesOutstanding = "sharesoutstanding";
+			public const string AAAAA_ShippingMethodCode = "shippingmethodcode";
+			public const string AAAAA_ShippingMethodCodeName = "shippingmethodcodename";
+			public const string AAAAA_SIC = "sic";
+			public const string AAAAA_SLAId = "slaid";
+			public const string AAAAA_SLAInvokedId = "slainvokedid";
+			public const string AAAAA_SLAInvokedIdName = "slainvokedidname";
+			public const string AAAAA_SLAName = "slaname";
+			public const string AAAAA_StageId = "stageid";
+			public const string AAAAA_StateCode = "statecode";
+			public const string AAAAA_StateCodeName = "statecodename";
+			public const string AAAAA_StatusCode = "statuscode";
+			public const string AAAAA_StatusCodeName = "statuscodename";
+			public const string AAAAA_StockExchange = "stockexchange";
+			public const string AAAAA_Telephone1 = "telephone1";
+			public const string AAAAA_Telephone2 = "telephone2";
+			public const string AAAAA_Telephone3 = "telephone3";
+			public const string AAAAA_TerritoryCode = "territorycode";
+			public const string AAAAA_TerritoryCodeName = "territorycodename";
+			public const string AAAAA_TickerSymbol = "tickersymbol";
+			public const string AAAAA_TimeSpentByMeOnEmailAndMeetings = "timespentbymeonemailandmeetings";
+			public const string AAAAA_TimeZoneRuleVersionNumber = "timezoneruleversionnumber";
+			public const string AAAAA_TransactionCurrencyId = "transactioncurrencyid";
+			public const string AAAAA_TransactionCurrencyIdName = "transactioncurrencyidname";
+			public const string AAAAA_TraversedPath = "traversedpath";
+			public const string AAAAA_UTCConversionTimeZoneCode = "utcconversiontimezonecode";
+			public const string AAAAA_VersionNumber = "versionnumber";
+			public const string AAAAA_WebSiteURL = "websiteurl";
+			public const string AAAAA_YomiName = "yominame";
+			public const string GGGGG_Referencedaccount_master_account = "GGGGG_Referencedaccount_master_account";
+			public const string GGGGG_Referencedaccount_parent_account = "GGGGG_Referencedaccount_parent_account";
+			public const string GGGGG_Referencedmsa_account_managingpartner = "GGGGG_Referencedmsa_account_managingpartner";
+			public const string GGGGG_Referencingaccount_master_account = "account_master_account";
+			public const string GGGGG_Referencingaccount_parent_account = "account_parent_account";
+			public const string GGGGG_Referencingmsa_account_managingpartner = "msa_account_managingpartner";
 		}
 	
 	/// <summary>
 	/// Default Constructor.
 	/// </summary>
-	public Account() : 
+	public BBBBB_Account() : 
 			base(EntityLogicalName)
 	{
 	}
@@ -733,11 +733,11 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Select a category to indicate whether the customer account is standard or preferred.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("accountcategorycode")]
-	public virtual account_accountcategorycode? AccountCategoryCode
+	public virtual FFFFF_account_accountcategorycode? AAAAA_AccountCategoryCode
 	{
 		get
 		{
-			return ((account_accountcategorycode?)(EntityOptionSetEnum.GetEnum(this, "accountcategorycode")));
+			return ((FFFFF_account_accountcategorycode?)(EntityOptionSetEnum.GetEnum(this, "accountcategorycode")));
 		}
 		set
 		{
@@ -746,7 +746,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	}
 	
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("accountcategorycodename")]
-	public string AccountCategoryCodeName
+	public string AAAAA_AccountCategoryCodeName
 	{
 		get
 		{
@@ -765,11 +765,11 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Select a classification code to indicate the potential value of the customer account based on the projected return on investment, cooperation level, sales cycle length or other criteria.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("accountclassificationcode")]
-	public virtual account_accountclassificationcode? AccountClassificationCode
+	public virtual FFFFF_account_accountclassificationcode? AAAAA_AccountClassificationCode
 	{
 		get
 		{
-			return ((account_accountclassificationcode?)(EntityOptionSetEnum.GetEnum(this, "accountclassificationcode")));
+			return ((FFFFF_account_accountclassificationcode?)(EntityOptionSetEnum.GetEnum(this, "accountclassificationcode")));
 		}
 		set
 		{
@@ -778,7 +778,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	}
 	
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("accountclassificationcodename")]
-	public string AccountClassificationCodeName
+	public string AAAAA_AccountClassificationCodeName
 	{
 		get
 		{
@@ -797,7 +797,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Unique identifier of the account.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("accountid")]
-	public System.Nullable<System.Guid> AccountId
+	public System.Nullable<System.Guid> AAAAA_AccountId
 	{
 		get
 		{
@@ -826,7 +826,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 		}
 		set
 		{
-			this.AccountId = value;
+			this.AAAAA_AccountId = value;
 		}
 	}
 	
@@ -834,7 +834,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Type an ID number or code for the account to quickly search and identify the account in system views.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("accountnumber")]
-	public string AccountNumber
+	public string AAAAA_AccountNumber
 	{
 		get
 		{
@@ -850,11 +850,11 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Select a rating to indicate the value of the customer account.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("accountratingcode")]
-	public virtual account_accountratingcode? AccountRatingCode
+	public virtual FFFFF_account_accountratingcode? AAAAA_AccountRatingCode
 	{
 		get
 		{
-			return ((account_accountratingcode?)(EntityOptionSetEnum.GetEnum(this, "accountratingcode")));
+			return ((FFFFF_account_accountratingcode?)(EntityOptionSetEnum.GetEnum(this, "accountratingcode")));
 		}
 		set
 		{
@@ -863,7 +863,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	}
 	
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("accountratingcodename")]
-	public string AccountRatingCodeName
+	public string AAAAA_AccountRatingCodeName
 	{
 		get
 		{
@@ -882,7 +882,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Unique identifier for address 1.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address1_addressid")]
-	public System.Nullable<System.Guid> Address1_AddressId
+	public System.Nullable<System.Guid> AAAAA_Address1_AddressId
 	{
 		get
 		{
@@ -898,11 +898,11 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Select the primary address type.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address1_addresstypecode")]
-	public virtual account_address1_addresstypecode? Address1_AddressTypeCode
+	public virtual FFFFF_account_address1_addresstypecode? AAAAA_Address1_AddressTypeCode
 	{
 		get
 		{
-			return ((account_address1_addresstypecode?)(EntityOptionSetEnum.GetEnum(this, "address1_addresstypecode")));
+			return ((FFFFF_account_address1_addresstypecode?)(EntityOptionSetEnum.GetEnum(this, "address1_addresstypecode")));
 		}
 		set
 		{
@@ -911,7 +911,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	}
 	
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address1_addresstypecodename")]
-	public string Address1_AddressTypeCodeName
+	public string AAAAA_Address1_AddressTypeCodeName
 	{
 		get
 		{
@@ -930,7 +930,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Type the city for the primary address.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address1_city")]
-	public string Address1_City
+	public string AAAAA_Address1_City
 	{
 		get
 		{
@@ -946,7 +946,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Shows the complete primary address.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address1_composite")]
-	public string Address1_Composite
+	public string AAAAA_Address1_Composite
 	{
 		get
 		{
@@ -958,7 +958,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Type the country or region for the primary address.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address1_country")]
-	public string Address1_Country
+	public string AAAAA_Address1_Country
 	{
 		get
 		{
@@ -974,7 +974,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Type the county for the primary address.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address1_county")]
-	public string Address1_County
+	public string AAAAA_Address1_County
 	{
 		get
 		{
@@ -990,7 +990,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Type the fax number associated with the primary address.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address1_fax")]
-	public string Address1_Fax
+	public string AAAAA_Address1_Fax
 	{
 		get
 		{
@@ -1006,11 +1006,11 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Select the freight terms for the primary address to make sure shipping orders are processed correctly.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address1_freighttermscode")]
-	public virtual account_address1_freighttermscode? Address1_FreightTermsCode
+	public virtual FFFFF_account_address1_freighttermscode? AAAAA_Address1_FreightTermsCode
 	{
 		get
 		{
-			return ((account_address1_freighttermscode?)(EntityOptionSetEnum.GetEnum(this, "address1_freighttermscode")));
+			return ((FFFFF_account_address1_freighttermscode?)(EntityOptionSetEnum.GetEnum(this, "address1_freighttermscode")));
 		}
 		set
 		{
@@ -1019,7 +1019,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	}
 	
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address1_freighttermscodename")]
-	public string Address1_FreightTermsCodeName
+	public string AAAAA_Address1_FreightTermsCodeName
 	{
 		get
 		{
@@ -1038,7 +1038,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Type the latitude value for the primary address for use in mapping and other applications.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address1_latitude")]
-	public System.Nullable<double> Address1_Latitude
+	public System.Nullable<double> AAAAA_Address1_Latitude
 	{
 		get
 		{
@@ -1054,7 +1054,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Type the first line of the primary address.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address1_line1")]
-	public string Address1_Line1
+	public string AAAAA_Address1_Line1
 	{
 		get
 		{
@@ -1070,7 +1070,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Type the second line of the primary address.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address1_line2")]
-	public string Address1_Line2
+	public string AAAAA_Address1_Line2
 	{
 		get
 		{
@@ -1086,7 +1086,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Type the third line of the primary address.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address1_line3")]
-	public string Address1_Line3
+	public string AAAAA_Address1_Line3
 	{
 		get
 		{
@@ -1102,7 +1102,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Type the longitude value for the primary address for use in mapping and other applications.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address1_longitude")]
-	public System.Nullable<double> Address1_Longitude
+	public System.Nullable<double> AAAAA_Address1_Longitude
 	{
 		get
 		{
@@ -1118,7 +1118,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Type a descriptive name for the primary address, such as Corporate Headquarters.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address1_name")]
-	public string Address1_Name
+	public string AAAAA_Address1_Name
 	{
 		get
 		{
@@ -1134,7 +1134,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Type the ZIP Code or postal code for the primary address.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address1_postalcode")]
-	public string Address1_PostalCode
+	public string AAAAA_Address1_PostalCode
 	{
 		get
 		{
@@ -1150,7 +1150,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Type the post office box number of the primary address.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address1_postofficebox")]
-	public string Address1_PostOfficeBox
+	public string AAAAA_Address1_PostOfficeBox
 	{
 		get
 		{
@@ -1166,7 +1166,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Type the name of the main contact at the account's primary address.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address1_primarycontactname")]
-	public string Address1_PrimaryContactName
+	public string AAAAA_Address1_PrimaryContactName
 	{
 		get
 		{
@@ -1182,11 +1182,11 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Select a shipping method for deliveries sent to this address.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address1_shippingmethodcode")]
-	public virtual account_address1_shippingmethodcode? Address1_ShippingMethodCode
+	public virtual FFFFF_account_address1_shippingmethodcode? AAAAA_Address1_ShippingMethodCode
 	{
 		get
 		{
-			return ((account_address1_shippingmethodcode?)(EntityOptionSetEnum.GetEnum(this, "address1_shippingmethodcode")));
+			return ((FFFFF_account_address1_shippingmethodcode?)(EntityOptionSetEnum.GetEnum(this, "address1_shippingmethodcode")));
 		}
 		set
 		{
@@ -1195,7 +1195,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	}
 	
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address1_shippingmethodcodename")]
-	public string Address1_ShippingMethodCodeName
+	public string AAAAA_Address1_ShippingMethodCodeName
 	{
 		get
 		{
@@ -1214,7 +1214,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Type the state or province of the primary address.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address1_stateorprovince")]
-	public string Address1_StateOrProvince
+	public string AAAAA_Address1_StateOrProvince
 	{
 		get
 		{
@@ -1230,7 +1230,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Type the main phone number associated with the primary address.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address1_telephone1")]
-	public string Address1_Telephone1
+	public string AAAAA_Address1_Telephone1
 	{
 		get
 		{
@@ -1246,7 +1246,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Type a second phone number associated with the primary address.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address1_telephone2")]
-	public string Address1_Telephone2
+	public string AAAAA_Address1_Telephone2
 	{
 		get
 		{
@@ -1262,7 +1262,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Type a third phone number associated with the primary address.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address1_telephone3")]
-	public string Address1_Telephone3
+	public string AAAAA_Address1_Telephone3
 	{
 		get
 		{
@@ -1278,7 +1278,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Type the UPS zone of the primary address to make sure shipping charges are calculated correctly and deliveries are made promptly, if shipped by UPS.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address1_upszone")]
-	public string Address1_UPSZone
+	public string AAAAA_Address1_UPSZone
 	{
 		get
 		{
@@ -1294,7 +1294,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Select the time zone, or UTC offset, for this address so that other people can reference it when they contact someone at this address.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address1_utcoffset")]
-	public System.Nullable<int> Address1_UTCOffset
+	public System.Nullable<int> AAAAA_Address1_UTCOffset
 	{
 		get
 		{
@@ -1310,7 +1310,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Unique identifier for address 2.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address2_addressid")]
-	public System.Nullable<System.Guid> Address2_AddressId
+	public System.Nullable<System.Guid> AAAAA_Address2_AddressId
 	{
 		get
 		{
@@ -1326,11 +1326,11 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Select the secondary address type.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address2_addresstypecode")]
-	public virtual account_address2_addresstypecode? Address2_AddressTypeCode
+	public virtual FFFFF_account_address2_addresstypecode? AAAAA_Address2_AddressTypeCode
 	{
 		get
 		{
-			return ((account_address2_addresstypecode?)(EntityOptionSetEnum.GetEnum(this, "address2_addresstypecode")));
+			return ((FFFFF_account_address2_addresstypecode?)(EntityOptionSetEnum.GetEnum(this, "address2_addresstypecode")));
 		}
 		set
 		{
@@ -1339,7 +1339,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	}
 	
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address2_addresstypecodename")]
-	public string Address2_AddressTypeCodeName
+	public string AAAAA_Address2_AddressTypeCodeName
 	{
 		get
 		{
@@ -1358,7 +1358,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Type the city for the secondary address.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address2_city")]
-	public string Address2_City
+	public string AAAAA_Address2_City
 	{
 		get
 		{
@@ -1374,7 +1374,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Shows the complete secondary address.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address2_composite")]
-	public string Address2_Composite
+	public string AAAAA_Address2_Composite
 	{
 		get
 		{
@@ -1386,7 +1386,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Type the country or region for the secondary address.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address2_country")]
-	public string Address2_Country
+	public string AAAAA_Address2_Country
 	{
 		get
 		{
@@ -1402,7 +1402,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Type the county for the secondary address.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address2_county")]
-	public string Address2_County
+	public string AAAAA_Address2_County
 	{
 		get
 		{
@@ -1418,7 +1418,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Type the fax number associated with the secondary address.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address2_fax")]
-	public string Address2_Fax
+	public string AAAAA_Address2_Fax
 	{
 		get
 		{
@@ -1434,11 +1434,11 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Select the freight terms for the secondary address to make sure shipping orders are processed correctly.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address2_freighttermscode")]
-	public virtual account_address2_freighttermscode? Address2_FreightTermsCode
+	public virtual FFFFF_account_address2_freighttermscode? AAAAA_Address2_FreightTermsCode
 	{
 		get
 		{
-			return ((account_address2_freighttermscode?)(EntityOptionSetEnum.GetEnum(this, "address2_freighttermscode")));
+			return ((FFFFF_account_address2_freighttermscode?)(EntityOptionSetEnum.GetEnum(this, "address2_freighttermscode")));
 		}
 		set
 		{
@@ -1447,7 +1447,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	}
 	
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address2_freighttermscodename")]
-	public string Address2_FreightTermsCodeName
+	public string AAAAA_Address2_FreightTermsCodeName
 	{
 		get
 		{
@@ -1466,7 +1466,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Type the latitude value for the secondary address for use in mapping and other applications.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address2_latitude")]
-	public System.Nullable<double> Address2_Latitude
+	public System.Nullable<double> AAAAA_Address2_Latitude
 	{
 		get
 		{
@@ -1482,7 +1482,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Type the first line of the secondary address.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address2_line1")]
-	public string Address2_Line1
+	public string AAAAA_Address2_Line1
 	{
 		get
 		{
@@ -1498,7 +1498,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Type the second line of the secondary address.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address2_line2")]
-	public string Address2_Line2
+	public string AAAAA_Address2_Line2
 	{
 		get
 		{
@@ -1514,7 +1514,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Type the third line of the secondary address.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address2_line3")]
-	public string Address2_Line3
+	public string AAAAA_Address2_Line3
 	{
 		get
 		{
@@ -1530,7 +1530,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Type the longitude value for the secondary address for use in mapping and other applications.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address2_longitude")]
-	public System.Nullable<double> Address2_Longitude
+	public System.Nullable<double> AAAAA_Address2_Longitude
 	{
 		get
 		{
@@ -1546,7 +1546,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Type a descriptive name for the secondary address, such as Corporate Headquarters.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address2_name")]
-	public string Address2_Name
+	public string AAAAA_Address2_Name
 	{
 		get
 		{
@@ -1562,7 +1562,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Type the ZIP Code or postal code for the secondary address.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address2_postalcode")]
-	public string Address2_PostalCode
+	public string AAAAA_Address2_PostalCode
 	{
 		get
 		{
@@ -1578,7 +1578,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Type the post office box number of the secondary address.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address2_postofficebox")]
-	public string Address2_PostOfficeBox
+	public string AAAAA_Address2_PostOfficeBox
 	{
 		get
 		{
@@ -1594,7 +1594,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Type the name of the main contact at the account's secondary address.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address2_primarycontactname")]
-	public string Address2_PrimaryContactName
+	public string AAAAA_Address2_PrimaryContactName
 	{
 		get
 		{
@@ -1610,11 +1610,11 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Select a shipping method for deliveries sent to this address.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address2_shippingmethodcode")]
-	public virtual account_address2_shippingmethodcode? Address2_ShippingMethodCode
+	public virtual FFFFF_account_address2_shippingmethodcode? AAAAA_Address2_ShippingMethodCode
 	{
 		get
 		{
-			return ((account_address2_shippingmethodcode?)(EntityOptionSetEnum.GetEnum(this, "address2_shippingmethodcode")));
+			return ((FFFFF_account_address2_shippingmethodcode?)(EntityOptionSetEnum.GetEnum(this, "address2_shippingmethodcode")));
 		}
 		set
 		{
@@ -1623,7 +1623,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	}
 	
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address2_shippingmethodcodename")]
-	public string Address2_ShippingMethodCodeName
+	public string AAAAA_Address2_ShippingMethodCodeName
 	{
 		get
 		{
@@ -1642,7 +1642,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Type the state or province of the secondary address.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address2_stateorprovince")]
-	public string Address2_StateOrProvince
+	public string AAAAA_Address2_StateOrProvince
 	{
 		get
 		{
@@ -1658,7 +1658,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Type the main phone number associated with the secondary address.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address2_telephone1")]
-	public string Address2_Telephone1
+	public string AAAAA_Address2_Telephone1
 	{
 		get
 		{
@@ -1674,7 +1674,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Type a second phone number associated with the secondary address.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address2_telephone2")]
-	public string Address2_Telephone2
+	public string AAAAA_Address2_Telephone2
 	{
 		get
 		{
@@ -1690,7 +1690,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Type a third phone number associated with the secondary address.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address2_telephone3")]
-	public string Address2_Telephone3
+	public string AAAAA_Address2_Telephone3
 	{
 		get
 		{
@@ -1706,7 +1706,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Type the UPS zone of the secondary address to make sure shipping charges are calculated correctly and deliveries are made promptly, if shipped by UPS.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address2_upszone")]
-	public string Address2_UPSZone
+	public string AAAAA_Address2_UPSZone
 	{
 		get
 		{
@@ -1722,7 +1722,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Select the time zone, or UTC offset, for this address so that other people can reference it when they contact someone at this address.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("address2_utcoffset")]
-	public System.Nullable<int> Address2_UTCOffset
+	public System.Nullable<int> AAAAA_Address2_UTCOffset
 	{
 		get
 		{
@@ -1735,7 +1735,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	}
 	
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("adx_createdbyipaddress")]
-	public string Adx_CreatedByIPAddress
+	public string AAAAA_Adx_CreatedByIPAddress
 	{
 		get
 		{
@@ -1748,7 +1748,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	}
 	
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("adx_createdbyusername")]
-	public string Adx_CreatedByUsername
+	public string AAAAA_Adx_CreatedByUsername
 	{
 		get
 		{
@@ -1761,7 +1761,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	}
 	
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("adx_modifiedbyipaddress")]
-	public string Adx_ModifiedByIPAddress
+	public string AAAAA_Adx_ModifiedByIPAddress
 	{
 		get
 		{
@@ -1774,7 +1774,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	}
 	
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("adx_modifiedbyusername")]
-	public string Adx_ModifiedByUsername
+	public string AAAAA_Adx_ModifiedByUsername
 	{
 		get
 		{
@@ -1790,7 +1790,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// For system use only.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("aging30")]
-	public Microsoft.Xrm.Sdk.Money Aging30
+	public Microsoft.Xrm.Sdk.Money AAAAA_Aging30
 	{
 		get
 		{
@@ -1802,7 +1802,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// The base currency equivalent of the aging 30 field.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("aging30_base")]
-	public Microsoft.Xrm.Sdk.Money Aging30_Base
+	public Microsoft.Xrm.Sdk.Money AAAAA_Aging30_Base
 	{
 		get
 		{
@@ -1814,7 +1814,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// For system use only.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("aging60")]
-	public Microsoft.Xrm.Sdk.Money Aging60
+	public Microsoft.Xrm.Sdk.Money AAAAA_Aging60
 	{
 		get
 		{
@@ -1826,7 +1826,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// The base currency equivalent of the aging 60 field.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("aging60_base")]
-	public Microsoft.Xrm.Sdk.Money Aging60_Base
+	public Microsoft.Xrm.Sdk.Money AAAAA_Aging60_Base
 	{
 		get
 		{
@@ -1838,7 +1838,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// For system use only.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("aging90")]
-	public Microsoft.Xrm.Sdk.Money Aging90
+	public Microsoft.Xrm.Sdk.Money AAAAA_Aging90
 	{
 		get
 		{
@@ -1850,7 +1850,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// The base currency equivalent of the aging 90 field.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("aging90_base")]
-	public Microsoft.Xrm.Sdk.Money Aging90_Base
+	public Microsoft.Xrm.Sdk.Money AAAAA_Aging90_Base
 	{
 		get
 		{
@@ -1862,11 +1862,11 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Select the legal designation or other business type of the account for contracts or reporting purposes.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("businesstypecode")]
-	public virtual account_businesstypecode? BusinessTypeCode
+	public virtual FFFFF_account_businesstypecode? AAAAA_BusinessTypeCode
 	{
 		get
 		{
-			return ((account_businesstypecode?)(EntityOptionSetEnum.GetEnum(this, "businesstypecode")));
+			return ((FFFFF_account_businesstypecode?)(EntityOptionSetEnum.GetEnum(this, "businesstypecode")));
 		}
 		set
 		{
@@ -1875,7 +1875,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	}
 	
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("businesstypecodename")]
-	public string BusinessTypeCodeName
+	public string AAAAA_BusinessTypeCodeName
 	{
 		get
 		{
@@ -1894,7 +1894,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Shows who created the record.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("createdby")]
-	public Microsoft.Xrm.Sdk.EntityReference CreatedBy
+	public Microsoft.Xrm.Sdk.EntityReference AAAAA_CreatedBy
 	{
 		get
 		{
@@ -1906,7 +1906,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Shows the external party who created the record.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("createdbyexternalparty")]
-	public Microsoft.Xrm.Sdk.EntityReference CreatedByExternalParty
+	public Microsoft.Xrm.Sdk.EntityReference AAAAA_CreatedByExternalParty
 	{
 		get
 		{
@@ -1915,7 +1915,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	}
 	
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("createdbyexternalpartyname")]
-	public string CreatedByExternalPartyName
+	public string AAAAA_CreatedByExternalPartyName
 	{
 		get
 		{
@@ -1931,7 +1931,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	}
 	
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("createdbyexternalpartyyominame")]
-	public string CreatedByExternalPartyYomiName
+	public string AAAAA_CreatedByExternalPartyYomiName
 	{
 		get
 		{
@@ -1947,7 +1947,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	}
 	
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("createdbyname")]
-	public string CreatedByName
+	public string AAAAA_CreatedByName
 	{
 		get
 		{
@@ -1963,7 +1963,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	}
 	
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("createdbyyominame")]
-	public string CreatedByYomiName
+	public string AAAAA_CreatedByYomiName
 	{
 		get
 		{
@@ -1982,7 +1982,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("createdon")]
-	public System.Nullable<System.DateTime> CreatedOn
+	public System.Nullable<System.DateTime> AAAAA_CreatedOn
 	{
 		get
 		{
@@ -1994,7 +1994,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Shows who created the record on behalf of another user.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("createdonbehalfby")]
-	public Microsoft.Xrm.Sdk.EntityReference CreatedOnBehalfBy
+	public Microsoft.Xrm.Sdk.EntityReference AAAAA_CreatedOnBehalfBy
 	{
 		get
 		{
@@ -2003,7 +2003,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	}
 	
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("createdonbehalfbyname")]
-	public string CreatedOnBehalfByName
+	public string AAAAA_CreatedOnBehalfByName
 	{
 		get
 		{
@@ -2019,7 +2019,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	}
 	
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("createdonbehalfbyyominame")]
-	public string CreatedOnBehalfByYomiName
+	public string AAAAA_CreatedOnBehalfByYomiName
 	{
 		get
 		{
@@ -2038,7 +2038,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Type the credit limit of the account. This is a useful reference when you address invoice and accounting issues with the customer.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("creditlimit")]
-	public Microsoft.Xrm.Sdk.Money CreditLimit
+	public Microsoft.Xrm.Sdk.Money AAAAA_CreditLimit
 	{
 		get
 		{
@@ -2054,7 +2054,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Shows the credit limit converted to the system's default base currency for reporting purposes.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("creditlimit_base")]
-	public Microsoft.Xrm.Sdk.Money CreditLimit_Base
+	public Microsoft.Xrm.Sdk.Money AAAAA_CreditLimit_Base
 	{
 		get
 		{
@@ -2066,7 +2066,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Select whether the credit for the account is on hold. This is a useful reference while addressing the invoice and accounting issues with the customer.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("creditonhold")]
-	public System.Nullable<bool> CreditOnHold
+	public System.Nullable<bool> AAAAA_CreditOnHold
 	{
 		get
 		{
@@ -2079,7 +2079,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	}
 	
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("creditonholdname")]
-	public string CreditOnHoldName
+	public string AAAAA_CreditOnHoldName
 	{
 		get
 		{
@@ -2098,11 +2098,11 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Select the size category or range of the account for segmentation and reporting purposes.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("customersizecode")]
-	public virtual account_customersizecode? CustomerSizeCode
+	public virtual FFFFF_account_customersizecode? AAAAA_CustomerSizeCode
 	{
 		get
 		{
-			return ((account_customersizecode?)(EntityOptionSetEnum.GetEnum(this, "customersizecode")));
+			return ((FFFFF_account_customersizecode?)(EntityOptionSetEnum.GetEnum(this, "customersizecode")));
 		}
 		set
 		{
@@ -2111,7 +2111,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	}
 	
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("customersizecodename")]
-	public string CustomerSizeCodeName
+	public string AAAAA_CustomerSizeCodeName
 	{
 		get
 		{
@@ -2130,11 +2130,11 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Select the category that best describes the relationship between the account and your organization.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("customertypecode")]
-	public virtual account_customertypecode? CustomerTypeCode
+	public virtual FFFFF_account_customertypecode? AAAAA_CustomerTypeCode
 	{
 		get
 		{
-			return ((account_customertypecode?)(EntityOptionSetEnum.GetEnum(this, "customertypecode")));
+			return ((FFFFF_account_customertypecode?)(EntityOptionSetEnum.GetEnum(this, "customertypecode")));
 		}
 		set
 		{
@@ -2143,7 +2143,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	}
 	
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("customertypecodename")]
-	public string CustomerTypeCodeName
+	public string AAAAA_CustomerTypeCodeName
 	{
 		get
 		{
@@ -2162,7 +2162,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Type additional information to describe the account, such as an excerpt from the company's website.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("description")]
-	public string Description
+	public string AAAAA_Description
 	{
 		get
 		{
@@ -2175,7 +2175,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	}
 	
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("devkit_bigint")]
-	public System.Nullable<long> devkit_BigInt
+	public System.Nullable<long> AAAAA_devkit_BigInt
 	{
 		get
 		{
@@ -2188,11 +2188,11 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	}
 	
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("devkit_categorycode")]
-	public virtual System.Collections.Generic.IEnumerable<connectionrole_category> devkit_CategoryCode
+	public virtual System.Collections.Generic.IEnumerable<FFFFF_connectionrole_category> AAAAA_devkit_CategoryCode
 	{
 		get
 		{
-			return EntityOptionSetEnum.GetMultiEnum<connectionrole_category>(this, "devkit_categorycode");
+			return EntityOptionSetEnum.GetMultiEnum<FFFFF_connectionrole_category>(this, "devkit_categorycode");
 		}
 		set
 		{
@@ -2201,7 +2201,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	}
 	
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("devkit_categorycodename")]
-	public string devkit_categorycodeName
+	public string AAAAA_devkit_categorycodeName
 	{
 		get
 		{
@@ -2220,7 +2220,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Select whether the account allows bulk email sent through campaigns. If Do Not Allow is selected, the account can be added to marketing lists, but is excluded from email.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("donotbulkemail")]
-	public System.Nullable<bool> DoNotBulkEMail
+	public System.Nullable<bool> AAAAA_DoNotBulkEMail
 	{
 		get
 		{
@@ -2233,7 +2233,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	}
 	
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("donotbulkemailname")]
-	public string DoNotBulkEMailName
+	public string AAAAA_DoNotBulkEMailName
 	{
 		get
 		{
@@ -2252,7 +2252,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Select whether the account allows bulk postal mail sent through marketing campaigns or quick campaigns. If Do Not Allow is selected, the account can be added to marketing lists, but will be excluded from the postal mail.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("donotbulkpostalmail")]
-	public System.Nullable<bool> DoNotBulkPostalMail
+	public System.Nullable<bool> AAAAA_DoNotBulkPostalMail
 	{
 		get
 		{
@@ -2265,7 +2265,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	}
 	
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("donotbulkpostalmailname")]
-	public string DoNotBulkPostalMailName
+	public string AAAAA_DoNotBulkPostalMailName
 	{
 		get
 		{
@@ -2284,7 +2284,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Select whether the account allows direct email sent from Microsoft Dynamics 365.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("donotemail")]
-	public System.Nullable<bool> DoNotEMail
+	public System.Nullable<bool> AAAAA_DoNotEMail
 	{
 		get
 		{
@@ -2297,7 +2297,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	}
 	
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("donotemailname")]
-	public string DoNotEMailName
+	public string AAAAA_DoNotEMailName
 	{
 		get
 		{
@@ -2316,7 +2316,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Select whether the account allows faxes. If Do Not Allow is selected, the account will be excluded from fax activities distributed in marketing campaigns.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("donotfax")]
-	public System.Nullable<bool> DoNotFax
+	public System.Nullable<bool> AAAAA_DoNotFax
 	{
 		get
 		{
@@ -2329,7 +2329,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	}
 	
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("donotfaxname")]
-	public string DoNotFaxName
+	public string AAAAA_DoNotFaxName
 	{
 		get
 		{
@@ -2348,7 +2348,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Select whether the account allows phone calls. If Do Not Allow is selected, the account will be excluded from phone call activities distributed in marketing campaigns.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("donotphone")]
-	public System.Nullable<bool> DoNotPhone
+	public System.Nullable<bool> AAAAA_DoNotPhone
 	{
 		get
 		{
@@ -2361,7 +2361,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	}
 	
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("donotphonename")]
-	public string DoNotPhoneName
+	public string AAAAA_DoNotPhoneName
 	{
 		get
 		{
@@ -2380,7 +2380,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Select whether the account allows direct mail. If Do Not Allow is selected, the account will be excluded from letter activities distributed in marketing campaigns.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("donotpostalmail")]
-	public System.Nullable<bool> DoNotPostalMail
+	public System.Nullable<bool> AAAAA_DoNotPostalMail
 	{
 		get
 		{
@@ -2393,7 +2393,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	}
 	
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("donotpostalmailname")]
-	public string DoNotPostalMailName
+	public string AAAAA_DoNotPostalMailName
 	{
 		get
 		{
@@ -2409,7 +2409,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	}
 	
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("donotsendmarketingmaterialname")]
-	public string DoNotSendMarketingMaterialName
+	public string AAAAA_DoNotSendMarketingMaterialName
 	{
 		get
 		{
@@ -2428,7 +2428,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Select whether the account accepts marketing materials, such as brochures or catalogs.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("donotsendmm")]
-	public System.Nullable<bool> DoNotSendMM
+	public System.Nullable<bool> AAAAA_DoNotSendMM
 	{
 		get
 		{
@@ -2444,7 +2444,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Type the primary email address for the account.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("emailaddress1")]
-	public string EMailAddress1
+	public string AAAAA_EMailAddress1
 	{
 		get
 		{
@@ -2460,7 +2460,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Type the secondary email address for the account.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("emailaddress2")]
-	public string EMailAddress2
+	public string AAAAA_EMailAddress2
 	{
 		get
 		{
@@ -2476,7 +2476,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Type an alternate email address for the account.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("emailaddress3")]
-	public string EMailAddress3
+	public string AAAAA_EMailAddress3
 	{
 		get
 		{
@@ -2492,7 +2492,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Shows the default image for the record.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("entityimage")]
-	public byte[] EntityImage
+	public byte[] AAAAA_EntityImage
 	{
 		get
 		{
@@ -2505,7 +2505,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	}
 	
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("entityimage_timestamp")]
-	public System.Nullable<long> EntityImage_Timestamp
+	public System.Nullable<long> AAAAA_EntityImage_Timestamp
 	{
 		get
 		{
@@ -2514,7 +2514,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	}
 	
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("entityimage_url")]
-	public string EntityImage_URL
+	public string AAAAA_EntityImage_URL
 	{
 		get
 		{
@@ -2526,7 +2526,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// For internal use only.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("entityimageid")]
-	public System.Nullable<System.Guid> EntityImageId
+	public System.Nullable<System.Guid> AAAAA_EntityImageId
 	{
 		get
 		{
@@ -2538,7 +2538,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("exchangerate")]
-	public System.Nullable<decimal> ExchangeRate
+	public System.Nullable<decimal> AAAAA_ExchangeRate
 	{
 		get
 		{
@@ -2550,7 +2550,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Type the fax number for the account.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("fax")]
-	public string Fax
+	public string AAAAA_Fax
 	{
 		get
 		{
@@ -2566,7 +2566,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Information about whether to allow following email activity like opens, attachment views and link clicks for emails sent to the account.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("followemail")]
-	public System.Nullable<bool> FollowEmail
+	public System.Nullable<bool> AAAAA_FollowEmail
 	{
 		get
 		{
@@ -2579,7 +2579,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	}
 	
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("followemailname")]
-	public string FollowEmailName
+	public string AAAAA_FollowEmailName
 	{
 		get
 		{
@@ -2598,7 +2598,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Type the URL for the account's FTP site to enable users to access data and share documents.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ftpsiteurl")]
-	public string FtpSiteURL
+	public string AAAAA_FtpSiteURL
 	{
 		get
 		{
@@ -2614,7 +2614,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Unique identifier of the data import or data migration that created this record.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("importsequencenumber")]
-	public System.Nullable<int> ImportSequenceNumber
+	public System.Nullable<int> AAAAA_ImportSequenceNumber
 	{
 		get
 		{
@@ -2630,11 +2630,11 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Select the account's primary industry for use in marketing segmentation and demographic analysis.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("industrycode")]
-	public virtual account_industrycode? IndustryCode
+	public virtual FFFFF_account_industrycode? AAAAA_IndustryCode
 	{
 		get
 		{
-			return ((account_industrycode?)(EntityOptionSetEnum.GetEnum(this, "industrycode")));
+			return ((FFFFF_account_industrycode?)(EntityOptionSetEnum.GetEnum(this, "industrycode")));
 		}
 		set
 		{
@@ -2643,7 +2643,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	}
 	
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("industrycodename")]
-	public string IndustryCodeName
+	public string AAAAA_IndustryCodeName
 	{
 		get
 		{
@@ -2659,7 +2659,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	}
 	
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("isprivatename")]
-	public string IsPrivateName
+	public string AAAAA_IsPrivateName
 	{
 		get
 		{
@@ -2678,7 +2678,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Contains the date and time stamp of the last on hold time.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("lastonholdtime")]
-	public System.Nullable<System.DateTime> LastOnHoldTime
+	public System.Nullable<System.DateTime> AAAAA_LastOnHoldTime
 	{
 		get
 		{
@@ -2694,7 +2694,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Shows the date when the account was last included in a marketing campaign or quick campaign.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("lastusedincampaign")]
-	public System.Nullable<System.DateTime> LastUsedInCampaign
+	public System.Nullable<System.DateTime> AAAAA_LastUsedInCampaign
 	{
 		get
 		{
@@ -2710,7 +2710,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Type the market capitalization of the account to identify the company's equity, used as an indicator in financial performance analysis.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("marketcap")]
-	public Microsoft.Xrm.Sdk.Money MarketCap
+	public Microsoft.Xrm.Sdk.Money AAAAA_MarketCap
 	{
 		get
 		{
@@ -2726,7 +2726,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Shows the market capitalization converted to the system's default base currency.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("marketcap_base")]
-	public Microsoft.Xrm.Sdk.Money MarketCap_Base
+	public Microsoft.Xrm.Sdk.Money AAAAA_MarketCap_Base
 	{
 		get
 		{
@@ -2738,7 +2738,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Whether is only for marketing
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("marketingonly")]
-	public System.Nullable<bool> MarketingOnly
+	public System.Nullable<bool> AAAAA_MarketingOnly
 	{
 		get
 		{
@@ -2751,7 +2751,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	}
 	
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("marketingonlyname")]
-	public string MarketingOnlyName
+	public string AAAAA_MarketingOnlyName
 	{
 		get
 		{
@@ -2767,7 +2767,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	}
 	
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("masteraccountidname")]
-	public string MasterAccountIdName
+	public string AAAAA_MasterAccountIdName
 	{
 		get
 		{
@@ -2783,7 +2783,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	}
 	
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("masteraccountidyominame")]
-	public string MasterAccountIdYomiName
+	public string AAAAA_MasterAccountIdYomiName
 	{
 		get
 		{
@@ -2802,7 +2802,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Shows the master account that the account was merged with.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("masterid")]
-	public Microsoft.Xrm.Sdk.EntityReference MasterId
+	public Microsoft.Xrm.Sdk.EntityReference AAAAA_MasterId
 	{
 		get
 		{
@@ -2814,7 +2814,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Shows whether the account has been merged with another account.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("merged")]
-	public System.Nullable<bool> Merged
+	public System.Nullable<bool> AAAAA_Merged
 	{
 		get
 		{
@@ -2823,7 +2823,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	}
 	
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("mergedname")]
-	public string MergedName
+	public string AAAAA_MergedName
 	{
 		get
 		{
@@ -2842,7 +2842,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Shows who last updated the record.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("modifiedby")]
-	public Microsoft.Xrm.Sdk.EntityReference ModifiedBy
+	public Microsoft.Xrm.Sdk.EntityReference AAAAA_ModifiedBy
 	{
 		get
 		{
@@ -2854,7 +2854,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Shows the external party who modified the record.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("modifiedbyexternalparty")]
-	public Microsoft.Xrm.Sdk.EntityReference ModifiedByExternalParty
+	public Microsoft.Xrm.Sdk.EntityReference AAAAA_ModifiedByExternalParty
 	{
 		get
 		{
@@ -2863,7 +2863,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	}
 	
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("modifiedbyexternalpartyname")]
-	public string ModifiedByExternalPartyName
+	public string AAAAA_ModifiedByExternalPartyName
 	{
 		get
 		{
@@ -2879,7 +2879,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	}
 	
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("modifiedbyexternalpartyyominame")]
-	public string ModifiedByExternalPartyYomiName
+	public string AAAAA_ModifiedByExternalPartyYomiName
 	{
 		get
 		{
@@ -2895,7 +2895,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	}
 	
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("modifiedbyname")]
-	public string ModifiedByName
+	public string AAAAA_ModifiedByName
 	{
 		get
 		{
@@ -2911,7 +2911,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	}
 	
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("modifiedbyyominame")]
-	public string ModifiedByYomiName
+	public string AAAAA_ModifiedByYomiName
 	{
 		get
 		{
@@ -2930,7 +2930,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("modifiedon")]
-	public System.Nullable<System.DateTime> ModifiedOn
+	public System.Nullable<System.DateTime> AAAAA_ModifiedOn
 	{
 		get
 		{
@@ -2942,7 +2942,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Shows who created the record on behalf of another user.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("modifiedonbehalfby")]
-	public Microsoft.Xrm.Sdk.EntityReference ModifiedOnBehalfBy
+	public Microsoft.Xrm.Sdk.EntityReference AAAAA_ModifiedOnBehalfBy
 	{
 		get
 		{
@@ -2951,7 +2951,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	}
 	
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("modifiedonbehalfbyname")]
-	public string ModifiedOnBehalfByName
+	public string AAAAA_ModifiedOnBehalfByName
 	{
 		get
 		{
@@ -2967,7 +2967,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	}
 	
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("modifiedonbehalfbyyominame")]
-	public string ModifiedOnBehalfByYomiName
+	public string AAAAA_ModifiedOnBehalfByYomiName
 	{
 		get
 		{
@@ -2986,7 +2986,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Unique identifier for Account associated with Account.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("msa_managingpartnerid")]
-	public Microsoft.Xrm.Sdk.EntityReference msa_managingpartnerid
+	public Microsoft.Xrm.Sdk.EntityReference AAAAA_msa_managingpartnerid
 	{
 		get
 		{
@@ -2999,7 +2999,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	}
 	
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("msa_managingpartneridname")]
-	public string msa_managingpartneridName
+	public string AAAAA_msa_managingpartneridName
 	{
 		get
 		{
@@ -3015,7 +3015,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	}
 	
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("msa_managingpartneridyominame")]
-	public string msa_managingpartneridYomiName
+	public string AAAAA_msa_managingpartneridYomiName
 	{
 		get
 		{
@@ -3034,7 +3034,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Type the company or business name.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("name")]
-	public string Name
+	public string AAAAA_Name
 	{
 		get
 		{
@@ -3050,7 +3050,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Type the number of employees that work at the account for use in marketing segmentation and demographic analysis.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("numberofemployees")]
-	public System.Nullable<int> NumberOfEmployees
+	public System.Nullable<int> AAAAA_NumberOfEmployees
 	{
 		get
 		{
@@ -3066,7 +3066,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Shows how long, in minutes, that the record was on hold.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("onholdtime")]
-	public System.Nullable<int> OnHoldTime
+	public System.Nullable<int> AAAAA_OnHoldTime
 	{
 		get
 		{
@@ -3078,7 +3078,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Date and time that the record was migrated.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("overriddencreatedon")]
-	public System.Nullable<System.DateTime> OverriddenCreatedOn
+	public System.Nullable<System.DateTime> AAAAA_OverriddenCreatedOn
 	{
 		get
 		{
@@ -3094,7 +3094,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ownerid")]
-	public Microsoft.Xrm.Sdk.EntityReference OwnerId
+	public Microsoft.Xrm.Sdk.EntityReference AAAAA_OwnerId
 	{
 		get
 		{
@@ -3107,7 +3107,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	}
 	
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("owneridname")]
-	public string OwnerIdName
+	public string AAAAA_OwnerIdName
 	{
 		get
 		{
@@ -3123,7 +3123,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	}
 	
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("owneridyominame")]
-	public string OwnerIdYomiName
+	public string AAAAA_OwnerIdYomiName
 	{
 		get
 		{
@@ -3142,11 +3142,11 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Select the account's ownership structure, such as public or private.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ownershipcode")]
-	public virtual account_ownershipcode? OwnershipCode
+	public virtual FFFFF_account_ownershipcode? AAAAA_OwnershipCode
 	{
 		get
 		{
-			return ((account_ownershipcode?)(EntityOptionSetEnum.GetEnum(this, "ownershipcode")));
+			return ((FFFFF_account_ownershipcode?)(EntityOptionSetEnum.GetEnum(this, "ownershipcode")));
 		}
 		set
 		{
@@ -3155,7 +3155,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	}
 	
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ownershipcodename")]
-	public string OwnershipCodeName
+	public string AAAAA_OwnershipCodeName
 	{
 		get
 		{
@@ -3174,7 +3174,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Shows the business unit that the record owner belongs to.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("owningbusinessunit")]
-	public Microsoft.Xrm.Sdk.EntityReference OwningBusinessUnit
+	public Microsoft.Xrm.Sdk.EntityReference AAAAA_OwningBusinessUnit
 	{
 		get
 		{
@@ -3183,7 +3183,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	}
 	
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("owningbusinessunitname")]
-	public string OwningBusinessUnitName
+	public string AAAAA_OwningBusinessUnitName
 	{
 		get
 		{
@@ -3202,7 +3202,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Unique identifier of the team who owns the account.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("owningteam")]
-	public Microsoft.Xrm.Sdk.EntityReference OwningTeam
+	public Microsoft.Xrm.Sdk.EntityReference AAAAA_OwningTeam
 	{
 		get
 		{
@@ -3214,7 +3214,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Unique identifier of the user who owns the account.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("owninguser")]
-	public Microsoft.Xrm.Sdk.EntityReference OwningUser
+	public Microsoft.Xrm.Sdk.EntityReference AAAAA_OwningUser
 	{
 		get
 		{
@@ -3226,7 +3226,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Choose the parent account associated with this account to show parent and child businesses in reporting and analytics.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("parentaccountid")]
-	public Microsoft.Xrm.Sdk.EntityReference ParentAccountId
+	public Microsoft.Xrm.Sdk.EntityReference AAAAA_ParentAccountId
 	{
 		get
 		{
@@ -3239,7 +3239,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	}
 	
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("parentaccountidname")]
-	public string ParentAccountIdName
+	public string AAAAA_ParentAccountIdName
 	{
 		get
 		{
@@ -3255,7 +3255,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	}
 	
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("parentaccountidyominame")]
-	public string ParentAccountIdYomiName
+	public string AAAAA_ParentAccountIdYomiName
 	{
 		get
 		{
@@ -3274,7 +3274,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// For system use only. Legacy Microsoft Dynamics CRM 3.0 workflow data.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("participatesinworkflow")]
-	public System.Nullable<bool> ParticipatesInWorkflow
+	public System.Nullable<bool> AAAAA_ParticipatesInWorkflow
 	{
 		get
 		{
@@ -3287,7 +3287,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	}
 	
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("participatesinworkflowname")]
-	public string ParticipatesInWorkflowName
+	public string AAAAA_ParticipatesInWorkflowName
 	{
 		get
 		{
@@ -3306,11 +3306,11 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Select the payment terms to indicate when the customer needs to pay the total amount.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("paymenttermscode")]
-	public virtual account_paymenttermscode? PaymentTermsCode
+	public virtual FFFFF_account_paymenttermscode? AAAAA_PaymentTermsCode
 	{
 		get
 		{
-			return ((account_paymenttermscode?)(EntityOptionSetEnum.GetEnum(this, "paymenttermscode")));
+			return ((FFFFF_account_paymenttermscode?)(EntityOptionSetEnum.GetEnum(this, "paymenttermscode")));
 		}
 		set
 		{
@@ -3319,7 +3319,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	}
 	
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("paymenttermscodename")]
-	public string PaymentTermsCodeName
+	public string AAAAA_PaymentTermsCodeName
 	{
 		get
 		{
@@ -3338,11 +3338,11 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Select the preferred day of the week for service appointments.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("preferredappointmentdaycode")]
-	public virtual account_preferredappointmentdaycode? PreferredAppointmentDayCode
+	public virtual FFFFF_account_preferredappointmentdaycode? AAAAA_PreferredAppointmentDayCode
 	{
 		get
 		{
-			return ((account_preferredappointmentdaycode?)(EntityOptionSetEnum.GetEnum(this, "preferredappointmentdaycode")));
+			return ((FFFFF_account_preferredappointmentdaycode?)(EntityOptionSetEnum.GetEnum(this, "preferredappointmentdaycode")));
 		}
 		set
 		{
@@ -3351,7 +3351,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	}
 	
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("preferredappointmentdaycodename")]
-	public string PreferredAppointmentDayCodeName
+	public string AAAAA_PreferredAppointmentDayCodeName
 	{
 		get
 		{
@@ -3370,11 +3370,11 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Select the preferred time of day for service appointments.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("preferredappointmenttimecode")]
-	public virtual account_preferredappointmenttimecode? PreferredAppointmentTimeCode
+	public virtual FFFFF_account_preferredappointmenttimecode? AAAAA_PreferredAppointmentTimeCode
 	{
 		get
 		{
-			return ((account_preferredappointmenttimecode?)(EntityOptionSetEnum.GetEnum(this, "preferredappointmenttimecode")));
+			return ((FFFFF_account_preferredappointmenttimecode?)(EntityOptionSetEnum.GetEnum(this, "preferredappointmenttimecode")));
 		}
 		set
 		{
@@ -3383,7 +3383,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	}
 	
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("preferredappointmenttimecodename")]
-	public string PreferredAppointmentTimeCodeName
+	public string AAAAA_PreferredAppointmentTimeCodeName
 	{
 		get
 		{
@@ -3402,11 +3402,11 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Select the preferred method of contact.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("preferredcontactmethodcode")]
-	public virtual account_preferredcontactmethodcode? PreferredContactMethodCode
+	public virtual FFFFF_account_preferredcontactmethodcode? AAAAA_PreferredContactMethodCode
 	{
 		get
 		{
-			return ((account_preferredcontactmethodcode?)(EntityOptionSetEnum.GetEnum(this, "preferredcontactmethodcode")));
+			return ((FFFFF_account_preferredcontactmethodcode?)(EntityOptionSetEnum.GetEnum(this, "preferredcontactmethodcode")));
 		}
 		set
 		{
@@ -3415,7 +3415,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	}
 	
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("preferredcontactmethodcodename")]
-	public string PreferredContactMethodCodeName
+	public string AAAAA_PreferredContactMethodCodeName
 	{
 		get
 		{
@@ -3434,7 +3434,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Choose the preferred service representative for reference when you schedule service activities for the account.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("preferredsystemuserid")]
-	public Microsoft.Xrm.Sdk.EntityReference PreferredSystemUserId
+	public Microsoft.Xrm.Sdk.EntityReference AAAAA_PreferredSystemUserId
 	{
 		get
 		{
@@ -3447,7 +3447,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	}
 	
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("preferredsystemuseridname")]
-	public string PreferredSystemUserIdName
+	public string AAAAA_PreferredSystemUserIdName
 	{
 		get
 		{
@@ -3463,7 +3463,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	}
 	
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("preferredsystemuseridyominame")]
-	public string PreferredSystemUserIdYomiName
+	public string AAAAA_PreferredSystemUserIdYomiName
 	{
 		get
 		{
@@ -3482,7 +3482,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Choose the primary contact for the account to provide quick access to contact details.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("primarycontactid")]
-	public Microsoft.Xrm.Sdk.EntityReference PrimaryContactId
+	public Microsoft.Xrm.Sdk.EntityReference AAAAA_PrimaryContactId
 	{
 		get
 		{
@@ -3495,7 +3495,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	}
 	
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("primarycontactidname")]
-	public string PrimaryContactIdName
+	public string AAAAA_PrimaryContactIdName
 	{
 		get
 		{
@@ -3511,7 +3511,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	}
 	
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("primarycontactidyominame")]
-	public string PrimaryContactIdYomiName
+	public string AAAAA_PrimaryContactIdYomiName
 	{
 		get
 		{
@@ -3530,7 +3530,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Primary Satori ID for Account
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("primarysatoriid")]
-	public string PrimarySatoriId
+	public string AAAAA_PrimarySatoriId
 	{
 		get
 		{
@@ -3546,7 +3546,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Primary Twitter ID for Account
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("primarytwitterid")]
-	public string PrimaryTwitterId
+	public string AAAAA_PrimaryTwitterId
 	{
 		get
 		{
@@ -3562,7 +3562,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Shows the ID of the process.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("processid")]
-	public System.Nullable<System.Guid> ProcessId
+	public System.Nullable<System.Guid> AAAAA_ProcessId
 	{
 		get
 		{
@@ -3578,7 +3578,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Type the annual revenue for the account, used as an indicator in financial performance analysis.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("revenue")]
-	public Microsoft.Xrm.Sdk.Money Revenue
+	public Microsoft.Xrm.Sdk.Money AAAAA_Revenue
 	{
 		get
 		{
@@ -3594,7 +3594,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Shows the annual revenue converted to the system's default base currency. The calculations use the exchange rate specified in the Currencies area.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("revenue_base")]
-	public Microsoft.Xrm.Sdk.Money Revenue_Base
+	public Microsoft.Xrm.Sdk.Money AAAAA_Revenue_Base
 	{
 		get
 		{
@@ -3606,7 +3606,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Type the number of shares available to the public for the account. This number is used as an indicator in financial performance analysis.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("sharesoutstanding")]
-	public System.Nullable<int> SharesOutstanding
+	public System.Nullable<int> AAAAA_SharesOutstanding
 	{
 		get
 		{
@@ -3622,11 +3622,11 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Select a shipping method for deliveries sent to the account's address to designate the preferred carrier or other delivery option.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("shippingmethodcode")]
-	public virtual account_shippingmethodcode? ShippingMethodCode
+	public virtual FFFFF_account_shippingmethodcode? AAAAA_ShippingMethodCode
 	{
 		get
 		{
-			return ((account_shippingmethodcode?)(EntityOptionSetEnum.GetEnum(this, "shippingmethodcode")));
+			return ((FFFFF_account_shippingmethodcode?)(EntityOptionSetEnum.GetEnum(this, "shippingmethodcode")));
 		}
 		set
 		{
@@ -3635,7 +3635,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	}
 	
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("shippingmethodcodename")]
-	public string ShippingMethodCodeName
+	public string AAAAA_ShippingMethodCodeName
 	{
 		get
 		{
@@ -3654,7 +3654,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Type the Standard Industrial Classification (SIC) code that indicates the account's primary industry of business, for use in marketing segmentation and demographic analysis.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("sic")]
-	public string SIC
+	public string AAAAA_SIC
 	{
 		get
 		{
@@ -3670,7 +3670,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Choose the service level agreement (SLA) that you want to apply to the Account record.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("slaid")]
-	public Microsoft.Xrm.Sdk.EntityReference SLAId
+	public Microsoft.Xrm.Sdk.EntityReference AAAAA_SLAId
 	{
 		get
 		{
@@ -3686,7 +3686,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Last SLA that was applied to this case. This field is for internal use only.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("slainvokedid")]
-	public Microsoft.Xrm.Sdk.EntityReference SLAInvokedId
+	public Microsoft.Xrm.Sdk.EntityReference AAAAA_SLAInvokedId
 	{
 		get
 		{
@@ -3695,7 +3695,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	}
 	
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("slainvokedidname")]
-	public string SLAInvokedIdName
+	public string AAAAA_SLAInvokedIdName
 	{
 		get
 		{
@@ -3711,7 +3711,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	}
 	
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("slaname")]
-	public string SLAName
+	public string AAAAA_SLAName
 	{
 		get
 		{
@@ -3730,7 +3730,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Shows the ID of the stage.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("stageid")]
-	public System.Nullable<System.Guid> StageId
+	public System.Nullable<System.Guid> AAAAA_StageId
 	{
 		get
 		{
@@ -3746,11 +3746,11 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Shows whether the account is active or inactive. Inactive accounts are read-only and can't be edited unless they are reactivated.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("statecode")]
-	public virtual account_statecode? StateCode
+	public virtual FFFFF_account_statecode? AAAAA_StateCode
 	{
 		get
 		{
-			return ((account_statecode?)(EntityOptionSetEnum.GetEnum(this, "statecode")));
+			return ((FFFFF_account_statecode?)(EntityOptionSetEnum.GetEnum(this, "statecode")));
 		}
 		set
 		{
@@ -3759,7 +3759,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	}
 	
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("statecodename")]
-	public string StateCodeName
+	public string AAAAA_StateCodeName
 	{
 		get
 		{
@@ -3778,11 +3778,11 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Select the account's status.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("statuscode")]
-	public virtual account_statuscode? StatusCode
+	public virtual FFFFF_account_statuscode? AAAAA_StatusCode
 	{
 		get
 		{
-			return ((account_statuscode?)(EntityOptionSetEnum.GetEnum(this, "statuscode")));
+			return ((FFFFF_account_statuscode?)(EntityOptionSetEnum.GetEnum(this, "statuscode")));
 		}
 		set
 		{
@@ -3791,7 +3791,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	}
 	
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("statuscodename")]
-	public string StatusCodeName
+	public string AAAAA_StatusCodeName
 	{
 		get
 		{
@@ -3810,7 +3810,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Type the stock exchange at which the account is listed to track their stock and financial performance of the company.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("stockexchange")]
-	public string StockExchange
+	public string AAAAA_StockExchange
 	{
 		get
 		{
@@ -3826,7 +3826,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Type the main phone number for this account.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("telephone1")]
-	public string Telephone1
+	public string AAAAA_Telephone1
 	{
 		get
 		{
@@ -3842,7 +3842,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Type a second phone number for this account.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("telephone2")]
-	public string Telephone2
+	public string AAAAA_Telephone2
 	{
 		get
 		{
@@ -3858,7 +3858,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Type a third phone number for this account.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("telephone3")]
-	public string Telephone3
+	public string AAAAA_Telephone3
 	{
 		get
 		{
@@ -3874,11 +3874,11 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Select a region or territory for the account for use in segmentation and analysis.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("territorycode")]
-	public virtual account_territorycode? TerritoryCode
+	public virtual FFFFF_account_territorycode? AAAAA_TerritoryCode
 	{
 		get
 		{
-			return ((account_territorycode?)(EntityOptionSetEnum.GetEnum(this, "territorycode")));
+			return ((FFFFF_account_territorycode?)(EntityOptionSetEnum.GetEnum(this, "territorycode")));
 		}
 		set
 		{
@@ -3887,7 +3887,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	}
 	
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("territorycodename")]
-	public string TerritoryCodeName
+	public string AAAAA_TerritoryCodeName
 	{
 		get
 		{
@@ -3906,7 +3906,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Type the stock exchange symbol for the account to track financial performance of the company. You can click the code entered in this field to access the latest trading information from MSN Money.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("tickersymbol")]
-	public string TickerSymbol
+	public string AAAAA_TickerSymbol
 	{
 		get
 		{
@@ -3922,7 +3922,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Total time spent for emails (read and write) and meetings by me in relation to account record.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("timespentbymeonemailandmeetings")]
-	public string TimeSpentByMeOnEmailAndMeetings
+	public string AAAAA_TimeSpentByMeOnEmailAndMeetings
 	{
 		get
 		{
@@ -3934,7 +3934,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// For internal use only.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("timezoneruleversionnumber")]
-	public System.Nullable<int> TimeZoneRuleVersionNumber
+	public System.Nullable<int> AAAAA_TimeZoneRuleVersionNumber
 	{
 		get
 		{
@@ -3950,7 +3950,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Choose the local currency for the record to make sure budgets are reported in the correct currency.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("transactioncurrencyid")]
-	public Microsoft.Xrm.Sdk.EntityReference TransactionCurrencyId
+	public Microsoft.Xrm.Sdk.EntityReference AAAAA_TransactionCurrencyId
 	{
 		get
 		{
@@ -3963,7 +3963,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	}
 	
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("transactioncurrencyidname")]
-	public string TransactionCurrencyIdName
+	public string AAAAA_TransactionCurrencyIdName
 	{
 		get
 		{
@@ -3982,7 +3982,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// For internal use only.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("traversedpath")]
-	public string TraversedPath
+	public string AAAAA_TraversedPath
 	{
 		get
 		{
@@ -3998,7 +3998,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Time zone code that was in use when the record was created.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("utcconversiontimezonecode")]
-	public System.Nullable<int> UTCConversionTimeZoneCode
+	public System.Nullable<int> AAAAA_UTCConversionTimeZoneCode
 	{
 		get
 		{
@@ -4014,7 +4014,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Version number of the account.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("versionnumber")]
-	public System.Nullable<long> VersionNumber
+	public System.Nullable<long> AAAAA_VersionNumber
 	{
 		get
 		{
@@ -4026,7 +4026,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Type the account's website URL to get quick details about the company profile.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("websiteurl")]
-	public string WebSiteURL
+	public string AAAAA_WebSiteURL
 	{
 		get
 		{
@@ -4042,7 +4042,7 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// Type the phonetic spelling of the company name, if specified in Japanese, to make sure the name is pronounced correctly in phone calls and other communications.
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("yominame")]
-	public string YomiName
+	public string AAAAA_YomiName
 	{
 		get
 		{
@@ -4058,15 +4058,15 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// 1:N account_master_account
 	/// </summary>
 	[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("account_master_account", Microsoft.Xrm.Sdk.EntityRole.Referenced)]
-	public System.Collections.Generic.IEnumerable<Account> Referencedaccount_master_account
+	public System.Collections.Generic.IEnumerable<BBBBB_Account> GGGGG_Referencedaccount_master_account
 	{
 		get
 		{
-			return this.GetRelatedEntities<Account>("account_master_account", Microsoft.Xrm.Sdk.EntityRole.Referenced);
+			return this.GetRelatedEntities<BBBBB_Account>("account_master_account", Microsoft.Xrm.Sdk.EntityRole.Referenced);
 		}
 		set
 		{
-			this.SetRelatedEntities<Account>("account_master_account", Microsoft.Xrm.Sdk.EntityRole.Referenced, value);
+			this.SetRelatedEntities<BBBBB_Account>("account_master_account", Microsoft.Xrm.Sdk.EntityRole.Referenced, value);
 		}
 	}
 	
@@ -4074,15 +4074,15 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// 1:N account_parent_account
 	/// </summary>
 	[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("account_parent_account", Microsoft.Xrm.Sdk.EntityRole.Referenced)]
-	public System.Collections.Generic.IEnumerable<Account> Referencedaccount_parent_account
+	public System.Collections.Generic.IEnumerable<BBBBB_Account> GGGGG_Referencedaccount_parent_account
 	{
 		get
 		{
-			return this.GetRelatedEntities<Account>("account_parent_account", Microsoft.Xrm.Sdk.EntityRole.Referenced);
+			return this.GetRelatedEntities<BBBBB_Account>("account_parent_account", Microsoft.Xrm.Sdk.EntityRole.Referenced);
 		}
 		set
 		{
-			this.SetRelatedEntities<Account>("account_parent_account", Microsoft.Xrm.Sdk.EntityRole.Referenced, value);
+			this.SetRelatedEntities<BBBBB_Account>("account_parent_account", Microsoft.Xrm.Sdk.EntityRole.Referenced, value);
 		}
 	}
 	
@@ -4090,15 +4090,15 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// 1:N msa_account_managingpartner
 	/// </summary>
 	[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("msa_account_managingpartner", Microsoft.Xrm.Sdk.EntityRole.Referenced)]
-	public System.Collections.Generic.IEnumerable<Account> Referencedmsa_account_managingpartner
+	public System.Collections.Generic.IEnumerable<BBBBB_Account> GGGGG_Referencedmsa_account_managingpartner
 	{
 		get
 		{
-			return this.GetRelatedEntities<Account>("msa_account_managingpartner", Microsoft.Xrm.Sdk.EntityRole.Referenced);
+			return this.GetRelatedEntities<BBBBB_Account>("msa_account_managingpartner", Microsoft.Xrm.Sdk.EntityRole.Referenced);
 		}
 		set
 		{
-			this.SetRelatedEntities<Account>("msa_account_managingpartner", Microsoft.Xrm.Sdk.EntityRole.Referenced, value);
+			this.SetRelatedEntities<BBBBB_Account>("msa_account_managingpartner", Microsoft.Xrm.Sdk.EntityRole.Referenced, value);
 		}
 	}
 	
@@ -4107,11 +4107,11 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("masterid")]
 	[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("account_master_account", Microsoft.Xrm.Sdk.EntityRole.Referencing)]
-	public Account Referencingaccount_master_account
+	public BBBBB_Account GGGGG_Referencingaccount_master_account
 	{
 		get
 		{
-			return this.GetRelatedEntity<Account>("account_master_account", Microsoft.Xrm.Sdk.EntityRole.Referencing);
+			return this.GetRelatedEntity<BBBBB_Account>("account_master_account", Microsoft.Xrm.Sdk.EntityRole.Referencing);
 		}
 	}
 	
@@ -4120,15 +4120,15 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("parentaccountid")]
 	[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("account_parent_account", Microsoft.Xrm.Sdk.EntityRole.Referencing)]
-	public Account Referencingaccount_parent_account
+	public BBBBB_Account GGGGG_Referencingaccount_parent_account
 	{
 		get
 		{
-			return this.GetRelatedEntity<Account>("account_parent_account", Microsoft.Xrm.Sdk.EntityRole.Referencing);
+			return this.GetRelatedEntity<BBBBB_Account>("account_parent_account", Microsoft.Xrm.Sdk.EntityRole.Referencing);
 		}
 		set
 		{
-			this.SetRelatedEntity<Account>("account_parent_account", Microsoft.Xrm.Sdk.EntityRole.Referencing, value);
+			this.SetRelatedEntity<BBBBB_Account>("account_parent_account", Microsoft.Xrm.Sdk.EntityRole.Referencing, value);
 		}
 	}
 	
@@ -4137,15 +4137,15 @@ public partial class Account : Microsoft.Xrm.Sdk.Entity
 	/// </summary>
 	[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("msa_managingpartnerid")]
 	[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("msa_account_managingpartner", Microsoft.Xrm.Sdk.EntityRole.Referencing)]
-	public Account Referencingmsa_account_managingpartner
+	public BBBBB_Account GGGGG_Referencingmsa_account_managingpartner
 	{
 		get
 		{
-			return this.GetRelatedEntity<Account>("msa_account_managingpartner", Microsoft.Xrm.Sdk.EntityRole.Referencing);
+			return this.GetRelatedEntity<BBBBB_Account>("msa_account_managingpartner", Microsoft.Xrm.Sdk.EntityRole.Referencing);
 		}
 		set
 		{
-			this.SetRelatedEntity<Account>("msa_account_managingpartner", Microsoft.Xrm.Sdk.EntityRole.Referencing, value);
+			this.SetRelatedEntity<BBBBB_Account>("msa_account_managingpartner", Microsoft.Xrm.Sdk.EntityRole.Referencing, value);
 		}
 	}
 }

@@ -15,31 +15,31 @@
 /// Categories for connection roles.
 /// </summary>
 [System.Runtime.Serialization.DataContractAttribute()]
-public enum connectionrole_category
+public enum FFFFF_connectionrole_category
 {
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	Business = 1,
+	EEEEE_Business = 1,
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	Family = 2,
+	EEEEE_Family = 2,
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	Social = 3,
+	EEEEE_Social = 3,
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	Sales = 4,
+	EEEEE_Sales = 4,
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	Other = 5,
+	EEEEE_Other = 5,
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	Stakeholder = 1000,
+	EEEEE_Stakeholder = 1000,
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	SalesTeam = 1001,
+	EEEEE_SalesTeam = 1001,
 	
 	[System.Runtime.Serialization.EnumMemberAttribute()]
-	Service = 1002,
+	EEEEE_Service = 1002,
 }
 #pragma warning restore CS1591
