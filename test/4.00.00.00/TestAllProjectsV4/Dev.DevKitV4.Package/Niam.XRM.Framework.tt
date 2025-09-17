@@ -14,9 +14,11 @@ namespace <#=Context.PluginNameSpace#>
         */
         public <#=Context.Class#><#if(Context.PluginOrder!=1){#><#=Context.PluginOrder#><#}#>Package(string unsecure, string secure) : base(unsecure, secure)
         {
+
         }
         protected override void ExecuteCrmPlugin(IPluginContext<Entity> context)
         {
+            context.TracingService.DebugContext(context.PluginExecutionContext);
             new <#=Context.PluginSchemaName#>Operation(context).Execute();
         }
     }

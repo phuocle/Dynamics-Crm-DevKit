@@ -737,9 +737,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             else
             {
                 pluginStepId = rows.Entities[0].Id;
-                pluginStep["sdkmessageprocessingstepid"] = ((Guid?)null).Value;
+                pluginStep["sdkmessageprocessingstepid"] = pluginStepId.Value;
                 var hasChangedPluginStep = false;
-                var secureEntity = await GetSecureEntityAsync(((Guid?)null).Value);
+                var secureEntity = await GetSecureEntityAsync(pluginStepId.Value);
                 if (attribute.SecureConfiguration?.Trim().Length == 0 && secureEntity != null)
                 {
                     var sdkmessageprocessingstepsecureconfigid = (Guid?)secureEntity.GetAttributeValue<AliasedValue>("s.sdkmessageprocessingstepsecureconfigid")?.Value;
@@ -845,7 +845,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 )
                )
             {
-                var update = new Entity("sdkmessageprocessingstep", ((Guid?)null).Value);
+                var update = new Entity("sdkmessageprocessingstep", pluginStepId.Value);
                 update["statecode"] = new OptionSetValue(1);
                 update["statuscode"] = new OptionSetValue(2);
                 await ServiceClient.UpdateAsync(update);
@@ -860,7 +860,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 rows?.Entities?[0]?.GetAttributeValue<OptionSetValue>("statecode")?.Value == 1 &&
                 attribute.Action == PluginStepOperationEnum.Activate)
             {
-                var update = new Entity("sdkmessageprocessingstep", ((Guid?)null).Value);
+                var update = new Entity("sdkmessageprocessingstep", pluginStepId.Value);
                 update["statecode"] = new OptionSetValue(0);
                 update["statuscode"] = new OptionSetValue(1);
                 await ServiceClient.UpdateAsync(update);
@@ -870,7 +870,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     CliLog.WriteLineWarning(SPACE, SPACE, SPACE, SPACE, "Update Fields: ", ConsoleColor.Blue, "[", ConsoleColor.Green, attribute.FilteringAttributes ?? "*", ConsoleColor.Blue, "]");
                 }
             }
-            return ((Guid?)null).Value;
+            return null;
         }
 
         private bool IsChangedPluginStep(bool alreadyChanged, Entity _old, Entity _new, CrmPluginRegistrationAttribute attribute)

@@ -25,6 +25,7 @@ namespace Dev.DevKitV4.Package.Contact
         }
         protected override void ExecuteCrmPlugin(IPluginContext<Entity> context)
         {
+            context.TracingService.DebugContext(context.PluginExecutionContext);
             new ContactOperation(context).Execute();
         }
     }
