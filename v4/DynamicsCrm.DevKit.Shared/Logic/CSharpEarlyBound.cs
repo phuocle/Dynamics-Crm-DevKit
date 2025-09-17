@@ -25,14 +25,16 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                 "/emitvirtualattributes",
                 "/suppressgeneratedcodeattribute",
                 "/suppressinotifypattern",
-                "/generateGlobalOptionSets",
-                //"/splitfiles",
-                //$"/OutDirectory:{tempFolder}",
-                $"/namespace:{rootnamespace}",
-                //$"/entitynamesfilter:{entityMetadata.LogicalName}",
 
-                $"/outputfile:{tempFile}",
-                $"/out:AAAA.cs",
+                //"/generateGlobalOptionSets",
+
+                $"/splitfiles",
+                $"/outdirectory:{tempFolder}",
+                $"/namespace:{rootnamespace}",
+                $"/entitynamesfilter:{entityMetadata.LogicalName}",
+
+                //$"/outputfile:{tempFile}",
+                //$"/out:AAAA.cs",
 
             };
             modelbuilder.Parameters.LoadArguments(arguments);

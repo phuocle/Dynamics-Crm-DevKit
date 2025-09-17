@@ -9,7 +9,6 @@
     <Import_RootNamespace>Dev.DevKitV4.Shared</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Folder Include="$(MSBuildThisFileDirectory)Entities4\" />
     <Folder Include="$(MSBuildThisFileDirectory)Lib\" />
   </ItemGroup>
   <ItemGroup>
@@ -20,6 +19,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)Entities3\Entities\account.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities3\EntityOptionSetEnum.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities3\OptionSets\connectionrole_category.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities4\CSharpEarlyBound\Entities\account.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities4\CSharpEarlyBound\EntityOptionSetEnum.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities4\CSharpEarlyBound\OptionSets\connectionrole_category.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Account.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Account.generated.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Date.cs" />

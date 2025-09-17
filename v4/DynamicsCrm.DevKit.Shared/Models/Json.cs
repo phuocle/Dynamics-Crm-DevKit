@@ -16,6 +16,5 @@ namespace DynamicsCrm.DevKit.Shared.Models
         public List<JsonDownloadReport> downloadreports { get; set; }
         public List<JsonServer> servers { get; set; }
         public List<JsonUploadReport> uploadreports { get; set; }
-        public List<JsonEarlyBound> earlybound { get; set; }
     }
 }

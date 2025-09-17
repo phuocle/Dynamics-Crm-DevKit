@@ -21,14 +21,14 @@
         workflows,
         dataproviders,
         uploadreports,
-        earlybound,
+        //earlybound,
     }
     public enum GeneratorType
     {
         jsform,
         jswebapi,
         csharp,
-        earlybound
+        //earlybound
     }
 
     public enum WebResourceWebResourceType
