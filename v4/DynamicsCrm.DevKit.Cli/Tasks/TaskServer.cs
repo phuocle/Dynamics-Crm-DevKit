@@ -884,16 +884,16 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 old.Name != @new.Name ||
                 (old.Configuration ?? string.Empty) != @new.Configuration ||
                 (old.Description ?? string.Empty) != (@new.Description ?? String.Empty) ||
-                old.Mode != @new.Mode ||
+                old.Mode.Value != @new.Mode.Value ||
                 old.Rank != @new.Rank ||
-                old.Stage != @new.Stage ||
+                old.Stage.Value != @new.Stage.Value ||
                 old.AsyncAutoDelete != @new.AsyncAutoDelete ||
-                old.StatusCode != @new.StatusCode ||
+                old.StatusCode.Value != @new.StatusCode.Value ||
                 old.SdkMessageFilterId?.Id != @new.SdkMessageFilterId?.Id ||
                 old.SdkMessageId?.Id != @new.SdkMessageId?.Id ||
                 (old.FilteringAttributes ?? string.Empty) != (@new.FilteringAttributes ?? string.Empty) ||
                 old.ImpersonatingUserId?.Id != @new.ImpersonatingUserId?.Id ||
-                old.SupportedDeployment != @new.SupportedDeployment)
+                old.SupportedDeployment.Value != @new.SupportedDeployment.Value)
                 return true;
             return false;
             static SdkMessageProcessingStep ReadFromEntity(Entity entity)
