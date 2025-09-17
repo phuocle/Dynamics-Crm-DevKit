@@ -31,7 +31,7 @@
 		<PackageReference Include="Niam.XRM.Framework" Version="9.0.2.27" />
 	</ItemGroup>
 	<ItemGroup>
-		<None Update="Niam.XRM.Framework.tt">
+		<None Update="Niam.XRM.Framework.t4">
 		  <Generator></Generator>
 		</None>
 		<None Update="ReadMe.md">
