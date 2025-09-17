@@ -870,7 +870,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     CliLog.WriteLineWarning(SPACE, SPACE, SPACE, SPACE, "Update Fields: ", ConsoleColor.Blue, "[", ConsoleColor.Green, attribute.FilteringAttributes ?? "*", ConsoleColor.Blue, "]");
                 }
             }
-            return null;
+            return pluginStepId;
         }
 
         private bool IsChangedPluginStep(bool alreadyChanged, Entity _old, Entity _new, CrmPluginRegistrationAttribute attribute)
