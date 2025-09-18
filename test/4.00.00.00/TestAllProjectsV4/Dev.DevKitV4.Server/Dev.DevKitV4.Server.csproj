@@ -58,7 +58,11 @@
     <None Include="Dev.DevKitV4.Server.snk" />
     <None Include="deploy.debug.bat" />
     <None Include="deploy.debug.only.bat" />
+    <Compile Include="PluginBase.cs" />
+    <Compile Include="Plugins\Account\PostAccountCreateAsynchronous.cs" />
+    <Compile Include="Plugins\Account\PostAccountCreateAsynchronous2.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <None Include="PacPluginInit.t4" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\DynamicsCrm.DevKit.Analyzers.4.0.0\analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />
