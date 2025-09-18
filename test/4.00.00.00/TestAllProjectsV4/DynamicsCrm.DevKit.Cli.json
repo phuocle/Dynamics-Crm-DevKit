@@ -11,7 +11,8 @@
         "Dev.DevKitV4.Workflow.*.dll",
         "Dev.DevKitV4.CustomApi.*.dll",
         "Dev.DevKitV4.DataProvider.*.dll",
-        "Dev.DevKitV4.Package.*.nupkg"
+        "Dev.DevKitV4.Package.*.nupkg",
+        "Dev.DevKitV4.Server.dll"
       ],
       "excludefiles": [
         "Dev.DevKitV4.*.Test.dll"
