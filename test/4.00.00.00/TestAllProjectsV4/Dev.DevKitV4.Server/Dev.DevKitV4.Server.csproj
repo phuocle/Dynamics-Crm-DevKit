@@ -56,6 +56,7 @@
   <ItemGroup>
     <Compile Include="CustomActions\Account\PostAsynchronous___v4_AccountCustomAction.cs" />
     <Compile Include="CustomActions\None\PostSynchronous___v4_CustomAction.cs" />
+    <Compile Include="CustomApis\v4_CustomApiRequest.cs" />
     <Compile Include="Plugins\Account\PostAccountUpdateAsynchronous.cs" />
     <Compile Include="Workflows\SendEmailByQueue.cs" />
     <None Include="packages.config" />
