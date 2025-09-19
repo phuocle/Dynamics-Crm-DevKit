@@ -67,7 +67,12 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
         private async Task DeployWebResourceFilesAsync()
         {
-            CliLog.WriteLineWarning(ConsoleColor.Yellow, "DEPLOYING WEBRESOURCES");
+            CliLog.WriteLineWarning(ConsoleColor.Yellow, "DEPLOYING WEBRESOURCES WITH PATTERNS");
+            foreach (var pattern in Json.includefiles)
+            {
+                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, $"{SPACE}{SPACE}{pattern}");
+            }
+            CliLog.WriteLine(ConsoleColor.White, "|");
             CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Found: ", ConsoleColor.Yellow, WebResourceFiles.Count, ConsoleColor.Green, " webresources");
             CliLog.WriteLine(ConsoleColor.White, "|");
             var i = 1;
@@ -82,6 +87,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 CliLog.WriteLine(ConsoleColor.White, "|");
                 CliLog.WriteLineWarning(ConsoleColor.Yellow, "DEPLOYING WEBRESOURCES DEPENDENCIES");
+                CliLog.WriteLine(ConsoleColor.White, "|");
                 CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Found: ", ConsoleColor.Yellow, dependencies.Count, ConsoleColor.Green, " dependencies");
                 CliLog.WriteLine(ConsoleColor.White, "|");
                 var j = 1;
