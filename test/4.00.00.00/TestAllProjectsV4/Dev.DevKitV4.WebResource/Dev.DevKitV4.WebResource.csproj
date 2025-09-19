@@ -52,7 +52,16 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <None Include="deploy.debug.bat" />
+    <None Include="download\download.webresources.bat" />
     <None Include="package.json" />
+    <Content Include="download\DEVKITV4\v4_\entities\Account.form.js" />
+    <Content Include="download\DEVKITV4\v4_\entities\Account.js" />
+    <Content Include="download\DEVKITV4\v4_\entities\Account.webapi.js" />
+    <Content Include="download\DEVKITV4\v4_\entities\Contact.form.js" />
+    <Content Include="download\DEVKITV4\v4_\entities\Contact.js" />
+    <Content Include="download\DEVKITV4\v4_\entities\SystemUser.js" />
+    <Content Include="download\DEVKITV4\v4_\entities\SystemUser.webapi.js" />
+    <Content Include="download\DEVKITV4\v4_\lib\devkit.js" />
     <Content Include="entities\Account.form.js">
       <DependentUpon>Account.js</DependentUpon>
     </Content>
@@ -87,6 +96,8 @@
     <TypeScriptCompile Include="entities\SystemUser.d.ts" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="download\DEVKITV4\v4_\resources\resource.1033.resx" />
+    <EmbeddedResource Include="download\DEVKITV4\v4_\resources\resource.1066.resx" />
     <EmbeddedResource Include="resources\resource.1033.resx" />
     <EmbeddedResource Include="resources\resource.1066.resx" />
   </ItemGroup>
