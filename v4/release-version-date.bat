@@ -5,12 +5,37 @@ REM =====================================================================
 REM DynamicsCrm DevKit Release Build Script
 REM This script automates the release process including version updates,
 REM building, packaging, and cleanup.
+REM
+REM Usage:
+REM   release-version-date.bat [USE_CURRENT_DATE]
+REM
+REM Parameters:
+REM   USE_CURRENT_DATE - Optional flag (true/false).
+REM                      If true, uses current date/time instead of date.txt
+REM                      If false or omitted, reads date from date.txt
 REM =====================================================================
 
 echo.
 echo ************************************************************
 echo DynamicsCrm DevKit Release Build Script
 echo ************************************************************
+
+REM Parse command line arguments
+set "USE_CURRENT_DATE_FLAG=%~1"
+if "!USE_CURRENT_DATE_FLAG!"=="" set "USE_CURRENT_DATE_FLAG=false"
+
+REM Validate flag parameter
+if /i "!USE_CURRENT_DATE_FLAG!"=="true" (
+    set "USE_CURRENT_DATE=true"
+) else if /i "!USE_CURRENT_DATE_FLAG!"=="false" (
+    set "USE_CURRENT_DATE=false"
+) else (
+    echo ERROR: Invalid USE_CURRENT_DATE parameter. Use 'true' or 'false'
+    echo Usage: release-version-date.bat [USE_CURRENT_DATE]
+    goto :Error
+)
+
+echo Use current date: !USE_CURRENT_DATE!
 
 REM Initialize variables and validate required files
 call :InitializeVariables
@@ -55,13 +80,21 @@ if not exist "version.txt" (
     echo ERROR: version.txt file not found!
     exit /b 1
 )
-if not exist "date.txt" (
-    echo ERROR: date.txt file not found!
-    exit /b 1
-)
 
 set /p VERSION=<version.txt
-set /p DATE=<date.txt
+
+REM Handle date based on flag
+if /i "!USE_CURRENT_DATE!"=="true" (
+    echo Using current date/time...
+    call :GenerateCurrentDate
+) else (
+    echo Using date from date.txt...
+    if not exist "date.txt" (
+        echo ERROR: date.txt file not found!
+        exit /b 1
+    )
+    set /p DATE=<date.txt
+)
 
 echo Version: !VERSION!
 echo Date: !DATE!
@@ -80,6 +113,20 @@ set "DATE_FILES=!DATE_FILES! DynamicsCrm.DevKit\VSPackage.resx"
 set "DATE_FILES=!DATE_FILES! DynamicsCrm.DevKit\source.extension.cs"
 set "DATE_FILES=!DATE_FILES! ProjectTemplates\CSharp\05.PackageProjectTemplate\ReadMe.md"
 set "DATE_FILES=!DATE_FILES! ProjectTemplates\CSharp\12.ReportProjectTemplate\notes.md"
+
+exit /b 0
+
+:GenerateCurrentDate
+REM Generate current date in format: YYYY.MM.DD HH.mm.ss
+for /f "tokens=1-4 delims=/ " %%a in ('date /t') do (
+    set "CURRENT_DATE=%%d.%%b.%%c"
+)
+for /f "tokens=1-2 delims=: " %%a in ('time /t') do (
+    set "CURRENT_TIME=%%a.%%b"
+)
+
+REM Get more precise date/time using PowerShell for better formatting
+for /f "delims=" %%i in ('powershell -command "Get-Date -Format 'yyyy.MM.dd HH.mm.ss'"') do set "DATE=%%i"
 
 exit /b 0
 

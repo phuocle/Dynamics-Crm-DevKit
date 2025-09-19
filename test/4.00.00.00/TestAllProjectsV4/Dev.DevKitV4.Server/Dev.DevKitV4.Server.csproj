@@ -61,6 +61,7 @@
     <Compile Include="CustomApis\v4_CustomApiRequest.cs" />
     <Compile Include="Plugins\Account\PostAccountUpdateAsynchronous.cs" />
     <Compile Include="Workflows\SendEmailByQueue.cs" />
+    <None Include="deploy.datasource.bat" />
     <None Include="packages.config" />
     <None Include="Dev.DevKitV4.Server.snk" />
     <None Include="deploy.debug.bat" />

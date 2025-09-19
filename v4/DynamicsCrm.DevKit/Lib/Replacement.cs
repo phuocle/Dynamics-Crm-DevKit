@@ -54,7 +54,7 @@ namespace DynamicsCrm.DevKit.Lib
             await NuGetHelper.SetReplacementAsync(replacements, "Microsoft.CrmSdk.CoreTools");
         }
 
-        private static void SetConnectionValues(Dictionary<string, string> replacements, CrmConnection crmConnection)
+        public static void SetConnectionValues(Dictionary<string, string> replacements, CrmConnection crmConnection)
         {
             replacements["$AuthTypeValue$"] = crmConnection.Type;
             replacements["$UrlValue$"] = crmConnection.Url;
