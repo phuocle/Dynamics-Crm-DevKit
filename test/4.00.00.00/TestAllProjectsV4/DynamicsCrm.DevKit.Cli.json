@@ -57,6 +57,39 @@
           ]
         }
       ]
+    },
+    {
+      "profile": "DOWNLOAD_DEVKITV4",
+      "solution": "DOWNLOAD_DEVKITV4",
+      "rootfolder": "",
+      "includefiles": [
+        "entities\\*.js",
+        "lib\\**.js",
+        "resources\\*.resx"
+      ],
+      "excludefiles": [
+      ],
+      "dependencies": [
+        {
+          "webresources": [
+            "v4_/entities/[entity].js"
+          ],
+          "dependencies": [
+            "v4_/entities/[entity].form.js",
+            "v4_/entities/[entity].webapi.js",
+            "v4_/resources/resource.1033.resx",
+            "v4_/resources/resource.1066.resx"
+          ]
+        },
+        {
+          "webresources": [
+            "v4_/entities/[entity].form.js"
+          ],
+          "dependencies": [
+            "v4_/lib/devkit.js"
+          ]
+        }
+      ]
     }
   ],
   "datasources": [

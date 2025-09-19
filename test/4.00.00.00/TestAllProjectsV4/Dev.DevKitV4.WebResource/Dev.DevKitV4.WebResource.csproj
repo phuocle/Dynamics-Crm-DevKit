@@ -52,16 +52,18 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <None Include="deploy.debug.bat" />
-    <None Include="download\download.webresources.bat" />
+    <None Include="download.webresources.bat" />
+    <None Include="DOWNLOAD_DEVKITV4\v4_\deploy.debug.bat" />
     <None Include="package.json" />
-    <Content Include="download\DEVKITV4\v4_\entities\Account.form.js" />
-    <Content Include="download\DEVKITV4\v4_\entities\Account.js" />
-    <Content Include="download\DEVKITV4\v4_\entities\Account.webapi.js" />
-    <Content Include="download\DEVKITV4\v4_\entities\Contact.form.js" />
-    <Content Include="download\DEVKITV4\v4_\entities\Contact.js" />
-    <Content Include="download\DEVKITV4\v4_\entities\SystemUser.js" />
-    <Content Include="download\DEVKITV4\v4_\entities\SystemUser.webapi.js" />
-    <Content Include="download\DEVKITV4\v4_\lib\devkit.js" />
+    <Content Include="DOWNLOAD_DEVKITV4\v4_\entities\Account.form.js" />
+    <Content Include="DOWNLOAD_DEVKITV4\v4_\entities\Account.js" />
+    <Content Include="DOWNLOAD_DEVKITV4\v4_\entities\Account.webapi.js" />
+    <Content Include="DOWNLOAD_DEVKITV4\v4_\entities\Contact.form.js" />
+    <Content Include="DOWNLOAD_DEVKITV4\v4_\entities\Contact.js" />
+    <Content Include="DOWNLOAD_DEVKITV4\v4_\entities\devkit.js" />
+    <Content Include="DOWNLOAD_DEVKITV4\v4_\entities\SystemUser.js" />
+    <Content Include="DOWNLOAD_DEVKITV4\v4_\entities\SystemUser.webapi.js" />
+    <Content Include="DOWNLOAD_DEVKITV4\v4_\lib\devkit.js" />
     <Content Include="entities\Account.form.js">
       <DependentUpon>Account.js</DependentUpon>
     </Content>
@@ -89,6 +91,7 @@
     <Folder Include="js\" />
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="DOWNLOAD_DEVKITV4\v4_\entities\devkit.d.ts" />
     <TypeScriptCompile Include="entities\Account.d.ts">
       <DependentUpon>Account.js</DependentUpon>
     </TypeScriptCompile>
@@ -96,8 +99,8 @@
     <TypeScriptCompile Include="entities\SystemUser.d.ts" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="download\DEVKITV4\v4_\resources\resource.1033.resx" />
-    <EmbeddedResource Include="download\DEVKITV4\v4_\resources\resource.1066.resx" />
+    <EmbeddedResource Include="DOWNLOAD_DEVKITV4\v4_\resources\resource.1033.resx" />
+    <EmbeddedResource Include="DOWNLOAD_DEVKITV4\v4_\resources\resource.1066.resx" />
     <EmbeddedResource Include="resources\resource.1033.resx" />
     <EmbeddedResource Include="resources\resource.1066.resx" />
   </ItemGroup>
