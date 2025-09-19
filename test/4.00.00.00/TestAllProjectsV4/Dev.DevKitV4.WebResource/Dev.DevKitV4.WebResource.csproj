@@ -78,7 +78,6 @@
     <Folder Include="html\" />
     <Folder Include="images\" />
     <Folder Include="js\" />
-    <Folder Include="resources\" />
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="entities\Account.d.ts">
@@ -86,6 +85,10 @@
     </TypeScriptCompile>
     <TypeScriptCompile Include="entities\Contact.d.ts" />
     <TypeScriptCompile Include="entities\SystemUser.d.ts" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resources\resource.1033.resx" />
+    <EmbeddedResource Include="resources\resource.1066.resx" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v15.0\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />

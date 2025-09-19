@@ -43,7 +43,9 @@
           ],
           "dependencies": [
             "v4_/entities/[entity].form.js",
-            "v4_/entities/[entity].webapi.js"
+            "v4_/entities/[entity].webapi.js",
+            "v4_/resources/resource.1033.resx",
+            "v4_/resources/resource.1066.resx"
           ]
         },
         {
