@@ -18,7 +18,7 @@ namespace Dev.DevKitV4.Test.Workflows
             var workflowContext = _context.GetDefaultWorkflowContext();
             workflowContext.SetXrmFakedContextWorkflow(remote);
             //run
-            _context.ExecuteCodeActivity <Dev.DevKitV4.Server.Workflows.SendEmailByQueue> (workflowContext);
+            _context.ExecuteCodeActivity<Dev.DevKitV4.Server.Workflows.SendEmailByQueue>(workflowContext);
             //result
             Assert.IsTrue(true);
         }

@@ -40,6 +40,7 @@ namespace Dev.DevKitV4.Server.Workflows
             //workflowContext.PreEntityImages.TryGetValue("PreBusinessEntity", out Entity preEntity);
             //workflowContext.PostEntityImages.TryGetValue("PostBusinessEntity", out Entity postEntity);
             //YOUR WORKFLOW-CODE GO HERE
+            var t = string.Empty;
         }
     }
 }
