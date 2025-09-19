@@ -133,13 +133,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var pluginAssemblyId = await DeployAssemblyAsync(file);
             if (pluginAssemblyId == null) return;
             if (Arg?.OnlyUpdateAssembly?.Length > 0) return;
-
-            //form types, loop all type, get attributes value, the do the sort types by: Plugin -> Custom Action -> Custom Api -> Workflow -> Data Provider
             var sortedTypes = types.OrderBy(type =>
             {
                 var attributes = GetCrmPluginRegistrationAttributes(type);
-                if (attributes.Count == 0) return int.MaxValue; // Put types without attributes at the end
-
+                if (attributes.Count == 0) return int.MaxValue;
                 var pluginType = attributes[0].PluginType;
                 return pluginType switch
                 {
@@ -155,7 +152,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 var attributes = GetCrmPluginRegistrationAttributes(type);
                 return attributes.Count > 0 ? attributes[0].Name : type.FullName;
             }).ToList();
-
             foreach (var type in sortedTypes)
             {
                 var attributes = GetCrmPluginRegistrationAttributes(type);
