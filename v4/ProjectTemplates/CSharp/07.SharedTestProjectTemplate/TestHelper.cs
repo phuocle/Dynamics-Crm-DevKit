@@ -54,7 +54,7 @@ namespace $NameSpace$
                                 parameters[key] = dateTime;
                             break;
                         case EntityReference entityReference:
-                            if (entityReference?.Name == null)
+                            if (entityReference != null && entityReference?.Name == null)
                                 entityReference.Name = "(No Name)";
                             break;
                         case Array array:
@@ -91,7 +91,7 @@ namespace $NameSpace$
                         try
                         {
                             var er = entity.GetAttributeValue<EntityReference>(key);
-                            if (er?.Name == null)
+                            if (er != null && er?.Name == null)
                                 er.Name = "(No Name)";
                         }
                         catch { }

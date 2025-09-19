@@ -91,7 +91,7 @@ namespace Dev.DevKitV4.Shared.Test
                         try
                         {
                             var er = entity.GetAttributeValue<EntityReference>(key);
-                            if (er?.Name == null)
+                            if (er != null && er?.Name == null)
                                 er.Name = "(No Name)";
                         }
                         catch { }
