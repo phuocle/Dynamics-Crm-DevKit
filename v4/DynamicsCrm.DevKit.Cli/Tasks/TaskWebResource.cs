@@ -15,6 +15,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 {
     public class TaskWebResource(CommandLineArgs arg, JsonWebResource json) : ITask
     {
+        private const string SPACE = "  ";
         public string CurrentDirectory { get; set; } = arg.CurrentDirectory;
         public string TaskType => $"[{nameof(CliType.webresources).ToUpper()}]";
         public ServiceClient ServiceClient { get; set; } = arg.ServiceClient;
@@ -26,7 +27,41 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         private List<Guid> WebResourcesToPublish { get; } = [];
         public async Task<bool> IsValidAsync()
         {
-            await Helper.DelayAsync(1);
+            if (Json == null)
+            {
+                CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'profile' not found: '{Arg.Profile}'. Please check DynamicsCrm.DevKit.Cli.json file.");
+                return false;
+            }
+            if (Json.solution == "???" || (Json.solution != null && Json?.solution?.Trim().Length == 0))
+            {
+                CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'solution' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
+                return false;
+            }
+            (IsOk, SolutionId, SolutionPrefix) = await XrmHelper.IsExistSolutionAsync(ServiceClient, Json.solution);
+            if (!IsOk)
+            {
+                CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} solution '{Json.solution}' not exist");
+                return false;
+            }
+            if (await IsSupportWebResourceDependencyAsync())
+            {
+                var dependencies = await GetDependenciesAsync();
+                foreach (var dependency in dependencies)
+                {
+                    var check = dependency.dependencies.Where(x => x.StartsWith("???_/")).Any();
+                    if (check)
+                    {
+                        CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} Found ???_/ in webresource dependencies. Please check DynamicsCrm.DevKit.Cli.json file.");
+                        return false;
+                    }
+                    var check2 = dependency.webresources.Where(x => x.StartsWith("???_/")).Any();
+                    if (check2)
+                    {
+                        CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} Found ???_/ in webresource dependencies. Please check DynamicsCrm.DevKit.Cli.json file.");
+                        return false;
+                    }
+                }
+            }
             return true;
         }
 
@@ -118,7 +153,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     };
                     CliLog.WriteLineWarning(ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", current) + ": ", ConsoleColor.Green, CliAction.UPDATED, ConsoleColor.White, $"{webResourceName}", ConsoleColor.Green, " dependencies ", ConsoleColor.White, "with");
                     foreach (var d in foundDependencies)
-                        CliLog.WriteLineWarning(ConsoleColor.White, "\t" + d);
+                        CliLog.WriteLineWarning(ConsoleColor.White, $"{SPACE}{SPACE}{SPACE}{d}");
                     await ServiceClient.UpdateAsync(entity);
                     if (!WebResourcesToPublish.Contains(webResourceId))
                         WebResourcesToPublish.Add(webResourceId);
@@ -127,7 +162,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 {
                     CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", current) + ": ", ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, webResourceName, ConsoleColor.Green, " dependencies ", ConsoleColor.White, "with");
                     foreach (var d in foundDependencies)
-                        CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.White, "\t" + d);
+                        CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.White, $"{SPACE}{SPACE}{SPACE}{d}");
                 }
             }
         }
@@ -410,7 +445,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 ComponentId = Guid.Parse(webResource["webresourceid"].ToString()),
                 SolutionUniqueName = Json.solution
             };
-            CliLog.WriteLineWarning("\t", ConsoleColor.Green, CliAction.ADDED, ConsoleColor.White, $"{webResource["name"]} ", ConsoleColor.Green, "to solution: ", ConsoleColor.White, $"{Json.solution}");
+            CliLog.WriteLineWarning(SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.ADDED, ConsoleColor.White, $"{webResource["name"]} ", ConsoleColor.Green, "to solution: ", ConsoleColor.White, $"{Json.solution}");
             await ServiceClient.ExecuteAsync(request);
         }
 

@@ -60,6 +60,10 @@
     <Content Include="entities\Account.webapi.js">
       <DependentUpon>Account.js</DependentUpon>
     </Content>
+    <Content Include="entities\Contact.form.js" />
+    <Content Include="entities\Contact.js" />
+    <Content Include="entities\SystemUser.js" />
+    <Content Include="entities\SystemUser.webapi.js" />
     <Content Include="lib\devkit.js" />
     <Content Include="entities\devkit.d.ts" />
     <None Include="entities\generator.form.bat" />
@@ -80,6 +84,8 @@
     <TypeScriptCompile Include="entities\Account.d.ts">
       <DependentUpon>Account.js</DependentUpon>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="entities\Contact.d.ts" />
+    <TypeScriptCompile Include="entities\SystemUser.d.ts" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v15.0\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />

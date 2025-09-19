@@ -22,7 +22,7 @@
   "webresources": [
     {
       "profile": "DEBUG",
-      "solution": "???",
+      "solution": "DEVKITV4",
       "rootfolder": "",
       "includefiles": [
         "css\\**.css",
@@ -39,19 +39,19 @@
       "dependencies": [
         {
           "webresources": [
-            "???_/entities/[entity].js"
+            "v4_/entities/[entity].js"
           ],
           "dependencies": [
-            "???_/entities/[entity].form.js",
-            "???_/entities/[entity].webapi.js"
+            "v4_/entities/[entity].form.js",
+            "v4_/entities/[entity].webapi.js"
           ]
         },
         {
           "webresources": [
-            "???_/entities/[entity].form.js"
+            "v4_/entities/[entity].form.js"
           ],
           "dependencies": [
-            "???_/lib/devkit.js"
+            "v4_/lib/devkit.js"
           ]
         }
       ]
@@ -108,14 +108,14 @@
       "type": "JsForm",
       "rootnamespace": "DevKitV4",
       "rootfolder": "",
-      "entities": "folder"
+      "entities": "account,contact"
     },
     {
       "profile": "JS-WEBAPI",
       "type": "JsWebApi",
       "rootnamespace": "DevKitV4",
       "rootfolder": "",
-      "entities": "folder"
+      "entities": "account,systemuser"
     }
   ],
   "downloadwebresources": [
