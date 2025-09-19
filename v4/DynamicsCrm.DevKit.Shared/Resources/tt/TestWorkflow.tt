@@ -22,12 +22,14 @@ namespace <#=Context.PluginNameSpace#>
         [TestMethod]
         public void _01_ExecuteWorkflow()
         {
-            //setup
-            //var json = "";
-            //Plugin.SetDebugContext(json);
-            //run
-            //Context.ExecutePluginWith<<#=Context.Class#>>(Plugin);
-            //result
+            ////setup
+            //var json = @"";
+            //var remote = TestHelper.DeserializeRemoteExecutionContext(json);
+            //var pluginContext = _context.GetDefaultPluginContext();
+            //pluginContext.SetXrmFakedContextPlugin(remote);
+            ////run
+            //Context.ExecutePluginWith<???> (pluginContext);
+            ////result
             Assert.IsTrue(true);
         }
     }

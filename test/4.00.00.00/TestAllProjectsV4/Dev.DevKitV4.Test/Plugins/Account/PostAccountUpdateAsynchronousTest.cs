@@ -1,58 +1,58 @@
-﻿using FakeXrmEasy.Plugins;
+﻿using Dev.DevKitV4.Shared;
+using Dev.DevKitV4.Shared.Test;
+using FakeXrmEasy.Plugins;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xrm.Sdk;
 using System.Linq;
-using <#=Context.PluginSharedNameSpace#>;
-using <#=Context.PluginSharedNameSpace#>.Test;
 
-namespace <#=Context.PluginNameSpace#>
+namespace Dev.DevKitV4.Test.Plugins.Account
 {
     [TestClass]
-    public class <#=Context.Class#>Test : FakeXrmEasyTestBase
+    public class PostAccountUpdateAsynchronousTest : FakeXrmEasyTestBase
     {
-        private const StageEnum PLUGIN_STAGE = StageEnum.???;
-        private const string PLUGIN_MESSAGE = "???";
-        private const string PLUGIN_ENTITY_LOGICAL_NAME = "???";
-        private const ExecutionModeEnum PLUGIN_EXECUTION_MODE = ExecutionModeEnum.???;
+        private const StageEnum PLUGIN_STAGE = StageEnum.PostOperation;
+        private const string PLUGIN_MESSAGE = "Update";
+        private const string PLUGIN_ENTITY_LOGICAL_NAME = "account";
+        private const ExecutionModeEnum PLUGIN_EXECUTION_MODE = ExecutionModeEnum.Asynchronous;
 
         [TestMethod]
-        public void <#=Context.Class#>Test_00()
+        public void PostAccountUpdateAsynchronousTest_00()
         {
             var pluginContext = _context.GetDefaultPluginContext();
 
             Assert.ThrowsExactly<InvalidPluginExecutionException>(() =>
             {
-                _context.ExecutePluginWith<???>(pluginContext);
+                _context.ExecutePluginWith <Dev.DevKitV4.Server.Plugins.Account.PostAccountUpdateAsynchronous> (pluginContext);
             }, $"Stage does not equals {PLUGIN_STAGE}");
 
             pluginContext.Stage = (int)PLUGIN_STAGE;
             pluginContext.MessageName = string.Empty;
             Assert.ThrowsExactly<InvalidPluginExecutionException>(() =>
             {
-                _context.ExecutePluginWith<???>(pluginContext);
+                _context.ExecutePluginWith <Dev.DevKitV4.Server.Plugins.Account.PostAccountUpdateAsynchronous> (pluginContext);
             }, $"MessageName does not equals {PLUGIN_MESSAGE}");
 
             pluginContext.MessageName = PLUGIN_MESSAGE;
             pluginContext.PrimaryEntityName = string.Empty;
             Assert.ThrowsExactly<InvalidPluginExecutionException>(() =>
             {
-                _context.ExecutePluginWith<???>(pluginContext);
+                _context.ExecutePluginWith <Dev.DevKitV4.Server.Plugins.Account.PostAccountUpdateAsynchronous> (pluginContext);
             }, $"PrimaryEntityName does not equals {PLUGIN_ENTITY_LOGICAL_NAME}");
 
             pluginContext.PrimaryEntityName = PLUGIN_ENTITY_LOGICAL_NAME;
             pluginContext.Mode = -1;
             Assert.ThrowsExactly<InvalidPluginExecutionException>(() =>
             {
-                _context.ExecutePluginWith<???>(pluginContext);
+                _context.ExecutePluginWith <Dev.DevKitV4.Server.Plugins.Account.PostAccountUpdateAsynchronous> (pluginContext);
             }, $"Execution does not equals {PLUGIN_EXECUTION_MODE}");
 
             pluginContext.Mode = (int)PLUGIN_EXECUTION_MODE;
-            _context.ExecutePluginWith<???>(pluginContext);
+            _context.ExecutePluginWith<Dev.DevKitV4.Server.Plugins.Account.PostAccountUpdateAsynchronous>(pluginContext);
             Assert.IsTrue(true);
         }
 
         [TestMethod]
-        public void <#=Context.Class#>Test_01()
+        public void PostAccountUpdateAsynchronousTest_01()
         {
             ////setup
             //var json = @"";
