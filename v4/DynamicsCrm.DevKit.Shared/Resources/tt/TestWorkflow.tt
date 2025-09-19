@@ -2,33 +2,23 @@
 using FakeXrmEasy;
 using FakeXrmEasy.CodeActivities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using <#=Context.PluginSharedNameSpace#>.Test;
 
 namespace <#=Context.PluginNameSpace#>
 {
     [TestClass]
-    public class <#=Context.Class#>Test
+    public class <#=Context.Class#>Test : FakeXrmEasyTestBase
     {
-        public static XrmFakedContext Context { get; set; }
-        public static XrmFakedWorkflowContext Workflow { get; set; }
-
-        [ClassInitialize()]
-        public static void ClassInit(TestContext context)
-        {
-            Context = new XrmFakedContext();
-            Context.ProxyTypesAssembly = Assembly.GetAssembly(typeof(ProxyTypesAssembly));
-            Workflow = Context.GetDefaultWorkflowContext();
-        }
-
         [TestMethod]
-        public void _01_ExecuteWorkflow()
+        public void <#=Context.Class#>Test_01()
         {
             ////setup
             //var json = @"";
             //var remote = TestHelper.DeserializeRemoteExecutionContext(json);
-            //var pluginContext = _context.GetDefaultPluginContext();
-            //pluginContext.SetXrmFakedContextPlugin(remote);
+            //var workflowContext = _context.GetDefaultWorkflowContext();
+            //workflowContext.SetXrmFakedContextWorkflow(remote);
             ////run
-            //Context.ExecutePluginWith<???> (pluginContext);
+            //_context.ExecuteCodeActivity<???>(workflowContext);
             ////result
             Assert.IsTrue(true);
         }

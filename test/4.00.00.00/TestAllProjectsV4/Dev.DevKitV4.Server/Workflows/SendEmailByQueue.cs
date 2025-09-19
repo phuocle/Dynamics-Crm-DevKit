@@ -37,10 +37,9 @@ namespace Dev.DevKitV4.Server.Workflows
 
         private void ExecuteWorkflow(CodeActivityContext executionContext, IWorkflowContext workflowContext, IOrganizationServiceFactory serviceFactory, IOrganizationService serviceAdmin, IOrganizationService service, ITracingService tracing)
         {
-            //var preEntity = (Entity)workflowContext?.PreEntityImages?["PreBusinessEntity"];
-            //var postEntity = (Entity)workflowContext?.PostEntityImages?["PostBusinessEntity"];
+            //workflowContext.PreEntityImages.TryGetValue("PreBusinessEntity", out Entity preEntity);
+            //workflowContext.PostEntityImages.TryGetValue("PostBusinessEntity", out Entity postEntity);
             //YOUR WORKFLOW-CODE GO HERE
-
         }
     }
 }

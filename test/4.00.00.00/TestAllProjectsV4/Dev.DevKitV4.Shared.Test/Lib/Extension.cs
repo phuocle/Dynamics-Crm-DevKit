@@ -1,4 +1,5 @@
-﻿using FakeXrmEasy.Plugins;
+﻿using FakeXrmEasy.CodeActivities;
+using FakeXrmEasy.Plugins;
 using Microsoft.Xrm.Sdk;
 
 namespace Dev.DevKitV4.Shared.Test
@@ -34,6 +35,35 @@ namespace Dev.DevKitV4.Shared.Test
             plugin.BusinessUnitId = remote.BusinessUnitId;
             plugin.ParentContext = remote.ParentContext;
             plugin.Stage = remote.Stage;
+        }
+
+        public static void SetXrmFakedContextWorkflow(this XrmFakedWorkflowContext workflow, RemoteExecutionContext remote)
+        {
+            workflow.UserId = remote.UserId;
+            workflow.SharedVariables = remote.SharedVariables;
+            workflow.SecondaryEntityName = remote.SecondaryEntityName;
+            workflow.RequestId = remote.RequestId;
+            workflow.PrimaryEntityName = remote.PrimaryEntityName;
+            workflow.PrimaryEntityId = remote.PrimaryEntityId;
+            workflow.PreEntityImages = remote.PreEntityImages;
+            workflow.PostEntityImages = remote.PostEntityImages;
+            workflow.OwningExtension = remote.OwningExtension;
+            workflow.OutputParameters = remote.OutputParameters;
+            workflow.OrganizationName = remote.OrganizationName;
+            workflow.OrganizationId = remote.OrganizationId;
+            workflow.OperationId = remote.OperationId;
+            workflow.OperationCreatedOn = remote.OperationCreatedOn;
+            workflow.Mode = remote.Mode;
+            workflow.MessageName = remote.MessageName;
+            workflow.IsolationMode = remote.IsolationMode;
+            workflow.IsOfflinePlayback = remote.IsOfflinePlayback;
+            workflow.IsInTransaction = remote.IsInTransaction;
+            workflow.IsExecutingOffline = remote.IsExecutingOffline;
+            workflow.InputParameters = remote.InputParameters;
+            workflow.InitiatingUserId = remote.InitiatingUserId;
+            workflow.Depth = remote.Depth;
+            workflow.CorrelationId = remote.CorrelationId;
+            workflow.BusinessUnitId = remote.BusinessUnitId;
         }
     }
 }
