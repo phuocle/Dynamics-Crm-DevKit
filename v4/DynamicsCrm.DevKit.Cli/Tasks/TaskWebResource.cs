@@ -73,7 +73,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, $"{SPACE}{SPACE}{pattern}");
             }
             CliLog.WriteLine(ConsoleColor.White, "|");
-            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Found: ", ConsoleColor.Yellow, WebResourceFiles.Count, ConsoleColor.Green, " webresources");
+            CliLog.Write(ConsoleColor.White, "|", ConsoleColor.Green, "Found: ");
+            CliLog.WriteSuccess(ConsoleColor.Yellow, $" {WebResourceFiles.Count} ");
+            CliLog.WriteLine(ConsoleColor.Green, " webresources");
             CliLog.WriteLine(ConsoleColor.White, "|");
             var i = 1;
             foreach (var webResourceFile in WebResourceFiles)
@@ -99,7 +101,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     }
                 }
                 CliLog.WriteLine(ConsoleColor.White, "|");
-                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Found: ", ConsoleColor.Yellow, dependencies.Count, ConsoleColor.Green, " dependencies");
+                CliLog.Write(ConsoleColor.White, "|", ConsoleColor.Green, "Found: ");
+                CliLog.WriteSuccess(ConsoleColor.Yellow, $" {dependencies.Count} ");
+                CliLog.WriteLine(ConsoleColor.Green, " dependencies");
                 CliLog.WriteLine(ConsoleColor.White, "|");
                 var j = 1;
                 foreach (var dependency in dependencies)
