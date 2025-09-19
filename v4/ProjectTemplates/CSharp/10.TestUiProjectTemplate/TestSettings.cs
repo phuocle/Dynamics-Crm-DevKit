@@ -14,7 +14,7 @@ namespace $NameSpace$
             BrowserType = (BrowserType)Enum.Parse(typeof(BrowserType), Type),
             PrivateMode = true,
             FireEvents = false,
-            Headless = false,
+            Headless = true,
             UserAgent = false,
             DefaultThinkTime = 2000,
             RemoteBrowserType = (BrowserType)Enum.Parse(typeof(BrowserType), RemoteType),

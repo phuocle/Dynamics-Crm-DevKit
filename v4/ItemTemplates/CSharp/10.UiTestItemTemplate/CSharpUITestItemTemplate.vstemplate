@@ -14,7 +14,7 @@
 		<SortOrder>200</SortOrder>
 	</TemplateData>
 	<TemplateContent>
-		<ProjectItem ReplaceParameters="true" TargetFileName="$Class$$PluginOrder$.cs">Class.cs</ProjectItem>
+		<ProjectItem ReplaceParameters="true" TargetFileName="$Class$$PluginOrder$Test.cs">Class.cs</ProjectItem>
 	</TemplateContent>
 	<WizardExtension>
 		<Assembly>DynamicsCrm.DevKit, Version=4.00.00.00, Culture=Neutral, PublicKeyToken=null</Assembly>

@@ -244,11 +244,18 @@
     <ProjectReference Include="..\Dev.DevKitV4.ProxyTypes\Dev.DevKitV4.ProxyTypes.csproj">
       <Name>Dev.DevKitV4.ProxyTypes</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Dev.DevKitV4.Server\Dev.DevKitV4.Server.csproj">
+      <Project>{7e8d2951-a96d-47ee-b5d9-f4ed74c11ab6}</Project>
+      <Name>Dev.DevKitV4.Server</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\DynamicsCrm.DevKit.Analyzers.4.0.0\analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />
     <Analyzer Include="..\packages\MSTest.Analyzers.3.10.4\analyzers\dotnet\cs\MSTest.Analyzers.CodeFixes.dll" />
     <Analyzer Include="..\packages\MSTest.Analyzers.3.10.4\analyzers\dotnet\cs\MSTest.Analyzers.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Plugins\Account\" />
   </ItemGroup>
   <Import Project="..\Dev.DevKitV4.Shared.Test\Dev.DevKitV4.Shared.Test.projitems" Label="Shared" Condition="Exists('..\Dev.DevKitV4.Shared.Test\Dev.DevKitV4.Shared.Test.projitems')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
