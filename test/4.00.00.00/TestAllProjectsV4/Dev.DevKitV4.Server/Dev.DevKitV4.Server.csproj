@@ -59,6 +59,11 @@
     <Compile Include="CustomApis\PostAsynchronous___v4_CustomApi.cs" />
     <Compile Include="CustomApis\PostSynchronous___v4_CustomApi.cs" />
     <Compile Include="CustomApis\v4_CustomApiRequest.cs" />
+    <Compile Include="DataProviders\Dataverse\Create.cs" />
+    <Compile Include="DataProviders\Dataverse\Delete.cs" />
+    <Compile Include="DataProviders\Dataverse\Retrieve.cs" />
+    <Compile Include="DataProviders\Dataverse\RetrieveMultiple.cs" />
+    <Compile Include="DataProviders\Dataverse\Update.cs" />
     <Compile Include="Plugins\Account\PostAccountUpdateAsynchronous.cs" />
     <Compile Include="Workflows\SendEmailByQueue.cs" />
     <None Include="deploy.datasource.bat" />
