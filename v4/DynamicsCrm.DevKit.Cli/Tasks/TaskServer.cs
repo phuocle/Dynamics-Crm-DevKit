@@ -210,26 +210,23 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 CliLog.WriteLineError(ConsoleColor.Yellow, $"Multiple message RetrieveMultiple found with data source {dataSource} ({checkDataSource}). Assemply deployed, but the deployment of this assembly stopped.");
                 return false;
             }
-            if (IsVirtualTableSupportCRUD())
+            var countCreate = dataProviderEvents.Count(x => x.Message == "Create" && x.DataSource == dataSource);
+            if (countCreate != 0 && countCreate != 1)
             {
-                var countCreate = dataProviderEvents.Count(x => x.Message == "Create" && x.DataSource == dataSource);
-                if (countCreate != 0 && countCreate != 1)
-                {
-                    CliLog.WriteLineError(ConsoleColor.Yellow, $"Multiple message Create found with data source {dataSource} ({checkDataSource}). Assemply deployed, but the deployment of this assembly stopped.");
-                    return false;
-                }
-                var countUpdate = dataProviderEvents.Count(x => x.Message == "Update" && x.DataSource == dataSource);
-                if (countUpdate != 0 && countUpdate != 1)
-                {
-                    CliLog.WriteLineError(ConsoleColor.Yellow, $"Multiple message Update found with data source {dataSource} ({checkDataSource}). Assemply deployed, but the deployment of this assembly stopped.");
-                    return false;
-                }
-                var countDelete = dataProviderEvents.Count(x => x.Message == "Delete" && x.DataSource == dataSource);
-                if (countDelete != 0 && countDelete != 1)
-                {
-                    CliLog.WriteLineError(ConsoleColor.Yellow, $"Multiple message Delete found with data source {dataSource} ({checkDataSource}). Assemply deployed, but the deployment of this assembly stopped.");
-                    return false;
-                }
+                CliLog.WriteLineError(ConsoleColor.Yellow, $"Multiple message Create found with data source {dataSource} ({checkDataSource}). Assemply deployed, but the deployment of this assembly stopped.");
+                return false;
+            }
+            var countUpdate = dataProviderEvents.Count(x => x.Message == "Update" && x.DataSource == dataSource);
+            if (countUpdate != 0 && countUpdate != 1)
+            {
+                CliLog.WriteLineError(ConsoleColor.Yellow, $"Multiple message Update found with data source {dataSource} ({checkDataSource}). Assemply deployed, but the deployment of this assembly stopped.");
+                return false;
+            }
+            var countDelete = dataProviderEvents.Count(x => x.Message == "Delete" && x.DataSource == dataSource);
+            if (countDelete != 0 && countDelete != 1)
+            {
+                CliLog.WriteLineError(ConsoleColor.Yellow, $"Multiple message Delete found with data source {dataSource} ({checkDataSource}). Assemply deployed, but the deployment of this assembly stopped.");
+                return false;
             }
             return true;
         }
@@ -259,32 +256,29 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 entity.Attributes.Add("retrievemultipleplugin", retrievemultiple.PluginTypeId);
                 events += "RetrieveMultiple, ";
             }
-            if (IsVirtualTableSupportCRUD())
+            var create = dataProviderEvents.Where(x => x.Message == "Create" && x.DataSource == dataSource).FirstOrDefault();
+            if (create == null)
+                entity.Attributes.Add("createplugin", new Guid("{c1919979-0021-4f11-a587-a8f904bdfdf9}"));
+            else
             {
-                var create = dataProviderEvents.Where(x => x.Message == "Create" && x.DataSource == dataSource).FirstOrDefault();
-                if (create == null)
-                    entity.Attributes.Add("createplugin", new Guid("{c1919979-0021-4f11-a587-a8f904bdfdf9}"));
-                else
-                {
-                    entity.Attributes.Add("createplugin", create.PluginTypeId);
-                    events += "Create, ";
-                }
-                var update = dataProviderEvents.Where(x => x.Message == "Update" && x.DataSource == dataSource).FirstOrDefault();
-                if (update == null)
-                    entity.Attributes.Add("updateplugin", new Guid("{c1919979-0021-4f11-a587-a8f904bdfdf9}"));
-                else
-                {
-                    entity.Attributes.Add("updateplugin", update.PluginTypeId);
-                    events += "Update, ";
-                }
-                var delete = dataProviderEvents.Where(x => x.Message == "Delete" && x.DataSource == dataSource).FirstOrDefault();
-                if (delete == null)
-                    entity.Attributes.Add("deleteplugin", new Guid("{c1919979-0021-4f11-a587-a8f904bdfdf9}"));
-                else
-                {
-                    entity.Attributes.Add("deleteplugin", delete.PluginTypeId);
-                    events += "Delete, ";
-                }
+                entity.Attributes.Add("createplugin", create.PluginTypeId);
+                events += "Create, ";
+            }
+            var update = dataProviderEvents.Where(x => x.Message == "Update" && x.DataSource == dataSource).FirstOrDefault();
+            if (update == null)
+                entity.Attributes.Add("updateplugin", new Guid("{c1919979-0021-4f11-a587-a8f904bdfdf9}"));
+            else
+            {
+                entity.Attributes.Add("updateplugin", update.PluginTypeId);
+                events += "Update, ";
+            }
+            var delete = dataProviderEvents.Where(x => x.Message == "Delete" && x.DataSource == dataSource).FirstOrDefault();
+            if (delete == null)
+                entity.Attributes.Add("deleteplugin", new Guid("{c1919979-0021-4f11-a587-a8f904bdfdf9}"));
+            else
+            {
+                entity.Attributes.Add("deleteplugin", delete.PluginTypeId);
+                events += "Delete, ";
             }
             events = events.TrimEnd(", ".ToCharArray());
             var entityDataProvider = await GetEntityDataProviderIdAsync(logicalNameDataSource);
@@ -295,7 +289,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 request.Target = entity;
                 request.Parameters.Add("SuppressDuplicateDetection", true);
                 request.Parameters.Add("SolutionUniqueName", Json.solution);
-                CliLog.WriteLineWarning(SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.REGISTER, ConsoleColor.Blue, $"DataSource ", ConsoleColor.Cyan, $"{logicalNameDataSource}", ConsoleColor.Blue, " linked with events ", ConsoleColor.Cyan, events);
+                CliLog.WriteLineWarning(SPACE, SPACE, ConsoleColor.Green, CliAction.REGISTER, ConsoleColor.White, "Type ", ConsoleColor.Blue, $"DataSource ", ConsoleColor.Cyan, $"{logicalNameDataSource}", ConsoleColor.Blue, " linked with events ", ConsoleColor.Cyan, events);
                 await ServiceClient.ExecuteAsync(request);
             }
             else
@@ -318,12 +312,12 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     {
                         Target = entity
                     };
-                    CliLog.WriteLineWarning(SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.UPDATED, ConsoleColor.Blue, $"DataSource ", ConsoleColor.Cyan, $"{logicalNameDataSource}", ConsoleColor.Blue, " linked with events ", ConsoleColor.Cyan, events);
+                    CliLog.WriteLineWarning(SPACE, SPACE, ConsoleColor.Green, CliAction.UPDATED, ConsoleColor.White, "Type ", ConsoleColor.Blue, $"DataSource ", ConsoleColor.Cyan, $"{logicalNameDataSource}", ConsoleColor.Blue, " linked with events ", ConsoleColor.Cyan, events);
                     await ServiceClient.ExecuteAsync(request);
                 }
                 else
                 {
-                    CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.Blue, $"DataSource ", ConsoleColor.Cyan, $"{logicalNameDataSource}", ConsoleColor.Blue, " linked with events ", ConsoleColor.Cyan, events);
+                    CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, "Type ", ConsoleColor.Blue, $"DataSource ", ConsoleColor.Cyan, $"{logicalNameDataSource}", ConsoleColor.Blue, " linked with events ", ConsoleColor.Cyan, events);
                 }
             }
         }
@@ -353,10 +347,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             return rows.Entities[0];
         }
 
-        private bool IsVirtualTableSupportCRUD()
-        {
-            return ServiceClient.ConnectedOrgVersion >= new Version("9.1.0.18950");
-        }
+        //private bool IsVirtualTableSupportCRUD()
+        //{
+        //    return ServiceClient.ConnectedOrgVersion >= new Version("9.1.0.18950");
+        //}
 
         private async Task<bool> IsExistDataSourceAsync(string logicalname)
         {
