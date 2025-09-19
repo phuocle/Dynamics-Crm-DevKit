@@ -129,10 +129,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     "</webresources></importexportxml>"
             };
             CliLog.WriteLine(ConsoleColor.White, "|");
-            CliLog.WriteLineWarning(ConsoleColor.Green, "PUBLISHING WEBRESOURCES");
+            CliLog.WriteLineWarning(ConsoleColor.Yellow, "PUBLISHING WEBRESOURCES");
             await ServiceClient.ExecuteAsync(publish);
             CliLog.WriteLine(ConsoleColor.White, "|");
-            CliLog.WriteLineWarning(ConsoleColor.Green, "PUBLISHED WEBRESOURCES");
+            CliLog.WriteLineWarning(ConsoleColor.Yellow, "PUBLISHED WEBRESOURCES");
         }
 
         private async Task UpdateDependencyAsync(Dependency dependency, int current)

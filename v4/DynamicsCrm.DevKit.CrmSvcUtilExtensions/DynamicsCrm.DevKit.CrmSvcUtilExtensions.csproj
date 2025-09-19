@@ -2,7 +2,7 @@
 	<PropertyGroup>
 		<TargetFramework>net48</TargetFramework>
 		<SignAssembly>True</SignAssembly>
-		<AssemblyOriginatorKeyFile>D:\github\Dynamics-Crm-DevKit\v3\DynamicsCrm.DevKit.pfx</AssemblyOriginatorKeyFile>
+		<AssemblyOriginatorKeyFile>..\DynamicsCrm.DevKit.pfx</AssemblyOriginatorKeyFile>
 		<AssemblyVersion>4.00.00.00</AssemblyVersion>
 		<FileVersion>4.00.00.00</FileVersion>
 		<GeneratePackageOnBuild>False</GeneratePackageOnBuild>

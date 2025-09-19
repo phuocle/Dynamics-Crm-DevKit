@@ -6,7 +6,7 @@
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <DevelopmentDependency>true</DevelopmentDependency>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-	  <AssemblyOriginatorKeyFile>D:\github\Dynamics-Crm-DevKit\v3\DynamicsCrm.DevKit.pfx</AssemblyOriginatorKeyFile>
+	  <AssemblyOriginatorKeyFile>..\DynamicsCrm.DevKit.pfx</AssemblyOriginatorKeyFile>
 	  <BaseOutputPath>bin</BaseOutputPath>
   </PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
