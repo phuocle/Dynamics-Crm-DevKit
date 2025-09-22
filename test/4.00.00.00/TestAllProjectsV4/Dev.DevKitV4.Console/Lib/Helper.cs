@@ -68,27 +68,43 @@ namespace Dev.DevKitV4.Console.Lib
 
         public static void ExecuteWorkflow<T>(string json, ServiceClient service) where T : CodeActivity, new()
         {
-            // Create required services for mocking
-            var workflowContext = Substitute.For<IWorkflowContext>();
-            var tracingService = Substitute.For<ITracingService>();
-            var serviceFactory = Substitute.For<IOrganizationServiceFactory>();
-
-            // Configure the organization service factory
-            serviceFactory.CreateOrganizationService(Arg.Any<Guid?>()).Returns((param) =>
-            {
-                var userId = param.ArgAt<Guid?>(0);
-                if (userId != null)
-                {
-                    var clone = service.Clone();
-                    clone.CallerId = userId.GetValueOrDefault();
-                    return clone;
-                }
-                return service;
-            });
-
             // Deserialize the workflow context from JSON
             var remoteExecutionContext = DeserializeRemoteExecutionContext(json);
 
+            // Create mock services directly
+            var workflowContext = CreateMockWorkflowContext(remoteExecutionContext);
+            var tracingService = Substitute.For<ITracingService>();
+            var serviceFactory = CreateMockServiceFactory(service);
+
+            // Create and execute the workflow by calling the public ExecuteWorkflow method directly
+            var workflow = new T();
+            
+            // Use reflection to find and call the public ExecuteWorkflow method
+            var executeWorkflowMethod = typeof(T).GetMethod("ExecuteWorkflow", BindingFlags.Public | BindingFlags.Instance);
+            
+            if (executeWorkflowMethod != null)
+            {
+                var serviceAdmin = serviceFactory.CreateOrganizationService(null);
+                var userService = serviceFactory.CreateOrganizationService(workflowContext.UserId);
+                
+                executeWorkflowMethod.Invoke(workflow, new object[] { 
+                    workflowContext, 
+                    serviceFactory, 
+                    serviceAdmin, 
+                    userService, 
+                    tracingService 
+                });
+            }
+            else
+            {
+                System.Console.WriteLine("Could not find ExecuteWorkflow method to invoke. Make sure the method is public.");
+            }
+        }
+
+        private static IWorkflowContext CreateMockWorkflowContext(RemoteExecutionContext remoteExecutionContext)
+        {
+            var workflowContext = Substitute.For<IWorkflowContext>();
+            
             // Configure the workflow context with data from the remote execution context
             workflowContext.BusinessUnitId.Returns(remoteExecutionContext.BusinessUnitId);
             workflowContext.CorrelationId.Returns(remoteExecutionContext.CorrelationId);
@@ -107,12 +123,13 @@ namespace Dev.DevKitV4.Console.Lib
             workflowContext.OrganizationName.Returns(remoteExecutionContext.OrganizationName);
             workflowContext.OutputParameters.Returns(remoteExecutionContext.OutputParameters);
             workflowContext.OwningExtension.Returns(remoteExecutionContext.OwningExtension);
-            // ParentContext is IWorkflowContext type, need to cast or create mock
+            
             if (remoteExecutionContext.ParentContext != null)
             {
                 var parentWorkflowContext = Substitute.For<IWorkflowContext>();
                 workflowContext.ParentContext.Returns(parentWorkflowContext);
             }
+            
             workflowContext.PostEntityImages.Returns(remoteExecutionContext.PostEntityImages);
             workflowContext.PreEntityImages.Returns(remoteExecutionContext.PreEntityImages);
             workflowContext.PrimaryEntityId.Returns(remoteExecutionContext.PrimaryEntityId);
@@ -121,22 +138,27 @@ namespace Dev.DevKitV4.Console.Lib
             workflowContext.SecondaryEntityName.Returns(remoteExecutionContext.SecondaryEntityName);
             workflowContext.SharedVariables.Returns(remoteExecutionContext.SharedVariables);
             workflowContext.UserId.Returns(remoteExecutionContext.UserId);
+            
+            return workflowContext;
+        }
 
-            // Create and test the workflow directly using the private method
-            var workflow = new T();
-
-            // Use reflection to call the private ExecuteWorkflow method directly
-            var executeWorkflowMethod = typeof(T).GetMethod("ExecuteWorkflow",
-                BindingFlags.NonPublic | BindingFlags.Instance);
-
-            if (executeWorkflowMethod != null)
+        private static IOrganizationServiceFactory CreateMockServiceFactory(ServiceClient service)
+        {
+            var serviceFactory = Substitute.For<IOrganizationServiceFactory>();
+            
+            serviceFactory.CreateOrganizationService(Arg.Any<Guid?>()).Returns((param) =>
             {
-                executeWorkflowMethod.Invoke(workflow, new object[] { null, workflowContext, serviceFactory, service, service, tracingService });
-            }
-            else
-            {
-                System.Console.WriteLine("Could not find ExecuteWorkflow method to invoke");
-            }
+                var userId = param.ArgAt<Guid?>(0);
+                if (userId != null && userId != Guid.Empty)
+                {
+                    var clone = service.Clone();
+                    clone.CallerId = userId.GetValueOrDefault();
+                    return clone;
+                }
+                return service;
+            });
+            
+            return serviceFactory;
         }
 
         private static void FixParameterCollection(ParameterCollection parameters)

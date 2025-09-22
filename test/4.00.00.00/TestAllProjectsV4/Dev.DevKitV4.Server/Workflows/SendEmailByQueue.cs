@@ -32,10 +32,11 @@ namespace Dev.DevKitV4.Server.Workflows
 
             tracing?.DebugContext(workflowContext);
 
-            ExecuteWorkflow(executionContext, workflowContext, serviceFactory, serviceAdmin, service, tracing);
+            ExecuteWorkflow(workflowContext, serviceFactory, serviceAdmin, service, tracing);
         }
 
-        private void ExecuteWorkflow(CodeActivityContext executionContext, IWorkflowContext workflowContext, IOrganizationServiceFactory serviceFactory, IOrganizationService serviceAdmin, IOrganizationService service, ITracingService tracing)
+        // Make this method public for testing and remove CodeActivityContext dependency
+        public void ExecuteWorkflow(IWorkflowContext workflowContext, IOrganizationServiceFactory serviceFactory, IOrganizationService serviceAdmin, IOrganizationService service, ITracingService tracing)
         {
             //workflowContext.PreEntityImages.TryGetValue("PreBusinessEntity", out Entity preEntity);
             //workflowContext.PostEntityImages.TryGetValue("PostBusinessEntity", out Entity postEntity);
