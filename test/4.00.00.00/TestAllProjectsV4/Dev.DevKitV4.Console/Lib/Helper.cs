@@ -66,7 +66,14 @@ namespace Dev.DevKitV4.Console.Lib
             return serviceProvider;
         }
 
-        public static void ExecuteWorkflow<T>(string json, ServiceClient service) where T : CodeActivity, new()
+        public static void DebugPlugin<T>(string json, ServiceClient service, params object[] constructorArgs) where T : IPlugin
+        {
+            var serviceProvider = GetServiceProvider(json, service);
+            var plugin = (T)Activator.CreateInstance(typeof(T), constructorArgs);
+            plugin.Execute(serviceProvider);
+        }
+
+        public static void DebugWorkflow<T>(string json, ServiceClient service) where T : CodeActivity, new()
         {
             // Deserialize the workflow context from JSON
             var remoteExecutionContext = DeserializeRemoteExecutionContext(json);
