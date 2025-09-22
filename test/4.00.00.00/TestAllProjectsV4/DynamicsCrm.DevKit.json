@@ -1,0 +1,12 @@
+﻿{
+    "DefaultCrmConnection": "devkit@phuocle.net",
+    "CrmConnections": [
+        {
+            "Name": "devkit@phuocle.net",
+            "Url": "https://dynamics-crm-devkit.crm5.dynamics.com",
+            "UserName": "devkit@phuocle.net",
+            "Password": "",
+            "Type": "OAuth"
+        }
+    ]
+}
