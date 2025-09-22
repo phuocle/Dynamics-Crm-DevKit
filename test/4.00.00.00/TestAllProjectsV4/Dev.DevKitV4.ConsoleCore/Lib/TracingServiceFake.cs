@@ -4,7 +4,7 @@ namespace Dev.DevKitV4.ConsoleCore.Lib
 {
     public class TracingServiceFake : ITracingService
     {
-        public ITracingService? tracingService;
+        public ITracingService tracingService;
 
         public void Trace(string format, params object[] args)
         {

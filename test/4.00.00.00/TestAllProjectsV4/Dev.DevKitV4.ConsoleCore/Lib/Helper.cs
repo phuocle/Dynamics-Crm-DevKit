@@ -2,9 +2,16 @@
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Extensions;
 using Microsoft.Xrm.Sdk.PluginTelemetry;
+//using Microsoft.Xrm.Sdk.Workflow;
 using NSubstitute;
+using System;
+//using System.Activities;
+using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.IO.Compression;
+using System.Linq;
+//using System.Reflection;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 using System.Text;
@@ -77,20 +84,18 @@ namespace Dev.DevKitV4.ConsoleCore.Lib
                                 parameters[key] = dateTime;
                             break;
                         case EntityReference entityReference:
-                            if (entityReference?.Name == null)
-#pragma warning disable CS8602 // Dereference of a possibly null reference.
+                            if (entityReference != null && entityReference?.Name == null)
                                 entityReference.Name = "(No Name)";
-#pragma warning restore CS8602 // Dereference of a possibly null reference.
                             break;
                         case Array array:
                             var entityReferenceCollection = new EntityReferenceCollection();
                             var listString = new List<string>();
                             foreach (var item in array)
                             {
-                                if (item is EntityReference entityRef)
-                                    entityReferenceCollection.Add(entityRef);
-                                else if (item is string str)
-                                    listString.Add(str);
+                                if (item is EntityReference entityReference)
+                                    entityReferenceCollection.Add(entityReference);
+                                else if (item is string @string)
+                                    listString.Add(@string);
                             }
                             if (entityReferenceCollection.Count > 0) parameters[key] = entityReferenceCollection;
                             if (listString.Count > 0) parameters[key] = listString.ToArray();
@@ -116,10 +121,8 @@ namespace Dev.DevKitV4.ConsoleCore.Lib
                         try
                         {
                             var er = entity.GetAttributeValue<EntityReference>(key);
-                            if (er?.Name == null)
-#pragma warning disable CS8602 // Dereference of a possibly null reference.
+                            if (er != null && er?.Name == null)
                                 er.Name = "(No Name)";
-#pragma warning restore CS8602 // Dereference of a possibly null reference.
                         }
                         catch { }
                     }
@@ -170,15 +173,119 @@ namespace Dev.DevKitV4.ConsoleCore.Lib
                 }
             }
         }
+        //private static IWorkflowContext CreateMockWorkflowContext(RemoteExecutionContext remoteExecutionContext)
+        //{
+        //    var workflowContext = Substitute.For<IWorkflowContext>();
+        //    workflowContext.BusinessUnitId.Returns(remoteExecutionContext.BusinessUnitId);
+        //    workflowContext.CorrelationId.Returns(remoteExecutionContext.CorrelationId);
+        //    workflowContext.Depth.Returns(remoteExecutionContext.Depth);
+        //    workflowContext.InitiatingUserId.Returns(remoteExecutionContext.InitiatingUserId);
+        //    workflowContext.InputParameters.Returns(remoteExecutionContext.InputParameters);
+        //    workflowContext.IsExecutingOffline.Returns(remoteExecutionContext.IsExecutingOffline);
+        //    workflowContext.IsInTransaction.Returns(remoteExecutionContext.IsInTransaction);
+        //    workflowContext.IsOfflinePlayback.Returns(remoteExecutionContext.IsOfflinePlayback);
+        //    workflowContext.IsolationMode.Returns(remoteExecutionContext.IsolationMode);
+        //    workflowContext.MessageName.Returns(remoteExecutionContext.MessageName);
+        //    workflowContext.Mode.Returns(remoteExecutionContext.Mode);
+        //    workflowContext.OperationCreatedOn.Returns(remoteExecutionContext.OperationCreatedOn);
+        //    workflowContext.OperationId.Returns(remoteExecutionContext.OperationId);
+        //    workflowContext.OrganizationId.Returns(remoteExecutionContext.OrganizationId);
+        //    workflowContext.OrganizationName.Returns(remoteExecutionContext.OrganizationName);
+        //    workflowContext.OutputParameters.Returns(remoteExecutionContext.OutputParameters);
+        //    workflowContext.OwningExtension.Returns(remoteExecutionContext.OwningExtension);
+        //    if (remoteExecutionContext.ParentContext != null)
+        //    {
+        //        var parentWorkflowContext = Substitute.For<IWorkflowContext>();
+        //        workflowContext.ParentContext.Returns(parentWorkflowContext);
+        //    }
+        //    workflowContext.PostEntityImages.Returns(remoteExecutionContext.PostEntityImages);
+        //    workflowContext.PreEntityImages.Returns(remoteExecutionContext.PreEntityImages);
+        //    workflowContext.PrimaryEntityId.Returns(remoteExecutionContext.PrimaryEntityId);
+        //    workflowContext.PrimaryEntityName.Returns(remoteExecutionContext.PrimaryEntityName);
+        //    workflowContext.RequestId.Returns(remoteExecutionContext.RequestId);
+        //    workflowContext.SecondaryEntityName.Returns(remoteExecutionContext.SecondaryEntityName);
+        //    workflowContext.SharedVariables.Returns(remoteExecutionContext.SharedVariables);
+        //    workflowContext.UserId.Returns(remoteExecutionContext.UserId);
+        //    return workflowContext;
+        //}
+        //private static IOrganizationServiceFactory CreateMockServiceFactory(ServiceClient service)
+        //{
+        //    var serviceFactory = Substitute.For<IOrganizationServiceFactory>();
+        //    serviceFactory.CreateOrganizationService(Arg.Any<Guid?>()).Returns((param) =>
+        //    {
+        //        var userId = param.ArgAt<Guid?>(0);
+        //        if (userId != null && userId != Guid.Empty)
+        //        {
+        //            var clone = service.Clone();
+        //            clone.CallerId = userId.GetValueOrDefault();
+        //            return clone;
+        //        }
+        //        return service;
+        //    });
+        //    return serviceFactory;
+        //}
+        public static void DebugPlugin<T>(string json, ServiceClient service, params object[] constructorArgs) where T : IPlugin
+        {
+            var serviceProvider = GetServiceProvider(json, service);
+            var plugin = (T)Activator.CreateInstance(typeof(T), constructorArgs);
+            plugin.Execute(serviceProvider);
+        }
+        //public static void DebugWorkflow<T>(string json, ServiceClient service) where T : CodeActivity, new()
+        //{
+        //    var remoteExecutionContext = DeserializeRemoteExecutionContext(json);
+        //    var workflowContext = CreateMockWorkflowContext(remoteExecutionContext);
+        //    var tracingService = Substitute.For<ITracingService>();
+        //    var serviceFactory = CreateMockServiceFactory(service);
+        //    var workflow = new T();
+        //    var executeWorkflowMethod = typeof(T).GetMethod("ExecuteWorkflow", BindingFlags.Public | BindingFlags.Instance);
+        //    if (executeWorkflowMethod != null)
+        //    {
+        //        var serviceAdmin = serviceFactory.CreateOrganizationService(null);
+        //        var userService = serviceFactory.CreateOrganizationService(workflowContext.UserId);
+        //        executeWorkflowMethod.Invoke(workflow, new object[] {
+        //            workflowContext,
+        //            serviceFactory,
+        //            serviceAdmin,
+        //            userService,
+        //            tracingService
+        //        });
+        //    }
+        //    else
+        //    {
+        //        System.Console.WriteLine("Could not find ExecuteWorkflow method to invoke. Make sure the method is public.");
+        //    }
+        //}
+        public static string Compress(string uncompressedString)
+        {
+            try
+            {
+                byte[] compressedBytes;
+                using (var uncompressedStream = new MemoryStream(Encoding.UTF8.GetBytes(uncompressedString)))
+                {
+                    using (var compressedStream = new MemoryStream())
+                    {
+                        using (var compressorStream = new DeflateStream(compressedStream, CompressionLevel.Fastest, true))
+                        {
+                            uncompressedStream.CopyTo(compressorStream);
+                        }
+                        compressedBytes = compressedStream.ToArray();
+                    }
+                }
+                return Convert.ToBase64String(compressedBytes);
+            }
+            catch { return uncompressedString; }
+        }
         public static string Decompress(string compressedString)
         {
             byte[] decompressedBytes;
             var compressedStream = new MemoryStream(Convert.FromBase64String(compressedString));
             using (var decompressorStream = new DeflateStream(compressedStream, CompressionMode.Decompress))
             {
-                using var decompressedStream = new MemoryStream();
-                decompressorStream.CopyTo(decompressedStream);
-                decompressedBytes = decompressedStream.ToArray();
+                using (var decompressedStream = new MemoryStream())
+                {
+                    decompressorStream.CopyTo(decompressedStream);
+                    decompressedBytes = decompressedStream.ToArray();
+                }
             }
             return Encoding.UTF8.GetString(decompressedBytes);
         }

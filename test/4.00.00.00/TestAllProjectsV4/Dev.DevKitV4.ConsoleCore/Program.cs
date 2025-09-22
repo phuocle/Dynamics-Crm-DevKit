@@ -9,14 +9,7 @@ namespace Dev.DevKitV4.ConsoleCore
         {
             CheckWhoAmI();
             //DebugPlugin();
-        }
-
-        private static void DebugPlugin()
-        {
-            //var json = "";
-            //var serviceProvider = Helper.GetServiceProvider(json, App.Service);
-            //var plugin = new Abc.Xyz.PluginXXX.PostCreateAccountSynchronous();
-            //plugin.Execute(serviceProvider);
+            //DebugWorkflow();
         }
 
         private static void CheckWhoAmI()
@@ -24,6 +17,18 @@ namespace Dev.DevKitV4.ConsoleCore
             var UserId = ((WhoAmIResponse)App.Service.Execute(new WhoAmIRequest())).UserId;
             System.Console.WriteLine(UserId);
             System.Console.ReadKey();
+        }
+
+        private static void DebugPlugin()
+        {
+            //var json = "";
+            //Helper.DebugPlugin<???>(json, App.Service);
+        }
+
+        private static void DebugWorkflow()
+        {
+            //var json = "";
+            //Helper.DebugWorkflow<???>(json, App.Service);
         }
     }
 }
