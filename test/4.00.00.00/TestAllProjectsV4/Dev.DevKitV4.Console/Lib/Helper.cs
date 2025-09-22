@@ -2,13 +2,16 @@
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Extensions;
 using Microsoft.Xrm.Sdk.PluginTelemetry;
+using Microsoft.Xrm.Sdk.Workflow;
 using NSubstitute;
 using System;
+using System.Activities;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 using System.Text;
@@ -61,6 +64,79 @@ namespace Dev.DevKitV4.Console.Lib
             });
             serviceProvider.Get<IOrganizationServiceFactory>().Returns(factory);
             return serviceProvider;
+        }
+
+        public static void ExecuteWorkflow<T>(string json, ServiceClient service) where T : CodeActivity, new()
+        {
+            // Create required services for mocking
+            var workflowContext = Substitute.For<IWorkflowContext>();
+            var tracingService = Substitute.For<ITracingService>();
+            var serviceFactory = Substitute.For<IOrganizationServiceFactory>();
+
+            // Configure the organization service factory
+            serviceFactory.CreateOrganizationService(Arg.Any<Guid?>()).Returns((param) =>
+            {
+                var userId = param.ArgAt<Guid?>(0);
+                if (userId != null)
+                {
+                    var clone = service.Clone();
+                    clone.CallerId = userId.GetValueOrDefault();
+                    return clone;
+                }
+                return service;
+            });
+
+            // Deserialize the workflow context from JSON
+            var remoteExecutionContext = DeserializeRemoteExecutionContext(json);
+
+            // Configure the workflow context with data from the remote execution context
+            workflowContext.BusinessUnitId.Returns(remoteExecutionContext.BusinessUnitId);
+            workflowContext.CorrelationId.Returns(remoteExecutionContext.CorrelationId);
+            workflowContext.Depth.Returns(remoteExecutionContext.Depth);
+            workflowContext.InitiatingUserId.Returns(remoteExecutionContext.InitiatingUserId);
+            workflowContext.InputParameters.Returns(remoteExecutionContext.InputParameters);
+            workflowContext.IsExecutingOffline.Returns(remoteExecutionContext.IsExecutingOffline);
+            workflowContext.IsInTransaction.Returns(remoteExecutionContext.IsInTransaction);
+            workflowContext.IsOfflinePlayback.Returns(remoteExecutionContext.IsOfflinePlayback);
+            workflowContext.IsolationMode.Returns(remoteExecutionContext.IsolationMode);
+            workflowContext.MessageName.Returns(remoteExecutionContext.MessageName);
+            workflowContext.Mode.Returns(remoteExecutionContext.Mode);
+            workflowContext.OperationCreatedOn.Returns(remoteExecutionContext.OperationCreatedOn);
+            workflowContext.OperationId.Returns(remoteExecutionContext.OperationId);
+            workflowContext.OrganizationId.Returns(remoteExecutionContext.OrganizationId);
+            workflowContext.OrganizationName.Returns(remoteExecutionContext.OrganizationName);
+            workflowContext.OutputParameters.Returns(remoteExecutionContext.OutputParameters);
+            workflowContext.OwningExtension.Returns(remoteExecutionContext.OwningExtension);
+            // ParentContext is IWorkflowContext type, need to cast or create mock
+            if (remoteExecutionContext.ParentContext != null)
+            {
+                var parentWorkflowContext = Substitute.For<IWorkflowContext>();
+                workflowContext.ParentContext.Returns(parentWorkflowContext);
+            }
+            workflowContext.PostEntityImages.Returns(remoteExecutionContext.PostEntityImages);
+            workflowContext.PreEntityImages.Returns(remoteExecutionContext.PreEntityImages);
+            workflowContext.PrimaryEntityId.Returns(remoteExecutionContext.PrimaryEntityId);
+            workflowContext.PrimaryEntityName.Returns(remoteExecutionContext.PrimaryEntityName);
+            workflowContext.RequestId.Returns(remoteExecutionContext.RequestId);
+            workflowContext.SecondaryEntityName.Returns(remoteExecutionContext.SecondaryEntityName);
+            workflowContext.SharedVariables.Returns(remoteExecutionContext.SharedVariables);
+            workflowContext.UserId.Returns(remoteExecutionContext.UserId);
+
+            // Create and test the workflow directly using the private method
+            var workflow = new T();
+
+            // Use reflection to call the private ExecuteWorkflow method directly
+            var executeWorkflowMethod = typeof(T).GetMethod("ExecuteWorkflow",
+                BindingFlags.NonPublic | BindingFlags.Instance);
+
+            if (executeWorkflowMethod != null)
+            {
+                executeWorkflowMethod.Invoke(workflow, new object[] { null, workflowContext, serviceFactory, service, service, tracingService });
+            }
+            else
+            {
+                System.Console.WriteLine("Could not find ExecuteWorkflow method to invoke");
+            }
         }
 
         private static void FixParameterCollection(ParameterCollection parameters)

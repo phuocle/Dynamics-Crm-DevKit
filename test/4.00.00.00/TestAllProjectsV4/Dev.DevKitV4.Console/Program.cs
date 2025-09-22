@@ -38,76 +38,7 @@ namespace Dev.DevKitV4.Console
         private static void DebugWorkflow()
         {
             var json = Helper.Decompress("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");
-
-            // Create required services for mocking
-            var workflowContext = Substitute.For<IWorkflowContext>();
-            var tracingService = Substitute.For<ITracingService>();
-            var serviceFactory = Substitute.For<IOrganizationServiceFactory>();
-
-            // Configure the organization service factory
-            serviceFactory.CreateOrganizationService(Arg.Any<Guid?>()).Returns((param) =>
-            {
-                var userId = param.ArgAt<Guid?>(0);
-                if (userId != null)
-                {
-                    var clone = AppSettings.Service.Clone();
-                    clone.CallerId = userId.GetValueOrDefault();
-                    return clone;
-                }
-                return AppSettings.Service;
-            });
-
-            // Deserialize the workflow context from JSON
-            var remoteExecutionContext = Helper.DeserializeRemoteExecutionContext(json);
-
-            // Configure the workflow context with data from the remote execution context
-            workflowContext.BusinessUnitId.Returns(remoteExecutionContext.BusinessUnitId);
-            workflowContext.CorrelationId.Returns(remoteExecutionContext.CorrelationId);
-            workflowContext.Depth.Returns(remoteExecutionContext.Depth);
-            workflowContext.InitiatingUserId.Returns(remoteExecutionContext.InitiatingUserId);
-            workflowContext.InputParameters.Returns(remoteExecutionContext.InputParameters);
-            workflowContext.IsExecutingOffline.Returns(remoteExecutionContext.IsExecutingOffline);
-            workflowContext.IsInTransaction.Returns(remoteExecutionContext.IsInTransaction);
-            workflowContext.IsOfflinePlayback.Returns(remoteExecutionContext.IsOfflinePlayback);
-            workflowContext.IsolationMode.Returns(remoteExecutionContext.IsolationMode);
-            workflowContext.MessageName.Returns(remoteExecutionContext.MessageName);
-            workflowContext.Mode.Returns(remoteExecutionContext.Mode);
-            workflowContext.OperationCreatedOn.Returns(remoteExecutionContext.OperationCreatedOn);
-            workflowContext.OperationId.Returns(remoteExecutionContext.OperationId);
-            workflowContext.OrganizationId.Returns(remoteExecutionContext.OrganizationId);
-            workflowContext.OrganizationName.Returns(remoteExecutionContext.OrganizationName);
-            workflowContext.OutputParameters.Returns(remoteExecutionContext.OutputParameters);
-            workflowContext.OwningExtension.Returns(remoteExecutionContext.OwningExtension);
-            // ParentContext is IWorkflowContext type, need to cast or create mock
-            if (remoteExecutionContext.ParentContext != null)
-            {
-                var parentWorkflowContext = Substitute.For<IWorkflowContext>();
-                workflowContext.ParentContext.Returns(parentWorkflowContext);
-            }
-            workflowContext.PostEntityImages.Returns(remoteExecutionContext.PostEntityImages);
-            workflowContext.PreEntityImages.Returns(remoteExecutionContext.PreEntityImages);
-            workflowContext.PrimaryEntityId.Returns(remoteExecutionContext.PrimaryEntityId);
-            workflowContext.PrimaryEntityName.Returns(remoteExecutionContext.PrimaryEntityName);
-            workflowContext.RequestId.Returns(remoteExecutionContext.RequestId);
-            workflowContext.SecondaryEntityName.Returns(remoteExecutionContext.SecondaryEntityName);
-            workflowContext.SharedVariables.Returns(remoteExecutionContext.SharedVariables);
-            workflowContext.UserId.Returns(remoteExecutionContext.UserId);
-
-            // Create and test the workflow directly using the private method
-            var workflow = new Dev.DevKitV4.Server.Workflows.SendEmailByQueue();
-
-            // Use reflection to call the private ExecuteWorkflow method directly
-            var executeWorkflowMethod = typeof(Dev.DevKitV4.Server.Workflows.SendEmailByQueue).GetMethod("ExecuteWorkflow",
-                BindingFlags.NonPublic | BindingFlags.Instance);
-
-            if (executeWorkflowMethod != null)
-            {
-                executeWorkflowMethod.Invoke(workflow, new object[] { null, workflowContext, serviceFactory, AppSettings.Service, AppSettings.Service, tracingService });
-            }
-            else
-            {
-                System.Console.WriteLine("Could not find ExecuteWorkflow method to invoke");
-            }
+            Helper.ExecuteWorkflow<Dev.DevKitV4.Server.Workflows.SendEmailByQueue>(json, AppSettings.Service);
         }
     }
 }
