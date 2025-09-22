@@ -4,7 +4,7 @@ using System.Configuration;
 
 namespace $NameSpace$
 {
-    public static class AppSettings
+    public static class App
     {
         private static ServiceClient _Service = null;
         public static ServiceClient Service

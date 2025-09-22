@@ -29,7 +29,7 @@
         </TextBlock>
 
         <!-- Connection user control (provides ServiceClient + CrmConnection) -->
-        <wpfcontrols:UserControlConnection Grid.Row="1" x:Name="CONNECTION" />
+        <wpfcontrols:UserControlConnection Grid.Row="1" x:Name="CONNECTION" Connected="Connection_Connected" />
 
         <!-- Main content area -->
         <StackPanel Grid.Row="2" IsEnabled="{Binding IsConnected, ElementName=CONNECTION}" x:Name="StackPanelMain">

@@ -18,8 +18,8 @@
   <TemplateContent>
     <Project TargetFileName="$SafeProjectName$.csproj" File="ProjectTemplate.csproj" ReplaceParameters="true">
       <ProjectItem ReplaceParameters="true" TargetFileName="Properties\AssemblyInfo.cs">AssemblyInfo.cs</ProjectItem>
-      <ProjectItem ReplaceParameters="true">AppSettings.cs</ProjectItem>
-      <ProjectItem ReplaceParameters="true">Program.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="App.cs">App.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Program.cs">Program.cs</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="packages.config">_packages.config</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="App.config">App.config</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="Lib\Helper.cs">Helper.cs</ProjectItem>

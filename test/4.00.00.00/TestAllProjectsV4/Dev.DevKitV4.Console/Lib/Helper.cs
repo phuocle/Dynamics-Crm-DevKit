@@ -2,16 +2,16 @@
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Extensions;
 using Microsoft.Xrm.Sdk.PluginTelemetry;
-using Microsoft.Xrm.Sdk.Workflow;
+//using Microsoft.Xrm.Sdk.Workflow;
 using NSubstitute;
 using System;
-using System.Activities;
+//using System.Activities;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
-using System.Reflection;
+//using System.Reflection;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 using System.Text;
@@ -20,7 +20,7 @@ namespace Dev.DevKitV4.Console.Lib
 {
     public static class Helper
     {
-        public static RemoteExecutionContext DeserializeRemoteExecutionContext(string jsonString)
+        private static RemoteExecutionContext DeserializeRemoteExecutionContext(string jsonString)
         {
             var settings = new DataContractJsonSerializerSettings { DateTimeFormat = new DateTimeFormat("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'") };
             var obj = Activator.CreateInstance<RemoteExecutionContext>();
@@ -30,20 +30,12 @@ namespace Dev.DevKitV4.Console.Lib
                 var deserialized = serializer.ReadObject(ms);
                 obj = deserialized != null ? (RemoteExecutionContext)deserialized : obj;
             }
-            
-            // Fix data after deserialization
-            FixParameterCollection(obj.InputParameters);
-            FixParameterCollection(obj.SharedVariables);
-            FixParameterCollection(obj.OutputParameters);
-            FixEntityImageCollection(obj.PreEntityImages);
-            FixEntityImageCollection(obj.PostEntityImages);
-            
             return obj;
         }
-
         public static IServiceProvider GetServiceProvider(string json, ServiceClient service)
         {
             var pluginExecutionContext = DeserializeRemoteExecutionContext(json);
+            FixPluginExecutionContext();
             var serviceProvider = Substitute.For<IServiceProvider>();
             serviceProvider.Get<IPluginExecutionContext>().Returns(pluginExecutionContext);
             serviceProvider.Get<IServiceEndpointNotificationService>().Returns(Substitute.For<IServiceEndpointNotificationService>());
@@ -64,221 +56,225 @@ namespace Dev.DevKitV4.Console.Lib
             });
             serviceProvider.Get<IOrganizationServiceFactory>().Returns(factory);
             return serviceProvider;
+            void FixPluginExecutionContext()
+            {
+                FixParameterCollection(pluginExecutionContext.InputParameters);
+                FixParameterCollection(pluginExecutionContext.SharedVariables);
+                FixParameterCollection(pluginExecutionContext.OutputParameters);
+                FixEntityImageCollection(pluginExecutionContext.PreEntityImages);
+                FixEntityImageCollection(pluginExecutionContext.PostEntityImages);
+            }
+            void FixParameterCollection(ParameterCollection parameters)
+            {
+                foreach (var key in parameters.Keys.ToList())
+                {
+                    switch (parameters[key])
+                    {
+                        case Entity entity:
+                            FixEntity(entity);
+                            break;
+                        case EntityCollection entities:
+                            foreach (var entity in entities.Entities)
+                                FixEntity(entity);
+                            break;
+                        case string @string:
+                            if (Guid.TryParse(@string, out var guid))
+                                parameters[key] = guid;
+                            else if (DateTime.TryParseExact(@string, "yyyy-MM-ddTHH:mm:ss.fffZ", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal, out var dateTime))
+                                parameters[key] = dateTime;
+                            break;
+                        case EntityReference entityReference:
+                            if (entityReference != null && entityReference?.Name == null)
+                                entityReference.Name = "(No Name)";
+                            break;
+                        case Array array:
+                            var entityReferenceCollection = new EntityReferenceCollection();
+                            var listString = new List<string>();
+                            foreach (var item in array)
+                            {
+                                if (item is EntityReference entityReference)
+                                    entityReferenceCollection.Add(entityReference);
+                                else if (item is string @string)
+                                    listString.Add(@string);
+                            }
+                            if (entityReferenceCollection.Count > 0) parameters[key] = entityReferenceCollection;
+                            if (listString.Count > 0) parameters[key] = listString.ToArray();
+                            break;
+                    }
+                }
+            }
+            void FixEntityImageCollection(EntityImageCollection images)
+            {
+                foreach (var image in images)
+                    FixEntity(image.Value);
+            }
+            void FixEntity(Entity entity)
+            {
+                FixLookup();
+                FixDateTime();
+                FixGuid();
+                FixOptionSetValueCollection();
+                void FixLookup()
+                {
+                    foreach (var key in entity.Attributes.Keys.ToList())
+                    {
+                        try
+                        {
+                            var er = entity.GetAttributeValue<EntityReference>(key);
+                            if (er != null && er?.Name == null)
+                                er.Name = "(No Name)";
+                        }
+                        catch { }
+                    }
+                }
+                void FixDateTime()
+                {
+                    foreach (var key in entity.Attributes.Keys.ToList())
+                    {
+                        try
+                        {
+                            var @string = entity.GetAttributeValue<string>(key);
+                            if (@string != null && DateTime.TryParseExact(@string, "yyyy-MM-ddTHH:mm:ss.fffZ", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal, out var dateTime))
+                                entity.Attributes[key] = dateTime;
+                        }
+                        catch { }
+                    }
+                }
+                void FixGuid()
+                {
+                    foreach (var key in entity.Attributes.Keys.ToList())
+                    {
+                        try
+                        {
+                            var str = entity.GetAttributeValue<string>(key);
+                            if (str != null && Guid.TryParse(str, out var guid))
+                                entity.Attributes[key] = guid;
+                        }
+                        catch { }
+                    }
+                }
+                void FixOptionSetValueCollection()
+                {
+                    foreach (var key in entity.Attributes.Keys.ToList())
+                    {
+                        try
+                        {
+                            var array = entity.GetAttributeValue<object[]>(key);
+                            if (array != null)
+                            {
+                                var collection = new OptionSetValueCollection();
+                                foreach (var item in array)
+                                    if (item is OptionSetValue optionSetValue) collection.Add(optionSetValue);
+                                entity.Attributes[key] = collection;
+                            }
+                        }
+                        catch { }
+                    }
+                }
+            }
         }
-
+        //private static IWorkflowContext CreateMockWorkflowContext(RemoteExecutionContext remoteExecutionContext)
+        //{
+        //    var workflowContext = Substitute.For<IWorkflowContext>();
+        //    workflowContext.BusinessUnitId.Returns(remoteExecutionContext.BusinessUnitId);
+        //    workflowContext.CorrelationId.Returns(remoteExecutionContext.CorrelationId);
+        //    workflowContext.Depth.Returns(remoteExecutionContext.Depth);
+        //    workflowContext.InitiatingUserId.Returns(remoteExecutionContext.InitiatingUserId);
+        //    workflowContext.InputParameters.Returns(remoteExecutionContext.InputParameters);
+        //    workflowContext.IsExecutingOffline.Returns(remoteExecutionContext.IsExecutingOffline);
+        //    workflowContext.IsInTransaction.Returns(remoteExecutionContext.IsInTransaction);
+        //    workflowContext.IsOfflinePlayback.Returns(remoteExecutionContext.IsOfflinePlayback);
+        //    workflowContext.IsolationMode.Returns(remoteExecutionContext.IsolationMode);
+        //    workflowContext.MessageName.Returns(remoteExecutionContext.MessageName);
+        //    workflowContext.Mode.Returns(remoteExecutionContext.Mode);
+        //    workflowContext.OperationCreatedOn.Returns(remoteExecutionContext.OperationCreatedOn);
+        //    workflowContext.OperationId.Returns(remoteExecutionContext.OperationId);
+        //    workflowContext.OrganizationId.Returns(remoteExecutionContext.OrganizationId);
+        //    workflowContext.OrganizationName.Returns(remoteExecutionContext.OrganizationName);
+        //    workflowContext.OutputParameters.Returns(remoteExecutionContext.OutputParameters);
+        //    workflowContext.OwningExtension.Returns(remoteExecutionContext.OwningExtension);
+        //    if (remoteExecutionContext.ParentContext != null)
+        //    {
+        //        var parentWorkflowContext = Substitute.For<IWorkflowContext>();
+        //        workflowContext.ParentContext.Returns(parentWorkflowContext);
+        //    }
+        //    workflowContext.PostEntityImages.Returns(remoteExecutionContext.PostEntityImages);
+        //    workflowContext.PreEntityImages.Returns(remoteExecutionContext.PreEntityImages);
+        //    workflowContext.PrimaryEntityId.Returns(remoteExecutionContext.PrimaryEntityId);
+        //    workflowContext.PrimaryEntityName.Returns(remoteExecutionContext.PrimaryEntityName);
+        //    workflowContext.RequestId.Returns(remoteExecutionContext.RequestId);
+        //    workflowContext.SecondaryEntityName.Returns(remoteExecutionContext.SecondaryEntityName);
+        //    workflowContext.SharedVariables.Returns(remoteExecutionContext.SharedVariables);
+        //    workflowContext.UserId.Returns(remoteExecutionContext.UserId);
+        //    return workflowContext;
+        //}
+        //private static IOrganizationServiceFactory CreateMockServiceFactory(ServiceClient service)
+        //{
+        //    var serviceFactory = Substitute.For<IOrganizationServiceFactory>();
+        //    serviceFactory.CreateOrganizationService(Arg.Any<Guid?>()).Returns((param) =>
+        //    {
+        //        var userId = param.ArgAt<Guid?>(0);
+        //        if (userId != null && userId != Guid.Empty)
+        //        {
+        //            var clone = service.Clone();
+        //            clone.CallerId = userId.GetValueOrDefault();
+        //            return clone;
+        //        }
+        //        return service;
+        //    });
+        //    return serviceFactory;
+        //}
         public static void DebugPlugin<T>(string json, ServiceClient service, params object[] constructorArgs) where T : IPlugin
         {
             var serviceProvider = GetServiceProvider(json, service);
             var plugin = (T)Activator.CreateInstance(typeof(T), constructorArgs);
             plugin.Execute(serviceProvider);
         }
-
-        public static void DebugWorkflow<T>(string json, ServiceClient service) where T : CodeActivity, new()
+        //public static void DebugWorkflow<T>(string json, ServiceClient service) where T : CodeActivity, new()
+        //{
+        //    var remoteExecutionContext = DeserializeRemoteExecutionContext(json);
+        //    var workflowContext = CreateMockWorkflowContext(remoteExecutionContext);
+        //    var tracingService = Substitute.For<ITracingService>();
+        //    var serviceFactory = CreateMockServiceFactory(service);
+        //    var workflow = new T();
+        //    var executeWorkflowMethod = typeof(T).GetMethod("ExecuteWorkflow", BindingFlags.Public | BindingFlags.Instance);
+        //    if (executeWorkflowMethod != null)
+        //    {
+        //        var serviceAdmin = serviceFactory.CreateOrganizationService(null);
+        //        var userService = serviceFactory.CreateOrganizationService(workflowContext.UserId);
+        //        executeWorkflowMethod.Invoke(workflow, new object[] {
+        //            workflowContext,
+        //            serviceFactory,
+        //            serviceAdmin,
+        //            userService,
+        //            tracingService
+        //        });
+        //    }
+        //    else
+        //    {
+        //        System.Console.WriteLine("Could not find ExecuteWorkflow method to invoke. Make sure the method is public.");
+        //    }
+        //}
+        public static string Compress(string uncompressedString)
         {
-            // Deserialize the workflow context from JSON
-            var remoteExecutionContext = DeserializeRemoteExecutionContext(json);
-
-            // Create mock services directly
-            var workflowContext = CreateMockWorkflowContext(remoteExecutionContext);
-            var tracingService = Substitute.For<ITracingService>();
-            var serviceFactory = CreateMockServiceFactory(service);
-
-            // Create and execute the workflow by calling the public ExecuteWorkflow method directly
-            var workflow = new T();
-            
-            // Use reflection to find and call the public ExecuteWorkflow method
-            var executeWorkflowMethod = typeof(T).GetMethod("ExecuteWorkflow", BindingFlags.Public | BindingFlags.Instance);
-            
-            if (executeWorkflowMethod != null)
+            try
             {
-                var serviceAdmin = serviceFactory.CreateOrganizationService(null);
-                var userService = serviceFactory.CreateOrganizationService(workflowContext.UserId);
-                
-                executeWorkflowMethod.Invoke(workflow, new object[] { 
-                    workflowContext, 
-                    serviceFactory, 
-                    serviceAdmin, 
-                    userService, 
-                    tracingService 
-                });
-            }
-            else
-            {
-                System.Console.WriteLine("Could not find ExecuteWorkflow method to invoke. Make sure the method is public.");
-            }
-        }
-
-        private static IWorkflowContext CreateMockWorkflowContext(RemoteExecutionContext remoteExecutionContext)
-        {
-            var workflowContext = Substitute.For<IWorkflowContext>();
-            
-            // Configure the workflow context with data from the remote execution context
-            workflowContext.BusinessUnitId.Returns(remoteExecutionContext.BusinessUnitId);
-            workflowContext.CorrelationId.Returns(remoteExecutionContext.CorrelationId);
-            workflowContext.Depth.Returns(remoteExecutionContext.Depth);
-            workflowContext.InitiatingUserId.Returns(remoteExecutionContext.InitiatingUserId);
-            workflowContext.InputParameters.Returns(remoteExecutionContext.InputParameters);
-            workflowContext.IsExecutingOffline.Returns(remoteExecutionContext.IsExecutingOffline);
-            workflowContext.IsInTransaction.Returns(remoteExecutionContext.IsInTransaction);
-            workflowContext.IsOfflinePlayback.Returns(remoteExecutionContext.IsOfflinePlayback);
-            workflowContext.IsolationMode.Returns(remoteExecutionContext.IsolationMode);
-            workflowContext.MessageName.Returns(remoteExecutionContext.MessageName);
-            workflowContext.Mode.Returns(remoteExecutionContext.Mode);
-            workflowContext.OperationCreatedOn.Returns(remoteExecutionContext.OperationCreatedOn);
-            workflowContext.OperationId.Returns(remoteExecutionContext.OperationId);
-            workflowContext.OrganizationId.Returns(remoteExecutionContext.OrganizationId);
-            workflowContext.OrganizationName.Returns(remoteExecutionContext.OrganizationName);
-            workflowContext.OutputParameters.Returns(remoteExecutionContext.OutputParameters);
-            workflowContext.OwningExtension.Returns(remoteExecutionContext.OwningExtension);
-            
-            if (remoteExecutionContext.ParentContext != null)
-            {
-                var parentWorkflowContext = Substitute.For<IWorkflowContext>();
-                workflowContext.ParentContext.Returns(parentWorkflowContext);
-            }
-            
-            workflowContext.PostEntityImages.Returns(remoteExecutionContext.PostEntityImages);
-            workflowContext.PreEntityImages.Returns(remoteExecutionContext.PreEntityImages);
-            workflowContext.PrimaryEntityId.Returns(remoteExecutionContext.PrimaryEntityId);
-            workflowContext.PrimaryEntityName.Returns(remoteExecutionContext.PrimaryEntityName);
-            workflowContext.RequestId.Returns(remoteExecutionContext.RequestId);
-            workflowContext.SecondaryEntityName.Returns(remoteExecutionContext.SecondaryEntityName);
-            workflowContext.SharedVariables.Returns(remoteExecutionContext.SharedVariables);
-            workflowContext.UserId.Returns(remoteExecutionContext.UserId);
-            
-            return workflowContext;
-        }
-
-        private static IOrganizationServiceFactory CreateMockServiceFactory(ServiceClient service)
-        {
-            var serviceFactory = Substitute.For<IOrganizationServiceFactory>();
-            
-            serviceFactory.CreateOrganizationService(Arg.Any<Guid?>()).Returns((param) =>
-            {
-                var userId = param.ArgAt<Guid?>(0);
-                if (userId != null && userId != Guid.Empty)
+                byte[] compressedBytes;
+                using (var uncompressedStream = new MemoryStream(Encoding.UTF8.GetBytes(uncompressedString)))
                 {
-                    var clone = service.Clone();
-                    clone.CallerId = userId.GetValueOrDefault();
-                    return clone;
-                }
-                return service;
-            });
-            
-            return serviceFactory;
-        }
-
-        private static void FixParameterCollection(ParameterCollection parameters)
-        {
-            foreach (var key in parameters.Keys.ToList())
-            {
-                switch (parameters[key])
-                {
-                    case Entity entity:
-                        FixEntity(entity);
-                        break;
-                    case EntityCollection entities:
-                        foreach (var entity in entities.Entities)
-                            FixEntity(entity);
-                        break;
-                    case string @string:
-                        if (Guid.TryParse(@string, out var guid))
-                            parameters[key] = guid;
-                        else if (DateTime.TryParseExact(@string, "yyyy-MM-ddTHH:mm:ss.fffZ", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal, out var dateTime))
-                            parameters[key] = dateTime;
-                        break;
-                    case EntityReference entityReference:
-                        if (entityReference != null && entityReference?.Name == null)
-                            entityReference.Name = "(No Name)";
-                        break;
-                    case Array array:
-                        var entityReferenceCollection = new EntityReferenceCollection();
-                        var listString = new List<string>();
-                        foreach (var item in array)
+                    using (var compressedStream = new MemoryStream())
+                    {
+                        using (var compressorStream = new DeflateStream(compressedStream, CompressionLevel.Fastest, true))
                         {
-                            if (item is EntityReference entityReference)
-                                entityReferenceCollection.Add(entityReference);
-                            else if (item is string @string)
-                                listString.Add(@string);
+                            uncompressedStream.CopyTo(compressorStream);
                         }
-                        if (entityReferenceCollection.Count > 0) parameters[key] = entityReferenceCollection;
-                        if (listString.Count > 0) parameters[key] = listString.ToArray();
-                        break;
+                        compressedBytes = compressedStream.ToArray();
+                    }
                 }
+                return Convert.ToBase64String(compressedBytes);
             }
+            catch { return uncompressedString; }
         }
-
-        private static void FixEntityImageCollection(EntityImageCollection images)
-        {
-            foreach (var image in images)
-                FixEntity(image.Value);
-        }
-
-        private static void FixEntity(Entity entity)
-        {
-            FixLookup();
-            FixDateTime();
-            FixGuid();
-            FixOptionSetValueCollection();
-            void FixLookup()
-            {
-                foreach (var key in entity.Attributes.Keys.ToList())
-                {
-                    try
-                    {
-                        var er = entity.GetAttributeValue<EntityReference>(key);
-                        if (er != null && er?.Name == null)
-                            er.Name = "(No Name)";
-                    }
-                    catch { }
-                }
-            }
-            void FixDateTime()
-            {
-                foreach (var key in entity.Attributes.Keys.ToList())
-                {
-                    try
-                    {
-                        var @string = entity.GetAttributeValue<string>(key);
-                        if (@string != null && DateTime.TryParseExact(@string, "yyyy-MM-ddTHH:mm:ss.fffZ", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal, out var dateTime))
-                            entity.Attributes[key] = dateTime;
-                    }
-                    catch { }
-                }
-            }
-            void FixGuid()
-            {
-                foreach (var key in entity.Attributes.Keys.ToList())
-                {
-                    try
-                    {
-                        var str = entity.GetAttributeValue<string>(key);
-                        if (str != null && Guid.TryParse(str, out var guid))
-                            entity.Attributes[key] = guid;
-                    }
-                    catch { }
-                }
-            }
-            void FixOptionSetValueCollection()
-            {
-                foreach (var key in entity.Attributes.Keys.ToList())
-                {
-                    try
-                    {
-                        var array = entity.GetAttributeValue<object[]>(key);
-                        if (array != null)
-                        {
-                            var collection = new OptionSetValueCollection();
-                            foreach (var item in array)
-                                if (item is OptionSetValue optionSetValue) collection.Add(optionSetValue);
-                            entity.Attributes[key] = collection;
-                        }
-                    }
-                    catch { }
-                }
-            }
-        }
-
         public static string Decompress(string compressedString)
         {
             byte[] decompressedBytes;

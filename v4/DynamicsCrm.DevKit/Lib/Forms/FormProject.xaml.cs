@@ -17,7 +17,6 @@ namespace DynamicsCrm.DevKit.Lib.Forms
 
         public string ProjectName => LabelProjectName.Content?.ToString() ?? string.Empty;
 
-        // Simple UI lock helper (consistent with FormPlugin/FormConnection)
         private void LockUi(bool value)
         {
             StackPanelMain.IsEnabled = !value;
@@ -31,8 +30,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             get => _ProjectType;
             set
             {
-                // Wrap the async initialization with a UI lock so user cannot interact while calculating names
-                LockUi(true);
+                StackPanelMain.IsEnabled = false;
                 ThreadHelper.JoinableTaskFactory.Run(async () =>
                 {
                     try
@@ -195,7 +193,6 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     }
                     finally
                     {
-                        LockUi(false);
                     }
                 });
             }
@@ -305,6 +302,11 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 ExitEditMode(apply: false);
                 e.Handled = true;
             }
+        }
+
+        private void Connection_Connected(object sender, EventArgs e)
+        {
+            LockUi(false);
         }
     }
 }

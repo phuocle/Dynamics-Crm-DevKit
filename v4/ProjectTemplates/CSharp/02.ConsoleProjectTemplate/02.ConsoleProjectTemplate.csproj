@@ -76,7 +76,7 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include="TracingServiceFake.cs" />
-    <None Include="AppSettings.cs" />
+    <None Include="App.cs" />
     <None Include="Program.cs" />
     <None Include="Helper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
