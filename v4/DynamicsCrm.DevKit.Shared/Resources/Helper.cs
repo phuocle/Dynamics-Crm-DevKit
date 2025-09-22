@@ -227,7 +227,9 @@ namespace $NameSpace$.Lib
         public static void DebugPlugin<T>(string json, ServiceClient service, params object[] constructorArgs) where T : IPlugin
         {
             var serviceProvider = GetServiceProvider(json, service);
-            var plugin = (T)Activator.CreateInstance(typeof(T), constructorArgs);
+            var pluginObj = Activator.CreateInstance(typeof(T), constructorArgs);
+            if (pluginObj is not T plugin)
+                throw new InvalidOperationException($"Could not create instance of type {typeof(T).FullName}.");
             plugin.Execute(serviceProvider);
         }
         //public static void DebugWorkflow<T>(string json, ServiceClient service) where T : CodeActivity, new()
