@@ -242,12 +242,12 @@ namespace $NameSpace$.Lib
         //    if (executeWorkflowMethod != null)
         //    {
         //        var serviceAdmin = serviceFactory.CreateOrganizationService(null);
-        //        var service = serviceFactory.CreateOrganizationService(workflowContext.UserId);
+        //        var serviceUser = serviceFactory.CreateOrganizationService(workflowContext.UserId);
         //        executeWorkflowMethod.Invoke(workflow, new object[] {
         //            workflowContext,
         //            serviceFactory,
         //            serviceAdmin,
-        //            service,
+        //            serviceUser,
         //            tracingService
         //        });
         //    }

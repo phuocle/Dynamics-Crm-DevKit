@@ -12,9 +12,9 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 using System.Text;
-//using Microsoft.Xrm.Sdk.Workflow;
-//using System.Reflection;
-//using System.Activities;
+using Microsoft.Xrm.Sdk.Workflow;
+using System.Reflection;
+using System.Activities;
 
 namespace Dev.DevKitV4.Console.Lib
 {
@@ -180,82 +180,82 @@ namespace Dev.DevKitV4.Console.Lib
 
         #region DEBUG WORKFLOW
 
-        //private static IWorkflowContext CreateMockWorkflowContext(RemoteExecutionContext remoteExecutionContext)
-        //{
-        //    var workflowContext = Substitute.For<IWorkflowContext>();
-        //    workflowContext.BusinessUnitId.Returns(remoteExecutionContext.BusinessUnitId);
-        //    workflowContext.CorrelationId.Returns(remoteExecutionContext.CorrelationId);
-        //    workflowContext.Depth.Returns(remoteExecutionContext.Depth);
-        //    workflowContext.InitiatingUserId.Returns(remoteExecutionContext.InitiatingUserId);
-        //    workflowContext.InputParameters.Returns(remoteExecutionContext.InputParameters);
-        //    workflowContext.IsExecutingOffline.Returns(remoteExecutionContext.IsExecutingOffline);
-        //    workflowContext.IsInTransaction.Returns(remoteExecutionContext.IsInTransaction);
-        //    workflowContext.IsOfflinePlayback.Returns(remoteExecutionContext.IsOfflinePlayback);
-        //    workflowContext.IsolationMode.Returns(remoteExecutionContext.IsolationMode);
-        //    workflowContext.MessageName.Returns(remoteExecutionContext.MessageName);
-        //    workflowContext.Mode.Returns(remoteExecutionContext.Mode);
-        //    workflowContext.OperationCreatedOn.Returns(remoteExecutionContext.OperationCreatedOn);
-        //    workflowContext.OperationId.Returns(remoteExecutionContext.OperationId);
-        //    workflowContext.OrganizationId.Returns(remoteExecutionContext.OrganizationId);
-        //    workflowContext.OrganizationName.Returns(remoteExecutionContext.OrganizationName);
-        //    workflowContext.OutputParameters.Returns(remoteExecutionContext.OutputParameters);
-        //    workflowContext.OwningExtension.Returns(remoteExecutionContext.OwningExtension);
-        //    if (remoteExecutionContext.ParentContext != null)
-        //    {
-        //        var parentWorkflowContext = Substitute.For<IWorkflowContext>();
-        //        workflowContext.ParentContext.Returns(parentWorkflowContext);
-        //    }
-        //    workflowContext.PostEntityImages.Returns(remoteExecutionContext.PostEntityImages);
-        //    workflowContext.PreEntityImages.Returns(remoteExecutionContext.PreEntityImages);
-        //    workflowContext.PrimaryEntityId.Returns(remoteExecutionContext.PrimaryEntityId);
-        //    workflowContext.PrimaryEntityName.Returns(remoteExecutionContext.PrimaryEntityName);
-        //    workflowContext.RequestId.Returns(remoteExecutionContext.RequestId);
-        //    workflowContext.SecondaryEntityName.Returns(remoteExecutionContext.SecondaryEntityName);
-        //    workflowContext.SharedVariables.Returns(remoteExecutionContext.SharedVariables);
-        //    workflowContext.UserId.Returns(remoteExecutionContext.UserId);
-        //    return workflowContext;
-        //}
-        //private static IOrganizationServiceFactory CreateMockServiceFactory(ServiceClient service)
-        //{
-        //    var serviceFactory = Substitute.For<IOrganizationServiceFactory>();
-        //    serviceFactory.CreateOrganizationService(Arg.Any<Guid?>()).Returns((param) =>
-        //    {
-        //        var userId = param.ArgAt<Guid?>(0);
-        //        if (userId != null && userId != Guid.Empty)
-        //        {
-        //            var clone = service.Clone();
-        //            clone.CallerId = userId.GetValueOrDefault();
-        //            return clone;
-        //        }
-        //        return service;
-        //    });
-        //    return serviceFactory;
-        //}
-        //public static void DebugWorkflow<T>(string json, ServiceClient service) where T : CodeActivity, new()
-        //{
-        //    var remoteExecutionContext = DeserializeRemoteExecutionContext(json);
-        //    var workflowContext = CreateMockWorkflowContext(remoteExecutionContext);
-        //    var tracingService = Substitute.For<ITracingService>();
-        //    var serviceFactory = CreateMockServiceFactory(service);
-        //    var workflow = new T();
-        //    var executeWorkflowMethod = typeof(T).GetMethod("ExecuteWorkflow", BindingFlags.Public | BindingFlags.Instance);
-        //    if (executeWorkflowMethod != null)
-        //    {
-        //        var serviceAdmin = serviceFactory.CreateOrganizationService(null);
-        //        var service = serviceFactory.CreateOrganizationService(workflowContext.UserId);
-        //        executeWorkflowMethod.Invoke(workflow, new object[] {
-        //            workflowContext,
-        //            serviceFactory,
-        //            serviceAdmin,
-        //            service,
-        //            tracingService
-        //        });
-        //    }
-        //    else
-        //    {
-        //        System.Console.WriteLine("Could not find ExecuteWorkflow method to invoke. Make sure the method is public.");
-        //    }
-        //}
+        private static IWorkflowContext CreateMockWorkflowContext(RemoteExecutionContext remoteExecutionContext)
+        {
+            var workflowContext = Substitute.For<IWorkflowContext>();
+            workflowContext.BusinessUnitId.Returns(remoteExecutionContext.BusinessUnitId);
+            workflowContext.CorrelationId.Returns(remoteExecutionContext.CorrelationId);
+            workflowContext.Depth.Returns(remoteExecutionContext.Depth);
+            workflowContext.InitiatingUserId.Returns(remoteExecutionContext.InitiatingUserId);
+            workflowContext.InputParameters.Returns(remoteExecutionContext.InputParameters);
+            workflowContext.IsExecutingOffline.Returns(remoteExecutionContext.IsExecutingOffline);
+            workflowContext.IsInTransaction.Returns(remoteExecutionContext.IsInTransaction);
+            workflowContext.IsOfflinePlayback.Returns(remoteExecutionContext.IsOfflinePlayback);
+            workflowContext.IsolationMode.Returns(remoteExecutionContext.IsolationMode);
+            workflowContext.MessageName.Returns(remoteExecutionContext.MessageName);
+            workflowContext.Mode.Returns(remoteExecutionContext.Mode);
+            workflowContext.OperationCreatedOn.Returns(remoteExecutionContext.OperationCreatedOn);
+            workflowContext.OperationId.Returns(remoteExecutionContext.OperationId);
+            workflowContext.OrganizationId.Returns(remoteExecutionContext.OrganizationId);
+            workflowContext.OrganizationName.Returns(remoteExecutionContext.OrganizationName);
+            workflowContext.OutputParameters.Returns(remoteExecutionContext.OutputParameters);
+            workflowContext.OwningExtension.Returns(remoteExecutionContext.OwningExtension);
+            if (remoteExecutionContext.ParentContext != null)
+            {
+                var parentWorkflowContext = Substitute.For<IWorkflowContext>();
+                workflowContext.ParentContext.Returns(parentWorkflowContext);
+            }
+            workflowContext.PostEntityImages.Returns(remoteExecutionContext.PostEntityImages);
+            workflowContext.PreEntityImages.Returns(remoteExecutionContext.PreEntityImages);
+            workflowContext.PrimaryEntityId.Returns(remoteExecutionContext.PrimaryEntityId);
+            workflowContext.PrimaryEntityName.Returns(remoteExecutionContext.PrimaryEntityName);
+            workflowContext.RequestId.Returns(remoteExecutionContext.RequestId);
+            workflowContext.SecondaryEntityName.Returns(remoteExecutionContext.SecondaryEntityName);
+            workflowContext.SharedVariables.Returns(remoteExecutionContext.SharedVariables);
+            workflowContext.UserId.Returns(remoteExecutionContext.UserId);
+            return workflowContext;
+        }
+        private static IOrganizationServiceFactory CreateMockServiceFactory(ServiceClient service)
+        {
+            var serviceFactory = Substitute.For<IOrganizationServiceFactory>();
+            serviceFactory.CreateOrganizationService(Arg.Any<Guid?>()).Returns((param) =>
+            {
+                var userId = param.ArgAt<Guid?>(0);
+                if (userId != null && userId != Guid.Empty)
+                {
+                    var clone = service.Clone();
+                    clone.CallerId = userId.GetValueOrDefault();
+                    return clone;
+                }
+                return service;
+            });
+            return serviceFactory;
+        }
+        public static void DebugWorkflow<T>(string json, ServiceClient service) where T : CodeActivity, new()
+        {
+            var remoteExecutionContext = DeserializeRemoteExecutionContext(json);
+            var workflowContext = CreateMockWorkflowContext(remoteExecutionContext);
+            var tracingService = Substitute.For<ITracingService>();
+            var serviceFactory = CreateMockServiceFactory(service);
+            var workflow = new T();
+            var executeWorkflowMethod = typeof(T).GetMethod("ExecuteWorkflow", BindingFlags.Public | BindingFlags.Instance);
+            if (executeWorkflowMethod != null)
+            {
+                var serviceAdmin = serviceFactory.CreateOrganizationService(null);
+                var serviceUser = serviceFactory.CreateOrganizationService(workflowContext.UserId);
+                executeWorkflowMethod.Invoke(workflow, new object[] {
+                    workflowContext,
+                    serviceFactory,
+                    serviceAdmin,
+                    serviceUser,
+                    tracingService
+                });
+            }
+            else
+            {
+                System.Console.WriteLine("Could not find ExecuteWorkflow method to invoke. Make sure the method is public.");
+            }
+        }
 
         #endregion
 
