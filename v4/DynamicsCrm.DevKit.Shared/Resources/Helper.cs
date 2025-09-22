@@ -228,7 +228,7 @@ namespace $NameSpace$.Lib
         {
             var serviceProvider = GetServiceProvider(json, service);
             var pluginObj = Activator.CreateInstance(typeof(T), constructorArgs);
-            if (pluginObj is not T plugin)
+            if (!(pluginObj is T plugin))
                 throw new InvalidOperationException($"Could not create instance of type {typeof(T).FullName}.");
             plugin.Execute(serviceProvider);
         }
