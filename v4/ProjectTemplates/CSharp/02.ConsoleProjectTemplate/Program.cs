@@ -10,14 +10,7 @@ namespace $NameSpace$
         {
             CheckWhoAmI();
             //DebugPlugin();
-        }
-
-        private static void DebugPlugin()
-        {
-            //var json = "";
-            //var serviceProvider = Helper.GetServiceProvider(json, AppSettings.Service);
-            //var plugin = new Abc.Xyz.PluginXXX.PostCreateAccountSynchronous();
-            //plugin.Execute(serviceProvider);
+            //DebugWorkflow();
         }
 
         private static void CheckWhoAmI()
@@ -25,6 +18,17 @@ namespace $NameSpace$
             var UserId = ((WhoAmIResponse)AppSettings.Service.Execute(new WhoAmIRequest())).UserId;
             System.Console.WriteLine(UserId);
             System.Console.ReadKey();
+        }
+        private static void DebugPlugin()
+        {
+            //var json = "";
+            //Helper.DebugPlugin<???>(json, AppSettings.Service);
+        }
+
+        private static void DebugPlugin()
+        {
+            //var json = "";
+            //Helper.DebugWorkflow<???>(json, AppSettings.Service);
         }
     }
 }
