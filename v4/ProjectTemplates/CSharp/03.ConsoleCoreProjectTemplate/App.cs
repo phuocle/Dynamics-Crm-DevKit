@@ -1,158 +1,87 @@
-﻿using Microsoft.PowerPlatform.Dataverse.Client;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.PowerPlatform.Dataverse.Client;
+using System;
+using System.Configuration;
+using System.IO;
 using System.Runtime.CompilerServices;
+using System.Threading;
 
 namespace $NameSpace$
 {
-    internal static class App
+    public static class App
     {
-        private static ServiceClient? _service;
-        private static IConfiguration? _configuration;
-        private static readonly Lock _lock = new();
-        private static bool _disposed = false;
-
-        public static ServiceClient Service
-        {
-            get
-            {
-                ThrowIfDisposed();
-                if (_service is null)
-                {
-                    lock (_lock)
-                    {
-                        if (_service is null)
-                        {
-                            InitializeService();
-                        }
-                    }
-                }
-                return _service ?? throw new InvalidOperationException("ServiceClient could not be initialized.");
-            }
-        }
-
-        public static IConfiguration Configuration
-        {
-            get
-            {
-                ThrowIfDisposed();
-                if (_configuration is null)
-                {
-                    lock (_lock)
-                    {
-                        if (_configuration is null)
-                        {
-                            InitializeConfiguration();
-                        }
-                    }
-                }
-                return _configuration ?? throw new InvalidOperationException("Configuration could not be initialized.");
-            }
-        }
-
         private static void InitializeConfiguration()
         {
             var configurationBuilder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("AppSettings.json", optional: false, reloadOnChange: true);
-            _configuration = configurationBuilder.Build();
+            _Configuration = configurationBuilder.Build();
         }
-
-        private static void InitializeService()
+        private static IConfiguration? _Configuration = null;
+        public static IConfiguration Configuration
         {
-            try
+            get
             {
-                if (_configuration == null) InitializeConfiguration();
-                var connectionString = ConnectionStringBuilder.Build(_configuration!);
-                _service = new ServiceClient(connectionString);
-                if (_service == null) throw new InvalidOperationException("ServiceClient constructor returned null.");
-                if (!_service.IsReady)
-                {
-                    var lastError = _service.LastError ?? "Unknown error";
-                    var lastException = _service.LastException?.Message ?? "No exception details available";
-                    _service.Dispose();
-                    _service = null;
-                    throw new InvalidOperationException($"Authentication failed or was cancelled. Last Error: {lastError}. Exception: {lastException}");
-                }
-            }
-            catch (Exception ex) when (ex is not InvalidOperationException)
-            {
-                _service?.Dispose();
-                _service = null;
-                throw new InvalidOperationException($"Failed to initialize ServiceClient: {ex.Message}", ex);
+                if (_Configuration is null) InitializeConfiguration();
+                return _Configuration ?? throw new InvalidOperationException("Configuration could not be initialized.");
             }
         }
 
-        public static void DisposeService()
+        private static string GetAppSettingValue(string key)
         {
-            lock (_lock)
-            {
-                if (!_disposed)
-                {
-                    _service?.Dispose();
-                    _service = null;
-                    _disposed = true;
-                }
-            }
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static void ThrowIfDisposed()
-        {
-            ObjectDisposedException.ThrowIf(_disposed, nameof(App));
-        }
-    }
-
-    internal static class ConnectionStringBuilder
-    {
-        private const string DefaultRedirectUri = "app://58145B91-0C36-4500-8554-080854F2AC97";
-        private const string DefaultLoginPrompt = "Auto";
-
-        public static string Build(IConfiguration configuration)
-        {
-            var dataverseSettings = configuration.GetSection("Dataverse");
-            var authType = GetAppSettingValue(dataverseSettings, "AuthType");
-            var url = GetAppSettingValue(dataverseSettings, "Url");
-            return authType.ToUpperInvariant() switch
-            {
-                "CLIENTSECRET" => BuildClientSecretConnectionString(dataverseSettings, url),
-                "OAUTH" => BuildOAuthConnectionString(dataverseSettings, url),
-                "AD" => BuildAdConnectionString(dataverseSettings, url),
-                _ => throw new InvalidOperationException($"Unsupported AuthType: {authType}. Supported types are: ClientSecret, OAuth, AD")
-            };
-        }
-
-        private static string BuildClientSecretConnectionString(IConfigurationSection settings, string url)
-        {
-            var username = GetAppSettingValue(settings, "UserName");
-            var password = GetAppSettingValue(settings, "Password");
-            return $"AuthType=ClientSecret;Url={url};ClientId={username};ClientSecret={password};";
-        }
-
-        private static string BuildOAuthConnectionString(IConfigurationSection settings, string url)
-        {
-            var username = GetAppSettingValue(settings, "Username");
-            var password = GetAppSettingValue(settings, "Password");
-            var connectionString = $"AuthType=OAuth;Url={url};UserName={username};RedirectUri={DefaultRedirectUri};LoginPrompt={DefaultLoginPrompt};";
-            if (!string.IsNullOrWhiteSpace(password)) connectionString += $"Password={password};";
-            return connectionString;
-        }
-
-        private static string BuildAdConnectionString(IConfigurationSection settings, string url)
-        {
-            var username = GetAppSettingValue(settings, "Username");
-            var password = GetAppSettingValue(settings, "Password");
-            var userParts = username.Split('\\');
-            if (userParts.Length != 2) throw new InvalidOperationException("For AD authentication, Username must be in format 'domain\\username'");
-            var domain = userParts[0];
-            var user = userParts[1];
-            if (string.IsNullOrWhiteSpace(domain) || string.IsNullOrWhiteSpace(user)) throw new InvalidOperationException("Domain and username cannot be empty for AD authentication");
-            return $"AuthType=AD;Url={url};Domain={domain};Username={user};Password={password};";
-        }
-
-        private static string GetAppSettingValue(IConfigurationSection settings, string key)
-        {
+            var settings = Configuration.GetSection("Dataverse");
             var value = settings.GetValue<string>(key);
             return value ?? string.Empty;
+        }
+
+        private static ServiceClient? _Service = null;
+        public static ServiceClient Service
+        {
+            get
+            {
+                if (_Service != null) return _Service;
+                _Service = new ServiceClient(ConnectionString);
+                ServiceClient.MaxConnectionTimeout = new TimeSpan(1, 0, 0);
+                return _Service;
+            }
+        }
+        private static string AuthType { get { return GetAppSettingValue("AuthType"); } }
+        private static string Url { get { return GetAppSettingValue("Url"); } }
+        private static string UserName { get { return GetAppSettingValue("UserName"); } }
+        private static string Password { get { return GetAppSettingValue("Password"); } }
+        private static string ConnectionString
+        {
+            get
+            {
+                switch (AuthType.ToUpperInvariant())
+                {
+                    case "CLIENTSECRET":
+                        return $"AuthType=ClientSecret;Url={Url};ClientId={UserName};ClientSecret={Password};";
+                    case "AD":
+                        if (string.IsNullOrEmpty(UserName) || !UserName.Contains("\\"))
+                            throw new ArgumentException("For AD authentication, username must be in format 'domain\\username'");
+                        var parts = UserName.Split('\\');
+                        if (parts.Length != 2)
+                            throw new ArgumentException("For AD authentication, username must be in format 'domain\\username'");
+                        return $"AuthType=AD;Url={Url};Domain={parts[0]};Username={parts[1]};Password={Password};";
+                    case "OAUTH":
+                    default:
+                        var connectionString = $"AuthType=OAuth;Url={Url};Username={UserName};Password={Password};";
+                        if (!connectionString.ToLower().Contains("appid="))
+                        {
+                            connectionString += "AppId=51f81489-12ee-4a9e-aaae-a2591f45987d;";
+                        }
+                        if (!connectionString.ToLower().Contains("redirecturi="))
+                        {
+                            connectionString += "RedirectUri=http://localhost;";
+                        }
+                        if (!connectionString.ToLower().Contains("loginprompt="))
+                        {
+                            connectionString += "LoginPrompt=Auto;";
+                        }
+                        return connectionString;
+                }
+            }
         }
     }
 }

@@ -2,24 +2,26 @@
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Extensions;
 using Microsoft.Xrm.Sdk.PluginTelemetry;
-//using Microsoft.Xrm.Sdk.Workflow;
 using NSubstitute;
 using System;
-//using System.Activities;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
-//using System.Reflection;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 using System.Text;
+//using Microsoft.Xrm.Sdk.Workflow;
+//using System.Reflection;
+//using System.Activities;
 
 namespace $NameSpace$.Lib
 {
     public static class Helper
     {
+        #region PRIVATE METHODS
+
         private static RemoteExecutionContext DeserializeRemoteExecutionContext(string jsonString)
         {
             var settings = new DataContractJsonSerializerSettings { DateTimeFormat = new DateTimeFormat("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'") };
@@ -173,6 +175,11 @@ namespace $NameSpace$.Lib
                 }
             }
         }
+
+        #endregion
+
+        #region DEBUG WORKFLOW
+
         //private static IWorkflowContext CreateMockWorkflowContext(RemoteExecutionContext remoteExecutionContext)
         //{
         //    var workflowContext = Substitute.For<IWorkflowContext>();
@@ -224,14 +231,6 @@ namespace $NameSpace$.Lib
         //    });
         //    return serviceFactory;
         //}
-        public static void DebugPlugin<T>(string json, ServiceClient service, params object[] constructorArgs) where T : IPlugin
-        {
-            var serviceProvider = GetServiceProvider(json, service);
-            var pluginObj = Activator.CreateInstance(typeof(T), constructorArgs);
-            if (!(pluginObj is T plugin))
-                throw new InvalidOperationException($"Could not create instance of type {typeof(T).FullName}.");
-            plugin.Execute(serviceProvider);
-        }
         //public static void DebugWorkflow<T>(string json, ServiceClient service) where T : CodeActivity, new()
         //{
         //    var remoteExecutionContext = DeserializeRemoteExecutionContext(json);
@@ -243,12 +242,12 @@ namespace $NameSpace$.Lib
         //    if (executeWorkflowMethod != null)
         //    {
         //        var serviceAdmin = serviceFactory.CreateOrganizationService(null);
-        //        var userService = serviceFactory.CreateOrganizationService(workflowContext.UserId);
+        //        var service = serviceFactory.CreateOrganizationService(workflowContext.UserId);
         //        executeWorkflowMethod.Invoke(workflow, new object[] {
         //            workflowContext,
         //            serviceFactory,
         //            serviceAdmin,
-        //            userService,
+        //            service,
         //            tracingService
         //        });
         //    }
@@ -257,6 +256,24 @@ namespace $NameSpace$.Lib
         //        System.Console.WriteLine("Could not find ExecuteWorkflow method to invoke. Make sure the method is public.");
         //    }
         //}
+
+        #endregion
+
+        #region DEBUG PLUGIN
+
+        public static void DebugPlugin<T>(string json, ServiceClient service, params object[] constructorArgs) where T : IPlugin
+        {
+            var serviceProvider = GetServiceProvider(json, service);
+            var pluginObj = Activator.CreateInstance(typeof(T), constructorArgs);
+            if (!(pluginObj is T plugin))
+                throw new InvalidOperationException($"Could not create instance of type {typeof(T).FullName}.");
+            plugin.Execute(serviceProvider);
+        }
+
+        #endregion
+
+        #region PUBLIC METHODS
+
         public static string Compress(string uncompressedString)
         {
             try
@@ -291,5 +308,7 @@ namespace $NameSpace$.Lib
             }
             return Encoding.UTF8.GetString(decompressedBytes);
         }
+
+        #endregion
     }
 }
