@@ -4,7 +4,7 @@ namespace $NameSpace$.Lib
 {
     public class TracingServiceFake : ITracingService
     {
-        public ITracingService tracingService = null;
+        public ITracingService? tracingService = null;
 
         public void Trace(string format, params object[] args)
         {

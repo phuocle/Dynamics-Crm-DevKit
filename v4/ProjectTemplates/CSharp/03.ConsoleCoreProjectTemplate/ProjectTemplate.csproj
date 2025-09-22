@@ -10,8 +10,8 @@
   <ItemGroup>
     <PackageReference Include="DynamicsCrm.DevKit.Analyzers" Version="$DynamicsCrm.DevKit.Analyzers.Version$" />
     <PackageReference Include="DynamicsCrm.DevKit.Cli" Version="$DynamicsCrm.DevKit.Cli.Version$" />
-	<PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.8" />
-	<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.8" />
+	<PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.9" />
+	<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.9" />
 	<PackageReference Include="Microsoft.PowerPlatform.Dataverse.Client" Version="1.2.10" />
 	<PackageReference Include="NSubstitute" Version="5.3.0" />
   </ItemGroup>
