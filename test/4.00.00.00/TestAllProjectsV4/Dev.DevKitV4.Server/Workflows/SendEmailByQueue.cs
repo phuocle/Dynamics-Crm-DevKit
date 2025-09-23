@@ -1,22 +1,20 @@
-﻿using System.Activities;
+﻿using Dev.DevKitV4.Shared;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Workflow;
-using <#=Context.PluginSharedNameSpace#>;
+using System.Activities;
 
-namespace <#=Context.PluginNameSpace#>
+namespace Dev.DevKitV4.Server.Workflows
 {
-    [CrmPluginRegistration("<#=Context.Class#><#if(Context.PluginOrder!=1){#><#=Context.PluginOrder#><#}#>", "<#=Context.Class#><#if(Context.PluginOrder!=1){#><#=Context.PluginOrder#><#}#>", "", "<#=Context.PluginNameSpace#>", IsolationModeEnum.Sandbox, PluginType = PluginType.Workflow)]
-    public class <#=Context.Class#><#if(Context.PluginOrder!=1){#><#=Context.PluginOrder#><#}#> : CodeActivity
+    [CrmPluginRegistration("SendEmailByQueue", "SendEmailByQueue", "", "Dev.DevKitV4.Server.Workflows", IsolationModeEnum.Sandbox, PluginType = PluginType.Workflow)]
+    public class SendEmailByQueue : CodeActivity
     {
         // https://learn.microsoft.com/en-us/power-apps/developer/data-platform/workflow/workflow-extensions#add-parameters
         // Supported Input/Output types: bool, DateTime, Decimal, Double, EntityReference, int, Money, OptionSetValue, string
 
-        //[Default("Default Input Value")]
-        //[Input("Input Value")]
-        //[ReferenceTarget("account")]
-        //[RequiredArgument]
-        //[AttributeTarget("account", "industrycode")]
-        //public InArgument<EntityReference> InputValue { get; set; }
+        [Default("")]
+        [Input("To Email")]
+        [RequiredArgument]
+        public InArgument<string> InputValue { get; set; }
 
         //[Default("Default Output Value")]
         //[Output("Output Value")]
