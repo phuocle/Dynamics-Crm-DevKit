@@ -155,6 +155,20 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             foreach (var type in sortedTypes)
             {
                 var attributes = GetCrmPluginRegistrationAttributes(type);
+                if (attributes[0].Unregister)
+                {
+                    var doing = await UnregisterPluginTypeAsync(pluginAssemblyId.Value, type, attributes[0], deployFileType);
+                    if (doing)
+                        CliLog.WriteLineWarning(SPACE, SPACE, ConsoleColor.Green, CliAction.UNREGISTER, ConsoleColor.White, ConsoleColor.White, "Type ", ConsoleColor.Blue, attributes[0].PluginType, " ", ConsoleColor.Cyan, type.FullName);
+                    else
+                    {
+                        CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, ConsoleColor.Green);
+                        CliLog.WriteWarning(CliAction.UNREGISTER.Trim());
+                        CliLog.Write(ConsoleColor.White, $" Type ", ConsoleColor.Blue, attributes[0].PluginType, " ", ConsoleColor.Cyan, type.FullName);
+                        CliLog.WriteLine();
+                    }
+                    continue;
+                }
                 var pluginTypeId = await DeployPluginTypeAsync(pluginAssemblyId.Value, type, attributes[0], deployFileType);
                 if (pluginTypeId == null) return;
                 if (IsWorkflowType(type)) continue;
@@ -455,7 +469,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 {
                     CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.DO_NOTHING);
                     CliLog.WriteWarning(CliAction.DEACTIVATED.Trim());
-                    CliLog.Write(ConsoleColor.White, "Message ", ConsoleColor.Blue, attribute.PluginType, " ", ConsoleColor.Cyan, attribute.Message, ConsoleColor.White, " with type ", ConsoleColor.Cyan, pluginTypeName);
+                    CliLog.Write(ConsoleColor.White, " Message ", ConsoleColor.Blue, attribute.PluginType, " ", ConsoleColor.Cyan, attribute.Message, ConsoleColor.White, " with type ", ConsoleColor.Cyan, pluginTypeName);
                     CliLog.WriteLine();
                 }
                 else
@@ -813,7 +827,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     {
                         CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE, ConsoleColor.Green);
                         CliLog.WriteWarning(CliAction.DEACTIVATED.Trim());
-                        CliLog.Write(ConsoleColor.White, $"Step ", ConsoleColor.Blue, attribute.Message, " ", ConsoleColor.Cyan, attribute.Name);
+                        CliLog.Write(ConsoleColor.White, $" Step ", ConsoleColor.Blue, attribute.Message, " ", ConsoleColor.Cyan, attribute.Name);
                         CliLog.WriteLine();
                     }
                 }
@@ -969,6 +983,69 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var rows = await ServiceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
             if (rows.Entities.Count != 1) return null;
             return rows.Entities[0];
+        }
+
+        private async Task<bool> UnregisterPluginTypeAsync(Guid pluginAssemblyId, TypeInfo type, CrmPluginRegistrationAttribute attribute, DeployFileType deployFileType)
+        {
+            var fetchData = new
+            {
+                typename = type.FullName
+            };
+            var fetchXml = $@"
+<fetch>
+  <entity name='plugintype'>
+    <attribute name='plugintypeid' />
+    <filter type='and'>
+      <condition attribute='typename' operator='eq' value='{fetchData.typename}'/>
+    </filter>
+  </entity>
+</fetch>";
+            var rows = await ServiceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
+            if (rows.Entities.Count != 1) return false;
+            var pluginTypeId = rows.Entities[0].GetAttributeValue<Guid>("plugintypeid");
+            await DeletePluginStepsAsync();
+            await ServiceClient.DeleteAsync("plugintype", pluginTypeId);
+            return true;
+            async Task DeletePluginStepsAsync()
+            {
+                var fetchXml = $@"
+<fetch>
+  <entity name='sdkmessageprocessingstep'>
+    <attribute name='sdkmessageprocessingstepid' />
+    <filter>
+      <condition attribute='plugintypeid' operator='eq' value='{pluginTypeId}' />
+    </filter>
+  </entity>
+</fetch>";
+                var rows = await ServiceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
+                foreach (var row in rows.Entities)
+                {
+                    await DeletePluginImagesAsync(row.Id);
+                    await ServiceClient.DeleteAsync("sdkmessageprocessingstep", row.Id);
+                }
+            }
+            async Task DeletePluginImagesAsync(Guid pluginStepId)
+            {
+                if (!IsSupportPluginImage(attribute)) return;
+                var fetchData = new
+                {
+                    sdkmessageprocessingstepid = pluginStepId,
+                };
+                var fetchXml = $@"
+<fetch>
+  <entity name='sdkmessageprocessingstepimage'>
+    <attribute name='sdkmessageprocessingstepimageid' />
+    <filter type='and'>
+      <condition attribute='sdkmessageprocessingstepid' operator='eq' value='{fetchData.sdkmessageprocessingstepid}'/>
+    </filter>
+  </entity>
+</fetch>";
+                var rows = await ServiceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
+                foreach (var row in rows.Entities)
+                {
+                    await ServiceClient.DeleteAsync("sdkmessageprocessingstepimage", row.Id);
+                }
+            }
         }
 
         private async Task<Guid?> DeployPluginTypeAsync(Guid pluginAssemblyId, TypeInfo type, CrmPluginRegistrationAttribute attribute, DeployFileType deployFileType)

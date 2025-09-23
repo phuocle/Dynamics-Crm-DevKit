@@ -338,6 +338,9 @@ namespace DynamicsCrm.DevKit.Shared
             {
                 switch (namedArgument.MemberName)
                 {
+                    case "Unregister":
+                        attribute.Unregister = (bool)namedArgument.TypedValue.Value;
+                        break;
                     case "RunAs":
                         attribute.RunAs = (string)namedArgument.TypedValue.Value;
                         break;
