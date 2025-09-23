@@ -1,4 +1,5 @@
-﻿using FakeXrmEasy.Plugins;
+﻿using FakeXrmEasy.CodeActivities;
+using FakeXrmEasy.Plugins;
 using Microsoft.Xrm.Sdk;
 
 namespace Dev.DevKitV4.Shared.Test
