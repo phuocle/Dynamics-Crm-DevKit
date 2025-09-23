@@ -5,7 +5,7 @@ using System;
 
 namespace Dev.DevKitV4.Server.Plugins.Account
 {
-    [CrmPluginRegistration("Create", "account", StageEnum.PreOperation, ExecutionModeEnum.Synchronous, "", "Dev.DevKitV4.Server.Plugins.Account.PreAccountCreateSynchronous", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin)]
+    [CrmPluginRegistration("Create", "account", StageEnum.PreOperation, ExecutionModeEnum.Synchronous, "", "Dev.DevKitV4.Server.Plugins.Account.PreAccountCreateSynchronous", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, Unregister = true)]
     public class PreAccountCreateSynchronous : IPlugin
     {
         /*
