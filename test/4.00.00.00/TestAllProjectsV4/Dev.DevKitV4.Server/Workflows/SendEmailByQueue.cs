@@ -14,11 +14,10 @@ namespace Dev.DevKitV4.Server.Workflows
         [Default("")]
         [Input("To Email")]
         [RequiredArgument]
-        public InArgument<string> InputValue { get; set; }
+        public InArgument<string> ToEmail { get; set; }
 
-        //[Default("Default Output Value")]
-        //[Output("Output Value")]
-        //public OutArgument<string> OutputValue { get; set; }
+        [Output("Is Succeed")]
+        public OutArgument<bool> IsSucceed { get; set; }
 
         protected override void Execute(CodeActivityContext executionContext)
         {
