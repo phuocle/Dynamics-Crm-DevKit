@@ -16,8 +16,8 @@ namespace Dev.DevKitV4.Server.Workflows
         [RequiredArgument]
         public InArgument<string> ToEmail { get; set; }
 
-        [Output("Is Succeed")]
-        public OutArgument<bool> IsSucceed { get; set; }
+        [Output("Is Succeeded")]
+        public OutArgument<bool> IsSucceeded { get; set; }
 
         protected override void Execute(CodeActivityContext executionContext)
         {
