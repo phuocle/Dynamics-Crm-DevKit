@@ -195,7 +195,6 @@
 	<ItemGroup>
 		<Analyzer Include="..\packages\DynamicsCrm.DevKit.Analyzers.$DynamicsCrm.DevKit.Analyzers.Version$\analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />
 	</ItemGroup>
-	<Import Project="..\$SharedProject$\$SharedProject$.projitems" Label="Shared" Condition="Exists('..\$SharedProject$\$SharedProject$.projitems')" />
 	<Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
 <!-- $DevKitVersion$ -->

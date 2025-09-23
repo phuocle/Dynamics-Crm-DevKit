@@ -12,3 +12,11 @@
 
 * [Package Project Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Package-Project-Template)
 * [Dependent Assembly plug-ins](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/dependent-assembly-plugins)
+
+* [Let’s try Dataverse Dependent Assemblies for Plug-ins](https://temmyraharjo.wordpress.com/2022/08/07/lets-try-dataverse-dependent-assemblies-for-plug-ins/)
+
+1. Add a new project to the solution using the "DynamicsCrm.DevKit Dependent Assembly Plugins" template
+2. Add nuget Niam.XRM.Framework to the project
+3. Add plugin class and update T4 code Niam.XRM.Framework.t4
+4. Update your code and update DynamicsCrm.DevKit.Cli.json with: Dev.DevKitV4.Package.*.nupkg
+5. Build and deploy with DynamicsCrm.DevKit.Cli

@@ -7,9 +7,12 @@ namespace Dev.DevKitV4.Console
     {
         static void Main()
         {
-            CheckWhoAmI();
+            //CheckWhoAmI();
             //DebugPlugin();
             //DebugWorkflow();
+
+            //DebugPackage.DebugContact.PreContactCreateSynchronousPackage();
+            //DebugPackage.DebugContact.PreContactCreateSynchronousPackage2();
         }
 
         private static void CheckWhoAmI()
