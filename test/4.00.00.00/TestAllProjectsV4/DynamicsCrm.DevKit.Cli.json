@@ -124,9 +124,9 @@
   "proxytypes": [
     {
       "profile": "ALL",
-      "namespace": "???",
+      "namespace": "Dev.DevKitV4.ProxyTypes",
       "output": "GeneratedCode.cs",
-      "entities": "*"
+      "entities": "account,contact,team,systemuser"
     }
   ],
   "uploadreports": [
