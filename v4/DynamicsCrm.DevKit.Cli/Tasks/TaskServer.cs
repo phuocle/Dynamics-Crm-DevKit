@@ -457,7 +457,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, "Message ", ConsoleColor.Blue, attribute.PluginType,  " ", ConsoleColor.Cyan, attribute.Message, ConsoleColor.White, " with type ", ConsoleColor.Cyan, pluginTypeName);
                 else
                 {
-                    CliLog.WriteLineWarning(SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.UPDATED, CliAction.DEACTIVATED, ConsoleColor.White, "Message ", ConsoleColor.Blue, attribute.PluginType, " ", ConsoleColor.Cyan, attribute.Message, ConsoleColor.White, " with type ", ConsoleColor.Cyan, pluginTypeName);
                     var update = new Entity("customapi", rows.Entities[0].Id);
                     update["plugintypeid"] = null;
                     await ServiceClient.UpdateAsync(update);
@@ -848,7 +847,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     }
                     else
                     {
-                        CliLog.WriteLineWarning(SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.UPDATED, CliAction.DEACTIVATED, ConsoleColor.White, $"Step ", ConsoleColor.Blue, attribute.Message, " ", ConsoleColor.Cyan, attribute.Name);
                         if (attribute.Message.ToLower() == "update")
                         {
                             CliLog.WriteLineWarning(SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, ConsoleColor.White, "Update Fields: ", ConsoleColor.Green, attribute.FilteringAttributes ?? "*");
