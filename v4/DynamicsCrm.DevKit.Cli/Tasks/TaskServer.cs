@@ -638,7 +638,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 "send" or
                 "setstate" or
                 "setstatedynamicentity" or
-                "update" => true,
+                "update" or
+                "createmultiple" or
+                "updatemultiple" or
+                "executeworkflow" => true,
                 _ => false,
             };
         }
