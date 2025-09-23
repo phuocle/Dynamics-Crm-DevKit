@@ -2,7 +2,7 @@
   "servers": [
     {
       "profile": "DEBUG",
-      "solution": "???",
+      "solution": "DEVKITV4",
       "folder": "bin\\Debug",
       "includefiles": [
         "Dev.DevKitV4.Plugin.*.dll",
@@ -10,7 +10,8 @@
         "Dev.DevKitV4.CustomAction.*.dll",
         "Dev.DevKitV4.Workflow.*.dll",
         "Dev.DevKitV4.CustomApi.*.dll",
-        "Dev.DevKitV4.DataProvider.*.dll"
+        "Dev.DevKitV4.DataProvider.*.dll",
+        "Dev.DevKitV4.Package.*.nupkg"
       ],
       "excludefiles": [
         "Dev.DevKitV4.*.Test.dll"
