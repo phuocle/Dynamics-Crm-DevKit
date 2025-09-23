@@ -17,7 +17,7 @@ namespace $NameSpace$
                 .AddJsonFile("AppSettings.json", optional: false, reloadOnChange: true);
             _Configuration = configurationBuilder.Build();
         }
-        private static IConfiguration? _Configuration = null;
+        private static IConfiguration _Configuration = null;
         public static IConfiguration Configuration
         {
             get
@@ -34,7 +34,7 @@ namespace $NameSpace$
             return value ?? string.Empty;
         }
 
-        private static ServiceClient? _Service = null;
+        private static ServiceClient _Service = null;
         public static ServiceClient Service
         {
             get
