@@ -68,9 +68,13 @@
     <Compile Include="Plugins\Account\PreValidationAccountCreateSynchronous.cs" />
     <Compile Include="Plugins\Contact\PostContactAssignAsynchronous.cs" />
     <Compile Include="Plugins\Contact\PostContactCreateAsynchronous.cs" />
+    <Compile Include="Plugins\Contact\PostContactCreateMultipleAsynchronous.cs" />
     <Compile Include="Plugins\Contact\PostContactDeleteAsynchronous.cs" />
     <Compile Include="Plugins\Contact\PostContactIsValidStateTransitionAsynchronous.cs" />
+    <Compile Include="Plugins\Contact\PostContactSetStateAsynchronous.cs" />
+    <Compile Include="Plugins\Contact\PostContactSetStateDynamicEntityAsynchronous.cs" />
     <Compile Include="Plugins\Contact\PostContactUpdateAsynchronous.cs" />
+    <Compile Include="Plugins\Contact\PostContactUpdateMultipleAsynchronous.cs" />
     <Compile Include="Workflows\SendEmailByQueue.cs" />
     <None Include="deploy.datasource.bat" />
     <None Include="packages.config" />
