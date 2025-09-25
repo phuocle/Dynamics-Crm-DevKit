@@ -43,7 +43,7 @@
   <ItemGroup>
     <Compile Include="App.cs" />
     <Compile Include="DebugPackage\DebugContact.cs" />
-    <Compile Include="Pluugins\DebugAccount.cs" />
+    <Compile Include="Plugins\DebugAccount.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Lib\Helper.cs" />

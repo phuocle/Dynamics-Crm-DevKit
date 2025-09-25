@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Dev.DevKitV4.Console.Pluugins
+namespace Dev.DevKitV4.Console.Plugins
 {
     internal class DebugAccount
     {

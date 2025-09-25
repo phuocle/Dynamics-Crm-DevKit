@@ -1,4 +1,4 @@
-﻿using Dev.DevKitV4.Console.Pluugins;
+﻿using Dev.DevKitV4.Console.Plugins;
 using Dev.DevKitV4.Console.Workflows;
 using Microsoft.Crm.Sdk.Messages;
 using System;
