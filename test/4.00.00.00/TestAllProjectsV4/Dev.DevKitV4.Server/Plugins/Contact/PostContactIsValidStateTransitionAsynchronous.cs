@@ -5,7 +5,7 @@ using System;
 
 namespace Dev.DevKitV4.Server.Plugins.Contact
 {
-    [CrmPluginRegistration("IsValidStateTransition", "contact", StageEnum.PostOperation, ExecutionModeEnum.Asynchronous, "", "Dev.DevKitV4.Server.Plugins.Contact.PostContactIsValidStateTransitionAsynchronous", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, DeleteAsyncOperation = true)]
+    [CrmPluginRegistration("IsValidStateTransition", "contact", StageEnum.PostOperation, ExecutionModeEnum.Asynchronous, "", "Dev.DevKitV4.Server.Plugins.Contact.PostContactIsValidStateTransitionAsynchronous", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, DeleteAsyncOperation = true, Unregister = true)]
     public class PostContactIsValidStateTransitionAsynchronous : IPlugin
     {
         /*
