@@ -15,6 +15,7 @@ using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
 using System.ServiceModel;
+using System.ServiceModel.Channels;
 using System.Threading.Tasks;
 
 namespace DynamicsCrm.DevKit.Cli.Tasks
@@ -496,6 +497,19 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             return check;
         }
 
+        private string GetMessagePropertyName(string message)
+        {
+            return message.ToLower() switch
+            {
+                "create" => "Id",
+                "createmultiple" => "Ids",
+                "updatemultiple" => "Targets",
+                "setstate" => "EntityMoniker",
+                "setstatedynamicentity" => "EntityMoniker",
+                _ => "Target"
+            };
+        }
+
         private async Task<Guid> DeployPluginImageAsync(string message, string imageName, string imageAliasName, ImageTypeEnum imageType, string imageAttributes, Guid pluginStepId, string pluginStepName)
         {
             if (imageAliasName.Length == 0) imageAliasName = imageName;
@@ -537,7 +551,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 ["sdkmessageprocessingstepid"] = new EntityReference("sdkmessageprocessingstep", pluginStepId),
                 ["attributes"] = imageAttributes.Trim() == "*" ? null : imageAttributes,
                 ["entityalias"] = imageAliasName,
-                ["messagepropertyname"] = message == "Create" ? "Id" : "Target"
+                ["messagepropertyname"] = GetMessagePropertyName(message)
             };
             if (rows.Entities.Count == 0)
             {
@@ -566,9 +580,13 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         {
                             CliLog.WriteLineError(ConsoleColor.Yellow, $"Step {pluginStepName} have invalid {imageType} Attribute {imageAttributes}. Assemply deployed, but the deployment of this assembly stopped.");
                         }
-                        if (fe.Message.Contains("does not support this image type") || fe.Message.Contains("does not support Post Image"))
+                        else if (fe.Message.Contains("does not support this image type") || fe.Message.Contains("does not support Post Image"))
                         {
                             CliLog.WriteLineError(ConsoleColor.Yellow, $"Step {pluginStepName} does not support this image type {imageType}. Assemply deployed, but the deployment of this assembly stopped.");
+                        }
+                        else
+                        {
+                            CliLog.WriteLineError(ConsoleColor.Yellow, $"{fe.Message} Assemply deployed, but the deployment of this assembly stopped.");
                         }
                         return Guid.Empty;
                     }
