@@ -1,4 +1,6 @@
-﻿using Microsoft.Crm.Sdk.Messages;
+﻿using Dev.DevKitV4.Console.Pluugins;
+using Dev.DevKitV4.Console.Workflows;
+using Microsoft.Crm.Sdk.Messages;
 using System;
 
 namespace Dev.DevKitV4.Console
@@ -7,31 +9,10 @@ namespace Dev.DevKitV4.Console
     {
         static void Main()
         {
-            //CheckWhoAmI();
-            //DebugPlugin();
-            //DebugWorkflow();
-
             //DebugPackage.DebugContact.PreContactCreateSynchronousPackage();
             //DebugPackage.DebugContact.PreContactCreateSynchronousPackage2();
-        }
-
-        private static void CheckWhoAmI()
-        {
-            var UserId = ((WhoAmIResponse)App.Service.Execute(new WhoAmIRequest())).UserId;
-            System.Console.WriteLine(UserId);
-            System.Console.ReadKey();
-        }
-
-        private static void DebugPlugin()
-        {
-            //var json = "";
-            //Helper.DebugPlugin<???>(json, App.Service);
-        }
-
-        private static void DebugWorkflow()
-        {
-            //var json = "";
-            //Helper.DebugWorkflow<???>(json, App.Service);
+            //DebugWorkflow.SendEmailByQueue();
+            DebugAccount.PreValidationAccountCreateSynchronous();
         }
     }
 }

@@ -22,13 +22,13 @@ namespace $NameSpace$
         private static void DebugPlugin()
         {
             //var json = "";
-            //Helper.DebugPlugin<???>(json, App.Service);
+            //Helper.DebugPluginWith<???>(json, App.Service);
         }
 
         private static void DebugWorkflow()
         {
             //var json = "";
-            //Helper.DebugWorkflow<???>(json, App.Service);
+            //Helper.DebugWorkflowWith<???>(json, App.Service);
         }
     }
 }

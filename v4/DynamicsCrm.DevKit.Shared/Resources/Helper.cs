@@ -213,6 +213,7 @@ namespace $NameSpace$.Lib
         //    workflowContext.SecondaryEntityName.Returns(remoteExecutionContext.SecondaryEntityName);
         //    workflowContext.SharedVariables.Returns(remoteExecutionContext.SharedVariables);
         //    workflowContext.UserId.Returns(remoteExecutionContext.UserId);
+        //    workflowContext.StageName.Returns($"{remoteExecutionContext.Stage}");
         //    return workflowContext;
         //}
         //private static IOrganizationServiceFactory CreateMockServiceFactory(ServiceClient service)
@@ -231,7 +232,7 @@ namespace $NameSpace$.Lib
         //    });
         //    return serviceFactory;
         //}
-        //public static void DebugWorkflow<T>(string json, ServiceClient service) where T : CodeActivity, new()
+        //public static void DebugWorkflowWith<T>(string json, ServiceClient service) where T : CodeActivity, new()
         //{
         //    var remoteExecutionContext = DeserializeRemoteExecutionContext(json);
         //    var workflowContext = CreateMockWorkflowContext(remoteExecutionContext);
@@ -261,7 +262,7 @@ namespace $NameSpace$.Lib
 
         #region DEBUG PLUGIN
 
-        public static void DebugPlugin<T>(string json, ServiceClient service, params object[] constructorArgs) where T : IPlugin
+        public static void DebugPluginWith<T>(string json, ServiceClient service, params object[] constructorArgs) where T : IPlugin
         {
             var serviceProvider = GetServiceProvider(json, service);
             var pluginObj = Activator.CreateInstance(typeof(T), constructorArgs);
