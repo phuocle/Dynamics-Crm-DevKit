@@ -5,7 +5,7 @@ using System;
 
 namespace Dev.DevKitV4.Server.Plugins.Email.Pre
 {
-    [CrmPluginRegistration("DeliverIncoming", "email", StageEnum.PreOperation, ExecutionModeEnum.Synchronous, "", "Dev.DevKitV4.Server.Plugins.Email.Pre.PreEmailDeliverIncomingSynchronous", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, Image1Name = "PreImage", Image1Alias = "PreImage", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "*", Image2Name = "PostImage", Image2Alias = "PostImage", Image2Type = ImageTypeEnum.PostImage, Image2Attributes = "*")]
+    [CrmPluginRegistration("DeliverIncoming", "email", StageEnum.PreOperation, ExecutionModeEnum.Synchronous, "", "Dev.DevKitV4.Server.Plugins.Email.Pre.PreEmailDeliverIncomingSynchronous", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, Image1Name = "PreImage", Image1Alias = "PreImage", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "*")]
     public class PreEmailDeliverIncomingSynchronous : IPlugin
     {
         /*
@@ -56,7 +56,6 @@ namespace Dev.DevKitV4.Server.Plugins.Email.Pre
         {
             //var ??? = context.InputParameterOrDefault<???>("???");
             context.PreEntityImages.TryGetValue("PreImage", out Entity preEntity);
-            context.PostEntityImages.TryGetValue("PostImage", out Entity postEntity);
             //YOUR PLUGIN-CODE GO HERE
 
         }

@@ -3,10 +3,10 @@ using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Extensions;
 using System;
 
-namespace Dev.DevKitV4.Server.Plugins.Email.Pre
+namespace Dev.DevKitV4.Server.Plugins.Contact.Pre
 {
-    [CrmPluginRegistration("Route", "email", StageEnum.PreOperation, ExecutionModeEnum.Synchronous, "", "Dev.DevKitV4.Server.Plugins.Email.Pre.PreEmailRouteSynchronous", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, Image1Name = "PreImage", Image1Alias = "PreImage", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "*")]
-    public class PreEmailRouteSynchronous : IPlugin
+    [CrmPluginRegistration("SetStateDynamicEntity", "contact", StageEnum.PreOperation, ExecutionModeEnum.Synchronous, "", "Dev.DevKitV4.Server.Plugins.Contact.Pre.PreContactSetStateDynamicEntitySynchronous", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, Image1Name = "PreImage", Image1Alias = "PreImage", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "*")]
+    public class PreContactSetStateDynamicEntitySynchronous : IPlugin
     {
         /*
 
@@ -14,7 +14,7 @@ namespace Dev.DevKitV4.Server.Plugins.Email.Pre
 
         //private readonly string unSecureConfiguration = null;
         //private readonly string secureConfiguration = null;
-        //public PreEmailRouteSynchronous(string unSecureConfiguration, string secureConfiguration)
+        //public PreContactSetStateDynamicEntitySynchronous(string unSecureConfiguration, string secureConfiguration)
         //{
         //    this.unSecureConfiguration = unSecureConfiguration;
         //    this.secureConfiguration = secureConfiguration;
@@ -25,8 +25,8 @@ namespace Dev.DevKitV4.Server.Plugins.Email.Pre
             var context = (IPluginExecutionContext)serviceProvider.GetService(typeof(IPluginExecutionContext));
             var tracing = (ITracingService)serviceProvider.GetService(typeof(ITracingService));
             if (!int.Equals(context.Stage, (int)StageEnum.PreOperation)) throw new InvalidPluginExecutionException("Stage does not equals PreOperation");
-            if (!string.Equals(context.MessageName, "Route", StringComparison.OrdinalIgnoreCase)) throw new InvalidPluginExecutionException("MessageName does not equals Route");
-            if (!string.Equals(context.PrimaryEntityName, "email", StringComparison.OrdinalIgnoreCase)) throw new InvalidPluginExecutionException("PrimaryEntityName does not equals email");
+            if (!string.Equals(context.MessageName, "SetStateDynamicEntity", StringComparison.OrdinalIgnoreCase)) throw new InvalidPluginExecutionException("MessageName does not equals SetStateDynamicEntity");
+            if (!string.Equals(context.PrimaryEntityName, "contact", StringComparison.OrdinalIgnoreCase)) throw new InvalidPluginExecutionException("PrimaryEntityName does not equals contact");
             if (!int.Equals(context.Mode, (int)ExecutionModeEnum.Synchronous)) throw new InvalidPluginExecutionException("Execution does not equals Synchronous");
             var serviceFactory = (IOrganizationServiceFactory)serviceProvider.GetService(typeof(IOrganizationServiceFactory));
             var serviceAdmin = serviceFactory.CreateOrganizationService(null);

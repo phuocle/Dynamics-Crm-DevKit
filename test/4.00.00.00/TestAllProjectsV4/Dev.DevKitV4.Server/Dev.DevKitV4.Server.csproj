@@ -76,6 +76,15 @@
     <Compile Include="Plugins\Contact\PostContactSetStateDynamicEntityAsynchronous.cs" />
     <Compile Include="Plugins\Contact\PostContactUpdateAsynchronous.cs" />
     <Compile Include="Plugins\Contact\PostContactUpdateMultipleAsynchronous.cs" />
+    <Compile Include="Plugins\Contact\Pre\PreContactAssignSynchronous.cs" />
+    <Compile Include="Plugins\Contact\Pre\PreContactCreateMultipleSynchronous.cs" />
+    <Compile Include="Plugins\Contact\Pre\PreContactCreateSynchronous.cs" />
+    <Compile Include="Plugins\Contact\Pre\PreContactDeleteSynchronous.cs" />
+    <Compile Include="Plugins\Contact\Pre\PreContactMergeSynchronous.cs" />
+    <Compile Include="Plugins\Contact\Pre\PreContactSetStateDynamicEntitySynchronous.cs" />
+    <Compile Include="Plugins\Contact\Pre\PreContactSetStateSynchronous.cs" />
+    <Compile Include="Plugins\Contact\Pre\PreContactUpdateMultipleSynchronous.cs" />
+    <Compile Include="Plugins\Contact\Pre\PreContactUpdateSynchronous.cs" />
     <Compile Include="Plugins\Email\PostEmailDeliverIncomingAsynchronous.cs" />
     <Compile Include="Plugins\Email\PostEmailDeliverPromoteAsynchronous.cs" />
     <Compile Include="Plugins\Email\PostEmailRouteAsynchronous.cs" />
