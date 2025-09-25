@@ -696,7 +696,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
         private async Task<Guid?> DeployPluginStepAsync(Guid pluginTypeId, TypeInfo type, CrmPluginRegistrationAttribute attribute)
         {
-            if (attribute?.Message?.ToLower() == "update" || attribute?.Message?.ToLower() == "updatemultiple")
+            if (attribute?.Message?.ToLower() == "update" ||
+                attribute?.Message?.ToLower() == "updatemultiple" ||
+                attribute?.Message?.ToLower() == "onexternalupdated"
+                )
             {
                 if (attribute?.FilteringAttributes?.Trim().Length == 0)
                 {

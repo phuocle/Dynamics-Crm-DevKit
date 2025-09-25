@@ -80,6 +80,10 @@
     <Compile Include="Plugins\Email\PostEmailDeliverPromoteAsynchronous.cs" />
     <Compile Include="Plugins\Email\PostEmailRouteAsynchronous.cs" />
     <Compile Include="Plugins\Email\PostEmailSendAsynchronous.cs" />
+    <Compile Include="Plugins\Email\Pre\PreEmailDeliverIncomingSynchronous.cs" />
+    <Compile Include="Plugins\Email\Pre\PreEmailDeliverPromoteSynchronous.cs" />
+    <Compile Include="Plugins\Email\Pre\PreEmailRouteSynchronous.cs" />
+    <Compile Include="Plugins\Email\Pre\PreEmailSendSynchronous.cs" />
     <Compile Include="Workflows\SendEmailByQueue.cs" />
     <None Include="deploy.datasource.bat" />
     <None Include="packages.config" />

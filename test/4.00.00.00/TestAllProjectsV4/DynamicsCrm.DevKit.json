@@ -1,5 +1,5 @@
 ﻿{
-    "DefaultCrmConnection": "devkit@phuocle.net",
+    "DefaultCrmConnection": "ClientSecret",
     "CrmConnections": [
         {
             "Name": "devkit@phuocle.net",
@@ -7,6 +7,13 @@
             "UserName": "devkit@phuocle.net",
             "Password": "",
             "Type": "OAuth"
+        },
+        {
+            "Name": "ClientSecret",
+            "Url": "https://dynamics-crm-devkit.crm5.dynamics.com",
+            "UserName": "1a60a5c2-d04c-4b26-8f86-9d6ce0616799",
+            "Password": "4Y11hDyKJYQTqXC9cRDXnoJ2DytZDs/jYI1byYwKli57mRfjHcCPu6Qx5sxgtCWQ",
+            "Type": "ClientSecret"
         }
     ]
 }
