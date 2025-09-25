@@ -323,6 +323,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
             }
             events = events.TrimEnd(", ".ToCharArray());
+            events = string.Join(", ", events.Split(",".ToCharArray()).Select(x => x.Trim()).OrderBy(x => x)).Trim();
             var entityDataProvider = await GetEntityDataProviderIdAsync(logicalNameDataSource);
             if (entityDataProvider == null)
             {
@@ -331,7 +332,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 request.Target = entity;
                 request.Parameters.Add("SuppressDuplicateDetection", true);
                 request.Parameters.Add("SolutionUniqueName", Json.solution);
-                CliLog.WriteLineWarning(SPACE, SPACE, ConsoleColor.Green, CliAction.REGISTER, ConsoleColor.White, "Type ", ConsoleColor.Blue, $"DataSource ", ConsoleColor.Cyan, $"{logicalNameDataSource}", ConsoleColor.Blue, " linked with events ", ConsoleColor.Cyan, events);
+                CliLog.WriteLineWarning(SPACE, SPACE, ConsoleColor.Green, CliAction.REGISTER, ConsoleColor.White, "Type ", ConsoleColor.Blue, $"DataSource ", ConsoleColor.Cyan, $"{logicalNameDataSource}", ConsoleColor.White, " linked with events ", ConsoleColor.Cyan, events);
                 await ServiceClient.ExecuteAsync(request);
             }
             else
@@ -354,12 +355,12 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     {
                         Target = entity
                     };
-                    CliLog.WriteLineWarning(SPACE, SPACE, ConsoleColor.Green, CliAction.UPDATED, ConsoleColor.White, "Type ", ConsoleColor.Blue, $"DataSource ", ConsoleColor.Cyan, $"{logicalNameDataSource}", ConsoleColor.Blue, " linked with events ", ConsoleColor.Cyan, events);
+                    CliLog.WriteLineWarning(SPACE, SPACE, ConsoleColor.Green, CliAction.UPDATED, ConsoleColor.White, "Type ", ConsoleColor.Blue, $"DataSource ", ConsoleColor.Cyan, $"{logicalNameDataSource}", ConsoleColor.White, " linked with events ", ConsoleColor.Cyan, events);
                     await ServiceClient.ExecuteAsync(request);
                 }
                 else
                 {
-                    CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, "Type ", ConsoleColor.Blue, $"DataSource ", ConsoleColor.Cyan, $"{logicalNameDataSource}", ConsoleColor.Blue, " linked with events ", ConsoleColor.Cyan, events);
+                    CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, "Type ", ConsoleColor.Blue, $"DataSource ", ConsoleColor.Cyan, $"{logicalNameDataSource}", ConsoleColor.White, " linked with events ", ConsoleColor.Cyan, events);
                 }
             }
         }
