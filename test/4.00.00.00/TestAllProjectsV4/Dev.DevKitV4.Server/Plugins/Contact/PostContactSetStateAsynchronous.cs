@@ -45,6 +45,8 @@ namespace Dev.DevKitV4.Server.Plugins.Contact
         private void ExecutePlugin(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService serviceAdmin, IOrganizationService service, ITracingService tracing)
         {
             //var ??? = context.InputParameterOrDefault<???>("???");
+            context.PreEntityImages.TryGetValue("PreImage", out Entity preEntity);
+            context.PostEntityImages.TryGetValue("PostImage", out Entity postEntity);
             //YOUR PLUGIN-CODE GO HERE
 
         }

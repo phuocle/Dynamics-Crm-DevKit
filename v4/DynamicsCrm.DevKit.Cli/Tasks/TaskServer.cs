@@ -696,11 +696,11 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
         private async Task<Guid?> DeployPluginStepAsync(Guid pluginTypeId, TypeInfo type, CrmPluginRegistrationAttribute attribute)
         {
-            if (attribute?.Message?.ToLower() == "update")
+            if (attribute?.Message?.ToLower() == "update" || attribute?.Message?.ToLower() == "updatemultiple")
             {
                 if (attribute?.FilteringAttributes?.Trim().Length == 0)
                 {
-                    CliLog.WriteLineError(ConsoleColor.Yellow, $"{type.FullName} Update message need provide FilteringAttributes value. Assemply deployed, but the deployment of this assembly stopped.");
+                    CliLog.WriteLineError(ConsoleColor.Yellow, $"{type.FullName} The {attribute?.Message} message need provide FilteringAttributes value. Assemply deployed, but the deployment of this assembly stopped.");
                     return null;
                 }
                 if (attribute?.FilteringAttributes.Trim() == "*")

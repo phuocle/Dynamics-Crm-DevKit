@@ -5,7 +5,7 @@ using System;
 
 namespace Dev.DevKitV4.Server.Plugins.Contact
 {
-    [CrmPluginRegistration("UpdateMultiple", "contact", StageEnum.PostOperation, ExecutionModeEnum.Asynchronous, "", "Dev.DevKitV4.Server.Plugins.Contact.PostContactUpdateMultipleAsynchronous", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, DeleteAsyncOperation = true, Image1Name = "PreImage", Image1Alias = "PreImage", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "*", Image2Name = "PostImage", Image2Alias = "PostImage", Image2Type = ImageTypeEnum.PostImage, Image2Attributes = "*")]
+    [CrmPluginRegistration("UpdateMultiple", "contact", StageEnum.PostOperation, ExecutionModeEnum.Asynchronous, "firstname", "Dev.DevKitV4.Server.Plugins.Contact.PostContactUpdateMultipleAsynchronous", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, DeleteAsyncOperation = true, Image1Name = "PreImage", Image1Alias = "PreImage", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "*", Image2Name = "PostImage", Image2Alias = "PostImage", Image2Type = ImageTypeEnum.PostImage, Image2Attributes = "*")]
     public class PostContactUpdateMultipleAsynchronous : IPlugin
     {
         /*
@@ -42,6 +42,8 @@ namespace Dev.DevKitV4.Server.Plugins.Contact
         private void ExecutePlugin(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService serviceAdmin, IOrganizationService service, ITracingService tracing)
         {
             var targetEntities = context.InputParameterOrDefault<EntityCollection>("Targets");
+            context.PreEntityImages.TryGetValue("PreImage", out Entity preEntity);
+            context.PostEntityImages.TryGetValue("PostImage", out Entity postEntity);
             //YOUR PLUGIN-CODE GO HERE
 
         }
