@@ -133,7 +133,8 @@ namespace DynamicsCrm.DevKit.Shared.Models
         Workflow = 1,
         CustomAction = 2,
         DataProvider = 3,
-        CustomApi = 4
+        CustomApi = 4,
+        DataSource = 5
     }
 
     [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = true)]
