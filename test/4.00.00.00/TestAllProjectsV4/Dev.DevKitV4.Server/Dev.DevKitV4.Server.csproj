@@ -56,6 +56,8 @@
   <ItemGroup>
     <Compile Include="CustomActions\Account\PostAccountv4_AccountCustomActionAsynchronous.cs" />
     <Compile Include="CustomActions\PostNonev4_CustomActionAsynchronous.cs" />
+    <Compile Include="CustomApis\Account\v4_AccountCustomApiRequest.cs" />
+    <Compile Include="CustomApis\v4_CustomApiRequest.cs" />
     <Compile Include="Plugins\Account\PostAccountCreateAsynchronous.cs" />
     <Compile Include="Plugins\Account\PreAccountCreateSynchronous.cs" />
     <Compile Include="Plugins\Account\PreValidationAccountCreateSynchronous.cs" />
@@ -69,6 +71,7 @@
   <ItemGroup>
     <Analyzer Include="..\packages\DynamicsCrm.DevKit.Analyzers.4.0.0\analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="..\Dev.DevKitV4.Shared\Dev.DevKitV4.Shared.projitems" Label="Shared" Condition="Exists('..\Dev.DevKitV4.Shared\Dev.DevKitV4.Shared.projitems')" />
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
