@@ -122,7 +122,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
         private async Task DeployDllAsync(string file, DeployFileType deployFileType = DeployFileType.Dll)
         {
-            if (deployFileType == DeployFileType.Dll) CliLog.WriteLineWarning(ConsoleColor.Cyan, $"{Path.GetFileName(file)}");
+            if (deployFileType == DeployFileType.Dll)
+            {
+                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, $"{Path.GetFileName(file)}");
+            }
             var types = GetTypes(file);
             if (!await IsValidTypesAsync(file, types)) return;
             await DeployFileAsync(file, types, deployFileType);
@@ -1233,7 +1236,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     Target = plugin
                 };
                 request.Parameters.Add("SolutionUniqueName", Json.solution);
-                CliLog.WriteLineWarning(SPACE, ConsoleColor.Green, CliAction.REGISTER, ConsoleColor.Blue, "Assembly ", ConsoleColor.Blue, ConsoleColor.Cyan, assemblyName);
+                CliLog.Write(ConsoleColor.White, "|", SPACE);
+                CliLog.WriteWarning(ConsoleColor.Green, CliAction.REGISTER.Trim());
+                CliLog.WriteLine(ConsoleColor.White, " Assembly ", ConsoleColor.Cyan, assemblyName);
                 var response = (CreateResponse)await ServiceClient.ExecuteAsync(request);
                 return response.id;
             }
@@ -1253,7 +1258,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         Target = plugin
                     };
                     request.Parameters.Add("SolutionUniqueName", Json.solution);
-                    CliLog.WriteLineWarning(SPACE, ConsoleColor.Green, CliAction.UPDATED, ConsoleColor.Blue, "Assembly ", ConsoleColor.Cyan, assemblyName);
+                    CliLog.Write(ConsoleColor.White, "|", SPACE);
+                    CliLog.WriteWarning(ConsoleColor.Green, CliAction.UPDATED.Trim());
+                    CliLog.WriteLine(ConsoleColor.White, " Assembly ", ConsoleColor.Cyan, assemblyName);
                     try
                     {
                         await ServiceClient.ExecuteAsync(request);

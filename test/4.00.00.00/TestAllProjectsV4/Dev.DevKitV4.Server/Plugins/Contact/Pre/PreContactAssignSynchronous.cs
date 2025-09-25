@@ -45,7 +45,7 @@ namespace Dev.DevKitV4.Server.Plugins.Contact.Pre
             //var ??? = context.InputParameterOrDefault<???>("???");
             context.PreEntityImages.TryGetValue("PreImage", out Entity preEntity);
             //YOUR PLUGIN-CODE GO HERE
-
+            var t = string.Empty;
         }
     }
 }
