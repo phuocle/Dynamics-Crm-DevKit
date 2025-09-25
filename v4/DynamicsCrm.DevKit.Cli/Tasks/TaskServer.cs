@@ -567,9 +567,11 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         Target = pluginImage
                     };
                     request.Parameters.Add("SolutionUniqueName", Json.solution);
-
-                    CliLog.WriteLineWarning(SPACE, SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.REGISTER, ConsoleColor.White, "Image Type ", ConsoleColor.Blue, imageType, ConsoleColor.White, $", Name = ", ConsoleColor.Cyan, imageName, ConsoleColor.White, $", Alias = ", ConsoleColor.Cyan, imageAliasName);
-                    CliLog.WriteLineWarning(SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, " ", ConsoleColor.White, "Image Fields: ", ConsoleColor.Green, imageAttributes ?? "*");
+                    //CliLog.WriteLineWarning(SPACE, SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.REGISTER, ConsoleColor.White, "Image Type ", ConsoleColor.Blue, imageType, ConsoleColor.White, $", Name = ", ConsoleColor.Cyan, imageName, ConsoleColor.White, $", Alias = ", ConsoleColor.Cyan, imageAliasName);
+                    CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE);
+                    CliLog.WriteWarning(ConsoleColor.Green, CliAction.REGISTER.Trim());
+                    CliLog.Write(ConsoleColor.White, " Image Type ", ConsoleColor.Blue, imageType, ConsoleColor.White, $", Name = ", ConsoleColor.Cyan, imageName, ConsoleColor.White, $", Alias = ", ConsoleColor.Cyan, imageAliasName);
+                    CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, " ", ConsoleColor.White, "Image Fields: ", ConsoleColor.Green, imageAttributes ?? "*");
                     try
                     {
                         var response = (CreateResponse)await ServiceClient.ExecuteAsync(request);
@@ -610,7 +612,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     attributes == (imageAttributes.Trim() == "*" ? null : imageAttributes) &&
                     imagetype == (int)imageType)
                 {
-
                     CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, "Image Type ", ConsoleColor.Blue, imageType, ConsoleColor.White, $", Name = ", ConsoleColor.Cyan, imageName, ConsoleColor.White, $", Alias = ", ConsoleColor.Cyan, imageAliasName);
                     CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, ConsoleColor.White, "Image Fields: ", ConsoleColor.Green, imageAttributes ?? "*");
                 }
@@ -619,15 +620,19 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     if (attributes == null || (attributes != (imageAttributes.Trim() == "*" ? null : imageAttributes) && imageAttributes.Length != 0))
                     {
                         pluginImage["sdkmessageprocessingstepimageid"] = rows.Entities[0].Id;
-
-                        CliLog.WriteLineWarning(SPACE, SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.UPDATED, ConsoleColor.White, "Image Type ", ConsoleColor.Blue, imageType, ConsoleColor.White, $", Name = ", ConsoleColor.Cyan, imageName, ConsoleColor.White, $", Alias = ", ConsoleColor.Cyan, imageAliasName);
-                        CliLog.WriteLineWarning(SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, ConsoleColor.White, "Image Fields: ", ConsoleColor.Green, imageAttributes ?? "*");
+                        //CliLog.WriteLineWarning(SPACE, SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.UPDATED, ConsoleColor.White, "Image Type ", ConsoleColor.Blue, imageType, ConsoleColor.White, $", Name = ", ConsoleColor.Cyan, imageName, ConsoleColor.White, $", Alias = ", ConsoleColor.Cyan, imageAliasName);
+                        CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE);
+                        CliLog.WriteWarning(ConsoleColor.Green, CliAction.UPDATED.Trim());
+                        CliLog.WriteLine(ConsoleColor.White, " Image Type ", ConsoleColor.Blue, imageType, ConsoleColor.White, $", Name = ", ConsoleColor.Cyan, imageName, ConsoleColor.White, $", Alias = ", ConsoleColor.Cyan, imageAliasName);
+                        CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, ConsoleColor.White, "Image Fields: ", ConsoleColor.Green, imageAttributes ?? "*");
                     }
                     else if (imageAttributes.Length == 0)
                     {
-
-                        CliLog.WriteLine(SPACE, SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.DELETED, ConsoleColor.White, "Image Type ", ConsoleColor.Blue, imageType, ConsoleColor.White, $", Name = ", ConsoleColor.Cyan, imageName, ConsoleColor.White, $", Alias = ", ConsoleColor.Cyan, imageAliasName);
-                        CliLog.WriteLineWarning(SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, ConsoleColor.White, "Image Fields: ", ConsoleColor.Green, imageAttributes ?? "*");
+                        //CliLog.WriteLine(SPACE, SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.DELETED, ConsoleColor.White, "Image Type ", ConsoleColor.Blue, imageType, ConsoleColor.White, $", Name = ", ConsoleColor.Cyan, imageName, ConsoleColor.White, $", Alias = ", ConsoleColor.Cyan, imageAliasName);
+                        CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE);
+                        CliLog.WriteWarning(ConsoleColor.Green, CliAction.DELETED.Trim());
+                        CliLog.WriteLine(ConsoleColor.White, " Image Type ", ConsoleColor.Blue, imageType, ConsoleColor.White, $", Name = ", ConsoleColor.Cyan, imageName, ConsoleColor.White, $", Alias = ", ConsoleColor.Cyan, imageAliasName);
+                        CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, ConsoleColor.White, "Image Fields: ", ConsoleColor.Green, imageAttributes ?? "*");
                         await ServiceClient.DeleteAsync("sdkmessageprocessingstepimage", rows.Entities[0].Id);
                         return Guid.NewGuid();
                     }
