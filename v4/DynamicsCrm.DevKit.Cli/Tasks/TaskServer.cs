@@ -506,6 +506,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 "updatemultiple" => "Targets",
                 "setstate" => "EntityMoniker",
                 "setstatedynamicentity" => "EntityMoniker",
+                "deliverincoming" => "EmailId",
+                "deliverpromote" => "EmailId",
+                "send" => "EmailId",
                 _ => "Target"
             };
         }

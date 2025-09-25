@@ -71,10 +71,15 @@
     <Compile Include="Plugins\Contact\PostContactCreateMultipleAsynchronous.cs" />
     <Compile Include="Plugins\Contact\PostContactDeleteAsynchronous.cs" />
     <Compile Include="Plugins\Contact\PostContactIsValidStateTransitionAsynchronous.cs" />
+    <Compile Include="Plugins\Contact\PostContactMergeAsynchronous.cs" />
     <Compile Include="Plugins\Contact\PostContactSetStateAsynchronous.cs" />
     <Compile Include="Plugins\Contact\PostContactSetStateDynamicEntityAsynchronous.cs" />
     <Compile Include="Plugins\Contact\PostContactUpdateAsynchronous.cs" />
     <Compile Include="Plugins\Contact\PostContactUpdateMultipleAsynchronous.cs" />
+    <Compile Include="Plugins\Email\PostEmailDeliverIncomingAsynchronous.cs" />
+    <Compile Include="Plugins\Email\PostEmailDeliverPromoteAsynchronous.cs" />
+    <Compile Include="Plugins\Email\PostEmailRouteAsynchronous.cs" />
+    <Compile Include="Plugins\Email\PostEmailSendAsynchronous.cs" />
     <Compile Include="Workflows\SendEmailByQueue.cs" />
     <None Include="deploy.datasource.bat" />
     <None Include="packages.config" />
