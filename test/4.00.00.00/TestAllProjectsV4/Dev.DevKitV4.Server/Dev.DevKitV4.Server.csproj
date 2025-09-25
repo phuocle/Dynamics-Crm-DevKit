@@ -64,6 +64,7 @@
     <Compile Include="DataProviders\Sql\RetrieveMultiple.cs" />
     <Compile Include="DataProviders\Sql\Update.cs" />
     <Compile Include="Plugins\Account\PostAccountCreateAsynchronous.cs" />
+    <Compile Include="Plugins\Account\PostAccountPurgeRetainedContentAsynchronous.cs" />
     <Compile Include="Plugins\Account\PreAccountCreateSynchronous.cs" />
     <Compile Include="Plugins\Account\PreValidationAccountCreateSynchronous.cs" />
     <Compile Include="Plugins\Contact\PostContactAssignAsynchronous.cs" />
