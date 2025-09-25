@@ -58,10 +58,16 @@
     <Compile Include="CustomActions\PostNonev4_CustomActionAsynchronous.cs" />
     <Compile Include="CustomApis\Account\v4_AccountCustomApiRequest.cs" />
     <Compile Include="CustomApis\v4_CustomApiRequest.cs" />
+    <Compile Include="DataProviders\Sql\Create.cs" />
+    <Compile Include="DataProviders\Sql\Delete.cs" />
+    <Compile Include="DataProviders\Sql\Retrieve.cs" />
+    <Compile Include="DataProviders\Sql\RetrieveMultiple.cs" />
+    <Compile Include="DataProviders\Sql\Update.cs" />
     <Compile Include="Plugins\Account\PostAccountCreateAsynchronous.cs" />
     <Compile Include="Plugins\Account\PreAccountCreateSynchronous.cs" />
     <Compile Include="Plugins\Account\PreValidationAccountCreateSynchronous.cs" />
     <Compile Include="Workflows\SendEmailByQueue.cs" />
+    <None Include="deploy.datasource.bat" />
     <None Include="packages.config" />
     <None Include="Dev.DevKitV4.Server.snk" />
     <None Include="deploy.debug.bat" />

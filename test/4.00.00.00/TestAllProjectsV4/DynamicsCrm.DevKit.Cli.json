@@ -60,10 +60,10 @@
   "datasources": [
     {
       "profile": "DEBUG",
-      "solution": "???",
-      "displayname": "???",
-      "pluralname": "???",
-      "name": "???"
+      "solution": "DEVKITV4",
+      "displayname": "Sql DataSource",
+      "pluralname": "Sql DatSources",
+      "name": "Sql_DataSource"
     }
   ],
   "solutionpackagers": [
