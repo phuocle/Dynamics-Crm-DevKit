@@ -554,7 +554,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     request.Parameters.Add("SolutionUniqueName", Json.solution);
 
                     CliLog.WriteLineWarning(SPACE, SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.REGISTER, ConsoleColor.White, "Image Type ", ConsoleColor.Blue, imageType, ConsoleColor.White, $", Name = ", ConsoleColor.Cyan, imageName, ConsoleColor.White, $", Alias = ", ConsoleColor.Cyan, imageAliasName);
-                    CliLog.WriteLineWarning(SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, ConsoleColor.White, "Image Fields: ", ConsoleColor.Green, imageAttributes ?? "*");
+                    CliLog.WriteLineWarning(SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, " ", ConsoleColor.White, "Image Fields: ", ConsoleColor.Green, imageAttributes ?? "*");
                     try
                     {
                         var response = (CreateResponse)await ServiceClient.ExecuteAsync(request);
@@ -752,7 +752,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 CliLog.WriteLineWarning(SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.REGISTER, ConsoleColor.White, $"Step ", ConsoleColor.Blue, attribute.Message, " ", ConsoleColor.Cyan, attribute.Name);
                 if (attribute.Message.ToLower() == "update")
                 {
-                    CliLog.WriteLineWarning(SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, ConsoleColor.White, "Update Fields: ", ConsoleColor.Green, attribute.FilteringAttributes ?? "*");
+                    CliLog.WriteLineWarning(SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, " ",ConsoleColor.White, "Update Fields: ", ConsoleColor.Green, attribute.FilteringAttributes ?? "*");
                 }
                 try
                 {

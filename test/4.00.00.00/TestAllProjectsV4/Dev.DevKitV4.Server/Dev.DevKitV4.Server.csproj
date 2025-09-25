@@ -66,6 +66,8 @@
     <Compile Include="Plugins\Account\PostAccountCreateAsynchronous.cs" />
     <Compile Include="Plugins\Account\PreAccountCreateSynchronous.cs" />
     <Compile Include="Plugins\Account\PreValidationAccountCreateSynchronous.cs" />
+    <Compile Include="Plugins\Contact\PostContactIsValidStateTransitionAsynchronous.cs" />
+    <Compile Include="Plugins\Contact\PostContactUpdateAsynchronous.cs" />
     <Compile Include="Workflows\SendEmailByQueue.cs" />
     <None Include="deploy.datasource.bat" />
     <None Include="packages.config" />
