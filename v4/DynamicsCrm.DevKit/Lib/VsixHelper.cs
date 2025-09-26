@@ -90,10 +90,7 @@ namespace DynamicsCrm.DevKit.Lib
         {
             var configJson = new ConfigJson();
             var fileName = await GetDynamicsCrmDevKitConfigJsonFullFileNameAsync();
-            if (File.Exists(fileName))
-            {
-                configJson.WebResources = SimpleJson.DeserializeObject<ConfigJson>(await Task.Run(() => File.ReadAllText(fileName))).WebResources;
-            }
+            if (File.Exists(fileName)) configJson = SimpleJson.DeserializeObject<ConfigJson>(await Task.Run(() => File.ReadAllText(fileName)));
             var found = configJson.WebResources.Where(x => x?.File == deployWebResource?.File).FirstOrDefault();
             if (found != null)
             {
