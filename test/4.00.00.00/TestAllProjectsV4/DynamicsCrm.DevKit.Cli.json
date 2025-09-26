@@ -98,16 +98,16 @@
     {
       "profile": "JS-FORM",
       "type": "JsForm",
-      "rootnamespace": "???",
-      "rootfolder": "???",
-      "entities": "folder"
+      "rootnamespace": "Dev.DevKitV4",
+      "rootfolder": "",
+      "entities": "account,contact,team,systemuser,task"
     },
     {
       "profile": "JS-WEBAPI",
       "type": "JsWebApi",
-      "rootnamespace": "???",
-      "rootfolder": "???",
-      "entities": "folder"
+      "rootnamespace": "Dev.DevKitV4",
+      "rootfolder": "",
+      "entities": "account,contact,team,systemuser,task"
     }
   ],
   "downloadwebresources": [

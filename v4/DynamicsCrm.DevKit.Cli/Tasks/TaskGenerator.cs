@@ -154,15 +154,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var dtsFile = Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}.d.ts");
                     var oldCode = await FileHelper.ReadAllTextAsync(fileEndsWith);
                     var oldDTS = await FileHelper.ReadAllTextAsync(dtsFile);
-                    var isJsExist = File.Exists(file);
                     var isJsFormExist = File.Exists(Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}.form.js"));
-                    var isJsWebApiExist = File.Exists(Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}.webapi.js"));
-                    if (isJsExist && !isJsWebApiExist)
-                    {
-                        CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, $"{schemaName}{endsWith}");
-                        i++;
-                        continue;
-                    }
                     var (newCode, newDTS) = await JsWebApi.GetJsWebApiCodeAsync(ServiceClient, entityMetadata, Json.rootnamespace, isJsFormExist);
                     if (Helper.IsTheSame(oldCode, newCode))
                     {
@@ -222,15 +214,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var dtsFile = Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}.d.ts");
                     var oldCode = await FileHelper.ReadAllTextAsync(fileEndsWith);
                     var oldDTS = await FileHelper.ReadAllTextAsync(dtsFile);
-                    var isJsExist = File.Exists(file);
-                    var isJsFormExist = File.Exists(Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}.form.js"));
                     var isJsWebApiExist = File.Exists(Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}.webapi.js"));
-                    if (isJsExist && !isJsFormExist)
-                    {
-                        CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, $"{schemaName}{endsWith}");
-                        i++;
-                        continue;
-                    }
                     var (newCode, newDTS) = await JsForm.GetJsFormCodeAsync(ServiceClient, entityMetadata, Json.rootnamespace, isJsWebApiExist);
                     if (Helper.IsTheSame(oldCode, newCode))
                     {
