@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<SdkMessageProcessingStep Name="Dev.DevKitV4.Server.Plugins.Email.PostEmailDeliverPromoteAsynchronous" SdkMessageProcessingStepId="{c42e9d5a-c799-f011-b41c-000d3aa25840}" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <SdkMessageId>a3bdbb1b-ea3e-db11-86a7-000a3a5473e8</SdkMessageId>
+  <PluginTypeName>Dev.DevKitV4.Server.Plugins.Email.PostEmailDeliverPromoteAsynchronous, Dev.DevKitV4.Server, Version=1.0.0.0, Culture=neutral, PublicKeyToken=35bef6dd61f18c2a</PluginTypeName>
+  <PluginTypeId>c32e9d5a-c799-f011-b41c-000d3aa25840</PluginTypeId>
+  <PrimaryEntity>email</PrimaryEntity>
+  <AsyncAutoDelete>1</AsyncAutoDelete>
+  <FilteringAttributes></FilteringAttributes>
+  <InvocationSource>0</InvocationSource>
+  <Mode>1</Mode>
+  <Rank>1</Rank>
+  <EventHandlerTypeCode>4602</EventHandlerTypeCode>
+  <Stage>40</Stage>
+  <IsCustomizable>1</IsCustomizable>
+  <IsHidden>0</IsHidden>
+  <SupportedDeployment>0</SupportedDeployment>
+  <IntroducedVersion>1.0.0.0</IntroducedVersion>
+  <SdkMessageProcessingStepImages>
+    <SdkMessageProcessingStepImage Name="PostImage">
+      <SdkMessageProcessingStepImageId>{fc21fb76-c899-f011-b41c-000d3aa25840}</SdkMessageProcessingStepImageId>
+      <Attributes></Attributes>
+      <EntityAlias>PostImage</EntityAlias>
+      <ImageType>1</ImageType>
+      <MessagePropertyName>EmailId</MessagePropertyName>
+      <IsCustomizable>1</IsCustomizable>
+    </SdkMessageProcessingStepImage>
+    <SdkMessageProcessingStepImage Name="PreImage">
+      <SdkMessageProcessingStepImageId>{78595187-c799-f011-b41c-000d3aa25840}</SdkMessageProcessingStepImageId>
+      <Attributes></Attributes>
+      <EntityAlias>PreImage</EntityAlias>
+      <ImageType>0</ImageType>
+      <MessagePropertyName>EmailId</MessagePropertyName>
+      <IsCustomizable>1</IsCustomizable>
+    </SdkMessageProcessingStepImage>
+  </SdkMessageProcessingStepImages>
+</SdkMessageProcessingStep>

@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<WebResource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <WebResourceId>{bc46865f-2695-f011-b41c-000d3aa25840}</WebResourceId>
+  <Name>v4_/entities/SystemUser.webapi.js</Name>
+  <DisplayName>v4_/entities/SystemUser.webapi.js</DisplayName>
+  <Description>1.0.0.0</Description>
+  <WebResourceType>3</WebResourceType>
+  <IntroducedVersion>1.0</IntroducedVersion>
+  <IsEnabledForMobileClient>0</IsEnabledForMobileClient>
+  <IsAvailableForMobileOffline>0</IsAvailableForMobileOffline>
+  <IsCustomizable>1</IsCustomizable>
+  <CanBeDeleted>1</CanBeDeleted>
+  <IsHidden>0</IsHidden>
+  <FileName>/WebResources/v4_entitiesSystemUserwebapijsBC46865F-2695-F011-B41C-000D3AA25840</FileName>
+</WebResource>
