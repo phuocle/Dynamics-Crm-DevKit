@@ -9,7 +9,6 @@
     <Import_RootNamespace>Dev.DevKitV4.Shared.Test</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Folder Include="$(MSBuildThisFileDirectory)Contact\" />
     <Folder Include="$(MSBuildThisFileDirectory)Executor\" />
     <Folder Include="$(MSBuildThisFileDirectory)Lib\" />
   </ItemGroup>

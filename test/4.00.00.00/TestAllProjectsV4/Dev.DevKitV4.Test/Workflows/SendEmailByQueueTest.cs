@@ -18,7 +18,6 @@ namespace Dev.DevKitV4.Test.Workflows
             var remote = TestHelper.DeserializeRemoteExecutionContext(json);
             var workflowContext = _context.GetDefaultWorkflowContext();
             workflowContext.SetXrmFakedContextWorkflow(remote);
-            // Add required workflow arguments
             var inputs = new Dictionary<string, object>
             {
                 { "ToEmail", "vanphuoc@gmail.com" }
