@@ -1,0 +1,33 @@
+﻿using Microsoft.Dynamics365.UIAutomation.Api.UCI;
+using Microsoft.Dynamics365.UIAutomation.Browser;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using System.Security;
+
+namespace Dev.DevKitV4.UiTest
+{
+    [TestClass]
+    public class Login
+    {
+        private readonly SecureString _username = System.Configuration.ConfigurationManager.AppSettings["UiTestUserName"].ToSecureString();
+        private readonly SecureString _password = System.Configuration.ConfigurationManager.AppSettings["UiTestPassword"].ToSecureString();
+        private readonly Uri _xrmUri = new Uri(System.Configuration.ConfigurationManager.AppSettings["Url"].ToString());
+
+        [TestMethod]
+        public void Test()
+        {
+            var client = new WebClient(TestSettings.Options);
+            client.Browser.Options.UCIPerformanceMode = false; // Disable UCI performance mode for testing purposes
+            using (var xrmApp = new XrmApp(client))
+            {
+                xrmApp.OnlineLogin.Login(_xrmUri, _username, _password);
+                try
+                {
+                    xrmApp.Navigation.OpenApp("Power Platform Environment Settings");
+                }
+                catch { }
+                Assert.IsTrue(true);
+            }
+        }
+    }
+}
