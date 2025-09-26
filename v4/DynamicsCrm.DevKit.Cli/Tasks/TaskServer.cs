@@ -331,7 +331,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 request.Target = entity;
                 request.Parameters.Add("SuppressDuplicateDetection", true);
                 request.Parameters.Add("SolutionUniqueName", Json.solution);
-                CliLog.WriteLineWarning(SPACE, SPACE, ConsoleColor.Green, CliAction.REGISTER, ConsoleColor.White, "Type ", ConsoleColor.Blue, $"{PluginType.DataSource} ", ConsoleColor.Cyan, $"{logicalNameDataSource}", ConsoleColor.White, " linked with events ", ConsoleColor.Cyan, events);
+                CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE);
+                CliLog.WriteWarning(ConsoleColor.Green, CliAction.REGISTER.Trim());
+                CliLog.WriteLine(ConsoleColor.White, " Type ", ConsoleColor.Blue, $"{PluginType.DataSource} ", ConsoleColor.Cyan, $"{logicalNameDataSource}", ConsoleColor.White, " linked with events ", ConsoleColor.Cyan, events);
                 await ServiceClient.ExecuteAsync(request);
             }
             else
@@ -354,7 +356,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     {
                         Target = entity
                     };
-                    CliLog.WriteLineWarning(SPACE, SPACE, ConsoleColor.Green, CliAction.UPDATED, ConsoleColor.White, "Type ", ConsoleColor.Blue, $"{PluginType.DataSource} ", ConsoleColor.Cyan, $"{logicalNameDataSource}", ConsoleColor.White, " linked with events ", ConsoleColor.Cyan, events);
+                    CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE);
+                    CliLog.WriteWarning(ConsoleColor.Green, CliAction.UPDATED.Trim());
+                    CliLog.WriteLine(ConsoleColor.White, "Type ", ConsoleColor.Blue, $"{PluginType.DataSource} ", ConsoleColor.Cyan, $"{logicalNameDataSource}", ConsoleColor.White, " linked with events ", ConsoleColor.Cyan, events);
                     await ServiceClient.ExecuteAsync(request);
                 }
                 else
@@ -473,7 +477,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
                 else
                 {
-                    CliLog.WriteLineWarning(SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.REGISTER, ConsoleColor.White, "Message ", ConsoleColor.Blue, attribute.PluginType, " ",ConsoleColor.Cyan, attribute.Message, ConsoleColor.White, " with type ", ConsoleColor.Cyan, pluginTypeName);
+                    CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE);
+                    CliLog.WriteWarning(ConsoleColor.Green, CliAction.REGISTER.Trim());
+                    CliLog.WriteLine(ConsoleColor.White, " Message ", ConsoleColor.Blue, attribute.PluginType, " ", ConsoleColor.Cyan, attribute.Message, ConsoleColor.White, " with type ", ConsoleColor.Cyan, pluginTypeName);
                     var update = new Entity("customapi", rows.Entities[0].Id);
                     update["plugintypeid"] = new EntityReference("plugintype", pluginTypeId);
                     await ServiceClient.UpdateAsync(update);
@@ -567,7 +573,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         Target = pluginImage
                     };
                     request.Parameters.Add("SolutionUniqueName", Json.solution);
-                    //CliLog.WriteLineWarning(SPACE, SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.REGISTER, ConsoleColor.White, "Image Type ", ConsoleColor.Blue, imageType, ConsoleColor.White, $", Name = ", ConsoleColor.Cyan, imageName, ConsoleColor.White, $", Alias = ", ConsoleColor.Cyan, imageAliasName);
                     CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE);
                     CliLog.WriteWarning(ConsoleColor.Green, CliAction.REGISTER.Trim());
                     CliLog.Write(ConsoleColor.White, " Image Type ", ConsoleColor.Blue, imageType, ConsoleColor.White, $", Name = ", ConsoleColor.Cyan, imageName, ConsoleColor.White, $", Alias = ", ConsoleColor.Cyan, imageAliasName);
@@ -620,7 +625,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     if (attributes == null || (attributes != (imageAttributes.Trim() == "*" ? null : imageAttributes) && imageAttributes.Length != 0))
                     {
                         pluginImage["sdkmessageprocessingstepimageid"] = rows.Entities[0].Id;
-                        //CliLog.WriteLineWarning(SPACE, SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.UPDATED, ConsoleColor.White, "Image Type ", ConsoleColor.Blue, imageType, ConsoleColor.White, $", Name = ", ConsoleColor.Cyan, imageName, ConsoleColor.White, $", Alias = ", ConsoleColor.Cyan, imageAliasName);
                         CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE);
                         CliLog.WriteWarning(ConsoleColor.Green, CliAction.UPDATED.Trim());
                         CliLog.WriteLine(ConsoleColor.White, " Image Type ", ConsoleColor.Blue, imageType, ConsoleColor.White, $", Name = ", ConsoleColor.Cyan, imageName, ConsoleColor.White, $", Alias = ", ConsoleColor.Cyan, imageAliasName);
@@ -784,13 +788,11 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     Target = pluginStep
                 };
                 request.Parameters.Add("SolutionUniqueName", Json.solution);
-                //CliLog.WriteLineWarning(SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.REGISTER, ConsoleColor.White, $"Step ", ConsoleColor.Blue, attribute.Message, " ", ConsoleColor.Cyan, attribute.Name);
                 CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE);
                 CliLog.WriteWarning(ConsoleColor.Green, CliAction.REGISTER.Trim());
                 CliLog.WriteLine(ConsoleColor.White, $" Step ", ConsoleColor.Blue, attribute.Message, " ", ConsoleColor.Cyan, attribute.Name);
                 if (IsMessageUpdate(attribute.Message))
                 {
-                    //CliLog.WriteLineWarning(SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, " ",ConsoleColor.White, "Update Fields: ", ConsoleColor.Green, attribute.FilteringAttributes ?? "*");
                     CliLog.WriteLine(SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, " ", ConsoleColor.White, "Update Fields: ", ConsoleColor.Green, attribute.FilteringAttributes ?? "*");
                 }
                 try
@@ -879,13 +881,11 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     request.Parameters.Add("SolutionUniqueName", Json.solution);
                     if (attribute.Action == PluginStepOperationEnum.Activate)
                     {
-                        //CliLog.WriteLineWarning(SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.UPDATED, ConsoleColor.White, $"Step ", ConsoleColor.Blue, attribute.Message, " ", ConsoleColor.Cyan, attribute.Name);
                         CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE);
                         CliLog.WriteWarning(ConsoleColor.Green, CliAction.UPDATED.Trim());
                         CliLog.WriteLine(ConsoleColor.White, $" Step ", ConsoleColor.Blue, attribute.Message, " ", ConsoleColor.Cyan, attribute.Name);
                         if (IsMessageUpdate(attribute.Message))
                         {
-                            //CliLog.WriteLineWarning(SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, ConsoleColor.White, "Update Fields: ", ConsoleColor.Green, attribute.FilteringAttributes ?? "*");
                             CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, ConsoleColor.White, "Update Fields: ", ConsoleColor.Green, attribute.FilteringAttributes ?? "*");
                         }
                     }
@@ -893,7 +893,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     {
                         if (IsMessageUpdate(attribute.Message))
                         {
-                            //CliLog.WriteLineWarning(SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, ConsoleColor.White, "Update Fields: ", ConsoleColor.Green, attribute.FilteringAttributes ?? "*");
                             CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, ConsoleColor.White, "Update Fields: ", ConsoleColor.Green, attribute.FilteringAttributes ?? "*");
                         }
                     }
@@ -933,13 +932,12 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 update["statecode"] = new OptionSetValue(1);
                 update["statuscode"] = new OptionSetValue(2);
                 await ServiceClient.UpdateAsync(update);
-                //CliLog.WriteLineWarning(SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.DEACTIVATED, ConsoleColor.White, $"Step ", ConsoleColor.Blue, attribute.Message, " ", ConsoleColor.Cyan, attribute.Name);
                 CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE);
                 CliLog.WriteWarning(ConsoleColor.Green, CliAction.DEACTIVATED.Trim());
                 CliLog.WriteLine(ConsoleColor.White, $" Step ", ConsoleColor.Blue, attribute.Message, " ", ConsoleColor.Cyan, attribute.Name);
                 if (IsMessageUpdate(attribute.Message))
                 {
-                    CliLog.WriteLineWarning(SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, ConsoleColor.White, "Update Fields: ", ConsoleColor.Green, attribute.FilteringAttributes ?? "*");
+                    CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, ConsoleColor.White, "Update Fields: ", ConsoleColor.Green, attribute.FilteringAttributes ?? "*");
                 }
             }
             else if (
@@ -951,10 +949,12 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 update["statecode"] = new OptionSetValue(0);
                 update["statuscode"] = new OptionSetValue(1);
                 await ServiceClient.UpdateAsync(update);
-                CliLog.WriteLineWarning(SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.ACTIVATED, ConsoleColor.White, $"Step ", ConsoleColor.Blue, attribute.Message, " ", ConsoleColor.Cyan, attribute.Name);
+                CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE);
+                CliLog.WriteWarning(ConsoleColor.Green, CliAction.ACTIVATED.Trim());
+                CliLog.WriteLine(ConsoleColor.White, $" Step ", ConsoleColor.Blue, attribute.Message, " ", ConsoleColor.Cyan, attribute.Name);
                 if (IsMessageUpdate(attribute.Message))
                 {
-                    CliLog.WriteLineWarning(SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, ConsoleColor.White, "Update Fields: ", ConsoleColor.Green, attribute.FilteringAttributes ?? "*");
+                    CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, ConsoleColor.White, "Update Fields: ", ConsoleColor.Green, attribute.FilteringAttributes ?? "*");
                 }
             }
             return pluginStepId;
@@ -1163,7 +1163,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     Target = pluginType
                 };
                 request.Parameters.Add("SolutionUniqueName", Json.solution);
-                //CliLog.WriteLineWarning(SPACE, SPACE, ConsoleColor.Green, CliAction.REGISTER, ConsoleColor.White, ConsoleColor.White, "Type ", ConsoleColor.Blue, attribute.PluginType, " ", ConsoleColor.Cyan, type.FullName);
                 CliLog.Write(ConsoleColor.White, "|", SPACE);
                 CliLog.WriteWarning(ConsoleColor.Green, CliAction.REGISTER.Trim());
                 CliLog.WriteLine(ConsoleColor.White, " Type ", ConsoleColor.Blue, attribute.PluginType, " ", ConsoleColor.Cyan, type.FullName);
@@ -1197,7 +1196,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     }
                     else
                     {
-                        //CliLog.WriteLineWarning(SPACE, SPACE, ConsoleColor.Green, CliAction.UPDATED, ConsoleColor.White, ConsoleColor.White, "Type ", ConsoleColor.Blue, attribute.PluginType, " ", ConsoleColor.Cyan, type.FullName);
                         CliLog.Write(ConsoleColor.White, "|", SPACE);
                         CliLog.WriteWarning(ConsoleColor.Green, CliAction.UPDATED.Trim());
                         CliLog.WriteLine(ConsoleColor.White, " Type ", ConsoleColor.Blue, attribute.PluginType, " ", ConsoleColor.Cyan, type.FullName);
@@ -1652,7 +1650,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     entity["version"] = packageArchiveReader.NuspecReader.GetVersion().ToFullString();
                     var request = new CreateRequest { Target = entity };
                     request.Parameters.Add("SolutionUniqueName", Json.solution);
-                    CliLog.WriteLineWarning(ConsoleColor.Cyan, new FileInfo(file).Name);
+                    CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, $"{Path.GetFileName(file)}");
                     await ServiceClient.ExecuteAsync(request);
                 }
                 catch (FaultException fe)
@@ -1667,7 +1665,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 var oldContent = entity.GetAttributeValue<string>("content");
                 if (IsEqualsContent(oldContent, newContent))
                 {
-                    CliLog.WriteLineWarning(ConsoleColor.Cyan, new FileInfo(file).Name);
+                    CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, $"{Path.GetFileName(file)}");
                 }
                 else
                 {
@@ -1679,7 +1677,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         update["version"] = packageArchiveReader.NuspecReader.GetVersion().ToFullString();
                         var request = new UpdateRequest { Target = update };
                         request.Parameters.Add("SolutionUniqueName", Json.solution);
-                        CliLog.WriteLineWarning(ConsoleColor.Cyan, new FileInfo(file).Name);
+                        CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, $"{Path.GetFileName(file)}");
                         await ServiceClient.ExecuteAsync(request);
                     }
                     catch (FaultException fe)
