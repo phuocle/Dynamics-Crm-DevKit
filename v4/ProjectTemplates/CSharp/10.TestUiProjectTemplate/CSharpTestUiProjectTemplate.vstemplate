@@ -22,7 +22,7 @@
       <ProjectItem ReplaceParameters="true" TargetFileName="packages.config">_packages.config</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="App.config">App.config</ProjectItem>
 	  <ProjectItem ReplaceParameters="true" TargetFileName="$SafeProjectName$.runsettings">UiTest.runsettings</ProjectItem>
-      <ProjectItem ReplaceParameters="true">AppSettings.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="App.cs">App.cs</ProjectItem>
     </Project>
   </TemplateContent>
   <WizardExtension>
