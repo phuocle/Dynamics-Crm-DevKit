@@ -35,7 +35,7 @@ namespace Dev.DevKitV4.Server.CustomApis
         {
             var outputs = new ParameterCollection();
             //YOUR CUSTOM ACTION BEGIN HERE
-
+            var t = string.Empty;
             return outputs;
         }
     }
