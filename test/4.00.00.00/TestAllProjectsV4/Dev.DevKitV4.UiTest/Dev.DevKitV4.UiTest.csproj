@@ -7,7 +7,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{9DC6DFE1-AC79-43F5-8F85-CCEE27DDDBE1}</ProjectGuid>
+    <ProjectGuid>{B57641F3-A97B-43C1-9DB7-B3DBAFF372AB}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Dev.DevKitV4.UiTest</RootNamespace>
@@ -262,7 +262,7 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestSettings.cs" />
-    <Compile Include="AppSettings.cs" />
+    <Compile Include="App.cs" />
     <None Include="App.config" />
     <None Include="packages.config" />
     <None Include="Dev.DevKitV4.UiTest.runsettings" />
