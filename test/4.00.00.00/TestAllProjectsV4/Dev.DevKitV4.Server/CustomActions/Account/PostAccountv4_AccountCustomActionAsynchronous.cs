@@ -4,7 +4,7 @@ using System;
 
 namespace Dev.DevKitV4.Server.CustomActions.Account
 {
-    [CrmPluginRegistration("v4_AccountCustomAction", "account", StageEnum.PostOperation, ExecutionModeEnum.Asynchronous, "", "Dev.DevKitV4.Server.CustomActions.Account.PostAccountv4_AccountCustomActionAsynchronous", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.CustomAction, DeleteAsyncOperation = true)]
+    [CrmPluginRegistration("v4_AccountCustomAction", "account", StageEnum.PostOperation, ExecutionModeEnum.Asynchronous, "", "Dev.DevKitV4.Server.CustomActions.Account.PostAccountv4_AccountCustomActionAsynchronous", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.CustomAction, DeleteAsyncOperation = true, Unregister = true)]
     public class PostAccountv4_AccountCustomActionAsynchronous : IPlugin
     {
         /*

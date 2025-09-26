@@ -5,7 +5,7 @@ using System;
 
 namespace Dev.DevKitV4.Server.DataProviders.Sql
 {
-    [CrmPluginRegistration("Dev.DevKitV4.Server.DataProviders.Sql.Delete", "Delete", PluginType.DataProvider, DataSource = "v4_sql_datasource")]
+    [CrmPluginRegistration("Dev.DevKitV4.Server.DataProviders.Sql.Delete", "Delete", PluginType.DataProvider, DataSource = "v4_sql_datasource", Unregister = true)]
     public class Delete : IPlugin
     {
         /*

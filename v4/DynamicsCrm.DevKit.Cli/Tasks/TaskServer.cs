@@ -14,6 +14,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Remoting.Messaging;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
 using System.Threading.Tasks;
@@ -159,7 +160,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 var attributes = GetCrmPluginRegistrationAttributes(type);
                 if (attributes[0].Unregister)
                 {
-                    await UnregisterPluginTypeAsync(pluginAssemblyId.Value, type, attributes[0], deployFileType);
+                    var error = await UnregisterPluginTypeAsync(pluginAssemblyId.Value, type, attributes[0], deployFileType);
+                    if (error) return;
                     CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE);
                     CliLog.WriteSuccess(ConsoleColor.White, CliAction.UNREGISTER.Trim());
                     CliLog.Write(ConsoleColor.White, $" Type ", ConsoleColor.Blue, attributes[0].PluginType, " ", ConsoleColor.Cyan, type.FullName);
@@ -1028,7 +1030,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             return rows.Entities[0];
         }
 
-        private async Task UnregisterPluginTypeAsync(Guid pluginAssemblyId, TypeInfo type, CrmPluginRegistrationAttribute attribute, DeployFileType deployFileType)
+        private async Task<bool> UnregisterPluginTypeAsync(Guid pluginAssemblyId, TypeInfo type, CrmPluginRegistrationAttribute attribute, DeployFileType deployFileType)
         {
             var fetchData = new
             {
@@ -1044,11 +1046,19 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
   </entity>
 </fetch>";
             var rows = await ServiceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
-            if (rows.Entities.Count != 1) return;
+            if (rows.Entities.Count != 1) return false ;
             var pluginTypeId = rows.Entities[0].GetAttributeValue<Guid>("plugintypeid");
-            await DeletePluginStepsAsync();
-            await ServiceClient.DeleteAsync("plugintype", pluginTypeId);
-            return;
+            try
+            {
+                await DeletePluginStepsAsync();
+                await ServiceClient.DeleteAsync("plugintype", pluginTypeId);
+            }
+            catch(FaultException fe)
+            {
+                CliLog.WriteLineError(ConsoleColor.Yellow, $"Unregister {type.FullName} failed: {fe.Message} Assemply deployed, but the deployment of this assembly stopped.");
+                return true;
+            }
+            return false;
             async Task DeletePluginStepsAsync()
             {
                 var fetchXml = $@"
@@ -1288,7 +1298,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     }
                     catch (FaultException fe)
                     {
-                        CliLog.WriteLineError(ConsoleColor.Yellow, $"{fe.Message}. Assemply deployed, but the deployment of this assembly stopped.");
+                        CliLog.WriteLineError(ConsoleColor.Yellow, $"{fe.Message} Assemply deployed, but the deployment of this assembly stopped.");
                         return null;
                     }
                 }
