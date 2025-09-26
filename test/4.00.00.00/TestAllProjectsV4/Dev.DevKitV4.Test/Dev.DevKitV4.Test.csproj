@@ -262,8 +262,9 @@
     <Analyzer Include="..\packages\MSTest.Analyzers.3.10.4\analyzers\dotnet\cs\MSTest.Analyzers.CodeFixes.dll" />
     <Analyzer Include="..\packages\MSTest.Analyzers.3.10.4\analyzers\dotnet\cs\MSTest.Analyzers.dll" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Workflows\" />
+    <Compile Include="Workflows\SendEmailByQueueTest.cs" />
   </ItemGroup>
   <Import Project="..\Dev.DevKitV4.Shared.Test\Dev.DevKitV4.Shared.Test.projitems" Label="Shared" Condition="Exists('..\Dev.DevKitV4.Shared.Test\Dev.DevKitV4.Shared.Test.projitems')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
