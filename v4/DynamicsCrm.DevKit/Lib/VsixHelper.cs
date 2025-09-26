@@ -513,6 +513,7 @@ namespace DynamicsCrm.DevKit.Lib
                 if (item == null) continue;
                 string name = item.Name;
                 if (string.IsNullOrEmpty(name)) continue;
+                if (!name.EndsWith(".cs")) continue;
                 var nameWithoutExt = System.IO.Path.GetFileNameWithoutExtension(name);
                 if (nameWithoutExt.Equals(baseName, StringComparison.OrdinalIgnoreCase))
                 {
