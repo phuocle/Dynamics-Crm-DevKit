@@ -138,6 +138,9 @@
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.13.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="Niam.XRM.Framework, Version=9.0.2.27, Culture=neutral, PublicKeyToken=95ffda3bd4333fd3, processorArchitecture=MSIL">
+      <HintPath>..\packages\Niam.XRM.Framework.9.0.2.27\lib\net462\Niam.XRM.Framework.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Activities" />
@@ -148,6 +151,7 @@
     <Reference Include="System.Collections.Immutable, Version=9.0.0.9, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Collections.Immutable.9.0.9\lib\net462\System.Collections.Immutable.dll</HintPath>
     </Reference>
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Configuration.ConfigurationManager, Version=9.0.0.9, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Configuration.ConfigurationManager.9.0.9\lib\net462\System.Configuration.ConfigurationManager.dll</HintPath>
@@ -241,14 +245,25 @@
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
+    <ProjectReference Include="..\Dev.DevKitV4.Package\Dev.DevKitV4.Package.csproj">
+      <Project>{3c3b4758-5500-76b4-6cae-5ca9b2d82588}</Project>
+      <Name>Dev.DevKitV4.Package</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Dev.DevKitV4.ProxyTypes\Dev.DevKitV4.ProxyTypes.csproj">
       <Name>Dev.DevKitV4.ProxyTypes</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Dev.DevKitV4.Server\Dev.DevKitV4.Server.csproj">
+      <Project>{5d928e51-5b85-45ea-bdf8-00e40da6745b}</Project>
+      <Name>Dev.DevKitV4.Server</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\DynamicsCrm.DevKit.Analyzers.4.0.0\analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />
     <Analyzer Include="..\packages\MSTest.Analyzers.3.10.4\analyzers\dotnet\cs\MSTest.Analyzers.CodeFixes.dll" />
     <Analyzer Include="..\packages\MSTest.Analyzers.3.10.4\analyzers\dotnet\cs\MSTest.Analyzers.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Workflows\" />
   </ItemGroup>
   <Import Project="..\Dev.DevKitV4.Shared.Test\Dev.DevKitV4.Shared.Test.projitems" Label="Shared" Condition="Exists('..\Dev.DevKitV4.Shared.Test\Dev.DevKitV4.Shared.Test.projitems')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
