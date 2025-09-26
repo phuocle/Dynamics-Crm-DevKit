@@ -28,7 +28,8 @@ namespace $NameSpace$
         private static void DebugWorkflow()
         {
             //var json = "";
-            //Helper.DebugWorkflowWith<???>(json, App.Service);
+            //var inputs = new Dictionary<string, object> { };
+            //Helper.DebugWorkflowWith<???>(json, App.Service, inputs);
         }
     }
 }

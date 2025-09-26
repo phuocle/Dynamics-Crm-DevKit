@@ -22,23 +22,23 @@ namespace Dev.DevKitV4.Server.Workflows
         protected override void Execute(CodeActivityContext executionContext)
         {
             var workflowContext = executionContext.GetExtension<IWorkflowContext>();
-            var tracing = executionContext.GetExtension<ITracingService>();
             var serviceFactory = executionContext.GetExtension<IOrganizationServiceFactory>();
             var serviceAdmin = serviceFactory.CreateOrganizationService(null);
             var service = serviceFactory.CreateOrganizationService(workflowContext.UserId);
+            var tracing = executionContext.GetExtension<ITracingService>();
 
             tracing?.DebugContext(workflowContext);
 
-            ExecuteWorkflow(workflowContext, serviceFactory, serviceAdmin, service, tracing);
+            ExecuteWorkflow(executionContext, workflowContext, serviceFactory, serviceAdmin, service, tracing);
         }
 
-        public void ExecuteWorkflow(IWorkflowContext workflowContext, IOrganizationServiceFactory serviceFactory, IOrganizationService serviceAdmin, IOrganizationService service, ITracingService tracing)
+        public void ExecuteWorkflow(CodeActivityContext executionContext, IWorkflowContext workflowContext, IOrganizationServiceFactory serviceFactory, IOrganizationService serviceAdmin, IOrganizationService service, ITracingService tracing)
         {
             var targetEntity = workflowContext.InputParameters["Target"] as Entity;
             workflowContext.PreEntityImages.TryGetValue("PreBusinessEntity", out Entity preEntity);
             workflowContext.PostEntityImages.TryGetValue("PostBusinessEntity", out Entity postEntity);
             //YOUR WORKFLOW-CODE GO HERE
-            var t = string.Empty;
+
         }
     }
 }

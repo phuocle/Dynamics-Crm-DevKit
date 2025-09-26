@@ -11,8 +11,8 @@ namespace Dev.DevKitV4.Console
         {
             //DebugPackage.DebugContact.PreContactCreateSynchronousPackage();
             //DebugPackage.DebugContact.PreContactCreateSynchronousPackage2();
-            //DebugWorkflow.SendEmailByQueue();
-            DebugAccount.PreValidationAccountCreateSynchronous();
+            DebugWorkflow.SendEmailByQueue();
+            //DebugAccount.PreValidationAccountCreateSynchronous();
         }
     }
 }

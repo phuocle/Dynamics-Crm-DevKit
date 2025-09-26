@@ -232,30 +232,19 @@ namespace $NameSpace$.Lib
         //    });
         //    return serviceFactory;
         //}
-        //public static void DebugWorkflowWith<T>(string json, ServiceClient service) where T : CodeActivity, new()
+        //public static void DebugWorkflowWith<T>(string json, ServiceClient service, Dictionary<string, object> inputs = null) where T : CodeActivity, new()
         //{
         //    var remoteExecutionContext = DeserializeRemoteExecutionContext(json);
         //    var workflowContext = CreateMockWorkflowContext(remoteExecutionContext);
-        //    var tracingService = Substitute.For<ITracingService>();
         //    var serviceFactory = CreateMockServiceFactory(service);
-        //    var workflow = new T();
-        //    var executeWorkflowMethod = typeof(T).GetMethod("ExecuteWorkflow", BindingFlags.Public | BindingFlags.Instance);
-        //    if (executeWorkflowMethod != null)
-        //    {
-        //        var serviceAdmin = serviceFactory.CreateOrganizationService(null);
-        //        var serviceUser = serviceFactory.CreateOrganizationService(workflowContext.UserId);
-        //        executeWorkflowMethod.Invoke(workflow, new object[] {
-        //            workflowContext,
-        //            serviceFactory,
-        //            serviceAdmin,
-        //            serviceUser,
-        //            tracingService
-        //        });
-        //    }
-        //    else
-        //    {
-        //        System.Console.WriteLine("Could not find ExecuteWorkflow method to invoke. Make sure the method is public.");
-        //    }
+        //    var instance = new T();
+        //    var invoker = new WorkflowInvoker(instance);
+        //    invoker.Extensions.Add<ITracingService>(() => Substitute.For<TracingServiceFake>());
+        //    invoker.Extensions.Add<IWorkflowContext>(() => workflowContext);
+        //    invoker.Extensions.Add<IOrganizationServiceFactory>(() => serviceFactory);
+        //    invoker.Extensions.Add<IServiceEndpointNotificationService>(() => Substitute.For<IServiceEndpointNotificationService>());
+        //    if (inputs == null) inputs = new Dictionary<string, object>();
+        //    invoker.Invoke(inputs);
         //}
 
         #endregion
