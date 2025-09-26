@@ -1170,7 +1170,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     Target = pluginType
                 };
                 request.Parameters.Add("SolutionUniqueName", Json.solution);
-                CliLog.Write(ConsoleColor.White, "|", SPACE);
+                CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE);
                 CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTER.Trim());
                 CliLog.WriteLine(ConsoleColor.White, " Type ", ConsoleColor.Blue, attribute.PluginType, " ", ConsoleColor.Cyan, type.FullName);
                 var response = (CreateResponse)await ServiceClient.ExecuteAsync(request);
@@ -1203,7 +1203,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     }
                     else
                     {
-                        CliLog.Write(ConsoleColor.White, "|", SPACE);
+                        CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE);
                         CliLog.WriteSuccess(ConsoleColor.White, CliAction.UPDATED.Trim());
                         CliLog.WriteLine(ConsoleColor.White, " Type ", ConsoleColor.Blue, attribute.PluginType, " ", ConsoleColor.Cyan, type.FullName);
                     }

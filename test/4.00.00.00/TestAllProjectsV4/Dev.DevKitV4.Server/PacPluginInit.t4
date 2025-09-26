@@ -1,0 +1,47 @@
+﻿using Microsoft.Xrm.Sdk;
+using System;
+using <#=Context.PluginSharedNameSpace#>;
+
+namespace <#=Context.PluginNameSpace#>
+{
+    /// <summary>
+    /// Plugin development guide: https://docs.microsoft.com/powerapps/developer/common-data-service/plug-ins
+    /// Best practices and guidance: https://docs.microsoft.com/powerapps/developer/common-data-service/best-practices/business-logic/
+    /// </summary>
+    [CrmPluginRegistration("<#=Context.PluginMessage#>", "<#=Context.PluginLogicalName#>", StageEnum.<#=Context.PluginStage#>, ExecutionModeEnum.<#=Context.PluginExecution#>, "", "<#=Context.PluginNameSpace#>.<#=Context.Class#><#if(Context.PluginOrder!=1){#><#=Context.PluginOrder#><#}#>", <#=Context.PluginOrder#>, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin<#if(Context.PluginExecution=="Asynchronous"){#>, DeleteAsyncOperation = true<#}#><#if(Context.IsPluginSupportedPreImage){#>, Image1Name = "PreImage", Image1Alias = "PreImage", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "*"<#}#><#if(Context.IsPluginSupportedPostImage){#><#if(Context.IsPluginSupportedPreImage){#>, Image2Name = "PostImage", Image2Alias = "PostImage", Image2Type = ImageTypeEnum.PostImage, Image2Attributes = "*"<#} else {#>, Image1Name = "PostImage", Image1Alias = "PostImage", Image1Type = ImageTypeEnum.PostImage, Image1Attributes = "*"<#}#><#}#>)]
+    public class <#=Context.Class#><#if(Context.PluginOrder!=1){#><#=Context.PluginOrder#><#}#> : PluginBase
+    {
+        /*
+<#=Context.PluginComment#>
+        */
+        public <#=Context.Class#><#if(Context.PluginOrder!=1){#><#=Context.PluginOrder#><#}#>(string unsecureConfiguration, string secureConfiguration)
+            : base(typeof(<#=Context.Class#><#if(Context.PluginOrder!=1){#><#=Context.PluginOrder#><#}#>))
+        {
+            // TODO: Implement your custom configuration handling
+            // https://docs.microsoft.com/powerapps/developer/common-data-service/register-plug-in#set-configuration-data
+        }
+
+        // Entry point for custom business logic execution
+        protected override void ExecuteDataversePlugin(ILocalPluginContext localPluginContext)
+        {
+            if (localPluginContext == null)
+            {
+                throw new ArgumentNullException(nameof(localPluginContext));
+            }
+            var context = localPluginContext.PluginExecutionContext;
+            localPluginContext.TracingService.DebugContext(context);
+
+            // TODO: Implement your custom business logic
+            // Check for the entity on which the plugin would be registered
+            //if (context.InputParameters.Contains("Target") && context.InputParameters["Target"] is Entity)
+            //{
+            //    var entity = (Entity)context.InputParameters["Target"];
+            //    // Check for entity name on which this plugin would be registered
+            //    if (entity.LogicalName == "<#=Context.PluginLogicalName#>")
+            //    {
+            //
+            //    }
+            //}
+        }
+    }
+}

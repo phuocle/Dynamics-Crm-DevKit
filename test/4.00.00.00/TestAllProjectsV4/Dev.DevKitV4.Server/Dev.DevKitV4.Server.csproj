@@ -63,6 +63,7 @@
     <Compile Include="DataProviders\Sql\Retrieve.cs" />
     <Compile Include="DataProviders\Sql\RetrieveMultiple.cs" />
     <Compile Include="DataProviders\Sql\Update.cs" />
+    <Compile Include="PluginBase.cs" />
     <Compile Include="Plugins\Account\PostAccountCreateAsynchronous.cs" />
     <Compile Include="Plugins\Account\PostAccountPurgeRetainedContentAsynchronous.cs" />
     <Compile Include="Plugins\Account\PreAccountCreateSynchronous.cs" />
@@ -94,6 +95,7 @@
     <Compile Include="Plugins\Email\Pre\PreEmailDeliverPromoteSynchronous.cs" />
     <Compile Include="Plugins\Email\Pre\PreEmailRouteSynchronous.cs" />
     <Compile Include="Plugins\Email\Pre\PreEmailSendSynchronous.cs" />
+    <Compile Include="Plugins\Team\PostTeamCreateAsynchronous.cs" />
     <Compile Include="Workflows\SendEmailByQueue.cs" />
     <None Include="deploy.datasource.bat" />
     <None Include="packages.config" />
@@ -101,6 +103,7 @@
     <None Include="deploy.debug.bat" />
     <None Include="deploy.debug.only.bat" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <None Include="PacPluginInit.t4" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\DynamicsCrm.DevKit.Analyzers.4.0.0\analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />
