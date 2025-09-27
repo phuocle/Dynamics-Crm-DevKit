@@ -11,7 +11,7 @@ using System.Runtime.InteropServices;
 #endif
 [assembly: AssemblyCompany("PhuocLe")]
 [assembly: AssemblyProduct("DynamicsCrm.DevKit")]
-[assembly: AssemblyCopyright("Copyright © PhuocLe 2016 - 2036")]
+[assembly: AssemblyCopyright("Copyright © PhuocLe 2016 - 2026")]
 [assembly: AssemblyTrademark("PhuocLe")]
 [assembly: ComVisible(false)]
 [assembly: AssemblyVersion("4.00.00.00")]

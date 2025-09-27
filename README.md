@@ -1,5 +1,5 @@
 ﻿
-# DynamicsCrm.DevKit v.x.xx.xx.xx contains:
+# DynamicsCrm.DevKit v4.00.00.00 contains:
 * [17 Visual Studio projects template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Projects-Template)
     * [01. Shared Project](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Shared-Project-Template)
     * [02. Console Project](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Console-Project-Template)
@@ -49,7 +49,7 @@
 ![Form](/v3/images/form.gif)
 
 ## Deploy webresource from Visual Studio
-![Form](/v3/images/webresouce.gif)
+![Form](/v3/images/webresource.gif)
 
 ## Deploy report from Visual Studio
 ![Form](/v3/images/report.gif)
