@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 #endif
 [assembly: AssemblyCompany("PhuocLe")]
 [assembly: AssemblyProduct("DynamicsCrm.DevKit.Analyzers")]
-[assembly: AssemblyCopyright("Copyright © PhuocLe 2016 - 2026")]
+[assembly: AssemblyCopyright("Copyright © PhuocLe 2016 - 2036")]
 [assembly: AssemblyTrademark("PhuocLe")]
 [assembly: AssemblyCulture("en")]
 [assembly: ComVisible(false)]
