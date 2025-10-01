@@ -155,6 +155,11 @@ declare namespace DevKit {
              */
             readonly UserPrivilege: DevKit.FieldUserPrivilege;
             /**
+             * Returns an array of objects, where each object has a name and value property. The array represents the current output parameter values for a custom control
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getoutputs
+             */
+            readonly Outputs: Array<{ name: string; value: any }>;
+            /**
              * Get/Set a value indicating whether a value for the attribute is required or recommended
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getrequiredlevel
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/setrequiredlevel

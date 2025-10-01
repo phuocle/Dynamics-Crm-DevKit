@@ -248,33 +248,21 @@ namespace DynamicsCrm.DevKit.Shared
                     var values = attribute.OptionSetValues();
                     if (values.Count == 0)
                     {
-                        code += $"{TAB}{TAB}{attribute.SchemaName} : {{{NEW_LINE}";
-                        code = code.TrimEnd($",{NEW_LINE}".ToCharArray());
-                        code += $"{NEW_LINE}";
-                        code += $"{TAB}{TAB}}},{NEW_LINE}";
+                        code += $"{TAB}{TAB}{attribute.SchemaName} : {{ }},{NEW_LINE}";
                     }
                     else
                     {
-                        code += $"{TAB}{TAB}{attribute.SchemaName} : {{{NEW_LINE}";
+                        code += $"{TAB}{TAB}{attribute.SchemaName} : {{ ";
                         foreach (var value in values)
                         {
-                            code += $"{TAB}{TAB}{TAB}{value.Name}: {value.Value},{NEW_LINE}";
+                            code += $"{value.Name}: {value.Value}, ";
                         }
-                        code = code.TrimEnd($",{NEW_LINE}".ToCharArray());
-                        code += $"{NEW_LINE}";
-                        code += $"{TAB}{TAB}}},{NEW_LINE}";
+                        code = code.TrimEnd($", ".ToCharArray());
+                        code += $" }},{NEW_LINE}";
                     }
                 }
             }
-            code += $"{TAB}{TAB}RollupState : {{{NEW_LINE}";
-            code += $"{TAB}{TAB}{TAB}NotCalculated: 0,{NEW_LINE}";
-            code += $"{TAB}{TAB}{TAB}Calculated: 1,{NEW_LINE}";
-            code += $"{TAB}{TAB}{TAB}OverflowError: 2,{NEW_LINE}";
-            code += $"{TAB}{TAB}{TAB}OtherError: 3,{NEW_LINE}";
-            code += $"{TAB}{TAB}{TAB}RetryLimitExceeded: 4,{NEW_LINE}";
-            code += $"{TAB}{TAB}{TAB}HierarchicalRecursionLimitReached: 5,{NEW_LINE}";
-            code += $"{TAB}{TAB}{TAB}LoopDetected: 6{NEW_LINE}";
-            code += $"{TAB}{TAB}}}{NEW_LINE}";
+            code += $"{TAB}{TAB}RollupState: {{ NotCalculated: 0, Calculated: 1, OverflowError: 2, OtherError: 3, RetryLimitExceeded: 4, HierarchicalRecursionLimitReached: 5, LoopDetected: 6 }}{NEW_LINE}";
             code += $"{TAB}}};{NEW_LINE}";
             code += $"}})(OptionSet || (OptionSet = {{}}));";
             return code;
@@ -532,68 +520,7 @@ namespace DynamicsCrm.DevKit.Shared
             return code;
         }
 
-        public static async Task<string> GetDefaultFileWithFormAsync(ServiceClient CrmServiceClient, EntityMetadata entityMetadata, string rootnamespace)
-        {
-            string GetUnquieFormName(List<string> FormNames, string formName)
-            {
-                if (!FormNames.Contains(formName))
-                {
-                    FormNames.Add(formName);
-                    return formName;
-                }
-                else
-                {
-                    var count = FormNames.Count(x => x == formName) + 1;
-                    FormNames.Add(formName);
-                    return $"{formName}{count}";
-                }
-            }
-            var forms = await XrmHelper.GetEntityFormsAsync(CrmServiceClient, entityMetadata.LogicalName);
-            if (!forms.Any()) return GetDefaultFileWithWebApi(entityMetadata.SchemaName);
-            var @namespace = Helper.GetNameSpace(rootnamespace);
-            var code = string.Empty;
-            code += $"//@ts-check\r\n";
-            code += $"///<reference path=\"{entityMetadata.SchemaName}.d.ts\" />\r\n";
-            code += "\"use strict\";\r\n";
-            var formNames = new List<string>();
-            foreach (var form in forms)
-            {
-                var formName = Helper.GetFormName(form.Name, entityMetadata.SchemaName);
-                formName = GetUnquieFormName(formNames, formName);
-                var type = $"{@namespace}.Form{Helper.SafeIdentifier(formName)}";
-                code += $"var form{Helper.SafeIdentifier(formName)} = (function () {{\r\n";
-                code += $"\t\"use strict\";\r\n";
-                code += $"\t/** @type {type} */\r\n";
-                code += $"\tvar form = null;\r\n";
-                code += $"\t/** @param {{any}} executionContext */\r\n";
-                code += $"\tasync function onLoad(executionContext) {{\r\n";
-                code += $"\t\tform = new {type}(executionContext);\r\n";
-                code += $"\t\tregisterEvents();\r\n";
-                code += $"\t\tform.UiAddLoaded(UiAddLoaded);\r\n";
-                code += $"\t}}\r\n";
-                code += $"\tfunction registerEvents() {{\r\n";
-                code += $"\t\tif (form.ExecutionContext.IsInitialLoad()) {{\r\n";
-                code += $"\t\t}}\r\n";
-                code += $"\t}}\r\n";
-                code += $"\t//BEGIN ON LOAD ========================================================\r\n";
-                code += $"\tasync function UiAddLoaded(executionContext) {{\r\n";
-                code += $"\t}}\r\n";
-                code += $"\t//END ON LOAD ==========================================================\r\n";
-                code += $"\t//BEGIN ON CHANGE ======================================================\r\n";
-                code += $"\r\n";
-                code += $"\t//END ON CHANGE ========================================================\r\n";
-                code += $"\t//BEGIN PRE SEARCH =====================================================\r\n";
-                code += $"\r\n";
-                code += $"\t//END PRE SEARCH =======================================================\r\n";
-                code += $"\t//BEGIN OTHERS =========================================================\r\n";
-                code += $"\r\n";
-                code += $"\t//END OTHERS ===========================================================\r\n";
-                code += $"\treturn {{\r\n\t\tOnLoad: onLoad\r\n\t}};\r\n";
-                code += $"}})();\r\n";
-            }
-            code = code.TrimEnd("\r\n".ToCharArray());
-            return code;
-        }
+
 
         public static string GetDefaultFileWithWebApi(string schemaName)
         {

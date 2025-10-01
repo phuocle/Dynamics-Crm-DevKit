@@ -94,7 +94,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
         private static string GetWebApi_d_ts(string @namespace)
         {
             var _d_ts = string.Empty;
-            _d_ts += $"{TAB}class {EntityMetadata.SchemaName}Api {{{NEW_LINE}";
+            _d_ts += $"{TAB}export class {EntityMetadata.SchemaName}Api {{{NEW_LINE}";
             _d_ts += $"{TAB}{TAB}/**{NEW_LINE}";
             _d_ts += $"{TAB}{TAB}* DynamicsCrm.DevKit {EntityMetadata.SchemaName}Api{NEW_LINE}";
             _d_ts += $"{TAB}{TAB}* @param entity The entity object from OData response{NEW_LINE}";
@@ -495,7 +495,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                 _d_ts += form_d_ts_Body_QuickCreate;
             }
             _d_ts += $"{TAB}}}{NEW_LINE}";
-            _d_ts += $"{TAB}class Form{formName} extends DevKit.IForm {{{NEW_LINE}";
+            _d_ts += $"{TAB}export class Form{formName} extends DevKit.IForm {{{NEW_LINE}";
             _d_ts += $"{TAB}{TAB}/**{NEW_LINE}";
             _d_ts += $"{TAB}{TAB}* {form.Name} [Quick Create]{NEW_LINE}";
             _d_ts += $"{TAB}{TAB}* @param executionContext the execution context{NEW_LINE}";
@@ -555,7 +555,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                 _d_ts += form_d_ts_Grid;
             }
             _d_ts += $"{TAB}}}{NEW_LINE}";
-            _d_ts += $"{TAB}class Form{formName} extends DevKit.IForm {{{NEW_LINE}";
+            _d_ts += $"{TAB}export class Form{formName} extends DevKit.IForm {{{NEW_LINE}";
             _d_ts += $"{TAB}{TAB}/**{NEW_LINE}";
             _d_ts += $"{TAB}{TAB}* {form.Name} [Main Form]{NEW_LINE}";
             _d_ts += $"{TAB}{TAB}* @param executionContext the execution context{NEW_LINE}";

@@ -899,6 +899,12 @@ const devKit = (function () {
         loadNavigations(formContext, navigationObj);
         form.Navigation = navigationObj;
 
+        // Load Dialog Fields
+        var dialog = formConfig.dialog || [];
+        if (dialog.length > 0) {
+            form.Dialog = loadFormDialog(formContext, dialog);
+        }
+
         // Load Utility, ExecutionContext, and Others
         form.Utility = loadUtility(defaultWebResourceName);
         form.ExecutionContext = loadExecutionContext(executionContext);
