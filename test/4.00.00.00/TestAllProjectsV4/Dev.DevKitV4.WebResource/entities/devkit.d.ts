@@ -1571,7 +1571,7 @@ declare namespace DevKit {
     }
     /**
      * Provides methods to interact with Microsoft Copilot Studio topics (Preview feature)
-     * @link https://docs.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-copilot
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-copilot
      */
     interface Copilot {
         /**
@@ -1580,7 +1580,7 @@ declare namespace DevKit {
          * @param eventParameters Optional parameters to pass to the Copilot Studio topic
          * @param successCallback The function that will be called with the response from Copilot Studio
          * @param errorCallback The function that will be called if the operation fails
-         * @link https://docs.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-copilot/executeevent
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-copilot/executeevent
          */
         ExecuteEvent(eventName: string, eventParameters: any, successCallback: (result: Array<any>) => void, errorCallback?: (error: any) => void): void;
         /**
@@ -1588,7 +1588,7 @@ declare namespace DevKit {
          * @param eventName The name of the event configured in Copilot Studio
          * @param eventParameters Optional parameters to pass to the Copilot Studio topic
          * @returns Promise that resolves with the Copilot Studio response
-         * @link https://docs.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-copilot/executeevent
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-copilot/executeevent
          */
         ExecuteEvent(eventName: string, eventParameters?: any): Promise<Array<any>>;
         /**
@@ -1596,14 +1596,14 @@ declare namespace DevKit {
          * @param promptText The natural language prompt to send to Copilot Studio
          * @param successCallback The function that will be called with the response from Copilot Studio
          * @param errorCallback The function that will be called if the operation fails
-         * @link https://docs.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-copilot/executeprompt
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-copilot/executeprompt
          */
         ExecutePrompt(promptText: string, successCallback: (result: Array<any>) => void, errorCallback?: (error: any) => void): void;
         /**
          * Executes a Copilot Studio topic by sending a natural language prompt and returns a promise
          * @param promptText The natural language prompt to send to Copilot Studio
          * @returns Promise that resolves with the Copilot Studio response
-         * @link https://docs.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-copilot/executeprompt
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-copilot/executeprompt
          */
         ExecutePrompt(promptText: string): Promise<Array<any>>;
     }
@@ -2559,7 +2559,7 @@ declare namespace DevKit {
        readonly IsOffline: boolean;
         /**
         *  Returns information whether the network is available or not.
-        *  @link https://docs.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/client#isnetworkavailable
+        *  @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/client#isnetworkavailable
         */
         readonly IsNetworkAvailable: boolean;
     }
@@ -2938,7 +2938,7 @@ declare namespace DevKit {
         readonly WebApi: DevKit.WebApi;
         /**
          * Provides methods to interact with Microsoft Copilot Studio topics (Preview feature)
-         * @link https://docs.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-copilot
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-copilot
          */
         readonly Copilot: DevKit.Copilot;
     }
