@@ -216,6 +216,7 @@ const devKit = (function () {
         getter(field, 'Min', () => attribute?.getMin());
         getter(field, 'Object', () => control?.getObject());
         getter(field, 'Options', () => attribute?.getOptions());
+        getter(field, 'Outputs', () => control?.getOutputs());
         getter(field, 'SelectedOption', () => attribute?.getSelectedOption());
         getter(field, 'SelectedResults', () => control?.getSelectedResults());
         getter(field, 'State', () => control?.getState());
@@ -552,6 +553,62 @@ const devKit = (function () {
         utility.WebResourceUrl = webResourceName => getGlobalContext?.getWebResourceUrl(webResourceName);
         utility.XmlAttributeEncode = arg => getEncoding?.xmlAttributeEncode(arg);
         utility.XmlEncode = arg => getEncoding?.xmlEncode(arg);
+        // Xrm.WebApi namespace
+        getter(utility, 'WebApi', () => {
+            const obj = {};
+            const getWebApi = Xrm?.WebApi;
+            const getOnline = Xrm?.WebApi?.online;
+            const getOffline = Xrm?.WebApi?.offline;
+            obj.CreateRecord = function (entityLogicalName, data, successCallback, errorCallback) {
+                getWebApi?.createRecord(entityLogicalName, data)?.then(successCallback, errorCallback);
+            };
+            obj.DeleteRecord = function (entityLogicalName, id, successCallback, errorCallback) {
+                getWebApi?.deleteRecord(entityLogicalName, id)?.then(successCallback, errorCallback);
+            };
+            obj.RetrieveRecord = function (entityLogicalName, id, options, successCallback, errorCallback) {
+                getWebApi?.retrieveRecord(entityLogicalName, id, options)?.then(successCallback, errorCallback);
+            };
+            obj.RetrieveMultipleRecords = function (entityLogicalName, options, maxPageSize, successCallback, errorCallback) {
+                getWebApi?.retrieveMultipleRecords(entityLogicalName, options, maxPageSize)?.then(successCallback, errorCallback);
+            };
+            obj.UpdateRecord = function (entityLogicalName, id, data, successCallback, errorCallback) {
+                getWebApi?.updateRecord(entityLogicalName, id, data)?.then(successCallback, errorCallback);
+            };
+            obj.Execute = function (request, successCallback, errorCallback) {
+                getWebApi?.execute(request)?.then(successCallback, errorCallback);
+            };
+            obj.ExecuteMultiple = function (requests, successCallback, errorCallback) {
+                getWebApi?.executeMultiple(requests)?.then(successCallback, errorCallback);
+            };
+            getter(obj, 'Online', () => {
+                const online = {};
+                online.Execute = function (request, successCallback, errorCallback) {
+                    getOnline?.execute(request)?.then(successCallback, errorCallback);
+                };
+                online.ExecuteMultiple = function (requests, successCallback, errorCallback) {
+                    getOnline?.executeMultiple(requests)?.then(successCallback, errorCallback);
+                };
+                return online;
+            });
+            getter(obj, 'Offline', () => {
+                const offline = {};
+                offline.IsAvailable = entityLogicalName => getOffline?.isAvailable(entityLogicalName);
+                return offline;
+            });
+            return obj;
+        });
+        // Xrm.Copilot namespace (Preview)
+        getter(utility, 'Copilot', () => {
+            const obj = {};
+            const getCopilot = Xrm?.Copilot;
+            obj.ExecuteEvent = function (eventName, eventParameters, successCallback, errorCallback) {
+                getCopilot?.executeEvent(eventName, eventParameters)?.then(successCallback, errorCallback);
+            };
+            obj.ExecutePrompt = function (promptText, successCallback, errorCallback) {
+                getCopilot?.executePrompt(promptText)?.then(successCallback, errorCallback);
+            };
+            return obj;
+        });
         return utility;
     }
     function loadExecutionContext(executionContext) {
