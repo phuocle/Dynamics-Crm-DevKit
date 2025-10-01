@@ -874,7 +874,15 @@ const devKit = (function () {
         var quick = formConfig.quick || [];
         var quickLength = quick.length;
         for (var i = 0; i < quickLength; i++) {
-            quickFormObj[quick[i]] = {};
+            var parts = quick[i].split('___');
+            var quickFormName = parts[0];
+            var fieldName = parts[1];
+            if (!quickFormObj[quickFormName]) {
+                quickFormObj[quickFormName] = {};
+            }
+            if (fieldName) {
+                quickFormObj[quickFormName][fieldName] = {};
+            }
         }
         loadQuickForms(formContext, quickFormObj);
         form.QuickForm = quickFormObj;
@@ -898,6 +906,12 @@ const devKit = (function () {
         }
         loadNavigations(formContext, navigationObj);
         form.Navigation = navigationObj;
+
+        // Load Dialog Fields
+        var dialog = formConfig.dialog || [];
+        if (dialog.length > 0) {
+            form.Dialog = loadFormDialog(formContext, dialog);
+        }
 
         // Load Utility, ExecutionContext, and Others
         form.Utility = loadUtility(defaultWebResourceName);
@@ -925,7 +939,7 @@ const devKit = (function () {
         LoadFormV2: loadFormV2
     }
 })();
-let OptionSet;
+var OptionSet;
 (function (OptionSet) {
     OptionSet.FormType = {
         Undefined: 0,

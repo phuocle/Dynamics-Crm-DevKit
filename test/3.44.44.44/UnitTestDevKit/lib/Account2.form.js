@@ -216,12 +216,12 @@ var Tfsvn;
 			body: ["ActionCards", "Address1_Composite", "Address1_FreightTermsCode", "Address1_ShippingMethodCode", "ChildAccounts", "Contacts", "CreatedOn", "CreditLimit", "CreditOnHold", "Description", "devkit_CategoryCode", "DoNotBulkEMail", "DoNotEMail", "DoNotFax", "DoNotPhone", "DoNotPostalMail", "Fax", "FollowEmail", "IFRAME_PHUOCLE", "IndustryCode", "mapcontrol", "ModifiedOn", "Name", "Name1", "notescontrol", "OwnershipCode", "ParentAccountId", "PaymentTermsCode", "PreferredContactMethodCode", "PrimaryContactId", "PrimaryContactId1", "SIC", "Telephone1", "TickerSymbol", "TransactionCurrencyId", "WebSiteURL"],
 			tab: ["DETAILS_TAB___BILLING", "DETAILS_TAB___ChildAccounts", "DETAILS_TAB___COMPANY_PROFILE", "DETAILS_TAB___CONTACT_PREFERENCES", "DETAILS_TAB___DETAILS_TAB_section_6", "DETAILS_TAB___SHIPPING", "SUMMARY_TAB___ACCOUNT_INFORMATION", "SUMMARY_TAB___ADDRESS", "SUMMARY_TAB___MapSection", "SUMMARY_TAB___SOCIAL_PANE_TAB", "SUMMARY_TAB___Summary_section_6", "SUMMARY_TAB___SUMMARY_TAB_section_6"],
 			header: ["NumberOfEmployees", "OwnerId", "Revenue"],
-			bpf: ["BPF_Account___Name", "BPF_Account___Name1"],
-			quick: ["contactquickform"],
+			bpf: ["BPF_Account___Name", "BPF_Account___Name_1", "BPF_Account_v4_1___AccountNumber", "BPF_Account_v4_1___AccountRatingCode", "BPF_Account_v4_1___Address1_County", "BPF_Account_v4_1___Description", "BPF_Account_v4_1___Name", "BPF_Account_v4_1___SIC", ],
+			quick: ["contactquickform___EMailAddress1", "contactquickform___Telephone1"],
 			grid: ["ChildAccounts", "Contacts"],
-			navigation: ["account_adx_inviteredemptions", "account_adx_portalcomments", "Account_Appointments", "Account_Email_EmailSender", "Account_Email_SendersAccount", "Account_Emails", "account_msfp_alerts", "account_msfp_surveyinvites", "account_msfp_surveyresponses", "account_parent_account", "Account_Phonecalls", "Account_Tasks", "adx_invitation_assigntoaccount", "bpf_account_devkit_bpfaccount", "contact_customer_accounts", "msa_account_managingpartner", "msa_contact_managingpartner"]
+			navigation: ["account_adx_inviteredemptions", "account_adx_portalcomments", "Account_Appointments", "Account_Email_EmailSender", "Account_Email_SendersAccount", "Account_Emails", "account_msfp_alerts", "account_msfp_surveyinvites", "account_msfp_surveyresponses", "account_parent_account", "Account_Phonecalls", "Account_Tasks", "adx_invitation_assigntoaccount", "bpf_account_devkit_bpfaccount", "bpf_account_v4_bpf_account_v4_1", "contact_customer_accounts", "msa_account_managingpartner", "msa_contact_managingpartner"],
 		};
-		return devKit.LoadFormV2(executionContext, defaultWebResourceName, form);
+		devKit.LoadFormV2(executionContext, defaultWebResourceName, form);
 	};
 })(Tfsvn || (Tfsvn = {}));
 /** @namespace OptionSet */
