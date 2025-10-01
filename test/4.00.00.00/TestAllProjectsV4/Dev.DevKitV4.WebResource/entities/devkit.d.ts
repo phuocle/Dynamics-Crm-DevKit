@@ -1344,6 +1344,141 @@ declare namespace DevKit {
             message: string;
         }
     }
+    /**
+     * Provides methods to create and manage records using the Web API
+     * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-webapi
+     */
+    interface WebApi {
+        /**
+         * Creates an entity record
+         * @param entityLogicalName Logical name of the entity you want to create. For example: "account".
+         * @param data A JSON object defining the attributes and values for the new entity record.
+         * @param successCallback The function that will be passed through and be called by a successful response.
+         * @param errorCallback The function that will be passed through and be called by a failed response.
+         * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-webapi/createrecord
+         */
+        CreateRecord(entityLogicalName: string, data: any, successCallback?: (result: DevKit.EntityReference) => void, errorCallback?: (error: DevKit.WebApi.ErrorCallbackObject) => void): void;
+        /**
+         * Deletes an entity record
+         * @param entityLogicalName The entity logical name of the record you want to delete. For example: "account".
+         * @param id GUID of the entity record you want to delete.
+         * @param successCallback The function that will be passed through and be called by a successful response.
+         * @param errorCallback The function that will be passed through and be called by a failed response.
+         * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-webapi/deleterecord
+         */
+        DeleteRecord(entityLogicalName: string, id: string, successCallback?: (result: DevKit.EntityReference) => void, errorCallback?: (error: DevKit.WebApi.ErrorCallbackObject) => void): void;
+        /**
+         * Retrieves an entity record
+         * @param entityLogicalName The entity logical name of the record you want to retrieve. For example: "account".
+         * @param id GUID of the entity record you want to retrieve.
+         * @param options OData system query options, $select and $expand, to retrieve your data.
+         * @param successCallback The function that will be passed through and be called by a successful response.
+         * @param errorCallback The function that will be passed through and be called by a failed response.
+         * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-webapi/retrieverecord
+         */
+        RetrieveRecord(entityLogicalName: string, id: string, options?: string, successCallback?: (result: any) => void, errorCallback?: (error: DevKit.WebApi.ErrorCallbackObject) => void): void;
+        /**
+         * Retrieves a collection of entity records
+         * @param entityLogicalName The entity logical name of the records you want to retrieve. For example: "account".
+         * @param options OData system query options or FetchXML query to retrieve your data.
+         * @param maxPageSize Specify a positive number that indicates the number of entity records to be returned per page.
+         * @param successCallback The function that will be passed through and be called by a successful response.
+         * @param errorCallback The function that will be passed through and be called by a failed response.
+         * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-webapi/retrievemultiplerecords
+         */
+        RetrieveMultipleRecords(entityLogicalName: string, options?: string, maxPageSize?: number, successCallback?: (result: DevKit.WebApi.RetrieveMultipleResponse) => void, errorCallback?: (error: DevKit.WebApi.ErrorCallbackObject) => void): void;
+        /**
+         * Updates an entity record
+         * @param entityLogicalName The entity logical name of the record you want to update. For example: "account".
+         * @param id GUID of the entity record you want to update.
+         * @param data A JSON object containing key : value pairs where key is the property of the entity and value is the value of the property you want to update.
+         * @param successCallback The function that will be passed through and be called by a successful response.
+         * @param errorCallback The function that will be passed through and be called by a failed response.
+         * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-webapi/updaterecord
+         */
+        UpdateRecord(entityLogicalName: string, id: string, data: any, successCallback?: (result: DevKit.EntityReference) => void, errorCallback?: (error: DevKit.WebApi.ErrorCallbackObject) => void): void;
+        /**
+         * Execute a single action, function, or CRUD operation
+         * @param request Object that will be passed to the Web API endpoint to execute an action, function, or CRUD request.
+         * @param successCallback The function that will be passed through and be called by a successful response.
+         * @param errorCallback The function that will be passed through and be called by a failed response.
+         * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-webapi/online/execute
+         */
+        Execute(request: DevKit.WebApi.ExecuteRequest, successCallback?: (result: DevKit.WebApi.ExecuteResponse) => void, errorCallback?: (error: DevKit.WebApi.ErrorCallbackObject) => void): void;
+        /**
+         * Execute a collection of action, function, or CRUD operations
+         * @param requests An array of objects where each object is an action, function, or CRUD request that you want to execute.
+         * @param successCallback The function that will be passed through and be called by a successful response.
+         * @param errorCallback The function that will be passed through and be called by a failed response.
+         * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-webapi/online/executemultiple
+         */
+        ExecuteMultiple(requests: Array<DevKit.WebApi.ExecuteRequest>, successCallback?: (result: Array<DevKit.WebApi.ExecuteResponse>) => void, errorCallback?: (error: DevKit.WebApi.ErrorCallbackObject) => void): void;
+        /**
+         * Contains methods to execute operations that will be executed against the server even when the user is offline
+         */
+        readonly Online: WebApiOnline;
+        /**
+         * Contains methods to interact with the offline cache
+         */
+        readonly Offline: WebApiOffline;
+    }
+    /**
+     * Contains methods to execute operations that will be executed against the server even when the user is offline
+     * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-webapi/online
+     */
+    interface WebApiOnline {
+        /**
+         * Execute a single action, function, or CRUD operation that will be executed against the server even when the user is offline
+         * @param request Object that will be passed to the Web API endpoint to execute an action, function, or CRUD request.
+         * @param successCallback The function that will be passed through and be called by a successful response.
+         * @param errorCallback The function that will be passed through and be called by a failed response.
+         * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-webapi/online/execute
+         */
+        Execute(request: DevKit.WebApi.ExecuteRequest, successCallback?: (result: DevKit.WebApi.ExecuteResponse) => void, errorCallback?: (error: DevKit.WebApi.ErrorCallbackObject) => void): void;
+        /**
+         * Execute a collection of action, function, or CRUD operations that will be executed against the server even when the user is offline
+         * @param requests An array of objects where each object is an action, function, or CRUD request that you want to execute.
+         * @param successCallback The function that will be passed through and be called by a successful response.
+         * @param errorCallback The function that will be passed through and be called by a failed response.
+         * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-webapi/online/executemultiple
+         */
+        ExecuteMultiple(requests: Array<DevKit.WebApi.ExecuteRequest>, successCallback?: (result: Array<DevKit.WebApi.ExecuteResponse>) => void, errorCallback?: (error: DevKit.WebApi.ErrorCallbackObject) => void): void;
+    }
+    /**
+     * Contains methods to interact with the offline cache
+     * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-webapi/offline
+     */
+    interface WebApiOffline {
+        /**
+         * Returns whether an entity is offline enabled
+         * @param entityLogicalName Logical name of the entity. For example: "account".
+         * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-webapi/offline/isavailable
+         */
+        IsAvailable(entityLogicalName: string): boolean;
+    }
+    /**
+     * Provides methods to interact with Microsoft Copilot Studio topics (Preview feature)
+     * @link https://docs.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-copilot
+     */
+    interface Copilot {
+        /**
+         * Executes a Copilot Studio topic by event name
+         * @param eventName The name of the event configured in Copilot Studio
+         * @param eventParameters Optional parameters to pass to the Copilot Studio topic
+         * @param successCallback The function that will be called with the response from Copilot Studio
+         * @param errorCallback The function that will be called if the operation fails
+         * @link https://docs.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-copilot/executeevent
+         */
+        ExecuteEvent(eventName: string, eventParameters?: any, successCallback?: (result: Array<any>) => void, errorCallback?: (error: any) => void): void;
+        /**
+         * Executes a Copilot Studio topic by sending a natural language prompt
+         * @param promptText The natural language prompt to send to Copilot Studio
+         * @param successCallback The function that will be called with the response from Copilot Studio
+         * @param errorCallback The function that will be called if the operation fails
+         * @link https://docs.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-copilot/executeprompt
+         */
+        ExecutePrompt(promptText: string, successCallback?: (result: Array<any>) => void, errorCallback?: (error: any) => void): void;
+    }
     interface IEntityBaseAttribute {
         /** Type of an attribute */
         readonly AttributeType: number;
@@ -2150,6 +2285,16 @@ declare namespace DevKit {
          * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/getversion
          */
         readonly Version: string;
+        /**
+         * Provides methods to create and manage records using the Web API
+         * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-webapi
+         */
+        readonly WebApi: DevKit.WebApi;
+        /**
+         * Provides methods to interact with Microsoft Copilot Studio topics (Preview feature)
+         * @link https://docs.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-copilot
+         */
+        readonly Copilot: DevKit.Copilot;
     }
     interface SidePanes {
         Create(paneOptions: DevKit.SidePaneOptions, successCallback: (pane: DevKit.SidePane) => void): void;
