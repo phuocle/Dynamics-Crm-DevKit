@@ -4,213 +4,222 @@ var Tfsvn;
 (function (Tfsvn) {
 	'use strict';
 	Tfsvn.FormAccount = function(executionContext, defaultWebResourceName) {
-		var formContext = null;
-		if (executionContext !== undefined) {
-			if (executionContext.getFormContext === undefined) {
-				formContext = executionContext;
-			}
-			else {
-				formContext = executionContext.getFormContext();
-			}
-		}
-		var form = devKit.LoadForm(formContext);
-		var body = {
-			accountcasessgrid: {},
-			AccountNumber: {},
-			ActionCards: {},
-			Address1_Composite: {},
-			Address1_FreightTermsCode: {},
-			Address1_Line1: {},
-			Address1_ShippingMethodCode: {},
-			ChildAccounts: {},
-			Contacts: {},
-			CreditLimit: {},
-			CreditOnHold: {},
-			Description: {},
-			DocumentsSubGrid: {},
-			DoNotBulkEMail: {},
-			DoNotEMail: {},
-			DoNotFax: {},
-			DoNotPhone: {},
-			DoNotPostalMail: {},
-			DoNotSendMM: {},
-			Fax: {},
-			FollowEmail: {},
-			hs_tax_id: {},
-			IndustryCode: {},
-			LastUsedInCampaign: {},
-			loan_chart_by_status: {},
-			Name: {},
-			notescontrol: {},
-			OriginatingLeadId: {},
-			OwnershipCode: {},
-			ParentAccountId: {},
-			PaymentTermsCode: {},
-			PreferredContactMethodCode: {},
-			PrimaryContactId: {},
-			SIC: {},
-			Subgrid_loan_list: {},
-			Telephone1: {},
-			Telephone11: {},
-			TransactionCurrencyId: {},
-			WebSiteURL: {}
-		};
-		devKit.LoadFields(formContext, body);
-		var tab = {
-			DETAILS_TAB: {
-				Section: {
-					BILLING: {},
-					ChildAccounts: {},
-					COMPANY_PROFILE: {},
-					CONTACT_PREFERENCES: {},
-					DETAILS_TAB_section_6: {},
-					MARKETING: {},
-					SHIPPING: {}
-				}
-			},
-			documents_sharepoint: {
-				Section: {
-					documents_sharepoint_section: {}
-				}
-			},
-			SUMMARY_TAB: {
-				Section: {
-					ACCOUNT_INFORMATION: {},
-					ADDRESS: {},
-					SOCIAL_PANE_TAB: {},
-					SUMMARY_TAB_ADDRESSINPUT_SECTION: {},
-					SUMMARY_TAB_section_6: {},
-					SUMMARY_TAB_section_8: {}
-				}
-			},
-			tab_5: {
-				Section: {
-					Summary_section_6: {}
-				}
-			},
-			tab_loan_info: {
-				Section: {
-					_section_913: {},
-					tab_4_section_loan_list: {}
-				}
-			}
-		};
-		devKit.LoadTabs(formContext, tab);
-		body.Tab = tab;
-		form.Body = body;
-		var header = {
-			AccountNumber: {},
-			OwnerId: {}
-		};
-		devKit.LoadFields(formContext, header, "header_");
-		form.Header = header;
-		var grid = {
-			accountcasessgrid: {},
-			ChildAccounts: {},
-			Contacts: {},
-			DocumentsSubGrid: {},
-			loan_chart_by_status: {},
-			Subgrid_loan_list: {},
-		};
-		devKit.LoadGrids(formContext, grid);
-		form.Grid = grid;
-		var navigation = {
-			account_adx_inviteredemptions: {},
-			account_adx_portalcomments: {},
-			Account_Appointments: {},
-			account_bookableresource_AccountId: {},
-			account_BulkOperations: {},
-			account_CampaignResponses: {},
-			account_customer_opportunity_roles: {},
-			Account_Email_EmailSender: {},
-			Account_Email_SendersAccount: {},
-			Account_Emails: {},
-			account_entitlement_Account: {},
-			account_entitlement_Customer: {},
-			account_hs_zns_messages: {},
-			account_IncidentResolutions: {},
-			account_msdyn_bookingalerts: {},
-			account_msdyn_copilottranscripts: {},
-			account_msdyn_ocliveworkitems: {},
-			account_msdyn_ocoutboundmessages: {},
-			account_msdyn_ocsessions: {},
-			account_msdyn_ocvoicemails: {},
-			account_msdyn_orgchartnode_msdyn_parentrecord: {},
-			account_msfp_alerts: {},
-			account_msfp_surveyinvites: {},
-			account_msfp_surveyresponses: {},
-			account_OpportunityCloses: {},
-			account_OrderCloses: {},
-			account_parent_account: {},
-			Account_Phonecalls: {},
-			account_Posts: {},
-			account_QuoteCloses: {},
-			Account_ServiceAppointments: {},
-			Account_Tasks: {},
-			adx_invitation_assigntoaccount: {},
-			contact_customer_accounts: {},
-			contract_billingcustomer_accounts: {},
-			contract_customer_accounts: {},
-			contractlineitem_customer_accounts: {},
-			hs_account_contact_customer_id: {},
-			hs_account_hs_interaction_id: {},
-			hs_account_hs_loan_account_id: {},
-			hs_hs_custom_template_account_hs_object1_id: {},
-			hs_hs_custom_template_account_hs_object2_id: {},
-			hs_hs_custom_template_account_hs_object3_id: {},
-			hs_hs_custom_template_account_hs_object4_id: {},
-			hs_hs_custom_template_account_hs_object5_id: {},
-			hs_hs_zns_message_account_hs_object1_id: {},
-			hs_hs_zns_message_account_hs_object2_id: {},
-			hs_hs_zns_message_account_hs_object3_id: {},
-			hs_hs_zns_message_account_hs_object4_id: {},
-			hs_hs_zns_message_account_hs_object5_id: {},
-			hs_hs_zns_message_account_hs_object6_id: {},
-			hs_loan_account_account_id_account: {},
-			incident_customer_accounts: {},
-			invoice_customer_accounts: {},
-			lead_customer_accounts: {},
-			lead_parent_account: {},
-			msa_account_managingpartner: {},
-			msa_contact_managingpartner: {},
-			msdyn_account_dailyaccountkpiitem_entityid: {},
-			msdyn_account_msdyn_accountkpiitem_accountid: {},
-			msdyn_account_msdyn_actual_AccountCustomer: {},
-			msdyn_account_msdyn_actual_AccountVendor: {},
-			msdyn_account_msdyn_aicontactsuggestion_sourcerecord: {},
-			msdyn_account_msdyn_customerasset_Account: {},
-			msdyn_account_msdyn_iotdevice_Account: {},
-			msdyn_account_msdyn_liveconversation_Customer: {},
-			msdyn_account_msdyn_mostcontacted_regardingObjectId: {},
-			msdyn_account_msdyn_mostcontactedby_regardingObjectId: {},
-			msdyn_account_msdyn_ocliveworkitem_Customer: {},
-			msdyn_account_msdyn_ocvoicemail_Customer: {},
-			msdyn_account_msdyn_salesroutingrun_targetobject: {},
-			msdyn_account_msdyn_warranty_WarrantyHolder: {},
-			msdyn_account_msdyn_warranty_WarrantyProvider: {},
-			msdyn_msdyn_conversationparticipantinsights_account_msdyn_User: {},
-			msdyn_msdyn_lastagent_account_msdyn_recordId: {},
-			msdyn_msdyn_preferredagent_account_msdyn_recordId: {},
-			msdyn_msdyn_salescopilotinsight_account_msdyn_targetentityid: {},
-			msdyn_playbookinstance_account: {},
-			msdyn_sabackupdiagnostic_account_msdyn_target: {},
-			msdyn_salesaccelerationinsights_account: {},
-			msdyn_salesroutingdiagnostic_account_msdyn_target: {},
-			msdyn_salessuggestion_account: {},
-			msdyn_sequencetarget_account_msdyn_target: {},
-			msdyn_swarm_account: {},
-			opportunity_customer_accounts: {},
-			opportunity_parent_account: {},
-			order_customer_accounts: {},
-			quote_customer_accounts: {},
-			SourceAccount_BulkOperationLogs: {}
-		};
-		devKit.LoadNavigations(formContext, navigation);
-		form.Navigation = navigation;
-		form.Utility = devKit.LoadUtility(defaultWebResourceName);
-		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
-		devKit.LoadOthers(formContext, form, defaultWebResourceName);
-		return form;
+		// var formContext = null;
+		// if (executionContext !== undefined) {
+		// 	if (executionContext.getFormContext === undefined) {
+		// 		formContext = executionContext;
+		// 	}
+		// 	else {
+		// 		formContext = executionContext.getFormContext();
+		// 	}
+		// }
+		// var form = devKit.LoadForm(formContext);
+		// var body = {
+		// 	accountcasessgrid: {},
+		// 	AccountNumber: {},
+		// 	ActionCards: {},
+		// 	Address1_Composite: {},
+		// 	Address1_FreightTermsCode: {},
+		// 	Address1_Line1: {},
+		// 	Address1_ShippingMethodCode: {},
+		// 	ChildAccounts: {},
+		// 	Contacts: {},
+		// 	CreditLimit: {},
+		// 	CreditOnHold: {},
+		// 	Description: {},
+		// 	DocumentsSubGrid: {},
+		// 	DoNotBulkEMail: {},
+		// 	DoNotEMail: {},
+		// 	DoNotFax: {},
+		// 	DoNotPhone: {},
+		// 	DoNotPostalMail: {},
+		// 	DoNotSendMM: {},
+		// 	Fax: {},
+		// 	FollowEmail: {},
+		// 	hs_tax_id: {},
+		// 	IndustryCode: {},
+		// 	LastUsedInCampaign: {},
+		// 	loan_chart_by_status: {},
+		// 	Name: {},
+		// 	notescontrol: {},
+		// 	OriginatingLeadId: {},
+		// 	OwnershipCode: {},
+		// 	ParentAccountId: {},
+		// 	PaymentTermsCode: {},
+		// 	PreferredContactMethodCode: {},
+		// 	PrimaryContactId: {},
+		// 	SIC: {},
+		// 	Subgrid_loan_list: {},
+		// 	Telephone1: {},
+		// 	Telephone11: {},
+		// 	TransactionCurrencyId: {},
+		// 	WebSiteURL: {}
+		// };
+		// devKit.LoadFields(formContext, body);
+		// var tab = {
+		// 	DETAILS_TAB: {
+		// 		Section: {
+		// 			BILLING: {},
+		// 			ChildAccounts: {},
+		// 			COMPANY_PROFILE: {},
+		// 			CONTACT_PREFERENCES: {},
+		// 			DETAILS_TAB_section_6: {},
+		// 			MARKETING: {},
+		// 			SHIPPING: {}
+		// 		}
+		// 	},
+		// 	documents_sharepoint: {
+		// 		Section: {
+		// 			documents_sharepoint_section: {}
+		// 		}
+		// 	},
+		// 	SUMMARY_TAB: {
+		// 		Section: {
+		// 			ACCOUNT_INFORMATION: {},
+		// 			ADDRESS: {},
+		// 			SOCIAL_PANE_TAB: {},
+		// 			SUMMARY_TAB_ADDRESSINPUT_SECTION: {},
+		// 			SUMMARY_TAB_section_6: {},
+		// 			SUMMARY_TAB_section_8: {}
+		// 		}
+		// 	},
+		// 	tab_5: {
+		// 		Section: {
+		// 			Summary_section_6: {}
+		// 		}
+		// 	},
+		// 	tab_loan_info: {
+		// 		Section: {
+		// 			_section_913: {},
+		// 			tab_4_section_loan_list: {}
+		// 		}
+		// 	}
+		// };
+		// devKit.LoadTabs(formContext, tab);
+		// body.Tab = tab;
+		// form.Body = body;
+		// var header = {
+		// 	AccountNumber: {},
+		// 	OwnerId: {}
+		// };
+		// devKit.LoadFields(formContext, header, "header_");
+		// form.Header = header;
+		// var grid = {
+		// 	accountcasessgrid: {},
+		// 	ChildAccounts: {},
+		// 	Contacts: {},
+		// 	DocumentsSubGrid: {},
+		// 	loan_chart_by_status: {},
+		// 	Subgrid_loan_list: {},
+		// };
+		// devKit.LoadGrids(formContext, grid);
+		// form.Grid = grid;
+		// var navigation = {
+		// 	account_adx_inviteredemptions: {},
+		// 	account_adx_portalcomments: {},
+		// 	Account_Appointments: {},
+		// 	account_bookableresource_AccountId: {},
+		// 	account_BulkOperations: {},
+		// 	account_CampaignResponses: {},
+		// 	account_customer_opportunity_roles: {},
+		// 	Account_Email_EmailSender: {},
+		// 	Account_Email_SendersAccount: {},
+		// 	Account_Emails: {},
+		// 	account_entitlement_Account: {},
+		// 	account_entitlement_Customer: {},
+		// 	account_hs_zns_messages: {},
+		// 	account_IncidentResolutions: {},
+		// 	account_msdyn_bookingalerts: {},
+		// 	account_msdyn_copilottranscripts: {},
+		// 	account_msdyn_ocliveworkitems: {},
+		// 	account_msdyn_ocoutboundmessages: {},
+		// 	account_msdyn_ocsessions: {},
+		// 	account_msdyn_ocvoicemails: {},
+		// 	account_msdyn_orgchartnode_msdyn_parentrecord: {},
+		// 	account_msfp_alerts: {},
+		// 	account_msfp_surveyinvites: {},
+		// 	account_msfp_surveyresponses: {},
+		// 	account_OpportunityCloses: {},
+		// 	account_OrderCloses: {},
+		// 	account_parent_account: {},
+		// 	Account_Phonecalls: {},
+		// 	account_Posts: {},
+		// 	account_QuoteCloses: {},
+		// 	Account_ServiceAppointments: {},
+		// 	Account_Tasks: {},
+		// 	adx_invitation_assigntoaccount: {},
+		// 	contact_customer_accounts: {},
+		// 	contract_billingcustomer_accounts: {},
+		// 	contract_customer_accounts: {},
+		// 	contractlineitem_customer_accounts: {},
+		// 	hs_account_contact_customer_id: {},
+		// 	hs_account_hs_interaction_id: {},
+		// 	hs_account_hs_loan_account_id: {},
+		// 	hs_hs_custom_template_account_hs_object1_id: {},
+		// 	hs_hs_custom_template_account_hs_object2_id: {},
+		// 	hs_hs_custom_template_account_hs_object3_id: {},
+		// 	hs_hs_custom_template_account_hs_object4_id: {},
+		// 	hs_hs_custom_template_account_hs_object5_id: {},
+		// 	hs_hs_zns_message_account_hs_object1_id: {},
+		// 	hs_hs_zns_message_account_hs_object2_id: {},
+		// 	hs_hs_zns_message_account_hs_object3_id: {},
+		// 	hs_hs_zns_message_account_hs_object4_id: {},
+		// 	hs_hs_zns_message_account_hs_object5_id: {},
+		// 	hs_hs_zns_message_account_hs_object6_id: {},
+		// 	hs_loan_account_account_id_account: {},
+		// 	incident_customer_accounts: {},
+		// 	invoice_customer_accounts: {},
+		// 	lead_customer_accounts: {},
+		// 	lead_parent_account: {},
+		// 	msa_account_managingpartner: {},
+		// 	msa_contact_managingpartner: {},
+		// 	msdyn_account_dailyaccountkpiitem_entityid: {},
+		// 	msdyn_account_msdyn_accountkpiitem_accountid: {},
+		// 	msdyn_account_msdyn_actual_AccountCustomer: {},
+		// 	msdyn_account_msdyn_actual_AccountVendor: {},
+		// 	msdyn_account_msdyn_aicontactsuggestion_sourcerecord: {},
+		// 	msdyn_account_msdyn_customerasset_Account: {},
+		// 	msdyn_account_msdyn_iotdevice_Account: {},
+		// 	msdyn_account_msdyn_liveconversation_Customer: {},
+		// 	msdyn_account_msdyn_mostcontacted_regardingObjectId: {},
+		// 	msdyn_account_msdyn_mostcontactedby_regardingObjectId: {},
+		// 	msdyn_account_msdyn_ocliveworkitem_Customer: {},
+		// 	msdyn_account_msdyn_ocvoicemail_Customer: {},
+		// 	msdyn_account_msdyn_salesroutingrun_targetobject: {},
+		// 	msdyn_account_msdyn_warranty_WarrantyHolder: {},
+		// 	msdyn_account_msdyn_warranty_WarrantyProvider: {},
+		// 	msdyn_msdyn_conversationparticipantinsights_account_msdyn_User: {},
+		// 	msdyn_msdyn_lastagent_account_msdyn_recordId: {},
+		// 	msdyn_msdyn_preferredagent_account_msdyn_recordId: {},
+		// 	msdyn_msdyn_salescopilotinsight_account_msdyn_targetentityid: {},
+		// 	msdyn_playbookinstance_account: {},
+		// 	msdyn_sabackupdiagnostic_account_msdyn_target: {},
+		// 	msdyn_salesaccelerationinsights_account: {},
+		// 	msdyn_salesroutingdiagnostic_account_msdyn_target: {},
+		// 	msdyn_salessuggestion_account: {},
+		// 	msdyn_sequencetarget_account_msdyn_target: {},
+		// 	msdyn_swarm_account: {},
+		// 	opportunity_customer_accounts: {},
+		// 	opportunity_parent_account: {},
+		// 	order_customer_accounts: {},
+		// 	quote_customer_accounts: {},
+		// 	SourceAccount_BulkOperationLogs: {}
+		// };
+		// devKit.LoadNavigations(formContext, navigation);
+		// form.Navigation = navigation;
+		// form.Utility = devKit.LoadUtility(defaultWebResourceName);
+		// form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		// devKit.LoadOthers(formContext, form, defaultWebResourceName);
+		// return form;
+
+		const body = ["ActionCards", "Address1_Composite", "Address1_FreightTermsCode", "Address1_ShippingMethodCode", "ChildAccounts", "Contacts", "CreatedOn", "CreditLimit", "CreditOnHold", "Description", "devkit_CategoryCode", "DoNotBulkEMail", "DoNotEMail", "DoNotFax", "DoNotPhone", "DoNotPostalMail", "Fax", "FollowEmail", "IFRAME_PHUOCLE", "IndustryCode", "mapcontrol", "ModifiedOn", "Name", "Name1", "notescontrol", "OwnershipCode", "ParentAccountId", "PaymentTermsCode", "PreferredContactMethodCode", "PrimaryContactId", "PrimaryContactId1", "SIC", "Telephone1", "TickerSymbol", "TransactionCurrencyId", "WebSiteURL"];
+		const tab = ["DETAILS_TAB___BILLING", "DETAILS_TAB___ChildAccounts", "DETAILS_TAB___COMPANY_PROFILE", "DETAILS_TAB___CONTACT_PREFERENCES", "DETAILS_TAB___DETAILS_TAB_section_6", "DETAILS_TAB___SHIPPING", "SUMMARY_TAB___ACCOUNT_INFORMATION", "SUMMARY_TAB___ADDRESS", "SUMMARY_TAB___MapSection", "SUMMARY_TAB___SOCIAL_PANE_TAB", "SUMMARY_TAB___Summary_section_6", "SUMMARY_TAB___SUMMARY_TAB_section_6"];
+		const header = ["NumberOfEmployees", "OwnerId", "Revenue"];
+		const bpf = ["BPF_Account___Name", "BPF_Account___Name_1"];
+		const quick = ["contactquickform"];
+		const grid = ["ChildAccounts", "Contacts"];
+		const navigation = ["account_adx_inviteredemptions", "account_adx_portalcomments", "Account_Appointments", "Account_Email_EmailSender", "Account_Email_SendersAccount", "Account_Emails", "account_msfp_alerts", "account_msfp_surveyinvites", "account_msfp_surveyresponses", "account_parent_account", "Account_Phonecalls", "Account_Tasks", "adx_invitation_assigntoaccount", "bpf_account_devkit_bpfaccount", "contact_customer_accounts", "msa_account_managingpartner", "msa_contact_managingpartner"];
+		return devKit.LoadFormV2(executionContext, defaultWebResourceName, body, tab, header, bpf, quick, grid, navigation);
 	};
 })(Tfsvn || (Tfsvn = {}));
 /** @namespace OptionSet */
