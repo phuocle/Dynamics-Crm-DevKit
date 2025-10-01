@@ -798,7 +798,7 @@ const devKit = (function () {
         form.Close = () => formContext?.ui?.close();
         return form;
     }
-    function loadFormV2(executionContext, defaultWebResourceName, body, tab, header, bpf, quick, grid, navigation) {
+    function loadFormV2(executionContext, defaultWebResourceName, formConfig) {
         var formContext = null;
         if (executionContext !== undefined) {
             if (executionContext.getFormContext === undefined) {
@@ -812,7 +812,8 @@ const devKit = (function () {
 
         // Load Body Fields
         var bodyObj = {};
-        var bodyLength = body?.length || 0;
+        var body = formConfig.body || [];
+        var bodyLength = body.length;
         for (var i = 0; i < bodyLength; i++) {
             bodyObj[body[i]] = {};
         }
@@ -820,7 +821,8 @@ const devKit = (function () {
 
         // Load Tabs and Sections
         var tabObj = {};
-        var tabLength = tab?.length || 0;
+        var tab = formConfig.tab || [];
+        var tabLength = tab.length;
         for (var i = 0; i < tabLength; i++) {
             var parts = tab[i].split('___');
             var tabName = parts[0];
@@ -836,7 +838,8 @@ const devKit = (function () {
 
         // Load Header Fields
         var headerObj = {};
-        var headerLength = header?.length || 0;
+        var header = formConfig.header || [];
+        var headerLength = header.length;
         for (var i = 0; i < headerLength; i++) {
             headerObj[header[i]] = {};
         }
@@ -845,7 +848,8 @@ const devKit = (function () {
 
         // Load Process (BPF)
         var process = loadProcess(formContext);
-        var bpfLength = bpf?.length || 0;
+        var bpf = formConfig.bpf || [];
+        var bpfLength = bpf.length;
         if (bpfLength > 0) {
             var bpfObj = {};
             var bpfProcessName = null;
@@ -867,7 +871,8 @@ const devKit = (function () {
 
         // Load Quick Forms
         var quickFormObj = {};
-        var quickLength = quick?.length || 0;
+        var quick = formConfig.quick || [];
+        var quickLength = quick.length;
         for (var i = 0; i < quickLength; i++) {
             quickFormObj[quick[i]] = {};
         }
@@ -876,7 +881,8 @@ const devKit = (function () {
 
         // Load Grids
         var gridObj = {};
-        var gridLength = grid?.length || 0;
+        var grid = formConfig.grid || [];
+        var gridLength = grid.length;
         for (var i = 0; i < gridLength; i++) {
             gridObj[grid[i]] = {};
         }
@@ -885,7 +891,8 @@ const devKit = (function () {
 
         // Load Navigation
         var navigationObj = {};
-        var navigationLength = navigation?.length || 0;
+        var navigation = formConfig.navigation || [];
+        var navigationLength = navigation.length;
         for (var i = 0; i < navigationLength; i++) {
             navigationObj[navigation[i]] = {};
         }
