@@ -798,6 +798,107 @@ const devKit = (function () {
         form.Close = () => formContext?.ui?.close();
         return form;
     }
+    function loadFormV2(executionContext, defaultWebResourceName, body, tab, header, bpf, quick, grid, navigation) {
+        var formContext = null;
+        if (executionContext !== undefined) {
+            if (executionContext.getFormContext === undefined) {
+                formContext = executionContext;
+            }
+            else {
+                formContext = executionContext.getFormContext();
+            }
+        }
+        var form = loadForm(formContext);
+
+        // Load Body Fields
+        var bodyObj = {};
+        var bodyLength = body?.length || 0;
+        for (var i = 0; i < bodyLength; i++) {
+            bodyObj[body[i]] = {};
+        }
+        loadFields(formContext, bodyObj);
+
+        // Load Tabs and Sections
+        var tabObj = {};
+        var tabLength = tab?.length || 0;
+        for (var i = 0; i < tabLength; i++) {
+            var parts = tab[i].split('___');
+            var tabName = parts[0];
+            var sectionName = parts[1];
+            if (!tabObj[tabName]) {
+                tabObj[tabName] = { Section: {} };
+            }
+            tabObj[tabName].Section[sectionName] = {};
+        }
+        loadTabs(formContext, tabObj);
+        bodyObj.Tab = tabObj;
+        form.Body = bodyObj;
+
+        // Load Header Fields
+        var headerObj = {};
+        var headerLength = header?.length || 0;
+        for (var i = 0; i < headerLength; i++) {
+            headerObj[header[i]] = {};
+        }
+        loadFields(formContext, headerObj, 'header_');
+        form.Header = headerObj;
+
+        // Load Process (BPF)
+        var process = loadProcess(formContext);
+        var bpfLength = bpf?.length || 0;
+        if (bpfLength > 0) {
+            var bpfObj = {};
+            var bpfProcessName = null;
+            for (var i = 0; i < bpfLength; i++) {
+                var parts = bpf[i].split('___');
+                var processName = parts[0];
+                var fieldName = parts[1];
+                if (!bpfProcessName) {
+                    bpfProcessName = processName;
+                }
+                bpfObj[fieldName] = {};
+            }
+            loadFields(formContext, bpfObj, 'header_process_');
+            if (bpfProcessName) {
+                process[bpfProcessName] = bpfObj;
+            }
+        }
+        form.Process = process;
+
+        // Load Quick Forms
+        var quickFormObj = {};
+        var quickLength = quick?.length || 0;
+        for (var i = 0; i < quickLength; i++) {
+            quickFormObj[quick[i]] = {};
+        }
+        loadQuickForms(formContext, quickFormObj);
+        form.QuickForm = quickFormObj;
+
+        // Load Grids
+        var gridObj = {};
+        var gridLength = grid?.length || 0;
+        for (var i = 0; i < gridLength; i++) {
+            gridObj[grid[i]] = {};
+        }
+        loadGrids(formContext, gridObj);
+        form.Grid = gridObj;
+
+        // Load Navigation
+        var navigationObj = {};
+        var navigationLength = navigation?.length || 0;
+        for (var i = 0; i < navigationLength; i++) {
+            navigationObj[navigation[i]] = {};
+        }
+        loadNavigations(formContext, navigationObj);
+        form.Navigation = navigationObj;
+
+        // Load Utility, ExecutionContext, and Others
+        form.Utility = loadUtility(defaultWebResourceName);
+        form.ExecutionContext = loadExecutionContext(executionContext);
+        loadOthers(formContext, form, defaultWebResourceName);
+
+        return form;
+    }
     return {
         LoadForm: loadForm,
         LoadProcess: loadProcess,
@@ -812,7 +913,9 @@ const devKit = (function () {
         LoadCopilot: loadCopilot,
         LoadExecutionContext: loadExecutionContext,
         LoadOthers: loadOthers,
-        LoadFormDialog: loadFormDialog
+        LoadFormDialog: loadFormDialog,
+        LoadSidePanes: loadSidePanes,
+        LoadFormV2: loadFormV2
     }
 })();
 var OptionSet;
