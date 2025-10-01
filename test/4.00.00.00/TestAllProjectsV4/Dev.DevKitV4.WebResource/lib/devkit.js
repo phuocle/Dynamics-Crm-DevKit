@@ -561,33 +561,78 @@ const devKit = (function () {
         const getOnline = Xrm?.WebApi?.online;
         const getOffline = Xrm?.WebApi?.offline;
         obj.CreateRecord = function (entityLogicalName, data, successCallback, errorCallback) {
-            getWebApi?.createRecord(entityLogicalName, data)?.then(successCallback, errorCallback);
+            const promise = getWebApi?.createRecord(entityLogicalName, data);
+            if (successCallback) {
+                promise?.then(successCallback, errorCallback);
+            } else {
+                return promise;
+            }
         };
         obj.DeleteRecord = function (entityLogicalName, id, successCallback, errorCallback) {
-            getWebApi?.deleteRecord(entityLogicalName, id)?.then(successCallback, errorCallback);
+            const promise = getWebApi?.deleteRecord(entityLogicalName, id);
+            if (successCallback) {
+                promise?.then(successCallback, errorCallback);
+            } else {
+                return promise;
+            }
         };
         obj.RetrieveRecord = function (entityLogicalName, id, options, successCallback, errorCallback) {
-            getWebApi?.retrieveRecord(entityLogicalName, id, options)?.then(successCallback, errorCallback);
+            const promise = getWebApi?.retrieveRecord(entityLogicalName, id, options);
+            if (successCallback) {
+                promise?.then(successCallback, errorCallback);
+            } else {
+                return promise;
+            }
         };
         obj.RetrieveMultipleRecords = function (entityLogicalName, options, maxPageSize, successCallback, errorCallback) {
-            getWebApi?.retrieveMultipleRecords(entityLogicalName, options, maxPageSize)?.then(successCallback, errorCallback);
+            const promise = getWebApi?.retrieveMultipleRecords(entityLogicalName, options, maxPageSize);
+            if (successCallback) {
+                promise?.then(successCallback, errorCallback);
+            } else {
+                return promise;
+            }
         };
         obj.UpdateRecord = function (entityLogicalName, id, data, successCallback, errorCallback) {
-            getWebApi?.updateRecord(entityLogicalName, id, data)?.then(successCallback, errorCallback);
+            const promise = getWebApi?.updateRecord(entityLogicalName, id, data);
+            if (successCallback) {
+                promise?.then(successCallback, errorCallback);
+            } else {
+                return promise;
+            }
         };
         obj.Execute = function (request, successCallback, errorCallback) {
-            getWebApi?.execute(request)?.then(successCallback, errorCallback);
+            const promise = getWebApi?.execute(request);
+            if (successCallback) {
+                promise?.then(successCallback, errorCallback);
+            } else {
+                return promise;
+            }
         };
         obj.ExecuteMultiple = function (requests, successCallback, errorCallback) {
-            getWebApi?.executeMultiple(requests)?.then(successCallback, errorCallback);
+            const promise = getWebApi?.executeMultiple(requests);
+            if (successCallback) {
+                promise?.then(successCallback, errorCallback);
+            } else {
+                return promise;
+            }
         };
         getter(obj, 'Online', () => {
             const online = {};
             online.Execute = function (request, successCallback, errorCallback) {
-                getOnline?.execute(request)?.then(successCallback, errorCallback);
+                const promise = getOnline?.execute(request);
+                if (successCallback) {
+                    promise?.then(successCallback, errorCallback);
+                } else {
+                    return promise;
+                }
             };
             online.ExecuteMultiple = function (requests, successCallback, errorCallback) {
-                getOnline?.executeMultiple(requests)?.then(successCallback, errorCallback);
+                const promise = getOnline?.executeMultiple(requests);
+                if (successCallback) {
+                    promise?.then(successCallback, errorCallback);
+                } else {
+                    return promise;
+                }
             };
             return online;
         });
@@ -602,10 +647,20 @@ const devKit = (function () {
         const obj = {};
         const getCopilot = Xrm?.Copilot;
         obj.ExecuteEvent = function (eventName, eventParameters, successCallback, errorCallback) {
-            getCopilot?.executeEvent(eventName, eventParameters)?.then(successCallback, errorCallback);
+            const promise = getCopilot?.executeEvent(eventName, eventParameters);
+            if (successCallback) {
+                promise?.then(successCallback, errorCallback);
+            } else {
+                return promise;
+            }
         };
         obj.ExecutePrompt = function (promptText, successCallback, errorCallback) {
-            getCopilot?.executePrompt(promptText)?.then(successCallback, errorCallback);
+            const promise = getCopilot?.executePrompt(promptText);
+            if (successCallback) {
+                promise?.then(successCallback, errorCallback);
+            } else {
+                return promise;
+            }
         };
         return obj;
     }
