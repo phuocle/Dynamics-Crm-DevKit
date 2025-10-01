@@ -2285,16 +2285,6 @@ declare namespace DevKit {
          * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/getversion
          */
         readonly Version: string;
-        /**
-         * Provides methods to create and manage records using the Web API
-         * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-webapi
-         */
-        readonly WebApi: DevKit.WebApi;
-        /**
-         * Provides methods to interact with Microsoft Copilot Studio topics (Preview feature)
-         * @link https://docs.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-copilot
-         */
-        readonly Copilot: DevKit.Copilot;
     }
     interface SidePanes {
         Create(paneOptions: DevKit.SidePaneOptions, successCallback: (pane: DevKit.SidePane) => void): void;
@@ -2684,6 +2674,16 @@ declare namespace DevKit {
          * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/execution-context
          * */
         readonly ExecutionContext: DevKit.ExecutionContext;
+        /**
+         * Provides methods to create and manage records using the Web API
+         * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-webapi
+         */
+        readonly WebApi: DevKit.WebApi;
+        /**
+         * Provides methods to interact with Microsoft Copilot Studio topics (Preview feature)
+         * @link https://docs.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-copilot
+         */
+        readonly Copilot: DevKit.Copilot;
     }
     interface DialogError {
         /** Details about the error. When you specify this, the Download Log File button is available in the error message, and clicking it will let users download a text file with the content specified in this attribute */
