@@ -710,7 +710,13 @@ declare namespace DevKit {
             * @param errorCallback A function to call when the operation fails
             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/controls/getcontentwindow
             */
-           ContentWindow(successCallback?: (contentWindow: any) => void, errorCallback?: (error: DevKit.Error) => void): void;
+           ContentWindow(successCallback: (contentWindow: any) => void, errorCallback?: (error: DevKit.Error) => void): void;
+            /**
+            * Returns the content window that represents an IFRAME or web resource and returns a promise
+            * @returns Promise that resolves with the content window
+            * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/controls/getcontentwindow
+            */
+           ContentWindow(): Promise<any>;
            /**
              * Returns the object in the form that represents an IFRAME or web resource
              * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/controls/getobject
@@ -2056,7 +2062,15 @@ declare namespace DevKit {
          * @param errorCallback The function to execute when the operation fails.
          * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-utility/getallowedstatustransitions
          */
-        AllowedStatusTransitions(entityName: string, statusCode: number, successCallback?: (statusCodes: Array<number>) => void, errorCallback?: (error: DevKit.Error) => void): void;
+        AllowedStatusTransitions(entityName: string, statusCode: number, successCallback: (statusCodes: Array<number>) => void, errorCallback?: (error: DevKit.Error) => void): void;
+        /**
+         * Returns the valid state transitions for the specified entity type and state code and returns a promise
+         * @param entityName The logical name of the entity.
+         * @param statusCode The status code to find out the allowed status transition values.
+         * @returns Promise that resolves with an array of allowed status codes
+         * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-utility/getallowedstatustransitions
+         */
+        AllowedStatusTransitions(entityName: string, statusCode: number): Promise<Array<number>>;
         /**
          * Returns a promise containing the default main form descriptor with the following values.
          * @param entityName The logical name of the entity.
@@ -2070,14 +2084,26 @@ declare namespace DevKit {
          * @param errorCallback A function to call when the operation fails. An error object with the message property (String) will be passed that describes the error details.
          * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-device/getbarcodevalue
          */
-        BarcodeValue(successCallback: (result: string) => void, errorCallback: (error: DevKit.Error) => void): void;
+        BarcodeValue(successCallback: (result: string) => void, errorCallback?: (error: DevKit.Error) => void): void;
+        /**
+         * Invokes the device camera to scan the barcode information and returns a promise
+         * @returns Promise that resolves with the barcode value as a string
+         * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-device/getbarcodevalue
+         */
+        BarcodeValue(): Promise<string>;
         /**
          * Invokes the device microphone to record audio.
          * @param successCallback A function to call when audio is returned. A base64 encoded audio object attributes is passed to the function.
          * @param errorCallback A function to call when the operation fails.
          * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-device/captureaudio
          */
-        CaptureAudio(successCallback: (result: DevKit.FileData) => void, errorCallback: (error: DevKit.Error) => void): void;
+        CaptureAudio(successCallback: (result: DevKit.FileData) => void, errorCallback?: (error: DevKit.Error) => void): void;
+        /**
+         * Invokes the device microphone to record audio and returns a promise
+         * @returns Promise that resolves with the audio file data
+         * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-device/captureaudio
+         */
+        CaptureAudio(): Promise<DevKit.FileData>;
         /**
          * Invokes the device camera to capture an image. Note: This method is supported only for the mobile clients.
          * @param imageOption The image option.
@@ -2085,14 +2111,27 @@ declare namespace DevKit {
          * @param errorCallback A function to call when the operation fails.
          * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-device/captureimage
          */
-        CaptureImage(imageOption: DevKit.ImageOption, successCallback: (result: DevKit.FileData) => void, errorCallback: (error: DevKit.Error) => void): void;
+        CaptureImage(imageOption: DevKit.ImageOption, successCallback: (result: DevKit.FileData) => void, errorCallback?: (error: DevKit.Error) => void): void;
+        /**
+         * Invokes the device camera to capture an image and returns a promise
+         * @param imageOption The image option.
+         * @returns Promise that resolves with the image file data
+         * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-device/captureimage
+         */
+        CaptureImage(imageOption: DevKit.ImageOption): Promise<DevKit.FileData>;
         /**
          * Invokes the device camera to record video. Note: This method is supported only for the mobile clients.
          * @param successCallback A function to call when Video is returned. A base64 encoded video object attributes is passed to the function.
          * @param errorCallback A function to call when the operation fails.
          * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-device/capturevideo
          */
-        CaptureVideo(successCallback: (result: DevKit.FileData) => void, errorCallback: (error: DevKit.Error) => void): void;
+        CaptureVideo(successCallback: (result: DevKit.FileData) => void, errorCallback?: (error: DevKit.Error) => void): void;
+        /**
+         * Invokes the device camera to record video and returns a promise
+         * @returns Promise that resolves with the video file data
+         * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-device/capturevideo
+         */
+        CaptureVideo(): Promise<DevKit.FileData>;
         /**
          * Closes a progress dialog box. If no progress dialog is displayed currently, this method will do nothing. You can display a progress dialog using the ShowProgressIndicator method.
          * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-utility/closeprogressindicator
@@ -2104,7 +2143,13 @@ declare namespace DevKit {
          * @param errorCallback A function to call when the operation fails
          * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/getcurrentappname
          */
-        CurrentAppName(successCallback: (result: string) => void, errorCallback: (error: DevKit.Error) => void): void;
+        CurrentAppName(successCallback: (result: string) => void, errorCallback?: (error: DevKit.Error) => void): void;
+        /**
+         * Returns the name of the current business app in Customer Engagement and returns a promise
+         * @returns Promise that resolves with the app name
+         * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/getcurrentappname
+         */
+        CurrentAppName(): Promise<string>;
         /**
          * Returns the relative URL with the caching token for the specified web resource.
          * @param webResourceName Name of the web resource.
@@ -2117,14 +2162,26 @@ declare namespace DevKit {
          * @param errorCallback A function to call when the operation fails
          * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/getcurrentappproperties
          */
-        CurrentAppProperties(successCallback: (result: DevKit.AppProperty) => void, errorCallback: (error: DevKit.Error) => void): void;
+        CurrentAppProperties(successCallback: (result: DevKit.AppProperty) => void, errorCallback?: (error: DevKit.Error) => void): void;
+        /**
+         * Returns the properties of the current business app in Customer Engagement and returns a promise
+         * @returns Promise that resolves with the app properties
+         * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/getcurrentappproperties
+         */
+        CurrentAppProperties(): Promise<DevKit.AppProperty>;
         /**
          * Returns the current location using the device geolocation capability. Note: For the CurrentPosition method to work, the geolocation capability must be enabled on your mobile device, and the Dynamics 365 for Customer Engagement mobile clients must have permissions to access the device location, which isn't enabled by default. This method is supported only for the mobile clients.
          * @param successCallback A function to call when the current geolocation information is returned. A geolocation object attributes is passed to the function
          * @param errorCallback A function to call when the operation fails.
          * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-device/getcurrentposition
          */
-        CurrentPosition(successCallback: (result: DevKit.PositionData) => void, errorCallback: (error: DevKit.Error) => void): void;
+        CurrentPosition(successCallback: (result: DevKit.PositionData) => void, errorCallback?: (error: DevKit.Error) => void): void;
+        /**
+         * Returns the current location using the device geolocation capability and returns a promise
+         * @returns Promise that resolves with the position data
+         * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-device/getcurrentposition
+         */
+        CurrentPosition(): Promise<DevKit.PositionData>;
         /**
          * Returns the entity metadata for the specified entity.
          * @param entityName The logical name of the entity.
@@ -2133,7 +2190,15 @@ declare namespace DevKit {
          * @param errorCallback A function to call when the operation fails.
          * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-utility/getentitymetadata
          */
-        EntityMetadata(entityName: string, attributes?: Array<string>, successCallback?: (result: DevKit.EntityMetadata) => void, errorCallback?: (error: DevKit.Error) => void): void;
+        EntityMetadata(entityName: string, attributes: Array<string>, successCallback: (result: DevKit.EntityMetadata) => void, errorCallback?: (error: DevKit.Error) => void): void;
+        /**
+         * Returns the entity metadata for the specified entity and returns a promise
+         * @param entityName The logical name of the entity.
+         * @param attributes The attributes to get metadata for.
+         * @returns Promise that resolves with the entity metadata
+         * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-utility/getentitymetadata
+         */
+        EntityMetadata(entityName: string, attributes?: Array<string>): Promise<DevKit.EntityMetadata>;
         /**
          * Encodes the specified string so that it can be used in an HTML attribute.
          * @param arg String to be encoded.
@@ -2160,7 +2225,15 @@ declare namespace DevKit {
          * @param errorCallback A function to call when the operation fails.
          * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-utility/invokeprocessaction
          */
-        InvokeProcessAction(name: string, parameter: any, successCallback: (result: any) => void, errorCallback: (error: DevKit.Error) => void): void;
+        InvokeProcessAction(name: string, parameter: any, successCallback: (result: any) => void, errorCallback?: (error: DevKit.Error) => void): void;
+        /**
+         * Invokes an action based on the specified parameters and returns a promise
+         * @param name Name of the process action to invoke.
+         * @param parameter An object containing input parameters for the action. You define an object using key:value pairs of items, where key is of String type.
+         * @returns Promise that resolves with the action result
+         * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-utility/invokeprocessaction
+         */
+        InvokeProcessAction(name: string, parameter: any): Promise<any>;
         /**
          * Displays the web page represented by a URL in the static area in the side pane, which appears on all pages in the Dynamics 365 for Customer Engagement apps web client.
          * @param url URL of the page to be loaded in the side pane static area.
@@ -2175,7 +2248,14 @@ declare namespace DevKit {
          * @param cancelCallback A function to call when you cancel the lookup control or the operation fails
          * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-utility/lookupobjects
          */
-        LookupObjects(lookupOption: DevKit.LookupOption, successCallback: (results: Array<DevKit.EntityReference>) => void, errorCallback: (error: DevKit.Error) => void): void;
+        LookupObjects(lookupOption: DevKit.LookupOption, successCallback: (results: Array<DevKit.EntityReference>) => void, errorCallback?: (error: DevKit.Error) => void): void;
+        /**
+         * Defines the options for opening the lookup dialog and returns a promise
+         * @param lookupOption
+         * @returns Promise that resolves with an array of selected entity references
+         * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-utility/lookupobjects
+         */
+        LookupObjects(lookupOption: DevKit.LookupOption): Promise<Array<DevKit.EntityReference>>;
         /**
          * Displays an alert dialog containing a message and a button.
          * @param alertOption The strings to be used in the alert dialog.
@@ -2184,7 +2264,15 @@ declare namespace DevKit {
          * @param errorCallback A function to execute when the operation fails.
          * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-navigation/openalertdialog
          */
-        OpenAlertDialog(alertOption: DevKit.DialogAlertOption, window?: DevKit.Window, successCallback?: (result: string) => void, errorCallback?: (error: DevKit.Error) => void): void;
+        OpenAlertDialog(alertOption: DevKit.DialogAlertOption, window: DevKit.Window, successCallback: (result: string) => void, errorCallback?: (error: DevKit.Error) => void): void;
+        /**
+         * Displays an alert dialog containing a message and a button and returns a promise
+         * @param alertOption The strings to be used in the alert dialog.
+         * @param window The height and width options for alert dialog.
+         * @returns Promise that resolves when the dialog is closed
+         * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-navigation/openalertdialog
+         */
+        OpenAlertDialog(alertOption: DevKit.DialogAlertOption, window?: DevKit.Window): Promise<string>;
         /**
          * Displays a confirmation dialog box containing a message and two buttons.
          * @param confirmOption The strings to be used in the confirmation dialog.
@@ -2193,7 +2281,15 @@ declare namespace DevKit {
          * @param errorCallback A function to execute when the operation fails.
          * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-navigation/openconfirmdialog
          */
-        OpenConfirmDialog(confirmOption: DevKit.DialogConfirmOption, window?: DevKit.Window, successCallback?: (result: DevKit.DialogResult) => void, errorCallback?: (error: DevKit.Error) => void): void;
+        OpenConfirmDialog(confirmOption: DevKit.DialogConfirmOption, window: DevKit.Window, successCallback: (result: DevKit.DialogResult) => void, errorCallback?: (error: DevKit.Error) => void): void;
+        /**
+         * Displays a confirmation dialog box containing a message and two buttons and returns a promise
+         * @param confirmOption The strings to be used in the confirmation dialog.
+         * @param window The height and width options for confirmation dialog.
+         * @returns Promise that resolves with the dialog result
+         * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-navigation/openconfirmdialog
+         */
+        OpenConfirmDialog(confirmOption: DevKit.DialogConfirmOption, window?: DevKit.Window): Promise<DevKit.DialogResult>;
         /**
          * Displays an error dialog.
          * @param errorOptions An object to specify the options for error dialog.
@@ -2201,7 +2297,14 @@ declare namespace DevKit {
          * @param errorCallback A function to execute when the operation fails.
          * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-navigation/openerrordialog
          */
-        OpenErrorDialog(errorOptions: DevKit.DialogError, successCallback: (result: string) => void, errorCallback: (error: DevKit.Error) => void): void;
+        OpenErrorDialog(errorOptions: DevKit.DialogError, successCallback: (result: string) => void, errorCallback?: (error: DevKit.Error) => void): void;
+        /**
+         * Displays an error dialog and returns a promise
+         * @param errorOptions An object to specify the options for error dialog.
+         * @returns Promise that resolves when the dialog is closed
+         * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-navigation/openerrordialog
+         */
+        OpenErrorDialog(errorOptions: DevKit.DialogError): Promise<string>;
         /**
          * Opens a file.
          * @param file An object describing the file to open.
@@ -2217,7 +2320,15 @@ declare namespace DevKit {
          * @param errorCallback A function to execute when the operation fails.
          * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-navigation/openform
          */
-        OpenForm(formOption: DevKit.FormOption, formParameters?: any, successCallback?: (result: DevKit.OpenQuickCreateSuccessCallbackObject) => void, errorCallback?: (error: DevKit.Error) => void): void;
+        OpenForm(formOption: DevKit.FormOption, formParameters: any, successCallback: (result: DevKit.OpenQuickCreateSuccessCallbackObject) => void, errorCallback?: (error: DevKit.Error) => void): void;
+        /**
+         * Opens an entity form or a quick create form and returns a promise
+         * @param formOption The open form option for opening the form.
+         * @param formParameters A dictionary object that passes extra parameters to the form. Invalid parameters will cause an error.
+         * @returns Promise that resolves with the saved record information
+         * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-navigation/openform
+         */
+        OpenForm(formOption: DevKit.FormOption, formParameters?: any): Promise<DevKit.OpenQuickCreateSuccessCallbackObject>;
         /**
          * Opens a URL, including file URLs.
          * @param url URL to open.
@@ -2249,7 +2360,14 @@ declare namespace DevKit {
          * @param errorCallback A function to call when the operation fails.
          * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-device/pickfile
          */
-        PickFile(filePickOption: DevKit.FilePickOption, successCallback: (result: Array<DevKit.FileData>) => void, errorCallback: (error: DevKit.Error) => void): void;
+        PickFile(filePickOption: DevKit.FilePickOption, successCallback: (result: Array<DevKit.FileData>) => void, errorCallback?: (error: DevKit.Error) => void): void;
+        /**
+         * Opens a dialog box to select files from your computer (web client) or mobile device (mobile clients) and returns a promise
+         * @param filePickOption An object pick file option
+         * @returns Promise that resolves with an array of selected file data
+         * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-device/pickfile
+         */
+        PickFile(filePickOption: DevKit.FilePickOption): Promise<Array<DevKit.FileData>>;
         /**
          * Prefixes the current organization's unique name to a string, typically a URL path
          * @param path A local path to a resource
@@ -2317,7 +2435,14 @@ declare namespace DevKit {
          * @param errorCallback A function to call when the operation fails.
          * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-app/addglobalnotification
          */
-        AddGlobalNotification(notification: DevKit.GlobalNotification, successCallback?: (result: string) => void, errorCallback?: (error: DevKit.Error) => void): void;
+        AddGlobalNotification(notification: DevKit.GlobalNotification, successCallback: (result: string) => void, errorCallback?: (error: DevKit.Error) => void): void;
+        /**
+         * Displays an error, information, warning, or success notification for an app and returns a promise
+         * @param notification The notification to add.
+         * @returns Promise that resolves with the notification GUID
+         * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-app/addglobalnotification
+         */
+        AddGlobalNotification(notification: DevKit.GlobalNotification): Promise<string>;
         /**
          * Clears a notification in the app.
          * @param uniqueId The ID to use to clear a specific notification that was set using addGlobalNotification.
@@ -2325,7 +2450,21 @@ declare namespace DevKit {
          * @param errorCallback A function to call when the operation fails.
          * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-app/clearglobalnotification
          */
-        ClearGlobalNotification(uniqueId: string, successCallback?: (result: string) => void, errorCallback?: (error: DevKit.Error) => void): void;
+        ClearGlobalNotification(uniqueId: string, successCallback: (result: string) => void, errorCallback?: (error: DevKit.Error) => void): void;
+        /**
+         * Clears a notification in the app and returns a promise
+         * @param uniqueId The ID to use to clear a specific notification that was set using addGlobalNotification.
+         * @returns Promise that resolves when the notification is cleared
+         * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-app/clearglobalnotification
+         */
+        ClearGlobalNotification(uniqueId: string): Promise<string>;
+        /**
+         * Clears a notification in the app and returns a promise
+         * @param uniqueId The ID to use to clear a specific notification that was set using addGlobalNotification.
+         * @returns Promise that resolves when the notification is cleared
+         * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-app/clearglobalnotification
+         */
+        ClearGlobalNotification(uniqueId: string): Promise<string>;
         /**
          *  Provides access to the methods to determine which client is being used, whether the client is connected to the server, and what kind of device is being used.
          *  @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/client
@@ -2616,7 +2755,14 @@ declare namespace DevKit {
          * @param errorCallback A function to call when the operation fails
          * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-data/refresh
          */
-        Refresh(save?: boolean, successCallback?: (executionContext: any) => void, errorCallback?: (error: DevKit.Error) => void): void;
+        Refresh(save: boolean, successCallback: (executionContext: any) => void, errorCallback?: (error: DevKit.Error) => void): void;
+        /**
+         * Asynchronously refreshes and optionally saves all the data of the form without reloading the page and returns a promise
+         * @param save true if the data should be saved after it is refreshed, otherwise false
+         * @returns Promise that resolves when the refresh is complete
+         * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-data/refresh
+         */
+        Refresh(save?: boolean): Promise<any>;
         /**
          * Causes the ribbon to re-evaluate data that controls what is displayed in it
          * @param refreshAll Indicates whether all the ribbon command bars on the current page are refreshed. If you specify false, only the page-level ribbon command bar is refreshed. If you do not specify this parameter, by default false is passed
@@ -2660,7 +2806,14 @@ declare namespace DevKit {
          * @param errorCallback A function to call when the operation fails
          * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-data/save
          */
-        Save(saveOption?: DevKit.SaveOption, successCallback?: (executionContext: any) => void, errorCallback?: (error: DevKit.Error) => void): void;
+        Save(saveOption: DevKit.SaveOption, successCallback: (executionContext: any) => void, errorCallback?: (error: DevKit.Error) => void): void;
+        /**
+         * Saves the record asynchronously and returns a promise
+         * @param saveOption An object for specifying options for saving the record
+         * @returns Promise that resolves when the save is complete
+         * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-data/save
+         */
+        Save(saveOption?: DevKit.SaveOption): Promise<any>;
         /**
          * Displays form level notifications
          * @param message The text of the message

@@ -57,11 +57,19 @@ const devKit = (function () {
         form.FormNavigateToFormId = formId => { findFormItem(item => item.getId(), formId)?.navigate(); };
         form.FormNavigateToFormLabel = formLabel => { findFormItem(item => item.getLabel(), formLabel)?.navigate(); };
         form.FormSetVisible = (formId, value) => { findFormItem(item => item.getId(), formId)?.setVisible(value); }
-        form.Refresh = (save, successCallback, errorCallback) => contextData?.refresh(save)?.then(successCallback, errorCallback);
+        form.Refresh = (save, successCallback, errorCallback) => {
+            const promise = contextData?.refresh(save);
+            if (successCallback) promise?.then(successCallback, errorCallback);
+            else return promise;
+        };
         form.RefreshRibbon = refreshAll => contextUi?.refreshRibbon(refreshAll);
         form.RemoveOnPostSave = callback => contextDataEntity?.removeOnPostSave(callback);
         form.RemoveOnSave = callback => contextDataEntity?.removeOnSave(callback);
-        form.Save = (saveOptions, successCallback, errorCallback) => contextData?.save(saveOptions)?.then(successCallback, errorCallback);
+        form.Save = (saveOptions, successCallback, errorCallback) => {
+            const promise = contextData?.save(saveOptions);
+            if (successCallback) promise?.then(successCallback, errorCallback);
+            else return promise;
+        };
         form.SetFormEntityName = arg => contextUi?.setFormEntityName(arg);
         form.SetFormNotification = (message, level, uniqueId) => contextUi?.setFormNotification(message, level, uniqueId);
         form.UiAddLoaded = callback => contextUi?.addLoaded(callback);
@@ -259,7 +267,11 @@ const devKit = (function () {
         field.AddSelection = callback => control?.addOnSelection(callback);
         field.ClearNotification = uniqueId => control?.clearNotification(uniqueId);
         field.ClearOptions = () => control?.clearOptions();
-        field.ContentWindow = (successCallback, errorCallback) => control?.getContentWindow()?.then(successCallback, errorCallback);
+        field.ContentWindow = (successCallback, errorCallback) => {
+            const promise = control?.getContentWindow();
+            if (successCallback) promise?.then(successCallback, errorCallback);
+            else return promise;
+        };
         field.FireOnChange = () => attribute?.fireOnChange();
         field.Focus = () => control?.setFocus();
         field.OpenSearchResult = (resultNumber, mode) => control?.openSearchResult(resultNumber, mode);
@@ -516,35 +528,111 @@ const devKit = (function () {
             return obj;
         });
         getter(utility, 'Version', () => getGlobalContext?.getVersion());
-        utility.AddGlobalNotification = function (notification, successCallback, errorCallback) { getApp?.addGlobalNotification(notification)?.then(successCallback, errorCallback); };
+        utility.AddGlobalNotification = function (notification, successCallback, errorCallback) {
+            const promise = getApp?.addGlobalNotification(notification);
+            if (successCallback) promise?.then(successCallback, errorCallback);
+            else return promise;
+        };
         utility.AdvancedConfigSetting = setting => getGlobalContext?.getAdvancedConfigSetting(setting);
-        utility.AllowedStatusTransitions = function (entityName, stateCode, successCallback, errorCallback) { getUtility?.getAllowedStatusTransitions(entityName, stateCode)?.then(successCallback, errorCallback); };
-        utility.BarcodeValue = function (successCallback, errorCallback) { getDevice?.getBarcodeValue()?.then(successCallback, errorCallback); };
-        utility.CaptureAudio = function (successCallback, errorCallback) { getDevice?.captureAudio()?.then(successCallback, errorCallback); };
-        utility.CaptureImage = function (imageOptions, successCallback, errorCallback) { getDevice?.captureImage(imageOptions)?.then(successCallback, errorCallback); };
-        utility.CaptureVideo = function (successCallback, errorCallback) { getDevice?.captureVideo()?.then(successCallback, errorCallback); };
-        utility.ClearGlobalNotification = function (uniqueId, successCallback, errorCallback) { getApp?.clearGlobalNotification(uniqueId)?.then(successCallback, errorCallback); };
+        utility.AllowedStatusTransitions = function (entityName, stateCode, successCallback, errorCallback) {
+            const promise = getUtility?.getAllowedStatusTransitions(entityName, stateCode);
+            if (successCallback) promise?.then(successCallback, errorCallback);
+            else return promise;
+        };
+        utility.BarcodeValue = function (successCallback, errorCallback) {
+            const promise = getDevice?.getBarcodeValue();
+            if (successCallback) promise?.then(successCallback, errorCallback);
+            else return promise;
+        };
+        utility.CaptureAudio = function (successCallback, errorCallback) {
+            const promise = getDevice?.captureAudio();
+            if (successCallback) promise?.then(successCallback, errorCallback);
+            else return promise;
+        };
+        utility.CaptureImage = function (imageOptions, successCallback, errorCallback) {
+            const promise = getDevice?.captureImage(imageOptions);
+            if (successCallback) promise?.then(successCallback, errorCallback);
+            else return promise;
+        };
+        utility.CaptureVideo = function (successCallback, errorCallback) {
+            const promise = getDevice?.captureVideo();
+            if (successCallback) promise?.then(successCallback, errorCallback);
+            else return promise;
+        };
+        utility.ClearGlobalNotification = function (uniqueId, successCallback, errorCallback) {
+            const promise = getApp?.clearGlobalNotification(uniqueId);
+            if (successCallback) promise?.then(successCallback, errorCallback);
+            else return promise;
+        };
         utility.CloseProgressIndicator = () => getUtility?.closeProgressIndicator();
-        utility.CurrentAppName = function (successCallback, errorCallback) { getGlobalContext?.getCurrentAppName()?.then(successCallback, errorCallback); }
-        utility.CurrentAppProperties = function (successCallback, errorCallback) { getGlobalContext?.getCurrentAppProperties()?.then(successCallback, errorCallback); };
-        utility.CurrentPosition = function (successCallback, errorCallback) { getDevice?.getCurrentPosition()?.then(successCallback, errorCallback); };
+        utility.CurrentAppName = function (successCallback, errorCallback) {
+            const promise = getGlobalContext?.getCurrentAppName();
+            if (successCallback) promise?.then(successCallback, errorCallback);
+            else return promise;
+        }
+        utility.CurrentAppProperties = function (successCallback, errorCallback) {
+            const promise = getGlobalContext?.getCurrentAppProperties();
+            if (successCallback) promise?.then(successCallback, errorCallback);
+            else return promise;
+        };
+        utility.CurrentPosition = function (successCallback, errorCallback) {
+            const promise = getDevice?.getCurrentPosition();
+            if (successCallback) promise?.then(successCallback, errorCallback);
+            else return promise;
+        };
         utility.EntityMainFormDescriptor = (entityName, formId) => getUtility?.getEntityMainFormDescriptor(entityName, formId);
-        utility.EntityMetadata = function (entityName, attributes, successCallback, errorCallback) { getUtility?.getEntityMetadata(entityName, attributes)?.then(successCallback, errorCallback); };
+        utility.EntityMetadata = function (entityName, attributes, successCallback, errorCallback) {
+            const promise = getUtility?.getEntityMetadata(entityName, attributes);
+            if (successCallback) promise?.then(successCallback, errorCallback);
+            else return promise;
+        };
         utility.HtmlAttributeEncode = arg => getEncoding?.htmlAttributeEncode(arg);
         utility.HtmlDecode = arg => getEncoding?.htmlDecode(arg);
         utility.HtmlEncode = arg => getEncoding?.htmlEncode(arg);
-        utility.InvokeProcessAction = function (name, parameters, successCallback, errorCallback) { getUtility?.invokeProcessAction(name, parameters)?.then(successCallback, errorCallback); };
+        utility.InvokeProcessAction = function (name, parameters, successCallback, errorCallback) {
+            const promise = getUtility?.invokeProcessAction(name, parameters);
+            if (successCallback) promise?.then(successCallback, errorCallback);
+            else return promise;
+        };
         utility.LoadPanel = (url, title) => getPanel?.loadPanel(url, title);
-        utility.LookupObjects = function (lookupOptions, successCallback, errorCallback) { getUtility?.lookupObjects(lookupOptions)?.then(successCallback, errorCallback); };
-        utility.NavigateTo = function (pageInput, navigationOptions, successCallback, errorCallback) { getNavigation?.navigateTo(pageInput, navigationOptions)?.then(successCallback, errorCallback); };
-        utility.OpenAlertDialog = function (alertStrings, alertOptions, closeCallback, errorCallback) { getNavigation?.openAlertDialog(alertStrings, alertOptions)?.then(closeCallback, errorCallback); };
-        utility.OpenConfirmDialog = function (confirmStrings, confirmOptions, successCallback, errorCallback) { getNavigation?.openConfirmDialog(confirmStrings, confirmOptions)?.then(successCallback, errorCallback); };
-        utility.OpenErrorDialog = function (errorOptions, successCallback, errorCallback) { getNavigation?.openErrorDialog(errorOptions)?.then(successCallback, errorCallback); };
+        utility.LookupObjects = function (lookupOptions, successCallback, errorCallback) {
+            const promise = getUtility?.lookupObjects(lookupOptions);
+            if (successCallback) promise?.then(successCallback, errorCallback);
+            else return promise;
+        };
+        utility.NavigateTo = function (pageInput, navigationOptions, successCallback, errorCallback) {
+            const promise = getNavigation?.navigateTo(pageInput, navigationOptions);
+            if (successCallback) promise?.then(successCallback, errorCallback);
+            else return promise;
+        };
+        utility.OpenAlertDialog = function (alertStrings, alertOptions, closeCallback, errorCallback) {
+            const promise = getNavigation?.openAlertDialog(alertStrings, alertOptions);
+            if (closeCallback) promise?.then(closeCallback, errorCallback);
+            else return promise;
+        };
+        utility.OpenConfirmDialog = function (confirmStrings, confirmOptions, successCallback, errorCallback) {
+            const promise = getNavigation?.openConfirmDialog(confirmStrings, confirmOptions);
+            if (successCallback) promise?.then(successCallback, errorCallback);
+            else return promise;
+        };
+        utility.OpenErrorDialog = function (errorOptions, successCallback, errorCallback) {
+            const promise = getNavigation?.openErrorDialog(errorOptions);
+            if (successCallback) promise?.then(successCallback, errorCallback);
+            else return promise;
+        };
         utility.OpenFile = (file, openFileOptions) => getNavigation?.openFile(file, openFileOptions);
-        utility.OpenForm = function (entityFormOptions, formParameters, successCallback, errorCallback) { getNavigation?.openForm(entityFormOptions, formParameters)?.then(successCallback, errorCallback); };
+        utility.OpenForm = function (entityFormOptions, formParameters, successCallback, errorCallback) {
+            const promise = getNavigation?.openForm(entityFormOptions, formParameters);
+            if (successCallback) promise?.then(successCallback, errorCallback);
+            else return promise;
+        };
         utility.OpenUrl = (url, openUrlOptions) => getNavigation?.openUrl(url, openUrlOptions);
         utility.OpenWebResource = (webResourceName, windowOptions, data) => getNavigation?.openWebResource(webResourceName, windowOptions, data);
-        utility.PickFile = function (pickFileOptions, successCallback, errorCallback) { getDevice?.pickFile(pickFileOptions)?.then(successCallback, errorCallback); };
+        utility.PickFile = function (pickFileOptions, successCallback, errorCallback) {
+            const promise = getDevice?.pickFile(pickFileOptions);
+            if (successCallback) promise?.then(successCallback, errorCallback);
+            else return promise;
+        };
         utility.PrependOrgName = sPath => getGlobalContext?.prependOrgName(sPath);
         utility.RefreshParentGrid = lookupOptions => getUtility?.refreshParentGrid(lookupOptions);
         utility.Resource = key => getUtility?.getResourceString(defaultWebResourceName, key);
