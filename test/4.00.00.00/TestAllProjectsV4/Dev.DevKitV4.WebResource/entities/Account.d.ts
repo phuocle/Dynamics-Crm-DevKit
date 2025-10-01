@@ -115,6 +115,7 @@ declare namespace DevKitV4 {
 			Account_Tasks: DevKit.Controls.NavigationItem;
 			adx_invitation_assigntoaccount: DevKit.Controls.NavigationItem;
 			bpf_account_devkit_bpfaccount: DevKit.Controls.NavigationItem;
+			bpf_account_v4_bpf_account_v4_1: DevKit.Controls.NavigationItem;
 			contact_customer_accounts: DevKit.Controls.NavigationItem;
 			msa_account_managingpartner: DevKit.Controls.NavigationItem;
 			msa_contact_managingpartner: DevKit.Controls.NavigationItem;
@@ -135,8 +136,23 @@ declare namespace DevKitV4 {
 			/** Type the company or business name. */
 			Name_1: DevKit.Controls.String;
 		}
+		interface ProcessBPF_Account_v4_1 {
+			/** Type an ID number or code for the account to quickly search and identify the account in system views. */
+			AccountNumber: DevKit.Controls.String;
+			/** Select a rating to indicate the value of the customer account. */
+			AccountRatingCode: DevKit.Controls.OptionSet;
+			/** Type the county for the primary address. */
+			Address1_County: DevKit.Controls.String;
+			/** Type additional information to describe the account, such as an excerpt from the company's website. */
+			Description: DevKit.Controls.String;
+			/** Type the company or business name. */
+			Name: DevKit.Controls.String;
+			/** Type the Standard Industrial Classification (SIC) code that indicates the account's primary industry of business, for use in marketing segmentation and demographic analysis. */
+			SIC: DevKit.Controls.String;
+		}
 		interface Process extends DevKit.Controls.IProcess {
 			BPF_Account: ProcessBPF_Account;
+			BPF_Account_v4_1: ProcessBPF_Account_v4_1;
 		}
 		interface Grid {
 			ChildAccounts: DevKit.Controls.Grid;
@@ -265,6 +281,7 @@ declare namespace DevKitV4 {
 			Account_Tasks: DevKit.Controls.NavigationItem;
 			adx_invitation_assigntoaccount: DevKit.Controls.NavigationItem;
 			bpf_account_devkit_bpfaccount: DevKit.Controls.NavigationItem;
+			bpf_account_v4_bpf_account_v4_1: DevKit.Controls.NavigationItem;
 			contact_customer_accounts: DevKit.Controls.NavigationItem;
 			msa_account_managingpartner: DevKit.Controls.NavigationItem;
 			msa_contact_managingpartner: DevKit.Controls.NavigationItem;
@@ -285,8 +302,23 @@ declare namespace DevKitV4 {
 			/** Type the company or business name. */
 			Name_1: DevKit.Controls.String;
 		}
+		interface ProcessBPF_Account_v4_1 {
+			/** Type an ID number or code for the account to quickly search and identify the account in system views. */
+			AccountNumber: DevKit.Controls.String;
+			/** Select a rating to indicate the value of the customer account. */
+			AccountRatingCode: DevKit.Controls.OptionSet;
+			/** Type the county for the primary address. */
+			Address1_County: DevKit.Controls.String;
+			/** Type additional information to describe the account, such as an excerpt from the company's website. */
+			Description: DevKit.Controls.String;
+			/** Type the company or business name. */
+			Name: DevKit.Controls.String;
+			/** Type the Standard Industrial Classification (SIC) code that indicates the account's primary industry of business, for use in marketing segmentation and demographic analysis. */
+			SIC: DevKit.Controls.String;
+		}
 		interface Process extends DevKit.Controls.IProcess {
 			BPF_Account: ProcessBPF_Account;
+			BPF_Account_v4_1: ProcessBPF_Account_v4_1;
 		}
 		interface Grid {
 			Contacts: DevKit.Controls.Grid;
@@ -476,6 +508,7 @@ declare namespace DevKitV4 {
 			Account_Tasks: DevKit.Controls.NavigationItem;
 			adx_invitation_assigntoaccount: DevKit.Controls.NavigationItem;
 			bpf_account_devkit_bpfaccount: DevKit.Controls.NavigationItem;
+			bpf_account_v4_bpf_account_v4_1: DevKit.Controls.NavigationItem;
 			contact_customer_accounts: DevKit.Controls.NavigationItem;
 			msa_account_managingpartner: DevKit.Controls.NavigationItem;
 			msa_contact_managingpartner: DevKit.Controls.NavigationItem;
@@ -486,8 +519,23 @@ declare namespace DevKitV4 {
 			/** Type the company or business name. */
 			Name_1: DevKit.Controls.String;
 		}
+		interface ProcessBPF_Account_v4_1 {
+			/** Type an ID number or code for the account to quickly search and identify the account in system views. */
+			AccountNumber: DevKit.Controls.String;
+			/** Select a rating to indicate the value of the customer account. */
+			AccountRatingCode: DevKit.Controls.OptionSet;
+			/** Type the county for the primary address. */
+			Address1_County: DevKit.Controls.String;
+			/** Type additional information to describe the account, such as an excerpt from the company's website. */
+			Description: DevKit.Controls.String;
+			/** Type the company or business name. */
+			Name: DevKit.Controls.String;
+			/** Type the Standard Industrial Classification (SIC) code that indicates the account's primary industry of business, for use in marketing segmentation and demographic analysis. */
+			SIC: DevKit.Controls.String;
+		}
 		interface Process extends DevKit.Controls.IProcess {
 			BPF_Account: ProcessBPF_Account;
+			BPF_Account_v4_1: ProcessBPF_Account_v4_1;
 		}
 		interface Grid {
 			accountactivitiesgrid: DevKit.Controls.Grid;

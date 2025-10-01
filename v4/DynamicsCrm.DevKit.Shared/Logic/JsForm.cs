@@ -321,17 +321,19 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                     {
                         var array = m.Value.Split("=".ToCharArray());
                         var fieldName = array[1].Substring(1, array[1].Length - 2);
-                        fields.Add($"{name}___{fieldName}");
+                        fields.Add($"{fieldName}");
                     }
                 }
                 fields.Sort();
-                code += GetJsForListFields(fields, true);
+                code += GetJsForListFields(fields, true, $"{name}___");
+                code += ", ";
             }
             return code;
         }
 
-        private static string GetJsForListFields(IEnumerable<string> list, bool isBPF)
+        private static string GetJsForListFields(IEnumerable<string> list, bool isBPF, string prefix = null)
         {
+            prefix ??= string.Empty;
             var code = string.Empty;
             var previousName = string.Empty;
             var previousCount = 0;
@@ -361,7 +363,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                         previousName = string.Empty;
                         previousCount = 0;
                     }
-                    code += $"\"{name}\", ";
+                    code += $"\"{prefix}{name}\", ";
                     previousName = Helper.SafeIdentifier(crmAttribute.SchemaName);
                 }
             }
