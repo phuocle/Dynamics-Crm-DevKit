@@ -143,7 +143,7 @@ declare namespace DevKitV4 {
 			Contacts: DevKit.Controls.Grid;
 		}
 	}
-	class FormAccount extends DevKit.IForm {
+	export class FormAccount extends DevKit.IForm {
 		/**
 		* Account [Main Form]
 		* @param executionContext the execution context
@@ -292,7 +292,7 @@ declare namespace DevKitV4 {
 			Contacts: DevKit.Controls.Grid;
 		}
 	}
-	class FormAccount_for_Interactive_experience extends DevKit.IForm {
+	export class FormAccount_for_Interactive_experience extends DevKit.IForm {
 		/**
 		* Account for Interactive experience [Main Form]
 		* @param executionContext the execution context
@@ -494,7 +494,7 @@ declare namespace DevKitV4 {
 			accountContactsGrid: DevKit.Controls.Grid;
 		}
 	}
-	class FormAccount_Information extends DevKit.IForm {
+	export class FormAccount_Information extends DevKit.IForm {
 		/**
 		* Information [Main Form]
 		* @param executionContext the execution context
@@ -552,7 +552,7 @@ declare namespace DevKitV4 {
 			Telephone1: DevKit.Controls.String;
 		}
 	}
-	class FormAccount_Quick_Create extends DevKit.IForm {
+	export class FormAccount_Quick_Create extends DevKit.IForm {
 		/**
 		* Account Quick Create [Quick Create]
 		* @param executionContext the execution context
@@ -564,7 +564,7 @@ declare namespace DevKitV4 {
 		/** The Body section of form Account_Quick_Create */
 		Body: DevKitV4.FormAccount_Quick_Create.Body;
 	}
-	class AccountApi {
+	export class AccountApi {
 		/**
 		* DynamicsCrm.DevKit AccountApi
 		* @param entity The entity object from OData response

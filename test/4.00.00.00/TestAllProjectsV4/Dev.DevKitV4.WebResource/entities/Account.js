@@ -3,7 +3,7 @@
 "use strict";
 var formAccount = (function () {
 	"use strict";
-	/** @type DevKitV4.FormAccount */
+	/** @type {DevKitV4.FormAccount | null} */
 	var form = null;
 	/** @param {any} executionContext */
 	async function onLoad(executionContext) {
@@ -12,10 +12,12 @@ var formAccount = (function () {
 		form.UiAddLoaded(UiAddLoaded);
 	}
 	function registerEvents() {
-		if (form.ExecutionContext.IsInitialLoad()) {
+		if (form && form.ExecutionContext.IsInitialLoad()) {
+
 		}
 	}
 	//BEGIN ON LOAD ========================================================
+	/** @param {any} executionContext */
 	async function UiAddLoaded(executionContext) {
 	}
 	//END ON LOAD ==========================================================
@@ -34,7 +36,7 @@ var formAccount = (function () {
 })();
 var formAccount_for_Interactive_experience = (function () {
 	"use strict";
-	/** @type DevKitV4.FormAccount_for_Interactive_experience */
+	/** @type {DevKitV4.FormAccount_for_Interactive_experience} */
 	var form = null;
 	/** @param {any} executionContext */
 	async function onLoad(executionContext) {
@@ -43,10 +45,11 @@ var formAccount_for_Interactive_experience = (function () {
 		form.UiAddLoaded(UiAddLoaded);
 	}
 	function registerEvents() {
-		if (form.ExecutionContext.IsInitialLoad()) {
+		if (form && form.ExecutionContext.IsInitialLoad()) {
 		}
 	}
 	//BEGIN ON LOAD ========================================================
+	/** @param {any} executionContext */
 	async function UiAddLoaded(executionContext) {
 	}
 	//END ON LOAD ==========================================================
@@ -65,7 +68,7 @@ var formAccount_for_Interactive_experience = (function () {
 })();
 var formAccount_Quick_Create = (function () {
 	"use strict";
-	/** @type DevKitV4.FormAccount_Quick_Create */
+	/** @type {DevKitV4.FormAccount_Quick_Create} */
 	var form = null;
 	/** @param {any} executionContext */
 	async function onLoad(executionContext) {
@@ -74,10 +77,11 @@ var formAccount_Quick_Create = (function () {
 		form.UiAddLoaded(UiAddLoaded);
 	}
 	function registerEvents() {
-		if (form.ExecutionContext.IsInitialLoad()) {
+		if (form && form.ExecutionContext.IsInitialLoad()) {
 		}
 	}
 	//BEGIN ON LOAD ========================================================
+	/** @param {any} executionContext */
 	async function UiAddLoaded(executionContext) {
 	}
 	//END ON LOAD ==========================================================
@@ -96,7 +100,7 @@ var formAccount_Quick_Create = (function () {
 })();
 var formAccount_Information = (function () {
 	"use strict";
-	/** @type DevKitV4.FormAccount_Information */
+	/** @type {DevKitV4.FormAccount_Information} */
 	var form = null;
 	/** @param {any} executionContext */
 	async function onLoad(executionContext) {
@@ -105,10 +109,11 @@ var formAccount_Information = (function () {
 		form.UiAddLoaded(UiAddLoaded);
 	}
 	function registerEvents() {
-		if (form.ExecutionContext.IsInitialLoad()) {
+		if (form && form.ExecutionContext.IsInitialLoad()) {
 		}
 	}
 	//BEGIN ON LOAD ========================================================
+	/** @param {any} executionContext */
 	async function UiAddLoaded(executionContext) {
 	}
 	//END ON LOAD ==========================================================
