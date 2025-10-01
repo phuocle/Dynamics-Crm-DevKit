@@ -161,8 +161,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
 
             var quickViewXml = (from x in xdoc2.Descendants("QuickFormId") select new { formId = x.Value, entityLogicalName = x?.Attribute("entityname")?.Value }).FirstOrDefault();
             if (quickViewXml == null) return string.Empty;
-            var quickViewFormXml = string.Empty;
-            await GetFormXmlAsync(quickViewXml.formId, quickViewXml.entityLogicalName);
+            var quickViewFormXml = await GetFormXmlAsync(quickViewXml.formId, quickViewXml.entityLogicalName);
             if (quickViewFormXml == string.Empty) return string.Empty;
             var xdoc3 = XDocument.Parse(quickViewFormXml);
             var fields = (from x in xdoc3

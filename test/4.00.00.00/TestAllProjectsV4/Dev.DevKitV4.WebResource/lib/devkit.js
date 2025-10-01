@@ -874,7 +874,15 @@ const devKit = (function () {
         var quick = formConfig.quick || [];
         var quickLength = quick.length;
         for (var i = 0; i < quickLength; i++) {
-            quickFormObj[quick[i]] = {};
+            var parts = quick[i].split('___');
+            var quickFormName = parts[0];
+            var fieldName = parts[1];
+            if (!quickFormObj[quickFormName]) {
+                quickFormObj[quickFormName] = {};
+            }
+            if (fieldName) {
+                quickFormObj[quickFormName][fieldName] = {};
+            }
         }
         loadQuickForms(formContext, quickFormObj);
         form.QuickForm = quickFormObj;

@@ -687,6 +687,7 @@ namespace DynamicsCrm.DevKit.Shared
                 code += $"{TAB}{TAB}}}{NEW_LINE}";
                 code += $"{TAB}}}{NEW_LINE}";
                 code += $"{TAB}//BEGIN ON LOAD ========================================================{NEW_LINE}";
+                code += $"{TAB}/** @param {{any}} executionContext */{NEW_LINE}";
                 code += $"{TAB}async function UiAddLoaded(executionContext) {{{NEW_LINE}";
                 code += $"{TAB}}}{NEW_LINE}";
                 code += $"{TAB}//END ON LOAD =========================================================={NEW_LINE}";

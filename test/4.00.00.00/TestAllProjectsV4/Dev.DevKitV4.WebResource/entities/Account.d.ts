@@ -513,6 +513,28 @@ declare namespace DevKitV4 {
 			msa_account_managingpartner: DevKit.Controls.NavigationItem;
 			msa_contact_managingpartner: DevKit.Controls.NavigationItem;
 		}
+		interface quickForm_QuickviewControl1759305531762_Body {
+			EMailAddress1: DevKit.Controls.QuickView;
+			Name: DevKit.Controls.QuickView;
+			Telephone1: DevKit.Controls.QuickView;
+		}
+		interface quickForm_QuickviewControl1759305509815_Body {
+			EMailAddress1: DevKit.Controls.QuickView;
+			FirstName: DevKit.Controls.QuickView;
+			LastName: DevKit.Controls.QuickView;
+			MobilePhone: DevKit.Controls.QuickView;
+			ParentCustomerId: DevKit.Controls.QuickView;
+		}
+		interface quickForm_QuickviewControl1759305531762 extends DevKit.Controls.IQuickView {
+			Body: quickForm_QuickviewControl1759305531762_Body;
+		}
+		interface quickForm_QuickviewControl1759305509815 extends DevKit.Controls.IQuickView {
+			Body: quickForm_QuickviewControl1759305509815_Body;
+		}
+		interface QuickForm {
+			QuickviewControl1759305531762: quickForm_QuickviewControl1759305531762;
+			QuickviewControl1759305509815: quickForm_QuickviewControl1759305509815;
+		}
 		interface ProcessBPF_Account {
 			/** Type the company or business name. */
 			Name: DevKit.Controls.String;
@@ -557,6 +579,8 @@ declare namespace DevKitV4 {
 		Header: DevKitV4.FormAccount_Information.Header;
 		/** The Navigation of form Account_Information */
 		Navigation: DevKitV4.FormAccount_Information.Navigation;
+		/** The QuickForm of form Account_Information */
+		QuickForm: DevKitV4.FormAccount_Information.QuickForm;
 		/** The Process of form Account_Information */
 		Process: DevKitV4.FormAccount_Information.Process;
 		/** The Grid of form Account_Information */
