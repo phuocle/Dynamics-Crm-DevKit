@@ -18,6 +18,18 @@ var formAccount = (function () {
 	//BEGIN ON LOAD ========================================================
 	/** @param {any} executionContext */
 	async function UiAddLoaded(executionContext) {
+		/**
+		 * Helper function to pad numbers with leading zeros (ES5 compatible)
+		 * @param {number} num - The number to pad
+		 * @param {number} size - The desired length
+		 * @returns {string} Padded string
+		 */
+		function pad(num, size) {
+			var s = num.toString();
+			while (s.length < size) s = '0' + s;
+			return s;
+		}
+
 		//await testRetrieveRecord();
 		//await testRetrieveRecords();
 		//await testLookup();
@@ -2652,7 +2664,7 @@ var formAccount = (function () {
 					console.log("  ✓ UTC Minutes:", minutes);
 					console.log("  ✓ UTC Seconds:", seconds);
 					console.log("  ✓ UTC Milliseconds:", milliseconds);
-					console.log(`  ℹ Formatted time: ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`);
+					console.log(`  ℹ Formatted time: ${pad(hours, 2)}:${pad(minutes, 2)}:${pad(seconds, 2)}`);
 				}
 
 				// Test 10: Extract date components (using local methods)
@@ -2680,7 +2692,7 @@ var formAccount = (function () {
 					console.log("  ✓ Local Minutes:", minutes);
 					console.log("  ✓ Local Seconds:", seconds);
 					console.log("  ✓ Local Milliseconds:", milliseconds);
-					console.log(`  ℹ Formatted time: ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`);
+					console.log(`  ℹ Formatted time: ${pad(hours, 2)}:${pad(minutes, 2)}:${pad(seconds, 2)}`);
 				}
 
 				// Test 12: Get time zone offset
@@ -2691,7 +2703,7 @@ var formAccount = (function () {
 					const offsetMinutes = Math.abs(timezoneOffset % 60);
 					const offsetSign = timezoneOffset > 0 ? '-' : '+';
 					console.log("  ✓ Time Zone Offset (minutes):", timezoneOffset);
-					console.log(`  ℹ UTC${offsetSign}${offsetHours.toString().padStart(2, '0')}:${offsetMinutes.toString().padStart(2, '0')}`);
+					console.log(`  ℹ UTC${offsetSign}${pad(offsetHours, 2)}:${pad(offsetMinutes, 2)}`);
 					console.log("  ℹ Positive offset means local time is behind UTC");
 					console.log("  ℹ Negative offset means local time is ahead of UTC");
 				}
