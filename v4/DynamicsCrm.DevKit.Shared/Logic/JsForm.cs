@@ -77,7 +77,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             var tabCode = GetJsCodeTabs(form.FormXml);
             if (tabCode.Length > 0) code += $"{TAB}{TAB}{TAB}tab: [{tabCode}],{NEW_LINE}";
             code += $"{TAB}{TAB}}};{NEW_LINE}";
-            code += $"{TAB}{TAB}devKit.LoadFormV2(executionContext, defaultWebResourceName, form);{NEW_LINE}";
+            code += $"{TAB}{TAB}return devKit.LoadFormV2(executionContext, defaultWebResourceName, form);{NEW_LINE}";
             code += $"{TAB}}};{NEW_LINE}";
             return code;
         }
@@ -104,7 +104,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             var codeNavigation = GetJsNavigationCode(form.FormXml);
             if (codeNavigation.Length > 0) code += $"{TAB}{TAB}{TAB}navigation: [{codeNavigation}],{NEW_LINE}";
             code += $"{TAB}{TAB}}};{NEW_LINE}";
-            code += $"{TAB}{TAB}devKit.LoadFormV2(executionContext, defaultWebResourceName, form);{NEW_LINE}";
+            code += $"{TAB}{TAB}return devKit.LoadFormV2(executionContext, defaultWebResourceName, form);{NEW_LINE}";
             code += $"{TAB}}};{NEW_LINE}";
             return code;
         }

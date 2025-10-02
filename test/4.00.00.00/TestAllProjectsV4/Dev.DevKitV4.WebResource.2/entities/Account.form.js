@@ -13,7 +13,7 @@ var DevKitV4;
 			grid: ["ChildAccounts", "Contacts"],
 			navigation: ["account_adx_inviteredemptions", "account_adx_portalcomments", "Account_Appointments", "Account_Email_EmailSender", "Account_Email_SendersAccount", "Account_Emails", "account_msfp_alerts", "account_msfp_surveyinvites", "account_msfp_surveyresponses", "account_parent_account", "Account_Phonecalls", "Account_Tasks", "adx_invitation_assigntoaccount", "bpf_account_devkit_bpfaccount", "bpf_account_v4_bpf_account_v4_1", "contact_customer_accounts", "msa_account_managingpartner", "msa_contact_managingpartner"],
 		};
-		devKit.LoadFormV2(executionContext, defaultWebResourceName, form);
+		return devKit.LoadFormV2(executionContext, defaultWebResourceName, form);
 	};
 	DevKitV4.FormAccount_for_Interactive_experience = function(executionContext, defaultWebResourceName) {
 		const form = {
@@ -25,7 +25,7 @@ var DevKitV4;
 			grid: ["Contacts"],
 			navigation: ["account_adx_inviteredemptions", "account_adx_portalcomments", "Account_Appointments", "Account_Email_EmailSender", "Account_Email_SendersAccount", "Account_Emails", "account_msfp_alerts", "account_msfp_surveyinvites", "account_msfp_surveyresponses", "account_parent_account", "Account_Phonecalls", "Account_Tasks", "adx_invitation_assigntoaccount", "bpf_account_devkit_bpfaccount", "bpf_account_v4_bpf_account_v4_1", "contact_customer_accounts", "msa_account_managingpartner", "msa_contact_managingpartner"],
 		};
-		devKit.LoadFormV2(executionContext, defaultWebResourceName, form);
+		return devKit.LoadFormV2(executionContext, defaultWebResourceName, form);
 	};
 	DevKitV4.FormAccount_Information = function(executionContext, defaultWebResourceName) {
 		const form = {
@@ -37,14 +37,14 @@ var DevKitV4;
 			grid: ["accountactivitiesgrid", "accountContactsGrid"],
 			navigation: ["account_adx_inviteredemptions", "account_adx_portalcomments", "Account_Appointments", "Account_Email_EmailSender", "Account_Email_SendersAccount", "Account_Emails", "account_msfp_alerts", "account_msfp_surveyinvites", "account_msfp_surveyresponses", "account_parent_account", "Account_Phonecalls", "Account_Tasks", "adx_invitation_assigntoaccount", "bpf_account_devkit_bpfaccount", "bpf_account_v4_bpf_account_v4_1", "contact_customer_accounts", "msa_account_managingpartner", "msa_contact_managingpartner"],
 		};
-		devKit.LoadFormV2(executionContext, defaultWebResourceName, form);
+		return devKit.LoadFormV2(executionContext, defaultWebResourceName, form);
 	};
 	DevKitV4.FormAccount_Quick_Create = function(executionContext, defaultWebResourceName) {
 		const form = {
 			body: ["Address1_City", "Address1_Line1", "Address1_Line2", "Address1_PostalCode", "Description", "Name", "NumberOfEmployees", "PrimaryContactId", "Revenue", "Telephone1"],
 			tab: ["tab_1___tab_1_column_1_section_1", "tab_1___tab_1_column_2_section_1", "tab_1___tab_1_column_3_section_1"],
 		};
-		devKit.LoadFormV2(executionContext, defaultWebResourceName, form);
+		return devKit.LoadFormV2(executionContext, defaultWebResourceName, form);
 	};
 })(DevKitV4 || (DevKitV4 = {}));
 /** @namespace OptionSet */

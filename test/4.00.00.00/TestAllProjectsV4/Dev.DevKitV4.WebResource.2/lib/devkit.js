@@ -661,8 +661,13 @@ const devKit = (function () {
         const getOnline = xrmInstance?.WebApi?.online;
         const getOffline = xrmInstance?.WebApi?.offline;
         const extractEntityName = function(fetchXml) {
+            // Remove ?fetchXml= prefix if present
+            let cleanXml = fetchXml;
+            if (fetchXml.includes('fetchXml=')) {
+                cleanXml = decodeURIComponent(fetchXml.split('fetchXml=')[1]);
+            }
             const parser = new DOMParser();
-            const xmlDoc = parser.parseFromString(fetchXml, "text/xml");
+            const xmlDoc = parser.parseFromString(cleanXml, "text/xml");
             const entityNode = xmlDoc.querySelector("entity");
             if (entityNode && entityNode.hasAttribute("name"))
                 return entityNode.getAttribute("name");

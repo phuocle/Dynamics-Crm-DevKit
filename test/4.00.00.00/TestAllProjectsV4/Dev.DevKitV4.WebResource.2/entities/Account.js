@@ -8,7 +8,6 @@ var formAccount = (function () {
 	/** @param {any} executionContext */
 	async function onLoad(executionContext) {
 		form = new DevKitV4.FormAccount(executionContext);
-		debugger;
 		registerEvents();
 		form.UiAddLoaded(UiAddLoaded);
 	}
@@ -20,8 +19,7 @@ var formAccount = (function () {
 	//BEGIN ON LOAD ========================================================
 	/** @param {any} executionContext */
 	async function UiAddLoaded(executionContext) {
-		debugger;
-		await testRetrieveRecord();
+		//await testRetrieveRecord();
 		await testRetrieveRecords();
 
 		/**************************************************************************
