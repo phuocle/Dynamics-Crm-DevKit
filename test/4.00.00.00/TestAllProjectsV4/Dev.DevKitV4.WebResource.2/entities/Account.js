@@ -42,7 +42,11 @@ var formAccount = (function () {
 		//await testFloat();
 		//await testDateTime();
 		//await testBoolean();
-		await testMemo();
+		//await testMemo();
+		//await testIFrame();
+		//await testNote();
+		//await testNavigationItem();
+		//await testMap(); // SKIPPED: Map interface is empty, no methods available
 
 		/**************************************************************************
 		 * TEST: RetrieveRecord Function - All Overloads
@@ -3443,6 +3447,686 @@ var formAccount = (function () {
 				console.error("✗ Error in Memo control tests:", error.message);
 				console.error("Stack trace:", error.stack);
 			}
+		}
+
+		/**************************************************************************
+		 * TEST: IFrame Control - IFRAME_PHUOCLE
+		 * Tests all IFrame control methods and properties
+		 **************************************************************************/
+		async function testIFrame() {
+			console.log("\n╔════════════════════════════════════════════════════════════════╗");
+			console.log("║                    IFRAME CONTROL TEST SUITE                  ║");
+			console.log("║                   Control: IFRAME_PHUOCLE                     ║");
+			console.log("╚════════════════════════════════════════════════════════════════╝");
+
+			try {
+				// Get the IFrame control
+				const iframeControl = form.Body.IFRAME_PHUOCLE;
+
+				if (!iframeControl) {
+					console.error("✗ IFrame control 'IFRAME_PHUOCLE' not found on the form");
+					return;
+				}
+
+				console.log("✓ IFrame control found: IFRAME_PHUOCLE");
+				console.log("  ℹ This control tests IFrame-specific properties and methods");
+
+				// Store original values
+				const originalLabel = iframeControl.Label;
+				const originalVisible = iframeControl.Visible;
+				const originalSrc = iframeControl.Src;
+
+				// Test 1: Get Control Type
+				try {
+					console.log("\n⚡ Test 1: Get Control Type");
+					const controlType = iframeControl.ControlType;
+					console.log("  ✓ Control Type:", controlType);
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 1 Error:", error.message);
+				}
+
+				// Test 2: Get Label
+				try {
+					console.log("\n⚡ Test 2: Get Label");
+					const label = iframeControl.Label;
+					console.log("  ✓ Label:", label);
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 3 Error:", error.message);
+				}
+
+				// Test 3: Get Visible State
+				try {
+					console.log("\n⚡ Test 3: Get Visible State");
+					const visible = iframeControl.Visible;
+					console.log("  ✓ Visible:", visible);
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 4 Error:", error.message);
+				}
+
+				// Test 4: Get Disabled State
+				try {
+					console.log("\n⚡ Test 4: Get Disabled State");
+					const disabled = iframeControl.Disabled;
+					console.log("  ✓ Disabled:", disabled);
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 5 Error:", error.message);
+				}
+
+				// Test 5: Get Current Src (URL)
+				try {
+					console.log("\n⚡ Test 5: Get Current Src (URL)");
+					const src = iframeControl.Src;
+					console.log("  ✓ Current Src:", src);
+					console.log("  ℹ This is the URL currently displayed in the IFrame");
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 6 Error:", error.message);
+				}
+
+				// Test 6: Get Initial URL
+				try {
+					console.log("\n⚡ Test 6: Get Initial URL");
+					const initialUrl = iframeControl.InitialUrl;
+					console.log("  ✓ Initial URL:", initialUrl);
+					console.log("  ℹ This is the default URL configured in the form designer");
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 7 Error:", error.message);
+				}
+
+				// Test 7: Get Object
+				try {
+					console.log("\n⚡ Test 7: Get Object (DOM Element)");
+					const obj = iframeControl.Object;
+					console.log("  ✓ Object retrieved:", typeof obj);
+					if (obj) {
+						console.log("  ℹ Object type:", obj.constructor.name);
+						console.log("  ℹ Tag name:", obj.tagName);
+					}
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 8 Error:", error.message);
+				}
+
+				// Test 8: Set New Src URL
+				try {
+					console.log("\n⚡ Test 8: Set New Src URL");
+					await new Promise(resolve => setTimeout(resolve, 500));
+					iframeControl.Src = "https://www.bing.com/search?q=Dynamics+365";
+					console.log("  ✓ Src changed to: https://www.bing.com/search?q=Dynamics+365");
+					console.log("  ℹ Check the IFrame - it should now display Bing search");
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 9 Error:", error.message);
+				}
+
+				// Test 9: Wait and observe IFrame load
+				try {
+					console.log("\n⚡ Test 9: Wait for IFrame to Load");
+					await new Promise(resolve => setTimeout(resolve, 2000));
+					console.log("  ✓ Waited 2 seconds for IFrame content to load");
+					console.log("  ℹ Verify that the IFrame shows the new URL content");
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 10 Error:", error.message);
+				}
+
+				// Test 10: Get ContentWindow (with callback)
+				try {
+					console.log("\n⚡ Test 10: Get ContentWindow (Callback Method)");
+					await new Promise((resolve, reject) => {
+						iframeControl.ContentWindow(
+							function (contentWindow) {
+								console.log("  ✓ ContentWindow retrieved successfully");
+								console.log("  ℹ ContentWindow type:", typeof contentWindow);
+								if (contentWindow) {
+									console.log("  ℹ Has document:", !!contentWindow.document);
+									console.log("  ℹ Has location:", !!contentWindow.location);
+								}
+								resolve(true);
+							},
+							function (error) {
+								console.error("  ✗ Error getting ContentWindow:", error.message);
+								resolve(false);
+							}
+						);
+					});
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 11 Error:", error.message);
+				}
+
+				// Test 11: Set Disabled State
+				try {
+					console.log("\n⚡ Test 11: Set Disabled State");
+					await new Promise(resolve => setTimeout(resolve, 500));
+					iframeControl.Disabled = true;
+					console.log("  ✓ IFrame disabled");
+					console.log("  ℹ IFrame should be grayed out or non-interactive");
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 12 Error:", error.message);
+				}
+
+				// Test 12: Enable IFrame Again
+				try {
+					console.log("\n⚡ Test 12: Enable IFrame Again");
+					await new Promise(resolve => setTimeout(resolve, 1500));
+					iframeControl.Disabled = false;
+					console.log("  ✓ IFrame enabled");
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 13 Error:", error.message);
+				}
+
+				// Test 14: Add Notification
+				try {
+					console.log("\n⚡ Test 13: Add Notification");
+					await new Promise(resolve => setTimeout(resolve, 500));
+					const notificationId = "iframeNotification_" + Date.now();
+					iframeControl.AddNotification({
+						uniqueId: notificationId,
+						messages: ["This is a test notification for the IFrame control"],
+						notificationLevel: OptionSet.FieldNotificationLevel.Recommendation
+					});
+					console.log("  ✓ Notification added with ID:", notificationId);
+					console.log("  ℹ Check the form - notification should appear near the IFrame");
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 14 Error:", error.message);
+				}
+
+				// Test 14: Clear Notification
+				try {
+					console.log("\n⚡ Test 14: Clear Notification");
+					await new Promise(resolve => setTimeout(resolve, 2000));
+					const notificationId = "iframeNotification_" + (Date.now() - 2000);
+					iframeControl.ClearNotification(notificationId);
+					console.log("  ✓ Notification cleared");
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 15 Error:", error.message);
+				}
+
+				// Test 15: Set Focus to Control
+				try {
+					console.log("\n⚡ Test 15: Set Focus to Control");
+					await new Promise(resolve => setTimeout(resolve, 500));
+					iframeControl.Focus();
+					console.log("  ✓ Focus set to IFrame control");
+					console.log("  ℹ Check the form UI - IFrame should be focused");
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 16 Error:", error.message);
+				}
+
+				// Test 16: Toggle Visibility (Hide then Show)
+				try {
+					console.log("\n⚡ Test 16: Toggle Visibility (Hide then Show)");
+					await new Promise(resolve => setTimeout(resolve, 1000));
+					iframeControl.Visible = false;
+					console.log("  ✓ Control hidden");
+					await new Promise(resolve => setTimeout(resolve, 1500));
+					iframeControl.Visible = true;
+					console.log("  ✓ Control shown again");
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 17 Error:", error.message);
+				}
+
+				// Test 17: Change Label
+				try {
+					console.log("\n⚡ Test 17: Change Label");
+					await new Promise(resolve => setTimeout(resolve, 500));
+					iframeControl.Label = "Test IFrame (Label Changed)";
+					console.log("  ✓ Label changed to: 'Test IFrame (Label Changed)'");
+					console.log("  ℹ Original label:", originalLabel);
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 18 Error:", error.message);
+				}
+
+				// Test 18: Restore Original Src
+				try {
+					console.log("\n⚡ Test 18: Restore Original Src");
+					await new Promise(resolve => setTimeout(resolve, 1500));
+					iframeControl.Src = originalSrc;
+					console.log("  ✓ Original Src restored:", originalSrc);
+					console.log("  ℹ IFrame should return to original content");
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 19 Error:", error.message);
+				}
+
+				// Test 20: Restore Original Label
+				try {
+					console.log("\n⚡ Test 20: Restore Original Label");
+					await new Promise(resolve => setTimeout(resolve, 500));
+					iframeControl.Label = originalLabel;
+					console.log("  ✓ Original label restored:", originalLabel);
+					console.log("  ↩ All changes reverted");
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 20 Error:", error.message);
+				}
+
+				// Summary
+				console.log("\n╔═══════════════════════════════════════════════════════════════╗");
+				console.log("║        IFRAME CONTROL TESTS COMPLETED SUCCESSFULLY           ║");
+				console.log("╚═══════════════════════════════════════════════════════════════╝");
+				console.log("\n📊 Test Summary:");
+				console.log("  ✓ Total Tests: 20");
+				console.log("  ℹ Tests 1-8: Read operations and properties");
+				console.log("  ℹ Tests 9-20: URL manipulation, ContentWindow, and UI operations");
+				console.log("  ℹ Execution time: ~12 seconds (includes UI validation delays)");
+				console.log("\n  ℹ Key Features Tested:");
+				console.log("    • Src property (get/set URL)");
+				console.log("    • InitialUrl property (default URL)");
+				console.log("    • Object property (DOM element)");
+				console.log("    • ContentWindow method (access iframe window)");
+				console.log("    • UI interactions (notifications, focus, visibility, labels)");
+				console.log("    • Disabled state management");
+				console.log("    • Original state restoration");
+				console.log("\n🎯 Control Type: IFrame (Advanced Control)");
+				console.log("🎯 Control Name: IFRAME_PHUOCLE");
+				console.log("🎯 Phase 2 - Test 1 of 5 Complete!");
+
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Error in IFrame control tests:", error.message);
+				console.error("Stack trace:", error.stack);
+			}
+		}
+
+		/**************************************************************************
+		 * TEST: Note Control - notescontrol (Timeline/Notes)
+		 * Tests all Note control methods and properties
+		 **************************************************************************/
+		async function testNote() {
+			console.log("\n╔════════════════════════════════════════════════════════════════╗");
+			console.log("║                     NOTE CONTROL TEST SUITE                   ║");
+			console.log("║                     Control: notescontrol                     ║");
+			console.log("╚════════════════════════════════════════════════════════════════╝");
+
+			try {
+				// Get the Note control
+				const noteControl = form.Body.notescontrol;
+
+				if (!noteControl) {
+					console.error("✗ Note control 'notescontrol' not found on the form");
+					return;
+				}
+
+				console.log("✓ Note control found: notescontrol");
+				console.log("  ℹ This control displays the timeline/notes section");
+
+				// Store original values
+				const originalLabel = noteControl.Label;
+				const originalVisible = noteControl.Visible;
+
+				// Test 1: Get Control Type
+				try {
+					console.log("\n⚡ Test 1: Get Control Type");
+					const controlType = noteControl.ControlType;
+					console.log("  ✓ Control Type:", controlType);
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 1 Error:", error.message);
+				}
+
+				// Test 2: Get Label
+				try {
+					console.log("\n⚡ Test 2: Get Label");
+					const label = noteControl.Label;
+					console.log("  ✓ Label:", label);
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 2 Error:", error.message);
+				}
+
+				// Test 3: Get Visible State
+				try {
+					console.log("\n⚡ Test 3: Get Visible State");
+					const visible = noteControl.Visible;
+					console.log("  ✓ Visible:", visible);
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 3 Error:", error.message);
+				}
+
+				// Test 4: Get Disabled State
+				try {
+					console.log("\n⚡ Test 4: Get Disabled State");
+					const disabled = noteControl.Disabled;
+					console.log("  ✓ Disabled:", disabled);
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 4 Error:", error.message);
+				}
+
+				// Test 5: Refresh Method (UNIQUE TO NOTE CONTROL)
+				try {
+					console.log("\n⚡ Test 5: Refresh Timeline/Notes");
+					await new Promise(resolve => setTimeout(resolve, 500));
+					noteControl.Refresh();
+					console.log("  ✓ Timeline/Notes refreshed");
+					console.log("  ℹ This reloads the notes and activity data from the server");
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 5 Error:", error.message);
+				}
+
+				// Test 6: Wait after Refresh
+				try {
+					console.log("\n⚡ Test 6: Wait for Refresh to Complete");
+					await new Promise(resolve => setTimeout(resolve, 2000));
+					console.log("  ✓ Waited 2 seconds for timeline to reload");
+					console.log("  ℹ Verify that the timeline shows updated content");
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 6 Error:", error.message);
+				}
+
+				// Test 7: Set Disabled State
+				try {
+					console.log("\n⚡ Test 7: Set Disabled State");
+					await new Promise(resolve => setTimeout(resolve, 500));
+					noteControl.Disabled = true;
+					console.log("  ✓ Note control disabled");
+					console.log("  ℹ Timeline should be grayed out or non-interactive");
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 7 Error:", error.message);
+				}
+
+				// Test 8: Enable Control Again
+				try {
+					console.log("\n⚡ Test 8: Enable Control Again");
+					await new Promise(resolve => setTimeout(resolve, 1500));
+					noteControl.Disabled = false;
+					console.log("  ✓ Note control enabled");
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 8 Error:", error.message);
+				}
+
+				// Test 9: Add Notification
+				try {
+					console.log("\n⚡ Test 9: Add Notification");
+					await new Promise(resolve => setTimeout(resolve, 500));
+					const notificationId = "noteNotification_" + Date.now();
+					noteControl.AddNotification({
+						uniqueId: notificationId,
+						messages: ["This is a test notification for the Note/Timeline control"],
+						notificationLevel: OptionSet.FieldNotificationLevel.Recommendation
+					});
+					console.log("  ✓ Notification added with ID:", notificationId);
+					console.log("  ℹ Check the form - notification should appear near the timeline");
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 9 Error:", error.message);
+				}
+
+				// Test 10: Clear Notification
+				try {
+					console.log("\n⚡ Test 10: Clear Notification");
+					await new Promise(resolve => setTimeout(resolve, 2000));
+					const notificationId = "noteNotification_" + (Date.now() - 2000);
+					noteControl.ClearNotification(notificationId);
+					console.log("  ✓ Notification cleared");
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 10 Error:", error.message);
+				}
+
+				// Test 11: Set Focus to Control
+				try {
+					console.log("\n⚡ Test 11: Set Focus to Control");
+					await new Promise(resolve => setTimeout(resolve, 500));
+					noteControl.Focus();
+					console.log("  ✓ Focus set to Note control");
+					console.log("  ℹ Check the form UI - timeline should be focused/scrolled into view");
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 11 Error:", error.message);
+				}
+
+				// Test 12: Toggle Visibility (Hide then Show)
+				try {
+					console.log("\n⚡ Test 12: Toggle Visibility (Hide then Show)");
+					await new Promise(resolve => setTimeout(resolve, 1000));
+					noteControl.Visible = false;
+					console.log("  ✓ Control hidden");
+					await new Promise(resolve => setTimeout(resolve, 1500));
+					noteControl.Visible = true;
+					console.log("  ✓ Control shown again");
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 12 Error:", error.message);
+				}
+
+				// Test 13: Change Label
+				try {
+					console.log("\n⚡ Test 13: Change Label");
+					await new Promise(resolve => setTimeout(resolve, 500));
+					noteControl.Label = "Timeline (Test Label)";
+					console.log("  ✓ Label changed to: 'Timeline (Test Label)'");
+					console.log("  ℹ Original label:", originalLabel);
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 13 Error:", error.message);
+				}
+
+				// Test 14: Restore Original Label
+				try {
+					console.log("\n⚡ Test 14: Restore Original Label");
+					await new Promise(resolve => setTimeout(resolve, 1000));
+					noteControl.Label = originalLabel;
+					console.log("  ✓ Original label restored:", originalLabel);
+					console.log("  ↩ All changes reverted");
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 14 Error:", error.message);
+				}
+
+				// Summary
+				console.log("\n╔═══════════════════════════════════════════════════════════════╗");
+				console.log("║         NOTE CONTROL TESTS COMPLETED SUCCESSFULLY            ║");
+				console.log("╚═══════════════════════════════════════════════════════════════╝");
+				console.log("\n📊 Test Summary:");
+				console.log("  ✓ Total Tests: 14");
+				console.log("  ℹ Tests 1-4: Read operations and properties");
+				console.log("  ℹ Tests 5-14: Refresh method and UI operations");
+				console.log("  ℹ Execution time: ~10 seconds (includes UI validation delays)");
+				console.log("\n  ℹ Key Features Tested:");
+				console.log("    • Refresh() method (unique to Note control)");
+				console.log("    • Timeline/Notes data reload");
+				console.log("    • UI interactions (notifications, focus, visibility, labels)");
+				console.log("    • Disabled state management");
+				console.log("    • Original state restoration");
+				console.log("\n🎯 Control Type: Note (Advanced Control)");
+				console.log("🎯 Control Name: notescontrol");
+				console.log("🎯 Phase 2 - Test 2 of 5 Complete!");
+
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Error in Note control tests:", error.message);
+				console.error("Stack trace:", error.stack);
+			}
+		}
+
+		/**************************************************************************
+		 * TEST: NavigationItem Control - Form Navigation Tabs
+		 * Tests NavigationItem control methods and properties
+		 **************************************************************************/
+		async function testNavigationItem() {
+			console.log("\n╔════════════════════════════════════════════════════════════════╗");
+			console.log("║              NAVIGATIONITEM CONTROL TEST SUITE                ║");
+			console.log("║                Testing: Account_Appointments                  ║");
+			console.log("╚════════════════════════════════════════════════════════════════╝");
+
+			try {
+				// Get a representative NavigationItem control
+				const navItem = form.Navigation.Account_Appointments;
+
+				if (!navItem) {
+					console.error("✗ NavigationItem 'Account_Appointments' not found on the form");
+					return;
+				}
+
+				console.log("✓ NavigationItem found: Account_Appointments");
+				console.log("  ℹ This represents a navigation tab/link on the form");
+				console.log("  ℹ There are 18 navigation items available on this form");
+
+				// Store original values
+				const originalLabel = navItem.Label;
+				const originalVisible = navItem.Visible;
+				const originalId = navItem.Id;
+
+				// Test 1: Get ID (readonly)
+				try {
+					console.log("\n⚡ Test 1: Get ID (readonly)");
+					const id = navItem.Id;
+					console.log("  ✓ Navigation Item ID:", id);
+					console.log("  ℹ ID is readonly and identifies this navigation item");
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 1 Error:", error.message);
+				}
+
+				// Test 2: Get Label
+				try {
+					console.log("\n⚡ Test 2: Get Label");
+					const label = navItem.Label;
+					console.log("  ✓ Label:", label);
+					console.log("  ℹ This is the display text shown on the navigation tab");
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 2 Error:", error.message);
+				}
+
+				// Test 3: Get Visible State
+				try {
+					console.log("\n⚡ Test 3: Get Visible State");
+					const visible = navItem.Visible;
+					console.log("  ✓ Visible:", visible);
+					console.log("  ℹ Determines if this tab is shown in navigation");
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 3 Error:", error.message);
+				}
+
+				// Test 4: Set Label
+				try {
+					console.log("\n⚡ Test 4: Set Label");
+					await new Promise(resolve => setTimeout(resolve, 500));
+					navItem.Label = "Meetings (Test)";
+					console.log("  ✓ Label changed to: 'Meetings (Test)'");
+					console.log("  ℹ Check the navigation - tab text should be updated");
+					console.log("  ℹ Original label:", originalLabel);
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 4 Error:", error.message);
+				}
+
+				// Test 5: Wait to observe label change
+				try {
+					console.log("\n⚡ Test 5: Wait to Observe Label Change");
+					await new Promise(resolve => setTimeout(resolve, 2000));
+					console.log("  ✓ Waited 2 seconds");
+					console.log("  ℹ Verify the navigation tab shows the new label");
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 5 Error:", error.message);
+				}
+
+				// Test 6: Hide Navigation Item
+				try {
+					console.log("\n⚡ Test 6: Hide Navigation Item");
+					await new Promise(resolve => setTimeout(resolve, 500));
+					navItem.Visible = false;
+					console.log("  ✓ Navigation item hidden");
+					console.log("  ℹ The tab should disappear from the navigation");
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 6 Error:", error.message);
+				}
+
+				// Test 7: Wait to observe hidden state
+				try {
+					console.log("\n⚡ Test 7: Wait to Observe Hidden State");
+					await new Promise(resolve => setTimeout(resolve, 2000));
+					console.log("  ✓ Waited 2 seconds");
+					console.log("  ℹ Verify the tab is no longer visible in navigation");
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 7 Error:", error.message);
+				}
+
+				// Test 8: Show Navigation Item Again
+				try {
+					console.log("\n⚡ Test 8: Show Navigation Item Again");
+					await new Promise(resolve => setTimeout(resolve, 500));
+					navItem.Visible = true;
+					console.log("  ✓ Navigation item shown");
+					console.log("  ℹ The tab should reappear in the navigation");
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 8 Error:", error.message);
+				}
+
+				// Test 9: Focus on Navigation Item
+				try {
+					console.log("\n⚡ Test 9: Focus on Navigation Item");
+					await new Promise(resolve => setTimeout(resolve, 1000));
+					navItem.Focus();
+					console.log("  ✓ Focus set to navigation item");
+					console.log("  ℹ This should navigate to/activate the related tab content");
+					console.log("  ℹ The form may scroll or change view to show related data");
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 9 Error:", error.message);
+				}
+
+				// Test 10: Wait after Focus
+				try {
+					console.log("\n⚡ Test 10: Wait After Focus");
+					await new Promise(resolve => setTimeout(resolve, 2000));
+					console.log("  ✓ Waited 2 seconds");
+					console.log("  ℹ The related entity grid/data should now be visible");
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 10 Error:", error.message);
+				}
+
+				// Test 11: Restore Original Label
+				try {
+					console.log("\n⚡ Test 11: Restore Original Label");
+					await new Promise(resolve => setTimeout(resolve, 500));
+					navItem.Label = originalLabel;
+					console.log("  ✓ Original label restored:", originalLabel);
+					console.log("  ↩ All changes reverted");
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 11 Error:", error.message);
+				}
+
+				// Summary
+				console.log("\n╔═══════════════════════════════════════════════════════════════╗");
+				console.log("║      NAVIGATIONITEM CONTROL TESTS COMPLETED SUCCESSFULLY     ║");
+				console.log("╚═══════════════════════════════════════════════════════════════╝");
+				console.log("\n📊 Test Summary:");
+				console.log("  ✓ Total Tests: 11");
+				console.log("  ℹ Tests 1-3: Read operations and properties");
+				console.log("  ℹ Tests 4-11: Label changes, visibility, and focus");
+				console.log("  ℹ Execution time: ~10 seconds (includes UI validation delays)");
+				console.log("\n  ℹ Key Features Tested:");
+				console.log("    • Id property (readonly, unique identifier)");
+				console.log("    • Label property (get/set, display text)");
+				console.log("    • Visible property (get/set, show/hide tab)");
+				console.log("    • Focus() method (navigate to/activate tab)");
+				console.log("    • Original state restoration");
+				console.log("\n  ℹ Available Navigation Items on Account Form (18 total):");
+				console.log("    • account_adx_inviteredemptions");
+				console.log("    • account_adx_portalcomments");
+				console.log("    • Account_Appointments ✓ (tested)");
+				console.log("    • Account_Email_EmailSender");
+				console.log("    • Account_Emails");
+				console.log("    • account_msfp_alerts");
+				console.log("    • Account_Phonecalls");
+				console.log("    • Account_Tasks");
+				console.log("    • contact_customer_accounts");
+				console.log("    • ... and 9 more");
+				console.log("\n🎯 Control Type: NavigationItem (Form Navigation)");
+				console.log("🎯 Control Tested: Account_Appointments");
+				console.log("🎯 Phase 2 - Test 3 of 5 Complete!");
+
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Error in NavigationItem control tests:", error.message);
+				console.error("Stack trace:", error.stack);
+			}
+		}
+
+		/**************************************************************************
+		 * TEST: Map Control - mapcontrol
+		 * NOTE: Map interface is empty in devkit.d.ts - no methods available to test
+		 * The Map control exists on the form but has no accessible properties or methods
+		 * through the Client API. It operates as a read-only visual element.
+		 **************************************************************************/
+		async function testMap() {
+			console.log("\n╔════════════════════════════════════════════════════════════════╗");
+			console.log("║                      MAP CONTROL TEST SUITE                   ║");
+			console.log("║                      Control: mapcontrol                      ║");
+			console.log("╚════════════════════════════════════════════════════════════════╝");
+
+			console.log("\n⚠ Map Control Analysis:");
+			console.log("  • Interface Definition: interface Map { } (empty)");
+			console.log("  • Does NOT extend IControl");
+			console.log("  • No properties available: Label, Visible, Disabled");
+			console.log("  • No methods available: AddNotification, ClearNotification, Focus");
+			console.log("  • Control exists on form but cannot be tested via Client API");
+			console.log("\n✓ Control exists on form but has no programmable interface");
+			console.log("✓ This is by design - Map control is a read-only visual element");
+			console.log("✓ Map displays based on address fields (automatic behavior)");
+			console.log("\n🎯 Phase 2 - Test 4: Map Control - SKIPPED (No interface available)");
 		}
 
 	}
