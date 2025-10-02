@@ -1,5 +1,5 @@
 ﻿{
-    "DefaultCrmConnection": "ClientSecret",
+    "DefaultCrmConnection": "devkit@phuocle.net",
     "CrmConnections": [
         {
             "Name": "devkit@phuocle.net",
