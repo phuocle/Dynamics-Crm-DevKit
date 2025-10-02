@@ -5,6 +5,10 @@
             "WebResource": "v4_/entities/Account.form.js"
         },
         {
+            "File": "\\Dev.DevKitV4.WebResource.3\\entities\\Account.form.js",
+            "WebResource": "v4_/entities/Account.form.js"
+        },
+        {
             "File": "\\Dev.DevKitV4.WebResource\\entities\\Account.js",
             "WebResource": "v4_/entities/Account.js"
         },
@@ -13,11 +17,23 @@
             "WebResource": "v4_/entities/Account.js"
         },
         {
+            "File": "\\Dev.DevKitV4.WebResource.3\\entities\\Account.js",
+            "WebResource": "v4_/entities/Account.js"
+        },
+        {
             "File": "\\Dev.DevKitV4.WebResource.2\\entities\\Account.webapi.js",
             "WebResource": "v4_/entities/Account.webapi.js"
         },
         {
+            "File": "\\Dev.DevKitV4.WebResource.3\\entities\\Account.webapi.js",
+            "WebResource": "v4_/entities/Account.webapi.js"
+        },
+        {
             "File": "\\Dev.DevKitV4.WebResource.2\\lib\\devkit.js",
+            "WebResource": "v4_/lib/devkit.js"
+        },
+        {
+            "File": "\\Dev.DevKitV4.WebResource.3\\lib\\devkit.js",
             "WebResource": "v4_/lib/devkit.js"
         }
     ],

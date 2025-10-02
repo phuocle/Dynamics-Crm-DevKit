@@ -1,0 +1,16 @@
+{
+  "private": true,
+  "name": "dev.devkitv4.webresource.3",
+  "version": "1.0.0",
+  "description": "dev.devkitv4.webresource.3",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {},
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/xrm": "^9.0.87"
+  }
+}
