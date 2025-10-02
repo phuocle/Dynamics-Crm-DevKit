@@ -13,7 +13,8 @@ var formAccount = (function () {
 	}
 	function registerEvents() {
 		if (form.ExecutionContext.IsInitialLoad()) {
-
+			debugger;
+			form.Body.devkit_CategoryCode.RequiredLevel = OptionSet.FieldRequiredLevel.Required;
 		}
 	}
 	//BEGIN ON LOAD ========================================================

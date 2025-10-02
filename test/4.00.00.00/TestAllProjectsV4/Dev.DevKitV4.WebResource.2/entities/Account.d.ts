@@ -53,7 +53,6 @@ declare namespace DevKitV4 {
 			CreditOnHold: DevKit.Controls.Boolean;
 			/** Type additional information to describe the account, such as an excerpt from the company's website. */
 			Description: DevKit.Controls.String;
-			devkit_CategoryCode: DevKit.Controls.MultiOptionSet;
 			/** Select whether the account allows bulk email sent through campaigns. If Do Not Allow is selected, the account can be added to marketing lists, but is excluded from email. */
 			DoNotBulkEMail: DevKit.Controls.Boolean;
 			/** Select whether the account allows direct email sent from Microsoft Dynamics 365. */
@@ -180,8 +179,6 @@ declare namespace DevKitV4 {
 		Process: DevKitV4.FormAccount.Process;
 		/** The Grid of form Account */
 		Grid: DevKitV4.FormAccount.Grid;
-		/** The SidePanes of form Account */
-		SidePanes: DevKit.SidePanes;
 	}
 	namespace FormAccount_for_Interactive_experience {
 		interface Header extends DevKit.Controls.IHeader {
@@ -345,8 +342,6 @@ declare namespace DevKitV4 {
 		Process: DevKitV4.FormAccount_for_Interactive_experience.Process;
 		/** The Grid of form Account_for_Interactive_experience */
 		Grid: DevKitV4.FormAccount_for_Interactive_experience.Grid;
-		/** The SidePanes of form Account_for_Interactive_experience */
-		SidePanes: DevKit.SidePanes;
 	}
 	namespace FormAccount_Information {
 		interface Header extends DevKit.Controls.IHeader {
@@ -585,8 +580,6 @@ declare namespace DevKitV4 {
 		Process: DevKitV4.FormAccount_Information.Process;
 		/** The Grid of form Account_Information */
 		Grid: DevKitV4.FormAccount_Information.Grid;
-		/** The SidePanes of form Account_Information */
-		SidePanes: DevKit.SidePanes;
 	}
 	namespace FormAccount_Quick_Create {
 		interface tab_tab_1_Sections {
@@ -631,8 +624,6 @@ declare namespace DevKitV4 {
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
 		constructor(executionContext: any, defaultWebResourceName?: string);
-		/** Utility functions/methods/objects for Dynamics 365 form */
-		Utility: DevKit.Utility;
 		/** The Body section of form Account_Quick_Create */
 		Body: DevKitV4.FormAccount_Quick_Create.Body;
 	}

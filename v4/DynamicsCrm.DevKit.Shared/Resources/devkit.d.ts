@@ -1,4 +1,4 @@
-/**
+﻿/**
  * DynamicsCrm.DevKit TypeScript Definitions
  *
  * @version 4.0
@@ -136,7 +136,7 @@ declare namespace DevKit {
              */
             readonly ControlParent: any;
             /**
-             * Returns an object with three Boolean properties corresponding to privileges indicating if the user can create, read or update data values for an attribute. This function is intended for use when Field Level Security modifies a user�s privileges for a particular attribute
+             * Returns an object with three Boolean properties corresponding to privileges indicating if the user can create, read or update data values for a attribute. This function is intended for use when Field Level Security modifies a user�s privileges for a particular attribute
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getuserprivilege
              */
             readonly UserPrivilege: DevKit.FieldUserPrivilege;
@@ -1504,6 +1504,106 @@ declare namespace DevKit {
          */
         ExecuteMultiple(requests: Array<DevKit.WebApi.ExecuteRequest>): Promise<Array<DevKit.WebApi.ExecuteResponse>>;
         /**
+         * Retrieves multiple records and maps them using the provided constructor or factory function.
+         * @template T The type of the entity to return
+         * @param apiConstructorOrFactory - Constructor or factory function that takes entity data and returns typed instance
+         * @param entityLogicalName - The entity logical name of the records you want to retrieve. For example: "account"
+         * @param options - OData system query options or FetchXML query to retrieve your data
+         * @param maxPageSize - Specify a positive number that indicates the number of records to be returned per page
+         * @param successCallback - The function that will be passed through and be called by a successful response
+         * @param errorCallback - The function that will be passed through and be called by a failed response
+         * @example
+         * form.WebApi.RetrieveRecords(DevKitV4.AccountApi, 'account', '?$select=name&$top=3', 3, (rows) => { console.log(rows); });
+         */
+        RetrieveRecords<T>(apiConstructorOrFactory: ((data: any) => T) | (new (data: any) => T), entityLogicalName: string, options: string, maxPageSize: number, successCallback: (result: T[]) => void, errorCallback?: (error: DevKit.WebApi.ErrorCallbackObject) => void): void;
+        /**
+         * Retrieves multiple records and maps them using the provided constructor or factory function.
+         * @template T The type of the entity to return
+         * @param apiConstructorOrFactory - Constructor or factory function that takes entity data and returns typed instance
+         * @param entityLogicalName - The entity logical name of the records you want to retrieve. For example: "account"
+         * @param options - OData system query options or FetchXML query to retrieve your data
+         * @param successCallback - The function that will be passed through and be called by a successful response
+         * @param errorCallback - The function that will be passed through and be called by a failed response
+         * @example
+         * form.WebApi.RetrieveRecords(DevKitV4.AccountApi, 'account', '?$select=name', (rows) => { console.log(rows); });
+         */
+        RetrieveRecords<T>(apiConstructorOrFactory: ((data: any) => T) | (new (data: any) => T), entityLogicalName: string, options: string, successCallback: (result: T[]) => void, errorCallback?: (error: DevKit.WebApi.ErrorCallbackObject) => void): void;
+        /**
+         * Retrieves multiple records using FetchXML and maps them using the provided constructor or factory function.
+         * Entity name is automatically extracted from FetchXML.
+         * @template T The type of the entity to return
+         * @param apiConstructorOrFactory - Constructor or factory function that takes entity data and returns typed instance
+         * @param fetchXml - FetchXML query string (must include ?fetchXml= prefix)
+         * @param successCallback - The function that will be passed through and be called by a successful response
+         * @param errorCallback - The function that will be passed through and be called by a failed response
+         * @example
+         * form.WebApi.RetrieveRecords(DevKitV4.AccountApi, '?fetchXml=<fetch><entity name="account"/></fetch>', (rows) => { console.log(rows); });
+         */
+        RetrieveRecords<T>(apiConstructorOrFactory: ((data: any) => T) | (new (data: any) => T), fetchXml: string, successCallback: (result: T[]) => void, errorCallback?: (error: DevKit.WebApi.ErrorCallbackObject) => void): void;
+        /**
+         * Retrieves multiple records and maps them using the provided constructor or factory function (Promise-based).
+         * @template T The type of the entity to return
+         * @param apiConstructorOrFactory - Constructor or factory function that takes entity data and returns typed instance
+         * @param entityLogicalName - The entity logical name of the records you want to retrieve. For example: "account"
+         * @param options - Optional OData system query options or FetchXML query to retrieve your data
+         * @param maxPageSize - Optional: Specify a positive number that indicates the number of records to be returned per page
+         * @returns A promise that resolves to an array of typed instances
+         * @example
+         * const rows = await form.WebApi.RetrieveRecords(DevKitV4.AccountApi, 'account', '?$select=name&$top=3');
+         * @example
+         * const rows = await form.WebApi.RetrieveRecords(DevKitV4.AccountApi, 'account', '?fetchXml=<fetch><entity name="account"/></fetch>');
+         */
+        RetrieveRecords<T>(apiConstructorOrFactory: ((data: any) => T) | (new (data: any) => T), entityLogicalName: string, options?: string, maxPageSize?: number): Promise<T[]>;
+        /**
+         * Retrieves multiple records using FetchXML and maps them using the provided constructor or factory function (Promise-based).
+         * Entity name is automatically extracted from FetchXML.
+         * @template T The type of the entity to return
+         * @param apiConstructorOrFactory - Constructor or factory function that takes entity data and returns typed instance
+         * @param fetchXml - FetchXML query string (must include ?fetchXml= prefix)
+         * @param maxPageSize - Optional: Specify a positive number that indicates the number of records to be returned per page
+         * @returns A promise that resolves to an array of typed instances
+         * @example
+         * const rows = await form.WebApi.RetrieveRecords(DevKitV4.AccountApi, '?fetchXml=<fetch><entity name="account"/></fetch>');
+         */
+        RetrieveRecords<T>(apiConstructorOrFactory: ((data: any) => T) | (new (data: any) => T), fetchXml: string, maxPageSize?: number): Promise<T[]>;
+        /**
+         * Retrieves a single record and maps it using the provided constructor or factory function.
+         * @template T The type of the entity to return
+         * @param apiConstructorOrFactory - Constructor or factory function that takes entity data and returns typed instance
+         * @param entityLogicalName - The logical name of the entity
+         * @param id - The GUID of the record
+         * @param options - Optional OData query options (defaults to "?$select=*")
+         * @param successCallback - The function that will be passed through and be called by a successful response
+         * @param errorCallback - The function that will be passed through and be called by a failed response
+         * @example
+         * form.WebApi.RetrieveRecord(DevKitV4.AccountApi, form.EntityName, form.EntityId, (record) => { console.log(record); });
+         */
+        RetrieveRecord<T>(apiConstructorOrFactory: ((data: any) => T) | (new (data: any) => T), entityLogicalName: string, id: string, options: string, successCallback: (result: T) => void, errorCallback?: (error: DevKit.WebApi.ErrorCallbackObject) => void): void;
+        /**
+         * Retrieves a single record and maps it using the provided constructor or factory function.
+         * @template T The type of the entity to return
+         * @param apiConstructorOrFactory - Constructor or factory function that takes entity data and returns typed instance
+         * @param entityLogicalName - The logical name of the entity
+         * @param id - The GUID of the record
+         * @param successCallback - The function that will be passed through and be called by a successful response
+         * @param errorCallback - The function that will be passed through and be called by a failed response
+         * @example
+         * form.WebApi.RetrieveRecord(DevKitV4.AccountApi, form.EntityName, form.EntityId, (record) => { console.log(record); });
+         */
+        RetrieveRecord<T>(apiConstructorOrFactory: ((data: any) => T) | (new (data: any) => T), entityLogicalName: string, id: string, successCallback: (result: T) => void, errorCallback?: (error: DevKit.WebApi.ErrorCallbackObject) => void): void;
+        /**
+         * Retrieves a single record and maps it using the provided constructor or factory function (Promise-based).
+         * @template T The type of the entity to return
+         * @param apiConstructorOrFactory - Constructor or factory function that takes entity data and returns typed instance
+         * @param entityLogicalName - The logical name of the entity
+         * @param id - The GUID of the record
+         * @param options - Optional OData query options (defaults to "?$select=*")
+         * @returns A promise that resolves to a typed instance
+         * @example
+         * const account = await form.WebApi.RetrieveRecord(DevKitV4.AccountApi, 'account', accountId);
+         */
+        RetrieveRecord<T>(apiConstructorOrFactory: ((data: any) => T) | (new (data: any) => T), entityLogicalName: string, id: string, options?: string): Promise<T>;
+        /**
          * Contains methods to execute operations that will be executed against the server even when the user is offline
          */
         readonly Online: WebApiOnline;
@@ -1585,8 +1685,8 @@ declare namespace DevKit {
         /**
          * Executes a Copilot Studio topic by sending a natural language prompt
          * @param promptText The natural language prompt to send to Copilot Studio
-         * @param successCallback The function that will be called with the response from Copilot Studio
-         * @param errorCallback The function that will be called if the operation fails
+         * @param successCallback The function to call with the response from Copilot Studio
+         * @param errorCallback The function to call if the operation fails
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-copilot/executeprompt
          */
         ExecutePrompt(promptText: string, successCallback: (result: Array<any>) => void, errorCallback?: (error: any) => void): void;
@@ -1999,7 +2099,7 @@ declare namespace DevKit {
         DisableAsyncTimeout(): void;
         /**
          * Returns a value that indicates the order in which this handler is executed.
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/executioncontext/getdepth
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/execution-context
          */
         readonly Depth: number;
         /**
@@ -2091,7 +2191,7 @@ declare namespace DevKit {
          */
         AllowedStatusTransitions(entityName: string, statusCode: number, successCallback: (statusCodes: Array<number>) => void, errorCallback?: (error: DevKit.Error) => void): void;
         /**
-         * Returns the valid state transitions for the specified entity type and state code and returns a promise
+         * Returns the valid status transitions for the specified entity type and state code and returns a promise
          * @param entityName The logical name of the entity.
          * @param statusCode The status code to find out the allowed status transition values.
          * @returns Promise that resolves with an array of allowed status codes
@@ -2584,68 +2684,6 @@ declare namespace DevKit {
         /**
         * Returns the preferred language ID for the current organization
         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#languageid
-        */
-        readonly LanguageId: number;
-        /**
-        * Returns the ID of the current organization
-        * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#organizationid
-        */
-        readonly OrganizationId: DevKit.Guid;
-        /**
-        * Returns the ID of the current organization
-        * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#istrialorganization
-        */
-        readonly IsTrialOrganization: boolean;
-        /**
-        * Returns the expiry date of the current organization if it is a trial organization.
-        * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#organizationexpirydate
-        */
-        readonly OrganizationExpiryDate: Date;
-        /**
-        * Returns a boolean indicating whether the organization is a trial organization.
-        * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#uniquename
-        */
-        readonly UniqueName: string;
-        /**
-        * Indicates whether the Skype protocol is used for the current organization
-        * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#useskypeprotocol
-        */
-        readonly UseSkypeProtocol: boolean;
-        /**
-        * Returns the FullNameConventionCode setting of the current organization.
-        * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#fullnameconventioncode
-        */
-        readonly FullNameConventionCode: OptionSet.FullNameConventionCode;
-    }
-    interface UserSettings {
-        /**
-        * Returns the date formatting information for the current user
-        * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#dateformattinginfo
-        */
-        readonly DateFormattingInfo: DevKit.DateFormattingInfo;
-        /**
-        * Returns the ID of the default dashboard for the current user
-        * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#defaultdashboardid
-        */
-        readonly DefaultDashboardId: DevKit.Guid;
-        /**
-        * Indicates whether guided help is enabled for the current user
-        * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#isguidedhelpenabled
-        */
-        readonly IsGuidedHelpEnabled: boolean;
-        /**
-        * Indicates whether high contrast is enabled for the current user
-        * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#ishighcontrastenabled
-        */
-        readonly IsHighContrastEnabled: boolean;
-        /**
-        * Indicates whether the language for the current user is a right-to-left (RTL) language
-        * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#isrtl
-        */
-        readonly IsRTL: boolean;
-        /**
-        * Returns the language ID for the current user
-        * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#languageid
         */
         readonly LanguageId: number;
         /**
@@ -3248,6 +3286,28 @@ declare namespace DevKit {
         badge?: number
     }
 }
+
+// Provide a DevKitV4 namespace alias for backward compatibility and to support code that references DevKitV4
+declare namespace DevKitV4 {
+    export import Guid = DevKit.Guid;
+    export import SuccessCallback = DevKit.SuccessCallback;
+    export import ErrorCallback = DevKit.ErrorCallback;
+    export import Controls = DevKit.Controls;
+    export import WebApi = DevKit.WebApi;
+    export import EntityReference = DevKit.EntityReference;
+    export import Utility = DevKit.Utility;
+    export import Collections = DevKit.Collections;
+    export import ExecutionContext = DevKit.ExecutionContext;
+    export import IForm = DevKit.IForm;
+    export import KeyValueObject = DevKit.KeyValueObject;
+    export import TextValueNumber = DevKit.TextValueNumber;
+    export import FieldNotification = DevKit.FieldNotification;
+    export import OpenQuickCreateSuccessCallbackObject = DevKit.OpenQuickCreateSuccessCallbackObject;
+    export import SidePanes = DevKit.SidePanes;
+    export import Error = DevKit.Error;
+    export import FileData = DevKit.FileData;
+}
+
 /** DynamicsCrm.DevKit for namespace OptionSet */
 declare namespace OptionSet {
     /**  */
