@@ -37,7 +37,7 @@
         <Report Include="download.reports.bat">
             <MimeType>application/octet-stream</MimeType>
         </Report>
-        <Report Include="notes.txt">
+        <Report Include="notes.md">
             <MimeType>
             </MimeType>
         </Report>
