@@ -502,8 +502,6 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             _d_ts += $"{TAB}{TAB}* @param defaultWebResourceName default resource name. E.g.: \"devkit_/resources/Resource\"{NEW_LINE}";
             _d_ts += $"{TAB}{TAB}*/{NEW_LINE}";
             _d_ts += $"{TAB}{TAB}constructor(executionContext: any, defaultWebResourceName?: string);{NEW_LINE}";
-            _d_ts += $"{TAB}{TAB}/** Utility functions/methods/objects for Dynamics 365 form */{NEW_LINE}";
-            _d_ts += $"{TAB}{TAB}Utility: DevKit.Utility;{NEW_LINE}";
             if (form_d_ts_Body_QuickCreate.Length > 0)
             {
                 _d_ts += $"{TAB}{TAB}/** The Body section of form {formName} */{NEW_LINE}";
@@ -595,8 +593,6 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                 _d_ts += $"{TAB}{TAB}/** The Grid of form {formName} */{NEW_LINE}";
                 _d_ts += $"{TAB}{TAB}Grid: {@namespace}.Form{formName}.Grid;{NEW_LINE}";
             }
-            _d_ts += $"{TAB}{TAB}/** The SidePanes of form {formName} */{NEW_LINE}";
-            _d_ts += $"{TAB}{TAB}SidePanes: DevKit.SidePanes;{NEW_LINE}";
             _d_ts += $"{TAB}}}{NEW_LINE}";
             return _d_ts;
         }

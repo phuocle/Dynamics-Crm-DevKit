@@ -2932,6 +2932,13 @@ declare namespace DevKit {
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-copilot
          */
         readonly Copilot: DevKit.Copilot;
+        /**
+         * Provides methods for managing a single side pane.
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app-appsidepane
+         */
+        readonly SidePanes: DevKit.SidePanes;
+        /** Utility functions/methods/objects for Dynamics 365 form */
+        readonly Utility: DevKit.Utility;
     }
     interface DialogError {
         /** Details about the error. When you specify this, the Download Log File button is available in the error message, and clicking it will let users download a text file with the content specified in this attribute */
