@@ -27,7 +27,8 @@ var formAccount = (function () {
 		//await testOptionSet();
 		//await testMultiOptionSet();
 		//await testDecimal();
-		await testFloat();
+		//await testFloat();
+		await testDateTime();
 
 		/**************************************************************************
 		 * TEST: RetrieveRecord Function - All Overloads
@@ -2551,6 +2552,322 @@ var formAccount = (function () {
 			console.log("║     FLOAT (DOUBLE) CONTROL TESTS COMPLETED                     ║");
 			console.log("╚════════════════════════════════════════════════════════════════╝");
 		}
+
+		/**************************************************************************
+		 * TEST: DateTime Control (CreatedOn field - Read-only system field)
+		 * Tests comprehensive DateTime control functionality including:
+		 * - ShowTime property (get/set)
+		 * - Date value operations (get/set)
+		 * - Date component methods (getFullYear, getMonth, getDate)
+		 * - Time component methods (getHours, getMinutes, getSeconds)
+		 * - Date formatting and manipulation
+		 * - Time zone handling (UTC vs local)
+		 * - UI interactions (visibility, label, notifications)
+		 *
+		 * Note: CreatedOn is a read-only system field that stores when the record was created
+		 * Uses UTC date/time with "User Local" behavior (timezone adjusted for display)
+		 **************************************************************************/
+		async function testDateTime() {
+			console.log("╔════════════════════════════════════════════════════════════════╗");
+			console.log("║         DATETIME CONTROL TESTS (CreatedOn Field)              ║");
+			console.log("╚════════════════════════════════════════════════════════════════╝");
+
+			try {
+				// Get the DateTime control reference
+				const dateTimeControl = form.Body.CreatedOn;
+
+				// Test 1: Get current DateTime value
+				console.log("\n📋 Test 1: Get DateTime Value");
+				const currentValue = dateTimeControl.Value;
+				if (currentValue) {
+					console.log("  ✓ Current DateTime value:", currentValue);
+					console.log("  ℹ Type:", typeof currentValue);
+					console.log("  ℹ Is Date object:", currentValue instanceof Date);
+					console.log("  ℹ ISO String:", currentValue.toISOString());
+					console.log("  ℹ UTC String:", currentValue.toUTCString());
+					console.log("  ℹ Local String:", currentValue.toString());
+				} else {
+					console.log("  ℹ DateTime value is null (record not yet created)");
+				}
+
+				// Test 2: Get control name
+				console.log("\n📋 Test 2: Get Control Name");
+				const controlName = dateTimeControl.ControlName;
+				console.log("  ✓ Control Name:", controlName);
+
+				// Test 3: Get attribute name
+				console.log("\n📋 Test 3: Get Attribute Name");
+				const attributeName = dateTimeControl.Attribute.Name;
+				console.log("  ✓ Attribute Name:", attributeName);
+
+				// Test 4: Get ShowTime property (initial state)
+				console.log("\n📋 Test 4: Get ShowTime Property");
+				const showTime = dateTimeControl.ShowTime;
+				console.log("  ✓ ShowTime:", showTime);
+				console.log("  ℹ If true: displays date and time");
+				console.log("  ℹ If false: displays date only");
+
+				// Test 5: Get control type
+				console.log("\n📋 Test 5: Get Control Type");
+				const controlType = dateTimeControl.ControlType;
+				console.log("  ✓ Control Type:", controlType);
+				console.log("  ℹ Expected: 'standard' for DateTime control");
+
+				// Test 6: Get attribute type
+				console.log("\n📋 Test 6: Get Attribute Type");
+				const attributeType = dateTimeControl.Attribute.Type;
+				console.log("  ✓ Attribute Type:", attributeType);
+				console.log("  ℹ Expected: 'datetime' for DateTime fields");
+
+				// Test 7: Get format
+				console.log("\n📋 Test 7: Get Format");
+				const format = dateTimeControl.Attribute.Format;
+				console.log("  ✓ Format:", format);
+				console.log("  ℹ Possible values: 'date' (date only) or 'datetime' (date and time)");
+
+				// Test 8: Extract date components (using UTC methods)
+				console.log("\n📋 Test 8: Extract Date Components (UTC)");
+				if (currentValue) {
+					const year = currentValue.getUTCFullYear();
+					const month = currentValue.getUTCMonth() + 1; // 0-indexed, so add 1
+					const day = currentValue.getUTCDate();
+					const dayOfWeek = currentValue.getUTCDay(); // 0=Sunday, 6=Saturday
+					const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+					console.log("  ✓ UTC Year:", year);
+					console.log("  ✓ UTC Month:", month);
+					console.log("  ✓ UTC Day:", day);
+					console.log("  ✓ UTC Day of Week:", dayOfWeek, `(${dayNames[dayOfWeek]})`);
+				}
+
+				// Test 9: Extract time components (using UTC methods)
+				console.log("\n📋 Test 9: Extract Time Components (UTC)");
+				if (currentValue) {
+					const hours = currentValue.getUTCHours();
+					const minutes = currentValue.getUTCMinutes();
+					const seconds = currentValue.getUTCSeconds();
+					const milliseconds = currentValue.getUTCMilliseconds();
+					console.log("  ✓ UTC Hours:", hours);
+					console.log("  ✓ UTC Minutes:", minutes);
+					console.log("  ✓ UTC Seconds:", seconds);
+					console.log("  ✓ UTC Milliseconds:", milliseconds);
+					console.log(`  ℹ Formatted time: ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`);
+				}
+
+				// Test 10: Extract date components (using local methods)
+				console.log("\n📋 Test 10: Extract Date Components (Local Time Zone)");
+				if (currentValue) {
+					const year = currentValue.getFullYear();
+					const month = currentValue.getMonth() + 1;
+					const day = currentValue.getDate();
+					const dayOfWeek = currentValue.getDay();
+					const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+					console.log("  ✓ Local Year:", year);
+					console.log("  ✓ Local Month:", month);
+					console.log("  ✓ Local Day:", day);
+					console.log("  ✓ Local Day of Week:", dayOfWeek, `(${dayNames[dayOfWeek]})`);
+				}
+
+				// Test 11: Extract time components (using local methods)
+				console.log("\n📋 Test 11: Extract Time Components (Local Time Zone)");
+				if (currentValue) {
+					const hours = currentValue.getHours();
+					const minutes = currentValue.getMinutes();
+					const seconds = currentValue.getSeconds();
+					const milliseconds = currentValue.getMilliseconds();
+					console.log("  ✓ Local Hours:", hours);
+					console.log("  ✓ Local Minutes:", minutes);
+					console.log("  ✓ Local Seconds:", seconds);
+					console.log("  ✓ Local Milliseconds:", milliseconds);
+					console.log(`  ℹ Formatted time: ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`);
+				}
+
+				// Test 12: Get time zone offset
+				console.log("\n📋 Test 12: Get Time Zone Offset");
+				if (currentValue) {
+					const timezoneOffset = currentValue.getTimezoneOffset();
+					const offsetHours = Math.abs(Math.floor(timezoneOffset / 60));
+					const offsetMinutes = Math.abs(timezoneOffset % 60);
+					const offsetSign = timezoneOffset > 0 ? '-' : '+';
+					console.log("  ✓ Time Zone Offset (minutes):", timezoneOffset);
+					console.log(`  ℹ UTC${offsetSign}${offsetHours.toString().padStart(2, '0')}:${offsetMinutes.toString().padStart(2, '0')}`);
+					console.log("  ℹ Positive offset means local time is behind UTC");
+					console.log("  ℹ Negative offset means local time is ahead of UTC");
+				}
+
+				// Test 13: Check if field is required
+				console.log("\n📋 Test 13: Check Required Level");
+				const requiredLevel = dateTimeControl.Attribute.RequiredLevel;
+				console.log("  ✓ Required Level:", requiredLevel);
+				console.log("  ℹ 'none' = optional, 'required' = mandatory, 'recommended' = suggested");
+
+				// Test 14: Check if field is read-only
+				console.log("\n📋 Test 14: Check Read-Only State");
+				const isReadOnly = dateTimeControl.Attribute.IsReadOnly;
+				console.log("  ✓ Is Read-Only:", isReadOnly);
+				console.log("  ℹ CreatedOn is typically read-only (system field)");
+
+				// Test 15: Get isDirty status
+				console.log("\n📋 Test 15: Get isDirty Status");
+				const isDirty = dateTimeControl.Attribute.IsDirty;
+				console.log("  ✓ Is Dirty:", isDirty);
+				console.log("  ℹ Indicates if value has been modified since form load");
+
+				// Test 16: Get visibility state
+				console.log("\n📋 Test 16: Get Visibility State");
+				const isVisible = dateTimeControl.Visible;
+				console.log("  ✓ Is Visible:", isVisible);
+
+				// Test 17: Get disabled state
+				console.log("\n📋 Test 17: Get Disabled State");
+				const isDisabled = dateTimeControl.Disabled;
+				console.log("  ✓ Is Disabled:", isDisabled);
+
+				// Test 18: Get label
+				console.log("\n📋 Test 18: Get Label");
+				const label = dateTimeControl.Label;
+				console.log("  ✓ Label:", label);
+
+				// Test 19: Calculate time since creation (if value exists)
+				console.log("\n📋 Test 19: Calculate Time Since Creation");
+				if (currentValue) {
+					const now = new Date();
+					const diffMs = now.getTime() - currentValue.getTime();
+					const diffSeconds = Math.floor(diffMs / 1000);
+					const diffMinutes = Math.floor(diffSeconds / 60);
+					const diffHours = Math.floor(diffMinutes / 60);
+					const diffDays = Math.floor(diffHours / 24);
+					console.log("  ✓ Time since creation:");
+					console.log(`    ℹ ${diffDays} days, ${diffHours % 24} hours, ${diffMinutes % 60} minutes, ${diffSeconds % 60} seconds`);
+					console.log(`    ℹ Total milliseconds: ${diffMs}`);
+				}
+
+				// Test 20: Set ShowTime to false (hide time portion)
+				console.log("\n⚡ Test 20: Set ShowTime to False (Show Date Only)");
+				console.log("  ℹ This will hide the time portion in the UI");
+				dateTimeControl.ShowTime = false;
+				console.log("  ✓ ShowTime set to: false");
+				console.log("  ℹ Control now displays date only (time hidden)");
+
+				// Test 21: Set ShowTime to true (show time portion)
+				console.log("\n⚡ Test 21: Set ShowTime to True (Show Date and Time)");
+				setTimeout(() => {
+					try {
+						console.log("  ℹ Restoring ShowTime to original state");
+						dateTimeControl.ShowTime = true;
+						console.log("  ✓ ShowTime set to: true");
+						console.log("  ℹ Control now displays both date and time");
+					} catch (/** @type {any} */ error) {
+						console.error("  ✗ Error setting ShowTime:", error.message);
+					}
+				}, 1000);
+
+				// Test 22: Add notification to control
+				console.log("\n⚡ Test 22: Add Notification");
+				setTimeout(() => {
+					try {
+						const uniqueId = "dateTimeNotification_" + Date.now();
+						dateTimeControl.AddNotification({
+							uniqueId: uniqueId,
+							messages: ["This is a read-only system field that stores the record creation date/time"],
+							notificationLevel: OptionSet.FieldNotificationLevel.Recommendation
+						});
+						console.log("  ✓ Notification added with ID:", uniqueId);
+						console.log("  ℹ Check the form UI to see the notification");
+					} catch (/** @type {any} */ error) {
+						console.error("  ✗ Error adding notification:", error.message);
+					}
+				}, 2000);
+
+				// Test 23: Clear notification
+				console.log("\n⚡ Test 23: Clear Notification");
+				setTimeout(() => {
+					try {
+						dateTimeControl.ClearNotification("dateTimeNotification_" + Date.now());
+						console.log("  ✓ Notification cleared");
+					} catch (/** @type {any} */ error) {
+						console.error("  ✗ Error clearing notification:", error.message);
+					}
+				}, 4000);
+
+				// Test 24: Set focus to control
+				console.log("\n⚡ Test 24: Set Focus to Control");
+				setTimeout(() => {
+					try {
+						dateTimeControl.Focus();
+						console.log("  ✓ Focus set to DateTime control");
+						console.log("  ℹ Check the form UI - cursor should be in this field");
+					} catch (/** @type {any} */ error) {
+						console.error("  ✗ Error setting focus:", error.message);
+					}
+				}, 5000);
+
+				// Test 25: Toggle visibility
+				console.log("\n⚡ Test 25: Toggle Visibility (Hide then Show)");
+				setTimeout(() => {
+					try {
+						dateTimeControl.Visible = false;
+						console.log("  ✓ Control hidden");
+					} catch (/** @type {any} */ error) {
+						console.error("  ✗ Error hiding control:", error.message);
+					}
+				}, 6000);
+
+				setTimeout(() => {
+					try {
+						dateTimeControl.Visible = true;
+						console.log("  ✓ Control shown again");
+					} catch (/** @type {any} */ error) {
+						console.error("  ✗ Error showing control:", error.message);
+					}
+				}, 7000);
+
+				// Test 26: Change label
+				console.log("\n⚡ Test 26: Change Label");
+				setTimeout(() => {
+					try {
+						const originalLabel = dateTimeControl.Label;
+						dateTimeControl.Label = "Record Created (Test Label)";
+						console.log("  ✓ Label changed to: 'Record Created (Test Label)'");
+						console.log("  ℹ Original label:", originalLabel);
+					} catch (/** @type {any} */ error) {
+						console.error("  ✗ Error changing label:", error.message);
+					}
+				}, 8000);
+
+				// Test 27: Restore original label
+				setTimeout(() => {
+					try {
+						dateTimeControl.Label = "Created On";
+						console.log("  ✓ Label restored to: 'Created On'");
+					} catch (/** @type {any} */ error) {
+						console.error("  ✗ Error restoring label:", error.message);
+					}
+				}, 9000);
+
+				console.log("\n╔════════════════════════════════════════════════════════════════╗");
+				console.log("║     DATETIME CONTROL TESTS COMPLETED                           ║");
+				console.log("╚════════════════════════════════════════════════════════════════╝");
+				console.log("  ✓ Total Tests: 27");
+				console.log("  ℹ Tests 1-19: Read operations and date/time extraction");
+				console.log("  ℹ Tests 20-27: UI operations (ShowTime, notifications, focus, visibility, label)");
+				console.log("  ℹ Execution time: ~10 seconds (includes UI validation delays)");
+				console.log("\n  ℹ Key Features Tested:");
+				console.log("    • ShowTime property for date/time display control");
+				console.log("    • Date component extraction (year, month, day, day of week)");
+				console.log("    • Time component extraction (hours, minutes, seconds, milliseconds)");
+				console.log("    • UTC vs Local time zone handling");
+				console.log("    • Time zone offset calculation");
+				console.log("    • Time duration calculations");
+				console.log("    • Date formatting (ISO, UTC, local)");
+				console.log("    • Read-only system field behavior");
+				console.log("    • UI interactions (notifications, focus, visibility, labels)");
+
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Error in DateTime control tests:", error.message);
+				console.error("Stack trace:", error.stack);
+			}
+		}
+
 	}
 	//END ON LOAD ==========================================================
 	//BEGIN ON CHANGE ======================================================

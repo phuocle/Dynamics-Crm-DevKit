@@ -22,11 +22,11 @@ Comprehensive test suite for all Dynamics 365 field control types using the Acco
 | 6 | **MultiOptionSet** | devkit_CategoryCode | 19 | ✅ Complete | [MULTIOPTIONSET_FIELD_TESTS.md](MULTIOPTIONSET_FIELD_TESTS.md) |
 | 7 | **Decimal** | v4_Decimal | 21 | ✅ Complete | [DECIMAL_FIELD_TESTS.md](DECIMAL_FIELD_TESTS.md) |
 | 8 | **Float (Double)** | v4_Float | 23 | ✅ Complete | [FLOAT_FIELD_TESTS.md](FLOAT_FIELD_TESTS.md) |
-| 9 | **Boolean** | CreditOnHold | - | ⏳ Pending | - |
-| 10 | **DateTime** | CreatedOn | - | ⏳ Pending | - |
+| 9 | **DateTime** | CreatedOn | 27 | ✅ Complete | [DATETIME_FIELD_TESTS.md](DATETIME_FIELD_TESTS.md) |
+| 10 | **Boolean** | CreditOnHold | - | ⏳ Pending | - |
 | 11 | **Memo** | Description | - | ⏳ Pending | - |
 
-**Completion Rate:** 8/11 (73%)
+**Completion Rate:** 9/11 (82%)
 
 ---
 
@@ -356,9 +356,80 @@ Comprehensive test suite for all Dynamics 365 field control types using the Acco
 
 ---
 
+### 9. ✅ DateTime Control - CreatedOn
+**Status:** Complete
+**Tests:** 27
+**Documentation:** [DATETIME_FIELD_TESTS.md](DATETIME_FIELD_TESTS.md)
+**Form Location:** Body
+
+#### Test Coverage:
+1. Get DateTime Value (Date object)
+2. Get Control Name
+3. Get Attribute Name
+4. Get ShowTime Property
+5. Get Control Type
+6. Get Attribute Type
+7. Get Format
+8. Extract Date Components (UTC)
+9. Extract Time Components (UTC)
+10. Extract Date Components (Local Time Zone)
+11. Extract Time Components (Local Time Zone)
+12. Get Time Zone Offset
+13. Check Required Level
+14. Check Read-Only State
+15. Get isDirty Status
+16. Get Visibility State
+17. Get Disabled State
+18. Get Label
+19. Calculate Time Since Creation
+20. Set ShowTime to False (Show Date Only)
+21. Set ShowTime to True (Show Date and Time)
+22. Add Notification
+23. Clear Notification
+24. Set Focus to Control
+25. Toggle Visibility (Hide then Show)
+26. Change Label
+27. Restore Original Label
+
+#### Unique Features:
+- ✅ **JavaScript Date Object:** Values returned as native Date objects
+- ✅ **ShowTime Property:** Toggle time portion display (date only vs date+time)
+- ✅ **Time Zone Handling:** Proper UTC vs Local method usage
+- ✅ **DateTime Behaviors:** User Local, Time Zone Independent, Date Only
+- ✅ **Date Component Extraction:** Year, month, day, day of week
+- ✅ **Time Component Extraction:** Hours, minutes, seconds, milliseconds
+- ✅ **Time Zone Offset:** Calculate browser's offset from UTC
+- ✅ **Time Calculations:** Duration since creation, elapsed time
+- ✅ **Read-Only System Field:** CreatedOn cannot be modified via UI
+- ⭐ **Microsoft Documentation:** All tests based on official docs
+
+**DateTime Behavior Types:**
+- **User Local** (CreatedOn): Stored as UTC, displayed in user's time zone, use `getUTC*()` methods
+- **Time Zone Independent**: Same value everywhere, use `get*()` methods
+- **Date Only**: No time component, always 00:00:00
+
+**Best For:**
+- 📅 Record creation/modification timestamps
+- ⏰ Meeting times adjusted for user time zones
+- 🎂 Birthdays and anniversaries (Date Only)
+- 📆 Deadlines and due dates
+- ⏱️ Time-based business logic and calculations
+
+**Example Values:**
+- `Wed Oct 02 2024 14:30:15 GMT-0700` - Full date/time with timezone
+- `2024-10-02T21:30:15.000Z` - ISO 8601 format (UTC)
+- `10/2/2024 2:30 PM` - Locale-formatted display
+
+**Microsoft Documentation References:**
+- [getShowTime](https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getshowtime)
+- [setShowTime](https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/setshowtime)
+- [DateTime Behavior and Format](https://learn.microsoft.com/en-us/power-apps/maker/data-platform/behavior-format-date-time-field)
+
+---
+
 ## Pending Tests
 
-### 9. ⏳ Boolean Control - CreditOnHold
+### 10. ⏳ Boolean Control - CreditOnHold
 **Status:** Pending
 **Estimated Tests:** 10-12
 **Priority:** High (next recommended - simple field)
@@ -372,23 +443,6 @@ Comprehensive test suite for all Dynamics 365 field control types using the Acco
 - Notification and focus methods
 - Visibility/disabled control
 - Label management
-
----
-
-### 10. ⏳ DateTime Control - CreatedOn
-**Status:** Pending
-**Estimated Tests:** 15-18
-**Priority:** Medium (complex date/time)
-
-#### Planned Coverage:
-- Get/Set date/time value
-- Date formatting
-- Time zone handling
-- ShowTime property
-- Date validation
-- Date manipulation
-- Notification and focus methods
-- Visibility/disabled control
 
 ---
 
@@ -406,24 +460,6 @@ Comprehensive test suite for all Dynamics 365 field control types using the Acco
 - Notification and focus methods
 - Visibility/disabled control
 - Label management
-
----
-
-### 8. ⏳ DateTime Control - CreatedOn
-**Status:** Pending
-**Estimated Tests:** 15-18
-
-#### Planned Coverage:
-- Get/Set date value
-- Get/Set time value
-- Date format behavior
-- Time zone handling
-- Date picker behavior
-- Time picker behavior
-- Min/Max date validation
-- Format property (date/datetime)
-- Notification and focus methods
-- Visibility/disabled control
 
 ---
 
@@ -491,17 +527,19 @@ Comprehensive test suite for all Dynamics 365 field control types using the Acco
 - ✅ Lookup controls (complex) - PrimaryContactId - 15 tests
 - ✅ String controls (simple) - Name - 12 tests
 
-### Phase 2: Numeric Types (🔄 In Progress - 67%)
+### Phase 2: Numeric Types (✅ Complete - 100%)
 - ✅ Integer controls - NumberOfEmployees (Header) - 15 tests
 - ✅ Money controls - Revenue (Header) - 16 tests
-- ⏳ Decimal controls - Custom field (Next) - ~15 tests
+- ✅ Decimal controls - v4_Decimal (Body) - 21 tests
+- ✅ Float controls - v4_Float (Body) - 23 tests
 
-### Phase 3: Choice Types (⏳ Pending - 0%)
-- ⏳ OptionSet controls - AccountCategoryCode - ~15 tests
-- ⏳ Boolean controls - CreditOnHold - ~12 tests
+### Phase 3: Choice Types (✅ Complete - 100%)
+- ✅ OptionSet controls - AccountCategoryCode - 19 tests
+- ✅ MultiOptionSet controls - devkit_CategoryCode - 19 tests
 
-### Phase 4: Advanced Types (⏳ Pending - 0%)
-- ⏳ DateTime controls - CreatedOn - ~15 tests
+### Phase 4: Advanced Types (🔄 In Progress - 33%)
+- ✅ DateTime controls - CreatedOn - 27 tests
+- ⏳ Boolean controls - CreditOnHold - ~10 tests (Next)
 - ⏳ Memo controls - Description - ~12 tests
 
 ---
@@ -590,10 +628,15 @@ In `Account.js`, locate the `UiAddLoaded` function:
 async function UiAddLoaded(executionContext) {
     //await testRetrieveRecord();
     //await testRetrieveRecords();
-    //await testLookup();         // ✅ Lookup tests - 15 tests
-    //await testString();         // ✅ String tests - 12 tests
-    //await testInteger();        // ✅ Integer tests - 15 tests
-    await testMoney();            // ✅ Money tests - 16 tests (currently active)
+    //await testLookup();           // ✅ Lookup tests - 15 tests
+    //await testString();           // ✅ String tests - 12 tests
+    //await testInteger();          // ✅ Integer tests - 15 tests
+    //await testMoney();            // ✅ Money tests - 16 tests
+    //await testOptionSet();        // ✅ OptionSet tests - 19 tests
+    //await testMultiOptionSet();   // ✅ MultiOptionSet tests - 19 tests
+    //await testDecimal();          // ✅ Decimal tests - 21 tests
+    //await testFloat();            // ✅ Float tests - 23 tests
+    await testDateTime();           // ✅ DateTime tests - 27 tests (currently active)
 }
 ```
 
@@ -660,13 +703,15 @@ For each field type test to be marked as "Complete":
 |------|-----------|
 | Oct 2, 2025 | ✅ Lookup tests complete |
 | Oct 2, 2025 | ✅ String tests complete |
-| TBD | Integer tests |
-| TBD | Decimal tests |
-| TBD | OptionSet tests |
-| TBD | Boolean tests |
-| TBD | DateTime tests |
-| TBD | Memo tests |
-| TBD | Money tests |
+| Oct 2, 2025 | ✅ Integer tests complete |
+| Oct 2, 2025 | ✅ Money tests complete |
+| Oct 2, 2025 | ✅ OptionSet tests complete |
+| Oct 2, 2025 | ✅ MultiOptionSet tests complete |
+| Oct 2, 2025 | ✅ Decimal tests complete |
+| Oct 2, 2025 | ✅ Float tests complete |
+| Oct 2, 2025 | ✅ DateTime tests complete |
+| TBD | ⏳ Boolean tests (next) |
+| TBD | ⏳ Memo tests |
 
 ---
 
@@ -714,6 +759,6 @@ This comprehensive test suite ensures complete coverage of all Dynamics 365 fiel
 - Provides troubleshooting guidance
 - Ensures no permanent record changes
 
-**Current Status:** Foundation phase complete, ready for numeric types phase.
+**Current Status:** 9 out of 11 field types complete (82%). Advanced types phase in progress.
 
-**Next Step:** Implement Integer control tests for NumberOfEmployees field.
+**Next Step:** Implement Boolean control tests for CreditOnHold field (quick win - simple field type).
