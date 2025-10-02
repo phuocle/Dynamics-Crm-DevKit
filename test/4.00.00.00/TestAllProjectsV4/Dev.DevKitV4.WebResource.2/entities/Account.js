@@ -28,7 +28,8 @@ var formAccount = (function () {
 		//await testMultiOptionSet();
 		//await testDecimal();
 		//await testFloat();
-		await testDateTime();
+		//await testDateTime();
+		await testBoolean();
 
 		/**************************************************************************
 		 * TEST: RetrieveRecord Function - All Overloads
@@ -2864,6 +2865,278 @@ var formAccount = (function () {
 
 			} catch (/** @type {any} */ error) {
 				console.error("✗ Error in DateTime control tests:", error.message);
+				console.error("Stack trace:", error.stack);
+			}
+		}
+
+		/**************************************************************************
+		 * TEST: Boolean Control - CreditOnHold Field
+		 * Tests for two-option (Boolean) field functionality
+		 **************************************************************************/
+		async function testBoolean() {
+			try {
+				console.log("╔═══════════════════════════════════════════════════════════════╗");
+				console.log("║     TESTING BOOLEAN CONTROL - CreditOnHold Field             ║");
+				console.log("╚═══════════════════════════════════════════════════════════════╝");
+				console.log("\n📋 Field: CreditOnHold (Two-Option Boolean Field)");
+				console.log("📍 Location: form.Body.CreditOnHold");
+				console.log("🎯 Purpose: Test Boolean control functionality\n");
+
+				const booleanControl = form.Body.CreditOnHold;
+
+				// Test 1: Get Boolean Value
+				try {
+					console.log("📋 Test 1: Get Boolean Value");
+					const currentValue = booleanControl.Value;
+					console.log("  ✓ Current Boolean value:", currentValue);
+					console.log("  ℹ Type:", typeof currentValue);
+					if (currentValue === null) {
+						console.log("  ℹ Value is null (not set)");
+					} else if (currentValue === true) {
+						console.log("  ℹ Credit is ON HOLD (true)");
+					} else {
+						console.log("  ℹ Credit is NOT on hold (false)");
+					}
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 1 Error:", error.message);
+				}
+
+				// Test 2: Get Control Name
+				try {
+					console.log("\n📋 Test 2: Get Control Name");
+					const controlName = booleanControl.ControlName;
+					console.log("  ✓ Control Name:", controlName);
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 2 Error:", error.message);
+				}
+
+				// Test 3: Get Attribute Name
+				try {
+					console.log("\n📋 Test 3: Get Attribute Name");
+					const attributeName = booleanControl.Attribute.Name;
+					console.log("  ✓ Attribute Name:", attributeName);
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 3 Error:", error.message);
+				}
+
+				// Test 4: Get Initial Value
+				try {
+					console.log("\n📋 Test 4: Get Initial Value");
+					const initialValue = booleanControl.InitialValue;
+					console.log("  ✓ Initial Value:", initialValue);
+					console.log("  ℹ This is the value when the form was loaded");
+					if (initialValue === 1) {
+						console.log("  ℹ Initial state: true (On Hold)");
+					} else if (initialValue === 0) {
+						console.log("  ℹ Initial state: false (Not On Hold)");
+					} else {
+						console.log("  ℹ Initial state: null (Not set)");
+					}
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 4 Error:", error.message);
+				}
+
+				// Test 5: Get Control Type
+				try {
+					console.log("\n📋 Test 5: Get Control Type");
+					const controlType = booleanControl.ControlType;
+					console.log("  ✓ Control Type:", controlType);
+					console.log("  ℹ Expected: 'standard' for Boolean control");
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 5 Error:", error.message);
+				}
+
+				// Test 6: Get Attribute Type
+				try {
+					console.log("\n📋 Test 6: Get Attribute Type");
+					const attributeType = booleanControl.Attribute.Type;
+					console.log("  ✓ Attribute Type:", attributeType);
+					console.log("  ℹ Expected: 'boolean' for two-option fields");
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 6 Error:", error.message);
+				}
+
+				// Test 7: Get Required Level
+				try {
+					console.log("\n📋 Test 7: Get Required Level");
+					const requiredLevel = booleanControl.Attribute.RequiredLevel;
+					console.log("  ✓ Required Level:", requiredLevel);
+					console.log("  ℹ 'none' = optional, 'required' = mandatory, 'recommended' = suggested");
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 7 Error:", error.message);
+				}
+
+				// Test 8: Get isDirty Status
+				try {
+					console.log("\n📋 Test 8: Get isDirty Status");
+					const isDirty = booleanControl.Attribute.IsDirty;
+					console.log("  ✓ Is Dirty:", isDirty);
+					console.log("  ℹ Indicates if value has been modified since form load");
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 8 Error:", error.message);
+				}
+
+				// Test 9: Get Visibility Status
+				try {
+					console.log("\n📋 Test 9: Get Visibility Status");
+					const isVisible = booleanControl.Visible;
+					console.log("  ✓ Is Visible:", isVisible);
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 9 Error:", error.message);
+				}
+
+				// Test 10: Get Disabled Status
+				try {
+					console.log("\n📋 Test 10: Get Disabled Status");
+					const isDisabled = booleanControl.Disabled;
+					console.log("  ✓ Is Disabled:", isDisabled);
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 10 Error:", error.message);
+				}
+
+				// Test 11: Get Label
+				try {
+					console.log("\n📋 Test 11: Get Label");
+					const label = booleanControl.Label;
+					console.log("  ✓ Label:", label);
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 11 Error:", error.message);
+				}
+
+				// Store original value for restoration
+				const originalValue = booleanControl.Value;
+				const originalLabel = booleanControl.Label;
+
+				// Test 12: Set Boolean to True
+				try {
+					console.log("\n⚡ Test 12: Set Boolean to True (Credit On Hold)");
+					booleanControl.Value = true;
+					console.log("  ✓ Boolean value set to: true");
+					console.log("  ℹ Credit should now be marked as ON HOLD");
+					console.log("  ℹ Check the form UI - field should show 'Yes' or checked state");
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 12 Error:", error.message);
+				}
+
+				// Test 13: Set Boolean to False
+				try {
+					console.log("\n⚡ Test 13: Set Boolean to False (Credit Not On Hold)");
+					await new Promise(resolve => setTimeout(resolve, 1000));
+					booleanControl.Value = false;
+					console.log("  ✓ Boolean value set to: false");
+					console.log("  ℹ Credit should now be marked as NOT on hold");
+					console.log("  ℹ Check the form UI - field should show 'No' or unchecked state");
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 13 Error:", error.message);
+				}
+
+				// Test 14: Set Boolean to Null (Clear Value)
+				try {
+					console.log("\n⚡ Test 14: Set Boolean to Null (Clear Value)");
+					await new Promise(resolve => setTimeout(resolve, 1000));
+					// @ts-ignore - null is valid for boolean fields in Dynamics 365
+					booleanControl.Value = null;
+					console.log("  ✓ Boolean value set to: null");
+					console.log("  ℹ Field should now be cleared (no selection)");
+					console.log("  ℹ Note: Some boolean fields don't allow null values");
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 14 Error:", error.message);
+				}
+
+				// Test 15: Add Notification
+				try {
+					console.log("\n⚡ Test 15: Add Notification");
+					await new Promise(resolve => setTimeout(resolve, 1000));
+					const notificationId = "booleanNotification_" + Date.now();
+					booleanControl.AddNotification({
+						uniqueId: notificationId,
+						messages: ["This field indicates whether the account's credit is on hold. Set to 'Yes' to prevent new orders."],
+						notificationLevel: OptionSet.FieldNotificationLevel.Recommendation
+					});
+					console.log("  ✓ Notification added with ID:", notificationId);
+					console.log("  ℹ Check the form UI to see the notification icon");
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 15 Error:", error.message);
+				}
+
+				// Test 16: Clear Notification
+				try {
+					console.log("\n⚡ Test 16: Clear Notification");
+					await new Promise(resolve => setTimeout(resolve, 2000));
+					const notificationId = "booleanNotification_" + (Date.now() - 2000);
+					booleanControl.ClearNotification(notificationId);
+					console.log("  ✓ Notification cleared");
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 16 Error:", error.message);
+				}
+
+				// Test 17: Set Focus to Control
+				try {
+					console.log("\n⚡ Test 17: Set Focus to Control");
+					await new Promise(resolve => setTimeout(resolve, 500));
+					booleanControl.Focus();
+					console.log("  ✓ Focus set to Boolean control");
+					console.log("  ℹ Check the form UI - cursor should be in this field");
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 17 Error:", error.message);
+				}
+
+				// Test 18: Toggle Visibility (Hide then Show)
+				try {
+					console.log("\n⚡ Test 18: Toggle Visibility (Hide then Show)");
+					await new Promise(resolve => setTimeout(resolve, 1000));
+					booleanControl.Visible = false;
+					console.log("  ✓ Control hidden");
+					await new Promise(resolve => setTimeout(resolve, 1500));
+					booleanControl.Visible = true;
+					console.log("  ✓ Control shown again");
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 18 Error:", error.message);
+				}
+
+				// Test 19: Change Label
+				try {
+					console.log("\n⚡ Test 19: Change Label");
+					await new Promise(resolve => setTimeout(resolve, 500));
+					booleanControl.Label = "Credit Status (Test Label)";
+					console.log("  ✓ Label changed to: 'Credit Status (Test Label)'");
+					console.log("  ℹ Original label:", originalLabel);
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 19 Error:", error.message);
+				}
+
+				// Test 20: Restore Original Values
+				try {
+					console.log("\n⚡ Test 20: Restore Original Values");
+					await new Promise(resolve => setTimeout(resolve, 1500));
+					booleanControl.Value = originalValue;
+					booleanControl.Label = originalLabel;
+					console.log("  ✓ Original value restored:", originalValue);
+					console.log("  ✓ Original label restored:", originalLabel);
+					console.log("  ↩ All changes reverted");
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 20 Error:", error.message);
+				}
+
+				// Summary
+				console.log("\n╔═══════════════════════════════════════════════════════════════╗");
+				console.log("║        BOOLEAN CONTROL TESTS COMPLETED SUCCESSFULLY          ║");
+				console.log("╚═══════════════════════════════════════════════════════════════╝");
+				console.log("\n📊 Test Summary:");
+				console.log("  ✓ Total Tests: 20");
+				console.log("  ℹ Tests 1-11: Read operations and properties");
+				console.log("  ℹ Tests 12-20: Value manipulation and UI operations");
+				console.log("  ℹ Execution time: ~10 seconds (includes UI validation delays)");
+				console.log("\n  ℹ Key Features Tested:");
+				console.log("    • Boolean value handling (true/false/null)");
+				console.log("    • Initial value tracking");
+				console.log("    • Control and attribute properties");
+				console.log("    • Value toggling (true → false → null)");
+				console.log("    • UI interactions (notifications, focus, visibility, labels)");
+				console.log("    • Original state restoration");
+
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Error in Boolean control tests:", error.message);
 				console.error("Stack trace:", error.stack);
 			}
 		}

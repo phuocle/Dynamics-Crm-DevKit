@@ -23,10 +23,10 @@ Comprehensive test suite for all Dynamics 365 field control types using the Acco
 | 7 | **Decimal** | v4_Decimal | 21 | ✅ Complete | [DECIMAL_FIELD_TESTS.md](DECIMAL_FIELD_TESTS.md) |
 | 8 | **Float (Double)** | v4_Float | 23 | ✅ Complete | [FLOAT_FIELD_TESTS.md](FLOAT_FIELD_TESTS.md) |
 | 9 | **DateTime** | CreatedOn | 27 | ✅ Complete | [DATETIME_FIELD_TESTS.md](DATETIME_FIELD_TESTS.md) |
-| 10 | **Boolean** | CreditOnHold | - | ⏳ Pending | - |
+| 10 | **Boolean** | CreditOnHold | 20 | ✅ Complete | [BOOLEAN_FIELD_TESTS.md](BOOLEAN_FIELD_TESTS.md) |
 | 11 | **Memo** | Description | - | ⏳ Pending | - |
 
-**Completion Rate:** 9/11 (82%)
+**Completion Rate:** 10/11 (91%)
 
 ---
 
@@ -427,26 +427,68 @@ Comprehensive test suite for all Dynamics 365 field control types using the Acco
 
 ---
 
-## Pending Tests
+### 10. ✅ Boolean Control - CreditOnHold
+**Status:** Complete
+**Tests:** 20
+**Documentation:** [BOOLEAN_FIELD_TESTS.md](BOOLEAN_FIELD_TESTS.md)
+**Form Location:** Body
 
-### 10. ⏳ Boolean Control - CreditOnHold
-**Status:** Pending
-**Estimated Tests:** 10-12
-**Priority:** High (next recommended - simple field)
+#### Test Coverage:
+1. Get Boolean Value (true/false/null)
+2. Get Control Name
+3. Get Attribute Name
+4. Get Initial Value
+5. Get Control Type
+6. Get Attribute Type
+7. Get Required Level
+8. Get isDirty Status
+9. Get Visibility Status
+10. Get Disabled Status
+11. Get Label
+12. Set Boolean to True (Credit On Hold)
+13. Set Boolean to False (Credit Not On Hold)
+14. Set Boolean to Null (Clear Value)
+15. Add Notification
+16. Clear Notification
+17. Set Focus to Control
+18. Toggle Visibility (Hide then Show)
+19. Change Label
+20. Restore Original Values
 
-#### Planned Coverage:
-- Get/Set boolean value (true/false)
-- Get option labels (Yes/No, True/False, On/Off)
-- Get option values (0 or 1)
-- Default value
-- Toggle behavior
-- Notification and focus methods
-- Visibility/disabled control
-- Label management
+#### Unique Features:
+- ✅ **Two-Option Field:** Only two possible states: true/false (plus null)
+- ✅ **Simple Data Type:** Boolean primitive values
+- ✅ **InitialValue Property:** Track original value when form loaded
+- ✅ **Null State:** Can be cleared to null (unset)
+- ✅ **UI Representations:** Checkbox, toggle, or radio buttons
+- ✅ **Value Types:** 1 = true, 0 = false, null = not set
+- ✅ **Option Labels:** Customizable (Yes/No, True/False, On/Off, etc.)
+
+**Common Use Cases:**
+- Credit hold flags
+- Active/Inactive status
+- Do Not Contact preferences
+- Feature toggles
+- Approval flags
+
+**Best For:**
+- ✔️ Binary choices (yes/no, on/off)
+- ✔️ Status flags
+- ✔️ Preferences and settings
+- ✔️ Validation states
+- ✔️ Permission toggles
+
+**Example Values:**
+- `true` - Credit is on hold, feature enabled, approved
+- `false` - Credit is clear, feature disabled, not approved
+- `null` - Not set, undecided, no selection made
 
 ---
 
+## Pending Tests
+
 ### 11. ⏳ Memo Control - Description
+
 **Status:** Pending
 **Estimated Tests:** 12-15
 **Priority:** Medium (multi-line text)
@@ -537,10 +579,10 @@ Comprehensive test suite for all Dynamics 365 field control types using the Acco
 - ✅ OptionSet controls - AccountCategoryCode - 19 tests
 - ✅ MultiOptionSet controls - devkit_CategoryCode - 19 tests
 
-### Phase 4: Advanced Types (🔄 In Progress - 33%)
+### Phase 4: Advanced Types (🔄 In Progress - 67%)
 - ✅ DateTime controls - CreatedOn - 27 tests
-- ⏳ Boolean controls - CreditOnHold - ~10 tests (Next)
-- ⏳ Memo controls - Description - ~12 tests
+- ✅ Boolean controls - CreditOnHold - 20 tests
+- ⏳ Memo controls - Description - ~12 tests (Next - Final field type!)
 
 ---
 
@@ -636,7 +678,8 @@ async function UiAddLoaded(executionContext) {
     //await testMultiOptionSet();   // ✅ MultiOptionSet tests - 19 tests
     //await testDecimal();          // ✅ Decimal tests - 21 tests
     //await testFloat();            // ✅ Float tests - 23 tests
-    await testDateTime();           // ✅ DateTime tests - 27 tests (currently active)
+    //await testDateTime();         // ✅ DateTime tests - 27 tests
+    await testBoolean();            // ✅ Boolean tests - 20 tests (currently active)
 }
 ```
 
@@ -710,8 +753,8 @@ For each field type test to be marked as "Complete":
 | Oct 2, 2025 | ✅ Decimal tests complete |
 | Oct 2, 2025 | ✅ Float tests complete |
 | Oct 2, 2025 | ✅ DateTime tests complete |
-| TBD | ⏳ Boolean tests (next) |
-| TBD | ⏳ Memo tests |
+| Oct 2, 2025 | ✅ Boolean tests complete |
+| TBD | ⏳ Memo tests (final field type!) |
 
 ---
 
@@ -759,6 +802,6 @@ This comprehensive test suite ensures complete coverage of all Dynamics 365 fiel
 - Provides troubleshooting guidance
 - Ensures no permanent record changes
 
-**Current Status:** 9 out of 11 field types complete (82%). Advanced types phase in progress.
+**Current Status:** 10 out of 11 field types complete (91%). Only ONE field type remaining!
 
-**Next Step:** Implement Boolean control tests for CreditOnHold field (quick win - simple field type).
+**Next Step:** Implement Memo control tests for Description field (final field type - multi-line text).
