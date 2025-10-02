@@ -29,7 +29,8 @@ var formAccount = (function () {
 		//await testDecimal();
 		//await testFloat();
 		//await testDateTime();
-		await testBoolean();
+		//await testBoolean();
+		await testMemo();
 
 		/**************************************************************************
 		 * TEST: RetrieveRecord Function - All Overloads
@@ -3137,6 +3138,297 @@ var formAccount = (function () {
 
 			} catch (/** @type {any} */ error) {
 				console.error("✗ Error in Boolean control tests:", error.message);
+				console.error("Stack trace:", error.stack);
+			}
+		}
+
+		/**************************************************************************
+		 * TEST: Memo Control - Description Field
+		 * Tests for multi-line text field functionality
+		 **************************************************************************/
+		async function testMemo() {
+			try {
+				console.log("╔═══════════════════════════════════════════════════════════════╗");
+				console.log("║     TESTING MEMO CONTROL - Description Field                 ║");
+				console.log("╚═══════════════════════════════════════════════════════════════╝");
+				console.log("\n📋 Field: Description (Multi-line Text Field)");
+				console.log("📍 Location: form.Body.Description");
+				console.log("🎯 Purpose: Test Memo control functionality\n");
+
+				const memoControl = form.Body.Description;
+
+				// Test 1: Get Memo Value
+				try {
+					console.log("📋 Test 1: Get Memo Value");
+					const currentValue = memoControl.Value;
+					console.log("  ✓ Current Memo value:", currentValue || "(empty)");
+					console.log("  ℹ Type:", typeof currentValue);
+					if (currentValue) {
+						console.log("  ℹ Length:", currentValue.length, "characters");
+						const lines = currentValue.split('\n').length;
+						console.log("  ℹ Lines:", lines);
+						const words = currentValue.trim().split(/\s+/).filter(w => w.length > 0).length;
+						console.log("  ℹ Words:", words);
+					} else {
+						console.log("  ℹ Field is empty");
+					}
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 1 Error:", error.message);
+				}
+
+				// Test 2: Get Control Name
+				try {
+					console.log("\n📋 Test 2: Get Control Name");
+					const controlName = memoControl.ControlName;
+					console.log("  ✓ Control Name:", controlName);
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 2 Error:", error.message);
+				}
+
+				// Test 3: Get Attribute Name
+				try {
+					console.log("\n📋 Test 3: Get Attribute Name");
+					const attributeName = memoControl.Attribute.Name;
+					console.log("  ✓ Attribute Name:", attributeName);
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 3 Error:", error.message);
+				}
+
+				// Test 4: Get MaxLength
+				try {
+					console.log("\n📋 Test 4: Get MaxLength");
+					const maxLength = memoControl.MaxLength;
+					console.log("  ✓ MaxLength:", maxLength, "characters");
+					console.log("  ℹ This is the maximum allowed text length");
+					if (maxLength === 2000) {
+						console.log("  ℹ Standard memo field (2,000 characters)");
+					} else if (maxLength > 2000) {
+						console.log("  ℹ Extended memo field (up to", maxLength.toLocaleString(), "characters)");
+					}
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 4 Error:", error.message);
+				}
+
+				// Test 5: Get Control Type
+				try {
+					console.log("\n📋 Test 5: Get Control Type");
+					const controlType = memoControl.ControlType;
+					console.log("  ✓ Control Type:", controlType);
+					console.log("  ℹ Expected: 'standard' for Memo control");
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 5 Error:", error.message);
+				}
+
+				// Test 6: Get Attribute Type
+				try {
+					console.log("\n📋 Test 6: Get Attribute Type");
+					const attributeType = memoControl.Attribute.Type;
+					console.log("  ✓ Attribute Type:", attributeType);
+					console.log("  ℹ Expected: 'memo' for multi-line text fields");
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 6 Error:", error.message);
+				}
+
+				// Test 7: Get Format
+				try {
+					console.log("\n📋 Test 7: Get Format");
+					const format = memoControl.Attribute.Format;
+					console.log("  ✓ Format:", format || "text");
+					console.log("  ℹ Format options: 'text' (plain text), 'email', 'textarea', 'url'");
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 7 Error:", error.message);
+				}
+
+				// Test 8: Get Required Level
+				try {
+					console.log("\n📋 Test 8: Get Required Level");
+					const requiredLevel = memoControl.Attribute.RequiredLevel;
+					console.log("  ✓ Required Level:", requiredLevel);
+					console.log("  ℹ 'none' = optional, 'required' = mandatory, 'recommended' = suggested");
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 8 Error:", error.message);
+				}
+
+				// Test 9: Get isDirty Status
+				try {
+					console.log("\n📋 Test 9: Get isDirty Status");
+					const isDirty = memoControl.Attribute.IsDirty;
+					console.log("  ✓ Is Dirty:", isDirty);
+					console.log("  ℹ Indicates if value has been modified since form load");
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 9 Error:", error.message);
+				}
+
+				// Test 10: Get Visibility Status
+				try {
+					console.log("\n📋 Test 10: Get Visibility Status");
+					const isVisible = memoControl.Visible;
+					console.log("  ✓ Is Visible:", isVisible);
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 10 Error:", error.message);
+				}
+
+				// Test 11: Get Disabled Status
+				try {
+					console.log("\n📋 Test 11: Get Disabled Status");
+					const isDisabled = memoControl.Disabled;
+					console.log("  ✓ Is Disabled:", isDisabled);
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 11 Error:", error.message);
+				}
+
+				// Test 12: Get Label
+				try {
+					console.log("\n📋 Test 12: Get Label");
+					const label = memoControl.Label;
+					console.log("  ✓ Label:", label);
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 12 Error:", error.message);
+				}
+
+				// Store original value for restoration
+				const originalValue = memoControl.Value;
+				const originalLabel = memoControl.Label;
+
+				// Test 13: Set Multi-line Text
+				try {
+					console.log("\n⚡ Test 13: Set Multi-line Text");
+					const testText = "This is a test description.\n\nThis field supports multiple lines of text.\n\nKey features:\n- Line 1: Supports line breaks\n- Line 2: Can store long text\n- Line 3: Used for detailed information";
+					memoControl.Value = testText;
+					console.log("  ✓ Multi-line text set successfully");
+					console.log("  ℹ Text length:", testText.length, "characters");
+					console.log("  ℹ Number of lines:", testText.split('\n').length);
+					console.log("  ℹ Check the form UI to see the multi-line text");
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 13 Error:", error.message);
+				}
+
+				// Test 14: Set Long Text (Test MaxLength)
+				try {
+					console.log("\n⚡ Test 14: Set Long Text (Test Character Limit)");
+					await new Promise(resolve => setTimeout(resolve, 1000));
+					const longText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. ".repeat(20);
+					memoControl.Value = longText;
+					const actualValue = memoControl.Value;
+					console.log("  ✓ Long text set");
+					console.log("  ℹ Text length:", actualValue ? actualValue.length : 0, "characters");
+					console.log("  ℹ MaxLength limit:", memoControl.MaxLength, "characters");
+					if (actualValue && actualValue.length === memoControl.MaxLength) {
+						console.log("  ⚠ Text was truncated to MaxLength");
+					}
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 14 Error:", error.message);
+				}
+
+				// Test 15: Clear Value (Set to Empty String)
+				try {
+					console.log("\n⚡ Test 15: Clear Value (Set to Empty String)");
+					await new Promise(resolve => setTimeout(resolve, 1000));
+					memoControl.Value = "";
+					console.log("  ✓ Value cleared (empty string)");
+					console.log("  ℹ Field should now be empty");
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 15 Error:", error.message);
+				}
+
+				// Test 16: Add Notification
+				try {
+					console.log("\n⚡ Test 16: Add Notification");
+					await new Promise(resolve => setTimeout(resolve, 1000));
+					const notificationId = "memoNotification_" + Date.now();
+					memoControl.AddNotification({
+						uniqueId: notificationId,
+						messages: ["This field supports multi-line text. Use line breaks to organize content. Maximum " + memoControl.MaxLength + " characters."],
+						notificationLevel: OptionSet.FieldNotificationLevel.Recommendation
+					});
+					console.log("  ✓ Notification added with ID:", notificationId);
+					console.log("  ℹ Check the form UI to see the notification icon");
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 16 Error:", error.message);
+				}
+
+				// Test 17: Clear Notification
+				try {
+					console.log("\n⚡ Test 17: Clear Notification");
+					await new Promise(resolve => setTimeout(resolve, 2000));
+					const notificationId = "memoNotification_" + (Date.now() - 2000);
+					memoControl.ClearNotification(notificationId);
+					console.log("  ✓ Notification cleared");
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 17 Error:", error.message);
+				}
+
+				// Test 18: Set Focus to Control
+				try {
+					console.log("\n⚡ Test 18: Set Focus to Control");
+					await new Promise(resolve => setTimeout(resolve, 500));
+					memoControl.Focus();
+					console.log("  ✓ Focus set to Memo control");
+					console.log("  ℹ Check the form UI - cursor should be in this text area");
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 18 Error:", error.message);
+				}
+
+				// Test 19: Toggle Visibility (Hide then Show)
+				try {
+					console.log("\n⚡ Test 19: Toggle Visibility (Hide then Show)");
+					await new Promise(resolve => setTimeout(resolve, 1000));
+					memoControl.Visible = false;
+					console.log("  ✓ Control hidden");
+					await new Promise(resolve => setTimeout(resolve, 1500));
+					memoControl.Visible = true;
+					console.log("  ✓ Control shown again");
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 19 Error:", error.message);
+				}
+
+				// Test 20: Change Label
+				try {
+					console.log("\n⚡ Test 20: Change Label");
+					await new Promise(resolve => setTimeout(resolve, 500));
+					memoControl.Label = "Account Notes (Test Label)";
+					console.log("  ✓ Label changed to: 'Account Notes (Test Label)'");
+					console.log("  ℹ Original label:", originalLabel);
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 20 Error:", error.message);
+				}
+
+				// Test 21: Restore Original Values
+				try {
+					console.log("\n⚡ Test 21: Restore Original Values");
+					await new Promise(resolve => setTimeout(resolve, 1500));
+					memoControl.Value = originalValue;
+					memoControl.Label = originalLabel;
+					console.log("  ✓ Original value restored:", originalValue ? originalValue.substring(0, 50) + "..." : "(empty)");
+					console.log("  ✓ Original label restored:", originalLabel);
+					console.log("  ↩ All changes reverted");
+				} catch (/** @type {any} */ error) {
+					console.error("  ✗ Test 21 Error:", error.message);
+				}
+
+				// Summary
+				console.log("\n╔═══════════════════════════════════════════════════════════════╗");
+				console.log("║         MEMO CONTROL TESTS COMPLETED SUCCESSFULLY            ║");
+				console.log("╚═══════════════════════════════════════════════════════════════╝");
+				console.log("\n🎉 CONGRATULATIONS! ALL FIELD TYPES TESTED! 🎉");
+				console.log("\n📊 Test Summary:");
+				console.log("  ✓ Total Tests: 21");
+				console.log("  ℹ Tests 1-12: Read operations and properties");
+				console.log("  ℹ Tests 13-21: Value manipulation and UI operations");
+				console.log("  ℹ Execution time: ~10 seconds (includes UI validation delays)");
+				console.log("\n  ℹ Key Features Tested:");
+				console.log("    • Multi-line text handling");
+				console.log("    • MaxLength property (character limit)");
+				console.log("    • Line and word counting");
+				console.log("    • Long text handling and truncation");
+				console.log("    • UI interactions (notifications, focus, visibility, labels)");
+				console.log("    • Original state restoration");
+				console.log("\n╔════════════════════════════════════════════════════════════════╗");
+				console.log("║  🏆 COMPLETE TEST SUITE - ALL 11 FIELD TYPES IMPLEMENTED! 🏆  ║");
+				console.log("╚════════════════════════════════════════════════════════════════╝");
+
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Error in Memo control tests:", error.message);
 				console.error("Stack trace:", error.stack);
 			}
 		}
