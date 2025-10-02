@@ -20,12 +20,13 @@ Comprehensive test suite for all Dynamics 365 field control types using the Acco
 | 4 | **Money** | Revenue | 16 | ✅ Complete | [MONEY_FIELD_TESTS.md](MONEY_FIELD_TESTS.md) |
 | 5 | **OptionSet** | AccountCategoryCode | 19 | ✅ Complete | [OPTIONSET_FIELD_TESTS.md](OPTIONSET_FIELD_TESTS.md) |
 | 6 | **MultiOptionSet** | devkit_CategoryCode | 19 | ✅ Complete | [MULTIOPTIONSET_FIELD_TESTS.md](MULTIOPTIONSET_FIELD_TESTS.md) |
-| 7 | **Decimal** | (Custom field) | - | ⏳ Pending | - |
-| 8 | **Boolean** | CreditOnHold | - | ⏳ Pending | - |
-| 9 | **DateTime** | CreatedOn | - | ⏳ Pending | - |
-| 10 | **Memo** | Description | - | ⏳ Pending | - |
+| 7 | **Decimal** | v4_Decimal | 21 | ✅ Complete | [DECIMAL_FIELD_TESTS.md](DECIMAL_FIELD_TESTS.md) |
+| 8 | **Float (Double)** | v4_Float | 23 | ✅ Complete | [FLOAT_FIELD_TESTS.md](FLOAT_FIELD_TESTS.md) |
+| 9 | **Boolean** | CreditOnHold | - | ⏳ Pending | - |
+| 10 | **DateTime** | CreatedOn | - | ⏳ Pending | - |
+| 11 | **Memo** | Description | - | ⏳ Pending | - |
 
-**Completion Rate:** 6/10 (60%)
+**Completion Rate:** 8/11 (73%)
 
 ---
 
@@ -244,55 +245,167 @@ Comprehensive test suite for all Dynamics 365 field control types using the Acco
 
 ---
 
+### 7. ✅ Decimal Control - v4_Decimal
+**Status:** Complete
+**Tests:** 21
+**Documentation:** [DECIMAL_FIELD_TESTS.md](DECIMAL_FIELD_TESTS.md)
+**Additional Docs:** [DECIMAL_FLOAT_COMPLETE_SUMMARY.md](DECIMAL_FLOAT_COMPLETE_SUMMARY.md)
+**Form Location:** Body
+
+#### Test Coverage:
+1. Get Decimal Value (numeric)
+2. Get Control and Attribute Names
+3. Get Precision (Decimal Places)
+4. Get Min and Max Values
+5. Get Control Type
+6. Get Attribute Type
+7. Get Format
+8. Get IsDirty Status
+9. Get Visibility Status
+10. Get Disabled Status
+11. Get Label
+12. Set Decimal Value with Precision
+13. Set Negative Decimal Value
+14. Set Zero Value
+15. Clear Value (Set to Null)
+16. Set Precision (Dynamic Change)
+17. Add Notification
+18. Set Focus
+19. Toggle Visibility
+20. Toggle Disabled State
+21. Change Label
+
+#### Unique Features:
+- ✅ **Fixed-Point Arithmetic:** Exact decimal calculations (no floating-point errors)
+- ✅ **High Precision:** 0-10 decimal places (configurable)
+- ✅ **Financial Accuracy:** Perfect for money calculations
+- ✅ **Wide Range:** ±100 billion
+- ✅ **Dynamic Precision:** Runtime precision changes
+- ✅ **Banker's Rounding:** Standard financial rounding
+
+**Best For:**
+- 💰 Money/currency calculations
+- 📊 Financial reporting
+- 💳 Pricing and tax calculations
+- 📈 Interest rates
+- ⚖️ Any scenario requiring exact decimal precision
+
+**Example Values:**
+- `123.45` - Price with 2 decimals
+- `0.0825` - Tax rate (8.25%)
+- `99999.9999` - High precision financial value
+
+---
+
+### 8. ✅ Float (Double) Control - v4_Float
+**Status:** Complete
+**Tests:** 23
+**Documentation:** [FLOAT_FIELD_TESTS.md](FLOAT_FIELD_TESTS.md)
+**Additional Docs:** [DECIMAL_FLOAT_COMPLETE_SUMMARY.md](DECIMAL_FLOAT_COMPLETE_SUMMARY.md)
+**Form Location:** Body
+
+#### Test Coverage:
+1. Get Float Value (numeric)
+2. Get Control and Attribute Names
+3. Get Precision (Decimal Places)
+4. Get Min and Max Values
+5. Get Control Type
+6. Get Attribute Type
+7. Get Format
+8. Get IsDirty Status
+9. Get Visibility Status
+10. Get Disabled Status
+11. Get Label
+12. Set Float Value with High Precision
+13. **Set Scientific Notation Value** ⭐
+14. Set Large Float Value
+15. Set Negative Float Value
+16. Set Zero Value
+17. Clear Value (Set to Null)
+18. Set Precision (Dynamic Change)
+19. Add Notification
+20. Set Focus
+21. Toggle Visibility
+22. Toggle Disabled State
+23. Change Label
+
+#### Unique Features:
+- ✅ **Floating-Point Arithmetic:** Binary-based calculations
+- ✅ **Scientific Notation:** Supports 1.23e-8 format ⭐
+- ✅ **Precision:** 0-5 decimal places (configurable)
+- ✅ **Wide Range:** ±100 billion
+- ✅ **Approximate Values:** Suitable for scientific data
+- ⚠️ **Binary Representation:** May have minor rounding artifacts
+
+**Best For:**
+- 🔬 Scientific measurements
+- 📍 Geographic coordinates (lat/long)
+- 📉 Statistical data
+- 🌡️ Temperature readings
+- ⚛️ Physics constants
+- 📊 Sensor data
+
+**Example Values:**
+- `3.14159` - Pi
+- `1.23e-4` - Scientific notation (0.000123)
+- `47.60621` - Latitude coordinate
+- `-273.15` - Absolute zero (Celsius)
+- `6.022e23` - Avogadro's number
+
+**⭐ Unique Feature:** Only numeric type supporting scientific notation!
+
+---
+
 ## Pending Tests
 
-### 7. ⏳ Decimal Control - Custom Field
-**Status:** Pending
-**Estimated Tests:** 15-16
-
-#### Planned Coverage:
-- Get/Set decimal value
-- Precision property (variable decimal places)
-- Min/Max value validation
-- Format property
-- Rounding behavior
-- Scientific notation handling
-- Notification and focus methods
-- Visibility/disabled control
-- Difference from Integer and Money
-
----
-
-### 6. ⏳ OptionSet Control - AccountCategoryCode
-**Status:** Pending
-**Estimated Tests:** 15-18
-
-#### Planned Coverage:
-- Get/Set option value
-- Get options array
-- Get selected option text
-- Get selected option value
-- Default option
-- Add/Remove options (if supported)
-- Clear selection
-- Option filtering
-- Notification and focus methods
-- Visibility/disabled control
-
----
-
-### 7. ⏳ Boolean (Two Options) Control - CreditOnHold
+### 9. ⏳ Boolean Control - CreditOnHold
 **Status:** Pending
 **Estimated Tests:** 10-12
+**Priority:** High (next recommended - simple field)
 
 #### Planned Coverage:
-- Get/Set boolean value
-- Get option labels (Yes/No, True/False, etc.)
-- Get option values
+- Get/Set boolean value (true/false)
+- Get option labels (Yes/No, True/False, On/Off)
+- Get option values (0 or 1)
 - Default value
 - Toggle behavior
 - Notification and focus methods
 - Visibility/disabled control
+- Label management
+
+---
+
+### 10. ⏳ DateTime Control - CreatedOn
+**Status:** Pending
+**Estimated Tests:** 15-18
+**Priority:** Medium (complex date/time)
+
+#### Planned Coverage:
+- Get/Set date/time value
+- Date formatting
+- Time zone handling
+- ShowTime property
+- Date validation
+- Date manipulation
+- Notification and focus methods
+- Visibility/disabled control
+
+---
+
+### 11. ⏳ Memo Control - Description
+**Status:** Pending
+**Estimated Tests:** 12-15
+**Priority:** Medium (multi-line text)
+
+#### Planned Coverage:
+- Get/Set multi-line text value
+- Max length property
+- Line count / word count
+- Text area behavior
+- Long text handling
+- Notification and focus methods
+- Visibility/disabled control
+- Label management
 
 ---
 

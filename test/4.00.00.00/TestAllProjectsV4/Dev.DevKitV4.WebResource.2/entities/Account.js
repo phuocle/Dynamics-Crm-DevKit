@@ -25,7 +25,9 @@ var formAccount = (function () {
 		//await testInteger();
 		//await testMoney();
 		//await testOptionSet();
-		await testMultiOptionSet();
+		//await testMultiOptionSet();
+		//await testDecimal();
+		await testFloat();
 
 		/**************************************************************************
 		 * TEST: RetrieveRecord Function - All Overloads
@@ -1940,6 +1942,616 @@ var formAccount = (function () {
 
 			console.log("╔════════════════════════════════════════════════════════════════╗");
 			console.log("║     MULTI-OPTIONSET CONTROL TESTS COMPLETED                    ║");
+			console.log("╚════════════════════════════════════════════════════════════════╝");
+		}
+
+		/**************************************************************************
+		 * TEST: Decimal Control - v4_Decimal Field
+		 * Tests all methods and properties for decimal number controls with precision
+		 **************************************************************************/
+		async function testDecimal() {
+			console.log("╔════════════════════════════════════════════════════════════════╗");
+			console.log("║     DECIMAL CONTROL TESTS - v4_Decimal Field                  ║");
+			console.log("╚════════════════════════════════════════════════════════════════╝");
+			console.log("");
+
+			const decimalControl = form.Body.v4_Decimal;
+
+			try {
+				// Test 1: Get Decimal Value
+				console.log("Test 1: Get Decimal Value");
+				const value = decimalControl.Value;
+				console.log(`  ✓ Current Decimal Value: ${value}`);
+				console.log(`  ℹ Type: ${typeof value}, Is null: ${value === null}`);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 1 Error:", error.message);
+			}
+
+			try {
+				// Test 2: Get Control and Attribute Names
+				console.log("Test 2: Get Control and Attribute Names");
+				const controlName = decimalControl.ControlName;
+				const attributeName = decimalControl.AttributeName;
+				console.log(`  ✓ Control Name: ${controlName}`);
+				console.log(`  ✓ Attribute Name: ${attributeName}`);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 2 Error:", error.message);
+			}
+
+			try {
+				// Test 3: Get Precision (Decimal Places)
+				console.log("Test 3: Get Precision (Decimal Places)");
+				const precision = decimalControl.Precision;
+				console.log(`  ✓ Decimal Precision: ${precision} decimal places`);
+				console.log(`  ℹ This determines how many digits can appear after the decimal point`);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 3 Error:", error.message);
+			}
+
+			try {
+				// Test 4: Get Min and Max Values
+				console.log("Test 4: Get Min and Max Values");
+				const minValue = decimalControl.Min;
+				const maxValue = decimalControl.Max;
+				console.log(`  ✓ Minimum Value: ${minValue}`);
+				console.log(`  ✓ Maximum Value: ${maxValue}`);
+				console.log(`  ℹ Valid range: ${minValue} to ${maxValue}`);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 4 Error:", error.message);
+			}
+
+			try {
+				// Test 5: Get Control Type
+				console.log("Test 5: Get Control Type");
+				const controlType = decimalControl.ControlType;
+				console.log(`  ✓ Control Type: ${controlType}`);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 5 Error:", error.message);
+			}
+
+			try {
+				// Test 6: Get Attribute Type
+				console.log("Test 6: Get Attribute Type");
+				const attributeType = decimalControl.AttributeType;
+				console.log(`  ✓ Attribute Type: ${attributeType}`);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 6 Error:", error.message);
+			}
+
+			try {
+				// Test 7: Get Format
+				console.log("Test 7: Get Format");
+				const format = decimalControl.Format;
+				console.log(`  ✓ Format: ${format}`);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 7 Error:", error.message);
+			}
+
+			try {
+				// Test 8: Get IsDirty Status
+				console.log("Test 8: Get IsDirty Status");
+				const isDirty = decimalControl.IsDirty;
+				console.log(`  ✓ Is Dirty: ${isDirty}`);
+				console.log(`  ℹ Indicates if the field value has been modified`);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 8 Error:", error.message);
+			}
+
+			try {
+				// Test 9: Get Visibility Status
+				console.log("Test 9: Get Visibility Status");
+				const isVisible = decimalControl.Visible;
+				console.log(`  ✓ Is Visible: ${isVisible}`);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 9 Error:", error.message);
+			}
+
+			try {
+				// Test 10: Get Disabled Status
+				console.log("Test 10: Get Disabled Status");
+				const isDisabled = decimalControl.Disabled;
+				console.log(`  ✓ Is Disabled: ${isDisabled}`);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 10 Error:", error.message);
+			}
+
+			try {
+				// Test 11: Get Label
+				console.log("Test 11: Get Label");
+				const label = decimalControl.Label;
+				console.log(`  ✓ Label: "${label}"`);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 11 Error:", error.message);
+			}
+
+			try {
+				// Test 12: Set Decimal Value with Precision
+				console.log("Test 12: Set Decimal Value with Precision");
+				const originalValue = decimalControl.Value;
+				console.log(`  ℹ Original value: ${originalValue}`);
+				decimalControl.Value = 123.456789;
+				console.log(`  ✓ Set decimal value to: 123.456789`);
+				const newValue = decimalControl.Value;
+				console.log(`  ⚡ Stored value (after precision applied): ${newValue}`);
+				console.log(`  ℹ Note: Value is rounded based on field precision`);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 12 Error:", error.message);
+			}
+
+			try {
+				// Test 13: Set Negative Decimal Value
+				console.log("Test 13: Set Negative Decimal Value");
+				decimalControl.Value = -99.99;
+				console.log(`  ✓ Set negative decimal value to: -99.99`);
+				const negValue = decimalControl.Value;
+				console.log(`  ⚡ Current value: ${negValue}`);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 13 Error:", error.message);
+			}
+
+			try {
+				// Test 14: Set Zero Value
+				console.log("Test 14: Set Zero Value");
+				decimalControl.Value = 0;
+				console.log(`  ✓ Set decimal value to: 0`);
+				const zeroValue = decimalControl.Value;
+				console.log(`  ⚡ Current value: ${zeroValue}`);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 14 Error:", error.message);
+			}
+
+			try {
+				// Test 15: Clear Value (Set to Null)
+				console.log("Test 15: Clear Value (Set to Null)");
+				decimalControl.Value = /** @type {any} */ (null);
+				console.log(`  ✓ Cleared decimal value (set to null)`);
+				const clearedValue = decimalControl.Value;
+				console.log(`  ⚡ Current value: ${clearedValue}`);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 15 Error:", error.message);
+			}
+
+			try {
+				// Test 16: Set Precision (Dynamic Change)
+				console.log("Test 16: Set Precision (Dynamic Change)");
+				const originalPrecision = decimalControl.Precision;
+				console.log(`  ℹ Original precision: ${originalPrecision}`);
+				decimalControl.Value = 123.456789;
+				console.log(`  ℹ Set value to: 123.456789`);
+				decimalControl.Precision = 2;
+				console.log(`  ✓ Changed precision to: 2 decimal places`);
+				const valuePrecision2 = decimalControl.Value;
+				console.log(`  ⚡ Value with 2 decimals: ${valuePrecision2}`);
+				decimalControl.Precision = 1;
+				console.log(`  ✓ Changed precision to: 1 decimal places`);
+				const valuePrecision1 = decimalControl.Value;
+				console.log(`  ⚡ Value with 1 decimals: ${valuePrecision1}`);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 16 Error:", error.message);
+			}
+
+			try {
+				// Test 17: Add Notification
+				console.log("Test 17: Add Notification");
+				decimalControl.AddNotification({
+					messages: ["Please enter a valid decimal number"],
+					notificationLevel: OptionSet.FieldNotificationLevel.Error,
+					uniqueId: "decimal_error_notification"
+				});
+				console.log(`  ✓ Error notification added to decimal field`);
+				console.log(`  ℹ Check the UI for red 'X' icon next to the field`);
+				// Clear notification after delay
+				setTimeout(() => {
+					decimalControl.ClearNotification("decimal_error_notification");
+					console.log(`  ↩ Notification cleared`);
+				}, 3000);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 17 Error:", error.message);
+			}
+
+			try {
+				// Test 18: Set Focus
+				console.log("Test 18: Set Focus");
+				setTimeout(() => {
+					decimalControl.Focus();
+					console.log(`  ✓ Focus set on decimal field`);
+					console.log(`  ℹ The decimal field should be highlighted/active`);
+				}, 3500);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 18 Error:", error.message);
+			}
+
+			try {
+				// Test 19: Toggle Visibility
+				console.log("Test 19: Toggle Visibility");
+				const originalVisibility = decimalControl.Visible;
+				setTimeout(() => {
+					decimalControl.Visible = false;
+					console.log(`  ✓ Decimal field hidden`);
+				}, 4000);
+				setTimeout(() => {
+					decimalControl.Visible = true;
+					console.log(`  ✓ Decimal field shown again`);
+				}, 5000);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 19 Error:", error.message);
+			}
+
+			try {
+				// Test 20: Toggle Disabled State
+				console.log("Test 20: Toggle Disabled State");
+				const originalDisabled = decimalControl.Disabled;
+				setTimeout(() => {
+					decimalControl.Disabled = true;
+					console.log(`  ✓ Decimal field disabled`);
+				}, 5500);
+				setTimeout(() => {
+					decimalControl.Disabled = false;
+					console.log(`  ✓ Decimal field enabled again`);
+				}, 6500);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 20 Error:", error.message);
+			}
+
+			try {
+				// Test 21: Change Label
+				console.log("Test 21: Change Label");
+				const originalLabel = decimalControl.Label;
+				console.log(`  ℹ Original label: "${originalLabel}"`);
+				setTimeout(() => {
+					decimalControl.Label = "Modified Decimal Label";
+					console.log(`  ✓ Label changed to: "Modified Decimal Label"`);
+				}, 7000);
+				setTimeout(() => {
+					decimalControl.Label = originalLabel;
+					console.log(`  ↩ Label restored to: "${originalLabel}"`);
+				}, 8000);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 21 Error:", error.message);
+			}
+
+			console.log("╔════════════════════════════════════════════════════════════════╗");
+			console.log("║     DECIMAL CONTROL TESTS COMPLETED                            ║");
+			console.log("╚════════════════════════════════════════════════════════════════╝");
+		}
+
+		/**************************************************************************
+		 * TEST: Float (Double) Control - v4_Float Field
+		 * Tests all methods and properties for floating-point number controls
+		 **************************************************************************/
+		async function testFloat() {
+			console.log("╔════════════════════════════════════════════════════════════════╗");
+			console.log("║     FLOAT (DOUBLE) CONTROL TESTS - v4_Float Field             ║");
+			console.log("╚════════════════════════════════════════════════════════════════╝");
+			console.log("");
+
+			const floatControl = form.Body.v4_Float;
+
+			try {
+				// Test 1: Get Float Value
+				console.log("Test 1: Get Float Value");
+				const value = floatControl.Value;
+				console.log(`  ✓ Current Float Value: ${value}`);
+				console.log(`  ℹ Type: ${typeof value}, Is null: ${value === null}`);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 1 Error:", error.message);
+			}
+
+			try {
+				// Test 2: Get Control and Attribute Names
+				console.log("Test 2: Get Control and Attribute Names");
+				const controlName = floatControl.ControlName;
+				const attributeName = floatControl.AttributeName;
+				console.log(`  ✓ Control Name: ${controlName}`);
+				console.log(`  ✓ Attribute Name: ${attributeName}`);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 2 Error:", error.message);
+			}
+
+			try {
+				// Test 3: Get Precision (Decimal Places)
+				console.log("Test 3: Get Precision (Decimal Places)");
+				const precision = floatControl.Precision;
+				console.log(`  ✓ Float Precision: ${precision} decimal places`);
+				console.log(`  ℹ Float/Double typically allows up to 5 decimal places`);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 3 Error:", error.message);
+			}
+
+			try {
+				// Test 4: Get Min and Max Values
+				console.log("Test 4: Get Min and Max Values");
+				const minValue = floatControl.Min;
+				const maxValue = floatControl.Max;
+				console.log(`  ✓ Minimum Value: ${minValue}`);
+				console.log(`  ✓ Maximum Value: ${maxValue}`);
+				console.log(`  ℹ Valid range: ${minValue} to ${maxValue}`);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 4 Error:", error.message);
+			}
+
+			try {
+				// Test 5: Get Control Type
+				console.log("Test 5: Get Control Type");
+				const controlType = floatControl.ControlType;
+				console.log(`  ✓ Control Type: ${controlType}`);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 5 Error:", error.message);
+			}
+
+			try {
+				// Test 6: Get Attribute Type
+				console.log("Test 6: Get Attribute Type");
+				const attributeType = floatControl.AttributeType;
+				console.log(`  ✓ Attribute Type: ${attributeType}`);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 6 Error:", error.message);
+			}
+
+			try {
+				// Test 7: Get Format
+				console.log("Test 7: Get Format");
+				const format = floatControl.Format;
+				console.log(`  ✓ Format: ${format}`);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 7 Error:", error.message);
+			}
+
+			try {
+				// Test 8: Get IsDirty Status
+				console.log("Test 8: Get IsDirty Status");
+				const isDirty = floatControl.IsDirty;
+				console.log(`  ✓ Is Dirty: ${isDirty}`);
+				console.log(`  ℹ Indicates if the field value has been modified`);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 8 Error:", error.message);
+			}
+
+			try {
+				// Test 9: Get Visibility Status
+				console.log("Test 9: Get Visibility Status");
+				const isVisible = floatControl.Visible;
+				console.log(`  ✓ Is Visible: ${isVisible}`);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 9 Error:", error.message);
+			}
+
+			try {
+				// Test 10: Get Disabled Status
+				console.log("Test 10: Get Disabled Status");
+				const isDisabled = floatControl.Disabled;
+				console.log(`  ✓ Is Disabled: ${isDisabled}`);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 10 Error:", error.message);
+			}
+
+			try {
+				// Test 11: Get Label
+				console.log("Test 11: Get Label");
+				const label = floatControl.Label;
+				console.log(`  ✓ Label: "${label}"`);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 11 Error:", error.message);
+			}
+
+			try {
+				// Test 12: Set Float Value with High Precision
+				console.log("Test 12: Set Float Value with High Precision");
+				const originalValue = floatControl.Value;
+				console.log(`  ℹ Original value: ${originalValue}`);
+				floatControl.Value = 3.14159265358979;
+				console.log(`  ✓ Set float value to: 3.14159265358979 (Pi)`);
+				const newValue = floatControl.Value;
+				console.log(`  ⚡ Stored value: ${newValue}`);
+				console.log(`  ℹ Note: Float maintains precision up to 5 decimal places`);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 12 Error:", error.message);
+			}
+
+			try {
+				// Test 13: Set Scientific Notation Value
+				console.log("Test 13: Set Scientific Notation Value");
+				floatControl.Value = 1.23e-4;
+				console.log(`  ✓ Set scientific notation value: 1.23e-4`);
+				const sciValue = floatControl.Value;
+				console.log(`  ⚡ Current value: ${sciValue}`);
+				console.log(`  ℹ Equivalent to: 0.000123`);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 13 Error:", error.message);
+			}
+
+			try {
+				// Test 14: Set Large Float Value
+				console.log("Test 14: Set Large Float Value");
+				floatControl.Value = 9999999.99999;
+				console.log(`  ✓ Set large float value to: 9999999.99999`);
+				const largeValue = floatControl.Value;
+				console.log(`  ⚡ Current value: ${largeValue}`);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 14 Error:", error.message);
+			}
+
+			try {
+				// Test 15: Set Negative Float Value
+				console.log("Test 15: Set Negative Float Value");
+				floatControl.Value = -273.15;
+				console.log(`  ✓ Set negative float value to: -273.15 (absolute zero in Celsius)`);
+				const negValue = floatControl.Value;
+				console.log(`  ⚡ Current value: ${negValue}`);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 15 Error:", error.message);
+			}
+
+			try {
+				// Test 16: Set Zero Value
+				console.log("Test 16: Set Zero Value");
+				floatControl.Value = 0.0;
+				console.log(`  ✓ Set float value to: 0.0`);
+				const zeroValue = floatControl.Value;
+				console.log(`  ⚡ Current value: ${zeroValue}`);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 16 Error:", error.message);
+			}
+
+			try {
+				// Test 17: Clear Value (Set to Null)
+				console.log("Test 17: Clear Value (Set to Null)");
+				floatControl.Value = /** @type {any} */ (null);
+				console.log(`  ✓ Cleared float value (set to null)`);
+				const clearedValue = floatControl.Value;
+				console.log(`  ⚡ Current value: ${clearedValue}`);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 17 Error:", error.message);
+			}
+
+			try {
+				// Test 18: Set Precision (Dynamic Change)
+				console.log("Test 18: Set Precision (Dynamic Change)");
+				const originalPrecision = floatControl.Precision;
+				console.log(`  ℹ Original precision: ${originalPrecision}`);
+				floatControl.Value = 123.456789;
+				console.log(`  ℹ Set value to: 123.456789`);
+				floatControl.Precision = 2;
+				console.log(`  ✓ Changed precision to: 2 decimal places`);
+				const valuePrecision2 = floatControl.Value;
+				console.log(`  ⚡ Value with 2 decimals: ${valuePrecision2}`);
+				floatControl.Precision = 5;
+				console.log(`  ✓ Changed precision to: 5 decimal places`);
+				const valuePrecision5 = floatControl.Value;
+				console.log(`  ⚡ Value with 5 decimals: ${valuePrecision5}`);
+				// Restore original precision
+				floatControl.Precision = originalPrecision;
+				console.log(`  ↩ Precision restored to: ${originalPrecision}`);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 18 Error:", error.message);
+			}
+
+			try {
+				// Test 19: Add Notification
+				console.log("Test 19: Add Notification");
+				floatControl.AddNotification({
+					messages: ["Please enter a valid floating-point number"],
+					notificationLevel: OptionSet.FieldNotificationLevel.Error,
+					uniqueId: "float_error_notification"
+				});
+				console.log(`  ✓ Error notification added to float field`);
+				console.log(`  ℹ Check the UI for red 'X' icon next to the field`);
+				// Clear notification after delay
+				setTimeout(() => {
+					floatControl.ClearNotification("float_error_notification");
+					console.log(`  ↩ Notification cleared`);
+				}, 3000);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 19 Error:", error.message);
+			}
+
+			try {
+				// Test 20: Set Focus
+				console.log("Test 20: Set Focus");
+				setTimeout(() => {
+					floatControl.Focus();
+					console.log(`  ✓ Focus set on float field`);
+					console.log(`  ℹ The float field should be highlighted/active`);
+				}, 3500);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 20 Error:", error.message);
+			}
+
+			try {
+				// Test 21: Toggle Visibility
+				console.log("Test 21: Toggle Visibility");
+				const originalVisibility = floatControl.Visible;
+				setTimeout(() => {
+					floatControl.Visible = false;
+					console.log(`  ✓ Float field hidden`);
+				}, 4000);
+				setTimeout(() => {
+					floatControl.Visible = true;
+					console.log(`  ✓ Float field shown again`);
+				}, 5000);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 21 Error:", error.message);
+			}
+
+			try {
+				// Test 22: Toggle Disabled State
+				console.log("Test 22: Toggle Disabled State");
+				const originalDisabled = floatControl.Disabled;
+				setTimeout(() => {
+					floatControl.Disabled = true;
+					console.log(`  ✓ Float field disabled`);
+				}, 5500);
+				setTimeout(() => {
+					floatControl.Disabled = false;
+					console.log(`  ✓ Float field enabled again`);
+				}, 6500);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 22 Error:", error.message);
+			}
+
+			try {
+				// Test 23: Change Label
+				console.log("Test 23: Change Label");
+				const originalLabel = floatControl.Label;
+				console.log(`  ℹ Original label: "${originalLabel}"`);
+				setTimeout(() => {
+					floatControl.Label = "Modified Float Label";
+					console.log(`  ✓ Label changed to: "Modified Float Label"`);
+				}, 7000);
+				setTimeout(() => {
+					floatControl.Label = originalLabel;
+					console.log(`  ↩ Label restored to: "${originalLabel}"`);
+				}, 8000);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 23 Error:", error.message);
+			}
+
+			console.log("╔════════════════════════════════════════════════════════════════╗");
+			console.log("║     FLOAT (DOUBLE) CONTROL TESTS COMPLETED                     ║");
 			console.log("╚════════════════════════════════════════════════════════════════╝");
 		}
 	}
