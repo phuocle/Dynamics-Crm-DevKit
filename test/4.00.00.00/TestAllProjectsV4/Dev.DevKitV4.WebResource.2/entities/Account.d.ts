@@ -38,6 +38,8 @@ declare namespace DevKitV4 {
 		}
 		interface Body {
 			Tab: Tabs;
+			/** Select a category to indicate whether the customer account is standard or preferred. */
+			AccountCategoryCode: DevKit.Controls.OptionSet;
 			ActionCards: DevKit.Controls.ActionCards;
 			/** Shows the complete primary address. */
 			Address1_Composite: DevKit.Controls.String;
@@ -53,6 +55,7 @@ declare namespace DevKitV4 {
 			CreditOnHold: DevKit.Controls.Boolean;
 			/** Type additional information to describe the account, such as an excerpt from the company's website. */
 			Description: DevKit.Controls.String;
+			devkit_CategoryCode: DevKit.Controls.MultiOptionSet;
 			/** Select whether the account allows bulk email sent through campaigns. If Do Not Allow is selected, the account can be added to marketing lists, but is excluded from email. */
 			DoNotBulkEMail: DevKit.Controls.Boolean;
 			/** Select whether the account allows direct email sent from Microsoft Dynamics 365. */
