@@ -674,8 +674,8 @@ namespace DynamicsCrm.DevKit.Shared
                 var type = $"{@namespace}.Form{Helper.SafeIdentifier(formName)}";
                 code += $"var form{Helper.SafeIdentifier(formName)} = (function () {{{NEW_LINE}";
                 code += $"{TAB}\"use strict\";{NEW_LINE}";
-                code += $"{TAB}/** @type {{{type} | null}} */{NEW_LINE}";
-                code += $"{TAB}var form = null;{NEW_LINE}";
+                code += $"{TAB}/** @type {{{type}}} */{NEW_LINE}";
+                code += $"{TAB}let form;{NEW_LINE}";
                 code += $"{TAB}/** @param {{any}} executionContext */{NEW_LINE}";
                 code += $"{TAB}async function onLoad(executionContext) {{{NEW_LINE}";
                 code += $"{TAB}{TAB}form = new {type}(executionContext);{NEW_LINE}";

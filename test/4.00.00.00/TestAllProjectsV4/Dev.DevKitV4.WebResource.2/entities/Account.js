@@ -3,8 +3,8 @@
 "use strict";
 var formAccount = (function () {
 	"use strict";
-	/** @type {DevKitV4.FormAccount | null} */
-	var form = null;
+	/** @type {DevKitV4.FormAccount} */
+	let form;
 	/** @param {any} executionContext */
 	async function onLoad(executionContext) {
 		form = new DevKitV4.FormAccount(executionContext);
@@ -42,8 +42,8 @@ var formAccount = (function () {
 })();
 var formAccount_for_Interactive_experience = (function () {
 	"use strict";
-	/** @type {DevKitV4.FormAccount_for_Interactive_experience | null} */
-	var form = null;
+	/** @type {DevKitV4.FormAccount_for_Interactive_experience} */
+	let form;
 	/** @param {any} executionContext */
 	async function onLoad(executionContext) {
 		form = new DevKitV4.FormAccount_for_Interactive_experience(executionContext);
@@ -74,8 +74,8 @@ var formAccount_for_Interactive_experience = (function () {
 })();
 var formAccount_Quick_Create = (function () {
 	"use strict";
-	/** @type {DevKitV4.FormAccount_Quick_Create | null} */
-	var form = null;
+	/** @type {DevKitV4.FormAccount_Quick_Create} */
+	let form;
 	/** @param {any} executionContext */
 	async function onLoad(executionContext) {
 		form = new DevKitV4.FormAccount_Quick_Create(executionContext);
@@ -106,8 +106,8 @@ var formAccount_Quick_Create = (function () {
 })();
 var formAccount_Information = (function () {
 	"use strict";
-	/** @type {DevKitV4.FormAccount_Information | null} */
-	var form = null;
+	/** @type {DevKitV4.FormAccount_Information} */
+	let form;
 	/** @param {any} executionContext */
 	async function onLoad(executionContext) {
 		form = new DevKitV4.FormAccount_Information(executionContext);
