@@ -21,7 +21,8 @@ var formAccount = (function () {
 		//await testRetrieveRecord();
 		//await testRetrieveRecords();
 		//await testLookup();
-		await testString();
+		//await testString();
+		await testInteger();
 
 		/**************************************************************************
 		 * TEST: RetrieveRecord Function - All Overloads
@@ -737,6 +738,295 @@ var formAccount = (function () {
 
 			console.log("╔════════════════════════════════════════════════════════════════╗");
 			console.log("║           STRING CONTROL TESTS COMPLETED                       ║");
+			console.log("╚════════════════════════════════════════════════════════════════╝");
+		}
+
+		/**************************************************************************
+		 * TEST: Integer Control - NumberOfEmployees Field
+		 * This test demonstrates all available methods and properties for Integer controls
+		 **************************************************************************/
+		async function testInteger() {
+			console.log("╔════════════════════════════════════════════════════════════════╗");
+			console.log("║      TESTING INTEGER CONTROL: NumberOfEmployees                ║");
+			console.log("║      (Located in Header section)                               ║");
+			console.log("╚════════════════════════════════════════════════════════════════╝");
+
+			const intControl = form.Header.NumberOfEmployees;
+
+			try {
+				// Test 1: Get current integer value
+				console.log("📋 Test 1: Get Integer Value");
+				console.log("─────────────────────────────────────────────────────────");
+				const currentValue = intControl.Value;
+				console.log(`✓ Current Value: ${currentValue}`);
+				console.log(`  Type: ${typeof currentValue}`);
+				console.log(`  Is Number: ${typeof currentValue === 'number'}`);
+				console.log(`  Is Integer: ${Number.isInteger(currentValue)}`);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 1 Error:", error.message);
+			}
+
+			try {
+				// Test 2: Get Control and Attribute Names
+				console.log("📋 Test 2: Get Control and Attribute Names");
+				console.log("─────────────────────────────────────────────────────────");
+				console.log(`✓ Control Name: ${intControl.ControlName}`);
+				console.log(`✓ Attribute Name: ${intControl.AttributeName}`);
+				console.log(`  (Both should be: 'numberofemployees')`);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 2 Error:", error.message);
+			}
+
+			try {
+				// Test 3: Get Attribute Properties
+				console.log("📋 Test 3: Get Attribute Properties");
+				console.log("─────────────────────────────────────────────────────────");
+				console.log(`✓ Attribute Name: ${intControl.AttributeName}`);
+				console.log(`  Attribute Type: ${intControl.AttributeType}`);
+				console.log(`  Control Type: ${intControl.ControlType}`);
+				console.log(`  Required Level: ${intControl.RequiredLevel}`);
+				console.log(`  Submit Mode: ${intControl.SubmitMode}`);
+				console.log(`  Is Valid: ${intControl.IsValid}`);
+				console.log(`  Is Dirty: ${intControl.IsDirty}`);
+				console.log(`  Format: ${intControl.Format}`);
+				console.log(`  Min Value: ${intControl.Min}`);
+				console.log(`  Max Value: ${intControl.Max}`);
+				console.log(`  Precision: ${intControl.Precision}`);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 3 Error:", error.message);
+			}
+
+			try {
+				// Test 4: Get Control Visibility
+				console.log("📋 Test 4: Get Control Visibility");
+				console.log("─────────────────────────────────────────────────────────");
+				const isVisible = intControl.Visible;
+				console.log(`✓ Visible: ${isVisible}`);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 4 Error:", error.message);
+			}
+
+			try {
+				// Test 5: Get Control Disabled State
+				console.log("📋 Test 5: Get Control Disabled State");
+				console.log("─────────────────────────────────────────────────────────");
+				const isDisabled = intControl.Disabled;
+				console.log(`✓ Disabled: ${isDisabled}`);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 5 Error:", error.message);
+			}
+
+			try {
+				// Test 6: Get Control Label
+				console.log("📋 Test 6: Get Control Label");
+				console.log("─────────────────────────────────────────────────────────");
+				const label = intControl.Label;
+				console.log(`✓ Label: "${label}"`);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 6 Error:", error.message);
+			}
+
+			try {
+				// Test 7: Set Integer Value (and restore)
+				console.log("📋 Test 7: Set Integer Value (and restore)");
+				console.log("─────────────────────────────────────────────────────────");
+				const originalValue = intControl.Value;
+				console.log(`  Original Value: ${originalValue}`);
+
+				// Set new value (add 100 to current value, or set to 100 if null)
+				const testValue = (originalValue || 0) + 100;
+				intControl.Value = testValue;
+				console.log(`✓ New Value Set: ${testValue}`);
+
+				// Restore original value after 2 seconds
+				setTimeout(function() {
+					intControl.Value = originalValue;
+					console.log(`  ↩ Original value restored: ${originalValue}`);
+				}, 2000);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 7 Error:", error.message);
+			}
+
+			try {
+				// Test 8: Test Min/Max Validation
+				console.log("📋 Test 8: Test Min/Max Validation");
+				console.log("─────────────────────────────────────────────────────────");
+				const minValue = intControl.Min;
+				const maxValue = intControl.Max;
+				console.log(`✓ Min Value: ${minValue !== null && minValue !== undefined ? minValue : 'No limit'}`);
+				console.log(`✓ Max Value: ${maxValue !== null && maxValue !== undefined ? maxValue : 'No limit'}`);
+
+				if (minValue !== null && minValue !== undefined) {
+					console.log(`  ℹ Values below ${minValue} will be rejected`);
+				}
+				if (maxValue !== null && maxValue !== undefined) {
+					console.log(`  ℹ Values above ${maxValue} will be rejected`);
+				}
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 8 Error:", error.message);
+			}
+
+			try {
+				// Test 9: Test Decimal Value Handling
+				console.log("📋 Test 9: Test Decimal Value Handling");
+				console.log("─────────────────────────────────────────────────────────");
+				const originalValue = intControl.Value;
+
+				// Try to set a decimal value
+				console.log("  ℹ Attempting to set decimal value: 123.45");
+				intControl.Value = 123.45;
+
+				// Check what value was actually set
+				const actualValue = intControl.Value;
+				console.log(`✓ Actual Value Set: ${actualValue}`);
+				console.log(`  Is Integer: ${Number.isInteger(actualValue)}`);
+				console.log(`  ℹ Dynamics 365 may round or truncate decimal values`);
+
+				// Restore original value immediately
+				setTimeout(function() {
+					intControl.Value = originalValue;
+					console.log(`  ↩ Original value restored: ${originalValue}`);
+				}, 2000);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 9 Error:", error.message);
+			}
+
+			try {
+				// Test 10: Test Notification Methods
+				console.log("📋 Test 10: Test Notification Methods");
+				console.log("─────────────────────────────────────────────────────────");
+
+				// Add error notification
+				intControl.SetNotification("This is a test error notification for NumberOfEmployees", "TEST_INT_ERROR_1");
+				console.log("✓ Error notification set");
+
+				// Clear notification after 3 seconds
+				setTimeout(function() {
+					intControl.ClearNotification("TEST_INT_ERROR_1");
+					console.log("  ↩ Notification cleared");
+				}, 3000);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 10 Error:", error.message);
+			}
+
+			try {
+				// Test 11: Test SetFocus Method
+				console.log("📋 Test 11: Test SetFocus Method");
+				console.log("─────────────────────────────────────────────────────────");
+				setTimeout(function() {
+					intControl.Focus();
+					console.log("✓ Focus set to NumberOfEmployees field");
+				}, 4000);
+				console.log("ℹ Will set focus in 4 seconds...");
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 11 Error:", error.message);
+			}
+
+			try {
+				// Test 12: Test Visibility Toggle (and restore)
+				console.log("📋 Test 12: Test Visibility Toggle");
+				console.log("─────────────────────────────────────────────────────────");
+				const originalVisibility = intControl.Visible;
+				console.log(`  Original Visibility: ${originalVisibility}`);
+
+				// Hide the control
+				intControl.Visible = false;
+				console.log("✓ Control hidden");
+
+				// Restore visibility after 2 seconds
+				setTimeout(function() {
+					intControl.Visible = originalVisibility;
+					console.log(`  ↩ Visibility restored: ${originalVisibility}`);
+				}, 2000);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 12 Error:", error.message);
+			}
+
+			try {
+				// Test 13: Test Disabled Toggle (and restore)
+				console.log("📋 Test 13: Test Disabled Toggle");
+				console.log("─────────────────────────────────────────────────────────");
+				const originalDisabled = intControl.Disabled;
+				console.log(`  Original Disabled State: ${originalDisabled}`);
+
+				// Disable the control
+				intControl.Disabled = true;
+				console.log("✓ Control disabled");
+
+				// Restore disabled state after 2 seconds
+				setTimeout(function() {
+					intControl.Disabled = originalDisabled;
+					console.log(`  ↩ Disabled state restored: ${originalDisabled}`);
+				}, 2000);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 13 Error:", error.message);
+			}
+
+			try {
+				// Test 14: Test Label Change (and restore)
+				console.log("📋 Test 14: Test Label Change");
+				console.log("─────────────────────────────────────────────────────────");
+				const originalLabel = intControl.Label;
+				console.log(`  Original Label: "${originalLabel}"`);
+
+				// Change label
+				intControl.Label = `${originalLabel} (TEST)`;
+				console.log(`✓ Label changed to: "${intControl.Label}"`);
+
+				// Restore label after 2 seconds
+				setTimeout(function() {
+					intControl.Label = originalLabel;
+					console.log(`  ↩ Label restored: "${originalLabel}"`);
+				}, 2000);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 14 Error:", error.message);
+			}
+
+			try {
+				// Test 15: Test Null/Zero Handling
+				console.log("📋 Test 15: Test Null/Zero Handling");
+				console.log("─────────────────────────────────────────────────────────");
+				const originalValue = intControl.Value;
+				console.log(`  Original Value: ${originalValue}`);
+
+				// Set to zero
+				intControl.Value = 0;
+				console.log(`✓ Value set to: 0`);
+				console.log(`  Current Value: ${intControl.Value}`);
+
+				setTimeout(function() {
+					// Set to null (clear the field)
+					/** @type {any} */ (intControl).Value = null;
+					console.log(`✓ Value set to: null (cleared)`);
+					console.log(`  Current Value: ${intControl.Value}`);
+
+					// Restore original value after another 2 seconds
+					setTimeout(function() {
+						intControl.Value = originalValue;
+						console.log(`  ↩ Original value restored: ${originalValue}`);
+					}, 2000);
+				}, 2000);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 15 Error:", error.message);
+			}
+
+			console.log("╔════════════════════════════════════════════════════════════════╗");
+			console.log("║         INTEGER CONTROL TESTS COMPLETED                        ║");
 			console.log("╚════════════════════════════════════════════════════════════════╝");
 		}
 	}
