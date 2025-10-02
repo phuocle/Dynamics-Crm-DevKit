@@ -13,15 +13,15 @@ var formAccount = (function () {
 	}
 	function registerEvents() {
 		if (form.ExecutionContext.IsInitialLoad()) {
-			debugger;
-			form.Body.devkit_CategoryCode.RequiredLevel = OptionSet.FieldRequiredLevel.Required;
 		}
 	}
 	//BEGIN ON LOAD ========================================================
 	/** @param {any} executionContext */
 	async function UiAddLoaded(executionContext) {
-		await testRetrieveRecord();
-		await testRetrieveRecords();
+		//await testRetrieveRecord();
+		//await testRetrieveRecords();
+		//await testLookup();
+		await testString();
 
 		/**************************************************************************
 		 * TEST: RetrieveRecord Function - All Overloads
@@ -218,102 +218,527 @@ var formAccount = (function () {
 
 			console.log("========== RetrieveRecords Tests Completed ==========\n");
 		}
-	}
-	//END ON LOAD ==========================================================
-	//BEGIN ON CHANGE ======================================================
 
-	//END ON CHANGE ========================================================
-	//BEGIN PRE SEARCH =====================================================
+		/**************************************************************************
+		 * TEST: Lookup Control - PrimaryContactId Field
+		 * This test demonstrates all available methods and properties for Lookup controls
+		 **************************************************************************/
+		async function testLookup() {
+			console.log("╔════════════════════════════════════════════════════════════════╗");
+			console.log("║        TESTING LOOKUP CONTROL: PrimaryContactId                ║");
+			console.log("╚════════════════════════════════════════════════════════════════╝");
 
-	//END PRE SEARCH =======================================================
-	//BEGIN OTHERS =========================================================
+			const lookup = form.Body.PrimaryContactId;
 
-	//END OTHERS ===========================================================
-	return {
-		OnLoad: onLoad
-	};
-})();
-var formAccount_for_Interactive_experience = (function () {
-	"use strict";
-	/** @type {DevKitV4.FormAccount_for_Interactive_experience} */
-	let form;
-	/** @param {any} executionContext */
-	async function onLoad(executionContext) {
-		form = new DevKitV4.FormAccount_for_Interactive_experience(executionContext);
-		registerEvents();
-		form.UiAddLoaded(UiAddLoaded);
-	}
-	function registerEvents() {
-		if (form && form.ExecutionContext.IsInitialLoad()) {
+			try {
+				// Test 1: Get current lookup value
+				console.log("📋 Test 1: Get Lookup Value");
+				console.log("─────────────────────────────────────────────────────────");
+				const currentValue = lookup.Value;
+				if (currentValue && currentValue.length > 0) {
+					console.log("✓ Current Value Found:");
+					currentValue.forEach((ref, index) => {
+						console.log(`  [${index}] ID: ${ref.id}`);
+						console.log(`      Name: ${ref.name}`);
+						console.log(`      Type: ${ref.entityType}`);
+					});
+				} else {
+					console.log("ℹ No value currently set (field is empty)");
+				}
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 1 Error:", error.message);
+			}
+
+			try {
+				// Test 2: Check if it's a PartyList lookup
+				console.log("📋 Test 2: Check IsPartyList Property");
+				console.log("─────────────────────────────────────────────────────────");
+				const isPartyList = lookup.IsPartyList;
+				console.log(`✓ IsPartyList: ${isPartyList}`);
+				console.log(`  (PrimaryContactId should be 'false' - single lookup)`);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 2 Error:", error.message);
+			}
+
+			try {
+				// Test 3: Get Entity Types allowed
+				console.log("📋 Test 3: Get Allowed Entity Types");
+				console.log("─────────────────────────────────────────────────────────");
+				const entityTypes = lookup.EntityTypes;
+				console.log("✓ Allowed Entity Types:", entityTypes);
+				console.log(`  (Should contain: 'contact')`);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 3 Error:", error.message);
+			}
+
+			try {
+				// Test 4: Get Default View
+				console.log("📋 Test 4: Get Default View GUID");
+				console.log("─────────────────────────────────────────────────────────");
+				const defaultView = lookup.DefaultView;
+				console.log(`✓ Default View: ${defaultView}`);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 4 Error:", error.message);
+			}
+
+			try {
+				// Test 5: Get Control Visibility
+				console.log("📋 Test 5: Get Control Visibility");
+				console.log("─────────────────────────────────────────────────────────");
+				const isVisible = lookup.Visible;
+				console.log(`✓ Visible: ${isVisible}`);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 5 Error:", error.message);
+			}
+
+			try {
+				// Test 6: Get Control Disabled State
+				console.log("📋 Test 6: Get Control Disabled State");
+				console.log("─────────────────────────────────────────────────────────");
+				const isDisabled = lookup.Disabled;
+				console.log(`✓ Disabled: ${isDisabled}`);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 6 Error:", error.message);
+			}
+
+			try {
+				// Test 7: Get Control Type
+				console.log("📋 Test 7: Get Control Type");
+				console.log("─────────────────────────────────────────────────────────");
+				const controlType = lookup.ControlType;
+				console.log(`✓ Control Type: ${controlType}`);
+				console.log(`  (Should be: 'lookup')`);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 7 Error:", error.message);
+			}
+
+			try {
+				// Test 8: Get Control and Attribute Names
+				console.log("📋 Test 8: Get Control and Attribute Names");
+				console.log("─────────────────────────────────────────────────────────");
+				const controlName = lookup.ControlName;
+				const attributeName = lookup.AttributeName;
+				console.log(`✓ Control Name: ${controlName}`);
+				console.log(`✓ Attribute Name: ${attributeName}`);
+				console.log(`  (Both should be: 'primarycontactid')`);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 8 Error:", error.message);
+			}
+
+			try {
+				// Test 9: Get Attribute Properties
+				console.log("📋 Test 9: Get Attribute Properties");
+				console.log("─────────────────────────────────────────────────────────");
+				// Access properties directly from the control (IControl interface)
+				console.log(`✓ Attribute Name: ${lookup.AttributeName}`);
+				console.log(`  Attribute Type: ${lookup.AttributeType}`);
+				console.log(`  Required Level: ${lookup.RequiredLevel}`);
+				console.log(`  Submit Mode: ${lookup.SubmitMode}`);
+				console.log(`  Is Valid: ${lookup.IsValid}`);
+				console.log(`  Is Dirty: ${lookup.IsDirty}`);
+				console.log(`  Format: ${lookup.Format}`);
+
+				// Also show that Attribute object exists (for advanced scenarios)
+				const attribute = lookup.Attribute;
+				if (attribute) {
+					console.log(`  ℹ Attribute object available: ${typeof attribute}`);
+					// The Attribute object provides methods like getValue(), setValue(), etc.
+					// It's the underlying Xrm.Attributes.Attribute object
+				} else {
+					console.log("  ⚠ Attribute object is null/undefined");
+				}
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 9 Error:", error.message);
+			}
+
+			try {
+				// Test 10: Test AddPreSearch event (add filter for active contacts only)
+				console.log("📋 Test 10: Add PreSearch Event Handler");
+				console.log("─────────────────────────────────────────────────────────");
+				lookup.AddPreSearch(function(executionContext) {
+					console.log("  ⚡ PreSearch event fired!");
+					// Add filter to show only active contacts
+					const filterXml = "<filter type='and'><condition attribute='statecode' operator='eq' value='0' /></filter>";
+					lookup.AddCustomFilter(filterXml, "contact");
+					console.log("  ✓ Custom filter added: Show only active contacts");
+				});
+				console.log("✓ PreSearch event handler registered");
+				console.log("  (Will filter for active contacts when lookup is opened)");
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 10 Error:", error.message);
+			}
+
+			try {
+				// Test 11: Add custom view for the lookup
+				console.log("📋 Test 11: Add Custom View to Lookup");
+				console.log("─────────────────────────────────────────────────────────");
+				const customViewId = "00000000-0000-0000-0000-000000000001"; // Dummy GUID
+				const fetchXml = `
+					<fetch>
+						<entity name='contact'>
+							<attribute name='fullname' />
+							<attribute name='emailaddress1' />
+							<attribute name='telephone1' />
+							<order attribute='fullname' descending='false' />
+							<filter type='and'>
+								<condition attribute='statecode' operator='eq' value='0' />
+							</filter>
+						</entity>
+					</fetch>`;
+				const layoutXml = `
+					<grid name='resultset' jump='fullname' select='1' icon='1' preview='1'>
+						<row name='result' id='contactid'>
+							<cell name='fullname' width='200' />
+							<cell name='emailaddress1' width='150' />
+							<cell name='telephone1' width='150' />
+						</row>
+					</grid>`;
+
+				lookup.AddCustomView(
+					customViewId,
+					"contact",
+					"Active Contacts (Custom View)",
+					fetchXml,
+					layoutXml,
+					false
+				);
+				console.log("✓ Custom view added successfully");
+				console.log("  View Name: 'Active Contacts (Custom View)'");
+				console.log("  Shows: Full Name, Email, Phone");
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 11 Error:", error.message);
+			}
+
+			try {
+				// Test 12: Test SetValue (programmatically set a lookup value)
+				console.log("📋 Test 12: Set Lookup Value (if contact exists)");
+				console.log("─────────────────────────────────────────────────────────");
+
+				// First, try to get a contact record to set
+				try {
+					/** @type {function(any): any} */
+					const ContactApi = function(/** @type {any} */ data) { return data; };
+					const contacts = await form.WebApi.RetrieveRecords(
+						ContactApi,
+						'contact',
+						'?$select=contactid,fullname&$top=1'
+					);
+
+					if (contacts && contacts.length > 0) {
+						const contact = contacts[0];
+						const lookupValue = [{
+							id: contact.contactid,
+							name: contact.fullname,
+							entityType: 'contact'
+						}];
+
+						// Store original value to restore later
+						const originalValue = lookup.Value;
+
+						// Set new value
+						lookup.Value = lookupValue;
+						console.log("✓ Lookup value set successfully");
+						console.log(`  Contact ID: ${contact.contactid}`);
+						console.log(`  Contact Name: ${contact.fullname}`);
+
+						// Restore original value after 2 seconds
+						setTimeout(function() {
+							lookup.Value = originalValue;
+							console.log("  ↩ Original value restored");
+						}, 2000);
+					} else {
+						console.log("ℹ No contacts found to test SetValue");
+					}
+				} catch (/** @type {any} */ apiError) {
+					console.log("ℹ Could not retrieve contacts:", apiError.message);
+				}
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 12 Error:", error.message);
+			}
+
+			try {
+				// Test 13: Test Clear Value
+				console.log("📋 Test 13: Clear Lookup Value (and restore)");
+				console.log("─────────────────────────────────────────────────────────");
+				const originalValue = lookup.Value;
+
+				if (originalValue && originalValue.length > 0) {
+					// Clear the value
+					lookup.Value = [];
+					console.log("✓ Lookup value cleared");
+
+					// Restore after 2 seconds
+					setTimeout(function() {
+						lookup.Value = originalValue;
+						console.log("  ↩ Original value restored");
+					}, 2000);
+				} else {
+					console.log("ℹ Field is already empty, cannot demonstrate clear");
+				}
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 13 Error:", error.message);
+			}
+
+			try {
+				// Test 14: Test notification methods
+				console.log("📋 Test 14: Test Notification Methods");
+				console.log("─────────────────────────────────────────────────────────");
+
+				// Add error notification
+				lookup.SetNotification("This is a test error notification", "TEST_ERROR_1");
+				console.log("✓ Error notification set");
+
+				// Clear notification after 3 seconds
+				setTimeout(function() {
+					lookup.ClearNotification("TEST_ERROR_1");
+					console.log("  ↩ Notification cleared");
+				}, 3000);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 14 Error:", error.message);
+			}
+
+			try {
+				// Test 15: Test SetFocus
+				console.log("📋 Test 15: Test SetFocus Method");
+				console.log("─────────────────────────────────────────────────────────");
+				setTimeout(function() {
+					lookup.Focus();
+					console.log("✓ Focus set to PrimaryContactId lookup");
+				}, 4000);
+				console.log("ℹ Will set focus in 4 seconds...");
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 15 Error:", error.message);
+			}
+
+			console.log("╔════════════════════════════════════════════════════════════════╗");
+			console.log("║           LOOKUP CONTROL TESTS COMPLETED                       ║");
+			console.log("╚════════════════════════════════════════════════════════════════╝");
 		}
-	}
-	//BEGIN ON LOAD ========================================================
-	/** @param {any} executionContext */
-	async function UiAddLoaded(executionContext) {
-	}
-	//END ON LOAD ==========================================================
-	//BEGIN ON CHANGE ======================================================
 
-	//END ON CHANGE ========================================================
-	//BEGIN PRE SEARCH =====================================================
+		/**************************************************************************
+		 * TEST: String Control - Name Field
+		 * This test demonstrates all available methods and properties for String controls
+		 **************************************************************************/
+		async function testString() {
+			console.log("╔════════════════════════════════════════════════════════════════╗");
+			console.log("║          TESTING STRING CONTROL: Name Field                    ║");
+			console.log("╚════════════════════════════════════════════════════════════════╝");
 
-	//END PRE SEARCH =======================================================
-	//BEGIN OTHERS =========================================================
+			const stringControl = form.Body.Name;
 
-	//END OTHERS ===========================================================
-	return {
-		OnLoad: onLoad
-	};
-})();
-var formAccount_Quick_Create = (function () {
-	"use strict";
-	/** @type {DevKitV4.FormAccount_Quick_Create} */
-	let form;
-	/** @param {any} executionContext */
-	async function onLoad(executionContext) {
-		form = new DevKitV4.FormAccount_Quick_Create(executionContext);
-		registerEvents();
-		form.UiAddLoaded(UiAddLoaded);
-	}
-	function registerEvents() {
-		if (form && form.ExecutionContext.IsInitialLoad()) {
+			try {
+				// Test 1: Get current string value
+				console.log("📋 Test 1: Get String Value");
+				console.log("─────────────────────────────────────────────────────────");
+				const currentValue = stringControl.Value;
+				console.log(`✓ Current Value: "${currentValue}"`);
+				console.log(`  Type: ${typeof currentValue}`);
+				console.log(`  Length: ${currentValue ? currentValue.length : 0} characters`);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 1 Error:", error.message);
+			}
+
+			try {
+				// Test 2: Get Control and Attribute Names
+				console.log("📋 Test 2: Get Control and Attribute Names");
+				console.log("─────────────────────────────────────────────────────────");
+				console.log(`✓ Control Name: ${stringControl.ControlName}`);
+				console.log(`✓ Attribute Name: ${stringControl.AttributeName}`);
+				console.log(`  (Both should be: 'name')`);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 2 Error:", error.message);
+			}
+
+			try {
+				// Test 3: Get Attribute Properties
+				console.log("📋 Test 3: Get Attribute Properties");
+				console.log("─────────────────────────────────────────────────────────");
+				console.log(`✓ Attribute Name: ${stringControl.AttributeName}`);
+				console.log(`  Attribute Type: ${stringControl.AttributeType}`);
+				console.log(`  Control Type: ${stringControl.ControlType}`);
+				console.log(`  Required Level: ${stringControl.RequiredLevel}`);
+				console.log(`  Submit Mode: ${stringControl.SubmitMode}`);
+				console.log(`  Is Valid: ${stringControl.IsValid}`);
+				console.log(`  Is Dirty: ${stringControl.IsDirty}`);
+				console.log(`  Format: ${stringControl.Format}`);
+				console.log(`  Max Length: ${stringControl.MaxLength}`);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 3 Error:", error.message);
+			}
+
+			try {
+				// Test 4: Get Control Visibility
+				console.log("📋 Test 4: Get Control Visibility");
+				console.log("─────────────────────────────────────────────────────────");
+				const isVisible = stringControl.Visible;
+				console.log(`✓ Visible: ${isVisible}`);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 4 Error:", error.message);
+			}
+
+			try {
+				// Test 5: Get Control Disabled State
+				console.log("📋 Test 5: Get Control Disabled State");
+				console.log("─────────────────────────────────────────────────────────");
+				const isDisabled = stringControl.Disabled;
+				console.log(`✓ Disabled: ${isDisabled}`);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 5 Error:", error.message);
+			}
+
+			try {
+				// Test 6: Get Control Label
+				console.log("📋 Test 6: Get Control Label");
+				console.log("─────────────────────────────────────────────────────────");
+				const label = stringControl.Label;
+				console.log(`✓ Label: "${label}"`);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 6 Error:", error.message);
+			}
+
+			try {
+				// Test 7: Set String Value (and restore)
+				console.log("📋 Test 7: Set String Value (and restore)");
+				console.log("─────────────────────────────────────────────────────────");
+				const originalValue = stringControl.Value;
+				console.log(`  Original Value: "${originalValue}"`);
+
+				// Set new value
+				const testValue = `${originalValue} (MODIFIED)`;
+				stringControl.Value = testValue;
+				console.log(`✓ New Value Set: "${testValue}"`);
+
+				// Restore original value after 2 seconds
+				setTimeout(function() {
+					stringControl.Value = originalValue;
+					console.log(`  ↩ Original value restored: "${originalValue}"`);
+				}, 2000);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 7 Error:", error.message);
+			}
+
+			try {
+				// Test 8: Test Notification Methods
+				console.log("📋 Test 8: Test Notification Methods");
+				console.log("─────────────────────────────────────────────────────────");
+
+				// Add error notification
+				stringControl.SetNotification("This is a test error notification for Name field", "TEST_STRING_ERROR_1");
+				console.log("✓ Error notification set");
+
+				// Clear notification after 3 seconds
+				setTimeout(function() {
+					stringControl.ClearNotification("TEST_STRING_ERROR_1");
+					console.log("  ↩ Notification cleared");
+				}, 3000);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 8 Error:", error.message);
+			}
+
+			try {
+				// Test 9: Test SetFocus Method
+				console.log("📋 Test 9: Test SetFocus Method");
+				console.log("─────────────────────────────────────────────────────────");
+				setTimeout(function() {
+					stringControl.Focus();
+					console.log("✓ Focus set to Name field");
+				}, 4000);
+				console.log("ℹ Will set focus in 4 seconds...");
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 9 Error:", error.message);
+			}
+
+			try {
+				// Test 10: Test Visibility Toggle (and restore)
+				console.log("📋 Test 10: Test Visibility Toggle");
+				console.log("─────────────────────────────────────────────────────────");
+				const originalVisibility = stringControl.Visible;
+				console.log(`  Original Visibility: ${originalVisibility}`);
+
+				// Hide the control
+				stringControl.Visible = false;
+				console.log("✓ Control hidden");
+
+				// Restore visibility after 2 seconds
+				setTimeout(function() {
+					stringControl.Visible = originalVisibility;
+					console.log(`  ↩ Visibility restored: ${originalVisibility}`);
+				}, 2000);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 10 Error:", error.message);
+			}
+
+			try {
+				// Test 11: Test Disabled Toggle (and restore)
+				console.log("📋 Test 11: Test Disabled Toggle");
+				console.log("─────────────────────────────────────────────────────────");
+				const originalDisabled = stringControl.Disabled;
+				console.log(`  Original Disabled State: ${originalDisabled}`);
+
+				// Disable the control
+				stringControl.Disabled = true;
+				console.log("✓ Control disabled");
+
+				// Restore disabled state after 2 seconds
+				setTimeout(function() {
+					stringControl.Disabled = originalDisabled;
+					console.log(`  ↩ Disabled state restored: ${originalDisabled}`);
+				}, 2000);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 11 Error:", error.message);
+			}
+
+			try {
+				// Test 12: Test Label Change (and restore)
+				console.log("📋 Test 12: Test Label Change");
+				console.log("─────────────────────────────────────────────────────────");
+				const originalLabel = stringControl.Label;
+				console.log(`  Original Label: "${originalLabel}"`);
+
+				// Change label
+				stringControl.Label = `${originalLabel} (TEST)`;
+				console.log(`✓ Label changed to: "${stringControl.Label}"`);
+
+				// Restore label after 2 seconds
+				setTimeout(function() {
+					stringControl.Label = originalLabel;
+					console.log(`  ↩ Label restored: "${originalLabel}"`);
+				}, 2000);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 12 Error:", error.message);
+			}
+
+			console.log("╔════════════════════════════════════════════════════════════════╗");
+			console.log("║           STRING CONTROL TESTS COMPLETED                       ║");
+			console.log("╚════════════════════════════════════════════════════════════════╝");
 		}
-	}
-	//BEGIN ON LOAD ========================================================
-	/** @param {any} executionContext */
-	async function UiAddLoaded(executionContext) {
-	}
-	//END ON LOAD ==========================================================
-	//BEGIN ON CHANGE ======================================================
-
-	//END ON CHANGE ========================================================
-	//BEGIN PRE SEARCH =====================================================
-
-	//END PRE SEARCH =======================================================
-	//BEGIN OTHERS =========================================================
-
-	//END OTHERS ===========================================================
-	return {
-		OnLoad: onLoad
-	};
-})();
-var formAccount_Information = (function () {
-	"use strict";
-	/** @type {DevKitV4.FormAccount_Information} */
-	let form;
-	/** @param {any} executionContext */
-	async function onLoad(executionContext) {
-		form = new DevKitV4.FormAccount_Information(executionContext);
-		registerEvents();
-		form.UiAddLoaded(UiAddLoaded);
-	}
-	function registerEvents() {
-		if (form && form.ExecutionContext.IsInitialLoad()) {
-		}
-	}
-	//BEGIN ON LOAD ========================================================
-	/** @param {any} executionContext */
-	async function UiAddLoaded(executionContext) {
 	}
 	//END ON LOAD ==========================================================
 	//BEGIN ON CHANGE ======================================================
