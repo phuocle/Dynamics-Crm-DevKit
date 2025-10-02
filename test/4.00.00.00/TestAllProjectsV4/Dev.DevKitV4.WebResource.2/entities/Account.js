@@ -104,7 +104,7 @@ var formAccount = (function () {
 			try {
 				// Test 1: FetchXML Promise-based (entity name auto-extracted)
 				console.log("Test 1: RetrieveRecords with FetchXML (Promise-based)");
-				var fetchXml1 = "?fetchXml=<fetch top='3'><entity name='account'><attribute name='name'/><attribute name='accountnumber'/></entity></fetch>";
+				var fetchXml1 = "<fetch top='3'><entity name='account'><attribute name='name'/><attribute name='accountnumber'/></entity></fetch>";
 				var records1 = await form.WebApi.RetrieveRecords(DevKitV4.AccountApi, fetchXml1);
 				console.log("✓ Test 1 Result Count:", records1.length, "Records:", records1);
 			} catch (/** @type {any} */ error) {
@@ -114,7 +114,7 @@ var formAccount = (function () {
 			try {
 				// Test 2: FetchXML Promise-based with maxPageSize (entity name auto-extracted)
 				console.log("Test 2: RetrieveRecords with FetchXML and maxPageSize (Promise-based)");
-				var fetchXml2 = "?fetchXml=<fetch><entity name='account'><attribute name='name'/><attribute name='telephone1'/></entity></fetch>";
+				var fetchXml2 = "<fetch><entity name='account'><attribute name='name'/><attribute name='telephone1'/></entity></fetch>";
 				var records2 = await form.WebApi.RetrieveRecords(DevKitV4.AccountApi, fetchXml2, 5);
 				console.log("✓ Test 2 Result Count:", records2.length, "Records:", records2);
 			} catch (/** @type {any} */ error) {
@@ -124,7 +124,7 @@ var formAccount = (function () {
 			try {
 				// Test 3: FetchXML Callback-based (entity name auto-extracted)
 				console.log("Test 3: RetrieveRecords with FetchXML (Callback-based)");
-				var fetchXml3 = "?fetchXml=<fetch top='2'><entity name='account'><attribute name='name'/><attribute name='revenue'/></entity></fetch>";
+				var fetchXml3 = "<fetch top='2'><entity name='account'><attribute name='name'/><attribute name='revenue'/></entity></fetch>";
 				form.WebApi.RetrieveRecords(
 					DevKitV4.AccountApi,
 					fetchXml3,

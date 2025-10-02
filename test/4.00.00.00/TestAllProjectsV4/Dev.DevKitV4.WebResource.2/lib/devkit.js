@@ -661,12 +661,14 @@ const devKit = (function () {
         const getOnline = xrmInstance?.WebApi?.online;
         const getOffline = xrmInstance?.WebApi?.offline;
         const extractEntityName = function(fetchXml) {
-            // Remove ?fetchXml= prefix if present (case-insensitive)
             let cleanXml = fetchXml;
             const fetchXmlMatch = fetchXml.match(/fetchxml=/i);
             if (fetchXmlMatch) {
                 const splitIndex = fetchXml.toLowerCase().indexOf('fetchxml=') + 'fetchxml='.length;
                 cleanXml = decodeURIComponent(fetchXml.substring(splitIndex));
+            }
+            else if (fetchXml.trim().startsWith('<')) {
+                cleanXml = fetchXml;
             }
             const parser = new DOMParser();
             const xmlDoc = parser.parseFromString(cleanXml, "text/xml");
@@ -736,12 +738,17 @@ const devKit = (function () {
             let options;
             let maxPageSize;
             const hasFetchXml = entityLogicalNameOrOptions => /fetchxml=/i.test(entityLogicalNameOrOptions);
+            const isPlainFetchXml = entityLogicalNameOrOptions => typeof entityLogicalNameOrOptions === 'string' && entityLogicalNameOrOptions.trim().startsWith('<fetch');
             const secondParamIsFetchXmlOrOData = typeof entityLogicalNameOrOptions === 'string' &&
                 (hasFetchXml(entityLogicalNameOrOptions) ||
+                isPlainFetchXml(entityLogicalNameOrOptions) ||
                 (entityLogicalNameOrOptions.startsWith('?') && !hasFetchXml(entityLogicalNameOrOptions)));
             if (secondParamIsFetchXmlOrOData) {
                 options = entityLogicalNameOrOptions;
-                if (hasFetchXml(options)) {
+                if (isPlainFetchXml(options)) {
+                    options = '?fetchXml=' + encodeURIComponent(options);
+                }
+                if (hasFetchXml(options) || isPlainFetchXml(entityLogicalNameOrOptions)) {
                     entityLogicalName = extractEntityName(options);
                 } else {
                     throw new Error('Entity name cannot be determined from OData query. Please provide entityLogicalName as second parameter.');
