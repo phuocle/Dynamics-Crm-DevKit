@@ -23,7 +23,9 @@ var formAccount = (function () {
 		//await testLookup();
 		//await testString();
 		//await testInteger();
-		await testMoney();
+		//await testMoney();
+		//await testOptionSet();
+		await testMultiOptionSet();
 
 		/**************************************************************************
 		 * TEST: RetrieveRecord Function - All Overloads
@@ -1338,6 +1340,606 @@ var formAccount = (function () {
 
 			console.log("╔════════════════════════════════════════════════════════════════╗");
 			console.log("║           MONEY CONTROL TESTS COMPLETED                        ║");
+			console.log("╚════════════════════════════════════════════════════════════════╝");
+		}
+
+		/**************************************************************************
+		 * TEST: OptionSet Control (Single Select Picklist)
+		 * Field: AccountCategoryCode - Category
+		 * Values: Preferred_Customer = 1, Standard = 2
+		 **************************************************************************/
+		async function testOptionSet() {
+			console.log("╔════════════════════════════════════════════════════════════════╗");
+			console.log("║           OPTIONSET CONTROL TESTS                              ║");
+			console.log("║           Field: AccountCategoryCode (Category)                ║");
+			console.log("║           Location: Body                                       ║");
+			console.log("╚════════════════════════════════════════════════════════════════╝");
+			console.log("");
+
+			/** @type {DevKit.Controls.OptionSet} */
+			const optionSetControl = form.Body.AccountCategoryCode;
+
+			try {
+				// Test 1: Get OptionSet Value (returns number)
+				console.log("⚡ Test 1: Get OptionSet Value");
+				const value = optionSetControl.Value;
+				console.log(`✓ Current Value (numeric): ${value}`);
+				console.log(`  Type: ${typeof value}`);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 1 Error:", error.message);
+			}
+
+			try {
+				// Test 2: Get Control and Attribute Names
+				console.log("⚡ Test 2: Get Control and Attribute Names");
+				console.log(`✓ Control Name: ${optionSetControl.ControlName}`);
+				console.log(`✓ Attribute Name: ${optionSetControl.AttributeName}`);
+				console.log(`✓ Control Type: ${optionSetControl.ControlType}`);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 2 Error:", error.message);
+			}
+
+			try {
+				// Test 3: Get Selected Option (returns text and value)
+				console.log("⚡ Test 3: Get Selected Option Details");
+				const selectedOption = optionSetControl.SelectedOption;
+				if (selectedOption) {
+					console.log(`✓ Selected Option:`);
+					console.log(`  Text: "${selectedOption.text}"`);
+					console.log(`  Value: ${selectedOption.value}`);
+				} else {
+					console.log(`  ℹ No option selected (null)`);
+				}
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 3 Error:", error.message);
+			}
+
+			try {
+				// Test 4: Get Text of Selected Option
+				console.log("⚡ Test 4: Get Text of Selected Option");
+				const text = optionSetControl.Text;
+				console.log(`✓ Selected Option Text: "${text}"`);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 4 Error:", error.message);
+			}
+
+			try {
+				// Test 5: Get All Available Options
+				console.log("⚡ Test 5: Get All Available Options");
+				const options = optionSetControl.Options;
+				console.log(`✓ Available Options (${options.length} total):`);
+				for (const option of options) {
+					console.log(`  [${option.value}] "${option.text}"`);
+				}
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 5 Error:", error.message);
+			}
+
+			try {
+				// Test 6: Get Control Options (includes blank option)
+				console.log("⚡ Test 6: Get Control Options");
+				const controlOptions = optionSetControl.ControlOptions;
+				console.log(`✓ Control Options (${controlOptions.length} total, includes blank):`);
+				for (const option of controlOptions) {
+					if (option.value === null || option.value === undefined) {
+						console.log(`  [null] "(Blank)"`);
+					} else {
+						console.log(`  [${option.value}] "${option.text}"`);
+					}
+				}
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 6 Error:", error.message);
+			}
+
+			try {
+				// Test 7: Get Specific Option by Value
+				console.log("⚡ Test 7: Get Specific Option by Value");
+				const preferredCustomer = optionSetControl.Option(1); // Preferred_Customer
+				const standard = optionSetControl.Option(2); // Standard
+				console.log(`✓ Option by Value (1): "${preferredCustomer?.text}" = ${preferredCustomer?.value}`);
+				console.log(`✓ Option by Value (2): "${standard?.text}" = ${standard?.value}`);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 7 Error:", error.message);
+			}
+
+			try {
+				// Test 8: Get Specific Option by Text
+				console.log("⚡ Test 8: Get Specific Option by Text");
+				const option = optionSetControl.Option("Preferred Customer");
+				if (option) {
+					console.log(`✓ Option by Text: "${option.text}" = ${option.value}`);
+				} else {
+					console.log(`  ℹ Option not found or text doesn't match exactly`);
+				}
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 8 Error:", error.message);
+			}
+
+			try {
+				// Test 9: Get Initial Value (value when form loaded)
+				console.log("⚡ Test 9: Get Initial Value");
+				const initialValue = optionSetControl.InitialValue;
+				console.log(`✓ Initial Value: ${initialValue}`);
+				console.log(`  ℹ This is the value when the form was loaded`);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 9 Error:", error.message);
+			}
+
+			try {
+				// Test 10: Get Visibility Status
+				console.log("⚡ Test 10: Get Visibility Status");
+				const visible = optionSetControl.Visible;
+				console.log(`✓ Is Visible: ${visible}`);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 10 Error:", error.message);
+			}
+
+			try {
+				// Test 11: Get Disabled Status
+				console.log("⚡ Test 11: Get Disabled Status");
+				const disabled = optionSetControl.Disabled;
+				console.log(`✓ Is Disabled: ${disabled}`);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 11 Error:", error.message);
+			}
+
+			try {
+				// Test 12: Get Label
+				console.log("⚡ Test 12: Get Label");
+				const label = optionSetControl.Label;
+				console.log(`✓ Label: "${label}"`);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 12 Error:", error.message);
+			}
+
+			try {
+				// Test 13: Set Value and Observe Change
+				console.log("⚡ Test 13: Set Value to 'Preferred Customer' (1)");
+				const originalValue = optionSetControl.Value;
+				console.log(`  📋 Original Value: ${originalValue}`);
+
+				await new Promise(resolve => setTimeout(resolve, 2000));
+				optionSetControl.Value = 1; // Preferred_Customer
+				console.log(`✓ Value set to: 1 (Preferred Customer)`);
+				console.log(`  Current Text: "${optionSetControl.Text}"`);
+
+				// Restore after 2 seconds
+				setTimeout(function() {
+					/** @type {any} */ (optionSetControl).Value = originalValue;
+					console.log(`  ↩ Original value restored: ${originalValue}`);
+				}, 2000);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 13 Error:", error.message);
+			}
+
+			try {
+				// Test 14: Clear Value (set to null)
+				console.log("⚡ Test 14: Clear Value (set to null)");
+				const originalValue = optionSetControl.Value;
+
+				await new Promise(resolve => setTimeout(resolve, 4000));
+				/** @type {any} */ (optionSetControl).Value = null;
+				console.log(`✓ Value cleared (set to null)`);
+				console.log(`  Current Value: ${optionSetControl.Value}`);
+				console.log(`  Current Text: "${optionSetControl.Text}"`);
+
+				// Restore after 2 seconds
+				setTimeout(function() {
+					optionSetControl.Value = originalValue;
+					console.log(`  ↩ Original value restored: ${originalValue}`);
+				}, 2000);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 14 Error:", error.message);
+			}
+
+			try {
+				// Test 15: Add Notification
+				console.log("⚡ Test 15: Add Notification");
+				await new Promise(resolve => setTimeout(resolve, 6000));
+				optionSetControl.AddNotification({
+					messages: ["This is a test notification for Category field"],
+					notificationLevel: OptionSet.FieldNotificationLevel.Error,
+					uniqueId: "TEST_OPTIONSET_NOTIF"
+				});
+				console.log(`✓ Notification added with ID: TEST_OPTIONSET_NOTIF`);
+				console.log(`  Message: "This is a test notification for Category field"`);
+
+				// Clear notification after 3 seconds
+				setTimeout(function() {
+					optionSetControl.ClearNotification("TEST_OPTIONSET_NOTIF");
+					console.log(`  ↩ Notification cleared`);
+				}, 3000);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 15 Error:", error.message);
+			}
+
+			try {
+				// Test 16: Set Focus
+				console.log("⚡ Test 16: Set Focus to Control");
+				await new Promise(resolve => setTimeout(resolve, 9000));
+				optionSetControl.Focus();
+				console.log(`✓ Focus set to AccountCategoryCode control`);
+				console.log(`  ⚡ The control should now be highlighted and focused`);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 16 Error:", error.message);
+			}
+
+			try {
+				// Test 17: Toggle Visibility
+				console.log("⚡ Test 17: Toggle Visibility");
+				await new Promise(resolve => setTimeout(resolve, 13000));
+				const originalVisible = optionSetControl.Visible;
+				optionSetControl.Visible = false;
+				console.log(`✓ Visibility set to: false (control hidden)`);
+
+				// Restore after 2 seconds
+				setTimeout(function() {
+					optionSetControl.Visible = originalVisible;
+					console.log(`  ↩ Visibility restored to: ${originalVisible}`);
+				}, 2000);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 17 Error:", error.message);
+			}
+
+			try {
+				// Test 18: Toggle Disabled State
+				console.log("⚡ Test 18: Toggle Disabled State");
+				await new Promise(resolve => setTimeout(resolve, 15000));
+				const originalDisabled = optionSetControl.Disabled;
+				optionSetControl.Disabled = true;
+				console.log(`✓ Disabled set to: true (control is read-only)`);
+
+				// Restore after 2 seconds
+				setTimeout(function() {
+					optionSetControl.Disabled = originalDisabled;
+					console.log(`  ↩ Disabled restored to: ${originalDisabled}`);
+				}, 2000);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 18 Error:", error.message);
+			}
+
+			try {
+				// Test 19: Change Label
+				console.log("⚡ Test 19: Change Label Text");
+				await new Promise(resolve => setTimeout(resolve, 17000));
+				const originalLabel = optionSetControl.Label;
+				optionSetControl.Label = "TEST: Modified Category Label";
+				console.log(`✓ Label changed from "${originalLabel}" to "TEST: Modified Category Label"`);
+
+				// Restore after 2 seconds
+				setTimeout(function() {
+					optionSetControl.Label = originalLabel;
+					console.log(`  ↩ Label restored to: "${originalLabel}"`);
+				}, 2000);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 19 Error:", error.message);
+			}
+
+			console.log("╔════════════════════════════════════════════════════════════════╗");
+			console.log("║         OPTIONSET CONTROL TESTS COMPLETED                      ║");
+			console.log("╚════════════════════════════════════════════════════════════════╝");
+		}
+
+		/**************************************************************************
+		 * TEST: MultiOptionSet Control (Multi-Select Picklist)
+		 * Field: devkit_CategoryCode - Category Code
+		 * Values: Business=1, Family=2, Social=3, Sales=4, Other=5, Stakeholder=1000, Sales_Team=1001, Service=1002
+		 **************************************************************************/
+		async function testMultiOptionSet() {
+			console.log("╔════════════════════════════════════════════════════════════════╗");
+			console.log("║       MULTI-OPTIONSET CONTROL TESTS                            ║");
+			console.log("║       Field: devkit_CategoryCode (Category Code)               ║");
+			console.log("║       Location: Body                                           ║");
+			console.log("╚════════════════════════════════════════════════════════════════╝");
+			console.log("");
+
+			/** @type {DevKit.Controls.MultiOptionSet} */
+			const multiOptionSetControl = form.Body.devkit_CategoryCode;
+
+			try {
+				// Test 1: Get MultiOptionSet Value (returns array of numbers)
+				console.log("⚡ Test 1: Get MultiOptionSet Value");
+				const value = multiOptionSetControl.Value;
+				console.log(`✓ Current Value (array): [${value?.join(', ')}]`);
+				console.log(`  Type: ${Array.isArray(value) ? 'Array' : typeof value}`);
+				console.log(`  Length: ${value?.length || 0} selected`);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 1 Error:", error.message);
+			}
+
+			try {
+				// Test 2: Get Control and Attribute Names
+				console.log("⚡ Test 2: Get Control and Attribute Names");
+				console.log(`✓ Control Name: ${multiOptionSetControl.ControlName}`);
+				console.log(`✓ Attribute Name: ${multiOptionSetControl.AttributeName}`);
+				console.log(`✓ Control Type: ${multiOptionSetControl.ControlType}`);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 2 Error:", error.message);
+			}
+
+			try {
+				// Test 3: Get Selected Options (returns array of text/value objects)
+				console.log("⚡ Test 3: Get Selected Options Details");
+				const selectedOptions = multiOptionSetControl.SelectedOption;
+				if (selectedOptions && selectedOptions.length > 0) {
+					console.log(`✓ Selected Options (${selectedOptions.length}):`);
+					for (const option of selectedOptions) {
+						console.log(`  [${option.value}] "${option.text}"`);
+					}
+				} else {
+					console.log(`  ℹ No options selected (empty array)`);
+				}
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 3 Error:", error.message);
+			}
+
+			try {
+				// Test 4: Get Text of Selected Options
+				console.log("⚡ Test 4: Get Text of Selected Options");
+				const text = multiOptionSetControl.Text;
+				console.log(`✓ Selected Options Text: "${text}"`);
+				console.log(`  ℹ Multiple selections are separated by semicolon`);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 4 Error:", error.message);
+			}
+
+			try {
+				// Test 5: Get All Available Options
+				console.log("⚡ Test 5: Get All Available Options");
+				const options = multiOptionSetControl.Options;
+				console.log(`✓ Available Options (${options.length} total):`);
+				for (const option of options) {
+					console.log(`  [${option.value}] "${option.text}"`);
+				}
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 5 Error:", error.message);
+			}
+
+			try {
+				// Test 6: Get Control Options
+				console.log("⚡ Test 6: Get Control Options");
+				const controlOptions = multiOptionSetControl.ControlOptions;
+				console.log(`✓ Control Options (${controlOptions.length} total):`);
+				for (const option of controlOptions) {
+					console.log(`  [${option.value}] "${option.text}"`);
+				}
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 6 Error:", error.message);
+			}
+
+			try {
+				// Test 7: Get Specific Option by Value
+				console.log("⚡ Test 7: Get Specific Option by Value");
+				const business = multiOptionSetControl.Option(1); // Business
+				const family = multiOptionSetControl.Option(2); // Family
+				const social = multiOptionSetControl.Option(3); // Social
+				console.log(`✓ Option by Value (1): "${business?.text}" = ${business?.value}`);
+				console.log(`✓ Option by Value (2): "${family?.text}" = ${family?.value}`);
+				console.log(`✓ Option by Value (3): "${social?.text}" = ${social?.value}`);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 7 Error:", error.message);
+			}
+
+			try {
+				// Test 8: Get Initial Value (value when form loaded)
+				console.log("⚡ Test 8: Get Initial Value");
+				const initialValue = multiOptionSetControl.InitialValue;
+				console.log(`✓ Initial Value: ${initialValue}`);
+				console.log(`  ℹ This is the value when the form was loaded`);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 8 Error:", error.message);
+			}
+
+			try {
+				// Test 9: Get Visibility Status
+				console.log("⚡ Test 9: Get Visibility Status");
+				const visible = multiOptionSetControl.Visible;
+				console.log(`✓ Is Visible: ${visible}`);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 9 Error:", error.message);
+			}
+
+			try {
+				// Test 10: Get Disabled Status
+				console.log("⚡ Test 10: Get Disabled Status");
+				const disabled = multiOptionSetControl.Disabled;
+				console.log(`✓ Is Disabled: ${disabled}`);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 10 Error:", error.message);
+			}
+
+			try {
+				// Test 11: Get Label
+				console.log("⚡ Test 11: Get Label");
+				const label = multiOptionSetControl.Label;
+				console.log(`✓ Label: "${label}"`);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 11 Error:", error.message);
+			}
+
+			try {
+				// Test 12: Set Single Value
+				console.log("⚡ Test 12: Set Single Value [1] (Business)");
+				const originalValue = multiOptionSetControl.Value;
+				console.log(`  📋 Original Value: [${originalValue?.join(', ')}]`);
+
+				await new Promise(resolve => setTimeout(resolve, 2000));
+				multiOptionSetControl.Value = [1]; // Business only
+				console.log(`✓ Value set to: [1] (Business)`);
+				console.log(`  Current Text: "${multiOptionSetControl.Text}"`);
+
+				// Restore after 2 seconds
+				setTimeout(function() {
+					/** @type {any} */ (multiOptionSetControl).Value = originalValue;
+					console.log(`  ↩ Original value restored: [${originalValue?.join(', ')}]`);
+				}, 2000);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 12 Error:", error.message);
+			}
+
+			try {
+				// Test 13: Set Multiple Values
+				console.log("⚡ Test 13: Set Multiple Values [1, 2, 3] (Business, Family, Social)");
+				const originalValue = multiOptionSetControl.Value;
+
+				await new Promise(resolve => setTimeout(resolve, 4000));
+				multiOptionSetControl.Value = [1, 2, 3]; // Business, Family, Social
+				console.log(`✓ Value set to: [1, 2, 3]`);
+				console.log(`  Current Text: "${multiOptionSetControl.Text}"`);
+				console.log(`  ℹ Multiple selections visible in UI`);
+
+				// Restore after 2 seconds
+				setTimeout(function() {
+					/** @type {any} */ (multiOptionSetControl).Value = originalValue;
+					console.log(`  ↩ Original value restored: [${originalValue?.join(', ')}]`);
+				}, 2000);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 13 Error:", error.message);
+			}
+
+			try {
+				// Test 14: Clear All Values (set to empty array or null)
+				console.log("⚡ Test 14: Clear All Values");
+				const originalValue = multiOptionSetControl.Value;
+
+				await new Promise(resolve => setTimeout(resolve, 6000));
+				multiOptionSetControl.Value = [];
+				console.log(`✓ All values cleared (empty array)`);
+				console.log(`  Current Value: [${multiOptionSetControl.Value?.join(', ')}]`);
+				console.log(`  Current Text: "${multiOptionSetControl.Text}"`);
+
+				// Restore after 2 seconds
+				setTimeout(function() {
+					/** @type {any} */ (multiOptionSetControl).Value = originalValue;
+					console.log(`  ↩ Original value restored: [${originalValue?.join(', ')}]`);
+				}, 2000);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 14 Error:", error.message);
+			}
+
+			try {
+				// Test 15: Add Notification
+				console.log("⚡ Test 15: Add Notification");
+				await new Promise(resolve => setTimeout(resolve, 8000));
+				multiOptionSetControl.AddNotification({
+					messages: ["This is a test notification for Category Code field"],
+					notificationLevel: OptionSet.FieldNotificationLevel.Error,
+					uniqueId: "TEST_MULTIOPTION_NOTIF"
+				});
+				console.log(`✓ Notification added with ID: TEST_MULTIOPTION_NOTIF`);
+				console.log(`  Message: "This is a test notification for Category Code field"`);
+
+				// Clear notification after 3 seconds
+				setTimeout(function() {
+					multiOptionSetControl.ClearNotification("TEST_MULTIOPTION_NOTIF");
+					console.log(`  ↩ Notification cleared`);
+				}, 3000);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 15 Error:", error.message);
+			}
+
+			try {
+				// Test 16: Set Focus
+				console.log("⚡ Test 16: Set Focus to Control");
+				await new Promise(resolve => setTimeout(resolve, 11000));
+				multiOptionSetControl.Focus();
+				console.log(`✓ Focus set to devkit_CategoryCode control`);
+				console.log(`  ⚡ The control should now be highlighted and focused`);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 16 Error:", error.message);
+			}
+
+			try {
+				// Test 17: Toggle Visibility
+				console.log("⚡ Test 17: Toggle Visibility");
+				await new Promise(resolve => setTimeout(resolve, 15000));
+				const originalVisible = multiOptionSetControl.Visible;
+				multiOptionSetControl.Visible = false;
+				console.log(`✓ Visibility set to: false (control hidden)`);
+
+				// Restore after 2 seconds
+				setTimeout(function() {
+					multiOptionSetControl.Visible = originalVisible;
+					console.log(`  ↩ Visibility restored to: ${originalVisible}`);
+				}, 2000);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 17 Error:", error.message);
+			}
+
+			try {
+				// Test 18: Toggle Disabled State
+				console.log("⚡ Test 18: Toggle Disabled State");
+				await new Promise(resolve => setTimeout(resolve, 17000));
+				const originalDisabled = multiOptionSetControl.Disabled;
+				multiOptionSetControl.Disabled = true;
+				console.log(`✓ Disabled set to: true (control is read-only)`);
+
+				// Restore after 2 seconds
+				setTimeout(function() {
+					multiOptionSetControl.Disabled = originalDisabled;
+					console.log(`  ↩ Disabled restored to: ${originalDisabled}`);
+				}, 2000);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 18 Error:", error.message);
+			}
+
+			try {
+				// Test 19: Change Label
+				console.log("⚡ Test 19: Change Label Text");
+				await new Promise(resolve => setTimeout(resolve, 19000));
+				const originalLabel = multiOptionSetControl.Label;
+				multiOptionSetControl.Label = "TEST: Modified Category Code Label";
+				console.log(`✓ Label changed from "${originalLabel}" to "TEST: Modified Category Code Label"`);
+
+				// Restore after 2 seconds
+				setTimeout(function() {
+					multiOptionSetControl.Label = originalLabel;
+					console.log(`  ↩ Label restored to: "${originalLabel}"`);
+				}, 2000);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 19 Error:", error.message);
+			}
+
+			console.log("╔════════════════════════════════════════════════════════════════╗");
+			console.log("║     MULTI-OPTIONSET CONTROL TESTS COMPLETED                    ║");
 			console.log("╚════════════════════════════════════════════════════════════════╝");
 		}
 	}

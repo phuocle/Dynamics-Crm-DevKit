@@ -99,6 +99,8 @@ declare namespace DevKitV4 {
 			TickerSymbol: DevKit.Controls.String;
 			/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
 			TransactionCurrencyId: DevKit.Controls.Lookup;
+			v4_Decimal: DevKit.Controls.Decimal;
+			v4_Float: DevKit.Controls.Double;
 			/** Type the account's website URL to get quick details about the company profile. */
 			WebSiteURL: DevKit.Controls.String;
 		}
@@ -953,6 +955,8 @@ declare namespace DevKitV4 {
 		TraversedPath: string | null;
 		/** Time zone code that was in use when the record was created. */
 		UTCConversionTimeZoneCode: number | null;
+		v4_Decimal: number | null;
+		v4_Float: number | null;
 		/** Version number of the account. */
 		readonly VersionNumber: number | null;
 		/** Type the account's website URL to get quick details about the company profile. */
@@ -1257,6 +1261,8 @@ declare namespace DevKitV4 {
 			readonly TraversedPath: string;
 			/** Time zone code that was in use when the record was created. */
 			readonly UTCConversionTimeZoneCode: string;
+			readonly v4_Decimal: string;
+			readonly v4_Float: string;
 			/** Version number of the account. */
 			readonly VersionNumber: string;
 			/** Type the account's website URL to get quick details about the company profile. */
