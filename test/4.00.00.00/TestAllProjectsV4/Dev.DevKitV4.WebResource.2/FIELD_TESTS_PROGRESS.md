@@ -17,14 +17,14 @@ Comprehensive test suite for all Dynamics 365 field control types using the Acco
 | 1 | **Lookup** | PrimaryContactId | 15 | ✅ Complete | [LOOKUP_FIELD_TESTS.md](LOOKUP_FIELD_TESTS.md) |
 | 2 | **String** | Name | 12 | ✅ Complete | [STRING_FIELD_TESTS.md](STRING_FIELD_TESTS.md) |
 | 3 | **Integer** | NumberOfEmployees | 15 | ✅ Complete | [INTEGER_FIELD_TESTS.md](INTEGER_FIELD_TESTS.md) |
-| 4 | **Decimal** | Revenue | - | ⏳ Pending | - |
-| 5 | **OptionSet** | AccountCategoryCode | - | ⏳ Pending | - |
-| 6 | **Boolean** | CreditOnHold | - | ⏳ Pending | - |
-| 7 | **DateTime** | CreatedOn | - | ⏳ Pending | - |
-| 8 | **Memo** | Description | - | ⏳ Pending | - |
-| 9 | **Money** | CreditLimit | - | ⏳ Pending | - |
+| 4 | **Money** | Revenue | 16 | ✅ Complete | [MONEY_FIELD_TESTS.md](MONEY_FIELD_TESTS.md) |
+| 5 | **Decimal** | (Custom field) | - | ⏳ Pending | - |
+| 6 | **OptionSet** | AccountCategoryCode | - | ⏳ Pending | - |
+| 7 | **Boolean** | CreditOnHold | - | ⏳ Pending | - |
+| 8 | **DateTime** | CreatedOn | - | ⏳ Pending | - |
+| 9 | **Memo** | Description | - | ⏳ Pending | - |
 
-**Completion Rate:** 3/9 (33%)
+**Completion Rate:** 4/9 (44%)
 
 ---
 
@@ -94,6 +94,7 @@ Comprehensive test suite for all Dynamics 365 field control types using the Acco
 **Status:** Complete
 **Tests:** 15
 **Documentation:** [INTEGER_FIELD_TESTS.md](INTEGER_FIELD_TESTS.md)
+**Form Location:** Header
 
 #### Test Coverage:
 1. Get Integer Value
@@ -112,36 +113,67 @@ Comprehensive test suite for all Dynamics 365 field control types using the Acco
 14. Test Label Change
 15. Test Null/Zero Handling
 
-#### Key Features:
-- ✅ Integer value validation
-- ✅ Min/Max value constraints
-- ✅ Precision property (0 for integers)
-- ✅ Format property (none/duration/timezone/language)
-- ✅ Decimal rejection/rounding
-- ✅ Null vs zero distinction
-- ✅ Number.isInteger() validation
+#### Unique Features:
+- **Type Validation:** Uses `Number.isInteger()` to confirm whole numbers
+- **Min/Max Testing:** Validates value range constraints
+- **Decimal Rejection:** Tests that integers reject/round decimal values
+- **Null vs Zero:** Important distinction for numeric fields
+
+---
+
+### 4. ✅ Money Control - Revenue
+**Status:** Complete
+**Tests:** 16
+**Documentation:** [MONEY_FIELD_TESTS.md](MONEY_FIELD_TESTS.md)
+**Form Location:** Header
+
+#### Test Coverage:
+1. Get Money Value
+2. Get Control and Attribute Names
+3. Get Attribute Properties
+4. Get Control Visibility
+5. Get Control Disabled State
+6. Get Control Label
+7. Set Money Value (and restore)
+8. Test Min/Max Validation
+9. Test Decimal Precision
+10. Test Notification Methods
+11. Test SetFocus Method
+12. Test Visibility Toggle
+13. Test Disabled Toggle
+14. Test Label Change
+15. Test Null/Zero Handling
+16. Test Negative Values
+
+#### Unique Features:
+- **Currency Formatting:** Automatic $ symbol, thousand separators, 2 decimal places
+- **Multi-Currency:** Supports exchange rates and base currency conversion
+- **Precision Control:** Fixed 2 decimal places for currency standards
+- **Negative Values:** Tests for debts, losses, or refunds
+- **Large Number Formatting:** Handles billions with proper formatting
 
 ---
 
 ## Pending Tests
 
-### 4. ⏳ Decimal Control - Revenue
+### 5. ⏳ Decimal Control - Custom Field
 **Status:** Pending
-**Estimated Tests:** 12-15
+**Estimated Tests:** 15-16
 
 #### Planned Coverage:
 - Get/Set decimal value
-- Precision property (decimal places)
+- Precision property (variable decimal places)
 - Min/Max value validation
 - Format property
 - Rounding behavior
 - Scientific notation handling
 - Notification and focus methods
 - Visibility/disabled control
+- Difference from Integer and Money
 
 ---
 
-### 5. ⏳ OptionSet Control - AccountCategoryCode
+### 6. ⏳ OptionSet Control - AccountCategoryCode
 **Status:** Pending
 **Estimated Tests:** 15-18
 
@@ -159,7 +191,7 @@ Comprehensive test suite for all Dynamics 365 field control types using the Acco
 
 ---
 
-### 6. ⏳ Boolean (Two Options) Control - CreditOnHold
+### 7. ⏳ Boolean (Two Options) Control - CreditOnHold
 **Status:** Pending
 **Estimated Tests:** 10-12
 
@@ -174,7 +206,7 @@ Comprehensive test suite for all Dynamics 365 field control types using the Acco
 
 ---
 
-### 7. ⏳ DateTime Control - CreatedOn
+### 8. ⏳ DateTime Control - CreatedOn
 **Status:** Pending
 **Estimated Tests:** 15-18
 
@@ -192,7 +224,7 @@ Comprehensive test suite for all Dynamics 365 field control types using the Acco
 
 ---
 
-### 8. ⏳ Memo (Multi-line Text) Control - Description
+### 9. ⏳ Memo (Multi-line Text) Control - Description
 **Status:** Pending
 **Estimated Tests:** 12-15
 
@@ -209,8 +241,10 @@ Comprehensive test suite for all Dynamics 365 field control types using the Acco
 
 ---
 
-### 9. ⏳ Money Control - CreditLimit
-**Status:** Pending
+## Removed from Test Plan
+
+### ~~Money Control - CreditLimit~~
+**Status:** Already tested using Revenue field
 **Estimated Tests:** 12-15
 
 #### Planned Coverage:
@@ -250,22 +284,22 @@ Comprehensive test suite for all Dynamics 365 field control types using the Acco
 
 ## Testing Strategy
 
-### Phase 1: Foundation (✅ Complete)
-- ✅ Lookup controls (complex)
-- ✅ String controls (simple)
+### Phase 1: Foundation (✅ Complete - 100%)
+- ✅ Lookup controls (complex) - PrimaryContactId - 15 tests
+- ✅ String controls (simple) - Name - 12 tests
 
-### Phase 2: Numeric Types (🔄 In Progress)
-- ✅ Integer controls
-- ⏳ Decimal controls (Next)
-- ⏳ Money controls
+### Phase 2: Numeric Types (🔄 In Progress - 67%)
+- ✅ Integer controls - NumberOfEmployees (Header) - 15 tests
+- ✅ Money controls - Revenue (Header) - 16 tests
+- ⏳ Decimal controls - Custom field (Next) - ~15 tests
 
-### Phase 3: Choice Types (⏳ Pending)
-- OptionSet controls
-- Boolean controls
+### Phase 3: Choice Types (⏳ Pending - 0%)
+- ⏳ OptionSet controls - AccountCategoryCode - ~15 tests
+- ⏳ Boolean controls - CreditOnHold - ~12 tests
 
-### Phase 4: Advanced Types (⏳ Pending)
-- DateTime controls
-- Memo controls
+### Phase 4: Advanced Types (⏳ Pending - 0%)
+- ⏳ DateTime controls - CreatedOn - ~15 tests
+- ⏳ Memo controls - Description - ~12 tests
 
 ---
 
@@ -334,6 +368,10 @@ Dev.DevKitV4.WebResource.2/
 ├── LOOKUP_FIELD_TESTS.md                   ← Lookup documentation
 ├── LOOKUP_FIX_ATTRIBUTE_PROPERTIES.md      ← Lookup fix explanation
 ├── STRING_FIELD_TESTS.md                   ← String documentation
+├── INTEGER_FIELD_TESTS.md                  ← Integer documentation
+├── MONEY_FIELD_TESTS.md                    ← Money documentation
+├── INTEGER_COMPLETE_SUMMARY.md             ← Integer summary
+├── CURRENT_STATUS.md                       ← Project status
 └── FIELD_TESTS_PROGRESS.md                 ← This file
 ```
 
@@ -349,8 +387,10 @@ In `Account.js`, locate the `UiAddLoaded` function:
 async function UiAddLoaded(executionContext) {
     //await testRetrieveRecord();
     //await testRetrieveRecords();
-    //await testLookup();         // ✅ Lookup tests
-    await testString();           // ✅ String tests (currently active)
+    //await testLookup();         // ✅ Lookup tests - 15 tests
+    //await testString();         // ✅ String tests - 12 tests
+    //await testInteger();        // ✅ Integer tests - 15 tests
+    await testMoney();            // ✅ Money tests - 16 tests (currently active)
 }
 ```
 

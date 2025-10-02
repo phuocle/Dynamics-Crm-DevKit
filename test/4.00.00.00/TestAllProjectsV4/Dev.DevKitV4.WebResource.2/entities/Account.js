@@ -22,7 +22,8 @@ var formAccount = (function () {
 		//await testRetrieveRecords();
 		//await testLookup();
 		//await testString();
-		await testInteger();
+		//await testInteger();
+		await testMoney();
 
 		/**************************************************************************
 		 * TEST: RetrieveRecord Function - All Overloads
@@ -1027,6 +1028,316 @@ var formAccount = (function () {
 
 			console.log("╔════════════════════════════════════════════════════════════════╗");
 			console.log("║         INTEGER CONTROL TESTS COMPLETED                        ║");
+			console.log("╚════════════════════════════════════════════════════════════════╝");
+		}
+
+		/**************************************************************************
+		 * TEST: Money Control - Revenue Field
+		 * This test demonstrates all available methods and properties for Money controls
+		 **************************************************************************/
+		async function testMoney() {
+			console.log("╔════════════════════════════════════════════════════════════════╗");
+			console.log("║        TESTING MONEY CONTROL: Revenue                          ║");
+			console.log("║        (Located in Header section)                             ║");
+			console.log("╚════════════════════════════════════════════════════════════════╝");
+
+			const moneyControl = form.Header.Revenue;
+
+			try {
+				// Test 1: Get current money value
+				console.log("📋 Test 1: Get Money Value");
+				console.log("─────────────────────────────────────────────────────────");
+				const currentValue = moneyControl.Value;
+				console.log(`✓ Current Value: ${currentValue}`);
+				console.log(`  Type: ${typeof currentValue}`);
+				console.log(`  Is Number: ${typeof currentValue === 'number'}`);
+				console.log(`  Formatted: $${currentValue !== null ? currentValue.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) : 'null'}`);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 1 Error:", error.message);
+			}
+
+			try {
+				// Test 2: Get Control and Attribute Names
+				console.log("📋 Test 2: Get Control and Attribute Names");
+				console.log("─────────────────────────────────────────────────────────");
+				console.log(`✓ Control Name: ${moneyControl.ControlName}`);
+				console.log(`✓ Attribute Name: ${moneyControl.AttributeName}`);
+				console.log(`  (Both should be: 'revenue')`);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 2 Error:", error.message);
+			}
+
+			try {
+				// Test 3: Get Attribute Properties
+				console.log("📋 Test 3: Get Attribute Properties");
+				console.log("─────────────────────────────────────────────────────────");
+				console.log(`✓ Attribute Name: ${moneyControl.AttributeName}`);
+				console.log(`  Attribute Type: ${moneyControl.AttributeType}`);
+				console.log(`  Control Type: ${moneyControl.ControlType}`);
+				console.log(`  Required Level: ${moneyControl.RequiredLevel}`);
+				console.log(`  Submit Mode: ${moneyControl.SubmitMode}`);
+				console.log(`  Is Valid: ${moneyControl.IsValid}`);
+				console.log(`  Is Dirty: ${moneyControl.IsDirty}`);
+				console.log(`  Format: ${moneyControl.Format}`);
+				console.log(`  Min Value: ${moneyControl.Min}`);
+				console.log(`  Max Value: ${moneyControl.Max}`);
+				console.log(`  Precision: ${moneyControl.Precision}`);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 3 Error:", error.message);
+			}
+
+			try {
+				// Test 4: Get Control Visibility
+				console.log("📋 Test 4: Get Control Visibility");
+				console.log("─────────────────────────────────────────────────────────");
+				const isVisible = moneyControl.Visible;
+				console.log(`✓ Visible: ${isVisible}`);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 4 Error:", error.message);
+			}
+
+			try {
+				// Test 5: Get Control Disabled State
+				console.log("📋 Test 5: Get Control Disabled State");
+				console.log("─────────────────────────────────────────────────────────");
+				const isDisabled = moneyControl.Disabled;
+				console.log(`✓ Disabled: ${isDisabled}`);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 5 Error:", error.message);
+			}
+
+			try {
+				// Test 6: Get Control Label
+				console.log("📋 Test 6: Get Control Label");
+				console.log("─────────────────────────────────────────────────────────");
+				const label = moneyControl.Label;
+				console.log(`✓ Label: "${label}"`);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 6 Error:", error.message);
+			}
+
+			try {
+				// Test 7: Set Money Value (and restore)
+				console.log("📋 Test 7: Set Money Value (and restore)");
+				console.log("─────────────────────────────────────────────────────────");
+				const originalValue = moneyControl.Value;
+				console.log(`  Original Value: $${originalValue !== null ? originalValue.toLocaleString('en-US', {minimumFractionDigits: 2}) : 'null'}`);
+
+				// Set new value (add 50000 to current value, or set to 1000000 if null)
+				const testValue = (originalValue || 0) + 50000;
+				moneyControl.Value = testValue;
+				console.log(`✓ New Value Set: $${testValue.toLocaleString('en-US', {minimumFractionDigits: 2})}`);
+
+				// Restore original value after 2 seconds
+				setTimeout(function() {
+					moneyControl.Value = originalValue;
+					console.log(`  ↩ Original value restored: $${originalValue !== null ? originalValue.toLocaleString('en-US', {minimumFractionDigits: 2}) : 'null'}`);
+				}, 2000);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 7 Error:", error.message);
+			}
+
+			try {
+				// Test 8: Test Min/Max Validation
+				console.log("📋 Test 8: Test Min/Max Validation");
+				console.log("─────────────────────────────────────────────────────────");
+				const minValue = moneyControl.Min;
+				const maxValue = moneyControl.Max;
+				console.log(`✓ Min Value: ${minValue !== null && minValue !== undefined ? '$' + minValue.toLocaleString('en-US', {minimumFractionDigits: 2}) : 'No limit'}`);
+				console.log(`✓ Max Value: ${maxValue !== null && maxValue !== undefined ? '$' + maxValue.toLocaleString('en-US', {minimumFractionDigits: 2}) : 'No limit'}`);
+
+				if (minValue !== null && minValue !== undefined) {
+					console.log(`  ℹ Values below $${minValue.toLocaleString('en-US', {minimumFractionDigits: 2})} will be rejected`);
+				}
+				if (maxValue !== null && maxValue !== undefined) {
+					console.log(`  ℹ Values above $${maxValue.toLocaleString('en-US', {minimumFractionDigits: 2})} will be rejected`);
+				}
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 8 Error:", error.message);
+			}
+
+			try {
+				// Test 9: Test Decimal Precision
+				console.log("📋 Test 9: Test Decimal Precision");
+				console.log("─────────────────────────────────────────────────────────");
+				const originalValue = moneyControl.Value;
+				const precision = moneyControl.Precision;
+
+				console.log(`  Current Precision: ${precision} decimal places`);
+				console.log(`  ℹ Attempting to set value with high precision: 123456.789`);
+				moneyControl.Value = 123456.789;
+
+				const actualValue = moneyControl.Value;
+				console.log(`✓ Actual Value Set: $${actualValue !== null ? actualValue.toLocaleString('en-US', {minimumFractionDigits: precision, maximumFractionDigits: precision}) : 'null'}`);
+				console.log(`  ℹ Value rounded to ${precision} decimal places`);
+
+				// Restore original value immediately
+				setTimeout(function() {
+					moneyControl.Value = originalValue;
+					console.log(`  ↩ Original value restored: $${originalValue !== null ? originalValue.toLocaleString('en-US', {minimumFractionDigits: 2}) : 'null'}`);
+				}, 2000);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 9 Error:", error.message);
+			}
+
+			try {
+				// Test 10: Test Notification Methods
+				console.log("📋 Test 10: Test Notification Methods");
+				console.log("─────────────────────────────────────────────────────────");
+
+				// Add error notification
+				moneyControl.SetNotification("This is a test error notification for Revenue field", "TEST_MONEY_ERROR_1");
+				console.log("✓ Error notification set");
+
+				// Clear notification after 3 seconds
+				setTimeout(function() {
+					moneyControl.ClearNotification("TEST_MONEY_ERROR_1");
+					console.log("  ↩ Notification cleared");
+				}, 3000);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 10 Error:", error.message);
+			}
+
+			try {
+				// Test 11: Test SetFocus Method
+				console.log("📋 Test 11: Test SetFocus Method");
+				console.log("─────────────────────────────────────────────────────────");
+				setTimeout(function() {
+					moneyControl.Focus();
+					console.log("✓ Focus set to Revenue field");
+				}, 4000);
+				console.log("ℹ Will set focus in 4 seconds...");
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 11 Error:", error.message);
+			}
+
+			try {
+				// Test 12: Test Visibility Toggle (and restore)
+				console.log("📋 Test 12: Test Visibility Toggle");
+				console.log("─────────────────────────────────────────────────────────");
+				const originalVisibility = moneyControl.Visible;
+				console.log(`  Original Visibility: ${originalVisibility}`);
+
+				// Hide the control
+				moneyControl.Visible = false;
+				console.log("✓ Control hidden");
+
+				// Restore visibility after 2 seconds
+				setTimeout(function() {
+					moneyControl.Visible = originalVisibility;
+					console.log(`  ↩ Visibility restored: ${originalVisibility}`);
+				}, 2000);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 12 Error:", error.message);
+			}
+
+			try {
+				// Test 13: Test Disabled Toggle (and restore)
+				console.log("📋 Test 13: Test Disabled Toggle");
+				console.log("─────────────────────────────────────────────────────────");
+				const originalDisabled = moneyControl.Disabled;
+				console.log(`  Original Disabled State: ${originalDisabled}`);
+
+				// Disable the control
+				moneyControl.Disabled = true;
+				console.log("✓ Control disabled");
+
+				// Restore disabled state after 2 seconds
+				setTimeout(function() {
+					moneyControl.Disabled = originalDisabled;
+					console.log(`  ↩ Disabled state restored: ${originalDisabled}`);
+				}, 2000);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 13 Error:", error.message);
+			}
+
+			try {
+				// Test 14: Test Label Change (and restore)
+				console.log("📋 Test 14: Test Label Change");
+				console.log("─────────────────────────────────────────────────────────");
+				const originalLabel = moneyControl.Label;
+				console.log(`  Original Label: "${originalLabel}"`);
+
+				// Change label
+				moneyControl.Label = `${originalLabel} (TEST)`;
+				console.log(`✓ Label changed to: "${moneyControl.Label}"`);
+
+				// Restore label after 2 seconds
+				setTimeout(function() {
+					moneyControl.Label = originalLabel;
+					console.log(`  ↩ Label restored: "${originalLabel}"`);
+				}, 2000);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 14 Error:", error.message);
+			}
+
+			try {
+				// Test 15: Test Null/Zero Handling
+				console.log("📋 Test 15: Test Null/Zero Handling");
+				console.log("─────────────────────────────────────────────────────────");
+				const originalValue = moneyControl.Value;
+				console.log(`  Original Value: $${originalValue !== null ? originalValue.toLocaleString('en-US', {minimumFractionDigits: 2}) : 'null'}`);
+
+				// Set to zero
+				moneyControl.Value = 0;
+				console.log(`✓ Value set to: $0.00`);
+				console.log(`  Current Value: $${moneyControl.Value !== null ? moneyControl.Value.toLocaleString('en-US', {minimumFractionDigits: 2}) : 'null'}`);
+
+				setTimeout(function() {
+					// Set to null (clear the field)
+					/** @type {any} */ (moneyControl).Value = null;
+					console.log(`✓ Value set to: null (cleared)`);
+					console.log(`  Current Value: ${moneyControl.Value}`);
+
+					// Restore original value after another 2 seconds
+					setTimeout(function() {
+						moneyControl.Value = originalValue;
+						console.log(`  ↩ Original value restored: $${originalValue !== null ? originalValue.toLocaleString('en-US', {minimumFractionDigits: 2}) : 'null'}`);
+					}, 2000);
+				}, 2000);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 15 Error:", error.message);
+			}
+
+			try {
+				// Test 16: Test Negative Values
+				console.log("📋 Test 16: Test Negative Values");
+				console.log("─────────────────────────────────────────────────────────");
+				const originalValue = moneyControl.Value;
+
+				// Set negative value
+				moneyControl.Value = -25000;
+				console.log(`✓ Negative value set: -$25,000.00`);
+				console.log(`  Current Value: $${moneyControl.Value !== null ? moneyControl.Value.toLocaleString('en-US', {minimumFractionDigits: 2}) : 'null'}`);
+				console.log(`  ℹ Some money fields may allow negative values (debts, losses)`);
+
+				// Restore original value after 2 seconds
+				setTimeout(function() {
+					moneyControl.Value = originalValue;
+					console.log(`  ↩ Original value restored: $${originalValue !== null ? originalValue.toLocaleString('en-US', {minimumFractionDigits: 2}) : 'null'}`);
+				}, 2000);
+				console.log("");
+			} catch (/** @type {any} */ error) {
+				console.error("✗ Test 16 Error:", error.message);
+			}
+
+			console.log("╔════════════════════════════════════════════════════════════════╗");
+			console.log("║           MONEY CONTROL TESTS COMPLETED                        ║");
 			console.log("╚════════════════════════════════════════════════════════════════╝");
 		}
 	}
