@@ -2453,13 +2453,10 @@ var formAccount = (function () {
 				console.log(`  ✓ Changed precision to: 2 decimal places`);
 				const valuePrecision2 = floatControl.Value;
 				console.log(`  ⚡ Value with 2 decimals: ${valuePrecision2}`);
-				floatControl.Precision = 5;
-				console.log(`  ✓ Changed precision to: 5 decimal places`);
-				const valuePrecision5 = floatControl.Value;
-				console.log(`  ⚡ Value with 5 decimals: ${valuePrecision5}`);
-				// Restore original precision
-				floatControl.Precision = originalPrecision;
-				console.log(`  ↩ Precision restored to: ${originalPrecision}`);
+				floatControl.Precision = 1;
+				console.log(`  ✓ Changed precision to: 1 decimal places`);
+				const valuePrecision1 = floatControl.Value;
+				console.log(`  ⚡ Value with 1 decimals: ${valuePrecision1}`);
 				console.log("");
 			} catch (/** @type {any} */ error) {
 				console.error("✗ Test 18 Error:", error.message);
