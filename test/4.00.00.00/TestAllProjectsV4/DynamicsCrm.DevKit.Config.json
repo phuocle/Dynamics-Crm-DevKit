@@ -1,12 +1,24 @@
 ﻿{
     "WebResources": [
         {
+            "File": "\\Dev.DevKitV4.WebResource.2\\entities\\Account.form.js",
+            "WebResource": "v4_/entities/Account.form.js"
+        },
+        {
             "File": "\\Dev.DevKitV4.WebResource\\entities\\Account.js",
             "WebResource": "v4_/entities/Account.js"
         },
         {
             "File": "\\Dev.DevKitV4.WebResource.2\\entities\\Account.js",
             "WebResource": "v4_/entities/Account.js"
+        },
+        {
+            "File": "\\Dev.DevKitV4.WebResource.2\\entities\\Account.webapi.js",
+            "WebResource": "v4_/entities/Account.webapi.js"
+        },
+        {
+            "File": "\\Dev.DevKitV4.WebResource.2\\lib\\devkit.js",
+            "WebResource": "v4_/lib/devkit.js"
         }
     ],
     "CustomTemplates": [

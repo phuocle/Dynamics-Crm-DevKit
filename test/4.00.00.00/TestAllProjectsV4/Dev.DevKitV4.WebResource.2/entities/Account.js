@@ -19,6 +19,7 @@ var formAccount = (function () {
 	//BEGIN ON LOAD ========================================================
 	/** @param {any} executionContext */
 	async function UiAddLoaded(executionContext) {
+		debugger;
 		await testRetrieveRecord();
 		await testRetrieveRecords();
 
