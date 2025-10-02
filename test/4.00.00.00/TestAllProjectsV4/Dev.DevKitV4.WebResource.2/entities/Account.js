@@ -4,7 +4,7 @@
 var formAccount = (function () {
 	"use strict";
 	/** @type {DevKitV4.FormAccount} */
-	var form;
+	let form;
 	/** @param {any} executionContext */
 	async function onLoad(executionContext) {
 		form = new DevKitV4.FormAccount(executionContext);
@@ -12,14 +12,14 @@ var formAccount = (function () {
 		form.UiAddLoaded(UiAddLoaded);
 	}
 	function registerEvents() {
-		if (form && form.ExecutionContext.IsInitialLoad()) {
+		if (form.ExecutionContext.IsInitialLoad()) {
 
 		}
 	}
 	//BEGIN ON LOAD ========================================================
 	/** @param {any} executionContext */
 	async function UiAddLoaded(executionContext) {
-		//await testRetrieveRecord();
+		await testRetrieveRecord();
 		await testRetrieveRecords();
 
 		/**************************************************************************

@@ -683,7 +683,7 @@ namespace DynamicsCrm.DevKit.Shared
                 code += $"{TAB}{TAB}form.UiAddLoaded(UiAddLoaded);{NEW_LINE}";
                 code += $"{TAB}}}{NEW_LINE}";
                 code += $"{TAB}function registerEvents() {{{NEW_LINE}";
-                code += $"{TAB}{TAB}if (form && form.ExecutionContext.IsInitialLoad()) {{{NEW_LINE}";
+                code += $"{TAB}{TAB}if (form.ExecutionContext.IsInitialLoad()) {{{NEW_LINE}";
                 code += $"{TAB}{TAB}}}{NEW_LINE}";
                 code += $"{TAB}}}{NEW_LINE}";
                 code += $"{TAB}//BEGIN ON LOAD ========================================================{NEW_LINE}";

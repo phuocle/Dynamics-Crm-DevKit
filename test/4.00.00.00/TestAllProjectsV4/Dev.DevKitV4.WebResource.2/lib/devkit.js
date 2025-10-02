@@ -661,10 +661,12 @@ const devKit = (function () {
         const getOnline = xrmInstance?.WebApi?.online;
         const getOffline = xrmInstance?.WebApi?.offline;
         const extractEntityName = function(fetchXml) {
-            // Remove ?fetchXml= prefix if present
+            // Remove ?fetchXml= prefix if present (case-insensitive)
             let cleanXml = fetchXml;
-            if (fetchXml.includes('fetchXml=')) {
-                cleanXml = decodeURIComponent(fetchXml.split('fetchXml=')[1]);
+            const fetchXmlMatch = fetchXml.match(/fetchxml=/i);
+            if (fetchXmlMatch) {
+                const splitIndex = fetchXml.toLowerCase().indexOf('fetchxml=') + 'fetchxml='.length;
+                cleanXml = decodeURIComponent(fetchXml.substring(splitIndex));
             }
             const parser = new DOMParser();
             const xmlDoc = parser.parseFromString(cleanXml, "text/xml");
@@ -733,12 +735,13 @@ const devKit = (function () {
             let entityLogicalName;
             let options;
             let maxPageSize;
+            const hasFetchXml = entityLogicalNameOrOptions => /fetchxml=/i.test(entityLogicalNameOrOptions);
             const secondParamIsFetchXmlOrOData = typeof entityLogicalNameOrOptions === 'string' &&
-                (entityLogicalNameOrOptions.includes('fetchXml=') ||
-                (entityLogicalNameOrOptions.startsWith('?') && !entityLogicalNameOrOptions.includes('fetchXml=')));
+                (hasFetchXml(entityLogicalNameOrOptions) ||
+                (entityLogicalNameOrOptions.startsWith('?') && !hasFetchXml(entityLogicalNameOrOptions)));
             if (secondParamIsFetchXmlOrOData) {
                 options = entityLogicalNameOrOptions;
-                if (options.includes('fetchXml=')) {
+                if (hasFetchXml(options)) {
                     entityLogicalName = extractEntityName(options);
                 } else {
                     throw new Error('Entity name cannot be determined from OData query. Please provide entityLogicalName as second parameter.');
