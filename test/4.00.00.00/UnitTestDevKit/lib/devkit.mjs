@@ -1,5 +1,14 @@
 'use strict';
 const devKit = (function () {
+    function getXrm() {
+        if (typeof window !== 'undefined' && window.Xrm !== undefined) {
+            return window.Xrm;
+        }
+        if (typeof parent !== 'undefined' && parent.Xrm !== undefined) {
+            return parent.Xrm;
+        }
+        throw new Error('Not found Xrm in the current context');
+    }
     function getter(obj, prop, getter) {
         Object.defineProperty(obj, prop, {
             get: getter,
@@ -166,10 +175,10 @@ const devKit = (function () {
         process.AddOnStageSelected = callback => getProcess?.addOnStageSelected(callback);
         process.EnabledProcesses = callback => {
             getProcess?.getEnabledProcesses(enabledProcesses => {
-                const processes = [];
-                for (const processId in enabledProcesses) {
-                    processes.push({ ProcessId: processId, ProcessName: enabledProcesses[processId] });
-                }
+                const processes = Object.entries(enabledProcesses).map(([processId, processName]) => ({
+                    ProcessId: processId,
+                    ProcessName: processName
+                }));
                 callback(processes);
             });
         };
@@ -177,19 +186,15 @@ const devKit = (function () {
         process.MovePrevious = callback => getProcess?.movePrevious(callback);
         process.ProcessInstances = callback => {
             getProcess?.getProcessInstances(processInstances => {
-                const processes = [];
-                for (const processId in processInstances) {
-                    const process = processInstances[processId];
-                    processes.push({
-                        ProcessId: process.ProcessDefinitionID,
-                        ProcessName: process.ProcessDefinitionName,
-                        CreatedOn: process.CreatedOn,
-                        CreatedOnDate: process.CreatedOnDate,
-                        InstanceId: process.ProcessInstanceID,
-                        InstanceName: process.ProcessInstanceName,
-                        Status: process.StatusCodeName
-                    });
-                }
+                const processes = Object.values(processInstances).map(process => ({
+                    ProcessId: process.ProcessDefinitionID,
+                    ProcessName: process.ProcessDefinitionName,
+                    CreatedOn: process.CreatedOn,
+                    CreatedOnDate: process.CreatedOnDate,
+                    InstanceId: process.ProcessInstanceID,
+                    InstanceName: process.ProcessInstanceName,
+                    Status: process.StatusCodeName
+                }));
                 callback(processes);
             });
         };
@@ -289,14 +294,15 @@ const devKit = (function () {
         field.SetNotification = (message, uniqueId) => control?.setNotification(message, uniqueId);
     }
     function loadFields(formContext, body, type) {
-        for (const field in body) {
+        Object.keys(body).forEach(field => {
             const logicalName = type === undefined ? field?.toLowerCase() : (type + field)?.toLowerCase();
-            const control = formContext?.getControl(logicalName) ?? formContext?.getControl(field); let attribute = formContext?.getAttribute(logicalName);
+            const control = formContext?.getControl(logicalName) ?? formContext?.getControl(field);
+            let attribute = formContext?.getAttribute(logicalName);
             if (!attribute && control?.getAttribute) {
                 attribute = control.getAttribute();
             }
             loadField(formContext, body[field], attribute, control);
-        }
+        });
         if (type === "header_") {
             const getHeaderSection = formContext?.ui?.headerSection;
             getterSetter(body, 'BodyVisible', () => getHeaderSection?.getBodyVisible(), value => { getHeaderSection?.setBodyVisible(value); });
@@ -325,13 +331,13 @@ const devKit = (function () {
             tabs[tab].AddTabStateChange = callback => tabObject?.addTabStateChange(callback);
             tabs[tab].Focus = () => tabObject?.setFocus();
             tabs[tab].RemoveTabStateChange = callback => tabObject?.removeTabStateChange(callback);
-            for (const section in tabs[tab].Section) {
+            Object.keys(tabs[tab].Section).forEach(section => {
                 loadSection(formContext, tab, tabs[tab].Section, section);
-            }
+            });
         }
-        for (const tab in tabs) {
+        Object.keys(tabs).forEach(tab => {
             loadTab(formContext, tabs, tab);
-        }
+        });
     }
     function loadNavigations(formContext, navigations) {
         const getNavigationItem = (navigation) => {
@@ -353,9 +359,9 @@ const devKit = (function () {
             getterSetter(navigations[navigation], 'Visible', () => navigationItem?.getVisible(), value => navigationItem?.setVisible(value));
             navigations[navigation].Focus = () => navigationItem?.setFocus();
         }
-        for (const navigation in navigations) {
+        Object.keys(navigations).forEach(navigation => {
             loadNavigation(formContext, navigations, navigation);
-        }
+        });
     }
     function loadQuickForms(formContext, quickForms) {
         const excludedFields = new Set(["Body", "Controls", "IsLoaded", "Refresh", "Focus", "ControlType", "Disabled", "Label", "ControlName", "ControlParent", "Visible"]);
@@ -374,9 +380,9 @@ const devKit = (function () {
             quickForms[quickForm].IsLoaded = () => quick?.isLoaded();
             quickForms[quickForm].Refresh = () => quick?.refresh();
         }
-        for (const quickForm in quickForms) {
+        Object.keys(quickForms).forEach(quickForm => {
             loadQuickForm(formContext, quickForms, quickForm);
-        }
+        });
     }
     function loadGrids(formContext, grids) {
         const loadGridRow = row => {
@@ -463,9 +469,9 @@ const devKit = (function () {
             grids[grid].RemoveOnLoad = callback => gridControl?.removeOnLoad(callback);
             grids[grid].Url = client => gridControl?.getUrl(client);
         }
-        for (const grid in grids) {
+        Object.keys(grids).forEach(grid => {
             loadGrid(formContext, grids, grid);
-        }
+        });
     }
     function loadUtility(defaultWebResourceName) {
         const utility = {};
@@ -645,9 +651,32 @@ const devKit = (function () {
     }
     function loadWebApi() {
         const obj = {};
-        const getWebApi = Xrm?.WebApi;
-        const getOnline = Xrm?.WebApi?.online;
-        const getOffline = Xrm?.WebApi?.offline;
+        let xrmInstance;
+        try {
+            xrmInstance = getXrm();
+        } catch (e) {
+            xrmInstance = Xrm;
+        }
+        const getWebApi = xrmInstance?.WebApi;
+        const getOnline = xrmInstance?.WebApi?.online;
+        const getOffline = xrmInstance?.WebApi?.offline;
+        const extractEntityName = function(fetchXml) {
+            let cleanXml = fetchXml;
+            const fetchXmlMatch = fetchXml.match(/fetchxml=/i);
+            if (fetchXmlMatch) {
+                const splitIndex = fetchXml.toLowerCase().indexOf('fetchxml=') + 'fetchxml='.length;
+                cleanXml = decodeURIComponent(fetchXml.substring(splitIndex));
+            }
+            else if (fetchXml.trim().startsWith('<')) {
+                cleanXml = fetchXml;
+            }
+            const parser = new DOMParser();
+            const xmlDoc = parser.parseFromString(cleanXml, "text/xml");
+            const entityNode = xmlDoc.querySelector("entity");
+            if (entityNode && entityNode.hasAttribute("name"))
+                return entityNode.getAttribute("name");
+            throw new Error("Entity name not found in fetchXml");
+        };
         obj.CreateRecord = function (entityLogicalName, data, successCallback, errorCallback) {
             const promise = getWebApi?.createRecord(entityLogicalName, data);
             if (successCallback) {
@@ -698,6 +727,84 @@ const devKit = (function () {
         };
         obj.ExecuteMultiple = function (requests, successCallback, errorCallback) {
             const promise = getWebApi?.executeMultiple(requests);
+            if (successCallback) {
+                promise?.then(successCallback, errorCallback);
+            } else {
+                return promise;
+            }
+        };
+        obj.RetrieveRecords = function(apiConstructorOrFactory, entityLogicalNameOrOptions, optionsOrMaxPageSizeOrCallback, maxPageSizeOrSuccessCallback, successCallback, errorCallback) {
+            let entityLogicalName;
+            let options;
+            let maxPageSize;
+            const hasFetchXml = entityLogicalNameOrOptions => /fetchxml=/i.test(entityLogicalNameOrOptions);
+            const isPlainFetchXml = entityLogicalNameOrOptions => typeof entityLogicalNameOrOptions === 'string' && entityLogicalNameOrOptions.trim().startsWith('<fetch');
+            const secondParamIsFetchXmlOrOData = typeof entityLogicalNameOrOptions === 'string' &&
+                (hasFetchXml(entityLogicalNameOrOptions) ||
+                isPlainFetchXml(entityLogicalNameOrOptions) ||
+                (entityLogicalNameOrOptions.startsWith('?') && !hasFetchXml(entityLogicalNameOrOptions)));
+            if (secondParamIsFetchXmlOrOData) {
+                options = entityLogicalNameOrOptions;
+                if (isPlainFetchXml(options)) {
+                    options = '?fetchXml=' + encodeURIComponent(options);
+                }
+                if (hasFetchXml(options) || isPlainFetchXml(entityLogicalNameOrOptions)) {
+                    entityLogicalName = extractEntityName(options);
+                } else {
+                    throw new Error('Entity name cannot be determined from OData query. Please provide entityLogicalName as second parameter.');
+                }
+                if (typeof optionsOrMaxPageSizeOrCallback === 'function') {
+                    successCallback = optionsOrMaxPageSizeOrCallback;
+                    errorCallback = maxPageSizeOrSuccessCallback;
+                    maxPageSize = undefined;
+                } else if (typeof optionsOrMaxPageSizeOrCallback === 'number') {
+                    maxPageSize = optionsOrMaxPageSizeOrCallback;
+                    if (typeof maxPageSizeOrSuccessCallback === 'function') {
+                        successCallback = maxPageSizeOrSuccessCallback;
+                        errorCallback = successCallback;
+                    }
+                }
+            } else {
+                entityLogicalName = entityLogicalNameOrOptions;
+                options = optionsOrMaxPageSizeOrCallback;
+                if (typeof maxPageSizeOrSuccessCallback === 'function') {
+                    errorCallback = successCallback;
+                    successCallback = maxPageSizeOrSuccessCallback;
+                    maxPageSize = undefined;
+                } else if (typeof maxPageSizeOrSuccessCallback === 'number') {
+                    maxPageSize = maxPageSizeOrSuccessCallback;
+                }
+            }
+            const promise = getWebApi?.retrieveMultipleRecords(entityLogicalName, options, maxPageSize).then(result => {
+                if (result.entities && result.entities.length > 0) {
+                    return result.entities.map(entity =>
+                        typeof apiConstructorOrFactory === 'function' && apiConstructorOrFactory.prototype
+                            ? new apiConstructorOrFactory(entity)
+                            : apiConstructorOrFactory(entity)
+                    );
+                }
+                return [];
+            });
+            if (successCallback) {
+                promise?.then(successCallback, errorCallback);
+            } else {
+                return promise;
+            }
+        };
+        obj.RetrieveRecord = function(apiConstructorOrFactory, entityLogicalName, id, options, successCallback, errorCallback) {
+            if (typeof options === 'function') {
+                errorCallback = successCallback;
+                successCallback = options;
+                options = "?$select=*";
+            }
+            if (!options) {
+                options = "?$select=*";
+            }
+            const promise = getWebApi?.retrieveRecord(entityLogicalName, id, options).then(result => {
+                return typeof apiConstructorOrFactory === 'function' && apiConstructorOrFactory.prototype
+                    ? new apiConstructorOrFactory(result)
+                    : apiConstructorOrFactory(result);
+            });
             if (successCallback) {
                 promise?.then(successCallback, errorCallback);
             } else {
@@ -799,125 +906,70 @@ const devKit = (function () {
         return form;
     }
     function loadFormV2(executionContext, defaultWebResourceName, formConfig) {
-        var formContext = null;
-        if (executionContext !== undefined) {
-            if (executionContext.getFormContext === undefined) {
-                formContext = executionContext;
-            }
-            else {
-                formContext = executionContext.getFormContext();
-            }
-        }
-        var form = loadForm(formContext);
-
-        // Load Body Fields
-        var bodyObj = {};
-        var body = formConfig.body || [];
-        var bodyLength = body.length;
-        for (var i = 0; i < bodyLength; i++) {
-            bodyObj[body[i]] = {};
-        }
+        const formContext = executionContext?.getFormContext?.() ?? executionContext ?? null;
+        const form = loadForm(formContext);
+        const { body = [], tab = [], header = [], bpf = [], quick = [], grid = [], navigation = [], dialog = [] } = formConfig;
+        const bodyObj = {};
+        body.forEach(field => bodyObj[field] = {});
         loadFields(formContext, bodyObj);
-
-        // Load Tabs and Sections
-        var tabObj = {};
-        var tab = formConfig.tab || [];
-        var tabLength = tab.length;
-        for (var i = 0; i < tabLength; i++) {
-            var parts = tab[i].split('___');
-            var tabName = parts[0];
-            var sectionName = parts[1];
+        const tabObj = {};
+        tab.forEach(item => {
+            const [tabName, sectionName] = item.split('___');
             if (!tabObj[tabName]) {
                 tabObj[tabName] = { Section: {} };
             }
             tabObj[tabName].Section[sectionName] = {};
-        }
+        });
         loadTabs(formContext, tabObj);
         bodyObj.Tab = tabObj;
         form.Body = bodyObj;
-
-        // Load Header Fields
-        var headerObj = {};
-        var header = formConfig.header || [];
-        var headerLength = header.length;
-        for (var i = 0; i < headerLength; i++) {
-            headerObj[header[i]] = {};
-        }
+        const headerObj = {};
+        header.forEach(field => headerObj[field] = {});
         loadFields(formContext, headerObj, 'header_');
         form.Header = headerObj;
-
-        // Load Process (BPF)
-        var process = loadProcess(formContext);
-        var bpf = formConfig.bpf || [];
-        var bpfLength = bpf.length;
-        if (bpfLength > 0) {
-            var bpfObj = {};
-            var bpfProcessName = null;
-            for (var i = 0; i < bpfLength; i++) {
-                var parts = bpf[i].split('___');
-                var processName = parts[0];
-                var fieldName = parts[1];
+        const process = loadProcess(formContext);
+        if (bpf.length > 0) {
+            const bpfObj = {};
+            let bpfProcessName = null;
+            bpf.forEach(item => {
+                const [processName, fieldName] = item.split('___');
                 if (!bpfProcessName) {
                     bpfProcessName = processName;
                 }
                 bpfObj[fieldName] = {};
-            }
+            });
             loadFields(formContext, bpfObj, 'header_process_');
             if (bpfProcessName) {
                 process[bpfProcessName] = bpfObj;
             }
         }
         form.Process = process;
-
-        // Load Quick Forms
-        var quickFormObj = {};
-        var quick = formConfig.quick || [];
-        var quickLength = quick.length;
-        for (var i = 0; i < quickLength; i++) {
-            var parts = quick[i].split('___');
-            var quickFormName = parts[0];
-            var fieldName = parts[1];
+        const quickFormObj = {};
+        quick.forEach(item => {
+            const [quickFormName, fieldName] = item.split('___');
             if (!quickFormObj[quickFormName]) {
                 quickFormObj[quickFormName] = {};
             }
             if (fieldName) {
                 quickFormObj[quickFormName][fieldName] = {};
             }
-        }
+        });
         loadQuickForms(formContext, quickFormObj);
         form.QuickForm = quickFormObj;
-
-        // Load Grids
-        var gridObj = {};
-        var grid = formConfig.grid || [];
-        var gridLength = grid.length;
-        for (var i = 0; i < gridLength; i++) {
-            gridObj[grid[i]] = {};
-        }
+        const gridObj = {};
+        grid.forEach(item => gridObj[item] = {});
         loadGrids(formContext, gridObj);
         form.Grid = gridObj;
-
-        // Load Navigation
-        var navigationObj = {};
-        var navigation = formConfig.navigation || [];
-        var navigationLength = navigation.length;
-        for (var i = 0; i < navigationLength; i++) {
-            navigationObj[navigation[i]] = {};
-        }
+        const navigationObj = {};
+        navigation.forEach(item => navigationObj[item] = {});
         loadNavigations(formContext, navigationObj);
         form.Navigation = navigationObj;
-
-        // Load Dialog Fields
-        var dialog = formConfig.dialog || [];
         if (dialog.length > 0) {
             form.Dialog = loadFormDialog(formContext, dialog);
         }
-
-        // Load Utility, ExecutionContext, and Others
         form.Utility = loadUtility(defaultWebResourceName);
         form.ExecutionContext = loadExecutionContext(executionContext);
         loadOthers(formContext, form, defaultWebResourceName);
-
         return form;
     }
     return {
@@ -941,168 +993,29 @@ const devKit = (function () {
 })();
 var OptionSet;
 (function (OptionSet) {
-    OptionSet.FormType = {
-        Undefined: 0,
-        Create: 1,
-        Update: 2,
-        ReadOnly: 3,
-        Disabled: 4,
-        BulkEdit: 5
-    };
-    OptionSet.SaveOption = {
-        SaveAndClose: 'saveandclose',
-        SaveAndNew: 'saveandnew'
-    };
-    OptionSet.SaveMode = {
-        Save: 1,
-        SaveAndClose: 2,
-        Deactivate: 5,
-        Reactivate: 6,
-        Email: 7,
-        Disqualify: 15,
-        Qualify: 16,
-        Assign: 47,
-        SaveAsCompleted: 58,
-        SaveAndNew: 59,
-        AutoSave: 70
-    };
-    OptionSet.FormNotificationLevel = {
-        Error: 'ERROR',
-        Warning: 'WARNING',
-        Info: 'INFO'
-    };
-    OptionSet.TabDisplayState = {
-        Expanded: 'expanded',
-        Collapsed: 'collapsed'
-    };
-    OptionSet.TabContentType = {
-        CardSections: 'cardSections',
-        SingleComponent: 'singleComponent'
-    };
-    OptionSet.ProcessDisplayState = {
-        Expanded: 'expanded',
-        Collapsed: 'collapsed',
-        Floating: 'floating'
-    };
-    OptionSet.ProcessStatus = {
-        Active: 'active',
-        Aborted: 'aborted',
-        Finished: 'finished'
-    };
-    OptionSet.FieldAttributeType = {
-        Boolean: 'boolean',
-        DateTime: 'datetime',
-        Decimal: 'decimal',
-        Double: 'double',
-        Integer: 'integer',
-        Lookup: 'lookup',
-        Memo: 'memo',
-        Money: 'money',
-        MultiOptionSet: 'multioptionset',
-        OptionSet: 'optionset',
-        String: 'string'
-    };
-    OptionSet.FieldFormat = {
-        Date: 'date',
-        DateTime: 'datetime',
-        Duration: 'duration',
-        Email: 'email',
-        Language: 'language',
-        None: 'none',
-        TextArea: 'textarea',
-        Text: 'text',
-        TickerSymbol: 'tickersymbol',
-        Phone: 'phone',
-        TimeZone: 'timezone',
-        Url: 'url'
-    };
-    OptionSet.FieldRequiredLevel = {
-        None: 'none',
-        Required: 'required',
-        Recommended: 'recommended'
-    };
-    OptionSet.FieldSubmitMode = {
-        Always: 'always',
-        Never: 'never',
-        Dirty: 'dirty'
-    };
-    OptionSet.FieldControlType = {
-        Standard: 'standard',
-        Iframe: 'iframe',
-        KbSearch: 'kbsearch',
-        Lookup: 'lookup',
-        MultiSelectOptionset: 'multiselectoptionset',
-        Notes: 'notes',
-        OptionSet: 'optionset',
-        QuickForm: 'quickform',
-        SubGrid: 'subgrid',
-        TimerControl: 'timercontrol',
-        TimelineWall: 'timelinewall',
-        WebResource: 'webresource'
-    };
-    OptionSet.FieldNotificationLevel = {
-        Error: 'ERROR',
-        Recommendation: 'RECOMMENDATION'
-    };
-    OptionSet.ProcessCategory = {
-        Qualify: 0,
-        Develop: 1,
-        Propose: 2,
-        Close: 3,
-        Identify: 4,
-        Research: 5,
-        Resolve: 6
-    };
-    OptionSet.TimerState = {
-        NotSet: 1,
-        InProgress: 2,
-        Warning: 3,
-        Violated: 4,
-        Success: 5,
-        Expired: 6,
-        Canceled: 7,
-        Paused: 8
-    };
-    OptionSet.ClientName = {
-        Web: 'Web',
-        Outlook: 'Outlook',
-        Mobile: 'Mobile'
-    };
-    OptionSet.ClientState = {
-        Online: 'Online',
-        Offline: 'Offline'
-    };
-    OptionSet.FormFactor = {
-        Unknown: 0,
-        Desktop: 1,
-        Tablet: 2,
-        Phone: 3
-    };
-    OptionSet.AdvancedConfigSetting = {
-        MaxChildIncidentNumber: 'MaxChildIncidentNumber',
-        MaxIncidentMergeNumber: 'MaxIncidentMergeNumber'
-    };
-    OptionSet.OpenFileOption = {
-        Open: 1,
-        Save: 2
-    };
-    OptionSet.GridType = {
-        HomePageGrid: 1,
-        Subgrid: 2
-    };
-    OptionSet.SidePaneState = {
-        Collapsed: 0,
-        Expanded: 1
-    };
-    OptionSet.FullNameConventionCode = {
-        LastName_Comma_FirstName: 0,
-        FirstName_LastName: 1,
-        LastName_Comma_FirstName_MiddleInitial: 2,
-        FirstName_MiddleInitial_LastName: 3,
-        LastName_Comma_FirstName_MiddleName: 4,
-        FirstName_MiddleName_LastName: 5,
-        LastName_FirstName: 6,
-        LastNameFirstName: 7
-    };
+    OptionSet.AdvancedConfigSetting = Object.freeze({ MaxChildIncidentNumber: 'MaxChildIncidentNumber', MaxIncidentMergeNumber: 'MaxIncidentMergeNumber' });
+    OptionSet.ClientName = Object.freeze({ Web: 'Web', Outlook: 'Outlook', Mobile: 'Mobile' });
+    OptionSet.ClientState = Object.freeze({ Online: 'Online', Offline: 'Offline' });
+    OptionSet.FieldAttributeType = Object.freeze({ Boolean: 'boolean', DateTime: 'datetime', Decimal: 'decimal', Double: 'double', Integer: 'integer', Lookup: 'lookup', Memo: 'memo', Money: 'money', MultiOptionSet: 'multioptionset', OptionSet: 'optionset', String: 'string' });
+    OptionSet.FieldControlType = Object.freeze({ Standard: 'standard', Iframe: 'iframe', KbSearch: 'kbsearch', Lookup: 'lookup', MultiSelectOptionset: 'multiselectoptionset', Notes: 'notes', OptionSet: 'optionset', QuickForm: 'quickform', SubGrid: 'subgrid', TimerControl: 'timercontrol', TimelineWall: 'timelinewall', WebResource: 'webresource' });
+    OptionSet.FieldFormat = Object.freeze({ Date: 'date', DateTime: 'datetime', Duration: 'duration', Email: 'email', Language: 'language', None: 'none', TextArea: 'textarea', Text: 'text', TickerSymbol: 'tickersymbol', Phone: 'phone', TimeZone: 'timezone', Url: 'url' });
+    OptionSet.FieldNotificationLevel = Object.freeze({ Error: 'ERROR', Recommendation: 'RECOMMENDATION' });
+    OptionSet.FieldRequiredLevel = Object.freeze({ None: 'none', Required: 'required', Recommended: 'recommended' });
+    OptionSet.FieldSubmitMode = Object.freeze({ Always: 'always', Never: 'never', Dirty: 'dirty' });
+    OptionSet.FormFactor = Object.freeze({ Unknown: 0, Desktop: 1, Tablet: 2, Phone: 3 });
+    OptionSet.FormNotificationLevel = Object.freeze({ Error: 'ERROR', Warning: 'WARNING', Info: 'INFO' });
+    OptionSet.FormType = Object.freeze({ Undefined: 0, Create: 1, Update: 2, ReadOnly: 3, Disabled: 4, BulkEdit: 5 });
+    OptionSet.FullNameConventionCode = Object.freeze({ LastName_Comma_FirstName: 0, FirstName_LastName: 1, LastName_Comma_FirstName_MiddleInitial: 2, FirstName_MiddleInitial_LastName: 3, LastName_Comma_FirstName_MiddleName: 4, FirstName_MiddleName_LastName: 5, LastName_FirstName: 6, LastNameFirstName: 7 });
+    OptionSet.GridType = Object.freeze({ HomePageGrid: 1, Subgrid: 2 });
+    OptionSet.OpenFileOption = Object.freeze({ Open: 1, Save: 2 });
+    OptionSet.ProcessCategory = Object.freeze({ Qualify: 0, Develop: 1, Propose: 2, Close: 3, Identify: 4, Research: 5, Resolve: 6 });
+    OptionSet.ProcessDisplayState = Object.freeze({ Expanded: 'expanded', Collapsed: 'collapsed', Floating: 'floating' });
+    OptionSet.ProcessStatus = Object.freeze({ Active: 'active', Aborted: 'aborted', Finished: 'finished' });
+    OptionSet.SaveMode = Object.freeze({ Save: 1, SaveAndClose: 2, Deactivate: 5, Reactivate: 6, Email: 7, Disqualify: 15, Qualify: 16, Assign: 47, SaveAsCompleted: 58, SaveAndNew: 59, AutoSave: 70 });
+    OptionSet.SaveOption = Object.freeze({ SaveAndClose: 'saveandclose', SaveAndNew: 'saveandnew' });
+    OptionSet.SidePaneState = Object.freeze({ Collapsed: 0, Expanded: 1 });
+    OptionSet.TabContentType = Object.freeze({ CardSections: 'cardSections', SingleComponent: 'singleComponent' });
+    OptionSet.TabDisplayState = Object.freeze({ Expanded: 'expanded', Collapsed: 'collapsed' });
+    OptionSet.TimerState = Object.freeze({ NotSet: 1, InProgress: 2, Warning: 3, Violated: 4, Success: 5, Expired: 6, Canceled: 7, Paused: 8 });
 })(OptionSet || (OptionSet = {}));
 export { devKit, OptionSet };
