@@ -1,5 +1,20 @@
 'use strict';
 const devKit = (function () {
+    /**
+     * Safe retrieval of Xrm object from current window or parent window
+     * @returns {object} The Xrm object
+     * @throws {Error} If Xrm is not found in current or parent context
+     */
+    function getXrm() {
+        if (typeof window !== 'undefined' && window.Xrm !== undefined) {
+            return window.Xrm;
+        }
+        if (typeof parent !== 'undefined' && parent.Xrm !== undefined) {
+            return parent.Xrm;
+        }
+        throw new Error('Not found Xrm in the current context');
+    }
+
     function getter(obj, prop, getter) {
         Object.defineProperty(obj, prop, {
             get: getter,
@@ -645,9 +660,30 @@ const devKit = (function () {
     }
     function loadWebApi() {
         const obj = {};
-        const getWebApi = Xrm?.WebApi;
-        const getOnline = Xrm?.WebApi?.online;
-        const getOffline = Xrm?.WebApi?.offline;
+        let xrmInstance;
+        try {
+            xrmInstance = getXrm();
+        } catch (e) {
+            xrmInstance = Xrm;
+        }
+        const getWebApi = xrmInstance?.WebApi;
+        const getOnline = xrmInstance?.WebApi?.online;
+        const getOffline = xrmInstance?.WebApi?.offline;
+
+        /**
+         * Extracts the entity name from a FetchXML string
+         * @param {string} fetchXml - The FetchXML query string
+         * @returns {string} The entity name
+         */
+        const extractEntityName = function(fetchXml) {
+            const parser = new DOMParser();
+            const xmlDoc = parser.parseFromString(fetchXml, "text/xml");
+            const entityNode = xmlDoc.querySelector("entity");
+            if (entityNode && entityNode.hasAttribute("name"))
+                return entityNode.getAttribute("name");
+            throw new Error("Entity name not found in fetchXml");
+        };
+
         obj.CreateRecord = function (entityLogicalName, data, successCallback, errorCallback) {
             const promise = getWebApi?.createRecord(entityLogicalName, data);
             if (successCallback) {
@@ -704,6 +740,67 @@ const devKit = (function () {
                 return promise;
             }
         };
+
+        /**
+         * Retrieves multiple records using FetchXML and maps them using the provided constructor or factory function.
+         * @param {(new (data: any) => any) | ((data: any) => any)} apiConstructorOrFactory - Constructor or factory function to create typed instances
+         * @param {string} fetchXml - The FetchXML query string
+         * @param {function} successCallback - Optional callback function for successful response
+         * @param {function} errorCallback - Optional callback function for failed response
+         * @returns {Promise<any[]>} A promise that resolves to an array of instances (when no callback provided)
+         */
+        obj.RetrieveMultiple = function(apiConstructorOrFactory, fetchXml, successCallback, errorCallback) {
+            const entityName = extractEntityName(fetchXml);
+            const encodedFetchXml = "?fetchXml=" + encodeURIComponent(fetchXml);
+            const promise = getWebApi?.retrieveMultipleRecords(entityName, encodedFetchXml).then(result => {
+                if (result.entities && result.entities.length > 0) {
+                    return result.entities.map(entity =>
+                        typeof apiConstructorOrFactory === 'function' && apiConstructorOrFactory.prototype
+                            ? new apiConstructorOrFactory(entity)
+                            : apiConstructorOrFactory(entity)
+                    );
+                }
+                return [];
+            });
+            if (successCallback) {
+                promise?.then(successCallback, errorCallback);
+            } else {
+                return promise;
+            }
+        };
+
+        /**
+         * Retrieves a single record and maps it using the provided constructor or factory function.
+         * @param {(new (data: any) => any) | ((data: any) => any)} apiConstructorOrFactory - Constructor or factory function to create typed instance
+         * @param {string} entityLogicalName - The logical name of the entity
+         * @param {string} id - The GUID of the record
+         * @param {string} options - Optional OData query options (defaults to "?$select=*")
+         * @param {function} successCallback - Optional callback function for successful response
+         * @param {function} errorCallback - Optional callback function for failed response
+         * @returns {Promise<any>} A promise that resolves to an instance (when no callback provided)
+         */
+        obj.Retrieve1Record = function(apiConstructorOrFactory, entityLogicalName, id, options, successCallback, errorCallback) {
+            // Handle overloads: options parameter is optional
+            if (typeof options === 'function') {
+                errorCallback = successCallback;
+                successCallback = options;
+                options = "?$select=*";
+            }
+            if (!options) {
+                options = "?$select=*";
+            }
+            const promise = getWebApi?.retrieveRecord(entityLogicalName, id, options).then(result => {
+                return typeof apiConstructorOrFactory === 'function' && apiConstructorOrFactory.prototype
+                    ? new apiConstructorOrFactory(result)
+                    : apiConstructorOrFactory(result);
+            });
+            if (successCallback) {
+                promise?.then(successCallback, errorCallback);
+            } else {
+                return promise;
+            }
+        };
+
         getter(obj, 'Online', () => {
             const online = {};
             online.Execute = function (request, successCallback, errorCallback) {

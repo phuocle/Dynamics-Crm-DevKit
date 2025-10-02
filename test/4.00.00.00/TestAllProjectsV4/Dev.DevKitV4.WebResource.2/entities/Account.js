@@ -19,6 +19,12 @@ var formAccount = (function () {
 	//BEGIN ON LOAD ========================================================
 	/** @param {any} executionContext */
 	async function UiAddLoaded(executionContext) {
+		await loadAccount();
+		async function loadAccount()
+		{
+			var fetchXml = "";
+            var rows = await form.WebApi.RetrieveMultiple(DevKitV4.AccountApi, fetchXml);
+		}
 	}
 	//END ON LOAD ==========================================================
 	//BEGIN ON CHANGE ======================================================
