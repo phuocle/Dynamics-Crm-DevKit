@@ -4,10 +4,11 @@
 var formAccount = (function () {
 	"use strict";
 	/** @type {DevKitV4.FormAccount} */
-	let form;
+	var form;
 	/** @param {any} executionContext */
 	async function onLoad(executionContext) {
 		form = new DevKitV4.FormAccount(executionContext);
+		debugger;
 		registerEvents();
 		form.UiAddLoaded(UiAddLoaded);
 	}
