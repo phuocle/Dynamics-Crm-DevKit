@@ -1,10 +1,5 @@
 'use strict';
 const devKit = (function () {
-    /**
-     * Safe retrieval of Xrm object from current window or parent window
-     * @returns {object} The Xrm object
-     * @throws {Error} If Xrm is not found in current or parent context
-     */
     function getXrm() {
         if (typeof window !== 'undefined' && window.Xrm !== undefined) {
             return window.Xrm;
@@ -14,7 +9,6 @@ const devKit = (function () {
         }
         throw new Error('Not found Xrm in the current context');
     }
-
     function getter(obj, prop, getter) {
         Object.defineProperty(obj, prop, {
             get: getter,
@@ -181,10 +175,10 @@ const devKit = (function () {
         process.AddOnStageSelected = callback => getProcess?.addOnStageSelected(callback);
         process.EnabledProcesses = callback => {
             getProcess?.getEnabledProcesses(enabledProcesses => {
-                const processes = [];
-                for (const processId in enabledProcesses) {
-                    processes.push({ ProcessId: processId, ProcessName: enabledProcesses[processId] });
-                }
+                const processes = Object.entries(enabledProcesses).map(([processId, processName]) => ({
+                    ProcessId: processId,
+                    ProcessName: processName
+                }));
                 callback(processes);
             });
         };
@@ -192,19 +186,15 @@ const devKit = (function () {
         process.MovePrevious = callback => getProcess?.movePrevious(callback);
         process.ProcessInstances = callback => {
             getProcess?.getProcessInstances(processInstances => {
-                const processes = [];
-                for (const processId in processInstances) {
-                    const process = processInstances[processId];
-                    processes.push({
-                        ProcessId: process.ProcessDefinitionID,
-                        ProcessName: process.ProcessDefinitionName,
-                        CreatedOn: process.CreatedOn,
-                        CreatedOnDate: process.CreatedOnDate,
-                        InstanceId: process.ProcessInstanceID,
-                        InstanceName: process.ProcessInstanceName,
-                        Status: process.StatusCodeName
-                    });
-                }
+                const processes = Object.values(processInstances).map(process => ({
+                    ProcessId: process.ProcessDefinitionID,
+                    ProcessName: process.ProcessDefinitionName,
+                    CreatedOn: process.CreatedOn,
+                    CreatedOnDate: process.CreatedOnDate,
+                    InstanceId: process.ProcessInstanceID,
+                    InstanceName: process.ProcessInstanceName,
+                    Status: process.StatusCodeName
+                }));
                 callback(processes);
             });
         };
@@ -304,14 +294,15 @@ const devKit = (function () {
         field.SetNotification = (message, uniqueId) => control?.setNotification(message, uniqueId);
     }
     function loadFields(formContext, body, type) {
-        for (const field in body) {
+        Object.keys(body).forEach(field => {
             const logicalName = type === undefined ? field?.toLowerCase() : (type + field)?.toLowerCase();
-            const control = formContext?.getControl(logicalName) ?? formContext?.getControl(field); let attribute = formContext?.getAttribute(logicalName);
+            const control = formContext?.getControl(logicalName) ?? formContext?.getControl(field);
+            let attribute = formContext?.getAttribute(logicalName);
             if (!attribute && control?.getAttribute) {
                 attribute = control.getAttribute();
             }
             loadField(formContext, body[field], attribute, control);
-        }
+        });
         if (type === "header_") {
             const getHeaderSection = formContext?.ui?.headerSection;
             getterSetter(body, 'BodyVisible', () => getHeaderSection?.getBodyVisible(), value => { getHeaderSection?.setBodyVisible(value); });
@@ -340,13 +331,13 @@ const devKit = (function () {
             tabs[tab].AddTabStateChange = callback => tabObject?.addTabStateChange(callback);
             tabs[tab].Focus = () => tabObject?.setFocus();
             tabs[tab].RemoveTabStateChange = callback => tabObject?.removeTabStateChange(callback);
-            for (const section in tabs[tab].Section) {
+            Object.keys(tabs[tab].Section).forEach(section => {
                 loadSection(formContext, tab, tabs[tab].Section, section);
-            }
+            });
         }
-        for (const tab in tabs) {
+        Object.keys(tabs).forEach(tab => {
             loadTab(formContext, tabs, tab);
-        }
+        });
     }
     function loadNavigations(formContext, navigations) {
         const getNavigationItem = (navigation) => {
@@ -368,9 +359,9 @@ const devKit = (function () {
             getterSetter(navigations[navigation], 'Visible', () => navigationItem?.getVisible(), value => navigationItem?.setVisible(value));
             navigations[navigation].Focus = () => navigationItem?.setFocus();
         }
-        for (const navigation in navigations) {
+        Object.keys(navigations).forEach(navigation => {
             loadNavigation(formContext, navigations, navigation);
-        }
+        });
     }
     function loadQuickForms(formContext, quickForms) {
         const excludedFields = new Set(["Body", "Controls", "IsLoaded", "Refresh", "Focus", "ControlType", "Disabled", "Label", "ControlName", "ControlParent", "Visible"]);
@@ -389,9 +380,9 @@ const devKit = (function () {
             quickForms[quickForm].IsLoaded = () => quick?.isLoaded();
             quickForms[quickForm].Refresh = () => quick?.refresh();
         }
-        for (const quickForm in quickForms) {
+        Object.keys(quickForms).forEach(quickForm => {
             loadQuickForm(formContext, quickForms, quickForm);
-        }
+        });
     }
     function loadGrids(formContext, grids) {
         const loadGridRow = row => {
@@ -478,9 +469,9 @@ const devKit = (function () {
             grids[grid].RemoveOnLoad = callback => gridControl?.removeOnLoad(callback);
             grids[grid].Url = client => gridControl?.getUrl(client);
         }
-        for (const grid in grids) {
+        Object.keys(grids).forEach(grid => {
             loadGrid(formContext, grids, grid);
-        }
+        });
     }
     function loadUtility(defaultWebResourceName) {
         const utility = {};
@@ -669,12 +660,6 @@ const devKit = (function () {
         const getWebApi = xrmInstance?.WebApi;
         const getOnline = xrmInstance?.WebApi?.online;
         const getOffline = xrmInstance?.WebApi?.offline;
-
-        /**
-         * Extracts the entity name from a FetchXML string
-         * @param {string} fetchXml - The FetchXML query string
-         * @returns {string} The entity name
-         */
         const extractEntityName = function(fetchXml) {
             const parser = new DOMParser();
             const xmlDoc = parser.parseFromString(fetchXml, "text/xml");
@@ -683,7 +668,6 @@ const devKit = (function () {
                 return entityNode.getAttribute("name");
             throw new Error("Entity name not found in fetchXml");
         };
-
         obj.CreateRecord = function (entityLogicalName, data, successCallback, errorCallback) {
             const promise = getWebApi?.createRecord(entityLogicalName, data);
             if (successCallback) {
@@ -740,39 +724,20 @@ const devKit = (function () {
                 return promise;
             }
         };
-
-        /**
-         * Retrieves multiple records and maps them using the provided constructor or factory function.
-         * @param {(new (data: any) => any) | ((data: any) => any)} apiConstructorOrFactory - Constructor or factory function to create typed instances
-         * @param {string} entityLogicalNameOrOptions - The entity logical name (for OData) OR the options string (for FetchXML or OData)
-         * @param {string|number|function} optionsOrMaxPageSizeOrCallback - Optional: OData options, maxPageSize, or callback
-         * @param {number|function} maxPageSizeOrSuccessCallback - Optional: maxPageSize or success callback
-         * @param {function} successCallback - Optional callback function for successful response
-         * @param {function} errorCallback - Optional callback function for failed response
-         * @returns {Promise<any[]>} A promise that resolves to an array of instances (when no callback provided)
-         */
         obj.RetrieveRecords = function(apiConstructorOrFactory, entityLogicalNameOrOptions, optionsOrMaxPageSizeOrCallback, maxPageSizeOrSuccessCallback, successCallback, errorCallback) {
             let entityLogicalName;
             let options;
             let maxPageSize;
-
-            // Detect if second parameter is FetchXML (starts with ?fetchXml=) or just options starting with ?
             const secondParamIsFetchXmlOrOData = typeof entityLogicalNameOrOptions === 'string' &&
                 (entityLogicalNameOrOptions.includes('fetchXml=') ||
-                 (entityLogicalNameOrOptions.startsWith('?') && !entityLogicalNameOrOptions.includes('fetchXml=')));
-
+                (entityLogicalNameOrOptions.startsWith('?') && !entityLogicalNameOrOptions.includes('fetchXml=')));
             if (secondParamIsFetchXmlOrOData) {
-                // Pattern: RetrieveRecords(api, fetchXmlOrODataOptions, [maxPageSize], [callback], [errorCallback])
                 options = entityLogicalNameOrOptions;
-
-                // Extract entity name from FetchXML if present
                 if (options.includes('fetchXml=')) {
                     entityLogicalName = extractEntityName(options);
                 } else {
                     throw new Error('Entity name cannot be determined from OData query. Please provide entityLogicalName as second parameter.');
                 }
-
-                // Handle remaining parameters
                 if (typeof optionsOrMaxPageSizeOrCallback === 'function') {
                     successCallback = optionsOrMaxPageSizeOrCallback;
                     errorCallback = maxPageSizeOrSuccessCallback;
@@ -785,11 +750,8 @@ const devKit = (function () {
                     }
                 }
             } else {
-                // Pattern: RetrieveRecords(api, entityName, options, [maxPageSize], [callback], [errorCallback])
                 entityLogicalName = entityLogicalNameOrOptions;
                 options = optionsOrMaxPageSizeOrCallback;
-
-                // Handle remaining parameters
                 if (typeof maxPageSizeOrSuccessCallback === 'function') {
                     errorCallback = successCallback;
                     successCallback = maxPageSizeOrSuccessCallback;
@@ -798,7 +760,6 @@ const devKit = (function () {
                     maxPageSize = maxPageSizeOrSuccessCallback;
                 }
             }
-
             const promise = getWebApi?.retrieveMultipleRecords(entityLogicalName, options, maxPageSize).then(result => {
                 if (result.entities && result.entities.length > 0) {
                     return result.entities.map(entity =>
@@ -815,19 +776,7 @@ const devKit = (function () {
                 return promise;
             }
         };
-
-        /**
-         * Retrieves a single record and maps it using the provided constructor or factory function.
-         * @param {(new (data: any) => any) | ((data: any) => any)} apiConstructorOrFactory - Constructor or factory function to create typed instance
-         * @param {string} entityLogicalName - The logical name of the entity
-         * @param {string} id - The GUID of the record
-         * @param {string} options - Optional OData query options (defaults to "?$select=*")
-         * @param {function} successCallback - Optional callback function for successful response
-         * @param {function} errorCallback - Optional callback function for failed response
-         * @returns {Promise<any>} A promise that resolves to an instance (when no callback provided)
-         */
         obj.RetrieveRecord = function(apiConstructorOrFactory, entityLogicalName, id, options, successCallback, errorCallback) {
-            // Handle overloads: options parameter is optional
             if (typeof options === 'function') {
                 errorCallback = successCallback;
                 successCallback = options;
@@ -847,7 +796,6 @@ const devKit = (function () {
                 return promise;
             }
         };
-
         getter(obj, 'Online', () => {
             const online = {};
             online.Execute = function (request, successCallback, errorCallback) {
@@ -943,125 +891,70 @@ const devKit = (function () {
         return form;
     }
     function loadFormV2(executionContext, defaultWebResourceName, formConfig) {
-        var formContext = null;
-        if (executionContext !== undefined) {
-            if (executionContext.getFormContext === undefined) {
-                formContext = executionContext;
-            }
-            else {
-                formContext = executionContext.getFormContext();
-            }
-        }
-        var form = loadForm(formContext);
-
-        // Load Body Fields
-        var bodyObj = {};
-        var body = formConfig.body || [];
-        var bodyLength = body.length;
-        for (var i = 0; i < bodyLength; i++) {
-            bodyObj[body[i]] = {};
-        }
+        const formContext = executionContext?.getFormContext?.() ?? executionContext ?? null;
+        const form = loadForm(formContext);
+        const { body = [], tab = [], header = [], bpf = [], quick = [], grid = [], navigation = [], dialog = [] } = formConfig;
+        const bodyObj = {};
+        body.forEach(field => bodyObj[field] = {});
         loadFields(formContext, bodyObj);
-
-        // Load Tabs and Sections
-        var tabObj = {};
-        var tab = formConfig.tab || [];
-        var tabLength = tab.length;
-        for (var i = 0; i < tabLength; i++) {
-            var parts = tab[i].split('___');
-            var tabName = parts[0];
-            var sectionName = parts[1];
+        const tabObj = {};
+        tab.forEach(item => {
+            const [tabName, sectionName] = item.split('___');
             if (!tabObj[tabName]) {
                 tabObj[tabName] = { Section: {} };
             }
             tabObj[tabName].Section[sectionName] = {};
-        }
+        });
         loadTabs(formContext, tabObj);
         bodyObj.Tab = tabObj;
         form.Body = bodyObj;
-
-        // Load Header Fields
-        var headerObj = {};
-        var header = formConfig.header || [];
-        var headerLength = header.length;
-        for (var i = 0; i < headerLength; i++) {
-            headerObj[header[i]] = {};
-        }
+        const headerObj = {};
+        header.forEach(field => headerObj[field] = {});
         loadFields(formContext, headerObj, 'header_');
         form.Header = headerObj;
-
-        // Load Process (BPF)
-        var process = loadProcess(formContext);
-        var bpf = formConfig.bpf || [];
-        var bpfLength = bpf.length;
-        if (bpfLength > 0) {
-            var bpfObj = {};
-            var bpfProcessName = null;
-            for (var i = 0; i < bpfLength; i++) {
-                var parts = bpf[i].split('___');
-                var processName = parts[0];
-                var fieldName = parts[1];
+        const process = loadProcess(formContext);
+        if (bpf.length > 0) {
+            const bpfObj = {};
+            let bpfProcessName = null;
+            bpf.forEach(item => {
+                const [processName, fieldName] = item.split('___');
                 if (!bpfProcessName) {
                     bpfProcessName = processName;
                 }
                 bpfObj[fieldName] = {};
-            }
+            });
             loadFields(formContext, bpfObj, 'header_process_');
             if (bpfProcessName) {
                 process[bpfProcessName] = bpfObj;
             }
         }
         form.Process = process;
-
-        // Load Quick Forms
-        var quickFormObj = {};
-        var quick = formConfig.quick || [];
-        var quickLength = quick.length;
-        for (var i = 0; i < quickLength; i++) {
-            var parts = quick[i].split('___');
-            var quickFormName = parts[0];
-            var fieldName = parts[1];
+        const quickFormObj = {};
+        quick.forEach(item => {
+            const [quickFormName, fieldName] = item.split('___');
             if (!quickFormObj[quickFormName]) {
                 quickFormObj[quickFormName] = {};
             }
             if (fieldName) {
                 quickFormObj[quickFormName][fieldName] = {};
             }
-        }
+        });
         loadQuickForms(formContext, quickFormObj);
         form.QuickForm = quickFormObj;
-
-        // Load Grids
-        var gridObj = {};
-        var grid = formConfig.grid || [];
-        var gridLength = grid.length;
-        for (var i = 0; i < gridLength; i++) {
-            gridObj[grid[i]] = {};
-        }
+        const gridObj = {};
+        grid.forEach(item => gridObj[item] = {});
         loadGrids(formContext, gridObj);
         form.Grid = gridObj;
-
-        // Load Navigation
-        var navigationObj = {};
-        var navigation = formConfig.navigation || [];
-        var navigationLength = navigation.length;
-        for (var i = 0; i < navigationLength; i++) {
-            navigationObj[navigation[i]] = {};
-        }
+        const navigationObj = {};
+        navigation.forEach(item => navigationObj[item] = {});
         loadNavigations(formContext, navigationObj);
         form.Navigation = navigationObj;
-
-        // Load Dialog Fields
-        var dialog = formConfig.dialog || [];
         if (dialog.length > 0) {
             form.Dialog = loadFormDialog(formContext, dialog);
         }
-
-        // Load Utility, ExecutionContext, and Others
         form.Utility = loadUtility(defaultWebResourceName);
         form.ExecutionContext = loadExecutionContext(executionContext);
         loadOthers(formContext, form, defaultWebResourceName);
-
         return form;
     }
     return {
@@ -1085,167 +978,28 @@ const devKit = (function () {
 })();
 var OptionSet;
 (function (OptionSet) {
-    OptionSet.FormType = {
-        Undefined: 0,
-        Create: 1,
-        Update: 2,
-        ReadOnly: 3,
-        Disabled: 4,
-        BulkEdit: 5
-    };
-    OptionSet.SaveOption = {
-        SaveAndClose: 'saveandclose',
-        SaveAndNew: 'saveandnew'
-    };
-    OptionSet.SaveMode = {
-        Save: 1,
-        SaveAndClose: 2,
-        Deactivate: 5,
-        Reactivate: 6,
-        Email: 7,
-        Disqualify: 15,
-        Qualify: 16,
-        Assign: 47,
-        SaveAsCompleted: 58,
-        SaveAndNew: 59,
-        AutoSave: 70
-    };
-    OptionSet.FormNotificationLevel = {
-        Error: 'ERROR',
-        Warning: 'WARNING',
-        Info: 'INFO'
-    };
-    OptionSet.TabDisplayState = {
-        Expanded: 'expanded',
-        Collapsed: 'collapsed'
-    };
-    OptionSet.TabContentType = {
-        CardSections: 'cardSections',
-        SingleComponent: 'singleComponent'
-    };
-    OptionSet.ProcessDisplayState = {
-        Expanded: 'expanded',
-        Collapsed: 'collapsed',
-        Floating: 'floating'
-    };
-    OptionSet.ProcessStatus = {
-        Active: 'active',
-        Aborted: 'aborted',
-        Finished: 'finished'
-    };
-    OptionSet.FieldAttributeType = {
-        Boolean: 'boolean',
-        DateTime: 'datetime',
-        Decimal: 'decimal',
-        Double: 'double',
-        Integer: 'integer',
-        Lookup: 'lookup',
-        Memo: 'memo',
-        Money: 'money',
-        MultiOptionSet: 'multioptionset',
-        OptionSet: 'optionset',
-        String: 'string'
-    };
-    OptionSet.FieldFormat = {
-        Date: 'date',
-        DateTime: 'datetime',
-        Duration: 'duration',
-        Email: 'email',
-        Language: 'language',
-        None: 'none',
-        TextArea: 'textarea',
-        Text: 'text',
-        TickerSymbol: 'tickersymbol',
-        Phone: 'phone',
-        TimeZone: 'timezone',
-        Url: 'url'
-    };
-    OptionSet.FieldRequiredLevel = {
-        None: 'none',
-        Required: 'required',
-        Recommended: 'recommended'
-    };
-    OptionSet.FieldSubmitMode = {
-        Always: 'always',
-        Never: 'never',
-        Dirty: 'dirty'
-    };
-    OptionSet.FieldControlType = {
-        Standard: 'standard',
-        Iframe: 'iframe',
-        KbSearch: 'kbsearch',
-        Lookup: 'lookup',
-        MultiSelectOptionset: 'multiselectoptionset',
-        Notes: 'notes',
-        OptionSet: 'optionset',
-        QuickForm: 'quickform',
-        SubGrid: 'subgrid',
-        TimerControl: 'timercontrol',
-        TimelineWall: 'timelinewall',
-        WebResource: 'webresource'
-    };
-    OptionSet.FieldNotificationLevel = {
-        Error: 'ERROR',
-        Recommendation: 'RECOMMENDATION'
-    };
-    OptionSet.ProcessCategory = {
-        Qualify: 0,
-        Develop: 1,
-        Propose: 2,
-        Close: 3,
-        Identify: 4,
-        Research: 5,
-        Resolve: 6
-    };
-    OptionSet.TimerState = {
-        NotSet: 1,
-        InProgress: 2,
-        Warning: 3,
-        Violated: 4,
-        Success: 5,
-        Expired: 6,
-        Canceled: 7,
-        Paused: 8
-    };
-    OptionSet.ClientName = {
-        Web: 'Web',
-        Outlook: 'Outlook',
-        Mobile: 'Mobile'
-    };
-    OptionSet.ClientState = {
-        Online: 'Online',
-        Offline: 'Offline'
-    };
-    OptionSet.FormFactor = {
-        Unknown: 0,
-        Desktop: 1,
-        Tablet: 2,
-        Phone: 3
-    };
-    OptionSet.AdvancedConfigSetting = {
-        MaxChildIncidentNumber: 'MaxChildIncidentNumber',
-        MaxIncidentMergeNumber: 'MaxIncidentMergeNumber'
-    };
-    OptionSet.OpenFileOption = {
-        Open: 1,
-        Save: 2
-    };
-    OptionSet.GridType = {
-        HomePageGrid: 1,
-        Subgrid: 2
-    };
-    OptionSet.SidePaneState = {
-        Collapsed: 0,
-        Expanded: 1
-    };
-    OptionSet.FullNameConventionCode = {
-        LastName_Comma_FirstName: 0,
-        FirstName_LastName: 1,
-        LastName_Comma_FirstName_MiddleInitial: 2,
-        FirstName_MiddleInitial_LastName: 3,
-        LastName_Comma_FirstName_MiddleName: 4,
-        FirstName_MiddleName_LastName: 5,
-        LastName_FirstName: 6,
-        LastNameFirstName: 7
-    };
+    OptionSet.AdvancedConfigSetting = { MaxChildIncidentNumber: 'MaxChildIncidentNumber', MaxIncidentMergeNumber: 'MaxIncidentMergeNumber' };
+    OptionSet.ClientName = { Web: 'Web', Outlook: 'Outlook', Mobile: 'Mobile' };
+    OptionSet.ClientState = { Online: 'Online', Offline: 'Offline' };
+    OptionSet.FieldAttributeType = { Boolean: 'boolean', DateTime: 'datetime', Decimal: 'decimal', Double: 'double', Integer: 'integer', Lookup: 'lookup', Memo: 'memo', Money: 'money', MultiOptionSet: 'multioptionset', OptionSet: 'optionset', String: 'string' };
+    OptionSet.FieldControlType = { Standard: 'standard', Iframe: 'iframe', KbSearch: 'kbsearch', Lookup: 'lookup', MultiSelectOptionset: 'multiselectoptionset', Notes: 'notes', OptionSet: 'optionset', QuickForm: 'quickform', SubGrid: 'subgrid', TimerControl: 'timercontrol', TimelineWall: 'timelinewall', WebResource: 'webresource' };
+    OptionSet.FieldFormat = { Date: 'date', DateTime: 'datetime', Duration: 'duration', Email: 'email', Language: 'language', None: 'none', TextArea: 'textarea', Text: 'text', TickerSymbol: 'tickersymbol', Phone: 'phone', TimeZone: 'timezone', Url: 'url' };
+    OptionSet.FieldNotificationLevel = { Error: 'ERROR', Recommendation: 'RECOMMENDATION' };
+    OptionSet.FieldRequiredLevel = { None: 'none', Required: 'required', Recommended: 'recommended' };
+    OptionSet.FieldSubmitMode = { Always: 'always', Never: 'never', Dirty: 'dirty' };
+    OptionSet.FormFactor = { Unknown: 0, Desktop: 1, Tablet: 2, Phone: 3 };
+    OptionSet.FormNotificationLevel = { Error: 'ERROR', Warning: 'WARNING', Info: 'INFO' };
+    OptionSet.FormType = { Undefined: 0, Create: 1, Update: 2, ReadOnly: 3, Disabled: 4, BulkEdit: 5 };
+    OptionSet.FullNameConventionCode = { LastName_Comma_FirstName: 0, FirstName_LastName: 1, LastName_Comma_FirstName_MiddleInitial: 2, FirstName_MiddleInitial_LastName: 3, LastName_Comma_FirstName_MiddleName: 4, FirstName_MiddleName_LastName: 5, LastName_FirstName: 6, LastNameFirstName: 7 };
+    OptionSet.GridType = { HomePageGrid: 1, Subgrid: 2 };
+    OptionSet.OpenFileOption = { Open: 1, Save: 2 };
+    OptionSet.ProcessCategory = { Qualify: 0, Develop: 1, Propose: 2, Close: 3, Identify: 4, Research: 5, Resolve: 6 };
+    OptionSet.ProcessDisplayState = { Expanded: 'expanded', Collapsed: 'collapsed', Floating: 'floating' };
+    OptionSet.ProcessStatus = { Active: 'active', Aborted: 'aborted', Finished: 'finished' };
+    OptionSet.SaveMode = { Save: 1, SaveAndClose: 2, Deactivate: 5, Reactivate: 6, Email: 7, Disqualify: 15, Qualify: 16, Assign: 47, SaveAsCompleted: 58, SaveAndNew: 59, AutoSave: 70 };
+    OptionSet.SaveOption = { SaveAndClose: 'saveandclose', SaveAndNew: 'saveandnew' };
+    OptionSet.SidePaneState = { Collapsed: 0, Expanded: 1 };
+    OptionSet.TabContentType = { CardSections: 'cardSections', SingleComponent: 'singleComponent' };
+    OptionSet.TabDisplayState = { Expanded: 'expanded', Collapsed: 'collapsed' };
+    OptionSet.TimerState = { NotSet: 1, InProgress: 2, Warning: 3, Violated: 4, Success: 5, Expired: 6, Canceled: 7, Paused: 8 };
 })(OptionSet || (OptionSet = {}));
