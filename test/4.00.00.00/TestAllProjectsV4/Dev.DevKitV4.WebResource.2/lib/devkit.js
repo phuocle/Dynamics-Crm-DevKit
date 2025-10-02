@@ -742,17 +742,64 @@ const devKit = (function () {
         };
 
         /**
-         * Retrieves multiple records using FetchXML and maps them using the provided constructor or factory function.
+         * Retrieves multiple records and maps them using the provided constructor or factory function.
          * @param {(new (data: any) => any) | ((data: any) => any)} apiConstructorOrFactory - Constructor or factory function to create typed instances
-         * @param {string} fetchXml - The FetchXML query string
+         * @param {string} entityLogicalNameOrOptions - The entity logical name (for OData) OR the options string (for FetchXML or OData)
+         * @param {string|number|function} optionsOrMaxPageSizeOrCallback - Optional: OData options, maxPageSize, or callback
+         * @param {number|function} maxPageSizeOrSuccessCallback - Optional: maxPageSize or success callback
          * @param {function} successCallback - Optional callback function for successful response
          * @param {function} errorCallback - Optional callback function for failed response
          * @returns {Promise<any[]>} A promise that resolves to an array of instances (when no callback provided)
          */
-        obj.RetrieveMultiple = function(apiConstructorOrFactory, fetchXml, successCallback, errorCallback) {
-            const entityName = extractEntityName(fetchXml);
-            const encodedFetchXml = "?fetchXml=" + encodeURIComponent(fetchXml);
-            const promise = getWebApi?.retrieveMultipleRecords(entityName, encodedFetchXml).then(result => {
+        obj.RetrieveRecords = function(apiConstructorOrFactory, entityLogicalNameOrOptions, optionsOrMaxPageSizeOrCallback, maxPageSizeOrSuccessCallback, successCallback, errorCallback) {
+            let entityLogicalName;
+            let options;
+            let maxPageSize;
+
+            // Detect if second parameter is FetchXML (starts with ?fetchXml=) or just options starting with ?
+            const secondParamIsFetchXmlOrOData = typeof entityLogicalNameOrOptions === 'string' &&
+                (entityLogicalNameOrOptions.includes('fetchXml=') ||
+                 (entityLogicalNameOrOptions.startsWith('?') && !entityLogicalNameOrOptions.includes('fetchXml=')));
+
+            if (secondParamIsFetchXmlOrOData) {
+                // Pattern: RetrieveRecords(api, fetchXmlOrODataOptions, [maxPageSize], [callback], [errorCallback])
+                options = entityLogicalNameOrOptions;
+
+                // Extract entity name from FetchXML if present
+                if (options.includes('fetchXml=')) {
+                    entityLogicalName = extractEntityName(options);
+                } else {
+                    throw new Error('Entity name cannot be determined from OData query. Please provide entityLogicalName as second parameter.');
+                }
+
+                // Handle remaining parameters
+                if (typeof optionsOrMaxPageSizeOrCallback === 'function') {
+                    successCallback = optionsOrMaxPageSizeOrCallback;
+                    errorCallback = maxPageSizeOrSuccessCallback;
+                    maxPageSize = undefined;
+                } else if (typeof optionsOrMaxPageSizeOrCallback === 'number') {
+                    maxPageSize = optionsOrMaxPageSizeOrCallback;
+                    if (typeof maxPageSizeOrSuccessCallback === 'function') {
+                        successCallback = maxPageSizeOrSuccessCallback;
+                        errorCallback = successCallback;
+                    }
+                }
+            } else {
+                // Pattern: RetrieveRecords(api, entityName, options, [maxPageSize], [callback], [errorCallback])
+                entityLogicalName = entityLogicalNameOrOptions;
+                options = optionsOrMaxPageSizeOrCallback;
+
+                // Handle remaining parameters
+                if (typeof maxPageSizeOrSuccessCallback === 'function') {
+                    errorCallback = successCallback;
+                    successCallback = maxPageSizeOrSuccessCallback;
+                    maxPageSize = undefined;
+                } else if (typeof maxPageSizeOrSuccessCallback === 'number') {
+                    maxPageSize = maxPageSizeOrSuccessCallback;
+                }
+            }
+
+            const promise = getWebApi?.retrieveMultipleRecords(entityLogicalName, options, maxPageSize).then(result => {
                 if (result.entities && result.entities.length > 0) {
                     return result.entities.map(entity =>
                         typeof apiConstructorOrFactory === 'function' && apiConstructorOrFactory.prototype
@@ -779,7 +826,7 @@ const devKit = (function () {
          * @param {function} errorCallback - Optional callback function for failed response
          * @returns {Promise<any>} A promise that resolves to an instance (when no callback provided)
          */
-        obj.Retrieve1Record = function(apiConstructorOrFactory, entityLogicalName, id, options, successCallback, errorCallback) {
+        obj.RetrieveRecord = function(apiConstructorOrFactory, entityLogicalName, id, options, successCallback, errorCallback) {
             // Handle overloads: options parameter is optional
             if (typeof options === 'function') {
                 errorCallback = successCallback;

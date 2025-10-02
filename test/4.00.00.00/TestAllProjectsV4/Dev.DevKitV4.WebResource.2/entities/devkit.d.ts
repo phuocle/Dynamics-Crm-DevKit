@@ -1504,26 +1504,68 @@ declare namespace DevKit {
          */
         ExecuteMultiple(requests: Array<DevKit.WebApi.ExecuteRequest>): Promise<Array<DevKit.WebApi.ExecuteResponse>>;
         /**
-         * Retrieves multiple records using FetchXML and maps them using the provided constructor or factory function.
+         * Retrieves multiple records and maps them using the provided constructor or factory function.
          * @template T The type of the entity to return
          * @param apiConstructorOrFactory - Constructor or factory function that takes entity data and returns typed instance
-         * @param fetchXml - The FetchXML query string
+         * @param entityLogicalName - The entity logical name of the records you want to retrieve. For example: "account"
+         * @param options - OData system query options or FetchXML query to retrieve your data
+         * @param maxPageSize - Specify a positive number that indicates the number of records to be returned per page
          * @param successCallback - The function that will be passed through and be called by a successful response
          * @param errorCallback - The function that will be passed through and be called by a failed response
          * @example
-         * form.WebApi.RetrieveMultiple(DevKitV4.AccountApi, fetchXml, (rows) => { console.log(rows); });
+         * form.WebApi.RetrieveRecords(DevKitV4.AccountApi, 'account', '?$select=name&$top=3', 3, (rows) => { console.log(rows); });
          */
-        RetrieveMultiple<T>(apiConstructorOrFactory: ((data: any) => T) | (new (data: any) => T), fetchXml: string, successCallback: (result: T[]) => void, errorCallback?: (error: DevKit.WebApi.ErrorCallbackObject) => void): void;
+        RetrieveRecords<T>(apiConstructorOrFactory: ((data: any) => T) | (new (data: any) => T), entityLogicalName: string, options: string, maxPageSize: number, successCallback: (result: T[]) => void, errorCallback?: (error: DevKit.WebApi.ErrorCallbackObject) => void): void;
         /**
-         * Retrieves multiple records using FetchXML and maps them using the provided constructor or factory function (Promise-based)
+         * Retrieves multiple records and maps them using the provided constructor or factory function.
          * @template T The type of the entity to return
          * @param apiConstructorOrFactory - Constructor or factory function that takes entity data and returns typed instance
-         * @param fetchXml - The FetchXML query string
+         * @param entityLogicalName - The entity logical name of the records you want to retrieve. For example: "account"
+         * @param options - OData system query options or FetchXML query to retrieve your data
+         * @param successCallback - The function that will be passed through and be called by a successful response
+         * @param errorCallback - The function that will be passed through and be called by a failed response
+         * @example
+         * form.WebApi.RetrieveRecords(DevKitV4.AccountApi, 'account', '?$select=name', (rows) => { console.log(rows); });
+         */
+        RetrieveRecords<T>(apiConstructorOrFactory: ((data: any) => T) | (new (data: any) => T), entityLogicalName: string, options: string, successCallback: (result: T[]) => void, errorCallback?: (error: DevKit.WebApi.ErrorCallbackObject) => void): void;
+        /**
+         * Retrieves multiple records using FetchXML and maps them using the provided constructor or factory function.
+         * Entity name is automatically extracted from FetchXML.
+         * @template T The type of the entity to return
+         * @param apiConstructorOrFactory - Constructor or factory function that takes entity data and returns typed instance
+         * @param fetchXml - FetchXML query string (must include ?fetchXml= prefix)
+         * @param successCallback - The function that will be passed through and be called by a successful response
+         * @param errorCallback - The function that will be passed through and be called by a failed response
+         * @example
+         * form.WebApi.RetrieveRecords(DevKitV4.AccountApi, '?fetchXml=<fetch><entity name="account"/></fetch>', (rows) => { console.log(rows); });
+         */
+        RetrieveRecords<T>(apiConstructorOrFactory: ((data: any) => T) | (new (data: any) => T), fetchXml: string, successCallback: (result: T[]) => void, errorCallback?: (error: DevKit.WebApi.ErrorCallbackObject) => void): void;
+        /**
+         * Retrieves multiple records and maps them using the provided constructor or factory function (Promise-based).
+         * @template T The type of the entity to return
+         * @param apiConstructorOrFactory - Constructor or factory function that takes entity data and returns typed instance
+         * @param entityLogicalName - The entity logical name of the records you want to retrieve. For example: "account"
+         * @param options - Optional OData system query options or FetchXML query to retrieve your data
+         * @param maxPageSize - Optional: Specify a positive number that indicates the number of records to be returned per page
          * @returns A promise that resolves to an array of typed instances
          * @example
-         * const rows = await form.WebApi.RetrieveMultiple(DevKitV4.AccountApi, '<fetch><entity name="account"/></fetch>');
+         * const rows = await form.WebApi.RetrieveRecords(DevKitV4.AccountApi, 'account', '?$select=name&$top=3');
+         * @example
+         * const rows = await form.WebApi.RetrieveRecords(DevKitV4.AccountApi, 'account', '?fetchXml=<fetch><entity name="account"/></fetch>');
          */
-        RetrieveMultiple<T>(apiConstructorOrFactory: ((data: any) => T) | (new (data: any) => T), fetchXml: string): Promise<T[]>;
+        RetrieveRecords<T>(apiConstructorOrFactory: ((data: any) => T) | (new (data: any) => T), entityLogicalName: string, options?: string, maxPageSize?: number): Promise<T[]>;
+        /**
+         * Retrieves multiple records using FetchXML and maps them using the provided constructor or factory function (Promise-based).
+         * Entity name is automatically extracted from FetchXML.
+         * @template T The type of the entity to return
+         * @param apiConstructorOrFactory - Constructor or factory function that takes entity data and returns typed instance
+         * @param fetchXml - FetchXML query string (must include ?fetchXml= prefix)
+         * @param maxPageSize - Optional: Specify a positive number that indicates the number of records to be returned per page
+         * @returns A promise that resolves to an array of typed instances
+         * @example
+         * const rows = await form.WebApi.RetrieveRecords(DevKitV4.AccountApi, '?fetchXml=<fetch><entity name="account"/></fetch>');
+         */
+        RetrieveRecords<T>(apiConstructorOrFactory: ((data: any) => T) | (new (data: any) => T), fetchXml: string, maxPageSize?: number): Promise<T[]>;
         /**
          * Retrieves a single record and maps it using the provided constructor or factory function.
          * @template T The type of the entity to return
@@ -1534,9 +1576,9 @@ declare namespace DevKit {
          * @param successCallback - The function that will be passed through and be called by a successful response
          * @param errorCallback - The function that will be passed through and be called by a failed response
          * @example
-         * form.WebApi.Retrieve1Record(DevKitV4.AccountApi, 'account', accountId, (record) => { console.log(record); });
+         * form.WebApi.RetrieveRecord(DevKitV4.AccountApi, form.EntityName, form.EntityId, (record) => { console.log(record); });
          */
-        Retrieve1Record<T>(apiConstructorOrFactory: ((data: any) => T) | (new (data: any) => T), entityLogicalName: string, id: string, options: string, successCallback: (result: T) => void, errorCallback?: (error: DevKit.WebApi.ErrorCallbackObject) => void): void;
+        RetrieveRecord<T>(apiConstructorOrFactory: ((data: any) => T) | (new (data: any) => T), entityLogicalName: string, id: string, options: string, successCallback: (result: T) => void, errorCallback?: (error: DevKit.WebApi.ErrorCallbackObject) => void): void;
         /**
          * Retrieves a single record and maps it using the provided constructor or factory function.
          * @template T The type of the entity to return
@@ -1546,9 +1588,9 @@ declare namespace DevKit {
          * @param successCallback - The function that will be passed through and be called by a successful response
          * @param errorCallback - The function that will be passed through and be called by a failed response
          * @example
-         * form.WebApi.Retrieve1Record(DevKitV4.AccountApi, 'account', accountId, (record) => { console.log(record); });
+         * form.WebApi.RetrieveRecord(DevKitV4.AccountApi, form.EntityName, form.EntityId, (record) => { console.log(record); });
          */
-        Retrieve1Record<T>(apiConstructorOrFactory: ((data: any) => T) | (new (data: any) => T), entityLogicalName: string, id: string, successCallback: (result: T) => void, errorCallback?: (error: DevKit.WebApi.ErrorCallbackObject) => void): void;
+        RetrieveRecord<T>(apiConstructorOrFactory: ((data: any) => T) | (new (data: any) => T), entityLogicalName: string, id: string, successCallback: (result: T) => void, errorCallback?: (error: DevKit.WebApi.ErrorCallbackObject) => void): void;
         /**
          * Retrieves a single record and maps it using the provided constructor or factory function (Promise-based).
          * @template T The type of the entity to return
@@ -1558,9 +1600,9 @@ declare namespace DevKit {
          * @param options - Optional OData query options (defaults to "?$select=*")
          * @returns A promise that resolves to a typed instance
          * @example
-         * const account = await form.WebApi.Retrieve1Record(DevKitV4.AccountApi, 'account', accountId);
+         * const account = await form.WebApi.RetrieveRecord(DevKitV4.AccountApi, 'account', accountId);
          */
-        Retrieve1Record<T>(apiConstructorOrFactory: ((data: any) => T) | (new (data: any) => T), entityLogicalName: string, id: string, options?: string): Promise<T>;
+        RetrieveRecord<T>(apiConstructorOrFactory: ((data: any) => T) | (new (data: any) => T), entityLogicalName: string, id: string, options?: string): Promise<T>;
         /**
          * Contains methods to execute operations that will be executed against the server even when the user is offline
          */

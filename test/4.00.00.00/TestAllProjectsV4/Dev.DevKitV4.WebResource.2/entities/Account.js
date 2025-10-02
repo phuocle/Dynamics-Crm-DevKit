@@ -22,8 +22,12 @@ var formAccount = (function () {
 		await loadAccount();
 		async function loadAccount()
 		{
-			var fetchXml = "";
-            var rows = await form.WebApi.RetrieveMultiple(DevKitV4.AccountApi, fetchXml);
+			// Using FetchXML - entity name is auto-extracted
+			var fetchXml = "?fetchXml=<fetch><entity name='account'><attribute name='name'/></entity></fetch>";
+            var rows = await form.WebApi.RetrieveRecords(DevKitV4.AccountApi, fetchXml);
+			// Using OData - must provide entity name
+			// var rows = await form.WebApi.RetrieveRecords(DevKitV4.AccountApi, 'account', '?$select=name&$top=3');
+			var row = await form.WebApi.RetrieveRecord(DevKitV4.AccountApi, form.EntityName, form.EntityId);
 		}
 	}
 	//END ON LOAD ==========================================================
