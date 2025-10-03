@@ -11,3 +11,23 @@
 
 # For Solution
 * Scan the files for the loaded project in the open solution.
+
+# Develop DynamicsCrm.DevKit.Cli
+* If the prompt related to DynamicsCrm.DevKit.Cli, please check the code in these folders
+    * DynamicsCrm.DevKit.Cli
+    * DynamicsCrm.DevKit.Shared
+
+# Develop DynamicsCrm.DevKit.Tools
+* If the prompt related to DynamicsCrm.DevKit.Tools, please check the code in these folders
+    * DynamicsCrm.DevKit.Tools
+    * DynamicsCrm.DevKit.Shared
+
+# Develop DynamicsCrm.DevKit
+* If the prompt related to DynamicsCrm.DevKit, please check the code in these folders
+    * DynamicsCrm.DevKit
+    * DynamicsCrm.DevKit.Shared
+
+# Develop DynamicsCrm.DevKit.Analyzers
+* If the prompt related to DynamicsCrm.DevKit.Analyzers, please check the code
+    * DynamicsCrm.DevKit.Analyzers
+    * DynamicsCrm.DevKit.Shared
