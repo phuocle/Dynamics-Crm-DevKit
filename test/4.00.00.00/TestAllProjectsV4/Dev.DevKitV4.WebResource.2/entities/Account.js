@@ -56,7 +56,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 1: Promise-based with options parameter
-				console.log("Test 1: RetrieveRecord with options (Promise-based)");
+				console.log("⚡ Test 1: RetrieveRecord with options (Promise-based)");
 				var record1 = await form.WebApi.RetrieveRecord(
 					DevKitV4.AccountApi,
 					form.EntityName,
@@ -70,7 +70,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 2: Promise-based without options (defaults to ?$select=*)
-				console.log("Test 2: RetrieveRecord without options (Promise-based)");
+				console.log("⚡ Test 2: RetrieveRecord without options (Promise-based)");
 				var record2 = await form.WebApi.RetrieveRecord(
 					DevKitV4.AccountApi,
 					form.EntityName,
@@ -83,7 +83,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 3: Callback-based with options parameter
-				console.log("Test 3: RetrieveRecord with options (Callback-based)");
+				console.log("⚡ Test 3: RetrieveRecord with options (Callback-based)");
 				form.WebApi.RetrieveRecord(
 					DevKitV4.AccountApi,
 					form.EntityName,
@@ -102,7 +102,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 4: Callback-based without options (defaults to ?$select=*)
-				console.log("Test 4: RetrieveRecord without options (Callback-based)");
+				console.log("⚡ Test 4: RetrieveRecord without options (Callback-based)");
 				form.WebApi.RetrieveRecord(
 					DevKitV4.AccountApi,
 					form.EntityName,
@@ -129,7 +129,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 1: FetchXML Promise-based (entity name auto-extracted)
-				console.log("Test 1: RetrieveRecords with FetchXML (Promise-based)");
+				console.log("⚡ Test 1: RetrieveRecords with FetchXML (Promise-based)");
 				var fetchXml1 = "<fetch top='3'><entity name='account'><attribute name='name'/><attribute name='accountnumber'/></entity></fetch>";
 				var records1 = await form.WebApi.RetrieveRecords(DevKitV4.AccountApi, fetchXml1);
 				console.log("✓ Test 1 Result Count:", records1.length, "Records:", records1);
@@ -139,7 +139,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 2: FetchXML Promise-based with maxPageSize (entity name auto-extracted)
-				console.log("Test 2: RetrieveRecords with FetchXML and maxPageSize (Promise-based)");
+				console.log("⚡ Test 2: RetrieveRecords with FetchXML and maxPageSize (Promise-based)");
 				var fetchXml2 = "<fetch><entity name='account'><attribute name='name'/><attribute name='telephone1'/></entity></fetch>";
 				var records2 = await form.WebApi.RetrieveRecords(DevKitV4.AccountApi, fetchXml2, 5);
 				console.log("✓ Test 2 Result Count:", records2.length, "Records:", records2);
@@ -149,7 +149,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 3: FetchXML Callback-based (entity name auto-extracted)
-				console.log("Test 3: RetrieveRecords with FetchXML (Callback-based)");
+				console.log("⚡ Test 3: RetrieveRecords with FetchXML (Callback-based)");
 				var fetchXml3 = "<fetch top='2'><entity name='account'><attribute name='name'/><attribute name='revenue'/></entity></fetch>";
 				form.WebApi.RetrieveRecords(
 					DevKitV4.AccountApi,
@@ -167,7 +167,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 4: OData Promise-based (entity name must be provided)
-				console.log("Test 4: RetrieveRecords with OData (Promise-based)");
+				console.log("⚡ Test 4: RetrieveRecords with OData (Promise-based)");
 				var records4 = await form.WebApi.RetrieveRecords(
 					DevKitV4.AccountApi,
 					'account',
@@ -180,7 +180,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 5: OData Promise-based with maxPageSize (entity name must be provided)
-				console.log("Test 5: RetrieveRecords with OData and maxPageSize (Promise-based)");
+				console.log("⚡ Test 5: RetrieveRecords with OData and maxPageSize (Promise-based)");
 				var records5 = await form.WebApi.RetrieveRecords(
 					DevKitV4.AccountApi,
 					'account',
@@ -194,7 +194,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 6: OData Callback-based (entity name must be provided)
-				console.log("Test 6: RetrieveRecords with OData (Callback-based)");
+				console.log("⚡ Test 6: RetrieveRecords with OData (Callback-based)");
 				form.WebApi.RetrieveRecords(
 					DevKitV4.AccountApi,
 					'account',
@@ -212,7 +212,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 7: OData Callback-based with maxPageSize (entity name must be provided)
-				console.log("Test 7: RetrieveRecords with OData, maxPageSize and Callback");
+				console.log("⚡ Test 7: RetrieveRecords with OData, maxPageSize and Callback");
 				form.WebApi.RetrieveRecords(
 					DevKitV4.AccountApi,
 					'account',
@@ -231,7 +231,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 8: OData without options (should get all records - be careful with this!)
-				console.log("Test 8: RetrieveRecords with OData without filter");
+				console.log("⚡ Test 8: RetrieveRecords with OData without filter");
 				var records8 = await form.WebApi.RetrieveRecords(
 					DevKitV4.AccountApi,
 					'account'
@@ -257,8 +257,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 1: Get current lookup value
-				console.log("📋 Test 1: Get Lookup Value");
-				console.log("─────────────────────────────────────────────────────────");
+				console.log("⚡ Test 1: Get Lookup Value");
 				const currentValue = lookup.Value;
 				if (currentValue && currentValue.length > 0) {
 					console.log("✓ Current Value Found:");
@@ -277,8 +276,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 2: Check if it's a PartyList lookup
-				console.log("📋 Test 2: Check IsPartyList Property");
-				console.log("─────────────────────────────────────────────────────────");
+				console.log("⚡ Test 2: Check IsPartyList Property");
 				const isPartyList = lookup.IsPartyList;
 				console.log(`✓ IsPartyList: ${isPartyList}`);
 				console.log(`  (PrimaryContactId should be 'false' - single lookup)`);
@@ -289,8 +287,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 3: Get Entity Types allowed
-				console.log("📋 Test 3: Get Allowed Entity Types");
-				console.log("─────────────────────────────────────────────────────────");
+				console.log("⚡ Test 3: Get Allowed Entity Types");
 				const entityTypes = lookup.EntityTypes;
 				console.log("✓ Allowed Entity Types:", entityTypes);
 				console.log(`  (Should contain: 'contact')`);
@@ -301,8 +298,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 4: Get Default View
-				console.log("📋 Test 4: Get Default View GUID");
-				console.log("─────────────────────────────────────────────────────────");
+				console.log("⚡ Test 4: Get Default View GUID");
 				const defaultView = lookup.DefaultView;
 				console.log(`✓ Default View: ${defaultView}`);
 				console.log("");
@@ -312,8 +308,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 5: Get Control Visibility
-				console.log("📋 Test 5: Get Control Visibility");
-				console.log("─────────────────────────────────────────────────────────");
+				console.log("⚡ Test 5: Get Control Visibility");
 				const isVisible = lookup.Visible;
 				console.log(`✓ Visible: ${isVisible}`);
 				console.log("");
@@ -323,8 +318,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 6: Get Control Disabled State
-				console.log("📋 Test 6: Get Control Disabled State");
-				console.log("─────────────────────────────────────────────────────────");
+				console.log("⚡ Test 6: Get Control Disabled State");
 				const isDisabled = lookup.Disabled;
 				console.log(`✓ Disabled: ${isDisabled}`);
 				console.log("");
@@ -334,8 +328,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 7: Get Control Type
-				console.log("📋 Test 7: Get Control Type");
-				console.log("─────────────────────────────────────────────────────────");
+				console.log("⚡ Test 7: Get Control Type");
 				const controlType = lookup.ControlType;
 				console.log(`✓ Control Type: ${controlType}`);
 				console.log(`  (Should be: 'lookup')`);
@@ -346,8 +339,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 8: Get Control and Attribute Names
-				console.log("📋 Test 8: Get Control and Attribute Names");
-				console.log("─────────────────────────────────────────────────────────");
+				console.log("⚡ Test 8: Get Control and Attribute Names");
 				const controlName = lookup.ControlName;
 				const attributeName = lookup.AttributeName;
 				console.log(`✓ Control Name: ${controlName}`);
@@ -360,8 +352,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 9: Get Attribute Properties
-				console.log("📋 Test 9: Get Attribute Properties");
-				console.log("─────────────────────────────────────────────────────────");
+				console.log("⚡ Test 9: Get Attribute Properties");
 				// Access properties directly from the control (IControl interface)
 				console.log(`✓ Attribute Name: ${lookup.AttributeName}`);
 				console.log(`  Attribute Type: ${lookup.AttributeType}`);
@@ -387,8 +378,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 10: Test AddPreSearch event (add filter for active contacts only)
-				console.log("📋 Test 10: Add PreSearch Event Handler");
-				console.log("─────────────────────────────────────────────────────────");
+				console.log("⚡ Test 10: Add PreSearch Event Handler");
 				lookup.AddPreSearch(function(executionContext) {
 					console.log("  ⚡ PreSearch event fired!");
 					// Add filter to show only active contacts
@@ -405,8 +395,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 11: Add custom view for the lookup
-				console.log("📋 Test 11: Add Custom View to Lookup");
-				console.log("─────────────────────────────────────────────────────────");
+				console.log("⚡ Test 11: Add Custom View to Lookup");
 				const customViewId = "00000000-0000-0000-0000-000000000001"; // Dummy GUID
 				const fetchXml = `
 					<fetch>
@@ -447,9 +436,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 12: Test SetValue (programmatically set a lookup value)
-				console.log("📋 Test 12: Set Lookup Value (if contact exists)");
-				console.log("─────────────────────────────────────────────────────────");
-
+				console.log("⚡ Test 12: Set Lookup Value (if contact exists)");
 				// First, try to get a contact record to set
 				try {
 					/** @type {function(any): any} */
@@ -495,8 +482,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 13: Test Clear Value
-				console.log("📋 Test 13: Clear Lookup Value (and restore)");
-				console.log("─────────────────────────────────────────────────────────");
+				console.log("⚡ Test 13: Clear Lookup Value (and restore)");
 				const originalValue = lookup.Value;
 
 				if (originalValue && originalValue.length > 0) {
@@ -519,9 +505,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 14: Test notification methods
-				console.log("📋 Test 14: Test Notification Methods");
-				console.log("─────────────────────────────────────────────────────────");
-
+				console.log("⚡ Test 14: Test Notification Methods");
 				// Add error notification
 				lookup.SetNotification("This is a test error notification", "TEST_ERROR_1");
 				console.log("✓ Error notification set");
@@ -538,8 +522,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 15: Test SetFocus
-				console.log("📋 Test 15: Test SetFocus Method");
-				console.log("─────────────────────────────────────────────────────────");
+				console.log("⚡ Test 15: Test SetFocus Method");
 				setTimeout(function() {
 					lookup.Focus();
 					console.log("✓ Focus set to PrimaryContactId lookup");
@@ -568,8 +551,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 1: Get current string value
-				console.log("📋 Test 1: Get String Value");
-				console.log("─────────────────────────────────────────────────────────");
+				console.log("⚡ Test 1: Get String Value");
 				const currentValue = stringControl.Value;
 				console.log(`✓ Current Value: "${currentValue}"`);
 				console.log(`  Type: ${typeof currentValue}`);
@@ -581,8 +563,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 2: Get Control and Attribute Names
-				console.log("📋 Test 2: Get Control and Attribute Names");
-				console.log("─────────────────────────────────────────────────────────");
+				console.log("⚡ Test 2: Get Control and Attribute Names");
 				console.log(`✓ Control Name: ${stringControl.ControlName}`);
 				console.log(`✓ Attribute Name: ${stringControl.AttributeName}`);
 				console.log(`  (Both should be: 'name')`);
@@ -593,8 +574,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 3: Get Attribute Properties
-				console.log("📋 Test 3: Get Attribute Properties");
-				console.log("─────────────────────────────────────────────────────────");
+				console.log("⚡ Test 3: Get Attribute Properties");
 				console.log(`✓ Attribute Name: ${stringControl.AttributeName}`);
 				console.log(`  Attribute Type: ${stringControl.AttributeType}`);
 				console.log(`  Control Type: ${stringControl.ControlType}`);
@@ -611,8 +591,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 4: Get Control Visibility
-				console.log("📋 Test 4: Get Control Visibility");
-				console.log("─────────────────────────────────────────────────────────");
+				console.log("⚡ Test 4: Get Control Visibility");
 				const isVisible = stringControl.Visible;
 				console.log(`✓ Visible: ${isVisible}`);
 				console.log("");
@@ -622,8 +601,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 5: Get Control Disabled State
-				console.log("📋 Test 5: Get Control Disabled State");
-				console.log("─────────────────────────────────────────────────────────");
+				console.log("⚡ Test 5: Get Control Disabled State");
 				const isDisabled = stringControl.Disabled;
 				console.log(`✓ Disabled: ${isDisabled}`);
 				console.log("");
@@ -633,8 +611,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 6: Get Control Label
-				console.log("📋 Test 6: Get Control Label");
-				console.log("─────────────────────────────────────────────────────────");
+				console.log("⚡ Test 6: Get Control Label");
 				const label = stringControl.Label;
 				console.log(`✓ Label: "${label}"`);
 				console.log("");
@@ -644,8 +621,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 7: Set String Value (and restore)
-				console.log("📋 Test 7: Set String Value (and restore)");
-				console.log("─────────────────────────────────────────────────────────");
+				console.log("⚡ Test 7: Set String Value (and restore)");
 				const originalValue = stringControl.Value;
 				console.log(`  Original Value: "${originalValue}"`);
 
@@ -666,9 +642,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 8: Test Notification Methods
-				console.log("📋 Test 8: Test Notification Methods");
-				console.log("─────────────────────────────────────────────────────────");
-
+				console.log("⚡ Test 8: Test Notification Methods");
 				// Add error notification
 				stringControl.SetNotification("This is a test error notification for Name field", "TEST_STRING_ERROR_1");
 				console.log("✓ Error notification set");
@@ -685,8 +659,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 9: Test SetFocus Method
-				console.log("📋 Test 9: Test SetFocus Method");
-				console.log("─────────────────────────────────────────────────────────");
+				console.log("⚡ Test 9: Test SetFocus Method");
 				setTimeout(function() {
 					stringControl.Focus();
 					console.log("✓ Focus set to Name field");
@@ -699,8 +672,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 10: Test Visibility Toggle (and restore)
-				console.log("📋 Test 10: Test Visibility Toggle");
-				console.log("─────────────────────────────────────────────────────────");
+				console.log("⚡ Test 10: Test Visibility Toggle");
 				const originalVisibility = stringControl.Visible;
 				console.log(`  Original Visibility: ${originalVisibility}`);
 
@@ -720,8 +692,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 11: Test Disabled Toggle (and restore)
-				console.log("📋 Test 11: Test Disabled Toggle");
-				console.log("─────────────────────────────────────────────────────────");
+				console.log("⚡ Test 11: Test Disabled Toggle");
 				const originalDisabled = stringControl.Disabled;
 				console.log(`  Original Disabled State: ${originalDisabled}`);
 
@@ -741,8 +712,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 12: Test Label Change (and restore)
-				console.log("📋 Test 12: Test Label Change");
-				console.log("─────────────────────────────────────────────────────────");
+				console.log("⚡ Test 12: Test Label Change");
 				const originalLabel = stringControl.Label;
 				console.log(`  Original Label: "${originalLabel}"`);
 
@@ -779,8 +749,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 1: Get current integer value
-				console.log("📋 Test 1: Get Integer Value");
-				console.log("─────────────────────────────────────────────────────────");
+				console.log("⚡ Test 1: Get Integer Value");
 				const currentValue = intControl.Value;
 				console.log(`✓ Current Value: ${currentValue}`);
 				console.log(`  Type: ${typeof currentValue}`);
@@ -793,8 +762,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 2: Get Control and Attribute Names
-				console.log("📋 Test 2: Get Control and Attribute Names");
-				console.log("─────────────────────────────────────────────────────────");
+				console.log("⚡ Test 2: Get Control and Attribute Names");
 				console.log(`✓ Control Name: ${intControl.ControlName}`);
 				console.log(`✓ Attribute Name: ${intControl.AttributeName}`);
 				console.log(`  (Both should be: 'numberofemployees')`);
@@ -805,8 +773,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 3: Get Attribute Properties
-				console.log("📋 Test 3: Get Attribute Properties");
-				console.log("─────────────────────────────────────────────────────────");
+				console.log("⚡ Test 3: Get Attribute Properties");
 				console.log(`✓ Attribute Name: ${intControl.AttributeName}`);
 				console.log(`  Attribute Type: ${intControl.AttributeType}`);
 				console.log(`  Control Type: ${intControl.ControlType}`);
@@ -825,8 +792,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 4: Get Control Visibility
-				console.log("📋 Test 4: Get Control Visibility");
-				console.log("─────────────────────────────────────────────────────────");
+				console.log("⚡ Test 4: Get Control Visibility");
 				const isVisible = intControl.Visible;
 				console.log(`✓ Visible: ${isVisible}`);
 				console.log("");
@@ -836,8 +802,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 5: Get Control Disabled State
-				console.log("📋 Test 5: Get Control Disabled State");
-				console.log("─────────────────────────────────────────────────────────");
+				console.log("⚡ Test 5: Get Control Disabled State");
 				const isDisabled = intControl.Disabled;
 				console.log(`✓ Disabled: ${isDisabled}`);
 				console.log("");
@@ -847,8 +812,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 6: Get Control Label
-				console.log("📋 Test 6: Get Control Label");
-				console.log("─────────────────────────────────────────────────────────");
+				console.log("⚡ Test 6: Get Control Label");
 				const label = intControl.Label;
 				console.log(`✓ Label: "${label}"`);
 				console.log("");
@@ -858,8 +822,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 7: Set Integer Value (and restore)
-				console.log("📋 Test 7: Set Integer Value (and restore)");
-				console.log("─────────────────────────────────────────────────────────");
+				console.log("⚡ Test 7: Set Integer Value (and restore)");
 				const originalValue = intControl.Value;
 				console.log(`  Original Value: ${originalValue}`);
 
@@ -880,8 +843,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 8: Test Min/Max Validation
-				console.log("📋 Test 8: Test Min/Max Validation");
-				console.log("─────────────────────────────────────────────────────────");
+				console.log("⚡ Test 8: Test Min/Max Validation");
 				const minValue = intControl.Min;
 				const maxValue = intControl.Max;
 				console.log(`✓ Min Value: ${minValue !== null && minValue !== undefined ? minValue : 'No limit'}`);
@@ -900,8 +862,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 9: Test Decimal Value Handling
-				console.log("📋 Test 9: Test Decimal Value Handling");
-				console.log("─────────────────────────────────────────────────────────");
+				console.log("⚡ Test 9: Test Decimal Value Handling");
 				const originalValue = intControl.Value;
 
 				// Try to set a decimal value
@@ -926,9 +887,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 10: Test Notification Methods
-				console.log("📋 Test 10: Test Notification Methods");
-				console.log("─────────────────────────────────────────────────────────");
-
+				console.log("⚡ Test 10: Test Notification Methods");
 				// Add error notification
 				intControl.SetNotification("This is a test error notification for NumberOfEmployees", "TEST_INT_ERROR_1");
 				console.log("✓ Error notification set");
@@ -945,8 +904,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 11: Test SetFocus Method
-				console.log("📋 Test 11: Test SetFocus Method");
-				console.log("─────────────────────────────────────────────────────────");
+				console.log("⚡ Test 11: Test SetFocus Method");
 				setTimeout(function() {
 					intControl.Focus();
 					console.log("✓ Focus set to NumberOfEmployees field");
@@ -959,8 +917,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 12: Test Visibility Toggle (and restore)
-				console.log("📋 Test 12: Test Visibility Toggle");
-				console.log("─────────────────────────────────────────────────────────");
+				console.log("⚡ Test 12: Test Visibility Toggle");
 				const originalVisibility = intControl.Visible;
 				console.log(`  Original Visibility: ${originalVisibility}`);
 
@@ -980,8 +937,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 13: Test Disabled Toggle (and restore)
-				console.log("📋 Test 13: Test Disabled Toggle");
-				console.log("─────────────────────────────────────────────────────────");
+				console.log("⚡ Test 13: Test Disabled Toggle");
 				const originalDisabled = intControl.Disabled;
 				console.log(`  Original Disabled State: ${originalDisabled}`);
 
@@ -1001,8 +957,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 14: Test Label Change (and restore)
-				console.log("📋 Test 14: Test Label Change");
-				console.log("─────────────────────────────────────────────────────────");
+				console.log("⚡ Test 14: Test Label Change");
 				const originalLabel = intControl.Label;
 				console.log(`  Original Label: "${originalLabel}"`);
 
@@ -1022,8 +977,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 15: Test Null/Zero Handling
-				console.log("📋 Test 15: Test Null/Zero Handling");
-				console.log("─────────────────────────────────────────────────────────");
+				console.log("⚡ Test 15: Test Null/Zero Handling");
 				const originalValue = intControl.Value;
 				console.log(`  Original Value: ${originalValue}`);
 
@@ -1068,8 +1022,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 1: Get current money value
-				console.log("📋 Test 1: Get Money Value");
-				console.log("─────────────────────────────────────────────────────────");
+				console.log("⚡ Test 1: Get Money Value");
 				const currentValue = moneyControl.Value;
 				console.log(`✓ Current Value: ${currentValue}`);
 				console.log(`  Type: ${typeof currentValue}`);
@@ -1082,8 +1035,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 2: Get Control and Attribute Names
-				console.log("📋 Test 2: Get Control and Attribute Names");
-				console.log("─────────────────────────────────────────────────────────");
+				console.log("⚡ Test 2: Get Control and Attribute Names");
 				console.log(`✓ Control Name: ${moneyControl.ControlName}`);
 				console.log(`✓ Attribute Name: ${moneyControl.AttributeName}`);
 				console.log(`  (Both should be: 'revenue')`);
@@ -1094,8 +1046,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 3: Get Attribute Properties
-				console.log("📋 Test 3: Get Attribute Properties");
-				console.log("─────────────────────────────────────────────────────────");
+				console.log("⚡ Test 3: Get Attribute Properties");
 				console.log(`✓ Attribute Name: ${moneyControl.AttributeName}`);
 				console.log(`  Attribute Type: ${moneyControl.AttributeType}`);
 				console.log(`  Control Type: ${moneyControl.ControlType}`);
@@ -1114,8 +1065,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 4: Get Control Visibility
-				console.log("📋 Test 4: Get Control Visibility");
-				console.log("─────────────────────────────────────────────────────────");
+				console.log("⚡ Test 4: Get Control Visibility");
 				const isVisible = moneyControl.Visible;
 				console.log(`✓ Visible: ${isVisible}`);
 				console.log("");
@@ -1125,8 +1075,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 5: Get Control Disabled State
-				console.log("📋 Test 5: Get Control Disabled State");
-				console.log("─────────────────────────────────────────────────────────");
+				console.log("⚡ Test 5: Get Control Disabled State");
 				const isDisabled = moneyControl.Disabled;
 				console.log(`✓ Disabled: ${isDisabled}`);
 				console.log("");
@@ -1136,8 +1085,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 6: Get Control Label
-				console.log("📋 Test 6: Get Control Label");
-				console.log("─────────────────────────────────────────────────────────");
+				console.log("⚡ Test 6: Get Control Label");
 				const label = moneyControl.Label;
 				console.log(`✓ Label: "${label}"`);
 				console.log("");
@@ -1147,8 +1095,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 7: Set Money Value (and restore)
-				console.log("📋 Test 7: Set Money Value (and restore)");
-				console.log("─────────────────────────────────────────────────────────");
+				console.log("⚡ Test 7: Set Money Value (and restore)");
 				const originalValue = moneyControl.Value;
 				console.log(`  Original Value: $${originalValue !== null ? originalValue.toLocaleString('en-US', {minimumFractionDigits: 2}) : 'null'}`);
 
@@ -1169,8 +1116,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 8: Test Min/Max Validation
-				console.log("📋 Test 8: Test Min/Max Validation");
-				console.log("─────────────────────────────────────────────────────────");
+				console.log("⚡ Test 8: Test Min/Max Validation");
 				const minValue = moneyControl.Min;
 				const maxValue = moneyControl.Max;
 				console.log(`✓ Min Value: ${minValue !== null && minValue !== undefined ? '$' + minValue.toLocaleString('en-US', {minimumFractionDigits: 2}) : 'No limit'}`);
@@ -1189,8 +1135,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 9: Test Decimal Precision
-				console.log("📋 Test 9: Test Decimal Precision");
-				console.log("─────────────────────────────────────────────────────────");
+				console.log("⚡ Test 9: Test Decimal Precision");
 				const originalValue = moneyControl.Value;
 				const precision = moneyControl.Precision;
 
@@ -1214,9 +1159,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 10: Test Notification Methods
-				console.log("📋 Test 10: Test Notification Methods");
-				console.log("─────────────────────────────────────────────────────────");
-
+				console.log("⚡ Test 10: Test Notification Methods");
 				// Add error notification
 				moneyControl.SetNotification("This is a test error notification for Revenue field", "TEST_MONEY_ERROR_1");
 				console.log("✓ Error notification set");
@@ -1233,8 +1176,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 11: Test SetFocus Method
-				console.log("📋 Test 11: Test SetFocus Method");
-				console.log("─────────────────────────────────────────────────────────");
+				console.log("⚡ Test 11: Test SetFocus Method");
 				setTimeout(function() {
 					moneyControl.Focus();
 					console.log("✓ Focus set to Revenue field");
@@ -1247,8 +1189,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 12: Test Visibility Toggle (and restore)
-				console.log("📋 Test 12: Test Visibility Toggle");
-				console.log("─────────────────────────────────────────────────────────");
+				console.log("⚡ Test 12: Test Visibility Toggle");
 				const originalVisibility = moneyControl.Visible;
 				console.log(`  Original Visibility: ${originalVisibility}`);
 
@@ -1268,8 +1209,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 13: Test Disabled Toggle (and restore)
-				console.log("📋 Test 13: Test Disabled Toggle");
-				console.log("─────────────────────────────────────────────────────────");
+				console.log("⚡ Test 13: Test Disabled Toggle");
 				const originalDisabled = moneyControl.Disabled;
 				console.log(`  Original Disabled State: ${originalDisabled}`);
 
@@ -1289,8 +1229,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 14: Test Label Change (and restore)
-				console.log("📋 Test 14: Test Label Change");
-				console.log("─────────────────────────────────────────────────────────");
+				console.log("⚡ Test 14: Test Label Change");
 				const originalLabel = moneyControl.Label;
 				console.log(`  Original Label: "${originalLabel}"`);
 
@@ -1310,8 +1249,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 15: Test Null/Zero Handling
-				console.log("📋 Test 15: Test Null/Zero Handling");
-				console.log("─────────────────────────────────────────────────────────");
+				console.log("⚡ Test 15: Test Null/Zero Handling");
 				const originalValue = moneyControl.Value;
 				console.log(`  Original Value: $${originalValue !== null ? originalValue.toLocaleString('en-US', {minimumFractionDigits: 2}) : 'null'}`);
 
@@ -1339,8 +1277,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 16: Test Negative Values
-				console.log("📋 Test 16: Test Negative Values");
-				console.log("─────────────────────────────────────────────────────────");
+				console.log("⚡ Test 16: Test Negative Values");
 				const originalValue = moneyControl.Value;
 
 				// Set negative value
@@ -1978,7 +1915,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 1: Get Decimal Value
-				console.log("Test 1: Get Decimal Value");
+				console.log("⚡ Test 1: Get Decimal Value");
 				const value = decimalControl.Value;
 				console.log(`  ✓ Current Decimal Value: ${value}`);
 				console.log(`  ℹ Type: ${typeof value}, Is null: ${value === null}`);
@@ -1989,7 +1926,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 2: Get Control and Attribute Names
-				console.log("Test 2: Get Control and Attribute Names");
+				console.log("⚡ Test 2: Get Control and Attribute Names");
 				const controlName = decimalControl.ControlName;
 				const attributeName = decimalControl.AttributeName;
 				console.log(`  ✓ Control Name: ${controlName}`);
@@ -2001,7 +1938,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 3: Get Precision (Decimal Places)
-				console.log("Test 3: Get Precision (Decimal Places)");
+				console.log("⚡ Test 3: Get Precision (Decimal Places)");
 				const precision = decimalControl.Precision;
 				console.log(`  ✓ Decimal Precision: ${precision} decimal places`);
 				console.log(`  ℹ This determines how many digits can appear after the decimal point`);
@@ -2012,7 +1949,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 4: Get Min and Max Values
-				console.log("Test 4: Get Min and Max Values");
+				console.log("⚡ Test 4: Get Min and Max Values");
 				const minValue = decimalControl.Min;
 				const maxValue = decimalControl.Max;
 				console.log(`  ✓ Minimum Value: ${minValue}`);
@@ -2025,7 +1962,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 5: Get Control Type
-				console.log("Test 5: Get Control Type");
+				console.log("⚡ Test 5: Get Control Type");
 				const controlType = decimalControl.ControlType;
 				console.log(`  ✓ Control Type: ${controlType}`);
 				console.log("");
@@ -2035,7 +1972,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 6: Get Attribute Type
-				console.log("Test 6: Get Attribute Type");
+				console.log("⚡ Test 6: Get Attribute Type");
 				const attributeType = decimalControl.AttributeType;
 				console.log(`  ✓ Attribute Type: ${attributeType}`);
 				console.log("");
@@ -2045,7 +1982,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 7: Get Format
-				console.log("Test 7: Get Format");
+				console.log("⚡ Test 7: Get Format");
 				const format = decimalControl.Format;
 				console.log(`  ✓ Format: ${format}`);
 				console.log("");
@@ -2055,7 +1992,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 8: Get IsDirty Status
-				console.log("Test 8: Get IsDirty Status");
+				console.log("⚡ Test 8: Get IsDirty Status");
 				const isDirty = decimalControl.IsDirty;
 				console.log(`  ✓ Is Dirty: ${isDirty}`);
 				console.log(`  ℹ Indicates if the field value has been modified`);
@@ -2066,7 +2003,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 9: Get Visibility Status
-				console.log("Test 9: Get Visibility Status");
+				console.log("⚡ Test 9: Get Visibility Status");
 				const isVisible = decimalControl.Visible;
 				console.log(`  ✓ Is Visible: ${isVisible}`);
 				console.log("");
@@ -2076,7 +2013,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 10: Get Disabled Status
-				console.log("Test 10: Get Disabled Status");
+				console.log("⚡ Test 10: Get Disabled Status");
 				const isDisabled = decimalControl.Disabled;
 				console.log(`  ✓ Is Disabled: ${isDisabled}`);
 				console.log("");
@@ -2086,7 +2023,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 11: Get Label
-				console.log("Test 11: Get Label");
+				console.log("⚡ Test 11: Get Label");
 				const label = decimalControl.Label;
 				console.log(`  ✓ Label: "${label}"`);
 				console.log("");
@@ -2096,7 +2033,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 12: Set Decimal Value with Precision
-				console.log("Test 12: Set Decimal Value with Precision");
+				console.log("⚡ Test 12: Set Decimal Value with Precision");
 				const originalValue = decimalControl.Value;
 				console.log(`  ℹ Original value: ${originalValue}`);
 				decimalControl.Value = 123.456789;
@@ -2111,7 +2048,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 13: Set Negative Decimal Value
-				console.log("Test 13: Set Negative Decimal Value");
+				console.log("⚡ Test 13: Set Negative Decimal Value");
 				decimalControl.Value = -99.99;
 				console.log(`  ✓ Set negative decimal value to: -99.99`);
 				const negValue = decimalControl.Value;
@@ -2123,7 +2060,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 14: Set Zero Value
-				console.log("Test 14: Set Zero Value");
+				console.log("⚡ Test 14: Set Zero Value");
 				decimalControl.Value = 0;
 				console.log(`  ✓ Set decimal value to: 0`);
 				const zeroValue = decimalControl.Value;
@@ -2135,7 +2072,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 15: Clear Value (Set to Null)
-				console.log("Test 15: Clear Value (Set to Null)");
+				console.log("⚡ Test 15: Clear Value (Set to Null)");
 				decimalControl.Value = /** @type {any} */ (null);
 				console.log(`  ✓ Cleared decimal value (set to null)`);
 				const clearedValue = decimalControl.Value;
@@ -2147,7 +2084,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 16: Set Precision (Dynamic Change)
-				console.log("Test 16: Set Precision (Dynamic Change)");
+				console.log("⚡ Test 16: Set Precision (Dynamic Change)");
 				const originalPrecision = decimalControl.Precision;
 				console.log(`  ℹ Original precision: ${originalPrecision}`);
 				decimalControl.Value = 123.456789;
@@ -2167,7 +2104,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 17: Add Notification
-				console.log("Test 17: Add Notification");
+				console.log("⚡ Test 17: Add Notification");
 				decimalControl.AddNotification({
 					messages: ["Please enter a valid decimal number"],
 					notificationLevel: OptionSet.FieldNotificationLevel.Error,
@@ -2187,7 +2124,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 18: Set Focus
-				console.log("Test 18: Set Focus");
+				console.log("⚡ Test 18: Set Focus");
 				setTimeout(() => {
 					decimalControl.Focus();
 					console.log(`  ✓ Focus set on decimal field`);
@@ -2200,7 +2137,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 19: Toggle Visibility
-				console.log("Test 19: Toggle Visibility");
+				console.log("⚡ Test 19: Toggle Visibility");
 				const originalVisibility = decimalControl.Visible;
 				setTimeout(() => {
 					decimalControl.Visible = false;
@@ -2217,7 +2154,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 20: Toggle Disabled State
-				console.log("Test 20: Toggle Disabled State");
+				console.log("⚡ Test 20: Toggle Disabled State");
 				const originalDisabled = decimalControl.Disabled;
 				setTimeout(() => {
 					decimalControl.Disabled = true;
@@ -2234,7 +2171,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 21: Change Label
-				console.log("Test 21: Change Label");
+				console.log("⚡ Test 21: Change Label");
 				const originalLabel = decimalControl.Label;
 				console.log(`  ℹ Original label: "${originalLabel}"`);
 				setTimeout(() => {
@@ -2269,7 +2206,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 1: Get Float Value
-				console.log("Test 1: Get Float Value");
+				console.log("⚡ Test 1: Get Float Value");
 				const value = floatControl.Value;
 				console.log(`  ✓ Current Float Value: ${value}`);
 				console.log(`  ℹ Type: ${typeof value}, Is null: ${value === null}`);
@@ -2280,7 +2217,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 2: Get Control and Attribute Names
-				console.log("Test 2: Get Control and Attribute Names");
+				console.log("⚡ Test 2: Get Control and Attribute Names");
 				const controlName = floatControl.ControlName;
 				const attributeName = floatControl.AttributeName;
 				console.log(`  ✓ Control Name: ${controlName}`);
@@ -2292,7 +2229,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 3: Get Precision (Decimal Places)
-				console.log("Test 3: Get Precision (Decimal Places)");
+				console.log("⚡ Test 3: Get Precision (Decimal Places)");
 				const precision = floatControl.Precision;
 				console.log(`  ✓ Float Precision: ${precision} decimal places`);
 				console.log(`  ℹ Float/Double typically allows up to 5 decimal places`);
@@ -2303,7 +2240,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 4: Get Min and Max Values
-				console.log("Test 4: Get Min and Max Values");
+				console.log("⚡ Test 4: Get Min and Max Values");
 				const minValue = floatControl.Min;
 				const maxValue = floatControl.Max;
 				console.log(`  ✓ Minimum Value: ${minValue}`);
@@ -2316,7 +2253,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 5: Get Control Type
-				console.log("Test 5: Get Control Type");
+				console.log("⚡ Test 5: Get Control Type");
 				const controlType = floatControl.ControlType;
 				console.log(`  ✓ Control Type: ${controlType}`);
 				console.log("");
@@ -2326,7 +2263,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 6: Get Attribute Type
-				console.log("Test 6: Get Attribute Type");
+				console.log("⚡ Test 6: Get Attribute Type");
 				const attributeType = floatControl.AttributeType;
 				console.log(`  ✓ Attribute Type: ${attributeType}`);
 				console.log("");
@@ -2336,7 +2273,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 7: Get Format
-				console.log("Test 7: Get Format");
+				console.log("⚡ Test 7: Get Format");
 				const format = floatControl.Format;
 				console.log(`  ✓ Format: ${format}`);
 				console.log("");
@@ -2346,7 +2283,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 8: Get IsDirty Status
-				console.log("Test 8: Get IsDirty Status");
+				console.log("⚡ Test 8: Get IsDirty Status");
 				const isDirty = floatControl.IsDirty;
 				console.log(`  ✓ Is Dirty: ${isDirty}`);
 				console.log(`  ℹ Indicates if the field value has been modified`);
@@ -2357,7 +2294,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 9: Get Visibility Status
-				console.log("Test 9: Get Visibility Status");
+				console.log("⚡ Test 9: Get Visibility Status");
 				const isVisible = floatControl.Visible;
 				console.log(`  ✓ Is Visible: ${isVisible}`);
 				console.log("");
@@ -2367,7 +2304,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 10: Get Disabled Status
-				console.log("Test 10: Get Disabled Status");
+				console.log("⚡ Test 10: Get Disabled Status");
 				const isDisabled = floatControl.Disabled;
 				console.log(`  ✓ Is Disabled: ${isDisabled}`);
 				console.log("");
@@ -2377,7 +2314,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 11: Get Label
-				console.log("Test 11: Get Label");
+				console.log("⚡ Test 11: Get Label");
 				const label = floatControl.Label;
 				console.log(`  ✓ Label: "${label}"`);
 				console.log("");
@@ -2387,7 +2324,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 12: Set Float Value with High Precision
-				console.log("Test 12: Set Float Value with High Precision");
+				console.log("⚡ Test 12: Set Float Value with High Precision");
 				const originalValue = floatControl.Value;
 				console.log(`  ℹ Original value: ${originalValue}`);
 				floatControl.Value = 3.14159265358979;
@@ -2402,7 +2339,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 13: Set Scientific Notation Value
-				console.log("Test 13: Set Scientific Notation Value");
+				console.log("⚡ Test 13: Set Scientific Notation Value");
 				floatControl.Value = 1.23e-4;
 				console.log(`  ✓ Set scientific notation value: 1.23e-4`);
 				const sciValue = floatControl.Value;
@@ -2415,7 +2352,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 14: Set Large Float Value
-				console.log("Test 14: Set Large Float Value");
+				console.log("⚡ Test 14: Set Large Float Value");
 				floatControl.Value = 9999999.99999;
 				console.log(`  ✓ Set large float value to: 9999999.99999`);
 				const largeValue = floatControl.Value;
@@ -2427,7 +2364,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 15: Set Negative Float Value
-				console.log("Test 15: Set Negative Float Value");
+				console.log("⚡ Test 15: Set Negative Float Value");
 				floatControl.Value = -273.15;
 				console.log(`  ✓ Set negative float value to: -273.15 (absolute zero in Celsius)`);
 				const negValue = floatControl.Value;
@@ -2439,7 +2376,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 16: Set Zero Value
-				console.log("Test 16: Set Zero Value");
+				console.log("⚡ Test 16: Set Zero Value");
 				floatControl.Value = 0.0;
 				console.log(`  ✓ Set float value to: 0.0`);
 				const zeroValue = floatControl.Value;
@@ -2451,7 +2388,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 17: Clear Value (Set to Null)
-				console.log("Test 17: Clear Value (Set to Null)");
+				console.log("⚡ Test 17: Clear Value (Set to Null)");
 				floatControl.Value = /** @type {any} */ (null);
 				console.log(`  ✓ Cleared float value (set to null)`);
 				const clearedValue = floatControl.Value;
@@ -2463,7 +2400,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 18: Set Precision (Dynamic Change)
-				console.log("Test 18: Set Precision (Dynamic Change)");
+				console.log("⚡ Test 18: Set Precision (Dynamic Change)");
 				const originalPrecision = floatControl.Precision;
 				console.log(`  ℹ Original precision: ${originalPrecision}`);
 				floatControl.Value = 123.456789;
@@ -2483,7 +2420,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 19: Add Notification
-				console.log("Test 19: Add Notification");
+				console.log("⚡ Test 19: Add Notification");
 				floatControl.AddNotification({
 					messages: ["Please enter a valid floating-point number"],
 					notificationLevel: OptionSet.FieldNotificationLevel.Error,
@@ -2503,7 +2440,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 20: Set Focus
-				console.log("Test 20: Set Focus");
+				console.log("⚡ Test 20: Set Focus");
 				setTimeout(() => {
 					floatControl.Focus();
 					console.log(`  ✓ Focus set on float field`);
@@ -2516,7 +2453,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 21: Toggle Visibility
-				console.log("Test 21: Toggle Visibility");
+				console.log("⚡ Test 21: Toggle Visibility");
 				const originalVisibility = floatControl.Visible;
 				setTimeout(() => {
 					floatControl.Visible = false;
@@ -2533,7 +2470,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 22: Toggle Disabled State
-				console.log("Test 22: Toggle Disabled State");
+				console.log("⚡ Test 22: Toggle Disabled State");
 				const originalDisabled = floatControl.Disabled;
 				setTimeout(() => {
 					floatControl.Disabled = true;
@@ -2550,7 +2487,7 @@ var formAccount = (function () {
 
 			try {
 				// Test 23: Change Label
-				console.log("Test 23: Change Label");
+				console.log("⚡ Test 23: Change Label");
 				const originalLabel = floatControl.Label;
 				console.log(`  ℹ Original label: "${originalLabel}"`);
 				setTimeout(() => {
@@ -2903,7 +2840,7 @@ var formAccount = (function () {
 
 				// Test 1: Get Boolean Value
 				try {
-					console.log("📋 Test 1: Get Boolean Value");
+					console.log("⚡ Test 1: Get Boolean Value");
 					const currentValue = booleanControl.Value;
 					console.log("  ✓ Current Boolean value:", currentValue);
 					console.log("  ℹ Type:", typeof currentValue);
@@ -3175,7 +3112,7 @@ var formAccount = (function () {
 
 				// Test 1: Get Memo Value
 				try {
-					console.log("📋 Test 1: Get Memo Value");
+					console.log("⚡ Test 1: Get Memo Value");
 					const currentValue = memoControl.Value;
 					console.log("  ✓ Current Memo value:", currentValue || "(empty)");
 					console.log("  ℹ Type:", typeof currentValue);
