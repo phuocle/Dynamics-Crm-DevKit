@@ -849,7 +849,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 {
                     var create = new Entity("sdkmessageprocessingstepsecureconfig");
                     create["secureconfig"] = attribute.SecureConfiguration;
-                    var sdkmessageprocessingstepsecureconfigid = await ServiceClient.CreateAsync(secureEntity);
+                    var sdkmessageprocessingstepsecureconfigid = await ServiceClient.CreateAsync(create);
                     pluginStep["sdkmessageprocessingstepsecureconfigid"] = new EntityReference("sdkmessageprocessingstepsecureconfig", sdkmessageprocessingstepsecureconfigid);
                     hasChangedPluginStep = true;
                 }
