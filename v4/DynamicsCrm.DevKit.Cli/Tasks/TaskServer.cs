@@ -1065,6 +1065,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 <fetch>
   <entity name='sdkmessageprocessingstep'>
     <attribute name='sdkmessageprocessingstepid' />
+    <attribute name='sdkmessageprocessingstepsecureconfigid' />
     <filter>
       <condition attribute='plugintypeid' operator='eq' value='{pluginTypeId}' />
     </filter>
@@ -1074,6 +1075,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 foreach (var row in rows.Entities)
                 {
                     await DeletePluginImagesAsync(row.Id);
+                    await DeleteSecureConfigAsync(row);
                     await ServiceClient.DeleteAsync("sdkmessageprocessingstep", row.Id);
                 }
             }
@@ -1097,6 +1099,14 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 foreach (var row in rows.Entities)
                 {
                     await ServiceClient.DeleteAsync("sdkmessageprocessingstepimage", row.Id);
+                }
+            }
+            async Task DeleteSecureConfigAsync(Entity pluginStep)
+            {
+                var secureConfigId = pluginStep.GetAttributeValue<EntityReference>("sdkmessageprocessingstepsecureconfigid")?.Id;
+                if (secureConfigId.HasValue)
+                {
+                    await ServiceClient.DeleteAsync("sdkmessageprocessingstepsecureconfig", secureConfigId.Value);
                 }
             }
         }
