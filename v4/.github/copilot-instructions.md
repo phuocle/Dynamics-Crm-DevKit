@@ -10,7 +10,7 @@
 * Scan the files for the loaded project in the open solution.
 
 # Develop DynamicsCrm.DevKit.Cli
-* If the prompt related to DynamicsCrm.DevKit.Cli, please check the code in these folders
+* If the prompt related to DynamicsCrm.DevKit.Cli, please check the code in these folders only
     * DynamicsCrm.DevKit.Cli
     * DynamicsCrm.DevKit.Shared
 * If you found text 'cli' means is said 'DynamicsCrm.DevKit.Cli' project

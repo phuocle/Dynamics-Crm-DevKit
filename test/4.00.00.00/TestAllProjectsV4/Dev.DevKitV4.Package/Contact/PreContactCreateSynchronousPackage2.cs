@@ -5,8 +5,8 @@ using System;
 
 namespace Dev.DevKitV4.Package.Contact
 {
-    [CrmPluginRegistration("Create", "contact", StageEnum.PreOperation, ExecutionModeEnum.Synchronous, "", "Dev.DevKitV4.Package.Contact.PreContactCreateSynchronous2", 2, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin)]
-    public class PreContactCreateSynchronous2 : IPlugin
+    [CrmPluginRegistration("Create", "contact", StageEnum.PreOperation, ExecutionModeEnum.Synchronous, "", "Dev.DevKitV4.Package.Contact.PreContactCreateSynchronousPackage2", 2, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin)]
+    public class PreContactCreateSynchronousPackage2 : IPlugin
     {
         /*
         InputParameters:
@@ -49,7 +49,7 @@ namespace Dev.DevKitV4.Package.Contact
         {
             var targetEntity = context.InputParameterOrDefault<Entity>("Target");
             //YOUR PLUGIN-CODE GO HERE
-            targetEntity["jobtitle"] = "Modified by PreContactCreateSynchronous2";
+            targetEntity["jobtitle"] = "Modified by PreContactCreateSynchronousPackage2";
         }
     }
 }
