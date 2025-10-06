@@ -14,9 +14,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.Remoting.Messaging;
 using System.ServiceModel;
-using System.ServiceModel.Channels;
 using System.Threading.Tasks;
 
 namespace DynamicsCrm.DevKit.Cli.Tasks
@@ -245,7 +243,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 CliLog.WriteLineError(ConsoleColor.Yellow, $"Multiple message RetrieveMultiple found with data source {dataSource} ({checkDataSource}). Assemply deployed, but the deployment of this assembly stopped.");
                 return false;
             }
-            if (IsVirtualTableSupportCRUD())
+            if (await XrmHelper.IsVirtualTableSupportCRUDAsync(ServiceClient))
             {
                 var countCreate = dataProviderEvents.Count(x => x.Message == "Create" && x.DataSource == dataSource);
                 if (countCreate != 0 && countCreate != 1)
@@ -294,7 +292,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 entity.Attributes.Add("retrievemultipleplugin", retrievemultiple.PluginTypeId);
                 events += "RetrieveMultiple, ";
             }
-            if (IsVirtualTableSupportCRUD())
+            if (await XrmHelper.IsVirtualTableSupportCRUDAsync(ServiceClient))
             {
                 var create = dataProviderEvents.Where(x => x.Message == "Create" && x.DataSource == dataSource).FirstOrDefault();
                 if (create == null)
@@ -323,7 +321,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             events = events.TrimEnd(", ".ToCharArray());
             events = string.Join(", ", events.Split(",".ToCharArray()).Select(x => x.Trim()).OrderBy(x => x)).Trim();
-            var entityDataProvider = await GetEntityDataProviderIdAsync(logicalNameDataSource);
+            var entityDataProvider = await XrmHelper.GetEntityDataProviderIdAsync(ServiceClient, logicalNameDataSource);
             if (entityDataProvider == null)
             {
                 var request = new CreateRequest();
@@ -366,38 +364,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, "Type ", ConsoleColor.Blue, $"{PluginType.DataSource} ", ConsoleColor.Cyan, $"{logicalNameDataSource}", ConsoleColor.White, " linked with events ", ConsoleColor.Cyan, events);
                 }
             }
-        }
-
-        private async Task<Entity> GetEntityDataProviderIdAsync(string dataSource)
-        {
-            var fetchData = new
-            {
-                datasourcelogicalname = dataSource
-            };
-            var fetchXml = $@"
-<fetch>
-  <entity name='entitydataprovider'>
-    <attribute name='entitydataproviderid' />
-    <attribute name='retrievemultipleplugin' />
-    <attribute name='createplugin' />
-    <attribute name='deleteplugin' />
-    <attribute name='updateplugin' />
-    <attribute name='retrieveplugin' />
-    <filter>
-      <condition attribute='datasourcelogicalname' operator='eq' value='{fetchData.datasourcelogicalname}'/>
-    </filter>
-  </entity>
-</fetch>";
-            var rows = await ServiceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
-            if (rows.Entities.Count != 1) return null;
-            return rows.Entities[0];
-        }
-
-        private bool IsVirtualTableSupportCRUD()
-        {
-            var request = new RetrieveVersionRequest();
-            var response = (RetrieveVersionResponse)ServiceClient.Execute(request);
-            return new Version(response.Version) >= new Version("9.1.0.18950");
         }
 
         private async Task<bool> IsExistDataSourceAsync(string logicalname)
@@ -751,9 +717,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     return null;
                 }
             }
-            var sdkMessageFilterId = await GetSdkMessageFilterIdAsync(attribute.EntityLogicalName, attribute.Message);
-            var sdkMessageId = await GetSdkMessageIdAsync(attribute.EntityLogicalName, attribute.Message);
-            var impersonatingUserId = await GetImpersonatingUserIdAsync(attribute.RunAs);
+            var sdkMessageFilterId = await XrmHelper.GetSdkMessageFilterIdAsync(ServiceClient, attribute.EntityLogicalName, attribute.Message);
+            var sdkMessageId = await XrmHelper.GetSdkMessageIdAsync(ServiceClient, attribute.EntityLogicalName, attribute.Message);
+            var impersonatingUserId = await XrmHelper.GetImpersonatingUserIdAsync(ServiceClient, attribute.RunAs);
             if (attribute.ExecutionMode == 0) attribute.DeleteAsyncOperation = false;
             var pluginStep = new Entity("sdkmessageprocessingstep")
             {
@@ -820,7 +786,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 pluginStepId = rows.Entities[0].Id;
                 pluginStep["sdkmessageprocessingstepid"] = pluginStepId.Value;
                 var hasChangedPluginStep = false;
-                var secureEntity = await GetSecureEntityAsync(pluginStepId.Value);
+                var secureEntity = await XrmHelper.GetSecureEntityAsync(ServiceClient, pluginStepId.Value);
                 if (attribute.SecureConfiguration?.Trim().Length == 0 && secureEntity != null)
                 {
                     var sdkmessageprocessingstepsecureconfigid = (Guid?)secureEntity.GetAttributeValue<AliasedValue>("s.sdkmessageprocessingstepsecureconfigid")?.Value;
@@ -1002,32 +968,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     SupportedDeployment = entity.GetAttributeValue<OptionSetValue>("supporteddeployment")
                 };
             }
-        }
-
-        private async Task<Entity> GetSecureEntityAsync(Guid pluginStepId)
-        {
-            var fetchData = new
-            {
-                sdkmessageprocessingstepid = pluginStepId
-            };
-            var fetchXml = $@"
-<fetch>
-  <entity name='sdkmessageprocessingstep'>
-    <attribute name='name' />
-    <attribute name='sdkmessageprocessingstepid' />
-    <filter>
-      <condition attribute='sdkmessageprocessingstepid' operator='eq' value='{fetchData.sdkmessageprocessingstepid}'/>
-    </filter>
-    <link-entity name='sdkmessageprocessingstepsecureconfig' from='sdkmessageprocessingstepsecureconfigid' to='sdkmessageprocessingstepsecureconfigid' link-type='outer' alias='s'>
-      <attribute name='secureconfig' />
-      <attribute name='sdkmessageprocessingstepsecureconfigid' />
-    </link-entity>
-  </entity>
-</fetch>";
-
-            var rows = await ServiceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
-            if (rows.Entities.Count != 1) return null;
-            return rows.Entities[0];
         }
 
         private async Task<bool> UnregisterPluginTypeAsync(Guid pluginAssemblyId, TypeInfo type, CrmPluginRegistrationAttribute attribute, DeployFileType deployFileType)
@@ -1504,111 +1444,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
             }
             return new OptionSetValue(2);
-        }
-
-        private async Task<EntityReference> GetSdkMessageFilterIdAsync(string entityLogicalName, string message)
-        {
-            if (entityLogicalName?.Length == 0 || entityLogicalName?.ToLower() == "none") return null;
-            var fetchData = new
-            {
-                primaryobjecttypecode = await GetPrimaryObjectTypeCodeAsync(entityLogicalName),
-                name = message
-            };
-            var fetchXml = $@"
-<fetch>
-  <entity name='sdkmessagefilter'>
-    <attribute name='sdkmessagefilterid' />
-    <filter type='and'>
-      <condition attribute='primaryobjecttypecode' operator='eq' value='{fetchData.primaryobjecttypecode}'/>
-    </filter>
-    <link-entity name='sdkmessage' from='sdkmessageid' to='sdkmessageid'>
-      <filter type='and'>
-        <condition attribute='name' operator='eq' value='{fetchData.name}'/>
-      </filter>
-    </link-entity>
-  </entity>
-</fetch>";
-            var rows = await ServiceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
-            return rows.Entities.Count == 0 ? null : new EntityReference("sdkmessagefilter", rows.Entities[0].Id);
-        }
-
-        private async Task<int?> GetPrimaryObjectTypeCodeAsync(string entityName)
-        {
-            if (entityName?.Length == 0) return null;
-            var request = new RetrieveEntityRequest
-            {
-                EntityFilters = EntityFilters.Entity,
-                LogicalName = entityName.ToLower()
-            };
-            var response = (RetrieveEntityResponse)await ServiceClient.ExecuteAsync(request);
-            return response.EntityMetadata.ObjectTypeCode ?? 0;
-        }
-
-        private async Task<EntityReference> GetSdkMessageIdAsync(string entityLogicalName, string message)
-        {
-            if (entityLogicalName?.Length == 0) return null;
-            string fetchXml;
-            if (entityLogicalName.ToLower() == "none")
-            {
-                var fetchData = new
-                {
-                    name = message
-                };
-                fetchXml = $@"
-<fetch>
-  <entity name='sdkmessage'>
-    <attribute name='sdkmessageid' />
-    <filter type='and'>
-      <condition attribute='name' operator='eq' value='{fetchData.name}'/>
-    </filter>
-  </entity>
-</fetch>";
-            }
-            else
-            {
-                var fetchData = new
-                {
-                    name = message,
-                    primaryobjecttypecode = await GetPrimaryObjectTypeCodeAsync(entityLogicalName)
-                };
-                fetchXml = $@"
-<fetch>
-  <entity name='sdkmessage'>
-    <attribute name='sdkmessageid' />
-    <filter type='and'>
-      <condition attribute='name' operator='eq' value='{fetchData.name}'/>
-    </filter>
-    <link-entity name='sdkmessagefilter' from='sdkmessageid' to='sdkmessageid'>
-      <filter type='and'>
-        <condition attribute='primaryobjecttypecode' operator='eq' value='{fetchData.primaryobjecttypecode}'/>
-      </filter>
-    </link-entity>
-  </entity>
-</fetch>";
-            }
-            var rows = await ServiceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
-            return rows.Entities.Count == 0 ? null : new EntityReference("sdkmessage", rows.Entities[0].Id);
-        }
-
-        private async Task<Guid?> GetImpersonatingUserIdAsync(string runAs)
-        {
-            if (runAs.Length == 0) return (Guid?)null;
-            var fetchData = new
-            {
-                fullname = runAs
-            };
-            var fetchXml = $@"
-<fetch>
-  <entity name='systemuser'>
-    <attribute name='systemuserid' />
-    <filter type='and'>
-      <condition attribute='fullname' operator='eq' value='{fetchData.fullname}'/>
-    </filter>
-  </entity>
-</fetch>";
-            var rows = await ServiceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
-            if (rows.Entities.Count == 0) return (Guid?)null;
-            return rows.Entities[0].Id;
         }
 
         private async Task DeployPackageAsync(string file)

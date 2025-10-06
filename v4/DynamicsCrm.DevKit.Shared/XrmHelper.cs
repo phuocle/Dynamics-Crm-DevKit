@@ -1306,5 +1306,168 @@ namespace DynamicsCrm.DevKit.Shared
                 return languages;
             }
         }
+
+        internal static async Task<Entity> GetSecureEntityAsync(ServiceClient service, Guid pluginStepId)
+        {
+            var fetchData = new
+            {
+                sdkmessageprocessingstepid = pluginStepId
+            };
+            var fetchXml = $@"
+<fetch>
+  <entity name='sdkmessageprocessingstep'>
+    <attribute name='name' />
+    <attribute name='sdkmessageprocessingstepid' />
+    <filter>
+      <condition attribute='sdkmessageprocessingstepid' operator='eq' value='{fetchData.sdkmessageprocessingstepid}'/>
+    </filter>
+    <link-entity name='sdkmessageprocessingstepsecureconfig' from='sdkmessageprocessingstepsecureconfigid' to='sdkmessageprocessingstepsecureconfigid' link-type='outer' alias='s'>
+      <attribute name='secureconfig' />
+      <attribute name='sdkmessageprocessingstepsecureconfigid' />
+    </link-entity>
+  </entity>
+</fetch>";
+
+            var rows = await service.RetrieveMultipleAsync(new FetchExpression(fetchXml));
+            if (rows.Entities.Count != 1) return null;
+            return rows.Entities[0];
+        }
+
+        internal static async Task<Guid?> GetImpersonatingUserIdAsync(ServiceClient service, string runAs)
+        {
+            if (runAs.Length == 0) return (Guid?)null;
+            var fetchData = new
+            {
+                fullname = runAs
+            };
+            var fetchXml = $@"
+<fetch>
+  <entity name='systemuser'>
+    <attribute name='systemuserid' />
+    <filter type='and'>
+      <condition attribute='fullname' operator='eq' value='{fetchData.fullname}'/>
+    </filter>
+  </entity>
+</fetch>";
+            var rows = await service.RetrieveMultipleAsync(new FetchExpression(fetchXml));
+            if (rows.Entities.Count == 0) return (Guid?)null;
+            return rows.Entities[0].Id;
+        }
+
+        internal static async Task<EntityReference> GetSdkMessageIdAsync(ServiceClient service, string entityLogicalName, string message)
+        {
+            if (entityLogicalName?.Length == 0) return null;
+            string fetchXml;
+            if (entityLogicalName.ToLower() == "none")
+            {
+                var fetchData = new
+                {
+                    name = message
+                };
+                fetchXml = $@"
+<fetch>
+  <entity name='sdkmessage'>
+    <attribute name='sdkmessageid' />
+    <filter type='and'>
+      <condition attribute='name' operator='eq' value='{fetchData.name}'/>
+    </filter>
+  </entity>
+</fetch>";
+            }
+            else
+            {
+                var fetchData = new
+                {
+                    name = message,
+                    primaryobjecttypecode = await GetPrimaryObjectTypeCodeAsync(service, entityLogicalName)
+                };
+                fetchXml = $@"
+<fetch>
+  <entity name='sdkmessage'>
+    <attribute name='sdkmessageid' />
+    <filter type='and'>
+      <condition attribute='name' operator='eq' value='{fetchData.name}'/>
+    </filter>
+    <link-entity name='sdkmessagefilter' from='sdkmessageid' to='sdkmessageid'>
+      <filter type='and'>
+        <condition attribute='primaryobjecttypecode' operator='eq' value='{fetchData.primaryobjecttypecode}'/>
+      </filter>
+    </link-entity>
+  </entity>
+</fetch>";
+            }
+            var rows = await service.RetrieveMultipleAsync(new FetchExpression(fetchXml));
+            return rows.Entities.Count == 0 ? null : new EntityReference("sdkmessage", rows.Entities[0].Id);
+        }
+
+        internal static async Task<int?> GetPrimaryObjectTypeCodeAsync(ServiceClient service, string entityName)
+        {
+            if (entityName?.Length == 0) return null;
+            var request = new RetrieveEntityRequest
+            {
+                EntityFilters = EntityFilters.Entity,
+                LogicalName = entityName.ToLower()
+            };
+            var response = (RetrieveEntityResponse)await service.ExecuteAsync(request);
+            return response.EntityMetadata.ObjectTypeCode ?? 0;
+        }
+
+        internal static async Task<EntityReference> GetSdkMessageFilterIdAsync(ServiceClient service, string entityLogicalName, string message)
+        {
+            if (entityLogicalName?.Length == 0 || entityLogicalName?.ToLower() == "none") return null;
+            var fetchData = new
+            {
+                primaryobjecttypecode = await GetPrimaryObjectTypeCodeAsync(service,entityLogicalName),
+                name = message
+            };
+            var fetchXml = $@"
+<fetch>
+  <entity name='sdkmessagefilter'>
+    <attribute name='sdkmessagefilterid' />
+    <filter type='and'>
+      <condition attribute='primaryobjecttypecode' operator='eq' value='{fetchData.primaryobjecttypecode}'/>
+    </filter>
+    <link-entity name='sdkmessage' from='sdkmessageid' to='sdkmessageid'>
+      <filter type='and'>
+        <condition attribute='name' operator='eq' value='{fetchData.name}'/>
+      </filter>
+    </link-entity>
+  </entity>
+</fetch>";
+            var rows = await service.RetrieveMultipleAsync(new FetchExpression(fetchXml));
+            return rows.Entities.Count == 0 ? null : new EntityReference("sdkmessagefilter", rows.Entities[0].Id);
+        }
+
+        internal static async Task<Entity> GetEntityDataProviderIdAsync(ServiceClient service, string dataSource)
+        {
+            var fetchData = new
+            {
+                datasourcelogicalname = dataSource
+            };
+            var fetchXml = $@"
+<fetch>
+  <entity name='entitydataprovider'>
+    <attribute name='entitydataproviderid' />
+    <attribute name='retrievemultipleplugin' />
+    <attribute name='createplugin' />
+    <attribute name='deleteplugin' />
+    <attribute name='updateplugin' />
+    <attribute name='retrieveplugin' />
+    <filter>
+      <condition attribute='datasourcelogicalname' operator='eq' value='{fetchData.datasourcelogicalname}'/>
+    </filter>
+  </entity>
+</fetch>";
+            var rows = await service.RetrieveMultipleAsync(new FetchExpression(fetchXml));
+            if (rows.Entities.Count != 1) return null;
+            return rows.Entities[0];
+        }
+
+        internal static async Task<bool> IsVirtualTableSupportCRUDAsync(ServiceClient service)
+        {
+            var request = new RetrieveVersionRequest();
+            var response = (RetrieveVersionResponse)await service.ExecuteAsync(request);
+            return new Version(response.Version) >= new Version("9.1.0.18950");
+        }
     }
 }
