@@ -6,9 +6,6 @@
 * Automatic include hashtag #solution for each prompt
 * If used ServiceClient type, the variable name should be 'serviceClient'
 
-# For Markdown file (.md)
-* Use markdown.instructions.md in the same folder with this file
-
 # For Solution
 * Scan the files for the loaded project in the open solution.
 
@@ -16,6 +13,10 @@
 * If the prompt related to DynamicsCrm.DevKit.Cli, please check the code in these folders
     * DynamicsCrm.DevKit.Cli
     * DynamicsCrm.DevKit.Shared
+* If you found text 'cli' means is said 'DynamicsCrm.DevKit.Cli' project
+* If you need build cli, you need use MSBuild to build the solution DynamicsCrm.DevKit.Cli.sln
+* If you need run cli, you need check launchSettings.json in DynamicsCrm.DevKit.Cli project
+* If I provide build and run profile "server", it means you need build and run DynamicsCrm.DevKit.Cli project with launchSettings.json profile "server"
 
 # Develop DynamicsCrm.DevKit.Tools
 * If the prompt related to DynamicsCrm.DevKit.Tools, please check the code in these folders
@@ -31,3 +32,10 @@
 * If the prompt related to DynamicsCrm.DevKit.Analyzers, please check the code
     * DynamicsCrm.DevKit.Analyzers
     * DynamicsCrm.DevKit.Shared
+
+# BUILD PROJECTS/SOLUTION
+* After each code change, please build the solution to ensure nothing is broken.
+* DON'T use dotnet build, please use MSBuild to build the solution.
+* Path to MSBuild: C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\MSBuild.exe
+
+* ALWAYS use BeastMode.prompt.md in folder .github\prompts for each prompt
