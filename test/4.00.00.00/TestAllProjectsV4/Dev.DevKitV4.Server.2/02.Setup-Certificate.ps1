@@ -1,14 +1,13 @@
-﻿# Setup Code Signing Certificate for Managed Identity Sample Plugin
-# This script generates a self-signed code signing certificate
-
-# ========================================
-# CONFIGURATION - UPDATE THESE VALUES
+﻿# ========================================
+# BEGIN CONFIGURATION
 # ========================================
 $certificatePassword = "YourPassword123!"  # Change to your preferred password
 $certificateSubject = "CN=Dataverse Plugin Code Signing"
 $certificateFileName = "cert-signing"
 $validityYears = 20
-
+# ========================================
+# END CONFIGURATION
+# ========================================
 Write-Host "========================================" -ForegroundColor Cyan
 Write-Host "Code Signing Certificate Setup" -ForegroundColor Cyan
 Write-Host "========================================`n" -ForegroundColor Cyan

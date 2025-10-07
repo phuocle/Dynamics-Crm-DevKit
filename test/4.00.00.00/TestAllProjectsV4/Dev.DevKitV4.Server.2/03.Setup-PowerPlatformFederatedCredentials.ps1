@@ -1,14 +1,10 @@
 ﻿# ========================================
-# HARD-CODED PARAMETERS - UPDATE THESE VALUES
+# BEGIN CONFIGURATION
 # ========================================
-
 $TenantId = "49528483-b79b-4b88-b86e-7d882ba68911"
 $AppId = "8ad0b2f9-f23d-4f57-b4bd-a04220501240"
 $CertificatePath = "cert-signing.pfx"
 $CertificatePassword = "YourPassword123!"
-
-# IMPORTANT: PROVIDE ARRAYS FOR ENVIRONMENTS AND ORGANIZATIONS
-# Ensure the EnvironmentId and OrganizationId at the same index belong to the same environment!
 $EnvironmentId = @(
     "2f985c04-9487-e70c-aa57-dcd6d08f0886" # DEV Environment ID
     #"a1b2c3d4-e5f6-g7h8-i9j0-k1l2m3n4o5p6", # TEST Environment ID
@@ -19,9 +15,8 @@ $OrganizationId = @(
     #"12345678-90ab-cdef-1234-567890abcdef", # TEST Organization ID
     #"fedcba98-7654-3210-fedc-ba9876543210"  # UAT Organization ID
 )
-
 # ========================================
-# SCRIPT LOGIC - DO NOT MODIFY BELOW
+# END CONFIGURATION
 # ========================================
 
 function Convert-GuidToBase64Url {

@@ -1,16 +1,15 @@
-﻿# Setup Azure Resources for Managed Identity Sample Plugin
-# This script creates all necessary Azure resources
-
+﻿# ========================================
+# BEGIN CONFIGURATION
 # ========================================
-# CONFIGURATION - UPDATE THESE VALUES
-# ========================================
-$appName = "DataversePluginManagedIdentity"
+$appName = "DataversePluginManagedIdentity2"
 $resourceGroup = "dataverse-plugin-rg"
 $location = "eastus"
-$keyVaultName = "dataverse-plugin-kv"  # Must be globally unique
-$secretName = "ApiEndpoint"
-$secretValue = "https://api.example.com"
-
+$keyVaultName = "dataverse-plugin-kv-2"
+$secretName = "ApiEndpoint2"
+$secretValue = "https://api.example.com2"
+# ========================================
+# END CONFIGURATION
+# ========================================
 Write-Host "========================================" -ForegroundColor Cyan
 Write-Host "Azure Resources Setup for Managed Identity Plugin" -ForegroundColor Cyan
 Write-Host "========================================`n" -ForegroundColor Cyan
