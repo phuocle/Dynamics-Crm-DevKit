@@ -156,7 +156,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var signToolPath = FindSignTool();
             if (string.IsNullOrEmpty(signToolPath))
             {
-                CliLog.WriteLineError(ConsoleColor.Yellow, "SignTool.exe not found. Please install Windows SDK.");
+                //CliLog.WriteLineError(ConsoleColor.Yellow, "SignTool.exe not found. Please install Windows SDK.");
                 return false;
             }
             var extension = Path.GetExtension(certificatePath).ToLowerInvariant();
@@ -274,9 +274,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         }
                     }
                 }
-
-                CliLog.WriteLineWarning(ConsoleColor.Yellow, "SignTool.exe not found in Windows SDK paths");
-                CliLog.WriteLine(ConsoleColor.White, "|");
+                CliLog.WriteLineError(ConsoleColor.Yellow, "SignTool.exe not found. Please install Windows SDK.");
                 CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Cyan, "To sign assemblies, you need to install Windows SDK:");
                 CliLog.WriteLine(ConsoleColor.White, "|");
                 CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.White, "Option 1: Install Windows 10/11 SDK (Recommended)");
