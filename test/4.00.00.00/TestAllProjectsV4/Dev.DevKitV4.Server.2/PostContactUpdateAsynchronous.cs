@@ -2,10 +2,11 @@
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Extensions;
 using System;
+using System.Collections.Generic;
 
 namespace Dev.DevKitV4.Server._2
 {
-    [CrmPluginRegistration("Update", "contact", StageEnum.PostOperation, ExecutionModeEnum.Asynchronous, "firstname", "Dev.DevKitV4.Server._2.PostContactUpdateAsynchronous", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, DeleteAsyncOperation = true, Image1Name = "PreImage", Image1Alias = "PreImage", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "*", Image2Name = "PostImage", Image2Alias = "PostImage", Image2Type = ImageTypeEnum.PostImage, Image2Attributes = "*", SecureConfiguration = "SecureConfiguration", UnSecureConfiguration = "UnSecureConfiguration", Action = PluginStepOperationEnum.Deactivate, Unregister = true)]
+    [CrmPluginRegistration("Update", "contact", StageEnum.PostOperation, ExecutionModeEnum.Asynchronous, "firstname", "Dev.DevKitV4.Server._2.PostContactUpdateAsynchronous", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, DeleteAsyncOperation = true, Image1Name = "PreImage", Image1Alias = "PreImage", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "*", Image2Name = "PostImage", Image2Alias = "PostImage", Image2Type = ImageTypeEnum.PostImage, Image2Attributes = "*", SecureConfiguration = "SecureConfiguration", UnSecureConfiguration = "UnSecureConfiguration")]
     public class PostContactUpdateAsynchronous : IPlugin
     {
         /*
@@ -39,6 +40,22 @@ namespace Dev.DevKitV4.Server._2
             var serviceFactory = (IOrganizationServiceFactory)serviceProvider.GetService(typeof(IOrganizationServiceFactory));
             var serviceAdmin = serviceFactory.CreateOrganizationService(null);
             var service = serviceFactory.CreateOrganizationService(context.UserId);
+
+            // 1. Get Managed Identity Token
+            var identityService = (IManagedIdentityService)serviceProvider.GetService(typeof(IManagedIdentityService));
+            var scopes = new List<string> { "https://vault.azure.net/.default" };
+            var token = identityService.AcquireToken(scopes);
+
+            // 2. Get Secret from Key Vault
+            var secretValue = KeyVaultHelper.GetSecret(
+                token,
+                "https://dataverse-plugin-kv.vault.azure.net/",
+                "ApiEndPoint",
+                tracing
+            );
+
+            // 3. Use the secret!
+            tracing.DebugMessage($"API Endpoint: {secretValue}");
 
             tracing?.DebugContext(context);
 
