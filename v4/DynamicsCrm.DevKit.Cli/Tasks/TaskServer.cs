@@ -1216,16 +1216,19 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 ["version"] = assemblyProperties[2],
                 ["publickeytoken"] = assemblyProperties[6],
             };
+            var text = string.Empty;
             var assemblyAttribute = GetDynamcisCrmDevkitAssemblyAttribute(assembly);
             if (assemblyAttribute != null)
             {
                 plugin["sourcetype"] = new OptionSetValue((int)assemblyAttribute.SourceType);
                 plugin["isolationmode"] = new OptionSetValue((int)assemblyAttribute.IsolationMode);
+                text = $" [Isolation={assemblyAttribute.IsolationMode}, Source={assemblyAttribute.SourceType}]";
             }
             else
             {
                 plugin["sourcetype"] = new OptionSetValue(0);
                 plugin["isolationmode"] = new OptionSetValue(2);
+                text = $" [Isolation={IsolationModeEnum.Sandbox}, Source={SourceTypeEnum.Database}]";
             }
             if (rows.Entities.Count == 0)
             {
@@ -1236,7 +1239,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 request.Parameters.Add("SolutionUniqueName", Json.solution);
                 CliLog.Write(ConsoleColor.White, "|", SPACE);
                 CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTER.Trim());
-                CliLog.WriteLine(ConsoleColor.White, " Assembly ", ConsoleColor.Cyan, assemblyName);
+                CliLog.Write(ConsoleColor.White, " Assembly ", ConsoleColor.Cyan, assemblyName);
+                CliLog.WriteLine(ConsoleColor.Blue, text);
                 var response = (CreateResponse)await ServiceClient.ExecuteAsync(request);
                 return response.id;
             }
@@ -1245,7 +1249,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 var oldContent = rows.Entities[0].GetAttributeValue<string>("content");
                 if (IsEqualsContent(oldContent, newContent))
                 {
-                    CliLog.WriteLine(ConsoleColor.White, "|", SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.Blue, "Assembly ", ConsoleColor.Cyan, assemblyName);
+                    CliLog.Write(ConsoleColor.White, "|", SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.Blue, "Assembly ", ConsoleColor.Cyan, assemblyName);
+                    CliLog.WriteLine(ConsoleColor.Blue, text);
                     return rows.Entities[0].Id;
                 }
                 else
@@ -1258,7 +1263,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     request.Parameters.Add("SolutionUniqueName", Json.solution);
                     CliLog.Write(ConsoleColor.White, "|", SPACE);
                     CliLog.WriteSuccess(ConsoleColor.White, CliAction.UPDATED.Trim());
-                    CliLog.WriteLine(ConsoleColor.White, " Assembly ", ConsoleColor.Cyan, assemblyName);
+                    CliLog.Write(ConsoleColor.White, " Assembly ", ConsoleColor.Cyan, assemblyName);
+                    CliLog.WriteLine(ConsoleColor.Blue, text);
                     try
                     {
                         await ServiceClient.ExecuteAsync(request);
