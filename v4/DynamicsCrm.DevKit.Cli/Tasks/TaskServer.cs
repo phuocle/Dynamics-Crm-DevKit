@@ -756,6 +756,14 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE);
                 CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTER.Trim());
                 CliLog.WriteLine(ConsoleColor.White, $" Step ", ConsoleColor.Blue, attribute.Message, " ", ConsoleColor.Cyan, attribute.Name);
+                if (attribute.SecureConfiguration.Length > 0)
+                {
+
+                }
+                if (attribute.UnSecureConfiguration.Length > 0)
+                {
+
+                }
                 if (IsMessageUpdate(attribute.Message))
                 {
                     CliLog.WriteLine(SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, " ", ConsoleColor.White, "Update Fields: ", ConsoleColor.Green, attribute.FilteringAttributes ?? "*");
