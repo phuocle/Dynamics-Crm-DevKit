@@ -1,0 +1,9 @@
+﻿{
+    "subject":  "component:pluginassembly,thumbprint:DAEF6289DDBDAF48A351EDE565454C23EC213BE4,environment:2f985c04-9487-e70c-aa57-dcd6d08f0886",
+    "audiences":  [
+                      "api://AzureADTokenExchange"
+                  ],
+    "issuer":  "https://2f985c049487e70caa57dcd6d08f08.86.environment.api.powerplatform.com/sts",
+    "name":  "PowerPlatform-Issuer",
+    "description":  "Power Platform Issuer - Authentication (uses Environment ID)"
+}

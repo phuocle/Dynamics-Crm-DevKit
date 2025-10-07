@@ -1,12 +1,13 @@
 ﻿# ========================================
 # HARD-CODED PARAMETERS - UPDATE THESE VALUES
 # ========================================
-$AppId = "YOUR-APP-ID-HERE"              # Example: 8ad0b2f9-f23d-4f57-b4bd-a04220501240
-$TenantId = "YOUR-TENANT-ID-HERE"        # Example: 49528483-b79b-4b88-b86e-7d882ba68911
-$OrganizationId = "YOUR-ORG-ID-HERE"     # Example: 29c6e552-e16f-ef11-a66b-6045bd1e7d8b
-$EnvironmentId = "YOUR-ENV-ID-HERE"      # Example: 2f985c04-9487-e70c-aa57-dcd6d08f0886
-$CertificatePath = "YOUR-CERT-PATH-HERE" # Example: D:\certs\cert.pfx
-$CertificatePassword = "YOUR-CERT-PWD-HERE" # Example: password
+
+$TenantId = "49528483-b79b-4b88-b86e-7d882ba68911"
+$EnvironmentId = "2f985c04-9487-e70c-aa57-dcd6d08f0886"
+$OrganizationId = "29c6e552-e16f-ef11-a66b-6045bd1e7d8b"
+$AppId = "8ad0b2f9-f23d-4f57-b4bd-a04220501240"
+$CertificatePath = "cert-signing.pfx"
+$CertificatePassword = "YourPassword123!"
 
 function Convert-GuidToBase64Url {
     param([string]$guid)
@@ -30,7 +31,17 @@ Write-Host ""
 Write-Host "💡 Tip: Get IDs from Power Apps → Settings → Session details" -ForegroundColor Cyan
 Write-Host ""
 
-# Load certificate
+# Load certificate - use script directory if relative path
+$ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+if (-not [System.IO.Path]::IsPathRooted($CertificatePath)) {
+    $CertificatePath = Join-Path $ScriptDir $CertificatePath
+}
+
+if (-not (Test-Path $CertificatePath)) {
+    Write-Host "❌ ERROR: Certificate file not found: $CertificatePath" -ForegroundColor Red
+    exit 1
+}
+
 $secPwd = ConvertTo-SecureString -String $CertificatePassword -AsPlainText -Force
 $cert = New-Object System.Security.Cryptography.X509Certificates.X509Certificate2($CertificatePath, $secPwd)
 $certBytes = $cert.Export([System.Security.Cryptography.X509Certificates.X509ContentType]::Cert)
@@ -86,9 +97,9 @@ $cred1 = @{
     subject = $subject1
     description = "Azure AD Issuer - OIDC Validation (uses Organization ID)"
     audiences = @("api://AzureADTokenExchange")
-} | ConvertTo-Json | Out-File "cred1.json" -Encoding UTF8
+} | ConvertTo-Json | Out-File "AzureAD-Issuer.json" -Encoding UTF8
 
-az ad app federated-credential create --id $AppId --parameters cred1.json | Out-Null
+az ad app federated-credential create --id $AppId --parameters AzureAD-Issuer.json | Out-Null
 Write-Host "  ✅ Created" -ForegroundColor Green
 Write-Host ""
 
@@ -105,9 +116,9 @@ $cred2 = @{
     subject = $subject2
     description = "Power Platform Issuer - Authentication (uses Environment ID)"
     audiences = @("api://AzureADTokenExchange")
-} | ConvertTo-Json | Out-File "cred2.json" -Encoding UTF8
+} | ConvertTo-Json | Out-File "PowerPlatform-Issuer.json" -Encoding UTF8
 
-az ad app federated-credential create --id $AppId --parameters cred2.json | Out-Null
+az ad app federated-credential create --id $AppId --parameters PowerPlatform-Issuer.json | Out-Null
 Write-Host "  ✅ Created" -ForegroundColor Green
 
 Write-Host "`n✅ SUCCESS! Both credentials created.`n" -ForegroundColor Green
