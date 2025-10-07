@@ -10,6 +10,7 @@ using Microsoft.Xrm.Sdk.Query;
 using NuGet.Packaging;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -123,11 +124,218 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         {
             if (deployFileType == DeployFileType.Dll)
             {
-                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, $"{Path.GetFileName(file)}");
+                CliLog.Write(ConsoleColor.White, "|", ConsoleColor.Green, $"{Path.GetFileName(file)}");
+                var signed = await SignDllIfNeedAsync(file);
+                if (string.IsNullOrEmpty(signed)) CliLog.WriteLine();
+                else CliLog.WriteLine(ConsoleColor.White, " [", ConsoleColor.Magenta, signed, ConsoleColor.White, "]");
             }
             var types = GetTypes(file);
             if (!await IsValidTypesAsync(file, types)) return;
             await DeployFileAsync(file, types, deployFileType);
+        }
+
+        private async Task<string> SignDllIfNeedAsync(string file)
+        {
+            var assembly = LoadAssemblyIntoCache(file);
+            var assemblyAttribute = GetDynamcisCrmDevkitAssemblyAttribute(assembly);
+            if (assemblyAttribute == null) return string.Empty;
+            if (await SignAssemblyAsync(file, Path.Combine(CurrentDirectory, assemblyAttribute.CertificatePath), assemblyAttribute.CertificatePassword))
+                return "Signed => DynamcisCrmDevkitAssemblyAttribute";
+            return "Signed => FALIED";
+        }
+
+        private async Task<bool> SignAssemblyAsync(string file, string certificatePath, string certificatePassword = null)
+        {
+            if (!File.Exists(file))
+            {
+                CliLog.WriteLineError(ConsoleColor.Red, $"Assembly not found: {file}");
+                return false;
+            }
+            if (!File.Exists(certificatePath))
+            {
+                CliLog.WriteLineError(ConsoleColor.Red, $"Certificate not found: {certificatePath}");
+                return false;
+            }
+
+            var signToolPath = FindSignTool();
+            if (string.IsNullOrEmpty(signToolPath))
+            {
+                CliLog.WriteLineError(ConsoleColor.Red, "SignTool.exe not found. Please install Windows SDK.");
+                return false;
+            }
+
+            // Build signtool command based on certificate type
+            var extension = Path.GetExtension(certificatePath).ToLowerInvariant();
+            string arguments;
+
+            if (extension == ".pfx")
+            {
+                // Sign with .pfx file (requires password)
+                if (string.IsNullOrEmpty(certificatePassword))
+                {
+                    arguments = $"sign /f \"{certificatePath}\" /fd SHA256 /v \"{file}\"";
+                }
+                else
+                {
+                    arguments = $"sign /f \"{certificatePath}\" /p \"{certificatePassword}\" /fd SHA256 /v \"{file}\"";
+                }
+            }
+            else if (extension == ".cer")
+            {
+                // Sign with .cer file (no password needed, uses certificate from store)
+                arguments = $"sign /f \"{certificatePath}\" /fd SHA256 /v \"{file}\"";
+            }
+            else
+            {
+                CliLog.WriteLineError(ConsoleColor.Red, $"Unsupported certificate format: {extension}. Only .pfx and .cer are supported.");
+                return false;
+            }
+
+            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Cyan, $"Signing assembly: {Path.GetFileName(file)}");
+
+
+            var processStartInfo = new ProcessStartInfo
+            {
+                FileName = signToolPath,
+                Arguments = arguments,
+                UseShellExecute = false,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                CreateNoWindow = true
+            };
+
+            using (var process = new Process { StartInfo = processStartInfo })
+            {
+                var output = new System.Text.StringBuilder();
+                var error = new System.Text.StringBuilder();
+
+                process.OutputDataReceived += (sender, args) =>
+                {
+                    if (!string.IsNullOrEmpty(args.Data))
+                        output.AppendLine(args.Data);
+                };
+
+                process.ErrorDataReceived += (sender, args) =>
+                {
+                    if (!string.IsNullOrEmpty(args.Data))
+                        error.AppendLine(args.Data);
+                };
+
+                process.Start();
+                process.BeginOutputReadLine();
+                process.BeginErrorReadLine();
+
+                await Task.Run(() => process.WaitForExit());
+
+                if (process.ExitCode == 0)
+                {
+                    CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, $"✓ Assembly signed successfully");
+                    return true;
+                }
+                else
+                {
+                    CliLog.WriteLineError(ConsoleColor.Red, $"  SignTool failed with exit code: {process.ExitCode}");
+                    return false;
+                }
+            }
+
+        }
+
+        private string FindSignTool()
+        {
+            try
+            {
+                // Common Windows SDK paths
+                var programFilesX86 = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86);
+                var programFiles = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
+
+                var searchPaths = new List<string>
+                {
+                    Path.Combine(programFilesX86, "Windows Kits", "10", "bin"),
+                    Path.Combine(programFiles, "Windows Kits", "10", "bin"),
+                    Path.Combine(programFilesX86, "Windows Kits", "8.1", "bin"),
+                    Path.Combine(programFiles, "Windows Kits", "8.1", "bin"),
+                    Path.Combine(programFilesX86, "Windows Kits", "8.0", "bin"),
+                    Path.Combine(programFiles, "Windows Kits", "8.0", "bin")
+                };
+
+                // Search for signtool.exe in SDK directories
+                foreach (var searchPath in searchPaths)
+                {
+                    if (!Directory.Exists(searchPath)) continue;
+
+                    // For Windows 10 SDK, check version subfolders
+                    if (searchPath.Contains("Windows Kits\\10"))
+                    {
+                        var versionDirs = Directory.GetDirectories(searchPath)
+                            .Where(d => Directory.Exists(Path.Combine(d, "x64")) || Directory.Exists(Path.Combine(d, "x86")))
+                            .OrderByDescending(d => d);
+
+                        foreach (var versionDir in versionDirs)
+                        {
+                            // Prefer x64 version
+                            var x64Path = Path.Combine(versionDir, "x64", "signtool.exe");
+                            if (File.Exists(x64Path))
+                            {
+                                CliLog.WriteLine(ConsoleColor.White, "|", SPACE, ConsoleColor.Green, $"Found SignTool: {x64Path}");
+                                return x64Path;
+                            }
+
+                            var x86Path = Path.Combine(versionDir, "x86", "signtool.exe");
+                            if (File.Exists(x86Path))
+                            {
+                                CliLog.WriteLine(ConsoleColor.White, "|", SPACE, ConsoleColor.Green, $"Found SignTool: {x86Path}");
+                                return x86Path;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        // For older SDKs
+                        var x64Path = Path.Combine(searchPath, "x64", "signtool.exe");
+                        if (File.Exists(x64Path))
+                        {
+                            CliLog.WriteLine(ConsoleColor.White, "|", SPACE, ConsoleColor.Green, $"Found SignTool: {x64Path}");
+                            return x64Path;
+                        }
+
+                        var x86Path = Path.Combine(searchPath, "x86", "signtool.exe");
+                        if (File.Exists(x86Path))
+                        {
+                            CliLog.WriteLine(ConsoleColor.White, "|", SPACE, ConsoleColor.Green, $"Found SignTool: {x86Path}");
+                            return x86Path;
+                        }
+                    }
+                }
+
+                CliLog.WriteLineWarning(ConsoleColor.Yellow, "SignTool.exe not found in Windows SDK paths");
+                CliLog.WriteLine(ConsoleColor.White, "|");
+                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Cyan, "To sign assemblies, you need to install Windows SDK:");
+                CliLog.WriteLine(ConsoleColor.White, "|");
+                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.White, "Option 1: Install Windows 10/11 SDK (Recommended)");
+                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "  Download: https://developer.microsoft.com/en-us/windows/downloads/windows-sdk/");
+                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.White, "  During installation, select:", ConsoleColor.Yellow, " 'Windows SDK Signing Tools for Desktop Apps'");
+                CliLog.WriteLine(ConsoleColor.White, "|");
+                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.White, "Option 2: Install via Visual Studio Installer");
+                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.White, "  1. Open Visual Studio Installer");
+                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.White, "  2. Click 'Modify' on your Visual Studio installation");
+                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.White, "  3. Go to 'Individual Components' tab");
+                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.White, "  4. Search for and select:", ConsoleColor.Yellow, " 'Windows 10 SDK' or 'Windows 11 SDK'");
+                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.White, "  5. Click 'Modify' to install");
+                CliLog.WriteLine(ConsoleColor.White, "|");
+                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.White, "Option 3: Install via Chocolatey (Package Manager)");
+                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "  Run: ", ConsoleColor.Yellow, "choco install windows-sdk-10.0");
+                CliLog.WriteLine(ConsoleColor.White, "|");
+                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.White, "After installation, SignTool.exe will be located at:");
+                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Gray, "  C:\\Program Files (x86)\\Windows Kits\\10\\bin\\{version}\\x64\\signtool.exe");
+                CliLog.WriteLine(ConsoleColor.White, "|");
+                return null;
+            }
+            catch (Exception ex)
+            {
+                CliLog.WriteLineError(ConsoleColor.Red, $"Error finding SignTool: {ex.Message}");
+                return null;
+            }
         }
 
         private async Task DeployFileAsync(string file, List<TypeInfo> types, DeployFileType deployFileType)
@@ -1568,12 +1776,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
         private async Task DeployPackageFilesAsync(List<string> files)
         {
-            // Pre-load all dependency assemblies into cache to avoid file locking
             foreach (var f in files)
             {
                 LoadAssemblyIntoCache(f);
             }
-
             foreach (var file in files)
             {
                 var types = GetTypes(file);
