@@ -1,9 +1,0 @@
-﻿{
-    "subject":  "/eid1/c/pub/t/g4RSSZu3iEu4bn2IK6aJEQ/a/-bLQij3yV0-0vaBCIFASQA/n/plugin/e/29c6e552e16fef11a66b6045bd1e7d8b/h/liyOm4bhvXXyPT48hrkiH_rLUakfj1MCx0kmimf_yT4",
-    "audiences":  [
-                      "api://AzureADTokenExchange"
-                  ],
-    "issuer":  "https://login.microsoftonline.com/49528483-b79b-4b88-b86e-7d882ba68911/v2.0",
-    "name":  "AzureAD-Issuer",
-    "description":  "Azure AD Issuer - OIDC Validation (uses Organization ID)"
-}
