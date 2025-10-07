@@ -59,6 +59,7 @@
     <None Include="deploy.debug.bat" />
     <None Include="deploy.debug.only.bat" />
     <Compile Include="PostContactCreateAsynchronous.cs" />
+    <Compile Include="PostContactDeleteAsynchronous.cs" />
     <Compile Include="PostContactUpdateAsynchronous.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

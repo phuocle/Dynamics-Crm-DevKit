@@ -758,15 +758,15 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 CliLog.WriteLine(ConsoleColor.White, $" Step ", ConsoleColor.Blue, attribute.Message, " ", ConsoleColor.Cyan, attribute.Name);
                 if (attribute.SecureConfiguration.Length > 0)
                 {
-
+                    CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, " ", ConsoleColor.White, "Secure Configuration: ", ConsoleColor.Green, attribute.SecureConfiguration ?? "*");
                 }
                 if (attribute.UnSecureConfiguration.Length > 0)
                 {
-
+                    CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, " ", ConsoleColor.White, "UnSecure Configuration: ", ConsoleColor.Green, attribute.UnSecureConfiguration ?? "*");
                 }
                 if (IsMessageUpdate(attribute.Message))
                 {
-                    CliLog.WriteLine(SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, " ", ConsoleColor.White, "Update Fields: ", ConsoleColor.Green, attribute.FilteringAttributes ?? "*");
+                    CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, " ", ConsoleColor.White, "Update Fields: ", ConsoleColor.Green, attribute.FilteringAttributes ?? "*");
                 }
                 try
                 {
@@ -832,6 +832,14 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     if (attribute.Action == PluginStepOperationEnum.Activate)
                     {
                         CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, $"Step ", ConsoleColor.Blue, attribute.Message, " ", ConsoleColor.Cyan, attribute.Name);
+                        if (attribute.SecureConfiguration.Length > 0)
+                        {
+                            CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, ConsoleColor.White, "Secure Configuration: ", ConsoleColor.Green, attribute.SecureConfiguration ?? "*");
+                        }
+                        if (attribute.UnSecureConfiguration.Length > 0)
+                        {
+                            CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, ConsoleColor.White, "UnSecure Configuration: ", ConsoleColor.Green, attribute.UnSecureConfiguration ?? "*");
+                        }
                         if (IsMessageUpdate(attribute.Message))
                         {
                             CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, ConsoleColor.White, "Update Fields: ", ConsoleColor.Green, attribute.FilteringAttributes ?? "*"); ;
@@ -843,6 +851,18 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         CliLog.WriteSuccess(ConsoleColor.White, CliAction.DEACTIVATED.Trim());
                         CliLog.Write(ConsoleColor.White, $" Step ", ConsoleColor.Blue, attribute.Message, " ", ConsoleColor.Cyan, attribute.Name);
                         CliLog.WriteLine();
+                        if (attribute.SecureConfiguration.Length > 0)
+                        {
+                            CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, ConsoleColor.White, "Secure Configuration: ", ConsoleColor.Green, attribute.SecureConfiguration ?? "*");
+                        }
+                        if (attribute.UnSecureConfiguration.Length > 0)
+                        {
+                            CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, ConsoleColor.White, "UnSecure Configuration: ", ConsoleColor.Green, attribute.UnSecureConfiguration ?? "*");
+                        }
+                        if (IsMessageUpdate(attribute.Message))
+                        {
+                            CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, ConsoleColor.White, "Update Fields: ", ConsoleColor.Green, attribute.FilteringAttributes ?? "*");
+                        }
                     }
                 }
                 else
@@ -857,6 +877,14 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE);
                         CliLog.WriteSuccess(ConsoleColor.White, CliAction.UPDATED.Trim());
                         CliLog.WriteLine(ConsoleColor.White, $" Step ", ConsoleColor.Blue, attribute.Message, " ", ConsoleColor.Cyan, attribute.Name);
+                        if (attribute.SecureConfiguration.Length > 0)
+                        {
+                            CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, ConsoleColor.White, "Secure Configuration: ", ConsoleColor.Green, attribute.SecureConfiguration ?? "*");
+                        }
+                        if (attribute.UnSecureConfiguration.Length > 0)
+                        {
+                            CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, ConsoleColor.White, "UnSecure Configuration: ", ConsoleColor.Green, attribute.UnSecureConfiguration ?? "*");
+                        }
                         if (IsMessageUpdate(attribute.Message))
                         {
                             CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, ConsoleColor.White, "Update Fields: ", ConsoleColor.Green, attribute.FilteringAttributes ?? "*");
@@ -864,6 +892,17 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     }
                     else
                     {
+                        CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE);
+                        CliLog.WriteSuccess(ConsoleColor.White, CliAction.UPDATED.Trim());
+                        CliLog.WriteLine(ConsoleColor.White, $" Step ", ConsoleColor.Blue, attribute.Message, " ", ConsoleColor.Cyan, attribute.Name);
+                        if (attribute.SecureConfiguration.Length > 0)
+                        {
+                            CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, ConsoleColor.White, "Secure Configuration: ", ConsoleColor.Green, attribute.SecureConfiguration ?? "*");
+                        }
+                        if (attribute.UnSecureConfiguration.Length > 0)
+                        {
+                            CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, ConsoleColor.White, "UnSecure Configuration: ", ConsoleColor.Green, attribute.UnSecureConfiguration ?? "*");
+                        }
                         if (IsMessageUpdate(attribute.Message))
                         {
                             CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, ConsoleColor.White, "Update Fields: ", ConsoleColor.Green, attribute.FilteringAttributes ?? "*");
@@ -908,10 +947,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE);
                 CliLog.WriteSuccess(ConsoleColor.White, CliAction.DEACTIVATED.Trim());
                 CliLog.WriteLine(ConsoleColor.White, $" Step ", ConsoleColor.Blue, attribute.Message, " ", ConsoleColor.Cyan, attribute.Name);
-                if (IsMessageUpdate(attribute.Message))
-                {
-                    CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, ConsoleColor.White, "Update Fields: ", ConsoleColor.Green, attribute.FilteringAttributes ?? "*");
-                }
             }
             else if (
                 rows.Entities.Count > 0 &&
@@ -925,10 +960,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE);
                 CliLog.WriteSuccess(ConsoleColor.White, CliAction.ACTIVATED.Trim());
                 CliLog.WriteLine(ConsoleColor.White, $" Step ", ConsoleColor.Blue, attribute.Message, " ", ConsoleColor.Cyan, attribute.Name);
-                if (IsMessageUpdate(attribute.Message))
-                {
-                    CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, ConsoleColor.White, "Update Fields: ", ConsoleColor.Green, attribute.FilteringAttributes ?? "*");
-                }
             }
             return pluginStepId;
         }
