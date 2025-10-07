@@ -36,6 +36,6 @@
 # BUILD PROJECTS/SOLUTION
 * After each code change, please build the solution to ensure nothing is broken.
 * DON'T use dotnet build, please use MSBuild to build the solution.
-* Path to MSBuild: C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\MSBuild.exe
+* Path to MSBuild: C:\Program Files\Microsoft Visual Studio\2022\Enterprise\MSBuild\Current\Bin\MSBuild.exe
 
 * ALWAYS use BeastMode.prompt.md in folder .github\prompts for each prompt

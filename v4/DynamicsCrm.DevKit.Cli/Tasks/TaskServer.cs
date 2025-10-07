@@ -32,6 +32,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         }
 
         private const string SPACE = "  ";
+        private readonly Dictionary<string, Assembly> _assemblyCache = new Dictionary<string, Assembly>(StringComparer.OrdinalIgnoreCase);
         public bool IsOk { get; set; }
         public Guid SolutionId { get; set; }
         public string SolutionPrefix { get; set; }
@@ -1181,7 +1182,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
         private async Task<Guid?> DeployAssemblyAsync(string file)
         {
-            var assembly = Assembly.ReflectionOnlyLoadFrom(file);
+            var assembly = LoadAssemblyIntoCache(file);
             var assemblyProperties = assembly.GetName().FullName.Split(",= ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
             var assemblyName = assemblyProperties[0];
             var fetchData = new
@@ -1444,41 +1445,88 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             return files;
         }
 
+        private Assembly LoadAssemblyIntoCache(string file)
+        {
+            // Normalize path for cache lookup
+            var normalizedPath = Path.GetFullPath(file);
+
+            // Check if already loaded in cache
+            if (_assemblyCache.TryGetValue(normalizedPath, out var cachedAssembly))
+            {
+                return cachedAssembly;
+            }
+
+            Assembly assembly = null;
+            try
+            {
+                // Load assembly bytes into memory to avoid file locking
+                var assemblyBytes = File.ReadAllBytes(file);
+                AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve += CurrentDomain_ReflectionOnlyAssemblyResolve;
+                assembly = Assembly.ReflectionOnlyLoad(assemblyBytes);
+                AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve -= CurrentDomain_ReflectionOnlyAssemblyResolve;
+
+                // Cache the loaded assembly
+                if (assembly != null)
+                {
+                    _assemblyCache[normalizedPath] = assembly;
+                }
+            }
+            catch (Exception ex)
+            {
+                CliLog.WriteLineError(ConsoleColor.Red, $"Failed to load assembly {file}: {ex.Message}");
+            }
+
+            return assembly;
+        }
+
         private List<TypeInfo> GetTypes(string file)
         {
-            var assemblyFilePath = new FileInfo(file);
-            Assembly assembly = null;
-            AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve += CurrentDomain_ReflectionOnlyAssemblyResolve;
-            assembly = Assembly.ReflectionOnlyLoadFrom(file);
-            AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve -= CurrentDomain_ReflectionOnlyAssemblyResolve;
-            if (assembly == null) return null;
-            AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve += CurrentDomain_ReflectionOnlyAssemblyResolve;
-            var allTypes = assembly.DefinedTypes;
-            AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve -= CurrentDomain_ReflectionOnlyAssemblyResolve;
+            var assembly = LoadAssemblyIntoCache(file);
+
+            if (assembly == null) return new List<TypeInfo>();
+
             var types = new List<TypeInfo>();
-            foreach (var type in allTypes)
+            try
             {
-                try
+                AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve += CurrentDomain_ReflectionOnlyAssemblyResolve;
+                var allTypes = assembly.DefinedTypes;
+                AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve -= CurrentDomain_ReflectionOnlyAssemblyResolve;
+
+                foreach (var type in allTypes)
                 {
-                    var attributes = type?.GetCustomAttributesData();
-                    if (attributes.Any(a => a.AttributeType.Name == typeof(CrmPluginRegistrationAttribute).Name))
-                        types.Add(type);
+                    try
+                    {
+                        var attributes = type?.GetCustomAttributesData();
+                        if (attributes.Any(a => a.AttributeType.Name == typeof(CrmPluginRegistrationAttribute).Name))
+                            types.Add(type);
+                    }
+                    catch { }
                 }
-                catch { }
             }
+            catch (Exception ex)
+            {
+                CliLog.WriteLineError(ConsoleColor.Red, $"Failed to read types from assembly {file}: {ex.Message}");
+            }
+
             types = [.. types.OrderBy(x => x.FullName)];
             return types;
         }
 
         private Assembly CurrentDomain_ReflectionOnlyAssemblyResolve(object sender, ResolveEventArgs args)
         {
-            var parts = args.Name.Split(',');
-            Assembly assembly = parts[0] switch
+            try
             {
-                "Microsoft.Xrm.Sdk" => Assembly.ReflectionOnlyLoad(parts[0].Trim()),
-                _ => Assembly.ReflectionOnlyLoad(args.Name),
-            };
-            return assembly;
+                var parts = args.Name.Split(',');
+                var assemblyName = parts[0].Trim();
+
+                // Try to load from GAC or already loaded assemblies
+                return Assembly.ReflectionOnlyLoad(args.Name);
+            }
+            catch
+            {
+                // Return null if assembly cannot be resolved
+                return null;
+            }
         }
 
         private bool IsWorkflowType(Type type)
@@ -1519,9 +1567,15 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
         private async Task DeployPackageFilesAsync(List<string> files)
         {
+            // Pre-load all dependency assemblies into cache to avoid file locking
+            foreach (var f in files)
+            {
+                LoadAssemblyIntoCache(f);
+            }
+
             foreach (var file in files)
             {
-                var types = GetTypes(file, files);
+                var types = GetTypes(file);
                 if (types.Count > 0)
                 {
                     await DeployDllAsync(file, DeployFileType.Nuget);
@@ -1618,33 +1672,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
         }
 
-        private List<TypeInfo> GetTypes(string file, List<string> files)
-        {
-            var assemblyFilePath = new FileInfo(file);
-            Assembly assembly = null;
-            foreach (var f in files)
-                assembly = Assembly.ReflectionOnlyLoadFrom(f);
-            AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve += CurrentDomain_ReflectionOnlyAssemblyResolve;
-            assembly = Assembly.ReflectionOnlyLoadFrom(file);
-            AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve -= CurrentDomain_ReflectionOnlyAssemblyResolve;
-            if (assembly == null) return null;
-            AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve += CurrentDomain_ReflectionOnlyAssemblyResolve;
-            var allTypes = assembly.DefinedTypes;
-            AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve -= CurrentDomain_ReflectionOnlyAssemblyResolve;
-            var types = new List<TypeInfo>();
-            foreach (var type in allTypes)
-            {
-                try
-                {
-                    var attributes = type?.GetCustomAttributesData();
-                    if (attributes.Any(a => a.AttributeType.Name == typeof(CrmPluginRegistrationAttribute).Name))
-                        types.Add(type);
-                }
-                catch { }
-            }
-            types = [.. types.OrderBy(x => x.FullName)];
-            return types;
-        }
+
 
         public async Task RunAsync()
         {
