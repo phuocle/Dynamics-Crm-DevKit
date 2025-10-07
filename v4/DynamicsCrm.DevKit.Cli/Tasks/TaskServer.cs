@@ -1285,6 +1285,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var attributeData = CustomAttributeData.GetCustomAttributes(assembly)
                 .Where(data => data.AttributeType.FullName.Contains("DynamcisCrmDevkitAssemblyAttribute"))
                 .FirstOrDefault();
+            if (attributeData == null) return null;
             var attribute = new DynamcisCrmDevkitAssemblyAttribute();
             var properties = typeof(DynamcisCrmDevkitAssemblyAttribute).GetProperties();
             foreach (var namedArgument in attributeData.NamedArguments)
