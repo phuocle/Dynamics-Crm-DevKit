@@ -1053,39 +1053,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 var rows = await ServiceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
                 foreach (var row in rows.Entities)
                 {
-                    await DeletePluginImagesAsync(row.Id);
-                    await DeleteSecureConfigAsync(row);
                     await ServiceClient.DeleteAsync("sdkmessageprocessingstep", row.Id);
-                }
-            }
-            async Task DeletePluginImagesAsync(Guid pluginStepId)
-            {
-                if (!IsSupportPluginImage(attribute)) return;
-                var fetchData = new
-                {
-                    sdkmessageprocessingstepid = pluginStepId,
-                };
-                var fetchXml = $@"
-<fetch>
-  <entity name='sdkmessageprocessingstepimage'>
-    <attribute name='sdkmessageprocessingstepimageid' />
-    <filter type='and'>
-      <condition attribute='sdkmessageprocessingstepid' operator='eq' value='{fetchData.sdkmessageprocessingstepid}'/>
-    </filter>
-  </entity>
-</fetch>";
-                var rows = await ServiceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
-                foreach (var row in rows.Entities)
-                {
-                    await ServiceClient.DeleteAsync("sdkmessageprocessingstepimage", row.Id);
-                }
-            }
-            async Task DeleteSecureConfigAsync(Entity pluginStep)
-            {
-                var secureConfigId = pluginStep.GetAttributeValue<EntityReference>("sdkmessageprocessingstepsecureconfigid")?.Id;
-                if (secureConfigId.HasValue)
-                {
-                    await ServiceClient.DeleteAsync("sdkmessageprocessingstepsecureconfig", secureConfigId.Value);
                 }
             }
         }
