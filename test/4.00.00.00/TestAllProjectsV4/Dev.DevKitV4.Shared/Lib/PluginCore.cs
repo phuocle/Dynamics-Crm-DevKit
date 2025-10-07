@@ -24,8 +24,18 @@ namespace Dev.DevKitV4.Shared
 
     public enum IsolationModeEnum
     {
-        None = 0,
-        Sandbox = 1
+        None = 1,
+        Sandbox = 2,
+        External = 3,
+    }
+
+    public enum SourceTypeEnum
+    {
+        Database = 0,
+        Disk = 1,
+        Normal = 2,	
+        AzureWebApp = 3,
+        FileStore = 4
     }
 
     public enum PluginStepOperationEnum
@@ -145,7 +155,7 @@ namespace Dev.DevKitV4.Shared
 
     [DebuggerNonUserCode()]
     [AttributeUsage(AttributeTargets.Assembly, Inherited = false, AllowMultiple = false)]
-    public class AssemblyManagedIdentityAttribute : Attribute
+    public class DynamcisCrmDevkitAssemblyAttribute : Attribute
     {
         public string ApplicationId { get; set; }
         public string TenantId { get; set; }
@@ -154,5 +164,7 @@ namespace Dev.DevKitV4.Shared
         public string CertificatePath { get; set; } = string.Empty;
         public string CertificatePassword { get; set; } = string.Empty;
         public AzureCloudEnvironment CloudEnvironment { get; set; } = AzureCloudEnvironment.Public;
+        public IsolationModeEnum IsolationMode { get; set; } = IsolationModeEnum.Sandbox;
+        public SourceTypeEnum SourceType { get; set; } = SourceTypeEnum.Database;
     }
 }

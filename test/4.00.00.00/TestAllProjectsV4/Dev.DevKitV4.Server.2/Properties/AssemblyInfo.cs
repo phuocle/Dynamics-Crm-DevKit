@@ -20,7 +20,9 @@ using System.Security;
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
 
-[assembly: AssemblyManagedIdentity(
+[assembly: DynamcisCrmDevkitAssembly(
+    IsolationMode = IsolationModeEnum.Sandbox,
+    SourceType = SourceTypeEnum.Database,
     TenantId = "49528483-b79b-4b88-b86e-7d882ba68911",
     ApplicationId = "8ad0b2f9-f23d-4f57-b4bd-a04220501240",
     CertificatePath = "cert-signing.pfx",

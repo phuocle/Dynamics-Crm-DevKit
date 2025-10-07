@@ -29,6 +29,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\DeployWebResource.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\DevKitConnections.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\DownloadFile.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\DynamcisCrmDevkitAssemblyAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\IdName.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Json.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\JsonBase.cs" />

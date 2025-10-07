@@ -16,6 +16,7 @@ using System.Linq;
 using System.Reflection;
 using System.ServiceModel;
 using System.Threading.Tasks;
+using VSLangProj80;
 
 namespace DynamicsCrm.DevKit.Cli.Tasks
 {
@@ -1214,9 +1215,18 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 ["culture"] = assemblyProperties[4],
                 ["version"] = assemblyProperties[2],
                 ["publickeytoken"] = assemblyProperties[6],
-                ["sourcetype"] = new OptionSetValue(0),
-                ["isolationmode"] = GetIsolationMode(file)
             };
+            var assemblyAttribute = GetDynamcisCrmDevkitAssemblyAttribute(assembly);
+            if (assemblyAttribute != null)
+            {
+                plugin["sourcetype"] = new OptionSetValue((int)assemblyAttribute.SourceType);
+                plugin["isolationmode"] = new OptionSetValue((int)assemblyAttribute.IsolationMode);
+            }
+            else
+            {
+                plugin["sourcetype"] = new OptionSetValue(0);
+                plugin["isolationmode"] = new OptionSetValue(2);
+            }
             if (rows.Entities.Count == 0)
             {
                 var request = new CreateRequest
@@ -1261,6 +1271,40 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
             }
             return rows.Entities[0].Id;
+        }
+
+        private DynamcisCrmDevkitAssemblyAttribute GetDynamcisCrmDevkitAssemblyAttribute(Assembly assembly)
+        {
+            var attributeData = CustomAttributeData.GetCustomAttributes(assembly)
+                .Where(data => data.AttributeType.FullName.Contains("DynamcisCrmDevkitAssemblyAttribute"))
+                .FirstOrDefault();
+            var attribute = new DynamcisCrmDevkitAssemblyAttribute();
+            var properties = typeof(DynamcisCrmDevkitAssemblyAttribute).GetProperties();
+            foreach (var namedArgument in attributeData.NamedArguments)
+            {
+                string propertyName = namedArgument.MemberName;
+                object rawValue = namedArgument.TypedValue.Value;
+                var targetProperty = properties.FirstOrDefault(p => p.Name == propertyName);
+
+                if (targetProperty != null)
+                {
+                    object finalValue = rawValue;
+                    if (targetProperty.PropertyType.IsGenericType && targetProperty.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>))
+                    {
+                        Type underlyingType = Nullable.GetUnderlyingType(targetProperty.PropertyType);
+                        if (underlyingType != null && underlyingType.IsEnum)
+                        {
+                            finalValue = Enum.ToObject(underlyingType, rawValue);
+                        }
+                    }
+                    else if (targetProperty.PropertyType.IsEnum)
+                    {
+                        finalValue = Enum.ToObject(targetProperty.PropertyType, rawValue);
+                    }
+                    targetProperty.SetValue(attribute, finalValue);
+                }
+            }
+            return attribute;
         }
 
         private bool IsEqualsContent(string oldContent, string newContent)
@@ -1438,20 +1482,20 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             return false;
         }
 
-        private OptionSetValue GetIsolationMode(string file)
-        {
-            var types = GetTypes(file);
-            foreach (var type in types)
-            {
-                if (IsWorkflowType(type)) continue;
-                var attributes = GetCrmPluginRegistrationAttributes(type);
-                foreach (var attribute in attributes)
-                {
-                    if (attribute.IsolationMode == IsolationModeEnum.None) return new OptionSetValue(1);
-                }
-            }
-            return new OptionSetValue(2);
-        }
+        //private OptionSetValue GetIsolationMode(string file)
+        //{
+        //    var types = GetTypes(file);
+        //    foreach (var type in types)
+        //    {
+        //        if (IsWorkflowType(type)) continue;
+        //        var attributes = GetCrmPluginRegistrationAttributes(type);
+        //        foreach (var attribute in attributes)
+        //        {
+        //            if (attribute.IsolationMode == IsolationModeEnum.None) return new OptionSetValue(1);
+        //        }
+        //    }
+        //    return new OptionSetValue(2);
+        //}
 
         private async Task DeployPackageAsync(string file)
         {

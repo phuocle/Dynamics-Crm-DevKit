@@ -17,8 +17,18 @@ namespace DynamicsCrm.DevKit.Shared.Models
 
     public enum IsolationModeEnum
     {
-        None = 0,
-        Sandbox = 1
+        None = 1,
+        Sandbox = 2,
+        External = 3,
+    }
+
+    public enum SourceTypeEnum
+    {
+        Database = 0,
+        Disk = 1,
+        Normal = 2,
+        AzureWebApp = 3,
+        FileStore = 4
     }
 
     public enum PluginStepOperationEnum
