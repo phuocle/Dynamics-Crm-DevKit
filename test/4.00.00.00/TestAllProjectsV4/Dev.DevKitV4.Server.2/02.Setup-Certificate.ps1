@@ -1,9 +1,9 @@
 ﻿# ========================================
 # BEGIN CONFIGURATION
 # ========================================
-$certificatePassword = "YourPassword123!"  # Change to your preferred password
+$certificatePassword = "YourPassword123!!"  # Change to your preferred password
 $certificateSubject = "CN=Dataverse Plugin Code Signing"
-$certificateFileName = "cert-signing"
+$certificateFileName = "cert-signing-2"
 $validityYears = 20
 # ========================================
 # END CONFIGURATION

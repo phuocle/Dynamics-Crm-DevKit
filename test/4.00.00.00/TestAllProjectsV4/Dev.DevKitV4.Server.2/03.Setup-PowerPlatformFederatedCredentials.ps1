@@ -2,9 +2,9 @@
 # BEGIN CONFIGURATION
 # ========================================
 $TenantId = "49528483-b79b-4b88-b86e-7d882ba68911"
-$AppId = "8ad0b2f9-f23d-4f57-b4bd-a04220501240"
-$CertificatePath = "cert-signing.pfx"
-$CertificatePassword = "YourPassword123!"
+$AppId = "55779c38-2a94-417f-887f-6223de49789c"
+$CertificatePath = "cert-signing-2.pfx"
+$CertificatePassword = "YourPassword123!!"
 $EnvironmentId = @(
     "2f985c04-9487-e70c-aa57-dcd6d08f0886" # DEV Environment ID
     #"a1b2c3d4-e5f6-g7h8-i9j0-k1l2m3n4o5p6", # TEST Environment ID

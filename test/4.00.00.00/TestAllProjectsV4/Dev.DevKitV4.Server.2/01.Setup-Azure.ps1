@@ -231,11 +231,7 @@ Write-Host "Key Vault URL:          " -NoNewline
 Write-Host "  $($kv.properties.vaultUri)" -ForegroundColor Cyan
 
 Write-Host "`nNext Steps:" -ForegroundColor Yellow
-Write-Host "1. Run Setup-Certificate.ps1 to generate code signing certificate" -ForegroundColor White
-Write-Host "2. Update KeyVaultTestPlugin.cs with Application ID and Tenant ID" -ForegroundColor White
-Write-Host "3. Update KEY_VAULT_URL in KeyVaultTestPlugin.cs" -ForegroundColor White
-Write-Host "4. Build and deploy the plugin" -ForegroundColor White
-Write-Host "5. Configure federated identity credential (shown after deployment)`n" -ForegroundColor White
+Write-Host "Run 02.Setup-Certificate.ps1 to generate code signing certificate" -ForegroundColor White
 
 # Save values to a file for reference
 $outputFile = "azure-config.txt"

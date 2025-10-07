@@ -24,9 +24,9 @@ using System.Security;
     IsolationMode = IsolationModeEnum.Sandbox,
     SourceType = SourceTypeEnum.Database,
     TenantId = "49528483-b79b-4b88-b86e-7d882ba68911",
-    ApplicationId = "8ad0b2f9-f23d-4f57-b4bd-a04220501240",
-    CertificatePath = "cert-signing.pfx",
-    CertificatePassword = "YourPassword123!",
+    ApplicationId = "55779c38-2a94-417f-887f-6223de49789c",
+    CertificatePath = "cert-signing-2.pfx",
+    CertificatePassword = "YourPassword123!!",
     CredentialSource = ManagedIdentityCredentialSource.EntraIdApplication,
     SubjectScope = ManagedIdentitySubjectScope.Environment,
     CloudEnvironment = AzureCloudEnvironment.Public
