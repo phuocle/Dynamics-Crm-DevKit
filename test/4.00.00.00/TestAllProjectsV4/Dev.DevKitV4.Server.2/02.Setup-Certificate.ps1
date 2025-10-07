@@ -7,7 +7,7 @@
 $certificatePassword = "YourPassword123!"  # Change to your preferred password
 $certificateSubject = "CN=Dataverse Plugin Code Signing"
 $certificateFileName = "cert-signing"
-$validityYears = 2
+$validityYears = 20
 
 Write-Host "========================================" -ForegroundColor Cyan
 Write-Host "Code Signing Certificate Setup" -ForegroundColor Cyan
@@ -147,33 +147,11 @@ Write-Host "  • $certificateFileName.cer (public key only)" -ForegroundColor W
 Write-Host "`nCertificate password:" -NoNewline
 Write-Host "  $certificatePassword" -ForegroundColor Cyan
 
-Write-Host "`n⚠️  IMPORTANT SECURITY NOTES:" -ForegroundColor Red
-Write-Host "  1. Do NOT commit .pfx files to source control" -ForegroundColor Yellow
-Write-Host "  2. Do NOT commit certificate passwords to source control" -ForegroundColor Yellow
-Write-Host "  3. Store certificates securely (Azure Key Vault, secure storage)" -ForegroundColor Yellow
-Write-Host "  4. Use different certificates for dev/test/prod environments" -ForegroundColor Yellow
-
 Write-Host "`nNext Steps:" -ForegroundColor Yellow
-Write-Host "1. Verify cert-signing.pfx exists in this folder" -ForegroundColor White
-Write-Host "2. Update KeyVaultTestPlugin.cs:" -ForegroundColor White
-Write-Host "   CertificatePath = `"cert-signing.pfx`"" -ForegroundColor Cyan
+Write-Host "1. Verify $certificateFileName.pfx exists in this folder" -ForegroundColor White
+Write-Host "2. Update AssemblyInfo.cs with DynamcisCrmDevkitAssemblyAttribute" -ForegroundColor White
+Write-Host "   CertificatePath = `"$certificateFileName.pfx`"" -ForegroundColor Cyan
 Write-Host "   CertificatePassword = `"$certificatePassword`"" -ForegroundColor Cyan
 Write-Host "3. Build the plugin project" -ForegroundColor White
-Write-Host "4. Deploy using DynamicsCrm.DevKit.Cli`n" -ForegroundColor White
-
-# Create .gitignore if it doesn't exist
-if (-not (Test-Path ".gitignore")) {
-    @"
-# Certificate files - DO NOT COMMIT
-*.pfx
-*.cer
-
-# Azure configuration
-azure-config.txt
-
-# Build output
-bin/
-obj/
-"@ | Out-File -FilePath ".gitignore" -Encoding UTF8
-    Write-Host "✓ Created .gitignore file" -ForegroundColor Green
-}
+Write-Host "4. Run 03.Setup-PowerPlatformFederatedCredentials.ps1" -ForegroundColor White
+Write-Host "5. Deploy using DynamicsCrm.DevKit.Cli`n" -ForegroundColor White
