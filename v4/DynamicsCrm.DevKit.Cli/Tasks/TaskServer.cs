@@ -15,6 +15,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.ServiceModel;
 using System.Threading.Tasks;
 using VSLangProj80;
@@ -189,7 +190,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 return false;
             }
 
-            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Magenta, $"{Path.GetFileName(file)}: Signing.....");
+            //.CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, $"{Path.GetFileName(file)}: Signing.....");
             var processStartInfo = new ProcessStartInfo
             {
                 FileName = signToolPath,
@@ -218,7 +219,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 await Task.Run(() => process.WaitForExit());
                 if (process.ExitCode == 0)
                 {
-                    CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Magenta, $"{Path.GetFileName(file)}: Signed by DynamcisCrmDevkitAssemblyAttribute");
+                    CliLog.Write(ConsoleColor.White, "|", SPACE);
+                    CliLog.WriteSuccess(ConsoleColor.White, CliAction.SIGNED.Trim());
+                    CliLog.WriteLine(" ", ConsoleColor.Green, Path.GetFileName(file));
                     return true;
                 }
                 else
@@ -1460,40 +1463,48 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var (ok, attribute) = IsNeedSignAssembly(file);
             if (ok)
             {
-                var managedIdentityId = await DeployManagedIdentityAsync(assemblyName,Guid.Parse(attribute.TenantId), Guid.Parse(attribute.ApplicationId), attribute.CredentialSource, attribute.SubjectScope, attribute.CloudEnvironment);
-                if (rows.Entities[0].GetAttributeValue<EntityReference>("managedidentityid") == null)
+                if (string.IsNullOrEmpty(attribute.TenantId) || string.IsNullOrEmpty(attribute.ApplicationId))
                 {
-                    var pluginAssembly = new Entity("pluginassembly")
-                    {
-                        ["pluginassemblyid"] = pluginAssemblyId,
-                        ["managedidentityid"] = new EntityReference("managedidentity", managedIdentityId)
-                    };
-                    var request2 = new UpdateRequest { Target = pluginAssembly };
-                    request2.Parameters.Add("SolutionUniqueName", Json.solution);
-                    CliLog.Write(ConsoleColor.White, "|", SPACE);
-                    CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTER.Trim());
-                    CliLog.WriteLine(ConsoleColor.Blue, " Bind Assembly ", ConsoleColor.White, "to", ConsoleColor.Blue, " Managed Identity ", ConsoleColor.Cyan, assemblyName);
-                    await ServiceClient.ExecuteAsync(request2);
-                }
-                else if (rows.Entities[0].GetAttributeValue<EntityReference>("managedidentityid")?.Id == managedIdentityId)
-                {
-                    CliLog.Write(ConsoleColor.White, "|", SPACE);
-                    CliLog.Write(ConsoleColor.Green, CliAction.DO_NOTHING.Trim());
-                    CliLog.WriteLine(ConsoleColor.Blue, " Bind Assembly ", ConsoleColor.White, "to", ConsoleColor.Blue, " Managed Identity ", ConsoleColor.Cyan, assemblyName);
+                    if (string.IsNullOrEmpty(attribute.TenantId)) CliLog.WriteLineError(ConsoleColor.Yellow, "Not found TenantId from DynamcisCrmDevkitAssemblyAttribute");
+                    if (string.IsNullOrEmpty(attribute.ApplicationId)) CliLog.WriteLineError(ConsoleColor.Yellow, "Not found ApplicationId from DynamcisCrmDevkitAssemblyAttribute");
                 }
                 else
                 {
-                    var pluginAssembly = new Entity("pluginassembly")
+                    var managedIdentityId = await DeployManagedIdentityAsync(assemblyName, Guid.Parse(attribute.TenantId), Guid.Parse(attribute.ApplicationId), attribute.CredentialSource, attribute.SubjectScope, attribute.CloudEnvironment);
+                    if (rows.Entities.Count == 0)
                     {
-                        ["pluginassemblyid"] = pluginAssemblyId,
-                        ["managedidentityid"] = new EntityReference("managedidentity", managedIdentityId)
-                    };
-                    var request2 = new UpdateRequest { Target = pluginAssembly };
-                    request2.Parameters.Add("SolutionUniqueName", Json.solution);
-                    CliLog.Write(ConsoleColor.White, "|", SPACE);
-                    CliLog.WriteSuccess(ConsoleColor.White, CliAction.UPDATED.Trim());
-                    CliLog.WriteLine(ConsoleColor.Blue, " Bind Assembly ", ConsoleColor.White, "to", ConsoleColor.Blue, " Managed Identity ", ConsoleColor.Cyan, assemblyName);
-                    await ServiceClient.ExecuteAsync(request2);
+                        var pluginAssembly = new Entity("pluginassembly")
+                        {
+                            ["pluginassemblyid"] = pluginAssemblyId,
+                            ["managedidentityid"] = new EntityReference("managedidentity", managedIdentityId)
+                        };
+                        var request2 = new UpdateRequest { Target = pluginAssembly };
+                        request2.Parameters.Add("SolutionUniqueName", Json.solution);
+                        CliLog.Write(ConsoleColor.White, "|", SPACE);
+                        CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTER.Trim());
+                        CliLog.WriteLine(ConsoleColor.Blue, " Bind Assembly to Managed Identity ", ConsoleColor.Cyan, assemblyName);
+                        await ServiceClient.ExecuteAsync(request2);
+                    }
+                    else if (rows.Entities[0].GetAttributeValue<EntityReference>("managedidentityid")?.Id == managedIdentityId)
+                    {
+                        CliLog.Write(ConsoleColor.White, "|", SPACE);
+                        CliLog.Write(ConsoleColor.Green, CliAction.DO_NOTHING.Trim());
+                        CliLog.WriteLine(ConsoleColor.Blue, " Bind Assembly to Managed Identity ", ConsoleColor.Cyan, assemblyName);
+                    }
+                    else
+                    {
+                        var pluginAssembly = new Entity("pluginassembly")
+                        {
+                            ["pluginassemblyid"] = pluginAssemblyId,
+                            ["managedidentityid"] = new EntityReference("managedidentity", managedIdentityId)
+                        };
+                        var request2 = new UpdateRequest { Target = pluginAssembly };
+                        request2.Parameters.Add("SolutionUniqueName", Json.solution);
+                        CliLog.Write(ConsoleColor.White, "|", SPACE);
+                        CliLog.WriteSuccess(ConsoleColor.White, CliAction.UPDATED.Trim());
+                        CliLog.WriteLine(ConsoleColor.Blue, " Bind Assembly to Managed Identity ", ConsoleColor.Cyan, assemblyName);
+                        await ServiceClient.ExecuteAsync(request2);
+                    }
                 }
             }
             return pluginAssemblyId;
@@ -1528,7 +1539,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 request.Parameters.Add("SolutionUniqueName", Json.solution);
                 CliLog.Write(ConsoleColor.White, "|", SPACE);
                 CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTER.Trim());
-                CliLog.WriteLine(ConsoleColor.White, " Managed Identity ", ConsoleColor.Cyan, $"App: {ApplicationId}");
+                CliLog.WriteLine(ConsoleColor.Blue, " Managed Identity ", ConsoleColor.Cyan, $"App: {ApplicationId}");
                 var response = (CreateResponse)await ServiceClient.ExecuteAsync(request);
                 return response.id;
             }
@@ -1548,7 +1559,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     request.Parameters.Add("SolutionUniqueName", Json.solution);
                     CliLog.Write(ConsoleColor.White, "|", SPACE);
                     CliLog.WriteSuccess(ConsoleColor.White, CliAction.UPDATED.Trim());
-                    CliLog.WriteLine(ConsoleColor.White, " Managed Identity ", ConsoleColor.Cyan, $"App: {ApplicationId}");
+                    CliLog.WriteLine(ConsoleColor.Blue, " Managed Identity ", ConsoleColor.Cyan, $"App: {ApplicationId}");
                     await ServiceClient.ExecuteAsync(request);
                 }
                 else

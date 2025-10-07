@@ -16,5 +16,6 @@
         public const string NOT_FOUND = "[NOT FOUND] ";
         public const string ADDED = "[ADDED] ";
         public const string UNREGISTER = "[UNREGISTER] ";
+        public const string SIGNED = "[SIGNED] ";
     }
 }
