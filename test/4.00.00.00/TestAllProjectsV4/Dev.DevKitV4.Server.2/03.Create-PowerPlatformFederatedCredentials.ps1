@@ -1,69 +1,12 @@
-﻿<#
-.SYNOPSIS
-    Creates federated credentials for Power Platform plugin managed identity.
-
-.DESCRIPTION
-    Creates TWO required federated credentials:
-    1. Azure AD Issuer (uses Organization ID)
-    2. Power Platform Issuer (uses Environment ID)
-
-.PARAMETER AppId
-    The Application (Client) ID of your Azure AD App Registration
-    Example: 8ad0b2f9-f23d-4f57-b4bd-a04220501240
-    Found in: Azure Portal → App registrations → Your App → Overview → "Application (client) ID"
-
-.PARAMETER TenantId
-    Your Azure AD Tenant ID
-    Example: 49528483-b79b-4b88-b86e-7d882ba68911
-    Found in: Azure Portal → Azure Active Directory → Overview → "Tenant ID"
-
-.PARAMETER OrganizationId
-    The Organization ID from Power Apps Session Details
-    Example: 29c6e552-e16f-ef11-a66b-6045bd1e7d8b
-    Found in: Power Apps → Settings → Session details → "Organization ID"
-
-.PARAMETER EnvironmentId
-    The Environment ID from Power Apps Session Details
-    Example: 2f985c04-9487-e70c-aa57-dcd6d08f0886
-    Found in: Power Apps → Settings → Session details → "Environment ID"
-
-.PARAMETER CertificatePath
-    Path to your plugin signing certificate (.pfx file)
-
-.PARAMETER CertificatePassword
-    Password for the certificate file
-
-.EXAMPLE
-    .\Create-PowerPlatformFederatedCredentials.ps1 `
-        -AppId "8ad0b2f9-f23d-4f57-b4bd-a04220501240" `
-        -TenantId "49528483-b79b-4b88-b86e-7d882ba68911" `
-        -OrganizationId "29c6e552-e16f-ef11-a66b-6045bd1e7d8b" `
-        -EnvironmentId "2f985c04-9487-e70c-aa57-dcd6d08f0886" `
-        -CertificatePath "D:\certs\cert.pfx" `
-        -CertificatePassword "password"
-#>
-
-param(
-    [Parameter(Mandatory=$true)]
-    [string]$AppId,
-
-    [Parameter(Mandatory=$true)]
-    [string]$TenantId,
-
-    [Parameter(Mandatory=$true)]
-    [Alias("EnvironmentIdForAzureAD")]
-    [string]$OrganizationId,
-
-    [Parameter(Mandatory=$true)]
-    [Alias("EnvironmentIdForPowerPlatform")]
-    [string]$EnvironmentId,
-
-    [Parameter(Mandatory=$true)]
-    [string]$CertificatePath,
-
-    [Parameter(Mandatory=$true)]
-    [string]$CertificatePassword
-)
+﻿# ========================================
+# HARD-CODED PARAMETERS - UPDATE THESE VALUES
+# ========================================
+$AppId = "YOUR-APP-ID-HERE"              # Example: 8ad0b2f9-f23d-4f57-b4bd-a04220501240
+$TenantId = "YOUR-TENANT-ID-HERE"        # Example: 49528483-b79b-4b88-b86e-7d882ba68911
+$OrganizationId = "YOUR-ORG-ID-HERE"     # Example: 29c6e552-e16f-ef11-a66b-6045bd1e7d8b
+$EnvironmentId = "YOUR-ENV-ID-HERE"      # Example: 2f985c04-9487-e70c-aa57-dcd6d08f0886
+$CertificatePath = "YOUR-CERT-PATH-HERE" # Example: D:\certs\cert.pfx
+$CertificatePassword = "YOUR-CERT-PWD-HERE" # Example: password
 
 function Convert-GuidToBase64Url {
     param([string]$guid)

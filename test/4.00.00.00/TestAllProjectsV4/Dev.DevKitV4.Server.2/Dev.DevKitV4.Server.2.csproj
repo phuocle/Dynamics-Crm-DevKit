@@ -54,7 +54,9 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Create-PowerPlatformFederatedCredentials.ps1" />
+    <None Include="cert-signing.cer" />
+    <None Include="cert-signing.pfx" />
+    <None Include="03.Create-PowerPlatformFederatedCredentials.ps1" />
     <None Include="packages.config" />
     <None Include="Dev.DevKitV4.Server.2.snk" />
     <None Include="deploy.debug.bat" />
@@ -63,7 +65,8 @@
     <Compile Include="PostContactDeleteAsynchronous.cs" />
     <Compile Include="PostContactUpdateAsynchronous.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <None Include="Setup-Azure.ps1" />
+    <None Include="01.Setup-Azure.ps1" />
+    <None Include="02.Setup-Certificate.ps1" />
   </ItemGroup>
   <Import Project="..\Dev.DevKitV4.Shared\Dev.DevKitV4.Shared.projitems" Label="Shared" Condition="Exists('..\Dev.DevKitV4.Shared\Dev.DevKitV4.Shared.projitems')" />
   <PropertyGroup>

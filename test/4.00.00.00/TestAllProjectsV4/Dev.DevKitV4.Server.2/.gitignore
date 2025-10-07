@@ -1,0 +1,10 @@
+﻿# Certificate files - DO NOT COMMIT
+*.pfx
+*.cer
+
+# Azure configuration
+azure-config.txt
+
+# Build output
+bin/
+obj/
