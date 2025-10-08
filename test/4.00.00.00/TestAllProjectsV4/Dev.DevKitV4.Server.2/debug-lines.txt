@@ -1,0 +1,5 @@
+﻿else {
+    Write-Host "âš ï¸  Cleanup completed with some errors." -ForegroundColor Yellow
+    Write-Host "   Please review the errors above and manually clean up if needed.`n" -ForegroundColor Yellow
+    exit 1
+}

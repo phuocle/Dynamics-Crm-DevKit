@@ -7,10 +7,11 @@ $ConfigPath = Join-Path $ScriptDir "config.json"
 # Check if config.json exists
 if (-not (Test-Path $ConfigPath)) {
     Write-Host "========================================" -ForegroundColor Red
-    Write-Host "❌ ERROR: config.json NOT FOUND" -ForegroundColor Red
+    Write-Host "[X] ERROR: config.json NOT FOUND" -ForegroundColor Red
     Write-Host "========================================`n" -ForegroundColor Red
-    Write-Host "Please run 01.Setup-Azure.ps1 first to create the config.json file." -ForegroundColor Yellow
-    Write-Host "Expected location: $ConfigPath`n" -ForegroundColor Cyan
+    Write-Host "[!] Please run 01.Setup-Azure.ps1 first to create the config.json file." -ForegroundColor Yellow
+    Write-Host "[i] Expected location:" -ForegroundColor White
+    Write-Host "  $ConfigPath`n" -ForegroundColor Cyan
     exit 1
 }
 
@@ -19,7 +20,7 @@ try {
     $config = Get-Content -Path $ConfigPath -Raw | ConvertFrom-Json
 }
 catch {
-    Write-Host "❌ ERROR: Failed to parse config.json: $($_.Exception.Message)" -ForegroundColor Red
+    Write-Host "[X] ERROR: Failed to parse config.json: $($_.Exception.Message)" -ForegroundColor Red
     exit 1
 }
 
@@ -49,16 +50,17 @@ if ($null -eq $config.OrganizationId -or $config.OrganizationId.Count -eq 0) {
 
 if ($missingFields.Count -gt 0) {
     Write-Host "========================================" -ForegroundColor Red
-    Write-Host "❌ ERROR: Missing Required Configuration" -ForegroundColor Red
+    Write-Host "[X] ERROR: Missing Required Configuration" -ForegroundColor Red
     Write-Host "========================================`n" -ForegroundColor Red
-    Write-Host "Please update the following fields in config.json:" -ForegroundColor Yellow
+    Write-Host "[i] Please update the following fields in config.json:" -ForegroundColor White
     foreach ($field in $missingFields) {
-        Write-Host "  • $field" -ForegroundColor White
+        Write-Host "  - $field" -ForegroundColor White
     }
-    Write-Host "`nConfig file location: $ConfigPath`n" -ForegroundColor Cyan
-    Write-Host "Example for array values in config.json:" -ForegroundColor Yellow
-    Write-Host '  "EnvironmentId": ["guid1", "guid2"]' -ForegroundColor Gray
-    Write-Host '  "OrganizationId": ["guid1", "guid2"]' -ForegroundColor Gray
+    Write-Host "`n[i] Config file location:" -ForegroundColor White
+    Write-Host "  $ConfigPath`n" -ForegroundColor Cyan
+    Write-Host "[i] Example for array values in config.json:" -ForegroundColor White
+    Write-Host '  "EnvironmentId": ["guid1", "guid2"]' -ForegroundColor Cyan
+    Write-Host '  "OrganizationId": ["guid1", "guid2"]' -ForegroundColor Cyan
     Write-Host ""
     exit 1
 }
@@ -86,14 +88,14 @@ Write-Host "========================================`n" -ForegroundColor Cyan
 # --- 1. Validation and Certificate Loading ---
 
 if ($EnvironmentId.Count -ne $OrganizationId.Count) {
-    Write-Host "❌ ERROR: The number of Environment IDs must match the number of Organization IDs." -ForegroundColor Red
+    Write-Host "[X] ERROR: The number of Environment IDs must match the number of Organization IDs." -ForegroundColor Red
     exit 1
 }
 
-Write-Host "Input Parameters:" -ForegroundColor Yellow
-Write-Host "  App ID: $AppId" -ForegroundColor Gray
-Write-Host "  Tenant ID: $TenantId" -ForegroundColor Gray
-Write-Host "  Number of Environments to Configure: $($EnvironmentId.Count)" -ForegroundColor Gray
+Write-Host "[i] Input Parameters:" -ForegroundColor White
+Write-Host "  [i] App ID: $AppId" -ForegroundColor Cyan
+Write-Host "  [i] Tenant ID: $TenantId" -ForegroundColor Cyan
+Write-Host "  [i] Number of Environments to Configure: $($EnvironmentId.Count)" -ForegroundColor Cyan
 Write-Host ""
 
 # Load certificate - resolve path relative to script directory
@@ -102,7 +104,7 @@ if (-not [System.IO.Path]::IsPathRooted($CertificatePath)) {
 }
 
 if (-not (Test-Path $CertificatePath)) {
-    Write-Host "❌ ERROR: Certificate file not found: $CertificatePath" -ForegroundColor Red
+    Write-Host "[X] ERROR: Certificate file not found: $CertificatePath" -ForegroundColor Red
     exit 1
 }
 
@@ -112,9 +114,9 @@ $certBytes = $cert.Export([System.Security.Cryptography.X509Certificates.X509Con
 $sha256 = [System.Security.Cryptography.SHA256]::Create().ComputeHash($certBytes)
 $sha256Hash = [System.Convert]::ToBase64String($sha256).Replace('+', '-').Replace('/', '_').TrimEnd('=')
 
-Write-Host "Certificate Information:" -ForegroundColor Yellow
-Write-Host "  Thumbprint: $($cert.Thumbprint)" -ForegroundColor Gray
-Write-Host "  SHA-256 Hash: $sha256Hash" -ForegroundColor Gray
+Write-Host "[i] Certificate Information:" -ForegroundColor White
+Write-Host "  [i] Thumbprint: $($cert.Thumbprint)" -ForegroundColor Cyan
+Write-Host "  [i] SHA-256 Hash: $sha256Hash" -ForegroundColor Cyan
 Write-Host ""
 
 # Compute fixed encodings for Azure AD credential
@@ -123,17 +125,17 @@ $encodedApp = Convert-GuidToBase64Url -guid $AppId
 
 # --- 2. Deleting Existing Credentials (Cleanup) ---
 
-Write-Host "Deleting ALL existing federated credentials for cleanup..." -ForegroundColor Yellow
+Write-Host "[~] Deleting ALL existing federated credentials for cleanup..." -ForegroundColor Yellow
 # Delete ALL existing federated credentials to ensure a clean setup
 $existing = az ad app federated-credential list --id $AppId 2>$null | ConvertFrom-Json
 if ($existing -and $existing.Count -gt 0) {
     foreach ($cred in $existing) {
-        Write-Host "  Deleting: $($cred.name)" -ForegroundColor Gray
+        Write-Host "  [~] Deleting: $($cred.name)" -ForegroundColor Yellow
         az ad app federated-credential delete --id $AppId --federated-credential-id $cred.id 2>$null
     }
-    Write-Host "  ✅ Deleted $($existing.Count) existing credential(s).`n" -ForegroundColor Green
+    Write-Host "  [+] Deleted $($existing.Count) existing credential(s).`n" -ForegroundColor Green
 } else {
-    Write-Host "  No existing credentials found.`n" -ForegroundColor Gray
+    Write-Host "  [-] No existing credentials found.`n" -ForegroundColor Yellow
 }
 
 # --- 3. Iterate and Create Credentials for Each Environment ---
@@ -153,9 +155,9 @@ for ($i = 0; $i -lt $EnvironmentId.Count; $i++) {
     $subject1 = "/eid1/c/pub/t/$encodedTenant/a/$encodedApp/n/plugin/e/$orgIdNoHyphens/h/$sha256Hash"
     $credName1 = "AzureAD-Issuer-Org-$(($currentOrgId.Substring(0, 4)).Replace('-',''))" # Unique name based on start of Org ID
 
-    Write-Host "Creating $credName1..." -ForegroundColor Yellow
-    Write-Host "  Issuer: $issuer1" -ForegroundColor Gray
-    Write-Host "  Subject: $subject1" -ForegroundColor Gray
+    Write-Host "[~] Creating $credName1..." -ForegroundColor Yellow
+    Write-Host "  [i] Issuer: $issuer1" -ForegroundColor Cyan
+    Write-Host "  [i] Subject: $subject1" -ForegroundColor Cyan
 
     $cred1 = @{
         name = $credName1
@@ -167,7 +169,7 @@ for ($i = 0; $i -lt $EnvironmentId.Count; $i++) {
 
     az ad app federated-credential create --id $AppId --parameters "$credName1.json" | Out-Null
     Remove-Item "$credName1.json" -Force -ErrorAction SilentlyContinue
-    Write-Host "  ✅ Created $credName1" -ForegroundColor Green
+    Write-Host "  [+] Created $credName1" -ForegroundColor Green
 
     # --- Credential #2: PowerPlatform-Issuer (Uses Environment ID) ---
     $envIdNoHyphens = $currentEnvId.Replace("-", "")
@@ -178,9 +180,9 @@ for ($i = 0; $i -lt $EnvironmentId.Count; $i++) {
     $subject2 = "component:pluginassembly,thumbprint:$($cert.Thumbprint),environment:$currentEnvId"
     $credName2 = "PowerPlatform-Issuer-Env-$(($currentEnvId.Substring(0, 4)).Replace('-',''))" # Unique name based on start of Env ID
 
-    Write-Host "Creating $credName2..." -ForegroundColor Yellow
-    Write-Host "  Issuer: $issuer2" -ForegroundColor Gray
-    Write-Host "  Subject: $subject2" -ForegroundColor Gray
+    Write-Host "[~] Creating $credName2..." -ForegroundColor Yellow
+    Write-Host "  [i] Issuer: $issuer2" -ForegroundColor Cyan
+    Write-Host "  [i] Subject: $subject2" -ForegroundColor Cyan
 
     $cred2 = @{
         name = $credName2
@@ -192,28 +194,29 @@ for ($i = 0; $i -lt $EnvironmentId.Count; $i++) {
 
     az ad app federated-credential create --id $AppId --parameters "$credName2.json" | Out-Null
     Remove-Item "$credName2.json" -Force -ErrorAction SilentlyContinue
-    Write-Host "  ✅ Created $credName2" -ForegroundColor Green
+    Write-Host "  [+] Created $credName2" -ForegroundColor Green
     Write-Host ""
 }
 
 # --- 4. Cleanup any remaining temporary JSON files ---
-Write-Host "Cleaning up temporary files..." -ForegroundColor Yellow
+Write-Host "[~] Cleaning up temporary files..." -ForegroundColor Yellow
 Get-ChildItem -Path $ScriptDir -Filter "*Issuer*.json" | Remove-Item -Force -ErrorAction SilentlyContinue
-Write-Host "  ✅ Cleanup complete.`n" -ForegroundColor Green
+Write-Host "  [+] Cleanup complete.`n" -ForegroundColor Green
 
 Write-Host "========================================" -ForegroundColor Green
-Write-Host "✅ SUCCESS! All credentials created." -ForegroundColor Green
+Write-Host "[+] SUCCESS! All credentials created." -ForegroundColor Green
 Write-Host "========================================" -ForegroundColor Green
-Write-Host "Verification:" -ForegroundColor Yellow
-Write-Host "  az ad app federated-credential list --id $AppId" -ForegroundColor Gray
+Write-Host "[i] Verification:" -ForegroundColor White
+Write-Host "  az ad app federated-credential list --id $AppId" -ForegroundColor Cyan
 Write-Host ""
 
 # Update config.json with final verification
 try {
     # The config already has all necessary values, just save to ensure consistency
     $config | ConvertTo-Json -Depth 10 | Out-File -FilePath $ConfigPath -Encoding UTF8
-    Write-Host "Configuration verified and saved to: $ConfigPath" -ForegroundColor Green
+    Write-Host "[+] Configuration verified and saved to:" -ForegroundColor Green
+    Write-Host "  $ConfigPath" -ForegroundColor Cyan
 }
 catch {
-    Write-Host "⚠️  WARNING: Failed to update config.json: $($_.Exception.Message)" -ForegroundColor Yellow
+    Write-Host "[!] WARNING: Failed to update config.json: $($_.Exception.Message)" -ForegroundColor Yellow
 }

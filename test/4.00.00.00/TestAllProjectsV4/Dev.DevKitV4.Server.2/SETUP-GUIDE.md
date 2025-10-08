@@ -26,17 +26,17 @@ The setup process consists of **3 sequential steps**:
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│ Step 1: Setup Azure Resources (01.Setup-Azure.ps1)             │
+│ Step 1: Setup Azure Resources (01.Setup-Azure.ps1)              │
 │ - Creates config.json template                                  │
 │ - Creates Azure Resource Group                                  │
 │ - Creates App Registration & Service Principal                  │
 │ - Creates Azure Key Vault                                       │
 │ - Stores secret in Key Vault                                    │
-│ - Updates config.json with TenantId, AppId, KeyVaultURL        │
+│ - Updates config.json with TenantId, AppId, KeyVaultURL         │
 └─────────────────────────────────────────────────────────────────┘
                               ↓
 ┌─────────────────────────────────────────────────────────────────┐
-│ Step 2: Generate Certificate (02.Setup-Certificate.ps1)        │
+│ Step 2: Generate Certificate (02.Setup-Certificate.ps1)         │
 │ - Creates self-signed certificate                               │
 │ - Exports .pfx and .cer files                                   │
 │ - Calculates SHA-256 hash                                       │
@@ -44,9 +44,9 @@ The setup process consists of **3 sequential steps**:
 └─────────────────────────────────────────────────────────────────┘
                               ↓
 ┌─────────────────────────────────────────────────────────────────┐
-│ Step 3: Setup Federated Credentials (03.Setup-PP-Federated.ps1)│
+│ Step 3: Setup Federated Credentials (03.Setup-PP-Federated.ps1) │
 │ - Connects to Azure with certificate                            │
-│ - Deletes existing federated credentials (if any)              │
+│ - Deletes existing federated credentials (if any)               │
 │ - Creates new federated credentials for each environment        │
 │   • Azure AD Issuer credential                                  │
 │   • Power Platform Issuer credential                            │
