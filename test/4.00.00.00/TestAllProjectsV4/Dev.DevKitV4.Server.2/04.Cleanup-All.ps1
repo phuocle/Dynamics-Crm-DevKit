@@ -337,23 +337,6 @@ else {
     Write-Host "[-] File not found: ManagedIdentity.cs" -ForegroundColor Yellow
 }
 
-# Delete config.json
-Write-Host ""
-if (Test-Path $ConfigPath) {
-    try {
-        Remove-Item $ConfigPath -Force
-        $success += "Deleted file: config.json"
-        Write-Host "[+] Deleted: config.json" -ForegroundColor Green
-    }
-    catch {
-        $errors += "Failed to delete config.json: $($_.Exception.Message)"
-        Write-Host "[X] Failed to delete: config.json" -ForegroundColor Red
-    }
-}
-else {
-    Write-Host "[-] File not found: config.json" -ForegroundColor Yellow
-}
-
 # ========================================
 # SUMMARY
 # ========================================
