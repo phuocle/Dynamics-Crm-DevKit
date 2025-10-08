@@ -81,9 +81,9 @@ function Convert-GuidToBase64Url {
     return $base64.Replace('+', '-').Replace('/', '_').TrimEnd('=')
 }
 
-Write-Host "`n========================================" -ForegroundColor Cyan
-Write-Host "Power Platform Federated Credentials Setup" -ForegroundColor Cyan
-Write-Host "========================================`n" -ForegroundColor Cyan
+Write-Host "`n=======================================================================" -ForegroundColor Cyan
+Write-Host "Begin Power Platform Federated Credentials Setup" -ForegroundColor Green
+Write-Host "=======================================================================" -ForegroundColor Cyan
 
 # --- 1. Validation and Certificate Loading ---
 
@@ -198,33 +198,10 @@ for ($i = 0; $i -lt $EnvironmentId.Count; $i++) {
     Write-Host ""
 }
 
-# --- 4. Cleanup any remaining temporary JSON files ---
-Write-Host "[~] Cleaning up temporary files..." -ForegroundColor Yellow
-Get-ChildItem -Path $ScriptDir -Filter "*Issuer*.json" | Remove-Item -Force -ErrorAction SilentlyContinue
-Write-Host "  [+] Cleanup complete.`n" -ForegroundColor Green
-
-Write-Host "========================================" -ForegroundColor Green
-Write-Host "[+] SUCCESS! All credentials created." -ForegroundColor Green
-Write-Host "========================================" -ForegroundColor Green
-Write-Host "[i] Verification:" -ForegroundColor White
-Write-Host "  az ad app federated-credential list --id $AppId" -ForegroundColor Cyan
-Write-Host ""
-
-# Update config.json with final verification
-try {
-    # The config already has all necessary values, just save to ensure consistency
-    $config | ConvertTo-Json -Depth 10 | Out-File -FilePath $ConfigPath -Encoding UTF8
-    Write-Host "[+] Configuration verified and saved to:" -ForegroundColor Green
-    Write-Host "  $ConfigPath" -ForegroundColor Cyan
-}
-catch {
-    Write-Host "[!] WARNING: Failed to update config.json: $($_.Exception.Message)" -ForegroundColor Yellow
-}
-
 # ========================================
 # Generate ManagedIdentity.cs File
 # ========================================
-Write-Host "`n[~] Generating ManagedIdentity.cs file..." -ForegroundColor Yellow
+Write-Host "[~] Generating ManagedIdentity.cs file..." -ForegroundColor Yellow
 
 $managedIdentityPath = Join-Path $ScriptDir "ManagedIdentity.cs"
 
@@ -240,7 +217,7 @@ using System;
     SourceType = SourceTypeEnum.Database,
     TenantId = "$TenantId",
     ApplicationId = "$AppId",
-    CertificatePath = "$CertificatePath",
+    CertificatePath = "$config.CertificatePath",
     CertificatePassword = "$CertificatePassword",
     CredentialSource = CredentialSource.IsManaged,
     SubjectScope = SubjectScope.EnvironmentScope
@@ -254,3 +231,24 @@ try {
 catch {
     Write-Host "[X] ERROR: Failed to create ManagedIdentity.cs: $($_.Exception.Message)" -ForegroundColor Red
 }
+
+# --- 4. Cleanup any remaining temporary JSON files ---
+Write-Host "[~] Cleaning up temporary files..." -ForegroundColor Yellow
+Get-ChildItem -Path $ScriptDir -Filter "*Issuer*.json" | Remove-Item -Force -ErrorAction SilentlyContinue
+Write-Host "  [+] Cleanup complete.`n" -ForegroundColor Green
+
+# Update config.json with final verification
+try {
+    # The config already has all necessary values, just save to ensure consistency
+    $config | ConvertTo-Json -Depth 10 | Out-File -FilePath $ConfigPath -Encoding UTF8
+    Write-Host "[+] config.json saved to: " -NoNewline -ForegroundColor Green
+    Write-Host "$ConfigPath" -ForegroundColor Cyan
+}
+catch {
+    Write-Host "[!] WARNING: Failed to update config.json: $($_.Exception.Message)" -ForegroundColor Yellow
+}
+
+Write-Host "`n=======================================================================" -ForegroundColor Cyan
+Write-Host "End Power Platform Federated Credentials Setup" -ForegroundColor Green
+Write-Host "=======================================================================" -ForegroundColor Cyan
+Write-Host ""

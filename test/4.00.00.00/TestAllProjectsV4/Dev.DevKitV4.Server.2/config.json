@@ -18,9 +18,9 @@
                            "dde66cdf-7e63-f011-8ee6-000d3ac78989"
                        ],
     "TenantId":  "49528483-b79b-4b88-b86e-7d882ba68911",
-    "AppId":  "0f3fdf8b-7770-4371-88fd-a1c54b07a60e",
+    "AppId":  "e4af0fad-3754-454b-b1df-8c5fae32e311",
     "KeyVaultURL":  "https://kv-dataverse-secrets.vault.azure.net/",
-    "CertificatePath":  "",
-    "CertificateThumbprint":  "",
-    "CertificateSHA256Hash":  ""
+    "CertificatePath":  "ManagedIdentity.pfx",
+    "CertificateThumbprint":  "CD6645CFFD34A8993EDD7DF82FD3CDAE6D0F1AAF",
+    "CertificateSHA256Hash":  "BLvGPIViXI3KOG9Q057xMKunWRpdo3xkRxhaW9x3eaI"
 }

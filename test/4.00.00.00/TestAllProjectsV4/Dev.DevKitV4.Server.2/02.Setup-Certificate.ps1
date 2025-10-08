@@ -64,7 +64,7 @@ $certificateFileName = $config.CertificateFileName
 $validityYears = $config.ValidityYears
 
 Write-Host "========================================" -ForegroundColor Cyan
-Write-Host "Code Signing Certificate Setup" -ForegroundColor Cyan
+Write-Host "[+] Begin Code Signing Certificate Setup" -ForegroundColor Green
 Write-Host "========================================`n" -ForegroundColor Cyan
 
 # ========================================
@@ -192,15 +192,13 @@ else {
 # Summary
 # ========================================
 Write-Host "`n========================================" -ForegroundColor Cyan
-Write-Host "[+] Certificate Setup Complete!" -ForegroundColor Green
+Write-Host "[+] End Code Signing Certificate Setup" -ForegroundColor Green
 Write-Host "========================================`n" -ForegroundColor Cyan
 
-Write-Host "[i] Files created:" -ForegroundColor White
+Write-Host "[i] Files created:" -ForegroundColor Green
 Write-Host "  - $certificateFileName.pfx (with private key)" -ForegroundColor White
 Write-Host "  - $certificateFileName.cer (public key only)" -ForegroundColor White
 
-Write-Host "`n[i] Next Steps:" -ForegroundColor White
-Write-Host "  - Run 03.Setup-PowerPlatformFederatedCredentials.ps1" -ForegroundColor White
 
 # Update config.json with certificate output values
 try {
@@ -216,11 +214,16 @@ try {
     if ([string]::IsNullOrWhiteSpace($config.CertificatePath)) {
         $config.CertificatePath = "$certificateFileName.pfx"
     }
-
     $config | ConvertTo-Json -Depth 10 | Out-File -FilePath $ConfigPath -Encoding UTF8
-    Write-Host "[+] Configuration updated in:" -ForegroundColor Green
-    Write-Host "  $ConfigPath" -ForegroundColor Cyan
+    Write-Host "`n[+] config.json saved to: " -NoNewline -ForegroundColor Green
+    Write-Host "$ConfigPath" -ForegroundColor Cyan
 }
 catch {
     Write-Host "[!] WARNING: Failed to update config.json: $($_.Exception.Message)" -ForegroundColor Yellow
 }
+
+
+Write-Host "`n========================================" -ForegroundColor Cyan
+Write-Host "Next Steps:" -ForegroundColor Yellow
+Write-Host "Run 03.Setup-PowerPlatformFederatedCredentials.ps1 to create power platform federated credentials" -ForegroundColor Green
+Write-Host "========================================`n" -ForegroundColor Cyan
