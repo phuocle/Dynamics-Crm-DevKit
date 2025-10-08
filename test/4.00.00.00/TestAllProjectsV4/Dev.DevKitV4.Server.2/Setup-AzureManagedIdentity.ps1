@@ -442,17 +442,13 @@ $certificateFileName = $config.CertificateFileName
 $validityYears = $config.ValidityYears
 
 # ========================================
-# Step 1: Check for existing certificate
+# Step 1: Check for existing certificate and remove if exists
 # ========================================
 if (Test-Path "$certificateFileName.pfx") {
-    Write-Host "[!] Certificate already exists: $certificateFileName.pfx" -ForegroundColor Yellow
-    $overwrite = Read-Host "Do you want to overwrite it? (Y/N)"
-    if ($overwrite -ne "Y" -and $overwrite -ne "y") {
-        Write-Host "[-] Cancelled." -ForegroundColor Yellow
-        exit 0
-    }
+    Write-Host "[!] Certificate already exists: $certificateFileName.pfx - Overwriting..." -ForegroundColor Yellow
     Remove-Item "$certificateFileName.pfx" -Force
     Remove-Item "$certificateFileName.cer" -Force -ErrorAction SilentlyContinue
+    Write-Host "[+] Existing certificate files removed" -ForegroundColor Green
 }
 
 # ========================================
@@ -718,11 +714,9 @@ try {
     $config | ConvertTo-Json -Depth 10 | Out-File -FilePath $ConfigPath -Encoding UTF8
     Write-Host "[+] config.json saved to: " -NoNewline -ForegroundColor Green
     Write-Host "$ConfigPath" -ForegroundColor Cyan
-    Write-Host ""
 }
 catch {
     Write-Host "[X] ERROR: Failed to save config.json: $($_.Exception.Message)" -ForegroundColor Red
-    Write-Host ""
 }
 
 # ========================================
@@ -762,7 +756,7 @@ catch {
 # --- 4. Cleanup any remaining temporary JSON files ---
 Write-Host "[~] Cleaning up temporary files..." -ForegroundColor Yellow
 Get-ChildItem -Path $ScriptDir -Filter "*Issuer*.json" | Remove-Item -Force -ErrorAction SilentlyContinue
-Write-Host "  [+] Cleanup complete.`n" -ForegroundColor Green
+Write-Host "[+] Cleanup complete.`n" -ForegroundColor Green
 
 Write-Host "`n========================================================================================================" -ForegroundColor Cyan
 Write-Host "              PHASE 3 COMPLETED: POWER PLATFORM FEDERATED CREDENTIALS CONFIGURATION                    " -ForegroundColor Green
@@ -777,29 +771,43 @@ Write-Host "                                  SETUP COMPLETED SUCCESSFULLY      
 Write-Host "========================================================================================================`n" -ForegroundColor Cyan
 
 Write-Host "[+] Azure Resources Created:" -ForegroundColor Green
-Write-Host "    - App Registration: $appName" -ForegroundColor White
-Write-Host "    - Application ID: $AppId" -ForegroundColor Cyan
-Write-Host "    - Tenant ID: $TenantId" -ForegroundColor Cyan
-Write-Host "    - Resource Group: $resourceGroup" -ForegroundColor White
-Write-Host "    - Key Vault: $keyVaultName" -ForegroundColor White
-Write-Host "    - Key Vault URL: $($kv.properties.vaultUri)" -ForegroundColor Cyan
+Write-Host "    - App Registration: " -NoNewline -ForegroundColor White
+Write-Host "$appName" -ForegroundColor Cyan
+Write-Host "    - Application ID: " -NoNewline -ForegroundColor White
+Write-Host "$AppId" -ForegroundColor Cyan
+Write-Host "    - Tenant ID: " -NoNewline -ForegroundColor White
+Write-Host "$TenantId" -ForegroundColor Cyan
+Write-Host "    - Resource Group: " -NoNewline -ForegroundColor White
+Write-Host "$resourceGroup" -ForegroundColor Cyan
+Write-Host "    - Key Vault: " -NoNewline -ForegroundColor White
+Write-Host "$keyVaultName" -ForegroundColor Cyan
+Write-Host "    - Key Vault URL: " -NoNewline -ForegroundColor White
+Write-Host "$($kv.properties.vaultUri)" -ForegroundColor Cyan
 Write-Host ""
 
 Write-Host "[+] Certificate Generated:" -ForegroundColor Green
-Write-Host "    - Certificate File: $certificateFileName.pfx" -ForegroundColor White
-Write-Host "    - Public Key File: $certificateFileName.cer" -ForegroundColor White
-Write-Host "    - Thumbprint: $($pfxCert.Thumbprint)" -ForegroundColor Cyan
-Write-Host "    - Validity: $validityYears years" -ForegroundColor White
+Write-Host "    - Certificate File: " -NoNewline -ForegroundColor White
+Write-Host "$certificateFileName.pfx" -ForegroundColor Cyan
+Write-Host "    - Public Key File: " -NoNewline -ForegroundColor White
+Write-Host "$certificateFileName.cer" -ForegroundColor Cyan
+Write-Host "    - Thumbprint: " -NoNewline -ForegroundColor White
+Write-Host "$($pfxCert.Thumbprint)" -ForegroundColor Cyan
+Write-Host "    - Validity: " -NoNewline -ForegroundColor White
+Write-Host "$validityYears years" -ForegroundColor Cyan
 Write-Host ""
 
 Write-Host "[+] Federated Credentials Configured:" -ForegroundColor Green
-Write-Host "    - Number of Environments: $($EnvironmentId.Count)" -ForegroundColor White
-Write-Host "    - Total Credentials Created: $($EnvironmentId.Count * 2)" -ForegroundColor Cyan
+Write-Host "    - Number of Environments: " -NoNewline -ForegroundColor White
+Write-Host "$($EnvironmentId.Count)" -ForegroundColor Cyan
+Write-Host "    - Total Credentials Created: " -NoNewline -ForegroundColor White
+Write-Host "$($EnvironmentId.Count * 2)" -ForegroundColor Cyan
 Write-Host ""
 
 Write-Host "[+] Generated Files:" -ForegroundColor Green
-Write-Host "    - config.json (updated with all values)" -ForegroundColor White
-Write-Host "    - ManagedIdentity.cs (assembly attribute file)" -ForegroundColor White
+Write-Host "    - config.json: " -NoNewline -ForegroundColor White
+Write-Host "updated with all values" -ForegroundColor Cyan
+Write-Host "    - ManagedIdentity.cs: " -NoNewline -ForegroundColor White
+Write-Host "assembly attribute file" -ForegroundColor Cyan
 Write-Host ""
 
 Write-Host "========================================================================================================" -ForegroundColor Cyan
