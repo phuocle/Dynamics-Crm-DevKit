@@ -83,9 +83,9 @@ foreach ($field in $requiredFields) {
 }
 
 if ($missingFields.Count -gt 0) {
-    Write-Host "========================================" -ForegroundColor Red
+    Write-Host "=====================================================================" -ForegroundColor Red
     Write-Host "[X] ERROR: Missing Required Configuration" -ForegroundColor Red
-    Write-Host "========================================`n" -ForegroundColor Red
+    Write-Host "=====================================================================`n" -ForegroundColor Red
     Write-Host "Please update the following fields in config.json:" -ForegroundColor Yellow
     foreach ($field in $missingFields) {
         Write-Host "  - $field" -ForegroundColor White
@@ -102,9 +102,9 @@ $keyVaultName = $config.KeyVaultName
 $secretName = $config.SecretName
 $secretValue = $config.SecretValue
 
-Write-Host "========================================" -ForegroundColor Cyan
-Write-Host "[+] Begin - Azure Resources Setup for Managed Identity Plugin" -ForegroundColor Green
-Write-Host "========================================`n" -ForegroundColor Cyan
+Write-Host "`n=====================================================================" -ForegroundColor Cyan
+Write-Host "Begin Azure Resources Setup for Managed Identity Plugin" -ForegroundColor Green
+Write-Host "=====================================================================`n" -ForegroundColor Cyan
 
 # ========================================
 # Step 1: Create Resource Group
@@ -324,7 +324,9 @@ if ($existingPolicy -and $existingPolicy.Count -gt 0) {
             Write-Host "  [+] SUCCESS: Permissions updated" -ForegroundColor Green
         }
     } else {
-        Write-Host "  Permissions: Get, List (Secrets) - Already configured" -ForegroundColor Cyan
+
+        Write-Host "  Permissions: " -NoNewline -ForegroundColor White
+        Write-Host "Get, List (Secrets) - Already configured" -ForegroundColor Cyan
     }
 } else {
     Write-Host "Creating new access policy..." -ForegroundColor Gray
@@ -362,10 +364,9 @@ catch {
     Write-Host "[!] WARNING: Failed to update config.json: $($_.Exception.Message)" -ForegroundColor Yellow
 }
 
-Write-Host "`n========================================" -ForegroundColor Cyan
-Write-Host "[+] End - Azure Resources Setup for Managed Identity Plugin" -ForegroundColor Green
-Write-Host "========================================`n" -ForegroundColor Cyan
-Write-Host "========================================" -ForegroundColor Cyan
-Write-Host "Next Steps:" -ForegroundColor Yellow
+Write-Host "`nNext Steps:" -ForegroundColor Blue
 Write-Host "Run 02.Setup-Certificate.ps1 to generate code signing certificate" -ForegroundColor Green
-Write-Host "========================================" -ForegroundColor Cyan
+
+Write-Host "`n=====================================================================" -ForegroundColor Cyan
+Write-Host "End Azure Resources Setup for Managed Identity Plugin" -ForegroundColor Green
+Write-Host "=====================================================================`n" -ForegroundColor Cyan

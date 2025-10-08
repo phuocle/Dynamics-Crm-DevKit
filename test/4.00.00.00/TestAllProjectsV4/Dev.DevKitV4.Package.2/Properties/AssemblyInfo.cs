@@ -26,5 +26,5 @@ using System.Runtime.InteropServices;
     CertificatePath = "cert-signing-2.pfx",
     CertificatePassword = "YourPassword123!!",
     CredentialSource = CredentialSource.IsManaged,
-    SubjectScope = SubjectScope.EnviornmentScope
+    SubjectScope = SubjectScope.EnvironmentScope
 )]

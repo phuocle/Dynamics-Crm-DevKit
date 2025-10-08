@@ -59,7 +59,6 @@ if ($config -and $config.CertificateFileName) {
     Write-Host "     - $($config.CertificateFileName).cer" -ForegroundColor Gray
 }
 Write-Host "     - ManagedIdentity.cs" -ForegroundColor Gray
-Write-Host "     - config.json" -ForegroundColor Gray
 
 Write-Host ""
 Write-Host "[!] WARNING: App Registration & Resource Group will be permanently deleted!" -ForegroundColor Red

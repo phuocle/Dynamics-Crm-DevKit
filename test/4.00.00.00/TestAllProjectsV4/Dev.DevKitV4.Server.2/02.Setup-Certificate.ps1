@@ -63,9 +63,9 @@ $certificateSubject = $config.CertificateSubject
 $certificateFileName = $config.CertificateFileName
 $validityYears = $config.ValidityYears
 
-Write-Host "========================================" -ForegroundColor Cyan
-Write-Host "[+] Begin Code Signing Certificate Setup" -ForegroundColor Green
-Write-Host "========================================`n" -ForegroundColor Cyan
+Write-Host "===========================================" -ForegroundColor Cyan
+Write-Host "Begin Code Signing Certificate Setup" -ForegroundColor Green
+Write-Host "===========================================`n" -ForegroundColor Cyan
 
 # ========================================
 # Step 1: Check for existing certificate
@@ -84,7 +84,7 @@ if (Test-Path "$certificateFileName.pfx") {
 # ========================================
 # Step 2: Create self-signed certificate
 # ========================================
-Write-Host "[1/4] Creating self-signed code signing certificate..." -ForegroundColor Yellow
+Write-Host "`n[1/4] Creating self-signed code signing certificate..." -ForegroundColor Yellow
 
 try {
     $cert = New-SelfSignedCertificate `
@@ -177,23 +177,16 @@ $removeCert = Read-Host "Remove certificate from Windows certificate store? (Y/N
 if ($removeCert -eq "Y" -or $removeCert -eq "y") {
     try {
         Remove-Item "Cert:\CurrentUser\My\$($cert.Thumbprint)" -Force
-        Write-Host "[+] Certificate removed from store" -ForegroundColor Green
+        Write-Host "`n[+] Certificate removed from store" -ForegroundColor Green
     }
     catch {
         Write-Host "[!] Could not remove certificate from store" -ForegroundColor Yellow
     }
 }
 else {
-    Write-Host "[i] Certificate kept in store:" -ForegroundColor White
+    Write-Host "`n[i] Certificate kept in store:" -ForegroundColor White
     Write-Host "  Cert:\CurrentUser\My\$($cert.Thumbprint)" -ForegroundColor Cyan
 }
-
-# ========================================
-# Summary
-# ========================================
-Write-Host "`n========================================" -ForegroundColor Cyan
-Write-Host "[+] End Code Signing Certificate Setup" -ForegroundColor Green
-Write-Host "========================================`n" -ForegroundColor Cyan
 
 Write-Host "[i] Files created:" -ForegroundColor Green
 Write-Host "  - $certificateFileName.pfx (with private key)" -ForegroundColor White
@@ -222,8 +215,9 @@ catch {
     Write-Host "[!] WARNING: Failed to update config.json: $($_.Exception.Message)" -ForegroundColor Yellow
 }
 
-
-Write-Host "`n========================================" -ForegroundColor Cyan
-Write-Host "Next Steps:" -ForegroundColor Yellow
+Write-Host "`nNext Steps:" -ForegroundColor Blue
 Write-Host "Run 03.Setup-PowerPlatformFederatedCredentials.ps1 to create power platform federated credentials" -ForegroundColor Green
-Write-Host "========================================`n" -ForegroundColor Cyan
+
+Write-Host "`n===========================================" -ForegroundColor Cyan
+Write-Host "End Code Signing Certificate Setup" -ForegroundColor Green
+Write-Host "===========================================`n" -ForegroundColor Cyan

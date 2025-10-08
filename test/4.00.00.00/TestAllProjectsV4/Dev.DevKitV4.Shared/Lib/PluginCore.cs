@@ -142,7 +142,7 @@ namespace Dev.DevKitV4.Shared
     public enum SubjectScope
     {
         GlobalScope = 0,
-        EnviornmentScope = 1,
+        EnvironmentScope = 1,
         DevOnlyScope = 2
     }
 
