@@ -103,7 +103,7 @@ $secretName = $config.SecretName
 $secretValue = $config.SecretValue
 
 Write-Host "========================================" -ForegroundColor Cyan
-Write-Host "Azure Resources Setup for Managed Identity Plugin" -ForegroundColor Green
+Write-Host "[+] Begin - Azure Resources Setup for Managed Identity Plugin" -ForegroundColor Green
 Write-Host "========================================`n" -ForegroundColor Cyan
 
 # ========================================
@@ -343,6 +343,10 @@ if ($existingPolicy -and $existingPolicy.Count -gt 0) {
         exit 1
     }
 }
+# ========================================
+# Step 7: Summary
+# ========================================
+Write-Host "`n[7/7] Saving config.json" -ForegroundColor Yellow
 
 # Update config.json with output values
 try {
@@ -351,19 +355,15 @@ try {
     $config.KeyVaultURL = $kv.properties.vaultUri
 
     $config | ConvertTo-Json -Depth 10 | Out-File -FilePath $ConfigPath -Encoding UTF8
-    Write-Host "`n[+] Configuration saved to: " -NoNewline -ForegroundColor Green
+    Write-Host "[+] config.json saved to: " -NoNewline -ForegroundColor Green
     Write-Host "$ConfigPath" -ForegroundColor Cyan
 }
 catch {
-    Write-Host "`n[!] WARNING: Failed to update config.json: $($_.Exception.Message)" -ForegroundColor Yellow
+    Write-Host "[!] WARNING: Failed to update config.json: $($_.Exception.Message)" -ForegroundColor Yellow
 }
 
-# ========================================
-# Step 7: Summary
-# ========================================
-Write-Host "`n[7/7] Summary" -ForegroundColor Yellow
 Write-Host "`n========================================" -ForegroundColor Cyan
-Write-Host "[+] Azure Resources Setup Complete!" -ForegroundColor Green
+Write-Host "[+] End - Azure Resources Setup for Managed Identity Plugin" -ForegroundColor Green
 Write-Host "========================================`n" -ForegroundColor Cyan
 Write-Host "========================================" -ForegroundColor Cyan
 Write-Host "Next Steps:" -ForegroundColor Yellow
