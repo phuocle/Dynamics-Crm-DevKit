@@ -458,5 +458,111 @@ If you encounter issues not covered in this guide:
 
 ---
 
+## 🧹 Cleanup and Starting Fresh
+
+If you need to start over or want to remove all created resources, use the cleanup script:
+
+### Script 4: Cleanup All Resources (04.Cleanup-All.ps1)
+
+This script will **permanently delete**:
+- ✅ Azure App Registration (includes service principal and federated credentials)
+- ✅ Azure Resource Group (includes Key Vault and all resources)
+- ✅ Certificate from Windows Certificate Store
+- ✅ Local certificate files (.pfx and .cer)
+- ✅ config.json file
+
+#### How to Run Cleanup
+
+```powershell
+.\04.Cleanup-All.ps1
+```
+
+#### Safety Features
+
+1. **Configuration Check**: Reads config.json to know what to delete
+2. **Preview**: Shows all resources that will be deleted before proceeding
+3. **Confirmation Required**: You must type `DELETE` (uppercase) to confirm
+4. **Error Handling**: Continues cleanup even if some resources don't exist
+5. **Summary Report**: Shows what was deleted successfully and any errors
+
+#### Example Output
+
+```
+========================================
+⚠️  CLEANUP SCRIPT - DELETE ALL RESOURCES
+========================================
+
+📋 The following resources will be DELETED:
+
+  🗑️  App Registration: DynamicsCrmDevKitManagedIdentity
+     • AppId: 89a8ddb5-6414-4478-8dd2-2aad7c9a292b
+     • All federated credentials
+
+  🗑️  Resource Group: DevKit
+     • Key Vault: kv-dataverse-secrets
+     • All resources within the group
+
+  🗑️  Certificate from Windows Store:
+     • Subject: CN=DynamicsCrmDevKitManagedIdentity
+     • Thumbprint: 8B3D731DF5B92993EAC96E4161C7B1E3F08F6853
+
+  🗑️  Local Files:
+     • ManagedIdentity.pfx
+     • ManagedIdentity.cer
+     • config.json
+
+⚠️  WARNING: This action CANNOT be undone!
+
+Type 'DELETE' (in uppercase) to confirm deletion: DELETE
+
+========================================
+🧹 Starting Cleanup Process...
+========================================
+
+Step 1: Deleting Azure Resources...
+✅ App Registration deleted successfully
+✅ Resource Group deletion started (running in background)
+
+Step 2: Deleting Certificate from Windows Store...
+✅ Certificate removed from Windows Store
+
+Step 3: Deleting Local Files...
+✅ Deleted: ManagedIdentity.pfx
+✅ Deleted: ManagedIdentity.cer
+✅ Deleted: config.json
+
+========================================
+📊 CLEANUP SUMMARY
+========================================
+
+✅ Successfully Completed (6):
+   • Deleted App Registration: DynamicsCrmDevKitManagedIdentity
+   • Resource Group deletion initiated: DevKit
+   • Deleted certificate from Windows Store
+   • Deleted file: ManagedIdentity.pfx
+   • Deleted file: ManagedIdentity.cer
+   • Deleted file: config.json
+
+🎉 Cleanup completed successfully!
+   You can now run scripts 01-03 again from scratch.
+```
+
+#### When to Use Cleanup Script
+
+- **Testing**: When you want to test the setup scripts multiple times
+- **Mistakes**: If you made configuration errors and want to start fresh
+- **Cleanup**: When you no longer need the resources
+- **Name Conflicts**: If you need to use different resource names
+
+#### After Cleanup
+
+After running the cleanup script:
+1. All Azure resources will be deleted
+2. All local files will be removed
+3. You can run `01.Setup-Azure.ps1` again to start fresh
+4. A new `config.json` will be created
+
+---
+
 **Last Updated:** October 2025
 **Version:** 4.0
