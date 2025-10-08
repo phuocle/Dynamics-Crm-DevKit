@@ -205,7 +205,7 @@ if ($existingSp) {
 # ========================================
 Write-Host "`n[4/7] Checking Azure Key Vault..." -ForegroundColor Yellow
 
-# Check if Key Vault already exists
+# Check if Key Vault already exists (active)
 $existingKv = az keyvault show --name $keyVaultName --resource-group $resourceGroup --output json 2>$null | ConvertFrom-Json
 
 if ($existingKv) {
@@ -215,22 +215,55 @@ if ($existingKv) {
     Write-Host "  Vault URL: " -NoNewline -ForegroundColor White
     Write-Host "$($kv.properties.vaultUri)" -ForegroundColor Cyan
 } else {
-    Write-Host "Creating new Key Vault..." -ForegroundColor Gray
-    $kv = az keyvault create `
-        --name $keyVaultName `
-        --resource-group $resourceGroup `
-        --location $location `
-        --enable-rbac-authorization false `
-        --output json | ConvertFrom-Json
+    # Check if Key Vault exists in soft-deleted state
+    Write-Host "Key Vault not found in resource group. Checking soft-deleted state..." -ForegroundColor Gray
+    $softDeletedKv = az keyvault list-deleted --query "[?name=='$keyVaultName']" --output json 2>$null | ConvertFrom-Json
 
-    if ($kv) {
-        Write-Host "[+] SUCCESS: Key Vault created: $($kv.name)" -ForegroundColor Green
-        Write-Host "  Vault URL: " -NoNewline -ForegroundColor White
-        Write-Host "$($kv.properties.vaultUri)" -ForegroundColor Cyan
+    if ($softDeletedKv -and $softDeletedKv.Count -gt 0) {
+        Write-Host "[i] Found soft-deleted Key Vault - Recovering..." -ForegroundColor Cyan
+        Write-Host "  Location: " -NoNewline -ForegroundColor White
+        Write-Host "$($softDeletedKv[0].properties.location)" -ForegroundColor Cyan
+        Write-Host "  [~] This may take a few minutes..." -ForegroundColor Yellow
+
+        # Recover the soft-deleted Key Vault
+        $null = az keyvault recover --name $keyVaultName --output none 2>&1
+
+        if ($LASTEXITCODE -eq 0) {
+            Write-Host "  [+] Key Vault recovered successfully!" -ForegroundColor Green
+
+            # Get the recovered Key Vault details
+            $kv = az keyvault show --name $keyVaultName --output json 2>$null | ConvertFrom-Json
+
+            if ($kv) {
+                Write-Host "[+] SUCCESS: Key Vault recovered: $($kv.name)" -ForegroundColor Green
+                Write-Host "  Vault URL: " -NoNewline -ForegroundColor White
+                Write-Host "$($kv.properties.vaultUri)" -ForegroundColor Cyan
+            }
+        } else {
+            Write-Host "  [X] Failed to recover Key Vault" -ForegroundColor Red
+            Write-Host "  [i] You may need to purge it first: az keyvault purge --name $keyVaultName" -ForegroundColor Yellow
+            exit 1
+        }
     } else {
-        Write-Host "[X] ERROR: Failed to create Key Vault (name may not be globally unique)" -ForegroundColor Red
-        Write-Host "  Try a different Key Vault name" -ForegroundColor Yellow
-        exit 1
+        # Create new Key Vault
+        Write-Host "Creating new Key Vault..." -ForegroundColor Gray
+        $kv = az keyvault create `
+            --name $keyVaultName `
+            --resource-group $resourceGroup `
+            --location $location `
+            --enable-rbac-authorization false `
+            --output json | ConvertFrom-Json
+
+        if ($kv) {
+            Write-Host "[+] SUCCESS: Key Vault created: $($kv.name)" -ForegroundColor Green
+            Write-Host "  Vault URL: " -NoNewline -ForegroundColor White
+            Write-Host "$($kv.properties.vaultUri)" -ForegroundColor Cyan
+        } else {
+            Write-Host "[X] ERROR: Failed to create Key Vault (name may not be globally unique)" -ForegroundColor Red
+            Write-Host "  [i] Check if it's soft-deleted: az keyvault list-deleted" -ForegroundColor Yellow
+            Write-Host "  [i] Try a different Key Vault name or recover/purge the existing one" -ForegroundColor Yellow
+            exit 1
+        }
     }
 }
 

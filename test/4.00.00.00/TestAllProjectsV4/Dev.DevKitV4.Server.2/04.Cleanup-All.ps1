@@ -39,9 +39,14 @@ if ($config) {
         Write-Host "     - All federated credentials" -ForegroundColor Gray
     }
 
+    if ($config.KeyVaultName) {
+        Write-Host "  [*] Key Vault (Soft-Delete):" -ForegroundColor White
+        Write-Host "     - Name: $($config.KeyVaultName)" -ForegroundColor Gray
+        Write-Host "     - Will be recoverable for 90 days" -ForegroundColor Gray
+    }
+
     if ($config.ResourceGroup) {
         Write-Host "  [*] Resource Group: $($config.ResourceGroup)" -ForegroundColor White
-        Write-Host "     - Key Vault: $($config.KeyVaultName)" -ForegroundColor Gray
         Write-Host "     - All resources within the group" -ForegroundColor Gray
     }
 
@@ -61,7 +66,8 @@ Write-Host "     - ManagedIdentity.cs" -ForegroundColor Gray
 Write-Host "     - config.json" -ForegroundColor Gray
 
 Write-Host ""
-Write-Host "[!] WARNING: This action CANNOT be undone!" -ForegroundColor Red
+Write-Host "[!] WARNING: App Registration & Resource Group will be permanently deleted!" -ForegroundColor Red
+Write-Host "[i] NOTE: Key Vault will be soft-deleted (recoverable for 90 days)" -ForegroundColor Cyan
 Write-Host ""
 
 # Confirmation prompt
@@ -140,69 +146,51 @@ if ($config -and ($config.AppId -or $config.ResourceGroup)) {
         }
     }
 
-    # Delete Key Vault first (with purge to prevent soft-delete issues)
+    # Delete Key Vault (soft-delete only, can be recovered by 01.Setup-Azure.ps1)
     if ($config.KeyVaultName) {
         Write-Host "[~] Deleting Key Vault..." -ForegroundColor Yellow
         Write-Host "   Key Vault: $($config.KeyVaultName)" -ForegroundColor Gray
-        Write-Host "   [i] Purging to allow name reuse" -ForegroundColor Cyan
+        Write-Host "   [i] Using soft-delete (can be recovered)" -ForegroundColor Cyan
 
         try {
-            # Check if Key Vault exists
-            $kvExists = az keyvault show --name $config.KeyVaultName --output json 2>&1
-            if ($LASTEXITCODE -eq 0) {
-                # Delete Key Vault (suppress warnings)
+            # Check if Key Vault exists in active state
+            $kvExists = az keyvault show --name $config.KeyVaultName --output json 2>$null | ConvertFrom-Json
+
+            if ($kvExists) {
+                # Soft-delete the Key Vault (suppress warnings)
                 $null = az keyvault delete --name $config.KeyVaultName --output none 2>&1
+
                 if ($LASTEXITCODE -eq 0) {
-                    Write-Host "   [+] Key Vault deleted" -ForegroundColor Green
-
-                    # Purge the Key Vault immediately to free up the name (suppress warnings)
-                    Write-Host "   [~] Purging soft-deleted Key Vault (to allow name reuse)..." -ForegroundColor Yellow
-                    $null = az keyvault purge --name $config.KeyVaultName --output none 2>&1
-
-                    if ($LASTEXITCODE -eq 0) {
-                        $success += "Key Vault purged: $($config.KeyVaultName) (name is now available)"
-                        Write-Host "   [+] Key Vault purged successfully - name can be reused" -ForegroundColor Green
-                    }
-                    else {
-                        Write-Host "   [!] Warning: Failed to purge Key Vault (may need manual purge)" -ForegroundColor Yellow
-                        Write-Host "   [i] Name may be reserved for up to 90 days" -ForegroundColor Yellow
-                    }
+                    $success += "Key Vault soft-deleted: $($config.KeyVaultName) (can be recovered)"
+                    Write-Host "   [+] Key Vault moved to soft-deleted state" -ForegroundColor Green
+                    Write-Host "   [i] Can be recovered by running 01.Setup-Azure.ps1 again" -ForegroundColor Cyan
+                    Write-Host "   [i] Will auto-purge after 90 days if not recovered`n" -ForegroundColor Gray
                 }
                 else {
                     $errors += "Failed to delete Key Vault: $($config.KeyVaultName)"
-                    Write-Host "   [X] Failed to delete Key Vault" -ForegroundColor Red
+                    Write-Host "   [X] Failed to delete Key Vault`n" -ForegroundColor Red
                 }
             }
             else {
-                Write-Host "   [-] Key Vault not found in subscription" -ForegroundColor Yellow
+                Write-Host "   [-] Key Vault not found in active state" -ForegroundColor Yellow
 
-                # Check if it's soft-deleted (suppress warnings)
-                Write-Host "   [~] Checking for soft-deleted Key Vault..." -ForegroundColor Yellow
-                $softDeleted = az keyvault list-deleted --query "[?name=='$($config.KeyVaultName)']" --output json 2>&1 | ConvertFrom-Json
+                # Check if already soft-deleted
+                $softDeleted = az keyvault list-deleted --query "[?name=='$($config.KeyVaultName)']" --output json 2>$null | ConvertFrom-Json
 
                 if ($softDeleted -and $softDeleted.Count -gt 0) {
-                    Write-Host "   [i] Found soft-deleted Key Vault - purging..." -ForegroundColor Cyan
-                    $null = az keyvault purge --name $config.KeyVaultName --output none 2>&1
-
-                    if ($LASTEXITCODE -eq 0) {
-                        $success += "Purged soft-deleted Key Vault: $($config.KeyVaultName)"
-                        Write-Host "   [+] Soft-deleted Key Vault purged - name is now available" -ForegroundColor Green
-                    }
-                    else {
-                        $errors += "Failed to purge soft-deleted Key Vault: $($config.KeyVaultName)"
-                        Write-Host "   [X] Failed to purge soft-deleted Key Vault" -ForegroundColor Red
-                    }
+                    Write-Host "   [i] Key Vault is already in soft-deleted state" -ForegroundColor Cyan
+                    Write-Host "   [i] Can be recovered by running 01.Setup-Azure.ps1 again`n" -ForegroundColor Cyan
+                    $success += "Key Vault already soft-deleted: $($config.KeyVaultName)"
                 }
                 else {
-                    Write-Host "   [-] No soft-deleted Key Vault found either" -ForegroundColor Yellow
+                    Write-Host "   [-] Key Vault not found (may have been already purged)`n" -ForegroundColor Yellow
                 }
             }
         }
         catch {
             $errors += "Error processing Key Vault: $($_.Exception.Message)"
-            Write-Host "   [X] Error: $($_.Exception.Message)" -ForegroundColor Red
+            Write-Host "   [X] Error: $($_.Exception.Message)`n" -ForegroundColor Red
         }
-        Write-Host ""
     }
 
     # Delete Resource Group (includes any remaining resources)
