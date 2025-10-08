@@ -308,20 +308,6 @@ Write-Host "`n========================================" -ForegroundColor Cyan
 Write-Host "Azure Resources Setup Complete!" -ForegroundColor Green
 Write-Host "========================================`n" -ForegroundColor Cyan
 
-Write-Host "IMPORTANT: Save these values for plugin configuration:`n" -ForegroundColor Yellow
-
-Write-Host "Application (Client) ID:" -NoNewline
-Write-Host "  $appId" -ForegroundColor Cyan
-
-Write-Host "Directory (Tenant) ID:  " -NoNewline
-Write-Host "  $tenantId" -ForegroundColor Cyan
-
-Write-Host "Key Vault Name:         " -NoNewline
-Write-Host "  $keyVaultName" -ForegroundColor Cyan
-
-Write-Host "Key Vault URL:          " -NoNewline
-Write-Host "  $($kv.properties.vaultUri)" -ForegroundColor Cyan
-
 Write-Host "`nNext Steps:" -ForegroundColor Yellow
 Write-Host "Run 02.Setup-Certificate.ps1 to generate code signing certificate" -ForegroundColor White
 

@@ -196,17 +196,8 @@ Write-Host "Files created:" -ForegroundColor Yellow
 Write-Host "  • $certificateFileName.pfx (with private key)" -ForegroundColor White
 Write-Host "  • $certificateFileName.cer (public key only)" -ForegroundColor White
 
-Write-Host "`nCertificate password:" -NoNewline
-Write-Host "  $certificatePassword" -ForegroundColor Cyan
-
 Write-Host "`nNext Steps:" -ForegroundColor Yellow
-Write-Host "1. Verify $certificateFileName.pfx exists in this folder" -ForegroundColor White
-Write-Host "2. Update AssemblyInfo.cs with DynamcisCrmDevkitAssemblyAttribute" -ForegroundColor White
-Write-Host "   CertificatePath = `"$certificateFileName.pfx`"" -ForegroundColor Cyan
-Write-Host "   CertificatePassword = `"$certificatePassword`"" -ForegroundColor Cyan
-Write-Host "3. Build the plugin project" -ForegroundColor White
-Write-Host "4. Run 03.Setup-PowerPlatformFederatedCredentials.ps1" -ForegroundColor White
-Write-Host "5. Deploy using DynamicsCrm.DevKit.Cli`n" -ForegroundColor White
+Write-Host "Run 03.Setup-PowerPlatformFederatedCredentials.ps1" -ForegroundColor White
 
 # Update config.json with certificate output values
 try {
