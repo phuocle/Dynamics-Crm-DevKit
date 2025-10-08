@@ -80,7 +80,7 @@ if ($confirmation -ne "DELETE") {
 
 Write-Host ""
 Write-Host "========================================" -ForegroundColor Cyan
-Write-Host "[~] Starting Cleanup Process..." -ForegroundColor Cyan
+Write-Host "[~] Starting Cleanup Process..." -ForegroundColor Green
 Write-Host "========================================`n" -ForegroundColor Cyan
 
 $errors = @()
@@ -330,7 +330,7 @@ else {
 # ========================================
 Write-Host ""
 Write-Host "========================================" -ForegroundColor Cyan
-Write-Host "[i] CLEANUP SUMMARY" -ForegroundColor Cyan
+Write-Host "[~] Finished Cleanup Process" -ForegroundColor Green
 Write-Host "========================================`n" -ForegroundColor Cyan
 
 if ($success.Count -gt 0) {

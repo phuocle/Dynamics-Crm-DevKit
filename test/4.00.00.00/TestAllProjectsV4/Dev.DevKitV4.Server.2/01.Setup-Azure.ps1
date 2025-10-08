@@ -103,7 +103,7 @@ $secretName = $config.SecretName
 $secretValue = $config.SecretValue
 
 Write-Host "========================================" -ForegroundColor Cyan
-Write-Host "Azure Resources Setup for Managed Identity Plugin" -ForegroundColor Cyan
+Write-Host "Azure Resources Setup for Managed Identity Plugin" -ForegroundColor Green
 Write-Host "========================================`n" -ForegroundColor Cyan
 
 # ========================================
@@ -365,7 +365,7 @@ Write-Host "`n[7/7] Summary" -ForegroundColor Yellow
 Write-Host "`n========================================" -ForegroundColor Cyan
 Write-Host "[+] Azure Resources Setup Complete!" -ForegroundColor Green
 Write-Host "========================================`n" -ForegroundColor Cyan
-Write-Host "========================================`n" -ForegroundColor Cyan
+Write-Host "========================================" -ForegroundColor Cyan
 Write-Host "Next Steps:" -ForegroundColor Yellow
 Write-Host "Run 02.Setup-Certificate.ps1 to generate code signing certificate" -ForegroundColor Green
-Write-Host "`n========================================" -ForegroundColor Cyan
+Write-Host "========================================" -ForegroundColor Cyan
