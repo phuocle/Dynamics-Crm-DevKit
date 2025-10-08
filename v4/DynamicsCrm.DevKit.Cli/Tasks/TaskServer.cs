@@ -1406,13 +1406,13 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 plugin["sourcetype"] = new OptionSetValue((int)assemblyAttribute.SourceType);
                 plugin["isolationmode"] = new OptionSetValue((int)assemblyAttribute.IsolationMode);
-                text = $" [Isolation={assemblyAttribute.IsolationMode}, Source={assemblyAttribute.SourceType}]";
+                text = $" [Isolation={assemblyAttribute.IsolationMode}], [Source={assemblyAttribute.SourceType}]";
             }
             else
             {
                 plugin["sourcetype"] = new OptionSetValue(0);
                 plugin["isolationmode"] = new OptionSetValue(2);
-                text = $" [Isolation={IsolationModeEnum.Sandbox}, Source={SourceTypeEnum.Database}]";
+                text = $" [Isolation={IsolationModeEnum.Sandbox}], [Source={SourceTypeEnum.Database}]";
             }
             if (rows.Entities.Count == 0)
             {
@@ -1569,7 +1569,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 return existingId;
             }
         }
-
 
         private DynamcisCrmDevkitAssemblyAttribute GetDynamcisCrmDevkitAssemblyAttribute(Assembly assembly)
         {
@@ -1827,21 +1826,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             if (type?.BaseType != null) return IsWorkflowType(type?.BaseType);
             return false;
         }
-
-        //private OptionSetValue GetIsolationMode(string file)
-        //{
-        //    var types = GetTypes(file);
-        //    foreach (var type in types)
-        //    {
-        //        if (IsWorkflowType(type)) continue;
-        //        var attributes = GetCrmPluginRegistrationAttributes(type);
-        //        foreach (var attribute in attributes)
-        //        {
-        //            if (attribute.IsolationMode == IsolationModeEnum.None) return new OptionSetValue(1);
-        //        }
-        //    }
-        //    return new OptionSetValue(2);
-        //}
 
         private async Task DeployPackageAsync(string file)
         {

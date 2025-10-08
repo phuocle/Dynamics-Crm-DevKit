@@ -33,7 +33,7 @@ namespace Dev.DevKitV4.Shared
     {
         Database = 0,
         Disk = 1,
-        Normal = 2,	
+        Normal = 2,
         AzureWebApp = 3,
         FileStore = 4
     }

@@ -57,8 +57,6 @@ namespace Dev.DevKitV4.Server._2
             // 3. Use the secret!
             tracing.DebugMessage($"API Endpoint: {secretValue}");
 
-            tracing?.DebugContext(context);
-
             ExecutePlugin(context, serviceFactory, serviceAdmin, service, tracing);
         }
 
