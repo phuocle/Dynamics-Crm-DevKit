@@ -416,19 +416,12 @@ if ($existingPolicy -and $existingPolicy.Count -gt 0) {
 # ========================================
 Write-Host "`n[7/7] Updating configuration..." -ForegroundColor Yellow
 
-# Update config.json with output values
-try {
-    $config.TenantId = $tenantId
-    $config.AppId = $appId
-    $config.KeyVaultURL = $kv.properties.vaultUri
+# Update config.json with output values from Phase 1
+$config.TenantId = $tenantId
+$config.AppId = $appId
+$config.KeyVaultURL = $kv.properties.vaultUri
 
-    $config | ConvertTo-Json -Depth 10 | Out-File -FilePath $ConfigPath -Encoding UTF8
-    Write-Host "[+] config.json saved to: " -NoNewline -ForegroundColor Green
-    Write-Host "$ConfigPath" -ForegroundColor Cyan
-}
-catch {
-    Write-Host "[!] WARNING: Failed to update config.json: $($_.Exception.Message)" -ForegroundColor Yellow
-}
+Write-Host "[+] Configuration updated (will be saved after all phases complete)" -ForegroundColor Green
 
 Write-Host "`n========================================================================================================" -ForegroundColor Cyan
 Write-Host "                             PHASE 1 COMPLETED: AZURE RESOURCES SETUP                                 " -ForegroundColor Green
@@ -566,28 +559,21 @@ Write-Host "[i] Files created:" -ForegroundColor Green
 Write-Host "  - $certificateFileName.pfx (with private key)" -ForegroundColor White
 Write-Host "  - $certificateFileName.cer (public key only)" -ForegroundColor White
 
+# Update config.json with certificate output values (in memory only)
+$config.CertificateThumbprint = $pfxCert.Thumbprint
 
-# Update config.json with certificate output values
-try {
-    $config.CertificateThumbprint = $pfxCert.Thumbprint
+# Calculate SHA-256 hash for federated credentials
+$certBytes = $pfxCert.Export([System.Security.Cryptography.X509Certificates.X509ContentType]::Cert)
+$sha256 = [System.Security.Cryptography.SHA256]::Create().ComputeHash($certBytes)
+$sha256Hash = [System.Convert]::ToBase64String($sha256).Replace('+', '-').Replace('/', '_').TrimEnd('=')
+$config.CertificateSHA256Hash = $sha256Hash
 
-    # Calculate SHA-256 hash for federated credentials
-    $certBytes = $pfxCert.Export([System.Security.Cryptography.X509Certificates.X509ContentType]::Cert)
-    $sha256 = [System.Security.Cryptography.SHA256]::Create().ComputeHash($certBytes)
-    $sha256Hash = [System.Convert]::ToBase64String($sha256).Replace('+', '-').Replace('/', '_').TrimEnd('=')
-    $config.CertificateSHA256Hash = $sha256Hash
-
-    # Update CertificatePath if empty
-    if ([string]::IsNullOrWhiteSpace($config.CertificatePath)) {
-        $config.CertificatePath = "$certificateFileName.pfx"
-    }
-    $config | ConvertTo-Json -Depth 10 | Out-File -FilePath $ConfigPath -Encoding UTF8
-    Write-Host "`n[+] config.json saved to: " -NoNewline -ForegroundColor Green
-    Write-Host "$ConfigPath" -ForegroundColor Cyan
+# Update CertificatePath if empty
+if ([string]::IsNullOrWhiteSpace($config.CertificatePath)) {
+    $config.CertificatePath = "$certificateFileName.pfx"
 }
-catch {
-    Write-Host "[!] WARNING: Failed to update config.json: $($_.Exception.Message)" -ForegroundColor Yellow
-}
+
+Write-Host "`n[+] Configuration updated (will be saved after all phases complete)" -ForegroundColor Green
 
 Write-Host "`n========================================================================================================" -ForegroundColor Cyan
 Write-Host "                      PHASE 2 COMPLETED: CODE SIGNING CERTIFICATE GENERATION                          " -ForegroundColor Green
@@ -723,6 +709,23 @@ for ($i = 0; $i -lt $EnvironmentId.Count; $i++) {
 }
 
 # ========================================
+# Save Final Configuration
+# ========================================
+Write-Host "[~] Saving final configuration..." -ForegroundColor Yellow
+
+try {
+    # Save config.json with all values from all phases
+    $config | ConvertTo-Json -Depth 10 | Out-File -FilePath $ConfigPath -Encoding UTF8
+    Write-Host "[+] config.json saved to: " -NoNewline -ForegroundColor Green
+    Write-Host "$ConfigPath" -ForegroundColor Cyan
+    Write-Host ""
+}
+catch {
+    Write-Host "[X] ERROR: Failed to save config.json: $($_.Exception.Message)" -ForegroundColor Red
+    Write-Host ""
+}
+
+# ========================================
 # Generate ManagedIdentity.cs File
 # ========================================
 Write-Host "[~] Generating ManagedIdentity.cs file..." -ForegroundColor Yellow
@@ -760,17 +763,6 @@ catch {
 Write-Host "[~] Cleaning up temporary files..." -ForegroundColor Yellow
 Get-ChildItem -Path $ScriptDir -Filter "*Issuer*.json" | Remove-Item -Force -ErrorAction SilentlyContinue
 Write-Host "  [+] Cleanup complete.`n" -ForegroundColor Green
-
-# Update config.json with final verification
-try {
-    # The config already has all necessary values, just save to ensure consistency
-    $config | ConvertTo-Json -Depth 10 | Out-File -FilePath $ConfigPath -Encoding UTF8
-    Write-Host "[+] config.json saved to: " -NoNewline -ForegroundColor Green
-    Write-Host "$ConfigPath" -ForegroundColor Cyan
-}
-catch {
-    Write-Host "[!] WARNING: Failed to update config.json: $($_.Exception.Message)" -ForegroundColor Yellow
-}
 
 Write-Host "`n========================================================================================================" -ForegroundColor Cyan
 Write-Host "              PHASE 3 COMPLETED: POWER PLATFORM FEDERATED CREDENTIALS CONFIGURATION                    " -ForegroundColor Green
