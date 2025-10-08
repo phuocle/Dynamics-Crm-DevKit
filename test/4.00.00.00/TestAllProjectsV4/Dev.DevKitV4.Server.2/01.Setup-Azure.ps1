@@ -1,20 +1,4 @@
-﻿# ================================    W    Write-Host "[i] Please update the following values in config.json:" -ForegroundColor White
-    Write-Host "  - AppName" -ForegroundColor White
-    Write-Host "  - ResourceGroup" -ForegroundColor White
-    Write-Host "  - Location" -ForegroundColor White
-    Write-Host "  - KeyVaultName" -ForegroundColor White
-    Write-Host "  - SecretName" -ForegroundColor White
-    Write-Host "  - SecretValue" -ForegroundColor White
-    Write-Host "  - CertificatePassword" -ForegroundColor White
-    Write-Host "  - CertificateSubject" -ForegroundColor White
-    Write-Host "  - CertificateFileName" -ForegroundColor White
-    Write-Host "  - ValidityYears" -ForegroundColor White
-    Write-Host "  - EnvironmentId (array)" -ForegroundColor White
-    Write-Host "  - OrganizationId (array)" -ForegroundColor White
-    Write-Host "`n[!] Then run this script again.`n" -ForegroundColor Yellow A new config.json file has been created at:" -ForegroundColor Yellow
-    Write-Host "  $ConfigPath`n" -ForegroundColor Cyan
-    Write-Host "[i] Please update the following values in config.json:" -ForegroundColor White
-    Write-Host "  - AppName" -ForegroundColor White====
+﻿# ========================================
 # CONFIGURATION FROM config.json
 # ========================================
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
@@ -48,21 +32,21 @@ function Initialize-ConfigFile {
     Write-Host "========================================" -ForegroundColor Red
     Write-Host "[X] ERROR: config.json NOT FOUND" -ForegroundColor Red
     Write-Host "========================================`n" -ForegroundColor Red
-    Write-Host "[!] A new config.json file has been created at:" -ForegroundColor Yellow
+    Write-Host "A new config.json file has been created at:" -ForegroundColor Yellow
     Write-Host "  $ConfigPath`n" -ForegroundColor Cyan
     Write-Host "Please update the following values in config.json:" -ForegroundColor Yellow
-    Write-Host "  • AppName" -ForegroundColor White
-    Write-Host "  • ResourceGroup" -ForegroundColor White
-    Write-Host "  • Location" -ForegroundColor White
-    Write-Host "  • KeyVaultName" -ForegroundColor White
-    Write-Host "  • SecretName" -ForegroundColor White
-    Write-Host "  • SecretValue" -ForegroundColor White
-    Write-Host "  • CertificatePassword" -ForegroundColor White
-    Write-Host "  • CertificateSubject" -ForegroundColor White
-    Write-Host "  • CertificateFileName" -ForegroundColor White
-    Write-Host "  • ValidityYears" -ForegroundColor White
-    Write-Host "  • EnvironmentId (array)" -ForegroundColor White
-    Write-Host "  • OrganizationId (array)" -ForegroundColor White
+    Write-Host "  - AppName" -ForegroundColor White
+    Write-Host "  - ResourceGroup" -ForegroundColor White
+    Write-Host "  - Location" -ForegroundColor White
+    Write-Host "  - KeyVaultName" -ForegroundColor White
+    Write-Host "  - SecretName" -ForegroundColor White
+    Write-Host "  - SecretValue" -ForegroundColor White
+    Write-Host "  - CertificatePassword" -ForegroundColor White
+    Write-Host "  - CertificateSubject" -ForegroundColor White
+    Write-Host "  - CertificateFileName" -ForegroundColor White
+    Write-Host "  - ValidityYears" -ForegroundColor White
+    Write-Host "  - EnvironmentId (array)" -ForegroundColor White
+    Write-Host "  - OrganizationId (array)" -ForegroundColor White
     Write-Host "`nThen run this script again.`n" -ForegroundColor Yellow
     exit 1
 }
@@ -102,12 +86,11 @@ if ($missingFields.Count -gt 0) {
     Write-Host "========================================" -ForegroundColor Red
     Write-Host "[X] ERROR: Missing Required Configuration" -ForegroundColor Red
     Write-Host "========================================`n" -ForegroundColor Red
-    Write-Host "[i] Please update the following fields in config.json:" -ForegroundColor White
+    Write-Host "Please update the following fields in config.json:" -ForegroundColor Yellow
     foreach ($field in $missingFields) {
         Write-Host "  - $field" -ForegroundColor White
     }
-    Write-Host "`n[i] Config file location:" -ForegroundColor White
-    Write-Host "  $ConfigPath`n" -ForegroundColor Cyan
+    Write-Host "`nConfig file location: $ConfigPath`n" -ForegroundColor Cyan
     exit 1
 }
 
@@ -132,21 +115,22 @@ Write-Host "[1/7] Checking resource group..." -ForegroundColor Yellow
 $existingRg = az group show --name $resourceGroup --output json 2>$null | ConvertFrom-Json
 
 if ($existingRg) {
-    Write-Host "[-] Resource group already exists. Using existing one." -ForegroundColor Yellow
+    Write-Host "Resource group already exists. Using existing one." -ForegroundColor Yellow
     $rg = $existingRg
-    Write-Host "[+] Resource group found: $($rg.name)" -ForegroundColor Green
-    Write-Host "  [i] Location: $($rg.location)" -ForegroundColor Cyan
+    Write-Host "[+] SUCCESS: Resource group found: $($rg.name)" -ForegroundColor Green
+    Write-Host "  Location: " -NoNewline -ForegroundColor White
+    Write-Host "$($rg.location)" -ForegroundColor Cyan
 } else {
-    Write-Host "[~] Creating new resource group..." -ForegroundColor Yellow
+    Write-Host "Creating new resource group..." -ForegroundColor Gray
     $rg = az group create `
         --name $resourceGroup `
         --location $location `
         --output json | ConvertFrom-Json
 
     if ($rg) {
-        Write-Host "[+] Resource group created: $($rg.name)" -ForegroundColor Green
+        Write-Host "[+] SUCCESS: Resource group created: $($rg.name)" -ForegroundColor Green
     } else {
-        Write-Host "[X] Failed to create resource group" -ForegroundColor Red
+        Write-Host "[X] ERROR: Failed to create resource group" -ForegroundColor Red
         exit 1
     }
 }
@@ -160,30 +144,33 @@ Write-Host "`n[2/7] Checking Azure AD app registration..." -ForegroundColor Yell
 $existingApp = az ad app list --display-name $appName --output json | ConvertFrom-Json
 
 if ($existingApp -and $existingApp.Count -gt 0) {
-    Write-Host "[-] App registration already exists. Using existing one." -ForegroundColor Yellow
+    Write-Host "App registration already exists. Using existing one." -ForegroundColor Yellow
     $app = $existingApp[0]
     $appId = $app.appId
-    Write-Host "[+] App registration found" -ForegroundColor Green
-    Write-Host "  [i] Application (Client) ID: $appId" -ForegroundColor Cyan
+    Write-Host "[+] SUCCESS: App registration found" -ForegroundColor Green
+    Write-Host "  Application (Client) ID: " -NoNewline -ForegroundColor White
+    Write-Host "$appId" -ForegroundColor Cyan
 } else {
-    Write-Host "[~] Creating new app registration..." -ForegroundColor Yellow
+    Write-Host "Creating new app registration..." -ForegroundColor Gray
     $app = az ad app create `
         --display-name $appName `
         --output json | ConvertFrom-Json
 
     if ($app) {
         $appId = $app.appId
-        Write-Host "[+] App registration created" -ForegroundColor Green
-        Write-Host "  [i] Application (Client) ID: $appId" -ForegroundColor Cyan
+        Write-Host "[+] SUCCESS: App registration created" -ForegroundColor Green
+        Write-Host "  Application (Client) ID: " -NoNewline -ForegroundColor White
+        Write-Host "$appId" -ForegroundColor Cyan
     } else {
-        Write-Host "[X] Failed to create app registration" -ForegroundColor Red
+        Write-Host "[X] ERROR: Failed to create app registration" -ForegroundColor Red
         exit 1
     }
 }
 
 # Get tenant ID
 $tenantId = (az account show --output json | ConvertFrom-Json).tenantId
-Write-Host "  [i] Directory (Tenant) ID: $tenantId" -ForegroundColor Cyan
+Write-Host "  Directory (Tenant) ID: " -NoNewline -ForegroundColor White
+Write-Host "$tenantId" -ForegroundColor Cyan
 
 # ========================================
 # Step 3: Create Service Principal
@@ -194,19 +181,21 @@ Write-Host "`n[3/7] Checking service principal for the app..." -ForegroundColor 
 $existingSp = az ad sp show --id $appId --output json 2>$null | ConvertFrom-Json
 
 if ($existingSp) {
-    Write-Host "[-] Service principal already exists. Using existing one." -ForegroundColor Yellow
+    Write-Host "Service principal already exists. Using existing one." -ForegroundColor Yellow
     $sp = $existingSp
-    Write-Host "[+] Service principal found" -ForegroundColor Green
-    Write-Host "  [i] Service Principal ID: $($sp.id)" -ForegroundColor Cyan
+    Write-Host "[+] SUCCESS: Service principal found" -ForegroundColor Green
+    Write-Host "  Service Principal ID: " -NoNewline -ForegroundColor White
+    Write-Host "$($sp.id)" -ForegroundColor Cyan
 } else {
-    Write-Host "[~] Creating new service principal..." -ForegroundColor Yellow
+    Write-Host "Creating new service principal..." -ForegroundColor Gray
     $sp = az ad sp create --id $appId --output json | ConvertFrom-Json
 
     if ($sp) {
-        Write-Host "[+] Service principal created" -ForegroundColor Green
-        Write-Host "  [i] Service Principal ID: $($sp.id)" -ForegroundColor Cyan
+        Write-Host "[+] SUCCESS: Service principal created" -ForegroundColor Green
+        Write-Host "  Service Principal ID: " -NoNewline -ForegroundColor White
+        Write-Host "$($sp.id)" -ForegroundColor Cyan
     } else {
-        Write-Host "[X] Failed to create service principal" -ForegroundColor Red
+        Write-Host "[X] ERROR: Failed to create service principal" -ForegroundColor Red
         exit 1
     }
 }
@@ -220,12 +209,13 @@ Write-Host "`n[4/7] Checking Azure Key Vault..." -ForegroundColor Yellow
 $existingKv = az keyvault show --name $keyVaultName --resource-group $resourceGroup --output json 2>$null | ConvertFrom-Json
 
 if ($existingKv) {
-    Write-Host "[-] Key Vault already exists. Using existing one." -ForegroundColor Yellow
+    Write-Host "Key Vault already exists. Using existing one." -ForegroundColor Yellow
     $kv = $existingKv
-    Write-Host "[+] Key Vault found: $($kv.name)" -ForegroundColor Green
-    Write-Host "  [i] Vault URL: $($kv.properties.vaultUri)" -ForegroundColor Cyan
+    Write-Host "[+] SUCCESS: Key Vault found: $($kv.name)" -ForegroundColor Green
+    Write-Host "  Vault URL: " -NoNewline -ForegroundColor White
+    Write-Host "$($kv.properties.vaultUri)" -ForegroundColor Cyan
 } else {
-    Write-Host "[~] Creating new Key Vault..." -ForegroundColor Yellow
+    Write-Host "Creating new Key Vault..." -ForegroundColor Gray
     $kv = az keyvault create `
         --name $keyVaultName `
         --resource-group $resourceGroup `
@@ -234,11 +224,12 @@ if ($existingKv) {
         --output json | ConvertFrom-Json
 
     if ($kv) {
-        Write-Host "[+] Key Vault created: $($kv.name)" -ForegroundColor Green
-        Write-Host "  [i] Vault URL: $($kv.properties.vaultUri)" -ForegroundColor Cyan
+        Write-Host "[+] SUCCESS: Key Vault created: $($kv.name)" -ForegroundColor Green
+        Write-Host "  Vault URL: " -NoNewline -ForegroundColor White
+        Write-Host "$($kv.properties.vaultUri)" -ForegroundColor Cyan
     } else {
-        Write-Host "[X] Failed to create Key Vault (name may not be globally unique)" -ForegroundColor Red
-        Write-Host "[!] Try a different Key Vault name" -ForegroundColor Yellow
+        Write-Host "[X] ERROR: Failed to create Key Vault (name may not be globally unique)" -ForegroundColor Red
+        Write-Host "  Try a different Key Vault name" -ForegroundColor Yellow
         exit 1
     }
 }
@@ -252,7 +243,7 @@ Write-Host "`n[5/7] Adding/updating test secret in Key Vault..." -ForegroundColo
 $existingSecret = az keyvault secret show --vault-name $keyVaultName --name $secretName --output json 2>$null | ConvertFrom-Json
 
 if ($existingSecret) {
-    Write-Host "[-] Secret already exists. Updating value..." -ForegroundColor Yellow
+    Write-Host "Secret already exists. Updating value..." -ForegroundColor Yellow
 }
 
 $secret = az keyvault secret set `
@@ -262,10 +253,11 @@ $secret = az keyvault secret set `
     --output json | ConvertFrom-Json
 
 if ($secret) {
-    Write-Host "[+] Secret configured: $($secret.name)" -ForegroundColor Green
-    Write-Host "  [i] Value: $($secret.value)" -ForegroundColor Cyan
+    Write-Host "[+] SUCCESS: Secret configured: $($secret.name)" -ForegroundColor Green
+    Write-Host "  Value: " -NoNewline -ForegroundColor White
+    Write-Host "$($secret.value)" -ForegroundColor Cyan
 } else {
-    Write-Host "[X] Failed to configure secret" -ForegroundColor Red
+    Write-Host "[X] ERROR: Failed to configure secret" -ForegroundColor Red
     exit 1
 }
 
@@ -278,16 +270,17 @@ Write-Host "`n[6/7] Configuring app access to Key Vault..." -ForegroundColor Yel
 $existingPolicy = az keyvault show --name $keyVaultName --resource-group $resourceGroup --query "properties.accessPolicies[?objectId=='$($sp.id)']" --output json 2>$null | ConvertFrom-Json
 
 if ($existingPolicy -and $existingPolicy.Count -gt 0) {
-    Write-Host "[-] Access policy already exists for this service principal." -ForegroundColor Yellow
-    Write-Host "[+] Using existing access policy" -ForegroundColor Green
-    Write-Host "  [i] Service Principal ID: $($sp.id)" -ForegroundColor Cyan
+    Write-Host "Access policy already exists for this service principal." -ForegroundColor Yellow
+    Write-Host "[+] SUCCESS: Using existing access policy" -ForegroundColor Green
+    Write-Host "  Service Principal ID: " -NoNewline -ForegroundColor White
+    Write-Host "$($sp.id)" -ForegroundColor Cyan
 
     # Check if permissions are correct
     $hasGetPermission = $existingPolicy[0].permissions.secrets -contains "Get" -or $existingPolicy[0].permissions.secrets -contains "get"
     $hasListPermission = $existingPolicy[0].permissions.secrets -contains "List" -or $existingPolicy[0].permissions.secrets -contains "list"
 
     if (-not $hasGetPermission -or -not $hasListPermission) {
-        Write-Host "[~] Updating permissions to include Get and List..." -ForegroundColor Yellow
+        Write-Host "  Updating permissions to include Get and List..." -ForegroundColor Yellow
         az keyvault set-policy `
             --name $keyVaultName `
             --spn $appId `
@@ -295,13 +288,13 @@ if ($existingPolicy -and $existingPolicy.Count -gt 0) {
             --output none
 
         if ($LASTEXITCODE -eq 0) {
-            Write-Host "[+] Permissions updated" -ForegroundColor Green
+            Write-Host "  [+] SUCCESS: Permissions updated" -ForegroundColor Green
         }
     } else {
-        Write-Host "  [i] Permissions: Get, List (Secrets) - Already configured" -ForegroundColor Cyan
+        Write-Host "  Permissions: Get, List (Secrets) - Already configured" -ForegroundColor Cyan
     }
 } else {
-    Write-Host "[~] Creating new access policy..." -ForegroundColor Yellow
+    Write-Host "Creating new access policy..." -ForegroundColor Gray
     az keyvault set-policy `
         --name $keyVaultName `
         --spn $appId `
@@ -309,10 +302,11 @@ if ($existingPolicy -and $existingPolicy.Count -gt 0) {
         --output none
 
     if ($LASTEXITCODE -eq 0) {
-        Write-Host "[+] Access policy created" -ForegroundColor Green
-        Write-Host "  [i] Permissions: Get, List (Secrets)" -ForegroundColor Cyan
+        Write-Host "[+] SUCCESS: Access policy created" -ForegroundColor Green
+        Write-Host "  Permissions: " -NoNewline -ForegroundColor White
+        Write-Host "Get, List (Secrets)" -ForegroundColor Cyan
     } else {
-        Write-Host "[X] Failed to set access policy" -ForegroundColor Red
+        Write-Host "[X] ERROR: Failed to set access policy" -ForegroundColor Red
         exit 1
     }
 }
@@ -325,8 +319,22 @@ Write-Host "`n========================================" -ForegroundColor Cyan
 Write-Host "[+] Azure Resources Setup Complete!" -ForegroundColor Green
 Write-Host "========================================`n" -ForegroundColor Cyan
 
-Write-Host "[i] Next Steps:" -ForegroundColor White
-Write-Host "  - Run 02.Setup-Certificate.ps1 to generate code signing certificate" -ForegroundColor White
+Write-Host "IMPORTANT: Save these values for plugin configuration:`n" -ForegroundColor Yellow
+
+Write-Host "Application (Client) ID: " -NoNewline -ForegroundColor White
+Write-Host "$appId" -ForegroundColor Cyan
+
+Write-Host "Directory (Tenant) ID:   " -NoNewline -ForegroundColor White
+Write-Host "$tenantId" -ForegroundColor Cyan
+
+Write-Host "Key Vault Name:          " -NoNewline -ForegroundColor White
+Write-Host "$keyVaultName" -ForegroundColor Cyan
+
+Write-Host "Key Vault URL:           " -NoNewline -ForegroundColor White
+Write-Host "$($kv.properties.vaultUri)" -ForegroundColor Cyan
+
+Write-Host "`nNext Steps:" -ForegroundColor Yellow
+Write-Host "Run 02.Setup-Certificate.ps1 to generate code signing certificate" -ForegroundColor White
 
 # Update config.json with output values
 try {
@@ -335,8 +343,8 @@ try {
     $config.KeyVaultURL = $kv.properties.vaultUri
 
     $config | ConvertTo-Json -Depth 10 | Out-File -FilePath $ConfigPath -Encoding UTF8
-    Write-Host "`n[+] Configuration saved to:" -ForegroundColor Green
-    Write-Host "  $ConfigPath" -ForegroundColor Cyan
+    Write-Host "`n[+] Configuration saved to: " -NoNewline -ForegroundColor Green
+    Write-Host "$ConfigPath" -ForegroundColor Cyan
 }
 catch {
     Write-Host "`n[!] WARNING: Failed to update config.json: $($_.Exception.Message)" -ForegroundColor Yellow

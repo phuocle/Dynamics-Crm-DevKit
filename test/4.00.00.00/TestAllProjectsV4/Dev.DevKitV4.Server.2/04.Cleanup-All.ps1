@@ -139,11 +139,75 @@ if ($config -and ($config.AppId -or $config.ResourceGroup)) {
         }
     }
 
-    # Delete Resource Group (includes Key Vault and all other resources)
+    # Delete Key Vault first (with purge to prevent soft-delete issues)
+    if ($config.KeyVaultName) {
+        Write-Host "[~] Deleting Key Vault..." -ForegroundColor Yellow
+        Write-Host "   Key Vault: $($config.KeyVaultName)" -ForegroundColor Gray
+        Write-Host "   [i] Purging to allow name reuse" -ForegroundColor Cyan
+
+        try {
+            # Check if Key Vault exists
+            $kvExists = az keyvault show --name $config.KeyVaultName --output json 2>&1
+            if ($LASTEXITCODE -eq 0) {
+                # Delete Key Vault
+                az keyvault delete --name $config.KeyVaultName --output none 2>&1
+                if ($LASTEXITCODE -eq 0) {
+                    Write-Host "   [+] Key Vault deleted" -ForegroundColor Green
+
+                    # Purge the Key Vault immediately to free up the name
+                    Write-Host "   [~] Purging soft-deleted Key Vault (to allow name reuse)..." -ForegroundColor Yellow
+                    az keyvault purge --name $config.KeyVaultName --output none 2>&1
+
+                    if ($LASTEXITCODE -eq 0) {
+                        $success += "Key Vault purged: $($config.KeyVaultName) (name is now available)"
+                        Write-Host "   [+] Key Vault purged successfully - name can be reused" -ForegroundColor Green
+                    }
+                    else {
+                        Write-Host "   [!] Warning: Failed to purge Key Vault (may need manual purge)" -ForegroundColor Yellow
+                        Write-Host "   [i] Name may be reserved for up to 90 days" -ForegroundColor Yellow
+                    }
+                }
+                else {
+                    $errors += "Failed to delete Key Vault: $($config.KeyVaultName)"
+                    Write-Host "   [X] Failed to delete Key Vault" -ForegroundColor Red
+                }
+            }
+            else {
+                Write-Host "   [-] Key Vault not found in subscription" -ForegroundColor Yellow
+
+                # Check if it's soft-deleted
+                Write-Host "   [~] Checking for soft-deleted Key Vault..." -ForegroundColor Yellow
+                $softDeleted = az keyvault list-deleted --query "[?name=='$($config.KeyVaultName)']" --output json 2>&1 | ConvertFrom-Json
+
+                if ($softDeleted -and $softDeleted.Count -gt 0) {
+                    Write-Host "   [i] Found soft-deleted Key Vault - purging..." -ForegroundColor Cyan
+                    az keyvault purge --name $config.KeyVaultName --output none 2>&1
+
+                    if ($LASTEXITCODE -eq 0) {
+                        $success += "Purged soft-deleted Key Vault: $($config.KeyVaultName)"
+                        Write-Host "   [+] Soft-deleted Key Vault purged - name is now available" -ForegroundColor Green
+                    }
+                    else {
+                        $errors += "Failed to purge soft-deleted Key Vault: $($config.KeyVaultName)"
+                        Write-Host "   [X] Failed to purge soft-deleted Key Vault" -ForegroundColor Red
+                    }
+                }
+                else {
+                    Write-Host "   [-] No soft-deleted Key Vault found either" -ForegroundColor Yellow
+                }
+            }
+        }
+        catch {
+            $errors += "Error processing Key Vault: $($_.Exception.Message)"
+            Write-Host "   [X] Error: $($_.Exception.Message)" -ForegroundColor Red
+        }
+        Write-Host ""
+    }
+
+    # Delete Resource Group (includes any remaining resources)
     if ($config.ResourceGroup) {
         Write-Host "[~] Deleting Resource Group..." -ForegroundColor Yellow
         Write-Host "   Resource Group: $($config.ResourceGroup)" -ForegroundColor Gray
-        Write-Host "   This will delete ALL resources in the group (including Key Vault)" -ForegroundColor Gray
         Write-Host "   [~] This may take a few minutes..." -ForegroundColor Yellow
 
         try {
@@ -156,7 +220,7 @@ if ($config -and ($config.AppId -or $config.ResourceGroup)) {
                 if ($LASTEXITCODE -eq 0) {
                     $success += "Resource Group deletion initiated: $($config.ResourceGroup)"
                     Write-Host "   [+] Resource Group deletion started (running in background)" -ForegroundColor Green
-                    Write-Host "   [+] Key Vault and all resources will be deleted`n" -ForegroundColor Green
+                    Write-Host "   [+] All remaining resources will be deleted`n" -ForegroundColor Green
                 }
                 else {
                     $errors += "Failed to delete Resource Group: $($config.ResourceGroup)"
