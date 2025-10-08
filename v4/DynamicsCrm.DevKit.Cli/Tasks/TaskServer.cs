@@ -1470,7 +1470,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
                 else
                 {
-                    var managedIdentityId = await DeployManagedIdentityAsync(assemblyName, Guid.Parse(attribute.TenantId), Guid.Parse(attribute.ApplicationId), attribute.CredentialSource, attribute.SubjectScope, attribute.CloudEnvironment);
+                    var managedIdentityId = await DeployManagedIdentityAsync(assemblyName, Guid.Parse(attribute.TenantId), Guid.Parse(attribute.ApplicationId), attribute.CredentialSource, attribute.SubjectScope);
                     if (rows.Entities.Count == 0)
                     {
                         var pluginAssembly = new Entity("pluginassembly")
@@ -1510,7 +1510,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             return pluginAssemblyId;
         }
 
-        private async Task<Guid> DeployManagedIdentityAsync(string assemblyName, Guid TenantId, Guid ApplicationId, ManagedIdentityCredentialSource CredentialSource, ManagedIdentitySubjectScope SubjectScope, AzureCloudEnvironment CloudEnvironment)
+        private async Task<Guid> DeployManagedIdentityAsync(string assemblyName, Guid TenantId, Guid ApplicationId, CredentialSource CredentialSource, SubjectScope SubjectScope)
         {
             var fetchXml = $@"
 <fetch>

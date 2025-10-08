@@ -131,26 +131,19 @@ namespace Dev.DevKitV4.Shared
         public string DataSource { get; set; }
     }
 
-    public enum ManagedIdentityCredentialSource
+    public enum CredentialSource
     {
-        EntraIdApplication = 2,
-        UserAssignedManagedIdentity = 3
+        ClientSecret = 0,
+        KeyVault = 1,
+        IsManaged = 2,
+        MicrosoftFirstPartyCertificate = 3
     }
 
-    public enum ManagedIdentitySubjectScope
+    public enum SubjectScope
     {
-        Environment = 1,
-        Organization = 2
-    }
-
-    public enum AzureCloudEnvironment
-    {
-        Public,
-        GCC,
-        GCCHigh,
-        China,
-        USNat,
-        USSec
+        GlobalScope = 0,
+        EnviornmentScope = 1,
+        DevOnlyScope = 2
     }
 
     [DebuggerNonUserCode()]
@@ -159,11 +152,10 @@ namespace Dev.DevKitV4.Shared
     {
         public string ApplicationId { get; set; }
         public string TenantId { get; set; }
-        public ManagedIdentityCredentialSource CredentialSource { get; set; } = ManagedIdentityCredentialSource.EntraIdApplication;
-        public ManagedIdentitySubjectScope SubjectScope { get; set; } = ManagedIdentitySubjectScope.Environment;
+        public CredentialSource CredentialSource { get; set; } = CredentialSource.IsManaged;
+        public SubjectScope SubjectScope { get; set; } = SubjectScope.GlobalScope;
         public string CertificatePath { get; set; } = string.Empty;
         public string CertificatePassword { get; set; } = string.Empty;
-        public AzureCloudEnvironment CloudEnvironment { get; set; } = AzureCloudEnvironment.Public;
         public IsolationModeEnum IsolationMode { get; set; } = IsolationModeEnum.Sandbox;
         public SourceTypeEnum SourceType { get; set; } = SourceTypeEnum.Database;
     }

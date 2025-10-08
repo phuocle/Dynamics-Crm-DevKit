@@ -1,3 +1,4 @@
+using Dev.DevKitV4.Shared;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
@@ -16,3 +17,14 @@ using System.Runtime.InteropServices;
 [assembly: Guid("00000000-0000-0000-0000-000000000000")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
+
+[assembly: DynamcisCrmDevkitAssembly(
+    IsolationMode = IsolationModeEnum.Sandbox,
+    SourceType = SourceTypeEnum.Database,
+    TenantId = "49528483-b79b-4b88-b86e-7d882ba68911",
+    ApplicationId = "55779c38-2a94-417f-887f-6223de49789c",
+    CertificatePath = "cert-signing-2.pfx",
+    CertificatePassword = "YourPassword123!!",
+    CredentialSource = CredentialSource.IsManaged,
+    SubjectScope = SubjectScope.EnviornmentScope
+)]
