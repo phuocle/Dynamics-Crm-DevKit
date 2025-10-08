@@ -1,23 +1,75 @@
 ﻿# ========================================
-# BEGIN CONFIGURATION
+# CONFIGURATION FROM config.json
 # ========================================
-$TenantId = "49528483-b79b-4b88-b86e-7d882ba68911"
-$AppId = "55779c38-2a94-417f-887f-6223de49789c"
-$CertificatePath = "cert-signing-2.pfx"
-$CertificatePassword = "YourPassword123!!"
-$EnvironmentId = @(
-    "2f985c04-9487-e70c-aa57-dcd6d08f0886" # DEV Environment ID
-    #"a1b2c3d4-e5f6-g7h8-i9j0-k1l2m3n4o5p6", # TEST Environment ID
-    #"11223344-5566-7788-9900-aabbccddeeff"  # UAT Environment ID
+$ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+$ConfigPath = Join-Path $ScriptDir "config.json"
+
+# Check if config.json exists
+if (-not (Test-Path $ConfigPath)) {
+    Write-Host "========================================" -ForegroundColor Red
+    Write-Host "❌ ERROR: config.json NOT FOUND" -ForegroundColor Red
+    Write-Host "========================================`n" -ForegroundColor Red
+    Write-Host "Please run 01.Setup-Azure.ps1 first to create the config.json file." -ForegroundColor Yellow
+    Write-Host "Expected location: $ConfigPath`n" -ForegroundColor Cyan
+    exit 1
+}
+
+# Load configuration
+try {
+    $config = Get-Content -Path $ConfigPath -Raw | ConvertFrom-Json
+}
+catch {
+    Write-Host "❌ ERROR: Failed to parse config.json: $($_.Exception.Message)" -ForegroundColor Red
+    exit 1
+}
+
+# Validate required fields for this script
+$requiredFields = @(
+    @{Path = "TenantId"; Value = $config.TenantId}
+    @{Path = "AppId"; Value = $config.AppId}
+    @{Path = "CertificatePath"; Value = $config.CertificatePath}
+    @{Path = "CertificatePassword"; Value = $config.CertificatePassword}
 )
-$OrganizationId = @(
-    "29c6e552-e16f-ef11-a66b-6045bd1e7d8b" # DEV Organization ID
-    #"12345678-90ab-cdef-1234-567890abcdef", # TEST Organization ID
-    #"fedcba98-7654-3210-fedc-ba9876543210"  # UAT Organization ID
-)
-# ========================================
-# END CONFIGURATION
-# ========================================
+
+$missingFields = @()
+foreach ($field in $requiredFields) {
+    if ([string]::IsNullOrWhiteSpace($field.Value)) {
+        $missingFields += $field.Path
+    }
+}
+
+# Check arrays
+if ($null -eq $config.EnvironmentId -or $config.EnvironmentId.Count -eq 0) {
+    $missingFields += "EnvironmentId (must be an array with at least one value)"
+}
+
+if ($null -eq $config.OrganizationId -or $config.OrganizationId.Count -eq 0) {
+    $missingFields += "OrganizationId (must be an array with at least one value)"
+}
+
+if ($missingFields.Count -gt 0) {
+    Write-Host "========================================" -ForegroundColor Red
+    Write-Host "❌ ERROR: Missing Required Configuration" -ForegroundColor Red
+    Write-Host "========================================`n" -ForegroundColor Red
+    Write-Host "Please update the following fields in config.json:" -ForegroundColor Yellow
+    foreach ($field in $missingFields) {
+        Write-Host "  • $field" -ForegroundColor White
+    }
+    Write-Host "`nConfig file location: $ConfigPath`n" -ForegroundColor Cyan
+    Write-Host "Example for array values in config.json:" -ForegroundColor Yellow
+    Write-Host '  "EnvironmentId": ["guid1", "guid2"]' -ForegroundColor Gray
+    Write-Host '  "OrganizationId": ["guid1", "guid2"]' -ForegroundColor Gray
+    Write-Host ""
+    exit 1
+}
+
+# Load values from config
+$TenantId = $config.TenantId
+$AppId = $config.AppId
+$CertificatePath = $config.CertificatePath
+$CertificatePassword = $config.CertificatePassword
+$EnvironmentId = $config.EnvironmentId
+$OrganizationId = $config.OrganizationId
 
 function Convert-GuidToBase64Url {
     param([string]$guid)
@@ -44,8 +96,7 @@ Write-Host "  Tenant ID: $TenantId" -ForegroundColor Gray
 Write-Host "  Number of Environments to Configure: $($EnvironmentId.Count)" -ForegroundColor Gray
 Write-Host ""
 
-# Load certificate
-$ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+# Load certificate - resolve path relative to script directory
 if (-not [System.IO.Path]::IsPathRooted($CertificatePath)) {
     $CertificatePath = Join-Path $ScriptDir $CertificatePath
 }
@@ -156,3 +207,13 @@ Write-Host "========================================" -ForegroundColor Green
 Write-Host "Verification:" -ForegroundColor Yellow
 Write-Host "  az ad app federated-credential list --id $AppId" -ForegroundColor Gray
 Write-Host ""
+
+# Update config.json with final verification
+try {
+    # The config already has all necessary values, just save to ensure consistency
+    $config | ConvertTo-Json -Depth 10 | Out-File -FilePath $ConfigPath -Encoding UTF8
+    Write-Host "Configuration verified and saved to: $ConfigPath" -ForegroundColor Green
+}
+catch {
+    Write-Host "⚠️  WARNING: Failed to update config.json: $($_.Exception.Message)" -ForegroundColor Yellow
+}

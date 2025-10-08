@@ -1,15 +1,107 @@
 ﻿# ========================================
-# BEGIN CONFIGURATION
+# CONFIGURATION FROM config.json
 # ========================================
-$appName = "DataversePluginManagedIdentity2"
-$resourceGroup = "dataverse-plugin-rg"
-$location = "eastus"
-$keyVaultName = "dataverse-plugin-kv-2"
-$secretName = "ApiEndpoint2"
-$secretValue = "https://api.example.com2"
-# ========================================
-# END CONFIGURATION
-# ========================================
+$ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+$ConfigPath = Join-Path $ScriptDir "config.json"
+
+# Function to create initial config.json if it doesn't exist
+function Initialize-ConfigFile {
+    $defaultConfig = [ordered]@{
+        AppName = ""
+        ResourceGroup = ""
+        Location = ""
+        KeyVaultName = ""
+        SecretName = ""
+        SecretValue = ""
+        CertificatePassword = ""
+        CertificateSubject = ""
+        CertificateFileName = ""
+        ValidityYears = $null
+        EnvironmentId = @()
+        OrganizationId = @()
+        TenantId = ""
+        AppId = ""
+        KeyVaultURL = ""
+        CertificatePath = ""
+        CertificateThumbprint = ""
+        CertificateSHA256Hash = ""
+    }
+
+    $defaultConfig | ConvertTo-Json -Depth 10 | Out-File -FilePath $ConfigPath -Encoding UTF8
+
+    Write-Host "========================================" -ForegroundColor Red
+    Write-Host "❌ ERROR: config.json NOT FOUND" -ForegroundColor Red
+    Write-Host "========================================`n" -ForegroundColor Red
+    Write-Host "A new config.json file has been created at:" -ForegroundColor Yellow
+    Write-Host "  $ConfigPath`n" -ForegroundColor Cyan
+    Write-Host "Please update the following values in config.json:" -ForegroundColor Yellow
+    Write-Host "  • AppName" -ForegroundColor White
+    Write-Host "  • ResourceGroup" -ForegroundColor White
+    Write-Host "  • Location" -ForegroundColor White
+    Write-Host "  • KeyVaultName" -ForegroundColor White
+    Write-Host "  • SecretName" -ForegroundColor White
+    Write-Host "  • SecretValue" -ForegroundColor White
+    Write-Host "  • CertificatePassword" -ForegroundColor White
+    Write-Host "  • CertificateSubject" -ForegroundColor White
+    Write-Host "  • CertificateFileName" -ForegroundColor White
+    Write-Host "  • ValidityYears" -ForegroundColor White
+    Write-Host "  • EnvironmentId (array)" -ForegroundColor White
+    Write-Host "  • OrganizationId (array)" -ForegroundColor White
+    Write-Host "`nThen run this script again.`n" -ForegroundColor Yellow
+    exit 1
+}
+
+# Check if config.json exists
+if (-not (Test-Path $ConfigPath)) {
+    Initialize-ConfigFile
+}
+
+# Load configuration
+try {
+    $config = Get-Content -Path $ConfigPath -Raw | ConvertFrom-Json
+}
+catch {
+    Write-Host "❌ ERROR: Failed to parse config.json: $($_.Exception.Message)" -ForegroundColor Red
+    exit 1
+}
+
+# Validate required fields for this script
+$requiredFields = @(
+    @{Path = "AppName"; Value = $config.AppName}
+    @{Path = "ResourceGroup"; Value = $config.ResourceGroup}
+    @{Path = "Location"; Value = $config.Location}
+    @{Path = "KeyVaultName"; Value = $config.KeyVaultName}
+    @{Path = "SecretName"; Value = $config.SecretName}
+    @{Path = "SecretValue"; Value = $config.SecretValue}
+)
+
+$missingFields = @()
+foreach ($field in $requiredFields) {
+    if ([string]::IsNullOrWhiteSpace($field.Value)) {
+        $missingFields += $field.Path
+    }
+}
+
+if ($missingFields.Count -gt 0) {
+    Write-Host "========================================" -ForegroundColor Red
+    Write-Host "❌ ERROR: Missing Required Configuration" -ForegroundColor Red
+    Write-Host "========================================`n" -ForegroundColor Red
+    Write-Host "Please update the following fields in config.json:" -ForegroundColor Yellow
+    foreach ($field in $missingFields) {
+        Write-Host "  • $field" -ForegroundColor White
+    }
+    Write-Host "`nConfig file location: $ConfigPath`n" -ForegroundColor Cyan
+    exit 1
+}
+
+# Load values from config
+$appName = $config.AppName
+$resourceGroup = $config.ResourceGroup
+$location = $config.Location
+$keyVaultName = $config.KeyVaultName
+$secretName = $config.SecretName
+$secretValue = $config.SecretValue
+
 Write-Host "========================================" -ForegroundColor Cyan
 Write-Host "Azure Resources Setup for Managed Identity Plugin" -ForegroundColor Cyan
 Write-Host "========================================`n" -ForegroundColor Cyan
@@ -233,24 +325,15 @@ Write-Host "  $($kv.properties.vaultUri)" -ForegroundColor Cyan
 Write-Host "`nNext Steps:" -ForegroundColor Yellow
 Write-Host "Run 02.Setup-Certificate.ps1 to generate code signing certificate" -ForegroundColor White
 
-# Save values to a file for reference
-$outputFile = "azure-config.txt"
-$configContent = @"
-Azure Configuration for Managed Identity Plugin
-================================================
-Created: $(Get-Date -Format "yyyy-MM-dd HH:mm:ss")
+# Update config.json with output values
+try {
+    $config.TenantId = $tenantId
+    $config.AppId = $appId
+    $config.KeyVaultURL = $kv.properties.vaultUri
 
-Application (Client) ID: $appId
-Directory (Tenant) ID:   $tenantId
-Key Vault Name:          $keyVaultName
-Key Vault URL:           $($kv.properties.vaultUri)
-Resource Group:          $resourceGroup
-Location:                $location
-
-WARNING: Do NOT commit this file to source control!
-"@
-
-$configContent | Out-File -FilePath $outputFile -Encoding UTF8
-
-Write-Host "Configuration saved to: $outputFile" -ForegroundColor Green
-Write-Host "WARNING: Do NOT commit this file to source control!" -ForegroundColor Red
+    $config | ConvertTo-Json -Depth 10 | Out-File -FilePath $ConfigPath -Encoding UTF8
+    Write-Host "`nConfiguration saved to: $ConfigPath" -ForegroundColor Green
+}
+catch {
+    Write-Host "`n⚠️  WARNING: Failed to update config.json: $($_.Exception.Message)" -ForegroundColor Yellow
+}

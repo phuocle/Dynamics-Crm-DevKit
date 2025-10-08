@@ -1,13 +1,66 @@
 ﻿# ========================================
-# BEGIN CONFIGURATION
+# CONFIGURATION FROM config.json
 # ========================================
-$certificatePassword = "YourPassword123!!"  # Change to your preferred password
-$certificateSubject = "CN=Dataverse Plugin Code Signing"
-$certificateFileName = "cert-signing-2"
-$validityYears = 20
-# ========================================
-# END CONFIGURATION
-# ========================================
+$ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+$ConfigPath = Join-Path $ScriptDir "config.json"
+
+# Check if config.json exists
+if (-not (Test-Path $ConfigPath)) {
+    Write-Host "========================================" -ForegroundColor Red
+    Write-Host "❌ ERROR: config.json NOT FOUND" -ForegroundColor Red
+    Write-Host "========================================`n" -ForegroundColor Red
+    Write-Host "Please run 01.Setup-Azure.ps1 first to create the config.json file." -ForegroundColor Yellow
+    Write-Host "Expected location: $ConfigPath`n" -ForegroundColor Cyan
+    exit 1
+}
+
+# Load configuration
+try {
+    $config = Get-Content -Path $ConfigPath -Raw | ConvertFrom-Json
+}
+catch {
+    Write-Host "❌ ERROR: Failed to parse config.json: $($_.Exception.Message)" -ForegroundColor Red
+    exit 1
+}
+
+# Validate required fields for this script
+$requiredFields = @(
+    @{Path = "CertificatePassword"; Value = $config.CertificatePassword}
+    @{Path = "CertificateSubject"; Value = $config.CertificateSubject}
+    @{Path = "CertificateFileName"; Value = $config.CertificateFileName}
+    @{Path = "ValidityYears"; Value = $config.ValidityYears}
+)
+
+$missingFields = @()
+foreach ($field in $requiredFields) {
+    if ($field.Path -eq "ValidityYears") {
+        if ($null -eq $field.Value -or $field.Value -eq 0) {
+            $missingFields += $field.Path
+        }
+    }
+    elseif ([string]::IsNullOrWhiteSpace($field.Value)) {
+        $missingFields += $field.Path
+    }
+}
+
+if ($missingFields.Count -gt 0) {
+    Write-Host "========================================" -ForegroundColor Red
+    Write-Host "❌ ERROR: Missing Required Configuration" -ForegroundColor Red
+    Write-Host "========================================`n" -ForegroundColor Red
+    Write-Host "Please update the following fields in config.json:" -ForegroundColor Yellow
+    foreach ($field in $missingFields) {
+        Write-Host "  • $field" -ForegroundColor White
+    }
+    Write-Host "`nConfig file location: $ConfigPath`n" -ForegroundColor Cyan
+    exit 1
+}
+
+# Load values from config
+$certificatePassword = $config.CertificatePassword
+$certificateSubject = $config.CertificateSubject
+$certificateFileName = $config.CertificateFileName
+$validityYears = $config.ValidityYears
+
 Write-Host "========================================" -ForegroundColor Cyan
 Write-Host "Code Signing Certificate Setup" -ForegroundColor Cyan
 Write-Host "========================================`n" -ForegroundColor Cyan
@@ -154,3 +207,25 @@ Write-Host "   CertificatePassword = `"$certificatePassword`"" -ForegroundColor 
 Write-Host "3. Build the plugin project" -ForegroundColor White
 Write-Host "4. Run 03.Setup-PowerPlatformFederatedCredentials.ps1" -ForegroundColor White
 Write-Host "5. Deploy using DynamicsCrm.DevKit.Cli`n" -ForegroundColor White
+
+# Update config.json with certificate output values
+try {
+    $config.CertificateThumbprint = $pfxCert.Thumbprint
+
+    # Calculate SHA-256 hash for federated credentials
+    $certBytes = $pfxCert.Export([System.Security.Cryptography.X509Certificates.X509ContentType]::Cert)
+    $sha256 = [System.Security.Cryptography.SHA256]::Create().ComputeHash($certBytes)
+    $sha256Hash = [System.Convert]::ToBase64String($sha256).Replace('+', '-').Replace('/', '_').TrimEnd('=')
+    $config.CertificateSHA256Hash = $sha256Hash
+
+    # Update CertificatePath if empty
+    if ([string]::IsNullOrWhiteSpace($config.CertificatePath)) {
+        $config.CertificatePath = "$certificateFileName.pfx"
+    }
+
+    $config | ConvertTo-Json -Depth 10 | Out-File -FilePath $ConfigPath -Encoding UTF8
+    Write-Host "Configuration updated in: $ConfigPath" -ForegroundColor Green
+}
+catch {
+    Write-Host "⚠️  WARNING: Failed to update config.json: $($_.Exception.Message)" -ForegroundColor Yellow
+}

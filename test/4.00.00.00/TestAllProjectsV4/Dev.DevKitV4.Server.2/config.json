@@ -1,0 +1,24 @@
+﻿{
+    "AppName":  "",
+    "ResourceGroup":  "",
+    "Location":  "",
+    "KeyVaultName":  "",
+    "SecretName":  "",
+    "SecretValue":  "",
+    "CertificatePassword":  "",
+    "CertificateSubject":  "",
+    "CertificateFileName":  "",
+    "ValidityYears":  null,
+    "EnvironmentId":  [
+
+                      ],
+    "OrganizationId":  [
+
+                       ],
+    "TenantId":  "",
+    "AppId":  "",
+    "KeyVaultURL":  "",
+    "CertificatePath":  "",
+    "CertificateThumbprint":  "",
+    "CertificateSHA256Hash":  ""
+}

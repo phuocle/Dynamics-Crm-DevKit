@@ -54,9 +54,8 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="cert-signing.cer" />
-    <None Include="cert-signing.pfx" />
     <None Include="03.Setup-PowerPlatformFederatedCredentials.ps1" />
+    <None Include="config.json" />
     <None Include="packages.config" />
     <None Include="Dev.DevKitV4.Server.2.snk" />
     <None Include="deploy.debug.bat" />
