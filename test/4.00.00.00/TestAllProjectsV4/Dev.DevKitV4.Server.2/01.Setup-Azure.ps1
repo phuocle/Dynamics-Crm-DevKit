@@ -311,31 +311,6 @@ if ($existingPolicy -and $existingPolicy.Count -gt 0) {
     }
 }
 
-# ========================================
-# Step 7: Summary
-# ========================================
-Write-Host "`n[7/7] Summary" -ForegroundColor Yellow
-Write-Host "`n========================================" -ForegroundColor Cyan
-Write-Host "[+] Azure Resources Setup Complete!" -ForegroundColor Green
-Write-Host "========================================`n" -ForegroundColor Cyan
-
-Write-Host "IMPORTANT: Save these values for plugin configuration:`n" -ForegroundColor Yellow
-
-Write-Host "Application (Client) ID: " -NoNewline -ForegroundColor White
-Write-Host "$appId" -ForegroundColor Cyan
-
-Write-Host "Directory (Tenant) ID:   " -NoNewline -ForegroundColor White
-Write-Host "$tenantId" -ForegroundColor Cyan
-
-Write-Host "Key Vault Name:          " -NoNewline -ForegroundColor White
-Write-Host "$keyVaultName" -ForegroundColor Cyan
-
-Write-Host "Key Vault URL:           " -NoNewline -ForegroundColor White
-Write-Host "$($kv.properties.vaultUri)" -ForegroundColor Cyan
-
-Write-Host "`nNext Steps:" -ForegroundColor Yellow
-Write-Host "Run 02.Setup-Certificate.ps1 to generate code signing certificate" -ForegroundColor White
-
 # Update config.json with output values
 try {
     $config.TenantId = $tenantId
@@ -349,3 +324,15 @@ try {
 catch {
     Write-Host "`n[!] WARNING: Failed to update config.json: $($_.Exception.Message)" -ForegroundColor Yellow
 }
+
+# ========================================
+# Step 7: Summary
+# ========================================
+Write-Host "`n[7/7] Summary" -ForegroundColor Yellow
+Write-Host "`n========================================" -ForegroundColor Cyan
+Write-Host "[+] Azure Resources Setup Complete!" -ForegroundColor Green
+Write-Host "========================================`n" -ForegroundColor Cyan
+Write-Host "========================================`n" -ForegroundColor Cyan
+Write-Host "Next Steps:" -ForegroundColor Yellow
+Write-Host "Run 02.Setup-Certificate.ps1 to generate code signing certificate" -ForegroundColor Green
+Write-Host "`n========================================" -ForegroundColor Cyan

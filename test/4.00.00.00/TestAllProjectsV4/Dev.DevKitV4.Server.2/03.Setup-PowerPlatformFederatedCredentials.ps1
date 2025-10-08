@@ -220,3 +220,37 @@ try {
 catch {
     Write-Host "[!] WARNING: Failed to update config.json: $($_.Exception.Message)" -ForegroundColor Yellow
 }
+
+# ========================================
+# Generate ManagedIdentity.cs File
+# ========================================
+Write-Host "`n[~] Generating ManagedIdentity.cs file..." -ForegroundColor Yellow
+
+$managedIdentityPath = Join-Path $ScriptDir "ManagedIdentity.cs"
+
+# Use values from config, with defaults for certificate info
+$certPath = if ($config.CertificatePath) { $config.CertificatePath } else { "cert-signing.pfx" }
+$certPassword = if ($config.CertificatePassword) { $config.CertificatePassword } else { "YourPassword123!" }
+
+$managedIdentityContent = @"
+using System;
+
+[assembly: DynamicsCrmDevkitAssembly(
+    IsolationMode = IsolationModeEnum.Sandbox,
+    SourceType = SourceTypeEnum.Database,
+    TenantId = "$TenantId",
+    ApplicationId = "$AppId",
+    CertificatePath = "$CertificatePath",
+    CertificatePassword = "$CertificatePassword",
+    CredentialSource = CredentialSource.IsManaged,
+    SubjectScope = SubjectScope.EnvironmentScope
+)]
+"@
+
+try {
+    $managedIdentityContent | Out-File -FilePath $managedIdentityPath -Encoding UTF8 -Force
+    Write-Host "[+] ManagedIdentity.cs created successfully" -ForegroundColor Green
+}
+catch {
+    Write-Host "[X] ERROR: Failed to create ManagedIdentity.cs: $($_.Exception.Message)" -ForegroundColor Red
+}

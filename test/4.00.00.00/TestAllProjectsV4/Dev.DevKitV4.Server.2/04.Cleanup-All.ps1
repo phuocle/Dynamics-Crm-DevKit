@@ -57,6 +57,7 @@ if ($config -and $config.CertificateFileName) {
     Write-Host "     - $($config.CertificateFileName).pfx" -ForegroundColor Gray
     Write-Host "     - $($config.CertificateFileName).cer" -ForegroundColor Gray
 }
+Write-Host "     - ManagedIdentity.cs" -ForegroundColor Gray
 Write-Host "     - config.json" -ForegroundColor Gray
 
 Write-Host ""
@@ -149,14 +150,14 @@ if ($config -and ($config.AppId -or $config.ResourceGroup)) {
             # Check if Key Vault exists
             $kvExists = az keyvault show --name $config.KeyVaultName --output json 2>&1
             if ($LASTEXITCODE -eq 0) {
-                # Delete Key Vault
-                az keyvault delete --name $config.KeyVaultName --output none 2>&1
+                # Delete Key Vault (suppress warnings)
+                $null = az keyvault delete --name $config.KeyVaultName --output none 2>&1
                 if ($LASTEXITCODE -eq 0) {
                     Write-Host "   [+] Key Vault deleted" -ForegroundColor Green
 
-                    # Purge the Key Vault immediately to free up the name
+                    # Purge the Key Vault immediately to free up the name (suppress warnings)
                     Write-Host "   [~] Purging soft-deleted Key Vault (to allow name reuse)..." -ForegroundColor Yellow
-                    az keyvault purge --name $config.KeyVaultName --output none 2>&1
+                    $null = az keyvault purge --name $config.KeyVaultName --output none 2>&1
 
                     if ($LASTEXITCODE -eq 0) {
                         $success += "Key Vault purged: $($config.KeyVaultName) (name is now available)"
@@ -175,13 +176,13 @@ if ($config -and ($config.AppId -or $config.ResourceGroup)) {
             else {
                 Write-Host "   [-] Key Vault not found in subscription" -ForegroundColor Yellow
 
-                # Check if it's soft-deleted
+                # Check if it's soft-deleted (suppress warnings)
                 Write-Host "   [~] Checking for soft-deleted Key Vault..." -ForegroundColor Yellow
                 $softDeleted = az keyvault list-deleted --query "[?name=='$($config.KeyVaultName)']" --output json 2>&1 | ConvertFrom-Json
 
                 if ($softDeleted -and $softDeleted.Count -gt 0) {
                     Write-Host "   [i] Found soft-deleted Key Vault - purging..." -ForegroundColor Cyan
-                    az keyvault purge --name $config.KeyVaultName --output none 2>&1
+                    $null = az keyvault purge --name $config.KeyVaultName --output none 2>&1
 
                     if ($LASTEXITCODE -eq 0) {
                         $success += "Purged soft-deleted Key Vault: $($config.KeyVaultName)"
@@ -317,6 +318,23 @@ if ($config -and $config.CertificateFileName) {
     else {
         Write-Host "[-] File not found: $($config.CertificateFileName).cer" -ForegroundColor Yellow
     }
+}
+
+# Delete ManagedIdentity.cs
+$managedIdentityFile = Join-Path $ScriptDir "ManagedIdentity.cs"
+if (Test-Path $managedIdentityFile) {
+    try {
+        Remove-Item $managedIdentityFile -Force
+        $success += "Deleted file: ManagedIdentity.cs"
+        Write-Host "[+] Deleted: ManagedIdentity.cs" -ForegroundColor Green
+    }
+    catch {
+        $errors += "Failed to delete ManagedIdentity.cs: $($_.Exception.Message)"
+        Write-Host "[X] Failed to delete: ManagedIdentity.cs" -ForegroundColor Red
+    }
+}
+else {
+    Write-Host "[-] File not found: ManagedIdentity.cs" -ForegroundColor Yellow
 }
 
 # Delete config.json
