@@ -7,10 +7,6 @@
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $ConfigPath = Join-Path $ScriptDir "config.json"
 
-Write-Host "========================================" -ForegroundColor Yellow
-Write-Host "[!] CLEANUP SCRIPT - DELETE ALL RESOURCES" -ForegroundColor Yellow
-Write-Host "========================================`n" -ForegroundColor Yellow
-
 # Check if config.json exists
 if (-not (Test-Path $ConfigPath)) {
     Write-Host "[X] ERROR: config.json NOT FOUND" -ForegroundColor Red
@@ -29,7 +25,7 @@ catch {
 }
 
 # Display what will be deleted
-Write-Host "[i] The following resources will be DELETED:" -ForegroundColor Cyan
+Write-Host "`n[i] The following resources will be DELETED:" -ForegroundColor Cyan
 Write-Host ""
 
 if ($config) {
@@ -80,7 +76,7 @@ if ($confirmation -ne "DELETE") {
 
 Write-Host ""
 Write-Host "========================================" -ForegroundColor Cyan
-Write-Host "[~] Starting Cleanup Process..." -ForegroundColor Green
+Write-Host "Begin Cleanup Process" -ForegroundColor Green
 Write-Host "========================================`n" -ForegroundColor Cyan
 
 $errors = @()
@@ -330,7 +326,7 @@ else {
 # ========================================
 Write-Host ""
 Write-Host "========================================" -ForegroundColor Cyan
-Write-Host "[~] Finished Cleanup Process" -ForegroundColor Green
+Write-Host "End Cleanup Process" -ForegroundColor Green
 Write-Host "========================================`n" -ForegroundColor Cyan
 
 if ($success.Count -gt 0) {
