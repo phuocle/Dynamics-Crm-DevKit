@@ -1,18 +1,5 @@
-# ========================================================================================================
-# AZURE MANAGED IDENTITY SETUP - COMPLETE WORKFLOW
-# ========================================================================================================
-# This script combines the following setup processes into a single automated workflow:
-#   1. Azure Resources Setup (App Registration, Key Vault, Service Principal)
-#   2. Code Signing Certificate Generation
-#   3. Power Platform Federated Credentials Configuration
-#
-# Version: 1.0
-# Date: October 8, 2025
-# ========================================================================================================
-
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $ConfigPath = Join-Path $ScriptDir "config.json"
-
 # ========================================================================================================
 # HELPER FUNCTION: Initialize Config File
 # ========================================================================================================
@@ -613,15 +600,6 @@ if ($EnvironmentId.Count -ne $OrganizationId.Count) {
     exit 1
 }
 
-#Write-Host "[+] Input Parameters:" -ForegroundColor Green
-#Write-Host "  - App ID: " -NoNewline -ForegroundColor White
-#Write-Host "$AppId" -ForegroundColor Cyan
-#Write-Host "  - Tenant ID: " -NoNewline -ForegroundColor White
-#Write-Host "$TenantId" -ForegroundColor Cyan
-#Write-Host "  - Number of Environments to Configure: " -NoNewline -ForegroundColor White
-#Write-Host "$($EnvironmentId.Count)" -ForegroundColor Cyan
-#Write-Host ""
-
 # Load certificate - resolve path relative to script directory
 if (-not [System.IO.Path]::IsPathRooted($CertificatePath)) {
     $CertificatePath = Join-Path $ScriptDir $CertificatePath
@@ -638,33 +616,10 @@ $certBytes = $cert.Export([System.Security.Cryptography.X509Certificates.X509Con
 $sha256 = [System.Security.Cryptography.SHA256]::Create().ComputeHash($certBytes)
 $sha256Hash = [System.Convert]::ToBase64String($sha256).Replace('+', '-').Replace('/', '_').TrimEnd('=')
 
-#Write-Host "[+] Certificate Information:" -ForegroundColor Green
-#Write-Host "  - Thumbprint: " -NoNewline -ForegroundColor White
-#Write-Host "$($cert.Thumbprint)" -ForegroundColor Cyan
-#Write-Host "  - SHA-256 Hash: " -NoNewline -ForegroundColor White
-#Write-Host "$sha256Hash" -ForegroundColor Cyan
-#Write-Host ""
-
 # Compute fixed encodings for Azure AD credential
 $encodedTenant = Convert-GuidToBase64Url -guid $TenantId
 $encodedApp = Convert-GuidToBase64Url -guid $AppId
 
-# --- 2. Deleting Existing Credentials (Cleanup) ---
-<#
-Write-Host "[+] Deleting all existing federated credentials" -ForegroundColor Green
-# Delete ALL existing federated credentials to ensure a clean setup
-$existing = az ad app federated-credential list --id $AppId 2>$null | ConvertFrom-Json
-if ($existing -and $existing.Count -gt 0) {
-    foreach ($cred in $existing) {
-        Write-Host "  - Deleting: " -NoNewline -ForegroundColor White
-        Write-Host "$($cred.name)" -ForegroundColor Cyan
-        az ad app federated-credential delete --id $AppId --federated-credential-id $cred.id 2>$null
-    }
-    Write-Host "  - Deleted $($existing.Count) existing credential(s).`n" -ForegroundColor Green
-} else {
-    Write-Host "  - No existing credentials found.`n" -ForegroundColor Yellow
-}
-#>
 # --- 3. Iterate and Create Credentials for Each Environment ---
 
 for ($i = 0; $i -lt $EnvironmentId.Count; $i++) {
@@ -861,7 +816,7 @@ Write-Host "$($kv.properties.vaultUri)" -ForegroundColor Cyan
 Write-Host ""
 
 Write-Host "[+] Certificate Generated:" -ForegroundColor Green
-Write-Host "    - Certificate File: " -NoNewline -ForegroundColor White
+Write-Host "    - Private Key File: " -NoNewline -ForegroundColor White
 Write-Host "$certificateFileName.pfx" -ForegroundColor Cyan
 Write-Host "    - Public Key File: " -NoNewline -ForegroundColor White
 Write-Host "$certificateFileName.cer" -ForegroundColor Cyan
@@ -881,20 +836,16 @@ Write-Host ""
 Write-Host "[+] Generated Files:" -ForegroundColor Green
 Write-Host "    - config.json: " -NoNewline -ForegroundColor White
 Write-Host "updated with all values" -ForegroundColor Cyan
-Write-Host "    - ManagedIdentity.cs: " -NoNewline -ForegroundColor White
+Write-Host "    - AssemblyInfo2.cs: " -NoNewline -ForegroundColor White
 Write-Host "assembly attribute file" -ForegroundColor Cyan
 Write-Host ""
 
 Write-Host "========================================================================================================" -ForegroundColor Cyan
-Write-Host "                                         NEXT STEPS                                                     " -ForegroundColor Yellow
+Write-Host "                                         NEXT STEPS                                                     " -ForegroundColor Green
 Write-Host "========================================================================================================`n" -ForegroundColor Cyan
 
-Write-Host "1. Review the generated AssemblyInfo2.cs file" -ForegroundColor White
-Write-Host "2. Include AssemblyInfo2.cs in your project" -ForegroundColor White
-Write-Host "3. Deploy your plugin assembly to Power Platform use DynamicsCrm.DevKit.Cli" -ForegroundColor White
-Write-Host "4. Test the managed identity integration" -ForegroundColor White
+Write-Host "1. Review the generated AssemblyInfo2.cs file." -ForegroundColor White
+Write-Host "2. Include AssemblyInfo2.cs in your project." -ForegroundColor White
+Write-Host "3. Deploy your plugin assembly to Power Platform use DynamicsCrm.DevKit.Cli." -ForegroundColor White
+Write-Host "4. Test the managed identity integration." -ForegroundColor White
 Write-Host ""
-
-Write-Host "========================================================================================================" -ForegroundColor Cyan
-Write-Host "                                      SETUP COMPLETE                                                    " -ForegroundColor Green
-Write-Host "========================================================================================================`n" -ForegroundColor Cyan
