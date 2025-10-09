@@ -289,7 +289,6 @@ if ($existingKv) {
     Write-Host "$($kv.properties.vaultUri)" -ForegroundColor Cyan
 } else {
     # Check if Key Vault exists in soft-deleted state
-    Write-Host "  @  Key Vault not found in resource group. Checking soft-deleted state..." -ForegroundColor Yellow
     $softDeletedKv = az keyvault list-deleted --query "[?name=='$keyVaultName']" --output json 2>$null | ConvertFrom-Json
 
     if ($softDeletedKv -and $softDeletedKv.Count -gt 0) {
@@ -392,15 +391,16 @@ if ($existingPolicy -and $existingPolicy.Count -gt 0) {
             --output none
 
         if ($LASTEXITCODE -eq 0) {
-            Write-Host "  + SUCCESS: Permissions updated" -ForegroundColor Green
+            Write-Host "  + SUCCESS: Permissions updated." -ForegroundColor Green
+            Write-Host "  - Permissions: " -NoNewline -ForegroundColor White
+            Write-Host "Get, List (Secrets)" -ForegroundColor Cyan
         }
     } else {
-
         Write-Host "  - Permissions: " -NoNewline -ForegroundColor White
         Write-Host "Get, List (Secrets)" -ForegroundColor Cyan
     }
 } else {
-    Write-Host "  @ Creating new access policy" -ForegroundColor Gray
+    Write-Host "  @ Creating new access policy." -ForegroundColor Yellow
     az keyvault set-policy `
         --name $keyVaultName `
         --spn $appId `
@@ -408,7 +408,9 @@ if ($existingPolicy -and $existingPolicy.Count -gt 0) {
         --output none
 
     if ($LASTEXITCODE -eq 0) {
-        Write-Host "  + SUCCESS: Access policy created" -ForegroundColor Green
+        Write-Host "  + SUCCESS: Access policy created." -ForegroundColor Green
+        Write-Host "  - Service Principal ID: " -NoNewline -ForegroundColor White
+        Write-Host "$($sp.id)" -ForegroundColor Cyan
         Write-Host "  - Permissions: " -NoNewline -ForegroundColor White
         Write-Host "Get, List (Secrets)" -ForegroundColor Cyan
     } else {
@@ -449,9 +451,9 @@ if (Test-Path "$certificateFileName.pfx") {
     try {
     Write-Host "  @ Certificate already exists." -ForegroundColor Yellow
     Write-Host "  + SUCCESS: Existing certificate files removed." -ForegroundColor Green
-    Write-Host "  - Public Key File: " -NoNewline -ForegroundColor White
+    Write-Host "  - Private Key File: " -NoNewline -ForegroundColor White
     Write-Host "$certificateFileName.pfx" -ForegroundColor Cyan
-    Write-Host "  - Certificate File: " -NoNewline -ForegroundColor White
+    Write-Host "  - Public Key File: " -NoNewline -ForegroundColor White
     Write-Host "$certificateFileName.cer" -ForegroundColor Cyan
     Remove-Item "$certificateFileName.pfx" -Force
     Remove-Item "$certificateFileName.cer" -Force -ErrorAction SilentlyContinue
@@ -494,56 +496,48 @@ catch {
     Write-Host "  x ERROR: Failed to create self-signed certificate: $($_.Exception.Message)" -ForegroundColor Red
     exit 1
 }
-
 # ========================================
-# Step 3: Export certificate with private key (.pfx)
+# Step 3: Export private key (.pfx)
 # ========================================
-Write-Host "`n[3/6] EXPORTING CERTIFICATE WITH PRIVATE KEY (.pfx)" -ForegroundColor Yellow
-
+Write-Host "`n[3/6] EXPORTING PRIVATE KEY (.pfx)" -ForegroundColor Yellow
 try {
     $securePwd = ConvertTo-SecureString -String $certificatePassword -Force -AsPlainText
-
     Export-PfxCertificate `
         -Cert $cert `
         -FilePath "$certificateFileName.pfx" `
         -Password $securePwd `
         -Force | Out-Null
-    Write-Host "  @ Exporting new public key file." -ForegroundColor Yellow
-    Write-Host "  + SUCCESS: exported new public key file." -ForegroundColor Green
-    Write-Host "  - Public Key File: " -NoNewline -ForegroundColor White
+    Write-Host "  @ Exporting new private key file." -ForegroundColor Yellow
+    Write-Host "  + SUCCESS: exported new private key file." -ForegroundColor Green
+    Write-Host "  - Private Key File: " -NoNewline -ForegroundColor White
     Write-Host "$certificateFileName.pfx" -ForegroundColor Cyan
 }
 catch {
-    Write-Host "[X] Failed to create pfx: $($_.Exception.Message)" -ForegroundColor Red
+    Write-Host "  x ERROR: Failed to create pfx: $($_.Exception.Message)" -ForegroundColor Red
     exit 1
 }
-
 # ========================================
 # Step 4: Export public key (.cer)
 # ========================================
 Write-Host "`n[4/6] EXPORTING PUBLIC KEY CERTIFICATE (.cer)" -ForegroundColor Yellow
-
 try {
     Export-Certificate `
         -Cert $cert `
         -FilePath "$certificateFileName.cer" `
         -Force | Out-Null
-    Write-Host "  @ Exporting new private key file." -ForegroundColor Yellow
-    Write-Host "  + SUCCESS: exported new private key file" -ForegroundColor Green
-    Write-Host "  - Private Key File: " -NoNewline -ForegroundColor White
+    Write-Host "  @ Exporting new public key file." -ForegroundColor Yellow
+    Write-Host "  + SUCCESS: exported new public key file" -ForegroundColor Green
+    Write-Host "  - Public Key File: " -NoNewline -ForegroundColor White
     Write-Host "$certificateFileName.cer" -ForegroundColor Cyan
-
 }
 catch {
     Write-Host "  x ERROR: Failed to create cer: $($_.Exception.Message)" -ForegroundColor Red
     exit 1
 }
-
 # ========================================
 # Step 5: Verify certificate
 # ========================================
 Write-Host "`n[5/6] VERIFYING CERTIFICATE" -ForegroundColor Yellow
-
 try {
     $pfxPath = Join-Path -Path $PSScriptRoot -ChildPath "$certificateFileName.pfx"
     $pfxCert = New-Object System.Security.Cryptography.X509Certificates.X509Certificate2($pfxPath, $certificatePassword)
@@ -564,7 +558,6 @@ catch {
     Write-Host " x ERROR: Failed to verify certificate: $($_.Exception.Message)" -ForegroundColor Red
     exit 1
 }
-
 # ========================================
 # Step 6: Clean up from certificate store (automatically)
 # ========================================
@@ -578,13 +571,6 @@ try {
 catch {
     Write-Host "  x ERROR: Could not remove certificate from store" -ForegroundColor Yellow
 }
-
-#Write-Host "[+] Files created:" -ForegroundColor Green
-#Write-Host "  - Private key: " -NoNewline -ForegroundColor White
-#Write-Host "$certificateFileName.pfx" -ForegroundColor Cyan
-#Write-Host "  - Public key: " -NoNewline -ForegroundColor White
-#Write-Host "$certificateFileName.cer" -ForegroundColor Cyan
-
 # Update config.json with certificate output values (in memory only)
 $config.CertificateThumbprint = $pfxCert.Thumbprint
 
