@@ -4,9 +4,9 @@
     IsolationMode = IsolationModeEnum.Sandbox,
     SourceType = SourceTypeEnum.Database,
     TenantId = "49528483-b79b-4b88-b86e-7d882ba68911",
-    ApplicationId = "b2bf74e4-607d-4738-94df-3860d9cca940",
+    ApplicationId = "f8fa4024-cebb-4c4d-8926-d9ddbba43654",
     CertificatePath = "ManagedIdentity.pfx",
-    CertificatePassword = "CertificatePassword123!",
+    CertificatePassword = "!CertificatePassword123!",
     CredentialSource = CredentialSource.IsManaged,
     SubjectScope = SubjectScope.EnvironmentScope
 )]

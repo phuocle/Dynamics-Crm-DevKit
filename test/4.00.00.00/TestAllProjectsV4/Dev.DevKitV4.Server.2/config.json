@@ -4,8 +4,8 @@
     "Location":  "eastus",
     "KeyVaultName":  "kv-dataverse-secrets",
     "SecretName":  "MySecret",
-    "SecretValue":  "MySecretValue123!",
-    "CertificatePassword":  "CertificatePassword123!",
+    "SecretValue":  "!MySecretValue123!",
+    "CertificatePassword":  "!CertificatePassword123!",
     "CertificateSubject":  "CN=DynamicsCrmDevKitManagedIdentity",
     "CertificateFileName":  "ManagedIdentity",
     "ValidityYears":  20,
@@ -18,9 +18,9 @@
                            "dde66cdf-7e63-f011-8ee6-000d3ac78989"
                        ],
     "TenantId":  "49528483-b79b-4b88-b86e-7d882ba68911",
-    "AppId":  "b2bf74e4-607d-4738-94df-3860d9cca940",
+    "AppId":  "f8fa4024-cebb-4c4d-8926-d9ddbba43654",
     "KeyVaultURL":  "https://kv-dataverse-secrets.vault.azure.net/",
     "CertificatePath":  "ManagedIdentity.pfx",
-    "CertificateThumbprint":  "112B36EFA34982474ED1225CF813D5AEAB4C124B",
-    "CertificateSHA256Hash":  "R9S6Ml4GGtJIi9F31VArIS5AhtsrySf_RkWHS6k4U3Y"
+    "CertificateThumbprint":  "43F07415F6C7446D55FB1956C26D72D44793F416",
+    "CertificateSHA256Hash":  "GEQmECK2dUjkUcg-SMVuX856UFR208UvHL1FbRcjryY"
 }

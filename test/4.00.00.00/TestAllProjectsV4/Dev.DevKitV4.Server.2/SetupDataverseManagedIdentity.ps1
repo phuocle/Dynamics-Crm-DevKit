@@ -186,7 +186,7 @@ if ($existingRg) {
     Write-Host "  - Location: " -NoNewline -ForegroundColor White
     Write-Host "$($rg.location)" -ForegroundColor Cyan
 } else {
-    Write-Host "  @ Creating new resource group" -ForegroundColor Gray
+    Write-Host "  @ Creating new resource group." -ForegroundColor Yellow
     $rg = az group create `
         --name $resourceGroup `
         --location $location `
@@ -222,7 +222,7 @@ if ($existingApp -and $existingApp.Count -gt 0) {
     Write-Host "  - Application (Client) ID: " -NoNewline -ForegroundColor White
     Write-Host "$appId" -ForegroundColor Cyan
 } else {
-    Write-Host "  @ Creating new app registration" -ForegroundColor Gray
+    Write-Host "  @ Creating new app registration." -ForegroundColor Yellow
     $app = az ad app create `
         --display-name $appName `
         --output json | ConvertFrom-Json
@@ -231,7 +231,7 @@ if ($existingApp -and $existingApp.Count -gt 0) {
         $appId = $app.appId
         Write-Host "  + SUCCESS: App registration created." -ForegroundColor Green
         Write-Host "  - Application (Client) ID: " -NoNewline -ForegroundColor White
-        e-Host "$appId" -ForegroundColor Cyan
+        Write-Host "$appId" -ForegroundColor Cyan
     } else {
         Write-Host "  x ERROR: Failed to create app registration" -ForegroundColor Red
         exit 1
@@ -258,7 +258,7 @@ if ($existingSp) {
     Write-Host "  - Service Principal ID: " -NoNewline -ForegroundColor White
     Write-Host "$($sp.id)" -ForegroundColor Cyan
 } else {
-    Write-Host "  @ Creating new service principal" -ForegroundColor Gray
+    Write-Host "  @ Creating new service principal." -ForegroundColor Yellow
     $sp = az ad sp create --id $appId --output json | ConvertFrom-Json
 
     if ($sp) {
@@ -289,37 +289,33 @@ if ($existingKv) {
     Write-Host "$($kv.properties.vaultUri)" -ForegroundColor Cyan
 } else {
     # Check if Key Vault exists in soft-deleted state
-    Write-Host "    Key Vault not found in resource group. Checking soft-deleted state..." -ForegroundColor Gray
+    Write-Host "  @  Key Vault not found in resource group. Checking soft-deleted state..." -ForegroundColor Yellow
     $softDeletedKv = az keyvault list-deleted --query "[?name=='$keyVaultName']" --output json 2>$null | ConvertFrom-Json
 
     if ($softDeletedKv -and $softDeletedKv.Count -gt 0) {
-        Write-Host "[i] Found soft-deleted Key Vault - Recovering..." -ForegroundColor Cyan
-        Write-Host "  Location: " -NoNewline -ForegroundColor White
+        Write-Host "  @ Found soft-deleted Key Vault - Recovering." -ForegroundColor Yellow
+        Write-Host "  - Location: " -NoNewline -ForegroundColor White
         Write-Host "$($softDeletedKv[0].properties.location)" -ForegroundColor Cyan
-        Write-Host "  [~] This may take a few minutes..." -ForegroundColor Yellow
 
         # Recover the soft-deleted Key Vault
         $null = az keyvault recover --name $keyVaultName --output none 2>&1
 
         if ($LASTEXITCODE -eq 0) {
-            Write-Host "  [+] Key Vault recovered successfully!" -ForegroundColor Green
-
             # Get the recovered Key Vault details
             $kv = az keyvault show --name $keyVaultName --output json 2>$null | ConvertFrom-Json
 
             if ($kv) {
-                Write-Host "[+] SUCCESS: Key Vault recovered: $($kv.name)" -ForegroundColor Green
-                Write-Host "  Vault URL: " -NoNewline -ForegroundColor White
+                Write-Host "  + SUCCESS: Key Vault recovered." -ForegroundColor Green
+                Write-Host "  - Vault URL: " -NoNewline -ForegroundColor White
                 Write-Host "$($kv.properties.vaultUri)" -ForegroundColor Cyan
             }
         } else {
-            Write-Host "  [X] Failed to recover Key Vault" -ForegroundColor Red
-            Write-Host "  [i] You may need to purge it first: az keyvault purge --name $keyVaultName" -ForegroundColor Yellow
+            Write-Host "  x ERROR: Failed to recover Key Vault" -ForegroundColor Red
             exit 1
         }
     } else {
         # Create new Key Vault
-        Write-Host "Creating new Key Vault..." -ForegroundColor Gray
+        Write-Host "  @ Creating new key vault." -ForegroundColor Gray
         $kv = az keyvault create `
             --name $keyVaultName `
             --resource-group $resourceGroup `
@@ -328,13 +324,13 @@ if ($existingKv) {
             --output json | ConvertFrom-Json
 
         if ($kv) {
-            Write-Host "[+] SUCCESS: Key Vault created: $($kv.name)" -ForegroundColor Green
-            Write-Host "  Vault URL: " -NoNewline -ForegroundColor White
+            Write-Host "  + SUCCESS: Key Vault created." -ForegroundColor Green
+            Write-Host "  - Vault Name: " -NoNewline -ForegroundColor White
+            Write-Host "$($kv.name)" -ForegroundColor Cyan
+            Write-Host "  - Vault URL: " -NoNewline -ForegroundColor White
             Write-Host "$($kv.properties.vaultUri)" -ForegroundColor Cyan
         } else {
-            Write-Host "[X] ERROR: Failed to create Key Vault (name may not be globally unique)" -ForegroundColor Red
-            Write-Host "  [i] Check if it's soft-deleted: az keyvault list-deleted" -ForegroundColor Yellow
-            Write-Host "  [i] Try a different Key Vault name or recover/purge the existing one" -ForegroundColor Yellow
+            Write-Host "  x ERROR: Failed to create Key Vault (name may not be globally unique)" -ForegroundColor Red
             exit 1
         }
     }
@@ -447,7 +443,7 @@ $validityYears = $config.ValidityYears
 # ========================================
 # Step 1: Check for existing certificate and remove if exists
 # ========================================
-Write-Host "`n[1/6] CHECKING SELF-SIGNED EXIST" -ForegroundColor Yellow
+Write-Host "`[1/6] CHECKING SELF-SIGNED EXIST" -ForegroundColor Yellow
 
 if (Test-Path "$certificateFileName.pfx") {
     try {
