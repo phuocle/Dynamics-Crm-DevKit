@@ -58,7 +58,7 @@ if ($config -and $config.CertificateFileName) {
     Write-Host "     - $($config.CertificateFileName).pfx" -ForegroundColor Gray
     Write-Host "     - $($config.CertificateFileName).cer" -ForegroundColor Gray
 }
-Write-Host "     - ManagedIdentity.cs" -ForegroundColor Gray
+Write-Host "     - AssemblyInfo2.cs" -ForegroundColor Gray
 
 Write-Host ""
 Write-Host "[!] WARNING: App Registration & Resource Group will be permanently deleted!" -ForegroundColor Red
@@ -303,21 +303,21 @@ if ($config -and $config.CertificateFileName) {
     }
 }
 
-# Delete ManagedIdentity.cs
-$managedIdentityFile = Join-Path $ScriptDir "ManagedIdentity.cs"
+# Delete AssemblyInfo2.cs
+$managedIdentityFile = Join-Path $ScriptDir "AssemblyInfo2.cs"
 if (Test-Path $managedIdentityFile) {
     try {
         Remove-Item $managedIdentityFile -Force
-        $success += "Deleted file: ManagedIdentity.cs"
-        Write-Host "[+] Deleted: ManagedIdentity.cs" -ForegroundColor Green
+        $success += "Deleted file: AssemblyInfo2.cs"
+        Write-Host "[+] Deleted: AssemblyInfo2.cs" -ForegroundColor Green
     }
     catch {
-        $errors += "Failed to delete ManagedIdentity.cs: $($_.Exception.Message)"
-        Write-Host "[X] Failed to delete: ManagedIdentity.cs" -ForegroundColor Red
+        $errors += "Failed to delete AssemblyInfo2.cs: $($_.Exception.Message)"
+        Write-Host "[X] Failed to delete: AssemblyInfo2.cs" -ForegroundColor Red
     }
 }
 else {
-    Write-Host "[-] File not found: ManagedIdentity.cs" -ForegroundColor Yellow
+    Write-Host "[-] File not found: AssemblyInfo2.cs" -ForegroundColor Yellow
 }
 
 # ========================================
