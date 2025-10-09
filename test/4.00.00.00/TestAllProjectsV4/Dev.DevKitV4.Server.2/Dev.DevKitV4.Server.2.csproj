@@ -68,7 +68,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <None Include="01.Setup-Azure.ps1" />
     <None Include="02.Setup-Certificate.ps1" />
-    <None Include="Setup-AzureManagedIdentity.ps1" />
+    <None Include="SetupDataverseManagedIdentity.ps1" />
     <None Include="SETUP-GUIDE.md" />
   </ItemGroup>
   <Import Project="..\Dev.DevKitV4.Shared\Dev.DevKitV4.Shared.projitems" Label="Shared" Condition="Exists('..\Dev.DevKitV4.Shared\Dev.DevKitV4.Shared.projitems')" />
