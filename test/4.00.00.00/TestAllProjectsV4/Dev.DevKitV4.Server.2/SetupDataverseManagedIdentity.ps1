@@ -283,6 +283,8 @@ if ($existingKv) {
     Write-Host "  @ Key Vault already exists." -ForegroundColor Yellow
     $kv = $existingKv
     Write-Host "  + SUCCESS: found key vault." -ForegroundColor Green
+    Write-Host "  - Location: " -NoNewline -ForegroundColor White
+    Write-Host "$($kv.properties.location)" -ForegroundColor Cyan
     Write-Host "  - Vault Name: " -NoNewline -ForegroundColor White
     Write-Host "$($kv.name)" -ForegroundColor Cyan
     Write-Host "  - Vault URL: " -NoNewline -ForegroundColor White
@@ -292,19 +294,16 @@ if ($existingKv) {
     $softDeletedKv = az keyvault list-deleted --query "[?name=='$keyVaultName']" --output json 2>$null | ConvertFrom-Json
 
     if ($softDeletedKv -and $softDeletedKv.Count -gt 0) {
-        Write-Host "  @ Found soft-deleted Key Vault - Recovering." -ForegroundColor Yellow
-        Write-Host "  - Location: " -NoNewline -ForegroundColor White
-        Write-Host "$($softDeletedKv[0].properties.location)" -ForegroundColor Cyan
-
+        Write-Host "  @ Found soft-deleted key vault - Recovering." -ForegroundColor Yellow
         # Recover the soft-deleted Key Vault
         $null = az keyvault recover --name $keyVaultName --output none 2>&1
-
         if ($LASTEXITCODE -eq 0) {
             # Get the recovered Key Vault details
             $kv = az keyvault show --name $keyVaultName --output json 2>$null | ConvertFrom-Json
-
             if ($kv) {
                 Write-Host "  + SUCCESS: Key Vault recovered." -ForegroundColor Green
+                Write-Host "  - Location: " -NoNewline -ForegroundColor White
+                Write-Host "$($softDeletedKv[0].properties.location)" -ForegroundColor Cyan
                 Write-Host "  - Vault URL: " -NoNewline -ForegroundColor White
                 Write-Host "$($kv.properties.vaultUri)" -ForegroundColor Cyan
             }
@@ -324,6 +323,8 @@ if ($existingKv) {
 
         if ($kv) {
             Write-Host "  + SUCCESS: Key Vault created." -ForegroundColor Green
+            Write-Host "  - Location: " -NoNewline -ForegroundColor White
+            Write-Host "$($kv.properties.location)" -ForegroundColor Cyan
             Write-Host "  - Vault Name: " -NoNewline -ForegroundColor White
             Write-Host "$($kv.name)" -ForegroundColor Cyan
             Write-Host "  - Vault URL: " -NoNewline -ForegroundColor White
@@ -519,14 +520,14 @@ catch {
 # ========================================
 # Step 4: Export public key (.cer)
 # ========================================
-Write-Host "`n[4/6] EXPORTING PUBLIC KEY CERTIFICATE (.cer)" -ForegroundColor Yellow
+Write-Host "`n[4/6] EXPORTING PUBLIC KEY (.cer)" -ForegroundColor Yellow
 try {
     Export-Certificate `
         -Cert $cert `
         -FilePath "$certificateFileName.cer" `
         -Force | Out-Null
     Write-Host "  @ Exporting new public key file." -ForegroundColor Yellow
-    Write-Host "  + SUCCESS: exported new public key file" -ForegroundColor Green
+    Write-Host "  + SUCCESS: exported new public key file." -ForegroundColor Green
     Write-Host "  - Public Key File: " -NoNewline -ForegroundColor White
     Write-Host "$certificateFileName.cer" -ForegroundColor Cyan
 }
