@@ -61,7 +61,6 @@
     <None Include="Dev.DevKitV4.Server.2.snk" />
     <None Include="deploy.debug.bat" />
     <None Include="deploy.debug.only.bat" />
-    <Compile Include="AssemblyInfo2.cs" />
     <Compile Include="KeyVaultHelper.cs" />
     <Compile Include="PostContactCreateAsynchronous.cs" />
     <Compile Include="PostContactDeleteAsynchronous.cs" />

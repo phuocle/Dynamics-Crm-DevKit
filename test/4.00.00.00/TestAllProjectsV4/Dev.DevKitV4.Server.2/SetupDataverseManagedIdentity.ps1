@@ -108,7 +108,7 @@ $requiredFields = @(
 $missingFields = @()
 foreach ($field in $requiredFields) {
     if ($field.Path -eq "ValidityYears") {
-        if ($null -eq $field.Value -or $field.Value -eq 0) {
+        if ($null -eq $field.Value -or 0 -eq $field.Value) {
             $missingFields += $field.Path
         }
     }
@@ -118,11 +118,11 @@ foreach ($field in $requiredFields) {
 }
 
 # Check arrays
-if ($null -eq $config.EnvironmentId -or $config.EnvironmentId.Count -eq 0) {
+if ($null -eq $config.EnvironmentId -or 0 -eq $config.EnvironmentId.Count) {
     $missingFields += "EnvironmentId (must be an array with at least one value)"
 }
 
-if ($null -eq $config.OrganizationId -or $config.OrganizationId.Count -eq 0) {
+if ($null -eq $config.OrganizationId -or 0 -eq $config.OrganizationId.Count) {
     $missingFields += "OrganizationId (must be an array with at least one value)"
 }
 
@@ -199,7 +199,7 @@ Write-Host "`n[2/6] CHECKING AZURE AD APP REGISTRATION" -ForegroundColor Yellow
 # Check if app registration exists
 $existingApp = az ad app list --display-name $appName --output json | ConvertFrom-Json
 
-if ($existingApp -and $existingApp.Count -gt 0) {
+if ($null -ne $existingApp -and $existingApp.Count -gt 0) {
     Write-Host "  @ App registration already exists." -ForegroundColor Yellow
     $app = $existingApp[0]
     $appId = $app.appId
@@ -280,7 +280,7 @@ if ($existingKv) {
     # Check if Key Vault exists in soft-deleted state
     $softDeletedKv = az keyvault list-deleted --query "[?name=='$keyVaultName']" --output json 2>$null | ConvertFrom-Json
 
-    if ($softDeletedKv -and $softDeletedKv.Count -gt 0) {
+    if ($null -ne $softDeletedKv -and $softDeletedKv.Count -gt 0) {
         Write-Host "  @ Found soft-deleted key vault - Recovering." -ForegroundColor Yellow
         # Recover the soft-deleted Key Vault
         $null = az keyvault recover --name $keyVaultName --output none 2>&1
@@ -360,7 +360,7 @@ Write-Host "`n[6/6] CONFIGURING APP ACCESS TO KEY VAULT" -ForegroundColor Yellow
 # Check current access policies for the service principal
 $existingPolicy = az keyvault show --name $keyVaultName --resource-group $resourceGroup --query "properties.accessPolicies[?objectId=='$($sp.id)']" --output json 2>$null | ConvertFrom-Json
 
-if ($existingPolicy -and $existingPolicy.Count -gt 0) {
+if ($null -ne $existingPolicy -and $existingPolicy.Count -gt 0) {
     Write-Host "  @ Access policy already exists." -ForegroundColor Yellow
     Write-Host "  + SUCCESS: Found access policy." -ForegroundColor Green
     Write-Host "  - Service Principal ID: " -NoNewline -ForegroundColor White
@@ -433,7 +433,7 @@ $validityYears = $config.ValidityYears
 # ========================================
 # Step 1: Check for existing certificate and remove if exists
 # ========================================
-Write-Host "`[1/6] CHECKING SELF-SIGNED EXIST" -ForegroundColor Yellow
+Write-Host "[1/6] CHECKING SELF-SIGNED EXIST" -ForegroundColor Yellow
 
 if (Test-Path "$certificateFileName.pfx") {
     try {
@@ -756,10 +756,7 @@ Write-Host "[2/3] Generating AssemblyInfo2.cs file" -ForegroundColor Yellow
 
 $managedIdentityPath = Join-Path $ScriptDir "AssemblyInfo2.cs"
 
-# Use values from config, with defaults for certificate info
-$certPath = if ($config.CertificatePath) { $config.CertificatePath } else { "cert-signing.pfx" }
-$certPassword = if ($config.CertificatePassword) { $config.CertificatePassword } else { "YourPassword123!" }
-
+# Generate managed identity content
 $managedIdentityContent = @"
 using System;
 
