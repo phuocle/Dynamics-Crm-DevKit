@@ -21,6 +21,6 @@
     "AppId":  "b2bf74e4-607d-4738-94df-3860d9cca940",
     "KeyVaultURL":  "https://kv-dataverse-secrets.vault.azure.net/",
     "CertificatePath":  "ManagedIdentity.pfx",
-    "CertificateThumbprint":  "07CAB4749749F056FA0DEC29BE5B3182741190E3",
-    "CertificateSHA256Hash":  "9cWdZKtYrJsfvDE1JmrY5YWrQJnKARk9Ex9-A_xjnTs"
+    "CertificateThumbprint":  "73FEAD2B9CA7DA3209F10AAA1697F73C8E4F3A92",
+    "CertificateSHA256Hash":  "GvtjFqv_mslAK6PG-fSD1CI8lIWnZnrsJhCPNToAVhg"
 }

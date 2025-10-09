@@ -450,18 +450,25 @@ $validityYears = $config.ValidityYears
 Write-Host "`n[1/6] CHECKING SELF-SIGNED EXIST" -ForegroundColor Yellow
 
 if (Test-Path "$certificateFileName.pfx") {
+    try {
     Write-Host "  @ Certificate already exists." -ForegroundColor Yellow
+    Write-Host "  + SUCCESS: Existing certificate files removed." -ForegroundColor Green
     Write-Host "  - Public Key File: " -NoNewline -ForegroundColor White
     Write-Host "$certificateFileName.pfx" -ForegroundColor Cyan
     Write-Host "  - Certificate File: " -NoNewline -ForegroundColor White
     Write-Host "$certificateFileName.cer" -ForegroundColor Cyan
     Remove-Item "$certificateFileName.pfx" -Force
     Remove-Item "$certificateFileName.cer" -Force -ErrorAction SilentlyContinue
-    Write-Host "  + SUCCESS: Existing certificate files removed" -ForegroundColor Green
+    }
+    catch {
+        Write-Host "  x ERROR: Could not remove existing certificate files." -ForegroundColor Red
+        exit 1
+    }
 }
 else
 {
     Write-Host "  @ No existing certificate files found." -ForegroundColor Yellow
+    Write-Host "  + SUCCESS: Ready to create new certificate." -ForegroundColor Green
 }
 
 # ========================================
@@ -478,8 +485,8 @@ try {
         -KeyExportPolicy Exportable `
         -KeyLength 2048 `
         -HashAlgorithm SHA256
-    Write-Host "  @ Creating new certificate." -ForegroundColor Gray
-    Write-Host "  + SUCCESS: Certificate created in certificate store" -ForegroundColor Green
+    Write-Host "  @ Creating new self-signed certificate." -ForegroundColor Yellow
+    Write-Host "  + SUCCESS: self-signed certificate created in certificate store." -ForegroundColor Green
     Write-Host "  - Subject: " -NoNewline -ForegroundColor White
     Write-Host "$($cert.Subject)" -ForegroundColor Cyan
     Write-Host "  - Thumbprint: " -NoNewline -ForegroundColor White
@@ -488,7 +495,7 @@ try {
     Write-Host "$($cert.NotAfter.ToString('yyyy-MM-dd'))" -ForegroundColor Cyan
 }
 catch {
-    Write-Host "  x ERROR: Failed to create certificate: $($_.Exception.Message)" -ForegroundColor Red
+    Write-Host "  x ERROR: Failed to create self-signed certificate: $($_.Exception.Message)" -ForegroundColor Red
     exit 1
 }
 
@@ -505,8 +512,8 @@ try {
         -FilePath "$certificateFileName.pfx" `
         -Password $securePwd `
         -Force | Out-Null
-    Write-Host "  @ Creating new public key file." -ForegroundColor Gray
-    Write-Host "  + SUCCESS: export new public key file." -ForegroundColor Green
+    Write-Host "  @ Exporting new public key file." -ForegroundColor Yellow
+    Write-Host "  + SUCCESS: exported new public key file." -ForegroundColor Green
     Write-Host "  - Public Key File: " -NoNewline -ForegroundColor White
     Write-Host "$certificateFileName.pfx" -ForegroundColor Cyan
 }
@@ -525,8 +532,8 @@ try {
         -Cert $cert `
         -FilePath "$certificateFileName.cer" `
         -Force | Out-Null
-    Write-Host "  @ Creating new private key file." -ForegroundColor Gray
-    Write-Host "  + SUCCESS: export new private key file: $certificateFileName.cer" -ForegroundColor Green
+    Write-Host "  @ Exporting new private key file." -ForegroundColor Yellow
+    Write-Host "  + SUCCESS: exported new private key file" -ForegroundColor Green
     Write-Host "  - Private Key File: " -NoNewline -ForegroundColor White
     Write-Host "$certificateFileName.cer" -ForegroundColor Cyan
 
@@ -545,8 +552,8 @@ try {
     $pfxPath = Join-Path -Path $PSScriptRoot -ChildPath "$certificateFileName.pfx"
     $pfxCert = New-Object System.Security.Cryptography.X509Certificates.X509Certificate2($pfxPath, $certificatePassword)
     if ($pfxCert) {
-        Write-Host "  @ found certificate." -ForegroundColor Yellow
-        Write-Host "  + SUCCESS: certificate verified successfully" -ForegroundColor Green
+        Write-Host "  @ Found certificate to verify." -ForegroundColor Yellow
+        Write-Host "  + SUCCESS: certificate verified successfully." -ForegroundColor Green
         Write-Host "  - Thumbprint: " -NoNewline -ForegroundColor White
         Write-Host "$($pfxCert.Thumbprint)" -ForegroundColor Cyan
         Write-Host "  - Has Private Key: " -NoNewline -ForegroundColor White
@@ -569,8 +576,8 @@ Write-Host "`n[6/6] REMOVING CERTIFICATE FROM WINDOWS CERTIFICATE STORE" -Foregr
 
 try {
     Remove-Item "Cert:\CurrentUser\My\$($cert.Thumbprint)" -Force
-    Write-Host "  @ found certificate to remove." -ForegroundColor Yellow
-    Write-Host "  + SUCCESS: certificate removed from store" -ForegroundColor Green
+    Write-Host "  @ Found certificate to remove." -ForegroundColor Yellow
+    Write-Host "  + SUCCESS: certificate removed from store." -ForegroundColor Green
 }
 catch {
     Write-Host "  x ERROR: Could not remove certificate from store" -ForegroundColor Yellow
