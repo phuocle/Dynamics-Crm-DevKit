@@ -1,7 +1,7 @@
 ﻿{
     "AppName":  "DynamicsCrmDevKitManagedIdentity",
     "ResourceGroup":  "DevKit",
-    "Location":  "eastus",
+    "Location":  "southeastasia",
     "KeyVaultName":  "kv-dataverse-secrets",
     "SecretName":  "MySecret",
     "SecretValue":  "!MySecretValue123!",
@@ -18,9 +18,9 @@
                            "dde66cdf-7e63-f011-8ee6-000d3ac78989"
                        ],
     "TenantId":  "49528483-b79b-4b88-b86e-7d882ba68911",
-    "AppId":  "8abd7e92-86e1-4660-8407-0170eb81500c",
+    "AppId":  "c60f6fe5-92a2-485c-9149-f84e8f73c105",
     "KeyVaultURL":  "https://kv-dataverse-secrets.vault.azure.net/",
     "CertificatePath":  "ManagedIdentity.pfx",
-    "CertificateThumbprint":  "7FA315625641B5AA2462C0EAD81EE4DE5AC12769",
-    "CertificateSHA256Hash":  "ptquTZ5cQBKU_IBlL68tXEBZg-UCBY46jfK_gl_tuVU"
+    "CertificateThumbprint":  "605BE49982C7F15B59E0BA4B2BFE46A8C37E4C7D",
+    "CertificateSHA256Hash":  "Q0YDZYr93P597MW_zMkWLhoFZQyAT1eWXLb-SwIibHU"
 }
