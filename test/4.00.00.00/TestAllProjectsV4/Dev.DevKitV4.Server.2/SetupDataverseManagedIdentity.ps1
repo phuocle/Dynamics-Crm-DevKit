@@ -284,7 +284,7 @@ if ($existingKv) {
     $kv = $existingKv
     Write-Host "  + SUCCESS: found key vault." -ForegroundColor Green
     Write-Host "  - Location: " -NoNewline -ForegroundColor White
-    Write-Host "$($kv.properties.location)" -ForegroundColor Cyan
+    Write-Host "$($kv.location)" -ForegroundColor Cyan
     Write-Host "  - Vault Name: " -NoNewline -ForegroundColor White
     Write-Host "$($kv.name)" -ForegroundColor Cyan
     Write-Host "  - Vault URL: " -NoNewline -ForegroundColor White
@@ -303,7 +303,7 @@ if ($existingKv) {
             if ($kv) {
                 Write-Host "  + SUCCESS: Key Vault recovered." -ForegroundColor Green
                 Write-Host "  - Location: " -NoNewline -ForegroundColor White
-                Write-Host "$($softDeletedKv[0].properties.location)" -ForegroundColor Cyan
+                Write-Host "$($softDeletedKv[0].location)" -ForegroundColor Cyan
                 Write-Host "  - Vault URL: " -NoNewline -ForegroundColor White
                 Write-Host "$($kv.properties.vaultUri)" -ForegroundColor Cyan
             }
@@ -324,7 +324,7 @@ if ($existingKv) {
         if ($kv) {
             Write-Host "  + SUCCESS: Key Vault created." -ForegroundColor Green
             Write-Host "  - Location: " -NoNewline -ForegroundColor White
-            Write-Host "$($kv.properties.location)" -ForegroundColor Cyan
+            Write-Host "$($kv.location)" -ForegroundColor Cyan
             Write-Host "  - Vault Name: " -NoNewline -ForegroundColor White
             Write-Host "$($kv.name)" -ForegroundColor Cyan
             Write-Host "  - Vault URL: " -NoNewline -ForegroundColor White
