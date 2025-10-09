@@ -40,9 +40,9 @@ namespace Dev.DevKitV4.Server._2
             var serviceAdmin = serviceFactory.CreateOrganizationService(null);
             var service = serviceFactory.CreateOrganizationService(context.UserId);
 
-            tracing?.DebugContext(context);
-            tracing.DebugMessage($"unSecureConfiguration = {unSecureConfiguration}");
-            tracing.DebugMessage($"secureConfiguration = {secureConfiguration}");
+            //tracing?.DebugContext(context);
+            //tracing.DebugMessage($"unSecureConfiguration = {unSecureConfiguration}");
+            //tracing.DebugMessage($"secureConfiguration = {secureConfiguration}");
 
             ExecutePlugin(context, serviceFactory, serviceAdmin, service, tracing);
         }

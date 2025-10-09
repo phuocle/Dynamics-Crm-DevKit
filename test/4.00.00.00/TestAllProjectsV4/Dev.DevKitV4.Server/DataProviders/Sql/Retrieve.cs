@@ -38,7 +38,7 @@ namespace Dev.DevKitV4.Server.DataProviders.Sql
             var retriever = serviceProvider.Get<IEntityDataSourceRetrieverService>();
             var dataSource = retriever.RetrieveEntityDataSource();
 
-            tracing?.DebugContext(context);
+            //tracing?.DebugContext(context);
 
             ExecutePlugin(context, serviceFactory, serviceAdmin, service, tracing, dataSource);
         }

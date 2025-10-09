@@ -35,7 +35,7 @@ namespace Dev.DevKitV4.Server.Plugins.Contact.Pre
             var serviceAdmin = serviceFactory.CreateOrganizationService(null);
             var service = serviceFactory.CreateOrganizationService(context.UserId);
 
-            tracing?.DebugContext(context);
+            //tracing?.DebugContext(context);
 
             ExecutePlugin(context, serviceFactory, serviceAdmin, service, tracing);
         }

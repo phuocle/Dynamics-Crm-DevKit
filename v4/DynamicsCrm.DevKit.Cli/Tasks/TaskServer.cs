@@ -1,6 +1,5 @@
 ﻿using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
-using Microsoft.Crm.Sdk.Messages;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
@@ -15,10 +14,8 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using System.ServiceModel;
 using System.Threading.Tasks;
-using VSLangProj80;
 
 namespace DynamicsCrm.DevKit.Cli.Tasks
 {
@@ -1482,14 +1479,14 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         request2.Parameters.Add("SolutionUniqueName", Json.solution);
                         CliLog.Write(ConsoleColor.White, "|", SPACE);
                         CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTER.Trim());
-                        CliLog.WriteLine(ConsoleColor.Blue, " Bind Assembly to Managed Identity ", ConsoleColor.Cyan, assemblyName);
+                        CliLog.WriteLine(ConsoleColor.Blue, " Bind Assembly to Managed Identity ", ConsoleColor.Cyan, assemblyName, ".dll");
                         await ServiceClient.ExecuteAsync(request2);
                     }
                     else if (rows.Entities[0].GetAttributeValue<EntityReference>("managedidentityid")?.Id == managedIdentityId)
                     {
                         CliLog.Write(ConsoleColor.White, "|", SPACE);
                         CliLog.Write(ConsoleColor.Green, CliAction.DO_NOTHING.Trim());
-                        CliLog.WriteLine(ConsoleColor.Blue, " Bind Assembly to Managed Identity ", ConsoleColor.Cyan, assemblyName);
+                        CliLog.WriteLine(ConsoleColor.Blue, " Bind Assembly to Managed Identity ", ConsoleColor.Cyan, assemblyName, ".dll");
                     }
                     else
                     {
@@ -1502,7 +1499,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         request2.Parameters.Add("SolutionUniqueName", Json.solution);
                         CliLog.Write(ConsoleColor.White, "|", SPACE);
                         CliLog.WriteSuccess(ConsoleColor.White, CliAction.UPDATED.Trim());
-                        CliLog.WriteLine(ConsoleColor.Blue, " Bind Assembly to Managed Identity ", ConsoleColor.Cyan, assemblyName);
+                        CliLog.WriteLine(ConsoleColor.Blue, " Bind Assembly to Managed Identity ", ConsoleColor.Cyan, assemblyName, ".dll");
                         await ServiceClient.ExecuteAsync(request2);
                     }
                 }

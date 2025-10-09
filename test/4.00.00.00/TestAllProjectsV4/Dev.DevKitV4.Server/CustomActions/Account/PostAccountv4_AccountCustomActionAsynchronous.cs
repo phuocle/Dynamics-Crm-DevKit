@@ -38,7 +38,7 @@ namespace Dev.DevKitV4.Server.CustomActions.Account
             var serviceAdmin = serviceFactory.CreateOrganizationService(null);
             var service = serviceFactory.CreateOrganizationService(context.UserId);
 
-            tracing?.DebugContext(context);
+            //tracing?.DebugContext(context);
 
             var outputs = ExecuteCustomAction(context, serviceFactory, serviceAdmin, service, tracing);
             foreach (var output in outputs)
