@@ -313,7 +313,7 @@ if ($existingKv) {
         }
     } else {
         # Create new Key Vault
-        Write-Host "  @ Creating new key vault." -ForegroundColor Gray
+        Write-Host "  @ Creating new key vault." -ForegroundColor Yellow
         $kv = az keyvault create `
             --name $keyVaultName `
             --resource-group $resourceGroup `
