@@ -68,7 +68,7 @@ $secretValue = $config.SecretValue
 # ========================================
 # Step 1: Create Resource Group
 # ========================================
-Write-Host "[1/6] CHECKING RESOURCE GROUP" -ForegroundColor Yellow
+Write-Host "[1/6] CHECKING RESOURCE GROUP" -ForegroundColor Blue
 $existingRg = az group show --name $resourceGroup --output json 2>$null | ConvertFrom-Json
 if ($existingRg) {
     Write-Host "  @ Resource group already exists." -ForegroundColor Yellow
@@ -99,7 +99,7 @@ if ($existingRg) {
 # ========================================
 # Step 2: Create Key Vault
 # ========================================
-Write-Host "`n[2/6] CHECKING AZURE KEY VAULT" -ForegroundColor Yellow
+Write-Host "`n[2/6] CHECKING AZURE KEY VAULT" -ForegroundColor Blue
 $existingKv = az keyvault show --name $keyVaultName --resource-group $resourceGroup --output json 2>$null | ConvertFrom-Json
 if ($existingKv) {
     Write-Host "  @ Key Vault already exists." -ForegroundColor Yellow
@@ -159,7 +159,7 @@ if ($existingKv) {
 # ========================================
 # Step 3: Add/Update Secret in Key Vault
 # ========================================
-Write-Host "`n[3/6] ADDING/UPDATING TEST SECRET IN KEY VAULT" -ForegroundColor Yellow
+Write-Host "`n[3/6] ADDING/UPDATING TEST SECRET IN KEY VAULT" -ForegroundColor Blue
 $existingSecret = az keyvault secret show --vault-name $keyVaultName --name $secretName --output json 2>$null | ConvertFrom-Json
 if ($existingSecret) {
     Write-Host "  @ Secret already exists." -ForegroundColor Yellow
@@ -182,7 +182,7 @@ if ($secret) {
 # ========================================
 # Step 4: Add/Update Secret in Key Vault
 # ========================================
-Write-Host "`n[4/4] CHECKING AZURE AD APP REGISTRATION`n" -ForegroundColor Yellow
+Write-Host "`n[4/4] CHECKING AZURE AD APP REGISTRATION`n" -ForegroundColor Blue
 for ($i = 0; $i -lt $config.ManagedIdentities.Count; $i++) {
     $mi = $config.ManagedIdentities[$i]
     $appName = $mi.AppName
