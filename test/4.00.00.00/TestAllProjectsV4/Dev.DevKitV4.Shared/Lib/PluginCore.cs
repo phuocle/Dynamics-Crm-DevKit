@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace Dev.DevKitV4.Shared
@@ -136,16 +137,14 @@ namespace Dev.DevKitV4.Shared
     public class DynamcisCrmDevkitAssemblyAttribute : Attribute
     {        
         public string TenantId { get; set; }
-        public string ApplicationId { get; set; }
-        public string CertificatePath { get; set; } = string.Empty;
-        public string CertificatePassword { get; set; } = string.Empty;
+        public List<PluginManagedIdentity> PluginManagedIdentities { get; set; }
         public IsolationModeEnum IsolationMode { get; set; } = IsolationModeEnum.Sandbox;
         public SourceTypeEnum SourceType { get; set; } = SourceTypeEnum.Database;
     }
 
     public class PluginManagedIdentity
     {
-        public string TenantId { get; set; }
+        public string ManagedIdentityName { get; set; }
         public string ApplicationId { get; set; }
         public string CertificatePath { get; set; }
         public string CertificatePassword { get; set; }
