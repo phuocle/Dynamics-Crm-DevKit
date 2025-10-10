@@ -384,7 +384,7 @@ for ($i = 0; $i -lt $config.ManagedIdentities.Count; $i++) {
     Write-Host "Processing AppName $AppName" -ForegroundColor Red
 
     $AppId = $mi.AppId
-    $CertificatePath = $mi.CertificatePath
+    $CertificatePath = "$($mi.CertificateFileName).pfx"
     $CertificatePassword = $mi.CertificatePassword
     $EnvironmentId = $mi.EnvironmentId
     $OrganizationId = $mi.OrganizationId
@@ -397,6 +397,7 @@ for ($i = 0; $i -lt $config.ManagedIdentities.Count; $i++) {
     $encodedTenant = Convert-GuidToBase64Url -guid $TenantId
     $encodedApp = Convert-GuidToBase64Url -guid $AppId
 
+    # --- Credential #1: AzureAD-Issuer (Uses Organization ID) ---
     $orgIdNoHyphens = $OrganizationId.Replace("-", "")
     $issuer1 = "https://login.microsoftonline.com/$TenantId/v2.0"
     $subject1 = "/eid1/c/pub/t/$encodedTenant/a/$encodedApp/n/plugin/e/$orgIdNoHyphens/h/$sha256Hash"
@@ -415,10 +416,10 @@ for ($i = 0; $i -lt $config.ManagedIdentities.Count; $i++) {
             Write-Host "  + SUCCESS: No updates needed for $credName1 (values match)" -ForegroundColor Green
         } else {
             Write-Host "  @ Updating $credName1 (values different)" -ForegroundColor Yellow
-            Write-Host "  - Old Issuer: $($existingCred.issuer)" -ForegroundColor DarkGray
-            Write-Host "  - New Issuer: $issuer1" -ForegroundColor White
-            Write-Host "  - Old Subject: $($existingCred.subject)" -ForegroundColor DarkGray
-            Write-Host "  - New Subject: $subject1" -ForegroundColor White
+            Write-Host "    - Old Issuer: $($existingCred.issuer)" -ForegroundColor DarkGray
+            Write-Host "    - New Issuer: $issuer1" -ForegroundColor White
+            Write-Host "    - Old Subject: $($existingCred.subject)" -ForegroundColor DarkGray
+            Write-Host "    - New Subject: $subject1" -ForegroundColor White
             az ad app federated-credential delete --id $AppId --federated-credential-id $existingCred.id
             $newCred | ConvertTo-Json | Out-File "$credName1.json" -Encoding UTF8
             az ad app federated-credential create --id $AppId --parameters "$credName1.json" | Out-Null
@@ -427,12 +428,63 @@ for ($i = 0; $i -lt $config.ManagedIdentities.Count; $i++) {
         }
     } else {
         Write-Host "  @ Creating new credential $credName1" -ForegroundColor Yellow
-        Write-Host "  - Issuer: $issuer1" -ForegroundColor White
-        Write-Host "  - Subject: $subject1" -ForegroundColor White
+        Write-Host "    - Issuer: $issuer1" -ForegroundColor White
+        Write-Host "    - Subject: $subject1" -ForegroundColor White
         $newCred | ConvertTo-Json | Out-File "$credName1.json" -Encoding UTF8
         az ad app federated-credential create --id $AppId --parameters "$credName1.json" | Out-Null
         Remove-Item "$credName1.json" -Force -ErrorAction SilentlyContinue
         Write-Host "  + SUCCESS: Created $credName1." -ForegroundColor Green
+    }
+
+    # --- Credential #2: PowerPlatform-Issuer (Uses Environment ID) ---
+    $envIdNoHyphens = $EnvironmentId.Replace("-", "")
+    $envIdPrefix = $envIdNoHyphens.Substring(0, $envIdNoHyphens.Length - 2)
+    $envIdSuffix = $envIdNoHyphens.Substring($envIdNoHyphens.Length - 2)
+
+    $issuer2 = "https://$envIdPrefix.$envIdSuffix.environment.api.powerplatform.com/sts"
+    $subject2 = "component:pluginassembly,thumbprint:$($cert.Thumbprint),environment:$currentEnvId"
+    $credName2 = "PowerPlatform-Issuer"
+
+    Write-Host "  @ Checking credential $credName2" -ForegroundColor Yellow
+
+    # Check if credential exists
+    $existingCred2 = az ad app federated-credential list --id $AppId --query "[?name=='$credName2']" | ConvertFrom-Json
+
+    $newCred2 = @{
+        name = $credName2
+        issuer = $issuer2
+        subject = $subject2
+        description = "Power Platform Issuer - Authentication for Env $EnvironmentId"
+        audiences = @("api://AzureADTokenExchange")
+    }
+
+    if ($existingCred2) {
+        # Compare existing with new values
+        if ($existingCred2.issuer -eq $issuer2 -and $existingCred2.subject -eq $subject2) {
+            Write-Host "  + SUCCESS: No updates needed for $credName2 (values match)." -ForegroundColor Green
+        } else {
+            Write-Host "  @ Updating $credName2 (values different)" -ForegroundColor Yellow
+            Write-Host "    - Old Issuer: $($existingCred2.issuer)" -ForegroundColor DarkGray
+            Write-Host "    - New Issuer: $issuer2" -ForegroundColor White
+            Write-Host "    - Old Subject: $($existingCred2.subject)" -ForegroundColor DarkGray
+            Write-Host "    - New Subject: $subject2" -ForegroundColor White
+
+            # Delete existing and create new
+            az ad app federated-credential delete --id $AppId --federated-credential-id $existingCred2.id
+            $newCred2 | ConvertTo-Json | Out-File "$credName2.json" -Encoding UTF8
+            az ad app federated-credential create --id $AppId --parameters "$credName2.json" | Out-Null
+            Remove-Item "$credName2.json" -Force -ErrorAction SilentlyContinue
+            Write-Host "  + SUCCESS: Updated $credName2." -ForegroundColor Green
+        }
+    } else {
+        Write-Host "  @ Creating new credential $credName2" -ForegroundColor Yellow
+        Write-Host "    - Issuer: $issuer2" -ForegroundColor White
+        Write-Host "    - Subject: $subject2" -ForegroundColor White
+
+        $newCred2 | ConvertTo-Json | Out-File "$credName2.json" -Encoding UTF8
+        az ad app federated-credential create --id $AppId --parameters "$credName2.json" | Out-Null
+        Remove-Item "$credName2.json" -Force -ErrorAction SilentlyContinue
+        Write-Host "  + SUCCESS: Created $credName2." -ForegroundColor Green
     }
 }
 
