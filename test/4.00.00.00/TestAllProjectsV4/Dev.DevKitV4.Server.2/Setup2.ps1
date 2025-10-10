@@ -1,3 +1,10 @@
+function Convert-GuidToBase64Url {
+    param([string]$guid)
+    $guidObj = [System.Guid]::Parse($guid)
+    $bytes = $guidObj.ToByteArray()
+    $base64 = [System.Convert]::ToBase64String($bytes)
+    return $base64.Replace('+', '-').Replace('/', '_').TrimEnd('=')
+}
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $ConfigPath = Join-Path $ScriptDir "config2.json"
 
@@ -262,7 +269,7 @@ for ($i = 0; $i -lt $config.ManagedIdentities.Count; $i++) {
     # ========================================
     # Step 2: Create self-signed certificate
     # ========================================
-    Write-Host "  + CREATING SELF-SIGNED CODE SIGNING CERTIFICATE" -ForegroundColor DarkBlue
+    Write-Host "  + CREATING SELF-SIGNED CODE SIGNING CERTIFICATE" -ForegroundColor DarkCyan
     try {
         $cert = New-SelfSignedCertificate `
             -Subject $certificateSubject `
@@ -288,7 +295,7 @@ for ($i = 0; $i -lt $config.ManagedIdentities.Count; $i++) {
     # ========================================
     # Step 3: Export private key (.pfx)
     # ========================================
-    Write-Host "  + EXPORTING PRIVATE KEY (.pfx)" -ForegroundColor DarkYellow
+    Write-Host "  + EXPORTING PRIVATE KEY (.pfx)" -ForegroundColor DarkCyan
     try {
         $securePwd = ConvertTo-SecureString -String $certificatePassword -Force -AsPlainText
         Export-PfxCertificate `
@@ -308,7 +315,7 @@ for ($i = 0; $i -lt $config.ManagedIdentities.Count; $i++) {
     # ========================================
     # Step 4: Export public key (.cer)
     # ========================================
-    Write-Host "  + EXPORTING PUBLIC KEY (.cer)" -ForegroundColor Yellow
+    Write-Host "  + EXPORTING PUBLIC KEY (.cer)" -ForegroundColor DarkCyan
     try {
         Export-Certificate `
             -Cert $cert `
@@ -326,7 +333,7 @@ for ($i = 0; $i -lt $config.ManagedIdentities.Count; $i++) {
     # ========================================
     # Step 5: Verify certificate
     # ========================================
-    Write-Host "  + VERIFYING CERTIFICATE" -ForegroundColor Yellow
+    Write-Host "  + VERIFYING CERTIFICATE" -ForegroundColor DarkCyan
     try {
         $pfxPath = Join-Path -Path $PSScriptRoot -ChildPath "$certificateFileName.pfx"
         $pfxCert = New-Object System.Security.Cryptography.X509Certificates.X509Certificate2($pfxPath, $certificatePassword)
@@ -350,7 +357,7 @@ for ($i = 0; $i -lt $config.ManagedIdentities.Count; $i++) {
     # ========================================
     # Step 6: Clean up from certificate store (automatically)
     # ========================================
-    Write-Host "  + REMOVING CERTIFICATE FROM WINDOWS CERTIFICATE STORE" -ForegroundColor Yellow
+    Write-Host "  + REMOVING CERTIFICATE FROM WINDOWS CERTIFICATE STORE" -ForegroundColor DarkCyan
     try {
         Remove-Item "Cert:\CurrentUser\My\$($cert.Thumbprint)" -Force
         Write-Host "  @ Found certificate to remove." -ForegroundColor Yellow
@@ -366,6 +373,67 @@ for ($i = 0; $i -lt $config.ManagedIdentities.Count; $i++) {
     $sha256 = [System.Security.Cryptography.SHA256]::Create().ComputeHash($certBytes)
     $sha256Hash = [System.Convert]::ToBase64String($sha256).Replace('+', '-').Replace('/', '_').TrimEnd('=')
     $mi.CertificateSHA256Hash = $sha256Hash
+}
+
+$TenantId = (az account show --output json | ConvertFrom-Json).tenantId
+
+Write-Host "`n[5] POWER PLATFORM FEDERATED CREDENTIALS CONFIGURATION" -ForegroundColor Blue
+for ($i = 0; $i -lt $config.ManagedIdentities.Count; $i++) {
+    $mi = $config.ManagedIdentities[$i]
+    $AppName = $mi.AppName
+    Write-Host "Processing AppName $AppName" -ForegroundColor Red
+
+    $AppId = $mi.AppId
+    $CertificatePath = $mi.CertificatePath
+    $CertificatePassword = $mi.CertificatePassword
+    $EnvironmentId = $mi.EnvironmentId
+    $OrganizationId = $mi.OrganizationId
+
+    $secPwd = ConvertTo-SecureString -String $CertificatePassword -AsPlainText -Force
+    $cert = New-Object System.Security.Cryptography.X509Certificates.X509Certificate2($CertificatePath, $secPwd)
+    $certBytes = $cert.Export([System.Security.Cryptography.X509Certificates.X509ContentType]::Cert)
+    $sha256 = [System.Security.Cryptography.SHA256]::Create().ComputeHash($certBytes)
+    $sha256Hash = [System.Convert]::ToBase64String($sha256).Replace('+', '-').Replace('/', '_').TrimEnd('=')
+    $encodedTenant = Convert-GuidToBase64Url -guid $TenantId
+    $encodedApp = Convert-GuidToBase64Url -guid $AppId
+
+    $orgIdNoHyphens = $OrganizationId.Replace("-", "")
+    $issuer1 = "https://login.microsoftonline.com/$TenantId/v2.0"
+    $subject1 = "/eid1/c/pub/t/$encodedTenant/a/$encodedApp/n/plugin/e/$orgIdNoHyphens/h/$sha256Hash"
+    $credName1 = "AzureAD-Issuer"
+    Write-Host "  @ Checking credential $credName1" -ForegroundColor Yellow
+    $existingCred = az ad app federated-credential list --id $AppId --query "[?name=='$credName1']" | ConvertFrom-Json
+    $newCred = @{
+        name = $credName1
+        issuer = $issuer1
+        subject = $subject1
+        description = "Azure AD Issuer - OIDC Validation for Org $OrganizationId"
+        audiences = @("api://AzureADTokenExchange")
+    }
+    if ($existingCred) {
+        if ($existingCred.issuer -eq $issuer1 -and $existingCred.subject -eq $subject1) {
+            Write-Host "  + SUCCESS: No updates needed for $credName1 (values match)" -ForegroundColor Green
+        } else {
+            Write-Host "  @ Updating $credName1 (values different)" -ForegroundColor Yellow
+            Write-Host "  - Old Issuer: $($existingCred.issuer)" -ForegroundColor DarkGray
+            Write-Host "  - New Issuer: $issuer1" -ForegroundColor White
+            Write-Host "  - Old Subject: $($existingCred.subject)" -ForegroundColor DarkGray
+            Write-Host "  - New Subject: $subject1" -ForegroundColor White
+            az ad app federated-credential delete --id $AppId --federated-credential-id $existingCred.id
+            $newCred | ConvertTo-Json | Out-File "$credName1.json" -Encoding UTF8
+            az ad app federated-credential create --id $AppId --parameters "$credName1.json" | Out-Null
+            Remove-Item "$credName1.json" -Force -ErrorAction SilentlyContinue
+            Write-Host "  + SUCCESS: Updated $credName1." -ForegroundColor Green
+        }
+    } else {
+        Write-Host "  @ Creating new credential $credName1" -ForegroundColor Yellow
+        Write-Host "  - Issuer: $issuer1" -ForegroundColor White
+        Write-Host "  - Subject: $subject1" -ForegroundColor White
+        $newCred | ConvertTo-Json | Out-File "$credName1.json" -Encoding UTF8
+        az ad app federated-credential create --id $AppId --parameters "$credName1.json" | Out-Null
+        Remove-Item "$credName1.json" -Force -ErrorAction SilentlyContinue
+        Write-Host "  + SUCCESS: Created $credName1." -ForegroundColor Green
+    }
 }
 
 
@@ -392,12 +460,8 @@ for ($i = 0; $i -lt $config.ManagedIdentities.Count; $i++) {
 
 
 
-
-
-
-
-Write-Host "[1/3] Saving final configuration" -ForegroundColor Yellow
-$config.TenantId = (az account show --output json | ConvertFrom-Json).tenantId
+Write-Host "`n[5] SAVING DATA" -ForegroundColor Blue
+$config.TenantId = $TenantId
 $config.KeyVaultURL = $kv.properties.vaultUri
 try {
     # Save config.json with all values from all phases
