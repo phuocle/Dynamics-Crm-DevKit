@@ -8,6 +8,7 @@ function Convert-GuidToBase64Url {
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $ConfigPath = Join-Path $ScriptDir "config2.json"
 
+
 if (-not (Test-Path $ConfigPath)) {
     Write-Host "========================================================================================================" -ForegroundColor Red
     Write-Host "[X] config2.json not found" -ForegroundColor Red
@@ -65,7 +66,8 @@ Write-Host "`n==================================================================
 Write-Host "                          DATAVERSE MANAGED IDENTITY SETUP" -ForegroundColor Green
 Write-Host "========================================================================================================" -ForegroundColor Cyan
 
-# Load values from config
+
+$TenantId = (az account show --output json | ConvertFrom-Json).tenantId
 $resourceGroup = $config.ResourceGroup
 $location = $config.Location
 $keyVaultName = $config.KeyVaultName
@@ -239,36 +241,15 @@ for ($i = 0; $i -lt $config.ManagedIdentities.Count; $i++) {
     $certificateFileName = $mi.CertificateFileName
     $validityYears = $mi.ValidityYears
     $appName = $mi.AppName
-
     Write-Host "Processing AppName $appName" -ForegroundColor Red
-    # ========================================
-    # Step 1: Check for existing certificate and remove if exists
-    # ========================================
-    Write-Host "  + CHECKING SELF-SIGNED EXIST" -ForegroundColor DarkCyan
-    if (Test-Path "$certificateFileName.pfx") {
-        try {
-        Write-Host "  @ Certificate already exists." -ForegroundColor Yellow
-        Write-Host "  + SUCCESS: Existing certificate files removed." -ForegroundColor Green
+    if ((Test-Path "$certificateFileName.pfx") -and (Test-Path "$certificateFileName.cer")) {
+        Write-Host "  @ Found existing .pfx and .cer files, re-using them." -ForegroundColor Yellow
         Write-Host "    - Private Key File: " -NoNewline -ForegroundColor White
         Write-Host "$certificateFileName.pfx" -ForegroundColor Cyan
         Write-Host "    - Public Key File: " -NoNewline -ForegroundColor White
         Write-Host "$certificateFileName.cer" -ForegroundColor Cyan
-        Remove-Item "$certificateFileName.pfx" -Force
-        Remove-Item "$certificateFileName.cer" -Force -ErrorAction SilentlyContinue
-        }
-        catch {
-            Write-Host "  x ERROR: Could not remove existing certificate files." -ForegroundColor Red
-            exit 1
-        }
+        continue
     }
-    else
-    {
-        Write-Host "  @ No existing certificate files found." -ForegroundColor Yellow
-        Write-Host "  + SUCCESS: Ready to create new certificate." -ForegroundColor Green
-    }
-    # ========================================
-    # Step 2: Create self-signed certificate
-    # ========================================
     Write-Host "  + CREATING SELF-SIGNED CODE SIGNING CERTIFICATE" -ForegroundColor DarkCyan
     try {
         $cert = New-SelfSignedCertificate `
@@ -292,9 +273,6 @@ for ($i = 0; $i -lt $config.ManagedIdentities.Count; $i++) {
         Write-Host "  x ERROR: Failed to create self-signed certificate: $($_.Exception.Message)" -ForegroundColor Red
         exit 1
     }
-    # ========================================
-    # Step 3: Export private key (.pfx)
-    # ========================================
     Write-Host "  + EXPORTING PRIVATE KEY (.pfx)" -ForegroundColor DarkCyan
     try {
         $securePwd = ConvertTo-SecureString -String $certificatePassword -Force -AsPlainText
@@ -312,9 +290,6 @@ for ($i = 0; $i -lt $config.ManagedIdentities.Count; $i++) {
         Write-Host "  x ERROR: Failed to create pfx: $($_.Exception.Message)" -ForegroundColor Red
         exit 1
     }
-    # ========================================
-    # Step 4: Export public key (.cer)
-    # ========================================
     Write-Host "  + EXPORTING PUBLIC KEY (.cer)" -ForegroundColor DarkCyan
     try {
         Export-Certificate `
@@ -330,9 +305,6 @@ for ($i = 0; $i -lt $config.ManagedIdentities.Count; $i++) {
         Write-Host "  x ERROR: Failed to create cer: $($_.Exception.Message)" -ForegroundColor Red
         exit 1
     }
-    # ========================================
-    # Step 5: Verify certificate
-    # ========================================
     Write-Host "  + VERIFYING CERTIFICATE" -ForegroundColor DarkCyan
     try {
         $pfxPath = Join-Path -Path $PSScriptRoot -ChildPath "$certificateFileName.pfx"
@@ -354,9 +326,6 @@ for ($i = 0; $i -lt $config.ManagedIdentities.Count; $i++) {
         Write-Host " x ERROR: Failed to verify certificate: $($_.Exception.Message)" -ForegroundColor Red
         exit 1
     }
-    # ========================================
-    # Step 6: Clean up from certificate store (automatically)
-    # ========================================
     Write-Host "  + REMOVING CERTIFICATE FROM WINDOWS CERTIFICATE STORE" -ForegroundColor DarkCyan
     try {
         Remove-Item "Cert:\CurrentUser\My\$($cert.Thumbprint)" -Force
@@ -366,16 +335,12 @@ for ($i = 0; $i -lt $config.ManagedIdentities.Count; $i++) {
     catch {
         Write-Host "  x ERROR: Could not remove certificate from store" -ForegroundColor Yellow
     }
-    # Update config.json with certificate output values (in memory only)
     $mi.CertificateThumbprint = $pfxCert.Thumbprint
-    # Calculate SHA-256 hash for federated credentials
     $certBytes = $pfxCert.Export([System.Security.Cryptography.X509Certificates.X509ContentType]::Cert)
     $sha256 = [System.Security.Cryptography.SHA256]::Create().ComputeHash($certBytes)
     $sha256Hash = [System.Convert]::ToBase64String($sha256).Replace('+', '-').Replace('/', '_').TrimEnd('=')
     $mi.CertificateSHA256Hash = $sha256Hash
 }
-
-$TenantId = (az account show --output json | ConvertFrom-Json).tenantId
 
 Write-Host "`n[5] POWER PLATFORM FEDERATED CREDENTIALS CONFIGURATION" -ForegroundColor Blue
 for ($i = 0; $i -lt $config.ManagedIdentities.Count; $i++) {
