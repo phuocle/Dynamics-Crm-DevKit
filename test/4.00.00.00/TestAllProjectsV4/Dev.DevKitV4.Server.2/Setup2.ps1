@@ -99,7 +99,7 @@ if ($existingRg) {
 # ========================================
 # Step 2
 # ========================================
-Write-Host "`n[2] CHECKING AZURE KEY VAULT" -ForegroundColor Blue
+Write-Host "`n[2] CHECKING KEY VAULT" -ForegroundColor Blue
 $existingKv = az keyvault show --name $keyVaultName --resource-group $resourceGroup --output json 2>$null | ConvertFrom-Json
 if ($existingKv) {
     Write-Host "  @ Key Vault already exists." -ForegroundColor Yellow
@@ -156,21 +156,15 @@ if ($existingKv) {
         }
     }
 }
-# ========================================
-# Step 3
-# ========================================
-Write-Host "`n[3] ADDING/UPDATING TEST SECRET IN KEY VAULT" -ForegroundColor Blue
-$existingSecret = az keyvault secret show --vault-name $keyVaultName --name $secretName --output json 2>$null | ConvertFrom-Json
-if ($existingSecret) {
-    Write-Host "  @ Secret already exists." -ForegroundColor Yellow
-}
+Write-Host "  @ Adding/Updating secret value." -ForegroundColor Yellow
+$null = az keyvault secret show --vault-name $keyVaultName --name $secretName --output json 2>$null | ConvertFrom-Json
 $secret = az keyvault secret set `
     --vault-name $keyVaultName `
     --name $secretName `
     --value $secretValue `
     --output json | ConvertFrom-Json
 if ($secret) {
-    Write-Host "  + SUCCESS: found secret configured." -ForegroundColor Green
+    Write-Host "  + SUCCESS: updated secret value." -ForegroundColor Green
     Write-Host "    - Name: " -NoNewline -ForegroundColor White
     Write-Host "$($secret.name)" -ForegroundColor Cyan
     Write-Host "    - Value: " -NoNewline -ForegroundColor White
@@ -180,9 +174,9 @@ if ($secret) {
     exit 1
 }
 # ========================================
-# Step 4
+# Step 3
 # ========================================
-Write-Host "`n[4] CHECKING AZURE AD APP REGISTRATION" -ForegroundColor Blue
+Write-Host "`n[3] CHECKING AZURE AD APP REGISTRATION" -ForegroundColor Blue
 for ($i = 0; $i -lt $config.ManagedIdentities.Count; $i++) {
     $mi = $config.ManagedIdentities[$i]
     $appName = $mi.AppName
@@ -228,9 +222,9 @@ for ($i = 0; $i -lt $config.ManagedIdentities.Count; $i++) {
     Write-Host "Get, List (Secrets)" -ForegroundColor Cyan
 }
 # ========================================
-# Step 5
+# Step 4
 # ========================================
-Write-Host "`n[5] SIGNING CERTIFICATE GENERATION" -ForegroundColor Blue
+Write-Host "`n[4] SIGNING CERTIFICATE GENERATION" -ForegroundColor Blue
 for ($i = 0; $i -lt $config.ManagedIdentities.Count; $i++) {
     $mi = $config.ManagedIdentities[$i]
     $certificatePassword = $mi.CertificatePassword
@@ -239,18 +233,18 @@ for ($i = 0; $i -lt $config.ManagedIdentities.Count; $i++) {
     $validityYears = $mi.ValidityYears
     $appName = $mi.AppName
 
-    Write-Host "Processing AppName $appName" -ForegroundColor Gray
+    Write-Host "Processing AppName $appName" -ForegroundColor Red
     # ========================================
     # Step 1: Check for existing certificate and remove if exists
     # ========================================
-    Write-Host "  + CHECKING SELF-SIGNED EXIST" -ForegroundColor Yellow
+    Write-Host "  + CHECKING SELF-SIGNED EXIST" -ForegroundColor DarkCyan
     if (Test-Path "$certificateFileName.pfx") {
         try {
         Write-Host "  @ Certificate already exists." -ForegroundColor Yellow
         Write-Host "  + SUCCESS: Existing certificate files removed." -ForegroundColor Green
-        Write-Host "  - Private Key File: " -NoNewline -ForegroundColor White
+        Write-Host "    - Private Key File: " -NoNewline -ForegroundColor White
         Write-Host "$certificateFileName.pfx" -ForegroundColor Cyan
-        Write-Host "  - Public Key File: " -NoNewline -ForegroundColor White
+        Write-Host "    - Public Key File: " -NoNewline -ForegroundColor White
         Write-Host "$certificateFileName.cer" -ForegroundColor Cyan
         Remove-Item "$certificateFileName.pfx" -Force
         Remove-Item "$certificateFileName.cer" -Force -ErrorAction SilentlyContinue
@@ -268,7 +262,7 @@ for ($i = 0; $i -lt $config.ManagedIdentities.Count; $i++) {
     # ========================================
     # Step 2: Create self-signed certificate
     # ========================================
-    Write-Host "  + CREATING SELF-SIGNED CODE SIGNING CERTIFICATE" -ForegroundColor Yellow
+    Write-Host "  + CREATING SELF-SIGNED CODE SIGNING CERTIFICATE" -ForegroundColor DarkBlue
     try {
         $cert = New-SelfSignedCertificate `
             -Subject $certificateSubject `
@@ -280,11 +274,11 @@ for ($i = 0; $i -lt $config.ManagedIdentities.Count; $i++) {
             -HashAlgorithm SHA256
         Write-Host "  @ Creating new self-signed certificate." -ForegroundColor Yellow
         Write-Host "  + SUCCESS: self-signed certificate created in certificate store." -ForegroundColor Green
-        Write-Host "  - Subject: " -NoNewline -ForegroundColor White
+        Write-Host "    - Subject: " -NoNewline -ForegroundColor White
         Write-Host "$($cert.Subject)" -ForegroundColor Cyan
-        Write-Host "  - Thumbprint: " -NoNewline -ForegroundColor White
+        Write-Host "    - Thumbprint: " -NoNewline -ForegroundColor White
         Write-Host "$($cert.Thumbprint)" -ForegroundColor Cyan
-        Write-Host "  - Valid Until: " -NoNewline -ForegroundColor White
+        Write-Host "    - Valid Until: " -NoNewline -ForegroundColor White
         Write-Host "$($cert.NotAfter.ToString('yyyy-MM-dd'))" -ForegroundColor Cyan
     }
     catch {
@@ -294,7 +288,7 @@ for ($i = 0; $i -lt $config.ManagedIdentities.Count; $i++) {
     # ========================================
     # Step 3: Export private key (.pfx)
     # ========================================
-    Write-Host "  + EXPORTING PRIVATE KEY (.pfx)" -ForegroundColor Yellow
+    Write-Host "  + EXPORTING PRIVATE KEY (.pfx)" -ForegroundColor DarkYellow
     try {
         $securePwd = ConvertTo-SecureString -String $certificatePassword -Force -AsPlainText
         Export-PfxCertificate `
@@ -304,7 +298,7 @@ for ($i = 0; $i -lt $config.ManagedIdentities.Count; $i++) {
             -Force | Out-Null
         Write-Host "  @ Exporting new private key file." -ForegroundColor Yellow
         Write-Host "  + SUCCESS: exported new private key file." -ForegroundColor Green
-        Write-Host "  - Private Key File: " -NoNewline -ForegroundColor White
+        Write-Host "    - Private Key File: " -NoNewline -ForegroundColor White
         Write-Host "$certificateFileName.pfx" -ForegroundColor Cyan
     }
     catch {
@@ -322,7 +316,7 @@ for ($i = 0; $i -lt $config.ManagedIdentities.Count; $i++) {
             -Force | Out-Null
         Write-Host "  @ Exporting new public key file." -ForegroundColor Yellow
         Write-Host "  + SUCCESS: exported new public key file." -ForegroundColor Green
-        Write-Host "  - Public Key File: " -NoNewline -ForegroundColor White
+        Write-Host "    - Public Key File: " -NoNewline -ForegroundColor White
         Write-Host "$certificateFileName.cer" -ForegroundColor Cyan
     }
     catch {
@@ -339,9 +333,9 @@ for ($i = 0; $i -lt $config.ManagedIdentities.Count; $i++) {
         if ($pfxCert) {
             Write-Host "  @ Found certificate to verify." -ForegroundColor Yellow
             Write-Host "  + SUCCESS: certificate verified successfully." -ForegroundColor Green
-            Write-Host "  - Thumbprint: " -NoNewline -ForegroundColor White
+            Write-Host "    - Thumbprint: " -NoNewline -ForegroundColor White
             Write-Host "$($pfxCert.Thumbprint)" -ForegroundColor Cyan
-            Write-Host "  - Has Private Key: " -NoNewline -ForegroundColor White
+            Write-Host "    - Has Private Key: " -NoNewline -ForegroundColor White
             Write-Host "$($pfxCert.HasPrivateKey)" -ForegroundColor Cyan
         }
         else {
