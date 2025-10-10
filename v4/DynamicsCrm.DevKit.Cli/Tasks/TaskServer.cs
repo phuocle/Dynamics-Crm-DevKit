@@ -1528,7 +1528,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 ["credentialsource"] = new OptionSetValue((int)CredentialSource),
                 ["subjectscope"] = new OptionSetValue((int)SubjectScope),
                 ["managedidentityid"] = Guid.NewGuid(),
-                ["name"] = $"{assemblyName}"
+                ["name"] = $"{assemblyName}-{ApplicationId.ToString().ToUpper()}"
             };
             if (rows.Entities.Count == 0)
             {
