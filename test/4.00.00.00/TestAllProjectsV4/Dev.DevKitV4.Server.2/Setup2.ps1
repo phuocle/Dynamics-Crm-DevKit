@@ -379,6 +379,9 @@ $TenantId = (az account show --output json | ConvertFrom-Json).tenantId
 
 Write-Host "`n[5] POWER PLATFORM FEDERATED CREDENTIALS CONFIGURATION" -ForegroundColor Blue
 for ($i = 0; $i -lt $config.ManagedIdentities.Count; $i++) {
+
+    $CertificateThumbprint =  $config.ManagedIdentities[0].CertificateThumbprint
+
     $mi = $config.ManagedIdentities[$i]
     $AppName = $mi.AppName
     Write-Host "Processing AppName $AppName" -ForegroundColor Red
@@ -442,7 +445,8 @@ for ($i = 0; $i -lt $config.ManagedIdentities.Count; $i++) {
     $envIdSuffix = $envIdNoHyphens.Substring($envIdNoHyphens.Length - 2)
 
     $issuer2 = "https://$envIdPrefix.$envIdSuffix.environment.api.powerplatform.com/sts"
-    $subject2 = "component:pluginassembly,thumbprint:$($cert.Thumbprint),environment:$currentEnvId"
+    #$subject2 = "component:pluginassembly,thumbprint:$($cert.Thumbprint),environment:$EnvironmentId"
+    $subject2 = "component:pluginassembly,thumbprint:$($CertificateThumbprint),environment:$EnvironmentId"
     $credName2 = "PowerPlatform-Issuer"
 
     Write-Host "  @ Checking credential $credName2" -ForegroundColor Yellow

@@ -17,8 +17,8 @@
                                   "CertificateSubject":  "CN=DEV-ManagedIdentityName",
                                   "CertificateFileName":  "DEV-ManagedIdentity",
                                   "ValidityYears":  20,
-                                  "CertificateThumbprint":  "71C4F9E30B6695FAD6B52BD7276793E15A41BC7A",
-                                  "CertificateSHA256Hash":  "wuao4zLiyUVnoznw75JPvPbFVvWJsVvpAb3fQrDBeLI"
+                                  "CertificateThumbprint":  "F5BFC7A6D5CDC382CA4522B3F7A6EC372C02E42F",
+                                  "CertificateSHA256Hash":  "Bl2RhwjaA3JEG_sjVpMJTefdeSTTfuk0wgNMaFBvAS4"
                               },
                               {
                                   "EnvironmentId":  "0a8c04bd-a997-e7ed-992a-be5315366493",
@@ -30,8 +30,8 @@
                                   "CertificateSubject":  "CN=TEST-ManagedIdentityName",
                                   "CertificateFileName":  "TEST-ManagedIdentity",
                                   "ValidityYears":  20,
-                                  "CertificateThumbprint":  "1D7B094C80811106B3B2503FD097C1C7C77F5D83",
-                                  "CertificateSHA256Hash":  "6gifNmnXllBrYA3kiIaLOLRSuaygr3lxsCJ71syJDtE"
+                                  "CertificateThumbprint":  "6AC7A6B625DA72FC89EB2D18E85B49D3493E66BA",
+                                  "CertificateSHA256Hash":  "b4eynTXlBzp1ZBJEiKHHq8Bv5DQ8gb7tZtbTw9QNXoM"
                               }
                           ]
 }
