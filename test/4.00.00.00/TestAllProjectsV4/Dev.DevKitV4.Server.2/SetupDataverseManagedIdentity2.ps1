@@ -156,6 +156,7 @@ if ($existingKv) {
         }
     }
 }
+
 # ========================================
 # Step 3: Add/Update Secret in Key Vault
 # ========================================
@@ -182,4 +183,51 @@ if ($secret) {
 } else {
     Write-Host "  x ERROR: Failed to configure secret" -ForegroundColor Red
     exit 1
+}
+
+# ========================================
+# Step 4, 5, 6: Loop through ManagedIdentities for App Registration, Service Principal, Key Vault Policy
+# ========================================
+for ($i = 0; $i -lt $config.ManagedIdentities.Count; $i++) {
+    $mi = $config.ManagedIdentities[$i]
+    $appName = $mi.AppName
+    Write-Host "`n[4/6] CHECKING AZURE AD APP REGISTRATION for ManagedIdentity[$i]: $appName" -ForegroundColor Yellow
+    $existingApp = az ad app list --display-name $appName --output json | ConvertFrom-Json
+    if ($null -ne $existingApp -and $existingApp.Count -gt 0) {
+        $appId = $existingApp[0].appId
+        Write-Host "  - App Registration exists: $appName ($appId)" -ForegroundColor Green
+    } else {
+        $createdApp = az ad app create --display-name $appName --output json | ConvertFrom-Json
+        $appId = $createdApp.appId
+        Write-Host "  - App Registration created: $appName ($appId)" -ForegroundColor Green
+    }
+    $config.ManagedIdentities[$i].AppId = $appId
+
+    Write-Host "[5/6] CHECKING SERVICE PRINCIPAL FOR THE APP for ManagedIdentity[$i]: $appName" -ForegroundColor Yellow
+    $existingSp = az ad sp show --id $appId --output json 2>$null | ConvertFrom-Json
+    if ($existingSp) {
+        Write-Host "  - Service Principal exists: $($existingSp.id)" -ForegroundColor Green
+        $spId = $existingSp.id
+    } else {
+        $createdSp = az ad sp create --id $appId --output json | ConvertFrom-Json
+        $spId = $createdSp.id
+        Write-Host "  - Service Principal created: $spId" -ForegroundColor Green
+    }
+
+    Write-Host "[6/6] CONFIGURING APP ACCESS TO KEY VAULT for ManagedIdentity[$i]: $appName" -ForegroundColor Yellow
+    $existingPolicy = az keyvault show --name $keyVaultName --resource-group $resourceGroup --query "properties.accessPolicies[?objectId=='$spId']" --output json 2>$null | ConvertFrom-Json
+    if ($null -ne $existingPolicy -and $existingPolicy.Count -gt 0) {
+        Write-Host "  - Access policy already exists for SP: $spId" -ForegroundColor Green
+    } else {
+        az keyvault set-policy --name $keyVaultName --resource-group $resourceGroup --object-id $spId --secret-permissions get list set --certificate-permissions get list --output none
+        Write-Host "  - Access policy set for SP: $spId" -ForegroundColor Green
+    }
+}
+
+# Save updated config with new AppIds
+try {
+    $config | ConvertTo-Json -Depth 10 | Out-File -FilePath $ConfigPath -Encoding UTF8
+    Write-Host "\n[+] Updated config2.json with new AppIds." -ForegroundColor Green
+} catch {
+    Write-Host "[X] Failed to save updated config2.json" -ForegroundColor Red
 }
