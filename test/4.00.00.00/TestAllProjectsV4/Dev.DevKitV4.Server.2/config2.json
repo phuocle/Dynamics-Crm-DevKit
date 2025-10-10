@@ -1,37 +1,37 @@
 ﻿{
-  "ResourceGroup": "DevKit",
-  "Location": "southeastasia",
-  "KeyVaultName": "kv-dataverse-secrets",
-  "SecretName": "MySecret",
-  "SecretValue": "!MySecretValue123!",
-  "ManagedIdentities": [
-    {
-      "AppName": "DEV-ManagedIdentity",
-      "AppId": "",
-      "EnvironmentId": "2f985c04-9487-e70c-aa57-dcd6d08f0886",
-      "OrganizationId": "29c6e552-e16f-ef11-a66b-6045bd1e7d8b",
-      "ManagedIdentityName": "DEV-ManagedIdentityName",
-      "CertificatePassword": "DEV-!CertificatePassword123!",
-      "CertificateSubject": "CN=DEV-ManagedIdentityName",
-      "CertificateFileName": "DEV-ManagedIdentity",
-      "ValidityYears": 20,
-      "CertificateThumbprint": "",
-      "CertificateSHA256Hash": ""
-    },
-    {
-      "EnvironmentId": "0a8c04bd-a997-e7ed-992a-be5315366493",
-      "OrganizationId": "dde66cdf-7e63-f011-8ee6-000d3ac78989",
-      "AppName": "TEST-ManagedIdentity",
-      "AppId": "",
-      "ManagedIdentityName": "TEST-ManagedIdentityName",
-      "CertificatePassword": "TEST-!CertificatePassword123!",
-      "CertificateSubject": "CN=TEST-ManagedIdentityName",
-      "CertificateFileName": "TEST-ManagedIdentity",
-      "ValidityYears": 20,
-      "CertificateThumbprint": "",
-      "CertificateSHA256Hash": ""
-    }
-  ],
-  "TenantId": "",
-  "KeyVaultURL": ""
+    "ResourceGroup":  "DevKit",
+    "Location":  "southeastasia",
+    "KeyVaultName":  "kv-dataverse-secrets",
+    "SecretName":  "MySecret",
+    "SecretValue":  "!MySecretValue123!",
+    "TenantId":  "49528483-b79b-4b88-b86e-7d882ba68911",
+    "KeyVaultURL":  "https://kv-dataverse-secrets.vault.azure.net/",
+    "ManagedIdentities":  [
+                              {
+                                  "AppName":  "DEV-ManagedIdentity",
+                                  "AppId":  "8636168f-feff-4051-9e7a-ee95ef8ebeaf",
+                                  "EnvironmentId":  "2f985c04-9487-e70c-aa57-dcd6d08f0886",
+                                  "OrganizationId":  "29c6e552-e16f-ef11-a66b-6045bd1e7d8b",
+                                  "ManagedIdentityName":  "DEV-ManagedIdentityName",
+                                  "CertificatePassword":  "DEV-!CertificatePassword123!",
+                                  "CertificateSubject":  "CN=DEV-ManagedIdentityName",
+                                  "CertificateFileName":  "DEV-ManagedIdentity",
+                                  "ValidityYears":  20,
+                                  "CertificateThumbprint":  "",
+                                  "CertificateSHA256Hash":  ""
+                              },
+                              {
+                                  "EnvironmentId":  "0a8c04bd-a997-e7ed-992a-be5315366493",
+                                  "OrganizationId":  "dde66cdf-7e63-f011-8ee6-000d3ac78989",
+                                  "AppName":  "TEST-ManagedIdentity",
+                                  "AppId":  "b4f9ba9f-fefd-4d5c-9f2f-701a22a1ff45",
+                                  "ManagedIdentityName":  "TEST-ManagedIdentityName",
+                                  "CertificatePassword":  "TEST-!CertificatePassword123!",
+                                  "CertificateSubject":  "CN=TEST-ManagedIdentityName",
+                                  "CertificateFileName":  "TEST-ManagedIdentity",
+                                  "ValidityYears":  20,
+                                  "CertificateThumbprint":  "",
+                                  "CertificateSHA256Hash":  ""
+                              }
+                          ]
 }

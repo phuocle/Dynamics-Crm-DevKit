@@ -71,7 +71,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <None Include="01.Setup-Azure.ps1" />
     <None Include="02.Setup-Certificate.ps1" />
-    <None Include="SetupDataverseManagedIdentity2.ps1" />
+    <None Include="Setup2.ps1" />
     <None Include="SetupDataverseManagedIdentity.ps1" />
     <None Include="SETUP-GUIDE.md" />
   </ItemGroup>

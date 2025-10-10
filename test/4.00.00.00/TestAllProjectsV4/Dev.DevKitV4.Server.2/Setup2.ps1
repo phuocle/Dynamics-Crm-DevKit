@@ -149,7 +149,7 @@ if ($existingKv) {
             Write-Host "  - Vault Name: " -NoNewline -ForegroundColor White
             Write-Host "$($kv.name)" -ForegroundColor Cyan
             Write-Host "  - Vault URL: " -NoNewline -ForegroundColor White
-            Write-Host "$($kv.vaultUri)" -ForegroundColor Cyan
+            Write-Host "$($kv.properties.vaultUri)" -ForegroundColor Cyan
         } else {
             Write-Host "  x ERROR: Failed to create Key Vault (name may not be globally unique)" -ForegroundColor Red
             exit 1
@@ -186,7 +186,7 @@ if ($secret) {
 }
 
 $config.TenantId = (az account show --output json | ConvertFrom-Json).tenantId
-$config.KeyVaultURL = $kv.vaultUri
+$config.KeyVaultURL = $kv.properties.vaultUri
 
 # ========================================
 # Step 4, 5, 6: Loop through ManagedIdentities for App Registration, Service Principal, Key Vault Policy
