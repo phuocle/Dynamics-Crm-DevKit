@@ -24,14 +24,14 @@
                                   "EnvironmentId":  "0a8c04bd-a997-e7ed-992a-be5315366493",
                                   "OrganizationId":  "dde66cdf-7e63-f011-8ee6-000d3ac78989",
                                   "AppName":  "TEST-ManagedIdentity",
-                                  "AppId":  "d6a0ae97-b25f-4595-bcc2-000e0c10bb32",
+                                  "AppId":  "cfce5d56-8d28-4c66-86ec-4acb98607cfa",
                                   "ManagedIdentityName":  "TEST-ManagedIdentityName",
                                   "CertificatePassword":  "TEST-!CertificatePassword123!",
                                   "CertificateSubject":  "CN=TEST-ManagedIdentityName",
                                   "CertificateFileName":  "TEST-ManagedIdentity",
                                   "ValidityYears":  20,
-                                  "CertificateThumbprint":  "0390EB6C330B5E594A241529943AADEA6CB7BCB1",
-                                  "CertificateSHA256Hash":  "ZOalPJTs9pLY1uyGY8eUkHx4NjtGCUXPwCwnYUdSNXM"
+                                  "CertificateThumbprint":  "BAFEC76D58894ED6F22470184B5C74A95084D8F4",
+                                  "CertificateSHA256Hash":  "kK0cXqMNgRmOF2GnYCPh42tcg63AKl3pzKol09YrLO0"
                               }
                           ]
 }
