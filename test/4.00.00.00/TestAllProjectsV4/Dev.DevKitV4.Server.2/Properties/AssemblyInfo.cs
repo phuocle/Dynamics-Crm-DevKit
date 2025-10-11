@@ -1,4 +1,5 @@
 ﻿using Dev.DevKitV4.Shared;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security;
@@ -22,5 +23,9 @@ using System.Security;
 
 [assembly: DynamcisCrmDevkitAssembly(
     IsolationMode = IsolationModeEnum.Sandbox,
-    SourceType = SourceTypeEnum.Database
+    SourceType = SourceTypeEnum.Database,
+    TenantId = "49528483-b79b-4b88-b86e-7d882ba68911",
+    ApplicationIds = "ff16b40c-f623-44fa-a11c-1e446a6b9bc8;d6a0ae97-b25f-4595-bcc2-000e0c10bb32",
+    CertificatePath = "DEV-ManagedIdentity.pfx",
+    CertificatePassword = "DEV-!CertificatePassword123!"
 )]

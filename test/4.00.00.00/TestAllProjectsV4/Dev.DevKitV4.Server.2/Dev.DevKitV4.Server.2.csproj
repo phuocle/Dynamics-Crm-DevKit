@@ -62,8 +62,6 @@
     <Compile Include="PostContactDeleteAsynchronous.cs" />
     <Compile Include="PostContactUpdateAsynchronous.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <None Include="Setup2.ps1" />
-    <None Include="SETUP-GUIDE.md" />
   </ItemGroup>
   <Import Project="..\Dev.DevKitV4.Shared\Dev.DevKitV4.Shared.projitems" Label="Shared" Condition="Exists('..\Dev.DevKitV4.Shared\Dev.DevKitV4.Shared.projitems')" />
   <PropertyGroup>

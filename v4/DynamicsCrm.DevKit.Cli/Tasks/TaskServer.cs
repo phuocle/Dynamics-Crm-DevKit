@@ -148,6 +148,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         {
             var assembly = LoadAssemblyIntoCache(file);
             var assemblyAttribute = GetDynamcisCrmDevkitAssemblyAttribute(assembly);
+
+
+
             return (assemblyAttribute.CertificatePath != string.Empty, assemblyAttribute);
         }
 
@@ -1460,14 +1463,14 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var (ok, attribute) = IsNeedSignAssembly(file);
             if (ok)
             {
-                if (string.IsNullOrEmpty(attribute.TenantId) || string.IsNullOrEmpty(attribute.ApplicationId))
+                if (string.IsNullOrEmpty(attribute.TenantId) || string.IsNullOrEmpty(attribute.ApplicationIds))
                 {
                     if (string.IsNullOrEmpty(attribute.TenantId)) CliLog.WriteLineError(ConsoleColor.Yellow, "Not found TenantId from DynamcisCrmDevkitAssemblyAttribute");
-                    if (string.IsNullOrEmpty(attribute.ApplicationId)) CliLog.WriteLineError(ConsoleColor.Yellow, "Not found ApplicationId from DynamcisCrmDevkitAssemblyAttribute");
+                    if (string.IsNullOrEmpty(attribute.ApplicationIds)) CliLog.WriteLineError(ConsoleColor.Yellow, "Not found ApplicationId from DynamcisCrmDevkitAssemblyAttribute");
                 }
                 else
                 {
-                    var managedIdentityId = await DeployManagedIdentityAsync(assemblyName, Guid.Parse(attribute.TenantId), Guid.Parse(attribute.ApplicationId), attribute.CredentialSource, attribute.SubjectScope);
+                    var managedIdentityId = await DeployManagedIdentityAsync(assemblyName, Guid.Parse(attribute.TenantId), attribute.ApplicationIds);
                     if (rows.Entities.Count == 0)
                     {
                         var pluginAssembly = new Entity("pluginassembly")
@@ -1507,9 +1510,13 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             return pluginAssemblyId;
         }
 
-        private async Task<Guid> DeployManagedIdentityAsync(string assemblyName, Guid TenantId, Guid ApplicationId, CredentialSource CredentialSource, SubjectScope SubjectScope)
+        private async Task<Guid> DeployManagedIdentityAsync(string assemblyName, Guid TenantId, string ApplicationIds)
         {
-            var fetchXml = $@"
+            var AppIds = ApplicationIds.Split(";".ToCharArray());
+            Guid? value = null;
+            foreach (var ApplicationId in AppIds)
+            {
+                var fetchXml = $@"
 <fetch>
   <entity name='managedidentity'>
     <all-attributes />
@@ -1520,51 +1527,32 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
   </entity>
 </fetch>";
 
-            var rows = await ServiceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
-            var managedIdentity = new Entity("managedidentity")
-            {
-                ["tenantid"] = TenantId,
-                ["applicationid"] = ApplicationId,
-                ["credentialsource"] = new OptionSetValue((int)CredentialSource),
-                ["subjectscope"] = new OptionSetValue((int)SubjectScope),
-                ["managedidentityid"] = Guid.NewGuid(),
-                ["name"] = $"{assemblyName}-{ApplicationId.ToString().ToUpper()}"
-            };
-            if (rows.Entities.Count == 0)
-            {
-                var request = new CreateRequest { Target = managedIdentity };
-                request.Parameters.Add("SolutionUniqueName", Json.solution);
-                CliLog.Write(ConsoleColor.White, "|", SPACE);
-                CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTER.Trim());
-                CliLog.WriteLine(ConsoleColor.Blue, " Managed Identity ", ConsoleColor.Cyan, $"App: {ApplicationId}");
-                var response = (CreateResponse)await ServiceClient.ExecuteAsync(request);
-                return response.id;
-            }
-            else
-            {
-                var existingId = rows.Entities[0].Id;
-                managedIdentity["managedidentityid"] = existingId;
-                var existing = rows.Entities[0];
-                bool needsUpdate = false;
-                if (existing.GetAttributeValue<Guid>("tenantid") != TenantId) needsUpdate = true;
-                if (existing.GetAttributeValue<Guid>("applicationid") != ApplicationId) needsUpdate = true;
-                if (existing.GetAttributeValue<OptionSetValue>("credentialsource")?.Value != (int)CredentialSource) needsUpdate = true;
-                if (existing.GetAttributeValue<OptionSetValue>("subjectscope")?.Value != (int)SubjectScope) needsUpdate = true;
-                if (needsUpdate)
+                var rows = await ServiceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
+                var managedIdentity = new Entity("managedidentity")
                 {
-                    var request = new UpdateRequest { Target = managedIdentity };
+                    ["tenantid"] = TenantId,
+                    ["applicationid"] = ApplicationId,
+                    ["credentialsource"] = new OptionSetValue(2),
+                    ["subjectscope"] = new OptionSetValue(1),
+                    ["managedidentityid"] = Guid.NewGuid(),
+                    ["name"] = $"{assemblyName}-{ApplicationId.ToString().ToUpper()}"
+                };
+                if (rows.Entities.Count == 0)
+                {
+                    var request = new CreateRequest { Target = managedIdentity };
                     request.Parameters.Add("SolutionUniqueName", Json.solution);
                     CliLog.Write(ConsoleColor.White, "|", SPACE);
-                    CliLog.WriteSuccess(ConsoleColor.White, CliAction.UPDATED.Trim());
+                    CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTER.Trim());
                     CliLog.WriteLine(ConsoleColor.Blue, " Managed Identity ", ConsoleColor.Cyan, $"App: {ApplicationId}");
-                    await ServiceClient.ExecuteAsync(request);
+                    var response = (CreateResponse)await ServiceClient.ExecuteAsync(request);
+                    if (value == null) value = response.id;
                 }
                 else
                 {
                     CliLog.WriteLine(ConsoleColor.White, "|", SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.Blue, "Managed Identity ", ConsoleColor.Cyan, $"App: {ApplicationId}");
                 }
-                return existingId;
             }
+            return value.Value;
         }
 
         private DynamcisCrmDevkitAssemblyAttribute GetDynamcisCrmDevkitAssemblyAttribute(Assembly assembly)

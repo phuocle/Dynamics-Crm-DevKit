@@ -1,0 +1,20 @@
+===
+HOWTO DEBUG DynamicsCrm.DevKit
+1. Open Visual Studio Developer Command
+2. sn –d VS_KEY_500FCB5490AB840C
+3. sn -i DynamicsCrm.DevKit.pfx VS_KEY_500FCB5490AB840C
+4. Pass !Zz3^2
+
+===
+HOWTO DEBUG DynamicsCrm.DevKit.Analyzers
+
+1. Open solution DynamicsCrm.DevKit.Analyzers.sln in VS instance
+2. Open solution DynamicsCrm.DevKit.sln in another VS instance
+3. Uncomment the code, attach to debugger in (1)
+4. Run debug in (1), and ask instance debug => then select instance (2)
+5. Now you can debug :)
+
+=== 
+HOWTO Release DynamicsCrm.DevKit
++ FINAL release: run release-version-date.bat
++ TEST release: run release-version-date-current-date.bat

@@ -137,16 +137,10 @@ namespace Dev.DevKitV4.Shared
     public class DynamcisCrmDevkitAssemblyAttribute : Attribute
     {        
         public string TenantId { get; set; }
-        public List<PluginManagedIdentity> PluginManagedIdentities { get; set; }
         public IsolationModeEnum IsolationMode { get; set; } = IsolationModeEnum.Sandbox;
         public SourceTypeEnum SourceType { get; set; } = SourceTypeEnum.Database;
-    }
-
-    public class PluginManagedIdentity
-    {
-        public string ManagedIdentityName { get; set; }
-        public string ApplicationId { get; set; }
         public string CertificatePath { get; set; }
         public string CertificatePassword { get; set; }
+        public string ApplicationIds { get; set; } = string.Empty;
     }
 }
