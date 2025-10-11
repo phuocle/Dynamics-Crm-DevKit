@@ -1531,7 +1531,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 var managedIdentity = new Entity("managedidentity")
                 {
                     ["tenantid"] = TenantId,
-                    ["applicationid"] = ApplicationId,
+                    ["applicationid"] = Guid.Parse(ApplicationId),
                     ["credentialsource"] = new OptionSetValue(2),
                     ["subjectscope"] = new OptionSetValue(1),
                     ["managedidentityid"] = Guid.NewGuid(),
