@@ -59,7 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="icon.png" />
-    <None Include="notes.md" />
+    <None Include="ReadMe.md" />
     <Content Include="ProjectTemplate.csproj" />
   </ItemGroup>
   <ItemGroup>
