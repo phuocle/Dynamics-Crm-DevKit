@@ -24,7 +24,7 @@
                                   "EnvironmentId":  "0a8c04bd-a997-e7ed-992a-be5315366493",
                                   "OrganizationId":  "dde66cdf-7e63-f011-8ee6-000d3ac78989",
                                   "AppName":  "TEST-ManagedIdentity",
-                                  "AppId":  "cfce5d56-8d28-4c66-86ec-4acb98607cfa",
+                                  "AppId":  "bc677584-dc14-4226-8fa6-e7a573754695",
                                   "ManagedIdentityName":  "TEST-ManagedIdentityName",
                                   "CertificatePassword":  "TEST-!CertificatePassword123!",
                                   "CertificateSubject":  "CN=TEST-ManagedIdentityName",
