@@ -119,45 +119,4 @@ namespace Dev.DevKitV4.Server._2
             return json.Substring(startIndex, endIndex - startIndex);
         }
     }
-
-    // ========================================
-    // USAGE EXAMPLE IN YOUR PLUGIN
-    // ========================================
-    public class ExamplePluginWithKeyVault : IPlugin
-    {
-        public void Execute(IServiceProvider serviceProvider)
-        {
-            var context = (IPluginExecutionContext)serviceProvider.GetService(typeof(IPluginExecutionContext));
-            var tracing = (ITracingService)serviceProvider.GetService(typeof(ITracingService));
-
-            try
-            {
-                // 1. Get Managed Identity Token
-                var identityService = (IManagedIdentityService)serviceProvider.GetService(typeof(IManagedIdentityService));
-                var scopes = new System.Collections.Generic.List<string> { "https://vault.azure.net/.default" };
-                var token = identityService.AcquireToken(scopes);
-
-                tracing.DebugMessage("✅ Managed Identity token acquired");
-
-                // 2. Get Secret from Key Vault
-                var keyVaultUrl = "https://dataverse-plugin-kv.vault.azure.net/";
-                var secretName = "ApiEndPoint";
-
-                var secretValue = KeyVaultHelper.GetSecret(token, keyVaultUrl, secretName, tracing);
-
-                tracing.DebugMessage($"✅ Secret '{secretName}' retrieved successfully!");
-                tracing.DebugMessage($"Secret value: {secretValue}");
-
-                // 3. Use the secret value in your plugin logic
-                // Example: Call external API using the endpoint from Key Vault
-                // var apiResponse = CallExternalApi(secretValue);
-
-            }
-            catch (Exception ex)
-            {
-                tracing.DebugMessage($"❌ ERROR: {ex.Message}");
-                throw;
-            }
-        }
-    }
 }
