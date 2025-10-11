@@ -1550,6 +1550,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 else
                 {
                     CliLog.WriteLine(ConsoleColor.White, "|", SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.Blue, "Managed Identity ", ConsoleColor.Cyan, $"App: {ApplicationId}");
+                    value = rows.Entities[0].Id;
                 }
             }
             return value.Value;
