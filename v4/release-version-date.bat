@@ -104,7 +104,7 @@ set "VERSION_FILES=DynamicsCrm.DevKit.Shared\Const.cs"
 set "VERSION_FILES=!VERSION_FILES! DynamicsCrm.DevKit.Cli\docs\README.md"
 set "VERSION_FILES=!VERSION_FILES! DynamicsCrm.DevKit\source.extension.cs"
 set "VERSION_FILES=!VERSION_FILES! ProjectTemplates\CSharp\05.PackageProjectTemplate\ReadMe.md"
-set "VERSION_FILES=!VERSION_FILES! ProjectTemplates\CSharp\12.ReportProjectTemplate\notes.md"
+set "VERSION_FILES=!VERSION_FILES! ProjectTemplates\CSharp\12.ReportProjectTemplate\ReadMe.md"
 
 set "DATE_FILES=DynamicsCrm.DevKit.Cli\docs\README.md"
 set "DATE_FILES=!DATE_FILES! DynamicsCrm.DevKit.Shared\Const.cs"
@@ -112,7 +112,7 @@ set "DATE_FILES=!DATE_FILES! DynamicsCrm.DevKit\source.extension.vsixmanifest"
 set "DATE_FILES=!DATE_FILES! DynamicsCrm.DevKit\VSPackage.resx"
 set "DATE_FILES=!DATE_FILES! DynamicsCrm.DevKit\source.extension.cs"
 set "DATE_FILES=!DATE_FILES! ProjectTemplates\CSharp\05.PackageProjectTemplate\ReadMe.md"
-set "DATE_FILES=!DATE_FILES! ProjectTemplates\CSharp\12.ReportProjectTemplate\notes.md"
+set "DATE_FILES=!DATE_FILES! ProjectTemplates\CSharp\12.ReportProjectTemplate\ReadMe.md"
 
 exit /b 0
 
