@@ -1,8 +1,8 @@
 ﻿{
-  "ResourceGroup": "DevKit",
+  "ResourceGroup": "DEVKITV4",
   "Location": "southeastasia",
-  "KeyVaultName": "kv-dataverse-secrets",
-  "SecretName": "MySecret",
+  "KeyVaultName": "kv-dataverse-devkitv4",
+  "SecretName": "DEVKITV4",
   "SecretValue": "DEVKITV4-ManagedIdentity",
   "TenantId": "",
   "KeyVaultURL": "",
