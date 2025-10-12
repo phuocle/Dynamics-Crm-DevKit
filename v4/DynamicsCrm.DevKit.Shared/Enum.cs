@@ -93,4 +93,10 @@
         DownloadReports,
         BatFile
     }
+
+    public enum DeployFileType
+    {
+        Dll,
+        Nuget
+    }
 }

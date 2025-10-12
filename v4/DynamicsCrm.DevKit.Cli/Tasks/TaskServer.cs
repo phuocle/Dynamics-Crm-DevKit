@@ -21,20 +21,16 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 {
     public class TaskServer : ITask
     {
-        private class DataProviderEvent
-        {
-            public Guid PluginTypeId { get; set; }
-
-            public string Message { get; set; }
-
-            public string DataSource { get; set; }
-        }
-
         private const string SPACE = "  ";
+
         private readonly Dictionary<string, Assembly> _assemblyCache = new Dictionary<string, Assembly>(StringComparer.OrdinalIgnoreCase);
+
         public bool IsOk { get; set; }
+
         public Guid SolutionId { get; set; }
+
         public string SolutionPrefix { get; set; }
+
         public TaskServer(CommandLineArgs arg, Json json)
         {
             this.Arg = arg;
@@ -59,12 +55,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     TaskType = $"[{nameof(CliType.dataproviders).ToUpper()}]";
                     break;
             }
-        }
-
-        private enum DeployFileType
-        {
-            Dll,
-            Nuget
         }
 
         public string CurrentDirectory { get; set; }
