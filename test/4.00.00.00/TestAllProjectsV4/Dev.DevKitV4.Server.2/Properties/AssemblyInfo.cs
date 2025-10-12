@@ -25,7 +25,7 @@ using System.Security;
     IsolationMode = IsolationModeEnum.Sandbox,
     SourceType = SourceTypeEnum.Database,
     TenantId = "49528483-b79b-4b88-b86e-7d882ba68911",
-    ApplicationIds = "ff16b40c-f623-44fa-a11c-1e446a6b9bc8",
+    ApplicationIds = "a3bf6969-126f-4caa-a54c-03f2b8bab6a3",
     CertificatePath = "DEV-ManagedIdentity.pfx",
     CertificatePassword = "DEV-!CertificatePassword123!"
 )]
