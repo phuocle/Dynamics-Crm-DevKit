@@ -469,7 +469,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         private async Task<bool> IsValidDataProviderAsync(List<DataProviderEvent> dataProviderEvents, string dataSource)
         {
             var checkDataSource = dataSource.ToLower().StartsWith(SolutionPrefix.ToLower()) ? dataSource : $"{SolutionPrefix?.ToLower()}{dataSource}";
-            if (!await IsExistDataSourceAsync($"{checkDataSource}"))
+            if (!await XrmHelper.IsExistDataSourceAsync(ServiceClient, $"{checkDataSource}"))
             {
                 CliLog.WriteLineError(ConsoleColor.Yellow, $"DataSource {dataSource} with prefix {SolutionPrefix.ToLower()} not exist ({checkDataSource}). Assemply deployed, but the deployment of this assembly stopped.");
                 return false;
@@ -606,37 +606,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, "Type ", ConsoleColor.Blue, $"{PluginType.DataSource} ", ConsoleColor.Cyan, $"{logicalNameDataSource}", ConsoleColor.White, " linked with events ", ConsoleColor.Cyan, events);
                 }
             }
-        }
-        private async Task<bool> IsExistDataSourceAsync(string logicalname)
-        {
-            var filterExpression = new MetadataFilterExpression();
-            logicalname = logicalname.ToLower();
-            filterExpression.Conditions.Add(new MetadataConditionExpression("DataProviderId", MetadataConditionOperator.Equals, Guid.Parse("B2112A7E-B26C-42F7-9B63-9A809A9D716F")));
-            var propertiesExpression = new MetadataPropertiesExpression(
-            [
-                "DataProviderId",
-                "LogicalName",
-                "SchemaName",
-                "MetadataId",
-                "DisplayName",
-                "ExternalName",
-                "DisplayCollectionName"
-            ]);
-            var entityQueryExpression = new EntityQueryExpression
-            {
-                Criteria = new MetadataFilterExpression()
-            };
-            entityQueryExpression.Criteria = filterExpression;
-            entityQueryExpression.Properties = propertiesExpression;
-            var request = new RetrieveMetadataChangesRequest
-            {
-                Query = entityQueryExpression
-            };
-            var response = (RetrieveMetadataChangesResponse)await ServiceClient.ExecuteAsync(request);
-            foreach (EntityMetadata entityMetadata in response.EntityMetadata)
-                if (entityMetadata.LogicalName == logicalname)
-                    return true;
-            return false;
         }
         private async Task DeployCustomApiStepAsync(Guid pluginTypeId, string pluginTypeName, CrmPluginRegistrationAttribute attribute)
         {
@@ -1744,16 +1713,13 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         private List<TypeInfo> GetTypes(string file)
         {
             var assembly = LoadAssemblyIntoCache(file);
-
             if (assembly == null) return new List<TypeInfo>();
-
             var types = new List<TypeInfo>();
             try
             {
                 AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve += CurrentDomain_ReflectionOnlyAssemblyResolve;
                 var allTypes = assembly.DefinedTypes;
                 AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve -= CurrentDomain_ReflectionOnlyAssemblyResolve;
-
                 foreach (var type in allTypes)
                 {
                     try
@@ -1769,7 +1735,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 CliLog.WriteLineError(ConsoleColor.Red, $"Failed to read types from assembly {file}: {ex.Message}");
             }
-
             types = [.. types.OrderBy(x => x.FullName)];
             return types;
         }
