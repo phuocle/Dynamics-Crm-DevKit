@@ -42,10 +42,17 @@ namespace Dev.DevKitV4.Server._2
             var service = serviceFactory.CreateOrganizationService(context.UserId);
 
             // 1. Get Managed Identity Token
+            tracing.DebugMessage("1");
             var identityService = (IManagedIdentityService)serviceProvider.GetService(typeof(IManagedIdentityService));
+            tracing.DebugMessage("2");
             var scopes = new List<string> { "https://vault.azure.net/.default" };
+            tracing.DebugMessage("3");
+
+
             var token = identityService.AcquireToken(scopes);
 
+
+            tracing.DebugMessage("4");
             // 2. Get Secret from Key Vault
             var secretValue = KeyVaultHelper.GetSecret(
                 token,
@@ -53,9 +60,10 @@ namespace Dev.DevKitV4.Server._2
                 "MySecret",
                 tracing
             );
-
+            tracing.DebugMessage("5");
             // 3. Use the secret!
-            tracing.DebugMessage($"AAAAAAAAAAA API Endpoint: {secretValue}");
+            tracing.DebugMessage($"123 API Endpoint: {secretValue}");
+            tracing.DebugMessage("6");
             ExecutePlugin(context, serviceFactory, serviceAdmin, service, tracing);
         }
 
