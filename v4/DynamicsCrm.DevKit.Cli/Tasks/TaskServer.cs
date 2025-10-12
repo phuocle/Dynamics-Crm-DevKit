@@ -26,111 +26,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 {
     public class TaskServer : ITask
     {
-        private const string SPACE = "  ";
-
-        private readonly Dictionary<string, Assembly> _assemblyCache = new Dictionary<string, Assembly>(StringComparer.OrdinalIgnoreCase);
-
-        public bool IsOk { get; set; }
-
-        public Guid SolutionId { get; set; }
-
-        public string SolutionPrefix { get; set; }
-
-        public TaskServer(CommandLineArgs arg, Json json)
-        {
-            this.Arg = arg;
-            ServiceClient = arg.ServiceClient;
-            CurrentDirectory = arg.CurrentDirectory;
-            switch (arg.Type)
-            {
-                case nameof(CliType.servers):
-                    Json = json.servers.FirstOrDefault(x => x.profile == arg.Profile);
-                    TaskType = $"[{nameof(CliType.servers).ToUpper()}]";
-                    break;
-                case nameof(CliType.workflows):
-                    Json = json.workflows.FirstOrDefault(x => x.profile == arg.Profile);
-                    TaskType = $"[{nameof(CliType.workflows).ToUpper()}]";
-                    break;
-                case nameof(CliType.plugins):
-                    Json = json.plugins.FirstOrDefault(x => x.profile == arg.Profile);
-                    TaskType = $"[{nameof(CliType.plugins).ToUpper()}]";
-                    break;
-                case nameof(CliType.dataproviders):
-                    Json = json.dataproviders.FirstOrDefault(x => x.profile == arg.Profile);
-                    TaskType = $"[{nameof(CliType.dataproviders).ToUpper()}]";
-                    break;
-            }
-        }
-
-        public string CurrentDirectory { get; set; }
-
-        public string TaskType { get; set; }
-
-        public ServiceClient ServiceClient { get; set; }
-
-        public CommandLineArgs Arg { get; set; }
-
-        private JsonServer Json { get; }
-
-        private string CurrentFolder => $"{CurrentDirectory}\\{Json.folder}";
-
-        public async Task<bool> IsValidAsync()
-        {
-            if (Json == null)
-            {
-                CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'profile' not found: '{Arg.Profile}'. Please check DynamicsCrm.DevKit.Cli.json file.");
-                return false;
-            }
-            if (Json.folder == "???" || (Json.folder != null && Json?.folder?.Trim().Length == 0))
-            {
-                CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'folder' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
-                return false;
-            }
-            if (Json.solution == "???" || (Json.solution != null && Json?.solution?.Trim().Length == 0))
-            {
-                CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'solution' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
-                return false;
-            }
-            (IsOk, SolutionId, SolutionPrefix) = await XrmHelper.IsExistSolutionAsync(ServiceClient, Json.solution);
-            if (!IsOk)
-            {
-                CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} solution '{Json.solution}' not exist");
-                return false;
-            }
-            return true;
-        }
-
-        private async Task DeployFilesAsync(List<string> files)
-        {
-            foreach (var file in files)
-            {
-                if (file.EndsWith(".dll"))
-                    await DeployDllAsync(file);
-                else if (file.EndsWith(".nupkg"))
-                    await DeployPackageAsync(file);
-                else
-                    CliLog.WriteLineError(ConsoleColor.Yellow, $"Not support file extension: {new FileInfo(file).Extension}");
-            }
-        }
-
-        private async Task DeployDllAsync(string file, DeployFileType deployFileType = DeployFileType.Dll)
-        {
-            if (deployFileType == DeployFileType.Dll)
-            {
-                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, $"{Path.GetFileName(file)}");
-#if IS_SUPPORT_MANAGED_IDENTITY
-                var ok = await SignDllIfNeedAsync(file);
-                if (!ok)
-                {
-
-                }
-#endif
-            }
-            var types = GetTypes(file);
-            if (!await IsValidTypesAsync(file, types)) return;
-            await DeployFileAsync(file, types, deployFileType);
-        }
-
 #if IS_SUPPORT_MANAGED_IDENTITY
         private async Task<bool> SignDllIfNeedAsync(string file)
         {
@@ -387,6 +282,96 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             return attribute;
         }
 #endif
+        private const string SPACE = "  ";
+        private readonly Dictionary<string, Assembly> _assemblyCache = new Dictionary<string, Assembly>(StringComparer.OrdinalIgnoreCase);
+        public bool IsOk { get; set; }
+        public Guid SolutionId { get; set; }
+        public string SolutionPrefix { get; set; }
+        public TaskServer(CommandLineArgs arg, Json json)
+        {
+            this.Arg = arg;
+            ServiceClient = arg.ServiceClient;
+            CurrentDirectory = arg.CurrentDirectory;
+            switch (arg.Type)
+            {
+                case nameof(CliType.servers):
+                    Json = json.servers.FirstOrDefault(x => x.profile == arg.Profile);
+                    TaskType = $"[{nameof(CliType.servers).ToUpper()}]";
+                    break;
+                case nameof(CliType.workflows):
+                    Json = json.workflows.FirstOrDefault(x => x.profile == arg.Profile);
+                    TaskType = $"[{nameof(CliType.workflows).ToUpper()}]";
+                    break;
+                case nameof(CliType.plugins):
+                    Json = json.plugins.FirstOrDefault(x => x.profile == arg.Profile);
+                    TaskType = $"[{nameof(CliType.plugins).ToUpper()}]";
+                    break;
+                case nameof(CliType.dataproviders):
+                    Json = json.dataproviders.FirstOrDefault(x => x.profile == arg.Profile);
+                    TaskType = $"[{nameof(CliType.dataproviders).ToUpper()}]";
+                    break;
+            }
+        }
+        public string CurrentDirectory { get; set; }
+        public string TaskType { get; set; }
+        public ServiceClient ServiceClient { get; set; }
+        public CommandLineArgs Arg { get; set; }
+        private JsonServer Json { get; }
+        private string CurrentFolder => $"{CurrentDirectory}\\{Json.folder}";
+        public async Task<bool> IsValidAsync()
+        {
+            if (Json == null)
+            {
+                CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'profile' not found: '{Arg.Profile}'. Please check DynamicsCrm.DevKit.Cli.json file.");
+                return false;
+            }
+            if (Json.folder == "???" || (Json.folder != null && Json?.folder?.Trim().Length == 0))
+            {
+                CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'folder' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
+                return false;
+            }
+            if (Json.solution == "???" || (Json.solution != null && Json?.solution?.Trim().Length == 0))
+            {
+                CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'solution' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
+                return false;
+            }
+            (IsOk, SolutionId, SolutionPrefix) = await XrmHelper.IsExistSolutionAsync(ServiceClient, Json.solution);
+            if (!IsOk)
+            {
+                CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} solution '{Json.solution}' not exist");
+                return false;
+            }
+            return true;
+        }
+        private async Task DeployFilesAsync(List<string> files)
+        {
+            foreach (var file in files)
+            {
+                if (file.EndsWith(".dll"))
+                    await DeployDllAsync(file);
+                else if (file.EndsWith(".nupkg"))
+                    await DeployPackageAsync(file);
+                else
+                    CliLog.WriteLineError(ConsoleColor.Yellow, $"Not support file extension: {new FileInfo(file).Extension}");
+            }
+        }
+        private async Task DeployDllAsync(string file, DeployFileType deployFileType = DeployFileType.Dll)
+        {
+            if (deployFileType == DeployFileType.Dll)
+            {
+                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, $"{Path.GetFileName(file)}");
+#if IS_SUPPORT_MANAGED_IDENTITY
+                var ok = await SignDllIfNeedAsync(file);
+                if (!ok)
+                {
+
+                }
+#endif
+            }
+            var types = GetTypes(file);
+            if (!await IsValidTypesAsync(file, types)) return;
+            await DeployFileAsync(file, types, deployFileType);
+        }
         private async Task DeployFileAsync(string file, List<TypeInfo> types, DeployFileType deployFileType)
         {
             var dataProviderEvents = new List<DataProviderEvent>();
@@ -1598,12 +1583,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 #endif
             return pluginAssemblyId;
         }
-
         private bool IsEqualsContent(string oldContent, string newContent)
         {
             return oldContent == newContent;
         }
-
         private async Task<bool> IsValidTypesAsync(string file, List<TypeInfo> types)
         {
             if (types.Count == 0)
@@ -1621,7 +1604,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             return true;
         }
-
         private async Task<bool> IsValidTypesWithCDSAsync(List<TypeInfo> types, string fileNameWithoutExtension)
         {
             var fetchData = new
@@ -1656,7 +1638,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             return true;
         }
-
         private bool IsValidTypes(List<TypeInfo> types)
         {
             foreach (var type in types)
@@ -1681,7 +1662,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             return true;
         }
-
         private List<CrmPluginRegistrationAttribute> GetCrmPluginRegistrationAttributes(TypeInfo type)
         {
             var list = new List<CrmPluginRegistrationAttribute>();
@@ -1690,7 +1670,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 list.Add(Helper.ConvertAttributeToCrmPluginRegistration(attribute));
             return list;
         }
-
         private List<string> GetFiles(string folder, List<string> includePatternFiles, List<string> excludePatternFiles)
         {
             var includefiles = new List<string>();
@@ -1729,7 +1708,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             files.Sort();
             return files;
         }
-
         private Assembly LoadAssemblyIntoCache(string file)
         {
             // Normalize path for cache lookup
@@ -1763,7 +1741,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
             return assembly;
         }
-
         private List<TypeInfo> GetTypes(string file)
         {
             var assembly = LoadAssemblyIntoCache(file);
@@ -1796,7 +1773,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             types = [.. types.OrderBy(x => x.FullName)];
             return types;
         }
-
         private Assembly CurrentDomain_ReflectionOnlyAssemblyResolve(object sender, ResolveEventArgs args)
         {
             try
@@ -1813,14 +1789,12 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 return null;
             }
         }
-
         private bool IsWorkflowType(Type type)
         {
             if (type?.FullName == "System.Activities.CodeActivity") return true;
             if (type?.BaseType != null) return IsWorkflowType(type?.BaseType);
             return false;
         }
-
         private async Task DeployPackageAsync(string file)
         {
             using PackageArchiveReader packageArchiveReader = new(file);
@@ -1834,7 +1808,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 await DeployPackageFilesAsync(files);
             }
         }
-
         private async Task DeployPackageFilesAsync(List<string> files)
         {
             foreach (var f in files)
@@ -1850,7 +1823,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
             }
         }
-
         private async Task<bool> DeployNewOrUpdatePackageAsync(PackageArchiveReader packageArchiveReader, string file)
         {
             byte[] inArray = File.ReadAllBytes(file);
@@ -1920,7 +1892,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             return true;
         }
-
         private void ExtractZip(PackageArchiveReader packageArchiveReader, string folder)
         {
             var libFiles = packageArchiveReader.GetFiles("lib");
@@ -1939,7 +1910,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 zip.ExtractToFile($"{folder}\\{zip.Name}", true);
             }
         }
-
         public async Task RunAsync()
         {
             CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "START ");
