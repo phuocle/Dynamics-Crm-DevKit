@@ -1,24 +1,24 @@
 ﻿{
-    "ResourceGroup":  "DevKit",
-    "Location":  "southeastasia",
-    "KeyVaultName":  "kv-dataverse-secrets",
-    "SecretName":  "MySecret",
-    "SecretValue":  "!MySecretValue123!",
-    "TenantId":  "49528483-b79b-4b88-b86e-7d882ba68911",
-    "KeyVaultURL":  "https://kv-dataverse-secrets.vault.azure.net/",
-    "ManagedIdentities":  [
-                              {
-                                  "AppName":  "DEV-ManagedIdentity",
-                                  "AppId":  "a3bf6969-126f-4caa-a54c-03f2b8bab6a3",
-                                  "EnvironmentId":  "2f985c04-9487-e70c-aa57-dcd6d08f0886",
-                                  "OrganizationId":  "29c6e552-e16f-ef11-a66b-6045bd1e7d8b",
-                                  "ManagedIdentityName":  "DEV-ManagedIdentityName",
-                                  "CertificatePassword":  "DEV-!CertificatePassword123!",
-                                  "CertificateSubject":  "CN=DEV-ManagedIdentityName",
-                                  "CertificateFileName":  "DEV-ManagedIdentity",
-                                  "ValidityYears":  20,
-                                  "CertificateThumbprint":  "495E4B31BA541E8E92D8BBE88812ED9743F561DC",
-                                  "CertificateSHA256Hash":  "vp6RWObsaLHXZStdbgMJTjT1R-XVuLPkU4YJuS75W6k"
-                              }
-                          ]
+  "ResourceGroup": "DevKit",
+  "Location": "southeastasia",
+  "KeyVaultName": "kv-dataverse-secrets",
+  "SecretName": "MySecret",
+  "SecretValue": "DEVKITV4-ManagedIdentity",
+  "TenantId": "",
+  "KeyVaultURL": "",
+  "ManagedIdentities": [
+    {
+      "AppName": "DEVKITV4-ManagedIdentity",
+      "AppId": "",
+      "EnvironmentId": "cbba8ce9-ea7c-e440-b083-0b9517496e17",
+      "OrganizationId": "82131d86-1aa7-f011-8706-00224806e819",
+      "ManagedIdentityName": "DEVKITV4-ManagedIdentity",
+      "CertificatePassword": "DEVKITV4-ManagedIdentity",
+      "CertificateSubject": "CN=DEVKITV4-ManagedIdentity",
+      "CertificateFileName": "DEVKITV4-ManagedIdentity",
+      "ValidityYears": 20,
+      "CertificateThumbprint": "",
+      "CertificateSHA256Hash": ""
+    }
+  ]
 }
