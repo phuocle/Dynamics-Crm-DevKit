@@ -22,10 +22,8 @@ using System.Security;
 [assembly: AssemblyFileVersion("1.0.0.0")]
 
 [assembly: DynamcisCrmDevkitAssembly(
-    IsolationMode = IsolationModeEnum.Sandbox,
-    SourceType = SourceTypeEnum.Database,
     TenantId = "49528483-b79b-4b88-b86e-7d882ba68911",
-    ApplicationIds = "a3bf6969-126f-4caa-a54c-03f2b8bab6a3",
-    CertificatePath = "DEV-ManagedIdentity.pfx",
-    CertificatePassword = "DEV-!CertificatePassword123!"
+    ApplicationIds = "2cb1f038-1adb-42bf-8e8d-6debe0073e1c",
+    CertificatePath = "DEVKITV4-ManagedIdentity.pfx",
+    CertificatePassword = "DEVKITV4-ManagedIdentity"
 )]
