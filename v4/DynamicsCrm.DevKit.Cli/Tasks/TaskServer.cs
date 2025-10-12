@@ -1,4 +1,9 @@
-﻿using DynamicsCrm.DevKit.Shared;
+﻿//#define IS_SUPPORT_MANAGED_IDENTITY // Uncomment to enable managed identity support
+//#if !IS_SUPPORT_MANAGED_IDENTITY
+//#undef IS_SUPPORT_MANAGED_IDENTITY
+//#endif
+
+using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk;
@@ -113,17 +118,20 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             if (deployFileType == DeployFileType.Dll)
             {
                 CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, $"{Path.GetFileName(file)}");
+#if IS_SUPPORT_MANAGED_IDENTITY
                 var ok = await SignDllIfNeedAsync(file);
                 if (!ok)
                 {
 
                 }
+#endif
             }
             var types = GetTypes(file);
             if (!await IsValidTypesAsync(file, types)) return;
             await DeployFileAsync(file, types, deployFileType);
         }
 
+#if IS_SUPPORT_MANAGED_IDENTITY
         private async Task<bool> SignDllIfNeedAsync(string file)
         {
             var (ok, attribute) = IsNeedSignAssembly(file);
@@ -133,7 +141,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             return true;
         }
-
         private (bool ok, DynamcisCrmDevkitAssemblyAttribute attribute) IsNeedSignAssembly(string file)
         {
             var assembly = LoadAssemblyIntoCache(file);
@@ -143,7 +150,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
             return (assemblyAttribute.CertificatePath != string.Empty, assemblyAttribute);
         }
-
         private async Task<bool> SignAssemblyAsync(string file, string certificatePath, string certificatePassword = null)
         {
             if (!File.Exists(certificatePath))
@@ -222,7 +228,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
             }
         }
-
         private string FindSignTool()
         {
             try
@@ -302,7 +307,86 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 return null;
             }
         }
+        private async Task<Guid> DeployManagedIdentityAsync(string assemblyName, Guid TenantId, string ApplicationIds)
+        {
+            var AppIds = ApplicationIds.Split(";".ToCharArray());
+            Guid? value = null;
+            foreach (var ApplicationId in AppIds)
+            {
+                var fetchXml = $@"
+<fetch>
+  <entity name='managedidentity'>
+    <all-attributes />
+    <filter type='and'>
+      <condition attribute='applicationid' operator='eq' value='{ApplicationId}'/>
+      <condition attribute='tenantid' operator='eq' value='{TenantId}'/>
+    </filter>
+  </entity>
+</fetch>";
 
+                var rows = await ServiceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
+                var managedIdentity = new Entity("managedidentity")
+                {
+                    ["tenantid"] = TenantId,
+                    ["applicationid"] = Guid.Parse(ApplicationId),
+                    ["credentialsource"] = new OptionSetValue(2),
+                    ["subjectscope"] = new OptionSetValue(1),
+                    ["managedidentityid"] = Guid.NewGuid(),
+                    ["name"] = $"{assemblyName}-{ApplicationId.ToString().ToUpper()}"
+                };
+                if (rows.Entities.Count == 0)
+                {
+                    var request = new CreateRequest { Target = managedIdentity };
+                    request.Parameters.Add("SolutionUniqueName", Json.solution);
+                    CliLog.Write(ConsoleColor.White, "|", SPACE);
+                    CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTER.Trim());
+                    CliLog.WriteLine(ConsoleColor.Blue, " Managed Identity ", ConsoleColor.Cyan, $"App: {ApplicationId}");
+                    var response = (CreateResponse)await ServiceClient.ExecuteAsync(request);
+                    if (value == null) value = response.id;
+                }
+                else
+                {
+                    CliLog.WriteLine(ConsoleColor.White, "|", SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.Blue, "Managed Identity ", ConsoleColor.Cyan, $"App: {ApplicationId}");
+                    value = rows.Entities[0].Id;
+                }
+            }
+            return value.Value;
+        }
+        private DynamcisCrmDevkitAssemblyAttribute GetDynamcisCrmDevkitAssemblyAttribute(Assembly assembly)
+        {
+            var attributeData = CustomAttributeData.GetCustomAttributes(assembly)
+                .Where(data => data.AttributeType.FullName.Contains("DynamcisCrmDevkitAssemblyAttribute"))
+                .FirstOrDefault();
+            if (attributeData == null) return null;
+            var attribute = new DynamcisCrmDevkitAssemblyAttribute();
+            var properties = typeof(DynamcisCrmDevkitAssemblyAttribute).GetProperties();
+            foreach (var namedArgument in attributeData.NamedArguments)
+            {
+                string propertyName = namedArgument.MemberName;
+                object rawValue = namedArgument.TypedValue.Value;
+                var targetProperty = properties.FirstOrDefault(p => p.Name == propertyName);
+
+                if (targetProperty != null)
+                {
+                    object finalValue = rawValue;
+                    if (targetProperty.PropertyType.IsGenericType && targetProperty.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>))
+                    {
+                        Type underlyingType = Nullable.GetUnderlyingType(targetProperty.PropertyType);
+                        if (underlyingType != null && underlyingType.IsEnum)
+                        {
+                            finalValue = Enum.ToObject(underlyingType, rawValue);
+                        }
+                    }
+                    else if (targetProperty.PropertyType.IsEnum)
+                    {
+                        finalValue = Enum.ToObject(targetProperty.PropertyType, rawValue);
+                    }
+                    targetProperty.SetValue(attribute, finalValue);
+                }
+            }
+            return attribute;
+        }
+#endif
         private async Task DeployFileAsync(string file, List<TypeInfo> types, DeployFileType deployFileType)
         {
             var dataProviderEvents = new List<DataProviderEvent>();
@@ -397,7 +481,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
             }
         }
-
         private async Task<bool> IsValidDataProviderAsync(List<DataProviderEvent> dataProviderEvents, string dataSource)
         {
             var checkDataSource = dataSource.ToLower().StartsWith(SolutionPrefix.ToLower()) ? dataSource : $"{SolutionPrefix?.ToLower()}{dataSource}";
@@ -441,7 +524,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             return true;
         }
-
         private async Task RegisterDataProviderAsync(List<DataProviderEvent> dataProviderEvents, string dataSource)
         {
             var events = string.Empty;
@@ -540,7 +622,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
             }
         }
-
         private async Task<bool> IsExistDataSourceAsync(string logicalname)
         {
             var filterExpression = new MetadataFilterExpression();
@@ -572,7 +653,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     return true;
             return false;
         }
-
         private async Task DeployCustomApiStepAsync(Guid pluginTypeId, string pluginTypeName, CrmPluginRegistrationAttribute attribute)
         {
             var fetchData = new
@@ -627,7 +707,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
             }
         }
-
         private async Task<Guid?> DeployPluginImageAsync(Guid pluginStepId, CrmPluginRegistrationAttribute attribute)
         {
             Guid? check = null;
@@ -641,7 +720,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             if (check == Guid.Empty) return null;
             return check;
         }
-
         private string GetMessagePropertyName(string message)
         {
             return message.ToLower() switch
@@ -657,7 +735,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 _ => "Target"
             };
         }
-
         private async Task<Guid> DeployPluginImageAsync(string message, string imageName, string imageAliasName, ImageTypeEnum imageType, string imageAttributes, Guid pluginStepId, string pluginStepName)
         {
             if (imageAliasName.Length == 0) imageAliasName = imageName;
@@ -805,7 +882,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 return rows.Entities[0].Id;
             }
         }
-
         private bool IsSupportPluginImage(CrmPluginRegistrationAttribute attribute)
         {
             return (attribute?.Message?.ToLower()) switch
@@ -827,7 +903,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 _ => false,
             };
         }
-
         private bool HasPluginImage(CrmPluginRegistrationAttribute attribute)
         {
             if (attribute?.Image1Name?.Length > 0)
@@ -840,7 +915,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 return true;
             return false;
         }
-
         private bool IsMessageUpdate(string message)
         {
             return message.ToLower() switch
@@ -851,7 +925,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 _ => false,
             };
         }
-
         private async Task<Guid?> DeployPluginStepAsync(Guid pluginTypeId, TypeInfo type, CrmPluginRegistrationAttribute attribute)
         {
             if (IsMessageUpdate(attribute?.Message))
@@ -1138,7 +1211,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             return pluginStepId;
         }
-
         private bool IsChangedPluginStep(bool alreadyChanged, Entity _old, Entity _new, CrmPluginRegistrationAttribute attribute)
         {
             if (alreadyChanged) return true;
@@ -1183,7 +1255,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 };
             }
         }
-
         private async Task<bool> UnregisterPluginTypeAsync(Guid pluginAssemblyId, TypeInfo type, CrmPluginRegistrationAttribute attribute, DeployFileType deployFileType)
         {
             var fetchData = new
@@ -1232,7 +1303,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
             }
         }
-
         private async Task<Guid?> DeployPluginTypeAsync(Guid pluginAssemblyId, TypeInfo type, CrmPluginRegistrationAttribute attribute, DeployFileType deployFileType)
         {
             var fetchData = new
@@ -1347,14 +1417,49 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             return rows.Entities[0].Id;
         }
-
         private bool IsEqualsWorkflowType(string old, string @new)
         {
             return old == @new;
         }
-
         private async Task<Guid?> DeployAssemblyAsync(string file)
         {
+            (string name, int value) GetIsolationMode(string file)
+            {
+                var types = GetTypes(file);
+                foreach (var type in types)
+                {
+                    if (IsWorkflowType(type)) continue;
+                    var attributes = GetCrmPluginRegistrationAttributes(type);
+                    foreach (var attribute in attributes)
+                    {
+                        if (attribute.IsolationMode == IsolationModeEnum.None) return ("None", 1);
+                        if (attribute.IsolationMode == IsolationModeEnum.Sandbox) return ("Sandbox", 2);
+                        if (attribute.IsolationMode == IsolationModeEnum.Sandbox) return ("Sandbox", 2);
+                    }
+                }
+                return ("Sandbox", 2);
+            }
+
+            (string name, int value) GetSourceType(string file)
+            {
+                var types = GetTypes(file);
+                foreach (var type in types)
+                {
+                    if (IsWorkflowType(type)) continue;
+                    var attributes = GetCrmPluginRegistrationAttributes(type);
+                    foreach (var attribute in attributes)
+                    {
+                        if (attribute.SourceType == SourceTypeEnum.Database) return ("Database", 0);
+                        if (attribute.SourceType == SourceTypeEnum.Disk) return ("Disk", 1);
+                        if (attribute.SourceType == SourceTypeEnum.Normal) return ("Normal", 2);
+                        if (attribute.SourceType == SourceTypeEnum.AzureWebApp) return ("AzureWebApp", 3);
+                        if (attribute.SourceType == SourceTypeEnum.FileStore) return ("FileStore", 4);
+                    }
+                }
+                return ("Database", 0);
+            }
+
+
             var assembly = LoadAssemblyIntoCache(file);
             var assemblyProperties = assembly.GetName().FullName.Split(",= ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
             var assemblyName = assemblyProperties[0];
@@ -1391,19 +1496,11 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 ["publickeytoken"] = assemblyProperties[6],
             };
             var text = string.Empty;
-            var assemblyAttribute = GetDynamcisCrmDevkitAssemblyAttribute(assembly);
-            if (assemblyAttribute != null)
-            {
-                plugin["sourcetype"] = new OptionSetValue((int)assemblyAttribute.SourceType);
-                plugin["isolationmode"] = new OptionSetValue((int)assemblyAttribute.IsolationMode);
-                text = $" [Isolation={assemblyAttribute.IsolationMode}], [Source={assemblyAttribute.SourceType}]";
-            }
-            else
-            {
-                plugin["sourcetype"] = new OptionSetValue(0);
-                plugin["isolationmode"] = new OptionSetValue(2);
-                text = $" [Isolation={IsolationModeEnum.Sandbox}], [Source={SourceTypeEnum.Database}]";
-            }
+            var (name_IsolationMode, value_IsolationMode) = GetIsolationMode(file);
+            var (name_SourceType, value_SourceType) = GetSourceType(file);
+            plugin["sourcetype"] = new OptionSetValue(value_SourceType);
+            plugin["isolationmode"] = new OptionSetValue(value_IsolationMode);
+            text = $" [Isolation={name_IsolationMode}], [Source={name_SourceType}]";
             if (rows.Entities.Count == 0)
             {
                 var request = new CreateRequest
@@ -1450,6 +1547,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     }
                 }
             }
+#if IS_SUPPORT_MANAGED_IDENTITY
             var (ok, attribute) = IsNeedSignAssembly(file);
             if (ok)
             {
@@ -1497,88 +1595,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     }
                 }
             }
+#endif
             return pluginAssemblyId;
-        }
-
-        private async Task<Guid> DeployManagedIdentityAsync(string assemblyName, Guid TenantId, string ApplicationIds)
-        {
-            var AppIds = ApplicationIds.Split(";".ToCharArray());
-            Guid? value = null;
-            foreach (var ApplicationId in AppIds)
-            {
-                var fetchXml = $@"
-<fetch>
-  <entity name='managedidentity'>
-    <all-attributes />
-    <filter type='and'>
-      <condition attribute='applicationid' operator='eq' value='{ApplicationId}'/>
-      <condition attribute='tenantid' operator='eq' value='{TenantId}'/>
-    </filter>
-  </entity>
-</fetch>";
-
-                var rows = await ServiceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
-                var managedIdentity = new Entity("managedidentity")
-                {
-                    ["tenantid"] = TenantId,
-                    ["applicationid"] = Guid.Parse(ApplicationId),
-                    ["credentialsource"] = new OptionSetValue(2),
-                    ["subjectscope"] = new OptionSetValue(1),
-                    ["managedidentityid"] = Guid.NewGuid(),
-                    ["name"] = $"{assemblyName}-{ApplicationId.ToString().ToUpper()}"
-                };
-                if (rows.Entities.Count == 0)
-                {
-                    var request = new CreateRequest { Target = managedIdentity };
-                    request.Parameters.Add("SolutionUniqueName", Json.solution);
-                    CliLog.Write(ConsoleColor.White, "|", SPACE);
-                    CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTER.Trim());
-                    CliLog.WriteLine(ConsoleColor.Blue, " Managed Identity ", ConsoleColor.Cyan, $"App: {ApplicationId}");
-                    var response = (CreateResponse)await ServiceClient.ExecuteAsync(request);
-                    if (value == null) value = response.id;
-                }
-                else
-                {
-                    CliLog.WriteLine(ConsoleColor.White, "|", SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.Blue, "Managed Identity ", ConsoleColor.Cyan, $"App: {ApplicationId}");
-                    value = rows.Entities[0].Id;
-                }
-            }
-            return value.Value;
-        }
-
-        private DynamcisCrmDevkitAssemblyAttribute GetDynamcisCrmDevkitAssemblyAttribute(Assembly assembly)
-        {
-            var attributeData = CustomAttributeData.GetCustomAttributes(assembly)
-                .Where(data => data.AttributeType.FullName.Contains("DynamcisCrmDevkitAssemblyAttribute"))
-                .FirstOrDefault();
-            if (attributeData == null) return null;
-            var attribute = new DynamcisCrmDevkitAssemblyAttribute();
-            var properties = typeof(DynamcisCrmDevkitAssemblyAttribute).GetProperties();
-            foreach (var namedArgument in attributeData.NamedArguments)
-            {
-                string propertyName = namedArgument.MemberName;
-                object rawValue = namedArgument.TypedValue.Value;
-                var targetProperty = properties.FirstOrDefault(p => p.Name == propertyName);
-
-                if (targetProperty != null)
-                {
-                    object finalValue = rawValue;
-                    if (targetProperty.PropertyType.IsGenericType && targetProperty.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>))
-                    {
-                        Type underlyingType = Nullable.GetUnderlyingType(targetProperty.PropertyType);
-                        if (underlyingType != null && underlyingType.IsEnum)
-                        {
-                            finalValue = Enum.ToObject(underlyingType, rawValue);
-                        }
-                    }
-                    else if (targetProperty.PropertyType.IsEnum)
-                    {
-                        finalValue = Enum.ToObject(targetProperty.PropertyType, rawValue);
-                    }
-                    targetProperty.SetValue(attribute, finalValue);
-                }
-            }
-            return attribute;
         }
 
         private bool IsEqualsContent(string oldContent, string newContent)

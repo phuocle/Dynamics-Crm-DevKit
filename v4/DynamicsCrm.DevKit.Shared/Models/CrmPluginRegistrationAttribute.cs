@@ -164,6 +164,7 @@ namespace DynamicsCrm.DevKit.Shared.Models
         public bool Server { get; set; } = true;
         public PluginStepOperationEnum Action { get; set; } = PluginStepOperationEnum.Activate;
         public IsolationModeEnum IsolationMode { get; set; } = IsolationModeEnum.Sandbox;
+        public SourceTypeEnum SourceType { get; set; } = SourceTypeEnum.Database;
         public string Message { get; set; } = string.Empty;
         public string EntityLogicalName { get; set; } = string.Empty;
         public string FilteringAttributes { get; set; } = string.Empty;

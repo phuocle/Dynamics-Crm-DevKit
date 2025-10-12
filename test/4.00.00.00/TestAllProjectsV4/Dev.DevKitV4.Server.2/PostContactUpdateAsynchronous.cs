@@ -1,4 +1,9 @@
-﻿using Dev.DevKitV4.Shared;
+﻿#define IS_SUPPORT_MANAGED_IDENTITY // Uncomment to enable managed identity support
+#if !IS_SUPPORT_MANAGED_IDENTITY
+#undef IS_SUPPORT_MANAGED_IDENTITY
+#endif
+
+using Dev.DevKitV4.Shared;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Extensions;
 using System;
