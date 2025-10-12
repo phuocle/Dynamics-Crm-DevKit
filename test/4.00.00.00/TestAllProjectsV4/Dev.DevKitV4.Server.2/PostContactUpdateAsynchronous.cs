@@ -73,7 +73,7 @@ namespace Dev.DevKitV4.Server._2
             context.PreEntityImages.TryGetValue("PreImage", out Entity preEntity);
             context.PostEntityImages.TryGetValue("PostImage", out Entity postEntity);
             //YOUR PLUGIN-CODE GO HERE
-
+            tracing.DebugMessage($"FirstName = {targetEntity.GetAttributeValue<string>("firstname")}");
         }
     }
 }
