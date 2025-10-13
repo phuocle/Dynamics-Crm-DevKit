@@ -1,15 +1,10 @@
-﻿//#define IS_SUPPORT_MANAGED_IDENTITY // Uncomment to enable managed identity support
-//#if !IS_SUPPORT_MANAGED_IDENTITY
-//#undef IS_SUPPORT_MANAGED_IDENTITY
-//#endif
+﻿#define IS_SUPPORT_MANAGED_IDENTITY
 
 using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
-using Microsoft.Xrm.Sdk.Metadata;
-using Microsoft.Xrm.Sdk.Metadata.Query;
 using Microsoft.Xrm.Sdk.Query;
 using NuGet.Packaging;
 using System;
@@ -202,7 +197,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         }
         private async Task<Guid> DeployManagedIdentityAsync(string assemblyName, Guid TenantId, string ApplicationIds)
         {
-            var AppIds = ApplicationIds.Split(";".ToCharArray());
+
+            var AppIds = ApplicationIds.Contains(";") ? ApplicationIds.Split(";".ToCharArray()) : ApplicationIds.Split(",".ToCharArray());
             Guid? value = null;
             foreach (var ApplicationId in AppIds)
             {
@@ -232,7 +228,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var request = new CreateRequest { Target = managedIdentity };
                     request.Parameters.Add("SolutionUniqueName", Json.solution);
                     CliLog.Write(ConsoleColor.White, "|", SPACE);
-                    CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTER.Trim());
+                    CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTERED.Trim());
                     CliLog.WriteLine(ConsoleColor.Blue, " Managed Identity ", ConsoleColor.Cyan, $"App: {ApplicationId}");
                     var response = (CreateResponse)await ServiceClient.ExecuteAsync(request);
                     if (value == null) value = response.id;
@@ -570,7 +566,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 request.Parameters.Add("SuppressDuplicateDetection", true);
                 request.Parameters.Add("SolutionUniqueName", Json.solution);
                 CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE);
-                CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTER.Trim());
+                CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTERED.Trim());
                 CliLog.WriteLine(ConsoleColor.White, " Type ", ConsoleColor.Blue, $"{PluginType.DataSource} ", ConsoleColor.Cyan, $"{logicalNameDataSource}", ConsoleColor.White, " linked with events ", ConsoleColor.Cyan, events);
                 await ServiceClient.ExecuteAsync(request);
             }
@@ -651,7 +647,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 else
                 {
                     CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE);
-                    CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTER.Trim());
+                    CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTERED.Trim());
                     CliLog.WriteLine(ConsoleColor.White, " Message ", ConsoleColor.Blue, attribute.PluginType, " ", ConsoleColor.Cyan, attribute.Message, ConsoleColor.White, " with type ", ConsoleColor.Cyan, pluginTypeName);
                     var update = new Entity("customapi", rows.Entities[0].Id);
                     update["plugintypeid"] = new EntityReference("plugintype", pluginTypeId);
@@ -744,7 +740,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     };
                     request.Parameters.Add("SolutionUniqueName", Json.solution);
                     CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE);
-                    CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTER.Trim());
+                    CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTERED.Trim());
                     CliLog.WriteLine(ConsoleColor.White, " Image Type ", ConsoleColor.Blue, imageType, ConsoleColor.White, $", Name = ", ConsoleColor.Cyan, imageName, ConsoleColor.White, $", Alias = ", ConsoleColor.Cyan, imageAliasName);
                     CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, " ", ConsoleColor.White, "Image Fields: ", ConsoleColor.Green, imageAttributes ?? "*");
                     try
@@ -954,7 +950,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 };
                 request.Parameters.Add("SolutionUniqueName", Json.solution);
                 CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE);
-                CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTER.Trim());
+                CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTERED.Trim());
                 CliLog.WriteLine(ConsoleColor.White, $" Step ", ConsoleColor.Blue, attribute.Message, " ", ConsoleColor.Cyan, attribute.Name);
                 if (attribute.SecureConfiguration.Length > 0)
                 {
@@ -1325,7 +1321,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 };
                 request.Parameters.Add("SolutionUniqueName", Json.solution);
                 CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE);
-                CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTER.Trim());
+                CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTERED.Trim());
                 CliLog.WriteLine(ConsoleColor.White, " Type ", ConsoleColor.Blue, attribute.PluginType, " ", ConsoleColor.Cyan, type.FullName);
                 var response = (CreateResponse)await ServiceClient.ExecuteAsync(request);
                 return response.id;
@@ -1461,7 +1457,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 };
                 request.Parameters.Add("SolutionUniqueName", Json.solution);
                 CliLog.Write(ConsoleColor.White, "|", SPACE);
-                CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTER.Trim());
+                CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTERED.Trim());
                 CliLog.Write(ConsoleColor.White, " Assembly ", ConsoleColor.Cyan, assemblyName);
                 CliLog.WriteLine(ConsoleColor.Blue, text);
                 var response = (CreateResponse)await ServiceClient.ExecuteAsync(request);
@@ -1521,7 +1517,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         var request2 = new UpdateRequest { Target = pluginAssembly };
                         request2.Parameters.Add("SolutionUniqueName", Json.solution);
                         CliLog.Write(ConsoleColor.White, "|", SPACE);
-                        CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTER.Trim());
+                        CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTERED.Trim());
                         CliLog.WriteLine(ConsoleColor.Blue, " Bind Assembly to Managed Identity ", ConsoleColor.Cyan, assemblyName, ".dll");
                         await ServiceClient.ExecuteAsync(request2);
                     }

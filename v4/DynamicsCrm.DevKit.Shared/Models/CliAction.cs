@@ -9,7 +9,7 @@
         public const string UPDATED = "[UPDATED] ";
         public const string CREATED = "[CREATED] ";
         public const string ERROR = "[ERROR] ";
-        public const string REGISTER = "[REGISTER] ";
+        public const string REGISTERED = "[REGISTERED] ";
         public const string DELETED = "[DELETED] ";
         public const string DEACTIVATED = "[DEACTIVATED] ";
         public const string ACTIVATED = "[ACTIVATED] ";
