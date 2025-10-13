@@ -46,18 +46,14 @@ namespace Dev.DevKitV4.Server._2
             var serviceAdmin = serviceFactory.CreateOrganizationService(null);
             var service = serviceFactory.CreateOrganizationService(context.UserId);
 
+            var targetEntity = context.InputParameterOrDefault<Entity>("Target");
+            tracing.DebugMessage($"FirstName = {targetEntity.GetAttributeValue<string>("firstname")}");
+
             // 1. Get Managed Identity Token
-            tracing.DebugMessage("1");
             var identityService = (IManagedIdentityService)serviceProvider.GetService(typeof(IManagedIdentityService));
-            tracing.DebugMessage("2");
             var scopes = new List<string> { "https://vault.azure.net/.default" };
-            tracing.DebugMessage("3");
-
-
             var token = identityService.AcquireToken(scopes);
 
-
-            tracing.DebugMessage("4");
             // 2. Get Secret from Key Vault
             var secretValue = KeyVaultHelper.GetSecret(
                 token,
@@ -65,10 +61,8 @@ namespace Dev.DevKitV4.Server._2
                 "DEVKITV4",
                 tracing
             );
-            tracing.DebugMessage("5");
             // 3. Use the secret!
-            tracing.DebugMessage($"123 API Endpoint: {secretValue}");
-            tracing.DebugMessage("6");
+            tracing.DebugMessage($"API Endpoint: {secretValue}");
             ExecutePlugin(context, serviceFactory, serviceAdmin, service, tracing);
         }
 
@@ -78,7 +72,7 @@ namespace Dev.DevKitV4.Server._2
             context.PreEntityImages.TryGetValue("PreImage", out Entity preEntity);
             context.PostEntityImages.TryGetValue("PostImage", out Entity postEntity);
             //YOUR PLUGIN-CODE GO HERE
-            tracing.DebugMessage($"FirstName = {targetEntity.GetAttributeValue<string>("firstname")}");
+
         }
     }
 }
