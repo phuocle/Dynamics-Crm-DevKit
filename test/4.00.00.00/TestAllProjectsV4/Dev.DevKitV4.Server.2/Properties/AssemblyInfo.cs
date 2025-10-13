@@ -23,7 +23,7 @@ using System.Security;
 
 [assembly: DynamcisCrmDevkitAssembly(
     TenantId = "49528483-b79b-4b88-b86e-7d882ba68911",
-    ApplicationIds = "2cb1f038-1adb-42bf-8e8d-6debe0073e1c",
+    ApplicationIds = "2cb1f038-1adb-42bf-8e8d-6debe0073e1c,0a8c04bd-a997-e7ed-992a-be5315366493",
     CertificatePath = "DEVKITV4-ManagedIdentity.pfx",
     CertificatePassword = "DEVKITV4-ManagedIdentity"
 )]

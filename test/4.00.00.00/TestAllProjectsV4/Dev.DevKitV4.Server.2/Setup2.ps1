@@ -364,7 +364,7 @@ for ($i = 0; $i -lt $config.ManagedIdentities.Count; $i++) {
     $sha256Hash = [System.Convert]::ToBase64String($sha256).Replace('+', '-').Replace('/', '_').TrimEnd('=')
     $encodedTenant = Convert-GuidToBase64Url -guid $TenantId
     $encodedApp = Convert-GuidToBase64Url -guid $AppId
-
+    <#
     # --- Credential #1: AzureAD-Issuer (Uses Organization ID) ---
     $orgIdNoHyphens = $OrganizationId.Replace("-", "")
     $issuer1 = "https://login.microsoftonline.com/$TenantId/v2.0"
@@ -403,7 +403,7 @@ for ($i = 0; $i -lt $config.ManagedIdentities.Count; $i++) {
         Remove-Item "$credName1.json" -Force -ErrorAction SilentlyContinue
         Write-Host "  + SUCCESS: Created $credName1." -ForegroundColor Green
     }
-
+    #>
     # --- Credential #2: PowerPlatform-Issuer (Uses Environment ID) ---
     $envIdNoHyphens = $EnvironmentId.Replace("-", "")
     $envIdPrefix = $envIdNoHyphens.Substring(0, $envIdNoHyphens.Length - 2)

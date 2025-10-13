@@ -19,6 +19,19 @@
                                   "ValidityYears":  20,
                                   "CertificateThumbprint":  "FBDC676E8B96CF508664D7C6F6BD99D564DFF523",
                                   "CertificateSHA256Hash":  "3KxFEkSwKKsyevAI2a5wNwNKPG1jSwmB3XTxzihQZAQ"
+                              },
+                              {
+                                  "AppName":  "DEVKITV4-ManagedIdentity-2",
+                                  "AppId":  "d3e983d9-f0ae-4907-89dc-a974cc9b9d75",
+                                  "EnvironmentId":  "0a8c04bd-a997-e7ed-992a-be5315366493",
+                                  "OrganizationId":  "dde66cdf-7e63-f011-8ee6-000d3ac78989",
+                                  "ManagedIdentityName":  "DEVKITV4-ManagedIdentity",
+                                  "CertificatePassword":  "DEVKITV4-ManagedIdentity",
+                                  "CertificateSubject":  "CN=DEVKITV4-ManagedIdentity",
+                                  "CertificateFileName":  "DEVKITV4-ManagedIdentity",
+                                  "ValidityYears":  20,
+                                  "CertificateThumbprint":  "",
+                                  "CertificateSHA256Hash":  ""
                               }
                           ]
 }
