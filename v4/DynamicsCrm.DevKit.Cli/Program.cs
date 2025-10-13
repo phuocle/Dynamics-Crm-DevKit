@@ -20,7 +20,7 @@ namespace DynamicsCrm.DevKit.Cli
         {
             if (args.Count() == 0)
             {
-                ShowHelp();
+                ShowHelp(true);
                 Console.ReadKey();
             }
             else
@@ -30,7 +30,7 @@ namespace DynamicsCrm.DevKit.Cli
             }
         }
 
-        private static void ShowHelp()
+        private static void ShowHelp(bool showParam = false)
         {
             var helpColor = ConsoleColor.White;
             var colorBox = ConsoleColor.Green;
@@ -53,6 +53,9 @@ namespace DynamicsCrm.DevKit.Cli
             CliLog.Write(colorBox, "╝");
             CliLog.WriteLine(ConsoleColor.Black, "█");
             CliLog.WriteLine(ConsoleColor.White, "|");
+            if (showParam)
+            {
+            }
         }
 
         static async Task RunCliAsync(CommandLineArgs arguments)

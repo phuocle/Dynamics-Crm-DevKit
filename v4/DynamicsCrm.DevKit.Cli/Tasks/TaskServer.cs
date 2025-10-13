@@ -40,9 +40,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         {
             var assembly = LoadAssemblyIntoCache(file);
             var assemblyAttribute = GetDynamcisCrmDevkitAssemblyAttribute(assembly);
-
-
-
+            if (assemblyAttribute == null) return (false, null);
             return (assemblyAttribute.CertificatePath != string.Empty, assemblyAttribute);
         }
         private async Task<bool> SignAssemblyAsync(string file, string certificatePath, string certificatePassword = null)
@@ -405,7 +403,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var error = await UnregisterPluginTypeAsync(pluginAssemblyId.Value, type, attributes[0], deployFileType);
                     if (error) return;
                     CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE);
-                    CliLog.WriteSuccess(ConsoleColor.White, CliAction.UNREGISTER.Trim());
+                    CliLog.WriteSuccess(ConsoleColor.White, CliAction.UNREGISTERED.Trim());
                     CliLog.Write(ConsoleColor.White, $" Type ", ConsoleColor.Blue, attributes[0].PluginType, " ", ConsoleColor.Cyan, type.FullName);
                     CliLog.WriteLine();
                     continue;
