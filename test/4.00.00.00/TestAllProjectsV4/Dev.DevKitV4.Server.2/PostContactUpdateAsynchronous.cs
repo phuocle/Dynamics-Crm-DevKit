@@ -67,6 +67,7 @@ namespace Dev.DevKitV4.Server._2
             {
                 tracing.DebugMessage(ex.ToString());
             }
+            tracing.DebugMessage("CAN RUN PLUGIN WITHOUT ERROR");
             ExecutePlugin(context, serviceFactory, serviceAdmin, service, tracing);
         }
 
