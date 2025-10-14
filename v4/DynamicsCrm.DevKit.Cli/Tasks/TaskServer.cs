@@ -14,8 +14,10 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.ServiceModel;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace DynamicsCrm.DevKit.Cli.Tasks
 {
@@ -139,7 +141,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var packageArchiveReader = new PackageArchiveReader(file);
             byte[] inArray = File.ReadAllBytes(file);
             var newContent = Convert.ToBase64String(inArray);
-            var packageName = $"{SolutionPrefix}_{Path.GetFileName(file)}";
+            var packageName = $"{SolutionPrefix}{Path.GetFileName(file)}";
             var fetchData = new
             {
                 name = packageName
@@ -166,8 +168,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     entity["version"] = packageArchiveReader.NuspecReader.GetVersion().ToFullString();
                     var request = new CreateRequest { Target = entity };
                     request.Parameters.Add("SolutionUniqueName", Json.solution);
-                    CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, $"{Path.GetFileName(file)}");
                     var response = (CreateResponse)await ServiceClient.ExecuteAsync(request);
+                    CliLog.Write(ConsoleColor.White, "|", SPACE);
+                    CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTERED.Trim());
+                    CliLog.WriteLine(ConsoleColor.Blue, " Package ", ConsoleColor.Cyan, Path.GetFileName(file));
                     PluginPackageId = response.id;
                 }
                 catch (FaultException fe)
@@ -181,7 +185,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 var oldContent = entity.GetAttributeValue<string>("content");
                 if (IsEqualsContent(oldContent, newContent))
                 {
-                    CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, $"{Path.GetFileName(file)}");
+                    CliLog.WriteLine(ConsoleColor.White, "|", SPACE, CliAction.DO_NOTHING, ConsoleColor.Blue, " Package ", ConsoleColor.Green, $"{Path.GetFileName(file)}");
                 }
                 else
                 {
@@ -193,8 +197,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         update["version"] = packageArchiveReader.NuspecReader.GetVersion().ToFullString();
                         var request = new UpdateRequest { Target = update };
                         request.Parameters.Add("SolutionUniqueName", Json.solution);
-                        CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, $"{Path.GetFileName(file)}");
                         await ServiceClient.ExecuteAsync(request);
+                        CliLog.Write(ConsoleColor.White, "|", SPACE);
+                        CliLog.WriteSuccess(ConsoleColor.White, CliAction.UPDATED.Trim());
+                        CliLog.WriteLine(ConsoleColor.Blue, " Package ", ConsoleColor.Cyan, Path.GetFileName(file));
                         PluginPackageId = entity.Id;
                     }
                     catch (FaultException fe)
@@ -217,14 +223,14 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     request2.Parameters.Add("SolutionUniqueName", Json.solution);
                     CliLog.Write(ConsoleColor.White, "|", SPACE);
                     CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTERED.Trim());
-                    CliLog.WriteLine(ConsoleColor.Blue, " Bind Package ", ConsoleColor.Cyan, fetchData.name, ConsoleColor.Blue, " to Managed Identity App: ", ConsoleColor.Cyan, applicationId);
+                    CliLog.WriteLine(ConsoleColor.Blue, " Bind Package ", ConsoleColor.Cyan, Path.GetFileName(file), ConsoleColor.Blue, " to Managed Identity App: ", ConsoleColor.Cyan, applicationId);
                     await ServiceClient.ExecuteAsync(request2);
                 }
                 else if (rows.Entities[0].GetAttributeValue<EntityReference>("managedidentityid")?.Id == managedIdentityId)
                 {
                     CliLog.Write(ConsoleColor.White, "|", SPACE);
                     CliLog.Write(ConsoleColor.Green, CliAction.DO_NOTHING.Trim());
-                    CliLog.WriteLine(ConsoleColor.Blue, " Bind Package ", ConsoleColor.Cyan, fetchData.name, ConsoleColor.Blue, " to Managed Identity App: ", ConsoleColor.Cyan, applicationId);
+                    CliLog.WriteLine(ConsoleColor.Blue, " Bind Package ", ConsoleColor.Cyan, Path.GetFileName(file), ConsoleColor.Blue, " to Managed Identity App: ", ConsoleColor.Cyan, applicationId);
                 }
                 else
                 {
@@ -237,7 +243,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     request2.Parameters.Add("SolutionUniqueName", Json.solution);
                     CliLog.Write(ConsoleColor.White, "|", SPACE);
                     CliLog.WriteSuccess(ConsoleColor.White, CliAction.UPDATED.Trim());
-                    CliLog.WriteLine(ConsoleColor.Blue, " Bind Package ", ConsoleColor.Cyan, fetchData.name, ConsoleColor.Blue, " to Managed Identity App: ", ConsoleColor.Cyan, applicationId);
+                    CliLog.WriteLine(ConsoleColor.Blue, " Bind Package ", ConsoleColor.Cyan, Path.GetFileName(file), ConsoleColor.Blue, " to Managed Identity App: ", ConsoleColor.Cyan, applicationId);
                     await ServiceClient.ExecuteAsync(request2);
                 }
             }
@@ -261,7 +267,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
                 return ("Sandbox", 2);
             }
-
             (string name, int value) GetSourceType(string file)
             {
                 var types = GetTypes(file);
@@ -354,7 +359,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     request.Parameters.Add("SolutionUniqueName", Json.solution);
                     CliLog.Write(ConsoleColor.White, "|", SPACE);
                     CliLog.WriteSuccess(ConsoleColor.White, CliAction.UPDATED.Trim());
-                    CliLog.Write(ConsoleColor.White, " Assembly ", ConsoleColor.Cyan, assemblyName);
+                    CliLog.Write(ConsoleColor.White, " Assembly ", ConsoleColor.Cyan, assemblyName, ".dll");
                     CliLog.WriteLine(ConsoleColor.Blue, text);
                     try
                     {
@@ -704,7 +709,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 {
                     CliLog.Write(ConsoleColor.White, "|", SPACE);
                     CliLog.WriteSuccess(ConsoleColor.White, CliAction.SIGNED.Trim());
-                    CliLog.WriteLine(" ", ConsoleColor.Green, Path.GetFileName(file));
+                    CliLog.Write(ConsoleColor.Blue, " Package ");
+                    CliLog.WriteLine(ConsoleColor.Cyan, Path.GetFileName(file));
                     return (true, string.Empty);
                 }
                 else
