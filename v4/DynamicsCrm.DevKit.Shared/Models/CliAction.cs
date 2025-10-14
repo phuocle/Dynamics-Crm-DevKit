@@ -17,5 +17,6 @@
         public const string ADDED = "[ADDED] ";
         public const string UNREGISTERED = "[UNREGISTERED] ";
         public const string SIGNED = "[SIGNED] ";
+        public const string FLAG = "[FLAG] ";
     }
 }

@@ -775,7 +775,14 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var dataProviderEvents = new List<DataProviderEvent>();
             var pluginAssemblyId = await DeployAssemblyAsync(file, deployFileType);
             if (pluginAssemblyId == null) return;
-            if (Arg?.OnlyUpdateAssembly?.Length > 0) return;
+            if (Arg?.OnlyUpdateAssembly?.Length > 0)
+            {
+                CliLog.Write(ConsoleColor.White, "|", SPACE);
+                CliLog.WriteSuccess(ConsoleColor.White, CliAction.FLAG.Trim());
+                CliLog.Write(ConsoleColor.Blue, " OnlyUpdateAssembly ");
+                CliLog.WriteLine(ConsoleColor.Cyan, "true");
+                return;
+            }
             var sortedTypes = types.OrderBy(type =>
             {
                 var attributes = GetCrmPluginRegistrationAttributes(type);
