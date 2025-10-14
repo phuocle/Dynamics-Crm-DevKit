@@ -139,15 +139,16 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var packageArchiveReader = new PackageArchiveReader(file);
             byte[] inArray = File.ReadAllBytes(file);
             var newContent = Convert.ToBase64String(inArray);
-            var packageName = $"{SolutionPrefix}{Path.GetFileName(file)}";
+            var name = $"{SolutionPrefix}{packageArchiveReader.NuspecReader.GetId()}";
             var fetchData = new
             {
-                name = packageName
+                name
             };
             var fetchXml = $@"
 <fetch>
   <entity name='pluginpackage'>
     <attribute name='pluginpackageid' />
+    <attribute name='managedidentityid' />
     <attribute name='content' />
     <filter type='and'>
       <condition attribute='name' operator='eq' value='{fetchData.name}'/>
@@ -161,7 +162,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 try
                 {
                     var entity = new Entity("pluginpackage");
-                    entity["name"] = packageName;
+                    entity["name"] = name;
                     entity["content"] = newContent;
                     entity["version"] = packageArchiveReader.NuspecReader.GetVersion().ToFullString();
                     var request = new CreateRequest { Target = entity };
@@ -221,14 +222,14 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     request2.Parameters.Add("SolutionUniqueName", Json.solution);
                     CliLog.Write(ConsoleColor.White, "|", SPACE);
                     CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTERED.Trim());
-                    CliLog.WriteLine(ConsoleColor.Blue, " Bind Package ", ConsoleColor.Cyan, Path.GetFileName(file), ConsoleColor.Blue, " to Managed Identity App: ", ConsoleColor.Cyan, applicationId);
+                    CliLog.WriteLine(ConsoleColor.Blue, " Bind Package ", ConsoleColor.Cyan, Path.GetFileName(file), ConsoleColor.Blue, " to Managed Identity App ", ConsoleColor.Cyan, applicationId);
                     await ServiceClient.ExecuteAsync(request2);
                 }
                 else if (rows.Entities[0].GetAttributeValue<EntityReference>("managedidentityid")?.Id == managedIdentityId)
                 {
                     CliLog.Write(ConsoleColor.White, "|", SPACE);
                     CliLog.Write(ConsoleColor.Green, CliAction.DO_NOTHING.Trim());
-                    CliLog.WriteLine(ConsoleColor.Blue, " Bind Package ", ConsoleColor.Cyan, Path.GetFileName(file), ConsoleColor.Blue, " to Managed Identity App: ", ConsoleColor.Cyan, applicationId);
+                    CliLog.WriteLine(ConsoleColor.Blue, " Bind Package ", ConsoleColor.Cyan, Path.GetFileName(file), ConsoleColor.Blue, " to Managed Identity App ", ConsoleColor.Cyan, applicationId);
                 }
                 else
                 {
@@ -241,7 +242,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     request2.Parameters.Add("SolutionUniqueName", Json.solution);
                     CliLog.Write(ConsoleColor.White, "|", SPACE);
                     CliLog.WriteSuccess(ConsoleColor.White, CliAction.UPDATED.Trim());
-                    CliLog.WriteLine(ConsoleColor.Blue, " Bind Package ", ConsoleColor.Cyan, Path.GetFileName(file), ConsoleColor.Blue, " to Managed Identity App: ", ConsoleColor.Cyan, applicationId);
+                    CliLog.WriteLine(ConsoleColor.Blue, " Bind Package ", ConsoleColor.Cyan, Path.GetFileName(file), ConsoleColor.Blue, " to Managed Identity App ", ConsoleColor.Cyan, applicationId);
                     await ServiceClient.ExecuteAsync(request2);
                 }
             }
@@ -384,14 +385,14 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     request2.Parameters.Add("SolutionUniqueName", Json.solution);
                     CliLog.Write(ConsoleColor.White, "|", SPACE);
                     CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTERED.Trim());
-                    CliLog.WriteLine(ConsoleColor.Blue, " Bind Assembly ", ConsoleColor.Cyan, assemblyName, ".dll", ConsoleColor.Blue, " to Managed Identity App: ", ConsoleColor.Cyan, applicationId);
+                    CliLog.WriteLine(ConsoleColor.Blue, " Bind Assembly ", ConsoleColor.Cyan, assemblyName, ".dll", ConsoleColor.Blue, " to Managed Identity App ", ConsoleColor.Cyan, applicationId);
                     await ServiceClient.ExecuteAsync(request2);
                 }
                 else if (rows.Entities[0].GetAttributeValue<EntityReference>("managedidentityid")?.Id == managedIdentityId)
                 {
                     CliLog.Write(ConsoleColor.White, "|", SPACE);
                     CliLog.Write(ConsoleColor.Green, CliAction.DO_NOTHING.Trim());
-                    CliLog.WriteLine(ConsoleColor.Blue, " Bind Assembly ", ConsoleColor.Cyan, assemblyName, ".dll", ConsoleColor.Blue, " to Managed Identity App: ", ConsoleColor.Cyan, applicationId);
+                    CliLog.WriteLine(ConsoleColor.Blue, " Bind Assembly ", ConsoleColor.Cyan, assemblyName, ".dll", ConsoleColor.Blue, " to Managed Identity App ", ConsoleColor.Cyan, applicationId);
                 }
                 else
                 {
@@ -404,7 +405,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     request2.Parameters.Add("SolutionUniqueName", Json.solution);
                     CliLog.Write(ConsoleColor.White, "|", SPACE);
                     CliLog.WriteSuccess(ConsoleColor.White, CliAction.UPDATED.Trim());
-                    CliLog.WriteLine(ConsoleColor.Blue, " Bind Assembly ", ConsoleColor.Cyan, assemblyName, ".dll", ConsoleColor.Blue, " to Managed Identity App: ", ConsoleColor.Cyan, applicationId);
+                    CliLog.WriteLine(ConsoleColor.Blue, " Bind Assembly ", ConsoleColor.Cyan, assemblyName, ".dll", ConsoleColor.Blue, " to Managed Identity App ", ConsoleColor.Cyan, applicationId);
                     await ServiceClient.ExecuteAsync(request2);
                 }
             }
@@ -566,7 +567,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     request.Parameters.Add("SolutionUniqueName", Json.solution);
                     CliLog.Write(ConsoleColor.White, "|", SPACE);
                     CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTERED.Trim());
-                    CliLog.WriteLine(ConsoleColor.Blue, " Managed Identity App: ", ConsoleColor.Cyan, $"{AppId}");
+                    CliLog.WriteLine(ConsoleColor.Blue, " Managed Identity App ", ConsoleColor.Cyan, $"{AppId}");
                     var response = (CreateResponse)await ServiceClient.ExecuteAsync(request);
                     if (isDevApplication && _ManagedIdentityId == null && _ApplicationId == null)
                     {
@@ -577,7 +578,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
                 else
                 {
-                    CliLog.WriteLine(ConsoleColor.White, "|", SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.Blue, "Managed Identity App: ", ConsoleColor.Cyan, $"{AppId}");
+                    CliLog.WriteLine(ConsoleColor.White, "|", SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.Blue, "Managed Identity App ", ConsoleColor.Cyan, $"{AppId}");
                     if (isDevApplication && _ManagedIdentityId == null && _ApplicationId == null)
                     {
                         _ManagedIdentityId = rows.Entities[0].Id;
