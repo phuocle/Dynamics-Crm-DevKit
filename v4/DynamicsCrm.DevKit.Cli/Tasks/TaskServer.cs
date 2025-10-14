@@ -78,19 +78,21 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     (IS_MANAGED_IDENTITY, ERROR) = IsNeedSignAssembly(fileDll);
                     if (IS_MANAGED_IDENTITY && ERROR.Length == 0)
                     {
-                        var ok = await SignAssemblyAsync(fileDll, Path.Combine(CurrentDirectory, ManagedIdentityAttribute.CertificateFile), ManagedIdentityAttribute.CertificatePassword);
-                        if (!ok)
+                        (OK, ERROR) = await SignAssemblyAsync(fileDll, Path.Combine(CurrentDirectory, ManagedIdentityAttribute.CertificateFile), ManagedIdentityAttribute.CertificatePassword);
+                        if (!OK)
                         {
-                            CliLog.WriteLineError(ConsoleColor.Yellow, $"The assembly {Path.GetFileName(fileDll)} not signed. Assemply deployment stopped.");
-                            return;
+                            if (!OK)
+                            {
+                                CliLog.WriteLineError(ConsoleColor.Yellow, ERROR);
+                                CliLog.WriteLineError(ConsoleColor.Yellow, $"Assembly {Path.GetFileName(fileDll)} not signed. Assembly deployment stopped.");
+                                continue;
+                            }
                         }
                     }
                     else if (ERROR.Length > 0)
                     {
-                        CliLog.WriteError(ConsoleColor.Yellow, ERROR);
-                        CliLog.WriteLine(ConsoleColor.White, "|");
-                        CliLog.WriteError(ConsoleColor.Yellow, $"Assembly {Path.GetFileName(fileDll)} not signed. Assemply deployment stopped.");
-                        CliLog.WriteLine(ConsoleColor.White, "|");
+                        CliLog.WriteLineError(ConsoleColor.Yellow, ERROR);
+                        CliLog.WriteLineError(ConsoleColor.Yellow, $"Assembly {Path.GetFileName(fileDll)} not signed. Assembly deployment stopped.");
                         continue;
                     }
                     await DeployDllAsync(fileDll, DeployFileType.Dll);
@@ -331,7 +333,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 request.Parameters.Add("SolutionUniqueName", Json.solution);
                 CliLog.Write(ConsoleColor.White, "|", SPACE);
                 CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTERED.Trim());
-                CliLog.Write(ConsoleColor.White, " Assembly ", ConsoleColor.Cyan, assemblyName, ".dll");
+                CliLog.Write(ConsoleColor.Blue, " Assembly ", ConsoleColor.Cyan, assemblyName, ".dll");
                 CliLog.WriteLine(ConsoleColor.Blue, text);
                 var response = (CreateResponse)await ServiceClient.ExecuteAsync(request);
                 pluginAssemblyId = response.id;
@@ -355,7 +357,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     request.Parameters.Add("SolutionUniqueName", Json.solution);
                     CliLog.Write(ConsoleColor.White, "|", SPACE);
                     CliLog.WriteSuccess(ConsoleColor.White, CliAction.UPDATED.Trim());
-                    CliLog.Write(ConsoleColor.White, " Assembly ", ConsoleColor.Cyan, assemblyName, ".dll");
+                    CliLog.Write(ConsoleColor.Blue, " Assembly ", ConsoleColor.Cyan, assemblyName, ".dll");
                     CliLog.WriteLine(ConsoleColor.Blue, text);
                     try
                     {
@@ -501,7 +503,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         }
                     }
                 }
-                CliLog.WriteLineError(ConsoleColor.Yellow, "SignTool.exe not found. Please install Windows SDK.");
+                CliLog.WriteLine(ConsoleColor.White, "|");
                 CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Cyan, "To sign assemblies, you need to install Windows SDK:");
                 CliLog.WriteLine(ConsoleColor.White, "|");
                 CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.White, "Option 1: Install Windows 10/11 SDK (Recommended)");
@@ -520,7 +522,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 CliLog.WriteLine(ConsoleColor.White, "|");
                 CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.White, "After installation, SignTool.exe will be located at:");
                 CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Gray, "  C:\\Program Files (x86)\\Windows Kits\\10\\bin\\{version}\\x64\\signtool.exe");
-                CliLog.WriteLine(ConsoleColor.White, "|");
                 return null;
             }
             catch (Exception ex)
@@ -621,18 +622,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             return attribute;
         }
-        private async Task<bool> SignAssemblyAsync(string file, string certificatePath, string certificatePassword = null)
+        private async Task<(bool ok, string error)> SignAssemblyAsync(string file, string certificatePath, string certificatePassword = null)
         {
-            if (!File.Exists(certificatePath))
-            {
-                CliLog.WriteLineError(ConsoleColor.Yellow, $"Certificate not found: {certificatePath}");
-                return false;
-            }
             var signToolPath = FindSignTool();
-            if (string.IsNullOrEmpty(signToolPath))
-            {
-                return false;
-            }
+            if (string.IsNullOrEmpty(signToolPath)) return (false, "SignTool.exe not found. Please install Windows SDK.");
             var extension = Path.GetExtension(certificatePath).ToLowerInvariant();
             string arguments;
             if (string.IsNullOrEmpty(certificatePassword))
@@ -672,14 +665,13 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 {
                     CliLog.Write(ConsoleColor.White, "|", SPACE);
                     CliLog.WriteSuccess(ConsoleColor.White, CliAction.SIGNED.Trim());
-                    CliLog.WriteLine(" ", ConsoleColor.Green, Path.GetFileName(file));
-                    return true;
+                    CliLog.Write(ConsoleColor.Blue, " Assembly ");
+                    CliLog.WriteLine(ConsoleColor.Cyan, Path.GetFileName(file));
+                    return (true, string.Empty);
                 }
                 else
                 {
-                    CliLog.WriteError(ConsoleColor.Yellow, $"{error.ToString()}");
-                    CliLog.WriteLine(ConsoleColor.White, "|");
-                    return false;
+                    return (false, $"{error}");
                 }
             }
         }
