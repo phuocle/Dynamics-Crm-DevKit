@@ -1,9 +1,8 @@
-﻿#define IS_SUPPORT_MANAGED_IDENTITY
-
+﻿
 using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.PowerPlatform.Dataverse.Client;
-using Microsoft.VisualStudio.PlatformUI;
+using Microsoft.VisualStudio.RpcContracts.Logging;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Query;
@@ -15,7 +14,6 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using System.ServiceModel;
 using System.Threading.Tasks;
 
@@ -23,25 +21,432 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 {
     public class TaskServer : ITask
     {
-#if IS_SUPPORT_MANAGED_IDENTITY
-        private bool IS_DEPLOY_SUPPORT_MANAGED_IDENTITY = false;
-        private DynamcisCrmDevkitAssemblyAttribute DynamcisCrmDevkitAssemblyAttribute { get; set; }
-        private bool IsNeedSignAssembly(string file)
+        public TaskServer(CommandLineArgs arg, Json json)
+        {
+            this.Arg = arg;
+            ServiceClient = arg.ServiceClient;
+            CurrentDirectory = arg.CurrentDirectory;
+            switch (arg.Type)
+            {
+                case nameof(CliType.servers):
+                    Json = json.servers.FirstOrDefault(x => x.profile == arg.Profile);
+                    TaskType = $"[{nameof(CliType.servers).ToUpper()}]";
+                    break;
+                case nameof(CliType.workflows):
+                    Json = json.workflows.FirstOrDefault(x => x.profile == arg.Profile);
+                    TaskType = $"[{nameof(CliType.workflows).ToUpper()}]";
+                    break;
+                case nameof(CliType.plugins):
+                    Json = json.plugins.FirstOrDefault(x => x.profile == arg.Profile);
+                    TaskType = $"[{nameof(CliType.plugins).ToUpper()}]";
+                    break;
+                case nameof(CliType.dataproviders):
+                    Json = json.dataproviders.FirstOrDefault(x => x.profile == arg.Profile);
+                    TaskType = $"[{nameof(CliType.dataproviders).ToUpper()}]";
+                    break;
+            }
+        }
+        public async Task RunAsync()
+        {
+            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "START ");
+            CliLog.WriteLine(ConsoleColor.White, "|");
+            if (await IsValidAsync())
+            {
+                var files = GetFiles(CurrentFolder, Json.includefiles, Json.excludefiles);
+                if (files.Count == 0)
+                {
+                    CliLog.WriteLineWarning(ConsoleColor.Green, "Not found any files to deploy");
+                }
+                else
+                {
+                    await DeployFilesAsync(files);
+                }
+            }
+            CliLog.WriteLine(ConsoleColor.White, "|");
+            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "END ");
+        }
+        private async Task DeployFilesAsync(List<string> files)
+        {
+            foreach (var file in files)
+            {
+                if (file.EndsWith(".dll"))
+                {
+                    var fileDll = file;
+                    CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, $"{Path.GetFileName(fileDll)}");
+                    (IS_MANAGED_IDENTITY, ERROR) = IsNeedSignAssembly(fileDll);
+                    if (IS_MANAGED_IDENTITY && ERROR.Length == 0)
+                    {
+                        var ok = await SignAssemblyAsync(fileDll, Path.Combine(CurrentDirectory, ManagedIdentityAttribute.CertificateFile), ManagedIdentityAttribute.CertificatePassword);
+                        if (!ok)
+                        {
+                            CliLog.WriteLineError(ConsoleColor.Yellow, $"The assembly {Path.GetFileName(fileDll)} not signed. Assemply deployment stopped.");
+                            return;
+                        }
+                    }
+                    else if (ERROR.Length > 0)
+                    {
+                        CliLog.WriteError(ConsoleColor.Yellow, ERROR);
+                        CliLog.WriteLine(ConsoleColor.White, "|");
+                        CliLog.WriteError(ConsoleColor.Yellow, $"Assembly {Path.GetFileName(fileDll)} not signed. Assemply deployment stopped.");
+                        CliLog.WriteLine(ConsoleColor.White, "|");
+                        continue;
+                    }
+                    await DeployDllAsync(fileDll, DeployFileType.Dll);
+                }
+                else if (file.EndsWith(".nupkg"))
+                {
+                    var fileNuget = file;
+                    CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, $"{Path.GetFileName(fileNuget)}");
+                    var fileNugetDll = GetDllFileFromNugetPackage(fileNuget);
+                    (IS_MANAGED_IDENTITY, ERROR) = IsNeedSignAssembly(fileNugetDll);
+                    if (IS_MANAGED_IDENTITY && ERROR.Length == 0)
+                    {
+                        (OK, ERROR) = await SignPackageAsync(fileNuget, Path.Combine(CurrentDirectory, ManagedIdentityAttribute.CertificateFile), ManagedIdentityAttribute.CertificatePassword);
+                        if (!OK)
+                        {
+                            CliLog.WriteError(ConsoleColor.Yellow, ERROR);
+                            CliLog.WriteLine(ConsoleColor.White, "|");
+                            CliLog.WriteError(ConsoleColor.Yellow, $"Package {Path.GetFileName(fileNuget)} not signed. Package deployment stopped.");
+                            CliLog.WriteLine(ConsoleColor.White, "|");
+                            continue;
+                        }
+                    }
+                    else if (ERROR.Length > 0)
+                    {
+                        CliLog.WriteError(ConsoleColor.Yellow, ERROR);
+                        CliLog.WriteLine(ConsoleColor.White, "|");
+                        CliLog.WriteError(ConsoleColor.Yellow, $"Package {Path.GetFileName(fileNuget)} not signed. Package deployment stopped.");
+                        CliLog.WriteLine(ConsoleColor.White, "|");
+                        continue;
+                    }
+                    ERROR = await DeployPackageAsync(fileNuget);
+                    if (ERROR.Length > 0)
+                    {
+                        CliLog.WriteError(ConsoleColor.Yellow, ERROR);
+                        CliLog.WriteLine(ConsoleColor.White, "|");
+                        CliLog.WriteError(ConsoleColor.Yellow, $"Package {Path.GetFileName(fileNuget)} not signed. Package deployment stopped.");
+                        CliLog.WriteLine(ConsoleColor.White, "|");
+                        continue;
+                    }
+                    await DeployDllAsync(fileNugetDll, DeployFileType.Nuget);
+                }
+                else
+                    CliLog.WriteLineError(ConsoleColor.Yellow, $"Not support file extension: {new FileInfo(file).Extension}");
+            }
+        }
+        private async Task<string> DeployPackageAsync(string file)
+        {
+            var packageArchiveReader = new PackageArchiveReader(file);
+            byte[] inArray = File.ReadAllBytes(file);
+            var newContent = Convert.ToBase64String(inArray);
+            var packageName = $"{SolutionPrefix}_{Path.GetFileName(file)}";
+            var fetchData = new
+            {
+                name = packageName
+            };
+            var fetchXml = $@"
+<fetch>
+  <entity name='pluginpackage'>
+    <attribute name='pluginpackageid' />
+    <attribute name='content' />
+    <filter type='and'>
+      <condition attribute='name' operator='eq' value='{fetchData.name}'/>
+    </filter>
+  </entity>
+</fetch>";
+            var rows = await ServiceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
+            Guid PluginPackageId = Guid.Empty;
+            if (rows.Entities.Count == 0)
+            {
+                try
+                {
+                    var entity = new Entity("pluginpackage");
+                    entity["name"] = packageName;
+                    entity["content"] = newContent;
+                    entity["version"] = packageArchiveReader.NuspecReader.GetVersion().ToFullString();
+                    var request = new CreateRequest { Target = entity };
+                    request.Parameters.Add("SolutionUniqueName", Json.solution);
+                    CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, $"{Path.GetFileName(file)}");
+                    var response = (CreateResponse)await ServiceClient.ExecuteAsync(request);
+                    PluginPackageId = response.id;
+                }
+                catch (FaultException fe)
+                {
+                    return fe.Message;
+                }
+            }
+            else
+            {
+                var entity = rows.Entities[0];
+                var oldContent = entity.GetAttributeValue<string>("content");
+                if (IsEqualsContent(oldContent, newContent))
+                {
+                    CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, $"{Path.GetFileName(file)}");
+                }
+                else
+                {
+                    try
+                    {
+                        var update = new Entity("pluginpackage");
+                        update["pluginpackageid"] = entity.Id;
+                        update["content"] = newContent;
+                        update["version"] = packageArchiveReader.NuspecReader.GetVersion().ToFullString();
+                        var request = new UpdateRequest { Target = update };
+                        request.Parameters.Add("SolutionUniqueName", Json.solution);
+                        CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, $"{Path.GetFileName(file)}");
+                        await ServiceClient.ExecuteAsync(request);
+                        PluginPackageId = entity.Id;
+                    }
+                    catch (FaultException fe)
+                    {
+                        return fe.Message;
+                    }
+                }
+            }
+            if (IS_MANAGED_IDENTITY)
+            {
+                var (managedIdentityId, applicationId) = await DeployManagedIdentityAsync(fetchData.name, Guid.Parse(ManagedIdentityAttribute.TenantId), ManagedIdentityAttribute.ApplicationIds);
+                if (rows.Entities.Count == 0)
+                {
+                    var pluginPackage = new Entity("pluginpackage")
+                    {
+                        ["pluginpackageid"] = PluginPackageId,
+                        ["managedidentityid"] = new EntityReference("managedidentity", managedIdentityId)
+                    };
+                    var request2 = new UpdateRequest { Target = pluginPackage };
+                    request2.Parameters.Add("SolutionUniqueName", Json.solution);
+                    CliLog.Write(ConsoleColor.White, "|", SPACE);
+                    CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTERED.Trim());
+                    CliLog.WriteLine(ConsoleColor.Blue, " Bind Package ", ConsoleColor.Cyan, fetchData.name, ConsoleColor.Blue, " to Managed Identity App: ", ConsoleColor.Cyan, applicationId);
+                    await ServiceClient.ExecuteAsync(request2);
+                }
+                else if (rows.Entities[0].GetAttributeValue<EntityReference>("managedidentityid")?.Id == managedIdentityId)
+                {
+                    CliLog.Write(ConsoleColor.White, "|", SPACE);
+                    CliLog.Write(ConsoleColor.Green, CliAction.DO_NOTHING.Trim());
+                    CliLog.WriteLine(ConsoleColor.Blue, " Bind Package ", ConsoleColor.Cyan, fetchData.name, ConsoleColor.Blue, " to Managed Identity App: ", ConsoleColor.Cyan, applicationId);
+                }
+                else
+                {
+                    var pluginPackage = new Entity("pluginpackage")
+                    {
+                        ["pluginpackageid"] = PluginPackageId,
+                        ["managedidentityid"] = new EntityReference("managedidentity", managedIdentityId)
+                    };
+                    var request2 = new UpdateRequest { Target = pluginPackage };
+                    request2.Parameters.Add("SolutionUniqueName", Json.solution);
+                    CliLog.Write(ConsoleColor.White, "|", SPACE);
+                    CliLog.WriteSuccess(ConsoleColor.White, CliAction.UPDATED.Trim());
+                    CliLog.WriteLine(ConsoleColor.Blue, " Bind Package ", ConsoleColor.Cyan, fetchData.name, ConsoleColor.Blue, " to Managed Identity App: ", ConsoleColor.Cyan, applicationId);
+                    await ServiceClient.ExecuteAsync(request2);
+                }
+            }
+            return string.Empty;
+        }
+        private async Task<Guid?> DeployAssemblyAsync(string file, DeployFileType deployFileType)
+        {
+            (string name, int value) GetIsolationMode(string file)
+            {
+                var types = GetTypes(file);
+                foreach (var type in types)
+                {
+                    if (IsWorkflowType(type)) continue;
+                    var attributes = GetCrmPluginRegistrationAttributes(type);
+                    foreach (var attribute in attributes)
+                    {
+                        if (attribute.IsolationMode == IsolationModeEnum.None) return ("None", 1);
+                        if (attribute.IsolationMode == IsolationModeEnum.Sandbox) return ("Sandbox", 2);
+                        if (attribute.IsolationMode == IsolationModeEnum.Sandbox) return ("Sandbox", 2);
+                    }
+                }
+                return ("Sandbox", 2);
+            }
+
+            (string name, int value) GetSourceType(string file)
+            {
+                var types = GetTypes(file);
+                foreach (var type in types)
+                {
+                    if (IsWorkflowType(type)) continue;
+                    var attributes = GetCrmPluginRegistrationAttributes(type);
+                    foreach (var attribute in attributes)
+                    {
+                        if (attribute.SourceType == SourceTypeEnum.Database) return ("Database", 0);
+                        if (attribute.SourceType == SourceTypeEnum.Disk) return ("Disk", 1);
+                        if (attribute.SourceType == SourceTypeEnum.Normal) return ("Normal", 2);
+                        if (attribute.SourceType == SourceTypeEnum.AzureWebApp) return ("AzureWebApp", 3);
+                        if (attribute.SourceType == SourceTypeEnum.FileStore) return ("FileStore", 4);
+                    }
+                }
+                return ("Database", 0);
+            }
+            var assembly = LoadAssemblyIntoCache(file);
+            var assemblyProperties = assembly.GetName().FullName.Split(",= ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+            var assemblyName = assemblyProperties[0];
+            var fetchData = new
+            {
+                name = assemblyName
+            };
+            var fetchXml = $@"
+<fetch>
+  <entity name='pluginassembly'>
+    <all-attributes />
+    <filter type='and'>
+      <condition attribute='name' operator='eq' value='{fetchData.name}'/>
+    </filter>
+  </entity>
+</fetch>";
+            var rows = await ServiceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
+            if (rows.Entities.Count > 0)
+            {
+                if (rows.Entities.Count > 0 && rows.Entities.Count != 1)
+                {
+                    CliLog.WriteLineError(ConsoleColor.Yellow, $"Found more than 1 plugin assembly name {assemblyName}. Assemply deployed, but the deployment of this assembly stopped.");
+                    return null;
+                }
+            }
+            var newContent = Convert.ToBase64String(File.ReadAllBytes(file));
+            Guid pluginAssemblyId = Guid.NewGuid();
+            var plugin = new Entity("pluginassembly")
+            {
+                ["content"] = newContent,
+                ["name"] = assemblyProperties[0],
+                ["culture"] = assemblyProperties[4],
+                ["version"] = assemblyProperties[2],
+                ["publickeytoken"] = assemblyProperties[6],
+            };
+            var text = string.Empty;
+            var (name_IsolationMode, value_IsolationMode) = GetIsolationMode(file);
+            var (name_SourceType, value_SourceType) = GetSourceType(file);
+            plugin["sourcetype"] = new OptionSetValue(value_SourceType);
+            plugin["isolationmode"] = new OptionSetValue(value_IsolationMode);
+            text = $" [Isolation: {name_IsolationMode}, Source: {name_SourceType}]";
+            if (rows.Entities.Count == 0)
+            {
+                var request = new CreateRequest
+                {
+                    Target = plugin
+                };
+                request.Parameters.Add("SolutionUniqueName", Json.solution);
+                CliLog.Write(ConsoleColor.White, "|", SPACE);
+                CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTERED.Trim());
+                CliLog.Write(ConsoleColor.White, " Assembly ", ConsoleColor.Cyan, assemblyName, ".dll");
+                CliLog.WriteLine(ConsoleColor.Blue, text);
+                var response = (CreateResponse)await ServiceClient.ExecuteAsync(request);
+                pluginAssemblyId = response.id;
+            }
+            else
+            {
+                var oldContent = rows.Entities[0].GetAttributeValue<string>("content");
+                pluginAssemblyId = rows.Entities[0].Id;
+                if (IsEqualsContent(oldContent, newContent))
+                {
+                    CliLog.Write(ConsoleColor.White, "|", SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.Blue, "Assembly ", ConsoleColor.Cyan, assemblyName, ".dll");
+                    CliLog.WriteLine(ConsoleColor.Blue, text);
+                }
+                else
+                {
+                    plugin["pluginassemblyid"] = pluginAssemblyId;
+                    var request = new UpdateRequest
+                    {
+                        Target = plugin
+                    };
+                    request.Parameters.Add("SolutionUniqueName", Json.solution);
+                    CliLog.Write(ConsoleColor.White, "|", SPACE);
+                    CliLog.WriteSuccess(ConsoleColor.White, CliAction.UPDATED.Trim());
+                    CliLog.Write(ConsoleColor.White, " Assembly ", ConsoleColor.Cyan, assemblyName);
+                    CliLog.WriteLine(ConsoleColor.Blue, text);
+                    try
+                    {
+                        await ServiceClient.ExecuteAsync(request);
+                    }
+                    catch (FaultException fe)
+                    {
+                        CliLog.WriteLineError(ConsoleColor.Yellow, $"{fe.Message} Assemply deployed, but the deployment of this assembly stopped.");
+                        return null;
+                    }
+                }
+            }
+            if (IS_MANAGED_IDENTITY && deployFileType == DeployFileType.Dll)
+            {
+                var (managedIdentityId, applicationId) = await DeployManagedIdentityAsync(assemblyName, Guid.Parse(ManagedIdentityAttribute.TenantId), ManagedIdentityAttribute.ApplicationIds);
+                if (rows.Entities.Count == 0)
+                {
+                    var pluginAssembly = new Entity("pluginassembly")
+                    {
+                        ["pluginassemblyid"] = pluginAssemblyId,
+                        ["managedidentityid"] = new EntityReference("managedidentity", managedIdentityId)
+                    };
+                    var request2 = new UpdateRequest { Target = pluginAssembly };
+                    request2.Parameters.Add("SolutionUniqueName", Json.solution);
+                    CliLog.Write(ConsoleColor.White, "|", SPACE);
+                    CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTERED.Trim());
+                    CliLog.WriteLine(ConsoleColor.Blue, " Bind Assembly ", ConsoleColor.Cyan, assemblyName, ".dll", ConsoleColor.Blue, " to Managed Identity App: ", ConsoleColor.Cyan, applicationId);
+                    await ServiceClient.ExecuteAsync(request2);
+                }
+                else if (rows.Entities[0].GetAttributeValue<EntityReference>("managedidentityid")?.Id == managedIdentityId)
+                {
+                    CliLog.Write(ConsoleColor.White, "|", SPACE);
+                    CliLog.Write(ConsoleColor.Green, CliAction.DO_NOTHING.Trim());
+                    CliLog.WriteLine(ConsoleColor.Blue, " Bind Assembly ", ConsoleColor.Cyan, assemblyName, ".dll", ConsoleColor.Blue, " to Managed Identity App: ", ConsoleColor.Cyan, applicationId);
+                }
+                else
+                {
+                    var pluginAssembly = new Entity("pluginassembly")
+                    {
+                        ["pluginassemblyid"] = pluginAssemblyId,
+                        ["managedidentityid"] = new EntityReference("managedidentity", managedIdentityId)
+                    };
+                    var request2 = new UpdateRequest { Target = pluginAssembly };
+                    request2.Parameters.Add("SolutionUniqueName", Json.solution);
+                    CliLog.Write(ConsoleColor.White, "|", SPACE);
+                    CliLog.WriteSuccess(ConsoleColor.White, CliAction.UPDATED.Trim());
+                    CliLog.WriteLine(ConsoleColor.Blue, " Bind Assembly ", ConsoleColor.Cyan, assemblyName, ".dll", ConsoleColor.Blue, " to Managed Identity App: ", ConsoleColor.Cyan, applicationId);
+                    await ServiceClient.ExecuteAsync(request2);
+                }
+            }
+            return pluginAssemblyId;
+        }
+
+
+
+
+
+
+
+
+
+        private bool OK = false;
+        private bool IS_MANAGED_IDENTITY = false;
+        private string ERROR = string.Empty;
+        private DynamcisCrmDevKitManagedIdentityAssemblyAttribute ManagedIdentityAttribute { get; set; }
+        private (bool needSign, string error) IsNeedSignAssembly(string file)
         {
             var assembly = LoadAssemblyIntoCache(file);
-            DynamcisCrmDevkitAssemblyAttribute = GetDynamcisCrmDevkitAssemblyAttribute(assembly);
-            if (DynamcisCrmDevkitAssemblyAttribute == null) return false;
-            if (string.IsNullOrEmpty(DynamcisCrmDevkitAssemblyAttribute.TenantId))
+            ManagedIdentityAttribute = GetDynamcisCrmDevkitManagedIdentityAssemblyAttribute(assembly);
+            if (ManagedIdentityAttribute == null) return (false, string.Empty);
+            if (string.IsNullOrEmpty(ManagedIdentityAttribute.TenantId))
             {
-                //CliLog.WriteLineError(ConsoleColor.Yellow, "Not found TenantId from DynamcisCrmDevkitAssemblyAttribute");
-                return false;
+                return (false, $"Not found TenantId value from {nameof(DynamcisCrmDevKitManagedIdentityAssemblyAttribute)}");
             }
-            if (string.IsNullOrEmpty(DynamcisCrmDevkitAssemblyAttribute.ApplicationIds))
+            if (string.IsNullOrEmpty(ManagedIdentityAttribute.ApplicationIds))
             {
-                //CliLog.WriteLineError(ConsoleColor.Yellow, "Not found ApplicationId from DynamcisCrmDevkitAssemblyAttribute");
-                return false;
+                return (false, $"Not found ApplicationId value from {nameof(DynamcisCrmDevKitManagedIdentityAssemblyAttribute)}");
             }
-            return DynamcisCrmDevkitAssemblyAttribute.CertificatePath != string.Empty;
+            if (string.IsNullOrEmpty(ManagedIdentityAttribute.CertificateFile))
+            {
+                return (false, $"Not found CertificateFile value from {nameof(DynamcisCrmDevKitManagedIdentityAssemblyAttribute)}");
+            }
+            if (!ManagedIdentityAttribute.CertificateFile.EndsWith(".pfx"))
+            {
+                return (false, $"CertificateFile value should ends with '.pfx' from {nameof(DynamcisCrmDevKitManagedIdentityAssemblyAttribute)}");
+            }
+            var certificateFile = Path.Combine(CurrentDirectory, ManagedIdentityAttribute.CertificateFile);
+            if (!File.Exists(certificateFile))
+            {
+                return (false, $"CertificateFile not exist: {certificateFile}");
+            }
+            return (true, string.Empty);
         }
         private async Task<bool> SignAssemblyAsync(string file, string certificatePath, string certificatePassword = null)
         {
@@ -53,33 +458,18 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var signToolPath = FindSignTool();
             if (string.IsNullOrEmpty(signToolPath))
             {
-                //CliLog.WriteLineError(ConsoleColor.Yellow, "SignTool.exe not found. Please install Windows SDK.");
                 return false;
             }
             var extension = Path.GetExtension(certificatePath).ToLowerInvariant();
             string arguments;
-            if (extension == ".pfx")
-            {
-                if (string.IsNullOrEmpty(certificatePassword))
-                {
-                    arguments = $"sign /f \"{certificatePath}\" /fd SHA256 /v \"{file}\"";
-                }
-                else
-                {
-                    arguments = $"sign /f \"{certificatePath}\" /p \"{certificatePassword}\" /fd SHA256 /v \"{file}\"";
-                }
-            }
-            else if (extension == ".cer")
+            if (string.IsNullOrEmpty(certificatePassword))
             {
                 arguments = $"sign /f \"{certificatePath}\" /fd SHA256 /v \"{file}\"";
             }
             else
             {
-                CliLog.WriteLineError(ConsoleColor.Red, $"Unsupported certificate format: {extension}. Only .pfx and .cer are supported.");
-                return false;
+                arguments = $"sign /f \"{certificatePath}\" /p \"{certificatePassword}\" /fd SHA256 /v \"{file}\"";
             }
-
-            //.CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, $"{Path.GetFileName(file)}: Signing.....");
             var processStartInfo = new ProcessStartInfo
             {
                 FileName = signToolPath,
@@ -89,7 +479,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 RedirectStandardError = true,
                 CreateNoWindow = true
             };
-
             using (var process = new Process { StartInfo = processStartInfo })
             {
                 var output = new System.Text.StringBuilder();
@@ -258,14 +647,14 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             return (_ManagedIdentityId.Value, _ApplicationId.Value);
         }
-        private DynamcisCrmDevkitAssemblyAttribute GetDynamcisCrmDevkitAssemblyAttribute(Assembly assembly)
+        private DynamcisCrmDevKitManagedIdentityAssemblyAttribute GetDynamcisCrmDevkitManagedIdentityAssemblyAttribute(Assembly assembly)
         {
             var attributeData = CustomAttributeData.GetCustomAttributes(assembly)
-                .Where(data => data.AttributeType.FullName.Contains("DynamcisCrmDevkitAssemblyAttribute"))
+                .Where(data => data.AttributeType.FullName.Contains(nameof(DynamcisCrmDevKitManagedIdentityAssemblyAttribute)))
                 .FirstOrDefault();
             if (attributeData == null) return null;
-            var attribute = new DynamcisCrmDevkitAssemblyAttribute();
-            var properties = typeof(DynamcisCrmDevkitAssemblyAttribute).GetProperties();
+            var attribute = new DynamcisCrmDevKitManagedIdentityAssemblyAttribute();
+            var properties = typeof(DynamcisCrmDevKitManagedIdentityAssemblyAttribute).GetProperties();
             foreach (var namedArgument in attributeData.NamedArguments)
             {
                 string propertyName = namedArgument.MemberName;
@@ -292,126 +681,57 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             return attribute;
         }
-        private async Task<bool> SignPackageAsync(string file, string certificatePath, string certificatePassword = null)
+        private async Task<(bool ok, string error)> SignPackageAsync(string file, string certificatePath, string certificatePassword = null)
         {
-            if (!File.Exists(certificatePath))
-            {
-                CliLog.WriteLineError(ConsoleColor.Yellow, $"Certificate not found: {certificatePath}");
-                return false;
-            }
-
-            // 1. Remove quotes around the certificate password as arguments for passwords often work better without them
-            var arguments = $"nuget sign \"{file}\" --certificate-path \"{certificatePath}\" --certificate-password {certificatePassword} --timestamper \"http://timestamp.digicert.com\"";
-            //CliLog.WriteLineError(ConsoleColor.Red, $"Arguments passed to dotnet: {arguments}"); // Log arguments for verification
-
+            var arguments = $"nuget sign \"{file}\" --certificate-path \"{certificatePath}\" --certificate-password \"{certificatePassword}\" --timestamper \"http://timestamp.digicert.com\"";
             var processStartInfo = new ProcessStartInfo
             {
                 FileName = "dotnet",
                 Arguments = arguments,
-                // 2. IMPORTANT: Set the Working Directory to the location of the .nupkg file
-                WorkingDirectory = Path.GetDirectoryName(file) ?? Environment.CurrentDirectory,
+                WorkingDirectory = Path.GetDirectoryName(file),
                 UseShellExecute = false,
                 RedirectStandardOutput = true,
-                RedirectStandardError = true, // Keep redirection for capturing
+                RedirectStandardError = true,
                 CreateNoWindow = true
             };
-
             using (var process = new Process { StartInfo = processStartInfo })
             {
-                // 3. Start the process
                 process.Start();
-
-                // 4. Synchronously read all output and error streams to guarantee capture
                 string output = await process.StandardOutput.ReadToEndAsync();
                 string error = await process.StandardError.ReadToEndAsync();
-
-                // 5. Wait for the process to exit
                 await Task.Run(() => process.WaitForExit());
-
-                // Now, check the exit code and logs
                 if (process.ExitCode == 0)
                 {
                     CliLog.Write(ConsoleColor.White, "|", SPACE);
                     CliLog.WriteSuccess(ConsoleColor.White, CliAction.SIGNED.Trim());
                     CliLog.WriteLine(" ", ConsoleColor.Green, Path.GetFileName(file));
-                    return true;
+                    return (true, string.Empty);
                 }
                 else
                 {
-                    // The process failed. Log all captured information.
-                    CliLog.WriteLineError(ConsoleColor.Red, $"--- Dotnet Sign Failed with Exit Code {process.ExitCode} ---");
-                    if (!string.IsNullOrEmpty(error))
+                    var outputs = output.Trim().Split("\n".ToCharArray());
+                    foreach(var o in outputs)
                     {
-                        CliLog.WriteLineError(ConsoleColor.Yellow, $"Standard Error Output:\n{error.Trim()}");
+                        if (o.StartsWith("error: NU3001:")) return (false, "Package already contains a signature. Please remove the existing signature by 'Clean' and then 'Rebuild' project.");
                     }
-                    else
-                    {
-                        // Sometimes the error is written to StandardOutput even on failure.
-                        CliLog.WriteLineError(ConsoleColor.Yellow, $"Standard Error was empty. Checking Standard Output (if available):\n{output.Trim()}");
-                    }
-                    CliLog.WriteLine(ConsoleColor.White, "|");
-                    //The package already contains a signature. Please remove the existing signature using Clearn and Rebuild project, and then try it again";
-                    return false;
+                    return (false, $"{output}");
                 }
             }
         }
 
-#endif
         private const string SPACE = "  ";
         private readonly Dictionary<string, Assembly> _assemblyCache = new Dictionary<string, Assembly>(StringComparer.OrdinalIgnoreCase);
         public bool IsOk { get; set; }
         public Guid SolutionId { get; set; }
         public string SolutionPrefix { get; set; }
-        public TaskServer(CommandLineArgs arg, Json json)
-        {
-            this.Arg = arg;
-            ServiceClient = arg.ServiceClient;
-            CurrentDirectory = arg.CurrentDirectory;
-            switch (arg.Type)
-            {
-                case nameof(CliType.servers):
-                    Json = json.servers.FirstOrDefault(x => x.profile == arg.Profile);
-                    TaskType = $"[{nameof(CliType.servers).ToUpper()}]";
-                    break;
-                case nameof(CliType.workflows):
-                    Json = json.workflows.FirstOrDefault(x => x.profile == arg.Profile);
-                    TaskType = $"[{nameof(CliType.workflows).ToUpper()}]";
-                    break;
-                case nameof(CliType.plugins):
-                    Json = json.plugins.FirstOrDefault(x => x.profile == arg.Profile);
-                    TaskType = $"[{nameof(CliType.plugins).ToUpper()}]";
-                    break;
-                case nameof(CliType.dataproviders):
-                    Json = json.dataproviders.FirstOrDefault(x => x.profile == arg.Profile);
-                    TaskType = $"[{nameof(CliType.dataproviders).ToUpper()}]";
-                    break;
-            }
-        }
+
         public string CurrentDirectory { get; set; }
         public string TaskType { get; set; }
         public ServiceClient ServiceClient { get; set; }
         public CommandLineArgs Arg { get; set; }
         private JsonServer Json { get; }
         private string CurrentFolder => $"{CurrentDirectory}\\{Json.folder}";
-        public async Task RunAsync()
-        {
-            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "START ");
-            CliLog.WriteLine(ConsoleColor.White, "|");
-            if (await IsValidAsync())
-            {
-                var files = GetFiles(CurrentFolder, Json.includefiles, Json.excludefiles);
-                if (files.Count == 0)
-                {
-                    CliLog.WriteLineWarning(ConsoleColor.Green, "Not found any files to deploy");
-                }
-                else
-                {
-                    await DeployFilesAsync(files);
-                }
-            }
-            CliLog.WriteLine(ConsoleColor.White, "|");
-            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "END ");
-        }
+
         public async Task<bool> IsValidAsync()
         {
             if (Json == null)
@@ -437,50 +757,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             return true;
         }
-        private async Task DeployFilesAsync(List<string> files)
-        {
-            foreach (var file in files)
-            {
-                if (file.EndsWith(".dll"))
-                {
-                    CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, $"{Path.GetFileName(file)}");
-#if IS_SUPPORT_MANAGED_IDENTITY
-                    IS_DEPLOY_SUPPORT_MANAGED_IDENTITY = IsNeedSignAssembly(file);
-                    if (IS_DEPLOY_SUPPORT_MANAGED_IDENTITY)
-                    {
-                        var ok = await SignAssemblyAsync(file, Path.Combine(CurrentDirectory, DynamcisCrmDevkitAssemblyAttribute.CertificatePath), DynamcisCrmDevkitAssemblyAttribute.CertificatePassword);
-                        if (!ok)
-                        {
-                            CliLog.WriteLineError(ConsoleColor.Yellow, $"The assembly {Path.GetFileName(file)} not signed. Assemply deployment stopped.");
-                            return;
-                        }
-                    }
-#endif
-                    await DeployDllAsync(file, DeployFileType.Dll);
-                }
-                else if (file.EndsWith(".nupkg"))
-                {
-                    CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, $"{Path.GetFileName(file)}");
-                    var checkFile = GetDllFileFromNugetPackage(file);
-#if IS_SUPPORT_MANAGED_IDENTITY
-                    IS_DEPLOY_SUPPORT_MANAGED_IDENTITY = IsNeedSignAssembly(checkFile);
-                    if (IS_DEPLOY_SUPPORT_MANAGED_IDENTITY)
-                    {
-                        var ok = await SignPackageAsync(file, Path.Combine(CurrentDirectory, DynamcisCrmDevkitAssemblyAttribute.CertificatePath), DynamcisCrmDevkitAssemblyAttribute.CertificatePassword);
-                        if (!ok)
-                        {
-                            CliLog.WriteLineError(ConsoleColor.Yellow, $"The package {Path.GetFileName(file)} not signed. Assemply deployment stopped.");
-                            return;
-                        }
-                    }
-#endif
-                    if(await DeployPackageAsync(file) == null) return;
-                    await DeployDllAsync(checkFile, DeployFileType.Nuget);
-                }
-                else
-                    CliLog.WriteLineError(ConsoleColor.Yellow, $"Not support file extension: {new FileInfo(file).Extension}");
-            }
-        }
+
         private string GetDllFileFromNugetPackage(string file)
         {
             var tempFile = Path.Combine(Path.GetTempPath(), Path.GetFileName(file));
@@ -1501,284 +1778,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         {
             return old == @new;
         }
-        private async Task<Guid?> DeployPackageAsync(string file)
-        {
-            var packageArchiveReader = new PackageArchiveReader(file);
-            byte[] inArray = File.ReadAllBytes(file);
-            var newContent = Convert.ToBase64String(inArray);
-            var fetchData = new
-            {
-                name = Path.GetFileName(file)
-            };
-            var fetchXml = $@"
-<fetch>
-  <entity name='pluginpackage'>
-    <attribute name='pluginpackageid' />
-    <attribute name='content' />
-    <filter type='and'>
-      <condition attribute='name' operator='eq' value='{fetchData.name}'/>
-    </filter>
-  </entity>
-</fetch>";
-            var rows = await ServiceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
-            Guid PluginPackageId = Guid.Empty;
-            if (rows.Entities.Count == 0)
-            {
-                try
-                {
-                    var entity = new Entity("pluginpackage");
-                    entity["name"] = $"{SolutionPrefix}_{fetchData.name}";
-                    entity["content"] = newContent;
-                    entity["version"] = packageArchiveReader.NuspecReader.GetVersion().ToFullString();
-                    var request = new CreateRequest { Target = entity };
-                    request.Parameters.Add("SolutionUniqueName", Json.solution);
-                    CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, $"{Path.GetFileName(file)}");
-                    var response = (CreateResponse)await ServiceClient.ExecuteAsync(request);
-                    PluginPackageId = response.id;
-                }
-                catch (FaultException fe)
-                {
-                    CliLog.WriteLineError(ConsoleColor.Yellow, $"{fe.Message} Package deployed, but the deployment of this package stopped.");
-                    return null;
-                }
-            }
-            else
-            {
-                var entity = rows.Entities[0];
-                var oldContent = entity.GetAttributeValue<string>("content");
-                if (IsEqualsContent(oldContent, newContent))
-                {
-                    CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, $"{Path.GetFileName(file)}");
-                }
-                else
-                {
-                    try
-                    {
-                        var update = new Entity("pluginpackage");
-                        update["pluginpackageid"] = entity.Id;
-                        update["content"] = newContent;
-                        update["version"] = packageArchiveReader.NuspecReader.GetVersion().ToFullString();
-                        var request = new UpdateRequest { Target = update };
-                        request.Parameters.Add("SolutionUniqueName", Json.solution);
-                        CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, $"{Path.GetFileName(file)}");
-                        await ServiceClient.ExecuteAsync(request);
-                        PluginPackageId = entity.Id;
-                    }
-                    catch (FaultException fe)
-                    {
-                        CliLog.WriteLineError(ConsoleColor.Yellow, $"{fe.Message} Package deployed, but the deployment of this package stopped.");
-                        return null;
-                    }
-                }
-            }
-#if IS_SUPPORT_MANAGED_IDENTITY
-            if (IS_DEPLOY_SUPPORT_MANAGED_IDENTITY)
-            {
-                var (managedIdentityId, applicationId) = await DeployManagedIdentityAsync(fetchData.name, Guid.Parse(DynamcisCrmDevkitAssemblyAttribute.TenantId), DynamcisCrmDevkitAssemblyAttribute.ApplicationIds);
-                if (rows.Entities.Count == 0)
-                {
-                    var pluginPackage = new Entity("pluginpackage")
-                    {
-                        ["pluginpackageid"] = PluginPackageId,
-                        ["managedidentityid"] = new EntityReference("managedidentity", managedIdentityId)
-                    };
-                    var request2 = new UpdateRequest { Target = pluginPackage };
-                    request2.Parameters.Add("SolutionUniqueName", Json.solution);
-                    CliLog.Write(ConsoleColor.White, "|", SPACE);
-                    CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTERED.Trim());
-                    CliLog.WriteLine(ConsoleColor.Blue, " Bind Assembly ", ConsoleColor.Cyan, fetchData.name, ConsoleColor.Blue, " to Managed Identity App: ", ConsoleColor.Cyan, applicationId);
-                    await ServiceClient.ExecuteAsync(request2);
-                }
-                else if (rows.Entities[0].GetAttributeValue<EntityReference>("managedidentityid")?.Id == managedIdentityId)
-                {
-                    CliLog.Write(ConsoleColor.White, "|", SPACE);
-                    CliLog.Write(ConsoleColor.Green, CliAction.DO_NOTHING.Trim());
-                    CliLog.WriteLine(ConsoleColor.Blue, " Bind Package ", ConsoleColor.Cyan, fetchData.name, ConsoleColor.Blue, " to Managed Identity App: ", ConsoleColor.Cyan, applicationId);
-                }
-                else
-                {
-                    var pluginPackage = new Entity("pluginpackage")
-                    {
-                        ["pluginpackageid"] = PluginPackageId,
-                        ["managedidentityid"] = new EntityReference("managedidentity", managedIdentityId)
-                    };
-                    var request2 = new UpdateRequest { Target = pluginPackage };
-                    request2.Parameters.Add("SolutionUniqueName", Json.solution);
-                    CliLog.Write(ConsoleColor.White, "|", SPACE);
-                    CliLog.WriteSuccess(ConsoleColor.White, CliAction.UPDATED.Trim());
-                    CliLog.WriteLine(ConsoleColor.Blue, " Bind Package ", ConsoleColor.Cyan, fetchData.name, ConsoleColor.Blue, " to Managed Identity App: ", ConsoleColor.Cyan, applicationId);
-                    await ServiceClient.ExecuteAsync(request2);
-                }
-            }
-#endif
-            return PluginPackageId;
-        }
-        private async Task<Guid?> DeployAssemblyAsync(string file, DeployFileType deployFileType)
-        {
-            (string name, int value) GetIsolationMode(string file)
-            {
-                var types = GetTypes(file);
-                foreach (var type in types)
-                {
-                    if (IsWorkflowType(type)) continue;
-                    var attributes = GetCrmPluginRegistrationAttributes(type);
-                    foreach (var attribute in attributes)
-                    {
-                        if (attribute.IsolationMode == IsolationModeEnum.None) return ("None", 1);
-                        if (attribute.IsolationMode == IsolationModeEnum.Sandbox) return ("Sandbox", 2);
-                        if (attribute.IsolationMode == IsolationModeEnum.Sandbox) return ("Sandbox", 2);
-                    }
-                }
-                return ("Sandbox", 2);
-            }
 
-            (string name, int value) GetSourceType(string file)
-            {
-                var types = GetTypes(file);
-                foreach (var type in types)
-                {
-                    if (IsWorkflowType(type)) continue;
-                    var attributes = GetCrmPluginRegistrationAttributes(type);
-                    foreach (var attribute in attributes)
-                    {
-                        if (attribute.SourceType == SourceTypeEnum.Database) return ("Database", 0);
-                        if (attribute.SourceType == SourceTypeEnum.Disk) return ("Disk", 1);
-                        if (attribute.SourceType == SourceTypeEnum.Normal) return ("Normal", 2);
-                        if (attribute.SourceType == SourceTypeEnum.AzureWebApp) return ("AzureWebApp", 3);
-                        if (attribute.SourceType == SourceTypeEnum.FileStore) return ("FileStore", 4);
-                    }
-                }
-                return ("Database", 0);
-            }
-            var assembly = LoadAssemblyIntoCache(file);
-            var assemblyProperties = assembly.GetName().FullName.Split(",= ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
-            var assemblyName = assemblyProperties[0];
-            var fetchData = new
-            {
-                name = assemblyName
-            };
-            var fetchXml = $@"
-<fetch>
-  <entity name='pluginassembly'>
-    <all-attributes />
-    <filter type='and'>
-      <condition attribute='name' operator='eq' value='{fetchData.name}'/>
-    </filter>
-  </entity>
-</fetch>";
-            var rows = await ServiceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
-            if (rows.Entities.Count > 0)
-            {
-                if (rows.Entities.Count > 0 && rows.Entities.Count != 1)
-                {
-                    CliLog.WriteLineError(ConsoleColor.Yellow, $"Found more than 1 plugin assembly name {assemblyName}. Assemply deployed, but the deployment of this assembly stopped.");
-                    return null;
-                }
-            }
-            var newContent = Convert.ToBase64String(File.ReadAllBytes(file));
-            Guid pluginAssemblyId = Guid.NewGuid();
-            var plugin = new Entity("pluginassembly")
-            {
-                ["content"] = newContent,
-                ["name"] = assemblyProperties[0],
-                ["culture"] = assemblyProperties[4],
-                ["version"] = assemblyProperties[2],
-                ["publickeytoken"] = assemblyProperties[6],
-            };
-            var text = string.Empty;
-            var (name_IsolationMode, value_IsolationMode) = GetIsolationMode(file);
-            var (name_SourceType, value_SourceType) = GetSourceType(file);
-            plugin["sourcetype"] = new OptionSetValue(value_SourceType);
-            plugin["isolationmode"] = new OptionSetValue(value_IsolationMode);
-            text = $" [Isolation: {name_IsolationMode}, Source: {name_SourceType}]";
-            if (rows.Entities.Count == 0)
-            {
-                var request = new CreateRequest
-                {
-                    Target = plugin
-                };
-                request.Parameters.Add("SolutionUniqueName", Json.solution);
-                CliLog.Write(ConsoleColor.White, "|", SPACE);
-                CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTERED.Trim());
-                CliLog.Write(ConsoleColor.White, " Assembly ", ConsoleColor.Cyan, assemblyName, ".dll");
-                CliLog.WriteLine(ConsoleColor.Blue, text);
-                var response = (CreateResponse)await ServiceClient.ExecuteAsync(request);
-                pluginAssemblyId = response.id;
-            }
-            else
-            {
-                var oldContent = rows.Entities[0].GetAttributeValue<string>("content");
-                pluginAssemblyId = rows.Entities[0].Id;
-                if (IsEqualsContent(oldContent, newContent))
-                {
-                    CliLog.Write(ConsoleColor.White, "|", SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.Blue, "Assembly ", ConsoleColor.Cyan, assemblyName, ".dll");
-                    CliLog.WriteLine(ConsoleColor.Blue, text);
-                }
-                else
-                {
-                    plugin["pluginassemblyid"] = pluginAssemblyId;
-                    var request = new UpdateRequest
-                    {
-                        Target = plugin
-                    };
-                    request.Parameters.Add("SolutionUniqueName", Json.solution);
-                    CliLog.Write(ConsoleColor.White, "|", SPACE);
-                    CliLog.WriteSuccess(ConsoleColor.White, CliAction.UPDATED.Trim());
-                    CliLog.Write(ConsoleColor.White, " Assembly ", ConsoleColor.Cyan, assemblyName);
-                    CliLog.WriteLine(ConsoleColor.Blue, text);
-                    try
-                    {
-                        await ServiceClient.ExecuteAsync(request);
-                    }
-                    catch (FaultException fe)
-                    {
-                        CliLog.WriteLineError(ConsoleColor.Yellow, $"{fe.Message} Assemply deployed, but the deployment of this assembly stopped.");
-                        return null;
-                    }
-                }
-            }
-#if IS_SUPPORT_MANAGED_IDENTITY
-            if (IS_DEPLOY_SUPPORT_MANAGED_IDENTITY && deployFileType == DeployFileType.Dll)
-            {
-                var (managedIdentityId, applicationId) = await DeployManagedIdentityAsync(assemblyName, Guid.Parse(DynamcisCrmDevkitAssemblyAttribute.TenantId), DynamcisCrmDevkitAssemblyAttribute.ApplicationIds);
-                if (rows.Entities.Count == 0)
-                {
-                    var pluginAssembly = new Entity("pluginassembly")
-                    {
-                        ["pluginassemblyid"] = pluginAssemblyId,
-                        ["managedidentityid"] = new EntityReference("managedidentity", managedIdentityId)
-                    };
-                    var request2 = new UpdateRequest { Target = pluginAssembly };
-                    request2.Parameters.Add("SolutionUniqueName", Json.solution);
-                    CliLog.Write(ConsoleColor.White, "|", SPACE);
-                    CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTERED.Trim());
-                    CliLog.WriteLine(ConsoleColor.Blue, " Bind Assembly ", ConsoleColor.Cyan, assemblyName, ".dll", ConsoleColor.Blue, " to Managed Identity App: ", ConsoleColor.Cyan, applicationId);
-                    await ServiceClient.ExecuteAsync(request2);
-                }
-                else if (rows.Entities[0].GetAttributeValue<EntityReference>("managedidentityid")?.Id == managedIdentityId)
-                {
-                    CliLog.Write(ConsoleColor.White, "|", SPACE);
-                    CliLog.Write(ConsoleColor.Green, CliAction.DO_NOTHING.Trim());
-                    CliLog.WriteLine(ConsoleColor.Blue, " Bind Assembly ", ConsoleColor.Cyan, assemblyName, ".dll", ConsoleColor.Blue, " to Managed Identity App: ", ConsoleColor.Cyan, applicationId);
-                }
-                else
-                {
-                    var pluginAssembly = new Entity("pluginassembly")
-                    {
-                        ["pluginassemblyid"] = pluginAssemblyId,
-                        ["managedidentityid"] = new EntityReference("managedidentity", managedIdentityId)
-                    };
-                    var request2 = new UpdateRequest { Target = pluginAssembly };
-                    request2.Parameters.Add("SolutionUniqueName", Json.solution);
-                    CliLog.Write(ConsoleColor.White, "|", SPACE);
-                    CliLog.WriteSuccess(ConsoleColor.White, CliAction.UPDATED.Trim());
-                    CliLog.WriteLine(ConsoleColor.Blue, " Bind Assembly ", ConsoleColor.Cyan, assemblyName, ".dll", ConsoleColor.Blue, " to Managed Identity App: ", ConsoleColor.Cyan, applicationId);
-                    await ServiceClient.ExecuteAsync(request2);
-                }
-            }
-#endif
-            return pluginAssemblyId;
-        }
+
         private bool IsEqualsContent(string oldContent, string newContent)
         {
             return oldContent == newContent;

@@ -134,13 +134,19 @@ namespace Dev.DevKitV4.Shared
 
     [DebuggerNonUserCode()]
     [AttributeUsage(AttributeTargets.Assembly, Inherited = false, AllowMultiple = false)]
-    public class DynamcisCrmDevkitAssemblyAttribute : Attribute
+    public class DynamcisCrmDevKitManagedIdentityAssemblyAttribute : Attribute
     {
-        public string TenantId { get; set; }
-        public IsolationModeEnum IsolationMode { get; set; } = IsolationModeEnum.Sandbox;
-        public SourceTypeEnum SourceType { get; set; } = SourceTypeEnum.Database;
-        public string CertificatePath { get; set; }
+        public string TenantId { get; set; }        
+        public string CertificateFile { get; set; }
         public string CertificatePassword { get; set; }
         public string ApplicationIds { get; set; } = string.Empty;
+    }
+
+    [DebuggerNonUserCode()]
+    [AttributeUsage(AttributeTargets.Assembly, Inherited = false, AllowMultiple = false)]
+    public class DynamcisCrmDevKitPluginAssemblyAttribute : Attribute
+    {
+        public IsolationModeEnum IsolationMode { get; set; } = IsolationModeEnum.Sandbox;
+        public SourceTypeEnum SourceType { get; set; } = SourceTypeEnum.Database;
     }
 }

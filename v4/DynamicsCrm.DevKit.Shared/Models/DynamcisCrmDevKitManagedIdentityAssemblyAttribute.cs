@@ -5,12 +5,11 @@ namespace DynamicsCrm.DevKit.Shared.Models
 {
 
     [DebuggerNonUserCode()]
-    public class DynamcisCrmDevkitAssemblyAttribute : Attribute
+    [AttributeUsage(AttributeTargets.Assembly, Inherited = false, AllowMultiple = false)]
+    public class DynamcisCrmDevKitManagedIdentityAssemblyAttribute : Attribute
     {
         public string TenantId { get; set; }
-        public IsolationModeEnum IsolationMode { get; set; } = IsolationModeEnum.Sandbox;
-        public SourceTypeEnum SourceType { get; set; } = SourceTypeEnum.Database;
-        public string CertificatePath { get; set; }
+        public string CertificateFile { get; set; }
         public string CertificatePassword { get; set; }
         public string ApplicationIds { get; set; } = string.Empty;
     }
