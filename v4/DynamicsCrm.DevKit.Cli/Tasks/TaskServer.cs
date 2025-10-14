@@ -393,7 +393,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         public CommandLineArgs Arg { get; set; }
         private JsonServer Json { get; }
         private string CurrentFolder => $"{CurrentDirectory}\\{Json.folder}";
-
         public async Task RunAsync()
         {
             CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "START ");
@@ -413,7 +412,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             CliLog.WriteLine(ConsoleColor.White, "|");
             CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "END ");
         }
-
         public async Task<bool> IsValidAsync()
         {
             if (Json == null)
@@ -483,7 +481,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     CliLog.WriteLineError(ConsoleColor.Yellow, $"Not support file extension: {new FileInfo(file).Extension}");
             }
         }
-
         private string GetDllFileFromNugetPackage(string file)
         {
             var tempFile = Path.Combine(Path.GetTempPath(), Path.GetFileName(file));
@@ -495,7 +492,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             ExtractZip(packageArchiveReader, folder);
             return Directory.GetFiles(folder).FirstOrDefault();
         }
-
         private async Task DeployDllAsync(string file, DeployFileType deployFileType = DeployFileType.Dll)
         {
             var types = GetTypes(file);
@@ -1531,7 +1527,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 try
                 {
                     var entity = new Entity("pluginpackage");
-                    entity["name"] = fetchData.name;
+                    entity["name"] = $"{SolutionPrefix}_{fetchData.name}";
                     entity["content"] = newContent;
                     entity["version"] = packageArchiveReader.NuspecReader.GetVersion().ToFullString();
                     var request = new CreateRequest { Target = entity };
@@ -1654,8 +1650,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
                 return ("Database", 0);
             }
-
-
             var assembly = LoadAssemblyIntoCache(file);
             var assemblyProperties = assembly.GetName().FullName.Split(",= ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
             var assemblyName = assemblyProperties[0];
@@ -1993,38 +1987,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             if (type?.BaseType != null) return IsWorkflowType(type?.BaseType);
             return false;
         }
-        //private async Task DeployPackageAsync(string file)
-        //{
-
-        //    using PackageArchiveReader packageArchiveReader = new(file);
-        //    var folder = $"{CurrentFolder}\\DynamicsCrm.DevKit";
-        //    ExtractZip(packageArchiveReader, folder);
-
-        //    var ok = await DeployPackageAsync(file);
-        //    if (ok)
-        //    {
-        //        if (Arg?.OnlyUpdateAssembly?.Length > 0) return;
-        //        var files = Directory.GetFiles(folder).ToList();
-        //        await DeployPackageFilesAsync(files);
-        //    }
-        //}
-        //private async Task DeployPackageFilesAsync(List<string> files)
-        //{
-        //    foreach (var f in files)
-        //    {
-        //        LoadAssemblyIntoCache(f);
-        //    }
-        //    foreach (var file in files)
-        //    {
-        //        var types = GetTypes(file);
-        //        if (types.Count > 0)
-        //        {
-        //            await DeployDllAsync(file, DeployFileType.Nuget);
-        //        }
-        //    }
-        //}
-
-
         private void ExtractZip(PackageArchiveReader packageArchiveReader, string folder)
         {
             var libFiles = packageArchiveReader.GetFiles("lib");
