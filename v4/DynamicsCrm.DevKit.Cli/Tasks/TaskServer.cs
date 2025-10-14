@@ -334,7 +334,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 request.Parameters.Add("SolutionUniqueName", Json.solution);
                 CliLog.Write(ConsoleColor.White, "|", SPACE);
                 CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTERED.Trim());
-                CliLog.Write(ConsoleColor.Blue, " Assembly ", ConsoleColor.Cyan, assemblyName, ".dll");
+                CliLog.Write(ConsoleColor.White, " Assembly ", ConsoleColor.Cyan, assemblyName, ".dll");
                 CliLog.WriteLine(ConsoleColor.Blue, text);
                 var response = (CreateResponse)await ServiceClient.ExecuteAsync(request);
                 pluginAssemblyId = response.id;
@@ -345,7 +345,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 pluginAssemblyId = rows.Entities[0].Id;
                 if (IsEqualsContent(oldContent, newContent))
                 {
-                    CliLog.Write(ConsoleColor.White, "|", SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.Blue, "Assembly ", ConsoleColor.Cyan, assemblyName, ".dll");
+                    CliLog.Write(ConsoleColor.White, "|", SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, "Assembly ", ConsoleColor.Cyan, assemblyName, ".dll");
                     CliLog.WriteLine(ConsoleColor.Blue, text);
                 }
                 else
@@ -358,7 +358,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     request.Parameters.Add("SolutionUniqueName", Json.solution);
                     CliLog.Write(ConsoleColor.White, "|", SPACE);
                     CliLog.WriteSuccess(ConsoleColor.White, CliAction.UPDATED.Trim());
-                    CliLog.Write(ConsoleColor.Blue, " Assembly ", ConsoleColor.Cyan, assemblyName, ".dll");
+                    CliLog.Write(ConsoleColor.White, " Assembly ", ConsoleColor.Cyan, assemblyName, ".dll");
                     CliLog.WriteLine(ConsoleColor.Blue, text);
                     try
                     {
@@ -385,14 +385,14 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     request2.Parameters.Add("SolutionUniqueName", Json.solution);
                     CliLog.Write(ConsoleColor.White, "|", SPACE);
                     CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTERED.Trim());
-                    CliLog.WriteLine(ConsoleColor.Blue, " Bind Assembly ", ConsoleColor.Cyan, assemblyName, ".dll", ConsoleColor.Blue, " to Managed Identity App ", ConsoleColor.Cyan, applicationId);
+                    CliLog.WriteLine(ConsoleColor.White, " Bind Assembly ", ConsoleColor.Cyan, assemblyName, ".dll", ConsoleColor.Blue, " to Managed Identity App ", ConsoleColor.Cyan, applicationId);
                     await ServiceClient.ExecuteAsync(request2);
                 }
                 else if (rows.Entities[0].GetAttributeValue<EntityReference>("managedidentityid")?.Id == managedIdentityId)
                 {
                     CliLog.Write(ConsoleColor.White, "|", SPACE);
                     CliLog.Write(ConsoleColor.Green, CliAction.DO_NOTHING.Trim());
-                    CliLog.WriteLine(ConsoleColor.Blue, " Bind Assembly ", ConsoleColor.Cyan, assemblyName, ".dll", ConsoleColor.Blue, " to Managed Identity App ", ConsoleColor.Cyan, applicationId);
+                    CliLog.WriteLine(ConsoleColor.White, " Bind Assembly ", ConsoleColor.Cyan, assemblyName, ".dll", ConsoleColor.Blue, " to Managed Identity App ", ConsoleColor.Cyan, applicationId);
                 }
                 else
                 {
@@ -405,7 +405,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     request2.Parameters.Add("SolutionUniqueName", Json.solution);
                     CliLog.Write(ConsoleColor.White, "|", SPACE);
                     CliLog.WriteSuccess(ConsoleColor.White, CliAction.UPDATED.Trim());
-                    CliLog.WriteLine(ConsoleColor.Blue, " Bind Assembly ", ConsoleColor.Cyan, assemblyName, ".dll", ConsoleColor.Blue, " to Managed Identity App ", ConsoleColor.Cyan, applicationId);
+                    CliLog.WriteLine(ConsoleColor.White, " Bind Assembly ", ConsoleColor.Cyan, assemblyName, ".dll", ConsoleColor.Blue, " to Managed Identity App ", ConsoleColor.Cyan, applicationId);
                     await ServiceClient.ExecuteAsync(request2);
                 }
             }
