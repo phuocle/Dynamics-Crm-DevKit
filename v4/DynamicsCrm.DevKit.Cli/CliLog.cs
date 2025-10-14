@@ -47,7 +47,6 @@ namespace DynamicsCrm.DevKit.Cli
             WriteLine(ConsoleColor.White, "▌");
             var oldConsoleBackgroundColor = Console.BackgroundColor;
             var oldConsoleForegroundColor = Console.ForegroundColor;
-            var countLength = 0;
             Console.BackgroundColor = ConsoleColor.Red;
             Write(ConsoleColor.White, "▌");
             foreach (var value in values)
@@ -56,14 +55,12 @@ namespace DynamicsCrm.DevKit.Cli
                     Console.ForegroundColor = color;
                 else
                 {
-                    Console.Write(FormatValue(value));
-                    countLength += value.ToString().Length;
+                    Console.Write(FormatValue2(value));
                 }
             }
             Console.ForegroundColor = oldConsoleForegroundColor;
             Console.BackgroundColor = oldConsoleBackgroundColor;
-            WriteLine(ConsoleColor.Black, "█");
-            WriteLine(ConsoleColor.White, "▌");
+            WriteLine(ConsoleColor.Black, "");
         }
 
         public static void WriteError(params object[] values)
@@ -71,7 +68,6 @@ namespace DynamicsCrm.DevKit.Cli
             WriteLine(ConsoleColor.White, "▌");
             var oldConsoleBackgroundColor = Console.BackgroundColor;
             var oldConsoleForegroundColor = Console.ForegroundColor;
-            var countLength = 0;
             Console.BackgroundColor = ConsoleColor.Red;
             Write(ConsoleColor.White, "▌");
             foreach (var value in values)
@@ -80,12 +76,16 @@ namespace DynamicsCrm.DevKit.Cli
                     Console.ForegroundColor = color;
                 else
                 {
-                    Console.Write(FormatValue(value));
-                    countLength += value.ToString().Length;
+                    Console.Write(FormatValue2(value));
                 }
             }
             Console.ForegroundColor = oldConsoleForegroundColor;
             Console.BackgroundColor = oldConsoleBackgroundColor;
+        }
+
+        private static string FormatValue2(object value)
+        {
+            return value?.ToString() ?? string.Empty;
         }
 
         private static string FormatValue(object value)

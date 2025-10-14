@@ -106,19 +106,15 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         (OK, ERROR) = await SignPackageAsync(fileNuget, Path.Combine(CurrentDirectory, ManagedIdentityAttribute.CertificateFile), ManagedIdentityAttribute.CertificatePassword);
                         if (!OK)
                         {
-                            CliLog.WriteError(ConsoleColor.Yellow, ERROR);
-                            CliLog.WriteLine(ConsoleColor.White, "|");
-                            CliLog.WriteError(ConsoleColor.Yellow, $"Package {Path.GetFileName(fileNuget)} not signed. Package deployment stopped.");
-                            CliLog.WriteLine(ConsoleColor.White, "|");
+                            CliLog.WriteLineError(ConsoleColor.Yellow, ERROR);
+                            CliLog.WriteLineError(ConsoleColor.Yellow, $"Package {Path.GetFileName(fileNuget)} not signed. Package deployment stopped.");
                             continue;
                         }
                     }
                     else if (ERROR.Length > 0)
                     {
-                        CliLog.WriteError(ConsoleColor.Yellow, ERROR);
-                        CliLog.WriteLine(ConsoleColor.White, "|");
-                        CliLog.WriteError(ConsoleColor.Yellow, $"Package {Path.GetFileName(fileNuget)} not signed. Package deployment stopped.");
-                        CliLog.WriteLine(ConsoleColor.White, "|");
+                        CliLog.WriteLineError(ConsoleColor.Yellow, ERROR);
+                        CliLog.WriteLineError(ConsoleColor.Yellow, $"Package {Path.GetFileName(fileNuget)} not signed. Package deployment stopped.");
                         continue;
                     }
                     ERROR = await DeployPackageAsync(fileNuget);
@@ -453,68 +449,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             return (true, string.Empty);
         }
-        private async Task<bool> SignAssemblyAsync(string file, string certificatePath, string certificatePassword = null)
-        {
-            if (!File.Exists(certificatePath))
-            {
-                CliLog.WriteLineError(ConsoleColor.Yellow, $"Certificate not found: {certificatePath}");
-                return false;
-            }
-            var signToolPath = FindSignTool();
-            if (string.IsNullOrEmpty(signToolPath))
-            {
-                return false;
-            }
-            var extension = Path.GetExtension(certificatePath).ToLowerInvariant();
-            string arguments;
-            if (string.IsNullOrEmpty(certificatePassword))
-            {
-                arguments = $"sign /f \"{certificatePath}\" /fd SHA256 /v \"{file}\"";
-            }
-            else
-            {
-                arguments = $"sign /f \"{certificatePath}\" /p \"{certificatePassword}\" /fd SHA256 /v \"{file}\"";
-            }
-            var processStartInfo = new ProcessStartInfo
-            {
-                FileName = signToolPath,
-                Arguments = arguments,
-                UseShellExecute = false,
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-                CreateNoWindow = true
-            };
-            using (var process = new Process { StartInfo = processStartInfo })
-            {
-                var output = new System.Text.StringBuilder();
-                var error = new System.Text.StringBuilder();
-                process.OutputDataReceived += (sender, args) =>
-                {
-                    if (!string.IsNullOrEmpty(args.Data)) output.AppendLine(args.Data);
-                };
-                process.ErrorDataReceived += (sender, args) =>
-                {
-                    if (!string.IsNullOrEmpty(args.Data)) error.AppendLine(args.Data);
-                };
-                process.Start();
-                process.BeginOutputReadLine();
-                process.BeginErrorReadLine();
-                await Task.Run(() => process.WaitForExit());
-                if (process.ExitCode == 0)
-                {
-                    CliLog.Write(ConsoleColor.White, "|", SPACE);
-                    CliLog.WriteSuccess(ConsoleColor.White, CliAction.SIGNED.Trim());
-                    CliLog.WriteLine(" ", ConsoleColor.Green, Path.GetFileName(file));
-                    return true;
-                }
-                else
-                {
-                    CliLog.WriteError(ConsoleColor.Yellow, $"{error.ToString()}");
-                    CliLog.WriteLine(ConsoleColor.White, "|");
-                    return false;
-                }
-            }
-        }
+
         private string FindSignTool()
         {
             try
@@ -685,6 +620,68 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
             }
             return attribute;
+        }
+        private async Task<bool> SignAssemblyAsync(string file, string certificatePath, string certificatePassword = null)
+        {
+            if (!File.Exists(certificatePath))
+            {
+                CliLog.WriteLineError(ConsoleColor.Yellow, $"Certificate not found: {certificatePath}");
+                return false;
+            }
+            var signToolPath = FindSignTool();
+            if (string.IsNullOrEmpty(signToolPath))
+            {
+                return false;
+            }
+            var extension = Path.GetExtension(certificatePath).ToLowerInvariant();
+            string arguments;
+            if (string.IsNullOrEmpty(certificatePassword))
+            {
+                arguments = $"sign /f \"{certificatePath}\" /fd SHA256 /v \"{file}\"";
+            }
+            else
+            {
+                arguments = $"sign /f \"{certificatePath}\" /p \"{certificatePassword}\" /fd SHA256 /v \"{file}\"";
+            }
+            var processStartInfo = new ProcessStartInfo
+            {
+                FileName = signToolPath,
+                Arguments = arguments,
+                UseShellExecute = false,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                CreateNoWindow = true
+            };
+            using (var process = new Process { StartInfo = processStartInfo })
+            {
+                var output = new System.Text.StringBuilder();
+                var error = new System.Text.StringBuilder();
+                process.OutputDataReceived += (sender, args) =>
+                {
+                    if (!string.IsNullOrEmpty(args.Data)) output.AppendLine(args.Data);
+                };
+                process.ErrorDataReceived += (sender, args) =>
+                {
+                    if (!string.IsNullOrEmpty(args.Data)) error.AppendLine(args.Data);
+                };
+                process.Start();
+                process.BeginOutputReadLine();
+                process.BeginErrorReadLine();
+                await Task.Run(() => process.WaitForExit());
+                if (process.ExitCode == 0)
+                {
+                    CliLog.Write(ConsoleColor.White, "|", SPACE);
+                    CliLog.WriteSuccess(ConsoleColor.White, CliAction.SIGNED.Trim());
+                    CliLog.WriteLine(" ", ConsoleColor.Green, Path.GetFileName(file));
+                    return true;
+                }
+                else
+                {
+                    CliLog.WriteError(ConsoleColor.Yellow, $"{error.ToString()}");
+                    CliLog.WriteLine(ConsoleColor.White, "|");
+                    return false;
+                }
+            }
         }
         private async Task<(bool ok, string error)> SignPackageAsync(string file, string certificatePath, string certificatePassword = null)
         {
