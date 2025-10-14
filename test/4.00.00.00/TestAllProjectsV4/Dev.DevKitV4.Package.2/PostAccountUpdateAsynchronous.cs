@@ -65,6 +65,7 @@ namespace Dev.DevKitV4.Package._2
                 tracing.DebugMessage(ex.ToString());
             }
             tracing.DebugMessage("CAN RUN PLUGIN WITHOUT ERROR");
+            tracing.DebugMessage("THIS IS THE SECOND LINE");
         }
 
         private void ExecutePlugin(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService serviceAdmin, IOrganizationService service, ITracingService tracing)
