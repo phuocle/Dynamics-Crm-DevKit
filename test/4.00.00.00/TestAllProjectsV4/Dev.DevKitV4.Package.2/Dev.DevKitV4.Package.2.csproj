@@ -5,7 +5,6 @@
 		<AssemblyVersion>1.0.0.0</AssemblyVersion>
 		<FileVersion>1.0.0.0</FileVersion>
 		<ProjectTypeGuids>{4C25E9B5-9FA6-436c-8E19-B395D2A65FAF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 	</PropertyGroup>
 	<Import Project="$(PowerAppsTargetsPath)\Microsoft.PowerApps.VisualStudio.Plugin.props" Condition="Exists('$(PowerAppsTargetsPath)\Microsoft.PowerApps.VisualStudio.Plugin.props')" />
 	<PropertyGroup>
@@ -16,6 +15,7 @@
 		<Description>$(AssemblyName)</Description>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<IsPublishable>True</IsPublishable>
+		<RootNamespace>Dev.DevKitV4.Package._2</RootNamespace>
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
 		<PackageOutputPath>bin\Debug</PackageOutputPath>
@@ -24,8 +24,8 @@
 		<PackageOutputPath>..\Release\dll</PackageOutputPath>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="DynamicsCrm.DevKit.Analyzers" Version="4.0.0" PrivateAssets="All" />
-		<PackageReference Include="DynamicsCrm.DevKit.Cli" Version="4.0.0" />
+		<PackageReference Include="DynamicsCrm.DevKit.Analyzers" Version="3.55.55.55" PrivateAssets="All" />
+		<PackageReference Include="DynamicsCrm.DevKit.Cli" Version="3.45.67.89" />
 		<PackageReference Include="Microsoft.CrmSdk.CoreAssemblies" Version="9.0.2.59" PrivateAssets="All" />
 		<PackageReference Include="Microsoft.PowerApps.MSBuild.Plugin" Version="1.*" PrivateAssets="All" />
 		<PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.*" PrivateAssets="All" />

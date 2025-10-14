@@ -135,7 +135,7 @@ namespace Dev.DevKitV4.Shared
     [DebuggerNonUserCode()]
     [AttributeUsage(AttributeTargets.Assembly, Inherited = false, AllowMultiple = false)]
     public class DynamcisCrmDevkitAssemblyAttribute : Attribute
-    {        
+    {
         public string TenantId { get; set; }
         public IsolationModeEnum IsolationMode { get; set; } = IsolationModeEnum.Sandbox;
         public SourceTypeEnum SourceType { get; set; } = SourceTypeEnum.Database;
