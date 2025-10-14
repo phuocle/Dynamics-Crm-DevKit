@@ -13,7 +13,7 @@
         "Dev.DevKitV4.DataProvider.*.dll",
         "Dev.DevKitV4.Server.dll",
         "Dev.DevKitV4.Server.2.dll",
-        "ManagedIdentity.nupkg"
+        "Dev.DevKitV4.Package.2.*.nupkg"
       ],
       "excludefiles": [
         "Dev.DevKitV4.*.Test.dll"

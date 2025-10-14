@@ -1,4 +1,4 @@
-﻿//#define IS_SUPPORT_MANAGED_IDENTITY
+﻿#define IS_SUPPORT_MANAGED_IDENTITY
 
 using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
@@ -287,6 +287,77 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
             }
             return attribute;
+        }
+        private async Task<bool> SignPackageAsync(string file, string certificatePath, string certificatePassword = null)
+        {
+            if (!File.Exists(certificatePath))
+            {
+                CliLog.WriteLineError(ConsoleColor.Yellow, $"Certificate not found: {certificatePath}");
+                return false;
+            }
+
+            var arguments = $"nuget sign \"{file}\" --certificate-path \"{certificatePath}\" --certificate-password \"{certificatePassword}\" --timestamper \"http://timestamp.digicert.com\"";
+            //    if (string.IsNullOrEmpty(certificatePassword))
+            //    {
+            //        arguments = $"sign /f \"{certificatePath}\" /fd SHA256 /v \"{file}\"";
+            //    }
+            //    else
+            //    {
+            //        arguments = $"sign /f \"{certificatePath}\" /p \"{certificatePassword}\" /fd SHA256 /v \"{file}\"";
+            //    }
+            //}
+            //else if (extension == ".cer")
+            //{
+            //    arguments = $"sign /f \"{certificatePath}\" /fd SHA256 /v \"{file}\"";
+            //}
+            //else
+            //{
+            //    CliLog.WriteLineError(ConsoleColor.Red, $"Unsupported certificate format: {extension}. Only .pfx and .cer are supported.");
+            //    return false;
+            //}
+
+            //.CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, $"{Path.GetFileName(file)}: Signing.....");
+            var processStartInfo = new ProcessStartInfo
+            {
+                FileName = "dotnet",
+                Arguments = arguments,
+                UseShellExecute = false,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                CreateNoWindow = true
+            };
+
+            using (var process = new Process { StartInfo = processStartInfo })
+            {
+                var output = new System.Text.StringBuilder();
+                var error = new System.Text.StringBuilder();
+                process.OutputDataReceived += (sender, args) =>
+                {
+                    if (!string.IsNullOrEmpty(args.Data)) output.AppendLine(args.Data);
+                };
+                process.ErrorDataReceived += (sender, args) =>
+                {
+                    if (!string.IsNullOrEmpty(args.Data)) error.AppendLine(args.Data);
+                };
+                process.Start();
+                process.BeginOutputReadLine();
+                process.BeginErrorReadLine();
+                //await Task.Run(() => process.WaitForExit());
+                process.WaitForExit();
+                if (process.ExitCode == 0)
+                {
+                    CliLog.Write(ConsoleColor.White, "|", SPACE);
+                    CliLog.WriteSuccess(ConsoleColor.White, CliAction.SIGNED.Trim());
+                    CliLog.WriteLine(" ", ConsoleColor.Green, Path.GetFileName(file));
+                    return true;
+                }
+                else
+                {
+                    CliLog.WriteError(ConsoleColor.Yellow, $"{error.ToString()}");
+                    CliLog.WriteLine(ConsoleColor.White, "|");
+                    return false;
+                }
+            }
         }
 #endif
         private const string SPACE = "  ";
@@ -1771,18 +1842,18 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         {
             using PackageArchiveReader packageArchiveReader = new(file);
             var folder = $"{CurrentFolder}\\DynamicsCrm.DevKit";
+            ExtractZip(packageArchiveReader, folder);
 #if IS_SUPPORT_MANAGED_IDENTITY
-            //var ok = await SignDllIfNeedAsync(file);
-            //if (!ok)
-            //{
-
-            //}
+            var (needsign, attribute) = IsNeedSignAssembly(Directory.GetFiles(folder).FirstOrDefault());
+            if (needsign)
+            {
+                await SignPackageAsync(file, Path.Combine(CurrentDirectory, attribute.CertificatePath), attribute.CertificatePassword);
+            }
 #endif
             var ok = await DeployNewOrUpdatePackageAsync(packageArchiveReader, file);
             if (ok)
             {
                 if (Arg?.OnlyUpdateAssembly?.Length > 0) return;
-                ExtractZip(packageArchiveReader, folder);
                 var files = Directory.GetFiles(folder).ToList();
                 await DeployPackageFilesAsync(files);
             }
@@ -1915,69 +1986,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             return true;
         }
 
-        private async Task<(Guid ManagedIdentityId, Guid ApplicationId)> DeployManagedIdentityAsync(string assemblyName, Guid TenantId, string ApplicationIds)
-        {
-
-            var AppIds = ApplicationIds.Contains(";") ? ApplicationIds.Split(";".ToCharArray()) : ApplicationIds.Split(",".ToCharArray());
-            var isDevApplication = true;
-            Guid? _ManagedIdentityId = null;
-            Guid? _ApplicationId = null;
-            foreach (var AppId in AppIds)
-            {
-                var fetchXml = $@"
-<fetch>
-  <entity name='managedidentity'>
-    <all-attributes />
-    <filter type='and'>
-      <condition attribute='applicationid' operator='eq' value='{AppId}'/>
-      <condition attribute='tenantid' operator='eq' value='{TenantId}'/>
-    </filter>
-  </entity>
-</fetch>";
-
-                var rows = await ServiceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
-                var managedIdentity = new Entity("managedidentity")
-                {
-                    ["tenantid"] = TenantId,
-                    ["applicationid"] = Guid.Parse(AppId),
-                    ["credentialsource"] = new OptionSetValue(2),
-                    ["subjectscope"] = new OptionSetValue(1),
-                    ["managedidentityid"] = Guid.NewGuid(),
-                    ["name"] = $"{assemblyName}-{AppId.ToString().ToUpper()}"
-                };
-                if (rows.Entities.Count == 0)
-                {
-                    var request = new CreateRequest { Target = managedIdentity };
-                    request.Parameters.Add("SolutionUniqueName", Json.solution);
-                    CliLog.Write(ConsoleColor.White, "|", SPACE);
-                    CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTERED.Trim());
-                    CliLog.WriteLine(ConsoleColor.Blue, " Managed Identity App: ", ConsoleColor.Cyan, $"{AppId}");
-                    var response = (CreateResponse)await ServiceClient.ExecuteAsync(request);
-                    if (isDevApplication && _ManagedIdentityId == null && _ApplicationId == null)
-                    {
-                        _ManagedIdentityId = response.id;
-                        _ApplicationId = Guid.Parse(AppId);
-                        isDevApplication = false;
-                    }
-                }
-                else
-                {
-                    CliLog.WriteLine(ConsoleColor.White, "|", SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.Blue, "Managed Identity App: ", ConsoleColor.Cyan, $"{AppId}");
-                    if (isDevApplication && _ManagedIdentityId == null && _ApplicationId == null)
-                    {
-                        _ManagedIdentityId = rows.Entities[0].Id;
-                        _ApplicationId = Guid.Parse(AppId);
-                        isDevApplication = false;
-                    }
-                }
-            }
-            return (_ManagedIdentityId.Value, _ApplicationId.Value);
-        }
-
         private void ExtractZip(PackageArchiveReader packageArchiveReader, string folder)
         {
             var libFiles = packageArchiveReader.GetFiles("lib");
-
             if (!Directory.Exists(folder))
             {
                 Directory.CreateDirectory(folder);
