@@ -2,6 +2,7 @@
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Extensions;
 using System;
+using System.Collections.Generic;
 
 namespace Dev.DevKitV4.Package._2
 {
@@ -43,9 +44,27 @@ namespace Dev.DevKitV4.Package._2
             var targetEntity = context.InputParameterOrDefault<Entity>("Target");
             tracing.DebugMessage(targetEntity.GetAttributeValue<string>("name"));
 
-            //tracing?.DebugContext(context);
-
-            //ExecutePlugin(context, serviceFactory, serviceAdmin, service, tracing);
+            try
+            {
+                // 1. Get Managed Identity Token
+                var identityService = (IManagedIdentityService)serviceProvider.GetService(typeof(IManagedIdentityService));
+                var scopes = new List<string> { "https://vault.azure.net/.default" };
+                var token = identityService.AcquireToken(scopes);
+                // 2. Get Secret from Key Vault
+                var secretValue = KeyVaultHelper.GetSecret(
+                    token,
+                    "https://kv-dataverse-devkitv4.vault.azure.net/",
+                    "DEVKITV4",
+                    tracing
+                );
+                // 3. Use the secret!
+                tracing.DebugMessage($"NEW API Endpoint: {secretValue}");
+            }
+            catch (Exception ex)
+            {
+                tracing.DebugMessage(ex.ToString());
+            }
+            tracing.DebugMessage("CAN RUN PLUGIN WITHOUT ERROR");
         }
 
         private void ExecutePlugin(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService serviceAdmin, IOrganizationService service, ITracingService tracing)

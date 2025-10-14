@@ -1,8 +1,9 @@
-﻿#define IS_SUPPORT_MANAGED_IDENTITY
+﻿//#define IS_SUPPORT_MANAGED_IDENTITY
 
 using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.PowerPlatform.Dataverse.Client;
+using Microsoft.VisualStudio.PlatformUI;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Query;
@@ -1770,6 +1771,13 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         {
             using PackageArchiveReader packageArchiveReader = new(file);
             var folder = $"{CurrentFolder}\\DynamicsCrm.DevKit";
+#if IS_SUPPORT_MANAGED_IDENTITY
+            //var ok = await SignDllIfNeedAsync(file);
+            //if (!ok)
+            //{
+
+            //}
+#endif
             var ok = await DeployNewOrUpdatePackageAsync(packageArchiveReader, file);
             if (ok)
             {
@@ -1814,6 +1822,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
   </entity>
 </fetch>";
             var rows = await ServiceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
+            Guid PluginPackageId = Guid.Empty;
             if (rows.Entities.Count == 0)
             {
                 try
@@ -1825,7 +1834,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var request = new CreateRequest { Target = entity };
                     request.Parameters.Add("SolutionUniqueName", Json.solution);
                     CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, $"{Path.GetFileName(file)}");
-                    await ServiceClient.ExecuteAsync(request);
+                    var response = (CreateResponse)await ServiceClient.ExecuteAsync(request);
+                    PluginPackageId = response.id;
                 }
                 catch (FaultException fe)
                 {
@@ -1853,6 +1863,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         request.Parameters.Add("SolutionUniqueName", Json.solution);
                         CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, $"{Path.GetFileName(file)}");
                         await ServiceClient.ExecuteAsync(request);
+                        PluginPackageId = entity.Id;
                     }
                     catch (FaultException fe)
                     {
@@ -1861,8 +1872,108 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     }
                 }
             }
+
+
+
+                var (managedIdentityId, applicationId) = await DeployManagedIdentityAsync("Dev.DevKitV4.Server.2.dll", Guid.Parse("49528483-b79b-4b88-b86e-7d882ba68911"), "2cb1f038-1adb-42bf-8e8d-6debe0073e1c,d3e983d9-f0ae-4907-89dc-a974cc9b9d75");
+            //if (rows.Entities.Count == 0)
+            //{
+            //    var pluginAssembly = new Entity("pluginassembly")
+            //    {
+            //        ["pluginassemblyid"] = pluginAssemblyId,
+            //        ["managedidentityid"] = new EntityReference("managedidentity", managedIdentityId)
+            //    };
+            //    var request2 = new UpdateRequest { Target = pluginAssembly };
+            //    request2.Parameters.Add("SolutionUniqueName", Json.solution);
+            //    CliLog.Write(ConsoleColor.White, "|", SPACE);
+            //    CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTERED.Trim());
+            //    CliLog.WriteLine(ConsoleColor.Blue, " Bind Assembly ", ConsoleColor.Cyan, assemblyName, ".dll", ConsoleColor.Blue, " to Managed Identity App: ", ConsoleColor.Cyan, applicationId);
+            //    await ServiceClient.ExecuteAsync(request2);
+            //}
+            //else if (rows.Entities[0].GetAttributeValue<EntityReference>("managedidentityid")?.Id == managedIdentityId)
+            //{
+            //    CliLog.Write(ConsoleColor.White, "|", SPACE);
+            //    CliLog.Write(ConsoleColor.Green, CliAction.DO_NOTHING.Trim());
+            //    CliLog.WriteLine(ConsoleColor.Blue, " Bind Assembly ", ConsoleColor.Cyan, assemblyName, ".dll", ConsoleColor.Blue, " to Managed Identity App: ", ConsoleColor.Cyan, applicationId);
+            //}
+            //else
+            //{
+            var pluginPackage = new Entity("pluginpackage")
+            {
+                ["pluginpackageid"] = PluginPackageId,
+                ["managedidentityid"] = new EntityReference("managedidentity", managedIdentityId)
+            };
+            var request2 = new UpdateRequest { Target = pluginPackage };
+            request2.Parameters.Add("SolutionUniqueName", Json.solution);
+            CliLog.Write(ConsoleColor.White, "|", SPACE);
+            CliLog.WriteSuccess(ConsoleColor.White, CliAction.UPDATED.Trim());
+            CliLog.WriteLine(ConsoleColor.Blue, " Bind Assembly ", ConsoleColor.Cyan, "Dev.DevKitV4.Server.2", ".dll", ConsoleColor.Blue, " to Managed Identity App: ", ConsoleColor.Cyan, applicationId);
+            await ServiceClient.ExecuteAsync(request2);
+            //}
+
+
             return true;
         }
+
+        private async Task<(Guid ManagedIdentityId, Guid ApplicationId)> DeployManagedIdentityAsync(string assemblyName, Guid TenantId, string ApplicationIds)
+        {
+
+            var AppIds = ApplicationIds.Contains(";") ? ApplicationIds.Split(";".ToCharArray()) : ApplicationIds.Split(",".ToCharArray());
+            var isDevApplication = true;
+            Guid? _ManagedIdentityId = null;
+            Guid? _ApplicationId = null;
+            foreach (var AppId in AppIds)
+            {
+                var fetchXml = $@"
+<fetch>
+  <entity name='managedidentity'>
+    <all-attributes />
+    <filter type='and'>
+      <condition attribute='applicationid' operator='eq' value='{AppId}'/>
+      <condition attribute='tenantid' operator='eq' value='{TenantId}'/>
+    </filter>
+  </entity>
+</fetch>";
+
+                var rows = await ServiceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
+                var managedIdentity = new Entity("managedidentity")
+                {
+                    ["tenantid"] = TenantId,
+                    ["applicationid"] = Guid.Parse(AppId),
+                    ["credentialsource"] = new OptionSetValue(2),
+                    ["subjectscope"] = new OptionSetValue(1),
+                    ["managedidentityid"] = Guid.NewGuid(),
+                    ["name"] = $"{assemblyName}-{AppId.ToString().ToUpper()}"
+                };
+                if (rows.Entities.Count == 0)
+                {
+                    var request = new CreateRequest { Target = managedIdentity };
+                    request.Parameters.Add("SolutionUniqueName", Json.solution);
+                    CliLog.Write(ConsoleColor.White, "|", SPACE);
+                    CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTERED.Trim());
+                    CliLog.WriteLine(ConsoleColor.Blue, " Managed Identity App: ", ConsoleColor.Cyan, $"{AppId}");
+                    var response = (CreateResponse)await ServiceClient.ExecuteAsync(request);
+                    if (isDevApplication && _ManagedIdentityId == null && _ApplicationId == null)
+                    {
+                        _ManagedIdentityId = response.id;
+                        _ApplicationId = Guid.Parse(AppId);
+                        isDevApplication = false;
+                    }
+                }
+                else
+                {
+                    CliLog.WriteLine(ConsoleColor.White, "|", SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.Blue, "Managed Identity App: ", ConsoleColor.Cyan, $"{AppId}");
+                    if (isDevApplication && _ManagedIdentityId == null && _ApplicationId == null)
+                    {
+                        _ManagedIdentityId = rows.Entities[0].Id;
+                        _ApplicationId = Guid.Parse(AppId);
+                        isDevApplication = false;
+                    }
+                }
+            }
+            return (_ManagedIdentityId.Value, _ApplicationId.Value);
+        }
+
         private void ExtractZip(PackageArchiveReader packageArchiveReader, string folder)
         {
             var libFiles = packageArchiveReader.GetFiles("lib");
