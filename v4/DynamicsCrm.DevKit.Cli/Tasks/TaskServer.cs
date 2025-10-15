@@ -223,14 +223,14 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     request2.Parameters.Add("SolutionUniqueName", Json.solution);
                     CliLog.Write(ConsoleColor.White, "|", SPACE);
                     CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTERED.Trim());
-                    CliLog.WriteLine(ConsoleColor.Blue, " Bind Package ", ConsoleColor.Cyan, Path.GetFileName(file), ConsoleColor.Blue, " to Managed Identity App ", ConsoleColor.Cyan, applicationId);
+                    CliLog.WriteLine(ConsoleColor.Blue, " Bind Package ", ConsoleColor.Cyan, Path.GetFileName(file), ConsoleColor.White, " to Managed Identity App ", ConsoleColor.Cyan, applicationId);
                     await ServiceClient.ExecuteAsync(request2);
                 }
                 else if (rows.Entities[0].GetAttributeValue<EntityReference>("managedidentityid")?.Id == managedIdentityId)
                 {
                     CliLog.Write(ConsoleColor.White, "|", SPACE);
                     CliLog.Write(ConsoleColor.Green, CliAction.DO_NOTHING.Trim());
-                    CliLog.WriteLine(ConsoleColor.Blue, " Bind Package ", ConsoleColor.Cyan, Path.GetFileName(file), ConsoleColor.Blue, " to Managed Identity App ", ConsoleColor.Cyan, applicationId);
+                    CliLog.WriteLine(ConsoleColor.Blue, " Bind Package ", ConsoleColor.Cyan, Path.GetFileName(file), ConsoleColor.White, " to Managed Identity App ", ConsoleColor.Cyan, applicationId);
                 }
                 else
                 {
@@ -243,7 +243,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     request2.Parameters.Add("SolutionUniqueName", Json.solution);
                     CliLog.Write(ConsoleColor.White, "|", SPACE);
                     CliLog.WriteSuccess(ConsoleColor.White, CliAction.UPDATED.Trim());
-                    CliLog.WriteLine(ConsoleColor.Blue, " Bind Package ", ConsoleColor.Cyan, Path.GetFileName(file), ConsoleColor.Blue, " to Managed Identity App ", ConsoleColor.Cyan, applicationId);
+                    CliLog.WriteLine(ConsoleColor.Blue, " Bind Package ", ConsoleColor.Cyan, Path.GetFileName(file), ConsoleColor.White, " to Managed Identity App ", ConsoleColor.Cyan, applicationId);
                     await ServiceClient.ExecuteAsync(request2);
                 }
             }
@@ -386,14 +386,14 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     request2.Parameters.Add("SolutionUniqueName", Json.solution);
                     CliLog.Write(ConsoleColor.White, "|", SPACE);
                     CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTERED.Trim());
-                    CliLog.WriteLine(ConsoleColor.White, " Bind Assembly ", ConsoleColor.Cyan, assemblyName, ".dll", ConsoleColor.Blue, " to Managed Identity App ", ConsoleColor.Cyan, applicationId);
+                    CliLog.WriteLine(ConsoleColor.White, " Bind Assembly ", ConsoleColor.Cyan, assemblyName, ".dll", ConsoleColor.White, " to Managed Identity App ", ConsoleColor.Cyan, applicationId);
                     await ServiceClient.ExecuteAsync(request2);
                 }
                 else if (rows.Entities[0].GetAttributeValue<EntityReference>("managedidentityid")?.Id == managedIdentityId)
                 {
                     CliLog.Write(ConsoleColor.White, "|", SPACE);
                     CliLog.Write(ConsoleColor.Green, CliAction.DO_NOTHING.Trim());
-                    CliLog.WriteLine(ConsoleColor.White, " Bind Assembly ", ConsoleColor.Cyan, assemblyName, ".dll", ConsoleColor.Blue, " to Managed Identity App ", ConsoleColor.Cyan, applicationId);
+                    CliLog.WriteLine(ConsoleColor.White, " Bind Assembly ", ConsoleColor.Cyan, assemblyName, ".dll", ConsoleColor.White, " to Managed Identity App ", ConsoleColor.Cyan, applicationId);
                 }
                 else
                 {
@@ -406,7 +406,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     request2.Parameters.Add("SolutionUniqueName", Json.solution);
                     CliLog.Write(ConsoleColor.White, "|", SPACE);
                     CliLog.WriteSuccess(ConsoleColor.White, CliAction.UPDATED.Trim());
-                    CliLog.WriteLine(ConsoleColor.White, " Bind Assembly ", ConsoleColor.Cyan, assemblyName, ".dll", ConsoleColor.Blue, " to Managed Identity App ", ConsoleColor.Cyan, applicationId);
+                    CliLog.WriteLine(ConsoleColor.White, " Bind Assembly ", ConsoleColor.Cyan, assemblyName, ".dll", ConsoleColor.White, " to Managed Identity App ", ConsoleColor.Cyan, applicationId);
                     await ServiceClient.ExecuteAsync(request2);
                 }
             }
@@ -667,7 +667,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 {
                     CliLog.Write(ConsoleColor.White, "|", SPACE);
                     CliLog.WriteSuccess(ConsoleColor.White, CliAction.SIGNED.Trim());
-                    CliLog.Write(ConsoleColor.Blue, " Assembly ");
+                    CliLog.Write(ConsoleColor.White, " Assembly ");
                     CliLog.WriteLine(ConsoleColor.Cyan, Path.GetFileName(file));
                     return (true, string.Empty);
                 }
@@ -1544,17 +1544,17 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 {
                     if (rows.Entities.Count == 0)
                     {
-                        CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE);
+                        CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE);
                         CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTERED.Trim());
                         CliLog.WriteLine(ConsoleColor.White, " Update Fields: ", ConsoleColor.Green, attribute.FilteringAttributes ?? "*");
                     }
                     else
                     {
                         if (rows.Entities[0].GetAttributeValue<string>("filteringattributes") == attribute.FilteringAttributes?.Replace(" ", ""))
-                            CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, "Update Fields: ", ConsoleColor.Green, attribute.FilteringAttributes ?? "*");
+                            CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, "Update Fields: ", ConsoleColor.Green, attribute.FilteringAttributes ?? "*");
                         else
                         {
-                            CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE);
+                            CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE);
                             CliLog.WriteSuccess(ConsoleColor.White, CliAction.UPDATED.Trim());
                             CliLog.WriteLine(ConsoleColor.White, " Update Fields: ", ConsoleColor.Green, attribute.FilteringAttributes ?? "*"); ;
                         }
@@ -1566,19 +1566,19 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 //SecureConfiguration
                 if (SecureConfigurationAction == CliAction.DO_NOTHING)
                 {
-                    CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, "Secure Configuration = ", ConsoleColor.Green, attribute.SecureConfiguration);
+                    CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, "Secure Configuration = ", ConsoleColor.Green, attribute.SecureConfiguration);
                 }
                 else if (!string.IsNullOrWhiteSpace(SecureConfigurationAction))
                 {
                     if (string.IsNullOrWhiteSpace(attribute.SecureConfiguration))
                     {
-                        CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE);
+                        CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE);
                         CliLog.WriteSuccess(ConsoleColor.White, CliAction.UNREGISTERED.Trim());
                         CliLog.WriteLine(ConsoleColor.White, " Secure Configuration", ConsoleColor.Green, attribute.SecureConfiguration);
                     }
                     else
                     {
-                        CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE);
+                        CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE);
                         CliLog.WriteSuccess(ConsoleColor.White, SecureConfigurationAction.Trim());
                         CliLog.WriteLine(ConsoleColor.White, " Secure Configuration = ", ConsoleColor.Green, attribute.SecureConfiguration);
                     }
@@ -1586,7 +1586,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 //UnSecureConfiguration
                 if (rows.Entities.Count == 0 && !string.IsNullOrWhiteSpace(attribute.UnSecureConfiguration))
                 {
-                    CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE);
+                    CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE);
                     CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTERED.Trim());
                     CliLog.WriteLine(ConsoleColor.White, " UnSecure Configuration = ", ConsoleColor.Green, attribute.UnSecureConfiguration);
                 }
@@ -1594,23 +1594,23 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 {
                     if (rows.Entities[0].GetAttributeValue<string>("configuration") == null && !string.IsNullOrWhiteSpace(attribute.UnSecureConfiguration))
                     {
-                        CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE);
+                        CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE);
                         CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTERED.Trim());
                         CliLog.WriteLine(ConsoleColor.White, " UnSecure Configuration = ", ConsoleColor.Green, attribute.UnSecureConfiguration);
                     }
                     else if (rows.Entities[0].GetAttributeValue<string>("configuration") == attribute.UnSecureConfiguration)
                     {
-                        CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, "UnSecure Configuration = ", ConsoleColor.Green, attribute.UnSecureConfiguration);
+                        CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, "UnSecure Configuration = ", ConsoleColor.Green, attribute.UnSecureConfiguration);
                     }
                     else if (rows.Entities[0].GetAttributeValue<string>("configuration") != null && string.IsNullOrEmpty(attribute.UnSecureConfiguration))
                     {
-                        CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE);
+                        CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE);
                         CliLog.WriteSuccess(ConsoleColor.White, CliAction.UNREGISTERED.Trim());
                         CliLog.WriteLine(ConsoleColor.White, " UnSecure Configuration");
                     }
                     else if (rows.Entities[0].GetAttributeValue<string>("configuration") != null && !string.IsNullOrEmpty(attribute.UnSecureConfiguration))
                     {
-                        CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE);
+                        CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE);
                         CliLog.WriteSuccess(ConsoleColor.White, CliAction.UPDATED.Trim());
                         CliLog.WriteLine(ConsoleColor.White, " UnSecure Configuration = ", ConsoleColor.Green, attribute.UnSecureConfiguration);
                     }
