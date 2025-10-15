@@ -568,7 +568,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     request.Parameters.Add("SolutionUniqueName", Json.solution);
                     CliLog.Write(ConsoleColor.White, "|", SPACE);
                     CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTERED.Trim());
-                    CliLog.WriteLine(ConsoleColor.Blue, " Managed Identity App ", ConsoleColor.Cyan, $"{AppId}");
+                    CliLog.WriteLine(ConsoleColor.White, " Managed Identity App ", ConsoleColor.Cyan, $"{AppId}");
                     var response = (CreateResponse)await ServiceClient.ExecuteAsync(request);
                     if (isDevApplication && _ManagedIdentityId == null && _ApplicationId == null)
                     {
@@ -579,7 +579,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
                 else
                 {
-                    CliLog.WriteLine(ConsoleColor.White, "|", SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.Blue, "Managed Identity App ", ConsoleColor.Cyan, $"{AppId}");
+                    CliLog.WriteLine(ConsoleColor.White, "|", SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, "Managed Identity App ", ConsoleColor.Cyan, $"{AppId}");
                     if (isDevApplication && _ManagedIdentityId == null && _ApplicationId == null)
                     {
                         _ManagedIdentityId = rows.Entities[0].Id;
