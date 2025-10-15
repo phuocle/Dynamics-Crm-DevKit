@@ -778,7 +778,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         private async Task DeployDllAsync(string file, DeployFileType deployFileType = DeployFileType.Dll)
         {
             var types = GetTypes(file);
-            if (!await IsValidTypesAsync(file, types)) return;
+            if (!await IsValidTypesAsync(file, types, deployFileType)) return;
             await DeployFileAsync(file, types, deployFileType);
         }
         private async Task DeployFileAsync(string file, List<TypeInfo> types, DeployFileType deployFileType)
@@ -1373,7 +1373,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE);
                 CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTERED.Trim());
                 if (attribute.Action == PluginStepOperationEnum.Deactivate)
-                    CliLog.WriteSuccess(ConsoleColor.White, " ", CliAction.DEACTIVATED.Trim());
+                {
+                    CliLog.Write(" ");
+                    CliLog.WriteSuccess(ConsoleColor.White, CliAction.DEACTIVATED.Trim());
+                }
                 CliLog.WriteLine(ConsoleColor.White, $" Step ", ConsoleColor.Blue, attribute.Message, " ", ConsoleColor.Cyan, attribute.Name, ConsoleColor.Blue, $" [{attribute.Stage}, {attribute.ExecutionMode}]");
                 CliLogSecureUnsecure();
                 CliLogUpdateFields();
@@ -1861,8 +1864,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         {
             return oldContent == newContent;
         }
-        private async Task<bool> IsValidTypesAsync(string file, List<TypeInfo> types)
+        private async Task<bool> IsValidTypesAsync(string file, List<TypeInfo> types, DeployFileType deployFileType)
         {
+            if (types.Count == 0 && deployFileType == DeployFileType.Nuget)
+                return false;
             if (types.Count == 0)
             {
                 CliLog.WriteLineError(ConsoleColor.Yellow, $"Not found any valid types to deploy.");
