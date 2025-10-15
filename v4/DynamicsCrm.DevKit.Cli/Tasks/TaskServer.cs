@@ -1312,6 +1312,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
   </entity>
 </fetch>";
             var rows = await ServiceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
+            var SecureConfigurationAction = string.Empty;
             if (rows.Entities.Count > 0)
             {
                 if (rows.Entities.Count > 0 && rows.Entities.Count != 1)
@@ -1349,6 +1350,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var secureEntity = new Entity("sdkmessageprocessingstepsecureconfig");
                     secureEntity["secureconfig"] = attribute.SecureConfiguration;
                     var sdkmessageprocessingstepsecureconfigid = await ServiceClient.CreateAsync(secureEntity);
+                    SecureConfigurationAction = CliAction.REGISTERED;
                     pluginStep["sdkmessageprocessingstepsecureconfigid"] = new EntityReference("sdkmessageprocessingstepsecureconfig", sdkmessageprocessingstepsecureconfigid);
                 }
                 var request = new CreateRequest
@@ -1359,7 +1361,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE);
                 CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTERED.Trim());
                 CliLog.WriteLine(ConsoleColor.White, $" Step ", ConsoleColor.Blue, attribute.Message, " ", ConsoleColor.Cyan, attribute.Name, ConsoleColor.Blue, $" [{attribute.Stage}, {attribute.ExecutionMode}]");
-
                 CliLogSecureUnsecure();
                 CliLogUpdateFields();
                 try
@@ -1394,7 +1395,12 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var sdkmessageprocessingstepsecureconfigid = (Guid?)secureEntity.GetAttributeValue<AliasedValue>("s.sdkmessageprocessingstepsecureconfigid")?.Value;
                     if (sdkmessageprocessingstepsecureconfigid.HasValue)
                     {
+                        var u = new Entity("sdkmessageprocessingstep");
+                        u["sdkmessageprocessingstepid"] = pluginStepId.Value;
+                        u["sdkmessageprocessingstepsecureconfigid"] = null;
+                        await ServiceClient.UpdateAsync(u);
                         await ServiceClient.DeleteAsync("sdkmessageprocessingstepsecureconfig", sdkmessageprocessingstepsecureconfigid.Value);
+                        SecureConfigurationAction = CliAction.UNREGISTERED;
                         hasChangedPluginStep = true;
                     }
                 }
@@ -1409,8 +1415,22 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                             var update = new Entity("sdkmessageprocessingstepsecureconfig", sdkmessageprocessingstepsecureconfigid.Value);
                             update["secureconfig"] = attribute.SecureConfiguration;
                             await ServiceClient.UpdateAsync(update);
+                            SecureConfigurationAction = CliAction.UPDATED;
                             hasChangedPluginStep = true;
                         }
+                        else
+                            SecureConfigurationAction = CliAction.DO_NOTHING;
+                    }
+                    else
+                    {
+                        var secureEntity2 = new Entity("sdkmessageprocessingstepsecureconfig");
+                        secureEntity2["secureconfig"] = attribute.SecureConfiguration;
+                        var sdkmessageprocessingstepsecureconfigid2 = await ServiceClient.CreateAsync(secureEntity2);
+                        SecureConfigurationAction = CliAction.REGISTERED;
+                        var u = new Entity("sdkmessageprocessingstep");
+                        u["sdkmessageprocessingstepid"] = pluginStepId.Value;
+                        u["sdkmessageprocessingstepsecureconfigid"] = new EntityReference("sdkmessageprocessingstepsecureconfig", sdkmessageprocessingstepsecureconfigid2);
+                        await ServiceClient.UpdateAsync(u);
                     }
                 }
                 else if (attribute.SecureConfiguration?.Trim().Length > 0 && secureEntity == null)
@@ -1418,6 +1438,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var create = new Entity("sdkmessageprocessingstepsecureconfig");
                     create["secureconfig"] = attribute.SecureConfiguration;
                     var sdkmessageprocessingstepsecureconfigid = await ServiceClient.CreateAsync(secureEntity);
+                    SecureConfigurationAction = CliAction.REGISTERED;
                     pluginStep["sdkmessageprocessingstepsecureconfigid"] = new EntityReference("sdkmessageprocessingstepsecureconfig", sdkmessageprocessingstepsecureconfigid);
                     hasChangedPluginStep = true;
                 }
@@ -1542,10 +1563,25 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             void CliLogSecureUnsecure()
             {
-                if (attribute.SecureConfiguration.Length > 0)
+                //SecureConfiguration
+                if (SecureConfigurationAction == CliAction.DO_NOTHING)
                 {
-
-                    CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, " ", ConsoleColor.White, "Secure Configuration = ", ConsoleColor.Green, attribute.SecureConfiguration ?? "*");
+                    CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, "Secure Configuration = ", ConsoleColor.Green, attribute.SecureConfiguration);
+                }
+                else if (!string.IsNullOrWhiteSpace(SecureConfigurationAction))
+                {
+                    if (string.IsNullOrWhiteSpace(attribute.SecureConfiguration))
+                    {
+                        CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE);
+                        CliLog.WriteSuccess(ConsoleColor.White, CliAction.UNREGISTERED.Trim());
+                        CliLog.WriteLine(ConsoleColor.White, " Secure Configuration", ConsoleColor.Green, attribute.SecureConfiguration);
+                    }
+                    else
+                    {
+                        CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE);
+                        CliLog.WriteSuccess(ConsoleColor.White, SecureConfigurationAction.Trim());
+                        CliLog.WriteLine(ConsoleColor.White, " Secure Configuration = ", ConsoleColor.Green, attribute.SecureConfiguration);
+                    }
                 }
                 //UnSecureConfiguration
                 if (rows.Entities.Count == 0 && !string.IsNullOrWhiteSpace(attribute.UnSecureConfiguration))
