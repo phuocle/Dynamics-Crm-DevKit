@@ -102,8 +102,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 {
                     var fileNuget = file;
                     CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, $"{Path.GetFileName(fileNuget)}");
-                    var fileNugetDll = GetDllFileFromNugetPackage(fileNuget);
-                    (IS_MANAGED_IDENTITY, ERROR) = IsNeedSignAssembly(fileNugetDll);
+                    var fileNugetDlls = GetDllFileFromNugetPackage(fileNuget);
+                    (IS_MANAGED_IDENTITY, ERROR) = IsNeedSignAssembly(fileNugetDlls);
                     if (IS_MANAGED_IDENTITY && ERROR.Length == 0)
                     {
                         (OK, ERROR) = await SignPackageAsync(fileNuget, Path.Combine(CurrentDirectory, ManagedIdentityAttribute.CertificateFile), ManagedIdentityAttribute.CertificatePassword);
@@ -129,7 +129,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         CliLog.WriteLine(ConsoleColor.White, "|");
                         continue;
                     }
-                    await DeployDllAsync(fileNugetDll, DeployFileType.Nuget);
+                    foreach (var fileNugetDll in fileNugetDlls)
+                    {
+                        await DeployDllAsync(fileNugetDll, DeployFileType.Nuget);
+                    }
                 }
                 else
                     CliLog.WriteLineError(ConsoleColor.Yellow, $"Not support file extension: {new FileInfo(file).Extension}");
@@ -171,7 +174,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var response = (CreateResponse)await ServiceClient.ExecuteAsync(request);
                     CliLog.Write(ConsoleColor.White, "|", SPACE);
                     CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTERED.Trim());
-                    CliLog.WriteLine(ConsoleColor.Blue, " Package ", ConsoleColor.Cyan, Path.GetFileName(file));
+                    CliLog.WriteLine(ConsoleColor.White, " Package ", ConsoleColor.Cyan, Path.GetFileName(file));
                     PluginPackageId = response.id;
                 }
                 catch (FaultException fe)
@@ -200,7 +203,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         await ServiceClient.ExecuteAsync(request);
                         CliLog.Write(ConsoleColor.White, "|", SPACE);
                         CliLog.WriteSuccess(ConsoleColor.White, CliAction.UPDATED.Trim());
-                        CliLog.WriteLine(ConsoleColor.Blue, " Package ", ConsoleColor.Cyan, Path.GetFileName(file));
+                        CliLog.WriteLine(ConsoleColor.White, " Package ", ConsoleColor.Cyan, Path.GetFileName(file));
                         PluginPackageId = entity.Id;
                     }
                     catch (FaultException fe)
@@ -425,6 +428,15 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         private bool IS_MANAGED_IDENTITY = false;
         private string ERROR = string.Empty;
         private DynamcisCrmDevKitManagedIdentityAssemblyAttribute ManagedIdentityAttribute { get; set; }
+        private (bool needSign, string error) IsNeedSignAssembly(List<string> files)
+        {
+            foreach(var file in files)
+            {
+                var (ok, error) = IsNeedSignAssembly(file);
+                if (ok) return (ok, error);
+            }
+            return (false, string.Empty);
+        }
         private (bool needSign, string error) IsNeedSignAssembly(string file)
         {
             var assembly = LoadAssemblyIntoCache(file);
@@ -752,7 +764,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             return true;
         }
-        private string GetDllFileFromNugetPackage(string file)
+        private List<string> GetDllFileFromNugetPackage(string file)
         {
             var tempFile = Path.Combine(Path.GetTempPath(), Path.GetFileName(file));
             Helper.TryDeleteFile(tempFile);
@@ -761,7 +773,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var folder = $"{CurrentFolder}\\DynamicsCrm.DevKit.Cli.2";
             Helper.TryDeleteDirectory(folder);
             ExtractZip(packageArchiveReader, folder);
-            return Directory.GetFiles(folder).FirstOrDefault();
+            return Directory.GetFiles(folder).ToList();
         }
         private async Task DeployDllAsync(string file, DeployFileType deployFileType = DeployFileType.Dll)
         {
@@ -1610,23 +1622,23 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
                 else
                 {
-                    if (rows.Entities[0].GetAttributeValue<string>("configuration") == null && !string.IsNullOrWhiteSpace(attribute.UnSecureConfiguration))
+                    if (rows.Entities.Count == 1 && rows.Entities[0].GetAttributeValue<string>("configuration") == null && !string.IsNullOrWhiteSpace(attribute.UnSecureConfiguration))
                     {
                         CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE);
                         CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTERED.Trim());
                         CliLog.WriteLine(ConsoleColor.White, " UnSecure Configuration = ", ConsoleColor.Green, attribute.UnSecureConfiguration);
                     }
-                    else if (rows.Entities[0].GetAttributeValue<string>("configuration") == attribute.UnSecureConfiguration)
+                    else if (rows.Entities.Count == 1 && rows.Entities[0].GetAttributeValue<string>("configuration") == attribute.UnSecureConfiguration)
                     {
                         CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, "UnSecure Configuration = ", ConsoleColor.Green, attribute.UnSecureConfiguration);
                     }
-                    else if (rows.Entities[0].GetAttributeValue<string>("configuration") != null && string.IsNullOrEmpty(attribute.UnSecureConfiguration))
+                    else if (rows.Entities.Count == 1 && rows.Entities[0].GetAttributeValue<string>("configuration") != null && string.IsNullOrEmpty(attribute.UnSecureConfiguration))
                     {
                         CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE);
                         CliLog.WriteSuccess(ConsoleColor.White, CliAction.UNREGISTERED.Trim());
                         CliLog.WriteLine(ConsoleColor.White, " UnSecure Configuration");
                     }
-                    else if (rows.Entities[0].GetAttributeValue<string>("configuration") != null && !string.IsNullOrEmpty(attribute.UnSecureConfiguration))
+                    else if (rows.Entities.Count == 1 && rows.Entities[0].GetAttributeValue<string>("configuration") != null && !string.IsNullOrEmpty(attribute.UnSecureConfiguration))
                     {
                         CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE);
                         CliLog.WriteSuccess(ConsoleColor.White, CliAction.UPDATED.Trim());
@@ -1758,7 +1770,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
                 if (deployFileType == DeployFileType.Nuget)
                 {
-                    CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, "Type ", ConsoleColor.Blue, attribute.PluginType, ConsoleColor.Cyan, type.FullName);
+                    CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, "Type ", ConsoleColor.Blue, attribute.PluginType, " ", ConsoleColor.Cyan, type.FullName);
                     return rows.Entities[0].Id;
                 }
             }
