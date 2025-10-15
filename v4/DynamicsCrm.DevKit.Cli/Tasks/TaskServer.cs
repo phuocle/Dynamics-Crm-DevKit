@@ -1360,6 +1360,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 request.Parameters.Add("SolutionUniqueName", Json.solution);
                 CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE);
                 CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTERED.Trim());
+                if (attribute.Action == PluginStepOperationEnum.Deactivate)
+                    CliLog.WriteSuccess(ConsoleColor.White, " ", CliAction.DEACTIVATED.Trim());
                 CliLog.WriteLine(ConsoleColor.White, $" Step ", ConsoleColor.Blue, attribute.Message, " ", ConsoleColor.Cyan, attribute.Name, ConsoleColor.Blue, $" [{attribute.Stage}, {attribute.ExecutionMode}]");
                 CliLogSecureUnsecure();
                 CliLogUpdateFields();
@@ -1471,6 +1473,14 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     {
                         CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE);
                         CliLog.WriteSuccess(ConsoleColor.White, CliAction.UPDATED.Trim());
+                        if (
+                            rows.Entities.Count == 1 &&
+                            rows?.Entities?[0]?.GetAttributeValue<OptionSetValue>("statecode")?.Value == (int)PluginStepOperationEnum.Deactivate  &&
+                            attribute.Action == PluginStepOperationEnum.Activate)
+                        {
+                            CliLog.Write(" ");
+                            CliLog.WriteSuccess(ConsoleColor.White, CliAction.ACTIVATED.Trim());
+                        }
                         CliLog.WriteLine(ConsoleColor.White, $" Step ", ConsoleColor.Blue, attribute.Message, " ", ConsoleColor.Cyan, attribute.Name, ConsoleColor.Blue, $" [{attribute.Stage}, {attribute.ExecutionMode}]");
                         CliLogSecureUnsecure();
                         CliLogUpdateFields();
@@ -1479,6 +1489,14 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     {
                         CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE);
                         CliLog.WriteSuccess(ConsoleColor.White, CliAction.UPDATED.Trim());
+                        if (
+                            rows.Entities.Count == 1 &&
+                            rows?.Entities?[0]?.GetAttributeValue<OptionSetValue>("statecode")?.Value == (int)PluginStepOperationEnum.Activate &&
+                            attribute.Action == PluginStepOperationEnum.Deactivate)
+                        {
+                            CliLog.Write(" ");
+                            CliLog.WriteSuccess(ConsoleColor.White, CliAction.DEACTIVATED.Trim());
+                        }
                         CliLog.WriteLine(ConsoleColor.White, $" Step ", ConsoleColor.Blue, attribute.Message, " ", ConsoleColor.Cyan, attribute.Name, ConsoleColor.Blue, $" [{attribute.Stage}, {attribute.ExecutionMode}]");
                         CliLogSecureUnsecure();
                         CliLogUpdateFields();
@@ -1519,9 +1537,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 update["statecode"] = new OptionSetValue(1);
                 update["statuscode"] = new OptionSetValue(2);
                 await ServiceClient.UpdateAsync(update);
-                CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE);
-                CliLog.WriteSuccess(ConsoleColor.White, CliAction.DEACTIVATED.Trim());
-                CliLog.WriteLine(ConsoleColor.White, $" Step ", ConsoleColor.Blue, attribute.Message, " ", ConsoleColor.Cyan, attribute.Name, ConsoleColor.Blue, $" [{attribute.Stage}, {attribute.ExecutionMode}]");
+                //CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE);
+                //CliLog.WriteSuccess(ConsoleColor.White, CliAction.DEACTIVATED.Trim());
+                //CliLog.WriteLine(ConsoleColor.White, $" Step ", ConsoleColor.Blue, attribute.Message, " ", ConsoleColor.Cyan, attribute.Name, ConsoleColor.Blue, $" [{attribute.Stage}, {attribute.ExecutionMode}]");
             }
             else if (
                 rows.Entities.Count > 0 &&
@@ -1532,9 +1550,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 update["statecode"] = new OptionSetValue(0);
                 update["statuscode"] = new OptionSetValue(1);
                 await ServiceClient.UpdateAsync(update);
-                CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE);
-                CliLog.WriteSuccess(ConsoleColor.White, CliAction.ACTIVATED.Trim());
-                CliLog.WriteLine(ConsoleColor.White, $" Step ", ConsoleColor.Blue, attribute.Message, " ", ConsoleColor.Cyan, attribute.Name, ConsoleColor.Blue, $" [{attribute.Stage}, {attribute.ExecutionMode}]");
+                //CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE);
+                //CliLog.WriteSuccess(ConsoleColor.White, CliAction.ACTIVATED.Trim());
+                //CliLog.WriteLine(ConsoleColor.White, $" Step ", ConsoleColor.Blue, attribute.Message, " ", ConsoleColor.Cyan, attribute.Name, ConsoleColor.Blue, $" [{attribute.Stage}, {attribute.ExecutionMode}]");
             }
             return pluginStepId;
 

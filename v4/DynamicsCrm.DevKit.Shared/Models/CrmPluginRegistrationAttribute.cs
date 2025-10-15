@@ -33,7 +33,6 @@ namespace DynamicsCrm.DevKit.Shared.Models
 
     public enum PluginStepOperationEnum
     {
-        Delete = 0,
         Activate = 0,
         Deactivate = 1
     }
