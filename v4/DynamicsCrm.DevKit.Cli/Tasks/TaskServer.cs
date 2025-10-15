@@ -1037,7 +1037,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             if (rows.Entities[0].GetAttributeValue<EntityReference>("plugintypeid")?.Id.ToString("D") == pluginTypeId.ToString("D"))
             {
                 if (attribute.Action == PluginStepOperationEnum.Activate)
-                    CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, "Step ", ConsoleColor.Blue, attribute.Message, ConsoleColor.White, " ", ConsoleColor.Cyan, pluginTypeName);
+                    CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, "Step ", ConsoleColor.Blue, attribute.Message, ConsoleColor.White, " ", ConsoleColor.Cyan, pluginTypeName, ConsoleColor.Blue, $" [MainOperation, Synchronous]");
                 else
                 {
                     var update = new Entity("customapi", rows.Entities[0].Id);
