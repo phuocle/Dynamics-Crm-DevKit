@@ -17,6 +17,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.ServiceModel;
 using System.Threading.Tasks;
+using VSLangProj80;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace DynamicsCrm.DevKit.Cli.Tasks
@@ -1358,18 +1359,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE);
                 CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTERED.Trim());
                 CliLog.WriteLine(ConsoleColor.White, $" Step ", ConsoleColor.Blue, attribute.Message, " ", ConsoleColor.Cyan, attribute.Name, ConsoleColor.Blue, $" [{attribute.Stage}, {attribute.ExecutionMode}]");
-                if (attribute.SecureConfiguration.Length > 0)
-                {
-                    CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, " ", ConsoleColor.White, "Secure Configuration = ", ConsoleColor.Green, attribute.SecureConfiguration ?? "*");
-                }
-                if (attribute.UnSecureConfiguration.Length > 0)
-                {
-                    CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, " ", ConsoleColor.White, "UnSecure Configuration = ", ConsoleColor.Green, attribute.UnSecureConfiguration ?? "*");
-                }
-                if (IsMessageUpdate(attribute.Message))
-                {
-                    CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, " ", ConsoleColor.White, "Update Fields: ", ConsoleColor.Green, attribute.FilteringAttributes ?? "*");
-                }
+
+                CliLogSecureUnsecure();
+                CliLogUpdateFields();
                 try
                 {
                     var response = (CreateResponse)await ServiceClient.ExecuteAsync(request);
@@ -1434,18 +1426,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     if (attribute.Action == PluginStepOperationEnum.Activate)
                     {
                         CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, $"Step ", ConsoleColor.Blue, attribute.Message, " ", ConsoleColor.Cyan, attribute.Name, ConsoleColor.Blue, $" [{attribute.Stage}, {attribute.ExecutionMode}]");
-                        if (attribute.SecureConfiguration.Length > 0)
-                        {
-                            CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, ConsoleColor.White, "Secure Configuration = ", ConsoleColor.Green, attribute.SecureConfiguration ?? "*");
-                        }
-                        if (attribute.UnSecureConfiguration.Length > 0)
-                        {
-                            CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, ConsoleColor.White, "UnSecure Configuration = ", ConsoleColor.Green, attribute.UnSecureConfiguration ?? "*");
-                        }
-                        if (IsMessageUpdate(attribute.Message))
-                        {
-                            CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, ConsoleColor.White, "Update Fields: ", ConsoleColor.Green, attribute.FilteringAttributes ?? "*"); ;
-                        }
+                        CliLogSecureUnsecure();
+                        CliLogUpdateFields();
                     }
                     else
                     {
@@ -1453,18 +1435,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         CliLog.WriteSuccess(ConsoleColor.White, CliAction.DEACTIVATED.Trim());
                         CliLog.Write(ConsoleColor.White, $" Step ", ConsoleColor.Blue, attribute.Message, " ", ConsoleColor.Cyan, attribute.Name, ConsoleColor.Blue, $" [{attribute.Stage}, {attribute.ExecutionMode}]");
                         CliLog.WriteLine();
-                        if (attribute.SecureConfiguration.Length > 0)
-                        {
-                            CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, ConsoleColor.White, "Secure Configuration = ", ConsoleColor.Green, attribute.SecureConfiguration ?? "*");
-                        }
-                        if (attribute.UnSecureConfiguration.Length > 0)
-                        {
-                            CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, ConsoleColor.White, "UnSecure Configuration = ", ConsoleColor.Green, attribute.UnSecureConfiguration ?? "*");
-                        }
-                        if (IsMessageUpdate(attribute.Message))
-                        {
-                            CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, ConsoleColor.White, "Update Fields: ", ConsoleColor.Green, attribute.FilteringAttributes ?? "*");
-                        }
+                        CliLogSecureUnsecure();
+                        CliLogUpdateFields();
                     }
                 }
                 else
@@ -1479,36 +1451,16 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE);
                         CliLog.WriteSuccess(ConsoleColor.White, CliAction.UPDATED.Trim());
                         CliLog.WriteLine(ConsoleColor.White, $" Step ", ConsoleColor.Blue, attribute.Message, " ", ConsoleColor.Cyan, attribute.Name, ConsoleColor.Blue, $" [{attribute.Stage}, {attribute.ExecutionMode}]");
-                        if (attribute.SecureConfiguration.Length > 0)
-                        {
-                            CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, ConsoleColor.White, "Secure Configuration = ", ConsoleColor.Green, attribute.SecureConfiguration ?? "*");
-                        }
-                        if (attribute.UnSecureConfiguration.Length > 0)
-                        {
-                            CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, ConsoleColor.White, "UnSecure Configuration = ", ConsoleColor.Green, attribute.UnSecureConfiguration ?? "*");
-                        }
-                        if (IsMessageUpdate(attribute.Message))
-                        {
-                            CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, ConsoleColor.White, "Update Fields: ", ConsoleColor.Green, attribute.FilteringAttributes ?? "*");
-                        }
+                        CliLogSecureUnsecure();
+                        CliLogUpdateFields();
                     }
                     else
                     {
                         CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE);
                         CliLog.WriteSuccess(ConsoleColor.White, CliAction.UPDATED.Trim());
                         CliLog.WriteLine(ConsoleColor.White, $" Step ", ConsoleColor.Blue, attribute.Message, " ", ConsoleColor.Cyan, attribute.Name, ConsoleColor.Blue, $" [{attribute.Stage}, {attribute.ExecutionMode}]");
-                        if (attribute.SecureConfiguration.Length > 0)
-                        {
-                            CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, ConsoleColor.White, "Secure Configuration = ", ConsoleColor.Green, attribute.SecureConfiguration ?? "*");
-                        }
-                        if (attribute.UnSecureConfiguration.Length > 0)
-                        {
-                            CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, ConsoleColor.White, "UnSecure Configuration = ", ConsoleColor.Green, attribute.UnSecureConfiguration ?? "*");
-                        }
-                        if (IsMessageUpdate(attribute.Message))
-                        {
-                            CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, ConsoleColor.White, "Update Fields: ", ConsoleColor.Green, attribute.FilteringAttributes ?? "*");
-                        }
+                        CliLogSecureUnsecure();
+                        CliLogUpdateFields();
                     }
                     try
                     {
@@ -1564,6 +1516,70 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 CliLog.WriteLine(ConsoleColor.White, $" Step ", ConsoleColor.Blue, attribute.Message, " ", ConsoleColor.Cyan, attribute.Name, ConsoleColor.Blue, $" [{attribute.Stage}, {attribute.ExecutionMode}]");
             }
             return pluginStepId;
+
+            void CliLogUpdateFields()
+            {
+                if (IsMessageUpdate(attribute.Message))
+                {
+                    if (rows.Entities.Count == 0)
+                    {
+                        CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE);
+                        CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTERED.Trim());
+                        CliLog.WriteLine(ConsoleColor.White, " Update Fields: ", ConsoleColor.Green, attribute.FilteringAttributes ?? "*");
+                    }
+                    else
+                    {
+                        if (rows.Entities[0].GetAttributeValue<string>("filteringattributes") == attribute.FilteringAttributes?.Replace(" ", ""))
+                            CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, "Update Fields: ", ConsoleColor.Green, attribute.FilteringAttributes ?? "*");
+                        else
+                        {
+                            CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE);
+                            CliLog.WriteSuccess(ConsoleColor.White, CliAction.UPDATED.Trim());
+                            CliLog.WriteLine(ConsoleColor.White, " Update Fields: ", ConsoleColor.Green, attribute.FilteringAttributes ?? "*"); ;
+                        }
+                    }
+                }
+            }
+            void CliLogSecureUnsecure()
+            {
+                if (attribute.SecureConfiguration.Length > 0)
+                {
+
+                    CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, SPACE, " ", ConsoleColor.White, "Secure Configuration = ", ConsoleColor.Green, attribute.SecureConfiguration ?? "*");
+                }
+                //UnSecureConfiguration
+                if (rows.Entities.Count == 0 && !string.IsNullOrWhiteSpace(attribute.UnSecureConfiguration))
+                {
+                    CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE);
+                    CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTERED.Trim());
+                    CliLog.WriteLine(ConsoleColor.White, " UnSecure Configuration = ", ConsoleColor.Green, attribute.UnSecureConfiguration);
+                }
+                else
+                {
+                    if (rows.Entities[0].GetAttributeValue<string>("configuration") == null && !string.IsNullOrWhiteSpace(attribute.UnSecureConfiguration))
+                    {
+                        CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE);
+                        CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTERED.Trim());
+                        CliLog.WriteLine(ConsoleColor.White, " UnSecure Configuration = ", ConsoleColor.Green, attribute.UnSecureConfiguration);
+                    }
+                    else if (rows.Entities[0].GetAttributeValue<string>("configuration") == attribute.UnSecureConfiguration)
+                    {
+                        CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, "UnSecure Configuration = ", ConsoleColor.Green, attribute.UnSecureConfiguration);
+                    }
+                    else if (rows.Entities[0].GetAttributeValue<string>("configuration") != null && string.IsNullOrEmpty(attribute.UnSecureConfiguration))
+                    {
+                        CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE);
+                        CliLog.WriteSuccess(ConsoleColor.White, CliAction.UNREGISTERED.Trim());
+                        CliLog.WriteLine(ConsoleColor.White, " UnSecure Configuration");
+                    }
+                    else if (rows.Entities[0].GetAttributeValue<string>("configuration") != null && !string.IsNullOrEmpty(attribute.UnSecureConfiguration))
+                    {
+                        CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE);
+                        CliLog.WriteSuccess(ConsoleColor.White, CliAction.UPDATED.Trim());
+                        CliLog.WriteLine(ConsoleColor.White, " UnSecure Configuration = ", ConsoleColor.Green, attribute.UnSecureConfiguration);
+                    }
+                }
+            }
         }
         private bool IsChangedPluginStep(bool alreadyChanged, Entity _old, Entity _new, CrmPluginRegistrationAttribute attribute)
         {

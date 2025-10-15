@@ -5,7 +5,7 @@ using System;
 
 namespace Dev.DevKitV4.Server.Plugins.Account
 {
-    [CrmPluginRegistration("PurgeRetainedContent", "account", StageEnum.PostOperation, ExecutionModeEnum.Asynchronous, "", "Dev.DevKitV4.Server.Plugins.Account.PostAccountPurgeRetainedContentAsynchronous", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, DeleteAsyncOperation = true, SecureConfiguration = "ABC", UnSecureConfiguration = "DEF")]
+    [CrmPluginRegistration("PurgeRetainedContent", "account", StageEnum.PostOperation, ExecutionModeEnum.Asynchronous, "", "Dev.DevKitV4.Server.Plugins.Account.PostAccountPurgeRetainedContentAsynchronous", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, DeleteAsyncOperation = true, SecureConfiguration = "SecureConfiguration", UnSecureConfiguration = "UnSecureConfiguration")]
     public class PostAccountPurgeRetainedContentAsynchronous : IPlugin
     {
         /*
