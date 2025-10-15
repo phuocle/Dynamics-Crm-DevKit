@@ -720,14 +720,12 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         public bool IsOk { get; set; }
         public Guid SolutionId { get; set; }
         public string SolutionPrefix { get; set; }
-
         public string CurrentDirectory { get; set; }
         public string TaskType { get; set; }
         public ServiceClient ServiceClient { get; set; }
         public CommandLineArgs Arg { get; set; }
         private JsonServer Json { get; }
         private string CurrentFolder => $"{CurrentDirectory}\\{Json.folder}";
-
         public async Task<bool> IsValidAsync()
         {
             if (Json == null)
@@ -753,7 +751,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             return true;
         }
-
         private string GetDllFileFromNugetPackage(string file)
         {
             var tempFile = Path.Combine(Path.GetTempPath(), Path.GetFileName(file));
@@ -840,10 +837,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                                     return;
                                 }
                             }
-                            //else if (attribute.PluginType == PluginType.CustomAction)
-                            //{
-                            //    CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, $"Step ", ConsoleColor.Blue, attribute.Message, " ", ConsoleColor.Cyan, attribute.Name, ConsoleColor.Blue, $" [{attribute.Stage}, {attribute.ExecutionMode}]");
-                            //}
                             break;
                         case PluginType.DataProvider:
                             dataProviderEvents.Add(new DataProviderEvent
@@ -852,6 +845,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                                 Message = attribute.Message,
                                 DataSource = attribute.DataSource
                             });
+                            CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, $"Step ", ConsoleColor.Blue, attribute.Message, " ", ConsoleColor.Cyan, attribute.Name, ConsoleColor.Blue, $" [MainOperation, Synchronous]");
                             break;
                         case PluginType.CustomApi:
                             await DeployCustomApiStepAsync(pluginTypeId.Value, type.FullName, attribute);
@@ -935,7 +929,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 entity.Attributes.Add("retrieveplugin", retrieve.PluginTypeId);
                 events += "Retrieve, ";
             }
-
             var retrievemultiple = dataProviderEvents.Where(x => x.Message == "RetrieveMultiple" && x.DataSource == dataSource).FirstOrDefault();
             if (retrievemultiple == null)
                 entity.Attributes.Add("retrievemultipleplugin", new Guid("{c1919979-0021-4f11-a587-a8f904bdfdf9}"));
@@ -1009,6 +1002,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE);
                     CliLog.WriteSuccess(ConsoleColor.White, CliAction.UPDATED.Trim());
                     CliLog.WriteLine(ConsoleColor.White, " Type ", ConsoleColor.Blue, $"{PluginType.DataSource} ", ConsoleColor.Cyan, $"{logicalNameDataSource}", ConsoleColor.White, " linked with events ", ConsoleColor.Cyan, events);
+                    //CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, $"Step ", ConsoleColor.Blue, attribute.Message, " ", ConsoleColor.Cyan, attribute.Name, ConsoleColor.Blue, $" [{attribute.Stage}, {attribute.ExecutionMode}]");
                     await ServiceClient.ExecuteAsync(request);
                 }
                 else
@@ -1057,14 +1051,14 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 {
                     CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.DO_NOTHING.Trim(), " ");
                     CliLog.WriteSuccess(ConsoleColor.White, CliAction.DEACTIVATED.Trim());
-                    CliLog.Write(ConsoleColor.White, " Step ", ConsoleColor.Blue, attribute.Message, ConsoleColor.White, " ", ConsoleColor.Cyan, pluginTypeName);
+                    CliLog.Write(ConsoleColor.White, " Step ", ConsoleColor.Blue, attribute.Message, ConsoleColor.White, " ", ConsoleColor.Cyan, pluginTypeName, ConsoleColor.Blue, $" [MainOperation, Synchronous]");
                     CliLog.WriteLine();
                 }
                 else
                 {
                     CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE);
                     CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTERED.Trim());
-                    CliLog.WriteLine(ConsoleColor.White, " Step ", ConsoleColor.Blue, attribute.Message, ConsoleColor.White, " ", ConsoleColor.Cyan, pluginTypeName);
+                    CliLog.WriteLine(ConsoleColor.White, " Step ", ConsoleColor.Blue, attribute.Message, ConsoleColor.White, " ", ConsoleColor.Cyan, pluginTypeName, ConsoleColor.Blue, $" [MainOperation, Synchronous]");
                     var update = new Entity("customapi", rows.Entities[0].Id);
                     update["plugintypeid"] = new EntityReference("plugintype", pluginTypeId);
                     await ServiceClient.UpdateAsync(update);
@@ -1781,8 +1775,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         {
             return old == @new;
         }
-
-
         private bool IsEqualsContent(string oldContent, string newContent)
         {
             return oldContent == newContent;
