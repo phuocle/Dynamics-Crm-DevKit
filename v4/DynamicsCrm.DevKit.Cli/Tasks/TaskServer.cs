@@ -625,7 +625,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 string propertyName = namedArgument.MemberName;
                 object rawValue = namedArgument.TypedValue.Value;
                 var targetProperty = properties.FirstOrDefault(p => p.Name == propertyName);
-
                 if (targetProperty != null)
                 {
                     object finalValue = rawValue;
