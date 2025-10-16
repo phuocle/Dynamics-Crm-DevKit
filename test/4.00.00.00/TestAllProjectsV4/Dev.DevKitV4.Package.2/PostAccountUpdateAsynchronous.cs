@@ -69,7 +69,7 @@ namespace Dev.DevKitV4.Package._2
             }
             tracing.DebugMessage("CAN RUN PLUGIN WITHOUT ERROR");
             tracing.DebugMessage("THIS IS THE SECOND LINE");
-            tracing.DebugMessage("THIS IS THE NEXT LINE");
+            tracing.DebugMessage("THIS IS THE NEXT LINE 1111111111111111111111");
             try
             {
                 var credential = new DefaultAzureCredential();
