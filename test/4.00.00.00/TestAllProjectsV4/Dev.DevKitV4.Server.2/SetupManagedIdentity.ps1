@@ -235,9 +235,9 @@ for ($i = 0; $i -lt $config.ManagedIdentities.Count; $i++) {
 # ========================================
 Write-Host "`n[4] SIGNING CERTIFICATE GENERATION" -ForegroundColor Blue
 $certificatePassword = $config.CertificatePassword
-$certificateSubject = 'CN=$config.CertificateFileName'
+$certificateSubject = "CN=$($config.CertificateFileName)"
 $certificateFileName = $config.CertificateFileName
-$validityYears = $config.ValidityYears
+$validityYears = $config.CertificateValidityYears
 if ((Test-Path "$certificateFileName.pfx") -and (Test-Path "$certificateFileName.cer")) {
     Write-Host "  @ Found existing .pfx and .cer files, re-using them." -ForegroundColor Yellow
     Write-Host "    - Private Key File: " -NoNewline -ForegroundColor White
@@ -302,8 +302,9 @@ if ((Test-Path "$certificateFileName.pfx") -and (Test-Path "$certificateFileName
     }
     Write-Host "  + VERIFYING CERTIFICATE" -ForegroundColor DarkCyan
     try {
-        $pfxPath = Join-Path -Path $PSScriptRoot -ChildPath "$certificateFileName.pfx"
-        $pfxCert = New-Object System.Security.Cryptography.X509Certificates.X509Certificate2($pfxPath, $certificatePassword)
+    $pfxPath = Join-Path -Path $PSScriptRoot -ChildPath "$certificateFileName.pfx"
+    # Load PFX with Exportable flag so the private key (if present) is usable and detectable
+    $pfxCert = New-Object System.Security.Cryptography.X509Certificates.X509Certificate2($pfxPath, $certificatePassword, [System.Security.Cryptography.X509Certificates.X509KeyStorageFlags]::Exportable)
         if ($pfxCert) {
             Write-Host "  @ Found certificate to verify." -ForegroundColor Yellow
             Write-Host "  + SUCCESS: certificate verified successfully." -ForegroundColor Green

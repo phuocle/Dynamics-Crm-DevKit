@@ -652,7 +652,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         {
             var signToolPath = FindSignTool();
             if (string.IsNullOrEmpty(signToolPath)) return (false, "SignTool.exe not found. Please install Windows SDK.");
-            var extension = Path.GetExtension(certificatePath).ToLowerInvariant();
             string arguments;
             if (string.IsNullOrEmpty(certificatePassword))
             {

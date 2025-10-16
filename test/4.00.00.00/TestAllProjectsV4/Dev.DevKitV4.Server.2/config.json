@@ -9,8 +9,8 @@
     "CertificateValidityYears":  20,
     "TenantId":  "49528483-b79b-4b88-b86e-7d882ba68911",
     "KeyVaultURL":  "https://kv-dataverse-devkitv4-2.vault.azure.net/",
-    "CertificateThumbprint":  "7E666CC9F5111BC6A64AC7D4325239410E06C488",
-    "CertificateSHA256Hash":  "vXsnjZoOdOvhEEacK9igqYSd3b6rWOVNwJJ7pPXkWA8",
+    "CertificateThumbprint":  "E8F60E8DCB7F57A6FF4F36A25A45E49BF3A1AADE",
+    "CertificateSHA256Hash":  "5WHEauZvKDhOo7jHN94wfl6xVMpuUNo-T9lvrgDMmD0",
     "ManagedIdentities":  [
                               {
                                   "AppName":  "DEVKITV4-2-ManagedIdentity-DEV",
