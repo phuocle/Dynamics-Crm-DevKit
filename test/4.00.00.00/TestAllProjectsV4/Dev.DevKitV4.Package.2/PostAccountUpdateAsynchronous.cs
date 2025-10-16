@@ -1,8 +1,11 @@
-﻿using Dev.DevKitV4.Shared;
+﻿using Azure.Identity;
+using Azure.Security.KeyVault.Secrets;
+using Dev.DevKitV4.Shared;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Extensions;
 using System;
 using System.Collections.Generic;
+using System.Runtime.Remoting.Services;
 
 namespace Dev.DevKitV4.Package._2
 {
@@ -67,6 +70,21 @@ namespace Dev.DevKitV4.Package._2
             tracing.DebugMessage("CAN RUN PLUGIN WITHOUT ERROR");
             tracing.DebugMessage("THIS IS THE SECOND LINE");
             tracing.DebugMessage("THIS IS THE NEXT LINE");
+            try
+            {
+                var credential = new DefaultAzureCredential();
+                var client = new SecretClient(new Uri("https://kv-dataverse-devkitv4-2.vault.azure.net/"), credential);
+                KeyVaultSecret secret = client.GetSecret("DEVKITV4-2");
+                tracing.Trace($"✓ Successfully retrieved secret from Key Vault");
+                tracing.Trace($"  Secret Name: {secret.Name}");
+                tracing.Trace($"  Secret Value: {secret.Value}");
+                tracing.Trace($"  Content Type: {secret.Properties.ContentType ?? "N/A"}");
+                tracing.Trace($"  Updated On: {secret.Properties.UpdatedOn}");
+            }
+            catch(Exception e)
+            {
+                throw new InvalidPluginExecutionException($"{e.Message}");
+            }
         }
 
         private void ExecutePlugin(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService serviceAdmin, IOrganizationService service, ITracingService tracing)

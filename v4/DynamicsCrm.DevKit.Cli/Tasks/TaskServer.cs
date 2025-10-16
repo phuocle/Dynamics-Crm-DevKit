@@ -1,7 +1,9 @@
 ﻿
 using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
+using Microsoft.Crm.Sdk.Messages;
 using Microsoft.PowerPlatform.Dataverse.Client;
+using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Query;
@@ -114,35 +116,39 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     CliLog.Write(ConsoleColor.White, "|");
                     CliLog.WriteSuccess(ConsoleColor.White, $"{Path.GetFileName(fileNuget)}");
                     CliLog.WriteLine();
-                    var fileNugetDlls = GetDllFileFromNugetPackage(fileNuget);
-                    (IS_MANAGED_IDENTITY, ERROR) = IsNeedSignAssembly(fileNugetDlls);
-                    if (IS_MANAGED_IDENTITY && ERROR.Length == 0)
+                    var fileNugetDll = GetDllFileFromNugetPackage(fileNuget);
+                    if (fileNugetDll.Length == 0)
                     {
-                        (OK, ERROR) = await SignPackageAsync(fileNuget, Path.Combine(CurrentDirectory, ManagedIdentityAttribute.CertificateFile), ManagedIdentityAttribute.CertificatePassword);
-                        if (!OK)
+                        CliLog.WriteLineError(ConsoleColor.Yellow, ERROR);
+                        CliLog.WriteLineError(ConsoleColor.Yellow, $"Package {Path.GetFileName(file)} don't have a .dll file to deploy.");
+                        continue;
+                    }
+                    else
+                    {
+                        (IS_MANAGED_IDENTITY, ERROR) = IsNeedSignAssembly(fileNugetDll);
+                        if (IS_MANAGED_IDENTITY && ERROR.Length == 0)
+                        {
+                            (OK, ERROR) = await SignPackageAsync(fileNuget, Path.Combine(CurrentDirectory, ManagedIdentityAttribute.CertificateFile), ManagedIdentityAttribute.CertificatePassword);
+                            if (!OK)
+                            {
+                                CliLog.WriteLineError(ConsoleColor.Yellow, ERROR);
+                                CliLog.WriteLineError(ConsoleColor.Yellow, $"Package {Path.GetFileName(fileNuget)} not signed. Package deployment stopped.");
+                                continue;
+                            }
+                        }
+                        else if (ERROR.Length > 0)
                         {
                             CliLog.WriteLineError(ConsoleColor.Yellow, ERROR);
                             CliLog.WriteLineError(ConsoleColor.Yellow, $"Package {Path.GetFileName(fileNuget)} not signed. Package deployment stopped.");
                             continue;
                         }
-                    }
-                    else if (ERROR.Length > 0)
-                    {
-                        CliLog.WriteLineError(ConsoleColor.Yellow, ERROR);
-                        CliLog.WriteLineError(ConsoleColor.Yellow, $"Package {Path.GetFileName(fileNuget)} not signed. Package deployment stopped.");
-                        continue;
-                    }
-                    ERROR = await DeployPackageAsync(fileNuget);
-                    if (ERROR.Length > 0)
-                    {
-                        CliLog.WriteError(ConsoleColor.Yellow, ERROR);
-                        CliLog.WriteLine(ConsoleColor.White, "|");
-                        CliLog.WriteError(ConsoleColor.Yellow, $"Package {Path.GetFileName(fileNuget)} not signed. Package deployment stopped.");
-                        CliLog.WriteLine(ConsoleColor.White, "|");
-                        continue;
-                    }
-                    foreach (var fileNugetDll in fileNugetDlls)
-                    {
+                        ERROR = await DeployPackageAsync(fileNuget);
+                        if (ERROR.Length > 0)
+                        {
+                            CliLog.WriteLineError(ConsoleColor.Yellow, ERROR);
+                            CliLog.WriteLineError(ConsoleColor.Yellow, $"Package {Path.GetFileName(fileNuget)} not signed. Package deployment stopped.");
+                            continue;
+                        }
                         await DeployDllAsync(fileNugetDll, DeployFileType.Nuget);
                     }
                 }
@@ -189,7 +195,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     CliLog.WriteLine(ConsoleColor.White, " Package ", ConsoleColor.Cyan, Path.GetFileName(file));
                     PluginPackageId = response.id;
                 }
-                catch (FaultException fe)
+                catch (Exception fe)
                 {
                     return fe.Message;
                 }
@@ -218,7 +224,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         CliLog.WriteLine(ConsoleColor.White, " Package ", ConsoleColor.Cyan, Path.GetFileName(file));
                         PluginPackageId = entity.Id;
                     }
-                    catch (FaultException fe)
+                    catch (Exception fe)
                     {
                         return fe.Message;
                     }
@@ -427,14 +433,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             return pluginAssemblyId;
         }
-
-
-
-
-
-
-
-
 
         private bool OK = false;
         private bool IS_MANAGED_IDENTITY = false;
@@ -775,7 +773,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             return true;
         }
-        private List<string> GetDllFileFromNugetPackage(string file)
+        private string GetDllFileFromNugetPackage(string file)
         {
             var tempFile = Path.Combine(Path.GetTempPath(), Path.GetFileName(file));
             Helper.TryDeleteFile(tempFile);
@@ -784,7 +782,13 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var folder = $"{CurrentFolder}\\DynamicsCrm.DevKit.Cli.2";
             Helper.TryDeleteDirectory(folder);
             ExtractZip(packageArchiveReader, folder);
-            return Directory.GetFiles(folder).ToList();
+            var files = Directory.GetFiles(folder).ToList();
+            var fileNameWithoutExtention = Path.GetFileNameWithoutExtension(file);
+            var nugetVerion = packageArchiveReader.NuspecReader.GetVersion().ToFullString();
+            fileNameWithoutExtention = fileNameWithoutExtention.Substring(0, fileNameWithoutExtention.Length - nugetVerion.Length);
+            files = files.Where(x => x.Contains(fileNameWithoutExtention)).ToList();
+            if (files.Count == 1) return files.First();
+            return string.Empty;
         }
         private async Task DeployDllAsync(string file, DeployFileType deployFileType = DeployFileType.Dll)
         {
@@ -2070,13 +2074,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 var parts = args.Name.Split(',');
                 var assemblyName = parts[0].Trim();
-
-                // Try to load from GAC or already loaded assemblies
                 return Assembly.ReflectionOnlyLoad(args.Name);
             }
             catch
             {
-                // Return null if assembly cannot be resolved
                 return null;
             }
         }
