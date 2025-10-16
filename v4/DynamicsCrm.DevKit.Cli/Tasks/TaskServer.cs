@@ -1846,6 +1846,11 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     CliLog.WriteLineError(ConsoleColor.Yellow, $"{fe.Message} Assemply deployed, but the deployment of this assembly stopped.");
                     return null;
                 }
+                catch(Exception ee)
+                {
+                    CliLog.WriteLineError(ConsoleColor.Yellow, $"{ee.Message} Assemply deployed, but the deployment of this assembly stopped.");
+                    return null;
+                }
                 if (IsWorkflowType(type))
                 {
                     var old = rows.Entities[0].GetAttributeValue<string>("customworkflowactivityinfo");
