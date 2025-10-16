@@ -56,7 +56,7 @@ namespace Dev.DevKitV4.Server._2
                 // 2. Get Secret from Key Vault
                 var secretValue = KeyVaultHelper.GetSecret(
                     token,
-                    "https://kv-dataverse-devkitv4-2.vault.azure.nett/",
+                    "https://kv-dataverse-devkitv4-2.vault.azure.net/",
                     "DEVKITV4-2",
                     tracing
                 );
@@ -69,6 +69,7 @@ namespace Dev.DevKitV4.Server._2
             }
             tracing.DebugMessage("CAN RUN PLUGIN WITHOUT ERROR");
             ExecutePlugin(context, serviceFactory, serviceAdmin, service, tracing);
+            tracing.DebugMessage("CAN RUN PLUGIN WITHOUT ERROR2");
         }
 
         private void ExecutePlugin(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService serviceAdmin, IOrganizationService service, ITracingService tracing)
