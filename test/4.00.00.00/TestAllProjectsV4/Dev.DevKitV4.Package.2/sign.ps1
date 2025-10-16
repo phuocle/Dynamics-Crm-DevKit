@@ -1,4 +1,0 @@
-﻿dotnet nuget sign "D:\github\Dynamics-Crm-DevKit\test\4.00.00.00\TestAllProjectsV4\Dev.DevKitV4.Package.2\bin\Debug\Dev.DevKitV4.Package.2.1.0.0.nupkg" `
-  --certificate-path "D:\github\Dynamics-Crm-DevKit\test\4.00.00.00\TestAllProjectsV4\Dev.DevKitV4.Package.2\DEVKITV4-ManagedIdentity.pfx" `
-  --certificate-password 'DEVKITV4-ManagedIdentity' `
-  --timestamper "http://timestamp.digicert.com"

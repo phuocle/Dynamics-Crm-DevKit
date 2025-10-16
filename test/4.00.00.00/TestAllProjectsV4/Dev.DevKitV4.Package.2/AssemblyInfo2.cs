@@ -2,7 +2,7 @@
 
 [assembly: DynamcisCrmDevKitManagedIdentityAssembly(
     TenantId = "49528483-b79b-4b88-b86e-7d882ba68911",
-    ApplicationIds = "2cb1f038-1adb-42bf-8e8d-6debe0073e1c,d3e983d9-f0ae-4907-89dc-a974cc9b9d75",
-    CertificateFile = "DEVKITV4-ManagedIdentity.pfx",
-    CertificatePassword = "DEVKITV4-ManagedIdentity"
+    ApplicationIds = "14a7bd40-7912-4c9f-98be-ac7054bac183,16f66ce7-067f-4228-97a8-d61c3163de05",
+    CertificateFile = "DEVKITV4-2-ManagedIdentity.pfx",
+    CertificatePassword = "DEVKITV4-2-ManagedIdentity"
 )]
