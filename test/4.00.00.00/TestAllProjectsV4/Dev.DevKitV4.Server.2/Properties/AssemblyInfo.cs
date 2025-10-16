@@ -1,6 +1,4 @@
-﻿using Dev.DevKitV4.Shared;
-using System.Collections.Generic;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security;
 
@@ -20,10 +18,3 @@ using System.Security;
 [assembly: Guid("3089322d-118f-4b2c-b78f-6a3812eafc22")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
-
-[assembly: DynamcisCrmDevKitManagedIdentityAssembly(
-    TenantId = "49528483-b79b-4b88-b86e-7d882ba68911",
-    ApplicationIds = "2cb1f038-1adb-42bf-8e8d-6debe0073e1c,d3e983d9-f0ae-4907-89dc-a974cc9b9d75",
-    CertificateFile = "DEVKITV4-ManagedIdentity.pfx",
-    CertificatePassword = "DEVKITV4-ManagedIdentity"
-)]

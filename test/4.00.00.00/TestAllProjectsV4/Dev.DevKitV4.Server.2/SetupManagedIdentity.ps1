@@ -6,12 +6,12 @@ function Convert-GuidToBase64Url {
     return $base64.Replace('+', '-').Replace('/', '_').TrimEnd('=')
 }
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
-$ConfigPath = Join-Path $ScriptDir "config3.json"
+$ConfigPath = Join-Path $ScriptDir "config.json"
 
 
 if (-not (Test-Path $ConfigPath)) {
     Write-Host "========================================================================================================" -ForegroundColor Red
-    Write-Host "[X] config2.json not found" -ForegroundColor Red
+    Write-Host "[X] config.json not found" -ForegroundColor Red
     Write-Host "========================================================================================================`n" -ForegroundColor Red
     exit 1
 }
@@ -22,7 +22,7 @@ else
         $config = $ConfigContent | ConvertFrom-Json
     } catch {
         Write-Host "========================================================================================================" -ForegroundColor Red
-        Write-Host "[X] config3.json is not valid JSON" -ForegroundColor Red
+        Write-Host "[X] config.json is not valid JSON" -ForegroundColor Red
         Write-Host "========================================================================================================`n" -ForegroundColor Red
         exit 1
     }

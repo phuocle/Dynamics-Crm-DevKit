@@ -54,15 +54,20 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="config.json" />
     <None Include="Dev.DevKitV4.Server.2.snk" />
+    <None Include="DEVKITV4-2-ManagedIdentity.cer" />
+    <None Include="DEVKITV4-2-ManagedIdentity.pfx" />
     <None Include="packages.config" />
     <None Include="deploy.debug.bat" />
     <None Include="deploy.debug.only.bat" />
+    <Compile Include="AssemblyInfo2.cs" />
     <Compile Include="KeyVaultHelper.cs" />
     <Compile Include="PostContactCreateAsynchronous.cs" />
     <Compile Include="PostContactDeleteAsynchronous.cs" />
     <Compile Include="PostContactUpdateAsynchronous.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <None Include="SetupManagedIdentity.ps1" />
   </ItemGroup>
   <Import Project="..\Dev.DevKitV4.Shared\Dev.DevKitV4.Shared.projitems" Label="Shared" Condition="Exists('..\Dev.DevKitV4.Shared\Dev.DevKitV4.Shared.projitems')" />
   <PropertyGroup>

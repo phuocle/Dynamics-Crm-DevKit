@@ -1,26 +1,26 @@
 ﻿{
-    "AppName":  "DynamicsCrmDevKitManagedIdentity",
-    "ResourceGroup":  "DevKit",
+    "ResourceGroup":  "DEVKITV4-2",
     "Location":  "southeastasia",
-    "KeyVaultName":  "kv-dataverse-secrets",
-    "SecretName":  "MySecret",
-    "SecretValue":  "!MySecretValue123!",
-    "CertificatePassword":  "!CertificatePassword123!",
-    "CertificateSubject":  "CN=DynamicsCrmDevKitManagedIdentity",
-    "CertificateFileName":  "ManagedIdentity",
-    "ValidityYears":  20,
-    "EnvironmentId":  [
-                          "2f985c04-9487-e70c-aa57-dcd6d08f0886",
-                          "0a8c04bd-a997-e7ed-992a-be5315366493"
-                      ],
-    "OrganizationId":  [
-                           "29c6e552-e16f-ef11-a66b-6045bd1e7d8b",
-                           "dde66cdf-7e63-f011-8ee6-000d3ac78989"
-                       ],
+    "KeyVaultName":  "kv-dataverse-devkitv4-2",
+    "SecretName":  "DEVKITV4-2",
+    "SecretValue":  "DEVKITV4-2-ManagedIdentity",
+    "CertificateFileName":  "DEVKITV4-2-ManagedIdentity",
+    "CertificatePassword":  "DEVKITV4-2-ManagedIdentity",
+    "CertificateValidityYears":  20,
     "TenantId":  "49528483-b79b-4b88-b86e-7d882ba68911",
-    "AppId":  "c60f6fe5-92a2-485c-9149-f84e8f73c105",
-    "KeyVaultURL":  "https://kv-dataverse-secrets.vault.azure.net/",
-    "CertificatePath":  "ManagedIdentity.pfx",
-    "CertificateThumbprint":  "605BE49982C7F15B59E0BA4B2BFE46A8C37E4C7D",
-    "CertificateSHA256Hash":  "Q0YDZYr93P597MW_zMkWLhoFZQyAT1eWXLb-SwIibHU"
+    "KeyVaultURL":  "https://kv-dataverse-devkitv4-2.vault.azure.net/",
+    "CertificateThumbprint":  "7E666CC9F5111BC6A64AC7D4325239410E06C488",
+    "CertificateSHA256Hash":  "vXsnjZoOdOvhEEacK9igqYSd3b6rWOVNwJJ7pPXkWA8",
+    "ManagedIdentities":  [
+                              {
+                                  "AppName":  "DEVKITV4-2-ManagedIdentity-DEV",
+                                  "AppId":  "14a7bd40-7912-4c9f-98be-ac7054bac183",
+                                  "EnvironmentId":  "cbba8ce9-ea7c-e440-b083-0b9517496e17"
+                              },
+                              {
+                                  "AppName":  "DEVKITV4-2-ManagedIdentity-TEST",
+                                  "AppId":  "16f66ce7-067f-4228-97a8-d61c3163de05",
+                                  "EnvironmentId":  "0a8c04bd-a997-e7ed-992a-be5315366493"
+                              }
+                          ]
 }

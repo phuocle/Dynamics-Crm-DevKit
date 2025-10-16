@@ -56,8 +56,8 @@ namespace Dev.DevKitV4.Server._2
                 // 2. Get Secret from Key Vault
                 var secretValue = KeyVaultHelper.GetSecret(
                     token,
-                    "https://kv-dataverse-devkitv4.vault.azure.net/",
-                    "DEVKITV4",
+                    "https://kv-dataverse-devkitv4-2.vault.azure.nett/",
+                    "DEVKITV4-2",
                     tracing
                 );
                 // 3. Use the secret!
