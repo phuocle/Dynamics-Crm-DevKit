@@ -2,7 +2,6 @@
 using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.PowerPlatform.Dataverse.Client;
-using Microsoft.VisualStudio.RpcContracts.Logging;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Query;
@@ -14,11 +13,8 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using System.ServiceModel;
 using System.Threading.Tasks;
-using VSLangProj80;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace DynamicsCrm.DevKit.Cli.Tasks
 {
@@ -56,12 +52,24 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             if (await IsValidAsync())
             {
                 var files = GetFiles(CurrentFolder, Json.includefiles, Json.excludefiles);
+                files.Sort();
                 if (files.Count == 0)
                 {
                     CliLog.WriteLineWarning(ConsoleColor.Green, "Not found any files to deploy");
                 }
                 else
                 {
+                    if (files.Count > 1)
+                    {
+                        CliLog.Write(ConsoleColor.White, "|", ConsoleColor.Green, "Found: ");
+                        CliLog.WriteSuccess(ConsoleColor.White, files.Count);
+                        CliLog.WriteLine(ConsoleColor.Green, " files to deploy");
+                        foreach(var file in files)
+                        {
+                            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.White, $"  - {Path.GetFileName(file)}");
+                        }
+                        CliLog.WriteLine(ConsoleColor.White, "|");
+                    }
                     await DeployFilesAsync(files);
                 }
             }
@@ -75,7 +83,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 if (file.EndsWith(".dll"))
                 {
                     var fileDll = file;
-                    CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, $"{Path.GetFileName(fileDll)}");
+                    CliLog.Write(ConsoleColor.White, "|");
+                    CliLog.WriteSuccess(ConsoleColor.White, $"{Path.GetFileName(fileDll)}");
+                    CliLog.WriteLine();
                     (IS_MANAGED_IDENTITY, ERROR) = IsNeedSignAssembly(fileDll);
                     if (IS_MANAGED_IDENTITY && ERROR.Length == 0)
                     {
@@ -101,7 +111,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 else if (file.EndsWith(".nupkg"))
                 {
                     var fileNuget = file;
-                    CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, $"{Path.GetFileName(fileNuget)}");
+                    CliLog.Write(ConsoleColor.White, "|");
+                    CliLog.WriteSuccess(ConsoleColor.White, $"{Path.GetFileName(fileNuget)}");
+                    CliLog.WriteLine();
                     var fileNugetDlls = GetDllFileFromNugetPackage(fileNuget);
                     (IS_MANAGED_IDENTITY, ERROR) = IsNeedSignAssembly(fileNugetDlls);
                     if (IS_MANAGED_IDENTITY && ERROR.Length == 0)
@@ -226,14 +238,14 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     request2.Parameters.Add("SolutionUniqueName", Json.solution);
                     CliLog.Write(ConsoleColor.White, "|", SPACE);
                     CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTERED.Trim());
-                    CliLog.WriteLine(ConsoleColor.Blue, " Bind Package ", ConsoleColor.Cyan, Path.GetFileName(file), ConsoleColor.White, " to Managed Identity App ", ConsoleColor.Cyan, applicationId);
+                    CliLog.WriteLine(ConsoleColor.White, " Bind Package ", ConsoleColor.Cyan, Path.GetFileName(file), ConsoleColor.White, " to Managed Identity App ", ConsoleColor.Cyan, applicationId);
                     await ServiceClient.ExecuteAsync(request2);
                 }
                 else if (rows.Entities[0].GetAttributeValue<EntityReference>("managedidentityid")?.Id == managedIdentityId)
                 {
                     CliLog.Write(ConsoleColor.White, "|", SPACE);
                     CliLog.Write(ConsoleColor.Green, CliAction.DO_NOTHING.Trim());
-                    CliLog.WriteLine(ConsoleColor.Blue, " Bind Package ", ConsoleColor.Cyan, Path.GetFileName(file), ConsoleColor.White, " to Managed Identity App ", ConsoleColor.Cyan, applicationId);
+                    CliLog.WriteLine(ConsoleColor.White, " Bind Package ", ConsoleColor.Cyan, Path.GetFileName(file), ConsoleColor.White, " to Managed Identity App ", ConsoleColor.Cyan, applicationId);
                 }
                 else
                 {
@@ -246,7 +258,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     request2.Parameters.Add("SolutionUniqueName", Json.solution);
                     CliLog.Write(ConsoleColor.White, "|", SPACE);
                     CliLog.WriteSuccess(ConsoleColor.White, CliAction.UPDATED.Trim());
-                    CliLog.WriteLine(ConsoleColor.Blue, " Bind Package ", ConsoleColor.Cyan, Path.GetFileName(file), ConsoleColor.White, " to Managed Identity App ", ConsoleColor.Cyan, applicationId);
+                    CliLog.WriteLine(ConsoleColor.White, " Bind Package ", ConsoleColor.Cyan, Path.GetFileName(file), ConsoleColor.White, " to Managed Identity App ", ConsoleColor.Cyan, applicationId);
                     await ServiceClient.ExecuteAsync(request2);
                 }
             }
@@ -712,7 +724,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 {
                     CliLog.Write(ConsoleColor.White, "|", SPACE);
                     CliLog.WriteSuccess(ConsoleColor.White, CliAction.SIGNED.Trim());
-                    CliLog.Write(ConsoleColor.Blue, " Package ");
+                    CliLog.Write(ConsoleColor.White, " Package ");
                     CliLog.WriteLine(ConsoleColor.Cyan, Path.GetFileName(file));
                     return (true, string.Empty);
                 }
@@ -790,7 +802,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 CliLog.Write(ConsoleColor.White, "|", SPACE);
                 CliLog.WriteSuccess(ConsoleColor.White, CliAction.FLAG.Trim());
-                CliLog.Write(ConsoleColor.Blue, " OnlyUpdateAssembly ");
+                CliLog.Write(ConsoleColor.White, " OnlyUpdateAssembly ");
                 CliLog.WriteLine(ConsoleColor.Cyan, "true");
                 return;
             }

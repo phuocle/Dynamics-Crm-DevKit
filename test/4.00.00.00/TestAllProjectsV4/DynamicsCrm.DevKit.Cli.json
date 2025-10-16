@@ -20,6 +20,27 @@
       "excludefiles": [
         "Dev.DevKitV4.*.Test.dll"
       ]
+    },
+    {
+      "profile": "RELEASE",
+      "solution": "DEVKITV4",
+      "folder": "Release\\dll",
+      "includefiles": [
+        "Dev.DevKitV4.Plugin.*.dll",
+        "Dev.DevKitV4.Plugin.*.nupkg",
+        "Dev.DevKitV4.CustomAction.*.dll",
+        "Dev.DevKitV4.Workflow.*.dll",
+        "Dev.DevKitV4.CustomApi.*.dll",
+        "Dev.DevKitV4.DataProvider.*.dll",
+
+        "Dev.DevKitV4.Server.dll",
+        "Dev.DevKitV4.Server.*.dll",
+        "Dev.DevKitV4.Package.nupkg",
+        "Dev.DevKitV4.Package.*.nupkg"
+      ],
+      "excludefiles": [
+        "Dev.DevKitV4.*.Test.dll"
+      ]
     }
   ],
   "webresources": [
