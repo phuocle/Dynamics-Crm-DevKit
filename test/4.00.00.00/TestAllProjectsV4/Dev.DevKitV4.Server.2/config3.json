@@ -4,13 +4,13 @@
     "KeyVaultName":  "kv-dataverse-devkitv4-2",
     "SecretName":  "DEVKITV4-2",
     "SecretValue":  "DEVKITV4-2-ManagedIdentity",
-    "CertificateFileName":  "DEVKITV4-ManagedIdentity",
-    "CertificatePassword":  "DEVKITV4-ManagedIdentity",
+    "CertificateFileName":  "DEVKITV4-2-ManagedIdentity",
+    "CertificatePassword":  "DEVKITV4-2-ManagedIdentity",
     "CertificateValidityYears":  20,
     "TenantId":  "49528483-b79b-4b88-b86e-7d882ba68911",
     "KeyVaultURL":  "https://kv-dataverse-devkitv4-2.vault.azure.net/",
-    "CertificateThumbprint":  "",
-    "CertificateSHA256Hash":  "",
+    "CertificateThumbprint":  "F5BAF4667E43CADFA81578E4325787EB92EB300F",
+    "CertificateSHA256Hash":  "jyiazlF5UeMPipkn3ysP-tOsAxcwCin20zZvmfNOo8E",
     "ManagedIdentities":  [
                               {
                                   "AppName":  "DEVKITV4-2-ManagedIdentity-DEV",
