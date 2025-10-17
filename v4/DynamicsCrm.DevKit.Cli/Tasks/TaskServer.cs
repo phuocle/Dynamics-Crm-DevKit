@@ -342,7 +342,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
             }
             var assembly = LoadAssemblyIntoCache(file);
-            PluginAssemblyAttribute = GetAssemblyAttribute<DynamcisCrmDevKitPluginAssemblyAttribute>(assembly);
+            PluginAssemblyAttribute = GetCustomAttribute<DynamcisCrmDevKitPluginAssemblyAttribute>(assembly);
             var assemblyProperties = assembly.GetName().FullName.Split(",= ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
             var assemblyName = assemblyProperties[0];
             var fetchData = new
@@ -472,7 +472,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         private (bool needSign, string error) IsNeedSignAssembly(string file)
         {
             var assembly = LoadAssemblyIntoCache(file);
-            ManagedIdentityAttribute = GetAssemblyAttribute<DynamcisCrmDevKitManagedIdentityAssemblyAttribute>(assembly);
+            ManagedIdentityAttribute = GetCustomAttribute<DynamcisCrmDevKitManagedIdentityAssemblyAttribute>(assembly);
             if (ManagedIdentityAttribute == null) return (false, string.Empty);
             if (string.IsNullOrEmpty(ManagedIdentityAttribute.TenantId))
             {
@@ -1982,7 +1982,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
         }
 
-        private T GetAssemblyAttribute<T>(Assembly assembly) where T : class, new()
+        private T GetCustomAttribute<T>(Assembly assembly) where T : class, new()
         {
             var attrTypeName = typeof(T).Name;
             var attributeData = CustomAttributeData.GetCustomAttributes(assembly)
