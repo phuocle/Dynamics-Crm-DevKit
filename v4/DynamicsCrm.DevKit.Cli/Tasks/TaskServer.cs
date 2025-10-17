@@ -1,4 +1,5 @@
-﻿using DynamicsCrm.DevKit.Shared;
+﻿
+using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk;
@@ -19,22 +20,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 {
     public class TaskServer : ITask
     {
-        private const string SPACE = "  ";
-        public bool IsOk { get; set; }
-        public Guid SolutionId { get; set; }
-        public string SolutionPrefix { get; set; }
-        public string CurrentDirectory { get; set; }
-        public string TaskType { get; set; }
-        public ServiceClient ServiceClient { get; set; }
-        public CommandLineArgs Arg { get; set; }
-        private JsonServer Json { get; }
-        private bool OK { get; set; } = false;
-        private bool IS_MANAGED_IDENTITY { get; set; } = false;
-        private string ERROR { get; set; } = string.Empty;
-        private string CurrentFolder => $"{CurrentDirectory}\\{Json.folder}";
-        private DynamcisCrmDevKitManagedIdentityAssemblyAttribute ManagedIdentityAttribute { get; set; }
-        private DynamcisCrmDevKitPluginAssemblyAttribute PluginAssemblyAttribute { get; set; }
-        private readonly Dictionary<string, Assembly> _assemblyCache = new Dictionary<string, Assembly>(StringComparer.OrdinalIgnoreCase);
         public TaskServer(CommandLineArgs arg, Json json)
         {
             this.Arg = arg;
@@ -66,7 +51,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             CliLog.WriteLine(ConsoleColor.White, "|");
             if (await IsValidAsync())
             {
-                var files = XrmHelper.GetFiles(CurrentFolder, Json.includefiles, Json.excludefiles);
+                var files = GetFiles(CurrentFolder, Json.includefiles, Json.excludefiles);
                 files.Sort();
                 if (files.Count == 0)
                 {
@@ -79,7 +64,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         CliLog.Write(ConsoleColor.White, "|", ConsoleColor.Green, "Found: ");
                         CliLog.WriteSuccess(ConsoleColor.White, files.Count);
                         CliLog.WriteLine(ConsoleColor.Green, " files to deploy");
-                        foreach(var file in files)
+                        foreach (var file in files)
                         {
                             CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.White, $"  - {Path.GetFileName(file)}");
                         }
@@ -130,40 +115,34 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     CliLog.WriteSuccess(ConsoleColor.White, $"{Path.GetFileName(fileNuget)}");
                     CliLog.WriteLine();
                     var fileNugetDll = GetDllFileFromNugetPackage(fileNuget);
-                    if (fileNugetDll.Length == 0)
+                    (IS_MANAGED_IDENTITY, ERROR) = IsNeedSignAssembly(fileNugetDll);
+                    if (IS_MANAGED_IDENTITY && ERROR.Length == 0)
+                    {
+                        (OK, ERROR) = await SignPackageAsync(fileNuget, Path.Combine(CurrentDirectory, ManagedIdentityAttribute.CertificateFile), ManagedIdentityAttribute.CertificatePassword);
+                        if (!OK)
+                        {
+                            CliLog.WriteLineError(ConsoleColor.Yellow, ERROR);
+                            CliLog.WriteLineError(ConsoleColor.Yellow, $"Package {Path.GetFileName(fileNuget)} not signed. Package deployment stopped.");
+                            continue;
+                        }
+                    }
+                    else if (ERROR.Length > 0)
                     {
                         CliLog.WriteLineError(ConsoleColor.Yellow, ERROR);
-                        CliLog.WriteLineError(ConsoleColor.Yellow, $"Package {Path.GetFileName(file)} don't have a .dll file to deploy.");
+                        CliLog.WriteLineError(ConsoleColor.Yellow, $"Package {Path.GetFileName(fileNuget)} not signed. Package deployment stopped.");
                         continue;
                     }
-                    else
+                    ERROR = await DeployPackageAsync(fileNuget);
+                    if (ERROR.Length > 0)
                     {
-                        (IS_MANAGED_IDENTITY, ERROR) = IsNeedSignAssembly(fileNugetDll);
-                        if (IS_MANAGED_IDENTITY && ERROR.Length == 0)
-                        {
-                            (OK, ERROR) = await SignPackageAsync(fileNuget, Path.Combine(CurrentDirectory, ManagedIdentityAttribute.CertificateFile), ManagedIdentityAttribute.CertificatePassword);
-                            if (!OK)
-                            {
-                                CliLog.WriteLineError(ConsoleColor.Yellow, ERROR);
-                                CliLog.WriteLineError(ConsoleColor.Yellow, $"Package {Path.GetFileName(fileNuget)} not signed. Package deployment stopped.");
-                                continue;
-                            }
-                        }
-                        else if (ERROR.Length > 0)
-                        {
-                            CliLog.WriteLineError(ConsoleColor.Yellow, ERROR);
-                            CliLog.WriteLineError(ConsoleColor.Yellow, $"Package {Path.GetFileName(fileNuget)} not signed. Package deployment stopped.");
-                            continue;
-                        }
-                        ERROR = await DeployPackageAsync(fileNuget);
-                        if (ERROR.Length > 0)
-                        {
-                            CliLog.WriteLineError(ConsoleColor.Yellow, ERROR);
-                            CliLog.WriteLineError(ConsoleColor.Yellow, $"Package {Path.GetFileName(fileNuget)} not signed. Package deployment stopped.");
-                            continue;
-                        }
-                        await DeployDllAsync(fileNugetDll, DeployFileType.Nuget);
+                        CliLog.WriteLineError(ConsoleColor.Yellow, ERROR);
+                        CliLog.WriteLineError(ConsoleColor.Yellow, $"Package {Path.GetFileName(fileNuget)} not signed. Package deployment stopped.");
+                        continue;
                     }
+                    //foreach (var fileNugetDll in fileNugetDlls)
+                    //{
+                        await DeployDllAsync(fileNugetDll, DeployFileType.Nuget);
+                    //}
                 }
                 else
                     CliLog.WriteLineError(ConsoleColor.Yellow, $"Not support file extension: {new FileInfo(file).Extension}");
@@ -217,7 +196,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 var entity = rows.Entities[0];
                 var oldContent = entity.GetAttributeValue<string>("content");
-                if (XrmHelper.IsEqualsContent(oldContent, newContent))
+                if (IsEqualsContent(oldContent, newContent))
                 {
                     CliLog.WriteLine(ConsoleColor.White, "|", SPACE, CliAction.DO_NOTHING, ConsoleColor.Blue, " Package ", ConsoleColor.Green, $"{Path.GetFileName(file)}");
                 }
@@ -287,62 +266,39 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         {
             (string name, int value) GetIsolationMode(string file)
             {
-                if (PluginAssemblyAttribute != null)
+                var types = GetTypes(file);
+                foreach (var type in types)
                 {
-                    if (PluginAssemblyAttribute.IsolationMode == IsolationModeEnum.None) return ("None", 1);
-                    if (PluginAssemblyAttribute.IsolationMode == IsolationModeEnum.Sandbox) return ("Sandbox", 2);
-                    if (PluginAssemblyAttribute.IsolationMode == IsolationModeEnum.External) return ("Sandbox", 3);
-                    return ("Sandbox", 2);
-                }
-                else
-                {
-                    var types = GetTypes(file);
-                    foreach (var type in types)
+                    if (IsWorkflowType(type)) continue;
+                    var attributes = GetCrmPluginRegistrationAttributes(type);
+                    foreach (var attribute in attributes)
                     {
-                        if (XrmHelper.IsWorkflowType(type)) continue;
-                        var attributes = GetCrmPluginRegistrationAttributes(type);
-                        foreach (var attribute in attributes)
-                        {
-                            if (attribute.IsolationMode == IsolationModeEnum.None) return ("None", 1);
-                            if (attribute.IsolationMode == IsolationModeEnum.Sandbox) return ("Sandbox", 2);
+                        if (attribute.IsolationMode == IsolationModeEnum.None) return ("None", 1);
+                        if (attribute.IsolationMode == IsolationModeEnum.Sandbox) return ("Sandbox", 2);
                             if (attribute.IsolationMode == IsolationModeEnum.External) return ("Sandbox", 3);
-                        }
                     }
-                    return ("Sandbox", 2);
                 }
+                return ("Sandbox", 2);
             }
             (string name, int value) GetSourceType(string file)
             {
-                if (PluginAssemblyAttribute != null)
+                var types = GetTypes(file);
+                foreach (var type in types)
                 {
-                    if (PluginAssemblyAttribute.SourceType == SourceTypeEnum.Database) return ("Database", 0);
-                    if (PluginAssemblyAttribute.SourceType == SourceTypeEnum.Disk) return ("Disk", 1);
-                    if (PluginAssemblyAttribute.SourceType == SourceTypeEnum.Normal) return ("Normal", 2);
-                    if (PluginAssemblyAttribute.SourceType == SourceTypeEnum.AzureWebApp) return ("AzureWebApp", 3);
-                    if (PluginAssemblyAttribute.SourceType == SourceTypeEnum.FileStore) return ("FileStore", 4);
-                    return ("Database", 0);
-                }
-                else
-                {
-                    var types = GetTypes(file);
-                    foreach (var type in types)
+                    if (IsWorkflowType(type)) continue;
+                    var attributes = GetCrmPluginRegistrationAttributes(type);
+                    foreach (var attribute in attributes)
                     {
-                        if (XrmHelper.IsWorkflowType(type)) continue;
-                        var attributes = GetCrmPluginRegistrationAttributes(type);
-                        foreach (var attribute in attributes)
-                        {
-                            if (attribute.SourceType == SourceTypeEnum.Database) return ("Database", 0);
-                            if (attribute.SourceType == SourceTypeEnum.Disk) return ("Disk", 1);
-                            if (attribute.SourceType == SourceTypeEnum.Normal) return ("Normal", 2);
-                            if (attribute.SourceType == SourceTypeEnum.AzureWebApp) return ("AzureWebApp", 3);
-                            if (attribute.SourceType == SourceTypeEnum.FileStore) return ("FileStore", 4);
-                        }
+                        if (attribute.SourceType == SourceTypeEnum.Database) return ("Database", 0);
+                        if (attribute.SourceType == SourceTypeEnum.Disk) return ("Disk", 1);
+                        if (attribute.SourceType == SourceTypeEnum.Normal) return ("Normal", 2);
+                        if (attribute.SourceType == SourceTypeEnum.AzureWebApp) return ("AzureWebApp", 3);
+                        if (attribute.SourceType == SourceTypeEnum.FileStore) return ("FileStore", 4);
                     }
-                    return ("Database", 0);
                 }
+                return ("Database", 0);
             }
             var assembly = LoadAssemblyIntoCache(file);
-            PluginAssemblyAttribute = GetCustomAttribute<DynamcisCrmDevKitPluginAssemblyAttribute>(assembly);
             var assemblyProperties = assembly.GetName().FullName.Split(",= ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
             var assemblyName = assemblyProperties[0];
             var fetchData = new
@@ -401,7 +357,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 var oldContent = rows.Entities[0].GetAttributeValue<string>("content");
                 pluginAssemblyId = rows.Entities[0].Id;
-                if (XrmHelper.IsEqualsContent(oldContent, newContent))
+                if (IsEqualsContent(oldContent, newContent))
                 {
                     CliLog.Write(ConsoleColor.White, "|", SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, "Assembly ", ConsoleColor.Cyan, assemblyName, ".dll");
                     CliLog.WriteLine(ConsoleColor.Blue, text);
@@ -469,10 +425,32 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             return pluginAssemblyId;
         }
+
+
+
+
+
+
+
+
+
+        private bool OK = false;
+        private bool IS_MANAGED_IDENTITY = false;
+        private string ERROR = string.Empty;
+        private DynamcisCrmDevKitManagedIdentityAssemblyAttribute ManagedIdentityAttribute { get; set; }
+        //private (bool needSign, string error) IsNeedSignAssembly(List<string> files)
+        //{
+        //    foreach (var file in files)
+        //    {
+        //        var (ok, error) = IsNeedSignAssembly(file);
+        //        if (ok) return (ok, error);
+        //    }
+        //    return (false, string.Empty);
+        //}
         private (bool needSign, string error) IsNeedSignAssembly(string file)
         {
             var assembly = LoadAssemblyIntoCache(file);
-            ManagedIdentityAttribute = GetCustomAttribute<DynamcisCrmDevKitManagedIdentityAssemblyAttribute>(assembly);
+            ManagedIdentityAttribute = GetDynamcisCrmDevkitManagedIdentityAssemblyAttribute(assembly);
             if (ManagedIdentityAttribute == null) return (false, string.Empty);
             if (string.IsNullOrEmpty(ManagedIdentityAttribute.TenantId))
             {
@@ -497,6 +475,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             return (true, string.Empty);
         }
+
         private string FindSignTool()
         {
             try
@@ -633,6 +612,40 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             return (_ManagedIdentityId.Value, _ApplicationId.Value);
         }
+        private DynamcisCrmDevKitManagedIdentityAssemblyAttribute GetDynamcisCrmDevkitManagedIdentityAssemblyAttribute(Assembly assembly)
+        {
+            var attributeData = CustomAttributeData.GetCustomAttributes(assembly)
+                .Where(data => data.AttributeType.FullName.Contains(nameof(DynamcisCrmDevKitManagedIdentityAssemblyAttribute)))
+                .FirstOrDefault();
+            if (attributeData == null) return null;
+            var attribute = new DynamcisCrmDevKitManagedIdentityAssemblyAttribute();
+            var properties = typeof(DynamcisCrmDevKitManagedIdentityAssemblyAttribute).GetProperties();
+            foreach (var namedArgument in attributeData.NamedArguments)
+            {
+                string propertyName = namedArgument.MemberName;
+                object rawValue = namedArgument.TypedValue.Value;
+                var targetProperty = properties.FirstOrDefault(p => p.Name == propertyName);
+
+                if (targetProperty != null)
+                {
+                    object finalValue = rawValue;
+                    if (targetProperty.PropertyType.IsGenericType && targetProperty.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>))
+                    {
+                        Type underlyingType = Nullable.GetUnderlyingType(targetProperty.PropertyType);
+                        if (underlyingType != null && underlyingType.IsEnum)
+                        {
+                            finalValue = Enum.ToObject(underlyingType, rawValue);
+                        }
+                    }
+                    else if (targetProperty.PropertyType.IsEnum)
+                    {
+                        finalValue = Enum.ToObject(targetProperty.PropertyType, rawValue);
+                    }
+                    targetProperty.SetValue(attribute, finalValue);
+                }
+            }
+            return attribute;
+        }
         private async Task<(bool ok, string error)> SignAssemblyAsync(string file, string certificatePath, string certificatePassword = null)
         {
             var signToolPath = FindSignTool();
@@ -715,7 +728,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 else
                 {
                     var outputs = output.Trim().Split("\n".ToCharArray());
-                    foreach(var o in outputs)
+                    foreach (var o in outputs)
                     {
                         if (o.StartsWith("error: NU3001:")) return (false, "Package already contains a signature. Please remove the existing signature by 'Clean' and then 'Rebuild' project.");
                     }
@@ -723,6 +736,18 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
             }
         }
+
+        private const string SPACE = "  ";
+        private readonly Dictionary<string, Assembly> _assemblyCache = new Dictionary<string, Assembly>(StringComparer.OrdinalIgnoreCase);
+        public bool IsOk { get; set; }
+        public Guid SolutionId { get; set; }
+        public string SolutionPrefix { get; set; }
+        public string CurrentDirectory { get; set; }
+        public string TaskType { get; set; }
+        public ServiceClient ServiceClient { get; set; }
+        public CommandLineArgs Arg { get; set; }
+        private JsonServer Json { get; }
+        private string CurrentFolder => $"{CurrentDirectory}\\{Json.folder}";
         public async Task<bool> IsValidAsync()
         {
             if (Json == null)
@@ -748,6 +773,18 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             return true;
         }
+        //private List<string> GetDllFileFromNugetPackage(string file)
+        //{
+        //    var tempFile = Path.Combine(Path.GetTempPath(), Path.GetFileName(file));
+        //    Helper.TryDeleteFile(tempFile);
+        //    File.Copy(file, tempFile);
+        //    using PackageArchiveReader packageArchiveReader = new(tempFile);
+        //    var folder = $"{CurrentFolder}\\DynamicsCrm.DevKit.Cli.2";
+        //    Helper.TryDeleteDirectory(folder);
+        //    ExtractZip(packageArchiveReader, folder);
+        //    return Directory.GetFiles(folder).ToList();
+        //}
+
         private string GetDllFileFromNugetPackage(string file)
         {
             var tempFile = Path.Combine(Path.GetTempPath(), Path.GetFileName(file));
@@ -757,14 +794,34 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var folder = $"{CurrentFolder}\\DynamicsCrm.DevKit.Cli.Temp";
             Helper.TryDeleteDirectory(folder);
             ExtractZip(packageArchiveReader, folder);
+            var currentDllFiles = Directory.GetFiles(CurrentFolder, "*.dll", SearchOption.AllDirectories);
+            foreach (var dllFile in currentDllFiles)
+            {
+                var destFile = Path.Combine(folder, Path.GetFileName(dllFile));
+                if (!File.Exists(destFile))
+                {
+                    File.Copy(dllFile, destFile);
+                }
+            }
             var files = Directory.GetFiles(folder).ToList();
             var fileNameWithoutExtention = Path.GetFileNameWithoutExtension(file);
             var nugetVerion = packageArchiveReader.NuspecReader.GetVersion().ToFullString();
             fileNameWithoutExtention = fileNameWithoutExtention.Substring(0, fileNameWithoutExtention.Length - nugetVerion.Length);
-            files = files.Where(x => x.Contains(fileNameWithoutExtention)).ToList();
-            if (files.Count == 1) return files.First();
+            var returnFiles = files.Where(x => x.Contains(fileNameWithoutExtention)).ToList();
+            if (returnFiles.Count == 1)
+            {
+                var returnFile = returnFiles.First();
+                foreach (var _file in files)
+                {
+                    if (_file == returnFile) continue;
+                    LoadAssemblyIntoCache(_file);
+                }
+                LoadAssemblyIntoCache(returnFile);
+                return returnFile;
+            }
             return string.Empty;
         }
+
         private async Task DeployDllAsync(string file, DeployFileType deployFileType = DeployFileType.Dll)
         {
             var types = GetTypes(file);
@@ -818,7 +875,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
                 var pluginTypeId = await DeployPluginTypeAsync(pluginAssemblyId.Value, type, attributes[0], deployFileType);
                 if (pluginTypeId == null) return;
-                if (XrmHelper.IsWorkflowType(type)) continue;
+                if (IsWorkflowType(type)) continue;
                 foreach (var attribute in attributes)
                 {
                     switch (attribute.PluginType)
@@ -829,7 +886,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                             if (pluginStepId == null) return;
                             if (attribute.PluginType == PluginType.Plugin && HasPluginImage(attribute))
                             {
-                                if (XrmHelper.IsSupportPluginImage(attribute?.Message))
+                                if (IsSupportPluginImage(attribute))
                                 {
                                     var pluginImageId = await DeployPluginImageAsync(pluginStepId.Value, attribute);
                                     if (pluginImageId == null) return;
@@ -901,7 +958,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     CliLog.WriteLineError(ConsoleColor.Yellow, $"Multiple message Create found with data source {dataSource} ({checkDataSource}). Assemply deployed, but the deployment of this assembly stopped.");
                     return false;
                 }
-                var countUpdate = dataProviderEvents.Count(x => XrmHelper.IsMessageUpdate(x.Message) && x.DataSource == dataSource);
+                var countUpdate = dataProviderEvents.Count(x => IsMessageUpdate(x.Message) && x.DataSource == dataSource);
                 if (countUpdate != 0 && countUpdate != 1)
                 {
                     CliLog.WriteLineError(ConsoleColor.Yellow, $"Multiple message Update found with data source {dataSource} ({checkDataSource}). Assemply deployed, but the deployment of this assembly stopped.");
@@ -950,7 +1007,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     entity.Attributes.Add("createplugin", create.PluginTypeId);
                     events += "Create, ";
                 }
-                var update = dataProviderEvents.Where(x => XrmHelper.IsMessageUpdate(x.Message) && x.DataSource == dataSource).FirstOrDefault();
+                var update = dataProviderEvents.Where(x => IsMessageUpdate(x.Message) && x.DataSource == dataSource).FirstOrDefault();
                 if (update == null)
                     entity.Attributes.Add("updateplugin", new Guid("{c1919979-0021-4f11-a587-a8f904bdfdf9}"));
                 else
@@ -1081,6 +1138,21 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             if (check == Guid.Empty) return null;
             return check;
         }
+        private string GetMessagePropertyName(string message)
+        {
+            return message.ToLower() switch
+            {
+                "create" => "Id",
+                "createmultiple" => "Ids",
+                "updatemultiple" => "Targets",
+                "setstate" => "EntityMoniker",
+                "setstatedynamicentity" => "EntityMoniker",
+                "deliverincoming" => "EmailId",
+                "deliverpromote" => "EmailId",
+                "send" => "EmailId",
+                _ => "Target"
+            };
+        }
         private async Task<Guid> DeployPluginImageAsync(string message, string imageName, string imageAliasName, ImageTypeEnum imageType, string imageAttributes, Guid pluginStepId, string pluginStepName)
         {
             if (imageAliasName.Length == 0) imageAliasName = imageName;
@@ -1122,7 +1194,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 ["sdkmessageprocessingstepid"] = new EntityReference("sdkmessageprocessingstep", pluginStepId),
                 ["attributes"] = imageAttributes.Trim() == "*" ? null : imageAttributes,
                 ["entityalias"] = imageAliasName,
-                ["messagepropertyname"] = XrmHelper.GetMessagePropertyName(message)
+                ["messagepropertyname"] = GetMessagePropertyName(message)
             };
             if (rows.Entities.Count == 0)
             {
@@ -1224,6 +1296,27 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 return rows.Entities[0].Id;
             }
         }
+        private bool IsSupportPluginImage(CrmPluginRegistrationAttribute attribute)
+        {
+            return (attribute?.Message?.ToLower()) switch
+            {
+                "assign" or
+                "create" or
+                "delete" or
+                "deliverincoming" or
+                "deliverpromote" or
+                "merge" or
+                "route" or
+                "send" or
+                "setstate" or
+                "setstatedynamicentity" or
+                "update" or
+                "createmultiple" or
+                "updatemultiple" or
+                "executeworkflow" => true,
+                _ => false,
+            };
+        }
         private bool HasPluginImage(CrmPluginRegistrationAttribute attribute)
         {
             if (attribute?.Image1Name?.Length > 0)
@@ -1236,9 +1329,19 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 return true;
             return false;
         }
+        private bool IsMessageUpdate(string message)
+        {
+            return message.ToLower() switch
+            {
+                "update" or
+                "updatemultiple" or
+                "onexternalupdated" => true,
+                _ => false,
+            };
+        }
         private async Task<Guid?> DeployPluginStepAsync(Guid pluginTypeId, TypeInfo type, CrmPluginRegistrationAttribute attribute)
         {
-            if (XrmHelper.IsMessageUpdate(attribute?.Message))
+            if (IsMessageUpdate(attribute?.Message))
             {
                 if (attribute?.FilteringAttributes?.Trim().Length == 0)
                 {
@@ -1434,7 +1537,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         CliLog.WriteSuccess(ConsoleColor.White, CliAction.UPDATED.Trim());
                         if (
                             rows.Entities.Count == 1 &&
-                            rows?.Entities?[0]?.GetAttributeValue<OptionSetValue>("statecode")?.Value == (int)PluginStepOperationEnum.Deactivate  &&
+                            rows?.Entities?[0]?.GetAttributeValue<OptionSetValue>("statecode")?.Value == (int)PluginStepOperationEnum.Deactivate &&
                             attribute.Action == PluginStepOperationEnum.Activate)
                         {
                             CliLog.Write(" ");
@@ -1517,7 +1620,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
             void CliLogUpdateFields()
             {
-                if (XrmHelper.IsMessageUpdate(attribute.Message))
+                if (IsMessageUpdate(attribute.Message))
                 {
                     if (rows.Entities.Count == 0)
                     {
@@ -1654,14 +1757,14 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
   </entity>
 </fetch>";
             var rows = await ServiceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
-            if (rows.Entities.Count != 1) return false ;
+            if (rows.Entities.Count != 1) return false;
             var pluginTypeId = rows.Entities[0].GetAttributeValue<Guid>("plugintypeid");
             try
             {
                 await DeletePluginStepsAsync();
                 await ServiceClient.DeleteAsync("plugintype", pluginTypeId);
             }
-            catch(FaultException fe)
+            catch (Exception fe)
             {
                 CliLog.WriteLineError(ConsoleColor.Yellow, $"Unregister {type.FullName} failed: {fe.Message} Assemply deployed, but the deployment of this assembly stopped.");
                 return true;
@@ -1736,7 +1839,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 pluginType["pluginassemblyid"] = new EntityReference("pluginassembly", pluginAssemblyId);
                 pluginType["typename"] = type.FullName;
                 pluginType["friendlyname"] = type.FullName;
-            };
+            }
             if (string.IsNullOrWhiteSpace(attribute.Description))
             {
                 if (rows.Entities.Count == 0 || (rows.Entities.Count > 0 && string.IsNullOrWhiteSpace(rows.Entities[0].GetAttributeValue<string>("description"))))
@@ -1778,18 +1881,18 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     CliLog.WriteLineError(ConsoleColor.Yellow, $"{fe.Message} Assemply deployed, but the deployment of this assembly stopped.");
                     return null;
                 }
-                catch(Exception ee)
+                catch (Exception ee)
                 {
                     CliLog.WriteLineError(ConsoleColor.Yellow, $"{ee.Message} Assemply deployed, but the deployment of this assembly stopped.");
                     return null;
                 }
-                if (XrmHelper.IsWorkflowType(type))
+                if (IsWorkflowType(type))
                 {
                     var old = rows.Entities[0].GetAttributeValue<string>("customworkflowactivityinfo");
                     var @new = (await ServiceClient.RetrieveAsync("plugintype", rows.Entities[0].Id, new ColumnSet("customworkflowactivityinfo"))).GetAttributeValue<string>("customworkflowactivityinfo");
-                    if (XrmHelper.IsEqualsWorkflowType(old, @new))
+                    if (IsEqualsWorkflowType(old, @new))
                     {
-                        CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, ConsoleColor.White, "Type ", ConsoleColor.Blue, attribute.PluginType, " ",ConsoleColor.Cyan, type.FullName);
+                        CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, ConsoleColor.White, "Type ", ConsoleColor.Blue, attribute.PluginType, " ", ConsoleColor.Cyan, type.FullName);
                     }
                     else
                     {
@@ -1804,6 +1907,14 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
             }
             return rows.Entities[0].Id;
+        }
+        private bool IsEqualsWorkflowType(string old, string @new)
+        {
+            return old == @new;
+        }
+        private bool IsEqualsContent(string oldContent, string newContent)
+        {
+            return oldContent == newContent;
         }
         private async Task<bool> IsValidTypesAsync(string file, List<TypeInfo> types, DeployFileType deployFileType)
         {
@@ -1865,7 +1976,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 var attributes = GetCrmPluginRegistrationAttributes(type);
                 if (attributes.Count() > 1)
                 {
-                    if (XrmHelper.IsWorkflowType(type))
+                    if (IsWorkflowType(type))
                     {
                         CliLog.WriteLineError(ConsoleColor.Yellow, $"Type '{type.FullName}' has multi attribute CrmPluginRegistration. Deploy stopped.");
                         return false;
@@ -1890,17 +2001,51 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 list.Add(Helper.ConvertAttributeToCrmPluginRegistration(attribute));
             return list;
         }
+        private List<string> GetFiles(string folder, List<string> includePatternFiles, List<string> excludePatternFiles)
+        {
+            var includefiles = new List<string>();
+            foreach (var includefile in includePatternFiles)
+            {
+                if (Directory.Exists(folder))
+                {
+                    includefiles.AddRange([.. Directory.GetFiles(folder, includefile)]);
+                }
+            }
+            foreach (var includefile in includePatternFiles)
+            {
+                var other = includefile.Replace("*.", string.Empty);
+                if (Directory.Exists(folder))
+                {
+                    includefiles.AddRange([.. Directory.GetFiles(folder, other)]);
+                }
+            }
+            var excludefiles = new List<string>();
+            foreach (var excludefile in excludePatternFiles)
+            {
+                if (Directory.Exists(folder))
+                {
+                    excludefiles.AddRange([.. Directory.GetFiles(folder, excludefile)]);
+                }
+            }
+            foreach (var excludefile in excludePatternFiles)
+            {
+                var other = excludefile.Replace("*.", string.Empty);
+                if (Directory.Exists(folder))
+                {
+                    excludefiles.AddRange([.. Directory.GetFiles(folder, other)]);
+                }
+            }
+            var files = includefiles.Where(file => !excludefiles.Contains(file)).Distinct().ToList();
+            files.Sort();
+            return files;
+        }
         private Assembly LoadAssemblyIntoCache(string file)
         {
-            // Normalize path for cache lookup
             var normalizedPath = Path.GetFullPath(file);
-
-            // Check if already loaded in cache
             if (_assemblyCache.TryGetValue(normalizedPath, out var cachedAssembly))
             {
                 return cachedAssembly;
             }
-
             Assembly assembly = null;
             try
             {
@@ -1920,7 +2065,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 CliLog.WriteLineError(ConsoleColor.Red, $"Failed to load assembly {file}: {ex.Message}");
             }
-
             return assembly;
         }
         private List<TypeInfo> GetTypes(string file)
@@ -1964,6 +2108,12 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 return null;
             }
         }
+        private bool IsWorkflowType(Type type)
+        {
+            if (type?.FullName == "System.Activities.CodeActivity") return true;
+            if (type?.BaseType != null) return IsWorkflowType(type?.BaseType);
+            return false;
+        }
         private void ExtractZip(PackageArchiveReader packageArchiveReader, string folder)
         {
             var libFiles = packageArchiveReader.GetFiles("lib");
@@ -1980,42 +2130,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 var zip = packageArchiveReader.GetEntry(libFile);
                 zip.ExtractToFile($"{folder}\\{zip.Name}", true);
             }
-        }
-
-        private T GetCustomAttribute<T>(Assembly assembly) where T : class, new()
-        {
-            var attrTypeName = typeof(T).Name;
-            var attributeData = CustomAttributeData.GetCustomAttributes(assembly)
-                .Where(data => data.AttributeType.FullName.Contains(attrTypeName))
-                .FirstOrDefault();
-            if (attributeData == null) return null;
-            var attribute = new T();
-            var properties = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
-            foreach (var namedArgument in attributeData.NamedArguments)
-            {
-                string propertyName = namedArgument.MemberName;
-                object rawValue = namedArgument.TypedValue.Value;
-                var targetProperty = properties.FirstOrDefault(p => p.Name == propertyName);
-                if (targetProperty != null)
-                {
-                    object finalValue = rawValue;
-                    var propType = targetProperty.PropertyType;
-                    if (propType.IsGenericType && propType.GetGenericTypeDefinition() == typeof(Nullable<>))
-                    {
-                        Type underlyingType = Nullable.GetUnderlyingType(propType);
-                        if (underlyingType != null && underlyingType.IsEnum && rawValue != null)
-                        {
-                            finalValue = Enum.ToObject(underlyingType, rawValue);
-                        }
-                    }
-                    else if (propType.IsEnum && rawValue != null)
-                    {
-                        finalValue = Enum.ToObject(propType, rawValue);
-                    }
-                    targetProperty.SetValue(attribute, finalValue);
-                }
-            }
-            return attribute;
         }
     }
 }
