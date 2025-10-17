@@ -1,9 +1,7 @@
 ﻿
 using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
-using Microsoft.Crm.Sdk.Messages;
 using Microsoft.PowerPlatform.Dataverse.Client;
-using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Query;
@@ -204,7 +202,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 var entity = rows.Entities[0];
                 var oldContent = entity.GetAttributeValue<string>("content");
-                if (IsEqualsContent(oldContent, newContent))
+                if (XrmHelper.IsEqualsContent(oldContent, newContent))
                 {
                     CliLog.WriteLine(ConsoleColor.White, "|", SPACE, CliAction.DO_NOTHING, ConsoleColor.Blue, " Package ", ConsoleColor.Green, $"{Path.GetFileName(file)}");
                 }
@@ -365,7 +363,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 var oldContent = rows.Entities[0].GetAttributeValue<string>("content");
                 pluginAssemblyId = rows.Entities[0].Id;
-                if (IsEqualsContent(oldContent, newContent))
+                if (XrmHelper.IsEqualsContent(oldContent, newContent))
                 {
                     CliLog.Write(ConsoleColor.White, "|", SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, "Assembly ", ConsoleColor.Cyan, assemblyName, ".dll");
                     CliLog.WriteLine(ConsoleColor.Blue, text);
@@ -433,20 +431,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             return pluginAssemblyId;
         }
-
         private bool OK = false;
         private bool IS_MANAGED_IDENTITY = false;
         private string ERROR = string.Empty;
         private DynamcisCrmDevKitManagedIdentityAssemblyAttribute ManagedIdentityAttribute { get; set; }
-        private (bool needSign, string error) IsNeedSignAssembly(List<string> files)
-        {
-            foreach(var file in files)
-            {
-                var (ok, error) = IsNeedSignAssembly(file);
-                if (ok) return (ok, error);
-            }
-            return (false, string.Empty);
-        }
         private (bool needSign, string error) IsNeedSignAssembly(string file)
         {
             var assembly = LoadAssemblyIntoCache(file);
@@ -475,7 +463,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             return (true, string.Empty);
         }
-
         private string FindSignTool()
         {
             try
@@ -735,7 +722,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
             }
         }
-
         private const string SPACE = "  ";
         private readonly Dictionary<string, Assembly> _assemblyCache = new Dictionary<string, Assembly>(StringComparer.OrdinalIgnoreCase);
         public bool IsOk { get; set; }
@@ -925,7 +911,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     CliLog.WriteLineError(ConsoleColor.Yellow, $"Multiple message Create found with data source {dataSource} ({checkDataSource}). Assemply deployed, but the deployment of this assembly stopped.");
                     return false;
                 }
-                var countUpdate = dataProviderEvents.Count(x => IsMessageUpdate(x.Message) && x.DataSource == dataSource);
+                var countUpdate = dataProviderEvents.Count(x => XrmHelper.IsMessageUpdate(x.Message) && x.DataSource == dataSource);
                 if (countUpdate != 0 && countUpdate != 1)
                 {
                     CliLog.WriteLineError(ConsoleColor.Yellow, $"Multiple message Update found with data source {dataSource} ({checkDataSource}). Assemply deployed, but the deployment of this assembly stopped.");
@@ -974,7 +960,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     entity.Attributes.Add("createplugin", create.PluginTypeId);
                     events += "Create, ";
                 }
-                var update = dataProviderEvents.Where(x => IsMessageUpdate(x.Message) && x.DataSource == dataSource).FirstOrDefault();
+                var update = dataProviderEvents.Where(x => XrmHelper.IsMessageUpdate(x.Message) && x.DataSource == dataSource).FirstOrDefault();
                 if (update == null)
                     entity.Attributes.Add("updateplugin", new Guid("{c1919979-0021-4f11-a587-a8f904bdfdf9}"));
                 else
@@ -1105,21 +1091,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             if (check == Guid.Empty) return null;
             return check;
         }
-        private string GetMessagePropertyName(string message)
-        {
-            return message.ToLower() switch
-            {
-                "create" => "Id",
-                "createmultiple" => "Ids",
-                "updatemultiple" => "Targets",
-                "setstate" => "EntityMoniker",
-                "setstatedynamicentity" => "EntityMoniker",
-                "deliverincoming" => "EmailId",
-                "deliverpromote" => "EmailId",
-                "send" => "EmailId",
-                _ => "Target"
-            };
-        }
         private async Task<Guid> DeployPluginImageAsync(string message, string imageName, string imageAliasName, ImageTypeEnum imageType, string imageAttributes, Guid pluginStepId, string pluginStepName)
         {
             if (imageAliasName.Length == 0) imageAliasName = imageName;
@@ -1161,7 +1132,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 ["sdkmessageprocessingstepid"] = new EntityReference("sdkmessageprocessingstep", pluginStepId),
                 ["attributes"] = imageAttributes.Trim() == "*" ? null : imageAttributes,
                 ["entityalias"] = imageAliasName,
-                ["messagepropertyname"] = GetMessagePropertyName(message)
+                ["messagepropertyname"] = XrmHelper.GetMessagePropertyName(message)
             };
             if (rows.Entities.Count == 0)
             {
@@ -1296,19 +1267,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 return true;
             return false;
         }
-        private bool IsMessageUpdate(string message)
-        {
-            return message.ToLower() switch
-            {
-                "update" or
-                "updatemultiple" or
-                "onexternalupdated" => true,
-                _ => false,
-            };
-        }
+
         private async Task<Guid?> DeployPluginStepAsync(Guid pluginTypeId, TypeInfo type, CrmPluginRegistrationAttribute attribute)
         {
-            if (IsMessageUpdate(attribute?.Message))
+            if (XrmHelper.IsMessageUpdate(attribute?.Message))
             {
                 if (attribute?.FilteringAttributes?.Trim().Length == 0)
                 {
@@ -1587,7 +1549,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
             void CliLogUpdateFields()
             {
-                if (IsMessageUpdate(attribute.Message))
+                if (XrmHelper.IsMessageUpdate(attribute.Message))
                 {
                     if (rows.Entities.Count == 0)
                     {
@@ -1857,7 +1819,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 {
                     var old = rows.Entities[0].GetAttributeValue<string>("customworkflowactivityinfo");
                     var @new = (await ServiceClient.RetrieveAsync("plugintype", rows.Entities[0].Id, new ColumnSet("customworkflowactivityinfo"))).GetAttributeValue<string>("customworkflowactivityinfo");
-                    if (IsEqualsWorkflowType(old, @new))
+                    if (XrmHelper.IsEqualsWorkflowType(old, @new))
                     {
                         CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, ConsoleColor.White, "Type ", ConsoleColor.Blue, attribute.PluginType, " ",ConsoleColor.Cyan, type.FullName);
                     }
@@ -1874,14 +1836,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
             }
             return rows.Entities[0].Id;
-        }
-        private bool IsEqualsWorkflowType(string old, string @new)
-        {
-            return old == @new;
-        }
-        private bool IsEqualsContent(string oldContent, string newContent)
-        {
-            return oldContent == newContent;
         }
         private async Task<bool> IsValidTypesAsync(string file, List<TypeInfo> types, DeployFileType deployFileType)
         {
@@ -2080,7 +2034,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 return null;
             }
         }
-
         private void ExtractZip(PackageArchiveReader packageArchiveReader, string folder)
         {
             var libFiles = packageArchiveReader.GetFiles("lib");

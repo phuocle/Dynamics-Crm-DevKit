@@ -1476,5 +1476,39 @@ namespace DynamicsCrm.DevKit.Shared
             if (type?.BaseType != null) return IsWorkflowType(type?.BaseType);
             return false;
         }
+        internal static string GetMessagePropertyName(string message)
+        {
+            return message.ToLower() switch
+            {
+                "create" => "Id",
+                "createmultiple" => "Ids",
+                "updatemultiple" => "Targets",
+                "setstate" => "EntityMoniker",
+                "setstatedynamicentity" => "EntityMoniker",
+                "deliverincoming" => "EmailId",
+                "deliverpromote" => "EmailId",
+                "send" => "EmailId",
+                _ => "Target"
+            };
+        }
+        internal static bool IsEqualsWorkflowType(string old, string @new)
+        {
+            return old == @new;
+        }
+        internal static bool IsEqualsContent(string oldContent, string newContent)
+        {
+            return oldContent == newContent;
+        }
+
+        internal static bool IsMessageUpdate(string message)
+        {
+            return message.ToLower() switch
+            {
+                "update" or
+                "updatemultiple" or
+                "onexternalupdated" => true,
+                _ => false,
+            };
+        }
     }
 }
