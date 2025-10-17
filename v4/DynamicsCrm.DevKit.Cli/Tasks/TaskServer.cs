@@ -1,5 +1,4 @@
-﻿
-using DynamicsCrm.DevKit.Shared;
+﻿using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk;
