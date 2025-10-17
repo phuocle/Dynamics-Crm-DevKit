@@ -63,26 +63,6 @@ namespace DynamicsCrm.DevKit.Cli
             WriteLine(ConsoleColor.Black, "");
         }
 
-        public static void WriteError(params object[] values)
-        {
-            WriteLine(ConsoleColor.White, "▌");
-            var oldConsoleBackgroundColor = Console.BackgroundColor;
-            var oldConsoleForegroundColor = Console.ForegroundColor;
-            Console.BackgroundColor = ConsoleColor.Red;
-            Write(ConsoleColor.White, "▌");
-            foreach (var value in values)
-            {
-                if (value is ConsoleColor color)
-                    Console.ForegroundColor = color;
-                else
-                {
-                    Console.Write(FormatValue2(value));
-                }
-            }
-            Console.ForegroundColor = oldConsoleForegroundColor;
-            Console.BackgroundColor = oldConsoleBackgroundColor;
-        }
-
         private static string FormatValue2(object value)
         {
             return value?.ToString() ?? string.Empty;
@@ -114,26 +94,6 @@ namespace DynamicsCrm.DevKit.Cli
             Console.ForegroundColor = oldConsoleForegroundColor;
             Console.BackgroundColor = oldConsoleBackgroundColor;
             WriteLine(ConsoleColor.Black, "█");
-        }
-
-        public static void WriteWarning(params object[] values)
-        {
-            var oldConsoleBackgroundColor = Console.BackgroundColor;
-            var oldConsoleForegroundColor = Console.ForegroundColor;
-            var countLength = 0;
-            Console.BackgroundColor = ConsoleColor.DarkGray;
-            foreach (var value in values)
-            {
-                if (value is ConsoleColor color)
-                    Console.ForegroundColor = color;
-                else
-                {
-                    Console.Write(FormatValue(value));
-                    countLength += value.ToString().Length;
-                }
-            }
-            Console.ForegroundColor = oldConsoleForegroundColor;
-            Console.BackgroundColor = oldConsoleBackgroundColor;
         }
 
         public static void WriteSuccess(params object[] values)
