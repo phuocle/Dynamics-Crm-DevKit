@@ -1549,5 +1549,26 @@ namespace DynamicsCrm.DevKit.Shared
             files.Sort();
             return files;
         }
+        internal static bool IsSupportPluginImage(string message)
+        {
+            return (message?.ToLower()) switch
+            {
+                "assign" or
+                "create" or
+                "delete" or
+                "deliverincoming" or
+                "deliverpromote" or
+                "merge" or
+                "route" or
+                "send" or
+                "setstate" or
+                "setstatedynamicentity" or
+                "update" or
+                "createmultiple" or
+                "updatemultiple" or
+                "executeworkflow" => true,
+                _ => false,
+            };
+        }
     }
 }

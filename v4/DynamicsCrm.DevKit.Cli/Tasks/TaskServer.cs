@@ -895,7 +895,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                             if (pluginStepId == null) return;
                             if (attribute.PluginType == PluginType.Plugin && HasPluginImage(attribute))
                             {
-                                if (IsSupportPluginImage(attribute))
+                                if (XrmHelper.IsSupportPluginImage(attribute?.Message))
                                 {
                                     var pluginImageId = await DeployPluginImageAsync(pluginStepId.Value, attribute);
                                     if (pluginImageId == null) return;
@@ -1289,27 +1289,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
                 return rows.Entities[0].Id;
             }
-        }
-        private bool IsSupportPluginImage(CrmPluginRegistrationAttribute attribute)
-        {
-            return (attribute?.Message?.ToLower()) switch
-            {
-                "assign" or
-                "create" or
-                "delete" or
-                "deliverincoming" or
-                "deliverpromote" or
-                "merge" or
-                "route" or
-                "send" or
-                "setstate" or
-                "setstatedynamicentity" or
-                "update" or
-                "createmultiple" or
-                "updatemultiple" or
-                "executeworkflow" => true,
-                _ => false,
-            };
         }
         private bool HasPluginImage(CrmPluginRegistrationAttribute attribute)
         {
