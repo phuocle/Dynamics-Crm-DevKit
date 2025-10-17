@@ -20,6 +20,20 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 {
     public class TaskServer : ITask
     {
+        private const string SPACE = "  ";
+        public bool IsOk { get; set; }
+        public Guid SolutionId { get; set; }
+        public string SolutionPrefix { get; set; }
+        public string CurrentDirectory { get; set; }
+        public string TaskType { get; set; }
+        public ServiceClient ServiceClient { get; set; }
+        public CommandLineArgs Arg { get; set; }
+        private JsonServer Json { get; }
+        private bool OK { get; set; } = false;
+        private bool IS_MANAGED_IDENTITY { get; set; } = false;
+        private string ERROR { get; set; } = string.Empty;
+        private string CurrentFolder => $"{CurrentDirectory}\\{Json.folder}";
+        private readonly Dictionary<string, Assembly> _assemblyCache = new Dictionary<string, Assembly>(StringComparer.OrdinalIgnoreCase);
         public TaskServer(CommandLineArgs arg, Json json)
         {
             this.Arg = arg;
@@ -431,9 +445,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             return pluginAssemblyId;
         }
-        private bool OK = false;
-        private bool IS_MANAGED_IDENTITY = false;
-        private string ERROR = string.Empty;
         private DynamcisCrmDevKitManagedIdentityAssemblyAttribute ManagedIdentityAttribute { get; set; }
         private (bool needSign, string error) IsNeedSignAssembly(string file)
         {
@@ -722,17 +733,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
             }
         }
-        private const string SPACE = "  ";
-        private readonly Dictionary<string, Assembly> _assemblyCache = new Dictionary<string, Assembly>(StringComparer.OrdinalIgnoreCase);
-        public bool IsOk { get; set; }
-        public Guid SolutionId { get; set; }
-        public string SolutionPrefix { get; set; }
-        public string CurrentDirectory { get; set; }
-        public string TaskType { get; set; }
-        public ServiceClient ServiceClient { get; set; }
-        public CommandLineArgs Arg { get; set; }
-        private JsonServer Json { get; }
-        private string CurrentFolder => $"{CurrentDirectory}\\{Json.folder}";
         public async Task<bool> IsValidAsync()
         {
             if (Json == null)
@@ -1267,7 +1267,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 return true;
             return false;
         }
-
         private async Task<Guid?> DeployPluginStepAsync(Guid pluginTypeId, TypeInfo type, CrmPluginRegistrationAttribute attribute)
         {
             if (XrmHelper.IsMessageUpdate(attribute?.Message))
@@ -1922,7 +1921,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 list.Add(Helper.ConvertAttributeToCrmPluginRegistration(attribute));
             return list;
         }
-
         private Assembly LoadAssemblyIntoCache(string file)
         {
             // Normalize path for cache lookup
