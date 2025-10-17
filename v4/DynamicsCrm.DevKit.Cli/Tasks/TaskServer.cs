@@ -51,7 +51,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             CliLog.WriteLine(ConsoleColor.White, "|");
             if (await IsValidAsync())
             {
-                var files = GetFiles(CurrentFolder, Json.includefiles, Json.excludefiles);
+                var files = XrmHelper.GetFiles(CurrentFolder, Json.includefiles, Json.excludefiles);
                 files.Sort();
                 if (files.Count == 0)
                 {
@@ -1922,44 +1922,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 list.Add(Helper.ConvertAttributeToCrmPluginRegistration(attribute));
             return list;
         }
-        private List<string> GetFiles(string folder, List<string> includePatternFiles, List<string> excludePatternFiles)
-        {
-            var includefiles = new List<string>();
-            foreach (var includefile in includePatternFiles)
-            {
-                if (Directory.Exists(folder))
-                {
-                    includefiles.AddRange([.. Directory.GetFiles(folder, includefile)]);
-                }
-            }
-            foreach (var includefile in includePatternFiles)
-            {
-                var other = includefile.Replace("*.", string.Empty);
-                if (Directory.Exists(folder))
-                {
-                    includefiles.AddRange([.. Directory.GetFiles(folder, other)]);
-                }
-            }
-            var excludefiles = new List<string>();
-            foreach (var excludefile in excludePatternFiles)
-            {
-                if (Directory.Exists(folder))
-                {
-                    excludefiles.AddRange([.. Directory.GetFiles(folder, excludefile)]);
-                }
-            }
-            foreach (var excludefile in excludePatternFiles)
-            {
-                var other = excludefile.Replace("*.", string.Empty);
-                if (Directory.Exists(folder))
-                {
-                    excludefiles.AddRange([.. Directory.GetFiles(folder, other)]);
-                }
-            }
-            var files = includefiles.Where(file => !excludefiles.Contains(file)).Distinct().ToList();
-            files.Sort();
-            return files;
-        }
+
         private Assembly LoadAssemblyIntoCache(string file)
         {
             // Normalize path for cache lookup
