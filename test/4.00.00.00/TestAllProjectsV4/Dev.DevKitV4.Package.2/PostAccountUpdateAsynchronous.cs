@@ -34,37 +34,57 @@ namespace Dev.DevKitV4.Package._2
 
         public void Execute(IServiceProvider serviceProvider)
         {
+            var context = (IPluginExecutionContext)serviceProvider.GetService(typeof(IPluginExecutionContext));
             var tracing = (ITracingService)serviceProvider.GetService(typeof(ITracingService));
+            if (!int.Equals(context.Stage, (int)StageEnum.PostOperation)) throw new InvalidPluginExecutionException("Stage does not equals PostOperation");
+            if (!string.Equals(context.MessageName, "Update", StringComparison.OrdinalIgnoreCase)) throw new InvalidPluginExecutionException("MessageName does not equals Update");
+            if (!string.Equals(context.PrimaryEntityName, "account", StringComparison.OrdinalIgnoreCase)) throw new InvalidPluginExecutionException("PrimaryEntityName does not equals account");
+            if (!int.Equals(context.Mode, (int)ExecutionModeEnum.Asynchronous)) throw new InvalidPluginExecutionException("Execution does not equals Asynchronous");
+            var serviceFactory = (IOrganizationServiceFactory)serviceProvider.GetService(typeof(IOrganizationServiceFactory));
+            var serviceAdmin = serviceFactory.CreateOrganizationService(null);
+            var service = serviceFactory.CreateOrganizationService(context.UserId);
+
+            var targetEntity = context.InputParameterOrDefault<Entity>("Target");
+            tracing.DebugMessage(targetEntity.GetAttributeValue<string>("name"));
 
             try
             {
-                // 1. Get the Dataverse IManagedIdentityService
+                // 1. Get Managed Identity Token
                 var identityService = (IManagedIdentityService)serviceProvider.GetService(typeof(IManagedIdentityService));
+                var scopes = new List<string> { "https://vault.azure.net/.default" };
+                var token = identityService.AcquireToken(scopes);
+                // 2. Get Secret from Key Vault
+                var secretValue = KeyVaultHelper.GetSecret(
+                    token,
+                    "https://kv-dataverse-devkitv4-2.vault.azure.net/",
+                    "DEVKITV4-2",
+                    tracing
+                );
+                // 3. Use the secret!
+                tracing.DebugMessage($"NEW API Endpoint: {secretValue}");
+            }
+            catch (Exception ex)
+            {
+                tracing.DebugMessage(ex.ToString());
+            }
+            tracing.DebugMessage("CAN RUN PLUGIN WITHOUT ERROR");
+            tracing.DebugMessage("THIS IS THE SECOND LINE");
+            tracing.DebugMessage("THIS IS THE NEXT LINE");
+            try
+            {
+                // 1. Get Managed Identity Token using Dataverse Service
+                var identityService = (IManagedIdentityService)serviceProvider.GetService(typeof(IManagedIdentityService));
+                var scopes = new List<string> { "https://vault.azure.net/.default" };
+                var tokenResponse = identityService.AcquireToken(scopes);
 
-                // 2. Define the scope for the target Azure resource (Key Vault)
-                // This is the standard Azure Key Vault scope.
-                var keyVaultScopes = new List<string> { "https://vault.azure.net/.default" };
+                // 2. Create a TokenCredential from the acquired token
+                var managedTokenCredential = new ManagedIdentityTokenCredential(tokenResponse);
 
-                // 3. Use the custom DataverseTokenCredential wrapper!
-                // This credential object uses the Dataverse service to acquire the token
-                // and presents it to the Azure SDK SecretClient in the required format.
-                var credential = new DataverseTokenCredential(identityService, keyVaultScopes);
+                // 3. Use the new credential with SecretClient
+                var client = new SecretClient(new Uri("https://kv-dataverse-devkitv4-2.vault.azure.net/"), managedTokenCredential);
+                KeyVaultSecret secret = client.GetSecret("DEVKITV4-2");
 
-                // --- Azure SDK Key Vault Client Setup ---
-
-                var vaultUri = new Uri("https://kv-dataverse-devkitv4-2.vault.azure.net/");
-                const string secretName = "DEVKITV4-2";
-
-                // Initialize the SecretClient using the URI and the custom DataverseTokenCredential.
-                var client = new SecretClient(vaultUri, credential);
-
-                tracing.Trace($"Attempting to retrieve secret '{secretName}' from {vaultUri.Host} using Dataverse Managed Identity...");
-
-                // 4. Retrieve the secret using the Azure SDK client
-                // We use .Result to block synchronously, which is necessary in a typical Dataverse IPlugin.Execute method.
-                KeyVaultSecret secret = client.GetSecretAsync(secretName).Result;
-
-                // 5. Success!
+                // ... continue with success tracing ...
                 tracing.Trace($"✓ Successfully retrieved secret from Key Vault");
                 tracing.Trace($"  Secret Name: {secret.Name}");
                 tracing.Trace($"  Secret Value starts with: {secret.Value.Substring(0, Math.Min(secret.Value.Length, 10))}...");
@@ -72,13 +92,17 @@ namespace Dev.DevKitV4.Package._2
             }
             catch (Exception e)
             {
-                // Log the full exception details
-                tracing.Trace($"ERROR: Key Vault Access Failed: {e.ToString()}");
-
-                // Throw the clean exception required for a plugin
-                throw new InvalidPluginExecutionException(
-                    "Plugin failed to retrieve Key Vault secret using Azure SDK via Managed Identity. Check trace log for details.", e);
+                throw new InvalidPluginExecutionException($"SecretClient with IManagedIdentityService failed: {e.Message}");
             }
+        }
+
+        private void ExecutePlugin(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService serviceAdmin, IOrganizationService service, ITracingService tracing)
+        {
+            var targetEntity = context.InputParameterOrDefault<Entity>("Target");
+            context.PreEntityImages.TryGetValue("PreImage", out Entity preEntity);
+            context.PostEntityImages.TryGetValue("PostImage", out Entity postEntity);
+            //YOUR PLUGIN-CODE GO HERE
+            tracing.DebugMessage(targetEntity.GetAttributeValue<string>("name"));
         }
     }
 }
