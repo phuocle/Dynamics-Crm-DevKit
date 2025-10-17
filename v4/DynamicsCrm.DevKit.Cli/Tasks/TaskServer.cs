@@ -285,39 +285,62 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         {
             (string name, int value) GetIsolationMode(string file)
             {
-                var types = GetTypes(file);
-                foreach (var type in types)
+                if (PluginAssemblyAttribute != null)
                 {
-                    if (XrmHelper.IsWorkflowType(type)) continue;
-                    var attributes = GetCrmPluginRegistrationAttributes(type);
-                    foreach (var attribute in attributes)
-                    {
-                        if (attribute.IsolationMode == IsolationModeEnum.None) return ("None", 1);
-                        if (attribute.IsolationMode == IsolationModeEnum.Sandbox) return ("Sandbox", 2);
-                        if (attribute.IsolationMode == IsolationModeEnum.Sandbox) return ("Sandbox", 2);
-                    }
+                    if (PluginAssemblyAttribute.IsolationMode == IsolationModeEnum.None) return ("None", 1);
+                    if (PluginAssemblyAttribute.IsolationMode == IsolationModeEnum.Sandbox) return ("Sandbox", 2);
+                    if (PluginAssemblyAttribute.IsolationMode == IsolationModeEnum.External) return ("Sandbox", 3);
+                    return ("Sandbox", 2);
                 }
-                return ("Sandbox", 2);
+                else
+                {
+                    var types = GetTypes(file);
+                    foreach (var type in types)
+                    {
+                        if (XrmHelper.IsWorkflowType(type)) continue;
+                        var attributes = GetCrmPluginRegistrationAttributes(type);
+                        foreach (var attribute in attributes)
+                        {
+                            if (attribute.IsolationMode == IsolationModeEnum.None) return ("None", 1);
+                            if (attribute.IsolationMode == IsolationModeEnum.Sandbox) return ("Sandbox", 2);
+                            if (attribute.IsolationMode == IsolationModeEnum.External) return ("Sandbox", 3);
+                        }
+                    }
+                    return ("Sandbox", 2);
+                }
             }
             (string name, int value) GetSourceType(string file)
             {
-                var types = GetTypes(file);
-                foreach (var type in types)
+                if (PluginAssemblyAttribute != null)
                 {
-                    if (XrmHelper.IsWorkflowType(type)) continue;
-                    var attributes = GetCrmPluginRegistrationAttributes(type);
-                    foreach (var attribute in attributes)
-                    {
-                        if (attribute.SourceType == SourceTypeEnum.Database) return ("Database", 0);
-                        if (attribute.SourceType == SourceTypeEnum.Disk) return ("Disk", 1);
-                        if (attribute.SourceType == SourceTypeEnum.Normal) return ("Normal", 2);
-                        if (attribute.SourceType == SourceTypeEnum.AzureWebApp) return ("AzureWebApp", 3);
-                        if (attribute.SourceType == SourceTypeEnum.FileStore) return ("FileStore", 4);
-                    }
+                    if (PluginAssemblyAttribute.SourceType == SourceTypeEnum.Database) return ("Database", 0);
+                    if (PluginAssemblyAttribute.SourceType == SourceTypeEnum.Disk) return ("Disk", 1);
+                    if (PluginAssemblyAttribute.SourceType == SourceTypeEnum.Normal) return ("Normal", 2);
+                    if (PluginAssemblyAttribute.SourceType == SourceTypeEnum.AzureWebApp) return ("AzureWebApp", 3);
+                    if (PluginAssemblyAttribute.SourceType == SourceTypeEnum.FileStore) return ("FileStore", 4);
+                    return ("Database", 0);
                 }
-                return ("Database", 0);
+                else
+                {
+                    var types = GetTypes(file);
+                    foreach (var type in types)
+                    {
+                        if (XrmHelper.IsWorkflowType(type)) continue;
+                        var attributes = GetCrmPluginRegistrationAttributes(type);
+                        foreach (var attribute in attributes)
+                        {
+                            if (attribute.SourceType == SourceTypeEnum.Database) return ("Database", 0);
+                            if (attribute.SourceType == SourceTypeEnum.Disk) return ("Disk", 1);
+                            if (attribute.SourceType == SourceTypeEnum.Normal) return ("Normal", 2);
+                            if (attribute.SourceType == SourceTypeEnum.AzureWebApp) return ("AzureWebApp", 3);
+                            if (attribute.SourceType == SourceTypeEnum.FileStore) return ("FileStore", 4);
+                        }
+                    }
+                    return ("Database", 0);
+                }
             }
             var assembly = LoadAssemblyIntoCache(file);
+            PluginAssemblyAttribute = GetDynamcisCrmDevKitPluginAssemblyAttribute(assembly);
             var assemblyProperties = assembly.GetName().FullName.Split(",= ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
             var assemblyName = assemblyProperties[0];
             var fetchData = new
@@ -445,6 +468,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             return pluginAssemblyId;
         }
         private DynamcisCrmDevKitManagedIdentityAssemblyAttribute ManagedIdentityAttribute { get; set; }
+        private DynamcisCrmDevKitPluginAssemblyAttribute PluginAssemblyAttribute { get; set; }
         private (bool needSign, string error) IsNeedSignAssembly(string file)
         {
             var assembly = LoadAssemblyIntoCache(file);
@@ -617,6 +641,39 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             if (attributeData == null) return null;
             var attribute = new DynamcisCrmDevKitManagedIdentityAssemblyAttribute();
             var properties = typeof(DynamcisCrmDevKitManagedIdentityAssemblyAttribute).GetProperties();
+            foreach (var namedArgument in attributeData.NamedArguments)
+            {
+                string propertyName = namedArgument.MemberName;
+                object rawValue = namedArgument.TypedValue.Value;
+                var targetProperty = properties.FirstOrDefault(p => p.Name == propertyName);
+                if (targetProperty != null)
+                {
+                    object finalValue = rawValue;
+                    if (targetProperty.PropertyType.IsGenericType && targetProperty.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>))
+                    {
+                        Type underlyingType = Nullable.GetUnderlyingType(targetProperty.PropertyType);
+                        if (underlyingType != null && underlyingType.IsEnum)
+                        {
+                            finalValue = Enum.ToObject(underlyingType, rawValue);
+                        }
+                    }
+                    else if (targetProperty.PropertyType.IsEnum)
+                    {
+                        finalValue = Enum.ToObject(targetProperty.PropertyType, rawValue);
+                    }
+                    targetProperty.SetValue(attribute, finalValue);
+                }
+            }
+            return attribute;
+        }
+        private DynamcisCrmDevKitPluginAssemblyAttribute GetDynamcisCrmDevKitPluginAssemblyAttribute(Assembly assembly)
+        {
+            var attributeData = CustomAttributeData.GetCustomAttributes(assembly)
+                .Where(data => data.AttributeType.FullName.Contains(nameof(DynamcisCrmDevKitPluginAssemblyAttribute)))
+                .FirstOrDefault();
+            if (attributeData == null) return null;
+            var attribute = new DynamcisCrmDevKitPluginAssemblyAttribute();
+            var properties = typeof(DynamcisCrmDevKitPluginAssemblyAttribute).GetProperties();
             foreach (var namedArgument in attributeData.NamedArguments)
             {
                 string propertyName = namedArgument.MemberName;
