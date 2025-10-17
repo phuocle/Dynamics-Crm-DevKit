@@ -28,12 +28,6 @@
 	  <Compile Remove="DataverseTokenCredential.cs" />
 	</ItemGroup>
 	<ItemGroup>
-	  <None Include="DataverseTokenCredential.cs" />
-	</ItemGroup>
-	<ItemGroup>
-		<PackageReference Include="Azure.Identity" Version="1.10.0" />
-		<PackageReference Include="Azure.Security.KeyVault.Secrets" Version="4.5.0" />
-
 		<PackageReference Include="DynamicsCrm.DevKit.Analyzers" Version="3.55.55.55" PrivateAssets="All" />
 		<PackageReference Include="DynamicsCrm.DevKit.Cli" Version="3.45.67.89" />
 		<PackageReference Include="Microsoft.CrmSdk.CoreAssemblies" Version="9.0.2.59" PrivateAssets="All" />

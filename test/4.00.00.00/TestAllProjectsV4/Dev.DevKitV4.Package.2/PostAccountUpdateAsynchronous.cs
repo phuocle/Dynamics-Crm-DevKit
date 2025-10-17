@@ -1,6 +1,4 @@
-﻿using Azure.Identity;
-using Azure.Security.KeyVault.Secrets;
-using Dev.DevKitV4.Shared;
+﻿using Dev.DevKitV4.Shared;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Extensions;
 using System;
@@ -70,30 +68,7 @@ namespace Dev.DevKitV4.Package._2
             tracing.DebugMessage("CAN RUN PLUGIN WITHOUT ERROR");
             tracing.DebugMessage("THIS IS THE SECOND LINE");
             tracing.DebugMessage("THIS IS THE NEXT LINE");
-            try
-            {
-                // 1. Get Managed Identity Token using Dataverse Service
-                var identityService = (IManagedIdentityService)serviceProvider.GetService(typeof(IManagedIdentityService));
-                var scopes = new List<string> { "https://vault.azure.net/.default" };
-                var tokenResponse = identityService.AcquireToken(scopes);
 
-                // 2. Create a TokenCredential from the acquired token
-                var managedTokenCredential = new ManagedIdentityTokenCredential(tokenResponse);
-
-                // 3. Use the new credential with SecretClient
-                var client = new SecretClient(new Uri("https://kv-dataverse-devkitv4-2.vault.azure.net/"), managedTokenCredential);
-                KeyVaultSecret secret = client.GetSecret("DEVKITV4-2");
-
-                // ... continue with success tracing ...
-                tracing.Trace($"✓ Successfully retrieved secret from Key Vault");
-                tracing.Trace($"  Secret Name: {secret.Name}");
-                tracing.Trace($"  Secret Value starts with: {secret.Value.Substring(0, Math.Min(secret.Value.Length, 10))}...");
-
-            }
-            catch (Exception e)
-            {
-                throw new InvalidPluginExecutionException($"SecretClient with IManagedIdentityService failed: {e.Message}");
-            }
         }
 
         private void ExecutePlugin(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService serviceAdmin, IOrganizationService service, ITracingService tracing)

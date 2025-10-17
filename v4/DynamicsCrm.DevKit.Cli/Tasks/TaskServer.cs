@@ -764,7 +764,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             Helper.TryDeleteFile(tempFile);
             File.Copy(file, tempFile);
             using PackageArchiveReader packageArchiveReader = new(tempFile);
-            var folder = $"{CurrentFolder}\\DynamicsCrm.DevKit.Cli.2";
+            var folder = $"{CurrentFolder}\\DynamicsCrm.DevKit.Cli.Temp";
             Helper.TryDeleteDirectory(folder);
             ExtractZip(packageArchiveReader, folder);
             var files = Directory.GetFiles(folder).ToList();
