@@ -277,7 +277,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 var types = GetTypes(file);
                 foreach (var type in types)
                 {
-                    if (IsWorkflowType(type)) continue;
+                    if (XrmHelper.IsWorkflowType(type)) continue;
                     var attributes = GetCrmPluginRegistrationAttributes(type);
                     foreach (var attribute in attributes)
                     {
@@ -293,7 +293,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 var types = GetTypes(file);
                 foreach (var type in types)
                 {
-                    if (IsWorkflowType(type)) continue;
+                    if (XrmHelper.IsWorkflowType(type)) continue;
                     var attributes = GetCrmPluginRegistrationAttributes(type);
                     foreach (var attribute in attributes)
                     {
@@ -842,7 +842,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
                 var pluginTypeId = await DeployPluginTypeAsync(pluginAssemblyId.Value, type, attributes[0], deployFileType);
                 if (pluginTypeId == null) return;
-                if (IsWorkflowType(type)) continue;
+                if (XrmHelper.IsWorkflowType(type)) continue;
                 foreach (var attribute in attributes)
                 {
                     switch (attribute.PluginType)
@@ -1853,7 +1853,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     CliLog.WriteLineError(ConsoleColor.Yellow, $"{ee.Message} Assemply deployed, but the deployment of this assembly stopped.");
                     return null;
                 }
-                if (IsWorkflowType(type))
+                if (XrmHelper.IsWorkflowType(type))
                 {
                     var old = rows.Entities[0].GetAttributeValue<string>("customworkflowactivityinfo");
                     var @new = (await ServiceClient.RetrieveAsync("plugintype", rows.Entities[0].Id, new ColumnSet("customworkflowactivityinfo"))).GetAttributeValue<string>("customworkflowactivityinfo");
@@ -1943,7 +1943,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 var attributes = GetCrmPluginRegistrationAttributes(type);
                 if (attributes.Count() > 1)
                 {
-                    if (IsWorkflowType(type))
+                    if (XrmHelper.IsWorkflowType(type))
                     {
                         CliLog.WriteLineError(ConsoleColor.Yellow, $"Type '{type.FullName}' has multi attribute CrmPluginRegistration. Deploy stopped.");
                         return false;
@@ -2080,12 +2080,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 return null;
             }
         }
-        private bool IsWorkflowType(Type type)
-        {
-            if (type?.FullName == "System.Activities.CodeActivity") return true;
-            if (type?.BaseType != null) return IsWorkflowType(type?.BaseType);
-            return false;
-        }
+
         private void ExtractZip(PackageArchiveReader packageArchiveReader, string folder)
         {
             var libFiles = packageArchiveReader.GetFiles("lib");

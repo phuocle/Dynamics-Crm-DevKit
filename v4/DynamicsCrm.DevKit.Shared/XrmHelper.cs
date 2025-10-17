@@ -1417,7 +1417,7 @@ namespace DynamicsCrm.DevKit.Shared
             if (entityLogicalName?.Length == 0 || entityLogicalName?.ToLower() == "none") return null;
             var fetchData = new
             {
-                primaryobjecttypecode = await GetPrimaryObjectTypeCodeAsync(service,entityLogicalName),
+                primaryobjecttypecode = await GetPrimaryObjectTypeCodeAsync(service, entityLogicalName),
                 name = message
             };
             var fetchXml = $@"
@@ -1468,6 +1468,13 @@ namespace DynamicsCrm.DevKit.Shared
             var request = new RetrieveVersionRequest();
             var response = (RetrieveVersionResponse)await service.ExecuteAsync(request);
             return new Version(response.Version) >= new Version("9.1.0.18950");
+        }
+
+        internal static bool IsWorkflowType(Type type)
+        {
+            if (type?.FullName == "System.Activities.CodeActivity") return true;
+            if (type?.BaseType != null) return IsWorkflowType(type?.BaseType);
+            return false;
         }
     }
 }
