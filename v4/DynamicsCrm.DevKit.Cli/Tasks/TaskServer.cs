@@ -32,6 +32,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         private bool IS_MANAGED_IDENTITY { get; set; } = false;
         private string ERROR { get; set; } = string.Empty;
         private string CurrentFolder => $"{CurrentDirectory}\\{Json.folder}";
+        private DynamcisCrmDevKitManagedIdentityAssemblyAttribute ManagedIdentityAttribute { get; set; }
+        private DynamcisCrmDevKitPluginAssemblyAttribute PluginAssemblyAttribute { get; set; }
         private readonly Dictionary<string, Assembly> _assemblyCache = new Dictionary<string, Assembly>(StringComparer.OrdinalIgnoreCase);
         public TaskServer(CommandLineArgs arg, Json json)
         {
@@ -340,7 +342,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
             }
             var assembly = LoadAssemblyIntoCache(file);
-            PluginAssemblyAttribute = GetDynamcisCrmDevKitPluginAssemblyAttribute(assembly);
+            PluginAssemblyAttribute = GetAssemblyAttribute<DynamcisCrmDevKitPluginAssemblyAttribute>(assembly);
             var assemblyProperties = assembly.GetName().FullName.Split(",= ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
             var assemblyName = assemblyProperties[0];
             var fetchData = new
@@ -467,12 +469,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             return pluginAssemblyId;
         }
-        private DynamcisCrmDevKitManagedIdentityAssemblyAttribute ManagedIdentityAttribute { get; set; }
-        private DynamcisCrmDevKitPluginAssemblyAttribute PluginAssemblyAttribute { get; set; }
         private (bool needSign, string error) IsNeedSignAssembly(string file)
         {
             var assembly = LoadAssemblyIntoCache(file);
-            ManagedIdentityAttribute = GetDynamcisCrmDevkitManagedIdentityAssemblyAttribute(assembly);
+            ManagedIdentityAttribute = GetAssemblyAttribute<DynamcisCrmDevKitManagedIdentityAssemblyAttribute>(assembly);
             if (ManagedIdentityAttribute == null) return (false, string.Empty);
             if (string.IsNullOrEmpty(ManagedIdentityAttribute.TenantId))
             {
@@ -632,72 +632,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
             }
             return (_ManagedIdentityId.Value, _ApplicationId.Value);
-        }
-        private DynamcisCrmDevKitManagedIdentityAssemblyAttribute GetDynamcisCrmDevkitManagedIdentityAssemblyAttribute(Assembly assembly)
-        {
-            var attributeData = CustomAttributeData.GetCustomAttributes(assembly)
-                .Where(data => data.AttributeType.FullName.Contains(nameof(DynamcisCrmDevKitManagedIdentityAssemblyAttribute)))
-                .FirstOrDefault();
-            if (attributeData == null) return null;
-            var attribute = new DynamcisCrmDevKitManagedIdentityAssemblyAttribute();
-            var properties = typeof(DynamcisCrmDevKitManagedIdentityAssemblyAttribute).GetProperties();
-            foreach (var namedArgument in attributeData.NamedArguments)
-            {
-                string propertyName = namedArgument.MemberName;
-                object rawValue = namedArgument.TypedValue.Value;
-                var targetProperty = properties.FirstOrDefault(p => p.Name == propertyName);
-                if (targetProperty != null)
-                {
-                    object finalValue = rawValue;
-                    if (targetProperty.PropertyType.IsGenericType && targetProperty.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>))
-                    {
-                        Type underlyingType = Nullable.GetUnderlyingType(targetProperty.PropertyType);
-                        if (underlyingType != null && underlyingType.IsEnum)
-                        {
-                            finalValue = Enum.ToObject(underlyingType, rawValue);
-                        }
-                    }
-                    else if (targetProperty.PropertyType.IsEnum)
-                    {
-                        finalValue = Enum.ToObject(targetProperty.PropertyType, rawValue);
-                    }
-                    targetProperty.SetValue(attribute, finalValue);
-                }
-            }
-            return attribute;
-        }
-        private DynamcisCrmDevKitPluginAssemblyAttribute GetDynamcisCrmDevKitPluginAssemblyAttribute(Assembly assembly)
-        {
-            var attributeData = CustomAttributeData.GetCustomAttributes(assembly)
-                .Where(data => data.AttributeType.FullName.Contains(nameof(DynamcisCrmDevKitPluginAssemblyAttribute)))
-                .FirstOrDefault();
-            if (attributeData == null) return null;
-            var attribute = new DynamcisCrmDevKitPluginAssemblyAttribute();
-            var properties = typeof(DynamcisCrmDevKitPluginAssemblyAttribute).GetProperties();
-            foreach (var namedArgument in attributeData.NamedArguments)
-            {
-                string propertyName = namedArgument.MemberName;
-                object rawValue = namedArgument.TypedValue.Value;
-                var targetProperty = properties.FirstOrDefault(p => p.Name == propertyName);
-                if (targetProperty != null)
-                {
-                    object finalValue = rawValue;
-                    if (targetProperty.PropertyType.IsGenericType && targetProperty.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>))
-                    {
-                        Type underlyingType = Nullable.GetUnderlyingType(targetProperty.PropertyType);
-                        if (underlyingType != null && underlyingType.IsEnum)
-                        {
-                            finalValue = Enum.ToObject(underlyingType, rawValue);
-                        }
-                    }
-                    else if (targetProperty.PropertyType.IsEnum)
-                    {
-                        finalValue = Enum.ToObject(targetProperty.PropertyType, rawValue);
-                    }
-                    targetProperty.SetValue(attribute, finalValue);
-                }
-            }
-            return attribute;
         }
         private async Task<(bool ok, string error)> SignAssemblyAsync(string file, string certificatePath, string certificatePassword = null)
         {
@@ -2046,6 +1980,42 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 var zip = packageArchiveReader.GetEntry(libFile);
                 zip.ExtractToFile($"{folder}\\{zip.Name}", true);
             }
+        }
+
+        private T GetAssemblyAttribute<T>(Assembly assembly) where T : class, new()
+        {
+            var attrTypeName = typeof(T).Name;
+            var attributeData = CustomAttributeData.GetCustomAttributes(assembly)
+                .Where(data => data.AttributeType.FullName.Contains(attrTypeName))
+                .FirstOrDefault();
+            if (attributeData == null) return null;
+            var attribute = new T();
+            var properties = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+            foreach (var namedArgument in attributeData.NamedArguments)
+            {
+                string propertyName = namedArgument.MemberName;
+                object rawValue = namedArgument.TypedValue.Value;
+                var targetProperty = properties.FirstOrDefault(p => p.Name == propertyName);
+                if (targetProperty != null)
+                {
+                    object finalValue = rawValue;
+                    var propType = targetProperty.PropertyType;
+                    if (propType.IsGenericType && propType.GetGenericTypeDefinition() == typeof(Nullable<>))
+                    {
+                        Type underlyingType = Nullable.GetUnderlyingType(propType);
+                        if (underlyingType != null && underlyingType.IsEnum && rawValue != null)
+                        {
+                            finalValue = Enum.ToObject(underlyingType, rawValue);
+                        }
+                    }
+                    else if (propType.IsEnum && rawValue != null)
+                    {
+                        finalValue = Enum.ToObject(propType, rawValue);
+                    }
+                    targetProperty.SetValue(attribute, finalValue);
+                }
+            }
+            return attribute;
         }
     }
 }
