@@ -355,12 +355,12 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 ["version"] = assemblyProperties[2],
                 ["publickeytoken"] = assemblyProperties[6],
             };
-            var text = string.Empty;
+            //var text = string.Empty;
             var (name_IsolationMode, value_IsolationMode) = GetIsolationMode(file);
             var (name_SourceType, value_SourceType) = GetSourceType(file);
             plugin["sourcetype"] = new OptionSetValue(value_SourceType);
             plugin["isolationmode"] = new OptionSetValue(value_IsolationMode);
-            text = $" [Isolation: {name_IsolationMode}, Source: {name_SourceType}]";
+            //text = $" [{name_IsolationMode}, {name_SourceType}]";
             if (rows.Entities.Count == 0)
             {
                 var request = new CreateRequest
@@ -371,7 +371,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 CliLog.Write(ConsoleColor.White, "|", SPACE);
                 CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTERED.Trim());
                 CliLog.Write(ConsoleColor.White, " Assembly ", ConsoleColor.Cyan, assemblyName, ".dll");
-                CliLog.WriteLine(ConsoleColor.Blue, text);
+                CliLog.WriteList(new List<string> { name_IsolationMode, name_SourceType }, true);
                 var response = (CreateResponse)await ServiceClient.ExecuteAsync(request);
                 pluginAssemblyId = response.id;
             }
@@ -382,7 +382,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 if (Helper.IsEqualsContent(oldContent, newContent))
                 {
                     CliLog.Write(ConsoleColor.White, "|", SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, "Assembly ", ConsoleColor.Cyan, assemblyName, ".dll");
-                    CliLog.WriteLine(ConsoleColor.Blue, text);
+                    CliLog.WriteList(new List<string> { name_IsolationMode, name_SourceType }, true);
                 }
                 else
                 {
@@ -395,7 +395,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     CliLog.Write(ConsoleColor.White, "|", SPACE);
                     CliLog.WriteSuccess(ConsoleColor.White, CliAction.UPDATED.Trim());
                     CliLog.Write(ConsoleColor.White, " Assembly ", ConsoleColor.Cyan, assemblyName, ".dll");
-                    CliLog.WriteLine(ConsoleColor.Blue, text);
+                    CliLog.WriteList(new List<string> { name_IsolationMode, name_SourceType }, true);
                     try
                     {
                         await ServiceClient.ExecuteAsync(request);

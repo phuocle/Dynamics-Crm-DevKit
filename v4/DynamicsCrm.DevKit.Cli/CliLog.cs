@@ -1,5 +1,7 @@
 ﻿using DynamicsCrm.DevKit.Shared;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 
 namespace DynamicsCrm.DevKit.Cli
@@ -162,6 +164,21 @@ namespace DynamicsCrm.DevKit.Cli
             catch (OperationCanceledException)
             {
             }
+        }
+
+        internal static void WriteList(List<string> list, bool isWriteLine = false)
+        {
+            CliLog.Write(ConsoleColor.White, " [");
+            foreach(var item in list)
+            {
+                CliLog.Write(ConsoleColor.Blue, item);
+                if (item != list.Last())
+                {
+                    CliLog.Write(ConsoleColor.White, ", ");
+                }
+            }
+            CliLog.Write(ConsoleColor.White, "]");
+            if (isWriteLine) CliLog.WriteLine();
         }
     }
 }
