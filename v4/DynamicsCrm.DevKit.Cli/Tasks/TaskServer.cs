@@ -12,7 +12,6 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.ServiceModel;
 using System.Threading.Tasks;
 
@@ -20,6 +19,21 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 {
     public class TaskServer : ITask
     {
+        private const string SPACE = "  ";
+        private readonly Dictionary<string, Assembly> _assemblyCache = new Dictionary<string, Assembly>(StringComparer.OrdinalIgnoreCase);
+        private bool OK { get; set; } = false;
+        private bool IS_MANAGED_IDENTITY { get; set; } = false;
+        private string ERROR { get; set; } = string.Empty;
+        private DynamcisCrmDevKitManagedIdentityAssemblyAttribute ManagedIdentityAttribute { get; set; }
+        public bool IsOk { get; set; }
+        public Guid SolutionId { get; set; }
+        public string SolutionPrefix { get; set; }
+        public string CurrentDirectory { get; set; }
+        public string TaskType { get; set; }
+        public ServiceClient ServiceClient { get; set; }
+        public CommandLineArgs Arg { get; set; }
+        private JsonServer Json { get; }
+        private string CurrentFolder => $"{CurrentDirectory}\\{Json.folder}";
         public TaskServer(CommandLineArgs arg, Json json)
         {
             this.Arg = arg;
@@ -426,28 +440,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             return pluginAssemblyId;
         }
-
-
-
-
-
-
-
-
-
-        private bool OK = false;
-        private bool IS_MANAGED_IDENTITY = false;
-        private string ERROR = string.Empty;
-        private DynamcisCrmDevKitManagedIdentityAssemblyAttribute ManagedIdentityAttribute { get; set; }
-        //private (bool needSign, string error) IsNeedSignAssembly(List<string> files)
-        //{
-        //    foreach (var file in files)
-        //    {
-        //        var (ok, error) = IsNeedSignAssembly(file);
-        //        if (ok) return (ok, error);
-        //    }
-        //    return (false, string.Empty);
-        //}
         private (bool needSign, string error) IsNeedSignAssembly(string file)
         {
             var assembly = LoadAssemblyIntoCache(file);
@@ -476,7 +468,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             return (true, string.Empty);
         }
-
         private string FindSignTool()
         {
             try
@@ -737,18 +728,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
             }
         }
-
-        private const string SPACE = "  ";
-        private readonly Dictionary<string, Assembly> _assemblyCache = new Dictionary<string, Assembly>(StringComparer.OrdinalIgnoreCase);
-        public bool IsOk { get; set; }
-        public Guid SolutionId { get; set; }
-        public string SolutionPrefix { get; set; }
-        public string CurrentDirectory { get; set; }
-        public string TaskType { get; set; }
-        public ServiceClient ServiceClient { get; set; }
-        public CommandLineArgs Arg { get; set; }
-        private JsonServer Json { get; }
-        private string CurrentFolder => $"{CurrentDirectory}\\{Json.folder}";
         public async Task<bool> IsValidAsync()
         {
             if (Json == null)
@@ -774,18 +753,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             return true;
         }
-        //private List<string> GetDllFileFromNugetPackage(string file)
-        //{
-        //    var tempFile = Path.Combine(Path.GetTempPath(), Path.GetFileName(file));
-        //    Helper.TryDeleteFile(tempFile);
-        //    File.Copy(file, tempFile);
-        //    using PackageArchiveReader packageArchiveReader = new(tempFile);
-        //    var folder = $"{CurrentFolder}\\DynamicsCrm.DevKit.Cli.2";
-        //    Helper.TryDeleteDirectory(folder);
-        //    ExtractZip(packageArchiveReader, folder);
-        //    return Directory.GetFiles(folder).ToList();
-        //}
-
         private string GetDllFileFromNugetPackage(string file)
         {
             var tempFile = Path.Combine(Path.GetTempPath(), Path.GetFileName(file));
@@ -822,7 +789,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             return string.Empty;
         }
-
         private async Task DeployDllAsync(string file, DeployFileType deployFileType = DeployFileType.Dll)
         {
             var types = GetTypes(file);
