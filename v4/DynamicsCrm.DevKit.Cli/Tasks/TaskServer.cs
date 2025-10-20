@@ -1200,7 +1200,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     CliLog.Write(" ");
                     CliLog.WriteSuccess(ConsoleColor.White, CliAction.DEACTIVATED.Trim());
                 }
-                CliLog.WriteLine(ConsoleColor.White, $" Step ", ConsoleColor.Blue, attribute.Message, " ", ConsoleColor.Cyan, attribute.Name, ConsoleColor.Blue, $" [{attribute.Stage}, {attribute.ExecutionMode}]");
+                CliLog.Write(ConsoleColor.White, $" Step ", ConsoleColor.Blue, attribute.Message, " ", ConsoleColor.Cyan, attribute.Name);
+                CliLog.WriteList(new List<string> { $"{attribute.Stage}", $"{attribute.ExecutionMode}" }, true);
                 CliLogSecureUnsecure();
                 CliLogUpdateFields();
                 try
@@ -1281,7 +1282,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 {
                     if (attribute.Action == PluginStepOperationEnum.Activate)
                     {
-                        CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, $"Step ", ConsoleColor.Blue, attribute.Message, " ", ConsoleColor.Cyan, attribute.Name, ConsoleColor.Blue, $" [{attribute.Stage}, {attribute.ExecutionMode}]");
+                        CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, $"Step ", ConsoleColor.Blue, attribute.Message, " ", ConsoleColor.Cyan, attribute.Name);
+                        CliLog.WriteList(new List<string> { $"{attribute.Stage}", $"{attribute.ExecutionMode}" }, true);
                         CliLogSecureUnsecure();
                         CliLogUpdateFields();
                     }
@@ -1289,8 +1291,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     {
                         CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE);
                         CliLog.WriteSuccess(ConsoleColor.White, CliAction.DEACTIVATED.Trim());
-                        CliLog.Write(ConsoleColor.White, $" Step ", ConsoleColor.Blue, attribute.Message, " ", ConsoleColor.Cyan, attribute.Name, ConsoleColor.Blue, $" [{attribute.Stage}, {attribute.ExecutionMode}]");
-                        CliLog.WriteLine();
+                        CliLog.Write(ConsoleColor.White, $" Step ", ConsoleColor.Blue, attribute.Message, " ", ConsoleColor.Cyan, attribute.Name);
+                        CliLog.WriteList(new List<string> { $"{attribute.Stage}", $"{attribute.ExecutionMode}" }, true);
                         CliLogSecureUnsecure();
                         CliLogUpdateFields();
                     }
@@ -1314,7 +1316,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                             CliLog.Write(" ");
                             CliLog.WriteSuccess(ConsoleColor.White, CliAction.ACTIVATED.Trim());
                         }
-                        CliLog.WriteLine(ConsoleColor.White, $" Step ", ConsoleColor.Blue, attribute.Message, " ", ConsoleColor.Cyan, attribute.Name, ConsoleColor.Blue, $" [{attribute.Stage}, {attribute.ExecutionMode}]");
+                        CliLog.Write(ConsoleColor.White, $" Step ", ConsoleColor.Blue, attribute.Message, " ", ConsoleColor.Cyan, attribute.Name);
+                        CliLog.WriteList(new List<string> { $"{attribute.Stage}", $"{attribute.ExecutionMode}" }, true);
                         CliLogSecureUnsecure();
                         CliLogUpdateFields();
                     }
@@ -1330,7 +1333,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                             CliLog.Write(" ");
                             CliLog.WriteSuccess(ConsoleColor.White, CliAction.DEACTIVATED.Trim());
                         }
-                        CliLog.WriteLine(ConsoleColor.White, $" Step ", ConsoleColor.Blue, attribute.Message, " ", ConsoleColor.Cyan, attribute.Name, ConsoleColor.Blue, $" [{attribute.Stage}, {attribute.ExecutionMode}]");
+                        CliLog.Write(ConsoleColor.White, $" Step ", ConsoleColor.Blue, attribute.Message, " ", ConsoleColor.Cyan, attribute.Name);
+                        CliLog.WriteList(new List<string> { $"{attribute.Stage}", $"{attribute.ExecutionMode}" }, true);
                         CliLogSecureUnsecure();
                         CliLogUpdateFields();
                     }
