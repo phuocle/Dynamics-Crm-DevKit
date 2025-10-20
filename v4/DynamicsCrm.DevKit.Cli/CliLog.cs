@@ -171,7 +171,7 @@ namespace DynamicsCrm.DevKit.Cli
             CliLog.Write(ConsoleColor.White, " [");
             foreach(var item in list)
             {
-                CliLog.Write(ConsoleColor.Blue, item);
+                CliLog.Write(ConsoleColor.Green, item);
                 if (item != list.Last())
                 {
                     CliLog.Write(ConsoleColor.White, ", ");
@@ -179,6 +179,12 @@ namespace DynamicsCrm.DevKit.Cli
             }
             CliLog.Write(ConsoleColor.White, "]");
             if (isWriteLine) CliLog.WriteLine();
+        }
+        internal static void WriteList(string @string, bool isWriteLine = false)
+        {
+            if (@string == null || @string == "*") @string = " * ";
+            var list = @string.Split(',').ToList();
+            WriteList(list, isWriteLine);
         }
     }
 }
