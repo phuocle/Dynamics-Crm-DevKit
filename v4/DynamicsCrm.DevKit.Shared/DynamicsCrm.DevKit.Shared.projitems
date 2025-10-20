@@ -128,9 +128,9 @@
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\TracingServiceFake.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\config.json" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Plugin-Managed-Identity-Config.json" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\SetupManagedIdentity.ps1" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Plugin-Managed-Identity.ps1" />
   </ItemGroup>
 </Project>

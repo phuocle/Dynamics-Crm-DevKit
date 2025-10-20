@@ -6,12 +6,11 @@ function Convert-GuidToBase64Url {
     return $base64.Replace('+', '-').Replace('/', '_').TrimEnd('=')
 }
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
-$ConfigPath = Join-Path $ScriptDir "config.json"
-
+$ConfigPath = Join-Path $ScriptDir "Plugin-Managed-Identity-Config.json"
 
 if (-not (Test-Path $ConfigPath)) {
     Write-Host "========================================================================================================" -ForegroundColor Red
-    Write-Host "[X] config.json not found" -ForegroundColor Red
+    Write-Host "[X] Plugin-Managed-Identity-Config.json not found" -ForegroundColor Red
     Write-Host "========================================================================================================`n" -ForegroundColor Red
     exit 1
 }
@@ -22,7 +21,7 @@ else
         $config = $ConfigContent | ConvertFrom-Json
     } catch {
         Write-Host "========================================================================================================" -ForegroundColor Red
-        Write-Host "[X] config.json is not valid JSON" -ForegroundColor Red
+        Write-Host "[X] Plugin-Managed-Identity-Config.json is not valid JSON" -ForegroundColor Red
         Write-Host "========================================================================================================`n" -ForegroundColor Red
         exit 1
     }
@@ -65,7 +64,6 @@ else
 Write-Host "`n========================================================================================================" -ForegroundColor Cyan
 Write-Host "                          DATAVERSE MANAGED IDENTITY SETUP" -ForegroundColor Green
 Write-Host "========================================================================================================" -ForegroundColor Cyan
-
 
 $TenantId = (az account show --output json | ConvertFrom-Json).tenantId
 $resourceGroup = $config.ResourceGroup
@@ -121,14 +119,11 @@ if ($existingKv) {
     Write-Host "    - Vault URL: " -NoNewline -ForegroundColor White
     Write-Host "$($kv.properties.vaultUri)" -ForegroundColor Cyan
 } else {
-    # Check if Key Vault exists in soft-deleted state
     $softDeletedKv = az keyvault list-deleted --query "[?name=='$keyVaultName']" --output json 2>$null | ConvertFrom-Json
     if ($null -ne $softDeletedKv -and $softDeletedKv.Count -gt 0) {
         Write-Host "  @ Found soft-deleted key vault - Recovering." -ForegroundColor Yellow
-        # Recover the soft-deleted Key Vault
         $null = az keyvault recover --name $keyVaultName --output none 2>&1
         if ($LASTEXITCODE -eq 0) {
-            # Get the recovered Key Vault details
             $kv = az keyvault show --name $keyVaultName --output json 2>$null | ConvertFrom-Json
             if ($kv) {
                 Write-Host "  + SUCCESS: Key Vault recovered." -ForegroundColor Green
@@ -142,7 +137,6 @@ if ($existingKv) {
             exit 1
         }
     } else {
-        # Create new Key Vault
         Write-Host "  @ Creating new key vault." -ForegroundColor Yellow
         $kv = az keyvault create `
             --name $keyVaultName `
@@ -303,7 +297,6 @@ if ((Test-Path "$certificateFileName.pfx") -and (Test-Path "$certificateFileName
     Write-Host "  + VERIFYING CERTIFICATE" -ForegroundColor DarkCyan
     try {
     $pfxPath = Join-Path -Path $PSScriptRoot -ChildPath "$certificateFileName.pfx"
-    # Load PFX with Exportable flag so the private key (if present) is usable and detectable
     $pfxCert = New-Object System.Security.Cryptography.X509Certificates.X509Certificate2($pfxPath, $certificatePassword, [System.Security.Cryptography.X509Certificates.X509KeyStorageFlags]::Exportable)
         if ($pfxCert) {
             Write-Host "  @ Found certificate to verify." -ForegroundColor Yellow
@@ -352,10 +345,7 @@ for ($i = 0; $i -lt $config.ManagedIdentities.Count; $i++) {
     $AppName = $mi.AppName
     $AppId = $mi.AppId
     $EnvironmentId = $mi.EnvironmentId
-
     Write-Host "Processing AppName $AppName" -ForegroundColor Red
-
-    # Resolve possible pfx file locations. config.CertificateFileName may be provided without extension.
     $resolvedPfx = $null
     if (Test-Path $CertificateFileName) {
         $resolvedPfx = (Resolve-Path $CertificateFileName).ProviderPath
@@ -366,21 +356,17 @@ for ($i = 0; $i -lt $config.ManagedIdentities.Count; $i++) {
     } elseif (Test-Path "$CertificateFileName.pfx") {
         $resolvedPfx = (Resolve-Path "$CertificateFileName.pfx").ProviderPath
     }
-
     if (-not $resolvedPfx) {
         Write-Host "  x ERROR: Could not find certificate file for '$CertificateFileName'. Looked for $CertificateFileName and $CertificateFileName.pfx in script folder and given path." -ForegroundColor Red
         exit 1
     }
-
     try {
-        # Use the same constructor style as the verification step (plain password string) to avoid overload ambiguity.
         $cert = New-Object System.Security.Cryptography.X509Certificates.X509Certificate2($resolvedPfx, $CertificatePassword)
     }
     catch {
         Write-Host "  x ERROR: Failed to load certificate file '$resolvedPfx': $($_.Exception.Message)" -ForegroundColor Red
         exit 1
     }
-
     try {
         $certBytes = $cert.Export([System.Security.Cryptography.X509Certificates.X509ContentType]::Cert)
         $sha256 = [System.Security.Cryptography.SHA256]::Create().ComputeHash($certBytes)
@@ -390,20 +376,14 @@ for ($i = 0; $i -lt $config.ManagedIdentities.Count; $i++) {
         Write-Host "  x ERROR: Failed to compute certificate hash: $($_.Exception.Message)" -ForegroundColor Red
         exit 1
     }
-
-
     $envIdNoHyphens = $EnvironmentId.Replace("-", "")
     $envIdPrefix = $envIdNoHyphens.Substring(0, $envIdNoHyphens.Length - 2)
     $envIdSuffix = $envIdNoHyphens.Substring($envIdNoHyphens.Length - 2)
     $issuer2 = "https://$envIdPrefix.$envIdSuffix.environment.api.powerplatform.com/sts"
     $subject2 = "component:pluginassembly,thumbprint:$($CertificateThumbprint),environment:$EnvironmentId"
     $credName2 = "PowerPlatform-Issuer"
-
     Write-Host "  @ Checking credential $credName2" -ForegroundColor Yellow
-
-    # Check if credential exists
     $existingCred2 = az ad app federated-credential list --id $AppId --query "[?name=='$credName2']" | ConvertFrom-Json
-
     $newCred2 = @{
         name = $credName2
         issuer = $issuer2
@@ -411,9 +391,7 @@ for ($i = 0; $i -lt $config.ManagedIdentities.Count; $i++) {
         description = "Power Platform Issuer - Authentication for Env $EnvironmentId"
         audiences = @("api://AzureADTokenExchange")
     }
-
     if ($existingCred2) {
-        # Compare existing with new values
         if ($existingCred2.issuer -eq $issuer2 -and $existingCred2.subject -eq $subject2) {
             Write-Host "  + SUCCESS: No updates needed for $credName2 (values match)." -ForegroundColor Green
         } else {
@@ -422,8 +400,6 @@ for ($i = 0; $i -lt $config.ManagedIdentities.Count; $i++) {
             Write-Host "    - New Issuer: $issuer2" -ForegroundColor White
             Write-Host "    - Old Subject: $($existingCred2.subject)" -ForegroundColor DarkGray
             Write-Host "    - New Subject: $subject2" -ForegroundColor White
-
-            # Delete existing and create new
             az ad app federated-credential delete --id $AppId --federated-credential-id $existingCred2.id
             $newCred2 | ConvertTo-Json | Out-File "$credName2.json" -Encoding UTF8
             az ad app federated-credential create --id $AppId --parameters "$credName2.json" | Out-Null
@@ -434,7 +410,6 @@ for ($i = 0; $i -lt $config.ManagedIdentities.Count; $i++) {
         Write-Host "  @ Creating new credential $credName2" -ForegroundColor Yellow
         Write-Host "    - Issuer: $issuer2" -ForegroundColor White
         Write-Host "    - Subject: $subject2" -ForegroundColor White
-
         $newCred2 | ConvertTo-Json | Out-File "$credName2.json" -Encoding UTF8
         az ad app federated-credential create --id $AppId --parameters "$credName2.json" | Out-Null
         Remove-Item "$credName2.json" -Force -ErrorAction SilentlyContinue
@@ -444,10 +419,8 @@ for ($i = 0; $i -lt $config.ManagedIdentities.Count; $i++) {
 # ========================================
 # Step 6
 # ========================================
-
 Write-Host "`n[6] GENERATING ASSEMBLYINFO2.CS" -ForegroundColor Blue
 $assemblyFilePath = Join-Path -Path $ScriptDir -ChildPath "AssemblyInfo2.cs"
-## Build dynamic values from $config
 $tenantId = if ($config.TenantId) { $config.TenantId } else { "" }
 $applicationIds = @()
 if ($config.ManagedIdentities -and $config.ManagedIdentities.Count -gt 0) {
@@ -456,17 +429,13 @@ if ($config.ManagedIdentities -and $config.ManagedIdentities.Count -gt 0) {
     }
 }
 $applicationIdsString = $applicationIds -join ','
-
-# Ensure certificate filename ends with .pfx
 $certificateFileOut = if ($config.CertificateFileName -and $config.CertificateFileName.ToLower().EndsWith('.pfx')) { $config.CertificateFileName } elseif ($config.CertificateFileName) { "$($config.CertificateFileName).pfx" } else { "" }
 $certificatePasswordOut = if ($config.CertificatePassword) { $config.CertificatePassword } else { "" }
-
 if (Test-Path $assemblyFilePath) {
     Write-Host "  @ Overwriting existing file: AssemblyInfo2.cs" -ForegroundColor Yellow
 } else {
     Write-Host "  @ Creating file: AssemblyInfo2.cs" -ForegroundColor Yellow
 }
-
 $assemblyContent = @"
 [assembly: DynamcisCrmDevKitManagedIdentityAssembly(
     TenantId = "$tenantId",
@@ -475,11 +444,9 @@ $assemblyContent = @"
     CertificatePassword = "$certificatePasswordOut"
 )]
 "@
-
 $assemblyContent | Out-File -FilePath $assemblyFilePath -Encoding UTF8 -Force
 Write-Host "  + SUCCESS: Saved AssemblyInfo2.cs to: " -NoNewline -ForegroundColor Green
 Write-Host $assemblyFilePath -ForegroundColor Cyan
-
 # ========================================
 # Step 7
 # ========================================
@@ -487,12 +454,11 @@ Write-Host "`n[7] SAVING DATA" -ForegroundColor Blue
 $config.TenantId = $TenantId
 $config.KeyVaultURL = $kv.properties.vaultUri
 try {
-    # Save config.json with all values from all phases
     $config | ConvertTo-Json -Depth 10 | Out-File -FilePath $ConfigPath -Encoding UTF8
-    Write-Host " + SUCCESS: Saved config.json to: " -NoNewline -ForegroundColor Green
+    Write-Host " + SUCCESS: Saved Plugin-Managed-Identity-Config.json to: " -NoNewline -ForegroundColor Green
     Write-Host $ConfigPath -ForegroundColor Cyan
     Write-Host ""
 }
 catch {
-    Write-Host " x ERROR: Failed to save config.json: $($_.Exception.Message)" -ForegroundColor Red
+    Write-Host " x ERROR: Failed to save Plugin-Managed-Identity-Config.json: $($_.Exception.Message)" -ForegroundColor Red
 }

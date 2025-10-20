@@ -87,6 +87,7 @@
     <Content Include="icon.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Plugin-Managed-Identity-Config.json" />
     <None Include="batfile.bat" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

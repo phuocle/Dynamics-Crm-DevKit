@@ -32,6 +32,8 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
         {
         }
 
+        private bool IsPluginManagedIdentity { get; set; } = false;
+
         public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary, WizardRunKind runKind, object[] customParams)
         {
             ThreadHelper.JoinableTaskFactory.Run(async () =>
@@ -61,6 +63,15 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
                             content3 = content3.Replace("$ConnectionString$", Helper.BuildConnectionString(form.CrmConnection, true));
                             replacementsDictionary.Add("$batfile.bat$", content3);
                             break;
+                        case "Plugin-Managed-Identity.ps1":
+                            IsPluginManagedIdentity = true;
+                            var content4 = await VsixHelper.ReadEmbeddedResourceAsync("Plugin-Managed-Identity.ps1");
+                            content4 = content4.Replace("$batfile.bat$", content4);
+                            replacementsDictionary.Add("$batfile.bat$", content4);
+                            var content5 = await VsixHelper.ReadEmbeddedResourceAsync("Plugin-Managed-Identity-Config.json");
+                            content5 = content5.Replace("$config.json$", content5);
+                            replacementsDictionary.Add("$config.json$", content5);
+                            break;
                     }
                     await VS.StatusBar.EndAnimationAsync(StatusAnimation.Deploy);
                     Mouse.OverrideCursor = null;
@@ -75,6 +86,7 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
 
         public bool ShouldAddProjectItem(string filePath)
         {
+            if (filePath == "Plugin-Managed-Identity-Config.json") return IsPluginManagedIdentity;
             return true;
         }
     }

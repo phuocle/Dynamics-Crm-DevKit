@@ -426,7 +426,8 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 {
                     new XrmEntity { SchemaName = "download.reports.bat", LogicalName = "download.reports.bat" },
                     new XrmEntity { SchemaName = "download.webresources.bat", LogicalName = "download.webresources.bat" },
-                    new XrmEntity { SchemaName = "deploy.datasource.bat", LogicalName = "deploy.datasource.bat" }
+                    new XrmEntity { SchemaName = "deploy.datasource.bat", LogicalName = "deploy.datasource.bat" },
+                    new XrmEntity { SchemaName = "Plugin-Managed-Identity.ps1", LogicalName = "Plugin-Managed-Identity.ps1" }
                 };
                 ComboBoxEntity.DisplayMemberPath = Const.SchemaName;
                 ComboBoxEntity.ItemsSource = items;
