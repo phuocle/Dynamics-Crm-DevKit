@@ -49,6 +49,7 @@ namespace DynamicsCrm.DevKit.Cli
             var oldConsoleForegroundColor = Console.ForegroundColor;
             Console.BackgroundColor = ConsoleColor.Red;
             Write(ConsoleColor.White, "▌");
+            Console.ForegroundColor = ConsoleColor.Yellow;
             foreach (var value in values)
             {
                 if (value is ConsoleColor color)
