@@ -6,12 +6,12 @@ function Convert-GuidToBase64Url {
     return $base64.Replace('+', '-').Replace('/', '_').TrimEnd('=')
 }
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
-$ConfigPath = Join-Path $ScriptDir "config2.json"
+$ConfigPath = Join-Path $ScriptDir "config.json"
 
 
 if (-not (Test-Path $ConfigPath)) {
     Write-Host "========================================================================================================" -ForegroundColor Red
-    Write-Host "[X] config2.json not found" -ForegroundColor Red
+    Write-Host "[X] config.json not found" -ForegroundColor Red
     Write-Host "========================================================================================================`n" -ForegroundColor Red
     exit 1
 }
@@ -22,13 +22,13 @@ else
         $config = $ConfigContent | ConvertFrom-Json
     } catch {
         Write-Host "========================================================================================================" -ForegroundColor Red
-        Write-Host "[X] config2.json is not valid JSON" -ForegroundColor Red
+        Write-Host "[X] config.json is not valid JSON" -ForegroundColor Red
         Write-Host "========================================================================================================`n" -ForegroundColor Red
         exit 1
     }
     $errors = @()
     $requiredFields = @(
-        'ResourceGroup', 'Location', 'KeyVaultName', 'SecretName', 'SecretValue'
+        'ResourceGroup', 'Location', 'KeyVaultName', 'SecretName', 'SecretValue', 'CertificateFileName', 'CertificatePassword', 'CertificateValidityYears'
     )
     foreach ($field in $requiredFields) {
         if (-not $config.$field -or $config.$field -eq '' -or $null -eq $config.$field) {
@@ -37,7 +37,7 @@ else
     }
     if ($config.ManagedIdentities -and $config.ManagedIdentities.Count -gt 0) {
         $miFields = @(
-            'ManagedIdentityName', 'CertificatePassword', 'CertificateSubject', 'CertificateFileName', 'ValidityYears', 'EnvironmentId', 'OrganizationId', 'AppName'
+            'EnvironmentId', 'AppName'
         )
         for ($i = 0; $i -lt $config.ManagedIdentities.Count; $i++) {
             $mi = $config.ManagedIdentities[$i]
@@ -234,22 +234,17 @@ for ($i = 0; $i -lt $config.ManagedIdentities.Count; $i++) {
 # Step 4
 # ========================================
 Write-Host "`n[4] SIGNING CERTIFICATE GENERATION" -ForegroundColor Blue
-for ($i = 0; $i -lt $config.ManagedIdentities.Count; $i++) {
-    $mi = $config.ManagedIdentities[$i]
-    $certificatePassword = $mi.CertificatePassword
-    $certificateSubject = $mi.CertificateSubject
-    $certificateFileName = $mi.CertificateFileName
-    $validityYears = $mi.ValidityYears
-    $appName = $mi.AppName
-    Write-Host "Processing AppName $appName" -ForegroundColor Red
-    if ((Test-Path "$certificateFileName.pfx") -and (Test-Path "$certificateFileName.cer")) {
-        Write-Host "  @ Found existing .pfx and .cer files, re-using them." -ForegroundColor Yellow
-        Write-Host "    - Private Key File: " -NoNewline -ForegroundColor White
-        Write-Host "$certificateFileName.pfx" -ForegroundColor Cyan
-        Write-Host "    - Public Key File: " -NoNewline -ForegroundColor White
-        Write-Host "$certificateFileName.cer" -ForegroundColor Cyan
-        continue
-    }
+$certificatePassword = $config.CertificatePassword
+$certificateSubject = "CN=$($config.CertificateFileName)"
+$certificateFileName = $config.CertificateFileName
+$validityYears = $config.CertificateValidityYears
+if ((Test-Path "$certificateFileName.pfx") -and (Test-Path "$certificateFileName.cer")) {
+    Write-Host "  @ Found existing .pfx and .cer files, re-using them." -ForegroundColor Yellow
+    Write-Host "    - Private Key File: " -NoNewline -ForegroundColor White
+    Write-Host "$certificateFileName.pfx" -ForegroundColor Cyan
+    Write-Host "    - Public Key File: " -NoNewline -ForegroundColor White
+    Write-Host "$certificateFileName.cer" -ForegroundColor Cyan
+} else {
     Write-Host "  + CREATING SELF-SIGNED CODE SIGNING CERTIFICATE" -ForegroundColor DarkCyan
     try {
         $cert = New-SelfSignedCertificate `
@@ -307,8 +302,9 @@ for ($i = 0; $i -lt $config.ManagedIdentities.Count; $i++) {
     }
     Write-Host "  + VERIFYING CERTIFICATE" -ForegroundColor DarkCyan
     try {
-        $pfxPath = Join-Path -Path $PSScriptRoot -ChildPath "$certificateFileName.pfx"
-        $pfxCert = New-Object System.Security.Cryptography.X509Certificates.X509Certificate2($pfxPath, $certificatePassword)
+    $pfxPath = Join-Path -Path $PSScriptRoot -ChildPath "$certificateFileName.pfx"
+    # Load PFX with Exportable flag so the private key (if present) is usable and detectable
+    $pfxCert = New-Object System.Security.Cryptography.X509Certificates.X509Certificate2($pfxPath, $certificatePassword, [System.Security.Cryptography.X509Certificates.X509KeyStorageFlags]::Exportable)
         if ($pfxCert) {
             Write-Host "  @ Found certificate to verify." -ForegroundColor Yellow
             Write-Host "  + SUCCESS: certificate verified successfully." -ForegroundColor Green
@@ -335,82 +331,71 @@ for ($i = 0; $i -lt $config.ManagedIdentities.Count; $i++) {
     catch {
         Write-Host "  x ERROR: Could not remove certificate from store" -ForegroundColor Yellow
     }
-    $mi.CertificateThumbprint = $pfxCert.Thumbprint
+    $config.CertificateThumbprint = $pfxCert.Thumbprint
     $certBytes = $pfxCert.Export([System.Security.Cryptography.X509Certificates.X509ContentType]::Cert)
     $sha256 = [System.Security.Cryptography.SHA256]::Create().ComputeHash($certBytes)
     $sha256Hash = [System.Convert]::ToBase64String($sha256).Replace('+', '-').Replace('/', '_').TrimEnd('=')
-    $mi.CertificateSHA256Hash = $sha256Hash
+    $config.CertificateSHA256Hash = $sha256Hash
 }
-
+# ========================================
+# Step 5
+# ========================================
 Write-Host "`n[5] POWER PLATFORM FEDERATED CREDENTIALS CONFIGURATION" -ForegroundColor Blue
-for ($i = 0; $i -lt $config.ManagedIdentities.Count; $i++) {
 
-    $CertificateThumbprint =  $config.ManagedIdentities[0].CertificateThumbprint
+$CertificateThumbprint =  $config.CertificateThumbprint
+$CertificateFileName = $config.CertificateFileName
+$CertificatePassword = $config.CertificatePassword
+
+for ($i = 0; $i -lt $config.ManagedIdentities.Count; $i++) {
 
     $mi = $config.ManagedIdentities[$i]
     $AppName = $mi.AppName
+    $AppId = $mi.AppId
+    $EnvironmentId = $mi.EnvironmentId
+
     Write-Host "Processing AppName $AppName" -ForegroundColor Red
 
-    $AppId = $mi.AppId
-    $CertificatePath = "$($mi.CertificateFileName).pfx"
-    $CertificatePassword = $mi.CertificatePassword
-    $EnvironmentId = $mi.EnvironmentId
-    $OrganizationId = $mi.OrganizationId
-
-    $secPwd = ConvertTo-SecureString -String $CertificatePassword -AsPlainText -Force
-    $cert = New-Object System.Security.Cryptography.X509Certificates.X509Certificate2($CertificatePath, $secPwd)
-    $certBytes = $cert.Export([System.Security.Cryptography.X509Certificates.X509ContentType]::Cert)
-    $sha256 = [System.Security.Cryptography.SHA256]::Create().ComputeHash($certBytes)
-    $sha256Hash = [System.Convert]::ToBase64String($sha256).Replace('+', '-').Replace('/', '_').TrimEnd('=')
-    $encodedTenant = Convert-GuidToBase64Url -guid $TenantId
-    $encodedApp = Convert-GuidToBase64Url -guid $AppId
-
-    # --- Credential #1: AzureAD-Issuer (Uses Organization ID) ---
-    $orgIdNoHyphens = $OrganizationId.Replace("-", "")
-    $issuer1 = "https://login.microsoftonline.com/$TenantId/v2.0"
-    $subject1 = "/eid1/c/pub/t/$encodedTenant/a/$encodedApp/n/plugin/e/$orgIdNoHyphens/h/$sha256Hash"
-    $credName1 = "AzureAD-Issuer"
-    Write-Host "  @ Checking credential $credName1" -ForegroundColor Yellow
-    $existingCred = az ad app federated-credential list --id $AppId --query "[?name=='$credName1']" | ConvertFrom-Json
-    $newCred = @{
-        name = $credName1
-        issuer = $issuer1
-        subject = $subject1
-        description = "Azure AD Issuer - OIDC Validation for Org $OrganizationId"
-        audiences = @("api://AzureADTokenExchange")
-    }
-    if ($existingCred) {
-        if ($existingCred.issuer -eq $issuer1 -and $existingCred.subject -eq $subject1) {
-            Write-Host "  + SUCCESS: No updates needed for $credName1 (values match)" -ForegroundColor Green
-        } else {
-            Write-Host "  @ Updating $credName1 (values different)" -ForegroundColor Yellow
-            Write-Host "    - Old Issuer: $($existingCred.issuer)" -ForegroundColor DarkGray
-            Write-Host "    - New Issuer: $issuer1" -ForegroundColor White
-            Write-Host "    - Old Subject: $($existingCred.subject)" -ForegroundColor DarkGray
-            Write-Host "    - New Subject: $subject1" -ForegroundColor White
-            az ad app federated-credential delete --id $AppId --federated-credential-id $existingCred.id
-            $newCred | ConvertTo-Json | Out-File "$credName1.json" -Encoding UTF8
-            az ad app federated-credential create --id $AppId --parameters "$credName1.json" | Out-Null
-            Remove-Item "$credName1.json" -Force -ErrorAction SilentlyContinue
-            Write-Host "  + SUCCESS: Updated $credName1." -ForegroundColor Green
-        }
-    } else {
-        Write-Host "  @ Creating new credential $credName1" -ForegroundColor Yellow
-        Write-Host "    - Issuer: $issuer1" -ForegroundColor White
-        Write-Host "    - Subject: $subject1" -ForegroundColor White
-        $newCred | ConvertTo-Json | Out-File "$credName1.json" -Encoding UTF8
-        az ad app federated-credential create --id $AppId --parameters "$credName1.json" | Out-Null
-        Remove-Item "$credName1.json" -Force -ErrorAction SilentlyContinue
-        Write-Host "  + SUCCESS: Created $credName1." -ForegroundColor Green
+    # Resolve possible pfx file locations. config.CertificateFileName may be provided without extension.
+    $resolvedPfx = $null
+    if (Test-Path $CertificateFileName) {
+        $resolvedPfx = (Resolve-Path $CertificateFileName).ProviderPath
+    } elseif (Test-Path (Join-Path -Path $PSScriptRoot -ChildPath $CertificateFileName)) {
+        $resolvedPfx = (Resolve-Path (Join-Path -Path $PSScriptRoot -ChildPath $CertificateFileName)).ProviderPath
+    } elseif (Test-Path (Join-Path -Path $PSScriptRoot -ChildPath "$CertificateFileName.pfx")) {
+        $resolvedPfx = (Resolve-Path (Join-Path -Path $PSScriptRoot -ChildPath "$CertificateFileName.pfx")).ProviderPath
+    } elseif (Test-Path "$CertificateFileName.pfx") {
+        $resolvedPfx = (Resolve-Path "$CertificateFileName.pfx").ProviderPath
     }
 
-    # --- Credential #2: PowerPlatform-Issuer (Uses Environment ID) ---
+    if (-not $resolvedPfx) {
+        Write-Host "  x ERROR: Could not find certificate file for '$CertificateFileName'. Looked for $CertificateFileName and $CertificateFileName.pfx in script folder and given path." -ForegroundColor Red
+        exit 1
+    }
+
+    try {
+        # Use the same constructor style as the verification step (plain password string) to avoid overload ambiguity.
+        $cert = New-Object System.Security.Cryptography.X509Certificates.X509Certificate2($resolvedPfx, $CertificatePassword)
+    }
+    catch {
+        Write-Host "  x ERROR: Failed to load certificate file '$resolvedPfx': $($_.Exception.Message)" -ForegroundColor Red
+        exit 1
+    }
+
+    try {
+        $certBytes = $cert.Export([System.Security.Cryptography.X509Certificates.X509ContentType]::Cert)
+        $sha256 = [System.Security.Cryptography.SHA256]::Create().ComputeHash($certBytes)
+        $sha256Hash = [System.Convert]::ToBase64String($sha256).Replace('+', '-').Replace('/', '_').TrimEnd('=')
+    }
+    catch {
+        Write-Host "  x ERROR: Failed to compute certificate hash: $($_.Exception.Message)" -ForegroundColor Red
+        exit 1
+    }
+
+
     $envIdNoHyphens = $EnvironmentId.Replace("-", "")
     $envIdPrefix = $envIdNoHyphens.Substring(0, $envIdNoHyphens.Length - 2)
     $envIdSuffix = $envIdNoHyphens.Substring($envIdNoHyphens.Length - 2)
-
     $issuer2 = "https://$envIdPrefix.$envIdSuffix.environment.api.powerplatform.com/sts"
-    #$subject2 = "component:pluginassembly,thumbprint:$($cert.Thumbprint),environment:$EnvironmentId"
     $subject2 = "component:pluginassembly,thumbprint:$($CertificateThumbprint),environment:$EnvironmentId"
     $credName2 = "PowerPlatform-Issuer"
 
@@ -456,41 +441,58 @@ for ($i = 0; $i -lt $config.ManagedIdentities.Count; $i++) {
         Write-Host "  + SUCCESS: Created $credName2." -ForegroundColor Green
     }
 }
+# ========================================
+# Step 6
+# ========================================
 
+Write-Host "`n[6] GENERATING ASSEMBLYINFO2.CS" -ForegroundColor Blue
+$assemblyFilePath = Join-Path -Path $ScriptDir -ChildPath "AssemblyInfo2.cs"
+## Build dynamic values from $config
+$tenantId = if ($config.TenantId) { $config.TenantId } else { "" }
+$applicationIds = @()
+if ($config.ManagedIdentities -and $config.ManagedIdentities.Count -gt 0) {
+    foreach ($mi in $config.ManagedIdentities) {
+        if ($mi.AppId) { $applicationIds += $mi.AppId }
+    }
+}
+$applicationIdsString = $applicationIds -join ','
 
+# Ensure certificate filename ends with .pfx
+$certificateFileOut = if ($config.CertificateFileName -and $config.CertificateFileName.ToLower().EndsWith('.pfx')) { $config.CertificateFileName } elseif ($config.CertificateFileName) { "$($config.CertificateFileName).pfx" } else { "" }
+$certificatePasswordOut = if ($config.CertificatePassword) { $config.CertificatePassword } else { "" }
 
+if (Test-Path $assemblyFilePath) {
+    Write-Host "  @ Overwriting existing file: AssemblyInfo2.cs" -ForegroundColor Yellow
+} else {
+    Write-Host "  @ Creating file: AssemblyInfo2.cs" -ForegroundColor Yellow
+}
 
+$assemblyContent = @"
+[assembly: DynamcisCrmDevKitManagedIdentityAssembly(
+    TenantId = "$tenantId",
+    ApplicationIds = "$applicationIdsString",
+    CertificateFile = "$certificateFileOut",
+    CertificatePassword = "$certificatePasswordOut"
+)]
+"@
 
+$assemblyContent | Out-File -FilePath $assemblyFilePath -Encoding UTF8 -Force
+Write-Host "  + SUCCESS: Saved AssemblyInfo2.cs to: " -NoNewline -ForegroundColor Green
+Write-Host $assemblyFilePath -ForegroundColor Cyan
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Write-Host "`n[5] SAVING DATA" -ForegroundColor Blue
+# ========================================
+# Step 7
+# ========================================
+Write-Host "`n[7] SAVING DATA" -ForegroundColor Blue
 $config.TenantId = $TenantId
 $config.KeyVaultURL = $kv.properties.vaultUri
 try {
     # Save config.json with all values from all phases
     $config | ConvertTo-Json -Depth 10 | Out-File -FilePath $ConfigPath -Encoding UTF8
-    Write-Host " + SUCCESS: config.json saved to: " -NoNewline -ForegroundColor Green
-    Write-Host "$ConfigPath" -ForegroundColor Cyan
+    Write-Host " + SUCCESS: Saved config.json to: " -NoNewline -ForegroundColor Green
+    Write-Host $ConfigPath -ForegroundColor Cyan
+    Write-Host ""
 }
 catch {
     Write-Host " x ERROR: Failed to save config.json: $($_.Exception.Message)" -ForegroundColor Red
 }
-
