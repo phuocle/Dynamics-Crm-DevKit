@@ -1394,17 +1394,22 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     {
                         CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE);
                         CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTERED.Trim());
-                        CliLog.WriteLine(ConsoleColor.White, " Update Fields: ", ConsoleColor.Green, attribute.FilteringAttributes ?? "*");
+                        CliLog.Write(ConsoleColor.White, " Update Fields:");
+                        CliLog.WriteList(attribute.FilteringAttributes, true);
                     }
                     else
                     {
                         if (rows.Entities[0].GetAttributeValue<string>("filteringattributes") == attribute.FilteringAttributes?.Replace(" ", ""))
-                            CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, "Update Fields: ", ConsoleColor.Green, attribute.FilteringAttributes ?? "*");
+                        {
+                            CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, "Update Fields:");
+                            CliLog.WriteList(attribute.FilteringAttributes, true);
+                        }
                         else
                         {
                             CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE);
                             CliLog.WriteSuccess(ConsoleColor.White, CliAction.UPDATED.Trim());
-                            CliLog.WriteLine(ConsoleColor.White, " Update Fields: ", ConsoleColor.Green, attribute.FilteringAttributes ?? "*"); ;
+                            CliLog.Write(ConsoleColor.White, " Update Fields:");
+                            CliLog.WriteList(attribute.FilteringAttributes, true);
                         }
                     }
                 }
