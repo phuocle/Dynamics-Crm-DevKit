@@ -138,12 +138,19 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     (IS_MANAGED_IDENTITY, ERROR) = IsNeedSignAssembly(fileNugetDll);
                     if (IS_MANAGED_IDENTITY && ERROR.Length == 0)
                     {
-                        (OK, ERROR) = await SignPackageAsync(fileNuget, Path.Combine(CurrentDirectory, ManagedIdentityAttribute.CertificateFile), ManagedIdentityAttribute.CertificatePassword);
+                        (OK, ERROR) = await Helper.SignPackageAsync(fileNuget, Path.Combine(CurrentDirectory, ManagedIdentityAttribute.CertificateFile), ManagedIdentityAttribute.CertificatePassword);
                         if (!OK)
                         {
                             CliLog.WriteLineError(ERROR);
                             CliLog.WriteLineError($"Package {Path.GetFileName(fileNuget)} not signed. Package deployment stopped.");
                             continue;
+                        }
+                        else
+                        {
+                            CliLog.Write(ConsoleColor.White, "|", SPACE);
+                            CliLog.WriteSuccess(ConsoleColor.White, CliAction.SIGNED.Trim());
+                            CliLog.Write(ConsoleColor.White, " Package ");
+                            CliLog.WriteLine(ConsoleColor.Cyan, Path.GetFileName(file));
                         }
                     }
                     else if (ERROR.Length > 0)
@@ -588,44 +595,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             return attribute;
         }
 
-        private async Task<(bool ok, string error)> SignPackageAsync(string file, string certificatePath, string certificatePassword = null)
-        {
-            var arguments = $"nuget sign \"{file}\" --certificate-path \"{certificatePath}\" --certificate-password \"{certificatePassword}\" --timestamper \"http://timestamp.digicert.com\"";
-            var processStartInfo = new ProcessStartInfo
-            {
-                FileName = "dotnet",
-                Arguments = arguments,
-                WorkingDirectory = Path.GetDirectoryName(file),
-                UseShellExecute = false,
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-                CreateNoWindow = true
-            };
-            using (var process = new Process { StartInfo = processStartInfo })
-            {
-                process.Start();
-                string output = await process.StandardOutput.ReadToEndAsync();
-                string error = await process.StandardError.ReadToEndAsync();
-                await Task.Run(() => process.WaitForExit());
-                if (process.ExitCode == 0)
-                {
-                    CliLog.Write(ConsoleColor.White, "|", SPACE);
-                    CliLog.WriteSuccess(ConsoleColor.White, CliAction.SIGNED.Trim());
-                    CliLog.Write(ConsoleColor.White, " Package ");
-                    CliLog.WriteLine(ConsoleColor.Cyan, Path.GetFileName(file));
-                    return (true, string.Empty);
-                }
-                else
-                {
-                    var outputs = output.Trim().Split("\n".ToCharArray());
-                    foreach (var o in outputs)
-                    {
-                        if (o.StartsWith("error: NU3001:")) return (false, "Package already contains a signature. Please remove the existing signature by 'Clean' and then 'Rebuild' project.");
-                    }
-                    return (false, $"{output}");
-                }
-            }
-        }
+
         public async Task<bool> IsValidAsync()
         {
             if (Json == null)
@@ -1435,7 +1405,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             void CliLogSecureUnsecure()
             {
-                //SecureConfiguration
                 if (SecureConfigurationAction == CliAction.DO_NOTHING)
                 {
                     CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, "Secure Configuration = ", ConsoleColor.Green, attribute.SecureConfiguration);
@@ -1455,7 +1424,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         CliLog.WriteLine(ConsoleColor.White, " Secure Configuration = ", ConsoleColor.Green, attribute.SecureConfiguration);
                     }
                 }
-                //UnSecureConfiguration
                 if (rows.Entities.Count == 0 && !string.IsNullOrWhiteSpace(attribute.UnSecureConfiguration))
                 {
                     CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE);

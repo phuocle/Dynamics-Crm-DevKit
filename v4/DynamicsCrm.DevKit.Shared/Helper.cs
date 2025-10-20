@@ -1035,5 +1035,40 @@ namespace DynamicsCrm.DevKit.Shared
             }
             return null;
         }
+
+        public static async Task<(bool ok, string error)> SignPackageAsync(string file, string certificatePath, string certificatePassword = null)
+        {
+            var arguments = $"nuget sign \"{file}\" --certificate-path \"{certificatePath}\" --certificate-password \"{certificatePassword}\" --timestamper \"http://timestamp.digicert.com\"";
+            var processStartInfo = new ProcessStartInfo
+            {
+                FileName = "dotnet",
+                Arguments = arguments,
+                WorkingDirectory = Path.GetDirectoryName(file),
+                UseShellExecute = false,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                CreateNoWindow = true
+            };
+            using (var process = new Process { StartInfo = processStartInfo })
+            {
+                process.Start();
+                string output = await process.StandardOutput.ReadToEndAsync();
+                string error = await process.StandardError.ReadToEndAsync();
+                await Task.Run(() => process.WaitForExit());
+                if (process.ExitCode == 0)
+                {
+                    return (true, string.Empty);
+                }
+                else
+                {
+                    var outputs = output.Trim().Split("\n".ToCharArray());
+                    foreach (var o in outputs)
+                    {
+                        if (o.StartsWith("error: NU3001:")) return (false, "Package already contains a signature. Please remove the existing signature by 'Clean' and then 'Rebuild' project.");
+                    }
+                    return (false, $"{output}");
+                }
+            }
+        }
     }
 }
