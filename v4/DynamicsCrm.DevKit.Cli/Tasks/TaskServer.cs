@@ -69,7 +69,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 files.Sort();
                 if (files.Count == 0)
                 {
-                    CliLog.WriteLineWarning(ConsoleColor.Green, "Not found any files to deploy");
+                    CliLog.WriteLineError(ConsoleColor.Green, "Not found any files to deploy");
                 }
                 else
                 {
@@ -103,15 +103,21 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     (IS_MANAGED_IDENTITY, ERROR) = IsNeedSignAssembly(fileDll);
                     if (IS_MANAGED_IDENTITY && ERROR.Length == 0)
                     {
-                        (OK, ERROR) = await SignAssemblyAsync(fileDll, Path.Combine(CurrentDirectory, ManagedIdentityAttribute.CertificateFile), ManagedIdentityAttribute.CertificatePassword);
+                        var signToolPath = FindSignTool();
+                        if (signToolPath == null) continue;
+                        (OK, ERROR) = await Helper.SignAssemblyAsync(signToolPath, fileDll, Path.Combine(CurrentDirectory, ManagedIdentityAttribute.CertificateFile), ManagedIdentityAttribute.CertificatePassword);
                         if (!OK)
                         {
-                            if (!OK)
-                            {
-                                CliLog.WriteLineError(ERROR);
-                                CliLog.WriteLineError($"Assembly {Path.GetFileName(fileDll)} not signed. Assembly deployment stopped.");
-                                continue;
-                            }
+                            CliLog.WriteLineError(ERROR);
+                            CliLog.WriteLineError($"Assembly {Path.GetFileName(fileDll)} not signed. Assembly deployment stopped.");
+                            continue;
+                        }
+                        else
+                        {
+                            CliLog.Write(ConsoleColor.White, "|", SPACE);
+                            CliLog.WriteSuccess(ConsoleColor.White, CliAction.SIGNED.Trim());
+                            CliLog.Write(ConsoleColor.White, " Assembly ");
+                            CliLog.WriteLine(ConsoleColor.Cyan, Path.GetFileName(file));
                         }
                     }
                     else if (ERROR.Length > 0)
@@ -153,10 +159,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         CliLog.WriteLineError($"Package {Path.GetFileName(fileNuget)} not signed. Package deployment stopped.");
                         continue;
                     }
-                    //foreach (var fileNugetDll in fileNugetDlls)
-                    //{
-                        await DeployDllAsync(fileNugetDll, DeployFileType.Nuget);
-                    //}
+                    await DeployDllAsync(fileNugetDll, DeployFileType.Nuget);
                 }
                 else
                     CliLog.WriteLineError($"Not support file extension: {new FileInfo(file).Extension}");
@@ -392,7 +395,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     {
                         await ServiceClient.ExecuteAsync(request);
                     }
-                    catch (FaultException fe)
+                    catch (Exception fe)
                     {
                         CliLog.WriteLineError($"{fe.Message} Assemply deployed, but the deployment of this assembly stopped.");
                         return null;
@@ -469,81 +472,28 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         }
         private string FindSignTool()
         {
-            try
-            {
-                var programFilesX86 = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86);
-                var programFiles = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
-                var searchPaths = new List<string>
-                {
-                    Path.Combine(programFilesX86, "Windows Kits", "10", "bin"),
-                    Path.Combine(programFiles, "Windows Kits", "10", "bin"),
-                    Path.Combine(programFilesX86, "Windows Kits", "8.1", "bin"),
-                    Path.Combine(programFiles, "Windows Kits", "8.1", "bin"),
-                    Path.Combine(programFilesX86, "Windows Kits", "8.0", "bin"),
-                    Path.Combine(programFiles, "Windows Kits", "8.0", "bin")
-                };
-                foreach (var searchPath in searchPaths)
-                {
-                    if (!Directory.Exists(searchPath)) continue;
-                    if (searchPath.Contains("Windows Kits\\10"))
-                    {
-                        var versionDirs = Directory.GetDirectories(searchPath)
-                            .Where(d => Directory.Exists(Path.Combine(d, "x64")) || Directory.Exists(Path.Combine(d, "x86")))
-                            .OrderByDescending(d => d);
-                        foreach (var versionDir in versionDirs)
-                        {
-                            var x64Path = Path.Combine(versionDir, "x64", "signtool.exe");
-                            if (File.Exists(x64Path))
-                            {
-                                return x64Path;
-                            }
-                            var x86Path = Path.Combine(versionDir, "x86", "signtool.exe");
-                            if (File.Exists(x86Path))
-                            {
-                                return x86Path;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        var x64Path = Path.Combine(searchPath, "x64", "signtool.exe");
-                        if (File.Exists(x64Path))
-                        {
-                            return x64Path;
-                        }
-                        var x86Path = Path.Combine(searchPath, "x86", "signtool.exe");
-                        if (File.Exists(x86Path))
-                        {
-                            return x86Path;
-                        }
-                    }
-                }
-                CliLog.WriteLine(ConsoleColor.White, "|");
-                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Cyan, "To sign assemblies, you need to install Windows SDK:");
-                CliLog.WriteLine(ConsoleColor.White, "|");
-                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.White, "Option 1: Install Windows 10/11 SDK (Recommended)");
-                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "  Download: https://developer.microsoft.com/en-us/windows/downloads/windows-sdk/");
-                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.White, "  During installation, select:", ConsoleColor.Yellow, " 'Windows SDK Signing Tools for Desktop Apps'");
-                CliLog.WriteLine(ConsoleColor.White, "|");
-                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.White, "Option 2: Install via Visual Studio Installer");
-                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.White, "  1. Open Visual Studio Installer");
-                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.White, "  2. Click 'Modify' on your Visual Studio installation");
-                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.White, "  3. Go to 'Individual Components' tab");
-                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.White, "  4. Search for and select:", ConsoleColor.Yellow, " 'Windows 10 SDK' or 'Windows 11 SDK'");
-                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.White, "  5. Click 'Modify' to install");
-                CliLog.WriteLine(ConsoleColor.White, "|");
-                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.White, "Option 3: Install via Chocolatey (Package Manager)");
-                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "  Run: ", ConsoleColor.Yellow, "choco install windows-sdk-10.0");
-                CliLog.WriteLine(ConsoleColor.White, "|");
-                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.White, "After installation, SignTool.exe will be located at:");
-                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Gray, "  C:\\Program Files (x86)\\Windows Kits\\10\\bin\\{version}\\x64\\signtool.exe");
-                return null;
-            }
-            catch (Exception ex)
-            {
-                CliLog.WriteLineError(ConsoleColor.Red, $"Error finding SignTool: {ex.Message}");
-                return null;
-            }
+            var tool = Helper.FindSignTool();
+            if (tool != null) return tool;
+            CliLog.WriteLine(ConsoleColor.White, "|");
+            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Cyan, "To sign assemblies, you need to install Windows SDK:");
+            CliLog.WriteLine(ConsoleColor.White, "|");
+            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.White, "Option 1: Install Windows 10/11 SDK (Recommended)");
+            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "  Download: https://developer.microsoft.com/en-us/windows/downloads/windows-sdk/");
+            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.White, "  During installation, select:", ConsoleColor.Yellow, " 'Windows SDK Signing Tools for Desktop Apps'");
+            CliLog.WriteLine(ConsoleColor.White, "|");
+            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.White, "Option 2: Install via Visual Studio Installer");
+            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.White, "  1. Open Visual Studio Installer");
+            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.White, "  2. Click 'Modify' on your Visual Studio installation");
+            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.White, "  3. Go to 'Individual Components' tab");
+            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.White, "  4. Search for and select:", ConsoleColor.Yellow, " 'Windows 10 SDK' or 'Windows 11 SDK'");
+            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.White, "  5. Click 'Modify' to install");
+            CliLog.WriteLine(ConsoleColor.White, "|");
+            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.White, "Option 3: Install via Chocolatey (Package Manager)");
+            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "  Run: ", ConsoleColor.Yellow, "choco install windows-sdk-10.0");
+            CliLog.WriteLine(ConsoleColor.White, "|");
+            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.White, "After installation, SignTool.exe will be located at:");
+            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Gray, "  C:\\Program Files (x86)\\Windows Kits\\10\\bin\\{version}\\x64\\signtool.exe");
+            return tool;
         }
         private async Task<(Guid ManagedIdentityId, Guid ApplicationId)> DeployManagedIdentityAsync(string assemblyName, Guid TenantId, string ApplicationIds)
         {
@@ -637,58 +587,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             return attribute;
         }
-        private async Task<(bool ok, string error)> SignAssemblyAsync(string file, string certificatePath, string certificatePassword = null)
-        {
-            var signToolPath = FindSignTool();
-            if (string.IsNullOrEmpty(signToolPath)) return (false, "SignTool.exe not found. Please install Windows SDK.");
-            string arguments;
-            if (string.IsNullOrEmpty(certificatePassword))
-            {
-                arguments = $"sign /f \"{certificatePath}\" /fd SHA256 /v \"{file}\"";
-            }
-            else
-            {
-                arguments = $"sign /f \"{certificatePath}\" /p \"{certificatePassword}\" /fd SHA256 /v \"{file}\"";
-            }
-            var processStartInfo = new ProcessStartInfo
-            {
-                FileName = signToolPath,
-                Arguments = arguments,
-                UseShellExecute = false,
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-                CreateNoWindow = true
-            };
-            using (var process = new Process { StartInfo = processStartInfo })
-            {
-                var output = new System.Text.StringBuilder();
-                var error = new System.Text.StringBuilder();
-                process.OutputDataReceived += (sender, args) =>
-                {
-                    if (!string.IsNullOrEmpty(args.Data)) output.AppendLine(args.Data);
-                };
-                process.ErrorDataReceived += (sender, args) =>
-                {
-                    if (!string.IsNullOrEmpty(args.Data)) error.AppendLine(args.Data);
-                };
-                process.Start();
-                process.BeginOutputReadLine();
-                process.BeginErrorReadLine();
-                await Task.Run(() => process.WaitForExit());
-                if (process.ExitCode == 0)
-                {
-                    CliLog.Write(ConsoleColor.White, "|", SPACE);
-                    CliLog.WriteSuccess(ConsoleColor.White, CliAction.SIGNED.Trim());
-                    CliLog.Write(ConsoleColor.White, " Assembly ");
-                    CliLog.WriteLine(ConsoleColor.Cyan, Path.GetFileName(file));
-                    return (true, string.Empty);
-                }
-                else
-                {
-                    return (false, $"{error}");
-                }
-            }
-        }
+
         private async Task<(bool ok, string error)> SignPackageAsync(string file, string certificatePath, string certificatePassword = null)
         {
             var arguments = $"nuget sign \"{file}\" --certificate-path \"{certificatePath}\" --certificate-password \"{certificatePassword}\" --timestamper \"http://timestamp.digicert.com\"";
@@ -814,12 +713,12 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 var pluginType = attributes[0].PluginType;
                 return pluginType switch
                 {
-                    PluginType.Plugin => 0,        // First priority
-                    PluginType.CustomAction => 1,  // Second priority
-                    PluginType.CustomApi => 2,     // Third priority
-                    PluginType.Workflow => 3,      // Fourth priority
-                    PluginType.DataProvider => 4,  // Fifth priority
-                    _ => int.MaxValue               // Unknown types at the end
+                    PluginType.Plugin => 0,
+                    PluginType.CustomAction => 1,
+                    PluginType.CustomApi => 2,
+                    PluginType.Workflow => 3,
+                    PluginType.DataProvider => 4,
+                    _ => int.MaxValue
                 };
             }).ThenBy(type =>
             {
@@ -852,7 +751,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                             if (pluginStepId == null) return;
                             if (attribute.PluginType == PluginType.Plugin && HasPluginImage(attribute))
                             {
-                                if (IsSupportPluginImage(attribute))
+                                if (Helper.IsSupportPluginImage(attribute))
                                 {
                                     var pluginImageId = await DeployPluginImageAsync(pluginStepId.Value, attribute);
                                     if (pluginImageId == null) return;
@@ -1028,7 +927,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE);
                     CliLog.WriteSuccess(ConsoleColor.White, CliAction.UPDATED.Trim());
                     CliLog.WriteLine(ConsoleColor.White, " Type ", ConsoleColor.Blue, $"{PluginType.DataSource} ", ConsoleColor.Cyan, $"{logicalNameDataSource}", ConsoleColor.White, " linked with events ", ConsoleColor.Cyan, events);
-                    //CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, $"Step ", ConsoleColor.Blue, attribute.Message, " ", ConsoleColor.Cyan, attribute.Name, ConsoleColor.Blue, $" [{attribute.Stage}, {attribute.ExecutionMode}]");
                     await ServiceClient.ExecuteAsync(request);
                 }
                 else
@@ -1104,21 +1002,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             if (check == Guid.Empty) return null;
             return check;
         }
-        private string GetMessagePropertyName(string message)
-        {
-            return message.ToLower() switch
-            {
-                "create" => "Id",
-                "createmultiple" => "Ids",
-                "updatemultiple" => "Targets",
-                "setstate" => "EntityMoniker",
-                "setstatedynamicentity" => "EntityMoniker",
-                "deliverincoming" => "EmailId",
-                "deliverpromote" => "EmailId",
-                "send" => "EmailId",
-                _ => "Target"
-            };
-        }
         private async Task<Guid> DeployPluginImageAsync(string message, string imageName, string imageAliasName, ImageTypeEnum imageType, string imageAttributes, Guid pluginStepId, string pluginStepName)
         {
             if (imageAliasName.Length == 0) imageAliasName = imageName;
@@ -1160,7 +1043,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 ["sdkmessageprocessingstepid"] = new EntityReference("sdkmessageprocessingstep", pluginStepId),
                 ["attributes"] = imageAttributes.Trim() == "*" ? null : imageAttributes,
                 ["entityalias"] = imageAliasName,
-                ["messagepropertyname"] = GetMessagePropertyName(message)
+                ["messagepropertyname"] = Helper.GetMessagePropertyName(message)
             };
             if (rows.Entities.Count == 0)
             {
@@ -1183,7 +1066,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         var response = (CreateResponse)await ServiceClient.ExecuteAsync(request);
                         return response.id;
                     }
-                    catch (FaultException fe)
+                    catch (Exception fe)
                     {
                         if (fe.Message.Contains("entity doesn't contain attribute with"))
                         {
@@ -1197,11 +1080,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         {
                             CliLog.WriteLineError($"{fe.Message} Assemply deployed, but the deployment of this assembly stopped.");
                         }
-                        return Guid.Empty;
-                    }
-                    catch (Exception e)
-                    {
-                        CliLog.WriteLineError($"{e.Message} Assemply deployed, but the deployment of this assembly stopped.");
                         return Guid.Empty;
                     }
                 }
@@ -1241,7 +1119,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     {
                         await ServiceClient.UpdateAsync(pluginImage);
                     }
-                    catch (FaultException fe)
+                    catch (Exception fe)
                     {
                         if (fe.Message.Contains("entity doesn't contain attribute with"))
                         {
@@ -1253,35 +1131,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         }
                         return Guid.Empty;
                     }
-                    catch (Exception e)
-                    {
-                        CliLog.WriteLineError($"{e.Message} Assemply deployed, but the deployment of this assembly stopped.");
-                        return Guid.Empty;
-                    }
                 }
                 return rows.Entities[0].Id;
             }
-        }
-        private bool IsSupportPluginImage(CrmPluginRegistrationAttribute attribute)
-        {
-            return (attribute?.Message?.ToLower()) switch
-            {
-                "assign" or
-                "create" or
-                "delete" or
-                "deliverincoming" or
-                "deliverpromote" or
-                "merge" or
-                "route" or
-                "send" or
-                "setstate" or
-                "setstatedynamicentity" or
-                "update" or
-                "createmultiple" or
-                "updatemultiple" or
-                "executeworkflow" => true,
-                _ => false,
-            };
         }
         private bool HasPluginImage(CrmPluginRegistrationAttribute attribute)
         {
@@ -1388,7 +1240,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var response = (CreateResponse)await ServiceClient.ExecuteAsync(request);
                     pluginStepId = response.id;
                 }
-                catch (FaultException fe)
+                catch (Exception fe)
                 {
                     if (fe.Message.Contains("The dependent component Attribute "))
                     {
@@ -1396,11 +1248,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         return null;
                     }
                     CliLog.WriteLineError($"Step {attribute.Name} register failed: {fe.Message.TrimEnd(".".ToCharArray())}. Assemply deployed, but the deployment of this assembly stopped.");
-                    return null;
-                }
-                catch (Exception e)
-                {
-                    CliLog.WriteLineError($"{e.Message.TrimEnd(".".ToCharArray())}. Assemply deployed, but the deployment of this assembly stopped.");
                     return null;
                 }
             }
@@ -1523,17 +1370,12 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     {
                         await ServiceClient.ExecuteAsync(request);
                     }
-                    catch (FaultException fe)
+                    catch (Exception fe)
                     {
                         if (fe.Message.Contains("The dependent component Attribute "))
                         {
                             CliLog.WriteLineError($"Step {attribute.Name} have invalid Image Attribute {attribute.FilteringAttributes}. Assemply deployed, but the deployment of this assembly stopped.");
                         }
-                        return null;
-                    }
-                    catch (Exception e)
-                    {
-                        CliLog.WriteLineError($"{e.Message} Assemply deployed, but the deployment of this assembly stopped.");
                         return null;
                     }
                 }
@@ -1826,14 +1668,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 {
                     await ServiceClient.ExecuteAsync(request);
                 }
-                catch (FaultException fe)
+                catch (Exception fe)
                 {
                     CliLog.WriteLineError($"{fe.Message} Assemply deployed, but the deployment of this assembly stopped.");
-                    return null;
-                }
-                catch (Exception ee)
-                {
-                    CliLog.WriteLineError($"{ee.Message} Assemply deployed, but the deployment of this assembly stopped.");
                     return null;
                 }
                 if (IsWorkflowType(type))
@@ -1904,7 +1741,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 if (types.Count(x => x.FullName == typeName) == 0)
                 {
                     CliLog.WriteLineError($"Type: '{typeName}' not found in the assembly file. This type: '{typeName}' already registered to CRM/CDS. Assemply deployed, but the deployment of this assembly stopped.");
-                    CliLog.WriteLineWarning(ConsoleColor.Yellow, $"If you need to deploy this assembly. Please manually remove this type from Plugin Registration Tool and try it again.");
+                    CliLog.WriteLineError( $"If you need to deploy this assembly. Please manually remove this type from Plugin Registration Tool and try it again.");
                     return false;
                 }
             }

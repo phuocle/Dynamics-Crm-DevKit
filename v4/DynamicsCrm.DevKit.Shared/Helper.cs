@@ -1,10 +1,12 @@
-﻿using DynamicsCrm.DevKit.Shared.Models;
+﻿using DynamicsCrm.DevKit.Cli;
+using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.CSharp;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.IO.Compression;
@@ -893,6 +895,145 @@ namespace DynamicsCrm.DevKit.Shared
                 "onexternalupdated" => true,
                 _ => false,
             };
+        }
+
+        public static string GetMessagePropertyName(string message)
+        {
+            return message.ToLower() switch
+            {
+                "create" => "Id",
+                "createmultiple" => "Ids",
+                "updatemultiple" => "Targets",
+                "setstate" => "EntityMoniker",
+                "setstatedynamicentity" => "EntityMoniker",
+                "deliverincoming" => "EmailId",
+                "deliverpromote" => "EmailId",
+                "send" => "EmailId",
+                _ => "Target"
+            };
+        }
+
+        public static bool IsSupportPluginImage(CrmPluginRegistrationAttribute attribute)
+        {
+            return (attribute?.Message?.ToLower()) switch
+            {
+                "assign" or
+                "create" or
+                "delete" or
+                "deliverincoming" or
+                "deliverpromote" or
+                "merge" or
+                "route" or
+                "send" or
+                "setstate" or
+                "setstatedynamicentity" or
+                "update" or
+                "createmultiple" or
+                "updatemultiple" or
+                "executeworkflow" => true,
+                _ => false,
+            };
+        }
+
+        public static async Task<(bool ok, string error)> SignAssemblyAsync(string signToolPath, string file, string certificatePath, string certificatePassword = null)
+        {
+            if (string.IsNullOrEmpty(signToolPath)) return (false, "SignTool.exe not found. Please install Windows SDK.");
+            string arguments;
+            if (string.IsNullOrEmpty(certificatePassword))
+            {
+                arguments = $"sign /f \"{certificatePath}\" /fd SHA256 /v \"{file}\"";
+            }
+            else
+            {
+                arguments = $"sign /f \"{certificatePath}\" /p \"{certificatePassword}\" /fd SHA256 /v \"{file}\"";
+            }
+            var processStartInfo = new ProcessStartInfo
+            {
+                FileName = signToolPath,
+                Arguments = arguments,
+                UseShellExecute = false,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                CreateNoWindow = true
+            };
+            using (var process = new Process { StartInfo = processStartInfo })
+            {
+                var output = new System.Text.StringBuilder();
+                var error = new System.Text.StringBuilder();
+                process.OutputDataReceived += (sender, args) =>
+                {
+                    if (!string.IsNullOrEmpty(args.Data)) output.AppendLine(args.Data);
+                };
+                process.ErrorDataReceived += (sender, args) =>
+                {
+                    if (!string.IsNullOrEmpty(args.Data)) error.AppendLine(args.Data);
+                };
+                process.Start();
+                process.BeginOutputReadLine();
+                process.BeginErrorReadLine();
+                await Task.Run(() => process.WaitForExit());
+                if (process.ExitCode == 0)
+                {
+
+                    return (true, string.Empty);
+                }
+                else
+                {
+                    return (false, $"{error}");
+                }
+            }
+        }
+
+        public static string FindSignTool()
+        {
+            var programFilesX86 = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86);
+            var programFiles = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
+            var searchPaths = new List<string>
+                {
+                    Path.Combine(programFilesX86, "Windows Kits", "10", "bin"),
+                    Path.Combine(programFiles, "Windows Kits", "10", "bin"),
+                    Path.Combine(programFilesX86, "Windows Kits", "8.1", "bin"),
+                    Path.Combine(programFiles, "Windows Kits", "8.1", "bin"),
+                    Path.Combine(programFilesX86, "Windows Kits", "8.0", "bin"),
+                    Path.Combine(programFiles, "Windows Kits", "8.0", "bin")
+                };
+            foreach (var searchPath in searchPaths)
+            {
+                if (!Directory.Exists(searchPath)) continue;
+                if (searchPath.Contains("Windows Kits\\10"))
+                {
+                    var versionDirs = Directory.GetDirectories(searchPath)
+                        .Where(d => Directory.Exists(Path.Combine(d, "x64")) || Directory.Exists(Path.Combine(d, "x86")))
+                        .OrderByDescending(d => d);
+                    foreach (var versionDir in versionDirs)
+                    {
+                        var x64Path = Path.Combine(versionDir, "x64", "signtool.exe");
+                        if (File.Exists(x64Path))
+                        {
+                            return x64Path;
+                        }
+                        var x86Path = Path.Combine(versionDir, "x86", "signtool.exe");
+                        if (File.Exists(x86Path))
+                        {
+                            return x86Path;
+                        }
+                    }
+                }
+                else
+                {
+                    var x64Path = Path.Combine(searchPath, "x64", "signtool.exe");
+                    if (File.Exists(x64Path))
+                    {
+                        return x64Path;
+                    }
+                    var x86Path = Path.Combine(searchPath, "x86", "signtool.exe");
+                    if (File.Exists(x86Path))
+                    {
+                        return x86Path;
+                    }
+                }
+            }
+            return null;
         }
     }
 }
