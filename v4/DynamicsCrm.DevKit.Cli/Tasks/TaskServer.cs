@@ -65,7 +65,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             CliLog.WriteLine(ConsoleColor.White, "|");
             if (await IsValidAsync())
             {
-                var files = GetFiles(CurrentFolder, Json.includefiles, Json.excludefiles);
+                var files = Helper.GetFiles(CurrentFolder, Json.includefiles, Json.excludefiles);
                 files.Sort();
                 if (files.Count == 0)
                 {
@@ -211,7 +211,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 var entity = rows.Entities[0];
                 var oldContent = entity.GetAttributeValue<string>("content");
-                if (IsEqualsContent(oldContent, newContent))
+                if (Helper.IsEqualsContent(oldContent, newContent))
                 {
                     CliLog.WriteLine(ConsoleColor.White, "|", SPACE, CliAction.DO_NOTHING, ConsoleColor.Blue, " Package ", ConsoleColor.Green, $"{Path.GetFileName(file)}");
                 }
@@ -372,7 +372,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 var oldContent = rows.Entities[0].GetAttributeValue<string>("content");
                 pluginAssemblyId = rows.Entities[0].Id;
-                if (IsEqualsContent(oldContent, newContent))
+                if (Helper.IsEqualsContent(oldContent, newContent))
                 {
                     CliLog.Write(ConsoleColor.White, "|", SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, "Assembly ", ConsoleColor.Cyan, assemblyName, ".dll");
                     CliLog.WriteLine(ConsoleColor.Blue, text);
@@ -925,7 +925,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     CliLog.WriteLineError(ConsoleColor.Yellow, $"Multiple message Create found with data source {dataSource} ({checkDataSource}). Assemply deployed, but the deployment of this assembly stopped.");
                     return false;
                 }
-                var countUpdate = dataProviderEvents.Count(x => IsMessageUpdate(x.Message) && x.DataSource == dataSource);
+                var countUpdate = dataProviderEvents.Count(x => Helper.IsMessageUpdate(x.Message) && x.DataSource == dataSource);
                 if (countUpdate != 0 && countUpdate != 1)
                 {
                     CliLog.WriteLineError(ConsoleColor.Yellow, $"Multiple message Update found with data source {dataSource} ({checkDataSource}). Assemply deployed, but the deployment of this assembly stopped.");
@@ -974,7 +974,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     entity.Attributes.Add("createplugin", create.PluginTypeId);
                     events += "Create, ";
                 }
-                var update = dataProviderEvents.Where(x => IsMessageUpdate(x.Message) && x.DataSource == dataSource).FirstOrDefault();
+                var update = dataProviderEvents.Where(x => Helper.IsMessageUpdate(x.Message) && x.DataSource == dataSource).FirstOrDefault();
                 if (update == null)
                     entity.Attributes.Add("updateplugin", new Guid("{c1919979-0021-4f11-a587-a8f904bdfdf9}"));
                 else
@@ -1296,19 +1296,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 return true;
             return false;
         }
-        private bool IsMessageUpdate(string message)
-        {
-            return message.ToLower() switch
-            {
-                "update" or
-                "updatemultiple" or
-                "onexternalupdated" => true,
-                _ => false,
-            };
-        }
         private async Task<Guid?> DeployPluginStepAsync(Guid pluginTypeId, TypeInfo type, CrmPluginRegistrationAttribute attribute)
         {
-            if (IsMessageUpdate(attribute?.Message))
+            if (Helper.IsMessageUpdate(attribute?.Message))
             {
                 if (attribute?.FilteringAttributes?.Trim().Length == 0)
                 {
@@ -1566,9 +1556,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 update["statecode"] = new OptionSetValue(1);
                 update["statuscode"] = new OptionSetValue(2);
                 await ServiceClient.UpdateAsync(update);
-                //CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE);
-                //CliLog.WriteSuccess(ConsoleColor.White, CliAction.DEACTIVATED.Trim());
-                //CliLog.WriteLine(ConsoleColor.White, $" Step ", ConsoleColor.Blue, attribute.Message, " ", ConsoleColor.Cyan, attribute.Name, ConsoleColor.Blue, $" [{attribute.Stage}, {attribute.ExecutionMode}]");
             }
             else if (
                 rows.Entities.Count > 0 &&
@@ -1579,15 +1566,12 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 update["statecode"] = new OptionSetValue(0);
                 update["statuscode"] = new OptionSetValue(1);
                 await ServiceClient.UpdateAsync(update);
-                //CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE);
-                //CliLog.WriteSuccess(ConsoleColor.White, CliAction.ACTIVATED.Trim());
-                //CliLog.WriteLine(ConsoleColor.White, $" Step ", ConsoleColor.Blue, attribute.Message, " ", ConsoleColor.Cyan, attribute.Name, ConsoleColor.Blue, $" [{attribute.Stage}, {attribute.ExecutionMode}]");
             }
             return pluginStepId;
 
             void CliLogUpdateFields()
             {
-                if (IsMessageUpdate(attribute.Message))
+                if (Helper.IsMessageUpdate(attribute.Message))
                 {
                     if (rows.Entities.Count == 0)
                     {
@@ -1857,7 +1841,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 {
                     var old = rows.Entities[0].GetAttributeValue<string>("customworkflowactivityinfo");
                     var @new = (await ServiceClient.RetrieveAsync("plugintype", rows.Entities[0].Id, new ColumnSet("customworkflowactivityinfo"))).GetAttributeValue<string>("customworkflowactivityinfo");
-                    if (IsEqualsWorkflowType(old, @new))
+                    if (Helper.IsEqualsContent(old, @new))
                     {
                         CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, ConsoleColor.White, "Type ", ConsoleColor.Blue, attribute.PluginType, " ", ConsoleColor.Cyan, type.FullName);
                     }
@@ -1874,14 +1858,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
             }
             return rows.Entities[0].Id;
-        }
-        private bool IsEqualsWorkflowType(string old, string @new)
-        {
-            return old == @new;
-        }
-        private bool IsEqualsContent(string oldContent, string newContent)
-        {
-            return oldContent == newContent;
         }
         private async Task<bool> IsValidTypesAsync(string file, List<TypeInfo> types, DeployFileType deployFileType)
         {
@@ -1921,7 +1897,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
     </link-entity>
   </entity>
 </fetch>";
-
             var rows = await ServiceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
             if (rows.Entities.Count == 0) return true;
             foreach (var entity in rows.Entities)
@@ -1968,44 +1943,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 list.Add(Helper.ConvertAttributeToCrmPluginRegistration(attribute));
             return list;
         }
-        private List<string> GetFiles(string folder, List<string> includePatternFiles, List<string> excludePatternFiles)
-        {
-            var includefiles = new List<string>();
-            foreach (var includefile in includePatternFiles)
-            {
-                if (Directory.Exists(folder))
-                {
-                    includefiles.AddRange([.. Directory.GetFiles(folder, includefile)]);
-                }
-            }
-            foreach (var includefile in includePatternFiles)
-            {
-                var other = includefile.Replace("*.", string.Empty);
-                if (Directory.Exists(folder))
-                {
-                    includefiles.AddRange([.. Directory.GetFiles(folder, other)]);
-                }
-            }
-            var excludefiles = new List<string>();
-            foreach (var excludefile in excludePatternFiles)
-            {
-                if (Directory.Exists(folder))
-                {
-                    excludefiles.AddRange([.. Directory.GetFiles(folder, excludefile)]);
-                }
-            }
-            foreach (var excludefile in excludePatternFiles)
-            {
-                var other = excludefile.Replace("*.", string.Empty);
-                if (Directory.Exists(folder))
-                {
-                    excludefiles.AddRange([.. Directory.GetFiles(folder, other)]);
-                }
-            }
-            var files = includefiles.Where(file => !excludefiles.Contains(file)).Distinct().ToList();
-            files.Sort();
-            return files;
-        }
         private Assembly LoadAssemblyIntoCache(string file)
         {
             var normalizedPath = Path.GetFullPath(file);
@@ -2017,13 +1954,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             Assembly assembly = null;
             try
             {
-                // Load assembly bytes into memory to avoid file locking
                 var assemblyBytes = File.ReadAllBytes(file);
                 AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve += CurrentDomain_ReflectionOnlyAssemblyResolve;
                 assembly = Assembly.ReflectionOnlyLoad(assemblyBytes);
                 AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve -= CurrentDomain_ReflectionOnlyAssemblyResolve;
-
-                // Cache the loaded assembly
                 if (assembly != null)
                 {
                     _assemblyCache[fileName] = assembly;
@@ -2084,15 +2018,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         }
         private void ExtractZip(PackageArchiveReader packageArchiveReader, string folder)
         {
+            Helper.TryDeleteDirectory(folder);
+            if (!Directory.Exists(folder)) Directory.CreateDirectory(folder);
             var libFiles = packageArchiveReader.GetFiles("lib");
-            if (!Directory.Exists(folder))
-            {
-                Directory.CreateDirectory(folder);
-            }
-            else
-            {
-                foreach (FileInfo f in new DirectoryInfo(folder).GetFiles()) { f.Delete(); }
-            }
             foreach (var libFile in libFiles)
             {
                 var zip = packageArchiveReader.GetEntry(libFile);
