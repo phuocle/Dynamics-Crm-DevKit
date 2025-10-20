@@ -69,7 +69,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 files.Sort();
                 if (files.Count == 0)
                 {
-                    CliLog.WriteLineError(ConsoleColor.Green, "Not found any files to deploy");
+                    CliLog.WriteLineError("Not found any files to deploy");
                 }
                 else
                 {
@@ -1801,7 +1801,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             catch (Exception ex)
             {
-                CliLog.WriteLineError(ConsoleColor.Red, $"Failed to load assembly {file}: {ex.Message}");
+                CliLog.WriteLineError($"Failed to load assembly {file}: {ex.Message}");
             }
             return assembly;
         }
@@ -1828,7 +1828,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             catch (Exception ex)
             {
-                CliLog.WriteLineError(ConsoleColor.Red, $"Failed to read types from assembly {file}: {ex.Message}");
+                CliLog.WriteLineError($"Failed to read types from assembly {file}: {ex.Message}");
             }
             types = [.. types.OrderBy(x => x.FullName)];
             return types;
