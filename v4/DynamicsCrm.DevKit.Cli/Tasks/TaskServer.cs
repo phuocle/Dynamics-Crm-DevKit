@@ -7,12 +7,10 @@ using Microsoft.Xrm.Sdk.Query;
 using NuGet.Packaging;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
-using System.ServiceModel;
 using System.Threading.Tasks;
 
 namespace DynamicsCrm.DevKit.Cli.Tasks
@@ -299,7 +297,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     {
                         if (attribute.IsolationMode == IsolationModeEnum.None) return ("None", 1);
                         if (attribute.IsolationMode == IsolationModeEnum.Sandbox) return ("Sandbox", 2);
-                            if (attribute.IsolationMode == IsolationModeEnum.External) return ("Sandbox", 3);
+                        if (attribute.IsolationMode == IsolationModeEnum.External) return ("Sandbox", 3);
                     }
                 }
                 return ("Sandbox", 2);
