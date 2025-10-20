@@ -103,7 +103,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     {
                         var signToolPath = FindSignTool();
                         if (signToolPath == null) continue;
-                        (OK, ERROR) = await Helper.SignAssemblyAsync(signToolPath, fileDll, Path.Combine(CurrentDirectory, ManagedIdentityAttribute.CertificateFile), ManagedIdentityAttribute.CertificatePassword);
+                        (OK, ERROR) = await Helper.SignAssemblyAsync(signToolPath, fileDll, Path.Combine(CurrentDirectory, ManagedIdentityAttribute.CertificateFileName), ManagedIdentityAttribute.CertificatePassword);
                         if (!OK)
                         {
                             CliLog.WriteLineError(ERROR);
@@ -136,7 +136,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     (IS_MANAGED_IDENTITY, ERROR) = IsNeedSignAssembly(fileNugetDll);
                     if (IS_MANAGED_IDENTITY && ERROR.Length == 0)
                     {
-                        (OK, ERROR) = await Helper.SignPackageAsync(fileNuget, Path.Combine(CurrentDirectory, ManagedIdentityAttribute.CertificateFile), ManagedIdentityAttribute.CertificatePassword);
+                        (OK, ERROR) = await Helper.SignPackageAsync(fileNuget, Path.Combine(CurrentDirectory, ManagedIdentityAttribute.CertificateFileName), ManagedIdentityAttribute.CertificatePassword);
                         if (!OK)
                         {
                             CliLog.WriteLineError(ERROR);
@@ -460,15 +460,15 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 return (false, $"Not found ApplicationId value from {nameof(DynamcisCrmDevKitManagedIdentityAssemblyAttribute)}");
             }
-            if (string.IsNullOrEmpty(ManagedIdentityAttribute.CertificateFile))
+            if (string.IsNullOrEmpty(ManagedIdentityAttribute.CertificateFileName))
             {
                 return (false, $"Not found CertificateFile value from {nameof(DynamcisCrmDevKitManagedIdentityAssemblyAttribute)}");
             }
-            if (!ManagedIdentityAttribute.CertificateFile.EndsWith(".pfx"))
+            if (!ManagedIdentityAttribute.CertificateFileName.EndsWith(".pfx"))
             {
                 return (false, $"CertificateFile value should ends with '.pfx' from {nameof(DynamcisCrmDevKitManagedIdentityAssemblyAttribute)}");
             }
-            var certificateFile = Path.Combine(CurrentDirectory, ManagedIdentityAttribute.CertificateFile);
+            var certificateFile = Path.Combine(CurrentDirectory, ManagedIdentityAttribute.CertificateFileName);
             if (!File.Exists(certificateFile))
             {
                 return (false, $"CertificateFile not exist: {certificateFile}");

@@ -9,7 +9,7 @@ namespace DynamicsCrm.DevKit.Shared.Models
     public class DynamcisCrmDevKitManagedIdentityAssemblyAttribute : Attribute
     {
         public string TenantId { get; set; }
-        public string CertificateFile { get; set; }
+        public string CertificateFileName { get; set; }
         public string CertificatePassword { get; set; }
         public string ApplicationIds { get; set; } = string.Empty;
     }

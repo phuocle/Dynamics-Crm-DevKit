@@ -24,8 +24,18 @@ namespace $NameSpace$
 
     public enum IsolationModeEnum
     {
-        None = 0,
-        Sandbox = 1
+        None = 1,
+        Sandbox = 2,
+        External = 3,
+    }
+
+    public enum SourceTypeEnum
+    {
+        Database = 0,
+        Disk = 1,
+        Normal = 2,
+        AzureWebApp = 3,
+        FileStore = 4
     }
 
     public enum PluginStepOperationEnum
@@ -119,5 +129,23 @@ namespace $NameSpace$
         public string Image4Attributes { get; set; } = string.Empty;
         public PluginType PluginType { get; set; }
         public string DataSource { get; set; }
+    }
+
+    [DebuggerNonUserCode()]
+    [AttributeUsage(AttributeTargets.Assembly, Inherited = false, AllowMultiple = false)]
+    public class DynamcisCrmDevKitManagedIdentityAssemblyAttribute : Attribute
+    {
+        public string TenantId { get; set; }
+        public string CertificateFileName { get; set; }
+        public string CertificatePassword { get; set; }
+        public string ApplicationIds { get; set; } = string.Empty;
+    }
+
+    [DebuggerNonUserCode()]
+    [AttributeUsage(AttributeTargets.Assembly, Inherited = false, AllowMultiple = false)]
+    public class DynamcisCrmDevKitPluginAssemblyAttribute : Attribute
+    {
+        public IsolationModeEnum IsolationMode { get; set; } = IsolationModeEnum.Sandbox;
+        public SourceTypeEnum SourceType { get; set; } = SourceTypeEnum.Database;
     }
 }
