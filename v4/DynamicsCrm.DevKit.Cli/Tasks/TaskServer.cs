@@ -1,5 +1,4 @@
-﻿
-using DynamicsCrm.DevKit.Shared;
+﻿using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk;
@@ -13,6 +12,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.ServiceModel;
 using System.Threading.Tasks;
 
@@ -80,6 +80,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         {
             foreach (var file in files)
             {
+                //_assemblyCache.Clear();
                 if (file.EndsWith(".dll"))
                 {
                     var fileDll = file;
@@ -2042,7 +2043,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         private Assembly LoadAssemblyIntoCache(string file)
         {
             var normalizedPath = Path.GetFullPath(file);
-            if (_assemblyCache.TryGetValue(normalizedPath, out var cachedAssembly))
+            string fileName = Path.GetFileName(file);
+            if (_assemblyCache.TryGetValue(fileName, out var cachedAssembly))
             {
                 return cachedAssembly;
             }
@@ -2058,7 +2060,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 // Cache the loaded assembly
                 if (assembly != null)
                 {
-                    _assemblyCache[normalizedPath] = assembly;
+                    _assemblyCache[fileName] = assembly;
                 }
             }
             catch (Exception ex)
