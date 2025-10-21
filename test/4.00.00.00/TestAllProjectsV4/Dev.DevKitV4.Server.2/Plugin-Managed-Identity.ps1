@@ -439,7 +439,7 @@ $assemblyContent = @"
 [assembly: DynamcisCrmDevKitPluginManagedIdentityAssembly(
     TenantId = "$TenantId",
     ApplicationIds = "$applicationIdsString",
-    CertificateFile = "$certificateFileOut",
+    CertificateFileName = "$certificateFileOut",
     CertificatePassword = "$certificatePasswordOut"
 )]
 "@
