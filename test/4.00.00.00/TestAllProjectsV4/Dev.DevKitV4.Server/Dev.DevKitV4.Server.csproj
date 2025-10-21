@@ -54,11 +54,55 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Workflows\SendEmailByQueue.cs" />
     <None Include="packages.config" />
     <None Include="Dev.DevKitV4.Server.snk" />
     <None Include="deploy.debug.bat" />
     <None Include="deploy.debug.only.bat" />
+    <Compile Include="CustomActions\Account\PostAccountv4_AccountCustomActionAsynchronous.cs" />
+    <Compile Include="CustomActions\PostNonev4_CustomActionAsynchronous.cs" />
+    <Compile Include="CustomApis\Account\v4_AccountCustomApiRequest.cs" />
+    <Compile Include="CustomApis\v4_CustomApiRequest.cs" />
+    <Compile Include="DataProviders\Sql\Create.cs" />
+    <Compile Include="DataProviders\Sql\Delete.cs" />
+    <Compile Include="DataProviders\Sql\Retrieve.cs" />
+    <Compile Include="DataProviders\Sql\RetrieveMultiple.cs" />
+    <Compile Include="DataProviders\Sql\Update.cs" />
+    <Compile Include="PluginBase.cs" />
+    <Compile Include="Plugins\Account\PostAccountCreateAsynchronous.cs" />
+    <Compile Include="Plugins\Account\PostAccountPurgeRetainedContentAsynchronous.cs" />
+    <Compile Include="Plugins\Account\PreAccountCreateSynchronous.cs" />
+    <Compile Include="Plugins\Account\PreValidationAccountCreateSynchronous.cs" />
+    <Compile Include="Plugins\Contact\PostContactAssignAsynchronous.cs" />
+    <Compile Include="Plugins\Contact\PostContactCreateAsynchronous.cs" />
+    <Compile Include="Plugins\Contact\PostContactCreateMultipleAsynchronous.cs" />
+    <Compile Include="Plugins\Contact\PostContactDeleteAsynchronous.cs" />
+    <Compile Include="Plugins\Contact\PostContactIsValidStateTransitionAsynchronous.cs" />
+    <Compile Include="Plugins\Contact\PostContactMergeAsynchronous.cs" />
+    <Compile Include="Plugins\Contact\PostContactSetStateAsynchronous.cs" />
+    <Compile Include="Plugins\Contact\PostContactSetStateDynamicEntityAsynchronous.cs" />
+    <Compile Include="Plugins\Contact\PostContactUpdateAsynchronous.cs" />
+    <Compile Include="Plugins\Contact\PostContactUpdateMultipleAsynchronous.cs" />
+    <Compile Include="Plugins\Contact\Pre\PreContactAssignSynchronous.cs" />
+    <Compile Include="Plugins\Contact\Pre\PreContactCreateMultipleSynchronous.cs" />
+    <Compile Include="Plugins\Contact\Pre\PreContactCreateSynchronous.cs" />
+    <Compile Include="Plugins\Contact\Pre\PreContactDeleteSynchronous.cs" />
+    <Compile Include="Plugins\Contact\Pre\PreContactMergeSynchronous.cs" />
+    <Compile Include="Plugins\Contact\Pre\PreContactSetStateDynamicEntitySynchronous.cs" />
+    <Compile Include="Plugins\Contact\Pre\PreContactSetStateSynchronous.cs" />
+    <Compile Include="Plugins\Contact\Pre\PreContactUpdateMultipleSynchronous.cs" />
+    <Compile Include="Plugins\Contact\Pre\PreContactUpdateSynchronous.cs" />
+    <Compile Include="Plugins\Email\PostEmailDeliverIncomingAsynchronous.cs" />
+    <Compile Include="Plugins\Email\PostEmailDeliverPromoteAsynchronous.cs" />
+    <Compile Include="Plugins\Email\PostEmailRouteAsynchronous.cs" />
+    <Compile Include="Plugins\Email\PostEmailSendAsynchronous.cs" />
+    <Compile Include="Plugins\Email\Pre\PreEmailDeliverIncomingSynchronous.cs" />
+    <Compile Include="Plugins\Email\Pre\PreEmailDeliverPromoteSynchronous.cs" />
+    <Compile Include="Plugins\Email\Pre\PreEmailRouteSynchronous.cs" />
+    <Compile Include="Plugins\Email\Pre\PreEmailSendSynchronous.cs" />
+    <Compile Include="Plugins\Team\PostTeamCreateAsynchronous.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <None Include="PacPluginInit.t4" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\DynamicsCrm.DevKit.Analyzers.4.0.0\analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />
