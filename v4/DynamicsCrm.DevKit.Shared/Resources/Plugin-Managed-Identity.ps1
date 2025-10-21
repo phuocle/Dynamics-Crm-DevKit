@@ -437,7 +437,7 @@ if (Test-Path $assemblyFilePath) {
     Write-Host "  @ Creating file: AssemblyInfo2.cs" -ForegroundColor Yellow
 }
 $assemblyContent = @"
-[assembly: DynamcisCrmDevKitManagedIdentityAssembly(
+[assembly: DynamcisCrmDevKitPluginManagedIdentityAssembly(
     TenantId = "$tenantId",
     ApplicationIds = "$applicationIdsString",
     CertificateFile = "$certificateFileOut",

@@ -22,7 +22,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         private bool OK { get; set; } = false;
         private bool IS_MANAGED_IDENTITY { get; set; } = false;
         private string ERROR { get; set; } = string.Empty;
-        private DynamcisCrmDevKitManagedIdentityAssemblyAttribute ManagedIdentityAttribute { get; set; }
+        private DynamcisCrmDevKitPluginManagedIdentityAssemblyAttribute ManagedIdentityAttribute { get; set; }
         public bool IsOk { get; set; }
         public Guid SolutionId { get; set; }
         public string SolutionPrefix { get; set; }
@@ -450,23 +450,23 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         private (bool needSign, string error) IsNeedSignAssembly(string file)
         {
             var assembly = LoadAssemblyIntoCache(file);
-            ManagedIdentityAttribute = GetDynamcisCrmDevkitManagedIdentityAssemblyAttribute(assembly);
+            ManagedIdentityAttribute = GetDynamcisCrmDevKitPluginManagedIdentityAssemblyAttribute(assembly);
             if (ManagedIdentityAttribute == null) return (false, string.Empty);
             if (string.IsNullOrEmpty(ManagedIdentityAttribute.TenantId))
             {
-                return (false, $"Not found TenantId value from {nameof(DynamcisCrmDevKitManagedIdentityAssemblyAttribute)}");
+                return (false, $"Not found TenantId value from {nameof(DynamcisCrmDevKitPluginManagedIdentityAssemblyAttribute)}");
             }
             if (string.IsNullOrEmpty(ManagedIdentityAttribute.ApplicationIds))
             {
-                return (false, $"Not found ApplicationId value from {nameof(DynamcisCrmDevKitManagedIdentityAssemblyAttribute)}");
+                return (false, $"Not found ApplicationId value from {nameof(DynamcisCrmDevKitPluginManagedIdentityAssemblyAttribute)}");
             }
             if (string.IsNullOrEmpty(ManagedIdentityAttribute.CertificateFileName))
             {
-                return (false, $"Not found CertificateFile value from {nameof(DynamcisCrmDevKitManagedIdentityAssemblyAttribute)}");
+                return (false, $"Not found CertificateFile value from {nameof(DynamcisCrmDevKitPluginManagedIdentityAssemblyAttribute)}");
             }
             if (!ManagedIdentityAttribute.CertificateFileName.EndsWith(".pfx"))
             {
-                return (false, $"CertificateFile value should ends with '.pfx' from {nameof(DynamcisCrmDevKitManagedIdentityAssemblyAttribute)}");
+                return (false, $"CertificateFile value should ends with '.pfx' from {nameof(DynamcisCrmDevKitPluginManagedIdentityAssemblyAttribute)}");
             }
             var certificateFile = Path.Combine(CurrentDirectory, ManagedIdentityAttribute.CertificateFileName);
             if (!File.Exists(certificateFile))
@@ -558,14 +558,14 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             return (_ManagedIdentityId.Value, _ApplicationId.Value);
         }
-        private DynamcisCrmDevKitManagedIdentityAssemblyAttribute GetDynamcisCrmDevkitManagedIdentityAssemblyAttribute(Assembly assembly)
+        private DynamcisCrmDevKitPluginManagedIdentityAssemblyAttribute GetDynamcisCrmDevKitPluginManagedIdentityAssemblyAttribute(Assembly assembly)
         {
             var attributeData = CustomAttributeData.GetCustomAttributes(assembly)
-                .Where(data => data.AttributeType.FullName.Contains(nameof(DynamcisCrmDevKitManagedIdentityAssemblyAttribute)))
+                .Where(data => data.AttributeType.FullName.Contains(nameof(DynamcisCrmDevKitPluginManagedIdentityAssemblyAttribute)))
                 .FirstOrDefault();
             if (attributeData == null) return null;
-            var attribute = new DynamcisCrmDevKitManagedIdentityAssemblyAttribute();
-            var properties = typeof(DynamcisCrmDevKitManagedIdentityAssemblyAttribute).GetProperties();
+            var attribute = new DynamcisCrmDevKitPluginManagedIdentityAssemblyAttribute();
+            var properties = typeof(DynamcisCrmDevKitPluginManagedIdentityAssemblyAttribute).GetProperties();
             foreach (var namedArgument in attributeData.NamedArguments)
             {
                 string propertyName = namedArgument.MemberName;

@@ -6,7 +6,7 @@ namespace DynamicsCrm.DevKit.Shared.Models
 
     [DebuggerNonUserCode()]
     [AttributeUsage(AttributeTargets.Assembly, Inherited = false, AllowMultiple = false)]
-    public class DynamcisCrmDevKitManagedIdentityAssemblyAttribute : Attribute
+    public class DynamcisCrmDevKitPluginManagedIdentityAssemblyAttribute : Attribute
     {
         public string TenantId { get; set; }
         public string CertificateFileName { get; set; }
