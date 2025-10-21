@@ -60,19 +60,19 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         public async Task RunAsync()
         {
             CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "START ");
-            CliLog.WriteLine(ConsoleColor.White, "|");
             if (await IsValidAsync())
             {
                 var files = Helper.GetFiles(CurrentFolder, Json.includefiles, Json.excludefiles);
                 files.Sort();
                 if (files.Count == 0)
                 {
-                    CliLog.WriteLineError("Not found any files to deploy");
+                    CliLog.WriteLineError($"Not found any files to deploy. Please double check DynamicsCrm.DevKit.Cli.json section 'servers' with profile: '{Arg.Profile}' again.");
                 }
                 else
                 {
                     if (files.Count > 1)
                     {
+                        CliLog.WriteLine(ConsoleColor.White, "|");
                         CliLog.Write(ConsoleColor.White, "|", ConsoleColor.Green, "Found: ");
                         CliLog.WriteSuccess(ConsoleColor.White, files.Count);
                         CliLog.WriteLine(ConsoleColor.Green, " files to deploy");
@@ -80,6 +80,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         {
                             CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.White, $"  - {Path.GetFileName(file)}");
                         }
+                        CliLog.WriteLine(ConsoleColor.White, "|");
+                    }
+                    else
+                    {
                         CliLog.WriteLine(ConsoleColor.White, "|");
                     }
                     await DeployFilesAsync(files);
