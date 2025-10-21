@@ -54,6 +54,8 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="ManagedIdentity.cer" />
+    <None Include="ManagedIdentity.pfx" />
     <None Include="packages.config" />
     <None Include="Dev.DevKitV4.Server.2.snk" />
     <None Include="deploy.debug.bat" />
@@ -67,6 +69,9 @@
     <None Include="Plugin-Managed-Identity-Config.json" />
     <None Include="Plugin-Managed-Identity.ps1" />
   </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="..\packages\DynamicsCrm.DevKit.Analyzers.4.0.0\analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />
+  </ItemGroup>
   <Import Project="..\Dev.DevKitV4.Shared\Dev.DevKitV4.Shared.projitems" Label="Shared" Condition="Exists('..\Dev.DevKitV4.Shared\Dev.DevKitV4.Shared.projitems')" />
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
@@ -75,8 +80,5 @@
     <AssemblyOriginatorKeyFile>Dev.DevKitV4.Server.2.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <ItemGroup>
-    <Analyzer Include="..\packages\DynamicsCrm.DevKit.Analyzers.3.55.55.55\analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />
-  </ItemGroup>
 </Project>
 <!-- v.4.00.00.00 - Build: 2025.10.21 07.18.30 -->
