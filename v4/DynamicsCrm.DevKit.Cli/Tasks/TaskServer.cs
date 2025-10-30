@@ -359,12 +359,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 ["version"] = assemblyProperties[2],
                 ["publickeytoken"] = assemblyProperties[6],
             };
-            //var text = string.Empty;
             var (name_IsolationMode, value_IsolationMode) = GetIsolationMode(file);
             var (name_SourceType, value_SourceType) = GetSourceType(file);
             plugin["sourcetype"] = new OptionSetValue(value_SourceType);
             plugin["isolationmode"] = new OptionSetValue(value_IsolationMode);
-            //text = $" [{name_IsolationMode}, {name_SourceType}]";
             if (rows.Entities.Count == 0)
             {
                 var request = new CreateRequest
