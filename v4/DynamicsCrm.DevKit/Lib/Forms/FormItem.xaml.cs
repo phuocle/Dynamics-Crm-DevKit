@@ -2,6 +2,7 @@
 using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.VisualStudio.Shell;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -356,6 +357,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     {
                         await XrmHelper.ReadEntitiesMetadataAsync(ServiceClient);
                         var items = XrmHelper.GetListXrmEntity(XrmHelper.EntitiesMetadata);
+                        items = items.OrderBy(x => x.LogicalName).ToList();
                         await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
                         ComboBox.DisplayMemberPath = Const.SchemaName;
                         ComboBox.ItemsSource = items;
