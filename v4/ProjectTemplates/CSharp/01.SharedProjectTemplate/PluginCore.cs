@@ -24,9 +24,9 @@ namespace $NameSpace$
 
     public enum IsolationModeEnum
     {
-        None = 1,
-        Sandbox = 2,
-        External = 3,
+        None = 0,
+        Sandbox = 1,
+        External = 2,
     }
 
     public enum SourceTypeEnum
