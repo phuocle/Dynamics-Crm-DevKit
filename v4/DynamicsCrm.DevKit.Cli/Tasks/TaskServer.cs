@@ -890,6 +890,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
     <filter type='or'>{conditionNone}</filter>
   </entity>
 </fetch>";
+                    XrmHelper.COUNT_RetrieveMultipleAsync++;
                     var rows = await XrmHelper.RetrieveAllRecordsByFetchXmlAsync(ServiceClient, fetchXml);
                     foreach (var entity in rows)
                     {
@@ -903,7 +904,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 {
                     var fetchXml = $@"
 <fetch>
-  <entity name='sdkmessage'>
+  <entity name='sdkmessage'>4
     <attribute name='sdkmessageid' />
     <attribute name='name' />
     <link-entity name='sdkmessagefilter' from='sdkmessageid' to='sdkmessageid' link-type='inner' alias='s'>
@@ -912,6 +913,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
     </link-entity>
   </entity>
 </fetch>";
+                    XrmHelper.COUNT_RetrieveMultipleAsync++;
                     var rows = await XrmHelper.RetrieveAllRecordsByFetchXmlAsync(ServiceClient, fetchXml);
                     foreach (var entity in rows)
                     {
