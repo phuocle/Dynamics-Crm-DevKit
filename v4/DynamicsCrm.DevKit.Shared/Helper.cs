@@ -896,6 +896,16 @@ namespace DynamicsCrm.DevKit.Shared
             };
         }
 
+        public static bool IsMessageCreate(string message)
+        {
+            return message.ToLower() switch
+            {
+                "create" or
+                "createmultiple" => true,
+                _ => false,
+            };
+        }
+
         public static string GetMessagePropertyName(string message)
         {
             return message.ToLower() switch
