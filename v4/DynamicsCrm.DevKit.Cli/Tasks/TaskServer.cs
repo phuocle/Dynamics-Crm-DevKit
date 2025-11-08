@@ -888,12 +888,25 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 if (attributes[0].Unregister)
                 {
                     var error = await UnregisterPluginTypeAsync(pluginAssemblyId.Value, type, attributes[0], deployFileType);
-                    if (error) return;
-                    CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE);
-                    CliLog.WriteSuccess(ConsoleColor.White, CliAction.UNREGISTERED.Trim());
-                    CliLog.Write(ConsoleColor.White, $" Type ", ConsoleColor.Blue, attributes[0].PluginType, " ", ConsoleColor.Cyan, type.FullName);
-                    CliLog.WriteLine();
-                    continue;
+                    if (error == null)
+                    {
+                        CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE);
+                        CliLog.Write(ConsoleColor.Green, CliAction.DO_NOTHING);
+                        CliLog.WriteSuccess(ConsoleColor.White, CliAction.UNREGISTERED.Trim());
+                        CliLog.Write(ConsoleColor.White, $" Type ", ConsoleColor.Blue, attributes[0].PluginType, " ", ConsoleColor.Cyan, type.FullName);
+                        CliLog.WriteLine();
+                        continue;
+                    }
+                    else if (error == true)
+                        return;
+                    else
+                    {
+                        CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE);
+                        CliLog.WriteSuccess(ConsoleColor.White, CliAction.UNREGISTERED.Trim());
+                        CliLog.Write(ConsoleColor.White, $" Type ", ConsoleColor.Blue, attributes[0].PluginType, " ", ConsoleColor.Cyan, type.FullName);
+                        CliLog.WriteLine();
+                        continue;
+                    };
                 }
                 var pluginTypeId = await DeployPluginTypeAsync(pluginAssemblyId.Value, type, attributes[0], deployFileType);
                 if (pluginTypeId == null) return;
@@ -1499,7 +1512,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var create = new Entity("sdkmessageprocessingstepsecureconfig");
                     create["secureconfig"] = attribute.SecureConfiguration;
                     XrmHelper.COUNT_CreateAsync++;
-                    var sdkmessageprocessingstepsecureconfigid = await ServiceClient.CreateAsync(secureEntity);
+                    var sdkmessageprocessingstepsecureconfigid = await ServiceClient.CreateAsync(create);
                     SecureConfigurationAction = CliAction.REGISTERED;
                     pluginStep["sdkmessageprocessingstepsecureconfigid"] = new EntityReference("sdkmessageprocessingstepsecureconfig", sdkmessageprocessingstepsecureconfigid);
                     hasChangedPluginStep = true;
@@ -1765,7 +1778,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 };
             }
         }
-        private async Task<bool> UnregisterPluginTypeAsync(Guid pluginAssemblyId, TypeInfo type, CrmPluginRegistrationAttribute attribute, DeployFileType deployFileType)
+        private async Task<bool?> UnregisterPluginTypeAsync(Guid pluginAssemblyId, TypeInfo type, CrmPluginRegistrationAttribute attribute, DeployFileType deployFileType)
         {
             var fetchData = new
             {
@@ -1782,20 +1795,20 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 </fetch>";
             XrmHelper.COUNT_RetrieveMultipleAsync++;
             var rows = await ServiceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
-            if (rows.Entities.Count != 1) return false;
+            if (rows.Entities.Count != 1) return null;
             var pluginTypeId = rows.Entities[0].GetAttributeValue<Guid>("plugintypeid");
             try
             {
                 await DeletePluginStepsAsync();
                 XrmHelper.COUNT_DeleteAsync++;
                 await ServiceClient.DeleteAsync("plugintype", pluginTypeId);
+                return true;
             }
             catch (Exception fe)
             {
                 CliLog.WriteLineError($"Unregister {type.FullName} failed: {fe.Message} Assemply deployed, but the deployment of this assembly stopped.");
-                return true;
+                return false;
             }
-            return false;
             async Task DeletePluginStepsAsync()
             {
                 var fetchXml = $@"
