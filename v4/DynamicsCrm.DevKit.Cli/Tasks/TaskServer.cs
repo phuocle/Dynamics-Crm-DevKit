@@ -669,6 +669,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         }
 
         private readonly List<KeyValuePair<string, Entity>> _PluginTypesCache = new List<KeyValuePair<string, Entity>>();
+        private readonly List<KeyValuePair<string, Entity>> _PluginStepsCache = new List<KeyValuePair<string, Entity>>();
+        private readonly List<KeyValuePair<string, Entity>> _PluginImagesCache = new List<KeyValuePair<string, Entity>>();
         private async Task LoadAllPluginTypesAsync(List<TypeInfo> types)
         {
             _PluginTypesCache.Clear();
@@ -696,15 +698,15 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 var rows = await XrmHelper.RetrieveAllRecordsByFetchXmlAsync(ServiceClient, fetchXml);
                 foreach (var entity in rows)
                 {
-                    var name = entity.GetAttributeValue<string>("name");
-                    if (!string.IsNullOrEmpty(name))
+                    var typename = entity.GetAttributeValue<string>("typename");
+                    if (!string.IsNullOrEmpty(typename))
                     {
-                        _PluginTypesCache.Add(new KeyValuePair<string, Entity>(name, entity));
+                        _PluginTypesCache.Add(new KeyValuePair<string, Entity>(typename, entity));
                     }
                 }
             }
         }
-        private readonly List<KeyValuePair<string, Entity>> _PluginStepsCache = new List<KeyValuePair<string, Entity>>();
+
         private async Task LoadAllPluginStepsAsync()
         {
             _PluginStepsCache.Clear();
@@ -735,7 +737,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
             }
         }
-        private readonly List<KeyValuePair<string, Entity>> _PluginImagesCache = new List<KeyValuePair<string, Entity>>();
+
         private async Task LoadAllPluginImagesAsync()
         {
             _PluginImagesCache.Clear();
@@ -1284,9 +1286,11 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     return null;
                 }
             }
+
             var sdkMessageFilterId = await XrmHelper.GetSdkMessageFilterIdAsync(ServiceClient, attribute.EntityLogicalName, attribute.Message);
             var sdkMessageId = await XrmHelper.GetSdkMessageIdAsync(ServiceClient, attribute.EntityLogicalName, attribute.Message);
             var impersonatingUserId = await XrmHelper.GetImpersonatingUserIdAsync(ServiceClient, attribute.RunAs);
+
             if (attribute.ExecutionMode == 0) attribute.DeleteAsyncOperation = false;
             var pluginStep = new Entity("sdkmessageprocessingstep")
             {
