@@ -19,7 +19,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
     {
         private const string SPACE = "  ";
         private readonly Dictionary<string, Assembly> _assemblyCache = new Dictionary<string, Assembly>(StringComparer.OrdinalIgnoreCase);
-        private readonly Dictionary<string, Entity> _pluginAssemblyCache = new Dictionary<string, Entity>(StringComparer.OrdinalIgnoreCase);
         private bool OK { get; set; } = false;
         private bool IS_MANAGED_IDENTITY { get; set; } = false;
         private string ERROR { get; set; } = string.Empty;
@@ -95,7 +94,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         }
         private async Task DeployFilesAsync(List<string> files)
         {
-            await LoadAllPluginAssembliesAsync();
             foreach (var file in files)
             {
                 if (file.EndsWith(".dll"))
@@ -290,28 +288,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             return string.Empty;
         }
-        private async Task LoadAllPluginAssembliesAsync()
-        {
-            var fetchXml = @"
-<fetch>
-  <entity name='pluginassembly'>
-    <attribute name='pluginassemblyid' />
-    <attribute name='name' />
-    <attribute name='content' />
-    <attribute name='managedidentityid' />
-  </entity>
-</fetch>";
-            var allRecords = await XrmHelper.RetrieveAllRecordsByFetchXmlAsync(ServiceClient, fetchXml);
-            _pluginAssemblyCache.Clear();
-            foreach (var entity in allRecords)
-            {
-                var name = entity.GetAttributeValue<string>("name");
-                if (!string.IsNullOrEmpty(name))
-                {
-                    _pluginAssemblyCache[name] = entity;
-                }
-            }
-        }
         private async Task<Guid?> DeployAssemblyAsync(string file, DeployFileType deployFileType)
         {
             (string name, int value) GetIsolationMode(string file)
@@ -351,12 +327,27 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var assembly = LoadAssemblyIntoCache(file);
             var assemblyProperties = assembly.GetName().FullName.Split(",= ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
             var assemblyName = assemblyProperties[0];
-
-            // Use cached plugin assembly data
-            Entity existingAssembly = null;
-            if (_pluginAssemblyCache.ContainsKey(assemblyName))
+            var fetchData = new
             {
-                existingAssembly = _pluginAssemblyCache[assemblyName];
+                name = assemblyName
+            };
+            var fetchXml = $@"
+<fetch>
+  <entity name='pluginassembly'>
+    <all-attributes />
+    <filter type='and'>
+      <condition attribute='name' operator='eq' value='{fetchData.name}'/>
+    </filter>
+  </entity>
+</fetch>";
+            var rows = await ServiceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
+            if (rows.Entities.Count > 0)
+            {
+                if (rows.Entities.Count > 0 && rows.Entities.Count != 1)
+                {
+                    CliLog.WriteLineError($"Found more than 1 plugin assembly name {assemblyName}. Assemply deployed, but the deployment of this assembly stopped.");
+                    return null;
+                }
             }
             var newContent = Convert.ToBase64String(File.ReadAllBytes(file));
             Guid pluginAssemblyId = Guid.NewGuid();
@@ -372,7 +363,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var (name_SourceType, value_SourceType) = GetSourceType(file);
             plugin["sourcetype"] = new OptionSetValue(value_SourceType);
             plugin["isolationmode"] = new OptionSetValue(value_IsolationMode);
-            if (existingAssembly == null)
+            if (rows.Entities.Count == 0)
             {
                 var request = new CreateRequest
                 {
@@ -385,14 +376,11 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 CliLog.WriteList(new List<string> { name_IsolationMode, name_SourceType }, true);
                 var response = (CreateResponse)await ServiceClient.ExecuteAsync(request);
                 pluginAssemblyId = response.id;
-                // Add newly created assembly to cache
-                plugin["pluginassemblyid"] = pluginAssemblyId;
-                _pluginAssemblyCache[assemblyName] = plugin;
             }
             else
             {
-                var oldContent = existingAssembly.GetAttributeValue<string>("content");
-                pluginAssemblyId = existingAssembly.Id;
+                var oldContent = rows.Entities[0].GetAttributeValue<string>("content");
+                pluginAssemblyId = rows.Entities[0].Id;
                 if (Helper.IsEqualsContent(oldContent, newContent))
                 {
                     CliLog.Write(ConsoleColor.White, "|", SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, "Assembly ", ConsoleColor.Cyan, assemblyName, ".dll");
@@ -413,8 +401,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     try
                     {
                         await ServiceClient.ExecuteAsync(request);
-                        // Update cache with the updated assembly
-                        _pluginAssemblyCache[assemblyName] = plugin;
                     }
                     catch (Exception fe)
                     {
@@ -426,7 +412,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             if (IS_MANAGED_IDENTITY && deployFileType == DeployFileType.Dll)
             {
                 var (managedIdentityId, applicationId) = await DeployManagedIdentityAsync(assemblyName, Guid.Parse(ManagedIdentityAttribute.TenantId), ManagedIdentityAttribute.ApplicationIds);
-                if (existingAssembly == null)
+                if (rows.Entities.Count == 0)
                 {
                     var pluginAssembly = new Entity("pluginassembly")
                     {
@@ -440,7 +426,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     CliLog.WriteLine(ConsoleColor.White, " Bind Assembly ", ConsoleColor.Cyan, assemblyName, ".dll", ConsoleColor.White, " to Managed Identity App ", ConsoleColor.Cyan, applicationId);
                     await ServiceClient.ExecuteAsync(request2);
                 }
-                else if (existingAssembly.GetAttributeValue<EntityReference>("managedidentityid")?.Id == managedIdentityId)
+                else if (rows.Entities[0].GetAttributeValue<EntityReference>("managedidentityid")?.Id == managedIdentityId)
                 {
                     CliLog.Write(ConsoleColor.White, "|", SPACE);
                     CliLog.Write(ConsoleColor.Green, CliAction.DO_NOTHING.Trim());
@@ -1764,7 +1750,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 if (types.Count(x => x.FullName == typeName) == 0)
                 {
                     CliLog.WriteLineError($"Type: '{typeName}' not found in the assembly file. This type: '{typeName}' already registered to CRM/CDS. Assemply deployed, but the deployment of this assembly stopped.");
-                    CliLog.WriteLineError( $"If you need to deploy this assembly. Please manually remove this type from Plugin Registration Tool and try it again.");
+                    CliLog.WriteLineError($"If you need to deploy this assembly. Please manually remove this type from Plugin Registration Tool and try it again.");
                     return false;
                 }
             }
