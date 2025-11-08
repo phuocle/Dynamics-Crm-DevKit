@@ -18,7 +18,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 {
     public class TaskServer : ITask
     {
-        const int PACK = 50;
+        const int PACK = 20;
         private const string SPACE = "  ";
         private readonly Dictionary<string, Assembly> _assemblyCache = new Dictionary<string, Assembly>(StringComparer.OrdinalIgnoreCase);
         private bool OK { get; set; } = false;
@@ -88,7 +88,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     {
                         CliLog.WriteLine(ConsoleColor.White, "|");
                     }
-                    await LoadObjectTypeCodeAsync();
+                    await LoadAllObjectTypeCodeAsync();
                     await DeployFilesAsync(files);
                 }
             }
@@ -694,6 +694,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         private readonly List<KeyValuePair<string, Entity>> _PluginImagesCache = new List<KeyValuePair<string, Entity>>();
         private readonly List<KeyValuePair<string, int>> _ObjectTypeCodeCache = new List<KeyValuePair<string, int>>();
         private readonly List<KeyValuePair<string, Entity>> _SecureEntityCache = new List<KeyValuePair<string, Entity>>();
+        private readonly List<KeyValuePair<string, EntityReference>> _SdkMessageCache = new List<KeyValuePair<string, EntityReference>>();
         private async Task LoadAllPluginTypesAsync(List<TypeInfo> types)
         {
             _PluginTypesCache.Clear();
@@ -829,7 +830,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
             }
         }
-        private async Task LoadObjectTypeCodeAsync()
+        private async Task LoadAllObjectTypeCodeAsync()
         {
             var request = new RetrieveAllEntitiesRequest
             {
@@ -842,6 +843,85 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             foreach(var item in response.EntityMetadata)
             {
                 if (item.ObjectTypeCode != null) _ObjectTypeCodeCache.Add(new KeyValuePair<string, int>(item.LogicalName, item.ObjectTypeCode.Value));
+            }
+        }
+        private async Task LoadAllSdkMessagesAsync(List<TypeInfo> types)
+        {
+            _SdkMessageCache.Clear();
+            var uniqueMessageCombinations = new HashSet<(string entityLogicalName, string message)>();
+            foreach (var type in types)
+            {
+                var attributes = GetCrmPluginRegistrationAttributes(type);
+                foreach (var attr in attributes)
+                {
+                    if (!string.IsNullOrEmpty(attr.Message) && !string.IsNullOrEmpty(attr.EntityLogicalName))
+                    {
+                        uniqueMessageCombinations.Add((attr.EntityLogicalName, attr.Message));
+                    }
+                }
+            }
+            var messageList = uniqueMessageCombinations.ToList();
+            var messageBatches = (int)Math.Ceiling((double)messageList.Count / PACK);
+            for (int i = 0; i < messageBatches; i++)
+            {
+                var batch = messageList.Skip(i * PACK).Take(PACK).ToList();
+                var conditionNone = string.Empty;
+                var condition = string.Empty;
+                foreach (var (entityLogicalName, message) in batch)
+                {
+                    if (entityLogicalName == "none")
+                    {
+                        var check = $"<condition attribute='name' operator='eq' value='{message}'/>";
+                        if (!conditionNone.Contains(check)) conditionNone += check;
+                    }
+                    else
+                    {
+                        var check = $"<condition attribute='primaryobjecttypecode' operator='eq' value='{GetObjectTypeCode(entityLogicalName)}'/>";
+                        if (!condition.Contains(check)) condition += check;
+                    }
+                }
+                if (conditionNone.Length > 0)
+                {
+                    var fetchXml = $@"
+<fetch>
+  <entity name='sdkmessage'>
+    <attribute name='sdkmessageid' />
+    <attribute name='name' />
+    <filter type='or'>{conditionNone}</filter>
+  </entity>
+</fetch>";
+                    var rows = await XrmHelper.RetrieveAllRecordsByFetchXmlAsync(ServiceClient, fetchXml);
+                    foreach (var entity in rows)
+                    {
+                        var key = $"none-{entity.GetAttributeValue<string>("name")}";
+                        var er = new EntityReference("sdkmessage", entity.GetAttributeValue<Guid>("sdkmessageid"));
+                        if (!_SdkMessageCache.Contains(new KeyValuePair<string, EntityReference>(key, er)))
+                            _SdkMessageCache.Add(new KeyValuePair<string, EntityReference>(key, er));
+                    }
+                }
+                if (condition.Length > 0)
+                {
+                    var fetchXml = $@"
+<fetch>
+  <entity name='sdkmessage'>
+    <attribute name='sdkmessageid' />
+    <attribute name='name' />
+    <link-entity name='sdkmessagefilter' from='sdkmessageid' to='sdkmessageid' link-type='inner' alias='s'>
+      <attribute name='primaryobjecttypecode' />
+      <filter type='or'>{condition}</filter>
+    </link-entity>
+  </entity>
+</fetch>";
+                    var rows = await XrmHelper.RetrieveAllRecordsByFetchXmlAsync(ServiceClient, fetchXml);
+                    foreach (var entity in rows)
+                    {
+                        var Aliased = entity.GetAttributeValue<AliasedValue>("s.primaryobjecttypecode");
+                        var key = $"{Aliased.Value}-{entity.GetAttributeValue<string>("name")}";
+                        var er = new EntityReference("sdkmessage", entity.GetAttributeValue<Guid>("sdkmessageid"));
+                        if (!_SdkMessageCache.Contains(new KeyValuePair<string, EntityReference>(key, er)))
+                            _SdkMessageCache.Add(new KeyValuePair<string, EntityReference>(key, er));
+                    }
+                }
             }
         }
         private async Task DeployFileAsync(string file, List<TypeInfo> types, DeployFileType deployFileType)
@@ -881,6 +961,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             await LoadAllPluginStepsAsync();
             await LoadAllPluginImagesAsync();
             await LoadAllSecureEntitiesAsync();
+            await LoadAllSdkMessagesAsync(sortedTypes);
 
             foreach (var type in sortedTypes)
             {
@@ -1344,7 +1425,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
             }
             var sdkMessageFilterId = await GetSdkMessageFilterIdAsync(ServiceClient, attribute.EntityLogicalName, attribute.Message);
-            var sdkMessageId = await GetSdkMessageIdAsync(ServiceClient, attribute.EntityLogicalName, attribute.Message);
+            //var sdkMessageId = await GetSdkMessageIdAsync(ServiceClient, attribute.EntityLogicalName, attribute.Message);
+            var sdkMessageId = GetSdkMessageId(attribute.EntityLogicalName, attribute.Message);
             var impersonatingUserId = await XrmHelper.GetImpersonatingUserIdAsync(ServiceClient, attribute.RunAs);
 
             if (attribute.ExecutionMode == 0) attribute.DeleteAsyncOperation = false;
@@ -2092,51 +2174,57 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             return rows.Entities.Count == 0 ? null : new EntityReference("sdkmessagefilter", rows.Entities[0].Id);
         }
 
-        private async Task<EntityReference> GetSdkMessageIdAsync(ServiceClient service, string entityLogicalName, string message)
+        private EntityReference GetSdkMessageId(string entityLogicalName, string message)
         {
             if (entityLogicalName?.Length == 0) return null;
-            string fetchXml;
-            if (entityLogicalName.ToLower() == "none")
-            {
-                var fetchData = new
-                {
-                    name = message
-                };
-                fetchXml = $@"
-<fetch>
-  <entity name='sdkmessage'>
-    <attribute name='sdkmessageid' />
-    <filter type='and'>
-      <condition attribute='name' operator='eq' value='{fetchData.name}'/>
-    </filter>
-  </entity>
-</fetch>";
-            }
-            else
-            {
-                var fetchData = new
-                {
-                    name = message,
-                    primaryobjecttypecode = GetObjectTypeCode(entityLogicalName)
-                };
-                fetchXml = $@"
-<fetch>
-  <entity name='sdkmessage'>
-    <attribute name='sdkmessageid' />
-    <filter type='and'>
-      <condition attribute='name' operator='eq' value='{fetchData.name}'/>
-    </filter>
-    <link-entity name='sdkmessagefilter' from='sdkmessageid' to='sdkmessageid'>
-      <filter type='and'>
-        <condition attribute='primaryobjecttypecode' operator='eq' value='{fetchData.primaryobjecttypecode}'/>
-      </filter>
-    </link-entity>
-  </entity>
-</fetch>";
-            }
-            XrmHelper.COUNT_RetrieveMultipleAsync++;
-            var rows = await service.RetrieveMultipleAsync(new FetchExpression(fetchXml));
-            return rows.Entities.Count == 0 ? null : new EntityReference("sdkmessage", rows.Entities[0].Id);
+            var key = $"{entityLogicalName}-{message}";
+            var rows = _SdkMessageCache.Where(x => x.Key == key).Select(x => x.Value).ToList();
+            if (rows.Count == 1) return rows[0];
+            return null;
+
+            //            if (entityLogicalName?.Length == 0) return null;
+            //            string fetchXml;
+            //            if (entityLogicalName.ToLower() == "none")
+            //            {
+            //                var fetchData = new
+            //                {
+            //                    name = message
+            //                };
+            //                fetchXml = $@"
+            //<fetch>
+            //  <entity name='sdkmessage'>
+            //    <attribute name='sdkmessageid' />
+            //    <filter type='and'>
+            //      <condition attribute='name' operator='eq' value='{fetchData.name}'/>
+            //    </filter>
+            //  </entity>
+            //</fetch>";
+            //            }
+            //            else
+            //            {
+            //                var fetchData = new
+            //                {
+            //                    name = message,
+            //                    primaryobjecttypecode = GetObjectTypeCode(entityLogicalName)
+            //                };
+            //                fetchXml = $@"
+            //<fetch>
+            //  <entity name='sdkmessage'>
+            //    <attribute name='sdkmessageid' />
+            //    <filter type='and'>
+            //      <condition attribute='name' operator='eq' value='{fetchData.name}'/>
+            //    </filter>
+            //    <link-entity name='sdkmessagefilter' from='sdkmessageid' to='sdkmessageid'>
+            //      <filter type='and'>
+            //        <condition attribute='primaryobjecttypecode' operator='eq' value='{fetchData.primaryobjecttypecode}'/>
+            //      </filter>
+            //    </link-entity>
+            //  </entity>
+            //</fetch>";
+            //            }
+            //            XrmHelper.COUNT_RetrieveMultipleAsync++;
+            //            var rows = await service.RetrieveMultipleAsync(new FetchExpression(fetchXml));
+            //            return rows.Entities.Count == 0 ? null : new EntityReference("sdkmessage", rows.Entities[0].Id);
         }
     }
 }
