@@ -7,9 +7,7 @@ using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Metadata.Query;
 using Microsoft.Xrm.Sdk.Query;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.IdentityModel.Metadata;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -20,7 +18,13 @@ namespace DynamicsCrm.DevKit.Shared
     {
         private const string NEW_LINE = "\r\n";
         private const string TAB = "\t";
-        public static int COUNT = 0;
+        public static int COUNT_RetrieveMultipleAsync = 0;
+        public static int COUNT_RetrieveAsync = 0;
+        public static int COUNT_ExecuteAsync = 0;
+        public static int COUNT_UpdateAsync = 0;
+        public static int COUNT_DeleteAsync = 0;
+        public static int COUNT_CreateAsync = 0;
+        //public static int COUNT_RequestAsync = 0;
         public static List<EntityMetadata> EntitiesMetadata { get; set; } = new List<EntityMetadata>();
         public static List<SystemForm> EntitiesFormXml { get; set; } = new List<SystemForm>();
         public static List<ProcessForm> EntitiesProcessForm { get; set; } = new List<ProcessForm>();
@@ -45,7 +49,7 @@ namespace DynamicsCrm.DevKit.Shared
                 var pagedFetchXml = CreatePagedFetchXml(fetchXml, pageNumber, pagingCookie);
 
                 // Execute the query
-                COUNT++;
+                COUNT_RetrieveMultipleAsync++;
                 var response = await serviceClient.RetrieveMultipleAsync(new FetchExpression(pagedFetchXml));
 
                 // Add the records to the collection
@@ -105,7 +109,7 @@ namespace DynamicsCrm.DevKit.Shared
   </entity>
 </fetch>";
 
-            COUNT++;
+            COUNT_RetrieveMultipleAsync++;
             var rows = await serviceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
             if (rows.Entities.Count != 1) return (false, Guid.Empty, string.Empty);
             var entity = rows.Entities[0];
@@ -137,7 +141,7 @@ namespace DynamicsCrm.DevKit.Shared
             {
                 Query = entityQueryExpression
             };
-            COUNT++;
+            COUNT_ExecuteAsync++;
             var response = (RetrieveMetadataChangesResponse)await serviceClient.ExecuteAsync(request);
             foreach (EntityMetadata entityMetadata in response.EntityMetadata)
                 if (entityMetadata.LogicalName == logicalname)
@@ -1391,7 +1395,7 @@ namespace DynamicsCrm.DevKit.Shared
   </entity>
 </fetch>";
 
-            COUNT++;
+            COUNT_RetrieveMultipleAsync++;
             var rows = await service.RetrieveMultipleAsync(new FetchExpression(fetchXml));
             if (rows.Entities.Count != 1) return null;
             return rows.Entities[0];
@@ -1413,97 +1417,10 @@ namespace DynamicsCrm.DevKit.Shared
     </filter>
   </entity>
 </fetch>";
-            COUNT++;
+            COUNT_RetrieveMultipleAsync++;
             var rows = await service.RetrieveMultipleAsync(new FetchExpression(fetchXml));
             if (rows.Entities.Count == 0) return (Guid?)null;
             return rows.Entities[0].Id;
-        }
-
-        internal static async Task<EntityReference> GetSdkMessageIdAsync(ServiceClient service, string entityLogicalName, string message)
-        {
-            if (entityLogicalName?.Length == 0) return null;
-            string fetchXml;
-            if (entityLogicalName.ToLower() == "none")
-            {
-                var fetchData = new
-                {
-                    name = message
-                };
-                fetchXml = $@"
-<fetch>
-  <entity name='sdkmessage'>
-    <attribute name='sdkmessageid' />
-    <filter type='and'>
-      <condition attribute='name' operator='eq' value='{fetchData.name}'/>
-    </filter>
-  </entity>
-</fetch>";
-            }
-            else
-            {
-                var fetchData = new
-                {
-                    name = message,
-                    primaryobjecttypecode = await GetPrimaryObjectTypeCodeAsync(service, entityLogicalName)
-                };
-                fetchXml = $@"
-<fetch>
-  <entity name='sdkmessage'>
-    <attribute name='sdkmessageid' />
-    <filter type='and'>
-      <condition attribute='name' operator='eq' value='{fetchData.name}'/>
-    </filter>
-    <link-entity name='sdkmessagefilter' from='sdkmessageid' to='sdkmessageid'>
-      <filter type='and'>
-        <condition attribute='primaryobjecttypecode' operator='eq' value='{fetchData.primaryobjecttypecode}'/>
-      </filter>
-    </link-entity>
-  </entity>
-</fetch>";
-            }
-            COUNT++;
-            var rows = await service.RetrieveMultipleAsync(new FetchExpression(fetchXml));
-            return rows.Entities.Count == 0 ? null : new EntityReference("sdkmessage", rows.Entities[0].Id);
-        }
-
-        internal static async Task<int?> GetPrimaryObjectTypeCodeAsync(ServiceClient service, string entityName)
-        {
-            if (entityName?.Length == 0) return null;
-            var request = new RetrieveEntityRequest
-            {
-                EntityFilters = EntityFilters.Entity,
-                LogicalName = entityName.ToLower()
-            };
-            COUNT++;
-            var response = (RetrieveEntityResponse)await service.ExecuteAsync(request);
-            return response.EntityMetadata.ObjectTypeCode ?? 0;
-        }
-
-        internal static async Task<EntityReference> GetSdkMessageFilterIdAsync(ServiceClient service, string entityLogicalName, string message)
-        {
-            if (entityLogicalName?.Length == 0 || entityLogicalName?.ToLower() == "none") return null;
-            var fetchData = new
-            {
-                primaryobjecttypecode = await GetPrimaryObjectTypeCodeAsync(service, entityLogicalName),
-                name = message
-            };
-            var fetchXml = $@"
-<fetch>
-  <entity name='sdkmessagefilter'>
-    <attribute name='sdkmessagefilterid' />
-    <filter type='and'>
-      <condition attribute='primaryobjecttypecode' operator='eq' value='{fetchData.primaryobjecttypecode}'/>
-    </filter>
-    <link-entity name='sdkmessage' from='sdkmessageid' to='sdkmessageid'>
-      <filter type='and'>
-        <condition attribute='name' operator='eq' value='{fetchData.name}'/>
-      </filter>
-    </link-entity>
-  </entity>
-</fetch>";
-            COUNT++;
-            var rows = await service.RetrieveMultipleAsync(new FetchExpression(fetchXml));
-            return rows.Entities.Count == 0 ? null : new EntityReference("sdkmessagefilter", rows.Entities[0].Id);
         }
 
         internal static async Task<Entity> GetEntityDataProviderIdAsync(ServiceClient service, string dataSource)
@@ -1526,7 +1443,7 @@ namespace DynamicsCrm.DevKit.Shared
     </filter>
   </entity>
 </fetch>";
-            COUNT++;
+            COUNT_RetrieveMultipleAsync++;
             var rows = await service.RetrieveMultipleAsync(new FetchExpression(fetchXml));
             if (rows.Entities.Count != 1) return null;
             return rows.Entities[0];
@@ -1535,7 +1452,7 @@ namespace DynamicsCrm.DevKit.Shared
         internal static async Task<bool> IsVirtualTableSupportCRUDAsync(ServiceClient service)
         {
             var request = new RetrieveVersionRequest();
-            COUNT++;
+            COUNT_ExecuteAsync++;
             var response = (RetrieveVersionResponse)await service.ExecuteAsync(request);
             return new Version(response.Version) >= new Version("9.1.0.18950");
         }

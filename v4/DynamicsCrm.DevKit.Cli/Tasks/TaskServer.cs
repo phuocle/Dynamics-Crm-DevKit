@@ -3,6 +3,7 @@ using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
+using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
 using NuGet.Packaging;
 using System;
@@ -91,7 +92,13 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
             }
             CliLog.WriteLine(ConsoleColor.White, "|");
-            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Cyan, $"Total Dataverse Requests: {XrmHelper.COUNT}");
+            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Cyan, $"Total Dataverse Requests COUNT_ExecuteAsync: {XrmHelper.COUNT_ExecuteAsync}");
+            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Cyan, $"Total Dataverse Requests COUNT_RetrieveMultipleAsync: {XrmHelper.COUNT_RetrieveMultipleAsync}");
+            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Cyan, $"Total Dataverse Requests COUNT_CreateAsync: {XrmHelper.COUNT_CreateAsync}");
+            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Cyan, $"Total Dataverse Requests COUNT_DeleteAsync: {XrmHelper.COUNT_DeleteAsync}");
+            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Cyan, $"Total Dataverse Requests COUNT_RetrieveAsync: {XrmHelper.COUNT_RetrieveAsync}");
+            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Cyan, $"Total Dataverse Requests COUNT_UpdateAsync: {XrmHelper.COUNT_UpdateAsync}");
+
             CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "END ");
         }
         private async Task DeployFilesAsync(List<string> files)
@@ -197,7 +204,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
     </filter>
   </entity>
 </fetch>";
-            XrmHelper.COUNT++;
+            XrmHelper.COUNT_RetrieveMultipleAsync++;
             var rows = await ServiceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
             Guid PluginPackageId = Guid.Empty;
             if (rows.Entities.Count == 0)
@@ -210,7 +217,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     entity["version"] = packageArchiveReader.NuspecReader.GetVersion().ToFullString();
                     var request = new CreateRequest { Target = entity };
                     request.Parameters.Add("SolutionUniqueName", Json.solution);
-                    XrmHelper.COUNT++;
+                    XrmHelper.COUNT_ExecuteAsync++;
                     var response = (CreateResponse)await ServiceClient.ExecuteAsync(request);
                     CliLog.Write(ConsoleColor.White, "|", SPACE);
                     CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTERED.Trim());
@@ -240,7 +247,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         update["version"] = packageArchiveReader.NuspecReader.GetVersion().ToFullString();
                         var request = new UpdateRequest { Target = update };
                         request.Parameters.Add("SolutionUniqueName", Json.solution);
-                        XrmHelper.COUNT++;
+                        XrmHelper.COUNT_ExecuteAsync++;
                         await ServiceClient.ExecuteAsync(request);
                         CliLog.Write(ConsoleColor.White, "|", SPACE);
                         CliLog.WriteSuccess(ConsoleColor.White, CliAction.UPDATED.Trim());
@@ -268,7 +275,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     CliLog.Write(ConsoleColor.White, "|", SPACE);
                     CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTERED.Trim());
                     CliLog.WriteLine(ConsoleColor.White, " Bind Package ", ConsoleColor.Cyan, Path.GetFileName(file), ConsoleColor.White, " to Managed Identity App ", ConsoleColor.Cyan, applicationId);
-                    XrmHelper.COUNT++;
+                    XrmHelper.COUNT_ExecuteAsync++;
                     await ServiceClient.ExecuteAsync(request2);
                 }
                 else if (rows.Entities[0].GetAttributeValue<EntityReference>("managedidentityid")?.Id == managedIdentityId)
@@ -289,7 +296,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     CliLog.Write(ConsoleColor.White, "|", SPACE);
                     CliLog.WriteSuccess(ConsoleColor.White, CliAction.UPDATED.Trim());
                     CliLog.WriteLine(ConsoleColor.White, " Bind Package ", ConsoleColor.Cyan, Path.GetFileName(file), ConsoleColor.White, " to Managed Identity App ", ConsoleColor.Cyan, applicationId);
-                    XrmHelper.COUNT++;
+                    XrmHelper.COUNT_ExecuteAsync++;
                     await ServiceClient.ExecuteAsync(request2);
                 }
             }
@@ -350,7 +357,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
     </filter>
   </entity>
 </fetch>";
-            XrmHelper.COUNT++;
+            XrmHelper.COUNT_RetrieveMultipleAsync++;
             var rows = await ServiceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
             if (rows.Entities.Count > 0)
             {
@@ -385,7 +392,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTERED.Trim());
                 CliLog.Write(ConsoleColor.White, " Assembly ", ConsoleColor.Cyan, assemblyName, ".dll");
                 CliLog.WriteList(new List<string> { name_IsolationMode, name_SourceType }, true);
-                XrmHelper.COUNT++;
+                XrmHelper.COUNT_ExecuteAsync++;
                 var response = (CreateResponse)await ServiceClient.ExecuteAsync(request);
                 pluginAssemblyId = response.id;
             }
@@ -412,7 +419,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     CliLog.WriteList(new List<string> { name_IsolationMode, name_SourceType }, true);
                     try
                     {
-                        XrmHelper.COUNT++;
+                        XrmHelper.COUNT_ExecuteAsync++;
                         await ServiceClient.ExecuteAsync(request);
                     }
                     catch (Exception fe)
@@ -437,7 +444,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     CliLog.Write(ConsoleColor.White, "|", SPACE);
                     CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTERED.Trim());
                     CliLog.WriteLine(ConsoleColor.White, " Bind Assembly ", ConsoleColor.Cyan, assemblyName, ".dll", ConsoleColor.White, " to Managed Identity App ", ConsoleColor.Cyan, applicationId);
-                    XrmHelper.COUNT++;
+                    XrmHelper.COUNT_ExecuteAsync++;
                     await ServiceClient.ExecuteAsync(request2);
                 }
                 else if (rows.Entities[0].GetAttributeValue<EntityReference>("managedidentityid")?.Id == managedIdentityId)
@@ -458,7 +465,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     CliLog.Write(ConsoleColor.White, "|", SPACE);
                     CliLog.WriteSuccess(ConsoleColor.White, CliAction.UPDATED.Trim());
                     CliLog.WriteLine(ConsoleColor.White, " Bind Assembly ", ConsoleColor.Cyan, assemblyName, ".dll", ConsoleColor.White, " to Managed Identity App ", ConsoleColor.Cyan, applicationId);
-                    XrmHelper.COUNT++;
+                    XrmHelper.COUNT_ExecuteAsync++;
                     await ServiceClient.ExecuteAsync(request2);
                 }
             }
@@ -537,7 +544,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
   </entity>
 </fetch>";
 
-                XrmHelper.COUNT++;
+                XrmHelper.COUNT_RetrieveMultipleAsync++;
                 var rows = await ServiceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
                 var managedIdentity = new Entity("managedidentity")
                 {
@@ -555,7 +562,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     CliLog.Write(ConsoleColor.White, "|", SPACE);
                     CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTERED.Trim());
                     CliLog.WriteLine(ConsoleColor.White, " Managed Identity App ", ConsoleColor.Cyan, $"{AppId}");
-                    XrmHelper.COUNT++;
+                    XrmHelper.COUNT_ExecuteAsync++;
                     var response = (CreateResponse)await ServiceClient.ExecuteAsync(request);
                     if (isDevApplication && _ManagedIdentityId == null && _ApplicationId == null)
                     {
@@ -1002,7 +1009,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE);
                 CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTERED.Trim());
                 CliLog.WriteLine(ConsoleColor.White, " Type ", ConsoleColor.Blue, $"{PluginType.DataSource} ", ConsoleColor.Cyan, $"{logicalNameDataSource}", ConsoleColor.White, " linked with events ", ConsoleColor.Cyan, events);
-                XrmHelper.COUNT++;
+                XrmHelper.COUNT_ExecuteAsync++;
                 await ServiceClient.ExecuteAsync(request);
             }
             else
@@ -1028,7 +1035,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE);
                     CliLog.WriteSuccess(ConsoleColor.White, CliAction.UPDATED.Trim());
                     CliLog.WriteLine(ConsoleColor.White, " Type ", ConsoleColor.Blue, $"{PluginType.DataSource} ", ConsoleColor.Cyan, $"{logicalNameDataSource}", ConsoleColor.White, " linked with events ", ConsoleColor.Cyan, events);
-                    XrmHelper.COUNT++;
+                    XrmHelper.COUNT_ExecuteAsync++;
                     await ServiceClient.ExecuteAsync(request);
                 }
                 else
@@ -1054,7 +1061,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
   </entity>
 </fetch>
 ";
-            XrmHelper.COUNT++;
+            XrmHelper.COUNT_RetrieveMultipleAsync++;
             var rows = await ServiceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
             if (rows.Entities.Count != 1)
             {
@@ -1069,7 +1076,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 {
                     var update = new Entity("customapi", rows.Entities[0].Id);
                     update["plugintypeid"] = null;
-                    XrmHelper.COUNT++;
+                    XrmHelper.COUNT_UpdateAsync++;
                     await ServiceClient.UpdateAsync(update);
                 }
             }
@@ -1089,7 +1096,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     CliLog.WriteLine(ConsoleColor.White, " Step ", ConsoleColor.Blue, attribute.Message, ConsoleColor.White, " ", ConsoleColor.Cyan, pluginTypeName, ConsoleColor.Blue, $" [MainOperation, Synchronous]");
                     var update = new Entity("customapi", rows.Entities[0].Id);
                     update["plugintypeid"] = new EntityReference("plugintype", pluginTypeId);
-                    XrmHelper.COUNT++;
+                    XrmHelper.COUNT_UpdateAsync++;
                     await ServiceClient.UpdateAsync(update);
                 }
             }
@@ -1171,7 +1178,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     CliLog.WriteList(imageAttributes, true);
                     try
                     {
-                        XrmHelper.COUNT++;
+                        XrmHelper.COUNT_ExecuteAsync++;
                         var response = (CreateResponse)await ServiceClient.ExecuteAsync(request);
                         return response.id;
                     }
@@ -1224,13 +1231,13 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         CliLog.WriteSuccess(ConsoleColor.White, CliAction.DELETED.Trim());
                         CliLog.Write(ConsoleColor.White, " Image ", ConsoleColor.Blue, imageType, ConsoleColor.White, $", Name = ", ConsoleColor.Green, imageName, ConsoleColor.White, $", Alias = ", ConsoleColor.Green, imageAliasName, ConsoleColor.White, ", Image Fields =");
                         CliLog.WriteList(imageAttributes, true);
-                        XrmHelper.COUNT++;
+                        XrmHelper.COUNT_DeleteAsync++;
                         await ServiceClient.DeleteAsync("sdkmessageprocessingstepimage", rows[0].Id);
                         return Guid.NewGuid();
                     }
                     try
                     {
-                        XrmHelper.COUNT++;
+                        XrmHelper.COUNT_UpdateAsync++;
                         await ServiceClient.UpdateAsync(pluginImage);
                     }
                     catch (Exception fe)
@@ -1308,8 +1315,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
             }
 
-            var sdkMessageFilterId = await XrmHelper.GetSdkMessageFilterIdAsync(ServiceClient, attribute.EntityLogicalName, attribute.Message);
-            var sdkMessageId = await XrmHelper.GetSdkMessageIdAsync(ServiceClient, attribute.EntityLogicalName, attribute.Message);
+            var sdkMessageFilterId = await GetSdkMessageFilterIdAsync(ServiceClient, attribute.EntityLogicalName, attribute.Message);
+            var sdkMessageId = await GetSdkMessageIdAsync(ServiceClient, attribute.EntityLogicalName, attribute.Message);
             var impersonatingUserId = await XrmHelper.GetImpersonatingUserIdAsync(ServiceClient, attribute.RunAs);
 
             if (attribute.ExecutionMode == 0) attribute.DeleteAsyncOperation = false;
@@ -1337,7 +1344,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 {
                     var secureEntity = new Entity("sdkmessageprocessingstepsecureconfig");
                     secureEntity["secureconfig"] = attribute.SecureConfiguration;
-                    XrmHelper.COUNT++;
+                    XrmHelper.COUNT_CreateAsync++;
                     var sdkmessageprocessingstepsecureconfigid = await ServiceClient.CreateAsync(secureEntity);
                     SecureConfigurationAction = CliAction.REGISTERED;
                     pluginStep["sdkmessageprocessingstepsecureconfigid"] = new EntityReference("sdkmessageprocessingstepsecureconfig", sdkmessageprocessingstepsecureconfigid);
@@ -1360,7 +1367,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 CliLogUpdateFields();
                 try
                 {
-                    XrmHelper.COUNT++;
+                    XrmHelper.COUNT_ExecuteAsync++;
                     var response = (CreateResponse)await ServiceClient.ExecuteAsync(request);
                     pluginStepId = response.id;
                 }
@@ -1389,9 +1396,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         var u = new Entity("sdkmessageprocessingstep");
                         u["sdkmessageprocessingstepid"] = pluginStepId.Value;
                         u["sdkmessageprocessingstepsecureconfigid"] = null;
-                        XrmHelper.COUNT++;
+                        XrmHelper.COUNT_UpdateAsync++;
                         await ServiceClient.UpdateAsync(u);
-                        XrmHelper.COUNT++;
+                        XrmHelper.COUNT_DeleteAsync++;
                         await ServiceClient.DeleteAsync("sdkmessageprocessingstepsecureconfig", sdkmessageprocessingstepsecureconfigid.Value);
                         SecureConfigurationAction = CliAction.UNREGISTERED;
                         hasChangedPluginStep = true;
@@ -1407,7 +1414,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         {
                             var update = new Entity("sdkmessageprocessingstepsecureconfig", sdkmessageprocessingstepsecureconfigid.Value);
                             update["secureconfig"] = attribute.SecureConfiguration;
-                            XrmHelper.COUNT++;
+                            XrmHelper.COUNT_UpdateAsync++;
                             await ServiceClient.UpdateAsync(update);
                             SecureConfigurationAction = CliAction.UPDATED;
                             hasChangedPluginStep = true;
@@ -1419,13 +1426,13 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     {
                         var secureEntity2 = new Entity("sdkmessageprocessingstepsecureconfig");
                         secureEntity2["secureconfig"] = attribute.SecureConfiguration;
-                        XrmHelper.COUNT++;
+                        XrmHelper.COUNT_CreateAsync++;
                         var sdkmessageprocessingstepsecureconfigid2 = await ServiceClient.CreateAsync(secureEntity2);
                         SecureConfigurationAction = CliAction.REGISTERED;
                         var u = new Entity("sdkmessageprocessingstep");
                         u["sdkmessageprocessingstepid"] = pluginStepId.Value;
                         u["sdkmessageprocessingstepsecureconfigid"] = new EntityReference("sdkmessageprocessingstepsecureconfig", sdkmessageprocessingstepsecureconfigid2);
-                        XrmHelper.COUNT++;
+                        XrmHelper.COUNT_UpdateAsync++;
                         await ServiceClient.UpdateAsync(u);
                     }
                 }
@@ -1433,7 +1440,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 {
                     var create = new Entity("sdkmessageprocessingstepsecureconfig");
                     create["secureconfig"] = attribute.SecureConfiguration;
-                    XrmHelper.COUNT++;
+                    XrmHelper.COUNT_CreateAsync++;
                     var sdkmessageprocessingstepsecureconfigid = await ServiceClient.CreateAsync(secureEntity);
                     SecureConfigurationAction = CliAction.REGISTERED;
                     pluginStep["sdkmessageprocessingstepsecureconfigid"] = new EntityReference("sdkmessageprocessingstepsecureconfig", sdkmessageprocessingstepsecureconfigid);
@@ -1501,7 +1508,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     }
                     try
                     {
-                        XrmHelper.COUNT++;
+                        XrmHelper.COUNT_ExecuteAsync++;
                         await ServiceClient.ExecuteAsync(request);
                     }
                     catch (Exception fe)
@@ -1530,7 +1537,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 var update = new Entity("sdkmessageprocessingstep", pluginStepId.Value);
                 update["statecode"] = new OptionSetValue(1);
                 update["statuscode"] = new OptionSetValue(2);
-                XrmHelper.COUNT++;
+                XrmHelper.COUNT_UpdateAsync++;
                 await ServiceClient.UpdateAsync(update);
             }
             else if (
@@ -1541,7 +1548,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 var update = new Entity("sdkmessageprocessingstep", pluginStepId.Value);
                 update["statecode"] = new OptionSetValue(0);
                 update["statuscode"] = new OptionSetValue(1);
-                XrmHelper.COUNT++;
+                XrmHelper.COUNT_UpdateAsync++;
                 await ServiceClient.UpdateAsync(update);
             }
             return pluginStepId;
@@ -1715,14 +1722,14 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
     </filter>
   </entity>
 </fetch>";
-            XrmHelper.COUNT++;
+            XrmHelper.COUNT_RetrieveMultipleAsync++;
             var rows = await ServiceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
             if (rows.Entities.Count != 1) return false;
             var pluginTypeId = rows.Entities[0].GetAttributeValue<Guid>("plugintypeid");
             try
             {
                 await DeletePluginStepsAsync();
-                XrmHelper.COUNT++;
+                XrmHelper.COUNT_DeleteAsync++;
                 await ServiceClient.DeleteAsync("plugintype", pluginTypeId);
             }
             catch (Exception fe)
@@ -1743,11 +1750,11 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
     </filter>
   </entity>
 </fetch>";
-                XrmHelper.COUNT++;
+                XrmHelper.COUNT_RetrieveMultipleAsync++;
                 var rows = await ServiceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
                 foreach (var row in rows.Entities)
                 {
-                    XrmHelper.COUNT++;
+                    XrmHelper.COUNT_DeleteAsync++;
                     await ServiceClient.DeleteAsync("sdkmessageprocessingstep", row.Id);
                 }
             }
@@ -1825,7 +1832,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE);
                 CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTERED.Trim());
                 CliLog.WriteLine(ConsoleColor.White, " Type ", ConsoleColor.Blue, attribute.PluginType, " ", ConsoleColor.Cyan, type.FullName);
-                XrmHelper.COUNT++;
+                XrmHelper.COUNT_ExecuteAsync++;
                 var response = (CreateResponse)await ServiceClient.ExecuteAsync(request);
                 return response.id;
             }
@@ -1839,7 +1846,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 request.Parameters.Add("SolutionUniqueName", Json.solution);
                 try
                 {
-                    XrmHelper.COUNT++;
+                    XrmHelper.COUNT_ExecuteAsync++;
                     await ServiceClient.ExecuteAsync(request);
                 }
                 catch (Exception fe)
@@ -1850,7 +1857,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 if (IsWorkflowType(type))
                 {
                     var old = rows[0].GetAttributeValue<string>("customworkflowactivityinfo");
-                    XrmHelper.COUNT++;
+                    XrmHelper.COUNT_RetrieveAsync++;
                     var @new = (await ServiceClient.RetrieveAsync("plugintype", rows[0].Id, new ColumnSet("customworkflowactivityinfo"))).GetAttributeValue<string>("customworkflowactivityinfo");
                     if (Helper.IsEqualsContent(old, @new))
                     {
@@ -1908,7 +1915,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
     </link-entity>
   </entity>
 </fetch>";
-            XrmHelper.COUNT++;
+            XrmHelper.COUNT_RetrieveMultipleAsync++;
             var rows = await ServiceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
             if (rows.Entities.Count == 0) return true;
             foreach (var entity in rows.Entities)
@@ -2038,6 +2045,93 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 var zip = packageArchiveReader.GetEntry(libFile);
                 zip.ExtractToFile($"{folder}\\{zip.Name}", true);
             }
+        }
+
+        private async Task<int?> GetPrimaryObjectTypeCodeAsync(ServiceClient service, string entityName)
+        {
+            if (entityName?.Length == 0) return null;
+            var request = new RetrieveEntityRequest
+            {
+                EntityFilters = EntityFilters.Entity,
+                LogicalName = entityName.ToLower()
+            };
+            XrmHelper.COUNT_ExecuteAsync++;
+            var response = (RetrieveEntityResponse)await service.ExecuteAsync(request);
+            return response.EntityMetadata.ObjectTypeCode ?? 0;
+        }
+
+        private async Task<EntityReference> GetSdkMessageFilterIdAsync(ServiceClient service, string entityLogicalName, string message)
+        {
+            if (entityLogicalName?.Length == 0 || entityLogicalName?.ToLower() == "none") return null;
+            var fetchData = new
+            {
+                primaryobjecttypecode = await GetPrimaryObjectTypeCodeAsync(service, entityLogicalName),
+                name = message
+            };
+            var fetchXml = $@"
+<fetch>
+  <entity name='sdkmessagefilter'>
+    <attribute name='sdkmessagefilterid' />
+    <filter type='and'>
+      <condition attribute='primaryobjecttypecode' operator='eq' value='{fetchData.primaryobjecttypecode}'/>
+    </filter>
+    <link-entity name='sdkmessage' from='sdkmessageid' to='sdkmessageid'>
+      <filter type='and'>
+        <condition attribute='name' operator='eq' value='{fetchData.name}'/>
+      </filter>
+    </link-entity>
+  </entity>
+</fetch>";
+            XrmHelper.COUNT_RetrieveMultipleAsync++;
+            var rows = await service.RetrieveMultipleAsync(new FetchExpression(fetchXml));
+            return rows.Entities.Count == 0 ? null : new EntityReference("sdkmessagefilter", rows.Entities[0].Id);
+        }
+
+        private async Task<EntityReference> GetSdkMessageIdAsync(ServiceClient service, string entityLogicalName, string message)
+        {
+            if (entityLogicalName?.Length == 0) return null;
+            string fetchXml;
+            if (entityLogicalName.ToLower() == "none")
+            {
+                var fetchData = new
+                {
+                    name = message
+                };
+                fetchXml = $@"
+<fetch>
+  <entity name='sdkmessage'>
+    <attribute name='sdkmessageid' />
+    <filter type='and'>
+      <condition attribute='name' operator='eq' value='{fetchData.name}'/>
+    </filter>
+  </entity>
+</fetch>";
+            }
+            else
+            {
+                var fetchData = new
+                {
+                    name = message,
+                    primaryobjecttypecode = await GetPrimaryObjectTypeCodeAsync(service, entityLogicalName)
+                };
+                fetchXml = $@"
+<fetch>
+  <entity name='sdkmessage'>
+    <attribute name='sdkmessageid' />
+    <filter type='and'>
+      <condition attribute='name' operator='eq' value='{fetchData.name}'/>
+    </filter>
+    <link-entity name='sdkmessagefilter' from='sdkmessageid' to='sdkmessageid'>
+      <filter type='and'>
+        <condition attribute='primaryobjecttypecode' operator='eq' value='{fetchData.primaryobjecttypecode}'/>
+      </filter>
+    </link-entity>
+  </entity>
+</fetch>";
+            }
+            XrmHelper.COUNT_RetrieveMultipleAsync++;
+            var rows = await service.RetrieveMultipleAsync(new FetchExpression(fetchXml));
+            return rows.Entities.Count == 0 ? null : new EntityReference("sdkmessage", rows.Entities[0].Id);
         }
     }
 }
