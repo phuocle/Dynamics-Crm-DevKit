@@ -17,6 +17,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 {
     public class TaskServer : ITask
     {
+        const int PACK = 7; // Process 50 types at a time to avoid FetchXML limitations
         private const string SPACE = "  ";
         private readonly Dictionary<string, Assembly> _assemblyCache = new Dictionary<string, Assembly>(StringComparer.OrdinalIgnoreCase);
         private bool OK { get; set; } = false;
@@ -667,13 +668,18 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             await DeployFileAsync(file, types, deployFileType);
         }
 
-        private readonly Dictionary<string, Entity> _PluginTypeCache = new Dictionary<string, Entity>(StringComparer.OrdinalIgnoreCase);
+        private readonly List<KeyValuePair<string, Entity>> _PluginTypeCache = new List<KeyValuePair<string, Entity>>();
         private async Task LoadAllPluginTypesAsync(List<TypeInfo> types)
         {
-            var condition = string.Empty;
-            foreach (var type in types)
-                condition += $"<condition attribute='typename' operator='eq' value='{type.FullName}'/>";
-            var fetchXml = $@"
+            _PluginTypeCache.Clear();
+            var totalBatches = (int)Math.Ceiling((double)types.Count / PACK);
+            for (int i = 0; i < totalBatches; i++)
+            {
+                var batchTypes = types.Skip(i * PACK).Take(PACK).ToList();
+                var condition = string.Empty;
+                foreach (var type in batchTypes)
+                    condition += $"<condition attribute='typename' operator='eq' value='{type.FullName}'/>";
+                var fetchXml = $@"
 <fetch>
   <entity name='plugintype'>
     <attribute name='plugintypeid' />
@@ -686,17 +692,17 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
     <filter type='or'>{condition}</filter>
   </entity>
 </fetch>";
-            var rows = await XrmHelper.RetrieveAllRecordsByFetchXmlAsync(ServiceClient, fetchXml);
-            _PluginTypeCache.Clear();
-            foreach (var entity in rows)
-            {
-                var name = entity.GetAttributeValue<string>("name");
-                if (!string.IsNullOrEmpty(name))
+
+                var rows = await XrmHelper.RetrieveAllRecordsByFetchXmlAsync(ServiceClient, fetchXml);
+                foreach (var entity in rows)
                 {
-                    _PluginTypeCache[name] = entity;
+                    var name = entity.GetAttributeValue<string>("name");
+                    if (!string.IsNullOrEmpty(name))
+                    {
+                        _PluginTypeCache.Add(new KeyValuePair<string, Entity>(name, entity));
+                    }
                 }
             }
-            var t = string.Empty;
         }
         private async Task DeployFileAsync(string file, List<TypeInfo> types, DeployFileType deployFileType)
         {
@@ -1630,29 +1636,30 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         }
         private async Task<Guid?> DeployPluginTypeAsync(Guid pluginAssemblyId, TypeInfo type, CrmPluginRegistrationAttribute attribute, DeployFileType deployFileType)
         {
-            var fetchData = new
+            //            var fetchData = new
+            //            {
+            //                typename = type.FullName
+            //            };
+            //            var fetchXml = $@"
+            //<fetch>
+            //  <entity name='plugintype'>
+            //    <attribute name='plugintypeid' />
+            //    <attribute name='name' />
+            //    <attribute name='typename' />
+            //    <attribute name='friendlyname' />
+            //    <attribute name='workflowactivitygroupname' />
+            //    <attribute name='description' />
+            //    <attribute name='customworkflowactivityinfo' />
+            //    <filter type='and'>
+            //      <condition attribute='typename' operator='eq' value='{fetchData.typename}'/>
+            //    </filter>
+            //  </entity>
+            //</fetch>";
+            //            var rows = await ServiceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
+            var rows = _PluginTypeCache.Where(x => x.Key == type.FullName).Select(x => x.Value).ToList();
+            if (rows.Count > 0)
             {
-                typename = type.FullName
-            };
-            var fetchXml = $@"
-<fetch>
-  <entity name='plugintype'>
-    <attribute name='plugintypeid' />
-    <attribute name='name' />
-    <attribute name='typename' />
-    <attribute name='friendlyname' />
-    <attribute name='workflowactivitygroupname' />
-    <attribute name='description' />
-    <attribute name='customworkflowactivityinfo' />
-    <filter type='and'>
-      <condition attribute='typename' operator='eq' value='{fetchData.typename}'/>
-    </filter>
-  </entity>
-</fetch>";
-            var rows = await ServiceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
-            if (rows.Entities.Count > 0)
-            {
-                if (rows.Entities.Count > 0 && rows.Entities.Count != 1)
+                if (rows.Count > 0 && rows.Count != 1)
                 {
                     CliLog.WriteLineError($"Found more than 1 type name {type.FullName}. Assemply deployed, but the deployment of this assembly stopped.");
                     return null;
@@ -1660,7 +1667,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 if (deployFileType == DeployFileType.Nuget)
                 {
                     CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, "Type ", ConsoleColor.Blue, attribute.PluginType, " ", ConsoleColor.Cyan, type.FullName);
-                    return rows.Entities[0].Id;
+                    return rows[0].Id;
                 }
             }
             var pluginType = new Entity("plugintype");
@@ -1681,7 +1688,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             if (string.IsNullOrWhiteSpace(attribute.Description))
             {
-                if (rows.Entities.Count == 0 || (rows.Entities.Count > 0 && string.IsNullOrWhiteSpace(rows.Entities[0].GetAttributeValue<string>("description"))))
+                if (rows.Count == 0 || (rows.Count > 0 && string.IsNullOrWhiteSpace(rows[0].GetAttributeValue<string>("description"))))
                 {
                     pluginType["description"] = Const.WindowTitle;
                 }
@@ -1690,7 +1697,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 pluginType["description"] = attribute.Description;
             }
-            if (rows.Entities.Count == 0)
+            if (rows.Count == 0)
             {
                 var request = new CreateRequest
                 {
@@ -1705,7 +1712,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             else
             {
-                pluginType["plugintypeid"] = rows.Entities[0].Id;
+                pluginType["plugintypeid"] = rows[0].Id;
                 var request = new UpdateRequest
                 {
                     Target = pluginType
@@ -1722,8 +1729,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
                 if (IsWorkflowType(type))
                 {
-                    var old = rows.Entities[0].GetAttributeValue<string>("customworkflowactivityinfo");
-                    var @new = (await ServiceClient.RetrieveAsync("plugintype", rows.Entities[0].Id, new ColumnSet("customworkflowactivityinfo"))).GetAttributeValue<string>("customworkflowactivityinfo");
+                    var old = rows[0].GetAttributeValue<string>("customworkflowactivityinfo");
+                    var @new = (await ServiceClient.RetrieveAsync("plugintype", rows[0].Id, new ColumnSet("customworkflowactivityinfo"))).GetAttributeValue<string>("customworkflowactivityinfo");
                     if (Helper.IsEqualsContent(old, @new))
                     {
                         CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, ConsoleColor.White, "Type ", ConsoleColor.Blue, attribute.PluginType, " ", ConsoleColor.Cyan, type.FullName);
@@ -1740,7 +1747,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, ConsoleColor.White, "Type ", ConsoleColor.Blue, attribute.PluginType, " ", ConsoleColor.Cyan, type.FullName);
                 }
             }
-            return rows.Entities[0].Id;
+            return rows[0].Id;
         }
         private async Task<bool> IsValidTypesAsync(string file, List<TypeInfo> types, DeployFileType deployFileType)
         {
