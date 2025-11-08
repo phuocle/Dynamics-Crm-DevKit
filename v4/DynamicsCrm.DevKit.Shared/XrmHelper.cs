@@ -1374,32 +1374,7 @@ namespace DynamicsCrm.DevKit.Shared
             }
         }
 
-        internal static async Task<Entity> GetSecureEntityAsync(ServiceClient service, Guid pluginStepId)
-        {
-            var fetchData = new
-            {
-                sdkmessageprocessingstepid = pluginStepId
-            };
-            var fetchXml = $@"
-<fetch>
-  <entity name='sdkmessageprocessingstep'>
-    <attribute name='name' />
-    <attribute name='sdkmessageprocessingstepid' />
-    <filter>
-      <condition attribute='sdkmessageprocessingstepid' operator='eq' value='{fetchData.sdkmessageprocessingstepid}'/>
-    </filter>
-    <link-entity name='sdkmessageprocessingstepsecureconfig' from='sdkmessageprocessingstepsecureconfigid' to='sdkmessageprocessingstepsecureconfigid' link-type='outer' alias='s'>
-      <attribute name='secureconfig' />
-      <attribute name='sdkmessageprocessingstepsecureconfigid' />
-    </link-entity>
-  </entity>
-</fetch>";
 
-            COUNT_RetrieveMultipleAsync++;
-            var rows = await service.RetrieveMultipleAsync(new FetchExpression(fetchXml));
-            if (rows.Entities.Count != 1) return null;
-            return rows.Entities[0];
-        }
 
         internal static async Task<Guid?> GetImpersonatingUserIdAsync(ServiceClient service, string runAs)
         {

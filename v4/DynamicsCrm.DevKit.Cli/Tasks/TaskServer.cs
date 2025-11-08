@@ -693,6 +693,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         private readonly List<KeyValuePair<string, Entity>> _PluginStepsCache = new List<KeyValuePair<string, Entity>>();
         private readonly List<KeyValuePair<string, Entity>> _PluginImagesCache = new List<KeyValuePair<string, Entity>>();
         private readonly List<KeyValuePair<string, int>> _ObjectTypeCodeCache = new List<KeyValuePair<string, int>>();
+        private readonly List<KeyValuePair<string, Entity>> _SecureEntityCache = new List<KeyValuePair<string, Entity>>();
         private async Task LoadAllPluginTypesAsync(List<TypeInfo> types)
         {
             _PluginTypesCache.Clear();
@@ -794,6 +795,42 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
             }
         }
+        private async Task LoadAllSecureEntitiesAsync()
+        {
+            _SecureEntityCache.Clear();
+            var totalBatches = (int)Math.Ceiling((double)_PluginStepsCache.Count / PACK);
+            for (int i = 0; i < totalBatches; i++)
+            {
+                var entities = _PluginStepsCache.Skip(i * PACK).Take(PACK).ToList();
+                var condition = string.Empty;
+                foreach (var entity in entities)
+                    condition += $"<condition attribute='sdkmessageprocessingstepid' operator='eq' value='{entity.Value.GetAttributeValue<Guid>("sdkmessageprocessingstepid")}'/>";
+                var fetchXml = $@"
+<fetch>
+  <entity name='sdkmessageprocessingstep'>
+    <attribute name='name' />
+    <attribute name='sdkmessageprocessingstepid' />
+    <filter type='or'>{condition}</filter>
+    <link-entity name='sdkmessageprocessingstepsecureconfig' from='sdkmessageprocessingstepsecureconfigid' to='sdkmessageprocessingstepsecureconfigid' link-type='inner' alias='s'>
+      <attribute name='secureconfig' />
+      <attribute name='sdkmessageprocessingstepsecureconfigid' />
+    </link-entity>
+  </entity>
+</fetch>";
+                var rows = await XrmHelper.RetrieveAllRecordsByFetchXmlAsync(ServiceClient, fetchXml);
+                foreach (var entity in rows)
+                {
+                    var sdkmessageprocessingstepid = entity.GetAttributeValue<Guid>("sdkmessageprocessingstepid");
+                    var key = $"{sdkmessageprocessingstepid}";
+                    if (!string.IsNullOrEmpty(key))
+                    {
+                        _SecureEntityCache.Add(new KeyValuePair<string, Entity>(key, entity));
+                    }
+                }
+            }
+        }
+
+
         private async Task LoadObjectTypeCodeAsync()
         {
             var request = new RetrieveAllEntitiesRequest
@@ -845,6 +882,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             await LoadAllPluginTypesAsync(sortedTypes);
             await LoadAllPluginStepsAsync();
             await LoadAllPluginImagesAsync();
+            await LoadAllSecureEntitiesAsync();
 
             foreach (var type in sortedTypes)
             {
@@ -1401,7 +1439,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 pluginStepId = rows[0].Id;
                 pluginStep["sdkmessageprocessingstepid"] = pluginStepId.Value;
                 var hasChangedPluginStep = false;
-                var secureEntity = await XrmHelper.GetSecureEntityAsync(ServiceClient, pluginStepId.Value);
+                //var secureEntity = await XrmHelper.GetSecureEntityAsync(ServiceClient, pluginStepId.Value);
+                var _rows = _SecureEntityCache.Where(x => x.Key == pluginStepId.Value.ToString()).Select(x => x.Value).ToList();
+                var secureEntity = _rows.Count > 0 ? _rows[0] : null;
                 if (attribute.SecureConfiguration?.Trim().Length == 0 && secureEntity != null)
                 {
                     var sdkmessageprocessingstepsecureconfigid = (Guid?)secureEntity.GetAttributeValue<AliasedValue>("s.sdkmessageprocessingstepsecureconfigid")?.Value;
@@ -2061,7 +2101,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
         }
 
-        private int? GetPrimaryObjectTypeCode(string entityName)
+        private int? GetObjectTypeCode(string entityName)
         {
             if (entityName?.Length == 0) return null;
             var rows = _ObjectTypeCodeCache.Where(x => x.Key == entityName.ToLower()).Select(x => x.Value).ToList();
@@ -2074,7 +2114,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             if (entityLogicalName?.Length == 0 || entityLogicalName?.ToLower() == "none") return null;
             var fetchData = new
             {
-                primaryobjecttypecode = GetPrimaryObjectTypeCode(entityLogicalName),
+                primaryobjecttypecode = GetObjectTypeCode(entityLogicalName),
                 name = message
             };
             var fetchXml = $@"
@@ -2121,7 +2161,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 var fetchData = new
                 {
                     name = message,
-                    primaryobjecttypecode = GetPrimaryObjectTypeCode(entityLogicalName)
+                    primaryobjecttypecode = GetObjectTypeCode(entityLogicalName)
                 };
                 fetchXml = $@"
 <fetch>
@@ -2142,5 +2182,32 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var rows = await service.RetrieveMultipleAsync(new FetchExpression(fetchXml));
             return rows.Entities.Count == 0 ? null : new EntityReference("sdkmessage", rows.Entities[0].Id);
         }
+
+//        internal static async Task<Entity> GetSecureEntityAsync(ServiceClient service, Guid pluginStepId)
+//        {
+//            var fetchData = new
+//            {
+//                sdkmessageprocessingstepid = pluginStepId
+//            };
+//            var fetchXml = $@"
+//<fetch>
+//  <entity name='sdkmessageprocessingstep'>
+//    <attribute name='name' />
+//    <attribute name='sdkmessageprocessingstepid' />
+//    <filter>
+//      <condition attribute='sdkmessageprocessingstepid' operator='eq' value='{fetchData.sdkmessageprocessingstepid}'/>
+//    </filter>
+//    <link-entity name='sdkmessageprocessingstepsecureconfig' from='sdkmessageprocessingstepsecureconfigid' to='sdkmessageprocessingstepsecureconfigid' link-type='outer' alias='s'>
+//      <attribute name='secureconfig' />
+//      <attribute name='sdkmessageprocessingstepsecureconfigid' />
+//    </link-entity>
+//  </entity>
+//</fetch>";
+
+//            XrmHelper.COUNT_RetrieveMultipleAsync++;
+//            var rows = await service.RetrieveMultipleAsync(new FetchExpression(fetchXml));
+//            if (rows.Entities.Count != 1) return null;
+//            return rows.Entities[0];
+//        }
     }
 }
