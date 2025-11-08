@@ -12,6 +12,7 @@ using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace DynamicsCrm.DevKit.Cli.Tasks
 {
@@ -668,10 +669,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             await DeployFileAsync(file, types, deployFileType);
         }
 
-        private readonly List<KeyValuePair<string, Entity>> _PluginTypeCache = new List<KeyValuePair<string, Entity>>();
+        private readonly List<KeyValuePair<string, Entity>> _PluginTypesCache = new List<KeyValuePair<string, Entity>>();
         private async Task LoadAllPluginTypesAsync(List<TypeInfo> types)
         {
-            _PluginTypeCache.Clear();
+            _PluginTypesCache.Clear();
             var totalBatches = (int)Math.Ceiling((double)types.Count / PACK);
             for (int i = 0; i < totalBatches; i++)
             {
@@ -699,11 +700,43 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var name = entity.GetAttributeValue<string>("name");
                     if (!string.IsNullOrEmpty(name))
                     {
-                        _PluginTypeCache.Add(new KeyValuePair<string, Entity>(name, entity));
+                        _PluginTypesCache.Add(new KeyValuePair<string, Entity>(name, entity));
                     }
                 }
             }
         }
+        private readonly List<KeyValuePair<string, Entity>> _PluginStepsCache = new List<KeyValuePair<string, Entity>>();
+        private async Task LoadAllPluginStepsAsync()
+        {
+            _PluginStepsCache.Clear();
+            var totalBatches = (int)Math.Ceiling((double)_PluginTypesCache.Count / PACK);
+            for (int i = 0; i < totalBatches; i++)
+            {
+                var batchSteps = _PluginTypesCache.Skip(i * PACK).Take(PACK).ToList();
+                var condition = string.Empty;
+                foreach (var type in batchSteps)
+                    condition += $"<condition attribute='plugintypeid' operator='eq' value='{type.Value.GetAttributeValue<Guid>("plugintypeid")}'/>";
+                var fetchXml = $@"
+<fetch>
+    <entity name='sdkmessageprocessingstep'>
+    <all-attributes />
+    <filter type='or'>{condition}</filter>
+    </entity>
+</fetch>";
+                var rows = await XrmHelper.RetrieveAllRecordsByFetchXmlAsync(ServiceClient, fetchXml);
+                foreach (var entity in rows)
+                {
+                    var plugintypeid = entity.GetAttributeValue<EntityReference>("plugintypeid").Id;
+                    var name = entity.GetAttributeValue<string>("name");
+                    var key = $"{plugintypeid}-{name}";
+                    if (!string.IsNullOrEmpty(key))
+                    {
+                        _PluginStepsCache.Add(new KeyValuePair<string, Entity>(key, entity));
+                    }
+                }
+            }
+        }
+
         private async Task DeployFileAsync(string file, List<TypeInfo> types, DeployFileType deployFileType)
         {
             var dataProviderEvents = new List<DataProviderEvent>();
@@ -738,6 +771,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }).ToList();
 
             await LoadAllPluginTypesAsync(sortedTypes);
+            await LoadAllPluginStepsAsync();
 
             foreach (var type in sortedTypes)
             {
@@ -1179,28 +1213,32 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     attribute.FilteringAttributes = null;
                 }
             }
-            var fetchData = new
-            {
-                plugintypeid = pluginTypeId,
-                name = attribute.Name,
-                sdkmessageidname = attribute.Message
-            };
-            var fetchXml = $@"
-<fetch>
-  <entity name='sdkmessageprocessingstep'>
-    <all-attributes />
-    <filter type='and'>
-      <condition attribute='plugintypeid' operator='eq' value='{fetchData.plugintypeid}'/>
-      <condition attribute='name' operator='eq' value='{fetchData.name}'/>
-      <condition attribute='sdkmessageidname' operator='eq' value='{fetchData.sdkmessageidname}'/>
-    </filter>
-  </entity>
-</fetch>";
-            var rows = await ServiceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
+            //            var fetchData = new
+            //            {
+            //                plugintypeid = pluginTypeId,
+            //                name = attribute.Name,
+            //                sdkmessageidname = attribute.Message
+            //            };
+            //            var fetchXml = $@"
+            //<fetch>
+            //  <entity name='sdkmessageprocessingstep'>
+            //    <all-attributes />
+            //    <filter type='and'>
+            //      <condition attribute='plugintypeid' operator='eq' value='{fetchData.plugintypeid}'/>
+            //      <condition attribute='name' operator='eq' value='{fetchData.name}'/>
+            //      <condition attribute='sdkmessageidname' operator='eq' value='{fetchData.sdkmessageidname}'/>
+            //    </filter>
+            //  </entity>
+            //</fetch>";
+            //            var rows = await ServiceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
+
+
+            var key = $"{pluginTypeId}-{attribute.Name}";
+            var rows = _PluginStepsCache.Where(x => x.Key == key).Select(x => x.Value).ToList();
             var SecureConfigurationAction = string.Empty;
-            if (rows.Entities.Count > 0)
+            if (rows.Count > 0)
             {
-                if (rows.Entities.Count > 0 && rows.Entities.Count != 1)
+                if (rows.Count > 0 && rows.Count != 1)
                 {
                     CliLog.WriteLineError($"Found more than 1 step name {type.FullName}. Assemply deployed, but the deployment of this assembly stopped.");
                     return null;
@@ -1228,7 +1266,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             };
 
             Guid? pluginStepId;
-            if (rows.Entities.Count == 0)
+            if (rows.Count == 0)
             {
                 if (attribute.SecureConfiguration?.Trim().Length > 0)
                 {
@@ -1272,7 +1310,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             else
             {
-                pluginStepId = rows.Entities[0].Id;
+                pluginStepId = rows[0].Id;
                 pluginStep["sdkmessageprocessingstepid"] = pluginStepId.Value;
                 var hasChangedPluginStep = false;
                 var secureEntity = await XrmHelper.GetSecureEntityAsync(ServiceClient, pluginStepId.Value);
@@ -1328,7 +1366,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     pluginStep["sdkmessageprocessingstepsecureconfigid"] = new EntityReference("sdkmessageprocessingstepsecureconfig", sdkmessageprocessingstepsecureconfigid);
                     hasChangedPluginStep = true;
                 }
-                if (!IsChangedPluginStep(hasChangedPluginStep, rows.Entities[0], pluginStep, attribute))
+                if (!IsChangedPluginStep(hasChangedPluginStep, rows[0], pluginStep, attribute))
                 {
                     if (attribute.Action == PluginStepOperationEnum.Activate)
                     {
@@ -1359,8 +1397,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE);
                         CliLog.WriteSuccess(ConsoleColor.White, CliAction.UPDATED.Trim());
                         if (
-                            rows.Entities.Count == 1 &&
-                            rows?.Entities?[0]?.GetAttributeValue<OptionSetValue>("statecode")?.Value == (int)PluginStepOperationEnum.Deactivate &&
+                            rows.Count == 1 &&
+                            rows[0].GetAttributeValue<OptionSetValue>("statecode")?.Value == (int)PluginStepOperationEnum.Deactivate &&
                             attribute.Action == PluginStepOperationEnum.Activate)
                         {
                             CliLog.Write(" ");
@@ -1376,8 +1414,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE);
                         CliLog.WriteSuccess(ConsoleColor.White, CliAction.UPDATED.Trim());
                         if (
-                            rows.Entities.Count == 1 &&
-                            rows?.Entities?[0]?.GetAttributeValue<OptionSetValue>("statecode")?.Value == (int)PluginStepOperationEnum.Activate &&
+                            rows.Count == 1 &&
+                            rows[0].GetAttributeValue<OptionSetValue>("statecode")?.Value == (int)PluginStepOperationEnum.Activate &&
                             attribute.Action == PluginStepOperationEnum.Deactivate)
                         {
                             CliLog.Write(" ");
@@ -1405,13 +1443,13 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
             if (
                 (
-                    (rows.Entities.Count == 0) &&
+                    (rows.Count == 0) &&
                     (attribute.Action == PluginStepOperationEnum.Deactivate)
                 )
                 ||
                 (
-                    (rows.Entities.Count == 1 && rows?.Entities?[0]?.GetAttributeValue<OptionSetValue>("statecode")?.Value == 0 && attribute.Action == PluginStepOperationEnum.Deactivate) ||
-                    (rows.Entities.Count == 1 && rows?.Entities?[0]?.GetAttributeValue<OptionSetValue>("statecode")?.Value == null && attribute.Action == PluginStepOperationEnum.Deactivate)
+                    (rows.Count == 1 && rows[0].GetAttributeValue<OptionSetValue>("statecode")?.Value == 0 && attribute.Action == PluginStepOperationEnum.Deactivate) ||
+                    (rows.Count == 1 && rows[0].GetAttributeValue<OptionSetValue>("statecode")?.Value == null && attribute.Action == PluginStepOperationEnum.Deactivate)
                 )
                )
             {
@@ -1421,8 +1459,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 await ServiceClient.UpdateAsync(update);
             }
             else if (
-                rows.Entities.Count > 0 &&
-                rows?.Entities?[0]?.GetAttributeValue<OptionSetValue>("statecode")?.Value == 1 &&
+                rows.Count > 0 &&
+                rows[0].GetAttributeValue<OptionSetValue>("statecode")?.Value == 1 &&
                 attribute.Action == PluginStepOperationEnum.Activate)
             {
                 var update = new Entity("sdkmessageprocessingstep", pluginStepId.Value);
@@ -1436,7 +1474,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 if (Helper.IsMessageUpdate(attribute.Message))
                 {
-                    if (rows.Entities.Count == 0)
+                    if (rows.Count == 0)
                     {
                         CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE);
                         CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTERED.Trim());
@@ -1445,7 +1483,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     }
                     else
                     {
-                        if (rows.Entities[0].GetAttributeValue<string>("filteringattributes") == attribute.FilteringAttributes?.Replace(" ", ""))
+                        if (rows[0].GetAttributeValue<string>("filteringattributes") == attribute.FilteringAttributes?.Replace(" ", ""))
                         {
                             CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, "Update Fields:");
                             CliLog.WriteList(attribute.FilteringAttributes, true);
@@ -1463,7 +1501,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 {
                     if (attribute.FilteringAttributes.Length > 0)
                     {
-                        if (rows.Entities.Count == 0)
+                        if (rows.Count == 0)
                         {
                             CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE);
                             CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTERED.Trim());
@@ -1472,7 +1510,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         }
                         else
                         {
-                            if (rows.Entities[0].GetAttributeValue<string>("filteringattributes") == attribute.FilteringAttributes?.Replace(" ", ""))
+                            if (rows[0].GetAttributeValue<string>("filteringattributes") == attribute.FilteringAttributes?.Replace(" ", ""))
                             {
                                 CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, "Create Fields:");
                                 CliLog.WriteList(attribute.FilteringAttributes, true);
@@ -1509,7 +1547,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         CliLog.WriteLine(ConsoleColor.White, " Secure Configuration = ", ConsoleColor.Green, attribute.SecureConfiguration);
                     }
                 }
-                if (rows.Entities.Count == 0 && !string.IsNullOrWhiteSpace(attribute.UnSecureConfiguration))
+                if (rows.Count == 0 && !string.IsNullOrWhiteSpace(attribute.UnSecureConfiguration))
                 {
                     CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE);
                     CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTERED.Trim());
@@ -1517,23 +1555,23 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
                 else
                 {
-                    if (rows.Entities.Count == 1 && rows.Entities[0].GetAttributeValue<string>("configuration") == null && !string.IsNullOrWhiteSpace(attribute.UnSecureConfiguration))
+                    if (rows.Count == 1 && rows[0].GetAttributeValue<string>("configuration") == null && !string.IsNullOrWhiteSpace(attribute.UnSecureConfiguration))
                     {
                         CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE);
                         CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTERED.Trim());
                         CliLog.WriteLine(ConsoleColor.White, " UnSecure Configuration = ", ConsoleColor.Green, attribute.UnSecureConfiguration);
                     }
-                    else if (rows.Entities.Count == 1 && rows.Entities[0].GetAttributeValue<string>("configuration") == attribute.UnSecureConfiguration)
+                    else if (rows.Count == 1 && rows[0].GetAttributeValue<string>("configuration") == attribute.UnSecureConfiguration)
                     {
                         CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, "UnSecure Configuration = ", ConsoleColor.Green, attribute.UnSecureConfiguration);
                     }
-                    else if (rows.Entities.Count == 1 && rows.Entities[0].GetAttributeValue<string>("configuration") != null && string.IsNullOrEmpty(attribute.UnSecureConfiguration))
+                    else if (rows.Count == 1 && rows[0].GetAttributeValue<string>("configuration") != null && string.IsNullOrEmpty(attribute.UnSecureConfiguration))
                     {
                         CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE);
                         CliLog.WriteSuccess(ConsoleColor.White, CliAction.UNREGISTERED.Trim());
                         CliLog.WriteLine(ConsoleColor.White, " UnSecure Configuration");
                     }
-                    else if (rows.Entities.Count == 1 && rows.Entities[0].GetAttributeValue<string>("configuration") != null && !string.IsNullOrEmpty(attribute.UnSecureConfiguration))
+                    else if (rows.Count == 1 && rows[0].GetAttributeValue<string>("configuration") != null && !string.IsNullOrEmpty(attribute.UnSecureConfiguration))
                     {
                         CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE);
                         CliLog.WriteSuccess(ConsoleColor.White, CliAction.UPDATED.Trim());
@@ -1656,7 +1694,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             //  </entity>
             //</fetch>";
             //            var rows = await ServiceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
-            var rows = _PluginTypeCache.Where(x => x.Key == type.FullName).Select(x => x.Value).ToList();
+            var rows = _PluginTypesCache.Where(x => x.Key == type.FullName).Select(x => x.Value).ToList();
             if (rows.Count > 0)
             {
                 if (rows.Count > 0 && rows.Count != 1)
