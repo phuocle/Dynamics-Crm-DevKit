@@ -829,8 +829,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
             }
         }
-
-
         private async Task LoadObjectTypeCodeAsync()
         {
             var request = new RetrieveAllEntitiesRequest
@@ -929,7 +927,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                                 Message = attribute.Message,
                                 DataSource = attribute.DataSource
                             });
-                            CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, $"Step ", ConsoleColor.Blue, attribute.Message, " ", ConsoleColor.Cyan, attribute.Name, ConsoleColor.Blue, $" [MainOperation, Synchronous]");
+                            CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, $"Step ", ConsoleColor.Blue, attribute.Message, " ", ConsoleColor.Cyan, attribute.Name);
+                            CliLog.WriteList(new List<string> { $"MainOperation", $"Synchronous" }, true);
                             break;
                         case PluginType.CustomApi:
                             await DeployCustomApiStepAsync(pluginTypeId.Value, type.FullName, attribute);
@@ -1123,7 +1122,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             if (rows.Entities[0].GetAttributeValue<EntityReference>("plugintypeid")?.Id.ToString("D") == pluginTypeId.ToString("D"))
             {
                 if (attribute.Action == PluginStepOperationEnum.Activate)
-                    CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, "Step ", ConsoleColor.Blue, attribute.Message, ConsoleColor.White, " ", ConsoleColor.Cyan, pluginTypeName, ConsoleColor.Blue, $" [MainOperation, Synchronous]");
+                {
+                    CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, $"Step ", ConsoleColor.Blue, attribute.Message, " ", ConsoleColor.Cyan, pluginTypeName);
+                    CliLog.WriteList(new List<string> { $"MainOperation", $"Synchronous" }, true);
+                }
                 else
                 {
                     var update = new Entity("customapi", rows.Entities[0].Id);
@@ -1138,14 +1140,16 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 {
                     CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.DO_NOTHING.Trim(), " ");
                     CliLog.WriteSuccess(ConsoleColor.White, CliAction.DEACTIVATED.Trim());
-                    CliLog.Write(ConsoleColor.White, " Step ", ConsoleColor.Blue, attribute.Message, ConsoleColor.White, " ", ConsoleColor.Cyan, pluginTypeName, ConsoleColor.Blue, $" [MainOperation, Synchronous]");
+                    CliLog.Write(ConsoleColor.White, " Step ", ConsoleColor.Blue, attribute.Message, ConsoleColor.White, " ", ConsoleColor.Cyan, pluginTypeName);
+                    CliLog.WriteList(new List<string> { $"MainOperation", $"Synchronous" }, true);
                     CliLog.WriteLine();
                 }
                 else
                 {
                     CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE);
                     CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTERED.Trim());
-                    CliLog.WriteLine(ConsoleColor.White, " Step ", ConsoleColor.Blue, attribute.Message, ConsoleColor.White, " ", ConsoleColor.Cyan, pluginTypeName, ConsoleColor.Blue, $" [MainOperation, Synchronous]");
+                    CliLog.WriteLine(ConsoleColor.White, " Step ", ConsoleColor.Blue, attribute.Message, ConsoleColor.White, " ", ConsoleColor.Cyan, pluginTypeName);
+                    CliLog.WriteList(new List<string> { $"MainOperation", $"Synchronous" }, true);
                     var update = new Entity("customapi", rows.Entities[0].Id);
                     update["plugintypeid"] = new EntityReference("plugintype", pluginTypeId);
                     XrmHelper.COUNT_UpdateAsync++;
