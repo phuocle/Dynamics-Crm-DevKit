@@ -25,6 +25,66 @@ namespace DynamicsCrm.DevKit.Shared
         public static List<SystemForm> EntitiesFormXml { get; set; } = new List<SystemForm>();
         public static List<ProcessForm> EntitiesProcessForm { get; set; } = new List<ProcessForm>();
 
+        /// <summary>
+        /// Retrieves all records using FetchXML with automatic paging.
+        /// Handles datasets larger than 5000 records by automatically paging through all results.
+        /// </summary>
+        /// <param name="serviceClient">The Dataverse service client</param>
+        /// <param name="fetchXml">The FetchXML query (without paging attributes)</param>
+        /// <returns>List of all entities matching the query</returns>
+        public static async Task<List<Entity>> RetrieveAllRecordsByFetchXmlAsync(ServiceClient serviceClient, string fetchXml)
+        {
+            var allRecords = new List<Entity>();
+            int pageNumber = 1;
+            string pagingCookie = null;
+            bool moreRecords = true;
+
+            while (moreRecords)
+            {
+                // Build the FetchXML with paging
+                var pagedFetchXml = CreatePagedFetchXml(fetchXml, pageNumber, pagingCookie);
+
+                // Execute the query
+                var response = await serviceClient.RetrieveMultipleAsync(new FetchExpression(pagedFetchXml));
+
+                // Add the records to the collection
+                allRecords.AddRange(response.Entities);
+
+                // Check if there are more records
+                moreRecords = response.MoreRecords;
+
+                if (moreRecords)
+                {
+                    pageNumber++;
+                    pagingCookie = response.PagingCookie;
+                }
+            }
+
+            return allRecords;
+        }
+
+        /// <summary>
+        /// Creates a paged FetchXML query by adding paging attributes to the fetch element.
+        /// </summary>
+        private static string CreatePagedFetchXml(string fetchXml, int pageNumber, string pagingCookie)
+        {
+            // Parse the FetchXML to add paging attributes
+            var xml = System.Xml.Linq.XDocument.Parse(fetchXml);
+            var fetchElement = xml.Root;
+
+            // Add page and count attributes
+            fetchElement.SetAttributeValue("page", pageNumber.ToString());
+            fetchElement.SetAttributeValue("count", "5000");
+
+            // Add paging cookie if present
+            if (!string.IsNullOrEmpty(pagingCookie))
+            {
+                fetchElement.SetAttributeValue("paging-cookie", pagingCookie);
+            }
+
+            return xml.ToString();
+        }
+
         public static async Task<(bool IsOk, Guid SolutionId, string Prefix)> IsExistSolutionAsync(ServiceClient serviceClient, string solutionuniquename)
         {
             var fetchData = new
