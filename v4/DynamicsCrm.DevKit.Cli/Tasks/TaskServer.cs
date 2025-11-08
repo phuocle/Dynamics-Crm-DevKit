@@ -1072,7 +1072,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 request.Parameters.Add("SolutionUniqueName", Json.solution);
                 CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE);
                 CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTERED.Trim());
-                CliLog.WriteLine(ConsoleColor.White, " Type ", ConsoleColor.Blue, $"{PluginType.DataSource} ", ConsoleColor.Cyan, $"{logicalNameDataSource}", ConsoleColor.White, " linked with events ", ConsoleColor.Cyan, events);
+                CliLog.Write(ConsoleColor.White, " Type ", ConsoleColor.Blue, $"{PluginType.DataSource} ", ConsoleColor.Cyan, $"{logicalNameDataSource}", ConsoleColor.White, " linked with events ", ConsoleColor.Cyan);
+                CliLog.WriteList(events.Split(",".ToCharArray()).ToList().Select(x => x.Trim()).ToList(), true);
                 XrmHelper.COUNT_ExecuteAsync++;
                 await ServiceClient.ExecuteAsync(request);
             }
@@ -1098,13 +1099,15 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     };
                     CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE);
                     CliLog.WriteSuccess(ConsoleColor.White, CliAction.UPDATED.Trim());
-                    CliLog.WriteLine(ConsoleColor.White, " Type ", ConsoleColor.Blue, $"{PluginType.DataSource} ", ConsoleColor.Cyan, $"{logicalNameDataSource}", ConsoleColor.White, " linked with events ", ConsoleColor.Cyan, events);
+                    CliLog.Write(ConsoleColor.White, " Type ", ConsoleColor.Blue, $"{PluginType.DataSource} ", ConsoleColor.Cyan, $"{logicalNameDataSource}", ConsoleColor.White, " linked with events ", ConsoleColor.Cyan);
+                    CliLog.WriteList(events.Split(",".ToCharArray()).ToList().Select(x => x.Trim()).ToList(), true);
                     XrmHelper.COUNT_ExecuteAsync++;
                     await ServiceClient.ExecuteAsync(request);
                 }
                 else
                 {
-                    CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, "Type ", ConsoleColor.Blue, $"{PluginType.DataSource} ", ConsoleColor.Cyan, $"{logicalNameDataSource}", ConsoleColor.White, " linked with events ", ConsoleColor.Cyan, events);
+                    CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, "Type ", ConsoleColor.Blue, $"{PluginType.DataSource} ", ConsoleColor.Cyan, $"{logicalNameDataSource}", ConsoleColor.White, " linked with events ", ConsoleColor.Cyan);
+                    CliLog.WriteList(events.Split(",".ToCharArray()).ToList().Select(x => x.Trim()).ToList(), true);
                 }
             }
         }
@@ -1187,28 +1190,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         {
             if (imageAliasName.Length == 0) imageAliasName = imageName;
             imageAttributes = imageAttributes?.Replace(" ", string.Empty);
-            //var fetchData = new
-            //{
-            //    name = imageName,
-            //    sdkmessageprocessingstepid = pluginStepId,
-            //    imagetype = (int)imageType
-            //};
-            //            var fetchXml = $@"
-            //<fetch>
-            //  <entity name='sdkmessageprocessingstepimage'>
-            //    <attribute name='sdkmessageprocessingstepimageid' />
-            //    <attribute name='name' />
-            //    <attribute name='entityalias' />
-            //    <attribute name='attributes' />
-            //    <attribute name='imagetype' />
-            //    <filter type='and'>
-            //      <condition attribute='sdkmessageprocessingstepid' operator='eq' value='{fetchData.sdkmessageprocessingstepid}'/>
-            //      <condition attribute='imagetype' operator='eq' value='{fetchData.imagetype}'/>
-            //      <condition attribute='name' operator='eq' value='{fetchData.name}'/>
-            //    </filter>
-            //  </entity>
-            //</fetch>";
-            //            var rows = await ServiceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
             var key = $"{pluginStepId}-{imageName}-{(int)imageType}";
             var rows = _PluginImagesCache.Where(x => x.Key == key).Select(x => x.Value).ToList();
             if (rows.Count > 0)
@@ -1351,27 +1332,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     attribute.FilteringAttributes = null;
                 }
             }
-
-            //            var fetchData = new
-            //            {
-            //                plugintypeid = pluginTypeId,
-            //                name = attribute.Name,
-            //                sdkmessageidname = attribute.Message
-            //            };
-            //            var fetchXml = $@"
-            //<fetch>
-            //  <entity name='sdkmessageprocessingstep'>
-            //    <all-attributes />
-            //    <filter type='and'>
-            //      <condition attribute='plugintypeid' operator='eq' value='{fetchData.plugintypeid}'/>
-            //      <condition attribute='name' operator='eq' value='{fetchData.name}'/>
-            //      <condition attribute='sdkmessageidname' operator='eq' value='{fetchData.sdkmessageidname}'/>
-            //    </filter>
-            //  </entity>
-            //</fetch>";
-            //            var rows = await ServiceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
-
-
             var key = $"{pluginTypeId}-{attribute.Name}";
             var rows = _PluginStepsCache.Where(x => x.Key == key).Select(x => x.Value).ToList();
             var SecureConfigurationAction = string.Empty;
@@ -1383,7 +1343,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     return null;
                 }
             }
-
             var sdkMessageFilterId = await GetSdkMessageFilterIdAsync(ServiceClient, attribute.EntityLogicalName, attribute.Message);
             var sdkMessageId = await GetSdkMessageIdAsync(ServiceClient, attribute.EntityLogicalName, attribute.Message);
             var impersonatingUserId = await XrmHelper.GetImpersonatingUserIdAsync(ServiceClient, attribute.RunAs);
@@ -1456,7 +1415,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 pluginStepId = rows[0].Id;
                 pluginStep["sdkmessageprocessingstepid"] = pluginStepId.Value;
                 var hasChangedPluginStep = false;
-                //var secureEntity = await XrmHelper.GetSecureEntityAsync(ServiceClient, pluginStepId.Value);
                 var _rows = _SecureEntityCache.Where(x => x.Key == pluginStepId.Value.ToString()).Select(x => x.Value).ToList();
                 var secureEntity = _rows.Count > 0 ? _rows[0] : null;
                 if (attribute.SecureConfiguration?.Trim().Length == 0 && secureEntity != null)
@@ -1529,6 +1487,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     else
                     {
                         CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE);
+                        CliLog.Write(ConsoleColor.Green, CliAction.DO_NOTHING);
                         CliLog.WriteSuccess(ConsoleColor.White, CliAction.DEACTIVATED.Trim());
                         CliLog.Write(ConsoleColor.White, $" Step ", ConsoleColor.Blue, attribute.Message, " ", ConsoleColor.Cyan, attribute.Name);
                         CliLog.WriteList(new List<string> { $"{attribute.Stage}", $"{attribute.ExecutionMode}" }, true);
@@ -1832,26 +1791,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         }
         private async Task<Guid?> DeployPluginTypeAsync(Guid pluginAssemblyId, TypeInfo type, CrmPluginRegistrationAttribute attribute, DeployFileType deployFileType)
         {
-            //            var fetchData = new
-            //            {
-            //                typename = type.FullName
-            //            };
-            //            var fetchXml = $@"
-            //<fetch>
-            //  <entity name='plugintype'>
-            //    <attribute name='plugintypeid' />
-            //    <attribute name='name' />
-            //    <attribute name='typename' />
-            //    <attribute name='friendlyname' />
-            //    <attribute name='workflowactivitygroupname' />
-            //    <attribute name='description' />
-            //    <attribute name='customworkflowactivityinfo' />
-            //    <filter type='and'>
-            //      <condition attribute='typename' operator='eq' value='{fetchData.typename}'/>
-            //    </filter>
-            //  </entity>
-            //</fetch>";
-            //            var rows = await ServiceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
             var rows = _PluginTypesCache.Where(x => x.Key == type.FullName).Select(x => x.Value).ToList();
             if (rows.Count > 0)
             {
