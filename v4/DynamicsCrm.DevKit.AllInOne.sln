@@ -9,10 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DynamicsCrm.DevKit.Cli", "D
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{089100B1-113F-4E66-888A-E83F3999EAFD}"
 	ProjectSection(SolutionItems) = preProject
-		date.txt = date.txt
+		ImportKey.bat = ImportKey.bat
 		release-version-date-current-date.bat = release-version-date-current-date.bat
 		release-version-date.bat = release-version-date.bat
-		version.txt = version.txt
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicsCrm.DevKit.Tool", "DynamicsCrm.DevKit.Tool\DynamicsCrm.DevKit.Tool.csproj", "{A4BF7AB3-EBC2-4AC9-ACCE-4F2790236A02}"
@@ -22,14 +21,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicsCrm.DevKit.CrmSvcUtilExtensions", "DynamicsCrm.DevKit.CrmSvcUtilExtensions\DynamicsCrm.DevKit.CrmSvcUtilExtensions.csproj", "{AF511858-3072-45D7-932D-C0D98470914E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicsCrm.DevKit", "DynamicsCrm.DevKit\DynamicsCrm.DevKit.csproj", "{A886E86E-65BC-40C1-8494-FE7E80B7E1A3}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
-	ProjectSection(SolutionItems) = preProject
-		.github\prompts\BeastMode.prompt.md = .github\prompts\BeastMode.prompt.md
-		.github\copilot-instructions.md = .github\copilot-instructions.md
-		.github\prompts\csharp-async.prompt.md = .github\prompts\csharp-async.prompt.md
-		.github\markdown.instructions.md = .github\markdown.instructions.md
-	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ItemTemplates", "ItemTemplates", "{618112B7-A33C-45A1-8D65-4BA24CA53484}"
 EndProject
@@ -464,7 +455,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{02EA681E-C7D8-13C7-8484-4AC65E1B71E8} = {089100B1-113F-4E66-888A-E83F3999EAFD}
 		{3CFA3C19-7820-46EE-8DF7-B1CCCFF03C27} = {618112B7-A33C-45A1-8D65-4BA24CA53484}
 		{921403BE-B301-40D8-B023-083C4747B50D} = {3CFA3C19-7820-46EE-8DF7-B1CCCFF03C27}
 		{F3432EFE-5FE3-46F4-9335-703E658C022E} = {3CFA3C19-7820-46EE-8DF7-B1CCCFF03C27}

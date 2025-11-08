@@ -5,7 +5,6 @@
 		<OutputType>Exe</OutputType>
 		<IsPublishable>True</IsPublishable>
 		<SignAssembly>True</SignAssembly>
-		<AssemblyOriginatorKeyFile>..\DynamicsCrm.DevKit.pfx</AssemblyOriginatorKeyFile>
 		<AssemblyVersion>4.00.00.00</AssemblyVersion>
 		<FileVersion>4.00.00.00</FileVersion>
 		<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
@@ -28,6 +27,7 @@
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
 		<PlatformTarget>x86</PlatformTarget>
 		<DefineConstants>TRACE</DefineConstants>
+		<AssemblyOriginatorKeyFile>..\DynamicsCrm.DevKit.pfx</AssemblyOriginatorKeyFile>
 	</PropertyGroup>
 	<ItemGroup>
 	  <Compile Remove="Nuget\**" />
