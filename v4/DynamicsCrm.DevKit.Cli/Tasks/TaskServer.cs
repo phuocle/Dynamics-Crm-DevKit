@@ -1113,8 +1113,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             //  </entity>
             //</fetch>";
             //            var rows = await ServiceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
-
-
             var key = $"{pluginStepId}-{imageName}-{(int)imageType}";
             var rows = _PluginImagesCache.Where(x => x.Key == key).Select(x => x.Value).ToList();
             if (rows.Count > 0)
