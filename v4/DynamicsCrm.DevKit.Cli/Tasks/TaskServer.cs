@@ -666,6 +666,38 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             if (!await IsValidTypesAsync(file, types, deployFileType)) return;
             await DeployFileAsync(file, types, deployFileType);
         }
+
+        private readonly Dictionary<string, Entity> _PluginTypeCache = new Dictionary<string, Entity>(StringComparer.OrdinalIgnoreCase);
+        private async Task LoadAllPluginTypesAsync(List<TypeInfo> types)
+        {
+            var condition = string.Empty;
+            foreach (var type in types)
+                condition += $"<condition attribute='typename' operator='eq' value='{type.FullName}'/>";
+            var fetchXml = $@"
+<fetch>
+  <entity name='plugintype'>
+    <attribute name='plugintypeid' />
+    <attribute name='name' />
+    <attribute name='typename' />
+    <attribute name='friendlyname' />
+    <attribute name='workflowactivitygroupname' />
+    <attribute name='description' />
+    <attribute name='customworkflowactivityinfo' />
+    <filter type='or'>{condition}</filter>
+  </entity>
+</fetch>";
+            var rows = await XrmHelper.RetrieveAllRecordsByFetchXmlAsync(ServiceClient, fetchXml);
+            _PluginTypeCache.Clear();
+            foreach (var entity in rows)
+            {
+                var name = entity.GetAttributeValue<string>("name");
+                if (!string.IsNullOrEmpty(name))
+                {
+                    _PluginTypeCache[name] = entity;
+                }
+            }
+            var t = string.Empty;
+        }
         private async Task DeployFileAsync(string file, List<TypeInfo> types, DeployFileType deployFileType)
         {
             var dataProviderEvents = new List<DataProviderEvent>();
@@ -698,6 +730,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 var attributes = GetCrmPluginRegistrationAttributes(type);
                 return attributes.Count > 0 ? attributes[0].Name : type.FullName;
             }).ToList();
+
+            await LoadAllPluginTypesAsync(sortedTypes);
+
             foreach (var type in sortedTypes)
             {
                 var attributes = GetCrmPluginRegistrationAttributes(type);
