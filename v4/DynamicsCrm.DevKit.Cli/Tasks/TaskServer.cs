@@ -334,7 +334,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var fetchXml = $@"
 <fetch>
   <entity name='pluginassembly'>
-    <all-attributes />
+    <attribute name='pluginassemblyid' />
+    <attribute name='name' />
+    <attribute name='content' />
+    <attribute name='managedidentityid' />
     <filter type='and'>
       <condition attribute='name' operator='eq' value='{fetchData.name}'/>
     </filter>
