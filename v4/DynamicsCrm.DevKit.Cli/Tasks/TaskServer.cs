@@ -1,6 +1,7 @@
 using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.PowerPlatform.Dataverse.Client;
+using Microsoft.VisualStudio.Utilities;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
@@ -692,9 +693,11 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         private readonly List<KeyValuePair<string, Entity>> _PluginTypesCache = new List<KeyValuePair<string, Entity>>();
         private readonly List<KeyValuePair<string, Entity>> _PluginStepsCache = new List<KeyValuePair<string, Entity>>();
         private readonly List<KeyValuePair<string, Entity>> _PluginImagesCache = new List<KeyValuePair<string, Entity>>();
-        private readonly List<KeyValuePair<string, int>> _ObjectTypeCodeCache = new List<KeyValuePair<string, int>>();
-        private readonly List<KeyValuePair<string, Entity>> _SecureEntityCache = new List<KeyValuePair<string, Entity>>();
-        private readonly List<KeyValuePair<string, EntityReference>> _SdkMessageCache = new List<KeyValuePair<string, EntityReference>>();
+        private readonly List<KeyValuePair<string, int>> _ObjectTypeCodesCache = new List<KeyValuePair<string, int>>();
+        private readonly List<KeyValuePair<string, Entity>> _SecureEntitiesCache = new List<KeyValuePair<string, Entity>>();
+        private readonly List<KeyValuePair<string, EntityReference>> _SdkMessagesCache = new List<KeyValuePair<string, EntityReference>>();
+        private readonly List<KeyValuePair<string, EntityReference>> _SdkMessageFiltersCache = new List<KeyValuePair<string, EntityReference>>();
+
         private async Task LoadAllPluginTypesAsync(List<TypeInfo> types)
         {
             _PluginTypesCache.Clear();
@@ -798,7 +801,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         }
         private async Task LoadAllSecureEntitiesAsync()
         {
-            _SecureEntityCache.Clear();
+            _SecureEntitiesCache.Clear();
             var totalBatches = (int)Math.Ceiling((double)_PluginStepsCache.Count / PACK);
             for (int i = 0; i < totalBatches; i++)
             {
@@ -825,7 +828,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var key = $"{sdkmessageprocessingstepid}";
                     if (!string.IsNullOrEmpty(key))
                     {
-                        _SecureEntityCache.Add(new KeyValuePair<string, Entity>(key, entity));
+                        _SecureEntitiesCache.Add(new KeyValuePair<string, Entity>(key, entity));
                     }
                 }
             }
@@ -839,15 +842,16 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             };
             XrmHelper.COUNT_ExecuteAsync++;
             var response = (RetrieveAllEntitiesResponse)await ServiceClient.ExecuteAsync(request);
-            _ObjectTypeCodeCache.Clear();
+            _ObjectTypeCodesCache.Clear();
             foreach(var item in response.EntityMetadata)
             {
-                if (item.ObjectTypeCode != null) _ObjectTypeCodeCache.Add(new KeyValuePair<string, int>(item.LogicalName, item.ObjectTypeCode.Value));
+                if (item.ObjectTypeCode != null) _ObjectTypeCodesCache.Add(new KeyValuePair<string, int>(item.LogicalName, item.ObjectTypeCode.Value));
             }
         }
-        private async Task LoadAllSdkMessagesAsync(List<TypeInfo> types)
+        private async Task LoadAllSdkMessages_And_SdkMessageFiltersAsync(List<TypeInfo> types)
         {
-            _SdkMessageCache.Clear();
+            _SdkMessagesCache.Clear();
+            _SdkMessageFiltersCache.Clear();
             var uniqueMessageCombinations = new HashSet<(string entityLogicalName, string message)>();
             foreach (var type in types)
             {
@@ -867,6 +871,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 var batch = messageList.Skip(i * PACK).Take(PACK).ToList();
                 var conditionNone = string.Empty;
                 var condition = string.Empty;
+                var condition2 = string.Empty;
                 foreach (var (entityLogicalName, message) in batch)
                 {
                     if (entityLogicalName == "none")
@@ -878,6 +883,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     {
                         var check = $"<condition attribute='primaryobjecttypecode' operator='eq' value='{GetObjectTypeCode(entityLogicalName)}'/>";
                         if (!condition.Contains(check)) condition += check;
+                        var check2 = $"<condition attribute='name' operator='eq' value='{message}'/>";
+                        if (!condition2.Contains(check2)) condition2 += check2;
                     }
                 }
                 if (conditionNone.Length > 0)
@@ -896,8 +903,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     {
                         var key = $"none-{entity.GetAttributeValue<string>("name")}";
                         var er = new EntityReference("sdkmessage", entity.GetAttributeValue<Guid>("sdkmessageid"));
-                        if (!_SdkMessageCache.Contains(new KeyValuePair<string, EntityReference>(key, er)))
-                            _SdkMessageCache.Add(new KeyValuePair<string, EntityReference>(key, er));
+                        if (!_SdkMessagesCache.Contains(new KeyValuePair<string, EntityReference>(key, er)))
+                            _SdkMessagesCache.Add(new KeyValuePair<string, EntityReference>(key, er));
                     }
                 }
                 if (condition.Length > 0)
@@ -920,8 +927,30 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         var Aliased = entity.GetAttributeValue<AliasedValue>("s.primaryobjecttypecode");
                         var key = $"{Aliased.Value}-{entity.GetAttributeValue<string>("name")}";
                         var er = new EntityReference("sdkmessage", entity.GetAttributeValue<Guid>("sdkmessageid"));
-                        if (!_SdkMessageCache.Contains(new KeyValuePair<string, EntityReference>(key, er)))
-                            _SdkMessageCache.Add(new KeyValuePair<string, EntityReference>(key, er));
+                        if (!_SdkMessagesCache.Contains(new KeyValuePair<string, EntityReference>(key, er)))
+                            _SdkMessagesCache.Add(new KeyValuePair<string, EntityReference>(key, er));
+                    }
+                    var fetchXml2 = $@"
+<fetch>
+  <entity name='sdkmessagefilter'>
+    <attribute name='sdkmessagefilterid' />
+    <attribute name='primaryobjecttypecode' />
+    <filter type='or'>{condition}</filter>
+    <link-entity name='sdkmessage' from='sdkmessageid' to='sdkmessageid' link-type='inner' alias='s'>
+      <attribute name='name' />
+      <filter type='or'>{condition2}</filter>
+    </link-entity>
+  </entity>
+</fetch>";
+                    XrmHelper.COUNT_RetrieveMultipleAsync++;
+                    var rows2 = await XrmHelper.RetrieveAllRecordsByFetchXmlAsync(ServiceClient, fetchXml2);
+                    foreach (var entity in rows2)
+                    {
+                        var Aliased = entity.GetAttributeValue<AliasedValue>("s.name");
+                        var key = $"{entity.GetAttributeValue<string>("primaryobjecttypecode")}-{Aliased.Value}";
+                        var er = new EntityReference("sdkmessagefilter", entity.GetAttributeValue<Guid>("sdkmessagefilterid"));
+                        if (!_SdkMessageFiltersCache.Contains(new KeyValuePair<string, EntityReference>(key, er)))
+                            _SdkMessageFiltersCache.Add(new KeyValuePair<string, EntityReference>(key, er));
                     }
                 }
             }
@@ -963,7 +992,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             await LoadAllPluginStepsAsync();
             await LoadAllPluginImagesAsync();
             await LoadAllSecureEntitiesAsync();
-            await LoadAllSdkMessagesAsync(sortedTypes);
+            await LoadAllSdkMessages_And_SdkMessageFiltersAsync(sortedTypes);
 
             foreach (var type in sortedTypes)
             {
@@ -1426,8 +1455,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     return null;
                 }
             }
-            var sdkMessageFilterId = await GetSdkMessageFilterIdAsync(ServiceClient, attribute.EntityLogicalName, attribute.Message);
-            //var sdkMessageId = await GetSdkMessageIdAsync(ServiceClient, attribute.EntityLogicalName, attribute.Message);
+            var sdkMessageFilterId = GetSdkMessageFilterId(attribute.EntityLogicalName, attribute.Message);
             var sdkMessageId = GetSdkMessageId(attribute.EntityLogicalName, attribute.Message);
             var impersonatingUserId = await XrmHelper.GetImpersonatingUserIdAsync(ServiceClient, attribute.RunAs);
 
@@ -1499,7 +1527,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 pluginStepId = rows[0].Id;
                 pluginStep["sdkmessageprocessingstepid"] = pluginStepId.Value;
                 var hasChangedPluginStep = false;
-                var _rows = _SecureEntityCache.Where(x => x.Key == pluginStepId.Value.ToString()).Select(x => x.Value).ToList();
+                var _rows = _SecureEntitiesCache.Where(x => x.Key == pluginStepId.Value.ToString()).Select(x => x.Value).ToList();
                 var secureEntity = _rows.Count > 0 ? _rows[0] : null;
                 if (attribute.SecureConfiguration?.Trim().Length == 0 && secureEntity != null)
                 {
@@ -2144,89 +2172,52 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         private int? GetObjectTypeCode(string entityName)
         {
             if (entityName?.Length == 0) return null;
-            var rows = _ObjectTypeCodeCache.Where(x => x.Key == entityName.ToLower()).Select(x => x.Value).ToList();
+            var rows = _ObjectTypeCodesCache.Where(x => x.Key == entityName.ToLower()).Select(x => x.Value).ToList();
             if (rows.Count == 1) return rows[0];
             return -1;
         }
 
-        private async Task<EntityReference> GetSdkMessageFilterIdAsync(ServiceClient service, string entityLogicalName, string message)
+        private EntityReference GetSdkMessageFilterId(string entityLogicalName, string message)
         {
             if (entityLogicalName?.Length == 0 || entityLogicalName?.ToLower() == "none") return null;
-            var fetchData = new
-            {
-                primaryobjecttypecode = GetObjectTypeCode(entityLogicalName),
-                name = message
-            };
-            var fetchXml = $@"
-<fetch>
-  <entity name='sdkmessagefilter'>
-    <attribute name='sdkmessagefilterid' />
-    <filter type='and'>
-      <condition attribute='primaryobjecttypecode' operator='eq' value='{fetchData.primaryobjecttypecode}'/>
-    </filter>
-    <link-entity name='sdkmessage' from='sdkmessageid' to='sdkmessageid'>
-      <filter type='and'>
-        <condition attribute='name' operator='eq' value='{fetchData.name}'/>
-      </filter>
-    </link-entity>
-  </entity>
-</fetch>";
-            XrmHelper.COUNT_RetrieveMultipleAsync++;
-            var rows = await service.RetrieveMultipleAsync(new FetchExpression(fetchXml));
-            return rows.Entities.Count == 0 ? null : new EntityReference("sdkmessagefilter", rows.Entities[0].Id);
+            var key = $"{entityLogicalName}-{message}";
+            var rows = _SdkMessageFiltersCache.Where(x => x.Key == key).Select(x => x.Value).ToList();
+            if (rows.Count == 1)
+                return rows[0];
+            return null;
+
+            //            if (entityLogicalName?.Length == 0 || entityLogicalName?.ToLower() == "none") return null;
+            //            var fetchData = new
+            //            {
+            //                primaryobjecttypecode = GetObjectTypeCode(entityLogicalName),
+            //                name = message
+            //            };
+            //            var fetchXml = $@"
+            //<fetch>
+            //  <entity name='sdkmessagefilter'>
+            //    <attribute name='sdkmessagefilterid' />
+            //    <filter type='and'>
+            //      <condition attribute='primaryobjecttypecode' operator='eq' value='{fetchData.primaryobjecttypecode}'/>
+            //    </filter>
+            //    <link-entity name='sdkmessage' from='sdkmessageid' to='sdkmessageid'>
+            //      <filter type='and'>
+            //        <condition attribute='name' operator='eq' value='{fetchData.name}'/>
+            //      </filter>
+            //    </link-entity>
+            //  </entity>
+            //</fetch>";
+            //            XrmHelper.COUNT_RetrieveMultipleAsync++;
+            //            var rows = await service.RetrieveMultipleAsync(new FetchExpression(fetchXml));
+            //            return rows.Entities.Count == 0 ? null : new EntityReference("sdkmessagefilter", rows.Entities[0].Id);
         }
 
         private EntityReference GetSdkMessageId(string entityLogicalName, string message)
         {
             if (entityLogicalName?.Length == 0) return null;
             var key = $"{entityLogicalName}-{message}";
-            var rows = _SdkMessageCache.Where(x => x.Key == key).Select(x => x.Value).ToList();
+            var rows = _SdkMessagesCache.Where(x => x.Key == key).Select(x => x.Value).ToList();
             if (rows.Count == 1) return rows[0];
             return null;
-
-            //            if (entityLogicalName?.Length == 0) return null;
-            //            string fetchXml;
-            //            if (entityLogicalName.ToLower() == "none")
-            //            {
-            //                var fetchData = new
-            //                {
-            //                    name = message
-            //                };
-            //                fetchXml = $@"
-            //<fetch>
-            //  <entity name='sdkmessage'>
-            //    <attribute name='sdkmessageid' />
-            //    <filter type='and'>
-            //      <condition attribute='name' operator='eq' value='{fetchData.name}'/>
-            //    </filter>
-            //  </entity>
-            //</fetch>";
-            //            }
-            //            else
-            //            {
-            //                var fetchData = new
-            //                {
-            //                    name = message,
-            //                    primaryobjecttypecode = GetObjectTypeCode(entityLogicalName)
-            //                };
-            //                fetchXml = $@"
-            //<fetch>
-            //  <entity name='sdkmessage'>
-            //    <attribute name='sdkmessageid' />
-            //    <filter type='and'>
-            //      <condition attribute='name' operator='eq' value='{fetchData.name}'/>
-            //    </filter>
-            //    <link-entity name='sdkmessagefilter' from='sdkmessageid' to='sdkmessageid'>
-            //      <filter type='and'>
-            //        <condition attribute='primaryobjecttypecode' operator='eq' value='{fetchData.primaryobjecttypecode}'/>
-            //      </filter>
-            //    </link-entity>
-            //  </entity>
-            //</fetch>";
-            //            }
-            //            XrmHelper.COUNT_RetrieveMultipleAsync++;
-            //            var rows = await service.RetrieveMultipleAsync(new FetchExpression(fetchXml));
-            //            return rows.Entities.Count == 0 ? null : new EntityReference("sdkmessage", rows.Entities[0].Id);
         }
     }
 }
