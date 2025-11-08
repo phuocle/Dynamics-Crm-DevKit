@@ -712,10 +712,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var totalBatches = (int)Math.Ceiling((double)_PluginTypesCache.Count / PACK);
             for (int i = 0; i < totalBatches; i++)
             {
-                var batchSteps = _PluginTypesCache.Skip(i * PACK).Take(PACK).ToList();
+                var entities = _PluginTypesCache.Skip(i * PACK).Take(PACK).ToList();
                 var condition = string.Empty;
-                foreach (var type in batchSteps)
-                    condition += $"<condition attribute='plugintypeid' operator='eq' value='{type.Value.GetAttributeValue<Guid>("plugintypeid")}'/>";
+                foreach (var entity in entities)
+                    condition += $"<condition attribute='plugintypeid' operator='eq' value='{entity.Value.GetAttributeValue<Guid>("plugintypeid")}'/>";
                 var fetchXml = $@"
 <fetch>
     <entity name='sdkmessageprocessingstep'>
@@ -732,6 +732,44 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     if (!string.IsNullOrEmpty(key))
                     {
                         _PluginStepsCache.Add(new KeyValuePair<string, Entity>(key, entity));
+                    }
+                }
+            }
+        }
+        private readonly List<KeyValuePair<string, Entity>> _PluginImagesCache = new List<KeyValuePair<string, Entity>>();
+        private async Task LoadAllPluginImagesAsync()
+        {
+            _PluginImagesCache.Clear();
+            var totalBatches = (int)Math.Ceiling((double)_PluginStepsCache.Count / PACK);
+            for (int i = 0; i < totalBatches; i++)
+            {
+                var entities = _PluginStepsCache.Skip(i * PACK).Take(PACK).ToList();
+                var condition = string.Empty;
+                foreach (var entity in entities)
+                    condition += $"<condition attribute='sdkmessageprocessingstepid' operator='eq' value='{entity.Value.GetAttributeValue<Guid>("sdkmessageprocessingstepid")}'/>";
+                var fetchXml = $@"
+<fetch>
+    <entity name='sdkmessageprocessingstepimage'>
+    <attribute name='sdkmessageprocessingstepimageid' />
+    <attribute name='name' />
+    <attribute name='entityalias' />
+    <attribute name='attributes' />
+    <attribute name='imagetype' />
+    <attribute name='sdkmessageprocessingstepid' />
+    <filter type='or'>{condition}</filter>
+    </entity>
+</fetch>";
+                var rows = await XrmHelper.RetrieveAllRecordsByFetchXmlAsync(ServiceClient, fetchXml);
+                foreach (var entity in rows)
+                {
+                    var sdkmessageprocessingstepid = entity.GetAttributeValue<EntityReference>("sdkmessageprocessingstepid").Id;
+                    var name = entity.GetAttributeValue<string>("name");
+                    var imageType = entity.GetAttributeValue<OptionSetValue>("imagetype");
+                    var key = $"{sdkmessageprocessingstepid}-{name}-{imageType.Value}";
+
+                    if (!string.IsNullOrEmpty(key))
+                    {
+                        _PluginImagesCache.Add(new KeyValuePair<string, Entity>(key, entity));
                     }
                 }
             }
@@ -772,6 +810,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
             await LoadAllPluginTypesAsync(sortedTypes);
             await LoadAllPluginStepsAsync();
+            await LoadAllPluginImagesAsync();
 
             foreach (var type in sortedTypes)
             {
@@ -1054,31 +1093,35 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         {
             if (imageAliasName.Length == 0) imageAliasName = imageName;
             imageAttributes = imageAttributes?.Replace(" ", string.Empty);
-            var fetchData = new
+            //var fetchData = new
+            //{
+            //    name = imageName,
+            //    sdkmessageprocessingstepid = pluginStepId,
+            //    imagetype = (int)imageType
+            //};
+            //            var fetchXml = $@"
+            //<fetch>
+            //  <entity name='sdkmessageprocessingstepimage'>
+            //    <attribute name='sdkmessageprocessingstepimageid' />
+            //    <attribute name='name' />
+            //    <attribute name='entityalias' />
+            //    <attribute name='attributes' />
+            //    <attribute name='imagetype' />
+            //    <filter type='and'>
+            //      <condition attribute='sdkmessageprocessingstepid' operator='eq' value='{fetchData.sdkmessageprocessingstepid}'/>
+            //      <condition attribute='imagetype' operator='eq' value='{fetchData.imagetype}'/>
+            //      <condition attribute='name' operator='eq' value='{fetchData.name}'/>
+            //    </filter>
+            //  </entity>
+            //</fetch>";
+            //            var rows = await ServiceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
+
+
+            var key = $"{pluginStepId}-{imageName}-{(int)imageType}";
+            var rows = _PluginImagesCache.Where(x => x.Key == key).Select(x => x.Value).ToList();
+            if (rows.Count > 0)
             {
-                name = imageName,
-                sdkmessageprocessingstepid = pluginStepId,
-                imagetype = (int)imageType
-            };
-            var fetchXml = $@"
-<fetch>
-  <entity name='sdkmessageprocessingstepimage'>
-    <attribute name='sdkmessageprocessingstepimageid' />
-    <attribute name='name' />
-    <attribute name='entityalias' />
-    <attribute name='attributes' />
-    <attribute name='imagetype' />
-    <filter type='and'>
-      <condition attribute='sdkmessageprocessingstepid' operator='eq' value='{fetchData.sdkmessageprocessingstepid}'/>
-      <condition attribute='imagetype' operator='eq' value='{fetchData.imagetype}'/>
-      <condition attribute='name' operator='eq' value='{fetchData.name}'/>
-    </filter>
-  </entity>
-</fetch>";
-            var rows = await ServiceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
-            if (rows.Entities.Count > 0)
-            {
-                if (rows.Entities.Count > 0 && rows.Entities.Count != 1)
+                if (rows.Count > 0 && rows.Count != 1)
                 {
                     CliLog.WriteLineError($"Found more than 1 plugin image name {imageName}. Assemply deployed, but the deployment of this assembly stopped.");
                     return Guid.Empty;
@@ -1093,7 +1136,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 ["entityalias"] = imageAliasName,
                 ["messagepropertyname"] = Helper.GetMessagePropertyName(message)
             };
-            if (rows.Entities.Count == 0)
+            if (rows.Count == 0)
             {
                 if (imageName.Length > 0 && imageAttributes.Length == 0)
                 {
@@ -1135,7 +1178,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             else
             {
-                var row = rows.Entities[0];
+                var row = rows[0];
                 var name = row.GetAttributeValue<string>("name");
                 var entityalias = row.GetAttributeValue<string>("entityalias");
                 var attributes = row.GetAttributeValue<string>("attributes");
@@ -1152,7 +1195,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 {
                     if (attributes == null || (attributes != (imageAttributes.Trim() == "*" ? null : imageAttributes) && imageAttributes.Length != 0))
                     {
-                        pluginImage["sdkmessageprocessingstepimageid"] = rows.Entities[0].Id;
+                        pluginImage["sdkmessageprocessingstepimageid"] = rows[0].Id;
                         CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE);
                         CliLog.WriteSuccess(ConsoleColor.White, CliAction.UPDATED.Trim());
                         CliLog.Write(ConsoleColor.White, " Image ", ConsoleColor.Blue, imageType, ConsoleColor.White, $", Name = ", ConsoleColor.Green, imageName, ConsoleColor.White, $", Alias = ", ConsoleColor.Green, imageAliasName, ConsoleColor.White, ", Image Fields =");
@@ -1164,7 +1207,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         CliLog.WriteSuccess(ConsoleColor.White, CliAction.DELETED.Trim());
                         CliLog.Write(ConsoleColor.White, " Image ", ConsoleColor.Blue, imageType, ConsoleColor.White, $", Name = ", ConsoleColor.Green, imageName, ConsoleColor.White, $", Alias = ", ConsoleColor.Green, imageAliasName, ConsoleColor.White, ", Image Fields =");
                         CliLog.WriteList(imageAttributes, true);
-                        await ServiceClient.DeleteAsync("sdkmessageprocessingstepimage", rows.Entities[0].Id);
+                        await ServiceClient.DeleteAsync("sdkmessageprocessingstepimage", rows[0].Id);
                         return Guid.NewGuid();
                     }
                     try
@@ -1184,7 +1227,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         return Guid.Empty;
                     }
                 }
-                return rows.Entities[0].Id;
+                return rows[0].Id;
             }
         }
         private bool HasPluginImage(CrmPluginRegistrationAttribute attribute)
@@ -1213,6 +1256,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     attribute.FilteringAttributes = null;
                 }
             }
+
             //            var fetchData = new
             //            {
             //                plugintypeid = pluginTypeId,
