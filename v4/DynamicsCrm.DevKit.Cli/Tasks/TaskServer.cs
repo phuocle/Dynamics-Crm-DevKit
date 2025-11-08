@@ -1417,26 +1417,29 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
                 else if (Helper.IsMessageCreate(attribute.Message))
                 {
-                    if (rows.Entities.Count == 0)
+                    if (attribute.FilteringAttributes.Length > 0)
                     {
-                        CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE);
-                        CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTERED.Trim());
-                        CliLog.Write(ConsoleColor.White, " Create Fields:");
-                        CliLog.WriteList(attribute.FilteringAttributes, true);
-                    }
-                    else
-                    {
-                        if (rows.Entities[0].GetAttributeValue<string>("filteringattributes") == attribute.FilteringAttributes?.Replace(" ", ""))
+                        if (rows.Entities.Count == 0)
                         {
-                            CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, "Create Fields:");
+                            CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE);
+                            CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTERED.Trim());
+                            CliLog.Write(ConsoleColor.White, " Create Fields:");
                             CliLog.WriteList(attribute.FilteringAttributes, true);
                         }
                         else
                         {
-                            CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE);
-                            CliLog.WriteSuccess(ConsoleColor.White, CliAction.UPDATED.Trim());
-                            CliLog.Write(ConsoleColor.White, " Create Fields:");
-                            CliLog.WriteList(attribute.FilteringAttributes, true);
+                            if (rows.Entities[0].GetAttributeValue<string>("filteringattributes") == attribute.FilteringAttributes?.Replace(" ", ""))
+                            {
+                                CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, "Create Fields:");
+                                CliLog.WriteList(attribute.FilteringAttributes, true);
+                            }
+                            else
+                            {
+                                CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE);
+                                CliLog.WriteSuccess(ConsoleColor.White, CliAction.UPDATED.Trim());
+                                CliLog.Write(ConsoleColor.White, " Create Fields:");
+                                CliLog.WriteList(attribute.FilteringAttributes, true);
+                            }
                         }
                     }
                 }
