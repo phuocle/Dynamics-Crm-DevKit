@@ -88,6 +88,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     {
                         CliLog.WriteLine(ConsoleColor.White, "|");
                     }
+                    await LoadObjectTypeCodeAsync();
                     await DeployFilesAsync(files);
                 }
             }
@@ -691,6 +692,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         private readonly List<KeyValuePair<string, Entity>> _PluginTypesCache = new List<KeyValuePair<string, Entity>>();
         private readonly List<KeyValuePair<string, Entity>> _PluginStepsCache = new List<KeyValuePair<string, Entity>>();
         private readonly List<KeyValuePair<string, Entity>> _PluginImagesCache = new List<KeyValuePair<string, Entity>>();
+        private readonly List<KeyValuePair<string, int>> _ObjectTypeCodeCache = new List<KeyValuePair<string, int>>();
         private async Task LoadAllPluginTypesAsync(List<TypeInfo> types)
         {
             _PluginTypesCache.Clear();
@@ -726,7 +728,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
             }
         }
-
         private async Task LoadAllPluginStepsAsync()
         {
             _PluginStepsCache.Clear();
@@ -757,7 +758,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
             }
         }
-
         private async Task LoadAllPluginImagesAsync()
         {
             _PluginImagesCache.Clear();
@@ -794,7 +794,21 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
             }
         }
-
+        private async Task LoadObjectTypeCodeAsync()
+        {
+            var request = new RetrieveAllEntitiesRequest
+            {
+                EntityFilters = EntityFilters.Entity,
+                RetrieveAsIfPublished = true
+            };
+            XrmHelper.COUNT_ExecuteAsync++;
+            var response = (RetrieveAllEntitiesResponse)await ServiceClient.ExecuteAsync(request);
+            _ObjectTypeCodeCache.Clear();
+            foreach(var item in response.EntityMetadata)
+            {
+                if (item.ObjectTypeCode != null) _ObjectTypeCodeCache.Add(new KeyValuePair<string, int>(item.LogicalName, item.ObjectTypeCode.Value));
+            }
+        }
         private async Task DeployFileAsync(string file, List<TypeInfo> types, DeployFileType deployFileType)
         {
             var dataProviderEvents = new List<DataProviderEvent>();
@@ -2047,17 +2061,12 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
         }
 
-        private async Task<int?> GetPrimaryObjectTypeCodeAsync(ServiceClient service, string entityName)
+        private int? GetPrimaryObjectTypeCode(string entityName)
         {
             if (entityName?.Length == 0) return null;
-            var request = new RetrieveEntityRequest
-            {
-                EntityFilters = EntityFilters.Entity,
-                LogicalName = entityName.ToLower()
-            };
-            XrmHelper.COUNT_ExecuteAsync++;
-            var response = (RetrieveEntityResponse)await service.ExecuteAsync(request);
-            return response.EntityMetadata.ObjectTypeCode ?? 0;
+            var rows = _ObjectTypeCodeCache.Where(x => x.Key == entityName.ToLower()).Select(x => x.Value).ToList();
+            if (rows.Count == 1) return rows[0];
+            return -1;
         }
 
         private async Task<EntityReference> GetSdkMessageFilterIdAsync(ServiceClient service, string entityLogicalName, string message)
@@ -2065,7 +2074,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             if (entityLogicalName?.Length == 0 || entityLogicalName?.ToLower() == "none") return null;
             var fetchData = new
             {
-                primaryobjecttypecode = await GetPrimaryObjectTypeCodeAsync(service, entityLogicalName),
+                primaryobjecttypecode = GetPrimaryObjectTypeCode(entityLogicalName),
                 name = message
             };
             var fetchXml = $@"
@@ -2112,7 +2121,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 var fetchData = new
                 {
                     name = message,
-                    primaryobjecttypecode = await GetPrimaryObjectTypeCodeAsync(service, entityLogicalName)
+                    primaryobjecttypecode = GetPrimaryObjectTypeCode(entityLogicalName)
                 };
                 fetchXml = $@"
 <fetch>
