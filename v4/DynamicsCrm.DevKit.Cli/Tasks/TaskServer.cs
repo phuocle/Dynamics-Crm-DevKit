@@ -12,13 +12,12 @@ using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace DynamicsCrm.DevKit.Cli.Tasks
 {
     public class TaskServer : ITask
     {
-        const int PACK = 7; // Process 50 types at a time to avoid FetchXML limitations
+        const int PACK = 50;
         private const string SPACE = "  ";
         private readonly Dictionary<string, Assembly> _assemblyCache = new Dictionary<string, Assembly>(StringComparer.OrdinalIgnoreCase);
         private bool OK { get; set; } = false;
@@ -673,8 +672,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         private async Task LoadAllPluginTypesAsync(List<TypeInfo> types)
         {
             _PluginTypesCache.Clear();
-            var totalBatches = (int)Math.Ceiling((double)types.Count / PACK);
-            for (int i = 0; i < totalBatches; i++)
+            var batches = (int)Math.Ceiling((double)types.Count / PACK);
+            for (int i = 0; i < batches; i++)
             {
                 var batchTypes = types.Skip(i * PACK).Take(PACK).ToList();
                 var condition = string.Empty;
@@ -709,8 +708,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         private async Task LoadAllPluginStepsAsync()
         {
             _PluginStepsCache.Clear();
-            var totalBatches = (int)Math.Ceiling((double)_PluginTypesCache.Count / PACK);
-            for (int i = 0; i < totalBatches; i++)
+            var batches = (int)Math.Ceiling((double)_PluginTypesCache.Count / PACK);
+            for (int i = 0; i < batches; i++)
             {
                 var entities = _PluginTypesCache.Skip(i * PACK).Take(PACK).ToList();
                 var condition = string.Empty;
@@ -719,8 +718,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 var fetchXml = $@"
 <fetch>
     <entity name='sdkmessageprocessingstep'>
-    <all-attributes />
-    <filter type='or'>{condition}</filter>
+        <all-attributes />
+        <filter type='or'>{condition}</filter>
     </entity>
 </fetch>";
                 var rows = await XrmHelper.RetrieveAllRecordsByFetchXmlAsync(ServiceClient, fetchXml);
@@ -750,13 +749,13 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 var fetchXml = $@"
 <fetch>
     <entity name='sdkmessageprocessingstepimage'>
-    <attribute name='sdkmessageprocessingstepimageid' />
-    <attribute name='name' />
-    <attribute name='entityalias' />
-    <attribute name='attributes' />
-    <attribute name='imagetype' />
-    <attribute name='sdkmessageprocessingstepid' />
-    <filter type='or'>{condition}</filter>
+        <attribute name='sdkmessageprocessingstepimageid' />
+        <attribute name='name' />
+        <attribute name='entityalias' />
+        <attribute name='attributes' />
+        <attribute name='imagetype' />
+        <attribute name='sdkmessageprocessingstepid' />
+        <filter type='or'>{condition}</filter>
     </entity>
 </fetch>";
                 var rows = await XrmHelper.RetrieveAllRecordsByFetchXmlAsync(ServiceClient, fetchXml);
@@ -766,7 +765,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var name = entity.GetAttributeValue<string>("name");
                     var imageType = entity.GetAttributeValue<OptionSetValue>("imagetype");
                     var key = $"{sdkmessageprocessingstepid}-{name}-{imageType.Value}";
-
                     if (!string.IsNullOrEmpty(key))
                     {
                         _PluginImagesCache.Add(new KeyValuePair<string, Entity>(key, entity));
