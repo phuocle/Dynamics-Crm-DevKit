@@ -45,6 +45,7 @@ namespace DynamicsCrm.DevKit.Shared
                 var pagedFetchXml = CreatePagedFetchXml(fetchXml, pageNumber, pagingCookie);
 
                 // Execute the query
+                COUNT++;
                 var response = await serviceClient.RetrieveMultipleAsync(new FetchExpression(pagedFetchXml));
 
                 // Add the records to the collection
@@ -104,6 +105,7 @@ namespace DynamicsCrm.DevKit.Shared
   </entity>
 </fetch>";
 
+            COUNT++;
             var rows = await serviceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
             if (rows.Entities.Count != 1) return (false, Guid.Empty, string.Empty);
             var entity = rows.Entities[0];
@@ -135,6 +137,7 @@ namespace DynamicsCrm.DevKit.Shared
             {
                 Query = entityQueryExpression
             };
+            COUNT++;
             var response = (RetrieveMetadataChangesResponse)await serviceClient.ExecuteAsync(request);
             foreach (EntityMetadata entityMetadata in response.EntityMetadata)
                 if (entityMetadata.LogicalName == logicalname)
@@ -1388,6 +1391,7 @@ namespace DynamicsCrm.DevKit.Shared
   </entity>
 </fetch>";
 
+            COUNT++;
             var rows = await service.RetrieveMultipleAsync(new FetchExpression(fetchXml));
             if (rows.Entities.Count != 1) return null;
             return rows.Entities[0];
@@ -1409,6 +1413,7 @@ namespace DynamicsCrm.DevKit.Shared
     </filter>
   </entity>
 </fetch>";
+            COUNT++;
             var rows = await service.RetrieveMultipleAsync(new FetchExpression(fetchXml));
             if (rows.Entities.Count == 0) return (Guid?)null;
             return rows.Entities[0].Id;
@@ -1456,6 +1461,7 @@ namespace DynamicsCrm.DevKit.Shared
   </entity>
 </fetch>";
             }
+            COUNT++;
             var rows = await service.RetrieveMultipleAsync(new FetchExpression(fetchXml));
             return rows.Entities.Count == 0 ? null : new EntityReference("sdkmessage", rows.Entities[0].Id);
         }
@@ -1468,6 +1474,7 @@ namespace DynamicsCrm.DevKit.Shared
                 EntityFilters = EntityFilters.Entity,
                 LogicalName = entityName.ToLower()
             };
+            COUNT++;
             var response = (RetrieveEntityResponse)await service.ExecuteAsync(request);
             return response.EntityMetadata.ObjectTypeCode ?? 0;
         }
@@ -1494,6 +1501,7 @@ namespace DynamicsCrm.DevKit.Shared
     </link-entity>
   </entity>
 </fetch>";
+            COUNT++;
             var rows = await service.RetrieveMultipleAsync(new FetchExpression(fetchXml));
             return rows.Entities.Count == 0 ? null : new EntityReference("sdkmessagefilter", rows.Entities[0].Id);
         }
@@ -1518,6 +1526,7 @@ namespace DynamicsCrm.DevKit.Shared
     </filter>
   </entity>
 </fetch>";
+            COUNT++;
             var rows = await service.RetrieveMultipleAsync(new FetchExpression(fetchXml));
             if (rows.Entities.Count != 1) return null;
             return rows.Entities[0];
@@ -1526,6 +1535,7 @@ namespace DynamicsCrm.DevKit.Shared
         internal static async Task<bool> IsVirtualTableSupportCRUDAsync(ServiceClient service)
         {
             var request = new RetrieveVersionRequest();
+            COUNT++;
             var response = (RetrieveVersionResponse)await service.ExecuteAsync(request);
             return new Version(response.Version) >= new Version("9.1.0.18950");
         }
