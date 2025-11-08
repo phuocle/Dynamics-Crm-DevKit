@@ -2138,32 +2138,5 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var rows = await service.RetrieveMultipleAsync(new FetchExpression(fetchXml));
             return rows.Entities.Count == 0 ? null : new EntityReference("sdkmessage", rows.Entities[0].Id);
         }
-
-//        internal static async Task<Entity> GetSecureEntityAsync(ServiceClient service, Guid pluginStepId)
-//        {
-//            var fetchData = new
-//            {
-//                sdkmessageprocessingstepid = pluginStepId
-//            };
-//            var fetchXml = $@"
-//<fetch>
-//  <entity name='sdkmessageprocessingstep'>
-//    <attribute name='name' />
-//    <attribute name='sdkmessageprocessingstepid' />
-//    <filter>
-//      <condition attribute='sdkmessageprocessingstepid' operator='eq' value='{fetchData.sdkmessageprocessingstepid}'/>
-//    </filter>
-//    <link-entity name='sdkmessageprocessingstepsecureconfig' from='sdkmessageprocessingstepsecureconfigid' to='sdkmessageprocessingstepsecureconfigid' link-type='outer' alias='s'>
-//      <attribute name='secureconfig' />
-//      <attribute name='sdkmessageprocessingstepsecureconfigid' />
-//    </link-entity>
-//  </entity>
-//</fetch>";
-
-//            XrmHelper.COUNT_RetrieveMultipleAsync++;
-//            var rows = await service.RetrieveMultipleAsync(new FetchExpression(fetchXml));
-//            if (rows.Entities.Count != 1) return null;
-//            return rows.Entities[0];
-//        }
     }
 }
