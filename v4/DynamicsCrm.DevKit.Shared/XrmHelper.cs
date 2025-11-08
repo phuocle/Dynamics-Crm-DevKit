@@ -20,7 +20,7 @@ namespace DynamicsCrm.DevKit.Shared
     {
         private const string NEW_LINE = "\r\n";
         private const string TAB = "\t";
-
+        public static int COUNT = 0;
         public static List<EntityMetadata> EntitiesMetadata { get; set; } = new List<EntityMetadata>();
         public static List<SystemForm> EntitiesFormXml { get; set; } = new List<SystemForm>();
         public static List<ProcessForm> EntitiesProcessForm { get; set; } = new List<ProcessForm>();
