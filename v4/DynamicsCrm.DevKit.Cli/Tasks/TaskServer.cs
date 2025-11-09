@@ -679,7 +679,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             if (!await IsValidTypesAsync(file, types, deployFileType)) return;
             await DeployFileAsync(file, types, deployFileType);
         }
-
         private readonly List<KeyValuePair<string, Entity>> _PluginTypesCache = new List<KeyValuePair<string, Entity>>();
         private readonly List<KeyValuePair<string, Entity>> _PluginStepsCache = new List<KeyValuePair<string, Entity>>();
         private readonly List<KeyValuePair<string, Entity>> _PluginImagesCache = new List<KeyValuePair<string, Entity>>();
@@ -688,7 +687,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         private readonly List<KeyValuePair<string, EntityReference>> _SdkMessagesCache = new List<KeyValuePair<string, EntityReference>>();
         private readonly List<KeyValuePair<string, EntityReference>> _SdkMessageFiltersCache = new List<KeyValuePair<string, EntityReference>>();
         private readonly List<KeyValuePair<string, List<CrmPluginRegistrationAttribute>>> _AttributesCache = new List<KeyValuePair<string, List<CrmPluginRegistrationAttribute>>>();
-
         private async Task LoadAllPluginTypesAsync()
         {
             _PluginTypesCache.Clear();
@@ -2052,7 +2050,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             return true;
         }
-        private List<CrmPluginRegistrationAttribute> GetCrmPluginRegistrationAttributess(TypeInfo type)
+        private List<CrmPluginRegistrationAttribute> GetCrmPluginRegistrationAttributes(TypeInfo type)
         {
             var list = new List<CrmPluginRegistrationAttribute>();
             var attributes = type.GetCustomAttributesData();
@@ -2112,14 +2110,12 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 CliLog.WriteLineError($"Failed to read types from assembly {file}: {ex.Message}");
             }
             types = [.. types.OrderBy(x => x.FullName)];
-
             _AttributesCache.Clear();
             foreach (var type in types)
             {
-                var attributes = GetCrmPluginRegistrationAttributess(type);
+                var attributes = GetCrmPluginRegistrationAttributes(type);
                 _AttributesCache.Add(new KeyValuePair<string, List<CrmPluginRegistrationAttribute>>(type.FullName, attributes));
             }
-
             return types;
         }
         private Assembly CurrentDomain_ReflectionOnlyAssemblyResolve(object sender, ResolveEventArgs args)
@@ -2152,7 +2148,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 zip.ExtractToFile($"{folder}\\{zip.Name}", true);
             }
         }
-
         private int? GetObjectTypeCode(string entityName)
         {
             if (entityName?.Length == 0) return null;
@@ -2160,7 +2155,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             if (rows.Count == 1) return rows[0];
             return -1;
         }
-
         private EntityReference GetSdkMessageFilterId(string entityLogicalName, string message)
         {
             if (entityLogicalName?.Length == 0 || entityLogicalName?.ToLower() == "none") return null;
@@ -2170,7 +2164,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 return rows[0];
             return null;
         }
-
         private EntityReference GetSdkMessageId(string entityLogicalName, string message)
         {
             if (entityLogicalName?.Length == 0) return null;
