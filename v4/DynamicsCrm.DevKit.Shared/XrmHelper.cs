@@ -1374,8 +1374,6 @@ namespace DynamicsCrm.DevKit.Shared
             }
         }
 
-
-
         internal static async Task<Guid?> GetImpersonatingUserIdAsync(ServiceClient service, string runAs)
         {
             if (runAs.Length == 0) return (Guid?)null;

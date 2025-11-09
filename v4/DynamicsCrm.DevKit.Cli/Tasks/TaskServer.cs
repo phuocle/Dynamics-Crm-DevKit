@@ -92,6 +92,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     await DeployFilesAsync(files);
                 }
             }
+#if DEBUG
             CliLog.WriteLine(ConsoleColor.White, "|");
             CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Cyan, $"Total Dataverse Requests COUNT_ExecuteAsync: {XrmHelper.COUNT_ExecuteAsync}");
             CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Cyan, $"Total Dataverse Requests COUNT_RetrieveMultipleAsync: {XrmHelper.COUNT_RetrieveMultipleAsync}");
@@ -99,7 +100,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Cyan, $"Total Dataverse Requests COUNT_DeleteAsync: {XrmHelper.COUNT_DeleteAsync}");
             CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Cyan, $"Total Dataverse Requests COUNT_RetrieveAsync: {XrmHelper.COUNT_RetrieveAsync}");
             CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Cyan, $"Total Dataverse Requests COUNT_UpdateAsync: {XrmHelper.COUNT_UpdateAsync}");
-
+#endif
             CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "END ");
         }
         private async Task DeployFilesAsync(List<string> files)
