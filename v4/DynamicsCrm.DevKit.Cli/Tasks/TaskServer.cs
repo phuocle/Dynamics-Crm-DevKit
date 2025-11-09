@@ -1911,32 +1911,13 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
             }
             var pluginType = new Entity("plugintype");
+            pluginType["name"] = attribute.Name;
+            pluginType["pluginassemblyid"] = new EntityReference("pluginassembly", pluginAssemblyId);
+            pluginType["typename"] = type.FullName;
+            pluginType["friendlyname"] = attribute.FriendlyName?.Length == 0 ? type.FullName : attribute.FriendlyName;
+            pluginType["description"] = attribute.Description?.Length == 0 ? null : attribute.Description;
             if (attribute.PluginType == PluginType.Workflow)
-            {
-                pluginType["name"] = attribute.Name;
-                pluginType["pluginassemblyid"] = new EntityReference("pluginassembly", pluginAssemblyId);
-                pluginType["typename"] = type.FullName;
-                pluginType["friendlyname"] = attribute.FriendlyName;
                 pluginType["workflowactivitygroupname"] = attribute.GroupName;
-            }
-            else
-            {
-                pluginType["name"] = type.FullName;
-                pluginType["pluginassemblyid"] = new EntityReference("pluginassembly", pluginAssemblyId);
-                pluginType["typename"] = type.FullName;
-                pluginType["friendlyname"] = type.FullName;
-            }
-            if (string.IsNullOrWhiteSpace(attribute.Description))
-            {
-                if (rows.Count == 0 || (rows.Count > 0 && string.IsNullOrWhiteSpace(rows[0].GetAttributeValue<string>("description"))))
-                {
-                    pluginType["description"] = Const.WindowTitle;
-                }
-            }
-            else
-            {
-                pluginType["description"] = attribute.Description;
-            }
             if (rows.Count == 0)
             {
                 var request = new CreateRequest
@@ -1953,37 +1934,28 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             else
             {
-                pluginType["plugintypeid"] = rows[0].Id;
-                var request = new UpdateRequest
+                var old = _PluginTypesCache
+                        .Select(x => x.Value)
+                        .FirstOrDefault(x => x.GetAttributeValue<Guid>("plugintypeid") == rows[0].Id);
+                if (
+                    pluginType.GetAttributeValue<string>("name") != old.GetAttributeValue<string>("name") ||
+                    pluginType.GetAttributeValue<string>("typename") != old.GetAttributeValue<string>("typename") ||
+                    pluginType.GetAttributeValue<string>("friendlyname") != old.GetAttributeValue<string>("friendlyname") ||
+                    pluginType.GetAttributeValue<string>("workflowactivitygroupname") != old.GetAttributeValue<string>("workflowactivitygroupname") ||
+                    pluginType.GetAttributeValue<string>("description") != old.GetAttributeValue<string>("description")
+                    )
                 {
-                    Target = pluginType
-                };
-                request.Parameters.Add("SolutionUniqueName", Json.solution);
-                try
-                {
+                    pluginType["plugintypeid"] = rows[0].Id;
+                    var request = new UpdateRequest
+                    {
+                        Target = pluginType
+                    };
+                    request.Parameters.Add("SolutionUniqueName", Json.solution);
                     XrmHelper.COUNT_ExecuteAsync++;
                     await ServiceClient.ExecuteAsync(request);
-                }
-                catch (Exception fe)
-                {
-                    CliLog.WriteLineError($"{fe.Message} Assemply deployed, but the deployment of this assembly stopped.");
-                    return null;
-                }
-                if (IsWorkflowType(type))
-                {
-                    var old = rows[0].GetAttributeValue<string>("customworkflowactivityinfo");
-                    XrmHelper.COUNT_RetrieveAsync++;
-                    var @new = (await ServiceClient.RetrieveAsync("plugintype", rows[0].Id, new ColumnSet("customworkflowactivityinfo"))).GetAttributeValue<string>("customworkflowactivityinfo");
-                    if (Helper.IsEqualsContent(old, @new))
-                    {
-                        CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, ConsoleColor.White, "Type ", ConsoleColor.Blue, attribute.PluginType, " ", ConsoleColor.Cyan, type.FullName);
-                    }
-                    else
-                    {
-                        CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE);
-                        CliLog.WriteSuccess(ConsoleColor.White, CliAction.UPDATED.Trim());
-                        CliLog.WriteLine(ConsoleColor.White, " Type ", ConsoleColor.Blue, attribute.PluginType, " ", ConsoleColor.Cyan, type.FullName);
-                    }
+                    CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE);
+                    CliLog.WriteSuccess(ConsoleColor.White, CliAction.UPDATED.Trim());
+                    CliLog.WriteLine(ConsoleColor.White, " Type ", ConsoleColor.Blue, attribute.PluginType, " ", ConsoleColor.Cyan, type.FullName);
                 }
                 else
                 {
