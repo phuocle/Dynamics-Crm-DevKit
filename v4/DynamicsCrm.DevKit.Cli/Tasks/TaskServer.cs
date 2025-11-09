@@ -680,11 +680,12 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             if (!await IsValidTypesAsync(file, types, deployFileType)) return;
             await DeployFileAsync(file, types, deployFileType);
         }
+        private readonly List<KeyValuePair<string, int>> _ObjectTypeCodesCache = new List<KeyValuePair<string, int>>();
         private readonly List<KeyValuePair<string, Entity>> _PluginTypesCache = new List<KeyValuePair<string, Entity>>();
         private readonly List<KeyValuePair<string, Entity>> _PluginStepsCache = new List<KeyValuePair<string, Entity>>();
         private readonly List<KeyValuePair<string, Entity>> _PluginImagesCache = new List<KeyValuePair<string, Entity>>();
-        private readonly List<KeyValuePair<string, int>> _ObjectTypeCodesCache = new List<KeyValuePair<string, int>>();
         private readonly List<KeyValuePair<string, Entity>> _SecureEntitiesCache = new List<KeyValuePair<string, Entity>>();
+        private readonly List<KeyValuePair<string, Entity>> _CustomApisCache = new List<KeyValuePair<string, Entity>>();
         private readonly List<KeyValuePair<string, EntityReference>> _SdkMessagesCache = new List<KeyValuePair<string, EntityReference>>();
         private readonly List<KeyValuePair<string, EntityReference>> _SdkMessageFiltersCache = new List<KeyValuePair<string, EntityReference>>();
         private readonly List<KeyValuePair<string, List<CrmPluginRegistrationAttribute>>> _AttributesCache = new List<KeyValuePair<string, List<CrmPluginRegistrationAttribute>>>();
@@ -716,10 +717,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 foreach (var entity in rows)
                 {
                     var typename = entity.GetAttributeValue<string>("typename");
-                    if (!string.IsNullOrEmpty(typename))
-                    {
-                        _PluginTypesCache.Add(new KeyValuePair<string, Entity>(typename, entity));
-                    }
+                    _PluginTypesCache.Add(new KeyValuePair<string, Entity>(typename, entity));
                 }
             }
         }
@@ -746,10 +744,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var plugintypeid = entity.GetAttributeValue<EntityReference>("plugintypeid").Id;
                     var name = entity.GetAttributeValue<string>("name");
                     var key = $"{plugintypeid}-{name}";
-                    if (!string.IsNullOrEmpty(key))
-                    {
-                        _PluginStepsCache.Add(new KeyValuePair<string, Entity>(key, entity));
-                    }
+                    _PluginStepsCache.Add(new KeyValuePair<string, Entity>(key, entity));
                 }
             }
         }
@@ -782,10 +777,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var name = entity.GetAttributeValue<string>("name");
                     var imageType = entity.GetAttributeValue<OptionSetValue>("imagetype");
                     var key = $"{sdkmessageprocessingstepid}-{name}-{imageType.Value}";
-                    if (!string.IsNullOrEmpty(key))
-                    {
-                        _PluginImagesCache.Add(new KeyValuePair<string, Entity>(key, entity));
-                    }
+                    _PluginImagesCache.Add(new KeyValuePair<string, Entity>(key, entity));
                 }
             }
         }
@@ -816,10 +808,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 {
                     var sdkmessageprocessingstepid = entity.GetAttributeValue<Guid>("sdkmessageprocessingstepid");
                     var key = $"{sdkmessageprocessingstepid}";
-                    if (!string.IsNullOrEmpty(key))
-                    {
-                        _SecureEntitiesCache.Add(new KeyValuePair<string, Entity>(key, entity));
-                    }
+                    _SecureEntitiesCache.Add(new KeyValuePair<string, Entity>(key, entity));
                 }
             }
         }
@@ -838,7 +827,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 if (item.ObjectTypeCode != null) _ObjectTypeCodesCache.Add(new KeyValuePair<string, int>(item.LogicalName, item.ObjectTypeCode.Value));
             }
         }
-        private async Task LoadAllSdkMessages_And_SdkMessageFiltersAsync()
+        private async Task LoadAll_SdkMessages_SdkMessageFilters_Async()
         {
             _SdkMessagesCache.Clear();
             _SdkMessageFiltersCache.Clear();
@@ -896,6 +885,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                             _SdkMessagesCache.Add(new KeyValuePair<string, EntityReference>(key, er));
                     }
                 }
+
                 if (condition.Length > 0)
                 {
                     var fetchXml = $@"
@@ -944,6 +934,49 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
             }
         }
+        private async Task LoadAllCustomApisAsync()
+        {
+            _CustomApisCache.Clear();
+            var customApiMessages = new List<string>();
+            foreach (var list in _AttributesCache)
+            {
+                foreach (var attribute in list.Value)
+                {
+                    if (attribute.PluginType == PluginType.CustomApi)
+                    {
+                        customApiMessages.Add(attribute.Message);
+                    }
+                }
+            }
+            var messageBatches = (int)Math.Ceiling((double)customApiMessages.Count / PACK);
+            for (int i = 0; i < messageBatches; i++)
+            {
+                var messages = customApiMessages.Skip(i * PACK).Take(PACK).ToList();
+                var condition = string.Empty;
+                foreach (var message in messages)
+                {
+                    var check = $"<condition attribute='uniquename' operator='eq' value='{message}'/>";
+                    if (!condition.Contains(check)) condition += check;
+                }
+                var fetchXml = $@"
+<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+    <entity name='customapi'>
+        <attribute name='customapiid'/>
+        <attribute name='uniquename'/>
+        <attribute name='plugintypeid'/>
+        <filter type='or'>{condition}</filter>
+    </entity>
+</fetch>
+";
+                XrmHelper.COUNT_RetrieveMultipleAsync++;
+                var rows = await XrmHelper.RetrieveAllRecordsByFetchXmlAsync(ServiceClient, fetchXml);
+                foreach (var entity in rows)
+                {
+                    var key = $"{entity.GetAttributeValue<string>("uniquename")}";
+                    _CustomApisCache.Add(new KeyValuePair<string, Entity>(key, entity));
+                }
+            }
+        }
         private async Task DeployFileAsync(string file, List<TypeInfo> types, DeployFileType deployFileType)
         {
             var dataProviderEvents = new List<DataProviderEvent>();
@@ -981,8 +1014,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             await LoadAllPluginStepsAsync();
             await LoadAllPluginImagesAsync();
             await LoadAllSecureEntitiesAsync();
-            await LoadAllSdkMessages_And_SdkMessageFiltersAsync();
-
+            await LoadAll_SdkMessages_SdkMessageFilters_Async();
+            await LoadAllCustomApisAsync();
             foreach (var type in sortedTypes)
             {
                 var attributes = _AttributesCache.FirstOrDefault(x => x.Key == type.FullName).Value;
@@ -1214,29 +1247,13 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         }
         private async Task DeployCustomApiStepAsync(Guid pluginTypeId, string pluginTypeName, CrmPluginRegistrationAttribute attribute)
         {
-            var fetchData = new
-            {
-                uniquename = attribute.Message
-            };
-            var fetchXml = $@"
-<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
-  <entity name='customapi'>
-    <attribute name='customapiid'/>
-    <attribute name='plugintypeid'/>
-    <filter type='and'>
-      <condition attribute='uniquename' operator='eq' value='{fetchData.uniquename}'/>
-    </filter>
-  </entity>
-</fetch>
-";
-            XrmHelper.COUNT_RetrieveMultipleAsync++;
-            var rows = await ServiceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
-            if (rows.Entities.Count != 1)
+            var rows = _CustomApisCache.Where(x => x.Key == attribute.Message).Select(x => x.Value).ToList();
+            if (rows.Count != 1)
             {
                 CliLog.WriteLineError($"Custom Api with message {attribute.Message} not found. Assemply deployed, but the deployment of this assembly stopped.");
                 return;
             }
-            if (rows.Entities[0].GetAttributeValue<EntityReference>("plugintypeid")?.Id.ToString("D") == pluginTypeId.ToString("D"))
+            if (rows[0].GetAttributeValue<EntityReference>("plugintypeid")?.Id.ToString("D") == pluginTypeId.ToString("D"))
             {
                 if (attribute.Action == PluginStepOperationEnum.Activate)
                 {
@@ -1245,7 +1262,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
                 else
                 {
-                    var update = new Entity("customapi", rows.Entities[0].Id);
+                    var update = new Entity("customapi", rows[0].Id);
                     update["plugintypeid"] = null;
                     XrmHelper.COUNT_UpdateAsync++;
                     await ServiceClient.UpdateAsync(update);
@@ -1267,7 +1284,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTERED.Trim());
                     CliLog.WriteLine(ConsoleColor.White, " Step ", ConsoleColor.Blue, attribute.Message, ConsoleColor.White, " ", ConsoleColor.Cyan, pluginTypeName);
                     CliLog.WriteList(new List<string> { $"MainOperation", $"Synchronous" }, true);
-                    var update = new Entity("customapi", rows.Entities[0].Id);
+                    var update = new Entity("customapi", rows[0].Id);
                     update["plugintypeid"] = new EntityReference("plugintype", pluginTypeId);
                     XrmHelper.COUNT_UpdateAsync++;
                     await ServiceClient.UpdateAsync(update);
