@@ -54,6 +54,10 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Plugins\Email\PostEmailBackgroundSendAsynchronous.cs" />
+    <Compile Include="Plugins\Email\PostEmailSendFromTemplateAsynchronous.cs" />
+    <Compile Include="Plugins\PhoneCall\PostPhoneCallAssignAsynchronous.cs" />
+    <Compile Include="Plugins\Task\PostTaskCreateMultipleAsynchronous.cs" />
     <Compile Include="Workflows\SendEmailByQueue.cs" />
     <None Include="packages.config" />
     <None Include="Dev.DevKitV4.Server.snk" />
