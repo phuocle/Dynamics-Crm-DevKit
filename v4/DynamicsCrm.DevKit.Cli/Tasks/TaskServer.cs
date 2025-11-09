@@ -1,7 +1,6 @@
 using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.PowerPlatform.Dataverse.Client;
-using Microsoft.VisualStudio.Utilities;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
@@ -308,12 +307,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         {
             (string name, int value) GetIsolationMode(string file)
             {
-                var types = GetTypes(file);
-                foreach (var type in types)
+                foreach (var list in _AttributesCache)
                 {
-                    if (IsWorkflowType(type)) continue;
-                    var attributes = GetCrmPluginRegistrationAttributes(type);
-                    foreach (var attribute in attributes)
+                    foreach (var attribute in list.Value)
                     {
                         if (attribute.IsolationMode == IsolationModeEnum.None) return ("None", 1);
                         if (attribute.IsolationMode == IsolationModeEnum.Sandbox) return ("Sandbox", 2);
@@ -324,12 +320,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             (string name, int value) GetSourceType(string file)
             {
-                var types = GetTypes(file);
-                foreach (var type in types)
+                foreach (var list in _AttributesCache)
                 {
-                    if (IsWorkflowType(type)) continue;
-                    var attributes = GetCrmPluginRegistrationAttributes(type);
-                    foreach (var attribute in attributes)
+                    foreach (var attribute in list.Value)
                     {
                         if (attribute.SourceType == SourceTypeEnum.Database) return ("Database", 0);
                         if (attribute.SourceType == SourceTypeEnum.Disk) return ("Disk", 1);
@@ -528,7 +521,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         }
         private async Task<(Guid ManagedIdentityId, Guid ApplicationId)> DeployManagedIdentityAsync(string assemblyName, Guid TenantId, string ApplicationIds)
         {
-
             var AppIds = ApplicationIds.Contains(";") ? ApplicationIds.Split(";".ToCharArray()) : ApplicationIds.Split(",".ToCharArray());
             var isDevApplication = true;
             Guid? _ManagedIdentityId = null;
@@ -620,8 +612,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             return attribute;
         }
-
-
         public async Task<bool> IsValidAsync()
         {
             if (Json == null)
@@ -697,17 +687,18 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         private readonly List<KeyValuePair<string, Entity>> _SecureEntitiesCache = new List<KeyValuePair<string, Entity>>();
         private readonly List<KeyValuePair<string, EntityReference>> _SdkMessagesCache = new List<KeyValuePair<string, EntityReference>>();
         private readonly List<KeyValuePair<string, EntityReference>> _SdkMessageFiltersCache = new List<KeyValuePair<string, EntityReference>>();
+        private readonly List<KeyValuePair<string, List<CrmPluginRegistrationAttribute>>> _AttributesCache = new List<KeyValuePair<string, List<CrmPluginRegistrationAttribute>>>();
 
-        private async Task LoadAllPluginTypesAsync(List<TypeInfo> types)
+        private async Task LoadAllPluginTypesAsync()
         {
             _PluginTypesCache.Clear();
-            var batches = (int)Math.Ceiling((double)types.Count / PACK);
+            var batches = (int)Math.Ceiling((double)_AttributesCache.Count / PACK);
             for (int i = 0; i < batches; i++)
             {
-                var batchTypes = types.Skip(i * PACK).Take(PACK).ToList();
+                var batchTypes = _AttributesCache.Skip(i * PACK).Take(PACK).ToList();
                 var condition = string.Empty;
                 foreach (var type in batchTypes)
-                    condition += $"<condition attribute='typename' operator='eq' value='{type.FullName}'/>";
+                    condition += $"<condition attribute='typename' operator='eq' value='{type.Key}'/>";
                 var fetchXml = $@"
 <fetch>
   <entity name='plugintype'>
@@ -848,19 +839,18 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 if (item.ObjectTypeCode != null) _ObjectTypeCodesCache.Add(new KeyValuePair<string, int>(item.LogicalName, item.ObjectTypeCode.Value));
             }
         }
-        private async Task LoadAllSdkMessages_And_SdkMessageFiltersAsync(List<TypeInfo> types)
+        private async Task LoadAllSdkMessages_And_SdkMessageFiltersAsync()
         {
             _SdkMessagesCache.Clear();
             _SdkMessageFiltersCache.Clear();
             var uniqueMessageCombinations = new HashSet<(string entityLogicalName, string message)>();
-            foreach (var type in types)
+            foreach (var list in _AttributesCache)
             {
-                var attributes = GetCrmPluginRegistrationAttributes(type);
-                foreach (var attr in attributes)
+                foreach (var attribute in list.Value)
                 {
-                    if (!string.IsNullOrEmpty(attr.Message) && !string.IsNullOrEmpty(attr.EntityLogicalName))
+                    if (!string.IsNullOrEmpty(attribute.Message) && !string.IsNullOrEmpty(attribute.EntityLogicalName))
                     {
-                        uniqueMessageCombinations.Add((attr.EntityLogicalName, attr.Message));
+                        uniqueMessageCombinations.Add((attribute.EntityLogicalName, attribute.Message));
                     }
                 }
             }
@@ -970,8 +960,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             var sortedTypes = types.OrderBy(type =>
             {
-                var attributes = GetCrmPluginRegistrationAttributes(type);
-                if (attributes.Count == 0) return int.MaxValue;
+                var attributes = _AttributesCache.FirstOrDefault(x => x.Key == type.FullName).Value;
+                if (attributes == null || attributes.Count == 0) return int.MaxValue;
                 var pluginType = attributes[0].PluginType;
                 return pluginType switch
                 {
@@ -984,19 +974,19 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 };
             }).ThenBy(type =>
             {
-                var attributes = GetCrmPluginRegistrationAttributes(type);
-                return attributes.Count > 0 ? attributes[0].Name : type.FullName;
+                var attributes = _AttributesCache.FirstOrDefault(x => x.Key == type.FullName).Value;
+                return attributes != null && attributes.Count > 0 ? attributes[0].Name : type.FullName;
             }).ToList();
 
-            await LoadAllPluginTypesAsync(sortedTypes);
+            await LoadAllPluginTypesAsync();
             await LoadAllPluginStepsAsync();
             await LoadAllPluginImagesAsync();
             await LoadAllSecureEntitiesAsync();
-            await LoadAllSdkMessages_And_SdkMessageFiltersAsync(sortedTypes);
+            await LoadAllSdkMessages_And_SdkMessageFiltersAsync();
 
             foreach (var type in sortedTypes)
             {
-                var attributes = GetCrmPluginRegistrationAttributes(type);
+                var attributes = _AttributesCache.FirstOrDefault(x => x.Key == type.FullName).Value;
                 if (attributes[0].Unregister)
                 {
                     var error = await UnregisterPluginTypeAsync(pluginAssemblyId.Value, type, attributes[0], deployFileType);
@@ -1851,23 +1841,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         }
         private async Task<bool?> UnregisterPluginTypeAsync(Guid pluginAssemblyId, TypeInfo type, CrmPluginRegistrationAttribute attribute, DeployFileType deployFileType)
         {
-            var fetchData = new
-            {
-                typename = type.FullName
-            };
-            var fetchXml = $@"
-<fetch>
-  <entity name='plugintype'>
-    <attribute name='plugintypeid' />
-    <filter type='and'>
-      <condition attribute='typename' operator='eq' value='{fetchData.typename}'/>
-    </filter>
-  </entity>
-</fetch>";
-            XrmHelper.COUNT_RetrieveMultipleAsync++;
-            var rows = await ServiceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
-            if (rows.Entities.Count != 1) return null;
-            var pluginTypeId = rows.Entities[0].GetAttributeValue<Guid>("plugintypeid");
+            var rows = _PluginTypesCache.Where(x => x.Key == type.FullName).Select(x => x.Value).ToList();
+            if (rows.Count != 1) return null;
+            var pluginTypeId = rows[0].GetAttributeValue<Guid>("plugintypeid");
             try
             {
                 await DeletePluginStepsAsync();
@@ -2056,8 +2032,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         {
             foreach (var type in types)
             {
-                var attributes = GetCrmPluginRegistrationAttributes(type);
-                if (attributes.Count() > 1)
+                var attributes = _AttributesCache.FirstOrDefault(x => x.Key == type.FullName).Value;
+                if (attributes != null && attributes.Count() > 1)
                 {
                     if (IsWorkflowType(type))
                     {
@@ -2076,7 +2052,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             return true;
         }
-        private List<CrmPluginRegistrationAttribute> GetCrmPluginRegistrationAttributes(TypeInfo type)
+        private List<CrmPluginRegistrationAttribute> GetCrmPluginRegistrationAttributess(TypeInfo type)
         {
             var list = new List<CrmPluginRegistrationAttribute>();
             var attributes = type.GetCustomAttributesData();
@@ -2136,6 +2112,14 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 CliLog.WriteLineError($"Failed to read types from assembly {file}: {ex.Message}");
             }
             types = [.. types.OrderBy(x => x.FullName)];
+
+            _AttributesCache.Clear();
+            foreach (var type in types)
+            {
+                var attributes = GetCrmPluginRegistrationAttributess(type);
+                _AttributesCache.Add(new KeyValuePair<string, List<CrmPluginRegistrationAttribute>>(type.FullName, attributes));
+            }
+
             return types;
         }
         private Assembly CurrentDomain_ReflectionOnlyAssemblyResolve(object sender, ResolveEventArgs args)
@@ -2185,30 +2169,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             if (rows.Count == 1)
                 return rows[0];
             return null;
-
-            //            if (entityLogicalName?.Length == 0 || entityLogicalName?.ToLower() == "none") return null;
-            //            var fetchData = new
-            //            {
-            //                primaryobjecttypecode = GetObjectTypeCode(entityLogicalName),
-            //                name = message
-            //            };
-            //            var fetchXml = $@"
-            //<fetch>
-            //  <entity name='sdkmessagefilter'>
-            //    <attribute name='sdkmessagefilterid' />
-            //    <filter type='and'>
-            //      <condition attribute='primaryobjecttypecode' operator='eq' value='{fetchData.primaryobjecttypecode}'/>
-            //    </filter>
-            //    <link-entity name='sdkmessage' from='sdkmessageid' to='sdkmessageid'>
-            //      <filter type='and'>
-            //        <condition attribute='name' operator='eq' value='{fetchData.name}'/>
-            //      </filter>
-            //    </link-entity>
-            //  </entity>
-            //</fetch>";
-            //            XrmHelper.COUNT_RetrieveMultipleAsync++;
-            //            var rows = await service.RetrieveMultipleAsync(new FetchExpression(fetchXml));
-            //            return rows.Entities.Count == 0 ? null : new EntityReference("sdkmessagefilter", rows.Entities[0].Id);
         }
 
         private EntityReference GetSdkMessageId(string entityLogicalName, string message)
