@@ -19,7 +19,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 {
     public class TaskServer : ITask
     {
-        const int PACK = 20;
+        const int PACK = 50;
         private const string SPACE = "  ";
         private readonly Dictionary<string, Assembly> _assemblyCache = new Dictionary<string, Assembly>(StringComparer.OrdinalIgnoreCase);
         private bool OK { get; set; } = false;
@@ -876,7 +876,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
     <filter type='or'>{conditionNone}</filter>
   </entity>
 </fetch>";
-                    XrmHelper.COUNT_RetrieveMultipleAsync++;
                     var rows = await XrmHelper.RetrieveAllRecordsByFetchXmlAsync(ServiceClient, fetchXml);
                     foreach (var entity in rows)
                     {
@@ -900,7 +899,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
     </link-entity>
   </entity>
 </fetch>";
-                    XrmHelper.COUNT_RetrieveMultipleAsync++;
                     var rows = await XrmHelper.RetrieveAllRecordsByFetchXmlAsync(ServiceClient, fetchXml);
                     foreach (var entity in rows)
                     {
@@ -922,7 +920,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
     </link-entity>
   </entity>
 </fetch>";
-                    XrmHelper.COUNT_RetrieveMultipleAsync++;
                     var rows2 = await XrmHelper.RetrieveAllRecordsByFetchXmlAsync(ServiceClient, fetchXml2);
                     foreach (var entity in rows2)
                     {
@@ -965,7 +962,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
     </entity>
 </fetch>
 ";
-                XrmHelper.COUNT_RetrieveMultipleAsync++;
                 var rows = await XrmHelper.RetrieveAllRecordsByFetchXmlAsync(ServiceClient, fetchXml);
                 foreach (var entity in rows)
                 {
