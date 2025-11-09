@@ -8,6 +8,7 @@ using Microsoft.Xrm.Sdk.Query;
 using NuGet.Packaging;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -975,6 +976,15 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         }
         private async Task DeployFileAsync(string file, List<TypeInfo> types, DeployFileType deployFileType)
         {
+            if (!(Arg?.OnlyUpdateAssembly?.Length > 0))
+            {
+                await LoadAllPluginTypesAsync();
+                await LoadAllPluginStepsAsync();
+                await LoadAllPluginImagesAsync();
+                await LoadAllSecureEntitiesAsync();
+                await LoadAll_SdkMessages_SdkMessageFilters_Async();
+                await LoadAllCustomApisAsync();
+            }
             var dataProviderEvents = new List<DataProviderEvent>();
             var pluginAssemblyId = await DeployAssemblyAsync(file, deployFileType);
             if (pluginAssemblyId == null) return;
@@ -1006,12 +1016,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 return attributes != null && attributes.Count > 0 ? attributes[0].Name : type.FullName;
             }).ToList();
 
-            await LoadAllPluginTypesAsync();
-            await LoadAllPluginStepsAsync();
-            await LoadAllPluginImagesAsync();
-            await LoadAllSecureEntitiesAsync();
-            await LoadAll_SdkMessages_SdkMessageFilters_Async();
-            await LoadAllCustomApisAsync();
+
             foreach (var type in sortedTypes)
             {
                 var attributes = _AttributesCache.FirstOrDefault(x => x.Key == type.FullName).Value;
