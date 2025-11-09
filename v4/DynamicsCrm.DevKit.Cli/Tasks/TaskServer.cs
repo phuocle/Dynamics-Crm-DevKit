@@ -937,17 +937,13 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         private async Task LoadAllCustomApisAsync()
         {
             _CustomApisCache.Clear();
-            var customApiMessages = new List<string>();
-            foreach (var list in _AttributesCache)
-            {
-                foreach (var attribute in list.Value)
-                {
-                    if (attribute.PluginType == PluginType.CustomApi)
-                    {
-                        customApiMessages.Add(attribute.Message);
-                    }
-                }
-            }
+            var customApiMessages = _AttributesCache
+                .SelectMany(x => x.Value)
+                .Where(x => x.PluginType == PluginType.CustomApi)
+                .Select(x => x.Message)
+                .Where(x => !string.IsNullOrEmpty(x))
+                .Distinct()
+                .ToList();
             var messageBatches = (int)Math.Ceiling((double)customApiMessages.Count / PACK);
             for (int i = 0; i < messageBatches; i++)
             {
