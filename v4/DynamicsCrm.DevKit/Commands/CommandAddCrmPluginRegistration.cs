@@ -63,6 +63,9 @@ namespace DynamicsCrm.DevKit.Commands
                 await VS.MessageBox.ShowErrorAsync($"Please install DynamicsCrm.DevKit.Cli from Nuget. DynamicsCrm.DevKit.Cli text have been copied to clipboard.", $"Thank you !!!");
                 return;
             }
+            
+            var hasExistingAttributes = VsixHelper.HasAttributeCrmPluginRegistration(@class);
+            
             if (VsixHelper.HasImplementedPlugin(@class))
             {
                 var attributes = await CrmPluginRegistrationDataForPluginAsync(dte, currentClass.FullName);
@@ -70,9 +73,18 @@ namespace DynamicsCrm.DevKit.Commands
                 {
                     if (attributes.Count > 0)
                     {
-                        foreach (var attribute in attributes)
+                        if (hasExistingAttributes)
                         {
-                            @class.AddAttribute("CrmPluginRegistration", attribute);
+                            // Update existing attributes with Id
+                            await UpdateAttributesWithIdAsync(@class, attributes);
+                        }
+                        else
+                        {
+                            // Add new attributes
+                            foreach (var attribute in attributes)
+                            {
+                                @class.AddAttribute("CrmPluginRegistration", attribute);
+                            }
                         }
                         await AddImportSharedProjectIfNeedAsync(dte, sharedProjectName);
                     }
@@ -87,14 +99,88 @@ namespace DynamicsCrm.DevKit.Commands
                 {
                     if (attributes.Count > 0)
                     {
-                        foreach (var attribute in attributes)
+                        if (hasExistingAttributes)
                         {
-                            @class.AddAttribute("CrmPluginRegistration", attribute);
+                            // Workflow attributes don't need Id updates (they don't use Id)
+                            await VS.MessageBox.ShowAsync($"Workflow attributes already exist and don't require Id updates.", $"Information");
+                        }
+                        else
+                        {
+                            // Add new attributes
+                            foreach (var attribute in attributes)
+                            {
+                                @class.AddAttribute("CrmPluginRegistration", attribute);
+                            }
                         }
                         await AddImportSharedProjectIfNeedAsync(dte, sharedProjectName);
                     }
                     else
                         await VS.MessageBox.ShowErrorAsync($"DynamicsCrm.DevKit not found any workflow step register with this class.", $"Thank you !!!");
+                }
+            }
+        }
+
+        private static async Task UpdateAttributesWithIdAsync(CodeClass @class, List<string> newAttributes)
+        {
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+            
+            // Parse new attributes to extract Id values keyed by step name
+            var idMapping = new Dictionary<string, string>();
+            foreach (var attrString in newAttributes)
+            {
+                var nameMatch = System.Text.RegularExpressions.Regex.Match(attrString, @"""([^""]+)"",\s*\d+,");
+                var idMatch = System.Text.RegularExpressions.Regex.Match(attrString, @"Id\s*=\s*""([^""]+)""");
+                
+                if (nameMatch.Success && idMatch.Success)
+                {
+                    var stepName = nameMatch.Groups[1].Value;
+                    var stepId = idMatch.Groups[1].Value;
+                    idMapping[stepName] = stepId;
+                }
+            }
+            
+            // Update existing attributes
+            var attributesToUpdate = new List<CodeAttribute>();
+            foreach (CodeAttribute attribute in @class.Attributes)
+            {
+                if (attribute.Name == "CrmPluginRegistration")
+                {
+                    attributesToUpdate.Add(attribute);
+                }
+            }
+            
+            foreach (var attribute in attributesToUpdate)
+            {
+                // Get the step name from attribute (6th parameter)
+                var attrValue = attribute.Value;
+                var match = System.Text.RegularExpressions.Regex.Match(attrValue, @"""([^""]+)"",\s*\d+,");
+                if (match.Success)
+                {
+                    var stepName = match.Groups[1].Value;
+                    if (idMapping.ContainsKey(stepName))
+                    {
+                        // Check if Id already exists
+                        bool hasId = false;
+                        foreach (CodeElement child in attribute.Children)
+                        {
+                            if (child is CodeAttributeArgument arg && arg.Name == "Id")
+                            {
+                                hasId = true;
+                                break;
+                            }
+                        }
+                        
+                        if (!hasId)
+                        {
+                            // Add Id to the attribute value
+                            var stepId = idMapping[stepName];
+                            var newValue = attrValue.TrimEnd(')');
+                            if (!newValue.EndsWith(","))
+                                newValue += ",";
+                            newValue += $" Id = \"{stepId}\")";
+                            attribute.Value = newValue;
+                        }
+                    }
                 }
             }
         }
@@ -115,9 +201,53 @@ namespace DynamicsCrm.DevKit.Commands
                 if (@class.IsAbstract) return;
                 if (!@class.IsCodeType) return;
                 if (!VsixHelper.HasImplementedPlugin(@class) && !VsixHelper.HasImplementedWorkflow(@class)) return;
-                if (VsixHelper.HasAttributeCrmPluginRegistration(@class)) return;
-                this.Command.Visible = true;
+                
+                var hasAttributes = VsixHelper.HasAttributeCrmPluginRegistration(@class);
+                if (hasAttributes)
+                {
+                    // Check if all attributes have Id property
+                    if (AllAttributesHaveId(@class))
+                    {
+                        // All attributes have Id, hide the menu
+                        return;
+                    }
+                    // Some attributes missing Id, show menu with updated text
+                    this.Command.Text = "Update Plugin Step Id";
+                    this.Command.Visible = true;
+                }
+                else
+                {
+                    // No attributes, show menu with default text
+                    this.Command.Text = "Add Crm Plugin Registration";
+                    this.Command.Visible = true;
+                }
             });
+        }
+
+        private static bool AllAttributesHaveId(CodeClass @class)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+            foreach (CodeAttribute attribute in @class.Attributes)
+            {
+                if (attribute.Name == "CrmPluginRegistration")
+                {
+                    // Check if Id property exists in the attribute
+                    bool hasId = false;
+                    foreach (CodeElement child in attribute.Children)
+                    {
+                        if (child is CodeAttributeArgument arg)
+                        {
+                            if (arg.Name == "Id")
+                            {
+                                hasId = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (!hasId) return false; // Found an attribute without Id
+                }
+            }
+            return true; // All attributes have Id
         }
 
         private static async Task<List<string>> CrmPluginRegistrationDataForWorkflowAsync(DTE dte, string fullName)
