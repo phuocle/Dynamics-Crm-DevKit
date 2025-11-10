@@ -8,7 +8,7 @@ namespace Dev.DevKitV4.Server.Plugins.Email
     /// Plugin development guide: https://docs.microsoft.com/powerapps/developer/common-data-service/plug-ins
     /// Best practices and guidance: https://docs.microsoft.com/powerapps/developer/common-data-service/best-practices/business-logic/
     /// </summary>
-    [CrmPluginRegistration("SendFromTemplate", "email", StageEnum.PostOperation, ExecutionModeEnum.Asynchronous, "", "Dev.DevKitV4.Server.Plugins.Email.PostEmailSendFromTemplateAsynchronous", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, DeleteAsyncOperation = true)]
+    [CrmPluginRegistration("SendFromTemplate", "email", StageEnum.PostOperation, ExecutionModeEnum.Asynchronous, "", "Dev.DevKitV4.Server.Plugins.Email.PostEmailSendFromTemplateAsynchronous", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, DeleteAsyncOperation = true, Unregister = true )]
     public class PostEmailSendFromTemplateAsynchronous : PluginBase
     {
         /*

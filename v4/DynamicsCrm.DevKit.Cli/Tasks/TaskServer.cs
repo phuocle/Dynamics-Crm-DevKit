@@ -8,7 +8,6 @@ using Microsoft.Xrm.Sdk.Query;
 using NuGet.Packaging;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Eventing.Reader;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -1029,15 +1028,19 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         continue;
                     }
                     else if (error == true)
-                        return;
-                    else
                     {
                         CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE);
+                        CliLog.WriteSuccess(ConsoleColor.White, CliAction.UPDATED.Trim());
+                        CliLog.Write(" ");
                         CliLog.WriteSuccess(ConsoleColor.White, CliAction.UNREGISTERED.Trim());
                         CliLog.Write(ConsoleColor.White, $" Type ", ConsoleColor.Blue, attributes[0].PluginType, " ", ConsoleColor.Cyan, type.FullName);
                         CliLog.WriteLine();
                         continue;
-                    };
+                    }
+                    else
+                    {
+                        return;
+                    }
                 }
                 var pluginTypeId = await DeployPluginTypeAsync(pluginAssemblyId.Value, type, attributes[0], deployFileType);
                 if (pluginTypeId == null) return;
