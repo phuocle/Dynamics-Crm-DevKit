@@ -12,6 +12,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace DynamicsCrm.DevKit.Commands
@@ -19,6 +21,9 @@ namespace DynamicsCrm.DevKit.Commands
     [Command(PackageIds.CommandAddCrmPluginRegistration)]
     public class CommandAddCrmPluginRegistration : BaseCommand<CommandAddCrmPluginRegistration>
     {
+        private static readonly Regex StepNameRegex = new Regex(@"""([^""]+)"",\s*\d+,", RegexOptions.Compiled);
+        private static readonly Regex StepIdRegex = new Regex(@"Id\s*=\s*""([^""]+)""", RegexOptions.Compiled);
+
         private enum ImageTypeEnum
         {
             PreImage = 0,
@@ -125,17 +130,15 @@ namespace DynamicsCrm.DevKit.Commands
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
             // Parse new attributes to extract Id values keyed by step name
-            var idMapping = new Dictionary<string, string>();
+            var idMapping = new Dictionary<string, string>(newAttributes.Count);
             foreach (var attrString in newAttributes)
             {
-                var nameMatch = System.Text.RegularExpressions.Regex.Match(attrString, @"""([^""]+)"",\s*\d+,");
-                var idMatch = System.Text.RegularExpressions.Regex.Match(attrString, @"Id\s*=\s*""([^""]+)""");
+                var nameMatch = StepNameRegex.Match(attrString);
+                var idMatch = StepIdRegex.Match(attrString);
 
                 if (nameMatch.Success && idMatch.Success)
                 {
-                    var stepName = nameMatch.Groups[1].Value;
-                    var stepId = idMatch.Groups[1].Value;
-                    idMapping[stepName] = stepId;
+                    idMapping[nameMatch.Groups[1].Value] = idMatch.Groups[1].Value;
                 }
             }
 
@@ -151,38 +154,36 @@ namespace DynamicsCrm.DevKit.Commands
 
             foreach (var attribute in attributesToUpdate)
             {
-                // Get the step name from attribute (6th parameter)
                 var attrValue = attribute.Value;
-                var match = System.Text.RegularExpressions.Regex.Match(attrValue, @"""([^""]+)"",\s*\d+,");
-                if (match.Success)
-                {
-                    var stepName = match.Groups[1].Value;
-                    if (idMapping.ContainsKey(stepName))
-                    {
-                        // Check if Id already exists
-                        bool hasId = false;
-                        foreach (CodeElement child in attribute.Children)
-                        {
-                            if (child is CodeAttributeArgument arg && arg.Name == "Id")
-                            {
-                                hasId = true;
-                                break;
-                            }
-                        }
+                var match = StepNameRegex.Match(attrValue);
 
-                        if (!hasId)
-                        {
-                            // Add Id to the attribute value
-                            var stepId = idMapping[stepName];
-                            var newValue = attrValue.TrimEnd(')');
-                            if (!newValue.EndsWith(","))
-                                newValue += ",";
-                            newValue += $" Id = \"{stepId}\")";
-                            attribute.Value = newValue;
-                        }
+                if (match.Success && idMapping.TryGetValue(match.Groups[1].Value, out var stepId))
+                {
+                    // Check if Id already exists
+                    if (!HasIdArgument(attribute))
+                    {
+                        // Add Id to the attribute value
+                        var newValue = attrValue.TrimEnd(')');
+                        if (!newValue.EndsWith(","))
+                            newValue += ",";
+                        newValue += $" Id = \"{stepId}\")";
+                        attribute.Value = newValue;
                     }
                 }
             }
+        }
+
+        private static bool HasIdArgument(CodeAttribute attribute)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+            foreach (CodeElement child in attribute.Children)
+            {
+                if (child is CodeAttributeArgument arg && arg.Name == "Id")
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         protected override void BeforeQueryStatus(EventArgs e)
@@ -228,21 +229,9 @@ namespace DynamicsCrm.DevKit.Commands
             ThreadHelper.ThrowIfNotOnUIThread();
             foreach (CodeAttribute attribute in @class.Attributes)
             {
-                if (attribute.Name == "CrmPluginRegistration")
+                if (attribute.Name == "CrmPluginRegistration" && !HasIdArgument(attribute))
                 {
-                    bool hasId = false;
-                    foreach (CodeElement child in attribute.Children)
-                    {
-                        if (child is CodeAttributeArgument arg)
-                        {
-                            if (arg.Name == "Id")
-                            {
-                                hasId = true;
-                                break;
-                            }
-                        }
-                    }
-                    if (!hasId) return false;
+                    return false;
                 }
             }
             return true;
@@ -281,6 +270,7 @@ namespace DynamicsCrm.DevKit.Commands
 
             var rows = await serviceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
             if (rows.Entities.Count == 0) return list;
+
             foreach (var row in rows.Entities)
             {
                 var name = row.GetAttributeValue<string>("name");
@@ -289,13 +279,8 @@ namespace DynamicsCrm.DevKit.Commands
                 var workflowactivitygroupname = row.GetAttributeValue<string>("workflowactivitygroupname");
                 var isolationMode = XrmHelper.GetAliasedValue<OptionSetValue>(row, "a.isolationmode").Value;
                 var isolationModeName = isolationMode == 0 ? "IsolationModeEnum.None" : "IsolationModeEnum.Sandbox";
-                var attribute = string.Empty;
-                attribute += $"\"{name}\"";
-                attribute += $", \"{friendlyname}\"";
-                attribute += $", \"{description}\"";
-                attribute += $", \"{workflowactivitygroupname}\"";
-                attribute += $", {isolationModeName}";
-                attribute += $", PluginType = PluginType.Workflow";
+
+                var attribute = $"\"{name}\", \"{friendlyname}\", \"{description}\", \"{workflowactivitygroupname}\", {isolationModeName}, PluginType = PluginType.Workflow";
                 list.Add(attribute);
             }
             return list;
@@ -374,6 +359,7 @@ namespace DynamicsCrm.DevKit.Commands
 
             var rows = await serviceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
             if (rows.Entities.Count == 0) return list;
+
             foreach (var row in rows.Entities)
             {
                 var stepId = row.Id;
@@ -388,66 +374,49 @@ namespace DynamicsCrm.DevKit.Commands
                 var rank = row.GetAttributeValue<int>("rank");
                 var isolationMode = XrmHelper.GetAliasedValue<OptionSetValue>(row, "p.isolationmode").Value;
                 var isolationModeName = isolationMode == 0 ? "IsolationModeEnum.None" : "IsolationModeEnum.Sandbox";
-                var asyncautodelete = row.GetAttributeValue<bool>("asyncautodelete");
-                var description = row.GetAttributeValue<string>("description");
-                var supportedDeployment = row.GetAttributeValue<OptionSetValue>("supporteddeployment").Value;
-                var status = row.GetAttributeValue<OptionSetValue>("statecode").Value;
-                var configuration = row.GetAttributeValue<string>("configuration");
-                var secureconfig = XrmHelper.GetAliasedValue<string>(row, "s.secureconfig");
-                var impersonatinguserid = row.GetAttributeValue<EntityReference>("impersonatinguserid");
 
-                var attribute = string.Empty;
-                attribute += $"\"{message}\"";
-                attribute += $", \"{entity}\"";
-                attribute += $", {stageName}";
-                attribute += $", {modeName}";
-                attribute += $", \"{filteringAttributes}\",";
-                attribute += $"\"{name}\"";
-                attribute += $", {rank}";
-                attribute += $", {isolationModeName}";
-                attribute += $", PluginType = PluginType.Plugin, Id = \"{stepId}\",";
-                if (asyncautodelete)
-                    attribute += $"DeleteAsyncOperation = true, ";
+                var sb = new StringBuilder();
+                sb.Append($"\"{message}\", \"{entity}\", {stageName}, {modeName}, \"{filteringAttributes}\", \"{name}\", {rank}, {isolationModeName}, PluginType = PluginType.Plugin, Id = \"{stepId}\"");
+
+                if (row.GetAttributeValue<bool>("asyncautodelete"))
+                    sb.Append(", DeleteAsyncOperation = true");
+
+                var description = row.GetAttributeValue<string>("description");
                 if (description != null)
-                    attribute += $"Description = \"{description}\", ";
+                    sb.Append($", Description = \"{description}\"");
+
+                var supportedDeployment = row.GetAttributeValue<OptionSetValue>("supporteddeployment").Value;
                 if (supportedDeployment == 2)
-                {
-                    attribute += $"Server = true, Offline = true, ";
-                }
+                    sb.Append(", Server = true, Offline = true");
                 else if (supportedDeployment == 1)
-                {
-                    attribute += $"Server = false, Offline = true, ";
-                }
-                if (status == 1)
-                {
-                    attribute += $"Action = PluginStepOperationEnum.Deactivate, ";
-                }
+                    sb.Append(", Server = false, Offline = true");
+
+                if (row.GetAttributeValue<OptionSetValue>("statecode").Value == 1)
+                    sb.Append(", Action = PluginStepOperationEnum.Deactivate");
+
+                var configuration = row.GetAttributeValue<string>("configuration");
                 if (configuration != null)
-                {
-                    attribute += $"UnSecureConfiguration = \"{configuration}\", ";
-                }
+                    sb.Append($", UnSecureConfiguration = \"{configuration}\"");
+
+                var secureconfig = XrmHelper.GetAliasedValue<string>(row, "s.secureconfig");
                 if (secureconfig != null)
-                {
-                    attribute += $"SecureConfiguration = \"{secureconfig}\", ";
-                }
+                    sb.Append($", SecureConfiguration = \"{secureconfig}\"");
+
+                var impersonatinguserid = row.GetAttributeValue<EntityReference>("impersonatinguserid");
                 if (impersonatinguserid != null)
-                {
-                    attribute += $"RunAs = \"{impersonatinguserid.Name}\", ";
-                }
+                    sb.Append($", RunAs = \"{impersonatinguserid.Name}\"");
+
                 var images = await GetPluginImagesAsync(serviceClient, fullName, row.Id);
                 if (images.Count > 0)
                 {
-                    var image = "Image{0}Name = \"{1}\", Image{0}Alias = \"{2}\", Image{0}Type = ImageTypeEnum.{3}, Image{0}Attributes = \"{4}\",";
-                    var i = 1;
-                    foreach (var item in images)
+                    for (int i = 0; i < Math.Min(images.Count, 4); i++)
                     {
-                        attribute += string.Format(image, i, item.Name, item.Alias, item.Type.ToString(), item.Attributes);
-                        i++;
-                        if (i == 5) break;
+                        var img = images[i];
+                        sb.Append($", Image{i + 1}Name = \"{img.Name}\", Image{i + 1}Alias = \"{img.Alias}\", Image{i + 1}Type = ImageTypeEnum.{img.Type}, Image{i + 1}Attributes = \"{img.Attributes}\"");
                     }
                 }
-                attribute = attribute.TrimEnd(", ".ToCharArray());
-                list.Add(attribute);
+
+                list.Add(sb.ToString());
             }
             return list;
         }

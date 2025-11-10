@@ -17,66 +17,87 @@ namespace DynamicsCrm.DevKit.Commands
         {
             await VS.StatusBar.StartAnimationAsync(StatusAnimation.Deploy);
             var serviceClient = await CacheHelper.GetServiceClientAsync();
-            if (serviceClient != null)
+
+            if (serviceClient == null)
             {
-                await VS.StatusBar.ShowMessageAsync($"[{serviceClient.ConnectedUrl()}] >>> Connected <<<");
-                var fullFileName = await VsixHelper.SelectedItem.GetFullFileNameAsync();
-                var fullFileNameForCrm = fullFileName.Substring((await VsixHelper.GetSolutionFolderAsync()).Length);
-                var deployWebResourceCache = CacheHelper.GetWebResource(fullFileNameForCrm);
-                if (deployWebResourceCache != null && deployWebResourceCache.WebResourceId != Guid.Empty)
-                    await DeployWebResourceAsync(serviceClient, deployWebResourceCache, fullFileName);
-                else
-                {
-                    var webResources = await XrmHelper.GetWebResourcesAsync(serviceClient, fullFileNameForCrm);
-                    var form = new FormWebResource(webResources, fullFileNameForCrm);
-                    var ok = form.ShowModal() ?? false;
-                    if (ok)
-                    {
-                        CacheHelper.SetWebResourceCache(fullFileNameForCrm, form.SelectedWebResource);
-                        await VsixHelper.SaveDynamicsCrmDevKitConfigJsonAsync(form.SelectedWebResource);
-                        await DeployWebResourceAsync(serviceClient, form.SelectedWebResource, fullFileName);
-                    }
-                    else
-                    {
-                        await VS.StatusBar.ClearAsync();
-                        await VS.MessageBox.ShowErrorAsync($"[{serviceClient.ConnectedUrl()}] >>> No web resource selected for deployment <<<");
-                    }
-                }
+                await VS.StatusBar.ClearAsync();
+                await VS.MessageBox.ShowErrorAsync("Connection cancelled by user");
+                await VS.StatusBar.EndAnimationAsync(StatusAnimation.Deploy);
+                return;
+            }
+
+            var url = serviceClient.ConnectedUrl();
+            await ShowStatusAsync(url, "Connected");
+
+            var fullFileName = await VsixHelper.SelectedItem.GetFullFileNameAsync();
+            var fullFileNameForCrm = fullFileName.Substring((await VsixHelper.GetSolutionFolderAsync()).Length);
+            var deployWebResourceCache = CacheHelper.GetWebResource(fullFileNameForCrm);
+
+            if (deployWebResourceCache != null && deployWebResourceCache.WebResourceId != Guid.Empty)
+            {
+                await DeployWebResourceAsync(serviceClient, deployWebResourceCache, fullFileName);
             }
             else
             {
-                await VS.StatusBar.ClearAsync();
-                await VS.MessageBox.ShowErrorAsync($"[{serviceClient.ConnectedUrl()}] >>> Connection cancelled by user <<<");
+                var webResources = await XrmHelper.GetWebResourcesAsync(serviceClient, fullFileNameForCrm);
+                var form = new FormWebResource(webResources, fullFileNameForCrm);
+
+                if (form.ShowModal() == true)
+                {
+                    CacheHelper.SetWebResourceCache(fullFileNameForCrm, form.SelectedWebResource);
+                    await VsixHelper.SaveDynamicsCrmDevKitConfigJsonAsync(form.SelectedWebResource);
+                    await DeployWebResourceAsync(serviceClient, form.SelectedWebResource, fullFileName);
+                }
+                else
+                {
+                    await VS.StatusBar.ClearAsync();
+                    await ShowStatusAndErrorAsync(url, "No web resource selected for deployment");
+                }
             }
+
             await VS.StatusBar.EndAnimationAsync(StatusAnimation.Deploy);
         }
 
         private static async Task DeployWebResourceAsync(ServiceClient serviceClient, DeployWebResource deployWebResource, string fullFileName)
         {
-            int wait = 2;
-            await VS.StatusBar.ShowMessageAsync($"[{serviceClient.ConnectedUrl()}] >>> Deploying ... <<<");
+            const int wait = 2;
+            var url = serviceClient.ConnectedUrl();
+
+            await ShowStatusAsync(url, "Deploying ...");
             var (ok, message) = await XrmHelper.DeployWebResourceAsync(serviceClient, fullFileName, deployWebResource.WebResourceId);
+
             if (ok)
             {
-                await VS.StatusBar.ShowMessageAsync($"[{serviceClient.ConnectedUrl()}] >>> Deployed <<<");
+                await ShowStatusAsync(url, "Deployed");
                 await Helper.DelayAsync(wait);
-                await VS.StatusBar.ShowMessageAsync($"[{serviceClient.ConnectedUrl()}] >>> Publishing ... <<<");
+                await ShowStatusAsync(url, "Publishing ...");
+
                 var (ok2, message2) = await XrmHelper.PublishWebResourceAsync(serviceClient, deployWebResource.WebResourceId);
                 if (ok2)
                 {
-                    await VS.StatusBar.ShowMessageAsync($"[{serviceClient.ConnectedUrl()}] >>> [{fullFileName}] published to: [{deployWebResource.WebResource}] <<<");
+                    await ShowStatusAsync(url, $"[{fullFileName}] published to: [{deployWebResource.WebResource}]");
                 }
                 else
                 {
-                    await VS.StatusBar.ShowMessageAsync($"[{serviceClient.ConnectedUrl()}] >>> Publishing Failed with message: {message2} <<<");
-                    await VS.MessageBox.ShowErrorAsync($"[{serviceClient.ConnectedUrl()}] >>> Publishing Failed with message: {message2} <<<");
+                    await ShowStatusAndErrorAsync(url, $"Publishing Failed with message: {message2}");
                 }
             }
             else
             {
-                await VS.StatusBar.ShowMessageAsync($"[{serviceClient.ConnectedUrl()}] >>> Deploying Failed with message: {message} <<<");
-                await VS.MessageBox.ShowErrorAsync($"[{serviceClient.ConnectedUrl()}] >>> Deploying Failed with message: {message} <<<");
+                await ShowStatusAndErrorAsync(url, $"Deploying Failed with message: {message}");
             }
+        }
+
+        private static async Task ShowStatusAsync(string url, string message)
+        {
+            await VS.StatusBar.ShowMessageAsync($"[{url}] >>> {message} <<<");
+        }
+
+        private static async Task ShowStatusAndErrorAsync(string url, string message)
+        {
+            var formattedMessage = $"[{url}] >>> {message} <<<";
+            await VS.StatusBar.ShowMessageAsync(formattedMessage);
+            await VS.MessageBox.ShowErrorAsync(formattedMessage);
         }
 
         protected override void BeforeQueryStatus(EventArgs e)
