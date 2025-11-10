@@ -112,7 +112,7 @@ public class AccountUpdate : IPlugin
     Name = "Account Update",
     ExecutionOrder = 1,
     IsolationMode = IsolationModeEnum.Sandbox,
-    // NOTE: DevKit.Cli doesn't have Id property yet - feature gap!
+    Id = "12345678-1234-1234-1234-123456789012", // ✅ Id property IS available!
     Image1Type = ImageTypeEnum.PreImage,
     Image1Name = "PreImage",
     Image1Alias = "PreImage", // Separate alias property
@@ -128,7 +128,7 @@ public class AccountUpdate : IPlugin
 
 1. **Image Alias**: DevKit.Cli has separate Image1Alias through Image4Alias properties
 2. **4 Images Support**: DevKit.Cli supports Image3 and Image4
-3. **No Id Property**: DevKit.Cli doesn't have step ID tracking yet (feature request needed)
+3. **Id Property**: ✅ Both tools support step ID tracking for idempotent deployments
 4. **New Properties**: Unregister, RunAs, SourceType, PluginType, DataSource
 
 ### Deploy Plugins
@@ -431,18 +431,23 @@ DynamicsCrm.DevKit.Cli /conn:"YourConnectionString" /json:"DynamicsCrm.DevKit.Cl
 
 ---
 
-## Critical Feature Gaps to Address
+## Feature Gap to Address
 
-### 1. Missing Id Property
+### 1. Id Property Status: ✅ AVAILABLE
 
-**spkl has** step ID tracking:
+**Both tools support** step ID tracking:
 ```csharp
-Id = "12345678-1234-1234-1234-123456789012"
+[CrmPluginRegistration(
+    Message = "Update",
+    EntityLogicalName = "account",
+    Stage = StageEnum.PostOperation,
+    ExecutionMode = ExecutionModeEnum.Synchronous,
+    Id = "12345678-1234-1234-1234-123456789012", // ✅ Works in DevKit.Cli!
+    Name = "Account Update"
+)]
 ```
 
-**DevKit.Cli lacks** this - **FEATURE REQUEST NEEDED!**
-
-**Workaround**: Manual step tracking or database queries
+**No workaround needed** - feature is fully implemented!
 
 ### 2. Missing Instrument Command
 
@@ -462,7 +467,7 @@ spkl instrument /url:YourOrgUrl /solution:YourSolution
 - [ ] Install DynamicsCrm.DevKit.Cli
 - [ ] Install Microsoft.CrmSdk.CoreTools
 - [ ] Create DynamicsCrm.DevKit.Cli.json
-- [ ] Migrate plugin attributes (add Image aliases)
+- [ ] Migrate plugin attributes (add Image aliases, keep existing Id values)
 - [ ] Update to 4 images if needed
 - [ ] Test plugin deployment
 - [ ] Migrate web resource configuration
@@ -473,8 +478,7 @@ spkl instrument /url:YourOrgUrl /solution:YourSolution
 - [ ] (Optional) Add report management
 - [ ] (Optional) Add virtual entity/data source creation
 - [ ] Update CI/CD pipelines
-- [ ] Document Id property workaround
-- [ ] Request Id property feature from DevKit team
+- [ ] (Optional) Request instrument command feature from DevKit team
 
 ---
 
@@ -506,16 +510,17 @@ spkl instrument /url:YourOrgUrl /solution:YourSolution
 
 ## Benefits After Migration
 
- **4 images** instead of 2
- **Managed Identity** support
- **Custom API** support
- **Data Provider** support  
- **Report management** (upload/download)
- **Virtual entity creation**
- **JavaScript/TypeScript** code generation
- **Download capabilities** (web resources, reports)
- **Direct solution export** from instance
- **Modern .NET** and active development
+✅ **4 images** instead of 2
+✅ **Step ID tracking** (Id property) - Same as spkl
+✅ **Managed Identity** support
+✅ **Custom API** support
+✅ **Data Provider** support
+✅ **Report management** (upload/download)
+✅ **Virtual entity creation**
+✅ **JavaScript/TypeScript** code generation
+✅ **Download capabilities** (web resources, reports)
+✅ **Direct solution export** from instance
+✅ **Modern .NET** and active development
 
 ---
 

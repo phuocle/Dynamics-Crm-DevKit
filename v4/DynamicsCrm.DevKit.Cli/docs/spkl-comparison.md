@@ -166,11 +166,11 @@ After comprehensive analysis of both entire projects, this document compares **s
 | Offline |  |  | Offline execution |
 | Server |  |  | Server execution |
 
-### spkl Exclusive Properties
+### Properties in Both Tools (Identical or Similar)
 
-| Property | Purpose |
-|----------|---------|
-| **Id** | Step ID tracking for idempotent deployments |
+| Property | spkl | DevKit.Cli | Notes |
+|----------|------|-----------|-------|
+| **Id** | ✅ | ✅ | Step GUID for idempotent deployments - **BOTH TOOLS HAVE THIS** |
 
 ### DevKit.Cli Exclusive Properties
 
@@ -214,9 +214,8 @@ After comprehensive analysis of both entire projects, this document compares **s
 ## 6. Feature Gap Analysis
 
 ### What spkl has that DevKit.Cli lacks:
-1.  **Id property** - Critical for tracking plugin step IDs across deployments
-2.  **Instrument command** - Generate attributes from existing registered plugins
-3.  Longer track record and community support
+1.  **Instrument command** - Generate attributes from existing registered plugins
+2.  Longer track record and community support
 
 ### What DevKit.Cli has that spkl lacks:
 1.  **Report Management** (upload/download)
@@ -236,7 +235,6 @@ After comprehensive analysis of both entire projects, this document compares **s
 
 ### Choose **spkl** if:
 -  You need the **instrument command** to generate attributes from existing steps
--  You need **step ID tracking** (Id property) for idempotent deployments
 -  You want a mature, battle-tested tool with large community
 -  You only need plugins, workflows, web resources, early-bound
 
@@ -254,9 +252,9 @@ After comprehensive analysis of both entire projects, this document compares **s
 
 ## 8. Conclusion
 
-**DynamicsCrm.DevKit.Cli is the more feature-rich and modern tool** with 9 task types covering far more scenarios than spkl. However, **spkl has two critical features** (Id property + instrument command) that DevKit.Cli should implement for full parity.
+**DynamicsCrm.DevKit.Cli is the more feature-rich and modern tool** with 9 task types covering far more scenarios than spkl. The only notable spkl feature missing is the **instrument command**.
 
-### Overall Winner: **DynamicsCrm.DevKit.Cli** (with noted gaps)
+### Overall Winner: **DynamicsCrm.DevKit.Cli**
 
 **Superiority Score:**
 - **Features**: DevKit.Cli wins (9 tasks vs 5-6 features)
@@ -265,10 +263,11 @@ After comprehensive analysis of both entire projects, this document compares **s
 - **Code Generation**: DevKit.Cli wins significantly (3 types vs 1)
 - **Report Management**: DevKit.Cli wins (spkl has none)
 - **Solution Management**: DevKit.Cli wins (direct instance export)
+- **Step ID Tracking**: Both tools have Id property ✅
 - **Maturity**: spkl wins (longer track record)
-- **Critical Features**: spkl wins (Id property + instrument command)
+- **Instrument Command**: spkl wins (DevKit.Cli should add this)
 
-**Recommendation**: Use **DynamicsCrm.DevKit.Cli** for new projects, but request the Id property and instrument command features for full parity with spkl.
+**Recommendation**: Use **DynamicsCrm.DevKit.Cli** for new projects. Consider implementing the instrument command feature for complete parity with spkl.
 
 ---
 
