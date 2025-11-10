@@ -203,23 +203,18 @@ namespace DynamicsCrm.DevKit.Commands
                     if (@class.IsAbstract) return;
                     if (!@class.IsCodeType) return;
                     if (!VsixHelper.HasImplementedPlugin(@class) && !VsixHelper.HasImplementedWorkflow(@class)) return;
-
                     var hasAttributes = VsixHelper.HasAttributeCrmPluginRegistration(@class);
                     if (hasAttributes)
                     {
-                        // Check if all attributes have Id property
                         if (AllAttributesHaveId(@class))
                         {
-                            // All attributes have Id, hide the menu
                             return;
                         }
-                        // Some attributes missing Id, show menu with updated text
-                        this.Command.Text = "Update Plugin Step Id";
+                        this.Command.Text = "Update Crm Plugin Registration";
                         this.Command.Visible = true;
                     }
                     else
                     {
-                        // No attributes, show menu with default text
                         this.Command.Text = "Add Crm Plugin Registration";
                         this.Command.Visible = true;
                     }
@@ -235,7 +230,6 @@ namespace DynamicsCrm.DevKit.Commands
             {
                 if (attribute.Name == "CrmPluginRegistration")
                 {
-                    // Check if Id property exists in the attribute
                     bool hasId = false;
                     foreach (CodeElement child in attribute.Children)
                     {
@@ -248,10 +242,10 @@ namespace DynamicsCrm.DevKit.Commands
                             }
                         }
                     }
-                    if (!hasId) return false; // Found an attribute without Id
+                    if (!hasId) return false;
                 }
             }
-            return true; // All attributes have Id
+            return true;
         }
 
         private static async Task<List<string>> CrmPluginRegistrationDataForWorkflowAsync(DTE dte, string fullName)
