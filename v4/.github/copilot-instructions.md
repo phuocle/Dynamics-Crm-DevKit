@@ -30,6 +30,7 @@
 
 ## Build System
 * Tool: MSBuild (NOT dotnet build)
+* Always build mode release
 * Path: `C:\Program Files\Microsoft Visual Studio\2022\Enterprise\MSBuild\Current\Bin\MSBuild.exe`
 * Build after each change
 

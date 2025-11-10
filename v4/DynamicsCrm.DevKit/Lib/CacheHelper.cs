@@ -12,9 +12,10 @@ namespace DynamicsCrm.DevKit.Lib
     public static class CacheHelper
     {
         private static readonly ConcurrentDictionary<string, ServiceClient> _serviceClientCache = new ConcurrentDictionary<string, ServiceClient>();
+        private static readonly ConcurrentDictionary<string, CrmConnection> _crmConnectionCache = new ConcurrentDictionary<string, CrmConnection>();
         private static readonly ConcurrentDictionary<string, DeployWebResource> _webResourceCache = new ConcurrentDictionary<string, DeployWebResource>();
-        private static readonly ConcurrentDictionary<string, DateTime> _connectionTimestamps = new ConcurrentDictionary<string, DateTime>();        
-        private static readonly int ConnectionTimeoutMinutes = 60;        
+        private static readonly ConcurrentDictionary<string, DateTime> _connectionTimestamps = new ConcurrentDictionary<string, DateTime>();
+        private static readonly int ConnectionTimeoutMinutes = 60;
 
         public static async Task<ServiceClient> GetServiceClientAsync()
         {
@@ -23,7 +24,7 @@ namespace DynamicsCrm.DevKit.Lib
 
         public static async Task<ServiceClient> GetServiceClientAsync(string connectionName)
         {
-            var cacheKey = connectionName ?? "default";            
+            var cacheKey = connectionName ?? "default";
             if (_serviceClientCache.TryGetValue(cacheKey, out var cachedClient))
             {
                 if (cachedClient != null && cachedClient.IsReady && !IsConnectionExpired(cacheKey))
@@ -35,7 +36,7 @@ namespace DynamicsCrm.DevKit.Lib
                     RemoveFromCache(connectionName);
                 }
             }
-            var serviceClient = await PromptForConnectionAsync(connectionName);            
+            var serviceClient = await PromptForConnectionAsync(connectionName);
             if (serviceClient != null)
             {
                 _serviceClientCache[cacheKey] = serviceClient;
@@ -60,10 +61,12 @@ namespace DynamicsCrm.DevKit.Lib
             var result = formConnection.ShowModal() ?? false;
             if (result && formConnection.ServiceClient != null)
             {
+                var cacheKey = connectionName ?? "default";
+                _crmConnectionCache[cacheKey] = formConnection.CrmConnection;
                 return formConnection.ServiceClient;
             }
             return null;
-        }       
+        }
 
         public static void ClearCache()
         {
@@ -86,9 +89,20 @@ namespace DynamicsCrm.DevKit.Lib
                 catch
                 {
                 }
-            }            
+            }
             _connectionTimestamps.TryRemove(cacheKey, out _);
-        }        
+            _crmConnectionCache.TryRemove(cacheKey, out _);
+        }
+
+        public static CrmConnection GetCrmConnection(string connectionName = null)
+        {
+            var cacheKey = connectionName ?? "default";
+            if (_crmConnectionCache.TryGetValue(cacheKey, out var crmConnection))
+            {
+                return crmConnection;
+            }
+            return null;
+        }
 
         public static DeployWebResource GetWebResource(string fullFileName)
         {

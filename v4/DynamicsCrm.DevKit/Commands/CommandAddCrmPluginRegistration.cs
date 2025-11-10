@@ -304,12 +304,13 @@ namespace DynamicsCrm.DevKit.Commands
         private static async Task<ServiceClient> AddDeployBatFilesAsync(DTE dte)
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-            var formConnection = new FormConnection();
-            var result = formConnection.ShowModal() ?? false;
-            if (!result) return null;
+            var serviceClient = await CacheHelper.GetServiceClientAsync();
+            if (serviceClient == null) return null;
+            var crmConnection = CacheHelper.GetCrmConnection();
+            if (crmConnection == null) return null;
             var plugin_deploy_debug_bat = await VsixHelper.ReadEmbeddedResourceAsync("plugin.deploy.debug.bat");
             var plugin_deploy_debug_only_bat = await VsixHelper.ReadEmbeddedResourceAsync("plugin.deploy.debug.only.bat");
-            var crmConnectionString = Helper.BuildConnectionString(formConnection.CrmConnection);
+            var crmConnectionString = Helper.BuildConnectionString(crmConnection);
             plugin_deploy_debug_bat = plugin_deploy_debug_bat
                 .Replace("$ConnectionString$", crmConnectionString)
                 .Replace("$ProjectName$", Path.GetFileNameWithoutExtension(dte?.ActiveDocument?.ProjectItem?.ContainingProject?.FullName));
@@ -318,7 +319,7 @@ namespace DynamicsCrm.DevKit.Commands
                 .Replace("$ProjectName$", Path.GetFileNameWithoutExtension(dte?.ActiveDocument?.ProjectItem?.ContainingProject?.FullName));
             await AddDeployBatFileToProjectAsync(dte, "deploy.debug.bat", plugin_deploy_debug_bat);
             await AddDeployBatFileToProjectAsync(dte, "deploy.debug.only.bat", plugin_deploy_debug_only_bat);
-            return formConnection.ServiceClient;
+            return serviceClient;
         }
 
         private static async Task<List<string>> CrmPluginRegistrationDataForPluginAsync(DTE dte, string fullName)
@@ -348,15 +349,15 @@ namespace DynamicsCrm.DevKit.Commands
                 <attribute name='configuration' />
                 <attribute name='statecode' />
                 <filter type='and'>
-                  <condition attribute='ismanaged' operator='eq' value='{fetchData.ismanaged/*0*/}'/>
-                  <condition attribute='iscustomizable' operator='eq' value='{fetchData.iscustomizable/*1*/}'/>
+                  <condition attribute='ismanaged' operator='eq' value='{fetchData.ismanaged}'/>
+                  <condition attribute='iscustomizable' operator='eq' value='{fetchData.iscustomizable}'/>
                 </filter>
                 <link-entity name='sdkmessage' from='sdkmessageid' to='sdkmessageid' alias='m'>
                   <attribute name='name' />
                 </link-entity>
                 <link-entity name='plugintype' from='plugintypeid' to='plugintypeid' link-type='inner' alias='t'>
                   <filter type='and'>
-                    <condition attribute='typename' operator='eq' value='{fetchData.typename/*AccountPlugin.PostDeleteAccount*/}'/>
+                    <condition attribute='typename' operator='eq' value='{fetchData.typename}'/>
                   </filter>
                   <link-entity name='pluginassembly' from='pluginassemblyid' to='pluginassemblyid' link-type='inner' alias='p'>
                     <attribute name='isolationmode' />
