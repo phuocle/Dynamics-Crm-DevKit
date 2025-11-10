@@ -123,11 +123,105 @@ function Initialize-Variables {
 
 function Update-VersionPlaceholders {
     Write-Section "Updating version and date placeholders..."
- # Update version placeholders
-    foreach ($file in $script:VERSION_FILES) {
+
+    # Categorize files to avoid double-write issue
+    # Files that appear in BOTH lists need combined update (single read-replace-write)
+    $bothFiles = $script:VERSION_FILES | Where-Object { $script:DATE_FILES -contains $_ }
+    $versionOnlyFiles = $script:VERSION_FILES | Where-Object { $script:DATE_FILES -notcontains $_ }
+    $dateOnlyFiles = $script:DATE_FILES | Where-Object { $script:VERSION_FILES -notcontains $_ }
+
+    # Update files needing BOTH version AND date (single operation to avoid file locking)
+    foreach ($file in $bothFiles) {
+        Write-Info "Updating version AND date in $file"
+        $success = $false
+        $backup = $null
+
+        for ($attempt = 1; $attempt -le 5; $attempt++) {
+            try {
+                # Wait before attempting to ensure no file locks
+                if ($attempt -gt 1) {
+                    Start-Sleep -Milliseconds (500 * $attempt)
+                }
+
+                # Read file content with a delay to avoid lock contention
+                Start-Sleep -Milliseconds 50
+                $content = Get-Content $file -Raw -Encoding UTF8
+
+                if ([string]::IsNullOrEmpty($content)) {
+                    throw "File content is empty or null"
+                }
+
+                # Store backup on first attempt
+                if ($attempt -eq 1) {
+                    $backup = $content
+                }
+
+                # Perform both replacements
+                $newContent = $content -replace 'x\.xx\.xx\.xx', $script:VERSION
+                $newContent = $newContent -replace 'xxxx\.yy\.zz HH\.mm\.ss', $script:DATE
+
+                # Verify we have content to write
+                if ([string]::IsNullOrEmpty($newContent)) {
+                    throw "Replacement resulted in empty content"
+                }
+
+                # Small delay before writing to ensure previous handles are closed
+                Start-Sleep -Milliseconds 100
+
+                # Write using .NET to have better control
+                [System.IO.File]::WriteAllText($file, $newContent, [System.Text.Encoding]::UTF8)
+
+                # Verify file was written correctly
+                Start-Sleep -Milliseconds 50
+                $verifyLength = (Get-Item $file).Length
+                if ($verifyLength -eq 0) {
+                    throw "File became empty after write"
+                }
+
+                $success = $true
+                break
+            }
+            catch {
+                $errorMsg = $_.Exception.Message
+                if ($errorMsg -like "*being used by another process*") {
+                    Write-Host "  Attempt $attempt failed: File is locked by another process" -ForegroundColor Yellow
+                }
+                else {
+                    Write-Host "  Attempt $attempt failed: $errorMsg" -ForegroundColor Yellow
+                }
+
+                if ($attempt -lt 5) {
+                    Write-Host "  Waiting before retry..." -ForegroundColor Yellow
+                }
+            }
+        }
+
+        if (-not $success) {
+            Write-ErrorMessage "ERROR: Failed to update version and date in $file after 5 attempts"
+            # Attempt final restoration from backup
+            if ($null -ne $backup) {
+                Write-Host "  Attempting final restoration from backup..." -ForegroundColor Yellow
+                try {
+                    Start-Sleep -Milliseconds 500
+                    $backup | Set-Content -Path $file -Encoding UTF8 -NoNewline -Force -ErrorAction Stop
+                }
+                catch {
+                    Write-Host "  WARNING: Could not restore backup" -ForegroundColor Red
+                }
+            }
+            return $false
+        }
+    }
+
+    # Update version-only files
+    foreach ($file in $versionOnlyFiles) {
         Write-Info "Updating version in $file"
         try {
-            (Get-Content $file -Raw) -replace 'x\.xx\.xx\.xx', $script:VERSION | Set-Content -Path $file -Encoding UTF8 -NoNewline
+            Start-Sleep -Milliseconds 50
+            $content = Get-Content $file -Raw -Encoding UTF8
+            $newContent = $content -replace 'x\.xx\.xx\.xx', $script:VERSION
+            Start-Sleep -Milliseconds 100
+            [System.IO.File]::WriteAllText($file, $newContent, [System.Text.Encoding]::UTF8)
         }
         catch {
             Write-ErrorMessage "ERROR: Failed to update version in $file"
@@ -135,11 +229,16 @@ function Update-VersionPlaceholders {
             return $false
         }
     }
-    # Update date placeholders
-    foreach ($file in $script:DATE_FILES) {
+
+    # Update date-only files
+    foreach ($file in $dateOnlyFiles) {
         Write-Info "Updating date in $file"
         try {
-            (Get-Content $file -Raw) -replace 'xxxx\.yy\.zz HH\.mm\.ss', $script:DATE | Set-Content -Path $file -Encoding UTF8 -NoNewline
+            Start-Sleep -Milliseconds 50
+            $content = Get-Content $file -Raw -Encoding UTF8
+            $newContent = $content -replace 'xxxx\.yy\.zz HH\.mm\.ss', $script:DATE
+            Start-Sleep -Milliseconds 100
+            [System.IO.File]::WriteAllText($file, $newContent, [System.Text.Encoding]::UTF8)
         }
         catch {
             Write-ErrorMessage "ERROR: Failed to update date in $file"
@@ -147,6 +246,7 @@ function Update-VersionPlaceholders {
             return $false
         }
     }
+
     Write-Success "Version and date placeholders updated successfully."
     return $true
 }
@@ -278,13 +378,76 @@ function Copy-VsixToPublished {
 }
 
 function Restore-Placeholders {
-  Write-Section "Reverting version and date placeholders..."
+    Write-Section "Reverting version and date placeholders..."
     $hasErrors = $false
-    # Revert version placeholders
-    foreach ($file in $script:VERSION_FILES) {
+
+    # Categorize files to avoid double-write issue during restore
+    $bothFiles = $script:VERSION_FILES | Where-Object { $script:DATE_FILES -contains $_ }
+    $versionOnlyFiles = $script:VERSION_FILES | Where-Object { $script:DATE_FILES -notcontains $_ }
+    $dateOnlyFiles = $script:DATE_FILES | Where-Object { $script:VERSION_FILES -notcontains $_ }
+
+    # Revert files with BOTH version AND date (single operation)
+    foreach ($file in $bothFiles) {
+        Write-Info "Reverting version AND date in $file"
+        $success = $false
+        $backup = $null
+
+        for ($attempt = 1; $attempt -le 5; $attempt++) {
+            try {
+                # Wait before attempting to ensure no file locks
+                if ($attempt -gt 1) {
+                    Start-Sleep -Milliseconds (500 * $attempt)
+                }
+
+                # Read file content
+                Start-Sleep -Milliseconds 50
+                $content = Get-Content $file -Raw -Encoding UTF8
+
+                if ([string]::IsNullOrEmpty($content)) {
+                    Write-Host "  WARNING: File is empty, skipping" -ForegroundColor Yellow
+                    $hasErrors = $true
+                    break
+                }
+
+                # Store backup on first attempt
+                if ($attempt -eq 1) {
+                    $backup = $content
+                }
+
+                # Perform both replacements
+                $newContent = $content -replace [regex]::Escape($script:VERSION), 'x.xx.xx.xx'
+                $newContent = $newContent -replace [regex]::Escape($script:DATE), 'xxxx.yy.zz HH.mm.ss'
+
+                # Write to file
+                Start-Sleep -Milliseconds 100
+                [System.IO.File]::WriteAllText($file, $newContent, [System.Text.Encoding]::UTF8)
+
+                $success = $true
+                break
+            }
+            catch {
+                $errorMsg = $_.Exception.Message
+                if ($attempt -lt 5) {
+                    Write-Host "  Attempt $attempt failed, retrying..." -ForegroundColor Yellow
+                }
+                else {
+                    Write-Host "WARNING: Failed to revert version and date in $file after $attempt attempts" -ForegroundColor Yellow
+                    Write-Host $errorMsg -ForegroundColor Yellow
+                    $hasErrors = $true
+                }
+            }
+        }
+    }
+
+    # Revert version-only placeholders
+    foreach ($file in $versionOnlyFiles) {
         Write-Info "Reverting version in $file"
         try {
-            (Get-Content $file -Raw) -replace [regex]::Escape($script:VERSION), 'x.xx.xx.xx' | Set-Content -Path $file -Encoding UTF8 -NoNewline
+            Start-Sleep -Milliseconds 50
+            $content = Get-Content $file -Raw -Encoding UTF8
+            $newContent = $content -replace [regex]::Escape($script:VERSION), 'x.xx.xx.xx'
+            Start-Sleep -Milliseconds 100
+            [System.IO.File]::WriteAllText($file, $newContent, [System.Text.Encoding]::UTF8)
         }
         catch {
             Write-Host "WARNING: Failed to revert version in $file" -ForegroundColor Yellow
@@ -292,11 +455,16 @@ function Restore-Placeholders {
             $hasErrors = $true
         }
     }
-    # Revert date placeholders
-    foreach ($file in $script:DATE_FILES) {
+
+    # Revert date-only placeholders
+    foreach ($file in $dateOnlyFiles) {
         Write-Info "Reverting date in $file"
         try {
-            (Get-Content $file -Raw) -replace [regex]::Escape($script:DATE), 'xxxx.yy.zz HH.mm.ss' | Set-Content -Path $file -Encoding UTF8 -NoNewline
+            Start-Sleep -Milliseconds 50
+            $content = Get-Content $file -Raw -Encoding UTF8
+            $newContent = $content -replace [regex]::Escape($script:DATE), 'xxxx.yy.zz HH.mm.ss'
+            Start-Sleep -Milliseconds 100
+            [System.IO.File]::WriteAllText($file, $newContent, [System.Text.Encoding]::UTF8)
         }
         catch {
             Write-Host "WARNING: Failed to revert date in $file" -ForegroundColor Yellow
@@ -304,6 +472,7 @@ function Restore-Placeholders {
             $hasErrors = $true
         }
     }
+
     if (-not $hasErrors) {
         Write-Success "Placeholders reverted successfully."
     }

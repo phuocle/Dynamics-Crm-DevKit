@@ -5,10 +5,10 @@ using System;
 
 namespace Dev.DevKitV4.Server.Plugins.Account
 {
-    [CrmPluginRegistration("Create", "account", StageEnum.PreValidation, ExecutionModeEnum.Synchronous, "", "Dev.DevKitV4.Server.Plugins.Account.PreValidationAccountCreateSynchronous", 2, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, SecureConfiguration = "ABCD", Unregister = true)]
-    [CrmPluginRegistration("Create", "contact", StageEnum.PreValidation, ExecutionModeEnum.Synchronous, "", "Dev.DevKitV4.Server.Plugins.Contact.PreValidationAccountCreateSynchronous", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, Action = PluginStepOperationEnum.Deactivate)]
-    [CrmPluginRegistration("Create", "team", StageEnum.PreValidation, ExecutionModeEnum.Synchronous, "", "Dev.DevKitV4.Server.Plugins.Team.PreValidationAccountCreateSynchronous", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, Action = PluginStepOperationEnum.Deactivate)]
-    [CrmPluginRegistration("Create", "systemuser", StageEnum.PreValidation, ExecutionModeEnum.Synchronous, "", "Dev.DevKitV4.Server.Plugins.SystemUser.PreValidationAccountCreateSynchronous", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, Action = PluginStepOperationEnum.Deactivate)]
+    [CrmPluginRegistration("Create", "account", StageEnum.PreValidation, ExecutionModeEnum.Synchronous, "", "Dev.DevKitV4.Server.Plugins.Account.PreValidationAccountCreateSynchronous", 2, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, SecureConfiguration = "ABCD", Id = "df53aff4-e1bd-f011-bbd2-000d3a5a9128")]
+    [CrmPluginRegistration("Create", "contact", StageEnum.PreValidation, ExecutionModeEnum.Synchronous, "", "Dev.DevKitV4.Server.Plugins.Contact.PreValidationAccountCreateSynchronous", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, Id = "e253aff4-e1bd-f011-bbd2-000d3a5a9128")]
+    [CrmPluginRegistration("Create", "team", StageEnum.PreValidation, ExecutionModeEnum.Synchronous, "", "Dev.DevKitV4.Server.Plugins.Team.PreValidationAccountCreateSynchronous", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, Id = "e553aff4-e1bd-f011-bbd2-000d3a5a9128")]
+    [CrmPluginRegistration("Create", "systemuser", StageEnum.PreValidation, ExecutionModeEnum.Synchronous, "", "Dev.DevKitV4.Server.Plugins.SystemUser.PreValidationAccountCreateSynchronous", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, Id = "e853aff4-e1bd-f011-bbd2-000d3a5a9128")]
     public class PreValidationAccountCreateSynchronous : IPlugin
     {
         /*

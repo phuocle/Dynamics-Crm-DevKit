@@ -12,6 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		ImportKey.bat = ImportKey.bat
 		release-version-date-current-date.ps1 = release-version-date-current-date.ps1
 		release-version-date.ps1 = release-version-date.ps1
+		sn.ps1 = sn.ps1
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicsCrm.DevKit.Tool", "DynamicsCrm.DevKit.Tool\DynamicsCrm.DevKit.Tool.csproj", "{A4BF7AB3-EBC2-4AC9-ACCE-4F2790236A02}"
