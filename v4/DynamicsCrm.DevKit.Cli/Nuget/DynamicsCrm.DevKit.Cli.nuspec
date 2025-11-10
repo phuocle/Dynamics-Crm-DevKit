@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
     <metadata>
         <id>DynamicsCrm.DevKit.Cli</id>
         <title>DynamicsCrm.DevKit.Cli - CLI for DynamicsCrm.DevKit tool</title>
@@ -11,8 +11,6 @@
         <description>Command Line Interface (CLI) for DynamicsCrm.DevKit, a comprehensive toolkit for Dynamics 365/Dataverse development. This tool helps automate common development tasks such as deploying plugins, workflows, web resources, and reports directly from the command line.</description>
         <language>en-US</language>
         <tags>Dynamics, Dynamics365, DynamicsCrm, Crm, Cli, DevKit, Analyzer, Dataverse, PowerPlatform, Xrm</tags>
-		<icon>images\icon.png</icon>
-		<readme>docs\README.md</readme>
     </metadata>
     <files>
         <!-- Main CLI executable and config -->

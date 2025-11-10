@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
   <metadata>
     <id>DynamicsCrm.DevKit.Tool</id>
     <title>DynamicsCrm.DevKit.Tool - Tool for DynamicsCrm.DevKit tool</title>
@@ -7,12 +7,10 @@
     <authors>PhuocLe</authors>
     <license type="file">license\LICENSE.txt</license>
     <projectUrl>https://github.com/phuocle/Dynamics-Crm-DevKit</projectUrl>
-    <icon>images\icon.png</icon>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Tool for DynamicsCrm.DevKit tool</description>
     <language>en-US</language>
 	<tags>Dynamics, Dynamics365, DynamicsCrm, Crm, Cli, DevKit, Analyzer, Dataverse</tags>
-	<readme>docs\README.md</readme>
   </metadata>
   <files>
     <file src="..\images\icon.png" target="images\icon.png" />

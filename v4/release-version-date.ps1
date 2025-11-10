@@ -469,9 +469,12 @@ function Build-Solution {
             "-target:Clean;Build",
             "DynamicsCrm.DevKit.AllInOne.sln"
         )
-        $process = Start-Process -FilePath $script:MSBUILD_PATH -ArgumentList $buildArgs -NoNewWindow -Wait -PassThru
-        if ($process.ExitCode -ne 0) {
-            Write-ErrorMessage "ERROR: Solution build failed with exit code $($process.ExitCode)!"
+
+        # Use & operator instead of Start-Process for better synchronous execution
+        & $script:MSBUILD_PATH @buildArgs
+
+        if ($LASTEXITCODE -ne 0) {
+            Write-ErrorMessage "ERROR: Solution build failed with exit code $LASTEXITCODE!"
             return $false
         }
         Write-Success "Solution built successfully."
