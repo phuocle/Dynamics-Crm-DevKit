@@ -82,7 +82,7 @@ namespace DynamicsCrm.DevKit.Cli
                     var current = new Version(currentVersion.Major, currentVersion.Minor, currentVersion.Build, currentVersion.Revision);
                     if (Version.TryParse(latestVersionString, out var latest))
                     {
-                        if (latest != current)
+                        if (latest > current)
                         {
                             ShowUpdateNotification(current.ToString(), latestVersionString);
                         }
