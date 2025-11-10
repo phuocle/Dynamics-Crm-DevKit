@@ -91,7 +91,7 @@ namespace Dev.DevKitV4.Shared
             Message = message;
             PluginType = pluginType;
         }
-
+        public string Id { get; set; } = string.Empty;
         public bool Unregister { get; set; } = false;
         public string RunAs { get; set; } = string.Empty;
         public string FriendlyName { get; set; } = string.Empty;

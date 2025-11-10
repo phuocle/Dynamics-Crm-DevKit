@@ -63,9 +63,9 @@ namespace DynamicsCrm.DevKit.Commands
                 await VS.MessageBox.ShowErrorAsync($"Please install DynamicsCrm.DevKit.Cli from Nuget. DynamicsCrm.DevKit.Cli text have been copied to clipboard.", $"Thank you !!!");
                 return;
             }
-            
+
             var hasExistingAttributes = VsixHelper.HasAttributeCrmPluginRegistration(@class);
-            
+
             if (VsixHelper.HasImplementedPlugin(@class))
             {
                 var attributes = await CrmPluginRegistrationDataForPluginAsync(dte, currentClass.FullName);
@@ -123,14 +123,14 @@ namespace DynamicsCrm.DevKit.Commands
         private static async Task UpdateAttributesWithIdAsync(CodeClass @class, List<string> newAttributes)
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-            
+
             // Parse new attributes to extract Id values keyed by step name
             var idMapping = new Dictionary<string, string>();
             foreach (var attrString in newAttributes)
             {
                 var nameMatch = System.Text.RegularExpressions.Regex.Match(attrString, @"""([^""]+)"",\s*\d+,");
                 var idMatch = System.Text.RegularExpressions.Regex.Match(attrString, @"Id\s*=\s*""([^""]+)""");
-                
+
                 if (nameMatch.Success && idMatch.Success)
                 {
                     var stepName = nameMatch.Groups[1].Value;
@@ -138,7 +138,7 @@ namespace DynamicsCrm.DevKit.Commands
                     idMapping[stepName] = stepId;
                 }
             }
-            
+
             // Update existing attributes
             var attributesToUpdate = new List<CodeAttribute>();
             foreach (CodeAttribute attribute in @class.Attributes)
@@ -148,7 +148,7 @@ namespace DynamicsCrm.DevKit.Commands
                     attributesToUpdate.Add(attribute);
                 }
             }
-            
+
             foreach (var attribute in attributesToUpdate)
             {
                 // Get the step name from attribute (6th parameter)
@@ -169,7 +169,7 @@ namespace DynamicsCrm.DevKit.Commands
                                 break;
                             }
                         }
-                        
+
                         if (!hasId)
                         {
                             // Add Id to the attribute value
@@ -190,37 +190,41 @@ namespace DynamicsCrm.DevKit.Commands
             this.Command.Visible = false;
             ThreadHelper.JoinableTaskFactory.Run(async () =>
             {
-                await Microsoft.VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-                var dte = await VS.GetServiceAsync<DTE, DTE>();
-                if (!(dte?.ActiveDocument?.Language?.Equals("CSharp", StringComparison.OrdinalIgnoreCase)) ?? false) return;
-                var textDocument = (TextDocument)dte?.ActiveDocument?.Object();
-                var activePoint = textDocument?.Selection?.ActivePoint;
-                var currentClass = dte?.ActiveDocument?.ProjectItem?.FileCodeModel?.CodeElementFromPoint(activePoint, vsCMElement.vsCMElementClass);
-                if (currentClass == null) return;
-                if (currentClass is not CodeClass @class) return;
-                if (@class.IsAbstract) return;
-                if (!@class.IsCodeType) return;
-                if (!VsixHelper.HasImplementedPlugin(@class) && !VsixHelper.HasImplementedWorkflow(@class)) return;
-                
-                var hasAttributes = VsixHelper.HasAttributeCrmPluginRegistration(@class);
-                if (hasAttributes)
+                try
                 {
-                    // Check if all attributes have Id property
-                    if (AllAttributesHaveId(@class))
+                    await Microsoft.VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                    var dte = await VS.GetServiceAsync<DTE, DTE>();
+                    if (!(dte?.ActiveDocument?.Language?.Equals("CSharp", StringComparison.OrdinalIgnoreCase)) ?? false) return;
+                    var textDocument = (TextDocument)dte?.ActiveDocument?.Object();
+                    var activePoint = textDocument?.Selection?.ActivePoint;
+                    var currentClass = dte?.ActiveDocument?.ProjectItem?.FileCodeModel?.CodeElementFromPoint(activePoint, vsCMElement.vsCMElementClass);
+                    if (currentClass == null) return;
+                    if (currentClass is not CodeClass @class) return;
+                    if (@class.IsAbstract) return;
+                    if (!@class.IsCodeType) return;
+                    if (!VsixHelper.HasImplementedPlugin(@class) && !VsixHelper.HasImplementedWorkflow(@class)) return;
+
+                    var hasAttributes = VsixHelper.HasAttributeCrmPluginRegistration(@class);
+                    if (hasAttributes)
                     {
-                        // All attributes have Id, hide the menu
-                        return;
+                        // Check if all attributes have Id property
+                        if (AllAttributesHaveId(@class))
+                        {
+                            // All attributes have Id, hide the menu
+                            return;
+                        }
+                        // Some attributes missing Id, show menu with updated text
+                        this.Command.Text = "Update Plugin Step Id";
+                        this.Command.Visible = true;
                     }
-                    // Some attributes missing Id, show menu with updated text
-                    this.Command.Text = "Update Plugin Step Id";
-                    this.Command.Visible = true;
+                    else
+                    {
+                        // No attributes, show menu with default text
+                        this.Command.Text = "Add Crm Plugin Registration";
+                        this.Command.Visible = true;
+                    }
                 }
-                else
-                {
-                    // No attributes, show menu with default text
-                    this.Command.Text = "Add Crm Plugin Registration";
-                    this.Command.Visible = true;
-                }
+                catch {  }
             });
         }
 
