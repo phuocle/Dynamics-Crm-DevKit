@@ -152,12 +152,6 @@ namespace DynamicsCrm.DevKit.Shared.Models
         public CrmPluginRegistrationAttribute()
         {
         }
-
-        /// <summary>
-        /// Unique identifier for the plugin step. Ensures idempotent deployments.
-        /// If provided, DevKit.Cli will update the existing step rather than creating a new one.
-        /// This matches spkl behavior for step ID tracking across environments.
-        /// </summary>
         public string Id { get; set; } = string.Empty;
         public bool Unregister { get; set; } = false;
         public string RunAs { get; set; } = string.Empty;

@@ -1456,14 +1456,12 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 rows = _PluginStepsCache.Where(x => x.Value.Id == stepId).Select(x => x.Value).ToList();
             }
-            
             // Fall back to Name-based lookup if Id not found or not provided
             if (rows.Count == 0)
             {
                 var key = $"{pluginTypeId}-{attribute.Name}";
                 rows = _PluginStepsCache.Where(x => x.Key == key).Select(x => x.Value).ToList();
             }
-            
             var SecureConfigurationAction = string.Empty;
             if (rows.Count > 0)
             {
@@ -1503,7 +1501,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 {
                     pluginStep["sdkmessageprocessingstepid"] = specificStepId;
                 }
-                
                 if (attribute.SecureConfiguration?.Trim().Length > 0)
                 {
                     var secureEntity = new Entity("sdkmessageprocessingstepsecureconfig");
