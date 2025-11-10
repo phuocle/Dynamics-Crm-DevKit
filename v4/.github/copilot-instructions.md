@@ -11,6 +11,12 @@
 
 ## Solution Structure
 
+### Release All Projects
+* If not mention any date, run .ps1 file release-version-date-current-date.ps1
+
+### Build All Projects
+* Use `DynamicsCrm.DevKit.AllInOne.sln` to build all projects
+
 ### Project Types
 * **CLI**: `DynamicsCrm.DevKit.Cli` + `DynamicsCrm.DevKit.Shared`
   - Build: MSBuild on `DynamicsCrm.DevKit.Cli.sln`

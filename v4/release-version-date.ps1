@@ -33,6 +33,7 @@ $script:DATE = ""
 $script:MSBUILD_PATH = ""
 $script:VERSION_FILES = @()
 $script:DATE_FILES = @()
+$script:UpdatedFilesBackup = @{}
 
 #region Helper Functions
 
@@ -124,6 +125,10 @@ function Initialize-Variables {
 function Update-VersionPlaceholders {
     Write-Section "Updating version and date placeholders..."
 
+    # Track successfully updated files and their backups for rollback
+    $script:UpdatedFilesBackup = @{}
+    $failedFile = $null
+
     # Categorize files to avoid double-write issue
     # Files that appear in BOTH lists need combined update (single read-replace-write)
     $bothFiles = $script:VERSION_FILES | Where-Object { $script:DATE_FILES -contains $_ }
@@ -179,6 +184,8 @@ function Update-VersionPlaceholders {
                 }
 
                 $success = $true
+                # Store backup for potential rollback
+                $script:UpdatedFilesBackup[$file] = $backup
                 break
             }
             catch {
@@ -197,18 +204,19 @@ function Update-VersionPlaceholders {
         }
 
         if (-not $success) {
+            $failedFile = $file
             Write-ErrorMessage "ERROR: Failed to update version and date in $file after 5 attempts"
-            # Attempt final restoration from backup
-            if ($null -ne $backup) {
-                Write-Host "  Attempting final restoration from backup..." -ForegroundColor Yellow
-                try {
-                    Start-Sleep -Milliseconds 500
-                    $backup | Set-Content -Path $file -Encoding UTF8 -NoNewline -Force -ErrorAction Stop
-                }
-                catch {
-                    Write-Host "  WARNING: Could not restore backup" -ForegroundColor Red
-                }
-            }
+            Write-ErrorMessage "ROLLING BACK all previous changes..."
+
+            # Rollback all previously updated files
+            Rollback-FileChanges
+
+            Write-ErrorMessage ""
+            Write-ErrorMessage "************************************************************"
+            Write-ErrorMessage "CANNOT REPLACE FILE: $failedFile"
+            Write-ErrorMessage "************************************************************"
+            Write-ErrorMessage "Please manually edit this file and try again."
+            Write-ErrorMessage ""
             return $false
         }
     }
@@ -216,16 +224,67 @@ function Update-VersionPlaceholders {
     # Update version-only files
     foreach ($file in $versionOnlyFiles) {
         Write-Info "Updating version in $file"
-        try {
-            Start-Sleep -Milliseconds 50
-            $content = Get-Content $file -Raw -Encoding UTF8
-            $newContent = $content -replace 'x\.xx\.xx\.xx', $script:VERSION
-            Start-Sleep -Milliseconds 100
-            [System.IO.File]::WriteAllText($file, $newContent, [System.Text.Encoding]::UTF8)
+        $success = $false
+
+        for ($attempt = 1; $attempt -le 5; $attempt++) {
+            try {
+                if ($attempt -gt 1) {
+                    Start-Sleep -Milliseconds (500 * $attempt)
+                }
+
+                Start-Sleep -Milliseconds 50
+                $content = Get-Content $file -Raw -Encoding UTF8
+
+                if ([string]::IsNullOrEmpty($content)) {
+                    throw "File content is empty or null"
+                }
+
+                # Store backup on first attempt
+                if ($attempt -eq 1) {
+                    $backup = $content
+                }
+
+                $newContent = $content -replace 'x\.xx\.xx\.xx', $script:VERSION
+
+                if ([string]::IsNullOrEmpty($newContent)) {
+                    throw "Replacement resulted in empty content"
+                }
+
+                Start-Sleep -Milliseconds 100
+                [System.IO.File]::WriteAllText($file, $newContent, [System.Text.Encoding]::UTF8)
+
+                # Verify write
+                Start-Sleep -Milliseconds 50
+                $verifyLength = (Get-Item $file).Length
+                if ($verifyLength -eq 0) {
+                    throw "File became empty after write"
+                }
+
+                $success = $true
+                $script:UpdatedFilesBackup[$file] = $backup
+                break
+            }
+            catch {
+                if ($attempt -lt 5) {
+                    Write-Host "  Attempt $attempt failed, retrying..." -ForegroundColor Yellow
+                }
+            }
         }
-        catch {
-            Write-ErrorMessage "ERROR: Failed to update version in $file"
-            Write-ErrorMessage $_.Exception.Message
+
+        if (-not $success) {
+            $failedFile = $file
+            Write-ErrorMessage "ERROR: Failed to update version in $file after 5 attempts"
+            Write-ErrorMessage "ROLLING BACK all previous changes..."
+
+            # Rollback all previously updated files
+            Rollback-FileChanges
+
+            Write-ErrorMessage ""
+            Write-ErrorMessage "************************************************************"
+            Write-ErrorMessage "CANNOT REPLACE FILE: $failedFile"
+            Write-ErrorMessage "************************************************************"
+            Write-ErrorMessage "Please manually edit this file and try again."
+            Write-ErrorMessage ""
             return $false
         }
     }
@@ -233,22 +292,135 @@ function Update-VersionPlaceholders {
     # Update date-only files
     foreach ($file in $dateOnlyFiles) {
         Write-Info "Updating date in $file"
-        try {
-            Start-Sleep -Milliseconds 50
-            $content = Get-Content $file -Raw -Encoding UTF8
-            $newContent = $content -replace 'xxxx\.yy\.zz HH\.mm\.ss', $script:DATE
-            Start-Sleep -Milliseconds 100
-            [System.IO.File]::WriteAllText($file, $newContent, [System.Text.Encoding]::UTF8)
+        $success = $false
+
+        for ($attempt = 1; $attempt -le 5; $attempt++) {
+            try {
+                if ($attempt -gt 1) {
+                    Start-Sleep -Milliseconds (500 * $attempt)
+                }
+
+                Start-Sleep -Milliseconds 50
+                $content = Get-Content $file -Raw -Encoding UTF8
+
+                if ([string]::IsNullOrEmpty($content)) {
+                    throw "File content is empty or null"
+                }
+
+                # Store backup on first attempt
+                if ($attempt -eq 1) {
+                    $backup = $content
+                }
+
+                $newContent = $content -replace 'xxxx\.yy\.zz HH\.mm\.ss', $script:DATE
+
+                if ([string]::IsNullOrEmpty($newContent)) {
+                    throw "Replacement resulted in empty content"
+                }
+
+                Start-Sleep -Milliseconds 100
+                [System.IO.File]::WriteAllText($file, $newContent, [System.Text.Encoding]::UTF8)
+
+                # Verify write
+                Start-Sleep -Milliseconds 50
+                $verifyLength = (Get-Item $file).Length
+                if ($verifyLength -eq 0) {
+                    throw "File became empty after write"
+                }
+
+                $success = $true
+                $script:UpdatedFilesBackup[$file] = $backup
+                break
+            }
+            catch {
+                if ($attempt -lt 5) {
+                    Write-Host "  Attempt $attempt failed, retrying..." -ForegroundColor Yellow
+                }
+            }
         }
-        catch {
-            Write-ErrorMessage "ERROR: Failed to update date in $file"
-            Write-ErrorMessage $_.Exception.Message
+
+        if (-not $success) {
+            $failedFile = $file
+            Write-ErrorMessage "ERROR: Failed to update date in $file after 5 attempts"
+            Write-ErrorMessage "ROLLING BACK all previous changes..."
+
+            # Rollback all previously updated files
+            Rollback-FileChanges
+
+            Write-ErrorMessage ""
+            Write-ErrorMessage "************************************************************"
+            Write-ErrorMessage "CANNOT REPLACE FILE: $failedFile"
+            Write-ErrorMessage "************************************************************"
+            Write-ErrorMessage "Please manually edit this file and try again."
+            Write-ErrorMessage ""
             return $false
         }
     }
 
     Write-Success "Version and date placeholders updated successfully."
+    # Clear backup after successful update
+    $script:UpdatedFilesBackup = @{}
     return $true
+}
+
+function Rollback-FileChanges {
+    if ($script:UpdatedFilesBackup.Count -eq 0) {
+        Write-Info "No files to rollback."
+        return
+    }
+
+    Write-Section "Rolling back changes to previously updated files..."
+    $rollbackErrors = @()
+
+    foreach ($file in $script:UpdatedFilesBackup.Keys) {
+        Write-Info "  Restoring: $file"
+        $success = $false
+
+        for ($attempt = 1; $attempt -le 5; $attempt++) {
+            try {
+                if ($attempt -gt 1) {
+                    Start-Sleep -Milliseconds (500 * $attempt)
+                }
+
+                Start-Sleep -Milliseconds 100
+                $originalContent = $script:UpdatedFilesBackup[$file]
+                [System.IO.File]::WriteAllText($file, $originalContent, [System.Text.Encoding]::UTF8)
+
+                # Verify restoration
+                Start-Sleep -Milliseconds 50
+                $verifyLength = (Get-Item $file).Length
+                if ($verifyLength -eq 0) {
+                    throw "File became empty after restoration"
+                }
+
+                $success = $true
+                Write-Success "  Restored: $file"
+                break
+            }
+            catch {
+                if ($attempt -lt 5) {
+                    Write-Host "  Rollback attempt $attempt failed, retrying..." -ForegroundColor Yellow
+                }
+            }
+        }
+
+        if (-not $success) {
+            $rollbackErrors += $file
+            Write-ErrorMessage "  WARNING: Failed to rollback $file"
+        }
+    }
+
+    if ($rollbackErrors.Count -gt 0) {
+        Write-ErrorMessage ""
+        Write-ErrorMessage "WARNING: The following files could not be rolled back:"
+        foreach ($file in $rollbackErrors) {
+            Write-ErrorMessage "  - $file"
+        }
+        Write-ErrorMessage "Please manually restore these files from source control."
+    }
+    else {
+        Write-Success "All files successfully rolled back."
+    }
 }
 
 function Find-MSBuild {
