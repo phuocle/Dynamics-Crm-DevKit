@@ -470,11 +470,37 @@ function Build-Solution {
             "DynamicsCrm.DevKit.AllInOne.sln"
         )
 
-        # Use & operator instead of Start-Process for better synchronous execution
-        & $script:MSBUILD_PATH @buildArgs
+        # Start build process in background to show animation
+        $psi = New-Object System.Diagnostics.ProcessStartInfo
+        $psi.FileName = $script:MSBUILD_PATH
+        $psi.Arguments = $buildArgs -join ' '
+        $psi.UseShellExecute = $false
+        $psi.CreateNoWindow = $true
+        $psi.RedirectStandardOutput = $true
+        $psi.RedirectStandardError = $true
 
-        if ($LASTEXITCODE -ne 0) {
-            Write-ErrorMessage "ERROR: Solution build failed with exit code $LASTEXITCODE!"
+        $process = New-Object System.Diagnostics.Process
+        $process.StartInfo = $psi
+        $process.Start() | Out-Null
+
+        # Show animated progress while building
+        $spinChars = @('|', '/', '-', '\')
+        $spinIndex = 0
+        Write-Host "  Building " -NoNewline -ForegroundColor White
+
+        while (-not $process.HasExited) {
+            Write-Host "`r  Building $($spinChars[$spinIndex]) " -NoNewline -ForegroundColor Cyan
+            $spinIndex = ($spinIndex + 1) % $spinChars.Length
+            Start-Sleep -Milliseconds 100
+        }
+
+        $process.WaitForExit()
+        $buildExitCode = $process.ExitCode
+
+        Write-Host "`r                    `r" -NoNewline
+
+        if ($buildExitCode -ne 0) {
+            Write-ErrorMessage "ERROR: Solution build failed with exit code $buildExitCode!"
             return $false
         }
         Write-Success "Solution built successfully."
