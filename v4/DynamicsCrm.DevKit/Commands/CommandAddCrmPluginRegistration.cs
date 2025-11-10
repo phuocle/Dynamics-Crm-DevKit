@@ -247,6 +247,7 @@ namespace DynamicsCrm.DevKit.Commands
             if (rows.Entities.Count == 0) return list;
             foreach (var row in rows.Entities)
             {
+                var stepId = row.Id;
                 var message = XrmHelper.GetAliasedValue<string>(row, "m.name");
                 var entity = XrmHelper.GetAliasedValue<string>(row, "f.primaryobjecttypecode");
                 var stage = row.GetAttributeValue<OptionSetValue>("stage").Value;
@@ -275,7 +276,7 @@ namespace DynamicsCrm.DevKit.Commands
                 attribute += $"\"{name}\"";
                 attribute += $", {rank}";
                 attribute += $", {isolationModeName}";
-                attribute += $", PluginType = PluginType.Plugin,";
+                attribute += $", PluginType = PluginType.Plugin, Id = \"{stepId}\",";
                 if (asyncautodelete)
                     attribute += $"DeleteAsyncOperation = true, ";
                 if (description != null)
