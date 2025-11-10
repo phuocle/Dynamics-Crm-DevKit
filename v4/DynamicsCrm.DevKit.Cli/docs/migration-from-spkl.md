@@ -1,4 +1,4 @@
-﻿# Migration Guide: spkl  DynamicsCrm.DevKit.Cli
+# Migration Guide: spkl → DynamicsCrm.DevKit.Cli
 
 ## Overview
 
