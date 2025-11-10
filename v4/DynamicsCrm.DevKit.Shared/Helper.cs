@@ -439,6 +439,9 @@ namespace DynamicsCrm.DevKit.Shared
                     case "DataSource":
                         attribute.DataSource = (string)namedArgument.TypedValue.Value;
                         break;
+                    case "Id":
+                        attribute.Id = (string)namedArgument.TypedValue.Value;
+                        break;
                 }
             }
             if (!hasNamedArgumentPluginType)

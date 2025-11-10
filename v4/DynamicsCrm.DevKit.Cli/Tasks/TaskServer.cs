@@ -8,7 +8,6 @@ using Microsoft.Xrm.Sdk.Query;
 using NuGet.Packaging;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Eventing.Reader;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -1029,15 +1028,19 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         continue;
                     }
                     else if (error == true)
-                        return;
-                    else
                     {
                         CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE);
+                        CliLog.WriteSuccess(ConsoleColor.White, CliAction.UPDATED.Trim());
+                        CliLog.Write(" ");
                         CliLog.WriteSuccess(ConsoleColor.White, CliAction.UNREGISTERED.Trim());
                         CliLog.Write(ConsoleColor.White, $" Type ", ConsoleColor.Blue, attributes[0].PluginType, " ", ConsoleColor.Cyan, type.FullName);
                         CliLog.WriteLine();
                         continue;
-                    };
+                    }
+                    else
+                    {
+                        return;
+                    }
                 }
                 var pluginTypeId = await DeployPluginTypeAsync(pluginAssemblyId.Value, type, attributes[0], deployFileType);
                 if (pluginTypeId == null) return;
@@ -1447,8 +1450,20 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     attribute.FilteringAttributes = null;
                 }
             }
-            var key = $"{pluginTypeId}-{attribute.Name}";
-            var rows = _PluginStepsCache.Where(x => x.Key == key).Select(x => x.Value).ToList();
+            // Try to find existing step by Id first (for idempotent deployments)
+            List<Entity> rows = new List<Entity>();
+            if (!string.IsNullOrEmpty(attribute.Id) && Guid.TryParse(attribute.Id, out Guid stepId))
+            {
+                rows = _PluginStepsCache.Where(x => x.Value.Id == stepId).Select(x => x.Value).ToList();
+            }
+            
+            // Fall back to Name-based lookup if Id not found or not provided
+            if (rows.Count == 0)
+            {
+                var key = $"{pluginTypeId}-{attribute.Name}";
+                rows = _PluginStepsCache.Where(x => x.Key == key).Select(x => x.Value).ToList();
+            }
+            
             var SecureConfigurationAction = string.Empty;
             if (rows.Count > 0)
             {
@@ -1483,6 +1498,12 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             Guid? pluginStepId;
             if (rows.Count == 0)
             {
+                // Use provided Id if available (for idempotent deployments)
+                if (!string.IsNullOrEmpty(attribute.Id) && Guid.TryParse(attribute.Id, out Guid specificStepId))
+                {
+                    pluginStep["sdkmessageprocessingstepid"] = specificStepId;
+                }
+                
                 if (attribute.SecureConfiguration?.Trim().Length > 0)
                 {
                     var secureEntity = new Entity("sdkmessageprocessingstepsecureconfig");
