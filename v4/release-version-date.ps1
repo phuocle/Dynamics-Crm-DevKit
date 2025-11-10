@@ -138,27 +138,22 @@ function Update-VersionPlaceholders {
 
         for ($attempt = 1; $attempt -le 5; $attempt++) {
             try {
-                # Read and backup file content on first attempt
-                if ($attempt -eq 1) {
-                    $content = Get-Content $file -Raw -ErrorAction Stop
-                    if ([string]::IsNullOrEmpty($content)) {
-                        throw "File content is empty or null before replacement"
-                    }
-                    $backup = $content
-                }
-                else {
-                    # On retry, wait longer and restore from backup if file is corrupted
+                # Wait before attempting to ensure no file locks
+                if ($attempt -gt 1) {
                     Start-Sleep -Milliseconds (500 * $attempt)
-                    $currentContent = Get-Content $file -Raw -ErrorAction SilentlyContinue
-                    if ([string]::IsNullOrEmpty($currentContent) -and $null -ne $backup) {
-                        Write-Host "  Restoring from backup..." -ForegroundColor Yellow
-                        $backup | Set-Content -Path $file -Encoding UTF8 -NoNewline -Force -ErrorAction Stop
-                        Start-Sleep -Milliseconds 200
-                    }
-                    $content = Get-Content $file -Raw -ErrorAction Stop
-                    if ([string]::IsNullOrEmpty($content)) {
-                        throw "File content is empty after backup restore"
-                    }
+                }
+
+                # Read file content with a delay to avoid lock contention
+                Start-Sleep -Milliseconds 50
+                $content = Get-Content $file -Raw -Encoding UTF8
+
+                if ([string]::IsNullOrEmpty($content)) {
+                    throw "File content is empty or null"
+                }
+
+                # Store backup on first attempt
+                if ($attempt -eq 1) {
+                    $backup = $content
                 }
 
                 # Perform both replacements
@@ -170,12 +165,14 @@ function Update-VersionPlaceholders {
                     throw "Replacement resulted in empty content"
                 }
 
-                # Write to file with delay
-                Start-Sleep -Milliseconds 150
-                $newContent | Set-Content -Path $file -Encoding UTF8 -NoNewline -Force -ErrorAction Stop
+                # Small delay before writing to ensure previous handles are closed
+                Start-Sleep -Milliseconds 100
+
+                # Write using .NET to have better control
+                [System.IO.File]::WriteAllText($file, $newContent, [System.Text.Encoding]::UTF8)
 
                 # Verify file was written correctly
-                Start-Sleep -Milliseconds 100
+                Start-Sleep -Milliseconds 50
                 $verifyLength = (Get-Item $file).Length
                 if ($verifyLength -eq 0) {
                     throw "File became empty after write"
@@ -220,10 +217,11 @@ function Update-VersionPlaceholders {
     foreach ($file in $versionOnlyFiles) {
         Write-Info "Updating version in $file"
         try {
-            $content = Get-Content $file -Raw -ErrorAction Stop
+            Start-Sleep -Milliseconds 50
+            $content = Get-Content $file -Raw -Encoding UTF8
             $newContent = $content -replace 'x\.xx\.xx\.xx', $script:VERSION
             Start-Sleep -Milliseconds 100
-            $newContent | Set-Content -Path $file -Encoding UTF8 -NoNewline -Force -ErrorAction Stop
+            [System.IO.File]::WriteAllText($file, $newContent, [System.Text.Encoding]::UTF8)
         }
         catch {
             Write-ErrorMessage "ERROR: Failed to update version in $file"
@@ -236,10 +234,11 @@ function Update-VersionPlaceholders {
     foreach ($file in $dateOnlyFiles) {
         Write-Info "Updating date in $file"
         try {
-            $content = Get-Content $file -Raw -ErrorAction Stop
+            Start-Sleep -Milliseconds 50
+            $content = Get-Content $file -Raw -Encoding UTF8
             $newContent = $content -replace 'xxxx\.yy\.zz HH\.mm\.ss', $script:DATE
             Start-Sleep -Milliseconds 100
-            $newContent | Set-Content -Path $file -Encoding UTF8 -NoNewline -Force -ErrorAction Stop
+            [System.IO.File]::WriteAllText($file, $newContent, [System.Text.Encoding]::UTF8)
         }
         catch {
             Write-ErrorMessage "ERROR: Failed to update date in $file"
@@ -395,26 +394,24 @@ function Restore-Placeholders {
 
         for ($attempt = 1; $attempt -le 5; $attempt++) {
             try {
-                # Read and backup file content on first attempt
-                if ($attempt -eq 1) {
-                    $content = Get-Content $file -Raw -ErrorAction Stop
-                    if ([string]::IsNullOrEmpty($content)) {
-                        Write-Host "  WARNING: File is empty, skipping" -ForegroundColor Yellow
-                        $hasErrors = $true
-                        break
-                    }
-                    $backup = $content
-                }
-                else {
-                    # On retry, wait longer and restore from backup if file is corrupted
+                # Wait before attempting to ensure no file locks
+                if ($attempt -gt 1) {
                     Start-Sleep -Milliseconds (500 * $attempt)
-                    $currentContent = Get-Content $file -Raw -ErrorAction SilentlyContinue
-                    if ([string]::IsNullOrEmpty($currentContent) -and $null -ne $backup) {
-                        Write-Host "  Restoring from backup before retry..." -ForegroundColor Yellow
-                        $backup | Set-Content -Path $file -Encoding UTF8 -NoNewline -Force -ErrorAction Stop
-                        Start-Sleep -Milliseconds 200
-                    }
-                    $content = Get-Content $file -Raw -ErrorAction Stop
+                }
+
+                # Read file content
+                Start-Sleep -Milliseconds 50
+                $content = Get-Content $file -Raw -Encoding UTF8
+
+                if ([string]::IsNullOrEmpty($content)) {
+                    Write-Host "  WARNING: File is empty, skipping" -ForegroundColor Yellow
+                    $hasErrors = $true
+                    break
+                }
+
+                # Store backup on first attempt
+                if ($attempt -eq 1) {
+                    $backup = $content
                 }
 
                 # Perform both replacements
@@ -422,8 +419,8 @@ function Restore-Placeholders {
                 $newContent = $newContent -replace [regex]::Escape($script:DATE), 'xxxx.yy.zz HH.mm.ss'
 
                 # Write to file
-                Start-Sleep -Milliseconds 150
-                $newContent | Set-Content -Path $file -Encoding UTF8 -NoNewline -Force -ErrorAction Stop
+                Start-Sleep -Milliseconds 100
+                [System.IO.File]::WriteAllText($file, $newContent, [System.Text.Encoding]::UTF8)
 
                 $success = $true
                 break
@@ -446,7 +443,11 @@ function Restore-Placeholders {
     foreach ($file in $versionOnlyFiles) {
         Write-Info "Reverting version in $file"
         try {
-            (Get-Content $file -Raw) -replace [regex]::Escape($script:VERSION), 'x.xx.xx.xx' | Set-Content -Path $file -Encoding UTF8 -NoNewline -Force
+            Start-Sleep -Milliseconds 50
+            $content = Get-Content $file -Raw -Encoding UTF8
+            $newContent = $content -replace [regex]::Escape($script:VERSION), 'x.xx.xx.xx'
+            Start-Sleep -Milliseconds 100
+            [System.IO.File]::WriteAllText($file, $newContent, [System.Text.Encoding]::UTF8)
         }
         catch {
             Write-Host "WARNING: Failed to revert version in $file" -ForegroundColor Yellow
@@ -459,7 +460,11 @@ function Restore-Placeholders {
     foreach ($file in $dateOnlyFiles) {
         Write-Info "Reverting date in $file"
         try {
-            (Get-Content $file -Raw) -replace [regex]::Escape($script:DATE), 'xxxx.yy.zz HH.mm.ss' | Set-Content -Path $file -Encoding UTF8 -NoNewline -Force
+            Start-Sleep -Milliseconds 50
+            $content = Get-Content $file -Raw -Encoding UTF8
+            $newContent = $content -replace [regex]::Escape($script:DATE), 'xxxx.yy.zz HH.mm.ss'
+            Start-Sleep -Milliseconds 100
+            [System.IO.File]::WriteAllText($file, $newContent, [System.Text.Encoding]::UTF8)
         }
         catch {
             Write-Host "WARNING: Failed to revert date in $file" -ForegroundColor Yellow
