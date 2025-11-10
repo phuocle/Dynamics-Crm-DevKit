@@ -64,15 +64,10 @@ namespace DynamicsCrm.DevKit.Cli
             try
             {
                 var currentVersion = Assembly.GetExecutingAssembly().GetName().Version;
-
-                // Read cache to avoid unnecessary NuGet API calls
                 var (lastCheck, cachedVersion) = ReadVersionCache();
                 var today = DateTime.UtcNow.Date;
                 var needsCheck = lastCheck.Date < today;
-
                 string latestVersionString = cachedVersion;
-
-                // Only check NuGet if we haven't checked today
                 if (needsCheck)
                 {
                     var latestVersion = await NuGetHelper.GetLatestVersionAsync("DynamicsCrm.DevKit.Cli");
@@ -82,15 +77,11 @@ namespace DynamicsCrm.DevKit.Cli
                         WriteVersionCache(latestVersionString);
                     }
                 }
-
-                // Compare versions and show notification if needed
                 if (!string.IsNullOrEmpty(latestVersionString))
                 {
                     var current = new Version(currentVersion.Major, currentVersion.Minor, currentVersion.Build, currentVersion.Revision);
                     if (Version.TryParse(latestVersionString, out var latest))
                     {
-                        // FOR TESTING: Show notification when versions differ
-                        // TODO: Change back to "if (latest > current)" before production release
                         if (latest != current)
                         {
                             ShowUpdateNotification(current.ToString(), latestVersionString);
@@ -100,7 +91,6 @@ namespace DynamicsCrm.DevKit.Cli
             }
             catch
             {
-                // Silently fail if version check fails - don't interrupt CLI operations
             }
         }
 
@@ -144,10 +134,14 @@ namespace DynamicsCrm.DevKit.Cli
         [STAThread]
         public static async Task Main(string[] args)
         {
+            var cacheFile = GetVersionCacheFilePath();
+            var hasCachedVersion = File.Exists(cacheFile);
             var versionCheckTask = CheckForUpdatesAsync();
-            var timeoutTask = Task.Delay(2000);
-            await Task.WhenAny(versionCheckTask, timeoutTask);
-
+            if (!hasCachedVersion)
+            {
+                var timeoutTask = Task.Delay(2000);
+                await Task.WhenAny(versionCheckTask, timeoutTask);
+            }
             if (args.Count() == 0)
             {
                 ShowHelp(true);
