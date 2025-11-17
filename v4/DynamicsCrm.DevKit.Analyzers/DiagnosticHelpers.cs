@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -9,6 +10,7 @@ namespace DynamicsCrm.DevKit.Analyzers
     public static class DiagnosticHelpers
     {
         #region SymbolAnalysisContext
+        [ExcludeFromCodeCoverage]
         public static void ReportDiagnostic(
             SymbolAnalysisContext context,
             DiagnosticDescriptor descriptor,
@@ -22,6 +24,7 @@ namespace DynamicsCrm.DevKit.Analyzers
                 messageArgs: messageArgs);
         }
 
+        [ExcludeFromCodeCoverage]
         public static void ReportDiagnostic(
             SymbolAnalysisContext context,
             DiagnosticDescriptor descriptor,
@@ -35,6 +38,7 @@ namespace DynamicsCrm.DevKit.Analyzers
                 messageArgs: messageArgs);
         }
 
+        [ExcludeFromCodeCoverage]
         public static void ReportDiagnostic(
             SymbolAnalysisContext context,
             DiagnosticDescriptor descriptor,
@@ -48,6 +52,7 @@ namespace DynamicsCrm.DevKit.Analyzers
                 messageArgs: messageArgs);
         }
 
+        [ExcludeFromCodeCoverage]
         public static void ReportDiagnostic(
             SymbolAnalysisContext context,
             DiagnosticDescriptor descriptor,
@@ -60,6 +65,7 @@ namespace DynamicsCrm.DevKit.Analyzers
                 messageArgs: messageArgs));
         }
 
+        [ExcludeFromCodeCoverage]
         public static void ReportDiagnostic(
             SymbolAnalysisContext context,
             DiagnosticDescriptor descriptor,
@@ -74,6 +80,7 @@ namespace DynamicsCrm.DevKit.Analyzers
                 messageArgs: messageArgs));
         }
 
+        [ExcludeFromCodeCoverage]
         public static void ReportDiagnostic(
             SymbolAnalysisContext context,
             DiagnosticDescriptor descriptor,
@@ -88,6 +95,7 @@ namespace DynamicsCrm.DevKit.Analyzers
                 messageArgs: messageArgs));
         }
 
+        [ExcludeFromCodeCoverage]
         public static void ReportDiagnostic(
             SymbolAnalysisContext context,
             DiagnosticDescriptor descriptor,
@@ -106,6 +114,7 @@ namespace DynamicsCrm.DevKit.Analyzers
         #endregion SymbolAnalysisContext
 
         #region SyntaxNodeAnalysisContext
+        [ExcludeFromCodeCoverage]
         public static void ReportDiagnosticIfNotSuppressed(
             SyntaxNodeAnalysisContext context,
             DiagnosticDescriptor descriptor,
@@ -115,6 +124,7 @@ namespace DynamicsCrm.DevKit.Analyzers
             ReportDiagnostic(context, descriptor, node, messageArgs);
         }
 
+        [ExcludeFromCodeCoverage]
         public static void ReportDiagnostic(
             SyntaxNodeAnalysisContext context,
             DiagnosticDescriptor descriptor,
@@ -128,6 +138,7 @@ namespace DynamicsCrm.DevKit.Analyzers
                 messageArgs: messageArgs);
         }
 
+        [ExcludeFromCodeCoverage]
         public static void ReportDiagnostic(
             SyntaxNodeAnalysisContext context,
             DiagnosticDescriptor descriptor,
@@ -141,6 +152,7 @@ namespace DynamicsCrm.DevKit.Analyzers
                 messageArgs: messageArgs);
         }
 
+        [ExcludeFromCodeCoverage]
         public static void ReportDiagnostic(
             SyntaxNodeAnalysisContext context,
             DiagnosticDescriptor descriptor,
@@ -166,6 +178,7 @@ namespace DynamicsCrm.DevKit.Analyzers
                 messageArgs: messageArgs));
         }
 
+        [ExcludeFromCodeCoverage]
         public static void ReportDiagnostic(
             SyntaxNodeAnalysisContext context,
             DiagnosticDescriptor descriptor,
@@ -180,6 +193,7 @@ namespace DynamicsCrm.DevKit.Analyzers
                 messageArgs: messageArgs));
         }
 
+        [ExcludeFromCodeCoverage]
         public static void ReportDiagnostic(
             SyntaxNodeAnalysisContext context,
             DiagnosticDescriptor descriptor,
@@ -194,6 +208,7 @@ namespace DynamicsCrm.DevKit.Analyzers
                 messageArgs: messageArgs));
         }
 
+        [ExcludeFromCodeCoverage]
         public static void ReportDiagnostic(
             SyntaxNodeAnalysisContext context,
             DiagnosticDescriptor descriptor,
@@ -210,12 +225,14 @@ namespace DynamicsCrm.DevKit.Analyzers
                 messageArgs: messageArgs));
         }
 
+        [ExcludeFromCodeCoverage]
         public static void ReportToken(SyntaxNodeAnalysisContext context, DiagnosticDescriptor descriptor, SyntaxToken token, params object[] messageArgs)
         {
             if (!token.IsMissing)
                 ReportDiagnostic(context, descriptor, token, messageArgs);
         }
 
+        [ExcludeFromCodeCoverage]
         public static void ReportNode(SyntaxNodeAnalysisContext context, DiagnosticDescriptor descriptor, SyntaxNode node, params object[] messageArgs)
         {
             if (!node.IsMissing)
@@ -224,6 +241,7 @@ namespace DynamicsCrm.DevKit.Analyzers
         #endregion SyntaxNodeAnalysisContext
 
         #region SyntaxTreeAnalysisContext
+        [ExcludeFromCodeCoverage]
         public static void ReportDiagnostic(
             SyntaxTreeAnalysisContext context,
             DiagnosticDescriptor descriptor,
@@ -237,6 +255,7 @@ namespace DynamicsCrm.DevKit.Analyzers
                 messageArgs: messageArgs);
         }
 
+        [ExcludeFromCodeCoverage]
         public static void ReportDiagnostic(
             SyntaxTreeAnalysisContext context,
             DiagnosticDescriptor descriptor,
@@ -250,6 +269,7 @@ namespace DynamicsCrm.DevKit.Analyzers
                 messageArgs: messageArgs);
         }
 
+        [ExcludeFromCodeCoverage]
         public static void ReportDiagnostic(
             SyntaxTreeAnalysisContext context,
             DiagnosticDescriptor descriptor,
@@ -263,6 +283,7 @@ namespace DynamicsCrm.DevKit.Analyzers
                 messageArgs: messageArgs);
         }
 
+        [ExcludeFromCodeCoverage]
         public static void ReportDiagnostic(
             SyntaxTreeAnalysisContext context,
             DiagnosticDescriptor descriptor,
@@ -275,6 +296,7 @@ namespace DynamicsCrm.DevKit.Analyzers
                 messageArgs: messageArgs));
         }
 
+        [ExcludeFromCodeCoverage]
         public static void ReportDiagnostic(
             SyntaxTreeAnalysisContext context,
             DiagnosticDescriptor descriptor,
@@ -289,6 +311,7 @@ namespace DynamicsCrm.DevKit.Analyzers
                 messageArgs: messageArgs));
         }
 
+        [ExcludeFromCodeCoverage]
         public static void ReportDiagnostic(
             SyntaxTreeAnalysisContext context,
             DiagnosticDescriptor descriptor,
@@ -303,6 +326,7 @@ namespace DynamicsCrm.DevKit.Analyzers
                 messageArgs: messageArgs));
         }
 
+        [ExcludeFromCodeCoverage]
         public static void ReportDiagnostic(
             SyntaxTreeAnalysisContext context,
             DiagnosticDescriptor descriptor,

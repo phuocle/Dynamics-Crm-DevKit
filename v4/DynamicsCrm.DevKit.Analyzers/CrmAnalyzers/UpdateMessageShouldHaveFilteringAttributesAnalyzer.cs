@@ -35,21 +35,21 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
 
         private void AnalyzerUpdateMessageShouldHaveFilteringAttributes(SyntaxNodeAnalysisContext context)
         {
-            if (
-                context.Node is AttributeSyntax attribute &&
-                attribute?.Name?.ToFullString() == "CrmPluginRegistration" &&
-                attribute.TryFindArgument(0, "message", out var argurment0) &&
-                (
-                    AnalyzerHelper.RemoveQuote(argurment0?.ToFullString().ToLower()) == "Update".ToLower() ||
-                    AnalyzerHelper.RemoveQuote(argurment0?.ToFullString().ToLower()) == "UpdateMultiple".ToLower() ||
-                    AnalyzerHelper.RemoveQuote(argurment0?.ToFullString().ToLower()) == "OnExternalUpdated".ToLower()
-                ) &&
-                attribute.TryFindArgument(4, "filteringAttributes", out var argurment4)
-               )
+            if (!(context.Node is AttributeSyntax attribute) || attribute.Name?.ToFullString() != "CrmPluginRegistration")
+                return;
+
+            if (!attribute.TryFindArgument(0, "message", out var argurment0) || argurment0 == null)
+                return;
+
+            var message = AnalyzerHelper.RemoveQuote(argurment0.ToFullString())?.ToLower();
+            if (message != "update" && message != "updatemultiple" && message != "onexternalupdated")
+                return;
+
+            if (attribute.TryFindArgument(4, "filteringAttributes", out var argurment4) && argurment4 != null)
             {
-                if (AnalyzerHelper.TestIsEmtpy(argurment4?.ToFullString()))
+                if (AnalyzerHelper.TestIsEmpty(argurment4.ToFullString()))
                     DiagnosticHelpers.ReportDiagnostic(context, DiagnosticDescriptors.UpdateMessageShouldHaveFilteringAttributes, argurment4.GetLocation());
-                else if (AnalyzerHelper.RemoveQuote(argurment4?.ToFullString()) == "*")
+                else if (AnalyzerHelper.RemoveQuote(argurment4.ToFullString()) == "*")
                     DiagnosticHelpers.ReportDiagnostic(context, DiagnosticDescriptors.UpdateMessageShouldNotUseAllAttributes, argurment4.GetLocation());
             }
         }

@@ -42,38 +42,38 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
 
         private void AnalyzerEntityReferenceNullConditionalOperator(SyntaxNodeAnalysisContext context)
         {
-            if (context.Node is MemberAccessExpressionSyntax node)
+            if (!(context.Node is MemberAccessExpressionSyntax node)) return;
+
+            var nodeName = node.Name?.ToString();
+            if (nodeName != "Id" && nodeName != "Name" && nodeName != "LogicalName") return;
+
+            var semanticModel = context.SemanticModel;
+            if (semanticModel == null || node.Expression == null) return;
+
+            var cancellationToken = context.CancellationToken;
+            var typeInfo = semanticModel.GetTypeInfo(node.Expression, cancellationToken);
+            var typeName = typeInfo.Type?.ToDisplayString();
+            if (typeName != "Microsoft.Xrm.Sdk.EntityReference") return;
+
+            var found = node.AncestorsAndSelf().FirstOrDefault(x => x is AssignmentExpressionSyntax);
+            if (found != null)
             {
-                if (node?.Name?.ToString() == "Id" || node?.Name?.ToString() == "Name" || node?.Name?.ToString() == "LogicalName")
+                var assignmentExpressionSyntax = (AssignmentExpressionSyntax)found;
+                if (assignmentExpressionSyntax.Left.ToFullString() == node.ToFullString()) return;
+            }
+
+            var found2 = node.AncestorsAndSelf().FirstOrDefault(x => x is BinaryExpressionSyntax || x is InterpolatedStringExpressionSyntax);
+            if (found2 != null)
+            {
+                DiagnosticHelpers.ReportDiagnostic(context, DiagnosticDescriptors.EntityReferenceMaybeNull, node.Name.GetLocation());
+            }
+            else
+            {
+                var convertedType = semanticModel.GetTypeInfo(node).ConvertedType;
+                var convertedTypeName = convertedType?.ToDisplayString();
+                if (convertedTypeName == "System.Guid?" || convertedTypeName == "string")
                 {
-                    var semanticModel = context.SemanticModel;
-                    var cancellationToken = context.CancellationToken;
-                    var typeInfo = semanticModel?.GetTypeInfo(node?.Expression, cancellationToken);
-                    var found = node.AncestorsAndSelf().FirstOrDefault(x => x is AssignmentExpressionSyntax);
-                    if (found != null)
-                    {
-                        var assignmentExpressionSyntax = (AssignmentExpressionSyntax)found;
-                        if (assignmentExpressionSyntax.Left.ToFullString() == node.ToFullString()) return;
-                    }
-                    var found2 = node.AncestorsAndSelf().FirstOrDefault(x => x is BinaryExpressionSyntax || x is InterpolatedStringExpressionSyntax);
-                    if (found2 != null)
-                    {
-                        if (typeInfo?.Type?.ToDisplayString() == "Microsoft.Xrm.Sdk.EntityReference")
-                        {
-                            DiagnosticHelpers.ReportDiagnostic(context, DiagnosticDescriptors.EntityReferenceMaybeNull, node?.Name?.GetLocation());
-                        }
-                    }
-                    else
-                    {
-                        if (typeInfo?.Type?.ToDisplayString() == "Microsoft.Xrm.Sdk.EntityReference")
-                        {
-                            var convertedType = context.SemanticModel?.GetTypeInfo(node).ConvertedType;
-                            if (convertedType?.ToDisplayString() == "System.Guid?" || convertedType?.ToDisplayString() == "string")
-                            {
-                                DiagnosticHelpers.ReportDiagnostic(context, DiagnosticDescriptors.EntityReferenceMaybeNull, node?.Name?.GetLocation());
-                            }
-                        }
-                    }
+                    DiagnosticHelpers.ReportDiagnostic(context, DiagnosticDescriptors.EntityReferenceMaybeNull, node.Name.GetLocation());
                 }
             }
         }

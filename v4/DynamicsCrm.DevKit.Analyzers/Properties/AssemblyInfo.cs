@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 [assembly: AssemblyTitle("DynamicsCrm.DevKit.Analyzers")]
@@ -17,3 +18,4 @@ using System.Runtime.InteropServices;
 [assembly: Guid("87e4fbf2-6f3e-4f95-b5eb-a91b66f77279")]
 [assembly: AssemblyVersion("4.00.00.00")]
 [assembly: AssemblyFileVersion("4.00.00.00")]
+[assembly: InternalsVisibleTo("DynamicsCrm.DevKit.Analyzers.Test")]
