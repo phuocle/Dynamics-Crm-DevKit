@@ -2,7 +2,6 @@
 
 ## Response Format
 * Start with: "Hi, I'm GitHub Copilot. I will help you with your prompt Phuoc"
-* Auto-tag: #solution
 
 ## C# Conventions
 * Use async/await for async operations
@@ -12,7 +11,7 @@
 ## Solution Structure
 
 ### Release All Projects
-* If not mention any date, run .ps1 file release-version-date-current-date.ps1
+* run .ps1 file release-version-date-current-date.ps1 to release all projects
 
 ### Build All Projects
 * Use `DynamicsCrm.DevKit.AllInOne.sln` to build all projects
@@ -20,18 +19,21 @@
 ### Project Types
 * **CLI**: `DynamicsCrm.DevKit.Cli` + `DynamicsCrm.DevKit.Shared`
   - Build: MSBuild on `DynamicsCrm.DevKit.Cli.sln`
-  - Run: Check `launchSettings.json` for profiles
+  - Run: Check `launchSettings.json` for profiles provided
 * **Tools**: `DynamicsCrm.DevKit.Tools` + `DynamicsCrm.DevKit.Shared`
+  - Build: MSBuild on `DynamicsCrm.DevKit.Tools.sln`
 * **VSIX**: `DynamicsCrm.DevKit` + `DynamicsCrm.DevKit.Shared`
+  - Build: MSBuild on `DynamicsCrm.DevKit.sln`
+  - Project Templates: `ItemTemplates`, `ProjectTemplates` (numbered 01-13, 01-12)
 * **Analyzers**: `DynamicsCrm.DevKit.Analyzers` + `DynamicsCrm.DevKit.Shared`
+  - Build: MSBuild on `DynamicsCrm.DevKit.Analyzers.sln`
 
 ### Key Folders
-* **Templates**: `ItemTemplates`, `ProjectTemplates` (numbered 01-13, 01-12)
 * **Shared**: Common logic in `DynamicsCrm.DevKit.Shared`
 * **Wiki**: GitHub wiki files in `DynamicsCrm.DevKit.Wiki` (not in solution)
 
 ## File Patterns
-* "Helper" in prompt ? Search for `*Helper.cs` files
+* "helper" in prompt ? Search for `*Helper.cs` files
 * Config files: `DynamicsCrm.DevKit.json`, `DynamicsCrm.DevKit.Cli.json`, `DynamicsCrm.DevKit.Config.json`
 
 ## Build System

@@ -58,12 +58,19 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
 
         private void AnalyzerPluginImage(SyntaxNodeAnalysisContext context)
         {
-            if (context.Node is AttributeSyntax attribute && attribute?.Name?.ToFullString() == "CrmPluginRegistration")
+            if (!(context.Node is AttributeSyntax attribute) || attribute.Name?.ToFullString() != "CrmPluginRegistration")
+                return;
+
+            if (!attribute.TryFindArgument(0, "message", out var argurment0) || argurment0 == null)
+                return;
+
+            var message = AnalyzerHelper.RemoveQuote(argurment0.ToFullString())?.Trim();
+            if (string.IsNullOrEmpty(message)) return;
+
+            attribute.TryFindArgument(2, "stage", out var argurment2);
+            var stage = argurment2?.ToFullString();
+
             {
-                attribute.TryFindArgument(0, "message", out var argurment0);
-                var message = AnalyzerHelper.RemoveQuote(argurment0?.ToFullString()).Trim();
-                attribute.TryFindArgument(2, "stage", out var argurment2);
-                var stage = argurment2?.ToFullString();
                 if (message.ToLower() == "create" && stage != null && (stage.EndsWith("StageEnum.PreValidation") || stage.EndsWith("StageEnum.PreOperation")))
                 {
                     var images = GetImages(attribute.ArgumentList);
@@ -140,8 +147,8 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
                 }
                 else
                 {
-                    var whiteListMessages = new List<string>() { "Assign", "Create", "Delete", "DeliverIncoming", "DeliverPromote", "Merge", "Route", "Send", "SetState", "SetStateDynamicEntity", "Update", "ExecuteWorkflow" };
-                    if (whiteListMessages.Where(x => x.ToLower() == message.ToLower()).Count() == 0)
+                    var whiteListMessages = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "Assign", "Create", "Delete", "DeliverIncoming", "DeliverPromote", "Merge", "Route", "Send", "SetState", "SetStateDynamicEntity", "Update", "ExecuteWorkflow" };
+                    if (!whiteListMessages.Contains(message))
                     {
                         var images = GetImages(attribute.ArgumentList);
                         if (images.Count > 0)
@@ -175,6 +182,8 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
 
         private Image GetImage(AttributeArgumentListSyntax argumentList, int index)
         {
+            if (argumentList == null) return new Image();
+
             var argumentImageType = argumentList.Arguments.ToList().FirstOrDefault(x => x?.NameEquals?.Name?.Identifier.ValueText == $"Image{index}Type");
             var argumentImageAttributes = argumentList.Arguments.ToList().FirstOrDefault(x => x?.NameEquals?.Name?.Identifier.ValueText == $"Image{index}Attributes");
             return new Image

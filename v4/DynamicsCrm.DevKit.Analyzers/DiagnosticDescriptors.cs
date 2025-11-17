@@ -5,172 +5,128 @@ namespace DynamicsCrm.DevKit.Analyzers
 {
     public static partial class DiagnosticDescriptors
     {
-        /// <summary>DEVKIT1001</summary>
-        public static readonly DiagnosticDescriptor UpdateMessageShouldHaveFilteringAttributes = new DiagnosticDescriptor(
-            id: "DEVKIT1001",
-            title: "Update message should have filtering attributes",
-            messageFormat: "Update message should have filtering attributes",
-            category: DiagnosticCategories.Category,
-            defaultSeverity: DiagnosticSeverity.Error,
-            isEnabledByDefault: true,
-            description: "DynamicsCrm.DevKit: Update message should have filtering attributes.",
-            helpLinkUri: $"https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DEVKIT1001",
-            customTags: Array.Empty<string>()
+        private static DiagnosticDescriptor CreateDescriptor(
+            string id,
+            string title,
+            string messageFormat,
+            DiagnosticSeverity severity,
+            string description)
+        {
+            return new DiagnosticDescriptor(
+                id: id,
+                title: title,
+                messageFormat: messageFormat,
+                category: DiagnosticCategories.Category,
+                defaultSeverity: severity,
+                isEnabledByDefault: true,
+                description: $"DynamicsCrm.DevKit: {description}",
+                helpLinkUri: $"https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/{id}",
+                customTags: Array.Empty<string>()
             );
+        }
 
         /// <summary>DEVKIT1001</summary>
-        public static readonly DiagnosticDescriptor UpdateMessageShouldNotUseAllAttributes = new DiagnosticDescriptor(
-            id: "DEVKIT1001",
-            title: "Update message should not use all attributes",
-            messageFormat: "Update message should not use all attributes",
-            category: DiagnosticCategories.Category,
-            defaultSeverity: DiagnosticSeverity.Error,
-            isEnabledByDefault: true,
-            description: "DynamicsCrm.DevKit: Update message should have filtering attributes.",
-            helpLinkUri: $"https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DEVKIT1001",
-            customTags: Array.Empty<string>()
-            );
+        public static readonly DiagnosticDescriptor UpdateMessageShouldHaveFilteringAttributes = CreateDescriptor(
+            "DEVKIT1001",
+            "Update message should have filtering attributes",
+            "Update message should have filtering attributes",
+            DiagnosticSeverity.Error,
+            "Update message should have filtering attributes.");
+
+        /// <summary>DEVKIT1001</summary>
+        public static readonly DiagnosticDescriptor UpdateMessageShouldNotUseAllAttributes = CreateDescriptor(
+            "DEVKIT1001",
+            "Update message should not use all attributes",
+            "Update message should not use all attributes",
+            DiagnosticSeverity.Error,
+            "Update message should have filtering attributes.");
 
         /// <summary>DEVKIT1002</summary>
-        public static readonly DiagnosticDescriptor NotUseColumnSetTrue = new DiagnosticDescriptor(
-            id: "DEVKIT1002",
-            title: "Don't use Microsoft.Xrm.Sdk.Query.ColumnSet(true)",
-            messageFormat: "Don't use Microsoft.Xrm.Sdk.Query.ColumnSet(true)",
-            category: DiagnosticCategories.Category,
-            defaultSeverity: DiagnosticSeverity.Warning,
-            isEnabledByDefault: true,
-            description: "DynamicsCrm.DevKit: Don't use Microsoft.Xrm.Sdk.Query.ColumnSet(true).",
-            helpLinkUri: $"https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DEVKIT1002",
-            customTags: Array.Empty<string>()
-            );
+        public static readonly DiagnosticDescriptor NotUseColumnSetTrue = CreateDescriptor(
+            "DEVKIT1002",
+            "Don't use Microsoft.Xrm.Sdk.Query.ColumnSet(true)",
+            "Don't use Microsoft.Xrm.Sdk.Query.ColumnSet(true)",
+            DiagnosticSeverity.Warning,
+            "Don't use Microsoft.Xrm.Sdk.Query.ColumnSet(true).");
 
         /// <summary>DEVKIT1003</summary>
-        public static readonly DiagnosticDescriptor PluginImage_PreCreate_PreImage = new DiagnosticDescriptor(
-            id: "DEVKIT1003",
-            title: "Plugin Pre Create not support Pre Image",
-            messageFormat: "Plugin Pre Create not support Pre Image",
-            category: DiagnosticCategories.Category,
-            defaultSeverity: DiagnosticSeverity.Error,
-            isEnabledByDefault: true,
-            description: "DynamicsCrm.DevKit: Plugin Pre Create not support Pre Image.",
-            helpLinkUri: $"https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DEVKIT1003",
-            customTags: Array.Empty<string>()
-            );
+        public static readonly DiagnosticDescriptor PluginImage_PreCreate_PreImage = CreateDescriptor(
+            "DEVKIT1003",
+            "Plugin Pre Create not support Pre Image",
+            "Plugin Pre Create not support Pre Image",
+            DiagnosticSeverity.Error,
+            "Plugin Pre Create not support Pre Image.");
 
         /// <summary>DEVKIT1003</summary>
-        public static readonly DiagnosticDescriptor PluginImage_PreCreate_PostImage = new DiagnosticDescriptor(
-            id: "DEVKIT1003",
-            title: "Plugin Pre Create not support Post Image",
-            messageFormat: "Plugin Pre Create not support Post Image",
-            category: DiagnosticCategories.Category,
-            defaultSeverity: DiagnosticSeverity.Error,
-            isEnabledByDefault: true,
-            description: "DynamicsCrm.DevKit: Plugin Pre Create not support Post Image.",
-            helpLinkUri: $"https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DEVKIT1003",
-            customTags: Array.Empty<string>()
-            );
+        public static readonly DiagnosticDescriptor PluginImage_PreCreate_PostImage = CreateDescriptor(
+            "DEVKIT1003",
+            "Plugin Pre Create not support Post Image",
+            "Plugin Pre Create not support Post Image",
+            DiagnosticSeverity.Error,
+            "Plugin Pre Create not support Post Image.");
 
         /// <summary>DEVKIT1003</summary>
-        public static readonly DiagnosticDescriptor PluginImage_PostCreate_PreImage = new DiagnosticDescriptor(
-            id: "DEVKIT1003",
-            title: "Plugin Post Create not support Pre Image",
-            messageFormat: "Plugin Post Create not support Pre Image",
-            category: DiagnosticCategories.Category,
-            defaultSeverity: DiagnosticSeverity.Error,
-            isEnabledByDefault: true,
-            description: "DynamicsCrm.DevKit: Plugin Pre Create not support Post Image.",
-            helpLinkUri: $"https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DEVKIT1003",
-            customTags: Array.Empty<string>()
-            );
+        public static readonly DiagnosticDescriptor PluginImage_PostCreate_PreImage = CreateDescriptor(
+            "DEVKIT1003",
+            "Plugin Post Create not support Pre Image",
+            "Plugin Post Create not support Pre Image",
+            DiagnosticSeverity.Error,
+            "Plugin Post Create not support Pre Image.");
 
         /// <summary>DEVKIT1003</summary>
-        public static readonly DiagnosticDescriptor PluginImage_PreUpdate_PostImage = new DiagnosticDescriptor(
-            id: "DEVKIT1003",
-            title: "Plugin Pre Update not support Post Image",
-            messageFormat: "Plugin Pre Update not support Post Image",
-            category: DiagnosticCategories.Category,
-            defaultSeverity: DiagnosticSeverity.Error,
-            isEnabledByDefault: true,
-            description: "DynamicsCrm.DevKit: Plugin Pre Update not support Post Image.",
-            helpLinkUri: $"https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DEVKIT1003",
-            customTags: Array.Empty<string>()
-            );
+        public static readonly DiagnosticDescriptor PluginImage_PreUpdate_PostImage = CreateDescriptor(
+            "DEVKIT1003",
+            "Plugin Pre Update not support Post Image",
+            "Plugin Pre Update not support Post Image",
+            DiagnosticSeverity.Error,
+            "Plugin Pre Update not support Post Image.");
 
         /// <summary>DEVKIT1003</summary>
-        public static readonly DiagnosticDescriptor PluginImage_PreDelete_PostImage = new DiagnosticDescriptor(
-            id: "DEVKIT1003",
-            title: "Plugin Pre Delete not support Post Image",
-            messageFormat: "Plugin Pre Delete not support Post Image",
-            category: DiagnosticCategories.Category,
-            defaultSeverity: DiagnosticSeverity.Error,
-            isEnabledByDefault: true,
-            description: "DynamicsCrm.DevKit: Plugin Pre Delete not support Post Image.",
-            helpLinkUri: $"https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DEVKIT1003",
-            customTags: Array.Empty<string>()
-            );
+        public static readonly DiagnosticDescriptor PluginImage_PreDelete_PostImage = CreateDescriptor(
+            "DEVKIT1003",
+            "Plugin Pre Delete not support Post Image",
+            "Plugin Pre Delete not support Post Image",
+            DiagnosticSeverity.Error,
+            "Plugin Pre Delete not support Post Image.");
 
         /// <summary>DEVKIT1003</summary>
-        public static readonly DiagnosticDescriptor PluginImage_PostDelete_PostImage = new DiagnosticDescriptor(
-            id: "DEVKIT1003",
-            title: "Plugin Post Delete not support Post Image",
-            messageFormat: "Plugin Post Delete not support Post Image",
-            category: DiagnosticCategories.Category,
-            defaultSeverity: DiagnosticSeverity.Error,
-            isEnabledByDefault: true,
-            description: "DynamicsCrm.DevKit: Plugin Post Delete not support Post Image.",
-            helpLinkUri: $"https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DEVKIT1003",
-            customTags: Array.Empty<string>()
-            );
+        public static readonly DiagnosticDescriptor PluginImage_PostDelete_PostImage = CreateDescriptor(
+            "DEVKIT1003",
+            "Plugin Post Delete not support Post Image",
+            "Plugin Post Delete not support Post Image",
+            DiagnosticSeverity.Error,
+            "Plugin Post Delete not support Post Image.");
 
         /// <summary>DEVKIT1003</summary>
-        public static readonly DiagnosticDescriptor PluginImage_NotSupportForPostImage = new DiagnosticDescriptor(
-            id: "DEVKIT1003",
-            title: "Plugin does not support Post Image",
-            messageFormat: "Plugin message: {0} does not support Post Image",
-            category: DiagnosticCategories.Category,
-            defaultSeverity: DiagnosticSeverity.Error,
-            isEnabledByDefault: true,
-            description: "DynamicsCrm.DevKit: Plugin does not support Post Image.",
-            helpLinkUri: $"https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DEVKIT1003",
-            customTags: Array.Empty<string>()
-            );
+        public static readonly DiagnosticDescriptor PluginImage_NotSupportForPostImage = CreateDescriptor(
+            "DEVKIT1003",
+            "Plugin does not support Post Image",
+            "Plugin message: {0} does not support Post Image",
+            DiagnosticSeverity.Error,
+            "Plugin does not support Post Image.");
 
         /// <summary>DEVKIT1003</summary>
-        public static readonly DiagnosticDescriptor PluginImage_NotSupportForPreImage = new DiagnosticDescriptor(
-            id: "DEVKIT1003",
-            title: "Plugin does not support Pre Image",
-            messageFormat: "Plugin message: {0} does not support Pre Image",
-            category: DiagnosticCategories.Category,
-            defaultSeverity: DiagnosticSeverity.Error,
-            isEnabledByDefault: true,
-            description: "DynamicsCrm.DevKit: Plugin does not support Pre Image.",
-            helpLinkUri: $"https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DEVKIT1003",
-            customTags: Array.Empty<string>()
-            );
+        public static readonly DiagnosticDescriptor PluginImage_NotSupportForPreImage = CreateDescriptor(
+            "DEVKIT1003",
+            "Plugin does not support Pre Image",
+            "Plugin message: {0} does not support Pre Image",
+            DiagnosticSeverity.Error,
+            "Plugin does not support Pre Image.");
 
         /// <summary>DEVKIT1004</summary>
-        public static readonly DiagnosticDescriptor DeprecatedRequest = new DiagnosticDescriptor(
-            id: "DEVKIT1004",
-            title: "Use the deprecated message",
-            messageFormat: "Use the deprecated message",
-            category: DiagnosticCategories.Category,
-            defaultSeverity: DiagnosticSeverity.Warning,
-            isEnabledByDefault: true,
-            description: "DynamicsCrm.DevKit: Use the deprecated message.",
-            helpLinkUri: $"https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DEVKIT1004",
-            customTags: Array.Empty<string>()
-            );
+        public static readonly DiagnosticDescriptor DeprecatedRequest = CreateDescriptor(
+            "DEVKIT1004",
+            "Use the deprecated message",
+            "Use the deprecated message",
+            DiagnosticSeverity.Warning,
+            "Use the deprecated message.");
+
         /// <summary>DEVKIT1005</summary>
-        public static readonly DiagnosticDescriptor EntityReferenceMaybeNull = new DiagnosticDescriptor(
-            id: "DEVKIT1005",
-            title: "Entity Reference maybe null",
-            messageFormat: "Entity Reference maybe null",
-            category: DiagnosticCategories.Category,
-            defaultSeverity: DiagnosticSeverity.Error,
-            isEnabledByDefault: true,
-            description: "Entity Reference maybe null.",
-            helpLinkUri: $"https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DEVKIT1005",
-            customTags: Array.Empty<string>()
-            );
+        public static readonly DiagnosticDescriptor EntityReferenceMaybeNull = CreateDescriptor(
+            "DEVKIT1005",
+            "Entity Reference maybe null",
+            "Entity Reference maybe null",
+            DiagnosticSeverity.Error,
+            "Entity Reference maybe null.");
     }
 }
