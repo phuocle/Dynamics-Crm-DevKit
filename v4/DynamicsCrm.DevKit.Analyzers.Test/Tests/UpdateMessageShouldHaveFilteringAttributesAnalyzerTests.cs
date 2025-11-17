@@ -41,80 +41,85 @@ public class PluginSample
         [Fact]
         public async Task NoDiagnostics_When_NotCrmPluginRegistration()
         {
-            var src = WrapInClass(@"[SomeOtherAttribute(\"anything\")] ");
+            var src = WrapInClass("[SomeOtherAttribute(\"anything\")] ");
             await CSharpAnalyzerVerifier<UpdateMessageShouldHaveFilteringAttributesAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
         [Fact]
         public async Task NoDiagnostics_When_NoArguments()
         {
-            var src = WrapInClass(@"[CrmPluginRegistration]");
+            var src = WrapInClass("[CrmPluginRegistration]");
             await CSharpAnalyzerVerifier<UpdateMessageShouldHaveFilteringAttributesAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
         [Fact]
         public async Task NoDiagnostics_When_Message_Not_UpdateFamily()
         {
-            var src = WrapInClass(@"[CrmPluginRegistration(\"create\", null, 0, \"account\", \"\")] ");
+            var src = WrapInClass("[CrmPluginRegistration(\"create\", null, 0, \"account\", \"\")] ");
             await CSharpAnalyzerVerifier<UpdateMessageShouldHaveFilteringAttributesAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
         [Fact]
         public async Task NoDiagnostics_When_Update_Missing_FilteringAttributes()
         {
-            var src = WrapInClass(@"[CrmPluginRegistration(\"update\")] ");
+            var src = WrapInClass("[CrmPluginRegistration(\"update\")] ");
             await CSharpAnalyzerVerifier<UpdateMessageShouldHaveFilteringAttributesAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
         [Fact]
         public async Task Diagnostic_When_Update_FilteringAttributes_Empty()
         {
-            var src = WrapInClass(@"[CrmPluginRegistration(\"update\", null, 0, \"account\", [|\"\"\|\])] ");
+            var src = WrapInClass("[CrmPluginRegistration(\"update\", null, 0, \"account\", \"\")] ");
             var expected = CSharpAnalyzerVerifier<UpdateMessageShouldHaveFilteringAttributesAnalyzer>
-                .Diagnostic(DiagnosticDescriptors.UpdateMessageShouldHaveFilteringAttributes);
+                .Diagnostic(DiagnosticDescriptors.UpdateMessageShouldHaveFilteringAttributes)
+                .WithSpan(23, 58, 23, 60);
             await CSharpAnalyzerVerifier<UpdateMessageShouldHaveFilteringAttributesAnalyzer>.VerifyAnalyzerAsync(src, expected);
         }
 
         [Fact]
         public async Task Diagnostic_When_Update_FilteringAttributes_All_Asterisk()
         {
-            var src = WrapInClass(@"[CrmPluginRegistration(\"update\", null, 0, \"account\", [|\"*\"|])] ");
+            var src = WrapInClass("[CrmPluginRegistration(\"update\", null, 0, \"account\", \"*\")] ");
             var expected = CSharpAnalyzerVerifier<UpdateMessageShouldHaveFilteringAttributesAnalyzer>
-                .Diagnostic(DiagnosticDescriptors.UpdateMessageShouldNotUseAllAttributes);
+                .Diagnostic(DiagnosticDescriptors.UpdateMessageShouldNotUseAllAttributes)
+                .WithSpan(23, 58, 23, 61);
             await CSharpAnalyzerVerifier<UpdateMessageShouldHaveFilteringAttributesAnalyzer>.VerifyAnalyzerAsync(src, expected);
         }
 
         [Fact]
         public async Task NoDiagnostics_When_Update_FilteringAttributes_NonEmpty()
         {
-            var src = WrapInClass(@"[CrmPluginRegistration(\"update\", null, 0, \"account\", \"firstname,lastname\")] ");
+            var src = WrapInClass("[CrmPluginRegistration(\"update\", null, 0, \"account\", \"firstname,lastname\")] ");
             await CSharpAnalyzerVerifier<UpdateMessageShouldHaveFilteringAttributesAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
         [Fact]
         public async Task Diagnostic_When_UpdateMultiple_FilteringAttributes_Empty()
         {
-            var src = WrapInClass(@"[CrmPluginRegistration(\"updatemultiple\", null, 0, \"account\", [|\"\"\|\])] ");
+            var src = WrapInClass("[CrmPluginRegistration(\"updatemultiple\", null, 0, \"account\", \"\")] ");
             var expected = CSharpAnalyzerVerifier<UpdateMessageShouldHaveFilteringAttributesAnalyzer>
-                .Diagnostic(DiagnosticDescriptors.UpdateMessageShouldHaveFilteringAttributes);
+                .Diagnostic(DiagnosticDescriptors.UpdateMessageShouldHaveFilteringAttributes)
+                .WithSpan(23, 66, 23, 68);
             await CSharpAnalyzerVerifier<UpdateMessageShouldHaveFilteringAttributesAnalyzer>.VerifyAnalyzerAsync(src, expected);
         }
 
         [Fact]
         public async Task Diagnostic_When_UpdateMultiple_FilteringAttributes_All_Asterisk()
         {
-            var src = WrapInClass(@"[CrmPluginRegistration(\"updatemultiple\", null, 0, \"account\", [|\"*\"|])] ");
+            var src = WrapInClass("[CrmPluginRegistration(\"updatemultiple\", null, 0, \"account\", \"*\")] ");
             var expected = CSharpAnalyzerVerifier<UpdateMessageShouldHaveFilteringAttributesAnalyzer>
-                .Diagnostic(DiagnosticDescriptors.UpdateMessageShouldNotUseAllAttributes);
+                .Diagnostic(DiagnosticDescriptors.UpdateMessageShouldNotUseAllAttributes)
+                .WithSpan(23, 66, 23, 69);
             await CSharpAnalyzerVerifier<UpdateMessageShouldHaveFilteringAttributesAnalyzer>.VerifyAnalyzerAsync(src, expected);
         }
 
         [Fact]
         public async Task Diagnostic_When_OnExternalUpdated_FilteringAttributes_Empty()
         {
-            var src = WrapInClass(@"[CrmPluginRegistration(\"onexternalupdated\", null, 0, \"account\", [|\"\"\|\])] ");
+            var src = WrapInClass("[CrmPluginRegistration(\"onexternalupdated\", null, 0, \"account\", \"\")] ");
             var expected = CSharpAnalyzerVerifier<UpdateMessageShouldHaveFilteringAttributesAnalyzer>
-                .Diagnostic(DiagnosticDescriptors.UpdateMessageShouldHaveFilteringAttributes);
+                .Diagnostic(DiagnosticDescriptors.UpdateMessageShouldHaveFilteringAttributes)
+                .WithSpan(23, 69, 23, 71);
             await CSharpAnalyzerVerifier<UpdateMessageShouldHaveFilteringAttributesAnalyzer>.VerifyAnalyzerAsync(src, expected);
         }
     }

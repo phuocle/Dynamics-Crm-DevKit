@@ -56,10 +56,7 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
                 var typeName = typeInfo.Type?.ToDisplayString();
                 if (typeName != null && AnalyzerHelper.DeprecatedRequests.Contains(typeName))
                 {
-                    if (castExpressionSyntax.Type is IdentifierNameSyntax identifierNameSyntax)
-                    {
-                        DiagnosticHelpers.ReportDiagnostic(context, DiagnosticDescriptors.DeprecatedRequest, identifierNameSyntax.Identifier.GetLocation());
-                    }
+                    DiagnosticHelpers.ReportDiagnostic(context, DiagnosticDescriptors.DeprecatedRequest, castExpressionSyntax.Type.GetLocation());
                 }
             }
             else if (context.Node is BinaryExpressionSyntax binaryExpressionSyntax)

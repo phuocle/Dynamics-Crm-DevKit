@@ -1,5 +1,6 @@
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Testing;
 using Microsoft.CodeAnalysis.CSharp.Testing;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -19,9 +20,10 @@ namespace DynamicsCrm.DevKit.Analyzers.Test.Verifier
         public static async Task VerifyAnalyzerAsync(string source, params DiagnosticResult[] expected)
         {
             var test = new Test { TestCode = source };
-            test.ReferenceAssemblies = ReferenceAssemblies.NetFramework.Net48.Default;
-            test.TestState.AnalyzerConfigFiles.Add(("/.editorconfig", @"is_global = true"));
-            test.TestBehaviors |= TestBehaviors.SkipGeneratedCodeCheck;
+            // Use modern .NET reference assemblies to enable analyzer config support
+            test.ReferenceAssemblies = ReferenceAssemblies.Net.Net60;
+            // Disambiguate diagnostics when analyzers expose multiple descriptors with same ID
+            test.MarkupOptions = MarkupOptions.UseFirstDescriptor;
             test.SolutionTransforms.Add((solution, projectId) =>
             {
                 var project = solution.GetProject(projectId)!;
