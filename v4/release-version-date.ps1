@@ -426,6 +426,9 @@ function Rollback-FileChanges {
 function Find-MSBuild {
     Write-Info "Locating MSBuild..."
     $msbuildPaths = @(
+        "C:\Program Files\Microsoft Visual Studio\2026\Professional\MSBuild\Current\Bin\MSBuild.exe",
+        "C:\Program Files\Microsoft Visual Studio\2026\Enterprise\MSBuild\Current\Bin\MSBuild.exe",
+        "C:\Program Files\Microsoft Visual Studio\2026\Community\MSBuild\Current\Bin\MSBuild.exe",
         "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\MSBuild\Current\Bin\MSBuild.exe",
         "C:\Program Files\Microsoft Visual Studio\2022\Professional\MSBuild\Current\Bin\MSBuild.exe",
         "C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\MSBuild.exe"
@@ -438,7 +441,7 @@ function Find-MSBuild {
         }
     }
     Write-ErrorMessage "ERROR: MSBuild.exe not found!"
-    Write-ErrorMessage "Please ensure Visual Studio 2022 is installed."
+    Write-ErrorMessage "Please ensure Visual Studio 2022 or 2026 is installed."
     return $false
 }
 
@@ -461,9 +464,41 @@ function Build-Solution {
     # Build solution
     Write-Info "Building solution..."
     try {
-        # Use Start-Process with PassThru to show output in real-time
-        $buildProcess = Start-Process -FilePath $script:MSBUILD_PATH `
-            -ArgumentList "/nologo","/verbosity:normal","/consoleloggerparameters:NoSummary","-p:Configuration=Release","-target:Clean;Build","DynamicsCrm.DevKit.AllInOne.sln" `
+        # Use Developer Command Prompt for VS 2026 or VS 2022
+        # Find VsDevCmd.bat
+        $vsInstallPath = "C:\Program Files\Microsoft Visual Studio\2026\Professional"
+        if (-not (Test-Path $vsInstallPath)) {
+            $vsInstallPath = "C:\Program Files\Microsoft Visual Studio\2026\Enterprise"
+        }
+        if (-not (Test-Path $vsInstallPath)) {
+            $vsInstallPath = "C:\Program Files\Microsoft Visual Studio\2026\Community"
+        }
+        if (-not (Test-Path $vsInstallPath)) {
+            $vsInstallPath = "C:\Program Files\Microsoft Visual Studio\2022\Enterprise"
+        }
+        if (-not (Test-Path $vsInstallPath)) {
+            $vsInstallPath = "C:\Program Files\Microsoft Visual Studio\2022\Professional"
+        }
+        if (-not (Test-Path $vsInstallPath)) {
+            $vsInstallPath = "C:\Program Files\Microsoft Visual Studio\2022\Community"
+        }
+
+        $vsDevCmd = "$vsInstallPath\Common7\Tools\VsDevCmd.bat"
+
+        # Build command that initializes VS environment and then builds
+        # Use short paths to avoid quote issues
+        $msbuildShort = $script:MSBUILD_PATH -replace 'Program Files', 'PROGRA~1'
+        $buildCommand = "`"`"$vsDevCmd`" && `"$script:MSBUILD_PATH`" /nologo /verbosity:normal /consoleloggerparameters:NoSummary -p:Configuration=Release -target:Clean;Build DynamicsCrm.DevKit.AllInOne.sln`""
+
+        # Build argument list for cmd.exe
+        $buildArgs = @(
+            "/c"
+            $buildCommand
+        )
+
+        # Use Start-Process with cmd.exe to initialize VS environment
+        $buildProcess = Start-Process -FilePath "cmd.exe" `
+            -ArgumentList $buildArgs `
             -NoNewWindow `
             -Wait `
             -PassThru `
@@ -521,6 +556,38 @@ function Build-Solution {
         if ($buildExitCode -ne 0) {
             Write-ErrorMessage ""
             Write-ErrorMessage "ERROR: Solution build failed with exit code $buildExitCode!"
+            Write-ErrorMessage ""
+
+            # Show more context from build output
+            if (Test-Path "build-output.tmp") {
+                Write-ErrorMessage "Build errors/warnings:"
+                $buildOutput = Get-Content "build-output.tmp"
+                $errorLines = $buildOutput | Where-Object { $_ -match 'error (CS|MSB)\d+:' -or $_ -match 'Build FAILED' }
+                $warningLines = $buildOutput | Where-Object { $_ -match 'warning (CS|MSB)\d+:' }
+
+                if ($errorLines) {
+                    Write-ErrorMessage "Errors found:"
+                    foreach ($line in $errorLines) {
+                        Write-Host "  $line" -ForegroundColor Red
+                    }
+                }
+
+                if ($warningLines -and $warningLines.Count -le 10) {
+                    Write-Host ""
+                    Write-Host "Warnings:" -ForegroundColor Yellow
+                    foreach ($line in $warningLines) {
+                        Write-Host "  $line" -ForegroundColor Yellow
+                    }
+                }
+
+                # Show last 15 lines for context
+                Write-Host ""
+                Write-Host "Last output lines:" -ForegroundColor Gray
+                $buildOutput | Select-Object -Last 15 | ForEach-Object {
+                    Write-Host "  $_" -ForegroundColor Gray
+                }
+            }
+
             return $false
         }
         Write-Success "Solution built successfully."
@@ -529,10 +596,12 @@ function Build-Solution {
     catch {
         Write-ErrorMessage "ERROR: Solution build failed!"
         Write-ErrorMessage $_.Exception.Message
+        return $false
+    }
+    finally {
         # Cleanup temp files
         Remove-Item "build-output.tmp" -Force -ErrorAction SilentlyContinue
         Remove-Item "build-error.tmp" -Force -ErrorAction SilentlyContinue
-        return $false
     }
 }
 
