@@ -461,45 +461,65 @@ function Build-Solution {
     # Build solution
     Write-Info "Building solution..."
     try {
-        $buildArgs = @(
-            "/nologo",
-            "/noautorsp",
-            "/verbosity:minimal",
-            "-p:Configuration=Release",
-            "-target:Clean;Build",
-            "DynamicsCrm.DevKit.AllInOne.sln"
-        )
+        # Use Start-Process with PassThru to show output in real-time
+        $buildProcess = Start-Process -FilePath $script:MSBUILD_PATH `
+            -ArgumentList "/nologo","/verbosity:normal","/consoleloggerparameters:NoSummary","-p:Configuration=Release","-target:Clean;Build","DynamicsCrm.DevKit.AllInOne.sln" `
+            -NoNewWindow `
+            -Wait `
+            -PassThru `
+            -RedirectStandardOutput "build-output.tmp" `
+            -RedirectStandardError "build-error.tmp"
 
-        # Start build process in background to show animation
-        $psi = New-Object System.Diagnostics.ProcessStartInfo
-        $psi.FileName = $script:MSBUILD_PATH
-        $psi.Arguments = $buildArgs -join ' '
-        $psi.UseShellExecute = $false
-        $psi.CreateNoWindow = $true
-        $psi.RedirectStandardOutput = $true
-        $psi.RedirectStandardError = $true
-
-        $process = New-Object System.Diagnostics.Process
-        $process.StartInfo = $psi
-        $process.Start() | Out-Null
-
-        # Show animated progress while building
-        $spinChars = @('|', '/', '-', '\')
-        $spinIndex = 0
-        Write-Host "  Building " -NoNewline -ForegroundColor White
-
-        while (-not $process.HasExited) {
-            Write-Host "`r  Building $($spinChars[$spinIndex]) " -NoNewline -ForegroundColor Cyan
-            $spinIndex = ($spinIndex + 1) % $spinChars.Length
-            Start-Sleep -Milliseconds 100
+        # Read and display the output with color coding
+        if (Test-Path "build-output.tmp") {
+            $buildOutput = Get-Content "build-output.tmp"
+            foreach ($line in $buildOutput) {
+                # Display project build lines with color coding
+                if ($line -match '^\s*\d+>------ (Build|Clean) started:.*Project: (.+?),') {
+                    $projectName = $matches[2]
+                    Write-Host "  Building: $projectName" -ForegroundColor Cyan
+                }
+                elseif ($line -match '^\s*\d+>------ Skipped') {
+                    Write-Host "  $line" -ForegroundColor DarkGray
+                }
+                elseif ($line -match 'Project ".+\\(.+?\.(csproj|vcxproj|vbproj))"') {
+                    $projFile = $matches[1]
+                    Write-Host "    -> $projFile" -ForegroundColor White
+                }
+                elseif ($line -match '-> .+\\(DynamicsCrm\.DevKit\..+?\.(dll|exe|vsix))') {
+                    $outputFile = $matches[1]
+                    Write-Host "    * $outputFile" -ForegroundColor Green
+                }
+                elseif ($line -match '(Build succeeded|Build FAILED)') {
+                    $status = $matches[1]
+                    $color = if ($status -match 'FAILED') { 'Red' } else { 'Green' }
+                    Write-Host "  $line" -ForegroundColor $color
+                }
+                elseif ($line -match 'error (CS|MSB)\d+:') {
+                    Write-Host "  $line" -ForegroundColor Red
+                }
+                elseif ($line -match 'warning (CS|MSB)\d+:') {
+                    Write-Host "  $line" -ForegroundColor Yellow
+                }
+            }
+            Remove-Item "build-output.tmp" -Force -ErrorAction SilentlyContinue
         }
 
-        $process.WaitForExit()
-        $buildExitCode = $process.ExitCode
+        # Display errors if any
+        if (Test-Path "build-error.tmp") {
+            $buildErrors = Get-Content "build-error.tmp"
+            if ($buildErrors) {
+                foreach ($line in $buildErrors) {
+                    Write-Host "  $line" -ForegroundColor Red
+                }
+            }
+            Remove-Item "build-error.tmp" -Force -ErrorAction SilentlyContinue
+        }
 
-        Write-Host "`r                    `r" -NoNewline
+        $buildExitCode = $buildProcess.ExitCode
 
         if ($buildExitCode -ne 0) {
+            Write-ErrorMessage ""
             Write-ErrorMessage "ERROR: Solution build failed with exit code $buildExitCode!"
             return $false
         }
@@ -509,6 +529,9 @@ function Build-Solution {
     catch {
         Write-ErrorMessage "ERROR: Solution build failed!"
         Write-ErrorMessage $_.Exception.Message
+        # Cleanup temp files
+        Remove-Item "build-output.tmp" -Force -ErrorAction SilentlyContinue
+        Remove-Item "build-error.tmp" -Force -ErrorAction SilentlyContinue
         return $false
     }
 }

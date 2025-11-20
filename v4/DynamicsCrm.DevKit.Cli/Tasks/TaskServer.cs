@@ -61,7 +61,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         }
         public async Task RunAsync()
         {
-            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "START ");
+            CliLog.WriteSectionHeader("START ");
             if (await IsValidAsync())
             {
                 var files = Helper.GetFiles(CurrentFolder, Json.includefiles, Json.excludefiles);
@@ -101,7 +101,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Cyan, $"Total Dataverse Requests COUNT_RetrieveAsync: {XrmHelper.COUNT_RetrieveAsync}");
             CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Cyan, $"Total Dataverse Requests COUNT_UpdateAsync: {XrmHelper.COUNT_UpdateAsync}");
 #endif
-            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "END ");
+            CliLog.WriteSectionHeader("END ");
         }
         private async Task DeployFilesAsync(List<string> files)
         {
@@ -110,9 +110,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 if (file.EndsWith(".dll"))
                 {
                     var fileDll = file;
-                    CliLog.Write(ConsoleColor.White, "|");
-                    CliLog.WriteSuccess(ConsoleColor.White, $"{Path.GetFileName(fileDll)}");
-                    CliLog.WriteLine();
+                    CliLog.WriteFileHeader(Path.GetFileName(fileDll));
                     (IS_MANAGED_IDENTITY, ERROR) = IsNeedSignAssembly(fileDll);
                     if (IS_MANAGED_IDENTITY && ERROR.Length == 0)
                     {
@@ -127,10 +125,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         }
                         else
                         {
-                            CliLog.Write(ConsoleColor.White, "|", SPACE);
-                            CliLog.WriteSuccess(ConsoleColor.White, CliAction.SIGNED.Trim());
-                            CliLog.Write(ConsoleColor.White, " Assembly ");
-                            CliLog.WriteLine(ConsoleColor.Cyan, Path.GetFileName(file));
+                            CliLog.WriteAssemblyAction(CliAction.SIGNED.Trim(), Path.GetFileName(file), null, false);
                         }
                     }
                     else if (ERROR.Length > 0)
@@ -144,9 +139,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 else if (file.EndsWith(".nupkg"))
                 {
                     var fileNuget = file;
-                    CliLog.Write(ConsoleColor.White, "|");
-                    CliLog.WriteSuccess(ConsoleColor.White, $"{Path.GetFileName(fileNuget)}");
-                    CliLog.WriteLine();
+                    CliLog.WriteFileHeader(Path.GetFileName(fileNuget));
                     var fileNugetDll = GetDllFileFromNugetPackage(fileNuget);
                     (IS_MANAGED_IDENTITY, ERROR) = IsNeedSignAssembly(fileNugetDll);
                     if (IS_MANAGED_IDENTITY && ERROR.Length == 0)
@@ -160,10 +153,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         }
                         else
                         {
-                            CliLog.Write(ConsoleColor.White, "|", SPACE);
-                            CliLog.WriteSuccess(ConsoleColor.White, CliAction.SIGNED.Trim());
-                            CliLog.Write(ConsoleColor.White, " Package ");
-                            CliLog.WriteLine(ConsoleColor.Cyan, Path.GetFileName(file));
+                            CliLog.WriteAssemblyAction(CliAction.SIGNED.Trim(), Path.GetFileName(file), null, true);
                         }
                     }
                     else if (ERROR.Length > 0)
@@ -221,9 +211,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     request.Parameters.Add("SolutionUniqueName", Json.solution);
                     XrmHelper.COUNT_ExecuteAsync++;
                     var response = (CreateResponse)await ServiceClient.ExecuteAsync(request);
-                    CliLog.Write(ConsoleColor.White, "|", SPACE);
-                    CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTERED.Trim());
-                    CliLog.WriteLine(ConsoleColor.White, " Package ", ConsoleColor.Cyan, Path.GetFileName(file));
+                    CliLog.WriteAssemblyAction(CliAction.REGISTERED.Trim(), Path.GetFileName(file), null, true);
                     PluginPackageId = response.id;
                 }
                 catch (Exception fe)
@@ -251,9 +239,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         request.Parameters.Add("SolutionUniqueName", Json.solution);
                         XrmHelper.COUNT_ExecuteAsync++;
                         await ServiceClient.ExecuteAsync(request);
-                        CliLog.Write(ConsoleColor.White, "|", SPACE);
-                        CliLog.WriteSuccess(ConsoleColor.White, CliAction.UPDATED.Trim());
-                        CliLog.WriteLine(ConsoleColor.White, " Package ", ConsoleColor.Cyan, Path.GetFileName(file));
+                        CliLog.WriteAssemblyAction(CliAction.UPDATED.Trim(), Path.GetFileName(file), null, true);
                         PluginPackageId = entity.Id;
                     }
                     catch (Exception fe)
@@ -274,17 +260,13 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     };
                     var request2 = new UpdateRequest { Target = pluginPackage };
                     request2.Parameters.Add("SolutionUniqueName", Json.solution);
-                    CliLog.Write(ConsoleColor.White, "|", SPACE);
-                    CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTERED.Trim());
-                    CliLog.WriteLine(ConsoleColor.White, " Bind Package ", ConsoleColor.Cyan, Path.GetFileName(file), ConsoleColor.White, " to Managed Identity App ", ConsoleColor.Cyan, applicationId);
+                    CliLog.WriteBindAction(CliAction.REGISTERED.Trim(), Path.GetFileName(file), applicationId, true);
                     XrmHelper.COUNT_ExecuteAsync++;
                     await ServiceClient.ExecuteAsync(request2);
                 }
                 else if (rows.Entities[0].GetAttributeValue<EntityReference>("managedidentityid")?.Id == managedIdentityId)
                 {
-                    CliLog.Write(ConsoleColor.White, "|", SPACE);
-                    CliLog.Write(ConsoleColor.Green, CliAction.DO_NOTHING.Trim());
-                    CliLog.WriteLine(ConsoleColor.White, " Bind Package ", ConsoleColor.Cyan, Path.GetFileName(file), ConsoleColor.White, " to Managed Identity App ", ConsoleColor.Cyan, applicationId);
+                    CliLog.WriteBindAction(CliAction.DO_NOTHING.Trim(), Path.GetFileName(file), applicationId, true);
                 }
                 else
                 {
@@ -295,9 +277,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     };
                     var request2 = new UpdateRequest { Target = pluginPackage };
                     request2.Parameters.Add("SolutionUniqueName", Json.solution);
-                    CliLog.Write(ConsoleColor.White, "|", SPACE);
-                    CliLog.WriteSuccess(ConsoleColor.White, CliAction.UPDATED.Trim());
-                    CliLog.WriteLine(ConsoleColor.White, " Bind Package ", ConsoleColor.Cyan, Path.GetFileName(file), ConsoleColor.White, " to Managed Identity App ", ConsoleColor.Cyan, applicationId);
+                    CliLog.WriteBindAction(CliAction.UPDATED.Trim(), Path.GetFileName(file), applicationId, true);
                     XrmHelper.COUNT_ExecuteAsync++;
                     await ServiceClient.ExecuteAsync(request2);
                 }
@@ -384,10 +364,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     Target = plugin
                 };
                 request.Parameters.Add("SolutionUniqueName", Json.solution);
-                CliLog.Write(ConsoleColor.White, "|", SPACE);
-                CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTERED.Trim());
-                CliLog.Write(ConsoleColor.White, " Assembly ", ConsoleColor.Cyan, assemblyName, ".dll");
-                CliLog.WriteList(new List<string> { name_IsolationMode, name_SourceType }, true);
+                CliLog.WriteAssemblyAction(CliAction.REGISTERED.Trim(), assemblyName, new List<string> { name_IsolationMode, name_SourceType }, false);
                 XrmHelper.COUNT_ExecuteAsync++;
                 var response = (CreateResponse)await ServiceClient.ExecuteAsync(request);
                 pluginAssemblyId = response.id;
@@ -398,8 +375,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 pluginAssemblyId = rows.Entities[0].Id;
                 if (Helper.IsEqualsContent(oldContent, newContent))
                 {
-                    CliLog.Write(ConsoleColor.White, "|", SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, "Assembly ", ConsoleColor.Cyan, assemblyName, ".dll");
-                    CliLog.WriteList(new List<string> { name_IsolationMode, name_SourceType }, true);
+                    CliLog.WriteAssemblyStatus(CliAction.DO_NOTHING, assemblyName, new List<string> { name_IsolationMode, name_SourceType }, false);
                 }
                 else
                 {
@@ -409,10 +385,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         Target = plugin
                     };
                     request.Parameters.Add("SolutionUniqueName", Json.solution);
-                    CliLog.Write(ConsoleColor.White, "|", SPACE);
-                    CliLog.WriteSuccess(ConsoleColor.White, CliAction.UPDATED.Trim());
-                    CliLog.Write(ConsoleColor.White, " Assembly ", ConsoleColor.Cyan, assemblyName, ".dll");
-                    CliLog.WriteList(new List<string> { name_IsolationMode, name_SourceType }, true);
+                    CliLog.WriteAssemblyAction(CliAction.UPDATED.Trim(), assemblyName, new List<string> { name_IsolationMode, name_SourceType }, false);
                     try
                     {
                         XrmHelper.COUNT_ExecuteAsync++;
@@ -437,17 +410,13 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     };
                     var request2 = new UpdateRequest { Target = pluginAssembly };
                     request2.Parameters.Add("SolutionUniqueName", Json.solution);
-                    CliLog.Write(ConsoleColor.White, "|", SPACE);
-                    CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTERED.Trim());
-                    CliLog.WriteLine(ConsoleColor.White, " Bind Assembly ", ConsoleColor.Cyan, assemblyName, ".dll", ConsoleColor.White, " to Managed Identity App ", ConsoleColor.Cyan, applicationId);
+                    CliLog.WriteBindAction(CliAction.REGISTERED.Trim(), assemblyName, applicationId, false);
                     XrmHelper.COUNT_ExecuteAsync++;
                     await ServiceClient.ExecuteAsync(request2);
                 }
                 else if (rows.Entities[0].GetAttributeValue<EntityReference>("managedidentityid")?.Id == managedIdentityId)
                 {
-                    CliLog.Write(ConsoleColor.White, "|", SPACE);
-                    CliLog.Write(ConsoleColor.Green, CliAction.DO_NOTHING.Trim());
-                    CliLog.WriteLine(ConsoleColor.White, " Bind Assembly ", ConsoleColor.Cyan, assemblyName, ".dll", ConsoleColor.White, " to Managed Identity App ", ConsoleColor.Cyan, applicationId);
+                    CliLog.WriteBindAction(CliAction.DO_NOTHING.Trim(), assemblyName, applicationId, false);
                 }
                 else
                 {
@@ -458,9 +427,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     };
                     var request2 = new UpdateRequest { Target = pluginAssembly };
                     request2.Parameters.Add("SolutionUniqueName", Json.solution);
-                    CliLog.Write(ConsoleColor.White, "|", SPACE);
-                    CliLog.WriteSuccess(ConsoleColor.White, CliAction.UPDATED.Trim());
-                    CliLog.WriteLine(ConsoleColor.White, " Bind Assembly ", ConsoleColor.Cyan, assemblyName, ".dll", ConsoleColor.White, " to Managed Identity App ", ConsoleColor.Cyan, applicationId);
+                    CliLog.WriteBindAction(CliAction.UPDATED.Trim(), assemblyName, applicationId, false);
                     XrmHelper.COUNT_ExecuteAsync++;
                     await ServiceClient.ExecuteAsync(request2);
                 }
