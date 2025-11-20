@@ -426,6 +426,9 @@ function Rollback-FileChanges {
 function Find-MSBuild {
     Write-Info "Locating MSBuild..."
     $msbuildPaths = @(
+        "C:\Program Files\Microsoft Visual Studio\2026\Professional\MSBuild\Current\Bin\MSBuild.exe",
+        "C:\Program Files\Microsoft Visual Studio\2026\Enterprise\MSBuild\Current\Bin\MSBuild.exe",
+        "C:\Program Files\Microsoft Visual Studio\2026\Community\MSBuild\Current\Bin\MSBuild.exe",
         "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\MSBuild\Current\Bin\MSBuild.exe",
         "C:\Program Files\Microsoft Visual Studio\2022\Professional\MSBuild\Current\Bin\MSBuild.exe",
         "C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\MSBuild.exe"
@@ -438,7 +441,7 @@ function Find-MSBuild {
         }
     }
     Write-ErrorMessage "ERROR: MSBuild.exe not found!"
-    Write-ErrorMessage "Please ensure Visual Studio 2022 is installed."
+    Write-ErrorMessage "Please ensure Visual Studio 2022 or 2026 is installed."
     return $false
 }
 
@@ -461,46 +464,130 @@ function Build-Solution {
     # Build solution
     Write-Info "Building solution..."
     try {
-        $buildArgs = @(
-            "/nologo",
-            "/noautorsp",
-            "/verbosity:minimal",
-            "-p:Configuration=Release",
-            "-target:Clean;Build",
-            "DynamicsCrm.DevKit.AllInOne.sln"
-        )
-
-        # Start build process in background to show animation
-        $psi = New-Object System.Diagnostics.ProcessStartInfo
-        $psi.FileName = $script:MSBUILD_PATH
-        $psi.Arguments = $buildArgs -join ' '
-        $psi.UseShellExecute = $false
-        $psi.CreateNoWindow = $true
-        $psi.RedirectStandardOutput = $true
-        $psi.RedirectStandardError = $true
-
-        $process = New-Object System.Diagnostics.Process
-        $process.StartInfo = $psi
-        $process.Start() | Out-Null
-
-        # Show animated progress while building
-        $spinChars = @('|', '/', '-', '\')
-        $spinIndex = 0
-        Write-Host "  Building " -NoNewline -ForegroundColor White
-
-        while (-not $process.HasExited) {
-            Write-Host "`r  Building $($spinChars[$spinIndex]) " -NoNewline -ForegroundColor Cyan
-            $spinIndex = ($spinIndex + 1) % $spinChars.Length
-            Start-Sleep -Milliseconds 100
+        # Use Developer Command Prompt for VS 2026 or VS 2022
+        # Find VsDevCmd.bat
+        $vsInstallPath = "C:\Program Files\Microsoft Visual Studio\2026\Professional"
+        if (-not (Test-Path $vsInstallPath)) {
+            $vsInstallPath = "C:\Program Files\Microsoft Visual Studio\2026\Enterprise"
+        }
+        if (-not (Test-Path $vsInstallPath)) {
+            $vsInstallPath = "C:\Program Files\Microsoft Visual Studio\2026\Community"
+        }
+        if (-not (Test-Path $vsInstallPath)) {
+            $vsInstallPath = "C:\Program Files\Microsoft Visual Studio\2022\Enterprise"
+        }
+        if (-not (Test-Path $vsInstallPath)) {
+            $vsInstallPath = "C:\Program Files\Microsoft Visual Studio\2022\Professional"
+        }
+        if (-not (Test-Path $vsInstallPath)) {
+            $vsInstallPath = "C:\Program Files\Microsoft Visual Studio\2022\Community"
         }
 
-        $process.WaitForExit()
-        $buildExitCode = $process.ExitCode
+        $vsDevCmd = "$vsInstallPath\Common7\Tools\VsDevCmd.bat"
 
-        Write-Host "`r                    `r" -NoNewline
+        # Build command that initializes VS environment and then builds
+        # Use short paths to avoid quote issues
+        $msbuildShort = $script:MSBUILD_PATH -replace 'Program Files', 'PROGRA~1'
+        $buildCommand = "`"`"$vsDevCmd`" && `"$script:MSBUILD_PATH`" /nologo /verbosity:normal /consoleloggerparameters:NoSummary -p:Configuration=Release -target:Clean;Build DynamicsCrm.DevKit.AllInOne.sln`""
+
+        # Build argument list for cmd.exe
+        $buildArgs = @(
+            "/c"
+            $buildCommand
+        )
+
+        # Use Start-Process with cmd.exe to initialize VS environment
+        $buildProcess = Start-Process -FilePath "cmd.exe" `
+            -ArgumentList $buildArgs `
+            -NoNewWindow `
+            -Wait `
+            -PassThru `
+            -RedirectStandardOutput "build-output.tmp" `
+            -RedirectStandardError "build-error.tmp"
+
+        # Read and display the output with color coding
+        if (Test-Path "build-output.tmp") {
+            $buildOutput = Get-Content "build-output.tmp"
+            foreach ($line in $buildOutput) {
+                # Display project build lines with color coding
+                if ($line -match '^\s*\d+>------ (Build|Clean) started:.*Project: (.+?),') {
+                    $projectName = $matches[2]
+                    Write-Host "  Building: $projectName" -ForegroundColor Cyan
+                }
+                elseif ($line -match '^\s*\d+>------ Skipped') {
+                    Write-Host "  $line" -ForegroundColor DarkGray
+                }
+                elseif ($line -match 'Project ".+\\(.+?\.(csproj|vcxproj|vbproj))"') {
+                    $projFile = $matches[1]
+                    Write-Host "    -> $projFile" -ForegroundColor White
+                }
+                elseif ($line -match '-> .+\\(DynamicsCrm\.DevKit\..+?\.(dll|exe|vsix))') {
+                    $outputFile = $matches[1]
+                    Write-Host "    * $outputFile" -ForegroundColor Green
+                }
+                elseif ($line -match '(Build succeeded|Build FAILED)') {
+                    $status = $matches[1]
+                    $color = if ($status -match 'FAILED') { 'Red' } else { 'Green' }
+                    Write-Host "  $line" -ForegroundColor $color
+                }
+                elseif ($line -match 'error (CS|MSB)\d+:') {
+                    Write-Host "  $line" -ForegroundColor Red
+                }
+                elseif ($line -match 'warning (CS|MSB)\d+:') {
+                    Write-Host "  $line" -ForegroundColor Yellow
+                }
+            }
+            Remove-Item "build-output.tmp" -Force -ErrorAction SilentlyContinue
+        }
+
+        # Display errors if any
+        if (Test-Path "build-error.tmp") {
+            $buildErrors = Get-Content "build-error.tmp"
+            if ($buildErrors) {
+                foreach ($line in $buildErrors) {
+                    Write-Host "  $line" -ForegroundColor Red
+                }
+            }
+            Remove-Item "build-error.tmp" -Force -ErrorAction SilentlyContinue
+        }
+
+        $buildExitCode = $buildProcess.ExitCode
 
         if ($buildExitCode -ne 0) {
+            Write-ErrorMessage ""
             Write-ErrorMessage "ERROR: Solution build failed with exit code $buildExitCode!"
+            Write-ErrorMessage ""
+
+            # Show more context from build output
+            if (Test-Path "build-output.tmp") {
+                Write-ErrorMessage "Build errors/warnings:"
+                $buildOutput = Get-Content "build-output.tmp"
+                $errorLines = $buildOutput | Where-Object { $_ -match 'error (CS|MSB)\d+:' -or $_ -match 'Build FAILED' }
+                $warningLines = $buildOutput | Where-Object { $_ -match 'warning (CS|MSB)\d+:' }
+
+                if ($errorLines) {
+                    Write-ErrorMessage "Errors found:"
+                    foreach ($line in $errorLines) {
+                        Write-Host "  $line" -ForegroundColor Red
+                    }
+                }
+
+                if ($warningLines -and $warningLines.Count -le 10) {
+                    Write-Host ""
+                    Write-Host "Warnings:" -ForegroundColor Yellow
+                    foreach ($line in $warningLines) {
+                        Write-Host "  $line" -ForegroundColor Yellow
+                    }
+                }
+
+                # Show last 15 lines for context
+                Write-Host ""
+                Write-Host "Last output lines:" -ForegroundColor Gray
+                $buildOutput | Select-Object -Last 15 | ForEach-Object {
+                    Write-Host "  $_" -ForegroundColor Gray
+                }
+            }
+
             return $false
         }
         Write-Success "Solution built successfully."
@@ -510,6 +597,11 @@ function Build-Solution {
         Write-ErrorMessage "ERROR: Solution build failed!"
         Write-ErrorMessage $_.Exception.Message
         return $false
+    }
+    finally {
+        # Cleanup temp files
+        Remove-Item "build-output.tmp" -Force -ErrorAction SilentlyContinue
+        Remove-Item "build-error.tmp" -Force -ErrorAction SilentlyContinue
     }
 }
 
