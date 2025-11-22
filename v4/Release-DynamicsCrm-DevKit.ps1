@@ -77,7 +77,8 @@ function Update-FileContent {
         return $null
     }
 
-    $content = Get-Content $fullPath -Raw -Encoding UTF8
+    # Use .NET to read/write to avoid PowerShell adding newlines
+    $content = [System.IO.File]::ReadAllText($fullPath, [System.Text.Encoding]::UTF8)
     $originalContent = $content
 
     if ($Version) {
@@ -88,7 +89,7 @@ function Update-FileContent {
     }
 
     if ($content -ne $originalContent) {
-        Set-Content -Path $fullPath -Value $content -Encoding UTF8
+        [System.IO.File]::WriteAllText($fullPath, $content, [System.Text.Encoding]::UTF8)
         return @{ Path = $fullPath; Content = $originalContent }
     }
     return $null
@@ -98,7 +99,7 @@ function Restore-Files {
     param ($Backups)
     foreach ($backup in $Backups) {
         Write-Host "Restoring $($backup.Path)..." -ForegroundColor DarkGray
-        Set-Content -Path $backup.Path -Value $backup.Content -Encoding UTF8
+        [System.IO.File]::WriteAllText($backup.Path, $backup.Content, [System.Text.Encoding]::UTF8)
     }
 }
 

@@ -327,8 +327,4 @@ steps:
 - Issues: https://github.com/phuocle/Dynamics-Crm-DevKit/issues
 
 ---
-
-Generated: 2025-11-10
-
 ````
-

@@ -32,4 +32,3 @@ namespace DynamicsCrm.DevKit.Shared
         };
     }
 }
-
