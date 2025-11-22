@@ -9,12 +9,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DynamicsCrm.DevKit.Cli", "D
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{089100B1-113F-4E66-888A-E83F3999EAFD}"
 	ProjectSection(SolutionItems) = preProject
+		date.txt = date.txt
 		ImportKey.bat = ImportKey.bat
 		Release-DynamicsCrm-DevKit-CurrentDate.ps1 = Release-DynamicsCrm-DevKit-CurrentDate.ps1
 		Release-DynamicsCrm-DevKit.ps1 = Release-DynamicsCrm-DevKit.ps1
-		release-version-date-current-date.ps1 = release-version-date-current-date.ps1
-		release-version-date.ps1 = release-version-date.ps1
 		sn.ps1 = sn.ps1
+		version.txt = version.txt
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicsCrm.DevKit.Tool", "DynamicsCrm.DevKit.Tool\DynamicsCrm.DevKit.Tool.csproj", "{A4BF7AB3-EBC2-4AC9-ACCE-4F2790236A02}"
