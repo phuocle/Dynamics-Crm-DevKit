@@ -16,3 +16,4 @@ namespace DynamicsCrm.DevKit
         public const string Tags = "Dynamics; Dynamics 365; Dynamics CRM; Tool; JavaScript; CDS";
     }
 }
+
