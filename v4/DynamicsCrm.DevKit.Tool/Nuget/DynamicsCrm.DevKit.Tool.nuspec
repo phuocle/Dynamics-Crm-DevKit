@@ -6,6 +6,7 @@
     <version>4.00.00.00</version>
     <authors>PhuocLe</authors>
     <license type="file">license\LICENSE.txt</license>
+    <icon>images\icon.png</icon>
     <projectUrl>https://github.com/phuocle/Dynamics-Crm-DevKit</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Tool for DynamicsCrm.DevKit tool</description>
