@@ -47,28 +47,32 @@ $DateFiles = @(
 # --- Helper Functions ---
 
 function Get-MSBuildPath {
-    # Try vswhere if available
-    $vswhere = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
-    if (Test-Path $vswhere) {
-        $path = & $vswhere -latest -products * -requires Microsoft.Component.MSBuild -find MSBuild\**\Bin\MSBuild.exe
-        if ($path -and (Test-Path $path)) {
+    # User requested only VS 2026 Professional
+    # Note: VS 2026 might be installed in a folder named "18" or "2026"
+    $paths = @(
+        "C:\Program Files\Microsoft Visual Studio\2026\Professional\MSBuild\Current\Bin\MSBuild.exe",
+        "C:\Program Files\Microsoft Visual Studio\18\Professional\MSBuild\Current\Bin\MSBuild.exe"
+    )
+
+    foreach ($path in $paths) {
+        if (Test-Path $path) {
             return $path
         }
     }
 
-    # Fallback to common paths
-    $paths = @(
-        "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\MSBuild\Current\Bin\MSBuild.exe",
-        "C:\Program Files\Microsoft Visual Studio\2022\Professional\MSBuild\Current\Bin\MSBuild.exe",
-        "C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\MSBuild.exe"
-    )
-    foreach ($p in $paths) {
-        if (Test-Path $p) { return $p }
+    # Try vswhere as a fallback for non-standard install locations, but filter for 2026 or 18
+    $vswhere = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
+    if (Test-Path $vswhere) {
+        $foundPath = & $vswhere -latest -products * -requires Microsoft.Component.MSBuild -find MSBuild\**\Bin\MSBuild.exe -prerelease
+        if ($foundPath -and (Test-Path $foundPath)) {
+             if (($foundPath -like "*2026*") -or ($foundPath -like "*\18\*")) {
+                return $foundPath
+             }
+        }
     }
-    throw "MSBuild.exe not found. Please install Visual Studio 2022 with MSBuild."
-}
 
-function Update-FileContent {
+    throw "MSBuild.exe for Visual Studio 2026 Professional not found. Checked paths: $($paths -join ', ')"
+}function Update-FileContent {
     param ($FilePath, $Version, $Date)
 
     $fullPath = Join-Path $PSScriptRoot $FilePath
@@ -89,6 +93,7 @@ function Update-FileContent {
     }
 
     if ($content -ne $originalContent) {
+        Write-Host "Updating $fullPath..." -ForegroundColor DarkGray
         [System.IO.File]::WriteAllText($fullPath, $content, [System.Text.Encoding]::UTF8)
         return @{ Path = $fullPath; Content = $originalContent }
     }
