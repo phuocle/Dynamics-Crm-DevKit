@@ -116,9 +116,7 @@ try {
     $Version = (Get-Content $VersionFile -Raw).Trim()
 
     if ([string]::IsNullOrWhiteSpace($BuildDate)) {
-        $DateFile = "$PSScriptRoot\date.txt"
-        if (-not (Test-Path $DateFile)) { throw "date.txt not found and no BuildDate parameter provided." }
-        $BuildDate = (Get-Content $DateFile -Raw).Trim()
+        $BuildDate = "31.12.2025 23:59:59"
     }
 
     Write-Host "Version: $Version" -ForegroundColor Cyan
