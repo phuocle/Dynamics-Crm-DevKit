@@ -134,14 +134,14 @@ namespace DynamicsCrm.DevKit.Cli
         [STAThread]
         public static async Task Main(string[] args)
         {
-            var cacheFile = GetVersionCacheFilePath();
-            var hasCachedVersion = File.Exists(cacheFile);
-            var versionCheckTask = CheckForUpdatesAsync();
-            if (!hasCachedVersion)
-            {
-                var timeoutTask = Task.Delay(2000);
-                await Task.WhenAny(versionCheckTask, timeoutTask);
-            }
+            //var cacheFile = GetVersionCacheFilePath();
+            //var hasCachedVersion = File.Exists(cacheFile);
+            //var versionCheckTask = CheckForUpdatesAsync();
+            //if (!hasCachedVersion)
+            //{
+            //    var timeoutTask = Task.Delay(2000);
+            //    await Task.WhenAny(versionCheckTask, timeoutTask);
+            //}
             if (args.Count() == 0)
             {
                 ShowHelp(true);
