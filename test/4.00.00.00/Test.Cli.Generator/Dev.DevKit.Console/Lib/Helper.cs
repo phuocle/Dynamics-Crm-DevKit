@@ -16,7 +16,7 @@ using System.Text;
 //using System.Reflection;
 //using System.Activities;
 
-namespace $NameSpace$.Lib
+namespace Dev.DevKit.Console.Lib
 {
     public static class Helper
     {
