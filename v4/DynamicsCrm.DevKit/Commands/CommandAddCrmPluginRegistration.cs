@@ -522,10 +522,21 @@ namespace DynamicsCrm.DevKit.Commands
         private static async Task<bool> IsAddPackagesConfigAndInstallAsync(DTE dte)
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-            var package = $"{Path.GetDirectoryName(dte?.ActiveDocument?.ProjectItem?.ContainingProject?.FullName)}\\packages.config";
-            if (!File.Exists(package)) return false;
-            var context = await DynamicsCrm.DevKit.Shared.FileHelper.ReadAllTextAsync(package);
-            return context.IndexOf("DynamicsCrm.DevKit.Cli") > 0;
+            var project = dte?.ActiveDocument?.ProjectItem?.ContainingProject;
+            if (project == null) return false;
+            var projectPath = project.FullName;
+            var package = $"{Path.GetDirectoryName(projectPath)}\\packages.config";
+            if (File.Exists(package))
+            {
+                var context = await DynamicsCrm.DevKit.Shared.FileHelper.ReadAllTextAsync(package);
+                return context.IndexOf("DynamicsCrm.DevKit.Cli") > 0;
+            }
+            if (File.Exists(projectPath))
+            {
+                var context = await DynamicsCrm.DevKit.Shared.FileHelper.ReadAllTextAsync(projectPath);
+                return context.IndexOf("DynamicsCrm.DevKit.Cli") > 0;
+            }
+            return false;
         }
     }
 }
