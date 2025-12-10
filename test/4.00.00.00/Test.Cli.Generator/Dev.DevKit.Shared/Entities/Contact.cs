@@ -1,5 +1,5 @@
-﻿using System;
-using Microsoft.Xrm.Sdk;
+﻿using Microsoft.Xrm.Sdk;
+using System;
 
 namespace Dev.DevKit.Shared.Entities
 {
