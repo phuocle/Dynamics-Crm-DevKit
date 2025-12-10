@@ -1,4 +1,4 @@
-﻿//@ts-check
+﻿
 ///<reference path="devkit.d.ts" />
 declare namespace DevKit {
 	namespace FormAccount {
@@ -327,6 +327,8 @@ declare namespace DevKit {
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
 		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** The ExecutionContext of form Account */
+		ExecutionContext: DevKit.ExecutionContext;
 		/** The Body section of form Account */
 		Body: DevKit.FormAccount.Body;
 		/** The Header section of form Account */
