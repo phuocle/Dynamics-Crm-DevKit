@@ -42,33 +42,53 @@ if ($null -eq $snExe) {
 
     # Find VsDevCmd.bat
     $vsDevCmd = $null
-    $editions = @("Enterprise", "Professional", "Community")
-    $basePaths = @(
-        "C:\Program Files\Microsoft Visual Studio\2022",
-        "C:\Program Files (x86)\Microsoft Visual Studio\2022"
-  )
 
-    foreach ($basePath in $basePaths) {
-        foreach ($edition in $editions) {
-          $testPath = Join-Path $basePath "$edition\Common7\Tools\VsDevCmd.bat"
-   if (Test-Path $testPath) {
+    # Method 1: Try vswhere (Best for VS2017+)
+    $vswherePath = "C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe"
+    if (Test-Path $vswherePath) {
+        $installPath = & $vswherePath -latest -products * -requires Microsoft.Component.MSBuild -property installationPath
+        if ($installPath -and (Test-Path $installPath)) {
+            $testPath = Join-Path $installPath "Common7\Tools\VsDevCmd.bat"
+            if (Test-Path $testPath) {
                 $vsDevCmd = $testPath
-       break
-       }
+            }
         }
-        if ($vsDevCmd) { break }
+    }
+
+    # Method 2: Check standard paths if not found
+    if (-not $vsDevCmd) {
+        $editions = @("Enterprise", "Professional", "Community", "Preview")
+        $basePaths = @(
+            "C:\Program Files\Microsoft Visual Studio\2026",
+            "C:\Program Files (x86)\Microsoft Visual Studio\2026",
+            "C:\Program Files\Microsoft Visual Studio\18",
+            "C:\Program Files (x86)\Microsoft Visual Studio\18",
+            "C:\Program Files\Microsoft Visual Studio\2022",
+            "C:\Program Files (x86)\Microsoft Visual Studio\2022"
+        )
+
+        foreach ($basePath in $basePaths) {
+            foreach ($edition in $editions) {
+                $testPath = Join-Path $basePath "$edition\Common7\Tools\VsDevCmd.bat"
+                if (Test-Path $testPath) {
+                    $vsDevCmd = $testPath
+                    break
+                }
+            }
+            if ($vsDevCmd) { break }
+        }
     }
 
     if (-not $vsDevCmd) {
       Write-Host ""
  Write-Host "[✗] ERROR: Could not find VsDevCmd.bat" -ForegroundColor Red
-     Write-Host "    Please ensure Visual Studio 2022 is installed." -ForegroundColor Red
+     Write-Host "    Please ensure Visual Studio 2022 or 2026 is installed." -ForegroundColor Red
         Write-Host ""
         Read-Host "Press Enter to exit"
     exit 1
     }
 
-    Write-Host "      └─ Found VS2022: $edition edition" -ForegroundColor Gray
+    Write-Host "      └─ Found Visual Studio: $edition edition" -ForegroundColor Gray
     Write-Host "      └─ Initializing environment..." -ForegroundColor Gray
 
     # Import VS Developer environment
