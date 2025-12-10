@@ -1,40 +1,5 @@
 {
   "profiles": {
-    //"generators.LateBound.ClientSecret": {
-    //  "commandName": "Project",
-    //  "commandLineArgs": "/conn:\"AuthType=ClientSecret;Url=https://dynamics-crm-devkit.crm5.dynamics.com;ClientId=1a60a5c2-d04c-4b26-8f86-9d6ce0616799;ClientSecret=4Y11hDyKJYQTqXC9cRDXnoJ2DytZDs/jYI1byYwKli57mRfjHcCPu6Qx5sxgtCWQ;\" /json:\"..\\..\\DynamicsCrm.DevKit.Cli.json\" /type:\"generators\" /profile:\"LATEBOUND\"",
-    //  "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\test\\4.00.00.00\\TestAllProjects\\Dev.DevKit.Shared\\Entities"
-    //},
-    //"generators.LateBound2.ClientSecret": {
-    //  "commandName": "Project",
-    //  "commandLineArgs": "/conn:\"AuthType=ClientSecret;Url=https://dynamics-crm-devkit.crm5.dynamics.com;ClientId=1a60a5c2-d04c-4b26-8f86-9d6ce0616799;ClientSecret=4Y11hDyKJYQTqXC9cRDXnoJ2DytZDs/jYI1byYwKli57mRfjHcCPu6Qx5sxgtCWQ;\" /json:\"..\\..\\DynamicsCrm.DevKit.Cli.json\" /type:\"generators\" /profile:\"SERVER\"",
-    //  "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\test\\4.00.00.00\\TestAllProjects\\Dev.DevKit.Server\\Entities"
-    //},
-    //"generators.EarlyBound.ClientSecret": {
-    //  "commandName": "Project",
-    //  "commandLineArgs": "/conn:\"AuthType=ClientSecret;Url=https://dynamics-crm-devkit.crm5.dynamics.com;ClientId=1a60a5c2-d04c-4b26-8f86-9d6ce0616799;ClientSecret=4Y11hDyKJYQTqXC9cRDXnoJ2DytZDs/jYI1byYwKli57mRfjHcCPu6Qx5sxgtCWQ;\" /json:\"..\\..\\DynamicsCrm.DevKit.Cli.json\" /type:\"generators\" /profile:\"EARLYBOUND\"",
-    //  "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\test\\4.00.00.00\\TestAllProjectsV4\\Dev.DevKitV4.Shared\\Entities4"
-    //},
-    //"generators.JsForm.ClientSecret": {
-    //  "commandName": "Project",
-    //  "commandLineArgs": "/conn:\"AuthType=ClientSecret;Url=https://dynamics-crm-devkit.crm5.dynamics.com;ClientId=1a60a5c2-d04c-4b26-8f86-9d6ce0616799;ClientSecret=4Y11hDyKJYQTqXC9cRDXnoJ2DytZDs/jYI1byYwKli57mRfjHcCPu6Qx5sxgtCWQ;\" /json:\"..\\..\\DynamicsCrm.DevKit.Cli.json\" /type:\"generators\" /profile:\"JS-FORM\"",
-    //  "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\test\\4.00.00.00\\TestAllProjectsV4\\Dev.DevKitV4.WebResource.2\\entities"
-    //},
-    //"generators.JsWebApi.ClientSecret": {
-    //  "commandName": "Project",
-    //  "commandLineArgs": "/conn:\"AuthType=ClientSecret;Url=https://dynamics-crm-devkit.crm5.dynamics.com;ClientId=1a60a5c2-d04c-4b26-8f86-9d6ce0616799;ClientSecret=4Y11hDyKJYQTqXC9cRDXnoJ2DytZDs/jYI1byYwKli57mRfjHcCPu6Qx5sxgtCWQ;\" /json:\"..\\..\\DynamicsCrm.DevKit.Cli.json\" /type:\"generators\" /profile:\"JS-WEBAPI\"",
-    //  "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\test\\4.00.00.00\\TestAllProjectsV4\\Dev.DevKitV4.WebResource\\entities"
-    //},
-    //"generators.LateBound.UserPass": {
-    //  "commandName": "Project",
-    //  "commandLineArgs": "/conn:\"AuthType=OAuth;Url=https://dynamics-crm-devkit.crm5.dynamics.com;Username=devkit@phuocle.net;Password=Cyt@67C2Ua;AppId=51f81489-12ee-4a9e-aaae-a2591f45987d;RedirectUri=app://58145B91-0C36-4500-8554-080854F2AC97;LoginPrompt=Auto;\" /json:\"..\\..\\DynamicsCrm.DevKit.Cli.json\" /type:\"generators\" /profile:\"LATEBOUND\"",
-    //  "workingDirectory": "D:\\azure\\PL\\HSAPVN\\src\\Hs.Hsap.Shared\\Entities"
-    //},
-    //"generators.LateBound.OOB": {
-    //  "commandName": "Project",
-    //  "commandLineArgs": "/sdklogin:\"yes\" /url:\"https://dynamics-crm-devkit.crm5.dynamics.com\" /json:\"..\\..\\DynamicsCrm.DevKit.Cli.json\" /type:\"generators\" /profile:\"LATEBOUND\"",
-    //  "workingDirectory": "D:\\azure\\PL\\HSAPVN\\src\\Hs.Hsap.Shared\\Entities"
-    //},
     "NoArgs": {
       "commandName": "Project",
       "workingDirectory": "D:\\azure\\PL\\HSAPVN\\src\\Hs.Hsap.Shared\\Entities"
@@ -88,23 +53,11 @@
       "commandName": "Project",
       "commandLineArgs": "/conn:\"AuthType=ClientSecret;Url=https://hitachi-hsapvn-dev.crm5.dynamics.com;ClientId=b1b8cf05-cb06-4674-b93e-98c8c9a02e5a;ClientSecret=v+L6+3MvOrVPMNqGn86vi6qEG4qpCCLoLqgeUMjnGkY=;\" /json:\"..\\DynamicsCrm.DevKit.Cli.json\" /type:\"servers\" /profile:\"DEBUG\"",
       "workingDirectory": "D:\\azure\\PL\\HSAPVN\\src\\Hs.Hsap.Server"
+    },
+    "BUG": {
+      "commandName": "Project",
+      "commandLineArgs": "/conn:\"AuthType=ClientSecret;Url=https://org56a8da65.crm.dynamics.com;ClientId=4b632954-5b63-4a6b-b574-d84330051238;ClientSecret=v6gy9pdV1u0yQQWA45EZfRkI6MF2pBUG8H/ckMTUEoj1qKXcyo+nKyT7aF+nPAlk;\" /json:\"..\\..\\DynamicsCrm.DevKit.Cli.json\" /type:\"generators\" /profile:\"LATEBOUND\"",
+      "workingDirectory": "D:\\azure\\phuocle\\PreSales\\CaptiaLand\\src\\Hs.CaptiaLand.Shared\\Entities"
     }
-
-    //"DEVKITV4.Server.OnlyUpdateAssembly": {
-    //  "commandName": "Project",
-    //  "commandLineArgs": "/conn:\"AuthType=ClientSecret;Url=https://dynamics-crm-devkit-2.crm.dynamics.com;ClientId=1a60a5c2-d04c-4b26-8f86-9d6ce0616799;ClientSecret=4Y11hDyKJYQTqXC9cRDXnoJ2DytZDs/jYI1byYwKli57mRfjHcCPu6Qx5sxgtCWQ;\" /json:\"..\\DynamicsCrm.DevKit.Cli.json\" /type:\"servers\" /profile:\"DEBUG\" /onlyupdateassembly:\"true\"",
-    //  "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\test\\4.00.00.00\\TestAllProjectsV4\\Dev.DevKitV4.Server"
-    //},
-
-    //"DEVKITV4.Server2.ManagedIdentity.OnlyUpdateAssembly": {
-    //  "commandName": "Project",
-    //  "commandLineArgs": "/conn:\"AuthType=ClientSecret;Url=https://dynamics-crm-devkit-2.crm.dynamics.com;ClientId=1a60a5c2-d04c-4b26-8f86-9d6ce0616799;ClientSecret=4Y11hDyKJYQTqXC9cRDXnoJ2DytZDs/jYI1byYwKli57mRfjHcCPu6Qx5sxgtCWQ;\" /json:\"..\\DynamicsCrm.DevKit.Cli.json\" /type:\"servers\" /profile:\"DEBUG\" /onlyupdateassembly:\"true\"",
-    //  "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\test\\4.00.00.00\\TestAllProjectsV4\\Dev.DevKitV4.Server.2"
-    //},
-    //"webresources": {
-    //  "commandName": "Project",
-    //  "commandLineArgs": "/conn:\"AuthType=ClientSecret;Url=https://dynamics-crm-devkit.crm5.dynamics.com;ClientId=1a60a5c2-d04c-4b26-8f86-9d6ce0616799;ClientSecret=4Y11hDyKJYQTqXC9cRDXnoJ2DytZDs/jYI1byYwKli57mRfjHcCPu6Qx5sxgtCWQ;\" /json:\"..\\DynamicsCrm.DevKit.Cli.json\" /type:\"webresources\" /profile:\"DEBUG\"",
-    //  "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\test\\4.00.00.00\\TestAllProjectsV4\\Dev.DevKitV4.WebResource"
-    //}
   }
 }
