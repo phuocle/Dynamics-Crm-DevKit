@@ -1,5 +1,5 @@
 ﻿{
-    "DefaultCrmConnection": "ClientSecret",
+    "DefaultCrmConnection": "UserPass",
     "CrmConnections": [
         {
             "Name": "UserPass",
