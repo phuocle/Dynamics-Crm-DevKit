@@ -1,0 +1,12 @@
+﻿{
+    "DefaultCrmConnection": "https://contoso-pl.crm5.dynamics.com",
+    "CrmConnections": [
+        {
+            "Name": "https://contoso-pl.crm5.dynamics.com",
+            "Url": "https://contoso-pl.crm5.dynamics.com",
+            "UserName": "phuocle@phuocle.net",
+            "Password": "",
+            "Type": "OAuth"
+        }
+    ]
+}
