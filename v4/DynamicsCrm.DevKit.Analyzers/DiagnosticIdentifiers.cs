@@ -13,5 +13,6 @@
         public const string KeepAliveFalse = "DEVKIT1009";
         public const string HttpTimeout = "DEVKIT1010";
         public const string RetrieveMultiplePlugin = "DEVKIT1013";
+        public const string UseInvalidPluginExecutionException = "DEVKIT1011";
     }
 }

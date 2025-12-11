@@ -16,6 +16,7 @@ Based on research of [Microsoft's Dataverse Best Practices](https://learn.micros
 | DEVKIT1008 | Don't use parallel execution | ✅ [Don't use parallel execution](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/do-not-use-parallel-execution-in-plug-ins) |
 | DEVKIT1009 | Set KeepAlive to false | ✅ [Set KeepAlive to false](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/set-keepalive-false-interacting-external-hosts-plugin) |
 | DEVKIT1010 | Set Timeout for HTTP calls | ✅ [Set Timeout for external calls](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/set-timeout-for-external-calls-from-plug-ins) |
+| DEVKIT1011 | Use InvalidPluginExecutionException | ✅ [Use InvalidPluginExecutionException](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/use-invalidpluginexecutionexception-plugin-workflow-activities) |
 | DEVKIT1013 | Avoid Retrieve/RetrieveMultiple plugins | ✅ [Limit Retrieve/RetrieveMultiple plugins](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/limit-registration-plugins-retrieve-retrievemultiple) |
 
 ---
@@ -23,18 +24,6 @@ Based on research of [Microsoft's Dataverse Best Practices](https://learn.micros
 ## Suggested New Analyzers (Roadmap)
 
 ### High Priority
-
----
-
-#### DEVKIT1011: Use InvalidPluginExecutionException for errors
-
-**Severity:** Warning  
-**Category:** Supportability, Usability  
-**Impact:** Medium  
-**MS Docs:** [Use InvalidPluginExecutionException](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/use-invalidpluginexecutionexception-plugin-workflow-activities)
-
-**Detection:**
-In IPlugin classes, detect `throw` statements with exception types other than `InvalidPluginExecutionException`.
 
 ---
 
@@ -90,7 +79,7 @@ Context-dependent validation of async patterns in plugins.
 | DEVKIT1009 | KeepAlive = false | ✅ Implemented |
 | DEVKIT1010 | HTTP Timeout | ✅ Implemented |
 | DEVKIT1013 | Retrieve/RetrieveMultiple warning | ✅ Implemented |
-| DEVKIT1011 | InvalidPluginExecutionException | 📋 Planned |
+| DEVKIT1011 | InvalidPluginExecutionException | ✅ Implemented |
 | DEVKIT1012 | ITracingService recommendation | 📋 Planned |
 | DEVKIT1014 | AppDomain events | 📋 Planned |
 | DEVKIT1015 | Async pattern validation | 📋 Planned |

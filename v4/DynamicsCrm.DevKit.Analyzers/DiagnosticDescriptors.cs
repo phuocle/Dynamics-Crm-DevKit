@@ -176,5 +176,13 @@ namespace DynamicsCrm.DevKit.Analyzers
             "Consider avoiding plugin registration on '{0}' message due to performance impact",
             DiagnosticSeverity.Info,
             "Plugins registered on Retrieve and RetrieveMultiple messages are called very frequently and can significantly impact system performance. Consider using alternate solutions like views, virtual entities, or client-side logic.");
+
+        /// <summary>DEVKIT1011</summary>
+        public static readonly DiagnosticDescriptor UseInvalidPluginExecutionException = CreateDescriptor(
+            "DEVKIT1011",
+            "Use InvalidPluginExecutionException in plug-ins and workflow activities",
+            "Use InvalidPluginExecutionException instead of '{0}' in plug-ins and workflow activities",
+            DiagnosticSeverity.Warning,
+            "Only InvalidPluginExecutionException is properly handled by the platform and shows error messages to users. Other exception types may result in generic error messages or system errors.");
     }
 }

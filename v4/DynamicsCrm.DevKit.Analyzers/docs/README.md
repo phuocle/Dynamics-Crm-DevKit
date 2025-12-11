@@ -36,6 +36,7 @@ Or add to your `.csproj`:
 | [DEVKIT1008](#devkit1008) | Error | Don't use parallel execution in plug-ins |
 | [DEVKIT1009](#devkit1009) | Warning | Set KeepAlive to false for external HTTP calls |
 | [DEVKIT1010](#devkit1010) | Warning | Set Timeout for external HTTP calls |
+| [DEVKIT1011](#devkit1011) | Warning | Use InvalidPluginExecutionException for errors |
 | [DEVKIT1013](#devkit1013) | Info | Avoid registering plugins on Retrieve/RetrieveMultiple |
 
 ---
@@ -491,6 +492,31 @@ public class CalculateAccountRatingPlugin : IPlugin { }
 ```
 
 [📖 Documentation](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DEVKIT1013)
+
+---
+
+### DEVKIT1011
+**Use InvalidPluginExecutionException for errors**
+
+**Severity:** Warning
+
+**MS Best Practice:** [Use InvalidPluginExecutionException in plug-ins and workflow activities](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/use-invalidpluginexecutionexception-plugin-workflow-activities)
+
+Warns when throwing exceptions other than `InvalidPluginExecutionException` in plugins. Only this exception type is properly handled by the platform and shows messages to users.
+
+**Bad Code:**
+```csharp
+// ❌ Generic Exception - user sees "An error occurred"
+throw new Exception("Something went wrong");
+```
+
+**Good Code:**
+```csharp
+// ✅ InvalidPluginExecutionException - message shown to user
+throw new InvalidPluginExecutionException("Please provide a valid account name.");
+```
+
+[📖 Documentation](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DEVKIT1011)
 
 ---
 
