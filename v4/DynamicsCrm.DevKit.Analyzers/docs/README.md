@@ -37,6 +37,7 @@ Or add to your `.csproj`:
 | [DEVKIT1009](#devkit1009) | Warning | Set KeepAlive to false for external HTTP calls |
 | [DEVKIT1010](#devkit1010) | Warning | Set Timeout for external HTTP calls |
 | [DEVKIT1011](#devkit1011) | Warning | Use InvalidPluginExecutionException for errors |
+| [DEVKIT1012](#devkit1012) | Info | Consider using ITracingService in plug-ins |
 | [DEVKIT1013](#devkit1013) | Info | Avoid registering plugins on Retrieve/RetrieveMultiple |
 
 ---
@@ -517,6 +518,42 @@ throw new InvalidPluginExecutionException("Please provide a valid account name."
 ```
 
 [📖 Documentation](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DEVKIT1011)
+
+---
+
+### DEVKIT1012
+**Consider using ITracingService in plug-ins**
+
+**Severity:** Info
+
+**MS Best Practice:** [Use ITracingService in Plug-ins](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/use-itracingservice-plugins)
+
+Recommends using `ITracingService` in plug-in classes for debugging and monitoring.
+
+**Bad Code:**
+```csharp
+// ⚠️ No tracing - difficult to debug
+public class AccountPlugin : IPlugin
+{
+    public void Execute(IServiceProvider serviceProvider) { }
+}
+```
+
+**Good Code:**
+```csharp
+// ✅ Uses tracing for debugging
+public class AccountPlugin : IPlugin
+{
+    public void Execute(IServiceProvider serviceProvider)
+    {
+        var tracingService = (ITracingService)serviceProvider
+            .GetService(typeof(ITracingService));
+        tracingService.Trace("Plugin started");
+    }
+}
+```
+
+[📖 Documentation](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DEVKIT1012)
 
 ---
 

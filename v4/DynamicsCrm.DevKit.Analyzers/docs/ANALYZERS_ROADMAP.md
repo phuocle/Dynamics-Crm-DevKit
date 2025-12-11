@@ -17,6 +17,7 @@ Based on research of [Microsoft's Dataverse Best Practices](https://learn.micros
 | DEVKIT1009 | Set KeepAlive to false | ✅ [Set KeepAlive to false](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/set-keepalive-false-interacting-external-hosts-plugin) |
 | DEVKIT1010 | Set Timeout for HTTP calls | ✅ [Set Timeout for external calls](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/set-timeout-for-external-calls-from-plug-ins) |
 | DEVKIT1011 | Use InvalidPluginExecutionException | ✅ [Use InvalidPluginExecutionException](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/use-invalidpluginexecutionexception-plugin-workflow-activities) |
+| DEVKIT1012 | ITracingService recommendation | ✅ [Use ITracingService](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/use-itracingservice-plugins) |
 | DEVKIT1013 | Avoid Retrieve/RetrieveMultiple plugins | ✅ [Limit Retrieve/RetrieveMultiple plugins](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/limit-registration-plugins-retrieve-retrievemultiple) |
 
 ---
@@ -28,18 +29,6 @@ Based on research of [Microsoft's Dataverse Best Practices](https://learn.micros
 ---
 
 ### Medium Priority
-
----
-
-#### DEVKIT1012: Recommend using ITracingService in plug-ins
-
-**Severity:** Info  
-**Category:** Maintainability, Supportability  
-**Impact:** Medium  
-**MS Docs:** [Use ITracingService](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/use-itracingservice-plugins)
-
-**Detection:**
-IPlugin classes that don't retrieve or use `ITracingService`.
 
 ---
 
@@ -80,6 +69,6 @@ Context-dependent validation of async patterns in plugins.
 | DEVKIT1010 | HTTP Timeout | ✅ Implemented |
 | DEVKIT1013 | Retrieve/RetrieveMultiple warning | ✅ Implemented |
 | DEVKIT1011 | InvalidPluginExecutionException | ✅ Implemented |
-| DEVKIT1012 | ITracingService recommendation | 📋 Planned |
+| DEVKIT1012 | ITracingService recommendation | ✅ Implemented |
 | DEVKIT1014 | AppDomain events | 📋 Planned |
 | DEVKIT1015 | Async pattern validation | 📋 Planned |

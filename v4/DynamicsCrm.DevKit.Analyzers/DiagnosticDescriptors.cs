@@ -184,5 +184,13 @@ namespace DynamicsCrm.DevKit.Analyzers
             "Use InvalidPluginExecutionException instead of '{0}' in plug-ins and workflow activities",
             DiagnosticSeverity.Warning,
             "Only InvalidPluginExecutionException is properly handled by the platform and shows error messages to users. Other exception types may result in generic error messages or system errors.");
+
+        /// <summary>DEVKIT1012</summary>
+        public static readonly DiagnosticDescriptor UseTracingService = CreateDescriptor(
+            "DEVKIT1012",
+            "Consider using ITracingService in plug-ins",
+            "Plug-in class '{0}' does not use ITracingService for debugging and monitoring",
+            DiagnosticSeverity.Info,
+            "Using ITracingService helps with debugging and monitoring plugin execution. Trace logs are captured in the platform and can be viewed using the Plug-in Trace Log viewer.");
     }
 }
