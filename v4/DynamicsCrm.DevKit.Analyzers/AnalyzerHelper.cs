@@ -1,12 +1,132 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace DynamicsCrm.DevKit.Analyzers
 {
     public static class AnalyzerHelper
     {
+        #region Type Name Constants
+
         private const string MicrosoftCrmSdkMessages = "Microsoft.Crm.Sdk.Messages";
-        private static readonly Regex EmptyStringPattern = new Regex(@"^\""(\s)*\""$", RegexOptions.Compiled | RegexOptions.Multiline);
+        private const string MicrosoftXrmSdkMessages = "Microsoft.Xrm.Sdk.Messages";
+
+        /// <summary>
+        /// The fully qualified name of the IPlugin interface.
+        /// </summary>
+        public const string IPluginTypeName = "Microsoft.Xrm.Sdk.IPlugin";
+
+        /// <summary>
+        /// Workflow/Activity base type names to check inheritance.
+        /// </summary>
+        public static readonly HashSet<string> WorkflowBaseTypes = new HashSet<string>
+        {
+            "System.Activities.CodeActivity",
+            "System.Activities.NativeActivity",
+            "System.Activities.Activity"
+        };
+
+        #endregion
+
+        #region Common Plugin/Workflow Detection
+
+        /// <summary>
+        /// Checks if a class implements IPlugin or inherits from CodeActivity/NativeActivity/Activity.
+        /// </summary>
+        /// <param name="classSymbol">The class symbol to check.</param>
+        /// <returns>True if the class is a plugin or workflow activity.</returns>
+        public static bool IsPluginOrWorkflowClass(INamedTypeSymbol classSymbol)
+        {
+            if (classSymbol == null)
+                return false;
+
+            // Check if class implements IPlugin
+            if (ImplementsIPlugin(classSymbol))
+                return true;
+
+            // Check if class inherits from CodeActivity or related base classes
+            return InheritsFromWorkflowBase(classSymbol);
+        }
+
+        /// <summary>
+        /// Checks if a class implements the IPlugin interface.
+        /// </summary>
+        /// <param name="classSymbol">The class symbol to check.</param>
+        /// <returns>True if the class implements IPlugin.</returns>
+        public static bool ImplementsIPlugin(INamedTypeSymbol classSymbol)
+        {
+            if (classSymbol == null)
+                return false;
+
+            return classSymbol.AllInterfaces.Any(i => i.ToDisplayString() == IPluginTypeName);
+        }
+
+        /// <summary>
+        /// Checks if a class inherits from a workflow base class (CodeActivity, NativeActivity, Activity).
+        /// </summary>
+        /// <param name="classSymbol">The class symbol to check.</param>
+        /// <returns>True if the class inherits from a workflow base.</returns>
+        public static bool InheritsFromWorkflowBase(INamedTypeSymbol classSymbol)
+        {
+            if (classSymbol == null)
+                return false;
+
+            var baseType = classSymbol.BaseType;
+            while (baseType != null)
+            {
+                if (WorkflowBaseTypes.Contains(baseType.ToDisplayString()))
+                    return true;
+                baseType = baseType.BaseType;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Checks if a syntax node is inside a plugin or workflow class.
+        /// </summary>
+        /// <param name="node">The syntax node to check.</param>
+        /// <param name="semanticModel">The semantic model for symbol resolution.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
+        /// <returns>True if the node is inside a plugin or workflow class.</returns>
+        public static bool IsInsidePluginOrWorkflow(SyntaxNode node, SemanticModel semanticModel, CancellationToken cancellationToken)
+        {
+            if (node == null || semanticModel == null)
+                return false;
+
+            var classDeclaration = node.FirstAncestorOrSelf<ClassDeclarationSyntax>();
+            if (classDeclaration == null)
+                return false;
+
+            var classSymbol = semanticModel.GetDeclaredSymbol(classDeclaration, cancellationToken) as INamedTypeSymbol;
+            return IsPluginOrWorkflowClass(classSymbol);
+        }
+
+        #endregion
+
+        #region String Helpers
+
+        private static readonly Regex EmptyStringPattern = new Regex(@"^""(\s)*""$", RegexOptions.Compiled | RegexOptions.Multiline);
+
+        public static string RemoveQuote(string text)
+        {
+            if (text == null) return null;
+            text = text.Substring(1);
+            return text.Substring(0, text.Length - 1);
+        }
+
+        public static bool TestIsEmpty(string text)
+        {
+            if (string.IsNullOrEmpty(text)) return false;
+            return EmptyStringPattern.IsMatch(text);
+        }
+
+        #endregion
+
+        #region Deprecated Requests
 
         public static readonly HashSet<string> DeprecatedRequests = new HashSet<string>
         {
@@ -66,20 +186,9 @@ namespace DynamicsCrm.DevKit.Analyzers
             $"{MicrosoftCrmSdkMessages}.UpdateUserSettingsSystemUserResponse"
         };
 
-        public static string RemoveQuote(string text)
-        {
-            if (text == null) return null;
-            text = text.Substring(1);
-            return text.Substring(0, text.Length - 1);
-        }
+        #endregion
 
-        public static bool TestIsEmpty(string text)
-        {
-            if (string.IsNullOrEmpty(text)) return false;
-            return EmptyStringPattern.IsMatch(text);
-        }
-
-        private const string MicrosoftXrmSdkMessages = "Microsoft.Xrm.Sdk.Messages";
+        #region Batch Request Types
 
         /// <summary>
         /// Batch request types that should not be used in plug-ins and workflow activities.
@@ -93,5 +202,8 @@ namespace DynamicsCrm.DevKit.Analyzers
             $"{MicrosoftXrmSdkMessages}.UpdateMultipleRequest",
             $"{MicrosoftXrmSdkMessages}.UpsertMultipleRequest"
         };
+
+        #endregion
     }
 }
+

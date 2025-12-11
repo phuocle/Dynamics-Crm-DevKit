@@ -33,10 +33,12 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
             //    Debugger.Launch();
             //}
 #endif
+            if (context == null) throw new ArgumentNullException(nameof(context));
+            
             context.EnableConcurrentExecution();
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.Analyze | GeneratedCodeAnalysisFlags.ReportDiagnostics);
-            if (context == null) throw new ArgumentNullException(nameof(context));
             base.Initialize(context);
+            
             context.RegisterSyntaxNodeAction(AnalyzeBatchRequest, SyntaxKind.ObjectCreationExpression);
         }
 
@@ -45,53 +47,21 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
             var semanticModel = context.SemanticModel;
             if (semanticModel == null) return;
 
-            var cancellationToken = context.CancellationToken;
+            if (!(context.Node is ObjectCreationExpressionSyntax objectCreation))
+                return;
 
-            if (context.Node is ObjectCreationExpressionSyntax objectCreationExpression)
+            var typeInfo = semanticModel.GetTypeInfo(objectCreation, context.CancellationToken);
+            var typeName = typeInfo.Type?.ToDisplayString();
+            
+            if (typeName == null || !AnalyzerHelper.BatchRequestTypes.Contains(typeName))
+                return;
+
+            // Check if we're inside an IPlugin or CodeActivity class
+            if (AnalyzerHelper.IsInsidePluginOrWorkflow(objectCreation, semanticModel, context.CancellationToken))
             {
-                var typeInfo = semanticModel.GetTypeInfo(objectCreationExpression, cancellationToken);
-                var typeName = typeInfo.Type?.ToDisplayString();
-                
-                if (typeName != null && AnalyzerHelper.BatchRequestTypes.Contains(typeName))
-                {
-                    // Check if we're inside an IPlugin or CodeActivity class
-                    if (IsInsidePluginOrWorkflow(objectCreationExpression, semanticModel, cancellationToken))
-                    {
-                        DiagnosticHelpers.ReportDiagnostic(context, DiagnosticDescriptors.BatchRequestInPlugin, 
-                            objectCreationExpression.GetLocation(), typeName);
-                    }
-                }
+                DiagnosticHelpers.ReportDiagnostic(context, DiagnosticDescriptors.BatchRequestInPlugin, 
+                    objectCreation.GetLocation(), typeName);
             }
-        }
-
-        private bool IsInsidePluginOrWorkflow(SyntaxNode node, SemanticModel semanticModel, System.Threading.CancellationToken cancellationToken)
-        {
-            var classDeclaration = node.FirstAncestorOrSelf<ClassDeclarationSyntax>();
-            if (classDeclaration == null) return false;
-
-            var classSymbol = semanticModel.GetDeclaredSymbol(classDeclaration, cancellationToken) as INamedTypeSymbol;
-            if (classSymbol == null) return false;
-
-            // Check if class implements IPlugin
-            foreach (var iface in classSymbol.AllInterfaces)
-            {
-                if (iface.ToDisplayString() == "Microsoft.Xrm.Sdk.IPlugin")
-                    return true;
-            }
-
-            // Check if class inherits from CodeActivity
-            var baseType = classSymbol.BaseType;
-            while (baseType != null)
-            {
-                var baseTypeName = baseType.ToDisplayString();
-                if (baseTypeName == "System.Activities.CodeActivity" ||
-                    baseTypeName == "System.Activities.NativeActivity" ||
-                    baseTypeName == "System.Activities.Activity")
-                    return true;
-                baseType = baseType.BaseType;
-            }
-
-            return false;
         }
     }
 }

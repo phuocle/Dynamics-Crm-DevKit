@@ -21,7 +21,6 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class TracingServiceAnalyzer : BaseDiagnosticAnalyzer
     {
-        private const string IPluginInterfaceName = "Microsoft.Xrm.Sdk.IPlugin";
         private const string ITracingServiceName = "ITracingService";
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics
@@ -62,8 +61,8 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
             if (classSymbol == null)
                 return;
 
-            // Check if class implements IPlugin
-            if (!ImplementsIPlugin(classSymbol))
+            // Check if class implements IPlugin (using centralized method)
+            if (!AnalyzerHelper.ImplementsIPlugin(classSymbol))
                 return;
 
             // Check if class uses ITracingService
@@ -73,14 +72,6 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
             // Report diagnostic on the class identifier
             DiagnosticHelpers.ReportDiagnostic(context, DiagnosticDescriptors.UseTracingService,
                 classDeclaration.Identifier.GetLocation(), classDeclaration.Identifier.Text);
-        }
-
-        /// <summary>
-        /// Checks if a class implements IPlugin interface.
-        /// </summary>
-        private static bool ImplementsIPlugin(INamedTypeSymbol classSymbol)
-        {
-            return classSymbol.AllInterfaces.Any(i => i.ToDisplayString() == IPluginInterfaceName);
         }
 
         /// <summary>

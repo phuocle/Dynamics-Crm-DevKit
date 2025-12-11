@@ -33,9 +33,10 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
             //    Debugger.Launch();
             //}
 #endif
+            if (context == null) throw new ArgumentNullException(nameof(context));
+            
             context.EnableConcurrentExecution();
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.Analyze | GeneratedCodeAnalysisFlags.ReportDiagnostics);
-            if (context == null) throw new ArgumentNullException(nameof(context));
             base.Initialize(context);
             
             // Register for invocation expressions (method calls like Task.Run, Parallel.ForEach)
@@ -50,23 +51,15 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
             var semanticModel = context.SemanticModel;
             if (semanticModel == null) return;
 
-            var cancellationToken = context.CancellationToken;
-
             if (!(context.Node is InvocationExpressionSyntax invocation))
                 return;
 
             // Check if this is inside an IPlugin or CodeActivity class
-            var classDeclaration = invocation.FirstAncestorOrSelf<ClassDeclarationSyntax>();
-            if (classDeclaration == null) return;
-
-            var classSymbol = semanticModel.GetDeclaredSymbol(classDeclaration, cancellationToken) as INamedTypeSymbol;
-            if (classSymbol == null) return;
-
-            if (!IsPluginOrWorkflowClass(classSymbol))
+            if (!AnalyzerHelper.IsInsidePluginOrWorkflow(invocation, semanticModel, context.CancellationToken))
                 return;
 
             // Get the method symbol being invoked
-            var symbolInfo = semanticModel.GetSymbolInfo(invocation, cancellationToken);
+            var symbolInfo = semanticModel.GetSymbolInfo(invocation, context.CancellationToken);
             if (!(symbolInfo.Symbol is IMethodSymbol methodSymbol))
                 return;
 
@@ -87,23 +80,15 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
             var semanticModel = context.SemanticModel;
             if (semanticModel == null) return;
 
-            var cancellationToken = context.CancellationToken;
-
             if (!(context.Node is ObjectCreationExpressionSyntax objectCreation))
                 return;
 
             // Check if this is inside an IPlugin or CodeActivity class
-            var classDeclaration = objectCreation.FirstAncestorOrSelf<ClassDeclarationSyntax>();
-            if (classDeclaration == null) return;
-
-            var classSymbol = semanticModel.GetDeclaredSymbol(classDeclaration, cancellationToken) as INamedTypeSymbol;
-            if (classSymbol == null) return;
-
-            if (!IsPluginOrWorkflowClass(classSymbol))
+            if (!AnalyzerHelper.IsInsidePluginOrWorkflow(objectCreation, semanticModel, context.CancellationToken))
                 return;
 
             // Get the type being created
-            var typeInfo = semanticModel.GetTypeInfo(objectCreation, cancellationToken);
+            var typeInfo = semanticModel.GetTypeInfo(objectCreation, context.CancellationToken);
             var typeName = typeInfo.Type?.ToDisplayString();
 
             // Check for Thread instantiation
@@ -114,7 +99,7 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
             }
         }
 
-        private bool IsParallelExecutionMethod(string containingTypeName, string methodName)
+        private static bool IsParallelExecutionMethod(string containingTypeName, string methodName)
         {
             // Task.Run, Task.Factory.StartNew
             if (containingTypeName == "System.Threading.Tasks.Task" && (methodName == "Run" || methodName == "StartNew"))
@@ -135,7 +120,7 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
             return false;
         }
 
-        private string GetParallelPatternName(string containingTypeName, string methodName)
+        private static string GetParallelPatternName(string containingTypeName, string methodName)
         {
             if (containingTypeName == "System.Threading.Tasks.Task")
                 return $"Task.{methodName}()";
@@ -146,30 +131,6 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
             if (containingTypeName == "System.Threading.ThreadPool")
                 return "ThreadPool.QueueUserWorkItem()";
             return $"{methodName}()";
-        }
-
-        private bool IsPluginOrWorkflowClass(INamedTypeSymbol classSymbol)
-        {
-            // Check if class implements IPlugin
-            foreach (var iface in classSymbol.AllInterfaces)
-            {
-                if (iface.ToDisplayString() == "Microsoft.Xrm.Sdk.IPlugin")
-                    return true;
-            }
-
-            // Check if class inherits from CodeActivity or related base classes
-            var baseType = classSymbol.BaseType;
-            while (baseType != null)
-            {
-                var baseTypeName = baseType.ToDisplayString();
-                if (baseTypeName == "System.Activities.CodeActivity" ||
-                    baseTypeName == "System.Activities.NativeActivity" ||
-                    baseTypeName == "System.Activities.Activity")
-                    return true;
-                baseType = baseType.BaseType;
-            }
-
-            return false;
         }
     }
 }

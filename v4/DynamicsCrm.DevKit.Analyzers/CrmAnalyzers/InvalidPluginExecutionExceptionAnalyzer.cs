@@ -35,9 +35,10 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
             //    Debugger.Launch();
             //}
 #endif
+            if (context == null) throw new ArgumentNullException(nameof(context));
+            
             context.EnableConcurrentExecution();
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.Analyze | GeneratedCodeAnalysisFlags.ReportDiagnostics);
-            if (context == null) throw new ArgumentNullException(nameof(context));
             base.Initialize(context);
             
             // Register for throw statements
@@ -70,26 +71,16 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
             var semanticModel = context.SemanticModel;
             if (semanticModel == null) return;
 
-            var cancellationToken = context.CancellationToken;
-
             // Check if this is inside an IPlugin or CodeActivity class
-            var classDeclaration = expression.FirstAncestorOrSelf<ClassDeclarationSyntax>();
-            if (classDeclaration == null) return;
-
-            var classSymbol = semanticModel.GetDeclaredSymbol(classDeclaration, cancellationToken) as INamedTypeSymbol;
-            if (classSymbol == null) return;
-
-            if (!IsPluginOrWorkflowClass(classSymbol))
+            if (!AnalyzerHelper.IsInsidePluginOrWorkflow(expression, semanticModel, context.CancellationToken))
                 return;
 
             // Get the type of the exception being thrown
-            var typeInfo = semanticModel.GetTypeInfo(expression, cancellationToken);
+            var typeInfo = semanticModel.GetTypeInfo(expression, context.CancellationToken);
             var exceptionType = typeInfo.Type;
 
             if (exceptionType == null)
                 return;
-
-            var exceptionTypeName = exceptionType.ToDisplayString();
 
             // Check if it's InvalidPluginExecutionException or derives from it
             if (IsInvalidPluginExecutionException(exceptionType))
@@ -100,7 +91,7 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
                 location, exceptionType.Name);
         }
 
-        private bool IsInvalidPluginExecutionException(ITypeSymbol type)
+        private static bool IsInvalidPluginExecutionException(ITypeSymbol type)
         {
             var currentType = type;
             while (currentType != null)
@@ -109,30 +100,6 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
                     return true;
                 currentType = currentType.BaseType;
             }
-            return false;
-        }
-
-        private bool IsPluginOrWorkflowClass(INamedTypeSymbol classSymbol)
-        {
-            // Check if class implements IPlugin
-            foreach (var iface in classSymbol.AllInterfaces)
-            {
-                if (iface.ToDisplayString() == "Microsoft.Xrm.Sdk.IPlugin")
-                    return true;
-            }
-
-            // Check if class inherits from CodeActivity or related base classes
-            var baseType = classSymbol.BaseType;
-            while (baseType != null)
-            {
-                var baseTypeName = baseType.ToDisplayString();
-                if (baseTypeName == "System.Activities.CodeActivity" ||
-                    baseTypeName == "System.Activities.NativeActivity" ||
-                    baseTypeName == "System.Activities.Activity")
-                    return true;
-                baseType = baseType.BaseType;
-            }
-
             return false;
         }
     }

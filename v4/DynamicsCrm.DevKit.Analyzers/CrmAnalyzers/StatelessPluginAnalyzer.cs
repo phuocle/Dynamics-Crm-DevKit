@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Immutable;
-using System.Linq;
 #if DEBUG
 using System.Diagnostics;
 #endif
@@ -35,10 +34,12 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
             //    Debugger.Launch();
             //}
 #endif
+            if (context == null) throw new ArgumentNullException(nameof(context));
+            
             context.EnableConcurrentExecution();
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.Analyze | GeneratedCodeAnalysisFlags.ReportDiagnostics);
-            if (context == null) throw new ArgumentNullException(nameof(context));
             base.Initialize(context);
+            
             context.RegisterSyntaxNodeAction(AnalyzeAssignment, SyntaxKind.SimpleAssignmentExpression);
         }
 
@@ -47,8 +48,6 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
             var semanticModel = context.SemanticModel;
             if (semanticModel == null) return;
 
-            var cancellationToken = context.CancellationToken;
-
             if (!(context.Node is AssignmentExpressionSyntax assignmentExpression))
                 return;
 
@@ -56,22 +55,20 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
             var classDeclaration = assignmentExpression.FirstAncestorOrSelf<ClassDeclarationSyntax>();
             if (classDeclaration == null) return;
 
-            var classSymbol = semanticModel.GetDeclaredSymbol(classDeclaration, cancellationToken) as INamedTypeSymbol;
-            if (classSymbol == null) return;
-
-            if (!IsPluginOrWorkflowClass(classSymbol))
+            var classSymbol = semanticModel.GetDeclaredSymbol(classDeclaration, context.CancellationToken) as INamedTypeSymbol;
+            if (classSymbol == null || !AnalyzerHelper.IsPluginOrWorkflowClass(classSymbol))
                 return;
-
-            // Check if we're inside the Execute method (not in constructor)
-            var methodDeclaration = assignmentExpression.FirstAncestorOrSelf<MethodDeclarationSyntax>();
-            if (methodDeclaration == null) return;
 
             // Skip if we're in a constructor
             var constructorDeclaration = assignmentExpression.FirstAncestorOrSelf<ConstructorDeclarationSyntax>();
             if (constructorDeclaration != null) return;
 
+            // Check if we're inside the Execute method (not in constructor)
+            var methodDeclaration = assignmentExpression.FirstAncestorOrSelf<MethodDeclarationSyntax>();
+            if (methodDeclaration == null) return;
+
             // Get the symbol being assigned to
-            var leftSymbol = semanticModel.GetSymbolInfo(assignmentExpression.Left, cancellationToken).Symbol;
+            var leftSymbol = semanticModel.GetSymbolInfo(assignmentExpression.Left, context.CancellationToken).Symbol;
             if (leftSymbol == null) return;
 
             // Check if it's a field or property
@@ -105,30 +102,6 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
                 DiagnosticHelpers.ReportDiagnostic(context, DiagnosticDescriptors.StatelessPlugin,
                     assignmentExpression.GetLocation(), propertySymbol.Name);
             }
-        }
-
-        private bool IsPluginOrWorkflowClass(INamedTypeSymbol classSymbol)
-        {
-            // Check if class implements IPlugin
-            foreach (var iface in classSymbol.AllInterfaces)
-            {
-                if (iface.ToDisplayString() == "Microsoft.Xrm.Sdk.IPlugin")
-                    return true;
-            }
-
-            // Check if class inherits from CodeActivity or related base classes
-            var baseType = classSymbol.BaseType;
-            while (baseType != null)
-            {
-                var baseTypeName = baseType.ToDisplayString();
-                if (baseTypeName == "System.Activities.CodeActivity" ||
-                    baseTypeName == "System.Activities.NativeActivity" ||
-                    baseTypeName == "System.Activities.Activity")
-                    return true;
-                baseType = baseType.BaseType;
-            }
-
-            return false;
         }
     }
 }
