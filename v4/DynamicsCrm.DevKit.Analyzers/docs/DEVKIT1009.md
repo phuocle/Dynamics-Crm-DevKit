@@ -1,13 +1,4 @@
-# DEVKIT1009: Set KeepAlive to False for External HTTP Calls
-
-## Overview
-
-| Property | Value |
-|----------|-------|
-| **Rule ID** | DEVKIT1009 |
-| **Category** | DynamicsCrm.DevKit |
-| **Severity** | Warning |
-| **Enabled by default** | Yes |
+﻿# DEVKIT1009: Set KeepAlive to False for External HTTP Calls
 
 ## Description
 
@@ -127,3 +118,15 @@ Or in `.editorconfig`:
 [*.cs]
 dotnet_diagnostic.DEVKIT1009.severity = suggestion
 ```
+
+---
+
+## Rule Properties
+
+| Property | Value |
+|----------|-------|
+| **Rule ID** | DEVKIT1009 |
+| **Category** | DynamicsCrm.DevKit |
+| **Severity** | Warning |
+| **Enabled by default** | Yes |
+

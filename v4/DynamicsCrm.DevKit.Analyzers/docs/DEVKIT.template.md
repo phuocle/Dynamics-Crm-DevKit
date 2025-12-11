@@ -7,15 +7,6 @@
 
 # DEVKIT{{XXXX}}: {{Title}}
 
-## Overview
-
-| Property | Value |
-|----------|-------|
-| **Rule ID** | DEVKIT{{XXXX}} |
-| **Category** | DynamicsCrm.DevKit |
-| **Severity** | {{Error/Warning/Info}} |
-| **Enabled by default** | Yes |
-
 ## Description
 
 {{One or two sentences describing what this analyzer does and why it matters.}}
@@ -54,13 +45,15 @@ The analyzer flags {{patterns/usages/attributes}} where:
 ### ❌ Bad Code
 
 ```csharp
-{{Bad code example with comments explaining why it's bad}}
+// ❌ {{Brief explanation of why this is bad}}
+{{Bad code example}}
 ```
 
 ### ✅ Good Code
 
 ```csharp
-{{Good code example with comments explaining why it's good}}
+// ✅ {{Brief explanation of why this is good}}
+{{Good code example}}
 ```
 
 ## How to Fix
@@ -97,3 +90,14 @@ Or in `.editorconfig`:
 [*.cs]
 dotnet_diagnostic.DEVKIT{{XXXX}}.severity = {{none/suggestion/warning}}
 ```
+
+---
+
+## Rule Properties
+
+| Property | Value |
+|----------|-------|
+| **Rule ID** | DEVKIT{{XXXX}} |
+| **Category** | DynamicsCrm.DevKit |
+| **Severity** | {{Error/Warning/Info}} |
+| **Enabled by default** | Yes |

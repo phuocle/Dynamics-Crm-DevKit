@@ -1,13 +1,4 @@
-# DEVKIT1002: Don't Use ColumnSet(true)
-
-## Overview
-
-| Property | Value |
-|----------|-------|
-| **Rule ID** | DEVKIT1002 |
-| **Category** | DynamicsCrm.DevKit |
-| **Severity** | Warning |
-| **Enabled by default** | Yes |
+﻿# DEVKIT1002: Don't Use ColumnSet(true)
 
 ## Description
 
@@ -102,3 +93,15 @@ Or in `.editorconfig`:
 [*.cs]
 dotnet_diagnostic.DEVKIT1002.severity = suggestion
 ```
+
+---
+
+## Rule Properties
+
+| Property | Value |
+|----------|-------|
+| **Rule ID** | DEVKIT1002 |
+| **Category** | DynamicsCrm.DevKit |
+| **Severity** | Warning |
+| **Enabled by default** | Yes |
+

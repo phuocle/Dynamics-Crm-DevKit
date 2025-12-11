@@ -1,13 +1,4 @@
-# DEVKIT1017: Avoid Console Output in Plug-ins
-
-## Overview
-
-| Property | Value |
-|----------|-------|
-| **Rule ID** | DEVKIT1017 |
-| **Category** | DynamicsCrm.DevKit |
-| **Severity** | Warning |
-| **Enabled by default** | Yes |
+﻿# DEVKIT1017: Avoid Console Output in Plug-ins
 
 ## Description
 
@@ -135,3 +126,15 @@ dotnet_diagnostic.DEVKIT1017.severity = none
 ## Related Rules
 
 - [DEVKIT1012](DEVKIT1012.md) - Consider using ITracingService in plug-ins
+
+---
+
+## Rule Properties
+
+| Property | Value |
+|----------|-------|
+| **Rule ID** | DEVKIT1017 |
+| **Category** | DynamicsCrm.DevKit |
+| **Severity** | Warning |
+| **Enabled by default** | Yes |
+

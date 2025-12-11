@@ -1,13 +1,4 @@
-# DEVKIT1003: Plugin Image Validation
-
-## Overview
-
-| Property | Value |
-|----------|-------|
-| **Rule ID** | DEVKIT1003 |
-| **Category** | DynamicsCrm.DevKit |
-| **Severity** | Error |
-| **Enabled by default** | Yes |
+﻿# DEVKIT1003: Plugin Image Validation
 
 ## Description
 
@@ -137,3 +128,15 @@ Or in `.editorconfig`:
 [*.cs]
 dotnet_diagnostic.DEVKIT1003.severity = none
 ```
+
+---
+
+## Rule Properties
+
+| Property | Value |
+|----------|-------|
+| **Rule ID** | DEVKIT1003 |
+| **Category** | DynamicsCrm.DevKit |
+| **Severity** | Error |
+| **Enabled by default** | Yes |
+

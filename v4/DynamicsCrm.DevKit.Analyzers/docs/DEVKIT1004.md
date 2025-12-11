@@ -1,13 +1,4 @@
-# DEVKIT1004: Use of Deprecated SDK Messages
-
-## Overview
-
-| Property | Value |
-|----------|-------|
-| **Rule ID** | DEVKIT1004 |
-| **Category** | DynamicsCrm.DevKit |
-| **Severity** | Warning |
-| **Enabled by default** | Yes |
+﻿# DEVKIT1004: Use of Deprecated SDK Messages
 
 ## Description
 
@@ -121,3 +112,15 @@ Or in `.editorconfig`:
 [*.cs]
 dotnet_diagnostic.DEVKIT1004.severity = suggestion
 ```
+
+---
+
+## Rule Properties
+
+| Property | Value |
+|----------|-------|
+| **Rule ID** | DEVKIT1004 |
+| **Category** | DynamicsCrm.DevKit |
+| **Severity** | Warning |
+| **Enabled by default** | Yes |
+

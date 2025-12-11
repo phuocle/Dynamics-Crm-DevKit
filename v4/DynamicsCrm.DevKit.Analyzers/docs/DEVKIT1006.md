@@ -1,13 +1,4 @@
-# DEVKIT1006: Don't Use Batch Request Types in Plug-ins
-
-## Overview
-
-| Property | Value |
-|----------|-------|
-| **Rule ID** | DEVKIT1006 |
-| **Category** | DynamicsCrm.DevKit |
-| **Severity** | Warning |
-| **Enabled by default** | Yes |
+﻿# DEVKIT1006: Don't Use Batch Request Types in Plug-ins
 
 ## Description
 
@@ -135,3 +126,15 @@ Or in `.editorconfig`:
 [*.cs]
 dotnet_diagnostic.DEVKIT1006.severity = suggestion
 ```
+
+---
+
+## Rule Properties
+
+| Property | Value |
+|----------|-------|
+| **Rule ID** | DEVKIT1006 |
+| **Category** | DynamicsCrm.DevKit |
+| **Severity** | Warning |
+| **Enabled by default** | Yes |
+

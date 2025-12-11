@@ -1,13 +1,4 @@
-# DEVKIT1001: Create/Update Message Should Have Filtering Attributes
-
-## Overview
-
-| Property | Value |
-|----------|-------|
-| **Rule ID** | DEVKIT1001 |
-| **Category** | DynamicsCrm.DevKit |
-| **Severity** | **Update messages**: Error<br>**Create messages**: Warning |
-| **Enabled by default** | Yes |
+﻿# DEVKIT1001: Create/Update Message Should Have Filtering Attributes
 
 ## Description
 
@@ -130,3 +121,15 @@ Or in `.editorconfig`:
 [*.cs]
 dotnet_diagnostic.DEVKIT1001.severity = none
 ```
+
+---
+
+## Rule Properties
+
+| Property | Value |
+|----------|-------|
+| **Rule ID** | DEVKIT1001 |
+| **Category** | DynamicsCrm.DevKit |
+| **Severity** | **Update messages**: Error<br>**Create messages**: Warning |
+| **Enabled by default** | Yes |
+

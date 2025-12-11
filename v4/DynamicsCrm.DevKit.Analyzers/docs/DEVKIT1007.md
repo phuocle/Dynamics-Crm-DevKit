@@ -1,13 +1,4 @@
-# DEVKIT1007: IPlugin Implementations Should Be Stateless
-
-## Overview
-
-| Property | Value |
-|----------|-------|
-| **Rule ID** | DEVKIT1007 |
-| **Category** | DynamicsCrm.DevKit |
-| **Severity** | Error |
-| **Enabled by default** | Yes |
+﻿# DEVKIT1007: IPlugin Implementations Should Be Stateless
 
 ## Description
 
@@ -152,3 +143,15 @@ Or in `.editorconfig`:
 [*.cs]
 dotnet_diagnostic.DEVKIT1007.severity = warning
 ```
+
+---
+
+## Rule Properties
+
+| Property | Value |
+|----------|-------|
+| **Rule ID** | DEVKIT1007 |
+| **Category** | DynamicsCrm.DevKit |
+| **Severity** | Error |
+| **Enabled by default** | Yes |
+

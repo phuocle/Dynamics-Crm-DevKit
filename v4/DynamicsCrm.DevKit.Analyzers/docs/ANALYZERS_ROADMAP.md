@@ -23,6 +23,7 @@ Based on research of [Microsoft's Dataverse Best Practices](https://learn.micros
 | DEVKIT1015 | Avoid blocking async patterns | ℹ️ Info | Best practice |
 | DEVKIT1016 | Avoid RetrieveAsIfPublished = true | ℹ️ Info | [Retrieve published metadata](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/work-with-metadata/retrieve-published-metadata) |
 | DEVKIT1017 | Avoid Console output in plugins | ℹ️ Info | Sandbox limitation |
+| DEVKIT1018 | Avoid File/IO operations in plugins | ❌ Error | Sandbox limitation |
 
 ---
 

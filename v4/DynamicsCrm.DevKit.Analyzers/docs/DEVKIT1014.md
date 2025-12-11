@@ -1,13 +1,4 @@
-# DEVKIT1014: Avoid AppDomain Event Registration in Plug-ins
-
-## Overview
-
-| Property | Value |
-|----------|-------|
-| **Rule ID** | DEVKIT1014 |
-| **Category** | DynamicsCrm.DevKit |
-| **Severity** | Error |
-| **Enabled by default** | Yes |
+﻿# DEVKIT1014: Avoid AppDomain Event Registration in Plug-ins
 
 ## Description
 
@@ -112,3 +103,15 @@ dotnet_diagnostic.DEVKIT1014.severity = none
 ```
 
 > **Warning**: Suppressing this rule is strongly discouraged as it can cause platform instability.
+
+---
+
+## Rule Properties
+
+| Property | Value |
+|----------|-------|
+| **Rule ID** | DEVKIT1014 |
+| **Category** | DynamicsCrm.DevKit |
+| **Severity** | Error |
+| **Enabled by default** | Yes |
+

@@ -1,13 +1,4 @@
-# DEVKIT1018: Avoid File/IO Operations in Plug-ins
-
-## Overview
-
-| Property | Value |
-|----------|-------|
-| **Rule ID** | DEVKIT1018 |
-| **Category** | DynamicsCrm.DevKit |
-| **Severity** | Error |
-| **Enabled by default** | Yes |
+﻿# DEVKIT1018: Avoid File/IO Operations in Plug-ins
 
 ## Description
 
@@ -141,3 +132,15 @@ dotnet_diagnostic.DEVKIT1018.severity = none
 
 - [DEVKIT1017](DEVKIT1017.md) - Avoid Console output (also has no effect in sandbox)
 - [DEVKIT1008](DEVKIT1008.md) - Avoid parallel execution (also blocked in sandbox)
+
+---
+
+## Rule Properties
+
+| Property | Value |
+|----------|-------|
+| **Rule ID** | DEVKIT1018 |
+| **Category** | DynamicsCrm.DevKit |
+| **Severity** | Error |
+| **Enabled by default** | Yes |
+

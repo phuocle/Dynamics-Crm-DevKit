@@ -1,13 +1,4 @@
-# DEVKIT1008: Don't Use Parallel Execution in Plug-ins
-
-## Overview
-
-| Property | Value |
-|----------|-------|
-| **Rule ID** | DEVKIT1008 |
-| **Category** | DynamicsCrm.DevKit |
-| **Severity** | Error |
-| **Enabled by default** | Yes |
+﻿# DEVKIT1008: Don't Use Parallel Execution in Plug-ins
 
 ## Description
 
@@ -136,3 +127,15 @@ Or in `.editorconfig`:
 [*.cs]
 dotnet_diagnostic.DEVKIT1008.severity = none
 ```
+
+---
+
+## Rule Properties
+
+| Property | Value |
+|----------|-------|
+| **Rule ID** | DEVKIT1008 |
+| **Category** | DynamicsCrm.DevKit |
+| **Severity** | Error |
+| **Enabled by default** | Yes |
+

@@ -1,13 +1,4 @@
-# DEVKIT1015: Avoid Blocking Async Patterns in Plug-ins
-
-## Overview
-
-| Property | Value |
-|----------|-------|
-| **Rule ID** | DEVKIT1015 |
-| **Category** | DynamicsCrm.DevKit |
-| **Severity** | Warning |
-| **Enabled by default** | Yes |
+﻿# DEVKIT1015: Avoid Blocking Async Patterns in Plug-ins
 
 ## Description
 
@@ -125,3 +116,15 @@ dotnet_diagnostic.DEVKIT1015.severity = none
 
 - [DEVKIT1009](DEVKIT1009.md) - Set KeepAlive to false for external HTTP calls
 - [DEVKIT1010](DEVKIT1010.md) - Set Timeout for external HTTP calls
+
+---
+
+## Rule Properties
+
+| Property | Value |
+|----------|-------|
+| **Rule ID** | DEVKIT1015 |
+| **Category** | DynamicsCrm.DevKit |
+| **Severity** | Warning |
+| **Enabled by default** | Yes |
+
