@@ -174,7 +174,7 @@ namespace DynamicsCrm.DevKit.Analyzers
             "DEVKIT1013",
             "Avoid registering plugins on Retrieve and RetrieveMultiple messages",
             "Consider avoiding plugin registration on '{0}' message due to performance impact",
-            DiagnosticSeverity.Info,
+            DiagnosticSeverity.Warning,
             "Plugins registered on Retrieve and RetrieveMultiple messages are called very frequently and can significantly impact system performance. Consider using alternate solutions like views, virtual entities, or client-side logic.");
 
         /// <summary>DEVKIT1011</summary>
@@ -190,7 +190,7 @@ namespace DynamicsCrm.DevKit.Analyzers
             "DEVKIT1012",
             "Consider using ITracingService in plug-ins",
             "Plug-in class '{0}' does not use ITracingService for debugging and monitoring",
-            DiagnosticSeverity.Info,
+            DiagnosticSeverity.Warning,
             "Using ITracingService helps with debugging and monitoring plugin execution. Trace logs are captured in the platform and can be viewed using the Plug-in Trace Log viewer.");
 
         /// <summary>DEVKIT1016</summary>
@@ -198,7 +198,7 @@ namespace DynamicsCrm.DevKit.Analyzers
             "DEVKIT1016",
             "Avoid retrieving unpublished metadata",
             "'{0}' should not use RetrieveAsIfPublished = true; this causes slower performance",
-            DiagnosticSeverity.Info,
+            DiagnosticSeverity.Warning,
             "Retrieving unpublished metadata adds overhead to processing and returns metadata that users might not expect. Only use RetrieveAsIfPublished = true when building a metadata editor.");
 
         /// <summary>DEVKIT1014</summary>
@@ -214,7 +214,7 @@ namespace DynamicsCrm.DevKit.Analyzers
             "DEVKIT1015",
             "Avoid blocking async patterns in plug-ins",
             "Consider alternatives to {0} in plug-ins as it can cause deadlocks in some scenarios",
-            DiagnosticSeverity.Info,
+            DiagnosticSeverity.Warning,
             "Using GetAwaiter().GetResult(), .Result, or .Wait() can cause deadlocks. While sometimes necessary in plugins (async Execute not supported), ensure you understand the implications and use ConfigureAwait(false).");
     }
 }

@@ -6,7 +6,7 @@
 |----------|-------|
 | **Rule ID** | DEVKIT1015 |
 | **Category** | DynamicsCrm.DevKit |
-| **Severity** | Info |
+| **Severity** | Warning |
 | **Enabled by default** | Yes |
 
 ## Description

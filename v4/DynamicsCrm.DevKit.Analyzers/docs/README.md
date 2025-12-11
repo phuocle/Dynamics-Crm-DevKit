@@ -37,11 +37,11 @@ Or add to your `.csproj`:
 | [DEVKIT1009](#devkit1009) | Warning | Set KeepAlive to false for external HTTP calls |
 | [DEVKIT1010](#devkit1010) | Warning | Set Timeout for external HTTP calls |
 | [DEVKIT1011](#devkit1011) | Warning | Use InvalidPluginExecutionException for errors |
-| [DEVKIT1012](#devkit1012) | Info | Consider using ITracingService in plug-ins |
-| [DEVKIT1013](#devkit1013) | Info | Avoid registering plugins on Retrieve/RetrieveMultiple |
+| [DEVKIT1012](#devkit1012) | Warning | Consider using ITracingService in plug-ins |
+| [DEVKIT1013](#devkit1013) | Warning | Avoid registering plugins on Retrieve/RetrieveMultiple |
 | [DEVKIT1014](#devkit1014) | Error | Avoid AppDomain event registration in plug-ins |
-| [DEVKIT1015](#devkit1015) | Info | Avoid blocking async patterns in plug-ins |
-| [DEVKIT1016](#devkit1016) | Info | Avoid retrieving unpublished metadata |
+| [DEVKIT1015](#devkit1015) | Warning | Avoid blocking async patterns in plug-ins |
+| [DEVKIT1016](#devkit1016) | Warning | Avoid retrieving unpublished metadata |
 
 ---
 
@@ -473,7 +473,7 @@ using (var client = new HttpClient())
 ### DEVKIT1013
 **Avoid registering plugins on Retrieve/RetrieveMultiple**
 
-**Severity:** Info
+**Severity:** Warning
 
 **MS Best Practice:** [Limit the registration of plug-ins for Retrieve and RetrieveMultiple messages](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/limit-registration-plugins-retrieve-retrievemultiple)
 
@@ -527,7 +527,7 @@ throw new InvalidPluginExecutionException("Please provide a valid account name."
 ### DEVKIT1012
 **Consider using ITracingService in plug-ins**
 
-**Severity:** Info
+**Severity:** Warning
 
 **MS Best Practice:** [Use ITracingService in Plug-ins](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/use-itracingservice-plugins)
 
@@ -563,7 +563,7 @@ public class AccountPlugin : IPlugin
 ### DEVKIT1016
 **Avoid retrieving unpublished metadata**
 
-**Severity:** Info
+**Severity:** Warning
 
 **MS Best Practice:** [Retrieve published metadata](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/work-with-metadata/retrieve-published-metadata)
 
@@ -619,7 +619,7 @@ catch (Exception ex) { throw new InvalidPluginExecutionException("Error", ex); }
 ### DEVKIT1015
 **Avoid blocking async patterns in plug-ins**
 
-**Severity:** Info
+**Severity:** Warning
 
 Detects usage of `GetAwaiter().GetResult()`, `.Result`, and `.Wait()` on Tasks in plugins. These can cause deadlocks.
 
