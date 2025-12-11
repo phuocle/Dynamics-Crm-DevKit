@@ -108,6 +108,8 @@
     <Compile Include="DEVKIT1003_02.cs" />
     <Compile Include="DEVKIT1003_03.cs" />
     <Compile Include="DEVKIT1003_04.cs" />
+    <Compile Include="DEVKIT1017.cs" />
+    <Compile Include="DEVKIT1018.cs" />
     <Compile Include="PostTerritoryUpdateAsynchronous.cs" />
     <Compile Include="PostTerritoryUpdateSynchronous.cs" />
     <Compile Include="DEVKIT1003_05.cs" />

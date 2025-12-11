@@ -240,5 +240,13 @@ namespace DynamicsCrm.DevKit.Analyzers
             "Don't use '{0}' in plug-ins or workflow activities; console output has no effect in sandbox",
             DiagnosticSeverity.Info,
             "Console.Write and Console.WriteLine have no effect in the Dataverse sandbox environment. Use ITracingService instead for debugging and logging.");
+
+        /// <summary>DEVKIT1018</summary>
+        public static readonly DiagnosticDescriptor AvoidFileIO = CreateDescriptor(
+            "DEVKIT1018",
+            "Avoid File/IO operations in plug-ins and workflow activities",
+            "Don't use '{0}' in plug-ins or workflow activities; file operations are blocked in sandbox",
+            DiagnosticSeverity.Error,
+            "System.IO file operations (File.Read, File.Write, FileStream, StreamReader, StreamWriter, etc.) are not allowed in the Dataverse sandbox environment and will throw SecurityException at runtime.");
     }
 }

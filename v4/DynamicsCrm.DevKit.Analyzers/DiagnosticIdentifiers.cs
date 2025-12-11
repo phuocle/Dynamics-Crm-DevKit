@@ -19,5 +19,6 @@
         public const string AvoidAppDomainEvents = "DEVKIT1014";
         public const string AvoidGetAwaiterGetResult = "DEVKIT1015";
         public const string AvoidConsoleOutput = "DEVKIT1017";
+        public const string AvoidFileIO = "DEVKIT1018";
     }
 }

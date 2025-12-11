@@ -21,3 +21,4 @@ DEVKIT1014 | DynamicsCrm.DevKit | Error | Avoid AppDomain events, [Documentation
 DEVKIT1015 | DynamicsCrm.DevKit | Info | Avoid blocking async patterns, [Documentation](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DEVKIT1015)
 DEVKIT1016 | DynamicsCrm.DevKit | Info | Avoid RetrieveAsIfPublished, [Documentation](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DEVKIT1016)
 DEVKIT1017 | DynamicsCrm.DevKit | Info | Avoid Console output, [Documentation](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DEVKIT1017)
+DEVKIT1018 | DynamicsCrm.DevKit | Error | Avoid File/IO operations, [Documentation](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DEVKIT1018)

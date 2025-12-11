@@ -43,6 +43,7 @@ Or add to your `.csproj`:
 | [DEVKIT1015](#devkit1015) | Info | Avoid blocking async patterns in plug-ins |
 | [DEVKIT1016](#devkit1016) | Info | Avoid retrieving unpublished metadata |
 | [DEVKIT1017](#devkit1017) | Info | Avoid Console output in plug-ins |
+| [DEVKIT1018](#devkit1018) | Error | Avoid File/IO operations in plug-ins |
 
 ---
 

@@ -64,3 +64,9 @@ dotnet_diagnostic.DEVKIT1015.severity = warning
 
 # DEVKIT1016: Avoid retrieving unpublished metadata
 dotnet_diagnostic.DEVKIT1016.severity = warning
+
+# DEVKIT1017: Avoid Console output in plug-ins
+dotnet_diagnostic.DEVKIT1017.severity = warning
+
+# DEVKIT1018: Avoid File/IO operations in plug-ins
+dotnet_diagnostic.DEVKIT1018.severity = warning
