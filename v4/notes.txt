@@ -13,5 +13,5 @@ HOWTO DEBUG DynamicsCrm.DevKit.Analyzers
 
 ===
 HOWTO Release DynamicsCrm.DevKit
-+ FINAL release: run release-version-date.bat
-+ TEST release: run release-version-date-current-date.bat
++ FINAL release: run Release-DynamicsCrm-DevKit.ps1 (every year 31.12.xxxx 23:59:59)
++ TEST release: run Release-DynamicsCrm-DevKit-CurrentDate.ps1 for testing with current date format: dd.MM.yyyy HH:mm:ss
