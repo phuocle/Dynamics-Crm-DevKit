@@ -32,6 +32,7 @@ Or add to your `.csproj`:
 | [DEVKIT1004](#devkit1004) | Warning | Use of deprecated SDK messages |
 | [DEVKIT1005](#devkit1005) | Error | EntityReference maybe null |
 | [DEVKIT1006](#devkit1006) | Warning | Don't use batch request types in plug-ins |
+| [DEVKIT1007](#devkit1007) | Error | IPlugin implementations should be stateless |
 
 ---
 
@@ -39,6 +40,8 @@ Or add to your `.csproj`:
 **Update message should have filtering attributes**
 
 **Severity:** Error
+
+**MS Best Practice:** [Include filtering attributes with plug-in registration](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/include-filtering-attributes-plugin-registration)
 
 Ensures that plugin registrations for `Update`, `UpdateMultiple`, or `OnExternalUpdated` messages include specific filtering attributes. This prevents the plugin from executing on every field change, improving performance.
 
@@ -71,6 +74,8 @@ Ensures that plugin registrations for `Update`, `UpdateMultiple`, or `OnExternal
 
 **Severity:** Warning
 
+**MS Best Practice:** [Retrieve specific columns for a table via query APIs](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/work-with-data/retrieve-specific-columns-entity-via-query-apis)
+
 Warns against using `ColumnSet(true)` which retrieves all columns from an entity. This is a performance anti-pattern as it retrieves unnecessary data.
 
 **Bad Code:**
@@ -102,6 +107,8 @@ var entity = service.Retrieve("account", id, new ColumnSet("name", "accountnumbe
 **Plugin image validation**
 
 **Severity:** Error
+
+**MS Best Practice:** [Understand the execution context](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/understand-the-data-context) (Plugin Images)
 
 Validates that plugin image configurations are compatible with the message and stage. The Dynamics 365 platform has specific rules about when Pre-Images and Post-Images are available:
 
@@ -145,6 +152,8 @@ Validates that plugin image configurations are compatible with the message and s
 **Use of deprecated SDK messages**
 
 **Severity:** Warning
+
+**MS Best Practice:** [Deprecated SDK messages](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/org-service/deprecations)
 
 Warns when using deprecated request/response classes from `Microsoft.Crm.Sdk.Messages`. These messages may be removed in future SDK versions.
 
@@ -193,6 +202,8 @@ service.Update(account);
 
 **Severity:** Error
 
+**MS Best Practice:** Null safety pattern for lookup fields
+
 Flags potential null reference exceptions when accessing `Id`, `Name`, or `LogicalName` properties of an `EntityReference` that may be null. Lookup fields in Dynamics 365 can return null if no value is set.
 
 **Bad Code:**
@@ -228,9 +239,9 @@ if (ownerRef != null)
 
 **Severity:** Warning
 
-Warns against using batch request types (`ExecuteMultipleRequest`, `ExecuteTransactionRequest`, `CreateMultipleRequest`, `UpdateMultipleRequest`, `UpsertMultipleRequest`) within plug-ins or workflow activities. These can cause performance issues and timeout errors.
-
 **MS Best Practice:** [Don't use batch request types in plug-ins](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/avoid-batch-requests-plugin)
+
+Warns against using batch request types (`ExecuteMultipleRequest`, `ExecuteTransactionRequest`, `CreateMultipleRequest`, `UpdateMultipleRequest`, `UpsertMultipleRequest`) within plug-ins or workflow activities. These can cause performance issues and timeout errors.
 
 **Bad Code:**
 ```csharp
@@ -265,6 +276,57 @@ public class MyPlugin : IPlugin
 ```
 
 [📖 Documentation](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DEVKIT1006)
+
+---
+
+### DEVKIT1007
+**IPlugin implementations should be stateless**
+
+**Severity:** Error
+
+Detects assignments to instance fields or properties during plug-in execution. IPlugin classes are cached and reused across multiple threads - storing state in instance members can cause thread-safety issues and data inconsistencies.
+
+**MS Best Practice:** [Develop IPlugin implementations as stateless](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/develop-iplugin-implementations-stateless)
+
+**Bad Code:**
+```csharp
+public class MyPlugin : IPlugin
+{
+    // ❌ Mutable instance field
+    private IOrganizationService _service;
+    private IPluginExecutionContext _context;
+    
+    public void Execute(IServiceProvider serviceProvider)
+    {
+        // ❌ Assigning to instance field during execution
+        _context = (IPluginExecutionContext)serviceProvider.GetService(typeof(IPluginExecutionContext));
+        _service = factory.CreateOrganizationService(_context.UserId);
+    }
+}
+```
+
+**Good Code:**
+```csharp
+public class MyPlugin : IPlugin
+{
+    // ✓ Readonly field assigned in constructor (for configuration)
+    private readonly string _secureConfig;
+    
+    public MyPlugin(string unsecure, string secure)
+    {
+        _secureConfig = secure;
+    }
+    
+    public void Execute(IServiceProvider serviceProvider)
+    {
+        // ✓ Local variables instead of instance fields
+        var context = (IPluginExecutionContext)serviceProvider.GetService(typeof(IPluginExecutionContext));
+        var service = factory.CreateOrganizationService(context.UserId);
+    }
+}
+```
+
+[📖 Documentation](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DEVKIT1007)
 
 ---
 

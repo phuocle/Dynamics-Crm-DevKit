@@ -8,5 +8,6 @@
         public const string DeprecatedRequest = "DEVKIT1004";
         public const string EntityReferenceMaybeNull = "DEVKIT1005";
         public const string BatchRequestInPlugin = "DEVKIT1006";
+        public const string StatelessPlugin = "DEVKIT1007";
     }
 }

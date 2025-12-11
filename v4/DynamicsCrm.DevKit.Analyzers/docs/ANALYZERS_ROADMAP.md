@@ -11,6 +11,8 @@ Based on research of [Microsoft's Dataverse Best Practices](https://learn.micros
 | DEVKIT1003 | Plugin image validation | ✅ Custom best practice |
 | DEVKIT1004 | Deprecated SDK messages | ✅ API deprecation |
 | DEVKIT1005 | EntityReference maybe null | ✅ Null safety |
+| DEVKIT1006 | Batch requests in plugins | ✅ [Avoid batch requests](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/avoid-batch-requests-plugin) |
+| DEVKIT1007 | Stateless IPlugin | ✅ [Develop IPlugin as stateless](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/develop-iplugin-implementations-stateless) |
 
 ---
 

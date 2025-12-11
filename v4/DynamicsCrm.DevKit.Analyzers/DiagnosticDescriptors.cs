@@ -136,5 +136,13 @@ namespace DynamicsCrm.DevKit.Analyzers
             "Don't use '{0}' in plug-ins or workflow activities",
             DiagnosticSeverity.Warning,
             "Batch request types (ExecuteMultipleRequest, ExecuteTransactionRequest, CreateMultipleRequest, UpdateMultipleRequest, UpsertMultipleRequest) should not be used within plug-ins or workflow activities as they can cause performance issues and timeout errors.");
+
+        /// <summary>DEVKIT1007</summary>
+        public static readonly DiagnosticDescriptor StatelessPlugin = CreateDescriptor(
+            "DEVKIT1007",
+            "IPlugin implementations should be stateless",
+            "Don't assign to instance member '{0}' during plug-in execution",
+            DiagnosticSeverity.Error,
+            "IPlugin implementations should be stateless. Assigning to instance fields or properties during Execute() method can cause thread-safety issues and data inconsistencies.");
     }
 }
