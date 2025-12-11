@@ -144,5 +144,13 @@ namespace DynamicsCrm.DevKit.Analyzers
             "Don't assign to instance member '{0}' during plug-in execution",
             DiagnosticSeverity.Error,
             "IPlugin implementations should be stateless. Assigning to instance fields or properties during Execute() method can cause thread-safety issues and data inconsistencies.");
+
+        /// <summary>DEVKIT1008</summary>
+        public static readonly DiagnosticDescriptor ParallelExecutionInPlugin = CreateDescriptor(
+            "DEVKIT1008",
+            "Don't use parallel execution in plug-ins and workflow activities",
+            "Don't use '{0}' in plug-ins or workflow activities",
+            DiagnosticSeverity.Error,
+            "Parallel execution patterns (Task.Run, Parallel.ForEach, Thread, ThreadPool) are not supported in plug-ins and workflow activities. Multi-threading can cause unpredictable behavior and is not allowed in the sandbox.");
     }
 }

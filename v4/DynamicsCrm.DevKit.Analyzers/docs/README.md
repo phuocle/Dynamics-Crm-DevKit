@@ -33,6 +33,7 @@ Or add to your `.csproj`:
 | [DEVKIT1005](#devkit1005) | Error | EntityReference maybe null |
 | [DEVKIT1006](#devkit1006) | Warning | Don't use batch request types in plug-ins |
 | [DEVKIT1007](#devkit1007) | Error | IPlugin implementations should be stateless |
+| [DEVKIT1008](#devkit1008) | Error | Don't use parallel execution in plug-ins |
 
 ---
 
@@ -329,6 +330,68 @@ public class MyPlugin : IPlugin
 ```
 
 [📖 Documentation](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DEVKIT1007)
+
+---
+
+### DEVKIT1008
+**Don't use parallel execution in plug-ins and workflow activities**
+
+**Severity:** Error
+
+**MS Best Practice:** [Do not use parallel execution within plug-ins and workflow activities](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/do-not-use-parallel-execution-in-plug-ins)
+
+Detects usage of parallel execution patterns within `IPlugin` or `CodeActivity` classes. Multi-threading and parallel execution are not supported in the Dataverse sandbox and can cause unpredictable behavior.
+
+**Detected Patterns:**
+- `Task.Run()`, `Task.Factory.StartNew()`
+- `Parallel.For()`, `Parallel.ForEach()`, `Parallel.Invoke()`
+- `new Thread()`
+- `ThreadPool.QueueUserWorkItem()`
+
+**Bad Code:**
+```csharp
+public class MyPlugin : IPlugin
+{
+    public void Execute(IServiceProvider serviceProvider)
+    {
+        var entities = GetEntities();
+        
+        // ❌ Using Parallel.ForEach
+        Parallel.ForEach(entities, entity => {
+            service.Update(entity);
+        });
+        
+        // ❌ Using Task.Run
+        Task.Run(() => DoSomething());
+        
+        // ❌ Using Thread
+        var thread = new Thread(() => DoWork());
+        thread.Start();
+    }
+}
+```
+
+**Good Code:**
+```csharp
+public class MyPlugin : IPlugin
+{
+    public void Execute(IServiceProvider serviceProvider)
+    {
+        var entities = GetEntities();
+        
+        // ✓ Sequential processing
+        foreach (var entity in entities)
+        {
+            service.Update(entity);
+        }
+        
+        // ✓ Direct method call
+        DoSomething();
+    }
+}
+```
+
+[📖 Documentation](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DEVKIT1008)
 
 ---
 

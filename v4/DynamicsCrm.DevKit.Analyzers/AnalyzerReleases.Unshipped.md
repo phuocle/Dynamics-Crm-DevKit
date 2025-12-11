@@ -11,3 +11,4 @@ DEVKIT1004 | DynamicsCrm.DevKit | Warning | DiagnosticDescriptors, [Documentatio
 DEVKIT1005 | DynamicsCrm.DevKit | Error | DiagnosticDescriptors, [Documentation](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DEVKIT1005)
 DEVKIT1006 | DynamicsCrm.DevKit | Warning | DiagnosticDescriptors, [Documentation](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DEVKIT1006)
 DEVKIT1007 | DynamicsCrm.DevKit | Error | DiagnosticDescriptors, [Documentation](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DEVKIT1007)
+DEVKIT1008 | DynamicsCrm.DevKit | Error | DiagnosticDescriptors, [Documentation](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DEVKIT1008)

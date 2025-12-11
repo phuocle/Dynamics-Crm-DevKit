@@ -9,5 +9,6 @@
         public const string EntityReferenceMaybeNull = "DEVKIT1005";
         public const string BatchRequestInPlugin = "DEVKIT1006";
         public const string StatelessPlugin = "DEVKIT1007";
+        public const string ParallelExecutionInPlugin = "DEVKIT1008";
     }
 }
