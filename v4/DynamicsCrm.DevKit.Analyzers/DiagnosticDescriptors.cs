@@ -128,5 +128,13 @@ namespace DynamicsCrm.DevKit.Analyzers
             "Entity Reference maybe null",
             DiagnosticSeverity.Error,
             "Entity Reference maybe null.");
+
+        /// <summary>DEVKIT1006</summary>
+        public static readonly DiagnosticDescriptor BatchRequestInPlugin = CreateDescriptor(
+            "DEVKIT1006",
+            "Don't use batch request types in plug-ins and workflow activities",
+            "Don't use '{0}' in plug-ins or workflow activities",
+            DiagnosticSeverity.Warning,
+            "Batch request types (ExecuteMultipleRequest, ExecuteTransactionRequest, CreateMultipleRequest, UpdateMultipleRequest, UpsertMultipleRequest) should not be used within plug-ins or workflow activities as they can cause performance issues and timeout errors.");
     }
 }

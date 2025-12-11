@@ -78,5 +78,20 @@ namespace DynamicsCrm.DevKit.Analyzers
             if (string.IsNullOrEmpty(text)) return false;
             return EmptyStringPattern.IsMatch(text);
         }
+
+        private const string MicrosoftXrmSdkMessages = "Microsoft.Xrm.Sdk.Messages";
+
+        /// <summary>
+        /// Batch request types that should not be used in plug-ins and workflow activities.
+        /// Based on: https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/avoid-batch-requests-plugin
+        /// </summary>
+        public static readonly HashSet<string> BatchRequestTypes = new HashSet<string>
+        {
+            $"{MicrosoftXrmSdkMessages}.ExecuteMultipleRequest",
+            $"{MicrosoftXrmSdkMessages}.ExecuteTransactionRequest",
+            $"{MicrosoftXrmSdkMessages}.CreateMultipleRequest",
+            $"{MicrosoftXrmSdkMessages}.UpdateMultipleRequest",
+            $"{MicrosoftXrmSdkMessages}.UpsertMultipleRequest"
+        };
     }
 }

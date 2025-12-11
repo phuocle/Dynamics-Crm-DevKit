@@ -31,6 +31,7 @@ Or add to your `.csproj`:
 | [DEVKIT1003](#devkit1003) | Error | Plugin image validation |
 | [DEVKIT1004](#devkit1004) | Warning | Use of deprecated SDK messages |
 | [DEVKIT1005](#devkit1005) | Error | EntityReference maybe null |
+| [DEVKIT1006](#devkit1006) | Warning | Don't use batch request types in plug-ins |
 
 ---
 
@@ -219,6 +220,51 @@ if (ownerRef != null)
 ```
 
 [📖 Documentation](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DEVKIT1005)
+
+---
+
+### DEVKIT1006
+**Don't use batch request types in plug-ins and workflow activities**
+
+**Severity:** Warning
+
+Warns against using batch request types (`ExecuteMultipleRequest`, `ExecuteTransactionRequest`, `CreateMultipleRequest`, `UpdateMultipleRequest`, `UpsertMultipleRequest`) within plug-ins or workflow activities. These can cause performance issues and timeout errors.
+
+**MS Best Practice:** [Don't use batch request types in plug-ins](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/avoid-batch-requests-plugin)
+
+**Bad Code:**
+```csharp
+public class MyPlugin : IPlugin
+{
+    public void Execute(IServiceProvider serviceProvider)
+    {
+        // ❌ Using ExecuteMultipleRequest in plugin
+        var batch = new ExecuteMultipleRequest();
+        foreach (var entity in entities)
+        {
+            batch.Requests.Add(new UpdateRequest { Target = entity });
+        }
+        service.Execute(batch);
+    }
+}
+```
+
+**Good Code:**
+```csharp
+public class MyPlugin : IPlugin
+{
+    public void Execute(IServiceProvider serviceProvider)
+    {
+        // ✓ Execute each request individually
+        foreach (var entity in entities)
+        {
+            service.Update(entity);
+        }
+    }
+}
+```
+
+[📖 Documentation](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DEVKIT1006)
 
 ---
 

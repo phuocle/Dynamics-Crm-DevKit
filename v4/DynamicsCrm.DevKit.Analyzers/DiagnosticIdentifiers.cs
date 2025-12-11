@@ -6,5 +6,7 @@
         public const string NotUseColumnSetTrue = "DEVKIT1002";
         public const string PluginImage = "DEVKIT1003";
         public const string DeprecatedRequest = "DEVKIT1004";
+        public const string EntityReferenceMaybeNull = "DEVKIT1005";
+        public const string BatchRequestInPlugin = "DEVKIT1006";
     }
 }
