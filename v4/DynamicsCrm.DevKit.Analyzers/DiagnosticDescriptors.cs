@@ -208,5 +208,13 @@ namespace DynamicsCrm.DevKit.Analyzers
             "Do not subscribe to AppDomain.{0} event in plug-ins; this can cause memory leaks and unexpected behavior",
             DiagnosticSeverity.Error,
             "Plugin instances are cached and reused. Subscribing to AppDomain events can cause memory leaks because the event handlers are never removed. This can also cause unexpected behavior when the plugin instance is reused.");
+
+        /// <summary>DEVKIT1015</summary>
+        public static readonly DiagnosticDescriptor AvoidGetAwaiterGetResult = CreateDescriptor(
+            "DEVKIT1015",
+            "Avoid blocking async patterns in plug-ins",
+            "Consider alternatives to {0} in plug-ins as it can cause deadlocks in some scenarios",
+            DiagnosticSeverity.Info,
+            "Using GetAwaiter().GetResult(), .Result, or .Wait() can cause deadlocks. While sometimes necessary in plugins (async Execute not supported), ensure you understand the implications and use ConfigureAwait(false).");
     }
 }

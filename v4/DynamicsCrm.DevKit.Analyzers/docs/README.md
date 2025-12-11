@@ -40,6 +40,7 @@ Or add to your `.csproj`:
 | [DEVKIT1012](#devkit1012) | Info | Consider using ITracingService in plug-ins |
 | [DEVKIT1013](#devkit1013) | Info | Avoid registering plugins on Retrieve/RetrieveMultiple |
 | [DEVKIT1014](#devkit1014) | Error | Avoid AppDomain event registration in plug-ins |
+| [DEVKIT1015](#devkit1015) | Info | Avoid blocking async patterns in plug-ins |
 | [DEVKIT1016](#devkit1016) | Info | Avoid retrieving unpublished metadata |
 
 ---
@@ -612,6 +613,31 @@ catch (Exception ex) { throw new InvalidPluginExecutionException("Error", ex); }
 ```
 
 [📖 Documentation](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DEVKIT1014)
+
+---
+
+### DEVKIT1015
+**Avoid blocking async patterns in plug-ins**
+
+**Severity:** Info
+
+Detects usage of `GetAwaiter().GetResult()`, `.Result`, and `.Wait()` on Tasks in plugins. These can cause deadlocks.
+
+**Patterns Detected:**
+```csharp
+// ⚠️ Can cause deadlocks
+task.GetAwaiter().GetResult();
+task.Result;
+task.Wait();
+```
+
+**Better Alternative:**
+```csharp
+// ✅ Use ConfigureAwait(false) or synchronous APIs
+var result = task.ConfigureAwait(false).GetAwaiter().GetResult();
+```
+
+[📖 Documentation](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DEVKIT1015)
 
 ---
 

@@ -17,5 +17,6 @@
         public const string UseTracingService = "DEVKIT1012";
         public const string AvoidRetrieveAsIfPublished = "DEVKIT1016";
         public const string AvoidAppDomainEvents = "DEVKIT1014";
+        public const string AvoidGetAwaiterGetResult = "DEVKIT1015";
     }
 }
