@@ -21,16 +21,16 @@ A development toolkit for Microsoft Dynamics 365 / CRM / Dataverse. This reposit
 $msbuild = "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\MSBuild\Current\Bin\MSBuild.exe"
 
 # Build everything
-& $msbuild "DynamicsCrm.DevKit.AllInOne.sln" /t:Build /p:Configuration=Release /v:m
+& $msbuild "DynamicsCrm.DevKit.AllInOne.slnx" /t:Build /p:Configuration=Release /v:m
 ```
 
 ### Build Individual Components
 ```powershell
 # VSIX Extension
-& $msbuild "DynamicsCrm.DevKit.sln" /t:Build /p:Configuration=Release
+& $msbuild "DynamicsCrm.DevKit.slnx" /t:Build /p:Configuration=Release
 
 # CLI Tool
-& $msbuild "DynamicsCrm.DevKit.Cli.sln" /t:Build /p:Configuration=Release
+& $msbuild "DynamicsCrm.DevKit.Cli.slnx" /t:Build /p:Configuration=Release
 
 # Analyzers (has separate .sln)
 & $msbuild "DynamicsCrm.DevKit.Analyzers\DynamicsCrm.DevKit.Analyzers.csproj" /t:Build /p:Configuration=Release
@@ -145,8 +145,8 @@ Plugins, Custom Actions, Custom APIs, Workflows, Data Providers, Late-bound clas
 3. F5 to launch experimental VS instance
 
 ### Debug Analyzers
-1. Open `DynamicsCrm.DevKit.Analyzers.sln` in VS instance #1
-2. Open `DynamicsCrm.DevKit.sln` in VS instance #2
+1. Open `DynamicsCrm.DevKit.Analyzers.slnx` in VS instance #1
+2. Open `DynamicsCrm.DevKit.slnx` in VS instance #2
 3. Attach debugger from #1 to #2
 
 ### Debug CLI

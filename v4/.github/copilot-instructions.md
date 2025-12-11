@@ -14,19 +14,19 @@
 * run .ps1 file release-version-date-current-date.ps1 to release all projects
 
 ### Build All Projects
-* Use `DynamicsCrm.DevKit.AllInOne.sln` to build all projects
+* Use `DynamicsCrm.DevKit.AllInOne.slnx` to build all projects
 
 ### Project Types
 * **CLI**: `DynamicsCrm.DevKit.Cli` + `DynamicsCrm.DevKit.Shared`
-  - Build: MSBuild on `DynamicsCrm.DevKit.Cli.sln`
+  - Build: MSBuild on `DynamicsCrm.DevKit.Cli.slnx`
   - Run: Check `launchSettings.json` for profiles provided
 * **Tools**: `DynamicsCrm.DevKit.Tools` + `DynamicsCrm.DevKit.Shared`
-  - Build: MSBuild on `DynamicsCrm.DevKit.Tools.sln`
+  - Build: MSBuild on `DynamicsCrm.DevKit.Tools.slnx`
 * **VSIX**: `DynamicsCrm.DevKit` + `DynamicsCrm.DevKit.Shared`
-  - Build: MSBuild on `DynamicsCrm.DevKit.sln`
+  - Build: MSBuild on `DynamicsCrm.DevKit.slnx`
   - Project Templates: `ItemTemplates`, `ProjectTemplates` (numbered 01-13, 01-12)
 * **Analyzers**: `DynamicsCrm.DevKit.Analyzers` + `DynamicsCrm.DevKit.Shared`
-  - Build: MSBuild on `DynamicsCrm.DevKit.Analyzers.sln`
+  - Build: MSBuild on `DynamicsCrm.DevKit.Analyzers.slnx`
 
 ### Key Folders
 * **Shared**: Common logic in `DynamicsCrm.DevKit.Shared`

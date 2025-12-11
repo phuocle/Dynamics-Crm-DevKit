@@ -1,0 +1,9 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="arm64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="DynamicsCrm.DevKit.Cli/DynamicsCrm.DevKit.Cli.csproj" />
+  <Project Path="DynamicsCrm.DevKit.Shared/DynamicsCrm.DevKit.Shared.shproj" />
+</Solution>

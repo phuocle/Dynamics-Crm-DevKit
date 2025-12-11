@@ -1,0 +1,130 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="arm64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Folder Name="/ItemTemplates/" />
+  <Folder Name="/ItemTemplates/CSharp/">
+    <Project Path="ItemTemplates/CSharp/01.LateBoundItemTemplate/01.LateBoundItemTemplate.csproj">
+      <Platform Solution="*|arm64" Project="arm64" />
+      <Platform Solution="*|x86" Project="x86" />
+    </Project>
+    <Project Path="ItemTemplates/CSharp/02.JsFormItemTemplate/02.JsFormItemTemplate.csproj">
+      <Platform Solution="*|arm64" Project="arm64" />
+      <Platform Solution="*|x86" Project="x86" />
+    </Project>
+    <Project Path="ItemTemplates/CSharp/03.JsWebApiItemTemplate/03.JsWebApiItemTemplate.csproj">
+      <Platform Solution="*|arm64" Project="arm64" />
+      <Platform Solution="*|x86" Project="x86" />
+    </Project>
+    <Project Path="ItemTemplates/CSharp/04.PluginItemTemplate/04.PluginItemTemplate.csproj">
+      <Platform Solution="*|arm64" Project="arm64" />
+      <Platform Solution="*|x86" Project="x86" />
+    </Project>
+    <Project Path="ItemTemplates/CSharp/05.CustomActionItemTemplate/05.CustomActionItemTemplate.csproj">
+      <Platform Solution="*|arm64" Project="arm64" />
+      <Platform Solution="*|x86" Project="x86" />
+    </Project>
+    <Project Path="ItemTemplates/CSharp/06.CustomApiItemTemplate/06.CustomApiItemTemplate.csproj">
+      <Platform Solution="*|arm64" Project="arm64" />
+      <Platform Solution="*|x86" Project="x86" />
+    </Project>
+    <Project Path="ItemTemplates/CSharp/07.WorkflowItemTemplate/07.WorkflowItemTemplate.csproj">
+      <Platform Solution="*|arm64" Project="arm64" />
+      <Platform Solution="*|x86" Project="x86" />
+    </Project>
+    <Project Path="ItemTemplates/CSharp/08.DataProviderItemTemplate/08.DataProviderItemTemplate.csproj">
+      <Platform Solution="*|arm64" Project="arm64" />
+      <Platform Solution="*|x86" Project="x86" />
+    </Project>
+    <Project Path="ItemTemplates/CSharp/09.TestItemTemplate/09.TestItemTemplate.csproj">
+      <Platform Solution="*|arm64" Project="arm64" />
+      <Platform Solution="*|x86" Project="x86" />
+    </Project>
+    <Project Path="ItemTemplates/CSharp/10.UiTestItemTemplate/10.UiTestItemTemplate.csproj">
+      <Platform Solution="*|arm64" Project="arm64" />
+      <Platform Solution="*|x86" Project="x86" />
+    </Project>
+    <Project Path="ItemTemplates/CSharp/11.ResourceStringItemTemplate/11.ResourceStringItemTemplate.csproj">
+      <Platform Solution="*|arm64" Project="arm64" />
+      <Platform Solution="*|x86" Project="x86" />
+    </Project>
+    <Project Path="ItemTemplates/CSharp/12.JsDevkitItemTemplate/12.JsDevkitItemTemplate.csproj">
+      <Platform Solution="*|arm64" Project="arm64" />
+      <Platform Solution="*|x86" Project="x86" />
+    </Project>
+    <Project Path="ItemTemplates/CSharp/13.BatFileItemTemplate/13.BatFileItemTemplate.csproj">
+      <Platform Solution="*|arm64" Project="arm64" />
+      <Platform Solution="*|x86" Project="x86" />
+    </Project>
+  </Folder>
+  <Folder Name="/ProjectTemplates/" />
+  <Folder Name="/ProjectTemplates/CSharp/">
+    <Project Path="ProjectTemplates/CSharp/01.SharedProjectTemplate/01.SharedProjectTemplate.csproj">
+      <Platform Solution="*|arm64" Project="arm64" />
+      <Platform Solution="*|x86" Project="x86" />
+    </Project>
+    <Project Path="ProjectTemplates/CSharp/02.ConsoleProjectTemplate/02.ConsoleProjectTemplate.csproj">
+      <Platform Solution="*|arm64" Project="arm64" />
+      <Platform Solution="*|x86" Project="x86" />
+    </Project>
+    <Project Path="ProjectTemplates/CSharp/03.ConsoleCoreProjectTemplate/03.ConsoleCoreProjectTemplate.csproj">
+      <Platform Solution="*|arm64" Project="arm64" />
+      <Platform Solution="*|x86" Project="x86" />
+    </Project>
+    <Project Path="ProjectTemplates/CSharp/04.ServerProjectTemplate/04.ServerProjectTemplate.csproj">
+      <Platform Solution="*|arm64" Project="arm64" />
+      <Platform Solution="*|x86" Project="x86" />
+    </Project>
+    <Project Path="ProjectTemplates/CSharp/05.PackageProjectTemplate/05.PackageProjectTemplate.csproj">
+      <Platform Solution="*|arm64" Project="arm64" />
+      <Platform Solution="*|x86" Project="x86" />
+    </Project>
+    <Project Path="ProjectTemplates/CSharp/06.WebResourceProjectTemplate/06.WebResourceProjectTemplate.csproj">
+      <Platform Solution="*|arm64" Project="arm64" />
+      <Platform Solution="*|x86" Project="x86" />
+    </Project>
+    <Project Path="ProjectTemplates/CSharp/07.SharedTestProjectTemplate/07.SharedTestProjectTemplate.csproj">
+      <Platform Solution="*|arm64" Project="arm64" />
+      <Platform Solution="*|x86" Project="x86" />
+    </Project>
+    <Project Path="ProjectTemplates/CSharp/08.ProxyTypesProjectTemplate/08.ProxyTypesProjectTemplate.csproj">
+      <Platform Solution="*|arm64" Project="arm64" />
+      <Platform Solution="*|x86" Project="x86" />
+    </Project>
+    <Project Path="ProjectTemplates/CSharp/09.TestProjectTemplate/09.TestProjectTemplate.csproj">
+      <Platform Solution="*|arm64" Project="arm64" />
+      <Platform Solution="*|x86" Project="x86" />
+    </Project>
+    <Project Path="ProjectTemplates/CSharp/10.TestUiProjectTemplate/10.TestUiProjectTemplate.csproj">
+      <Platform Solution="*|arm64" Project="arm64" />
+      <Platform Solution="*|x86" Project="x86" />
+    </Project>
+    <Project Path="ProjectTemplates/CSharp/11.SolutionPackagerProjectTemplate/11.SolutionPackagerProjectTemplate.csproj">
+      <Platform Solution="*|arm64" Project="arm64" />
+      <Platform Solution="*|x86" Project="x86" />
+    </Project>
+    <Project Path="ProjectTemplates/CSharp/12.ReportProjectTemplate/12.ReportProjectTemplate.csproj">
+      <Platform Solution="*|arm64" Project="arm64" />
+      <Platform Solution="*|x86" Project="x86" />
+    </Project>
+  </Folder>
+  <Folder Name="/Solution Items/">
+    <File Path="date.txt" />
+    <File Path="ImportKey.bat" />
+    <File Path="Release-DynamicsCrm-DevKit-CurrentDate.ps1" />
+    <File Path="Release-DynamicsCrm-DevKit.ps1" />
+    <File Path="sn.ps1" />
+    <File Path="version.txt" />
+  </Folder>
+  <Project Path="DynamicsCrm.DevKit.Analyzers/DynamicsCrm.DevKit.Analyzers.csproj" />
+  <Project Path="DynamicsCrm.DevKit.Cli/DynamicsCrm.DevKit.Cli.csproj" />
+  <Project Path="DynamicsCrm.DevKit.CrmSvcUtilExtensions/DynamicsCrm.DevKit.CrmSvcUtilExtensions.csproj" />
+  <Project Path="DynamicsCrm.DevKit.Shared/DynamicsCrm.DevKit.Shared.shproj" />
+  <Project Path="DynamicsCrm.DevKit.Tool/DynamicsCrm.DevKit.Tool.csproj" />
+  <Project Path="DynamicsCrm.DevKit/DynamicsCrm.DevKit.csproj">
+    <Platform Solution="*|arm64" Project="arm64" />
+    <Platform Solution="*|x86" Project="x86" />
+  </Project>
+</Solution>
