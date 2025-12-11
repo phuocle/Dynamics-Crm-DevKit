@@ -200,5 +200,13 @@ namespace DynamicsCrm.DevKit.Analyzers
             "'{0}' should not use RetrieveAsIfPublished = true; this causes slower performance",
             DiagnosticSeverity.Info,
             "Retrieving unpublished metadata adds overhead to processing and returns metadata that users might not expect. Only use RetrieveAsIfPublished = true when building a metadata editor.");
+
+        /// <summary>DEVKIT1014</summary>
+        public static readonly DiagnosticDescriptor AvoidAppDomainEvents = CreateDescriptor(
+            "DEVKIT1014",
+            "Avoid AppDomain event registration in plug-ins",
+            "Do not subscribe to AppDomain.{0} event in plug-ins; this can cause memory leaks and unexpected behavior",
+            DiagnosticSeverity.Error,
+            "Plugin instances are cached and reused. Subscribing to AppDomain events can cause memory leaks because the event handlers are never removed. This can also cause unexpected behavior when the plugin instance is reused.");
     }
 }

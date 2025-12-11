@@ -39,6 +39,7 @@ Or add to your `.csproj`:
 | [DEVKIT1011](#devkit1011) | Warning | Use InvalidPluginExecutionException for errors |
 | [DEVKIT1012](#devkit1012) | Info | Consider using ITracingService in plug-ins |
 | [DEVKIT1013](#devkit1013) | Info | Avoid registering plugins on Retrieve/RetrieveMultiple |
+| [DEVKIT1014](#devkit1014) | Error | Avoid AppDomain event registration in plug-ins |
 | [DEVKIT1016](#devkit1016) | Info | Avoid retrieving unpublished metadata |
 
 ---
@@ -587,6 +588,30 @@ var request = new RetrieveEntityRequest
 ```
 
 [📖 Documentation](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DEVKIT1016)
+
+---
+
+### DEVKIT1014
+**Avoid AppDomain event registration in plug-ins**
+
+**Severity:** Error
+
+Detects subscription to `AppDomain` events in plugins. Plugin instances are cached and reused, so subscribing to AppDomain events can cause memory leaks.
+
+**Bad Code:**
+```csharp
+// ❌ Memory leak - event handler never removed
+AppDomain.CurrentDomain.UnhandledException += (s, e) => { };
+```
+
+**Good Code:**
+```csharp
+// ✅ Use try-catch for exception handling
+try { /* work */ }
+catch (Exception ex) { throw new InvalidPluginExecutionException("Error", ex); }
+```
+
+[📖 Documentation](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DEVKIT1014)
 
 ---
 

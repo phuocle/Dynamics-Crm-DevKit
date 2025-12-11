@@ -16,5 +16,6 @@
         public const string UseInvalidPluginExecutionException = "DEVKIT1011";
         public const string UseTracingService = "DEVKIT1012";
         public const string AvoidRetrieveAsIfPublished = "DEVKIT1016";
+        public const string AvoidAppDomainEvents = "DEVKIT1014";
     }
 }
