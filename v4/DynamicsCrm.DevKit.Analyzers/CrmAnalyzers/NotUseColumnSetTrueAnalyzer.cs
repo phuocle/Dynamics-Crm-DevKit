@@ -11,10 +11,19 @@ using Microsoft.CodeAnalysis.Text;
 
 namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
 {
+    /// <summary>
+    /// Analyzer to detect usage of ColumnSet(true) or AllColumns = true.
+    /// Retrieving all columns causes performance degradation and should be avoided.
+    /// 
+    /// Based on Microsoft best practices:
+    /// https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/work-with-data/retrieve-specific-columns-entity-via-query-apis
+    /// </summary>
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class NotUseColumnSetTrueAnalyzer : BaseDiagnosticAnalyzer
     {
-        private const string MicrosoftXrmSdkQueryColumnSet = "Microsoft.Xrm.Sdk.Query.ColumnSet";
+        private const string ColumnSetTypeName = "Microsoft.Xrm.Sdk.Query.ColumnSet";
+        private const string AllAttributesElement = "<all-attributes";
+        private const string AllColumnsProperty = "AllColumns";
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics
         {
@@ -29,85 +38,133 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
             //    Debugger.Launch();
             //}
 #endif
+            if (context == null) throw new ArgumentNullException(nameof(context));
+            
             context.EnableConcurrentExecution();
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.Analyze | GeneratedCodeAnalysisFlags.ReportDiagnostics);
-            if (context == null) throw new ArgumentNullException(nameof(context));
             base.Initialize(context);
-            context.RegisterSyntaxNodeAction(AnalyzerNotUseColumnSetTrue,
-                SyntaxKind.ObjectCreationExpression,
-                SyntaxKind.SimpleAssignmentExpression,
-                SyntaxKind.StringLiteralExpression,
-                SyntaxKind.InterpolatedStringText);
+            
+            context.RegisterSyntaxNodeAction(AnalyzeObjectCreation, SyntaxKind.ObjectCreationExpression);
+            context.RegisterSyntaxNodeAction(AnalyzeAssignment, SyntaxKind.SimpleAssignmentExpression);
+            context.RegisterSyntaxNodeAction(AnalyzeFetchXmlString, SyntaxKind.StringLiteralExpression);
+            context.RegisterSyntaxNodeAction(AnalyzeFetchXmlInterpolated, SyntaxKind.InterpolatedStringText);
         }
 
-        private void AnalyzerNotUseColumnSetTrue(SyntaxNodeAnalysisContext context)
+        /// <summary>
+        /// Detects: new ColumnSet(true)
+        /// </summary>
+        private void AnalyzeObjectCreation(SyntaxNodeAnalysisContext context)
         {
+            if (!(context.Node is ObjectCreationExpressionSyntax objectCreation))
+                return;
+
             var semanticModel = context.SemanticModel;
             if (semanticModel == null) return;
 
-            var cancellationToken = context.CancellationToken;
-            if (context.Node is ObjectCreationExpressionSyntax objectCreationExpression)
+            var typeInfo = semanticModel.GetTypeInfo(objectCreation, context.CancellationToken);
+            if (typeInfo.Type?.ToDisplayString() != ColumnSetTypeName)
+                return;
+
+            // Check constructor argument: new ColumnSet(true)
+            if (objectCreation.ArgumentList?.Arguments.Count == 1)
             {
-                var typeInfo = semanticModel.GetTypeInfo(objectCreationExpression, cancellationToken);
-                if (typeInfo.Type?.ToDisplayString() != MicrosoftXrmSdkQueryColumnSet) return;
-                if (objectCreationExpression.ArgumentList?.Arguments.Count == 1)
+                var argument = objectCreation.ArgumentList.Arguments[0];
+                if (argument.Expression is LiteralExpressionSyntax literal &&
+                    literal.Token.IsKind(SyntaxKind.TrueKeyword))
                 {
-                    var argument = objectCreationExpression.ArgumentList.Arguments[0];
-                    if (argument.Expression is LiteralExpressionSyntax literalExpression &&
-                        literalExpression.Token.IsKind(SyntaxKind.TrueKeyword))
-                    {
-                        DiagnosticHelpers.ReportDiagnostic(context, DiagnosticDescriptors.NotUseColumnSetTrue, objectCreationExpression.GetLocation());
-                    }
-                }
-                if (objectCreationExpression.Initializer != null)
-                {
-                    foreach (AssignmentExpressionSyntax expression in objectCreationExpression.Initializer.Expressions)
-                    {
-                        if (expression.Right?.ToString() == "true" && expression.Left?.ToString() == "AllColumns")
-                            DiagnosticHelpers.ReportDiagnostic(context, DiagnosticDescriptors.NotUseColumnSetTrue, expression.GetLocation());
-                    }
+                    DiagnosticHelpers.ReportDiagnostic(context, DiagnosticDescriptors.NotUseColumnSetTrue, 
+                        objectCreation.GetLocation());
+                    return;
                 }
             }
-            else if (
-                context.Node is AssignmentExpressionSyntax assignmentExpressionSyntax &&
-                assignmentExpressionSyntax.Right is LiteralExpressionSyntax right &&
-                right.Token.IsKind(SyntaxKind.TrueKeyword) &&
-                assignmentExpressionSyntax.Left is MemberAccessExpressionSyntax left)
+
+            // Check object initializer: new ColumnSet { AllColumns = true }
+            if (objectCreation.Initializer != null)
             {
-                var typeInfo = semanticModel.GetTypeInfo(left.Expression, cancellationToken);
-                if (typeInfo.Type?.ToDisplayString() != MicrosoftXrmSdkQueryColumnSet) return;
-                DiagnosticHelpers.ReportDiagnostic(context, DiagnosticDescriptors.NotUseColumnSetTrue, assignmentExpressionSyntax.GetLocation());
-            }
-            else if (context.Node is LiteralExpressionSyntax @string)
-            {
-                var stringValue = @string.ToString()?.ToLower()?.RemoveWhitespace();
-                if (stringValue != null && stringValue.IndexOf("<all-attributes/>") >= 0)
+                foreach (var expression in objectCreation.Initializer.Expressions)
                 {
-                    var position = @string.ToString()?.ToLower()?.IndexOf("<all-attributes");
-                    if (position.HasValue && @string.SyntaxTree != null)
+                    if (expression is AssignmentExpressionSyntax assignment &&
+                        assignment.Left?.ToString() == AllColumnsProperty &&
+                        assignment.Right is LiteralExpressionSyntax rightLiteral &&
+                        rightLiteral.Token.IsKind(SyntaxKind.TrueKeyword))
                     {
-                        var start = @string.GetLocation().SourceSpan.Start;
-                        var textSpan = new TextSpan(start + position.Value + 1, "all-attributes".Length);
-                        var location = Location.Create(@string.SyntaxTree, textSpan);
-                        DiagnosticHelpers.ReportDiagnostic(context, DiagnosticDescriptors.NotUseColumnSetTrue, location);
+                        DiagnosticHelpers.ReportDiagnostic(context, DiagnosticDescriptors.NotUseColumnSetTrue, 
+                            assignment.GetLocation());
                     }
                 }
             }
-            else if (context.Node is InterpolatedStringTextSyntax interpolatedString)
+        }
+
+        /// <summary>
+        /// Detects: columnSet.AllColumns = true
+        /// </summary>
+        private void AnalyzeAssignment(SyntaxNodeAnalysisContext context)
+        {
+            if (!(context.Node is AssignmentExpressionSyntax assignment))
+                return;
+
+            // Check if assigning true to a member
+            if (!(assignment.Right is LiteralExpressionSyntax right) || !right.Token.IsKind(SyntaxKind.TrueKeyword))
+                return;
+
+            if (!(assignment.Left is MemberAccessExpressionSyntax memberAccess))
+                return;
+
+            // Verify the member is on a ColumnSet type
+            var semanticModel = context.SemanticModel;
+            if (semanticModel == null) return;
+
+            var typeInfo = semanticModel.GetTypeInfo(memberAccess.Expression, context.CancellationToken);
+            if (typeInfo.Type?.ToDisplayString() == ColumnSetTypeName)
             {
-                var stringValue = interpolatedString.ToString()?.ToLower()?.RemoveWhitespace();
-                if (stringValue != null && stringValue.IndexOf("<all-attributes/>") >= 0)
-                {
-                    var position = interpolatedString.ToString()?.ToLower()?.IndexOf("<all-attributes");
-                    if (position.HasValue && interpolatedString.SyntaxTree != null)
-                    {
-                        var start = interpolatedString.GetLocation().SourceSpan.Start;
-                        var textSpan = new TextSpan(start + position.Value + 1, "all-attributes".Length);
-                        var location = Location.Create(interpolatedString.SyntaxTree, textSpan);
-                        DiagnosticHelpers.ReportDiagnostic(context, DiagnosticDescriptors.NotUseColumnSetTrue, location);
-                    }
-                }
+                DiagnosticHelpers.ReportDiagnostic(context, DiagnosticDescriptors.NotUseColumnSetTrue, 
+                    assignment.GetLocation());
             }
+        }
+
+        /// <summary>
+        /// Detects: FetchXML with &lt;all-attributes/&gt; in string literals
+        /// </summary>
+        private void AnalyzeFetchXmlString(SyntaxNodeAnalysisContext context)
+        {
+            if (!(context.Node is LiteralExpressionSyntax literal))
+                return;
+
+            var text = literal.Token.Text;
+            ReportAllAttributesLocation(context, text, literal.GetLocation(), literal.SyntaxTree);
+        }
+
+        /// <summary>
+        /// Detects: FetchXML with &lt;all-attributes/&gt; in interpolated strings
+        /// </summary>
+        private void AnalyzeFetchXmlInterpolated(SyntaxNodeAnalysisContext context)
+        {
+            if (!(context.Node is InterpolatedStringTextSyntax interpolated))
+                return;
+
+            var text = interpolated.TextToken.Text;
+            ReportAllAttributesLocation(context, text, interpolated.GetLocation(), interpolated.SyntaxTree);
+        }
+
+        /// <summary>
+        /// Reports diagnostic for &lt;all-attributes&gt; element in FetchXML.
+        /// </summary>
+        private static void ReportAllAttributesLocation(SyntaxNodeAnalysisContext context, string text, Location nodeLocation, SyntaxTree syntaxTree)
+        {
+            if (string.IsNullOrEmpty(text) || syntaxTree == null)
+                return;
+
+            var lowerText = text.ToLowerInvariant();
+            var position = lowerText.IndexOf(AllAttributesElement, StringComparison.Ordinal);
+            
+            if (position < 0)
+                return;
+
+            var start = nodeLocation.SourceSpan.Start;
+            var textSpan = new TextSpan(start + position + 1, AllAttributesElement.Length - 1); // -1 to exclude '<'
+            var location = Location.Create(syntaxTree, textSpan);
+            
+            DiagnosticHelpers.ReportDiagnostic(context, DiagnosticDescriptors.NotUseColumnSetTrue, location);
         }
     }
 }
