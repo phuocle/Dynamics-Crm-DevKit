@@ -11,5 +11,6 @@
         public const string StatelessPlugin = "DEVKIT1007";
         public const string ParallelExecutionInPlugin = "DEVKIT1008";
         public const string KeepAliveFalse = "DEVKIT1009";
+        public const string HttpTimeout = "DEVKIT1010";
     }
 }

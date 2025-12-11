@@ -35,6 +35,7 @@ Or add to your `.csproj`:
 | [DEVKIT1007](#devkit1007) | Error | IPlugin implementations should be stateless |
 | [DEVKIT1008](#devkit1008) | Error | Don't use parallel execution in plug-ins |
 | [DEVKIT1009](#devkit1009) | Warning | Set KeepAlive to false for external HTTP calls |
+| [DEVKIT1010](#devkit1010) | Warning | Set Timeout for external HTTP calls |
 
 ---
 
@@ -428,6 +429,38 @@ using (var client = new HttpClient())
 ```
 
 [📖 Documentation](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DEVKIT1009)
+
+---
+
+### DEVKIT1010
+**Set Timeout for external HTTP calls**
+
+**Severity:** Warning
+
+**MS Best Practice:** [Set Timeout when making external calls from a plug-in](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/set-timeout-for-external-calls-from-plug-ins)
+
+Warns when using `HttpClient` in plugins without setting an explicit Timeout. The default HttpClient timeout is 100 seconds, which may exceed the plugin timeout limit.
+
+**Bad Code:**
+```csharp
+// ❌ HttpClient with default timeout (100 seconds)
+using (var client = new HttpClient())
+{
+    var response = client.GetAsync(url).GetAwaiter().GetResult();
+}
+```
+
+**Good Code:**
+```csharp
+// ✅ HttpClient with explicit timeout
+using (var client = new HttpClient())
+{
+    client.Timeout = TimeSpan.FromSeconds(15);
+    var response = client.GetAsync(url).GetAwaiter().GetResult();
+}
+```
+
+[📖 Documentation](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DEVKIT1010)
 
 ---
 

@@ -15,24 +15,13 @@ Based on research of [Microsoft's Dataverse Best Practices](https://learn.micros
 | DEVKIT1007 | Stateless IPlugin | ✅ [Develop IPlugin as stateless](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/develop-iplugin-implementations-stateless) |
 | DEVKIT1008 | Don't use parallel execution | ✅ [Don't use parallel execution](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/do-not-use-parallel-execution-in-plug-ins) |
 | DEVKIT1009 | Set KeepAlive to false | ✅ [Set KeepAlive to false](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/set-keepalive-false-interacting-external-hosts-plugin) |
+| DEVKIT1010 | Set Timeout for HTTP calls | ✅ [Set Timeout for external calls](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/set-timeout-for-external-calls-from-plug-ins) |
 
 ---
 
 ## Suggested New Analyzers (Roadmap)
 
 ### High Priority
-
----
-
-#### DEVKIT1010: Set Timeout for external calls in plug-ins
-
-**Severity:** Warning  
-**Category:** Performance  
-**Impact:** High  
-**MS Docs:** [Set Timeout for external calls](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/set-timeout-for-external-calls-from-plug-ins)
-
-**Detection:**
-In IPlugin classes, detect `HttpClient` usage without explicitly setting `Timeout` property.
 
 ---
 
@@ -110,7 +99,7 @@ Context-dependent validation of async patterns in plugins.
 | DEVKIT1007 | Stateless IPlugin | ✅ Implemented |
 | DEVKIT1008 | Parallel execution in plugins | ✅ Implemented |
 | DEVKIT1009 | KeepAlive = false | ✅ Implemented |
-| DEVKIT1010 | HTTP Timeout | 📋 Planned |
+| DEVKIT1010 | HTTP Timeout | ✅ Implemented |
 | DEVKIT1011 | InvalidPluginExecutionException | 📋 Planned |
 | DEVKIT1012 | ITracingService recommendation | 📋 Planned |
 | DEVKIT1013 | Retrieve/RetrieveMultiple warning | 📋 Planned |

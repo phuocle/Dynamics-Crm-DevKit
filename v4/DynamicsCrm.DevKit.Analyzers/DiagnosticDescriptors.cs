@@ -160,5 +160,13 @@ namespace DynamicsCrm.DevKit.Analyzers
             "Set KeepAlive to false when using '{0}' in plug-ins or workflow activities",
             DiagnosticSeverity.Warning,
             "When making external HTTP calls in plug-ins, set KeepAlive to false (HttpClient: DefaultRequestHeaders.ConnectionClose = true, WebRequest: KeepAlive = false) to avoid connection pool issues in the sandbox.");
+
+        /// <summary>DEVKIT1010</summary>
+        public static readonly DiagnosticDescriptor HttpTimeout = CreateDescriptor(
+            "DEVKIT1010",
+            "Set Timeout for external HTTP calls in plug-ins",
+            "Set Timeout when using '{0}' in plug-ins or workflow activities",
+            DiagnosticSeverity.Warning,
+            "When making external HTTP calls in plug-ins, set an explicit Timeout value to avoid blocking the plugin execution. The default timeout is 100 seconds which may exceed the plugin timeout limit.");
     }
 }
