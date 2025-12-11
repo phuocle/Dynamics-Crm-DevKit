@@ -34,6 +34,7 @@ Or add to your `.csproj`:
 | [DEVKIT1006](#devkit1006) | Warning | Don't use batch request types in plug-ins |
 | [DEVKIT1007](#devkit1007) | Error | IPlugin implementations should be stateless |
 | [DEVKIT1008](#devkit1008) | Error | Don't use parallel execution in plug-ins |
+| [DEVKIT1009](#devkit1009) | Warning | Set KeepAlive to false for external HTTP calls |
 
 ---
 
@@ -395,6 +396,38 @@ public class MyPlugin : IPlugin
 ```
 
 [📖 Documentation](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DEVKIT1008)
+
+---
+
+### DEVKIT1009
+**Set KeepAlive to false for external HTTP calls**
+
+**Severity:** Warning
+
+**MS Best Practice:** [Set KeepAlive to false when interacting with external hosts](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/set-keepalive-false-interacting-external-hosts-plugin)
+
+Warns when using `HttpClient` or `WebRequest` in plugins without setting KeepAlive to false. The sandbox environment has connection pool limitations that can cause issues when KeepAlive is enabled.
+
+**Bad Code:**
+```csharp
+// ❌ HttpClient with default KeepAlive (true)
+using (var client = new HttpClient())
+{
+    var response = client.GetAsync(url).GetAwaiter().GetResult();
+}
+```
+
+**Good Code:**
+```csharp
+// ✅ HttpClient with ConnectionClose = true
+using (var client = new HttpClient())
+{
+    client.DefaultRequestHeaders.ConnectionClose = true;
+    var response = client.GetAsync(url).GetAwaiter().GetResult();
+}
+```
+
+[📖 Documentation](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DEVKIT1009)
 
 ---
 

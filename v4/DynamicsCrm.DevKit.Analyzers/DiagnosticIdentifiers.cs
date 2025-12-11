@@ -10,5 +10,6 @@
         public const string BatchRequestInPlugin = "DEVKIT1006";
         public const string StatelessPlugin = "DEVKIT1007";
         public const string ParallelExecutionInPlugin = "DEVKIT1008";
+        public const string KeepAliveFalse = "DEVKIT1009";
     }
 }

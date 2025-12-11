@@ -152,5 +152,13 @@ namespace DynamicsCrm.DevKit.Analyzers
             "Don't use '{0}' in plug-ins or workflow activities",
             DiagnosticSeverity.Error,
             "Parallel execution patterns (Task.Run, Parallel.ForEach, Thread, ThreadPool) are not supported in plug-ins and workflow activities. Multi-threading can cause unpredictable behavior and is not allowed in the sandbox.");
+
+        /// <summary>DEVKIT1009</summary>
+        public static readonly DiagnosticDescriptor KeepAliveFalse = CreateDescriptor(
+            "DEVKIT1009",
+            "Set KeepAlive to false when making external HTTP calls in plug-ins",
+            "Set KeepAlive to false when using '{0}' in plug-ins or workflow activities",
+            DiagnosticSeverity.Warning,
+            "When making external HTTP calls in plug-ins, set KeepAlive to false (HttpClient: DefaultRequestHeaders.ConnectionClose = true, WebRequest: KeepAlive = false) to avoid connection pool issues in the sandbox.");
     }
 }
