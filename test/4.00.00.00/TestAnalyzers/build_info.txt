@@ -1,0 +1,620 @@
+﻿
+         C:\Program Files\dotnet\sdk\10.0.101\Roslyn\bincore\csc.exe /noconfig 
+/nowarn:1701,1702 /fullpaths /nostdlib+ /platform:x64 /errorreport:prompt 
+/warn:4 /define:DEBUG;TRACE /highentropyva+ /reference:D:\github\Dynamics-Crm-De
+vKit\test\4.00.00.00\TestAnalyzers\packages\Microsoft.Bcl.AsyncInterfaces.10.0.1
+\lib\net462\Microsoft.Bcl.AsyncInterfaces.dll /reference:D:\github\Dynamics-Crm-
+DevKit\test\4.00.00.00\TestAnalyzers\packages\Microsoft.CrmSdk.CoreAssemblies.9.
+0.2.60\lib\net462\Microsoft.Crm.Sdk.Proxy.dll /reference:"C:\Program Files 
+(x86)\Reference 
+Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\Microsoft.CSharp.dll" /refer
+ence:D:\github\Dynamics-Crm-DevKit\test\4.00.00.00\TestAnalyzers\packages\Micros
+oft.CrmSdk.CoreAssemblies.9.0.2.60\lib\net462\Microsoft.Xrm.Sdk.dll 
+/reference:"C:\Program Files (x86)\Reference 
+Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\mscorlib.dll" /reference:D:\
+github\Dynamics-Crm-DevKit\test\4.00.00.00\TestAnalyzers\packages\System.Buffers
+.4.6.1\lib\net462\System.Buffers.dll /reference:"C:\Program Files 
+(x86)\Reference 
+Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\System.Core.dll" 
+/reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NET
+Framework\v4.6.2\System.DirectoryServices.AccountManagement.dll" 
+/reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NET
+Framework\v4.6.2\System.DirectoryServices.dll" /reference:"C:\Program Files 
+(x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\System.dll" 
+/reference:"C:\Program Files (x86)\Reference 
+Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\System.IdentityModel.dll" /r
+eference:D:\github\Dynamics-Crm-DevKit\test\4.00.00.00\TestAnalyzers\packages\Sy
+stem.IO.Pipelines.10.0.1\lib\net462\System.IO.Pipelines.dll /reference:D:\github
+\Dynamics-Crm-DevKit\test\4.00.00.00\TestAnalyzers\packages\System.Memory.4.6.3\
+lib\net462\System.Memory.dll /reference:"C:\Program Files (x86)\Reference 
+Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\System.Net.Http.dll" 
+/reference:"C:\Program Files (x86)\Reference 
+Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\System.Numerics.dll" /refere
+nce:D:\github\Dynamics-Crm-DevKit\test\4.00.00.00\TestAnalyzers\packages\System.
+Numerics.Vectors.4.6.1\lib\net462\System.Numerics.Vectors.dll /reference:D:\gith
+ub\Dynamics-Crm-DevKit\test\4.00.00.00\TestAnalyzers\packages\System.Runtime.Com
+pilerServices.Unsafe.6.1.2\lib\net462\System.Runtime.CompilerServices.Unsafe.dll
+ /reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NE
+TFramework\v4.6.2\System.Runtime.Serialization.dll" /reference:"C:\Program 
+Files (x86)\Reference 
+Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\System.Security.dll" 
+/reference:"C:\Program Files (x86)\Reference 
+Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\System.ServiceModel.dll" /re
+ference:D:\github\Dynamics-Crm-DevKit\test\4.00.00.00\TestAnalyzers\packages\Sys
+tem.ServiceModel.Primitives.10.0.652802\lib\net462\System.ServiceModel.Duplex.dl
+l /reference:D:\github\Dynamics-Crm-DevKit\test\4.00.00.00\TestAnalyzers\package
+s\System.ServiceModel.Http.10.0.652802\lib\net462\System.ServiceModel.Http.dll /
+reference:D:\github\Dynamics-Crm-DevKit\test\4.00.00.00\TestAnalyzers\packages\S
+ystem.ServiceModel.Primitives.10.0.652802\lib\net462\System.ServiceModel.Primiti
+ves.dll /reference:D:\github\Dynamics-Crm-DevKit\test\4.00.00.00\TestAnalyzers\p
+ackages\System.ServiceModel.Primitives.10.0.652802\lib\net462\System.ServiceMode
+l.Security.dll /reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft
+\Framework\.NETFramework\v4.6.2\System.ServiceModel.Web.dll" /reference:D:\githu
+b\Dynamics-Crm-DevKit\test\4.00.00.00\TestAnalyzers\packages\System.Text.Encodin
+gs.Web.10.0.1\lib\net462\System.Text.Encodings.Web.dll /reference:D:\github\Dyna
+mics-Crm-DevKit\test\4.00.00.00\TestAnalyzers\packages\System.Text.Json.10.0.1\l
+ib\net462\System.Text.Json.dll /reference:D:\github\Dynamics-Crm-DevKit\test\4.0
+0.00.00\TestAnalyzers\packages\System.Threading.Tasks.Extensions.4.6.3\lib\net46
+2\System.Threading.Tasks.Extensions.dll /reference:D:\github\Dynamics-Crm-DevKit
+\test\4.00.00.00\TestAnalyzers\packages\System.ValueTuple.4.6.1\lib\net462\Syste
+m.ValueTuple.dll /reference:"C:\Program Files (x86)\Reference 
+Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\System.Web.dll" 
+/reference:"C:\Program Files (x86)\Reference 
+Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\System.Xml.dll" 
+/reference:"C:\Program Files (x86)\Reference 
+Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\System.Xml.Linq.dll" 
+/debug+ /debug:full /filealign:512 /keyfile:Dev.DevKit.Plugin.Territory.snk 
+/optimize- /out:obj\Debug\Dev.DevKit.Plugin.Territory.dll 
+/subsystemversion:6.00 /target:library /utf8output /langversion:7.3 /analyzer:..
+\packages\DynamicsCrm.DevKit.Analyzers.4.0.0\analyzers\dotnet\cs\DynamicsCrm.Dev
+Kit.Analyzers.dll DEVKIT1003_01.cs DEVKIT1003_02.cs DEVKIT1003_03.cs 
+DEVKIT1003_04.cs PostTerritoryUpdateAsynchronous.cs 
+PostTerritoryUpdateSynchronous.cs DEVKIT1003_05.cs DEVKIT1003_06.cs 
+DEVKIT1003_07.cs DEVKIT1003_08.cs DEVKIT1003_09.cs DEVKIT1003_10.cs 
+DEVKIT1006.cs DEVKIT1007.cs DEVKIT1008.cs DEVKIT1009.cs DEVKIT1010.cs 
+DEVKIT1011.cs DEVKIT1012.cs DEVKIT1013.cs DEVKIT1014.cs DEVKIT1015.cs 
+Properties\AssemblyInfo.cs D:\github\Dynamics-Crm-DevKit\test\4.00.00.00\TestAna
+lyzers\Dev.DevKit.Shared\Lib\Date.cs D:\github\Dynamics-Crm-DevKit\test\4.00.00.
+00\TestAnalyzers\Dev.DevKit.Shared\Lib\PluginCore.cs D:\github\Dynamics-Crm-DevK
+it\test\4.00.00.00\TestAnalyzers\Dev.DevKit.Shared\Lib\Extension.cs D:\github\Dy
+namics-Crm-DevKit\test\4.00.00.00\TestAnalyzers\Dev.DevKit.Shared\Lib\EntityBase
+.cs D:\github\Dynamics-Crm-DevKit\test\4.00.00.00\TestAnalyzers\Dev.DevKit.Share
+d\Lib\SimpleJson.cs 
+"obj\Debug\.NETFramework,Version=v4.6.2.AssemblyAttributes.cs"
+         BuildResponseFile = '/nowarn:1701,1702 /fullpaths /nostdlib+ 
+/platform:x64 /errorreport:prompt /warn:4 /define:DEBUG;TRACE /highentropyva+ /r
+eference:D:\github\Dynamics-Crm-DevKit\test\4.00.00.00\TestAnalyzers\packages\Mi
+crosoft.Bcl.AsyncInterfaces.10.0.1\lib\net462\Microsoft.Bcl.AsyncInterfaces.dll 
+/reference:D:\github\Dynamics-Crm-DevKit\test\4.00.00.00\TestAnalyzers\packages\
+Microsoft.CrmSdk.CoreAssemblies.9.0.2.60\lib\net462\Microsoft.Crm.Sdk.Proxy.dll 
+/reference:"C:\Program Files (x86)\Reference 
+Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\Microsoft.CSharp.dll" /refer
+ence:D:\github\Dynamics-Crm-DevKit\test\4.00.00.00\TestAnalyzers\packages\Micros
+oft.CrmSdk.CoreAssemblies.9.0.2.60\lib\net462\Microsoft.Xrm.Sdk.dll 
+/reference:"C:\Program Files (x86)\Reference 
+Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\mscorlib.dll" /reference:D:\
+github\Dynamics-Crm-DevKit\test\4.00.00.00\TestAnalyzers\packages\System.Buffers
+.4.6.1\lib\net462\System.Buffers.dll /reference:"C:\Program Files 
+(x86)\Reference 
+Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\System.Core.dll" 
+/reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NET
+Framework\v4.6.2\System.DirectoryServices.AccountManagement.dll" 
+/reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NET
+Framework\v4.6.2\System.DirectoryServices.dll" /reference:"C:\Program Files 
+(x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\System.dll" 
+/reference:"C:\Program Files (x86)\Reference 
+Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\System.IdentityModel.dll" /r
+eference:D:\github\Dynamics-Crm-DevKit\test\4.00.00.00\TestAnalyzers\packages\Sy
+stem.IO.Pipelines.10.0.1\lib\net462\System.IO.Pipelines.dll /reference:D:\github
+\Dynamics-Crm-DevKit\test\4.00.00.00\TestAnalyzers\packages\System.Memory.4.6.3\
+lib\net462\System.Memory.dll /reference:"C:\Program Files (x86)\Reference 
+Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\System.Net.Http.dll" 
+/reference:"C:\Program Files (x86)\Reference 
+Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\System.Numerics.dll" /refere
+nce:D:\github\Dynamics-Crm-DevKit\test\4.00.00.00\TestAnalyzers\packages\System.
+Numerics.Vectors.4.6.1\lib\net462\System.Numerics.Vectors.dll /reference:D:\gith
+ub\Dynamics-Crm-DevKit\test\4.00.00.00\TestAnalyzers\packages\System.Runtime.Com
+pilerServices.Unsafe.6.1.2\lib\net462\System.Runtime.CompilerServices.Unsafe.dll
+ /reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NE
+TFramework\v4.6.2\System.Runtime.Serialization.dll" /reference:"C:\Program 
+Files (x86)\Reference 
+Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\System.Security.dll" 
+/reference:"C:\Program Files (x86)\Reference 
+Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\System.ServiceModel.dll" /re
+ference:D:\github\Dynamics-Crm-DevKit\test\4.00.00.00\TestAnalyzers\packages\Sys
+tem.ServiceModel.Primitives.10.0.652802\lib\net462\System.ServiceModel.Duplex.dl
+l /reference:D:\github\Dynamics-Crm-DevKit\test\4.00.00.00\TestAnalyzers\package
+s\System.ServiceModel.Http.10.0.652802\lib\net462\System.ServiceModel.Http.dll /
+reference:D:\github\Dynamics-Crm-DevKit\test\4.00.00.00\TestAnalyzers\packages\S
+ystem.ServiceModel.Primitives.10.0.652802\lib\net462\System.ServiceModel.Primiti
+ves.dll /reference:D:\github\Dynamics-Crm-DevKit\test\4.00.00.00\TestAnalyzers\p
+ackages\System.ServiceModel.Primitives.10.0.652802\lib\net462\System.ServiceMode
+l.Security.dll /reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft
+\Framework\.NETFramework\v4.6.2\System.ServiceModel.Web.dll" /reference:D:\githu
+b\Dynamics-Crm-DevKit\test\4.00.00.00\TestAnalyzers\packages\System.Text.Encodin
+gs.Web.10.0.1\lib\net462\System.Text.Encodings.Web.dll /reference:D:\github\Dyna
+mics-Crm-DevKit\test\4.00.00.00\TestAnalyzers\packages\System.Text.Json.10.0.1\l
+ib\net462\System.Text.Json.dll /reference:D:\github\Dynamics-Crm-DevKit\test\4.0
+0.00.00\TestAnalyzers\packages\System.Threading.Tasks.Extensions.4.6.3\lib\net46
+2\System.Threading.Tasks.Extensions.dll /reference:D:\github\Dynamics-Crm-DevKit
+\test\4.00.00.00\TestAnalyzers\packages\System.ValueTuple.4.6.1\lib\net462\Syste
+m.ValueTuple.dll /reference:"C:\Program Files (x86)\Reference 
+Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\System.Web.dll" 
+/reference:"C:\Program Files (x86)\Reference 
+Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\System.Xml.dll" 
+/reference:"C:\Program Files (x86)\Reference 
+Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\System.Xml.Linq.dll" 
+/debug+ /debug:full /filealign:512 /keyfile:Dev.DevKit.Plugin.Territory.snk 
+/optimize- /out:obj\Debug\Dev.DevKit.Plugin.Territory.dll 
+/subsystemversion:6.00 /target:library /utf8output /langversion:7.3 /analyzer:..
+\packages\DynamicsCrm.DevKit.Analyzers.4.0.0\analyzers\dotnet\cs\DynamicsCrm.Dev
+Kit.Analyzers.dll DEVKIT1003_01.cs DEVKIT1003_02.cs DEVKIT1003_03.cs 
+DEVKIT1003_04.cs PostTerritoryUpdateAsynchronous.cs 
+PostTerritoryUpdateSynchronous.cs DEVKIT1003_05.cs DEVKIT1003_06.cs 
+DEVKIT1003_07.cs DEVKIT1003_08.cs DEVKIT1003_09.cs DEVKIT1003_10.cs 
+DEVKIT1006.cs DEVKIT1007.cs DEVKIT1008.cs DEVKIT1009.cs DEVKIT1010.cs 
+DEVKIT1011.cs DEVKIT1012.cs DEVKIT1013.cs DEVKIT1014.cs DEVKIT1015.cs 
+Properties\AssemblyInfo.cs D:\github\Dynamics-Crm-DevKit\test\4.00.00.00\TestAna
+lyzers\Dev.DevKit.Shared\Lib\Date.cs D:\github\Dynamics-Crm-DevKit\test\4.00.00.
+00\TestAnalyzers\Dev.DevKit.Shared\Lib\PluginCore.cs D:\github\Dynamics-Crm-DevK
+it\test\4.00.00.00\TestAnalyzers\Dev.DevKit.Shared\Lib\Extension.cs D:\github\Dy
+namics-Crm-DevKit\test\4.00.00.00\TestAnalyzers\Dev.DevKit.Shared\Lib\EntityBase
+.cs D:\github\Dynamics-Crm-DevKit\test\4.00.00.00\TestAnalyzers\Dev.DevKit.Share
+d\Lib\SimpleJson.cs 
+"obj\Debug\.NETFramework,Version=v4.6.2.AssemblyAttributes.cs"'
+         C:\Program Files\dotnet\sdk\10.0.101\Roslyn\bincore\csc.exe /noconfig 
+/nowarn:1701,1702 /fullpaths /nostdlib+ /platform:x64 /errorreport:prompt 
+/warn:4 /define:DEBUG;TRACE /highentropyva+ /reference:D:\github\Dynamics-Crm-De
+vKit\test\4.00.00.00\TestAnalyzers\packages\Castle.Core.5.2.1\lib\net462\Castle.
+Core.dll /reference:D:\github\Dynamics-Crm-DevKit\test\4.00.00.00\TestAnalyzers\
+packages\Microsoft.Bcl.AsyncInterfaces.10.0.1\lib\net462\Microsoft.Bcl.AsyncInte
+rfaces.dll /reference:D:\github\Dynamics-Crm-DevKit\test\4.00.00.00\TestAnalyzer
+s\packages\Microsoft.CrmSdk.CoreAssemblies.9.0.2.60\lib\net462\Microsoft.Crm.Sdk
+.Proxy.dll /reference:"C:\Program Files (x86)\Reference 
+Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\Microsoft.CSharp.dll" /refer
+ence:D:\github\Dynamics-Crm-DevKit\test\4.00.00.00\TestAnalyzers\packages\Micros
+oft.IdentityModel.Clients.ActiveDirectory.5.3.0\lib\net45\Microsoft.IdentityMode
+l.Clients.ActiveDirectory.dll /reference:D:\github\Dynamics-Crm-DevKit\test\4.00
+.00.00\TestAnalyzers\packages\Microsoft.Rest.ClientRuntime.3.0.3\lib\net45\Micro
+soft.Rest.ClientRuntime.dll /reference:D:\github\Dynamics-Crm-DevKit\test\4.00.0
+0.00\TestAnalyzers\packages\Microsoft.CrmSdk.Deployment.9.0.2.34\lib\net462\Micr
+osoft.Xrm.Sdk.Deployment.dll /reference:D:\github\Dynamics-Crm-DevKit\test\4.00.
+00.00\TestAnalyzers\packages\Microsoft.CrmSdk.CoreAssemblies.9.0.2.60\lib\net462
+\Microsoft.Xrm.Sdk.dll /reference:D:\github\Dynamics-Crm-DevKit\test\4.00.00.00\
+TestAnalyzers\packages\Microsoft.CrmSdk.Workflow.9.0.2.60\lib\net462\Microsoft.X
+rm.Sdk.Workflow.dll /reference:D:\github\Dynamics-Crm-DevKit\test\4.00.00.00\Tes
+tAnalyzers\packages\Microsoft.CrmSdk.XrmTooling.CoreAssembly.9.1.1.65\lib\net462
+\Microsoft.Xrm.Tooling.Connector.dll /reference:D:\github\Dynamics-Crm-DevKit\te
+st\4.00.00.00\TestAnalyzers\packages\Microsoft.CrmSdk.XrmTooling.WpfControls.9.1
+.1.65\lib\net462\Microsoft.Xrm.Tooling.CrmConnectControl.dll /reference:D:\githu
+b\Dynamics-Crm-DevKit\test\4.00.00.00\TestAnalyzers\packages\Microsoft.CrmSdk.Xr
+mTooling.WpfControls.9.1.1.65\lib\net462\Microsoft.Xrm.Tooling.Ui.Styles.dll /re
+ference:D:\github\Dynamics-Crm-DevKit\test\4.00.00.00\TestAnalyzers\packages\Mic
+rosoft.CrmSdk.XrmTooling.WpfControls.9.1.1.65\lib\net462\Microsoft.Xrm.Tooling.W
+ebResourceUtility.dll /reference:"C:\Program Files (x86)\Reference 
+Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\mscorlib.dll" /reference:D:\
+github\Dynamics-Crm-DevKit\test\4.00.00.00\TestAnalyzers\packages\Newtonsoft.Jso
+n.13.0.4\lib\net45\Newtonsoft.Json.dll /reference:D:\github\Dynamics-Crm-DevKit\
+test\4.00.00.00\TestAnalyzers\packages\NSubstitute.5.3.0\lib\net462\NSubstitute.
+dll /reference:"C:\Program Files (x86)\Reference 
+Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\PresentationCore.dll" 
+/reference:"C:\Program Files (x86)\Reference 
+Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\PresentationFramework.dll" 
+/reference:"C:\Program Files (x86)\Reference 
+Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\System.Activities.dll" 
+/reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NET
+Framework\v4.6.2\System.Activities.Presentation.dll" /reference:D:\github\Dynami
+cs-Crm-DevKit\test\4.00.00.00\TestAnalyzers\packages\System.Buffers.4.6.1\lib\ne
+t462\System.Buffers.dll /reference:"C:\Program Files (x86)\Reference 
+Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\System.Configuration.dll" 
+/reference:"C:\Program Files (x86)\Reference 
+Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\System.Core.dll" 
+/reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NET
+Framework\v4.6.2\System.Data.DataSetExtensions.dll" /reference:"C:\Program 
+Files (x86)\Reference 
+Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\System.Data.dll" 
+/reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NET
+Framework\v4.6.2\System.DirectoryServices.AccountManagement.dll" 
+/reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NET
+Framework\v4.6.2\System.DirectoryServices.dll" /reference:"C:\Program Files 
+(x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\System.dll" 
+/reference:"C:\Program Files (x86)\Reference 
+Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\System.Drawing.dll" 
+/reference:"C:\Program Files (x86)\Reference 
+Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\System.IdentityModel.dll" /r
+eference:D:\github\Dynamics-Crm-DevKit\test\4.00.00.00\TestAnalyzers\packages\Sy
+stem.IO.Pipelines.10.0.1\lib\net462\System.IO.Pipelines.dll /reference:D:\github
+\Dynamics-Crm-DevKit\test\4.00.00.00\TestAnalyzers\packages\System.Memory.4.6.3\
+lib\net462\System.Memory.dll /reference:"C:\Program Files (x86)\Reference 
+Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\System.Net.dll" /reference:D
+:\github\Dynamics-Crm-DevKit\test\4.00.00.00\TestAnalyzers\packages\System.Net.H
+ttp.4.3.4\lib\net46\System.Net.Http.dll /reference:"C:\Program Files 
+(x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\System.Net.H
+ttp.WebRequest.dll" /reference:"C:\Program Files (x86)\Reference 
+Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\System.Numerics.dll" /refere
+nce:D:\github\Dynamics-Crm-DevKit\test\4.00.00.00\TestAnalyzers\packages\System.
+Numerics.Vectors.4.6.1\lib\net462\System.Numerics.Vectors.dll /reference:D:\gith
+ub\Dynamics-Crm-DevKit\test\4.00.00.00\TestAnalyzers\packages\System.Runtime.Com
+pilerServices.Unsafe.6.1.2\lib\net462\System.Runtime.CompilerServices.Unsafe.dll
+ /reference:"C:\Program Files (x86)\Reference 
+Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\Facades\System.Runtime.dll" 
+/reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NET
+Framework\v4.6.2\System.Runtime.Serialization.dll" /reference:D:\github\Dynamics
+-Crm-DevKit\test\4.00.00.00\TestAnalyzers\packages\System.Security.Cryptography.
+Algorithms.4.3.1\lib\net461\System.Security.Cryptography.Algorithms.dll /referen
+ce:D:\github\Dynamics-Crm-DevKit\test\4.00.00.00\TestAnalyzers\packages\System.S
+ecurity.Cryptography.Encoding.4.3.0\lib\net46\System.Security.Cryptography.Encod
+ing.dll /reference:D:\github\Dynamics-Crm-DevKit\test\4.00.00.00\TestAnalyzers\p
+ackages\System.Security.Cryptography.Primitives.4.3.0\lib\net46\System.Security.
+Cryptography.Primitives.dll /reference:D:\github\Dynamics-Crm-DevKit\test\4.00.0
+0.00\TestAnalyzers\packages\System.Security.Cryptography.X509Certificates.4.3.2\
+lib\net461\System.Security.Cryptography.X509Certificates.dll 
+/reference:"C:\Program Files (x86)\Reference 
+Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\System.Security.dll" 
+/reference:"C:\Program Files (x86)\Reference 
+Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\System.ServiceModel.dll" /re
+ference:D:\github\Dynamics-Crm-DevKit\test\4.00.00.00\TestAnalyzers\packages\Sys
+tem.ServiceModel.Primitives.10.0.652802\lib\net462\System.ServiceModel.Duplex.dl
+l /reference:D:\github\Dynamics-Crm-DevKit\test\4.00.00.00\TestAnalyzers\package
+s\System.ServiceModel.Http.10.0.652802\lib\net462\System.ServiceModel.Http.dll /
+reference:D:\github\Dynamics-Crm-DevKit\test\4.00.00.00\TestAnalyzers\packages\S
+ystem.ServiceModel.Primitives.10.0.652802\lib\net462\System.ServiceModel.Primiti
+ves.dll /reference:D:\github\Dynamics-Crm-DevKit\test\4.00.00.00\TestAnalyzers\p
+ackages\System.ServiceModel.Primitives.10.0.652802\lib\net462\System.ServiceMode
+l.Security.dll /reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft
+\Framework\.NETFramework\v4.6.2\System.ServiceModel.Web.dll" /reference:D:\githu
+b\Dynamics-Crm-DevKit\test\4.00.00.00\TestAnalyzers\packages\System.Text.Encodin
+gs.Web.10.0.1\lib\net462\System.Text.Encodings.Web.dll /reference:D:\github\Dyna
+mics-Crm-DevKit\test\4.00.00.00\TestAnalyzers\packages\System.Text.Json.10.0.1\l
+ib\net462\System.Text.Json.dll /reference:D:\github\Dynamics-Crm-DevKit\test\4.0
+0.00.00\TestAnalyzers\packages\System.Threading.Tasks.Extensions.4.6.3\lib\net46
+2\System.Threading.Tasks.Extensions.dll /reference:D:\github\Dynamics-Crm-DevKit
+\test\4.00.00.00\TestAnalyzers\packages\System.ValueTuple.4.6.1\lib\net462\Syste
+m.ValueTuple.dll /reference:"C:\Program Files (x86)\Reference 
+Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\System.Web.dll" 
+/reference:"C:\Program Files (x86)\Reference 
+Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\System.Web.Services.dll" 
+/reference:"C:\Program Files (x86)\Reference 
+Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\System.Windows.Forms.dll" 
+/reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NET
+Framework\v4.6.2\System.Workflow.Activities.dll" /reference:"C:\Program Files 
+(x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\System.Workf
+low.ComponentModel.dll" /reference:"C:\Program Files (x86)\Reference Assemblies\
+Microsoft\Framework\.NETFramework\v4.6.2\System.Workflow.Runtime.dll" 
+/reference:"C:\Program Files (x86)\Reference 
+Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\System.Xaml.dll" 
+/reference:"C:\Program Files (x86)\Reference 
+Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\System.Xml.dll" 
+/reference:"C:\Program Files (x86)\Reference 
+Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\System.Xml.Linq.dll" 
+/reference:"C:\Program Files (x86)\Reference 
+Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\WindowsBase.dll" 
+/reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NET
+Framework\v4.6.2\Facades\System.Collections.Concurrent.dll" 
+/reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NET
+Framework\v4.6.2\Facades\System.Collections.dll" /reference:"C:\Program Files 
+(x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\Facades\Syst
+em.ComponentModel.Annotations.dll" /reference:"C:\Program Files (x86)\Reference 
+Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\Facades\System.ComponentMode
+l.dll" /reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framewo
+rk\.NETFramework\v4.6.2\Facades\System.ComponentModel.EventBasedAsync.dll" 
+/reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NET
+Framework\v4.6.2\Facades\System.Diagnostics.Contracts.dll" 
+/reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NET
+Framework\v4.6.2\Facades\System.Diagnostics.Debug.dll" /reference:"C:\Program 
+Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\Facade
+s\System.Diagnostics.Tools.dll" /reference:"C:\Program Files (x86)\Reference Ass
+emblies\Microsoft\Framework\.NETFramework\v4.6.2\Facades\System.Diagnostics.Trac
+ing.dll" /reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Frame
+work\.NETFramework\v4.6.2\Facades\System.Dynamic.Runtime.dll" 
+/reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NET
+Framework\v4.6.2\Facades\System.Globalization.dll" /reference:"C:\Program Files 
+(x86)\Reference 
+Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\Facades\System.IO.dll" 
+/reference:"C:\Program Files (x86)\Reference 
+Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\Facades\System.Linq.dll" 
+/reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NET
+Framework\v4.6.2\Facades\System.Linq.Expressions.dll" /reference:"C:\Program 
+Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\Facade
+s\System.Linq.Parallel.dll" /reference:"C:\Program Files (x86)\Reference Assembl
+ies\Microsoft\Framework\.NETFramework\v4.6.2\Facades\System.Linq.Queryable.dll" 
+/reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NET
+Framework\v4.6.2\Facades\System.Net.NetworkInformation.dll" 
+/reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NET
+Framework\v4.6.2\Facades\System.Net.Primitives.dll" /reference:"C:\Program 
+Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\Facade
+s\System.Net.Requests.dll" /reference:"C:\Program Files (x86)\Reference Assembli
+es\Microsoft\Framework\.NETFramework\v4.6.2\Facades\System.Net.WebHeaderCollecti
+on.dll" /reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framew
+ork\.NETFramework\v4.6.2\Facades\System.ObjectModel.dll" /reference:"C:\Program 
+Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\Facade
+s\System.Reflection.dll" /reference:"C:\Program Files (x86)\Reference Assemblies
+\Microsoft\Framework\.NETFramework\v4.6.2\Facades\System.Reflection.Emit.dll" 
+/reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NET
+Framework\v4.6.2\Facades\System.Reflection.Emit.ILGeneration.dll" 
+/reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NET
+Framework\v4.6.2\Facades\System.Reflection.Emit.Lightweight.dll" 
+/reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NET
+Framework\v4.6.2\Facades\System.Reflection.Extensions.dll" 
+/reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NET
+Framework\v4.6.2\Facades\System.Reflection.Primitives.dll" 
+/reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NET
+Framework\v4.6.2\Facades\System.Resources.ResourceManager.dll" 
+/reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NET
+Framework\v4.6.2\Facades\System.Runtime.Extensions.dll" /reference:"C:\Program 
+Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\Facade
+s\System.Runtime.Handles.dll" /reference:"C:\Program Files (x86)\Reference Assem
+blies\Microsoft\Framework\.NETFramework\v4.6.2\Facades\System.Runtime.InteropSer
+vices.dll" /reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Fra
+mework\.NETFramework\v4.6.2\Facades\System.Runtime.InteropServices.WindowsRuntim
+e.dll" /reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framewo
+rk\.NETFramework\v4.6.2\Facades\System.Runtime.Numerics.dll" 
+/reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NET
+Framework\v4.6.2\Facades\System.Runtime.Serialization.Json.dll" 
+/reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NET
+Framework\v4.6.2\Facades\System.Runtime.Serialization.Primitives.dll" 
+/reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NET
+Framework\v4.6.2\Facades\System.Runtime.Serialization.Xml.dll" 
+/reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NET
+Framework\v4.6.2\Facades\System.Security.Principal.dll" /reference:"C:\Program 
+Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\Facade
+s\System.ServiceModel.NetTcp.dll" /reference:"C:\Program Files (x86)\Reference A
+ssemblies\Microsoft\Framework\.NETFramework\v4.6.2\Facades\System.Text.Encoding.
+dll" /reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework
+\.NETFramework\v4.6.2\Facades\System.Text.Encoding.Extensions.dll" 
+/reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NET
+Framework\v4.6.2\Facades\System.Text.RegularExpressions.dll" 
+/reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NET
+Framework\v4.6.2\Facades\System.Threading.dll" /reference:"C:\Program Files 
+(x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\Facades\Syst
+em.Threading.Tasks.dll" /reference:"C:\Program Files (x86)\Reference Assemblies\
+Microsoft\Framework\.NETFramework\v4.6.2\Facades\System.Threading.Tasks.Parallel
+.dll" /reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framewor
+k\.NETFramework\v4.6.2\Facades\System.Threading.Timer.dll" 
+/reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NET
+Framework\v4.6.2\Facades\System.Xml.ReaderWriter.dll" /reference:"C:\Program 
+Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\Facade
+s\System.Xml.XDocument.dll" /reference:"C:\Program Files (x86)\Reference Assembl
+ies\Microsoft\Framework\.NETFramework\v4.6.2\Facades\System.Xml.XmlSerializer.dl
+l" /debug+ /debug:full /filealign:512 /optimize- 
+/out:obj\Debug\Dev.DevKit.Console.exe /subsystemversion:6.00 /target:exe 
+/utf8output /langversion:7.3 /analyzer:..\packages\DynamicsCrm.DevKit.Analyzers.
+4.0.0\analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll AppSettings.cs 
+DEVKIT1005.cs DEVKIT1002.cs Program.cs Properties\AssemblyInfo.cs 
+Debug\Helper.cs Debug\TracingServiceFake.cs DEVKIT1004.cs DEVKIT1016.cs D:\githu
+b\Dynamics-Crm-DevKit\test\4.00.00.00\TestAnalyzers\Dev.DevKit.Shared\Lib\Date.c
+s D:\github\Dynamics-Crm-DevKit\test\4.00.00.00\TestAnalyzers\Dev.DevKit.Shared\
+Lib\PluginCore.cs D:\github\Dynamics-Crm-DevKit\test\4.00.00.00\TestAnalyzers\De
+v.DevKit.Shared\Lib\Extension.cs D:\github\Dynamics-Crm-DevKit\test\4.00.00.00\T
+estAnalyzers\Dev.DevKit.Shared\Lib\EntityBase.cs D:\github\Dynamics-Crm-DevKit\t
+est\4.00.00.00\TestAnalyzers\Dev.DevKit.Shared\Lib\SimpleJson.cs 
+"obj\Debug\.NETFramework,Version=v4.6.2.AssemblyAttributes.cs"
+         BuildResponseFile = '/nowarn:1701,1702 /fullpaths /nostdlib+ 
+/platform:x64 /errorreport:prompt /warn:4 /define:DEBUG;TRACE /highentropyva+ /r
+eference:D:\github\Dynamics-Crm-DevKit\test\4.00.00.00\TestAnalyzers\packages\Ca
+stle.Core.5.2.1\lib\net462\Castle.Core.dll /reference:D:\github\Dynamics-Crm-Dev
+Kit\test\4.00.00.00\TestAnalyzers\packages\Microsoft.Bcl.AsyncInterfaces.10.0.1\
+lib\net462\Microsoft.Bcl.AsyncInterfaces.dll /reference:D:\github\Dynamics-Crm-D
+evKit\test\4.00.00.00\TestAnalyzers\packages\Microsoft.CrmSdk.CoreAssemblies.9.0
+.2.60\lib\net462\Microsoft.Crm.Sdk.Proxy.dll /reference:"C:\Program Files 
+(x86)\Reference 
+Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\Microsoft.CSharp.dll" /refer
+ence:D:\github\Dynamics-Crm-DevKit\test\4.00.00.00\TestAnalyzers\packages\Micros
+oft.IdentityModel.Clients.ActiveDirectory.5.3.0\lib\net45\Microsoft.IdentityMode
+l.Clients.ActiveDirectory.dll /reference:D:\github\Dynamics-Crm-DevKit\test\4.00
+.00.00\TestAnalyzers\packages\Microsoft.Rest.ClientRuntime.3.0.3\lib\net45\Micro
+soft.Rest.ClientRuntime.dll /reference:D:\github\Dynamics-Crm-DevKit\test\4.00.0
+0.00\TestAnalyzers\packages\Microsoft.CrmSdk.Deployment.9.0.2.34\lib\net462\Micr
+osoft.Xrm.Sdk.Deployment.dll /reference:D:\github\Dynamics-Crm-DevKit\test\4.00.
+00.00\TestAnalyzers\packages\Microsoft.CrmSdk.CoreAssemblies.9.0.2.60\lib\net462
+\Microsoft.Xrm.Sdk.dll /reference:D:\github\Dynamics-Crm-DevKit\test\4.00.00.00\
+TestAnalyzers\packages\Microsoft.CrmSdk.Workflow.9.0.2.60\lib\net462\Microsoft.X
+rm.Sdk.Workflow.dll /reference:D:\github\Dynamics-Crm-DevKit\test\4.00.00.00\Tes
+tAnalyzers\packages\Microsoft.CrmSdk.XrmTooling.CoreAssembly.9.1.1.65\lib\net462
+\Microsoft.Xrm.Tooling.Connector.dll /reference:D:\github\Dynamics-Crm-DevKit\te
+st\4.00.00.00\TestAnalyzers\packages\Microsoft.CrmSdk.XrmTooling.WpfControls.9.1
+.1.65\lib\net462\Microsoft.Xrm.Tooling.CrmConnectControl.dll /reference:D:\githu
+b\Dynamics-Crm-DevKit\test\4.00.00.00\TestAnalyzers\packages\Microsoft.CrmSdk.Xr
+mTooling.WpfControls.9.1.1.65\lib\net462\Microsoft.Xrm.Tooling.Ui.Styles.dll /re
+ference:D:\github\Dynamics-Crm-DevKit\test\4.00.00.00\TestAnalyzers\packages\Mic
+rosoft.CrmSdk.XrmTooling.WpfControls.9.1.1.65\lib\net462\Microsoft.Xrm.Tooling.W
+ebResourceUtility.dll /reference:"C:\Program Files (x86)\Reference 
+Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\mscorlib.dll" /reference:D:\
+github\Dynamics-Crm-DevKit\test\4.00.00.00\TestAnalyzers\packages\Newtonsoft.Jso
+n.13.0.4\lib\net45\Newtonsoft.Json.dll /reference:D:\github\Dynamics-Crm-DevKit\
+test\4.00.00.00\TestAnalyzers\packages\NSubstitute.5.3.0\lib\net462\NSubstitute.
+dll /reference:"C:\Program Files (x86)\Reference 
+Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\PresentationCore.dll" 
+/reference:"C:\Program Files (x86)\Reference 
+Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\PresentationFramework.dll" 
+/reference:"C:\Program Files (x86)\Reference 
+Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\System.Activities.dll" 
+/reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NET
+Framework\v4.6.2\System.Activities.Presentation.dll" /reference:D:\github\Dynami
+cs-Crm-DevKit\test\4.00.00.00\TestAnalyzers\packages\System.Buffers.4.6.1\lib\ne
+t462\System.Buffers.dll /reference:"C:\Program Files (x86)\Reference 
+Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\System.Configuration.dll" 
+/reference:"C:\Program Files (x86)\Reference 
+Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\System.Core.dll" 
+/reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NET
+Framework\v4.6.2\System.Data.DataSetExtensions.dll" /reference:"C:\Program 
+Files (x86)\Reference 
+Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\System.Data.dll" 
+/reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NET
+Framework\v4.6.2\System.DirectoryServices.AccountManagement.dll" 
+/reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NET
+Framework\v4.6.2\System.DirectoryServices.dll" /reference:"C:\Program Files 
+(x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\System.dll" 
+/reference:"C:\Program Files (x86)\Reference 
+Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\System.Drawing.dll" 
+/reference:"C:\Program Files (x86)\Reference 
+Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\System.IdentityModel.dll" /r
+eference:D:\github\Dynamics-Crm-DevKit\test\4.00.00.00\TestAnalyzers\packages\Sy
+stem.IO.Pipelines.10.0.1\lib\net462\System.IO.Pipelines.dll /reference:D:\github
+\Dynamics-Crm-DevKit\test\4.00.00.00\TestAnalyzers\packages\System.Memory.4.6.3\
+lib\net462\System.Memory.dll /reference:"C:\Program Files (x86)\Reference 
+Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\System.Net.dll" /reference:D
+:\github\Dynamics-Crm-DevKit\test\4.00.00.00\TestAnalyzers\packages\System.Net.H
+ttp.4.3.4\lib\net46\System.Net.Http.dll /reference:"C:\Program Files 
+(x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\System.Net.H
+ttp.WebRequest.dll" /reference:"C:\Program Files (x86)\Reference 
+Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\System.Numerics.dll" /refere
+nce:D:\github\Dynamics-Crm-DevKit\test\4.00.00.00\TestAnalyzers\packages\System.
+Numerics.Vectors.4.6.1\lib\net462\System.Numerics.Vectors.dll /reference:D:\gith
+ub\Dynamics-Crm-DevKit\test\4.00.00.00\TestAnalyzers\packages\System.Runtime.Com
+pilerServices.Unsafe.6.1.2\lib\net462\System.Runtime.CompilerServices.Unsafe.dll
+ /reference:"C:\Program Files (x86)\Reference 
+Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\Facades\System.Runtime.dll" 
+/reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NET
+Framework\v4.6.2\System.Runtime.Serialization.dll" /reference:D:\github\Dynamics
+-Crm-DevKit\test\4.00.00.00\TestAnalyzers\packages\System.Security.Cryptography.
+Algorithms.4.3.1\lib\net461\System.Security.Cryptography.Algorithms.dll /referen
+ce:D:\github\Dynamics-Crm-DevKit\test\4.00.00.00\TestAnalyzers\packages\System.S
+ecurity.Cryptography.Encoding.4.3.0\lib\net46\System.Security.Cryptography.Encod
+ing.dll /reference:D:\github\Dynamics-Crm-DevKit\test\4.00.00.00\TestAnalyzers\p
+ackages\System.Security.Cryptography.Primitives.4.3.0\lib\net46\System.Security.
+Cryptography.Primitives.dll /reference:D:\github\Dynamics-Crm-DevKit\test\4.00.0
+0.00\TestAnalyzers\packages\System.Security.Cryptography.X509Certificates.4.3.2\
+lib\net461\System.Security.Cryptography.X509Certificates.dll 
+/reference:"C:\Program Files (x86)\Reference 
+Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\System.Security.dll" 
+/reference:"C:\Program Files (x86)\Reference 
+Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\System.ServiceModel.dll" /re
+ference:D:\github\Dynamics-Crm-DevKit\test\4.00.00.00\TestAnalyzers\packages\Sys
+tem.ServiceModel.Primitives.10.0.652802\lib\net462\System.ServiceModel.Duplex.dl
+l /reference:D:\github\Dynamics-Crm-DevKit\test\4.00.00.00\TestAnalyzers\package
+s\System.ServiceModel.Http.10.0.652802\lib\net462\System.ServiceModel.Http.dll /
+reference:D:\github\Dynamics-Crm-DevKit\test\4.00.00.00\TestAnalyzers\packages\S
+ystem.ServiceModel.Primitives.10.0.652802\lib\net462\System.ServiceModel.Primiti
+ves.dll /reference:D:\github\Dynamics-Crm-DevKit\test\4.00.00.00\TestAnalyzers\p
+ackages\System.ServiceModel.Primitives.10.0.652802\lib\net462\System.ServiceMode
+l.Security.dll /reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft
+\Framework\.NETFramework\v4.6.2\System.ServiceModel.Web.dll" /reference:D:\githu
+b\Dynamics-Crm-DevKit\test\4.00.00.00\TestAnalyzers\packages\System.Text.Encodin
+gs.Web.10.0.1\lib\net462\System.Text.Encodings.Web.dll /reference:D:\github\Dyna
+mics-Crm-DevKit\test\4.00.00.00\TestAnalyzers\packages\System.Text.Json.10.0.1\l
+ib\net462\System.Text.Json.dll /reference:D:\github\Dynamics-Crm-DevKit\test\4.0
+0.00.00\TestAnalyzers\packages\System.Threading.Tasks.Extensions.4.6.3\lib\net46
+2\System.Threading.Tasks.Extensions.dll /reference:D:\github\Dynamics-Crm-DevKit
+\test\4.00.00.00\TestAnalyzers\packages\System.ValueTuple.4.6.1\lib\net462\Syste
+m.ValueTuple.dll /reference:"C:\Program Files (x86)\Reference 
+Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\System.Web.dll" 
+/reference:"C:\Program Files (x86)\Reference 
+Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\System.Web.Services.dll" 
+/reference:"C:\Program Files (x86)\Reference 
+Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\System.Windows.Forms.dll" 
+/reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NET
+Framework\v4.6.2\System.Workflow.Activities.dll" /reference:"C:\Program Files 
+(x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\System.Workf
+low.ComponentModel.dll" /reference:"C:\Program Files (x86)\Reference Assemblies\
+Microsoft\Framework\.NETFramework\v4.6.2\System.Workflow.Runtime.dll" 
+/reference:"C:\Program Files (x86)\Reference 
+Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\System.Xaml.dll" 
+/reference:"C:\Program Files (x86)\Reference 
+Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\System.Xml.dll" 
+/reference:"C:\Program Files (x86)\Reference 
+Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\System.Xml.Linq.dll" 
+/reference:"C:\Program Files (x86)\Reference 
+Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\WindowsBase.dll" 
+/reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NET
+Framework\v4.6.2\Facades\System.Collections.Concurrent.dll" 
+/reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NET
+Framework\v4.6.2\Facades\System.Collections.dll" /reference:"C:\Program Files 
+(x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\Facades\Syst
+em.ComponentModel.Annotations.dll" /reference:"C:\Program Files (x86)\Reference 
+Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\Facades\System.ComponentMode
+l.dll" /reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framewo
+rk\.NETFramework\v4.6.2\Facades\System.ComponentModel.EventBasedAsync.dll" 
+/reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NET
+Framework\v4.6.2\Facades\System.Diagnostics.Contracts.dll" 
+/reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NET
+Framework\v4.6.2\Facades\System.Diagnostics.Debug.dll" /reference:"C:\Program 
+Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\Facade
+s\System.Diagnostics.Tools.dll" /reference:"C:\Program Files (x86)\Reference Ass
+emblies\Microsoft\Framework\.NETFramework\v4.6.2\Facades\System.Diagnostics.Trac
+ing.dll" /reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Frame
+work\.NETFramework\v4.6.2\Facades\System.Dynamic.Runtime.dll" 
+/reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NET
+Framework\v4.6.2\Facades\System.Globalization.dll" /reference:"C:\Program Files 
+(x86)\Reference 
+Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\Facades\System.IO.dll" 
+/reference:"C:\Program Files (x86)\Reference 
+Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\Facades\System.Linq.dll" 
+/reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NET
+Framework\v4.6.2\Facades\System.Linq.Expressions.dll" /reference:"C:\Program 
+Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\Facade
+s\System.Linq.Parallel.dll" /reference:"C:\Program Files (x86)\Reference Assembl
+ies\Microsoft\Framework\.NETFramework\v4.6.2\Facades\System.Linq.Queryable.dll" 
+/reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NET
+Framework\v4.6.2\Facades\System.Net.NetworkInformation.dll" 
+/reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NET
+Framework\v4.6.2\Facades\System.Net.Primitives.dll" /reference:"C:\Program 
+Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\Facade
+s\System.Net.Requests.dll" /reference:"C:\Program Files (x86)\Reference Assembli
+es\Microsoft\Framework\.NETFramework\v4.6.2\Facades\System.Net.WebHeaderCollecti
+on.dll" /reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framew
+ork\.NETFramework\v4.6.2\Facades\System.ObjectModel.dll" /reference:"C:\Program 
+Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\Facade
+s\System.Reflection.dll" /reference:"C:\Program Files (x86)\Reference Assemblies
+\Microsoft\Framework\.NETFramework\v4.6.2\Facades\System.Reflection.Emit.dll" 
+/reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NET
+Framework\v4.6.2\Facades\System.Reflection.Emit.ILGeneration.dll" 
+/reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NET
+Framework\v4.6.2\Facades\System.Reflection.Emit.Lightweight.dll" 
+/reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NET
+Framework\v4.6.2\Facades\System.Reflection.Extensions.dll" 
+/reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NET
+Framework\v4.6.2\Facades\System.Reflection.Primitives.dll" 
+/reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NET
+Framework\v4.6.2\Facades\System.Resources.ResourceManager.dll" 
+/reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NET
+Framework\v4.6.2\Facades\System.Runtime.Extensions.dll" /reference:"C:\Program 
+Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\Facade
+s\System.Runtime.Handles.dll" /reference:"C:\Program Files (x86)\Reference Assem
+blies\Microsoft\Framework\.NETFramework\v4.6.2\Facades\System.Runtime.InteropSer
+vices.dll" /reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Fra
+mework\.NETFramework\v4.6.2\Facades\System.Runtime.InteropServices.WindowsRuntim
+e.dll" /reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framewo
+rk\.NETFramework\v4.6.2\Facades\System.Runtime.Numerics.dll" 
+/reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NET
+Framework\v4.6.2\Facades\System.Runtime.Serialization.Json.dll" 
+/reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NET
+Framework\v4.6.2\Facades\System.Runtime.Serialization.Primitives.dll" 
+/reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NET
+Framework\v4.6.2\Facades\System.Runtime.Serialization.Xml.dll" 
+/reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NET
+Framework\v4.6.2\Facades\System.Security.Principal.dll" /reference:"C:\Program 
+Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\Facade
+s\System.ServiceModel.NetTcp.dll" /reference:"C:\Program Files (x86)\Reference A
+ssemblies\Microsoft\Framework\.NETFramework\v4.6.2\Facades\System.Text.Encoding.
+dll" /reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework
+\.NETFramework\v4.6.2\Facades\System.Text.Encoding.Extensions.dll" 
+/reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NET
+Framework\v4.6.2\Facades\System.Text.RegularExpressions.dll" 
+/reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NET
+Framework\v4.6.2\Facades\System.Threading.dll" /reference:"C:\Program Files 
+(x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\Facades\Syst
+em.Threading.Tasks.dll" /reference:"C:\Program Files (x86)\Reference Assemblies\
+Microsoft\Framework\.NETFramework\v4.6.2\Facades\System.Threading.Tasks.Parallel
+.dll" /reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framewor
+k\.NETFramework\v4.6.2\Facades\System.Threading.Timer.dll" 
+/reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NET
+Framework\v4.6.2\Facades\System.Xml.ReaderWriter.dll" /reference:"C:\Program 
+Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\Facade
+s\System.Xml.XDocument.dll" /reference:"C:\Program Files (x86)\Reference Assembl
+ies\Microsoft\Framework\.NETFramework\v4.6.2\Facades\System.Xml.XmlSerializer.dl
+l" /debug+ /debug:full /filealign:512 /optimize- 
+/out:obj\Debug\Dev.DevKit.Console.exe /subsystemversion:6.00 /target:exe 
+/utf8output /langversion:7.3 /analyzer:..\packages\DynamicsCrm.DevKit.Analyzers.
+4.0.0\analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll AppSettings.cs 
+DEVKIT1005.cs DEVKIT1002.cs Program.cs Properties\AssemblyInfo.cs 
+Debug\Helper.cs Debug\TracingServiceFake.cs DEVKIT1004.cs DEVKIT1016.cs D:\githu
+b\Dynamics-Crm-DevKit\test\4.00.00.00\TestAnalyzers\Dev.DevKit.Shared\Lib\Date.c
+s D:\github\Dynamics-Crm-DevKit\test\4.00.00.00\TestAnalyzers\Dev.DevKit.Shared\
+Lib\PluginCore.cs D:\github\Dynamics-Crm-DevKit\test\4.00.00.00\TestAnalyzers\De
+v.DevKit.Shared\Lib\Extension.cs D:\github\Dynamics-Crm-DevKit\test\4.00.00.00\T
+estAnalyzers\Dev.DevKit.Shared\Lib\EntityBase.cs D:\github\Dynamics-Crm-DevKit\t
+est\4.00.00.00\TestAnalyzers\Dev.DevKit.Shared\Lib\SimpleJson.cs 
+"obj\Debug\.NETFramework,Version=v4.6.2.AssemblyAttributes.cs"'
+
+

@@ -177,6 +177,7 @@
     <Compile Include="Debug\Helper.cs" />
     <Compile Include="Debug\TracingServiceFake.cs" />
     <Compile Include="DEVKIT1004.cs" />
+    <Compile Include="DEVKIT1016.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

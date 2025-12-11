@@ -50,6 +50,7 @@
       <HintPath>..\packages\System.Buffers.4.6.1\lib\net462\System.Buffers.dll</HintPath>
     </Reference>
     <Reference Include="System.Core" />
+    <Reference Include="System.Net.Http" />
     <Reference Include="System.DirectoryServices" />
     <Reference Include="System.DirectoryServices.AccountManagement" />
     <Reference Include="System.IdentityModel" />
@@ -115,6 +116,16 @@
     <Compile Include="DEVKIT1003_08.cs" />
     <Compile Include="DEVKIT1003_09.cs" />
     <Compile Include="DEVKIT1003_10.cs" />
+    <Compile Include="DEVKIT1006.cs" />
+    <Compile Include="DEVKIT1007.cs" />
+    <Compile Include="DEVKIT1008.cs" />
+    <Compile Include="DEVKIT1009.cs" />
+    <Compile Include="DEVKIT1010.cs" />
+    <Compile Include="DEVKIT1011.cs" />
+    <Compile Include="DEVKIT1012.cs" />
+    <Compile Include="DEVKIT1013.cs" />
+    <Compile Include="DEVKIT1014.cs" />
+    <Compile Include="DEVKIT1015.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <None Include="packages.config" />
   </ItemGroup>
