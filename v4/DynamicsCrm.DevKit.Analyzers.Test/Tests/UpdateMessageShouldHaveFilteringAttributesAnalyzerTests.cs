@@ -38,6 +38,8 @@ public class PluginSample
 }}
 ";
 
+        #region Non-diagnostic tests
+
         [Fact]
         public async Task NoDiagnostics_When_NotCrmPluginRegistration()
         {
@@ -53,21 +55,81 @@ public class PluginSample
         }
 
         [Fact]
-        public async Task Diagnostic_When_Create_FilteringAttributes_Empty()
-        {
-            var src = WrapInClass("[CrmPluginRegistration(\"create\", null, 0, \"account\", \"\")] ");
-            var expected = CSharpAnalyzerVerifier<UpdateMessageShouldHaveFilteringAttributesAnalyzer>
-                .Diagnostic(DiagnosticDescriptors.UpdateMessageShouldHaveFilteringAttributes)
-                .WithSpan(23, 58, 23, 60);
-            await CSharpAnalyzerVerifier<UpdateMessageShouldHaveFilteringAttributesAnalyzer>.VerifyAnalyzerAsync(src, expected);
-        }
-
-        [Fact]
         public async Task NoDiagnostics_When_Update_Missing_FilteringAttributes()
         {
             var src = WrapInClass("[CrmPluginRegistration(\"update\")] ");
             await CSharpAnalyzerVerifier<UpdateMessageShouldHaveFilteringAttributesAnalyzer>.VerifyAnalyzerAsync(src);
         }
+
+        [Fact]
+        public async Task NoDiagnostics_When_Update_FilteringAttributes_NonEmpty()
+        {
+            var src = WrapInClass("[CrmPluginRegistration(\"update\", null, 0, \"account\", \"firstname,lastname\")] ");
+            await CSharpAnalyzerVerifier<UpdateMessageShouldHaveFilteringAttributesAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        [Fact]
+        public async Task NoDiagnostics_When_Create_FilteringAttributes_NonEmpty()
+        {
+            var src = WrapInClass("[CrmPluginRegistration(\"create\", null, 0, \"account\", \"firstname,lastname\")] ");
+            await CSharpAnalyzerVerifier<UpdateMessageShouldHaveFilteringAttributesAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        [Fact]
+        public async Task NoDiagnostics_When_Message_Not_CreateOrUpdateFamily()
+        {
+            // Delete, Retrieve, RetrieveMultiple should not trigger
+            var src = WrapInClass("[CrmPluginRegistration(\"delete\", null, 0, \"account\", \"\")] ");
+            await CSharpAnalyzerVerifier<UpdateMessageShouldHaveFilteringAttributesAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        #endregion
+
+        #region Create messages - Warning severity
+
+        [Fact]
+        public async Task Diagnostic_When_Create_FilteringAttributes_Empty()
+        {
+            var src = WrapInClass("[CrmPluginRegistration(\"create\", null, 0, \"account\", \"\")] ");
+            var expected = CSharpAnalyzerVerifier<UpdateMessageShouldHaveFilteringAttributesAnalyzer>
+                .Diagnostic(DiagnosticDescriptors.CreateMessageShouldHaveFilteringAttributes)
+                .WithSpan(23, 58, 23, 60);
+            await CSharpAnalyzerVerifier<UpdateMessageShouldHaveFilteringAttributesAnalyzer>.VerifyAnalyzerAsync(src, expected);
+        }
+
+        [Fact]
+        public async Task Diagnostic_When_Create_FilteringAttributes_All_Asterisk()
+        {
+            var src = WrapInClass("[CrmPluginRegistration(\"create\", null, 0, \"account\", \"*\")] ");
+            var expected = CSharpAnalyzerVerifier<UpdateMessageShouldHaveFilteringAttributesAnalyzer>
+                .Diagnostic(DiagnosticDescriptors.CreateMessageShouldNotUseAllAttributes)
+                .WithSpan(23, 58, 23, 61);
+            await CSharpAnalyzerVerifier<UpdateMessageShouldHaveFilteringAttributesAnalyzer>.VerifyAnalyzerAsync(src, expected);
+        }
+
+        [Fact]
+        public async Task Diagnostic_When_CreateMultiple_FilteringAttributes_Empty()
+        {
+            var src = WrapInClass("[CrmPluginRegistration(\"createmultiple\", null, 0, \"account\", \"\")] ");
+            var expected = CSharpAnalyzerVerifier<UpdateMessageShouldHaveFilteringAttributesAnalyzer>
+                .Diagnostic(DiagnosticDescriptors.CreateMessageShouldHaveFilteringAttributes)
+                .WithSpan(23, 66, 23, 68);
+            await CSharpAnalyzerVerifier<UpdateMessageShouldHaveFilteringAttributesAnalyzer>.VerifyAnalyzerAsync(src, expected);
+        }
+
+        [Fact]
+        public async Task Diagnostic_When_OnExternalCreated_FilteringAttributes_Empty()
+        {
+            var src = WrapInClass("[CrmPluginRegistration(\"onexternalcreated\", null, 0, \"account\", \"\")] ");
+            var expected = CSharpAnalyzerVerifier<UpdateMessageShouldHaveFilteringAttributesAnalyzer>
+                .Diagnostic(DiagnosticDescriptors.CreateMessageShouldHaveFilteringAttributes)
+                .WithSpan(23, 69, 23, 71);
+            await CSharpAnalyzerVerifier<UpdateMessageShouldHaveFilteringAttributesAnalyzer>.VerifyAnalyzerAsync(src, expected);
+        }
+
+        #endregion
+
+        #region Update messages - Error severity
 
         [Fact]
         public async Task Diagnostic_When_Update_FilteringAttributes_Empty()
@@ -87,13 +149,6 @@ public class PluginSample
                 .Diagnostic(DiagnosticDescriptors.UpdateMessageShouldNotUseAllAttributes)
                 .WithSpan(23, 58, 23, 61);
             await CSharpAnalyzerVerifier<UpdateMessageShouldHaveFilteringAttributesAnalyzer>.VerifyAnalyzerAsync(src, expected);
-        }
-
-        [Fact]
-        public async Task NoDiagnostics_When_Update_FilteringAttributes_NonEmpty()
-        {
-            var src = WrapInClass("[CrmPluginRegistration(\"update\", null, 0, \"account\", \"firstname,lastname\")] ");
-            await CSharpAnalyzerVerifier<UpdateMessageShouldHaveFilteringAttributesAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
         [Fact]
@@ -126,49 +181,6 @@ public class PluginSample
             await CSharpAnalyzerVerifier<UpdateMessageShouldHaveFilteringAttributesAnalyzer>.VerifyAnalyzerAsync(src, expected);
         }
 
-        [Fact]
-        public async Task Diagnostic_When_CreateMultiple_FilteringAttributes_Empty()
-        {
-            var src = WrapInClass("[CrmPluginRegistration(\"createmultiple\", null, 0, \"account\", \"\")] ");
-            var expected = CSharpAnalyzerVerifier<UpdateMessageShouldHaveFilteringAttributesAnalyzer>
-                .Diagnostic(DiagnosticDescriptors.UpdateMessageShouldHaveFilteringAttributes)
-                .WithSpan(23, 66, 23, 68);
-            await CSharpAnalyzerVerifier<UpdateMessageShouldHaveFilteringAttributesAnalyzer>.VerifyAnalyzerAsync(src, expected);
-        }
-
-        [Fact]
-        public async Task Diagnostic_When_Create_FilteringAttributes_All_Asterisk()
-        {
-            var src = WrapInClass("[CrmPluginRegistration(\"create\", null, 0, \"account\", \"*\")] ");
-            var expected = CSharpAnalyzerVerifier<UpdateMessageShouldHaveFilteringAttributesAnalyzer>
-                .Diagnostic(DiagnosticDescriptors.UpdateMessageShouldNotUseAllAttributes)
-                .WithSpan(23, 58, 23, 61);
-            await CSharpAnalyzerVerifier<UpdateMessageShouldHaveFilteringAttributesAnalyzer>.VerifyAnalyzerAsync(src, expected);
-        }
-
-        [Fact]
-        public async Task NoDiagnostics_When_Create_FilteringAttributes_NonEmpty()
-        {
-            var src = WrapInClass("[CrmPluginRegistration(\"create\", null, 0, \"account\", \"firstname,lastname\")] ");
-            await CSharpAnalyzerVerifier<UpdateMessageShouldHaveFilteringAttributesAnalyzer>.VerifyAnalyzerAsync(src);
-        }
-
-        [Fact]
-        public async Task NoDiagnostics_When_Message_Not_CreateOrUpdateFamily()
-        {
-            // Delete, Retrieve, RetrieveMultiple should not trigger
-            var src = WrapInClass("[CrmPluginRegistration(\"delete\", null, 0, \"account\", \"\")] ");
-            await CSharpAnalyzerVerifier<UpdateMessageShouldHaveFilteringAttributesAnalyzer>.VerifyAnalyzerAsync(src);
-        }
-
-        [Fact]
-        public async Task Diagnostic_When_OnExternalCreated_FilteringAttributes_Empty()
-        {
-            var src = WrapInClass("[CrmPluginRegistration(\"onexternalcreated\", null, 0, \"account\", \"\")] ");
-            var expected = CSharpAnalyzerVerifier<UpdateMessageShouldHaveFilteringAttributesAnalyzer>
-                .Diagnostic(DiagnosticDescriptors.UpdateMessageShouldHaveFilteringAttributes)
-                .WithSpan(23, 69, 23, 71);
-            await CSharpAnalyzerVerifier<UpdateMessageShouldHaveFilteringAttributesAnalyzer>.VerifyAnalyzerAsync(src, expected);
-        }
+        #endregion
     }
 }

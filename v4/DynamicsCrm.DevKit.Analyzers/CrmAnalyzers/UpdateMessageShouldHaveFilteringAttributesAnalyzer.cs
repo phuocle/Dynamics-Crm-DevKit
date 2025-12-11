@@ -16,18 +16,29 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
     /// 
     /// Based on Microsoft best practices:
     /// https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/include-filtering-attributes-plugin-registration
+    /// 
+    /// Severity:
+    /// - Update* messages: Error (must have filtering attributes)
+    /// - Create* messages: Warning (should have filtering attributes)
     /// </summary>
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class UpdateMessageShouldHaveFilteringAttributesAnalyzer : BaseDiagnosticAnalyzer
     {
         /// <summary>
-        /// Messages that require filtering attributes to be specified.
+        /// Create messages - Warning severity
         /// </summary>
-        private static readonly HashSet<string> MessagesRequiringFilteringAttributes = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+        private static readonly HashSet<string> CreateMessages = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
         {
             "create",
             "createmultiple",
-            "onexternalcreated",
+            "onexternalcreated"
+        };
+
+        /// <summary>
+        /// Update messages - Error severity
+        /// </summary>
+        private static readonly HashSet<string> UpdateMessages = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+        {
             "update",
             "updatemultiple",
             "onexternalupdated"
@@ -38,7 +49,9 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
             get
             {
                 return ImmutableArray.Create(
+                    DiagnosticDescriptors.CreateMessageShouldHaveFilteringAttributes,
                     DiagnosticDescriptors.UpdateMessageShouldHaveFilteringAttributes,
+                    DiagnosticDescriptors.CreateMessageShouldNotUseAllAttributes,
                     DiagnosticDescriptors.UpdateMessageShouldNotUseAllAttributes);
             }
         }
@@ -79,8 +92,11 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
             if (string.IsNullOrEmpty(message))
                 return;
 
-            // Check if this message requires filtering attributes
-            if (!MessagesRequiringFilteringAttributes.Contains(message))
+            // Check if this is a Create or Update message
+            bool isCreateMessage = CreateMessages.Contains(message);
+            bool isUpdateMessage = UpdateMessages.Contains(message);
+
+            if (!isCreateMessage && !isUpdateMessage)
                 return;
 
             // Get the filteringAttributes argument (fifth positional or named "filteringAttributes")
@@ -92,17 +108,19 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
             // Check for empty or invalid filtering attributes
             if (string.IsNullOrWhiteSpace(filteringValue))
             {
-                DiagnosticHelpers.ReportDiagnostic(
-                    context, 
-                    DiagnosticDescriptors.UpdateMessageShouldHaveFilteringAttributes, 
-                    filteringArgument.GetLocation());
+                var descriptor = isUpdateMessage
+                    ? DiagnosticDescriptors.UpdateMessageShouldHaveFilteringAttributes
+                    : DiagnosticDescriptors.CreateMessageShouldHaveFilteringAttributes;
+
+                DiagnosticHelpers.ReportDiagnostic(context, descriptor, filteringArgument.GetLocation());
             }
             else if (filteringValue == "*")
             {
-                DiagnosticHelpers.ReportDiagnostic(
-                    context, 
-                    DiagnosticDescriptors.UpdateMessageShouldNotUseAllAttributes, 
-                    filteringArgument.GetLocation());
+                var descriptor = isUpdateMessage
+                    ? DiagnosticDescriptors.UpdateMessageShouldNotUseAllAttributes
+                    : DiagnosticDescriptors.CreateMessageShouldNotUseAllAttributes;
+
+                DiagnosticHelpers.ReportDiagnostic(context, descriptor, filteringArgument.GetLocation());
             }
         }
 

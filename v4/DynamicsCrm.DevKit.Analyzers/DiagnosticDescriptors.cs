@@ -25,21 +25,37 @@ namespace DynamicsCrm.DevKit.Analyzers
             );
         }
 
-        /// <summary>DEVKIT1001</summary>
+        /// <summary>DEVKIT1001 - Create messages with missing filtering (Warning)</summary>
+        public static readonly DiagnosticDescriptor CreateMessageShouldHaveFilteringAttributes = CreateDescriptor(
+            "DEVKIT1001",
+            "Create message should have filtering attributes",
+            "Create message should have filtering attributes",
+            DiagnosticSeverity.Warning,
+            "Create, CreateMultiple, and OnExternalCreated messages should have filtering attributes.");
+
+        /// <summary>DEVKIT1001 - Update messages with missing filtering (Error)</summary>
         public static readonly DiagnosticDescriptor UpdateMessageShouldHaveFilteringAttributes = CreateDescriptor(
             "DEVKIT1001",
-            "Create/Update message should have filtering attributes",
-            "Create/Update message should have filtering attributes",
+            "Update message should have filtering attributes",
+            "Update message should have filtering attributes",
             DiagnosticSeverity.Error,
-            "Create, CreateMultiple, OnExternalCreated, Update, UpdateMultiple, and OnExternalUpdated messages should have filtering attributes.");
+            "Update, UpdateMultiple, and OnExternalUpdated messages must have filtering attributes.");
 
-        /// <summary>DEVKIT1001</summary>
+        /// <summary>DEVKIT1001 - Create messages with * filtering (Warning)</summary>
+        public static readonly DiagnosticDescriptor CreateMessageShouldNotUseAllAttributes = CreateDescriptor(
+            "DEVKIT1001",
+            "Create message should not use all attributes",
+            "Create message should not use all attributes",
+            DiagnosticSeverity.Warning,
+            "Create, CreateMultiple, and OnExternalCreated messages should have specific filtering attributes, not '*'.");
+
+        /// <summary>DEVKIT1001 - Update messages with * filtering (Error)</summary>
         public static readonly DiagnosticDescriptor UpdateMessageShouldNotUseAllAttributes = CreateDescriptor(
             "DEVKIT1001",
-            "Create/Update message should not use all attributes",
-            "Create/Update message should not use all attributes",
+            "Update message should not use all attributes",
+            "Update message should not use all attributes",
             DiagnosticSeverity.Error,
-            "Create, CreateMultiple, OnExternalCreated, Update, UpdateMultiple, and OnExternalUpdated messages should have specific filtering attributes, not '*'.");
+            "Update, UpdateMultiple, and OnExternalUpdated messages must have specific filtering attributes, not '*'.");
 
         /// <summary>DEVKIT1002</summary>
         public static readonly DiagnosticDescriptor NotUseColumnSetTrue = CreateDescriptor(
@@ -118,7 +134,7 @@ namespace DynamicsCrm.DevKit.Analyzers
             "DEVKIT1004",
             "Use the deprecated message",
             "Use the deprecated message",
-            DiagnosticSeverity.Warning,
+            DiagnosticSeverity.Info,
             "Use the deprecated message.");
 
         /// <summary>DEVKIT1005</summary>
@@ -126,7 +142,7 @@ namespace DynamicsCrm.DevKit.Analyzers
             "DEVKIT1005",
             "Entity Reference maybe null",
             "Entity Reference maybe null",
-            DiagnosticSeverity.Error,
+            DiagnosticSeverity.Warning,
             "Entity Reference maybe null.");
 
         /// <summary>DEVKIT1006</summary>
@@ -174,7 +190,7 @@ namespace DynamicsCrm.DevKit.Analyzers
             "DEVKIT1013",
             "Avoid registering plugins on Retrieve and RetrieveMultiple messages",
             "Consider avoiding plugin registration on '{0}' message due to performance impact",
-            DiagnosticSeverity.Warning,
+            DiagnosticSeverity.Info,
             "Plugins registered on Retrieve and RetrieveMultiple messages are called very frequently and can significantly impact system performance. Consider using alternate solutions like views, virtual entities, or client-side logic.");
 
         /// <summary>DEVKIT1011</summary>
@@ -190,7 +206,7 @@ namespace DynamicsCrm.DevKit.Analyzers
             "DEVKIT1012",
             "Consider using ITracingService in plug-ins",
             "Plug-in class '{0}' does not use ITracingService for debugging and monitoring",
-            DiagnosticSeverity.Warning,
+            DiagnosticSeverity.Info,
             "Using ITracingService helps with debugging and monitoring plugin execution. Trace logs are captured in the platform and can be viewed using the Plug-in Trace Log viewer.");
 
         /// <summary>DEVKIT1016</summary>
@@ -198,7 +214,7 @@ namespace DynamicsCrm.DevKit.Analyzers
             "DEVKIT1016",
             "Avoid retrieving unpublished metadata",
             "'{0}' should not use RetrieveAsIfPublished = true; this causes slower performance",
-            DiagnosticSeverity.Warning,
+            DiagnosticSeverity.Info,
             "Retrieving unpublished metadata adds overhead to processing and returns metadata that users might not expect. Only use RetrieveAsIfPublished = true when building a metadata editor.");
 
         /// <summary>DEVKIT1014</summary>
@@ -214,7 +230,7 @@ namespace DynamicsCrm.DevKit.Analyzers
             "DEVKIT1015",
             "Avoid blocking async patterns in plug-ins",
             "Consider alternatives to {0} in plug-ins as it can cause deadlocks in some scenarios",
-            DiagnosticSeverity.Warning,
+            DiagnosticSeverity.Info,
             "Using GetAwaiter().GetResult(), .Result, or .Wait() can cause deadlocks. While sometimes necessary in plugins (async Execute not supported), ensure you understand the implications and use ConfigureAwait(false).");
 
         /// <summary>DEVKIT1017</summary>
@@ -222,7 +238,7 @@ namespace DynamicsCrm.DevKit.Analyzers
             "DEVKIT1017",
             "Avoid Console output in plug-ins and workflow activities",
             "Don't use '{0}' in plug-ins or workflow activities; console output has no effect in sandbox",
-            DiagnosticSeverity.Warning,
+            DiagnosticSeverity.Info,
             "Console.Write and Console.WriteLine have no effect in the Dataverse sandbox environment. Use ITracingService instead for debugging and logging.");
     }
 }

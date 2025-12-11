@@ -4,24 +4,25 @@ Based on research of [Microsoft's Dataverse Best Practices](https://learn.micros
 
 ## Current Analyzers (Already Implemented)
 
-| ID | Description | MS Best Practice |
-|---|---|---|
-| DEVKIT1001 | Create/Update message should have filtering attributes | ✅ [Include filtering attributes](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/include-filtering-attributes-plugin-registration) |
-| DEVKIT1002 | Don't use ColumnSet(true) | ✅ [Retrieve specific columns](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/work-with-data/retrieve-specific-columns-entity-via-query-apis) |
-| DEVKIT1003 | Plugin image validation | ✅ [Understand the execution context](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/understand-the-data-context) |
-| DEVKIT1004 | Deprecated SDK messages | ✅ [Deprecated SDK messages](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/org-service/deprecations) |
-| DEVKIT1005 | EntityReference maybe null | ✅ [Entity class](https://learn.microsoft.com/en-us/dotnet/api/microsoft.xrm.sdk.entity) |
-| DEVKIT1006 | Batch requests in plugins | ✅ [Avoid batch requests](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/avoid-batch-requests-plugin) |
-| DEVKIT1007 | Stateless IPlugin | ✅ [Develop IPlugin as stateless](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/develop-iplugin-implementations-stateless) |
-| DEVKIT1008 | Don't use parallel execution | ✅ [Don't use parallel execution](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/do-not-use-parallel-execution-in-plug-ins) |
-| DEVKIT1009 | Set KeepAlive to false | ✅ [Set KeepAlive to false](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/set-keepalive-false-interacting-external-hosts-plugin) |
-| DEVKIT1010 | Set Timeout for HTTP calls | ✅ [Set Timeout for external calls](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/set-timeout-for-external-calls-from-plug-ins) |
-| DEVKIT1011 | Use InvalidPluginExecutionException | ✅ [Use InvalidPluginExecutionException](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/use-invalidpluginexecutionexception-plugin-workflow-activities) |
-| DEVKIT1012 | ITracingService recommendation | ✅ [Use ITracingService](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/use-itracingservice-plugins) |
-| DEVKIT1013 | Avoid Retrieve/RetrieveMultiple plugins | ✅ [Limit Retrieve/RetrieveMultiple plugins](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/limit-registration-plugins-retrieve-retrievemultiple) |
-| DEVKIT1014 | Avoid AppDomain event registration | ✅ Sandbox limitation |
-| DEVKIT1015 | Avoid blocking async patterns | ✅ Best practice |
-| DEVKIT1016 | Avoid RetrieveAsIfPublished = true | ✅ [Retrieve published metadata](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/work-with-metadata/retrieve-published-metadata) |
+| ID | Description | Severity | MS Best Practice |
+|---|---|:---:|---|
+| DEVKIT1001 | Create/Update message should have filtering attributes | ⚠️ Warning | [Include filtering attributes](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/include-filtering-attributes-plugin-registration) |
+| DEVKIT1002 | Don't use ColumnSet(true) | ⚠️ Warning | [Retrieve specific columns](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/work-with-data/retrieve-specific-columns-entity-via-query-apis) |
+| DEVKIT1003 | Plugin image validation | ❌ Error | [Understand the execution context](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/understand-the-data-context) |
+| DEVKIT1004 | Deprecated SDK messages | ℹ️ Info | [Deprecated SDK messages](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/org-service/deprecations) |
+| DEVKIT1005 | EntityReference maybe null | ⚠️ Warning | [Entity class](https://learn.microsoft.com/en-us/dotnet/api/microsoft.xrm.sdk.entity) |
+| DEVKIT1006 | Batch requests in plugins | ⚠️ Warning | [Avoid batch requests](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/avoid-batch-requests-plugin) |
+| DEVKIT1007 | Stateless IPlugin | ❌ Error | [Develop IPlugin as stateless](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/develop-iplugin-implementations-stateless) |
+| DEVKIT1008 | Don't use parallel execution | ❌ Error | [Don't use parallel execution](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/do-not-use-parallel-execution-in-plug-ins) |
+| DEVKIT1009 | Set KeepAlive to false | ⚠️ Warning | [Set KeepAlive to false](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/set-keepalive-false-interacting-external-hosts-plugin) |
+| DEVKIT1010 | Set Timeout for HTTP calls | ⚠️ Warning | [Set Timeout for external calls](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/set-timeout-for-external-calls-from-plug-ins) |
+| DEVKIT1011 | Use InvalidPluginExecutionException | ⚠️ Warning | [Use InvalidPluginExecutionException](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/use-invalidpluginexecutionexception-plugin-workflow-activities) |
+| DEVKIT1012 | ITracingService recommendation | ℹ️ Info | [Use ITracingService](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/use-itracingservice-plugins) |
+| DEVKIT1013 | Avoid Retrieve/RetrieveMultiple plugins | ℹ️ Info | [Limit Retrieve/RetrieveMultiple plugins](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/limit-registration-plugins-retrieve-retrievemultiple) |
+| DEVKIT1014 | Avoid AppDomain event registration | ❌ Error | Sandbox limitation |
+| DEVKIT1015 | Avoid blocking async patterns | ℹ️ Info | Best practice |
+| DEVKIT1016 | Avoid RetrieveAsIfPublished = true | ℹ️ Info | [Retrieve published metadata](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/work-with-metadata/retrieve-published-metadata) |
+| DEVKIT1017 | Avoid Console output in plugins | ℹ️ Info | Sandbox limitation |
 
 ---
 
@@ -29,12 +30,11 @@ Based on research of [Microsoft's Dataverse Best Practices](https://learn.micros
 
 ### High Priority
 
-| ID | Title | Description | MS Best Practice |
-|---|---|---|---|
-| DEVKIT1017 | Avoid Console Output in Plugins | Detect Console.Write/WriteLine in plugins (no effect in sandbox) | Sandbox limitation |
-| DEVKIT1018 | Implement All Query Types for PreOperation RetrieveMultiple | When filtering in PreOperation RetrieveMultiple, ensure FetchExpression, QueryExpression, and QueryByAttribute are all handled | [Implement all types of queries](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/implement-all-types-of-queries-when-filtering-preoperation-retrievemultiple) |
-| DEVKIT1019 | Avoid File/IO Operations in Plugins | Detect System.IO file operations that are blocked in sandbox | Sandbox limitation |
-| DEVKIT1020 | Duplicate Plugin Step Registration | Detect duplicate `[CrmPluginRegistration]` attributes with same message, entity, and stage | [Don't duplicate plug-in step registration](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/do-not-duplicate-plugin-step-registration) |
+| ID | Title | Suggested Severity | Description | MS Best Practice |
+|---|---|:---:|---|---|
+| DEVKIT1018 | All Query Types for PreOperation RetrieveMultiple | ⚠️ Warning | Handle FetchExpression, QueryExpression, QueryByAttribute | [Implement all types of queries](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/implement-all-types-of-queries-when-filtering-preoperation-retrievemultiple) |
+| DEVKIT1019 | Avoid File/IO Operations in Plugins | ❌ Error | Detect System.IO file operations blocked in sandbox | Sandbox limitation |
+| DEVKIT1020 | Duplicate Plugin Step Registration | ⚠️ Warning | Detect duplicate `[CrmPluginRegistration]` attributes | [Don't duplicate plug-in step registration](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/do-not-duplicate-plugin-step-registration) |
 
 ### Medium Priority
 

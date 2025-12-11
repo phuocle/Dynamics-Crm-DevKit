@@ -26,22 +26,23 @@ Or add to your `.csproj`:
 
 | Rule ID | Severity | Description |
 |---------|----------|-------------|
-| [DEVKIT1001](#devkit1001) | Error | Create/Update message should have filtering attributes |
+| [DEVKIT1001](#devkit1001) | Error/Warning | Create/Update message should have filtering attributes |
 | [DEVKIT1002](#devkit1002) | Warning | Don't use `ColumnSet(true)` |
 | [DEVKIT1003](#devkit1003) | Error | Plugin image validation |
-| [DEVKIT1004](#devkit1004) | Warning | Use of deprecated SDK messages |
-| [DEVKIT1005](#devkit1005) | Error | EntityReference maybe null |
+| [DEVKIT1004](#devkit1004) | Info | Use of deprecated SDK messages |
+| [DEVKIT1005](#devkit1005) | Warning | EntityReference maybe null |
 | [DEVKIT1006](#devkit1006) | Warning | Don't use batch request types in plug-ins |
 | [DEVKIT1007](#devkit1007) | Error | IPlugin implementations should be stateless |
 | [DEVKIT1008](#devkit1008) | Error | Don't use parallel execution in plug-ins |
 | [DEVKIT1009](#devkit1009) | Warning | Set KeepAlive to false for external HTTP calls |
 | [DEVKIT1010](#devkit1010) | Warning | Set Timeout for external HTTP calls |
 | [DEVKIT1011](#devkit1011) | Warning | Use InvalidPluginExecutionException for errors |
-| [DEVKIT1012](#devkit1012) | Warning | Consider using ITracingService in plug-ins |
-| [DEVKIT1013](#devkit1013) | Warning | Avoid registering plugins on Retrieve/RetrieveMultiple |
+| [DEVKIT1012](#devkit1012) | Info | Consider using ITracingService in plug-ins |
+| [DEVKIT1013](#devkit1013) | Info | Avoid registering plugins on Retrieve/RetrieveMultiple |
 | [DEVKIT1014](#devkit1014) | Error | Avoid AppDomain event registration in plug-ins |
-| [DEVKIT1015](#devkit1015) | Warning | Avoid blocking async patterns in plug-ins |
-| [DEVKIT1016](#devkit1016) | Warning | Avoid retrieving unpublished metadata |
+| [DEVKIT1015](#devkit1015) | Info | Avoid blocking async patterns in plug-ins |
+| [DEVKIT1016](#devkit1016) | Info | Avoid retrieving unpublished metadata |
+| [DEVKIT1017](#devkit1017) | Info | Avoid Console output in plug-ins |
 
 ---
 
@@ -638,6 +639,33 @@ var result = task.ConfigureAwait(false).GetAwaiter().GetResult();
 ```
 
 [📖 Documentation](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DEVKIT1015)
+
+---
+
+### DEVKIT1017
+**Avoid Console output in plug-ins and workflow activities**
+
+**Severity:** Info
+
+Console output methods like `Console.Write()` and `Console.WriteLine()` have no effect in the Dataverse sandbox environment. The console stream is redirected to null.
+
+**Patterns Detected:**
+```csharp
+// ⚠️ Has no effect in sandbox
+Console.WriteLine("Debug message");
+Console.Write($"Processing: {entity.Id}");
+Console.Error.WriteLine("Error occurred");
+```
+
+**Better Alternative:**
+```csharp
+// ✅ Use ITracingService for logging
+var tracingService = (ITracingService)serviceProvider.GetService(typeof(ITracingService));
+tracingService.Trace("Debug message");
+tracingService.Trace($"Processing: {entity.Id}");
+```
+
+[📖 Documentation](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DEVKIT1017)
 
 ---
 
