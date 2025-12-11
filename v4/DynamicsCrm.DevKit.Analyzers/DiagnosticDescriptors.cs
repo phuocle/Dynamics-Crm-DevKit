@@ -28,18 +28,18 @@ namespace DynamicsCrm.DevKit.Analyzers
         /// <summary>DEVKIT1001</summary>
         public static readonly DiagnosticDescriptor UpdateMessageShouldHaveFilteringAttributes = CreateDescriptor(
             "DEVKIT1001",
-            "Update message should have filtering attributes",
-            "Update message should have filtering attributes",
+            "Create/Update message should have filtering attributes",
+            "Create/Update message should have filtering attributes",
             DiagnosticSeverity.Error,
-            "Update message should have filtering attributes.");
+            "Create, CreateMultiple, OnExternalCreated, Update, UpdateMultiple, and OnExternalUpdated messages should have filtering attributes.");
 
         /// <summary>DEVKIT1001</summary>
         public static readonly DiagnosticDescriptor UpdateMessageShouldNotUseAllAttributes = CreateDescriptor(
             "DEVKIT1001",
-            "Update message should not use all attributes",
-            "Update message should not use all attributes",
+            "Create/Update message should not use all attributes",
+            "Create/Update message should not use all attributes",
             DiagnosticSeverity.Error,
-            "Update message should have filtering attributes.");
+            "Create, CreateMultiple, OnExternalCreated, Update, UpdateMultiple, and OnExternalUpdated messages should have specific filtering attributes, not '*'.");
 
         /// <summary>DEVKIT1002</summary>
         public static readonly DiagnosticDescriptor NotUseColumnSetTrue = CreateDescriptor(

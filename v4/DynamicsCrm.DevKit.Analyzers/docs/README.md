@@ -26,7 +26,7 @@ Or add to your `.csproj`:
 
 | Rule ID | Severity | Description |
 |---------|----------|-------------|
-| [DEVKIT1001](#devkit1001) | Error | Update message should have filtering attributes |
+| [DEVKIT1001](#devkit1001) | Error | Create/Update message should have filtering attributes |
 | [DEVKIT1002](#devkit1002) | Warning | Don't use `ColumnSet(true)` |
 | [DEVKIT1003](#devkit1003) | Error | Plugin image validation |
 | [DEVKIT1004](#devkit1004) | Warning | Use of deprecated SDK messages |
@@ -37,22 +37,20 @@ Or add to your `.csproj`:
 ---
 
 ### DEVKIT1001
-**Update message should have filtering attributes**
+**Create/Update message should have filtering attributes**
 
 **Severity:** Error
 
 **MS Best Practice:** [Include filtering attributes with plug-in registration](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/include-filtering-attributes-plugin-registration)
 
-Ensures that plugin registrations for `Update`, `UpdateMultiple`, or `OnExternalUpdated` messages include specific filtering attributes. This prevents the plugin from executing on every field change, improving performance.
+This analyzer ensures that plugin registrations for `Create`, `CreateMultiple`, `Update`, `UpdateMultiple`, `OnExternalCreated`, or `OnExternalUpdated` messages include specific filtering attributes. This prevents the plugin from executing on **every field change**, which can significantly impact performance.
 
 **Bad Code:**
 ```csharp
-[CrmPluginRegistration("Update", "account", StageEnum.PreOperation, ExecutionModeEnum.Synchronous, 
+[CrmPluginRegistration("Create", "account", StageEnum.PreOperation, ExecutionModeEnum.Synchronous, 
     filteringAttributes: "",  // ❌ Empty filtering attributes
-    stepName: "Pre-Update Account")]
-```
+    stepName: "Pre-Create Account")]
 
-```csharp
 [CrmPluginRegistration("Update", "account", StageEnum.PreOperation, ExecutionModeEnum.Synchronous, 
     filteringAttributes: "*",  // ❌ All attributes
     stepName: "Pre-Update Account")]
@@ -60,6 +58,10 @@ Ensures that plugin registrations for `Update`, `UpdateMultiple`, or `OnExternal
 
 **Good Code:**
 ```csharp
+[CrmPluginRegistration("Create", "account", StageEnum.PostOperation, ExecutionModeEnum.Synchronous, 
+    filteringAttributes: "name,accountnumber",  // ✓ Specific attributes
+    stepName: "Post-Create Account")]
+
 [CrmPluginRegistration("Update", "account", StageEnum.PreOperation, ExecutionModeEnum.Synchronous, 
     filteringAttributes: "name,accountnumber",  // ✓ Specific attributes
     stepName: "Pre-Update Account")]

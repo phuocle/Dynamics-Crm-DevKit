@@ -904,7 +904,8 @@ namespace DynamicsCrm.DevKit.Shared
             return message.ToLower() switch
             {
                 "create" or
-                "createmultiple" => true,
+                "createmultiple" or
+                "onexternalcreated" => true,
                 _ => false,
             };
         }

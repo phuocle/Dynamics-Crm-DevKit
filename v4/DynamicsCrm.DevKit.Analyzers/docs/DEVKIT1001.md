@@ -1,4 +1,4 @@
-# DEVKIT1001: Update Message Should Have Filtering Attributes
+# DEVKIT1001: Create/Update Message Should Have Filtering Attributes
 
 ## Overview
 
@@ -11,27 +11,38 @@
 
 ## Description
 
-This analyzer ensures that plugin registrations for `Update`, `UpdateMultiple`, or `OnExternalUpdated` messages include specific filtering attributes. Without filtering attributes, the plugin executes on **every field change**, which can significantly impact performance.
+This analyzer ensures that plugin registrations for `Create`, `CreateMultiple`, `Update`, `UpdateMultiple`, `OnExternalCreated`, or `OnExternalUpdated` messages include specific filtering attributes. Without filtering attributes, the plugin executes on **every field change**, which can significantly impact performance.
 
 ## Microsoft Best Practice
 
 📚 **[Include filtering attributes with plug-in registration](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/include-filtering-attributes-plugin-registration)**
 
-> Adding synchronous plug-in logic to the Update message event without including filtering attributes will cause the plug-in logic to be executed for any update to the entity. This can slow down the performance of the system.
+> Adding synchronous plug-in logic to Create or Update message events without including filtering attributes will cause the plug-in logic to be executed for any change to the entity. This can slow down the performance of the system.
 
 ## Why This Matters
 
-When you register a plugin on the `Update` message without filtering attributes:
+When you register a plugin on Create or Update messages without filtering attributes:
 
-1. **Performance Impact**: The plugin fires for every update, even if fields the plugin doesn't care about are modified
-2. **Unnecessary Execution**: Users experience delays when updating unrelated fields
-3. **Resource Waste**: Server resources are consumed processing updates that don't require plugin logic
+1. **Performance Impact**: The plugin fires for every create/update, even if fields the plugin doesn't care about are modified
+2. **Unnecessary Execution**: Users experience delays when modifying unrelated fields
+3. **Resource Waste**: Server resources are consumed processing changes that don't require plugin logic
 4. **Potential Cascading Issues**: Other plugins and workflows may be delayed
+
+## Applicable Messages
+
+| Message | Supports Filtering |
+|---------|:-----------------:|
+| `Create` | ✅ |
+| `CreateMultiple` | ✅ |
+| `OnExternalCreated` | ✅ |
+| `Update` | ✅ |
+| `UpdateMultiple` | ✅ |
+| `OnExternalUpdated` | ✅ |
 
 ## Detection
 
 The analyzer flags `[CrmPluginRegistration]` attributes where:
-- The message is `Update`, `UpdateMultiple`, or `OnExternalUpdated`
+- The message is `Create`, `CreateMultiple`, `Update`, `UpdateMultiple`, `OnExternalCreated`, or `OnExternalUpdated`
 - The `filteringAttributes` parameter is:
   - Empty string (`""`)
   - Asterisk (`"*"`) - which means all attributes
@@ -39,10 +50,19 @@ The analyzer flags `[CrmPluginRegistration]` attributes where:
 
 ## Code Examples
 
-### ❌ Bad Code
+### ❌ Bad Code: Empty Filtering Attributes
 
 ```csharp
-// Empty filtering attributes - fires on EVERY field update
+// Create with empty filtering - fires on EVERY create
+[CrmPluginRegistration("Create", "account", StageEnum.PreOperation, ExecutionModeEnum.Synchronous, 
+    filteringAttributes: "",
+    stepName: "Pre-Create Account")]
+public class AccountCreate : IPlugin
+{
+    public void Execute(IServiceProvider serviceProvider) { }
+}
+
+// Update with empty filtering - fires on EVERY field update
 [CrmPluginRegistration("Update", "account", StageEnum.PreOperation, ExecutionModeEnum.Synchronous, 
     filteringAttributes: "",
     stepName: "Pre-Update Account")]
@@ -52,21 +72,35 @@ public class AccountUpdate : IPlugin
 }
 ```
 
+### ❌ Bad Code: Using Asterisk
+
 ```csharp
 // Using asterisk - equivalent to no filter
-[CrmPluginRegistration("Update", "account", StageEnum.PreOperation, ExecutionModeEnum.Synchronous, 
+[CrmPluginRegistration("Create", "account", StageEnum.PreOperation, ExecutionModeEnum.Synchronous, 
     filteringAttributes: "*",
-    stepName: "Pre-Update Account")]
-public class AccountUpdate : IPlugin
+    stepName: "Pre-Create Account")]
+public class AccountCreate : IPlugin
 {
     public void Execute(IServiceProvider serviceProvider) { }
 }
 ```
 
-### ✅ Good Code
+### ✅ Good Code: Specific Filtering Attributes
 
 ```csharp
-// Specific filtering attributes - only fires when name or accountnumber changes
+// Create - only fires when name or accountnumber is provided
+[CrmPluginRegistration("Create", "account", StageEnum.PostOperation, ExecutionModeEnum.Synchronous, 
+    filteringAttributes: "name,accountnumber",
+    stepName: "Post-Create Account")]
+public class AccountCreate : IPlugin
+{
+    public void Execute(IServiceProvider serviceProvider)
+    {
+        // This code only runs when 'name' or 'accountnumber' is provided during creation
+    }
+}
+
+// Update - only fires when name or accountnumber changes
 [CrmPluginRegistration("Update", "account", StageEnum.PreOperation, ExecutionModeEnum.Synchronous, 
     filteringAttributes: "name,accountnumber",
     stepName: "Pre-Update Account")]
@@ -89,9 +123,18 @@ public class AccountUpdate : IPlugin
 filteringAttributes: "field1,field2,field3"
 ```
 
+### Examples by Message Type
+
+| Message | Example |
+|---------|---------|
+| Create | `filteringAttributes: "name,primarycontactid"` |
+| CreateMultiple | `filteringAttributes: "name,accountnumber"` |
+| Update | `filteringAttributes: "statecode,statuscode"` |
+| UpdateMultiple | `filteringAttributes: "ownerid"` |
+
 ## Suppression
 
-If you have a legitimate need to respond to all field updates, you can suppress this warning:
+If you have a legitimate need to respond to all field changes, you can suppress this warning:
 
 ```csharp
 #pragma warning disable DEVKIT1001

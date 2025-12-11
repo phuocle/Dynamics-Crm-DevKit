@@ -42,7 +42,8 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
                 return;
 
             var message = AnalyzerHelper.RemoveQuote(argurment0.ToFullString())?.ToLower();
-            if (message != "update" && message != "updatemultiple" && message != "onexternalupdated")
+            if (message != "update" && message != "updatemultiple" && message != "onexternalupdated" &&
+                message != "create" && message != "createmultiple" && message != "onexternalcreated")
                 return;
 
             if (attribute.TryFindArgument(4, "filteringAttributes", out var argurment4) && argurment4 != null)
