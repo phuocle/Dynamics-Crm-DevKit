@@ -29,9 +29,31 @@ A comprehensive CLI tool for Dynamics 365/Dataverse deployment automation and co
 ## Installation
 
 ### NuGet Package
+
+Download and install the NuGet package to your project using one of the following methods:
+
+#### Option 1: Visual Studio Package Manager Console
 ```powershell
-dotnet tool install --global DynamicsCrm.DevKit.Cli
+Install-Package DynamicsCrm.DevKit.Cli
 ```
+
+#### Option 2: .NET CLI
+```powershell
+dotnet add package DynamicsCrm.DevKit.Cli
+```
+
+#### Option 3: Direct Download from NuGet.org
+```powershell
+# Download from https://www.nuget.org/packages/DynamicsCrm.DevKit.Cli
+# Extract the .nupkg file (it's a zip file)
+# The CLI executable is located in the tools/ folder
+```
+
+After installation, the CLI executable (`DynamicsCrm.DevKit.Cli.exe`) and its dependencies can be found in:
+- **Visual Studio**: `packages\DynamicsCrm.DevKit.Cli.<version>\tools\`
+- **SDK-style projects**: `~\.nuget\packages\dynamicscrm.devkit.cli\<version>\tools\`
+
+> **Note:** This is NOT a dotnet global tool. The `dotnet tool install --global` command is not supported.
 
 ### Prerequisites
 - .NET Framework 4.8
@@ -71,20 +93,20 @@ dotnet tool install --global DynamicsCrm.DevKit.Cli
 
 ## Task Types
 
-| Type | Description | Task File |
-|------|-------------|-----------|
-| `servers` | Deploy plugins/workflows/custom APIs/data providers | TaskServer.cs |
-| `plugins` | Deploy plugins only | TaskServer.cs |
-| `workflows` | Deploy workflows only | TaskServer.cs |
-| `dataproviders` | Deploy data providers only | TaskServer.cs |
-| `webresources` | Deploy web resources | TaskWebResource.cs |
-| `downloadwebresources` | Download web resources from instance | TaskDownloadWebResource.cs |
-| `proxytypes` | Generate early-bound classes | TaskProxyType.cs |
-| `generators` | Generate code (JS/TypeScript/C#) | TaskGenerator.cs |
-| `solutionpackagers` | Extract/Pack solutions | TaskSolutionPackager.cs |
-| `uploadreports` | Upload reports | TaskUploadReport.cs |
-| `downloadreports` | Download reports from instance | TaskDownloadReport.cs |
-| `datasources` | Create virtual entities/data sources | TaskDataSource.cs |
+| Type | Description
+|------|-------------
+| `servers` | Deploy plugins/workflows/custom APIs/data providers
+| `plugins` | Deploy plugins only
+| `workflows` | Deploy workflows only
+| `dataproviders` | Deploy data providers only
+| `webresources` | Deploy web resources
+| `downloadwebresources` | Download web resources from instance
+| `proxytypes` | Generate early-bound classes
+| `generators` | Generate code (JS/TypeScript/C#)
+| `solutionpackagers` | Extract/Pack solutions
+| `uploadreports` | Upload reports
+| `downloadreports` | Download reports from instance
+| `datasources` | Create virtual entities/data sources
 
 ---
 
@@ -189,7 +211,7 @@ DynamicsCrm.DevKit.Cli /sdklogin:yes /url:"https://org.crm.dynamics.com" /json:"
 ## CrmPluginRegistrationAttribute Properties
 
 ### Core Properties
-- `Id` - Step GUID for idempotent deployments ✨
+- `Id` - Step GUID for idempotent deployments
 - `Message` - SDK message name
 - `EntityLogicalName` - Target entity
 - `Stage` - PreValidation/PreOperation/PostOperation
@@ -309,15 +331,7 @@ steps:
 | **Virtual Entities** | ❌ | ✅ |
 | **Code Generation** | ❌ | ✅ 3 types |
 | **Download Capabilities** | ❌ | ✅ |
-| **Instrument Command** | ✅ | ❌ (planned) |
-
----
-
-## Documentation
-
-- [spkl Comparison](spkl-comparison.md) - Detailed feature comparison
-- [Feature Gap Analysis](feature-gap-analysis.md) - Gap analysis with spkl
-- [Migration from spkl](migration-from-spkl.md) - Step-by-step migration guide
+| **Instrument Command** | ✅ | ✅ Use VSIX DynamicsCrmDevKit  |
 
 ---
 
@@ -325,6 +339,3 @@ steps:
 
 - GitHub: https://github.com/phuocle/Dynamics-Crm-DevKit
 - Issues: https://github.com/phuocle/Dynamics-Crm-DevKit/issues
-
----
-````
