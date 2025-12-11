@@ -22,7 +22,7 @@ $ErrorActionPreference = "Stop"
 
 # --- Configuration ---
 $VersionFile = "$PSScriptRoot\version.txt"
-$SolutionFile = "$PSScriptRoot\DynamicsCrm.DevKit.AllInOne.sln"
+$SolutionFile = "$PSScriptRoot\DynamicsCrm.DevKit.AllInOne.slnx"
 $PublishedRoot = "$PSScriptRoot\Published"
 
 # Files to update
