@@ -10,10 +10,15 @@ using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
 {
+    /// <summary>
+    /// Analyzer to detect usage of deprecated SDK request/response types.
+    /// 
+    /// Based on Microsoft documentation:
+    /// https://learn.microsoft.com/en-us/power-apps/developer/data-platform/org-service/deprecations
+    /// </summary>
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class DeprecatedAnalyzer : BaseDiagnosticAnalyzer
     {
-
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics
         {
             get { return ImmutableArray.Create(DiagnosticDescriptors.DeprecatedRequest); }
@@ -27,46 +32,59 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
             //    Debugger.Launch();
             //}
 #endif
+            if (context == null) throw new ArgumentNullException(nameof(context));
+            
             context.EnableConcurrentExecution();
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.Analyze | GeneratedCodeAnalysisFlags.ReportDiagnostics);
-            if (context == null) throw new ArgumentNullException(nameof(context));
             base.Initialize(context);
-            context.RegisterSyntaxNodeAction(AnalyzerDeprecated, SyntaxKind.ObjectCreationExpression, SyntaxKind.CastExpression, SyntaxKind.AsExpression);
+            
+            context.RegisterSyntaxNodeAction(AnalyzeDeprecatedUsage, 
+                SyntaxKind.ObjectCreationExpression, 
+                SyntaxKind.CastExpression, 
+                SyntaxKind.AsExpression);
         }
 
-        private void AnalyzerDeprecated(SyntaxNodeAnalysisContext context)
+        /// <summary>
+        /// Analyzes object creation, cast, and "as" expressions for deprecated types.
+        /// </summary>
+        private void AnalyzeDeprecatedUsage(SyntaxNodeAnalysisContext context)
         {
             var semanticModel = context.SemanticModel;
             if (semanticModel == null) return;
 
             var cancellationToken = context.CancellationToken;
 
-            if (context.Node is ObjectCreationExpressionSyntax objectCreationExpression)
+            switch (context.Node)
             {
-                var typeInfo = semanticModel.GetTypeInfo(objectCreationExpression, cancellationToken);
-                var typeName = typeInfo.Type?.ToDisplayString();
-                if (typeName != null && AnalyzerHelper.DeprecatedRequests.Contains(typeName))
-                {
-                    DiagnosticHelpers.ReportDiagnostic(context, DiagnosticDescriptors.DeprecatedRequest, objectCreationExpression.GetLocation());
-                }
+                case ObjectCreationExpressionSyntax objectCreation:
+                    // Detect: new DeprecatedRequest()
+                    ReportIfDeprecated(context, semanticModel.GetTypeInfo(objectCreation, cancellationToken), 
+                        objectCreation.GetLocation());
+                    break;
+
+                case CastExpressionSyntax castExpression:
+                    // Detect: (DeprecatedRequest)response
+                    ReportIfDeprecated(context, semanticModel.GetTypeInfo(castExpression, cancellationToken), 
+                        castExpression.Type.GetLocation());
+                    break;
+
+                case BinaryExpressionSyntax binaryExpression when binaryExpression.IsKind(SyntaxKind.AsExpression):
+                    // Detect: response as DeprecatedRequest
+                    ReportIfDeprecated(context, semanticModel.GetTypeInfo(binaryExpression, cancellationToken), 
+                        binaryExpression.Right.GetLocation());
+                    break;
             }
-            else if (context.Node is CastExpressionSyntax castExpressionSyntax)
+        }
+
+        /// <summary>
+        /// Reports a diagnostic if the type is a deprecated SDK type.
+        /// </summary>
+        private static void ReportIfDeprecated(SyntaxNodeAnalysisContext context, TypeInfo typeInfo, Location location)
+        {
+            var typeName = typeInfo.Type?.ToDisplayString();
+            if (typeName != null && AnalyzerHelper.DeprecatedRequests.Contains(typeName))
             {
-                var typeInfo = semanticModel.GetTypeInfo(castExpressionSyntax, cancellationToken);
-                var typeName = typeInfo.Type?.ToDisplayString();
-                if (typeName != null && AnalyzerHelper.DeprecatedRequests.Contains(typeName))
-                {
-                    DiagnosticHelpers.ReportDiagnostic(context, DiagnosticDescriptors.DeprecatedRequest, castExpressionSyntax.Type.GetLocation());
-                }
-            }
-            else if (context.Node is BinaryExpressionSyntax binaryExpressionSyntax)
-            {
-                var typeInfo = semanticModel.GetTypeInfo(binaryExpressionSyntax, cancellationToken);
-                var typeName = typeInfo.Type?.ToDisplayString();
-                if (typeName != null && AnalyzerHelper.DeprecatedRequests.Contains(typeName))
-                {
-                    DiagnosticHelpers.ReportDiagnostic(context, DiagnosticDescriptors.DeprecatedRequest, binaryExpressionSyntax.Right.GetLocation());
-                }
+                DiagnosticHelpers.ReportDiagnostic(context, DiagnosticDescriptors.DeprecatedRequest, location);
             }
         }
     }
