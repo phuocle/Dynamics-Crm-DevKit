@@ -116,13 +116,16 @@ var entity = service.Retrieve("account", id, new ColumnSet("name", "accountnumbe
 Validates that plugin image configurations are compatible with the message and stage. The Dynamics 365 platform has specific rules about when Pre-Images and Post-Images are available:
 
 | Message | Stage | Pre-Image | Post-Image |
-|---------|-------|-----------|------------|
-| Create | PreValidation / PreOperation | ❌ | ❌ |
-| Create | PostOperation | ❌ | ✓ |
-| Update | PreValidation / PreOperation | ✓ | ❌ |
-| Update | PostOperation | ✓ | ✓ |
-| Delete | PreValidation / PreOperation | ✓ | ❌ |
-| Delete | PostOperation | ✓ | ❌ |
+|---------|-------|:---------:|:----------:|
+| **Create** | Pre-Validation | ❌ | ❌ |
+| **Create** | Pre-Operation | ❌ | ❌ |
+| **Create** | Post-Operation | ❌ | ✅ |
+| **Update** | Pre-Validation | ✅ | ❌ |
+| **Update** | Pre-Operation | ✅ | ❌ |
+| **Update** | Post-Operation | ✅ | ✅ |
+| **Delete** | Pre-Validation | ✅ | ❌ |
+| **Delete** | Pre-Operation | ✅ | ❌ |
+| **Delete** | Post-Operation | ✅ | ❌ |
 
 **Bad Code:**
 ```csharp
