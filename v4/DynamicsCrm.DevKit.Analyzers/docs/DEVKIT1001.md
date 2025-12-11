@@ -43,14 +43,11 @@ When you register a plugin on Create or Update messages without filtering attrib
 
 The analyzer flags `[CrmPluginRegistration]` attributes where:
 - The message is `Create`, `CreateMultiple`, `Update`, `UpdateMultiple`, `OnExternalCreated`, or `OnExternalUpdated`
-- The `filteringAttributes` parameter is:
-  - Empty string (`""`)
-  - Asterisk (`"*"`) - which means all attributes
-  - Not specified at all
+- The `filteringAttributes` parameter is empty string (`""`), asterisk (`"*"`), or not specified
 
 ## Code Examples
 
-### ❌ Bad Code: Empty Filtering Attributes
+### ❌ Bad Code
 
 ```csharp
 // Create with empty filtering - fires on EVERY create
@@ -62,9 +59,9 @@ public class AccountCreate : IPlugin
     public void Execute(IServiceProvider serviceProvider) { }
 }
 
-// Update with empty filtering - fires on EVERY field update
+// Using asterisk - equivalent to no filter
 [CrmPluginRegistration("Update", "account", StageEnum.PreOperation, ExecutionModeEnum.Synchronous, 
-    filteringAttributes: "",
+    filteringAttributes: "*",
     stepName: "Pre-Update Account")]
 public class AccountUpdate : IPlugin
 {
@@ -72,20 +69,7 @@ public class AccountUpdate : IPlugin
 }
 ```
 
-### ❌ Bad Code: Using Asterisk
-
-```csharp
-// Using asterisk - equivalent to no filter
-[CrmPluginRegistration("Create", "account", StageEnum.PreOperation, ExecutionModeEnum.Synchronous, 
-    filteringAttributes: "*",
-    stepName: "Pre-Create Account")]
-public class AccountCreate : IPlugin
-{
-    public void Execute(IServiceProvider serviceProvider) { }
-}
-```
-
-### ✅ Good Code: Specific Filtering Attributes
+### ✅ Good Code
 
 ```csharp
 // Create - only fires when name or accountnumber is provided
@@ -119,22 +103,16 @@ public class AccountUpdate : IPlugin
 2. **Add Filtering Attributes**: Specify only those field names in the `filteringAttributes` parameter
 3. **Use Comma Separation**: Multiple fields should be separated by commas without spaces
 
-```csharp
-filteringAttributes: "field1,field2,field3"
+### Before and After
+
+```diff
+- filteringAttributes: ""
++ filteringAttributes: "name,accountnumber"
 ```
-
-### Examples by Message Type
-
-| Message | Example |
-|---------|---------|
-| Create | `filteringAttributes: "name,primarycontactid"` |
-| CreateMultiple | `filteringAttributes: "name,accountnumber"` |
-| Update | `filteringAttributes: "statecode,statuscode"` |
-| UpdateMultiple | `filteringAttributes: "ownerid"` |
 
 ## Suppression
 
-If you have a legitimate need to respond to all field changes, you can suppress this warning:
+If you have a legitimate need to suppress this warning:
 
 ```csharp
 #pragma warning disable DEVKIT1001
@@ -150,9 +128,3 @@ Or in `.editorconfig`:
 [*.cs]
 dotnet_diagnostic.DEVKIT1001.severity = none
 ```
-
-## Related Resources
-
-- [Include filtering attributes with plug-in registration](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/include-filtering-attributes-plugin-registration)
-- [Register a plug-in](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/register-plug-in)
-- [Event execution pipeline](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/event-framework)

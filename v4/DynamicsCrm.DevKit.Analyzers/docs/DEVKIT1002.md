@@ -27,17 +27,20 @@ Using `ColumnSet(true)` has several negative impacts:
 2. **Increased Memory Usage**: More data transferred means higher memory consumption
 3. **Network Overhead**: Larger payloads increase network latency
 4. **Database Load**: Forces unnecessary column reads from the database
-5. **Potential for Errors**: Some columns may have restricted access or throw errors when accessed
 
-## Detection
-
-The analyzer flags the following patterns:
+## Detected Patterns
 
 | Pattern | Description |
 |---------|-------------|
 | `new ColumnSet(true)` | Constructor with `true` parameter |
 | `AllColumns = true` | Property assignment |
 | `<all-attributes/>` | FetchXML all-attributes element |
+
+## Detection
+
+The analyzer flags usages where:
+- `new ColumnSet(true)` is called
+- `ColumnSet.AllColumns` property is set to `true`
 
 ## Code Examples
 
@@ -46,9 +49,7 @@ The analyzer flags the following patterns:
 ```csharp
 // ColumnSet constructor with true
 var entity = service.Retrieve("account", accountId, new ColumnSet(true));
-```
 
-```csharp
 // AllColumns property set to true
 var query = new QueryExpression("account")
 {
@@ -57,25 +58,13 @@ var query = new QueryExpression("account")
 var results = service.RetrieveMultiple(query);
 ```
 
-```csharp
-// FetchXML with all-attributes
-var fetchXml = @"
-<fetch>
-    <entity name='account'>
-        <all-attributes/>
-    </entity>
-</fetch>";
-```
-
 ### ✅ Good Code
 
 ```csharp
 // Only retrieve the columns you need
 var entity = service.Retrieve("account", accountId, 
     new ColumnSet("name", "accountnumber", "primarycontactid"));
-```
 
-```csharp
 // Explicit column list in QueryExpression
 var query = new QueryExpression("account")
 {
@@ -84,50 +73,22 @@ var query = new QueryExpression("account")
 var results = service.RetrieveMultiple(query);
 ```
 
-```csharp
-// FetchXML with specific attributes
-var fetchXml = @"
-<fetch>
-    <entity name='account'>
-        <attribute name='name'/>
-        <attribute name='accountnumber'/>
-        <attribute name='emailaddress1'/>
-    </entity>
-</fetch>";
-```
-
 ## How to Fix
 
 1. **Identify Required Columns**: Determine which columns your code actually uses
 2. **Replace with Specific Columns**: Change `ColumnSet(true)` to `ColumnSet("column1", "column2", ...)`
 3. **Review FetchXML**: Replace `<all-attributes/>` with individual `<attribute name='...'/>` elements
 
-### Before
-```csharp
-var account = service.Retrieve("account", id, new ColumnSet(true));
-var name = account.GetAttributeValue<string>("name");
-```
+### Before and After
 
-### After
-```csharp
-var account = service.Retrieve("account", id, new ColumnSet("name"));
-var name = account.GetAttributeValue<string>("name");
-```
-
-## Common Scenarios
-
-### Scenario 1: Clone Entity
-If you need to clone an entity, consider using the `CloneId` alternate key or explicitly listing required columns.
-
-### Scenario 2: Dynamic Requirements
-If column requirements are dynamic, build the ColumnSet programmatically:
-```csharp
-var columns = new List<string> { "name" };
-if (needsEmail) columns.Add("emailaddress1");
-var columnSet = new ColumnSet(columns.ToArray());
+```diff
+- var account = service.Retrieve("account", id, new ColumnSet(true));
++ var account = service.Retrieve("account", id, new ColumnSet("name", "accountnumber"));
 ```
 
 ## Suppression
+
+If you have a legitimate need to suppress this warning:
 
 ```csharp
 #pragma warning disable DEVKIT1002
@@ -141,9 +102,3 @@ Or in `.editorconfig`:
 [*.cs]
 dotnet_diagnostic.DEVKIT1002.severity = suggestion
 ```
-
-## Related Resources
-
-- [Retrieve specific columns for a table via query APIs](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/work-with-data/retrieve-specific-columns-entity-via-query-apis)
-- [Query data using QueryExpression](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/org-service/build-queries-with-queryexpression)
-- [Use FetchXML to query data](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/use-fetchxml-construct-query)

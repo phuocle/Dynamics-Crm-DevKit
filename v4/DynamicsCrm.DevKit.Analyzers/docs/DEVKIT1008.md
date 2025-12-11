@@ -27,11 +27,8 @@ When you use parallel execution in plugins:
 2. **Thread-Safety Issues**: Shared resources may be accessed concurrently, causing race conditions
 3. **Unpredictable Behavior**: Threads may be terminated unexpectedly by the platform
 4. **Transaction Problems**: Database transactions cannot span multiple threads properly
-5. **Debugging Difficulty**: Issues caused by threading are extremely hard to reproduce and diagnose
 
 ## Detected Patterns
-
-The analyzer flags the following patterns within `IPlugin` or `CodeActivity` classes:
 
 | Pattern | Example |
 |---------|---------|
@@ -43,9 +40,17 @@ The analyzer flags the following patterns within `IPlugin` or `CodeActivity` cla
 | `new Thread()` | `new Thread(() => DoWork()).Start();` |
 | `ThreadPool.QueueUserWorkItem()` | `ThreadPool.QueueUserWorkItem(DoWork);` |
 
+## Detection
+
+The analyzer flags the following patterns within `IPlugin` or `CodeActivity` classes:
+- `Task.Run()` and `Task.Factory.StartNew()` method calls
+- `Parallel.For()`, `Parallel.ForEach()`, `Parallel.Invoke()` method calls
+- `new Thread()` object creation
+- `ThreadPool.QueueUserWorkItem()` method calls
+
 ## Code Examples
 
-### ❌ Bad Code: Using Parallel.ForEach
+### ❌ Bad Code
 
 ```csharp
 public class MyPlugin : IPlugin
@@ -61,52 +66,18 @@ public class MyPlugin : IPlugin
         Parallel.ForEach(entities, entity => {
             service.Update(entity);
         });
-    }
-}
-```
-
-### ❌ Bad Code: Using Task.Run
-
-```csharp
-public class MyPlugin : IPlugin
-{
-    public void Execute(IServiceProvider serviceProvider)
-    {
+        
         // ❌ Task.Run spawns a new thread
-        Task.Run(() => {
-            ProcessData();
-        });
+        Task.Run(() => ProcessData());
         
-        // ❌ Task.Factory.StartNew also spawns threads
-        Task.Factory.StartNew(() => {
-            AnotherProcess();
-        });
-    }
-}
-```
-
-### ❌ Bad Code: Using Thread
-
-```csharp
-public class MyPlugin : IPlugin
-{
-    public void Execute(IServiceProvider serviceProvider)
-    {
         // ❌ Creating threads directly
-        var thread = new Thread(() => {
-            DoBackgroundWork();
-        });
+        var thread = new Thread(() => DoBackgroundWork());
         thread.Start();
-        
-        // ❌ ThreadPool is also not allowed
-        ThreadPool.QueueUserWorkItem(state => {
-            ProcessState(state);
-        });
     }
 }
 ```
 
-### ✅ Good Code: Sequential Processing
+### ✅ Good Code
 
 ```csharp
 public class MyPlugin : IPlugin
@@ -123,27 +94,9 @@ public class MyPlugin : IPlugin
         {
             service.Update(entity);
         }
-    }
-}
-```
-
-### ✅ Good Code: Using ExecuteMultiple for Batch Operations
-
-If you need to process many records, use built-in batch operations instead of parallel execution:
-
-```csharp
-public class MyPlugin : IPlugin
-{
-    public void Execute(IServiceProvider serviceProvider)
-    {
-        // Note: ExecuteMultiple should generally be avoided in plugins too (see DEVKIT1006)
-        // But if you have a legitimate use case, it's better than parallel execution
         
-        // ✓ Process synchronously
-        foreach (var record in records)
-        {
-            ProcessRecord(record);
-        }
+        // ✓ Direct method call
+        ProcessData();
     }
 }
 ```
@@ -153,31 +106,23 @@ public class MyPlugin : IPlugin
 1. **Replace Parallel.ForEach with foreach**: Convert parallel loops to sequential loops
 2. **Remove Task.Run calls**: Execute the code synchronously instead
 3. **Remove Thread instantiation**: Use direct method calls
-4. **Consider async patterns for external calls**: For HTTP calls, use async/await patterns (but be aware it's still synchronous in plugins)
 
 ### Before and After
 
 ```diff
-public void Execute(IServiceProvider serviceProvider)
-{
-    var items = GetItems();
-    
--   // Parallel execution
--   Parallel.ForEach(items, item => {
--       ProcessItem(item);
--   });
-    
-+   // Sequential execution
-+   foreach (var item in items)
-+   {
-+       ProcessItem(item);
-+   }
-}
+- Parallel.ForEach(items, item => {
+-     ProcessItem(item);
+- });
+
++ foreach (var item in items)
++ {
++     ProcessItem(item);
++ }
 ```
 
 ## Suppression
 
-If you have a specific reason to use parallel execution (e.g., in a custom application that imports the plugin assembly), you can suppress this warning:
+If you have a legitimate need to suppress this warning:
 
 ```csharp
 #pragma warning disable DEVKIT1008
@@ -191,9 +136,3 @@ Or in `.editorconfig`:
 [*.cs]
 dotnet_diagnostic.DEVKIT1008.severity = none
 ```
-
-## Related Resources
-
-- [Do not use parallel execution within plug-ins and workflow activities](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/do-not-use-parallel-execution-in-plug-ins)
-- [Develop IPlugin implementations as stateless](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/develop-iplugin-implementations-stateless)
-- [Plug-in and Custom Workflow Activity best practices](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/)

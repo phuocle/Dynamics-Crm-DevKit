@@ -28,49 +28,45 @@ Using deprecated messages can cause:
 3. **Technical Debt**: Code using deprecated APIs requires refactoring later
 4. **Support Limitations**: Microsoft may not provide support for deprecated APIs
 
-## Deprecated Messages List
-
-The following request/response classes are flagged as deprecated:
+## Deprecated Messages
 
 | Deprecated Message | Replacement |
 |-------------------|-------------|
 | `SetStateRequest/Response` | Use `Update` request with statecode/statuscode |
 | `ExecuteFetchRequest/Response` | Use `RetrieveMultiple` with FetchExpression |
-| `AddProductToKitRequest/Response` | Product kits are deprecated |
-| `AddSubstituteProductRequest/Response` | Use relationships instead |
 | `AssociateEntitiesRequest/Response` | Use `Associate` request |
+| `DisassociateEntitiesRequest/Response` | Use `Disassociate` request |
 | `CompoundCreateRequest/Response` | Use individual Create requests |
 | `CompoundUpdateRequest/Response` | Use individual Update requests |
-| `ConvertKitToProductRequest/Response` | Product kits are deprecated |
-| `ConvertProductToKitRequest/Response` | Product kits are deprecated |
-| `DisassociateEntitiesRequest/Response` | Use `Disassociate` request |
-| `RetrieveByResourcesServiceRequest/Response` | Feature deprecated |
-| `RetrieveByResourcesServiceResponse` | Feature deprecated |
-| `SetReportRelatedRequest/Response` | Use Update on report entity |
 
 ## Detection
 
-The analyzer flags:
+The analyzer flags usages where:
 - `new` expressions creating deprecated request/response types
 - Cast expressions `(DeprecatedType)obj`
 - `as` expressions `obj as DeprecatedType`
 
 ## Code Examples
 
-### ❌ Bad Code: SetStateRequest
+### ❌ Bad Code
 
 ```csharp
 // Deprecated: SetStateRequest
 var request = new SetStateRequest
 {
     EntityMoniker = new EntityReference("account", accountId),
-    State = new OptionSetValue(1),  // Active/Inactive
-    Status = new OptionSetValue(2)   // Status reason
+    State = new OptionSetValue(1),
+    Status = new OptionSetValue(2)
 };
 service.Execute(request);
+
+// Deprecated: ExecuteFetchRequest
+var fetchXml = @"<fetch><entity name='account'>...</entity></fetch>";
+var request = new ExecuteFetchRequest { FetchXml = fetchXml };
+var response = (ExecuteFetchResponse)service.Execute(request);
 ```
 
-### ✅ Good Code: Using Update
+### ✅ Good Code
 
 ```csharp
 // Modern: Use Update with statecode/statuscode
@@ -80,91 +76,38 @@ var account = new Entity("account", accountId)
     ["statuscode"] = new OptionSetValue(2)
 };
 service.Update(account);
-```
 
----
-
-### ❌ Bad Code: ExecuteFetchRequest
-
-```csharp
-// Deprecated: ExecuteFetchRequest
-var fetchXml = @"<fetch><entity name='account'>...</entity></fetch>";
-var request = new ExecuteFetchRequest { FetchXml = fetchXml };
-var response = (ExecuteFetchResponse)service.Execute(request);
-var result = response.FetchXmlResult; // Returns XML string
-```
-
-### ✅ Good Code: Using RetrieveMultiple
-
-```csharp
 // Modern: RetrieveMultiple with FetchExpression
 var fetchXml = @"<fetch><entity name='account'>...</entity></fetch>";
 var result = service.RetrieveMultiple(new FetchExpression(fetchXml));
-// Returns EntityCollection - easier to work with
-```
-
----
-
-### ❌ Bad Code: AssociateEntities
-
-```csharp
-// Deprecated: AssociateEntitiesRequest
-var request = new AssociateEntitiesRequest
-{
-    Moniker1 = new EntityReference("account", accountId),
-    Moniker2 = new EntityReference("contact", contactId),
-    RelationshipName = "account_primary_contact"
-};
-service.Execute(request);
-```
-
-### ✅ Good Code: Using Associate
-
-```csharp
-// Modern: Associate request
-service.Associate(
-    "account",
-    accountId,
-    new Relationship("account_primary_contact"),
-    new EntityReferenceCollection { new EntityReference("contact", contactId) }
-);
 ```
 
 ## How to Fix
 
-### SetStateRequest → Update
+1. **Identify Deprecated Usage**: Find all usages of deprecated request types
+2. **Use Modern Equivalent**: Replace with the modern API as shown in the table above
+3. **Test Thoroughly**: Ensure the replacement works correctly in all scenarios
 
-```csharp
-// Before
-var setStateRequest = new SetStateRequest
-{
-    EntityMoniker = entityRef,
-    State = new OptionSetValue(0),
-    Status = new OptionSetValue(1)
-};
-service.Execute(setStateRequest);
+### Before and After
 
-// After
-var entity = new Entity(entityRef.LogicalName, entityRef.Id);
-entity["statecode"] = new OptionSetValue(0);
-entity["statuscode"] = new OptionSetValue(1);
-service.Update(entity);
-```
+```diff
+- var request = new SetStateRequest
+- {
+-     EntityMoniker = entityRef,
+-     State = new OptionSetValue(0),
+-     Status = new OptionSetValue(1)
+- };
+- service.Execute(request);
 
-### ExecuteFetchRequest → RetrieveMultiple
-
-```csharp
-// Before
-var response = (ExecuteFetchResponse)service.Execute(
-    new ExecuteFetchRequest { FetchXml = fetchXml });
-
-// After
-var result = service.RetrieveMultiple(new FetchExpression(fetchXml));
++ var entity = new Entity(entityRef.LogicalName, entityRef.Id);
++ entity["statecode"] = new OptionSetValue(0);
++ entity["statuscode"] = new OptionSetValue(1);
++ service.Update(entity);
 ```
 
 ## Suppression
 
-If you must use a deprecated message temporarily:
+If you have a legitimate need to suppress this warning:
 
 ```csharp
 #pragma warning disable DEVKIT1004
@@ -178,9 +121,3 @@ Or in `.editorconfig`:
 [*.cs]
 dotnet_diagnostic.DEVKIT1004.severity = suggestion
 ```
-
-## Related Resources
-
-- [Deprecated SDK messages](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/org-service/deprecations)
-- [IOrganizationService methods](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/org-service/use-iorganizationservice)
-- [Product bundles and kits](https://learn.microsoft.com/en-us/dynamics365/sales/product-bundles-kits)

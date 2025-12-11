@@ -15,7 +15,7 @@ This analyzer validates that plugin image configurations (Pre-Images and Post-Im
 
 ## Microsoft Best Practice
 
-📚 **[Understand the execution context](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/understand-the-data-context)** (Plugin Images)
+📚 **[Understand the execution context](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/understand-the-data-context)**
 
 > Pre-entity images contain data as it existed before the operation. Post-entity images contain data as it exists after the operation. Not all operations support both types of images.
 
@@ -42,17 +42,13 @@ Configuring unavailable images causes:
 | **Delete** | Pre-Operation | ✅ | ❌ |
 | **Delete** | Post-Operation | ✅ | ❌ |
 
-### Why These Limitations Exist
-
-- **Create + Pre-Image**: The record doesn't exist yet, so there's no "before" state
-- **Create + Pre-Operation + Post-Image**: The record hasn't been created in the database yet
-- **Delete + Post-Image**: After deletion, the record no longer exists
-
 ## Detection
 
 The analyzer flags `[CrmPluginRegistration]` attributes where:
 - Image configurations are incompatible with the message/stage combination
-- Examples: Pre-Image on Create, Post-Image on Pre-Update, Post-Image on Delete
+- Pre-Image on Create (record doesn't exist yet)
+- Post-Image on Pre-Operation stages (changes not committed yet)
+- Post-Image on Delete (record is deleted)
 
 ## Code Examples
 
@@ -65,27 +61,14 @@ The analyzer flags `[CrmPluginRegistration]` attributes where:
     Image1Name = "PreImage",
     Image1Attributes = "name,accountnumber")]
 public class PreCreateWithPreImage : IPlugin { }
-```
 
-```csharp
-// Pre-Create cannot have Post-Image - record not committed yet!
-[CrmPluginRegistration("Create", "account", StageEnum.PreOperation, ExecutionModeEnum.Synchronous,
-    Image1Type = ImageTypeEnum.PostImage,
-    Image1Name = "PostImage",
-    Image1Attributes = "name")]
-public class PreCreateWithPostImage : IPlugin { }
-```
-
-```csharp
 // Pre-Update cannot have Post-Image - changes not committed yet!
 [CrmPluginRegistration("Update", "account", StageEnum.PreOperation, ExecutionModeEnum.Synchronous,
     Image1Type = ImageTypeEnum.PostImage,
     Image1Name = "PostImage",
     Image1Attributes = "name")]
 public class PreUpdateWithPostImage : IPlugin { }
-```
 
-```csharp
 // Delete cannot have Post-Image - record is deleted!
 [CrmPluginRegistration("Delete", "account", StageEnum.PostOperation, ExecutionModeEnum.Synchronous,
     Image1Type = ImageTypeEnum.PostImage,
@@ -103,18 +86,14 @@ public class PostDeleteWithPostImage : IPlugin { }
     Image1Name = "PostImage",
     Image1Attributes = "name,accountnumber")]
 public class PostCreateWithPostImage : IPlugin { }
-```
 
-```csharp
 // Pre-Update can have Pre-Image
 [CrmPluginRegistration("Update", "account", StageEnum.PreOperation, ExecutionModeEnum.Synchronous,
     Image1Type = ImageTypeEnum.PreImage,
     Image1Name = "PreImage",
     Image1Attributes = "name,accountnumber")]
 public class PreUpdateWithPreImage : IPlugin { }
-```
 
-```csharp
 // Post-Update can have BOTH images
 [CrmPluginRegistration("Update", "account", StageEnum.PostOperation, ExecutionModeEnum.Synchronous,
     Image1Type = ImageTypeEnum.PreImage,
@@ -126,39 +105,24 @@ public class PreUpdateWithPreImage : IPlugin { }
 public class PostUpdateWithBothImages : IPlugin { }
 ```
 
-```csharp
-// Delete can have Pre-Image (to see what was deleted)
-[CrmPluginRegistration("Delete", "account", StageEnum.PreOperation, ExecutionModeEnum.Synchronous,
-    Image1Type = ImageTypeEnum.PreImage,
-    Image1Name = "PreImage",
-    Image1Attributes = "name,accountnumber")]
-public class PreDeleteWithPreImage : IPlugin { }
-```
-
 ## How to Fix
 
 1. **Check the Matrix**: Refer to the Image Availability Matrix above
 2. **Adjust Stage or Image Type**: Either change the stage or remove the incompatible image
 3. **Use Target Entity**: For Create messages, use `Target` from InputParameters instead of images
 
-### Alternative: Using Target for Create
+### Before and After
 
-Instead of using images on Create, access the target entity directly:
-
-```csharp
-public void Execute(IServiceProvider serviceProvider)
-{
-    var context = (IPluginExecutionContext)serviceProvider.GetService(typeof(IPluginExecutionContext));
-    
-    // For Create, the target contains the entity being created
-    if (context.InputParameters.Contains("Target") && context.InputParameters["Target"] is Entity target)
-    {
-        var name = target.GetAttributeValue<string>("name");
-    }
-}
+```diff
+- [CrmPluginRegistration("Create", "account", StageEnum.PreOperation,
+-     Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "name")]
++ [CrmPluginRegistration("Create", "account", StageEnum.PostOperation,
++     Image1Type = ImageTypeEnum.PostImage, Image1Attributes = "name")]
 ```
 
 ## Suppression
+
+If you have a legitimate need to suppress this warning:
 
 ```csharp
 #pragma warning disable DEVKIT1003
@@ -167,8 +131,9 @@ public void Execute(IServiceProvider serviceProvider)
 #pragma warning restore DEVKIT1003
 ```
 
-## Related Resources
+Or in `.editorconfig`:
 
-- [Understand the execution context](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/understand-the-data-context)
-- [Define entity images](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/register-plug-in#define-entity-images)
-- [Event execution pipeline](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/event-framework)
+```ini
+[*.cs]
+dotnet_diagnostic.DEVKIT1003.severity = none
+```

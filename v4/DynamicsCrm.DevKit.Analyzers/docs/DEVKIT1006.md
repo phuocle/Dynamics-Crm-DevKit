@@ -17,7 +17,7 @@ This analyzer warns against using batch request types (`ExecuteMultipleRequest`,
 
 📚 **[Don't use batch request types in plug-ins and workflow activities](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/avoid-batch-requests-plugin)**
 
-> Batch requests used within a plug-in or workflow activity can become difficult to manage and may lead to performance issues. A plug-in runs within a database transaction. Calling additional batch requests within that transaction is not recommended because the batch becomes part of the transaction.
+> Batch requests used within a plug-in or workflow activity can become difficult to manage and may lead to performance issues. A plug-in runs within a database transaction. Calling additional batch requests within that transaction is not recommended.
 
 ## Why This Matters
 
@@ -27,7 +27,6 @@ Using batch requests in plugins causes:
 2. **Timeout Risks**: Long-running batches may exceed the 2-minute plugin timeout
 3. **Complexity**: Error handling becomes more difficult with batched operations
 4. **Nested Transactions**: Batch requests create nested transaction scenarios
-5. **Platform Throttling**: May trigger platform-level throttling protections
 
 ## Batch Request Types
 
@@ -55,9 +54,8 @@ public class MyPlugin : IPlugin
 {
     public void Execute(IServiceProvider serviceProvider)
     {
-        var context = (IPluginExecutionContext)serviceProvider.GetService(typeof(IPluginExecutionContext));
         var factory = (IOrganizationServiceFactory)serviceProvider.GetService(typeof(IOrganizationServiceFactory));
-        var service = factory.CreateOrganizationService(context.UserId);
+        var service = factory.CreateOrganizationService(null);
         
         // ❌ Using ExecuteMultipleRequest in plugin
         var batch = new ExecuteMultipleRequest
@@ -80,21 +78,6 @@ public class MyPlugin : IPlugin
 }
 ```
 
-```csharp
-public class MyWorkflow : CodeActivity
-{
-    protected override void Execute(CodeActivityContext context)
-    {
-        // ❌ Using CreateMultipleRequest in workflow
-        var request = new CreateMultipleRequest
-        {
-            Targets = new EntityCollection(entitiesToCreate)
-        };
-        service.Execute(request);
-    }
-}
-```
-
 ### ✅ Good Code
 
 ```csharp
@@ -102,9 +85,8 @@ public class MyPlugin : IPlugin
 {
     public void Execute(IServiceProvider serviceProvider)
     {
-        var context = (IPluginExecutionContext)serviceProvider.GetService(typeof(IPluginExecutionContext));
         var factory = (IOrganizationServiceFactory)serviceProvider.GetService(typeof(IOrganizationServiceFactory));
-        var service = factory.CreateOrganizationService(context.UserId);
+        var service = factory.CreateOrganizationService(null);
         
         // ✅ Execute each request individually
         foreach (var entity in entitiesToUpdate)
@@ -115,83 +97,31 @@ public class MyPlugin : IPlugin
 }
 ```
 
-```csharp
-public class MyPlugin : IPlugin
-{
-    public void Execute(IServiceProvider serviceProvider)
-    {
-        // ✅ For large operations, consider triggering async processing
-        // Create a custom entity record that triggers a Flow/Azure Function
-        var processingRequest = new Entity("custom_bulkprocessingrequest")
-        {
-            ["custom_data"] = SerializeData(entitiesToProcess),
-            ["custom_status"] = "Pending"
-        };
-        service.Create(processingRequest);
-        
-        // Flow or Azure Function handles the bulk operation outside the transaction
-    }
-}
-```
-
 ## How to Fix
 
-### Option 1: Individual Operations
+1. **Replace with Individual Operations**: Use individual Create/Update/Delete calls instead of batch
+2. **Use Async Processing**: For large data sets, trigger async processing outside the plugin
+3. **Limit Scope**: If processing multiple records, limit the count and queue remaining for async
 
-Replace batch operations with individual calls:
+### Before and After
 
-```csharp
-// Before (batch)
-var batch = new ExecuteMultipleRequest();
-foreach (var entity in entities)
-{
-    batch.Requests.Add(new UpdateRequest { Target = entity });
-}
-service.Execute(batch);
+```diff
+- var batch = new ExecuteMultipleRequest();
+- foreach (var entity in entities)
+- {
+-     batch.Requests.Add(new UpdateRequest { Target = entity });
+- }
+- service.Execute(batch);
 
-// After (individual)
-foreach (var entity in entities)
-{
-    service.Update(entity);
-}
++ foreach (var entity in entities)
++ {
++     service.Update(entity);
++ }
 ```
-
-### Option 2: Async Processing
-
-For large data sets, trigger async processing outside the plugin:
-
-1. **Power Automate**: Create a Flow that processes records
-2. **Azure Functions**: Trigger a function for bulk operations
-3. **Custom Action**: Call an async custom action
-4. **Background Job**: Queue work for a background service
-
-### Option 3: Limit Scope
-
-If you must process multiple records, limit the count:
-
-```csharp
-// Process only what's necessary in the plugin
-var limitedEntities = entitiesToUpdate.Take(10);
-foreach (var entity in limitedEntities)
-{
-    service.Update(entity);
-}
-
-// Queue remaining for async processing
-if (entitiesToUpdate.Count > 10)
-{
-    QueueForAsyncProcessing(entitiesToUpdate.Skip(10));
-}
-```
-
-## When Batch Requests ARE Appropriate
-
-Batch requests are designed for:
-- **External integrations**: Console apps, Azure Functions, web services
-- **Data migration tools**: One-time or scheduled imports
-- **Background jobs**: Processing outside of the platform transaction
 
 ## Suppression
+
+If you have a legitimate need to suppress this warning:
 
 ```csharp
 #pragma warning disable DEVKIT1006
@@ -205,9 +135,3 @@ Or in `.editorconfig`:
 [*.cs]
 dotnet_diagnostic.DEVKIT1006.severity = suggestion
 ```
-
-## Related Resources
-
-- [Don't use batch request types in plug-ins](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/avoid-batch-requests-plugin)
-- [ExecuteMultiple](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/org-service/execute-multiple-requests)
-- [Scalable Customization Design](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/scalable-customization-design/overview)
