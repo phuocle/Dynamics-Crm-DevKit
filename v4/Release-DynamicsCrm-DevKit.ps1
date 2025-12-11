@@ -29,6 +29,7 @@ $PublishedRoot = "$PSScriptRoot\Published"
 $VersionFiles = @(
     "DynamicsCrm.DevKit.Shared\Const.cs",
     "DynamicsCrm.DevKit.Cli\docs\README.md",
+    "DynamicsCrm.DevKit.Analyzers\docs\README.md",
     "DynamicsCrm.DevKit\source.extension.cs",
     "ProjectTemplates\CSharp\05.PackageProjectTemplate\ReadMe.md",
     "ProjectTemplates\CSharp\12.ReportProjectTemplate\ReadMe.md"
@@ -36,6 +37,7 @@ $VersionFiles = @(
 
 $DateFiles = @(
     "DynamicsCrm.DevKit.Cli\docs\README.md",
+    "DynamicsCrm.DevKit.Analyzers\docs\README.md",
     "DynamicsCrm.DevKit.Shared\Const.cs",
     "DynamicsCrm.DevKit\source.extension.vsixmanifest",
     "DynamicsCrm.DevKit\VSPackage.resx",
