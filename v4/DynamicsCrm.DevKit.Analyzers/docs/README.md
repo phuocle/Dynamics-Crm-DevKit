@@ -58,23 +58,26 @@ This analyzer ensures that plugin registrations for `Create`, `CreateMultiple`, 
 
 **Bad Code:**
 ```csharp
+// ❌ Empty filtering attributes
 [CrmPluginRegistration("Create", "account", StageEnum.PreOperation, ExecutionModeEnum.Synchronous, 
-    filteringAttributes: "",  // ❌ Empty filtering attributes
+    filteringAttributes: "",
     stepName: "Pre-Create Account")]
 
+// ❌ All attributes
 [CrmPluginRegistration("Update", "account", StageEnum.PreOperation, ExecutionModeEnum.Synchronous, 
-    filteringAttributes: "*",  // ❌ All attributes
+    filteringAttributes: "*", 
     stepName: "Pre-Update Account")]
 ```
 
 **Good Code:**
 ```csharp
+// ✅ Specific attributes
 [CrmPluginRegistration("Create", "account", StageEnum.PostOperation, ExecutionModeEnum.Synchronous, 
-    filteringAttributes: "name,accountnumber",  // ✓ Specific attributes
+    filteringAttributes: "name,accountnumber",
     stepName: "Post-Create Account")]
-
+// ✅ Specific attributes
 [CrmPluginRegistration("Update", "account", StageEnum.PreOperation, ExecutionModeEnum.Synchronous, 
-    filteringAttributes: "name,accountnumber",  // ✓ Specific attributes
+    filteringAttributes: "name,accountnumber",
     stepName: "Pre-Update Account")]
 ```
 
@@ -108,7 +111,7 @@ var fetch = @"<fetch><entity name='account'><all-attributes/></entity></fetch>";
 
 **Good Code:**
 ```csharp
-// ✓ Only retrieve needed columns
+// ✅ Only retrieve needed columns
 var entity = service.Retrieve("account", id, new ColumnSet("name", "accountnumber"));
 ```
 
@@ -150,11 +153,11 @@ Validates that plugin image configurations are compatible with the message and s
 
 **Good Code:**
 ```csharp
-// ✓ Post-Create can have Post-Image
+// ✅ Post-Create can have Post-Image
 [CrmPluginRegistration("Create", "account", StageEnum.PostOperation, ExecutionModeEnum.Synchronous,
     Image1Type = ImageTypeEnum.PostImage, Image1Attributes = "name")]
 
-// ✓ Post-Update can have both images
+// ✅ Post-Update can have both images
 [CrmPluginRegistration("Update", "account", StageEnum.PostOperation, ExecutionModeEnum.Synchronous,
     Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "name",
     Image2Type = ImageTypeEnum.PostImage, Image2Attributes = "name")]
@@ -200,7 +203,7 @@ service.Execute(request);
 
 **Good Code:**
 ```csharp
-// ✓ Use Update instead
+// ✅ Use Update instead
 var account = new Entity("account", accountId)
 {
     ["statecode"] = new OptionSetValue(1),
@@ -234,11 +237,11 @@ var message = "Owner: " + entity.GetAttributeValue<EntityReference>("ownerid").N
 
 **Good Code:**
 ```csharp
-// ✓ Null-conditional operator
+// ✅ Null-conditional operator
 var ownerId = entity.GetAttributeValue<EntityReference>("ownerid")?.Id;
 var ownerName = entity.GetAttributeValue<EntityReference>("ownerid")?.Name;
 
-// ✓ Null check first
+// ✅ Null check first
 var ownerRef = entity.GetAttributeValue<EntityReference>("ownerid");
 if (ownerRef != null)
 {
@@ -282,7 +285,7 @@ public class MyPlugin : IPlugin
 {
     public void Execute(IServiceProvider serviceProvider)
     {
-        // ✓ Execute each request individually
+        // ✅ Execute each request individually
         foreach (var entity in entities)
         {
             service.Update(entity);
@@ -325,7 +328,7 @@ public class MyPlugin : IPlugin
 ```csharp
 public class MyPlugin : IPlugin
 {
-    // ✓ Readonly field assigned in constructor (for configuration)
+    // ✅ Readonly field assigned in constructor (for configuration)
     private readonly string _secureConfig;
     
     public MyPlugin(string unsecure, string secure)
@@ -335,7 +338,7 @@ public class MyPlugin : IPlugin
     
     public void Execute(IServiceProvider serviceProvider)
     {
-        // ✓ Local variables instead of instance fields
+        // ✅ Local variables instead of instance fields
         var context = (IPluginExecutionContext)serviceProvider.GetService(typeof(IPluginExecutionContext));
         var service = factory.CreateOrganizationService(context.UserId);
     }
@@ -392,13 +395,13 @@ public class MyPlugin : IPlugin
     {
         var entities = GetEntities();
         
-        // ✓ Sequential processing
+        // ✅ Sequential processing
         foreach (var entity in entities)
         {
             service.Update(entity);
         }
         
-        // ✓ Direct method call
+        // ✅ Direct method call
         DoSomething();
     }
 }
@@ -667,6 +670,63 @@ tracingService.Trace($"Processing: {entity.Id}");
 ```
 
 [📖 Documentation](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DEVKIT1017)
+
+---
+
+### DEVKIT1018
+**Avoid File/IO operations in plug-ins and workflow activities**
+
+**Severity:** Error
+
+System.IO file operations are blocked in the Dataverse sandbox environment and will throw `SecurityException` at runtime.
+
+**Bad Code:**
+```csharp
+public class MyPlugin : IPlugin
+{
+    public void Execute(IServiceProvider serviceProvider)
+    {
+        // ❌ File.ReadAllText - blocked in sandbox
+        var content = File.ReadAllText("config.txt");
+        
+        // ❌ File.WriteAllText - blocked in sandbox
+        File.WriteAllText("log.txt", "Plugin executed");
+        
+        // ❌ new FileStream - blocked in sandbox
+        using (var stream = new FileStream("data.bin", FileMode.Open))
+        {
+        }
+        
+        // ❌ new StreamReader - blocked in sandbox
+        using (var reader = new StreamReader("input.txt"))
+        {
+        }
+    }
+}
+```
+
+**Good Code:**
+```csharp
+public class MyPlugin : IPlugin
+{
+    public void Execute(IServiceProvider serviceProvider)
+    {
+        // ✅ Use Dataverse storage instead of files
+        var tracingService = (ITracingService)serviceProvider.GetService(typeof(ITracingService));
+        tracingService.Trace("Use tracing instead of file logging");
+        
+        // ✅ Store data using Note attachments
+        var note = new Entity("annotation")
+        {
+            ["subject"] = "Plugin Output",
+            ["notetext"] = "Data to store"
+        };
+        service.Create(note);
+    }
+}
+```
+
+[📖 Documentation](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DEVKIT1018)
 
 ---
 
