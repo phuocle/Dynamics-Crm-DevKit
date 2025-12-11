@@ -16,6 +16,7 @@ Based on research of [Microsoft's Dataverse Best Practices](https://learn.micros
 | DEVKIT1008 | Don't use parallel execution | ✅ [Don't use parallel execution](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/do-not-use-parallel-execution-in-plug-ins) |
 | DEVKIT1009 | Set KeepAlive to false | ✅ [Set KeepAlive to false](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/set-keepalive-false-interacting-external-hosts-plugin) |
 | DEVKIT1010 | Set Timeout for HTTP calls | ✅ [Set Timeout for external calls](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/set-timeout-for-external-calls-from-plug-ins) |
+| DEVKIT1013 | Avoid Retrieve/RetrieveMultiple plugins | ✅ [Limit Retrieve/RetrieveMultiple plugins](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/limit-registration-plugins-retrieve-retrievemultiple) |
 
 ---
 
@@ -50,18 +51,6 @@ In IPlugin classes, detect `throw` statements with exception types other than `I
 
 **Detection:**
 IPlugin classes that don't retrieve or use `ITracingService`.
-
----
-
-#### DEVKIT1013: Avoid registering plugins on Retrieve/RetrieveMultiple
-
-**Severity:** Info  
-**Category:** Performance  
-**Impact:** Medium  
-**MS Docs:** [Limit Retrieve/RetrieveMultiple plugins](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/limit-registration-plugins-retrieve-retrievemultiple)
-
-**Detection:**
-Detect `[CrmPluginRegistration]` attributes with message "Retrieve" or "RetrieveMultiple".
 
 ---
 
@@ -100,8 +89,8 @@ Context-dependent validation of async patterns in plugins.
 | DEVKIT1008 | Parallel execution in plugins | ✅ Implemented |
 | DEVKIT1009 | KeepAlive = false | ✅ Implemented |
 | DEVKIT1010 | HTTP Timeout | ✅ Implemented |
+| DEVKIT1013 | Retrieve/RetrieveMultiple warning | ✅ Implemented |
 | DEVKIT1011 | InvalidPluginExecutionException | 📋 Planned |
 | DEVKIT1012 | ITracingService recommendation | 📋 Planned |
-| DEVKIT1013 | Retrieve/RetrieveMultiple warning | 📋 Planned |
 | DEVKIT1014 | AppDomain events | 📋 Planned |
 | DEVKIT1015 | Async pattern validation | 📋 Planned |

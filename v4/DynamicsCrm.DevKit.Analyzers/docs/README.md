@@ -36,6 +36,7 @@ Or add to your `.csproj`:
 | [DEVKIT1008](#devkit1008) | Error | Don't use parallel execution in plug-ins |
 | [DEVKIT1009](#devkit1009) | Warning | Set KeepAlive to false for external HTTP calls |
 | [DEVKIT1010](#devkit1010) | Warning | Set Timeout for external HTTP calls |
+| [DEVKIT1013](#devkit1013) | Info | Avoid registering plugins on Retrieve/RetrieveMultiple |
 
 ---
 
@@ -461,6 +462,35 @@ using (var client = new HttpClient())
 ```
 
 [📖 Documentation](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DEVKIT1010)
+
+---
+
+### DEVKIT1013
+**Avoid registering plugins on Retrieve/RetrieveMultiple**
+
+**Severity:** Info
+
+**MS Best Practice:** [Limit the registration of plug-ins for Retrieve and RetrieveMultiple messages](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/limit-registration-plugins-retrieve-retrievemultiple)
+
+Warns when a plugin is registered on `Retrieve` or `RetrieveMultiple` messages. These messages are called very frequently and can significantly impact system performance.
+
+**Bad Code:**
+```csharp
+// ❌ Plugin on RetrieveMultiple - runs EVERY time a view is loaded
+[CrmPluginRegistration("RetrieveMultiple", "account", StageEnum.PostOperation, 
+    ExecutionModeEnum.Synchronous, "", "RetrieveMultiple Account")]
+public class RetrieveMultipleAccountPlugin : IPlugin { }
+```
+
+**Good Code:**
+```csharp
+// ✅ Use Create/Update to pre-calculate values instead
+[CrmPluginRegistration("Update", "account", StageEnum.PreOperation, 
+    ExecutionModeEnum.Synchronous, "revenue", "Calculate Account Rating")]
+public class CalculateAccountRatingPlugin : IPlugin { }
+```
+
+[📖 Documentation](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DEVKIT1013)
 
 ---
 

@@ -168,5 +168,13 @@ namespace DynamicsCrm.DevKit.Analyzers
             "Set Timeout when using '{0}' in plug-ins or workflow activities",
             DiagnosticSeverity.Warning,
             "When making external HTTP calls in plug-ins, set an explicit Timeout value to avoid blocking the plugin execution. The default timeout is 100 seconds which may exceed the plugin timeout limit.");
+
+        /// <summary>DEVKIT1013</summary>
+        public static readonly DiagnosticDescriptor RetrieveMultiplePlugin = CreateDescriptor(
+            "DEVKIT1013",
+            "Avoid registering plugins on Retrieve and RetrieveMultiple messages",
+            "Consider avoiding plugin registration on '{0}' message due to performance impact",
+            DiagnosticSeverity.Info,
+            "Plugins registered on Retrieve and RetrieveMultiple messages are called very frequently and can significantly impact system performance. Consider using alternate solutions like views, virtual entities, or client-side logic.");
     }
 }
