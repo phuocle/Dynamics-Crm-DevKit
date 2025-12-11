@@ -216,5 +216,13 @@ namespace DynamicsCrm.DevKit.Analyzers
             "Consider alternatives to {0} in plug-ins as it can cause deadlocks in some scenarios",
             DiagnosticSeverity.Warning,
             "Using GetAwaiter().GetResult(), .Result, or .Wait() can cause deadlocks. While sometimes necessary in plugins (async Execute not supported), ensure you understand the implications and use ConfigureAwait(false).");
+
+        /// <summary>DEVKIT1017</summary>
+        public static readonly DiagnosticDescriptor AvoidConsoleOutput = CreateDescriptor(
+            "DEVKIT1017",
+            "Avoid Console output in plug-ins and workflow activities",
+            "Don't use '{0}' in plug-ins or workflow activities; console output has no effect in sandbox",
+            DiagnosticSeverity.Warning,
+            "Console.Write and Console.WriteLine have no effect in the Dataverse sandbox environment. Use ITracingService instead for debugging and logging.");
     }
 }

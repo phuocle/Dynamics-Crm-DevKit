@@ -29,11 +29,53 @@ Based on research of [Microsoft's Dataverse Best Practices](https://learn.micros
 
 ### High Priority
 
----
+| ID | Title | Description | MS Best Practice |
+|---|---|---|---|
+| DEVKIT1017 | Avoid Console Output in Plugins | Detect Console.Write/WriteLine in plugins (no effect in sandbox) | Sandbox limitation |
+| DEVKIT1018 | Implement All Query Types for PreOperation RetrieveMultiple | When filtering in PreOperation RetrieveMultiple, ensure FetchExpression, QueryExpression, and QueryByAttribute are all handled | [Implement all types of queries](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/implement-all-types-of-queries-when-filtering-preoperation-retrievemultiple) |
+| DEVKIT1019 | Avoid File/IO Operations in Plugins | Detect System.IO file operations that are blocked in sandbox | Sandbox limitation |
+| DEVKIT1020 | Duplicate Plugin Step Registration | Detect duplicate `[CrmPluginRegistration]` attributes with same message, entity, and stage | [Don't duplicate plug-in step registration](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/do-not-duplicate-plugin-step-registration) |
 
 ### Medium Priority
 
+| ID | Title | Description | MS Best Practice |
+|---|---|---|---|
+| DEVKIT1021 | Avoid Reflection in Sandbox Plugins | Detect disallowed reflection patterns (Assembly.Load, Activator.CreateInstance on arbitrary types) | Sandbox limitation |
+| DEVKIT1022 | Plugin Context Depth Check | Recommend checking `context.Depth` to prevent infinite loops | Plugin best practice |
+| DEVKIT1023 | Avoid Environment Variables in Plugins | Detect Environment.GetEnvironmentVariable (unavailable in sandbox) | Sandbox limitation |
+| DEVKIT1024 | Use OrganizationServiceContext Carefully | Warn about AutoSaveChanges and LINQ edge cases | Performance |
+| DEVKIT1025 | Avoid Large EntityCollection Returns | Warn when not using paging for RetrieveMultiple | [Service protection API limits](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/api-limits) |
+
+### Low Priority
+
+| ID | Title | Description | MS Best Practice |
+|---|---|---|---|
+| DEVKIT1026 | Manage Invalid Characters | Detect code that may set invalid characters in fields | [Manage invalid characters](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/work-with-data/invalidcharactersinfield) |
+| DEVKIT1027 | Verify Certificate Dependencies | Alert when using external HTTPS calls without cert validation consideration | [Verify certification dependencies](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/verify-certification-dependencies) |
+| DEVKIT1028 | Plugin Assembly Size Check | Warn if assembly exceeds recommended size limits | [Optimize custom assembly development](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/optimize-assembly-development) |
+
 ---
+
+## Competitor Analysis
+
+> **Note**: As of December 2024, no dedicated Roslyn analyzer package for Dynamics 365 / Dataverse plugin development exists in the .NET ecosystem. **DynamicsCrm.DevKit.Analyzers is the first and only comprehensive analyzer package** specifically for this domain.
+
+### Related Projects (Not Direct Competitors)
+
+| Project | Description | Scope |
+|---------|-------------|-------|
+| [dotnet/roslyn-analyzers](https://github.com/dotnet/roslyn-analyzers) | Official .NET code quality analyzers | General C# |
+| [Roslynator](https://github.com/JosefPihrt/Roslynator) | 500+ general C# analyzers | General C# |
+| [Meziantou.Analyzer](https://github.com/meziantou/Meziantou.Analyzer) | Enforces C# best practices | General C# |
+| Power Platform Solution Checker | Built-in static analysis for solutions | Solutions (not plugin code) |
+
+### Our Differentiator
+
+DynamicsCrm.DevKit.Analyzers uniquely focuses on:
+- **Plugin/Workflow Domain Knowledge**: Understands `IPlugin`, `CodeActivity`, `CrmPluginRegistration` patterns
+- **Sandbox Limitations**: Enforces sandbox-compatible code patterns
+- **Microsoft Best Practices**: Directly maps to published Microsoft documentation
+- **Real-time Feedback**: IDE integration while coding, not just at deploy time
 
 ---
 
@@ -41,14 +83,31 @@ Based on research of [Microsoft's Dataverse Best Practices](https://learn.micros
 
 | ID | Analyzer Name | Status |
 |---|---|---|
-| DEVKIT1006 | Batch requests in plugins | ✅ Implemented |
-| DEVKIT1007 | Stateless IPlugin | ✅ Implemented |
-| DEVKIT1008 | Parallel execution in plugins | ✅ Implemented |
-| DEVKIT1009 | KeepAlive = false | ✅ Implemented |
-| DEVKIT1010 | HTTP Timeout | ✅ Implemented |
-| DEVKIT1013 | Retrieve/RetrieveMultiple warning | ✅ Implemented |
-| DEVKIT1011 | InvalidPluginExecutionException | ✅ Implemented |
-| DEVKIT1012 | ITracingService recommendation | ✅ Implemented |
-| DEVKIT1014 | AppDomain events | ✅ Implemented |
-| DEVKIT1015 | Async pattern validation | ✅ Implemented |
-| DEVKIT1016 | Avoid RetrieveAsIfPublished = true | ✅ Implemented |
+| DEVKIT1001-1016 | Current analyzers | ✅ Implemented |
+| DEVKIT1017 | Console output | 📋 Planned |
+| DEVKIT1018 | Query type handling | 📋 Planned |
+| DEVKIT1019 | File/IO operations | 📋 Planned |
+| DEVKIT1020 | Duplicate step registration | 📋 Planned |
+| DEVKIT1021 | Reflection patterns | 📋 Planned |
+| DEVKIT1022 | Context depth check | 📋 Planned |
+| DEVKIT1023 | Environment variables | 📋 Planned |
+| DEVKIT1024 | OrganizationServiceContext | 📋 Planned |
+| DEVKIT1025 | Large EntityCollection | 📋 Planned |
+| DEVKIT1026 | Invalid characters | 📋 Planned |
+| DEVKIT1027 | Certificate dependencies | 📋 Planned |
+| DEVKIT1028 | Assembly size | 📋 Planned |
+
+---
+
+## References
+
+### Microsoft Documentation
+- [Best practices for plug-in and workflow development](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/)
+- [Best practices for working with data](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/work-with-data/)
+- [Best practices for working with metadata](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/work-with-metadata/)
+- [Plug-in isolation, trusts, and statistics](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/plug-ins#plug-in-isolation-trusts-and-statistics)
+- [Dataverse plug-in troubleshooting](https://learn.microsoft.com/en-us/troubleshoot/power-platform/dataverse/plug-in-execution/dataverse-plug-ins-errors)
+
+### Community Resources
+- [Roslyn Analyzer Cookbook (Tom Englert)](https://github.com/tom-englert/RoslynAnalyzerCookbook)
+- [Awesome Analyzers List](https://github.com/cybermaxs/awesome-analyzers)

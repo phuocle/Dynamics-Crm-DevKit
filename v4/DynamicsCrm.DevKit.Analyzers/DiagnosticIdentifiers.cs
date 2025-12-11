@@ -18,5 +18,6 @@
         public const string AvoidRetrieveAsIfPublished = "DEVKIT1016";
         public const string AvoidAppDomainEvents = "DEVKIT1014";
         public const string AvoidGetAwaiterGetResult = "DEVKIT1015";
+        public const string AvoidConsoleOutput = "DEVKIT1017";
     }
 }
