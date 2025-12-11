@@ -192,5 +192,13 @@ namespace DynamicsCrm.DevKit.Analyzers
             "Plug-in class '{0}' does not use ITracingService for debugging and monitoring",
             DiagnosticSeverity.Info,
             "Using ITracingService helps with debugging and monitoring plugin execution. Trace logs are captured in the platform and can be viewed using the Plug-in Trace Log viewer.");
+
+        /// <summary>DEVKIT1016</summary>
+        public static readonly DiagnosticDescriptor AvoidRetrieveAsIfPublished = CreateDescriptor(
+            "DEVKIT1016",
+            "Avoid retrieving unpublished metadata",
+            "'{0}' should not use RetrieveAsIfPublished = true; this causes slower performance",
+            DiagnosticSeverity.Info,
+            "Retrieving unpublished metadata adds overhead to processing and returns metadata that users might not expect. Only use RetrieveAsIfPublished = true when building a metadata editor.");
     }
 }

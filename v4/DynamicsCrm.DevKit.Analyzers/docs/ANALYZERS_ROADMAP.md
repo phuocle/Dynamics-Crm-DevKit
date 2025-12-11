@@ -19,6 +19,7 @@ Based on research of [Microsoft's Dataverse Best Practices](https://learn.micros
 | DEVKIT1011 | Use InvalidPluginExecutionException | ✅ [Use InvalidPluginExecutionException](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/use-invalidpluginexecutionexception-plugin-workflow-activities) |
 | DEVKIT1012 | ITracingService recommendation | ✅ [Use ITracingService](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/use-itracingservice-plugins) |
 | DEVKIT1013 | Avoid Retrieve/RetrieveMultiple plugins | ✅ [Limit Retrieve/RetrieveMultiple plugins](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/limit-registration-plugins-retrieve-retrievemultiple) |
+| DEVKIT1016 | Avoid RetrieveAsIfPublished = true | ✅ [Retrieve published metadata](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/work-with-metadata/retrieve-published-metadata) |
 
 ---
 
@@ -72,3 +73,4 @@ Context-dependent validation of async patterns in plugins.
 | DEVKIT1012 | ITracingService recommendation | ✅ Implemented |
 | DEVKIT1014 | AppDomain events | 📋 Planned |
 | DEVKIT1015 | Async pattern validation | 📋 Planned |
+| DEVKIT1016 | Avoid RetrieveAsIfPublished = true | ✅ Implemented |

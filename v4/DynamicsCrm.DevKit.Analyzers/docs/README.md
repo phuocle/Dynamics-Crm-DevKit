@@ -39,6 +39,7 @@ Or add to your `.csproj`:
 | [DEVKIT1011](#devkit1011) | Warning | Use InvalidPluginExecutionException for errors |
 | [DEVKIT1012](#devkit1012) | Info | Consider using ITracingService in plug-ins |
 | [DEVKIT1013](#devkit1013) | Info | Avoid registering plugins on Retrieve/RetrieveMultiple |
+| [DEVKIT1016](#devkit1016) | Info | Avoid retrieving unpublished metadata |
 
 ---
 
@@ -554,6 +555,38 @@ public class AccountPlugin : IPlugin
 ```
 
 [📖 Documentation](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DEVKIT1012)
+
+---
+
+### DEVKIT1016
+**Avoid retrieving unpublished metadata**
+
+**Severity:** Info
+
+**MS Best Practice:** [Retrieve published metadata](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/work-with-metadata/retrieve-published-metadata)
+
+Detects `RetrieveAsIfPublished = true` on metadata requests. Retrieving unpublished metadata causes slower performance.
+
+**Bad Code:**
+```csharp
+// ⚠️ RetrieveAsIfPublished = true causes performance issues
+var request = new RetrieveEntityRequest
+{
+    MetadataId = entityId,
+    RetrieveAsIfPublished = true
+};
+```
+
+**Good Code:**
+```csharp
+// ✅ Default behavior retrieves published metadata only
+var request = new RetrieveEntityRequest
+{
+    MetadataId = entityId
+};
+```
+
+[📖 Documentation](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DEVKIT1016)
 
 ---
 

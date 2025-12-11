@@ -15,5 +15,6 @@
         public const string RetrieveMultiplePlugin = "DEVKIT1013";
         public const string UseInvalidPluginExecutionException = "DEVKIT1011";
         public const string UseTracingService = "DEVKIT1012";
+        public const string AvoidRetrieveAsIfPublished = "DEVKIT1016";
     }
 }
