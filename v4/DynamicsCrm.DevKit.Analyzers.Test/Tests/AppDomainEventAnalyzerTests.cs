@@ -43,7 +43,7 @@ public class TestPlugin : Microsoft.Xrm.Sdk.IPlugin
 {{
     public void Execute(System.IServiceProvider serviceProvider)
     {{
-        [|System.AppDomain.CurrentDomain.UnhandledException += (s, e) => {{ }}|];
+        [|System.AppDomain.CurrentDomain.UnhandledException|] += (s, e) => {{ }};
     }}
 }}
 ";
@@ -59,7 +59,7 @@ public class TestPlugin : Microsoft.Xrm.Sdk.IPlugin
 {{
     public void Execute(System.IServiceProvider serviceProvider)
     {{
-        [|System.AppDomain.CurrentDomain.AssemblyResolve += (s, e) => null|];
+        [|System.AppDomain.CurrentDomain.AssemblyResolve|] += (s, e) => null;
     }}
 }}
 ";
@@ -75,7 +75,7 @@ public class TestPlugin : Microsoft.Xrm.Sdk.IPlugin
 {{
     public void Execute(System.IServiceProvider serviceProvider)
     {{
-        [|System.AppDomain.CurrentDomain.ProcessExit += (s, e) => {{ }}|];
+        [|System.AppDomain.CurrentDomain.ProcessExit|] += (s, e) => {{ }};
     }}
 }}
 ";

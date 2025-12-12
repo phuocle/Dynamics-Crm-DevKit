@@ -39,7 +39,7 @@ public class TestPlugin : Microsoft.Xrm.Sdk.IPlugin
     
     public void Execute(System.IServiceProvider serviceProvider)
     {{
-        [|_service = null|];
+        [|_service|] = null;
     }}
 }}
 ";
@@ -57,7 +57,7 @@ public class TestPlugin : Microsoft.Xrm.Sdk.IPlugin
     
     public void Execute(System.IServiceProvider serviceProvider)
     {{
-        [|this.context = null|];
+        [|this.context|] = null;
     }}
 }}
 ";
@@ -137,7 +137,7 @@ public class TestPlugin : Microsoft.Xrm.Sdk.IPlugin
     
     public void Execute(System.IServiceProvider serviceProvider)
     {{
-        [|Service = null|];
+        [|Service|] = null;
     }}
 }}
 ";
@@ -204,7 +204,7 @@ public class TestPlugin : Microsoft.Xrm.Sdk.IPlugin
     
     private void HelperMethod()
     {{
-        [|_data = ""value""|];  // Still in IPlugin class, still a problem
+        [|_data|] = ""value"";  // Still in IPlugin class, still a problem
     }}
 }}
 ";
@@ -226,7 +226,7 @@ public class TestWorkflow : System.Activities.CodeActivity
     
     protected override void Execute(object context)
     {{
-        [|_data = ""value""|];
+        [|_data|] = ""value"";
     }}
 }}
 ";

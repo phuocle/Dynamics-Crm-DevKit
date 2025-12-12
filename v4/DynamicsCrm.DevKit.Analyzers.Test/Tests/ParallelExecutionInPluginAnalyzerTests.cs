@@ -62,7 +62,7 @@ public class RegularClass
         [Fact]
         public async Task Diagnostic_When_Plugin_Uses_TaskRun()
         {
-            var src = WrapInPlugin("[|System.Threading.Tasks.Task.Run(() => { })|];");
+            var src = WrapInPlugin("[|System.Threading.Tasks.Task.Run|](() => { });");
             await CSharpAnalyzerVerifier<ParallelExecutionInPluginAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
@@ -80,21 +80,21 @@ public class RegularClass
         [Fact]
         public async Task Diagnostic_When_Plugin_Uses_ParallelForEach()
         {
-            var src = WrapInPlugin("var list = new System.Collections.Generic.List<int>(); [|System.Threading.Tasks.Parallel.ForEach(list, x => { })|];");
+            var src = WrapInPlugin("var list = new System.Collections.Generic.List<int>(); [|System.Threading.Tasks.Parallel.ForEach|](list, x => { });");
             await CSharpAnalyzerVerifier<ParallelExecutionInPluginAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
         [Fact]
         public async Task Diagnostic_When_Plugin_Uses_ParallelFor()
         {
-            var src = WrapInPlugin("[|System.Threading.Tasks.Parallel.For(0, 10, i => { })|];");
+            var src = WrapInPlugin("[|System.Threading.Tasks.Parallel.For|](0, 10, i => { });");
             await CSharpAnalyzerVerifier<ParallelExecutionInPluginAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
         [Fact]
         public async Task Diagnostic_When_Plugin_Uses_ParallelInvoke()
         {
-            var src = WrapInPlugin("[|System.Threading.Tasks.Parallel.Invoke(() => { }, () => { })|];");
+            var src = WrapInPlugin("[|System.Threading.Tasks.Parallel.Invoke|](() => { }, () => { });");
             await CSharpAnalyzerVerifier<ParallelExecutionInPluginAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
@@ -105,7 +105,7 @@ public class RegularClass
         [Fact]
         public async Task Diagnostic_When_Plugin_Uses_NewThread()
         {
-            var src = WrapInPlugin("var thread = [|new System.Threading.Thread(() => { })|];");
+            var src = WrapInPlugin("var thread = [|new System.Threading.Thread|](() => { });");
             await CSharpAnalyzerVerifier<ParallelExecutionInPluginAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
@@ -116,7 +116,7 @@ public class RegularClass
         [Fact]
         public async Task Diagnostic_When_Plugin_Uses_ThreadPoolQueueUserWorkItem()
         {
-            var src = WrapInPlugin("[|System.Threading.ThreadPool.QueueUserWorkItem(state => { })|];");
+            var src = WrapInPlugin("[|System.Threading.ThreadPool.QueueUserWorkItem|](state => { });");
             await CSharpAnalyzerVerifier<ParallelExecutionInPluginAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
@@ -127,14 +127,14 @@ public class RegularClass
         [Fact]
         public async Task Diagnostic_When_Workflow_Uses_TaskRun()
         {
-            var src = WrapInWorkflow("[|System.Threading.Tasks.Task.Run(() => { })|];");
+            var src = WrapInWorkflow("[|System.Threading.Tasks.Task.Run|](() => { });");
             await CSharpAnalyzerVerifier<ParallelExecutionInPluginAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
         [Fact]
         public async Task Diagnostic_When_Workflow_Uses_ParallelForEach()
         {
-            var src = WrapInWorkflow("var list = new System.Collections.Generic.List<int>(); [|System.Threading.Tasks.Parallel.ForEach(list, x => { })|];");
+            var src = WrapInWorkflow("var list = new System.Collections.Generic.List<int>(); [|System.Threading.Tasks.Parallel.ForEach|](list, x => { });");
             await CSharpAnalyzerVerifier<ParallelExecutionInPluginAnalyzer>.VerifyAnalyzerAsync(src);
         }
 

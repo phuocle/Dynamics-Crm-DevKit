@@ -42,7 +42,7 @@ public class {className} : Microsoft.Xrm.Sdk.IPlugin
         public async Task Diagnostic_When_Plugin_Registered_On_Retrieve()
         {
             var src = WrapCode(
-                @"[[|DynamicsCrm.DevKit.Shared.CrmPluginRegistration(""Retrieve"", ""account"", DynamicsCrm.DevKit.Shared.StageEnum.PostOperation, DynamicsCrm.DevKit.Shared.ExecutionModeEnum.Synchronous, """", ""Retrieve Account"")|]]",
+                @"[DynamicsCrm.DevKit.Shared.CrmPluginRegistration([|""Retrieve""|], ""account"", DynamicsCrm.DevKit.Shared.StageEnum.PostOperation, DynamicsCrm.DevKit.Shared.ExecutionModeEnum.Synchronous, """", ""Retrieve Account"")]",
                 "RetrievePlugin");
             await CSharpAnalyzerVerifier<RetrieveMultiplePluginAnalyzer>.VerifyAnalyzerAsync(src);
         }
@@ -51,7 +51,7 @@ public class {className} : Microsoft.Xrm.Sdk.IPlugin
         public async Task Diagnostic_When_Plugin_Registered_On_RetrieveMultiple()
         {
             var src = WrapCode(
-                @"[[|DynamicsCrm.DevKit.Shared.CrmPluginRegistration(""RetrieveMultiple"", ""account"", DynamicsCrm.DevKit.Shared.StageEnum.PostOperation, DynamicsCrm.DevKit.Shared.ExecutionModeEnum.Synchronous, """", ""RetrieveMultiple Account"")|]]",
+                @"[DynamicsCrm.DevKit.Shared.CrmPluginRegistration([|""RetrieveMultiple""|], ""account"", DynamicsCrm.DevKit.Shared.StageEnum.PostOperation, DynamicsCrm.DevKit.Shared.ExecutionModeEnum.Synchronous, """", ""RetrieveMultiple Account"")]",
                 "RetrieveMultiplePlugin");
             await CSharpAnalyzerVerifier<RetrieveMultiplePluginAnalyzer>.VerifyAnalyzerAsync(src);
         }

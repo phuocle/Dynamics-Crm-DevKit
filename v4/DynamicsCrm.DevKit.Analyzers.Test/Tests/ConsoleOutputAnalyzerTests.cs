@@ -62,14 +62,14 @@ public class RegularClass
         [Fact]
         public async Task Diagnostic_When_Plugin_Uses_ConsoleWriteLine()
         {
-            var src = WrapInPlugin("[|System.Console.WriteLine(\"test\")|];");
+            var src = WrapInPlugin("[|System.Console.WriteLine|](\"test\");");
             await CSharpAnalyzerVerifier<ConsoleOutputAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
         [Fact]
         public async Task Diagnostic_When_Plugin_Uses_ConsoleWriteLine_WithFormat()
         {
-            var src = WrapInPlugin("[|System.Console.WriteLine(\"value: {0}\", 42)|];");
+            var src = WrapInPlugin("[|System.Console.WriteLine|](\"value: {0}\", 42);");
             await CSharpAnalyzerVerifier<ConsoleOutputAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
@@ -87,7 +87,7 @@ public class RegularClass
         [Fact]
         public async Task Diagnostic_When_Plugin_Uses_ConsoleWrite()
         {
-            var src = WrapInPlugin("[|System.Console.Write(\"test\")|];");
+            var src = WrapInPlugin("[|System.Console.Write|](\"test\");");
             await CSharpAnalyzerVerifier<ConsoleOutputAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
@@ -98,21 +98,21 @@ public class RegularClass
         [Fact]
         public async Task Diagnostic_When_Plugin_Uses_ConsoleClear()
         {
-            var src = WrapInPlugin("[|System.Console.Clear()|];");
+            var src = WrapInPlugin("[|System.Console.Clear|]();");
             await CSharpAnalyzerVerifier<ConsoleOutputAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
         [Fact]
         public async Task Diagnostic_When_Plugin_Uses_ConsoleBeep()
         {
-            var src = WrapInPlugin("[|System.Console.Beep()|];");
+            var src = WrapInPlugin("[|System.Console.Beep|]();");
             await CSharpAnalyzerVerifier<ConsoleOutputAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
         [Fact]
         public async Task Diagnostic_When_Plugin_Uses_ConsoleResetColor()
         {
-            var src = WrapInPlugin("[|System.Console.ResetColor()|];");
+            var src = WrapInPlugin("[|System.Console.ResetColor|]();");
             await CSharpAnalyzerVerifier<ConsoleOutputAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
@@ -123,14 +123,14 @@ public class RegularClass
         [Fact]
         public async Task Diagnostic_When_Workflow_Uses_ConsoleWriteLine()
         {
-            var src = WrapInWorkflow("[|System.Console.WriteLine(\"test\")|];");
+            var src = WrapInWorkflow("[|System.Console.WriteLine|](\"test\");");
             await CSharpAnalyzerVerifier<ConsoleOutputAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
         [Fact]
         public async Task Diagnostic_When_Workflow_Uses_ConsoleWrite()
         {
-            var src = WrapInWorkflow("[|System.Console.Write(\"test\")|];");
+            var src = WrapInWorkflow("[|System.Console.Write|](\"test\");");
             await CSharpAnalyzerVerifier<ConsoleOutputAnalyzer>.VerifyAnalyzerAsync(src);
         }
 

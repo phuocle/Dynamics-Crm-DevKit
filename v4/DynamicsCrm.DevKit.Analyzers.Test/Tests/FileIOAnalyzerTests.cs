@@ -85,7 +85,7 @@ public class RegularClass
         [Fact]
         public async Task Diagnostic_When_Plugin_Uses_FileReadAllText()
         {
-            var src = WrapInPlugin("[|System.IO.File.ReadAllText(\"test.txt\")|];");
+            var src = WrapInPlugin("[|System.IO.File.ReadAllText|](\"test.txt\");");
             await CSharpAnalyzerVerifier<FileIOAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
@@ -103,14 +103,14 @@ public class RegularClass
         [Fact]
         public async Task Diagnostic_When_Plugin_Uses_FileWriteAllText()
         {
-            var src = WrapInPlugin("[|System.IO.File.WriteAllText(\"test.txt\", \"content\")|];");
+            var src = WrapInPlugin("[|System.IO.File.WriteAllText|](\"test.txt\", \"content\");");
             await CSharpAnalyzerVerifier<FileIOAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
         [Fact]
         public async Task Diagnostic_When_Plugin_Uses_FileWriteAllBytes()
         {
-            var src = WrapInPlugin("[|System.IO.File.WriteAllBytes(\"test.bin\", new byte[0])|];");
+            var src = WrapInPlugin("[|System.IO.File.WriteAllBytes|](\"test.bin\", new byte[0]);");
             await CSharpAnalyzerVerifier<FileIOAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
@@ -121,14 +121,14 @@ public class RegularClass
         [Fact]
         public async Task Diagnostic_When_Plugin_Uses_FileExists()
         {
-            var src = WrapInPlugin("var exists = [|System.IO.File.Exists(\"test.txt\")|];");
+            var src = WrapInPlugin("var exists = [|System.IO.File.Exists|](\"test.txt\");");
             await CSharpAnalyzerVerifier<FileIOAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
         [Fact]
         public async Task Diagnostic_When_Plugin_Uses_FileDelete()
         {
-            var src = WrapInPlugin("[|System.IO.File.Delete(\"test.txt\")|];");
+            var src = WrapInPlugin("[|System.IO.File.Delete|](\"test.txt\");");
             await CSharpAnalyzerVerifier<FileIOAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
@@ -139,21 +139,21 @@ public class RegularClass
         [Fact]
         public async Task Diagnostic_When_Plugin_Uses_NewFileStream()
         {
-            var src = WrapInPlugin("var fs = [|new System.IO.FileStream(\"test.txt\", System.IO.FileMode.Open)|];");
+            var src = WrapInPlugin("var fs = [|new System.IO.FileStream|](\"test.txt\", System.IO.FileMode.Open);");
             await CSharpAnalyzerVerifier<FileIOAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
         [Fact]
         public async Task Diagnostic_When_Plugin_Uses_NewStreamReader()
         {
-            var src = WrapInPlugin("var sr = [|new System.IO.StreamReader(\"test.txt\")|];");
+            var src = WrapInPlugin("var sr = [|new System.IO.StreamReader|](\"test.txt\");");
             await CSharpAnalyzerVerifier<FileIOAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
         [Fact]
         public async Task Diagnostic_When_Plugin_Uses_NewStreamWriter()
         {
-            var src = WrapInPlugin("var sw = [|new System.IO.StreamWriter(\"test.txt\")|];");
+            var src = WrapInPlugin("var sw = [|new System.IO.StreamWriter|](\"test.txt\");");
             await CSharpAnalyzerVerifier<FileIOAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
@@ -164,14 +164,14 @@ public class RegularClass
         [Fact]
         public async Task Diagnostic_When_Workflow_Uses_FileReadAllText()
         {
-            var src = WrapInWorkflow("[|System.IO.File.ReadAllText(\"test.txt\")|];");
+            var src = WrapInWorkflow("[|System.IO.File.ReadAllText|](\"test.txt\");");
             await CSharpAnalyzerVerifier<FileIOAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
         [Fact]
         public async Task Diagnostic_When_Workflow_Uses_NewStreamWriter()
         {
-            var src = WrapInWorkflow("var sw = [|new System.IO.StreamWriter(\"test.txt\")|];");
+            var src = WrapInWorkflow("var sw = [|new System.IO.StreamWriter|](\"test.txt\");");
             await CSharpAnalyzerVerifier<FileIOAnalyzer>.VerifyAnalyzerAsync(src);
         }
 

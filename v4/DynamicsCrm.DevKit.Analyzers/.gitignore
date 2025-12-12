@@ -1,0 +1,12 @@
+# Code coverage reports
+CoverageReport/
+
+# Test results
+TestResults/
+
+# Coverage files
+*.coverage
+*.cobertura.xml
+coverage.json
+lcov.info
+*.opencover.xml

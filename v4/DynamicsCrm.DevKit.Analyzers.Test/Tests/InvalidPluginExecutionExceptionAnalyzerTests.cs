@@ -66,21 +66,21 @@ public class RegularClass
         [Fact]
         public async Task Diagnostic_When_Plugin_Throws_Exception()
         {
-            var src = WrapInPlugin(@"[|throw new System.Exception(""error"");|]");
+            var src = WrapInPlugin(@"[|throw new System.Exception|](""error"");");
             await CSharpAnalyzerVerifier<InvalidPluginExecutionExceptionAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
         [Fact]
         public async Task Diagnostic_When_Plugin_Throws_ArgumentException()
         {
-            var src = WrapInPlugin(@"[|throw new System.ArgumentException(""invalid arg"");|]");
+            var src = WrapInPlugin(@"[|throw new System.ArgumentException|](""invalid arg"");");
             await CSharpAnalyzerVerifier<InvalidPluginExecutionExceptionAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
         [Fact]
         public async Task Diagnostic_When_Workflow_Throws_Exception()
         {
-            var src = WrapInWorkflow(@"[|throw new System.Exception(""error"");|]");
+            var src = WrapInWorkflow(@"[|throw new System.Exception|](""error"");");
             await CSharpAnalyzerVerifier<InvalidPluginExecutionExceptionAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
