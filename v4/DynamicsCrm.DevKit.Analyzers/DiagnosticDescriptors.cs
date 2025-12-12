@@ -248,5 +248,13 @@ namespace DynamicsCrm.DevKit.Analyzers
             "Don't use '{0}' in plug-ins or workflow activities; file operations are blocked in sandbox",
             DiagnosticSeverity.Error,
             "System.IO file operations (File.Read, File.Write, FileStream, StreamReader, StreamWriter, etc.) are not allowed in the Dataverse sandbox environment and will throw SecurityException at runtime.");
+
+        /// <summary>DEVKIT1019</summary>
+        public static readonly DiagnosticDescriptor PluginDepthCheck = CreateDescriptor(
+            "DEVKIT1019",
+            "Consider checking context.Depth to prevent infinite loops",
+            "Plugin class '{0}' does not check IPluginExecutionContext.Depth which may cause infinite loops",
+            DiagnosticSeverity.Warning,
+            "Plugins can trigger themselves recursively. Check context.Depth and exit early (e.g., if (context.Depth > 1) return;) to prevent infinite loops and stack overflows.");
     }
 }

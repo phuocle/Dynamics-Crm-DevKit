@@ -47,6 +47,10 @@ cd DynamicsCrm.DevKit.Analyzers
 .\Run-Analyzer-Coverage.ps1
 ```
 
+### Run Analyzer Tests for Visual Studio after run analyzer unit test
+- Build DynamicsCrm.DevKit.Analyzers to dll in debug mode
+- Copy DynamicsCrm.DevKit.Analyzers.dll to DynamicsCrm.DevKit.Analyzers.Test.Vs\packages\DynamicsCrm.DevKit.Analyzers.4.0.0\analyzers\dotnet\cs
+
 ## Build System
 
 > **IMPORTANT**: Use MSBuild, NOT `dotnet build`. The VSIX project requires MSBuild.

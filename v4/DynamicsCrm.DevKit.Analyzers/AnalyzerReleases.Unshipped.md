@@ -22,3 +22,4 @@ DEVKIT1015 | DynamicsCrm.DevKit | Info | [Avoid blocking async patterns](https:/
 DEVKIT1016 | DynamicsCrm.DevKit | Info | [Avoid RetrieveAsIfPublished](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DEVKIT1016)
 DEVKIT1017 | DynamicsCrm.DevKit | Info | [Avoid Console output](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DEVKIT1017)
 DEVKIT1018 | DynamicsCrm.DevKit | Error | [Avoid File/IO operations](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DEVKIT1018)
+DEVKIT1019 | DynamicsCrm.DevKit | Warning | [Check context.Depth to prevent infinite loops](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DEVKIT1019)

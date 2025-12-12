@@ -33,16 +33,14 @@ Based on research of [Microsoft's Dataverse Best Practices](https://learn.micros
 
 | ID | Title | Suggested Severity | Description | MS Best Practice |
 |---|---|:---:|---|---|
-| DEVKIT1018 | Avoid File/IO Operations in Plugins | ❌ Error | Detect System.IO file operations blocked in sandbox | Sandbox limitation |
-| DEVKIT1019 | All Query Types for PreOperation RetrieveMultiple | ⚠️ Warning | Handle FetchExpression, QueryExpression, QueryByAttribute | [Implement all types of queries](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/implement-all-types-of-queries-when-filtering-preoperation-retrievemultiple) |
-| DEVKIT1020 | Duplicate Plugin Step Registration | ⚠️ Warning | Detect duplicate `[CrmPluginRegistration]` attributes | [Don't duplicate plug-in step registration](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/do-not-duplicate-plugin-step-registration) |
+| DEVKIT1020 | All Query Types for PreOperation RetrieveMultiple | ⚠️ Warning | Handle FetchExpression, QueryExpression, QueryByAttribute | [Implement all types of queries](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/implement-all-types-of-queries-when-filtering-preoperation-retrievemultiple) |
+| DEVKIT1021 | Duplicate Plugin Step Registration | ⚠️ Warning | Detect duplicate `[CrmPluginRegistration]` attributes | [Don't duplicate plug-in step registration](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/do-not-duplicate-plugin-step-registration) |
 
 ### Medium Priority
 
 | ID | Title | Description | MS Best Practice |
 |---|---|---|---|
-| DEVKIT1021 | Avoid Reflection in Sandbox Plugins | Detect disallowed reflection patterns (Assembly.Load, Activator.CreateInstance on arbitrary types) | Sandbox limitation |
-| DEVKIT1022 | Plugin Context Depth Check | Recommend checking `context.Depth` to prevent infinite loops | Plugin best practice |
+| DEVKIT1022 | Avoid Reflection in Sandbox Plugins | Detect disallowed reflection patterns (Assembly.Load, Activator.CreateInstance on arbitrary types) | Sandbox limitation |
 | DEVKIT1023 | Avoid Environment Variables in Plugins | Detect Environment.GetEnvironmentVariable (unavailable in sandbox) | Sandbox limitation |
 | DEVKIT1024 | Use OrganizationServiceContext Carefully | Warn about AutoSaveChanges and LINQ edge cases | Performance |
 | DEVKIT1025 | Avoid Large EntityCollection Returns | Warn when not using paging for RetrieveMultiple | [Service protection API limits](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/api-limits) |
@@ -84,13 +82,11 @@ DynamicsCrm.DevKit.Analyzers uniquely focuses on:
 
 | ID | Analyzer Name | Status |
 |---|---|---|
-| DEVKIT1001-1016 | Current analyzers | ✅ Implemented |
-| DEVKIT1017 | Console output | 📋 Planned |
-| DEVKIT1018 | Query type handling | 📋 Planned |
-| DEVKIT1019 | File/IO operations | 📋 Planned |
-| DEVKIT1020 | Duplicate step registration | 📋 Planned |
-| DEVKIT1021 | Reflection patterns | 📋 Planned |
-| DEVKIT1022 | Context depth check | 📋 Planned |
+| DEVKIT1001-1018 | Current analyzers | ✅ Implemented |
+| DEVKIT1019 | Context depth check | ✅ Implemented |
+| DEVKIT1020 | Query type handling | 📋 Planned |
+| DEVKIT1021 | Duplicate step registration | 📋 Planned |
+| DEVKIT1022 | Reflection patterns | 📋 Planned |
 | DEVKIT1023 | Environment variables | 📋 Planned |
 | DEVKIT1024 | OrganizationServiceContext | 📋 Planned |
 | DEVKIT1025 | Large EntityCollection | 📋 Planned |

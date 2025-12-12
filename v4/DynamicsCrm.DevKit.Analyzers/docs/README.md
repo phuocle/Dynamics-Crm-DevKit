@@ -44,6 +44,7 @@ Or add to your `.csproj`:
 | [DEVKIT1016](#devkit1016) | Info | Avoid retrieving unpublished metadata |
 | [DEVKIT1017](#devkit1017) | Info | Avoid Console output in plug-ins |
 | [DEVKIT1018](#devkit1018) | Error | Avoid File/IO operations in plug-ins |
+| [DEVKIT1019](#devkit1019) | Warning | Consider checking context.Depth to prevent infinite loops |
 
 ---
 
@@ -727,6 +728,58 @@ public class MyPlugin : IPlugin
 ```
 
 [📖 Documentation](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DEVKIT1018)
+
+---
+
+### DEVKIT1019
+**Consider checking context.Depth to prevent infinite loops**
+
+**Severity:** Warning
+
+This analyzer recommends checking `IPluginExecutionContext.Depth` in plugin classes to prevent infinite loops when plugins modify entities that trigger themselves recursively.
+
+**Bad Code:**
+```csharp
+public class AccountPlugin : IPlugin
+{
+    public void Execute(IServiceProvider serviceProvider)
+    {
+        // ❌ No depth check - can cause infinite loop
+        var context = (IPluginExecutionContext)serviceProvider
+            .GetService(typeof(IPluginExecutionContext));
+        var target = (Entity)context.InputParameters["Target"];
+        
+        // This update triggers the plugin again!
+        var update = new Entity("account", target.Id);
+        update["modifiedon"] = DateTime.UtcNow;
+        service.Update(update);
+    }
+}
+```
+
+**Good Code:**
+```csharp
+public class AccountPlugin : IPlugin
+{
+    public void Execute(IServiceProvider serviceProvider)
+    {
+        var context = (IPluginExecutionContext)serviceProvider
+            .GetService(typeof(IPluginExecutionContext));
+        
+        // ✅ Exit early if this is a recursive call
+        if (context.Depth > 1) return;
+        
+        var target = (Entity)context.InputParameters["Target"];
+        
+        // Now safe to update
+        var update = new Entity("account", target.Id);
+        update["modifiedon"] = DateTime.UtcNow;
+        service.Update(update);
+    }
+}
+```
+
+[📖 Documentation](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DEVKIT1019)
 
 ---
 

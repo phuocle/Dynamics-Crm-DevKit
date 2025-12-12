@@ -20,5 +20,6 @@
         public const string AvoidGetAwaiterGetResult = "DEVKIT1015";
         public const string AvoidConsoleOutput = "DEVKIT1017";
         public const string AvoidFileIO = "DEVKIT1018";
+        public const string PluginDepthCheck = "DEVKIT1019";
     }
 }
