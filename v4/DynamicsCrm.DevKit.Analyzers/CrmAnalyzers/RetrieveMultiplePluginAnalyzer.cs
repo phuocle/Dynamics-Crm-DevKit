@@ -71,8 +71,9 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
             var messageLower = messageValue.ToLowerInvariant();
             if (messageLower == "retrieve" || messageLower == "retrievemultiple")
             {
+                // Highlight only the message argument to reduce visual noise
                 DiagnosticHelpers.ReportDiagnostic(context, DiagnosticDescriptors.RetrieveMultiplePlugin,
-                    attribute.GetLocation(), messageValue);
+                    firstArg.GetLocation(), messageValue);
             }
         }
 
