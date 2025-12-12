@@ -7,6 +7,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
+using Microsoft.CodeAnalysis.Text;
 
 namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
 {
@@ -59,8 +60,15 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
             // Check if we're inside an IPlugin or CodeActivity class
             if (AnalyzerHelper.IsInsidePluginOrWorkflow(objectCreation, semanticModel, context.CancellationToken))
             {
+                // Calculate location: from 'new' keyword to end of type/arguments (exclude initializer)
+                // This reduces visual noise when object initializers are present
+                var startSpan = objectCreation.NewKeyword.SpanStart;
+                var endSpan = objectCreation.ArgumentList?.Span.End ?? objectCreation.Type.Span.End;
+                var highlightSpan = TextSpan.FromBounds(startSpan, endSpan);
+                var highlightLocation = Location.Create(objectCreation.SyntaxTree, highlightSpan);
+
                 DiagnosticHelpers.ReportDiagnostic(context, DiagnosticDescriptors.BatchRequestInPlugin, 
-                    objectCreation.GetLocation(), typeName);
+                    highlightLocation, typeName);
             }
         }
     }
