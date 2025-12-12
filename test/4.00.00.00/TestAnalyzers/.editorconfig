@@ -48,7 +48,7 @@ dotnet_diagnostic.DEVKIT1009.severity = none
 dotnet_diagnostic.DEVKIT1010.severity = none
 
 # DEVKIT1011: Use InvalidPluginExecutionException for errors
-dotnet_diagnostic.DEVKIT1011.severity = none
+dotnet_diagnostic.DEVKIT1011.severity = warning
 
 # DEVKIT1012: Consider using ITracingService in plug-ins
 dotnet_diagnostic.DEVKIT1012.severity = none
@@ -57,7 +57,7 @@ dotnet_diagnostic.DEVKIT1012.severity = none
 dotnet_diagnostic.DEVKIT1013.severity = none
 
 # DEVKIT1014: Avoid AppDomain event registration in plug-ins
-dotnet_diagnostic.DEVKIT1014.severity = warning
+dotnet_diagnostic.DEVKIT1014.severity = none
 
 # DEVKIT1015: Avoid blocking async patterns in plug-ins
 dotnet_diagnostic.DEVKIT1015.severity = none

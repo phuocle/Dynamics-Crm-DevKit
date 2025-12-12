@@ -7,6 +7,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
+using Microsoft.CodeAnalysis.Text;
 
 namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
 {
@@ -55,7 +56,7 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
             if (throwStatement.Expression == null)
                 return;
 
-            AnalyzeThrowExpression(context, throwStatement.Expression, throwStatement.GetLocation());
+            AnalyzeThrowExpression(context, throwStatement.Expression, throwStatement.ThrowKeyword);
         }
 
         private void AnalyzeThrowExpression(SyntaxNodeAnalysisContext context)
@@ -63,10 +64,10 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
             if (!(context.Node is ThrowExpressionSyntax throwExpression))
                 return;
 
-            AnalyzeThrowExpression(context, throwExpression.Expression, throwExpression.GetLocation());
+            AnalyzeThrowExpression(context, throwExpression.Expression, throwExpression.ThrowKeyword);
         }
 
-        private void AnalyzeThrowExpression(SyntaxNodeAnalysisContext context, ExpressionSyntax expression, Location location)
+        private void AnalyzeThrowExpression(SyntaxNodeAnalysisContext context, ExpressionSyntax expression, SyntaxToken throwKeyword)
         {
             var semanticModel = context.SemanticModel;
             if (semanticModel == null) return;
@@ -86,9 +87,24 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
             if (IsInvalidPluginExecutionException(exceptionType))
                 return;
 
+            // Calculate location: from 'throw' keyword to end of type (exclude constructor arguments)
+            // This highlights 'throw new Exception' instead of the entire throw statement
+            Location highlightLocation;
+            if (expression is ObjectCreationExpressionSyntax objectCreation)
+            {
+                var startSpan = throwKeyword.SpanStart;
+                var endSpan = objectCreation.Type.Span.End;
+                var highlightSpan = TextSpan.FromBounds(startSpan, endSpan);
+                highlightLocation = Location.Create(expression.SyntaxTree, highlightSpan);
+            }
+            else
+            {
+                highlightLocation = expression.GetLocation();
+            }
+
             // Report diagnostic for non-InvalidPluginExecutionException
             DiagnosticHelpers.ReportDiagnostic(context, DiagnosticDescriptors.UseInvalidPluginExecutionException,
-                location, exceptionType.Name);
+                highlightLocation, exceptionType.Name);
         }
 
         private static bool IsInvalidPluginExecutionException(ITypeSymbol type)
