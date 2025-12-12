@@ -67,8 +67,9 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
             if (IsConsoleOutputMethod(containingTypeName, methodName))
             {
                 var patternName = GetConsoleMethodName(methodName);
+                // Highlight only the method name (e.g., Console.WriteLine, not the entire call)
                 DiagnosticHelpers.ReportDiagnostic(context, DiagnosticDescriptors.AvoidConsoleOutput,
-                    invocation.GetLocation(), patternName);
+                    invocation.Expression.GetLocation(), patternName);
             }
         }
 
