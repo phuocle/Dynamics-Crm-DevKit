@@ -17,7 +17,7 @@ A development toolkit for Microsoft Dynamics 365 / CRM / Dataverse. This reposit
 
 ### Build All Projects
 ```powershell
-# MSBuild path (VS 2022 Enterprise)
+# MSBuild path (VS 2026 Enterprise)
 $msbuild = "C:\Program Files\Microsoft Visual Studio\18\Professional\MSBuild\Current\Bin\MSBuild.exe"
 
 # Build everything

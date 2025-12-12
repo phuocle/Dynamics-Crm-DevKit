@@ -1,7 +1,7 @@
 # Copilot Instructions
 
 ## Response Format
-* Start with: "Hi, I'm GitHub Copilot. I will help you with your prompt Phuoc"
+* Start with: "Hi, I'm GitHub Copilot. I will help you with your prompt Phuoc Le"
 
 ## C# Conventions
 * Use async/await for async operations
