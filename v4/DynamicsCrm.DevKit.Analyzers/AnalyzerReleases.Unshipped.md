@@ -4,7 +4,7 @@
 ### New Rules
 Rule ID | Category | Severity | Notes
 --------|----------|----------|-------
-DEVKIT1001 | DynamicsCrm.DevKit | ❌ Error ⚠️ Warning | [Filtering attributes for Create/Update](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DEVKIT1001)
+DEVKIT1001 | DynamicsCrm.DevKit | ❌ Error | [Filtering attributes for Create/Update](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DEVKIT1001)
 DEVKIT1002 | DynamicsCrm.DevKit | ⚠️ Warning | [Don't use ColumnSet(true)](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DEVKIT1002)
 DEVKIT1003 | DynamicsCrm.DevKit | ❌ Error | [Plugin image validation](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DEVKIT1003)
 DEVKIT1004 | DynamicsCrm.DevKit | ℹ️ Info | [Deprecated SDK messages](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DEVKIT1004)

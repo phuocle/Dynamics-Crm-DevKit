@@ -25,15 +25,15 @@ namespace DynamicsCrm.DevKit.Analyzers
             );
         }
 
-        /// <summary>DEVKIT1001 - Create messages with missing filtering (Warning)</summary>
+        /// <summary>DEVKIT1001 - Create messages with missing filtering</summary>
         public static readonly DiagnosticDescriptor CreateMessageShouldHaveFilteringAttributes = CreateDescriptor(
             "DEVKIT1001",
             "Create message should have filtering attributes",
             "Create message should have filtering attributes",
-            DiagnosticSeverity.Warning,
-            "Create, CreateMultiple, and OnExternalCreated messages should have filtering attributes.");
+            DiagnosticSeverity.Error,
+            "Create, CreateMultiple, and OnExternalCreated messages must have filtering attributes.");
 
-        /// <summary>DEVKIT1001 - Update messages with missing filtering (Error)</summary>
+        /// <summary>DEVKIT1001 - Update messages with missing filtering</summary>
         public static readonly DiagnosticDescriptor UpdateMessageShouldHaveFilteringAttributes = CreateDescriptor(
             "DEVKIT1001",
             "Update message should have filtering attributes",
@@ -41,15 +41,15 @@ namespace DynamicsCrm.DevKit.Analyzers
             DiagnosticSeverity.Error,
             "Update, UpdateMultiple, and OnExternalUpdated messages must have filtering attributes.");
 
-        /// <summary>DEVKIT1001 - Create messages with * filtering (Warning)</summary>
+        /// <summary>DEVKIT1001 - Create messages with * filtering</summary>
         public static readonly DiagnosticDescriptor CreateMessageShouldNotUseAllAttributes = CreateDescriptor(
             "DEVKIT1001",
             "Create message should not use all attributes",
             "Create message should not use all attributes",
-            DiagnosticSeverity.Warning,
-            "Create, CreateMultiple, and OnExternalCreated messages should have specific filtering attributes, not '*'.");
+            DiagnosticSeverity.Error,
+            "Create, CreateMultiple, and OnExternalCreated messages must have specific filtering attributes, not '*'.");
 
-        /// <summary>DEVKIT1001 - Update messages with * filtering (Error)</summary>
+        /// <summary>DEVKIT1001 - Update messages with * filtering</summary>
         public static readonly DiagnosticDescriptor UpdateMessageShouldNotUseAllAttributes = CreateDescriptor(
             "DEVKIT1001",
             "Update message should not use all attributes",

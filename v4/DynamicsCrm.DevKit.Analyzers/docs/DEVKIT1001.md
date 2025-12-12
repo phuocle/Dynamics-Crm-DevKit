@@ -4,7 +4,6 @@
 
 This analyzer ensures that plugin registrations for `Create`, `CreateMultiple`, `Update`, `UpdateMultiple`, `OnExternalCreated`, or `OnExternalUpdated` messages include specific filtering attributes. Without filtering attributes, the plugin executes on **every field change**, which can significantly impact performance.
 
-> **Note**: Update messages trigger as Error because missing filtering on Update is more impactful - users frequently update records and every update will trigger the plugin. Create messages trigger as Warning since records are created less frequently.
 
 ## Microsoft Best Practice
 
@@ -130,6 +129,6 @@ dotnet_diagnostic.DEVKIT1001.severity = none
 |----------|-------|
 | **Rule ID** | DEVKIT1001 |
 | **Category** | DynamicsCrm.DevKit |
-| **Severity** | **Update messages**: Error<br>**Create messages**: Warning |
+| **Severity** | Error |
 | **Enabled by default** | Yes |
 

@@ -21,52 +21,52 @@ root = true
 dotnet_diagnostic.DEVKIT1001.severity = warning
 
 # DEVKIT1002: Don't use ColumnSet(true)
-dotnet_diagnostic.DEVKIT1002.severity = warning
+dotnet_diagnostic.DEVKIT1002.severity = none
 
 # DEVKIT1003: Plugin image validation
-dotnet_diagnostic.DEVKIT1003.severity = warning
+dotnet_diagnostic.DEVKIT1003.severity = none
 
 # DEVKIT1004: Use of deprecated SDK messages
-dotnet_diagnostic.DEVKIT1004.severity = warning
+dotnet_diagnostic.DEVKIT1004.severity = none
 
 # DEVKIT1005: EntityReference maybe null
-dotnet_diagnostic.DEVKIT1005.severity = warning
+dotnet_diagnostic.DEVKIT1005.severity = none
 
 # DEVKIT1006: Don't use batch request types in plug-ins
-dotnet_diagnostic.DEVKIT1006.severity = warning
+dotnet_diagnostic.DEVKIT1006.severity = none
 
 # DEVKIT1007: IPlugin implementations should be stateless
-dotnet_diagnostic.DEVKIT1007.severity = warning
+dotnet_diagnostic.DEVKIT1007.severity = none
 
 # DEVKIT1008: Don't use parallel execution in plug-ins
-dotnet_diagnostic.DEVKIT1008.severity = warning
+dotnet_diagnostic.DEVKIT1008.severity = none
 
 # DEVKIT1009: Set KeepAlive to false for external HTTP calls
-dotnet_diagnostic.DEVKIT1009.severity = warning
+dotnet_diagnostic.DEVKIT1009.severity = none
 
 # DEVKIT1010: Set Timeout for external HTTP calls
-dotnet_diagnostic.DEVKIT1010.severity = warning
+dotnet_diagnostic.DEVKIT1010.severity = none
 
 # DEVKIT1011: Use InvalidPluginExecutionException for errors
-dotnet_diagnostic.DEVKIT1011.severity = warning
+dotnet_diagnostic.DEVKIT1011.severity = none
 
 # DEVKIT1012: Consider using ITracingService in plug-ins
-dotnet_diagnostic.DEVKIT1012.severity = warning
+dotnet_diagnostic.DEVKIT1012.severity = none
 
 # DEVKIT1013: Avoid registering plugins on Retrieve/RetrieveMultiple
-dotnet_diagnostic.DEVKIT1013.severity = warning
+dotnet_diagnostic.DEVKIT1013.severity = none
 
 # DEVKIT1014: Avoid AppDomain event registration in plug-ins
-dotnet_diagnostic.DEVKIT1014.severity = warning
+dotnet_diagnostic.DEVKIT1014.severity = none
 
 # DEVKIT1015: Avoid blocking async patterns in plug-ins
-dotnet_diagnostic.DEVKIT1015.severity = warning
+dotnet_diagnostic.DEVKIT1015.severity = none
 
 # DEVKIT1016: Avoid retrieving unpublished metadata
-dotnet_diagnostic.DEVKIT1016.severity = warning
+dotnet_diagnostic.DEVKIT1016.severity = none
 
 # DEVKIT1017: Avoid Console output in plug-ins
-dotnet_diagnostic.DEVKIT1017.severity = warning
+dotnet_diagnostic.DEVKIT1017.severity = none
 
 # DEVKIT1018: Avoid File/IO operations in plug-ins
-dotnet_diagnostic.DEVKIT1018.severity = warning
+dotnet_diagnostic.DEVKIT1018.severity = none

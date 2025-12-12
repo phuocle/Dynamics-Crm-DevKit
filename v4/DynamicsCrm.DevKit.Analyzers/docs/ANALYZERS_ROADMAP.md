@@ -6,7 +6,7 @@ Based on research of [Microsoft's Dataverse Best Practices](https://learn.micros
 
 | ID | Description | Severity | MS Best Practice |
 |---|---|:---:|---|
-| DEVKIT1001 | Create/Update message should have filtering attributes | ❌ Error ⚠️ Warning | [Include filtering attributes](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/include-filtering-attributes-plugin-registration) |
+| DEVKIT1001 | Create/Update message should have filtering attributes | ❌ Error | [Include filtering attributes](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/include-filtering-attributes-plugin-registration) |
 | DEVKIT1002 | Don't use ColumnSet(true) | ⚠️ Warning | [Retrieve specific columns](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/work-with-data/retrieve-specific-columns-entity-via-query-apis) |
 | DEVKIT1003 | Plugin image validation | ❌ Error | [Understand the execution context](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/understand-the-data-context) |
 | DEVKIT1004 | Deprecated SDK messages | ℹ️ Info | [Deprecated SDK messages](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/org-service/deprecations) |

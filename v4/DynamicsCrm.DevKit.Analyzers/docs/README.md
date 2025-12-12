@@ -26,7 +26,7 @@ Or add to your `.csproj`:
 
 | Rule ID | Severity | Description |
 |---------|----------|-------------|
-| [DEVKIT1001](#devkit1001) | Error/Warning | Create/Update message should have filtering attributes |
+| [DEVKIT1001](#devkit1001) | Error | Create/Update message should have filtering attributes |
 | [DEVKIT1002](#devkit1002) | Warning | Don't use `ColumnSet(true)` |
 | [DEVKIT1003](#devkit1003) | Error | Plugin image validation |
 | [DEVKIT1004](#devkit1004) | Info | Use of deprecated SDK messages |
