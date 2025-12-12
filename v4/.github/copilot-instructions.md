@@ -41,15 +41,31 @@ $msbuild = "C:\Program Files\Microsoft Visual Studio\18\Professional\MSBuild\Cur
 | **Tools** | `DynamicsCrm.DevKit.Tools.slnx` | Utility package |
 | **Shared** | (shared project) | Common logic |
 
-### Run Analyzer Tests
+### Run Analyzer Unit Tests
 ```powershell
 cd DynamicsCrm.DevKit.Analyzers
 .\Run-Analyzer-Coverage.ps1
 ```
 
-### Run Analyzer Tests for Visual Studio after run analyzer unit test
-- Build DynamicsCrm.DevKit.Analyzers to dll in debug mode
-- Copy DynamicsCrm.DevKit.Analyzers.dll to DynamicsCrm.DevKit.Analyzers.Test.Vs\packages\DynamicsCrm.DevKit.Analyzers.4.0.0\analyzers\dotnet\cs
+### Run Analyzer VS Integration Tests
+After unit tests pass, verify analyzers work in real Visual Studio:
+
+```powershell
+# Step 1: Build analyzer DLL in Debug mode
+dotnet build DynamicsCrm.DevKit.Analyzers\DynamicsCrm.DevKit.Analyzers.csproj --configuration Debug --no-incremental
+
+# Step 2: Copy DLL to packages folder
+Copy-Item -Path "DynamicsCrm.DevKit.Analyzers\bin\Debug\netstandard2.0\DynamicsCrm.DevKit.Analyzers.dll" `
+  -Destination "DynamicsCrm.DevKit.Analyzers.Test.Vs\packages\DynamicsCrm.DevKit.Analyzers.4.0.0\analyzers\dotnet\cs\" -Force
+
+# Step 3: Build VS test project and capture output
+$msbuild = "C:\Program Files\Microsoft Visual Studio\18\Professional\MSBuild\Current\Bin\MSBuild.exe"
+& $msbuild "DynamicsCrm.DevKit.Analyzers.Test.Vs\DynamicsCrm.DevKit.Analyzers.Test.Vs.csproj" /t:Rebuild /p:Configuration=Debug /v:n
+
+# Step 4: Verify build output contains all DEVKIT warnings (DEVKIT1001-DEVKIT1019)
+```
+
+> **Note**: Close and reopen VS after copying DLL - VS caches analyzers.
 
 ## Build System
 
@@ -71,11 +87,12 @@ cd DynamicsCrm.DevKit.Analyzers
 
 ## DEVKIT Analyzers
 
-This project includes 18 Roslyn analyzers (DEVKIT1001-DEVKIT1018) for CRM-specific patterns:
+This project includes 19 Roslyn analyzers (DEVKIT1001-DEVKIT1019) for CRM-specific patterns:
 - Plugin thread safety (static fields, HttpClient)
 - UseStrict patterns for JavaScript
 - RetrieveMultiple bounded queries
 - Avoid Console/File operations in plugins
+- Context.Depth check for infinite loop prevention
 
 ## Key Constants
 

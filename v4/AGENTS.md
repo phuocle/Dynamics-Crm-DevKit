@@ -53,6 +53,35 @@ cd DynamicsCrm.DevKit.Analyzers
 .\Run-Analyzer-Coverage.ps1
 ```
 
+### Analyzer Development Workflow
+
+When developing/fixing/adding a new analyzer:
+
+#### Step 1: Run Unit Tests
+```powershell
+cd DynamicsCrm.DevKit.Analyzers
+dotnet test ..\DynamicsCrm.DevKit.Analyzers.Test\DynamicsCrm.DevKit.Analyzers.Test.csproj
+```
+
+#### Step 2: Run VS Integration Tests (after unit tests pass)
+```powershell
+# Build analyzer DLL in Debug mode
+dotnet build DynamicsCrm.DevKit.Analyzers\DynamicsCrm.DevKit.Analyzers.csproj --configuration Debug --no-incremental
+
+# Copy DLL to VS test project packages folder
+Copy-Item -Path "DynamicsCrm.DevKit.Analyzers\bin\Debug\netstandard2.0\DynamicsCrm.DevKit.Analyzers.dll" `
+  -Destination "DynamicsCrm.DevKit.Analyzers.Test.Vs\packages\DynamicsCrm.DevKit.Analyzers.4.0.0\analyzers\dotnet\cs\" -Force
+
+# Build VS test project (must close VS first to reload analyzer)
+$msbuild = "C:\Program Files\Microsoft Visual Studio\18\Professional\MSBuild\Current\Bin\MSBuild.exe"
+& $msbuild "DynamicsCrm.DevKit.Analyzers.Test.Vs\DynamicsCrm.DevKit.Analyzers.Test.Vs.csproj" /t:Rebuild /p:Configuration=Debug /v:n
+
+# Verify output contains all DEVKIT warnings (DEVKIT1001-DEVKIT1019)
+```
+
+> [!IMPORTANT]
+> Close and reopen VS after copying DLL - VS caches analyzers aggressively.
+
 ## Solution Structure
 
 ```
@@ -78,10 +107,11 @@ v4/
 │       ├── TaskUploadReport.cs      # Upload reports to CRM
 │       └── TaskDownloadWebResource.cs # Download web resources
 ├── DynamicsCrm.DevKit.Tool/         # Tool package
-├── DynamicsCrm.DevKit.Analyzers/    # Roslyn analyzers (DEVKIT1001-1018)
-│   ├── CrmAnalyzers/                # 18 analyzer implementations
+├── DynamicsCrm.DevKit.Analyzers/    # Roslyn analyzers (DEVKIT1001-1019)
+│   ├── CrmAnalyzers/                # 19 analyzer implementations
 │   └── docs/                        # Analyzer documentation
-├── DynamicsCrm.DevKit.Analyzers.Test/ # Analyzer unit tests
+├── DynamicsCrm.DevKit.Analyzers.Test/ # Analyzer unit tests (xUnit)
+├── DynamicsCrm.DevKit.Analyzers.Test.Vs/ # VS integration tests (real build verification)
 ├── DynamicsCrm.DevKit.CrmSvcUtilExtensions/ # CrmSvcUtil extensions
 ├── ProjectTemplates/CSharp/         # VS Project Templates (01-12)
 ├── ItemTemplates/CSharp/            # VS Item Templates (01-13)
