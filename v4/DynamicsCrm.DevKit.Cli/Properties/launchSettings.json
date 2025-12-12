@@ -58,6 +58,11 @@
       "commandName": "Project",
       "commandLineArgs": "/conn:\"AuthType=ClientSecret;Url=https://org56a8da65.crm.dynamics.com;ClientId=4b632954-5b63-4a6b-b574-d84330051238;ClientSecret=v6gy9pdV1u0yQQWA45EZfRkI6MF2pBUG8H/ckMTUEoj1qKXcyo+nKyT7aF+nPAlk;\" /json:\"..\\..\\DynamicsCrm.DevKit.Cli.json\" /type:\"generators\" /profile:\"LATEBOUND\"",
       "workingDirectory": "D:\\azure\\phuocle\\PreSales\\CaptiaLand\\src\\Hs.CaptiaLand.Shared\\Entities"
+    },
+    "WebResource": {
+      "commandName": "Project",
+      "commandLineArgs": "/conn:\"AuthType=ClientSecret;Url=https://dynamics-crm-devkit.crm5.dynamics.com;ClientId=1a60a5c2-d04c-4b26-8f86-9d6ce0616799;ClientSecret=~je8Q~4DL221zUgKOaHq-EWMlowkpl3KEbZItccL;\" /json:\"..\\DynamicsCrm.DevKit.Cli.json\" /type:\"webresources\" /profile:\"DEBUG\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\test\\4.00.00.00\\TestWebResource\\Dev.DevKit.WebResource"
     }
   }
 }
