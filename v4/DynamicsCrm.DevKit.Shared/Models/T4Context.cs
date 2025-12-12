@@ -36,8 +36,6 @@ namespace DynamicsCrm.DevKit.Shared.Models
                 if (string.IsNullOrEmpty(PluginStage)) return false;
                 string normalizedMessage = PluginMessage.ToLowerInvariant();
                 bool messageSupportsPostImage = MessagesSupportingPostImage.Contains(normalizedMessage);
-                // PostImage is only available in PostOperation stage (40)
-                // In PreValidation (10) and PreOperation (20), the database hasn't been modified yet
                 bool isPostOperationStage = PluginStage.Contains("40") || PluginStage.Contains("PostOperation");
                 return messageSupportsPostImage && isPostOperationStage;
             }
