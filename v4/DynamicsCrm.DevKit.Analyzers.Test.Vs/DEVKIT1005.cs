@@ -1,7 +1,7 @@
 using Microsoft.Xrm.Sdk;
 using System;
 
-namespace Dev.DevKit.PluginTerritory
+namespace DynamicsCrm.DevKit.Analyzers.Test.Vs
 {
     public class TestA {
         public EntityReference ABC { get; set; }

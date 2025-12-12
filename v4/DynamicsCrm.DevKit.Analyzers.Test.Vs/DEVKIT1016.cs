@@ -1,7 +1,7 @@
 using Microsoft.Xrm.Sdk.Messages;
 using System;
 
-namespace Dev.DevKit.PluginTerritory
+namespace DynamicsCrm.DevKit.Analyzers.Test.Vs
 {
     /// <summary>
     /// DEVKIT1016: Avoid Retrieving Unpublished Metadata

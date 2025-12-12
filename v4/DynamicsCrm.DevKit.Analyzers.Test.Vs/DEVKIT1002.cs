@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Dev.DevKit.PluginTerritory
+namespace DynamicsCrm.DevKit.Analyzers.Test.Vs
 {
     internal class DEVKIT1002
     {

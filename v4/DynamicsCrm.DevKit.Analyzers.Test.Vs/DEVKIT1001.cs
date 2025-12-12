@@ -2,13 +2,13 @@ using Dev.DevKit.Shared;
 using Microsoft.Xrm.Sdk;
 using System;
 
-namespace Dev.DevKit.PluginTerritory
+namespace DynamicsCrm.DevKit.Analyzers.Test.Vs
 {
     /// <summary>
     /// DEVKIT1001: Update message should have filtering attributes
     /// This file contains code that should trigger DEVKIT1001 errors for Update plugins without filtering attributes.
     /// </summary>
-    [CrmPluginRegistration("Update", "territory", StageEnum.PostOperation, ExecutionModeEnum.Synchronous, "", "Dev.DevKit.PluginTerritory.DEVKIT1001_UpdateWithoutFilteringAttributes", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin)]
+    [CrmPluginRegistration("Update", "territory", StageEnum.PostOperation, ExecutionModeEnum.Synchronous, "", "DynamicsCrm.DevKit.Analyzers.Test.Vs.DEVKIT1001_UpdateWithoutFilteringAttributes", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin)]
     public class DEVKIT1001_UpdateWithoutFilteringAttributes : IPlugin
     {
         public void Execute(IServiceProvider serviceProvider)
@@ -33,7 +33,7 @@ namespace Dev.DevKit.PluginTerritory
         }
     }
 
-    [CrmPluginRegistration("Update", "territory", StageEnum.PostOperation, ExecutionModeEnum.Synchronous, "*", "Dev.DevKit.PluginTerritory.DEVKIT1001_UpdateWithAllAttributes", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin)]
+    [CrmPluginRegistration("Update", "territory", StageEnum.PostOperation, ExecutionModeEnum.Synchronous, "*", "DynamicsCrm.DevKit.Analyzers.Test.Vs.DEVKIT1001_UpdateWithAllAttributes", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin)]
     public class DEVKIT1001_UpdateWithAllAttributes : IPlugin
     {
         public void Execute(IServiceProvider serviceProvider)

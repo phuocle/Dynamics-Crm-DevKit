@@ -3,13 +3,13 @@ using Microsoft.Xrm.Sdk;
 using System;
 using System.Net.Http;
 
-namespace Dev.DevKit.PluginTerritory
+namespace DynamicsCrm.DevKit.Analyzers.Test.Vs
 {
     /// <summary>
     /// DEVKIT1010: Set Timeout for External HTTP Calls
     /// The diagnostic appears when new HttpClient() is instantiated in a plugin/workflow.
     /// </summary>
-    [CrmPluginRegistration("Update", "territory", StageEnum.PostOperation, ExecutionModeEnum.Synchronous, "name", "Dev.DevKit.PluginTerritory.DEVKIT1010_HttpTimeout", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin)]
+    [CrmPluginRegistration("Update", "territory", StageEnum.PostOperation, ExecutionModeEnum.Synchronous, "name", "DynamicsCrm.DevKit.Analyzers.Test.Vs.DEVKIT1010_HttpTimeout", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin)]
     public class DEVKIT1010_HttpTimeout : IPlugin
     {
         public void Execute(IServiceProvider serviceProvider)

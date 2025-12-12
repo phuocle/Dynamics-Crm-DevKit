@@ -3,10 +3,10 @@ using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Extensions;
 using System;
 
-namespace Dev.DevKit.PluginTerritory
+namespace DynamicsCrm.DevKit.Analyzers.Test.Vs
 {
     //DEVKIT1003
-    [CrmPluginRegistration("Create", "territory", StageEnum.PostOperation, ExecutionModeEnum.Asynchronous, "", "Dev.DevKit.PluginTerritory.PostTerritoryCreateAsynchronous", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, DeleteAsyncOperation = true, Image1Name = "PostImage", Image1Alias = "PostImage", Image1Type = ImageTypeEnum.PostImage, Image1Attributes = "*", Image2Name = "PreImage", Image2Alias = "PreImage", Image2Type = ImageTypeEnum.PreImage, Image2Attributes = "*")]
+    [CrmPluginRegistration("Create", "territory", StageEnum.PostOperation, ExecutionModeEnum.Asynchronous, "", "DynamicsCrm.DevKit.Analyzers.Test.Vs.PostTerritoryCreateAsynchronous", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, DeleteAsyncOperation = true, Image1Name = "PostImage", Image1Alias = "PostImage", Image1Type = ImageTypeEnum.PostImage, Image1Attributes = "*", Image2Name = "PreImage", Image2Alias = "PreImage", Image2Type = ImageTypeEnum.PreImage, Image2Attributes = "*")]
     public class PostTerritoryCreateAsynchronous : IPlugin
     {
         public void Execute(IServiceProvider serviceProvider)
@@ -32,7 +32,7 @@ namespace Dev.DevKit.PluginTerritory
     }
 
     //DEVKIT1003
-    [CrmPluginRegistration("Create", "territory", StageEnum.PostOperation, ExecutionModeEnum.Synchronous, "", "Dev.DevKit.PluginTerritory.PostTerritoryCreateSynchronous", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, Image1Name = "PostImage", Image1Alias = "PostImage", Image1Type = ImageTypeEnum.PostImage, Image1Attributes = "*", Image2Name = "PreImage", Image2Alias = "PreImage", Image2Type = ImageTypeEnum.PreImage, Image2Attributes = "*")]
+    [CrmPluginRegistration("Create", "territory", StageEnum.PostOperation, ExecutionModeEnum.Synchronous, "", "DynamicsCrm.DevKit.Analyzers.Test.Vs.PostTerritoryCreateSynchronous", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, Image1Name = "PostImage", Image1Alias = "PostImage", Image1Type = ImageTypeEnum.PostImage, Image1Attributes = "*", Image2Name = "PreImage", Image2Alias = "PreImage", Image2Type = ImageTypeEnum.PreImage, Image2Attributes = "*")]
     public class PostTerritoryCreateSynchronous : IPlugin
     {
         public void Execute(IServiceProvider serviceProvider)
@@ -58,7 +58,7 @@ namespace Dev.DevKit.PluginTerritory
     }
 
     //DEVKIT1003
-    [CrmPluginRegistration("Delete", "territory", StageEnum.PostOperation, ExecutionModeEnum.Asynchronous, "", "Dev.DevKit.PluginTerritory.PostTerritoryDeleteAsynchronous", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, DeleteAsyncOperation = true, Image1Name = "PreImage", Image1Alias = "PreImage", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "*", Image2Name = "PostImage", Image2Alias = "PostImage", Image2Type = ImageTypeEnum.PostImage, Image2Attributes = "*")]
+    [CrmPluginRegistration("Delete", "territory", StageEnum.PostOperation, ExecutionModeEnum.Asynchronous, "", "DynamicsCrm.DevKit.Analyzers.Test.Vs.PostTerritoryDeleteAsynchronous", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, DeleteAsyncOperation = true, Image1Name = "PreImage", Image1Alias = "PreImage", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "*", Image2Name = "PostImage", Image2Alias = "PostImage", Image2Type = ImageTypeEnum.PostImage, Image2Attributes = "*")]
     public class PostTerritoryDeleteAsynchronous : IPlugin
     {
         public void Execute(IServiceProvider serviceProvider)
@@ -84,7 +84,7 @@ namespace Dev.DevKit.PluginTerritory
     }
 
     //DEVKIT1003
-    [CrmPluginRegistration("Delete", "territory", StageEnum.PostOperation, ExecutionModeEnum.Synchronous, "", "Dev.DevKit.PluginTerritory.PostTerritoryDeleteSynchronous", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, Image1Name = "PreImage", Image1Alias = "PreImage", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "*", Image2Name = "PostImage", Image2Alias = "PostImage", Image2Type = ImageTypeEnum.PostImage, Image2Attributes = "*")]
+    [CrmPluginRegistration("Delete", "territory", StageEnum.PostOperation, ExecutionModeEnum.Synchronous, "", "DynamicsCrm.DevKit.Analyzers.Test.Vs.PostTerritoryDeleteSynchronous", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, Image1Name = "PreImage", Image1Alias = "PreImage", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "*", Image2Name = "PostImage", Image2Alias = "PostImage", Image2Type = ImageTypeEnum.PostImage, Image2Attributes = "*")]
     public class PostTerritoryDeleteSynchronous : IPlugin
     {
         public void Execute(IServiceProvider serviceProvider)
@@ -110,7 +110,7 @@ namespace Dev.DevKit.PluginTerritory
     }
 
     //DEVKIT1003
-    [CrmPluginRegistration("Create", "territory", StageEnum.PreOperation, ExecutionModeEnum.Synchronous, "", "Dev.DevKit.PluginTerritory.PreTerritoryCreateSynchronous", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, Image1Name = "PreImage", Image1Alias = "PreImage", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "*", Image2Name = "PostImage", Image2Alias = "PostImage", Image2Type = ImageTypeEnum.PostImage, Image2Attributes = "*")]
+    [CrmPluginRegistration("Create", "territory", StageEnum.PreOperation, ExecutionModeEnum.Synchronous, "", "DynamicsCrm.DevKit.Analyzers.Test.Vs.PreTerritoryCreateSynchronous", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, Image1Name = "PreImage", Image1Alias = "PreImage", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "*", Image2Name = "PostImage", Image2Alias = "PostImage", Image2Type = ImageTypeEnum.PostImage, Image2Attributes = "*")]
     public class PreTerritoryCreateSynchronous : IPlugin
     {
         public void Execute(IServiceProvider serviceProvider)
@@ -135,7 +135,7 @@ namespace Dev.DevKit.PluginTerritory
     }
 
     //DEVKIT1003
-    [CrmPluginRegistration("Delete", "territory", StageEnum.PreOperation, ExecutionModeEnum.Synchronous, "", "Dev.DevKit.PluginTerritory.PreTerritoryDeleteSynchronous", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, Image1Name = "PreImage", Image1Alias = "PreImage", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "*", Image2Name = "PostImage", Image2Alias = "PostImage", Image2Type = ImageTypeEnum.PostImage, Image2Attributes = "*")]
+    [CrmPluginRegistration("Delete", "territory", StageEnum.PreOperation, ExecutionModeEnum.Synchronous, "", "DynamicsCrm.DevKit.Analyzers.Test.Vs.PreTerritoryDeleteSynchronous", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, Image1Name = "PreImage", Image1Alias = "PreImage", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "*", Image2Name = "PostImage", Image2Alias = "PostImage", Image2Type = ImageTypeEnum.PostImage, Image2Attributes = "*")]
     public class PreTerritoryDeleteSynchronous : IPlugin
     {
         public void Execute(IServiceProvider serviceProvider)
@@ -161,7 +161,7 @@ namespace Dev.DevKit.PluginTerritory
     }
 
     //DEVKIT1003
-    [CrmPluginRegistration("Update", "territory", StageEnum.PreOperation, ExecutionModeEnum.Synchronous, "*", "Dev.DevKit.PluginTerritory.PreTerritoryUpdateSynchronous", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, Image1Name = "PreImage", Image1Alias = "PreImage", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "*", Image2Name = "PostImage", Image2Alias = "PostImage", Image2Type = ImageTypeEnum.PostImage, Image2Attributes = "*")]
+    [CrmPluginRegistration("Update", "territory", StageEnum.PreOperation, ExecutionModeEnum.Synchronous, "*", "DynamicsCrm.DevKit.Analyzers.Test.Vs.PreTerritoryUpdateSynchronous", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, Image1Name = "PreImage", Image1Alias = "PreImage", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "*", Image2Name = "PostImage", Image2Alias = "PostImage", Image2Type = ImageTypeEnum.PostImage, Image2Attributes = "*")]
     public class PreTerritoryUpdateSynchronous : IPlugin
     {
         public void Execute(IServiceProvider serviceProvider)
@@ -187,7 +187,7 @@ namespace Dev.DevKit.PluginTerritory
     }
 
     //DEVKIT1003
-    [CrmPluginRegistration("Create", "territory", StageEnum.PreValidation, ExecutionModeEnum.Synchronous, "", "Dev.DevKit.PluginTerritory.PreValidationTerritoryCreateSynchronous", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, Image1Name = "PreImage", Image1Alias = "PreImage", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "*", Image2Name = "PostImage", Image2Alias = "PostImage", Image2Type = ImageTypeEnum.PostImage, Image2Attributes = "*")]
+    [CrmPluginRegistration("Create", "territory", StageEnum.PreValidation, ExecutionModeEnum.Synchronous, "", "DynamicsCrm.DevKit.Analyzers.Test.Vs.PreValidationTerritoryCreateSynchronous", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, Image1Name = "PreImage", Image1Alias = "PreImage", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "*", Image2Name = "PostImage", Image2Alias = "PostImage", Image2Type = ImageTypeEnum.PostImage, Image2Attributes = "*")]
     public class PreValidationTerritoryCreateSynchronous : IPlugin
     {
         public void Execute(IServiceProvider serviceProvider)
@@ -212,7 +212,7 @@ namespace Dev.DevKit.PluginTerritory
     }
 
     //DEVKIT1003
-    [CrmPluginRegistration("Delete", "territory", StageEnum.PreValidation, ExecutionModeEnum.Synchronous, "", "Dev.DevKit.PluginTerritory.PreValidationTerritoryDeleteSynchronous", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, Image1Name = "PreImage", Image1Alias = "PreImage", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "*", Image2Name = "PostImage", Image2Alias = "PostImage", Image2Type = ImageTypeEnum.PostImage, Image2Attributes = "*")]
+    [CrmPluginRegistration("Delete", "territory", StageEnum.PreValidation, ExecutionModeEnum.Synchronous, "", "DynamicsCrm.DevKit.Analyzers.Test.Vs.PreValidationTerritoryDeleteSynchronous", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, Image1Name = "PreImage", Image1Alias = "PreImage", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "*", Image2Name = "PostImage", Image2Alias = "PostImage", Image2Type = ImageTypeEnum.PostImage, Image2Attributes = "*")]
     public class PreValidationTerritoryDeleteSynchronous : IPlugin
     {
         public void Execute(IServiceProvider serviceProvider)
@@ -238,7 +238,7 @@ namespace Dev.DevKit.PluginTerritory
     }
 
     //DEVKIT1003
-    [CrmPluginRegistration("Update", "territory", StageEnum.PreValidation, ExecutionModeEnum.Synchronous, "*", "Dev.DevKit.PluginTerritory.PreValidationTerritoryUpdateSynchronous", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, Image1Name = "PreImage", Image1Alias = "PreImage", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "*", Image2Name = "PostImage", Image2Alias = "PostImage", Image2Type = ImageTypeEnum.PostImage, Image2Attributes = "*")]
+    [CrmPluginRegistration("Update", "territory", StageEnum.PreValidation, ExecutionModeEnum.Synchronous, "*", "DynamicsCrm.DevKit.Analyzers.Test.Vs.PreValidationTerritoryUpdateSynchronous", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, Image1Name = "PreImage", Image1Alias = "PreImage", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "*", Image2Name = "PostImage", Image2Alias = "PostImage", Image2Type = ImageTypeEnum.PostImage, Image2Attributes = "*")]
     public class PreValidationTerritoryUpdateSynchronous : IPlugin
     {
         public void Execute(IServiceProvider serviceProvider)

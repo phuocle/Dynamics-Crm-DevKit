@@ -1,7 +1,7 @@
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Messages;
 
-namespace Dev.DevKit.PluginTerritory
+namespace DynamicsCrm.DevKit.Analyzers.Test.Vs
 {
     internal class DEVKIT1004
     {

@@ -4,13 +4,13 @@ using Microsoft.Xrm.Sdk.Messages;
 using System;
 using System.Collections.Generic;
 
-namespace Dev.DevKit.PluginTerritory
+namespace DynamicsCrm.DevKit.Analyzers.Test.Vs
 {
     /// <summary>
     /// DEVKIT1006: Don't Use Batch Request Types in Plug-ins
     /// This file contains code that should trigger DEVKIT1006 warnings for using batch requests in plugins.
     /// </summary>
-    [CrmPluginRegistration("Update", "territory", StageEnum.PostOperation, ExecutionModeEnum.Synchronous, "name", "Dev.DevKit.PluginTerritory.DEVKIT1006_BatchRequests", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin)]
+    [CrmPluginRegistration("Update", "territory", StageEnum.PostOperation, ExecutionModeEnum.Synchronous, "name", "DynamicsCrm.DevKit.Analyzers.Test.Vs.DEVKIT1006_BatchRequests", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin)]
     public class DEVKIT1006_BatchRequests : IPlugin
     {
         public void Execute(IServiceProvider serviceProvider)

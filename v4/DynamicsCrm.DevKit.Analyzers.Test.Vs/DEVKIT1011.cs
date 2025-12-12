@@ -2,13 +2,13 @@ using Dev.DevKit.Shared;
 using Microsoft.Xrm.Sdk;
 using System;
 
-namespace Dev.DevKit.PluginTerritory
+namespace DynamicsCrm.DevKit.Analyzers.Test.Vs
 {
     /// <summary>
     /// DEVKIT1011: Use InvalidPluginExecutionException for Errors
     /// This file contains code that should trigger DEVKIT1011 warnings for throwing wrong exception types.
     /// </summary>
-    [CrmPluginRegistration("Update", "territory", StageEnum.PostOperation, ExecutionModeEnum.Synchronous, "name", "Dev.DevKit.PluginTerritory.DEVKIT1011_WrongExceptionType", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin)]
+    [CrmPluginRegistration("Update", "territory", StageEnum.PostOperation, ExecutionModeEnum.Synchronous, "name", "DynamicsCrm.DevKit.Analyzers.Test.Vs.DEVKIT1011_WrongExceptionType", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin)]
     public class DEVKIT1011_WrongExceptionType : IPlugin
     {
         public void Execute(IServiceProvider serviceProvider)
