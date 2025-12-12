@@ -43,6 +43,9 @@
 	</ItemGroup>
 	<ItemGroup>
 	  <PackageReference Include="CmdLine" Version="1.0.7.509" />
+	  <PackageReference Include="Microsoft.CrmSdk.CoreAssemblies" Version="*" />
+	  <PackageReference Include="Microsoft.CrmSdk.Workflow" Version="*" />
+	  <PackageReference Include="Microsoft.CrmSdk.XrmTooling.CoreAssembly" Version="*" />
 	  <PackageReference Include="Microsoft.PowerPlatform.Dataverse.Client" Version="1.2.10" />
 	  <!--<PackageReference Include="Microsoft.PowerPlatform.Dataverse.ModelBuilderLib" Version="2.0.16" />-->
 	  <PackageReference Include="Microsoft.VisualStudio.Shell.Framework" Version="17.14.40264" />

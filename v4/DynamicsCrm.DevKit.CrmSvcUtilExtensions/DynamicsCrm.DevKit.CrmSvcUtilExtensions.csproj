@@ -31,8 +31,10 @@
 	  <None Remove="Release\**" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="Microsoft.CrmSdk.CoreAssemblies" Version="9.0.2.59" />
+		<PackageReference Include="Microsoft.CrmSdk.CoreAssemblies" Version="*" />
 		<PackageReference Include="Microsoft.CrmSdk.CoreTools" Version="9.1.0.179" />
+		<PackageReference Include="Microsoft.CrmSdk.Workflow" Version="*" />
+		<PackageReference Include="Microsoft.CrmSdk.XrmTooling.CoreAssembly" Version="*" />
 	</ItemGroup>
 	<ItemGroup>
 	  <Reference Include="CrmSvcUtil">

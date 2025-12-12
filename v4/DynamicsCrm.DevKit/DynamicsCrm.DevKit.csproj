@@ -5,6 +5,7 @@
     <MinimumVisualStudioVersion>17.0</MinimumVisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
     <TargetFrameworkProfile />
+    <RuntimeIdentifiers>win-x64;win-x86;win-arm64</RuntimeIdentifiers>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -149,6 +150,7 @@
   </ItemGroup>
   <ItemGroup>
     <!-- NuGet Package References -->
+    <PackageReference Include="Community.VisualStudio.Toolkit" Version="*" />
     <PackageReference Include="Community.VisualStudio.Toolkit.17">
       <Version>17.0.533</Version>
     </PackageReference>
@@ -157,6 +159,9 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.CrmSdk.CoreAssemblies" Version="*" />
+    <PackageReference Include="Microsoft.CrmSdk.Workflow" Version="*" />
+    <PackageReference Include="Microsoft.CrmSdk.XrmTooling.CoreAssembly" Version="*" />
     <PackageReference Include="Microsoft.PowerPlatform.Dataverse.Client">
       <Version>1.2.10</Version>
     </PackageReference>
@@ -173,6 +178,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="NuGet.Protocol">
       <Version>6.14.0</Version>
     </PackageReference>

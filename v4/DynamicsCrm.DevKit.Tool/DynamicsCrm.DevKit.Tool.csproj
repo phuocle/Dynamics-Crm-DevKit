@@ -45,6 +45,9 @@
 	</ItemGroup>
 	<ItemGroup>
 	  <PackageReference Include="CmdLine" Version="1.0.7.509" />
+	  <PackageReference Include="Microsoft.CrmSdk.CoreAssemblies" Version="*" />
+	  <PackageReference Include="Microsoft.CrmSdk.Workflow" Version="*" />
+	  <PackageReference Include="Microsoft.CrmSdk.XrmTooling.CoreAssembly" Version="*" />
 	  <PackageReference Include="NUglify" Version="1.21.17" />
 	</ItemGroup>
 	<ItemGroup>
