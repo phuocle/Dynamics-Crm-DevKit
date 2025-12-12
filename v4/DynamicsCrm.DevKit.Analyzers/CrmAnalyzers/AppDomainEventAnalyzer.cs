@@ -89,9 +89,9 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
             if (expressionType?.ToDisplayString() != AppDomainTypeName)
                 return;
 
-            // Report diagnostic
+            // Report diagnostic - highlight only the event access (left side), not the entire assignment
             DiagnosticHelpers.ReportDiagnostic(context, DiagnosticDescriptors.AvoidAppDomainEvents,
-                assignment.GetLocation(), eventName);
+                assignment.Left.GetLocation(), eventName);
         }
     }
 }
