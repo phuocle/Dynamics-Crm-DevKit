@@ -1,10 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Dev.DevKit.Console
+namespace Dev.DevKit.PluginTerritory
 {
     internal class DEVKIT1002
     {

@@ -1,7 +1,7 @@
-﻿using Microsoft.Crm.Sdk.Messages;
+using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Messages;
 
-namespace Dev.DevKit.Console
+namespace Dev.DevKit.PluginTerritory
 {
     internal class DEVKIT1004
     {

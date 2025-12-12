@@ -1,7 +1,7 @@
 using Microsoft.Xrm.Sdk.Messages;
 using System;
 
-namespace Dev.DevKit.Console
+namespace Dev.DevKit.PluginTerritory
 {
     /// <summary>
     /// DEVKIT1016: Avoid Retrieving Unpublished Metadata

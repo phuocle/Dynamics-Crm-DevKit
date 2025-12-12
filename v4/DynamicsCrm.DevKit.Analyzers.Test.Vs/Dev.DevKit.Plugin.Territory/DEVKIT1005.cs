@@ -1,7 +1,7 @@
-﻿using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk;
 using System;
 
-namespace Dev.DevKit.Console
+namespace Dev.DevKit.PluginTerritory
 {
     public class TestA {
         public EntityReference ABC { get; set; }

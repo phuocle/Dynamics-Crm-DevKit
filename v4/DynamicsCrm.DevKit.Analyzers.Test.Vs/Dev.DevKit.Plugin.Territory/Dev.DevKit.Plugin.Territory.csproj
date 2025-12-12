@@ -100,19 +100,16 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DEVKIT1003_01.cs" />
-    <Compile Include="DEVKIT1003_02.cs" />
-    <Compile Include="DEVKIT1003_03.cs" />
-    <Compile Include="DEVKIT1003_04.cs" />
+    <Compile Include="AppSettings.cs" />
+    <Compile Include="DEVKIT1001.cs" />
+    <Compile Include="DEVKIT1002.cs" />
+    <Compile Include="DEVKIT1003.cs" />
+    <Compile Include="DEVKIT1004.cs" />
+    <Compile Include="DEVKIT1005.cs" />
+    <Compile Include="DEVKIT1016.cs" />
     <Compile Include="DEVKIT1017.cs" />
     <Compile Include="DEVKIT1018.cs" />
     <Compile Include="DEVKIT1019.cs" />
-    <Compile Include="DEVKIT1003_05.cs" />
-    <Compile Include="DEVKIT1003_06.cs" />
-    <Compile Include="DEVKIT1003_07.cs" />
-    <Compile Include="DEVKIT1003_08.cs" />
-    <Compile Include="DEVKIT1003_09.cs" />
-    <Compile Include="DEVKIT1003_10.cs" />
     <Compile Include="DEVKIT1006.cs" />
     <Compile Include="DEVKIT1007.cs" />
     <Compile Include="DEVKIT1008.cs" />
