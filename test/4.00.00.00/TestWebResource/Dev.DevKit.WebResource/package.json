@@ -1,0 +1,16 @@
+{
+  "private": true,
+  "name": "dev.devkit.webresource",
+  "version": "1.0.0",
+  "description": "dev.devkit.webresource",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {},
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/xrm": "^9.0.81"
+  }
+}

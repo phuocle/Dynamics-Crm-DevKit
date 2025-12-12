@@ -1,4 +1,4 @@
-﻿using DynamicsCrm.DevKit.Shared;
+using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.PowerPlatform.Dataverse.Client;
@@ -72,11 +72,11 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, $"{SPACE}{SPACE}{pattern}");
             }
-            CliLog.WriteLine(ConsoleColor.White, "|");
+            CliLog.WriteSeparator();
             CliLog.Write(ConsoleColor.White, "|", ConsoleColor.Green, "Found: ");
             CliLog.WriteSuccess(ConsoleColor.Yellow, $" {WebResourceFiles.Count} ");
             CliLog.WriteLine(ConsoleColor.Green, " webresources");
-            CliLog.WriteLine(ConsoleColor.White, "|");
+            CliLog.WriteSeparator();
             var i = 1;
             foreach (var webResourceFile in WebResourceFiles)
             {
@@ -87,7 +87,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var dependencies = await GetDependenciesAsync();
             if (await IsSupportWebResourceDependencyAsync() && dependencies.Count > 0)
             {
-                CliLog.WriteLine(ConsoleColor.White, "|");
+                CliLog.WriteSeparator();
                 CliLog.WriteLineWarning(ConsoleColor.Yellow, "DEPLOYING WEBRESOURCES DEPENDENCIES WITH PATTERNS FILES");
                 foreach (var item in Json.dependencies)
                 {
@@ -100,11 +100,11 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.White, $"{SPACE}{SPACE}{SPACE}{SPACE}{dependency}");
                     }
                 }
-                CliLog.WriteLine(ConsoleColor.White, "|");
+                CliLog.WriteSeparator();
                 CliLog.Write(ConsoleColor.White, "|", ConsoleColor.Green, "Found: ");
                 CliLog.WriteSuccess(ConsoleColor.Yellow, $" {dependencies.Count} ");
                 CliLog.WriteLine(ConsoleColor.Green, " dependencies");
-                CliLog.WriteLine(ConsoleColor.White, "|");
+                CliLog.WriteSeparator();
                 var j = 1;
                 foreach (var dependency in dependencies)
                 {
@@ -128,10 +128,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     "<webresource>" + webresources + "</webresource>" +
                     "</webresources></importexportxml>"
             };
-            CliLog.WriteLine(ConsoleColor.White, "|");
+            CliLog.WriteSeparator();
             CliLog.WriteLineWarning(ConsoleColor.Yellow, "PUBLISHING WEBRESOURCES");
             await ServiceClient.ExecuteAsync(publish);
-            CliLog.WriteLine(ConsoleColor.White, "|");
+            CliLog.WriteSeparator();
             CliLog.WriteLineWarning(ConsoleColor.Yellow, "PUBLISHED WEBRESOURCES");
         }
 
@@ -618,7 +618,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     }
                 }
                 CliLog.WriteLine();
-                CliLog.WriteLine(ConsoleColor.White, "|");
+                CliLog.WriteSeparator();
             }
             foreach (var dependency in dependencies)
             {
@@ -644,8 +644,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
         public async Task RunAsync()
         {
-            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "START ");
-            CliLog.WriteLine(ConsoleColor.White, "|");
+            CliLog.WriteSectionHeader("START ");
+            CliLog.WriteSeparator();
             if (await IsValidAsync())
             {
                 if (WebResourceFiles.Count == 0)
@@ -657,9 +657,17 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     await DeployWebResourceFilesAsync();
                 }
             }
-
-            CliLog.WriteLine(ConsoleColor.White, "|");
-            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "END ");
+#if DEBUG
+            CliLog.WriteSeparator();
+            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Cyan, $"Total Dataverse Requests COUNT_ExecuteAsync: {XrmHelper.COUNT_ExecuteAsync}");
+            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Cyan, $"Total Dataverse Requests COUNT_RetrieveMultipleAsync: {XrmHelper.COUNT_RetrieveMultipleAsync}");
+            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Cyan, $"Total Dataverse Requests COUNT_CreateAsync: {XrmHelper.COUNT_CreateAsync}");
+            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Cyan, $"Total Dataverse Requests COUNT_DeleteAsync: {XrmHelper.COUNT_DeleteAsync}");
+            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Cyan, $"Total Dataverse Requests COUNT_RetrieveAsync: {XrmHelper.COUNT_RetrieveAsync}");
+            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Cyan, $"Total Dataverse Requests COUNT_UpdateAsync: {XrmHelper.COUNT_UpdateAsync}");
+#endif
+            CliLog.WriteSeparator();
+            CliLog.WriteSectionHeader("END ");
         }
     }
 }

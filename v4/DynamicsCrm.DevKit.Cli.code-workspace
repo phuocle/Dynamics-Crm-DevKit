@@ -1,0 +1,11 @@
+{
+	"folders": [
+		{
+			"path": "DynamicsCrm.DevKit.Cli"
+		},
+		{
+			"path": "DynamicsCrm.DevKit.Shared"
+		}
+	],
+	"settings": {}
+}
