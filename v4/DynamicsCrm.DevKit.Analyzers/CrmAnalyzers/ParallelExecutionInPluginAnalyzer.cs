@@ -7,6 +7,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
+using Microsoft.CodeAnalysis.Text;
 
 namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
 {
@@ -70,8 +71,9 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
             if (IsParallelExecutionMethod(containingTypeName, methodName))
             {
                 var patternName = GetParallelPatternName(containingTypeName, methodName);
+                // Highlight only the method name (e.g., Parallel.ForEach, not the entire call)
                 DiagnosticHelpers.ReportDiagnostic(context, DiagnosticDescriptors.ParallelExecutionInPlugin,
-                    invocation.GetLocation(), patternName);
+                    invocation.Expression.GetLocation(), patternName);
             }
         }
 
@@ -94,8 +96,14 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
             // Check for Thread instantiation
             if (typeName == "System.Threading.Thread")
             {
+                // Highlight only 'new Thread' (excluding arguments) to reduce visual noise
+                var startSpan = objectCreation.NewKeyword.SpanStart;
+                var endSpan = objectCreation.Type.Span.End;
+                var highlightSpan = TextSpan.FromBounds(startSpan, endSpan);
+                var highlightLocation = Location.Create(objectCreation.SyntaxTree, highlightSpan);
+                
                 DiagnosticHelpers.ReportDiagnostic(context, DiagnosticDescriptors.ParallelExecutionInPlugin,
-                    objectCreation.GetLocation(), "new Thread()");
+                    highlightLocation, "new Thread()");
             }
         }
 
