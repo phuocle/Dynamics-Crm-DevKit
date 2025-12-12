@@ -8,6 +8,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
+using Microsoft.CodeAnalysis.Text;
 
 namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
 {
@@ -114,8 +115,9 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
             if (BlockedTypes.Contains(containingTypeName) || BlockedMethods.Contains(fullMethodName))
             {
                 var patternName = GetPatternName(containingTypeName, methodSymbol.Name);
+                // Highlight only the method name (e.g., File.ReadAllText, not the entire call)
                 DiagnosticHelpers.ReportDiagnostic(context, DiagnosticDescriptors.AvoidFileIO,
-                    invocation.GetLocation(), patternName);
+                    invocation.Expression.GetLocation(), patternName);
             }
         }
 
@@ -138,8 +140,14 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
             // Check for blocked types
             if (typeName != null && BlockedTypes.Contains(typeName))
             {
+                // Highlight only 'new TypeName' (excluding arguments) to reduce visual noise
+                var startSpan = objectCreation.NewKeyword.SpanStart;
+                var endSpan = objectCreation.Type.Span.End;
+                var highlightSpan = TextSpan.FromBounds(startSpan, endSpan);
+                var highlightLocation = Location.Create(objectCreation.SyntaxTree, highlightSpan);
+                
                 DiagnosticHelpers.ReportDiagnostic(context, DiagnosticDescriptors.AvoidFileIO,
-                    objectCreation.GetLocation(), $"new {GetShortTypeName(typeName)}()");
+                    highlightLocation, $"new {GetShortTypeName(typeName)}()");
             }
         }
 
