@@ -82,8 +82,9 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
                 if (!SymbolEqualityComparer.Default.Equals(fieldSymbol.ContainingType, classSymbol))
                     return;
 
+                // Highlight only the field name (left side) to reduce visual noise
                 DiagnosticHelpers.ReportDiagnostic(context, DiagnosticDescriptors.StatelessPlugin,
-                    assignmentExpression.GetLocation(), fieldSymbol.Name);
+                    assignmentExpression.Left.GetLocation(), fieldSymbol.Name);
             }
             else if (leftSymbol is IPropertySymbol propertySymbol)
             {
@@ -99,8 +100,9 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
                 if (propertySymbol.SetMethod == null)
                     return;
 
+                // Highlight only the property name (left side) to reduce visual noise
                 DiagnosticHelpers.ReportDiagnostic(context, DiagnosticDescriptors.StatelessPlugin,
-                    assignmentExpression.GetLocation(), propertySymbol.Name);
+                    assignmentExpression.Left.GetLocation(), propertySymbol.Name);
             }
         }
     }
