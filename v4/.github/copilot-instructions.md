@@ -1,47 +1,80 @@
 # Copilot Instructions
 
+## About This Project
+
+**DynamicsCrm.DevKit** is a development toolkit for Microsoft Dynamics 365 / Power Platform / Dataverse. It provides Visual Studio 2026 extensions, CLI tools, and Roslyn analyzers for accelerating CRM development.
+
 ## Response Format
-* Start with: "Hi, I'm GitHub Copilot. I will help you with your prompt Phuoc Le"
+
+- Start with: "Hi, I'm GitHub Copilot. I will help you with your prompt Phuoc Le"
 
 ## C# Conventions
-* Use async/await for async operations
-* Variable naming: `serviceClient` for ServiceClient type
-* Build after changes to verify no errors
+
+- Use `async/await` for async operations
+- Variable naming: `serviceClient` for ServiceClient, `crmService` for IOrganizationService
+- Target frameworks: .NET Framework 4.6.2, 4.8, and .NET Standard 2.0
+- Build after changes to verify no errors
+- Use `try/catch` with specific CRM exceptions: `FaultException<OrganizationServiceFault>`
 
 ## Solution Structure
 
-### Release All Projects
-* run .ps1 file release-version-date-current-date.ps1 to release all projects
-
 ### Build All Projects
-* Use `DynamicsCrm.DevKit.AllInOne.slnx` to build all projects
+```powershell
+$msbuild = "C:\Program Files\Microsoft Visual Studio\18\Professional\MSBuild\Current\Bin\MSBuild.exe"
+& $msbuild "DynamicsCrm.DevKit.AllInOne.slnx" /t:Build /p:Configuration=Release /v:m
+```
+
+### Release All Projects
+```powershell
+.\Release-DynamicsCrm-DevKit-CurrentDate.ps1
+# Or with specific date:
+.\Release-DynamicsCrm-DevKit.ps1 -BuildDate "2025.12.12 10.00.00"
+```
 
 ### Project Types
-* **CLI**: `DynamicsCrm.DevKit.Cli` + `DynamicsCrm.DevKit.Shared`
-  - Build: MSBuild on `DynamicsCrm.DevKit.Cli.slnx`
-  - Run: Check `launchSettings.json` for profiles provided
-* **Tools**: `DynamicsCrm.DevKit.Tools` + `DynamicsCrm.DevKit.Shared`
-  - Build: MSBuild on `DynamicsCrm.DevKit.Tools.slnx`
-* **VSIX**: `DynamicsCrm.DevKit` + `DynamicsCrm.DevKit.Shared`
-  - Build: MSBuild on `DynamicsCrm.DevKit.slnx`
-  - Project Templates: `ItemTemplates`, `ProjectTemplates` (numbered 01-13, 01-12)
-* **Analyzers**: `DynamicsCrm.DevKit.Analyzers` + `DynamicsCrm.DevKit.Shared`
-  - Build: MSBuild on `DynamicsCrm.DevKit.Analyzers.slnx`
 
-### Key Folders
-* **Shared**: Common logic in `DynamicsCrm.DevKit.Shared`
-* **Wiki**: GitHub wiki files in `DynamicsCrm.DevKit.Wiki` (not in solution)
+| Project | Solution | Purpose |
+|---------|----------|---------|
+| **CLI** | `DynamicsCrm.DevKit.Cli.slnx` | Deployment automation tool |
+| **VSIX** | `DynamicsCrm.DevKit.slnx` | Visual Studio extension |
+| **Analyzers** | `DynamicsCrm.DevKit.Analyzers.csproj` | Roslyn code analyzers |
+| **Tools** | `DynamicsCrm.DevKit.Tools.slnx` | Utility package |
+| **Shared** | (shared project) | Common logic |
 
-## File Patterns
-* "helper" in prompt ? Search for `*Helper.cs` files
-* Config files: `DynamicsCrm.DevKit.json`, `DynamicsCrm.DevKit.Cli.json`, `DynamicsCrm.DevKit.Config.json`
+### Run Analyzer Tests
+```powershell
+cd DynamicsCrm.DevKit.Analyzers
+.\Run-Analyzer-Coverage.ps1
+```
 
 ## Build System
-* Tool: MSBuild (NOT dotnet build)
-* Always build mode release
-* Path: `C:\Program Files\Microsoft Visual Studio\18\Professional\MSBuild\Current\Bin\MSBuild.exe`
-* Build after each change
 
-## Target Frameworks
-* .NET Framework 4.6.2, 4.8
-* .NET Standard 2.0
+> **IMPORTANT**: Use MSBuild, NOT `dotnet build`. The VSIX project requires MSBuild.
+
+- Path: `C:\Program Files\Microsoft Visual Studio\18\Professional\MSBuild\Current\Bin\MSBuild.exe`
+- Always build in Release mode
+- Debug CLI via `launchSettings.json` profiles
+
+## File Patterns
+
+| Search Term | Look For |
+|-------------|----------|
+| "helper" | `*Helper.cs` files (XrmHelper, FileHelper, JsonHelper) |
+| "config" | `DynamicsCrm.DevKit.json`, `DynamicsCrm.DevKit.Cli.json` |
+| "task" | `Tasks/*.cs` in CLI project |
+| "wizard" | `Wizard/*.cs` in VSIX project |
+| "analyzer" | `CrmAnalyzers/*.cs` in Analyzers project |
+
+## DEVKIT Analyzers
+
+This project includes 18 Roslyn analyzers (DEVKIT1001-DEVKIT1018) for CRM-specific patterns:
+- Plugin thread safety (static fields, HttpClient)
+- UseStrict patterns for JavaScript
+- RetrieveMultiple bounded queries
+- Avoid Console/File operations in plugins
+
+## Key Constants
+
+Version and build info in `DynamicsCrm.DevKit.Shared\Const.cs`:
+- `Version` = current version (e.g., "4.00.00.00")
+- `Build` = build timestamp

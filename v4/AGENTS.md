@@ -1,11 +1,11 @@
 # AGENTS.md
 
-A development toolkit for Microsoft Dynamics 365 / CRM / Dataverse. This repository contains a Visual Studio extension (VSIX), CLI tools, and Roslyn analyzers for accelerating CRM development.
+A development toolkit for Microsoft Dynamics 365 / Power Platform / Dataverse. This repository contains a Visual Studio 2026 extension (VSIX), CLI tools, and Roslyn analyzers for accelerating CRM development.
 
 ## Project Overview
 
 **DynamicsCrm.DevKit** is a collection of:
-- **VSIX Extension**: Project/item templates and wizards for Visual Studio 2022/2026
+- **VSIX Extension**: Project/item templates and wizards for Visual Studio 2026
 - **CLI Tool**: NuGet package for deployment automation (`DynamicsCrm.DevKit.Cli`)
 - **Roslyn Analyzers**: Code analysis for CRM-specific patterns (`DynamicsCrm.DevKit.Analyzers`)
 - **Tool Package**: Additional utilities (`DynamicsCrm.DevKit.Tool`)
@@ -17,7 +17,7 @@ A development toolkit for Microsoft Dynamics 365 / CRM / Dataverse. This reposit
 
 ### Build All Projects
 ```powershell
-# MSBuild path (VS 2026 Enterprise)
+# MSBuild path (VS 2026)
 $msbuild = "C:\Program Files\Microsoft Visual Studio\18\Professional\MSBuild\Current\Bin\MSBuild.exe"
 
 # Build everything
@@ -32,17 +32,24 @@ $msbuild = "C:\Program Files\Microsoft Visual Studio\18\Professional\MSBuild\Cur
 # CLI Tool
 & $msbuild "DynamicsCrm.DevKit.Cli.slnx" /t:Build /p:Configuration=Release
 
-# Analyzers (has separate .sln)
-& $msbuild "DynamicsCrm.DevKit.Analyzers\DynamicsCrm.DevKit.Analyzers.csproj" /t:Build /p:Configuration=Release
+# Analyzers
+& $msbuild "DynamicsCrm.DevKit.Analyzers.slnx" /t:Build /p:Configuration=Release
 ```
 
 ### Release Build
 ```powershell
 # Full release (updates version placeholders, builds, creates NuGet packages, copies VSIX)
-.\Release-DynamicsCrm-DevKit.ps1 -BuildDate "2025.12.11 10.00.00"
+.\Release-DynamicsCrm-DevKit.ps1 -BuildDate "2025.12.12 10.00.00"
 
 # Test release with current date
 .\Release-DynamicsCrm-DevKit-CurrentDate.ps1
+```
+
+### Run Tests
+```powershell
+# Analyzer unit tests with coverage
+cd DynamicsCrm.DevKit.Analyzers
+.\Run-Analyzer-Coverage.ps1
 ```
 
 ## Solution Structure
@@ -64,9 +71,17 @@ v4/
 │       ├── TaskWebResource.cs       # Web resource deployment
 │       ├── TaskGenerator.cs         # Code generation
 │       ├── TaskProxyType.cs         # Proxy type generation
-│       └── TaskSolutionPackager.cs  # Solution packager wrapper
+│       ├── TaskSolutionPackager.cs  # Solution packager wrapper
+│       ├── TaskDataSource.cs        # Data source operations
+│       ├── TaskDownloadReport.cs    # Download reports from CRM
+│       ├── TaskUploadReport.cs      # Upload reports to CRM
+│       └── TaskDownloadWebResource.cs # Download web resources
 ├── DynamicsCrm.DevKit.Tool/         # Tool package
-├── DynamicsCrm.DevKit.Analyzers/    # Roslyn analyzers
+├── DynamicsCrm.DevKit.Analyzers/    # Roslyn analyzers (DEVKIT1001-1018)
+│   ├── CrmAnalyzers/                # 18 analyzer implementations
+│   └── docs/                        # Analyzer documentation
+├── DynamicsCrm.DevKit.Analyzers.Test/ # Analyzer unit tests
+├── DynamicsCrm.DevKit.CrmSvcUtilExtensions/ # CrmSvcUtil extensions
 ├── ProjectTemplates/CSharp/         # VS Project Templates (01-12)
 ├── ItemTemplates/CSharp/            # VS Item Templates (01-13)
 ├── DynamicsCrm.DevKit.Wiki/         # GitHub wiki documentation
@@ -80,6 +95,7 @@ v4/
 - Variable naming: `serviceClient` for ServiceClient type, `crmService` for IOrganizationService
 - Target frameworks: .NET Framework 4.6.2, 4.8, and .NET Standard 2.0
 - Always build in Release mode after changes
+- Use `FaultException<OrganizationServiceFault>` for CRM error handling
 
 ### Key Patterns
 - **Helper classes**: Logic is organized in `*Helper.cs` files (e.g., `XrmHelper.cs`, `FileHelper.cs`)
@@ -93,16 +109,16 @@ The CLI tool (`DynamicsCrm.DevKit.Cli`) uses a JSON configuration file.
 ### Common Tasks
 ```bash
 # Deploy plugins/workflows
-DynamicsCrm.DevKit.Cli.exe conn "connection-string" json "DynamicsCrm.DevKit.Cli.json" type "servers" profile "DEBUG"
+DynamicsCrm.DevKit.Cli.exe conn "AuthType=OAuth;..." json "DynamicsCrm.DevKit.Cli.json" type "servers" profile "DEBUG"
 
 # Deploy web resources
-DynamicsCrm.DevKit.Cli.exe conn "connection-string" json "DynamicsCrm.DevKit.Cli.json" type "webresources" profile "DEBUG"
+DynamicsCrm.DevKit.Cli.exe conn "AuthType=OAuth;..." json "DynamicsCrm.DevKit.Cli.json" type "webresources" profile "DEBUG"
 
 # Generate late-bound classes
-DynamicsCrm.DevKit.Cli.exe conn "connection-string" json "DynamicsCrm.DevKit.Cli.json" type "generators" profile "LATEBOUND"
+DynamicsCrm.DevKit.Cli.exe conn "AuthType=OAuth;..." json "DynamicsCrm.DevKit.Cli.json" type "generators" profile "LATEBOUND"
 
 # Extract/Pack solution
-DynamicsCrm.DevKit.Cli.exe conn "connection-string" json "DynamicsCrm.DevKit.Cli.json" type "solutionpackagers" profile "Extract-Unmanaged"
+DynamicsCrm.DevKit.Cli.exe conn "AuthType=OAuth;..." json "DynamicsCrm.DevKit.Cli.json" type "solutionpackagers" profile "Extract-Unmanaged"
 ```
 
 ### CLI Configuration Sections
@@ -115,6 +131,7 @@ DynamicsCrm.DevKit.Cli.exe conn "connection-string" json "DynamicsCrm.DevKit.Cli
 | `proxytypes` | Generate proxy types (early-bound) |
 | `downloadwebresources` | Download web resources from CRM |
 | `downloadreports` / `uploadreports` | Report management |
+| `datasources` | Data source operations |
 
 ## Templates
 
@@ -140,7 +157,7 @@ Plugins, Custom Actions, Custom APIs, Workflows, Data Providers, Late-bound clas
 ## Debugging
 
 ### Debug VSIX Extension
-1. Run `ImportKey.bat` (password: `!Zz321^2`)
+1. Run `ImportKey.bat` to import signing key
 2. Open solution in VS, set `DynamicsCrm.DevKit` as startup project
 3. F5 to launch experimental VS instance
 
@@ -162,10 +179,33 @@ Check `DynamicsCrm.DevKit.Cli\Properties\launchSettings.json` for debug profiles
 | `source.extension.vsixmanifest` | VSIX metadata |
 | `DynamicsCrm.DevKit.Cli.json` | CLI configuration schema |
 
+## Dependencies
+
+### Required SDKs/Tools
+- Visual Studio 2026 with VSIX development workload
+- .NET Framework 4.6.2, 4.8 SDK
+- .NET Standard 2.0
+- MSBuild (do NOT use `dotnet build`)
+
+### Key NuGet Packages
+- `Microsoft.PowerPlatform.Dataverse.Client` - Dataverse connection
+- `Microsoft.CrmSdk.CoreAssemblies` - CRM SDK
+- `Microsoft.CodeAnalysis` - Roslyn analyzers
+
 ## Security
 
 > [!CAUTION]
-> Never commit connection strings or credentials. Use environment variables or secure vault.
+> Never commit connection strings or credentials. Use environment variables or Azure Key Vault.
 
-- PFX key file (`DynamicsCrm.DevKit.pfx`) requires password
+- PFX key file (`DynamicsCrm.DevKit.pfx`) requires password for signing
 - Connection strings should use OAuth/MFA when possible
+- Example format: `AuthType=OAuth;Url=https://org.crm.dynamics.com;...`
+
+## Troubleshooting
+
+| Issue | Solution |
+|-------|----------|
+| VSIX won't build | Ensure VSIX development workload is installed |
+| Analyzers not triggering | Check `.editorconfig` severity settings |
+| CLI connection fails | Verify OAuth settings and permissions |
+| Template not visible | Rebuild and reinstall VSIX in experimental instance |
