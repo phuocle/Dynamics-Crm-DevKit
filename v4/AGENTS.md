@@ -36,12 +36,13 @@ $msbuild = "C:\Program Files\Microsoft Visual Studio\18\Professional\MSBuild\Cur
 & $msbuild "DynamicsCrm.DevKit.Analyzers.slnx" /t:Build /p:Configuration=Release
 ```
 
-### Release Build
+### Final Release
 ```powershell
-# Full release (updates version placeholders, builds, creates NuGet packages, copies VSIX)
-.\Release-DynamicsCrm-DevKit.ps1 -BuildDate "2025.12.12 10.00.00"
+.\Release-DynamicsCrm-DevKit.ps1
+```
 
-# Test release with current date
+### Release Today
+```powershell
 .\Release-DynamicsCrm-DevKit-CurrentDate.ps1
 ```
 

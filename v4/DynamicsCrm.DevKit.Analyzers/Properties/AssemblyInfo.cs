@@ -13,7 +13,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyProduct("DynamicsCrm.DevKit.Analyzers")]
 [assembly: AssemblyCopyright("Copyright © PhuocLe 2016 - 2036")]
 [assembly: AssemblyTrademark("PhuocLe")]
-[assembly: AssemblyCulture("en")]
+[assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
 [assembly: Guid("87e4fbf2-6f3e-4f95-b5eb-a91b66f77279")]
 [assembly: AssemblyVersion("4.00.00.00")]
