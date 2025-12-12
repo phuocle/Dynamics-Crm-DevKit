@@ -6,10 +6,10 @@ Custom Templates in **DynamicsCrm.DevKit** allow you to customize the code that 
 
 ### Why Use Custom Templates?
 
-✅ **Consistency** - Ensure all team members generate code using the same patterns  
-✅ **Productivity** - Pre-include common helper methods and reduce boilerplate  
-✅ **Standards Compliance** - Enforce company coding standards automatically  
-✅ **Flexibility** - Adapt templates to your specific project needs  
+✅ **Consistency** - Ensure all team members generate code using the same patterns
+✅ **Productivity** - Pre-include common helper methods and reduce boilerplate
+✅ **Standards Compliance** - Enforce company coding standards automatically
+✅ **Flexibility** - Adapt templates to your specific project needs
 ✅ **Reusability** - Share templates across projects and teams
 
 ---
@@ -186,7 +186,7 @@ public void Execute(IServiceProvider serviceProvider)
 {
     var context = (IPluginExecutionContext)serviceProvider.GetService(typeof(IPluginExecutionContext));
     var tracing = (ITracingService)serviceProvider.GetService(typeof(ITracingService));
-    
+
     // YOUR CUSTOM LOGGING
     tracing?.Trace($"Plugin started: <#=Context.Class#>");
     tracing?.Trace($"Message: <#=Context.PluginMessage#>, Entity: <#=Context.PluginLogicalName#>");
@@ -224,7 +224,7 @@ public class <#=Context.Class#><#if(Context.PluginOrder!=1){#><#=Context.PluginO
 {
     private readonly string unsecureConfig;
     private readonly string secureConfig;
-    
+
     public <#=Context.Class#><#if(Context.PluginOrder!=1){#><#=Context.PluginOrder#><#}#>(string unsecureConfiguration, string secureConfiguration)
     {
         this.unsecureConfig = unsecureConfiguration;
@@ -254,7 +254,7 @@ private void ExecutePlugin(IPluginExecutionContext context, IOrganizationService
         var targetEntity = context.InputParameterOrDefault<Entity>("Target");
 <#}#>
         //YOUR PLUGIN-CODE GO HERE
-        
+
     }
     catch (InvalidPluginExecutionException)
     {
@@ -302,7 +302,7 @@ namespace <#=Context.PluginNameSpace#>
     /// Stage: <#=Context.PluginStage#>
     /// Created: <#=DateTime.Now.ToString("yyyy-MM-dd")#>
     /// </summary>
-    [CrmPluginRegistration("<#=Context.PluginMessage#>", "<#=Context.PluginLogicalName#>", 
+    [CrmPluginRegistration("<#=Context.PluginMessage#>", "<#=Context.PluginLogicalName#>",
 ```
 
 **Result:** XML documentation comments with metadata.
@@ -319,7 +319,7 @@ Add before the Execute method:
     {
         return entity.Contains(attributeName) && entity[attributeName] != null;
     }
-    
+
     private T GetAttributeValue<T>(Entity entity, string attributeName, T defaultValue = default(T))
     {
         return entity.Contains(attributeName) ? entity.GetAttributeValue<T>(attributeName) : defaultValue;
@@ -340,25 +340,25 @@ Add before the Execute method:
 public class <#=Context.Class#><#if(Context.PluginOrder!=1){#><#=Context.PluginOrder#><#}#> : IPlugin
 {
     #region Fields and Constants
-    
+
     // Add your fields here
-    
+
     #endregion
-    
+
     #region Constructor
-    
+
     public void Execute(IServiceProvider serviceProvider)
     {
     }
-    
+
     #endregion
-    
+
     #region Private Methods
-    
+
     private void ExecutePlugin(...)
     {
     }
-    
+
     #endregion
 }
 ```
@@ -376,18 +376,18 @@ public class <#=Context.Class#><#if(Context.PluginOrder!=1){#><#=Context.PluginO
 public class <#=Context.Class#><#if(Context.PluginOrder!=1){#><#=Context.PluginOrder#><#}#> : CodeActivity
 {
     // Standard inputs used in most workflows
-    
+
     [Input("Record Reference")]
     [RequiredArgument]
     [ReferenceTarget("account", "contact", "lead")]
     public InArgument<EntityReference> RecordReference { get; set; }
-    
+
     [Input("Process Notes")]
     public InArgument<string> ProcessNotes { get; set; }
-    
+
     [Output("Success")]
     public OutArgument<bool> Success { get; set; }
-    
+
     [Output("Error Message")]
     public OutArgument<string> ErrorMessage { get; set; }
 
@@ -406,15 +406,15 @@ public class <#=Context.Class#><#if(Context.PluginOrder!=1){#><#=Context.PluginO
 private ParameterCollection ExecuteCustomApi(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService serviceAdmin, IOrganizationService service, ITracingService tracing)
 {
     var outputs = new ParameterCollection();
-    
+
     try
     {
         //YOUR CUSTOM API CODE HERE
-        
+
         // Standard success response
         outputs["Success"] = true;
         outputs["Message"] = "Operation completed successfully";
-        
+
     }
     catch (Exception ex)
     {
@@ -422,7 +422,7 @@ private ParameterCollection ExecuteCustomApi(IPluginExecutionContext context, IO
         outputs["Message"] = $"Error: {ex.Message}";
         tracing?.Trace($"Error in <#=Context.Class#>: {ex.Message}");
     }
-    
+
     return outputs;
 }
 ```
@@ -440,12 +440,12 @@ public class <#=Context.Class#>Test : FakeXrmEasyTestBase
 {
     private IOrganizationService _service;
     private Guid _accountId;
-    
+
     [TestInitialize]
     public void TestInitialize()
     {
         _service = _context.GetOrganizationService();
-        
+
         // Create test account
         var account = new Entity("account")
         {
@@ -453,7 +453,7 @@ public class <#=Context.Class#>Test : FakeXrmEasyTestBase
         };
         _accountId = _service.Create(account);
     }
-    
+
     [TestMethod]
     public void <#=Context.Class#>Test_01()
     {
@@ -484,7 +484,7 @@ Always start by reviewing the default template. It includes:
 
 ### 3. Use Descriptive Names
 
-❌ Bad: "Template1", "MyTemplate"  
+❌ Bad: "Template1", "MyTemplate"
 ✅ Good: "Plugin with Logging", "Async Workflow with Retry"
 
 ### 4. Keep Templates Maintainable
@@ -535,7 +535,7 @@ Updates the currently selected template with your changes.
 
 Creates a new template with a new name.
 
-**When to use:** 
+**When to use:**
 - Creating your first custom template
 - Creating a variation of an existing template
 - Preserving the original while experimenting
@@ -779,9 +779,9 @@ namespace <#=Context.PluginNameSpace#>
     /// Message: <#=Context.PluginMessage#>
     /// Stage: <#=Context.PluginStage#>
     /// </summary>
-    [CrmPluginRegistration("<#=Context.PluginMessage#>", "<#=Context.PluginLogicalName#>", 
-        StageEnum.<#=Context.PluginStage#>, ExecutionModeEnum.<#=Context.PluginExecution#>, 
-        "", "<#=Context.PluginNameSpace#>.<#=Context.Class#><#if(Context.PluginOrder!=1){#><#=Context.PluginOrder#><#}#>", 
+    [CrmPluginRegistration("<#=Context.PluginMessage#>", "<#=Context.PluginLogicalName#>",
+        StageEnum.<#=Context.PluginStage#>, ExecutionModeEnum.<#=Context.PluginExecution#>,
+        "", "<#=Context.PluginNameSpace#>.<#=Context.Class#><#if(Context.PluginOrder!=1){#><#=Context.PluginOrder#><#}#>",
         <#=Context.PluginOrder#>, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin
 <#if(Context.PluginExecution=="Asynchronous"){#>, DeleteAsyncOperation = true<#}#>
 <#if(Context.IsPluginSupportedPreImage){#>, Image1Name = "PreImage", Image1Alias = "PreImage", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "*"<#}#>
@@ -789,41 +789,41 @@ namespace <#=Context.PluginNameSpace#>
     public class <#=Context.Class#><#if(Context.PluginOrder!=1){#><#=Context.PluginOrder#><#}#> : IPlugin
     {
         #region Fields
-        
+
         private readonly string _unsecureConfig;
         private readonly string _secureConfig;
-        
+
         #endregion
-        
+
         #region Constructor
-        
+
         public <#=Context.Class#><#if(Context.PluginOrder!=1){#><#=Context.PluginOrder#><#}#>(string unsecureConfiguration, string secureConfiguration)
         {
             _unsecureConfig = unsecureConfiguration;
             _secureConfig = secureConfiguration;
         }
-        
+
         #endregion
-        
+
         #region IPlugin Implementation
 
         public void Execute(IServiceProvider serviceProvider)
         {
             var context = (IPluginExecutionContext)serviceProvider.GetService(typeof(IPluginExecutionContext));
             var tracing = (ITracingService)serviceProvider.GetService(typeof(ITracingService));
-            
+
             tracing?.Trace($"[{DateTime.UtcNow:yyyy-MM-dd HH:mm:ss}] Plugin Started: <#=Context.Class#><#if(Context.PluginOrder!=1){#><#=Context.PluginOrder#><#}#>");
-            
+
             // Validate execution context
-            if (!int.Equals(context.Stage, (int)StageEnum.<#=Context.PluginStage#>)) 
+            if (!int.Equals(context.Stage, (int)StageEnum.<#=Context.PluginStage#>))
                 throw new InvalidPluginExecutionException("Stage does not equals <#=Context.PluginStage#>");
-            if (!string.Equals(context.MessageName, "<#=Context.PluginMessage#>", StringComparison.OrdinalIgnoreCase)) 
+            if (!string.Equals(context.MessageName, "<#=Context.PluginMessage#>", StringComparison.OrdinalIgnoreCase))
                 throw new InvalidPluginExecutionException("MessageName does not equals <#=Context.PluginMessage#>");
-            if (!string.Equals(context.PrimaryEntityName, "<#=Context.PluginLogicalName#>", StringComparison.OrdinalIgnoreCase)) 
+            if (!string.Equals(context.PrimaryEntityName, "<#=Context.PluginLogicalName#>", StringComparison.OrdinalIgnoreCase))
                 throw new InvalidPluginExecutionException("PrimaryEntityName does not equals <#=Context.PluginLogicalName#>");
-            if (!int.Equals(context.Mode, (int)ExecutionModeEnum.<#=Context.PluginExecution#>)) 
+            if (!int.Equals(context.Mode, (int)ExecutionModeEnum.<#=Context.PluginExecution#>))
                 throw new InvalidPluginExecutionException("Execution does not equals <#=Context.PluginExecution#>");
-            
+
             var serviceFactory = (IOrganizationServiceFactory)serviceProvider.GetService(typeof(IOrganizationServiceFactory));
             var serviceAdmin = serviceFactory.CreateOrganizationService(null);
             var service = serviceFactory.CreateOrganizationService(context.UserId);
@@ -831,12 +831,12 @@ namespace <#=Context.PluginNameSpace#>
             tracing?.DebugContext(context);
 
             ExecutePlugin(context, serviceFactory, serviceAdmin, service, tracing);
-            
+
             tracing?.Trace($"[{DateTime.UtcNow:yyyy-MM-dd HH:mm:ss}] Plugin Completed Successfully");
         }
-        
+
         #endregion
-        
+
         #region Private Methods
 
         private void ExecutePlugin(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService serviceAdmin, IOrganizationService service, ITracingService tracing)
@@ -865,9 +865,9 @@ namespace <#=Context.PluginNameSpace#>
                 if (postEntity != null)
                     tracing?.Trace("PostImage retrieved successfully");
 <#}#>
-                
+
                 //YOUR PLUGIN-CODE GO HERE
-                
+
             }
             catch (InvalidPluginExecutionException)
             {
@@ -880,17 +880,17 @@ namespace <#=Context.PluginNameSpace#>
                 throw new InvalidPluginExecutionException($"An error occurred in <#=Context.Class#><#if(Context.PluginOrder!=1){#><#=Context.PluginOrder#><#}#>: {ex.Message}", ex);
             }
         }
-        
+
         private bool HasAttribute(Entity entity, string attributeName)
         {
             return entity != null && entity.Contains(attributeName) && entity[attributeName] != null;
         }
-        
+
         private T GetAttributeValue<T>(Entity entity, string attributeName, T defaultValue = default(T))
         {
             return HasAttribute(entity, attributeName) ? entity.GetAttributeValue<T>(attributeName) : defaultValue;
         }
-        
+
         #endregion
     }
 }
