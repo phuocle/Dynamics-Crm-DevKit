@@ -42,7 +42,7 @@ Install-Package DynamicsCrm.DevKit.Cli
 - Report management (Upload/Download)
 - Early-bound class generation (ProxyTypes)
 
-[📖 Full CLI Documentation](v4/DynamicsCrm.DevKit.Cli/docs/README.md)
+[📖 Full CLI Documentation](https://github.com/phuocle/Dynamics-Crm-DevKit/blob/v4/v4/DynamicsCrm.DevKit.Cli/docs/README.md)
 
 #### DynamicsCrm.DevKit.Analyzers
 Roslyn-based code analyzers for Dynamics 365 best practices.
@@ -63,7 +63,7 @@ Roslyn-based code analyzers for Dynamics 365 best practices.
 - Real-time code analysis in Visual Studio
 - Compile-time error detection
 
-[📖 Full Analyzers Documentation](v4/DynamicsCrm.DevKit.Analyzers/docs/README.md)
+[📖 Full Analyzers Documentation](https://github.com/phuocle/Dynamics-Crm-DevKit/blob/v4/v4/DynamicsCrm.DevKit.Analyzers/docs/README.md)
 
 #### DynamicsCrm.DevKit.Tool
 Additional development utilities for Dynamics 365.
@@ -78,7 +78,7 @@ Additional development utilities for Dynamics 365.
 Install-Package DynamicsCrm.DevKit.Tool
 ```
 
-[📖 Full Tool Documentation](v4/DynamicsCrm.DevKit.Tool/docs/README.md)
+[📖 Full Tool Documentation](https://github.com/phuocle/Dynamics-Crm-DevKit/blob/v4/v4/DynamicsCrm.DevKit.Tool/docs/README.md)
 
 ---
 
@@ -145,8 +145,8 @@ Complete documentation is available in the [Wiki](https://github.com/phuocle/Dyn
 - **[Project Templates](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Projects-Template)** - Overview of all project templates
 - **[Item Templates](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Items-Template)** - Overview of all item templates
 - **[Tutorials](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Tutorials)** - Step-by-step guides
-- **[CLI Documentation](v4/DynamicsCrm.DevKit.Cli/docs/README.md)** - Command-line interface reference
-- **[Analyzers Documentation](v4/DynamicsCrm.DevKit.Analyzers/docs/README.md)** - Code analyzer rules
+- **[CLI Documentation](https://github.com/phuocle/Dynamics-Crm-DevKit/blob/v4/v4/DynamicsCrm.DevKit.Cli/docs/README.md)** - Command-line interface reference
+- **[Analyzers Documentation](https://github.com/phuocle/Dynamics-Crm-DevKit/blob/v4/v4/DynamicsCrm.DevKit.Analyzers/docs/README.md)** - Code analyzer rules
 - **[Integrated with Visual Studio](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Integrated-with-Visual-Studio)** - VS integration features
 
 ---
@@ -173,7 +173,7 @@ DynamicsCrm.DevKit.Cli /conn:"AuthType=OAuth;..." /json:"DynamicsCrm.DevKit.Cli.
 DynamicsCrm.DevKit.Cli /conn:"AuthType=OAuth;..." /json:"DynamicsCrm.DevKit.Cli.json" /type:solutionpackagers /profile:default
 ```
 
-[📖 See more CLI examples](v4/DynamicsCrm.DevKit.Cli/docs/README.md)
+[📖 See more CLI examples](https://github.com/phuocle/Dynamics-Crm-DevKit/blob/v4/v4/DynamicsCrm.DevKit.Cli/docs/README.md)
 
 ---
 
@@ -183,27 +183,27 @@ DynamicsCrm.DevKit.Analyzers provides 19 diagnostic rules to enforce best practi
 
 | Rule | Severity | Description |
 |------|----------|-------------|
-| [DEVKIT1001](v4/DynamicsCrm.DevKit.Analyzers/docs/DEVKIT1001.md) | Error | Create/Update should have filtering attributes |
-| [DEVKIT1002](v4/DynamicsCrm.DevKit.Analyzers/docs/DEVKIT1002.md) | Warning | Don't use ColumnSet(true) |
-| [DEVKIT1003](v4/DynamicsCrm.DevKit.Analyzers/docs/DEVKIT1003.md) | Error | Plugin image validation |
-| [DEVKIT1004](v4/DynamicsCrm.DevKit.Analyzers/docs/DEVKIT1004.md) | Info | Use of deprecated SDK messages |
-| [DEVKIT1005](v4/DynamicsCrm.DevKit.Analyzers/docs/DEVKIT1005.md) | Warning | EntityReference maybe null |
-| [DEVKIT1006](v4/DynamicsCrm.DevKit.Analyzers/docs/DEVKIT1006.md) | Warning | Don't use batch requests in plugins |
-| [DEVKIT1007](v4/DynamicsCrm.DevKit.Analyzers/docs/DEVKIT1007.md) | Error | IPlugin should be stateless |
-| [DEVKIT1008](v4/DynamicsCrm.DevKit.Analyzers/docs/DEVKIT1008.md) | Error | Don't use parallel execution in plugins |
-| [DEVKIT1009](v4/DynamicsCrm.DevKit.Analyzers/docs/DEVKIT1009.md) | Warning | Set KeepAlive to false for external HTTP calls |
-| [DEVKIT1010](v4/DynamicsCrm.DevKit.Analyzers/docs/DEVKIT1010.md) | Warning | Set Timeout for external HTTP calls |
-| [DEVKIT1011](v4/DynamicsCrm.DevKit.Analyzers/docs/DEVKIT1011.md) | Warning | Use InvalidPluginExecutionException for errors |
-| [DEVKIT1012](v4/DynamicsCrm.DevKit.Analyzers/docs/DEVKIT1012.md) | Info | Consider using ITracingService in plugins |
-| [DEVKIT1013](v4/DynamicsCrm.DevKit.Analyzers/docs/DEVKIT1013.md) | Info | Avoid registering plugins on Retrieve/RetrieveMultiple |
-| [DEVKIT1014](v4/DynamicsCrm.DevKit.Analyzers/docs/DEVKIT1014.md) | Error | Avoid AppDomain event registration in plugins |
-| [DEVKIT1015](v4/DynamicsCrm.DevKit.Analyzers/docs/DEVKIT1015.md) | Info | Avoid blocking async patterns in plugins |
-| [DEVKIT1016](v4/DynamicsCrm.DevKit.Analyzers/docs/DEVKIT1016.md) | Info | Avoid retrieving unpublished metadata |
-| [DEVKIT1017](v4/DynamicsCrm.DevKit.Analyzers/docs/DEVKIT1017.md) | Info | Avoid Console output in plugins |
-| [DEVKIT1018](v4/DynamicsCrm.DevKit.Analyzers/docs/DEVKIT1018.md) | Error | Avoid File/IO operations in plugins |
-| [DEVKIT1019](v4/DynamicsCrm.DevKit.Analyzers/docs/DEVKIT1019.md) | Warning | Consider checking context.Depth to prevent infinite loops |
+| [DEVKIT1001](https://github.com/phuocle/Dynamics-Crm-DevKit/blob/v4/v4/DynamicsCrm.DevKit.Analyzers/docs/DEVKIT1001.md) | Error | Create/Update should have filtering attributes |
+| [DEVKIT1002](https://github.com/phuocle/Dynamics-Crm-DevKit/blob/v4/v4/DynamicsCrm.DevKit.Analyzers/docs/DEVKIT1002.md) | Warning | Don't use ColumnSet(true) |
+| [DEVKIT1003](https://github.com/phuocle/Dynamics-Crm-DevKit/blob/v4/v4/DynamicsCrm.DevKit.Analyzers/docs/DEVKIT1003.md) | Error | Plugin image validation |
+| [DEVKIT1004](https://github.com/phuocle/Dynamics-Crm-DevKit/blob/v4/v4/DynamicsCrm.DevKit.Analyzers/docs/DEVKIT1004.md) | Info | Use of deprecated SDK messages |
+| [DEVKIT1005](https://github.com/phuocle/Dynamics-Crm-DevKit/blob/v4/v4/DynamicsCrm.DevKit.Analyzers/docs/DEVKIT1005.md) | Warning | EntityReference maybe null |
+| [DEVKIT1006](https://github.com/phuocle/Dynamics-Crm-DevKit/blob/v4/v4/DynamicsCrm.DevKit.Analyzers/docs/DEVKIT1006.md) | Warning | Don't use batch requests in plugins |
+| [DEVKIT1007](https://github.com/phuocle/Dynamics-Crm-DevKit/blob/v4/v4/DynamicsCrm.DevKit.Analyzers/docs/DEVKIT1007.md) | Error | IPlugin should be stateless |
+| [DEVKIT1008](https://github.com/phuocle/Dynamics-Crm-DevKit/blob/v4/v4/DynamicsCrm.DevKit.Analyzers/docs/DEVKIT1008.md) | Error | Don't use parallel execution in plugins |
+| [DEVKIT1009](https://github.com/phuocle/Dynamics-Crm-DevKit/blob/v4/v4/DynamicsCrm.DevKit.Analyzers/docs/DEVKIT1009.md) | Warning | Set KeepAlive to false for external HTTP calls |
+| [DEVKIT1010](https://github.com/phuocle/Dynamics-Crm-DevKit/blob/v4/v4/DynamicsCrm.DevKit.Analyzers/docs/DEVKIT1010.md) | Warning | Set Timeout for external HTTP calls |
+| [DEVKIT1011](https://github.com/phuocle/Dynamics-Crm-DevKit/blob/v4/v4/DynamicsCrm.DevKit.Analyzers/docs/DEVKIT1011.md) | Warning | Use InvalidPluginExecutionException for errors |
+| [DEVKIT1012](https://github.com/phuocle/Dynamics-Crm-DevKit/blob/v4/v4/DynamicsCrm.DevKit.Analyzers/docs/DEVKIT1012.md) | Info | Consider using ITracingService in plugins |
+| [DEVKIT1013](https://github.com/phuocle/Dynamics-Crm-DevKit/blob/v4/v4/DynamicsCrm.DevKit.Analyzers/docs/DEVKIT1013.md) | Info | Avoid registering plugins on Retrieve/RetrieveMultiple |
+| [DEVKIT1014](https://github.com/phuocle/Dynamics-Crm-DevKit/blob/v4/v4/DynamicsCrm.DevKit.Analyzers/docs/DEVKIT1014.md) | Error | Avoid AppDomain event registration in plugins |
+| [DEVKIT1015](https://github.com/phuocle/Dynamics-Crm-DevKit/blob/v4/v4/DynamicsCrm.DevKit.Analyzers/docs/DEVKIT1015.md) | Info | Avoid blocking async patterns in plugins |
+| [DEVKIT1016](https://github.com/phuocle/Dynamics-Crm-DevKit/blob/v4/v4/DynamicsCrm.DevKit.Analyzers/docs/DEVKIT1016.md) | Info | Avoid retrieving unpublished metadata |
+| [DEVKIT1017](https://github.com/phuocle/Dynamics-Crm-DevKit/blob/v4/v4/DynamicsCrm.DevKit.Analyzers/docs/DEVKIT1017.md) | Info | Avoid Console output in plugins |
+| [DEVKIT1018](https://github.com/phuocle/Dynamics-Crm-DevKit/blob/v4/v4/DynamicsCrm.DevKit.Analyzers/docs/DEVKIT1018.md) | Error | Avoid File/IO operations in plugins |
+| [DEVKIT1019](https://github.com/phuocle/Dynamics-Crm-DevKit/blob/v4/v4/DynamicsCrm.DevKit.Analyzers/docs/DEVKIT1019.md) | Warning | Consider checking context.Depth to prevent infinite loops |
 
-[📖 See full documentation for all rules](v4/DynamicsCrm.DevKit.Analyzers/docs/README.md)
+[📖 See full documentation for all rules](https://github.com/phuocle/Dynamics-Crm-DevKit/blob/v4/v4/DynamicsCrm.DevKit.Analyzers/docs/README.md)
 
 ---
 
