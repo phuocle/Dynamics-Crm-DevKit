@@ -1,26 +1,26 @@
 ﻿# DEVKIT1001: Create/Update Message Should Have Filtering Attributes
 
-## Description
+## 📖 Description
 
 This analyzer ensures that plugin registrations for `Create`, `CreateMultiple`, `Update`, `UpdateMultiple`, `OnExternalCreated`, or `OnExternalUpdated` messages include specific filtering attributes. Without filtering attributes, the plugin executes on **every field change**, which can significantly impact performance.
 
 
-## Microsoft Best Practice
+## 🎯 Microsoft Best Practice
 
 📚 **[Include filtering attributes with plug-in registration](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/include-filtering-attributes-plugin-registration)**
 
 > Adding synchronous plug-in logic to Create or Update message events without including filtering attributes will cause the plug-in logic to be executed for any change to the entity. This can slow down the performance of the system.
 
-## Why This Matters
+## ⚠️ Why This Matters
 
 When you register a plugin on Create or Update messages without filtering attributes:
 
-1. **Performance Impact**: The plugin fires for every create/update, even if fields the plugin doesn't care about are modified
-2. **Unnecessary Execution**: Users experience delays when modifying unrelated fields
-3. **Resource Waste**: Server resources are consumed processing changes that don't require plugin logic
-4. **Potential Cascading Issues**: Other plugins and workflows may be delayed
+1. **⚡ Performance Impact**: The plugin fires for every create/update, even if fields the plugin doesn't care about are modified
+2. **⏱️ Unnecessary Execution**: Users experience delays when modifying unrelated fields
+3. **💾 Resource Waste**: Server resources are consumed processing changes that don't require plugin logic
+4. **🔄 Potential Cascading Issues**: Other plugins and workflows may be delayed
 
-## Applicable Messages
+## 📋 Applicable Messages
 
 | Message | Supports Filtering |
 |---------|:-----------------:|
@@ -31,13 +31,13 @@ When you register a plugin on Create or Update messages without filtering attrib
 | `UpdateMultiple` | ✅ |
 | `OnExternalUpdated` | ✅ |
 
-## Detection
+## 🔍 Detection
 
 The analyzer flags `[CrmPluginRegistration]` attributes where:
 - The message is `Create`, `CreateMultiple`, `Update`, `UpdateMultiple`, `OnExternalCreated`, or `OnExternalUpdated`
 - The `filteringAttributes` parameter is empty string (`""`), asterisk (`"*"`), or not specified
 
-## Code Examples
+## 💻 Code Examples
 
 ### ❌ Bad Code
 
@@ -89,20 +89,20 @@ public class AccountUpdate : IPlugin
 }
 ```
 
-## How to Fix
+## 🔧 How to Fix
 
-1. **Identify Required Fields**: Determine which fields your plugin actually needs to respond to
-2. **Add Filtering Attributes**: Specify only those field names in the `filteringAttributes` parameter
-3. **Use Comma Separation**: Multiple fields should be separated by commas without spaces
+1. **🔍 Identify Required Fields**: Determine which fields your plugin actually needs to respond to
+2. **➕ Add Filtering Attributes**: Specify only those field names in the `filteringAttributes` parameter
+3. **📝 Use Comma Separation**: Multiple fields should be separated by commas without spaces
 
-### Before and After
+### 🔄 Before and After
 
 ```diff
 - filteringAttributes: ""
 + filteringAttributes: "name,accountnumber"
 ```
 
-## Suppression
+## 🔕 Suppression
 
 If you have a legitimate need to suppress this warning:
 
@@ -123,7 +123,7 @@ dotnet_diagnostic.DEVKIT1001.severity = none
 
 ---
 
-## Rule Properties
+## 📊 Rule Properties
 
 | Property | Value |
 |----------|-------|
