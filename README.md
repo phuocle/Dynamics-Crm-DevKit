@@ -124,16 +124,16 @@ The Visual Studio extension includes 13 item templates:
 ## 🚀 Key Features
 
 ### Deploy Server Projects (Plugins, Workflows, Custom APIs)
-![Deploy Server](/v3/images/deploy.server.gif)
+![Deploy Server](v4/images/deploy.server.gif)
 
 ### Form IntelliSense
-![Form IntelliSense](/v3/images/form.gif)
+![Form IntelliSense](v4/images/form.gif)
 
 ### Deploy WebResources from Visual Studio
-![WebResource Deployment](/v3/images/webresource.gif)
+![WebResource Deployment](v4/images/webresource.gif)
 
 ### Deploy Reports from Visual Studio
-![Report Deployment](/v3/images/report.gif)
+![Report Deployment](v4/images/report.gif)
 
 ---
 
