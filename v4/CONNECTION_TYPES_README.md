@@ -6,7 +6,24 @@ This folder contains comprehensive documentation for enhancing connection types 
 
 ## 📚 Documentation Files
 
-### 1. 🚀 [Quick Reference](./CONNECTION_TYPES_QUICK_REFERENCE.md) (Start Here!)
+### 1. 🎯 [Priority Order & Support Details](./CONNECTION_TYPES_PRIORITY_ORDER.md) (Implementation Guide!)
+**Size**: 22 KB | **Reading Time**: 20-30 minutes
+
+**NEW!** Detailed priority order for implementation with support information:
+- **Priority 1-9**: Ranked order with rationale (1 = highest)
+- **What We Support**: Detailed feature list for each type
+- **What We Don't Support**: Clear limitations
+- **Implementation Notes**: Code examples and configuration
+- **Use Cases**: Specific scenarios for each type
+- **Timeline**: Week-by-week schedule
+- **Risk Assessment**: Risk level and mitigation per type
+- **Success Metrics**: Adoption targets
+
+**Best for**: Understanding implementation order and detailed support for each connection type
+
+---
+
+### 2. 🚀 [Quick Reference](./CONNECTION_TYPES_QUICK_REFERENCE.md) (Overview)
 **Size**: 8.6 KB | **Reading Time**: 5-10 minutes
 
 A quick overview with:
@@ -20,7 +37,7 @@ A quick overview with:
 
 ---
 
-### 2. 📖 [Improvement Plan](./CONNECTION_TYPES_IMPROVEMENT_PLAN.md) (Complete Design)
+### 3. 📖 [Improvement Plan](./CONNECTION_TYPES_IMPROVEMENT_PLAN.md) (Complete Design)
 **Size**: 32 KB | **Reading Time**: 30-45 minutes
 
 Comprehensive design document with:
@@ -44,7 +61,7 @@ Comprehensive design document with:
 
 ---
 
-### 3. 🗺️ [Implementation Roadmap](./CONNECTION_TYPES_IMPLEMENTATION_ROADMAP.md) (Developer Guide)
+### 4. 🗺️ [Implementation Roadmap](./CONNECTION_TYPES_IMPLEMENTATION_ROADMAP.md) (Developer Guide)
 **Size**: 29 KB | **Reading Time**: 45-60 minutes
 
 Step-by-step implementation guide with:
@@ -62,7 +79,7 @@ Step-by-step implementation guide with:
 
 ---
 
-### 4. 📑 [Documentation Index](./docs/CONNECTION_ENHANCEMENT_README.md)
+### 5. 📑 [Documentation Index](./docs/CONNECTION_ENHANCEMENT_README.md)
 **Size**: 3.1 KB
 
 Navigation guide to all documentation with audience-specific reading paths.
@@ -74,22 +91,22 @@ Navigation guide to all documentation with audience-specific reading paths.
 ### By Role
 
 **👨‍💼 Project Managers**
-1. Read: [Quick Reference](./CONNECTION_TYPES_QUICK_REFERENCE.md)
-2. Check: Timeline (11 weeks), Success Metrics, Risks
+1. Read: [Priority Order](./CONNECTION_TYPES_PRIORITY_ORDER.md) for implementation timeline
+2. Check: [Quick Reference](./CONNECTION_TYPES_QUICK_REFERENCE.md) for benefits and metrics
 
 **🏗️ Architects/Tech Leads**
-1. Read: [Improvement Plan](./CONNECTION_TYPES_IMPROVEMENT_PLAN.md) (full)
-2. Review: Security, Data Models, Architecture
-3. Validate: [Implementation Roadmap](./CONNECTION_TYPES_IMPLEMENTATION_ROADMAP.md)
+1. Read: [Priority Order](./CONNECTION_TYPES_PRIORITY_ORDER.md) for detailed support matrix
+2. Review: [Improvement Plan](./CONNECTION_TYPES_IMPROVEMENT_PLAN.md) for complete design
+3. Validate: [Implementation Roadmap](./CONNECTION_TYPES_IMPLEMENTATION_ROADMAP.md) for feasibility
 
 **👨‍💻 Developers**
-1. Skim: [Quick Reference](./CONNECTION_TYPES_QUICK_REFERENCE.md)
-2. Study: [Implementation Roadmap](./CONNECTION_TYPES_IMPLEMENTATION_ROADMAP.md)
-3. Reference: [Improvement Plan](./CONNECTION_TYPES_IMPROVEMENT_PLAN.md) as needed
+1. Start: [Priority Order](./CONNECTION_TYPES_PRIORITY_ORDER.md) to understand what to implement when
+2. Study: [Implementation Roadmap](./CONNECTION_TYPES_IMPLEMENTATION_ROADMAP.md) for step-by-step guide
+3. Reference: [Improvement Plan](./CONNECTION_TYPES_IMPROVEMENT_PLAN.md) for design details
 
 **🧪 QA/Testers**
-1. Review: Testing sections in [Implementation Roadmap](./CONNECTION_TYPES_IMPLEMENTATION_ROADMAP.md)
-2. Check: Success criteria in [Improvement Plan](./CONNECTION_TYPES_IMPROVEMENT_PLAN.md)
+1. Review: [Priority Order](./CONNECTION_TYPES_PRIORITY_ORDER.md) for what each type supports
+2. Check: Testing sections in [Implementation Roadmap](./CONNECTION_TYPES_IMPLEMENTATION_ROADMAP.md)
 
 ---
 
