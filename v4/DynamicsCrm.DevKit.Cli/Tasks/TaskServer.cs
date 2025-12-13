@@ -789,8 +789,15 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 // No entities referenced, nothing to load
                 _ObjectTypeCodesCache.Clear();
+#if DEBUG
+                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Cyan, "No entities referenced in deployment - skipping metadata load");
+#endif
                 return;
             }
+            
+#if DEBUG
+            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Cyan, $"Loading metadata for {requiredEntities.Count} entities: {string.Join(", ", requiredEntities.Take(10))}{(requiredEntities.Count > 10 ? "..." : "")}");
+#endif
             
             // Use ExecuteMultiple to batch retrieve only the required entities
             await LoadObjectTypeCodesForEntitiesAsync(requiredEntities);
@@ -806,9 +813,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 foreach (var attribute in list.Value)
                 {
                     if (!string.IsNullOrEmpty(attribute.EntityLogicalName) && 
-                        attribute.EntityLogicalName.ToLower() != "none")
+                        !attribute.EntityLogicalName.Equals("none", StringComparison.OrdinalIgnoreCase))
                     {
-                        entities.Add(attribute.EntityLogicalName.ToLower());
+                        entities.Add(attribute.EntityLogicalName);
                     }
                 }
             }
