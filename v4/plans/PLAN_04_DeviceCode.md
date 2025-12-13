@@ -255,3 +255,257 @@ docker run -it devkit-test
 
 **Document Version**: 1.0  
 **Last Updated**: 2025-12-13
+
+## Testing
+
+### Option 1: Automated Testing (AI-Guided Unit Tests)
+
+**Test File**: `v4/DynamicsCrm.DevKit.Shared.Tests/DeviceCodeConnectionTests.cs`
+
+AI Prompt:
+```
+Create unit tests for DeviceCode connection:
+
+1. Device Code Flow Tests:
+   - Device code callback displays URL and code
+   - Device code timeout after 5 minutes
+   - Device code cancellation handling
+   - Silent token acquisition from cache
+
+2. Validation Tests:
+   - ValidateAsync with valid connection
+   - ValidateAsync with missing URL
+   - ValidateAsync with invalid ClientId
+
+3. Token Cache Tests:
+   - Token cached after successful auth
+   - Silent acquisition works on second call
+
+Mock: IPublicClientApplication, DeviceCodeResult
+Test async patterns correctly.
+```
+
+**Example Test**:
+```csharp
+[TestMethod]
+public async Task DeviceCodeAuth_DisplaysCodeCorrectly()
+{
+    // Arrange
+    var mockApp = new Mock<IPublicClientApplication>();
+    var deviceCodeResult = new DeviceCodeResult
+    {
+        UserCode = "ABCD1234",
+        VerificationUrl = "https://microsoft.com/devicelogin",
+        Message = "To sign in, use a web browser..."
+    };
+
+    bool callbackInvoked = false;
+    string displayedMessage = null;
+
+    mockApp.Setup(a => a.AcquireTokenWithDeviceCode(
+        It.IsAny<string[]>(),
+        It.IsAny<Func<DeviceCodeResult, Task>>()))
+        .Callback<string[], Func<DeviceCodeResult, Task>>((scopes, callback) =>
+        {
+            callbackInvoked = true;
+            callback(deviceCodeResult).Wait();
+        })
+        .ReturnsAsync(new AuthenticationResult());
+
+    // Act
+    // Invoke device code flow
+
+    // Assert
+    Assert.IsTrue(callbackInvoked);
+    Assert.IsNotNull(displayedMessage);
+    Assert.IsTrue(displayedMessage.Contains("ABCD1234"));
+}
+```
+
+**Running Tests**:
+```powershell
+dotnet test --filter "FullyQualifiedName~DeviceCodeConnection"
+```
+
+---
+
+### Option 2: Manual Testing (Step-by-Step Guide)
+
+#### Test Scenario 1: DeviceCode Authentication (CLI)
+
+**Step 1.1**: Run CLI with DeviceCode
+```powershell
+DynamicsCrm.DevKit.Cli `
+  /auth:DeviceCode `
+  /url:"https://test.crm.dynamics.com" `
+  /json:"DynamicsCrm.DevKit.Cli.json" `
+  /type:servers `
+  /profile:default
+```
+
+**Expected Result**: ✅ CLI displays:
+```
+|
+| Device Code Authentication
+| ==================================================
+|
+| To sign in, use a web browser to open the page 
+| https://microsoft.com/devicelogin and enter the 
+| code ABCD1234 to authenticate.
+|
+| Waiting for authentication...
+```
+
+**Step 1.2**: Complete authentication
+1. Open browser (any device)
+2. Navigate to `https://microsoft.com/devicelogin`
+3. Enter displayed code (e.g., `ABCD1234`)
+4. Sign in with credentials
+5. Complete MFA if prompted
+
+**Expected Result**: ✅ CLI shows "Authentication successful!" and proceeds with deployment
+
+**Step 1.3**: Verify token cached
+```powershell
+dir "$env:LOCALAPPDATA\DynamicsCrmDevKit\TokenCache"
+```
+
+**Expected Result**: ✅ Cache file created
+
+---
+
+#### Test Scenario 2: DeviceCode in Docker Container
+
+**Step 2.1**: Create Dockerfile
+```dockerfile
+FROM mcr.microsoft.com/dotnet/sdk:6.0
+WORKDIR /app
+COPY DynamicsCrm.DevKit.Cli.exe .
+COPY DynamicsCrm.DevKit.Cli.json .
+CMD ["./DynamicsCrm.DevKit.Cli.exe", "/auth:DeviceCode", "/url:https://test.crm.dynamics.com"]
+```
+
+**Step 2.2**: Build and run
+```powershell
+docker build -t devkit-devicecode .
+docker run -it devkit-devicecode
+```
+
+**Expected Result**: ✅ Device code displayed in container logs
+
+**Step 2.3**: Authenticate from host machine
+1. Copy device code from container output
+2. Open browser on host machine
+3. Complete authentication
+
+**Expected Result**: ✅ Container proceeds with deployment
+
+---
+
+#### Test Scenario 3: DeviceCode Timeout
+
+**Step 3.1**: Start DeviceCode authentication
+```powershell
+DynamicsCrm.DevKit.Cli /auth:DeviceCode /url:"..."
+```
+
+**Step 3.2**: Wait 5+ minutes without authenticating
+
+**Expected Result**: ✅ CLI shows "Device code authentication timed out after 5 minutes"
+
+---
+
+#### Test Scenario 4: DeviceCode in SSH Session
+
+**Step 4.1**: SSH to remote server
+```powershell
+ssh user@remote-server
+```
+
+**Step 4.2**: Run CLI with DeviceCode
+```bash
+./DynamicsCrm.DevKit.Cli /auth:DeviceCode /url:"https://test.crm.dynamics.com"
+```
+
+**Expected Result**: ✅ Device code displayed in SSH terminal
+
+**Step 4.3**: Authenticate from local machine
+**Expected Result**: ✅ SSH session shows authentication success
+
+---
+
+#### Test Scenario 5: DeviceCode with Named Connection
+
+**Step 5.1**: First run with connection name
+```powershell
+DynamicsCrm.DevKit.Cli `
+  /auth:DeviceCode `
+  /url:"https://test.crm.dynamics.com" `
+  /connection:"DeviceCodeTest" `
+  /json:"..." /type:servers /profile:default
+```
+
+**Step 5.2**: Complete authentication via device code
+
+**Step 5.3**: Second run with same connection name
+```powershell
+DynamicsCrm.DevKit.Cli `
+  /connection:"DeviceCodeTest" `
+  /json:"..." /type:servers /profile:default
+```
+
+**Expected Result**: ✅ NO device code shown, uses cached token
+
+---
+
+#### Test Scenario 6: Azure DevOps Pipeline
+
+**Step 6.1**: Create pipeline with approval gate
+```yaml
+stages:
+- stage: Deploy
+  jobs:
+  - deployment: DeployToProduction
+    environment: Production  # Requires manual approval
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: PowerShell@2
+            inputs:
+              script: |
+                DynamicsCrm.DevKit.Cli `
+                  /auth:DeviceCode `
+                  /url:"$(DataverseUrl)" `
+                  /json:"..." /type:servers /profile:prod
+```
+
+**Step 6.2**: Queue pipeline
+
+**Expected Result**: ✅ Pipeline pauses at approval, shows device code
+
+**Step 6.3**: Approve and authenticate
+
+**Expected Result**: ✅ Pipeline proceeds after authentication
+
+---
+
+#### Manual Testing Checklist
+
+- [ ] **Device code display**: URL and code shown clearly
+- [ ] **Code entry**: Code works on microsoft.com/devicelogin
+- [ ] **Authentication**: Sign-in flow works
+- [ ] **MFA**: Multi-factor auth supported
+- [ ] **Success**: CLI proceeds after auth
+- [ ] **Token cache**: Token cached for reuse
+- [ ] **Timeout**: 5-minute timeout works
+- [ ] **Cancellation**: Ctrl+C stops waiting
+- [ ] **Docker**: Works in containers
+- [ ] **SSH**: Works in SSH sessions
+- [ ] **Pipeline**: Azure DevOps integration works
+- [ ] **Silent auth**: Second run uses cache
+
+---
+
+**Document Version**: 1.1  
+**Last Updated**: 2025-12-13

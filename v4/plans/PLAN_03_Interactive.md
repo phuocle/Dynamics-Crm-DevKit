@@ -416,3 +416,349 @@ public async Task InteractiveConnectionBuilder_ValidConnection_Success()
 
 **Document Version**: 1.0  
 **Last Updated**: 2025-12-13
+
+## Testing
+
+### Option 1: Automated Testing (AI-Guided Unit Tests)
+
+#### AI Guidance for Creating Unit Tests
+
+**Test File**: `v4/DynamicsCrm.DevKit.Shared.Tests/InteractiveConnectionTests.cs`
+
+Create unit tests using this AI prompt:
+```
+Create comprehensive unit tests for Interactive (browser OAuth) connection:
+
+1. Connection Builder Tests:
+   - CreateServiceClientAsync with valid connection
+   - CreateServiceClientAsync with missing URL (should fail)
+   - CreateServiceClientAsync with invalid ClientId GUID
+   - BuildConnectionString format validation
+   - ValidateAsync with all scenarios
+
+2. Token Cache Tests:
+   - RegisterCache stores token correctly
+   - RegisterCache retrieves cached token
+   - RegisterCache encrypts with DPAPI
+   - ClearAll removes all tokens
+
+3. MSAL Integration Tests (mock MSAL):
+   - AcquireTokenInteractive called when no cache
+   - AcquireTokenSilent called when cache exists
+   - MsalUiRequiredException triggers interactive flow
+   - Token refresh on expiration
+
+4. ServiceClient Creation Tests:
+   - ServiceClientWithTokenProvider created correctly
+   - Token provider callback works
+   - Connection URL validation
+
+Mock: IPublicClientApplication, AuthenticationResult, SecureTokenCache
+Use async/await patterns correctly.
+```
+
+**Example Test Structure**:
+```csharp
+[TestClass]
+public class InteractiveConnectionTests
+{
+    private Mock<IPublicClientApplication> _mockPublicClient;
+    private Mock<SecureTokenCache> _mockTokenCache;
+
+    [TestInitialize]
+    public void Setup()
+    {
+        _mockPublicClient = new Mock<IPublicClientApplication>();
+        _mockTokenCache = new Mock<SecureTokenCache>();
+    }
+
+    [TestMethod]
+    public async Task CreateServiceClient_ValidConnection_Success()
+    {
+        // Arrange
+        var connection = new CrmConnection
+        {
+            Type = "Interactive",
+            Url = "https://test.crm.dynamics.com",
+            ClientId = "test-client-id",
+            Name = "TestConnection"
+        };
+
+        var mockAuthResult = new Mock<AuthenticationResult>();
+        mockAuthResult.Setup(r => r.AccessToken).Returns("test-token");
+        
+        _mockPublicClient
+            .Setup(c => c.AcquireTokenInteractive(It.IsAny<string[]>()))
+            .Returns(Task.FromResult(mockAuthResult.Object));
+
+        var builder = new InteractiveConnectionBuilder();
+
+        // Act
+        var serviceClient = await builder.CreateServiceClientAsync(connection);
+
+        // Assert
+        Assert.IsNotNull(serviceClient);
+        _mockTokenCache.Verify(c => c.RegisterCache(It.IsAny<IPublicClientApplication>(), "TestConnection"), Times.Once);
+    }
+
+    [TestMethod]
+    public async Task ValidateAsync_MissingUrl_ReturnsFalse()
+    {
+        // Arrange
+        var connection = new CrmConnection
+        {
+            Type = "Interactive",
+            Url = "",
+            ClientId = "test-client-id"
+        };
+
+        var builder = new InteractiveConnectionBuilder();
+
+        // Act
+        var (isValid, error) = await builder.ValidateAsync(connection);
+
+        // Assert
+        Assert.IsFalse(isValid);
+        Assert.AreEqual("URL is required", error);
+    }
+
+    [TestMethod]
+    public void TokenCache_RegisterCache_EncryptsWithDPAPI()
+    {
+        // Arrange
+        var cache = new SecureTokenCache();
+        var mockApp = new Mock<IPublicClientApplication>();
+
+        // Act
+        cache.RegisterCache(mockApp.Object, "TestConnection");
+
+        // Assert
+        // Verify DPAPI encryption is used
+        // Check cache file created in LocalAppData
+        var cachePath = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+            "DynamicsCrmDevKit",
+            "TokenCache",
+            "TestConnection.msalcache"
+        );
+
+        Assert.IsTrue(File.Exists(cachePath) || /* cache will exist after first token */);
+    }
+}
+```
+
+**Running the Tests**:
+```powershell
+dotnet test --filter "FullyQualifiedName~InteractiveConnection"
+```
+
+---
+
+### Option 2: Manual Testing (Step-by-Step Guide)
+
+#### Prerequisites
+- Visual Studio 2022 with DynamicsCrm.DevKit solution
+- Dataverse environment access
+- Default browser configured
+- Internet connection
+
+#### Test Scenario 1: First-Time Interactive Authentication
+
+**Step 1.1**: Create Interactive connection in VSIX
+1. Visual Studio → Tools → DynamicsCrm DevKit → Connect
+2. Click "New Connection"
+3. Fill in:
+   - Name: `InteractiveTest`
+   - Type: `Interactive (Browser)`
+   - URL: `https://test.crm.dynamics.com`
+   - Username: (leave empty - optional)
+   - Client Id: (leave empty - uses default)
+4. Click "Test Connection"
+
+**Expected Result**: ✅ Browser window opens automatically
+
+**Step 1.2**: Complete authentication in browser
+1. Sign in with your credentials
+2. Complete MFA if prompted
+3. Grant consent if prompted
+
+**Expected Result**: ✅ Browser shows "Authentication complete" or similar
+
+**Step 1.3**: Verify connection in Visual Studio
+**Expected Result**: ✅ Message box shows "Connection successful"
+
+**Step 1.4**: Check token cache created
+```powershell
+# Check cache location
+dir "$env:LOCALAPPDATA\DynamicsCrmDevKit\TokenCache"
+```
+
+**Expected Result**: ✅ File `InteractiveTest.msalcache` exists
+
+---
+
+#### Test Scenario 2: Silent Token Acquisition (Cache)
+
+**Step 2.1**: Close and reopen FormConnection
+1. Close FormConnection dialog
+2. Reopen: Tools → DynamicsCrm DevKit → Connect
+3. Load "InteractiveTest" connection
+4. Click "Test Connection"
+
+**Expected Result**: ✅ NO browser opens, connection succeeds immediately using cached token
+
+**Step 2.2**: Verify logs (if available)
+**Expected Result**: ✅ Log shows "Token acquired silently from cache"
+
+**Step 2.3**: Test after cache expiry
+1. Wait for token to expire (or manually clear cache)
+2. Click "Test Connection" again
+
+**Expected Result**: ✅ Browser opens for re-authentication
+
+---
+
+#### Test Scenario 3: Custom ClientId
+
+**Step 3.1**: Register Azure AD App
+1. Azure Portal → Azure Active Directory → App registrations
+2. Click "New registration"
+3. Name: `DynamicsCrm DevKit Interactive Test`
+4. Redirect URI: `http://localhost`
+5. Click "Register"
+6. Copy Application (client) ID
+
+**Step 3.2**: Create connection with custom ClientId
+1. Create new Interactive connection
+2. Enter custom Client Id
+3. Click "Test Connection"
+
+**Expected Result**: ✅ Browser shows custom app name in consent screen
+
+---
+
+#### Test Scenario 4: MFA and Conditional Access
+
+**Step 4.1**: Configure conditional access (if available)
+1. Azure AD → Conditional Access
+2. Create policy requiring MFA for test app
+
+**Step 4.2**: Test connection
+1. Create Interactive connection
+2. Click "Test Connection"
+
+**Expected Result**: ✅ Browser prompts for MFA (SMS, authenticator app, etc.)
+
+**Step 4.3**: Complete MFA
+**Expected Result**: ✅ Authentication succeeds after MFA
+
+---
+
+#### Test Scenario 5: Token Cache Management
+
+**Step 5.1**: List cached tokens
+```powershell
+dir "$env:LOCALAPPDATA\DynamicsCrmDevKit\TokenCache" | Select Name, LastWriteTime
+```
+
+**Expected Result**: ✅ Shows all cached connections with timestamps
+
+**Step 5.2**: Clear token cache (CLI)
+```powershell
+DynamicsCrm.DevKit.Cli /connections:clearcache
+```
+
+**Expected Result**: ✅ Message "All cached tokens have been cleared"
+
+**Step 5.3**: Verify cache cleared
+```powershell
+dir "$env:LOCALAPPDATA\DynamicsCrmDevKit\TokenCache"
+```
+
+**Expected Result**: ✅ Folder is empty
+
+**Step 5.4**: Test connection after cache clear
+1. Load Interactive connection
+2. Click "Test Connection"
+
+**Expected Result**: ✅ Browser opens (cache miss)
+
+---
+
+#### Test Scenario 6: CLI Interactive Authentication
+
+**Step 6.1**: Test CLI with Interactive
+```powershell
+DynamicsCrm.DevKit.Cli `
+  /auth:Interactive `
+  /url:"https://test.crm.dynamics.com" `
+  /json:"DynamicsCrm.DevKit.Cli.json" `
+  /type:servers `
+  /profile:default
+```
+
+**Expected Result**: ✅ Browser opens for authentication
+
+**Step 6.2**: Complete authentication
+**Expected Result**: ✅ CLI shows "Interactive authentication successful!", deployment proceeds
+
+**Step 6.3**: Run same command again (cached)
+**Expected Result**: ✅ NO browser opens, uses cached token
+
+---
+
+#### Test Scenario 7: Account Picker
+
+**Step 7.1**: Sign in with multiple accounts
+1. Authenticate with account A
+2. Close connection
+3. Authenticate with account B (same connection)
+
+**Expected Result**: ✅ Browser shows account picker: "Pick an account"
+
+**Step 7.2**: Select different account
+**Expected Result**: ✅ Authentication succeeds with selected account
+
+---
+
+#### Test Scenario 8: Error Handling
+
+**Step 8.1**: Test with invalid URL
+1. Create connection with URL: `https://invalid.crm.dynamics.com`
+2. Click "Test Connection"
+
+**Expected Result**: ✅ Error message: "Organization not found" or similar
+
+**Step 8.2**: Cancel authentication
+1. Start authentication
+2. Close browser window during sign-in
+
+**Expected Result**: ✅ Error message: "Authentication cancelled"
+
+**Step 8.3**: Test with blocked browser
+1. Configure firewall to block browser
+2. Click "Test Connection"
+
+**Expected Result**: ✅ Error message: "Unable to open browser for authentication"
+
+---
+
+#### Manual Testing Checklist
+
+- [ ] **First auth**: Browser opens correctly
+- [ ] **MFA**: Multi-factor authentication works
+- [ ] **Consent**: App consent screen appears (first time)
+- [ ] **Success**: Connection succeeds after authentication
+- [ ] **Token cache**: Token saved to disk (encrypted)
+- [ ] **Silent auth**: Second attempt uses cache (no browser)
+- [ ] **Cache clear**: Clear cache command works
+- [ ] **Custom ClientId**: Custom app appears in browser
+- [ ] **Account picker**: Multiple accounts handled
+- [ ] **CLI**: Interactive auth works in CLI
+- [ ] **Error handling**: Clear error messages
+- [ ] **No password**: No password stored in JSON
+
+---
+
+**Document Version**: 1.1  
+**Last Updated**: 2025-12-13

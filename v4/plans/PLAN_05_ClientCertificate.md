@@ -243,3 +243,196 @@ Export-PfxCertificate -Cert $cert -FilePath $certPath -Password $password
 
 **Document Version**: 1.0  
 **Last Updated**: 2025-12-13
+
+## Testing
+
+### Option 1: Automated Testing (AI-Guided Unit Tests)
+
+**Test File**: `v4/DynamicsCrm.DevKit.Shared.Tests/ClientCertificateConnectionTests.cs`
+
+AI Prompt:
+```
+Create unit tests for ClientCertificate connection:
+
+1. Certificate Loading Tests:
+   - LoadCertificate from file (.pfx)
+   - LoadCertificate from Windows Certificate Store
+   - LoadCertificate with password
+   - LoadCertificate without password
+   - LoadCertificate not found (should throw)
+
+2. Certificate Validation Tests:
+   - ValidateCertificate with valid cert
+   - ValidateCertificate with expired cert
+   - ValidateCertificate without private key
+   - ValidateCertificate near expiry (30 days)
+
+3. Connection String Tests:
+   - BuildConnectionString with file path
+   - BuildConnectionString with thumbprint
+   - BuildConnectionString with store location/name
+
+Mock: X509Store, X509Certificate2
+```
+
+**Example Test**:
+```csharp
+[TestMethod]
+public void ValidateCertificate_ExpiredCert_ReturnsFalse()
+{
+    // Arrange
+    var expiredCert = new X509Certificate2();
+    // Set NotAfter to past date
+
+    // Act
+    var (isValid, error) = Helper.ValidateCertificate(expiredCert);
+
+    // Assert
+    Assert.IsFalse(isValid);
+    Assert.IsTrue(error.Contains("expired"));
+}
+```
+
+---
+
+### Option 2: Manual Testing (Step-by-Step Guide)
+
+#### Test Scenario 1: Create Test Certificate
+
+**Step 1.1**: Generate self-signed certificate
+```powershell
+$cert = New-SelfSignedCertificate `
+    -Subject "CN=DynamicsCrmDevKit Test" `
+    -CertStoreLocation "Cert:\CurrentUser\My" `
+    -KeySpec KeyExchange `
+    -NotAfter (Get-Date).AddYears(2)
+
+# Note the thumbprint
+$cert.Thumbprint
+```
+
+**Expected Result**: ✅ Certificate created in Personal store
+
+**Step 1.2**: Export certificate to file
+```powershell
+$certPath = "C:\temp\devkit-test.pfx"
+$password = ConvertTo-SecureString -String "P@ssw0rd" -Force -AsPlainText
+Export-PfxCertificate -Cert $cert -FilePath $certPath -Password $password
+```
+
+**Expected Result**: ✅ .pfx file created
+
+---
+
+#### Test Scenario 2: Azure AD App with Certificate
+
+**Step 2.1**: Upload certificate to Azure AD
+1. Azure Portal → App registrations → Your app
+2. Certificates & secrets → Certificates tab
+3. Upload certificate (.cer file - public key only)
+
+**Step 2.2**: Configure app permissions
+1. API permissions → Add "Dynamics CRM" / "user_impersonation"
+2. Grant admin consent
+
+---
+
+#### Test Scenario 3: Connection with Certificate File
+
+**Step 3.1**: Create connection in VSIX
+1. Type: `ClientCertificate`
+2. Select "Certificate File" option
+3. Browse to .pfx file
+4. Enter password
+5. Enter ClientId
+6. Click "Test Connection"
+
+**Expected Result**: ✅ Authentication succeeds (no browser)
+
+---
+
+#### Test Scenario 4: Connection with Certificate Store
+
+**Step 4.1**: Verify certificate in store
+```powershell
+Get-ChildItem Cert:\CurrentUser\My | Where-Object {$_.Subject -like "*DynamicsCrmDevKit*"}
+```
+
+**Step 4.2**: Create connection with thumbprint
+1. Type: `ClientCertificate`
+2. Select "Certificate Store" option
+3. Enter thumbprint (from Step 1.1)
+4. Store Location: `CurrentUser`
+5. Store Name: `My`
+6. Click "Test Connection"
+
+**Expected Result**: ✅ Authentication succeeds
+
+---
+
+#### Test Scenario 5: Certificate Validation
+
+**Step 5.1**: Test with expired certificate
+1. Create expired certificate (NotAfter in past)
+2. Try to create connection
+
+**Expected Result**: ✅ Error: "Certificate expired on [date]"
+
+**Step 5.2**: Test without private key
+1. Export certificate without private key
+2. Try to load
+
+**Expected Result**: ✅ Error: "Certificate does not have a private key"
+
+---
+
+#### Test Scenario 6: CLI with Certificate
+
+**Step 6.1**: Test with file
+```powershell
+DynamicsCrm.DevKit.Cli `
+  /auth:ClientCertificate `
+  /url:"https://test.crm.dynamics.com" `
+  /clientid:"app-guid" `
+  /cert:"C:\temp\devkit-test.pfx" `
+  /certpass:"P@ssw0rd" `
+  /json:"..." /type:servers /profile:prod
+```
+
+**Expected Result**: ✅ Authentication succeeds
+
+**Step 6.2**: Test with thumbprint
+```powershell
+DynamicsCrm.DevKit.Cli `
+  /auth:ClientCertificate `
+  /url:"https://test.crm.dynamics.com" `
+  /clientid:"app-guid" `
+  /certthumb:"ABC123..." `
+  /certstorelocation:CurrentUser `
+  /certstorename:My `
+  /json:"..." /type:servers /profile:prod
+```
+
+**Expected Result**: ✅ Authentication succeeds
+
+---
+
+#### Manual Testing Checklist
+
+- [ ] **Certificate creation**: Test cert created
+- [ ] **File export**: .pfx file created with password
+- [ ] **Store installation**: Cert in Windows store
+- [ ] **Azure AD**: Cert uploaded to app registration
+- [ ] **File-based auth**: Connection with .pfx works
+- [ ] **Store-based auth**: Connection with thumbprint works
+- [ ] **Expiry validation**: Expired cert rejected
+- [ ] **Private key**: Cert without key rejected
+- [ ] **Expiry warning**: Warning shown <30 days
+- [ ] **CLI file**: File-based CLI auth works
+- [ ] **CLI store**: Store-based CLI auth works
+- [ ] **Production**: Works in Azure/production
+
+---
+
+**Document Version**: 1.1  
+**Last Updated**: 2025-12-13

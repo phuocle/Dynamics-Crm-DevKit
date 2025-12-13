@@ -336,3 +336,359 @@ VSIX:
 
 **Document Version**: 1.0  
 **Last Updated**: 2025-12-13
+
+## Testing
+
+### Option 1: Automated Testing (AI-Guided Unit Tests)
+
+#### AI Guidance for Creating Unit Tests
+
+**Test File**: `v4/DynamicsCrm.DevKit.Shared.Tests/ClientSecretConnectionTests.cs`
+
+Create unit tests using this AI prompt:
+```
+Create comprehensive unit tests for ClientSecret connection enhancement:
+
+1. Validation Tests:
+   - ValidateClientSecret with valid GUID ClientId
+   - ValidateClientSecret with invalid GUID ClientId
+   - ValidateClientSecret with empty ClientSecret
+   - ValidateClientSecret with valid HTTPS URL
+   - ValidateClientSecret with HTTP URL (should fail)
+   - ValidateClientSecret with invalid URL format
+
+2. Connection String Building Tests:
+   - BuildConnectionString with ClientId and ClientSecret
+   - BuildConnectionString with TenantId
+   - BuildConnectionString with invalid ClientId (should throw)
+   - BuildConnectionString with empty secret (should throw)
+
+3. Expiry Tracking Tests:
+   - IsClientSecretNearExpiry when expiry is >30 days (returns false)
+   - IsClientSecretNearExpiry when expiry is <30 days (returns true)
+   - IsClientSecretNearExpiry when no expiry date (returns false)
+   - IsClientSecretNearExpiry when already expired (returns true)
+
+4. Metadata Tests:
+   - ClientSecretCreatedAt is set correctly
+   - ClientSecretExpiresAt is calculated correctly
+   - ClientSecretNearExpiry flag updates correctly
+
+Use MSTest framework. Mock external dependencies.
+```
+
+**Example Test Structure**:
+```csharp
+[TestClass]
+public class ClientSecretConnectionTests
+{
+    [TestMethod]
+    public void ValidateClientSecret_ValidGuid_ReturnsTrue()
+    {
+        // Arrange
+        var connection = new CrmConnection
+        {
+            Type = "ClientSecret",
+            Url = "https://test.crm.dynamics.com",
+            UserName = "12345678-1234-1234-1234-123456789012", // ClientId
+            Password = Helper.EncryptString("test-secret")
+        };
+
+        // Act
+        var (isValid, error) = Helper.ValidateClientSecret(connection);
+
+        // Assert
+        Assert.IsTrue(isValid);
+        Assert.IsNull(error);
+    }
+
+    [TestMethod]
+    public void ValidateClientSecret_InvalidGuid_ReturnsFalse()
+    {
+        // Arrange
+        var connection = new CrmConnection
+        {
+            Type = "ClientSecret",
+            Url = "https://test.crm.dynamics.com",
+            UserName = "not-a-guid",
+            Password = Helper.EncryptString("test-secret")
+        };
+
+        // Act
+        var (isValid, error) = Helper.ValidateClientSecret(connection);
+
+        // Assert
+        Assert.IsFalse(isValid);
+        Assert.IsNotNull(error);
+        Assert.IsTrue(error.Contains("GUID"));
+    }
+
+    [TestMethod]
+    public void IsClientSecretNearExpiry_30DaysOrLess_ReturnsTrue()
+    {
+        // Arrange
+        var connection = new CrmConnection
+        {
+            ClientSecretExpiresAt = DateTime.UtcNow.AddDays(25)
+        };
+
+        // Act
+        var result = connection.IsClientSecretNearExpiry();
+
+        // Assert
+        Assert.IsTrue(result);
+    }
+
+    [TestMethod]
+    public void BuildConnectionString_WithTenantId_IncludesTenantId()
+    {
+        // Arrange
+        var connection = new CrmConnection
+        {
+            Type = "ClientSecret",
+            Url = "https://test.crm.dynamics.com",
+            UserName = "12345678-1234-1234-1234-123456789012",
+            Password = Helper.EncryptString("secret"),
+            TenantId = "tenant-guid"
+        };
+
+        // Act
+        var connStr = Helper.BuildConnectionString(connection);
+
+        // Assert
+        Assert.IsTrue(connStr.Contains("TenantId=tenant-guid"));
+    }
+}
+```
+
+**Running the Tests**:
+```powershell
+dotnet test --filter "FullyQualifiedName~ClientSecretConnection"
+```
+
+---
+
+### Option 2: Manual Testing (Step-by-Step Guide)
+
+#### Prerequisites
+- Azure AD application with client secret created
+- Dataverse environment with app user configured
+- ClientId and Secret values ready
+
+#### Test Scenario 1: Azure AD App Registration
+
+**Step 1.1**: Create Azure AD App
+1. Azure Portal → Azure Active Directory → App registrations
+2. Click "New registration"
+3. Name: `DynamicsCrm DevKit ClientSecret Test`
+4. Supported account types: Choose based on needs
+5. Click "Register"
+6. **Copy Application (client) ID**: `12345678-1234-1234-1234-123456789012`
+
+**Step 1.2**: Create Client Secret
+1. Go to "Certificates & secrets"
+2. Click "New client secret"
+3. Description: `DevKit Test Secret`
+4. Expires: 6 months (for testing)
+5. Click "Add"
+6. **IMMEDIATELY COPY the secret value** (shown only once!)
+7. **Note expiration date**
+
+**Expected Result**: ✅ ClientId and Secret ready for use
+
+---
+
+#### Test Scenario 2: Dataverse App User Setup
+
+**Step 2.1**: Create Application User
+1. Power Platform Admin Center → Select environment
+2. Settings → Users + permissions → Application users
+3. Click "New app user"
+4. Select your app registration
+5. Select Business Unit
+6. Assign security roles (e.g., System Administrator for testing)
+7. Click "Create"
+
+**Expected Result**: ✅ App user created and has permissions
+
+---
+
+#### Test Scenario 3: Connection with ClientSecret (VSIX)
+
+**Step 3.1**: Create new connection
+1. Visual Studio → Tools → DynamicsCrm DevKit → Connect
+2. Click "New Connection"
+3. Fill in:
+   - Name: `ClientSecretTest`
+   - Type: `ClientSecret`
+   - URL: `https://test.crm.dynamics.com`
+   - Username: `12345678-1234-1234-1234-123456789012` (ClientId)
+   - Password: `your-secret-value`
+4. Click "Test Connection"
+
+**Expected Result**: ✅ Connection succeeds (no browser prompt, direct auth)
+
+**Step 3.2**: Verify connection string
+```powershell
+notepad DynamicsCrm.DevKit.json
+```
+
+**Expected Result**: ✅ Connection includes ClientSecret type:
+```json
+{
+  "Name": "ClientSecretTest",
+  "Type": "ClientSecret",
+  "Url": "https://test.crm.dynamics.com",
+  "UserName": "12345678-1234-1234-1234-123456789012",
+  "Password": "encrypted-secret"
+}
+```
+
+---
+
+#### Test Scenario 4: Validation Testing
+
+**Step 4.1**: Test with invalid ClientId
+1. Create new connection
+2. Enter invalid GUID in Username field: `not-a-valid-guid`
+3. Enter valid secret
+4. Click "Test Connection"
+
+**Expected Result**: ✅ Error message: "ClientId must be a valid GUID"
+
+**Step 4.2**: Test with empty secret
+1. Create new connection
+2. Enter valid ClientId
+3. Leave password empty
+4. Click "Test Connection"
+
+**Expected Result**: ✅ Error message: "ClientSecret cannot be empty"
+
+**Step 4.3**: Test with HTTP URL (not HTTPS)
+1. Create new connection
+2. Enter URL: `http://test.crm.dynamics.com` (HTTP not HTTPS)
+3. Click "Test Connection"
+
+**Expected Result**: ✅ Error message: "URL must use HTTPS protocol"
+
+---
+
+#### Test Scenario 5: Secret Expiration Warning
+
+**Step 5.1**: Set expiration date (simulate near expiry)
+1. Manually edit DynamicsCrm.DevKit.json
+2. Add `ClientSecretExpiresAt` with date 25 days from now:
+```json
+{
+  "Name": "ClientSecretTest",
+  "ClientSecretExpiresAt": "2025-01-07T00:00:00Z"
+}
+```
+3. Save file
+
+**Step 5.2**: Load connection in VSIX
+1. Open FormConnection
+2. Load "ClientSecretTest" connection
+
+**Expected Result**: ✅ Warning dialog appears:
+```
+"Client Secret expires in 25 days. Please rotate the secret in Azure Portal."
+```
+
+**Step 5.3**: Test with expired secret
+1. Set `ClientSecretExpiresAt` to past date
+2. Load connection
+
+**Expected Result**: ✅ Warning shows "Client Secret has expired"
+
+---
+
+#### Test Scenario 6: CLI with ClientSecret
+
+**Step 6.1**: Test basic ClientSecret auth
+```powershell
+DynamicsCrm.DevKit.Cli `
+  /auth:ClientSecret `
+  /url:"https://test.crm.dynamics.com" `
+  /clientid:"12345678-1234-1234-1234-123456789012" `
+  /clientsecret:"your-secret-value" `
+  /json:"DynamicsCrm.DevKit.Cli.json" `
+  /type:servers `
+  /profile:default
+```
+
+**Expected Result**: ✅ Authentication succeeds, deployment proceeds
+
+**Step 6.2**: Test with TenantId
+```powershell
+DynamicsCrm.DevKit.Cli `
+  /auth:ClientSecret `
+  /url:"https://test.crm.dynamics.com" `
+  /clientid:"12345678-1234-1234-1234-123456789012" `
+  /clientsecret:"your-secret-value" `
+  /tenantid:"tenant-guid" `
+  /json:"..." /type:servers /profile:default
+```
+
+**Expected Result**: ✅ Auth restricted to specified tenant
+
+**Step 6.3**: Test with invalid ClientId
+```powershell
+DynamicsCrm.DevKit.Cli `
+  /auth:ClientSecret `
+  /url:"https://test.crm.dynamics.com" `
+  /clientid:"invalid-guid" `
+  /clientsecret:"secret" `
+  /json:"..." /type:servers /profile:default
+```
+
+**Expected Result**: ✅ Error message displayed before attempting connection
+
+---
+
+#### Test Scenario 7: CI/CD Pipeline Integration
+
+**Step 7.1**: Azure DevOps Pipeline
+```yaml
+steps:
+- task: PowerShell@2
+  env:
+    CLIENT_SECRET: $(ClientSecretVariable)  # Stored in pipeline variables
+  inputs:
+    targetType: 'inline'
+    script: |
+      DynamicsCrm.DevKit.Cli `
+        /auth:ClientSecret `
+        /url:"$(DataverseUrl)" `
+        /clientid:"$(ClientId)" `
+        /clientsecret:$env:CLIENT_SECRET `
+        /json:"DynamicsCrm.DevKit.Cli.json" `
+        /type:servers `
+        /profile:production
+```
+
+**Expected Result**: ✅ Pipeline runs successfully, no interactive prompts
+
+---
+
+#### Manual Testing Checklist
+
+- [ ] **Azure AD**: App registration created successfully
+- [ ] **Dataverse**: App user configured with permissions
+- [ ] **VSIX**: Connection with ClientSecret works
+- [ ] **Validation**: Invalid ClientId rejected
+- [ ] **Validation**: Empty secret rejected
+- [ ] **Validation**: HTTP URL rejected
+- [ ] **Expiration**: Warning shown <30 days
+- [ ] **Expiration**: Error shown if expired
+- [ ] **CLI**: Basic ClientSecret auth works
+- [ ] **CLI**: TenantId restriction works
+- [ ] **CLI**: Validation errors shown clearly
+- [ ] **CI/CD**: Pipeline integration successful
+- [ ] **Security**: Secret not visible in logs
+- [ ] **Security**: Secret encrypted in JSON
+
+---
+
+**Document Version**: 1.1  
+**Last Updated**: 2025-12-13
