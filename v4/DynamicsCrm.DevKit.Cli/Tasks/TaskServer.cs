@@ -781,17 +781,91 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         }
         private async Task LoadAllObjectTypeCodeAsync()
         {
-            var request = new RetrieveAllEntitiesRequest
+            // OPTIMIZATION: Only load ObjectTypeCodes for entities referenced in the deployment
+            // instead of loading ALL entities in the organization (which can be 2000+ entities)
+            var requiredEntities = GetRequiredEntitiesForDeployment();
+            
+            if (requiredEntities.Count == 0)
             {
-                EntityFilters = EntityFilters.Entity,
-                RetrieveAsIfPublished = true
-            };
-            XrmHelper.COUNT_ExecuteAsync++;
-            var response = (RetrieveAllEntitiesResponse)await ServiceClient.ExecuteAsync(request);
+                // No entities referenced, nothing to load
+                _ObjectTypeCodesCache.Clear();
+                return;
+            }
+            
+            // Use ExecuteMultiple to batch retrieve only the required entities
+            await LoadObjectTypeCodesForEntitiesAsync(requiredEntities);
+        }
+        
+        private HashSet<string> GetRequiredEntitiesForDeployment()
+        {
+            var entities = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            
+            // Scan all plugin/workflow attributes to find referenced entities
+            foreach (var list in _AttributesCache)
+            {
+                foreach (var attribute in list.Value)
+                {
+                    if (!string.IsNullOrEmpty(attribute.EntityLogicalName) && 
+                        attribute.EntityLogicalName.ToLower() != "none")
+                    {
+                        entities.Add(attribute.EntityLogicalName.ToLower());
+                    }
+                }
+            }
+            
+            return entities;
+        }
+        
+        private async Task LoadObjectTypeCodesForEntitiesAsync(HashSet<string> entityLogicalNames)
+        {
             _ObjectTypeCodesCache.Clear();
-            foreach(var item in response.EntityMetadata)
+            
+            if (entityLogicalNames == null || entityLogicalNames.Count == 0)
+                return;
+            
+            var entityList = entityLogicalNames.ToList();
+            var batches = (int)Math.Ceiling((double)entityList.Count / PACK);
+            
+            for (int i = 0; i < batches; i++)
             {
-                if (item.ObjectTypeCode != null) _ObjectTypeCodesCache.Add(new KeyValuePair<string, int>(item.LogicalName, item.ObjectTypeCode.Value));
+                var batch = entityList.Skip(i * PACK).Take(PACK).ToList();
+                
+                var request = new ExecuteMultipleRequest()
+                {
+                    Settings = new ExecuteMultipleSettings()
+                    {
+                        ContinueOnError = true,
+                        ReturnResponses = true
+                    },
+                    Requests = new OrganizationRequestCollection()
+                };
+                
+                foreach (var logicalName in batch)
+                {
+                    request.Requests.Add(new RetrieveEntityRequest
+                    {
+                        EntityFilters = EntityFilters.Entity,
+                        LogicalName = logicalName,
+                        RetrieveAsIfPublished = true
+                    });
+                }
+                
+                XrmHelper.COUNT_ExecuteAsync++;
+                var response = (ExecuteMultipleResponse)await ServiceClient.ExecuteAsync(request);
+                
+                foreach (var result in response.Responses)
+                {
+                    if (result.Fault == null)
+                    {
+                        var entityMetadata = ((RetrieveEntityResponse)result.Response).EntityMetadata;
+                        if (entityMetadata.ObjectTypeCode != null)
+                        {
+                            _ObjectTypeCodesCache.Add(new KeyValuePair<string, int>(
+                                entityMetadata.LogicalName, 
+                                entityMetadata.ObjectTypeCode.Value));
+                        }
+                    }
+                }
             }
         }
         private async Task LoadAll_SdkMessages_SdkMessageFilters_Async()
