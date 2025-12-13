@@ -1,31 +1,31 @@
 ﻿# DEVKIT1012: Consider Using ITracingService in Plug-ins
 
-## Description
+## 📖 Description
 
 This analyzer recommends using `ITracingService` in plug-in classes. Tracing is essential for debugging and monitoring plugin execution in Dynamics 365 / Dataverse.
 
-## Microsoft Best Practice
+## 🎯 Microsoft Best Practice
 
 📚 **[Use ITracingService in Plug-ins](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/use-itracingservice-plugins)**
 
 > Use ITracingService in plug-ins to write diagnostic information that helps debug and monitor your plug-ins.
 
-## Why This Matters
+## ⚠️ Why This Matters
 
 Without tracing:
 
-1. **Difficult Debugging**: Production issues are hard to diagnose
-2. **No Execution Visibility**: Can't see what your plugin is doing
-3. **Slow Incident Resolution**: Takes longer to identify root cause
-4. **Missing Audit Trail**: No record of plugin behavior
+1. **🐛 Difficult Debugging**: Production issues are hard to diagnose
+2. **👁️ No Execution Visibility**: Can't see what your plugin is doing
+3. **⏱️ Slow Incident Resolution**: Takes longer to identify root cause
+4. **📝 Missing Audit Trail**: No record of plugin behavior
 
-## Detection
+## 🔍 Detection
 
 The analyzer reports when:
 - A class implements `IPlugin` interface
 - The class doesn't contain any reference to `ITracingService`
 
-## Code Examples
+## 💻 Code Examples
 
 ### ❌ Code Without Tracing
 
@@ -74,7 +74,7 @@ public class AccountPlugin : IPlugin
 }
 ```
 
-## How to Fix
+## 🔧 How to Fix
 
 1. **Get ITracingService**: Retrieve from the service provider
 2. **Add Trace Calls**: Log entry/exit, key variables, and decisions
@@ -109,7 +109,7 @@ To view trace logs in Dynamics 365:
 
 > **Note**: Tracing must be enabled in the environment (Plug-in Trace Log Setting).
 
-## Suppression
+## 🔕 Suppression
 
 If you intentionally don't want tracing (e.g., a minimal helper plugin):
 
@@ -131,7 +131,9 @@ dotnet_diagnostic.DEVKIT1012.severity = none
 
 ---
 
-## Rule Properties
+---
+
+## 📊 Rule Properties
 
 | Property | Value |
 |----------|-------|

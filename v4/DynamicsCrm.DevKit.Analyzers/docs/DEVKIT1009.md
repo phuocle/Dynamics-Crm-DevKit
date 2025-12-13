@@ -1,25 +1,25 @@
 ﻿# DEVKIT1009: Set KeepAlive to False for External HTTP Calls
 
-## Description
+## 📖 Description
 
 This analyzer warns when using `HttpClient` or `WebRequest` in plugins without setting KeepAlive to false. The sandbox environment has connection pool limitations that can cause issues when KeepAlive is enabled.
 
-## Microsoft Best Practice
+## 🎯 Microsoft Best Practice
 
 📚 **[Set KeepAlive to false when interacting with external hosts in a plug-in](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/set-keepalive-false-interacting-external-hosts-plugin)**
 
 > When you interact with an external host from a plug-in, the KeepAlive property on the underlying connection must be set to false. Failure to set this property can cause intermittent connection failures.
 
-## Why This Matters
+## ⚠️ Why This Matters
 
 Using KeepAlive (default behavior) in plugins causes:
 
-1. **Connection Pool Issues**: The sandbox environment has limited connection pooling capabilities
-2. **Intermittent Failures**: Connections may be dropped unexpectedly, causing sporadic errors
-3. **Resource Leaks**: Kept-alive connections may not be properly cleaned up
-4. **Timeout Errors**: Stale connections in the pool can cause unexpected timeouts
+1. **🔌 Connection Pool Issues**: The sandbox environment has limited connection pooling capabilities
+2. **⚠️ Intermittent Failures**: Connections may be dropped unexpectedly, causing sporadic errors
+3. **💧 Resource Leaks**: Kept-alive connections may not be properly cleaned up
+4. **⏱️ Timeout Errors**: Stale connections in the pool can cause unexpected timeouts
 
-## Detected Patterns
+## 📋 Detected Patterns
 
 | Pattern | Issue |
 |---------|-------|
@@ -27,13 +27,13 @@ Using KeepAlive (default behavior) in plugins causes:
 | `new WebRequest()` | KeepAlive is true by default |
 | `WebRequest.Create()` | Returns request with KeepAlive = true |
 
-## Detection
+## 🔍 Detection
 
 The analyzer flags instantiation of HTTP client types within:
 - Classes implementing `Microsoft.Xrm.Sdk.IPlugin`
 - Classes inheriting from `System.Activities.CodeActivity`
 
-## Code Examples
+## 💻 Code Examples
 
 ### ❌ Bad Code
 
@@ -77,7 +77,7 @@ public class MyPlugin : IPlugin
 }
 ```
 
-## How to Fix
+## 🔧 How to Fix
 
 1. **For HttpClient**: Set `DefaultRequestHeaders.ConnectionClose = true` after creating the client
 2. **For WebRequest/HttpWebRequest**: Set `KeepAlive = false` on the request object
@@ -99,7 +99,7 @@ public class MyPlugin : IPlugin
   var response = request.GetResponse();
 ```
 
-## Suppression
+## 🔕 Suppression
 
 If you have a legitimate need to suppress this warning:
 
@@ -121,7 +121,9 @@ dotnet_diagnostic.DEVKIT1009.severity = suggestion
 
 ---
 
-## Rule Properties
+---
+
+## 📊 Rule Properties
 
 | Property | Value |
 |----------|-------|

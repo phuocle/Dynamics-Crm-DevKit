@@ -1,25 +1,25 @@
 ﻿# DEVKIT1013: Avoid Registering Plugins on Retrieve/RetrieveMultiple
 
-## Description
+## 📖 Description
 
 This analyzer warns when a plugin is registered on `Retrieve` or `RetrieveMultiple` messages. These messages are called very frequently and plugins on them can significantly impact system performance.
 
-## Microsoft Best Practice
+## 🎯 Microsoft Best Practice
 
 📚 **[Limit the registration of plug-ins for Retrieve and RetrieveMultiple messages](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/limit-registration-plugins-retrieve-retrievemultiple)**
 
 > Adding synchronous plug-in logic to the Retrieve and RetrieveMultiple message events can result in slowness. Consider using alternate design approaches if you require logic to run during these messages.
 
-## Why This Matters
+## ⚠️ Why This Matters
 
 Plugins on Retrieve/RetrieveMultiple messages cause:
 
-1. **Frequent Execution**: These messages are called constantly during normal application use
-2. **UI Slowdown**: Every form load, lookup, and view triggers these messages
-3. **Cascading Impact**: Slow retrievals affect all parts of the system
-4. **Scalability Issues**: Performance degrades as user count increases
+1. **⚡ Frequent Execution**: These messages are called constantly during normal application use
+2. **🖥️ UI Slowdown**: Every form load, lookup, and view triggers these messages
+3. **🔄 Cascading Impact**: Slow retrievals affect all parts of the system
+4. **📈 Scalability Issues**: Performance degrades as user count increases
 
-## Performance Impact
+## 📊 Performance Impact
 
 | Operation | Retrieve/RetrieveMultiple calls |
 |-----------|-------------------------------|
@@ -28,13 +28,13 @@ Plugins on Retrieve/RetrieveMultiple messages cause:
 | Lookup search | RetrieveMultiple for each keystroke |
 | Related records grid | RetrieveMultiple for each grid |
 
-## Detection
+## 🔍 Detection
 
 The analyzer flags `[CrmPluginRegistration]` attributes where:
 - The message parameter is `"Retrieve"`
 - The message parameter is `"RetrieveMultiple"`
 
-## Code Examples
+## 💻 Code Examples
 
 ### ❌ Bad Code
 
@@ -92,7 +92,7 @@ public class CalculateAccountRatingPlugin : IPlugin
 | External data | Use Virtual Entities |
 | UI logic | Use JavaScript on form load |
 
-## How to Fix
+## 🔧 How to Fix
 
 1. **Pre-calculate Values**: Store calculated values during Create/Update instead of computing during Retrieve
 2. **Use Security Features**: Row-level security, column security profiles, or field-level security
@@ -109,7 +109,7 @@ public class CalculateAccountRatingPlugin : IPlugin
 + public class PreCalculateAccountPlugin : IPlugin
 ```
 
-## Suppression
+## 🔕 Suppression
 
 If you have a legitimate need for Retrieve/RetrieveMultiple plugins:
 
@@ -129,7 +129,9 @@ dotnet_diagnostic.DEVKIT1013.severity = none
 
 ---
 
-## Rule Properties
+---
+
+## 📊 Rule Properties
 
 | Property | Value |
 |----------|-------|

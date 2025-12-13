@@ -1,24 +1,24 @@
 ﻿# DEVKIT1016: Avoid Retrieving Unpublished Metadata
 
-## Description
+## 📖 Description
 
 This analyzer detects usage of `RetrieveAsIfPublished = true` on metadata requests. Retrieving unpublished metadata adds overhead to processing and can return metadata that users might not expect.
 
-## Microsoft Best Practice
+## 🎯 Microsoft Best Practice
 
 📚 **[Retrieve published metadata](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/work-with-metadata/retrieve-published-metadata)**
 
 > Retrieving unpublished metadata not only adds overhead to processing the request itself, performing more slowly, it could also return metadata that the requestor doesn't expect.
 
-## Why This Matters
+## ⚠️ Why This Matters
 
 When you retrieve unpublished metadata:
 
-1. **Slower Performance**: The query has more overhead
-2. **User Confusion**: Returns customizations that haven't been published yet
-3. **Unexpected Results**: Developers may see changes that aren't visible to users
+1. **⚡ Slower Performance**: The query has more overhead
+2. **😕 User Confusion**: Returns customizations that haven't been published yet
+3. **⚠️ Unexpected Results**: Developers may see changes that aren't visible to users
 
-## Affected Request Types
+## 📋 Affected Request Types
 
 | Request Type | Namespace |
 |--------------|-----------|
@@ -30,7 +30,7 @@ When you retrieve unpublished metadata:
 | `RetrieveRelationshipRequest` | Microsoft.Xrm.Sdk.Messages |
 | `RetrieveEntityKeyRequest` | Microsoft.Xrm.Sdk.Messages |
 
-## Code Examples
+## 💻 Code Examples
 
 ### ❌ Bad Code
 
@@ -90,7 +90,7 @@ public class MetadataEditorService
 }
 ```
 
-## Suppression
+## 🔕 Suppression
 
 If you're building a metadata editor and need unpublished data:
 
@@ -109,7 +109,9 @@ dotnet_diagnostic.DEVKIT1016.severity = none
 
 ---
 
-## Rule Properties
+---
+
+## 📊 Rule Properties
 
 | Property | Value |
 |----------|-------|

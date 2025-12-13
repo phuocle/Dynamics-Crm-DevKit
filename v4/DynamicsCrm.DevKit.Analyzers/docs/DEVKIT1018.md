@@ -1,19 +1,19 @@
 ﻿# DEVKIT1018: Avoid File/IO Operations in Plug-ins
 
-## Description
+## 📖 Description
 
 This analyzer detects usage of `System.IO` file operations in plugin and workflow activity code. File system access is blocked in the Dataverse sandbox environment and will throw a `SecurityException` at runtime.
 
-## Why This Matters
+## ⚠️ Why This Matters
 
 File I/O operations in plugins and workflows:
 
-1. **Will Fail at Runtime**: Sandbox blocks all file system access with SecurityException
-2. **Cannot Be Tested Locally**: Code may work in development but fail when deployed
-3. **No File System Access**: Plugins run in isolated sandbox without disk access
-4. **Security Risk**: Allowing file access would create data exfiltration vulnerabilities
+1. **💥 Will Fail at Runtime**: Sandbox blocks all file system access with SecurityException
+2. **🧪 Cannot Be Tested Locally**: Code may work in development but fail when deployed
+3. **🚫 No File System Access**: Plugins run in isolated sandbox without disk access
+4. **🔒 Security Risk**: Allowing file access would create data exfiltration vulnerabilities
 
-## Detection
+## 🔍 Detection
 
 The analyzer flags usage of these System.IO types and methods within IPlugin or CodeActivity classes:
 
@@ -35,7 +35,7 @@ The analyzer flags usage of these System.IO types and methods within IPlugin or 
 - `Directory.CreateDirectory()`, `Directory.Delete()`, `Directory.Exists()`
 - `Directory.GetFiles()`, `Directory.GetDirectories()`
 
-## Code Examples
+## 💻 Code Examples
 
 ### ❌ Bad Code
 
@@ -111,7 +111,7 @@ public class MyPlugin : IPlugin
 | Data export | Azure Blob via external service |
 | File attachments | Notes (annotation) or attachment entities |
 
-## Suppression
+## 🔕 Suppression
 
 This rule should generally NOT be suppressed since the code will fail at runtime. However, if you have validly shared code:
 
@@ -135,7 +135,9 @@ dotnet_diagnostic.DEVKIT1018.severity = none
 
 ---
 
-## Rule Properties
+---
+
+## 📊 Rule Properties
 
 | Property | Value |
 |----------|-------|

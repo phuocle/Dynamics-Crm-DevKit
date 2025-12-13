@@ -1,32 +1,32 @@
 ﻿# DEVKIT1011: Use InvalidPluginExecutionException for Errors
 
-## Description
+## 📖 Description
 
 This analyzer warns when throwing exceptions other than `InvalidPluginExecutionException` in plugins or workflow activities. Only `InvalidPluginExecutionException` is properly handled by the platform and displays meaningful error messages to users.
 
-## Microsoft Best Practice
+## 🎯 Microsoft Best Practice
 
 📚 **[Use InvalidPluginExecutionException in plug-ins and workflow activities](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/use-invalidpluginexecutionexception-plugin-workflow-activities)**
 
 > Use InvalidPluginExecutionException when raising errors within the context of a plug-in or workflow activity. The platform catches this exception type and displays the message to the user.
 
-## Why This Matters
+## ⚠️ Why This Matters
 
 Using other exception types causes:
 
-1. **Generic Error Messages**: Users see unhelpful "An error occurred" messages
-2. **Lost Error Details**: Specific error information is not shown to users
-3. **Poor Debugging**: Stack traces may not be logged properly
-4. **Inconsistent Behavior**: Different exception types are handled differently
+1. **😞 Generic Error Messages**: Users see unhelpful "An error occurred" messages
+2. **📉 Lost Error Details**: Specific error information is not shown to users
+3. **🐛 Poor Debugging**: Stack traces may not be logged properly
+4. **⚠️ Inconsistent Behavior**: Different exception types are handled differently
 
-## Detection
+## 🔍 Detection
 
 The analyzer flags `throw` statements within plugins or workflows where:
 - The exception type is not `InvalidPluginExecutionException`
 - The exception does not derive from `InvalidPluginExecutionException`
 - Re-throw statements (`throw;`) are allowed
 
-## Code Examples
+## 💻 Code Examples
 
 ### ❌ Bad Code
 
@@ -75,7 +75,7 @@ public class MyPlugin : IPlugin
 }
 ```
 
-## How to Fix
+## 🔧 How to Fix
 
 1. **Replace Exception Type**: Change all `throw new Exception()` to `throw new InvalidPluginExecutionException()`
 2. **Preserve Original Exception**: Use the inner exception overload when catching and re-throwing
@@ -96,7 +96,7 @@ public class MyPlugin : IPlugin
   }
 ```
 
-## Suppression
+## 🔕 Suppression
 
 If you have a legitimate need to suppress this warning:
 
@@ -115,7 +115,9 @@ dotnet_diagnostic.DEVKIT1011.severity = suggestion
 
 ---
 
-## Rule Properties
+---
+
+## 📊 Rule Properties
 
 | Property | Value |
 |----------|-------|
