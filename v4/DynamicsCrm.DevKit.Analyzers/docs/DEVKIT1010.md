@@ -1,16 +1,16 @@
 ﻿# DEVKIT1010: Set Timeout for External HTTP Calls
 
-## Description
+## 📖 Description
 
 This analyzer warns when using `HttpClient` in plugins without setting an explicit Timeout. The default HttpClient timeout is 100 seconds, which may exceed the plugin timeout limit (2 minutes for synchronous plugins).
 
-## Microsoft Best Practice
+## 🎯 Microsoft Best Practice
 
 📚 **[Set Timeout when making external calls from a plug-in](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/set-timeout-for-external-calls-from-plug-ins)**
 
 > When making external HTTP calls from plug-ins, set an explicit timeout value to prevent the call from blocking indefinitely. External service delays can cause plugin timeouts.
 
-## Why This Matters
+## ⚠️ Why This Matters
 
 Not setting a timeout for external HTTP calls causes:
 
@@ -26,13 +26,13 @@ Not setting a timeout for external HTTP calls causes:
 | `new HttpClient()` | Default timeout is 100 seconds |
 | HttpClient without `.Timeout` set | May exceed plugin timeout |
 
-## Detection
+## 🔍 Detection
 
 The analyzer flags instantiation of HttpClient within:
 - Classes implementing `Microsoft.Xrm.Sdk.IPlugin`
 - Classes inheriting from `System.Activities.CodeActivity`
 
-## Code Examples
+## 💻 Code Examples
 
 ### ❌ Bad Code
 
@@ -68,7 +68,7 @@ public class MyPlugin : IPlugin
 }
 ```
 
-## How to Fix
+## 🔧 How to Fix
 
 1. **Set Explicit Timeout**: Always set `HttpClient.Timeout` to a reasonable value
 2. **Use Short Timeouts**: 15-30 seconds is recommended for plugin scenarios
@@ -95,7 +95,7 @@ public class MyPlugin : IPlugin
 
 > **Note:** Synchronous plugins have a 2-minute timeout. Leave buffer time for other plugin logic.
 
-## Suppression
+## 🔕 Suppression
 
 If you have a legitimate need to suppress this warning:
 
@@ -117,7 +117,9 @@ dotnet_diagnostic.DEVKIT1010.severity = suggestion
 
 ---
 
-## Rule Properties
+---
+
+## 📊 Rule Properties
 
 | Property | Value |
 |----------|-------|

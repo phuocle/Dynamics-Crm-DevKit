@@ -1,19 +1,19 @@
 ﻿# DEVKIT1014: Avoid AppDomain Event Registration in Plug-ins
 
-## Description
+## 📖 Description
 
 This analyzer detects subscription to `AppDomain` events within plugin or workflow activity classes. Plugin instances are cached and reused, so subscribing to AppDomain events can cause memory leaks and unexpected behavior.
 
-## Why This Matters
+## ⚠️ Why This Matters
 
 When you subscribe to AppDomain events in plugins:
 
-1. **Memory Leaks**: Event handlers are never removed, causing memory to accumulate
-2. **Multiple Subscriptions**: Each plugin execution might add another subscription
-3. **Unexpected Behavior**: Event handlers from one execution might interfere with another
-4. **Platform Instability**: Can affect the entire AppDomain, not just your plugin
+1. **💧 Memory Leaks**: Event handlers are never removed, causing memory to accumulate
+2. **⚡ Multiple Subscriptions**: Each plugin execution might add another subscription
+3. **⚠️ Unexpected Behavior**: Event handlers from one execution might interfere with another
+4. **🔧 Platform Instability**: Can affect the entire AppDomain, not just your plugin
 
-## Problematic Events
+## 📋 Problematic Events
 
 | Event | Risk |
 |-------|------|
@@ -26,7 +26,7 @@ When you subscribe to AppDomain events in plugins:
 | `DomainUnload` | High - runs on domain shutdown |
 | `ProcessExit` | High - runs on process exit |
 
-## Code Examples
+## 💻 Code Examples
 
 ### ❌ Bad Code
 
@@ -78,14 +78,14 @@ public class GoodPlugin : IPlugin
 }
 ```
 
-## How to Fix
+## 🔧 How to Fix
 
 1. **Remove AppDomain event subscriptions** from plugin code
 2. **Use try-catch blocks** for exception handling
 3. **Use ITracingService** for logging
 4. **Throw InvalidPluginExecutionException** for errors
 
-## Suppression
+## 🔕 Suppression
 
 In rare cases where you need this (not recommended):
 
@@ -106,7 +106,9 @@ dotnet_diagnostic.DEVKIT1014.severity = none
 
 ---
 
-## Rule Properties
+---
+
+## 📊 Rule Properties
 
 | Property | Value |
 |----------|-------|

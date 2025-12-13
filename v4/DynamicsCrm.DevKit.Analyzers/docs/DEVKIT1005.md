@@ -1,25 +1,25 @@
 ﻿# DEVKIT1005: EntityReference Maybe Null
 
-## Description
+## 📖 Description
 
 This analyzer flags potential `NullReferenceException` when accessing `Id`, `Name`, or `LogicalName` properties of an `EntityReference` that may be null. Lookup fields in Dynamics 365 can return null if no value is set.
 
-## Microsoft Best Practice
+## 🎯 Microsoft Best Practice
 
 📚 **[Entity class documentation](https://learn.microsoft.com/en-us/dotnet/api/microsoft.xrm.sdk.entity)**
 
 > Always check if an EntityReference is null before accessing its properties. Lookup fields are nullable by nature and attempting to access properties on null references will cause runtime exceptions.
 
-## Why This Matters
+## ⚠️ Why This Matters
 
 Accessing properties on a null EntityReference causes:
 
-1. **Runtime Exceptions**: `NullReferenceException` crashes your plugin
-2. **Failed Transactions**: The entire operation may be rolled back
-3. **Poor User Experience**: Users see cryptic error messages
-4. **Difficult Debugging**: Stack traces don't always clearly indicate the null field
+1. **💥 Runtime Exceptions**: `NullReferenceException` crashes your plugin
+2. **🔄 Failed Transactions**: The entire operation may be rolled back
+3. **😞 Poor User Experience**: Users see cryptic error messages
+4. **🔍 Difficult Debugging**: Stack traces don't always clearly indicate the null field
 
-## Common Scenarios
+## 📋 Common Scenarios
 
 | Scenario | Risk Level |
 |----------|------------|
@@ -28,14 +28,14 @@ Accessing properties on a null EntityReference causes:
 | System fields that may be empty | Medium |
 | Cleared lookup values | High |
 
-## Detection
+## 🔍 Detection
 
 The analyzer flags direct property access on `GetAttributeValue<EntityReference>()`:
 - `.Id` property access
 - `.Name` property access
 - `.LogicalName` property access
 
-## Code Examples
+## 💻 Code Examples
 
 ### ❌ Bad Code
 
@@ -71,20 +71,20 @@ var ownerId = entity.GetAttributeValue<EntityReference>("ownerid")?.Id ?? Guid.E
 var ownerName = entity.GetAttributeValue<EntityReference>("ownerid")?.Name ?? "Unknown";
 ```
 
-## How to Fix
+## 🔧 How to Fix
 
-1. **Add Null-Conditional Operator**: Change `.Id` to `?.Id` which returns `Guid?`
-2. **Use Explicit Null Check**: Store reference in variable and check before accessing
-3. **Provide Default Value**: Use null-coalescing operator for fallback values
+1. **➕ Add Null-Conditional Operator**: Change `.Id` to `?.Id` which returns `Guid?`
+2. **✅ Use Explicit Null Check**: Store reference in variable and check before accessing
+3. **🔄 Provide Default Value**: Use null-coalescing operator for fallback values
 
-### Before and After
+### 🔄 Before and After
 
 ```diff
 - var id = entity.GetAttributeValue<EntityReference>("lookupfield").Id;
 + var id = entity.GetAttributeValue<EntityReference>("lookupfield")?.Id;
 ```
 
-## Suppression
+## 🔕 Suppression
 
 If you have a legitimate need to suppress this warning:
 
@@ -103,7 +103,7 @@ dotnet_diagnostic.DEVKIT1005.severity = warning
 
 ---
 
-## Rule Properties
+## 📊 Rule Properties
 
 | Property | Value |
 |----------|-------|

@@ -1,25 +1,25 @@
 ﻿# DEVKIT1003: Plugin Image Validation
 
-## Description
+## 📖 Description
 
 This analyzer validates that plugin image configurations (Pre-Images and Post-Images) are compatible with the message and stage. The Dynamics 365 platform has specific rules about when images are available, and incorrect configurations will cause runtime errors.
 
-## Microsoft Best Practice
+## 🎯 Microsoft Best Practice
 
 📚 **[Understand the execution context](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/understand-the-data-context)**
 
 > Pre-entity images contain data as it existed before the operation. Post-entity images contain data as it exists after the operation. Not all operations support both types of images.
 
-## Why This Matters
+## ⚠️ Why This Matters
 
 Configuring unavailable images causes:
 
-1. **Runtime Errors**: Plugins will fail at execution time
-2. **Deployment Failures**: Solution import may fail with invalid step configurations
-3. **Debugging Difficulty**: Errors may not be obvious until runtime
-4. **Data Integrity Issues**: Failed plugins may leave data in inconsistent states
+1. **❌ Runtime Errors**: Plugins will fail at execution time
+2. **🚫 Deployment Failures**: Solution import may fail with invalid step configurations
+3. **🐛 Debugging Difficulty**: Errors may not be obvious until runtime
+4. **📊 Data Integrity Issues**: Failed plugins may leave data in inconsistent states
 
-## Image Availability Matrix
+## 📋 Image Availability Matrix
 
 | Message | Stage | Pre-Image | Post-Image |
 |---------|-------|:---------:|:----------:|
@@ -33,7 +33,7 @@ Configuring unavailable images causes:
 | **Delete** | Pre-Operation | ✅ | ❌ |
 | **Delete** | Post-Operation | ✅ | ❌ |
 
-## Detection
+## 🔍 Detection
 
 The analyzer flags `[CrmPluginRegistration]` attributes where:
 - Image configurations are incompatible with the message/stage combination
@@ -41,7 +41,7 @@ The analyzer flags `[CrmPluginRegistration]` attributes where:
 - Post-Image on Pre-Operation stages (changes not committed yet)
 - Post-Image on Delete (record is deleted)
 
-## Code Examples
+## 💻 Code Examples
 
 ### ❌ Bad Code
 
@@ -96,13 +96,13 @@ public class PreUpdateWithPreImage : IPlugin { }
 public class PostUpdateWithBothImages : IPlugin { }
 ```
 
-## How to Fix
+## 🔧 How to Fix
 
-1. **Check the Matrix**: Refer to the Image Availability Matrix above
-2. **Adjust Stage or Image Type**: Either change the stage or remove the incompatible image
-3. **Use Target Entity**: For Create messages, use `Target` from InputParameters instead of images
+1. **📋 Check the Matrix**: Refer to the Image Availability Matrix above
+2. **🔄 Adjust Stage or Image Type**: Either change the stage or remove the incompatible image
+3. **📝 Use Target Entity**: For Create messages, use `Target` from InputParameters instead of images
 
-### Before and After
+### 🔄 Before and After
 
 ```diff
 - [CrmPluginRegistration("Create", "account", StageEnum.PreOperation,
@@ -111,7 +111,7 @@ public class PostUpdateWithBothImages : IPlugin { }
 +     Image1Type = ImageTypeEnum.PostImage, Image1Attributes = "name")]
 ```
 
-## Suppression
+## 🔕 Suppression
 
 If you have a legitimate need to suppress this warning:
 
@@ -131,7 +131,7 @@ dotnet_diagnostic.DEVKIT1003.severity = none
 
 ---
 
-## Rule Properties
+## 📊 Rule Properties
 
 | Property | Value |
 |----------|-------|

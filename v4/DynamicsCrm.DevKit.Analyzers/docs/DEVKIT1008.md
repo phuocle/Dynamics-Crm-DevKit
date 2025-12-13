@@ -1,25 +1,25 @@
 ﻿# DEVKIT1008: Don't Use Parallel Execution in Plug-ins
 
-## Description
+## 📖 Description
 
 This analyzer detects usage of parallel execution patterns within `IPlugin` or `CodeActivity` classes. Multi-threading and parallel execution are not supported in the Dataverse sandbox and can cause unpredictable behavior, crashes, and data corruption.
 
-## Microsoft Best Practice
+## 🎯 Microsoft Best Practice
 
 📚 **[Do not use parallel execution within plug-ins and workflow activities](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/do-not-use-parallel-execution-in-plug-ins)**
 
 > The Dataverse platform does not support multi-threading within plug-ins. Using parallel execution patterns can cause thread-safety issues, unpredictable behavior, and errors that are difficult to diagnose.
 
-## Why This Matters
+## ⚠️ Why This Matters
 
 When you use parallel execution in plugins:
 
-1. **Sandbox Restrictions**: The sandbox environment doesn't support multi-threading properly
-2. **Thread-Safety Issues**: Shared resources may be accessed concurrently, causing race conditions
-3. **Unpredictable Behavior**: Threads may be terminated unexpectedly by the platform
-4. **Transaction Problems**: Database transactions cannot span multiple threads properly
+1. **🚫 Sandbox Restrictions**: The sandbox environment doesn't support multi-threading properly
+2. **⚡ Thread-Safety Issues**: Shared resources may be accessed concurrently, causing race conditions
+3. **⚠️ Unpredictable Behavior**: Threads may be terminated unexpectedly by the platform
+4. **🔄 Transaction Problems**: Database transactions cannot span multiple threads properly
 
-## Detected Patterns
+## 📋 Detected Patterns
 
 | Pattern | Example |
 |---------|---------|
@@ -31,7 +31,7 @@ When you use parallel execution in plugins:
 | `new Thread()` | `new Thread(() => DoWork()).Start();` |
 | `ThreadPool.QueueUserWorkItem()` | `ThreadPool.QueueUserWorkItem(DoWork);` |
 
-## Detection
+## 🔍 Detection
 
 The analyzer flags the following patterns within `IPlugin` or `CodeActivity` classes:
 - `Task.Run()` and `Task.Factory.StartNew()` method calls
@@ -39,7 +39,7 @@ The analyzer flags the following patterns within `IPlugin` or `CodeActivity` cla
 - `new Thread()` object creation
 - `ThreadPool.QueueUserWorkItem()` method calls
 
-## Code Examples
+## 💻 Code Examples
 
 ### ❌ Bad Code
 
@@ -92,7 +92,7 @@ public class MyPlugin : IPlugin
 }
 ```
 
-## How to Fix
+## 🔧 How to Fix
 
 1. **Replace Parallel.ForEach with foreach**: Convert parallel loops to sequential loops
 2. **Remove Task.Run calls**: Execute the code synchronously instead
@@ -111,7 +111,7 @@ public class MyPlugin : IPlugin
 + }
 ```
 
-## Suppression
+## 🔕 Suppression
 
 If you have a legitimate need to suppress this warning:
 
@@ -130,7 +130,9 @@ dotnet_diagnostic.DEVKIT1008.severity = none
 
 ---
 
-## Rule Properties
+---
+
+## 📊 Rule Properties
 
 | Property | Value |
 |----------|-------|

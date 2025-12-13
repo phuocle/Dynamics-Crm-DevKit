@@ -1,10 +1,10 @@
 ﻿# DEVKIT1015: Avoid Blocking Async Patterns in Plug-ins
 
-## Description
+## 📖 Description
 
 This analyzer detects usage of blocking async patterns like `GetAwaiter().GetResult()`, `.Result`, and `.Wait()` in plugins. While these patterns are sometimes necessary in plugins (since async `Execute` is not supported), they can cause deadlocks if not used carefully.
 
-## Why This Matters
+## ⚠️ Why This Matters
 
 Blocking async operations can cause issues:
 
@@ -20,7 +20,7 @@ Blocking async operations can cause issues:
 | `.Result` | `task.Result` | Medium |
 | `.Wait()` | `task.Wait()` | Medium |
 
-## Code Examples
+## 💻 Code Examples
 
 ### ⚠️ Patterns That Trigger Info
 
@@ -95,7 +95,7 @@ In plugins, async patterns with `ConfigureAwait(false)` may be acceptable when:
 2. **Using `ConfigureAwait(false)`**: Prevents deadlocks by not capturing sync context
 3. **Timeout is set**: Always set a timeout for external calls
 
-## Suppression
+## 🔕 Suppression
 
 If you must use async patterns and understand the risks:
 
@@ -119,7 +119,9 @@ dotnet_diagnostic.DEVKIT1015.severity = none
 
 ---
 
-## Rule Properties
+---
+
+## 📊 Rule Properties
 
 | Property | Value |
 |----------|-------|

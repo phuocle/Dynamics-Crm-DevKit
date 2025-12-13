@@ -6,11 +6,11 @@
  |____/ \__, |_| |_|\__,_|_| |_| |_|_|\___|___/\____|_|  |_| |_| |_(_)____/ \___| \_/ |_|\_\_|\__(_)_/   \_\_| |_|\__,_|_|\__, /___\___|_|  |___/
         |___/                         https://github.com/phuocle/Dynamics-Crm-DevKit x.xx.xx.xx Build: xxxx.yy.zz HH.mm.ss|___/                                   
 ```
-# DynamicsCrm.DevKit.Analyzers
+# 🔍 DynamicsCrm.DevKit.Analyzers
 
 A Roslyn-based code analyzer package for Microsoft Dynamics 365 / Power Platform development. It provides compile-time diagnostics to help developers follow best practices and avoid common pitfalls when building plugins, custom workflows, and other CRM customizations.
 
-## Installation
+## 📦 Installation
 
 Install via NuGet:
 ```
@@ -22,7 +22,7 @@ Or add to your `.csproj`:
 <PackageReference Include="DynamicsCrm.DevKit.Analyzers" Version="*" PrivateAssets="all" />
 ```
 
-## Diagnostic Rules
+## 📋 Diagnostic Rules
 
 | Rule ID | Severity | Description |
 |---------|----------|-------------|
@@ -48,12 +48,12 @@ Or add to your `.csproj`:
 
 ---
 
-### DEVKIT1001
+### ❌ DEVKIT1001
 **Create/Update message should have filtering attributes**
 
 **Severity:** Error
 
-**MS Best Practice:** [Include filtering attributes with plug-in registration](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/include-filtering-attributes-plugin-registration)
+**MS Best Practice:** 📚 [Include filtering attributes with plug-in registration](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/include-filtering-attributes-plugin-registration)
 
 This analyzer ensures that plugin registrations for `Create`, `CreateMultiple`, `Update`, `UpdateMultiple`, `OnExternalCreated`, or `OnExternalUpdated` messages include specific filtering attributes. This prevents the plugin from executing on **every field change**, which can significantly impact performance.
 
@@ -86,7 +86,7 @@ This analyzer ensures that plugin registrations for `Create`, `CreateMultiple`, 
 
 ---
 
-### DEVKIT1002
+### ⚠️ DEVKIT1002
 **Don't use ColumnSet(true)**
 
 **Severity:** Warning
@@ -120,7 +120,7 @@ var entity = service.Retrieve("account", id, new ColumnSet("name", "accountnumbe
 
 ---
 
-### DEVKIT1003
+### ❌ DEVKIT1003
 **Plugin image validation**
 
 **Severity:** Error
@@ -168,7 +168,7 @@ Validates that plugin image configurations are compatible with the message and s
 
 ---
 
-### DEVKIT1004
+### ℹ️ DEVKIT1004
 **Use of deprecated SDK messages**
 
 **Severity:** Warning
@@ -217,7 +217,7 @@ service.Update(account);
 
 ---
 
-### DEVKIT1005
+### ⚠️ DEVKIT1005
 **EntityReference maybe null**
 
 **Severity:** Error
@@ -254,7 +254,7 @@ if (ownerRef != null)
 
 ---
 
-### DEVKIT1006
+### ⚠️ DEVKIT1006
 **Don't use batch request types in plug-ins and workflow activities**
 
 **Severity:** Warning
@@ -299,7 +299,7 @@ public class MyPlugin : IPlugin
 
 ---
 
-### DEVKIT1007
+### ❌ DEVKIT1007
 **IPlugin implementations should be stateless**
 
 **Severity:** Error
@@ -350,7 +350,7 @@ public class MyPlugin : IPlugin
 
 ---
 
-### DEVKIT1008
+### ❌ DEVKIT1008
 **Don't use parallel execution in plug-ins and workflow activities**
 
 **Severity:** Error
@@ -412,7 +412,7 @@ public class MyPlugin : IPlugin
 
 ---
 
-### DEVKIT1009
+### ⚠️ DEVKIT1009
 **Set KeepAlive to false for external HTTP calls**
 
 **Severity:** Warning
@@ -444,7 +444,7 @@ using (var client = new HttpClient())
 
 ---
 
-### DEVKIT1010
+### ⚠️ DEVKIT1010
 **Set Timeout for external HTTP calls**
 
 **Severity:** Warning
@@ -476,7 +476,7 @@ using (var client = new HttpClient())
 
 ---
 
-### DEVKIT1013
+### ⚠️ DEVKIT1013
 **Avoid registering plugins on Retrieve/RetrieveMultiple**
 
 **Severity:** Warning
@@ -505,7 +505,7 @@ public class CalculateAccountRatingPlugin : IPlugin { }
 
 ---
 
-### DEVKIT1011
+### ⚠️ DEVKIT1011
 **Use InvalidPluginExecutionException for errors**
 
 **Severity:** Warning
@@ -530,7 +530,7 @@ throw new InvalidPluginExecutionException("Please provide a valid account name."
 
 ---
 
-### DEVKIT1012
+### ℹ️ DEVKIT1012
 **Consider using ITracingService in plug-ins**
 
 **Severity:** Warning
@@ -566,7 +566,7 @@ public class AccountPlugin : IPlugin
 
 ---
 
-### DEVKIT1016
+### ⚠️ DEVKIT1016
 **Avoid retrieving unpublished metadata**
 
 **Severity:** Warning
@@ -598,7 +598,7 @@ var request = new RetrieveEntityRequest
 
 ---
 
-### DEVKIT1014
+### ❌ DEVKIT1014
 **Avoid AppDomain event registration in plug-ins**
 
 **Severity:** Error
@@ -622,7 +622,7 @@ catch (Exception ex) { throw new InvalidPluginExecutionException("Error", ex); }
 
 ---
 
-### DEVKIT1015
+### ⚠️ DEVKIT1015
 **Avoid blocking async patterns in plug-ins**
 
 **Severity:** Warning
@@ -647,7 +647,7 @@ var result = task.ConfigureAwait(false).GetAwaiter().GetResult();
 
 ---
 
-### DEVKIT1017
+### ℹ️ DEVKIT1017
 **Avoid Console output in plug-ins and workflow activities**
 
 **Severity:** Info
@@ -674,7 +674,7 @@ tracingService.Trace($"Processing: {entity.Id}");
 
 ---
 
-### DEVKIT1018
+### ❌ DEVKIT1018
 **Avoid File/IO operations in plug-ins and workflow activities**
 
 **Severity:** Error
@@ -731,7 +731,7 @@ public class MyPlugin : IPlugin
 
 ---
 
-### DEVKIT1019
+### ⚠️ DEVKIT1019
 **Consider checking context.Depth to prevent infinite loops**
 
 **Severity:** Warning
@@ -783,7 +783,7 @@ public class AccountPlugin : IPlugin
 
 ---
 
-## Configuration
+## ⚙️ Configuration
 
 You can suppress specific rules in your `.editorconfig`:
 
@@ -801,11 +801,11 @@ var entity = service.Retrieve("account", id, new ColumnSet(true));
 #pragma warning restore DEVKIT1002
 ```
 
-## Requirements
+## 📋 Requirements
 
 - .NET Standard 2.0 compatible projects
 - Visual Studio 2019+ or any IDE with Roslyn analyzer support
 
-## License
+## 📄 License
 
 This project is part of [DynamicsCrm.DevKit](https://github.com/phuocle/Dynamics-Crm-DevKit).

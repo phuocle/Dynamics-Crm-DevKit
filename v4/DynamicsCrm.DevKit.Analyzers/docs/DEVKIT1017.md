@@ -1,19 +1,19 @@
 ﻿# DEVKIT1017: Avoid Console Output in Plug-ins
 
-## Description
+## 📖 Description
 
 This analyzer detects usage of `Console.Write`, `Console.WriteLine`, and other Console methods in plugin and workflow activity code. Console output has no effect in the Dataverse sandbox environment because the console stream is redirected to null.
 
-## Why This Matters
+## ⚠️ Why This Matters
 
 Console output in plugins and workflows:
 
-1. **Has No Effect**: Console is not available in the Dataverse sandbox - output is discarded
-2. **Wastes Resources**: String formatting and method calls execute but produce nothing
-3. **Creates False Confidence**: Developers may think their debug output is being logged
-4. **Better Alternatives Exist**: ITracingService provides actual logging
+1. **🚫 Has No Effect**: Console is not available in the Dataverse sandbox - output is discarded
+2. **⚡ Wastes Resources**: String formatting and method calls execute but produce nothing
+3. **😞 Creates False Confidence**: Developers may think their debug output is being logged
+4. **💡 Better Alternatives Exist**: ITracingService provides actual logging
 
-## Detection
+## 🔍 Detection
 
 The analyzer flags usage of these Console methods within IPlugin or CodeActivity classes:
 - `Console.Write()`
@@ -27,7 +27,7 @@ The analyzer flags usage of these Console methods within IPlugin or CodeActivity
 - `Console.ResetColor()`
 - `Console.SetCursorPosition()`
 
-## Code Examples
+## 💻 Code Examples
 
 ### ❌ Bad Code
 
@@ -74,7 +74,7 @@ public class MyPlugin : IPlugin
 }
 ```
 
-## How to Fix
+## 🔧 How to Fix
 
 1. **Remove Console calls**: Delete all Console.Write/WriteLine statements
 2. **Add ITracingService**: Get the tracing service from the service provider
@@ -106,7 +106,7 @@ Unlike Console output, ITracingService trace logs are captured by the platform:
 
 > **Note**: Tracing must be enabled in the environment (Plug-in Trace Log Setting).
 
-## Suppression
+## 🔕 Suppression
 
 If you have a specific reason to use Console (e.g., code shared with non-plugin projects):
 
@@ -129,7 +129,9 @@ dotnet_diagnostic.DEVKIT1017.severity = none
 
 ---
 
-## Rule Properties
+---
+
+## 📊 Rule Properties
 
 | Property | Value |
 |----------|-------|

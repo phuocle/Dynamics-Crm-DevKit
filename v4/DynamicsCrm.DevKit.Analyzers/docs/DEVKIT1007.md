@@ -1,25 +1,25 @@
 ﻿# DEVKIT1007: IPlugin Implementations Should Be Stateless
 
-## Description
+## 📖 Description
 
 This analyzer detects assignments to instance fields or properties during plug-in or workflow activity execution. IPlugin and CodeActivity classes are cached and reused across multiple threads - storing state in instance members causes thread-safety issues and data inconsistencies.
 
-## Microsoft Best Practice
+## 🎯 Microsoft Best Practice
 
 📚 **[Develop IPlugin implementations as stateless](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/develop-iplugin-implementations-stateless)**
 
 > The platform caches plug-in class instances. The way they cache and reuse the instance means that developers cannot use class member variables in plug-ins except in specific, well-known patterns.
 
-## Why This Matters
+## ⚠️ Why This Matters
 
 Storing state in plugin instance members causes:
 
-1. **Thread-Safety Issues**: Multiple threads share the same instance simultaneously
-2. **Data Corruption**: One execution can overwrite another's data mid-execution
-3. **Race Conditions**: Unpredictable behavior based on execution timing
-4. **Difficult Debugging**: Issues are intermittent and hard to reproduce
+1. **🔀 Thread-Safety Issues**: Multiple threads share the same instance simultaneously
+2. **💥 Data Corruption**: One execution can overwrite another's data mid-execution
+3. **⚡ Race Conditions**: Unpredictable behavior based on execution timing
+4. **🐛 Difficult Debugging**: Issues are intermittent and hard to reproduce
 
-## Safe Patterns
+## 📋 Safe Patterns
 
 | Pattern | Status |
 |---------|--------|
@@ -30,14 +30,14 @@ Storing state in plugin instance members causes:
 | Local variable assignments | ✅ Safe |
 | Instance field assignment in Execute | ❌ Unsafe |
 
-## Detection
+## 🔍 Detection
 
 The analyzer flags assignments to instance fields or properties in:
 - `IPlugin` implementations during any method execution
 - `CodeActivity`, `NativeActivity`, or `Activity` implementations
 - Helper methods called from execution context
 
-## Code Examples
+## 💻 Code Examples
 
 ### ❌ Bad Code
 
@@ -100,7 +100,7 @@ public class GoodPlugin : IPlugin
 }
 ```
 
-## How to Fix
+## 🔧 How to Fix
 
 1. **Convert to Local Variables**: Replace instance fields with local variables in Execute method
 2. **Pass as Parameters**: Pass dependencies to helper methods instead of using instance state
@@ -127,7 +127,7 @@ public class GoodPlugin : IPlugin
   }
 ```
 
-## Suppression
+## 🔕 Suppression
 
 If you have a legitimate need to suppress this warning:
 
@@ -146,7 +146,9 @@ dotnet_diagnostic.DEVKIT1007.severity = warning
 
 ---
 
-## Rule Properties
+---
+
+## 📊 Rule Properties
 
 | Property | Value |
 |----------|-------|
