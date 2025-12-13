@@ -677,7 +677,7 @@ public class CustomApiHandler : IPlugin
 using Microsoft.Xrm.Sdk;
 using System;
 
-[assembly: DynamcisCrmDevKitPluginManagedIdentityAssembly(
+[assembly: DynamicsCrmDevKitPluginManagedIdentityAssembly(
     "12345678-abcd-1234-abcd-123456789012",
     CertificateFileName = "MyCertificate.pfx",
     CertificatePassword = "P@ssw0rd"
