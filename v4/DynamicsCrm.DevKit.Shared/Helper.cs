@@ -622,7 +622,11 @@ namespace DynamicsCrm.DevKit.Shared
             switch (type.ToUpperInvariant())
             {
                 case "CLIENTSECRET":
-                    return $"AuthType=ClientSecret;Url={url};ClientId={userName};ClientSecret={password};";
+                    var csConnectionString = $"AuthType=ClientSecret;Url={url};ClientId={userName};ClientSecret={password};";
+                    // PLAN_01: Add TenantId support for ClientSecret
+                    if (!string.IsNullOrEmpty(crmConnection.TenantId))
+                        csConnectionString += $"TenantId={crmConnection.TenantId};";
+                    return csConnectionString;
                 case "AD":
                     if (string.IsNullOrEmpty(userName) || !userName.Contains("\\"))
                         throw new ArgumentException("For AD authentication, username must be in format 'domain\\username'");
@@ -635,10 +639,23 @@ namespace DynamicsCrm.DevKit.Shared
                 case "OAUTH":
                 default:
                     var connectionString = $"AuthType=OAuth;Url={url};Username={userName};Password={password};";
-                    if (!connectionString.ToLower().Contains("appid="))
+                    
+                    // PLAN_01: Add ClientId if provided, otherwise use default
+                    if (!string.IsNullOrEmpty(crmConnection.ClientId))
+                    {
+                        connectionString += $"AppId={crmConnection.ClientId};";
+                    }
+                    else if (!connectionString.ToLower().Contains("appid="))
                     {
                         connectionString += "AppId=51f81489-12ee-4a9e-aaae-a2591f45987d;";
                     }
+                    
+                    // PLAN_01: Add TenantId if provided
+                    if (!string.IsNullOrEmpty(crmConnection.TenantId))
+                    {
+                        connectionString += $"TenantId={crmConnection.TenantId};";
+                    }
+                    
                     if (!connectionString.ToLower().Contains("redirecturi="))
                     {
                         connectionString += "RedirectUri=app://58145B91-0C36-4500-8554-080854F2AC97;";
@@ -664,6 +681,9 @@ namespace DynamicsCrm.DevKit.Shared
             string username = null; // user or clientid
             string domain = null;
             string secretOrPassword = null;
+            string clientId = null;  // PLAN_01: Add ClientId parsing
+            string tenantId = null;  // PLAN_01: Add TenantId parsing
+            string appId = null;     // PLAN_01: Parse AppId parameter
 
             var parts = connectionString.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
             foreach (var part in parts)
@@ -679,10 +699,16 @@ namespace DynamicsCrm.DevKit.Shared
                 else if (key.Equals("Domain", StringComparison.OrdinalIgnoreCase)) domain = value;
                 else if (key.Equals("Password", StringComparison.OrdinalIgnoreCase)) secretOrPassword = value;
                 else if (key.Equals("ClientSecret", StringComparison.OrdinalIgnoreCase)) secretOrPassword = value;
+                else if (key.Equals("TenantId", StringComparison.OrdinalIgnoreCase)) tenantId = value;  // PLAN_01
+                else if (key.Equals("AppId", StringComparison.OrdinalIgnoreCase)) appId = value;       // PLAN_01
             }
             if (string.IsNullOrWhiteSpace(authType)) authType = "OAuth";
             if (!string.IsNullOrEmpty(domain) && !string.IsNullOrEmpty(username) && authType.Equals("AD", StringComparison.OrdinalIgnoreCase))
                 username = domain + "\\" + username;
+
+            // PLAN_01: Handle ClientId from either ClientId or AppId parameter
+            // For OAuth, AppId is the ClientId. For ClientSecret, username is the ClientId.
+            var effectiveClientId = clientId ?? appId;
 
             // Ensure we store encrypted
             string storedPassword;
@@ -698,7 +724,9 @@ namespace DynamicsCrm.DevKit.Shared
                 Type = authType,
                 Url = url,
                 UserName = username,
-                Password = storedPassword
+                Password = storedPassword,
+                ClientId = effectiveClientId,  // PLAN_01
+                TenantId = tenantId             // PLAN_01
             };
         }
 
