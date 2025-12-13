@@ -31,6 +31,12 @@ namespace DynamicsCrm.DevKit.Shared.Models
         [CommandLineParameter(Command = "url", Name = "Url", Required = false, Description = "Login by Sdk OOB dialog", Default = "")]
         public string Url { get; set; }
 
+        [CommandLineParameter(Command = "clientid", Name = "ClientId", Required = false, Description = "Custom Azure AD Application Client ID (optional)", Default = "")]
+        public string ClientId { get; set; }
+
+        [CommandLineParameter(Command = "tenantid", Name = "TenantId", Required = false, Description = "Azure AD Tenant ID to restrict authentication (optional)", Default = "")]
+        public string TenantId { get; set; }
+
         [CommandLineParameter(Command = "onlyupdateassembly", Name = "OnlyUpdateAssembly", Required = false, Description = "Fast deploy, only update the assembly", Default = "")]
         public string OnlyUpdateAssembly { get; set; }
 

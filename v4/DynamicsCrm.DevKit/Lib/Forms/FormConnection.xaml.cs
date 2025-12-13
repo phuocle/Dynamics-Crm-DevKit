@@ -116,7 +116,9 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 Password = textboxPassword.Password,
                 Type = ((ComboBoxItem)comboBoxType.SelectedItem).Content.ToString(),
                 Url = textboxUrl.Text,
-                UserName = textboxUser.Text
+                UserName = textboxUser.Text,
+                ClientId = string.IsNullOrWhiteSpace(textboxClientId.Text) ? null : textboxClientId.Text,
+                TenantId = string.IsNullOrWhiteSpace(textboxTenantId.Text) ? null : textboxTenantId.Text
             };
         }
 
@@ -152,6 +154,8 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             existing.Type = updated.Type;
             existing.Url = updated.Url;
             existing.UserName = updated.UserName;
+            existing.ClientId = updated.ClientId;
+            existing.TenantId = updated.TenantId;
         }
 
         private async Task ClearFormDataAsync()
@@ -162,6 +166,8 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             textboxUrl.Text = string.Empty;
             textboxUser.Text = string.Empty;
             textboxPassword.Password = string.Empty;
+            textboxClientId.Text = string.Empty;
+            textboxTenantId.Text = string.Empty;
         }
 
         private async Task LoadConnectionsAsync()
@@ -250,18 +256,34 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 case "AD":
                     labelUser.Content = "User Domain";
                     labelPassword.Content = "Password";
+                    labelClientId.Visibility = System.Windows.Visibility.Collapsed;
+                    textboxClientId.Visibility = System.Windows.Visibility.Collapsed;
+                    labelTenantId.Visibility = System.Windows.Visibility.Collapsed;
+                    textboxTenantId.Visibility = System.Windows.Visibility.Collapsed;
                     break;
                 case "OAuth":
                     labelUser.Content = "Username";
                     labelPassword.Content = "Password";
+                    labelClientId.Visibility = System.Windows.Visibility.Visible;
+                    textboxClientId.Visibility = System.Windows.Visibility.Visible;
+                    labelTenantId.Visibility = System.Windows.Visibility.Visible;
+                    textboxTenantId.Visibility = System.Windows.Visibility.Visible;
                     break;
                 case "ClientSecret":
                     labelUser.Content = "Client Id";
                     labelPassword.Content = "Secret Value";
+                    labelClientId.Visibility = System.Windows.Visibility.Collapsed;
+                    textboxClientId.Visibility = System.Windows.Visibility.Collapsed;
+                    labelTenantId.Visibility = System.Windows.Visibility.Visible;
+                    textboxTenantId.Visibility = System.Windows.Visibility.Visible;
                     break;
                 default:
                     labelUser.Content = "User";
                     labelPassword.Content = "Password";
+                    labelClientId.Visibility = System.Windows.Visibility.Collapsed;
+                    textboxClientId.Visibility = System.Windows.Visibility.Collapsed;
+                    labelTenantId.Visibility = System.Windows.Visibility.Collapsed;
+                    textboxTenantId.Visibility = System.Windows.Visibility.Collapsed;
                     break;
             }
 
@@ -286,6 +308,39 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         {
             textboxPassword.Visibility = System.Windows.Visibility.Visible;
             labelPassword.Visibility = System.Windows.Visibility.Visible;
+        }
+
+        private void ComboBoxSavedConnection_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            if (sender is not ComboBox comboBox || comboBox.SelectedItem is not CrmConnection connection)
+                return;
+
+            // Populate form fields with selected connection data
+            textboxName.Text = connection.Name ?? string.Empty;
+            textboxUrl.Text = connection.Url ?? string.Empty;
+            textboxUser.Text = connection.UserName ?? string.Empty;
+            textboxClientId.Text = connection.ClientId ?? string.Empty;
+            textboxTenantId.Text = connection.TenantId ?? string.Empty;
+
+            // Set connection type
+            var typeItem = comboBoxType.Items.OfType<ComboBoxItem>()
+                .FirstOrDefault(item => item.Content?.ToString() == connection.Type);
+            if (typeItem != null)
+            {
+                comboBoxType.SelectedItem = typeItem;
+            }
+
+            // Handle password
+            if (string.IsNullOrEmpty(connection.Password))
+            {
+                textboxPassword.Password = string.Empty;
+                checkBoxDontSavePassword.IsChecked = true;
+            }
+            else
+            {
+                textboxPassword.Password = string.Empty; // Don't display encrypted password
+                checkBoxDontSavePassword.IsChecked = false;
+            }
         }
     }
 }

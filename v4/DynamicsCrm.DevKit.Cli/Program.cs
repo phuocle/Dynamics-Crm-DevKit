@@ -244,7 +244,7 @@ namespace DynamicsCrm.DevKit.Cli
                     if (!ignoreCliTypes.Any(x => arguments.Type == x))
                     {
                         if (!string.IsNullOrEmpty(arguments.Url)) {
-                            if (!await IsConnectedDynamics365BySdkLoginAsync(arguments.Url))
+                            if (!await IsConnectedDynamics365BySdkLoginAsync(arguments.Url, arguments.ClientId, arguments.TenantId))
                             {
                                 CliLog.WriteLine(ConsoleColor.White, "|");
                                 CliLog.WriteLineError(ConsoleColor.Yellow, $" OOB Login failed !!!");
@@ -303,7 +303,7 @@ namespace DynamicsCrm.DevKit.Cli
             return true;
         }
 
-        private static async Task<bool> IsConnectedDynamics365BySdkLoginAsync(string url)
+        private static async Task<bool> IsConnectedDynamics365BySdkLoginAsync(string url, string clientId = null, string tenantId = null)
         {
             try
             {
@@ -311,12 +311,27 @@ namespace DynamicsCrm.DevKit.Cli
                 CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Starting OAuth authentication...");
                 CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Yellow, "Please complete authentication in the browser window that will open.");
 
+                // Use custom ClientId if provided, otherwise use default Microsoft ClientId
+                var effectiveClientId = string.IsNullOrWhiteSpace(clientId) 
+                    ? "51f81489-12ee-4a9e-aaae-a2591f45987d" 
+                    : clientId;
+
+                if (!string.IsNullOrWhiteSpace(clientId))
+                {
+                    CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Cyan, $"Using custom Client ID: {clientId}");
+                }
+
+                if (!string.IsNullOrWhiteSpace(tenantId))
+                {
+                    CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Cyan, $"Restricting to Tenant ID: {tenantId}");
+                }
+
                 var serviceClient = new ServiceClient(
                     userId: null,
                     password: null,
                     hostUri: new Uri(url),
                     useUniqueInstance: true,
-                    clientId: "51f81489-12ee-4a9e-aaae-a2591f45987d",
+                    clientId: effectiveClientId,
                     redirectUri: new Uri("app://58145B91-0C36-4500-8554-080854F2AC97"),
                     promptBehavior: Microsoft.PowerPlatform.Dataverse.Client.Auth.PromptBehavior.Always,
                     useDefaultCreds: false,
