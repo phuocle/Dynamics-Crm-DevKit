@@ -216,11 +216,11 @@ namespace DynamicsCrm.DevKit.Shared
         {
             var request = new RetrieveAllEntitiesRequest
             {
-                EntityFilters = EntityFilters.All,
-                RetrieveAsIfPublished = true
+                EntityFilters = EntityFilters.Entity,  // Optimized: Only retrieve entity-level metadata, not all attributes/relationships
+                RetrieveAsIfPublished = false  // Optimized: Only retrieve published entities for better performance
             };
             var response = (RetrieveAllEntitiesResponse)await serviceClient.ExecuteAsync(request);
-            return [.. response.EntityMetadata.ToList().Select(x => x.SchemaName)];
+            return [.. response.EntityMetadata.Select(x => x.SchemaName)];
         }
 
         public static async Task<List<EntityMetadata>> GetEntitiesMetadataAsync(ServiceClient serviceClient, List<string> schemaNames)
