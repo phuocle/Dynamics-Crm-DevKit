@@ -191,7 +191,19 @@ DynamicsCrm.DevKit.Analyzers provides 19 diagnostic rules to enforce best practi
 | [DEVKIT1006](v4/DynamicsCrm.DevKit.Analyzers/docs/DEVKIT1006.md) | Warning | Don't use batch requests in plugins |
 | [DEVKIT1007](v4/DynamicsCrm.DevKit.Analyzers/docs/DEVKIT1007.md) | Error | IPlugin should be stateless |
 | [DEVKIT1008](v4/DynamicsCrm.DevKit.Analyzers/docs/DEVKIT1008.md) | Error | Don't use parallel execution in plugins |
-| ... | ... | [See all 19 rules](v4/DynamicsCrm.DevKit.Analyzers/docs/README.md) |
+| [DEVKIT1009](v4/DynamicsCrm.DevKit.Analyzers/docs/DEVKIT1009.md) | Warning | Set KeepAlive to false for external HTTP calls |
+| [DEVKIT1010](v4/DynamicsCrm.DevKit.Analyzers/docs/DEVKIT1010.md) | Warning | Set Timeout for external HTTP calls |
+| [DEVKIT1011](v4/DynamicsCrm.DevKit.Analyzers/docs/DEVKIT1011.md) | Warning | Use InvalidPluginExecutionException for errors |
+| [DEVKIT1012](v4/DynamicsCrm.DevKit.Analyzers/docs/DEVKIT1012.md) | Info | Consider using ITracingService in plugins |
+| [DEVKIT1013](v4/DynamicsCrm.DevKit.Analyzers/docs/DEVKIT1013.md) | Info | Avoid registering plugins on Retrieve/RetrieveMultiple |
+| [DEVKIT1014](v4/DynamicsCrm.DevKit.Analyzers/docs/DEVKIT1014.md) | Error | Avoid AppDomain event registration in plugins |
+| [DEVKIT1015](v4/DynamicsCrm.DevKit.Analyzers/docs/DEVKIT1015.md) | Info | Avoid blocking async patterns in plugins |
+| [DEVKIT1016](v4/DynamicsCrm.DevKit.Analyzers/docs/DEVKIT1016.md) | Info | Avoid retrieving unpublished metadata |
+| [DEVKIT1017](v4/DynamicsCrm.DevKit.Analyzers/docs/DEVKIT1017.md) | Info | Avoid Console output in plugins |
+| [DEVKIT1018](v4/DynamicsCrm.DevKit.Analyzers/docs/DEVKIT1018.md) | Error | Avoid File/IO operations in plugins |
+| [DEVKIT1019](v4/DynamicsCrm.DevKit.Analyzers/docs/DEVKIT1019.md) | Warning | Consider checking context.Depth to prevent infinite loops |
+
+[📖 See full documentation for all rules](v4/DynamicsCrm.DevKit.Analyzers/docs/README.md)
 
 ---
 
