@@ -272,6 +272,8 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 case "ClientSecret":
                     labelUser.Content = "Client Id";
                     labelPassword.Content = "Secret Value";
+                    // Note: For ClientSecret, ClientId is entered in the "User" field (labelUser/textboxUser)
+                    // The dedicated ClientId field is hidden to avoid confusion
                     labelClientId.Visibility = System.Windows.Visibility.Collapsed;
                     textboxClientId.Visibility = System.Windows.Visibility.Collapsed;
                     labelTenantId.Visibility = System.Windows.Visibility.Visible;

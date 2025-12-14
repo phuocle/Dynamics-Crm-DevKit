@@ -321,9 +321,13 @@ namespace DynamicsCrm.DevKit.Cli
                     CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Cyan, $"Using custom Client ID: {clientId}");
                 }
 
+                // Note: ServiceClient constructor for interactive OAuth does not support direct tenantId parameter.
+                // For tenant-restricted authentication, use connection string mode (/conn:) with TenantId in the connection string.
+                // The sdklogin mode (/sdklogin:yes) uses browser-based interactive OAuth which inherits tenant from user's context.
                 if (!string.IsNullOrWhiteSpace(tenantId))
                 {
-                    CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Cyan, $"Restricting to Tenant ID: {tenantId}");
+                    CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Yellow, $"Note: TenantId parameter ({tenantId}) provided but not supported in sdklogin mode.");
+                    CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Yellow, $"For tenant-restricted auth, use /conn: with connection string including TenantId.");
                 }
 
                 var serviceClient = new ServiceClient(
