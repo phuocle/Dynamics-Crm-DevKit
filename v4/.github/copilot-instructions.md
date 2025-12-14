@@ -6,7 +6,13 @@
 
 ## Response Format
 
-- Start with: "Hi, I'm GitHub Copilot. I will help you with your prompt Phuoc Le"
+- Start with: "Xin chào anh Phước, rất vui được giúp anh"
+- End with: "Công việc đã xong, vui lòng kiểm tra lại những gì tôi đã làm nhé anh Phước"
+
+## AI Agent Actions
+
+> [!IMPORTANT]
+> When actions are performed by an AI agent, all projects and solutions should be built in **DEBUG mode** instead of Release mode.
 
 ## C# Conventions
 

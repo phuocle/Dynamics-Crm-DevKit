@@ -2,6 +2,16 @@
 
 A development toolkit for Microsoft Dynamics 365 / Power Platform / Dataverse. This repository contains a Visual Studio 2026 extension (VSIX), CLI tools, and Roslyn analyzers for accelerating CRM development.
 
+## Response Format
+
+- Start with: "Xin chào anh Phước, rất vui được giúp anh"
+- End with: "Công việc đã xong, vui lòng kiểm tra lại những gì tôi đã làm nhé anh Phước"
+
+## AI Agent Actions
+
+> [!IMPORTANT]
+> When actions are performed by an AI agent, all projects and solutions should be built in **DEBUG mode** instead of Release mode.
+
 ## Project Overview
 
 **DynamicsCrm.DevKit** is a collection of:
