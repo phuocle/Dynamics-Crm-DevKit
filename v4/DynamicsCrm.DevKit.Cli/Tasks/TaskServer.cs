@@ -784,7 +784,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var request = new RetrieveAllEntitiesRequest
             {
                 EntityFilters = EntityFilters.Entity,
-                RetrieveAsIfPublished = true
+                RetrieveAsIfPublished = false
             };
             XrmHelper.COUNT_ExecuteAsync++;
             var response = (RetrieveAllEntitiesResponse)await ServiceClient.ExecuteAsync(request);
