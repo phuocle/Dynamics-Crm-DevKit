@@ -7,11 +7,19 @@
     <authors>PhuocLe</authors>
     <license type="file">license\LICENSE.txt</license>
     <icon>images\icon.png</icon>
+    <readme>docs\README.md</readme>
     <projectUrl>https://github.com/phuocle/Dynamics-Crm-DevKit</projectUrl>
+    <repository type="git" url="https://github.com/phuocle/Dynamics-Crm-DevKit.git" branch="main" />
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>A collection of Dynamics 365 Roslyn Analyzers</description>
+    <description>A collection of Roslyn-based code analyzers for Microsoft Dynamics 365 / Power Platform development. Provides 19 compile-time diagnostics (DEVKIT1001-DEVKIT1019) to help developers follow best practices and avoid common pitfalls when building plugins and custom workflows.</description>
+    <releaseNotes>Version 4.0.0:
+- 19 diagnostic rules covering plugin best practices
+- DEVKIT1001-DEVKIT1019 analyzers for common Dynamics 365 pitfalls
+- Support for filtering attributes, ColumnSet validation, image validation
+- Detection of deprecated SDK messages, parallel execution, and file I/O operations
+- Recommendations for ITracingService usage and context.Depth checks</releaseNotes>
     <language>en-US</language>
-    <tags>Dynamics, Dynamics365, DynamicsCrm, Crm, Cli, DevKit, Analyzer, Dataverse</tags>
+    <tags>Dynamics Dynamics365 DynamicsCrm Crm DevKit Analyzer Dataverse Roslyn Plugin CodeAnalysis BestPractices</tags>
   </metadata>
   <files>
     <file src="..\bin\Release\netstandard2.0\DynamicsCrm.DevKit.Analyzers.dll" target="analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />
