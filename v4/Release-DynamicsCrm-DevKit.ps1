@@ -1,18 +1,21 @@
 <#
 .SYNOPSIS
-    DynamicsCrm.DevKit Release Build Script (v2)
+    DynamicsCrm.DevKit Release Build Script
 
 .DESCRIPTION
     Builds the DynamicsCrm.DevKit solution, creates NuGet packages, and publishes the VSIX.
     Updates version and date placeholders in source files before building.
+    
+    ANNUAL RELEASE: Uses Dec 31 of current year at 23:59:59
+    For current date testing, use Release-DynamicsCrm-DevKit-CurrentDate.ps1
 
 .PARAMETER BuildDate
     Optional. The build date string to use. Format: "yyyy.MM.dd HH.mm.ss".
-    If not provided, defaults to "CurrentYear.12.12 23.59.59".
+    If not provided, defaults to "31.12.{CurrentYear} 23:59:59" for annual release.
 
 .EXAMPLE
     .\Release-DynamicsCrm-DevKit.ps1
-    .\Release-DynamicsCrm-DevKit.ps1 -BuildDate "2023.11.22 10.00.00"
+    .\Release-DynamicsCrm-DevKit.ps1 -BuildDate "2025.12.15 10.00.00"
 #>
 param (
     [string]$BuildDate
@@ -21,7 +24,9 @@ param (
 $ErrorActionPreference = "Stop"
 
 # --- Configuration ---
-$VersionFile = "$PSScriptRoot\version.txt"
+# HARDCODED VERSION - Change this when releasing a new version (e.g., 4.00.00.00 -> 4.50.00.00)
+$Version = "4.00.00.00"
+
 $SolutionFile = "$PSScriptRoot\DynamicsCrm.DevKit.AllInOne.slnx"
 $PublishedRoot = "$PSScriptRoot\Published"
 
@@ -74,7 +79,9 @@ function Get-MSBuildPath {
     }
 
     throw "MSBuild.exe for Visual Studio 2026 Professional not found. Checked paths: $($paths -join ', ')"
-}function Update-FileContent {
+}
+
+function Update-FileContent {
     param ($FilePath, $Version, $Date)
 
     $fullPath = Join-Path $PSScriptRoot $FilePath
@@ -113,12 +120,11 @@ function Restore-Files {
 # --- Main Logic ---
 
 try {
-    # 1. Determine Version and Date
-    if (-not (Test-Path $VersionFile)) { throw "version.txt not found." }
-    $Version = (Get-Content $VersionFile -Raw).Trim()
-
+    # 1. Determine Build Date
+    # If no BuildDate provided, use Dec 31 of current year (annual release)
     if ([string]::IsNullOrWhiteSpace($BuildDate)) {
-        $BuildDate = "31.12.2025 23:59:59"
+        $currentYear = (Get-Date).Year
+        $BuildDate = "31.12.$currentYear 23:59:59"
     }
 
     Write-Host "Version: $Version" -ForegroundColor Cyan

@@ -7,9 +7,10 @@
 ║                              QUICK REFERENCE                                   ║
 ╚═══════════════════════════════════════════════════════════════════════════════╝
 
-VERSION FILES:
-  - version.txt     => Current version: 4.00.00.00
-  - date.txt        => Final release date: 2025.12.31 23.59.59
+VERSION:
+  - Hardcoded in Release-DynamicsCrm-DevKit.ps1, line 27
+  - Current version: 4.00.00.00
+  - Date: Auto-calculated (Dec 31 for annual, current for testing)
 
 KEY PASSWORDS:
   - PFX Signing Key (DynamicsCrm.DevKit.pfx): !Zz321^2
@@ -61,11 +62,11 @@ NUGET PACKAGES (Published\4.00.00.00\):
                               HOWTO: RELEASE
 ================================================================================
 
-FINAL RELEASE (once per year - usually on 31.12.xxxx 23:59:59):
+FINAL RELEASE (once per year - uses 31.12.{CurrentYear} 23:59:59):
   .\Release-DynamicsCrm-DevKit.ps1
 
-  This uses date.txt (2025.12.31 23.59.59) for build timestamp.
-  Used for official annual release.
+  Version is HARDCODED in the script (line 27): $Version = "4.00.00.00"
+  Date automatically uses Dec 31 of current year at 23:59:59
 
 TEST RELEASE (any time for testing):
   .\Release-DynamicsCrm-DevKit-CurrentDate.ps1
@@ -74,7 +75,12 @@ TEST RELEASE (any time for testing):
   Used for development testing.
 
 WITH CUSTOM DATE:
-  .\Release-DynamicsCrm-DevKit.ps1 -BuildDate "2025.12.15 10.00.00"
+  .\Release-DynamicsCrm-DevKit.ps1 -BuildDate "15.12.2025 10:00:00"
+
+TO CHANGE VERSION FOR NEW RELEASE:
+  Edit Release-DynamicsCrm-DevKit.ps1, line 27:
+  $Version = "4.50.00.00"  # Change this to new version
+
 
 ================================================================================
                          ANALYZERS (DEVKIT1001-DEVKIT1019)
