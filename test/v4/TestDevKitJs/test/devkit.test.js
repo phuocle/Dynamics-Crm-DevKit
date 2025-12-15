@@ -2,39 +2,10 @@ import { OptionSet, devKit } from '../lib/devkit.mjs';
 import {
     XrmMockGenerator, ContextMock, UserSettingsMock, ClientContextMock, LookupValueMock, DataMock, EntityMock, ItemCollectionMock, AttributeMock, StringControlMock,
     StringAttributeMock, UiMock, FormSelectorMock, FormItemMock, FormContextMock, OrganizationSettingsMock, EventContextMock, StageMock, StepMock, ProcessControlMock,
-    ProcessMock, ProcessManagerMock, LookupAttributeMock, LookupControlMock, OptionSetAttributeMock,
-    QuickFormControlMock, GridControlMock, GridRowDataMock, GridRowMock, GridMock, RelationshipMock, ViewSelectorMock, IframeControlMock, NavigationMock, NavigationItemMock, UiStandardElementMock,
+    UiCanGetVisibleElementMock, UiCanSetVisibleElementMock, ProcessMock, ProcessManagerMock, LookupAttributeMock, LookupControlMock, OptionSetAttributeMock,
+    QuickFormControlMock, GridControlMock, GridRowDataMock, GridRowMock, GridMock, RelationshipMock, ViewSelectorMock, IframeControlMock, HeaderSectionMock, NavigationMock, NavigationItemMock, UiStandardElementMock,
     UiFocusableMock, TimerControlMock, KbSearchControlMock, SaveEventArgumentsMock
 } from 'xrm-mock';
-
-// The following mocks are not exported from xrm-mock v3.6.2, so we create local implementations
-
-class UiCanGetVisibleElementMock {
-    constructor(visible) { this._visible = visible; }
-    getVisible() { return this._visible; }
-}
-
-class UiCanSetVisibleElementMock {
-    constructor() { this._visible = true; }
-    setVisible(value) { this._visible = value; }
-    getVisible() { return this._visible; }
-}
-
-class HeaderSectionMock {
-    constructor(bodyVisible, commandBarVisible, tabNavigatorVisible) {
-        this._bodyVisible = bodyVisible;
-        this._commandBarVisible = commandBarVisible;
-        this._tabNavigatorVisible = tabNavigatorVisible;
-    }
-    getBodyVisible() { return this._bodyVisible; }
-    setBodyVisible(value) { this._bodyVisible = value; }
-    getCommandBarVisible() { return this._commandBarVisible; }
-    setCommandBarVisible(value) { this._commandBarVisible = value; }
-    getTabNavigatorVisible() { return this._tabNavigatorVisible; }
-    setTabNavigatorVisible(value) { this._tabNavigatorVisible = value; }
-}
-
-
 beforeAll(() => {
     XrmMockGenerator.initialise();
 });
@@ -242,8 +213,8 @@ describe('devKit', () => {
         expect(() => { form.ViewPortWidth }).toThrow(new Error("getViewPortWidth not implemented"));
         expect(() => { form.UiAddOnLoad(null) }).toThrow(new Error("addOnLoad not implemented"));
         expect(() => { form.UiRemoveOnLoad(null) }).toThrow(new Error("removeOnLoad not implemented"));
-        expect(() => { form.UiAddLoaded(null) }).toThrow();
-        expect(() => { form.UiRemoveLoaded(null) }).toThrow();
+        expect(() => { form.UiAddLoaded(null) }).toThrow(new Error("addLoaded not implemented"));
+        expect(() => { form.UiRemoveLoaded(null) }).toThrow(new Error("removeLoaded not implemented"));
         expect(form.Controls).toBeDefined();
         expect(form.FormId).toBe("8d2dbd8c-c9f8-4cb5-8838-f5a916a6098a");
         expect(form.FormLabel).toBe("Account");
@@ -396,7 +367,7 @@ describe('devKit', () => {
         form.Utility = devKit.LoadUtility("web-resource-language");
         expect(() => { form.Utility.LearningPathAttributeName }).toThrow(new Error("Method not implemented."));
         expect(() => { form.Utility.ShowProgressIndicator("Waiting") }).toThrow(new Error("Method not implemented."));
-        expect(() => { form.Utility.EntityMainFormDescriptor(null, null) }).toThrow();
+        expect(() => { form.Utility.EntityMainFormDescriptor(null, null) }).toThrow(new Error("Method not implemented."));
         expect(() => { form.Utility.CloseProgressIndicator() }).toThrow(new Error("Method not implemented."));
         expect(() => { form.Utility.EntityMetadata("devkit_webapi", null, null, null) }).toThrow(new Error("Method not implemented."));
         expect(() => { form.Utility.ResourceString("resourcename", "key") }).toThrow(new Error("Method not implemented."));
@@ -414,7 +385,7 @@ describe('devKit', () => {
         expect(form.Utility.CurrentAppProperties(null, null)?.constructor?.name).toBe('XrmPromiseMock');
         expect(form.Utility.CurrentAppUrl).toBeUndefined();
         expect(form.Utility.WebResourceUrl(null)).toBeUndefined();
-        expect(() => { form.Utility.IsOnPremises }).toThrow();
+        expect(form.Utility.IsOnPremises).toBeTruthy();
         expect(form.Utility.PrependOrgName("abc-")).toBe("abc-OrgUniqueName");
         expect(form.Utility.Client.ClientName).toBe(OptionSet.ClientName.Web);
         expect(form.Utility.Client.ClientState).toBe(OptionSet.ClientState.Online);
@@ -433,8 +404,8 @@ describe('devKit', () => {
         expect(form.Utility.OrganizationSettings.UniqueName).toBe("OrgUniqueName");
         expect(form.Utility.OrganizationSettings.UseSkypeProtocol).toBeTruthy();
         expect(form.Utility.OrganizationSettings.IsTrialOrganization).toBeFalsy();
-        expect(form.Utility.OrganizationSettings.OrganizationExpiryDate).toBeUndefined();
-        expect(form.Utility.OrganizationSettings.FullNameConventionCode).toBeUndefined();
+        expect(form.Utility.OrganizationSettings.OrganizationExpiryDate).toBeNull();
+        expect(form.Utility.OrganizationSettings.FullNameConventionCode).toBe(OptionSet.FullNameConventionCode.FirstName_LastName);
 
         expect(form.Utility.UserSettings.DateFormattingInfo.AmDesignator).toBe("AM");
         expect(form.Utility.UserSettings.DateFormattingInfo.Calendar).toBeDefined();
@@ -502,12 +473,12 @@ describe('devKit', () => {
         expectXrmPromiseMock(form.Utility.OpenWebResource(null, null, null));
         expectXrmPromiseMock(form.Utility.NavigateTo(null, null, null, null));
 
-        expect(form.Utility.LoadPanel("url", "title")).toBeUndefined();
-        expect(form.Utility.XmlAttributeEncode("code")).toBeUndefined();
-        expect(form.Utility.XmlEncode("code")).toBeUndefined();
-        expect(form.Utility.HtmlAttributeEncode("code")).toBeUndefined();
-        expect(form.Utility.HtmlDecode("code")).toBeUndefined();
-        expect(form.Utility.HtmlEncode("code")).toBeUndefined();
+        expect(() => { form.Utility.LoadPanel("url", "title"); }).toThrow(new Error("Not implemented."));
+        expect(() => { form.Utility.XmlAttributeEncode("code"); }).toThrow(new Error("Not implemented"));
+        expect(() => { form.Utility.XmlEncode("code"); }).toThrow(new Error("Not implemented"));
+        expect(() => { form.Utility.HtmlAttributeEncode("code"); }).toThrow(new Error("Not implemented"));
+        expect(() => { form.Utility.HtmlDecode("code"); }).toThrow(new Error("Not implemented"));
+        expect(() => { form.Utility.HtmlEncode("code"); }).toThrow(new Error("Not implemented"));
 
         expect(() => { form.Utility.CaptureAudio(null, null) }).toThrow(new Error("Not implemented."));
         expect(() => { form.Utility.CaptureImage(null, null, null) }).toThrow(new Error("Not implemented."));
@@ -632,8 +603,7 @@ describe('devKit', () => {
         form.Process.DisplayState = OptionSet.ProcessDisplayState.Collapsed;
         expect(form.Process.DisplayState).toBe(OptionSet.ProcessDisplayState.Collapsed);
         expect(form.Process.Visible).toBeTruthy();
-        form.Process.Visible = false;
-        expect(form.Process.Visible).toBeTruthy(); // setter doesn't change the underlying mock
+        expect(() => { form.Process.Visible = false; }).toThrow(new Error("Method not implemented."));
         expect(form.Process.ActivePath).toBeDefined();
         expect(() => { form.Process.ActivePath.getLength() }).toThrow(new Error("get active path not implemented"));
         expect(() => { form.Process.ActivePath.get(0) }).toThrow(new Error("get active path not implemented"));
@@ -958,7 +928,7 @@ describe('devKit', () => {
         expect(form.QuickForm.contactquickform.ControlName).toBe("contactquickform");
         expect(form.QuickForm.contactquickform.ControlParent).toBeUndefined();
         expect(form.QuickForm.contactquickform.Visible).toBeTruthy();
-        expect(() => { form.QuickForm.contactquickform.IsLoaded() }).toThrow(new Error("Method not implemented."));
+        expect(form.QuickForm.contactquickform.IsLoaded()).toBeTruthy();
         expect(() => { form.QuickForm.contactquickform.Refresh() }).toThrow(new Error("Method not implemented."));
         expect(() => { form.QuickForm.contactquickform.Disabled = true }).toThrow(new Error("Method not implemented."));
         expect(() => { form.QuickForm.contactquickform.Focus() }).toThrow(new Error("Method not implemented."));
@@ -1156,8 +1126,8 @@ describe('devKit', () => {
         expect(form.Body.IFRAME_PHUOCLE.Label).toBe("PHUOCLE New");
         expect(() => { form.Body.IFRAME_PHUOCLE.Src = "https://phuocle.net" }).toThrow(new Error("setSrc not implemented."));
         expect(() => { form.Body.IFRAME_PHUOCLE.Visible = true }).toThrow(new Error("setVisible not implemented."));
-        expect(() => { var a = form.Body.IFRAME_PHUOCLE.Data; }).toThrow();
-        expect(() => { form.Body.IFRAME_PHUOCLE.Data = "b"; }).toThrow();
+        expect(() => { var a = form.Body.IFRAME_PHUOCLE.Data; }).toThrow(new Error("getData not implemented."));
+        expect(() => { form.Body.IFRAME_PHUOCLE.Data = "b"; }).toThrow(new Error("setData not implemented."));
     });
     test('Tab & Section', () => {
         //setup
@@ -1207,8 +1177,8 @@ describe('devKit', () => {
         expect(form.Body.Tab.SUMMARY_TAB.Section.ACCOUNT_INFORMATION.Visible).toBeFalsy();
         expect(form.Body.Tab.SUMMARY_TAB.Section.ACCOUNT_INFORMATION.Parent).toBeDefined();
         expect(form.Body.Tab.SUMMARY_TAB.Parent).toBeDefined();
-        expect(() => { form.Body.Tab.SUMMARY_TAB.ContentType }).toThrow();
-        expect(() => { form.Body.Tab.SUMMARY_TAB.ContentType = OptionSet.TabContentType.SingleComponent }).toThrow();
+        expect(() => { form.Body.Tab.SUMMARY_TAB.ContentType }).toThrow(new Error("Method not implemented."));
+        expect(() => { form.Body.Tab.SUMMARY_TAB.ContentType = OptionSet.TabContentType.SingleComponent }).toThrow(new Error("Method not implemented."));
     });
     test('Footer & Header', () => {
         //setup
