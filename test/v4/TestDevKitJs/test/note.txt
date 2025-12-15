@@ -4,3 +4,31 @@ How to debug devkit.mjs
 3. Debuger now come
 4. in devkit.mjs, add break point and start debug
 5. STOP debug, SHIFT+F5
+
+======================================
+PowerShell Scripts (*.ps1)
+======================================
+
+1.Clean.ps1        - Cleans the project (removes node_modules, coverage, etc.)
+2.CopyDevKitJs.ps1 - Copies devkit files from source
+3.Install.ps1      - Installs npm dependencies and runs tests
+4.RunCodeCoverage.ps1 - Runs tests with code coverage report
+
+======================================
+Manual Commands
+======================================
+
+# Install dependencies
+npm install
+
+# Run tests only
+npm test
+
+# Run tests with code coverage
+npm run coverage
+
+# Run tests in debug mode
+npm run test:debug
+
+# Open coverage report (after running coverage)
+start coverage\devkit.mjs.html

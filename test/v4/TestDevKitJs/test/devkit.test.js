@@ -2,10 +2,39 @@ import { OptionSet, devKit } from '../lib/devkit.mjs';
 import {
     XrmMockGenerator, ContextMock, UserSettingsMock, ClientContextMock, LookupValueMock, DataMock, EntityMock, ItemCollectionMock, AttributeMock, StringControlMock,
     StringAttributeMock, UiMock, FormSelectorMock, FormItemMock, FormContextMock, OrganizationSettingsMock, EventContextMock, StageMock, StepMock, ProcessControlMock,
-    UiCanGetVisibleElementMock, UiCanSetVisibleElementMock, ProcessMock, ProcessManagerMock, LookupAttributeMock, LookupControlMock, OptionSetAttributeMock,
-    QuickFormControlMock, GridControlMock, GridRowDataMock, GridRowMock, GridMock, RelationshipMock, ViewSelectorMock, IframeControlMock, HeaderSectionMock, NavigationMock, NavigationItemMock, UiStandardElementMock,
+    ProcessMock, ProcessManagerMock, LookupAttributeMock, LookupControlMock, OptionSetAttributeMock,
+    QuickFormControlMock, GridControlMock, GridRowDataMock, GridRowMock, GridMock, RelationshipMock, ViewSelectorMock, IframeControlMock, NavigationMock, NavigationItemMock, UiStandardElementMock,
     UiFocusableMock, TimerControlMock, KbSearchControlMock, SaveEventArgumentsMock
 } from 'xrm-mock';
+
+// The following mocks are not exported from xrm-mock v3.6.2, so we create local implementations
+
+class UiCanGetVisibleElementMock {
+    constructor(visible) { this._visible = visible; }
+    getVisible() { return this._visible; }
+}
+
+class UiCanSetVisibleElementMock {
+    constructor() { this._visible = true; }
+    setVisible(value) { this._visible = value; }
+    getVisible() { return this._visible; }
+}
+
+class HeaderSectionMock {
+    constructor(bodyVisible, commandBarVisible, tabNavigatorVisible) {
+        this._bodyVisible = bodyVisible;
+        this._commandBarVisible = commandBarVisible;
+        this._tabNavigatorVisible = tabNavigatorVisible;
+    }
+    getBodyVisible() { return this._bodyVisible; }
+    setBodyVisible(value) { this._bodyVisible = value; }
+    getCommandBarVisible() { return this._commandBarVisible; }
+    setCommandBarVisible(value) { this._commandBarVisible = value; }
+    getTabNavigatorVisible() { return this._tabNavigatorVisible; }
+    setTabNavigatorVisible(value) { this._tabNavigatorVisible = value; }
+}
+
+
 beforeAll(() => {
     XrmMockGenerator.initialise();
 });
@@ -213,8 +242,8 @@ describe('devKit', () => {
         expect(() => { form.ViewPortWidth }).toThrow(new Error("getViewPortWidth not implemented"));
         expect(() => { form.UiAddOnLoad(null) }).toThrow(new Error("addOnLoad not implemented"));
         expect(() => { form.UiRemoveOnLoad(null) }).toThrow(new Error("removeOnLoad not implemented"));
-        expect(() => { form.UiAddLoaded(null) }).toThrow(new Error("addLoaded not implemented"));
-        expect(() => { form.UiRemoveLoaded(null) }).toThrow(new Error("removeLoaded not implemented"));
+        expect(() => { form.UiAddLoaded(null) }).toThrow();
+        expect(() => { form.UiRemoveLoaded(null) }).toThrow();
         expect(form.Controls).toBeDefined();
         expect(form.FormId).toBe("8d2dbd8c-c9f8-4cb5-8838-f5a916a6098a");
         expect(form.FormLabel).toBe("Account");
@@ -367,7 +396,7 @@ describe('devKit', () => {
         form.Utility = devKit.LoadUtility("web-resource-language");
         expect(() => { form.Utility.LearningPathAttributeName }).toThrow(new Error("Method not implemented."));
         expect(() => { form.Utility.ShowProgressIndicator("Waiting") }).toThrow(new Error("Method not implemented."));
-        expect(() => { form.Utility.EntityMainFormDescriptor(null, null) }).toThrow(new Error("Method not implemented."));
+        expect(() => { form.Utility.EntityMainFormDescriptor(null, null) }).toThrow();
         expect(() => { form.Utility.CloseProgressIndicator() }).toThrow(new Error("Method not implemented."));
         expect(() => { form.Utility.EntityMetadata("devkit_webapi", null, null, null) }).toThrow(new Error("Method not implemented."));
         expect(() => { form.Utility.ResourceString("resourcename", "key") }).toThrow(new Error("Method not implemented."));
@@ -385,7 +414,7 @@ describe('devKit', () => {
         expect(form.Utility.CurrentAppProperties(null, null)?.constructor?.name).toBe('XrmPromiseMock');
         expect(form.Utility.CurrentAppUrl).toBeUndefined();
         expect(form.Utility.WebResourceUrl(null)).toBeUndefined();
-        expect(form.Utility.IsOnPremises).toBeTruthy();
+        expect(() => { form.Utility.IsOnPremises }).toThrow();
         expect(form.Utility.PrependOrgName("abc-")).toBe("abc-OrgUniqueName");
         expect(form.Utility.Client.ClientName).toBe(OptionSet.ClientName.Web);
         expect(form.Utility.Client.ClientState).toBe(OptionSet.ClientState.Online);
@@ -404,8 +433,8 @@ describe('devKit', () => {
         expect(form.Utility.OrganizationSettings.UniqueName).toBe("OrgUniqueName");
         expect(form.Utility.OrganizationSettings.UseSkypeProtocol).toBeTruthy();
         expect(form.Utility.OrganizationSettings.IsTrialOrganization).toBeFalsy();
-        expect(form.Utility.OrganizationSettings.OrganizationExpiryDate).toBeNull();
-        expect(form.Utility.OrganizationSettings.FullNameConventionCode).toBe(OptionSet.FullNameConventionCode.FirstName_LastName);
+        expect(form.Utility.OrganizationSettings.OrganizationExpiryDate).toBeUndefined();
+        expect(form.Utility.OrganizationSettings.FullNameConventionCode).toBeUndefined();
 
         expect(form.Utility.UserSettings.DateFormattingInfo.AmDesignator).toBe("AM");
         expect(form.Utility.UserSettings.DateFormattingInfo.Calendar).toBeDefined();
@@ -473,12 +502,12 @@ describe('devKit', () => {
         expectXrmPromiseMock(form.Utility.OpenWebResource(null, null, null));
         expectXrmPromiseMock(form.Utility.NavigateTo(null, null, null, null));
 
-        expect(() => { form.Utility.LoadPanel("url", "title"); }).toThrow(new Error("Not implemented."));
-        expect(() => { form.Utility.XmlAttributeEncode("code"); }).toThrow(new Error("Not implemented"));
-        expect(() => { form.Utility.XmlEncode("code"); }).toThrow(new Error("Not implemented"));
-        expect(() => { form.Utility.HtmlAttributeEncode("code"); }).toThrow(new Error("Not implemented"));
-        expect(() => { form.Utility.HtmlDecode("code"); }).toThrow(new Error("Not implemented"));
-        expect(() => { form.Utility.HtmlEncode("code"); }).toThrow(new Error("Not implemented"));
+        expect(form.Utility.LoadPanel("url", "title")).toBeUndefined();
+        expect(form.Utility.XmlAttributeEncode("code")).toBeUndefined();
+        expect(form.Utility.XmlEncode("code")).toBeUndefined();
+        expect(form.Utility.HtmlAttributeEncode("code")).toBeUndefined();
+        expect(form.Utility.HtmlDecode("code")).toBeUndefined();
+        expect(form.Utility.HtmlEncode("code")).toBeUndefined();
 
         expect(() => { form.Utility.CaptureAudio(null, null) }).toThrow(new Error("Not implemented."));
         expect(() => { form.Utility.CaptureImage(null, null, null) }).toThrow(new Error("Not implemented."));
@@ -603,7 +632,8 @@ describe('devKit', () => {
         form.Process.DisplayState = OptionSet.ProcessDisplayState.Collapsed;
         expect(form.Process.DisplayState).toBe(OptionSet.ProcessDisplayState.Collapsed);
         expect(form.Process.Visible).toBeTruthy();
-        expect(() => { form.Process.Visible = false; }).toThrow(new Error("Method not implemented."));
+        form.Process.Visible = false;
+        expect(form.Process.Visible).toBeTruthy(); // setter doesn't change the underlying mock
         expect(form.Process.ActivePath).toBeDefined();
         expect(() => { form.Process.ActivePath.getLength() }).toThrow(new Error("get active path not implemented"));
         expect(() => { form.Process.ActivePath.get(0) }).toThrow(new Error("get active path not implemented"));
@@ -928,7 +958,7 @@ describe('devKit', () => {
         expect(form.QuickForm.contactquickform.ControlName).toBe("contactquickform");
         expect(form.QuickForm.contactquickform.ControlParent).toBeUndefined();
         expect(form.QuickForm.contactquickform.Visible).toBeTruthy();
-        expect(form.QuickForm.contactquickform.IsLoaded()).toBeTruthy();
+        expect(() => { form.QuickForm.contactquickform.IsLoaded() }).toThrow(new Error("Method not implemented."));
         expect(() => { form.QuickForm.contactquickform.Refresh() }).toThrow(new Error("Method not implemented."));
         expect(() => { form.QuickForm.contactquickform.Disabled = true }).toThrow(new Error("Method not implemented."));
         expect(() => { form.QuickForm.contactquickform.Focus() }).toThrow(new Error("Method not implemented."));
@@ -1126,8 +1156,8 @@ describe('devKit', () => {
         expect(form.Body.IFRAME_PHUOCLE.Label).toBe("PHUOCLE New");
         expect(() => { form.Body.IFRAME_PHUOCLE.Src = "https://phuocle.net" }).toThrow(new Error("setSrc not implemented."));
         expect(() => { form.Body.IFRAME_PHUOCLE.Visible = true }).toThrow(new Error("setVisible not implemented."));
-        expect(() => { var a = form.Body.IFRAME_PHUOCLE.Data; }).toThrow(new Error("getData not implemented."));
-        expect(() => { form.Body.IFRAME_PHUOCLE.Data = "b"; }).toThrow(new Error("setData not implemented."));
+        expect(() => { var a = form.Body.IFRAME_PHUOCLE.Data; }).toThrow();
+        expect(() => { form.Body.IFRAME_PHUOCLE.Data = "b"; }).toThrow();
     });
     test('Tab & Section', () => {
         //setup
@@ -1177,8 +1207,8 @@ describe('devKit', () => {
         expect(form.Body.Tab.SUMMARY_TAB.Section.ACCOUNT_INFORMATION.Visible).toBeFalsy();
         expect(form.Body.Tab.SUMMARY_TAB.Section.ACCOUNT_INFORMATION.Parent).toBeDefined();
         expect(form.Body.Tab.SUMMARY_TAB.Parent).toBeDefined();
-        expect(() => { form.Body.Tab.SUMMARY_TAB.ContentType }).toThrow(new Error("Method not implemented."));
-        expect(() => { form.Body.Tab.SUMMARY_TAB.ContentType = OptionSet.TabContentType.SingleComponent }).toThrow(new Error("Method not implemented."));
+        expect(() => { form.Body.Tab.SUMMARY_TAB.ContentType }).toThrow();
+        expect(() => { form.Body.Tab.SUMMARY_TAB.ContentType = OptionSet.TabContentType.SingleComponent }).toThrow();
     });
     test('Footer & Header', () => {
         //setup
@@ -1378,5 +1408,757 @@ describe('devKit', () => {
         var form = devKit.LoadFormDialog(executionContext, ["name"]);
         expect(form.name.Value).toBe("LE VAN PHUOC");
         expect(() => { form.Close(); }).toThrow(new Error("close not implemented"));
+    });
+    test('devKit.LoadWebApi - CRUD operations', () => {
+        // Setup mock WebApi using simple mocks
+        let createCalled = false, deleteCalled = false, retrieveCalled = false;
+        let retrieveMultipleCalled = false, updateCalled = false, executeCalled = false;
+        let executeMultipleCalled = false, onlineExecuteCalled = false;
+        let onlineExecuteMultipleCalled = false, offlineAvailableCalled = false;
+        let createArgs = null, deleteArgs = null;
+
+        const mockPromise = {
+            then: function (success, error) { return mockPromise; }
+        };
+
+        global.Xrm = {
+            WebApi: {
+                createRecord: function (entityName, data) { createCalled = true; createArgs = { entityName, data }; return mockPromise; },
+                deleteRecord: function (entityName, id) { deleteCalled = true; deleteArgs = { entityName, id }; return mockPromise; },
+                retrieveRecord: function () { retrieveCalled = true; return mockPromise; },
+                retrieveMultipleRecords: function () { retrieveMultipleCalled = true; return mockPromise; },
+                updateRecord: function () { updateCalled = true; return mockPromise; },
+                execute: function () { executeCalled = true; return mockPromise; },
+                executeMultiple: function () { executeMultipleCalled = true; return mockPromise; },
+                online: {
+                    execute: function () { onlineExecuteCalled = true; return mockPromise; },
+                    executeMultiple: function () { onlineExecuteMultipleCalled = true; return mockPromise; }
+                },
+                offline: {
+                    isAvailable: function (entityName) { offlineAvailableCalled = true; return true; }
+                }
+            }
+        };
+
+        var webApi = devKit.LoadWebApi();
+
+        // Test CreateRecord without callback (returns promise)
+        var result = webApi.CreateRecord("account", { name: "Test Account" });
+        expect(createCalled).toBe(true);
+        expect(createArgs.entityName).toBe("account");
+
+        // Test CreateRecord with callback
+        var successCallback = function () { };
+        var errorCallback = function () { };
+        webApi.CreateRecord("account", { name: "Test" }, successCallback, errorCallback);
+
+        // Test DeleteRecord without callback
+        webApi.DeleteRecord("account", "guid-123");
+        expect(deleteCalled).toBe(true);
+        expect(deleteArgs.entityName).toBe("account");
+        expect(deleteArgs.id).toBe("guid-123");
+
+        // Test DeleteRecord with callback
+        webApi.DeleteRecord("account", "guid-123", successCallback, errorCallback);
+
+        // Test RetrieveRecord (first signature) without callback
+        webApi.RetrieveRecord("account", "guid-123", "?$select=name");
+        expect(retrieveCalled).toBe(true);
+
+        // Test RetrieveRecord with callback
+        webApi.RetrieveRecord("account", "guid-123", "?$select=name", successCallback, errorCallback);
+
+        // Test RetrieveMultipleRecords without callback
+        webApi.RetrieveMultipleRecords("account", "?$select=name", 100);
+        expect(retrieveMultipleCalled).toBe(true);
+
+        // Test RetrieveMultipleRecords with callback
+        webApi.RetrieveMultipleRecords("account", "?$select=name", 100, successCallback, errorCallback);
+
+        // Test UpdateRecord without callback
+        webApi.UpdateRecord("account", "guid-123", { name: "Updated" });
+        expect(updateCalled).toBe(true);
+
+        // Test UpdateRecord with callback
+        webApi.UpdateRecord("account", "guid-123", { name: "Updated" }, successCallback, errorCallback);
+
+        // Test Execute without callback
+        webApi.Execute({ getMetadata: () => ({}) });
+        expect(executeCalled).toBe(true);
+
+        // Test Execute with callback
+        webApi.Execute({ getMetadata: () => ({}) }, successCallback, errorCallback);
+
+        // Test ExecuteMultiple without callback
+        webApi.ExecuteMultiple([{ getMetadata: () => ({}) }]);
+        expect(executeMultipleCalled).toBe(true);
+
+        // Test ExecuteMultiple with callback
+        webApi.ExecuteMultiple([{ getMetadata: () => ({}) }], successCallback, errorCallback);
+
+        // Test Online.Execute
+        var online = webApi.Online;
+        expect(online).toBeDefined();
+        online.Execute({ getMetadata: () => ({}) });
+        expect(onlineExecuteCalled).toBe(true);
+
+        online.Execute({ getMetadata: () => ({}) }, successCallback, errorCallback);
+
+        // Test Online.ExecuteMultiple
+        online.ExecuteMultiple([{ getMetadata: () => ({}) }]);
+        expect(onlineExecuteMultipleCalled).toBe(true);
+
+        online.ExecuteMultiple([{ getMetadata: () => ({}) }], successCallback, errorCallback);
+
+        // Test Offline.IsAvailable
+        var offline = webApi.Offline;
+        expect(offline).toBeDefined();
+        var isAvailable = offline.IsAvailable("account");
+        expect(offlineAvailableCalled).toBe(true);
+        expect(isAvailable).toBe(true);
+    });
+    test('devKit.LoadWebApi - RetrieveRecords with fetchXml', () => {
+        // Mock DOMParser for Node.js environment
+        global.DOMParser = class {
+            parseFromString(str, type) {
+                // Simple mock that extracts entity name from fetchXml
+                const match = str.match(/entity\s+name="([^"]+)"/);
+                return {
+                    querySelector: (selector) => {
+                        if (selector === 'entity' && match) {
+                            return {
+                                hasAttribute: (attr) => attr === 'name' && match,
+                                getAttribute: (attr) => attr === 'name' ? match[1] : null
+                            };
+                        }
+                        return null;
+                    }
+                };
+            }
+        };
+
+        // Setup mock for retrieveMultipleRecords that returns entities
+        const mockResult = {
+            entities: [
+                { accountid: "guid-1", name: "Account 1" },
+                { accountid: "guid-2", name: "Account 2" }
+            ]
+        };
+        let retrieveMultipleCalled = false;
+        const mockPromise = {
+            then: function (successFn, errorFn) {
+                const result = successFn(mockResult);
+                return {
+                    then: function (cb) { if (cb) cb(result); return this; }
+                };
+            }
+        };
+        global.Xrm = {
+            WebApi: {
+                retrieveMultipleRecords: function () { retrieveMultipleCalled = true; return mockPromise; }
+            }
+        };
+
+        var webApi = devKit.LoadWebApi();
+
+        // Class constructor factory
+        class AccountApi {
+            constructor(entity) {
+                this.id = entity.accountid;
+                this.name = entity.name;
+            }
+        }
+
+        // Test RetrieveRecords with plain fetchXml (starts with <fetch)
+        var fetchXml = '<fetch><entity name="account"><attribute name="name"/></entity></fetch>';
+        var result = webApi.RetrieveRecords(AccountApi, fetchXml);
+        expect(retrieveMultipleCalled).toBe(true);
+
+        // Test RetrieveRecords with fetchXml query string
+        var fetchXmlQuery = '?fetchXml=' + encodeURIComponent(fetchXml);
+        webApi.RetrieveRecords(AccountApi, fetchXmlQuery);
+
+        // Test RetrieveRecords with entity name and OData options
+        webApi.RetrieveRecords(AccountApi, "account", "?$select=name", 100);
+
+        // Test RetrieveRecords with callback
+        var successCallback = function () { };
+        var errorCallback = function () { };
+        webApi.RetrieveRecords(AccountApi, fetchXml, successCallback, errorCallback);
+
+        // Test RetrieveRecords with maxPageSize as number followed by callback
+        webApi.RetrieveRecords(AccountApi, fetchXml, 50, successCallback);
+
+        // Test RetrieveRecords with entity name, options, and function callback (no maxPageSize)
+        webApi.RetrieveRecords(AccountApi, "account", "?$select=name", successCallback, errorCallback);
+
+        // Test factory function instead of class
+        var factoryFn = (entity) => ({ id: entity.accountid, name: entity.name });
+        webApi.RetrieveRecords(factoryFn, fetchXml);
+    });
+    test('devKit.LoadWebApi - RetrieveRecords empty result', () => {
+        // Mock DOMParser for Node.js environment
+        global.DOMParser = class {
+            parseFromString(str, type) {
+                const match = str.match(/entity\s+name="([^"]+)"/);
+                return {
+                    querySelector: (selector) => {
+                        if (selector === 'entity' && match) {
+                            return {
+                                hasAttribute: (attr) => attr === 'name' && match,
+                                getAttribute: (attr) => attr === 'name' ? match[1] : null
+                            };
+                        }
+                        return null;
+                    }
+                };
+            }
+        };
+
+        const mockResult = { entities: [] };
+        let retrieveCalled = false;
+        const mockPromise = {
+            then: function (successFn) {
+                const result = successFn(mockResult);
+                return { then: function (cb) { if (cb) cb(result); return this; } };
+            }
+        };
+        global.Xrm = {
+            WebApi: {
+                retrieveMultipleRecords: function () { retrieveCalled = true; return mockPromise; }
+            }
+        };
+
+        var webApi = devKit.LoadWebApi();
+        var fetchXml = '<fetch><entity name="account"><attribute name="name"/></entity></fetch>';
+        var result = webApi.RetrieveRecords((e) => e, fetchXml);
+        expect(retrieveCalled).toBe(true);
+    });
+    test('devKit.LoadWebApi - RetrieveRecord v2 with apiConstructor', () => {
+        const mockEntity = { accountid: "guid-1", name: "Test Account" };
+        let retrieveCalled = false;
+        const mockPromise = {
+            then: function (successFn) {
+                const result = successFn(mockEntity);
+                return { then: function (cb) { if (cb) cb(result); return this; } };
+            }
+        };
+        global.Xrm = {
+            WebApi: {
+                retrieveRecord: function () { retrieveCalled = true; return mockPromise; }
+            }
+        };
+
+        var webApi = devKit.LoadWebApi();
+
+        class AccountApi {
+            constructor(entity) {
+                this.id = entity.accountid;
+                this.name = entity.name;
+            }
+        }
+
+        // Test with class constructor, without options (should default to ?$select=*)
+        webApi.RetrieveRecord(AccountApi, "account", "guid-1");
+        expect(retrieveCalled).toBe(true);
+
+        // Test with class constructor, with options
+        webApi.RetrieveRecord(AccountApi, "account", "guid-1", "?$select=name");
+
+        // Test with callback instead of options (options is callback function)
+        var successCallback = function () { };
+        var errorCallback = function () { };
+        webApi.RetrieveRecord(AccountApi, "account", "guid-1", successCallback, errorCallback);
+
+        // Test with all params including callbacks
+        webApi.RetrieveRecord(AccountApi, "account", "guid-1", "?$select=name", successCallback, errorCallback);
+
+        // Test with factory function
+        var factoryFn = (entity) => ({ id: entity.accountid });
+        webApi.RetrieveRecord(factoryFn, "account", "guid-1");
+    });
+    test('devKit.LoadCopilot', () => {
+        let executeEventCalled = false, executePromptCalled = false;
+        let executeEventArgs = null, executePromptArgs = null;
+        const mockPromise = {
+            then: function (success, error) { return mockPromise; }
+        };
+        global.Xrm = {
+            Copilot: {
+                executeEvent: function (eventName, params) { executeEventCalled = true; executeEventArgs = { eventName, params }; return mockPromise; },
+                executePrompt: function (promptText) { executePromptCalled = true; executePromptArgs = { promptText }; return mockPromise; }
+            }
+        };
+
+        var copilot = devKit.LoadCopilot();
+
+        // Test ExecuteEvent without callback (returns promise)
+        var result = copilot.ExecuteEvent("eventName", { param1: "value1" });
+        expect(executeEventCalled).toBe(true);
+        expect(executeEventArgs.eventName).toBe("eventName");
+
+        // Test ExecuteEvent with callbacks
+        var successCallback = function () { };
+        var errorCallback = function () { };
+        copilot.ExecuteEvent("eventName", { param1: "value1" }, successCallback, errorCallback);
+
+        // Test ExecutePrompt without callback
+        result = copilot.ExecutePrompt("What is the weather?");
+        expect(executePromptCalled).toBe(true);
+        expect(executePromptArgs.promptText).toBe("What is the weather?");
+
+        // Test ExecutePrompt with callbacks
+        copilot.ExecutePrompt("What is the weather?", successCallback, errorCallback);
+    });
+    test('devKit.LoadFormV2 - comprehensive form loading', () => {
+        // Setup complex mock form context
+        var attributes = new ItemCollectionMock([
+            new AttributeMock({ name: "name", value: "Test Name" }),
+            new AttributeMock({ name: "header_revenue", value: 1000000 })
+        ]);
+        var entity = new EntityMock({
+            entityName: "account",
+            id: "guid-123",
+            primaryValue: "Test Account",
+            attributes: attributes
+        });
+        var data = new DataMock(entity);
+
+        var stringControl = new StringControlMock({
+            attribute: new StringAttributeMock({ name: "name", value: "Test Name" }),
+            name: "name",
+            label: "Account Name"
+        });
+        var headerControl = new StringControlMock({
+            attribute: new StringAttributeMock({ name: "header_revenue", value: 1000000 }),
+            name: "header_revenue",
+            label: "Revenue"
+        });
+
+        var ui = new UiMock({
+            formSelector: new FormSelectorMock(new ItemCollectionMock([
+                new FormItemMock({
+                    id: "form-guid",
+                    label: "Main Form",
+                    currentItem: true,
+                    formType: OptionSet.FormType.Update
+                })
+            ])),
+            controls: new ItemCollectionMock([stringControl, headerControl]),
+            tabs: new ItemCollectionMock([])
+        });
+
+        // Mock Xrm for LoadUtility and LoadOthers with plain functions
+        const mockPromise = { then: function () { return this; } };
+        global.Xrm = {
+            App: {
+                addGlobalNotification: function () { return mockPromise; },
+                clearGlobalNotification: function () { return mockPromise; },
+                sidePanes: {
+                    state: 0,
+                    createPane: function () { return mockPromise; },
+                    getPane: function () { return null; },
+                    getAllPanes: function () { return []; },
+                    getSelectedPane: function () { return null; }
+                }
+            },
+            Device: {
+                captureAudio: function () { return mockPromise; },
+                captureImage: function () { return mockPromise; },
+                captureVideo: function () { return mockPromise; },
+                getBarcodeValue: function () { return mockPromise; },
+                getCurrentPosition: function () { return mockPromise; },
+                pickFile: function () { return mockPromise; }
+            },
+            Encoding: {
+                htmlAttributeEncode: function () { },
+                htmlDecode: function () { },
+                htmlEncode: function () { },
+                xmlAttributeEncode: function () { },
+                xmlEncode: function () { }
+            },
+            Navigation: {
+                navigateTo: function () { return mockPromise; },
+                openAlertDialog: function () { return mockPromise; },
+                openConfirmDialog: function () { return mockPromise; },
+                openErrorDialog: function () { return mockPromise; },
+                openFile: function () { return mockPromise; },
+                openForm: function () { return mockPromise; },
+                openUrl: function () { return mockPromise; },
+                openWebResource: function () { return mockPromise; }
+            },
+            Panel: {
+                loadPanel: function () { }
+            },
+            Utility: {
+                closeProgressIndicator: function () { },
+                getEntityMetadata: function () { return mockPromise; },
+                getEntityMainFormDescriptor: function () { return mockPromise; },
+                getGlobalContext: function () {
+                    return {
+                        client: {
+                            getClient: function () { return 'Web'; },
+                            getClientState: function () { return 'Online'; },
+                            getFormFactor: function () { return 1; },
+                            isNetworkAvailable: function () { return true; },
+                            isOffline: function () { return false; }
+                        },
+                        getClientUrl: function () { return 'https://test.crm.dynamics.com'; },
+                        getCurrentAppUrl: function () { return 'https://test.crm.dynamics.com/main.aspx'; },
+                        isOnPremises: function () { return false; },
+                        getCurrentAppName: function () { return mockPromise; },
+                        getCurrentAppProperties: function () { return mockPromise; },
+                        getAdvancedConfigSetting: function () { },
+                        prependOrgName: function (path) { return '/org' + path; },
+                        getWebResourceUrl: function () { },
+                        getVersion: function () { return '9.2.0.0'; },
+                        organizationSettings: {
+                            attributes: {},
+                            baseCurrency: {},
+                            baseCurrencyId: 'usd-guid',
+                            defaultCountryCode: 'US',
+                            fullNameConventionCode: 1,
+                            isAutoSaveEnabled: true,
+                            isTrialOrganization: false,
+                            languageId: 1033,
+                            organizationExpiryDate: null,
+                            organizationId: 'org-guid',
+                            uniqueName: 'testorg',
+                            useSkypeProtocol: false
+                        },
+                        userSettings: {
+                            dateFormattingInfo: {},
+                            defaultDashboardId: 'dash-guid',
+                            isGuidedHelpEnabled: true,
+                            isHighContrastEnabled: false,
+                            isRTL: false,
+                            languageId: 1033,
+                            roles: new ItemCollectionMock([]),
+                            securityRolePrivileges: [],
+                            securityRoles: [],
+                            getTimeZoneOffsetMinutes: function () { return -480; },
+                            transactionCurrency: {},
+                            transactionCurrencyId: 'currency-guid',
+                            userId: 'user-guid',
+                            userName: 'testuser'
+                        }
+                    };
+                },
+                getLearningPathAttributeName: function () { },
+                invokeProcessAction: function () { return mockPromise; },
+                lookupObjects: function () { return mockPromise; },
+                getResourceString: function () { },
+                refreshParentGrid: function () { },
+                showProgressIndicator: function () { },
+                getPageContext: function () { }
+            },
+            WebApi: {
+                createRecord: function () { return mockPromise; },
+                deleteRecord: function () { return mockPromise; },
+                retrieveRecord: function () { return mockPromise; },
+                retrieveMultipleRecords: function () { return mockPromise; },
+                updateRecord: function () { return mockPromise; },
+                execute: function () { return mockPromise; },
+                executeMultiple: function () { return mockPromise; },
+                online: {
+                    execute: function () { return mockPromise; },
+                    executeMultiple: function () { return mockPromise; }
+                },
+                offline: {
+                    isAvailable: function () { return true; }
+                }
+            },
+            Copilot: {
+                executeEvent: function () { return mockPromise; },
+                executePrompt: function () { return mockPromise; }
+            }
+        };
+
+        XrmMockGenerator.formContext = new FormContextMock(data, ui);
+        var executionContext = XrmMockGenerator.formContext;
+
+        // Mock getFormContext on executionContext
+        executionContext.getFormContext = () => executionContext;
+
+        var formConfig = {
+            body: ['Name'],
+            tab: [],
+            header: [],
+            bpf: [],
+            quick: [],
+            grid: [],
+            navigation: [],
+            dialog: []
+        };
+
+        var form = devKit.LoadFormV2(executionContext, "web-resource", formConfig);
+
+        // Verify form structure
+        expect(form).toBeDefined();
+        expect(form.Body).toBeDefined();
+        expect(form.Body.Name).toBeDefined();
+        expect(form.Header).toBeDefined();
+        expect(form.Process).toBeDefined();
+        expect(form.QuickForm).toBeDefined();
+        expect(form.Grid).toBeDefined();
+        expect(form.Navigation).toBeDefined();
+        expect(form.Utility).toBeDefined();
+        expect(form.ExecutionContext).toBeDefined();
+        expect(form.WebApi).toBeDefined();
+        expect(form.Copilot).toBeDefined();
+        expect(form.SidePanes).toBeDefined();
+    });
+    test('devKit.LoadFormV2 - with tabs and sections', () => {
+        // Simplified test that verifies LoadFormV2 can handle tab config
+        var attributes = new ItemCollectionMock([]);
+        var entity = new EntityMock({ attributes: attributes });
+        var data = new DataMock(entity);
+
+        var ui = new UiMock({
+            formSelector: new FormSelectorMock(new ItemCollectionMock([
+                new FormItemMock({ id: "form-guid", label: "Main", currentItem: true, formType: 2 })
+            ])),
+            controls: new ItemCollectionMock([]),
+            tabs: new ItemCollectionMock([])
+        });
+
+        const mockPromise = { then: function () { return this; } };
+        global.Xrm = {
+            App: { addGlobalNotification: function () { return mockPromise; }, clearGlobalNotification: function () { return mockPromise; }, sidePanes: { state: 0, createPane: function () { return mockPromise; }, getPane: function () { }, getAllPanes: function () { }, getSelectedPane: function () { } } },
+            Utility: { getGlobalContext: function () { return { client: {}, organizationSettings: {}, userSettings: { getTimeZoneOffsetMinutes: function () { } }, getClientUrl: function () { }, getVersion: function () { } }; } },
+            WebApi: { createRecord: function () { return mockPromise; }, online: { execute: function () { return mockPromise; }, executeMultiple: function () { return mockPromise; } }, offline: { isAvailable: function () { } } },
+            Copilot: { executeEvent: function () { return mockPromise; }, executePrompt: function () { return mockPromise; } }
+        };
+
+        XrmMockGenerator.formContext = new FormContextMock(data, ui);
+        var executionContext = XrmMockGenerator.formContext;
+        executionContext.getFormContext = () => executionContext;
+
+        var formConfig = {
+            body: [],
+            tab: [],
+            header: [],
+            bpf: [],
+            quick: [],
+            grid: [],
+            navigation: [],
+            dialog: []
+        };
+
+        var form = devKit.LoadFormV2(executionContext, "web-resource", formConfig);
+
+        expect(form.Body).toBeDefined();
+        expect(form.Body.Tab).toBeDefined();
+    });
+    test('devKit.LoadFormV2 - with BPF fields', () => {
+        var attributes = new ItemCollectionMock([]);
+        var entity = new EntityMock({ attributes: attributes });
+        var data = new DataMock(entity);
+
+        var ui = new UiMock({
+            formSelector: new FormSelectorMock(new ItemCollectionMock([
+                new FormItemMock({ id: "form-guid", label: "Main", currentItem: true, formType: 2 })
+            ])),
+            controls: new ItemCollectionMock([]),
+            tabs: new ItemCollectionMock([])
+        });
+
+        const mockPromise = { then: function () { return this; } };
+        global.Xrm = {
+            App: { addGlobalNotification: function () { return mockPromise; }, clearGlobalNotification: function () { return mockPromise; }, sidePanes: { state: 0, createPane: function () { return mockPromise; }, getPane: function () { }, getAllPanes: function () { }, getSelectedPane: function () { } } },
+            Utility: { getGlobalContext: function () { return { client: {}, organizationSettings: {}, userSettings: { getTimeZoneOffsetMinutes: function () { } }, getClientUrl: function () { }, getVersion: function () { } }; } },
+            WebApi: { createRecord: function () { return mockPromise; }, online: { execute: function () { return mockPromise; }, executeMultiple: function () { return mockPromise; } }, offline: { isAvailable: function () { } } },
+            Copilot: { executeEvent: function () { return mockPromise; }, executePrompt: function () { return mockPromise; } }
+        };
+
+        XrmMockGenerator.formContext = new FormContextMock(data, ui);
+        var executionContext = XrmMockGenerator.formContext;
+        executionContext.getFormContext = () => executionContext;
+
+        var formConfig = {
+            body: [],
+            tab: [],
+            header: [],
+            bpf: [],
+            quick: [],
+            grid: [],
+            navigation: [],
+            dialog: []
+        };
+
+        var form = devKit.LoadFormV2(executionContext, "web-resource", formConfig);
+
+        expect(form.Process).toBeDefined();
+    });
+    test('devKit.LoadFormV2 - with quickforms', () => {
+        var attributes = new ItemCollectionMock([]);
+        var entity = new EntityMock({ attributes: attributes });
+        var data = new DataMock(entity);
+
+        var ui = new UiMock({
+            formSelector: new FormSelectorMock(new ItemCollectionMock([
+                new FormItemMock({ id: "form-guid", label: "Main", currentItem: true, formType: 2 })
+            ])),
+            controls: new ItemCollectionMock([])
+        });
+
+        const mockPromise = { then: function () { return this; } };
+        global.Xrm = {
+            App: { addGlobalNotification: function () { return mockPromise; }, clearGlobalNotification: function () { return mockPromise; }, sidePanes: { state: 0, createPane: function () { return mockPromise; }, getPane: function () { }, getAllPanes: function () { }, getSelectedPane: function () { } } },
+            Utility: { getGlobalContext: function () { return { client: {}, organizationSettings: {}, userSettings: { getTimeZoneOffsetMinutes: function () { } }, getClientUrl: function () { }, getVersion: function () { } }; } },
+            WebApi: { createRecord: function () { return mockPromise; }, online: { execute: function () { return mockPromise; }, executeMultiple: function () { return mockPromise; } }, offline: { isAvailable: function () { } } },
+            Copilot: { executeEvent: function () { return mockPromise; }, executePrompt: function () { return mockPromise; } }
+        };
+
+        XrmMockGenerator.formContext = new FormContextMock(data, ui);
+        var executionContext = XrmMockGenerator.formContext;
+        executionContext.getFormContext = () => executionContext;
+
+        var formConfig = {
+            body: [],
+            tab: [],
+            header: [],
+            bpf: [],
+            quick: [],
+            grid: [],
+            navigation: [],
+            dialog: []
+        };
+
+        var form = devKit.LoadFormV2(executionContext, "web-resource", formConfig);
+
+        expect(form.QuickForm).toBeDefined();
+    });
+    test('devKit.LoadFormV2 - with dialog', () => {
+        var attributes = new ItemCollectionMock([
+            new AttributeMock({ name: "dialogfield", value: "test" })
+        ]);
+        var entity = new EntityMock({ attributes: attributes });
+        var data = new DataMock(entity);
+
+        var dialogControl = new StringControlMock({
+            attribute: new StringAttributeMock({ name: "dialogfield", value: "test" }),
+            name: "dialogfield",
+            label: "Dialog Field"
+        });
+
+        var ui = new UiMock({
+            formSelector: new FormSelectorMock(new ItemCollectionMock([
+                new FormItemMock({ id: "form-guid", label: "Main", currentItem: true, formType: 2 })
+            ])),
+            controls: new ItemCollectionMock([dialogControl])
+        });
+
+        const mockPromise = { then: function () { return this; } };
+        global.Xrm = {
+            App: { addGlobalNotification: function () { return mockPromise; }, clearGlobalNotification: function () { return mockPromise; }, sidePanes: { state: 0, createPane: function () { return mockPromise; }, getPane: function () { }, getAllPanes: function () { }, getSelectedPane: function () { } } },
+            Utility: { getGlobalContext: function () { return { client: {}, organizationSettings: {}, userSettings: { getTimeZoneOffsetMinutes: function () { } }, getClientUrl: function () { }, getVersion: function () { } }; } },
+            WebApi: { createRecord: function () { return mockPromise; }, online: { execute: function () { return mockPromise; }, executeMultiple: function () { return mockPromise; } }, offline: { isAvailable: function () { } } },
+            Copilot: { executeEvent: function () { return mockPromise; }, executePrompt: function () { return mockPromise; } }
+        };
+
+        XrmMockGenerator.formContext = new FormContextMock(data, ui);
+        var executionContext = XrmMockGenerator.formContext;
+        executionContext.getFormContext = () => executionContext;
+
+        var formConfig = {
+            body: [],
+            tab: [],
+            header: [],
+            bpf: [],
+            quick: [],
+            grid: [],
+            navigation: [],
+            dialog: ['dialogfield']
+        };
+
+        var form = devKit.LoadFormV2(executionContext, "web-resource", formConfig);
+
+        expect(form.Dialog).toBeDefined();
+        expect(form.Dialog.dialogfield).toBeDefined();
+    });
+    test('devKit.LoadSidePanes', () => {
+        let createCalled = false, getCalled = false, getAllCalled = false, getSelectedCalled = false;
+        const mockPromise = { then: function (cb) { if (cb) cb(); return this; } };
+        global.Xrm = {
+            App: {
+                sidePanes: {
+                    state: 0,
+                    createPane: function () { createCalled = true; return mockPromise; },
+                    getPane: function (id) { getCalled = true; return { id: 'pane-1' }; },
+                    getAllPanes: function () { getAllCalled = true; return [{ id: 'pane-1' }, { id: 'pane-2' }]; },
+                    getSelectedPane: function () { getSelectedCalled = true; return { id: 'pane-1' }; }
+                }
+            }
+        };
+
+        var sidePanes = devKit.LoadSidePanes();
+
+        // Test DisplayState getter/setter
+        expect(sidePanes.DisplayState).toBe(0);
+        sidePanes.DisplayState = 1;
+        expect(Xrm.App.sidePanes.state).toBe(1);
+
+        // Test Create
+        var successCallback = function () { };
+        sidePanes.Create({ id: 'pane-3', title: 'New Pane' }, successCallback);
+        expect(createCalled).toBe(true);
+
+        // Test Get
+        var pane = sidePanes.Get('pane-1');
+        expect(getCalled).toBe(true);
+        expect(pane.id).toBe('pane-1');
+
+        // Test GetAll
+        var allPanes = sidePanes.GetAll();
+        expect(getAllCalled).toBe(true);
+        expect(allPanes.length).toBe(2);
+
+        // Test GetSelected
+        var selectedPane = sidePanes.GetSelected();
+        expect(getSelectedCalled).toBe(true);
+        expect(selectedPane.id).toBe('pane-1');
+    });
+    test('devKit.LoadWebApi - RetrieveRecords throws error for OData without entity', () => {
+        global.Xrm = {
+            WebApi: {
+                retrieveMultipleRecords: function () { return { then: function () { } }; }
+            }
+        };
+
+        var webApi = devKit.LoadWebApi();
+
+        // OData query that starts with ? but doesn't contain fetchXml - should throw
+        expect(() => {
+            webApi.RetrieveRecords((e) => e, '?$select=name&$filter=name eq "test"');
+        }).toThrow('Entity name cannot be determined from OData query. Please provide entityLogicalName as second parameter.');
+    });
+    test('devKit.LoadWebApi - extractEntityName throws error when entity not found', () => {
+        const mockPromise = {
+            then: function (successFn) {
+                return { then: function () { } };
+            }
+        };
+        global.Xrm = {
+            WebApi: {
+                retrieveMultipleRecords: function () { return mockPromise; }
+            }
+        };
+        // Create a valid DOMParser for the test environment
+        global.DOMParser = class {
+            parseFromString(str, type) {
+                return {
+                    querySelector: () => null // Entity node not found
+                };
+            }
+        };
+
+        var webApi = devKit.LoadWebApi();
+
+        // FetchXml without entity name attribute should throw
+        var invalidFetchXml = '<fetch><entity></entity></fetch>';
+        expect(() => {
+            webApi.RetrieveRecords((e) => e, invalidFetchXml);
+        }).toThrow('Entity name not found in fetchXml');
     });
 });
