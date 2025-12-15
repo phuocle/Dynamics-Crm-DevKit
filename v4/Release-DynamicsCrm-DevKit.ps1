@@ -145,10 +145,24 @@ try {
         if ($backup) { $backups += $backup }
     }
 
-    # 3. Build Solution
-    Write-Host "`nBuilding Solution..." -ForegroundColor Yellow
+    # 3. Restore NuGet Packages
+    Write-Host "`nRestoring NuGet packages..." -ForegroundColor Yellow
     $msbuild = Get-MSBuildPath
     Write-Host "Using MSBuild: $msbuild" -ForegroundColor DarkGray
+
+    $restoreArgs = @(
+        "$SolutionFile",
+        "/t:Restore",
+        "/nologo",
+        "/v:q" # Quiet verbosity for restore
+    )
+
+    & $msbuild $restoreArgs
+    if ($LASTEXITCODE -ne 0) { throw "NuGet restore failed with exit code $LASTEXITCODE" }
+    Write-Host "Restore Success." -ForegroundColor Green
+
+    # 4. Build Solution
+    Write-Host "`nBuilding Solution..." -ForegroundColor Yellow
 
     # Clean published folder
     $publishDir = Join-Path $PublishedRoot $Version
@@ -162,6 +176,7 @@ try {
         "/nologo",
         "/v:m" # Minimal verbosity
     )
+
 
     & $msbuild $buildArgs
     if ($LASTEXITCODE -ne 0) { throw "Build failed with exit code $LASTEXITCODE" }
