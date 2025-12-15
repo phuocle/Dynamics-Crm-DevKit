@@ -11,6 +11,12 @@ A development toolkit for Microsoft Dynamics 365 / Power Platform / Dataverse. T
 
 > [!IMPORTANT]
 > When actions are performed by an AI agent, all projects and solutions should be built in **DEBUG mode** instead of Release mode.
+> The Release mode requires PFX signing key password which is only available to human operators.
+
+### AI Build Command (No PFX required)
+```powershell
+.\Release-DynamicsCrm-DevKit-Debug.ps1
+```
 
 ## Project Overview
 
@@ -25,36 +31,31 @@ A development toolkit for Microsoft Dynamics 365 / Power Platform / Dataverse. T
 > [!IMPORTANT]
 > Use MSBuild, NOT `dotnet build`. The VSIX project requires MSBuild.
 
-### Build All Projects
+### Build All Projects (DEBUG - for AI)
 ```powershell
-# MSBuild path (VS 2026)
 $msbuild = "C:\Program Files\Microsoft Visual Studio\18\Professional\MSBuild\Current\Bin\MSBuild.exe"
-
-# Build everything
-& $msbuild "DynamicsCrm.DevKit.AllInOne.slnx" /t:Build /p:Configuration=Release /v:m
+& $msbuild "DynamicsCrm.DevKit.AllInOne.slnx" /t:Build /p:Configuration=Debug /v:m
 ```
 
 ### Build Individual Components
 ```powershell
 # VSIX Extension
-& $msbuild "DynamicsCrm.DevKit.slnx" /t:Build /p:Configuration=Release
+& $msbuild "DynamicsCrm.DevKit.slnx" /t:Build /p:Configuration=Debug
 
 # CLI Tool
-& $msbuild "DynamicsCrm.DevKit.Cli.slnx" /t:Build /p:Configuration=Release
+& $msbuild "DynamicsCrm.DevKit.Cli.slnx" /t:Build /p:Configuration=Debug
 
 # Analyzers
-& $msbuild "DynamicsCrm.DevKit.Analyzers.slnx" /t:Build /p:Configuration=Release
+& $msbuild "DynamicsCrm.DevKit.Analyzers.slnx" /t:Build /p:Configuration=Debug
 ```
 
-### Final Release
-```powershell
-.\Release-DynamicsCrm-DevKit.ps1
-```
+### Release Scripts
 
-### Release Today
-```powershell
-.\Release-DynamicsCrm-DevKit-CurrentDate.ps1
-```
+| Script | Mode | PFX Required | Use Case |
+|--------|------|--------------|----------|
+| `Release-DynamicsCrm-DevKit-Debug.ps1` | DEBUG | No | AI Agent sessions |
+| `Release-DynamicsCrm-DevKit-CurrentDate.ps1` | RELEASE | Yes | Human testing |
+| `Release-DynamicsCrm-DevKit.ps1` | RELEASE | Yes | Official annual release |
 
 ### Run Tests
 ```powershell
@@ -214,11 +215,12 @@ Check `DynamicsCrm.DevKit.Cli\Properties\launchSettings.json` for debug profiles
 
 | File | Purpose |
 |------|---------|
-| `version.txt` | Current version (e.g., `4.00.00.00`) |
-| `date.txt` | Build date placeholder |
+| `Release-DynamicsCrm-DevKit-Debug.ps1` | AI Agent build script (DEBUG mode) |
+| `Release-DynamicsCrm-DevKit.ps1` | Human release script (line 27 has version) |
 | `DynamicsCrm.DevKit.Shared\Const.cs` | Version constants |
 | `source.extension.vsixmanifest` | VSIX metadata |
 | `DynamicsCrm.DevKit.Cli.json` | CLI configuration schema |
+| `Clean-Repository.ps1` | Reset repo to fresh checkout state |
 
 ## Dependencies
 

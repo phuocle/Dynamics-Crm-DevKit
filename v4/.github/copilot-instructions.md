@@ -13,6 +13,18 @@
 
 > [!IMPORTANT]
 > When actions are performed by an AI agent, all projects and solutions should be built in **DEBUG mode** instead of Release mode.
+> The Release mode requires PFX signing key password which is only available to human operators.
+
+### AI Build Command
+```powershell
+.\Release-DynamicsCrm-DevKit-Debug.ps1
+```
+This script builds in DEBUG mode without requiring PFX password.
+
+### Human Release Command (requires PFX password)
+```powershell
+.\Release-DynamicsCrm-DevKit.ps1
+```
 
 ## C# Conventions
 
@@ -24,18 +36,19 @@
 
 ## Solution Structure
 
-### Build All Projects
+### Build All Projects (DEBUG - for AI)
 ```powershell
 $msbuild = "C:\Program Files\Microsoft Visual Studio\18\Professional\MSBuild\Current\Bin\MSBuild.exe"
-& $msbuild "DynamicsCrm.DevKit.AllInOne.slnx" /t:Build /p:Configuration=Release /v:m
+& $msbuild "DynamicsCrm.DevKit.AllInOne.slnx" /t:Build /p:Configuration=Debug /v:m
 ```
 
-### Release All Projects
-```powershell
-.\Release-DynamicsCrm-DevKit-CurrentDate.ps1
-# Or with specific date:
-.\Release-DynamicsCrm-DevKit.ps1 -BuildDate "2025.12.12 10.00.00"
-```
+### Release Scripts
+
+| Script | Mode | PFX Required | Use Case |
+|--------|------|--------------|----------|
+| `Release-DynamicsCrm-DevKit-Debug.ps1` | DEBUG | No | AI Agent sessions |
+| `Release-DynamicsCrm-DevKit-CurrentDate.ps1` | RELEASE | Yes | Human testing |
+| `Release-DynamicsCrm-DevKit.ps1` | RELEASE | Yes | Official annual release |
 
 ### Project Types
 
