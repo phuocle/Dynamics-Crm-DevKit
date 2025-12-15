@@ -1,8 +1,8 @@
-# Task: Server (Plugins, Workflows, Custom APIs, Data Providers)
+# Task: Server (Plugins, Workflows, Custom Actions, Custom APIs, Data Providers)
 
 ## Overview
 
-The Server task deploys server-side assemblies to Dynamics 365/Dataverse, including Plugins, Workflows, Custom Actions, Custom APIs, and Data Providers. It automatically registers assemblies, plugin types, and plugin steps based on `CrmPluginRegistration` attributes in your code. The task supports advanced features like 4 images, Managed Identity, batch processing, and fast deployment options. It can deploy from DLL files or NuGet packages and handles signing for Managed Identity scenarios.
+The Server task deploys server-side assemblies to Dynamics 365/Dataverse, including Plugins, Workflows, Custom Actions, Custom APIs, and Data Providers. It automatically registers assemblies, plugin types, and plugin steps based on `CrmPluginRegistration` attributes in your code. The task supports advanced features like 4 images, managed identity, batch processing, and fast deployment options. It can deploy from DLL files or nuget packages and handles signing for managed identity scenarios.
 
 ---
 
@@ -175,15 +175,15 @@ Array of file patterns to exclude from deployment. Applied after `includefiles`.
 | `Offline` | bool | `false` | Enable offline execution |
 | `Server` | bool | `true` | Enable server execution |
 
-### Image Support (4 Images)
+### Image Support: 4 Images
 
-**PreImage (Image1):**
+**Image1:**
 - `Image1Name` - Image entity alias
 - `Image1Alias` - Image alias for code
 - `Image1Type` | ImageTypeEnum | PreImage, PostImage, or Both
 - `Image1Attributes` - Comma-separated attributes
 
-**PostImage (Image2), Image3, Image4:** Same properties as Image1
+**Image2, Image3, Image4:** Same properties as Image1
 
 ---
 
