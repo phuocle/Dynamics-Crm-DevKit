@@ -2,16 +2,22 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
   <metadata>
     <id>DynamicsCrm.DevKit.Tool</id>
-    <title>DynamicsCrm.DevKit.Tool - Tool for DynamicsCrm.DevKit tool</title>
+    <title>DynamicsCrm.DevKit.Tool - Utility Tools for Dynamics 365 Development</title>
     <version>4.00.00.00</version>
     <authors>PhuocLe</authors>
     <license type="file">license\LICENSE.txt</license>
     <icon>images\icon.png</icon>
+    <readme>docs\README.md</readme>
     <projectUrl>https://github.com/phuocle/Dynamics-Crm-DevKit</projectUrl>
+    <repository type="git" url="https://github.com/phuocle/Dynamics-Crm-DevKit.git" branch="main" />
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>Tool for DynamicsCrm.DevKit tool</description>
+    <description>Utility tools for DynamicsCrm.DevKit development. Includes JavaScript/CSS minification via NUglify and code coverage analysis tools for Dynamics 365/Dataverse projects.</description>
+    <releaseNotes>Version 4.0.0:
+- JavaScript and CSS minification using NUglify
+- Code coverage analysis integration with Visual Studio Coverage tools
+- Utility executable for build automation tasks</releaseNotes>
     <language>en-US</language>
-	<tags>Dynamics, Dynamics365, DynamicsCrm, Crm, Cli, DevKit, Analyzer, Dataverse</tags>
+    <tags>Dynamics Dynamics365 DynamicsCrm Crm DevKit Dataverse Minify JavaScript CSS CodeCoverage Utility Build</tags>
   </metadata>
   <files>
     <file src="..\images\icon.png" target="images\icon.png" />
