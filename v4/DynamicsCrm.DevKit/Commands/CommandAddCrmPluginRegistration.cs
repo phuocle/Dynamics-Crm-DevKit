@@ -106,8 +106,8 @@ namespace DynamicsCrm.DevKit.Commands
                     {
                         if (hasExistingAttributes)
                         {
-                            // Workflow attributes don't need Id updates (they don't use Id)
-                            await VS.MessageBox.ShowAsync($"Workflow attributes already exist and don't require Id updates.", $"Information");
+                            // Update existing attributes with Id
+                            await UpdateAttributesWithIdAsync(@class, attributes);
                         }
                         else
                         {
@@ -273,6 +273,7 @@ namespace DynamicsCrm.DevKit.Commands
 
             foreach (var row in rows.Entities)
             {
+                var pluginTypeId = row.Id;
                 var name = row.GetAttributeValue<string>("name");
                 var friendlyname = row.GetAttributeValue<string>("friendlyname");
                 var description = row.GetAttributeValue<string>("description");
@@ -280,7 +281,7 @@ namespace DynamicsCrm.DevKit.Commands
                 var isolationMode = XrmHelper.GetAliasedValue<OptionSetValue>(row, "a.isolationmode").Value;
                 var isolationModeName = isolationMode == 0 ? "IsolationModeEnum.None" : "IsolationModeEnum.Sandbox";
 
-                var attribute = $"\"{name}\", \"{friendlyname}\", \"{description}\", \"{workflowactivitygroupname}\", {isolationModeName}, PluginType = PluginType.Workflow";
+                var attribute = $"\"{name}\", \"{friendlyname}\", \"{description}\", \"{workflowactivitygroupname}\", {isolationModeName}, PluginType = PluginType.Workflow, Id = \"{pluginTypeId}\"";
                 list.Add(attribute);
             }
             return list;
