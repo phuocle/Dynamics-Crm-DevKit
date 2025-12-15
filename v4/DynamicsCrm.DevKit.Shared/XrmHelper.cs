@@ -25,9 +25,9 @@ namespace DynamicsCrm.DevKit.Shared
         public static int COUNT_DeleteAsync = 0;
         public static int COUNT_CreateAsync = 0;
         //public static int COUNT_RequestAsync = 0;
-        public static List<EntityMetadata> EntitiesMetadata { get; set; } = new List<EntityMetadata>();
-        public static List<SystemForm> EntitiesFormXml { get; set; } = new List<SystemForm>();
-        public static List<ProcessForm> EntitiesProcessForm { get; set; } = new List<ProcessForm>();
+        public static List<EntityMetadata> EntitiesMetadata { get; set; } = [];
+        public static List<SystemForm> EntitiesFormXml { get; set; } = [];
+        public static List<ProcessForm> EntitiesProcessForm { get; set; } = [];
 
         /// <summary>
         /// Retrieves all records using FetchXML with automatic paging.
@@ -123,8 +123,8 @@ namespace DynamicsCrm.DevKit.Shared
             logicalname = logicalname.ToLower();
             var filterExpression = new MetadataFilterExpression();
             filterExpression.Conditions.Add(new MetadataConditionExpression("DataProviderId", MetadataConditionOperator.Equals, Guid.Parse("B2112A7E-B26C-42F7-9B63-9A809A9D716F")));
-            var propertiesExpression = new MetadataPropertiesExpression(new string[7]
-            {
+            var propertiesExpression = new MetadataPropertiesExpression(
+            [
                 "DataProviderId",
                 "LogicalName",
                 "SchemaName",
@@ -132,9 +132,11 @@ namespace DynamicsCrm.DevKit.Shared
                 "DisplayName",
                 "ExternalName",
                 "DisplayCollectionName"
-            });
-            var entityQueryExpression = new EntityQueryExpression();
-            entityQueryExpression.Criteria = new MetadataFilterExpression();
+            ]);
+            var entityQueryExpression = new EntityQueryExpression
+            {
+                Criteria = new MetadataFilterExpression()
+            };
             entityQueryExpression.Criteria = filterExpression;
             entityQueryExpression.Properties = propertiesExpression;
             var request = new RetrieveMetadataChangesRequest
@@ -201,22 +203,22 @@ namespace DynamicsCrm.DevKit.Shared
             await serviceClient.UpdateAsync(update);
         }
 
-        public static async Task<List<EntityMetadata>> GetEntitiesMetadataAsync(ServiceClient serviceClient)
+        public static async Task<List<EntityMetadata>> GetEntitiesMetadataAsync(ServiceClient serviceClient, EntityFilters entityFilters)
         {
             var request = new RetrieveAllEntitiesRequest
             {
-                EntityFilters = EntityFilters.All,
+                EntityFilters = entityFilters,
                 RetrieveAsIfPublished = true
             };
             var response = (RetrieveAllEntitiesResponse)await serviceClient.ExecuteAsync(request);
             return [.. response.EntityMetadata];
         }
 
-        public static async Task<List<string>> GetAllEntitiesSchemaAsync(ServiceClient serviceClient)
+        public static async Task<List<string>> GetAllEntitiesSchemaAsync(ServiceClient serviceClient, EntityFilters entityFilters)
         {
             var request = new RetrieveAllEntitiesRequest
             {
-                EntityFilters = EntityFilters.All,
+                EntityFilters = entityFilters,
                 RetrieveAsIfPublished = true
             };
             var response = (RetrieveAllEntitiesResponse)await serviceClient.ExecuteAsync(request);
@@ -232,7 +234,7 @@ namespace DynamicsCrm.DevKit.Shared
                     ContinueOnError = true,
                     ReturnResponses = true
                 },
-                Requests = new OrganizationRequestCollection()
+                Requests = []
             };
             foreach (var schemaName in schemaNames)
                 request.Requests.Add(new RetrieveEntityRequest { EntityFilters = EntityFilters.All, LogicalName = schemaName.ToLower() });
@@ -258,15 +260,15 @@ namespace DynamicsCrm.DevKit.Shared
 
         public static async Task<EntityMetadata> GetEntityMetadataAsync(ServiceClient serviceClient, string entityLogicalName)
         {
-            var entities = await GetEntitiesMetadataAsync(serviceClient, new List<string> { entityLogicalName });
+            var entities = await GetEntitiesMetadataAsync(serviceClient, [entityLogicalName]);
             return entities.FirstOrDefault();
         }
 
-        public static async Task ReadEntitiesMetadataAsync(ServiceClient serviceClient)
+        public static async Task ReadEntitiesMetadataAsync(ServiceClient serviceClient, EntityFilters entityFilters)
         {
             if (XrmHelper.EntitiesMetadata.Count == 0)
             {
-                XrmHelper.EntitiesMetadata = await XrmHelper.GetEntitiesMetadataAsync(serviceClient);
+                XrmHelper.EntitiesMetadata = await XrmHelper.GetEntitiesMetadataAsync(serviceClient, entityFilters);
             }
         }
 
@@ -419,7 +421,7 @@ namespace DynamicsCrm.DevKit.Shared
 
         public static async Task<List<DeployWebResource>> GetWebResourcesAsync(ServiceClient serviceClient, string fullFileName)
         {
-            var parts = fullFileName.Split(new[] { '\\', '/' }, StringSplitOptions.RemoveEmptyEntries);
+            var parts = fullFileName.Split(['\\', '/'], StringSplitOptions.RemoveEmptyEntries);
             var condition = string.Empty;
             for (var i = parts.Length - 1; i >= 0; i--)
             {
@@ -702,12 +704,12 @@ namespace DynamicsCrm.DevKit.Shared
   </entity>
 </fetch>";
             var rows = await serviceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
-            return rows.Entities.Select(x => new ProcessForm
+            return [.. rows.Entities.Select(x => new ProcessForm
             {
                 EntityLogicalName = logicalName,
                 Name = x.GetAttributeValue<string>("name"),
                 xaml = x.GetAttributeValue<string>("xaml")
-            }).ToList();
+            })];
         }
 
         public static async Task<string> GetDefaultFileWithFormAsync(ServiceClient serviceClient, EntityMetadata entityMetadata, string rootnamespace)
@@ -1193,8 +1195,8 @@ namespace DynamicsCrm.DevKit.Shared
             var list = new List<string>();
             var filterExpression = new MetadataFilterExpression();
             filterExpression.Conditions.Add(new MetadataConditionExpression("DataProviderId", MetadataConditionOperator.Equals, Guid.Parse("B2112A7E-B26C-42F7-9B63-9A809A9D716F")));
-            var propertiesExpression = new MetadataPropertiesExpression(new string[7]
-            {
+            var propertiesExpression = new MetadataPropertiesExpression(
+            [
                 "DataProviderId",
                 "LogicalName",
                 "SchemaName",
@@ -1202,7 +1204,7 @@ namespace DynamicsCrm.DevKit.Shared
                 "DisplayName",
                 "ExternalName",
                 "DisplayCollectionName"
-            });
+            ]);
             var entityQueryExpression = new EntityQueryExpression
             {
                 Criteria = new MetadataFilterExpression()
@@ -1232,143 +1234,143 @@ namespace DynamicsCrm.DevKit.Shared
             {
                 var languages = new List<NameValue>
                 {
-                    new NameValue { Name = "Afrikaans-South Africa", Value = "1078" },
-                    new NameValue { Name = "Albanian-Albania", Value = "1052" },
-                    new NameValue { Name = "Arabic-Algeria", Value = "5121" },
-                    new NameValue { Name = "Arabic-Bahrain", Value = "15361" },
-                    new NameValue { Name = "Arabic-Egypt", Value = "3073" },
-                    new NameValue { Name = "Arabic-Iraq", Value = "2049" },
-                    new NameValue { Name = "Arabic-Jordan", Value = "11265" },
-                    new NameValue { Name = "Arabic-Kuwait", Value = "13313" },
-                    new NameValue { Name = "Arabic-Lebanon", Value = "12289" },
-                    new NameValue { Name = "Arabic-Libya", Value = "4097" },
-                    new NameValue { Name = "Arabic-Morocco", Value = "6145" },
-                    new NameValue { Name = "Arabic-Oman", Value = "8193" },
-                    new NameValue { Name = "Arabic-Qatar", Value = "16385" },
-                    new NameValue { Name = "Arabic-Saudi Arabia", Value = "1025" },
-                    new NameValue { Name = "Arabic-Syria", Value = "10241" },
-                    new NameValue { Name = "Arabic-Tunisia", Value = "7169" },
-                    new NameValue { Name = "Arabic-U.A.E.", Value = "14337" },
-                    new NameValue { Name = "Arabic-Yemen", Value = "9217" },
-                    new NameValue { Name = "Armenian-Armenia", Value = "1067" },
-                    new NameValue { Name = "Azeri (Cyrillic)-Azerbaijan", Value = "2092" },
-                    new NameValue { Name = "Azeri (Latin)-Azerbaijan", Value = "1068" },
-                    new NameValue { Name = "Basque-Spain", Value = "1069" },
-                    new NameValue { Name = "Belarusian-Belarus", Value = "1059" },
-                    new NameValue { Name = "Bulgarian-Bulgaria", Value = "1026" },
-                    new NameValue { Name = "Catalan-Spain", Value = "1027" },
-                    new NameValue { Name = "Chinese-Hong Kong S.A.R.", Value = "3076" },
-                    new NameValue { Name = "Chinese-Macau S.A.R.", Value = "5124" },
-                    new NameValue { Name = "Chinese-People's Republic of China", Value = "2052" },
-                    new NameValue { Name = "Chinese-Singapore", Value = "4100" },
-                    new NameValue { Name = "Chinese-Taiwan", Value = "1028" },
-                    new NameValue { Name = "Croatian-Croatia", Value = "1050" },
-                    new NameValue { Name = "Czech-Czech Republic", Value = "1029" },
-                    new NameValue { Name = "Danish-Denmark", Value = "1030" },
-                    new NameValue { Name = "Divehi-Maldives", Value = "1125" },
-                    new NameValue { Name = "Dutch-Belgium", Value = "2067" },
-                    new NameValue { Name = "Dutch-Netherlands", Value = "1043" },
-                    new NameValue { Name = "English-Australia", Value = "3081" },
-                    new NameValue { Name = "English-Belize", Value = "10249" },
-                    new NameValue { Name = "English-Canada", Value = "4105" },
-                    new NameValue { Name = "English-Caribbean", Value = "9225" },
-                    new NameValue { Name = "English-Ireland", Value = "6153" },
-                    new NameValue { Name = "English-Jamaica", Value = "8201" },
-                    new NameValue { Name = "English-New Zealand", Value = "5129" },
-                    new NameValue { Name = "English-Republic of the Philippines", Value = "13321" },
-                    new NameValue { Name = "English-South Africa", Value = "7177" },
-                    new NameValue { Name = "English-Trinidad and Tobago", Value = "11273" },
-                    new NameValue { Name = "English-United Kingdom", Value = "2057" },
-                    new NameValue { Name = "English-United States", Value = "1033" },
-                    new NameValue { Name = "English-Zimbabwe", Value = "12297" },
-                    new NameValue { Name = "Estonian-Estonia", Value = "1061" },
-                    new NameValue { Name = "Faroese-Faeroe Islands", Value = "1080" },
-                    new NameValue { Name = "Farsi-Iran", Value = "1065" },
-                    new NameValue { Name = "Finnish-Finland", Value = "1035" },
-                    new NameValue { Name = "French-Belgium", Value = "2060" },
-                    new NameValue { Name = "French-Canada", Value = "3084" },
-                    new NameValue { Name = "French-France", Value = "1036" },
-                    new NameValue { Name = "French-Luxembourg", Value = "5132" },
-                    new NameValue { Name = "French-Principality of Monaco", Value = "6156" },
-                    new NameValue { Name = "French-Switzerland", Value = "4108" },
-                    new NameValue { Name = "FYRO Macedonian-Former Yugoslav Republic of Macedonia", Value = "1071" },
-                    new NameValue { Name = "Galician-Spain", Value = "1110" },
-                    new NameValue { Name = "Georgian-Georgia", Value = "1079" },
-                    new NameValue { Name = "German-Austria", Value = "3079" },
-                    new NameValue { Name = "German-Germany", Value = "1031" },
-                    new NameValue { Name = "German-Liechtenstein", Value = "5127" },
-                    new NameValue { Name = "German-Luxembourg", Value = "4103" },
-                    new NameValue { Name = "German-Switzerland", Value = "2055" },
-                    new NameValue { Name = "Greek-Greece", Value = "1032" },
-                    new NameValue { Name = "Gujarati-India", Value = "1095" },
-                    new NameValue { Name = "Hebrew-Israel", Value = "1037" },
-                    new NameValue { Name = "Hindi-India", Value = "1081" },
-                    new NameValue { Name = "Hungarian-Hungary", Value = "1038" },
-                    new NameValue { Name = "Icelandic-Iceland", Value = "1039" },
-                    new NameValue { Name = "Indonesian-Indonesia", Value = "1057" },
-                    new NameValue { Name = "Italian-Italy", Value = "1040" },
-                    new NameValue { Name = "Italian-Switzerland", Value = "2064" },
-                    new NameValue { Name = "Japanese-Japan", Value = "1041" },
-                    new NameValue { Name = "Kannada-India", Value = "1099" },
-                    new NameValue { Name = "Kazakh-Kazakhstan", Value = "1087" },
-                    new NameValue { Name = "Konkani-India", Value = "1111" },
-                    new NameValue { Name = "Korean-Korea", Value = "1042" },
-                    new NameValue { Name = "Kyrgyz-Kyrgyzstan", Value = "1088" },
-                    new NameValue { Name = "Latvian-Latvia", Value = "1062" },
-                    new NameValue { Name = "Lithuanian-Lithuania", Value = "1063" },
-                    new NameValue { Name = "Malay-Brunei Darussalam", Value = "2110" },
-                    new NameValue { Name = "Malay-Malaysia", Value = "1086" },
-                    new NameValue { Name = "Marathi-India", Value = "1102" },
-                    new NameValue { Name = "Mongolian-Mongolia", Value = "1104" },
-                    new NameValue { Name = "Norwegian (Bokmål)-Norway", Value = "1044" },
-                    new NameValue { Name = "Norwegian (Nynorsk)-Norway", Value = "2068" },
-                    new NameValue { Name = "Polish-Poland", Value = "1045" },
-                    new NameValue { Name = "Portuguese-Brazil", Value = "1046" },
-                    new NameValue { Name = "Portuguese-Portugal", Value = "2070" },
-                    new NameValue { Name = "Punjabi-India", Value = "1094" },
-                    new NameValue { Name = "Romanian-Romania", Value = "1048" },
-                    new NameValue { Name = "Russian-Russia", Value = "1049" },
-                    new NameValue { Name = "Sanskrit-India", Value = "1103" },
-                    new NameValue { Name = "Serbian (Cyrillic)-Serbia and Montenegro", Value = "3098" },
-                    new NameValue { Name = "Serbian (Latin)-Serbia and Montenegro", Value = "2074" },
-                    new NameValue { Name = "Slovak-Slovakia", Value = "1051" },
-                    new NameValue { Name = "Slovenian-Slovenia", Value = "1060" },
-                    new NameValue { Name = "Spanish-Argentina", Value = "11274" },
-                    new NameValue { Name = "Spanish-Bolivia", Value = "16394" },
-                    new NameValue { Name = "Spanish-Chile", Value = "13322" },
-                    new NameValue { Name = "Spanish-Colombia", Value = "9226" },
-                    new NameValue { Name = "Spanish-Costa Rica", Value = "5130" },
-                    new NameValue { Name = "Spanish-Dominican Republic", Value = "7178" },
-                    new NameValue { Name = "Spanish-Ecuador", Value = "12298" },
-                    new NameValue { Name = "Spanish-El Salvador", Value = "17418" },
-                    new NameValue { Name = "Spanish-Guatemala", Value = "4106" },
-                    new NameValue { Name = "Spanish-Honduras", Value = "18442" },
-                    new NameValue { Name = "Spanish-Mexico", Value = "2058" },
-                    new NameValue { Name = "Spanish-Nicaragua", Value = "19466" },
-                    new NameValue { Name = "Spanish-Panama", Value = "6154" },
-                    new NameValue { Name = "Spanish-Paraguay", Value = "15370" },
-                    new NameValue { Name = "Spanish-Peru", Value = "10250" },
-                    new NameValue { Name = "Spanish-Puerto Rico", Value = "20490" },
-                    new NameValue { Name = "Spanish-Spain", Value = "1034" },
-                    new NameValue { Name = "Spanish-Uruguay", Value = "14346" },
-                    new NameValue { Name = "Spanish-Venezuela", Value = "8202" },
-                    new NameValue { Name = "Spanish - Modern Sort-Spain", Value = "3082" },
-                    new NameValue { Name = "Swahili-Kenya", Value = "1089" },
-                    new NameValue { Name = "Swedish-Finland", Value = "2077" },
-                    new NameValue { Name = "Swedish-Sweden", Value = "1053" },
-                    new NameValue { Name = "Syriac-Syria", Value = "1114" },
-                    new NameValue { Name = "Tamil-India", Value = "1097" },
-                    new NameValue { Name = "Tatar-Tatarstan", Value = "1092" },
-                    new NameValue { Name = "Telugu-India", Value = "1098" },
-                    new NameValue { Name = "Thai-Thailand", Value = "1054" },
-                    new NameValue { Name = "Turkish-Turkey", Value = "1055" },
-                    new NameValue { Name = "Ukrainian-Ukraine", Value = "1058" },
-                    new NameValue { Name = "Urdu-Islamic Republic of Pakistan", Value = "1056" },
-                    new NameValue { Name = "Uzbek (Cyrillic)-Uzbekistan", Value = "2115" },
-                    new NameValue { Name = "Uzbek (Latin)-Uzbekistan", Value = "1091" },
-                    new NameValue { Name = "Vietnamese-Viet Nam", Value = "1066" },
-                    new NameValue { Name = "Welsh-United Kingdom", Value = "1106" },
-                    new NameValue { Name = "All Languages", Value = "-1" }
+                    new() { Name = "Afrikaans-South Africa", Value = "1078" },
+                    new() { Name = "Albanian-Albania", Value = "1052" },
+                    new() { Name = "Arabic-Algeria", Value = "5121" },
+                    new() { Name = "Arabic-Bahrain", Value = "15361" },
+                    new() { Name = "Arabic-Egypt", Value = "3073" },
+                    new() { Name = "Arabic-Iraq", Value = "2049" },
+                    new() { Name = "Arabic-Jordan", Value = "11265" },
+                    new() { Name = "Arabic-Kuwait", Value = "13313" },
+                    new() { Name = "Arabic-Lebanon", Value = "12289" },
+                    new() { Name = "Arabic-Libya", Value = "4097" },
+                    new() { Name = "Arabic-Morocco", Value = "6145" },
+                    new() { Name = "Arabic-Oman", Value = "8193" },
+                    new() { Name = "Arabic-Qatar", Value = "16385" },
+                    new() { Name = "Arabic-Saudi Arabia", Value = "1025" },
+                    new() { Name = "Arabic-Syria", Value = "10241" },
+                    new() { Name = "Arabic-Tunisia", Value = "7169" },
+                    new() { Name = "Arabic-U.A.E.", Value = "14337" },
+                    new() { Name = "Arabic-Yemen", Value = "9217" },
+                    new() { Name = "Armenian-Armenia", Value = "1067" },
+                    new() { Name = "Azeri (Cyrillic)-Azerbaijan", Value = "2092" },
+                    new() { Name = "Azeri (Latin)-Azerbaijan", Value = "1068" },
+                    new() { Name = "Basque-Spain", Value = "1069" },
+                    new() { Name = "Belarusian-Belarus", Value = "1059" },
+                    new() { Name = "Bulgarian-Bulgaria", Value = "1026" },
+                    new() { Name = "Catalan-Spain", Value = "1027" },
+                    new() { Name = "Chinese-Hong Kong S.A.R.", Value = "3076" },
+                    new() { Name = "Chinese-Macau S.A.R.", Value = "5124" },
+                    new() { Name = "Chinese-People's Republic of China", Value = "2052" },
+                    new() { Name = "Chinese-Singapore", Value = "4100" },
+                    new() { Name = "Chinese-Taiwan", Value = "1028" },
+                    new() { Name = "Croatian-Croatia", Value = "1050" },
+                    new() { Name = "Czech-Czech Republic", Value = "1029" },
+                    new() { Name = "Danish-Denmark", Value = "1030" },
+                    new() { Name = "Divehi-Maldives", Value = "1125" },
+                    new() { Name = "Dutch-Belgium", Value = "2067" },
+                    new() { Name = "Dutch-Netherlands", Value = "1043" },
+                    new() { Name = "English-Australia", Value = "3081" },
+                    new() { Name = "English-Belize", Value = "10249" },
+                    new() { Name = "English-Canada", Value = "4105" },
+                    new() { Name = "English-Caribbean", Value = "9225" },
+                    new() { Name = "English-Ireland", Value = "6153" },
+                    new() { Name = "English-Jamaica", Value = "8201" },
+                    new() { Name = "English-New Zealand", Value = "5129" },
+                    new() { Name = "English-Republic of the Philippines", Value = "13321" },
+                    new() { Name = "English-South Africa", Value = "7177" },
+                    new() { Name = "English-Trinidad and Tobago", Value = "11273" },
+                    new() { Name = "English-United Kingdom", Value = "2057" },
+                    new() { Name = "English-United States", Value = "1033" },
+                    new() { Name = "English-Zimbabwe", Value = "12297" },
+                    new() { Name = "Estonian-Estonia", Value = "1061" },
+                    new() { Name = "Faroese-Faeroe Islands", Value = "1080" },
+                    new() { Name = "Farsi-Iran", Value = "1065" },
+                    new() { Name = "Finnish-Finland", Value = "1035" },
+                    new() { Name = "French-Belgium", Value = "2060" },
+                    new() { Name = "French-Canada", Value = "3084" },
+                    new() { Name = "French-France", Value = "1036" },
+                    new() { Name = "French-Luxembourg", Value = "5132" },
+                    new() { Name = "French-Principality of Monaco", Value = "6156" },
+                    new() { Name = "French-Switzerland", Value = "4108" },
+                    new() { Name = "FYRO Macedonian-Former Yugoslav Republic of Macedonia", Value = "1071" },
+                    new() { Name = "Galician-Spain", Value = "1110" },
+                    new() { Name = "Georgian-Georgia", Value = "1079" },
+                    new() { Name = "German-Austria", Value = "3079" },
+                    new() { Name = "German-Germany", Value = "1031" },
+                    new() { Name = "German-Liechtenstein", Value = "5127" },
+                    new() { Name = "German-Luxembourg", Value = "4103" },
+                    new() { Name = "German-Switzerland", Value = "2055" },
+                    new() { Name = "Greek-Greece", Value = "1032" },
+                    new() { Name = "Gujarati-India", Value = "1095" },
+                    new() { Name = "Hebrew-Israel", Value = "1037" },
+                    new() { Name = "Hindi-India", Value = "1081" },
+                    new() { Name = "Hungarian-Hungary", Value = "1038" },
+                    new() { Name = "Icelandic-Iceland", Value = "1039" },
+                    new() { Name = "Indonesian-Indonesia", Value = "1057" },
+                    new() { Name = "Italian-Italy", Value = "1040" },
+                    new() { Name = "Italian-Switzerland", Value = "2064" },
+                    new() { Name = "Japanese-Japan", Value = "1041" },
+                    new() { Name = "Kannada-India", Value = "1099" },
+                    new() { Name = "Kazakh-Kazakhstan", Value = "1087" },
+                    new() { Name = "Konkani-India", Value = "1111" },
+                    new() { Name = "Korean-Korea", Value = "1042" },
+                    new() { Name = "Kyrgyz-Kyrgyzstan", Value = "1088" },
+                    new() { Name = "Latvian-Latvia", Value = "1062" },
+                    new() { Name = "Lithuanian-Lithuania", Value = "1063" },
+                    new() { Name = "Malay-Brunei Darussalam", Value = "2110" },
+                    new() { Name = "Malay-Malaysia", Value = "1086" },
+                    new() { Name = "Marathi-India", Value = "1102" },
+                    new() { Name = "Mongolian-Mongolia", Value = "1104" },
+                    new() { Name = "Norwegian (Bokmål)-Norway", Value = "1044" },
+                    new() { Name = "Norwegian (Nynorsk)-Norway", Value = "2068" },
+                    new() { Name = "Polish-Poland", Value = "1045" },
+                    new() { Name = "Portuguese-Brazil", Value = "1046" },
+                    new() { Name = "Portuguese-Portugal", Value = "2070" },
+                    new() { Name = "Punjabi-India", Value = "1094" },
+                    new() { Name = "Romanian-Romania", Value = "1048" },
+                    new() { Name = "Russian-Russia", Value = "1049" },
+                    new() { Name = "Sanskrit-India", Value = "1103" },
+                    new() { Name = "Serbian (Cyrillic)-Serbia and Montenegro", Value = "3098" },
+                    new() { Name = "Serbian (Latin)-Serbia and Montenegro", Value = "2074" },
+                    new() { Name = "Slovak-Slovakia", Value = "1051" },
+                    new() { Name = "Slovenian-Slovenia", Value = "1060" },
+                    new() { Name = "Spanish-Argentina", Value = "11274" },
+                    new() { Name = "Spanish-Bolivia", Value = "16394" },
+                    new() { Name = "Spanish-Chile", Value = "13322" },
+                    new() { Name = "Spanish-Colombia", Value = "9226" },
+                    new() { Name = "Spanish-Costa Rica", Value = "5130" },
+                    new() { Name = "Spanish-Dominican Republic", Value = "7178" },
+                    new() { Name = "Spanish-Ecuador", Value = "12298" },
+                    new() { Name = "Spanish-El Salvador", Value = "17418" },
+                    new() { Name = "Spanish-Guatemala", Value = "4106" },
+                    new() { Name = "Spanish-Honduras", Value = "18442" },
+                    new() { Name = "Spanish-Mexico", Value = "2058" },
+                    new() { Name = "Spanish-Nicaragua", Value = "19466" },
+                    new() { Name = "Spanish-Panama", Value = "6154" },
+                    new() { Name = "Spanish-Paraguay", Value = "15370" },
+                    new() { Name = "Spanish-Peru", Value = "10250" },
+                    new() { Name = "Spanish-Puerto Rico", Value = "20490" },
+                    new() { Name = "Spanish-Spain", Value = "1034" },
+                    new() { Name = "Spanish-Uruguay", Value = "14346" },
+                    new() { Name = "Spanish-Venezuela", Value = "8202" },
+                    new() { Name = "Spanish - Modern Sort-Spain", Value = "3082" },
+                    new() { Name = "Swahili-Kenya", Value = "1089" },
+                    new() { Name = "Swedish-Finland", Value = "2077" },
+                    new() { Name = "Swedish-Sweden", Value = "1053" },
+                    new() { Name = "Syriac-Syria", Value = "1114" },
+                    new() { Name = "Tamil-India", Value = "1097" },
+                    new() { Name = "Tatar-Tatarstan", Value = "1092" },
+                    new() { Name = "Telugu-India", Value = "1098" },
+                    new() { Name = "Thai-Thailand", Value = "1054" },
+                    new() { Name = "Turkish-Turkey", Value = "1055" },
+                    new() { Name = "Ukrainian-Ukraine", Value = "1058" },
+                    new() { Name = "Urdu-Islamic Republic of Pakistan", Value = "1056" },
+                    new() { Name = "Uzbek (Cyrillic)-Uzbekistan", Value = "2115" },
+                    new() { Name = "Uzbek (Latin)-Uzbekistan", Value = "1091" },
+                    new() { Name = "Vietnamese-Viet Nam", Value = "1066" },
+                    new() { Name = "Welsh-United Kingdom", Value = "1106" },
+                    new() { Name = "All Languages", Value = "-1" }
                 };
                 return languages;
             }

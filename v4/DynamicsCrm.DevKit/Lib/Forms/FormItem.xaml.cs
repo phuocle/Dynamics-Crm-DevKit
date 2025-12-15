@@ -355,7 +355,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 {
                     ThreadHelper.JoinableTaskFactory.Run(async () =>
                     {
-                        await XrmHelper.ReadEntitiesMetadataAsync(ServiceClient);
+                        await XrmHelper.ReadEntitiesMetadataAsync(ServiceClient, Microsoft.Xrm.Sdk.Metadata.EntityFilters.Entity);
                         var items = XrmHelper.GetListXrmEntity(XrmHelper.EntitiesMetadata);
                         items = items.OrderBy(x => x.LogicalName).ToList();
                         await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();

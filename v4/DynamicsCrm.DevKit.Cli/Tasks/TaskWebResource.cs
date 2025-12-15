@@ -594,7 +594,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var waitingTask = Task.Run(() => CliLog.WaitingWithCancellation("Reading entities Metadata ", cancellationTokenSource.Token), cancellationTokenSource.Token);
                     try
                     {
-                        var allEntities = await XrmHelper.GetAllEntitiesSchemaAsync(ServiceClient);
+                        var allEntities = await XrmHelper.GetAllEntitiesSchemaAsync(ServiceClient, Microsoft.Xrm.Sdk.Metadata.EntityFilters.Entity);
                         foreach (var webResourceFile in webResourceFiles)
                         {
                             var fInfo = new FileInfo(webResourceFile.file);

@@ -781,15 +781,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         }
         private async Task LoadAllObjectTypeCodeAsync()
         {
-            var request = new RetrieveAllEntitiesRequest
-            {
-                EntityFilters = EntityFilters.Entity,
-                RetrieveAsIfPublished = false
-            };
-            XrmHelper.COUNT_ExecuteAsync++;
-            var response = (RetrieveAllEntitiesResponse)await ServiceClient.ExecuteAsync(request);
+            await XrmHelper.ReadEntitiesMetadataAsync(ServiceClient, Microsoft.Xrm.Sdk.Metadata.EntityFilters.Entity);
             _ObjectTypeCodesCache.Clear();
-            foreach(var item in response.EntityMetadata)
+            foreach(var item in XrmHelper.EntitiesMetadata)
             {
                 if (item.ObjectTypeCode != null) _ObjectTypeCodesCache.Add(new KeyValuePair<string, int>(item.LogicalName, item.ObjectTypeCode.Value));
             }

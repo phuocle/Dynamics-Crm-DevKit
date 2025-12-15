@@ -2,6 +2,7 @@
 using DynamicsCrm.DevKit.Shared.Logic;
 using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.PowerPlatform.Dataverse.Client;
+using Microsoft.Xrm.Sdk.Metadata;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -73,7 +74,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 var schemaNames = await GetSchemaNamesAsync();
                 if (schemaNames.Count > 500)
-                    await ReadEntitiesMetadataAsync(ServiceClient);
+                    await ReadEntitiesMetadataAsync(ServiceClient, EntityFilters.Attributes);
                 else
                     XrmHelper.EntitiesMetadata = await XrmHelper.GetEntitiesMetadataAsync(ServiceClient, schemaNames);
                 schemaNames = [.. XrmHelper.EntitiesMetadata.Select(x => x.SchemaName)];
@@ -108,7 +109,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 CliLog.WriteSuccess(ConsoleColor.White, Json.entities.Trim());
                 CliLog.WriteLine();
                 CliLog.WriteLine(ConsoleColor.White, "|");
-                await ReadEntitiesMetadataAsync(ServiceClient);
+                await ReadEntitiesMetadataAsync(ServiceClient, EntityFilters.Attributes);
                 return [.. XrmHelper.EntitiesMetadata.Select(x => x.SchemaName)];
             }
             else if (Json.entities == null || Json.entities.Trim().Length == 0 || Json.entities.Trim().ToLower() == "folder")
@@ -353,7 +354,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
         }
 
-        private async Task ReadEntitiesMetadataAsync(ServiceClient serviceClient)
+        private async Task ReadEntitiesMetadataAsync(ServiceClient serviceClient, EntityFilters entityFilters)
         {
             if (XrmHelper.EntitiesMetadata.Count == 0 && XrmHelper.EntitiesFormXml.Count == 0 && XrmHelper.EntitiesProcessForm.Count == 0)
             {
@@ -362,7 +363,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var waitingTask = Task.Run(() => CliLog.WaitingWithCancellation("Reading entities Metadata ", cancellationTokenSource.Token), cancellationTokenSource.Token);
                     try
                     {
-                        await XrmHelper.ReadEntitiesMetadataAsync(serviceClient);
+                        await XrmHelper.ReadEntitiesMetadataAsync(serviceClient, entityFilters);
                     }
                     finally
                     {
