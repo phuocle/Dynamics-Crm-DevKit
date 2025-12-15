@@ -1,28 +1,24 @@
-# DynamicsCrm.DevKit v4.00.00.00
+# DynamicsCrm.DevKit
 
-A comprehensive development toolkit for Microsoft Dynamics 365 / Power Platform / Dataverse. This repository contains Visual Studio extensions (VSIX), CLI tools, and Roslyn analyzers to accelerate CRM development.
+A comprehensive development toolkit for Microsoft Dynamics 365 / Power Platform / Dataverse. This repository contains Visual Studio extensions (VSIX), CLI tools, and Roslyn analyzers to accelerate Dynamics 365 development.
 
-## 📦 Installation
+## 📦 Installation Visual Studio Extension
 
-### Visual Studio Extension (VSIX)
 The main Visual Studio extension provides project and item templates for Dynamics 365 development.
 
-**[Download from Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=PhuocLe.DynamicsCrm-DevKit)**
+**[Download from Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=PhuocLe.DynamicsCrmDevKit)**
 
-[![Visual Studio Marketplace Version](https://img.shields.io/visual-studio-marketplace/v/PhuocLe.DynamicsCrm-DevKit?label=VS%20Marketplace)](https://marketplace.visualstudio.com/items?itemName=PhuocLe.DynamicsCrm-DevKit)
-[![Visual Studio Marketplace Downloads](https://img.shields.io/visual-studio-marketplace/d/PhuocLe.DynamicsCrm-DevKit)](https://marketplace.visualstudio.com/items?itemName=PhuocLe.DynamicsCrm-DevKit)
-[![Visual Studio Marketplace Rating](https://img.shields.io/visual-studio-marketplace/r/PhuocLe.DynamicsCrm-DevKit)](https://marketplace.visualstudio.com/items?itemName=PhuocLe.DynamicsCrm-DevKit)
+[![Visual Studio Marketplace Version](https://img.shields.io/visual-studio-marketplace/v/PhuocLe.DynamicsCrmDevKit?label=VS%20Marketplace)](https://marketplace.visualstudio.com/items?itemName=PhuocLe.DynamicsCrmDevKit)
+[![Visual Studio Marketplace Downloads](https://img.shields.io/visual-studio-marketplace/d/PhuocLe.DynamicsCrmDevKit)](https://marketplace.visualstudio.com/items?itemName=PhuocLe.DynamicsCrmDevKit)
+[![Visual Studio Marketplace Rating](https://img.shields.io/visual-studio-marketplace/r/PhuocLe.DynamicsCrmDevKit)](https://marketplace.visualstudio.com/items?itemName=PhuocLe.DynamicsCrmDevKit)
 
 **Features:**
 - 12 Visual Studio project templates
 - 13 Visual Studio item templates
-- Integrated deployment tools for WebResources and Reports
 - Wizards for project/item creation
 
-### NuGet Packages
-
-#### DynamicsCrm.DevKit.Cli
-Command-line interface for deployment automation and code generation.
+## 📦 Installation DynamicsCrm.DevKit.Cli
+Command-line interface for deployment automation: plugins, workflows, custom actions, custom apis, data providers, web resources, reports and code generation.
 
 **[Download from NuGet.org](https://www.nuget.org/packages/DynamicsCrm.DevKit.Cli)**
 
@@ -35,16 +31,16 @@ Install-Package DynamicsCrm.DevKit.Cli
 ```
 
 **Features:**
-- Deploy plugins, workflows, custom APIs, and data providers
+- Deploy plugins (standard plugin, package plugin, managed identity plugin), workflows, custom actions, custom apis, data providers
 - Deploy and download web resources
 - Solution packaging (Extract/Pack)
-- Code generation (JavaScript, TypeScript, C# late-bound classes)
+- Code generation (JavaScript form, JavaScript webapi, C# late-bound classes)
 - Report management (Upload/Download)
 - Early-bound class generation (ProxyTypes)
 
 [📖 Full CLI Documentation](https://github.com/phuocle/Dynamics-Crm-DevKit/blob/v4/v4/DynamicsCrm.DevKit.Cli/docs/README.md)
 
-#### DynamicsCrm.DevKit.Analyzers
+## 📦 Installation DynamicsCrm.DevKit.Analyzers
 Roslyn-based code analyzers for Dynamics 365 best practices.
 
 **[Download from NuGet.org](https://www.nuget.org/packages/DynamicsCrm.DevKit.Analyzers)**
@@ -58,27 +54,12 @@ Roslyn-based code analyzers for Dynamics 365 best practices.
 ```
 
 **Features:**
-- 19 diagnostic rules (DEVKIT1001-DEVKIT1019)
+- 19 diagnostic rules
 - Enforces Microsoft best practices for plugins and workflows
 - Real-time code analysis in Visual Studio
 - Compile-time error detection
 
 [📖 Full Analyzers Documentation](https://github.com/phuocle/Dynamics-Crm-DevKit/blob/v4/v4/DynamicsCrm.DevKit.Analyzers/docs/README.md)
-
-#### DynamicsCrm.DevKit.Tool
-Additional development utilities for Dynamics 365.
-
-**[Download from NuGet.org](https://www.nuget.org/packages/DynamicsCrm.DevKit.Tool)**
-
-[![NuGet Version](https://img.shields.io/nuget/v/DynamicsCrm.DevKit.Tool?label=NuGet)](https://www.nuget.org/packages/DynamicsCrm.DevKit.Tool)
-[![NuGet Downloads](https://img.shields.io/nuget/dt/DynamicsCrm.DevKit.Tool)](https://www.nuget.org/packages/DynamicsCrm.DevKit.Tool)
-
-**Installation:**
-```powershell
-Install-Package DynamicsCrm.DevKit.Tool
-```
-
-[📖 Full Tool Documentation](https://github.com/phuocle/Dynamics-Crm-DevKit/blob/v4/v4/DynamicsCrm.DevKit.Tool/docs/README.md)
 
 ---
 
@@ -123,7 +104,9 @@ The Visual Studio extension includes 13 item templates:
 
 ## 🚀 Key Features
 
-### Deploy Server Projects (Plugins, Workflows, Custom APIs)
+### Deploy Server Projects with 1 click (all in one with: plugins, workflows, custom actions, custom apis, data providers)
+> These videos were recorded from version `2.12.31`, but we have since released version `4.00.00.00` with improved output."
+
 ![Deploy Server](v4/images/deploy.server.gif)
 
 ### Form IntelliSense
@@ -207,38 +190,20 @@ DynamicsCrm.DevKit.Analyzers provides 19 diagnostic rules to enforce best practi
 
 ---
 
-## 🏗️ Project Structure
-
-```
-v4/
-├── DynamicsCrm.DevKit/              # Visual Studio VSIX Extension
-├── DynamicsCrm.DevKit.Cli/          # CLI Tool (NuGet)
-├── DynamicsCrm.DevKit.Analyzers/    # Roslyn Analyzers (NuGet)
-├── DynamicsCrm.DevKit.Tool/         # Additional Tools (NuGet)
-├── DynamicsCrm.DevKit.Shared/       # Shared code library
-├── DynamicsCrm.DevKit.CrmSvcUtilExtensions/  # CrmSvcUtil extensions
-├── ProjectTemplates/                # 12 VS Project Templates
-├── ItemTemplates/                   # 13 VS Item Templates
-├── DynamicsCrm.DevKit.Wiki/         # Documentation (Wiki submodule)
-└── Published/                       # Release artifacts
-```
-
----
-
 ## 🎓 Getting Started
 
 1. **Install the Visual Studio Extension**
-   - Download from [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=PhuocLe.DynamicsCrm-DevKit)
+   - Download from [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=PhuocLe.DynamicsCrmDevKit)
    - Or install directly from Visual Studio: Extensions → Manage Extensions → Search for "DynamicsCrm.DevKit"
 
 2. **Add NuGet Packages to Your Projects**
    ```powershell
    # CLI Tool
    Install-Package DynamicsCrm.DevKit.Cli
-   
+
    # Code Analyzers
    Install-Package DynamicsCrm.DevKit.Analyzers
-   
+
    # Additional Tools
    Install-Package DynamicsCrm.DevKit.Tool
    ```
@@ -274,7 +239,7 @@ This project is licensed under the terms specified in the [LICENSE](LICENSE) fil
 ## 🔗 Links
 
 - **GitHub Repository**: [https://github.com/phuocle/Dynamics-Crm-DevKit](https://github.com/phuocle/Dynamics-Crm-DevKit)
-- **Visual Studio Marketplace**: [DynamicsCrm.DevKit Extension](https://marketplace.visualstudio.com/items?itemName=PhuocLe.DynamicsCrm-DevKit)
+- **Visual Studio Marketplace**: [DynamicsCrm.DevKit Extension](https://marketplace.visualstudio.com/items?itemName=PhuocLe.DynamicsCrmDevKit)
 - **NuGet - CLI**: [DynamicsCrm.DevKit.Cli](https://www.nuget.org/packages/DynamicsCrm.DevKit.Cli)
 - **NuGet - Analyzers**: [DynamicsCrm.DevKit.Analyzers](https://www.nuget.org/packages/DynamicsCrm.DevKit.Analyzers)
 - **NuGet - Tool**: [DynamicsCrm.DevKit.Tool](https://www.nuget.org/packages/DynamicsCrm.DevKit.Tool)
