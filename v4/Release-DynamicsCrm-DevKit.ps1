@@ -5,7 +5,7 @@
 .DESCRIPTION
     Builds the DynamicsCrm.DevKit solution, creates NuGet packages, and publishes the VSIX.
     Updates version and date placeholders in source files before building.
-    
+
     ANNUAL RELEASE: Uses Dec 31 of current year at 23:59:59
     For current date testing, use Release-DynamicsCrm-DevKit-CurrentDate.ps1
 
@@ -24,32 +24,23 @@ param (
 $ErrorActionPreference = "Stop"
 
 # --- Configuration ---
-# HARDCODED VERSION - Change this when releasing a new version (e.g., 4.00.00.00 -> 4.50.00.00)
-$Version = "4.00.00.00"
+# Load configuration from single source of truth
+$ConfigFile = Join-Path $PSScriptRoot "DevKit.ReleaseConfig.json"
+if (-not (Test-Path $ConfigFile)) {
+    throw "Configuration file not found: $ConfigFile"
+}
 
-$SolutionFile = "$PSScriptRoot\DynamicsCrm.DevKit.AllInOne.slnx"
-$PublishedRoot = "$PSScriptRoot\Published"
+$Config = Get-Content $ConfigFile -Raw | ConvertFrom-Json
 
-# Files to update
-$VersionFiles = @(
-    "DynamicsCrm.DevKit.Shared\Const.cs",
-    "DynamicsCrm.DevKit.Cli\docs\README.md",
-    "DynamicsCrm.DevKit.Analyzers\docs\README.md",
-    "DynamicsCrm.DevKit\source.extension.cs",
-    "ProjectTemplates\CSharp\05.PackageProjectTemplate\ReadMe.md",
-    "ProjectTemplates\CSharp\12.ReportProjectTemplate\ReadMe.md"
-)
+# Version - Change this in DevKit.ReleaseConfig.json when releasing a new version
+$Version = $Config.version
 
-$DateFiles = @(
-    "DynamicsCrm.DevKit.Cli\docs\README.md",
-    "DynamicsCrm.DevKit.Analyzers\docs\README.md",
-    "DynamicsCrm.DevKit.Shared\Const.cs",
-    "DynamicsCrm.DevKit\source.extension.vsixmanifest",
-    "DynamicsCrm.DevKit\VSPackage.resx",
-    "DynamicsCrm.DevKit\source.extension.cs",
-    "ProjectTemplates\CSharp\05.PackageProjectTemplate\ReadMe.md",
-    "ProjectTemplates\CSharp\12.ReportProjectTemplate\ReadMe.md"
-)
+$SolutionFile = Join-Path $PSScriptRoot $Config.buildConfig.solutionFile
+$PublishedRoot = Join-Path $PSScriptRoot $Config.buildConfig.publishedRoot
+
+# Files to update (loaded from config)
+$VersionFiles = $Config.files.versionReplacement
+$DateFiles = $Config.files.dateReplacement
 
 # --- Helper Functions ---
 
@@ -82,7 +73,7 @@ function Get-MSBuildPath {
 }
 
 function Update-FileContent {
-    param ($FilePath, $Version, $Date)
+    param ($FilePath, $Version, $Date, $Config)
 
     $fullPath = Join-Path $PSScriptRoot $FilePath
     if (-not (Test-Path $fullPath)) {
@@ -95,10 +86,12 @@ function Update-FileContent {
     $originalContent = $content
 
     if ($Version) {
-        $content = $content -replace 'x\.xx\.xx\.xx', $Version
+        $versionPattern = [regex]::Escape($Config.placeholders.version)
+        $content = $content -replace $versionPattern, $Version
     }
     if ($Date) {
-        $content = $content -replace 'xxxx\.yy\.zz HH\.mm\.ss', $Date
+        $datePattern = [regex]::Escape($Config.placeholders.date)
+        $content = $content -replace $datePattern, $Date
     }
 
     if ($content -ne $originalContent) {
@@ -124,7 +117,9 @@ try {
     # If no BuildDate provided, use Dec 31 of current year (annual release)
     if ([string]::IsNullOrWhiteSpace($BuildDate)) {
         $currentYear = (Get-Date).Year
-        $BuildDate = "31.12.$currentYear 23:59:59"
+        $annualConfig = $Config.buildConfig.annualRelease
+        $BuildDate = "{0:D2}.{1:D2}.$currentYear {2:D2}:{3:D2}:{4:D2}" -f `
+            $annualConfig.day, $annualConfig.month, $annualConfig.hour, $annualConfig.minute, $annualConfig.second
     }
 
     Write-Host "Version: $Version" -ForegroundColor Cyan
@@ -141,7 +136,7 @@ try {
         $v = if ($VersionFiles -contains $file) { $Version } else { $null }
         $d = if ($DateFiles -contains $file) { $BuildDate } else { $null }
 
-        $backup = Update-FileContent -FilePath $file -Version $v -Date $d
+        $backup = Update-FileContent -FilePath $file -Version $v -Date $d -Config $Config
         if ($backup) { $backups += $backup }
     }
 

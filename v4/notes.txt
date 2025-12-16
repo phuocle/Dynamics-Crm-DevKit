@@ -8,9 +8,16 @@
 ╚═══════════════════════════════════════════════════════════════════════════════╝
 
 VERSION:
-  - Hardcoded in Release-DynamicsCrm-DevKit.ps1, line 27
+  - Configured in DevKit.ReleaseConfig.json (single source of truth)
   - Current version: 4.00.00.00
   - Date: Auto-calculated (Dec 31 for annual, current for testing)
+
+CONFIGURATION FILE (SINGLE SOURCE OF TRUTH):
+  - DevKit.ReleaseConfig.json
+  - Contains: version, placeholders, file lists, build settings
+  - All release scripts read from this file
+  - To change version: Edit "version" field in this JSON file
+  - To add/remove files: Edit "files" section in this JSON file
 
 KEY PASSWORDS:
   - PFX Signing Key (DynamicsCrm.DevKit.pfx): !Zz321^2
@@ -65,7 +72,7 @@ NUGET PACKAGES (Published\4.00.00.00\):
 FINAL RELEASE (once per year - uses 31.12.{CurrentYear} 23:59:59):
   .\Release-DynamicsCrm-DevKit.ps1
 
-  Version is HARDCODED in the script (line 27): $Version = "4.00.00.00"
+  Version and settings are loaded from DevKit.ReleaseConfig.json
   Date automatically uses Dec 31 of current year at 23:59:59
 
 TEST RELEASE (any time for testing):
@@ -78,8 +85,26 @@ WITH CUSTOM DATE:
   .\Release-DynamicsCrm-DevKit.ps1 -BuildDate "15.12.2025 10:00:00"
 
 TO CHANGE VERSION FOR NEW RELEASE:
-  Edit Release-DynamicsCrm-DevKit.ps1, line 27:
-  $Version = "4.50.00.00"  # Change this to new version
+  Edit DevKit.ReleaseConfig.json:
+  {
+    "version": "4.50.00.00",  // Change this to new version
+    ...
+  }
+
+TO ADD/REMOVE FILES FROM RELEASE PROCESS:
+  Edit DevKit.ReleaseConfig.json, "files" section:
+  - "versionReplacement": Files where version placeholder gets replaced
+  - "dateReplacement": Files where date placeholder gets replaced
+  - "allModified": Combined list (used by RestoreReplacedFiles.ps1)
+
+RESTORE MODIFIED FILES (after build error):
+  .\RestoreReplacedFiles.ps1
+
+  If the release script fails mid-way, it may leave files in a modified state
+  with replaced placeholders (x.xx.xx.xx → 4.00.00.00, etc). This script
+  uses git restore to revert all modified files back to original state.
+
+  File list is automatically loaded from DevKit.ReleaseConfig.json.
 
 
 ================================================================================
@@ -132,6 +157,10 @@ RUN VS INTEGRATION TESTS:
 ================================================================================
                             IMPORTANT FILE LOCATIONS
 ================================================================================
+
+RELEASE CONFIGURATION (SINGLE SOURCE OF TRUTH):
+  DevKit.ReleaseConfig.json                   → Version, file lists, build settings
+                                                All release scripts read from this file
 
 CONSTANTS & VERSION:
   DynamicsCrm.DevKit.Shared\Const.cs          → Version, Build timestamp

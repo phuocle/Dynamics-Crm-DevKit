@@ -51,7 +51,7 @@
     <AssemblyOriginatorKeyFile>..\DynamicsCrm.DevKit.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <NoWarn>CVSTBLD001;CVSTBLD002</NoWarn>
+    <NoWarn>CVSTBLD001</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Commands\CommandAddCrmPluginRegistration.cs" />
@@ -178,7 +178,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="NuGet.Protocol">
       <Version>7.0.1</Version>
     </PackageReference>

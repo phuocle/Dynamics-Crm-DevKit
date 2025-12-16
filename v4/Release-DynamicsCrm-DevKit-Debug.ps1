@@ -5,7 +5,7 @@
 .DESCRIPTION
     This script is designed for AI agent sessions where human interaction is not available.
     It builds in DEBUG mode which does NOT require PFX signing key password.
-    
+
     For official RELEASE builds, use Release-DynamicsCrm-DevKit.ps1 (requires PFX password).
 
 .PARAMETER BuildDate
@@ -22,31 +22,22 @@ param (
 $ErrorActionPreference = "Stop"
 
 # --- Configuration ---
-# HARDCODED VERSION - same as Release script
-$Version = "4.00.00.00"
+# Load configuration from single source of truth
+$ConfigFile = Join-Path $PSScriptRoot "DevKit.ReleaseConfig.json"
+if (-not (Test-Path $ConfigFile)) {
+    throw "Configuration file not found: $ConfigFile"
+}
 
-$SolutionFile = "$PSScriptRoot\DynamicsCrm.DevKit.AllInOne.slnx"
+$Config = Get-Content $ConfigFile -Raw | ConvertFrom-Json
 
-# Files to update (same as Release script)
-$VersionFiles = @(
-    "DynamicsCrm.DevKit.Shared\Const.cs",
-    "DynamicsCrm.DevKit.Cli\docs\README.md",
-    "DynamicsCrm.DevKit.Analyzers\docs\README.md",
-    "DynamicsCrm.DevKit\source.extension.cs",
-    "ProjectTemplates\CSharp\05.PackageProjectTemplate\ReadMe.md",
-    "ProjectTemplates\CSharp\12.ReportProjectTemplate\ReadMe.md"
-)
+# Version - loaded from config
+$Version = $Config.version
 
-$DateFiles = @(
-    "DynamicsCrm.DevKit.Cli\docs\README.md",
-    "DynamicsCrm.DevKit.Analyzers\docs\README.md",
-    "DynamicsCrm.DevKit.Shared\Const.cs",
-    "DynamicsCrm.DevKit\source.extension.vsixmanifest",
-    "DynamicsCrm.DevKit\VSPackage.resx",
-    "DynamicsCrm.DevKit\source.extension.cs",
-    "ProjectTemplates\CSharp\05.PackageProjectTemplate\ReadMe.md",
-    "ProjectTemplates\CSharp\12.ReportProjectTemplate\ReadMe.md"
-)
+$SolutionFile = Join-Path $PSScriptRoot $Config.buildConfig.solutionFile
+
+# Files to update (loaded from config)
+$VersionFiles = $Config.files.versionReplacement
+$DateFiles = $Config.files.dateReplacement
 
 # --- Helper Functions ---
 
@@ -76,7 +67,7 @@ function Get-MSBuildPath {
 }
 
 function Update-FileContent {
-    param ($FilePath, $Version, $Date)
+    param ($FilePath, $Version, $Date, $Config)
 
     $fullPath = Join-Path $PSScriptRoot $FilePath
     if (-not (Test-Path $fullPath)) {
@@ -88,10 +79,12 @@ function Update-FileContent {
     $originalContent = $content
 
     if ($Version) {
-        $content = $content -replace 'x\.xx\.xx\.xx', $Version
+        $versionPattern = [regex]::Escape($Config.placeholders.version)
+        $content = $content -replace $versionPattern, $Version
     }
     if ($Date) {
-        $content = $content -replace 'xxxx\.yy\.zz HH\.mm\.ss', $Date
+        $datePattern = [regex]::Escape($Config.placeholders.date)
+        $content = $content -replace $datePattern, $Date
     }
 
     if ($content -ne $originalContent) {
@@ -137,7 +130,7 @@ try {
         $v = if ($VersionFiles -contains $file) { $Version } else { $null }
         $d = if ($DateFiles -contains $file) { $BuildDate } else { $null }
 
-        $backup = Update-FileContent -FilePath $file -Version $v -Date $d
+        $backup = Update-FileContent -FilePath $file -Version $v -Date $d -Config $Config
         if ($backup) { $backups += $backup }
     }
 
