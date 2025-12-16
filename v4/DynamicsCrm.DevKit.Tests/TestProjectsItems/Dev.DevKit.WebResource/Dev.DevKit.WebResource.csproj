@@ -51,6 +51,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <None Include="bat\deploy.datasource.bat" />
+    <None Include="bat\download.reports.bat" />
+    <None Include="bat\download.webresources.bat" />
+    <None Include="bat\Plugin-Managed-Identity-Config.json" />
+    <None Include="bat\Plugin-Managed-Identity.ps1" />
     <None Include="deploy.debug.bat" />
     <None Include="package.json" />
     <Content Include="entities\Account.form.js">
@@ -67,6 +72,7 @@
     <Content Include="entities\Contact.webapi.js">
       <DependentUpon>Contact.js</DependentUpon>
     </Content>
+    <Content Include="lib2\devkit.js" />
     <Content Include="lib\devkit.js" />
     <Content Include="entities\devkit.d.ts" />
     <None Include="entities\generator.form.bat" />
@@ -81,7 +87,6 @@
     <Folder Include="html\" />
     <Folder Include="images\" />
     <Folder Include="js\" />
-    <Folder Include="resources\" />
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="entities\Account.d.ts">
@@ -90,6 +95,10 @@
     <TypeScriptCompile Include="entities\Contact.d.ts">
       <DependentUpon>Contact.js</DependentUpon>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="lib2\devkit.d.ts" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resources\Resource.1033.resx" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v15.0\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
