@@ -13,6 +13,26 @@ declare namespace DevKit {
      */
     type Guid = string;
 
+    /**
+     * Notification object for AddNotification method
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/addnotification
+     */
+    interface FieldNotification {
+        /** Array of strings. The message to display in the notification */
+        messages: string[];
+        /** Notification level: ERROR or RECOMMENDATION */
+        notificationLevel?: 'ERROR' | 'RECOMMENDATION';
+        /** Unique identifier for the notification which can be used to clear this notification */
+        uniqueId: string;
+        /** Optional actions for the notification */
+        actions?: {
+            /** Message to display for the action */
+            message?: string;
+            /** Array of functions to execute when the action is clicked */
+            actions: Function[];
+        }[];
+    }
+
     namespace Controls {
         /**
          * Base interface for all field controls
@@ -31,6 +51,20 @@ declare namespace DevKit {
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/removeonchange
              */
             RemoveOnChange(callback: (executionContext: any) => void): void;
+
+            /**
+             * Adds an event handler to the OnOutputChange event for modern controls
+             * @param callback The function to be executed on the OnOutputChange event
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/addonoutputchange
+             */
+            AddOnOutputChange(callback: (executionContext: any) => void): void;
+
+            /**
+             * Removes an event handler from the OnOutputChange event
+             * @param callback Specifies the function to be removed from the OnOutputChange event
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/removeonoutputchange
+             */
+            RemoveOnOutputChange(callback: (executionContext: any) => void): void;
 
             /**
              * Causes the OnChange event to occur on the attribute so that any script associated to that event can execute
@@ -58,6 +92,13 @@ declare namespace DevKit {
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/setnotification
              */
             SetNotification(message: string, uniqueId?: string): boolean;
+
+            /**
+             * Displays a notification for a control with actions
+             * @param notification The notification object with messages, level, uniqueId, and optional actions
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/addnotification
+             */
+            AddNotification(notification: FieldNotification): void;
 
             /**
              * Sets a value for an attribute to determine whether it is valid or invalid with a message
@@ -734,6 +775,62 @@ declare namespace DevKit {
         }
 
         /**
+         * Interface for a Grid Column in an editable grid
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/gridattribute
+         */
+        interface GridColumn {
+            /** Get the label for the column */
+            readonly Label: string;
+            /** Get the logical name of the column */
+            readonly Name: string;
+            /** Get/Set whether the column is disabled */
+            Disabled: boolean;
+            /** Get/Set the required level of the column */
+            RequiredLevel: string;
+            /** Get/Set the value of the column */
+            Value: any;
+            /** Clear a notification for the column */
+            ClearNotification(uniqueId: string): boolean;
+            /** Set a notification for the column */
+            SetNotification(message: string, uniqueId: string): boolean;
+        }
+
+        /**
+         * Interface for a Grid Row
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/gridrow
+         */
+        interface GridRow {
+            /** Collection of columns in the row */
+            readonly Columns: {
+                /** Get the number of columns */
+                getLength(): number;
+                /** Get a column by index */
+                get(index: number): GridColumn;
+                /** Iterate over all columns */
+                forEach(callback: (column: GridColumn, index: number) => void): void;
+            };
+            /** Get the GUID of the record */
+            readonly EntityId: string;
+            /** Get the logical name of the entity */
+            readonly EntityName: string;
+            /** Get the entity reference */
+            readonly EntityReference: { entityType: string; id: string; name: string };
+            /** Get the value of the primary attribute */
+            readonly PrimaryAttributeValue: string;
+        }
+
+        /**
+         * Interface for Grid View Selector
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/viewselector
+         */
+        interface ViewSelector {
+            /** Get whether the view selector is visible */
+            readonly Visible: boolean;
+            /** Get/Set the current view */
+            CurrentView: { entityType: string; id: string; name: string };
+        }
+
+        /**
          * Interface for Grid controls
          */
         interface Grid {
@@ -752,10 +849,29 @@ declare namespace DevKit {
             RemoveOnLoad(callback: (executionContext: any) => void): void;
 
             /**
+             * Opens the related grid
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/openrelatedgrid
+             */
+            OpenRelatedGrid(): void;
+
+            /**
              * Refreshes the data displayed in the grid
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/refresh
              */
             Refresh(): void;
+
+            /**
+             * Refreshes the ribbon
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/refreshribbon
+             */
+            RefreshRibbon(): void;
+
+            /**
+             * Returns the URL for the current grid
+             * @param client 1=Web, 2=Outlook
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/geturl
+             */
+            Url(client?: number): string;
 
             /**
              * Get the logical name of the entity data displayed in the grid
@@ -770,10 +886,54 @@ declare namespace DevKit {
             readonly FetchXml: string;
 
             /**
+             * Get the grid type: 1=HomePageGrid, 2=Subgrid
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/getgridtype
+             */
+            readonly GridType: number;
+
+            /**
+             * Get the relationship information for the subgrid
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/getrelationship
+             */
+            readonly Relationship: { name: string; navigationPropertyName: string; relationshipType: number; roleType: number };
+
+            /**
+             * Collection of rows in the grid
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/getrows
+             */
+            readonly Rows: {
+                /** Get the number of rows */
+                getLength(): number;
+                /** Get a row by index */
+                get(index: number): GridRow;
+                /** Iterate over all rows */
+                forEach(callback: (row: GridRow, index: number) => void): void;
+            };
+
+            /**
+             * Collection of selected rows in the grid
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/getselectedrows
+             */
+            readonly SelectedRows: {
+                /** Get the number of selected rows */
+                getLength(): number;
+                /** Get a selected row by index */
+                get(index: number): GridRow;
+                /** Iterate over all selected rows */
+                forEach(callback: (row: GridRow, index: number) => void): void;
+            };
+
+            /**
              * Get the total record count (limited to 5000)
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/gettotalrecordcount
              */
             readonly TotalRecordCount: number;
+
+            /**
+             * Get the view selector for the grid
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/getviewselector
+             */
+            readonly ViewSelector: ViewSelector;
 
             /**
              * Get/Set a value that indicates whether the grid is currently visible
@@ -1643,33 +1803,6 @@ declare namespace DevKit {
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/showprogressindicator
          */
         ShowProgressIndicator(message: string): void;
-    }
-
-    // ============================================================================
-    // Copilot Interface
-    // ============================================================================
-
-    /**
-     * Interface for AI Copilot operations
-     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-ai
-     */
-    interface ICopilot {
-        /**
-         * Executes an AI event
-         * @param eventName Name of the event to execute
-         * @param eventParameters Parameters to pass to the event
-         * @param successCallback Function called on success
-         * @param errorCallback Function called on error
-         */
-        ExecuteEvent(eventName: string, eventParameters: any, successCallback?: (result: any) => void, errorCallback?: (error: any) => void): Promise<any> | void;
-
-        /**
-         * Executes an AI prompt
-         * @param promptText The prompt text to execute
-         * @param successCallback Function called on success
-         * @param errorCallback Function called on error
-         */
-        ExecutePrompt(promptText: string, successCallback?: (result: any) => void, errorCallback?: (error: any) => void): Promise<any> | void;
     }
 
     // ============================================================================

@@ -53,6 +53,10 @@ export interface IFieldControl {
     AddOnChange(callback: (context: any) => void): void;
     /** Remove onChange event handler */
     RemoveOnChange(callback: (context: any) => void): void;
+    /** Add onOutputChange event handler for modern controls */
+    AddOnOutputChange(callback: (context: any) => void): void;
+    /** Remove onOutputChange event handler */
+    RemoveOnOutputChange(callback: (context: any) => void): void;
     /** Fire onChange event */
     FireOnChange(): void;
     /** Set focus to control */
@@ -61,6 +65,8 @@ export interface IFieldControl {
     SetNotification(message: string, uniqueId: string): boolean;
     /** Clear notification */
     ClearNotification(uniqueId: string): boolean;
+    /** Add notification with options */
+    AddNotification(notification: { messages: string[]; notificationLevel?: 'ERROR' | 'RECOMMENDATION'; uniqueId: string; actions?: { message?: string; actions: Function[] }[] }): void;
     /** Set control validity */
     SetIsValid(valid: boolean, message?: string): void;
 }
@@ -319,10 +325,13 @@ function loadField(formContext: any, field: any, attribute: any, control: any): 
 
     field.AddOnChange = (callback: (context: any) => void) => attribute?.addOnChange(callback);
     field.RemoveOnChange = (callback: (context: any) => void) => attribute?.removeOnChange(callback);
+    field.AddOnOutputChange = (callback: (context: any) => void) => control?.addOnOutputChange?.(callback);
+    field.RemoveOnOutputChange = (callback: (context: any) => void) => control?.removeOnOutputChange?.(callback);
     field.FireOnChange = () => attribute?.fireOnChange();
     field.Focus = () => control?.setFocus();
     field.SetNotification = (message: string, uniqueId: string) => control?.setNotification(message, uniqueId);
     field.ClearNotification = (uniqueId: string) => control?.clearNotification(uniqueId);
+    field.AddNotification = (notification: any) => control?.addNotification(notification);
     field.SetIsValid = (valid: boolean, message?: string) => attribute?.setIsValid(valid, message);
 }
 
@@ -438,19 +447,108 @@ export function LoadFormV2<TBody, THeader, TTab, TGrid, TNavigation, TQuickForm>
         });
     }
 
-    // Build Grid (simplified)
+    // Build Grid (enhanced with Rows, SelectedRows, ViewSelector)
     const grid: any = {};
     if (formConfig.grid) {
+        // Helper to create grid column object
+        const loadGridColumn = (col: any) => {
+            const colObj: any = {};
+            getter(colObj, 'Label', () => col?.controls?.get(0)?.getLabel());
+            getter(colObj, 'Name', () => col?.getName());
+            getterSetter(colObj, 'Disabled', () => col?.controls?.get(0)?.getDisabled(), (value: boolean) => { col?.controls?.get(0)?.setDisabled(value); });
+            getterSetter(colObj, 'RequiredLevel', () => col?.getRequiredLevel(), (value: string) => { col?.setRequiredLevel(value); });
+            getterSetter(colObj, 'Value', () => col?.getValue(), (value: any) => { col?.setValue(value); });
+            colObj.ClearNotification = (uniqueId: string) => col?.controls?.get(0)?.clearNotification(uniqueId);
+            colObj.SetNotification = (message: string, uniqueId: string) => col?.controls?.get(0)?.setNotification(message, uniqueId);
+            return colObj;
+        };
+
+        // Helper to create grid row object
+        const loadGridRow = (row: any) => {
+            const rowObj: any = {};
+            getter(rowObj, 'Columns', () => {
+                const columnsObj: any = {};
+                columnsObj.getLength = () => row?.data?.entity?.attributes?.getLength();
+                columnsObj.get = (index: number) => {
+                    const column = row?.data?.entity?.attributes?.get(index);
+                    return loadGridColumn(column);
+                };
+                columnsObj.forEach = (callback: (col: any, index: number) => void) => {
+                    const columns = row?.data?.entity?.attributes;
+                    const length = columns?.getLength() || 0;
+                    for (let index = 0; index < length; index++) {
+                        const column = columns?.get(index);
+                        callback(loadGridColumn(column), index);
+                    }
+                };
+                return columnsObj;
+            });
+            getter(rowObj, 'EntityId', () => row?.data?.entity?.getId());
+            getter(rowObj, 'EntityName', () => row?.data?.entity?.getEntityName());
+            getter(rowObj, 'EntityReference', () => row?.data?.entity?.getEntityReference());
+            getter(rowObj, 'PrimaryAttributeValue', () => row?.data?.entity?.getPrimaryAttributeValue());
+            return rowObj;
+        };
+
+        // Helper to create collection object
+        const createCollectionObject = (getItemsFn: () => any, processItemFn: (item: any) => any) => {
+            const obj: any = {};
+            obj.getLength = () => getItemsFn()?.getLength();
+            obj.get = (index: number) => processItemFn(getItemsFn()?.get(index));
+            obj.forEach = (callback: (item: any, index: number) => void) => {
+                const items = getItemsFn();
+                const length = items?.getLength() || 0;
+                for (let index = 0; index < length; index++) {
+                    callback(processItemFn(items.get(index)), index);
+                }
+            };
+            return obj;
+        };
+
         formConfig.grid.forEach(gridName => {
             grid[gridName] = {};
             const gridControl = formContext?.getControl(gridName);
+
             getter(grid[gridName], 'EntityName', () => gridControl?.getEntityName());
             getter(grid[gridName], 'FetchXml', () => gridControl?.getFetchXml());
+            getter(grid[gridName], 'GridType', () => gridControl?.getGridType());
+            getter(grid[gridName], 'Relationship', () => gridControl?.getRelationship());
             getter(grid[gridName], 'TotalRecordCount', () => gridControl?.getGrid()?.getTotalRecordCount());
+
+            // Rows collection
+            getter(grid[gridName], 'Rows', () => {
+                const gridInstance = formContext?.getControl(gridName)?.getGrid();
+                return createCollectionObject(
+                    () => gridInstance?.getRows(),
+                    (row: any) => loadGridRow(row)
+                );
+            });
+
+            // SelectedRows collection
+            getter(grid[gridName], 'SelectedRows', () => {
+                const gridInstance = formContext?.getControl(gridName)?.getGrid();
+                return createCollectionObject(
+                    () => gridInstance?.getSelectedRows(),
+                    (row: any) => loadGridRow(row?.getData())
+                );
+            });
+
+            // ViewSelector
+            getter(grid[gridName], 'ViewSelector', () => {
+                const viewSelector = gridControl?.getViewSelector();
+                const viewObj: any = {};
+                getter(viewObj, 'Visible', () => viewSelector?.isVisible());
+                getterSetter(viewObj, 'CurrentView', () => viewSelector?.getCurrentView(), (value: any) => viewSelector?.setCurrentView(value));
+                return viewObj;
+            });
+
             getterSetter(grid[gridName], 'Visible', () => gridControl?.getVisible(), (value: boolean) => { gridControl?.setVisible(value); });
             grid[gridName].AddOnLoad = (callback: any) => gridControl?.addOnLoad(callback);
             grid[gridName].RemoveOnLoad = (callback: any) => gridControl?.removeOnLoad(callback);
+            grid[gridName].OpenRelatedGrid = () => gridControl?.openRelatedGrid();
             grid[gridName].Refresh = () => gridControl?.refresh();
+            grid[gridName].RefreshRibbon = () => gridControl?.refreshRibbon();
+            grid[gridName].Url = (client: number) => gridControl?.getUrl(client);
         });
     }
 
@@ -876,32 +974,6 @@ export function LoadUtility(defaultWebResourceName?: string): any {
 }
 
 // ============================================================================
-// Copilot Functions
-// ============================================================================
-
-/**
- * Load Copilot wrapper for AI operations
- */
-export function LoadCopilot(): any {
-    const copilot: any = {};
-    const getCopilot = (window as any).Xrm?.AI;
-
-    copilot.ExecuteEvent = function (eventName: string, eventParameters: any, successCallback?: (result: any) => void, errorCallback?: (error: any) => void) {
-        const promise = getCopilot?.executeEvent(eventName, eventParameters);
-        if (successCallback) promise?.then(successCallback, errorCallback);
-        else return promise;
-    };
-
-    copilot.ExecutePrompt = function (promptText: string, successCallback?: (result: any) => void, errorCallback?: (error: any) => void) {
-        const promise = getCopilot?.executePrompt(promptText);
-        if (successCallback) promise?.then(successCallback, errorCallback);
-        else return promise;
-    };
-
-    return copilot;
-}
-
-// ============================================================================
 // SidePanes Functions
 // ============================================================================
 
@@ -918,6 +990,34 @@ export function LoadSidePanes(): any {
     sidePanes.GetAll = () => (window as any).Xrm?.App?.sidePanes?.getAllPanes();
     sidePanes.GetSelected = () => (window as any).Xrm?.App?.sidePanes?.getSelectedPane();
     return sidePanes;
+}
+
+// ============================================================================
+// FormDialog Functions
+// ============================================================================
+
+/**
+ * Load Form Dialog wrapper for dialog forms
+ * @param formContext The form context
+ * @param fields Array of field names to load
+ * @returns Dialog form object with field controls and Close method
+ */
+export function LoadFormDialog(formContext: any, fields: string[]): any {
+    const form: any = {};
+    const fieldsLength = fields?.length || 0;
+
+    for (let i = 0; i < fieldsLength; i++) {
+        const fieldName = fields[i];
+        const attribute = formContext?.data?.entity?.attributes?.get(fieldName);
+        const control = formContext?.getControl(fieldName);
+        form[fieldName] = {};
+        loadField(formContext, form[fieldName], attribute, control);
+    }
+
+    // Add Close method for dialog
+    form.Close = () => formContext?.ui?.close();
+
+    return form;
 }
 
 // ============================================================================
