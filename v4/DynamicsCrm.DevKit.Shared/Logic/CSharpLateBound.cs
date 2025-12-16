@@ -19,6 +19,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
         public static string GetCsCode(ServiceClient service, EntityMetadata entityMetadata, string rootNameSpace, string shareProject = null)
         {
             EntityMetadata = entityMetadata;
+            if (EntityMetadata.Attributes == null) EntityMetadata = XrmHelper.FetchEntityMetadata(service, entityMetadata.LogicalName);
             RootNamespace = rootNameSpace;
             var code = string.Empty;
             var @class = Helper.SafeDeclareName(entityMetadata.SchemaName, GeneratorType.csharp);

@@ -258,6 +258,27 @@ namespace DynamicsCrm.DevKit.Shared
             return list;
         }
 
+        public static EntityMetadata FetchEntityMetadata(ServiceClient serviceClient, string entityLogicalName)
+        {
+            var request = new RetrieveEntityRequest {
+                LogicalName = entityLogicalName,
+                EntityFilters = EntityFilters.All
+            };
+            var response = (RetrieveEntityResponse)serviceClient.Execute(request);
+            return response.EntityMetadata;
+        }
+
+        public static async Task<EntityMetadata> FetchEntityMetadataAsync(ServiceClient serviceClient, string entityLogicalName)
+        {
+            var request = new RetrieveEntityRequest
+            {
+                LogicalName = entityLogicalName,
+                EntityFilters = EntityFilters.All
+            };
+            var response = (RetrieveEntityResponse)await serviceClient.ExecuteAsync(request);
+            return response.EntityMetadata;
+        }
+
         public static async Task<EntityMetadata> GetEntityMetadataAsync(ServiceClient serviceClient, string entityLogicalName)
         {
             var entities = await GetEntitiesMetadataAsync(serviceClient, [entityLogicalName]);

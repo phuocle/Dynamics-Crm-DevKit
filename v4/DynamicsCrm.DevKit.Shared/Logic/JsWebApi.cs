@@ -3,6 +3,7 @@ using Microsoft.Xrm.Sdk.Metadata;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web.Services.Description;
 
 namespace DynamicsCrm.DevKit.Shared.Logic
 {
@@ -18,6 +19,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
         {
             ServiceClient = serviceClient;
             EntityMetadata = entityMetadata;
+            if (EntityMetadata.Attributes == null) EntityMetadata = await XrmHelper.FetchEntityMetadataAsync(serviceClient, entityMetadata.LogicalName);
             RootNamespace = rootNamespace;
             var dts = await JsTypeScriptDeclaration.GetCodeAsync(serviceClient, entityMetadata, rootNamespace, isJsFormExist, true);
             var code = string.Empty;

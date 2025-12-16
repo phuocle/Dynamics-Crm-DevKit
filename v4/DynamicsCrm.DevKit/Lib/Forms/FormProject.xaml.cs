@@ -70,7 +70,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                             HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Server-Project-Template");
                             HELP.Inlines.Clear();
                             HELP.Inlines.Add("Server Project Template");
-                            LabelProjectName.Content = $"{solutionName}";
+                            LabelProjectName.Content = $"{solutionName}.Server";
                             LabelProjectName.Tag = LabelProjectName.Content;
                         }                
                         async Task WebResourceProjectAsync()

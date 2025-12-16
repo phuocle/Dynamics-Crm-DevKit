@@ -102,7 +102,7 @@ namespace DynamicsCrm.DevKit.Shared
         {
             if (!XrmHelper.EntitiesMetadata.Any(x => x.LogicalName == entityLogicalName))
             {
-                XrmHelper.EntitiesMetadata.Add(await XrmHelper.GetEntityMetadataAsync(crmServiceClient, entityLogicalName));
+                XrmHelper.EntitiesMetadata.Add(await XrmHelper.FetchEntityMetadataAsync(crmServiceClient, entityLogicalName));
             }
         }
 

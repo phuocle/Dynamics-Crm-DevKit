@@ -19,10 +19,11 @@ namespace DynamicsCrm.DevKit.Shared.Logic
         private static string RootNamespace { get; set; }
         private static List<string> FormNames = new List<string>();
 
-        public static async Task<string> GetCodeAsync(ServiceClient service, EntityMetadata entityMetadata, string rootNamespace, bool isJsFormExist, bool isJsWebApiExist)
+        public static async Task<string> GetCodeAsync(ServiceClient serviceClient, EntityMetadata entityMetadata, string rootNamespace, bool isJsFormExist, bool isJsWebApiExist)
         {
-            ServiceClient = service;
+            ServiceClient = serviceClient;
             EntityMetadata = entityMetadata;
+            if (EntityMetadata.Attributes == null) EntityMetadata = await XrmHelper.FetchEntityMetadataAsync(serviceClient, entityMetadata.LogicalName);
             RootNamespace = rootNamespace;
             FormNames = new List<string>();
             var @namespace = Helper.GetNameSpace(RootNamespace);
@@ -805,6 +806,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             await XrmHelper.EntitiesMetadata.AddIfNotExistAsync(ServiceClient, quickViewXml.entityLogicalName);
             var quickViewMetadata = XrmHelper.EntitiesMetadata.Where(x => x.LogicalName == quickViewXml.entityLogicalName).FirstOrDefault();
             if (quickViewMetadata == null) return String.Empty;
+            if (quickViewMetadata.Attributes == null) quickViewMetadata = await XrmHelper.FetchEntityMetadataAsync(ServiceClient, quickViewXml.entityLogicalName);
             foreach (var field in fields)
             {
                 var fieldAttribute = quickViewMetadata.Attributes.Where(x => x.LogicalName == field.Id).FirstOrDefault();
