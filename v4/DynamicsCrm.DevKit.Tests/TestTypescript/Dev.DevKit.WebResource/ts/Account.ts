@@ -269,9 +269,5 @@ const formAccount = (function () {
     };
 })();
 
-// Export để có thể sử dụng trong Dataverse
-// @ts-ignore - Dataverse sử dụng global scope
-(window as any).formAccount = formAccount;
-
-// Export default cho module
+// Chỉ cần export default - build script sẽ tự động assign vào window.formAccount
 export default formAccount;

@@ -60,7 +60,5 @@ const formContact = (function () {
     };
 })();
 
-// Export to global scope for Dataverse
-(window as any).formContact = formContact;
-
+// Chỉ cần export default - build script sẽ tự động assign vào window.formContact
 export default formContact;

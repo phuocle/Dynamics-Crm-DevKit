@@ -58,6 +58,11 @@ async function build() {
         // Ví dụ: Contact.ts -> IIFEContact
         const globalName = `IIFE${entityName}`;
 
+        // Footer: Tự động assign default export vào window
+        // User không cần viết: (window as any).formAccount = formAccount;
+        // Chỉ cần: export default formAccount;
+        const footerCode = `(function(){if(typeof ${globalName}!=='undefined'&&${globalName}.default)window['form${entityName}']=${globalName}.default;})();`;
+
         try {
             await esbuild.build({
                 entryPoints: [entryPoint],
@@ -68,6 +73,7 @@ async function build() {
                 target: 'es2020',
                 sourcemap: isDebug ? 'inline' : false,
                 minify: !isDebug,
+                footer: { js: footerCode },
             });
 
             const stats = fs.statSync(outFile);
