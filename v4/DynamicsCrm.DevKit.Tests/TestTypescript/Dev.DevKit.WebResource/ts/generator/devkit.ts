@@ -1,16 +1,22 @@
 /**
  * DevKit TypeScript Module
- * Đây là phiên bản TypeScript của lib/devkit.js
- * Chỉ convert một phần để chứng minh quá trình convert từ JS sang TS là khả thi
+ * 
+ * Đây là phiên bản TypeScript của lib/devkit.js, tập trung vào LoadFormV2 function
+ * để hỗ trợ form scripting với đầy đủ IntelliSense.
+ * 
+ * File gốc lib/devkit.js có nhiều tính năng hơn (WebApi, Utility, Copilot, SidePanes...),
+ * file này chỉ cần LoadFormV2 cho use case chính là form scripting.
+ * 
+ * Các tính năng khác nếu cần có thể thêm sau hoặc gọi trực tiếp từ Xrm object.
+ * 
+ * @requires @types/xrm - Đã được cài trong devDependencies
  */
 
 // ============================================================================
-// Global Xrm Declaration - Khai báo Xrm từ Dynamics 365
+// Note: @types/xrm đã cài đặt, Xrm global có đầy đủ IntelliSense
+// Nếu TypeScript báo lỗi Xrm not found, có thể uncomment dòng dưới:
+// declare const Xrm: any;
 // ============================================================================
-
-// Khai báo Xrm global để TypeScript không báo lỗi
-// Trong production, nên cài @types/xrm để có đầy đủ types
-declare const Xrm: any;
 
 // ============================================================================
 // Base Control Interfaces - Định nghĩa các interfaces cho controls
