@@ -23,3 +23,4 @@ DEVKIT1016 | DynamicsCrm.DevKit | Info | [Avoid RetrieveAsIfPublished](https://g
 DEVKIT1017 | DynamicsCrm.DevKit | Info | [Avoid Console output](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DEVKIT1017)
 DEVKIT1018 | DynamicsCrm.DevKit | Error | [Avoid File/IO operations](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DEVKIT1018)
 DEVKIT1019 | DynamicsCrm.DevKit | Warning | [Check context.Depth to prevent infinite loops](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DEVKIT1019)
+DEVKIT1020 | DynamicsCrm.DevKit | Error | [DataProvider requires DataSource](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DEVKIT1020)

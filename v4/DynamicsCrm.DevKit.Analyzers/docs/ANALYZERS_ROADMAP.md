@@ -24,6 +24,8 @@ Based on research of [Microsoft's Dataverse Best Practices](https://learn.micros
 | DEVKIT1016 | Avoid RetrieveAsIfPublished = true | ℹ️ Info | [Retrieve published metadata](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/work-with-metadata/retrieve-published-metadata) |
 | DEVKIT1017 | Avoid Console output in plugins | ℹ️ Info | Sandbox limitation |
 | DEVKIT1018 | Avoid File/IO operations in plugins | ❌ Error | Sandbox limitation |
+| DEVKIT1019 | Plugin depth check | ⚠️ Warning | Best practice |
+| DEVKIT1020 | DataProvider requires DataSource | ❌ Error | DataProvider configuration |
 
 ---
 
@@ -33,25 +35,25 @@ Based on research of [Microsoft's Dataverse Best Practices](https://learn.micros
 
 | ID | Title | Suggested Severity | Description | MS Best Practice |
 |---|---|:---:|---|---|
-| DEVKIT1020 | All Query Types for PreOperation RetrieveMultiple | ⚠️ Warning | Handle FetchExpression, QueryExpression, QueryByAttribute | [Implement all types of queries](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/implement-all-types-of-queries-when-filtering-preoperation-retrievemultiple) |
-| DEVKIT1021 | Duplicate Plugin Step Registration | ⚠️ Warning | Detect duplicate `[CrmPluginRegistration]` attributes | [Don't duplicate plug-in step registration](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/do-not-duplicate-plugin-step-registration) |
+| DEVKIT1021 | All Query Types for PreOperation RetrieveMultiple | ⚠️ Warning | Handle FetchExpression, QueryExpression, QueryByAttribute | [Implement all types of queries](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/implement-all-types-of-queries-when-filtering-preoperation-retrievemultiple) |
+| DEVKIT1022 | Duplicate Plugin Step Registration | ⚠️ Warning | Detect duplicate `[CrmPluginRegistration]` attributes | [Don't duplicate plug-in step registration](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/do-not-duplicate-plugin-step-registration) |
 
 ### 🟡 Medium Priority
 
 | ID | Title | Description | MS Best Practice |
 |---|---|---|---|
-| DEVKIT1022 | Avoid Reflection in Sandbox Plugins | Detect disallowed reflection patterns (Assembly.Load, Activator.CreateInstance on arbitrary types) | Sandbox limitation |
-| DEVKIT1023 | Avoid Environment Variables in Plugins | Detect Environment.GetEnvironmentVariable (unavailable in sandbox) | Sandbox limitation |
-| DEVKIT1024 | Use OrganizationServiceContext Carefully | Warn about AutoSaveChanges and LINQ edge cases | Performance |
-| DEVKIT1025 | Avoid Large EntityCollection Returns | Warn when not using paging for RetrieveMultiple | [Service protection API limits](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/api-limits) |
+| DEVKIT1023 | Avoid Reflection in Sandbox Plugins | Detect disallowed reflection patterns (Assembly.Load, Activator.CreateInstance on arbitrary types) | Sandbox limitation |
+| DEVKIT1024 | Avoid Environment Variables in Plugins | Detect Environment.GetEnvironmentVariable (unavailable in sandbox) | Sandbox limitation |
+| DEVKIT1025 | Use OrganizationServiceContext Carefully | Warn about AutoSaveChanges and LINQ edge cases | Performance |
+| DEVKIT1026 | Avoid Large EntityCollection Returns | Warn when not using paging for RetrieveMultiple | [Service protection API limits](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/api-limits) |
 
 ### 🟢 Low Priority
 
 | ID | Title | Description | MS Best Practice |
 |---|---|---|---|
-| DEVKIT1026 | Manage Invalid Characters | Detect code that may set invalid characters in fields | [Manage invalid characters](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/work-with-data/invalidcharactersinfield) |
-| DEVKIT1027 | Verify Certificate Dependencies | Alert when using external HTTPS calls without cert validation consideration | [Verify certification dependencies](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/verify-certification-dependencies) |
-| DEVKIT1028 | Plugin Assembly Size Check | Warn if assembly exceeds recommended size limits | [Optimize custom assembly development](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/optimize-assembly-development) |
+| DEVKIT1027 | Manage Invalid Characters | Detect code that may set invalid characters in fields | [Manage invalid characters](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/work-with-data/invalidcharactersinfield) |
+| DEVKIT1028 | Verify Certificate Dependencies | Alert when using external HTTPS calls without cert validation consideration | [Verify certification dependencies](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/verify-certification-dependencies) |
+| DEVKIT1029 | Plugin Assembly Size Check | Warn if assembly exceeds recommended size limits | [Optimize custom assembly development](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/optimize-assembly-development) |
 
 ---
 
@@ -84,15 +86,16 @@ DynamicsCrm.DevKit.Analyzers uniquely focuses on:
 |---|---|---|
 | DEVKIT1001-1018 | Current analyzers | ✅ Implemented |
 | DEVKIT1019 | Context depth check | ✅ Implemented |
-| DEVKIT1020 | Query type handling | 📋 Planned |
-| DEVKIT1021 | Duplicate step registration | 📋 Planned |
-| DEVKIT1022 | Reflection patterns | 📋 Planned |
-| DEVKIT1023 | Environment variables | 📋 Planned |
-| DEVKIT1024 | OrganizationServiceContext | 📋 Planned |
-| DEVKIT1025 | Large EntityCollection | 📋 Planned |
-| DEVKIT1026 | Invalid characters | 📋 Planned |
-| DEVKIT1027 | Certificate dependencies | 📋 Planned |
-| DEVKIT1028 | Assembly size | 📋 Planned |
+| DEVKIT1020 | DataProvider requires DataSource | ✅ Implemented |
+| DEVKIT1021 | Query type handling | 📋 Planned |
+| DEVKIT1022 | Duplicate step registration | 📋 Planned |
+| DEVKIT1023 | Reflection patterns | 📋 Planned |
+| DEVKIT1024 | Environment variables | 📋 Planned |
+| DEVKIT1025 | OrganizationServiceContext | 📋 Planned |
+| DEVKIT1026 | Large EntityCollection | 📋 Planned |
+| DEVKIT1027 | Invalid characters | 📋 Planned |
+| DEVKIT1028 | Certificate dependencies | 📋 Planned |
+| DEVKIT1029 | Assembly size | 📋 Planned |
 
 ---
 

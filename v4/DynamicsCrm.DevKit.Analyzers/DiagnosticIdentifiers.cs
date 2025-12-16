@@ -21,5 +21,6 @@
         public const string AvoidConsoleOutput = "DEVKIT1017";
         public const string AvoidFileIO = "DEVKIT1018";
         public const string PluginDepthCheck = "DEVKIT1019";
+        public const string DataProviderDataSource = "DEVKIT1020";
     }
 }

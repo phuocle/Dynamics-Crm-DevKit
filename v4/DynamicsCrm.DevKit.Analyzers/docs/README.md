@@ -45,6 +45,7 @@ Or add to your `.csproj`:
 | [DEVKIT1017](#devkit1017) | Info | Avoid Console output in plug-ins |
 | [DEVKIT1018](#devkit1018) | Error | Avoid File/IO operations in plug-ins |
 | [DEVKIT1019](#devkit1019) | Warning | Consider checking context.Depth to prevent infinite loops |
+| [DEVKIT1020](#devkit1020) | Error | DataProvider must have DataSource |
 
 ---
 
@@ -780,6 +781,41 @@ public class AccountPlugin : IPlugin
 ```
 
 [📖 Documentation](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DEVKIT1019)
+
+---
+
+### ❌ DEVKIT1020
+**DataProvider must have DataSource**
+
+**Severity:** Error
+
+**MS Best Practice:** [Virtual Table Data Providers](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/virtual-entities/custom-virtual-entity-data-providers)
+
+This analyzer detects when a `CrmPluginRegistration` attribute uses `PluginType.DataProvider` but the `DataSource` parameter is empty or missing. DataProvider plugins require a valid DataSource to function correctly at runtime.
+
+**Bad Code:**
+```csharp
+public class MyPlugin : IPlugin
+{
+    // ❌ DataSource is empty - will fail at runtime
+    [CrmPluginRegistration("Dev.DevKit.Server.DataProviders.Cds.Retrieve", "Retrieve", 
+        PluginType.DataProvider, DataSource = "")]
+    public void Execute(IServiceProvider serviceProvider) { }
+}
+```
+
+**Good Code:**
+```csharp
+public class MyPlugin : IPlugin
+{
+    // ✅ DataSource is specified with valid data source name
+    [CrmPluginRegistration("Dev.DevKit.Server.DataProviders.Cds.Retrieve", "Retrieve", 
+        PluginType.DataProvider, DataSource = "v4_sql_datasource")]
+    public void Execute(IServiceProvider serviceProvider) { }
+}
+```
+
+[📖 Documentation](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DEVKIT1020)
 
 ---
 

@@ -256,5 +256,13 @@ namespace DynamicsCrm.DevKit.Analyzers
             "Plugin class '{0}' does not check IPluginExecutionContext.Depth which may cause infinite loops",
             DiagnosticSeverity.Warning,
             "Plugins can trigger themselves recursively. Check context.Depth and exit early (e.g., if (context.Depth > 1) return;) to prevent infinite loops and stack overflows.");
+
+        /// <summary>DEVKIT1020</summary>
+        public static readonly DiagnosticDescriptor DataProviderDataSource = CreateDescriptor(
+            "DEVKIT1020",
+            "DataProvider must have DataSource",
+            "DataProvider plugin requires DataSource; DataSource cannot be empty",
+            DiagnosticSeverity.Error,
+            "When using PluginType.DataProvider, the DataSource parameter must be specified with a valid data source name. An empty DataSource will cause the plugin to fail at runtime.");
     }
 }

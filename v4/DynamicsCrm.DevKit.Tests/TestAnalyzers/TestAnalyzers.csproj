@@ -58,6 +58,7 @@
     <Compile Include="DEVKIT1017.cs" />
     <Compile Include="DEVKIT1018.cs" />
     <Compile Include="DEVKIT1019.cs" />
+    <Compile Include="DEVKIT1020.cs" />
     <Compile Include="Lib\PluginCore.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <None Include="app.config" />

@@ -19,7 +19,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         public ServiceClient ServiceClient => CONNECTION.ServiceClient;
         public CrmConnection CrmConnection => CONNECTION.CrmConnection;
         private List<CustomTemplate> CustomTemplates { get; set; } = new List<CustomTemplate>();
-        public string Class => TextboxClass.Text ?? string.Empty;
+        public string Class =>  TextboxClass.Text.EndsWith("Test") ? TextboxClass.Text.Substring(0, TextboxClass.Text.Length - 4) : TextboxClass.Text ?? string.Empty;
         public string PluginSchemaName
         {
             get
