@@ -2,13 +2,13 @@ using Dev.DevKit.Shared;
 using Microsoft.Xrm.Sdk;
 using System;
 
-namespace DynamicsCrm.DevKit.Analyzers.Test.Vs
+namespace TestAnalyzers
 {
     /// <summary>
     /// DEVKIT1007: IPlugin Implementations Should Be Stateless
     /// This file contains code that should trigger DEVKIT1007 errors for stateful plugins.
     /// </summary>
-    [CrmPluginRegistration("Update", "territory", StageEnum.PostOperation, ExecutionModeEnum.Synchronous, "name", "DynamicsCrm.DevKit.Analyzers.Test.Vs.DEVKIT1007_StatefulPlugin", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin)]
+    [CrmPluginRegistration("Update", "territory", StageEnum.PostOperation, ExecutionModeEnum.Synchronous, "name", "TestAnalyzers.DEVKIT1007_StatefulPlugin", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin)]
     public class DEVKIT1007_StatefulPlugin : IPlugin
     {
         // DEVKIT1007: Mutable instance fields - shared across all executions!

@@ -3,13 +3,13 @@ using Microsoft.Xrm.Sdk;
 using System;
 using System.Threading.Tasks;
 
-namespace DynamicsCrm.DevKit.Analyzers.Test.Vs
+namespace TestAnalyzers
 {
     /// <summary>
     /// DEVKIT1015: Avoid Blocking Async Patterns in Plug-ins
     /// The diagnostic appears on: task.GetAwaiter().GetResult(), task.Wait(), task.Result
     /// </summary>
-    [CrmPluginRegistration("Update", "territory", StageEnum.PostOperation, ExecutionModeEnum.Synchronous, "name", "DynamicsCrm.DevKit.Analyzers.Test.Vs.DEVKIT1015_BlockingAsync", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin)]
+    [CrmPluginRegistration("Update", "territory", StageEnum.PostOperation, ExecutionModeEnum.Synchronous, "name", "TestAnalyzers.DEVKIT1015_BlockingAsync", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin)]
     public class DEVKIT1015_BlockingAsync : IPlugin
     {
         public void Execute(IServiceProvider serviceProvider)

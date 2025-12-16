@@ -147,10 +147,10 @@ RUN VS INTEGRATION TESTS:
 
   2. Copy DLL to test packages:
      Copy-Item "bin\Debug\netstandard2.0\DynamicsCrm.DevKit.Analyzers.dll" `
-       "..\DynamicsCrm.DevKit.Analyzers.Test.Vs\packages\DynamicsCrm.DevKit.Analyzers.4.0.0\analyzers\dotnet\cs\" -Force
+       "..\DynamicsCrm.DevKit.Tests\TestAnalyzers\packages\DynamicsCrm.DevKit.Analyzers.4.0.0\analyzers\dotnet\cs\" -Force
 
   3. Build test project:
-     msbuild "..\DynamicsCrm.DevKit.Analyzers.Test.Vs.csproj" /t:Rebuild /p:Configuration=Debug /v:n
+     msbuild "..\DynamicsCrm.DevKit.Tests\TestAnalyzers\TestAnalyzers.csproj" /t:Rebuild /p:Configuration=Debug /v:n
 
   4. Check build output for DEVKIT1001-DEVKIT1019 warnings
 

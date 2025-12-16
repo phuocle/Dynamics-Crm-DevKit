@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DynamicsCrm.DevKit.Analyzers.Test.Vs
+namespace TestAnalyzers
 {
     internal class DEVKIT1002
     {

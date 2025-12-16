@@ -3,14 +3,14 @@ using Microsoft.Xrm.Sdk;
 using System;
 using System.Reflection;
 
-namespace DynamicsCrm.DevKit.Analyzers.Test.Vs
+namespace TestAnalyzers
 {
     /// <summary>
     /// DEVKIT1014: Avoid AppDomain Event Registration in Plug-ins
     /// This file contains code that subscribes to AppDomain events,
     /// which should trigger DEVKIT1014 errors.
     /// </summary>
-    [CrmPluginRegistration("Update", "territory", StageEnum.PostOperation, ExecutionModeEnum.Synchronous, "name", "DynamicsCrm.DevKit.Analyzers.Test.Vs.DEVKIT1014_AppDomainEvents", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin)]
+    [CrmPluginRegistration("Update", "territory", StageEnum.PostOperation, ExecutionModeEnum.Synchronous, "name", "TestAnalyzers.DEVKIT1014_AppDomainEvents", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin)]
     public class DEVKIT1014_AppDomainEvents : IPlugin
     {
         public void Execute(IServiceProvider serviceProvider)

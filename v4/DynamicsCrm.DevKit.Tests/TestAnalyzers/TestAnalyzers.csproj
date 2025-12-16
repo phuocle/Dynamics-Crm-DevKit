@@ -7,7 +7,7 @@
     <ProjectGuid>{E9C8FE6A-5DBC-4B04-95C9-BD9D61A198FC}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DynamicsCrm.DevKit.Analyzers.Test.Vs</RootNamespace>
+    <RootNamespace>TestAnalyzers</RootNamespace>
     <AssemblyName>Dev.DevKit.Plugin.Territory</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

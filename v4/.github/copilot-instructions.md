@@ -75,11 +75,11 @@ dotnet build DynamicsCrm.DevKit.Analyzers\DynamicsCrm.DevKit.Analyzers.csproj --
 
 # Step 2: Copy DLL to packages folder
 Copy-Item -Path "DynamicsCrm.DevKit.Analyzers\bin\Debug\netstandard2.0\DynamicsCrm.DevKit.Analyzers.dll" `
-  -Destination "DynamicsCrm.DevKit.Analyzers.Test.Vs\packages\DynamicsCrm.DevKit.Analyzers.4.0.0\analyzers\dotnet\cs\" -Force
+  -Destination "DynamicsCrm.DevKit.Tests\TestAnalyzers\packages\DynamicsCrm.DevKit.Analyzers.4.0.0\analyzers\dotnet\cs\" -Force
 
 # Step 3: Build VS test project and capture output
 $msbuild = "C:\Program Files\Microsoft Visual Studio\18\Professional\MSBuild\Current\Bin\MSBuild.exe"
-& $msbuild "DynamicsCrm.DevKit.Analyzers.Test.Vs\DynamicsCrm.DevKit.Analyzers.Test.Vs.csproj" /t:Rebuild /p:Configuration=Debug /v:n
+& $msbuild "DynamicsCrm.DevKit.Tests\TestAnalyzers\TestAnalyzers.csproj" /t:Rebuild /p:Configuration=Debug /v:n
 
 # Step 4: Verify build output contains all DEVKIT warnings (DEVKIT1001-DEVKIT1019)
 ```

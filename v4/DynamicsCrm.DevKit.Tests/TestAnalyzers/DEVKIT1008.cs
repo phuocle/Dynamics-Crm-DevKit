@@ -5,13 +5,13 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace DynamicsCrm.DevKit.Analyzers.Test.Vs
+namespace TestAnalyzers
 {
     /// <summary>
     /// DEVKIT1008: Don't Use Parallel Execution in Plug-ins
     /// This file contains code that should trigger DEVKIT1008 errors for parallel execution patterns.
     /// </summary>
-    [CrmPluginRegistration("Update", "territory", StageEnum.PostOperation, ExecutionModeEnum.Synchronous, "name", "DynamicsCrm.DevKit.Analyzers.Test.Vs.DEVKIT1008_ParallelExecution", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin)]
+    [CrmPluginRegistration("Update", "territory", StageEnum.PostOperation, ExecutionModeEnum.Synchronous, "name", "TestAnalyzers.DEVKIT1008_ParallelExecution", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin)]
     public class DEVKIT1008_ParallelExecution : IPlugin
     {
         public void Execute(IServiceProvider serviceProvider)

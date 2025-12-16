@@ -1,6 +1,6 @@
 using Microsoft.Xrm.Sdk;
 
-namespace DynamicsCrm.DevKit.Analyzers.Test.Vs
+namespace TestAnalyzers
 {
     public static class AppSettings
     {

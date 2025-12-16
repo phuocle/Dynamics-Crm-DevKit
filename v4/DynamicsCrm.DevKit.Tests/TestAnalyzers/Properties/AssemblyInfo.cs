@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security;
 
@@ -11,7 +11,7 @@ using System.Security;
 #endif
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("Dev.DevKit.Plugin.Territory")]
-[assembly: AssemblyCopyright("Copyright © 2023")]
+[assembly: AssemblyCopyright("Copyright � 2023")]
 [assembly: AssemblyTrademark("")]
 [assembly: SecurityRules(SecurityRuleSet.Level2)]
 [assembly: ComVisible(false)]

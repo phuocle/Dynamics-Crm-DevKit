@@ -80,8 +80,8 @@ C. ANALYZER DEVELOPMENT WORKFLOW
 
    Step 2: Run VS Integration Tests
    - Action: Build Analyzer in Debug.
-   - Action: Copy DLL to: DynamicsCrm.DevKit.Analyzers.Test.Vs\packages\...\analyzers\dotnet\cs\
-   - Action: Rebuild VS Test Project (DynamicsCrm.DevKit.Analyzers.Test.Vs.csproj).
+   - Action: Copy DLL to: DynamicsCrm.DevKit.Tests\TestAnalyzers\packages\...\analyzers\dotnet\cs\
+   - Action: Rebuild VS Test Project (DynamicsCrm.DevKit.Tests\TestAnalyzers\TestAnalyzers.csproj).
    - Note: Close VS before copying to avoid file locks.
 
 D. CLI USAGE (DynamicsCrm.DevKit.Cli.json)
