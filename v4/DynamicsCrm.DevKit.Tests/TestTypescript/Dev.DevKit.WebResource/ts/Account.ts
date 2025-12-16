@@ -14,7 +14,7 @@ const formAccount = (function () {
     function registerEvents(): void {
         if (form.ExecutionContext.IsInitialLoad()) {
             // BEGIN EVENTS
-
+            var accountNumber = form.Body.AccountNumber.Value;
             // END EVENTS
         }
     }

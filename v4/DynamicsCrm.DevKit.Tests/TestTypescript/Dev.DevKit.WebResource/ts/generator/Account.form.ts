@@ -2,119 +2,122 @@
  * Account Form TypeScript Module
  * Đây là phiên bản TypeScript của entities/Account.form.js
  * File này được generator tự động tạo ra, sau này có thể viết tool để generate đúng format này
+ * 
+ * @description Uses DevKit.Controls types from devkit.d.ts for IntelliSense support
  */
 
-import { LoadFormV2, IStringControl, INumberControl, IBooleanControl, IOptionSetControl, ILookupControl, IMoneyControl, ITab, ISection, IGrid, INavigationItem } from './devkit';
+/// <reference path="devkit.d.ts" />
+import { LoadFormV2 } from './devkit';
 
 // ============================================================================
-// Account Form Interfaces - TypeScript tự động có IntelliSense từ interfaces này
+// Account Form Interfaces - Uses DevKit.Controls.* types for IntelliSense
 // ============================================================================
 
 /** Interface cho các field trong Body của Account form */
 export interface IAccountFormBody {
     /** Type an ID number or code for the account to quickly search and identify the account in system views. */
-    AccountNumber: IStringControl;
+    AccountNumber: DevKit.Controls.String;
     /** Type the company or business name. */
-    Name: IStringControl;
+    Name: DevKit.Controls.String;
     /** Type the main phone number for this account. */
-    Telephone1: IStringControl;
+    Telephone1: DevKit.Controls.String;
     /** Type the primary email address for the account. */
-    EMailAddress1: IStringControl;
+    EMailAddress1: DevKit.Controls.String;
     /** Type the fax number for the account. */
-    Fax: IStringControl;
+    Fax: DevKit.Controls.String;
     /** Type the account's website URL to get quick details about the company profile. */
-    WebSiteURL: IStringControl;
+    WebSiteURL: DevKit.Controls.String;
     /** Type additional information to describe the account, such as an excerpt from the company's website. */
-    Description: IStringControl;
-    /** Type the credit limit of the account. */
-    CreditLimit: IMoneyControl;
-    /** Type the annual revenue for the account. */
-    Revenue: IMoneyControl;
-    /** Type the number of employees that work at the account. */
-    NumberOfEmployees: INumberControl;
-    /** Select whether the credit for the account is on hold. */
-    CreditOnHold: IBooleanControl;
-    /** Select whether the account allows direct email. */
-    DoNotEMail: IBooleanControl;
-    /** Select whether the account allows phone calls. */
-    DoNotPhone: IBooleanControl;
-    /** Select whether the account allows faxes. */
-    DoNotFax: IBooleanControl;
-    /** Select whether the account allows bulk email. */
-    DoNotBulkEMail: IBooleanControl;
-    /** Select whether the account allows direct mail. */
-    DoNotPostalMail: IBooleanControl;
-    /** Information about whether to allow following email activity. */
-    FollowEmail: IBooleanControl;
-    /** Select the account's primary industry. */
-    IndustryCode: IOptionSetControl;
-    /** Select the account's ownership structure. */
-    OwnershipCode: IOptionSetControl;
-    /** Select the payment terms. */
-    PaymentTermsCode: IOptionSetControl;
+    Description: DevKit.Controls.String;
+    /** Type the credit limit of the account. This is a useful reference when you address invoice and accounting issues with the customer. */
+    CreditLimit: DevKit.Controls.Money;
+    /** Type the annual revenue for the account, used as an indicator in financial performance analysis. */
+    Revenue: DevKit.Controls.Money;
+    /** Type the number of employees that work at the account for use in marketing segmentation and demographic analysis. */
+    NumberOfEmployees: DevKit.Controls.Integer;
+    /** Select whether the credit for the account is on hold. This is a useful reference while addressing the invoice and accounting issues with the customer. */
+    CreditOnHold: DevKit.Controls.Boolean;
+    /** Select whether the account allows direct email sent from Microsoft Dynamics 365. */
+    DoNotEMail: DevKit.Controls.Boolean;
+    /** Select whether the account allows phone calls. If Do Not Allow is selected, the account will be excluded from phone call activities distributed in marketing campaigns. */
+    DoNotPhone: DevKit.Controls.Boolean;
+    /** Select whether the account allows faxes. If Do Not Allow is selected, the account will be excluded from fax activities distributed in marketing campaigns. */
+    DoNotFax: DevKit.Controls.Boolean;
+    /** Select whether the account allows bulk email sent through campaigns. If Do Not Allow is selected, the account can be added to marketing lists, but is excluded from email. */
+    DoNotBulkEMail: DevKit.Controls.Boolean;
+    /** Select whether the account allows direct mail. If Do Not Allow is selected, the account will be excluded from letter activities distributed in marketing campaigns. */
+    DoNotPostalMail: DevKit.Controls.Boolean;
+    /** Information about whether to allow following email activity like opens, attachment views and link clicks for emails sent to the account. */
+    FollowEmail: DevKit.Controls.Boolean;
+    /** Select the account's primary industry for use in marketing segmentation and demographic analysis. */
+    IndustryCode: DevKit.Controls.OptionSet;
+    /** Select the account's ownership structure, such as public or private. */
+    OwnershipCode: DevKit.Controls.OptionSet;
+    /** Select the payment terms to indicate when the customer needs to pay the total amount. */
+    PaymentTermsCode: DevKit.Controls.OptionSet;
     /** Select the preferred method of contact. */
-    PreferredContactMethodCode: IOptionSetControl;
-    /** Select the freight terms for the primary address. */
-    Address1_FreightTermsCode: IOptionSetControl;
-    /** Select a shipping method for deliveries. */
-    Address1_ShippingMethodCode: IOptionSetControl;
-    /** Choose the parent account associated with this account. */
-    ParentAccountId: ILookupControl;
-    /** Choose the primary contact for the account. */
-    PrimaryContactId: ILookupControl;
-    /** Choose the local currency for the record. */
-    TransactionCurrencyId: ILookupControl;
-    /** Enter the user or team who is assigned to manage the record. */
-    OwnerId: ILookupControl;
-    /** Type the Standard Industrial Classification (SIC) code. */
-    SIC: IStringControl;
-    /** Type the stock exchange symbol for the account. */
-    TickerSymbol: IStringControl;
+    PreferredContactMethodCode: DevKit.Controls.OptionSet;
+    /** Select the freight terms for the primary address to make sure shipping orders are processed correctly. */
+    Address1_FreightTermsCode: DevKit.Controls.OptionSet;
+    /** Select a shipping method for deliveries sent to this address. */
+    Address1_ShippingMethodCode: DevKit.Controls.OptionSet;
+    /** Choose the parent account associated with this account to show parent and child businesses in reporting and analytics. */
+    ParentAccountId: DevKit.Controls.Lookup;
+    /** Choose the primary contact for the account to provide quick access to contact details. */
+    PrimaryContactId: DevKit.Controls.Lookup;
+    /** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
+    TransactionCurrencyId: DevKit.Controls.Lookup;
+    /** Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
+    OwnerId: DevKit.Controls.Lookup;
+    /** Type the Standard Industrial Classification (SIC) code that indicates the account's primary industry of business, for use in marketing segmentation and demographic analysis. */
+    SIC: DevKit.Controls.String;
+    /** Type the stock exchange symbol for the account to track financial performance of the company. You can click the code entered in this field to access the latest trading information from MSN Money. */
+    TickerSymbol: DevKit.Controls.String;
     /** Shows the complete primary address. */
-    Address1_Composite: IStringControl;
+    Address1_Composite: DevKit.Controls.String;
     /** Type the city for the primary address. */
-    Address1_City: IStringControl;
+    Address1_City: DevKit.Controls.String;
     /** Type the first line of the primary address. */
-    Address1_Line1: IStringControl;
+    Address1_Line1: DevKit.Controls.String;
     /** Type the second line of the primary address. */
-    Address1_Line2: IStringControl;
+    Address1_Line2: DevKit.Controls.String;
     /** Type the third line of the primary address. */
-    Address1_Line3: IStringControl;
+    Address1_Line3: DevKit.Controls.String;
     /** Type the ZIP Code or postal code for the primary address. */
-    Address1_PostalCode: IStringControl;
+    Address1_PostalCode: DevKit.Controls.String;
     /** Type the state or province of the primary address. */
-    Address1_StateOrProvince: IStringControl;
+    Address1_StateOrProvince: DevKit.Controls.String;
     /** Type the country or region for the primary address. */
-    Address1_Country: IStringControl;
-    /** Type a descriptive name for the primary address. */
-    Address1_Name: IStringControl;
+    Address1_Country: DevKit.Controls.String;
+    /** Type a descriptive name for the primary address, such as Corporate Headquarters. */
+    Address1_Name: DevKit.Controls.String;
     /** Type the main phone number associated with the primary address. */
-    Address1_Telephone1: IStringControl;
+    Address1_Telephone1: DevKit.Controls.String;
 }
 
 /** Interface cho các field trong Header của Account form */
 export interface IAccountFormHeader {
-    /** Type the number of employees that work at the account. */
-    NumberOfEmployees: INumberControl;
-    /** Enter the user or team who is assigned to manage the record. */
-    OwnerId: ILookupControl;
-    /** Type the annual revenue for the account. */
-    Revenue: IMoneyControl;
-    /** Type the credit limit of the account. */
-    CreditLimit: IMoneyControl;
+    /** Type the number of employees that work at the account for use in marketing segmentation and demographic analysis. */
+    NumberOfEmployees: DevKit.Controls.Integer;
+    /** Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
+    OwnerId: DevKit.Controls.Lookup;
+    /** Type the annual revenue for the account, used as an indicator in financial performance analysis. */
+    Revenue: DevKit.Controls.Money;
+    /** Type the credit limit of the account. This is a useful reference when you address invoice and accounting issues with the customer. */
+    CreditLimit: DevKit.Controls.Money;
     /** Select the preferred method of contact. */
-    PreferredContactMethodCode: IOptionSetControl;
-    /** Choose the primary contact for the account. */
-    PrimaryContactId: ILookupControl;
+    PreferredContactMethodCode: DevKit.Controls.OptionSet;
+    /** Choose the primary contact for the account to provide quick access to contact details. */
+    PrimaryContactId: DevKit.Controls.Lookup;
 }
 
 /** Interface cho Section trong Tab */
 export interface IAccountTabSections {
-    [key: string]: ISection;
+    [key: string]: DevKit.Controls.Section;
 }
 
 /** Interface cho Tab trong Account form */
-export interface IAccountFormTab extends ITab {
+export interface IAccountFormTab extends DevKit.Controls.ITab {
     Section: IAccountTabSections;
 }
 
@@ -141,43 +144,40 @@ export interface IAccountFormTabs {
 /** Interface cho Grid trong Account form */
 export interface IAccountFormGrid {
     /** Child Accounts subgrid */
-    ChildAccounts: IGrid;
+    ChildAccounts: DevKit.Controls.Grid;
     /** Contacts subgrid */
-    Contacts: IGrid;
+    Contacts: DevKit.Controls.Grid;
     /** Account Activities Grid */
-    accountactivitiesgrid: IGrid;
+    accountactivitiesgrid: DevKit.Controls.Grid;
     /** Account Contacts Grid */
-    accountContactsGrid: IGrid;
+    accountContactsGrid: DevKit.Controls.Grid;
 }
 
 /** Interface cho Navigation trong Account form */
 export interface IAccountFormNavigation {
-    account_adx_inviteredemptions: INavigationItem;
-    account_adx_portalcomments: INavigationItem;
-    Account_Appointments: INavigationItem;
-    account_DeletedItemReferences: INavigationItem;
-    Account_Email_EmailSender: INavigationItem;
-    Account_Email_SendersAccount: INavigationItem;
-    Account_Emails: INavigationItem;
-    account_parent_account: INavigationItem;
-    Account_Phonecalls: INavigationItem;
-    Account_Tasks: INavigationItem;
-    adx_invitation_assigntoaccount: INavigationItem;
-    contact_customer_accounts: INavigationItem;
-    msa_account_managingpartner: INavigationItem;
-    msa_contact_managingpartner: INavigationItem;
+    account_adx_inviteredemptions: DevKit.Controls.NavigationItem;
+    account_adx_portalcomments: DevKit.Controls.NavigationItem;
+    Account_Appointments: DevKit.Controls.NavigationItem;
+    account_DeletedItemReferences: DevKit.Controls.NavigationItem;
+    Account_Email_EmailSender: DevKit.Controls.NavigationItem;
+    Account_Email_SendersAccount: DevKit.Controls.NavigationItem;
+    Account_Emails: DevKit.Controls.NavigationItem;
+    account_parent_account: DevKit.Controls.NavigationItem;
+    Account_Phonecalls: DevKit.Controls.NavigationItem;
+    Account_Tasks: DevKit.Controls.NavigationItem;
+    adx_invitation_assigntoaccount: DevKit.Controls.NavigationItem;
+    contact_customer_accounts: DevKit.Controls.NavigationItem;
+    msa_account_managingpartner: DevKit.Controls.NavigationItem;
+    msa_contact_managingpartner: DevKit.Controls.NavigationItem;
 }
 
 /** Interface cho QuickForm trong Account form */
 export interface IAccountFormQuickForm {
-    contactquickform: {
+    contactquickform: DevKit.Controls.IQuickView & {
         Body: {
-            EMailAddress1: any;
-            Telephone1: any;
+            EMailAddress1: DevKit.Controls.QuickView;
+            Telephone1: DevKit.Controls.QuickView;
         };
-        IsLoaded: () => boolean;
-        Refresh: () => void;
-        Focus: () => void;
     };
 }
 
