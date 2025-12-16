@@ -10,20 +10,23 @@ const path = require('path');
 const mode = process.argv[2] || 'debug';
 const isDebug = mode === 'debug';
 
-// Tìm tất cả các file .ts ở root (không bao gồm trong generator, node_modules, build)
+// Tìm tất cả các file .ts trong folder entities
 const tsDir = __dirname;
-const excludeDirs = ['generator', 'node_modules', 'build'];
+const entitiesDir = path.join(tsDir, 'entities');
 
 function getEntityFiles() {
-    const files = fs.readdirSync(tsDir);
+    // Kiểm tra folder entities có tồn tại không
+    if (!fs.existsSync(entitiesDir)) {
+        console.log('entities folder not found.');
+        return [];
+    }
+
+    const files = fs.readdirSync(entitiesDir);
     return files.filter(file => {
         // Chỉ lấy file .ts
         if (!file.endsWith('.ts')) return false;
 
-        // Bỏ qua các file config
-        if (file === 'build.ts') return false;
-
-        const filePath = path.join(tsDir, file);
+        const filePath = path.join(entitiesDir, file);
         const stat = fs.statSync(filePath);
 
         // Chỉ lấy file, không lấy directory
@@ -50,7 +53,7 @@ async function build() {
     // Build từng file
     for (const file of entityFiles) {
         const entityName = path.basename(file, '.ts');
-        const entryPoint = path.join(tsDir, file);
+        const entryPoint = path.join(entitiesDir, file);
         const outFile = path.join(buildDir, `${entityName}.js`);
 
         // Convention: IIFE[filename without .ts]

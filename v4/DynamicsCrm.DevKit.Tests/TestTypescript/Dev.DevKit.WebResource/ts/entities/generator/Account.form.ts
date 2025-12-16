@@ -6,8 +6,8 @@
  * @description Uses DevKit.Controls types from devkit.d.ts for IntelliSense support
  */
 
-/// <reference path="devkit.d.ts" />
-import { LoadFormV2 } from './devkit';
+/// <reference path="../../lib/devkit.d.ts" />
+import { LoadFormV2 } from '../../lib/devkit';
 
 // ============================================================================
 // Account Form Interfaces - Uses DevKit.Controls.* types for IntelliSense
