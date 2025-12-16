@@ -243,11 +243,19 @@
     <ProjectReference Include="..\Dev.DevKit.ProxyTypes\Dev.DevKit.ProxyTypes.csproj">
       <Name>Dev.DevKit.ProxyTypes</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Dev.DevKit.Server\Dev.DevKit.Server.csproj">
+      <Project>{41074942-4fa7-4b0c-9b48-39ab90532284}</Project>
+      <Name>Dev.DevKit.Server</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\DynamicsCrm.DevKit.Analyzers.4.0.0\analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />
     <Analyzer Include="..\packages\MSTest.Analyzers.4.0.2\analyzers\dotnet\cs\MSTest.Analyzers.CodeFixes.dll" />
     <Analyzer Include="..\packages\MSTest.Analyzers.4.0.2\analyzers\dotnet\cs\MSTest.Analyzers.dll" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Compile Include="Plugins\Account\PostAccountCreateAsynchronousTest.cs" />
   </ItemGroup>
   <Import Project="..\Dev.DevKit.Shared.Test\Dev.DevKit.Shared.Test.projitems" Label="Shared" Condition="Exists('..\Dev.DevKit.Shared.Test\Dev.DevKit.Shared.Test.projitems')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

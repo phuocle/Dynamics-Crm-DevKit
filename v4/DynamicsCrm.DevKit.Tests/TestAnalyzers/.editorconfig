@@ -73,3 +73,6 @@ dotnet_diagnostic.DEVKIT1018.severity = warning
 
 # DEVKIT1019: Consider checking context.Depth to prevent infinite loops
 dotnet_diagnostic.DEVKIT1019.severity = warning
+
+# DEVKIT1020: DataProvider must have DataSource
+dotnet_diagnostic.DEVKIT1020.severity = error
