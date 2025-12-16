@@ -51,7 +51,7 @@
     <AssemblyOriginatorKeyFile>..\DynamicsCrm.DevKit.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <NoWarn>CVSTBLD001</NoWarn>
+    <NoWarn>CVSTBLD001;NU1605</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Commands\CommandAddCrmPluginRegistration.cs" />
