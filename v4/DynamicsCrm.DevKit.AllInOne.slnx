@@ -112,10 +112,9 @@
   </Folder>
   <Folder Name="/Solution Items/">
     <File Path="date.txt" />
-    <File Path="ImportKey.bat" />
     <File Path="Release-DynamicsCrm-DevKit-CurrentDate.ps1" />
     <File Path="Release-DynamicsCrm-DevKit.ps1" />
-    <File Path="sn.ps1" />
+    <File Path="Import-StrongNameKey.ps1" />
     <File Path="version.txt" />
   </Folder>
   <Project Path="DynamicsCrm.DevKit.Analyzers/DynamicsCrm.DevKit.Analyzers.csproj" />
