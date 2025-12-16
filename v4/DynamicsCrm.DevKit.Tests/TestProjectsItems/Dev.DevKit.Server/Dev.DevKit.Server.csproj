@@ -54,6 +54,11 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataProviders\Cds\Create.cs" />
+    <Compile Include="DataProviders\Cds\Delete.cs" />
+    <Compile Include="DataProviders\Cds\Retrieve.cs" />
+    <Compile Include="DataProviders\Cds\RetrieveMultiple.cs" />
+    <Compile Include="DataProviders\Cds\Update.cs" />
     <Compile Include="Workflows\SendEmailByQueueEmail.cs" />
     <None Include="packages.config" />
     <None Include="Dev.DevKit.Server.snk" />
@@ -69,9 +74,7 @@
   <ItemGroup>
     <Analyzer Include="..\packages\DynamicsCrm.DevKit.Analyzers.4.0.0\analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="DataProviders\Cds\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="..\Dev.DevKit.Shared\Dev.DevKit.Shared.projitems" Label="Shared" Condition="Exists('..\Dev.DevKit.Shared\Dev.DevKit.Shared.projitems')" />
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
