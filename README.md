@@ -54,7 +54,7 @@ Roslyn-based code analyzers for Dynamics 365 best practices.
 ```
 
 **Features:**
-- 19 diagnostic rules
+- 20 diagnostic rules
 - Enforces Microsoft best practices for plugins and workflows
 - Real-time code analysis in Visual Studio
 - Compile-time error detection
@@ -162,7 +162,7 @@ DynamicsCrm.DevKit.Cli /conn:"AuthType=OAuth;..." /json:"DynamicsCrm.DevKit.Cli.
 
 ## 🛡️ Code Quality with Analyzers
 
-DynamicsCrm.DevKit.Analyzers provides 19 diagnostic rules to enforce best practices:
+DynamicsCrm.DevKit.Analyzers provides 20 diagnostic rules to enforce best practices:
 
 | Rule | Severity | Description |
 |------|----------|-------------|
@@ -185,6 +185,7 @@ DynamicsCrm.DevKit.Analyzers provides 19 diagnostic rules to enforce best practi
 | [DEVKIT1017](https://github.com/phuocle/Dynamics-Crm-DevKit/blob/v4/v4/DynamicsCrm.DevKit.Analyzers/docs/DEVKIT1017.md) | Info | Avoid Console output in plugins |
 | [DEVKIT1018](https://github.com/phuocle/Dynamics-Crm-DevKit/blob/v4/v4/DynamicsCrm.DevKit.Analyzers/docs/DEVKIT1018.md) | Error | Avoid File/IO operations in plugins |
 | [DEVKIT1019](https://github.com/phuocle/Dynamics-Crm-DevKit/blob/v4/v4/DynamicsCrm.DevKit.Analyzers/docs/DEVKIT1019.md) | Warning | Consider checking context.Depth to prevent infinite loops |
+| [DEVKIT1020](https://github.com/phuocle/Dynamics-Crm-DevKit/blob/v4/v4/DynamicsCrm.DevKit.Analyzers/docs/DEVKIT1020.md) | Error | DataProvider must have DataSource |
 
 [📖 See full documentation for all rules](https://github.com/phuocle/Dynamics-Crm-DevKit/blob/v4/v4/DynamicsCrm.DevKit.Analyzers/docs/README.md)
 
