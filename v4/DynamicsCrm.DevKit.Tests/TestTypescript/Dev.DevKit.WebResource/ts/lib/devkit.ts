@@ -220,10 +220,37 @@ export interface IGrid {
 
 /** Interface cho Execution Context */
 export interface IExecutionContext {
+    /** Get the depth of the execution context (for plugin-like scenarios) */
+    readonly Depth: number;
+    /** Get the entity reference from event args */
+    readonly EntityReference: any;
+    /** Get the event arguments */
+    readonly EventArgs: any;
+    /** Get the event source */
+    readonly EventSource: any;
     /** Get form context */
-    getFormContext(): any;
-    /** Check if this is initial load */
+    readonly FormContext: any;
+    /** Check if save was successful (for OnSave event) */
+    readonly IsSaveSuccess: boolean;
+    /** Get save error info (for OnSave event) */
+    readonly SaveErrorInfo: any;
+    /** Get save mode (for OnSave event): 1=Save, 2=SaveAndClose, etc. */
+    readonly SaveMode: number;
+
+    /** Disable async timeout for long-running operations */
+    DisableAsyncTimeout(): void;
+    /** Get a shared variable by key */
+    GetSharedVariable(key: string): any;
+    /** Check if default behavior is prevented */
+    IsDefaultPrevented(): boolean;
+    /** Check if this is the initial form load */
     IsInitialLoad(): boolean;
+    /** Prevent default behavior */
+    SetPreventDefault(): void;
+    /** Prevent default on error */
+    SetPreventDefaultOnError(): void;
+    /** Set a shared variable */
+    SetSharedVariable(key: string, value: any): void;
 }
 
 // ============================================================================
@@ -478,14 +505,23 @@ export function LoadFormV2<TBody, THeader, TTab, TGrid, TNavigation, TQuickForm>
         });
     }
 
-    // Create ExecutionContext wrapper
-    const executionContextWrapper: IExecutionContext = {
-        getFormContext: () => formContext,
-        IsInitialLoad: () => {
-            // Check if this is initial load based on form type
-            return contextUi?.getFormType() === 1;
-        }
-    };
+    // Create ExecutionContext wrapper (complete implementation)
+    const executionContextWrapper: any = {};
+    getter(executionContextWrapper, 'Depth', () => executionContext?.getDepth());
+    getter(executionContextWrapper, 'EntityReference', () => executionContext?.getEventArgs()?.getEntityReference());
+    getter(executionContextWrapper, 'EventArgs', () => executionContext?.getEventArgs());
+    getter(executionContextWrapper, 'EventSource', () => executionContext?.getEventSource());
+    getter(executionContextWrapper, 'FormContext', () => executionContext?.getFormContext());
+    getter(executionContextWrapper, 'IsSaveSuccess', () => executionContext?.getEventArgs()?.getIsSaveSuccess());
+    getter(executionContextWrapper, 'SaveErrorInfo', () => executionContext?.getEventArgs()?.getSaveErrorInfo());
+    getter(executionContextWrapper, 'SaveMode', () => executionContext?.getEventArgs()?.getSaveMode());
+    executionContextWrapper.DisableAsyncTimeout = () => executionContext?.getEventArgs()?.disableAsyncTimeout();
+    executionContextWrapper.GetSharedVariable = (key: string) => executionContext?.getSharedVariable(key);
+    executionContextWrapper.IsDefaultPrevented = () => executionContext?.getEventArgs()?.isDefaultPrevented();
+    executionContextWrapper.IsInitialLoad = () => executionContext?.getEventArgs()?.getDataLoadState() === 1;
+    executionContextWrapper.SetPreventDefault = () => executionContext?.getEventArgs()?.preventDefault();
+    executionContextWrapper.SetPreventDefaultOnError = () => executionContext?.getEventArgs()?.preventDefaultOnError();
+    executionContextWrapper.SetSharedVariable = (key: string, value: any) => executionContext?.setSharedVariable(key, value);
 
     return {
         ExecutionContext: executionContextWrapper,
@@ -511,4 +547,406 @@ export function LoadFormV2<TBody, THeader, TTab, TGrid, TNavigation, TQuickForm>
         UiAddLoaded: (callback: (context: any) => void) => contextUi?.addLoaded(callback),
         UiRemoveLoaded: (callback: (context: any) => void) => contextUi?.removeLoaded(callback),
     };
+}
+
+// ============================================================================
+// Process (Business Process Flow) Functions
+// ============================================================================
+
+/**
+ * Load Business Process Flow wrapper
+ * @param formContext The form context
+ */
+export function LoadProcess(formContext: any): any {
+    const process: any = {};
+    const getProcess = formContext?.data?.process;
+    const getProcessUi = formContext?.ui?.process;
+
+    const loadStep = (step: any) => {
+        const obj: any = {};
+        getter(obj, 'Attribute', () => step?.getAttribute());
+        getter(obj, 'Name', () => step?.getName());
+        getter(obj, 'Progress', () => step?.getProgress());
+        getter(obj, 'Required', () => step?.isRequired());
+        obj.SetProgress = (stepProgress: number, message: string) => step?.setProgress(stepProgress, message);
+        return obj;
+    };
+
+    const loadStage = (stage: any) => {
+        const obj: any = {};
+        getter(obj, 'Category', () => stage?.getCategory()?.getValue());
+        getter(obj, 'EntityName', () => stage?.getEntityName());
+        getter(obj, 'Id', () => stage?.getId());
+        getter(obj, 'Name', () => stage?.getName());
+        getter(obj, 'Status', () => stage?.getStatus());
+        getter(obj, 'Steps', () => {
+            const steps = stage?.getSteps();
+            if (!steps) return [];
+            const stepsArray: any[] = [];
+            const length = steps.length || 0;
+            for (let index = 0; index < length; index++) {
+                stepsArray.push(loadStep(steps[index]));
+            }
+            return stepsArray;
+        });
+        obj.AllowCreateNew = (callback: any) => { if (stage?.getNavigationBehavior()) stage.getNavigationBehavior().allowCreateNew = callback; };
+        return obj;
+    };
+
+    const loadProcessInner = (processObj: any) => {
+        const obj: any = {};
+        getter(obj, 'Id', () => processObj?.getId());
+        getter(obj, 'IsRendered', () => processObj?.isRendered());
+        getter(obj, 'Name', () => processObj?.getName());
+        getter(obj, 'Stages', () => {
+            const processStages = processObj?.getStages();
+            const stagesObj: any = {};
+            stagesObj.get = (index: number) => {
+                const stage = processStages?.get(index);
+                return loadStage(stage);
+            };
+            stagesObj.getLength = () => processStages?.getLength();
+            stagesObj.forEach = (callback: (stage: any, index: number) => void) => {
+                const length = processStages?.getLength() || 0;
+                for (let index = 0; index < length; index++) {
+                    const stage = processStages.get(index);
+                    callback(loadStage(stage), index);
+                }
+            };
+            return stagesObj;
+        });
+        return obj;
+    };
+
+    getter(process, 'ActivePath', () => {
+        const activePathObj: any = {};
+        activePathObj.get = (index: number) => {
+            const stage = getProcess?.getActivePath()?.get(index);
+            return loadStage(stage);
+        };
+        activePathObj.getLength = () => getProcess?.getActivePath()?.getLength();
+        activePathObj.forEach = (callback: (stage: any, index: number) => void) => {
+            const stages = getProcess?.getActivePath();
+            for (let index = 0; index < stages?.getLength(); index++) {
+                const stage = stages?.get(index);
+                callback(loadStage(stage), index);
+            }
+        };
+        return activePathObj;
+    });
+    getter(process, 'ActiveProcess', () => loadProcessInner(getProcess?.getActiveProcess()));
+    getter(process, 'ActiveStage', () => loadStage(getProcess?.getActiveStage()));
+    getter(process, 'InstanceId', () => getProcess?.getInstanceId());
+    getter(process, 'InstanceName', () => getProcess?.getInstanceName());
+    getter(process, 'SelectedStage', () => loadStage(getProcess?.getSelectedStage()));
+    getterSetter(process, 'DisplayState', () => getProcessUi?.getDisplayState(), (value: string) => { getProcessUi?.setDisplayState(value); });
+    getterSetter(process, 'Status', () => getProcess?.getStatus(), (value: string) => { getProcess?.setStatus(value); });
+    getterSetter(process, 'Visible', () => getProcessUi?.getVisible(), (value: boolean) => { getProcessUi?.setVisible(value); });
+
+    process.AddOnPreProcessStatusChange = (callback: any) => getProcess?.addOnPreProcessStatusChange(callback);
+    process.AddOnPreStageChange = (callback: any) => getProcess?.addOnPreStageChange(callback);
+    process.AddOnProcessStatusChange = (callback: any) => getProcess?.addOnProcessStatusChange(callback);
+    process.AddOnStageChange = (callback: any) => getProcess?.addOnStageChange(callback);
+    process.AddOnStageSelected = (callback: any) => getProcess?.addOnStageSelected(callback);
+    process.EnabledProcesses = (callback: (processes: any[]) => void) => {
+        getProcess?.getEnabledProcesses((enabledProcesses: any) => {
+            const processes = Object.entries(enabledProcesses).map(([processId, processName]) => ({
+                ProcessId: processId,
+                ProcessName: processName
+            }));
+            callback(processes);
+        });
+    };
+    process.MoveNext = (callback: any) => getProcess?.moveNext(callback);
+    process.MovePrevious = (callback: any) => getProcess?.movePrevious(callback);
+    process.ProcessInstances = (callback: (processes: any[]) => void) => {
+        getProcess?.getProcessInstances((processInstances: any) => {
+            const processes = Object.values(processInstances).map((proc: any) => ({
+                ProcessId: proc.ProcessDefinitionID,
+                ProcessName: proc.ProcessDefinitionName,
+                CreatedOn: proc.CreatedOn,
+                CreatedOnDate: proc.CreatedOnDate,
+                InstanceId: proc.ProcessInstanceID,
+                InstanceName: proc.ProcessInstanceName,
+                Status: proc.StatusCodeName
+            }));
+            callback(processes);
+        });
+    };
+    process.Reflow = (updateUi: boolean, parentStage: string, nextStage: string) => getProcessUi?.reflow(updateUi, parentStage, nextStage);
+    process.RemoveOnPreProcessStatusChange = (callback: any) => getProcess?.removeOnPreProcessStatusChange(callback);
+    process.RemoveOnPreStageChange = (callback: any) => getProcess?.removeOnPreStageChange(callback);
+    process.RemoveOnProcessStatusChange = (callback: any) => getProcess?.removeOnProcessStatusChange(callback);
+    process.RemoveOnStageChange = (callback: any) => getProcess?.removeOnStageChange(callback);
+    process.RemoveOnStageSelected = (callback: any) => getProcess?.removeOnStageSelected(callback);
+    process.SetActiveProcess = (processId: string, callback: any) => getProcess?.setActiveProcess(processId, callback);
+    process.SetActiveProcessInstance = (processInstanceId: string, callback: any) => getProcess?.setActiveProcessInstance(processInstanceId, callback);
+    process.SetActiveStage = (stageId: string, callback: any) => getProcess?.setActiveStage(stageId, callback);
+
+    return process;
+}
+
+
+// ============================================================================
+// Utility Functions
+// ============================================================================
+
+/**
+ * Load Utility wrapper for common Xrm operations
+ * @param defaultWebResourceName Default web resource name for Resource strings
+ */
+export function LoadUtility(defaultWebResourceName?: string): any {
+    const utility: any = {};
+    const getApp = (window as any).Xrm?.App;
+    const getDevice = (window as any).Xrm?.Device;
+    const getEncoding = (window as any).Xrm?.Encoding;
+    const getGlobalContext = (window as any).Xrm?.Utility?.getGlobalContext();
+    const getNavigation = (window as any).Xrm?.Navigation;
+    const getPanel = (window as any).Xrm?.Panel;
+    const getUtility = (window as any).Xrm?.Utility;
+
+    getter(utility, 'Client', () => {
+        const obj: any = {};
+        const client = getGlobalContext?.client;
+        getter(obj, 'ClientName', () => client?.getClient());
+        getter(obj, 'ClientState', () => client?.getClientState());
+        getter(obj, 'FormFactor', () => client?.getFormFactor());
+        getter(obj, 'IsNetworkAvailable', () => client?.isNetworkAvailable());
+        getter(obj, 'IsOffline', () => client?.isOffline());
+        return obj;
+    });
+    getter(utility, 'ClientUrl', () => getGlobalContext?.getClientUrl());
+    getter(utility, 'CurrentAppUrl', () => getGlobalContext?.getCurrentAppUrl());
+    getter(utility, 'IsOnPremises', () => getGlobalContext?.isOnPremises());
+    getter(utility, 'LearningPathAttributeName', () => getUtility?.getLearningPathAttributeName());
+    getter(utility, 'OrganizationSettings', () => {
+        const obj: any = {};
+        const organizationSettings = getGlobalContext?.organizationSettings;
+        getter(obj, 'Attributes', () => organizationSettings?.attributes);
+        getter(obj, 'BaseCurrency', () => organizationSettings?.baseCurrency);
+        getter(obj, 'BaseCurrencyId', () => organizationSettings?.baseCurrencyId);
+        getter(obj, 'DefaultCountryCode', () => organizationSettings?.defaultCountryCode);
+        getter(obj, 'FullNameConventionCode', () => organizationSettings?.fullNameConventionCode);
+        getter(obj, 'IsAutoSaveEnabled', () => organizationSettings?.isAutoSaveEnabled);
+        getter(obj, 'IsTrialOrganization', () => organizationSettings?.isTrialOrganization);
+        getter(obj, 'LanguageId', () => organizationSettings?.languageId);
+        getter(obj, 'OrganizationExpiryDate', () => organizationSettings?.organizationExpiryDate);
+        getter(obj, 'OrganizationId', () => organizationSettings?.organizationId);
+        getter(obj, 'UniqueName', () => organizationSettings?.uniqueName);
+        getter(obj, 'UseSkypeProtocol', () => organizationSettings?.useSkypeProtocol);
+        return obj;
+    });
+    getter(utility, 'PageContext', () => getUtility?.getPageContext());
+    getter(utility, 'UserSettings', () => {
+        const obj: any = {};
+        const userSettings = getGlobalContext?.userSettings;
+        getter(obj, 'DateFormattingInfo', () => userSettings?.dateFormattingInfo);
+        getter(obj, 'DefaultDashboardId', () => userSettings?.defaultDashboardId);
+        getter(obj, 'IsGuidedHelpEnabled', () => userSettings?.isGuidedHelpEnabled);
+        getter(obj, 'IsHighContrastEnabled', () => userSettings?.isHighContrastEnabled);
+        getter(obj, 'IsRTL', () => userSettings?.isRTL);
+        getter(obj, 'LanguageId', () => userSettings?.languageId);
+        getter(obj, 'Roles', () => userSettings?.roles);
+        getter(obj, 'SecurityRolePrivileges', () => userSettings?.securityRolePrivileges);
+        getter(obj, 'SecurityRoles', () => userSettings?.securityRoles);
+        getter(obj, 'TimeZoneOffsetMinutes', () => userSettings?.getTimeZoneOffsetMinutes());
+        getter(obj, 'TransactionCurrency', () => userSettings?.transactionCurrency);
+        getter(obj, 'TransactionCurrencyId', () => userSettings?.transactionCurrencyId);
+        getter(obj, 'UserId', () => userSettings?.userId);
+        getter(obj, 'UserName', () => userSettings?.userName);
+        return obj;
+    });
+    getter(utility, 'Version', () => getGlobalContext?.getVersion());
+
+    utility.AddGlobalNotification = function (notification: any, successCallback?: (result: any) => void, errorCallback?: (error: any) => void) {
+        const promise = getApp?.addGlobalNotification(notification);
+        if (successCallback) promise?.then(successCallback, errorCallback);
+        else return promise;
+    };
+    utility.AdvancedConfigSetting = (setting: string) => getGlobalContext?.getAdvancedConfigSetting(setting);
+    utility.AllowedStatusTransitions = function (entityName: string, stateCode: number, successCallback?: (result: any) => void, errorCallback?: (error: any) => void) {
+        const promise = getUtility?.getAllowedStatusTransitions(entityName, stateCode);
+        if (successCallback) promise?.then(successCallback, errorCallback);
+        else return promise;
+    };
+    utility.BarcodeValue = function (successCallback?: (result: any) => void, errorCallback?: (error: any) => void) {
+        const promise = getDevice?.getBarcodeValue();
+        if (successCallback) promise?.then(successCallback, errorCallback);
+        else return promise;
+    };
+    utility.CaptureAudio = function (successCallback?: (result: any) => void, errorCallback?: (error: any) => void) {
+        const promise = getDevice?.captureAudio();
+        if (successCallback) promise?.then(successCallback, errorCallback);
+        else return promise;
+    };
+    utility.CaptureImage = function (imageOptions: any, successCallback?: (result: any) => void, errorCallback?: (error: any) => void) {
+        const promise = getDevice?.captureImage(imageOptions);
+        if (successCallback) promise?.then(successCallback, errorCallback);
+        else return promise;
+    };
+    utility.CaptureVideo = function (successCallback?: (result: any) => void, errorCallback?: (error: any) => void) {
+        const promise = getDevice?.captureVideo();
+        if (successCallback) promise?.then(successCallback, errorCallback);
+        else return promise;
+    };
+    utility.ClearGlobalNotification = function (uniqueId: string, successCallback?: (result: any) => void, errorCallback?: (error: any) => void) {
+        const promise = getApp?.clearGlobalNotification(uniqueId);
+        if (successCallback) promise?.then(successCallback, errorCallback);
+        else return promise;
+    };
+    utility.CloseProgressIndicator = () => getUtility?.closeProgressIndicator();
+    utility.CurrentAppName = function (successCallback?: (result: any) => void, errorCallback?: (error: any) => void) {
+        const promise = getGlobalContext?.getCurrentAppName();
+        if (successCallback) promise?.then(successCallback, errorCallback);
+        else return promise;
+    };
+    utility.CurrentAppProperties = function (successCallback?: (result: any) => void, errorCallback?: (error: any) => void) {
+        const promise = getGlobalContext?.getCurrentAppProperties();
+        if (successCallback) promise?.then(successCallback, errorCallback);
+        else return promise;
+    };
+    utility.CurrentPosition = function (successCallback?: (result: any) => void, errorCallback?: (error: any) => void) {
+        const promise = getDevice?.getCurrentPosition();
+        if (successCallback) promise?.then(successCallback, errorCallback);
+        else return promise;
+    };
+    utility.EntityMainFormDescriptor = (entityName: string, formId: string) => getUtility?.getEntityMainFormDescriptor(entityName, formId);
+    utility.EntityMetadata = function (entityName: string, attributes?: string[], successCallback?: (result: any) => void, errorCallback?: (error: any) => void) {
+        const promise = getUtility?.getEntityMetadata(entityName, attributes);
+        if (successCallback) promise?.then(successCallback, errorCallback);
+        else return promise;
+    };
+    utility.HtmlAttributeEncode = (arg: string) => getEncoding?.htmlAttributeEncode(arg);
+    utility.HtmlDecode = (arg: string) => getEncoding?.htmlDecode(arg);
+    utility.HtmlEncode = (arg: string) => getEncoding?.htmlEncode(arg);
+    utility.InvokeProcessAction = function (name: string, parameters: any, successCallback?: (result: any) => void, errorCallback?: (error: any) => void) {
+        const promise = getUtility?.invokeProcessAction(name, parameters);
+        if (successCallback) promise?.then(successCallback, errorCallback);
+        else return promise;
+    };
+    utility.LoadPanel = (url: string, title: string) => getPanel?.loadPanel(url, title);
+    utility.LookupObjects = function (lookupOptions: any, successCallback?: (result: any) => void, errorCallback?: (error: any) => void) {
+        const promise = getUtility?.lookupObjects(lookupOptions);
+        if (successCallback) promise?.then(successCallback, errorCallback);
+        else return promise;
+    };
+    utility.NavigateTo = function (pageInput: any, navigationOptions: any, successCallback?: (result: any) => void, errorCallback?: (error: any) => void) {
+        const promise = getNavigation?.navigateTo(pageInput, navigationOptions);
+        if (successCallback) promise?.then(successCallback, errorCallback);
+        else return promise;
+    };
+    utility.OpenAlertDialog = function (alertStrings: any, alertOptions: any, closeCallback?: () => void, errorCallback?: (error: any) => void) {
+        const promise = getNavigation?.openAlertDialog(alertStrings, alertOptions);
+        if (closeCallback) promise?.then(closeCallback, errorCallback);
+        else return promise;
+    };
+    utility.OpenConfirmDialog = function (confirmStrings: any, confirmOptions: any, successCallback?: (result: any) => void, errorCallback?: (error: any) => void) {
+        const promise = getNavigation?.openConfirmDialog(confirmStrings, confirmOptions);
+        if (successCallback) promise?.then(successCallback, errorCallback);
+        else return promise;
+    };
+    utility.OpenErrorDialog = function (errorOptions: any, successCallback?: (result: any) => void, errorCallback?: (error: any) => void) {
+        const promise = getNavigation?.openErrorDialog(errorOptions);
+        if (successCallback) promise?.then(successCallback, errorCallback);
+        else return promise;
+    };
+    utility.OpenFile = (file: any, openFileOptions?: any) => getNavigation?.openFile(file, openFileOptions);
+    utility.OpenForm = function (entityFormOptions: any, formParameters: any, successCallback?: (result: any) => void, errorCallback?: (error: any) => void) {
+        const promise = getNavigation?.openForm(entityFormOptions, formParameters);
+        if (successCallback) promise?.then(successCallback, errorCallback);
+        else return promise;
+    };
+    utility.OpenUrl = (url: string, openUrlOptions?: any) => getNavigation?.openUrl(url, openUrlOptions);
+    utility.OpenWebResource = (webResourceName: string, windowOptions?: any, data?: string) => getNavigation?.openWebResource(webResourceName, windowOptions, data);
+    utility.PickFile = function (pickFileOptions: any, successCallback?: (result: any) => void, errorCallback?: (error: any) => void) {
+        const promise = getDevice?.pickFile(pickFileOptions);
+        if (successCallback) promise?.then(successCallback, errorCallback);
+        else return promise;
+    };
+    utility.PrependOrgName = (sPath: string) => getGlobalContext?.prependOrgName(sPath);
+    utility.RefreshParentGrid = (lookupOptions: any) => getUtility?.refreshParentGrid(lookupOptions);
+    utility.Resource = (key: string) => getUtility?.getResourceString(defaultWebResourceName, key);
+    utility.ResourceString = (webResourceName: string, key: string) => getUtility?.getResourceString(webResourceName, key);
+    utility.ShowProgressIndicator = (message: string) => getUtility?.showProgressIndicator(message);
+    utility.WebResourceUrl = (webResourceName: string) => getGlobalContext?.getWebResourceUrl(webResourceName);
+    utility.XmlAttributeEncode = (arg: string) => getEncoding?.xmlAttributeEncode(arg);
+    utility.XmlEncode = (arg: string) => getEncoding?.xmlEncode(arg);
+
+    return utility;
+}
+
+// ============================================================================
+// Copilot Functions
+// ============================================================================
+
+/**
+ * Load Copilot wrapper for AI operations
+ */
+export function LoadCopilot(): any {
+    const copilot: any = {};
+    const getCopilot = (window as any).Xrm?.AI;
+
+    copilot.ExecuteEvent = function (eventName: string, eventParameters: any, successCallback?: (result: any) => void, errorCallback?: (error: any) => void) {
+        const promise = getCopilot?.executeEvent(eventName, eventParameters);
+        if (successCallback) promise?.then(successCallback, errorCallback);
+        else return promise;
+    };
+
+    copilot.ExecutePrompt = function (promptText: string, successCallback?: (result: any) => void, errorCallback?: (error: any) => void) {
+        const promise = getCopilot?.executePrompt(promptText);
+        if (successCallback) promise?.then(successCallback, errorCallback);
+        else return promise;
+    };
+
+    return copilot;
+}
+
+// ============================================================================
+// SidePanes Functions
+// ============================================================================
+
+/**
+ * Load SidePanes wrapper
+ */
+export function LoadSidePanes(): any {
+    const sidePanes: any = {};
+    getterSetter(sidePanes, 'DisplayState', () => (window as any).Xrm?.App?.sidePanes?.state, (value: number) => { (window as any).Xrm.App.sidePanes.state = value; });
+    sidePanes.Create = function (paneOptions: any, successCallback?: (result: any) => void) {
+        (window as any).Xrm?.App?.sidePanes?.createPane(paneOptions)?.then(successCallback);
+    };
+    sidePanes.Get = (paneId: string) => (window as any).Xrm?.App?.sidePanes?.getPane(paneId);
+    sidePanes.GetAll = () => (window as any).Xrm?.App?.sidePanes?.getAllPanes();
+    sidePanes.GetSelected = () => (window as any).Xrm?.App?.sidePanes?.getSelectedPane();
+    return sidePanes;
+}
+
+// ============================================================================
+// OptionSet Constants
+// ============================================================================
+
+export namespace OptionSet {
+    export const AdvancedConfigSetting = Object.freeze({ MaxChildIncidentNumber: 'MaxChildIncidentNumber', MaxIncidentMergeNumber: 'MaxIncidentMergeNumber' });
+    export const ClientName = Object.freeze({ Web: 'Web', Outlook: 'Outlook', Mobile: 'Mobile' });
+    export const ClientState = Object.freeze({ Online: 'Online', Offline: 'Offline' });
+    export const FieldAttributeType = Object.freeze({ Boolean: 'boolean', DateTime: 'datetime', Decimal: 'decimal', Double: 'double', Integer: 'integer', Lookup: 'lookup', Memo: 'memo', Money: 'money', MultiOptionSet: 'multioptionset', OptionSet: 'optionset', String: 'string' });
+    export const FieldControlType = Object.freeze({ Standard: 'standard', Iframe: 'iframe', KbSearch: 'kbsearch', Lookup: 'lookup', MultiSelectOptionset: 'multiselectoptionset', Notes: 'notes', OptionSet: 'optionset', QuickForm: 'quickform', SubGrid: 'subgrid', TimerControl: 'timercontrol', TimelineWall: 'timelinewall', WebResource: 'webresource' });
+    export const FieldFormat = Object.freeze({ Date: 'date', DateTime: 'datetime', Duration: 'duration', Email: 'email', Language: 'language', None: 'none', TextArea: 'textarea', Text: 'text', TickerSymbol: 'tickersymbol', Phone: 'phone', TimeZone: 'timezone', Url: 'url' });
+    export const FieldNotificationLevel = Object.freeze({ Error: 'ERROR', Recommendation: 'RECOMMENDATION' });
+    export const FieldRequiredLevel = Object.freeze({ None: 'none', Required: 'required', Recommended: 'recommended' });
+    export const FieldSubmitMode = Object.freeze({ Always: 'always', Never: 'never', Dirty: 'dirty' });
+    export const FormFactor = Object.freeze({ Unknown: 0, Desktop: 1, Tablet: 2, Phone: 3 });
+    export const FormNotificationLevel = Object.freeze({ Error: 'ERROR', Warning: 'WARNING', Info: 'INFO' });
+    export const FormType = Object.freeze({ Undefined: 0, Create: 1, Update: 2, ReadOnly: 3, Disabled: 4, BulkEdit: 5 });
+    export const FullNameConventionCode = Object.freeze({ LastName_Comma_FirstName: 0, FirstName_LastName: 1, LastName_Comma_FirstName_MiddleInitial: 2, FirstName_MiddleInitial_LastName: 3, LastName_Comma_FirstName_MiddleName: 4, FirstName_MiddleName_LastName: 5, LastName_FirstName: 6, LastNameFirstName: 7 });
+    export const GridType = Object.freeze({ HomePageGrid: 1, Subgrid: 2 });
+    export const OpenFileOption = Object.freeze({ Open: 1, Save: 2 });
+    export const ProcessCategory = Object.freeze({ Qualify: 0, Develop: 1, Propose: 2, Close: 3, Identify: 4, Research: 5, Resolve: 6 });
+    export const ProcessDisplayState = Object.freeze({ Expanded: 'expanded', Collapsed: 'collapsed', Floating: 'floating' });
+    export const ProcessStatus = Object.freeze({ Active: 'active', Aborted: 'aborted', Finished: 'finished' });
+    export const SaveMode = Object.freeze({ Save: 1, SaveAndClose: 2, Deactivate: 5, Reactivate: 6, Email: 7, Disqualify: 15, Qualify: 16, Assign: 47, SaveAsCompleted: 58, SaveAndNew: 59, AutoSave: 70 });
+    export const SaveOption = Object.freeze({ SaveAndClose: 'saveandclose', SaveAndNew: 'saveandnew' });
+    export const SidePaneState = Object.freeze({ Collapsed: 0, Expanded: 1 });
+    export const TabContentType = Object.freeze({ CardSections: 'cardSections', SingleComponent: 'singleComponent' });
+    export const TabDisplayState = Object.freeze({ Expanded: 'expanded', Collapsed: 'collapsed' });
+    export const TimerState = Object.freeze({ NotSet: 1, InProgress: 2, Warning: 3, Violated: 4, Success: 5, Expired: 6, Canceled: 7, Paused: 8 });
 }

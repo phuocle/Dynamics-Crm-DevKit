@@ -1064,4 +1064,654 @@ declare namespace DevKit {
          */
         UiRemoveLoaded(callback: (executionContext: any) => void): void;
     }
+
+    // ============================================================================
+    // Process (Business Process Flow) Interface
+    // ============================================================================
+
+    /**
+     * Interface for a Business Process Flow Step
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process
+     */
+    interface IStep {
+        /**
+         * Returns the logical name of the attribute associated to the step
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/step/getattribute
+         */
+        readonly Attribute: string;
+
+        /**
+         * Returns the name of the step
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/step/getname
+         */
+        readonly Name: string;
+
+        /**
+         * Returns the progress of the step
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/step/getprogress
+         */
+        readonly Progress: number;
+
+        /**
+         * Returns whether the step is required
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/step/isrequired
+         */
+        readonly Required: boolean;
+
+        /**
+         * Sets the progress of the step
+         * @param stepProgress Number from 0 to 100 representing the step progress
+         * @param message The message to display in the progress indicator
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/step/setprogress
+         */
+        SetProgress(stepProgress: number, message: string): void;
+    }
+
+    /**
+     * Interface for a Business Process Flow Stage
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process
+     */
+    interface IStage {
+        /**
+         * Returns an integer value representing the category of the stage
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/stage/getcategory
+         */
+        readonly Category: number;
+
+        /**
+         * Returns the logical name of the entity associated with the stage
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/stage/getentityname
+         */
+        readonly EntityName: string;
+
+        /**
+         * Returns the unique identifier of the stage
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/stage/getid
+         */
+        readonly Id: string;
+
+        /**
+         * Returns the name of the stage
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/stage/getname
+         */
+        readonly Name: string;
+
+        /**
+         * Returns the status of the stage
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/stage/getstatus
+         */
+        readonly Status: "active" | "inactive";
+
+        /**
+         * Returns an array of steps in the stage
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/stage/getsteps
+         */
+        readonly Steps: IStep[];
+
+        /**
+         * Sets whether the stage allows creating a new entity record
+         * @param callback Boolean value indicating whether to allow creating new records
+         */
+        AllowCreateNew(callback: boolean): void;
+    }
+
+    /**
+     * Interface for the collection of stages in active path
+     */
+    interface IActivePathCollection {
+        /**
+         * Gets a stage at the specified index
+         * @param index The index of the stage to get
+         */
+        get(index: number): IStage;
+
+        /**
+         * Gets the count of stages in the active path
+         */
+        getLength(): number;
+
+        /**
+         * Iterates through all stages in the active path
+         * @param callback Function to call for each stage
+         */
+        forEach(callback: (stage: IStage, index: number) => void): void;
+    }
+
+    /**
+     * Interface for Business Process Flow
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process
+     */
+    interface IProcess {
+        /**
+         * Returns a collection of stages in the active path
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/activepath
+         */
+        readonly ActivePath: IActivePathCollection;
+
+        /**
+         * Returns the currently active process
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/activeprocess/getactiveprocess
+         */
+        readonly ActiveProcess: { Id: string; Name: string; IsRendered: boolean; Stages: any };
+
+        /**
+         * Returns the currently active stage
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/activestage/getactivestage
+         */
+        readonly ActiveStage: IStage;
+
+        /**
+         * Returns the unique identifier of the process instance
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/getinstanceid
+         */
+        readonly InstanceId: string;
+
+        /**
+         * Returns the name of the process instance
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/getinstancename
+         */
+        readonly InstanceName: string;
+
+        /**
+         * Returns the currently selected stage
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/getselectedstage
+         */
+        readonly SelectedStage: IStage;
+
+        /**
+         * Get/Set the display state of the process control: "expanded", "collapsed", or "floating"
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-process/getdisplaystate
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-process/setdisplaystate
+         */
+        DisplayState: "expanded" | "collapsed" | "floating";
+
+        /**
+         * Get/Set the status of the process: "active", "aborted", or "finished"
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/getstatus
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/setstatus
+         */
+        Status: "active" | "aborted" | "finished";
+
+        /**
+         * Get/Set whether the process control is visible
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-process/getvisible
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-process/setvisible
+         */
+        Visible: boolean;
+
+        /**
+         * Adds a handler for the OnPreProcessStatusChange event
+         * @param callback The function to call when the event occurs
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/addonpreprocessstatuschange
+         */
+        AddOnPreProcessStatusChange(callback: (executionContext: any) => void): void;
+
+        /**
+         * Adds a handler for the OnPreStageChange event
+         * @param callback The function to call when the event occurs
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/addonprestagechange
+         */
+        AddOnPreStageChange(callback: (executionContext: any) => void): void;
+
+        /**
+         * Adds a handler for the OnProcessStatusChange event
+         * @param callback The function to call when the event occurs
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/addonprocessstatuschange
+         */
+        AddOnProcessStatusChange(callback: (executionContext: any) => void): void;
+
+        /**
+         * Adds a handler for the OnStageChange event
+         * @param callback The function to call when the event occurs
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/addonstagechange
+         */
+        AddOnStageChange(callback: (executionContext: any) => void): void;
+
+        /**
+         * Adds a handler for the OnStageSelected event
+         * @param callback The function to call when the event occurs
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/addonstageselected
+         */
+        AddOnStageSelected(callback: (executionContext: any) => void): void;
+
+        /**
+         * Gets the enabled processes for the entity
+         * @param callback Function to receive the array of enabled processes
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/getenabledprocesses
+         */
+        EnabledProcesses(callback: (processes: { ProcessId: string; ProcessName: string }[]) => void): void;
+
+        /**
+         * Moves to the next stage
+         * @param callback Function to call on completion
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/movenext
+         */
+        MoveNext(callback: (status: string) => void): void;
+
+        /**
+         * Moves to the previous stage
+         * @param callback Function to call on completion
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/moveprevious
+         */
+        MovePrevious(callback: (status: string) => void): void;
+
+        /**
+         * Gets the process instances for the record
+         * @param callback Function to receive the array of process instances
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/getprocessinstances
+         */
+        ProcessInstances(callback: (processes: any[]) => void): void;
+
+        /**
+         * Reflows the UI of the business process flow control
+         * @param updateUi Boolean indicating whether to update the UI
+         * @param parentStage The ID of the parent stage
+         * @param nextStage The ID of the next stage
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-process/reflow
+         */
+        Reflow(updateUi: boolean, parentStage: string, nextStage: string): void;
+
+        /**
+         * Removes a handler from the OnPreProcessStatusChange event
+         * @param callback The function to remove
+         */
+        RemoveOnPreProcessStatusChange(callback: (executionContext: any) => void): void;
+
+        /**
+         * Removes a handler from the OnPreStageChange event
+         * @param callback The function to remove
+         */
+        RemoveOnPreStageChange(callback: (executionContext: any) => void): void;
+
+        /**
+         * Removes a handler from the OnProcessStatusChange event
+         * @param callback The function to remove
+         */
+        RemoveOnProcessStatusChange(callback: (executionContext: any) => void): void;
+
+        /**
+         * Removes a handler from the OnStageChange event
+         * @param callback The function to remove
+         */
+        RemoveOnStageChange(callback: (executionContext: any) => void): void;
+
+        /**
+         * Removes a handler from the OnStageSelected event
+         * @param callback The function to remove
+         */
+        RemoveOnStageSelected(callback: (executionContext: any) => void): void;
+
+        /**
+         * Sets the active process
+         * @param processId The ID of the process to set as active
+         * @param callback Function to call on completion
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/setactiveprocess
+         */
+        SetActiveProcess(processId: string, callback: (status: string) => void): void;
+
+        /**
+         * Sets the active process instance
+         * @param processInstanceId The ID of the process instance to set as active
+         * @param callback Function to call on completion
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/setactiveprocessinstance
+         */
+        SetActiveProcessInstance(processInstanceId: string, callback: (status: string) => void): void;
+
+        /**
+         * Sets the active stage
+         * @param stageId The ID of the stage to set as active
+         * @param callback Function to call on completion
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/setactivestage
+         */
+        SetActiveStage(stageId: string, callback: (status: string) => void): void;
+    }
+
+    // ============================================================================
+    // Utility Interface
+    // ============================================================================
+
+    /**
+     * Interface for Client information
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/client
+     */
+    interface IClient {
+        /**
+         * Returns the name of the client: "Web", "Outlook", or "Mobile"
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/client#getclient
+         */
+        readonly ClientName: "Web" | "Outlook" | "Mobile";
+
+        /**
+         * Returns the state of the client: "Online" or "Offline"
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/client#getclientstate
+         */
+        readonly ClientState: "Online" | "Offline";
+
+        /**
+         * Returns the form factor: 0=Unknown, 1=Desktop, 2=Tablet, 3=Phone
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/client#getformfactor
+         */
+        readonly FormFactor: 0 | 1 | 2 | 3;
+
+        /**
+         * Returns whether the network is currently available
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/client#isnetworkavailable
+         */
+        readonly IsNetworkAvailable: boolean;
+
+        /**
+         * Returns whether the client is offline
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/client#isoffline
+         */
+        readonly IsOffline: boolean;
+    }
+
+    /**
+     * Interface for Organization Settings
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings
+     */
+    interface IOrganizationSettings {
+        /** Organization attributes */
+        readonly Attributes: any;
+        /** Base currency of the organization */
+        readonly BaseCurrency: any;
+        /** GUID of the base currency */
+        readonly BaseCurrencyId: string;
+        /** Default country code for the organization */
+        readonly DefaultCountryCode: string;
+        /** Full name convention code */
+        readonly FullNameConventionCode: number;
+        /** Whether auto-save is enabled */
+        readonly IsAutoSaveEnabled: boolean;
+        /** Whether this is a trial organization */
+        readonly IsTrialOrganization: boolean;
+        /** Language ID of the organization */
+        readonly LanguageId: number;
+        /** Organization expiry date */
+        readonly OrganizationExpiryDate: Date;
+        /** GUID of the organization */
+        readonly OrganizationId: string;
+        /** Unique name of the organization */
+        readonly UniqueName: string;
+        /** Whether to use Skype protocol */
+        readonly UseSkypeProtocol: boolean;
+    }
+
+    /**
+     * Interface for User Settings
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings
+     */
+    interface IUserSettings {
+        /** Date formatting information */
+        readonly DateFormattingInfo: any;
+        /** GUID of the default dashboard */
+        readonly DefaultDashboardId: string;
+        /** Whether guided help is enabled */
+        readonly IsGuidedHelpEnabled: boolean;
+        /** Whether high contrast mode is enabled */
+        readonly IsHighContrastEnabled: boolean;
+        /** Whether the layout is right-to-left */
+        readonly IsRTL: boolean;
+        /** Language ID of the user */
+        readonly LanguageId: number;
+        /** User's security roles */
+        readonly Roles: any;
+        /** User's security role privileges */
+        readonly SecurityRolePrivileges: string[];
+        /** User's security roles */
+        readonly SecurityRoles: string[];
+        /** User's time zone offset in minutes */
+        readonly TimeZoneOffsetMinutes: number;
+        /** User's transaction currency */
+        readonly TransactionCurrency: any;
+        /** GUID of the user's transaction currency */
+        readonly TransactionCurrencyId: string;
+        /** GUID of the user */
+        readonly UserId: string;
+        /** User's full name */
+        readonly UserName: string;
+    }
+
+    /**
+     * Interface for Xrm.Utility wrapper
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility
+     */
+    interface IUtility {
+        /**
+         * Client information
+         */
+        readonly Client: IClient;
+
+        /**
+         * Returns the base URL used to access the application
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/getclienturl
+         */
+        readonly ClientUrl: string;
+
+        /**
+         * Returns the URL for the current app
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/getcurrentappurl
+         */
+        readonly CurrentAppUrl: string;
+
+        /**
+         * Returns whether the server is on-premises or online
+         */
+        readonly IsOnPremises: boolean;
+
+        /**
+         * Organization settings
+         */
+        readonly OrganizationSettings: IOrganizationSettings;
+
+        /**
+         * User settings
+         */
+        readonly UserSettings: IUserSettings;
+
+        /**
+         * Returns the version number of Dynamics 365
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/getversion
+         */
+        readonly Version: string;
+
+        /**
+         * Displays a global notification
+         * @param notification The notification details
+         * @param successCallback Function called if the notification is added
+         * @param errorCallback Function called if there is an error
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app/addglobalnotification
+         */
+        AddGlobalNotification(notification: any, successCallback?: (id: string) => void, errorCallback?: (error: any) => void): Promise<string> | void;
+
+        /**
+         * Closes the progress indicator dialog
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/closeprogressindicator
+         */
+        CloseProgressIndicator(): void;
+
+        /**
+         * Clears a global notification
+         * @param uniqueId The ID of the notification to clear
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app/clearglobalnotification
+         */
+        ClearGlobalNotification(uniqueId: string, successCallback?: () => void, errorCallback?: (error: any) => void): Promise<void> | void;
+
+        /**
+         * Gets the name of the current app
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/getcurrentappname
+         */
+        CurrentAppName(successCallback?: (name: string) => void, errorCallback?: (error: any) => void): Promise<string> | void;
+
+        /**
+         * Gets metadata for an entity
+         * @param entityName The logical name of the entity
+         * @param attributes Array of attribute names to retrieve
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getentitymetadata
+         */
+        EntityMetadata(entityName: string, attributes?: string[], successCallback?: (metadata: any) => void, errorCallback?: (error: any) => void): Promise<any> | void;
+
+        /**
+         * Invokes a process action
+         * @param name The name of the action
+         * @param parameters Parameters to pass to the action
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/invokeprocessaction
+         */
+        InvokeProcessAction(name: string, parameters: any, successCallback?: (result: any) => void, errorCallback?: (error: any) => void): Promise<any> | void;
+
+        /**
+         * Opens a lookup dialog
+         * @param lookupOptions Options for the lookup dialog
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/lookupobjects
+         */
+        LookupObjects(lookupOptions: any, successCallback?: (result: any[]) => void, errorCallback?: (error: any) => void): Promise<any[]> | void;
+
+        /**
+         * Navigates to the specified page
+         * @param pageInput The page to navigate to
+         * @param navigationOptions Navigation options
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/navigateto
+         */
+        NavigateTo(pageInput: any, navigationOptions: any, successCallback?: () => void, errorCallback?: (error: any) => void): Promise<void> | void;
+
+        /**
+         * Displays an alert dialog
+         * @param alertStrings Strings used in the alert dialog
+         * @param alertOptions Options for the alert dialog
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/openalertdialog
+         */
+        OpenAlertDialog(alertStrings: { confirmButtonLabel?: string; text: string; title?: string }, alertOptions?: { height?: number; width?: number }, closeCallback?: () => void, errorCallback?: (error: any) => void): Promise<void> | void;
+
+        /**
+         * Displays a confirm dialog
+         * @param confirmStrings Strings used in the confirm dialog
+         * @param confirmOptions Options for the confirm dialog
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/openconfirmdialog
+         */
+        OpenConfirmDialog(confirmStrings: { cancelButtonLabel?: string; confirmButtonLabel?: string; subtitle?: string; text: string; title?: string }, confirmOptions?: { height?: number; width?: number }, successCallback?: (result: { confirmed: boolean }) => void, errorCallback?: (error: any) => void): Promise<{ confirmed: boolean }> | void;
+
+        /**
+         * Displays an error dialog
+         * @param errorOptions Options for the error dialog
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/openerrordialog
+         */
+        OpenErrorDialog(errorOptions: { details?: string; errorCode?: number; message?: string }, successCallback?: () => void, errorCallback?: (error: any) => void): Promise<void> | void;
+
+        /**
+         * Opens an entity form
+         * @param entityFormOptions Options for opening the form
+         * @param formParameters Parameters to pass to the form
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/openform
+         */
+        OpenForm(entityFormOptions: any, formParameters?: any, successCallback?: (result: any) => void, errorCallback?: (error: any) => void): Promise<any> | void;
+
+        /**
+         * Opens a URL
+         * @param url The URL to open
+         * @param openUrlOptions Options for opening the URL
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/openurl
+         */
+        OpenUrl(url: string, openUrlOptions?: { height?: number; width?: number }): void;
+
+        /**
+         * Opens a web resource
+         * @param webResourceName The name of the web resource
+         * @param windowOptions Options for the window
+         * @param data Data to pass to the web resource
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/openwebresource
+         */
+        OpenWebResource(webResourceName: string, windowOptions?: { height?: number; width?: number; openInNewWindow?: boolean }, data?: string): void;
+
+        /**
+         * Gets a string from a web resource
+         * @param key The key for the resource string
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getresourcestring
+         */
+        Resource(key: string): string;
+
+        /**
+         * Gets a string from a web resource
+         * @param webResourceName The name of the web resource
+         * @param key The key for the resource string
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getresourcestring
+         */
+        ResourceString(webResourceName: string, key: string): string;
+
+        /**
+         * Displays a progress indicator
+         * @param message The message to display
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/showprogressindicator
+         */
+        ShowProgressIndicator(message: string): void;
+    }
+
+    // ============================================================================
+    // Copilot Interface
+    // ============================================================================
+
+    /**
+     * Interface for AI Copilot operations
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-ai
+     */
+    interface ICopilot {
+        /**
+         * Executes an AI event
+         * @param eventName Name of the event to execute
+         * @param eventParameters Parameters to pass to the event
+         * @param successCallback Function called on success
+         * @param errorCallback Function called on error
+         */
+        ExecuteEvent(eventName: string, eventParameters: any, successCallback?: (result: any) => void, errorCallback?: (error: any) => void): Promise<any> | void;
+
+        /**
+         * Executes an AI prompt
+         * @param promptText The prompt text to execute
+         * @param successCallback Function called on success
+         * @param errorCallback Function called on error
+         */
+        ExecutePrompt(promptText: string, successCallback?: (result: any) => void, errorCallback?: (error: any) => void): Promise<any> | void;
+    }
+
+    // ============================================================================
+    // SidePanes Interface
+    // ============================================================================
+
+    /**
+     * Interface for Side Panes API
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app/xrm-app-sidepanes
+     */
+    interface ISidePanes {
+        /**
+         * Get/Set the display state of the side panes: 0=Collapsed, 1=Expanded
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app/xrm-app-sidepanes#state
+         */
+        DisplayState: 0 | 1;
+
+        /**
+         * Creates a new side pane
+         * @param paneOptions Options for creating the pane
+         * @param successCallback Function called when the pane is created
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app/xrm-app-sidepanes/createpane
+         */
+        Create(paneOptions: { title?: string; imageSrc?: string; hideHeader?: boolean; canClose?: boolean; width?: number }, successCallback?: (pane: any) => void): void;
+
+        /**
+         * Gets a pane by ID
+         * @param paneId The ID of the pane to get
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app/xrm-app-sidepanes/getpane
+         */
+        Get(paneId: string): any;
+
+        /**
+         * Gets all panes
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app/xrm-app-sidepanes/getallpanes
+         */
+        GetAll(): any[];
+
+        /**
+         * Gets the currently selected pane
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app/xrm-app-sidepanes/getselectedpane
+         */
+        GetSelected(): any;
+    }
 }
