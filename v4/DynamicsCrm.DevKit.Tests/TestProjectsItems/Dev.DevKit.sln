@@ -25,6 +25,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.SolutionPackager
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.Test", "Dev.DevKit.Test\Dev.DevKit.Test.csproj", "{2CB84BB1-875C-46B4-9631-C382E0DF6086}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{448CD323-DE51-487F-92F8-BF109D3197F4}"
+	ProjectSection(SolutionItems) = preProject
+		DynamicsCrm.DevKit.Cli.json = DynamicsCrm.DevKit.Cli.json
+		DynamicsCrm.DevKit.json = DynamicsCrm.DevKit.json
+	EndProjectSection
+EndProject
+Project("{F14B399A-7131-4C87-9E4B-1186C45EF12D}") = "Dev.DevKit.Report", "Dev.DevKit.Report\Dev.DevKit.Report.rptproj", "{44C72FF2-9813-24A6-661A-F3C0D238C0C1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -67,6 +75,12 @@ Global
 		{2CB84BB1-875C-46B4-9631-C382E0DF6086}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2CB84BB1-875C-46B4-9631-C382E0DF6086}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2CB84BB1-875C-46B4-9631-C382E0DF6086}.Release|Any CPU.Build.0 = Release|Any CPU
+		{44C72FF2-9813-24A6-661A-F3C0D238C0C1}.Debug|Any CPU.ActiveCfg = Debug
+		{44C72FF2-9813-24A6-661A-F3C0D238C0C1}.Debug|Any CPU.Build.0 = Debug
+		{44C72FF2-9813-24A6-661A-F3C0D238C0C1}.Debug|Any CPU.Deploy.0 = Debug
+		{44C72FF2-9813-24A6-661A-F3C0D238C0C1}.Release|Any CPU.ActiveCfg = Release
+		{44C72FF2-9813-24A6-661A-F3C0D238C0C1}.Release|Any CPU.Build.0 = Release
+		{44C72FF2-9813-24A6-661A-F3C0D238C0C1}.Release|Any CPU.Deploy.0 = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
