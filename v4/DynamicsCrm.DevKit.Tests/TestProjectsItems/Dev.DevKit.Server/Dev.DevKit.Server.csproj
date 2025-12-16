@@ -58,11 +58,15 @@
     <None Include="Dev.DevKit.Server.snk" />
     <None Include="deploy.debug.bat" />
     <None Include="deploy.debug.only.bat" />
+    <Compile Include="CustomActions\Account\PostAccountv4_AccountCustomActionAsynchronous.cs" />
+    <Compile Include="CustomActions\None\PostNonev4_CustomActionAsynchronous.cs" />
+    <Compile Include="Plugins\Account\PostAccountCreateAsynchronous.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\DynamicsCrm.DevKit.Analyzers.4.0.0\analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="..\Dev.DevKit.Shared\Dev.DevKit.Shared.projitems" Label="Shared" Condition="Exists('..\Dev.DevKit.Shared\Dev.DevKit.Shared.projitems')" />
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
