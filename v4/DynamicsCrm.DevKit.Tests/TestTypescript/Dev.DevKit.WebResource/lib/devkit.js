@@ -1,13 +1,20 @@
 'use strict';
 const devKit = (function () {
     function getXrm() {
+        // Check window.Xrm first (normal form scenario)
         if (typeof window !== 'undefined' && window.Xrm !== undefined) {
             return window.Xrm;
         }
-        if (typeof parent !== 'undefined' && parent.Xrm !== undefined) {
-            return parent.Xrm;
+        // Check parent.window.Xrm (HTML WebResource in iframe)
+        if (typeof parent !== 'undefined' && typeof parent.window !== 'undefined' && parent.window.Xrm !== undefined) {
+            return parent.window.Xrm;
         }
-        throw new Error('Not found Xrm in the current context');
+        // Check parent.parent.window.Xrm (nested iframe scenario)
+        if (typeof parent !== 'undefined' && typeof parent.parent !== 'undefined' && typeof parent.parent.window !== 'undefined' && parent.parent.window.Xrm !== undefined) {
+            return parent.parent.window.Xrm;
+        }
+        // Return undefined if not found (safe optional chaining)
+        return undefined;
     }
     function getter(obj, prop, getter) {
         Object.defineProperty(obj, prop, {
@@ -475,13 +482,14 @@ const devKit = (function () {
     }
     function loadUtility(defaultWebResourceName) {
         const utility = {};
-        const getApp = Xrm?.App;
-        const getDevice = Xrm?.Device;
-        const getEncoding = Xrm?.Encoding;
-        const getGlobalContext = Xrm?.Utility?.getGlobalContext();
-        const getNavigation = Xrm?.Navigation;
-        const getPanel = Xrm?.Panel;
-        const getUtility = Xrm?.Utility;
+        const xrm = getXrm();
+        const getApp = xrm?.App;
+        const getDevice = xrm?.Device;
+        const getEncoding = xrm?.Encoding;
+        const getGlobalContext = xrm?.Utility?.getGlobalContext();
+        const getNavigation = xrm?.Navigation;
+        const getPanel = xrm?.Panel;
+        const getUtility = xrm?.Utility;
         getter(utility, 'Client', () => {
             const obj = {};
             const client = getGlobalContext?.client;
@@ -651,16 +659,11 @@ const devKit = (function () {
     }
     function loadWebApi() {
         const obj = {};
-        let xrmInstance;
-        try {
-            xrmInstance = getXrm();
-        } catch (e) {
-            xrmInstance = Xrm;
-        }
-        const getWebApi = xrmInstance?.WebApi;
-        const getOnline = xrmInstance?.WebApi?.online;
-        const getOffline = xrmInstance?.WebApi?.offline;
-        const extractEntityName = function(fetchXml) {
+        const xrm = getXrm();
+        const getWebApi = xrm?.WebApi;
+        const getOnline = xrm?.WebApi?.online;
+        const getOffline = xrm?.WebApi?.offline;
+        const extractEntityName = function (fetchXml) {
             let cleanXml = fetchXml;
             const fetchXmlMatch = fetchXml.match(/fetchxml=/i);
             if (fetchXmlMatch) {
@@ -733,7 +736,7 @@ const devKit = (function () {
                 return promise;
             }
         };
-        obj.RetrieveRecords = function(apiConstructorOrFactory, entityLogicalNameOrOptions, optionsOrMaxPageSizeOrCallback, maxPageSizeOrSuccessCallback, successCallback, errorCallback) {
+        obj.RetrieveRecords = function (apiConstructorOrFactory, entityLogicalNameOrOptions, optionsOrMaxPageSizeOrCallback, maxPageSizeOrSuccessCallback, successCallback, errorCallback) {
             let entityLogicalName;
             let options;
             let maxPageSize;
@@ -741,8 +744,8 @@ const devKit = (function () {
             const isPlainFetchXml = entityLogicalNameOrOptions => typeof entityLogicalNameOrOptions === 'string' && entityLogicalNameOrOptions.trim().startsWith('<fetch');
             const secondParamIsFetchXmlOrOData = typeof entityLogicalNameOrOptions === 'string' &&
                 (hasFetchXml(entityLogicalNameOrOptions) ||
-                isPlainFetchXml(entityLogicalNameOrOptions) ||
-                (entityLogicalNameOrOptions.startsWith('?') && !hasFetchXml(entityLogicalNameOrOptions)));
+                    isPlainFetchXml(entityLogicalNameOrOptions) ||
+                    (entityLogicalNameOrOptions.startsWith('?') && !hasFetchXml(entityLogicalNameOrOptions)));
             if (secondParamIsFetchXmlOrOData) {
                 options = entityLogicalNameOrOptions;
                 if (isPlainFetchXml(options)) {
@@ -791,7 +794,7 @@ const devKit = (function () {
                 return promise;
             }
         };
-        obj.RetrieveRecord = function(apiConstructorOrFactory, entityLogicalName, id, options, successCallback, errorCallback) {
+        obj.RetrieveRecord = function (apiConstructorOrFactory, entityLogicalName, id, options, successCallback, errorCallback) {
             if (typeof options === 'function') {
                 errorCallback = successCallback;
                 successCallback = options;
@@ -880,11 +883,12 @@ const devKit = (function () {
     }
     function loadSidePanes() {
         const sidePanes = {};
-        getterSetter(sidePanes, 'DisplayState', () => Xrm?.App?.sidePanes?.state, value => { Xrm.App.sidePanes.state = value; });
-        sidePanes.Create = function (paneOptions, successCallback) { Xrm?.App?.sidePanes?.createPane(paneOptions)?.then(successCallback); };
-        sidePanes.Get = paneId => Xrm?.App?.sidePanes?.getPane(paneId);
-        sidePanes.GetAll = () => Xrm?.App?.sidePanes?.getAllPanes();
-        sidePanes.GetSelected = () => Xrm?.App?.sidePanes?.getSelectedPane();
+        const xrm = getXrm();
+        getterSetter(sidePanes, 'DisplayState', () => xrm?.App?.sidePanes?.state, value => { const x = getXrm(); if (x?.App?.sidePanes) x.App.sidePanes.state = value; });
+        sidePanes.Create = function (paneOptions, successCallback) { xrm?.App?.sidePanes?.createPane(paneOptions)?.then(successCallback); };
+        sidePanes.Get = paneId => xrm?.App?.sidePanes?.getPane(paneId);
+        sidePanes.GetAll = () => xrm?.App?.sidePanes?.getAllPanes();
+        sidePanes.GetSelected = () => xrm?.App?.sidePanes?.getSelectedPane();
         return sidePanes;
     }
     function loadOthers(formContext, form, defaultWebResourceName) {
