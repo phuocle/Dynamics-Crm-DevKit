@@ -13,7 +13,6 @@ const formAccount = (function () {
 
     function registerEvents(): void {
         if (form.ExecutionContext.IsInitialLoad()) {
-
         }
     }
 

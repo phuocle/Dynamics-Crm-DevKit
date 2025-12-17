@@ -111,34 +111,160 @@ export interface IAccountFormHeader {
     PrimaryContactId: DevKit.Controls.Lookup;
 }
 
-/** Interface cho Section trong Tab */
-export interface IAccountTabSections {
-    [key: string]: DevKit.Controls.Section;
+// ============================================================================
+// Tab Section Interfaces - Specific sections for each tab
+// ============================================================================
+
+/** Sections trong SUMMARY_TAB */
+export interface ISummaryTabSections {
+    /** Account Information Section */
+    ACCOUNT_INFORMATION: DevKit.Controls.Section;
+    /** Address Section */
+    ADDRESS: DevKit.Controls.Section;
+    /** Map Section */
+    MapSection: DevKit.Controls.Section;
+    /** Social Pane Tab Section */
+    SOCIAL_PANE_TAB: DevKit.Controls.Section;
+    /** Summary Section 6 */
+    Summary_section_6: DevKit.Controls.Section;
+    /** Summary Tab Section 6 */
+    SUMMARY_TAB_section_6: DevKit.Controls.Section;
+    /** Timeline Section (for Interactive experience form) */
+    Timeline: DevKit.Controls.Section;
 }
 
-/** Interface cho Tab trong Account form */
-export interface IAccountFormTab extends DevKit.Controls.ITab {
-    Section: IAccountTabSections;
+/** Sections trong DETAILS_TAB */
+export interface IDetailsTabSections {
+    /** Billing Section */
+    BILLING: DevKit.Controls.Section;
+    /** Child Accounts Section */
+    ChildAccounts: DevKit.Controls.Section;
+    /** Company Profile Section */
+    COMPANY_PROFILE: DevKit.Controls.Section;
+    /** Contact Preferences Section */
+    CONTACT_PREFERENCES: DevKit.Controls.Section;
+    /** Details Tab Section 6 */
+    DETAILS_TAB_section_6: DevKit.Controls.Section;
+    /** Shipping Section */
+    SHIPPING: DevKit.Controls.Section;
+}
+
+/** Sections trong general tab */
+export interface IGeneralTabSections {
+    /** Account Information Section */
+    account_information: DevKit.Controls.Section;
+    /** Address Section */
+    address: DevKit.Controls.Section;
+    /** Description Section */
+    description: DevKit.Controls.Section;
+    /** Shipping Information Section */
+    shipping_information: DevKit.Controls.Section;
+}
+
+/** Sections trong details tab */
+export interface IDetailsTab2Sections {
+    /** Professional Information Section */
+    professional_information: DevKit.Controls.Section;
+    /** Billing Information Section */
+    billing_information: DevKit.Controls.Section;
+    /** Description 2 Section */
+    description_2: DevKit.Controls.Section;
+}
+
+/** Sections trong administration tab */
+export interface IAdministrationTabSections {
+    /** Contact Methods Section */
+    contact_methods: DevKit.Controls.Section;
+    /** Internal Information Section */
+    internal_information: DevKit.Controls.Section;
+}
+
+/** Sections trong contacts tab */
+export interface IContactsTabSections {
+    /** Contacts Section */
+    contacts: DevKit.Controls.Section;
+}
+
+/** Sections trong notes_and_activities tab */
+export interface INotesAndActivitiesTabSections {
+    /** Activities Section */
+    activities: DevKit.Controls.Section;
+    /** Notes Section */
+    notes: DevKit.Controls.Section;
+}
+
+/** Sections trong tab_1 (Quick Create) */
+export interface ITab1Sections {
+    /** Tab 1 Column 1 Section 1 */
+    tab_1_column_1_section_1: DevKit.Controls.Section;
+    /** Tab 1 Column 2 Section 1 */
+    tab_1_column_2_section_1: DevKit.Controls.Section;
+    /** Tab 1 Column 3 Section 1 */
+    tab_1_column_3_section_1: DevKit.Controls.Section;
+}
+
+// ============================================================================
+// Tab Interfaces - Each tab with specific Section type
+// ============================================================================
+
+/** Interface cho SUMMARY_TAB */
+export interface ISummaryTab extends DevKit.Controls.ITab {
+    Section: ISummaryTabSections;
+}
+
+/** Interface cho DETAILS_TAB */
+export interface IDetailsTab extends DevKit.Controls.ITab {
+    Section: IDetailsTabSections;
+}
+
+/** Interface cho general tab */
+export interface IGeneralTab extends DevKit.Controls.ITab {
+    Section: IGeneralTabSections;
+}
+
+/** Interface cho details tab (alternate) */
+export interface IDetailsTab2 extends DevKit.Controls.ITab {
+    Section: IDetailsTab2Sections;
+}
+
+/** Interface cho administration tab */
+export interface IAdministrationTab extends DevKit.Controls.ITab {
+    Section: IAdministrationTabSections;
+}
+
+/** Interface cho contacts tab */
+export interface IContactsTab extends DevKit.Controls.ITab {
+    Section: IContactsTabSections;
+}
+
+/** Interface cho notes_and_activities tab */
+export interface INotesAndActivitiesTab extends DevKit.Controls.ITab {
+    Section: INotesAndActivitiesTabSections;
+}
+
+/** Interface cho tab_1 (Quick Create) */
+export interface ITab1 extends DevKit.Controls.ITab {
+    Section: ITab1Sections;
 }
 
 /** Interface cho tất cả Tabs trong Account form */
 export interface IAccountFormTabs {
     /** Summary Tab */
-    SUMMARY_TAB: IAccountFormTab;
+    SUMMARY_TAB: ISummaryTab;
     /** Details Tab */
-    DETAILS_TAB: IAccountFormTab;
+    DETAILS_TAB: IDetailsTab;
     /** General Tab */
-    general: IAccountFormTab;
+    general: IGeneralTab;
     /** Details Tab (alternate) */
-    details: IAccountFormTab;
+    details: IDetailsTab2;
     /** Administration Tab */
-    administration: IAccountFormTab;
+    administration: IAdministrationTab;
     /** Contacts Tab */
-    contacts: IAccountFormTab;
+    contacts: IContactsTab;
     /** Notes and Activities Tab */
-    notes_and_activities: IAccountFormTab;
+    notes_and_activities: INotesAndActivitiesTab;
     /** Tab 1 (Quick Create) */
-    tab_1: IAccountFormTab;
+    tab_1: ITab1;
 }
 
 /** Interface cho Grid trong Account form */
