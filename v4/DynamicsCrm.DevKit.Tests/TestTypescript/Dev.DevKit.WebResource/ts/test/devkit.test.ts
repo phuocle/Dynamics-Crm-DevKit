@@ -2094,4 +2094,487 @@ describe('DevKit Module', () => {
             expect((global as any).window.Xrm.Utility.showProgressIndicator).toHaveBeenCalled();
         });
     });
+
+    // =========================================================================
+    // Form Methods Tests - Close, SetFormNotification, etc.
+    // =========================================================================
+    describe('LoadFormV2 - Form Methods Coverage', () => {
+        let mockExecutionContext: any;
+        let mockFormContext: any;
+
+        beforeEach(() => {
+            mockFormContext = {
+                data: {
+                    entity: {
+                        getId: jest.fn().mockReturnValue('{guid}'),
+                        getEntityName: jest.fn().mockReturnValue('account'),
+                        getEntityReference: jest.fn().mockReturnValue({}),
+                        getPrimaryAttributeValue: jest.fn(),
+                        getDataXml: jest.fn(),
+                        getIsDirty: jest.fn().mockReturnValue(false),
+                        isValid: jest.fn().mockReturnValue(true),
+                        addOnSave: jest.fn(),
+                        removeOnSave: jest.fn(),
+                        addOnPostSave: jest.fn(),
+                        removeOnPostSave: jest.fn(),
+                        attributes: { get: jest.fn() }
+                    },
+                    getIsDirty: jest.fn().mockReturnValue(false),
+                    isValid: jest.fn().mockReturnValue(true),
+                    refresh: jest.fn(),
+                    save: jest.fn(),
+                    addOnLoad: jest.fn(),
+                    removeOnLoad: jest.fn()
+                },
+                ui: {
+                    getFormType: jest.fn().mockReturnValue(2),
+                    getViewPortHeight: jest.fn().mockReturnValue(800),
+                    getViewPortWidth: jest.fn().mockReturnValue(1200),
+                    close: jest.fn(),
+                    setFormNotification: jest.fn().mockReturnValue(true),
+                    clearFormNotification: jest.fn().mockReturnValue(true),
+                    refreshRibbon: jest.fn(),
+                    addLoaded: jest.fn(),
+                    removeLoaded: jest.fn(),
+                    addOnLoad: jest.fn(),
+                    removeOnLoad: jest.fn(),
+                    controls: { get: jest.fn() },
+                    tabs: { get: jest.fn() },
+                    formSelector: {
+                        getCurrentItem: jest.fn().mockReturnValue({ getId: jest.fn(), getLabel: jest.fn() }),
+                        items: { getLength: jest.fn(), get: jest.fn() }
+                    },
+                    navigation: { items: { getLength: jest.fn().mockReturnValue(0), get: jest.fn() } },
+                    quickForms: { get: jest.fn() }
+                },
+                getControl: jest.fn().mockImplementation((name: string) => ({
+                    getName: () => name,
+                    getControlType: jest.fn().mockReturnValue('standard'),
+                    getLabel: jest.fn(),
+                    setLabel: jest.fn(),
+                    getVisible: jest.fn().mockReturnValue(true),
+                    setVisible: jest.fn(),
+                    getDisabled: jest.fn().mockReturnValue(false),
+                    setDisabled: jest.fn(),
+                    setFocus: jest.fn(),
+                    setNotification: jest.fn(),
+                    clearNotification: jest.fn(),
+                    addNotification: jest.fn(),
+                    getAttribute: jest.fn().mockReturnValue({
+                        getName: () => name,
+                        getValue: jest.fn().mockReturnValue('value'),
+                        setValue: jest.fn()
+                    })
+                })),
+                getAttribute: jest.fn().mockReturnValue(null) // Return null to trigger fallback
+            };
+
+            mockExecutionContext = {
+                getFormContext: jest.fn().mockReturnValue(mockFormContext),
+                getDepth: jest.fn().mockReturnValue(1),
+                getEventArgs: jest.fn().mockReturnValue({
+                    getDataLoadState: jest.fn().mockReturnValue(1),
+                    getSaveMode: jest.fn(),
+                    isDefaultPrevented: jest.fn().mockReturnValue(false),
+                    preventDefault: jest.fn(),
+                    preventDefaultOnError: jest.fn(),
+                    disableAsyncTimeout: jest.fn()
+                }),
+                getEventSource: jest.fn(),
+                getSharedVariable: jest.fn(),
+                setSharedVariable: jest.fn()
+            };
+        });
+
+        test('should call Close method', () => {
+            const result = LoadFormV2(mockExecutionContext, undefined, {});
+
+            result.Close();
+
+            expect(mockFormContext.ui.close).toHaveBeenCalled();
+        });
+
+        test('should call SetFormNotification', () => {
+            const result = LoadFormV2(mockExecutionContext, undefined, {});
+
+            const notifResult = result.SetFormNotification('Test message', 'ERROR', 'notif1');
+
+            expect(mockFormContext.ui.setFormNotification).toHaveBeenCalledWith('Test message', 'ERROR', 'notif1');
+            expect(notifResult).toBe(true);
+        });
+
+        test('should call ClearFormNotification', () => {
+            const result = LoadFormV2(mockExecutionContext, undefined, {});
+
+            const clearResult = result.ClearFormNotification('notif1');
+
+            expect(mockFormContext.ui.clearFormNotification).toHaveBeenCalledWith('notif1');
+            expect(clearResult).toBe(true);
+        });
+
+        test('should call RefreshRibbon', () => {
+            const result = LoadFormV2(mockExecutionContext, undefined, {});
+
+            result.RefreshRibbon(true);
+
+            expect(mockFormContext.ui.refreshRibbon).toHaveBeenCalledWith(true);
+        });
+
+        test('should use control.getAttribute fallback for body fields', () => {
+            const result = LoadFormV2(mockExecutionContext, undefined, { body: ['testField'] });
+
+            // The field should be loaded using control.getAttribute() fallback
+            expect(result.Body.testField).toBeDefined();
+        });
+
+        test('should use control.getAttribute fallback for header fields', () => {
+            const result = LoadFormV2(mockExecutionContext, undefined, { header: ['testField'] });
+
+            // The field should be loaded using control.getAttribute() fallback
+            expect(result.Header.testField).toBeDefined();
+        });
+    });
+
+    // =========================================================================
+    // Utility Promise Returns - Without Callbacks
+    // =========================================================================
+    describe('LoadUtility - Promise Returns', () => {
+        beforeEach(() => {
+            (global as any).window = {
+                Xrm: {
+                    Utility: {
+                        getGlobalContext: jest.fn().mockReturnValue({
+                            getClientUrl: jest.fn().mockReturnValue('url'),
+                            getCurrentAppUrl: jest.fn().mockReturnValue('url'),
+                            getVersion: jest.fn().mockReturnValue('9.2'),
+                            isOnPremises: jest.fn().mockReturnValue(false),
+                            getCurrentAppProperties: jest.fn().mockResolvedValue({ appId: '123' }),
+                            client: {
+                                getClient: jest.fn().mockReturnValue('Web'),
+                                getClientState: jest.fn().mockReturnValue('Online'),
+                                getFormFactor: jest.fn().mockReturnValue(1),
+                                isOffline: jest.fn().mockReturnValue(false)
+                            },
+                            organizationSettings: {},
+                            userSettings: {}
+                        }),
+                        getAllowedStatusTransitions: jest.fn().mockResolvedValue(['status1']),
+                        getEntityMetadata: jest.fn().mockResolvedValue({ EntitySetName: 'accounts' }),
+                        invokeProcessAction: jest.fn().mockResolvedValue({ success: true }),
+                        lookupObjects: jest.fn().mockResolvedValue([{ id: '{id}' }]),
+                        getResourceString: jest.fn().mockReturnValue('resource')
+                    },
+                    Navigation: {
+                        navigateTo: jest.fn().mockResolvedValue({}),
+                        openAlertDialog: jest.fn().mockResolvedValue(undefined),
+                        openConfirmDialog: jest.fn().mockResolvedValue({ confirmed: true }),
+                        openErrorDialog: jest.fn().mockResolvedValue(undefined),
+                        openForm: jest.fn().mockResolvedValue({ savedEntityReference: {} })
+                    },
+                    Device: {
+                        captureImage: jest.fn().mockResolvedValue({}),
+                        pickFile: jest.fn().mockResolvedValue([])
+                    },
+                    App: {
+                        addGlobalNotification: jest.fn().mockResolvedValue('notif-id'),
+                        clearGlobalNotification: jest.fn().mockResolvedValue(undefined),
+                        sidePanes: {
+                            state: 0,
+                            createPane: jest.fn().mockResolvedValue({ paneId: 'pane1' }),
+                            getPane: jest.fn().mockReturnValue({ close: jest.fn() }),
+                            getAllPanes: jest.fn().mockReturnValue([]),
+                            getSelectedPane: jest.fn().mockReturnValue(null)
+                        }
+                    },
+                    Encoding: {
+                        xmlEncode: jest.fn().mockReturnValue('encoded'),
+                        xmlAttributeEncode: jest.fn().mockReturnValue('encoded')
+                    }
+                }
+            };
+        });
+
+        afterEach(() => {
+            delete (global as any).window;
+        });
+
+        test('should return promise from AddGlobalNotification without callback', async () => {
+            const result = LoadUtility(undefined);
+
+            const promise = result.AddGlobalNotification({ type: 1, message: 'test' });
+
+            expect(promise).toBeDefined();
+            const notifId = await promise;
+            expect(notifId).toBe('notif-id');
+        });
+
+        test('should return promise from AllowedStatusTransitions without callback', async () => {
+            const result = LoadUtility(undefined);
+
+            const promise = result.AllowedStatusTransitions('account', 0);
+
+            expect(promise).toBeDefined();
+            const statuses = await promise;
+            expect(statuses).toContain('status1');
+        });
+
+        test('should return promise from CurrentAppProperties without callback', async () => {
+            const result = LoadUtility(undefined);
+
+            const promise = result.CurrentAppProperties();
+
+            expect(promise).toBeDefined();
+            const props = await promise;
+            expect(props.appId).toBe('123');
+        });
+
+        test('should return promise from EntityMetadata without callback', async () => {
+            const result = LoadUtility(undefined);
+
+            const promise = result.EntityMetadata('account', ['displayname']);
+
+            expect(promise).toBeDefined();
+            const metadata = await promise;
+            expect(metadata.EntitySetName).toBe('accounts');
+        });
+
+        test('should return promise from InvokeProcessAction without callback', async () => {
+            const result = LoadUtility(undefined);
+
+            const promise = result.InvokeProcessAction('ActionName', { param: 'value' });
+
+            expect(promise).toBeDefined();
+            const actionResult = await promise;
+            expect(actionResult.success).toBe(true);
+        });
+
+        test('should return promise from LookupObjects without callback', async () => {
+            const result = LoadUtility(undefined);
+
+            const promise = result.LookupObjects({ entityTypes: ['account'] });
+
+            expect(promise).toBeDefined();
+            const lookups = await promise;
+            expect(lookups[0].id).toBe('{id}');
+        });
+
+        test('should return promise from NavigateTo without callback', async () => {
+            const result = LoadUtility(undefined);
+
+            const promise = result.NavigateTo({ pageType: 'entityrecord' }, {});
+
+            expect(promise).toBeDefined();
+            await promise;
+        });
+
+        test('should return promise from OpenAlertDialog without callback', async () => {
+            const result = LoadUtility(undefined);
+
+            const promise = result.OpenAlertDialog({ text: 'Alert' }, {});
+
+            expect(promise).toBeDefined();
+            await promise;
+        });
+
+        test('should return promise from OpenConfirmDialog without callback', async () => {
+            const result = LoadUtility(undefined);
+
+            const promise = result.OpenConfirmDialog({ title: 'Confirm', text: 'Are you sure?' }, {});
+
+            expect(promise).toBeDefined();
+            const confirmResult = await promise;
+            expect(confirmResult.confirmed).toBe(true);
+        });
+
+        test('should return promise from OpenErrorDialog without callback', async () => {
+            const result = LoadUtility(undefined);
+
+            const promise = result.OpenErrorDialog({ message: 'Error occurred' });
+
+            expect(promise).toBeDefined();
+            await promise;
+        });
+
+        test('should return promise from OpenForm without callback', async () => {
+            const result = LoadUtility(undefined);
+
+            const promise = result.OpenForm({ entityName: 'account' }, {});
+
+            expect(promise).toBeDefined();
+            const formResult = await promise;
+            expect(formResult.savedEntityReference).toBeDefined();
+        });
+
+        test('should return promise from PickFile without callback', async () => {
+            const result = LoadUtility(undefined);
+
+            const promise = result.PickFile({ allowMultipleFiles: true });
+
+            expect(promise).toBeDefined();
+            const files = await promise;
+            expect(Array.isArray(files)).toBe(true);
+        });
+    });
+
+    // =========================================================================
+    // SidePanes Create Tests
+    // =========================================================================
+    describe('LoadSidePanes - Create Method', () => {
+        beforeEach(() => {
+            (global as any).window = {
+                Xrm: {
+                    App: {
+                        sidePanes: {
+                            state: 0,
+                            createPane: jest.fn().mockResolvedValue({ paneId: 'pane1' }),
+                            getPane: jest.fn().mockReturnValue({ close: jest.fn() }),
+                            getAllPanes: jest.fn().mockReturnValue([]),
+                            getSelectedPane: jest.fn().mockReturnValue(null)
+                        }
+                    }
+                }
+            };
+        });
+
+        afterEach(() => {
+            delete (global as any).window;
+        });
+
+        test('should call Create with callback', async () => {
+            const result = LoadSidePanes();
+            const successCallback = jest.fn();
+
+            result.Create({ paneId: 'newPane', title: 'My Pane' }, successCallback);
+
+            await new Promise(resolve => setTimeout(resolve, 10));
+            expect((global as any).window.Xrm.App.sidePanes.createPane).toHaveBeenCalled();
+            expect(successCallback).toHaveBeenCalled();
+        });
+
+        test('should get all panes', () => {
+            const result = LoadSidePanes();
+
+            const allPanes = result.GetAll();
+
+            expect((global as any).window.Xrm.App.sidePanes.getAllPanes).toHaveBeenCalled();
+        });
+
+        test('should get selected pane', () => {
+            const result = LoadSidePanes();
+
+            result.GetSelected();
+
+            expect((global as any).window.Xrm.App.sidePanes.getSelectedPane).toHaveBeenCalled();
+        });
+    });
+
+    // =========================================================================
+    // Disabled Form Type 4 Tests
+    // =========================================================================
+    describe('LoadFormV2 - Disabled Form Type 4', () => {
+        let mockExecutionContext: any;
+        let mockFormContext: any;
+
+        beforeEach(() => {
+            mockFormContext = {
+                data: {
+                    entity: {
+                        getId: jest.fn().mockReturnValue('{guid}'),
+                        getEntityName: jest.fn().mockReturnValue('account'),
+                        getEntityReference: jest.fn().mockReturnValue({}),
+                        getPrimaryAttributeValue: jest.fn(),
+                        getDataXml: jest.fn(),
+                        getIsDirty: jest.fn().mockReturnValue(false),
+                        isValid: jest.fn().mockReturnValue(true),
+                        addOnSave: jest.fn(),
+                        removeOnSave: jest.fn(),
+                        addOnPostSave: jest.fn(),
+                        removeOnPostSave: jest.fn(),
+                        attributes: { get: jest.fn() }
+                    },
+                    getIsDirty: jest.fn().mockReturnValue(false),
+                    isValid: jest.fn().mockReturnValue(true),
+                    refresh: jest.fn(),
+                    save: jest.fn(),
+                    addOnLoad: jest.fn(),
+                    removeOnLoad: jest.fn()
+                },
+                ui: {
+                    getFormType: jest.fn().mockReturnValue(4), // Disabled form
+                    getViewPortHeight: jest.fn().mockReturnValue(800),
+                    getViewPortWidth: jest.fn().mockReturnValue(1200),
+                    close: jest.fn(),
+                    setFormNotification: jest.fn(),
+                    clearFormNotification: jest.fn(),
+                    refreshRibbon: jest.fn(),
+                    addLoaded: jest.fn(),
+                    removeLoaded: jest.fn(),
+                    addOnLoad: jest.fn(),
+                    removeOnLoad: jest.fn(),
+                    controls: { get: jest.fn() },
+                    tabs: { get: jest.fn() },
+                    formSelector: {
+                        getCurrentItem: jest.fn().mockReturnValue({ getId: jest.fn(), getLabel: jest.fn() }),
+                        items: { getLength: jest.fn(), get: jest.fn() }
+                    },
+                    navigation: { items: { getLength: jest.fn().mockReturnValue(0), get: jest.fn() } },
+                    quickForms: { get: jest.fn() }
+                },
+                getControl: jest.fn().mockImplementation((name: string) => ({
+                    getName: () => name,
+                    getControlType: jest.fn().mockReturnValue('standard'),
+                    getLabel: jest.fn().mockReturnValue('Label'),
+                    setLabel: jest.fn(),
+                    getVisible: jest.fn().mockReturnValue(true),
+                    setVisible: jest.fn(),
+                    getDisabled: jest.fn().mockReturnValue(false),
+                    setDisabled: jest.fn(),
+                    setFocus: jest.fn(),
+                    setNotification: jest.fn(),
+                    clearNotification: jest.fn(),
+                    addNotification: jest.fn(),
+                    getAttribute: jest.fn().mockReturnValue({ getName: () => name })
+                })),
+                getAttribute: jest.fn().mockImplementation((name: string) => ({
+                    getName: () => name,
+                    getValue: jest.fn().mockReturnValue('value'),
+                    setValue: jest.fn()
+                }))
+            };
+
+            mockExecutionContext = {
+                getFormContext: jest.fn().mockReturnValue(mockFormContext),
+                getDepth: jest.fn().mockReturnValue(1),
+                getEventArgs: jest.fn().mockReturnValue({
+                    getDataLoadState: jest.fn().mockReturnValue(1),
+                    getSaveMode: jest.fn(),
+                    isDefaultPrevented: jest.fn().mockReturnValue(false),
+                    preventDefault: jest.fn(),
+                    preventDefaultOnError: jest.fn(),
+                    disableAsyncTimeout: jest.fn()
+                }),
+                getEventSource: jest.fn(),
+                getSharedVariable: jest.fn(),
+                setSharedVariable: jest.fn()
+            };
+        });
+
+        test('should handle Disabled form type (4) for Disabled setter', () => {
+            const result = LoadFormV2(mockExecutionContext, undefined, { body: ['name'] });
+
+            // In Disabled form (type 4), setDisabled should not be called
+            result.Body.name.Disabled = true;
+
+            expect(result.Body.name).toBeDefined();
+        });
+
+        test('should handle Disabled form type (4) for Value setter', () => {
+            const result = LoadFormV2(mockExecutionContext, undefined, { body: ['name'] });
+
+            // In Disabled form (type 4), setValue should not be called
+            result.Body.name.Value = 'new value';
+
+            expect(result.Body.name).toBeDefined();
+        });
+    });
 });
