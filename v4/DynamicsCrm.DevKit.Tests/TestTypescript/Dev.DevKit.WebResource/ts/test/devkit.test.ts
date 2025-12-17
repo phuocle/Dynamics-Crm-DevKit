@@ -2248,6 +2248,7 @@ describe('DevKit Module', () => {
                             getCurrentAppUrl: jest.fn().mockReturnValue('url'),
                             getVersion: jest.fn().mockReturnValue('9.2'),
                             isOnPremises: jest.fn().mockReturnValue(false),
+                            getCurrentAppName: jest.fn().mockResolvedValue('App Name'),
                             getCurrentAppProperties: jest.fn().mockResolvedValue({ appId: '123' }),
                             client: {
                                 getClient: jest.fn().mockReturnValue('Web'),
@@ -2414,6 +2415,25 @@ describe('DevKit Module', () => {
             const files = await promise;
             expect(Array.isArray(files)).toBe(true);
         });
+
+        test('should return promise from ClearGlobalNotification without callback', async () => {
+            const result = LoadUtility(undefined);
+
+            const promise = result.ClearGlobalNotification('notif-id');
+
+            expect(promise).toBeDefined();
+            await promise;
+        });
+
+        test('should return promise from CurrentAppName without callback', async () => {
+            const result = LoadUtility(undefined);
+
+            const promise = result.CurrentAppName();
+
+            expect(promise).toBeDefined();
+            const appName = await promise;
+            expect(appName).toBe('App Name');
+        });
     });
 
     // =========================================================================
@@ -2575,6 +2595,268 @@ describe('DevKit Module', () => {
             result.Body.name.Value = 'new value';
 
             expect(result.Body.name).toBeDefined();
+        });
+    });
+
+    // =========================================================================
+    // Normal Form Type - Setters Should Work
+    // =========================================================================
+    describe('LoadFormV2 - Normal Form Type Setters', () => {
+        let mockExecutionContext: any;
+        let mockFormContext: any;
+        let mockSetDisabled: jest.Mock;
+        let mockSetValue: jest.Mock;
+
+        beforeEach(() => {
+            mockSetDisabled = jest.fn();
+            mockSetValue = jest.fn();
+
+            mockFormContext = {
+                data: {
+                    entity: {
+                        getId: jest.fn().mockReturnValue('{guid}'),
+                        getEntityName: jest.fn().mockReturnValue('account'),
+                        getEntityReference: jest.fn().mockReturnValue({}),
+                        getPrimaryAttributeValue: jest.fn(),
+                        getDataXml: jest.fn(),
+                        getIsDirty: jest.fn().mockReturnValue(false),
+                        isValid: jest.fn().mockReturnValue(true),
+                        addOnSave: jest.fn(),
+                        removeOnSave: jest.fn(),
+                        addOnPostSave: jest.fn(),
+                        removeOnPostSave: jest.fn(),
+                        attributes: { get: jest.fn() }
+                    },
+                    getIsDirty: jest.fn().mockReturnValue(false),
+                    isValid: jest.fn().mockReturnValue(true),
+                    refresh: jest.fn(),
+                    save: jest.fn(),
+                    addOnLoad: jest.fn(),
+                    removeOnLoad: jest.fn()
+                },
+                ui: {
+                    getFormType: jest.fn().mockReturnValue(2), // Update form (NOT readonly)
+                    getViewPortHeight: jest.fn().mockReturnValue(800),
+                    getViewPortWidth: jest.fn().mockReturnValue(1200),
+                    close: jest.fn(),
+                    setFormNotification: jest.fn(),
+                    clearFormNotification: jest.fn(),
+                    refreshRibbon: jest.fn(),
+                    addLoaded: jest.fn(),
+                    removeLoaded: jest.fn(),
+                    addOnLoad: jest.fn(),
+                    removeOnLoad: jest.fn(),
+                    controls: { get: jest.fn() },
+                    tabs: { get: jest.fn() },
+                    formSelector: {
+                        getCurrentItem: jest.fn().mockReturnValue({ getId: jest.fn(), getLabel: jest.fn() }),
+                        items: { getLength: jest.fn(), get: jest.fn() }
+                    },
+                    navigation: { items: { getLength: jest.fn().mockReturnValue(0), get: jest.fn() } },
+                    quickForms: { get: jest.fn() }
+                },
+                getControl: jest.fn().mockImplementation((name: string) => ({
+                    getName: () => name,
+                    getControlType: jest.fn().mockReturnValue('standard'),
+                    getLabel: jest.fn().mockReturnValue('Label'),
+                    setLabel: jest.fn(),
+                    getVisible: jest.fn().mockReturnValue(true),
+                    setVisible: jest.fn(),
+                    getDisabled: jest.fn().mockReturnValue(false),
+                    setDisabled: mockSetDisabled,
+                    setFocus: jest.fn(),
+                    setNotification: jest.fn(),
+                    clearNotification: jest.fn(),
+                    addNotification: jest.fn(),
+                    getAttribute: jest.fn().mockReturnValue({ getName: () => name })
+                })),
+                getAttribute: jest.fn().mockImplementation((name: string) => ({
+                    getName: () => name,
+                    getValue: jest.fn().mockReturnValue('value'),
+                    setValue: mockSetValue
+                }))
+            };
+
+            mockExecutionContext = {
+                getFormContext: jest.fn().mockReturnValue(mockFormContext),
+                getDepth: jest.fn().mockReturnValue(1),
+                getEventArgs: jest.fn().mockReturnValue({
+                    getDataLoadState: jest.fn().mockReturnValue(1),
+                    getSaveMode: jest.fn(),
+                    isDefaultPrevented: jest.fn().mockReturnValue(false),
+                    preventDefault: jest.fn(),
+                    preventDefaultOnError: jest.fn(),
+                    disableAsyncTimeout: jest.fn()
+                }),
+                getEventSource: jest.fn(),
+                getSharedVariable: jest.fn(),
+                setSharedVariable: jest.fn()
+            };
+        });
+
+        test('should call setDisabled on normal form (type 2)', () => {
+            const result = LoadFormV2(mockExecutionContext, undefined, { body: ['name'] });
+
+            result.Body.name.Disabled = true;
+
+            expect(mockSetDisabled).toHaveBeenCalledWith(true);
+        });
+
+        test('should call setValue on normal form (type 2)', () => {
+            const result = LoadFormV2(mockExecutionContext, undefined, { body: ['name'] });
+
+            result.Body.name.Value = 'new value';
+
+            expect(mockSetValue).toHaveBeenCalledWith('new value');
+        });
+    });
+
+    // =========================================================================
+    // Utility Callback Tests - ClearGlobalNotification, CurrentAppName
+    // =========================================================================
+    describe('LoadUtility - Additional Callback Tests', () => {
+        beforeEach(() => {
+            (global as any).window = {
+                Xrm: {
+                    Utility: {
+                        getGlobalContext: jest.fn().mockReturnValue({
+                            getClientUrl: jest.fn().mockReturnValue('url'),
+                            getCurrentAppUrl: jest.fn().mockReturnValue('url'),
+                            getVersion: jest.fn().mockReturnValue('9.2'),
+                            isOnPremises: jest.fn().mockReturnValue(false),
+                            getCurrentAppName: jest.fn().mockResolvedValue('My App'),
+                            getCurrentAppProperties: jest.fn().mockResolvedValue({ appId: '123' }),
+                            client: {
+                                getClient: jest.fn().mockReturnValue('Web'),
+                                getClientState: jest.fn().mockReturnValue('Online'),
+                                getFormFactor: jest.fn().mockReturnValue(1),
+                                isOffline: jest.fn().mockReturnValue(false)
+                            },
+                            organizationSettings: {},
+                            userSettings: {}
+                        })
+                    },
+                    App: {
+                        addGlobalNotification: jest.fn().mockResolvedValue('notif-id'),
+                        clearGlobalNotification: jest.fn().mockResolvedValue(undefined)
+                    },
+                    Device: {
+                        captureAudio: jest.fn().mockResolvedValue({ fileContent: 'audio' }),
+                        captureVideo: jest.fn().mockResolvedValue({ fileContent: 'video' })
+                    }
+                }
+            };
+        });
+
+        afterEach(() => {
+            delete (global as any).window;
+        });
+
+        test('should call ClearGlobalNotification with callback', async () => {
+            const result = LoadUtility(undefined);
+            const successCallback = jest.fn();
+
+            result.ClearGlobalNotification('notif-id', successCallback);
+
+            await new Promise(resolve => setTimeout(resolve, 10));
+            expect((global as any).window.Xrm.App.clearGlobalNotification).toHaveBeenCalled();
+            expect(successCallback).toHaveBeenCalled();
+        });
+
+        test('should call CurrentAppName with callback', async () => {
+            const result = LoadUtility(undefined);
+            const successCallback = jest.fn();
+
+            result.CurrentAppName(successCallback);
+
+            await new Promise(resolve => setTimeout(resolve, 10));
+            expect((global as any).window.Xrm.Utility.getGlobalContext().getCurrentAppName).toHaveBeenCalled();
+            expect(successCallback).toHaveBeenCalledWith('My App');
+        });
+
+        test('should call CaptureAudio with callback', async () => {
+            const result = LoadUtility(undefined);
+            const successCallback = jest.fn();
+
+            result.CaptureAudio(successCallback);
+
+            await new Promise(resolve => setTimeout(resolve, 10));
+            expect((global as any).window.Xrm.Device.captureAudio).toHaveBeenCalled();
+            expect(successCallback).toHaveBeenCalled();
+        });
+
+        test('should call CaptureVideo with callback', async () => {
+            const result = LoadUtility(undefined);
+            const successCallback = jest.fn();
+
+            result.CaptureVideo(successCallback);
+
+            await new Promise(resolve => setTimeout(resolve, 10));
+            expect((global as any).window.Xrm.Device.captureVideo).toHaveBeenCalled();
+            expect(successCallback).toHaveBeenCalled();
+        });
+    });
+
+    // =========================================================================
+    // getXrm Parent Fallback Tests
+    // =========================================================================
+    describe('LoadUtility - getXrm Parent Fallback', () => {
+        test('should use parent.window.Xrm when window.Xrm is undefined', () => {
+            // Set up parent.window.Xrm
+            (global as any).parent = {
+                window: {
+                    Xrm: {
+                        Utility: {
+                            getGlobalContext: jest.fn().mockReturnValue({
+                                getClientUrl: jest.fn().mockReturnValue('parent-url'),
+                                client: {}
+                            })
+                        },
+                        App: {},
+                        Device: {}
+                    }
+                }
+            };
+
+            const result = LoadUtility(undefined);
+
+            expect(result.ClientUrl).toBe('parent-url');
+
+            delete (global as any).parent;
+        });
+
+        test('should use parent.parent.window.Xrm when window.Xrm and parent.window.Xrm are undefined', () => {
+            // Set up parent.parent.window.Xrm
+            (global as any).parent = {
+                parent: {
+                    window: {
+                        Xrm: {
+                            Utility: {
+                                getGlobalContext: jest.fn().mockReturnValue({
+                                    getClientUrl: jest.fn().mockReturnValue('grandparent-url'),
+                                    client: {}
+                                })
+                            },
+                            App: {},
+                            Device: {}
+                        }
+                    }
+                }
+            };
+
+            const result = LoadUtility(undefined);
+
+            expect(result.ClientUrl).toBe('grandparent-url');
+
+            delete (global as any).parent;
+        });
+
+        test('should return undefined when no Xrm is found', () => {
+            // No window.Xrm, no parent.window.Xrm
+            const result = LoadUtility(undefined);
+
+            // Should not throw, just return undefined for properties
+            expect(result.ClientUrl).toBeUndefined();
         });
     });
 });
