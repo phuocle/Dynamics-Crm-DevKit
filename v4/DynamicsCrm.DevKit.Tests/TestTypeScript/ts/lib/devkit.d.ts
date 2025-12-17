@@ -645,7 +645,7 @@ declare namespace DevKit {
         /**
          * Interface for Date controls (without time)
          */
-        interface Date extends IControl {
+        interface DateOnly extends IControl {
             /**
              * Get/Set the data value for a date attribute
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getvalue

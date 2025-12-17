@@ -4,8 +4,8 @@
  * Covers ALL 12 DevKit control types
  */
 
-// Import AccountForm - OptionSet is now global (populated by devkit.ts and Account.form.ts)
-import { AccountForm } from '../entities/generator/Account.form';
+// Import AccountForm namespace - OptionSet is now global (populated by devkit.ts and Account.form.ts)
+import { AccountForm, Account } from '../entities/generator/Account.form';
 // Import devkit to populate global OptionSet
 import '../lib/devkit';
 
@@ -239,26 +239,26 @@ function createMockExecutionContext(formType: number = 2) {
 describe('AccountForm - String Control', () => {
     test('should get Value', () => {
         const { executionContext } = createMockExecutionContext();
-        const form = new AccountForm(executionContext);
+        const form = new AccountForm.Form(executionContext);
         expect(form.Body.Name.Value).toBe('Test Account');
     });
 
     test('should set Value', () => {
         const { executionContext, mocks } = createMockExecutionContext();
-        const form = new AccountForm(executionContext);
+        const form = new AccountForm.Form(executionContext);
         form.Body.Name.Value = 'New Name';
         expect(mocks.mockSetValue).toHaveBeenCalledWith('New Name');
     });
 
     test('should get MaxLength', () => {
         const { executionContext } = createMockExecutionContext();
-        const form = new AccountForm(executionContext);
+        const form = new AccountForm.Form(executionContext);
         expect(form.Body.Name.MaxLength).toBe(100);
     });
 
     test('should get/set Disabled', () => {
         const { executionContext, mocks } = createMockExecutionContext();
-        const form = new AccountForm(executionContext);
+        const form = new AccountForm.Form(executionContext);
         expect(form.Body.Name.Disabled).toBe(false);
         form.Body.Name.Disabled = true;
         expect(mocks.mockSetDisabled).toHaveBeenCalledWith(true);
@@ -266,7 +266,7 @@ describe('AccountForm - String Control', () => {
 
     test('should get/set Visible', () => {
         const { executionContext, mocks } = createMockExecutionContext();
-        const form = new AccountForm(executionContext);
+        const form = new AccountForm.Form(executionContext);
         expect(form.Body.Name.Visible).toBe(true);
         form.Body.Name.Visible = false;
         expect(mocks.mockSetVisible).toHaveBeenCalledWith(false);
@@ -274,7 +274,7 @@ describe('AccountForm - String Control', () => {
 
     test('should Focus', () => {
         const { executionContext, mocks } = createMockExecutionContext();
-        const form = new AccountForm(executionContext);
+        const form = new AccountForm.Form(executionContext);
         form.Body.Name.Focus();
         expect(mocks.mockSetFocus).toHaveBeenCalled();
     });
@@ -286,13 +286,13 @@ describe('AccountForm - String Control', () => {
 describe('AccountForm - Memo Control', () => {
     test('should get Value', () => {
         const { executionContext } = createMockExecutionContext();
-        const form = new AccountForm(executionContext);
+        const form = new AccountForm.Form(executionContext);
         expect(form.Body.Description.Value).toBe('Test Description');
     });
 
     test('should set Value', () => {
         const { executionContext, mocks } = createMockExecutionContext();
-        const form = new AccountForm(executionContext);
+        const form = new AccountForm.Form(executionContext);
         form.Body.Description.Value = 'New Description';
         expect(mocks.mockSetValue).toHaveBeenCalledWith('New Description');
     });
@@ -304,20 +304,20 @@ describe('AccountForm - Memo Control', () => {
 describe('AccountForm - Integer Control', () => {
     test('should get Value', () => {
         const { executionContext } = createMockExecutionContext();
-        const form = new AccountForm(executionContext);
+        const form = new AccountForm.Form(executionContext);
         expect(form.Body.NumberOfEmployees.Value).toBe(100);
     });
 
     test('should set Value', () => {
         const { executionContext, mocks } = createMockExecutionContext();
-        const form = new AccountForm(executionContext);
+        const form = new AccountForm.Form(executionContext);
         form.Body.NumberOfEmployees.Value = 200;
         expect(mocks.mockSetValue).toHaveBeenCalledWith(200);
     });
 
     test('should get Max/Min', () => {
         const { executionContext } = createMockExecutionContext();
-        const form = new AccountForm(executionContext);
+        const form = new AccountForm.Form(executionContext);
         expect(form.Body.NumberOfEmployees.Max).toBe(1000000);
         expect(form.Body.NumberOfEmployees.Min).toBe(0);
     });
@@ -329,13 +329,13 @@ describe('AccountForm - Integer Control', () => {
 describe('AccountForm - Money Control', () => {
     test('should get Value', () => {
         const { executionContext } = createMockExecutionContext();
-        const form = new AccountForm(executionContext);
+        const form = new AccountForm.Form(executionContext);
         expect(form.Body.Revenue.Value).toBe(1000000);
     });
 
     test('should set Value', () => {
         const { executionContext, mocks } = createMockExecutionContext();
-        const form = new AccountForm(executionContext);
+        const form = new AccountForm.Form(executionContext);
         form.Body.Revenue.Value = 2000000;
         expect(mocks.mockSetValue).toHaveBeenCalledWith(2000000);
     });
@@ -347,13 +347,13 @@ describe('AccountForm - Money Control', () => {
 describe('AccountForm - Boolean Control', () => {
     test('should get Value as false', () => {
         const { executionContext } = createMockExecutionContext();
-        const form = new AccountForm(executionContext);
+        const form = new AccountForm.Form(executionContext);
         expect(form.Body.CreditOnHold.Value).toBe(false);
     });
 
     test('should set Value to true', () => {
         const { executionContext, mocks } = createMockExecutionContext();
-        const form = new AccountForm(executionContext);
+        const form = new AccountForm.Form(executionContext);
         form.Body.CreditOnHold.Value = true;
         expect(mocks.mockSetValue).toHaveBeenCalledWith(true);
     });
@@ -365,27 +365,27 @@ describe('AccountForm - Boolean Control', () => {
 describe('AccountForm - OptionSet Control', () => {
     test('should get Value', () => {
         const { executionContext } = createMockExecutionContext();
-        const form = new AccountForm(executionContext);
+        const form = new AccountForm.Form(executionContext);
         expect(form.Body.IndustryCode.Value).toBe(7);
     });
 
     test('should set Value using OptionSet constants', () => {
         const { executionContext, mocks } = createMockExecutionContext();
-        const form = new AccountForm(executionContext);
+        const form = new AccountForm.Form(executionContext);
         form.Body.IndustryCode.Value = OptionSet.Account.IndustryCode.Financial;
         expect(mocks.mockSetValue).toHaveBeenCalledWith(16);
     });
 
     test('should get Options', () => {
         const { executionContext } = createMockExecutionContext();
-        const form = new AccountForm(executionContext);
+        const form = new AccountForm.Form(executionContext);
         expect(form.Body.IndustryCode.Options).toBeDefined();
         expect(form.Body.IndustryCode.Options.length).toBe(3);
     });
 
     test('should get Text', () => {
         const { executionContext } = createMockExecutionContext();
-        const form = new AccountForm(executionContext);
+        const form = new AccountForm.Form(executionContext);
         expect(form.Body.IndustryCode.Text).toBe('Option 1');
     });
 });
@@ -396,7 +396,7 @@ describe('AccountForm - OptionSet Control', () => {
 describe('AccountForm - Lookup Control', () => {
     test('should get Value as array', () => {
         const { executionContext } = createMockExecutionContext();
-        const form = new AccountForm(executionContext);
+        const form = new AccountForm.Form(executionContext);
         const value = form.Body.PrimaryContactId.Value;
         expect(Array.isArray(value)).toBe(true);
         expect(value![0].id).toBe('{guid}');
@@ -405,7 +405,7 @@ describe('AccountForm - Lookup Control', () => {
 
     test('should set Value', () => {
         const { executionContext, mocks } = createMockExecutionContext();
-        const form = new AccountForm(executionContext);
+        const form = new AccountForm.Form(executionContext);
         const newValue = [{ id: '{new-guid}', name: 'New Contact', entityType: 'contact' }];
         form.Body.PrimaryContactId.Value = newValue;
         expect(mocks.mockSetValue).toHaveBeenCalledWith(newValue);
@@ -418,7 +418,7 @@ describe('AccountForm - Lookup Control', () => {
 describe('AccountForm - Date Control (DateOnly)', () => {
     test('should get Value as Date object', () => {
         const { executionContext } = createMockExecutionContext();
-        const form = new AccountForm(executionContext);
+        const form = new AccountForm.Form(executionContext);
         const value = form.Body.v4_Birthday.Value;
         expect(value).toBeInstanceOf(Date);
         expect(value!.getFullYear()).toBe(2024);
@@ -426,7 +426,7 @@ describe('AccountForm - Date Control (DateOnly)', () => {
 
     test('should set Value', () => {
         const { executionContext, mocks } = createMockExecutionContext();
-        const form = new AccountForm(executionContext);
+        const form = new AccountForm.Form(executionContext);
         const newDate = new Date('2025-06-15');
         form.Body.v4_Birthday.Value = newDate;
         expect(mocks.mockSetValue).toHaveBeenCalledWith(newDate);
@@ -439,14 +439,14 @@ describe('AccountForm - Date Control (DateOnly)', () => {
 describe('AccountForm - DateTime Control', () => {
     test('should get Value as DateTime object', () => {
         const { executionContext } = createMockExecutionContext();
-        const form = new AccountForm(executionContext);
+        const form = new AccountForm.Form(executionContext);
         const value = form.Body.v4_AppointmentTime.Value;
         expect(value).toBeInstanceOf(Date);
     });
 
     test('should set Value', () => {
         const { executionContext, mocks } = createMockExecutionContext();
-        const form = new AccountForm(executionContext);
+        const form = new AccountForm.Form(executionContext);
         const newDateTime = new Date('2025-06-15T14:30:00');
         form.Body.v4_AppointmentTime.Value = newDateTime;
         expect(mocks.mockSetValue).toHaveBeenCalledWith(newDateTime);
@@ -459,20 +459,20 @@ describe('AccountForm - DateTime Control', () => {
 describe('AccountForm - Decimal Control', () => {
     test('should get Value', () => {
         const { executionContext } = createMockExecutionContext();
-        const form = new AccountForm(executionContext);
+        const form = new AccountForm.Form(executionContext);
         expect(form.Body.v4_Latitude.Value).toBe(40.7128);
     });
 
     test('should set Value', () => {
         const { executionContext, mocks } = createMockExecutionContext();
-        const form = new AccountForm(executionContext);
+        const form = new AccountForm.Form(executionContext);
         form.Body.v4_Latitude.Value = 51.5074;
         expect(mocks.mockSetValue).toHaveBeenCalledWith(51.5074);
     });
 
     test('should get Max/Min', () => {
         const { executionContext } = createMockExecutionContext();
-        const form = new AccountForm(executionContext);
+        const form = new AccountForm.Form(executionContext);
         expect(form.Body.v4_Latitude.Max).toBe(1000000);
         expect(form.Body.v4_Latitude.Min).toBe(0);
     });
@@ -484,20 +484,20 @@ describe('AccountForm - Decimal Control', () => {
 describe('AccountForm - Double Control', () => {
     test('should get Value', () => {
         const { executionContext } = createMockExecutionContext();
-        const form = new AccountForm(executionContext);
+        const form = new AccountForm.Form(executionContext);
         expect(form.Body.v4_DiscountPercentage.Value).toBe(15.5);
     });
 
     test('should set Value', () => {
         const { executionContext, mocks } = createMockExecutionContext();
-        const form = new AccountForm(executionContext);
+        const form = new AccountForm.Form(executionContext);
         form.Body.v4_DiscountPercentage.Value = 25.75;
         expect(mocks.mockSetValue).toHaveBeenCalledWith(25.75);
     });
 
     test('should get Max/Min', () => {
         const { executionContext } = createMockExecutionContext();
-        const form = new AccountForm(executionContext);
+        const form = new AccountForm.Form(executionContext);
         expect(form.Body.v4_DiscountPercentage.Max).toBe(1000000);
         expect(form.Body.v4_DiscountPercentage.Min).toBe(0);
     });
@@ -509,7 +509,7 @@ describe('AccountForm - Double Control', () => {
 describe('AccountForm - MultiOptionSet Control', () => {
     test('should get Value as array', () => {
         const { executionContext } = createMockExecutionContext();
-        const form = new AccountForm(executionContext);
+        const form = new AccountForm.Form(executionContext);
         const value = form.Body.v4_Categories.Value;
         expect(Array.isArray(value)).toBe(true);
         expect(value).toContain(100000000);
@@ -518,7 +518,7 @@ describe('AccountForm - MultiOptionSet Control', () => {
 
     test('should set Value using OptionSet constants', () => {
         const { executionContext, mocks } = createMockExecutionContext();
-        const form = new AccountForm(executionContext);
+        const form = new AccountForm.Form(executionContext);
         const newValue = [OptionSet.Account.v4_Categories.Category_A, OptionSet.Account.v4_Categories.Category_C];
         form.Body.v4_Categories.Value = newValue;
         expect(mocks.mockSetValue).toHaveBeenCalledWith([100000000, 100000002]);
@@ -526,7 +526,7 @@ describe('AccountForm - MultiOptionSet Control', () => {
 
     test('should get Options', () => {
         const { executionContext } = createMockExecutionContext();
-        const form = new AccountForm(executionContext);
+        const form = new AccountForm.Form(executionContext);
         expect(form.Body.v4_Categories.Options).toBeDefined();
         expect(form.Body.v4_Categories.Options.length).toBe(3);
     });
@@ -538,7 +538,7 @@ describe('AccountForm - MultiOptionSet Control', () => {
 describe('AccountForm - Header Controls', () => {
     test('should access Header.OwnerId', () => {
         const { executionContext } = createMockExecutionContext();
-        const form = new AccountForm(executionContext);
+        const form = new AccountForm.Form(executionContext);
         const owner = form.Header.OwnerId.Value;
         expect(Array.isArray(owner)).toBe(true);
     });
@@ -550,31 +550,31 @@ describe('AccountForm - Header Controls', () => {
 describe('AccountForm - Form Properties', () => {
     test('should get FormType', () => {
         const { executionContext } = createMockExecutionContext();
-        const form = new AccountForm(executionContext);
+        const form = new AccountForm.Form(executionContext);
         expect(form.FormType).toBe(2);
     });
 
     test('should get EntityId', () => {
         const { executionContext } = createMockExecutionContext();
-        const form = new AccountForm(executionContext);
+        const form = new AccountForm.Form(executionContext);
         expect(form.EntityId).toBe('{entity-guid}');
     });
 
     test('should get EntityName', () => {
         const { executionContext } = createMockExecutionContext();
-        const form = new AccountForm(executionContext);
+        const form = new AccountForm.Form(executionContext);
         expect(form.EntityName).toBe('account');
     });
 
     test('should get DataIsDirty', () => {
         const { executionContext } = createMockExecutionContext();
-        const form = new AccountForm(executionContext);
+        const form = new AccountForm.Form(executionContext);
         expect(form.DataIsDirty).toBe(false);
     });
 
     test('should get DataIsValid', () => {
         const { executionContext } = createMockExecutionContext();
-        const form = new AccountForm(executionContext);
+        const form = new AccountForm.Form(executionContext);
         expect(form.DataIsValid).toBe(true);
     });
 });
@@ -585,27 +585,27 @@ describe('AccountForm - Form Properties', () => {
 describe('AccountForm - Form Methods', () => {
     test('should call SetFormNotification', () => {
         const { executionContext } = createMockExecutionContext();
-        const form = new AccountForm(executionContext);
+        const form = new AccountForm.Form(executionContext);
         const result = form.SetFormNotification('Test message', 'INFO', 'notif1');
         expect(result).toBe(true);
     });
 
     test('should call ClearFormNotification', () => {
         const { executionContext } = createMockExecutionContext();
-        const form = new AccountForm(executionContext);
+        const form = new AccountForm.Form(executionContext);
         const result = form.ClearFormNotification('notif1');
         expect(result).toBe(true);
     });
 
     test('should call RefreshRibbon', () => {
         const { executionContext } = createMockExecutionContext();
-        const form = new AccountForm(executionContext);
+        const form = new AccountForm.Form(executionContext);
         expect(() => form.RefreshRibbon()).not.toThrow();
     });
 
     test('should call Close', () => {
         const { executionContext } = createMockExecutionContext();
-        const form = new AccountForm(executionContext);
+        const form = new AccountForm.Form(executionContext);
         expect(() => form.Close()).not.toThrow();
     });
 });
@@ -627,3 +627,4 @@ describe('OptionSet Values', () => {
         expect(OptionSet.Account.v4_Categories.Category_D).toBe(100000003);
     });
 });
+

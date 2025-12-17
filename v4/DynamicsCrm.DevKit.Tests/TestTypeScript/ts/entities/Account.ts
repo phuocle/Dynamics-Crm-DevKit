@@ -3,10 +3,10 @@ import { AccountForm } from './generator/Account.form';
 const formAccount = (function () {
     "use strict";
 
-    let form: AccountForm;
+    let form: AccountForm.Form;
 
     async function onLoad(executionContext: any): Promise<void> {
-        form = new AccountForm(executionContext);
+        form = new AccountForm.Form(executionContext);
         registerEvents();
         form.UiAddLoaded(UiAddLoaded);
     }
@@ -14,7 +14,9 @@ const formAccount = (function () {
     function registerEvents(): void {
         if (form.ExecutionContext.IsInitialLoad()) {
             if (form.FormType == OptionSet.FormType.Create) {
-
+                // Example: Using OptionSet values
+                var industryTech = OptionSet.Account.IndustryCode.Technology;
+                var categoryA = OptionSet.Account.v4_Categories.Category_A;
             }
         }
     }
