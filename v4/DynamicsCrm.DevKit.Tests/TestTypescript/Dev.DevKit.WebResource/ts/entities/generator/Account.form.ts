@@ -5,7 +5,7 @@
  */
 
 /// <reference path="../../lib/devkit.d.ts" />
-import { LoadFormV2 } from '../../lib/devkit';
+import { FormBase } from '../../lib/devkit';
 
 // ============================================================================
 // Body Interface - ALL DevKit control types
@@ -125,37 +125,21 @@ export interface IAccountFormProcess extends DevKit.Controls.IProcess {
 }
 
 // ============================================================================
-// Account Form Class
+// Account Form Class - Extends FormBase
+// All common properties are inherited from FormBase
 // ============================================================================
-export class AccountForm {
-    public Body: IAccountFormBody;
-    public Header: IAccountFormHeader;
-    public Tab: IAccountFormTabs;
-    public Grid: IAccountFormGrid;
-    public Navigation: IAccountFormNavigation;
-    public QuickForm: IAccountFormQuickForm;
-    /** Business Process Flow - includes BPF stage fields */
-    public Process: IAccountFormProcess;
-
-    public readonly FormId: string;
-    public readonly FormType: number;
-    public readonly EntityId: string;
-    public readonly EntityName: string;
-    public readonly DataIsDirty: boolean;
-    public readonly DataIsValid: boolean;
-
-    public ExecutionContext: any;
-    public Save: (saveOptions?: any) => Promise<void>;
-    public Refresh: (save?: boolean) => Promise<void>;
-    public Close: () => void;
-    public SetFormNotification: (message: string, level: string, uniqueId: string) => boolean;
-    public ClearFormNotification: (uniqueId: string) => boolean;
-    public RefreshRibbon: (refreshAll?: boolean) => void;
-    public UiAddLoaded: (callback: (context: any) => void) => void;
-    public UiRemoveLoaded: (callback: (context: any) => void) => void;
+export class AccountForm extends FormBase<
+    IAccountFormBody,
+    IAccountFormHeader,
+    IAccountFormTabs,
+    IAccountFormGrid,
+    IAccountFormNavigation,
+    IAccountFormQuickForm,
+    IAccountFormProcess
+> {
 
     constructor(executionContext: any, defaultWebResourceName?: string) {
-        const formConfig = {
+        super(executionContext, defaultWebResourceName, {
             body: [
                 // Standard Field Controls
                 "Name",                 // String
@@ -192,36 +176,7 @@ export class AccountForm {
                 "v4_AccountBPF___Revenue",        // Revenue
                 "v4_AccountBPF___PrimaryContactId" // Primary Contact
             ]
-        };
-
-        const form = LoadFormV2<IAccountFormBody, IAccountFormHeader, IAccountFormTabs, IAccountFormGrid, IAccountFormNavigation, IAccountFormQuickForm>(
-            executionContext,
-            defaultWebResourceName,
-            formConfig
-        );
-
-        this.ExecutionContext = form.ExecutionContext;
-        this.Body = form.Body;
-        this.Header = form.Header;
-        this.Tab = form.Tab;
-        this.Grid = form.Grid;
-        this.Navigation = form.Navigation;
-        this.QuickForm = form.QuickForm;
-        this.Process = form.Process;
-        this.FormId = form.FormId;
-        this.FormType = form.FormType;
-        this.EntityId = form.EntityId;
-        this.EntityName = form.EntityName;
-        this.DataIsDirty = form.DataIsDirty;
-        this.DataIsValid = form.DataIsValid;
-        this.Save = form.Save;
-        this.Refresh = form.Refresh;
-        this.Close = form.Close;
-        this.SetFormNotification = form.SetFormNotification;
-        this.ClearFormNotification = form.ClearFormNotification;
-        this.RefreshRibbon = form.RefreshRibbon;
-        this.UiAddLoaded = form.UiAddLoaded;
-        this.UiRemoveLoaded = form.UiRemoveLoaded;
+        });
     }
 }
 

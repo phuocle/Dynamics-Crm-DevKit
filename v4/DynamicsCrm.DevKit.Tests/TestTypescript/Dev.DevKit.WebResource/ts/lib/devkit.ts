@@ -350,9 +350,9 @@ function loadField(formContext: any, field: any, attribute: any, control: any): 
  * Load Form V2 - Hàm chính để load form với các fields
  * @param executionContext Execution context từ form
  * @param defaultWebResourceName Tên web resource mặc định
- * @param formConfig Cấu hình form bao gồm body, header, tab, grid, navigation, quick
+ * @param formConfig Cấu hình form bao gồm body, header, tab, grid, navigation, quick, bpf
  */
-export function LoadFormV2<TBody, THeader, TTab, TGrid, TNavigation, TQuickForm>(
+export function LoadFormV2<TBody, THeader, TTab, TGrid, TNavigation, TQuickForm, TProcess = any>(
     executionContext: any,
     defaultWebResourceName: string | undefined,
     formConfig: {
@@ -387,7 +387,7 @@ export function LoadFormV2<TBody, THeader, TTab, TGrid, TNavigation, TQuickForm>
     RefreshRibbon: (refreshAll?: boolean) => void;
     UiAddLoaded: (callback: (context: any) => void) => void;
     UiRemoveLoaded: (callback: (context: any) => void) => void;
-    Process: any;
+    Process: TProcess;
 } {
     const formContext = executionContext?.getFormContext?.() ?? executionContext;
     const contextData = formContext?.data;
@@ -630,6 +630,37 @@ export function LoadFormV2<TBody, THeader, TTab, TGrid, TNavigation, TQuickForm>
     executionContextWrapper.SetPreventDefaultOnError = () => executionContext?.getEventArgs()?.preventDefaultOnError();
     executionContextWrapper.SetSharedVariable = (key: string, value: any) => executionContext?.setSharedVariable(key, value);
 
+    // Build Process with BPF fields
+    const process = LoadProcess(formContext);
+    if (formConfig.bpf && formConfig.bpf.length > 0) {
+        const bpfObj: any = {};
+        let bpfProcessName: string | null = null;
+        formConfig.bpf.forEach((item: string) => {
+            const [processName, fieldName] = item.split('___');
+            if (!bpfProcessName) {
+                bpfProcessName = processName;
+            }
+            if (fieldName) {
+                bpfObj[fieldName] = {};
+            }
+        });
+        // Load BPF fields with 'header_process_' prefix
+        if (Object.keys(bpfObj).length > 0) {
+            Object.keys(bpfObj).forEach(fieldName => {
+                const logicalName = ('header_process_' + fieldName).toLowerCase();
+                const control = formContext?.getControl(logicalName);
+                let attribute = formContext?.getAttribute(fieldName.toLowerCase());
+                if (!attribute && control?.getAttribute) {
+                    attribute = control.getAttribute();
+                }
+                loadField(formContext, bpfObj[fieldName], attribute, control);
+            });
+        }
+        if (bpfProcessName) {
+            process[bpfProcessName] = bpfObj;
+        }
+    }
+
     return {
         ExecutionContext: executionContextWrapper,
         Body: body as TBody,
@@ -653,7 +684,7 @@ export function LoadFormV2<TBody, THeader, TTab, TGrid, TNavigation, TQuickForm>
         RefreshRibbon: (refreshAll?: boolean) => contextUi?.refreshRibbon(refreshAll),
         UiAddLoaded: (callback: (context: any) => void) => contextUi?.addLoaded(callback),
         UiRemoveLoaded: (callback: (context: any) => void) => contextUi?.removeLoaded(callback),
-        Process: LoadProcess(formContext),
+        Process: process,
     };
 }
 
@@ -792,6 +823,149 @@ export function LoadProcess(formContext: any): any {
     process.SetActiveStage = (stageId: string, callback: any) => getProcess?.setActiveStage(stageId, callback);
 
     return process;
+}
+
+// ============================================================================
+// FormBase Class - Base class for all entity forms
+// Entity forms extend this class to inherit common properties and methods
+// ============================================================================
+
+/**
+ * Form configuration interface for LoadFormV2
+ */
+export interface IFormConfig {
+    body?: string[];
+    header?: string[];
+    tab?: string[];
+    grid?: string[];
+    navigation?: string[];
+    quick?: string[];
+    bpf?: string[];
+}
+
+/**
+ * Base class for all entity forms
+ * Provides common properties and methods shared across all forms
+ * 
+ * @template TBody - Entity-specific body interface
+ * @template THeader - Entity-specific header interface
+ * @template TTab - Entity-specific tabs interface
+ * @template TGrid - Entity-specific grid interface
+ * @template TNavigation - Entity-specific navigation interface
+ * @template TQuickForm - Entity-specific quick form interface
+ * @template TProcess - Entity-specific process/BPF interface
+ * 
+ * @example
+ * ```typescript
+ * export class AccountForm extends FormBase<IAccountFormBody, IAccountFormHeader, ..., IAccountFormProcess> {
+ *     constructor(executionContext: any, defaultWebResourceName?: string) {
+ *         super(executionContext, defaultWebResourceName, {
+ *             body: ["Name", "Description", ...],
+ *             header: ["OwnerId"],
+ *             ...
+ *         });
+ *     }
+ * }
+ * ```
+ */
+export class FormBase<TBody, THeader, TTab, TGrid, TNavigation, TQuickForm, TProcess = any> {
+    // ========== Entity-Specific Properties ==========
+    /** Form body fields */
+    public Body: TBody;
+    /** Form header fields */
+    public Header: THeader;
+    /** Form tabs and sections */
+    public Tab: TTab;
+    /** Form grids/subgrids */
+    public Grid: TGrid;
+    /** Form navigation items */
+    public Navigation: TNavigation;
+    /** Quick view forms */
+    public QuickForm: TQuickForm;
+
+    // ========== Common Properties ==========
+    /** Business Process Flow */
+    public Process: TProcess;
+    /** Execution context wrapper */
+    public ExecutionContext: IExecutionContext;
+
+    /** Form GUID */
+    public readonly FormId: string;
+    /** Form label/name */
+    public readonly FormLabel: string;
+    /** Form type (Create=1, Update=2, ReadOnly=3, Disabled=4, BulkEdit=6) */
+    public readonly FormType: number;
+    /** Entity record GUID */
+    public readonly EntityId: string;
+    /** Entity logical name */
+    public readonly EntityName: string;
+    /** Whether form has unsaved changes */
+    public readonly DataIsDirty: boolean;
+    /** Whether all form data is valid */
+    public readonly DataIsValid: boolean;
+
+    // ========== Common Methods ==========
+    /** Save the record */
+    public Save: (saveOptions?: any) => Promise<void>;
+    /** Refresh the form data */
+    public Refresh: (save?: boolean) => Promise<void>;
+    /** Close the form */
+    public Close: () => void;
+    /** Set form-level notification */
+    public SetFormNotification: (message: string, level: string, uniqueId: string) => boolean;
+    /** Clear form-level notification */
+    public ClearFormNotification: (uniqueId: string) => boolean;
+    /** Refresh the command bar/ribbon */
+    public RefreshRibbon: (refreshAll?: boolean) => void;
+    /** Add handler for form loaded event */
+    public UiAddLoaded: (callback: (context: any) => void) => void;
+    /** Remove handler for form loaded event */
+    public UiRemoveLoaded: (callback: (context: any) => void) => void;
+
+    /**
+     * Create a new form instance
+     * @param executionContext Execution context from Dataverse
+     * @param defaultWebResourceName Default web resource name for localization
+     * @param formConfig Form configuration with field names
+     */
+    constructor(
+        executionContext: any,
+        defaultWebResourceName: string | undefined,
+        formConfig: IFormConfig
+    ) {
+        const form = LoadFormV2<TBody, THeader, TTab, TGrid, TNavigation, TQuickForm, TProcess>(
+            executionContext,
+            defaultWebResourceName,
+            formConfig
+        );
+
+        // Entity-specific
+        this.Body = form.Body;
+        this.Header = form.Header;
+        this.Tab = form.Tab;
+        this.Grid = form.Grid;
+        this.Navigation = form.Navigation;
+        this.QuickForm = form.QuickForm;
+
+        // Common
+        this.Process = form.Process;
+        this.ExecutionContext = form.ExecutionContext;
+        this.FormId = form.FormId;
+        this.FormLabel = form.FormLabel;
+        this.FormType = form.FormType;
+        this.EntityId = form.EntityId;
+        this.EntityName = form.EntityName;
+        this.DataIsDirty = form.DataIsDirty;
+        this.DataIsValid = form.DataIsValid;
+        this.Save = form.Save;
+        this.Refresh = form.Refresh;
+        this.Close = form.Close;
+        this.SetFormNotification = form.SetFormNotification;
+        this.ClearFormNotification = form.ClearFormNotification;
+        this.RefreshRibbon = form.RefreshRibbon;
+        this.UiAddLoaded = form.UiAddLoaded;
+        this.UiRemoveLoaded = form.UiRemoveLoaded;
+    }
 }
 
 
