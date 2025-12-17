@@ -387,6 +387,386 @@ function loadField(formContext: any, field: any, attribute: any, control: any): 
 }
 
 // ============================================================================
+// Helper Functions (matching devkit.js exactly)
+// ============================================================================
+
+function loadFields(formContext: any, body: any, type?: string): any {
+    Object.keys(body).forEach(field => {
+        const logicalName = type === undefined ? field?.toLowerCase() : (type + field)?.toLowerCase();
+        const control = formContext?.getControl(logicalName) ?? formContext?.getControl(field);
+        let attribute = formContext?.getAttribute(logicalName);
+        if (!attribute && control?.getAttribute) {
+            attribute = control.getAttribute();
+        }
+        loadField(formContext, body[field], attribute, control);
+    });
+    if (type === "header_") {
+        const getHeaderSection = formContext?.ui?.headerSection;
+        getterSetter(body, 'BodyVisible', () => getHeaderSection?.getBodyVisible(), (value: any) => { getHeaderSection?.setBodyVisible(value); });
+        getterSetter(body, 'CommandBarVisible', () => getHeaderSection?.getCommandBarVisible(), (value: any) => { getHeaderSection?.setCommandBarVisible(value); });
+        getterSetter(body, 'TabNavigatorVisible', () => getHeaderSection?.getTabNavigatorVisible(), (value: any) => { getHeaderSection?.setTabNavigatorVisible(value); });
+    }
+    return body;
+}
+
+function loadTabs(formContext: any, tabs: any): void {
+    const loadSection = (formContext: any, tab: string, sections: any, section: string) => {
+        const tabObject = formContext?.ui?.tabs?.get(tab);
+        const sectionObject = tabObject?.sections?.get(section);
+        getter(sections[section], 'Name', () => sectionObject?.getName());
+        getter(sections[section], 'Parent', () => sectionObject?.getParent());
+        getterSetter(sections[section], 'Label', () => sectionObject?.getLabel(), (value: any) => sectionObject?.setLabel(value));
+        getterSetter(sections[section], 'Visible', () => sectionObject?.getVisible(), (value: any) => sectionObject?.setVisible(value));
+    };
+    const loadTab = (formContext: any, tabs: any, tab: string) => {
+        const tabObject = formContext?.ui?.tabs?.get(tab);
+        getter(tabs[tab], 'Name', () => tabObject?.getName());
+        getter(tabs[tab], 'Parent', () => tabObject?.getParent());
+        getterSetter(tabs[tab], 'ContentType', () => tabObject?.getContentType(), (value: any) => { tabObject?.setContentType(value); });
+        getterSetter(tabs[tab], 'DisplayState', () => tabObject?.getDisplayState(), (value: any) => { tabObject?.setDisplayState(value); });
+        getterSetter(tabs[tab], 'Label', () => tabObject?.getLabel(), (value: any) => { tabObject?.setLabel(value); });
+        getterSetter(tabs[tab], 'Visible', () => tabObject?.getVisible(), (value: any) => { tabObject?.setVisible(value); });
+        tabs[tab].AddTabStateChange = (callback: any) => tabObject?.addTabStateChange(callback);
+        tabs[tab].Focus = () => tabObject?.setFocus();
+        tabs[tab].RemoveTabStateChange = (callback: any) => tabObject?.removeTabStateChange(callback);
+        Object.keys(tabs[tab].Section).forEach(section => {
+            loadSection(formContext, tab, tabs[tab].Section, section);
+        });
+    };
+    Object.keys(tabs).forEach(tab => {
+        loadTab(formContext, tabs, tab);
+    });
+}
+
+function loadNavigations(formContext: any, navigations: any): void {
+    const getNavigationItem = (navigation: string) => {
+        const navItems = formContext?.ui?.navigation?.items;
+        if (!navItems) return null;
+        const length = navItems.getLength();
+        for (let i = 0; i < length; i++) {
+            const item = navItems.get(i);
+            if (item?.getId() === navigation) {
+                return item;
+            }
+        }
+        return null;
+    };
+    const loadNavigation = (formContext: any, navigations: any, navigation: string) => {
+        const navigationItem = getNavigationItem(navigation);
+        getter(navigations[navigation], 'Id', () => navigationItem?.getId());
+        getterSetter(navigations[navigation], 'Label', () => navigationItem?.getLabel(), (value: any) => navigationItem?.setLabel(value));
+        getterSetter(navigations[navigation], 'Visible', () => navigationItem?.getVisible(), (value: any) => navigationItem?.setVisible(value));
+        navigations[navigation].Focus = () => navigationItem?.setFocus();
+    };
+    Object.keys(navigations).forEach(navigation => {
+        loadNavigation(formContext, navigations, navigation);
+    });
+}
+
+function loadQuickForms(formContext: any, quickForms: any): void {
+    const excludedFields = new Set(["Body", "Controls", "IsLoaded", "Refresh", "Focus", "ControlType", "Disabled", "Label", "ControlName", "ControlParent", "Visible"]);
+    const loadQuickForm = (formContext: any, quickForms: any, quickForm: string) => {
+        const fields = Object.keys(quickForms[quickForm]).filter(field => !excludedFields.has(field));
+        const quick = formContext?.ui?.quickForms?.get(quickForm);
+        getter(quickForms[quickForm], 'Body', () => LoadFormDialog(quick, fields));
+        getter(quickForms[quickForm], 'ControlName', () => quick?.getName());
+        getter(quickForms[quickForm], 'ControlParent', () => quick?.getParent());
+        getter(quickForms[quickForm], 'ControlType', () => quick?.getControlType());
+        getterSetter(quickForms[quickForm], 'Disabled', () => quick?.getDisabled(), (value: any) => { quick?.setDisabled(value); });
+        getterSetter(quickForms[quickForm], 'Label', () => quick?.getLabel(), (value: any) => { quick?.setLabel(value); });
+        getterSetter(quickForms[quickForm], 'Visible', () => quick?.getVisible(), (value: any) => { quick?.setVisible(value); });
+        quickForms[quickForm].Controls = (arg: any) => quick?.getControl(arg);
+        quickForms[quickForm].Focus = () => quick?.setFocus();
+        quickForms[quickForm].IsLoaded = () => quick?.isLoaded();
+        quickForms[quickForm].Refresh = () => quick?.refresh();
+    };
+    Object.keys(quickForms).forEach(quickForm => {
+        loadQuickForm(formContext, quickForms, quickForm);
+    });
+}
+
+function loadGrids(formContext: any, grids: any): void {
+    const loadGridColumn = (col: any) => {
+        const obj: any = {};
+        getter(obj, 'Label', () => col?.controls?.get(0)?.getLabel());
+        getter(obj, 'Name', () => col?.getName());
+        getterSetter(obj, 'Disabled', () => col?.controls?.get(0)?.getDisabled(), (value: any) => { col?.controls?.get(0)?.setDisabled(value); });
+        getterSetter(obj, 'RequiredLevel', () => col?.getRequiredLevel(), (value: any) => { col?.setRequiredLevel(value); });
+        getterSetter(obj, 'Value', () => col?.getValue(), (value: any) => { col?.setValue(value); });
+        obj.ClearNotification = (uniqueId: string) => col?.controls?.get(0)?.clearNotification(uniqueId);
+        obj.SetNotification = (message: string, uniqueId: string) => col?.controls?.get(0)?.setNotification(message, uniqueId);
+        return obj;
+    };
+    const loadGridRow = (row: any) => {
+        const obj: any = {};
+        getter(obj, 'Columns', () => {
+            const columnsObj: any = {};
+            columnsObj.getLength = () => row?.data?.entity?.attributes?.getLength();
+            columnsObj.get = (index: number) => {
+                const column = row?.data?.entity?.attributes?.get(index);
+                return loadGridColumn(column);
+            };
+            columnsObj.forEach = (callback: any) => {
+                const columns = row?.data?.entity?.attributes;
+                for (let index = 0; index < columns?.getLength(); index++) {
+                    const column = columns?.get(index);
+                    callback(loadGridColumn(column), index);
+                }
+            };
+            return columnsObj;
+        });
+        getter(obj, 'EntityId', () => row?.data?.entity?.getId());
+        getter(obj, 'EntityName', () => row?.data?.entity?.getEntityName());
+        getter(obj, 'EntityReference', () => row?.data?.entity?.getEntityReference());
+        getter(obj, 'PrimaryAttributeValue', () => row?.data?.entity?.getPrimaryAttributeValue());
+        return obj;
+    };
+    const loadGrid = (formContext: any, grids: any, grid: string) => {
+        const gridControl = formContext?.getControl(grid);
+        const createCollectionObject = (getItemsFn: any, processItemFn: any) => {
+            const obj: any = {};
+            obj.getLength = () => getItemsFn()?.getLength();
+            obj.get = (index: number) => processItemFn(getItemsFn()?.get(index));
+            obj.forEach = (callback: any) => {
+                const items = getItemsFn();
+                const length = items?.getLength() || 0;
+                for (let index = 0; index < length; index++) {
+                    callback(processItemFn(items.get(index)), index);
+                }
+            };
+            return obj;
+        };
+        getter(grids[grid], 'EntityName', () => gridControl?.getEntityName());
+        getter(grids[grid], 'FetchXml', () => gridControl?.getFetchXml());
+        getter(grids[grid], 'GridType', () => gridControl?.getGridType());
+        getter(grids[grid], 'Relationship', () => gridControl?.getRelationship());
+        getter(grids[grid], 'Rows', () => {
+            const gridInstance = formContext?.getControl(grid)?.getGrid();
+            return createCollectionObject(
+                () => gridInstance?.getRows(),
+                (row: any) => loadGridRow(row)
+            );
+        });
+        getter(grids[grid], 'SelectedRows', () => {
+            const gridInstance = formContext?.getControl(grid)?.getGrid();
+            return createCollectionObject(
+                () => gridInstance?.getSelectedRows(),
+                (row: any) => loadGridRow(row?.getData())
+            );
+        });
+        getter(grids[grid], 'TotalRecordCount', () => gridControl?.getGrid()?.getTotalRecordCount());
+        getter(grids[grid], 'ViewSelector', () => {
+            const viewSelector = gridControl?.getViewSelector();
+            const obj: any = {};
+            getter(obj, 'Visible', () => viewSelector?.isVisible());
+            getterSetter(obj, 'CurrentView', () => viewSelector?.getCurrentView(), (value: any) => viewSelector?.setCurrentView(value));
+            return obj;
+        });
+        getterSetter(grids[grid], 'Visible', () => gridControl?.getVisible(), (value: any) => { gridControl?.setVisible(value); });
+        grids[grid].AddOnLoad = (callback: any) => gridControl?.addOnLoad(callback);
+        grids[grid].OpenRelatedGrid = () => gridControl?.openRelatedGrid();
+        grids[grid].Refresh = () => gridControl?.refresh();
+        grids[grid].RefreshRibbon = () => gridControl?.refreshRibbon();
+        grids[grid].RemoveOnLoad = (callback: any) => gridControl?.removeOnLoad(callback);
+        grids[grid].Url = (client: number) => gridControl?.getUrl(client);
+    };
+    Object.keys(grids).forEach(grid => {
+        loadGrid(formContext, grids, grid);
+    });
+}
+
+// ============================================================================
+// Form Loading Functions (matching devkit.js exactly)
+// ============================================================================
+
+function LoadForm(formContext: any): any {
+    const form: any = {};
+    const contextData = formContext?.data;
+    const contextDataEntity = formContext?.data?.entity;
+    const contextUi = formContext?.ui;
+    const contextUiFormSelector = formContext?.ui?.formSelector;
+    const findFormItem = (criteria: any, value: any) => {
+        const length = contextUiFormSelector?.items?.getLength() ?? 0;
+        for (let i = 0; i < length; i++) {
+            const item = contextUiFormSelector?.items?.get(i);
+            if (item && criteria(item) === value) {
+                return item;
+            }
+        }
+        return null;
+    };
+    getter(form, 'Attributes', () => contextDataEntity?.attributes);
+    getter(form, 'Controls', () => contextUi?.controls);
+    getter(form, 'DataIsDirty', () => contextData?.getIsDirty());
+    getter(form, 'DataIsValid', () => contextData?.isValid());
+    getter(form, 'DataXml', () => contextDataEntity?.getDataXml());
+    getter(form, 'EntityId', () => contextDataEntity?.getId());
+    getter(form, 'EntityIsDirty', () => contextDataEntity?.getIsDirty());
+    getter(form, 'EntityIsValid', () => contextDataEntity?.isValid());
+    getter(form, 'EntityName', () => contextDataEntity?.getEntityName());
+    getter(form, 'EntityReference', () => contextDataEntity?.getEntityReference());
+    getter(form, 'FormId', () => contextUiFormSelector?.getCurrentItem()?.getId());
+    getter(form, 'FormLabel', () => contextUiFormSelector?.getCurrentItem()?.getLabel());
+    getter(form, 'FormType', () => contextUi?.getFormType());
+    getter(form, 'PrimaryAttributeValue', () => contextDataEntity?.getPrimaryAttributeValue());
+    getter(form, 'ViewPortHeight', () => contextUi?.getViewPortHeight());
+    getter(form, 'ViewPortWidth', () => contextUi?.getViewPortWidth());
+    form.AddOnPostSave = (callback: any) => contextDataEntity?.addOnPostSave(callback);
+    form.AddOnSave = (callback: any) => contextDataEntity?.addOnSave(callback);
+    form.ClearFormNotification = (uniqueId: string) => contextUi?.clearFormNotification(uniqueId);
+    form.Close = () => contextUi?.close();
+    form.DataAddOnLoad = (callback: any) => contextData?.addOnLoad(callback);
+    form.DataRemoveOnLoad = (callback: any) => contextData?.removeOnLoad(callback);
+    form.FormIsVisible = (formId: string) => { return findFormItem((item: any) => item.getId(), formId)?.getVisible(); };
+    form.FormNavigateToFormId = (formId: string) => { findFormItem((item: any) => item.getId(), formId)?.navigate(); };
+    form.FormNavigateToFormLabel = (formLabel: string) => { findFormItem((item: any) => item.getLabel(), formLabel)?.navigate(); };
+    form.FormSetVisible = (formId: string, value: boolean) => { findFormItem((item: any) => item.getId(), formId)?.setVisible(value); };
+    form.Refresh = (save?: boolean, successCallback?: any, errorCallback?: any) => {
+        const promise = contextData?.refresh(save);
+        if (successCallback) promise?.then(successCallback, errorCallback);
+        else return promise;
+    };
+    form.RefreshRibbon = (refreshAll?: boolean) => contextUi?.refreshRibbon(refreshAll);
+    form.RemoveOnPostSave = (callback: any) => contextDataEntity?.removeOnPostSave(callback);
+    form.RemoveOnSave = (callback: any) => contextDataEntity?.removeOnSave(callback);
+    form.Save = (saveOptions?: any, successCallback?: any, errorCallback?: any) => {
+        const promise = contextData?.save(saveOptions);
+        if (successCallback) promise?.then(successCallback, errorCallback);
+        else return promise;
+    };
+    form.SetFormEntityName = (arg: string) => contextUi?.setFormEntityName(arg);
+    form.SetFormNotification = (message: string, level: string, uniqueId: string) => contextUi?.setFormNotification(message, level, uniqueId);
+    form.UiAddLoaded = (callback: any) => contextUi?.addLoaded(callback);
+    form.UiAddOnLoad = (callback: any) => contextUi?.addOnLoad(callback);
+    form.UiRemoveLoaded = (callback: any) => contextUi?.removeLoaded(callback);
+    form.UiRemoveOnLoad = (callback: any) => contextUi?.removeOnLoad(callback);
+    return form;
+}
+
+function LoadExecutionContext(executionContext: any): any {
+    const obj: any = {};
+    getter(obj, 'Depth', () => executionContext?.getDepth());
+    getter(obj, 'EntityReference', () => executionContext?.getEventArgs()?.getEntityReference());
+    getter(obj, 'EventArgs', () => executionContext?.getEventArgs());
+    getter(obj, 'EventSource', () => executionContext?.getEventSource());
+    getter(obj, 'FormContext', () => executionContext?.getFormContext());
+    getter(obj, 'IsSaveSuccess', () => executionContext?.getEventArgs()?.getIsSaveSuccess());
+    getter(obj, 'SaveErrorInfo', () => executionContext?.getEventArgs()?.getSaveErrorInfo());
+    getter(obj, 'SaveMode', () => executionContext?.getEventArgs()?.getSaveMode());
+    obj.DisableAsyncTimeout = () => executionContext?.getEventArgs()?.disableAsyncTimeout();
+    obj.GetSharedVariable = (key: string) => executionContext?.getSharedVariable(key);
+    obj.IsDefaultPrevented = () => executionContext?.getEventArgs()?.isDefaultPrevented();
+    obj.IsInitialLoad = () => executionContext?.getEventArgs()?.getDataLoadState() === 1;
+    obj.SetPreventDefault = () => executionContext?.getEventArgs()?.preventDefault();
+    obj.SetPreventDefaultOnError = () => executionContext?.getEventArgs()?.preventDefaultOnError();
+    obj.SetSharedVariable = (key: string, value: any) => executionContext?.setSharedVariable(key, value);
+    return obj;
+}
+
+function LoadSidePanes(): any {
+    const sidePanes: any = {};
+    const xrm = getXrm();
+    getterSetter(sidePanes, 'DisplayState', () => (xrm as any)?.App?.sidePanes?.state, (value: any) => { const x = getXrm(); if ((x as any)?.App?.sidePanes) (x as any).App.sidePanes.state = value; });
+    sidePanes.Create = function (paneOptions: any, successCallback?: any) { (xrm as any)?.App?.sidePanes?.createPane(paneOptions)?.then(successCallback); };
+    sidePanes.Get = (paneId: string) => (xrm as any)?.App?.sidePanes?.getPane(paneId);
+    sidePanes.GetAll = () => (xrm as any)?.App?.sidePanes?.getAllPanes();
+    sidePanes.GetSelected = () => (xrm as any)?.App?.sidePanes?.getSelectedPane();
+    return sidePanes;
+}
+
+function LoadWebApi(): any {
+    const obj: any = {};
+    const xrm = getXrm();
+    const getWebApi = xrm?.WebApi;
+    obj.CreateRecord = function (entityLogicalName: string, data: any, successCallback?: any, errorCallback?: any) {
+        const promise = getWebApi?.createRecord(entityLogicalName, data);
+        if (successCallback) {
+            promise?.then(successCallback, errorCallback);
+        } else {
+            return promise;
+        }
+    };
+    obj.DeleteRecord = function (entityLogicalName: string, id: string, successCallback?: any, errorCallback?: any) {
+        const promise = getWebApi?.deleteRecord(entityLogicalName, id);
+        if (successCallback) {
+            promise?.then(successCallback, errorCallback);
+        } else {
+            return promise;
+        }
+    };
+    obj.RetrieveRecord = function (entityLogicalName: string, id: string, options?: string, successCallback?: any, errorCallback?: any) {
+        const promise = getWebApi?.retrieveRecord(entityLogicalName, id, options);
+        if (successCallback) {
+            promise?.then(successCallback, errorCallback);
+        } else {
+            return promise;
+        }
+    };
+    obj.RetrieveMultipleRecords = function (entityLogicalName: string, options?: string, maxPageSize?: number, successCallback?: any, errorCallback?: any) {
+        const promise = getWebApi?.retrieveMultipleRecords(entityLogicalName, options, maxPageSize);
+        if (successCallback) {
+            promise?.then(successCallback, errorCallback);
+        } else {
+            return promise;
+        }
+    };
+    obj.UpdateRecord = function (entityLogicalName: string, id: string, data: any, successCallback?: any, errorCallback?: any) {
+        const promise = getWebApi?.updateRecord(entityLogicalName, id, data);
+        if (successCallback) {
+            promise?.then(successCallback, errorCallback);
+        } else {
+            return promise;
+        }
+    };
+    obj.Execute = function (request: any, successCallback?: any, errorCallback?: any) {
+        const promise = getWebApi?.execute(request);
+        if (successCallback) {
+            promise?.then(successCallback, errorCallback);
+        } else {
+            return promise;
+        }
+    };
+    obj.ExecuteMultiple = function (requests: any[], successCallback?: any, errorCallback?: any) {
+        const promise = getWebApi?.executeMultiple(requests);
+        if (successCallback) {
+            promise?.then(successCallback, errorCallback);
+        } else {
+            return promise;
+        }
+    };
+    return obj;
+}
+
+function LoadCopilot(): any {
+    const obj: any = {};
+    const xrm = getXrm();
+    const getCopilot = (xrm as any)?.Copilot;
+    obj.ExecuteEvent = function (eventName: string, eventParameters: any, successCallback?: any, errorCallback?: any) {
+        const promise = getCopilot?.executeEvent(eventName, eventParameters);
+        if (successCallback) {
+            promise?.then(successCallback, errorCallback);
+        } else {
+            return promise;
+        }
+    };
+    obj.ExecutePrompt = function (promptText: string, successCallback?: any, errorCallback?: any) {
+        const promise = getCopilot?.executePrompt(promptText);
+        if (successCallback) {
+            promise?.then(successCallback, errorCallback);
+        } else {
+            return promise;
+        }
+    };
+    return obj;
+}
+
+function loadOthers(formContext: any, form: any, defaultWebResourceName: string | undefined): void {
+    form.SidePanes = LoadSidePanes();
+    form.WebApi = LoadWebApi();
+    form.Copilot = LoadCopilot();
+}
+
+// ============================================================================
 // DevKit Module Export
 // ============================================================================
 
@@ -433,303 +813,71 @@ export function LoadFormV2<TBody = Record<string, any>, THeader = Record<string,
     UiRemoveLoaded: (callback: (context: any) => void) => void;
     Process: TProcess;
 } {
-    const formContext = executionContext?.getFormContext?.() ?? executionContext;
-    const contextData = formContext?.data;
-    const contextDataEntity = formContext?.data?.entity;
-    const contextUi = formContext?.ui;
-    const contextUiFormSelector = formContext?.ui?.formSelector;
-
-    // Build Body
-    const body: any = {};
-    if (formConfig.body) {
-        formConfig.body.forEach(fieldName => {
-            body[fieldName] = {};
-            const logicalName = fieldName.toLowerCase();
-            const control = formContext?.getControl(logicalName) ?? formContext?.getControl(fieldName);
-            let attribute = formContext?.getAttribute(logicalName);
-            if (!attribute && control?.getAttribute) {
-                attribute = control.getAttribute();
-            }
-            loadField(formContext, body[fieldName], attribute, control);
-        });
-    }
-
-    // Build Header
-    const header: any = {};
-    if (formConfig.header) {
-        formConfig.header.forEach(fieldName => {
-            header[fieldName] = {};
-            const logicalName = ("header_" + fieldName).toLowerCase();
-            const control = formContext?.getControl(logicalName) ?? formContext?.getControl(fieldName);
-            let attribute = formContext?.getAttribute(fieldName.toLowerCase());
-            if (!attribute && control?.getAttribute) {
-                attribute = control.getAttribute();
-            }
-            loadField(formContext, header[fieldName], attribute, control);
-        });
-    }
-
-    // Build Tabs (simplified)
-    const tab: any = {};
-    if (formConfig.tab) {
-        formConfig.tab.forEach(tabConfig => {
-            const parts = tabConfig.split("___");
-            const tabName = parts[0];
-            const sectionName = parts.length > 1 ? parts[1] : null;
-
-            if (!tab[tabName]) {
-                tab[tabName] = { Section: {} };
-                const tabObject = formContext?.ui?.tabs?.get(tabName);
-                getter(tab[tabName], 'Name', () => tabObject?.getName());
-                getterSetter(tab[tabName], 'Label', () => tabObject?.getLabel(), (value: string) => { tabObject?.setLabel(value); });
-                getterSetter(tab[tabName], 'Visible', () => tabObject?.getVisible(), (value: boolean) => { tabObject?.setVisible(value); });
-                getterSetter(tab[tabName], 'DisplayState', () => tabObject?.getDisplayState(), (value: string) => { tabObject?.setDisplayState(value); });
-                tab[tabName].AddTabStateChange = (callback: any) => tabObject?.addTabStateChange(callback);
-                tab[tabName].RemoveTabStateChange = (callback: any) => tabObject?.removeTabStateChange(callback);
-                tab[tabName].Focus = () => tabObject?.setFocus();
-            }
-
-            if (sectionName) {
-                const tabObject = formContext?.ui?.tabs?.get(tabName);
-                const sectionObject = tabObject?.sections?.get(sectionName);
-                tab[tabName].Section[sectionName] = {};
-                getter(tab[tabName].Section[sectionName], 'Name', () => sectionObject?.getName());
-                getterSetter(tab[tabName].Section[sectionName], 'Label', () => sectionObject?.getLabel(), (value: string) => sectionObject?.setLabel(value));
-                getterSetter(tab[tabName].Section[sectionName], 'Visible', () => sectionObject?.getVisible(), (value: boolean) => sectionObject?.setVisible(value));
-            }
-        });
-    }
-
-    // Build Grid (enhanced with Rows, SelectedRows, ViewSelector)
-    const grid: any = {};
-    if (formConfig.grid) {
-        // Helper to create grid column object
-        const loadGridColumn = (col: any) => {
-            const colObj: any = {};
-            getter(colObj, 'Label', () => col?.controls?.get(0)?.getLabel());
-            getter(colObj, 'Name', () => col?.getName());
-            getterSetter(colObj, 'Disabled', () => col?.controls?.get(0)?.getDisabled(), (value: boolean) => { col?.controls?.get(0)?.setDisabled(value); });
-            getterSetter(colObj, 'RequiredLevel', () => col?.getRequiredLevel(), (value: string) => { col?.setRequiredLevel(value); });
-            getterSetter(colObj, 'Value', () => col?.getValue(), (value: any) => { col?.setValue(value); });
-            colObj.ClearNotification = (uniqueId: string) => col?.controls?.get(0)?.clearNotification(uniqueId);
-            colObj.SetNotification = (message: string, uniqueId: string) => col?.controls?.get(0)?.setNotification(message, uniqueId);
-            return colObj;
-        };
-
-        // Helper to create grid row object
-        const loadGridRow = (row: any) => {
-            const rowObj: any = {};
-            getter(rowObj, 'Columns', () => {
-                const columnsObj: any = {};
-                columnsObj.getLength = () => row?.data?.entity?.attributes?.getLength();
-                columnsObj.get = (index: number) => {
-                    const column = row?.data?.entity?.attributes?.get(index);
-                    return loadGridColumn(column);
-                };
-                columnsObj.forEach = (callback: (col: any, index: number) => void) => {
-                    const columns = row?.data?.entity?.attributes;
-                    const length = columns?.getLength() || 0;
-                    for (let index = 0; index < length; index++) {
-                        const column = columns?.get(index);
-                        callback(loadGridColumn(column), index);
-                    }
-                };
-                return columnsObj;
-            });
-            getter(rowObj, 'EntityId', () => row?.data?.entity?.getId());
-            getter(rowObj, 'EntityName', () => row?.data?.entity?.getEntityName());
-            getter(rowObj, 'EntityReference', () => row?.data?.entity?.getEntityReference());
-            getter(rowObj, 'PrimaryAttributeValue', () => row?.data?.entity?.getPrimaryAttributeValue());
-            return rowObj;
-        };
-
-        // Helper to create collection object
-        const createCollectionObject = (getItemsFn: () => any, processItemFn: (item: any) => any) => {
-            const obj: any = {};
-            obj.getLength = () => getItemsFn()?.getLength();
-            obj.get = (index: number) => processItemFn(getItemsFn()?.get(index));
-            obj.forEach = (callback: (item: any, index: number) => void) => {
-                const items = getItemsFn();
-                const length = items?.getLength() || 0;
-                for (let index = 0; index < length; index++) {
-                    callback(processItemFn(items.get(index)), index);
-                }
-            };
-            return obj;
-        };
-
-        formConfig.grid.forEach(gridName => {
-            grid[gridName] = {};
-            const gridControl = formContext?.getControl(gridName);
-
-            getter(grid[gridName], 'EntityName', () => gridControl?.getEntityName());
-            getter(grid[gridName], 'FetchXml', () => gridControl?.getFetchXml());
-            getter(grid[gridName], 'GridType', () => gridControl?.getGridType());
-            getter(grid[gridName], 'Relationship', () => gridControl?.getRelationship());
-            getter(grid[gridName], 'TotalRecordCount', () => gridControl?.getGrid()?.getTotalRecordCount());
-
-            // Rows collection
-            getter(grid[gridName], 'Rows', () => {
-                const gridInstance = formContext?.getControl(gridName)?.getGrid();
-                return createCollectionObject(
-                    () => gridInstance?.getRows(),
-                    (row: any) => loadGridRow(row)
-                );
-            });
-
-            // SelectedRows collection
-            getter(grid[gridName], 'SelectedRows', () => {
-                const gridInstance = formContext?.getControl(gridName)?.getGrid();
-                return createCollectionObject(
-                    () => gridInstance?.getSelectedRows(),
-                    (row: any) => loadGridRow(row?.getData())
-                );
-            });
-
-            // ViewSelector
-            getter(grid[gridName], 'ViewSelector', () => {
-                const viewSelector = gridControl?.getViewSelector();
-                const viewObj: any = {};
-                getter(viewObj, 'Visible', () => viewSelector?.isVisible());
-                getterSetter(viewObj, 'CurrentView', () => viewSelector?.getCurrentView(), (value: any) => viewSelector?.setCurrentView(value));
-                return viewObj;
-            });
-
-            getterSetter(grid[gridName], 'Visible', () => gridControl?.getVisible(), (value: boolean) => { gridControl?.setVisible(value); });
-            grid[gridName].AddOnLoad = (callback: any) => gridControl?.addOnLoad(callback);
-            grid[gridName].RemoveOnLoad = (callback: any) => gridControl?.removeOnLoad(callback);
-            grid[gridName].OpenRelatedGrid = () => gridControl?.openRelatedGrid();
-            grid[gridName].Refresh = () => gridControl?.refresh();
-            grid[gridName].RefreshRibbon = () => gridControl?.refreshRibbon();
-            grid[gridName].Url = (client: number) => gridControl?.getUrl(client);
-        });
-    }
-
-    // Build Navigation (simplified)
-    const navigation: any = {};
-    if (formConfig.navigation) {
-        formConfig.navigation.forEach(navName => {
-            navigation[navName] = {};
-            const navItems = formContext?.ui?.navigation?.items;
-            let navigationItem: any = null;
-            if (navItems) {
-                const length = navItems.getLength();
-                for (let i = 0; i < length; i++) {
-                    const item = navItems.get(i);
-                    if (item?.getId() === navName) {
-                        navigationItem = item;
-                        break;
-                    }
-                }
-            }
-            getter(navigation[navName], 'Id', () => navigationItem?.getId());
-            getterSetter(navigation[navName], 'Label', () => navigationItem?.getLabel(), (value: string) => navigationItem?.setLabel(value));
-            getterSetter(navigation[navName], 'Visible', () => navigationItem?.getVisible(), (value: boolean) => navigationItem?.setVisible(value));
-            navigation[navName].Focus = () => navigationItem?.setFocus();
-        });
-    }
-
-    // Build QuickForm (simplified)
-    const quickForm: any = {};
-    if (formConfig.quick) {
-        formConfig.quick.forEach(quickConfig => {
-            const parts = quickConfig.split("___");
-            const quickFormName = parts[0];
-            const fieldName = parts.length > 1 ? parts[1] : null;
-
-            if (!quickForm[quickFormName]) {
-                quickForm[quickFormName] = { Body: {} };
-                const quick = formContext?.ui?.quickForms?.get(quickFormName);
-                getter(quickForm[quickFormName], 'ControlName', () => quick?.getName());
-                getter(quickForm[quickFormName], 'ControlType', () => quick?.getControlType());
-                getterSetter(quickForm[quickFormName], 'Disabled', () => quick?.getDisabled(), (value: boolean) => { quick?.setDisabled(value); });
-                getterSetter(quickForm[quickFormName], 'Label', () => quick?.getLabel(), (value: string) => { quick?.setLabel(value); });
-                getterSetter(quickForm[quickFormName], 'Visible', () => quick?.getVisible(), (value: boolean) => { quick?.setVisible(value); });
-                quickForm[quickFormName].IsLoaded = () => quick?.isLoaded();
-                quickForm[quickFormName].Refresh = () => quick?.refresh();
-                quickForm[quickFormName].Focus = () => quick?.setFocus();
-            }
-
-            if (fieldName) {
-                quickForm[quickFormName].Body[fieldName] = {};
-            }
-        });
-    }
-
-    // Create ExecutionContext wrapper (complete implementation)
-    const executionContextWrapper: any = {};
-    getter(executionContextWrapper, 'Depth', () => executionContext?.getDepth());
-    getter(executionContextWrapper, 'EntityReference', () => executionContext?.getEventArgs()?.getEntityReference());
-    getter(executionContextWrapper, 'EventArgs', () => executionContext?.getEventArgs());
-    getter(executionContextWrapper, 'EventSource', () => executionContext?.getEventSource());
-    getter(executionContextWrapper, 'FormContext', () => executionContext?.getFormContext());
-    getter(executionContextWrapper, 'IsSaveSuccess', () => executionContext?.getEventArgs()?.getIsSaveSuccess());
-    getter(executionContextWrapper, 'SaveErrorInfo', () => executionContext?.getEventArgs()?.getSaveErrorInfo());
-    getter(executionContextWrapper, 'SaveMode', () => executionContext?.getEventArgs()?.getSaveMode());
-    executionContextWrapper.DisableAsyncTimeout = () => executionContext?.getEventArgs()?.disableAsyncTimeout();
-    executionContextWrapper.GetSharedVariable = (key: string) => executionContext?.getSharedVariable(key);
-    executionContextWrapper.IsDefaultPrevented = () => executionContext?.getEventArgs()?.isDefaultPrevented();
-    executionContextWrapper.IsInitialLoad = () => executionContext?.getEventArgs()?.getDataLoadState() === 1;
-    executionContextWrapper.SetPreventDefault = () => executionContext?.getEventArgs()?.preventDefault();
-    executionContextWrapper.SetPreventDefaultOnError = () => executionContext?.getEventArgs()?.preventDefaultOnError();
-    executionContextWrapper.SetSharedVariable = (key: string, value: any) => executionContext?.setSharedVariable(key, value);
-
-    // Build Process with BPF fields
+    const formContext = executionContext?.getFormContext?.() ?? executionContext ?? null;
+    const form = LoadForm(formContext);
+    const { body = [], tab = [], header = [], bpf = [], quick = [], grid = [], navigation = [], dialog = [] } = formConfig as any;
+    const bodyObj: any = {};
+    body.forEach((field: string) => bodyObj[field] = {});
+    loadFields(formContext, bodyObj);
+    const tabObj: any = {};
+    tab.forEach((item: string) => {
+        const [tabName, sectionName] = item.split('___');
+        if (!tabObj[tabName]) {
+            tabObj[tabName] = { Section: {} };
+        }
+        tabObj[tabName].Section[sectionName] = {};
+    });
+    loadTabs(formContext, tabObj);
+    bodyObj.Tab = tabObj;
+    form.Body = bodyObj;
+    const headerObj: any = {};
+    header.forEach((field: string) => headerObj[field] = {});
+    loadFields(formContext, headerObj, 'header_');
+    form.Header = headerObj;
     const process = LoadProcess(formContext);
-    if (formConfig.bpf && formConfig.bpf.length > 0) {
+    if (bpf.length > 0) {
         const bpfObj: any = {};
         let bpfProcessName: string | null = null;
-        formConfig.bpf.forEach((item: string) => {
+        bpf.forEach((item: string) => {
             const [processName, fieldName] = item.split('___');
             if (!bpfProcessName) {
                 bpfProcessName = processName;
             }
-            if (fieldName) {
-                bpfObj[fieldName] = {};
-            }
+            bpfObj[fieldName] = {};
         });
-        // Load BPF fields with 'header_process_' prefix
-        if (Object.keys(bpfObj).length > 0) {
-            Object.keys(bpfObj).forEach(fieldName => {
-                const logicalName = ('header_process_' + fieldName).toLowerCase();
-                const control = formContext?.getControl(logicalName);
-                let attribute = formContext?.getAttribute(fieldName.toLowerCase());
-                if (!attribute && control?.getAttribute) {
-                    attribute = control.getAttribute();
-                }
-                loadField(formContext, bpfObj[fieldName], attribute, control);
-            });
-        }
+        loadFields(formContext, bpfObj, 'header_process_');
         if (bpfProcessName) {
             process[bpfProcessName] = bpfObj;
         }
     }
-
-    return {
-        ExecutionContext: executionContextWrapper,
-        Body: body as TBody,
-        Header: header as THeader,
-        Tab: tab as TTab,
-        Grid: grid as TGrid,
-        Navigation: navigation as TNavigation,
-        QuickForm: quickForm as TQuickForm,
-        FormId: contextUiFormSelector?.getCurrentItem()?.getId(),
-        FormLabel: contextUiFormSelector?.getCurrentItem()?.getLabel(),
-        FormType: contextUi?.getFormType(),
-        EntityId: contextDataEntity?.getId(),
-        EntityName: contextDataEntity?.getEntityName(),
-        DataIsDirty: contextData?.getIsDirty(),
-        DataIsValid: contextData?.isValid(),
-        Save: (saveOptions?: any) => contextData?.save(saveOptions),
-        Refresh: (save?: boolean) => contextData?.refresh(save),
-        Close: () => contextUi?.close(),
-        SetFormNotification: (message: string, level: string, uniqueId: string) => contextUi?.setFormNotification(message, level, uniqueId),
-        ClearFormNotification: (uniqueId: string) => contextUi?.clearFormNotification(uniqueId),
-        RefreshRibbon: (refreshAll?: boolean) => contextUi?.refreshRibbon(refreshAll),
-        UiAddLoaded: (callback: (context: any) => void) => contextUi?.addLoaded(callback),
-        UiRemoveLoaded: (callback: (context: any) => void) => contextUi?.removeLoaded(callback),
-        Process: process,
-    };
+    form.Process = process;
+    const quickFormObj: any = {};
+    quick.forEach((item: string) => {
+        const [quickFormName, fieldName] = item.split('___');
+        if (!quickFormObj[quickFormName]) {
+            quickFormObj[quickFormName] = {};
+        }
+        if (fieldName) {
+            quickFormObj[quickFormName][fieldName] = {};
+        }
+    });
+    loadQuickForms(formContext, quickFormObj);
+    form.QuickForm = quickFormObj;
+    const gridObj: any = {};
+    grid.forEach((item: string) => gridObj[item] = {});
+    loadGrids(formContext, gridObj);
+    form.Grid = gridObj;
+    const navigationObj: any = {};
+    navigation.forEach((item: string) => navigationObj[item] = {});
+    loadNavigations(formContext, navigationObj);
+    form.Navigation = navigationObj;
+    if (dialog.length > 0) {
+        form.Dialog = LoadFormDialog(formContext, dialog);
+    }
+    form.Utility = LoadUtility(defaultWebResourceName);
+    form.ExecutionContext = LoadExecutionContext(executionContext);
+    loadOthers(formContext, form, defaultWebResourceName);
+    return form;
 }
 
 // ============================================================================
@@ -1200,26 +1348,6 @@ export function LoadUtility(defaultWebResourceName?: string): any {
     utility.XmlEncode = (arg: string) => getEncoding?.xmlEncode(arg);
 
     return utility;
-}
-
-// ============================================================================
-// SidePanes Functions
-// ============================================================================
-
-/**
- * Load SidePanes wrapper
- */
-export function LoadSidePanes(): any {
-    const sidePanes: any = {};
-    const xrm = getXrm();
-    getterSetter(sidePanes, 'DisplayState', () => xrm?.App?.sidePanes?.state, (value: number) => { const x = getXrm(); if (x?.App?.sidePanes) x.App.sidePanes.state = value; });
-    sidePanes.Create = function (paneOptions: any, successCallback?: (result: any) => void) {
-        xrm?.App?.sidePanes?.createPane(paneOptions)?.then(successCallback);
-    };
-    sidePanes.Get = (paneId: string) => xrm?.App?.sidePanes?.getPane(paneId);
-    sidePanes.GetAll = () => xrm?.App?.sidePanes?.getAllPanes();
-    sidePanes.GetSelected = () => xrm?.App?.sidePanes?.getSelectedPane();
-    return sidePanes;
 }
 
 // ============================================================================
