@@ -1114,6 +1114,341 @@ declare namespace DevKit {
              */
             Visible: boolean;
         }
+
+        /**
+         * Interface for WebResource controls
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
+         */
+        interface WebResource extends IControl {
+            /**
+             * Returns the content window that represents a web resource
+             * @param successCallback A function to call when operation is executed successfully
+             * @param errorCallback A function to call when the operation fails
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getcontentwindow
+             */
+            ContentWindow(successCallback?: (contentWindow: any) => void, errorCallback?: (error: any) => void): void;
+
+            /**
+             * Returns the object in the form that represents a web resource
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getobject
+             */
+            readonly Object: any;
+
+            /**
+             * Get/Set the value of the data query string parameter passed to a web resource
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getdata
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/setdata
+             */
+            Data: string;
+
+            /**
+             * Get/Set the current URL being displayed in a web resource
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getsrc
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/setsrc
+             */
+            Src: string;
+        }
+
+        /**
+         * Interface for IFrame controls
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
+         */
+        interface IFrame extends IControl {
+            /**
+             * Returns the content window that represents an IFRAME
+             * @param successCallback A function to call when operation is executed successfully
+             * @param errorCallback A function to call when the operation fails
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getcontentwindow
+             */
+            ContentWindow(successCallback?: (contentWindow: any) => void, errorCallback?: (error: any) => void): void;
+
+            /**
+             * Returns the default URL that an IFRAME control is configured to display
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getinitialurl
+             */
+            readonly InitialUrl: string;
+
+            /**
+             * Returns the object in the form that represents an IFRAME
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getobject
+             */
+            readonly Object: any;
+
+            /**
+             * Get/Set the current URL being displayed in an IFRAME
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getsrc
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/setsrc
+             */
+            Src: string;
+        }
+
+        /**
+         * Interface for Timer controls
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
+         */
+        interface Timer extends IControl {
+            /**
+             * Refreshes the data displayed in a timer control
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/refresh
+             */
+            Refresh(): void;
+
+            /**
+             * Returns the state of the timer control
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getstate
+             */
+            readonly State: number;
+        }
+
+        /**
+         * Interface for Knowledge Base Search controls
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
+         */
+        interface Knowledge extends IControl {
+            /**
+             * Adds an event handler to the PostSearch event
+             * @param callback The function to add to the PostSearch event
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/addonpostsearch
+             */
+            AddPostSearch(callback: (executionContext: any) => void): void;
+
+            /**
+             * Adds an event handler to the OnResultOpened event
+             * @param callback The function to add to the OnResultOpened event
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/addonresultopened
+             */
+            AddResultOpened(callback: (executionContext: any) => void): void;
+
+            /**
+             * Adds an event handler to the OnSelection event
+             * @param callback The function to add to the OnSelection event
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/addonselection
+             */
+            AddSelection(callback: (executionContext: any) => void): void;
+
+            /**
+             * Opens a search result in the search control by specifying the result number
+             * @param resultNumber Numerical value specifying the result number to be opened
+             * @param mode Specify "Inline" or "Popout"
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/opensearchresult
+             */
+            OpenSearchResult(resultNumber: number, mode?: string): boolean;
+
+            /**
+             * Removes an event handler from the PostSearch event
+             * @param callback The function to remove from the PostSearch event
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/removeonpostsearch
+             */
+            RemovePostSearch(callback: (executionContext: any) => void): void;
+
+            /**
+             * Removes an event handler from the OnResultOpened event
+             * @param callback The function to remove from the OnResultOpened event
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/removeonresultopened
+             */
+            RemoveResultOpened(callback: (executionContext: any) => void): void;
+
+            /**
+             * Removes an event handler from the OnSelection event
+             * @param callback The function to remove from the OnSelection event
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/removeonselection
+             */
+            RemoveSelection(callback: (executionContext: any) => void): void;
+
+            /**
+             * Gets the count of results found in the search control
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/gettotalresultcount
+             */
+            readonly TotalResultCount: number;
+
+            /**
+             * Gets the currently selected result of the search control
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getselectedresults
+             */
+            readonly SelectedResults: any;
+
+            /**
+             * Get/Set the text used as the search criteria for the knowledge base management control
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getsearchquery
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/setsearchquery
+             */
+            SearchQuery: string;
+        }
+
+        /**
+         * Interface for Business Process Flow (BPF) controls
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process
+         */
+        interface IProcess {
+            /**
+             * Adds a function as an event handler for the OnPreProcessStatusChange event
+             * @param callback The function to be executed
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/eventhandlers/addonpreprocessstatuschange
+             */
+            AddOnPreProcessStatusChange(callback: (executionContext: any) => void): void;
+
+            /**
+             * Adds a function as an event handler for the OnPreStageChange event
+             * @param callback The function that runs before the stage changes
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/eventhandlers/addonprestagechange
+             */
+            AddOnPreStageChange(callback: (executionContext: any) => void): void;
+
+            /**
+             * Adds a function as an event handler for the OnProcessStatusChange event
+             * @param callback The function to be executed when the status changes
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/eventhandlers/addonprocessstatuschange
+             */
+            AddOnProcessStatusChange(callback: (executionContext: any) => void): void;
+
+            /**
+             * Adds a function as an event handler for the OnStageChange event
+             * @param callback The function to be executed when the stage changes
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/eventhandlers/addonstagechange
+             */
+            AddOnStageChange(callback: (executionContext: any) => void): void;
+
+            /**
+             * Adds a function as an event handler for the OnStageSelected event
+             * @param callback The function to be executed when a stage is selected
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/eventhandlers/addonstageselected
+             */
+            AddOnStageSelected(callback: (executionContext: any) => void): void;
+
+            /**
+             * Removes an event handler from the OnPreProcessStatusChange event
+             * @param callback The function to be removed
+             */
+            RemoveOnPreProcessStatusChange(callback: (executionContext: any) => void): void;
+
+            /**
+             * Removes an event handler from the OnPreStageChange event
+             * @param callback The function to be removed
+             */
+            RemoveOnPreStageChange(callback: (executionContext: any) => void): void;
+
+            /**
+             * Removes an event handler from the OnProcessStatusChange event
+             * @param callback The function to be removed
+             */
+            RemoveOnProcessStatusChange(callback: (executionContext: any) => void): void;
+
+            /**
+             * Removes an event handler from the OnStageChange event
+             * @param callback The function to be removed
+             */
+            RemoveOnStageChange(callback: (executionContext: any) => void): void;
+
+            /**
+             * Removes an event handler from the OnStageSelected event
+             * @param callback The function to be removed
+             */
+            RemoveOnStageSelected(callback: (executionContext: any) => void): void;
+
+            /**
+             * Progresses to the next stage
+             * @param callback A function to call when the operation is complete
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/navigation/movenext
+             */
+            MoveNext(callback: (result: string) => void): void;
+
+            /**
+             * Moves to the previous stage
+             * @param callback A function to call when the operation is complete
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/navigation/moveprevious
+             */
+            MovePrevious(callback: (result: string) => void): void;
+
+            /**
+             * Sets a completed stage as the active stage
+             * @param stageId The ID of the completed stage for the entity to make the active stage
+             * @param callback A function to call when the operation is complete
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/activestage/setactivestage
+             */
+            SetActiveStage(stageId: string, callback: (result: string) => void): void;
+
+            /**
+             * Sets a Process as the active process
+             * @param processId The Id of the process to set as the active process
+             * @param callback A function to call when the operation is complete
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/activeprocess/setactiveprocess
+             */
+            SetActiveProcess(processId: string, callback: (result: string) => void): void;
+
+            /**
+             * Sets a process instance as the active instance
+             * @param processInstanceId The Id of the process instance to set as the active instance
+             * @param callback A function to call when the operation is complete
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/setactiveprocessinstance
+             */
+            SetActiveProcessInstance(processInstanceId: string, callback: (result: string) => void): void;
+
+            /**
+             * Reflows the UI of the business process control
+             * @param updateUi Specify true to update the UI of the process control
+             * @param parentStage Specify the ID of the parent stage in the GUID format
+             * @param nextStage Specify the ID of the next stage in the GUID format
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-process/reflow
+             */
+            Reflow(updateUi: boolean, parentStage: string, nextStage: string): void;
+
+            /**
+             * Returns a Process object representing the active process
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/activeprocess/getactiveprocess
+             */
+            readonly ActiveProcess: any;
+
+            /**
+             * Returns representing the active stage
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/activestage/getactivestage
+             */
+            readonly ActiveStage: any;
+
+            /**
+             * Gets the currently selected stage
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/getselectedstage
+             */
+            readonly SelectedStage: any;
+
+            /**
+             * Gets a collection of stages currently in the active path
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/activepath/getactivepath
+             */
+            readonly ActivePath: any;
+
+            /**
+             * Returns the unique identifier of the process instance
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/instance/getinstanceid
+             */
+            readonly InstanceId: string;
+
+            /**
+             * Returns the name of the process instance
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/instance/getinstancename
+             */
+            readonly InstanceName: string;
+
+            /**
+             * Get/Set the display state for the business process control
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-process/getdisplaystate
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-process/setdisplaystate
+             */
+            DisplayState: "expanded" | "collapsed" | "floating";
+
+            /**
+             * Get/Set the current status of the process instance
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/instance/getstatus
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/instance/setstatus
+             */
+            Status: "active" | "finished" | "aborted";
+
+            /**
+             * Get/Set a value indicating whether the business process control is visible
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-process/getvisible
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-process/setvisible
+             */
+            Visible: boolean;
+        }
     }
 
     /**

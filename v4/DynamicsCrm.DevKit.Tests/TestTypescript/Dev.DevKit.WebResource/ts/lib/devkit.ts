@@ -362,6 +362,7 @@ export function LoadFormV2<TBody, THeader, TTab, TGrid, TNavigation, TQuickForm>
         grid?: string[];
         navigation?: string[];
         quick?: string[];
+        bpf?: string[];
     }
 ): {
     ExecutionContext: IExecutionContext;
@@ -386,6 +387,7 @@ export function LoadFormV2<TBody, THeader, TTab, TGrid, TNavigation, TQuickForm>
     RefreshRibbon: (refreshAll?: boolean) => void;
     UiAddLoaded: (callback: (context: any) => void) => void;
     UiRemoveLoaded: (callback: (context: any) => void) => void;
+    Process: any;
 } {
     const formContext = executionContext?.getFormContext?.() ?? executionContext;
     const contextData = formContext?.data;
@@ -651,6 +653,7 @@ export function LoadFormV2<TBody, THeader, TTab, TGrid, TNavigation, TQuickForm>
         RefreshRibbon: (refreshAll?: boolean) => contextUi?.refreshRibbon(refreshAll),
         UiAddLoaded: (callback: (context: any) => void) => contextUi?.addLoaded(callback),
         UiRemoveLoaded: (callback: (context: any) => void) => contextUi?.removeLoaded(callback),
+        Process: LoadProcess(formContext),
     };
 }
 
