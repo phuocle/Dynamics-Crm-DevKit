@@ -1298,19 +1298,24 @@ export function LoadUtility(defaultWebResourceName?: string): any {
     });
     getter(utility, 'ClientUrl', () => getGlobalContext?.getClientUrl());
     getter(utility, 'CurrentAppUrl', () => getGlobalContext?.getCurrentAppUrl());
+    // @ts-ignore - isOnPremises not in @types/Xrm
     getter(utility, 'IsOnPremises', () => getGlobalContext?.isOnPremises());
     getter(utility, 'LearningPathAttributeName', () => getUtility?.getLearningPathAttributeName());
     getter(utility, 'OrganizationSettings', () => {
         const obj: any = {};
         const organizationSettings = getGlobalContext?.organizationSettings;
+        // @ts-ignore - attributes not in @types/Xrm
         getter(obj, 'Attributes', () => organizationSettings?.attributes);
         getter(obj, 'BaseCurrency', () => organizationSettings?.baseCurrency);
         getter(obj, 'BaseCurrencyId', () => organizationSettings?.baseCurrencyId);
         getter(obj, 'DefaultCountryCode', () => organizationSettings?.defaultCountryCode);
+        // @ts-ignore - fullNameConventionCode not in @types/Xrm
         getter(obj, 'FullNameConventionCode', () => organizationSettings?.fullNameConventionCode);
         getter(obj, 'IsAutoSaveEnabled', () => organizationSettings?.isAutoSaveEnabled);
+        // @ts-ignore - isTrialOrganization not in @types/Xrm
         getter(obj, 'IsTrialOrganization', () => organizationSettings?.isTrialOrganization);
         getter(obj, 'LanguageId', () => organizationSettings?.languageId);
+        // @ts-ignore - organizationExpiryDate not in @types/Xrm
         getter(obj, 'OrganizationExpiryDate', () => organizationSettings?.organizationExpiryDate);
         getter(obj, 'OrganizationId', () => organizationSettings?.organizationId);
         getter(obj, 'UniqueName', () => organizationSettings?.uniqueName);
@@ -1344,7 +1349,7 @@ export function LoadUtility(defaultWebResourceName?: string): any {
         if (successCallback) promise?.then(successCallback, errorCallback);
         else return promise;
     };
-    utility.AdvancedConfigSetting = (setting: string) => getGlobalContext?.getAdvancedConfigSetting(setting);
+    utility.AdvancedConfigSetting = (setting: string) => getGlobalContext?.getAdvancedConfigSetting(setting as "MaxChildIncidentNumber" | "MaxIncidentMergeNumber");
     utility.AllowedStatusTransitions = function (entityName: string, stateCode: number, successCallback?: (result: any) => void, errorCallback?: (error: any) => void) {
         const promise = getUtility?.getAllowedStatusTransitions(entityName, stateCode);
         if (successCallback) promise?.then(successCallback, errorCallback);
@@ -1391,6 +1396,7 @@ export function LoadUtility(defaultWebResourceName?: string): any {
         if (successCallback) promise?.then(successCallback, errorCallback);
         else return promise;
     };
+    // @ts-ignore - getEntityMainFormDescriptor not in @types/Xrm
     utility.EntityMainFormDescriptor = (entityName: string, formId: string) => getUtility?.getEntityMainFormDescriptor(entityName, formId);
     utility.EntityMetadata = function (entityName: string, attributes?: string[], successCallback?: (result: any) => void, errorCallback?: (error: any) => void) {
         const promise = getUtility?.getEntityMetadata(entityName, attributes);
@@ -1446,7 +1452,8 @@ export function LoadUtility(defaultWebResourceName?: string): any {
     };
     utility.PrependOrgName = (sPath: string) => getGlobalContext?.prependOrgName(sPath);
     utility.RefreshParentGrid = (lookupOptions: any) => getUtility?.refreshParentGrid(lookupOptions);
-    utility.Resource = (key: string) => getUtility?.getResourceString(defaultWebResourceName, key);
+    // @ts-ignore - defaultWebResourceName may be undefined
+    utility.Resource = (key: string) => getUtility?.getResourceString(defaultWebResourceName!, key);
     utility.ResourceString = (webResourceName: string, key: string) => getUtility?.getResourceString(webResourceName, key);
     utility.ShowProgressIndicator = (message: string) => getUtility?.showProgressIndicator(message);
     utility.WebResourceUrl = (webResourceName: string) => getGlobalContext?.getWebResourceUrl(webResourceName);
