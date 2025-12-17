@@ -304,42 +304,86 @@ function getterSetter<T>(obj: any, prop: string, getterFn: () => T, setterFn: (v
 function loadField(formContext: any, field: any, attribute: any, control: any): void {
     getter(field, 'Attribute', () => control?.getAttribute());
     getter(field, 'AttributeName', () => attribute?.getName());
+    getter(field, 'AttributeParent', () => attribute?.getParent());
     getter(field, 'AttributeType', () => attribute?.getAttributeType());
     getter(field, 'ControlName', () => control?.getName());
+    getter(field, 'ControlOptions', () => control?.getOptions());
+    getter(field, 'ControlParent', () => control?.getParent());
     getter(field, 'ControlType', () => control?.getControlType());
     getter(field, 'Format', () => attribute?.getFormat());
+    getter(field, 'InitialUrl', () => control?.getInitialUrl());
+    getter(field, 'InitialValue', () => attribute?.getInitialValue());
     getter(field, 'IsDirty', () => attribute?.getIsDirty());
+    getter(field, 'IsPartyList', () => attribute?.getIsPartyList());
     getter(field, 'IsValid', () => attribute?.isValid());
     getter(field, 'Max', () => attribute?.getMax());
     getter(field, 'MaxLength', () => attribute?.getMaxLength());
     getter(field, 'Min', () => attribute?.getMin());
+    getter(field, 'Object', () => control?.getObject());
     getter(field, 'Options', () => attribute?.getOptions());
+    getter(field, 'Outputs', () => control?.getOutputs());
     getter(field, 'SelectedOption', () => attribute?.getSelectedOption());
+    getter(field, 'SelectedResults', () => control?.getSelectedResults());
+    getter(field, 'State', () => control?.getState());
     getter(field, 'Text', () => attribute?.getText());
-
+    getter(field, 'TotalResultCount', () => control?.getTotalResultCount());
+    getter(field, 'UserPrivilege', () => attribute?.getUserPrivilege());
+    getterSetter(field, 'Data', () => control?.getData(), (value: any) => { control?.setData(value); });
+    getterSetter(field, 'DefaultView', () => control?.getDefaultView(), (value: any) => { control?.setDefaultView(value); });
     getterSetter(field, 'Disabled', () => control?.getDisabled(), (value: boolean) => {
         if (formContext?.ui?.getFormType() === 3 || formContext?.ui?.getFormType() === 4) return;
         control?.setDisabled(value);
     });
+    getterSetter(field, 'EntityTypes', () => control?.getEntityTypes(), (value: any) => { control?.setEntityTypes(value); });
     getterSetter(field, 'Label', () => control?.getLabel(), (value: string) => { control?.setLabel(value); });
+    getterSetter(field, 'Precision', () => attribute?.getPrecision(), (value: number) => { attribute?.setPrecision(value); });
     getterSetter(field, 'RequiredLevel', () => attribute?.getRequiredLevel(), (value: string) => { attribute?.setRequiredLevel(value); });
+    getterSetter(field, 'SearchQuery', () => control?.getSearchQuery(), (value: string) => { control?.setSearchQuery(value); });
+    getterSetter(field, 'ShowTime', () => control?.getShowTime(), (value: boolean) => { control?.setShowTime(value); });
+    getterSetter(field, 'Src', () => control?.getSrc(), (value: string) => { control?.setSrc(value); });
     getterSetter(field, 'SubmitMode', () => attribute?.getSubmitMode(), (value: string) => { attribute?.setSubmitMode(value); });
     getterSetter(field, 'Value', () => attribute?.getValue(), (value: any) => {
         if (formContext?.ui?.getFormType() === 3 || formContext?.ui?.getFormType() === 4) return;
         attribute?.setValue(value);
     });
     getterSetter(field, 'Visible', () => control?.getVisible(), (value: boolean) => { control?.setVisible(value); });
-
-    field.AddOnChange = (callback: (context: any) => void) => attribute?.addOnChange(callback);
-    field.RemoveOnChange = (callback: (context: any) => void) => attribute?.removeOnChange(callback);
-    field.AddOnOutputChange = (callback: (context: any) => void) => control?.addOnOutputChange?.(callback);
-    field.RemoveOnOutputChange = (callback: (context: any) => void) => control?.removeOnOutputChange?.(callback);
+    field.AddCustomFilter = (filter: string, entityLogicaName?: string) => control?.addCustomFilter(filter, entityLogicaName);
+    field.AddCustomView = (viewId: string, entityName: string, viewDisplayName: string, fetchXml: string, layoutXml: string, isDefault: boolean) => control?.addCustomView(viewId, entityName, viewDisplayName, fetchXml, layoutXml, isDefault);
+    field.AddLookupTagClick = (callback: any) => control?.addOnLookupTagClick(callback);
+    field.AddNotification = (message: string, notificationLevel: string, uniqueId: string, callback?: any) => {
+        const actions = { message: message, actions: [callback] };
+        const notification = { messages: [message], notificationLevel: notificationLevel, uniqueId: uniqueId, actions: [actions] };
+        return control?.addNotification(notification);
+    };
+    field.AddOnChange = (callback: any) => attribute?.addOnChange(callback);
+    field.AddOnOutputChange = (callback: any) => control?.addOnOutputChange(callback);
+    field.AddOption = (text: string, value: number, index?: number) => control?.addOption({ text: text, value: value }, index);
+    field.AddPostSearch = (callback: any) => control?.addOnPostSearch(callback);
+    field.AddPreSearch = (callback: any) => control?.addPreSearch(callback);
+    field.AddResultOpened = (callback: any) => control?.addOnResultOpened(callback);
+    field.AddSelection = (callback: any) => control?.addOnSelection(callback);
+    field.ClearNotification = (uniqueId: string) => control?.clearNotification(uniqueId);
+    field.ClearOptions = () => control?.clearOptions();
+    field.ContentWindow = (successCallback?: any, errorCallback?: any) => {
+        const promise = control?.getContentWindow();
+        if (successCallback) promise?.then(successCallback, errorCallback);
+        else return promise;
+    };
     field.FireOnChange = () => attribute?.fireOnChange();
     field.Focus = () => control?.setFocus();
-    field.SetNotification = (message: string, uniqueId: string) => control?.setNotification(message, uniqueId);
-    field.ClearNotification = (uniqueId: string) => control?.clearNotification(uniqueId);
-    field.AddNotification = (notification: any) => control?.addNotification(notification);
+    field.OpenSearchResult = (resultNumber: number, mode?: string) => control?.openSearchResult(resultNumber, mode);
+    field.Option = (value: number) => attribute?.getOption(value);
+    field.Refresh = () => control?.refresh();
+    field.RemoveLookupTagClick = (callback: any) => control?.removeOnLookupTagClick(callback);
+    field.RemoveOnChange = (callback: any) => attribute?.removeOnChange(callback);
+    field.RemoveOnOutputChange = (callback: any) => control?.removeOnOutputChange(callback);
+    field.RemoveOption = (value: number) => control?.removeOption(value);
+    field.RemovePostSearch = (callback: any) => control?.removeOnPostSearch(callback);
+    field.RemovePreSearch = (callback: any) => control?.removePreSearch(callback);
+    field.RemoveResultOpened = (callback: any) => control?.removeOnResultOpened(callback);
+    field.RemoveSelection = (callback: any) => control?.removeOnSelection(callback);
     field.SetIsValid = (valid: boolean, message?: string) => attribute?.setIsValid(valid, message);
+    field.SetNotification = (message: string, uniqueId: string) => control?.setNotification(message, uniqueId);
 }
 
 // ============================================================================

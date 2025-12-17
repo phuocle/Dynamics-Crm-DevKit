@@ -100,17 +100,130 @@ function createMockFormContext(formType: number = 2) {
             { value: 100000000, text: 'Category A' },
             { value: 100000001, text: 'Category B' },
             { value: 100000002, text: 'Category C' }
-        ])
+        ]),
+        // Specialty controls don't have attributes - they are control-only
+        'v4_webresourcehelp': null,
+        'v4_iframeexternal': null,
+        'v4_timersla': null,
+        'v4_knowledgesearch': null
+    };
+
+    // Specialty control mocks
+    const mockWebResourceSetSrc = jest.fn();
+    const mockWebResourceSetData = jest.fn();
+    const mockWebResourceContentWindow = jest.fn((successCallback: any) => {
+        if (successCallback) successCallback({ postMessage: jest.fn() });
+    });
+
+    const mockIFrameSetSrc = jest.fn();
+    const mockIFrameContentWindow = jest.fn((successCallback: any) => {
+        if (successCallback) successCallback({ location: { href: 'https://test.com' } });
+    });
+
+    const mockTimerRefresh = jest.fn();
+
+    const mockKnowledgeSetSearchQuery = jest.fn();
+    const mockKnowledgeAddPostSearch = jest.fn();
+    const mockKnowledgeAddResultOpened = jest.fn();
+    const mockKnowledgeAddSelection = jest.fn();
+    const mockKnowledgeOpenSearchResult = jest.fn().mockReturnValue(true);
+    const mockKnowledgeRemovePostSearch = jest.fn();
+    const mockKnowledgeRemoveResultOpened = jest.fn();
+    const mockKnowledgeRemoveSelection = jest.fn();
+
+    // Specialty controls
+    const specialtyControls: Record<string, any> = {
+        'v4_webresourcehelp': {
+            getName: () => 'v4_webresourcehelp',
+            getControlType: () => 'webresource',
+            getLabel: () => 'Help Web Resource',
+            setLabel: mockSetLabel,
+            getVisible: () => true,
+            setVisible: mockSetVisible,
+            getDisabled: () => false,
+            setDisabled: mockSetDisabled,
+            setFocus: mockSetFocus,
+            getAttribute: () => null,
+            // WebResource specific
+            getSrc: () => 'https://org.crm.dynamics.com/webresources/help.html',
+            setSrc: mockWebResourceSetSrc,
+            getData: () => 'param1=value1',
+            setData: mockWebResourceSetData,
+            getObject: () => ({ contentWindow: {} }),
+            getContentWindow: mockWebResourceContentWindow
+        },
+        'v4_iframeexternal': {
+            getName: () => 'v4_iframeexternal',
+            getControlType: () => 'iframe',
+            getLabel: () => 'External Page',
+            setLabel: mockSetLabel,
+            getVisible: () => true,
+            setVisible: mockSetVisible,
+            getDisabled: () => false,
+            setDisabled: mockSetDisabled,
+            setFocus: mockSetFocus,
+            getAttribute: () => null,
+            // IFrame specific
+            getSrc: () => 'https://external.example.com/page',
+            setSrc: mockIFrameSetSrc,
+            getInitialUrl: () => 'https://external.example.com/initial',
+            getObject: () => ({ contentWindow: {} }),
+            getContentWindow: mockIFrameContentWindow
+        },
+        'v4_timersla': {
+            getName: () => 'v4_timersla',
+            getControlType: () => 'timercontrol',
+            getLabel: () => 'SLA Timer',
+            setLabel: mockSetLabel,
+            getVisible: () => true,
+            setVisible: mockSetVisible,
+            getDisabled: () => false,
+            setDisabled: mockSetDisabled,
+            setFocus: mockSetFocus,
+            getAttribute: () => null,
+            // Timer specific
+            refresh: mockTimerRefresh,
+            getState: () => 2 // InProgress
+        },
+        'v4_knowledgesearch': {
+            getName: () => 'v4_knowledgesearch',
+            getControlType: () => 'kbsearch',
+            getLabel: () => 'Knowledge Search',
+            setLabel: mockSetLabel,
+            getVisible: () => true,
+            setVisible: mockSetVisible,
+            getDisabled: () => false,
+            setDisabled: mockSetDisabled,
+            setFocus: mockSetFocus,
+            getAttribute: () => null,
+            // Knowledge specific
+            getSearchQuery: () => 'how to fix',
+            setSearchQuery: mockKnowledgeSetSearchQuery,
+            getTotalResultCount: () => 5,
+            getSelectedResults: () => [{ articleId: 'KB001', title: 'How to Fix Issue' }],
+            addOnPostSearch: mockKnowledgeAddPostSearch,
+            addOnResultOpened: mockKnowledgeAddResultOpened,
+            addOnSelection: mockKnowledgeAddSelection,
+            openSearchResult: mockKnowledgeOpenSearchResult,
+            removeOnPostSearch: mockKnowledgeRemovePostSearch,
+            removeOnResultOpened: mockKnowledgeRemoveResultOpened,
+            removeOnSelection: mockKnowledgeRemoveSelection
+        }
     };
 
     // Controls keyed by lowercase name
     const controls: Record<string, any> = {};
     Object.keys(attributes).forEach(key => {
-        controls[key] = createControl(key, attributes[key]);
+        if (attributes[key]) {
+            controls[key] = createControl(key, attributes[key]);
+        }
         if (['ownerid'].includes(key)) {
             controls['header_' + key] = createControl('header_' + key, attributes[key]);
         }
     });
+
+    // Merge specialty controls into controls
+    Object.assign(controls, specialtyControls);
 
     // Tab and section mocks
     const mockSection = {
@@ -213,7 +326,14 @@ function createMockFormContext(formType: number = 2) {
             getControl: (name: string) => controls[name.toLowerCase()],
             getAttribute: (name: string) => attributes[name.toLowerCase()]
         },
-        mocks: { mockSetValue, mockSetDisabled, mockSetVisible, mockSetLabel, mockSetRequiredLevel, mockSetSubmitMode, mockAddOnChange, mockFireOnChange, mockSetFocus, mockSetPrecision, mockSetShowTime }
+        mocks: {
+            mockSetValue, mockSetDisabled, mockSetVisible, mockSetLabel, mockSetRequiredLevel, mockSetSubmitMode, mockAddOnChange, mockFireOnChange, mockSetFocus, mockSetPrecision, mockSetShowTime,
+            // Specialty control mocks
+            mockWebResourceSetSrc, mockWebResourceSetData, mockWebResourceContentWindow,
+            mockIFrameSetSrc, mockIFrameContentWindow,
+            mockTimerRefresh,
+            mockKnowledgeSetSearchQuery, mockKnowledgeAddPostSearch, mockKnowledgeAddResultOpened, mockKnowledgeAddSelection, mockKnowledgeOpenSearchResult, mockKnowledgeRemovePostSearch, mockKnowledgeRemoveResultOpened, mockKnowledgeRemoveSelection
+        }
     };
 }
 
@@ -628,3 +748,141 @@ describe('OptionSet Values', () => {
     });
 });
 
+// ============================================================================
+// TEST: WebResource Control (v4_WebResourceHelp)
+// ============================================================================
+describe('AccountForm - WebResource Control', () => {
+    test('should get ControlType as webresource', () => {
+        const { executionContext } = createMockExecutionContext();
+        const form = new AccountForm.Form(executionContext);
+        expect(form.Body.v4_WebResourceHelp.ControlType).toBe('webresource');
+    });
+
+    test('should get Src (URL)', () => {
+        const { executionContext } = createMockExecutionContext();
+        const form = new AccountForm.Form(executionContext);
+        expect(form.Body.v4_WebResourceHelp.Src).toBe('https://org.crm.dynamics.com/webresources/help.html');
+    });
+
+    test('should get Data (query string)', () => {
+        const { executionContext } = createMockExecutionContext();
+        const form = new AccountForm.Form(executionContext);
+        expect(form.Body.v4_WebResourceHelp.Data).toBe('param1=value1');
+    });
+
+    test('should get Object (DOM element)', () => {
+        const { executionContext } = createMockExecutionContext();
+        const form = new AccountForm.Form(executionContext);
+        expect(form.Body.v4_WebResourceHelp.Object).toBeDefined();
+        expect(form.Body.v4_WebResourceHelp.Object.contentWindow).toBeDefined();
+    });
+
+    test('should get/set Visible', () => {
+        const { executionContext, mocks } = createMockExecutionContext();
+        const form = new AccountForm.Form(executionContext);
+        expect(form.Body.v4_WebResourceHelp.Visible).toBe(true);
+        form.Body.v4_WebResourceHelp.Visible = false;
+        expect(mocks.mockSetVisible).toHaveBeenCalledWith(false);
+    });
+});
+
+// ============================================================================
+// TEST: IFrame Control (v4_IFrameExternal)
+// ============================================================================
+describe('AccountForm - IFrame Control', () => {
+    test('should get ControlType as iframe', () => {
+        const { executionContext } = createMockExecutionContext();
+        const form = new AccountForm.Form(executionContext);
+        expect(form.Body.v4_IFrameExternal.ControlType).toBe('iframe');
+    });
+
+    test('should get Src (current URL)', () => {
+        const { executionContext } = createMockExecutionContext();
+        const form = new AccountForm.Form(executionContext);
+        expect(form.Body.v4_IFrameExternal.Src).toBe('https://external.example.com/page');
+    });
+
+    test('should get InitialUrl (default URL)', () => {
+        const { executionContext } = createMockExecutionContext();
+        const form = new AccountForm.Form(executionContext);
+        expect(form.Body.v4_IFrameExternal.InitialUrl).toBe('https://external.example.com/initial');
+    });
+
+    test('should get Object (DOM element)', () => {
+        const { executionContext } = createMockExecutionContext();
+        const form = new AccountForm.Form(executionContext);
+        expect(form.Body.v4_IFrameExternal.Object).toBeDefined();
+    });
+
+    test('should get/set Visible', () => {
+        const { executionContext, mocks } = createMockExecutionContext();
+        const form = new AccountForm.Form(executionContext);
+        expect(form.Body.v4_IFrameExternal.Visible).toBe(true);
+        form.Body.v4_IFrameExternal.Visible = false;
+        expect(mocks.mockSetVisible).toHaveBeenCalledWith(false);
+    });
+});
+
+// ============================================================================
+// TEST: Timer Control (v4_TimerSLA)
+// ============================================================================
+describe('AccountForm - Timer Control', () => {
+    test('should get ControlType as timercontrol', () => {
+        const { executionContext } = createMockExecutionContext();
+        const form = new AccountForm.Form(executionContext);
+        expect(form.Body.v4_TimerSLA.ControlType).toBe('timercontrol');
+    });
+
+    test('should get State (timer state)', () => {
+        const { executionContext } = createMockExecutionContext();
+        const form = new AccountForm.Form(executionContext);
+        expect(form.Body.v4_TimerSLA.State).toBe(2); // InProgress
+    });
+
+    test('should get/set Visible', () => {
+        const { executionContext, mocks } = createMockExecutionContext();
+        const form = new AccountForm.Form(executionContext);
+        expect(form.Body.v4_TimerSLA.Visible).toBe(true);
+        form.Body.v4_TimerSLA.Visible = false;
+        expect(mocks.mockSetVisible).toHaveBeenCalledWith(false);
+    });
+});
+
+// ============================================================================
+// TEST: Knowledge Control (v4_KnowledgeSearch)
+// ============================================================================
+describe('AccountForm - Knowledge Control', () => {
+    test('should get ControlType as kbsearch', () => {
+        const { executionContext } = createMockExecutionContext();
+        const form = new AccountForm.Form(executionContext);
+        expect(form.Body.v4_KnowledgeSearch.ControlType).toBe('kbsearch');
+    });
+
+    test('should get SearchQuery', () => {
+        const { executionContext } = createMockExecutionContext();
+        const form = new AccountForm.Form(executionContext);
+        expect(form.Body.v4_KnowledgeSearch.SearchQuery).toBe('how to fix');
+    });
+
+    test('should get TotalResultCount', () => {
+        const { executionContext } = createMockExecutionContext();
+        const form = new AccountForm.Form(executionContext);
+        expect(form.Body.v4_KnowledgeSearch.TotalResultCount).toBe(5);
+    });
+
+    test('should get SelectedResults', () => {
+        const { executionContext } = createMockExecutionContext();
+        const form = new AccountForm.Form(executionContext);
+        const results = form.Body.v4_KnowledgeSearch.SelectedResults;
+        expect(Array.isArray(results)).toBe(true);
+        expect(results[0].articleId).toBe('KB001');
+    });
+
+    test('should get/set Visible', () => {
+        const { executionContext, mocks } = createMockExecutionContext();
+        const form = new AccountForm.Form(executionContext);
+        expect(form.Body.v4_KnowledgeSearch.Visible).toBe(true);
+        form.Body.v4_KnowledgeSearch.Visible = false;
+        expect(mocks.mockSetVisible).toHaveBeenCalledWith(false);
+    });
+});

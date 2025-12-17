@@ -643,7 +643,7 @@ declare namespace DevKit {
         }
 
         /**
-         * Interface for Date controls (without time)
+         * Interface for DateOnly controls (without time)
          */
         interface DateOnly extends IControl {
             /**
