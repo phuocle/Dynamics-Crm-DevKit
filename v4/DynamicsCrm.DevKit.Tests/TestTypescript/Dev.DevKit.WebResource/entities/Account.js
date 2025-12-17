@@ -45,6 +45,9 @@ var formAccount_for_Interactive_experience = (function () {
 	}
 	function registerEvents() {
 		if (form.ExecutionContext.IsInitialLoad()) {
+			if (form.FormType == OptionSet.FormType.Create) {
+
+			}
 		}
 	}
 	//BEGIN ON LOAD ========================================================

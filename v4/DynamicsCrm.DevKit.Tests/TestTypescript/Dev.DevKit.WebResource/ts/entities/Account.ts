@@ -1,4 +1,4 @@
-import { AccountForm, OptionSet } from './generator/Account.form';
+import { AccountForm } from './generator/Account.form';
 
 const formAccount = (function () {
     "use strict";
@@ -13,6 +13,9 @@ const formAccount = (function () {
 
     function registerEvents(): void {
         if (form.ExecutionContext.IsInitialLoad()) {
+            if (form.FormType == OptionSet.FormType.Create) {
+
+            }
         }
     }
 

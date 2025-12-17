@@ -181,24 +181,39 @@ export class AccountForm extends FormBase<
 }
 
 // ============================================================================
-// OptionSet Values
+// OptionSet.Account - Entity-specific OptionSets
+// Extends global OptionSet namespace from devkit.ts
 // ============================================================================
-export namespace OptionSet {
-    export namespace Account {
-        export const IndustryCode = {
-            Accounting: 1,
-            Consulting: 7,
-            Financial: 16,
-            Insurance: 20,
-            Technology: 12
-        } as const;
 
-        /** Custom MultiOptionSet - v4_Categories */
-        export const v4_Categories = {
-            Category_A: 100000000,
-            Category_B: 100000001,
-            Category_C: 100000002,
-            Category_D: 100000003
-        } as const;
+// Account-specific OptionSet values
+const AccountOptionSetValues = {
+    IndustryCode: Object.freeze({
+        Accounting: 1,
+        Consulting: 7,
+        Financial: 16,
+        Insurance: 20,
+        Technology: 12
+    }),
+
+    /** Custom MultiOptionSet - v4_Categories */
+    v4_Categories: Object.freeze({
+        Category_A: 100000000,
+        Category_B: 100000001,
+        Category_C: 100000002,
+        Category_D: 100000003
+    })
+} as const;
+
+// Populate global OptionSet.Account at runtime
+(globalThis as any).OptionSet = (globalThis as any).OptionSet || {};
+(globalThis as any).OptionSet.Account = AccountOptionSetValues;
+
+// Declare global namespace extension for TypeScript IntelliSense
+declare global {
+    namespace OptionSet {
+        namespace Account {
+            const IndustryCode: typeof AccountOptionSetValues.IndustryCode;
+            const v4_Categories: typeof AccountOptionSetValues.v4_Categories;
+        }
     }
 }

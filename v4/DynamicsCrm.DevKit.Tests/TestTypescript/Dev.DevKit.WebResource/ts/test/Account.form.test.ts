@@ -4,7 +4,10 @@
  * Covers ALL 12 DevKit control types
  */
 
-import { AccountForm, OptionSet } from '../entities/generator/Account.form';
+// Import AccountForm - OptionSet is now global (populated by devkit.ts and Account.form.ts)
+import { AccountForm } from '../entities/generator/Account.form';
+// Import devkit to populate global OptionSet
+import '../lib/devkit';
 
 // ============================================================================
 // Mock Setup - Matches devkit.ts LoadFormV2 behavior
