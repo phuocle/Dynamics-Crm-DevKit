@@ -263,14 +263,21 @@ export interface IExecutionContext {
 // Helper Functions - Các hàm helper để load form
 // ============================================================================
 
-function getXrm(): typeof Xrm {
+function getXrm(): typeof Xrm | undefined {
+    // Check window.Xrm first (normal form scenario)
     if (typeof window !== 'undefined' && (window as any).Xrm !== undefined) {
         return (window as any).Xrm;
     }
-    if (typeof parent !== 'undefined' && (parent as any).Xrm !== undefined) {
-        return (parent as any).Xrm;
+    // Check parent.window.Xrm (HTML WebResource in iframe)
+    if (typeof parent !== 'undefined' && typeof parent.window !== 'undefined' && (parent.window as any).Xrm !== undefined) {
+        return (parent.window as any).Xrm;
     }
-    throw new Error('Not found Xrm in the current context');
+    // Check parent.parent.window.Xrm (nested iframe scenario)
+    if (typeof parent !== 'undefined' && typeof parent.parent !== 'undefined' && typeof parent.parent.window !== 'undefined' && (parent.parent.window as any).Xrm !== undefined) {
+        return (parent.parent.window as any).Xrm;
+    }
+    // Return undefined if not found (safe optional chaining)
+    return undefined;
 }
 
 function getter<T>(obj: any, prop: string, getterFn: () => T): void {
@@ -795,13 +802,14 @@ export function LoadProcess(formContext: any): any {
  */
 export function LoadUtility(defaultWebResourceName?: string): any {
     const utility: any = {};
-    const getApp = (window as any).Xrm?.App;
-    const getDevice = (window as any).Xrm?.Device;
-    const getEncoding = (window as any).Xrm?.Encoding;
-    const getGlobalContext = (window as any).Xrm?.Utility?.getGlobalContext();
-    const getNavigation = (window as any).Xrm?.Navigation;
-    const getPanel = (window as any).Xrm?.Panel;
-    const getUtility = (window as any).Xrm?.Utility;
+    const xrm = getXrm();
+    const getApp = xrm?.App;
+    const getDevice = xrm?.Device;
+    const getEncoding = xrm?.Encoding;
+    const getGlobalContext = xrm?.Utility?.getGlobalContext();
+    const getNavigation = xrm?.Navigation;
+    const getPanel = xrm?.Panel;
+    const getUtility = xrm?.Utility;
 
     getter(utility, 'Client', () => {
         const obj: any = {};
@@ -982,13 +990,14 @@ export function LoadUtility(defaultWebResourceName?: string): any {
  */
 export function LoadSidePanes(): any {
     const sidePanes: any = {};
-    getterSetter(sidePanes, 'DisplayState', () => (window as any).Xrm?.App?.sidePanes?.state, (value: number) => { (window as any).Xrm.App.sidePanes.state = value; });
+    const xrm = getXrm();
+    getterSetter(sidePanes, 'DisplayState', () => xrm?.App?.sidePanes?.state, (value: number) => { const x = getXrm(); if (x?.App?.sidePanes) x.App.sidePanes.state = value; });
     sidePanes.Create = function (paneOptions: any, successCallback?: (result: any) => void) {
-        (window as any).Xrm?.App?.sidePanes?.createPane(paneOptions)?.then(successCallback);
+        xrm?.App?.sidePanes?.createPane(paneOptions)?.then(successCallback);
     };
-    sidePanes.Get = (paneId: string) => (window as any).Xrm?.App?.sidePanes?.getPane(paneId);
-    sidePanes.GetAll = () => (window as any).Xrm?.App?.sidePanes?.getAllPanes();
-    sidePanes.GetSelected = () => (window as any).Xrm?.App?.sidePanes?.getSelectedPane();
+    sidePanes.Get = (paneId: string) => xrm?.App?.sidePanes?.getPane(paneId);
+    sidePanes.GetAll = () => xrm?.App?.sidePanes?.getAllPanes();
+    sidePanes.GetSelected = () => xrm?.App?.sidePanes?.getSelectedPane();
     return sidePanes;
 }
 
