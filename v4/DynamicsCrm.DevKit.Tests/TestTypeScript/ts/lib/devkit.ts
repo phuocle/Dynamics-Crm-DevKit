@@ -352,7 +352,7 @@ function loadField(formContext: any, field: any, attribute: any, control: any): 
  * @param defaultWebResourceName Tên web resource mặc định
  * @param formConfig Cấu hình form bao gồm body, header, tab, grid, navigation, quick, bpf
  */
-export function LoadFormV2<TBody, THeader, TTab, TGrid, TNavigation, TQuickForm, TProcess = any>(
+export function LoadFormV2<TBody = Record<string, any>, THeader = Record<string, any>, TTab = Record<string, any>, TGrid = Record<string, any>, TNavigation = Record<string, any>, TQuickForm = Record<string, any>, TProcess = any>(
     executionContext: any,
     defaultWebResourceName: string | undefined,
     formConfig: {
