@@ -811,7 +811,13 @@ export function LoadFormV2<TBody = Record<string, any>, THeader = Record<string,
     RefreshRibbon: (refreshAll?: boolean) => void;
     UiAddLoaded: (callback: (context: any) => void) => void;
     UiRemoveLoaded: (callback: (context: any) => void) => void;
+    UiAddOnLoad: (callback: (context: any) => void) => void;
+    UiRemoveOnLoad: (callback: (context: any) => void) => void;
     Process: TProcess;
+    Utility: any;
+    SidePanes: any;
+    WebApi: any;
+    Copilot: any;
 } {
     const formContext = executionContext?.getFormContext?.() ?? executionContext ?? null;
     const form = LoadForm(formContext);
@@ -1080,6 +1086,14 @@ export class FormBase<TBody, THeader, TTab, TGrid, TNavigation, TQuickForm, TPro
     public Process: TProcess;
     /** Execution context wrapper */
     public ExecutionContext: IExecutionContext;
+    /** Utility functions wrapper */
+    public Utility: any;
+    /** Side panes wrapper */
+    public SidePanes: any;
+    /** Web API wrapper */
+    public WebApi: any;
+    /** Copilot wrapper */
+    public Copilot: any;
 
     /** Form GUID */
     public readonly FormId: string;
@@ -1113,6 +1127,10 @@ export class FormBase<TBody, THeader, TTab, TGrid, TNavigation, TQuickForm, TPro
     public UiAddLoaded: (callback: (context: any) => void) => void;
     /** Remove handler for form loaded event */
     public UiRemoveLoaded: (callback: (context: any) => void) => void;
+    /** Add handler for form onLoad event */
+    public UiAddOnLoad: (callback: (context: any) => void) => void;
+    /** Remove handler for form onLoad event */
+    public UiRemoveOnLoad: (callback: (context: any) => void) => void;
 
     /**
      * Create a new form instance
@@ -1157,6 +1175,14 @@ export class FormBase<TBody, THeader, TTab, TGrid, TNavigation, TQuickForm, TPro
         this.RefreshRibbon = form.RefreshRibbon;
         this.UiAddLoaded = form.UiAddLoaded;
         this.UiRemoveLoaded = form.UiRemoveLoaded;
+        this.UiAddOnLoad = form.UiAddOnLoad;
+        this.UiRemoveOnLoad = form.UiRemoveOnLoad;
+
+        // Additional form properties from loadOthers
+        this.Utility = form.Utility;
+        this.SidePanes = form.SidePanes;
+        this.WebApi = form.WebApi;
+        this.Copilot = form.Copilot;
     }
 }
 
