@@ -719,7 +719,7 @@ export function LoadWebApi(): any {
         }
     };
     obj.Execute = function (request: any, successCallback?: any, errorCallback?: any) {
-        const promise = getWebApi?.execute(request);
+        const promise = getWebApi?.online.execute(request);
         if (successCallback) {
             promise?.then(successCallback, errorCallback);
         } else {
@@ -727,7 +727,7 @@ export function LoadWebApi(): any {
         }
     };
     obj.ExecuteMultiple = function (requests: any[], successCallback?: any, errorCallback?: any) {
-        const promise = getWebApi?.executeMultiple(requests);
+        const promise = getWebApi?.online.executeMultiple(requests);
         if (successCallback) {
             promise?.then(successCallback, errorCallback);
         } else {
@@ -803,6 +803,15 @@ export function LoadFormV2<TBody = Record<string, any>, THeader = Record<string,
     EntityName: string;
     DataIsDirty: boolean;
     DataIsValid: boolean;
+    Attributes: any;
+    Controls: any;
+    DataXml: string;
+    EntityIsDirty: boolean;
+    EntityIsValid: boolean;
+    EntityReference: any;
+    PrimaryAttributeValue: string;
+    ViewPortHeight: number;
+    ViewPortWidth: number;
     Save: (saveOptions?: any) => Promise<void>;
     Refresh: (save?: boolean) => Promise<void>;
     Close: () => void;
@@ -813,6 +822,17 @@ export function LoadFormV2<TBody = Record<string, any>, THeader = Record<string,
     UiRemoveLoaded: (callback: (context: any) => void) => void;
     UiAddOnLoad: (callback: (context: any) => void) => void;
     UiRemoveOnLoad: (callback: (context: any) => void) => void;
+    AddOnPostSave: (callback: (context: any) => void) => void;
+    AddOnSave: (callback: (context: any) => void) => void;
+    RemoveOnPostSave: (callback: (context: any) => void) => void;
+    RemoveOnSave: (callback: (context: any) => void) => void;
+    DataAddOnLoad: (callback: (context: any) => void) => void;
+    DataRemoveOnLoad: (callback: (context: any) => void) => void;
+    FormIsVisible: (formId: string) => boolean;
+    FormNavigateToFormId: (formId: string) => void;
+    FormNavigateToFormLabel: (formLabel: string) => void;
+    FormSetVisible: (formId: string, visible: boolean) => void;
+    SetFormEntityName: (name: string) => void;
     Process: TProcess;
     Utility: any;
     SidePanes: any;
@@ -1109,6 +1129,24 @@ export class FormBase<TBody, THeader, TTab, TGrid, TNavigation, TQuickForm, TPro
     public readonly DataIsDirty: boolean;
     /** Whether all form data is valid */
     public readonly DataIsValid: boolean;
+    /** Form attributes collection */
+    public readonly Attributes: any;
+    /** Form controls collection */
+    public readonly Controls: any;
+    /** Entity data XML */
+    public readonly DataXml: string;
+    /** Whether entity has unsaved changes */
+    public readonly EntityIsDirty: boolean;
+    /** Whether entity data is valid */
+    public readonly EntityIsValid: boolean;
+    /** Entity reference object */
+    public readonly EntityReference: any;
+    /** Primary attribute value */
+    public readonly PrimaryAttributeValue: string;
+    /** View port height */
+    public readonly ViewPortHeight: number;
+    /** View port width */
+    public readonly ViewPortWidth: number;
 
     // ========== Common Methods ==========
     /** Save the record */
@@ -1131,6 +1169,28 @@ export class FormBase<TBody, THeader, TTab, TGrid, TNavigation, TQuickForm, TPro
     public UiAddOnLoad: (callback: (context: any) => void) => void;
     /** Remove handler for form onLoad event */
     public UiRemoveOnLoad: (callback: (context: any) => void) => void;
+    /** Add handler for post save event */
+    public AddOnPostSave: (callback: (context: any) => void) => void;
+    /** Add handler for save event */
+    public AddOnSave: (callback: (context: any) => void) => void;
+    /** Remove handler for post save event */
+    public RemoveOnPostSave: (callback: (context: any) => void) => void;
+    /** Remove handler for save event */
+    public RemoveOnSave: (callback: (context: any) => void) => void;
+    /** Add handler for data onLoad event */
+    public DataAddOnLoad: (callback: (context: any) => void) => void;
+    /** Remove handler for data onLoad event */
+    public DataRemoveOnLoad: (callback: (context: any) => void) => void;
+    /** Check if a form is visible */
+    public FormIsVisible: (formId: string) => boolean;
+    /** Navigate to a form by ID */
+    public FormNavigateToFormId: (formId: string) => void;
+    /** Navigate to a form by label */
+    public FormNavigateToFormLabel: (formLabel: string) => void;
+    /** Set form visibility */
+    public FormSetVisible: (formId: string, visible: boolean) => void;
+    /** Set the form entity name */
+    public SetFormEntityName: (name: string) => void;
 
     /**
      * Create a new form instance
@@ -1167,6 +1227,15 @@ export class FormBase<TBody, THeader, TTab, TGrid, TNavigation, TQuickForm, TPro
         this.EntityName = form.EntityName;
         this.DataIsDirty = form.DataIsDirty;
         this.DataIsValid = form.DataIsValid;
+        this.Attributes = form.Attributes;
+        this.Controls = form.Controls;
+        this.DataXml = form.DataXml;
+        this.EntityIsDirty = form.EntityIsDirty;
+        this.EntityIsValid = form.EntityIsValid;
+        this.EntityReference = form.EntityReference;
+        this.PrimaryAttributeValue = form.PrimaryAttributeValue;
+        this.ViewPortHeight = form.ViewPortHeight;
+        this.ViewPortWidth = form.ViewPortWidth;
         this.Save = form.Save;
         this.Refresh = form.Refresh;
         this.Close = form.Close;
@@ -1177,6 +1246,17 @@ export class FormBase<TBody, THeader, TTab, TGrid, TNavigation, TQuickForm, TPro
         this.UiRemoveLoaded = form.UiRemoveLoaded;
         this.UiAddOnLoad = form.UiAddOnLoad;
         this.UiRemoveOnLoad = form.UiRemoveOnLoad;
+        this.AddOnPostSave = form.AddOnPostSave;
+        this.AddOnSave = form.AddOnSave;
+        this.RemoveOnPostSave = form.RemoveOnPostSave;
+        this.RemoveOnSave = form.RemoveOnSave;
+        this.DataAddOnLoad = form.DataAddOnLoad;
+        this.DataRemoveOnLoad = form.DataRemoveOnLoad;
+        this.FormIsVisible = form.FormIsVisible;
+        this.FormNavigateToFormId = form.FormNavigateToFormId;
+        this.FormNavigateToFormLabel = form.FormNavigateToFormLabel;
+        this.FormSetVisible = form.FormSetVisible;
+        this.SetFormEntityName = form.SetFormEntityName;
 
         // Additional form properties from loadOthers
         this.Utility = form.Utility;

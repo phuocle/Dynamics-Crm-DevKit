@@ -299,12 +299,22 @@ function createMockFormContext(formType: number = 2) {
                     getId: () => '{entity-guid}',
                     getEntityName: () => 'account',
                     getIsDirty: () => false,
-                    isValid: () => true
+                    isValid: () => true,
+                    getDataXml: () => '<entity><name>Test</name></entity>',
+                    getEntityReference: () => ({ id: '{entity-guid}', name: 'Test Account', entityType: 'account' }),
+                    getPrimaryAttributeValue: () => 'Test Account',
+                    addOnPostSave: jest.fn(),
+                    removeOnPostSave: jest.fn(),
+                    addOnSave: jest.fn(),
+                    removeOnSave: jest.fn(),
+                    attributes: { get: () => null, getLength: () => 0, forEach: jest.fn() }
                 },
                 getIsDirty: () => false,
                 isValid: () => true,
                 refresh: jest.fn().mockResolvedValue(undefined),
-                save: jest.fn().mockResolvedValue(undefined)
+                save: jest.fn().mockResolvedValue(undefined),
+                addOnLoad: jest.fn(),
+                removeOnLoad: jest.fn()
             },
             ui: {
                 getFormType: () => formType,
@@ -312,7 +322,11 @@ function createMockFormContext(formType: number = 2) {
                     getCurrentItem: () => ({
                         getId: () => '{form-id}',
                         getLabel: () => 'Account Form'
-                    })
+                    }),
+                    items: {
+                        getLength: () => 0,
+                        get: () => null
+                    }
                 },
                 close: jest.fn(),
                 setFormNotification: jest.fn().mockReturnValue(true),
@@ -320,6 +334,12 @@ function createMockFormContext(formType: number = 2) {
                 refreshRibbon: jest.fn(),
                 addLoaded: jest.fn(),
                 removeLoaded: jest.fn(),
+                addOnLoad: jest.fn(),
+                removeOnLoad: jest.fn(),
+                setFormEntityName: jest.fn(),
+                getViewPortHeight: () => 800,
+                getViewPortWidth: () => 1200,
+                controls: { get: () => null, getLength: () => 0, forEach: jest.fn() },
                 tabs: mockTabs,
                 navigation: { items: mockNavItems }
             },
