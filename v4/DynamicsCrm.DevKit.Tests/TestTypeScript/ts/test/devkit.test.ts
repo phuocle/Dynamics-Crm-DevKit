@@ -326,7 +326,7 @@ describe('DevKit Module', () => {
             const result = LoadFormV2(mockExecutionContext, undefined, {});
 
             expect(result).toBeDefined();
-            expect(result.Body).toEqual({});
+            expect(result.Body).toEqual({ Tab: {} });
         });
     });
 
@@ -906,10 +906,10 @@ describe('DevKit Module', () => {
                 tab: ['general___section1', 'general___section2', 'details']
             });
 
-            expect(result.Tab.general).toBeDefined();
-            expect(result.Tab.general.Section.section1).toBeDefined();
-            expect(result.Tab.general.Section.section2).toBeDefined();
-            expect(result.Tab.details).toBeDefined();
+            expect(result.Body.Tab.general).toBeDefined();
+            expect(result.Body.Tab.general.Section.section1).toBeDefined();
+            expect(result.Body.Tab.general.Section.section2).toBeDefined();
+            expect(result.Body.Tab.details).toBeDefined();
         });
 
         test('should access tab properties and methods', () => {
@@ -917,13 +917,13 @@ describe('DevKit Module', () => {
                 tab: ['general']
             });
 
-            expect(result.Tab.general.Name).toBe('general');
-            expect(result.Tab.general.Label).toBe('Tab Label');
-            expect(result.Tab.general.Visible).toBe(true);
-            expect(result.Tab.general.DisplayState).toBe('expanded');
-            expect(typeof result.Tab.general.AddTabStateChange).toBe('function');
-            expect(typeof result.Tab.general.RemoveTabStateChange).toBe('function');
-            expect(typeof result.Tab.general.Focus).toBe('function');
+            expect(result.Body.Tab.general.Name).toBe('general');
+            expect(result.Body.Tab.general.Label).toBe('Tab Label');
+            expect(result.Body.Tab.general.Visible).toBe(true);
+            expect(result.Body.Tab.general.DisplayState).toBe('expanded');
+            expect(typeof result.Body.Tab.general.AddTabStateChange).toBe('function');
+            expect(typeof result.Body.Tab.general.RemoveTabStateChange).toBe('function');
+            expect(typeof result.Body.Tab.general.Focus).toBe('function');
         });
 
         test('should load grids with properties', () => {

@@ -663,7 +663,7 @@ function LoadExecutionContext(executionContext: any): any {
     return obj;
 }
 
-function LoadSidePanes(): any {
+export function LoadSidePanes(): any {
     const sidePanes: any = {};
     const xrm = getXrm();
     getterSetter(sidePanes, 'DisplayState', () => (xrm as any)?.App?.sidePanes?.state, (value: any) => { const x = getXrm(); if ((x as any)?.App?.sidePanes) (x as any).App.sidePanes.state = value; });
@@ -674,7 +674,7 @@ function LoadSidePanes(): any {
     return sidePanes;
 }
 
-function LoadWebApi(): any {
+export function LoadWebApi(): any {
     const obj: any = {};
     const xrm = getXrm();
     const getWebApi = xrm?.WebApi;
@@ -737,7 +737,7 @@ function LoadWebApi(): any {
     return obj;
 }
 
-function LoadCopilot(): any {
+export function LoadCopilot(): any {
     const obj: any = {};
     const xrm = getXrm();
     const getCopilot = (xrm as any)?.Copilot;
