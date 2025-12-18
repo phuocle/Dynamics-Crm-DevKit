@@ -81,7 +81,7 @@
     <None Include="deploy.debug.only.bat" />
     <None Include="deploy.debug.bat" />
     <None Include="ProjectTemplate.csproj" />
-    <None Include="ReadMe.md" />
+    <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
     <VSTemplate Include="CSharpPackageProjectTemplate.vstemplate">

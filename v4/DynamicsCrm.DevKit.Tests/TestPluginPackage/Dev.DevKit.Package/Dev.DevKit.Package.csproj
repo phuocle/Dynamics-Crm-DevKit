@@ -10,7 +10,7 @@
 	<PropertyGroup>
 		<PackageId>$(AssemblyName)</PackageId>
 		<Version>$(FileVersion)</Version>
-		<PackageReadmeFile>ReadMe.md</PackageReadmeFile>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<Title>$(AssemblyName)</Title>
 		<Description>$(AssemblyName)</Description>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
@@ -32,7 +32,7 @@
 		<PackageReference Include="Niam.XRM.Framework" Version="9.0.2.451" />
 	</ItemGroup>
 	<ItemGroup>
-		<None Update="ReadMe.md">
+		<None Update="README.md">
 			<Pack>True</Pack>
 			<PackagePath>\</PackagePath>
 		</None>

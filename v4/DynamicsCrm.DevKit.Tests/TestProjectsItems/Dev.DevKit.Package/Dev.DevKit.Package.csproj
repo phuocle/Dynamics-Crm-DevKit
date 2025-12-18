@@ -10,7 +10,7 @@
 	<PropertyGroup>
 		<PackageId>$(AssemblyName)</PackageId>
 		<Version>$(FileVersion)</Version>
-		<PackageReadmeFile>ReadMe.md</PackageReadmeFile>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<Title>$(AssemblyName)</Title>
 		<Description>$(AssemblyName)</Description>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
@@ -31,7 +31,7 @@
 		<PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.*" PrivateAssets="All" />
 	</ItemGroup>
 	<ItemGroup>
-		<None Update="ReadMe.md">
+		<None Update="README.md">
 			<Pack>True</Pack>
 			<PackagePath>\</PackagePath>
 		</None>
