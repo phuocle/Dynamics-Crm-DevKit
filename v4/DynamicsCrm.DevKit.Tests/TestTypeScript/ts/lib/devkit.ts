@@ -678,6 +678,27 @@ export function LoadWebApi(): DevKit.IWebApi {
     const obj: any = {} as DevKit.IWebApi;
     const xrm = getXrm();
     const getWebApi = xrm?.WebApi;
+    const getOnline = xrm?.WebApi?.online;
+    const getOffline = xrm?.WebApi?.offline;
+
+    const extractEntityName = function (fetchXml: string): string {
+        let cleanXml = fetchXml;
+        const fetchXmlMatch = fetchXml.match(/fetchxml=/i);
+        if (fetchXmlMatch) {
+            const splitIndex = fetchXml.toLowerCase().indexOf('fetchxml=') + 'fetchxml='.length;
+            cleanXml = decodeURIComponent(fetchXml.substring(splitIndex));
+        }
+        else if (fetchXml.trim().startsWith('<')) {
+            cleanXml = fetchXml;
+        }
+        const parser = new DOMParser();
+        const xmlDoc = parser.parseFromString(cleanXml, "text/xml");
+        const entityNode = xmlDoc.querySelector("entity");
+        if (entityNode && entityNode.hasAttribute("name"))
+            return entityNode.getAttribute("name")!;
+        throw new Error("Entity name not found in fetchXml");
+    };
+
     obj.CreateRecord = function (entityLogicalName: string, data: any, successCallback?: any, errorCallback?: any) {
         const promise = getWebApi?.createRecord(entityLogicalName, data);
         if (successCallback) {
@@ -719,7 +740,7 @@ export function LoadWebApi(): DevKit.IWebApi {
         }
     };
     obj.Execute = function (request: any, successCallback?: any, errorCallback?: any) {
-        const promise = getWebApi?.online.execute(request);
+        const promise = (getWebApi as any)?.execute(request);
         if (successCallback) {
             promise?.then(successCallback, errorCallback);
         } else {
@@ -727,13 +748,125 @@ export function LoadWebApi(): DevKit.IWebApi {
         }
     };
     obj.ExecuteMultiple = function (requests: any[], successCallback?: any, errorCallback?: any) {
-        const promise = getWebApi?.online.executeMultiple(requests);
+        const promise = (getWebApi as any)?.executeMultiple(requests);
         if (successCallback) {
             promise?.then(successCallback, errorCallback);
         } else {
             return promise;
         }
     };
+
+    // Typed RetrieveRecords helper - retrieves multiple records and wraps them in constructor/factory
+    obj.RetrieveRecords = function (apiConstructorOrFactory: any, entityLogicalNameOrOptions: string, optionsOrMaxPageSizeOrCallback?: any, maxPageSizeOrSuccessCallback?: any, successCallback?: any, errorCallback?: any) {
+        let entityLogicalName: string;
+        let options: string | undefined;
+        let maxPageSize: number | undefined;
+        const hasFetchXml = (str: string) => /fetchxml=/i.test(str);
+        const isPlainFetchXml = (str: string) => typeof str === 'string' && str.trim().startsWith('<fetch');
+        const secondParamIsFetchXmlOrOData = typeof entityLogicalNameOrOptions === 'string' &&
+            (hasFetchXml(entityLogicalNameOrOptions) ||
+                isPlainFetchXml(entityLogicalNameOrOptions) ||
+                (entityLogicalNameOrOptions.startsWith('?') && !hasFetchXml(entityLogicalNameOrOptions)));
+        if (secondParamIsFetchXmlOrOData) {
+            options = entityLogicalNameOrOptions;
+            if (isPlainFetchXml(options)) {
+                options = '?fetchXml=' + encodeURIComponent(options);
+            }
+            if (hasFetchXml(options) || isPlainFetchXml(entityLogicalNameOrOptions)) {
+                entityLogicalName = extractEntityName(options);
+            } else {
+                throw new Error('Entity name cannot be determined from OData query. Please provide entityLogicalName as second parameter.');
+            }
+            if (typeof optionsOrMaxPageSizeOrCallback === 'function') {
+                successCallback = optionsOrMaxPageSizeOrCallback;
+                errorCallback = maxPageSizeOrSuccessCallback;
+                maxPageSize = undefined;
+            } else if (typeof optionsOrMaxPageSizeOrCallback === 'number') {
+                maxPageSize = optionsOrMaxPageSizeOrCallback;
+                if (typeof maxPageSizeOrSuccessCallback === 'function') {
+                    successCallback = maxPageSizeOrSuccessCallback;
+                    errorCallback = successCallback;
+                }
+            }
+        } else {
+            entityLogicalName = entityLogicalNameOrOptions;
+            options = optionsOrMaxPageSizeOrCallback;
+            if (typeof maxPageSizeOrSuccessCallback === 'function') {
+                errorCallback = successCallback;
+                successCallback = maxPageSizeOrSuccessCallback;
+                maxPageSize = undefined;
+            } else if (typeof maxPageSizeOrSuccessCallback === 'number') {
+                maxPageSize = maxPageSizeOrSuccessCallback;
+            }
+        }
+        const promise = getWebApi?.retrieveMultipleRecords(entityLogicalName!, options, maxPageSize).then((result: any) => {
+            if (result.entities && result.entities.length > 0) {
+                return result.entities.map((entity: any) =>
+                    typeof apiConstructorOrFactory === 'function' && apiConstructorOrFactory.prototype
+                        ? new apiConstructorOrFactory(entity)
+                        : apiConstructorOrFactory(entity)
+                );
+            }
+            return [];
+        });
+        if (successCallback) {
+            promise?.then(successCallback, errorCallback);
+        } else {
+            return promise;
+        }
+    };
+
+    // Typed RetrieveRecord helper - retrieves single record and wraps it in constructor/factory
+    obj.RetrieveRecord = function (apiConstructorOrFactory: any, entityLogicalName: string, id: string, options?: string | Function, successCallback?: any, errorCallback?: any) {
+        if (typeof options === 'function') {
+            errorCallback = successCallback;
+            successCallback = options;
+            options = "?$select=*";
+        }
+        if (!options) {
+            options = "?$select=*";
+        }
+        const promise = getWebApi?.retrieveRecord(entityLogicalName, id, options as string).then((result: any) => {
+            return typeof apiConstructorOrFactory === 'function' && apiConstructorOrFactory.prototype
+                ? new apiConstructorOrFactory(result)
+                : apiConstructorOrFactory(result);
+        });
+        if (successCallback) {
+            promise?.then(successCallback, errorCallback);
+        } else {
+            return promise;
+        }
+    };
+
+    // Online object - for explicit online operations
+    getter(obj, 'Online', () => {
+        const online: any = {};
+        online.Execute = function (request: any, successCallback?: any, errorCallback?: any) {
+            const promise = getOnline?.execute(request);
+            if (successCallback) {
+                promise?.then(successCallback, errorCallback);
+            } else {
+                return promise;
+            }
+        };
+        online.ExecuteMultiple = function (requests: any[], successCallback?: any, errorCallback?: any) {
+            const promise = getOnline?.executeMultiple(requests);
+            if (successCallback) {
+                promise?.then(successCallback, errorCallback);
+            } else {
+                return promise;
+            }
+        };
+        return online;
+    });
+
+    // Offline object - for mobile offline support
+    getter(obj, 'Offline', () => {
+        const offline: any = {};
+        offline.IsAvailable = (entityLogicalName: string) => (getOffline as any)?.isAvailable(entityLogicalName);
+        return offline;
+    });
+
     return obj;
 }
 
