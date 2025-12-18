@@ -1,6 +1,6 @@
 /**
- * Account Forms - Organized by Namespace
- * @description Supports multiple forms (AccountForm, AnotherAccountForm) with shared OptionSets
+ * Account Form - TypeScript Implementation
+ * @description AccountForm with shared OptionSets
  * Uses namespace pattern for better organization and maintainability
  */
 
@@ -135,84 +135,7 @@ export namespace AccountForm {
 }
 
 // ============================================================================
-// NAMESPACE: AnotherAccountForm - Alternative Account Form
-// ============================================================================
-export namespace AnotherAccountForm {
-    // Body Interface - Different fields for this form
-    export interface IBody {
-        /** String: Account Name */
-        Name: DevKit.Controls.String;
-        /** String: Account Number */
-        AccountNumber: DevKit.Controls.String;
-        /** Memo: Description */
-        Description: DevKit.Controls.Memo;
-        /** OptionSet: Industry Code */
-        IndustryCode: DevKit.Controls.OptionSet;
-        /** Lookup: Primary Contact */
-        PrimaryContactId: DevKit.Controls.Lookup;
-        /** String: Phone */
-        Telephone1: DevKit.Controls.String;
-        /** String: Email */
-        EMailAddress1: DevKit.Controls.String;
-    }
-
-    // Header Interface
-    export interface IHeader {
-        /** Lookup: Owner */
-        OwnerId: DevKit.Controls.Lookup;
-    }
-
-    // Tab and Section Interfaces
-    export interface IGeneralTabSections {
-        GENERAL_INFO: DevKit.Controls.Section;
-        CONTACT_INFO: DevKit.Controls.Section;
-    }
-
-    export interface IGeneralTab extends DevKit.Controls.ITab {
-        Section: IGeneralTabSections;
-    }
-
-    export interface ITabs {
-        GENERAL_TAB: IGeneralTab;
-    }
-
-    // Grid Interface
-    export interface IGrid {
-        Opportunities: DevKit.Controls.Grid;
-    }
-
-    // Navigation Interface
-    export interface INavigation {
-        Account_Emails: DevKit.Controls.NavigationItem;
-    }
-
-    // QuickForm Interface - Empty for this form
-    export interface IQuickForm {}
-
-    // Process Interface - No BPF for this form
-    export interface IProcess extends DevKit.Controls.IProcess {}
-
-    // Form Class
-    export class Form extends FormBase<IBody, IHeader, ITabs, IGrid, INavigation, IQuickForm, IProcess> {
-        constructor(executionContext: any, defaultWebResourceName?: string) {
-            super(executionContext, defaultWebResourceName, {
-                body: [
-                    "Name", "AccountNumber", "Description", "IndustryCode",
-                    "PrimaryContactId", "Telephone1", "EMailAddress1"
-                ],
-                header: ["OwnerId"],
-                tab: ["GENERAL_TAB___GENERAL_INFO", "GENERAL_TAB___CONTACT_INFO"],
-                grid: ["Opportunities"],
-                navigation: ["Account_Emails"],
-                quick: [],
-                bpf: []
-            });
-        }
-    }
-}
-
-// ============================================================================
-// NAMESPACE: Account.OptionSet - Shared OptionSets for ALL Account Forms
+// NAMESPACE: Account.OptionSet - Shared OptionSets for Account Forms
 // ============================================================================
 export namespace Account {
     export namespace OptionSet {
@@ -259,3 +182,4 @@ declare global {
         }
     }
 }
+
