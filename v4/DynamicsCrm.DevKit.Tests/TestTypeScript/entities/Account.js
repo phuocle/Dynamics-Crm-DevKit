@@ -18,7 +18,8 @@ var formAccountForm = (function () {
 	function registerEvents() {
 		if (form.ExecutionContext.IsInitialLoad()) {
 			if (form.FormType == OptionSet.FormType.Create) {
-				// Initialize on Create
+				// Initialize on Create			
+
 			}
 		}
 	}

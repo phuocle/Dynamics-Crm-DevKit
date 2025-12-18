@@ -674,8 +674,8 @@ export function LoadSidePanes(): any {
     return sidePanes;
 }
 
-export function LoadWebApi(): any {
-    const obj: any = {};
+export function LoadWebApi(): DevKit.IWebApi {
+    const obj: any = {} as DevKit.IWebApi;
     const xrm = getXrm();
     const getWebApi = xrm?.WebApi;
     obj.CreateRecord = function (entityLogicalName: string, data: any, successCallback?: any, errorCallback?: any) {
@@ -737,7 +737,7 @@ export function LoadWebApi(): any {
     return obj;
 }
 
-export function LoadCopilot(): any {
+export function LoadCopilot(): DevKit.ICopilot {
     const obj: any = {};
     const xrm = getXrm();
     const getCopilot = (xrm as any)?.Copilot;
@@ -1109,11 +1109,11 @@ export class FormBase<TBody, THeader, TTab, TGrid, TNavigation, TQuickForm, TPro
     /** Utility functions wrapper */
     public Utility: any;
     /** Side panes wrapper */
-    public SidePanes: any;
+    public SidePanes: DevKit.ISidePanes;
     /** Web API wrapper */
-    public WebApi: any;
+    public WebApi: DevKit.IWebApi;
     /** Copilot wrapper */
-    public Copilot: any;
+    public Copilot: DevKit.ICopilot;
 
     /** Form GUID */
     public readonly FormId: string;

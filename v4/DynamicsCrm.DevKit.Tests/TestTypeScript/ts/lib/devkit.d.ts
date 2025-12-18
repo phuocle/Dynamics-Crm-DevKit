@@ -2182,4 +2182,112 @@ declare namespace DevKit {
          */
         GetSelected(): any;
     }
+
+    // ============================================================================
+    // WebApi Interface
+    // ============================================================================
+
+    /**
+     * Interface for Web API operations
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi
+     */
+    interface IWebApi {
+        /**
+         * Creates an entity record
+         * @param entityLogicalName Logical name of the entity
+         * @param data Object containing the data for the record
+         * @param successCallback Function called when the record is created successfully
+         * @param errorCallback Function called when the operation fails
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi/createrecord
+         */
+        CreateRecord(entityLogicalName: string, data: any, successCallback?: (result: { id: string; entityType: string }) => void, errorCallback?: (error: any) => void): Promise<{ id: string; entityType: string }> | void;
+
+        /**
+         * Deletes an entity record
+         * @param entityLogicalName Logical name of the entity
+         * @param id GUID of the record to delete
+         * @param successCallback Function called when the record is deleted successfully
+         * @param errorCallback Function called when the operation fails
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi/deleterecord
+         */
+        DeleteRecord(entityLogicalName: string, id: string, successCallback?: (result: { id: string; entityType: string }) => void, errorCallback?: (error: any) => void): Promise<{ id: string; entityType: string }> | void;
+
+        /**
+         * Retrieves an entity record
+         * @param entityLogicalName Logical name of the entity
+         * @param id GUID of the record to retrieve
+         * @param options OData system query options ($select, $expand)
+         * @param successCallback Function called when the record is retrieved successfully
+         * @param errorCallback Function called when the operation fails
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi/retrieverecord
+         */
+        RetrieveRecord(entityLogicalName: string, id: string, options?: string, successCallback?: (result: any) => void, errorCallback?: (error: any) => void): Promise<any> | void;
+
+        /**
+         * Retrieves a collection of entity records
+         * @param entityLogicalName Logical name of the entity
+         * @param options OData system query options ($select, $filter, $orderby, etc.)
+         * @param maxPageSize Maximum number of records to return per page
+         * @param successCallback Function called when records are retrieved successfully
+         * @param errorCallback Function called when the operation fails
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi/retrievemultiplerecords
+         */
+        RetrieveMultipleRecords(entityLogicalName: string, options?: string, maxPageSize?: number, successCallback?: (result: { entities: any[]; nextLink?: string }) => void, errorCallback?: (error: any) => void): Promise<{ entities: any[]; nextLink?: string }> | void;
+
+        /**
+         * Updates an entity record
+         * @param entityLogicalName Logical name of the entity
+         * @param id GUID of the record to update
+         * @param data Object containing the data to update
+         * @param successCallback Function called when the record is updated successfully
+         * @param errorCallback Function called when the operation fails
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi/updaterecord
+         */
+        UpdateRecord(entityLogicalName: string, id: string, data: any, successCallback?: (result: { id: string; entityType: string }) => void, errorCallback?: (error: any) => void): Promise<{ id: string; entityType: string }> | void;
+
+        /**
+         * Executes a single action, function, or CRUD operation
+         * @param request Object containing the request parameters
+         * @param successCallback Function called when the request is executed successfully
+         * @param errorCallback Function called when the operation fails
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi/online/execute
+         */
+        Execute(request: any, successCallback?: (result: any) => void, errorCallback?: (error: any) => void): Promise<any> | void;
+
+        /**
+         * Executes a collection of action, function, or CRUD operations
+         * @param requests Array of request objects
+         * @param successCallback Function called when requests are executed successfully
+         * @param errorCallback Function called when the operation fails
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi/online/executemultiple
+         */
+        ExecuteMultiple(requests: any[], successCallback?: (result: any[]) => void, errorCallback?: (error: any) => void): Promise<any[]> | void;
+    }
+
+    // ============================================================================
+    // Copilot Interface
+    // ============================================================================
+
+    /**
+     * Interface for Copilot API (Preview)
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-copilot
+     */
+    interface ICopilot {
+        /**
+         * Executes a Copilot event
+         * @param eventName The name of the Copilot event
+         * @param eventParameters Parameters for the event
+         * @param successCallback Function called on success
+         * @param errorCallback Function called on error
+         */
+        ExecuteEvent(eventName: string, eventParameters: any, successCallback?: (result: any) => void, errorCallback?: (error: any) => void): Promise<any> | void;
+
+        /**
+         * Executes a Copilot prompt
+         * @param promptText The prompt text to execute
+         * @param successCallback Function called on success
+         * @param errorCallback Function called on error
+         */
+        ExecutePrompt(promptText: string, successCallback?: (result: any) => void, errorCallback?: (error: any) => void): Promise<any> | void;
+    }
 }
