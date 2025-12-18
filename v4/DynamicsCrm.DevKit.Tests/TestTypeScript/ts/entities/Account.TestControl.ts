@@ -276,7 +276,14 @@ export function TestControl(form: AccountForm.Form): void {
     // =====================================================
     // OUTPUT
     // =====================================================
-    console.group(`🎛️ TEST 0: IControl Interface [${startTime}] - Using: Name field`);
+    // Calculate summary first for header
+    const allResults = [...results, ...setterResults, ...methodResults];
+    const passed = allResults.filter(r => r.Status === "✓").length;
+    const warnings = allResults.filter(r => r.Status === "⚠").length;
+    const failed = allResults.filter(r => r.Status === "✗").length;
+    const total = allResults.length;
+
+    console.groupCollapsed(`🎛️ TEST 0: IControl Interface [${startTime}] - Using: Name field - ${passed}/${total}`);
 
     console.log("%c📋 Properties (readonly) - 8 items", "font-weight: bold; font-size: 14px; color: #4CAF50;");
     console.table(results);
@@ -288,12 +295,6 @@ export function TestControl(form: AccountForm.Form): void {
     console.table(methodResults);
 
     // Summary
-    const allResults = [...results, ...setterResults, ...methodResults];
-    const passed = allResults.filter(r => r.Status === "✓").length;
-    const warnings = allResults.filter(r => r.Status === "⚠").length;
-    const failed = allResults.filter(r => r.Status === "✗").length;
-    const total = allResults.length;
-
     console.log(`%c✅ Summary: ${passed}/${total} passed` +
         (warnings > 0 ? ` | ⚠ ${warnings} warnings` : '') +
         (failed > 0 ? ` | ✗ ${failed} failed` : ''),

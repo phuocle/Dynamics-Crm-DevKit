@@ -13,6 +13,7 @@ ts/
 │   ├── Account.ts                    # Main form - gọi các Test functions
 │   ├── Account.TestControl.ts        # Test 0: IControl interface (base)
 │   ├── Account.TestLookup.ts         # Test 1: Lookup control
+│   ├── Account.TestMemo.ts           # Test 2: Memo control
 │   ├── Account.TestAiContext.md      # File này
 │   └── generator/
 │       └── Account.form.ts           # Generated form types
@@ -49,16 +50,23 @@ export function Test{ControlType}(form: AccountForm.Form): void {
 
     // Test properties và methods...
 
-    // Output
-    console.group(`🎯 TEST X: {ControlType} [${startTime}]`);
+    // Calculate summary first for header
+    const allResults = [...results, ...methodResults];
+    const passed = allResults.filter(r => r.Status === "✓").length;
+    const warnings = allResults.filter(r => r.Status === "⚠").length;
+    const failed = allResults.filter(r => r.Status === "✗").length;
+    const total = allResults.length;
+
+    // Output - Use groupCollapsed for collapsed by default
+    console.groupCollapsed(`🎯 TEST X: {ControlType} [${startTime}] - Using: {field} field - ${passed}/${total}`);
+    
     console.log("%c📋 Properties", "font-weight: bold; font-size: 14px; color: #4CAF50;");
     console.table(results);
+    
     console.log("%c⚡ Methods", "font-weight: bold; font-size: 14px; color: #2196F3;");
     console.table(methodResults);
     
-    const allResults = [...results, ...methodResults];
-    const passed = allResults.filter(r => r.Status === "✓").length;
-    console.log(`%c✅ Summary: ${passed}/${allResults.length} passed`, 
+    console.log(`%c✅ Summary: ${passed}/${total} passed`, 
         "font-weight: bold; color: #4CAF50; font-size: 14px;");
     console.groupEnd();
 }
@@ -68,15 +76,16 @@ export function Test{ControlType}(form: AccountForm.Form): void {
 ```typescript
 import { TestControl } from './Account.TestControl';
 import { TestLookup } from './Account.TestLookup';
+import { TestMemo } from './Account.TestMemo';
 import { Test{NewControl} } from './Account.Test{NewControl}';
 
 setTimeout(() => {
     console.clear();
-    debugger;
     
-    TestControl(form);   // Test 0
-    TestLookup(form);    // Test 1
-    Test{NewControl}(form); // Test 2...
+    TestControl(form);      // Test 0
+    TestLookup(form);       // Test 1
+    TestMemo(form);         // Test 2
+    Test{NewControl}(form); // Test 3...
 }, 10000);
 ```
 
@@ -96,10 +105,11 @@ File sẽ được copy vào: `D:\...\TestAllInOne\Dev.DevKit.WebResource\entiti
 
 ## Đã Test (Completed)
 
-| # | File | Control/Interface | Items |
-|---|------|-------------------|-------|
-| 0 | `Account.TestControl.ts` | IControl (base) | 24 items: 8 readonly props, 6 setter props, 10 methods |
-| 1 | `Account.TestLookup.ts` | Lookup | 25 items: 16 props, 9 methods |
+| # | File | Control/Interface | Items | Field |
+|---|------|-------------------|-------|-------|
+| 0 | `Account.TestControl.ts` | IControl (base) | 24 items | Name |
+| 1 | `Account.TestLookup.ts` | Lookup | 25 items | PrimaryContactId |
+| 2 | `Account.TestMemo.ts` | Memo | 26 items | Description |
 
 ---
 
@@ -109,22 +119,21 @@ Xem `devkit.d.ts` namespace `DevKit.Controls` để tìm interfaces:
 
 | # | Interface | Sample Field | Ghi chú |
 |---|-----------|--------------|---------|
-| 2 | String | `form.Body.Name` | MaxLength |
-| 3 | Integer | `form.Header.NumberOfEmployees` | Min, Max, Precision |
-| 4 | Money | `form.Body.Revenue` | Min, Max, Precision |
-| 5 | Decimal | | Min, Max, Precision |
-| 6 | Double | | Min, Max, Precision |
-| 7 | Boolean | `form.Body.CreditOnHold` | InitialValue |
-| 8 | DateTime | | ShowTime |
-| 9 | OptionSet | `form.Body.IndustryCode` | Options, SelectedOption, AddOption, RemoveOption, ClearOptions |
-| 10 | MultiOptionSet | `form.Body.v4_Categories` | Same as OptionSet but arrays |
-| 11 | Memo | | MaxLength (multiline text) |
-| 12 | ITab | `form.Tabs.SUMMARY` | AddTabStateChange, DisplayState |
+| 3 | String | `form.Body.Name` | MaxLength |
+| 4 | Integer | `form.Header.NumberOfEmployees` | Min, Max, Precision |
+| 5 | Money | `form.Body.Revenue` | Min, Max, Precision |
+| 6 | Decimal | | Min, Max, Precision |
+| 7 | Double | | Min, Max, Precision |
+| 8 | Boolean | `form.Body.CreditOnHold` | InitialValue |
+| 9 | DateTime | `form.Body.v4_Birthday` | ShowTime |
+| 10 | OptionSet | `form.Body.IndustryCode` | Options, SelectedOption, AddOption, RemoveOption, ClearOptions |
+| 11 | MultiOptionSet | `form.Body.v4_Categories` | Same as OptionSet but arrays |
+| 12 | ITab | `form.Tabs.DETAILS_TAB` | AddTabStateChange, DisplayState |
 | 13 | ISection | | Visibility |
-| 14 | IFrame | | Src, InitialUrl |
-| 15 | WebResource | | |
-| 16 | Grid/Subgrid | | |
-| 17 | NavigationItem | | |
+| 14 | IFrame | `form.Body.v4_IFrameExternal` | Src, InitialUrl |
+| 15 | WebResource | `form.Body.v4_WebResourceHelp` | |
+| 16 | Grid/Subgrid | `form.Grids.Contacts` | |
+| 17 | NavigationItem | `form.Navigation.Account_Tasks` | |
 
 ---
 
@@ -146,11 +155,12 @@ Xem `devkit.d.ts` namespace `DevKit.Controls` để tìm interfaces:
 
 ## Lưu ý quan trọng
 
-1. **Test order**: Test 0 (IControl) → Test 1 (Lookup) → Test 2, 3...
-2. **console.clear()**: Chỉ gọi 1 lần ở Account.ts, KHÔNG gọi trong các file Test riêng
-3. **setTimeout 10s**: Chờ form load xong mới run tests
-4. **deploy.bat**: Có biến `ENTITIES` để config copy nhiều entity files
-5. **debugger statement**: Giữ lại để debug trong F12 DevTools
+1. **Test order**: Test 0 → Test 1 → Test 2 → ...
+2. **console.groupCollapsed**: Mặc định đóng, click để mở xem chi tiết
+3. **Header format**: `TEST X: {Control} [{time}] - Using: {field} field - {passed}/{total}`
+4. **console.clear()**: Chỉ gọi 1 lần ở Account.ts, KHÔNG gọi trong các file Test riêng
+5. **setTimeout 10s**: Chờ form load xong mới run tests
+6. **deploy.bat**: Có biến `ENTITIES` để config copy nhiều entity files
 
 ---
 

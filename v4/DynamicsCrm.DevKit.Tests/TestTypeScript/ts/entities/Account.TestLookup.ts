@@ -245,7 +245,14 @@ export function TestLookup(form: AccountForm.Form): void {
     }
 
     // === OUTPUT: Single grouped log ===
-    console.group(`🔍 LOOKUP TEST: PrimaryContactId [${startTime}]`);
+    // Calculate summary first for header
+    const allResults = [...results, ...methodResults];
+    const passed = allResults.filter(r => r.Status === "✓").length;
+    const warnings = allResults.filter(r => r.Status === "⚠").length;
+    const failed = allResults.filter(r => r.Status === "✗").length;
+    const total = allResults.length;
+
+    console.groupCollapsed(`🔍 TEST 1: Lookup Control [${startTime}] - Using: PrimaryContactId field - ${passed}/${total}`);
 
     console.log("%c📋 Properties (16 items)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
     console.table(results);
@@ -254,12 +261,6 @@ export function TestLookup(form: AccountForm.Form): void {
     console.table(methodResults);
 
     // Summary
-    const allResults = [...results, ...methodResults];
-    const passed = allResults.filter(r => r.Status === "✓").length;
-    const warnings = allResults.filter(r => r.Status === "⚠").length;
-    const failed = allResults.filter(r => r.Status === "✗").length;
-    const total = allResults.length;
-
     console.log(`%c✅ Summary: ${passed}/${total} passed` +
         (warnings > 0 ? ` | ⚠ ${warnings} warnings` : '') +
         (failed > 0 ? ` | ✗ ${failed} failed` : ''),
@@ -267,3 +268,4 @@ export function TestLookup(form: AccountForm.Form): void {
 
     console.groupEnd();
 }
+

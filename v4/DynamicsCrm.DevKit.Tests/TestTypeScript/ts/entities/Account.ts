@@ -37,7 +37,7 @@ const formAccount = (function () {
             // Test 1: Lookup Control
             TestLookup(form);
 
-            // Test 3: Memo Control
+            // Test 2: Memo Control
             TestMemo(form);
 
         }, 10000);
