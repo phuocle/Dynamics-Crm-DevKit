@@ -21,6 +21,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         const int PACK = 50;
         private const string SPACE = "  ";
         private readonly Dictionary<string, Assembly> _assemblyCache = new Dictionary<string, Assembly>(StringComparer.OrdinalIgnoreCase);
+        private string _currentAssemblyDirectory = null;
         private bool OK { get; set; } = false;
         private bool IS_MANAGED_IDENTITY { get; set; } = false;
         private string ERROR { get; set; } = string.Empty;
@@ -2035,6 +2036,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             Assembly assembly = null;
             try
             {
+                _currentAssemblyDirectory = Path.GetDirectoryName(file);
                 var assemblyBytes = File.ReadAllBytes(file);
                 AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve += CurrentDomain_ReflectionOnlyAssemblyResolve;
                 assembly = Assembly.ReflectionOnlyLoad(assemblyBytes);
@@ -2052,6 +2054,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         }
         private List<TypeInfo> GetTypes(string file)
         {
+            _currentAssemblyDirectory = Path.GetDirectoryName(file);
             var assembly = LoadAssemblyIntoCache(file);
             if (assembly == null) return new List<TypeInfo>();
             var types = new List<TypeInfo>();
@@ -2069,6 +2072,17 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                             types.Add(type);
                     }
                     catch { }
+                }
+            }
+            catch (ReflectionTypeLoadException ex)
+            {
+                CliLog.WriteLineError($"Failed to read types from assembly {file}: {ex.Message}");
+                if (ex.LoaderExceptions != null)
+                {
+                    foreach (var loaderEx in ex.LoaderExceptions)
+                    {
+                        CliLog.WriteLineError($"  LoaderException: {loaderEx?.Message}");
+                    }
                 }
             }
             catch (Exception ex)
@@ -2090,6 +2104,27 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 var parts = args.Name.Split(',');
                 var assemblyName = parts[0].Trim();
+
+                // Check if already cached
+                if (_assemblyCache.TryGetValue(assemblyName + ".dll", out var cachedAssembly))
+                {
+                    return cachedAssembly;
+                }
+
+                // Try to load from current assembly directory first
+                if (!string.IsNullOrEmpty(_currentAssemblyDirectory))
+                {
+                    var localPath = Path.Combine(_currentAssemblyDirectory, assemblyName + ".dll");
+                    if (File.Exists(localPath))
+                    {
+                        var assemblyBytes = File.ReadAllBytes(localPath);
+                        var loaded = Assembly.ReflectionOnlyLoad(assemblyBytes);
+                        _assemblyCache[assemblyName + ".dll"] = loaded;
+                        return loaded;
+                    }
+                }
+
+                // Fall back to standard load
                 return Assembly.ReflectionOnlyLoad(args.Name);
             }
             catch
