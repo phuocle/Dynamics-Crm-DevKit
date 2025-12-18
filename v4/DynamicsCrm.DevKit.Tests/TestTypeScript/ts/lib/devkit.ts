@@ -1,18 +1,100 @@
+/**
+ * Execution context interface for form event handlers.
+ * The execution context defines the event context in which your code executes.
+ * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/execution-context
+ */
 export interface IExecutionContext {
+    /**
+     * Returns a value that indicates the order in which this handler is executed.
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/executioncontext/getdepth
+     */
     readonly Depth: number;
+
+    /**
+     * Returns an object with the Id, Name, and EntityType of the saved entity.
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/save-event-arguments/getentityreference
+     */
     readonly EntityReference: any;
+
+    /**
+     * Returns an object that contains methods to manage the save event.
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/executioncontext/geteventargs
+     */
     readonly EventArgs: any;
+
+    /**
+     * Returns a reference to the object that the event occurred on.
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/executioncontext/geteventsource
+     */
     readonly EventSource: any;
+
+    /**
+     * Returns a reference to the form or an item on the form depending on where the method was called.
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/executioncontext/getformcontext
+     */
     readonly FormContext: any;
+
+    /**
+     * Returns a boolean value indicating if the save operation was successful.
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/save-event-arguments/getissavesuccess
+     */
     readonly IsSaveSuccess: boolean;
+
+    /**
+     * Returns the error information if the save operation failed.
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/save-event-arguments/getsaveerrorinfo
+     */
     readonly SaveErrorInfo: any;
+
+    /**
+     * Returns a value indicating how the save event was initiated by the user.
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/save-event-arguments/getsavemode
+     */
     readonly SaveMode: number;
+
+    /**
+     * Disables the asynchronous timeout for the OnSave event handler.
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/save-event-arguments/disableasynctimeout
+     */
     DisableAsyncTimeout(): void;
+
+    /**
+     * Gets a variable set using setSharedVariable.
+     * @param key The name of the shared variable.
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/executioncontext/getsharedvariable
+     */
     GetSharedVariable(key: string): any;
+
+    /**
+     * Returns a value indicating whether the default behavior has been prevented.
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/save-event-arguments/isdefaultprevented
+     */
     IsDefaultPrevented(): boolean;
+
+    /**
+     * Returns a value indicating whether the form data is loading for the first time.
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/save-event-arguments/getdataloadstate
+     */
     IsInitialLoad(): boolean;
+
+    /**
+     * Cancels the save operation but leaves the form open.
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/save-event-arguments/preventdefault
+     */
     SetPreventDefault(): void;
+
+    /**
+     * Cancels the save operation and prevents the error dialog from appearing.
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/save-event-arguments/preventdefaultonerror
+     */
     SetPreventDefaultOnError(): void;
+
+    /**
+     * Sets a variable that can be accessed by other handlers.
+     * @param key The name of the shared variable.
+     * @param value The value to set.
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/executioncontext/setsharedvariable
+     */
     SetSharedVariable(key: string, value: any): void;
 }
 
@@ -389,6 +471,12 @@ function LoadExecutionContext(executionContext: any): any {
     obj.SetSharedVariable = (key: string, value: any) => executionContext?.setSharedVariable(key, value);
     return obj;
 }
+/**
+ * Loads the SidePanes API wrapper.
+ * Provides access to side panes functionality in model-driven apps.
+ * @returns An object implementing the ISidePanes interface
+ * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app-sidepanes
+ */
 export function LoadSidePanes(): any {
     const sidePanes: any = {};
     const xrm = getXrm();
@@ -399,6 +487,12 @@ export function LoadSidePanes(): any {
     sidePanes.GetSelected = () => (xrm as any)?.App?.sidePanes?.getSelectedPane();
     return sidePanes;
 }
+/**
+ * Loads the WebApi wrapper.
+ * Provides methods to use Web API to create and manage records and execute Web API actions and functions.
+ * @returns An object implementing the IWebApi interface
+ * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi
+ */
 export function LoadWebApi(): DevKit.IWebApi {
     const obj: any = {} as DevKit.IWebApi;
     const xrm = getXrm();
@@ -583,6 +677,12 @@ export function LoadWebApi(): DevKit.IWebApi {
     });
     return obj;
 }
+/**
+ * Loads the Copilot API wrapper.
+ * Provides access to Copilot functionality for executing events and prompts.
+ * @returns An object implementing the ICopilot interface
+ * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-copilot
+ */
 export function LoadCopilot(): DevKit.ICopilot {
     const obj: any = {};
     const xrm = getXrm();
@@ -610,6 +710,15 @@ function loadOthers(formContext: any, form: any, defaultWebResourceName: string 
     form.WebApi = LoadWebApi();
     form.Copilot = LoadCopilot();
 }
+/**
+ * Loads a form with typed Body, Header, Tab, Grid, Navigation, QuickForm, and Process sections.
+ * This is the main function for initializing a form in TypeScript.
+ * @param executionContext The execution context passed to the form event handler
+ * @param defaultWebResourceName Optional default web resource name for utility functions
+ * @param formConfig Configuration object specifying fields, tabs, grids, etc.
+ * @returns A typed form object with all form functionality
+ * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference
+ */
 export function LoadFormV2<TBody = Record<string, any>, THeader = Record<string, any>, TTab = Record<string, any>, TGrid = Record<string, any>, TNavigation = Record<string, any>, TQuickForm = Record<string, any>, TProcess = any>(
     executionContext: any,
     defaultWebResourceName: string | undefined,
@@ -861,15 +970,39 @@ export function LoadProcess(formContext: any): any {
     process.SetActiveStage = (stageId: string, callback: any) => getProcess?.setActiveStage(stageId, callback);
     return process;
 }
+/**
+ * Configuration interface for form initialization.
+ * Specifies which fields, tabs, grids, etc. to load on a form.
+ */
 export interface IFormConfig {
+    /** Array of body field logical names */
     body?: string[];
+    /** Array of header field logical names */
     header?: string[];
+    /** Array of tab and section names in format "TabName___SectionName" */
     tab?: string[];
+    /** Array of grid control names */
     grid?: string[];
+    /** Array of navigation item IDs */
     navigation?: string[];
+    /** Array of quick form names in format "QuickFormName___FieldName" */
     quick?: string[];
+    /** Array of BPF fields in format "ProcessName___FieldName" */
     bpf?: string[];
 }
+/**
+ * Base class for typed entity forms.
+ * Provides strongly-typed access to form controls, fields, tabs, grids, and more.
+ * Extend this class in generated entity form files.
+ * @template TBody Type definition for body fields
+ * @template THeader Type definition for header fields
+ * @template TTab Type definition for tabs
+ * @template TGrid Type definition for grids
+ * @template TNavigation Type definition for navigation items
+ * @template TQuickForm Type definition for quick view forms
+ * @template TProcess Type definition for business process flows
+ * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference
+ */
 export class FormBase<TBody, THeader, TTab, TGrid, TNavigation, TQuickForm, TProcess = any> {
     public Body: TBody;
     public Header: THeader;
