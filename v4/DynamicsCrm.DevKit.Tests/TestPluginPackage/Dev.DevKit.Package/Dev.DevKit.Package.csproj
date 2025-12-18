@@ -29,7 +29,7 @@
 		<PackageReference Include="Microsoft.CrmSdk.CoreAssemblies" Version="9.0.2.60" PrivateAssets="All" />
 		<PackageReference Include="Microsoft.PowerApps.MSBuild.Plugin" Version="1.51.1" PrivateAssets="All" />
 		<PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="All" />
-		<PackageReference Include="Niam.XRM.Framework" Version="9.0.2.27" />
+		<PackageReference Include="Niam.XRM.Framework" Version="9.0.2.451" />
 	</ItemGroup>
 	<ItemGroup>
 		<None Update="ReadMe.md">

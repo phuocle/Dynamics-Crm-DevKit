@@ -19,4 +19,5 @@
 2. Add nuget Niam.XRM.Framework to the project
 3. Add plugin class and update T4 code Niam.XRM.Framework.t4 as custom template
 4. Update your code and update DynamicsCrm.DevKit.Cli.json with: Dev.DevKitV4.Package.*.nupkg
-5. Build and deploy with DynamicsCrm.DevKit.Cli
+5. Add "02. Console Project" and build to get latest DynamicsCrm.DevKit.Cli.exe 
+6. Build and deploy with DynamicsCrm.DevKit.Cli
