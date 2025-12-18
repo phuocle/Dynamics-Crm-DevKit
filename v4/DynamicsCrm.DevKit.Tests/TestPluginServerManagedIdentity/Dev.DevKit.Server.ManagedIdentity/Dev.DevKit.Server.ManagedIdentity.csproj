@@ -58,11 +58,14 @@
     <None Include="Dev.DevKit.Server.ManagedIdentity.snk" />
     <None Include="deploy.debug.bat" />
     <None Include="deploy.debug.only.bat" />
+    <Compile Include="AssemblyInfo2.cs" />
     <Compile Include="PostTeamCreateAsynchronous.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <None Include="Plugin-Managed-Identity-Config.json" />
     <None Include="Plugin-Managed-Identity.ps1" />
     <None Include="README.md" />
+    <None Include="Server-ManagedIdentity.cer" />
+    <None Include="Server-ManagedIdentity.pfx" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\DynamicsCrm.DevKit.Analyzers.4.0.0\analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />

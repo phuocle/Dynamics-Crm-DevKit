@@ -18,7 +18,7 @@
 {
   "ResourceGroup": "Dev-DevKit-Server-ManagedIdentity",
   "Location": "southeastasia",
-  "KeyVaultName": "Dev-DevKit-Server-ManagedIdentity",
+  "KeyVaultName": "Server-ManagedIdentity",
   "SecretName": "Server-ManagedIdentity",
   "SecretValue": "PASSWORD-Server-ManagedIdentity",
   "CertificateFileName": "Server-ManagedIdentity",
@@ -38,5 +38,13 @@
 }
 
 ```
-5. Make sure you enter all valid values like above. Then run Plugin-Managed-Identity.ps1 and wait
+5. Make sure you enter all valid values like above. Then run Plugin-Managed-Identity.ps1 and wait.
+6. If 5 failed, make sure you fix and run 5. without any errors
+7. Now you see some files updated and created
+    + Plugin-Managed-Identity-Config.json updated
+    + Server-ManagedIdentity.cer created, need include to project
+    + Server-ManagedIdentity.pfx created, need include to project
+    + AssemblyInfo2.cs created, need include to project
+8. Now build your project/solution and deploy use DynamicsCrm.DevKit.Cli
+9. Done, DynamicsCrm.DevKit.Cli will do all for you, now verify you code and you can use Azure Managed Identity in your plugin
 

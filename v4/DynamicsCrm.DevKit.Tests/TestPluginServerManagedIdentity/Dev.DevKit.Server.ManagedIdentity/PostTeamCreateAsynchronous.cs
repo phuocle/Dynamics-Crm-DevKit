@@ -2,6 +2,7 @@
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Extensions;
 using System;
+using System.Collections.Generic;
 
 namespace Dev.DevKit.Server.ManagedIdentity
 {
@@ -42,15 +43,19 @@ namespace Dev.DevKit.Server.ManagedIdentity
 
             tracing?.DebugContext(context);
 
-            ExecutePlugin(context, serviceFactory, serviceAdmin, service, tracing);
+            var identityService = (IManagedIdentityService)serviceProvider.GetService(typeof(IManagedIdentityService));
+            var scopes = new List<string> { "https://vault.azure.net/.default" };
+            var accessToken = identityService.AcquireToken(scopes);
+
+            ExecutePlugin(context, serviceFactory, serviceAdmin, service, tracing, accessToken);
         }
 
-        private void ExecutePlugin(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService serviceAdmin, IOrganizationService service, ITracingService tracing)
+        private void ExecutePlugin(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService serviceAdmin, IOrganizationService service, ITracingService tracing, string accessToken)
         {
             var targetEntity = context.InputParameterOrDefault<Entity>("Target");
             context.PostEntityImages.TryGetValue("PostImage", out Entity postEntity);
             //YOUR PLUGIN-CODE GO HERE
-
+            tracing.Trace($"Azure Access Token: {accessToken}");
         }
     }
 }
