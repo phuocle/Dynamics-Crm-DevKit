@@ -2,6 +2,7 @@ import { AccountForm } from './generator/Account.form';
 import { TestControl } from './Account.TestControl';
 import { TestLookup } from './Account.TestLookup';
 import { TestMemo } from './Account.TestMemo';
+import { TestString } from './Account.TestString';
 
 const formAccount = (function () {
     "use strict";
@@ -39,6 +40,9 @@ const formAccount = (function () {
 
             // Test 2: Memo Control
             TestMemo(form);
+
+            // Test 3: String Control
+            TestString(form);
 
         }, 10000);
 
