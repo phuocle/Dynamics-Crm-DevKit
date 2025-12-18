@@ -14,6 +14,106 @@ declare namespace DevKit {
     type Guid = string;
 
     /**
+     * Execution context interface for form event handlers.
+     * The execution context defines the event context in which your code executes.
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/execution-context
+     */
+    interface IExecutionContext {
+        /**
+         * Returns a value that indicates the order in which this handler is executed.
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/executioncontext/getdepth
+         */
+        readonly Depth: number;
+
+        /**
+         * Returns an object with the Id, Name, and EntityType of the saved entity.
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/save-event-arguments/getentityreference
+         */
+        readonly EntityReference: any;
+
+        /**
+         * Returns an object that contains methods to manage the save event.
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/executioncontext/geteventargs
+         */
+        readonly EventArgs: any;
+
+        /**
+         * Returns a reference to the object that the event occurred on.
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/executioncontext/geteventsource
+         */
+        readonly EventSource: any;
+
+        /**
+         * Returns a reference to the form or an item on the form depending on where the method was called.
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/executioncontext/getformcontext
+         */
+        readonly FormContext: any;
+
+        /**
+         * Returns a boolean value indicating if the save operation was successful.
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/save-event-arguments/getissavesuccess
+         */
+        readonly IsSaveSuccess: boolean;
+
+        /**
+         * Returns the error information if the save operation failed.
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/save-event-arguments/getsaveerrorinfo
+         */
+        readonly SaveErrorInfo: any;
+
+        /**
+         * Returns a value indicating how the save event was initiated by the user.
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/save-event-arguments/getsavemode
+         */
+        readonly SaveMode: number;
+
+        /**
+         * Disables the asynchronous timeout for the OnSave event handler.
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/save-event-arguments/disableasynctimeout
+         */
+        DisableAsyncTimeout(): void;
+
+        /**
+         * Gets a variable set using setSharedVariable.
+         * @param key The name of the shared variable.
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/executioncontext/getsharedvariable
+         */
+        GetSharedVariable(key: string): any;
+
+        /**
+         * Returns a value indicating whether the default behavior has been prevented.
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/save-event-arguments/isdefaultprevented
+         */
+        IsDefaultPrevented(): boolean;
+
+        /**
+         * Returns a value indicating whether the form data is loading for the first time.
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/save-event-arguments/getdataloadstate
+         */
+        IsInitialLoad(): boolean;
+
+        /**
+         * Cancels the save operation but leaves the form open.
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/save-event-arguments/preventdefault
+         */
+        SetPreventDefault(): void;
+
+        /**
+         * Cancels the save operation and prevents the error dialog from appearing.
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/save-event-arguments/preventdefaultonerror
+         */
+        SetPreventDefaultOnError(): void;
+
+        /**
+         * Sets a variable that can be accessed by other handlers.
+         * @param key The name of the shared variable.
+         * @param value The value to set.
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/executioncontext/setsharedvariable
+         */
+        SetSharedVariable(key: string, value: any): void;
+    }
+
+    /**
      * Notification object for AddNotification method
      * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/addnotification
      */
