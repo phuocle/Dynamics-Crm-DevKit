@@ -10,5 +10,32 @@
 
 # DynamicsCrm.DevKit Server Managed Identity
 
-1. Add project item '13. .bat files' then chose "Plugin-Managed-Identity.ps1";
+1. Add project item '13. .bat files' then chose "Plugin-Managed-Identity.ps1"
+2. Add DynamicsCrm.DevKit plugin class to project
+3. Make sure you already install "Azure Cli" and sign in to your Azure account that want deploy Managed Identity  
+4. Update file Plugin-Managed-Identity-Config.json with these value
+```json
+{
+  "ResourceGroup": "Dev-DevKit-Server-ManagedIdentity",
+  "Location": "southeastasia",
+  "KeyVaultName": "Dev-DevKit-Server-ManagedIdentity",
+  "SecretName": "Server-ManagedIdentity",
+  "SecretValue": "PASSWORD-Server-ManagedIdentity",
+  "CertificateFileName": "Server-ManagedIdentity",
+  "CertificatePassword": "!-Server-ManagedIdentity-*",
+  "CertificateValidityYears": 10,
+  "TenantId": "",
+  "KeyVaultURL": "",
+  "CertificateThumbprint": "",
+  "CertificateSHA256Hash": "",
+  "ManagedIdentities": [
+    {
+      "AppName": "",
+      "AppId": "",
+      "EnvironmentId": ""
+    }
+  ]
+}
+```
+5. Make sure you enter all valid values like above. Then run Plugin-Managed-Identity.ps1 and wait
 
