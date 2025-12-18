@@ -236,7 +236,7 @@ export function TestLookup(form: AccountForm.Form): void {
     // Test 18: EntityTypes (setter) - test set and restore  
     try {
         const originalTypes = lookup.EntityTypes;
-        lookup.EntityTypes = ["contact", "account"];
+        lookup.EntityTypes = ["contact"];
         const newTypes = lookup.EntityTypes;
         lookup.EntityTypes = originalTypes; // restore
         methodResults.push({ Test: "18", Property: "EntityTypes (set)", Value: `Set→Restored`, Status: "✓" });
