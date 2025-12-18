@@ -9,8 +9,12 @@ interface TestResult {
 
 /**
  * TEST 3: Memo Control - Description Field
- * Memo extends IControl with MaxLength property
+ * Memo extends IControlText with MaxLength property
  * Uses console.table for cleaner output
+ * 
+ * Convention:
+ * - R-Index: ReadOnly properties (R1, R2, R3...)
+ * - S-Index: Setters & Methods (S1, S2, S3...)
  */
 export function TestMemo(form: AccountForm.Form): void {
     const results: TestResult[] = [];
@@ -20,56 +24,37 @@ export function TestMemo(form: AccountForm.Form): void {
     const originalValue = memo.Value;
 
     // =====================================================
-    // MEMO-SPECIFIC PROPERTIES
+    // READONLY PROPERTIES (R-Index)
     // =====================================================
     try {
-        // MaxLength (Memo-specific, readonly)
-        results.push({
-            Test: "M1",
-            Property: "MaxLength",
-            Value: memo.MaxLength,
-            Status: typeof memo.MaxLength === "number" ? "✓" : "⚠"
-        });
+        // Memo-specific properties
+        results.push({ Test: "R1", Property: "MaxLength", Value: memo.MaxLength, Status: typeof memo.MaxLength === "number" ? "✓" : "⚠" });
+        results.push({ Test: "R2", Property: "Value", Value: originalValue ? `"${originalValue.substring(0, 50)}${originalValue.length > 50 ? '...' : ''}"` : "(empty)", Status: "✓" });
 
-        // Value (string | null)
-        results.push({
-            Test: "M2",
-            Property: "Value",
-            Value: originalValue ? `"${originalValue.substring(0, 50)}${originalValue.length > 50 ? '...' : ''}"` : "(empty)",
-            Status: "✓"
-        });
+        // Inherited from IControl
+        results.push({ Test: "R3", Property: "Attribute", Value: memo.Attribute ? "object" : "null", Status: memo.Attribute ? "✓" : "⚠" });
+        results.push({ Test: "R4", Property: "AttributeName", Value: memo.AttributeName, Status: memo.AttributeName === "description" ? "✓" : "⚠" });
+        results.push({ Test: "R5", Property: "AttributeType", Value: memo.AttributeType, Status: memo.AttributeType === "memo" ? "✓" : "⚠" });
+        results.push({ Test: "R6", Property: "ControlName", Value: memo.ControlName, Status: "✓" });
+        results.push({ Test: "R7", Property: "ControlType", Value: memo.ControlType, Status: "✓" });
+        results.push({ Test: "R8", Property: "Format", Value: memo.Format, Status: "✓" });
+        results.push({ Test: "R9", Property: "IsDirty", Value: memo.IsDirty, Status: "✓" });
+        results.push({ Test: "R10", Property: "IsValid", Value: memo.IsValid, Status: "✓" });
+        results.push({ Test: "R11", Property: "RequiredLevel", Value: memo.RequiredLevel, Status: "✓" });
+        results.push({ Test: "R12", Property: "SubmitMode", Value: memo.SubmitMode, Status: "✓" });
+        results.push({ Test: "R13", Property: "Disabled", Value: memo.Disabled, Status: "✓" });
+        results.push({ Test: "R14", Property: "Label", Value: memo.Label, Status: "✓" });
+        results.push({ Test: "R15", Property: "Visible", Value: memo.Visible, Status: "✓" });
 
     } catch (error: any) {
-        results.push({ Test: "ERR", Property: "Memo Props Error", Value: error.message, Status: "✗" });
+        results.push({ Test: "ERR", Property: "Props Error", Value: error.message, Status: "✗" });
     }
 
     // =====================================================
-    // INHERITED FROM IControl - Properties
+    // SETTERS & METHODS (S-Index)
     // =====================================================
     try {
-        results.push({ Test: "I1", Property: "Attribute", Value: memo.Attribute ? "object" : "null", Status: memo.Attribute ? "✓" : "⚠" });
-        results.push({ Test: "I2", Property: "AttributeName", Value: memo.AttributeName, Status: memo.AttributeName === "description" ? "✓" : "⚠" });
-        results.push({ Test: "I3", Property: "AttributeType", Value: memo.AttributeType, Status: memo.AttributeType === "memo" ? "✓" : "⚠" });
-        results.push({ Test: "I4", Property: "ControlName", Value: memo.ControlName, Status: "✓" });
-        results.push({ Test: "I5", Property: "ControlType", Value: memo.ControlType, Status: "✓" });
-        results.push({ Test: "I6", Property: "Format", Value: memo.Format, Status: "✓" });
-        results.push({ Test: "I7", Property: "IsDirty", Value: memo.IsDirty, Status: "✓" });
-        results.push({ Test: "I8", Property: "IsValid", Value: memo.IsValid, Status: "✓" });
-        results.push({ Test: "I9", Property: "RequiredLevel", Value: memo.RequiredLevel, Status: "✓" });
-        results.push({ Test: "I10", Property: "SubmitMode", Value: memo.SubmitMode, Status: "✓" });
-        results.push({ Test: "I11", Property: "Disabled", Value: memo.Disabled, Status: "✓" });
-        results.push({ Test: "I12", Property: "Label", Value: memo.Label, Status: "✓" });
-        results.push({ Test: "I13", Property: "Visible", Value: memo.Visible, Status: "✓" });
-
-    } catch (error: any) {
-        results.push({ Test: "ERR", Property: "IControl Props Error", Value: error.message, Status: "✗" });
-    }
-
-    // =====================================================
-    // INHERITED FROM IControl - Setter Tests
-    // =====================================================
-    try {
-        // Value setter
+        // Setter: Value
         memo.Value = (originalValue || "") + " [TEST]";
         const newValue = memo.Value;
         memo.Value = originalValue;
@@ -79,6 +64,7 @@ export function TestMemo(form: AccountForm.Form): void {
     }
 
     try {
+        // Setter: RequiredLevel
         const origRequired = memo.RequiredLevel;
         memo.RequiredLevel = "required";
         const check = memo.RequiredLevel;
@@ -89,6 +75,7 @@ export function TestMemo(form: AccountForm.Form): void {
     }
 
     try {
+        // Setter: Disabled
         const origDisabled = memo.Disabled;
         memo.Disabled = !origDisabled;
         const check = memo.Disabled;
@@ -99,6 +86,7 @@ export function TestMemo(form: AccountForm.Form): void {
     }
 
     try {
+        // Setter: Label
         const origLabel = memo.Label;
         memo.Label = origLabel + " (TEST)";
         const check = memo.Label;
@@ -109,6 +97,7 @@ export function TestMemo(form: AccountForm.Form): void {
     }
 
     try {
+        // Setter: Visible
         const origVisible = memo.Visible;
         memo.Visible = !origVisible;
         const check = memo.Visible;
@@ -118,59 +107,56 @@ export function TestMemo(form: AccountForm.Form): void {
         methodResults.push({ Test: "S5", Property: "Visible (set)", Value: e.message, Status: "✗" });
     }
 
-    // =====================================================
-    // INHERITED FROM IControl - Methods
-    // =====================================================
+    // Methods
     const onChangeCallback = (ctx: any) => console.log("  📍 Memo OnChange fired");
 
     try {
         memo.AddOnChange(onChangeCallback);
-        methodResults.push({ Test: "M1", Property: "AddOnChange", Value: "Registered", Status: "✓" });
+        methodResults.push({ Test: "S6", Property: "AddOnChange", Value: "Registered", Status: "✓" });
     } catch (e: any) {
-        methodResults.push({ Test: "M1", Property: "AddOnChange", Value: e.message, Status: "✗" });
+        methodResults.push({ Test: "S6", Property: "AddOnChange", Value: e.message, Status: "✗" });
     }
 
     try {
         memo.RemoveOnChange(onChangeCallback);
-        methodResults.push({ Test: "M2", Property: "RemoveOnChange", Value: "Removed", Status: "✓" });
+        methodResults.push({ Test: "S7", Property: "RemoveOnChange", Value: "Removed", Status: "✓" });
     } catch (e: any) {
-        methodResults.push({ Test: "M2", Property: "RemoveOnChange", Value: e.message, Status: "✗" });
+        methodResults.push({ Test: "S7", Property: "RemoveOnChange", Value: e.message, Status: "✗" });
     }
 
     try {
         memo.FireOnChange();
-        methodResults.push({ Test: "M3", Property: "FireOnChange", Value: "Fired", Status: "✓" });
+        methodResults.push({ Test: "S8", Property: "FireOnChange", Value: "Fired", Status: "✓" });
     } catch (e: any) {
-        methodResults.push({ Test: "M3", Property: "FireOnChange", Value: e.message, Status: "✗" });
+        methodResults.push({ Test: "S8", Property: "FireOnChange", Value: e.message, Status: "✗" });
     }
 
     try {
         setTimeout(() => memo.Focus(), 1000);
-        methodResults.push({ Test: "M4", Property: "Focus", Value: "Scheduled (1s)", Status: "✓" });
+        methodResults.push({ Test: "S9", Property: "Focus", Value: "Scheduled (1s)", Status: "✓" });
     } catch (e: any) {
-        methodResults.push({ Test: "M4", Property: "Focus", Value: e.message, Status: "✗" });
+        methodResults.push({ Test: "S9", Property: "Focus", Value: e.message, Status: "✗" });
     }
 
     try {
         memo.SetNotification("Test Memo notification", "MEMO_TEST_1");
         setTimeout(() => memo.ClearNotification("MEMO_TEST_1"), 3000);
-        methodResults.push({ Test: "M5", Property: "SetNotification", Value: "Set (clears 3s)", Status: "✓" });
+        methodResults.push({ Test: "S10", Property: "SetNotification", Value: "Set (clears 3s)", Status: "✓" });
     } catch (e: any) {
-        methodResults.push({ Test: "M5", Property: "SetNotification", Value: e.message, Status: "✗" });
+        methodResults.push({ Test: "S10", Property: "SetNotification", Value: e.message, Status: "✗" });
     }
 
     try {
         memo.SetIsValid(false, "Test invalid");
         setTimeout(() => memo.SetIsValid(true), 2000);
-        methodResults.push({ Test: "M6", Property: "SetIsValid", Value: "Set→Restored (2s)", Status: "✓" });
+        methodResults.push({ Test: "S11", Property: "SetIsValid", Value: "Set→Restored (2s)", Status: "✓" });
     } catch (e: any) {
-        methodResults.push({ Test: "M6", Property: "SetIsValid", Value: e.message, Status: "✗" });
+        methodResults.push({ Test: "S11", Property: "SetIsValid", Value: e.message, Status: "✗" });
     }
 
     // =====================================================
     // OUTPUT
     // =====================================================
-    // Calculate summary first for header
     const allResults = [...results, ...methodResults];
     const passed = allResults.filter(r => r.Status === "✓").length;
     const warnings = allResults.filter(r => r.Status === "⚠").length;
@@ -179,13 +165,12 @@ export function TestMemo(form: AccountForm.Form): void {
 
     console.groupCollapsed(`📝 TEST 2: Memo Control [${startTime}] - Using: Description field - ${passed}/${total}`);
 
-    console.log("%c📋 Properties (15 items)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
+    console.log("%c📋 ReadOnly Properties (R1-R15)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
     console.table(results);
 
-    console.log("%c⚡ Setters & Methods (11 items)", "font-weight: bold; font-size: 14px; color: #2196F3;");
+    console.log("%c⚡ Setters & Methods (S1-S11)", "font-weight: bold; font-size: 14px; color: #2196F3;");
     console.table(methodResults);
 
-    // Summary
     console.log(`%c✅ Summary: ${passed}/${total} passed` +
         (warnings > 0 ? ` | ⚠ ${warnings} warnings` : '') +
         (failed > 0 ? ` | ✗ ${failed} failed` : ''),
@@ -193,4 +178,3 @@ export function TestMemo(form: AccountForm.Form): void {
 
     console.groupEnd();
 }
-

@@ -5,6 +5,21 @@ File này dùng để AI nắm bắt ngữ cảnh khi tiếp tục công việc 
 
 ---
 
+## ⚠️ NAMING CONVENTION (QUAN TRỌNG)
+
+| Prefix | Loại | Ví dụ |
+|--------|------|-------|
+| **R-Index** | ReadOnly properties | R1, R2, R3... |
+| **S-Index** | Setters & Methods | S1, S2, S3... |
+
+**KHÔNG sử dụng:**
+- ❌ P1, P2, P3... (cũ)
+- ❌ M1, M2, M3... (cũ)
+- ❌ I1, I2, I3... (cũ)
+- ❌ Số thuần: 1, 2, 3... (cũ)
+
+---
+
 ## Cấu trúc Project
 
 ```
@@ -43,27 +58,53 @@ interface TestResult {
     Status: string;
 }
 
+/**
+ * TEST X: {ControlType} Control - {Field} Field
+ * 
+ * Convention:
+ * - R-Index: ReadOnly properties (R1, R2, R3...)
+ * - S-Index: Setters & Methods (S1, S2, S3...)
+ */
 export function Test{ControlType}(form: AccountForm.Form): void {
-    const results: TestResult[] = [];
-    const methodResults: TestResult[] = [];
+    const results: TestResult[] = [];         // ReadOnly (R-Index)
+    const methodResults: TestResult[] = [];   // Setters & Methods (S-Index)
     const startTime = new Date().toLocaleTimeString();
 
-    // Test properties và methods...
+    // =====================================================
+    // READONLY PROPERTIES (R-Index)
+    // =====================================================
+    try {
+        results.push({ Test: "R1", Property: "...", Value: ..., Status: "✓" });
+        results.push({ Test: "R2", Property: "...", Value: ..., Status: "✓" });
+        // ...
+    } catch (error: any) {
+        results.push({ Test: "ERR", Property: "Error", Value: error.message, Status: "✗" });
+    }
 
-    // Calculate summary first for header
+    // =====================================================
+    // SETTERS & METHODS (S-Index)
+    // =====================================================
+    try {
+        methodResults.push({ Test: "S1", Property: "...", Value: ..., Status: "✓" });
+        methodResults.push({ Test: "S2", Property: "...", Value: ..., Status: "✓" });
+        // ...
+    } catch (e: any) {
+        methodResults.push({ Test: "S1", Property: "...", Value: e.message, Status: "✗" });
+    }
+
+    // =====================================================
+    // OUTPUT
+    // =====================================================
     const allResults = [...results, ...methodResults];
     const passed = allResults.filter(r => r.Status === "✓").length;
-    const warnings = allResults.filter(r => r.Status === "⚠").length;
-    const failed = allResults.filter(r => r.Status === "✗").length;
     const total = allResults.length;
 
-    // Output - Use groupCollapsed for collapsed by default
     console.groupCollapsed(`🎯 TEST X: {ControlType} [${startTime}] - Using: {field} field - ${passed}/${total}`);
     
-    console.log("%c📋 Properties", "font-weight: bold; font-size: 14px; color: #4CAF50;");
+    console.log("%c📋 ReadOnly Properties (R1-RN)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
     console.table(results);
     
-    console.log("%c⚡ Methods", "font-weight: bold; font-size: 14px; color: #2196F3;");
+    console.log("%c⚡ Setters & Methods (S1-SN)", "font-weight: bold; font-size: 14px; color: #2196F3;");
     console.table(methodResults);
     
     console.log(`%c✅ Summary: ${passed}/${total} passed`, 
@@ -99,23 +140,20 @@ npm run debug
 ```bash
 .\deploy.bat
 ```
-File sẽ được copy vào: `D:\...\TestAllInOne\Dev.DevKit.WebResource\entitiests`
 
 ---
 
 ## Đã Test (Completed)
 
-| # | File | Control/Interface | Items | Field |
-|---|------|-------------------|-------|-------|
-| 0 | `Account.TestControl.ts` | IControl (base) | 24 items | Name |
-| 1 | `Account.TestLookup.ts` | Lookup | 25 items | PrimaryContactId |
-| 2 | `Account.TestMemo.ts` | Memo | 26 items | Description |
+| # | File | Control | ReadOnly | Setters/Methods | Field |
+|---|------|---------|----------|-----------------|-------|
+| 0 | `Account.TestControl.ts` | IControl | R1-R8 | S1-S16 | Name |
+| 1 | `Account.TestLookup.ts` | Lookup | R1-R16 | S1-S9 | PrimaryContactId |
+| 2 | `Account.TestMemo.ts` | Memo | R1-R15 | S1-S11 | Description |
 
 ---
 
 ## Chưa Test (TODO)
-
-Xem `devkit.d.ts` namespace `DevKit.Controls` để tìm interfaces:
 
 | # | Interface | Sample Field | Ghi chú |
 |---|-----------|--------------|---------|
@@ -126,41 +164,26 @@ Xem `devkit.d.ts` namespace `DevKit.Controls` để tìm interfaces:
 | 7 | Double | | Min, Max, Precision |
 | 8 | Boolean | `form.Body.CreditOnHold` | InitialValue |
 | 9 | DateTime | `form.Body.v4_Birthday` | ShowTime |
-| 10 | OptionSet | `form.Body.IndustryCode` | Options, SelectedOption, AddOption, RemoveOption, ClearOptions |
+| 10 | OptionSet | `form.Body.IndustryCode` | Options, SelectedOption |
 | 11 | MultiOptionSet | `form.Body.v4_Categories` | Same as OptionSet but arrays |
 | 12 | ITab | `form.Tabs.DETAILS_TAB` | AddTabStateChange, DisplayState |
-| 13 | ISection | | Visibility |
-| 14 | IFrame | `form.Body.v4_IFrameExternal` | Src, InitialUrl |
-| 15 | WebResource | `form.Body.v4_WebResourceHelp` | |
-| 16 | Grid/Subgrid | `form.Grids.Contacts` | |
-| 17 | NavigationItem | `form.Navigation.Account_Tasks` | |
-
----
-
-## Reference Files
-
-- **Interface definitions**: `ts/lib/devkit.d.ts`
-  - `DevKit.Controls.IControl` (base)
-  - `DevKit.Controls.String`, `Integer`, `Money`, etc.
-  - `DevKit.Controls.Lookup`
-  - `DevKit.Controls.ITab`, `DevKit.Controls.ISection`
-  
-- **Implementation**: `ts/lib/devkit.ts`
-  - Function `loadField()` implements all control properties/methods
-
-- **Backup reference**: `ts/entities/Account.backup.ref`
-  - Contains older JS test code for reference
+| 13 | IFrame | `form.Body.v4_IFrameExternal` | Src, InitialUrl |
+| 14 | WebResource | `form.Body.v4_WebResourceHelp` | |
+| 15 | Grid | `form.Grids.Contacts` | |
+| 16 | NavigationItem | `form.Navigation.Account_Tasks` | |
 
 ---
 
 ## Lưu ý quan trọng
 
-1. **Test order**: Test 0 → Test 1 → Test 2 → ...
-2. **console.groupCollapsed**: Mặc định đóng, click để mở xem chi tiết
-3. **Header format**: `TEST X: {Control} [{time}] - Using: {field} field - {passed}/{total}`
-4. **console.clear()**: Chỉ gọi 1 lần ở Account.ts, KHÔNG gọi trong các file Test riêng
+1. **Naming Convention**: 
+   - `R-Index` cho ReadOnly (R1, R2, R3...)
+   - `S-Index` cho Setters & Methods (S1, S2, S3...)
+2. **Test order**: Test 0 → Test 1 → Test 2 → ...
+3. **console.groupCollapsed**: Mặc định đóng, click để mở
+4. **console.clear()**: Chỉ gọi 1 lần ở Account.ts
 5. **setTimeout 10s**: Chờ form load xong mới run tests
-6. **deploy.bat**: Có biến `ENTITIES` để config copy nhiều entity files
+6. **deploy.bat**: Copy output vào WebResource folder
 
 ---
 
