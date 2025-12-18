@@ -1,4 +1,5 @@
 import { AccountForm } from './generator/Account.form';
+import { TestControl } from './Account.TestControl';
 import { TestLookup } from './Account.TestLookup';
 
 const formAccount = (function () {
@@ -27,8 +28,14 @@ const formAccount = (function () {
         // Wait 10 seconds after OnLoad to allow form to fully load
         // Then clear console and run real tests
         setTimeout(() => {
-            debugger;
+            console.clear();
+
+            // Test 0: IControl Interface (base for all controls)
+            TestControl(form);
+
+            // Test 1: Lookup Control
             TestLookup(form);
+
         }, 10000);
 
         // END ON LOAD LOGIC

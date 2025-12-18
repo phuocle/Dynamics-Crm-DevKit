@@ -12,11 +12,10 @@ interface TestResult {
  * Uses console.table for cleaner output
  */
 export function TestLookup(form: AccountForm.Form): void {
-    console.clear();
-
     const results: TestResult[] = [];
     const lookup = form.Body.PrimaryContactId;
     const startTime = new Date().toLocaleTimeString();
+    const originalDefaultView = lookup.DefaultView; // Store for later use in setter tests
 
     // Collect all test results
     try {
@@ -47,7 +46,6 @@ export function TestLookup(form: AccountForm.Form): void {
         });
 
         // Test 4: DefaultView (getter)
-        const originalDefaultView = lookup.DefaultView;
         results.push({
             Test: "4",
             Property: "DefaultView",
