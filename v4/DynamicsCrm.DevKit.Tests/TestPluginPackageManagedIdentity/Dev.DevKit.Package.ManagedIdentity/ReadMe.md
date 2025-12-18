@@ -8,7 +8,7 @@
 
 ```
 
-# DynamicsCrm.DevKit — Package: Managed Identity
+# DynamicsCrm.DevKit — Package Managed Identity
 
 This project includes tooling and guidance to create and deploy an Azure Managed Identity for use in dependent-assembly plugin packages for Microsoft Dynamics 365 / Dataverse.
 

@@ -10,14 +10,14 @@
 
 # DynamicsCrm.DevKit - Server Managed Identity
 
-This project provides tooling and guidance to create and deploy an Azure Managed Identity for use by server-side plugin assemblies in Microsoft Dynamics 365 / Dataverse.
+This project includes tooling and guidance to create and deploy an Azure Managed Identity for use by server-side plugin assemblies in Microsoft Dynamics 365 / Dataverse.
 
 Related resources:
 - Server Project Template: https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Server-Project-Template
 
 ## Prerequisites
-- Azure CLI installed and you are signed in to the target Azure subscription (`az login`).
-- Visual Studio with .NET Framework 4.6.2 development workload (for building plugins).
+- Azure CLI installed and you are signed in to the target Azure subscription.
+- Visual Studio with .NET Framework 4.6.2 development workload.
 - DynamicsCrm.DevKit tools (CLI) for deployment.
 
 ## Configuration
