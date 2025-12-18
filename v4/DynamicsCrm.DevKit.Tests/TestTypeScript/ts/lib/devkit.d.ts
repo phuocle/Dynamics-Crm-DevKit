@@ -2224,6 +2224,28 @@ declare namespace DevKit {
         RetrieveRecord(entityLogicalName: string, id: string, options?: string, successCallback?: (result: any) => void, errorCallback?: (error: any) => void): Promise<any> | void;
 
         /**
+         * Retrieves a single record and maps it using the provided constructor or factory function (Promise-based)
+         * @template T The type of the entity to return
+         * @param apiConstructorOrFactory Constructor or factory function that takes entity data and returns typed instance
+         * @param entityLogicalName The logical name of the entity
+         * @param id The GUID of the record
+         * @param options Optional OData query options (defaults to "?$select=*")
+         * @returns A promise that resolves to a typed instance
+         */
+        RetrieveRecord<T>(apiConstructorOrFactory: ((data: any) => T) | (new (data: any) => T), entityLogicalName: string, id: string, options?: string): Promise<T>;
+
+        /**
+         * Retrieves a single record and maps it using the provided constructor or factory function (callback-based)
+         * @template T The type of the entity to return
+         * @param apiConstructorOrFactory Constructor or factory function that takes entity data and returns typed instance
+         * @param entityLogicalName The logical name of the entity
+         * @param id The GUID of the record
+         * @param successCallback Function called when the record is retrieved successfully
+         * @param errorCallback Function called when the operation fails
+         */
+        RetrieveRecord<T>(apiConstructorOrFactory: ((data: any) => T) | (new (data: any) => T), entityLogicalName: string, id: string, successCallback: (result: T) => void, errorCallback?: (error: any) => void): void;
+
+        /**
          * Retrieves a collection of entity records
          * @param entityLogicalName Logical name of the entity
          * @param options OData system query options ($select, $filter, $orderby, etc.)
@@ -2233,6 +2255,27 @@ declare namespace DevKit {
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi/retrievemultiplerecords
          */
         RetrieveMultipleRecords(entityLogicalName: string, options?: string, maxPageSize?: number, successCallback?: (result: { entities: any[]; nextLink?: string }) => void, errorCallback?: (error: any) => void): Promise<{ entities: any[]; nextLink?: string }> | void;
+
+        /**
+         * Retrieves multiple records and maps them using the provided constructor or factory function (Promise-based)
+         * @template T The type of the entity to return
+         * @param apiConstructorOrFactory Constructor or factory function that takes entity data and returns typed instance
+         * @param entityLogicalName The logical name of the entity
+         * @param options OData system query options or FetchXML
+         * @param maxPageSize Maximum number of records to return per page
+         * @returns A promise that resolves to an array of typed instances
+         */
+        RetrieveRecords<T>(apiConstructorOrFactory: ((data: any) => T) | (new (data: any) => T), entityLogicalName: string, options?: string, maxPageSize?: number): Promise<T[]>;
+
+        /**
+         * Retrieves multiple records using FetchXML and maps them (entity name extracted from FetchXML)
+         * @template T The type of the entity to return
+         * @param apiConstructorOrFactory Constructor or factory function that takes entity data and returns typed instance
+         * @param fetchXml FetchXML query string (must include ?fetchXml= prefix or raw XML)
+         * @param maxPageSize Maximum number of records to return per page
+         * @returns A promise that resolves to an array of typed instances
+         */
+        RetrieveRecords<T>(apiConstructorOrFactory: ((data: any) => T) | (new (data: any) => T), fetchXml: string, maxPageSize?: number): Promise<T[]>;
 
         /**
          * Updates an entity record
@@ -2262,6 +2305,55 @@ declare namespace DevKit {
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi/online/executemultiple
          */
         ExecuteMultiple(requests: any[], successCallback?: (result: any[]) => void, errorCallback?: (error: any) => void): Promise<any[]> | void;
+
+        /**
+         * Contains methods to execute operations that will be executed against the server even when the user is offline
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi/online
+         */
+        readonly Online: IWebApiOnline;
+
+        /**
+         * Contains methods to interact with the offline cache
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi/offline
+         */
+        readonly Offline: IWebApiOffline;
+    }
+
+    /**
+     * Interface for Online-specific Web API operations
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi/online
+     */
+    interface IWebApiOnline {
+        /**
+         * Execute a single action, function, or CRUD operation that will be executed against the server even when the user is offline
+         * @param request Object that will be passed to the Web API endpoint to execute an action, function, or CRUD request
+         * @param successCallback The function that will be passed through and be called by a successful response
+         * @param errorCallback The function that will be passed through and be called by a failed response
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi/online/execute
+         */
+        Execute(request: any, successCallback?: (result: any) => void, errorCallback?: (error: any) => void): Promise<any> | void;
+
+        /**
+         * Execute a collection of action, function, or CRUD operations that will be executed against the server even when the user is offline
+         * @param requests An array of objects where each object is an action, function, or CRUD request that you want to execute
+         * @param successCallback The function that will be passed through and be called by a successful response
+         * @param errorCallback The function that will be passed through and be called by a failed response
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi/online/executemultiple
+         */
+        ExecuteMultiple(requests: any[], successCallback?: (result: any[]) => void, errorCallback?: (error: any) => void): Promise<any[]> | void;
+    }
+
+    /**
+     * Interface for Offline-specific Web API operations
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi/offline
+     */
+    interface IWebApiOffline {
+        /**
+         * Returns whether an entity is offline enabled
+         * @param entityLogicalName Logical name of the entity. For example: "account"
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi/offline/isavailable
+         */
+        IsAvailable(entityLogicalName: string): boolean;
     }
 
     // ============================================================================
