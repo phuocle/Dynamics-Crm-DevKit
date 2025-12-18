@@ -14,13 +14,6 @@ const formAccount = (function () {
 
     function registerEvents(): void {
         if (form.ExecutionContext.IsInitialLoad()) {
-            if (form.FormType == OptionSet.FormType.Create) {
-                // Example: Using OptionSet values
-                var industryTech = OptionSet.Account.IndustryCode.Technology;
-                var categoryA = OptionSet.Account.v4_Categories.Category_A;
-
-
-            }
         }
     }
 
