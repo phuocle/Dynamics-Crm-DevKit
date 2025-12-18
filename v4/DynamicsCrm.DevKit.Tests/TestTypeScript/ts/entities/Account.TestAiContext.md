@@ -151,7 +151,7 @@ npm run debug
 | 1 | `Account.TestLookup.ts` | Lookup | R1-R16 | S1-S9 | PrimaryContactId |
 | 2 | `Account.TestMemo.ts` | Memo | R1-R15 | S1-S11 | Description |
 | 3 | `Account.TestString.ts` | String | R1-R15 | S1-S11 | Name |
-| 4 | `Account.TestInteger.ts` | Integer | R1-R17 | S1-S12 | NumberOfEmployees |
+| 4 | `Account.TestInteger.ts` | Integer | R1-R16 | S1-S11 | NumberOfEmployees |
 
 ---
 

@@ -9,7 +9,7 @@ interface TestResult {
 
 /**
  * TEST 4: Integer Control - NumberOfEmployees Field
- * Integer extends IControlNumber with Max, Min, Precision properties
+ * Integer extends IControlNumber with Max, Min properties (NO Precision support)
  * Uses console.table for cleaner output
  * 
  * Convention:
@@ -27,26 +27,25 @@ export function TestInteger(form: AccountForm.Form): void {
     // READONLY PROPERTIES (R-Index)
     // =====================================================
     try {
-        // Integer-specific properties (IControlNumber)
+        // Integer-specific properties (IControlNumber - NO Precision for Integer)
         results.push({ Test: "R1", Property: "Max", Value: int.Max, Status: typeof int.Max === "number" ? "✓" : "⚠" });
         results.push({ Test: "R2", Property: "Min", Value: int.Min, Status: typeof int.Min === "number" ? "✓" : "⚠" });
-        results.push({ Test: "R3", Property: "Precision", Value: int.Precision, Status: typeof int.Precision === "number" ? "✓" : "⚠" });
-        results.push({ Test: "R4", Property: "Value", Value: originalValue, Status: "✓" });
+        results.push({ Test: "R3", Property: "Value", Value: originalValue, Status: "✓" });
 
         // Inherited from IControl
-        results.push({ Test: "R5", Property: "Attribute", Value: int.Attribute ? "object" : "null", Status: int.Attribute ? "✓" : "⚠" });
-        results.push({ Test: "R6", Property: "AttributeName", Value: int.AttributeName, Status: int.AttributeName === "numberofemployees" ? "✓" : "⚠" });
-        results.push({ Test: "R7", Property: "AttributeType", Value: int.AttributeType, Status: int.AttributeType === "integer" ? "✓" : "⚠" });
-        results.push({ Test: "R8", Property: "ControlName", Value: int.ControlName, Status: "✓" });
-        results.push({ Test: "R9", Property: "ControlType", Value: int.ControlType, Status: "✓" });
-        results.push({ Test: "R10", Property: "Format", Value: int.Format, Status: "✓" });
-        results.push({ Test: "R11", Property: "IsDirty", Value: int.IsDirty, Status: "✓" });
-        results.push({ Test: "R12", Property: "IsValid", Value: int.IsValid, Status: "✓" });
-        results.push({ Test: "R13", Property: "RequiredLevel", Value: int.RequiredLevel, Status: "✓" });
-        results.push({ Test: "R14", Property: "SubmitMode", Value: int.SubmitMode, Status: "✓" });
-        results.push({ Test: "R15", Property: "Disabled", Value: int.Disabled, Status: "✓" });
-        results.push({ Test: "R16", Property: "Label", Value: int.Label, Status: "✓" });
-        results.push({ Test: "R17", Property: "Visible", Value: int.Visible, Status: "✓" });
+        results.push({ Test: "R4", Property: "Attribute", Value: int.Attribute ? "object" : "null", Status: int.Attribute ? "✓" : "⚠" });
+        results.push({ Test: "R5", Property: "AttributeName", Value: int.AttributeName, Status: int.AttributeName === "numberofemployees" ? "✓" : "⚠" });
+        results.push({ Test: "R6", Property: "AttributeType", Value: int.AttributeType, Status: int.AttributeType === "integer" ? "✓" : "⚠" });
+        results.push({ Test: "R7", Property: "ControlName", Value: int.ControlName, Status: "✓" });
+        results.push({ Test: "R8", Property: "ControlType", Value: int.ControlType, Status: "✓" });
+        results.push({ Test: "R9", Property: "Format", Value: int.Format, Status: "✓" });
+        results.push({ Test: "R10", Property: "IsDirty", Value: int.IsDirty, Status: "✓" });
+        results.push({ Test: "R11", Property: "IsValid", Value: int.IsValid, Status: "✓" });
+        results.push({ Test: "R12", Property: "RequiredLevel", Value: int.RequiredLevel, Status: "✓" });
+        results.push({ Test: "R13", Property: "SubmitMode", Value: int.SubmitMode, Status: "✓" });
+        results.push({ Test: "R14", Property: "Disabled", Value: int.Disabled, Status: "✓" });
+        results.push({ Test: "R15", Property: "Label", Value: int.Label, Status: "✓" });
+        results.push({ Test: "R16", Property: "Visible", Value: int.Visible, Status: "✓" });
 
     } catch (error: any) {
         results.push({ Test: "ERR", Property: "Props Error", Value: error.message, Status: "✗" });
@@ -67,26 +66,15 @@ export function TestInteger(form: AccountForm.Form): void {
         methodResults.push({ Test: "S1", Property: "Value (set)", Value: e.message, Status: "✗" });
     }
 
-    // Setter: Precision
-    try {
-        const origPrecision = int.Precision;
-        int.Precision = 0;
-        const check = int.Precision;
-        int.Precision = origPrecision;
-        methodResults.push({ Test: "S2", Property: "Precision (set)", Value: check === 0 ? "Set→Restored" : "Failed", Status: check === 0 ? "✓" : "✗" });
-    } catch (e: any) {
-        methodResults.push({ Test: "S2", Property: "Precision (set)", Value: e.message, Status: "✗" });
-    }
-
     // Setter: RequiredLevel
     try {
         const origRequired = int.RequiredLevel;
         int.RequiredLevel = "required";
         const check = int.RequiredLevel;
         int.RequiredLevel = origRequired;
-        methodResults.push({ Test: "S3", Property: "RequiredLevel (set)", Value: check === "required" ? "Set→Restored" : "Failed", Status: check === "required" ? "✓" : "✗" });
+        methodResults.push({ Test: "S2", Property: "RequiredLevel (set)", Value: check === "required" ? "Set→Restored" : "Failed", Status: check === "required" ? "✓" : "✗" });
     } catch (e: any) {
-        methodResults.push({ Test: "S3", Property: "RequiredLevel (set)", Value: e.message, Status: "✗" });
+        methodResults.push({ Test: "S2", Property: "RequiredLevel (set)", Value: e.message, Status: "✗" });
     }
 
     // Setter: Disabled
@@ -95,9 +83,9 @@ export function TestInteger(form: AccountForm.Form): void {
         int.Disabled = !origDisabled;
         const check = int.Disabled;
         int.Disabled = origDisabled;
-        methodResults.push({ Test: "S4", Property: "Disabled (set)", Value: "Set→Restored", Status: "✓" });
+        methodResults.push({ Test: "S3", Property: "Disabled (set)", Value: "Set→Restored", Status: "✓" });
     } catch (e: any) {
-        methodResults.push({ Test: "S4", Property: "Disabled (set)", Value: e.message, Status: "✗" });
+        methodResults.push({ Test: "S3", Property: "Disabled (set)", Value: e.message, Status: "✗" });
     }
 
     // Setter: Label
@@ -106,9 +94,9 @@ export function TestInteger(form: AccountForm.Form): void {
         int.Label = origLabel + " (TEST)";
         const check = int.Label;
         int.Label = origLabel;
-        methodResults.push({ Test: "S5", Property: "Label (set)", Value: check.includes("(TEST)") ? "Set→Restored" : "Failed", Status: check.includes("(TEST)") ? "✓" : "✗" });
+        methodResults.push({ Test: "S4", Property: "Label (set)", Value: check.includes("(TEST)") ? "Set→Restored" : "Failed", Status: check.includes("(TEST)") ? "✓" : "✗" });
     } catch (e: any) {
-        methodResults.push({ Test: "S5", Property: "Label (set)", Value: e.message, Status: "✗" });
+        methodResults.push({ Test: "S4", Property: "Label (set)", Value: e.message, Status: "✗" });
     }
 
     // Setter: Visible
@@ -117,9 +105,9 @@ export function TestInteger(form: AccountForm.Form): void {
         int.Visible = !origVisible;
         const check = int.Visible;
         int.Visible = origVisible;
-        methodResults.push({ Test: "S6", Property: "Visible (set)", Value: "Set→Restored", Status: "✓" });
+        methodResults.push({ Test: "S5", Property: "Visible (set)", Value: "Set→Restored", Status: "✓" });
     } catch (e: any) {
-        methodResults.push({ Test: "S6", Property: "Visible (set)", Value: e.message, Status: "✗" });
+        methodResults.push({ Test: "S5", Property: "Visible (set)", Value: e.message, Status: "✗" });
     }
 
     // Methods
@@ -127,46 +115,46 @@ export function TestInteger(form: AccountForm.Form): void {
 
     try {
         int.AddOnChange(onChangeCallback);
-        methodResults.push({ Test: "S7", Property: "AddOnChange", Value: "Registered", Status: "✓" });
+        methodResults.push({ Test: "S6", Property: "AddOnChange", Value: "Registered", Status: "✓" });
     } catch (e: any) {
-        methodResults.push({ Test: "S7", Property: "AddOnChange", Value: e.message, Status: "✗" });
+        methodResults.push({ Test: "S6", Property: "AddOnChange", Value: e.message, Status: "✗" });
     }
 
     try {
         int.RemoveOnChange(onChangeCallback);
-        methodResults.push({ Test: "S8", Property: "RemoveOnChange", Value: "Removed", Status: "✓" });
+        methodResults.push({ Test: "S7", Property: "RemoveOnChange", Value: "Removed", Status: "✓" });
     } catch (e: any) {
-        methodResults.push({ Test: "S8", Property: "RemoveOnChange", Value: e.message, Status: "✗" });
+        methodResults.push({ Test: "S7", Property: "RemoveOnChange", Value: e.message, Status: "✗" });
     }
 
     try {
         int.FireOnChange();
-        methodResults.push({ Test: "S9", Property: "FireOnChange", Value: "Fired", Status: "✓" });
+        methodResults.push({ Test: "S8", Property: "FireOnChange", Value: "Fired", Status: "✓" });
     } catch (e: any) {
-        methodResults.push({ Test: "S9", Property: "FireOnChange", Value: e.message, Status: "✗" });
+        methodResults.push({ Test: "S8", Property: "FireOnChange", Value: e.message, Status: "✗" });
     }
 
     try {
         setTimeout(() => int.Focus(), 1000);
-        methodResults.push({ Test: "S10", Property: "Focus", Value: "Scheduled (1s)", Status: "✓" });
+        methodResults.push({ Test: "S9", Property: "Focus", Value: "Scheduled (1s)", Status: "✓" });
     } catch (e: any) {
-        methodResults.push({ Test: "S10", Property: "Focus", Value: e.message, Status: "✗" });
+        methodResults.push({ Test: "S9", Property: "Focus", Value: e.message, Status: "✗" });
     }
 
     try {
         int.SetNotification("Test Integer notification", "INT_TEST_1");
         setTimeout(() => int.ClearNotification("INT_TEST_1"), 3000);
-        methodResults.push({ Test: "S11", Property: "SetNotification", Value: "Set (clears 3s)", Status: "✓" });
+        methodResults.push({ Test: "S10", Property: "SetNotification", Value: "Set (clears 3s)", Status: "✓" });
     } catch (e: any) {
-        methodResults.push({ Test: "S11", Property: "SetNotification", Value: e.message, Status: "✗" });
+        methodResults.push({ Test: "S10", Property: "SetNotification", Value: e.message, Status: "✗" });
     }
 
     try {
         int.SetIsValid(false, "Test invalid");
         setTimeout(() => int.SetIsValid(true), 2000);
-        methodResults.push({ Test: "S12", Property: "SetIsValid", Value: "Set→Restored (2s)", Status: "✓" });
+        methodResults.push({ Test: "S11", Property: "SetIsValid", Value: "Set→Restored (2s)", Status: "✓" });
     } catch (e: any) {
-        methodResults.push({ Test: "S12", Property: "SetIsValid", Value: e.message, Status: "✗" });
+        methodResults.push({ Test: "S11", Property: "SetIsValid", Value: e.message, Status: "✗" });
     }
 
     // =====================================================
@@ -180,10 +168,10 @@ export function TestInteger(form: AccountForm.Form): void {
 
     console.groupCollapsed(`🔢 TEST 4: Integer Control [${startTime}] - Using: NumberOfEmployees field - ${passed}/${total}`);
 
-    console.log("%c📋 ReadOnly Properties (R1-R17)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
+    console.log("%c📋 ReadOnly Properties (R1-R16)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
     console.table(results);
 
-    console.log("%c⚡ Setters & Methods (S1-S12)", "font-weight: bold; font-size: 14px; color: #2196F3;");
+    console.log("%c⚡ Setters & Methods (S1-S11)", "font-weight: bold; font-size: 14px; color: #2196F3;");
     console.table(methodResults);
 
     console.log(`%c✅ Summary: ${passed}/${total} passed` +

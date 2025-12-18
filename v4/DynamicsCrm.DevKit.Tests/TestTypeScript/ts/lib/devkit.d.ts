@@ -334,13 +334,6 @@ declare namespace DevKit {
             readonly Min: number;
 
             /**
-             * Get/Set the number of digits allowed to the right of the decimal point
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getprecision
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/setprecision
-             */
-            Precision: number;
-
-            /**
              * Get/Set the data value for an attribute
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getvalue
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/setvalue
@@ -361,7 +354,7 @@ declare namespace DevKit {
         }
 
         /**
-         * Interface for Integer controls
+         * Interface for Integer controls (no Precision support)
          */
         interface Integer extends IControlNumber {
         }
@@ -370,18 +363,36 @@ declare namespace DevKit {
          * Interface for Decimal controls
          */
         interface Decimal extends IControlNumber {
+            /**
+             * Get/Set the number of digits allowed to the right of the decimal point
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getprecision
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/setprecision
+             */
+            Precision: number;
         }
 
         /**
          * Interface for Double (floating point) controls
          */
         interface Double extends IControlNumber {
+            /**
+             * Get/Set the number of digits allowed to the right of the decimal point
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getprecision
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/setprecision
+             */
+            Precision: number;
         }
 
         /**
          * Interface for Money controls
          */
         interface Money extends IControlNumber {
+            /**
+             * Get/Set the number of digits allowed to the right of the decimal point
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getprecision
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/setprecision
+             */
+            Precision: number;
         }
 
         /**
