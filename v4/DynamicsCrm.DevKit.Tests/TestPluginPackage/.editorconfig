@@ -1,0 +1,4 @@
+﻿[*.cs]
+
+# DEVKIT1001: Create message should have filtering attributes
+dotnet_diagnostic.DEVKIT1001.severity = warning
