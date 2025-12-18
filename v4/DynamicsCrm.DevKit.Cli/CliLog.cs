@@ -311,7 +311,7 @@ namespace DynamicsCrm.DevKit.Cli
         {
             var itemType = isPackage ? " Package " : " Assembly ";
             Write(ConsoleColor.White, "|", "  ");
-            if (action == "DO_NOTHING")
+            if (action == "[SKIPPED]")
             {
                 Write(ConsoleColor.Green, action.Trim());
                 Write(ConsoleColor.White, " Bind" + itemType, ConsoleColor.Cyan, itemName);
