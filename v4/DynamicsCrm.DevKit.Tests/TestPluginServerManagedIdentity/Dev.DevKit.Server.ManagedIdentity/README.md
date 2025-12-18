@@ -45,6 +45,6 @@
     + Server-ManagedIdentity.cer created, need include to project
     + Server-ManagedIdentity.pfx created, need include to project
     + AssemblyInfo2.cs created, need include to project
-8. Now build your project/solution and deploy use DynamicsCrm.DevKit.Cli
+8. Now build your project/solution and deploy use DynamicsCrm.DevKit.Cli by run deploy.debug.bat
 9. Done, DynamicsCrm.DevKit.Cli will do all for you, now verify you code and you can use Azure Managed Identity in your plugin
-
+10. When Cli run, if failed, you should resolve by guide by Cli, like install some tool, update some notes, ....

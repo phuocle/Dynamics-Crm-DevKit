@@ -10,6 +10,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{19C8B1E0-08E5-4BF3-93A3-A3B969FD1DD5}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+		DynamicsCrm.DevKit.Cli.json = DynamicsCrm.DevKit.Cli.json
+		DynamicsCrm.DevKit.json = DynamicsCrm.DevKit.json
 	EndProjectSection
 EndProject
 Global
