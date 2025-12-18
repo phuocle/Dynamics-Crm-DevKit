@@ -1,285 +1,140 @@
-/**
- * DevKit TypeScript Module
- * 
- * Đây là phiên bản TypeScript của lib/devkit.js, tập trung vào LoadFormV2 function
- * để hỗ trợ form scripting với đầy đủ IntelliSense.
- * 
- * File gốc lib/devkit.js có nhiều tính năng hơn (WebApi, Utility, Copilot, SidePanes...),
- * file này chỉ cần LoadFormV2 cho use case chính là form scripting.
- * 
- * Các tính năng khác nếu cần có thể thêm sau hoặc gọi trực tiếp từ Xrm object.
- * 
- * @requires @types/xrm - Đã được cài trong devDependencies
- */
-
-// ============================================================================
-// Note: @types/xrm đã cài đặt, Xrm global có đầy đủ IntelliSense
-// Nếu TypeScript báo lỗi Xrm not found, có thể uncomment dòng dưới:
-// declare const Xrm: any;
-// ============================================================================
-
-// ============================================================================
-// Base Control Interfaces - Định nghĩa các interfaces cho controls
-// ============================================================================
-
-/** Interface cho Field control cơ bản */
 export interface IFieldControl {
-    /** Giá trị của field */
     Value: any;
-    /** Tên attribute */
     readonly AttributeName: string;
-    /** Tên control */
     readonly ControlName: string;
-    /** Kiểu attribute */
     readonly AttributeType: string;
-    /** Kiểu control */
     readonly ControlType: string;
-    /** Enable/Disable control */
     Disabled: boolean;
-    /** Visible/Hidden control */
     Visible: boolean;
-    /** Label của control */
     Label: string;
-    /** Required level: none, required, recommended */
     RequiredLevel: string;
-    /** Submit mode: always, never, dirty */
     SubmitMode: string;
-    /** Check if value is dirty */
     readonly IsDirty: boolean;
-    /** Check if value is valid */
     readonly IsValid: boolean;
-
-    /** Add onChange event handler */
     AddOnChange(callback: (context: any) => void): void;
-    /** Remove onChange event handler */
     RemoveOnChange(callback: (context: any) => void): void;
-    /** Add onOutputChange event handler for modern controls */
     AddOnOutputChange(callback: (context: any) => void): void;
-    /** Remove onOutputChange event handler */
     RemoveOnOutputChange(callback: (context: any) => void): void;
-    /** Fire onChange event */
     FireOnChange(): void;
-    /** Set focus to control */
     Focus(): void;
-    /** Set notification */
     SetNotification(message: string, uniqueId: string): boolean;
-    /** Clear notification */
     ClearNotification(uniqueId: string): boolean;
-    /** Add notification with options */
     AddNotification(notification: { messages: string[]; notificationLevel?: 'ERROR' | 'RECOMMENDATION'; uniqueId: string; actions?: { message?: string; actions: Function[] }[] }): void;
-    /** Set control validity */
     SetIsValid(valid: boolean, message?: string): void;
 }
-
-/** Interface cho String control */
 export interface IStringControl extends IFieldControl {
     Value: string | null;
     readonly MaxLength: number;
     readonly Format: string;
 }
-
-/** Interface cho Number/Integer control */
 export interface INumberControl extends IFieldControl {
     Value: number | null;
     readonly Max: number;
     readonly Min: number;
     readonly Precision: number;
 }
-
-/** Interface cho Boolean control */
 export interface IBooleanControl extends IFieldControl {
     Value: boolean | null;
 }
-
-/** Interface cho OptionSet control */
 export interface IOptionSetControl extends IFieldControl {
     Value: number | null;
     readonly Options: { text: string; value: number }[];
     readonly SelectedOption: { text: string; value: number } | null;
     readonly Text: string;
-
     AddOption(text: string, value: number, index?: number): void;
     RemoveOption(value: number): void;
     ClearOptions(): void;
 }
-
-/** Interface cho Lookup control */
 export interface ILookupControl extends IFieldControl {
     Value: { id: string; name: string; entityType: string }[] | null;
     readonly EntityTypes: string[];
-
     AddPreSearch(callback: () => void): void;
     RemovePreSearch(callback: () => void): void;
     AddCustomFilter(filter: string, entityLogicalName?: string): void;
     AddCustomView(viewId: string, entityName: string, viewDisplayName: string, fetchXml: string, layoutXml: string, isDefault: boolean): void;
     DefaultView: string;
 }
-
-/** Interface cho Date control */
 export interface IDateControl extends IFieldControl {
     Value: Date | null;
     ShowTime: boolean;
 }
-
-/** Interface cho Money control */
 export interface IMoneyControl extends INumberControl {
-    // Money kế thừa từ Number
 }
-
-// ============================================================================
-// Form Interfaces
-// ============================================================================
-
-/** Interface cho Form */
 export interface IForm {
-    /** Form ID */
     readonly FormId: string;
-    /** Form Label */
     readonly FormLabel: string;
-    /** Form Type: Create (1), Update (2), ReadOnly (3), Disabled (4), QuickCreate (5), BulkEdit (6) */
     readonly FormType: number;
-    /** Entity ID */
     readonly EntityId: string;
-    /** Entity Name - logical name của entity */
     readonly EntityName: string;
-    /** Check if form data is dirty */
     readonly DataIsDirty: boolean;
-    /** Check if form data is valid */
     readonly DataIsValid: boolean;
-    /** Primary attribute value */
     readonly PrimaryAttributeValue: string;
-
-    /** Save the form */
     Save(saveOptions?: { saveMode: number }): Promise<void>;
-    /** Refresh form data */
     Refresh(save?: boolean): Promise<void>;
-    /** Close the form */
     Close(): void;
-    /** Set form notification */
     SetFormNotification(message: string, level: "ERROR" | "WARNING" | "INFO", uniqueId: string): boolean;
-    /** Clear form notification */
     ClearFormNotification(uniqueId: string): boolean;
-    /** Refresh ribbon */
     RefreshRibbon(refreshAll?: boolean): void;
 }
-
-/** Interface cho Tab */
 export interface ITab {
-    /** Tab Name */
     readonly Name: string;
-    /** Tab Label */
     Label: string;
-    /** Tab Visible */
     Visible: boolean;
-    /** Tab Display State */
     DisplayState: "expanded" | "collapsed";
-
-    /** Add tab state change handler */
     AddTabStateChange(callback: (context: any) => void): void;
-    /** Remove tab state change handler */
     RemoveTabStateChange(callback: (context: any) => void): void;
-    /** Set focus to tab */
     Focus(): void;
 }
-
-/** Interface cho Section */
 export interface ISection {
-    /** Section Name */
     readonly Name: string;
-    /** Section Label */
     Label: string;
-    /** Section Visible */
     Visible: boolean;
 }
-
-/** Interface cho Navigation Item */
 export interface INavigationItem {
-    /** Navigation ID */
     readonly Id: string;
-    /** Navigation Label */
     Label: string;
-    /** Navigation Visible */
     Visible: boolean;
-
-    /** Set focus to navigation item */
     Focus(): void;
 }
-
-/** Interface cho Grid */
 export interface IGrid {
-    /** Grid Entity Name */
     readonly EntityName: string;
-    /** Grid FetchXml */
     readonly FetchXml: string;
-    /** Total record count */
     readonly TotalRecordCount: number;
-    /** Grid Visible */
     Visible: boolean;
-
-    /** Add onLoad handler */
     AddOnLoad(callback: (context: any) => void): void;
-    /** Remove onLoad handler */
     RemoveOnLoad(callback: (context: any) => void): void;
-    /** Refresh grid */
     Refresh(): void;
 }
-
-/** Interface cho Execution Context */
 export interface IExecutionContext {
-    /** Get the depth of the execution context (for plugin-like scenarios) */
     readonly Depth: number;
-    /** Get the entity reference from event args */
     readonly EntityReference: any;
-    /** Get the event arguments */
     readonly EventArgs: any;
-    /** Get the event source */
     readonly EventSource: any;
-    /** Get form context */
     readonly FormContext: any;
-    /** Check if save was successful (for OnSave event) */
     readonly IsSaveSuccess: boolean;
-    /** Get save error info (for OnSave event) */
     readonly SaveErrorInfo: any;
-    /** Get save mode (for OnSave event): 1=Save, 2=SaveAndClose, etc. */
     readonly SaveMode: number;
-
-    /** Disable async timeout for long-running operations */
     DisableAsyncTimeout(): void;
-    /** Get a shared variable by key */
     GetSharedVariable(key: string): any;
-    /** Check if default behavior is prevented */
     IsDefaultPrevented(): boolean;
-    /** Check if this is the initial form load */
     IsInitialLoad(): boolean;
-    /** Prevent default behavior */
     SetPreventDefault(): void;
-    /** Prevent default on error */
     SetPreventDefaultOnError(): void;
-    /** Set a shared variable */
     SetSharedVariable(key: string, value: any): void;
 }
 
-// ============================================================================
-// Helper Functions - Các hàm helper để load form
-// ============================================================================
-
 function getXrm(): typeof Xrm | undefined {
-    // Check window.Xrm first (normal form scenario)
     if (typeof window !== 'undefined' && (window as any).Xrm !== undefined) {
         return (window as any).Xrm;
     }
-    // Check parent.window.Xrm (HTML WebResource in iframe)
     if (typeof parent !== 'undefined' && typeof parent.window !== 'undefined' && (parent.window as any).Xrm !== undefined) {
         return (parent.window as any).Xrm;
     }
-    // Check parent.parent.window.Xrm (nested iframe scenario)
     if (typeof parent !== 'undefined' && typeof parent.parent !== 'undefined' && typeof parent.parent.window !== 'undefined' && (parent.parent.window as any).Xrm !== undefined) {
         return (parent.parent.window as any).Xrm;
     }
-    // Return undefined if not found (safe optional chaining)
     return undefined;
 }
-
 function getter<T>(obj: any, prop: string, getterFn: () => T): void {
     Object.defineProperty(obj, prop, {
         get: getterFn,
@@ -287,7 +142,6 @@ function getter<T>(obj: any, prop: string, getterFn: () => T): void {
         configurable: true
     });
 }
-
 function getterSetter<T>(obj: any, prop: string, getterFn: () => T, setterFn: (value: T) => void): void {
     Object.defineProperty(obj, prop, {
         get: getterFn,
@@ -296,11 +150,6 @@ function getterSetter<T>(obj: any, prop: string, getterFn: () => T, setterFn: (v
         configurable: true
     });
 }
-
-// ============================================================================
-// Field Loading Function
-// ============================================================================
-
 function loadField(formContext: any, field: any, attribute: any, control: any): void {
     getter(field, 'Attribute', () => control?.getAttribute());
     getter(field, 'AttributeName', () => attribute?.getName());
@@ -385,11 +234,6 @@ function loadField(formContext: any, field: any, attribute: any, control: any): 
     field.SetIsValid = (valid: boolean, message?: string) => attribute?.setIsValid(valid, message);
     field.SetNotification = (message: string, uniqueId: string) => control?.setNotification(message, uniqueId);
 }
-
-// ============================================================================
-// Helper Functions (matching devkit.js exactly)
-// ============================================================================
-
 function loadFields(formContext: any, body: any, type?: string): any {
     Object.keys(body).forEach(field => {
         const logicalName = type === undefined ? field?.toLowerCase() : (type + field)?.toLowerCase();
@@ -408,7 +252,6 @@ function loadFields(formContext: any, body: any, type?: string): any {
     }
     return body;
 }
-
 function loadTabs(formContext: any, tabs: any): void {
     const loadSection = (formContext: any, tab: string, sections: any, section: string) => {
         const tabObject = formContext?.ui?.tabs?.get(tab);
@@ -437,7 +280,6 @@ function loadTabs(formContext: any, tabs: any): void {
         loadTab(formContext, tabs, tab);
     });
 }
-
 function loadNavigations(formContext: any, navigations: any): void {
     const getNavigationItem = (navigation: string) => {
         const navItems = formContext?.ui?.navigation?.items;
@@ -462,7 +304,6 @@ function loadNavigations(formContext: any, navigations: any): void {
         loadNavigation(formContext, navigations, navigation);
     });
 }
-
 function loadQuickForms(formContext: any, quickForms: any): void {
     const excludedFields = new Set(["Body", "Controls", "IsLoaded", "Refresh", "Focus", "ControlType", "Disabled", "Label", "ControlName", "ControlParent", "Visible"]);
     const loadQuickForm = (formContext: any, quickForms: any, quickForm: string) => {
@@ -484,7 +325,6 @@ function loadQuickForms(formContext: any, quickForms: any): void {
         loadQuickForm(formContext, quickForms, quickForm);
     });
 }
-
 function loadGrids(formContext: any, grids: any): void {
     const loadGridColumn = (col: any) => {
         const obj: any = {};
@@ -574,11 +414,6 @@ function loadGrids(formContext: any, grids: any): void {
         loadGrid(formContext, grids, grid);
     });
 }
-
-// ============================================================================
-// Form Loading Functions (matching devkit.js exactly)
-// ============================================================================
-
 function LoadForm(formContext: any): any {
     const form: any = {};
     const contextData = formContext?.data;
@@ -642,7 +477,6 @@ function LoadForm(formContext: any): any {
     form.UiRemoveOnLoad = (callback: any) => contextUi?.removeOnLoad(callback);
     return form;
 }
-
 function LoadExecutionContext(executionContext: any): any {
     const obj: any = {};
     getter(obj, 'Depth', () => executionContext?.getDepth());
@@ -662,7 +496,6 @@ function LoadExecutionContext(executionContext: any): any {
     obj.SetSharedVariable = (key: string, value: any) => executionContext?.setSharedVariable(key, value);
     return obj;
 }
-
 export function LoadSidePanes(): any {
     const sidePanes: any = {};
     const xrm = getXrm();
@@ -673,14 +506,12 @@ export function LoadSidePanes(): any {
     sidePanes.GetSelected = () => (xrm as any)?.App?.sidePanes?.getSelectedPane();
     return sidePanes;
 }
-
 export function LoadWebApi(): DevKit.IWebApi {
     const obj: any = {} as DevKit.IWebApi;
     const xrm = getXrm();
     const getWebApi = xrm?.WebApi;
     const getOnline = xrm?.WebApi?.online;
     const getOffline = xrm?.WebApi?.offline;
-
     const extractEntityName = function (fetchXml: string): string {
         let cleanXml = fetchXml;
         const fetchXmlMatch = fetchXml.match(/fetchxml=/i);
@@ -698,7 +529,6 @@ export function LoadWebApi(): DevKit.IWebApi {
             return entityNode.getAttribute("name")!;
         throw new Error("Entity name not found in fetchXml");
     };
-
     obj.CreateRecord = function (entityLogicalName: string, data: any, successCallback?: any, errorCallback?: any) {
         const promise = getWebApi?.createRecord(entityLogicalName, data);
         if (successCallback) {
@@ -755,8 +585,6 @@ export function LoadWebApi(): DevKit.IWebApi {
             return promise;
         }
     };
-
-    // Typed RetrieveRecords helper - retrieves multiple records and wraps them in constructor/factory
     obj.RetrieveRecords = function (apiConstructorOrFactory: any, entityLogicalNameOrOptions: string, optionsOrMaxPageSizeOrCallback?: any, maxPageSizeOrSuccessCallback?: any, successCallback?: any, errorCallback?: any) {
         let entityLogicalName: string;
         let options: string | undefined;
@@ -815,8 +643,6 @@ export function LoadWebApi(): DevKit.IWebApi {
             return promise;
         }
     };
-
-    // Typed RetrieveRecord helper - retrieves single record and wraps it in constructor/factory
     obj.RetrieveRecord = function (apiConstructorOrFactory: any, entityLogicalName: string, id: string, options?: string | Function, successCallback?: any, errorCallback?: any) {
         if (typeof options === 'function') {
             errorCallback = successCallback;
@@ -837,8 +663,6 @@ export function LoadWebApi(): DevKit.IWebApi {
             return promise;
         }
     };
-
-    // Online object - for explicit online operations
     getter(obj, 'Online', () => {
         const online: any = {};
         online.Execute = function (request: any, successCallback?: any, errorCallback?: any) {
@@ -859,17 +683,13 @@ export function LoadWebApi(): DevKit.IWebApi {
         };
         return online;
     });
-
-    // Offline object - for mobile offline support
     getter(obj, 'Offline', () => {
         const offline: any = {};
         offline.IsAvailable = (entityLogicalName: string) => (getOffline as any)?.isAvailable(entityLogicalName);
         return offline;
     });
-
     return obj;
 }
-
 export function LoadCopilot(): DevKit.ICopilot {
     const obj: any = {};
     const xrm = getXrm();
@@ -892,23 +712,11 @@ export function LoadCopilot(): DevKit.ICopilot {
     };
     return obj;
 }
-
 function loadOthers(formContext: any, form: any, defaultWebResourceName: string | undefined): void {
     form.SidePanes = LoadSidePanes();
     form.WebApi = LoadWebApi();
     form.Copilot = LoadCopilot();
 }
-
-// ============================================================================
-// DevKit Module Export
-// ============================================================================
-
-/**
- * Load Form V2 - Hàm chính để load form với các fields
- * @param executionContext Execution context từ form
- * @param defaultWebResourceName Tên web resource mặc định
- * @param formConfig Cấu hình form bao gồm body, header, tab, grid, navigation, quick, bpf
- */
 export function LoadFormV2<TBody = Record<string, any>, THeader = Record<string, any>, TTab = Record<string, any>, TGrid = Record<string, any>, TNavigation = Record<string, any>, TQuickForm = Record<string, any>, TProcess = any>(
     executionContext: any,
     defaultWebResourceName: string | undefined,
@@ -1038,20 +846,10 @@ export function LoadFormV2<TBody = Record<string, any>, THeader = Record<string,
     loadOthers(formContext, form, defaultWebResourceName);
     return form;
 }
-
-// ============================================================================
-// Process (Business Process Flow) Functions
-// ============================================================================
-
-/**
- * Load Business Process Flow wrapper
- * @param formContext The form context
- */
 export function LoadProcess(formContext: any): any {
     const process: any = {};
     const getProcess = formContext?.data?.process;
     const getProcessUi = formContext?.ui?.process;
-
     const loadStep = (step: any) => {
         const obj: any = {};
         getter(obj, 'Attribute', () => step?.getAttribute());
@@ -1061,7 +859,6 @@ export function LoadProcess(formContext: any): any {
         obj.SetProgress = (stepProgress: number, message: string) => step?.setProgress(stepProgress, message);
         return obj;
     };
-
     const loadStage = (stage: any) => {
         const obj: any = {};
         getter(obj, 'Category', () => stage?.getCategory()?.getValue());
@@ -1082,7 +879,6 @@ export function LoadProcess(formContext: any): any {
         obj.AllowCreateNew = (callback: any) => { if (stage?.getNavigationBehavior()) stage.getNavigationBehavior().allowCreateNew = callback; };
         return obj;
     };
-
     const loadProcessInner = (processObj: any) => {
         const obj: any = {};
         getter(obj, 'Id', () => processObj?.getId());
@@ -1107,7 +903,6 @@ export function LoadProcess(formContext: any): any {
         });
         return obj;
     };
-
     getter(process, 'ActivePath', () => {
         const activePathObj: any = {};
         activePathObj.get = (index: number) => {
@@ -1132,7 +927,6 @@ export function LoadProcess(formContext: any): any {
     getterSetter(process, 'DisplayState', () => getProcessUi?.getDisplayState(), (value: string) => { getProcessUi?.setDisplayState(value); });
     getterSetter(process, 'Status', () => getProcess?.getStatus(), (value: string) => { getProcess?.setStatus(value); });
     getterSetter(process, 'Visible', () => getProcessUi?.getVisible(), (value: boolean) => { getProcessUi?.setVisible(value); });
-
     process.AddOnPreProcessStatusChange = (callback: any) => getProcess?.addOnPreProcessStatusChange(callback);
     process.AddOnPreStageChange = (callback: any) => getProcess?.addOnPreStageChange(callback);
     process.AddOnProcessStatusChange = (callback: any) => getProcess?.addOnProcessStatusChange(callback);
@@ -1172,18 +966,8 @@ export function LoadProcess(formContext: any): any {
     process.SetActiveProcess = (processId: string, callback: any) => getProcess?.setActiveProcess(processId, callback);
     process.SetActiveProcessInstance = (processInstanceId: string, callback: any) => getProcess?.setActiveProcessInstance(processInstanceId, callback);
     process.SetActiveStage = (stageId: string, callback: any) => getProcess?.setActiveStage(stageId, callback);
-
     return process;
 }
-
-// ============================================================================
-// FormBase Class - Base class for all entity forms
-// Entity forms extend this class to inherit common properties and methods
-// ============================================================================
-
-/**
- * Form configuration interface for LoadFormV2
- */
 export interface IFormConfig {
     body?: string[];
     header?: string[];
@@ -1193,144 +977,56 @@ export interface IFormConfig {
     quick?: string[];
     bpf?: string[];
 }
-
-/**
- * Base class for all entity forms
- * Provides common properties and methods shared across all forms
- * 
- * @template TBody - Entity-specific body interface
- * @template THeader - Entity-specific header interface
- * @template TTab - Entity-specific tabs interface
- * @template TGrid - Entity-specific grid interface
- * @template TNavigation - Entity-specific navigation interface
- * @template TQuickForm - Entity-specific quick form interface
- * @template TProcess - Entity-specific process/BPF interface
- * 
- * @example
- * ```typescript
- * export class AccountForm extends FormBase<IAccountFormBody, IAccountFormHeader, ..., IAccountFormProcess> {
- *     constructor(executionContext: any, defaultWebResourceName?: string) {
- *         super(executionContext, defaultWebResourceName, {
- *             body: ["Name", "Description", ...],
- *             header: ["OwnerId"],
- *             ...
- *         });
- *     }
- * }
- * ```
- */
 export class FormBase<TBody, THeader, TTab, TGrid, TNavigation, TQuickForm, TProcess = any> {
-    // ========== Entity-Specific Properties ==========
-    /** Form body fields */
     public Body: TBody;
-    /** Form header fields */
     public Header: THeader;
-    /** Form tabs and sections */
     public Tab: TTab;
-    /** Form grids/subgrids */
     public Grid: TGrid;
-    /** Form navigation items */
     public Navigation: TNavigation;
-    /** Quick view forms */
     public QuickForm: TQuickForm;
-
-    // ========== Common Properties ==========
-    /** Business Process Flow */
     public Process: TProcess;
-    /** Execution context wrapper */
     public ExecutionContext: IExecutionContext;
-    /** Utility functions wrapper */
     public Utility: any;
-    /** Side panes wrapper */
     public SidePanes: DevKit.ISidePanes;
-    /** Web API wrapper */
     public WebApi: DevKit.IWebApi;
-    /** Copilot wrapper */
     public Copilot: DevKit.ICopilot;
-
-    /** Form GUID */
     public readonly FormId: string;
-    /** Form label/name */
     public readonly FormLabel: string;
-    /** Form type (Create=1, Update=2, ReadOnly=3, Disabled=4, BulkEdit=6) */
     public readonly FormType: number;
-    /** Entity record GUID */
     public readonly EntityId: string;
-    /** Entity logical name */
     public readonly EntityName: string;
-    /** Whether form has unsaved changes */
     public readonly DataIsDirty: boolean;
-    /** Whether all form data is valid */
     public readonly DataIsValid: boolean;
-    /** Form attributes collection */
     public readonly Attributes: any;
-    /** Form controls collection */
     public readonly Controls: any;
-    /** Entity data XML */
     public readonly DataXml: string;
-    /** Whether entity has unsaved changes */
     public readonly EntityIsDirty: boolean;
-    /** Whether entity data is valid */
     public readonly EntityIsValid: boolean;
-    /** Entity reference object */
     public readonly EntityReference: any;
-    /** Primary attribute value */
     public readonly PrimaryAttributeValue: string;
-    /** View port height */
     public readonly ViewPortHeight: number;
-    /** View port width */
     public readonly ViewPortWidth: number;
-
-    // ========== Common Methods ==========
-    /** Save the record */
     public Save: (saveOptions?: any) => Promise<void>;
-    /** Refresh the form data */
     public Refresh: (save?: boolean) => Promise<void>;
-    /** Close the form */
     public Close: () => void;
-    /** Set form-level notification */
     public SetFormNotification: (message: string, level: string, uniqueId: string) => boolean;
-    /** Clear form-level notification */
     public ClearFormNotification: (uniqueId: string) => boolean;
-    /** Refresh the command bar/ribbon */
     public RefreshRibbon: (refreshAll?: boolean) => void;
-    /** Add handler for form loaded event */
     public UiAddLoaded: (callback: (context: any) => void) => void;
-    /** Remove handler for form loaded event */
     public UiRemoveLoaded: (callback: (context: any) => void) => void;
-    /** Add handler for form onLoad event */
     public UiAddOnLoad: (callback: (context: any) => void) => void;
-    /** Remove handler for form onLoad event */
     public UiRemoveOnLoad: (callback: (context: any) => void) => void;
-    /** Add handler for post save event */
     public AddOnPostSave: (callback: (context: any) => void) => void;
-    /** Add handler for save event */
     public AddOnSave: (callback: (context: any) => void) => void;
-    /** Remove handler for post save event */
     public RemoveOnPostSave: (callback: (context: any) => void) => void;
-    /** Remove handler for save event */
     public RemoveOnSave: (callback: (context: any) => void) => void;
-    /** Add handler for data onLoad event */
     public DataAddOnLoad: (callback: (context: any) => void) => void;
-    /** Remove handler for data onLoad event */
     public DataRemoveOnLoad: (callback: (context: any) => void) => void;
-    /** Check if a form is visible */
     public FormIsVisible: (formId: string) => boolean;
-    /** Navigate to a form by ID */
     public FormNavigateToFormId: (formId: string) => void;
-    /** Navigate to a form by label */
     public FormNavigateToFormLabel: (formLabel: string) => void;
-    /** Set form visibility */
     public FormSetVisible: (formId: string, visible: boolean) => void;
-    /** Set the form entity name */
     public SetFormEntityName: (name: string) => void;
-
-    /**
-     * Create a new form instance
-     * @param executionContext Execution context from Dataverse
-     * @param defaultWebResourceName Default web resource name for localization
-     * @param formConfig Form configuration with field names
-     */
     constructor(
         executionContext: any,
         defaultWebResourceName: string | undefined,
@@ -1341,16 +1037,12 @@ export class FormBase<TBody, THeader, TTab, TGrid, TNavigation, TQuickForm, TPro
             defaultWebResourceName,
             formConfig
         );
-
-        // Entity-specific
         this.Body = form.Body;
         this.Header = form.Header;
         this.Tab = form.Tab;
         this.Grid = form.Grid;
         this.Navigation = form.Navigation;
         this.QuickForm = form.QuickForm;
-
-        // Common
         this.Process = form.Process;
         this.ExecutionContext = form.ExecutionContext;
         this.FormId = form.FormId;
@@ -1390,24 +1082,12 @@ export class FormBase<TBody, THeader, TTab, TGrid, TNavigation, TQuickForm, TPro
         this.FormNavigateToFormLabel = form.FormNavigateToFormLabel;
         this.FormSetVisible = form.FormSetVisible;
         this.SetFormEntityName = form.SetFormEntityName;
-
-        // Additional form properties from loadOthers
         this.Utility = form.Utility;
         this.SidePanes = form.SidePanes;
         this.WebApi = form.WebApi;
         this.Copilot = form.Copilot;
     }
 }
-
-
-// ============================================================================
-// Utility Functions
-// ============================================================================
-
-/**
- * Load Utility wrapper for common Xrm operations
- * @param defaultWebResourceName Default web resource name for Resource strings
- */
 export function LoadUtility(defaultWebResourceName?: string): any {
     const utility: any = {};
     const xrm = getXrm();
@@ -1418,7 +1098,6 @@ export function LoadUtility(defaultWebResourceName?: string): any {
     const getNavigation = xrm?.Navigation;
     const getPanel = xrm?.Panel;
     const getUtility = xrm?.Utility;
-
     getter(utility, 'Client', () => {
         const obj: any = {};
         const client = getGlobalContext?.client;
@@ -1476,7 +1155,6 @@ export function LoadUtility(defaultWebResourceName?: string): any {
         return obj;
     });
     getter(utility, 'Version', () => getGlobalContext?.getVersion());
-
     utility.AddGlobalNotification = function (notification: any, successCallback?: (result: any) => void, errorCallback?: (error: any) => void) {
         const promise = getApp?.addGlobalNotification(notification);
         if (successCallback) promise?.then(successCallback, errorCallback);
@@ -1592,24 +1270,11 @@ export function LoadUtility(defaultWebResourceName?: string): any {
     utility.WebResourceUrl = (webResourceName: string) => getGlobalContext?.getWebResourceUrl(webResourceName);
     utility.XmlAttributeEncode = (arg: string) => getEncoding?.xmlAttributeEncode(arg);
     utility.XmlEncode = (arg: string) => getEncoding?.xmlEncode(arg);
-
     return utility;
 }
-
-// ============================================================================
-// FormDialog Functions
-// ============================================================================
-
-/**
- * Load Form Dialog wrapper for dialog forms
- * @param formContext The form context
- * @param fields Array of field names to load
- * @returns Dialog form object with field controls and Close method
- */
 export function LoadFormDialog(formContext: any, fields: string[]): any {
     const form: any = {};
     const fieldsLength = fields?.length || 0;
-
     for (let i = 0; i < fieldsLength; i++) {
         const fieldName = fields[i];
         const attribute = formContext?.data?.entity?.attributes?.get(fieldName);
@@ -1617,19 +1282,9 @@ export function LoadFormDialog(formContext: any, fields: string[]): any {
         form[fieldName] = {};
         loadField(formContext, form[fieldName], attribute, control);
     }
-
-    // Add Close method for dialog
     form.Close = () => formContext?.ui?.close();
-
     return form;
 }
-
-// ============================================================================
-// Global OptionSet - Using declare global for namespace merging
-// Entity files can extend this with their specific OptionSets
-// ============================================================================
-
-// Define global OptionSet values
 const GlobalOptionSetValues = {
     AdvancedConfigSetting: Object.freeze({ MaxChildIncidentNumber: 'MaxChildIncidentNumber', MaxIncidentMergeNumber: 'MaxIncidentMergeNumber' }),
     ClientName: Object.freeze({ Web: 'Web', Outlook: 'Outlook', Mobile: 'Mobile' }),
@@ -1656,12 +1311,8 @@ const GlobalOptionSetValues = {
     TabDisplayState: Object.freeze({ Expanded: 'expanded', Collapsed: 'collapsed' }),
     TimerState: Object.freeze({ NotSet: 1, InProgress: 2, Warning: 3, Violated: 4, Success: 5, Expired: 6, Canceled: 7, Paused: 8 }),
 } as const;
-
-// Populate global OptionSet at runtime
 (globalThis as any).OptionSet = (globalThis as any).OptionSet || {};
 Object.assign((globalThis as any).OptionSet, GlobalOptionSetValues);
-
-// Declare global namespace for TypeScript IntelliSense
 declare global {
     namespace OptionSet {
         const AdvancedConfigSetting: typeof GlobalOptionSetValues.AdvancedConfigSetting;
@@ -1690,6 +1341,4 @@ declare global {
         const TimerState: typeof GlobalOptionSetValues.TimerState;
     }
 }
-
-// Also export for module usage (backward compatibility)
 export { GlobalOptionSetValues as OptionSet };
