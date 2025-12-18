@@ -379,8 +379,8 @@ namespace DynamicsCrm.DevKit.Commands
                 var sb = new StringBuilder();
                 sb.Append($"\"{message}\", \"{entity}\", {stageName}, {modeName}, \"{filteringAttributes}\", \"{name}\", {rank}, {isolationModeName}, PluginType = PluginType.Plugin, Id = \"{stepId}\"");
 
-                if (row.GetAttributeValue<bool>("asyncautodelete"))
-                    sb.Append(", DeleteAsyncOperation = true");
+                var asyncautodelete = row.GetAttributeValue<bool>("asyncautodelete");
+                sb.Append($", DeleteAsyncOperation = {asyncautodelete.ToString().ToLower()}");
 
                 var description = row.GetAttributeValue<string>("description");
                 if (description != null)
