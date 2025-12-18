@@ -2,7 +2,7 @@
   "servers": [
     {
       "profile": "DEBUG",
-      "solution": "???",
+      "solution": "devkitv4",
       "folder": "bin\\Debug",
       "includefiles": [
         "Dev.DevKit.Plugin.*.dll",
