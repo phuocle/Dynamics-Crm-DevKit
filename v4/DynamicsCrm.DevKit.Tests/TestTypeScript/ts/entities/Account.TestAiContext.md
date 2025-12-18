@@ -150,6 +150,8 @@ npm run debug
 | 0 | `Account.TestControl.ts` | IControl | R1-R8 | S1-S16 | Name |
 | 1 | `Account.TestLookup.ts` | Lookup | R1-R16 | S1-S9 | PrimaryContactId |
 | 2 | `Account.TestMemo.ts` | Memo | R1-R15 | S1-S11 | Description |
+| 3 | `Account.TestString.ts` | String | R1-R15 | S1-S11 | Name |
+| 4 | `Account.TestInteger.ts` | Integer | R1-R17 | S1-S12 | NumberOfEmployees |
 
 ---
 
@@ -157,8 +159,6 @@ npm run debug
 
 | # | Interface | Sample Field | Ghi chú |
 |---|-----------|--------------|---------|
-| 3 | String | `form.Body.Name` | MaxLength |
-| 4 | Integer | `form.Header.NumberOfEmployees` | Min, Max, Precision |
 | 5 | Money | `form.Body.Revenue` | Min, Max, Precision |
 | 6 | Decimal | | Min, Max, Precision |
 | 7 | Double | | Min, Max, Precision |

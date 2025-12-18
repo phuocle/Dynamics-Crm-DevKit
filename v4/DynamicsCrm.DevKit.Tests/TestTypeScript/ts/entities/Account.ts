@@ -3,6 +3,7 @@ import { TestControl } from './Account.TestControl';
 import { TestLookup } from './Account.TestLookup';
 import { TestMemo } from './Account.TestMemo';
 import { TestString } from './Account.TestString';
+import { TestInteger } from './Account.TestInteger';
 
 const formAccount = (function () {
     "use strict";
@@ -43,6 +44,9 @@ const formAccount = (function () {
 
             // Test 3: String Control
             TestString(form);
+
+            // Test 4: Integer Control
+            TestInteger(form);
 
         }, 10000);
 
