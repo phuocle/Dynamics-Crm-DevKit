@@ -30,12 +30,13 @@
   "CertificateSHA256Hash": "",
   "ManagedIdentities": [
     {
-      "AppName": "",
+      "AppName": "Dev-DevKit-Server-ManagedIdentity",
       "AppId": "",
-      "EnvironmentId": ""
+      "EnvironmentId": "cbba8ce9-ea7c-e440-b083-0b9517496e17"
     }
   ]
 }
+
 ```
 5. Make sure you enter all valid values like above. Then run Plugin-Managed-Identity.ps1 and wait
 
