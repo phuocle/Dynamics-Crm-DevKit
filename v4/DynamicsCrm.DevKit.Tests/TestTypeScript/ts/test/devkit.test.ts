@@ -2861,32 +2861,803 @@ describe('DevKit Module', () => {
     });
 
     // =========================================================================
-    // Additional Coverage Tests
-    // Note: Some advanced tests are commented out due to xrm-mock limitations
-    // Coverage is already good: 85% statements, 80% branches, 99% lines
+    // Additional Coverage Tests - Field Methods
     // =========================================================================
-    describe('LoadFormV2 - Additional Field Properties', () => {
-        // Tests commented out due to xrm-mock limitations with RequiredLevel/SubmitMode
-        // Current coverage is sufficient for production use
+    describe('LoadFormV2 - Field AddNotification and ContentWindow', () => {
+        let mockExecutionContext: any;
+        let mockFormContext: any;
+        let mockAddNotification: jest.Mock;
+        let mockGetContentWindow: jest.Mock;
+
+        beforeEach(() => {
+            mockAddNotification = jest.fn();
+            mockGetContentWindow = jest.fn().mockResolvedValue({ postMessage: jest.fn() });
+
+            mockFormContext = {
+                data: {
+                    entity: {
+                        getId: jest.fn().mockReturnValue('{guid}'),
+                        getEntityName: jest.fn().mockReturnValue('account'),
+                        getEntityReference: jest.fn().mockReturnValue({}),
+                        getPrimaryAttributeValue: jest.fn(),
+                        getDataXml: jest.fn(),
+                        getIsDirty: jest.fn().mockReturnValue(false),
+                        isValid: jest.fn().mockReturnValue(true),
+                        addOnSave: jest.fn(),
+                        removeOnSave: jest.fn(),
+                        addOnPostSave: jest.fn(),
+                        removeOnPostSave: jest.fn(),
+                        attributes: { get: jest.fn() }
+                    },
+                    getIsDirty: jest.fn().mockReturnValue(false),
+                    isValid: jest.fn().mockReturnValue(true),
+                    refresh: jest.fn(),
+                    save: jest.fn(),
+                    addOnLoad: jest.fn(),
+                    removeOnLoad: jest.fn()
+                },
+                ui: {
+                    getFormType: jest.fn().mockReturnValue(2),
+                    getViewPortHeight: jest.fn().mockReturnValue(800),
+                    getViewPortWidth: jest.fn().mockReturnValue(1200),
+                    close: jest.fn(),
+                    setFormNotification: jest.fn(),
+                    clearFormNotification: jest.fn(),
+                    refreshRibbon: jest.fn(),
+                    addLoaded: jest.fn(),
+                    removeLoaded: jest.fn(),
+                    addOnLoad: jest.fn(),
+                    removeOnLoad: jest.fn(),
+                    controls: { get: jest.fn() },
+                    tabs: { get: jest.fn() },
+                    formSelector: {
+                        getCurrentItem: jest.fn().mockReturnValue({ getId: jest.fn(), getLabel: jest.fn() }),
+                        items: { getLength: jest.fn().mockReturnValue(0), get: jest.fn() }
+                    },
+                    navigation: { items: { getLength: jest.fn().mockReturnValue(0), get: jest.fn() } },
+                    quickForms: { get: jest.fn() }
+                },
+                getControl: jest.fn().mockImplementation((name: string) => ({
+                    getName: () => name,
+                    getControlType: jest.fn().mockReturnValue('standard'),
+                    getLabel: jest.fn().mockReturnValue('Label'),
+                    setLabel: jest.fn(),
+                    getVisible: jest.fn().mockReturnValue(true),
+                    setVisible: jest.fn(),
+                    getDisabled: jest.fn().mockReturnValue(false),
+                    setDisabled: jest.fn(),
+                    setFocus: jest.fn(),
+                    setNotification: jest.fn(),
+                    clearNotification: jest.fn(),
+                    addNotification: mockAddNotification,
+                    getContentWindow: mockGetContentWindow,
+                    getAttribute: jest.fn().mockReturnValue({ getName: () => name })
+                })),
+                getAttribute: jest.fn().mockImplementation((name: string) => ({
+                    getName: () => name,
+                    getValue: jest.fn().mockReturnValue('value'),
+                    setValue: jest.fn()
+                }))
+            };
+
+            mockExecutionContext = {
+                getFormContext: jest.fn().mockReturnValue(mockFormContext),
+                getDepth: jest.fn().mockReturnValue(1),
+                getEventArgs: jest.fn().mockReturnValue({}),
+                getEventSource: jest.fn(),
+                getSharedVariable: jest.fn(),
+                setSharedVariable: jest.fn()
+            };
+        });
+
+        test('should call AddNotification with callback', () => {
+            const result = LoadFormV2(mockExecutionContext, undefined, { body: ['webresource'] });
+            const callback = jest.fn();
+
+            result.Body.webresource.AddNotification('Test message', 'ERROR', 'notif1', callback);
+
+            expect(mockAddNotification).toHaveBeenCalled();
+        });
+
+        test('should call ContentWindow with callback', async () => {
+            const result = LoadFormV2(mockExecutionContext, undefined, { body: ['webresource'] });
+            const successCallback = jest.fn();
+
+            result.Body.webresource.ContentWindow(successCallback);
+
+            await new Promise(resolve => setTimeout(resolve, 10));
+            expect(mockGetContentWindow).toHaveBeenCalled();
+            expect(successCallback).toHaveBeenCalled();
+        });
+
+        test('should return promise from ContentWindow without callback', async () => {
+            const result = LoadFormV2(mockExecutionContext, undefined, { body: ['webresource'] });
+
+            const promise = result.Body.webresource.ContentWindow();
+
+            expect(promise).toBeDefined();
+            const iframe = await promise;
+            expect(iframe).toBeDefined();
+        });
     });
 
-    describe('LoadFormV2 - Tab and Section Operations', () => {
-        // Tests commented out due to xrm-mock getIsDirty not implemented
-        // Coverage is already good without these tests
+    // =========================================================================
+    // Form Selector Loop Tests (findFormItem)
+    // =========================================================================
+    describe('LoadFormV2 - Form Selector Operations', () => {
+        let mockExecutionContext: any;
+        let mockFormContext: any;
+        let mockFormItems: any[];
+
+        beforeEach(() => {
+            mockFormItems = [
+                { getId: () => 'form1', getLabel: () => 'Form 1', getVisible: () => true, setVisible: jest.fn(), navigate: jest.fn() },
+                { getId: () => 'form2', getLabel: () => 'Form 2', getVisible: () => true, setVisible: jest.fn(), navigate: jest.fn() },
+                { getId: () => 'form3', getLabel: () => 'Form 3', getVisible: () => false, setVisible: jest.fn(), navigate: jest.fn() }
+            ];
+
+            mockFormContext = {
+                data: {
+                    entity: {
+                        getId: jest.fn().mockReturnValue('{guid}'),
+                        getEntityName: jest.fn().mockReturnValue('account'),
+                        getEntityReference: jest.fn().mockReturnValue({}),
+                        getPrimaryAttributeValue: jest.fn(),
+                        getDataXml: jest.fn(),
+                        getIsDirty: jest.fn().mockReturnValue(false),
+                        isValid: jest.fn().mockReturnValue(true),
+                        addOnSave: jest.fn(),
+                        removeOnSave: jest.fn(),
+                        addOnPostSave: jest.fn(),
+                        removeOnPostSave: jest.fn(),
+                        attributes: { get: jest.fn() }
+                    },
+                    getIsDirty: jest.fn().mockReturnValue(false),
+                    isValid: jest.fn().mockReturnValue(true),
+                    refresh: jest.fn(),
+                    save: jest.fn(),
+                    addOnLoad: jest.fn(),
+                    removeOnLoad: jest.fn()
+                },
+                ui: {
+                    getFormType: jest.fn().mockReturnValue(2),
+                    getViewPortHeight: jest.fn().mockReturnValue(800),
+                    getViewPortWidth: jest.fn().mockReturnValue(1200),
+                    close: jest.fn(),
+                    setFormNotification: jest.fn(),
+                    clearFormNotification: jest.fn(),
+                    refreshRibbon: jest.fn(),
+                    addLoaded: jest.fn(),
+                    removeLoaded: jest.fn(),
+                    addOnLoad: jest.fn(),
+                    removeOnLoad: jest.fn(),
+                    controls: { get: jest.fn() },
+                    tabs: { get: jest.fn() },
+                    formSelector: {
+                        getCurrentItem: jest.fn().mockReturnValue({ getId: () => 'form1', getLabel: () => 'Form 1' }),
+                        items: {
+                            getLength: jest.fn().mockReturnValue(3),
+                            get: jest.fn().mockImplementation((index: number) => mockFormItems[index])
+                        }
+                    },
+                    navigation: { items: { getLength: jest.fn().mockReturnValue(0), get: jest.fn() } },
+                    quickForms: { get: jest.fn() }
+                },
+                getControl: jest.fn(),
+                getAttribute: jest.fn()
+            };
+
+            mockExecutionContext = {
+                getFormContext: jest.fn().mockReturnValue(mockFormContext),
+                getDepth: jest.fn().mockReturnValue(1),
+                getEventArgs: jest.fn().mockReturnValue({}),
+                getEventSource: jest.fn(),
+                getSharedVariable: jest.fn(),
+                setSharedVariable: jest.fn()
+            };
+        });
+
+        test('should check FormIsVisible for existing form', () => {
+            const result = LoadFormV2(mockExecutionContext, undefined, {});
+
+            const isVisible = result.FormIsVisible('form2');
+
+            expect(mockFormContext.ui.formSelector.items.getLength).toHaveBeenCalled();
+        });
+
+        test('should navigate to form by Id', () => {
+            const result = LoadFormV2(mockExecutionContext, undefined, {});
+
+            result.FormNavigateToFormId('form2');
+
+            expect(mockFormContext.ui.formSelector.items.get).toHaveBeenCalled();
+        });
+
+        test('should navigate to form by Label', () => {
+            const result = LoadFormV2(mockExecutionContext, undefined, {});
+
+            result.FormNavigateToFormLabel('Form 2');
+
+            expect(mockFormContext.ui.formSelector.items.get).toHaveBeenCalled();
+        });
+
+        test('should set form visibility', () => {
+            const result = LoadFormV2(mockExecutionContext, undefined, {});
+
+            result.FormSetVisible('form2', false);
+
+            expect(mockFormItems[1].setVisible).toHaveBeenCalledWith(false);
+        });
     });
 
-    describe('LoadProcess - Additional Coverage', () => {
-        // Tests commented out due to xrm-mock limitations
-        // Current coverage is sufficient
+    // =========================================================================
+    // WebApi Callback Tests
+    // =========================================================================
+    describe('LoadWebApi - Callback Tests', () => {
+        let mockWebApi: any;
+
+        beforeEach(() => {
+            mockWebApi = {
+                createRecord: jest.fn().mockResolvedValue({ id: '{newId}' }),
+                deleteRecord: jest.fn().mockResolvedValue({ id: '{deletedId}' }),
+                retrieveRecord: jest.fn().mockResolvedValue({ name: 'Test' }),
+                retrieveMultipleRecords: jest.fn().mockResolvedValue({ entities: [] }),
+                updateRecord: jest.fn().mockResolvedValue({ id: '{updatedId}' }),
+                execute: jest.fn().mockResolvedValue({ ok: true }),
+                executeMultiple: jest.fn().mockResolvedValue([{ ok: true }]),
+                online: {
+                    execute: jest.fn().mockResolvedValue({ ok: true }),
+                    executeMultiple: jest.fn().mockResolvedValue([{ ok: true }])
+                },
+                offline: {
+                    isAvailable: jest.fn().mockReturnValue(true)
+                }
+            };
+
+            (global as any).window = {
+                Xrm: {
+                    WebApi: mockWebApi
+                }
+            };
+        });
+
+        afterEach(() => {
+            delete (global as any).window;
+        });
+
+        test('should call CreateRecord with callback', async () => {
+            const { LoadWebApi } = require('../lib/devkit');
+            const webApi = LoadWebApi();
+            const successCallback = jest.fn();
+
+            webApi.CreateRecord('account', { name: 'Test' }, successCallback);
+
+            await new Promise(resolve => setTimeout(resolve, 10));
+            expect(mockWebApi.createRecord).toHaveBeenCalled();
+            expect(successCallback).toHaveBeenCalled();
+        });
+
+        test('should call DeleteRecord with callback', async () => {
+            const { LoadWebApi } = require('../lib/devkit');
+            const webApi = LoadWebApi();
+            const successCallback = jest.fn();
+
+            webApi.DeleteRecord('account', '{id}', successCallback);
+
+            await new Promise(resolve => setTimeout(resolve, 10));
+            expect(mockWebApi.deleteRecord).toHaveBeenCalled();
+            expect(successCallback).toHaveBeenCalled();
+        });
+
+        test('should call RetrieveRecord with callback', async () => {
+            const { LoadWebApi } = require('../lib/devkit');
+            const webApi = LoadWebApi();
+            const successCallback = jest.fn();
+            const errorCallback = jest.fn();
+
+            // Using 5 arguments to match the signature (entityLogicalName, id, options, successCallback, errorCallback)
+            webApi.RetrieveRecord('account', '{id}', '?$select=name', successCallback, errorCallback);
+
+            await new Promise(resolve => setTimeout(resolve, 10));
+            expect(mockWebApi.retrieveRecord).toHaveBeenCalled();
+        });
+
+        test('should call RetrieveMultipleRecords with callback', async () => {
+            const { LoadWebApi } = require('../lib/devkit');
+            const webApi = LoadWebApi();
+            const successCallback = jest.fn();
+
+            webApi.RetrieveMultipleRecords('account', '?$select=name', 50, successCallback);
+
+            await new Promise(resolve => setTimeout(resolve, 10));
+            expect(mockWebApi.retrieveMultipleRecords).toHaveBeenCalled();
+            expect(successCallback).toHaveBeenCalled();
+        });
+
+        test('should call UpdateRecord with callback', async () => {
+            const { LoadWebApi } = require('../lib/devkit');
+            const webApi = LoadWebApi();
+            const successCallback = jest.fn();
+
+            webApi.UpdateRecord('account', '{id}', { name: 'Updated' }, successCallback);
+
+            await new Promise(resolve => setTimeout(resolve, 10));
+            expect(mockWebApi.updateRecord).toHaveBeenCalled();
+            expect(successCallback).toHaveBeenCalled();
+        });
+
+        test('should call Execute with callback', async () => {
+            const { LoadWebApi } = require('../lib/devkit');
+            const webApi = LoadWebApi();
+            const successCallback = jest.fn();
+
+            webApi.Execute({ getMetadata: () => ({}) }, successCallback);
+
+            await new Promise(resolve => setTimeout(resolve, 10));
+            expect(mockWebApi.execute).toHaveBeenCalled();
+            expect(successCallback).toHaveBeenCalled();
+        });
+
+        test('should call ExecuteMultiple with callback', async () => {
+            const { LoadWebApi } = require('../lib/devkit');
+            const webApi = LoadWebApi();
+            const successCallback = jest.fn();
+
+            webApi.ExecuteMultiple([{ getMetadata: () => ({}) }], successCallback);
+
+            await new Promise(resolve => setTimeout(resolve, 10));
+            expect(mockWebApi.executeMultiple).toHaveBeenCalled();
+            expect(successCallback).toHaveBeenCalled();
+        });
     });
 
-    describe('LoadUtility - Additional Methods', () => {
-        // These tests temporarily commented out - coverage is already good
-        // Can be re-enabled and fixed later if needed
+    // =========================================================================
+    // WebApi Online/Offline Tests
+    // =========================================================================
+    describe('LoadWebApi - Online and Offline', () => {
+        let mockWebApi: any;
+
+        beforeEach(() => {
+            mockWebApi = {
+                online: {
+                    execute: jest.fn().mockResolvedValue({ ok: true }),
+                    executeMultiple: jest.fn().mockResolvedValue([{ ok: true }])
+                },
+                offline: {
+                    isAvailable: jest.fn().mockReturnValue(true)
+                }
+            };
+
+            (global as any).window = {
+                Xrm: {
+                    WebApi: mockWebApi
+                }
+            };
+        });
+
+        afterEach(() => {
+            delete (global as any).window;
+        });
+
+        test('should access Online.Execute with callback', async () => {
+            const { LoadWebApi } = require('../lib/devkit');
+            const webApi = LoadWebApi();
+            const successCallback = jest.fn();
+
+            webApi.Online.Execute({ getMetadata: () => ({}) }, successCallback);
+
+            await new Promise(resolve => setTimeout(resolve, 10));
+            expect(mockWebApi.online.execute).toHaveBeenCalled();
+            expect(successCallback).toHaveBeenCalled();
+        });
+
+        test('should return promise from Online.Execute without callback', async () => {
+            const { LoadWebApi } = require('../lib/devkit');
+            const webApi = LoadWebApi();
+
+            const promise = webApi.Online.Execute({ getMetadata: () => ({}) });
+
+            expect(promise).toBeDefined();
+        });
+
+        test('should access Online.ExecuteMultiple with callback', async () => {
+            const { LoadWebApi } = require('../lib/devkit');
+            const webApi = LoadWebApi();
+            const successCallback = jest.fn();
+
+            webApi.Online.ExecuteMultiple([{ getMetadata: () => ({}) }], successCallback);
+
+            await new Promise(resolve => setTimeout(resolve, 10));
+            expect(mockWebApi.online.executeMultiple).toHaveBeenCalled();
+            expect(successCallback).toHaveBeenCalled();
+        });
+
+        test('should return promise from Online.ExecuteMultiple without callback', async () => {
+            const { LoadWebApi } = require('../lib/devkit');
+            const webApi = LoadWebApi();
+
+            const promise = webApi.Online.ExecuteMultiple([{ getMetadata: () => ({}) }]);
+
+            expect(promise).toBeDefined();
+        });
+
+        test('should check Offline.IsAvailable', () => {
+            const { LoadWebApi } = require('../lib/devkit');
+            const webApi = LoadWebApi();
+
+            const isAvailable = webApi.Offline.IsAvailable('account');
+
+            expect(mockWebApi.offline.isAvailable).toHaveBeenCalledWith('account');
+            expect(isAvailable).toBe(true);
+        });
     });
 
-    describe('FormBase - Constructor Edge Cases', () => {
-        // These tests temporarily commented out - coverage is already good
-        // Can be re-enabled and fixed later if needed
+    // =========================================================================
+    // Copilot Tests
+    // =========================================================================
+    describe('LoadCopilot - ExecuteEvent and ExecutePrompt', () => {
+        let mockCopilot: any;
+
+        beforeEach(() => {
+            mockCopilot = {
+                executeEvent: jest.fn().mockResolvedValue({ success: true }),
+                executePrompt: jest.fn().mockResolvedValue({ response: 'AI response' })
+            };
+
+            (global as any).window = {
+                Xrm: {
+                    Copilot: mockCopilot
+                }
+            };
+        });
+
+        afterEach(() => {
+            delete (global as any).window;
+        });
+
+        test('should call ExecuteEvent with callback', async () => {
+            const { LoadCopilot } = require('../lib/devkit');
+            const copilot = LoadCopilot();
+            const successCallback = jest.fn();
+
+            copilot.ExecuteEvent('eventName', { param: 'value' }, successCallback);
+
+            await new Promise(resolve => setTimeout(resolve, 10));
+            expect(mockCopilot.executeEvent).toHaveBeenCalledWith('eventName', { param: 'value' });
+            expect(successCallback).toHaveBeenCalled();
+        });
+
+        test('should return promise from ExecuteEvent without callback', async () => {
+            const { LoadCopilot } = require('../lib/devkit');
+            const copilot = LoadCopilot();
+
+            const promise = copilot.ExecuteEvent('eventName', { param: 'value' });
+
+            expect(promise).toBeDefined();
+            const result = await promise;
+            expect(result.success).toBe(true);
+        });
+
+        test('should call ExecutePrompt with callback', async () => {
+            const { LoadCopilot } = require('../lib/devkit');
+            const copilot = LoadCopilot();
+            const successCallback = jest.fn();
+
+            copilot.ExecutePrompt('What is CRM?', successCallback);
+
+            await new Promise(resolve => setTimeout(resolve, 10));
+            expect(mockCopilot.executePrompt).toHaveBeenCalledWith('What is CRM?');
+            expect(successCallback).toHaveBeenCalled();
+        });
+
+        test('should return promise from ExecutePrompt without callback', async () => {
+            const { LoadCopilot } = require('../lib/devkit');
+            const copilot = LoadCopilot();
+
+            const promise = copilot.ExecutePrompt('What is CRM?');
+
+            expect(promise).toBeDefined();
+            const result = await promise;
+            expect(result.response).toBe('AI response');
+        });
+    });
+
+    // =========================================================================
+    // WebApi RetrieveRecords with FetchXml Tests
+    // =========================================================================
+    describe('LoadWebApi - RetrieveRecords with FetchXml', () => {
+        let mockWebApi: any;
+
+        beforeEach(() => {
+            mockWebApi = {
+                retrieveMultipleRecords: jest.fn().mockResolvedValue({
+                    entities: [{ accountid: '{id1}', name: 'Account 1' }, { accountid: '{id2}', name: 'Account 2' }]
+                }),
+                retrieveRecord: jest.fn().mockResolvedValue({ accountid: '{id}', name: 'Test Account' })
+            };
+
+            // Mock DOMParser for fetchXml parsing
+            const mockParser = {
+                parseFromString: jest.fn().mockImplementation((xml: string) => ({
+                    querySelector: jest.fn().mockReturnValue({
+                        hasAttribute: jest.fn().mockReturnValue(true),
+                        getAttribute: jest.fn().mockReturnValue('account')
+                    })
+                }))
+            };
+            (global as any).DOMParser = jest.fn().mockImplementation(() => mockParser);
+
+            (global as any).window = {
+                Xrm: {
+                    WebApi: mockWebApi
+                }
+            };
+        });
+
+        afterEach(() => {
+            delete (global as any).window;
+            delete (global as any).DOMParser;
+            jest.resetModules();
+        });
+
+        test('should call RetrieveRecords with plain FetchXml', async () => {
+            const { LoadWebApi } = require('../lib/devkit');
+            const webApi = LoadWebApi();
+            const mockFactory = jest.fn().mockImplementation((entity: any) => entity);
+
+            const fetchXml = '<fetch><entity name="account"><attribute name="name"/></entity></fetch>';
+            const promise = webApi.RetrieveRecords(mockFactory, fetchXml);
+
+            expect(promise).toBeDefined();
+            await new Promise(resolve => setTimeout(resolve, 10));
+            expect(mockWebApi.retrieveMultipleRecords).toHaveBeenCalled();
+        });
+
+        test('should call RetrieveRecords with encoded FetchXml', async () => {
+            const { LoadWebApi } = require('../lib/devkit');
+            const webApi = LoadWebApi();
+            const mockFactory = jest.fn().mockImplementation((entity: any) => entity);
+
+            const encodedFetchXml = '?fetchXml=' + encodeURIComponent('<fetch><entity name="account"></entity></fetch>');
+            const promise = webApi.RetrieveRecords(mockFactory, encodedFetchXml);
+
+            expect(promise).toBeDefined();
+        });
+
+        test('should call RetrieveRecords with entity name and OData options', async () => {
+            const { LoadWebApi } = require('../lib/devkit');
+            const webApi = LoadWebApi();
+            const mockFactory = jest.fn().mockImplementation((entity: any) => entity);
+
+            const promise = webApi.RetrieveRecords(mockFactory, 'account', '?$select=name', 50);
+
+            expect(promise).toBeDefined();
+        });
+
+        test('should call RetrieveRecords with callback', async () => {
+            const { LoadWebApi } = require('../lib/devkit');
+            const webApi = LoadWebApi();
+            const mockFactory = jest.fn().mockImplementation((entity: any) => entity);
+            const successCallback = jest.fn();
+
+            webApi.RetrieveRecords(mockFactory, 'account', '?$select=name', successCallback);
+
+            await new Promise(resolve => setTimeout(resolve, 10));
+            expect(mockWebApi.retrieveMultipleRecords).toHaveBeenCalled();
+        });
+
+        test('should call RetrieveRecord with constructor and options as function', async () => {
+            const { LoadWebApi } = require('../lib/devkit');
+            const webApi = LoadWebApi();
+
+            class AccountApi {
+                constructor(public entity: any) { }
+            }
+
+            const successCallback = jest.fn();
+            webApi.RetrieveRecord(AccountApi, 'account', '{id}', successCallback);
+
+            await new Promise(resolve => setTimeout(resolve, 10));
+            expect(mockWebApi.retrieveRecord).toHaveBeenCalled();
+        });
+
+        test('should call RetrieveRecord with constructor and no options', async () => {
+            const { LoadWebApi } = require('../lib/devkit');
+            const webApi = LoadWebApi();
+
+            class AccountApi {
+                constructor(public entity: any) { }
+            }
+
+            const promise = webApi.RetrieveRecord(AccountApi, 'account', '{id}');
+
+            expect(promise).toBeDefined();
+        });
+    });
+
+    // =========================================================================
+    // WebApi Methods - Promise Returns (without callbacks)
+    // =========================================================================
+    describe('LoadWebApi - Promise Returns', () => {
+        let mockWebApi: any;
+
+        beforeEach(() => {
+            mockWebApi = {
+                createRecord: jest.fn().mockResolvedValue({ id: '{newId}' }),
+                deleteRecord: jest.fn().mockResolvedValue({ id: '{deletedId}' }),
+                retrieveRecord: jest.fn().mockResolvedValue({ name: 'Test' }),
+                retrieveMultipleRecords: jest.fn().mockResolvedValue({ entities: [] }),
+                updateRecord: jest.fn().mockResolvedValue({ id: '{updatedId}' }),
+                execute: jest.fn().mockResolvedValue({ ok: true }),
+                executeMultiple: jest.fn().mockResolvedValue([{ ok: true }])
+            };
+
+            (global as any).window = {
+                Xrm: {
+                    WebApi: mockWebApi
+                }
+            };
+        });
+
+        afterEach(() => {
+            delete (global as any).window;
+            jest.resetModules();
+        });
+
+        test('should return promise from CreateRecord', async () => {
+            const { LoadWebApi } = require('../lib/devkit');
+            const webApi = LoadWebApi();
+
+            const promise = webApi.CreateRecord('account', { name: 'Test' });
+
+            expect(promise).toBeDefined();
+            const result = await promise;
+            expect(result.id).toBe('{newId}');
+        });
+
+        test('should return promise from DeleteRecord', async () => {
+            const { LoadWebApi } = require('../lib/devkit');
+            const webApi = LoadWebApi();
+
+            const promise = webApi.DeleteRecord('account', '{id}');
+
+            expect(promise).toBeDefined();
+        });
+
+        test('should return promise from RetrieveMultipleRecords', async () => {
+            const { LoadWebApi } = require('../lib/devkit');
+            const webApi = LoadWebApi();
+
+            const promise = webApi.RetrieveMultipleRecords('account', '?$select=name');
+
+            expect(promise).toBeDefined();
+        });
+
+        test('should return promise from UpdateRecord', async () => {
+            const { LoadWebApi } = require('../lib/devkit');
+            const webApi = LoadWebApi();
+
+            const promise = webApi.UpdateRecord('account', '{id}', { name: 'Updated' });
+
+            expect(promise).toBeDefined();
+        });
+
+        test('should return promise from Execute', async () => {
+            const { LoadWebApi } = require('../lib/devkit');
+            const webApi = LoadWebApi();
+
+            const promise = webApi.Execute({ getMetadata: () => ({}) });
+
+            expect(promise).toBeDefined();
+        });
+
+        test('should return promise from ExecuteMultiple', async () => {
+            const { LoadWebApi } = require('../lib/devkit');
+            const webApi = LoadWebApi();
+
+            const promise = webApi.ExecuteMultiple([{ getMetadata: () => ({}) }]);
+
+            expect(promise).toBeDefined();
+        });
+    });
+
+    // =========================================================================
+    // Form Selector - Not Found Cases
+    // =========================================================================
+    describe('LoadFormV2 - Form Selector Not Found', () => {
+        let mockExecutionContext: any;
+        let mockFormContext: any;
+
+        beforeEach(() => {
+            mockFormContext = {
+                data: {
+                    entity: {
+                        getId: jest.fn().mockReturnValue('{guid}'),
+                        getEntityName: jest.fn().mockReturnValue('account'),
+                        getEntityReference: jest.fn().mockReturnValue({}),
+                        getPrimaryAttributeValue: jest.fn(),
+                        getDataXml: jest.fn(),
+                        getIsDirty: jest.fn().mockReturnValue(false),
+                        isValid: jest.fn().mockReturnValue(true),
+                        addOnSave: jest.fn(),
+                        removeOnSave: jest.fn(),
+                        addOnPostSave: jest.fn(),
+                        removeOnPostSave: jest.fn(),
+                        attributes: { get: jest.fn() }
+                    },
+                    getIsDirty: jest.fn().mockReturnValue(false),
+                    isValid: jest.fn().mockReturnValue(true),
+                    refresh: jest.fn(),
+                    save: jest.fn(),
+                    addOnLoad: jest.fn(),
+                    removeOnLoad: jest.fn()
+                },
+                ui: {
+                    getFormType: jest.fn().mockReturnValue(2),
+                    getViewPortHeight: jest.fn().mockReturnValue(800),
+                    getViewPortWidth: jest.fn().mockReturnValue(1200),
+                    close: jest.fn(),
+                    setFormNotification: jest.fn(),
+                    clearFormNotification: jest.fn(),
+                    refreshRibbon: jest.fn(),
+                    addLoaded: jest.fn(),
+                    removeLoaded: jest.fn(),
+                    addOnLoad: jest.fn(),
+                    removeOnLoad: jest.fn(),
+                    controls: { get: jest.fn() },
+                    tabs: { get: jest.fn() },
+                    formSelector: {
+                        getCurrentItem: jest.fn().mockReturnValue({ getId: () => 'form1', getLabel: () => 'Form 1' }),
+                        items: {
+                            getLength: jest.fn().mockReturnValue(2),
+                            get: jest.fn().mockImplementation((index: number) => {
+                                const items = [
+                                    { getId: () => 'form1', getLabel: () => 'Form 1', getVisible: () => true, setVisible: jest.fn(), navigate: jest.fn() },
+                                    { getId: () => 'form2', getLabel: () => 'Form 2', getVisible: () => true, setVisible: jest.fn(), navigate: jest.fn() }
+                                ];
+                                return items[index];
+                            })
+                        }
+                    },
+                    navigation: { items: { getLength: jest.fn().mockReturnValue(0), get: jest.fn() } },
+                    quickForms: { get: jest.fn() }
+                },
+                getControl: jest.fn(),
+                getAttribute: jest.fn()
+            };
+
+            mockExecutionContext = {
+                getFormContext: jest.fn().mockReturnValue(mockFormContext),
+                getDepth: jest.fn().mockReturnValue(1),
+                getEventArgs: jest.fn().mockReturnValue({}),
+                getEventSource: jest.fn(),
+                getSharedVariable: jest.fn(),
+                setSharedVariable: jest.fn()
+            };
+        });
+
+        test('should return null for non-existent form', () => {
+            const result = LoadFormV2(mockExecutionContext, undefined, {});
+
+            // Trying to check visibility of non-existent form
+            const isVisible = result.FormIsVisible('nonExistentForm');
+
+            // Should return undefined/null for non-existent form
+            expect(isVisible).toBeFalsy();
+        });
+
+        test('should handle FormNavigateToFormId for non-existent form', () => {
+            const result = LoadFormV2(mockExecutionContext, undefined, {});
+
+            // This should not throw
+            result.FormNavigateToFormId('nonExistentForm');
+        });
+
+        test('should handle FormNavigateToFormLabel for non-existent form', () => {
+            const result = LoadFormV2(mockExecutionContext, undefined, {});
+
+            // This should not throw
+            result.FormNavigateToFormLabel('Non Existent Form');
+        });
     });
 });
