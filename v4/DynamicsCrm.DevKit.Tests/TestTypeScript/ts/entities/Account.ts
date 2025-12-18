@@ -1,4 +1,5 @@
 import { AccountForm } from './generator/Account.form';
+import { TestLookup } from './Account.TestLookup';
 
 const formAccount = (function () {
     "use strict";
@@ -29,6 +30,12 @@ const formAccount = (function () {
 
     async function UiAddLoaded(executionContext: any): Promise<void> {
         // BEGIN ON LOAD LOGIC
+
+        // Wait 30 seconds after OnLoad to allow form to fully load
+        // Then clear console and run real tests
+        setTimeout(() => {
+            TestLookup(form);
+        }, 30000);
 
         // END ON LOAD LOGIC
     }
