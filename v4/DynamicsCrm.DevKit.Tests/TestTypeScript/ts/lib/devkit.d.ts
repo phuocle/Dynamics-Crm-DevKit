@@ -424,15 +424,9 @@ declare namespace DevKit {
         }
 
         /**
-         * Interface for OptionSet controls
+         * Base interface for optionset controls (OptionSet, MultiOptionSet)
          */
-        interface OptionSet extends IControl {
-            /**
-             * Returns a value that represents the value set for an OptionSet attribute when the form is opened
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getinitialvalue
-             */
-            readonly InitialValue: number;
-
+        interface IControlOptionSet extends IControl {
             /**
              * Returns an option object with the value matching the argument passed to the method
              * @param value The enumeration value of the option
@@ -474,6 +468,17 @@ declare namespace DevKit {
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getoptions
              */
             readonly Options: OptionSetOption[];
+        }
+
+        /**
+         * Interface for OptionSet controls
+         */
+        interface OptionSet extends IControlOptionSet {
+            /**
+             * Returns a value that represents the value set for an OptionSet attribute when the form is opened
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getinitialvalue
+             */
+            readonly InitialValue: number;
 
             /**
              * Returns the option object that is selected in an optionset attribute
@@ -498,54 +503,12 @@ declare namespace DevKit {
         /**
          * Interface for MultiOptionSet controls
          */
-        interface MultiOptionSet extends IControl {
+        interface MultiOptionSet extends IControlOptionSet {
             /**
              * Returns a value that represents the values set for a MultiOptionSet attribute when the form is opened
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getinitialvalue
              */
             readonly InitialValue: number[];
-
-            /**
-             * Returns an option object with the value matching the argument passed to the method
-             * @param value The enumeration value of the option
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getoption
-             */
-            Option(value: number): OptionSetOption;
-
-            /**
-             * Returns an option object with the label matching the argument passed to the method
-             * @param label The label of the option
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getoption
-             */
-            Option(label: string): OptionSetOption;
-
-            /**
-             * Adds an option to a control
-             * @param text The label for the option
-             * @param value The value for the option
-             * @param index The index position to place the new option in
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/addoption
-             */
-            AddOption(text: string, value: number, index?: number): void;
-
-            /**
-             * Clears all options from a control
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/clearoptions
-             */
-            ClearOptions(): void;
-
-            /**
-             * Removes an option from a control
-             * @param value The value of the option you want to remove
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/removeoption
-             */
-            RemoveOption(value: number): void;
-
-            /**
-             * Returns an array of option objects representing valid options for an attribute
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getoptions
-             */
-            readonly Options: OptionSetOption[];
 
             /**
              * Returns the option objects that are selected in a multiselectoptionset attribute

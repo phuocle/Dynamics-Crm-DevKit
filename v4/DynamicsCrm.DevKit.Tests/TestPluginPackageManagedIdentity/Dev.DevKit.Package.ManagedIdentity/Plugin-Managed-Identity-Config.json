@@ -1,0 +1,21 @@
+{
+  "ResourceGroup": "Dev-DevKit-Package-ManagedIdentity",
+  "Location": "southeastasia",
+  "KeyVaultName": "Package-ManagedIdentity",
+  "SecretName": "Package-ManagedIdentity",
+  "SecretValue": "Package-ManagedIdentity-VERY-IMPORTANT-DATA",
+  "CertificateFileName": "Package-ManagedIdentity",
+  "CertificatePassword": "pASSw0rd",
+  "CertificateValidityYears": 100,
+  "TenantId": "",
+  "KeyVaultURL": "",
+  "CertificateThumbprint": "",
+  "CertificateSHA256Hash": "",
+  "ManagedIdentities": [
+    {
+      "AppName": "Dev-DevKit-Package-ManagedIdentity",
+      "AppId": "",
+      "EnvironmentId": "cbba8ce9-ea7c-e440-b083-0b9517496e17"
+    }
+  ]
+}
