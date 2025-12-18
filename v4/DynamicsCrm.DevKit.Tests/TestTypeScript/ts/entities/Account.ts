@@ -24,11 +24,12 @@ const formAccount = (function () {
     async function UiAddLoaded(executionContext: any): Promise<void> {
         // BEGIN ON LOAD LOGIC
 
-        // Wait 30 seconds after OnLoad to allow form to fully load
+        // Wait 10 seconds after OnLoad to allow form to fully load
         // Then clear console and run real tests
         setTimeout(() => {
+            debugger;
             TestLookup(form);
-        }, 30000);
+        }, 10000);
 
         // END ON LOAD LOGIC
     }
