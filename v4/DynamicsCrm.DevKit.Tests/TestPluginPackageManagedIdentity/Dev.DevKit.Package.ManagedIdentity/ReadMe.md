@@ -8,17 +8,24 @@
 
 ```
 
-# DynamicsCrm.DevKit dependent assembly plugins project
+# DynamicsCrm.DevKit — Package: Managed Identity
 
-* [Package Project Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Package-Project-Template)
-* [Dependent Assembly plug-ins](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/dependent-assembly-plugins)
+This project includes tooling and guidance to create and deploy an Azure Managed Identity for use in dependent-assembly plugin packages for Microsoft Dynamics 365 / Dataverse.
 
-# DynamicsCrm.DevKit Package Managed Identity
+Related resources:
+- Package Project Template: https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Package-Project-Template
+- Dependent assembly plug-ins: https://learn.microsoft.com/en-us/power-apps/developer/data-platform/dependent-assembly-plugins
 
-1. Add project item '13. .bat files' then chose "Plugin-Managed-Identity.ps1"
-2. Add DynamicsCrm.DevKit plugin class to project
-3. Make sure you already install "Azure Cli" and sign in to your Azure account that want deploy Managed Identity  
-4. Update file Plugin-Managed-Identity-Config.json with these value
+## Prerequisites
+- Azure CLI installed and you are signed in to the target Azure subscription.
+- Visual Studio with .NET Framework 4.6.2 development workload.
+- DynamicsCrm.DevKit tools (CLI) for deployment.
+
+## Configuration
+1. Add the project item `13. .bat files` and choose `Plugin-Managed-Identity.ps1`.
+2. Add the DynamicsCrm.DevKit plugin class to your project.
+3. Open `Plugin-Managed-Identity-Config.json` and update the values as required. Example:
+
 ```json
 {
   "ResourceGroup": "Dev-DevKit-Package-ManagedIdentity",
@@ -42,13 +49,33 @@
   ]
 }
 ```
-5. Make sure you enter all valid values like above. Then run Plugin-Managed-Identity.ps1 and wait.
-6. If 5 failed, make sure you fix and run 5. without any errors
-7. Now you see some files updated and created
-    + Plugin-Managed-Identity-Config.json updated
-    + Package-ManagedIdentity.cer created, need include to project
-    + Package-ManagedIdentity.pfx created, need include to project
-    + AssemblyInfo2.cs created, need include to project
-8. Now build your project/solution and deploy use DynamicsCrm.DevKit.Cli by run deploy.debug.bat
-9. Done, DynamicsCrm.DevKit.Cli will do all for you, now verify you code and you can use Azure Managed Identity in your plugin
-10. When Cli run, if failed, you should resolve by guide by Cli, like install some tool, update some notes, ....
+
+Notes:
+- Ensure all required fields are populated with valid values for your Azure environment.
+- `EnvironmentId` should match the target Dynamics/Dataverse environment GUID.
+
+## Deployment Steps
+1. Run the `Plugin-Managed-Identity.ps1` script. The script will create or update Azure resources (resource group, Key Vault, secrets, certificates, and managed identity) based on the configuration.
+2. If the script reports errors, correct the configuration and re-run the script.
+3. After the script completes, include the generated certificate files in your project (if applicable):
+   - `Package-ManagedIdentity.cer`
+   - `Package-ManagedIdentity.pfx`
+   - `AssemblyInfo2.cs`
+4. Build your project/solution in Debug configuration.
+5. Deploy the package using `DynamicsCrm.DevKit.Cli` by running `deploy.debug.bat`.
+
+## What to expect
+- Updated configuration file(s) and generated certificate files in the project folder.
+- The CLI will perform deployment tasks; review its output for any guidance or errors.
+
+## Troubleshooting
+- If the Azure CLI is not signed in, run `az login` and verify the correct subscription with `az account show`.
+- Ensure the Azure account has permissions to create resource groups, Key Vaults, and managed identities.
+- If deployment fails, review the CLI output for specific missing tools or permissions and follow the recommended actions.
+
+## Security Considerations
+- Do not commit secrets, passwords, or PFX files to source control.
+- Use Key Vault to store secrets and certificates securely.
+
+## Support
+For issues or contributions, please open an issue or pull request on the repository: https://github.com/phuocle/Dynamics-Crm-Dev-Kit

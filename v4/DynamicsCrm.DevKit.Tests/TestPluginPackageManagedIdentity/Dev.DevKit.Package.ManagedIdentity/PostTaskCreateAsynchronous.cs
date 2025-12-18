@@ -2,10 +2,11 @@
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Extensions;
 using System;
+using System.Collections.Generic;
 
 namespace Dev.DevKit.Package.ManagedIdentity
 {
-    [CrmPluginRegistration("Create", "task", StageEnum.PostOperation, ExecutionModeEnum.Asynchronous, "", "Dev.DevKit.Package.ManagedIdentity.PostTaskCreateAsynchronous", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, DeleteAsyncOperation = true, Image1Name = "PostImage", Image1Alias = "PostImage", Image1Type = ImageTypeEnum.PostImage, Image1Attributes = "*")]
+    [CrmPluginRegistration("Create", "task", StageEnum.PostOperation, ExecutionModeEnum.Asynchronous, "subject", "Dev.DevKit.Package.ManagedIdentity.PostTaskCreateAsynchronous", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, DeleteAsyncOperation = true, Image1Name = "PostImage", Image1Alias = "PostImage", Image1Type = ImageTypeEnum.PostImage, Image1Attributes = "*")]
     public class PostTaskCreateAsynchronous : IPlugin
     {
         /*
@@ -42,15 +43,19 @@ namespace Dev.DevKit.Package.ManagedIdentity
 
             tracing?.DebugContext(context);
 
-            ExecutePlugin(context, serviceFactory, serviceAdmin, service, tracing);
+            var identityService = (IManagedIdentityService)serviceProvider.GetService(typeof(IManagedIdentityService));
+            var scopes = new List<string> { "https://vault.azure.net/.default" };
+            var accessToken = identityService.AcquireToken(scopes);
+
+            ExecutePlugin(context, serviceFactory, serviceAdmin, service, tracing, accessToken);
         }
 
-        private void ExecutePlugin(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService serviceAdmin, IOrganizationService service, ITracingService tracing)
+        private void ExecutePlugin(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService serviceAdmin, IOrganizationService service, ITracingService tracing, string accessToken)
         {
             var targetEntity = context.InputParameterOrDefault<Entity>("Target");
             context.PostEntityImages.TryGetValue("PostImage", out Entity postEntity);
             //YOUR PLUGIN-CODE GO HERE
-
+            tracing.Trace($"Azure Access Token: {accessToken}");
         }
     }
 }
