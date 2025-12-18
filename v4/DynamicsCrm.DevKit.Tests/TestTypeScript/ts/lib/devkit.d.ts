@@ -300,9 +300,9 @@ declare namespace DevKit {
         }
 
         /**
-         * Interface for String controls
+         * Base interface for text controls (String, Memo)
          */
-        interface String extends IControl {
+        interface IControlText extends IControl {
             /**
              * Returns a number indicating the maximum length of a string or memo attribute
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getmaxlength
@@ -310,7 +310,7 @@ declare namespace DevKit {
             readonly MaxLength: number;
 
             /**
-             * Get/Set the data value for a string attribute
+             * Get/Set the data value for an attribute
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getvalue
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/setvalue
              */
@@ -318,27 +318,9 @@ declare namespace DevKit {
         }
 
         /**
-         * Interface for Memo (multiline text) controls
+         * Base interface for numeric controls (Integer, Decimal, Double, Money)
          */
-        interface Memo extends IControl {
-            /**
-             * Returns a number indicating the maximum length of a memo attribute
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getmaxlength
-             */
-            readonly MaxLength: number;
-
-            /**
-             * Get/Set the data value for a memo attribute
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getvalue
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/setvalue
-             */
-            Value: string | null;
-        }
-
-        /**
-         * Interface for Integer controls
-         */
-        interface Integer extends IControl {
+        interface IControlNumber extends IControl {
             /**
              * Returns a number indicating the maximum allowed value for an attribute
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getmax
@@ -359,104 +341,47 @@ declare namespace DevKit {
             Precision: number;
 
             /**
-             * Get/Set the data value for an integer attribute
+             * Get/Set the data value for an attribute
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getvalue
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/setvalue
              */
             Value: number | null;
+        }
+
+        /**
+         * Interface for String controls
+         */
+        interface String extends IControlText {
+        }
+
+        /**
+         * Interface for Memo (multiline text) controls
+         */
+        interface Memo extends IControlText {
+        }
+
+        /**
+         * Interface for Integer controls
+         */
+        interface Integer extends IControlNumber {
         }
 
         /**
          * Interface for Decimal controls
          */
-        interface Decimal extends IControl {
-            /**
-             * Returns a number indicating the maximum allowed value for a decimal attribute
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getmax
-             */
-            readonly Max: number;
-
-            /**
-             * Returns a number indicating the minimum allowed value for a decimal attribute
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getmin
-             */
-            readonly Min: number;
-
-            /**
-             * Get/Set the number of digits allowed to the right of the decimal point
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getprecision
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/setprecision
-             */
-            Precision: number;
-
-            /**
-             * Get/Set the data value for a decimal attribute
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getvalue
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/setvalue
-             */
-            Value: number | null;
+        interface Decimal extends IControlNumber {
         }
 
         /**
          * Interface for Double (floating point) controls
          */
-        interface Double extends IControl {
-            /**
-             * Returns a number indicating the maximum allowed value for a double attribute
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getmax
-             */
-            readonly Max: number;
-
-            /**
-             * Returns a number indicating the minimum allowed value for a double attribute
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getmin
-             */
-            readonly Min: number;
-
-            /**
-             * Get/Set the number of digits allowed to the right of the decimal point
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getprecision
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/setprecision
-             */
-            Precision: number;
-
-            /**
-             * Get/Set the data value for a double attribute
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getvalue
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/setvalue
-             */
-            Value: number | null;
+        interface Double extends IControlNumber {
         }
 
         /**
          * Interface for Money controls
          */
-        interface Money extends IControl {
-            /**
-             * Returns a number indicating the maximum allowed value for a money attribute
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getmax
-             */
-            readonly Max: number;
-
-            /**
-             * Returns a number indicating the minimum allowed value for a money attribute
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getmin
-             */
-            readonly Min: number;
-
-            /**
-             * Get/Set the number of digits allowed to the right of the decimal point
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getprecision
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/setprecision
-             */
-            Precision: number;
-
-            /**
-             * Get/Set the data value for a money attribute
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getvalue
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/setvalue
-             */
-            Value: number | null;
+        interface Money extends IControlNumber {
         }
 
         /**
