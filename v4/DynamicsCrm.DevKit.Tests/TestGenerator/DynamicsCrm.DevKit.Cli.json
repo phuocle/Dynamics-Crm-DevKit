@@ -67,19 +67,19 @@
   "solutionpackagers": [
     {
       "profile": "Extract-Both",
-      "solution": "???",
+      "solution": "devkitv4",
       "rootfolder": "",
       "solutiontype": "Both",
-      "folder": "???",
+      "folder": "DEVKIT4",
       "type": "Extract",
       "mapfile": ""
     },
     {
       "profile": "Pack-Both",
-      "solution": "???",
+      "solution": "devkitv4",
       "rootfolder": "",
       "solutiontype": "Both",
-      "folder": "???",
+      "folder": "DEVKIT4",
       "type": "Pack",
       "mapfile": ""
     }
