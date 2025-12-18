@@ -46,11 +46,12 @@ export function TestLookup(form: AccountForm.Form): void {
             Status: "✓"
         });
 
-        // Test 4: DefaultView
+        // Test 4: DefaultView (getter)
+        const originalDefaultView = lookup.DefaultView;
         results.push({
             Test: "4",
             Property: "DefaultView",
-            Value: lookup.DefaultView,
+            Value: originalDefaultView,
             Status: "✓"
         });
 
@@ -145,19 +146,53 @@ export function TestLookup(form: AccountForm.Form): void {
         });
     }
 
-    // Test 10-13: Methods (these have side effects, log separately)
+    // Test 10-17: Methods (these have side effects, log separately)
     const methodResults: TestResult[] = [];
 
+    // Store callback references for removal tests
+    const preSearchCallback = (ctx: any) => {
+        const filterXml = "<filter type='and'><condition attribute='statecode' operator='eq' value='0' /></filter>";
+        lookup.AddCustomFilter(filterXml, "contact");
+        console.log("  📍 PreSearch fired - filter applied");
+    };
+
+    const tagClickCallback = (ctx: any) => {
+        console.log("  📍 LookupTagClick fired - tag was clicked");
+    };
+
+    // Test 10: AddPreSearch
     try {
-        lookup.AddPreSearch((ctx: any) => {
-            const filterXml = "<filter type='and'><condition attribute='statecode' operator='eq' value='0' /></filter>";
-            lookup.AddCustomFilter(filterXml, "contact");
-        });
+        lookup.AddPreSearch(preSearchCallback);
         methodResults.push({ Test: "10", Property: "AddPreSearch", Value: "Registered", Status: "✓" });
     } catch (e: any) {
         methodResults.push({ Test: "10", Property: "AddPreSearch", Value: e.message, Status: "✗" });
     }
 
+    // Test 11: RemovePreSearch
+    try {
+        lookup.RemovePreSearch(preSearchCallback);
+        methodResults.push({ Test: "11", Property: "RemovePreSearch", Value: "Removed", Status: "✓" });
+    } catch (e: any) {
+        methodResults.push({ Test: "11", Property: "RemovePreSearch", Value: e.message, Status: "✗" });
+    }
+
+    // Test 12: AddLookupTagClick
+    try {
+        lookup.AddLookupTagClick(tagClickCallback);
+        methodResults.push({ Test: "12", Property: "AddLookupTagClick", Value: "Registered", Status: "✓" });
+    } catch (e: any) {
+        methodResults.push({ Test: "12", Property: "AddLookupTagClick", Value: e.message, Status: "✗" });
+    }
+
+    // Test 13: RemoveLookupTagClick
+    try {
+        lookup.RemoveLookupTagClick(tagClickCallback);
+        methodResults.push({ Test: "13", Property: "RemoveLookupTagClick", Value: "Removed", Status: "✓" });
+    } catch (e: any) {
+        methodResults.push({ Test: "13", Property: "RemoveLookupTagClick", Value: e.message, Status: "✗" });
+    }
+
+    // Test 14: AddCustomView
     try {
         lookup.AddCustomView(
             "00000000-0000-0000-0000-000000000001",
@@ -167,39 +202,70 @@ export function TestLookup(form: AccountForm.Form): void {
             "<grid name='resultset'><row name='result' id='contactid'><cell name='fullname' width='200'/></row></grid>",
             false
         );
-        methodResults.push({ Test: "11", Property: "AddCustomView", Value: "Added", Status: "✓" });
+        methodResults.push({ Test: "14", Property: "AddCustomView", Value: "Added", Status: "✓" });
     } catch (e: any) {
-        methodResults.push({ Test: "11", Property: "AddCustomView", Value: e.message, Status: "✗" });
+        methodResults.push({ Test: "14", Property: "AddCustomView", Value: e.message, Status: "✗" });
     }
 
+    // Test 15: SetNotification / ClearNotification
     try {
         lookup.SetNotification("Test notification", "TEST_1");
         setTimeout(() => lookup.ClearNotification("TEST_1"), 3000);
-        methodResults.push({ Test: "12", Property: "SetNotification", Value: "Set (clears in 3s)", Status: "✓" });
+        methodResults.push({ Test: "15", Property: "SetNotification", Value: "Set (clears in 3s)", Status: "✓" });
     } catch (e: any) {
-        methodResults.push({ Test: "12", Property: "SetNotification", Value: e.message, Status: "✗" });
+        methodResults.push({ Test: "15", Property: "SetNotification", Value: e.message, Status: "✗" });
     }
 
+    // Test 16: Focus
     try {
         setTimeout(() => lookup.Focus(), 4000);
-        methodResults.push({ Test: "13", Property: "Focus", Value: "Scheduled (4s)", Status: "✓" });
+        methodResults.push({ Test: "16", Property: "Focus", Value: "Scheduled (4s)", Status: "✓" });
     } catch (e: any) {
-        methodResults.push({ Test: "13", Property: "Focus", Value: e.message, Status: "✗" });
+        methodResults.push({ Test: "16", Property: "Focus", Value: e.message, Status: "✗" });
+    }
+
+    // Test 17: DefaultView (setter) - test set and restore
+    try {
+        const testViewId = "{00000000-0000-0000-0000-000000000002}";
+        lookup.DefaultView = testViewId;
+        const newView = lookup.DefaultView;
+        lookup.DefaultView = originalDefaultView; // restore
+        methodResults.push({ Test: "17", Property: "DefaultView (set)", Value: `Set→Restored`, Status: "✓" });
+    } catch (e: any) {
+        methodResults.push({ Test: "17", Property: "DefaultView (set)", Value: e.message, Status: "✗" });
+    }
+
+    // Test 18: EntityTypes (setter) - test set and restore  
+    try {
+        const originalTypes = lookup.EntityTypes;
+        lookup.EntityTypes = ["contact", "account"];
+        const newTypes = lookup.EntityTypes;
+        lookup.EntityTypes = originalTypes; // restore
+        methodResults.push({ Test: "18", Property: "EntityTypes (set)", Value: `Set→Restored`, Status: "✓" });
+    } catch (e: any) {
+        methodResults.push({ Test: "18", Property: "EntityTypes (set)", Value: e.message, Status: "✗" });
     }
 
     // === OUTPUT: Single grouped log ===
     console.group(`🔍 LOOKUP TEST: PrimaryContactId [${startTime}]`);
 
-    console.log("%c📋 Properties", "font-weight: bold; font-size: 14px;");
+    console.log("%c📋 Properties (16 items)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
     console.table(results);
 
-    console.log("%c⚡ Methods", "font-weight: bold; font-size: 14px;");
+    console.log("%c⚡ Methods (9 items)", "font-weight: bold; font-size: 14px; color: #2196F3;");
     console.table(methodResults);
 
     // Summary
-    const passed = [...results, ...methodResults].filter(r => r.Status === "✓").length;
-    const total = results.length + methodResults.length;
-    console.log(`%c✅ Summary: ${passed}/${total} passed`, "font-weight: bold; color: green; font-size: 14px;");
+    const allResults = [...results, ...methodResults];
+    const passed = allResults.filter(r => r.Status === "✓").length;
+    const warnings = allResults.filter(r => r.Status === "⚠").length;
+    const failed = allResults.filter(r => r.Status === "✗").length;
+    const total = allResults.length;
+
+    console.log(`%c✅ Summary: ${passed}/${total} passed` +
+        (warnings > 0 ? ` | ⚠ ${warnings} warnings` : '') +
+        (failed > 0 ? ` | ✗ ${failed} failed` : ''),
+        "font-weight: bold; color: #4CAF50; font-size: 14px;");
 
     console.groupEnd();
 }
