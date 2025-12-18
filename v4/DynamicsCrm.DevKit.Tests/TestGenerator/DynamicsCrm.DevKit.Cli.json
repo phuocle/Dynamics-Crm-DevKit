@@ -104,8 +104,8 @@
       "profile": "JS-WEBAPI",
       "type": "JsWebApi",
       "rootnamespace": "Dev.DevKit",
-      "rootfolder": "Account,Contact,Team,Task,ActivityParty,SystemUser,PhoneCall,Email",
-      "entities": "folder"
+      "rootfolder": "",
+      "entities": "Account,Contact,Team,Task,ActivityParty,SystemUser,PhoneCall,Email"
     }
   ],
   "downloadwebresources": [
