@@ -152,6 +152,7 @@ npm run debug
 | 2 | `Account.TestMemo.ts` | Memo | R1-R15 | S1-S11 | Description |
 | 3 | `Account.TestString.ts` | String | R1-R15 | S1-S11 | Name |
 | 4 | `Account.TestInteger.ts` | Integer | R1-R16 | S1-S11 | NumberOfEmployees |
+| 5 | `Account.TestOptionSet.ts` | OptionSet | R1-R18 | S1-S16 | IndustryCode |
 
 ---
 
@@ -159,18 +160,18 @@ npm run debug
 
 | # | Interface | Sample Field | Ghi chú |
 |---|-----------|--------------|---------|
-| 5 | Money | `form.Body.Revenue` | Min, Max, Precision |
-| 6 | Decimal | | Min, Max, Precision |
-| 7 | Double | | Min, Max, Precision |
-| 8 | Boolean | `form.Body.CreditOnHold` | InitialValue |
-| 9 | DateTime | `form.Body.v4_Birthday` | ShowTime |
-| 10 | OptionSet | `form.Body.IndustryCode` | Options, SelectedOption |
-| 11 | MultiOptionSet | `form.Body.v4_Categories` | Same as OptionSet but arrays |
-| 12 | ITab | `form.Tabs.DETAILS_TAB` | AddTabStateChange, DisplayState |
-| 13 | IFrame | `form.Body.v4_IFrameExternal` | Src, InitialUrl |
-| 14 | WebResource | `form.Body.v4_WebResourceHelp` | |
-| 15 | Grid | `form.Grids.Contacts` | |
-| 16 | NavigationItem | `form.Navigation.Account_Tasks` | |
+| 6 | Money | `form.Body.Revenue` | Min, Max, Precision |
+| 7 | Decimal | `form.Body.v4_Latitude` | Min, Max, Precision |
+| 8 | Double | `form.Body.v4_DiscountPercentage` | Min, Max, Precision |
+| 9 | Boolean | `form.Body.CreditOnHold` | InitialValue |
+| 10 | DateOnly | `form.Body.v4_Birthday` | ShowTime=false |
+| 11 | DateTime | `form.Body.v4_AppointmentTime` | ShowTime=true |
+| 12 | MultiOptionSet | `form.Body.v4_Categories` | Same as OptionSet but arrays |
+| 13 | ITab | `form.Tabs.DETAILS_TAB` | AddTabStateChange, DisplayState |
+| 14 | IFrame | `form.Body.v4_IFrameExternal` | Src, InitialUrl |
+| 15 | WebResource | `form.Body.v4_WebResourceHelp` | |
+| 16 | Grid | `form.Grids.Contacts` | |
+| 17 | NavigationItem | `form.Navigation.Account_Tasks` | |
 
 ---
 

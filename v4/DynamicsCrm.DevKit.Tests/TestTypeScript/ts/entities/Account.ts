@@ -4,6 +4,7 @@ import { TestLookup } from './Account.TestLookup';
 import { TestMemo } from './Account.TestMemo';
 import { TestString } from './Account.TestString';
 import { TestInteger } from './Account.TestInteger';
+import { TestOptionSet } from './Account.TestOptionSet';
 
 const formAccount = (function () {
     "use strict";
@@ -47,6 +48,9 @@ const formAccount = (function () {
 
             // Test 4: Integer Control
             TestInteger(form);
+
+            // Test 5: OptionSet Control
+            TestOptionSet(form);
 
         }, 10000);
 
