@@ -11,6 +11,7 @@ import { TestBoolean } from './Account.TestBoolean';
 import { TestDateTime } from './Account.TestDateTime';
 import { TestDateOnly } from './Account.TestDateOnly';
 import { TestGrid } from './Account.TestGrid';
+import { TestUtility } from './Account.TestUtility';
 
 const formAccount = (function () {
     "use strict";
@@ -75,6 +76,9 @@ const formAccount = (function () {
 
             // Test 11: Grid Control
             TestGrid(form);
+
+            // Test 12: Utility API
+            TestUtility(form);
 
         }, 10000);
 

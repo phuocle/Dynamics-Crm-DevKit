@@ -159,6 +159,7 @@ npm run debug
 | 9 | `Account.TestDateTime.ts` | DateTime | R1-R15 | S1-S12 | v4_AppointmentTime |
 | 10 | `Account.TestDateOnly.ts` | DateOnly | R1-R14 | S1-S11 | v4_Birthday |
 | 11 | `Account.TestGrid.ts` | Grid | R1-R12 | S1-S8 | Contacts |
+| 12 | `Account.TestUtility.ts` | Utility | R1-R40 | S1-S37 | Utility API |
 
 ---
 
@@ -166,13 +167,13 @@ npm run debug
 
 | # | Interface | Sample Field | Ghi chú |
 |---|-----------|--------------|---------|
-| 12 | Decimal | `form.Body.v4_Latitude` | Min, Max, Precision |
-| 13 | Double | `form.Body.v4_DiscountPercentage` | Min, Max, Precision |
-| 14 | MultiOptionSet | `form.Body.v4_Categories` | Same as OptionSet but arrays |
-| 15 | ITab | `form.Tab.DETAILS_TAB` | AddTabStateChange, DisplayState |
-| 16 | IFrame | `form.Body.v4_IFrameExternal` | Src, InitialUrl |
-| 17 | WebResource | `form.Body.v4_WebResourceHelp` | |
-| 18 | NavigationItem | `form.Navigation.Account_Tasks` | |
+| 13 | Decimal | `form.Body.v4_Latitude` | Min, Max, Precision |
+| 14 | Double | `form.Body.v4_DiscountPercentage` | Min, Max, Precision |
+| 15 | MultiOptionSet | `form.Body.v4_Categories` | Same as OptionSet but arrays |
+| 16 | ITab | `form.Tab.DETAILS_TAB` | AddTabStateChange, DisplayState |
+| 17 | IFrame | `form.Body.v4_IFrameExternal` | Src, InitialUrl |
+| 18 | WebResource | `form.Body.v4_WebResourceHelp` | |
+| 19 | NavigationItem | `form.Navigation.Account_Tasks` | |
 
 ---
 
