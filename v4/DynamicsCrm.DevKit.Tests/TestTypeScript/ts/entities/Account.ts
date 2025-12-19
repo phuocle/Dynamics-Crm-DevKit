@@ -1,12 +1,11 @@
 import { AccountForm } from './generator/Account.form';
-import { AccountApi } from './generator/Account.webapi';
-import { OptionSet } from './generator/OptionSet';
 import { TestControl } from './Account.TestControl';
 import { TestLookup } from './Account.TestLookup';
 import { TestMemo } from './Account.TestMemo';
 import { TestString } from './Account.TestString';
 import { TestInteger } from './Account.TestInteger';
 import { TestOptionSet } from './Account.TestOptionSet';
+import { TestWebApi } from './Account.TestWebApi';
 
 const formAccount = (function () {
     "use strict";
@@ -33,7 +32,7 @@ const formAccount = (function () {
 
         // Wait 10 seconds after OnLoad to allow form to fully load
         // Then clear console and run real tests
-        setTimeout(() => {
+        setTimeout(async () => {
             console.clear();
 
             // Test 0: IControl Interface (base for all controls)
@@ -54,31 +53,10 @@ const formAccount = (function () {
             // Test 5: OptionSet Control
             TestOptionSet(form);
 
+            // Test 6: WebApi 
+            await TestWebApi(form);
+
         }, 10000);
-
-        // ====================================================================
-        // DEMO: WebApi early-bound style (like C#)
-        // ====================================================================
-
-        // Example 1: Create empty Account object
-        const newAccount = AccountApi();
-        newAccount.Name = 'Contoso Ltd';
-        newAccount.Telephone1 = '123-456-7890';
-        newAccount.IndustryCode = OptionSet.Account.IndustryCode.Consulting;
-        console.log('New Account Entity:', newAccount.Entity);
-
-        // Example 2: Retrieve and access properties with dot notation
-        const accountId = form.EntityId;
-        form.WebApi.RetrieveRecord(AccountApi, 'account', accountId, '?$select=name,telephone1,industrycode')
-            .then((account: ReturnType<typeof AccountApi>) => {
-                console.log('=== WebApi Early-Bound Demo ===');
-                console.log('Account Name:', account.Name);
-                console.log('Phone:', account.Telephone1);
-                console.log('Industry Code:', account.IndustryCode);
-                console.log('Industry (Formatted):', account.FormattedValue.IndustryCode);
-                console.log('Entity Name:', account.EntityName);
-                console.log('Entity Collection:', account.EntityCollectionName);
-            });
 
         // END ON LOAD LOGIC
     }
