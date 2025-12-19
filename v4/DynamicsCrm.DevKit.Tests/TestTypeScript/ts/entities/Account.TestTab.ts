@@ -32,7 +32,7 @@ function stringify(value: any): any {
 export function TestTab(form: AccountForm.Form): void {
     const results: TestResult[] = [];
     const methodResults: TestResult[] = [];
-    const tab = form.Tab.DETAILS_TAB;
+    const tab = form.Tab.SUMMARY_TAB;
     const startTime = new Date().toLocaleTimeString();
 
     // =====================================================
@@ -45,8 +45,8 @@ export function TestTab(form: AccountForm.Form): void {
         results.push({ Test: "R4", Property: "Tab.Label", Value: tab.Label, Status: tab.Label ? "✓" : "⚠" });
         results.push({ Test: "R5", Property: "Tab.Visible", Value: tab.Visible, Status: typeof tab.Visible === "boolean" ? "✓" : "⚠" });
 
-        // Section properties (BILLING section)
-        const section = tab.Section.BILLING;
+        // Section properties (ACCOUNT_INFORMATION section)
+        const section = tab.Section.ACCOUNT_INFORMATION;
         results.push({ Test: "R6", Property: "Section.BILLING", Value: section ? "object" : "null", Status: section ? "✓" : "⚠" });
         results.push({ Test: "R7", Property: "Section.Name", Value: section?.Name, Status: section?.Name ? "✓" : "⚠" });
         results.push({ Test: "R8", Property: "Section.Parent", Value: section?.Parent ? "object" : "null", Status: section?.Parent ? "✓" : "⚠" });
@@ -122,7 +122,7 @@ export function TestTab(form: AccountForm.Form): void {
     // =====================================================
     // SECTION SETTERS (S-Index continued)
     // =====================================================
-    const section = tab.Section.BILLING;
+    const section = tab.Section.ACCOUNT_INFORMATION;
 
     // Section: Label
     try {
