@@ -155,16 +155,16 @@ npm run debug
 | 5 | `Account.TestOptionSet.ts` | OptionSet | R1-R18 | S1-S16 | IndustryCode |
 | 6 | `Account.TestWebApi.ts` | WebApi | R1-R5 | S1-S8 | AccountApi |
 | 7 | `Account.TestMoney.ts` | Money | R1-R17 | S1-S12 | Revenue |
+| 8 | `Account.TestBoolean.ts` | Boolean | R1-R15 | S1-S11 | CreditOnHold |
 
 ---
 
 ## Chưa Test (TODO)
 
 | # | Interface | Sample Field | Ghi chú |
-|---|-----------|--------------|---------|
-| 8 | Decimal | `form.Body.v4_Latitude` | Min, Max, Precision |
-| 9 | Double | `form.Body.v4_DiscountPercentage` | Min, Max, Precision |
-| 10 | Boolean | `form.Body.CreditOnHold` | InitialValue |
+|---|-----------|--------------|---------|---------
+| 9 | Decimal | `form.Body.v4_Latitude` | Min, Max, Precision |
+| 10 | Double | `form.Body.v4_DiscountPercentage` | Min, Max, Precision |
 | 11 | DateOnly | `form.Body.v4_Birthday` | ShowTime=false |
 | 12 | DateTime | `form.Body.v4_AppointmentTime` | ShowTime=true |
 | 13 | MultiOptionSet | `form.Body.v4_Categories` | Same as OptionSet but arrays |

@@ -7,6 +7,7 @@ import { TestInteger } from './Account.TestInteger';
 import { TestOptionSet } from './Account.TestOptionSet';
 import { TestWebApi } from './Account.TestWebApi';
 import { TestMoney } from './Account.TestMoney';
+import { TestBoolean } from './Account.TestBoolean';
 
 const formAccount = (function () {
     "use strict";
@@ -59,6 +60,9 @@ const formAccount = (function () {
 
             // Test 7: Money Control
             TestMoney(form);
+
+            // Test 8: Boolean Control
+            TestBoolean(form);
 
         }, 10000);
 
