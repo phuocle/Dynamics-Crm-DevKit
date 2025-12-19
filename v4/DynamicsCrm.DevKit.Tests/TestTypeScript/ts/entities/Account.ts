@@ -1,6 +1,6 @@
 import { AccountForm } from './generator/Account.form';
 import { AccountApi } from './generator/Account.webapi';
-import './generator/OptionSet'; // Import centralized OptionSets
+import { OptionSet } from './generator/OptionSet';
 import { TestControl } from './Account.TestControl';
 import { TestLookup } from './Account.TestLookup';
 import { TestMemo } from './Account.TestMemo';
