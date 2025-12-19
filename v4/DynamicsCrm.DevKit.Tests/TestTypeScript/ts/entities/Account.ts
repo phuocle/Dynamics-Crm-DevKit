@@ -9,6 +9,7 @@ import { TestWebApi } from './Account.TestWebApi';
 import { TestMoney } from './Account.TestMoney';
 import { TestBoolean } from './Account.TestBoolean';
 import { TestDateTime } from './Account.TestDateTime';
+import { TestDateOnly } from './Account.TestDateOnly';
 
 const formAccount = (function () {
     "use strict";
@@ -67,6 +68,9 @@ const formAccount = (function () {
 
             // Test 9: DateTime Control
             TestDateTime(form);
+
+            // Test 10: DateOnly Control
+            TestDateOnly(form);
 
         }, 10000);
 

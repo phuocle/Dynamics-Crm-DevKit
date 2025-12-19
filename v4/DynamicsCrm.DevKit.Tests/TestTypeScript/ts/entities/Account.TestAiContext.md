@@ -157,6 +157,7 @@ npm run debug
 | 7 | `Account.TestMoney.ts` | Money | R1-R17 | S1-S12 | Revenue |
 | 8 | `Account.TestBoolean.ts` | Boolean | R1-R15 | S1-S11 | CreditOnHold |
 | 9 | `Account.TestDateTime.ts` | DateTime | R1-R15 | S1-S12 | v4_AppointmentTime |
+| 10 | `Account.TestDateOnly.ts` | DateOnly | R1-R14 | S1-S11 | v4_Birthday |
 
 ---
 
@@ -164,9 +165,8 @@ npm run debug
 
 | # | Interface | Sample Field | Ghi chú |
 |---|-----------|--------------|---------|
-| 10 | Decimal | `form.Body.v4_Latitude` | Min, Max, Precision |
-| 11 | Double | `form.Body.v4_DiscountPercentage` | Min, Max, Precision |
-| 12 | DateOnly | `form.Body.v4_Birthday` | No ShowTime property |
+| 11 | Decimal | `form.Body.v4_Latitude` | Min, Max, Precision |
+| 12 | Double | `form.Body.v4_DiscountPercentage` | Min, Max, Precision |
 | 13 | MultiOptionSet | `form.Body.v4_Categories` | Same as OptionSet but arrays |
 | 14 | ITab | `form.Tabs.DETAILS_TAB` | AddTabStateChange, DisplayState |
 | 15 | IFrame | `form.Body.v4_IFrameExternal` | Src, InitialUrl |
