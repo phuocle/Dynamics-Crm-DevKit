@@ -63,7 +63,6 @@ const formAccount = (function () {
         const newAccount = AccountApi();
         newAccount.Name = 'Contoso Ltd';
         newAccount.Telephone1 = '123-456-7890';
-        newAccount.IndustryCode = 7; // Consulting
         newAccount.IndustryCode = OptionSet.Account.IndustryCode.Consulting;
         console.log('New Account Entity:', newAccount.Entity);
 
