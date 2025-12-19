@@ -1,4 +1,5 @@
 import { AccountForm } from './generator/Account.form';
+import { AccountApi } from './generator/Account.webapi';
 import { TestControl } from './Account.TestControl';
 import { TestLookup } from './Account.TestLookup';
 import { TestMemo } from './Account.TestMemo';
@@ -53,6 +54,31 @@ const formAccount = (function () {
             TestOptionSet(form);
 
         }, 10000);
+
+        // ====================================================================
+        // DEMO: WebApi early-bound style (like C#)
+        // ====================================================================
+
+        // Example 1: Create empty Account object
+        const newAccount = AccountApi();
+        newAccount.Name = 'Contoso Ltd';
+        newAccount.Telephone1 = '123-456-7890';
+        newAccount.IndustryCode = 7; // Consulting
+        newAccount.IndustryCode = OptionSet.Account.IndustryCode.Consulting;
+        console.log('New Account Entity:', newAccount.Entity);
+
+        // Example 2: Retrieve and access properties with dot notation
+        const accountId = form.EntityId;
+        form.WebApi.RetrieveRecord(AccountApi, 'account', accountId, '?$select=name,telephone1,industrycode')
+            .then((account: ReturnType<typeof AccountApi>) => {
+                console.log('=== WebApi Early-Bound Demo ===');
+                console.log('Account Name:', account.Name);
+                console.log('Phone:', account.Telephone1);
+                console.log('Industry Code:', account.IndustryCode);
+                console.log('Industry (Formatted):', account.FormattedValue.IndustryCode);
+                console.log('Entity Name:', account.EntityName);
+                console.log('Entity Collection:', account.EntityCollectionName);
+            });
 
         // END ON LOAD LOGIC
     }

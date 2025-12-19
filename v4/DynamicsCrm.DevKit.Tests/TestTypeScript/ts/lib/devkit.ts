@@ -1211,6 +1211,261 @@ export function LoadFormDialog(formContext: any, fields: string[]): any {
     form.Close = () => formContext?.ui?.close();
     return form;
 }
+
+// ============================================================================
+// WebApi Helper Types and Functions
+// For early-bound style WebApi coding (similar to C# early-bound)
+// ============================================================================
+
+/** Field type for WebApi fields */
+export type WebApiFieldType = 'Integer' | 'Number' | 'Boolean' | 'DateTime' | 'MultiOptionSet';
+
+/**
+ * Configuration for a WebApi field
+ * Used to define metadata for entity fields in WebApi operations
+ */
+export interface IWebApiFieldConfig {
+    /** Logical name of the attribute (e.g. 'accountid', 'name') */
+    logicalName: string;
+    /** Schema name for lookup binding (e.g. 'ParentAccountId') */
+    schemaName?: string;
+    /** Entity collection name for lookup (e.g. 'accounts', 'contacts') */
+    entityCollectionName?: string;
+    /** Entity logical name for lookup (e.g. 'account', 'contact') */
+    entityLogicalName?: string;
+    /** Whether the field is read-only */
+    readOnly?: boolean;
+    /** Field type for parsing (Integer, Number, Boolean, DateTime, MultiOptionSet) */
+    type?: WebApiFieldType;
+}
+
+/** Map of field names to their configurations */
+export interface IWebApiFieldConfigMap {
+    [fieldName: string]: IWebApiFieldConfig;
+}
+
+/** Constants for OData annotations */
+const WEBAPI_FORMATTED_VALUE_SUFFIX = '@OData.Community.Display.V1.FormattedValue';
+const WEBAPI_LOOKUP_LOGICAL_NAME_SUFFIX = '@Microsoft.Dynamics.CRM.lookuplogicalname';
+
+/** Type parsers for different WebApi field types */
+const webApiTypeParsers: Record<string, (value: any) => any> = {
+    DateTime: (value: any): Date | null => {
+        if (value === null || value === undefined) return null;
+        if (value instanceof Date) return isNaN(value.getTime()) ? null : value;
+        const trimmedString = String(value).trim();
+        if (trimmedString === '') return null;
+        const timestamp = Date.parse(trimmedString);
+        if (isNaN(timestamp)) return null;
+        const parsedDate = new Date(timestamp);
+        return isNaN(parsedDate.getTime()) ? null : parsedDate;
+    },
+    Integer: (value: any): number | null => {
+        const parsed = parseInt(value, 10);
+        return isNaN(parsed) ? null : parsed;
+    },
+    Number: (value: any): number | null => {
+        const parsed = Number(value);
+        return isNaN(parsed) ? null : parsed;
+    },
+    Boolean: (value: any): boolean | null => {
+        if (value === null || value === undefined) return null;
+        if (typeof value === 'boolean') return value;
+        if (typeof value === 'number') return value !== 0;
+        const stringValue = String(value).trim().toLowerCase();
+        const trueValues = ['true', '1', 'yes', 'y'];
+        const falseValues = ['false', '0', 'no', 'n'];
+        if (trueValues.includes(stringValue)) return true;
+        if (falseValues.includes(stringValue)) return false;
+        return false;
+    }
+};
+
+/**
+ * Parse and return value based on WebApi field type
+ */
+function webApiReturnGet(data: any, type?: WebApiFieldType): any {
+    if (data === null || data === undefined) return null;
+    if (type === null || type === undefined) return data;
+    const parser = webApiTypeParsers[type];
+    return parser ? parser(data) : data;
+}
+
+/**
+ * Define a WebApi field property on the target object with getter/setter
+ * @param obj The target object to define property on
+ * @param fieldName The property name
+ * @param entity The raw OData entity object
+ * @param config The field configuration
+ * @param upsertEntity The entity object for Create/Update operations
+ */
+export function defineWebApiField(
+    obj: any,
+    fieldName: string,
+    entity: Record<string, any>,
+    config: IWebApiFieldConfig,
+    upsertEntity: Record<string, any>
+): void {
+    const { logicalName, schemaName, entityCollectionName, entityLogicalName, readOnly, type } = config;
+
+    const getFormattedValue = (): string | string[] => {
+        const formattedKey = logicalName + WEBAPI_FORMATTED_VALUE_SUFFIX;
+        if (entity?.[formattedKey] === undefined || entity?.[formattedKey] === null) {
+            return '';
+        }
+        if (entityCollectionName !== undefined && entityCollectionName.length > 0) {
+            const lookupKey = logicalName + WEBAPI_LOOKUP_LOGICAL_NAME_SUFFIX;
+            if (entity?.[lookupKey] === entityLogicalName) {
+                return entity?.[formattedKey];
+            }
+            return '';
+        }
+        if (type === 'MultiOptionSet') {
+            return entity?.[formattedKey]?.toString()?.split(';').map((item: string) => item?.trim()) ?? [];
+        }
+        return entity?.[formattedKey];
+    };
+
+    const getValue = (): any => {
+        if (entity?.[logicalName] === undefined || entity?.[logicalName] === null) {
+            return null;
+        }
+        if (entityCollectionName !== undefined && entityCollectionName.length > 0) {
+            const lookupKey = logicalName + WEBAPI_LOOKUP_LOGICAL_NAME_SUFFIX;
+            if (entity?.[lookupKey] === undefined || entity?.[lookupKey] === entityLogicalName) {
+                return webApiReturnGet(entity?.[logicalName], type);
+            }
+            return null;
+        }
+        if (type === 'MultiOptionSet') {
+            return entity?.[logicalName]?.toString()?.split(',').map((item: string) => parseInt(item, 10)) ?? [];
+        }
+        return webApiReturnGet(entity?.[logicalName], type);
+    };
+
+    const setValue = (value: any): void => {
+        if (type === 'MultiOptionSet') value = value?.join(',');
+        if (entityCollectionName !== undefined && entityCollectionName?.length > 0) {
+            const bindingName = (schemaName ?? logicalName) + '@odata.bind';
+            if (value === null) {
+                upsertEntity[bindingName] = null;
+            } else {
+                const cleanValue = typeof value === 'string' ? value.replace(/[{}]/g, '') : value;
+                upsertEntity[bindingName] = '/' + entityCollectionName + '(' + cleanValue + ')';
+            }
+        } else {
+            upsertEntity[logicalName] = value;
+        }
+        entity[logicalName] = value;
+    };
+
+    // Define FormattedValue property
+    Object.defineProperty(obj.FormattedValue, fieldName, {
+        get: getFormattedValue
+    });
+
+    // Define main property (readonly or read/write)
+    if (readOnly) {
+        Object.defineProperty(obj, fieldName, {
+            get: getValue
+        });
+    } else {
+        Object.defineProperty(obj, fieldName, {
+            get: getValue,
+            set: setValue
+        });
+    }
+}
+
+/**
+ * Base interface for WebApi entity objects
+ */
+export interface IWebApiEntity {
+    /** The entity object for Create/Update operations */
+    readonly Entity: Record<string, any>;
+    /** The OData entity object containing raw data */
+    readonly ODataEntity: Record<string, any>;
+    /** The entity name */
+    readonly EntityName: string;
+    /** The entity collection name */
+    readonly EntityCollectionName: string;
+    /** The @odata.etag for caching */
+    readonly '@odata.etag': string | undefined;
+    /** Formatted values for all fields */
+    readonly FormattedValue: Record<string, any>;
+
+    /**
+     * Get the raw value of an aliased field (from $expand or related entity)
+     * @param alias The alias field name
+     * @param isMultiOptionSet True if the field is a multi-option set
+     * @returns The raw value or null if not found
+     */
+    getAliasedValue(alias: string, isMultiOptionSet?: boolean): any;
+
+    /**
+     * Get the formatted value of an aliased field
+     * @param alias The alias field name
+     * @param isMultiOptionSet True if the field is a multi-option set
+     * @returns The formatted value or empty string if not found
+     */
+    getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string | string[];
+}
+
+/**
+ * Creates a base WebApi entity object with common properties and methods
+ * @param entity The raw OData entity object
+ * @param entityName The logical name of the entity
+ * @param entityCollectionName The collection name of the entity
+ * @param fieldConfigMap Map of field configurations
+ * @returns A WebApi entity object
+ */
+export function createWebApiEntity<T extends IWebApiEntity>(
+    entity: Record<string, any> | undefined,
+    entityName: string,
+    entityCollectionName: string,
+    fieldConfigMap: IWebApiFieldConfigMap
+): T {
+    const e = entity ?? {};
+    const upsertEntity: Record<string, any> = {};
+
+    const webApiEntity: any = {
+        ODataEntity: e,
+        FormattedValue: {},
+        Entity: upsertEntity,
+        EntityName: entityName,
+        EntityCollectionName: entityCollectionName,
+        '@odata.etag': e?.['@odata.etag'],
+
+        getAliasedValue(alias: string, isMultiOptionSet = false): any {
+            if (e?.[alias] === undefined || e?.[alias] === null) {
+                return null;
+            }
+            if (isMultiOptionSet) {
+                return e?.[alias].toString().split(',').map((item: string) => parseInt(item, 10));
+            }
+            return e?.[alias];
+        },
+
+        getAliasedFormattedValue(alias: string, isMultiOptionSet = false): string | string[] {
+            const key = alias + WEBAPI_FORMATTED_VALUE_SUFFIX;
+            if (e?.[key] === undefined || e?.[key] === null) {
+                return '';
+            }
+            if (isMultiOptionSet) {
+                return e?.[key]?.toString()?.split(';').map((item: string) => item?.trim()) ?? [];
+            }
+            return e?.[key];
+        }
+    };
+
+    // Define all fields using the field configuration
+    for (const fieldName in fieldConfigMap) {
+        defineWebApiField(webApiEntity, fieldName, e, fieldConfigMap[fieldName], upsertEntity);
+    }
+
+    return webApiEntity as T;
+}
+
 const GlobalOptionSetValues = {
     AdvancedConfigSetting: Object.freeze({ MaxChildIncidentNumber: 'MaxChildIncidentNumber', MaxIncidentMergeNumber: 'MaxIncidentMergeNumber' }),
     ClientName: Object.freeze({ Web: 'Web', Outlook: 'Outlook', Mobile: 'Mobile' }),
