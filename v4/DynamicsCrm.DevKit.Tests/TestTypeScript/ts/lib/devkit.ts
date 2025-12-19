@@ -109,8 +109,10 @@ function loadField(formContext: any, field: any, attribute: any, control: any): 
     field.SetIsValid = (valid: boolean, message?: string) => attribute?.setIsValid(valid, message);
     field.SetNotification = (message: string, uniqueId: string) => control?.setNotification(message, uniqueId);
 }
-function loadFields(formContext: any, body: any, type?: string): any {
-    Object.keys(body).forEach(field => {
+function loadFields(formContext: any, fields: string[], type?: string): any {
+    const body: any = {};
+    fields.forEach(field => {
+        body[field] = {};
         const logicalName = type === undefined ? field?.toLowerCase() : (type + field)?.toLowerCase();
         const control = formContext?.getControl(logicalName) ?? formContext?.getControl(field);
         let attribute = formContext?.getAttribute(logicalName);
@@ -127,7 +129,15 @@ function loadFields(formContext: any, body: any, type?: string): any {
     }
     return body;
 }
-function loadTabs(formContext: any, tabs: any): void {
+function loadTabs(formContext: any, tabItems: string[]): any {
+    const tabs: any = {};
+    tabItems.forEach((item: string) => {
+        const [tabName, sectionName] = item.split('___');
+        if (!tabs[tabName]) {
+            tabs[tabName] = { Section: {} };
+        }
+        tabs[tabName].Section[sectionName] = {};
+    });
     const loadSection = (formContext: any, tab: string, sections: any, section: string) => {
         const tabObject = formContext?.ui?.tabs?.get(tab);
         const sectionObject = tabObject?.sections?.get(section);
@@ -154,9 +164,11 @@ function loadTabs(formContext: any, tabs: any): void {
     Object.keys(tabs).forEach(tab => {
         loadTab(formContext, tabs, tab);
     });
+    return tabs;
 }
-function loadNavigations(formContext: any, navigations: any): void {
-    debugger;
+function loadNavigations(formContext: any, navigationItems: string[]): any {
+    const navigations: any = {};
+    navigationItems.forEach((item: string) => navigations[item] = {});
     const getNavigationItem = (navigation: string) => {
         const navItems = formContext?.ui?.navigation?.items;
         if (!navItems) return null;
@@ -179,8 +191,19 @@ function loadNavigations(formContext: any, navigations: any): void {
     Object.keys(navigations).forEach(navigation => {
         loadNavigation(formContext, navigations, navigation);
     });
+    return navigations;
 }
-function loadQuickForms(formContext: any, quickForms: any): void {
+function loadQuickForms(formContext: any, quickItems: string[]): any {
+    const quickForms: any = {};
+    quickItems.forEach((item: string) => {
+        const [quickFormName, fieldName] = item.split('___');
+        if (!quickForms[quickFormName]) {
+            quickForms[quickFormName] = {};
+        }
+        if (fieldName) {
+            quickForms[quickFormName][fieldName] = {};
+        }
+    });
     const excludedFields = new Set(["Body", "Controls", "IsLoaded", "Refresh", "Focus", "ControlType", "Disabled", "Label", "ControlName", "ControlParent", "Visible"]);
     const loadQuickForm = (formContext: any, quickForms: any, quickForm: string) => {
         const fields = Object.keys(quickForms[quickForm]).filter(field => !excludedFields.has(field));
@@ -200,8 +223,11 @@ function loadQuickForms(formContext: any, quickForms: any): void {
     Object.keys(quickForms).forEach(quickForm => {
         loadQuickForm(formContext, quickForms, quickForm);
     });
+    return quickForms;
 }
-function loadGrids(formContext: any, grids: any): void {
+function loadGrids(formContext: any, gridItems: string[]): any {
+    const grids: any = {};
+    gridItems.forEach((item: string) => grids[item] = {});
     const loadGridColumn = (col: any) => {
         const obj: any = {};
         getter(obj, 'Label', () => col?.controls?.get(0)?.getLabel());
@@ -289,6 +315,7 @@ function loadGrids(formContext: any, grids: any): void {
     Object.keys(grids).forEach(grid => {
         loadGrid(formContext, grids, grid);
     });
+    return grids;
 }
 function LoadForm(formContext: any): any {
     const form: any = {};
@@ -686,61 +713,32 @@ export function LoadFormV2<TBody = Record<string, any>, THeader = Record<string,
     const formContext = executionContext?.getFormContext?.() ?? executionContext ?? null;
     const form = LoadForm(formContext);
     const { body = [], tab = [], header = [], bpf = [], quick = [], grid = [], navigation = [], dialog = [] } = formConfig as any;
-    const bodyObj: any = {};
-    body.forEach((field: string) => bodyObj[field] = {});
-    loadFields(formContext, bodyObj);
-    const tabObj: any = {};
-    tab.forEach((item: string) => {
-        const [tabName, sectionName] = item.split('___');
-        if (!tabObj[tabName]) {
-            tabObj[tabName] = { Section: {} };
-        }
-        tabObj[tabName].Section[sectionName] = {};
-    });
-    loadTabs(formContext, tabObj);
+    const bodyObj = loadFields(formContext, body);
+    const tabObj = loadTabs(formContext, tab);
     bodyObj.Tab = tabObj;
     form.Body = bodyObj;
-    const headerObj: any = {};
-    header.forEach((field: string) => headerObj[field] = {});
-    loadFields(formContext, headerObj, 'header_');
+    const headerObj = loadFields(formContext, header, 'header_');
     form.Header = headerObj;
     const process = LoadProcess(formContext);
     if (bpf.length > 0) {
-        const bpfObj: any = {};
         let bpfProcessName: string | null = null;
+        const bpfFieldNames: string[] = [];
         bpf.forEach((item: string) => {
             const [processName, fieldName] = item.split('___');
             if (!bpfProcessName) {
                 bpfProcessName = processName;
             }
-            bpfObj[fieldName] = {};
+            bpfFieldNames.push(fieldName);
         });
-        loadFields(formContext, bpfObj, 'header_process_');
+        const bpfObj = loadFields(formContext, bpfFieldNames, 'header_process_');
         if (bpfProcessName) {
             process[bpfProcessName] = bpfObj;
         }
     }
     form.Process = process;
-    const quickFormObj: any = {};
-    quick.forEach((item: string) => {
-        const [quickFormName, fieldName] = item.split('___');
-        if (!quickFormObj[quickFormName]) {
-            quickFormObj[quickFormName] = {};
-        }
-        if (fieldName) {
-            quickFormObj[quickFormName][fieldName] = {};
-        }
-    });
-    loadQuickForms(formContext, quickFormObj);
-    form.QuickForm = quickFormObj;
-    const gridObj: any = {};
-    grid.forEach((item: string) => gridObj[item] = {});
-    loadGrids(formContext, gridObj);
-    form.Grid = gridObj;
-    const navigationObj: any = {};
-    navigation.forEach((item: string) => navigationObj[item] = {});
-    loadNavigations(formContext, navigationObj);
-    form.Navigation = navigationObj;
+    form.QuickForm = loadQuickForms(formContext, quick);
+    form.Grid = loadGrids(formContext, grid);
+    form.Navigation = loadNavigations(formContext, navigation);
     if (dialog.length > 0) {
         form.Dialog = LoadFormDialog(formContext, dialog);
     }
