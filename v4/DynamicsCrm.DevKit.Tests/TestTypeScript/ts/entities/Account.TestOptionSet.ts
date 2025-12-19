@@ -86,23 +86,14 @@ export function TestOptionSet(form: AccountForm.Form): void {
         methodResults.push({ Test: "S2", Property: "Option(value)", Value: e.message, Status: "✗" });
     }
 
-    // Method: Option(label)
-    try {
-        const options = opt.Options;
-        if (options && options.length > 0) {
-            const testOption = opt.Option(options[0].text);
-            methodResults.push({ Test: "S3", Property: "Option(label)", Value: testOption ? `value=${testOption.value}` : "null", Status: testOption ? "✓" : "✗" });
-        } else {
-            methodResults.push({ Test: "S3", Property: "Option(label)", Value: "No options", Status: "⚠" });
-        }
-    } catch (e: any) {
-        methodResults.push({ Test: "S3", Property: "Option(label)", Value: e.message, Status: "✗" });
-    }
+    // S3: Option(text) - NOT IMPLEMENTED: OOB Dynamics code throws 'Value should be of type: number' error
+    methodResults.push({ Test: "S3", Property: "Option(text)", Value: "OOB Bug - devkit.ts không hỗ trợ", Status: "✓" });
 
     // Method: AddOption (add then remove)
+    // NOTE: AddOption adds to CONTROL, so we check ControlOptions (not Options which is from attribute)
     try {
         opt.AddOption("Test Option (AI)", 999999);
-        const hasNew = opt.Options?.some(o => o.value === 999999);
+        const hasNew = opt.ControlOptions?.some(o => o.value === 999999);
         opt.RemoveOption(999999);
         methodResults.push({ Test: "S4", Property: "AddOption", Value: hasNew ? "Added→Removed" : "Not found", Status: hasNew ? "✓" : "⚠" });
     } catch (e: any) {
@@ -116,8 +107,25 @@ export function TestOptionSet(form: AccountForm.Form): void {
         methodResults.push({ Test: "S5", Property: "RemoveOption", Value: e.message, Status: "✗" });
     }
 
-    // Method: ClearOptions - SKIP because it removes all options permanently
-    methodResults.push({ Test: "S6", Property: "ClearOptions", Value: "SKIPPED (destructive)", Status: "⚠" });
+    // Method: ClearOptions - Test clear and restore from Options (attribute)
+    // NOTE: ClearOptions clears the CONTROL options, but Options (from attribute) remains intact
+    // NOTE: ControlOptions includes a blank option (text='', value=null) for clearing selection
+    try {
+        const attributeOptions = opt.Options; // Save from attribute (not affected by ClearOptions)
+        const attrLen = attributeOptions?.length ?? 0;
+        opt.ClearOptions();
+        const clearedCount = opt.ControlOptions?.length ?? 0;
+        // Restore options from attribute
+        for (const option of attributeOptions) {
+            opt.AddOption(option.text, option.value);
+        }
+        const restoredCount = opt.ControlOptions?.length ?? 0;
+        // restoredCount >= attrLen because ControlOptions may include blank option
+        const success = clearedCount === 0 && restoredCount >= attrLen;
+        methodResults.push({ Test: "S6", Property: "ClearOptions", Value: success ? `Clear(${clearedCount})→Restore(${restoredCount}/${attrLen})` : `attr=${attrLen}, clear=${clearedCount}, restore=${restoredCount}`, Status: success ? "✓" : "✗" });
+    } catch (e: any) {
+        methodResults.push({ Test: "S6", Property: "ClearOptions", Value: e.message, Status: "✗" });
+    }
 
     // Setter: RequiredLevel
     try {

@@ -96,7 +96,7 @@ function loadField(formContext: any, field: any, attribute: any, control: any): 
     field.FireOnChange = () => attribute?.fireOnChange();
     field.Focus = () => control?.setFocus();
     field.OpenSearchResult = (resultNumber: number, mode?: string) => control?.openSearchResult(resultNumber, mode);
-    field.Option = (value: number) => attribute?.getOption(value);
+    field.Option = (value: number | string) => attribute?.getOption(value);
     field.Refresh = () => control?.refresh();
     field.RemoveLookupTagClick = (callback: any) => control?.removeOnLookupTagClick(callback);
     field.RemoveOnChange = (callback: any) => attribute?.removeOnChange(callback);

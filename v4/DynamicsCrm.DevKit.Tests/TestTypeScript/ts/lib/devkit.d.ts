@@ -431,15 +431,9 @@ declare namespace DevKit {
              * Returns an option object with the value matching the argument passed to the method
              * @param value The enumeration value of the option
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getoption
+             * @remarks Note: Despite MS documentation, only number values are supported. String/label lookup throws 'Value should be of type: number' error.
              */
             Option(value: number): OptionSetOption;
-
-            /**
-             * Returns an option object with the label matching the argument passed to the method
-             * @param label The label of the option
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getoption
-             */
-            Option(label: string): OptionSetOption;
 
             /**
              * Adds an option to a control
@@ -468,6 +462,12 @@ declare namespace DevKit {
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getoptions
              */
             readonly Options: OptionSetOption[];
+
+            /**
+             * Returns an array of option objects representing the options available in the control (includes dynamically added options via AddOption)
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getoptions
+             */
+            readonly ControlOptions: OptionSetOption[];
         }
 
         /**
