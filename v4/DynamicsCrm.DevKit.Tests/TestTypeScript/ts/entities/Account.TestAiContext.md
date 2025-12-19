@@ -161,6 +161,7 @@ npm run debug
 | 11 | `Account.TestGrid.ts` | Grid | R1-R12 | S1-S8 | Contacts |
 | 12 | `Account.TestUtility.ts` | Utility | R1-R40 | S1-S37 | Utility API |
 | 13 | `Account.TestMultiOptionSet.ts` | MultiOptionSet | R1-R18 | S1-S12 | v4_Categories |
+| 14 | `Account.TestTab.ts` | ITab + Section | R1-R10 | S1-S8 | DETAILS_TAB |
 
 ---
 
@@ -168,9 +169,8 @@ npm run debug
 
 | # | Interface | Sample Field | Ghi chú |
 |---|-----------|--------------|---------|
-| 14 | Decimal | `form.Body.v4_Latitude` | Min, Max, Precision |
-| 15 | Double | `form.Body.v4_DiscountPercentage` | Min, Max, Precision |
-| 16 | ITab | `form.Tab.DETAILS_TAB` | AddTabStateChange, DisplayState |
+| 15 | Decimal | `form.Body.v4_Latitude` | Min, Max, Precision |
+| 16 | Double | `form.Body.v4_DiscountPercentage` | Min, Max, Precision |
 | 17 | IFrame | `form.Body.v4_IFrameExternal` | Src, InitialUrl |
 | 18 | WebResource | `form.Body.v4_WebResourceHelp` | |
 | 19 | NavigationItem | `form.Navigation.Account_Tasks` | |

@@ -13,6 +13,7 @@ import { TestDateOnly } from './Account.TestDateOnly';
 import { TestGrid } from './Account.TestGrid';
 import { TestUtility } from './Account.TestUtility';
 import { TestMultiOptionSet } from './Account.TestMultiOptionSet';
+import { TestTab } from './Account.TestTab';
 
 const formAccount = (function () {
     "use strict";
@@ -83,6 +84,9 @@ const formAccount = (function () {
 
             // Test 13: MultiOptionSet Control
             TestMultiOptionSet(form);
+
+            // Test 14: Tab Control
+            TestTab(form);
 
         }, 10000);
 
