@@ -8,6 +8,7 @@ import { TestOptionSet } from './Account.TestOptionSet';
 import { TestWebApi } from './Account.TestWebApi';
 import { TestMoney } from './Account.TestMoney';
 import { TestBoolean } from './Account.TestBoolean';
+import { TestDateTime } from './Account.TestDateTime';
 
 const formAccount = (function () {
     "use strict";
@@ -63,6 +64,9 @@ const formAccount = (function () {
 
             // Test 8: Boolean Control
             TestBoolean(form);
+
+            // Test 9: DateTime Control
+            TestDateTime(form);
 
         }, 10000);
 
