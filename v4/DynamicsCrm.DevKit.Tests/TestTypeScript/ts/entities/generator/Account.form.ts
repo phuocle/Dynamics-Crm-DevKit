@@ -6,6 +6,7 @@
 
 /// <reference path="../../lib/devkit.d.ts" />
 import { FormBase } from '../../lib/devkit';
+import './OptionSet'; // Import centralized OptionSets
 
 // ============================================================================
 // NAMESPACE: AccountForm - Main Account Form
@@ -133,53 +134,3 @@ export namespace AccountForm {
         }
     }
 }
-
-// ============================================================================
-// NAMESPACE: Account.OptionSet - Shared OptionSets for Account Forms
-// ============================================================================
-export namespace Account {
-    export namespace OptionSet {
-        /** Industry Code OptionSet */
-        export const IndustryCode = Object.freeze({
-            Accounting: 1,
-            Consulting: 7,
-            Financial: 16,
-            Insurance: 20,
-            Technology: 12
-        });
-
-        /** Custom MultiOptionSet - v4_Categories */
-        export const v4_Categories = Object.freeze({
-            Category_A: 100000000,
-            Category_B: 100000001,
-            Category_C: 100000002,
-            Category_D: 100000003
-        });
-    }
-}
-
-// Populate global OptionSet.Account at runtime for backward compatibility
-(globalThis as any).OptionSet = (globalThis as any).OptionSet || {};
-(globalThis as any).OptionSet.Account = Account.OptionSet;
-
-// Declare global namespace extension for TypeScript IntelliSense
-declare global {
-    namespace OptionSet {
-        namespace Account {
-            const IndustryCode: {
-                readonly Accounting: 1;
-                readonly Consulting: 7;
-                readonly Financial: 16;
-                readonly Insurance: 20;
-                readonly Technology: 12;
-            };
-            const v4_Categories: {
-                readonly Category_A: 100000000;
-                readonly Category_B: 100000001;
-                readonly Category_C: 100000002;
-                readonly Category_D: 100000003;
-            };
-        }
-    }
-}
-
