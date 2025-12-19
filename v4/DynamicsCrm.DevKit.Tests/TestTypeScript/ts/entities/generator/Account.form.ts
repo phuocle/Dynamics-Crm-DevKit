@@ -53,6 +53,8 @@ export namespace AccountForm {
         v4_TimerSLA: DevKit.Controls.Timer;
         /** Knowledge Base Search */
         v4_KnowledgeSearch: DevKit.Controls.Knowledge;
+        /** Form Tabs */
+        Tab: ITabs;
     }
 
     /**
@@ -103,7 +105,7 @@ export namespace AccountForm {
      * Contains navigation items
      */
     export interface INavigation {
-        Account_Tasks: DevKit.Controls.NavigationItem;
+        contact_customer_accounts: DevKit.Controls.NavigationItem;
     }
 
     /**
@@ -187,7 +189,7 @@ export namespace AccountForm {
                     'Contacts'
                 ],
                 navigation: [
-                    'Account_Tasks'
+                    'contact_customer_accounts'
                 ],
                 quick: [
                     'contactquickform___EMailAddress1'

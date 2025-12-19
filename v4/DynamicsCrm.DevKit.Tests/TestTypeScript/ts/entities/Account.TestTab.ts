@@ -32,7 +32,7 @@ function stringify(value: any): any {
 export function TestTab(form: AccountForm.Form): void {
     const results: TestResult[] = [];
     const methodResults: TestResult[] = [];
-    const tab = form.Tab.SUMMARY_TAB;
+    const tab = form.Body.Tab.SUMMARY_TAB;
     const startTime = new Date().toLocaleTimeString();
 
     // =====================================================
