@@ -69,17 +69,17 @@ export namespace AccountForm {
     }
 
     /**
-     * Details tab sections interface
+     * Summary tab sections interface
      */
-    export interface IDetailsTabSections {
-        BILLING: DevKit.Controls.Section;
+    export interface ISUMMARY_TABTabSections {
+        ACCOUNT_INFORMATION: DevKit.Controls.Section;
     }
 
     /**
-     * Details tab interface
+     * Summary tab interface
      */
-    export interface IDetailsTab extends DevKit.Controls.ITab {
-        Section: IDetailsTabSections;
+    export interface ISUMMARY_TABTab extends DevKit.Controls.ITab {
+        Section: ISUMMARY_TABTabSections;
     }
 
     /**
@@ -87,7 +87,7 @@ export namespace AccountForm {
      * Contains all tabs on the form
      */
     export interface ITabs {
-        DETAILS_TAB: IDetailsTab;
+        SUMMARY_TAB: ISUMMARY_TABTab;
     }
 
     /**
@@ -181,7 +181,7 @@ export namespace AccountForm {
                     'Revenue',
                 ],
                 tab: [
-                    'DETAILS_TAB___BILLING'
+                    'SUMMARY_TAB___ACCOUNT_INFORMATION'
                 ],
                 grid: [
                     'Contacts'

@@ -162,6 +162,7 @@ npm run debug
 | 12 | `Account.TestUtility.ts` | Utility | R1-R40 | S1-S37 | Utility API |
 | 13 | `Account.TestMultiOptionSet.ts` | MultiOptionSet | R1-R18 | S1-S12 | v4_Categories |
 | 14 | `Account.TestTab.ts` | ITab + Section | R1-R10 | S1-S8 | DETAILS_TAB |
+| 15 | `Account.TestNavigationItem.ts` | NavigationItem | R1-R3 | S1-S3 | Account_Tasks |
 
 ---
 
@@ -169,11 +170,10 @@ npm run debug
 
 | # | Interface | Sample Field | Ghi chú |
 |---|-----------|--------------|---------|
-| 15 | Decimal | `form.Body.v4_Latitude` | Min, Max, Precision |
-| 16 | Double | `form.Body.v4_DiscountPercentage` | Min, Max, Precision |
-| 17 | IFrame | `form.Body.v4_IFrameExternal` | Src, InitialUrl |
-| 18 | WebResource | `form.Body.v4_WebResourceHelp` | |
-| 19 | NavigationItem | `form.Navigation.Account_Tasks` | |
+| 16 | Decimal | `form.Body.v4_Latitude` | Min, Max, Precision |
+| 17 | Double | `form.Body.v4_DiscountPercentage` | Min, Max, Precision |
+| 18 | IFrame | `form.Body.v4_IFrameExternal` | Src, InitialUrl |
+| 19 | WebResource | `form.Body.v4_WebResourceHelp` | |
 
 ---
 

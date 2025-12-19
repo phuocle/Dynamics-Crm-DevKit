@@ -14,6 +14,7 @@ import { TestGrid } from './Account.TestGrid';
 import { TestUtility } from './Account.TestUtility';
 import { TestMultiOptionSet } from './Account.TestMultiOptionSet';
 import { TestTab } from './Account.TestTab';
+import { TestNavigationItem } from './Account.TestNavigationItem';
 
 const formAccount = (function () {
     "use strict";
@@ -87,6 +88,9 @@ const formAccount = (function () {
 
             // Test 14: Tab Control
             TestTab(form);
+
+            // Test 15: NavigationItem Control
+            TestNavigationItem(form);
 
         }, 10000);
 
