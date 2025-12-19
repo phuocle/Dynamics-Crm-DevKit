@@ -6,6 +6,7 @@ import { TestString } from './Account.TestString';
 import { TestInteger } from './Account.TestInteger';
 import { TestOptionSet } from './Account.TestOptionSet';
 import { TestWebApi } from './Account.TestWebApi';
+import { TestMoney } from './Account.TestMoney';
 
 const formAccount = (function () {
     "use strict";
@@ -55,6 +56,9 @@ const formAccount = (function () {
 
             // Test 6: WebApi 
             await TestWebApi(form);
+
+            // Test 7: Money Control
+            TestMoney(form);
 
         }, 10000);
 

@@ -153,6 +153,8 @@ npm run debug
 | 3 | `Account.TestString.ts` | String | R1-R15 | S1-S11 | Name |
 | 4 | `Account.TestInteger.ts` | Integer | R1-R16 | S1-S11 | NumberOfEmployees |
 | 5 | `Account.TestOptionSet.ts` | OptionSet | R1-R18 | S1-S16 | IndustryCode |
+| 6 | `Account.TestWebApi.ts` | WebApi | R1-R5 | S1-S8 | AccountApi |
+| 7 | `Account.TestMoney.ts` | Money | R1-R17 | S1-S12 | Revenue |
 
 ---
 
@@ -160,18 +162,17 @@ npm run debug
 
 | # | Interface | Sample Field | Ghi chú |
 |---|-----------|--------------|---------|
-| 6 | Money | `form.Body.Revenue` | Min, Max, Precision |
-| 7 | Decimal | `form.Body.v4_Latitude` | Min, Max, Precision |
-| 8 | Double | `form.Body.v4_DiscountPercentage` | Min, Max, Precision |
-| 9 | Boolean | `form.Body.CreditOnHold` | InitialValue |
-| 10 | DateOnly | `form.Body.v4_Birthday` | ShowTime=false |
-| 11 | DateTime | `form.Body.v4_AppointmentTime` | ShowTime=true |
-| 12 | MultiOptionSet | `form.Body.v4_Categories` | Same as OptionSet but arrays |
-| 13 | ITab | `form.Tabs.DETAILS_TAB` | AddTabStateChange, DisplayState |
-| 14 | IFrame | `form.Body.v4_IFrameExternal` | Src, InitialUrl |
-| 15 | WebResource | `form.Body.v4_WebResourceHelp` | |
-| 16 | Grid | `form.Grids.Contacts` | |
-| 17 | NavigationItem | `form.Navigation.Account_Tasks` | |
+| 8 | Decimal | `form.Body.v4_Latitude` | Min, Max, Precision |
+| 9 | Double | `form.Body.v4_DiscountPercentage` | Min, Max, Precision |
+| 10 | Boolean | `form.Body.CreditOnHold` | InitialValue |
+| 11 | DateOnly | `form.Body.v4_Birthday` | ShowTime=false |
+| 12 | DateTime | `form.Body.v4_AppointmentTime` | ShowTime=true |
+| 13 | MultiOptionSet | `form.Body.v4_Categories` | Same as OptionSet but arrays |
+| 14 | ITab | `form.Tabs.DETAILS_TAB` | AddTabStateChange, DisplayState |
+| 15 | IFrame | `form.Body.v4_IFrameExternal` | Src, InitialUrl |
+| 16 | WebResource | `form.Body.v4_WebResourceHelp` | |
+| 17 | Grid | `form.Grids.Contacts` | |
+| 18 | NavigationItem | `form.Navigation.Account_Tasks` | |
 
 ---
 
@@ -188,4 +189,4 @@ npm run debug
 
 ---
 
-*Last updated: 2024-12-18*
+*Last updated: 2025-12-19*

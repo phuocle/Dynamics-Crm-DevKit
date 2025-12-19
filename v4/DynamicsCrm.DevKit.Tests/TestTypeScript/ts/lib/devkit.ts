@@ -1277,7 +1277,7 @@ const webApiTypeParsers: Record<string, (value: any) => any> = {
         const falseValues = ['false', '0', 'no', 'n'];
         if (trueValues.includes(stringValue)) return true;
         if (falseValues.includes(stringValue)) return false;
-        return false;
+        return null;
     }
 };
 
