@@ -10,6 +10,7 @@ import { TestMoney } from './Account.TestMoney';
 import { TestBoolean } from './Account.TestBoolean';
 import { TestDateTime } from './Account.TestDateTime';
 import { TestDateOnly } from './Account.TestDateOnly';
+import { TestGrid } from './Account.TestGrid';
 
 const formAccount = (function () {
     "use strict";
@@ -71,6 +72,9 @@ const formAccount = (function () {
 
             // Test 10: DateOnly Control
             TestDateOnly(form);
+
+            // Test 11: Grid Control
+            TestGrid(form);
 
         }, 10000);
 
