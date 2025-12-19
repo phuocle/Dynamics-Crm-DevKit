@@ -156,6 +156,7 @@ function loadTabs(formContext: any, tabs: any): void {
     });
 }
 function loadNavigations(formContext: any, navigations: any): void {
+    debugger;
     const getNavigationItem = (navigation: string) => {
         const navItems = formContext?.ui?.navigation?.items;
         if (!navItems) return null;

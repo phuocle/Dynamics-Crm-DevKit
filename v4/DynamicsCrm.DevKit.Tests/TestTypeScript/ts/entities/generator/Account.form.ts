@@ -105,7 +105,7 @@ export namespace AccountForm {
      * Contains navigation items
      */
     export interface INavigation {
-        contact_customer_accounts: DevKit.Controls.NavigationItem;
+        nav_msa_account_managingpartner: DevKit.Controls.NavigationItem;
     }
 
     /**
@@ -189,7 +189,7 @@ export namespace AccountForm {
                     'Contacts'
                 ],
                 navigation: [
-                    'contact_customer_accounts'
+                    'nav_msa_account_managingpartner'
                 ],
                 quick: [
                     'contactquickform___EMailAddress1'
