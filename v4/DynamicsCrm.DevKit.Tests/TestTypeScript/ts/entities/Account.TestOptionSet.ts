@@ -87,7 +87,7 @@ export function TestOptionSet(form: AccountForm.Form): void {
     }
 
     // S3: Option(text) - NOT IMPLEMENTED: OOB Dynamics code throws 'Value should be of type: number' error
-    methodResults.push({ Test: "S3", Property: "Option(text)", Value: "OOB Bug - devkit.ts không hỗ trợ", Status: "✓" });
+    methodResults.push({ Test: "S3", Property: "Option(text)", Value: "OOB Bug - devkit.ts not support", Status: "✓" });
 
     // Method: AddOption (add then remove)
     // NOTE: AddOption adds to CONTROL, so we check ControlOptions (not Options which is from attribute)

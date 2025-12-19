@@ -54,6 +54,7 @@ async function buildSingle() {
             globalName: globalName,
             target: 'es2020',
             sourcemap: isDebug ? 'inline' : false,
+            sourcesContent: isDebug,
             minify: !isDebug,
             footer: { js: footerCode },
         });
