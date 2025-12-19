@@ -1,90 +1,115 @@
 /**
- * Account Form - TypeScript Implementation
- * @description AccountForm with shared OptionSets
- * Uses namespace pattern for better organization and maintainability
+ * Account.form.ts - Account Form for early-bound style form coding
+ * Generated file - DO NOT MODIFY MANUALLY
+ * 
+ * Structure:
+ * 1. Imports
+ * 2. Types - IBody, IHeader, ITabs, IGrid, INavigation, IQuickForm, IProcess
+ * 3. Runtime - Form class with field configurations
  */
 
 /// <reference path="../../lib/devkit.d.ts" />
 import { FormBase } from '../../lib/devkit';
-import './OptionSet'; // Import centralized OptionSets
+import './OptionSet';
 
 // ============================================================================
-// NAMESPACE: AccountForm - Main Account Form
+// 1. Types
 // ============================================================================
+
 export namespace AccountForm {
-    // Body Interface - ALL DevKit control types
+
+    /**
+     * Body controls interface
+     * Contains all controls on the form body
+     */
     export interface IBody {
-        // ========== Standard Field Controls ==========
-        /** String: Account Name */
+        /** Type the company or business name. */
         Name: DevKit.Controls.String;
-        /** Memo: Description */
+        /** Type additional information to describe the account. */
         Description: DevKit.Controls.Memo;
-        /** Integer: Number of Employees */
+        /** Type the number of employees that work at the account. */
         NumberOfEmployees: DevKit.Controls.Integer;
-        /** Money: Annual Revenue */
+        /** Type the annual revenue for the account. */
         Revenue: DevKit.Controls.Money;
-        /** Boolean: Credit On Hold */
+        /** Select whether the credit for the account is on hold. */
         CreditOnHold: DevKit.Controls.Boolean;
-        /** OptionSet: Industry Code */
+        /** Select the account's primary industry. */
         IndustryCode: DevKit.Controls.OptionSet;
-        /** Lookup: Primary Contact */
+        /** Choose the primary contact for the account. */
         PrimaryContactId: DevKit.Controls.Lookup;
-
-        // ========== Custom v4_ Field Controls ==========
-        /** Date (DateOnly): Custom Birthday field */
+        /** Custom Birthday field */
         v4_Birthday: DevKit.Controls.DateOnly;
-        /** DateTime: Custom Appointment Time field */
+        /** Custom Appointment Time field */
         v4_AppointmentTime: DevKit.Controls.DateTime;
-        /** Decimal: Custom Latitude field */
+        /** Custom Latitude field */
         v4_Latitude: DevKit.Controls.Decimal;
-        /** Double: Custom Discount Percentage field */
+        /** Custom Discount Percentage field */
         v4_DiscountPercentage: DevKit.Controls.Double;
-        /** MultiOptionSet: Custom Categories field */
+        /** Custom Categories field */
         v4_Categories: DevKit.Controls.MultiOptionSet;
-
-        // ========== Specialty Controls ==========
-        /** WebResource: Custom Help Web Resource */
+        /** Custom Help Web Resource */
         v4_WebResourceHelp: DevKit.Controls.WebResource;
-        /** IFrame: Custom External Page */
+        /** Custom External Page */
         v4_IFrameExternal: DevKit.Controls.IFrame;
-        /** Timer: Custom SLA Timer */
+        /** Custom SLA Timer */
         v4_TimerSLA: DevKit.Controls.Timer;
-        /** Knowledge: Knowledge Base Search */
+        /** Knowledge Base Search */
         v4_KnowledgeSearch: DevKit.Controls.Knowledge;
     }
 
-    // Header Interface
+    /**
+     * Header controls interface
+     * Contains controls displayed in the form header
+     */
     export interface IHeader {
-        /** Lookup: Owner */
+        /** Enter the user or team who is assigned to manage the record. */
         OwnerId: DevKit.Controls.Lookup;
-        /** Integer: Number of Employees */
+        /** Type the number of employees that work at the account. */
         NumberOfEmployees: DevKit.Controls.Integer;
     }
 
-    // Tab and Section Interfaces
+    /**
+     * Details tab sections interface
+     */
     export interface IDetailsTabSections {
         BILLING: DevKit.Controls.Section;
     }
 
+    /**
+     * Details tab interface
+     */
     export interface IDetailsTab extends DevKit.Controls.ITab {
         Section: IDetailsTabSections;
     }
 
+    /**
+     * Tabs interface
+     * Contains all tabs on the form
+     */
     export interface ITabs {
         DETAILS_TAB: IDetailsTab;
     }
 
-    // Grid Interface
+    /**
+     * Grid controls interface
+     * Contains all subgrid controls on the form
+     */
     export interface IGrid {
         Contacts: DevKit.Controls.Grid;
     }
 
-    // Navigation Interface
+    /**
+     * Navigation interface
+     * Contains navigation items
+     */
     export interface INavigation {
         Account_Tasks: DevKit.Controls.NavigationItem;
     }
 
-    // QuickForm Interface
+    /**
+     * QuickForm interface
+     * Contains quick view form controls
+     */
     export interface IQuickForm {
         contactquickform: DevKit.Controls.IQuickView & {
             Body: {
@@ -93,7 +118,10 @@ export namespace AccountForm {
         };
     }
 
-    // Business Process Flow Interface
+    /**
+     * Business Process Flow fields interface
+     * v4_AccountBPF - Custom Account Business Process Flow
+     */
     export interface IBPF {
         /** BPF Field: Account Name (Stage 1: Qualify) */
         Name: DevKit.Controls.String;
@@ -105,30 +133,70 @@ export namespace AccountForm {
         PrimaryContactId: DevKit.Controls.Lookup;
     }
 
-    // Process Interface
+    /**
+     * Process interface
+     * Contains business process flow definitions
+     */
     export interface IProcess extends DevKit.Controls.IProcess {
         /** v4_AccountBPF - Custom Account Business Process Flow */
         v4_AccountBPF: IBPF;
     }
 
-    // Form Class
+    // ============================================================================
+    // 2. Runtime - Form Class
+    // ============================================================================
+
+    /**
+     * Account Form class
+     * Provides typed access to all form controls
+     */
     export class Form extends FormBase<IBody, IHeader, ITabs, IGrid, INavigation, IQuickForm, IProcess> {
+        /**
+         * Creates an Account Form instance
+         * @param executionContext The execution context from form event
+         * @param defaultWebResourceName Optional default web resource name
+         */
         constructor(executionContext: any, defaultWebResourceName?: string) {
             super(executionContext, defaultWebResourceName, {
                 body: [
-                    "Name", "Description", "NumberOfEmployees", "Revenue", "CreditOnHold",
-                    "IndustryCode", "PrimaryContactId", "v4_Birthday", "v4_AppointmentTime",
-                    "v4_Latitude", "v4_DiscountPercentage", "v4_Categories",
-                    "v4_WebResourceHelp", "v4_IFrameExternal", "v4_TimerSLA", "v4_KnowledgeSearch"
+                    'Name',
+                    'Description',
+                    'NumberOfEmployees',
+                    'Revenue',
+                    'CreditOnHold',
+                    'IndustryCode',
+                    'PrimaryContactId',
+                    'v4_Birthday',
+                    'v4_AppointmentTime',
+                    'v4_Latitude',
+                    'v4_DiscountPercentage',
+                    'v4_Categories',
+                    'v4_WebResourceHelp',
+                    'v4_IFrameExternal',
+                    'v4_TimerSLA',
+                    'v4_KnowledgeSearch'
                 ],
-                header: ["OwnerId", "NumberOfEmployees"],
-                tab: ["DETAILS_TAB___BILLING"],
-                grid: ["Contacts"],
-                navigation: ["Account_Tasks"],
-                quick: ["contactquickform___EMailAddress1"],
+                header: [
+                    'OwnerId',
+                    'NumberOfEmployees'
+                ],
+                tab: [
+                    'DETAILS_TAB___BILLING'
+                ],
+                grid: [
+                    'Contacts'
+                ],
+                navigation: [
+                    'Account_Tasks'
+                ],
+                quick: [
+                    'contactquickform___EMailAddress1'
+                ],
                 bpf: [
-                    "v4_AccountBPF___Name", "v4_AccountBPF___IndustryCode",
-                    "v4_AccountBPF___Revenue", "v4_AccountBPF___PrimaryContactId"
+                    'v4_AccountBPF___Name',
+                    'v4_AccountBPF___IndustryCode',
+                    'v4_AccountBPF___Revenue',
+                    'v4_AccountBPF___PrimaryContactId'
                 ]
             });
         }
