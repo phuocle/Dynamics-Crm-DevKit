@@ -28,7 +28,7 @@ export async function TestWebApi(form: AccountForm.Form): Promise<void> {
 
     // R1: Create empty Account object via AccountApi factory
     try {
-        const newAccount = AccountApi();
+        const newAccount = new AccountApi();
         newAccount.Name = 'Test Account';
         newAccount.Telephone1 = '123-456-7890';
         newAccount.IndustryCode = OptionSet.Account.IndustryCode.Consulting;
@@ -44,7 +44,7 @@ export async function TestWebApi(form: AccountForm.Form): Promise<void> {
 
     // R2: Test Entity object structure
     try {
-        const account = AccountApi();
+        const account = new AccountApi();
         account.Name = 'Entity Test';
         const entity = account.Entity;
         results.push({
@@ -59,7 +59,7 @@ export async function TestWebApi(form: AccountForm.Form): Promise<void> {
 
     // R3: Test EntityName property
     try {
-        const account = AccountApi();
+        const account = new AccountApi();
         results.push({
             Test: "R3",
             Property: "EntityName",
@@ -72,7 +72,7 @@ export async function TestWebApi(form: AccountForm.Form): Promise<void> {
 
     // R4: Test EntityCollectionName property
     try {
-        const account = AccountApi();
+        const account = new AccountApi();
         results.push({
             Test: "R4",
             Property: "EntityCollectionName",
@@ -85,7 +85,7 @@ export async function TestWebApi(form: AccountForm.Form): Promise<void> {
 
     // R5: Test FormattedValue property exists
     try {
-        const account = AccountApi();
+        const account = new AccountApi();
         results.push({
             Test: "R5",
             Property: "FormattedValue",
@@ -219,7 +219,7 @@ export async function TestWebApi(form: AccountForm.Form): Promise<void> {
 
     // S8: Set property and verify Entity update
     try {
-        const account = AccountApi();
+        const account = new AccountApi();
         account.Name = 'Update Test';
         account.Revenue = 1000000;
         account.NumberOfEmployees = 50;

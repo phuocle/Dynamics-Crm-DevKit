@@ -652,21 +652,24 @@ const AccountFieldConfig: IWebApiFieldConfigMap = {
 };
 
 // ============================================================================
-// 3. Runtime - Factory Function
+// 3. Runtime - Class (C# early-bound style with `new` keyword)
 // ============================================================================
 
 /**
- * Creates an Account WebApi object for early-bound style coding
- * @param entity The entity object from OData response
- * @returns AccountApi object with typed properties
+ * Account WebApi class for early-bound style coding
+ * Usage: const account = new AccountApi(entity);
+ * @param entity The entity object from OData response (optional for create operations)
  */
-export function AccountApi(entity?: Record<string, any>): IAccountApi {
-    return createWebApiEntity<IAccountApi>(
-        entity,
-        'account',
-        'accounts',
-        AccountFieldConfig
-    );
+export class AccountApi {
+    constructor(entity?: Record<string, any>) {
+        const webApiEntity = createWebApiEntity<IAccountApi>(entity, 'account', 'accounts', AccountFieldConfig);
+        // Copy property descriptors to preserve getters/setters
+        Object.defineProperties(this, Object.getOwnPropertyDescriptors(webApiEntity));
+    }
 }
 
+// Type assertion to make AccountApi instances work as IAccountApi
+export interface AccountApi extends IAccountApi { }
+
 export default AccountApi;
+
