@@ -29,8 +29,6 @@ export namespace AccountForm {
         Description: DevKit.Controls.Memo;
         /** Type the number of employees that work at the account. */
         NumberOfEmployees: DevKit.Controls.Integer;
-        /** Type the annual revenue for the account. */
-        Revenue: DevKit.Controls.Money;
         /** Select whether the credit for the account is on hold. */
         CreditOnHold: DevKit.Controls.Boolean;
         /** Select the account's primary industry. */
@@ -66,6 +64,8 @@ export namespace AccountForm {
         OwnerId: DevKit.Controls.Lookup;
         /** Type the number of employees that work at the account. */
         NumberOfEmployees: DevKit.Controls.Integer;
+        /** Type the annual revenue for the account. */
+        Revenue: DevKit.Controls.Money;
     }
 
     /**
@@ -162,7 +162,6 @@ export namespace AccountForm {
                     'Name',
                     'Description',
                     'NumberOfEmployees',
-                    'Revenue',
                     'CreditOnHold',
                     'IndustryCode',
                     'PrimaryContactId',
@@ -178,7 +177,8 @@ export namespace AccountForm {
                 ],
                 header: [
                     'OwnerId',
-                    'NumberOfEmployees'
+                    'NumberOfEmployees',
+                    'Revenue',
                 ],
                 tab: [
                     'DETAILS_TAB___BILLING'
