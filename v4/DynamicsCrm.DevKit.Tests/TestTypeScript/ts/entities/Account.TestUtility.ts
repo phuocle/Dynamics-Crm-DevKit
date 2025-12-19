@@ -7,6 +7,19 @@ interface TestResult {
     Status: string;
 }
 
+// Helper function to stringify objects for display
+function stringify(value: any): any {
+    if (value === null || value === undefined) return null;
+    if (typeof value === 'object') {
+        try {
+            return JSON.stringify(value);
+        } catch {
+            return '[Circular or Complex Object]';
+        }
+    }
+    return value;
+}
+
 /**
  * TEST 12: Utility API - Global Utility Functions
  * Utility provides access to Xrm.Utility, Xrm.Navigation, Xrm.Device, Xrm.Encoding, etc.
@@ -30,7 +43,7 @@ export function TestUtility(form: AccountForm.Form): void {
         // Client (all properties)
         // ----------------------------------------
         const client = util.Client;
-        results.push({ Test: "R1", Property: "Client", Value: client ? "object" : "null", Status: client ? "✓" : "⚠" });
+        results.push({ Test: "R1", Property: "Client", Value: stringify(client), Status: client ? "✓" : "⚠" });
         results.push({ Test: "R2", Property: "Client.ClientName", Value: client?.ClientName, Status: client?.ClientName ? "✓" : "⚠" });
         results.push({ Test: "R3", Property: "Client.ClientState", Value: client?.ClientState, Status: client?.ClientState ? "✓" : "⚠" });
         results.push({ Test: "R4", Property: "Client.FormFactor", Value: client?.FormFactor, Status: typeof client?.FormFactor === "number" ? "✓" : "⚠" });
@@ -40,20 +53,20 @@ export function TestUtility(form: AccountForm.Form): void {
         // ----------------------------------------
         // Global Context Properties
         // ----------------------------------------
-        results.push({ Test: "R7", Property: "ClientUrl", Value: util.ClientUrl ? util.ClientUrl.substring(0, 50) + "..." : null, Status: util.ClientUrl ? "✓" : "⚠" });
-        results.push({ Test: "R8", Property: "CurrentAppUrl", Value: util.CurrentAppUrl ? util.CurrentAppUrl.substring(0, 50) + "..." : null, Status: util.CurrentAppUrl ? "✓" : "⚠" });
+        results.push({ Test: "R7", Property: "ClientUrl", Value: util.ClientUrl, Status: util.ClientUrl ? "✓" : "⚠" });
+        results.push({ Test: "R8", Property: "CurrentAppUrl", Value: util.CurrentAppUrl, Status: util.CurrentAppUrl ? "✓" : "⚠" });
         results.push({ Test: "R9", Property: "IsOnPremises", Value: util.IsOnPremises, Status: typeof util.IsOnPremises === "boolean" ? "✓" : "⚠" });
         results.push({ Test: "R10", Property: "LearningPathAttributeName", Value: util.LearningPathAttributeName, Status: "✓" });
-        results.push({ Test: "R11", Property: "PageContext", Value: util.PageContext ? "object" : "null", Status: util.PageContext ? "✓" : "⚠" });
+        results.push({ Test: "R11", Property: "PageContext", Value: stringify(util.PageContext), Status: util.PageContext ? "✓" : "⚠" });
         results.push({ Test: "R12", Property: "Version", Value: util.Version, Status: util.Version ? "✓" : "⚠" });
 
         // ----------------------------------------
         // OrganizationSettings (all properties)
         // ----------------------------------------
         const orgSettings = util.OrganizationSettings;
-        results.push({ Test: "R13", Property: "OrganizationSettings", Value: orgSettings ? "object" : "null", Status: orgSettings ? "✓" : "⚠" });
-        results.push({ Test: "R14", Property: "Org.Attributes", Value: orgSettings?.Attributes ? "object" : "null", Status: "✓" });
-        results.push({ Test: "R15", Property: "Org.BaseCurrency", Value: orgSettings?.BaseCurrency ? "object" : "null", Status: orgSettings?.BaseCurrency ? "✓" : "⚠" });
+        results.push({ Test: "R13", Property: "OrganizationSettings", Value: stringify(orgSettings), Status: orgSettings ? "✓" : "⚠" });
+        results.push({ Test: "R14", Property: "Org.Attributes", Value: stringify(orgSettings?.Attributes), Status: "✓" });
+        results.push({ Test: "R15", Property: "Org.BaseCurrency", Value: stringify(orgSettings?.BaseCurrency), Status: orgSettings?.BaseCurrency ? "✓" : "⚠" });
         results.push({ Test: "R16", Property: "Org.BaseCurrencyId", Value: orgSettings?.BaseCurrencyId, Status: orgSettings?.BaseCurrencyId ? "✓" : "⚠" });
         results.push({ Test: "R17", Property: "Org.DefaultCountryCode", Value: orgSettings?.DefaultCountryCode, Status: "✓" });
         results.push({ Test: "R18", Property: "Org.FullNameConventionCode", Value: orgSettings?.FullNameConventionCode, Status: typeof orgSettings?.FullNameConventionCode === "number" ? "✓" : "⚠" });
@@ -69,18 +82,18 @@ export function TestUtility(form: AccountForm.Form): void {
         // UserSettings (all properties)
         // ----------------------------------------
         const userSettings = util.UserSettings;
-        results.push({ Test: "R26", Property: "UserSettings", Value: userSettings ? "object" : "null", Status: userSettings ? "✓" : "⚠" });
-        results.push({ Test: "R27", Property: "User.DateFormattingInfo", Value: userSettings?.DateFormattingInfo ? "object" : "null", Status: userSettings?.DateFormattingInfo ? "✓" : "⚠" });
+        results.push({ Test: "R26", Property: "UserSettings", Value: stringify(userSettings), Status: userSettings ? "✓" : "⚠" });
+        results.push({ Test: "R27", Property: "User.DateFormattingInfo", Value: stringify(userSettings?.DateFormattingInfo), Status: userSettings?.DateFormattingInfo ? "✓" : "⚠" });
         results.push({ Test: "R28", Property: "User.DefaultDashboardId", Value: userSettings?.DefaultDashboardId, Status: "✓" });
         results.push({ Test: "R29", Property: "User.IsGuidedHelpEnabled", Value: userSettings?.IsGuidedHelpEnabled, Status: typeof userSettings?.IsGuidedHelpEnabled === "boolean" ? "✓" : "⚠" });
         results.push({ Test: "R30", Property: "User.IsHighContrastEnabled", Value: userSettings?.IsHighContrastEnabled, Status: typeof userSettings?.IsHighContrastEnabled === "boolean" ? "✓" : "⚠" });
         results.push({ Test: "R31", Property: "User.IsRTL", Value: userSettings?.IsRTL, Status: typeof userSettings?.IsRTL === "boolean" ? "✓" : "⚠" });
         results.push({ Test: "R32", Property: "User.LanguageId", Value: userSettings?.LanguageId, Status: typeof userSettings?.LanguageId === "number" ? "✓" : "⚠" });
-        results.push({ Test: "R33", Property: "User.Roles", Value: userSettings?.Roles ? "collection" : "null", Status: userSettings?.Roles ? "✓" : "⚠" });
-        results.push({ Test: "R34", Property: "User.SecurityRolePrivileges", Value: userSettings?.SecurityRolePrivileges ? "array" : "null", Status: userSettings?.SecurityRolePrivileges ? "✓" : "⚠" });
-        results.push({ Test: "R35", Property: "User.SecurityRoles", Value: userSettings?.SecurityRoles ? "array" : "null", Status: userSettings?.SecurityRoles ? "✓" : "⚠" });
+        results.push({ Test: "R33", Property: "User.Roles", Value: stringify(userSettings?.Roles), Status: userSettings?.Roles ? "✓" : "⚠" });
+        results.push({ Test: "R34", Property: "User.SecurityRolePrivileges", Value: stringify(userSettings?.SecurityRolePrivileges), Status: userSettings?.SecurityRolePrivileges ? "✓" : "⚠" });
+        results.push({ Test: "R35", Property: "User.SecurityRoles", Value: stringify(userSettings?.SecurityRoles), Status: userSettings?.SecurityRoles ? "✓" : "⚠" });
         results.push({ Test: "R36", Property: "User.TimeZoneOffsetMinutes", Value: userSettings?.TimeZoneOffsetMinutes, Status: typeof userSettings?.TimeZoneOffsetMinutes === "number" ? "✓" : "⚠" });
-        results.push({ Test: "R37", Property: "User.TransactionCurrency", Value: userSettings?.TransactionCurrency ? "object" : "null", Status: userSettings?.TransactionCurrency ? "✓" : "⚠" });
+        results.push({ Test: "R37", Property: "User.TransactionCurrency", Value: stringify(userSettings?.TransactionCurrency), Status: userSettings?.TransactionCurrency ? "✓" : "⚠" });
         results.push({ Test: "R38", Property: "User.TransactionCurrencyId", Value: userSettings?.TransactionCurrencyId, Status: userSettings?.TransactionCurrencyId ? "✓" : "⚠" });
         results.push({ Test: "R39", Property: "User.UserId", Value: userSettings?.UserId, Status: userSettings?.UserId ? "✓" : "⚠" });
         results.push({ Test: "R40", Property: "User.UserName", Value: userSettings?.UserName, Status: userSettings?.UserName ? "✓" : "⚠" });
@@ -112,7 +125,7 @@ export function TestUtility(form: AccountForm.Form): void {
 
     try {
         const encoded = util.HtmlAttributeEncode("test=\"value\"");
-        methodResults.push({ Test: "S3", Property: "HtmlAttributeEncode", Value: encoded ? "Encoded" : "null", Status: encoded ? "✓" : "✗" });
+        methodResults.push({ Test: "S3", Property: "HtmlAttributeEncode", Value: encoded, Status: encoded ? "✓" : "✗" });
     } catch (e: any) {
         methodResults.push({ Test: "S3", Property: "HtmlAttributeEncode", Value: e.message, Status: "✗" });
     }
@@ -126,7 +139,7 @@ export function TestUtility(form: AccountForm.Form): void {
 
     try {
         const xmlAttrEncoded = util.XmlAttributeEncode("test=\"value\"");
-        methodResults.push({ Test: "S5", Property: "XmlAttributeEncode", Value: xmlAttrEncoded ? "Encoded" : "null", Status: xmlAttrEncoded ? "✓" : "✗" });
+        methodResults.push({ Test: "S5", Property: "XmlAttributeEncode", Value: xmlAttrEncoded, Status: xmlAttrEncoded ? "✓" : "✗" });
     } catch (e: any) {
         methodResults.push({ Test: "S5", Property: "XmlAttributeEncode", Value: e.message, Status: "✗" });
     }
@@ -136,14 +149,14 @@ export function TestUtility(form: AccountForm.Form): void {
     // ----------------------------------------
     try {
         const prependedUrl = util.PrependOrgName("/test");
-        methodResults.push({ Test: "S6", Property: "PrependOrgName", Value: prependedUrl ? prependedUrl.substring(0, 40) + "..." : "null", Status: prependedUrl ? "✓" : "✗" });
+        methodResults.push({ Test: "S6", Property: "PrependOrgName", Value: prependedUrl, Status: prependedUrl ? "✓" : "✗" });
     } catch (e: any) {
         methodResults.push({ Test: "S6", Property: "PrependOrgName", Value: e.message, Status: "✗" });
     }
 
     try {
         const webResourceUrl = util.WebResourceUrl("test.html");
-        methodResults.push({ Test: "S7", Property: "WebResourceUrl", Value: webResourceUrl ? "URL returned" : "null", Status: webResourceUrl ? "✓" : "⚠" });
+        methodResults.push({ Test: "S7", Property: "WebResourceUrl", Value: webResourceUrl, Status: webResourceUrl ? "✓" : "⚠" });
     } catch (e: any) {
         methodResults.push({ Test: "S7", Property: "WebResourceUrl", Value: e.message, Status: "✗" });
     }
