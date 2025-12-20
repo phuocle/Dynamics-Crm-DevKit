@@ -317,69 +317,7 @@ function loadGrids(formContext: any, gridItems: string[]): any {
     });
     return grids;
 }
-function LoadForm(formContext: any): any {
-    const form: any = {};
-    const contextData = formContext?.data;
-    const contextDataEntity = formContext?.data?.entity;
-    const contextUi = formContext?.ui;
-    const contextUiFormSelector = formContext?.ui?.formSelector;
-    const findFormItem = (criteria: any, value: any) => {
-        const length = contextUiFormSelector?.items?.getLength() ?? 0;
-        for (let i = 0; i < length; i++) {
-            const item = contextUiFormSelector?.items?.get(i);
-            if (item && criteria(item) === value) {
-                return item;
-            }
-        }
-        return null;
-    };
-    getter(form, 'Attributes', () => contextDataEntity?.attributes);
-    getter(form, 'Controls', () => contextUi?.controls);
-    getter(form, 'DataIsDirty', () => contextData?.getIsDirty());
-    getter(form, 'DataIsValid', () => contextData?.isValid());
-    getter(form, 'DataXml', () => contextDataEntity?.getDataXml());
-    getter(form, 'EntityId', () => contextDataEntity?.getId());
-    getter(form, 'EntityIsDirty', () => contextDataEntity?.getIsDirty());
-    getter(form, 'EntityIsValid', () => contextDataEntity?.isValid());
-    getter(form, 'EntityName', () => contextDataEntity?.getEntityName());
-    getter(form, 'EntityReference', () => contextDataEntity?.getEntityReference());
-    getter(form, 'FormId', () => contextUiFormSelector?.getCurrentItem()?.getId());
-    getter(form, 'FormLabel', () => contextUiFormSelector?.getCurrentItem()?.getLabel());
-    getter(form, 'FormType', () => contextUi?.getFormType());
-    getter(form, 'PrimaryAttributeValue', () => contextDataEntity?.getPrimaryAttributeValue());
-    getter(form, 'ViewPortHeight', () => contextUi?.getViewPortHeight());
-    getter(form, 'ViewPortWidth', () => contextUi?.getViewPortWidth());
-    form.AddOnPostSave = (callback: any) => contextDataEntity?.addOnPostSave(callback);
-    form.AddOnSave = (callback: any) => contextDataEntity?.addOnSave(callback);
-    form.ClearFormNotification = (uniqueId: string) => contextUi?.clearFormNotification(uniqueId);
-    form.Close = () => contextUi?.close();
-    form.DataAddOnLoad = (callback: any) => contextData?.addOnLoad(callback);
-    form.DataRemoveOnLoad = (callback: any) => contextData?.removeOnLoad(callback);
-    form.FormIsVisible = (formId: string) => { return findFormItem((item: any) => item.getId(), formId)?.getVisible(); };
-    form.FormNavigateToFormId = (formId: string) => { findFormItem((item: any) => item.getId(), formId)?.navigate(); };
-    form.FormNavigateToFormLabel = (formLabel: string) => { findFormItem((item: any) => item.getLabel(), formLabel)?.navigate(); };
-    form.FormSetVisible = (formId: string, value: boolean) => { findFormItem((item: any) => item.getId(), formId)?.setVisible(value); };
-    form.Refresh = (save?: boolean, successCallback?: any, errorCallback?: any) => {
-        const promise = contextData?.refresh(save);
-        if (successCallback) promise?.then(successCallback, errorCallback);
-        else return promise;
-    };
-    form.RefreshRibbon = (refreshAll?: boolean) => contextUi?.refreshRibbon(refreshAll);
-    form.RemoveOnPostSave = (callback: any) => contextDataEntity?.removeOnPostSave(callback);
-    form.RemoveOnSave = (callback: any) => contextDataEntity?.removeOnSave(callback);
-    form.Save = (saveOptions?: any, successCallback?: any, errorCallback?: any) => {
-        const promise = contextData?.save(saveOptions);
-        if (successCallback) promise?.then(successCallback, errorCallback);
-        else return promise;
-    };
-    form.SetFormEntityName = (arg: string) => contextUi?.setFormEntityName(arg);
-    form.SetFormNotification = (message: string, level: string, uniqueId: string) => contextUi?.setFormNotification(message, level, uniqueId);
-    form.UiAddLoaded = (callback: any) => contextUi?.addLoaded(callback);
-    form.UiAddOnLoad = (callback: any) => contextUi?.addOnLoad(callback);
-    form.UiRemoveLoaded = (callback: any) => contextUi?.removeLoaded(callback);
-    form.UiRemoveOnLoad = (callback: any) => contextUi?.removeOnLoad(callback);
-    return form;
-}
+
 function LoadExecutionContext(executionContext: any): any {
     const obj: any = {};
     getter(obj, 'Depth', () => executionContext?.getDepth());
@@ -640,14 +578,14 @@ function loadOthers(formContext: any, form: any, defaultWebResourceName: string 
 }
 /**
  * Loads a form with typed Body, Header, Tab, Grid, Navigation, QuickForm, and Process sections.
- * This is the main function for initializing a form in TypeScript.
+ * This is the main function for initializing a form in TypeScript (devkit.ts).
  * @param executionContext The execution context passed to the form event handler
  * @param defaultWebResourceName Optional default web resource name for utility functions
  * @param formConfig Configuration object specifying fields, tabs, grids, etc.
  * @returns A typed form object with all form functionality
  * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference
  */
-export function LoadFormV2<TBody = Record<string, any>, THeader = Record<string, any>, TTab = Record<string, any>, TGrid = Record<string, any>, TNavigation = Record<string, any>, TQuickForm = Record<string, any>, TProcess = any>(
+export function LoadFormV3<TBody = Record<string, any>, THeader = Record<string, any>, TTab = Record<string, any>, TGrid = Record<string, any>, TNavigation = Record<string, any>, TQuickForm = Record<string, any>, TProcess = any>(
     executionContext: any,
     defaultWebResourceName: string | undefined,
     formConfig: {
@@ -711,7 +649,66 @@ export function LoadFormV2<TBody = Record<string, any>, THeader = Record<string,
     Copilot: any;
 } {
     const formContext = executionContext?.getFormContext?.() ?? executionContext ?? null;
-    const form = LoadForm(formContext);
+    const form: any = {};
+    const contextData = formContext?.data;
+    const contextDataEntity = formContext?.data?.entity;
+    const contextUi = formContext?.ui;
+    const contextUiFormSelector = formContext?.ui?.formSelector;
+    const findFormItem = (criteria: any, value: any) => {
+        const length = contextUiFormSelector?.items?.getLength() ?? 0;
+        for (let i = 0; i < length; i++) {
+            const item = contextUiFormSelector?.items?.get(i);
+            if (item && criteria(item) === value) {
+                return item;
+            }
+        }
+        return null;
+    };
+    getter(form, 'Attributes', () => contextDataEntity?.attributes);
+    getter(form, 'Controls', () => contextUi?.controls);
+    getter(form, 'DataIsDirty', () => contextData?.getIsDirty());
+    getter(form, 'DataIsValid', () => contextData?.isValid());
+    getter(form, 'DataXml', () => contextDataEntity?.getDataXml());
+    getter(form, 'EntityId', () => contextDataEntity?.getId());
+    getter(form, 'EntityIsDirty', () => contextDataEntity?.getIsDirty());
+    getter(form, 'EntityIsValid', () => contextDataEntity?.isValid());
+    getter(form, 'EntityName', () => contextDataEntity?.getEntityName());
+    getter(form, 'EntityReference', () => contextDataEntity?.getEntityReference());
+    getter(form, 'FormId', () => contextUiFormSelector?.getCurrentItem()?.getId());
+    getter(form, 'FormLabel', () => contextUiFormSelector?.getCurrentItem()?.getLabel());
+    getter(form, 'FormType', () => contextUi?.getFormType());
+    getter(form, 'PrimaryAttributeValue', () => contextDataEntity?.getPrimaryAttributeValue());
+    getter(form, 'ViewPortHeight', () => contextUi?.getViewPortHeight());
+    getter(form, 'ViewPortWidth', () => contextUi?.getViewPortWidth());
+    form.AddOnPostSave = (callback: any) => contextDataEntity?.addOnPostSave(callback);
+    form.AddOnSave = (callback: any) => contextDataEntity?.addOnSave(callback);
+    form.ClearFormNotification = (uniqueId: string) => contextUi?.clearFormNotification(uniqueId);
+    form.Close = () => contextUi?.close();
+    form.DataAddOnLoad = (callback: any) => contextData?.addOnLoad(callback);
+    form.DataRemoveOnLoad = (callback: any) => contextData?.removeOnLoad(callback);
+    form.FormIsVisible = (formId: string) => { return findFormItem((item: any) => item.getId(), formId)?.getVisible(); };
+    form.FormNavigateToFormId = (formId: string) => { findFormItem((item: any) => item.getId(), formId)?.navigate(); };
+    form.FormNavigateToFormLabel = (formLabel: string) => { findFormItem((item: any) => item.getLabel(), formLabel)?.navigate(); };
+    form.FormSetVisible = (formId: string, value: boolean) => { findFormItem((item: any) => item.getId(), formId)?.setVisible(value); };
+    form.Refresh = (save?: boolean, successCallback?: any, errorCallback?: any) => {
+        const promise = contextData?.refresh(save);
+        if (successCallback) promise?.then(successCallback, errorCallback);
+        else return promise;
+    };
+    form.RefreshRibbon = (refreshAll?: boolean) => contextUi?.refreshRibbon(refreshAll);
+    form.RemoveOnPostSave = (callback: any) => contextDataEntity?.removeOnPostSave(callback);
+    form.RemoveOnSave = (callback: any) => contextDataEntity?.removeOnSave(callback);
+    form.Save = (saveOptions?: any, successCallback?: any, errorCallback?: any) => {
+        const promise = contextData?.save(saveOptions);
+        if (successCallback) promise?.then(successCallback, errorCallback);
+        else return promise;
+    };
+    form.SetFormEntityName = (arg: string) => contextUi?.setFormEntityName(arg);
+    form.SetFormNotification = (message: string, level: string, uniqueId: string) => contextUi?.setFormNotification(message, level, uniqueId);
+    form.UiAddLoaded = (callback: any) => contextUi?.addLoaded(callback);
+    form.UiAddOnLoad = (callback: any) => contextUi?.addOnLoad(callback);
+    form.UiRemoveLoaded = (callback: any) => contextUi?.removeLoaded(callback);
+    form.UiRemoveOnLoad = (callback: any) => contextUi?.removeOnLoad(callback);
     const { body = [], tab = [], header = [], bpf = [], quick = [], grid = [], navigation = [], dialog = [] } = formConfig as any;
     const bodyObj = loadFields(formContext, body);
     const tabObj = loadTabs(formContext, tab);
@@ -957,7 +954,7 @@ export class FormBase<TBody, THeader, TTab, TGrid, TNavigation, TQuickForm, TPro
         defaultWebResourceName: string | undefined,
         formConfig: IFormConfig
     ) {
-        const form = LoadFormV2<TBody, THeader, TTab, TGrid, TNavigation, TQuickForm, TProcess>(
+        const form = LoadFormV3<TBody, THeader, TTab, TGrid, TNavigation, TQuickForm, TProcess>(
             executionContext,
             defaultWebResourceName,
             formConfig
