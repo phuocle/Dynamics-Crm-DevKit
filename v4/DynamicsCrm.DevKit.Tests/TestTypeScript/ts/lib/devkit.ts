@@ -1,3 +1,10 @@
+/**
+ * Represents a GUID (Globally Unique Identifier) value.
+ * Used for entity IDs and EntityReference lookups in Dynamics 365.
+ * @example "00000000-0000-0000-0000-000000000000"
+ */
+export type Guid = string;
+
 function getXrm(): typeof Xrm | undefined {
     if (typeof window !== 'undefined' && (window as any).Xrm !== undefined) {
         return (window as any).Xrm;
