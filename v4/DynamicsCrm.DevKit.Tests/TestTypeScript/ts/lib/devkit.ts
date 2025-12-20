@@ -710,12 +710,10 @@ export function LoadFormV3<TBody = Record<string, any>, THeader = Record<string,
     form.UiRemoveLoaded = (callback: any) => contextUi?.removeLoaded(callback);
     form.UiRemoveOnLoad = (callback: any) => contextUi?.removeOnLoad(callback);
     const { body = [], tab = [], header = [], bpf = [], quick = [], grid = [], navigation = [], dialog = [] } = formConfig as any;
-    const bodyObj = loadFields(formContext, body);
-    const tabObj = loadTabs(formContext, tab);
-    bodyObj.Tab = tabObj;
+    const bodyObj = body.length > 0 ? loadFields(formContext, body) : {};
+    bodyObj.Tab = tab.length > 0 ? loadTabs(formContext, tab) : {};
     form.Body = bodyObj;
-    const headerObj = loadFields(formContext, header, 'header_');
-    form.Header = headerObj;
+    form.Header = header.length > 0 ? loadFields(formContext, header, 'header_') : {};
     const process = LoadProcess(formContext);
     if (bpf.length > 0) {
         let bpfProcessName: string | null = null;
@@ -733,12 +731,10 @@ export function LoadFormV3<TBody = Record<string, any>, THeader = Record<string,
         }
     }
     form.Process = process;
-    form.QuickForm = loadQuickForms(formContext, quick);
-    form.Grid = loadGrids(formContext, grid);
-    form.Navigation = loadNavigations(formContext, navigation);
-    if (dialog.length > 0) {
-        form.Dialog = LoadFormDialog(formContext, dialog);
-    }
+    form.QuickForm = quick.length > 0 ? loadQuickForms(formContext, quick) : {};
+    form.Grid = grid.length > 0 ? loadGrids(formContext, grid) : {};
+    form.Navigation = navigation.length > 0 ? loadNavigations(formContext, navigation) : {};
+    form.Dialog = dialog.length > 0 ? LoadFormDialog(formContext, dialog) : {};
     form.Utility = LoadUtility(defaultWebResourceName);
     form.ExecutionContext = LoadExecutionContext(executionContext);
     loadOthers(formContext, form, defaultWebResourceName);
