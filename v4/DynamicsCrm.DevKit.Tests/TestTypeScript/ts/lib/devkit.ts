@@ -317,7 +317,6 @@ function loadGrids(formContext: any, gridItems: string[]): any {
     });
     return grids;
 }
-
 function LoadExecutionContext(executionContext: any): any {
     const obj: any = {};
     getter(obj, 'Depth', () => executionContext?.getDepth());
@@ -337,7 +336,7 @@ function LoadExecutionContext(executionContext: any): any {
     obj.SetSharedVariable = (key: string, value: any) => executionContext?.setSharedVariable(key, value);
     return obj;
 }
-export function LoadSidePanes(): any {
+function LoadSidePanes(): any {
     const sidePanes: any = {};
     const xrm = getXrm();
     getterSetter(sidePanes, 'DisplayState', () => (xrm as any)?.App?.sidePanes?.state, (value: any) => { const x = getXrm(); if ((x as any)?.App?.sidePanes) (x as any).App.sidePanes.state = value; });
@@ -347,7 +346,7 @@ export function LoadSidePanes(): any {
     sidePanes.GetSelected = () => (xrm as any)?.App?.sidePanes?.getSelectedPane();
     return sidePanes;
 }
-export function LoadWebApi(): DevKit.IWebApi {
+function LoadWebApi(): DevKit.IWebApi {
     const obj: any = {} as DevKit.IWebApi;
     const xrm = getXrm();
     const getWebApi = xrm?.WebApi;
@@ -531,7 +530,7 @@ export function LoadWebApi(): DevKit.IWebApi {
     });
     return obj;
 }
-export function LoadCopilot(): DevKit.ICopilot {
+function LoadCopilot(): DevKit.ICopilot {
     const obj: any = {};
     const xrm = getXrm();
     const getCopilot = (xrm as any)?.Copilot;
@@ -1139,12 +1138,9 @@ export function LoadFormDialog(formContext: any, fields: string[]): any {
     form.Close = () => formContext?.ui?.close();
     return form;
 }
-
 type WebApiFieldType = DevKit.WebApiFieldType;
-
 const WEBAPI_FORMATTED_VALUE_SUFFIX = '@OData.Community.Display.V1.FormattedValue';
 const WEBAPI_LOOKUP_LOGICAL_NAME_SUFFIX = '@Microsoft.Dynamics.CRM.lookuplogicalname';
-
 const webApiTypeParsers: Record<string, (value: any) => any> = {
     DateTime: (value: any): Date | null => {
         if (value === null || value === undefined) return null;
@@ -1176,10 +1172,6 @@ const webApiTypeParsers: Record<string, (value: any) => any> = {
         return null;
     }
 };
-
-/**
- * Parse and return value based on WebApi field type
- */
 function webApiReturnGet(data: any, type?: WebApiFieldType): any {
     if (data === null || data === undefined) return null;
     if (type === null || type === undefined) return data;
