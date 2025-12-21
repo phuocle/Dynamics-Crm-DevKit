@@ -694,7 +694,7 @@ function LoadFormV3<TBody = Record<string, any>, THeader = Record<string, any>, 
     form.Copilot = LoadCopilot();
     return form;
 }
-export function LoadProcess(formContext: any, bpf: string[] = []): any {
+function LoadProcess(formContext: any, bpf: string[] = []): any {
     const process: any = {};
     if (bpf.length > 0) {
         let bpfProcessName: string | null = null;
@@ -831,118 +831,7 @@ export function LoadProcess(formContext: any, bpf: string[] = []): any {
     process.SetActiveStage = (stageId: string, callback: any) => getProcess?.setActiveStage(stageId, callback);
     return process;
 }
-export class FormBase<TBody, THeader, TTab, TGrid, TNavigation, TQuickForm, TProcess = any> {
-    public Body: TBody;
-    public Header: THeader;
-    public Tab: TTab;
-    public Grid: TGrid;
-    public Navigation: TNavigation;
-    public QuickForm: TQuickForm;
-    public Process: TProcess;
-    public ExecutionContext: DevKit.IExecutionContext;
-    public Utility: any;
-    public SidePanes: DevKit.ISidePanes;
-    public WebApi: DevKit.IWebApi;
-    public Copilot: DevKit.ICopilot;
-    public readonly FormId: string;
-    public readonly FormLabel: string;
-    public readonly FormType: number;
-    public readonly EntityId: string;
-    public readonly EntityName: string;
-    public readonly DataIsDirty: boolean;
-    public readonly DataIsValid: boolean;
-    public readonly Attributes: any;
-    public readonly Controls: any;
-    public readonly DataXml: string;
-    public readonly EntityIsDirty: boolean;
-    public readonly EntityIsValid: boolean;
-    public readonly EntityReference: any;
-    public readonly PrimaryAttributeValue: string;
-    public readonly ViewPortHeight: number;
-    public readonly ViewPortWidth: number;
-    public Save: (saveOptions?: any) => Promise<void>;
-    public Refresh: (save?: boolean) => Promise<void>;
-    public Close: () => void;
-    public SetFormNotification: (message: string, level: string, uniqueId: string) => boolean;
-    public ClearFormNotification: (uniqueId: string) => boolean;
-    public RefreshRibbon: (refreshAll?: boolean) => void;
-    public UiAddLoaded: (callback: (context: any) => void) => void;
-    public UiRemoveLoaded: (callback: (context: any) => void) => void;
-    public UiAddOnLoad: (callback: (context: any) => void) => void;
-    public UiRemoveOnLoad: (callback: (context: any) => void) => void;
-    public AddOnPostSave: (callback: (context: any) => void) => void;
-    public AddOnSave: (callback: (context: any) => void) => void;
-    public RemoveOnPostSave: (callback: (context: any) => void) => void;
-    public RemoveOnSave: (callback: (context: any) => void) => void;
-    public DataAddOnLoad: (callback: (context: any) => void) => void;
-    public DataRemoveOnLoad: (callback: (context: any) => void) => void;
-    public FormIsVisible: (formId: string) => boolean;
-    public FormNavigateToFormId: (formId: string) => void;
-    public FormNavigateToFormLabel: (formLabel: string) => void;
-    public FormSetVisible: (formId: string, visible: boolean) => void;
-    public SetFormEntityName: (name: string) => void;
-    constructor(
-        executionContext: any,
-        defaultWebResourceName: string | undefined,
-        formConfig: DevKit.IFormConfig
-    ) {
-        const form = LoadFormV3<TBody, THeader, TTab, TGrid, TNavigation, TQuickForm, TProcess>(
-            executionContext,
-            defaultWebResourceName,
-            formConfig
-        );
-        this.Body = form.Body;
-        this.Header = form.Header;
-        this.Tab = form.Tab;
-        this.Grid = form.Grid;
-        this.Navigation = form.Navigation;
-        this.QuickForm = form.QuickForm;
-        this.Process = form.Process;
-        this.ExecutionContext = form.ExecutionContext;
-        this.FormId = form.FormId;
-        this.FormLabel = form.FormLabel;
-        this.FormType = form.FormType;
-        this.EntityId = form.EntityId;
-        this.EntityName = form.EntityName;
-        this.DataIsDirty = form.DataIsDirty;
-        this.DataIsValid = form.DataIsValid;
-        this.Attributes = form.Attributes;
-        this.Controls = form.Controls;
-        this.DataXml = form.DataXml;
-        this.EntityIsDirty = form.EntityIsDirty;
-        this.EntityIsValid = form.EntityIsValid;
-        this.EntityReference = form.EntityReference;
-        this.PrimaryAttributeValue = form.PrimaryAttributeValue;
-        this.ViewPortHeight = form.ViewPortHeight;
-        this.ViewPortWidth = form.ViewPortWidth;
-        this.Save = form.Save;
-        this.Refresh = form.Refresh;
-        this.Close = form.Close;
-        this.SetFormNotification = form.SetFormNotification;
-        this.ClearFormNotification = form.ClearFormNotification;
-        this.RefreshRibbon = form.RefreshRibbon;
-        this.UiAddLoaded = form.UiAddLoaded;
-        this.UiRemoveLoaded = form.UiRemoveLoaded;
-        this.UiAddOnLoad = form.UiAddOnLoad;
-        this.UiRemoveOnLoad = form.UiRemoveOnLoad;
-        this.AddOnPostSave = form.AddOnPostSave;
-        this.AddOnSave = form.AddOnSave;
-        this.RemoveOnPostSave = form.RemoveOnPostSave;
-        this.RemoveOnSave = form.RemoveOnSave;
-        this.DataAddOnLoad = form.DataAddOnLoad;
-        this.DataRemoveOnLoad = form.DataRemoveOnLoad;
-        this.FormIsVisible = form.FormIsVisible;
-        this.FormNavigateToFormId = form.FormNavigateToFormId;
-        this.FormNavigateToFormLabel = form.FormNavigateToFormLabel;
-        this.FormSetVisible = form.FormSetVisible;
-        this.SetFormEntityName = form.SetFormEntityName;
-        this.Utility = form.Utility;
-        this.SidePanes = form.SidePanes;
-        this.WebApi = form.WebApi;
-        this.Copilot = form.Copilot;
-    }
-}
-export function LoadUtility(defaultWebResourceName?: string): any {
+function LoadUtility(defaultWebResourceName?: string): any {
     const utility: any = {};
     const xrm = getXrm();
     const getApp = xrm?.App;
@@ -1126,7 +1015,7 @@ export function LoadUtility(defaultWebResourceName?: string): any {
     utility.XmlEncode = (arg: string) => getEncoding?.xmlEncode(arg);
     return utility;
 }
-export function LoadFormDialog(formContext: any, fields: string[]): any {
+function LoadFormDialog(formContext: any, fields: string[]): any {
     const form: any = {};
     const fieldsLength = fields?.length || 0;
     for (let i = 0; i < fieldsLength; i++) {
@@ -1139,9 +1028,6 @@ export function LoadFormDialog(formContext: any, fields: string[]): any {
     form.Close = () => formContext?.ui?.close();
     return form;
 }
-type WebApiFieldType = DevKit.WebApiFieldType;
-const WEBAPI_FORMATTED_VALUE_SUFFIX = '@OData.Community.Display.V1.FormattedValue';
-const WEBAPI_LOOKUP_LOGICAL_NAME_SUFFIX = '@Microsoft.Dynamics.CRM.lookuplogicalname';
 const webApiTypeParsers: Record<string, (value: any) => any> = {
     DateTime: (value: any): Date | null => {
         if (value === null || value === undefined) return null;
@@ -1173,11 +1059,122 @@ const webApiTypeParsers: Record<string, (value: any) => any> = {
         return null;
     }
 };
-function webApiReturnGet(data: any, type?: WebApiFieldType): any {
+function webApiReturnGet(data: any, type?: DevKit.WebApiFieldType): any {
     if (data === null || data === undefined) return null;
     if (type === null || type === undefined) return data;
     const parser = webApiTypeParsers[type];
     return parser ? parser(data) : data;
+}
+export class FormBase<TBody, THeader, TTab, TGrid, TNavigation, TQuickForm, TProcess = any> {
+    public Body: TBody;
+    public Header: THeader;
+    public Tab: TTab;
+    public Grid: TGrid;
+    public Navigation: TNavigation;
+    public QuickForm: TQuickForm;
+    public Process: TProcess;
+    public ExecutionContext: DevKit.IExecutionContext;
+    public Utility: any;
+    public SidePanes: DevKit.ISidePanes;
+    public WebApi: DevKit.IWebApi;
+    public Copilot: DevKit.ICopilot;
+    public readonly FormId: string;
+    public readonly FormLabel: string;
+    public readonly FormType: number;
+    public readonly EntityId: string;
+    public readonly EntityName: string;
+    public readonly DataIsDirty: boolean;
+    public readonly DataIsValid: boolean;
+    public readonly Attributes: any;
+    public readonly Controls: any;
+    public readonly DataXml: string;
+    public readonly EntityIsDirty: boolean;
+    public readonly EntityIsValid: boolean;
+    public readonly EntityReference: any;
+    public readonly PrimaryAttributeValue: string;
+    public readonly ViewPortHeight: number;
+    public readonly ViewPortWidth: number;
+    public Save: (saveOptions?: any) => Promise<void>;
+    public Refresh: (save?: boolean) => Promise<void>;
+    public Close: () => void;
+    public SetFormNotification: (message: string, level: string, uniqueId: string) => boolean;
+    public ClearFormNotification: (uniqueId: string) => boolean;
+    public RefreshRibbon: (refreshAll?: boolean) => void;
+    public UiAddLoaded: (callback: (context: any) => void) => void;
+    public UiRemoveLoaded: (callback: (context: any) => void) => void;
+    public UiAddOnLoad: (callback: (context: any) => void) => void;
+    public UiRemoveOnLoad: (callback: (context: any) => void) => void;
+    public AddOnPostSave: (callback: (context: any) => void) => void;
+    public AddOnSave: (callback: (context: any) => void) => void;
+    public RemoveOnPostSave: (callback: (context: any) => void) => void;
+    public RemoveOnSave: (callback: (context: any) => void) => void;
+    public DataAddOnLoad: (callback: (context: any) => void) => void;
+    public DataRemoveOnLoad: (callback: (context: any) => void) => void;
+    public FormIsVisible: (formId: string) => boolean;
+    public FormNavigateToFormId: (formId: string) => void;
+    public FormNavigateToFormLabel: (formLabel: string) => void;
+    public FormSetVisible: (formId: string, visible: boolean) => void;
+    public SetFormEntityName: (name: string) => void;
+    constructor(
+        executionContext: any,
+        defaultWebResourceName: string | undefined,
+        formConfig: DevKit.IFormConfig
+    ) {
+        const form = LoadFormV3<TBody, THeader, TTab, TGrid, TNavigation, TQuickForm, TProcess>(
+            executionContext,
+            defaultWebResourceName,
+            formConfig
+        );
+        this.Body = form.Body;
+        this.Header = form.Header;
+        this.Tab = form.Tab;
+        this.Grid = form.Grid;
+        this.Navigation = form.Navigation;
+        this.QuickForm = form.QuickForm;
+        this.Process = form.Process;
+        this.ExecutionContext = form.ExecutionContext;
+        this.FormId = form.FormId;
+        this.FormLabel = form.FormLabel;
+        this.FormType = form.FormType;
+        this.EntityId = form.EntityId;
+        this.EntityName = form.EntityName;
+        this.DataIsDirty = form.DataIsDirty;
+        this.DataIsValid = form.DataIsValid;
+        this.Attributes = form.Attributes;
+        this.Controls = form.Controls;
+        this.DataXml = form.DataXml;
+        this.EntityIsDirty = form.EntityIsDirty;
+        this.EntityIsValid = form.EntityIsValid;
+        this.EntityReference = form.EntityReference;
+        this.PrimaryAttributeValue = form.PrimaryAttributeValue;
+        this.ViewPortHeight = form.ViewPortHeight;
+        this.ViewPortWidth = form.ViewPortWidth;
+        this.Save = form.Save;
+        this.Refresh = form.Refresh;
+        this.Close = form.Close;
+        this.SetFormNotification = form.SetFormNotification;
+        this.ClearFormNotification = form.ClearFormNotification;
+        this.RefreshRibbon = form.RefreshRibbon;
+        this.UiAddLoaded = form.UiAddLoaded;
+        this.UiRemoveLoaded = form.UiRemoveLoaded;
+        this.UiAddOnLoad = form.UiAddOnLoad;
+        this.UiRemoveOnLoad = form.UiRemoveOnLoad;
+        this.AddOnPostSave = form.AddOnPostSave;
+        this.AddOnSave = form.AddOnSave;
+        this.RemoveOnPostSave = form.RemoveOnPostSave;
+        this.RemoveOnSave = form.RemoveOnSave;
+        this.DataAddOnLoad = form.DataAddOnLoad;
+        this.DataRemoveOnLoad = form.DataRemoveOnLoad;
+        this.FormIsVisible = form.FormIsVisible;
+        this.FormNavigateToFormId = form.FormNavigateToFormId;
+        this.FormNavigateToFormLabel = form.FormNavigateToFormLabel;
+        this.FormSetVisible = form.FormSetVisible;
+        this.SetFormEntityName = form.SetFormEntityName;
+        this.Utility = form.Utility;
+        this.SidePanes = form.SidePanes;
+        this.WebApi = form.WebApi;
+        this.Copilot = form.Copilot;
+    }
 }
 export function defineWebApiField(
     obj: any,
@@ -1189,12 +1186,12 @@ export function defineWebApiField(
     const { logicalName, schemaName, entityCollectionName, entityLogicalName, readOnly, type } = config;
 
     const getFormattedValue = (): string | string[] => {
-        const formattedKey = logicalName + WEBAPI_FORMATTED_VALUE_SUFFIX;
+        const formattedKey = logicalName + '@OData.Community.Display.V1.FormattedValue';
         if (entity?.[formattedKey] === undefined || entity?.[formattedKey] === null) {
             return '';
         }
         if (entityCollectionName !== undefined && entityCollectionName.length > 0) {
-            const lookupKey = logicalName + WEBAPI_LOOKUP_LOGICAL_NAME_SUFFIX;
+            const lookupKey = logicalName + '@Microsoft.Dynamics.CRM.lookuplogicalname';
             if (entity?.[lookupKey] === entityLogicalName) {
                 return entity?.[formattedKey];
             }
@@ -1211,7 +1208,7 @@ export function defineWebApiField(
             return null;
         }
         if (entityCollectionName !== undefined && entityCollectionName.length > 0) {
-            const lookupKey = logicalName + WEBAPI_LOOKUP_LOGICAL_NAME_SUFFIX;
+            const lookupKey = logicalName + '@Microsoft.Dynamics.CRM.lookuplogicalname';
             if (entity?.[lookupKey] === undefined || entity?.[lookupKey] === entityLogicalName) {
                 return webApiReturnGet(entity?.[logicalName], type);
             }
@@ -1278,7 +1275,7 @@ export function createWebApiEntity<T extends DevKit.IWebApiEntity>(
             return e?.[alias];
         },
         getAliasedFormattedValue(alias: string, isMultiOptionSet = false): string | string[] {
-            const key = alias + WEBAPI_FORMATTED_VALUE_SUFFIX;
+            const key = alias + '@OData.Community.Display.V1.FormattedValue';
             if (e?.[key] === undefined || e?.[key] === null) {
                 return '';
             }
