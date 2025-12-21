@@ -1,11 +1,4 @@
-/**
- * Represents a GUID (Globally Unique Identifier) value.
- * Used for entity IDs and EntityReference lookups in Dynamics 365.
- * Template literal type enforces the GUID format: 8-4-4-4-12 hex digits separated by hyphens.
- * @example "00000000-0000-0000-0000-000000000000"
- */
 export type Guid = `${string}-${string}-${string}-${string}-${string}`;
-
 function getXrm(): typeof Xrm | undefined {
     if (typeof window !== 'undefined' && (window as any).Xrm !== undefined) {
         return (window as any).Xrm;
