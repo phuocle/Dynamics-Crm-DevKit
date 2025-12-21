@@ -1027,41 +1027,43 @@ function LoadFormDialog(formContext: any, fields: string[]): any {
     form.Close = () => formContext?.ui?.close();
     return form;
 }
-const webApiTypeParsers: Record<string, (value: any) => any> = {
-    DateTime: (value: any): Date | null => {
-        if (value === null || value === undefined) return null;
-        if (value instanceof Date) return isNaN(value.getTime()) ? null : value;
-        const trimmedString = String(value).trim();
-        if (trimmedString === '') return null;
-        const timestamp = Date.parse(trimmedString);
-        if (isNaN(timestamp)) return null;
-        const parsedDate = new Date(timestamp);
-        return isNaN(parsedDate.getTime()) ? null : parsedDate;
-    },
-    Integer: (value: any): number | null => {
-        const parsed = parseInt(value, 10);
-        return isNaN(parsed) ? null : parsed;
-    },
-    Number: (value: any): number | null => {
-        const parsed = Number(value);
-        return isNaN(parsed) ? null : parsed;
-    },
-    Boolean: (value: any): boolean | null => {
-        if (value === null || value === undefined) return null;
-        if (typeof value === 'boolean') return value;
-        if (typeof value === 'number') return value !== 0;
-        const stringValue = String(value).trim().toLowerCase();
-        const trueValues = ['true', '1', 'yes', 'y'];
-        const falseValues = ['false', '0', 'no', 'n'];
-        if (trueValues.includes(stringValue)) return true;
-        if (falseValues.includes(stringValue)) return false;
-        return null;
-    }
-};
+function getWebApiTypeParsers(): Record<string, (value: any) => any> {
+    return {
+        DateTime: (value: any): Date | null => {
+            if (value === null || value === undefined) return null;
+            if (value instanceof Date) return isNaN(value.getTime()) ? null : value;
+            const trimmedString = String(value).trim();
+            if (trimmedString === '') return null;
+            const timestamp = Date.parse(trimmedString);
+            if (isNaN(timestamp)) return null;
+            const parsedDate = new Date(timestamp);
+            return isNaN(parsedDate.getTime()) ? null : parsedDate;
+        },
+        Integer: (value: any): number | null => {
+            const parsed = parseInt(value, 10);
+            return isNaN(parsed) ? null : parsed;
+        },
+        Number: (value: any): number | null => {
+            const parsed = Number(value);
+            return isNaN(parsed) ? null : parsed;
+        },
+        Boolean: (value: any): boolean | null => {
+            if (value === null || value === undefined) return null;
+            if (typeof value === 'boolean') return value;
+            if (typeof value === 'number') return value !== 0;
+            const stringValue = String(value).trim().toLowerCase();
+            const trueValues = ['true', '1', 'yes', 'y'];
+            const falseValues = ['false', '0', 'no', 'n'];
+            if (trueValues.includes(stringValue)) return true;
+            if (falseValues.includes(stringValue)) return false;
+            return null;
+        }
+    };
+}
 function webApiReturnGet(data: any, type?: DevKit.WebApiFieldType): any {
     if (data === null || data === undefined) return null;
     if (type === null || type === undefined) return data;
-    const parser = webApiTypeParsers[type];
+    const parser = getWebApiTypeParsers()[type];
     return parser ? parser(data) : data;
 }
 export class FormBase<TBody, THeader, TTab, TGrid, TNavigation, TQuickForm, TProcess = any> {
