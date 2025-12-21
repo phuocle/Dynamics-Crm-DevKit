@@ -337,12 +337,6 @@ function LoadExecutionContext(executionContext: any): any {
     obj.SetSharedVariable = (key: string, value: any) => executionContext?.setSharedVariable(key, value);
     return obj;
 }
-/**
- * Loads the SidePanes API wrapper.
- * Provides access to side panes functionality in model-driven apps.
- * @returns An object implementing the ISidePanes interface
- * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app-sidepanes
- */
 export function LoadSidePanes(): any {
     const sidePanes: any = {};
     const xrm = getXrm();
@@ -353,12 +347,6 @@ export function LoadSidePanes(): any {
     sidePanes.GetSelected = () => (xrm as any)?.App?.sidePanes?.getSelectedPane();
     return sidePanes;
 }
-/**
- * Loads the WebApi wrapper.
- * Provides methods to use Web API to create and manage records and execute Web API actions and functions.
- * @returns An object implementing the IWebApi interface
- * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi
- */
 export function LoadWebApi(): DevKit.IWebApi {
     const obj: any = {} as DevKit.IWebApi;
     const xrm = getXrm();
@@ -543,12 +531,6 @@ export function LoadWebApi(): DevKit.IWebApi {
     });
     return obj;
 }
-/**
- * Loads the Copilot API wrapper.
- * Provides access to Copilot functionality for executing events and prompts.
- * @returns An object implementing the ICopilot interface
- * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-copilot
- */
 export function LoadCopilot(): DevKit.ICopilot {
     const obj: any = {};
     const xrm = getXrm();
@@ -571,20 +553,6 @@ export function LoadCopilot(): DevKit.ICopilot {
     };
     return obj;
 }
-function loadOthers(formContext: any, form: any, defaultWebResourceName: string | undefined): void {
-    form.SidePanes = LoadSidePanes();
-    form.WebApi = LoadWebApi();
-    form.Copilot = LoadCopilot();
-}
-/**
- * Loads a form with typed Body, Header, Tab, Grid, Navigation, QuickForm, and Process sections.
- * This is the main function for initializing a form in TypeScript (devkit.ts).
- * @param executionContext The execution context passed to the form event handler
- * @param defaultWebResourceName Optional default web resource name for utility functions
- * @param formConfig Configuration object specifying fields, tabs, grids, etc.
- * @returns A typed form object with all form functionality
- * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference
- */
 export function LoadFormV3<TBody = Record<string, any>, THeader = Record<string, any>, TTab = Record<string, any>, TGrid = Record<string, any>, TNavigation = Record<string, any>, TQuickForm = Record<string, any>, TProcess = any>(
     executionContext: any,
     defaultWebResourceName: string | undefined,
@@ -714,7 +682,20 @@ export function LoadFormV3<TBody = Record<string, any>, THeader = Record<string,
     bodyObj.Tab = tab.length > 0 ? loadTabs(formContext, tab) : {};
     form.Body = bodyObj;
     form.Header = header.length > 0 ? loadFields(formContext, header, 'header_') : {};
-    const process = LoadProcess(formContext);
+    form.Process = bpf.length > 0 ? LoadProcess(formContext, bpf) : {};
+    form.QuickForm = quick.length > 0 ? loadQuickForms(formContext, quick) : {};
+    form.Grid = grid.length > 0 ? loadGrids(formContext, grid) : {};
+    form.Navigation = navigation.length > 0 ? loadNavigations(formContext, navigation) : {};
+    form.Dialog = dialog.length > 0 ? LoadFormDialog(formContext, dialog) : {};
+    form.Utility = LoadUtility(defaultWebResourceName);
+    form.ExecutionContext = LoadExecutionContext(executionContext);
+    form.SidePanes = LoadSidePanes();
+    form.WebApi = LoadWebApi();
+    form.Copilot = LoadCopilot();
+    return form;
+}
+export function LoadProcess(formContext: any, bpf: string[] = []): any {
+    const process: any = {};
     if (bpf.length > 0) {
         let bpfProcessName: string | null = null;
         const bpfFieldNames: string[] = [];
@@ -730,18 +711,6 @@ export function LoadFormV3<TBody = Record<string, any>, THeader = Record<string,
             process[bpfProcessName] = bpfObj;
         }
     }
-    form.Process = process;
-    form.QuickForm = quick.length > 0 ? loadQuickForms(formContext, quick) : {};
-    form.Grid = grid.length > 0 ? loadGrids(formContext, grid) : {};
-    form.Navigation = navigation.length > 0 ? loadNavigations(formContext, navigation) : {};
-    form.Dialog = dialog.length > 0 ? LoadFormDialog(formContext, dialog) : {};
-    form.Utility = LoadUtility(defaultWebResourceName);
-    form.ExecutionContext = LoadExecutionContext(executionContext);
-    loadOthers(formContext, form, defaultWebResourceName);
-    return form;
-}
-export function LoadProcess(formContext: any): any {
-    const process: any = {};
     const getProcess = formContext?.data?.process;
     const getProcessUi = formContext?.ui?.process;
     const loadStep = (step: any) => {
@@ -862,39 +831,6 @@ export function LoadProcess(formContext: any): any {
     process.SetActiveStage = (stageId: string, callback: any) => getProcess?.setActiveStage(stageId, callback);
     return process;
 }
-/**
- * Configuration interface for form initialization.
- * Specifies which fields, tabs, grids, etc. to load on a form.
- */
-export interface IFormConfig {
-    /** Array of body field logical names */
-    body?: string[];
-    /** Array of header field logical names */
-    header?: string[];
-    /** Array of tab and section names in format "TabName___SectionName" */
-    tab?: string[];
-    /** Array of grid control names */
-    grid?: string[];
-    /** Array of navigation item IDs */
-    navigation?: string[];
-    /** Array of quick form names in format "QuickFormName___FieldName" */
-    quick?: string[];
-    /** Array of BPF fields in format "ProcessName___FieldName" */
-    bpf?: string[];
-}
-/**
- * Base class for typed entity forms.
- * Provides strongly-typed access to form controls, fields, tabs, grids, and more.
- * Extend this class in generated entity form files.
- * @template TBody Type definition for body fields
- * @template THeader Type definition for header fields
- * @template TTab Type definition for tabs
- * @template TGrid Type definition for grids
- * @template TNavigation Type definition for navigation items
- * @template TQuickForm Type definition for quick view forms
- * @template TProcess Type definition for business process flows
- * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference
- */
 export class FormBase<TBody, THeader, TTab, TGrid, TNavigation, TQuickForm, TProcess = any> {
     public Body: TBody;
     public Header: THeader;
@@ -948,7 +884,7 @@ export class FormBase<TBody, THeader, TTab, TGrid, TNavigation, TQuickForm, TPro
     constructor(
         executionContext: any,
         defaultWebResourceName: string | undefined,
-        formConfig: IFormConfig
+        formConfig: DevKit.IFormConfig
     ) {
         const form = LoadFormV3<TBody, THeader, TTab, TGrid, TNavigation, TQuickForm, TProcess>(
             executionContext,
@@ -1204,43 +1140,11 @@ export function LoadFormDialog(formContext: any, fields: string[]): any {
     return form;
 }
 
-// ============================================================================
-// WebApi Helper Types and Functions
-// For early-bound style WebApi coding (similar to C# early-bound)
-// ============================================================================
+type WebApiFieldType = DevKit.WebApiFieldType;
 
-/** Field type for WebApi fields */
-export type WebApiFieldType = 'Integer' | 'Number' | 'Boolean' | 'DateTime' | 'MultiOptionSet';
-
-/**
- * Configuration for a WebApi field
- * Used to define metadata for entity fields in WebApi operations
- */
-export interface IWebApiFieldConfig {
-    /** Logical name of the attribute (e.g. 'accountid', 'name') */
-    logicalName: string;
-    /** Schema name for lookup binding (e.g. 'ParentAccountId') */
-    schemaName?: string;
-    /** Entity collection name for lookup (e.g. 'accounts', 'contacts') */
-    entityCollectionName?: string;
-    /** Entity logical name for lookup (e.g. 'account', 'contact') */
-    entityLogicalName?: string;
-    /** Whether the field is read-only */
-    readOnly?: boolean;
-    /** Field type for parsing (Integer, Number, Boolean, DateTime, MultiOptionSet) */
-    type?: WebApiFieldType;
-}
-
-/** Map of field names to their configurations */
-export interface IWebApiFieldConfigMap {
-    [fieldName: string]: IWebApiFieldConfig;
-}
-
-/** Constants for OData annotations */
 const WEBAPI_FORMATTED_VALUE_SUFFIX = '@OData.Community.Display.V1.FormattedValue';
 const WEBAPI_LOOKUP_LOGICAL_NAME_SUFFIX = '@Microsoft.Dynamics.CRM.lookuplogicalname';
 
-/** Type parsers for different WebApi field types */
 const webApiTypeParsers: Record<string, (value: any) => any> = {
     DateTime: (value: any): Date | null => {
         if (value === null || value === undefined) return null;
@@ -1282,20 +1186,11 @@ function webApiReturnGet(data: any, type?: WebApiFieldType): any {
     const parser = webApiTypeParsers[type];
     return parser ? parser(data) : data;
 }
-
-/**
- * Define a WebApi field property on the target object with getter/setter
- * @param obj The target object to define property on
- * @param fieldName The property name
- * @param entity The raw OData entity object
- * @param config The field configuration
- * @param upsertEntity The entity object for Create/Update operations
- */
 export function defineWebApiField(
     obj: any,
     fieldName: string,
     entity: Record<string, any>,
-    config: IWebApiFieldConfig,
+    config: DevKit.IWebApiFieldConfig,
     upsertEntity: Record<string, any>
 ): void {
     const { logicalName, schemaName, entityCollectionName, entityLogicalName, readOnly, type } = config;
@@ -1351,12 +1246,9 @@ export function defineWebApiField(
         entity[logicalName] = value;
     };
 
-    // Define FormattedValue property
     Object.defineProperty(obj.FormattedValue, fieldName, {
         get: getFormattedValue
     });
-
-    // Define main property (readonly or read/write)
     if (readOnly) {
         Object.defineProperty(obj, fieldName, {
             get: getValue
@@ -1368,58 +1260,14 @@ export function defineWebApiField(
         });
     }
 }
-
-/**
- * Base interface for WebApi entity objects
- */
-export interface IWebApiEntity {
-    /** The entity object for Create/Update operations */
-    readonly Entity: Record<string, any>;
-    /** The OData entity object containing raw data */
-    readonly ODataEntity: Record<string, any>;
-    /** The entity name */
-    readonly EntityName: string;
-    /** The entity collection name */
-    readonly EntityCollectionName: string;
-    /** The @odata.etag for caching */
-    readonly '@odata.etag': string | undefined;
-    /** Formatted values for all fields */
-    readonly FormattedValue: Record<string, any>;
-
-    /**
-     * Get the raw value of an aliased field (from $expand or related entity)
-     * @param alias The alias field name
-     * @param isMultiOptionSet True if the field is a multi-option set
-     * @returns The raw value or null if not found
-     */
-    getAliasedValue(alias: string, isMultiOptionSet?: boolean): any;
-
-    /**
-     * Get the formatted value of an aliased field
-     * @param alias The alias field name
-     * @param isMultiOptionSet True if the field is a multi-option set
-     * @returns The formatted value or empty string if not found
-     */
-    getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string | string[];
-}
-
-/**
- * Creates a base WebApi entity object with common properties and methods
- * @param entity The raw OData entity object
- * @param entityName The logical name of the entity
- * @param entityCollectionName The collection name of the entity
- * @param fieldConfigMap Map of field configurations
- * @returns A WebApi entity object
- */
-export function createWebApiEntity<T extends IWebApiEntity>(
+export function createWebApiEntity<T extends DevKit.IWebApiEntity>(
     entity: Record<string, any> | undefined,
     entityName: string,
     entityCollectionName: string,
-    fieldConfigMap: IWebApiFieldConfigMap
+    fieldConfigMap: DevKit.IWebApiFieldConfigMap
 ): T {
     const e = entity ?? {};
     const upsertEntity: Record<string, any> = {};
-
     const webApiEntity: any = {
         ODataEntity: e,
         FormattedValue: {},
@@ -1427,7 +1275,6 @@ export function createWebApiEntity<T extends IWebApiEntity>(
         EntityName: entityName,
         EntityCollectionName: entityCollectionName,
         '@odata.etag': e?.['@odata.etag'],
-
         getAliasedValue(alias: string, isMultiOptionSet = false): any {
             if (e?.[alias] === undefined || e?.[alias] === null) {
                 return null;
@@ -1437,7 +1284,6 @@ export function createWebApiEntity<T extends IWebApiEntity>(
             }
             return e?.[alias];
         },
-
         getAliasedFormattedValue(alias: string, isMultiOptionSet = false): string | string[] {
             const key = alias + WEBAPI_FORMATTED_VALUE_SUFFIX;
             if (e?.[key] === undefined || e?.[key] === null) {
@@ -1449,11 +1295,8 @@ export function createWebApiEntity<T extends IWebApiEntity>(
             return e?.[key];
         }
     };
-
-    // Define all fields using the field configuration
     for (const fieldName in fieldConfigMap) {
         defineWebApiField(webApiEntity, fieldName, e, fieldConfigMap[fieldName], upsertEntity);
     }
-
     return webApiEntity as T;
 }

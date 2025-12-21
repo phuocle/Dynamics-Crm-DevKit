@@ -2381,4 +2381,40 @@ declare namespace DevKit {
          */
         ExecutePrompt(promptText: string, successCallback?: (result: any) => void, errorCallback?: (error: any) => void): Promise<any> | void;
     }
+
+    interface IFormConfig {
+        body?: string[];
+        header?: string[];
+        tab?: string[];
+        grid?: string[];
+        navigation?: string[];
+        quick?: string[];
+        bpf?: string[];
+    }
+
+    type WebApiFieldType = 'Integer' | 'Number' | 'Boolean' | 'DateTime' | 'MultiOptionSet';
+
+    interface IWebApiFieldConfig {
+        logicalName: string;
+        schemaName?: string;
+        entityCollectionName?: string;
+        entityLogicalName?: string;
+        readOnly?: boolean;
+        type?: WebApiFieldType;
+    }
+
+    interface IWebApiFieldConfigMap {
+        [fieldName: string]: IWebApiFieldConfig;
+    }
+
+    interface IWebApiEntity {
+        readonly Entity: Record<string, any>;
+        readonly ODataEntity: Record<string, any>;
+        readonly EntityName: string;
+        readonly EntityCollectionName: string;
+        readonly '@odata.etag': string | undefined;
+        readonly FormattedValue: Record<string, any>;
+        getAliasedValue(alias: string, isMultiOptionSet?: boolean): any;
+        getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string | string[];
+    }
 }
