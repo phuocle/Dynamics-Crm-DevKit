@@ -1,4 +1,3 @@
-export type Guid = `${string}-${string}-${string}-${string}-${string}`;
 function getXrm(): typeof Xrm | undefined {
     if (typeof window !== 'undefined' && (window as any).Xrm !== undefined) {
         return (window as any).Xrm;
