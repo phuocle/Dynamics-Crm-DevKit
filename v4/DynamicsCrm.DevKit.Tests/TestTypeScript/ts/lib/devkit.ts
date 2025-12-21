@@ -553,7 +553,7 @@ function LoadCopilot(): DevKit.ICopilot {
     };
     return obj;
 }
-export function LoadFormV3<TBody = Record<string, any>, THeader = Record<string, any>, TTab = Record<string, any>, TGrid = Record<string, any>, TNavigation = Record<string, any>, TQuickForm = Record<string, any>, TProcess = any>(
+function LoadFormV3<TBody = Record<string, any>, THeader = Record<string, any>, TTab = Record<string, any>, TGrid = Record<string, any>, TNavigation = Record<string, any>, TQuickForm = Record<string, any>, TProcess = any>(
     executionContext: any,
     defaultWebResourceName: string | undefined,
     formConfig: {
