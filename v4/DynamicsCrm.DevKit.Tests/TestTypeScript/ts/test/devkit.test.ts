@@ -4032,11 +4032,1748 @@ describe('DevKit Module', () => {
         });
     });
 
+    // =========================================================================
+    // LoadProcess - BPF (Business Process Flow) Tests
+    // =========================================================================
+    describe('LoadProcess - BPF Tests', () => {
+        let mockFormContext: any;
+        let mockExecutionContext: any;
+        let mockProcess: any;
+        let mockProcessUi: any;
+        let mockStep: any;
+        let mockStage: any;
+
+        beforeEach(() => {
+            mockStep = {
+                getAttribute: jest.fn().mockReturnValue('stepAttribute'),
+                getName: jest.fn().mockReturnValue('Step Name'),
+                getProgress: jest.fn().mockReturnValue(50),
+                isRequired: jest.fn().mockReturnValue(true),
+                setProgress: jest.fn()
+            };
+
+            mockStage = {
+                getCategory: jest.fn().mockReturnValue({ getValue: () => 0 }),
+                getEntityName: jest.fn().mockReturnValue('account'),
+                getId: jest.fn().mockReturnValue('{stage-guid}'),
+                getName: jest.fn().mockReturnValue('Qualify'),
+                getStatus: jest.fn().mockReturnValue('active'),
+                getSteps: jest.fn().mockReturnValue([mockStep]),
+                getNavigationBehavior: jest.fn().mockReturnValue({ allowCreateNew: undefined })
+            };
+
+            mockProcess = {
+                getActivePath: jest.fn().mockReturnValue({
+                    get: jest.fn().mockReturnValue(mockStage),
+                    getLength: jest.fn().mockReturnValue(3)
+                }),
+                getActiveProcess: jest.fn().mockReturnValue({
+                    getId: jest.fn().mockReturnValue('{process-guid}'),
+                    getName: jest.fn().mockReturnValue('Lead to Opportunity'),
+                    isRendered: jest.fn().mockReturnValue(true),
+                    getStages: jest.fn().mockReturnValue({
+                        get: jest.fn().mockReturnValue(mockStage),
+                        getLength: jest.fn().mockReturnValue(4)
+                    })
+                }),
+                getActiveStage: jest.fn().mockReturnValue(mockStage),
+                getInstanceId: jest.fn().mockReturnValue('{instance-guid}'),
+                getInstanceName: jest.fn().mockReturnValue('Opportunity Process Instance'),
+                getSelectedStage: jest.fn().mockReturnValue(mockStage),
+                getStatus: jest.fn().mockReturnValue('Active'),
+                setStatus: jest.fn(),
+                addOnPreProcessStatusChange: jest.fn(),
+                addOnPreStageChange: jest.fn(),
+                addOnProcessStatusChange: jest.fn(),
+                addOnStageChange: jest.fn(),
+                addOnStageSelected: jest.fn(),
+                getEnabledProcesses: jest.fn().mockImplementation((callback: any) => {
+                    callback({ 'process1': 'Process One', 'process2': 'Process Two' });
+                }),
+                moveNext: jest.fn(),
+                movePrevious: jest.fn(),
+                getProcessInstances: jest.fn().mockImplementation((callback: any) => {
+                    callback([{
+                        ProcessDefinitionID: '{def-id}',
+                        ProcessDefinitionName: 'Process Def',
+                        CreatedOn: '2024-01-01',
+                        CreatedOnDate: new Date(),
+                        ProcessInstanceID: '{inst-id}',
+                        ProcessInstanceName: 'Instance Name',
+                        StatusCodeName: 'Active'
+                    }]);
+                }),
+                removeOnPreProcessStatusChange: jest.fn(),
+                removeOnPreStageChange: jest.fn(),
+                removeOnProcessStatusChange: jest.fn(),
+                removeOnStageChange: jest.fn(),
+                removeOnStageSelected: jest.fn(),
+                setActiveProcess: jest.fn(),
+                setActiveProcessInstance: jest.fn(),
+                setActiveStage: jest.fn()
+            };
+
+            mockProcessUi = {
+                getDisplayState: jest.fn().mockReturnValue('expanded'),
+                setDisplayState: jest.fn(),
+                getVisible: jest.fn().mockReturnValue(true),
+                setVisible: jest.fn(),
+                reflow: jest.fn()
+            };
+
+            mockFormContext = {
+                data: {
+                    entity: {
+                        getId: jest.fn().mockReturnValue('{guid}'),
+                        getEntityName: jest.fn().mockReturnValue('opportunity'),
+                        getEntityReference: jest.fn().mockReturnValue({}),
+                        getPrimaryAttributeValue: jest.fn(),
+                        getDataXml: jest.fn(),
+                        getIsDirty: jest.fn().mockReturnValue(false),
+                        isValid: jest.fn().mockReturnValue(true),
+                        addOnSave: jest.fn(),
+                        removeOnSave: jest.fn(),
+                        addOnPostSave: jest.fn(),
+                        removeOnPostSave: jest.fn(),
+                        attributes: { get: jest.fn() }
+                    },
+                    process: mockProcess,
+                    getIsDirty: jest.fn().mockReturnValue(false),
+                    isValid: jest.fn().mockReturnValue(true),
+                    refresh: jest.fn(),
+                    save: jest.fn(),
+                    addOnLoad: jest.fn(),
+                    removeOnLoad: jest.fn()
+                },
+                ui: {
+                    getFormType: jest.fn().mockReturnValue(2),
+                    getViewPortHeight: jest.fn().mockReturnValue(800),
+                    getViewPortWidth: jest.fn().mockReturnValue(1200),
+                    close: jest.fn(),
+                    setFormNotification: jest.fn(),
+                    clearFormNotification: jest.fn(),
+                    refreshRibbon: jest.fn(),
+                    addLoaded: jest.fn(),
+                    removeLoaded: jest.fn(),
+                    addOnLoad: jest.fn(),
+                    removeOnLoad: jest.fn(),
+                    controls: { get: jest.fn() },
+                    tabs: { get: jest.fn() },
+                    formSelector: {
+                        getCurrentItem: jest.fn().mockReturnValue({ getId: jest.fn(), getLabel: jest.fn() }),
+                        items: { getLength: jest.fn(), get: jest.fn() }
+                    },
+                    navigation: { items: { getLength: jest.fn().mockReturnValue(0), get: jest.fn() } },
+                    quickForms: { get: jest.fn() },
+                    process: mockProcessUi
+                },
+                getControl: jest.fn().mockImplementation((name: string) => ({
+                    getName: () => name,
+                    getControlType: jest.fn().mockReturnValue('standard'),
+                    getLabel: jest.fn(),
+                    setLabel: jest.fn(),
+                    getVisible: jest.fn().mockReturnValue(true),
+                    setVisible: jest.fn(),
+                    getDisabled: jest.fn().mockReturnValue(false),
+                    setDisabled: jest.fn(),
+                    setFocus: jest.fn(),
+                    setNotification: jest.fn(),
+                    clearNotification: jest.fn(),
+                    addNotification: jest.fn(),
+                    getAttribute: jest.fn().mockReturnValue({ getName: () => name })
+                })),
+                getAttribute: jest.fn()
+            };
+
+            mockExecutionContext = {
+                getFormContext: jest.fn().mockReturnValue(mockFormContext),
+                getDepth: jest.fn().mockReturnValue(1),
+                getEventArgs: jest.fn().mockReturnValue({
+                    getDataLoadState: jest.fn().mockReturnValue(1),
+                    getSaveMode: jest.fn(),
+                    isDefaultPrevented: jest.fn().mockReturnValue(false),
+                    preventDefault: jest.fn(),
+                    preventDefaultOnError: jest.fn(),
+                    disableAsyncTimeout: jest.fn()
+                }),
+                getEventSource: jest.fn(),
+                getSharedVariable: jest.fn(),
+                setSharedVariable: jest.fn()
+            };
+        });
+
+        test('should load Process with BPF fields', () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, {
+                bpf: ['LeadProcess___estimatedclosedate', 'LeadProcess___estimatedvalue']
+            });
+
+            expect(form.Process).toBeDefined();
+        });
+
+        test('should access ActivePath', () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, { bpf: ['TestProcess___field1'] });
+            const activePath = form.Process.ActivePath;
+
+            expect(activePath).toBeDefined();
+            expect(activePath.getLength()).toBe(3);
+        });
+
+        test('should access ActivePath.get(index)', () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, { bpf: ['TestProcess___field1'] });
+            const stage = form.Process.ActivePath.get(0);
+
+            expect(stage).toBeDefined();
+            expect(stage.Name).toBe('Qualify');
+        });
+
+        test('should iterate ActivePath with forEach', () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, { bpf: ['TestProcess___field1'] });
+            const callback = jest.fn();
+
+            form.Process.ActivePath.forEach(callback);
+
+            expect(callback).toHaveBeenCalledTimes(3);
+        });
+
+        test('should access ActiveProcess', () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, { bpf: ['TestProcess___field1'] });
+            const activeProcess = form.Process.ActiveProcess;
+
+            expect(activeProcess).toBeDefined();
+            expect(activeProcess.Id).toBe('{process-guid}');
+            expect(activeProcess.Name).toBe('Lead to Opportunity');
+            expect(activeProcess.IsRendered).toBe(true);
+        });
+
+        test('should access ActiveProcess.Stages', () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, { bpf: ['TestProcess___field1'] });
+            const stages = form.Process.ActiveProcess.Stages;
+
+            expect(stages).toBeDefined();
+            expect(stages.getLength()).toBe(4);
+        });
+
+        test('should access ActiveProcess.Stages.get(index)', () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, { bpf: ['TestProcess___field1'] });
+            const stage = form.Process.ActiveProcess.Stages.get(0);
+
+            expect(stage).toBeDefined();
+            expect(stage.Name).toBe('Qualify');
+        });
+
+        test('should iterate ActiveProcess.Stages with forEach', () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, { bpf: ['TestProcess___field1'] });
+            const callback = jest.fn();
+
+            form.Process.ActiveProcess.Stages.forEach(callback);
+
+            expect(callback).toHaveBeenCalledTimes(4);
+        });
+
+        test('should access ActiveStage', () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, { bpf: ['TestProcess___field1'] });
+            const activeStage = form.Process.ActiveStage;
+
+            expect(activeStage).toBeDefined();
+            expect(activeStage.Id).toBe('{stage-guid}');
+            expect(activeStage.EntityName).toBe('account');
+            expect(activeStage.Status).toBe('active');
+            expect(activeStage.Category).toBe(0);
+        });
+
+        test('should access ActiveStage.Steps', () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, { bpf: ['TestProcess___field1'] });
+            const steps = form.Process.ActiveStage.Steps;
+
+            expect(steps).toBeDefined();
+            expect(steps.length).toBe(1);
+            expect(steps[0].Name).toBe('Step Name');
+            expect(steps[0].Progress).toBe(50);
+            expect(steps[0].Required).toBe(true);
+            expect(steps[0].Attribute).toBe('stepAttribute');
+        });
+
+        test('should call Step.SetProgress', () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, { bpf: ['TestProcess___field1'] });
+            const step = form.Process.ActiveStage.Steps[0];
+
+            step.SetProgress(100, 'Completed');
+
+            expect(mockStep.setProgress).toHaveBeenCalledWith(100, 'Completed');
+        });
+
+        test('should call Stage.AllowCreateNew', () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, { bpf: ['TestProcess___field1'] });
+            const callback = jest.fn();
+
+            form.Process.ActiveStage.AllowCreateNew(callback);
+
+            expect(mockStage.getNavigationBehavior).toHaveBeenCalled();
+        });
+
+        test('should access InstanceId', () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, { bpf: ['TestProcess___field1'] });
+
+            expect(form.Process.InstanceId).toBe('{instance-guid}');
+        });
+
+        test('should access InstanceName', () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, { bpf: ['TestProcess___field1'] });
+
+            expect(form.Process.InstanceName).toBe('Opportunity Process Instance');
+        });
+
+        test('should access SelectedStage', () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, { bpf: ['TestProcess___field1'] });
+
+            expect(form.Process.SelectedStage).toBeDefined();
+            expect(form.Process.SelectedStage.Name).toBe('Qualify');
+        });
+
+        test('should get and set DisplayState', () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, { bpf: ['TestProcess___field1'] });
+
+            expect(form.Process.DisplayState).toBe('expanded');
+
+            form.Process.DisplayState = 'collapsed';
+            expect(mockProcessUi.setDisplayState).toHaveBeenCalledWith('collapsed');
+        });
+
+        test('should get and set Status', () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, { bpf: ['TestProcess___field1'] });
+
+            expect(form.Process.Status).toBe('Active');
+
+            form.Process.Status = 'Finished';
+            expect(mockProcess.setStatus).toHaveBeenCalledWith('Finished');
+        });
+
+        test('should get and set Visible', () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, { bpf: ['TestProcess___field1'] });
+
+            expect(form.Process.Visible).toBe(true);
+
+            form.Process.Visible = false;
+            expect(mockProcessUi.setVisible).toHaveBeenCalledWith(false);
+        });
+
+        test('should call AddOnPreProcessStatusChange', () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, { bpf: ['TestProcess___field1'] });
+            const callback = jest.fn();
+
+            form.Process.AddOnPreProcessStatusChange(callback);
+
+            expect(mockProcess.addOnPreProcessStatusChange).toHaveBeenCalledWith(callback);
+        });
+
+        test('should call AddOnPreStageChange', () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, { bpf: ['TestProcess___field1'] });
+            const callback = jest.fn();
+
+            form.Process.AddOnPreStageChange(callback);
+
+            expect(mockProcess.addOnPreStageChange).toHaveBeenCalledWith(callback);
+        });
+
+        test('should call AddOnProcessStatusChange', () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, { bpf: ['TestProcess___field1'] });
+            const callback = jest.fn();
+
+            form.Process.AddOnProcessStatusChange(callback);
+
+            expect(mockProcess.addOnProcessStatusChange).toHaveBeenCalledWith(callback);
+        });
+
+        test('should call AddOnStageChange', () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, { bpf: ['TestProcess___field1'] });
+            const callback = jest.fn();
+
+            form.Process.AddOnStageChange(callback);
+
+            expect(mockProcess.addOnStageChange).toHaveBeenCalledWith(callback);
+        });
+
+        test('should call AddOnStageSelected', () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, { bpf: ['TestProcess___field1'] });
+            const callback = jest.fn();
+
+            form.Process.AddOnStageSelected(callback);
+
+            expect(mockProcess.addOnStageSelected).toHaveBeenCalledWith(callback);
+        });
+
+        test('should call EnabledProcesses', () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, { bpf: ['TestProcess___field1'] });
+            const callback = jest.fn();
+
+            form.Process.EnabledProcesses(callback);
+
+            expect(mockProcess.getEnabledProcesses).toHaveBeenCalled();
+            expect(callback).toHaveBeenCalledWith([
+                { ProcessId: 'process1', ProcessName: 'Process One' },
+                { ProcessId: 'process2', ProcessName: 'Process Two' }
+            ]);
+        });
+
+        test('should call MoveNext', () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, { bpf: ['TestProcess___field1'] });
+            const callback = jest.fn();
+
+            form.Process.MoveNext(callback);
+
+            expect(mockProcess.moveNext).toHaveBeenCalledWith(callback);
+        });
+
+        test('should call MovePrevious', () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, { bpf: ['TestProcess___field1'] });
+            const callback = jest.fn();
+
+            form.Process.MovePrevious(callback);
+
+            expect(mockProcess.movePrevious).toHaveBeenCalledWith(callback);
+        });
+
+        test('should call ProcessInstances', () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, { bpf: ['TestProcess___field1'] });
+            const callback = jest.fn();
+
+            form.Process.ProcessInstances(callback);
+
+            expect(mockProcess.getProcessInstances).toHaveBeenCalled();
+            expect(callback).toHaveBeenCalled();
+        });
+
+        test('should call Reflow', () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, { bpf: ['TestProcess___field1'] });
+
+            form.Process.Reflow(true, 'stage1', 'stage2');
+
+            expect(mockProcessUi.reflow).toHaveBeenCalledWith(true, 'stage1', 'stage2');
+        });
+
+        test('should call RemoveOnPreProcessStatusChange', () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, { bpf: ['TestProcess___field1'] });
+            const callback = jest.fn();
+
+            form.Process.RemoveOnPreProcessStatusChange(callback);
+
+            expect(mockProcess.removeOnPreProcessStatusChange).toHaveBeenCalledWith(callback);
+        });
+
+        test('should call RemoveOnPreStageChange', () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, { bpf: ['TestProcess___field1'] });
+            const callback = jest.fn();
+
+            form.Process.RemoveOnPreStageChange(callback);
+
+            expect(mockProcess.removeOnPreStageChange).toHaveBeenCalledWith(callback);
+        });
+
+        test('should call RemoveOnProcessStatusChange', () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, { bpf: ['TestProcess___field1'] });
+            const callback = jest.fn();
+
+            form.Process.RemoveOnProcessStatusChange(callback);
+
+            expect(mockProcess.removeOnProcessStatusChange).toHaveBeenCalledWith(callback);
+        });
+
+        test('should call RemoveOnStageChange', () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, { bpf: ['TestProcess___field1'] });
+            const callback = jest.fn();
+
+            form.Process.RemoveOnStageChange(callback);
+
+            expect(mockProcess.removeOnStageChange).toHaveBeenCalledWith(callback);
+        });
+
+        test('should call RemoveOnStageSelected', () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, { bpf: ['TestProcess___field1'] });
+            const callback = jest.fn();
+
+            form.Process.RemoveOnStageSelected(callback);
+
+            expect(mockProcess.removeOnStageSelected).toHaveBeenCalledWith(callback);
+        });
+
+        test('should call SetActiveProcess', () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, { bpf: ['TestProcess___field1'] });
+            const callback = jest.fn();
+
+            form.Process.SetActiveProcess('{new-process-id}', callback);
+
+            expect(mockProcess.setActiveProcess).toHaveBeenCalledWith('{new-process-id}', callback);
+        });
+
+        test('should call SetActiveProcessInstance', () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, { bpf: ['TestProcess___field1'] });
+            const callback = jest.fn();
+
+            form.Process.SetActiveProcessInstance('{instance-id}', callback);
+
+            expect(mockProcess.setActiveProcessInstance).toHaveBeenCalledWith('{instance-id}', callback);
+        });
+
+        test('should call SetActiveStage', () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, { bpf: ['TestProcess___field1'] });
+            const callback = jest.fn();
+
+            form.Process.SetActiveStage('{stage-id}', callback);
+
+            expect(mockProcess.setActiveStage).toHaveBeenCalledWith('{stage-id}', callback);
+        });
+    });
+
+    // =========================================================================
+    // LoadField - Lookup Methods Tests
+    // =========================================================================
+    describe('LoadField - Lookup Methods', () => {
+        let mockFormContext: any;
+        let mockExecutionContext: any;
+        let mockAddCustomFilter: jest.Mock;
+        let mockAddCustomView: jest.Mock;
+        let mockAddOnLookupTagClick: jest.Mock;
+        let mockRemoveOnLookupTagClick: jest.Mock;
+        let mockAddPreSearch: jest.Mock;
+        let mockRemovePreSearch: jest.Mock;
+        let mockAddNotification: jest.Mock;
+
+        beforeEach(() => {
+            mockAddCustomFilter = jest.fn();
+            mockAddCustomView = jest.fn();
+            mockAddOnLookupTagClick = jest.fn();
+            mockRemoveOnLookupTagClick = jest.fn();
+            mockAddPreSearch = jest.fn();
+            mockRemovePreSearch = jest.fn();
+            mockAddNotification = jest.fn();
+
+            mockFormContext = {
+                data: {
+                    entity: {
+                        getId: jest.fn().mockReturnValue('{guid}'),
+                        getEntityName: jest.fn().mockReturnValue('account'),
+                        getEntityReference: jest.fn().mockReturnValue({}),
+                        getPrimaryAttributeValue: jest.fn(),
+                        getDataXml: jest.fn(),
+                        getIsDirty: jest.fn().mockReturnValue(false),
+                        isValid: jest.fn().mockReturnValue(true),
+                        addOnSave: jest.fn(),
+                        removeOnSave: jest.fn(),
+                        addOnPostSave: jest.fn(),
+                        removeOnPostSave: jest.fn(),
+                        attributes: {
+                            get: jest.fn().mockImplementation((name: string) => ({
+                                getName: () => name,
+                                getValue: jest.fn().mockReturnValue([{ id: '{lookup-id}', name: 'Lookup Name', entityType: 'contact' }]),
+                                setValue: jest.fn(),
+                                getAttributeType: jest.fn().mockReturnValue('lookup'),
+                                getFormat: jest.fn().mockReturnValue('lookup'),
+                                getIsDirty: jest.fn().mockReturnValue(false),
+                                isValid: jest.fn().mockReturnValue(true),
+                                getRequiredLevel: jest.fn().mockReturnValue('none'),
+                                setRequiredLevel: jest.fn(),
+                                getSubmitMode: jest.fn().mockReturnValue('dirty'),
+                                setSubmitMode: jest.fn(),
+                                addOnChange: jest.fn(),
+                                removeOnChange: jest.fn(),
+                                fireOnChange: jest.fn(),
+                                setIsValid: jest.fn()
+                            }))
+                        }
+                    },
+                    getIsDirty: jest.fn().mockReturnValue(false),
+                    isValid: jest.fn().mockReturnValue(true),
+                    refresh: jest.fn(),
+                    save: jest.fn(),
+                    addOnLoad: jest.fn(),
+                    removeOnLoad: jest.fn()
+                },
+                ui: {
+                    getFormType: jest.fn().mockReturnValue(2),
+                    getViewPortHeight: jest.fn().mockReturnValue(800),
+                    getViewPortWidth: jest.fn().mockReturnValue(1200),
+                    close: jest.fn(),
+                    setFormNotification: jest.fn(),
+                    clearFormNotification: jest.fn(),
+                    refreshRibbon: jest.fn(),
+                    addLoaded: jest.fn(),
+                    removeLoaded: jest.fn(),
+                    addOnLoad: jest.fn(),
+                    removeOnLoad: jest.fn(),
+                    controls: { get: jest.fn() },
+                    tabs: { get: jest.fn() },
+                    formSelector: {
+                        getCurrentItem: jest.fn().mockReturnValue({ getId: jest.fn(), getLabel: jest.fn() }),
+                        items: { getLength: jest.fn(), get: jest.fn() }
+                    },
+                    navigation: { items: { getLength: jest.fn().mockReturnValue(0), get: jest.fn() } },
+                    quickForms: { get: jest.fn() }
+                },
+                getControl: jest.fn().mockImplementation((name: string) => ({
+                    getName: () => name,
+                    getControlType: jest.fn().mockReturnValue('lookup'),
+                    getLabel: jest.fn().mockReturnValue('Primary Contact'),
+                    setLabel: jest.fn(),
+                    getVisible: jest.fn().mockReturnValue(true),
+                    setVisible: jest.fn(),
+                    getDisabled: jest.fn().mockReturnValue(false),
+                    setDisabled: jest.fn(),
+                    setFocus: jest.fn(),
+                    setNotification: jest.fn(),
+                    clearNotification: jest.fn(),
+                    addCustomFilter: mockAddCustomFilter,
+                    addCustomView: mockAddCustomView,
+                    addOnLookupTagClick: mockAddOnLookupTagClick,
+                    removeOnLookupTagClick: mockRemoveOnLookupTagClick,
+                    addPreSearch: mockAddPreSearch,
+                    removePreSearch: mockRemovePreSearch,
+                    addNotification: mockAddNotification,
+                    getAttribute: jest.fn().mockReturnValue({ getName: () => name }),
+                    addOnOutputChange: jest.fn(),
+                    removeOnOutputChange: jest.fn()
+                })),
+                getAttribute: jest.fn()
+            };
+
+            mockExecutionContext = {
+                getFormContext: jest.fn().mockReturnValue(mockFormContext),
+                getDepth: jest.fn().mockReturnValue(1),
+                getEventArgs: jest.fn().mockReturnValue({
+                    getDataLoadState: jest.fn().mockReturnValue(1),
+                    getSaveMode: jest.fn(),
+                    isDefaultPrevented: jest.fn().mockReturnValue(false),
+                    preventDefault: jest.fn(),
+                    preventDefaultOnError: jest.fn(),
+                    disableAsyncTimeout: jest.fn()
+                }),
+                getEventSource: jest.fn(),
+                getSharedVariable: jest.fn(),
+                setSharedVariable: jest.fn()
+            };
+        });
+
+        test('should call AddCustomFilter on lookup field', () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, {
+                body: ['primarycontactid']
+            });
+
+            form.Body.primarycontactid.AddCustomFilter('<filter type="and"><condition attribute="statuscode" operator="eq" value="1"/></filter>', 'contact');
+
+            expect(mockAddCustomFilter).toHaveBeenCalled();
+        });
+
+        test('should call AddCustomView on lookup field', () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, {
+                body: ['primarycontactid']
+            });
+
+            form.Body.primarycontactid.AddCustomView(
+                '{00000000-0000-0000-0000-000000000001}',
+                'contact',
+                'Active Contacts',
+                '<fetch><entity name="contact"/></fetch>',
+                '<grid/>',
+                true
+            );
+
+            expect(mockAddCustomView).toHaveBeenCalledWith(
+                '{00000000-0000-0000-0000-000000000001}',
+                'contact',
+                'Active Contacts',
+                '<fetch><entity name="contact"/></fetch>',
+                '<grid/>',
+                true
+            );
+        });
+
+        test('should call AddLookupTagClick on lookup field', () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, {
+                body: ['primarycontactid']
+            });
+            const callback = jest.fn();
+
+            form.Body.primarycontactid.AddLookupTagClick(callback);
+
+            expect(mockAddOnLookupTagClick).toHaveBeenCalledWith(callback);
+        });
+
+        test('should call RemoveLookupTagClick on lookup field', () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, {
+                body: ['primarycontactid']
+            });
+            const callback = jest.fn();
+
+            form.Body.primarycontactid.RemoveLookupTagClick(callback);
+
+            expect(mockRemoveOnLookupTagClick).toHaveBeenCalledWith(callback);
+        });
+
+        test('should call AddPreSearch on lookup field', () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, {
+                body: ['primarycontactid']
+            });
+            const callback = jest.fn();
+
+            form.Body.primarycontactid.AddPreSearch(callback);
+
+            expect(mockAddPreSearch).toHaveBeenCalledWith(callback);
+        });
+
+        test('should call RemovePreSearch on lookup field', () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, {
+                body: ['primarycontactid']
+            });
+            const callback = jest.fn();
+
+            form.Body.primarycontactid.RemovePreSearch(callback);
+
+            expect(mockRemovePreSearch).toHaveBeenCalledWith(callback);
+        });
+
+        test('should call AddNotification on lookup field', () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, {
+                body: ['primarycontactid']
+            });
+            const callback = jest.fn();
+
+            form.Body.primarycontactid.AddNotification('Field required', 'ERROR', 'notif1', callback);
+
+            expect(mockAddNotification).toHaveBeenCalled();
+        });
+    });
+
+    // =========================================================================
+    // LoadField - KBSearch Methods Tests
+    // =========================================================================
+    describe('LoadField - KBSearch Methods', () => {
+        let mockFormContext: any;
+        let mockExecutionContext: any;
+        let mockAddOnPostSearch: jest.Mock;
+        let mockRemoveOnPostSearch: jest.Mock;
+        let mockAddOnResultOpened: jest.Mock;
+        let mockRemoveOnResultOpened: jest.Mock;
+        let mockAddOnSelection: jest.Mock;
+        let mockRemoveOnSelection: jest.Mock;
+        let mockOpenSearchResult: jest.Mock;
+
+        beforeEach(() => {
+            mockAddOnPostSearch = jest.fn();
+            mockRemoveOnPostSearch = jest.fn();
+            mockAddOnResultOpened = jest.fn();
+            mockRemoveOnResultOpened = jest.fn();
+            mockAddOnSelection = jest.fn();
+            mockRemoveOnSelection = jest.fn();
+            mockOpenSearchResult = jest.fn();
+
+            mockFormContext = {
+                data: {
+                    entity: {
+                        getId: jest.fn().mockReturnValue('{guid}'),
+                        getEntityName: jest.fn().mockReturnValue('incident'),
+                        getEntityReference: jest.fn().mockReturnValue({}),
+                        getPrimaryAttributeValue: jest.fn(),
+                        getDataXml: jest.fn(),
+                        getIsDirty: jest.fn().mockReturnValue(false),
+                        isValid: jest.fn().mockReturnValue(true),
+                        addOnSave: jest.fn(),
+                        removeOnSave: jest.fn(),
+                        addOnPostSave: jest.fn(),
+                        removeOnPostSave: jest.fn(),
+                        attributes: {
+                            get: jest.fn().mockImplementation((name: string) => ({
+                                getName: () => name,
+                                getValue: jest.fn().mockReturnValue('search query'),
+                                setValue: jest.fn(),
+                                getAttributeType: jest.fn().mockReturnValue('string'),
+                                getFormat: jest.fn().mockReturnValue('text'),
+                                getIsDirty: jest.fn().mockReturnValue(false),
+                                isValid: jest.fn().mockReturnValue(true),
+                                getRequiredLevel: jest.fn().mockReturnValue('none'),
+                                setRequiredLevel: jest.fn(),
+                                getSubmitMode: jest.fn().mockReturnValue('dirty'),
+                                setSubmitMode: jest.fn(),
+                                addOnChange: jest.fn(),
+                                removeOnChange: jest.fn(),
+                                fireOnChange: jest.fn(),
+                                setIsValid: jest.fn()
+                            }))
+                        }
+                    },
+                    getIsDirty: jest.fn().mockReturnValue(false),
+                    isValid: jest.fn().mockReturnValue(true),
+                    refresh: jest.fn(),
+                    save: jest.fn(),
+                    addOnLoad: jest.fn(),
+                    removeOnLoad: jest.fn()
+                },
+                ui: {
+                    getFormType: jest.fn().mockReturnValue(2),
+                    getViewPortHeight: jest.fn().mockReturnValue(800),
+                    getViewPortWidth: jest.fn().mockReturnValue(1200),
+                    close: jest.fn(),
+                    setFormNotification: jest.fn(),
+                    clearFormNotification: jest.fn(),
+                    refreshRibbon: jest.fn(),
+                    addLoaded: jest.fn(),
+                    removeLoaded: jest.fn(),
+                    addOnLoad: jest.fn(),
+                    removeOnLoad: jest.fn(),
+                    controls: { get: jest.fn() },
+                    tabs: { get: jest.fn() },
+                    formSelector: {
+                        getCurrentItem: jest.fn().mockReturnValue({ getId: jest.fn(), getLabel: jest.fn() }),
+                        items: { getLength: jest.fn(), get: jest.fn() }
+                    },
+                    navigation: { items: { getLength: jest.fn().mockReturnValue(0), get: jest.fn() } },
+                    quickForms: { get: jest.fn() }
+                },
+                getControl: jest.fn().mockImplementation((name: string) => ({
+                    getName: () => name,
+                    getControlType: jest.fn().mockReturnValue('kbsearch'),
+                    getLabel: jest.fn().mockReturnValue('Knowledge Search'),
+                    setLabel: jest.fn(),
+                    getVisible: jest.fn().mockReturnValue(true),
+                    setVisible: jest.fn(),
+                    getDisabled: jest.fn().mockReturnValue(false),
+                    setDisabled: jest.fn(),
+                    setFocus: jest.fn(),
+                    setNotification: jest.fn(),
+                    clearNotification: jest.fn(),
+                    addNotification: jest.fn(),
+                    addOnPostSearch: mockAddOnPostSearch,
+                    removeOnPostSearch: mockRemoveOnPostSearch,
+                    addOnResultOpened: mockAddOnResultOpened,
+                    removeOnResultOpened: mockRemoveOnResultOpened,
+                    addOnSelection: mockAddOnSelection,
+                    removeOnSelection: mockRemoveOnSelection,
+                    openSearchResult: mockOpenSearchResult,
+                    getAttribute: jest.fn().mockReturnValue({ getName: () => name }),
+                    addOnOutputChange: jest.fn(),
+                    removeOnOutputChange: jest.fn()
+                })),
+                getAttribute: jest.fn()
+            };
+
+            mockExecutionContext = {
+                getFormContext: jest.fn().mockReturnValue(mockFormContext),
+                getDepth: jest.fn().mockReturnValue(1),
+                getEventArgs: jest.fn().mockReturnValue({
+                    getDataLoadState: jest.fn().mockReturnValue(1),
+                    getSaveMode: jest.fn(),
+                    isDefaultPrevented: jest.fn().mockReturnValue(false),
+                    preventDefault: jest.fn(),
+                    preventDefaultOnError: jest.fn(),
+                    disableAsyncTimeout: jest.fn()
+                }),
+                getEventSource: jest.fn(),
+                getSharedVariable: jest.fn(),
+                setSharedVariable: jest.fn()
+            };
+        });
+
+        test('should call AddPostSearch on KBSearch field', () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, {
+                body: ['kbsearchfield']
+            });
+            const callback = jest.fn();
+
+            form.Body.kbsearchfield.AddPostSearch(callback);
+
+            expect(mockAddOnPostSearch).toHaveBeenCalledWith(callback);
+        });
+
+        test('should call RemovePostSearch on KBSearch field', () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, {
+                body: ['kbsearchfield']
+            });
+            const callback = jest.fn();
+
+            form.Body.kbsearchfield.RemovePostSearch(callback);
+
+            expect(mockRemoveOnPostSearch).toHaveBeenCalledWith(callback);
+        });
+
+        test('should call AddResultOpened on KBSearch field', () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, {
+                body: ['kbsearchfield']
+            });
+            const callback = jest.fn();
+
+            form.Body.kbsearchfield.AddResultOpened(callback);
+
+            expect(mockAddOnResultOpened).toHaveBeenCalledWith(callback);
+        });
+
+        test('should call RemoveResultOpened on KBSearch field', () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, {
+                body: ['kbsearchfield']
+            });
+            const callback = jest.fn();
+
+            form.Body.kbsearchfield.RemoveResultOpened(callback);
+
+            expect(mockRemoveOnResultOpened).toHaveBeenCalledWith(callback);
+        });
+
+        test('should call AddSelection on KBSearch field', () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, {
+                body: ['kbsearchfield']
+            });
+            const callback = jest.fn();
+
+            form.Body.kbsearchfield.AddSelection(callback);
+
+            expect(mockAddOnSelection).toHaveBeenCalledWith(callback);
+        });
+
+        test('should call RemoveSelection on KBSearch field', () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, {
+                body: ['kbsearchfield']
+            });
+            const callback = jest.fn();
+
+            form.Body.kbsearchfield.RemoveSelection(callback);
+
+            expect(mockRemoveOnSelection).toHaveBeenCalledWith(callback);
+        });
+
+        test('should call OpenSearchResult on KBSearch field', () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, {
+                body: ['kbsearchfield']
+            });
+
+            form.Body.kbsearchfield.OpenSearchResult(1, 'Inline');
+
+            expect(mockOpenSearchResult).toHaveBeenCalledWith(1, 'Inline');
+        });
+    });
+
+    // =========================================================================
+    // LoadUtility - Additional Device Methods Tests
+    // =========================================================================
+    describe('LoadUtility - Additional Device Methods', () => {
+        beforeEach(() => {
+            (global as any).window = {
+                Xrm: {
+                    Utility: {
+                        getGlobalContext: jest.fn().mockReturnValue({
+                            getClientUrl: jest.fn().mockReturnValue('https://org.crm.dynamics.com'),
+                            getCurrentAppUrl: jest.fn().mockReturnValue('https://org.crm.dynamics.com/main.aspx'),
+                            getVersion: jest.fn().mockReturnValue('9.2.0'),
+                            isOnPremises: jest.fn().mockReturnValue(false),
+                            getCurrentAppName: jest.fn().mockResolvedValue('Sales Hub'),
+                            getCurrentAppProperties: jest.fn().mockResolvedValue({ appId: '{app-id}' }),
+                            client: {
+                                getClient: jest.fn().mockReturnValue('Web'),
+                                getClientState: jest.fn().mockReturnValue('Online'),
+                                getFormFactor: jest.fn().mockReturnValue(1),
+                                isOffline: jest.fn().mockReturnValue(false)
+                            },
+                            organizationSettings: {},
+                            userSettings: {}
+                        })
+                    },
+                    Device: {
+                        getBarcodeValue: jest.fn().mockResolvedValue({ value: '1234567890' }),
+                        captureImage: jest.fn().mockResolvedValue({ fileContent: 'base64image' }),
+                        captureAudio: jest.fn().mockResolvedValue({ fileContent: 'base64audio' }),
+                        captureVideo: jest.fn().mockResolvedValue({ fileContent: 'base64video' }),
+                        getCurrentPosition: jest.fn().mockResolvedValue({ coords: { latitude: 47.6, longitude: -122.3 } }),
+                        pickFile: jest.fn().mockResolvedValue([{ fileName: 'file.txt' }])
+                    },
+                    Navigation: {
+                        openUrl: jest.fn(),
+                        openWebResource: jest.fn(),
+                        openFile: jest.fn()
+                    }
+                }
+            };
+        });
+
+        afterEach(() => {
+            delete (global as any).window;
+        });
+
+        test('should call BarcodeValue with callback', async () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+            const successCallback = jest.fn();
+
+            form.Utility.BarcodeValue(successCallback);
+
+            await new Promise(resolve => setTimeout(resolve, 10));
+            expect((global as any).window.Xrm.Device.getBarcodeValue).toHaveBeenCalled();
+            expect(successCallback).toHaveBeenCalled();
+        });
+
+        test('should return promise from BarcodeValue without callback', async () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+
+            const promise = form.Utility.BarcodeValue();
+
+            expect(promise).toBeDefined();
+            const result = await promise;
+            expect(result.value).toBe('1234567890');
+        });
+
+        test('should call CurrentPosition with callback', async () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+            const successCallback = jest.fn();
+
+            form.Utility.CurrentPosition(successCallback);
+
+            await new Promise(resolve => setTimeout(resolve, 10));
+            expect((global as any).window.Xrm.Device.getCurrentPosition).toHaveBeenCalled();
+            expect(successCallback).toHaveBeenCalled();
+        });
+
+        test('should return promise from CurrentPosition without callback', async () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+
+            const promise = form.Utility.CurrentPosition();
+
+            expect(promise).toBeDefined();
+            const result = await promise;
+            expect(result.coords.latitude).toBe(47.6);
+        });
+
+        test('should call OpenUrl', () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+
+            form.Utility.OpenUrl('https://example.com', { height: 600, width: 800 });
+
+            expect((global as any).window.Xrm.Navigation.openUrl).toHaveBeenCalledWith('https://example.com', { height: 600, width: 800 });
+        });
+
+        test('should call OpenWebResource', () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, 'defaultwebresource', {});
+
+            form.Utility.OpenWebResource('new_/test.html', { height: 500, width: 700 }, 'param1=value1');
+
+            expect((global as any).window.Xrm.Navigation.openWebResource).toHaveBeenCalled();
+        });
+
+        test('should call OpenFile', () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+
+            form.Utility.OpenFile({ fileContent: 'base64data', fileName: 'test.pdf', mimeType: 'application/pdf' }, { openMode: 2 });
+
+            expect((global as any).window.Xrm.Navigation.openFile).toHaveBeenCalled();
+        });
+    });
+
+    // =========================================================================
+    // LoadField - OptionSet Methods Tests
+    // =========================================================================
+    describe('LoadField - OptionSet Methods', () => {
+        let mockFormContext: any;
+        let mockExecutionContext: any;
+        let mockAddOption: jest.Mock;
+        let mockRemoveOption: jest.Mock;
+        let mockClearOptions: jest.Mock;
+
+        beforeEach(() => {
+            mockAddOption = jest.fn();
+            mockRemoveOption = jest.fn();
+            mockClearOptions = jest.fn();
+
+            mockFormContext = {
+                data: {
+                    entity: {
+                        getId: jest.fn().mockReturnValue('{guid}'),
+                        getEntityName: jest.fn().mockReturnValue('account'),
+                        getEntityReference: jest.fn().mockReturnValue({}),
+                        getPrimaryAttributeValue: jest.fn(),
+                        getDataXml: jest.fn(),
+                        getIsDirty: jest.fn().mockReturnValue(false),
+                        isValid: jest.fn().mockReturnValue(true),
+                        addOnSave: jest.fn(),
+                        removeOnSave: jest.fn(),
+                        addOnPostSave: jest.fn(),
+                        removeOnPostSave: jest.fn(),
+                        attributes: {
+                            get: jest.fn().mockImplementation((name: string) => ({
+                                getName: () => name,
+                                getValue: jest.fn().mockReturnValue(1),
+                                setValue: jest.fn(),
+                                getAttributeType: jest.fn().mockReturnValue('optionset'),
+                                getFormat: jest.fn().mockReturnValue(null),
+                                getIsDirty: jest.fn().mockReturnValue(false),
+                                isValid: jest.fn().mockReturnValue(true),
+                                getRequiredLevel: jest.fn().mockReturnValue('none'),
+                                setRequiredLevel: jest.fn(),
+                                getSubmitMode: jest.fn().mockReturnValue('dirty'),
+                                setSubmitMode: jest.fn(),
+                                addOnChange: jest.fn(),
+                                removeOnChange: jest.fn(),
+                                fireOnChange: jest.fn(),
+                                setIsValid: jest.fn(),
+                                getOption: jest.fn().mockReturnValue({ text: 'Active', value: 1 }),
+                                getOptions: jest.fn().mockReturnValue([
+                                    { text: 'Active', value: 1 },
+                                    { text: 'Inactive', value: 2 }
+                                ])
+                            }))
+                        }
+                    },
+                    getIsDirty: jest.fn().mockReturnValue(false),
+                    isValid: jest.fn().mockReturnValue(true),
+                    refresh: jest.fn(),
+                    save: jest.fn(),
+                    addOnLoad: jest.fn(),
+                    removeOnLoad: jest.fn()
+                },
+                ui: {
+                    getFormType: jest.fn().mockReturnValue(2),
+                    getViewPortHeight: jest.fn().mockReturnValue(800),
+                    getViewPortWidth: jest.fn().mockReturnValue(1200),
+                    close: jest.fn(),
+                    setFormNotification: jest.fn(),
+                    clearFormNotification: jest.fn(),
+                    refreshRibbon: jest.fn(),
+                    addLoaded: jest.fn(),
+                    removeLoaded: jest.fn(),
+                    addOnLoad: jest.fn(),
+                    removeOnLoad: jest.fn(),
+                    controls: { get: jest.fn() },
+                    tabs: { get: jest.fn() },
+                    formSelector: {
+                        getCurrentItem: jest.fn().mockReturnValue({ getId: jest.fn(), getLabel: jest.fn() }),
+                        items: { getLength: jest.fn(), get: jest.fn() }
+                    },
+                    navigation: { items: { getLength: jest.fn().mockReturnValue(0), get: jest.fn() } },
+                    quickForms: { get: jest.fn() }
+                },
+                getControl: jest.fn().mockImplementation((name: string) => ({
+                    getName: () => name,
+                    getControlType: jest.fn().mockReturnValue('optionset'),
+                    getLabel: jest.fn().mockReturnValue('Status'),
+                    setLabel: jest.fn(),
+                    getVisible: jest.fn().mockReturnValue(true),
+                    setVisible: jest.fn(),
+                    getDisabled: jest.fn().mockReturnValue(false),
+                    setDisabled: jest.fn(),
+                    setFocus: jest.fn(),
+                    setNotification: jest.fn(),
+                    clearNotification: jest.fn(),
+                    addNotification: jest.fn(),
+                    addOption: mockAddOption,
+                    removeOption: mockRemoveOption,
+                    clearOptions: mockClearOptions,
+                    getAttribute: jest.fn().mockReturnValue({ getName: () => name }),
+                    addOnOutputChange: jest.fn(),
+                    removeOnOutputChange: jest.fn()
+                })),
+                getAttribute: jest.fn()
+            };
+
+            mockExecutionContext = {
+                getFormContext: jest.fn().mockReturnValue(mockFormContext),
+                getDepth: jest.fn().mockReturnValue(1),
+                getEventArgs: jest.fn().mockReturnValue({
+                    getDataLoadState: jest.fn().mockReturnValue(1),
+                    getSaveMode: jest.fn(),
+                    isDefaultPrevented: jest.fn().mockReturnValue(false),
+                    preventDefault: jest.fn(),
+                    preventDefaultOnError: jest.fn(),
+                    disableAsyncTimeout: jest.fn()
+                }),
+                getEventSource: jest.fn(),
+                getSharedVariable: jest.fn(),
+                setSharedVariable: jest.fn()
+            };
+        });
+
+        test('should call AddOption on optionset field', () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, {
+                body: ['statuscode']
+            });
+
+            form.Body.statuscode.AddOption('Pending', 3, 2);
+
+            expect(mockAddOption).toHaveBeenCalledWith({ text: 'Pending', value: 3 }, 2);
+        });
+
+        test('should call RemoveOption on optionset field', () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, {
+                body: ['statuscode']
+            });
+
+            form.Body.statuscode.RemoveOption(2);
+
+            expect(mockRemoveOption).toHaveBeenCalledWith(2);
+        });
+
+        test('should call ClearOptions on optionset field', () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, {
+                body: ['statuscode']
+            });
+
+            form.Body.statuscode.ClearOptions();
+
+            expect(mockClearOptions).toHaveBeenCalled();
+        });
+
+        test('should get Option by value', () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, {
+                body: ['statuscode']
+            });
+
+            // Verify the Option method exists and can be called
+            expect(form.Body.statuscode.Option).toBeDefined();
+            expect(typeof form.Body.statuscode.Option).toBe('function');
+        });
+    });
+
+    // =========================================================================
+    // LoadWebApi - RetrieveRecords with FetchXml Tests
+    // =========================================================================
+    describe('LoadWebApi - RetrieveRecords with FetchXml', () => {
+        let mockRetrieveMultipleRecords: jest.Mock;
+
+        beforeEach(() => {
+            mockRetrieveMultipleRecords = jest.fn().mockResolvedValue({
+                entities: [
+                    { accountid: '{guid1}', name: 'Account 1' },
+                    { accountid: '{guid2}', name: 'Account 2' }
+                ]
+            });
+
+            (global as any).window = {
+                Xrm: {
+                    WebApi: {
+                        retrieveMultipleRecords: mockRetrieveMultipleRecords,
+                        createRecord: jest.fn().mockResolvedValue({ id: '{new-guid}' }),
+                        deleteRecord: jest.fn().mockResolvedValue({}),
+                        retrieveRecord: jest.fn().mockResolvedValue({ accountid: '{guid}', name: 'Test' }),
+                        updateRecord: jest.fn().mockResolvedValue({}),
+                        execute: jest.fn().mockResolvedValue({}),
+                        executeMultiple: jest.fn().mockResolvedValue([]),
+                        isAvailableOffline: jest.fn().mockReturnValue(false),
+                        online: {
+                            execute: jest.fn().mockResolvedValue({}),
+                            executeMultiple: jest.fn().mockResolvedValue([])
+                        },
+                        offline: {
+                            execute: jest.fn().mockResolvedValue({}),
+                            executeMultiple: jest.fn().mockResolvedValue([])
+                        }
+                    },
+                    Utility: {
+                        getGlobalContext: jest.fn().mockReturnValue({
+                            getClientUrl: jest.fn().mockReturnValue('https://org.crm.dynamics.com'),
+                            getCurrentAppUrl: jest.fn().mockReturnValue('https://org.crm.dynamics.com/main.aspx'),
+                            getVersion: jest.fn().mockReturnValue('9.2.0'),
+                            isOnPremises: jest.fn().mockReturnValue(false),
+                            client: {},
+                            organizationSettings: {},
+                            userSettings: {}
+                        })
+                    }
+                }
+            };
+        });
+
+        afterEach(() => {
+            delete (global as any).window;
+        });
+
+        test('should call CreateRecord with callback', async () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+            const successCallback = jest.fn();
+
+            form.WebApi.CreateRecord('account', { name: 'Test Account' }, successCallback);
+
+            await new Promise(resolve => setTimeout(resolve, 10));
+            expect((global as any).window.Xrm.WebApi.createRecord).toHaveBeenCalledWith('account', { name: 'Test Account' });
+            expect(successCallback).toHaveBeenCalled();
+        });
+
+        test('should return promise from CreateRecord without callback', async () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+
+            const promise = form.WebApi.CreateRecord('account', { name: 'Test Account' });
+
+            expect(promise).toBeDefined();
+            const result = await promise;
+            expect(result.id).toBe('{new-guid}');
+        });
+
+        test('should call DeleteRecord with callback', async () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+            const successCallback = jest.fn();
+
+            form.WebApi.DeleteRecord('account', '{guid}', successCallback);
+
+            await new Promise(resolve => setTimeout(resolve, 10));
+            expect((global as any).window.Xrm.WebApi.deleteRecord).toHaveBeenCalledWith('account', '{guid}');
+            expect(successCallback).toHaveBeenCalled();
+        });
+
+        test('should return promise from DeleteRecord without callback', async () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+
+            const promise = form.WebApi.DeleteRecord('account', '{guid}');
+
+            expect(promise).toBeDefined();
+        });
+
+        test('should call UpdateRecord with callback', async () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+            const successCallback = jest.fn();
+
+            form.WebApi.UpdateRecord('account', '{guid}', { name: 'Updated' }, successCallback);
+
+            await new Promise(resolve => setTimeout(resolve, 10));
+            expect((global as any).window.Xrm.WebApi.updateRecord).toHaveBeenCalledWith('account', '{guid}', { name: 'Updated' });
+            expect(successCallback).toHaveBeenCalled();
+        });
+
+        test('should return promise from UpdateRecord without callback', async () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+
+            const promise = form.WebApi.UpdateRecord('account', '{guid}', { name: 'Updated' });
+
+            expect(promise).toBeDefined();
+        });
+
+        test('should call Execute with callback', async () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+            const successCallback = jest.fn();
+
+            form.WebApi.Execute({ getMetadata: () => ({}) }, successCallback);
+
+            await new Promise(resolve => setTimeout(resolve, 10));
+            expect((global as any).window.Xrm.WebApi.execute).toHaveBeenCalled();
+            expect(successCallback).toHaveBeenCalled();
+        });
+
+        test('should return promise from Execute without callback', async () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+
+            const promise = form.WebApi.Execute({ getMetadata: () => ({}) });
+
+            expect(promise).toBeDefined();
+        });
+
+        test('should call ExecuteMultiple with callback', async () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+            const successCallback = jest.fn();
+
+            form.WebApi.ExecuteMultiple([{ getMetadata: () => ({}) }], successCallback);
+
+            await new Promise(resolve => setTimeout(resolve, 10));
+            expect((global as any).window.Xrm.WebApi.executeMultiple).toHaveBeenCalled();
+            expect(successCallback).toHaveBeenCalled();
+        });
+
+        test('should return promise from ExecuteMultiple without callback', async () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+
+            const promise = form.WebApi.ExecuteMultiple([{ getMetadata: () => ({}) }]);
+
+            expect(promise).toBeDefined();
+        });
+
+        test('should call RetrieveMultipleRecords with callback', async () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+            const successCallback = jest.fn();
+
+            form.WebApi.RetrieveMultipleRecords('account', '?$select=name', 100, successCallback);
+
+            await new Promise(resolve => setTimeout(resolve, 10));
+            expect(mockRetrieveMultipleRecords).toHaveBeenCalled();
+            expect(successCallback).toHaveBeenCalled();
+        });
+
+        test('should return promise from RetrieveMultipleRecords without callback', async () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+
+            const promise = form.WebApi.RetrieveMultipleRecords('account', '?$select=name');
+
+            expect(promise).toBeDefined();
+        });
+    });
+
+    // =========================================================================
+    // LoadField - Additional Control Methods Tests
+    // =========================================================================
+    describe('LoadField - Additional Control Methods', () => {
+        let mockFormContext: any;
+        let mockExecutionContext: any;
+        let mockRefresh: jest.Mock;
+        let mockAddOnOutputChange: jest.Mock;
+        let mockRemoveOnOutputChange: jest.Mock;
+        let mockGetContentWindow: jest.Mock;
+
+        beforeEach(() => {
+            mockRefresh = jest.fn();
+            mockAddOnOutputChange = jest.fn();
+            mockRemoveOnOutputChange = jest.fn();
+            mockGetContentWindow = jest.fn().mockResolvedValue({ document: {} });
+
+            mockFormContext = {
+                data: {
+                    entity: {
+                        getId: jest.fn().mockReturnValue('{guid}'),
+                        getEntityName: jest.fn().mockReturnValue('account'),
+                        getEntityReference: jest.fn().mockReturnValue({}),
+                        getPrimaryAttributeValue: jest.fn(),
+                        getDataXml: jest.fn(),
+                        getIsDirty: jest.fn().mockReturnValue(false),
+                        isValid: jest.fn().mockReturnValue(true),
+                        addOnSave: jest.fn(),
+                        removeOnSave: jest.fn(),
+                        addOnPostSave: jest.fn(),
+                        removeOnPostSave: jest.fn(),
+                        attributes: {
+                            get: jest.fn().mockImplementation((name: string) => ({
+                                getName: () => name,
+                                getValue: jest.fn().mockReturnValue('test'),
+                                setValue: jest.fn(),
+                                getAttributeType: jest.fn().mockReturnValue('string'),
+                                getFormat: jest.fn().mockReturnValue('text'),
+                                getIsDirty: jest.fn().mockReturnValue(false),
+                                isValid: jest.fn().mockReturnValue(true),
+                                getRequiredLevel: jest.fn().mockReturnValue('none'),
+                                setRequiredLevel: jest.fn(),
+                                getSubmitMode: jest.fn().mockReturnValue('dirty'),
+                                setSubmitMode: jest.fn(),
+                                addOnChange: jest.fn(),
+                                removeOnChange: jest.fn(),
+                                fireOnChange: jest.fn(),
+                                setIsValid: jest.fn()
+                            }))
+                        }
+                    },
+                    getIsDirty: jest.fn().mockReturnValue(false),
+                    isValid: jest.fn().mockReturnValue(true),
+                    refresh: jest.fn(),
+                    save: jest.fn(),
+                    addOnLoad: jest.fn(),
+                    removeOnLoad: jest.fn()
+                },
+                ui: {
+                    getFormType: jest.fn().mockReturnValue(2),
+                    getViewPortHeight: jest.fn().mockReturnValue(800),
+                    getViewPortWidth: jest.fn().mockReturnValue(1200),
+                    close: jest.fn(),
+                    setFormNotification: jest.fn(),
+                    clearFormNotification: jest.fn(),
+                    refreshRibbon: jest.fn(),
+                    addLoaded: jest.fn(),
+                    removeLoaded: jest.fn(),
+                    addOnLoad: jest.fn(),
+                    removeOnLoad: jest.fn(),
+                    controls: { get: jest.fn() },
+                    tabs: { get: jest.fn() },
+                    formSelector: {
+                        getCurrentItem: jest.fn().mockReturnValue({ getId: jest.fn(), getLabel: jest.fn() }),
+                        items: { getLength: jest.fn(), get: jest.fn() }
+                    },
+                    navigation: { items: { getLength: jest.fn().mockReturnValue(0), get: jest.fn() } },
+                    quickForms: { get: jest.fn() }
+                },
+                getControl: jest.fn().mockImplementation((name: string) => ({
+                    getName: () => name,
+                    getControlType: jest.fn().mockReturnValue('iframe'),
+                    getLabel: jest.fn().mockReturnValue('Field'),
+                    setLabel: jest.fn(),
+                    getVisible: jest.fn().mockReturnValue(true),
+                    setVisible: jest.fn(),
+                    getDisabled: jest.fn().mockReturnValue(false),
+                    setDisabled: jest.fn(),
+                    setFocus: jest.fn(),
+                    setNotification: jest.fn(),
+                    clearNotification: jest.fn(),
+                    addNotification: jest.fn(),
+                    refresh: mockRefresh,
+                    addOnOutputChange: mockAddOnOutputChange,
+                    removeOnOutputChange: mockRemoveOnOutputChange,
+                    getContentWindow: mockGetContentWindow,
+                    getAttribute: jest.fn().mockReturnValue({ getName: () => name })
+                })),
+                getAttribute: jest.fn()
+            };
+
+            mockExecutionContext = {
+                getFormContext: jest.fn().mockReturnValue(mockFormContext),
+                getDepth: jest.fn().mockReturnValue(1),
+                getEventArgs: jest.fn().mockReturnValue({
+                    getDataLoadState: jest.fn().mockReturnValue(1),
+                    getSaveMode: jest.fn(),
+                    isDefaultPrevented: jest.fn().mockReturnValue(false),
+                    preventDefault: jest.fn(),
+                    preventDefaultOnError: jest.fn(),
+                    disableAsyncTimeout: jest.fn()
+                }),
+                getEventSource: jest.fn(),
+                getSharedVariable: jest.fn(),
+                setSharedVariable: jest.fn()
+            };
+        });
+
+        test('should call Refresh on iframe field', () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, {
+                body: ['iframefield']
+            });
+
+            form.Body.iframefield.Refresh();
+
+            expect(mockRefresh).toHaveBeenCalled();
+        });
+
+        test('should call AddOnOutputChange on field', () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, {
+                body: ['outputfield']
+            });
+            const callback = jest.fn();
+
+            form.Body.outputfield.AddOnOutputChange(callback);
+
+            expect(mockAddOnOutputChange).toHaveBeenCalledWith(callback);
+        });
+
+        test('should call RemoveOnOutputChange on field', () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, {
+                body: ['outputfield']
+            });
+            const callback = jest.fn();
+
+            form.Body.outputfield.RemoveOnOutputChange(callback);
+
+            expect(mockRemoveOnOutputChange).toHaveBeenCalledWith(callback);
+        });
+
+        test('should call ContentWindow with callback', async () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, {
+                body: ['iframefield']
+            });
+            const successCallback = jest.fn();
+
+            form.Body.iframefield.ContentWindow(successCallback);
+
+            await new Promise(resolve => setTimeout(resolve, 10));
+            expect(mockGetContentWindow).toHaveBeenCalled();
+            expect(successCallback).toHaveBeenCalled();
+        });
+
+        test('should return promise from ContentWindow without callback', () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, {
+                body: ['iframefield']
+            });
+
+            const promise = form.Body.iframefield.ContentWindow();
+
+            expect(promise).toBeDefined();
+        });
+    });
+
+    // =========================================================================
+    // LoadUtility - Additional Utility Methods Tests
+    // =========================================================================
+    describe('LoadUtility - Additional Utility Methods', () => {
+        beforeEach(() => {
+            (global as any).window = {
+                Xrm: {
+                    Utility: {
+                        getGlobalContext: jest.fn().mockReturnValue({
+                            getClientUrl: jest.fn().mockReturnValue('https://org.crm.dynamics.com'),
+                            getCurrentAppUrl: jest.fn().mockReturnValue('https://org.crm.dynamics.com/main.aspx'),
+                            getVersion: jest.fn().mockReturnValue('9.2.0'),
+                            isOnPremises: jest.fn().mockReturnValue(false),
+                            getCurrentAppName: jest.fn().mockResolvedValue('Sales Hub'),
+                            getCurrentAppProperties: jest.fn().mockResolvedValue({ appId: '{app-id}' }),
+                            getAdvancedConfigSetting: jest.fn().mockReturnValue('setting-value'),
+                            client: {
+                                getClient: jest.fn().mockReturnValue('Web'),
+                                getClientState: jest.fn().mockReturnValue('Online'),
+                                getFormFactor: jest.fn().mockReturnValue(1),
+                                isOffline: jest.fn().mockReturnValue(false)
+                            },
+                            organizationSettings: {
+                                organizationId: '{org-id}',
+                                uniqueName: 'org',
+                                isAutoSaveEnabled: true,
+                                languageId: 1033,
+                                baseCurrencyId: '{currency-id}'
+                            },
+                            userSettings: {
+                                userId: '{user-id}',
+                                userName: 'Test User',
+                                languageId: 1033,
+                                isGuidedHelpEnabled: true,
+                                isHighContrastEnabled: false,
+                                isRTL: false
+                            }
+                        }),
+                        getEntityMetadata: jest.fn().mockResolvedValue({ EntitySetName: 'accounts' }),
+                        getPageContext: jest.fn().mockReturnValue({ entityId: '{guid}' }),
+                        getResourceString: jest.fn().mockReturnValue('Resource String'),
+                        invokeProcessAction: jest.fn().mockResolvedValue({ Output: 'result' }),
+                        lookupObjects: jest.fn().mockResolvedValue([{ id: '{lookup-id}' }]),
+                        refreshParentGrid: jest.fn(),
+                        showProgressIndicator: jest.fn(),
+                        closeProgressIndicator: jest.fn()
+                    },
+                    Navigation: {
+                        navigateTo: jest.fn().mockResolvedValue({}),
+                        openAlertDialog: jest.fn().mockResolvedValue({ confirmed: true }),
+                        openConfirmDialog: jest.fn().mockResolvedValue({ confirmed: true }),
+                        openErrorDialog: jest.fn().mockResolvedValue({}),
+                        openForm: jest.fn().mockResolvedValue({}),
+                        openUrl: jest.fn(),
+                        openWebResource: jest.fn(),
+                        openFile: jest.fn()
+                    },
+                    Device: {
+                        getBarcodeValue: jest.fn().mockResolvedValue({ value: '1234567890' }),
+                        captureImage: jest.fn().mockResolvedValue({ fileContent: 'base64image' }),
+                        captureAudio: jest.fn().mockResolvedValue({ fileContent: 'base64audio' }),
+                        captureVideo: jest.fn().mockResolvedValue({ fileContent: 'base64video' }),
+                        getCurrentPosition: jest.fn().mockResolvedValue({ coords: { latitude: 47.6, longitude: -122.3 } }),
+                        pickFile: jest.fn().mockResolvedValue([{ fileName: 'file.txt' }])
+                    }
+                }
+            };
+        });
+
+        afterEach(() => {
+            delete (global as any).window;
+        });
+
+        test('should call ShowProgressIndicator', () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+
+            form.Utility.ShowProgressIndicator('Loading...');
+
+            expect((global as any).window.Xrm.Utility.showProgressIndicator).toHaveBeenCalledWith('Loading...');
+        });
+
+        test('should call CloseProgressIndicator', () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+
+            form.Utility.CloseProgressIndicator();
+
+            expect((global as any).window.Xrm.Utility.closeProgressIndicator).toHaveBeenCalled();
+        });
+
+        test('should call RefreshParentGrid', () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+
+            form.Utility.RefreshParentGrid({ id: '{guid}', entityType: 'account', name: 'Test' });
+
+            expect((global as any).window.Xrm.Utility.refreshParentGrid).toHaveBeenCalled();
+        });
+
+        test('should get OrganizationSettings', () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+
+            const orgSettings = form.Utility.OrganizationSettings;
+
+            expect(orgSettings).toBeDefined();
+        });
+
+        test('should get UserSettings', () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+
+            const userSettings = form.Utility.UserSettings;
+
+            expect(userSettings).toBeDefined();
+        });
+
+        test('should get ClientUrl', () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+
+            const clientUrl = form.Utility.ClientUrl;
+
+            expect(clientUrl).toBe('https://org.crm.dynamics.com');
+        });
+
+        test('should get Client object', () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+
+            const client = form.Utility.Client;
+
+            expect(client).toBeDefined();
+        });
+
+        test('should get Client.ClientName', () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+
+            const clientName = form.Utility.Client.ClientName;
+
+            expect(clientName).toBe('Web');
+        });
+
+        test('should get Client.ClientState', () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+
+            const clientState = form.Utility.Client.ClientState;
+
+            expect(clientState).toBe('Online');
+        });
+
+        test('should get Client.FormFactor', () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+
+            const formFactor = form.Utility.Client.FormFactor;
+
+            expect(formFactor).toBe(1);
+        });
+
+        test('should get Client.IsOffline', () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+
+            const isOffline = form.Utility.Client.IsOffline;
+
+            expect(isOffline).toBe(false);
+        });
+
+        test('should call CaptureImage with callback', async () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+            const successCallback = jest.fn();
+
+            form.Utility.CaptureImage({}, successCallback);
+
+            await new Promise(resolve => setTimeout(resolve, 10));
+            expect((global as any).window.Xrm.Device.captureImage).toHaveBeenCalled();
+            expect(successCallback).toHaveBeenCalled();
+        });
+
+        test('should call CaptureAudio with callback', async () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+            const successCallback = jest.fn();
+
+            form.Utility.CaptureAudio(successCallback);
+
+            await new Promise(resolve => setTimeout(resolve, 10));
+            expect((global as any).window.Xrm.Device.captureAudio).toHaveBeenCalled();
+            expect(successCallback).toHaveBeenCalled();
+        });
+
+        test('should call CaptureVideo with callback', async () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+            const successCallback = jest.fn();
+
+            form.Utility.CaptureVideo(successCallback);
+
+            await new Promise(resolve => setTimeout(resolve, 10));
+            expect((global as any).window.Xrm.Device.captureVideo).toHaveBeenCalled();
+            expect(successCallback).toHaveBeenCalled();
+        });
+
+        test('should call PickFile with callback', async () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+            const successCallback = jest.fn();
+
+            form.Utility.PickFile({}, successCallback);
+
+            await new Promise(resolve => setTimeout(resolve, 10));
+            expect((global as any).window.Xrm.Device.pickFile).toHaveBeenCalled();
+            expect(successCallback).toHaveBeenCalled();
+        });
+
+    });
+
 });
-
-
-
-
-
-
 
