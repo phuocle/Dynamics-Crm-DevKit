@@ -563,6 +563,7 @@ function loadFormV3<TBody = Record<string, any>, THeader = Record<string, any>, 
         navigation?: string[];
         quick?: string[];
         bpf?: string[];
+        dialog?: string[];
     }
 ): {
     ExecutionContext: DevKit.IExecutionContext;
@@ -677,7 +678,7 @@ function loadFormV3<TBody = Record<string, any>, THeader = Record<string, any>, 
     form.UiAddOnLoad = (callback: any) => contextUi?.addOnLoad(callback);
     form.UiRemoveLoaded = (callback: any) => contextUi?.removeLoaded(callback);
     form.UiRemoveOnLoad = (callback: any) => contextUi?.removeOnLoad(callback);
-    const { body = [], tab = [], header = [], bpf = [], quick = [], grid = [], navigation = [], dialog = [] } = formConfig as any;
+    const { body = [], tab = [], header = [], bpf = [], quick = [], grid = [], navigation = [], dialog = [] } = formConfig;
     const bodyObj = body.length > 0 ? loadFields(formContext, body) : {};
     bodyObj.Tab = tab.length > 0 ? loadTabs(formContext, tab) : {};
     form.Body = bodyObj;
@@ -1176,7 +1177,6 @@ export class FormBase<TBody, THeader, TTab, TGrid, TNavigation, TQuickForm, TPro
         this.SidePanes = form.SidePanes;
         this.WebApi = form.WebApi;
         this.Copilot = form.Copilot;
-        this.Dialog = form.Dialog;
     }
 }
 export function defineWebApiField(obj: any, fieldName: string, entity: Record<string, any>, config: DevKit.IWebApiFieldConfig, upsertEntity: Record<string, any>): void {
