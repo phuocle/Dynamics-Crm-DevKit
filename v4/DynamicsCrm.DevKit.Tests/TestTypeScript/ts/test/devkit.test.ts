@@ -5,9 +5,9 @@
 import { XrmMockGenerator } from 'xrm-mock';
 import {
     FormBase,
-    LoadProcess,
-    LoadUtility,
-    LoadFormDialog
+    _test_LoadProcess as LoadProcess,
+    _test_LoadUtility as LoadUtility,
+    _test_LoadFormDialog as LoadFormDialog
 } from '../lib/devkit';
 import { OptionSet } from '../entities/generator/OptionSet';
 

@@ -1278,8 +1278,12 @@ export function createWebApiEntity<T extends DevKit.IWebApiEntity>(entity: Recor
 }
 
 // ============================================================================
-// Export internal functions for testing purposes
+// INTERNAL TEST EXPORTS - DO NOT USE IN PRODUCTION CODE
+// These exports are only for unit testing internal functions
 // ============================================================================
-export const LoadProcess = loadProcess;
-export const LoadUtility = loadUtility;
-export const LoadFormDialog = loadFormDialog;
+/** @internal - For testing only */
+export const _test_LoadProcess = loadProcess;
+/** @internal - For testing only */
+export const _test_LoadUtility = loadUtility;
+/** @internal - For testing only */
+export const _test_LoadFormDialog = loadFormDialog;
