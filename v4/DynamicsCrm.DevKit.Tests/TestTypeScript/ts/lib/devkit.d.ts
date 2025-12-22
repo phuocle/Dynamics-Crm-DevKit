@@ -2137,6 +2137,142 @@ declare namespace DevKit {
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/showprogressindicator
          */
         ShowProgressIndicator(message: string): void;
+
+        // Device API Methods
+        /**
+         * Captures an image using the device camera
+         * @param imageOptions Options for the image capture
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-device/captureimage
+         */
+        CaptureImage(imageOptions?: any, successCallback?: (result: any) => void, errorCallback?: (error: any) => void): Promise<any> | void;
+
+        /**
+         * Captures audio using the device microphone
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-device/captureaudio
+         */
+        CaptureAudio(successCallback?: (result: any) => void, errorCallback?: (error: any) => void): Promise<any> | void;
+
+        /**
+         * Captures video using the device camera
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-device/capturevideo
+         */
+        CaptureVideo(successCallback?: (result: any) => void, errorCallback?: (error: any) => void): Promise<any> | void;
+
+        /**
+         * Gets the barcode value using the device camera
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-device/getbarcodevalue
+         */
+        BarcodeValue(successCallback?: (result: string) => void, errorCallback?: (error: any) => void): Promise<string> | void;
+
+        /**
+         * Opens a file picker dialog
+         * @param pickFileOptions Options for the file picker
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-device/pickfile
+         */
+        PickFile(pickFileOptions?: any, successCallback?: (result: any[]) => void, errorCallback?: (error: any) => void): Promise<any[]> | void;
+
+        /**
+         * Gets the current geographical position
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-device/getcurrentposition
+         */
+        CurrentPosition(successCallback?: (result: any) => void, errorCallback?: (error: any) => void): Promise<any> | void;
+
+        /**
+         * Gets the advanced configuration setting
+         * @param setting The setting name
+         */
+        AdvancedConfigSetting(setting: string): number;
+
+        /**
+         * Gets the allowed status transitions for an entity
+         * @param entityName The logical name of the entity
+         * @param stateCode The state code
+         */
+        AllowedStatusTransitions(entityName: string, stateCode: number, successCallback?: (result: any) => void, errorCallback?: (error: any) => void): Promise<any> | void;
+
+        /**
+         * Gets the current app properties
+         */
+        CurrentAppProperties(successCallback?: (result: any) => void, errorCallback?: (error: any) => void): Promise<any> | void;
+
+        /**
+         * Gets entity main form descriptor
+         * @param entityName The logical name of the entity
+         * @param formId The form ID
+         */
+        EntityMainFormDescriptor(entityName: string, formId: string): any;
+
+        /**
+         * HTML attribute encode
+         * @param arg The string to encode
+         */
+        HtmlAttributeEncode(arg: string): string;
+
+        /**
+         * HTML decode
+         * @param arg The string to decode
+         */
+        HtmlDecode(arg: string): string;
+
+        /**
+         * HTML encode
+         * @param arg The string to encode
+         */
+        HtmlEncode(arg: string): string;
+
+        /**
+         * Gets learning path attribute name
+         */
+        readonly LearningPathAttributeName: string;
+
+        /**
+         * Loads a side panel
+         * @param url The URL to load
+         * @param title The title of the panel
+         */
+        LoadPanel(url: string, title: string): void;
+
+        /**
+         * Opens a file
+         * @param file The file to open
+         * @param openFileOptions Options for opening the file
+         */
+        OpenFile(file: any, openFileOptions?: any): void;
+
+        /**
+         * Gets page context
+         */
+        readonly PageContext: any;
+
+        /**
+         * Prepends the organization name to a path
+         * @param sPath The path
+         */
+        PrependOrgName(sPath: string): string;
+
+        /**
+         * Refreshes the parent grid
+         * @param lookupOptions The lookup options
+         */
+        RefreshParentGrid(lookupOptions: any): void;
+
+        /**
+         * Gets a web resource URL
+         * @param webResourceName The name of the web resource
+         */
+        WebResourceUrl(webResourceName: string): string;
+
+        /**
+         * XML attribute encode
+         * @param arg The string to encode
+         */
+        XmlAttributeEncode(arg: string): string;
+
+        /**
+         * XML encode
+         * @param arg The string to encode
+         */
+        XmlEncode(arg: string): string;
     }
 
     // ============================================================================
@@ -2160,7 +2296,7 @@ declare namespace DevKit {
          * @param successCallback Function called when the pane is created
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app/xrm-app-sidepanes/createpane
          */
-        Create(paneOptions: { title?: string; imageSrc?: string; hideHeader?: boolean; canClose?: boolean; width?: number }, successCallback?: (pane: any) => void): void;
+        Create(paneOptions: { paneId?: string; title?: string; imageSrc?: string; hideHeader?: boolean; canClose?: boolean; width?: number }, successCallback?: (pane: any) => void): void;
 
         /**
          * Gets a pane by ID

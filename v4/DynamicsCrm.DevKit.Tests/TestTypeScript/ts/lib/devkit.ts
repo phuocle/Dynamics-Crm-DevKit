@@ -1276,3 +1276,12 @@ export function createWebApiEntity<T extends DevKit.IWebApiEntity>(entity: Recor
     }
     return webApiEntity as T;
 }
+
+// ============================================================================
+// Export internal functions for testing purposes
+// ============================================================================
+export const LoadFormV2 = loadFormV3;
+export const LoadProcess = loadProcess;
+export const LoadUtility = loadUtility;
+export const LoadSidePanes = loadSidePanes;
+export const LoadFormDialog = loadFormDialog;

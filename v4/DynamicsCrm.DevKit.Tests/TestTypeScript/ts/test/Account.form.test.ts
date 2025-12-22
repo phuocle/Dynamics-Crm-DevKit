@@ -5,9 +5,8 @@
  */
 
 // Import AccountForm namespace - OptionSet is now global (populated by devkit.ts and Account.form.ts)
-import { AccountForm, Account } from '../entities/generator/Account.form';
-// Import devkit to populate global OptionSet
-import '../lib/devkit';
+import { AccountForm } from '../entities/generator/Account.form';
+import { OptionSet } from '../entities/generator/OptionSet';
 
 // ============================================================================
 // Mock Setup - Matches devkit.ts LoadFormV2 behavior
@@ -470,13 +469,13 @@ describe('AccountForm - Money Control', () => {
     test('should get Value', () => {
         const { executionContext } = createMockExecutionContext();
         const form = new AccountForm.Form(executionContext);
-        expect(form.Body.Revenue.Value).toBe(1000000);
+        expect(form.Header.Revenue.Value).toBe(1000000);
     });
 
     test('should set Value', () => {
         const { executionContext, mocks } = createMockExecutionContext();
         const form = new AccountForm.Form(executionContext);
-        form.Body.Revenue.Value = 2000000;
+        form.Header.Revenue.Value = 2000000;
         expect(mocks.mockSetValue).toHaveBeenCalledWith(2000000);
     });
 });

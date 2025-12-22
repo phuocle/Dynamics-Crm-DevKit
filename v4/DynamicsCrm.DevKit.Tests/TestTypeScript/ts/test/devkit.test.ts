@@ -4,13 +4,14 @@
  */
 import { XrmMockGenerator } from 'xrm-mock';
 import {
+    FormBase,
     LoadFormV2,
     LoadProcess,
     LoadUtility,
     LoadSidePanes,
-    LoadFormDialog,
-    OptionSet
+    LoadFormDialog
 } from '../lib/devkit';
+import { OptionSet } from '../entities/generator/OptionSet';
 
 describe('DevKit Module', () => {
     beforeEach(() => {
@@ -2355,7 +2356,7 @@ describe('DevKit Module', () => {
             const promise = result.LookupObjects({ entityTypes: ['account'] });
 
             expect(promise).toBeDefined();
-            const lookups = await promise;
+            const lookups = await promise as any[];
             expect(lookups[0].id).toBe('{id}');
         });
 
@@ -2383,7 +2384,7 @@ describe('DevKit Module', () => {
             const promise = result.OpenConfirmDialog({ title: 'Confirm', text: 'Are you sure?' }, {});
 
             expect(promise).toBeDefined();
-            const confirmResult = await promise;
+            const confirmResult = await promise as { confirmed: boolean };
             expect(confirmResult.confirmed).toBe(true);
         });
 
