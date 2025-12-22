@@ -22,6 +22,10 @@ import { TestDecimal } from './Account.TestDecimal';
 import { TestDouble } from './Account.TestDouble';
 import { TestIFrame } from './Account.TestIFrame';
 import { TestWebResource } from './Account.TestWebResource';
+import { TestTimer } from './Account.TestTimer';
+import { TestKnowledge } from './Account.TestKnowledge';
+import { TestQuickView } from './Account.TestQuickView';
+import { TestProcess } from './Account.TestProcess';
 
 const formAccount = (function () {
     "use strict";
@@ -119,6 +123,18 @@ const formAccount = (function () {
 
             // Test 22: WebResource Control
             TestWebResource(form);
+
+            // Test 23: Timer Control
+            TestTimer(form);
+
+            // Test 24: Knowledge Control
+            TestKnowledge(form);
+
+            // Test 25: QuickView Control
+            TestQuickView(form);
+
+            // Test 26: Process Control
+            TestProcess(form);
 
         }, 10000);
 

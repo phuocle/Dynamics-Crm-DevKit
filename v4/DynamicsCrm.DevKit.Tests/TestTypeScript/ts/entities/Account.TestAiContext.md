@@ -170,13 +170,19 @@ npm run debug
 | 20 | `Account.TestDouble.ts` | Double | R1-R17 | S1-S12 | form.Body.v4_DiscountPercentage |
 | 21 | `Account.TestIFrame.ts` | IFrame | R1-R7 | S1-S5 | form.Body.v4_IFrameExternal |
 | 22 | `Account.TestWebResource.ts` | WebResource | R1-R7 | S1-S6 | form.Body.v4_WebResourceHelp |
+| 23 | `Account.TestTimer.ts` | Timer | R1-R6 | S1-S4 | form.Body.v4_TimerSLA |
+| 24 | `Account.TestKnowledge.ts` | Knowledge | R1-R5 | S1-S6 | form.Body.v4_KnowledgeSearch |
+| 25 | `Account.TestQuickView.ts` | QuickView | R1-R5 | S1-S6 | form.QuickForm.contactquickform |
+| 26 | `Account.TestProcess.ts` | Process | R1-R9 | S1-S9 | form.Process.v4_AccountBPF |
 
 ---
 
 ## Chưa Test (TODO)
 
 | # | Interface | Sample Field | Ghi chú |
+| # | Interface | Sample Field | Ghi chú |
 |---|-----------|--------------|---------|
+| - | - | - | All Planned Tests Implemented |
 
 ---
 
