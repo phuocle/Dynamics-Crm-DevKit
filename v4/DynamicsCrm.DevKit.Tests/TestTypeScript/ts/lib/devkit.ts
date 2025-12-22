@@ -208,7 +208,7 @@ function loadQuickForms(formContext: any, quickItems: string[]): any {
     const loadQuickForm = (formContext: any, quickForms: any, quickForm: string) => {
         const fields = Object.keys(quickForms[quickForm]).filter(field => !excludedFields.has(field));
         const quick = formContext?.ui?.quickForms?.get(quickForm);
-        getter(quickForms[quickForm], 'Body', () => LoadFormDialog(quick, fields));
+        getter(quickForms[quickForm], 'Body', () => loadFormDialog(quick, fields));
         getter(quickForms[quickForm], 'ControlName', () => quick?.getName());
         getter(quickForms[quickForm], 'ControlParent', () => quick?.getParent());
         getter(quickForms[quickForm], 'ControlType', () => quick?.getControlType());
@@ -317,7 +317,7 @@ function loadGrids(formContext: any, gridItems: string[]): any {
     });
     return grids;
 }
-function LoadExecutionContext(executionContext: any): any {
+function loadExecutionContext(executionContext: any): DevKit.IExecutionContext {
     const obj: any = {};
     getter(obj, 'Depth', () => executionContext?.getDepth());
     getter(obj, 'EntityReference', () => executionContext?.getEventArgs()?.getEntityReference());
@@ -336,7 +336,7 @@ function LoadExecutionContext(executionContext: any): any {
     obj.SetSharedVariable = (key: string, value: any) => executionContext?.setSharedVariable(key, value);
     return obj;
 }
-function LoadSidePanes(): any {
+function loadSidePanes(): DevKit.ISidePanes {
     const sidePanes: any = {};
     const xrm = getXrm();
     getterSetter(sidePanes, 'DisplayState', () => (xrm as any)?.App?.sidePanes?.state, (value: any) => { const x = getXrm(); if ((x as any)?.App?.sidePanes) (x as any).App.sidePanes.state = value; });
@@ -346,7 +346,7 @@ function LoadSidePanes(): any {
     sidePanes.GetSelected = () => (xrm as any)?.App?.sidePanes?.getSelectedPane();
     return sidePanes;
 }
-function LoadWebApi(): DevKit.IWebApi {
+function loadWebApi(): DevKit.IWebApi {
     const obj: any = {} as DevKit.IWebApi;
     const xrm = getXrm();
     const getWebApi = xrm?.WebApi;
@@ -530,7 +530,7 @@ function LoadWebApi(): DevKit.IWebApi {
     });
     return obj;
 }
-function LoadCopilot(): DevKit.ICopilot {
+function loadCopilot(): DevKit.ICopilot {
     const obj: any = {};
     const xrm = getXrm();
     const getCopilot = (xrm as any)?.Copilot;
@@ -552,7 +552,7 @@ function LoadCopilot(): DevKit.ICopilot {
     };
     return obj;
 }
-function LoadFormV3<TBody = Record<string, any>, THeader = Record<string, any>, TTab = Record<string, any>, TGrid = Record<string, any>, TNavigation = Record<string, any>, TQuickForm = Record<string, any>, TProcess = any>(
+function loadFormV3<TBody = Record<string, any>, THeader = Record<string, any>, TTab = Record<string, any>, TGrid = Record<string, any>, TNavigation = Record<string, any>, TQuickForm = Record<string, any>, TProcess = any>(
     executionContext: any,
     defaultWebResourceName: string | undefined,
     formConfig: {
@@ -681,19 +681,19 @@ function LoadFormV3<TBody = Record<string, any>, THeader = Record<string, any>, 
     bodyObj.Tab = tab.length > 0 ? loadTabs(formContext, tab) : {};
     form.Body = bodyObj;
     form.Header = header.length > 0 ? loadFields(formContext, header, 'header_') : {};
-    form.Process = bpf.length > 0 ? LoadProcess(formContext, bpf) : {};
+    form.Process = bpf.length > 0 ? loadProcess(formContext, bpf) : {};
     form.QuickForm = quick.length > 0 ? loadQuickForms(formContext, quick) : {};
     form.Grid = grid.length > 0 ? loadGrids(formContext, grid) : {};
     form.Navigation = navigation.length > 0 ? loadNavigations(formContext, navigation) : {};
-    form.Dialog = dialog.length > 0 ? LoadFormDialog(formContext, dialog) : {};
-    form.Utility = LoadUtility(defaultWebResourceName);
-    form.ExecutionContext = LoadExecutionContext(executionContext);
-    form.SidePanes = LoadSidePanes();
-    form.WebApi = LoadWebApi();
-    form.Copilot = LoadCopilot();
+    form.Dialog = dialog.length > 0 ? loadFormDialog(formContext, dialog) : {};
+    form.Utility = loadUtility(defaultWebResourceName);
+    form.ExecutionContext = loadExecutionContext(executionContext);
+    form.SidePanes = loadSidePanes();
+    form.WebApi = loadWebApi();
+    form.Copilot = loadCopilot();
     return form;
 }
-function LoadProcess(formContext: any, bpf: string[] = []): any {
+function loadProcess(formContext: any, bpf: string[] = []): DevKit.IProcess {
     const process: any = {};
     if (bpf.length > 0) {
         let bpfProcessName: string | null = null;
@@ -830,7 +830,7 @@ function LoadProcess(formContext: any, bpf: string[] = []): any {
     process.SetActiveStage = (stageId: string, callback: any) => getProcess?.setActiveStage(stageId, callback);
     return process;
 }
-function LoadUtility(defaultWebResourceName?: string): any {
+function loadUtility(defaultWebResourceName?: string): DevKit.IUtility {
     const utility: any = {};
     const xrm = getXrm();
     const getApp = xrm?.App;
@@ -1014,7 +1014,7 @@ function LoadUtility(defaultWebResourceName?: string): any {
     utility.XmlEncode = (arg: string) => getEncoding?.xmlEncode(arg);
     return utility;
 }
-function LoadFormDialog(formContext: any, fields: string[]): any {
+function loadFormDialog(formContext: any, fields: string[]): any {
     const form: any = {};
     const fieldsLength = fields?.length || 0;
     for (let i = 0; i < fieldsLength; i++) {
@@ -1121,7 +1121,7 @@ export class FormBase<TBody, THeader, TTab, TGrid, TNavigation, TQuickForm, TPro
         defaultWebResourceName: string | undefined,
         formConfig: DevKit.IFormConfig
     ) {
-        const form = LoadFormV3<TBody, THeader, TTab, TGrid, TNavigation, TQuickForm, TProcess>(
+        const form = loadFormV3<TBody, THeader, TTab, TGrid, TNavigation, TQuickForm, TProcess>(
             executionContext,
             defaultWebResourceName,
             formConfig
@@ -1177,15 +1177,8 @@ export class FormBase<TBody, THeader, TTab, TGrid, TNavigation, TQuickForm, TPro
         this.Copilot = form.Copilot;
     }
 }
-export function defineWebApiField(
-    obj: any,
-    fieldName: string,
-    entity: Record<string, any>,
-    config: DevKit.IWebApiFieldConfig,
-    upsertEntity: Record<string, any>
-): void {
+export function defineWebApiField(obj: any, fieldName: string, entity: Record<string, any>, config: DevKit.IWebApiFieldConfig, upsertEntity: Record<string, any>): void {
     const { logicalName, schemaName, entityCollectionName, entityLogicalName, readOnly, type } = config;
-
     const getFormattedValue = (): string | string[] => {
         const formattedKey = logicalName + '@OData.Community.Display.V1.FormattedValue';
         if (entity?.[formattedKey] === undefined || entity?.[formattedKey] === null) {
@@ -1203,7 +1196,6 @@ export function defineWebApiField(
         }
         return entity?.[formattedKey];
     };
-
     const getValue = (): any => {
         if (entity?.[logicalName] === undefined || entity?.[logicalName] === null) {
             return null;
@@ -1220,7 +1212,6 @@ export function defineWebApiField(
         }
         return webApiReturnGet(entity?.[logicalName], type);
     };
-
     const setValue = (value: any): void => {
         if (type === 'MultiOptionSet') value = value?.join(',');
         if (entityCollectionName !== undefined && entityCollectionName?.length > 0) {
@@ -1236,7 +1227,6 @@ export function defineWebApiField(
         }
         entity[logicalName] = value;
     };
-
     Object.defineProperty(obj.FormattedValue, fieldName, {
         get: getFormattedValue
     });
@@ -1251,12 +1241,7 @@ export function defineWebApiField(
         });
     }
 }
-export function createWebApiEntity<T extends DevKit.IWebApiEntity>(
-    entity: Record<string, any> | undefined,
-    entityName: string,
-    entityCollectionName: string,
-    fieldConfigMap: DevKit.IWebApiFieldConfigMap
-): T {
+export function createWebApiEntity<T extends DevKit.IWebApiEntity>(entity: Record<string, any> | undefined, entityName: string, entityCollectionName: string, fieldConfigMap: DevKit.IWebApiFieldConfigMap): T {
     const e = entity ?? {};
     const upsertEntity: Record<string, any> = {};
     const webApiEntity: any = {
