@@ -3148,8 +3148,7 @@ describe('DevKit Module', () => {
         });
 
         test('should call CreateRecord with callback', async () => {
-            const { LoadWebApi } = require('../lib/devkit');
-            const webApi = LoadWebApi();
+            const mockExecContext = { getFormContext: () => ({ data: { entity: { attributes: { get: () => null } } }, ui: { formSelector: { getCurrentItem: () => null } } }) }; const webApi = LoadFormV3(mockExecContext, undefined, {}).WebApi;
             const successCallback = jest.fn();
 
             webApi.CreateRecord('account', { name: 'Test' }, successCallback);
@@ -3160,8 +3159,7 @@ describe('DevKit Module', () => {
         });
 
         test('should call DeleteRecord with callback', async () => {
-            const { LoadWebApi } = require('../lib/devkit');
-            const webApi = LoadWebApi();
+            const mockExecContext = { getFormContext: () => ({ data: { entity: { attributes: { get: () => null } } }, ui: { formSelector: { getCurrentItem: () => null } } }) }; const webApi = LoadFormV3(mockExecContext, undefined, {}).WebApi;
             const successCallback = jest.fn();
 
             webApi.DeleteRecord('account', '{id}', successCallback);
@@ -3172,8 +3170,7 @@ describe('DevKit Module', () => {
         });
 
         test('should call RetrieveRecord with callback', async () => {
-            const { LoadWebApi } = require('../lib/devkit');
-            const webApi = LoadWebApi();
+            const mockExecContext = { getFormContext: () => ({ data: { entity: { attributes: { get: () => null } } }, ui: { formSelector: { getCurrentItem: () => null } } }) }; const webApi = LoadFormV3(mockExecContext, undefined, {}).WebApi;
             const successCallback = jest.fn();
             const errorCallback = jest.fn();
 
@@ -3185,8 +3182,7 @@ describe('DevKit Module', () => {
         });
 
         test('should call RetrieveMultipleRecords with callback', async () => {
-            const { LoadWebApi } = require('../lib/devkit');
-            const webApi = LoadWebApi();
+            const mockExecContext = { getFormContext: () => ({ data: { entity: { attributes: { get: () => null } } }, ui: { formSelector: { getCurrentItem: () => null } } }) }; const webApi = LoadFormV3(mockExecContext, undefined, {}).WebApi;
             const successCallback = jest.fn();
 
             webApi.RetrieveMultipleRecords('account', '?$select=name', 50, successCallback);
@@ -3197,8 +3193,7 @@ describe('DevKit Module', () => {
         });
 
         test('should call UpdateRecord with callback', async () => {
-            const { LoadWebApi } = require('../lib/devkit');
-            const webApi = LoadWebApi();
+            const mockExecContext = { getFormContext: () => ({ data: { entity: { attributes: { get: () => null } } }, ui: { formSelector: { getCurrentItem: () => null } } }) }; const webApi = LoadFormV3(mockExecContext, undefined, {}).WebApi;
             const successCallback = jest.fn();
 
             webApi.UpdateRecord('account', '{id}', { name: 'Updated' }, successCallback);
@@ -3209,8 +3204,7 @@ describe('DevKit Module', () => {
         });
 
         test('should call Execute with callback', async () => {
-            const { LoadWebApi } = require('../lib/devkit');
-            const webApi = LoadWebApi();
+            const mockExecContext = { getFormContext: () => ({ data: { entity: { attributes: { get: () => null } } }, ui: { formSelector: { getCurrentItem: () => null } } }) }; const webApi = LoadFormV3(mockExecContext, undefined, {}).WebApi;
             const successCallback = jest.fn();
 
             webApi.Execute({ getMetadata: () => ({}) }, successCallback);
@@ -3221,8 +3215,7 @@ describe('DevKit Module', () => {
         });
 
         test('should call ExecuteMultiple with callback', async () => {
-            const { LoadWebApi } = require('../lib/devkit');
-            const webApi = LoadWebApi();
+            const mockExecContext = { getFormContext: () => ({ data: { entity: { attributes: { get: () => null } } }, ui: { formSelector: { getCurrentItem: () => null } } }) }; const webApi = LoadFormV3(mockExecContext, undefined, {}).WebApi;
             const successCallback = jest.fn();
 
             webApi.ExecuteMultiple([{ getMetadata: () => ({}) }], successCallback);
@@ -3262,8 +3255,7 @@ describe('DevKit Module', () => {
         });
 
         test('should access Online.Execute with callback', async () => {
-            const { LoadWebApi } = require('../lib/devkit');
-            const webApi = LoadWebApi();
+            const mockExecContext = { getFormContext: () => ({ data: { entity: { attributes: { get: () => null } } }, ui: { formSelector: { getCurrentItem: () => null } } }) }; const webApi = LoadFormV3(mockExecContext, undefined, {}).WebApi;
             const successCallback = jest.fn();
 
             webApi.Online.Execute({ getMetadata: () => ({}) }, successCallback);
@@ -3274,8 +3266,7 @@ describe('DevKit Module', () => {
         });
 
         test('should return promise from Online.Execute without callback', async () => {
-            const { LoadWebApi } = require('../lib/devkit');
-            const webApi = LoadWebApi();
+            const mockExecContext = { getFormContext: () => ({ data: { entity: { attributes: { get: () => null } } }, ui: { formSelector: { getCurrentItem: () => null } } }) }; const webApi = LoadFormV3(mockExecContext, undefined, {}).WebApi;
 
             const promise = webApi.Online.Execute({ getMetadata: () => ({}) });
 
@@ -3283,8 +3274,7 @@ describe('DevKit Module', () => {
         });
 
         test('should access Online.ExecuteMultiple with callback', async () => {
-            const { LoadWebApi } = require('../lib/devkit');
-            const webApi = LoadWebApi();
+            const mockExecContext = { getFormContext: () => ({ data: { entity: { attributes: { get: () => null } } }, ui: { formSelector: { getCurrentItem: () => null } } }) }; const webApi = LoadFormV3(mockExecContext, undefined, {}).WebApi;
             const successCallback = jest.fn();
 
             webApi.Online.ExecuteMultiple([{ getMetadata: () => ({}) }], successCallback);
@@ -3295,8 +3285,7 @@ describe('DevKit Module', () => {
         });
 
         test('should return promise from Online.ExecuteMultiple without callback', async () => {
-            const { LoadWebApi } = require('../lib/devkit');
-            const webApi = LoadWebApi();
+            const mockExecContext = { getFormContext: () => ({ data: { entity: { attributes: { get: () => null } } }, ui: { formSelector: { getCurrentItem: () => null } } }) }; const webApi = LoadFormV3(mockExecContext, undefined, {}).WebApi;
 
             const promise = webApi.Online.ExecuteMultiple([{ getMetadata: () => ({}) }]);
 
@@ -3304,8 +3293,7 @@ describe('DevKit Module', () => {
         });
 
         test('should check Offline.IsAvailable', () => {
-            const { LoadWebApi } = require('../lib/devkit');
-            const webApi = LoadWebApi();
+            const mockExecContext = { getFormContext: () => ({ data: { entity: { attributes: { get: () => null } } }, ui: { formSelector: { getCurrentItem: () => null } } }) }; const webApi = LoadFormV3(mockExecContext, undefined, {}).WebApi;
 
             const isAvailable = webApi.Offline.IsAvailable('account');
 
@@ -3338,8 +3326,7 @@ describe('DevKit Module', () => {
         });
 
         test('should call ExecuteEvent with callback', async () => {
-            const { LoadCopilot } = require('../lib/devkit');
-            const copilot = LoadCopilot();
+            const mockExecContext = { getFormContext: () => ({ data: { entity: { attributes: { get: () => null } } }, ui: { formSelector: { getCurrentItem: () => null } } }) }; const copilot = LoadFormV3(mockExecContext, undefined, {}).Copilot;
             const successCallback = jest.fn();
 
             copilot.ExecuteEvent('eventName', { param: 'value' }, successCallback);
@@ -3350,8 +3337,7 @@ describe('DevKit Module', () => {
         });
 
         test('should return promise from ExecuteEvent without callback', async () => {
-            const { LoadCopilot } = require('../lib/devkit');
-            const copilot = LoadCopilot();
+            const mockExecContext = { getFormContext: () => ({ data: { entity: { attributes: { get: () => null } } }, ui: { formSelector: { getCurrentItem: () => null } } }) }; const copilot = LoadFormV3(mockExecContext, undefined, {}).Copilot;
 
             const promise = copilot.ExecuteEvent('eventName', { param: 'value' });
 
@@ -3361,8 +3347,7 @@ describe('DevKit Module', () => {
         });
 
         test('should call ExecutePrompt with callback', async () => {
-            const { LoadCopilot } = require('../lib/devkit');
-            const copilot = LoadCopilot();
+            const mockExecContext = { getFormContext: () => ({ data: { entity: { attributes: { get: () => null } } }, ui: { formSelector: { getCurrentItem: () => null } } }) }; const copilot = LoadFormV3(mockExecContext, undefined, {}).Copilot;
             const successCallback = jest.fn();
 
             copilot.ExecutePrompt('What is CRM?', successCallback);
@@ -3373,8 +3358,7 @@ describe('DevKit Module', () => {
         });
 
         test('should return promise from ExecutePrompt without callback', async () => {
-            const { LoadCopilot } = require('../lib/devkit');
-            const copilot = LoadCopilot();
+            const mockExecContext = { getFormContext: () => ({ data: { entity: { attributes: { get: () => null } } }, ui: { formSelector: { getCurrentItem: () => null } } }) }; const copilot = LoadFormV3(mockExecContext, undefined, {}).Copilot;
 
             const promise = copilot.ExecutePrompt('What is CRM?');
 
@@ -3423,8 +3407,7 @@ describe('DevKit Module', () => {
         });
 
         test('should call RetrieveRecords with plain FetchXml', async () => {
-            const { LoadWebApi } = require('../lib/devkit');
-            const webApi = LoadWebApi();
+            const mockExecContext = { getFormContext: () => ({ data: { entity: { attributes: { get: () => null } } }, ui: { formSelector: { getCurrentItem: () => null } } }) }; const webApi = LoadFormV3(mockExecContext, undefined, {}).WebApi;
             const mockFactory = jest.fn().mockImplementation((entity: any) => entity);
 
             const fetchXml = '<fetch><entity name="account"><attribute name="name"/></entity></fetch>';
@@ -3436,8 +3419,7 @@ describe('DevKit Module', () => {
         });
 
         test('should call RetrieveRecords with encoded FetchXml', async () => {
-            const { LoadWebApi } = require('../lib/devkit');
-            const webApi = LoadWebApi();
+            const mockExecContext = { getFormContext: () => ({ data: { entity: { attributes: { get: () => null } } }, ui: { formSelector: { getCurrentItem: () => null } } }) }; const webApi = LoadFormV3(mockExecContext, undefined, {}).WebApi;
             const mockFactory = jest.fn().mockImplementation((entity: any) => entity);
 
             const encodedFetchXml = '?fetchXml=' + encodeURIComponent('<fetch><entity name="account"></entity></fetch>');
@@ -3447,8 +3429,7 @@ describe('DevKit Module', () => {
         });
 
         test('should call RetrieveRecords with entity name and OData options', async () => {
-            const { LoadWebApi } = require('../lib/devkit');
-            const webApi = LoadWebApi();
+            const mockExecContext = { getFormContext: () => ({ data: { entity: { attributes: { get: () => null } } }, ui: { formSelector: { getCurrentItem: () => null } } }) }; const webApi = LoadFormV3(mockExecContext, undefined, {}).WebApi;
             const mockFactory = jest.fn().mockImplementation((entity: any) => entity);
 
             const promise = webApi.RetrieveRecords(mockFactory, 'account', '?$select=name', 50);
@@ -3457,8 +3438,7 @@ describe('DevKit Module', () => {
         });
 
         test('should call RetrieveRecords with callback', async () => {
-            const { LoadWebApi } = require('../lib/devkit');
-            const webApi = LoadWebApi();
+            const mockExecContext = { getFormContext: () => ({ data: { entity: { attributes: { get: () => null } } }, ui: { formSelector: { getCurrentItem: () => null } } }) }; const webApi = LoadFormV3(mockExecContext, undefined, {}).WebApi;
             const mockFactory = jest.fn().mockImplementation((entity: any) => entity);
             const successCallback = jest.fn();
 
@@ -3469,8 +3449,7 @@ describe('DevKit Module', () => {
         });
 
         test('should call RetrieveRecord with constructor and options as function', async () => {
-            const { LoadWebApi } = require('../lib/devkit');
-            const webApi = LoadWebApi();
+            const mockExecContext = { getFormContext: () => ({ data: { entity: { attributes: { get: () => null } } }, ui: { formSelector: { getCurrentItem: () => null } } }) }; const webApi = LoadFormV3(mockExecContext, undefined, {}).WebApi;
 
             class AccountApi {
                 constructor(public entity: any) { }
@@ -3484,8 +3463,7 @@ describe('DevKit Module', () => {
         });
 
         test('should call RetrieveRecord with constructor and no options', async () => {
-            const { LoadWebApi } = require('../lib/devkit');
-            const webApi = LoadWebApi();
+            const mockExecContext = { getFormContext: () => ({ data: { entity: { attributes: { get: () => null } } }, ui: { formSelector: { getCurrentItem: () => null } } }) }; const webApi = LoadFormV3(mockExecContext, undefined, {}).WebApi;
 
             class AccountApi {
                 constructor(public entity: any) { }
@@ -3527,8 +3505,7 @@ describe('DevKit Module', () => {
         });
 
         test('should return promise from CreateRecord', async () => {
-            const { LoadWebApi } = require('../lib/devkit');
-            const webApi = LoadWebApi();
+            const mockExecContext = { getFormContext: () => ({ data: { entity: { attributes: { get: () => null } } }, ui: { formSelector: { getCurrentItem: () => null } } }) }; const webApi = LoadFormV3(mockExecContext, undefined, {}).WebApi;
 
             const promise = webApi.CreateRecord('account', { name: 'Test' });
 
@@ -3538,8 +3515,7 @@ describe('DevKit Module', () => {
         });
 
         test('should return promise from DeleteRecord', async () => {
-            const { LoadWebApi } = require('../lib/devkit');
-            const webApi = LoadWebApi();
+            const mockExecContext = { getFormContext: () => ({ data: { entity: { attributes: { get: () => null } } }, ui: { formSelector: { getCurrentItem: () => null } } }) }; const webApi = LoadFormV3(mockExecContext, undefined, {}).WebApi;
 
             const promise = webApi.DeleteRecord('account', '{id}');
 
@@ -3547,8 +3523,7 @@ describe('DevKit Module', () => {
         });
 
         test('should return promise from RetrieveMultipleRecords', async () => {
-            const { LoadWebApi } = require('../lib/devkit');
-            const webApi = LoadWebApi();
+            const mockExecContext = { getFormContext: () => ({ data: { entity: { attributes: { get: () => null } } }, ui: { formSelector: { getCurrentItem: () => null } } }) }; const webApi = LoadFormV3(mockExecContext, undefined, {}).WebApi;
 
             const promise = webApi.RetrieveMultipleRecords('account', '?$select=name');
 
@@ -3556,8 +3531,7 @@ describe('DevKit Module', () => {
         });
 
         test('should return promise from UpdateRecord', async () => {
-            const { LoadWebApi } = require('../lib/devkit');
-            const webApi = LoadWebApi();
+            const mockExecContext = { getFormContext: () => ({ data: { entity: { attributes: { get: () => null } } }, ui: { formSelector: { getCurrentItem: () => null } } }) }; const webApi = LoadFormV3(mockExecContext, undefined, {}).WebApi;
 
             const promise = webApi.UpdateRecord('account', '{id}', { name: 'Updated' });
 
@@ -3565,8 +3539,7 @@ describe('DevKit Module', () => {
         });
 
         test('should return promise from Execute', async () => {
-            const { LoadWebApi } = require('../lib/devkit');
-            const webApi = LoadWebApi();
+            const mockExecContext = { getFormContext: () => ({ data: { entity: { attributes: { get: () => null } } }, ui: { formSelector: { getCurrentItem: () => null } } }) }; const webApi = LoadFormV3(mockExecContext, undefined, {}).WebApi;
 
             const promise = webApi.Execute({ getMetadata: () => ({}) });
 
@@ -3574,8 +3547,7 @@ describe('DevKit Module', () => {
         });
 
         test('should return promise from ExecuteMultiple', async () => {
-            const { LoadWebApi } = require('../lib/devkit');
-            const webApi = LoadWebApi();
+            const mockExecContext = { getFormContext: () => ({ data: { entity: { attributes: { get: () => null } } }, ui: { formSelector: { getCurrentItem: () => null } } }) }; const webApi = LoadFormV3(mockExecContext, undefined, {}).WebApi;
 
             const promise = webApi.ExecuteMultiple([{ getMetadata: () => ({}) }]);
 
@@ -3719,8 +3691,7 @@ describe('DevKit Module', () => {
             };
             (global as any).DOMParser = jest.fn().mockImplementation(() => mockParser);
 
-            const { LoadWebApi } = require('../lib/devkit');
-            const webApi = LoadWebApi();
+            const mockExecContext = { getFormContext: () => ({ data: { entity: { attributes: { get: () => null } } }, ui: { formSelector: { getCurrentItem: () => null } } }) }; const webApi = LoadFormV3(mockExecContext, undefined, {}).WebApi;
             const mockFactory = jest.fn().mockImplementation((e: any) => e);
 
             // Pass XML that starts with spaces then '<'
@@ -3739,8 +3710,7 @@ describe('DevKit Module', () => {
             };
             (global as any).DOMParser = jest.fn().mockImplementation(() => mockParser);
 
-            const { LoadWebApi } = require('../lib/devkit');
-            const webApi = LoadWebApi();
+            const mockExecContext = { getFormContext: () => ({ data: { entity: { attributes: { get: () => null } } }, ui: { formSelector: { getCurrentItem: () => null } } }) }; const webApi = LoadFormV3(mockExecContext, undefined, {}).WebApi;
             const mockFactory = jest.fn().mockImplementation((e: any) => e);
 
             const fetchXml = '<fetch><invalid/></fetch>';
@@ -3749,8 +3719,7 @@ describe('DevKit Module', () => {
         });
 
         test('should throw error for OData query without entity name', async () => {
-            const { LoadWebApi } = require('../lib/devkit');
-            const webApi = LoadWebApi();
+            const mockExecContext = { getFormContext: () => ({ data: { entity: { attributes: { get: () => null } } }, ui: { formSelector: { getCurrentItem: () => null } } }) }; const webApi = LoadFormV3(mockExecContext, undefined, {}).WebApi;
             const mockFactory = jest.fn().mockImplementation((e: any) => e);
 
             // This is OData style (starts with ?) but NOT fetchXml, so entity cannot be determined
@@ -3806,8 +3775,7 @@ describe('DevKit Module', () => {
         });
 
         test('should handle FetchXml with callback as 3rd param', async () => {
-            const { LoadWebApi } = require('../lib/devkit');
-            const webApi = LoadWebApi();
+            const mockExecContext = { getFormContext: () => ({ data: { entity: { attributes: { get: () => null } } }, ui: { formSelector: { getCurrentItem: () => null } } }) }; const webApi = LoadFormV3(mockExecContext, undefined, {}).WebApi;
             const mockFactory = jest.fn().mockImplementation((e: any) => e);
             const successCallback = jest.fn();
             const errorCallback = jest.fn();
@@ -3821,8 +3789,7 @@ describe('DevKit Module', () => {
         });
 
         test('should handle FetchXml with maxPageSize as 3rd param and callback as 4th', async () => {
-            const { LoadWebApi } = require('../lib/devkit');
-            const webApi = LoadWebApi();
+            const mockExecContext = { getFormContext: () => ({ data: { entity: { attributes: { get: () => null } } }, ui: { formSelector: { getCurrentItem: () => null } } }) }; const webApi = LoadFormV3(mockExecContext, undefined, {}).WebApi;
             const mockFactory = jest.fn().mockImplementation((e: any) => e);
             const successCallback = jest.fn();
 
@@ -3859,8 +3826,7 @@ describe('DevKit Module', () => {
         });
 
         test('should return empty array when no entities found', async () => {
-            const { LoadWebApi } = require('../lib/devkit');
-            const webApi = LoadWebApi();
+            const mockExecContext = { getFormContext: () => ({ data: { entity: { attributes: { get: () => null } } }, ui: { formSelector: { getCurrentItem: () => null } } }) }; const webApi = LoadFormV3(mockExecContext, undefined, {}).WebApi;
             const mockFactory = jest.fn().mockImplementation((e: any) => e);
 
             const promise = webApi.RetrieveRecords(mockFactory, 'account', '?$select=name');
@@ -3964,3 +3930,5 @@ describe('DevKit Module', () => {
         });
     });
 });
+
+
