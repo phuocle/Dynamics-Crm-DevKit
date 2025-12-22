@@ -164,6 +164,7 @@ npm run debug
 | 14 | `Account.TestTab.ts` | ITab + Section | R1-R10 | S1-S8 | DETAILS_TAB |
 | 15 | `Account.TestNavigationItem.ts` | NavigationItem | R1-R3 | S1-S3 | Account_Tasks |
 | 16 | `Account.TestExecutionContext.ts` | ExecutionContext | R1-R8 | S1-S6 | form.ExecutionContext |
+| 17 | `Account.TestSidePanes.ts` | SidePanes | R1-R8 | S1-S6 | form.SidePanes |
 
 ---
 
@@ -171,10 +172,10 @@ npm run debug
 
 | # | Interface | Sample Field | Ghi chú |
 |---|-----------|--------------|---------|
-| 17 | Decimal | `form.Body.v4_Latitude` | Min, Max, Precision |
-| 18 | Double | `form.Body.v4_DiscountPercentage` | Min, Max, Precision |
-| 19 | IFrame | `form.Body.v4_IFrameExternal` | Src, InitialUrl |
-| 20 | WebResource | `form.Body.v4_WebResourceHelp` | |
+| 18 | Decimal | `form.Body.v4_Latitude` | Min, Max, Precision |
+| 19 | Double | `form.Body.v4_DiscountPercentage` | Min, Max, Precision |
+| 20 | IFrame | `form.Body.v4_IFrameExternal` | Src, InitialUrl |
+| 21 | WebResource | `form.Body.v4_WebResourceHelp` | |
 
 ---
 
@@ -191,4 +192,4 @@ npm run debug
 
 ---
 
-*Last updated: 2025-12-20*
+*Last updated: 2025-12-22*

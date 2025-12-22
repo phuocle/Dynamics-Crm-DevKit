@@ -16,6 +16,7 @@ import { TestMultiOptionSet } from './Account.TestMultiOptionSet';
 import { TestTab } from './Account.TestTab';
 import { TestNavigationItem } from './Account.TestNavigationItem';
 import { TestExecutionContext } from './Account.TestExecutionContext';
+import { TestSidePanes } from './Account.TestSidePanes';
 
 const formAccount = (function () {
     "use strict";
@@ -95,6 +96,9 @@ const formAccount = (function () {
 
             // Test 16: ExecutionContext
             TestExecutionContext(form);
+
+            // Test 17: SidePanes
+            TestSidePanes(form);
 
         }, 10000);
 
