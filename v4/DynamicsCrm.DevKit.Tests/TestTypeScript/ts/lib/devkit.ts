@@ -693,7 +693,7 @@ function loadFormV3<TBody = Record<string, any>, THeader = Record<string, any>, 
     form.Copilot = loadCopilot();
     return form;
 }
-function loadProcess(formContext: any, bpf: string[] = []): DevKit.IProcess {
+function loadProcess(formContext: any, bpf: string[] = []): any {
     const process: any = {};
     if (bpf.length > 0) {
         let bpfProcessName: string | null = null;
