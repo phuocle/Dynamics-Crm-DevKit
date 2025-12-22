@@ -1284,6 +1284,4 @@ export function createWebApiEntity<T extends DevKit.IWebApiEntity>(entity: Recor
 /** @internal - For testing only */
 export const _test_LoadProcess = loadProcess;
 /** @internal - For testing only */
-export const _test_LoadUtility = loadUtility;
-/** @internal - For testing only */
 export const _test_LoadFormDialog = loadFormDialog;

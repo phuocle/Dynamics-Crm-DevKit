@@ -6,7 +6,6 @@ import { XrmMockGenerator } from 'xrm-mock';
 import {
     FormBase,
     _test_LoadProcess as LoadProcess,
-    _test_LoadUtility as LoadUtility,
     _test_LoadFormDialog as LoadFormDialog
 } from '../lib/devkit';
 import { OptionSet } from '../entities/generator/OptionSet';
@@ -520,40 +519,40 @@ describe('DevKit Module', () => {
         });
 
         test('should load utility correctly', () => {
-            const result = LoadUtility(undefined);
-
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+            const result = form.Utility;
             expect(result).toBeDefined();
             expect(typeof result.CloseProgressIndicator).toBe('function');
             expect(typeof result.ShowProgressIndicator).toBe('function');
         });
 
         test('should have dialog methods', () => {
-            const result = LoadUtility(undefined);
-
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+            const result = form.Utility;
             expect(typeof result.OpenAlertDialog).toBe('function');
             expect(typeof result.OpenConfirmDialog).toBe('function');
             expect(typeof result.OpenErrorDialog).toBe('function');
         });
 
         test('should have navigation methods', () => {
-            const result = LoadUtility(undefined);
-
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+            const result = form.Utility;
             expect(typeof result.OpenForm).toBe('function');
             expect(typeof result.OpenUrl).toBe('function');
             expect(typeof result.OpenWebResource).toBe('function');
         });
 
         test('should have device methods', () => {
-            const result = LoadUtility(undefined);
-
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+            const result = form.Utility;
             expect(typeof result.CaptureImage).toBe('function');
             expect(typeof result.CaptureAudio).toBe('function');
             expect(typeof result.CaptureVideo).toBe('function');
         });
 
         test('should handle undefined webResourceName', () => {
-            const result = LoadUtility(undefined);
-
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+            const result = form.Utility;
             expect(result).toBeDefined();
         });
     });
@@ -1339,7 +1338,8 @@ describe('DevKit Module', () => {
         });
 
         test('should get client information', () => {
-            const result = LoadUtility(undefined);
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+            const result = form.Utility;
 
             expect(result.Client.ClientName).toBe('Web');
             expect(result.Client.ClientState).toBe('Online');
@@ -1347,7 +1347,8 @@ describe('DevKit Module', () => {
         });
 
         test('should get organization settings', () => {
-            const result = LoadUtility(undefined);
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+            const result = form.Utility;
 
             expect(result.OrganizationSettings.OrganizationId).toBe('{org-id}');
             expect(result.OrganizationSettings.UniqueName).toBe('orgname');
@@ -1355,14 +1356,16 @@ describe('DevKit Module', () => {
         });
 
         test('should get user settings', () => {
-            const result = LoadUtility(undefined);
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+            const result = form.Utility;
 
             expect(result.UserSettings.UserId).toBe('{user-id}');
             expect(result.UserSettings.UserName).toBe('Test User');
         });
 
         test('should call device methods', () => {
-            const result = LoadUtility(undefined);
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+            const result = form.Utility;
 
             result.CaptureImage({});
             result.CaptureAudio();
@@ -1374,21 +1377,24 @@ describe('DevKit Module', () => {
         });
 
         test('should encode XML', () => {
-            const result = LoadUtility(undefined);
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+            const result = form.Utility;
 
             expect(result.XmlEncode('test')).toBe('encoded:test');
             expect(result.XmlAttributeEncode('test')).toBe('encoded:test');
         });
 
         test('should get resource string', () => {
-            const result = LoadUtility('devkit_/resources');
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, 'devkit_/resources', {});
+            const result = form.Utility;
 
             expect(result.Resource('key1')).toBe('Resource String');
             expect(result.ResourceString('devkit_/other', 'key2')).toBe('Resource String');
         });
 
         test('should get URLs', () => {
-            const result = LoadUtility(undefined);
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+            const result = form.Utility;
 
             expect(result.ClientUrl).toBe('https://org.crm.dynamics.com');
             expect(result.CurrentAppUrl).toBe('https://org.crm.dynamics.com/main.aspx');
@@ -2050,7 +2056,8 @@ describe('DevKit Module', () => {
         });
 
         test('should call AddGlobalNotification with callback', async () => {
-            const result = LoadUtility(undefined);
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+            const result = form.Utility;
             const successCallback = jest.fn();
 
             result.AddGlobalNotification({ type: 1 }, successCallback);
@@ -2060,7 +2067,8 @@ describe('DevKit Module', () => {
         });
 
         test('should call OpenAlertDialog with callback', async () => {
-            const result = LoadUtility(undefined);
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+            const result = form.Utility;
             const closeCallback = jest.fn();
 
             result.OpenAlertDialog({ text: 'Alert' }, {}, closeCallback);
@@ -2070,7 +2078,8 @@ describe('DevKit Module', () => {
         });
 
         test('should call OpenConfirmDialog with callback', async () => {
-            const result = LoadUtility(undefined);
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+            const result = form.Utility;
             const successCallback = jest.fn();
 
             result.OpenConfirmDialog({ text: 'Confirm?' }, {}, successCallback);
@@ -2080,7 +2089,8 @@ describe('DevKit Module', () => {
         });
 
         test('should call OpenForm with callback', async () => {
-            const result = LoadUtility(undefined);
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+            const result = form.Utility;
             const successCallback = jest.fn();
 
             result.OpenForm({ entityName: 'account' }, {}, successCallback);
@@ -2090,7 +2100,8 @@ describe('DevKit Module', () => {
         });
 
         test('should call NavigateTo with callback', async () => {
-            const result = LoadUtility(undefined);
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+            const result = form.Utility;
             const successCallback = jest.fn();
 
             result.NavigateTo({ pageType: 'entityrecord' }, {}, successCallback);
@@ -2100,7 +2111,8 @@ describe('DevKit Module', () => {
         });
 
         test('should call PickFile with callback', async () => {
-            const result = LoadUtility(undefined);
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+            const result = form.Utility;
             const successCallback = jest.fn();
 
             result.PickFile({}, successCallback);
@@ -2110,7 +2122,8 @@ describe('DevKit Module', () => {
         });
 
         test('should call utility navigation methods', () => {
-            const result = LoadUtility(undefined);
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+            const result = form.Utility;
 
             result.OpenFile({ fileName: 'test.pdf' });
             result.OpenUrl('https://example.com');
@@ -2122,25 +2135,29 @@ describe('DevKit Module', () => {
         });
 
         test('should get AdvancedConfigSetting', () => {
-            const result = LoadUtility(undefined);
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+            const result = form.Utility;
 
             expect(result.AdvancedConfigSetting('MaxIncidentMergeNumber')).toBe('setting');
         });
 
         test('should get PrependOrgName', () => {
-            const result = LoadUtility(undefined);
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+            const result = form.Utility;
 
             expect(result.PrependOrgName('/path')).toBe('/org/path');
         });
 
         test('should get WebResourceUrl', () => {
-            const result = LoadUtility(undefined);
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+            const result = form.Utility;
 
             expect(result.WebResourceUrl('wr')).toBe('/wr');
         });
 
         test('should call RefreshParentGrid', () => {
-            const result = LoadUtility(undefined);
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+            const result = form.Utility;
 
             result.RefreshParentGrid({});
 
@@ -2148,7 +2165,8 @@ describe('DevKit Module', () => {
         });
 
         test('should call ShowProgressIndicator', () => {
-            const result = LoadUtility(undefined);
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+            const result = form.Utility;
 
             result.ShowProgressIndicator('Loading...');
 
@@ -2361,7 +2379,8 @@ describe('DevKit Module', () => {
         });
 
         test('should return promise from AddGlobalNotification without callback', async () => {
-            const result = LoadUtility(undefined);
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+            const result = form.Utility;
 
             const promise = result.AddGlobalNotification({ type: 1, message: 'test' });
 
@@ -2371,7 +2390,8 @@ describe('DevKit Module', () => {
         });
 
         test('should return promise from AllowedStatusTransitions without callback', async () => {
-            const result = LoadUtility(undefined);
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+            const result = form.Utility;
 
             const promise = result.AllowedStatusTransitions('account', 0);
 
@@ -2381,7 +2401,8 @@ describe('DevKit Module', () => {
         });
 
         test('should return promise from CurrentAppProperties without callback', async () => {
-            const result = LoadUtility(undefined);
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+            const result = form.Utility;
 
             const promise = result.CurrentAppProperties();
 
@@ -2391,7 +2412,8 @@ describe('DevKit Module', () => {
         });
 
         test('should return promise from EntityMetadata without callback', async () => {
-            const result = LoadUtility(undefined);
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+            const result = form.Utility;
 
             const promise = result.EntityMetadata('account', ['displayname']);
 
@@ -2401,7 +2423,8 @@ describe('DevKit Module', () => {
         });
 
         test('should return promise from InvokeProcessAction without callback', async () => {
-            const result = LoadUtility(undefined);
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+            const result = form.Utility;
 
             const promise = result.InvokeProcessAction('ActionName', { param: 'value' });
 
@@ -2411,7 +2434,8 @@ describe('DevKit Module', () => {
         });
 
         test('should return promise from LookupObjects without callback', async () => {
-            const result = LoadUtility(undefined);
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+            const result = form.Utility;
 
             const promise = result.LookupObjects({ entityTypes: ['account'] });
 
@@ -2421,7 +2445,8 @@ describe('DevKit Module', () => {
         });
 
         test('should return promise from NavigateTo without callback', async () => {
-            const result = LoadUtility(undefined);
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+            const result = form.Utility;
 
             const promise = result.NavigateTo({ pageType: 'entityrecord' }, {});
 
@@ -2430,7 +2455,8 @@ describe('DevKit Module', () => {
         });
 
         test('should return promise from OpenAlertDialog without callback', async () => {
-            const result = LoadUtility(undefined);
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+            const result = form.Utility;
 
             const promise = result.OpenAlertDialog({ text: 'Alert' }, {});
 
@@ -2439,7 +2465,8 @@ describe('DevKit Module', () => {
         });
 
         test('should return promise from OpenConfirmDialog without callback', async () => {
-            const result = LoadUtility(undefined);
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+            const result = form.Utility;
 
             const promise = result.OpenConfirmDialog({ title: 'Confirm', text: 'Are you sure?' }, {});
 
@@ -2449,7 +2476,8 @@ describe('DevKit Module', () => {
         });
 
         test('should return promise from OpenErrorDialog without callback', async () => {
-            const result = LoadUtility(undefined);
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+            const result = form.Utility;
 
             const promise = result.OpenErrorDialog({ message: 'Error occurred' });
 
@@ -2458,7 +2486,8 @@ describe('DevKit Module', () => {
         });
 
         test('should return promise from OpenForm without callback', async () => {
-            const result = LoadUtility(undefined);
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+            const result = form.Utility;
 
             const promise = result.OpenForm({ entityName: 'account' }, {});
 
@@ -2468,7 +2497,8 @@ describe('DevKit Module', () => {
         });
 
         test('should return promise from PickFile without callback', async () => {
-            const result = LoadUtility(undefined);
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+            const result = form.Utility;
 
             const promise = result.PickFile({ allowMultipleFiles: true });
 
@@ -2478,7 +2508,8 @@ describe('DevKit Module', () => {
         });
 
         test('should return promise from ClearGlobalNotification without callback', async () => {
-            const result = LoadUtility(undefined);
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+            const result = form.Utility;
 
             const promise = result.ClearGlobalNotification('notif-id');
 
@@ -2487,7 +2518,8 @@ describe('DevKit Module', () => {
         });
 
         test('should return promise from CurrentAppName without callback', async () => {
-            const result = LoadUtility(undefined);
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+            const result = form.Utility;
 
             const promise = result.CurrentAppName();
 
@@ -2820,7 +2852,8 @@ describe('DevKit Module', () => {
         });
 
         test('should call ClearGlobalNotification with callback', async () => {
-            const result = LoadUtility(undefined);
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+            const result = form.Utility;
             const successCallback = jest.fn();
 
             result.ClearGlobalNotification('notif-id', successCallback);
@@ -2831,7 +2864,8 @@ describe('DevKit Module', () => {
         });
 
         test('should call CurrentAppName with callback', async () => {
-            const result = LoadUtility(undefined);
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+            const result = form.Utility;
             const successCallback = jest.fn();
 
             result.CurrentAppName(successCallback);
@@ -2842,7 +2876,8 @@ describe('DevKit Module', () => {
         });
 
         test('should call CaptureAudio with callback', async () => {
-            const result = LoadUtility(undefined);
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+            const result = form.Utility;
             const successCallback = jest.fn();
 
             result.CaptureAudio(successCallback);
@@ -2853,7 +2888,8 @@ describe('DevKit Module', () => {
         });
 
         test('should call CaptureVideo with callback', async () => {
-            const result = LoadUtility(undefined);
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+            const result = form.Utility;
             const successCallback = jest.fn();
 
             result.CaptureVideo(successCallback);
@@ -2885,7 +2921,8 @@ describe('DevKit Module', () => {
                 }
             };
 
-            const result = LoadUtility(undefined);
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+            const result = form.Utility;
 
             expect(result.ClientUrl).toBe('parent-url');
 
@@ -2911,7 +2948,8 @@ describe('DevKit Module', () => {
                 }
             };
 
-            const result = LoadUtility(undefined);
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+            const result = form.Utility;
 
             expect(result.ClientUrl).toBe('grandparent-url');
 
@@ -2920,7 +2958,8 @@ describe('DevKit Module', () => {
 
         test('should return undefined when no Xrm is found', () => {
             // No window.Xrm, no parent.window.Xrm
-            const result = LoadUtility(undefined);
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+            const result = form.Utility;
 
             // Should not throw, just return undefined for properties
             expect(result.ClientUrl).toBeUndefined();
@@ -3883,6 +3922,7 @@ describe('DevKit Module', () => {
     });
 
 });
+
 
 
 
