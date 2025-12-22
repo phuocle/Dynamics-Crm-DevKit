@@ -5,10 +5,9 @@
 import { XrmMockGenerator } from 'xrm-mock';
 import {
     FormBase,
-    LoadFormV2,
+    LoadFormV3,
     LoadProcess,
     LoadUtility,
-    LoadSidePanes,
     LoadFormDialog
 } from '../lib/devkit';
 import { OptionSet } from '../entities/generator/OptionSet';
@@ -103,9 +102,9 @@ describe('DevKit Module', () => {
     });
 
     // =========================================================================
-    // LoadFormV2 Tests
+    // LoadFormV3 Tests
     // =========================================================================
-    describe('LoadFormV2', () => {
+    describe('LoadFormV3', () => {
         let mockExecutionContext: any;
         let mockFormContext: any;
 
@@ -273,7 +272,7 @@ describe('DevKit Module', () => {
         });
 
         test('should load form with basic configuration', () => {
-            const result = LoadFormV2(mockExecutionContext, undefined, {
+            const result = LoadFormV3(mockExecutionContext, undefined, {
                 body: ['name', 'telephone1'],
                 header: [],
                 tab: [],
@@ -288,7 +287,7 @@ describe('DevKit Module', () => {
         });
 
         test('should load ExecutionContext correctly', () => {
-            const result = LoadFormV2(mockExecutionContext, undefined, {});
+            const result = LoadFormV3(mockExecutionContext, undefined, {});
 
             expect(result.ExecutionContext).toBeDefined();
             expect(result.ExecutionContext.Depth).toBe(1);
@@ -296,7 +295,7 @@ describe('DevKit Module', () => {
         });
 
         test('should load form properties', () => {
-            const result = LoadFormV2(mockExecutionContext, undefined, {});
+            const result = LoadFormV3(mockExecutionContext, undefined, {});
 
             expect(result.EntityId).toBe('{00000000-0000-0000-0000-000000000001}');
             expect(result.EntityName).toBe('account');
@@ -304,7 +303,7 @@ describe('DevKit Module', () => {
         });
 
         test('should provide form methods', () => {
-            const result = LoadFormV2(mockExecutionContext, undefined, {});
+            const result = LoadFormV3(mockExecutionContext, undefined, {});
 
             expect(typeof result.Refresh).toBe('function');
             expect(typeof result.Close).toBe('function');
@@ -314,7 +313,7 @@ describe('DevKit Module', () => {
         });
 
         test('should load body fields', () => {
-            const result = LoadFormV2(mockExecutionContext, undefined, {
+            const result = LoadFormV3(mockExecutionContext, undefined, {
                 body: ['name', 'telephone1']
             });
 
@@ -324,7 +323,7 @@ describe('DevKit Module', () => {
         });
 
         test('should handle empty configuration', () => {
-            const result = LoadFormV2(mockExecutionContext, undefined, {});
+            const result = LoadFormV3(mockExecutionContext, undefined, {});
 
             expect(result).toBeDefined();
             expect(result.Body).toEqual({ Tab: {} });
@@ -505,9 +504,11 @@ describe('DevKit Module', () => {
     });
 
     // =========================================================================
-    // LoadSidePanes Tests
+    // LoadSidePanes Tests (via LoadFormV3)
     // =========================================================================
-    describe('LoadSidePanes', () => {
+    describe('LoadSidePanes (via LoadFormV3)', () => {
+        let mockExecutionContext: any;
+
         beforeEach(() => {
             (global as any).window = {
                 Xrm: {
@@ -522,6 +523,12 @@ describe('DevKit Module', () => {
                     }
                 }
             };
+            mockExecutionContext = {
+                getFormContext: () => ({
+                    data: { entity: { attributes: { get: () => null } } },
+                    ui: { formSelector: { getCurrentItem: () => null } }
+                })
+            };
         });
 
         afterEach(() => {
@@ -529,7 +536,8 @@ describe('DevKit Module', () => {
         });
 
         test('should load side panes correctly', () => {
-            const result = LoadSidePanes();
+            const form = LoadFormV3(mockExecutionContext, undefined, {});
+            const result = form.SidePanes;
 
             expect(result).toBeDefined();
             expect(typeof result.Create).toBe('function');
@@ -539,13 +547,15 @@ describe('DevKit Module', () => {
         });
 
         test('should have DisplayState property', () => {
-            const result = LoadSidePanes();
+            const form = LoadFormV3(mockExecutionContext, undefined, {});
+            const result = form.SidePanes;
 
             expect(result.DisplayState).toBe(1);
         });
 
         test('should get pane by id', () => {
-            const result = LoadSidePanes();
+            const form = LoadFormV3(mockExecutionContext, undefined, {});
+            const result = form.SidePanes;
             const pane = result.Get('pane1');
 
             expect(pane).toBeDefined();
@@ -644,9 +654,9 @@ describe('DevKit Module', () => {
     });
 
     // =========================================================================
-    // LoadFormV2 Extended Tests - Field Properties & Methods
+    // LoadFormV3 Extended Tests - Field Properties & Methods
     // =========================================================================
-    describe('LoadFormV2 Extended - Field Operations', () => {
+    describe('LoadFormV3 Extended - Field Operations', () => {
         let mockExecutionContext: any;
         let mockFormContext: any;
 
@@ -885,7 +895,7 @@ describe('DevKit Module', () => {
         });
 
         test('should load field with all properties', () => {
-            const result = LoadFormV2(mockExecutionContext, undefined, {
+            const result = LoadFormV3(mockExecutionContext, undefined, {
                 body: ['name']
             });
 
@@ -896,14 +906,14 @@ describe('DevKit Module', () => {
         });
 
         test('should access field Value getter/setter', () => {
-            const result = LoadFormV2(mockExecutionContext, undefined, { body: ['name'] });
+            const result = LoadFormV3(mockExecutionContext, undefined, { body: ['name'] });
 
             // Access Value (getter)
             expect(result.Body.name.Value).toBe('test value');
         });
 
         test('should load tabs with sections', () => {
-            const result = LoadFormV2(mockExecutionContext, undefined, {
+            const result = LoadFormV3(mockExecutionContext, undefined, {
                 tab: ['general___section1', 'general___section2', 'details']
             });
 
@@ -914,7 +924,7 @@ describe('DevKit Module', () => {
         });
 
         test('should access tab properties and methods', () => {
-            const result = LoadFormV2(mockExecutionContext, undefined, {
+            const result = LoadFormV3(mockExecutionContext, undefined, {
                 tab: ['general']
             });
 
@@ -928,7 +938,7 @@ describe('DevKit Module', () => {
         });
 
         test('should load grids with properties', () => {
-            const result = LoadFormV2(mockExecutionContext, undefined, {
+            const result = LoadFormV3(mockExecutionContext, undefined, {
                 grid: ['Contacts']
             });
 
@@ -940,7 +950,7 @@ describe('DevKit Module', () => {
         });
 
         test('should access grid rows collection', () => {
-            const result = LoadFormV2(mockExecutionContext, undefined, {
+            const result = LoadFormV3(mockExecutionContext, undefined, {
                 grid: ['Contacts']
             });
 
@@ -953,7 +963,7 @@ describe('DevKit Module', () => {
         });
 
         test('should iterate grid rows with forEach', () => {
-            const result = LoadFormV2(mockExecutionContext, undefined, {
+            const result = LoadFormV3(mockExecutionContext, undefined, {
                 grid: ['Contacts']
             });
 
@@ -966,7 +976,7 @@ describe('DevKit Module', () => {
         });
 
         test('should access grid columns in rows', () => {
-            const result = LoadFormV2(mockExecutionContext, undefined, {
+            const result = LoadFormV3(mockExecutionContext, undefined, {
                 grid: ['Contacts']
             });
 
@@ -980,7 +990,7 @@ describe('DevKit Module', () => {
         });
 
         test('should iterate columns with forEach', () => {
-            const result = LoadFormV2(mockExecutionContext, undefined, {
+            const result = LoadFormV3(mockExecutionContext, undefined, {
                 grid: ['Contacts']
             });
 
@@ -995,7 +1005,7 @@ describe('DevKit Module', () => {
         });
 
         test('should access grid ViewSelector', () => {
-            const result = LoadFormV2(mockExecutionContext, undefined, {
+            const result = LoadFormV3(mockExecutionContext, undefined, {
                 grid: ['Contacts']
             });
 
@@ -1005,7 +1015,7 @@ describe('DevKit Module', () => {
         });
 
         test('should have grid methods', () => {
-            const result = LoadFormV2(mockExecutionContext, undefined, {
+            const result = LoadFormV3(mockExecutionContext, undefined, {
                 grid: ['Contacts']
             });
 
@@ -1018,7 +1028,7 @@ describe('DevKit Module', () => {
         });
 
         test('should load navigation items', () => {
-            const result = LoadFormV2(mockExecutionContext, undefined, {
+            const result = LoadFormV3(mockExecutionContext, undefined, {
                 navigation: ['nav_contacts']
             });
 
@@ -1027,7 +1037,7 @@ describe('DevKit Module', () => {
         });
 
         test('should load header fields', () => {
-            const result = LoadFormV2(mockExecutionContext, undefined, {
+            const result = LoadFormV3(mockExecutionContext, undefined, {
                 header: ['ownerid']
             });
 
@@ -1035,7 +1045,7 @@ describe('DevKit Module', () => {
         });
 
         test('should load quick forms', () => {
-            const result = LoadFormV2(mockExecutionContext, undefined, {
+            const result = LoadFormV3(mockExecutionContext, undefined, {
                 quick: ['contactquickform___emailaddress1']
             });
 
@@ -1044,7 +1054,7 @@ describe('DevKit Module', () => {
         });
 
         test('should call field methods', () => {
-            const result = LoadFormV2(mockExecutionContext, undefined, { body: ['name'] });
+            const result = LoadFormV3(mockExecutionContext, undefined, { body: ['name'] });
 
             // Test field methods
             result.Body.name.AddOnChange(() => { });
@@ -1060,7 +1070,7 @@ describe('DevKit Module', () => {
         });
 
         test('should access ExecutionContext methods', () => {
-            const result = LoadFormV2(mockExecutionContext, undefined, {});
+            const result = LoadFormV3(mockExecutionContext, undefined, {});
 
             expect(result.ExecutionContext.Depth).toBe(1);
             expect(result.ExecutionContext.GetSharedVariable('key')).toBe('sharedValue');
@@ -1339,7 +1349,7 @@ describe('DevKit Module', () => {
     // =========================================================================
     // Advanced tests for better coverage
     // =========================================================================
-    describe('LoadFormV2 - ReadOnly Form Tests', () => {
+    describe('LoadFormV3 - ReadOnly Form Tests', () => {
         let mockExecutionContext: any;
         let mockFormContext: any;
 
@@ -1445,7 +1455,7 @@ describe('DevKit Module', () => {
         });
 
         test('should handle ReadOnly form type for Disabled setter', () => {
-            const result = LoadFormV2(mockExecutionContext, undefined, { body: ['name'] });
+            const result = LoadFormV3(mockExecutionContext, undefined, { body: ['name'] });
 
             // In ReadOnly form (type 3), setDisabled should not be called
             result.Body.name.Disabled = true;
@@ -1455,7 +1465,7 @@ describe('DevKit Module', () => {
         });
 
         test('should handle ReadOnly form type for Value setter', () => {
-            const result = LoadFormV2(mockExecutionContext, undefined, { body: ['name'] });
+            const result = LoadFormV3(mockExecutionContext, undefined, { body: ['name'] });
 
             // In ReadOnly form (type 3), setValue should not be called
             result.Body.name.Value = 'new value';
@@ -1464,7 +1474,7 @@ describe('DevKit Module', () => {
         });
 
         test('should call form methods Save and Refresh', () => {
-            const result = LoadFormV2(mockExecutionContext, undefined, {});
+            const result = LoadFormV3(mockExecutionContext, undefined, {});
 
             result.Save({ saveMode: 1 });
             result.Refresh(true);
@@ -1474,7 +1484,7 @@ describe('DevKit Module', () => {
         });
 
         test('should call UI methods', () => {
-            const result = LoadFormV2(mockExecutionContext, undefined, {});
+            const result = LoadFormV3(mockExecutionContext, undefined, {});
 
             result.UiAddLoaded(() => { });
             result.UiRemoveLoaded(() => { });
@@ -1756,7 +1766,7 @@ describe('DevKit Module', () => {
     // =========================================================================
     // Grid SelectedRows Tests
     // =========================================================================
-    describe('LoadFormV2 - Grid SelectedRows', () => {
+    describe('LoadFormV3 - Grid SelectedRows', () => {
         let mockExecutionContext: any;
         let mockFormContext: any;
 
@@ -1881,7 +1891,7 @@ describe('DevKit Module', () => {
         });
 
         test('should access SelectedRows', () => {
-            const result = LoadFormV2(mockExecutionContext, undefined, {
+            const result = LoadFormV3(mockExecutionContext, undefined, {
                 grid: ['Contacts']
             });
 
@@ -1890,7 +1900,7 @@ describe('DevKit Module', () => {
         });
 
         test('should iterate SelectedRows with forEach', () => {
-            const result = LoadFormV2(mockExecutionContext, undefined, {
+            const result = LoadFormV3(mockExecutionContext, undefined, {
                 grid: ['Contacts']
             });
 
@@ -1903,7 +1913,7 @@ describe('DevKit Module', () => {
         });
 
         test('should call grid Url method', () => {
-            const result = LoadFormV2(mockExecutionContext, undefined, {
+            const result = LoadFormV3(mockExecutionContext, undefined, {
                 grid: ['Contacts']
             });
 
@@ -2099,7 +2109,7 @@ describe('DevKit Module', () => {
     // =========================================================================
     // Form Methods Tests - Close, SetFormNotification, etc.
     // =========================================================================
-    describe('LoadFormV2 - Form Methods Coverage', () => {
+    describe('LoadFormV3 - Form Methods Coverage', () => {
         let mockExecutionContext: any;
         let mockFormContext: any;
 
@@ -2188,7 +2198,7 @@ describe('DevKit Module', () => {
         });
 
         test('should call Close method', () => {
-            const result = LoadFormV2(mockExecutionContext, undefined, {});
+            const result = LoadFormV3(mockExecutionContext, undefined, {});
 
             result.Close();
 
@@ -2196,7 +2206,7 @@ describe('DevKit Module', () => {
         });
 
         test('should call SetFormNotification', () => {
-            const result = LoadFormV2(mockExecutionContext, undefined, {});
+            const result = LoadFormV3(mockExecutionContext, undefined, {});
 
             const notifResult = result.SetFormNotification('Test message', 'ERROR', 'notif1');
 
@@ -2205,7 +2215,7 @@ describe('DevKit Module', () => {
         });
 
         test('should call ClearFormNotification', () => {
-            const result = LoadFormV2(mockExecutionContext, undefined, {});
+            const result = LoadFormV3(mockExecutionContext, undefined, {});
 
             const clearResult = result.ClearFormNotification('notif1');
 
@@ -2214,7 +2224,7 @@ describe('DevKit Module', () => {
         });
 
         test('should call RefreshRibbon', () => {
-            const result = LoadFormV2(mockExecutionContext, undefined, {});
+            const result = LoadFormV3(mockExecutionContext, undefined, {});
 
             result.RefreshRibbon(true);
 
@@ -2222,14 +2232,14 @@ describe('DevKit Module', () => {
         });
 
         test('should use control.getAttribute fallback for body fields', () => {
-            const result = LoadFormV2(mockExecutionContext, undefined, { body: ['testField'] });
+            const result = LoadFormV3(mockExecutionContext, undefined, { body: ['testField'] });
 
             // The field should be loaded using control.getAttribute() fallback
             expect(result.Body.testField).toBeDefined();
         });
 
         test('should use control.getAttribute fallback for header fields', () => {
-            const result = LoadFormV2(mockExecutionContext, undefined, { header: ['testField'] });
+            const result = LoadFormV3(mockExecutionContext, undefined, { header: ['testField'] });
 
             // The field should be loaded using control.getAttribute() fallback
             expect(result.Header.testField).toBeDefined();
@@ -2438,9 +2448,11 @@ describe('DevKit Module', () => {
     });
 
     // =========================================================================
-    // SidePanes Create Tests
+    // SidePanes Create Tests (via LoadFormV3)
     // =========================================================================
-    describe('LoadSidePanes - Create Method', () => {
+    describe('LoadSidePanes - Create Method (via LoadFormV3)', () => {
+        let mockExecutionContext: any;
+
         beforeEach(() => {
             (global as any).window = {
                 Xrm: {
@@ -2455,6 +2467,12 @@ describe('DevKit Module', () => {
                     }
                 }
             };
+            mockExecutionContext = {
+                getFormContext: () => ({
+                    data: { entity: { attributes: { get: () => null } } },
+                    ui: { formSelector: { getCurrentItem: () => null } }
+                })
+            };
         });
 
         afterEach(() => {
@@ -2462,7 +2480,8 @@ describe('DevKit Module', () => {
         });
 
         test('should call Create with callback', async () => {
-            const result = LoadSidePanes();
+            const form = LoadFormV3(mockExecutionContext, undefined, {});
+            const result = form.SidePanes;
             const successCallback = jest.fn();
 
             result.Create({ paneId: 'newPane', title: 'My Pane' }, successCallback);
@@ -2473,7 +2492,8 @@ describe('DevKit Module', () => {
         });
 
         test('should get all panes', () => {
-            const result = LoadSidePanes();
+            const form = LoadFormV3(mockExecutionContext, undefined, {});
+            const result = form.SidePanes;
 
             const allPanes = result.GetAll();
 
@@ -2481,7 +2501,8 @@ describe('DevKit Module', () => {
         });
 
         test('should get selected pane', () => {
-            const result = LoadSidePanes();
+            const form = LoadFormV3(mockExecutionContext, undefined, {});
+            const result = form.SidePanes;
 
             result.GetSelected();
 
@@ -2492,7 +2513,7 @@ describe('DevKit Module', () => {
     // =========================================================================
     // Disabled Form Type 4 Tests
     // =========================================================================
-    describe('LoadFormV2 - Disabled Form Type 4', () => {
+    describe('LoadFormV3 - Disabled Form Type 4', () => {
         let mockExecutionContext: any;
         let mockFormContext: any;
 
@@ -2581,7 +2602,7 @@ describe('DevKit Module', () => {
         });
 
         test('should handle Disabled form type (4) for Disabled setter', () => {
-            const result = LoadFormV2(mockExecutionContext, undefined, { body: ['name'] });
+            const result = LoadFormV3(mockExecutionContext, undefined, { body: ['name'] });
 
             // In Disabled form (type 4), setDisabled should not be called
             result.Body.name.Disabled = true;
@@ -2590,7 +2611,7 @@ describe('DevKit Module', () => {
         });
 
         test('should handle Disabled form type (4) for Value setter', () => {
-            const result = LoadFormV2(mockExecutionContext, undefined, { body: ['name'] });
+            const result = LoadFormV3(mockExecutionContext, undefined, { body: ['name'] });
 
             // In Disabled form (type 4), setValue should not be called
             result.Body.name.Value = 'new value';
@@ -2602,7 +2623,7 @@ describe('DevKit Module', () => {
     // =========================================================================
     // Normal Form Type - Setters Should Work
     // =========================================================================
-    describe('LoadFormV2 - Normal Form Type Setters', () => {
+    describe('LoadFormV3 - Normal Form Type Setters', () => {
         let mockExecutionContext: any;
         let mockFormContext: any;
         let mockSetDisabled: jest.Mock;
@@ -2696,7 +2717,7 @@ describe('DevKit Module', () => {
         });
 
         test('should call setDisabled on normal form (type 2)', () => {
-            const result = LoadFormV2(mockExecutionContext, undefined, { body: ['name'] });
+            const result = LoadFormV3(mockExecutionContext, undefined, { body: ['name'] });
 
             result.Body.name.Disabled = true;
 
@@ -2704,7 +2725,7 @@ describe('DevKit Module', () => {
         });
 
         test('should call setValue on normal form (type 2)', () => {
-            const result = LoadFormV2(mockExecutionContext, undefined, { body: ['name'] });
+            const result = LoadFormV3(mockExecutionContext, undefined, { body: ['name'] });
 
             result.Body.name.Value = 'new value';
 
@@ -2864,7 +2885,7 @@ describe('DevKit Module', () => {
     // =========================================================================
     // Additional Coverage Tests - Field Methods
     // =========================================================================
-    describe('LoadFormV2 - Field AddNotification and ContentWindow', () => {
+    describe('LoadFormV3 - Field AddNotification and ContentWindow', () => {
         let mockExecutionContext: any;
         let mockFormContext: any;
         let mockAddNotification: jest.Mock;
@@ -2952,7 +2973,7 @@ describe('DevKit Module', () => {
         });
 
         test('should call AddNotification with callback', () => {
-            const result = LoadFormV2(mockExecutionContext, undefined, { body: ['webresource'] });
+            const result = LoadFormV3(mockExecutionContext, undefined, { body: ['webresource'] });
             const callback = jest.fn();
 
             result.Body.webresource.AddNotification('Test message', 'ERROR', 'notif1', callback);
@@ -2961,7 +2982,7 @@ describe('DevKit Module', () => {
         });
 
         test('should call ContentWindow with callback', async () => {
-            const result = LoadFormV2(mockExecutionContext, undefined, { body: ['webresource'] });
+            const result = LoadFormV3(mockExecutionContext, undefined, { body: ['webresource'] });
             const successCallback = jest.fn();
 
             result.Body.webresource.ContentWindow(successCallback);
@@ -2972,7 +2993,7 @@ describe('DevKit Module', () => {
         });
 
         test('should return promise from ContentWindow without callback', async () => {
-            const result = LoadFormV2(mockExecutionContext, undefined, { body: ['webresource'] });
+            const result = LoadFormV3(mockExecutionContext, undefined, { body: ['webresource'] });
 
             const promise = result.Body.webresource.ContentWindow();
 
@@ -2985,7 +3006,7 @@ describe('DevKit Module', () => {
     // =========================================================================
     // Form Selector Loop Tests (findFormItem)
     // =========================================================================
-    describe('LoadFormV2 - Form Selector Operations', () => {
+    describe('LoadFormV3 - Form Selector Operations', () => {
         let mockExecutionContext: any;
         let mockFormContext: any;
         let mockFormItems: any[];
@@ -3059,7 +3080,7 @@ describe('DevKit Module', () => {
         });
 
         test('should check FormIsVisible for existing form', () => {
-            const result = LoadFormV2(mockExecutionContext, undefined, {});
+            const result = LoadFormV3(mockExecutionContext, undefined, {});
 
             const isVisible = result.FormIsVisible('form2');
 
@@ -3067,7 +3088,7 @@ describe('DevKit Module', () => {
         });
 
         test('should navigate to form by Id', () => {
-            const result = LoadFormV2(mockExecutionContext, undefined, {});
+            const result = LoadFormV3(mockExecutionContext, undefined, {});
 
             result.FormNavigateToFormId('form2');
 
@@ -3075,7 +3096,7 @@ describe('DevKit Module', () => {
         });
 
         test('should navigate to form by Label', () => {
-            const result = LoadFormV2(mockExecutionContext, undefined, {});
+            const result = LoadFormV3(mockExecutionContext, undefined, {});
 
             result.FormNavigateToFormLabel('Form 2');
 
@@ -3083,7 +3104,7 @@ describe('DevKit Module', () => {
         });
 
         test('should set form visibility', () => {
-            const result = LoadFormV2(mockExecutionContext, undefined, {});
+            const result = LoadFormV3(mockExecutionContext, undefined, {});
 
             result.FormSetVisible('form2', false);
 
@@ -3565,7 +3586,7 @@ describe('DevKit Module', () => {
     // =========================================================================
     // Form Selector - Not Found Cases
     // =========================================================================
-    describe('LoadFormV2 - Form Selector Not Found', () => {
+    describe('LoadFormV3 - Form Selector Not Found', () => {
         let mockExecutionContext: any;
         let mockFormContext: any;
 
@@ -3638,7 +3659,7 @@ describe('DevKit Module', () => {
         });
 
         test('should return null for non-existent form', () => {
-            const result = LoadFormV2(mockExecutionContext, undefined, {});
+            const result = LoadFormV3(mockExecutionContext, undefined, {});
 
             // Trying to check visibility of non-existent form
             const isVisible = result.FormIsVisible('nonExistentForm');
@@ -3648,14 +3669,14 @@ describe('DevKit Module', () => {
         });
 
         test('should handle FormNavigateToFormId for non-existent form', () => {
-            const result = LoadFormV2(mockExecutionContext, undefined, {});
+            const result = LoadFormV3(mockExecutionContext, undefined, {});
 
             // This should not throw
             result.FormNavigateToFormId('nonExistentForm');
         });
 
         test('should handle FormNavigateToFormLabel for non-existent form', () => {
-            const result = LoadFormV2(mockExecutionContext, undefined, {});
+            const result = LoadFormV3(mockExecutionContext, undefined, {});
 
             // This should not throw
             result.FormNavigateToFormLabel('Non Existent Form');
@@ -3851,9 +3872,9 @@ describe('DevKit Module', () => {
     });
 
     // =========================================================================
-    // LoadFormV2 - Dialog Loading (line 744)
+    // LoadFormV3 - Dialog Loading (line 744)
     // =========================================================================
-    describe('LoadFormV2 - Dialog Loading', () => {
+    describe('LoadFormV3 - Dialog Loading', () => {
         let mockExecutionContext: any;
         let mockFormContext: any;
 
@@ -3936,7 +3957,7 @@ describe('DevKit Module', () => {
 
         test('should load Dialog when dialog array is provided', () => {
             // Pass dialog config to trigger line 744
-            const result = LoadFormV2(mockExecutionContext, undefined, { dialog: ['dialogField1'] } as any);
+            const result = LoadFormV3(mockExecutionContext, undefined, { dialog: ['dialogField1'] } as any);
 
             expect(result).toBeDefined();
             expect((result as any).Dialog).toBeDefined();
