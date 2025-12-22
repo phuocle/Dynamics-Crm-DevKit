@@ -165,6 +165,7 @@ npm run debug
 | 15 | `Account.TestNavigationItem.ts` | NavigationItem | R1-R3 | S1-S3 | Account_Tasks |
 | 16 | `Account.TestExecutionContext.ts` | ExecutionContext | R1-R8 | S1-S6 | form.ExecutionContext |
 | 17 | `Account.TestSidePanes.ts` | SidePanes | R1-R8 | S1-S6 | form.SidePanes |
+| 18 | `Account.TestCopilot.ts` | Copilot | R1-R4 | S1-S4 | form.Copilot (Preview) |
 
 ---
 
@@ -172,10 +173,10 @@ npm run debug
 
 | # | Interface | Sample Field | Ghi chú |
 |---|-----------|--------------|---------|
-| 18 | Decimal | `form.Body.v4_Latitude` | Min, Max, Precision |
-| 19 | Double | `form.Body.v4_DiscountPercentage` | Min, Max, Precision |
-| 20 | IFrame | `form.Body.v4_IFrameExternal` | Src, InitialUrl |
-| 21 | WebResource | `form.Body.v4_WebResourceHelp` | |
+| 19 | Decimal | `form.Body.v4_Latitude` | Min, Max, Precision |
+| 20 | Double | `form.Body.v4_DiscountPercentage` | Min, Max, Precision |
+| 21 | IFrame | `form.Body.v4_IFrameExternal` | Src, InitialUrl |
+| 22 | WebResource | `form.Body.v4_WebResourceHelp` | |
 
 ---
 

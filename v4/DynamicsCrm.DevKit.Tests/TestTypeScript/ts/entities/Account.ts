@@ -17,6 +17,7 @@ import { TestTab } from './Account.TestTab';
 import { TestNavigationItem } from './Account.TestNavigationItem';
 import { TestExecutionContext } from './Account.TestExecutionContext';
 import { TestSidePanes } from './Account.TestSidePanes';
+import { TestCopilot } from './Account.TestCopilot';
 
 const formAccount = (function () {
     "use strict";
@@ -99,6 +100,9 @@ const formAccount = (function () {
 
             // Test 17: SidePanes
             TestSidePanes(form);
+
+            // Test 18: Copilot (Preview)
+            TestCopilot(form);
 
         }, 10000);
 
