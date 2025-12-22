@@ -18,6 +18,10 @@ import { TestNavigationItem } from './Account.TestNavigationItem';
 import { TestExecutionContext } from './Account.TestExecutionContext';
 import { TestSidePanes } from './Account.TestSidePanes';
 import { TestCopilot } from './Account.TestCopilot';
+import { TestDecimal } from './Account.TestDecimal';
+import { TestDouble } from './Account.TestDouble';
+import { TestIFrame } from './Account.TestIFrame';
+import { TestWebResource } from './Account.TestWebResource';
 
 const formAccount = (function () {
     "use strict";
@@ -103,6 +107,18 @@ const formAccount = (function () {
 
             // Test 18: Copilot (Preview)
             TestCopilot(form);
+
+            // Test 19: Decimal Control
+            TestDecimal(form);
+
+            // Test 20: Double Control
+            TestDouble(form);
+
+            // Test 21: IFrame Control
+            TestIFrame(form);
+
+            // Test 22: WebResource Control
+            TestWebResource(form);
 
         }, 10000);
 
