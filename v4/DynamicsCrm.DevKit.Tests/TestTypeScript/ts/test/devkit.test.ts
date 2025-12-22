@@ -5775,5 +5775,777 @@ describe('DevKit Module', () => {
 
     });
 
+    // =========================================================================
+    // Branch Coverage Tests - Optional Chaining and Null/Undefined Paths
+    // =========================================================================
+    describe('Branch Coverage - Optional Chaining', () => {
+        let mockExecutionContext: any;
+        let mockFormContext: any;
+
+        beforeEach(() => {
+            mockFormContext = {
+                data: {
+                    entity: {
+                        getId: jest.fn().mockReturnValue('{guid}'),
+                        getEntityName: jest.fn().mockReturnValue('account'),
+                        getEntityReference: jest.fn().mockReturnValue({ entityType: 'account', id: '{guid}' }),
+                        getPrimaryAttributeValue: jest.fn().mockReturnValue('Test'),
+                        getDataXml: jest.fn().mockReturnValue('<xml/>'),
+                        getIsDirty: jest.fn().mockReturnValue(false),
+                        isValid: jest.fn().mockReturnValue(true),
+                        addOnSave: jest.fn(),
+                        removeOnSave: jest.fn(),
+                        addOnPostSave: jest.fn(),
+                        removeOnPostSave: jest.fn(),
+                        attributes: { get: jest.fn() }
+                    },
+                    getIsDirty: jest.fn().mockReturnValue(false),
+                    isValid: jest.fn().mockReturnValue(true),
+                    refresh: jest.fn().mockResolvedValue(undefined),
+                    save: jest.fn().mockResolvedValue(undefined),
+                    addOnLoad: jest.fn(),
+                    removeOnLoad: jest.fn()
+                },
+                ui: {
+                    getFormType: jest.fn().mockReturnValue(2),
+                    getViewPortHeight: jest.fn().mockReturnValue(800),
+                    getViewPortWidth: jest.fn().mockReturnValue(1200),
+                    close: jest.fn(),
+                    setFormNotification: jest.fn().mockReturnValue(true),
+                    clearFormNotification: jest.fn().mockReturnValue(true),
+                    refreshRibbon: jest.fn(),
+                    addLoaded: jest.fn(),
+                    removeLoaded: jest.fn(),
+                    addOnLoad: jest.fn(),
+                    removeOnLoad: jest.fn(),
+                    controls: { get: jest.fn() },
+                    tabs: { get: jest.fn() },
+                    formSelector: {
+                        getCurrentItem: jest.fn().mockReturnValue({
+                            getId: jest.fn().mockReturnValue('{form-guid}'),
+                            getLabel: jest.fn().mockReturnValue('Main Form')
+                        }),
+                        items: { getLength: jest.fn().mockReturnValue(1), get: jest.fn() }
+                    }
+                },
+                getControl: jest.fn().mockReturnValue(null), // Return null to test optional chaining
+                getAttribute: jest.fn().mockReturnValue(null) // Return null to test optional chaining
+            };
+
+            mockExecutionContext = {
+                getFormContext: jest.fn().mockReturnValue(mockFormContext),
+                getDepth: jest.fn().mockReturnValue(1),
+                getEventArgs: jest.fn().mockReturnValue({
+                    getDataLoadState: jest.fn().mockReturnValue(1),
+                    getSaveMode: jest.fn().mockReturnValue(1),
+                    isDefaultPrevented: jest.fn().mockReturnValue(false),
+                    preventDefault: jest.fn(),
+                    preventDefaultOnError: jest.fn(),
+                    disableAsyncTimeout: jest.fn(),
+                    getIsSaveSuccess: jest.fn().mockReturnValue(true),
+                    getSaveErrorInfo: jest.fn().mockReturnValue(null),
+                    getEntityReference: jest.fn()
+                }),
+                getEventSource: jest.fn(),
+                getSharedVariable: jest.fn(),
+                setSharedVariable: jest.fn()
+            };
+        });
+
+        test('should handle null control and attribute gracefully', () => {
+            const result = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, {
+                body: ['testfield']
+            });
+
+            // All these should return undefined due to optional chaining
+            expect(result.Body.testfield.AttributeName).toBeUndefined();
+            expect(result.Body.testfield.ControlType).toBeUndefined();
+            expect(result.Body.testfield.Label).toBeUndefined();
+            expect(result.Body.testfield.Value).toBeUndefined();
+            expect(result.Body.testfield.Visible).toBeUndefined();
+            expect(result.Body.testfield.Disabled).toBeUndefined();
+        });
+
+        test('should handle getContentWindow with null control', () => {
+            const result = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, {
+                body: ['iframe']
+            });
+
+            const contentWindow = result.Body.iframe.ContentWindow();
+            expect(contentWindow).toBeUndefined();
+        });
+
+        test('should handle ContentWindow with successCallback when control is null', () => {
+            const result = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, {
+                body: ['iframe']
+            });
+
+            const successCallback = jest.fn();
+            const errorCallback = jest.fn();
+
+            result.Body.iframe.ContentWindow(successCallback, errorCallback);
+
+            // Since control is null, promise is undefined, callbacks won't be called
+            expect(successCallback).not.toHaveBeenCalled();
+        });
+    });
+
+    // =========================================================================
+    // Branch Coverage Tests - Form Type Guards (ReadOnly and Disabled)
+    // =========================================================================
+    describe('Branch Coverage - Form Type Guards', () => {
+        let mockFormContext: any;
+
+        beforeEach(() => {
+            mockFormContext = {
+                data: {
+                    entity: {
+                        getId: jest.fn().mockReturnValue('{guid}'),
+                        getEntityName: jest.fn().mockReturnValue('account'),
+                        getEntityReference: jest.fn().mockReturnValue({ entityType: 'account', id: '{guid}' }),
+                        getPrimaryAttributeValue: jest.fn().mockReturnValue('Test'),
+                        getDataXml: jest.fn().mockReturnValue('<xml/>'),
+                        getIsDirty: jest.fn().mockReturnValue(false),
+                        isValid: jest.fn().mockReturnValue(true),
+                        addOnSave: jest.fn(),
+                        removeOnSave: jest.fn(),
+                        addOnPostSave: jest.fn(),
+                        removeOnPostSave: jest.fn(),
+                        attributes: { get: jest.fn() }
+                    },
+                    getIsDirty: jest.fn().mockReturnValue(false),
+                    isValid: jest.fn().mockReturnValue(true),
+                    refresh: jest.fn().mockResolvedValue(undefined),
+                    save: jest.fn().mockResolvedValue(undefined),
+                    addOnLoad: jest.fn(),
+                    removeOnLoad: jest.fn()
+                },
+                ui: {
+                    getFormType: jest.fn().mockReturnValue(3), // ReadOnly form
+                    getViewPortHeight: jest.fn().mockReturnValue(800),
+                    getViewPortWidth: jest.fn().mockReturnValue(1200),
+                    close: jest.fn(),
+                    setFormNotification: jest.fn().mockReturnValue(true),
+                    clearFormNotification: jest.fn().mockReturnValue(true),
+                    refreshRibbon: jest.fn(),
+                    addLoaded: jest.fn(),
+                    removeLoaded: jest.fn(),
+                    addOnLoad: jest.fn(),
+                    removeOnLoad: jest.fn(),
+                    controls: { get: jest.fn() },
+                    tabs: { get: jest.fn() },
+                    formSelector: {
+                        getCurrentItem: jest.fn().mockReturnValue({
+                            getId: jest.fn().mockReturnValue('{form-guid}'),
+                            getLabel: jest.fn().mockReturnValue('Main Form')
+                        }),
+                        items: { getLength: jest.fn().mockReturnValue(1), get: jest.fn() }
+                    }
+                },
+                getControl: jest.fn().mockImplementation((name: string) => ({
+                    getName: () => name,
+                    getDisabled: jest.fn().mockReturnValue(false),
+                    setDisabled: jest.fn(),
+                    getAttribute: jest.fn().mockReturnValue({
+                        getName: () => name,
+                        getValue: jest.fn().mockReturnValue('test'),
+                        setValue: jest.fn()
+                    })
+                })),
+                getAttribute: jest.fn().mockImplementation((name: string) => ({
+                    getName: () => name,
+                    getValue: jest.fn().mockReturnValue('test'),
+                    setValue: jest.fn()
+                }))
+            };
+        });
+
+        test('should NOT set Disabled when form type is ReadOnly (3)', () => {
+            const mockExecutionContext = {
+                getFormContext: jest.fn().mockReturnValue(mockFormContext),
+                getDepth: jest.fn().mockReturnValue(1),
+                getEventArgs: jest.fn().mockReturnValue({
+                    getDataLoadState: jest.fn().mockReturnValue(1)
+                }),
+                getEventSource: jest.fn(),
+                getSharedVariable: jest.fn(),
+                setSharedVariable: jest.fn()
+            };
+
+            const result = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, {
+                body: ['name']
+            });
+
+            const control = mockFormContext.getControl('name');
+            const setDisabledSpy = control.setDisabled;
+
+            // Try to set Disabled - should be blocked by form type guard
+            result.Body.name.Disabled = true;
+
+            expect(setDisabledSpy).not.toHaveBeenCalled();
+        });
+
+        test('should NOT set Disabled when form type is Disabled (4)', () => {
+            mockFormContext.ui.getFormType.mockReturnValue(4);
+
+            const mockExecutionContext = {
+                getFormContext: jest.fn().mockReturnValue(mockFormContext),
+                getDepth: jest.fn().mockReturnValue(1),
+                getEventArgs: jest.fn().mockReturnValue({
+                    getDataLoadState: jest.fn().mockReturnValue(1)
+                }),
+                getEventSource: jest.fn(),
+                getSharedVariable: jest.fn(),
+                setSharedVariable: jest.fn()
+            };
+
+            const result = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, {
+                body: ['name']
+            });
+
+            const control = mockFormContext.getControl('name');
+            const setDisabledSpy = control.setDisabled;
+
+            result.Body.name.Disabled = true;
+
+            expect(setDisabledSpy).not.toHaveBeenCalled();
+        });
+
+        test('should NOT set Value when form type is ReadOnly (3)', () => {
+            const mockExecutionContext = {
+                getFormContext: jest.fn().mockReturnValue(mockFormContext),
+                getDepth: jest.fn().mockReturnValue(1),
+                getEventArgs: jest.fn().mockReturnValue({
+                    getDataLoadState: jest.fn().mockReturnValue(1)
+                }),
+                getEventSource: jest.fn(),
+                getSharedVariable: jest.fn(),
+                setSharedVariable: jest.fn()
+            };
+
+            const result = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, {
+                body: ['name']
+            });
+
+            const attribute = mockFormContext.getAttribute('name');
+            const setValueSpy = attribute.setValue;
+
+            result.Body.name.Value = 'New Value';
+
+            expect(setValueSpy).not.toHaveBeenCalled();
+        });
+
+        test('should NOT set Value when form type is Disabled (4)', () => {
+            mockFormContext.ui.getFormType.mockReturnValue(4);
+
+            const mockExecutionContext = {
+                getFormContext: jest.fn().mockReturnValue(mockFormContext),
+                getDepth: jest.fn().mockReturnValue(1),
+                getEventArgs: jest.fn().mockReturnValue({
+                    getDataLoadState: jest.fn().mockReturnValue(1)
+                }),
+                getEventSource: jest.fn(),
+                getSharedVariable: jest.fn(),
+                setSharedVariable: jest.fn()
+            };
+
+            const result = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, {
+                body: ['name']
+            });
+
+            const attribute = mockFormContext.getAttribute('name');
+            const setValueSpy = attribute.setValue;
+
+            result.Body.name.Value = 'New Value';
+
+            expect(setValueSpy).not.toHaveBeenCalled();
+        });
+    });
+
+    // =========================================================================
+    // Branch Coverage Tests - Header Section Properties
+    // =========================================================================
+    describe('Branch Coverage - Header Section Properties', () => {
+        let mockExecutionContext: any;
+        let mockFormContext: any;
+
+        beforeEach(() => {
+            (global as any).window = {
+                Xrm: {
+                    Utility: {
+                        getGlobalContext: jest.fn().mockReturnValue({
+                            getClientUrl: jest.fn().mockReturnValue('https://org.crm.dynamics.com'),
+                            getCurrentAppUrl: jest.fn().mockReturnValue('https://org.crm.dynamics.com/main.aspx'),
+                            getVersion: jest.fn().mockReturnValue('9.2.0.0'),
+                            isOnPremises: jest.fn().mockReturnValue(false)
+                        })
+                    }
+                }
+            };
+
+            mockFormContext = {
+                data: {
+                    entity: {
+                        getId: jest.fn().mockReturnValue('{guid}'),
+                        getEntityName: jest.fn().mockReturnValue('account'),
+                        getEntityReference: jest.fn().mockReturnValue({ entityType: 'account', id: '{guid}' }),
+                        getPrimaryAttributeValue: jest.fn().mockReturnValue('Test'),
+                        getDataXml: jest.fn().mockReturnValue('<xml/>'),
+                        getIsDirty: jest.fn().mockReturnValue(false),
+                        isValid: jest.fn().mockReturnValue(true),
+                        addOnSave: jest.fn(),
+                        removeOnSave: jest.fn(),
+                        addOnPostSave: jest.fn(),
+                        removeOnPostSave: jest.fn(),
+                        attributes: { get: jest.fn() }
+                    },
+                    getIsDirty: jest.fn().mockReturnValue(false),
+                    isValid: jest.fn().mockReturnValue(true),
+                    refresh: jest.fn().mockResolvedValue(undefined),
+                    save: jest.fn().mockResolvedValue(undefined),
+                    addOnLoad: jest.fn(),
+                    removeOnLoad: jest.fn()
+                },
+                ui: {
+                    getFormType: jest.fn().mockReturnValue(2),
+                    getViewPortHeight: jest.fn().mockReturnValue(800),
+                    getViewPortWidth: jest.fn().mockReturnValue(1200),
+                    close: jest.fn(),
+                    setFormNotification: jest.fn().mockReturnValue(true),
+                    clearFormNotification: jest.fn().mockReturnValue(true),
+                    refreshRibbon: jest.fn(),
+                    addLoaded: jest.fn(),
+                    removeLoaded: jest.fn(),
+                    addOnLoad: jest.fn(),
+                    removeOnLoad: jest.fn(),
+                    controls: { get: jest.fn() },
+                    tabs: { get: jest.fn() },
+                    formSelector: {
+                        getCurrentItem: jest.fn().mockReturnValue({
+                            getId: jest.fn().mockReturnValue('{form-guid}'),
+                            getLabel: jest.fn().mockReturnValue('Main Form')
+                        }),
+                        items: { getLength: jest.fn().mockReturnValue(1), get: jest.fn() }
+                    },
+                    headerSection: {
+                        getBodyVisible: jest.fn().mockReturnValue(true),
+                        setBodyVisible: jest.fn(),
+                        getCommandBarVisible: jest.fn().mockReturnValue(true),
+                        setCommandBarVisible: jest.fn(),
+                        getTabNavigatorVisible: jest.fn().mockReturnValue(true),
+                        setTabNavigatorVisible: jest.fn()
+                    }
+                },
+                getControl: jest.fn().mockImplementation((name: string) => ({
+                    getName: () => name,
+                    getLabel: jest.fn().mockReturnValue('Header Field'),
+                    setLabel: jest.fn(),
+                    getAttribute: jest.fn().mockReturnValue({
+                        getName: () => name
+                    })
+                })),
+                getAttribute: jest.fn().mockImplementation((name: string) => ({
+                    getName: () => name
+                }))
+            };
+
+            mockExecutionContext = {
+                getFormContext: jest.fn().mockReturnValue(mockFormContext),
+                getDepth: jest.fn().mockReturnValue(1),
+                getEventArgs: jest.fn().mockReturnValue({
+                    getDataLoadState: jest.fn().mockReturnValue(1)
+                }),
+                getEventSource: jest.fn(),
+                getSharedVariable: jest.fn(),
+                setSharedVariable: jest.fn()
+            };
+        });
+
+        afterEach(() => {
+            delete (global as any).window;
+        });
+
+        test('should load header fields with BodyVisible property', () => {
+            const result = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, {
+                header: ['name']
+            });
+
+            expect(result.Header.BodyVisible).toBe(true);
+        });
+
+        test('should set BodyVisible on header', () => {
+            const result = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, {
+                header: ['name']
+            });
+
+            result.Header.BodyVisible = false;
+
+            expect(mockFormContext.ui.headerSection.setBodyVisible).toHaveBeenCalledWith(false);
+        });
+
+        test('should load header fields with CommandBarVisible property', () => {
+            const result = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, {
+                header: ['name']
+            });
+
+            expect(result.Header.CommandBarVisible).toBe(true);
+        });
+
+        test('should set CommandBarVisible on header', () => {
+            const result = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, {
+                header: ['name']
+            });
+
+            result.Header.CommandBarVisible = false;
+
+            expect(mockFormContext.ui.headerSection.setCommandBarVisible).toHaveBeenCalledWith(false);
+        });
+
+        test('should load header fields with TabNavigatorVisible property', () => {
+            const result = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, {
+                header: ['name']
+            });
+
+            expect(result.Header.TabNavigatorVisible).toBe(true);
+        });
+
+        test('should set TabNavigatorVisible on header', () => {
+            const result = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, {
+                header: ['name']
+            });
+
+            result.Header.TabNavigatorVisible = false;
+
+            expect(mockFormContext.ui.headerSection.setTabNavigatorVisible).toHaveBeenCalledWith(false);
+        });
+    });
+
+    // =========================================================================
+    // Branch Coverage Tests - Navigation Edge Cases
+    // =========================================================================
+    describe('Branch Coverage - Navigation Edge Cases', () => {
+        test('should handle navigation when item is not found', () => {
+            const mockFormContext = {
+                data: {
+                    entity: {
+                        getId: jest.fn().mockReturnValue('{guid}'),
+                        getEntityName: jest.fn().mockReturnValue('account'),
+                        getEntityReference: jest.fn().mockReturnValue({ entityType: 'account', id: '{guid}' }),
+                        getPrimaryAttributeValue: jest.fn().mockReturnValue('Test'),
+                        getDataXml: jest.fn().mockReturnValue('<xml/>'),
+                        getIsDirty: jest.fn().mockReturnValue(false),
+                        isValid: jest.fn().mockReturnValue(true),
+                        addOnSave: jest.fn(),
+                        removeOnSave: jest.fn(),
+                        addOnPostSave: jest.fn(),
+                        removeOnPostSave: jest.fn(),
+                        attributes: { get: jest.fn() }
+                    },
+                    getIsDirty: jest.fn().mockReturnValue(false),
+                    isValid: jest.fn().mockReturnValue(true),
+                    refresh: jest.fn().mockResolvedValue(undefined),
+                    save: jest.fn().mockResolvedValue(undefined),
+                    addOnLoad: jest.fn(),
+                    removeOnLoad: jest.fn()
+                },
+                ui: {
+                    getFormType: jest.fn().mockReturnValue(2),
+                    getViewPortHeight: jest.fn().mockReturnValue(800),
+                    getViewPortWidth: jest.fn().mockReturnValue(1200),
+                    close: jest.fn(),
+                    setFormNotification: jest.fn().mockReturnValue(true),
+                    clearFormNotification: jest.fn().mockReturnValue(true),
+                    refreshRibbon: jest.fn(),
+                    addLoaded: jest.fn(),
+                    removeLoaded: jest.fn(),
+                    addOnLoad: jest.fn(),
+                    removeOnLoad: jest.fn(),
+                    controls: { get: jest.fn() },
+                    tabs: { get: jest.fn() },
+                    formSelector: {
+                        getCurrentItem: jest.fn().mockReturnValue({
+                            getId: jest.fn().mockReturnValue('{form-guid}'),
+                            getLabel: jest.fn().mockReturnValue('Main Form')
+                        }),
+                        items: { getLength: jest.fn().mockReturnValue(1), get: jest.fn() }
+                    },
+                    navigation: {
+                        items: {
+                            getLength: jest.fn().mockReturnValue(2),
+                            get: jest.fn().mockImplementation((index: number) => ({
+                                getId: () => index === 0 ? 'nav_contacts' : 'nav_activities',
+                                getLabel: jest.fn().mockReturnValue('Navigation Label'),
+                                setLabel: jest.fn(),
+                                getVisible: jest.fn().mockReturnValue(true),
+                                setVisible: jest.fn(),
+                                setFocus: jest.fn()
+                            }))
+                        }
+                    }
+                },
+                getControl: jest.fn(),
+                getAttribute: jest.fn()
+            };
+
+            const mockExecutionContext = {
+                getFormContext: jest.fn().mockReturnValue(mockFormContext),
+                getDepth: jest.fn().mockReturnValue(1),
+                getEventArgs: jest.fn().mockReturnValue({
+                    getDataLoadState: jest.fn().mockReturnValue(1)
+                }),
+                getEventSource: jest.fn(),
+                getSharedVariable: jest.fn(),
+                setSharedVariable: jest.fn()
+            };
+
+            const result = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, {
+                navigation: ['non_existent_nav']
+            });
+
+            // When navigation item is not found, properties should be undefined
+            expect(result.Navigation.non_existent_nav.Id).toBeUndefined();
+            expect(result.Navigation.non_existent_nav.Label).toBeUndefined();
+        });
+
+        test('should handle empty navigation items', () => {
+            const mockFormContext = {
+                data: {
+                    entity: {
+                        getId: jest.fn().mockReturnValue('{guid}'),
+                        getEntityName: jest.fn().mockReturnValue('account'),
+                        getEntityReference: jest.fn().mockReturnValue({ entityType: 'account', id: '{guid}' }),
+                        getPrimaryAttributeValue: jest.fn().mockReturnValue('Test'),
+                        getDataXml: jest.fn().mockReturnValue('<xml/>'),
+                        getIsDirty: jest.fn().mockReturnValue(false),
+                        isValid: jest.fn().mockReturnValue(true),
+                        addOnSave: jest.fn(),
+                        removeOnSave: jest.fn(),
+                        addOnPostSave: jest.fn(),
+                        removeOnPostSave: jest.fn(),
+                        attributes: { get: jest.fn() }
+                    },
+                    getIsDirty: jest.fn().mockReturnValue(false),
+                    isValid: jest.fn().mockReturnValue(true),
+                    refresh: jest.fn().mockResolvedValue(undefined),
+                    save: jest.fn().mockResolvedValue(undefined),
+                    addOnLoad: jest.fn(),
+                    removeOnLoad: jest.fn()
+                },
+                ui: {
+                    getFormType: jest.fn().mockReturnValue(2),
+                    getViewPortHeight: jest.fn().mockReturnValue(800),
+                    getViewPortWidth: jest.fn().mockReturnValue(1200),
+                    close: jest.fn(),
+                    setFormNotification: jest.fn().mockReturnValue(true),
+                    clearFormNotification: jest.fn().mockReturnValue(true),
+                    refreshRibbon: jest.fn(),
+                    addLoaded: jest.fn(),
+                    removeLoaded: jest.fn(),
+                    addOnLoad: jest.fn(),
+                    removeOnLoad: jest.fn(),
+                    controls: { get: jest.fn() },
+                    tabs: { get: jest.fn() },
+                    formSelector: {
+                        getCurrentItem: jest.fn().mockReturnValue({
+                            getId: jest.fn().mockReturnValue('{form-guid}'),
+                            getLabel: jest.fn().mockReturnValue('Main Form')
+                        }),
+                        items: { getLength: jest.fn().mockReturnValue(1), get: jest.fn() }
+                    },
+                    navigation: {
+                        items: null // No navigation items
+                    }
+                },
+                getControl: jest.fn(),
+                getAttribute: jest.fn()
+            };
+
+            const mockExecutionContext = {
+                getFormContext: jest.fn().mockReturnValue(mockFormContext),
+                getDepth: jest.fn().mockReturnValue(1),
+                getEventArgs: jest.fn().mockReturnValue({
+                    getDataLoadState: jest.fn().mockReturnValue(1)
+                }),
+                getEventSource: jest.fn(),
+                getSharedVariable: jest.fn(),
+                setSharedVariable: jest.fn()
+            };
+
+            const result = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, {
+                navigation: ['nav_item']
+            });
+
+            // Should handle null navigation items gracefully
+            expect(result.Navigation.nav_item).toBeDefined();
+        });
+    });
+
+    // =========================================================================
+    // Branch Coverage Tests - getXrm Fallback Paths
+    // =========================================================================
+    describe('Branch Coverage - getXrm Fallback Paths', () => {
+        afterEach(() => {
+            delete (global as any).window;
+            delete (global as any).parent;
+        });
+
+        test('should fallback to parent.window.Xrm when window.Xrm is undefined', () => {
+            (global as any).window = {}; // window exists but no Xrm
+            (global as any).parent = {
+                window: {
+                    Xrm: {
+                        Utility: {
+                            getGlobalContext: jest.fn().mockReturnValue({
+                                getClientUrl: jest.fn().mockReturnValue('https://org.crm.dynamics.com')
+                            })
+                        }
+                    }
+                }
+            };
+
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+
+            // Should use parent.window.Xrm
+            expect(form.Utility).toBeDefined();
+        });
+
+        test('should fallback to parent.parent.window.Xrm when parent.window.Xrm is undefined', () => {
+            (global as any).window = {}; // window exists but no Xrm
+            (global as any).parent = {
+                window: {}, // parent.window exists but no Xrm
+                parent: {
+                    window: {
+                        Xrm: {
+                            Utility: {
+                                getGlobalContext: jest.fn().mockReturnValue({
+                                    getClientUrl: jest.fn().mockReturnValue('https://org.crm.dynamics.com')
+                                })
+                            }
+                        }
+                    }
+                }
+            };
+
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+
+            // Should use parent.parent.window.Xrm
+            expect(form.Utility).toBeDefined();
+        });
+    });
+
+    // =========================================================================
+    // Branch Coverage Tests - Promise vs Callback Patterns
+    // =========================================================================
+    describe('Branch Coverage - Promise vs Callback Patterns', () => {
+        beforeEach(() => {
+            (global as any).window = {
+                Xrm: {
+                    WebApi: {
+                        createRecord: jest.fn().mockResolvedValue({ id: '{new-id}' }),
+                        deleteRecord: jest.fn().mockResolvedValue(undefined),
+                        retrieveRecord: jest.fn().mockResolvedValue({ id: '{id}', name: 'Test' }),
+                        retrieveMultipleRecords: jest.fn().mockResolvedValue({
+                            entities: [{ id: '{id1}' }, { id: '{id2}' }],
+                            nextLink: null
+                        }),
+                        updateRecord: jest.fn().mockResolvedValue({ id: '{id}' })
+                    },
+                    Utility: {
+                        getGlobalContext: jest.fn().mockReturnValue({
+                            getClientUrl: jest.fn().mockReturnValue('https://org.crm.dynamics.com')
+                        })
+                    }
+                }
+            };
+        });
+
+        afterEach(() => {
+            delete (global as any).window;
+        });
+
+        test('should call CreateRecord with callbacks', async () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+            const successCallback = jest.fn();
+            const errorCallback = jest.fn();
+
+            form.WebApi.CreateRecord('account', { name: 'Test' }, successCallback, errorCallback);
+
+            await new Promise(resolve => setTimeout(resolve, 10));
+            expect(successCallback).toHaveBeenCalledWith({ id: '{new-id}' });
+        });
+
+        test('should return promise from CreateRecord when no callbacks', async () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+
+            const promise = form.WebApi.CreateRecord('account', { name: 'Test' });
+
+            expect(promise).toBeInstanceOf(Promise);
+            const result = await promise;
+            expect(result).toEqual({ id: '{new-id}' });
+        });
+
+        test('should call DeleteRecord with callbacks', async () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+            const successCallback = jest.fn();
+            const errorCallback = jest.fn();
+
+            form.WebApi.DeleteRecord('account', '{id}', successCallback, errorCallback);
+
+            await new Promise(resolve => setTimeout(resolve, 10));
+            expect(successCallback).toHaveBeenCalled();
+        });
+
+        test('should return promise from DeleteRecord when no callbacks', async () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+
+            const promise = form.WebApi.DeleteRecord('account', '{id}');
+
+            expect(promise).toBeInstanceOf(Promise);
+            await expect(promise).resolves.toBeUndefined();
+        });
+
+        test('should call RetrieveMultipleRecords with callbacks', async () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+            const successCallback = jest.fn();
+            const errorCallback = jest.fn();
+
+            form.WebApi.RetrieveMultipleRecords('account', '?$select=name', 10, successCallback, errorCallback);
+
+            await new Promise(resolve => setTimeout(resolve, 10));
+            expect(successCallback).toHaveBeenCalled();
+        });
+
+        test('should return promise from RetrieveMultipleRecords when no callbacks', async () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+
+            const promise = form.WebApi.RetrieveMultipleRecords('account', '?$select=name', 10);
+
+            expect(promise).toBeInstanceOf(Promise);
+            const result = await promise;
+            expect(result).toHaveProperty('entities');
+        });
+
+        test('should call UpdateRecord with callbacks', async () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+            const successCallback = jest.fn();
+            const errorCallback = jest.fn();
+
+            form.WebApi.UpdateRecord('account', '{id}', { name: 'Updated' }, successCallback, errorCallback);
+
+            await new Promise(resolve => setTimeout(resolve, 10));
+            expect(successCallback).toHaveBeenCalledWith({ id: '{id}' });
+        });
+
+        test('should return promise from UpdateRecord when no callbacks', async () => {
+            const form = new FormBase<any, any, any, any, any, any, any>(undefined, undefined, {});
+
+            const promise = form.WebApi.UpdateRecord('account', '{id}', { name: 'Updated' });
+
+            expect(promise).toBeInstanceOf(Promise);
+            const result = await promise;
+            expect(result).toEqual({ id: '{id}' });
+        });
+    });
+
 });
 
