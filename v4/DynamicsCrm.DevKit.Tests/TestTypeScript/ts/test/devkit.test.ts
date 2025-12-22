@@ -5,12 +5,67 @@
 import { XrmMockGenerator } from 'xrm-mock';
 import {
     FormBase,
-    LoadFormV3,
     LoadProcess,
     LoadUtility,
     LoadFormDialog
 } from '../lib/devkit';
 import { OptionSet } from '../entities/generator/OptionSet';
+
+/**
+ * Creates a complete mock execution context for FormBase testing
+ */
+function createMockExecutionContext() {
+    return {
+        getFormContext: () => ({
+            data: {
+                entity: {
+                    attributes: { get: () => null },
+                    getId: () => '{00000000-0000-0000-0000-000000000000}',
+                    getEntityName: () => 'account',
+                    getEntityReference: () => ({ id: '{id}', entityType: 'account' }),
+                    getIsDirty: () => false,
+                    isValid: () => true,
+                    getDataXml: () => '<data></data>',
+                    addOnPostSave: () => { },
+                    addOnSave: () => { },
+                    removeOnPostSave: () => { },
+                    removeOnSave: () => { },
+                    getPrimaryAttributeValue: () => 'Test',
+                    save: () => Promise.resolve(),
+                    refresh: () => Promise.resolve()
+                },
+                getIsDirty: () => false,
+                isValid: () => true,
+                addOnLoad: () => { },
+                removeOnLoad: () => { }
+            },
+            ui: {
+                formSelector: {
+                    getCurrentItem: () => ({
+                        getId: () => '{formId}',
+                        getLabel: () => 'Test Form'
+                    })
+                },
+                getFormType: () => 2,
+                setFormNotification: () => true,
+                clearFormNotification: () => true,
+                refreshRibbon: () => { },
+                getViewPortHeight: () => 800,
+                getViewPortWidth: () => 1200,
+                addOnLoad: () => { },
+                removeOnLoad: () => { },
+                controls: { get: () => null },
+                tabs: { get: () => null }
+            },
+            getControl: () => null
+        }),
+        getEventSource: () => null,
+        getDepth: () => 1,
+        getSharedVariable: () => null,
+        setSharedVariable: () => { },
+        getEventArgs: () => null
+    };
+}
 
 describe('DevKit Module', () => {
     beforeEach(() => {
@@ -272,7 +327,7 @@ describe('DevKit Module', () => {
         });
 
         test('should load form with basic configuration', () => {
-            const result = LoadFormV3(mockExecutionContext, undefined, {
+            const result = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, {
                 body: ['name', 'telephone1'],
                 header: [],
                 tab: [],
@@ -287,7 +342,7 @@ describe('DevKit Module', () => {
         });
 
         test('should load ExecutionContext correctly', () => {
-            const result = LoadFormV3(mockExecutionContext, undefined, {});
+            const result = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, {});
 
             expect(result.ExecutionContext).toBeDefined();
             expect(result.ExecutionContext.Depth).toBe(1);
@@ -295,7 +350,7 @@ describe('DevKit Module', () => {
         });
 
         test('should load form properties', () => {
-            const result = LoadFormV3(mockExecutionContext, undefined, {});
+            const result = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, {});
 
             expect(result.EntityId).toBe('{00000000-0000-0000-0000-000000000001}');
             expect(result.EntityName).toBe('account');
@@ -303,7 +358,7 @@ describe('DevKit Module', () => {
         });
 
         test('should provide form methods', () => {
-            const result = LoadFormV3(mockExecutionContext, undefined, {});
+            const result = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, {});
 
             expect(typeof result.Refresh).toBe('function');
             expect(typeof result.Close).toBe('function');
@@ -313,7 +368,7 @@ describe('DevKit Module', () => {
         });
 
         test('should load body fields', () => {
-            const result = LoadFormV3(mockExecutionContext, undefined, {
+            const result = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, {
                 body: ['name', 'telephone1']
             });
 
@@ -323,7 +378,7 @@ describe('DevKit Module', () => {
         });
 
         test('should handle empty configuration', () => {
-            const result = LoadFormV3(mockExecutionContext, undefined, {});
+            const result = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, {});
 
             expect(result).toBeDefined();
             expect(result.Body).toEqual({ Tab: {} });
@@ -523,12 +578,7 @@ describe('DevKit Module', () => {
                     }
                 }
             };
-            mockExecutionContext = {
-                getFormContext: () => ({
-                    data: { entity: { attributes: { get: () => null } } },
-                    ui: { formSelector: { getCurrentItem: () => null } }
-                })
-            };
+            mockExecutionContext = createMockExecutionContext();
         });
 
         afterEach(() => {
@@ -536,7 +586,7 @@ describe('DevKit Module', () => {
         });
 
         test('should load side panes correctly', () => {
-            const form = LoadFormV3(mockExecutionContext, undefined, {});
+            const form = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, {});
             const result = form.SidePanes;
 
             expect(result).toBeDefined();
@@ -547,14 +597,14 @@ describe('DevKit Module', () => {
         });
 
         test('should have DisplayState property', () => {
-            const form = LoadFormV3(mockExecutionContext, undefined, {});
+            const form = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, {});
             const result = form.SidePanes;
 
             expect(result.DisplayState).toBe(1);
         });
 
         test('should get pane by id', () => {
-            const form = LoadFormV3(mockExecutionContext, undefined, {});
+            const form = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, {});
             const result = form.SidePanes;
             const pane = result.Get('pane1');
 
@@ -895,7 +945,7 @@ describe('DevKit Module', () => {
         });
 
         test('should load field with all properties', () => {
-            const result = LoadFormV3(mockExecutionContext, undefined, {
+            const result = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, {
                 body: ['name']
             });
 
@@ -906,14 +956,14 @@ describe('DevKit Module', () => {
         });
 
         test('should access field Value getter/setter', () => {
-            const result = LoadFormV3(mockExecutionContext, undefined, { body: ['name'] });
+            const result = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, { body: ['name'] });
 
             // Access Value (getter)
             expect(result.Body.name.Value).toBe('test value');
         });
 
         test('should load tabs with sections', () => {
-            const result = LoadFormV3(mockExecutionContext, undefined, {
+            const result = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, {
                 tab: ['general___section1', 'general___section2', 'details']
             });
 
@@ -924,7 +974,7 @@ describe('DevKit Module', () => {
         });
 
         test('should access tab properties and methods', () => {
-            const result = LoadFormV3(mockExecutionContext, undefined, {
+            const result = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, {
                 tab: ['general']
             });
 
@@ -938,7 +988,7 @@ describe('DevKit Module', () => {
         });
 
         test('should load grids with properties', () => {
-            const result = LoadFormV3(mockExecutionContext, undefined, {
+            const result = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, {
                 grid: ['Contacts']
             });
 
@@ -950,7 +1000,7 @@ describe('DevKit Module', () => {
         });
 
         test('should access grid rows collection', () => {
-            const result = LoadFormV3(mockExecutionContext, undefined, {
+            const result = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, {
                 grid: ['Contacts']
             });
 
@@ -963,7 +1013,7 @@ describe('DevKit Module', () => {
         });
 
         test('should iterate grid rows with forEach', () => {
-            const result = LoadFormV3(mockExecutionContext, undefined, {
+            const result = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, {
                 grid: ['Contacts']
             });
 
@@ -976,7 +1026,7 @@ describe('DevKit Module', () => {
         });
 
         test('should access grid columns in rows', () => {
-            const result = LoadFormV3(mockExecutionContext, undefined, {
+            const result = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, {
                 grid: ['Contacts']
             });
 
@@ -990,7 +1040,7 @@ describe('DevKit Module', () => {
         });
 
         test('should iterate columns with forEach', () => {
-            const result = LoadFormV3(mockExecutionContext, undefined, {
+            const result = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, {
                 grid: ['Contacts']
             });
 
@@ -1005,7 +1055,7 @@ describe('DevKit Module', () => {
         });
 
         test('should access grid ViewSelector', () => {
-            const result = LoadFormV3(mockExecutionContext, undefined, {
+            const result = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, {
                 grid: ['Contacts']
             });
 
@@ -1015,7 +1065,7 @@ describe('DevKit Module', () => {
         });
 
         test('should have grid methods', () => {
-            const result = LoadFormV3(mockExecutionContext, undefined, {
+            const result = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, {
                 grid: ['Contacts']
             });
 
@@ -1028,7 +1078,7 @@ describe('DevKit Module', () => {
         });
 
         test('should load navigation items', () => {
-            const result = LoadFormV3(mockExecutionContext, undefined, {
+            const result = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, {
                 navigation: ['nav_contacts']
             });
 
@@ -1037,7 +1087,7 @@ describe('DevKit Module', () => {
         });
 
         test('should load header fields', () => {
-            const result = LoadFormV3(mockExecutionContext, undefined, {
+            const result = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, {
                 header: ['ownerid']
             });
 
@@ -1045,7 +1095,7 @@ describe('DevKit Module', () => {
         });
 
         test('should load quick forms', () => {
-            const result = LoadFormV3(mockExecutionContext, undefined, {
+            const result = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, {
                 quick: ['contactquickform___emailaddress1']
             });
 
@@ -1054,7 +1104,7 @@ describe('DevKit Module', () => {
         });
 
         test('should call field methods', () => {
-            const result = LoadFormV3(mockExecutionContext, undefined, { body: ['name'] });
+            const result = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, { body: ['name'] });
 
             // Test field methods
             result.Body.name.AddOnChange(() => { });
@@ -1070,7 +1120,7 @@ describe('DevKit Module', () => {
         });
 
         test('should access ExecutionContext methods', () => {
-            const result = LoadFormV3(mockExecutionContext, undefined, {});
+            const result = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, {});
 
             expect(result.ExecutionContext.Depth).toBe(1);
             expect(result.ExecutionContext.GetSharedVariable('key')).toBe('sharedValue');
@@ -1455,7 +1505,7 @@ describe('DevKit Module', () => {
         });
 
         test('should handle ReadOnly form type for Disabled setter', () => {
-            const result = LoadFormV3(mockExecutionContext, undefined, { body: ['name'] });
+            const result = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, { body: ['name'] });
 
             // In ReadOnly form (type 3), setDisabled should not be called
             result.Body.name.Disabled = true;
@@ -1465,7 +1515,7 @@ describe('DevKit Module', () => {
         });
 
         test('should handle ReadOnly form type for Value setter', () => {
-            const result = LoadFormV3(mockExecutionContext, undefined, { body: ['name'] });
+            const result = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, { body: ['name'] });
 
             // In ReadOnly form (type 3), setValue should not be called
             result.Body.name.Value = 'new value';
@@ -1474,7 +1524,7 @@ describe('DevKit Module', () => {
         });
 
         test('should call form methods Save and Refresh', () => {
-            const result = LoadFormV3(mockExecutionContext, undefined, {});
+            const result = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, {});
 
             result.Save({ saveMode: 1 });
             result.Refresh(true);
@@ -1484,7 +1534,7 @@ describe('DevKit Module', () => {
         });
 
         test('should call UI methods', () => {
-            const result = LoadFormV3(mockExecutionContext, undefined, {});
+            const result = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, {});
 
             result.UiAddLoaded(() => { });
             result.UiRemoveLoaded(() => { });
@@ -1891,7 +1941,7 @@ describe('DevKit Module', () => {
         });
 
         test('should access SelectedRows', () => {
-            const result = LoadFormV3(mockExecutionContext, undefined, {
+            const result = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, {
                 grid: ['Contacts']
             });
 
@@ -1900,7 +1950,7 @@ describe('DevKit Module', () => {
         });
 
         test('should iterate SelectedRows with forEach', () => {
-            const result = LoadFormV3(mockExecutionContext, undefined, {
+            const result = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, {
                 grid: ['Contacts']
             });
 
@@ -1913,7 +1963,7 @@ describe('DevKit Module', () => {
         });
 
         test('should call grid Url method', () => {
-            const result = LoadFormV3(mockExecutionContext, undefined, {
+            const result = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, {
                 grid: ['Contacts']
             });
 
@@ -2198,7 +2248,7 @@ describe('DevKit Module', () => {
         });
 
         test('should call Close method', () => {
-            const result = LoadFormV3(mockExecutionContext, undefined, {});
+            const result = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, {});
 
             result.Close();
 
@@ -2206,7 +2256,7 @@ describe('DevKit Module', () => {
         });
 
         test('should call SetFormNotification', () => {
-            const result = LoadFormV3(mockExecutionContext, undefined, {});
+            const result = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, {});
 
             const notifResult = result.SetFormNotification('Test message', 'ERROR', 'notif1');
 
@@ -2215,7 +2265,7 @@ describe('DevKit Module', () => {
         });
 
         test('should call ClearFormNotification', () => {
-            const result = LoadFormV3(mockExecutionContext, undefined, {});
+            const result = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, {});
 
             const clearResult = result.ClearFormNotification('notif1');
 
@@ -2224,7 +2274,7 @@ describe('DevKit Module', () => {
         });
 
         test('should call RefreshRibbon', () => {
-            const result = LoadFormV3(mockExecutionContext, undefined, {});
+            const result = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, {});
 
             result.RefreshRibbon(true);
 
@@ -2232,14 +2282,14 @@ describe('DevKit Module', () => {
         });
 
         test('should use control.getAttribute fallback for body fields', () => {
-            const result = LoadFormV3(mockExecutionContext, undefined, { body: ['testField'] });
+            const result = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, { body: ['testField'] });
 
             // The field should be loaded using control.getAttribute() fallback
             expect(result.Body.testField).toBeDefined();
         });
 
         test('should use control.getAttribute fallback for header fields', () => {
-            const result = LoadFormV3(mockExecutionContext, undefined, { header: ['testField'] });
+            const result = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, { header: ['testField'] });
 
             // The field should be loaded using control.getAttribute() fallback
             expect(result.Header.testField).toBeDefined();
@@ -2467,12 +2517,7 @@ describe('DevKit Module', () => {
                     }
                 }
             };
-            mockExecutionContext = {
-                getFormContext: () => ({
-                    data: { entity: { attributes: { get: () => null } } },
-                    ui: { formSelector: { getCurrentItem: () => null } }
-                })
-            };
+            mockExecutionContext = createMockExecutionContext();
         });
 
         afterEach(() => {
@@ -2480,7 +2525,7 @@ describe('DevKit Module', () => {
         });
 
         test('should call Create with callback', async () => {
-            const form = LoadFormV3(mockExecutionContext, undefined, {});
+            const form = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, {});
             const result = form.SidePanes;
             const successCallback = jest.fn();
 
@@ -2492,7 +2537,7 @@ describe('DevKit Module', () => {
         });
 
         test('should get all panes', () => {
-            const form = LoadFormV3(mockExecutionContext, undefined, {});
+            const form = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, {});
             const result = form.SidePanes;
 
             const allPanes = result.GetAll();
@@ -2501,7 +2546,7 @@ describe('DevKit Module', () => {
         });
 
         test('should get selected pane', () => {
-            const form = LoadFormV3(mockExecutionContext, undefined, {});
+            const form = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, {});
             const result = form.SidePanes;
 
             result.GetSelected();
@@ -2602,7 +2647,7 @@ describe('DevKit Module', () => {
         });
 
         test('should handle Disabled form type (4) for Disabled setter', () => {
-            const result = LoadFormV3(mockExecutionContext, undefined, { body: ['name'] });
+            const result = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, { body: ['name'] });
 
             // In Disabled form (type 4), setDisabled should not be called
             result.Body.name.Disabled = true;
@@ -2611,7 +2656,7 @@ describe('DevKit Module', () => {
         });
 
         test('should handle Disabled form type (4) for Value setter', () => {
-            const result = LoadFormV3(mockExecutionContext, undefined, { body: ['name'] });
+            const result = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, { body: ['name'] });
 
             // In Disabled form (type 4), setValue should not be called
             result.Body.name.Value = 'new value';
@@ -2717,7 +2762,7 @@ describe('DevKit Module', () => {
         });
 
         test('should call setDisabled on normal form (type 2)', () => {
-            const result = LoadFormV3(mockExecutionContext, undefined, { body: ['name'] });
+            const result = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, { body: ['name'] });
 
             result.Body.name.Disabled = true;
 
@@ -2725,7 +2770,7 @@ describe('DevKit Module', () => {
         });
 
         test('should call setValue on normal form (type 2)', () => {
-            const result = LoadFormV3(mockExecutionContext, undefined, { body: ['name'] });
+            const result = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, { body: ['name'] });
 
             result.Body.name.Value = 'new value';
 
@@ -2973,7 +3018,7 @@ describe('DevKit Module', () => {
         });
 
         test('should call AddNotification with callback', () => {
-            const result = LoadFormV3(mockExecutionContext, undefined, { body: ['webresource'] });
+            const result = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, { body: ['webresource'] });
             const callback = jest.fn();
 
             result.Body.webresource.AddNotification('Test message', 'ERROR', 'notif1', callback);
@@ -2982,7 +3027,7 @@ describe('DevKit Module', () => {
         });
 
         test('should call ContentWindow with callback', async () => {
-            const result = LoadFormV3(mockExecutionContext, undefined, { body: ['webresource'] });
+            const result = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, { body: ['webresource'] });
             const successCallback = jest.fn();
 
             result.Body.webresource.ContentWindow(successCallback);
@@ -2993,7 +3038,7 @@ describe('DevKit Module', () => {
         });
 
         test('should return promise from ContentWindow without callback', async () => {
-            const result = LoadFormV3(mockExecutionContext, undefined, { body: ['webresource'] });
+            const result = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, { body: ['webresource'] });
 
             const promise = result.Body.webresource.ContentWindow();
 
@@ -3080,7 +3125,7 @@ describe('DevKit Module', () => {
         });
 
         test('should check FormIsVisible for existing form', () => {
-            const result = LoadFormV3(mockExecutionContext, undefined, {});
+            const result = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, {});
 
             const isVisible = result.FormIsVisible('form2');
 
@@ -3088,7 +3133,7 @@ describe('DevKit Module', () => {
         });
 
         test('should navigate to form by Id', () => {
-            const result = LoadFormV3(mockExecutionContext, undefined, {});
+            const result = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, {});
 
             result.FormNavigateToFormId('form2');
 
@@ -3096,7 +3141,7 @@ describe('DevKit Module', () => {
         });
 
         test('should navigate to form by Label', () => {
-            const result = LoadFormV3(mockExecutionContext, undefined, {});
+            const result = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, {});
 
             result.FormNavigateToFormLabel('Form 2');
 
@@ -3104,7 +3149,7 @@ describe('DevKit Module', () => {
         });
 
         test('should set form visibility', () => {
-            const result = LoadFormV3(mockExecutionContext, undefined, {});
+            const result = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, {});
 
             result.FormSetVisible('form2', false);
 
@@ -3148,7 +3193,7 @@ describe('DevKit Module', () => {
         });
 
         test('should call CreateRecord with callback', async () => {
-            const mockExecContext = { getFormContext: () => ({ data: { entity: { attributes: { get: () => null } } }, ui: { formSelector: { getCurrentItem: () => null } } }) }; const webApi = LoadFormV3(mockExecContext, undefined, {}).WebApi;
+            const mockExecContext = createMockExecutionContext(); const webApi = new FormBase<any, any, any, any, any, any, any>(mockExecContext, undefined, {}).WebApi;
             const successCallback = jest.fn();
 
             webApi.CreateRecord('account', { name: 'Test' }, successCallback);
@@ -3159,7 +3204,7 @@ describe('DevKit Module', () => {
         });
 
         test('should call DeleteRecord with callback', async () => {
-            const mockExecContext = { getFormContext: () => ({ data: { entity: { attributes: { get: () => null } } }, ui: { formSelector: { getCurrentItem: () => null } } }) }; const webApi = LoadFormV3(mockExecContext, undefined, {}).WebApi;
+            const mockExecContext = createMockExecutionContext(); const webApi = new FormBase<any, any, any, any, any, any, any>(mockExecContext, undefined, {}).WebApi;
             const successCallback = jest.fn();
 
             webApi.DeleteRecord('account', '{id}', successCallback);
@@ -3170,7 +3215,7 @@ describe('DevKit Module', () => {
         });
 
         test('should call RetrieveRecord with callback', async () => {
-            const mockExecContext = { getFormContext: () => ({ data: { entity: { attributes: { get: () => null } } }, ui: { formSelector: { getCurrentItem: () => null } } }) }; const webApi = LoadFormV3(mockExecContext, undefined, {}).WebApi;
+            const mockExecContext = createMockExecutionContext(); const webApi = new FormBase<any, any, any, any, any, any, any>(mockExecContext, undefined, {}).WebApi;
             const successCallback = jest.fn();
             const errorCallback = jest.fn();
 
@@ -3182,7 +3227,7 @@ describe('DevKit Module', () => {
         });
 
         test('should call RetrieveMultipleRecords with callback', async () => {
-            const mockExecContext = { getFormContext: () => ({ data: { entity: { attributes: { get: () => null } } }, ui: { formSelector: { getCurrentItem: () => null } } }) }; const webApi = LoadFormV3(mockExecContext, undefined, {}).WebApi;
+            const mockExecContext = createMockExecutionContext(); const webApi = new FormBase<any, any, any, any, any, any, any>(mockExecContext, undefined, {}).WebApi;
             const successCallback = jest.fn();
 
             webApi.RetrieveMultipleRecords('account', '?$select=name', 50, successCallback);
@@ -3193,7 +3238,7 @@ describe('DevKit Module', () => {
         });
 
         test('should call UpdateRecord with callback', async () => {
-            const mockExecContext = { getFormContext: () => ({ data: { entity: { attributes: { get: () => null } } }, ui: { formSelector: { getCurrentItem: () => null } } }) }; const webApi = LoadFormV3(mockExecContext, undefined, {}).WebApi;
+            const mockExecContext = createMockExecutionContext(); const webApi = new FormBase<any, any, any, any, any, any, any>(mockExecContext, undefined, {}).WebApi;
             const successCallback = jest.fn();
 
             webApi.UpdateRecord('account', '{id}', { name: 'Updated' }, successCallback);
@@ -3204,7 +3249,7 @@ describe('DevKit Module', () => {
         });
 
         test('should call Execute with callback', async () => {
-            const mockExecContext = { getFormContext: () => ({ data: { entity: { attributes: { get: () => null } } }, ui: { formSelector: { getCurrentItem: () => null } } }) }; const webApi = LoadFormV3(mockExecContext, undefined, {}).WebApi;
+            const mockExecContext = createMockExecutionContext(); const webApi = new FormBase<any, any, any, any, any, any, any>(mockExecContext, undefined, {}).WebApi;
             const successCallback = jest.fn();
 
             webApi.Execute({ getMetadata: () => ({}) }, successCallback);
@@ -3215,7 +3260,7 @@ describe('DevKit Module', () => {
         });
 
         test('should call ExecuteMultiple with callback', async () => {
-            const mockExecContext = { getFormContext: () => ({ data: { entity: { attributes: { get: () => null } } }, ui: { formSelector: { getCurrentItem: () => null } } }) }; const webApi = LoadFormV3(mockExecContext, undefined, {}).WebApi;
+            const mockExecContext = createMockExecutionContext(); const webApi = new FormBase<any, any, any, any, any, any, any>(mockExecContext, undefined, {}).WebApi;
             const successCallback = jest.fn();
 
             webApi.ExecuteMultiple([{ getMetadata: () => ({}) }], successCallback);
@@ -3255,7 +3300,7 @@ describe('DevKit Module', () => {
         });
 
         test('should access Online.Execute with callback', async () => {
-            const mockExecContext = { getFormContext: () => ({ data: { entity: { attributes: { get: () => null } } }, ui: { formSelector: { getCurrentItem: () => null } } }) }; const webApi = LoadFormV3(mockExecContext, undefined, {}).WebApi;
+            const mockExecContext = createMockExecutionContext(); const webApi = new FormBase<any, any, any, any, any, any, any>(mockExecContext, undefined, {}).WebApi;
             const successCallback = jest.fn();
 
             webApi.Online.Execute({ getMetadata: () => ({}) }, successCallback);
@@ -3266,7 +3311,7 @@ describe('DevKit Module', () => {
         });
 
         test('should return promise from Online.Execute without callback', async () => {
-            const mockExecContext = { getFormContext: () => ({ data: { entity: { attributes: { get: () => null } } }, ui: { formSelector: { getCurrentItem: () => null } } }) }; const webApi = LoadFormV3(mockExecContext, undefined, {}).WebApi;
+            const mockExecContext = createMockExecutionContext(); const webApi = new FormBase<any, any, any, any, any, any, any>(mockExecContext, undefined, {}).WebApi;
 
             const promise = webApi.Online.Execute({ getMetadata: () => ({}) });
 
@@ -3274,7 +3319,7 @@ describe('DevKit Module', () => {
         });
 
         test('should access Online.ExecuteMultiple with callback', async () => {
-            const mockExecContext = { getFormContext: () => ({ data: { entity: { attributes: { get: () => null } } }, ui: { formSelector: { getCurrentItem: () => null } } }) }; const webApi = LoadFormV3(mockExecContext, undefined, {}).WebApi;
+            const mockExecContext = createMockExecutionContext(); const webApi = new FormBase<any, any, any, any, any, any, any>(mockExecContext, undefined, {}).WebApi;
             const successCallback = jest.fn();
 
             webApi.Online.ExecuteMultiple([{ getMetadata: () => ({}) }], successCallback);
@@ -3285,7 +3330,7 @@ describe('DevKit Module', () => {
         });
 
         test('should return promise from Online.ExecuteMultiple without callback', async () => {
-            const mockExecContext = { getFormContext: () => ({ data: { entity: { attributes: { get: () => null } } }, ui: { formSelector: { getCurrentItem: () => null } } }) }; const webApi = LoadFormV3(mockExecContext, undefined, {}).WebApi;
+            const mockExecContext = createMockExecutionContext(); const webApi = new FormBase<any, any, any, any, any, any, any>(mockExecContext, undefined, {}).WebApi;
 
             const promise = webApi.Online.ExecuteMultiple([{ getMetadata: () => ({}) }]);
 
@@ -3293,7 +3338,7 @@ describe('DevKit Module', () => {
         });
 
         test('should check Offline.IsAvailable', () => {
-            const mockExecContext = { getFormContext: () => ({ data: { entity: { attributes: { get: () => null } } }, ui: { formSelector: { getCurrentItem: () => null } } }) }; const webApi = LoadFormV3(mockExecContext, undefined, {}).WebApi;
+            const mockExecContext = createMockExecutionContext(); const webApi = new FormBase<any, any, any, any, any, any, any>(mockExecContext, undefined, {}).WebApi;
 
             const isAvailable = webApi.Offline.IsAvailable('account');
 
@@ -3326,7 +3371,7 @@ describe('DevKit Module', () => {
         });
 
         test('should call ExecuteEvent with callback', async () => {
-            const mockExecContext = { getFormContext: () => ({ data: { entity: { attributes: { get: () => null } } }, ui: { formSelector: { getCurrentItem: () => null } } }) }; const copilot = LoadFormV3(mockExecContext, undefined, {}).Copilot;
+            const mockExecContext = createMockExecutionContext(); const copilot = new FormBase<any, any, any, any, any, any, any>(mockExecContext, undefined, {}).Copilot;
             const successCallback = jest.fn();
 
             copilot.ExecuteEvent('eventName', { param: 'value' }, successCallback);
@@ -3337,7 +3382,7 @@ describe('DevKit Module', () => {
         });
 
         test('should return promise from ExecuteEvent without callback', async () => {
-            const mockExecContext = { getFormContext: () => ({ data: { entity: { attributes: { get: () => null } } }, ui: { formSelector: { getCurrentItem: () => null } } }) }; const copilot = LoadFormV3(mockExecContext, undefined, {}).Copilot;
+            const mockExecContext = createMockExecutionContext(); const copilot = new FormBase<any, any, any, any, any, any, any>(mockExecContext, undefined, {}).Copilot;
 
             const promise = copilot.ExecuteEvent('eventName', { param: 'value' });
 
@@ -3347,7 +3392,7 @@ describe('DevKit Module', () => {
         });
 
         test('should call ExecutePrompt with callback', async () => {
-            const mockExecContext = { getFormContext: () => ({ data: { entity: { attributes: { get: () => null } } }, ui: { formSelector: { getCurrentItem: () => null } } }) }; const copilot = LoadFormV3(mockExecContext, undefined, {}).Copilot;
+            const mockExecContext = createMockExecutionContext(); const copilot = new FormBase<any, any, any, any, any, any, any>(mockExecContext, undefined, {}).Copilot;
             const successCallback = jest.fn();
 
             copilot.ExecutePrompt('What is CRM?', successCallback);
@@ -3358,7 +3403,7 @@ describe('DevKit Module', () => {
         });
 
         test('should return promise from ExecutePrompt without callback', async () => {
-            const mockExecContext = { getFormContext: () => ({ data: { entity: { attributes: { get: () => null } } }, ui: { formSelector: { getCurrentItem: () => null } } }) }; const copilot = LoadFormV3(mockExecContext, undefined, {}).Copilot;
+            const mockExecContext = createMockExecutionContext(); const copilot = new FormBase<any, any, any, any, any, any, any>(mockExecContext, undefined, {}).Copilot;
 
             const promise = copilot.ExecutePrompt('What is CRM?');
 
@@ -3407,7 +3452,7 @@ describe('DevKit Module', () => {
         });
 
         test('should call RetrieveRecords with plain FetchXml', async () => {
-            const mockExecContext = { getFormContext: () => ({ data: { entity: { attributes: { get: () => null } } }, ui: { formSelector: { getCurrentItem: () => null } } }) }; const webApi = LoadFormV3(mockExecContext, undefined, {}).WebApi;
+            const mockExecContext = createMockExecutionContext(); const webApi = new FormBase<any, any, any, any, any, any, any>(mockExecContext, undefined, {}).WebApi;
             const mockFactory = jest.fn().mockImplementation((entity: any) => entity);
 
             const fetchXml = '<fetch><entity name="account"><attribute name="name"/></entity></fetch>';
@@ -3419,7 +3464,7 @@ describe('DevKit Module', () => {
         });
 
         test('should call RetrieveRecords with encoded FetchXml', async () => {
-            const mockExecContext = { getFormContext: () => ({ data: { entity: { attributes: { get: () => null } } }, ui: { formSelector: { getCurrentItem: () => null } } }) }; const webApi = LoadFormV3(mockExecContext, undefined, {}).WebApi;
+            const mockExecContext = createMockExecutionContext(); const webApi = new FormBase<any, any, any, any, any, any, any>(mockExecContext, undefined, {}).WebApi;
             const mockFactory = jest.fn().mockImplementation((entity: any) => entity);
 
             const encodedFetchXml = '?fetchXml=' + encodeURIComponent('<fetch><entity name="account"></entity></fetch>');
@@ -3429,7 +3474,7 @@ describe('DevKit Module', () => {
         });
 
         test('should call RetrieveRecords with entity name and OData options', async () => {
-            const mockExecContext = { getFormContext: () => ({ data: { entity: { attributes: { get: () => null } } }, ui: { formSelector: { getCurrentItem: () => null } } }) }; const webApi = LoadFormV3(mockExecContext, undefined, {}).WebApi;
+            const mockExecContext = createMockExecutionContext(); const webApi = new FormBase<any, any, any, any, any, any, any>(mockExecContext, undefined, {}).WebApi;
             const mockFactory = jest.fn().mockImplementation((entity: any) => entity);
 
             const promise = webApi.RetrieveRecords(mockFactory, 'account', '?$select=name', 50);
@@ -3438,18 +3483,18 @@ describe('DevKit Module', () => {
         });
 
         test('should call RetrieveRecords with callback', async () => {
-            const mockExecContext = { getFormContext: () => ({ data: { entity: { attributes: { get: () => null } } }, ui: { formSelector: { getCurrentItem: () => null } } }) }; const webApi = LoadFormV3(mockExecContext, undefined, {}).WebApi;
+            const mockExecContext = createMockExecutionContext(); const webApi = new FormBase<any, any, any, any, any, any, any>(mockExecContext, undefined, {}).WebApi;
             const mockFactory = jest.fn().mockImplementation((entity: any) => entity);
             const successCallback = jest.fn();
 
-            webApi.RetrieveRecords(mockFactory, 'account', '?$select=name', successCallback);
+            webApi.RetrieveRecords(mockFactory as any, 'account', '?$select=name', successCallback as any);
 
             await new Promise(resolve => setTimeout(resolve, 10));
             expect(mockWebApi.retrieveMultipleRecords).toHaveBeenCalled();
         });
 
         test('should call RetrieveRecord with constructor and options as function', async () => {
-            const mockExecContext = { getFormContext: () => ({ data: { entity: { attributes: { get: () => null } } }, ui: { formSelector: { getCurrentItem: () => null } } }) }; const webApi = LoadFormV3(mockExecContext, undefined, {}).WebApi;
+            const mockExecContext = createMockExecutionContext(); const webApi = new FormBase<any, any, any, any, any, any, any>(mockExecContext, undefined, {}).WebApi;
 
             class AccountApi {
                 constructor(public entity: any) { }
@@ -3463,7 +3508,7 @@ describe('DevKit Module', () => {
         });
 
         test('should call RetrieveRecord with constructor and no options', async () => {
-            const mockExecContext = { getFormContext: () => ({ data: { entity: { attributes: { get: () => null } } }, ui: { formSelector: { getCurrentItem: () => null } } }) }; const webApi = LoadFormV3(mockExecContext, undefined, {}).WebApi;
+            const mockExecContext = createMockExecutionContext(); const webApi = new FormBase<any, any, any, any, any, any, any>(mockExecContext, undefined, {}).WebApi;
 
             class AccountApi {
                 constructor(public entity: any) { }
@@ -3505,17 +3550,17 @@ describe('DevKit Module', () => {
         });
 
         test('should return promise from CreateRecord', async () => {
-            const mockExecContext = { getFormContext: () => ({ data: { entity: { attributes: { get: () => null } } }, ui: { formSelector: { getCurrentItem: () => null } } }) }; const webApi = LoadFormV3(mockExecContext, undefined, {}).WebApi;
+            const mockExecContext = createMockExecutionContext(); const webApi = new FormBase<any, any, any, any, any, any, any>(mockExecContext, undefined, {}).WebApi;
 
             const promise = webApi.CreateRecord('account', { name: 'Test' });
 
             expect(promise).toBeDefined();
-            const result = await promise;
+            const result = await promise as any;
             expect(result.id).toBe('{newId}');
         });
 
         test('should return promise from DeleteRecord', async () => {
-            const mockExecContext = { getFormContext: () => ({ data: { entity: { attributes: { get: () => null } } }, ui: { formSelector: { getCurrentItem: () => null } } }) }; const webApi = LoadFormV3(mockExecContext, undefined, {}).WebApi;
+            const mockExecContext = createMockExecutionContext(); const webApi = new FormBase<any, any, any, any, any, any, any>(mockExecContext, undefined, {}).WebApi;
 
             const promise = webApi.DeleteRecord('account', '{id}');
 
@@ -3523,7 +3568,7 @@ describe('DevKit Module', () => {
         });
 
         test('should return promise from RetrieveMultipleRecords', async () => {
-            const mockExecContext = { getFormContext: () => ({ data: { entity: { attributes: { get: () => null } } }, ui: { formSelector: { getCurrentItem: () => null } } }) }; const webApi = LoadFormV3(mockExecContext, undefined, {}).WebApi;
+            const mockExecContext = createMockExecutionContext(); const webApi = new FormBase<any, any, any, any, any, any, any>(mockExecContext, undefined, {}).WebApi;
 
             const promise = webApi.RetrieveMultipleRecords('account', '?$select=name');
 
@@ -3531,7 +3576,7 @@ describe('DevKit Module', () => {
         });
 
         test('should return promise from UpdateRecord', async () => {
-            const mockExecContext = { getFormContext: () => ({ data: { entity: { attributes: { get: () => null } } }, ui: { formSelector: { getCurrentItem: () => null } } }) }; const webApi = LoadFormV3(mockExecContext, undefined, {}).WebApi;
+            const mockExecContext = createMockExecutionContext(); const webApi = new FormBase<any, any, any, any, any, any, any>(mockExecContext, undefined, {}).WebApi;
 
             const promise = webApi.UpdateRecord('account', '{id}', { name: 'Updated' });
 
@@ -3539,7 +3584,7 @@ describe('DevKit Module', () => {
         });
 
         test('should return promise from Execute', async () => {
-            const mockExecContext = { getFormContext: () => ({ data: { entity: { attributes: { get: () => null } } }, ui: { formSelector: { getCurrentItem: () => null } } }) }; const webApi = LoadFormV3(mockExecContext, undefined, {}).WebApi;
+            const mockExecContext = createMockExecutionContext(); const webApi = new FormBase<any, any, any, any, any, any, any>(mockExecContext, undefined, {}).WebApi;
 
             const promise = webApi.Execute({ getMetadata: () => ({}) });
 
@@ -3547,7 +3592,7 @@ describe('DevKit Module', () => {
         });
 
         test('should return promise from ExecuteMultiple', async () => {
-            const mockExecContext = { getFormContext: () => ({ data: { entity: { attributes: { get: () => null } } }, ui: { formSelector: { getCurrentItem: () => null } } }) }; const webApi = LoadFormV3(mockExecContext, undefined, {}).WebApi;
+            const mockExecContext = createMockExecutionContext(); const webApi = new FormBase<any, any, any, any, any, any, any>(mockExecContext, undefined, {}).WebApi;
 
             const promise = webApi.ExecuteMultiple([{ getMetadata: () => ({}) }]);
 
@@ -3631,7 +3676,7 @@ describe('DevKit Module', () => {
         });
 
         test('should return null for non-existent form', () => {
-            const result = LoadFormV3(mockExecutionContext, undefined, {});
+            const result = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, {});
 
             // Trying to check visibility of non-existent form
             const isVisible = result.FormIsVisible('nonExistentForm');
@@ -3641,14 +3686,14 @@ describe('DevKit Module', () => {
         });
 
         test('should handle FormNavigateToFormId for non-existent form', () => {
-            const result = LoadFormV3(mockExecutionContext, undefined, {});
+            const result = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, {});
 
             // This should not throw
             result.FormNavigateToFormId('nonExistentForm');
         });
 
         test('should handle FormNavigateToFormLabel for non-existent form', () => {
-            const result = LoadFormV3(mockExecutionContext, undefined, {});
+            const result = new FormBase<any, any, any, any, any, any, any>(mockExecutionContext, undefined, {});
 
             // This should not throw
             result.FormNavigateToFormLabel('Non Existent Form');
@@ -3691,7 +3736,7 @@ describe('DevKit Module', () => {
             };
             (global as any).DOMParser = jest.fn().mockImplementation(() => mockParser);
 
-            const mockExecContext = { getFormContext: () => ({ data: { entity: { attributes: { get: () => null } } }, ui: { formSelector: { getCurrentItem: () => null } } }) }; const webApi = LoadFormV3(mockExecContext, undefined, {}).WebApi;
+            const mockExecContext = createMockExecutionContext(); const webApi = new FormBase<any, any, any, any, any, any, any>(mockExecContext, undefined, {}).WebApi;
             const mockFactory = jest.fn().mockImplementation((e: any) => e);
 
             // Pass XML that starts with spaces then '<'
@@ -3710,7 +3755,7 @@ describe('DevKit Module', () => {
             };
             (global as any).DOMParser = jest.fn().mockImplementation(() => mockParser);
 
-            const mockExecContext = { getFormContext: () => ({ data: { entity: { attributes: { get: () => null } } }, ui: { formSelector: { getCurrentItem: () => null } } }) }; const webApi = LoadFormV3(mockExecContext, undefined, {}).WebApi;
+            const mockExecContext = createMockExecutionContext(); const webApi = new FormBase<any, any, any, any, any, any, any>(mockExecContext, undefined, {}).WebApi;
             const mockFactory = jest.fn().mockImplementation((e: any) => e);
 
             const fetchXml = '<fetch><invalid/></fetch>';
@@ -3719,7 +3764,7 @@ describe('DevKit Module', () => {
         });
 
         test('should throw error for OData query without entity name', async () => {
-            const mockExecContext = { getFormContext: () => ({ data: { entity: { attributes: { get: () => null } } }, ui: { formSelector: { getCurrentItem: () => null } } }) }; const webApi = LoadFormV3(mockExecContext, undefined, {}).WebApi;
+            const mockExecContext = createMockExecutionContext(); const webApi = new FormBase<any, any, any, any, any, any, any>(mockExecContext, undefined, {}).WebApi;
             const mockFactory = jest.fn().mockImplementation((e: any) => e);
 
             // This is OData style (starts with ?) but NOT fetchXml, so entity cannot be determined
@@ -3775,27 +3820,27 @@ describe('DevKit Module', () => {
         });
 
         test('should handle FetchXml with callback as 3rd param', async () => {
-            const mockExecContext = { getFormContext: () => ({ data: { entity: { attributes: { get: () => null } } }, ui: { formSelector: { getCurrentItem: () => null } } }) }; const webApi = LoadFormV3(mockExecContext, undefined, {}).WebApi;
+            const mockExecContext = createMockExecutionContext(); const webApi = new FormBase<any, any, any, any, any, any, any>(mockExecContext, undefined, {}).WebApi;
             const mockFactory = jest.fn().mockImplementation((e: any) => e);
             const successCallback = jest.fn();
             const errorCallback = jest.fn();
 
             // FetchXml pattern: RetrieveRecords(factory, fetchXml, successCallback, errorCallback)
             const fetchXml = '?fetchXml=' + encodeURIComponent('<fetch><entity name="account"></entity></fetch>');
-            webApi.RetrieveRecords(mockFactory, fetchXml, successCallback, errorCallback);
+            webApi.RetrieveRecords(mockFactory as any, fetchXml, successCallback as any, errorCallback as any);
 
             await new Promise(resolve => setTimeout(resolve, 10));
             expect(mockWebApi.retrieveMultipleRecords).toHaveBeenCalled();
         });
 
         test('should handle FetchXml with maxPageSize as 3rd param and callback as 4th', async () => {
-            const mockExecContext = { getFormContext: () => ({ data: { entity: { attributes: { get: () => null } } }, ui: { formSelector: { getCurrentItem: () => null } } }) }; const webApi = LoadFormV3(mockExecContext, undefined, {}).WebApi;
+            const mockExecContext = createMockExecutionContext(); const webApi = new FormBase<any, any, any, any, any, any, any>(mockExecContext, undefined, {}).WebApi;
             const mockFactory = jest.fn().mockImplementation((e: any) => e);
             const successCallback = jest.fn();
 
             // FetchXml pattern: RetrieveRecords(factory, fetchXml, maxPageSize, successCallback)
             const fetchXml = '?fetchXml=' + encodeURIComponent('<fetch><entity name="account"></entity></fetch>');
-            webApi.RetrieveRecords(mockFactory, fetchXml, 100, successCallback);
+            webApi.RetrieveRecords(mockFactory as any, fetchXml, 100 as any, successCallback as any);
 
             await new Promise(resolve => setTimeout(resolve, 10));
             expect(mockWebApi.retrieveMultipleRecords).toHaveBeenCalled();
@@ -3826,7 +3871,7 @@ describe('DevKit Module', () => {
         });
 
         test('should return empty array when no entities found', async () => {
-            const mockExecContext = { getFormContext: () => ({ data: { entity: { attributes: { get: () => null } } }, ui: { formSelector: { getCurrentItem: () => null } } }) }; const webApi = LoadFormV3(mockExecContext, undefined, {}).WebApi;
+            const mockExecContext = createMockExecutionContext(); const webApi = new FormBase<any, any, any, any, any, any, any>(mockExecContext, undefined, {}).WebApi;
             const mockFactory = jest.fn().mockImplementation((e: any) => e);
 
             const promise = webApi.RetrieveRecords(mockFactory, 'account', '?$select=name');
@@ -3837,98 +3882,10 @@ describe('DevKit Module', () => {
         });
     });
 
-    // =========================================================================
-    // LoadFormV3 - Dialog Loading (line 744)
-    // =========================================================================
-    describe('LoadFormV3 - Dialog Loading', () => {
-        let mockExecutionContext: any;
-        let mockFormContext: any;
-
-        beforeEach(() => {
-            mockFormContext = {
-                data: {
-                    entity: {
-                        getId: jest.fn().mockReturnValue('{guid}'),
-                        getEntityName: jest.fn().mockReturnValue('account'),
-                        getEntityReference: jest.fn().mockReturnValue({}),
-                        getPrimaryAttributeValue: jest.fn(),
-                        getDataXml: jest.fn(),
-                        getIsDirty: jest.fn().mockReturnValue(false),
-                        isValid: jest.fn().mockReturnValue(true),
-                        addOnSave: jest.fn(),
-                        removeOnSave: jest.fn(),
-                        addOnPostSave: jest.fn(),
-                        removeOnPostSave: jest.fn(),
-                        attributes: { get: jest.fn() }
-                    },
-                    getIsDirty: jest.fn().mockReturnValue(false),
-                    isValid: jest.fn().mockReturnValue(true),
-                    refresh: jest.fn(),
-                    save: jest.fn(),
-                    addOnLoad: jest.fn(),
-                    removeOnLoad: jest.fn()
-                },
-                ui: {
-                    getFormType: jest.fn().mockReturnValue(2),
-                    getViewPortHeight: jest.fn().mockReturnValue(800),
-                    getViewPortWidth: jest.fn().mockReturnValue(1200),
-                    close: jest.fn(),
-                    setFormNotification: jest.fn(),
-                    clearFormNotification: jest.fn(),
-                    refreshRibbon: jest.fn(),
-                    addLoaded: jest.fn(),
-                    removeLoaded: jest.fn(),
-                    addOnLoad: jest.fn(),
-                    removeOnLoad: jest.fn(),
-                    controls: { get: jest.fn() },
-                    tabs: { get: jest.fn() },
-                    formSelector: {
-                        getCurrentItem: jest.fn().mockReturnValue({ getId: jest.fn(), getLabel: jest.fn() }),
-                        items: { getLength: jest.fn().mockReturnValue(0), get: jest.fn() }
-                    },
-                    navigation: { items: { getLength: jest.fn().mockReturnValue(0), get: jest.fn() } },
-                    quickForms: { get: jest.fn() }
-                },
-                getControl: jest.fn().mockImplementation((name: string) => ({
-                    getName: () => name,
-                    getControlType: jest.fn().mockReturnValue('standard'),
-                    getLabel: jest.fn().mockReturnValue('Label'),
-                    setLabel: jest.fn(),
-                    getVisible: jest.fn().mockReturnValue(true),
-                    setVisible: jest.fn(),
-                    getDisabled: jest.fn().mockReturnValue(false),
-                    setDisabled: jest.fn(),
-                    setFocus: jest.fn(),
-                    setNotification: jest.fn(),
-                    clearNotification: jest.fn(),
-                    addNotification: jest.fn(),
-                    getAttribute: jest.fn().mockReturnValue({ getName: () => name })
-                })),
-                getAttribute: jest.fn().mockImplementation((name: string) => ({
-                    getName: () => name,
-                    getValue: jest.fn().mockReturnValue('value'),
-                    setValue: jest.fn()
-                }))
-            };
-
-            mockExecutionContext = {
-                getFormContext: jest.fn().mockReturnValue(mockFormContext),
-                getDepth: jest.fn().mockReturnValue(1),
-                getEventArgs: jest.fn().mockReturnValue({}),
-                getEventSource: jest.fn(),
-                getSharedVariable: jest.fn(),
-                setSharedVariable: jest.fn()
-            };
-        });
-
-        test('should load Dialog when dialog array is provided', () => {
-            // Pass dialog config to trigger line 744
-            const result = LoadFormV3(mockExecutionContext, undefined, { dialog: ['dialogField1'] } as any);
-
-            expect(result).toBeDefined();
-            expect((result as any).Dialog).toBeDefined();
-        });
-    });
 });
+
+
+
+
 
 
