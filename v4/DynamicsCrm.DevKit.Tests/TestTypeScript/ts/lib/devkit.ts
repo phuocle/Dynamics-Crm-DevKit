@@ -614,6 +614,7 @@ function loadFormV3<TBody = Record<string, any>, THeader = Record<string, any>, 
     SidePanes: any;
     WebApi: any;
     Copilot: any;
+    Dialog: any;
 } {
     const formContext = executionContext?.getFormContext?.() ?? executionContext ?? null;
     const form: any = {};
@@ -1175,6 +1176,7 @@ export class FormBase<TBody, THeader, TTab, TGrid, TNavigation, TQuickForm, TPro
         this.SidePanes = form.SidePanes;
         this.WebApi = form.WebApi;
         this.Copilot = form.Copilot;
+        this.Dialog = form.Dialog;
     }
 }
 export function defineWebApiField(obj: any, fieldName: string, entity: Record<string, any>, config: DevKit.IWebApiFieldConfig, upsertEntity: Record<string, any>): void {
