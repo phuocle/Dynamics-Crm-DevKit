@@ -354,13 +354,9 @@ function loadWebApi(): DevKit.IWebApi {
     const getOnline = xrm?.WebApi?.online;
     const getOffline = xrm?.WebApi?.offline;
     const extractEntityName = function (fetchXml: string): string {
-        // Note: This function is always called with ?fetchXml= prefix (added by line 433-434)
-        let cleanXml = fetchXml;
-        const fetchXmlMatch = fetchXml.match(/fetchxml=/i);
-        if (fetchXmlMatch) {
-            const splitIndex = fetchXml.toLowerCase().indexOf('fetchxml=') + 'fetchxml='.length;
-            cleanXml = decodeURIComponent(fetchXml.substring(splitIndex));
-        }
+        // This function is always called with ?fetchXml= prefix (line 433-434 ensures this)
+        const splitIndex = fetchXml.toLowerCase().indexOf('fetchxml=') + 'fetchxml='.length;
+        const cleanXml = decodeURIComponent(fetchXml.substring(splitIndex));
         const parser = new DOMParser();
         const xmlDoc = parser.parseFromString(cleanXml, "text/xml");
         const entityNode = xmlDoc.querySelector("entity");
@@ -368,6 +364,7 @@ function loadWebApi(): DevKit.IWebApi {
             return entityNode.getAttribute("name")!;
         throw new Error("Entity name not found in fetchXml");
     };
+
 
     obj.CreateRecord = function (entityLogicalName: string, data: any, successCallback?: any, errorCallback?: any) {
         const promise = getWebApi?.createRecord(entityLogicalName, data);
