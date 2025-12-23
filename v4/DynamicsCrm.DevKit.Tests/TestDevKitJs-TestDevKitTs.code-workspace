@@ -1,0 +1,11 @@
+{
+	"folders": [
+		{
+			"path": "TestTypeScript/ts"
+		},
+		{
+			"path": "TestDevKitJs"
+		}
+	],
+	"settings": {}
+}
