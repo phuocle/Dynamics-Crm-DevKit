@@ -10,9 +10,11 @@
   },
   "devDependencies": {
     "@types/jest": "^30.0.0",
+    "@types/jsdom": "^27.0.0",
     "@types/xrm": "^9.0.88",
     "esbuild": "^0.24.2",
     "jest": "^30.2.0",
+    "jsdom": "^27.3.0",
     "ts-jest": "^29.4.6",
     "typescript": "^5.7.2",
     "xrm-mock": "^3.6.2"
