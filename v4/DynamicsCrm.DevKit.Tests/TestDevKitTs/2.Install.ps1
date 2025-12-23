@@ -34,17 +34,9 @@ try {
         exit 1
     }
 
-    # Run tests to verify installation
+    # Only install packages here. Tests and coverage are handled by separate scripts.
     Write-Host ""
-    Write-Host "Running unit tests..." -ForegroundColor Yellow
-    npm test
-    $testExitCode = $LASTEXITCODE
-    if ($testExitCode -eq 0) {
-        Write-Host "All tests passed!" -ForegroundColor Green
-    } else {
-        Write-Host "Some tests failed! (Exit code: $testExitCode)" -ForegroundColor Yellow
-        Write-Host "Note: Test failures may be due to pre-existing issues in test files." -ForegroundColor Yellow
-    }
+    Write-Host "Packages installed; skipping test execution in this script." -ForegroundColor Yellow
 
     Write-Host ""
     Write-Host "=== Installation completed successfully ===" -ForegroundColor Cyan
