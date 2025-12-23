@@ -1005,7 +1005,7 @@ function loadUtility(defaultWebResourceName?: string): DevKit.IUtility {
 }
 function loadFormDialog(formContext: any, fields: string[]): any {
     const form: any = {};
-    const fieldsLength = fields?.length || 0;
+    const fieldsLength = fields.length;
     for (let i = 0; i < fieldsLength; i++) {
         const fieldName = fields[i];
         const attribute = formContext?.data?.entity?.attributes?.get(fieldName);

@@ -2264,5 +2264,213 @@ describe('loadFormV3 Tests', () => {
             expect(form.Body).toEqual({ Tab: {} });
         });
     });
+
+    // =========================================================================
+    // findFormItem Edge Cases (lines 617, 620)
+    // =========================================================================
+    describe('findFormItem Edge Cases', () => {
+        test('FormIsVisible should handle null items (line 617)', () => {
+            const formContext = {
+                data: {
+                    getIsDirty: () => false,
+                    isValid: () => true,
+                    entity: {
+                        getId: () => 'test-id',
+                        getEntityName: () => 'account',
+                        getIsDirty: () => false,
+                        isValid: () => true,
+                        getDataXml: () => '',
+                        getEntityReference: () => ({}),
+                        getPrimaryAttributeValue: () => ''
+                    }
+                },
+                ui: {
+                    getFormType: () => 2,
+                    formSelector: {
+                        getCurrentItem: () => ({ getId: () => 'form-1', getLabel: () => 'Form 1' }),
+                        items: null  // null items - covers line 617 ?? 0 fallback
+                    },
+                    getViewPortHeight: () => 800,
+                    getViewPortWidth: () => 1200,
+                    controls: { get: () => null }
+                },
+                getControl: () => null,
+                getAttribute: () => null,
+                getFormContext: function () { return this; }
+            };
+            const form = new FormBase({ getFormContext: () => formContext }, 'test', {});
+
+            // Should return undefined when items is null
+            expect(form.FormIsVisible('any-form-id')).toBeUndefined();
+        });
+
+        test('FormNavigateToFormId should handle items.get() returning null (line 620)', () => {
+            const formContext = {
+                data: {
+                    getIsDirty: () => false,
+                    isValid: () => true,
+                    entity: {
+                        getId: () => 'test-id',
+                        getEntityName: () => 'account',
+                        getIsDirty: () => false,
+                        isValid: () => true,
+                        getDataXml: () => '',
+                        getEntityReference: () => ({}),
+                        getPrimaryAttributeValue: () => ''
+                    }
+                },
+                ui: {
+                    getFormType: () => 2,
+                    formSelector: {
+                        getCurrentItem: () => ({ getId: () => 'form-1', getLabel: () => 'Form 1' }),
+                        items: {
+                            getLength: () => 3,
+                            get: (index: number) => {
+                                // Return null for index 0 and 1, covers line 620 (item && ...)
+                                if (index === 0) return null;
+                                if (index === 1) return undefined;
+                                return { getId: () => 'form-3', getLabel: () => 'Form 3', navigate: () => { } };
+                            }
+                        }
+                    },
+                    getViewPortHeight: () => 800,
+                    getViewPortWidth: () => 1200,
+                    controls: { get: () => null }
+                },
+                getControl: () => null,
+                getAttribute: () => null,
+                getFormContext: function () { return this; }
+            };
+            const form = new FormBase({ getFormContext: () => formContext }, 'test', {});
+
+            // Should handle null/undefined items in the loop
+            expect(() => form.FormNavigateToFormId('form-3')).not.toThrow();
+            expect(() => form.FormNavigateToFormId('not-found')).not.toThrow();
+        });
+    });
+
+    // =========================================================================
+    // Refresh/Save without callback (lines 654, 662)
+    // =========================================================================
+    describe('Refresh and Save without callback', () => {
+        test('Refresh without successCallback should return promise (line 654-655)', () => {
+            const refreshPromise = Promise.resolve();
+            const formContext = {
+                data: {
+                    getIsDirty: () => false,
+                    isValid: () => true,
+                    refresh: () => refreshPromise,
+                    save: () => Promise.resolve(),
+                    entity: {
+                        getId: () => 'test-id',
+                        getEntityName: () => 'account',
+                        getIsDirty: () => false,
+                        isValid: () => true,
+                        getDataXml: () => '',
+                        getEntityReference: () => ({}),
+                        getPrimaryAttributeValue: () => ''
+                    }
+                },
+                ui: {
+                    getFormType: () => 2,
+                    formSelector: { getCurrentItem: () => null, items: { getLength: () => 0 } },
+                    getViewPortHeight: () => 800,
+                    getViewPortWidth: () => 1200,
+                    controls: { get: () => null }
+                },
+                getControl: () => null,
+                getAttribute: () => null,
+                getFormContext: function () { return this; }
+            };
+            const form = new FormBase({ getFormContext: () => formContext }, 'test', {});
+
+            // Call Refresh WITHOUT callback - should return promise (else branch line 655)
+            const result = form.Refresh(true);
+            expect(result).toBe(refreshPromise);
+        });
+
+        test('Save without successCallback should return promise (line 662-663)', () => {
+            const savePromise = Promise.resolve();
+            const formContext = {
+                data: {
+                    getIsDirty: () => false,
+                    isValid: () => true,
+                    refresh: () => Promise.resolve(),
+                    save: () => savePromise,
+                    entity: {
+                        getId: () => 'test-id',
+                        getEntityName: () => 'account',
+                        getIsDirty: () => false,
+                        isValid: () => true,
+                        getDataXml: () => '',
+                        getEntityReference: () => ({}),
+                        getPrimaryAttributeValue: () => ''
+                    }
+                },
+                ui: {
+                    getFormType: () => 2,
+                    formSelector: { getCurrentItem: () => null, items: { getLength: () => 0 } },
+                    getViewPortHeight: () => 800,
+                    getViewPortWidth: () => 1200,
+                    controls: { get: () => null }
+                },
+                getControl: () => null,
+                getAttribute: () => null,
+                getFormContext: function () { return this; }
+            };
+            const form = new FormBase({ getFormContext: () => formContext }, 'test', {});
+
+            // Call Save WITHOUT callback - should return promise (else branch line 663)
+            const result = form.Save();
+            expect(result).toBe(savePromise);
+        });
+    });
+
+    // =========================================================================
+    // Refresh/Save WITH callback but null data (lines 654, 662 inner branch)
+    // =========================================================================
+    describe('Refresh and Save with callback but null data', () => {
+        test('Refresh WITH successCallback but null data should not throw (line 654 branch)', () => {
+            const formContext = {
+                data: null,  // null data means contextData?.refresh() returns undefined
+                ui: {
+                    getFormType: () => 2,
+                    formSelector: { getCurrentItem: () => null, items: { getLength: () => 0 } },
+                    getViewPortHeight: () => 800,
+                    getViewPortWidth: () => 1200,
+                    controls: { get: () => null }
+                },
+                getControl: () => null,
+                getAttribute: () => null,
+                getFormContext: function () { return this; }
+            };
+            const form = new FormBase({ getFormContext: () => formContext }, 'test', {});
+            const callback = jest.fn();
+
+            // Call Refresh WITH callback but data is null - promise?.then should handle null promise
+            expect(() => form.Refresh(true, callback)).not.toThrow();
+        });
+
+        test('Save WITH successCallback but null data should not throw (line 662 branch)', () => {
+            const formContext = {
+                data: null,  // null data means contextData?.save() returns undefined
+                ui: {
+                    getFormType: () => 2,
+                    formSelector: { getCurrentItem: () => null, items: { getLength: () => 0 } },
+                    getViewPortHeight: () => 800,
+                    getViewPortWidth: () => 1200,
+                    controls: { get: () => null }
+                },
+                getControl: () => null,
+                getAttribute: () => null,
+                getFormContext: function () { return this; }
+            };
+            const form = new FormBase({ getFormContext: () => formContext }, 'test', {});
+            const callback = jest.fn();
+
+            // Call Save WITH callback but data is null - promise?.then should handle null promise
+            expect(() => form.Save({}, callback)).not.toThrow();
+        });
+    });
 });
 

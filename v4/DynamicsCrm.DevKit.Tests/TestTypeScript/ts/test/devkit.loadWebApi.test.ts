@@ -1173,4 +1173,65 @@ describe('loadWebApi Tests', () => {
             expect(account.Entity.revenue).toBe(1000000);
         });
     });
+
+    // ========================================================================
+    // Coverage: DateTime Invalid Date object (line 1026)
+    // ========================================================================
+
+    describe('Type Parsers - DateTime with Invalid Date object (line 1026)', () => {
+        function createFieldWithType(entity: Record<string, any>, type?: string): any {
+            const { defineWebApiField } = require('../lib/devkit');
+            const obj: any = { FormattedValue: {} };
+            const upsertEntity: Record<string, any> = {};
+            defineWebApiField(obj, 'testField', entity, {
+                logicalName: 'testfield',
+                schemaName: 'Testfield',
+                type: type as any
+            }, upsertEntity);
+            return obj;
+        }
+
+        test('should return null for invalid Date object (NaN timestamp)', () => {
+            // This tests line 1026: if (value instanceof Date) return isNaN(value.getTime()) ? null : value;
+            // When value is a Date but getTime() returns NaN
+            const invalidDate = new Date('invalid');
+            expect(isNaN(invalidDate.getTime())).toBe(true); // Confirm it's invalid
+            const entity = { testfield: invalidDate };
+            const obj = createFieldWithType(entity, 'DateTime');
+            expect(obj.testField).toBeNull();
+        });
+    });
+
+    // ========================================================================
+    // Coverage: webApiReturnGet Unknown Type (line 1060)
+    // ========================================================================
+
+    describe('Type Parsers - Unknown Type Fallback (line 1060)', () => {
+        function createFieldWithType(entity: Record<string, any>, type?: string): any {
+            const { defineWebApiField } = require('../lib/devkit');
+            const obj: any = { FormattedValue: {} };
+            const upsertEntity: Record<string, any> = {};
+            defineWebApiField(obj, 'testField', entity, {
+                logicalName: 'testfield',
+                schemaName: 'Testfield',
+                type: type as any
+            }, upsertEntity);
+            return obj;
+        }
+
+        test('should return data as-is for unknown type (line 1060 parser fallback)', () => {
+            // This tests line 1060: return parser ? parser(data) : data;
+            // When type is not recognized (no parser found), it should return data unchanged
+            const entity = { testfield: 'some-custom-value' };
+            const obj = createFieldWithType(entity, 'UnknownType' as any);
+            expect(obj.testField).toBe('some-custom-value');
+        });
+
+        test('should return object as-is for unknown type', () => {
+            const customObject = { foo: 'bar', num: 123 };
+            const entity = { testfield: customObject };
+            const obj = createFieldWithType(entity, 'CustomType' as any);
+            expect(obj.testField).toEqual(customObject);
+        });
+    });
 });
