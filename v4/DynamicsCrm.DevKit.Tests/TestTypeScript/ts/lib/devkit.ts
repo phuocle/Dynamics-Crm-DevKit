@@ -338,12 +338,13 @@ function loadExecutionContext(executionContext: any): DevKit.IExecutionContext {
 }
 function loadSidePanes(): DevKit.ISidePanes {
     const sidePanes: any = {};
-    const xrm = getXrm();
-    getterSetter(sidePanes, 'DisplayState', () => (xrm as any)?.App?.sidePanes?.state, (value: any) => { const x = getXrm(); if ((x as any)?.App?.sidePanes) (x as any).App.sidePanes.state = value; });
-    sidePanes.Create = function (paneOptions: any, successCallback?: any) { (xrm as any)?.App?.sidePanes?.createPane(paneOptions)?.then(successCallback); };
-    sidePanes.Get = (paneId: string) => (xrm as any)?.App?.sidePanes?.getPane(paneId);
-    sidePanes.GetAll = () => (xrm as any)?.App?.sidePanes?.getAllPanes();
-    sidePanes.GetSelected = () => (xrm as any)?.App?.sidePanes?.getSelectedPane();
+    const xrm: any = getXrm();
+    const getSidePanes = xrm?.App?.sidePanes;
+    getterSetter(sidePanes, 'DisplayState', () => getSidePanes?.state, (value: any) => { if (getSidePanes) getSidePanes.state = value; });
+    sidePanes.Create = function (paneOptions: any, successCallback?: any) { getSidePanes?.createPane(paneOptions)?.then(successCallback); };
+    sidePanes.Get = (paneId: string) => getSidePanes?.getPane(paneId);
+    sidePanes.GetAll = () => getSidePanes?.getAllPanes();
+    sidePanes.GetSelected = () => getSidePanes?.getSelectedPane();
     return sidePanes;
 }
 function loadWebApi(): DevKit.IWebApi {
