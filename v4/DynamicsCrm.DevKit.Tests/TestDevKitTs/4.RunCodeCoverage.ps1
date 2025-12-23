@@ -9,23 +9,11 @@ $scriptDir = $PSScriptRoot
 Push-Location $scriptDir
 
 try {
-    # Decide how to run coverage: prefer npm script, fallback to npx jest
-    $hasCoverageScript = $false
-    $pkgPath = Join-Path $scriptDir "package.json"
-    if (Test-Path $pkgPath) {
-        try {
-            $pkg = Get-Content -Raw -Path $pkgPath | ConvertFrom-Json
-            if ($pkg.scripts -and $pkg.scripts.coverage) { $hasCoverageScript = $true }
-        } catch {
-            Write-Host "Warning: could not parse package.json; will attempt fallback coverage command." -ForegroundColor Yellow
-        }
-    }
-
-    if ($hasCoverageScript) {
-        Write-Host "Running npm run coverage..." -ForegroundColor Yellow
-        npm run coverage
-    } else {
-        Write-Host "No 'coverage' script found in package.json; running fallback: npx jest --coverage" -ForegroundColor Yellow
+    # Run the project's coverage script (per package.json) and fallback to npx jest
+    Write-Host "Running npm run devkit-test (coverage)..." -ForegroundColor Yellow
+    npm run devkit-test
+    if ($LASTEXITCODE -ne 0) {
+        Write-Host "npm run devkit-test failed; running fallback: npx jest --coverage" -ForegroundColor Yellow
         npx jest --coverage --coverageReporters=html --coverageDirectory coverage
     }
 

@@ -1,3 +1,48 @@
+> **IMPORTANT — Quy trình chạy (BẮT BUỘC, theo thứ tự)**
+
+- Yêu cầu trước khi chạy:
+  - Cài đặt `Node.js` và `npm` (version tuyên bố trong môi trường của bạn).
+  - Mở PowerShell với quyền đủ để chạy script hoặc cho phép ExecutionPolicy tạm thời.
+  - Mở terminal ở thư mục `TestDevKitTs` (đường dẫn chứa `package.json`).
+
+- Cách chạy từng bước (chạy theo thứ tự):
+
+  1. Dọn sạch môi trường (xóa `node_modules`, `coverage`, `package-lock.json`, ...):
+
+      ```powershell
+      .\1.Clean.ps1
+      ```
+
+      - Kết quả mong đợi: các thư mục/ file cũ được xóa.
+
+  2. Cài đặt dependency (chỉ cài, không chạy tests):
+
+      ```powershell
+      .\2.Install.ps1
+      ```
+
+      - Kết quả mong đợi: `npm install` hoàn tất; script này không chạy tests.
+
+  3. Build/Release (tạo output trong `build/`):
+
+      ```powershell
+      .\3.RunBuildRelease.ps1
+      ```
+
+      - Kết quả mong đợi: `npm run release` (hoặc fallback) chạy thành công và thư mục `build/` được tạo.
+
+  4. Chạy unit tests và hiển thị báo cáo coverage (popup file HTML):
+
+      ```powershell
+      .\4.RunCodeCoverage.ps1
+      ```
+
+      - Kết quả mong đợi: Jest chạy với coverage; script sẽ tìm file `.html` trong `coverage/` và mở báo cáo trong trình duyệt.
+
+- Nếu bất kỳ bước nào lỗi, dừng lại, sửa lỗi (hoặc cho tôi biết) và sau khi sửa xong, chạy lại từ bước 1 cho tới khi bước 4 thành công và báo cáo coverage mở được.
+
+---
+
 # TypeScript Modules cho Dynamics 365 / Dataverse
 
 ## Tổng quan
@@ -94,7 +139,7 @@ import { LeadForm, OptionSet } from './generator/Lead.form';
 
 const formLead = (function () {
     "use strict";
-    
+
     let form: LeadForm;
 
     async function onLoad(executionContext: any): Promise<void> {
@@ -177,37 +222,37 @@ let form: AccountForm;
 
 function onLoad(executionContext: any) {
     form = new AccountForm(executionContext);
-    
+
     // Lấy giá trị - TypeScript biết kiểu tự động
     const name = form.Body.Name.Value;            // string | null
     const revenue = form.Body.Revenue.Value;      // number | null
     const creditOnHold = form.Body.CreditOnHold.Value;  // boolean | null
-    
+
     // Set giá trị
     form.Body.Name.Value = "New Account Name";
-    
+
     // Control visibility
     form.Body.AccountNumber.Visible = false;
     form.Body.AccountNumber.Disabled = true;
-    
+
     // Required level
     form.Body.Name.RequiredLevel = 'required';
-    
+
     // Tab control
     form.Tab.DETAILS_TAB.Visible = false;
     form.Tab.DETAILS_TAB.DisplayState = 'collapsed';
-    
+
     // Grid control
     form.Grid.Contacts.Refresh();
-    
+
     // OptionSet comparison
     if (form.Body.IndustryCode.Value === OptionSet.Account.IndustryCode.Consulting) {
         console.log('This is a Consulting account');
     }
-    
+
     // WebApi usage
     const record = await form.WebApi.CreateRecord('account', { name: 'Test' });
-    
+
     // Utility functions
     form.Utility.OpenAlertDialog({ text: 'Hello!' });
 }
