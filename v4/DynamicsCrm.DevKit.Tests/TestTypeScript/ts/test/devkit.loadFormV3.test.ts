@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Unit Tests for devkit.ts - loadFormV3 function
  * Using xrm-mock framework for Dynamics 365/Xrm API simulation
