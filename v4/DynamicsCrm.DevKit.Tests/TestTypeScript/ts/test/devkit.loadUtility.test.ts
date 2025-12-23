@@ -322,6 +322,27 @@ describe('loadUtility Tests', () => {
             const utility = getUtility();
             expect(utility.OrganizationSettings.UseSkypeProtocol).toBe(false);
         });
+
+        test('OrganizationSettings.Attributes should return empty object', () => {
+            const utility = getUtility();
+            expect(utility.OrganizationSettings.Attributes).toEqual({});
+        });
+
+        test('OrganizationSettings.BaseCurrency should return currency object', () => {
+            const utility = getUtility();
+            expect(utility.OrganizationSettings.BaseCurrency.id).toBe('USD');
+            expect(utility.OrganizationSettings.BaseCurrency.name).toBe('US Dollar');
+        });
+
+        test('OrganizationSettings.FullNameConventionCode should return 0', () => {
+            const utility = getUtility();
+            expect(utility.OrganizationSettings.FullNameConventionCode).toBe(0);
+        });
+
+        test('OrganizationSettings.OrganizationExpiryDate should return date', () => {
+            const utility = getUtility();
+            expect(utility.OrganizationSettings.OrganizationExpiryDate).toBeInstanceOf(Date);
+        });
     });
 
     // =========================================================================
@@ -382,6 +403,22 @@ describe('loadUtility Tests', () => {
         test('UserSettings.UserName should return "Test User"', () => {
             const utility = getUtility();
             expect(utility.UserSettings.UserName).toBe('Test User');
+        });
+
+        test('UserSettings.DateFormattingInfo should return date formatting object', () => {
+            const utility = getUtility();
+            expect(utility.UserSettings.DateFormattingInfo.separator).toBe('/');
+        });
+
+        test('UserSettings.Roles should return roles collection', () => {
+            const utility = getUtility();
+            expect(utility.UserSettings.Roles.get()).toEqual([]);
+        });
+
+        test('UserSettings.TransactionCurrency should return currency object', () => {
+            const utility = getUtility();
+            expect(utility.UserSettings.TransactionCurrency.id).toBe('USD');
+            expect(utility.UserSettings.TransactionCurrency.name).toBe('US Dollar');
         });
     });
 
@@ -723,4 +760,224 @@ describe('loadUtility Tests', () => {
             expect(result.formId).toBe('00000000-0000-0000-0000-000000000001');
         });
     });
+
+    // =========================================================================
+    // ADDITIONAL CALLBACK-STYLE TESTS FOR 100% COVERAGE
+    // These tests cover the callback branches (if successCallback) paths
+    // =========================================================================
+
+    describe('Device Methods (Callback-based)', () => {
+        test('BarcodeValue with callback should call successCallback', (done) => {
+            const utility = getUtility();
+            utility.BarcodeValue(
+                (result: string) => {
+                    expect(result).toBe('barcode123');
+                    done();
+                },
+                (error: any) => {
+                    done(error);
+                }
+            );
+        });
+
+        test('CaptureAudio with callback should call successCallback', (done) => {
+            const utility = getUtility();
+            utility.CaptureAudio(
+                (result: any) => {
+                    expect(result.fileContent).toBe('base64audio');
+                    done();
+                },
+                (error: any) => {
+                    done(error);
+                }
+            );
+        });
+
+        test('CaptureImage with callback should call successCallback', (done) => {
+            const utility = getUtility();
+            utility.CaptureImage(
+                { width: 100, height: 100 },
+                (result: any) => {
+                    expect(result.fileContent).toBe('base64image');
+                    done();
+                },
+                (error: any) => {
+                    done(error);
+                }
+            );
+        });
+
+        test('CaptureVideo with callback should call successCallback', (done) => {
+            const utility = getUtility();
+            utility.CaptureVideo(
+                (result: any) => {
+                    expect(result.fileContent).toBe('base64video');
+                    done();
+                },
+                (error: any) => {
+                    done(error);
+                }
+            );
+        });
+
+        test('CurrentPosition with callback should call successCallback', (done) => {
+            const utility = getUtility();
+            utility.CurrentPosition(
+                (result: any) => {
+                    expect(result.coords.latitude).toBe(0);
+                    done();
+                },
+                (error: any) => {
+                    done(error);
+                }
+            );
+        });
+
+        test('PickFile with callback should call successCallback', (done) => {
+            const utility = getUtility();
+            utility.PickFile(
+                {},
+                (result: any[]) => {
+                    expect(result.length).toBe(1);
+                    done();
+                },
+                (error: any) => {
+                    done(error);
+                }
+            );
+        });
+    });
+
+    describe('Navigation Methods (Callback-based)', () => {
+        test('NavigateTo with callback should call successCallback', (done) => {
+            const utility = getUtility();
+            utility.NavigateTo(
+                { pageType: 'entityrecord', entityName: 'account' },
+                { target: 2 },
+                () => {
+                    done();
+                },
+                (error: any) => {
+                    done(error);
+                }
+            );
+        });
+
+        test('OpenAlertDialog with callback should call closeCallback', (done) => {
+            const utility = getUtility();
+            utility.OpenAlertDialog(
+                { text: 'Alert message', title: 'Alert' },
+                { height: 200, width: 400 },
+                () => {
+                    done();
+                },
+                (error: any) => {
+                    done(error);
+                }
+            );
+        });
+
+        test('OpenConfirmDialog with callback should call successCallback', (done) => {
+            const utility = getUtility();
+            utility.OpenConfirmDialog(
+                { text: 'Confirm?', title: 'Confirm' },
+                { height: 200, width: 400 },
+                (result: { confirmed: boolean }) => {
+                    expect(result.confirmed).toBe(true);
+                    done();
+                },
+                (error: any) => {
+                    done(error);
+                }
+            );
+        });
+
+        test('OpenErrorDialog with callback should call successCallback', (done) => {
+            const utility = getUtility();
+            utility.OpenErrorDialog(
+                { message: 'Error occurred' },
+                () => {
+                    done();
+                },
+                (error: any) => {
+                    done(error);
+                }
+            );
+        });
+
+        test('OpenForm with callback should call successCallback', (done) => {
+            const utility = getUtility();
+            utility.OpenForm(
+                { entityName: 'account', entityId: '00000000-0000-0000-0000-000000000001' },
+                {},
+                (result: any) => {
+                    expect(result.savedEntityReference).toEqual([]);
+                    done();
+                },
+                (error: any) => {
+                    done(error);
+                }
+            );
+        });
+    });
+
+    describe('App Notification (Callback-based)', () => {
+        test('ClearGlobalNotification with callback should call successCallback', (done) => {
+            const utility = getUtility();
+            utility.ClearGlobalNotification(
+                'notification-id',
+                () => {
+                    done();
+                },
+                (error: any) => {
+                    done(error);
+                }
+            );
+        });
+    });
+
+    describe('Async Utility (Additional Callback Tests)', () => {
+        test('CurrentAppProperties with callback should call successCallback', (done) => {
+            const utility = getUtility();
+            utility.CurrentAppProperties(
+                (result: any) => {
+                    expect(result.appId).toBe('app1');
+                    done();
+                },
+                (error: any) => {
+                    done(error);
+                }
+            );
+        });
+
+        test('InvokeProcessAction with callback should call successCallback', (done) => {
+            const utility = getUtility();
+            utility.InvokeProcessAction(
+                'MyAction',
+                { param1: 'value1' },
+                (result: any) => {
+                    expect(result.result).toBe('success');
+                    done();
+                },
+                (error: any) => {
+                    done(error);
+                }
+            );
+        });
+
+        test('LookupObjects with callback should call successCallback', (done) => {
+            const utility = getUtility();
+            utility.LookupObjects(
+                { entityTypes: ['account'] },
+                (result: any[]) => {
+                    expect(result).toEqual([]);
+                    done();
+                },
+                (error: any) => {
+                    done(error);
+                }
+            );
+        });
+    });
 });
+
