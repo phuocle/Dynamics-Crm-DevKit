@@ -675,4 +675,253 @@ describe('loadProcess Tests', () => {
             expect(stage.Steps).toBeDefined();
         });
     });
+
+    // ========================================================================
+    // TEST: Branch Coverage - Null/Undefined Cases
+    // ========================================================================
+
+    describe('Branch Coverage - Null Cases', () => {
+        function getFormWithNullSteps(): any {
+            const stageWithNullSteps = {
+                getCategory: () => null,
+                getEntityName: () => 'account',
+                getId: () => 'stage-null',
+                getName: () => 'Stage Null',
+                getStatus: () => 'active',
+                getSteps: () => null,
+                getNavigationBehavior: () => null
+            };
+
+            const processMock = {
+                getId: () => 'bpf-null',
+                getName: () => 'Null BPF',
+                isRendered: () => true,
+                getStages: () => ({ get: () => stageWithNullSteps, getLength: () => 1 })
+            };
+
+            let displayState = 'expanded', visible = true, status = 'active';
+
+            const ctx = {
+                data: {
+                    getIsDirty: () => false, isValid: () => true, refresh: () => Promise.resolve(), save: () => Promise.resolve(),
+                    addOnLoad: () => { }, removeOnLoad: () => { },
+                    process: {
+                        getActiveProcess: () => processMock,
+                        getActiveStage: () => stageWithNullSteps,
+                        getActivePath: () => ({ get: () => stageWithNullSteps, getLength: () => 1 }),
+                        getInstanceId: () => 'id', getInstanceName: () => 'name', getSelectedStage: () => stageWithNullSteps,
+                        getStatus: () => status, setStatus: (v: string) => { status = v; },
+                        addOnPreProcessStatusChange: () => { }, addOnPreStageChange: () => { },
+                        addOnProcessStatusChange: () => { }, addOnStageChange: () => { }, addOnStageSelected: () => { },
+                        getEnabledProcesses: (cb: any) => cb({ 'id': 'name' }),
+                        getProcessInstances: (cb: any) => cb({}),
+                        moveNext: (cb: any) => cb?.(), movePrevious: (cb: any) => cb?.(),
+                        removeOnPreProcessStatusChange: () => { }, removeOnPreStageChange: () => { },
+                        removeOnProcessStatusChange: () => { }, removeOnStageChange: () => { }, removeOnStageSelected: () => { },
+                        setActiveProcess: (i: string, cb: any) => cb?.(), setActiveProcessInstance: (i: string, cb: any) => cb?.(), setActiveStage: (i: string, cb: any) => cb?.()
+                    },
+                    entity: {
+                        attributes: { get: () => null }, getId: () => 'id', getEntityName: () => 'account',
+                        getIsDirty: () => false, isValid: () => true, getDataXml: () => '', getEntityReference: () => ({}),
+                        getPrimaryAttributeValue: () => '', addOnSave: () => { }, removeOnSave: () => { }, addOnPostSave: () => { }, removeOnPostSave: () => { }
+                    }
+                },
+                ui: {
+                    getFormType: () => 2, controls: { get: () => null }, tabs: { get: () => null },
+                    formSelector: { getCurrentItem: () => ({ getId: () => 'f', getLabel: () => 'l' }), items: { getLength: () => 0, get: () => null } },
+                    getViewPortHeight: () => 800, getViewPortWidth: () => 1200,
+                    clearFormNotification: () => true, setFormNotification: () => true, close: () => { }, refreshRibbon: () => { },
+                    addLoaded: () => { }, removeLoaded: () => { }, addOnLoad: () => { }, removeOnLoad: () => { }, setFormEntityName: () => { },
+                    process: { getDisplayState: () => displayState, setDisplayState: (v: string) => { displayState = v; }, getVisible: () => visible, setVisible: (v: boolean) => { visible = v; }, reflow: () => { } }
+                },
+                getControl: () => null, getAttribute: () => null, getFormContext: function () { return this; }
+            };
+
+            return new FormBase({ getFormContext: () => ctx }, 'test', { body: [], header: [], tab: [], grid: [], navigation: [], quick: [], bpf: ['BPF___Field'] });
+        }
+
+        test('Stage.Steps returns empty array when getSteps returns null (line 735)', () => {
+            const form = getFormWithNullSteps();
+            const stage = form.Process.ActiveProcess.Stages.get(0);
+            expect(stage.Steps).toEqual([]);
+        });
+
+        test('Stage.AllowCreateNew handles null navigation behavior (line 743)', () => {
+            const form = getFormWithNullSteps();
+            const stage = form.Process.ActiveProcess.Stages.get(0);
+            expect(() => stage.AllowCreateNew(() => true)).not.toThrow();
+        });
+
+        test('Stage.Category returns undefined when getCategory returns null (line 728)', () => {
+            const form = getFormWithNullSteps();
+            const stage = form.Process.ActiveProcess.Stages.get(0);
+            expect(stage.Category).toBeUndefined();
+        });
+
+        test('ProcessInstances with empty object returns empty array', (done) => {
+            const form = getFormWithNullSteps();
+            form.Process.ProcessInstances((instances: any[]) => {
+                expect(instances).toEqual([]);
+                done();
+            });
+        });
+
+        test('Stage with empty steps array returns empty Steps (line 735 branch)', () => {
+            // Test stage.getSteps() returns [] (empty array, not null)
+            // This covers the steps.length || 0 branch where length is 0
+            const stageWithEmptySteps = {
+                getCategory: () => ({ getValue: () => 0 }),
+                getEntityName: () => 'account',
+                getId: () => 'stage-empty',
+                getName: () => 'Stage Empty Steps',
+                getStatus: () => 'active',
+                getSteps: () => [], // Empty array, not null
+                getNavigationBehavior: () => ({ allowCreateNew: null })
+            };
+
+            const proc = {
+                getId: () => 'p', getName: () => 'P', isRendered: () => true,
+                getStages: () => ({ get: () => stageWithEmptySteps, getLength: () => 1 })
+            };
+            let ds = 'expanded', v = true, st = 'active';
+            const ctx = {
+                data: {
+                    getIsDirty: () => false, isValid: () => true, refresh: () => Promise.resolve(), save: () => Promise.resolve(), addOnLoad: () => { }, removeOnLoad: () => { },
+                    process: {
+                        getActiveProcess: () => proc, getActiveStage: () => stageWithEmptySteps, getActivePath: () => ({ get: () => stageWithEmptySteps, getLength: () => 1 }),
+                        getInstanceId: () => 'i', getInstanceName: () => 'n', getSelectedStage: () => stageWithEmptySteps, getStatus: () => st, setStatus: (x: string) => { st = x; },
+                        addOnPreProcessStatusChange: () => { }, addOnPreStageChange: () => { }, addOnProcessStatusChange: () => { }, addOnStageChange: () => { }, addOnStageSelected: () => { },
+                        getEnabledProcesses: (cb: any) => cb({}), getProcessInstances: (cb: any) => cb({}),
+                        moveNext: (cb: any) => cb?.(), movePrevious: (cb: any) => cb?.(),
+                        removeOnPreProcessStatusChange: () => { }, removeOnPreStageChange: () => { }, removeOnProcessStatusChange: () => { }, removeOnStageChange: () => { }, removeOnStageSelected: () => { },
+                        setActiveProcess: (i: string, cb: any) => cb?.(), setActiveProcessInstance: (i: string, cb: any) => cb?.(), setActiveStage: (i: string, cb: any) => cb?.()
+                    },
+                    entity: { attributes: { get: () => null }, getId: () => 'e', getEntityName: () => 'a', getIsDirty: () => false, isValid: () => true, getDataXml: () => '', getEntityReference: () => ({}), getPrimaryAttributeValue: () => '', addOnSave: () => { }, removeOnSave: () => { }, addOnPostSave: () => { }, removeOnPostSave: () => { } }
+                },
+                ui: {
+                    getFormType: () => 2, controls: { get: () => null }, tabs: { get: () => null },
+                    formSelector: { getCurrentItem: () => ({ getId: () => 'f', getLabel: () => 'l' }), items: { getLength: () => 0, get: () => null } },
+                    getViewPortHeight: () => 800, getViewPortWidth: () => 1200, clearFormNotification: () => true, setFormNotification: () => true, close: () => { }, refreshRibbon: () => { },
+                    addLoaded: () => { }, removeLoaded: () => { }, addOnLoad: () => { }, removeOnLoad: () => { }, setFormEntityName: () => { },
+                    process: { getDisplayState: () => ds, setDisplayState: (x: string) => { ds = x; }, getVisible: () => v, setVisible: (x: boolean) => { v = x; }, reflow: () => { } }
+                },
+                getControl: () => null, getAttribute: () => null, getFormContext: function () { return this; }
+            };
+            const form = new FormBase({ getFormContext: () => ctx }, 't', { body: [], header: [], tab: [], grid: [], navigation: [], quick: [], bpf: ['B___F'] });
+            expect(form.Process.ActiveProcess.Stages.get(0).Steps).toEqual([]);
+        });
+    });
+
+
+    // ========================================================================
+    // TEST: Step null properties
+    // ========================================================================
+
+    describe('Step Null Properties', () => {
+        function getFormWithNullStepProps(): any {
+            const nullStep = { getAttribute: () => null, getName: () => null, getProgress: () => null, isRequired: () => null, setProgress: () => { } };
+            const stage = {
+                getCategory: () => ({ getValue: () => 0 }), getEntityName: () => 'a', getId: () => 's',
+                getName: () => 'S', getStatus: () => 'active', getSteps: () => [nullStep], getNavigationBehavior: () => ({ allowCreateNew: null })
+            };
+            const proc = { getId: () => 'p', getName: () => 'P', isRendered: () => true, getStages: () => ({ get: () => stage, getLength: () => 1 }) };
+            let ds = 'expanded', v = true, st = 'active';
+            const ctx = {
+                data: {
+                    getIsDirty: () => false, isValid: () => true, refresh: () => Promise.resolve(), save: () => Promise.resolve(), addOnLoad: () => { }, removeOnLoad: () => { },
+                    process: {
+                        getActiveProcess: () => proc, getActiveStage: () => stage, getActivePath: () => ({ get: () => stage, getLength: () => 1 }),
+                        getInstanceId: () => 'i', getInstanceName: () => 'n', getSelectedStage: () => stage, getStatus: () => st, setStatus: (x: string) => { st = x; },
+                        addOnPreProcessStatusChange: () => { }, addOnPreStageChange: () => { }, addOnProcessStatusChange: () => { }, addOnStageChange: () => { }, addOnStageSelected: () => { },
+                        getEnabledProcesses: (cb: any) => cb({}), getProcessInstances: (cb: any) => cb({}),
+                        moveNext: (cb: any) => cb?.(), movePrevious: (cb: any) => cb?.(),
+                        removeOnPreProcessStatusChange: () => { }, removeOnPreStageChange: () => { }, removeOnProcessStatusChange: () => { }, removeOnStageChange: () => { }, removeOnStageSelected: () => { },
+                        setActiveProcess: (i: string, cb: any) => cb?.(), setActiveProcessInstance: (i: string, cb: any) => cb?.(), setActiveStage: (i: string, cb: any) => cb?.()
+                    },
+                    entity: { attributes: { get: () => null }, getId: () => 'e', getEntityName: () => 'a', getIsDirty: () => false, isValid: () => true, getDataXml: () => '', getEntityReference: () => ({}), getPrimaryAttributeValue: () => '', addOnSave: () => { }, removeOnSave: () => { }, addOnPostSave: () => { }, removeOnPostSave: () => { } }
+                },
+                ui: {
+                    getFormType: () => 2, controls: { get: () => null }, tabs: { get: () => null },
+                    formSelector: { getCurrentItem: () => ({ getId: () => 'f', getLabel: () => 'l' }), items: { getLength: () => 0, get: () => null } },
+                    getViewPortHeight: () => 800, getViewPortWidth: () => 1200, clearFormNotification: () => true, setFormNotification: () => true, close: () => { }, refreshRibbon: () => { },
+                    addLoaded: () => { }, removeLoaded: () => { }, addOnLoad: () => { }, removeOnLoad: () => { }, setFormEntityName: () => { },
+                    process: { getDisplayState: () => ds, setDisplayState: (x: string) => { ds = x; }, getVisible: () => v, setVisible: (x: boolean) => { v = x; }, reflow: () => { } }
+                },
+                getControl: () => null, getAttribute: () => null, getFormContext: function () { return this; }
+            };
+            return new FormBase({ getFormContext: () => ctx }, 't', { body: [], header: [], tab: [], grid: [], navigation: [], quick: [], bpf: ['B___F'] });
+        }
+
+        test('Step.Attribute returns null', () => {
+            const form = getFormWithNullStepProps();
+            expect(form.Process.ActiveProcess.Stages.get(0).Steps[0].Attribute).toBeNull();
+        });
+
+        test('Step.Name returns null', () => {
+            const form = getFormWithNullStepProps();
+            expect(form.Process.ActiveProcess.Stages.get(0).Steps[0].Name).toBeNull();
+        });
+
+        test('Step.Progress returns null', () => {
+            const form = getFormWithNullStepProps();
+            expect(form.Process.ActiveProcess.Stages.get(0).Steps[0].Progress).toBeNull();
+        });
+
+        test('Step.Required returns null', () => {
+            const form = getFormWithNullStepProps();
+            expect(form.Process.ActiveProcess.Stages.get(0).Steps[0].Required).toBeNull();
+        });
+
+        test('Step.SetProgress handles null', () => {
+            const form = getFormWithNullStepProps();
+            expect(() => form.Process.ActiveProcess.Stages.get(0).Steps[0].SetProgress(1, 'msg')).not.toThrow();
+        });
+    });
+
+    // ========================================================================
+    // TEST: Stages forEach with null getLength (line 758)
+    // ========================================================================
+
+    describe('Stages forEach with undefined length', () => {
+        test('Stages.forEach handles undefined getLength (line 758 branch)', () => {
+            // Process with stages that return undefined for getLength
+            const stageWithSteps = {
+                getCategory: () => ({ getValue: () => 0 }), getEntityName: () => 'account', getId: () => 's', getName: () => 'S', getStatus: () => 'active',
+                getSteps: () => [], getNavigationBehavior: () => ({ allowCreateNew: null })
+            };
+            const proc = {
+                getId: () => 'p', getName: () => 'P', isRendered: () => true,
+                getStages: () => ({ get: () => stageWithSteps, getLength: () => undefined }) // Returns undefined
+            };
+            let ds = 'expanded', v = true, st = 'active';
+            const ctx = {
+                data: {
+                    getIsDirty: () => false, isValid: () => true, refresh: () => Promise.resolve(), save: () => Promise.resolve(), addOnLoad: () => { }, removeOnLoad: () => { },
+                    process: {
+                        getActiveProcess: () => proc, getActiveStage: () => stageWithSteps, getActivePath: () => ({ get: () => stageWithSteps, getLength: () => 1 }),
+                        getInstanceId: () => 'i', getInstanceName: () => 'n', getSelectedStage: () => stageWithSteps, getStatus: () => st, setStatus: (x: string) => { st = x; },
+                        addOnPreProcessStatusChange: () => { }, addOnPreStageChange: () => { }, addOnProcessStatusChange: () => { }, addOnStageChange: () => { }, addOnStageSelected: () => { },
+                        getEnabledProcesses: (cb: any) => cb({}), getProcessInstances: (cb: any) => cb({}),
+                        moveNext: (cb: any) => cb?.(), movePrevious: (cb: any) => cb?.(),
+                        removeOnPreProcessStatusChange: () => { }, removeOnPreStageChange: () => { }, removeOnProcessStatusChange: () => { }, removeOnStageChange: () => { }, removeOnStageSelected: () => { },
+                        setActiveProcess: (i: string, cb: any) => cb?.(), setActiveProcessInstance: (i: string, cb: any) => cb?.(), setActiveStage: (i: string, cb: any) => cb?.()
+                    },
+                    entity: { attributes: { get: () => null }, getId: () => 'e', getEntityName: () => 'a', getIsDirty: () => false, isValid: () => true, getDataXml: () => '', getEntityReference: () => ({}), getPrimaryAttributeValue: () => '', addOnSave: () => { }, removeOnSave: () => { }, addOnPostSave: () => { }, removeOnPostSave: () => { } }
+                },
+                ui: {
+                    getFormType: () => 2, controls: { get: () => null }, tabs: { get: () => null },
+                    formSelector: { getCurrentItem: () => ({ getId: () => 'f', getLabel: () => 'l' }), items: { getLength: () => 0, get: () => null } },
+                    getViewPortHeight: () => 800, getViewPortWidth: () => 1200, clearFormNotification: () => true, setFormNotification: () => true, close: () => { }, refreshRibbon: () => { },
+                    addLoaded: () => { }, removeLoaded: () => { }, addOnLoad: () => { }, removeOnLoad: () => { }, setFormEntityName: () => { },
+                    process: { getDisplayState: () => ds, setDisplayState: (x: string) => { ds = x; }, getVisible: () => v, setVisible: (x: boolean) => { v = x; }, reflow: () => { } }
+                },
+                getControl: () => null, getAttribute: () => null, getFormContext: function () { return this; }
+            };
+            const form = new FormBase({ getFormContext: () => ctx }, 't', { body: [], header: [], tab: [], grid: [], navigation: [], quick: [], bpf: ['B___F'] });
+            // Call forEach - should handle undefined getLength gracefully
+            let count = 0;
+            form.Process.ActiveProcess.Stages.forEach((stage: any, index: number) => { count++; });
+            expect(count).toBe(0); // Should not iterate since length is undefined (becomes 0)
+        });
+    });
 });

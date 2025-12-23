@@ -695,23 +695,20 @@ function loadFormV3<TBody = Record<string, any>, THeader = Record<string, any>, 
     form.Copilot = loadCopilot();
     return form;
 }
-function loadProcess(formContext: any, bpf: string[] = []): any {
+function loadProcess(formContext: any, bpf: string[]): any {
     const process: any = {};
-    if (bpf.length > 0) {
-        let bpfProcessName: string | null = null;
-        const bpfFieldNames: string[] = [];
-        bpf.forEach((item: string) => {
-            const [processName, fieldName] = item.split('___');
-            if (!bpfProcessName) {
-                bpfProcessName = processName;
-            }
-            bpfFieldNames.push(fieldName);
-        });
-        const bpfObj = loadFields(formContext, bpfFieldNames, 'header_process_');
-        if (bpfProcessName) {
-            process[bpfProcessName] = bpfObj;
+    // Parse BPF fields - bpf always has items since gatekeeper checks bpf.length > 0 before calling
+    const bpfFieldNames: string[] = [];
+    let bpfProcessName: string = '';
+    bpf.forEach((item: string) => {
+        const [processName, fieldName] = item.split('___');
+        if (!bpfProcessName) {
+            bpfProcessName = processName;
         }
-    }
+        bpfFieldNames.push(fieldName);
+    });
+    const bpfObj = loadFields(formContext, bpfFieldNames, 'header_process_');
+    process[bpfProcessName] = bpfObj;
     const getProcess = formContext?.data?.process;
     const getProcessUi = formContext?.ui?.process;
     const loadStep = (step: any) => {
