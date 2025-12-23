@@ -354,14 +354,12 @@ function loadWebApi(): DevKit.IWebApi {
     const getOnline = xrm?.WebApi?.online;
     const getOffline = xrm?.WebApi?.offline;
     const extractEntityName = function (fetchXml: string): string {
+        // Note: This function is always called with ?fetchXml= prefix (added by line 433-434)
         let cleanXml = fetchXml;
         const fetchXmlMatch = fetchXml.match(/fetchxml=/i);
         if (fetchXmlMatch) {
             const splitIndex = fetchXml.toLowerCase().indexOf('fetchxml=') + 'fetchxml='.length;
             cleanXml = decodeURIComponent(fetchXml.substring(splitIndex));
-        }
-        else if (fetchXml.trim().startsWith('<')) {
-            cleanXml = fetchXml;
         }
         const parser = new DOMParser();
         const xmlDoc = parser.parseFromString(cleanXml, "text/xml");
@@ -370,6 +368,7 @@ function loadWebApi(): DevKit.IWebApi {
             return entityNode.getAttribute("name")!;
         throw new Error("Entity name not found in fetchXml");
     };
+
     obj.CreateRecord = function (entityLogicalName: string, data: any, successCallback?: any, errorCallback?: any) {
         const promise = getWebApi?.createRecord(entityLogicalName, data);
         if (successCallback) {
@@ -386,14 +385,8 @@ function loadWebApi(): DevKit.IWebApi {
             return promise;
         }
     };
-    obj.RetrieveRecord = function (entityLogicalName: string, id: string, options?: string, successCallback?: any, errorCallback?: any) {
-        const promise = getWebApi?.retrieveRecord(entityLogicalName, id, options);
-        if (successCallback) {
-            promise?.then(successCallback, errorCallback);
-        } else {
-            return promise;
-        }
-    };
+    // NOTE: obj.RetrieveRecord is defined later with factory pattern (line ~480)
+
     obj.RetrieveMultipleRecords = function (entityLogicalName: string, options?: string, maxPageSize?: number, successCallback?: any, errorCallback?: any) {
         const promise = getWebApi?.retrieveMultipleRecords(entityLogicalName, options, maxPageSize);
         if (successCallback) {

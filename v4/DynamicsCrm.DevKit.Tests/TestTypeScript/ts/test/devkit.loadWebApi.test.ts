@@ -505,4 +505,127 @@ describe('loadWebApi Tests', () => {
             expect(() => form.WebApi.Execute({})).not.toThrow();
         });
     });
+
+    // ========================================================================
+    // TEST: Additional Branch Coverage Tests
+    // ========================================================================
+
+    describe('Additional Branch Coverage - extractEntityName', () => {
+        test('extractEntityName should throw when entity has no name attribute', () => {
+            // Mock DOMParser to return entity without name attribute
+            const originalDOMParser = (global as any).DOMParser;
+            (global as any).DOMParser = class {
+                parseFromString() {
+                    return {
+                        querySelector: () => ({
+                            hasAttribute: () => false,
+                            getAttribute: () => null
+                        })
+                    };
+                }
+            };
+
+            setupWebApiMock();
+            const form = getForm();
+            const factory = (entity: any) => entity;
+            expect(() => form.WebApi.RetrieveRecords(factory, '<fetch><entity/></fetch>')).toThrow('Entity name not found');
+
+            (global as any).DOMParser = originalDOMParser;
+        });
+
+        test('extractEntityName should handle fetchXml parameter format', async () => {
+            setupWebApiMock();
+            const form = getForm();
+            const factory = (entity: any) => entity;
+            // This tests the fetchXmlMatch branch (line 359)
+            const result = await form.WebApi.RetrieveRecords(factory, '?fetchXml=<fetch><entity name="account"/></fetch>');
+            expect(result.length).toBe(2);
+        });
+    });
+
+    describe('Additional Branch Coverage - RetrieveRecords variations', () => {
+        test('RetrieveRecords with entity name and options and maxPageSize as number', async () => {
+            setupWebApiMock();
+            const form = getForm();
+            const factory = (entity: any) => entity;
+            // Line 467: typeof maxPageSizeOrSuccessCallback === 'number'
+            const result = await form.WebApi.RetrieveRecords(factory, 'account', '?$select=name', 100);
+            expect(result.length).toBe(2);
+        });
+
+        test('RetrieveRecords with entity name and function as 4th param', async () => {
+            setupWebApiMock();
+            const form = getForm();
+            const factory = (entity: any) => entity;
+            const callback = jest.fn();
+            // Line 463: typeof maxPageSizeOrSuccessCallback === 'function'
+            form.WebApi.RetrieveRecords(factory, 'account', '?$select=name', callback);
+            await new Promise(r => setTimeout(r, 10));
+            expect(callback).toHaveBeenCalled();
+        });
+
+        test('RetrieveRecords with FetchXML and maxPageSize number then callback', async () => {
+            setupWebApiMock();
+            const form = getForm();
+            const factory = (entity: any) => entity;
+            const callback = jest.fn();
+            const errorCallback = jest.fn();
+            // Line 455: typeof maxPageSizeOrSuccessCallback === 'number' in FetchXML branch
+            form.WebApi.RetrieveRecords(factory, '<fetch><entity name="account"/></fetch>', 50, callback, errorCallback);
+            await new Promise(r => setTimeout(r, 10));
+            expect(callback).toHaveBeenCalled();
+        });
+
+        test('RetrieveRecords with FetchXML and maxPageSize number but NO callback (line 447 branch)', async () => {
+            setupWebApiMock();
+            const form = getForm();
+            const factory = (entity: any) => entity;
+            // Line 447: typeof maxPageSizeOrSuccessCallback === 'function' is FALSE
+            // This means: FetchXML path, optionsOrMaxPageSizeOrCallback is number, but maxPageSizeOrSuccessCallback is NOT a function
+            const result = await form.WebApi.RetrieveRecords(factory, '<fetch><entity name="account"/></fetch>', 50);
+            expect(result.length).toBe(2);
+        });
+
+        test('RetrieveRecords with plain FetchXML (no fetchxml= prefix) tests line 359 false branch', async () => {
+            setupWebApiMock();
+            const form = getForm();
+            const factory = (entity: any) => entity;
+            // Line 359: fetchXmlMatch is null (no fetchxml= in string), so we go to else path
+            const result = await form.WebApi.RetrieveRecords(factory, '<fetch><entity name="account"><attribute name="name"/></entity></fetch>');
+            expect(result.length).toBe(2);
+        });
+    });
+
+
+    describe('Additional Branch Coverage - RetrieveRecord variations', () => {
+        test('RetrieveRecord with options string and callback', async () => {
+            setupWebApiMock();
+            const form = getForm();
+            const callback = jest.fn();
+            const errorCallback = jest.fn();
+            const factory = (entity: any) => entity;
+            // Line 488: typeof options !== 'function' AND line 493: options truthy
+            form.WebApi.RetrieveRecord(factory, 'account', 'acc-1', '?$select=name', callback, errorCallback);
+            await new Promise(r => setTimeout(r, 10));
+            expect(callback).toHaveBeenCalled();
+        });
+    });
+
+    describe('Additional Branch Coverage - Online/Offline null checks', () => {
+        test('Online.Execute should handle undefined promise', () => {
+            (global as any).Xrm = { WebApi: { online: null } };
+            (global as any).window.Xrm = (global as any).Xrm;
+
+            const form = getForm();
+            expect(() => form.WebApi.Online.Execute({})).not.toThrow();
+        });
+
+        test('Offline.IsAvailable should return undefined when offline is null', () => {
+            (global as any).Xrm = { WebApi: { offline: null } };
+            (global as any).window.Xrm = (global as any).Xrm;
+
+            const form = getForm();
+            expect(form.WebApi.Offline.IsAvailable('account')).toBeUndefined();
+        });
+    });
 });
