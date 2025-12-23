@@ -628,4 +628,416 @@ describe('loadWebApi Tests', () => {
             expect(form.WebApi.Offline.IsAvailable('account')).toBeUndefined();
         });
     });
+
+    // ========================================================================
+    // TYPE PARSERS TESTS (getWebApiTypeParsers and webApiReturnGet)
+    // ========================================================================
+
+    describe('Type Parsers - DateTime', () => {
+        function createFieldWithType(entity: Record<string, any>, type?: string): any {
+            const { defineWebApiField } = require('../lib/devkit');
+            const obj: any = { FormattedValue: {} };
+            const upsertEntity: Record<string, any> = {};
+            defineWebApiField(obj, 'testField', entity, {
+                logicalName: 'testfield',
+                schemaName: 'Testfield',
+                type: type as any
+            }, upsertEntity);
+            return obj;
+        }
+
+        test('should return Date for valid date string', () => {
+            const entity = { testfield: '2023-12-25T10:30:00Z' };
+            const obj = createFieldWithType(entity, 'DateTime');
+            expect(obj.testField).toBeInstanceOf(Date);
+        });
+
+        test('should return null for null value (filtered by getValue)', () => {
+            const entity = { testfield: null };
+            const obj = createFieldWithType(entity, 'DateTime');
+            expect(obj.testField).toBeNull();
+        });
+
+        test('should return null for empty string', () => {
+            const entity = { testfield: '' };
+            const obj = createFieldWithType(entity, 'DateTime');
+            expect(obj.testField).toBeNull();
+        });
+
+        test('should return null for invalid date string', () => {
+            const entity = { testfield: 'not-a-date' };
+            const obj = createFieldWithType(entity, 'DateTime');
+            expect(obj.testField).toBeNull();
+        });
+
+        test('should return same Date for valid Date object', () => {
+            const date = new Date('2023-12-25');
+            const entity = { testfield: date };
+            const obj = createFieldWithType(entity, 'DateTime');
+            expect(obj.testField).toEqual(date);
+        });
+    });
+
+    describe('Type Parsers - Integer', () => {
+        function createFieldWithType(entity: Record<string, any>, type?: string): any {
+            const { defineWebApiField } = require('../lib/devkit');
+            const obj: any = { FormattedValue: {} };
+            const upsertEntity: Record<string, any> = {};
+            defineWebApiField(obj, 'testField', entity, {
+                logicalName: 'testfield',
+                schemaName: 'Testfield',
+                type: type as any
+            }, upsertEntity);
+            return obj;
+        }
+
+        test('should return integer for valid number string', () => {
+            const entity = { testfield: '42' };
+            const obj = createFieldWithType(entity, 'Integer');
+            expect(obj.testField).toBe(42);
+        });
+
+        test('should truncate decimal for float string', () => {
+            const entity = { testfield: '42.9' };
+            const obj = createFieldWithType(entity, 'Integer');
+            expect(obj.testField).toBe(42);
+        });
+
+        test('should return null for non-numeric string', () => {
+            const entity = { testfield: 'abc' };
+            const obj = createFieldWithType(entity, 'Integer');
+            expect(obj.testField).toBeNull();
+        });
+    });
+
+    describe('Type Parsers - Number', () => {
+        function createFieldWithType(entity: Record<string, any>, type?: string): any {
+            const { defineWebApiField } = require('../lib/devkit');
+            const obj: any = { FormattedValue: {} };
+            const upsertEntity: Record<string, any> = {};
+            defineWebApiField(obj, 'testField', entity, {
+                logicalName: 'testfield',
+                schemaName: 'Testfield',
+                type: type as any
+            }, upsertEntity);
+            return obj;
+        }
+
+        test('should return number for valid decimal string', () => {
+            const entity = { testfield: '3.14' };
+            const obj = createFieldWithType(entity, 'Number');
+            expect(obj.testField).toBe(3.14);
+        });
+
+        test('should return null for non-numeric string', () => {
+            const entity = { testfield: 'not-a-number' };
+            const obj = createFieldWithType(entity, 'Number');
+            expect(obj.testField).toBeNull();
+        });
+    });
+
+    describe('Type Parsers - Boolean', () => {
+        function createFieldWithType(entity: Record<string, any>, type?: string): any {
+            const { defineWebApiField } = require('../lib/devkit');
+            const obj: any = { FormattedValue: {} };
+            const upsertEntity: Record<string, any> = {};
+            defineWebApiField(obj, 'testField', entity, {
+                logicalName: 'testfield',
+                schemaName: 'Testfield',
+                type: type as any
+            }, upsertEntity);
+            return obj;
+        }
+
+        test('should return true for boolean true', () => {
+            const entity = { testfield: true };
+            const obj = createFieldWithType(entity, 'Boolean');
+            expect(obj.testField).toBe(true);
+        });
+
+        test('should return false for boolean false', () => {
+            const entity = { testfield: false };
+            const obj = createFieldWithType(entity, 'Boolean');
+            expect(obj.testField).toBe(false);
+        });
+
+        test('should return true for string "true"', () => {
+            const entity = { testfield: 'true' };
+            const obj = createFieldWithType(entity, 'Boolean');
+            expect(obj.testField).toBe(true);
+        });
+
+        test('should return false for string "false"', () => {
+            const entity = { testfield: 'false' };
+            const obj = createFieldWithType(entity, 'Boolean');
+            expect(obj.testField).toBe(false);
+        });
+
+        test('should return true for non-zero number', () => {
+            const entity = { testfield: 42 };
+            const obj = createFieldWithType(entity, 'Boolean');
+            expect(obj.testField).toBe(true);
+        });
+
+        test('should return null for unrecognized string', () => {
+            const entity = { testfield: 'maybe' };
+            const obj = createFieldWithType(entity, 'Boolean');
+            expect(obj.testField).toBeNull();
+        });
+    });
+
+    // ========================================================================
+    // defineWebApiField TESTS
+    // ========================================================================
+
+    describe('defineWebApiField', () => {
+        function createField(entity: Record<string, any>, config: any): { obj: any; upsert: any } {
+            const { defineWebApiField } = require('../lib/devkit');
+            const obj: any = { FormattedValue: {} };
+            const upsertEntity: Record<string, any> = {};
+            defineWebApiField(obj, 'testField', entity, config, upsertEntity);
+            return { obj, upsert: upsertEntity };
+        }
+
+        test('should define getter and setter for simple field', () => {
+            const { obj, upsert } = createField({ name: 'Test Account' }, {
+                logicalName: 'name',
+                schemaName: 'Name'
+            });
+            expect(obj.testField).toBe('Test Account');
+            obj.testField = 'New Name';
+            expect(upsert.name).toBe('New Name');
+        });
+
+        test('should handle lookup field with entityCollectionName', () => {
+            const entity = {
+                '_primarycontactid_value': 'contact-guid-123',
+                '_primarycontactid_value@Microsoft.Dynamics.CRM.lookuplogicalname': 'contact'
+            };
+            const { obj, upsert } = createField(entity, {
+                logicalName: '_primarycontactid_value',
+                schemaName: 'primarycontactid',
+                entityCollectionName: 'contacts',
+                entityLogicalName: 'contact'
+            });
+            expect(obj.testField).toBe('contact-guid-123');
+            obj.testField = 'new-contact-guid';
+            expect(upsert['primarycontactid@odata.bind']).toBe('/contacts(new-contact-guid)');
+        });
+
+        test('should return null for lookup field with mismatched entityLogicalName', () => {
+            const entity = {
+                '_ownerid_value': 'team-guid-123',
+                '_ownerid_value@Microsoft.Dynamics.CRM.lookuplogicalname': 'team'
+            };
+            const { obj } = createField(entity, {
+                logicalName: '_ownerid_value',
+                schemaName: 'ownerid',
+                entityCollectionName: 'systemusers',
+                entityLogicalName: 'systemuser'
+            });
+            expect(obj.testField).toBeNull();
+        });
+
+        test('should handle FormattedValue for field', () => {
+            const entity = {
+                'statecode': 0,
+                'statecode@OData.Community.Display.V1.FormattedValue': 'Active'
+            };
+            const { obj } = createField(entity, {
+                logicalName: 'statecode',
+                schemaName: 'StateCode',
+                type: 'Integer'
+            });
+            expect(obj.FormattedValue.testField).toBe('Active');
+        });
+
+        test('should handle MultiOptionSet type', () => {
+            const entity = {
+                'categories': '1,2,3',
+                'categories@OData.Community.Display.V1.FormattedValue': 'Cat1; Cat2; Cat3'
+            };
+            const { obj } = createField(entity, {
+                logicalName: 'categories',
+                schemaName: 'Categories',
+                type: 'MultiOptionSet'
+            });
+            expect(obj.testField).toEqual([1, 2, 3]);
+            expect(obj.FormattedValue.testField).toEqual(['Cat1', 'Cat2', 'Cat3']);
+        });
+
+        test('should set lookup to null correctly', () => {
+            const entity = { '_parentid_value': 'parent-guid' };
+            const { obj, upsert } = createField(entity, {
+                logicalName: '_parentid_value',
+                schemaName: 'parentid',
+                entityCollectionName: 'accounts',
+                entityLogicalName: 'account'
+            });
+            obj.testField = null;
+            expect(upsert['parentid@odata.bind']).toBeNull();
+        });
+    });
+
+    // ========================================================================
+    // createWebApiEntity TESTS (Account.webapi.ts style)
+    // ========================================================================
+
+    describe('createWebApiEntity', () => {
+        test('should create entity with basic properties', () => {
+            const { createWebApiEntity } = require('../lib/devkit');
+            const entity = {
+                accountid: 'acc-guid-123',
+                name: 'Test Account',
+                '@odata.etag': 'W/"12345"'
+            };
+            const fieldConfig = {
+                AccountId: { logicalName: 'accountid' },
+                Name: { logicalName: 'name' }
+            };
+            const result = createWebApiEntity(entity, 'account', 'accounts', fieldConfig);
+
+            expect(result.EntityName).toBe('account');
+            expect(result.EntityCollectionName).toBe('accounts');
+            expect(result['@odata.etag']).toBe('W/"12345"');
+            expect(result.ODataEntity).toBe(entity);
+            expect(result.AccountId).toBe('acc-guid-123');
+            expect(result.Name).toBe('Test Account');
+        });
+
+        test('should create entity with undefined entity (for create operations)', () => {
+            const { createWebApiEntity } = require('../lib/devkit');
+            const fieldConfig = {
+                Name: { logicalName: 'name' }
+            };
+            const result = createWebApiEntity(undefined, 'account', 'accounts', fieldConfig);
+
+            expect(result.EntityName).toBe('account');
+            expect(result.Name).toBeNull();
+            result.Name = 'New Account';
+            expect(result.Entity.name).toBe('New Account');
+        });
+
+        test('should provide getAliasedValue for linked entity values', () => {
+            const { createWebApiEntity } = require('../lib/devkit');
+            const entity = {
+                'contact_alias.fullname': 'John Doe',
+                'contact_alias.contactid': 'contact-guid'
+            };
+            const result = createWebApiEntity(entity, 'account', 'accounts', {});
+
+            expect(result.getAliasedValue('contact_alias.fullname')).toBe('John Doe');
+            expect(result.getAliasedValue('nonexistent')).toBeNull();
+        });
+
+        test('should provide getAliasedValue for MultiOptionSet', () => {
+            const { createWebApiEntity } = require('../lib/devkit');
+            const entity = {
+                'alias.categories': '1,2,3'
+            };
+            const result = createWebApiEntity(entity, 'account', 'accounts', {});
+
+            expect(result.getAliasedValue('alias.categories', true)).toEqual([1, 2, 3]);
+        });
+
+        test('should provide getAliasedFormattedValue', () => {
+            const { createWebApiEntity } = require('../lib/devkit');
+            const entity = {
+                'alias.status@OData.Community.Display.V1.FormattedValue': 'Active'
+            };
+            const result = createWebApiEntity(entity, 'account', 'accounts', {});
+
+            expect(result.getAliasedFormattedValue('alias.status')).toBe('Active');
+            expect(result.getAliasedFormattedValue('nonexistent')).toBe('');
+        });
+
+        test('should provide getAliasedFormattedValue for MultiOptionSet', () => {
+            const { createWebApiEntity } = require('../lib/devkit');
+            const entity = {
+                'alias.cats@OData.Community.Display.V1.FormattedValue': 'Cat1; Cat2; Cat3'
+            };
+            const result = createWebApiEntity(entity, 'account', 'accounts', {});
+
+            expect(result.getAliasedFormattedValue('alias.cats', true)).toEqual(['Cat1', 'Cat2', 'Cat3']);
+        });
+
+        test('should define fields from fieldConfig', () => {
+            const { createWebApiEntity } = require('../lib/devkit');
+            const entity = {
+                numberofemployees: 100,
+                revenue: 1000000.50,
+                donotemail: true,
+                createdon: '2023-12-25T10:00:00Z'
+            };
+            const fieldConfig = {
+                NumberOfEmployees: { logicalName: 'numberofemployees', type: 'Integer' },
+                Revenue: { logicalName: 'revenue', type: 'Number' },
+                DoNotEmail: { logicalName: 'donotemail', type: 'Boolean' },
+                CreatedOn: { logicalName: 'createdon', type: 'DateTime' }
+            };
+            const result = createWebApiEntity(entity, 'account', 'accounts', fieldConfig);
+
+            expect(result.NumberOfEmployees).toBe(100);
+            expect(result.Revenue).toBe(1000000.50);
+            expect(result.DoNotEmail).toBe(true);
+            expect(result.CreatedOn).toBeInstanceOf(Date);
+        });
+    });
+
+    // ========================================================================
+    // AccountApi Integration Tests (like Account.webapi.ts usage)
+    // ========================================================================
+
+    describe('AccountApi Integration (Account.webapi.ts style)', () => {
+        test('should create AccountApi instance with entity data', () => {
+            const { createWebApiEntity } = require('../lib/devkit');
+            const entity = {
+                accountid: 'acc-123',
+                name: 'Contoso Ltd',
+                numberofemployees: 500,
+                revenue: 5000000,
+                '_primarycontactid_value': 'contact-456',
+                '_primarycontactid_value@Microsoft.Dynamics.CRM.lookuplogicalname': 'contact',
+                'name@OData.Community.Display.V1.FormattedValue': 'Contoso Ltd'
+            };
+            const fieldConfig = {
+                AccountId: { logicalName: 'accountid' },
+                Name: { logicalName: 'name' },
+                NumberOfEmployees: { logicalName: 'numberofemployees', type: 'Integer' },
+                Revenue: { logicalName: 'revenue', type: 'Number' },
+                PrimaryContactId: {
+                    schemaName: 'primarycontactid',
+                    logicalName: '_primarycontactid_value',
+                    entityCollectionName: 'contacts',
+                    entityLogicalName: 'contact'
+                }
+            };
+
+            const account = createWebApiEntity(entity, 'account', 'accounts', fieldConfig);
+
+            expect(account.AccountId).toBe('acc-123');
+            expect(account.Name).toBe('Contoso Ltd');
+            expect(account.NumberOfEmployees).toBe(500);
+            expect(account.Revenue).toBe(5000000);
+            expect(account.PrimaryContactId).toBe('contact-456');
+            expect(account.FormattedValue.Name).toBe('Contoso Ltd');
+        });
+
+        test('should create empty AccountApi for create operations', () => {
+            const { createWebApiEntity } = require('../lib/devkit');
+            const fieldConfig = {
+                Name: { logicalName: 'name' },
+                Revenue: { logicalName: 'revenue', type: 'Number' }
+            };
+
+            const account = createWebApiEntity(undefined, 'account', 'accounts', fieldConfig);
+
+            expect(account.Name).toBeNull();
+            account.Name = 'New Company';
+            account.Revenue = 1000000;
+
+            expect(account.Entity.name).toBe('New Company');
+            expect(account.Entity.revenue).toBe(1000000);
+        });
+    });
 });

@@ -1018,17 +1018,20 @@ function loadFormDialog(formContext: any, fields: string[]): any {
     return form;
 }
 function getWebApiTypeParsers(): Record<string, (value: any) => any> {
+    // Note: These parsers are called via webApiReturnGet which is only called after
+    // getValue in defineWebApiField has already filtered out null/undefined values.
+    // Therefore, null/undefined checks are NOT needed in individual parsers.
     return {
         DateTime: (value: any): Date | null => {
-            if (value === null || value === undefined) return null;
             if (value instanceof Date) return isNaN(value.getTime()) ? null : value;
             const trimmedString = String(value).trim();
             if (trimmedString === '') return null;
             const timestamp = Date.parse(trimmedString);
             if (isNaN(timestamp)) return null;
-            const parsedDate = new Date(timestamp);
-            return isNaN(parsedDate.getTime()) ? null : parsedDate;
+            // If Date.parse succeeded, new Date(timestamp) will always be valid
+            return new Date(timestamp);
         },
+
         Integer: (value: any): number | null => {
             const parsed = parseInt(value, 10);
             return isNaN(parsed) ? null : parsed;
@@ -1038,7 +1041,6 @@ function getWebApiTypeParsers(): Record<string, (value: any) => any> {
             return isNaN(parsed) ? null : parsed;
         },
         Boolean: (value: any): boolean | null => {
-            if (value === null || value === undefined) return null;
             if (typeof value === 'boolean') return value;
             if (typeof value === 'number') return value !== 0;
             const stringValue = String(value).trim().toLowerCase();
@@ -1051,11 +1053,13 @@ function getWebApiTypeParsers(): Record<string, (value: any) => any> {
     };
 }
 function webApiReturnGet(data: any, type?: DevKit.WebApiFieldType): any {
-    if (data === null || data === undefined) return null;
+    // Note: data is never null/undefined here - getValue in defineWebApiField
+    // already returns null before calling this function for null/undefined values.
     if (type === null || type === undefined) return data;
     const parser = getWebApiTypeParsers()[type];
     return parser ? parser(data) : data;
 }
+
 export class FormBase<TBody, THeader, TTab, TGrid, TNavigation, TQuickForm, TProcess = any> {
     public Body: TBody;
     public Header: THeader;
