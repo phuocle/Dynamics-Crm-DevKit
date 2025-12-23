@@ -1186,7 +1186,8 @@ export function defineWebApiField(obj: any, fieldName: string, entity: Record<st
             return '';
         }
         if (type === 'MultiOptionSet') {
-            return entity?.[formattedKey]?.toString()?.split(';').map((item: string) => item?.trim()) ?? [];
+            // Note: formattedKey is already validated not null at line 1178, so ?? [] is not needed
+            return entity[formattedKey].toString().split(';').map((item: string) => item.trim());
         }
         return entity?.[formattedKey];
     };
@@ -1202,7 +1203,8 @@ export function defineWebApiField(obj: any, fieldName: string, entity: Record<st
             return null;
         }
         if (type === 'MultiOptionSet') {
-            return entity?.[logicalName]?.toString()?.split(',').map((item: string) => parseInt(item, 10)) ?? [];
+            // Note: logicalName is already validated not null at line 1194, so ?? [] is not needed
+            return entity[logicalName].toString().split(',').map((item: string) => parseInt(item, 10));
         }
         return webApiReturnGet(entity?.[logicalName], type);
     };
@@ -1260,7 +1262,8 @@ export function createWebApiEntity<T extends DevKit.IWebApiEntity>(entity: Recor
                 return '';
             }
             if (isMultiOptionSet) {
-                return e?.[key]?.toString()?.split(';').map((item: string) => item?.trim()) ?? [];
+                // Note: key is already validated not null at line 1259, so ?? [] is not needed
+                return e[key].toString().split(';').map((item: string) => item.trim());
             }
             return e?.[key];
         }

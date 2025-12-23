@@ -877,6 +877,139 @@ describe('loadWebApi Tests', () => {
             obj.testField = null;
             expect(upsert['parentid@odata.bind']).toBeNull();
         });
+
+        // Additional tests for 100% branch coverage
+
+        test('should return empty string when FormattedValue is null (line 1178)', () => {
+            const entity = {
+                'status': 1,
+                'status@OData.Community.Display.V1.FormattedValue': null
+            };
+            const { obj } = createField(entity, {
+                logicalName: 'status',
+                type: 'Integer'
+            });
+            expect(obj.FormattedValue.testField).toBe('');
+        });
+
+        test('should return empty string when FormattedValue is undefined (line 1178)', () => {
+            const entity = { 'status': 1 }; // No formatted value key
+            const { obj } = createField(entity, {
+                logicalName: 'status',
+                type: 'Integer'
+            });
+            expect(obj.FormattedValue.testField).toBe('');
+        });
+
+        test('should return FormattedValue for lookup with matching entityLogicalName (line 1181-1184)', () => {
+            const entity = {
+                '_contactid_value': 'contact-123',
+                '_contactid_value@OData.Community.Display.V1.FormattedValue': 'John Doe',
+                '_contactid_value@Microsoft.Dynamics.CRM.lookuplogicalname': 'contact'
+            };
+            const { obj } = createField(entity, {
+                logicalName: '_contactid_value',
+                schemaName: 'contactid',
+                entityCollectionName: 'contacts',
+                entityLogicalName: 'contact'
+            });
+            expect(obj.FormattedValue.testField).toBe('John Doe');
+        });
+
+        test('should return empty string for lookup FormattedValue with mismatched entityLogicalName (line 1183-1186)', () => {
+            const entity = {
+                '_ownerid_value': 'team-123',
+                '_ownerid_value@OData.Community.Display.V1.FormattedValue': 'Sales Team',
+                '_ownerid_value@Microsoft.Dynamics.CRM.lookuplogicalname': 'team'
+            };
+            const { obj } = createField(entity, {
+                logicalName: '_ownerid_value',
+                schemaName: 'ownerid',
+                entityCollectionName: 'systemusers',
+                entityLogicalName: 'systemuser'
+            });
+            expect(obj.FormattedValue.testField).toBe('');
+        });
+
+        test('should handle readOnly field without setter (line 1227)', () => {
+            const entity = { 'createdon': '2023-12-25T10:00:00Z' };
+            const { obj } = createField(entity, {
+                logicalName: 'createdon',
+                type: 'DateTime',
+                readOnly: true
+            });
+            expect(obj.testField).toBeInstanceOf(Date);
+            // Attempting to set should have no effect (no setter defined)
+            expect(() => { obj.testField = new Date(); }).toThrow();
+        });
+
+        test('should strip braces from GUID when setting lookup (line 1216)', () => {
+            const entity = {};
+            const { obj, upsert } = createField(entity, {
+                logicalName: '_accountid_value',
+                schemaName: 'accountid',
+                entityCollectionName: 'accounts',
+                entityLogicalName: 'account'
+            });
+            obj.testField = '{12345678-1234-1234-1234-123456789abc}';
+            expect(upsert['accountid@odata.bind']).toBe('/accounts(12345678-1234-1234-1234-123456789abc)');
+        });
+
+        test('should handle lookup without schemaName - use logicalName (line 1212)', () => {
+            const entity = {};
+            const { obj, upsert } = createField(entity, {
+                logicalName: '_parentid_value',
+                // No schemaName - should fallback to logicalName
+                entityCollectionName: 'accounts',
+                entityLogicalName: 'account'
+            });
+            obj.testField = 'parent-guid';
+            expect(upsert['_parentid_value@odata.bind']).toBe('/accounts(parent-guid)');
+        });
+
+        test('should handle numeric lookup value (line 1216 non-string branch)', () => {
+            const entity = {};
+            const { obj, upsert } = createField(entity, {
+                logicalName: '_numericid_value',
+                schemaName: 'numericid',
+                entityCollectionName: 'numerics',
+                entityLogicalName: 'numeric'
+            });
+            // Pass a number instead of string - should still work
+            obj.testField = 12345;
+            expect(upsert['numericid@odata.bind']).toBe('/numerics(12345)');
+        });
+
+        test('should handle MultiOptionSet setValue (line 1210)', () => {
+            const entity = { 'categories': '1,2' };
+            const { obj, upsert } = createField(entity, {
+                logicalName: 'categories',
+                type: 'MultiOptionSet'
+            });
+            obj.testField = [3, 4, 5];
+            expect(upsert.categories).toBe('3,4,5');
+        });
+
+        test('should handle MultiOptionSet with null value in split (line 1205 fallback)', () => {
+            const entity = { 'categories': null };
+            const { obj } = createField(entity, {
+                logicalName: 'categories',
+                type: 'MultiOptionSet'
+            });
+            expect(obj.testField).toBeNull();
+        });
+
+        test('should handle MultiOptionSet FormattedValue with null (line 1189 fallback)', () => {
+            const entity = {
+                'categories': '1,2',
+                'categories@OData.Community.Display.V1.FormattedValue': null
+            };
+            const { obj } = createField(entity, {
+                logicalName: 'categories',
+                type: 'MultiOptionSet'
+            });
+            expect(obj.FormattedValue.testField).toBe('');
+        });
     });
 
     // ========================================================================
