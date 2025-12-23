@@ -1,10 +1,10 @@
 {
 	"folders": [
 		{
-			"path": "TestTypeScript/ts"
+			"path": "TestDevKitJs"
 		},
 		{
-			"path": "TestDevKitJs"
+			"path": "TestDevKitTs"
 		}
 	],
 	"settings": {}
