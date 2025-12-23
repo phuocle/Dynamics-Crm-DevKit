@@ -1342,6 +1342,91 @@ describe('loadFormV3 Tests', () => {
             section.Visible = false;
             expect(getSectionVisible()).toBe(false);
         });
+
+        // Test for multiple sections in same tab (covers line 136 else branch)
+        test('Tab with multiple sections should have all sections accessible', () => {
+            // Create mock with two sections in one tab
+            const sectionObjects = new Map([
+                ['SECTION_1', {
+                    getName: () => 'SECTION_1',
+                    getLabel: () => 'Section 1',
+                    setLabel: () => { },
+                    getVisible: () => true,
+                    setVisible: () => { },
+                    getParent: () => ({})
+                }],
+                ['SECTION_2', {
+                    getName: () => 'SECTION_2',
+                    getLabel: () => 'Section 2',
+                    setLabel: () => { },
+                    getVisible: () => true,
+                    setVisible: () => { },
+                    getParent: () => ({})
+                }]
+            ]);
+
+            const tabObject = {
+                getName: () => 'MY_TAB',
+                getLabel: () => 'My Tab',
+                setLabel: () => { },
+                getVisible: () => true,
+                setVisible: () => { },
+                getParent: () => ({}),
+                getDisplayState: () => 'expanded',
+                setDisplayState: () => { },
+                getContentType: () => 'cardSections',
+                setContentType: () => { },
+                setFocus: () => { },
+                addTabStateChange: () => { },
+                removeTabStateChange: () => { },
+                sections: {
+                    get: (n: string) => sectionObjects.get(n),
+                    getLength: () => 2
+                }
+            };
+
+            const tabsMap = new Map([['MY_TAB', tabObject]]);
+
+            const formContext = {
+                data: {
+                    getIsDirty: () => false,
+                    isValid: () => true,
+                    entity: {
+                        attributes: { get: () => null },
+                        getId: () => 'test-id',
+                        getEntityName: () => 'account',
+                        getIsDirty: () => false,
+                        isValid: () => true,
+                        getDataXml: () => '',
+                        getEntityReference: () => ({}),
+                        getPrimaryAttributeValue: () => ''
+                    }
+                },
+                ui: {
+                    getFormType: () => 2,
+                    controls: { get: () => null, getLength: () => 0, forEach: () => { } },
+                    tabs: { get: (n: string) => tabsMap.get(n), getLength: () => 1, forEach: () => { } },
+                    formSelector: { getCurrentItem: () => null, items: { getLength: () => 0 } },
+                    getViewPortHeight: () => 800,
+                    getViewPortWidth: () => 1200
+                },
+                getControl: () => null,
+                getAttribute: () => null,
+                getFormContext: function () { return this; }
+            };
+
+            const executionContext = { getFormContext: () => formContext };
+            // Pass two sections in the same tab - this triggers line 136 else branch
+            const form = new FormBase(executionContext, 'test', {
+                tab: ['MY_TAB___SECTION_1', 'MY_TAB___SECTION_2']
+            });
+
+            expect(form.Body.Tab.MY_TAB).toBeDefined();
+            expect(form.Body.Tab.MY_TAB.Section.SECTION_1).toBeDefined();
+            expect(form.Body.Tab.MY_TAB.Section.SECTION_2).toBeDefined();
+            expect(form.Body.Tab.MY_TAB.Section.SECTION_1.Name).toBe('SECTION_1');
+            expect(form.Body.Tab.MY_TAB.Section.SECTION_2.Name).toBe('SECTION_2');
+        });
     });
 
     // =========================================================================
@@ -2098,4 +2183,86 @@ describe('loadFormV3 Tests', () => {
             expect(() => form.Body.testfield.OpenSearchResult(1, 'read')).not.toThrow();
         });
     });
+
+    // =========================================================================
+    // Edge Cases - Null/Undefined ExecutionContext (lines 610-662)
+    // =========================================================================
+    describe('Null ExecutionContext Edge Cases', () => {
+        test('FormBase should handle null executionContext', () => {
+            const form = new FormBase(null, 'test', {});
+            expect(form).toBeDefined();
+            expect(form.FormId).toBeUndefined();
+            expect(form.FormType).toBeUndefined();
+            expect(form.EntityId).toBeUndefined();
+        });
+
+        test('FormBase should handle undefined executionContext', () => {
+            const form = new FormBase(undefined, 'test', {});
+            expect(form).toBeDefined();
+            expect(form.DataIsDirty).toBeUndefined();
+            expect(form.EntityName).toBeUndefined();
+        });
+
+        test('FormBase should handle executionContext with null getFormContext', () => {
+            const form = new FormBase({ getFormContext: () => null }, 'test', {});
+            expect(form).toBeDefined();
+            expect(form.Attributes).toBeUndefined();
+            expect(form.Controls).toBeUndefined();
+        });
+
+        test('FormBase should handle executionContext without getFormContext', () => {
+            // This tests the fallback path where executionContext itself is used
+            const mockContext = {
+                data: null,
+                ui: null
+            };
+            const form = new FormBase(mockContext, 'test', {});
+            expect(form).toBeDefined();
+        });
+
+        test('Form with null data should handle gracefully', () => {
+            const formContext = {
+                data: null,
+                ui: {
+                    getFormType: () => 2,
+                    getViewPortHeight: () => 800,
+                    getViewPortWidth: () => 1200,
+                    controls: null,
+                    formSelector: { getCurrentItem: () => null, items: { getLength: () => 0 } }
+                },
+                getFormContext: function () { return this; }
+            };
+            const form = new FormBase({ getFormContext: () => formContext }, 'test', {});
+            // Access FormType which should work (ui exists)
+            expect(form.FormType).toBe(2);
+            // Body should have Tab property even when body/tab config is empty
+            expect(form.Body).toEqual({ Tab: {} });
+        });
+
+        test('Form with null ui should handle gracefully', () => {
+            const formContext = {
+                data: {
+                    getIsDirty: () => false,
+                    isValid: () => true,
+                    entity: {
+                        getId: () => 'id',
+                        getEntityName: () => 'account',
+                        getIsDirty: () => false,
+                        isValid: () => true,
+                        getDataXml: () => '',
+                        getEntityReference: () => ({}),
+                        getPrimaryAttributeValue: () => ''
+                    }
+                },
+                ui: null,
+                getFormContext: function () { return this; }
+            };
+            const form = new FormBase({ getFormContext: () => formContext }, 'test', {});
+            // EntityId should work (data exists)
+            expect(form.EntityId).toBe('id');
+            // Body should have Tab property even when body/tab config is empty
+            expect(form.Body).toEqual({ Tab: {} });
+        });
+    });
 });
+

@@ -554,7 +554,6 @@ function loadFormV3<TBody = Record<string, any>, THeader = Record<string, any>, 
         navigation?: string[];
         quick?: string[];
         bpf?: string[];
-        dialog?: string[];
     }
 ): {
     ExecutionContext: DevKit.IExecutionContext;
@@ -669,7 +668,7 @@ function loadFormV3<TBody = Record<string, any>, THeader = Record<string, any>, 
     form.UiAddOnLoad = (callback: any) => contextUi?.addOnLoad(callback);
     form.UiRemoveLoaded = (callback: any) => contextUi?.removeLoaded(callback);
     form.UiRemoveOnLoad = (callback: any) => contextUi?.removeOnLoad(callback);
-    const { body = [], tab = [], header = [], bpf = [], quick = [], grid = [], navigation = [], dialog = [] } = formConfig;
+    const { body = [], tab = [], header = [], bpf = [], quick = [], grid = [], navigation = [] } = formConfig;
     const bodyObj = body.length > 0 ? loadFields(formContext, body) : {};
     bodyObj.Tab = tab.length > 0 ? loadTabs(formContext, tab) : {};
     form.Body = bodyObj;
@@ -678,7 +677,7 @@ function loadFormV3<TBody = Record<string, any>, THeader = Record<string, any>, 
     form.QuickForm = quick.length > 0 ? loadQuickForms(formContext, quick) : {};
     form.Grid = grid.length > 0 ? loadGrids(formContext, grid) : {};
     form.Navigation = navigation.length > 0 ? loadNavigations(formContext, navigation) : {};
-    form.Dialog = dialog.length > 0 ? loadFormDialog(formContext, dialog) : {};
+
     form.Utility = loadUtility(defaultWebResourceName);
     form.ExecutionContext = loadExecutionContext(executionContext);
     form.SidePanes = loadSidePanes();
@@ -1017,6 +1016,7 @@ function loadFormDialog(formContext: any, fields: string[]): any {
     form.Close = () => formContext?.ui?.close();
     return form;
 }
+
 function getWebApiTypeParsers(): Record<string, (value: any) => any> {
     // Note: These parsers are called via webApiReturnGet which is only called after
     // getValue in defineWebApiField has already filtered out null/undefined values.
