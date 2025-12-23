@@ -9,8 +9,8 @@
         ],
         "types": [
             "jest",
-            "@types/xrm",
-            "node"
+            "node",
+            "xrm"
         ],
         "strict": true,
         "esModuleInterop": true,

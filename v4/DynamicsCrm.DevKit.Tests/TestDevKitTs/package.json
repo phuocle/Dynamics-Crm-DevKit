@@ -11,6 +11,7 @@
   "devDependencies": {
     "@types/jest": "^30.0.0",
     "@types/jsdom": "^27.0.0",
+    "@types/node": "^25.0.3",
     "@types/xrm": "^9.0.88",
     "esbuild": "^0.27.2",
     "jest": "^30.2.0",
