@@ -1,7 +1,7 @@
 ﻿//@ts-check
 ///<reference path="Account.d.ts" />
 "use strict";
-var formAccount = (function () {
+var formAccount_DevKitV4 = (function () {
 	"use strict";
 	/** @type {DevKit.FormAccount_DevKitV4} */
 	let form;
@@ -39,8 +39,7 @@ var formAccount = (function () {
 		try {
 			results.push({ Test: "R1", Property: "Attribute", Value: form.Body.v4_String.Attribute ? "object" : "null", Status: form.Body.v4_String.Attribute ? "✓" : "⚠" });
 			results.push({ Test: "R2", Property: "AttributeName", Value: form.Body.v4_String.AttributeName, Status: form.Body.v4_String.AttributeName === "v4_string" ? "✓" : "⚠" });
-			// @ts-ignore - AttributeType comparison is valid at runtime
-			results.push({ Test: "R3", Property: "AttributeType", Value: form.Body.v4_String.AttributeType, Status: form.Body.v4_String.AttributeType === "string" ? "✓" : "⚠" });
+			results.push({ Test: "R3", Property: "AttributeType", Value: form.Body.v4_String.AttributeType, Status: form.Body.v4_String.AttributeType === OptionSet.FieldAttributeType.String ? "✓" : "⚠" });
 			results.push({ Test: "R4", Property: "ControlName", Value: form.Body.v4_String.ControlName, Status: "✓" });
 			results.push({ Test: "R5", Property: "ControlType", Value: form.Body.v4_String.ControlType, Status: "✓" });
 			results.push({ Test: "R6", Property: "Format", Value: form.Body.v4_String.Format, Status: "✓" });

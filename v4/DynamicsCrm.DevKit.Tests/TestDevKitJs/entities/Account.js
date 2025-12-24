@@ -1,7 +1,7 @@
 ﻿//@ts-check
 ///<reference path="Account.d.ts" />
 "use strict";
-var formAccount = (function () {
+var formAccount_DevKitV4 = (function () {
 	"use strict";
 	/** @type {DevKit.FormAccount_DevKitV4} */
 	let form;

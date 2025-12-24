@@ -1,0 +1,11 @@
+﻿{
+    "WebResources": [
+        {
+            "File": "\\Dev.DevKit.WebResource\\entities\\Account.js",
+            "WebResource": "v4_/entities/Account.js"
+        }
+    ],
+    "CustomTemplates": [
+        
+    ]
+}
