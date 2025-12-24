@@ -3,6 +3,10 @@
         {
             "File": "\\Dev.DevKit.WebResource\\entities\\Account.js",
             "WebResource": "v4_/entities/Account.js"
+        },
+        {
+            "File": "\\Dev.DevKit.WebResource\\lib\\devkit.js",
+            "WebResource": "v4_/lib/devkit.js"
         }
     ],
     "CustomTemplates": [

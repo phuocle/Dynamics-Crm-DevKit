@@ -660,7 +660,7 @@ const devKit = (function () {
         const getWebApi = xrmInstance?.WebApi;
         const getOnline = xrmInstance?.WebApi?.online;
         const getOffline = xrmInstance?.WebApi?.offline;
-        const extractEntityName = function(fetchXml) {
+        const extractEntityName = function (fetchXml) {
             let cleanXml = fetchXml;
             const fetchXmlMatch = fetchXml.match(/fetchxml=/i);
             if (fetchXmlMatch) {
@@ -733,7 +733,7 @@ const devKit = (function () {
                 return promise;
             }
         };
-        obj.RetrieveRecords = function(apiConstructorOrFactory, entityLogicalNameOrOptions, optionsOrMaxPageSizeOrCallback, maxPageSizeOrSuccessCallback, successCallback, errorCallback) {
+        obj.RetrieveRecords = function (apiConstructorOrFactory, entityLogicalNameOrOptions, optionsOrMaxPageSizeOrCallback, maxPageSizeOrSuccessCallback, successCallback, errorCallback) {
             let entityLogicalName;
             let options;
             let maxPageSize;
@@ -741,8 +741,8 @@ const devKit = (function () {
             const isPlainFetchXml = entityLogicalNameOrOptions => typeof entityLogicalNameOrOptions === 'string' && entityLogicalNameOrOptions.trim().startsWith('<fetch');
             const secondParamIsFetchXmlOrOData = typeof entityLogicalNameOrOptions === 'string' &&
                 (hasFetchXml(entityLogicalNameOrOptions) ||
-                isPlainFetchXml(entityLogicalNameOrOptions) ||
-                (entityLogicalNameOrOptions.startsWith('?') && !hasFetchXml(entityLogicalNameOrOptions)));
+                    isPlainFetchXml(entityLogicalNameOrOptions) ||
+                    (entityLogicalNameOrOptions.startsWith('?') && !hasFetchXml(entityLogicalNameOrOptions)));
             if (secondParamIsFetchXmlOrOData) {
                 options = entityLogicalNameOrOptions;
                 if (isPlainFetchXml(options)) {
@@ -791,7 +791,7 @@ const devKit = (function () {
                 return promise;
             }
         };
-        obj.RetrieveRecord = function(apiConstructorOrFactory, entityLogicalName, id, options, successCallback, errorCallback) {
+        obj.RetrieveRecord = function (apiConstructorOrFactory, entityLogicalName, id, options, successCallback, errorCallback) {
             if (typeof options === 'function') {
                 errorCallback = successCallback;
                 successCallback = options;
@@ -996,7 +996,7 @@ var OptionSet;
     OptionSet.AdvancedConfigSetting = Object.freeze({ MaxChildIncidentNumber: 'MaxChildIncidentNumber', MaxIncidentMergeNumber: 'MaxIncidentMergeNumber' });
     OptionSet.ClientName = Object.freeze({ Web: 'Web', Outlook: 'Outlook', Mobile: 'Mobile' });
     OptionSet.ClientState = Object.freeze({ Online: 'Online', Offline: 'Offline' });
-    OptionSet.FieldAttributeType = Object.freeze({ Boolean: 'boolean', DateTime: 'datetime', Decimal: 'decimal', Double: 'double', Integer: 'integer', Lookup: 'lookup', Memo: 'memo', Money: 'money', MultiOptionSet: 'multioptionset', OptionSet: 'optionset', String: 'string' });
+    OptionSet.FieldAttributeType = Object.freeze({ Boolean: 'boolean', DateTime: 'datetime', Decimal: 'decimal', Double: 'double', Integer: 'integer', Lookup: 'lookup', Memo: 'memo', Money: 'money', MultiOptionSet: 'multiselectoptionset', OptionSet: 'optionset', String: 'string' });
     OptionSet.FieldControlType = Object.freeze({ Standard: 'standard', Iframe: 'iframe', KbSearch: 'kbsearch', Lookup: 'lookup', MultiSelectOptionset: 'multiselectoptionset', Notes: 'notes', OptionSet: 'optionset', QuickForm: 'quickform', SubGrid: 'subgrid', TimerControl: 'timercontrol', TimelineWall: 'timelinewall', WebResource: 'webresource' });
     OptionSet.FieldFormat = Object.freeze({ Date: 'date', DateTime: 'datetime', Duration: 'duration', Email: 'email', Language: 'language', None: 'none', TextArea: 'textarea', Text: 'text', TickerSymbol: 'tickersymbol', Phone: 'phone', TimeZone: 'timezone', Url: 'url' });
     OptionSet.FieldNotificationLevel = Object.freeze({ Error: 'ERROR', Recommendation: 'RECOMMENDATION' });
