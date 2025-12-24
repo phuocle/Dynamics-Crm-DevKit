@@ -11,7 +11,8 @@ var DevKit;
 			quick: ["contactquickform___EMailAddress1", "contactquickform___Telephone1"],
 			grid: ["ChildAccounts", "Contacts"],
 			navigation: ["account_adx_inviteredemptions", "account_adx_portalcomments", "Account_Appointments", "account_DeletedItemReferences", "Account_Email_EmailSender", "Account_Email_SendersAccount", "Account_Emails", "account_parent_account", "Account_Phonecalls", "Account_Tasks", "adx_invitation_assigntoaccount", "contact_customer_accounts", "msa_account_managingpartner", "msa_contact_managingpartner"],
-			dialog: []
+			dialog: [],
+			bpf: []
 		};
 		return devKit.LoadFormV2(executionContext, defaultWebResourceName, form);
 	};
