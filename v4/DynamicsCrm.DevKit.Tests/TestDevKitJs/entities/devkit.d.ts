@@ -2589,6 +2589,14 @@ declare namespace DevKit {
          */
         NavigateTo(pageInput: DevKit.PageInputEntityList | DevKit.PageInputHtmlWebResource | DevKit.PageInputEntityRecord | DevKit.PageInputDashboard, navigationOptions?: DevKit.NavigationOptions, successCallback?: (result: any) => void, errorCallback?: (error: DevKit.Error) => void): void;
         /**
+         * Navigates to the specified page and returns a promise
+         * @param pageInput Input about the page to navigate to. The object definition changes depending on the type of page to navigate to: entity list or HTML web resource.
+         * @param navigationOptions Options for navigating to a page: whether to open inline or in a dialog. If you don't specify this parameter, page is opened inline by default.
+         * @returns Promise that resolves on successful navigation to the page when navigating inline and on closing the dialog when navigating to a dialog.
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/navigateto
+         */
+        NavigateTo(pageInput: DevKit.PageInputEntityList | DevKit.PageInputHtmlWebResource | DevKit.PageInputEntityRecord | DevKit.PageInputDashboard, navigationOptions?: DevKit.NavigationOptions): Promise<any>;
+        /**
          * Opens a dialog box to select files from your computer (web client) or mobile device (mobile clients).
          * @param filePickOption An object pick file option
          * @param successCallback A function to call when selected files are returned. An array of objects with each object having the following attributes is passed to the function.
