@@ -1057,6 +1057,14 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                     {
                         _d_ts += $"{jsdoc}{TAB}{TAB}{TAB}{name}: DevKit.Controls.String;{NEW_LINE}";
                     }
+                    else if (crmAttribute is ImageAttributeMetadata)
+                    {
+                        _d_ts += $"{jsdoc}{TAB}{TAB}{TAB}{name}: DevKit.Controls.String;{NEW_LINE}";
+                    }
+                    else if (crmAttribute is FileAttributeMetadata)
+                    {
+                        _d_ts += $"{jsdoc}{TAB}{TAB}{TAB}{name}: DevKit.Controls.String;{NEW_LINE}";
+                    }
                     else
                     {
                         _d_ts += $"{TAB}{TAB}{TAB}{item.Name}: DevKit.Controls.ELSE1???;//{item.Id} - {item.ClassId} -- FOR DEBUG {NEW_LINE}";
