@@ -144,6 +144,13 @@ export namespace AccountForm {
         v4_AccountBPF: IBPF;
     }
 
+    /**
+     * Dialog interface
+     * For quick create dialogs or other dialog forms
+     */
+    export interface IDialog extends DevKit.IDialog {
+    }
+
     // ============================================================================
     // 2. Runtime - Form Class
     // ============================================================================
@@ -152,7 +159,7 @@ export namespace AccountForm {
      * Account Form class
      * Provides typed access to all form controls
      */
-    export class Form extends FormBase<IBody, IHeader, IGrid, INavigation, IQuickForm, IProcess> {
+    export class Form extends FormBase<IBody, IHeader, IGrid, INavigation, IQuickForm, IProcess, IDialog> {
         /**
          * Creates an Account Form instance
          * @param executionContext The execution context from form event

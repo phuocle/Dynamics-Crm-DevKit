@@ -2503,6 +2503,16 @@ declare namespace DevKit {
         navigation?: string[];
         quick?: string[];
         bpf?: string[];
+        dialog?: string[];
+    }
+
+    /**
+     * Interface for Dialog forms (quick create dialogs, etc.)
+     * Dialog forms contain fields and a Close method
+     */
+    interface IDialog {
+        /** Closes the dialog */
+        Close(): void;
     }
 
     type WebApiFieldType = 'Integer' | 'Number' | 'Boolean' | 'DateTime' | 'MultiOptionSet';

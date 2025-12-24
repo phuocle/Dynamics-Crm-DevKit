@@ -56,8 +56,8 @@
     },
     "BUG": {
       "commandName": "Project",
-      "commandLineArgs": "/conn:\"AuthType=ClientSecret;Url=https://poc-tap.crm.dynamics.com;ClientId=4b632954-5b63-4a6b-b574-d84330051238;ClientSecret=v6gy9pdV1u0yQQWA45EZfRkI6MF2pBUG8H/ckMTUEoj1qKXcyo+nKyT7aF+nPAlk;\" /json:\"..\\..\\DynamicsCrm.DevKit.Cli.json\" /type:\"generators\" /profile:\"JS-FORM\"",
-      "workingDirectory": "D:\\azure\\phuocle\\PreSales\\ThaiAsiaPacific\\Hs.Tap.WebResource\\entities"
+      "commandLineArgs": "/conn:\"AuthType=ClientSecret;Url=https://org32a30558.crm.dynamics.com;ClientId=58f76dc4-3dca-4a25-9186-51a9322aa1c3;ClientSecret=9WXGRbNwEv/rTkdHIEpasg8HjjQvF1PBQk+YhIEiv5F6w8WHw67SHil9/Sq13e7g;\" /json:\"..\\DynamicsCrm.DevKit.Cli.json\" /type:\"solutionpackagers\" /profile:\"Extract-Both\" /version:\"9.1.0.179\"",
+      "workingDirectory": "D:\\azure\\phuocle\\PreSales\\ThaiAsiaPacific2\\Hs.Tap.SolutionPackager"
     },
     "WebResource": {
       "commandName": "Project",

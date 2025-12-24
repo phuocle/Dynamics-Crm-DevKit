@@ -543,7 +543,7 @@ function loadCopilot(): DevKit.ICopilot {
     };
     return obj;
 }
-function loadFormV3<TBody = Record<string, any>, THeader = Record<string, any>, TGrid = Record<string, any>, TNavigation = Record<string, any>, TQuickForm = Record<string, any>, TProcess = any>(
+function loadFormV3<TBody = Record<string, any>, THeader = Record<string, any>, TGrid = Record<string, any>, TNavigation = Record<string, any>, TQuickForm = Record<string, any>, TProcess = any, TDialog = any>(
     executionContext: any,
     defaultWebResourceName: string | undefined,
     formConfig: {
@@ -554,6 +554,7 @@ function loadFormV3<TBody = Record<string, any>, THeader = Record<string, any>, 
         navigation?: string[];
         quick?: string[];
         bpf?: string[];
+        dialog?: string[];
     }
 ): {
     ExecutionContext: DevKit.IExecutionContext;
@@ -1059,13 +1060,14 @@ function webApiReturnGet(data: any, type?: DevKit.WebApiFieldType): any {
     return parser ? parser(data) : data;
 }
 
-export class FormBase<TBody, THeader, TGrid, TNavigation, TQuickForm, TProcess = any> {
+export class FormBase<TBody, THeader, TGrid, TNavigation, TQuickForm, TProcess = any, TDialog = any> {
     public Body: TBody;
     public Header: THeader;
     public Grid: TGrid;
     public Navigation: TNavigation;
     public QuickForm: TQuickForm;
     public Process: TProcess;
+    public Dialog: TDialog;
     public ExecutionContext: DevKit.IExecutionContext;
     public Utility: any;
     public SidePanes: DevKit.ISidePanes;
@@ -1113,7 +1115,7 @@ export class FormBase<TBody, THeader, TGrid, TNavigation, TQuickForm, TProcess =
         defaultWebResourceName: string | undefined,
         formConfig: DevKit.IFormConfig
     ) {
-        const form = loadFormV3<TBody, THeader, TGrid, TNavigation, TQuickForm, TProcess>(
+        const form = loadFormV3<TBody, THeader, TGrid, TNavigation, TQuickForm, TProcess, TDialog>(
             executionContext,
             defaultWebResourceName,
             formConfig
@@ -1166,6 +1168,7 @@ export class FormBase<TBody, THeader, TGrid, TNavigation, TQuickForm, TProcess =
         this.SidePanes = form.SidePanes;
         this.WebApi = form.WebApi;
         this.Copilot = form.Copilot;
+        this.Dialog = form.Dialog;
     }
 }
 export function defineWebApiField(obj: any, fieldName: string, entity: Record<string, any>, config: DevKit.IWebApiFieldConfig, upsertEntity: Record<string, any>): void {
