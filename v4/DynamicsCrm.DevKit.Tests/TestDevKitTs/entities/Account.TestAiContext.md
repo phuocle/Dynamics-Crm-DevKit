@@ -141,6 +141,12 @@ npm run debug
 .\deploy.bat
 ```
 
+### Bước 5: (Nếu là TestDevKitJs) Copy file JS
+```bash
+Copy-Item -Path "d:\github\Dynamics-Crm-DevKit\v4\DynamicsCrm.DevKit.Tests\TestDevKitJs\entities\Account.js" -Destination "D:\github\Dynamics-Crm-DevKit\v4\DynamicsCrm.DevKit.Tests\TestWebResource\Dev.DevKit.WebResource\entities\" -Force
+```
+
+
 ---
 
 ## Đã Test (Completed)
@@ -186,6 +192,87 @@ npm run debug
 
 ---
 
+## ⚠️ JavaScript Convention (TestDevKitJs)
+
+Khi viết test cho **TestDevKitJs** (JavaScript), **KHÔNG** sử dụng shorthand variables:
+
+```javascript
+// ❌ KHÔNG DÙNG shorthand như này:
+const control = form.Body.v4_String;
+control.PropertyA;
+control.PropertyB;
+
+// ✅ PHẢI DÙNG full path:
+form.Body.v4_String.PropertyA;
+form.Body.v4_String.PropertyB;
+```
+
+**Lý do:**
+- Cho phép verify lint errors trực tiếp trên từng property
+- TypeScript checker có thể validate đúng line number cho mỗi property access
+- Dễ debug và identify vấn đề trong `.d.ts` file
+
+---
+
+## ⚠️ Global OptionSet Convention (TestDevKitJs)
+
+Khi viết test, **PHẢI** sử dụng Global OptionSet thay vì string literals:
+
+```javascript
+// ❌ KHÔNG DÙNG string literals:
+form.Body.v4_String.RequiredLevel = "required";
+form.Body.v4_String.SubmitMode = "always";
+notificationLevel: "RECOMMENDATION"
+
+// ✅ PHẢI DÙNG OptionSet enums:
+form.Body.v4_String.RequiredLevel = OptionSet.FieldRequiredLevel.Required;
+form.Body.v4_String.SubmitMode = OptionSet.FieldSubmitMode.Always;
+notificationLevel: OptionSet.FieldNotificationLevel.Recommendation
+```
+
+**Các Global OptionSet available:**
+| OptionSet | Values |
+|-----------|--------|
+| `OptionSet.FieldRequiredLevel` | `None`, `Required`, `Recommended` |
+| `OptionSet.FieldSubmitMode` | `Always`, `Never`, `Dirty` |
+| `OptionSet.FieldNotificationLevel` | `Error`, `Recommendation` |
+
+**Lý do:**
+- TypeScript checker sẽ báo lỗi nếu dùng string literals sai
+- Đảm bảo type safety và auto-complete trong IDE
+- Consistent với cách sử dụng trong CRM runtime
+
+---
+
+## ⚠️ TypeScript Lint Fixes (TestDevKitJs)
+
+Để file JavaScript hiển thị **"GREEN"** (không có lint errors):
+
+### 1. Catch blocks - sử dụng `/** @type {any} */`:
+```javascript
+// ❌ Lint error: 'e' is of type 'unknown'
+} catch (e) {
+    console.log(e.message);
+}
+
+// ✅ GREEN - không có lint error:
+} catch (/** @type {any} */ e) {
+    console.log(e.message);
+}
+```
+
+### 2. Runtime comparison - sử dụng `// @ts-ignore`:
+```javascript
+// ❌ Lint error: types have no overlap
+form.Body.v4_String.AttributeType === "string"
+
+// ✅ GREEN - comment trước dòng cần ignore:
+// @ts-ignore - AttributeType comparison is valid at runtime
+form.Body.v4_String.AttributeType === "string"
+```
+
+---
+
 ## Lưu ý quan trọng
 
 1. **Naming Convention**: 
@@ -199,4 +286,4 @@ npm run debug
 
 ---
 
-*Last updated: 2025-12-22*
+*Last updated: 2025-12-24*
