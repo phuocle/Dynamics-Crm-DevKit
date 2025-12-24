@@ -100,7 +100,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             _d_ts += $"{TAB}{TAB}* DynamicsCrm.DevKit {EntityMetadata.SchemaName}Api{NEW_LINE}";
             _d_ts += $"{TAB}{TAB}* @param entity The entity object from OData response{NEW_LINE}";
             _d_ts += $"{TAB}{TAB}*/{NEW_LINE}";
-            _d_ts += $"{TAB}{TAB}constructor(entity?: Record<string, any>) : {@namespace}.{EntityMetadata.SchemaName}Api;{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}constructor(entity?: Record<string, any>){NEW_LINE}";
             _d_ts += $"{TAB}{TAB}/**{NEW_LINE}";
             _d_ts += $"{TAB}{TAB} * Get the raw value of an aliased field{NEW_LINE}";
             _d_ts += $"{TAB}{TAB} * @param alias The alias field name{NEW_LINE}";
@@ -973,7 +973,8 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                 if (item.Name != null && ControlClassId.CONTROLS.Contains(item.ClassId))
                 {
                     var crmAttribute = EntityMetadata.Attributes.FirstOrDefault(x => x.LogicalName == item.Name);
-                    if (crmAttribute == null) continue;
+                    if (crmAttribute == null)
+                        continue;
                     var name = Helper.SafeIdentifier(crmAttribute.SchemaName);
                     if (name == previousName)
                     {
@@ -1059,11 +1060,11 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                     }
                     else if (crmAttribute is ImageAttributeMetadata)
                     {
-                        _d_ts += $"{jsdoc}{TAB}{TAB}{TAB}{name}: DevKit.Controls.String;{NEW_LINE}";
+                        _d_ts += $"{jsdoc}{TAB}{TAB}{TAB}{name}: DevKit.Controls.Image;{NEW_LINE}";
                     }
                     else if (crmAttribute is FileAttributeMetadata)
                     {
-                        _d_ts += $"{jsdoc}{TAB}{TAB}{TAB}{name}: DevKit.Controls.String;{NEW_LINE}";
+                        _d_ts += $"{jsdoc}{TAB}{TAB}{TAB}{name}: DevKit.Controls.File;{NEW_LINE}";
                     }
                     else
                     {

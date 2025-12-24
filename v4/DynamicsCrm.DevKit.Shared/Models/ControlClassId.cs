@@ -128,7 +128,9 @@
             LOOKUP_4,
             CUSTOMER,
             PARTY_LISTS,
-            REGRADING
+            REGRADING,
+            IMAGE,
+            FILE
         };
         public static readonly string[] VIRTUAL_CONTROLS =
         {
