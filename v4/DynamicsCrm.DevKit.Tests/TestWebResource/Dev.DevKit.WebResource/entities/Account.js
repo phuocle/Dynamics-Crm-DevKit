@@ -971,7 +971,7 @@ var formAccount_DevKitV4 = (function () {
 
 			// Inherited from IControl
 			results.push({ Test: "R4", Property: "Attribute", Value: form.Header.v4_Integer1.Attribute ? "object" : "null", Status: form.Header.v4_Integer1.Attribute ? "✓" : "⚠" });
-			results.push({ Test: "R5", Property: "AttributeName", Value: form.Header.v4_Integer1.AttributeName, Status: form.Header.v4_Integer1.AttributeName === "v4_integer1" ? "✓" : "⚠" });
+			results.push({ Test: "R5", Property: "AttributeName", Value: form.Header.v4_Integer1.AttributeName, Status: form.Header.v4_Integer1.AttributeName === "v4_integer" ? "✓" : "⚠" });
 			results.push({ Test: "R6", Property: "AttributeType", Value: form.Header.v4_Integer1.AttributeType, Status: form.Header.v4_Integer1.AttributeType === OptionSet.FieldAttributeType.Integer ? "✓" : "⚠" });
 			results.push({ Test: "R7", Property: "ControlName", Value: form.Header.v4_Integer1.ControlName, Status: "✓" });
 			results.push({ Test: "R8", Property: "ControlType", Value: form.Header.v4_Integer1.ControlType, Status: "✓" });
