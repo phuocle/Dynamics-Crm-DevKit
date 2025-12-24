@@ -2970,10 +2970,15 @@ declare namespace DevKit {
          * Returns a promise which resolves with an object whose keys are the security role privilege GUIDs and values are objects containing the businessUnitId, depth, and privilegeName of the security role privilege.
          * @param successCallback A function to call when the operation succeeds
          * @param errorCallback A function to call when the operation fails
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#getsecurityroleprivilegesinfo-method
+         */
+        GetSecurityRolePrivilegesInfo(successCallback: (rolePrivileges: { [key: string]: DevKit.SecurityRolePrivilegeInfo }) => void, errorCallback?: DevKit.ErrorCallback): void;
+        /**
+         * Returns a promise which resolves with an object whose keys are the security role privilege GUIDs and values are objects containing the businessUnitId, depth, and privilegeName of the security role privilege.
          * @returns Promise that resolves with security role privilege information
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#getsecurityroleprivilegesinfo-method
          */
-        GetSecurityRolePrivilegesInfo(successCallback?: (rolePrivileges: { [key: string]: DevKit.SecurityRolePrivilegeInfo }) => void, errorCallback?: DevKit.ErrorCallback): Promise<{ [key: string]: DevKit.SecurityRolePrivilegeInfo }>;
+        GetSecurityRolePrivilegesInfo(): Promise<{ [key: string]: DevKit.SecurityRolePrivilegeInfo }>;
     }
     abstract class IForm {
         /**
