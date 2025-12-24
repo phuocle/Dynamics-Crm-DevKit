@@ -32,7 +32,7 @@ function stringify(value: any): any {
 export function TestMultiOptionSet(form: AccountForm.Form): void {
     const results: TestResult[] = [];
     const methodResults: TestResult[] = [];
-    const mos = form.Body.v4_Categories;
+    const mos = form.Body.v4_MultiOptionSet;
     const startTime = new Date().toLocaleTimeString();
     const originalValue = mos.Value;
 

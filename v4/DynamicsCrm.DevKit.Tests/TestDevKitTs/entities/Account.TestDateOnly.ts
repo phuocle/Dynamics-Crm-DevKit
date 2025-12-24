@@ -19,7 +19,7 @@ interface TestResult {
 export function TestDateOnly(form: AccountForm.Form): void {
     const results: TestResult[] = [];
     const methodResults: TestResult[] = [];
-    const dateOnly = form.Body.v4_Birthday;
+    const dateOnly = form.Body.v4_DateOnly;
     const startTime = new Date().toLocaleTimeString();
     const originalValue = dateOnly.Value;
 

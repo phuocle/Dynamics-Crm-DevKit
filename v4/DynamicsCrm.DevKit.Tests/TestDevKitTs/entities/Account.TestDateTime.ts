@@ -19,7 +19,7 @@ interface TestResult {
 export function TestDateTime(form: AccountForm.Form): void {
     const results: TestResult[] = [];
     const methodResults: TestResult[] = [];
-    const dt = form.Body.v4_AppointmentTime;
+    const dt = form.Body.v4_DateTime;
     const startTime = new Date().toLocaleTimeString();
     const originalValue = dt.Value;
 

@@ -19,7 +19,7 @@ interface TestResult {
 export function TestDouble(form: AccountForm.Form): void {
     const results: TestResult[] = [];
     const methodResults: TestResult[] = [];
-    const double = form.Body.v4_DiscountPercentage;
+    const double = form.Body.v4_Double;
     const startTime = new Date().toLocaleTimeString();
     const originalValue = double.Value;
 

@@ -31,7 +31,7 @@ export function TestProcess(form: AccountForm.Form): void {
         results.push({ Test: "R7", Property: "Visible", Value: process.Visible, Status: "✓" });
 
         // BPF Specific Fields (Typed Check)
-        const bpf = process.v4_AccountBPF;
+        const bpf = process.AccountBPF;
         if (bpf) {
             results.push({ Test: "R8", Property: "BPF.Name", Value: bpf.Name ? "Control Found" : "Missing", Status: bpf.Name ? "✓" : "✗" });
             results.push({ Test: "R9", Property: "BPF.IndustryCode", Value: bpf.IndustryCode ? "Control Found" : "Missing", Status: bpf.IndustryCode ? "✓" : "✗" });

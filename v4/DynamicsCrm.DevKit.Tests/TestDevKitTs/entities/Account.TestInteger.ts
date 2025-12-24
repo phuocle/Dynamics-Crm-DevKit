@@ -19,7 +19,7 @@ interface TestResult {
 export function TestInteger(form: AccountForm.Form): void {
     const results: TestResult[] = [];
     const methodResults: TestResult[] = [];
-    const int = form.Header.NumberOfEmployees;
+    const int = form.Header.v4_Integer;
     const startTime = new Date().toLocaleTimeString();
     const originalValue = int.Value;
 

@@ -19,7 +19,7 @@ interface TestResult {
 export function TestBoolean(form: AccountForm.Form): void {
     const results: TestResult[] = [];
     const methodResults: TestResult[] = [];
-    const bool = form.Body.CreditOnHold;
+    const bool = form.Body.v4_Boolean;
     const startTime = new Date().toLocaleTimeString();
     const originalValue = bool.Value;
 

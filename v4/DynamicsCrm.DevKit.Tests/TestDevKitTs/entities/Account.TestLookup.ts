@@ -17,7 +17,7 @@ interface TestResult {
  */
 export function TestLookup(form: AccountForm.Form): void {
     const results: TestResult[] = [];
-    const lookup = form.Body.PrimaryContactId;
+    const lookup = form.Body.v4_Lookup;
     const startTime = new Date().toLocaleTimeString();
     const originalDefaultView = lookup.DefaultView;
 

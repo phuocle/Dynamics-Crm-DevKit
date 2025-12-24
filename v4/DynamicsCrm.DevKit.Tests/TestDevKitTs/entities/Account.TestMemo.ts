@@ -19,7 +19,7 @@ interface TestResult {
 export function TestMemo(form: AccountForm.Form): void {
     const results: TestResult[] = [];
     const methodResults: TestResult[] = [];
-    const memo = form.Body.Description;
+    const memo = form.Body.v4_Memo;
     const startTime = new Date().toLocaleTimeString();
     const originalValue = memo.Value;
 

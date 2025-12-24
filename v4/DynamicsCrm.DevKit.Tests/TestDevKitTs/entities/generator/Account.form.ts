@@ -23,36 +23,46 @@ export namespace AccountForm {
      * Contains all controls on the form body
      */
     export interface IBody {
-        /** Type the company or business name. */
-        Name: DevKit.Controls.String;
-        /** Type additional information to describe the account. */
-        Description: DevKit.Controls.Memo;
-        /** Type the number of employees that work at the account. */
-        NumberOfEmployees: DevKit.Controls.Integer;
-        /** Select whether the credit for the account is on hold. */
-        CreditOnHold: DevKit.Controls.Boolean;
-        /** Select the account's primary industry. */
-        IndustryCode: DevKit.Controls.OptionSet;
-        /** Choose the primary contact for the account. */
-        PrimaryContactId: DevKit.Controls.Lookup;
-        /** Custom Birthday field */
-        v4_Birthday: DevKit.Controls.DateOnly;
-        /** Custom Appointment Time field */
-        v4_AppointmentTime: DevKit.Controls.DateTime;
-        /** Custom Latitude field */
-        v4_Latitude: DevKit.Controls.Decimal;
-        /** Custom Discount Percentage field */
-        v4_DiscountPercentage: DevKit.Controls.Double;
-        /** Custom Categories field */
-        v4_Categories: DevKit.Controls.MultiOptionSet;
-        /** Custom Help Web Resource */
-        v4_WebResourceHelp: DevKit.Controls.WebResource;
-        /** Custom External Page */
-        v4_IFrameExternal: DevKit.Controls.IFrame;
-        /** Custom SLA Timer */
-        v4_TimerSLA: DevKit.Controls.Timer;
-        /** Knowledge Base Search */
-        v4_KnowledgeSearch: DevKit.Controls.Knowledge;
+        /** Contacts subgrid */
+        Contacts: DevKit.Controls.Grid;
+        /** External IFrame - PhuocLe */
+        IFRAME_PhuocLe: DevKit.Controls.IFrame;
+        /** Enter the user or team who is assigned to manage the record. */
+        OwnerId: DevKit.Controls.Lookup;
+        /** Enter the user or team who is assigned to manage the record (2nd control). */
+        OwnerId1: DevKit.Controls.Lookup;
+        /** Custom Boolean field */
+        v4_Boolean: DevKit.Controls.Boolean;
+        /** Custom DateOnly field */
+        v4_DateOnly: DevKit.Controls.DateOnly;
+        /** Custom DateTime field */
+        v4_DateTime: DevKit.Controls.DateTime;
+        /** Custom Decimal field */
+        v4_Decimal: DevKit.Controls.Decimal;
+        /** Custom Double field */
+        v4_Double: DevKit.Controls.Double;
+        /** Custom Integer field */
+        v4_Integer: DevKit.Controls.Integer;
+        /** Custom Lookup field */
+        v4_Lookup: DevKit.Controls.Lookup;
+        /** Custom Lookup field (2nd control) */
+        v4_Lookup1: DevKit.Controls.Lookup;
+        /** Custom Lookup field (3rd control) */
+        v4_Lookup2: DevKit.Controls.Lookup;
+        /** Custom Memo field */
+        v4_Memo: DevKit.Controls.Memo;
+        /** Custom Money field */
+        v4_Money: DevKit.Controls.Money;
+        /** Custom MultiOptionSet field */
+        v4_MultiOptionSet: DevKit.Controls.MultiOptionSet;
+        /** Custom OptionSet field */
+        v4_OptionSet: DevKit.Controls.OptionSet;
+        /** Custom String field */
+        v4_String: DevKit.Controls.String;
+        /** Custom String field (2nd control) */
+        v4_String1: DevKit.Controls.String;
+        /** Custom String field (3rd control) */
+        v4_String2: DevKit.Controls.String;
         /** Form Tabs */
         Tab: ITabs;
     }
@@ -62,26 +72,46 @@ export namespace AccountForm {
      * Contains controls displayed in the form header
      */
     export interface IHeader {
-        /** Enter the user or team who is assigned to manage the record. */
-        OwnerId: DevKit.Controls.Lookup;
-        /** Type the number of employees that work at the account. */
-        NumberOfEmployees: DevKit.Controls.Integer;
-        /** Type the annual revenue for the account. */
-        Revenue: DevKit.Controls.Money;
+        /** Custom Integer field */
+        v4_Integer: DevKit.Controls.Integer;
+        /** Custom Integer field (2nd control) */
+        v4_Integer1: DevKit.Controls.Integer;
+        /** Custom OptionSet field */
+        v4_OptionSet: DevKit.Controls.OptionSet;
+        /** Custom String field */
+        v4_String: DevKit.Controls.String;
     }
 
     /**
-     * Summary tab sections interface
+     * TAB_1_SECTION_1 sections interface
      */
-    export interface ISUMMARY_TABTabSections {
-        ACCOUNT_INFORMATION: DevKit.Controls.Section;
+    export interface ITAB_1TabSections {
+        TAB_1_SECTION_1: DevKit.Controls.Section;
+        TAB_1_SECTION_2: DevKit.Controls.Section;
+        TAB_1_SECTION_3: DevKit.Controls.Section;
+        TAB_1_SECTION_4: DevKit.Controls.Section;
     }
 
     /**
-     * Summary tab interface
+     * TAB_2 sections interface
      */
-    export interface ISUMMARY_TABTab extends DevKit.Controls.ITab {
-        Section: ISUMMARY_TABTabSections;
+    export interface ITAB_2TabSections {
+        TAB_2_SECTION_1: DevKit.Controls.Section;
+        TAB_2_SECTION_2: DevKit.Controls.Section;
+    }
+
+    /**
+     * TAB_1 tab interface
+     */
+    export interface ITAB_1Tab extends DevKit.Controls.ITab {
+        Section: ITAB_1TabSections;
+    }
+
+    /**
+     * TAB_2 tab interface
+     */
+    export interface ITAB_2Tab extends DevKit.Controls.ITab {
+        Section: ITAB_2TabSections;
     }
 
     /**
@@ -89,7 +119,8 @@ export namespace AccountForm {
      * Contains all tabs on the form
      */
     export interface ITabs {
-        SUMMARY_TAB: ISUMMARY_TABTab;
+        TAB_1: ITAB_1Tab;
+        TAB_2: ITAB_2Tab;
     }
 
     /**
@@ -105,7 +136,32 @@ export namespace AccountForm {
      * Contains navigation items
      */
     export interface INavigation {
-        nav_msa_account_managingpartner: DevKit.Controls.NavigationItem;
+        account_adx_inviteredemptions: DevKit.Controls.NavigationItem;
+        account_adx_portalcomments: DevKit.Controls.NavigationItem;
+        Account_Appointments: DevKit.Controls.NavigationItem;
+        account_DeletedItemReferences: DevKit.Controls.NavigationItem;
+        Account_Email_EmailSender: DevKit.Controls.NavigationItem;
+        Account_Email_SendersAccount: DevKit.Controls.NavigationItem;
+        Account_Emails: DevKit.Controls.NavigationItem;
+        account_parent_account: DevKit.Controls.NavigationItem;
+        Account_Phonecalls: DevKit.Controls.NavigationItem;
+        Account_Tasks: DevKit.Controls.NavigationItem;
+        adx_invitation_assigntoaccount: DevKit.Controls.NavigationItem;
+        bpf_account_v4_accountbpf: DevKit.Controls.NavigationItem;
+        contact_customer_accounts: DevKit.Controls.NavigationItem;
+        msa_account_managingpartner: DevKit.Controls.NavigationItem;
+        msa_contact_managingpartner: DevKit.Controls.NavigationItem;
+    }
+
+    /**
+     * ContactQuickForm quick view control body interface
+     */
+    export interface IContactQuickFormBody {
+        EMailAddress1: DevKit.Controls.QuickView;
+        FirstName: DevKit.Controls.QuickView;
+        LastName: DevKit.Controls.QuickView;
+        MobilePhone: DevKit.Controls.QuickView;
+        ParentCustomerId: DevKit.Controls.QuickView;
     }
 
     /**
@@ -113,26 +169,23 @@ export namespace AccountForm {
      * Contains quick view form controls
      */
     export interface IQuickForm {
-        contactquickform: DevKit.Controls.IQuickView & {
-            Body: {
-                EMailAddress1: DevKit.Controls.QuickView;
-            };
+        ContactQuickForm: DevKit.Controls.IQuickView & {
+            Body: IContactQuickFormBody;
         };
     }
 
     /**
-     * Business Process Flow fields interface
-     * v4_AccountBPF - Custom Account Business Process Flow
+     * AccountBPF Business Process Flow fields interface
      */
-    export interface IBPF {
-        /** BPF Field: Account Name (Stage 1: Qualify) */
-        Name: DevKit.Controls.String;
-        /** BPF Field: Industry Code (Stage 1: Qualify) */
+    export interface IAccountBPF {
+        /** BPF Field: Industry Code */
         IndustryCode: DevKit.Controls.OptionSet;
-        /** BPF Field: Revenue (Stage 2: Develop) */
-        Revenue: DevKit.Controls.Money;
-        /** BPF Field: Primary Contact (Stage 2: Develop) */
+        /** BPF Field: Name */
+        Name: DevKit.Controls.String;
+        /** BPF Field: Primary Contact */
         PrimaryContactId: DevKit.Controls.Lookup;
+        /** BPF Field: Revenue */
+        Revenue: DevKit.Controls.Money;
     }
 
     /**
@@ -140,8 +193,8 @@ export namespace AccountForm {
      * Contains business process flow definitions
      */
     export interface IProcess extends DevKit.Controls.IProcess {
-        /** v4_AccountBPF - Custom Account Business Process Flow */
-        v4_AccountBPF: IBPF;
+        /** AccountBPF - Account Business Process Flow */
+        AccountBPF: IAccountBPF;
     }
 
     /**
@@ -149,6 +202,8 @@ export namespace AccountForm {
      * For quick create dialogs or other dialog forms
      */
     export interface IDialog extends DevKit.IDialog {
+        /** Telephone1 field for dialog */
+        Telephone1: DevKit.Controls.String;
     }
 
     // ============================================================================
@@ -168,44 +223,76 @@ export namespace AccountForm {
         constructor(executionContext: any, defaultWebResourceName?: string) {
             super(executionContext, defaultWebResourceName, {
                 body: [
-                    'Name',
-                    'Description',
-                    'NumberOfEmployees',
-                    'CreditOnHold',
-                    'IndustryCode',
-                    'PrimaryContactId',
-                    'v4_Birthday',
-                    'v4_AppointmentTime',
-                    'v4_Latitude',
-                    'v4_DiscountPercentage',
-                    'v4_Categories',
-                    'v4_WebResourceHelp',
-                    'v4_IFrameExternal',
-                    'v4_TimerSLA',
-                    'v4_KnowledgeSearch'
+                    'Contacts',
+                    'IFRAME_PhuocLe',
+                    'OwnerId',
+                    'OwnerId1',
+                    'v4_Boolean',
+                    'v4_DateOnly',
+                    'v4_DateTime',
+                    'v4_Decimal',
+                    'v4_Double',
+                    'v4_Integer',
+                    'v4_Lookup',
+                    'v4_Lookup1',
+                    'v4_Lookup2',
+                    'v4_Memo',
+                    'v4_Money',
+                    'v4_MultiOptionSet',
+                    'v4_OptionSet',
+                    'v4_String',
+                    'v4_String1',
+                    'v4_String2'
                 ],
                 header: [
-                    'OwnerId',
-                    'NumberOfEmployees',
-                    'Revenue',
+                    'v4_Integer',
+                    'v4_Integer1',
+                    'v4_OptionSet',
+                    'v4_String'
                 ],
                 tab: [
-                    'SUMMARY_TAB___ACCOUNT_INFORMATION'
+                    'TAB_1___TAB_1_SECTION_1',
+                    'TAB_1___TAB_1_SECTION_2',
+                    'TAB_1___TAB_1_SECTION_3',
+                    'TAB_1___TAB_1_SECTION_4',
+                    'TAB_2___TAB_2_SECTION_1',
+                    'TAB_2___TAB_2_SECTION_2'
                 ],
                 grid: [
                     'Contacts'
                 ],
                 navigation: [
-                    'nav_msa_account_managingpartner'
+                    'account_adx_inviteredemptions',
+                    'account_adx_portalcomments',
+                    'Account_Appointments',
+                    'account_DeletedItemReferences',
+                    'Account_Email_EmailSender',
+                    'Account_Email_SendersAccount',
+                    'Account_Emails',
+                    'account_parent_account',
+                    'Account_Phonecalls',
+                    'Account_Tasks',
+                    'adx_invitation_assigntoaccount',
+                    'bpf_account_v4_accountbpf',
+                    'contact_customer_accounts',
+                    'msa_account_managingpartner',
+                    'msa_contact_managingpartner'
                 ],
                 quick: [
-                    'contactquickform___EMailAddress1'
+                    'ContactQuickForm___EMailAddress1',
+                    'ContactQuickForm___FirstName',
+                    'ContactQuickForm___LastName',
+                    'ContactQuickForm___MobilePhone',
+                    'ContactQuickForm___ParentCustomerId'
                 ],
                 bpf: [
-                    'v4_AccountBPF___Name',
-                    'v4_AccountBPF___IndustryCode',
-                    'v4_AccountBPF___Revenue',
-                    'v4_AccountBPF___PrimaryContactId'
+                    'AccountBPF___IndustryCode',
+                    'AccountBPF___Name',
+                    'AccountBPF___PrimaryContactId',
+                    'AccountBPF___Revenue'
+                ],
+                dialog: [
+                    'Telephone1'
                 ]
             });
         }

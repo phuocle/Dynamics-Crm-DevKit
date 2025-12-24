@@ -14,7 +14,7 @@ interface TestResult {
 export function TestIFrame(form: AccountForm.Form): void {
     const results: TestResult[] = [];
     const methodResults: TestResult[] = [];
-    const iframe = form.Body.v4_IFrameExternal;
+    const iframe = form.Body.IFRAME_PhuocLe;
     const startTime = new Date().toLocaleTimeString();
 
     // =====================================================

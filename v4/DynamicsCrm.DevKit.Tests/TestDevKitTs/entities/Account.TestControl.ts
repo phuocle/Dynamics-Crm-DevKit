@@ -18,7 +18,7 @@ interface TestResult {
  */
 export function TestControl(form: AccountForm.Form): void {
     const results: TestResult[] = [];
-    const control = form.Body.Name;
+    const control = form.Body.v4_String;
     const startTime = new Date().toLocaleTimeString();
     const originalValue = control.Value;
 

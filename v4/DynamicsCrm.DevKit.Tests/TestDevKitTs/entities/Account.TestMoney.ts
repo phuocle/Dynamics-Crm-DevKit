@@ -19,7 +19,7 @@ interface TestResult {
 export function TestMoney(form: AccountForm.Form): void {
     const results: TestResult[] = [];
     const methodResults: TestResult[] = [];
-    const money = form.Header.Revenue;
+    const money = form.Body.v4_Money;
     const startTime = new Date().toLocaleTimeString();
     const originalValue = money.Value;
 

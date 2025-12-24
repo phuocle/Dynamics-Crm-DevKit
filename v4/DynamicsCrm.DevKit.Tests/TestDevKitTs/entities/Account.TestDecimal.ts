@@ -19,7 +19,7 @@ interface TestResult {
 export function TestDecimal(form: AccountForm.Form): void {
     const results: TestResult[] = [];
     const methodResults: TestResult[] = [];
-    const decimal = form.Body.v4_Latitude;
+    const decimal = form.Body.v4_Decimal;
     const startTime = new Date().toLocaleTimeString();
     const originalValue = decimal.Value;
 

@@ -19,7 +19,7 @@ interface TestResult {
 export function TestOptionSet(form: AccountForm.Form): void {
     const results: TestResult[] = [];
     const methodResults: TestResult[] = [];
-    const opt = form.Body.IndustryCode;
+    const opt = form.Body.v4_OptionSet;
     const startTime = new Date().toLocaleTimeString();
     const originalValue = opt.Value;
 

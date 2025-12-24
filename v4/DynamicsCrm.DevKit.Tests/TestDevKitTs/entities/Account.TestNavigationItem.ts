@@ -18,7 +18,7 @@ interface TestResult {
 export function TestNavigationItem(form: AccountForm.Form): void {
     const results: TestResult[] = [];
     const methodResults: TestResult[] = [];
-    const navItem = form.Navigation.nav_msa_account_managingpartner;
+    const navItem = form.Navigation.contact_customer_accounts;
     const startTime = new Date().toLocaleTimeString();
     debugger;
     // =====================================================

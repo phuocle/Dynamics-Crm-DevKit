@@ -449,29 +449,198 @@ const TimerState = {
 
 /** Account entity OptionSets */
 const Account = {
-    /** Select the account's primary industry for use in marketing segmentation and demographic analysis */
-    IndustryCode: {
-        /** 1 - Accounting */
-        Accounting: 1,
-        /** 7 - Consulting */
-        Consulting: 7,
-        /** 16 - Financial */
-        Financial: 16,
-        /** 20 - Insurance */
-        Insurance: 20,
-        /** 12 - Technology */
-        Technology: 12
+    /** Account Category Code - Preferred Customer or Standard */
+    AccountCategoryCode: {
+        Preferred_Customer: 1,
+        Standard: 2
     },
-    /** Custom MultiOptionSet - v4_Categories */
+    /** Account Classification Code */
+    AccountClassificationCode: {
+        Default_Value: 1
+    },
+    /** Account Rating Code */
+    AccountRatingCode: {
+        Default_Value: 1
+    },
+    /** Address 1 Address Type Code */
+    Address1_AddressTypeCode: {
+        Bill_To: 1,
+        Other: 4,
+        Primary: 3,
+        Ship_To: 2
+    },
+    /** Address 1 Freight Terms Code */
+    Address1_FreightTermsCode: {
+        FOB: 1,
+        No_Charge: 2
+    },
+    /** Address 1 Shipping Method Code */
+    Address1_ShippingMethodCode: {
+        Airborne: 1,
+        DHL: 2,
+        FedEx: 3,
+        Full_Load: 6,
+        Postal_Mail: 5,
+        UPS: 4,
+        Will_Call: 7
+    },
+    /** Address 2 Address Type Code */
+    Address2_AddressTypeCode: {
+        Default_Value: 1
+    },
+    /** Address 2 Freight Terms Code */
+    Address2_FreightTermsCode: {
+        Default_Value: 1
+    },
+    /** Address 2 Shipping Method Code */
+    Address2_ShippingMethodCode: {
+        Default_Value: 1
+    },
+    /** Business Type Code */
+    BusinessTypeCode: {
+        Default_Value: 1
+    },
+    /** Customer Size Code */
+    CustomerSizeCode: {
+        Default_Value: 1
+    },
+    /** Customer Type Code */
+    CustomerTypeCode: {
+        Competitor: 1,
+        Consultant: 2,
+        Customer: 3,
+        Influencer: 6,
+        Investor: 4,
+        Other: 12,
+        Partner: 5,
+        Press: 7,
+        Prospect: 8,
+        Reseller: 9,
+        Supplier: 10,
+        Vendor: 11
+    },
+    /** Industry Code - Select the account's primary industry */
+    IndustryCode: {
+        Accounting: 1,
+        Agriculture_and_Non_petrol_Natural_Resource_Extraction: 2,
+        Broadcasting_Printing_and_Publishing: 3,
+        Brokers: 4,
+        Building_Supply_Retail: 5,
+        Business_Services: 6,
+        Consulting: 7,
+        Consumer_Services: 8,
+        Design_Direction_and_Creative_Management: 9,
+        Distributors_Dispatchers_and_Processors: 10,
+        Doctors_Offices_and_Clinics: 11,
+        Durable_Manufacturing: 12,
+        Eating_and_Drinking_Places: 13,
+        Entertainment_Retail: 14,
+        Equipment_Rental_and_Leasing: 15,
+        Financial: 16,
+        Food_and_Tobacco_Processing: 17,
+        Inbound_Capital_Intensive_Processing: 18,
+        Inbound_Repair_and_Services: 19,
+        Insurance: 20,
+        Legal_Services: 21,
+        Non_Durable_Merchandise_Retail: 22,
+        Outbound_Consumer_Service: 23,
+        Petrochemical_Extraction_and_Distribution: 24,
+        Service_Retail: 25,
+        SIG_Affiliations: 26,
+        Social_Services: 27,
+        Special_Outbound_Trade_Contractors: 28,
+        Specialty_Realty: 29,
+        Transportation: 30,
+        Utility_Creation_and_Distribution: 31,
+        Vehicle_Retail: 32,
+        Wholesale: 33
+    },
+    /** Ownership Code */
+    OwnershipCode: {
+        Other: 4,
+        Private: 2,
+        Public: 1,
+        Subsidiary: 3
+    },
+    /** Payment Terms Code */
+    PaymentTermsCode: {
+        _2_10_Net_30: 2,
+        Net_30: 1,
+        Net_45: 3,
+        Net_60: 4
+    },
+    /** Preferred Appointment Day Code */
+    PreferredAppointmentDayCode: {
+        Friday: 5,
+        Monday: 1,
+        Saturday: 6,
+        Sunday: 0,
+        Thursday: 4,
+        Tuesday: 2,
+        Wednesday: 3
+    },
+    /** Preferred Appointment Time Code */
+    PreferredAppointmentTimeCode: {
+        Afternoon: 2,
+        Evening: 3,
+        Morning: 1
+    },
+    /** Preferred Contact Method Code */
+    PreferredContactMethodCode: {
+        Any: 1,
+        Email: 2,
+        Fax: 4,
+        Mail: 5,
+        Phone: 3
+    },
+    /** Shipping Method Code */
+    ShippingMethodCode: {
+        Default_Value: 1
+    },
+    /** State Code */
+    StateCode: {
+        Active: 0,
+        Inactive: 1
+    },
+    /** Status Code */
+    StatusCode: {
+        Active: 1,
+        Inactive: 2
+    },
+    /** Territory Code */
+    TerritoryCode: {
+        Default_Value: 1
+    },
+    /** Custom OptionSet - v4_Categories */
     v4_Categories: {
-        /** 100000000 */
         Category_A: 100000000,
-        /** 100000001 */
         Category_B: 100000001,
-        /** 100000002 */
         Category_C: 100000002,
-        /** 100000003 */
         Category_D: 100000003
+    },
+    /** Custom MultiOptionSet - v4_MultiOptionSet */
+    v4_MultiOptionSet: {
+        Category_A: 100000000,
+        Category_B: 100000001,
+        Category_C: 100000002,
+        Category_D: 100000003
+    },
+    /** Custom OptionSet - v4_OptionSet */
+    v4_OptionSet: {
+        Category_A: 100000000,
+        Category_B: 100000001,
+        Category_C: 100000002,
+        Category_D: 100000003
+    },
+    /** Rollup State */
+    RollupState: {
+        NotCalculated: 0,
+        Calculated: 1,
+        OverflowError: 2,
+        OtherError: 3,
+        RetryLimitExceeded: 4,
+        HierarchicalRecursionLimitReached: 5,
+        LoopDetected: 6
     }
 } as const;
 

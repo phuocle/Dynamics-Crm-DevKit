@@ -8,14 +8,14 @@ interface TestResult {
 }
 
 /**
- * TEST 25: QuickView Control - contactquickform
+ * TEST 25: QuickView Control - ContactQuickForm
  * QuickView extends IQuickView with IsLoaded, Refresh, Controls methods
+ * Body fields: EMailAddress1, FirstName, LastName, MobilePhone, ParentCustomerId
  */
 export function TestQuickView(form: AccountForm.Form): void {
     const results: TestResult[] = [];
     const methodResults: TestResult[] = [];
-    // Accessing QuickView control via Quick property (based on FormBase generic mapping)
-    const qv = form.QuickForm.contactquickform;
+    const qv = form.QuickForm.ContactQuickForm;
     const startTime = new Date().toLocaleTimeString();
 
     // =====================================================
@@ -28,9 +28,21 @@ export function TestQuickView(form: AccountForm.Form): void {
         results.push({ Test: "R3", Property: "ControlType", Value: qv.ControlType, Status: "✓" });
         results.push({ Test: "R4", Property: "ControlName", Value: qv.ControlName, Status: "✓" });
 
-        // Nested Body controls check
+        // Nested Body controls check - all 5 fields
         const emailControl = qv.Body.EMailAddress1;
         results.push({ Test: "R5", Property: "Body.EMailAddress1", Value: emailControl ? "Found" : "Missing", Status: emailControl ? "✓" : "✗" });
+
+        const firstNameControl = qv.Body.FirstName;
+        results.push({ Test: "R6", Property: "Body.FirstName", Value: firstNameControl ? "Found" : "Missing", Status: firstNameControl ? "✓" : "✗" });
+
+        const lastNameControl = qv.Body.LastName;
+        results.push({ Test: "R7", Property: "Body.LastName", Value: lastNameControl ? "Found" : "Missing", Status: lastNameControl ? "✓" : "✗" });
+
+        const mobilePhoneControl = qv.Body.MobilePhone;
+        results.push({ Test: "R8", Property: "Body.MobilePhone", Value: mobilePhoneControl ? "Found" : "Missing", Status: mobilePhoneControl ? "✓" : "✗" });
+
+        const parentCustomerControl = qv.Body.ParentCustomerId;
+        results.push({ Test: "R9", Property: "Body.ParentCustomerId", Value: parentCustomerControl ? "Found" : "Missing", Status: parentCustomerControl ? "✓" : "✗" });
     } catch (error: any) {
         results.push({ Test: "ERR", Property: "Props Error", Value: error.message, Status: "✗" });
     }
@@ -79,8 +91,6 @@ export function TestQuickView(form: AccountForm.Form): void {
 
     // Method: Controls (access constituent controls)
     try {
-        // Try getting a control by index or name if supported, or just verify method exists
-        // d.ts says Controls(arg?: string | number)
         const controls = qv.Controls();
         const count = Array.isArray(controls) ? controls.length : "Not Array";
         methodResults.push({ Test: "S5", Property: "Controls()", Value: `Count: ${count}`, Status: "✓" });
@@ -96,7 +106,6 @@ export function TestQuickView(form: AccountForm.Form): void {
         methodResults.push({ Test: "S6", Property: "Focus", Value: e.message, Status: "✗" });
     }
 
-
     // =====================================================
     // OUTPUT
     // =====================================================
@@ -106,9 +115,9 @@ export function TestQuickView(form: AccountForm.Form): void {
     const failed = allResults.filter(r => r.Status === "✗").length;
     const total = allResults.length;
 
-    console.groupCollapsed(`⚡ TEST 25: QuickView Control [${startTime}] - Using: contactquickform - ${passed}/${total}`);
+    console.groupCollapsed(`⚡ TEST 25: QuickView Control [${startTime}] - Using: ContactQuickForm - ${passed}/${total}`);
 
-    console.log("%c📋 ReadOnly Properties (R1-R5)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
+    console.log("%c📋 ReadOnly Properties (R1-R9)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
     console.table(results);
 
     console.log("%c⚡ Setters & Methods (S1-S6)", "font-weight: bold; font-size: 14px; color: #2196F3;");

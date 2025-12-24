@@ -19,7 +19,7 @@ interface TestResult {
 export function TestString(form: AccountForm.Form): void {
     const results: TestResult[] = [];
     const methodResults: TestResult[] = [];
-    const str = form.Body.Name;
+    const str = form.Body.v4_String;
     const startTime = new Date().toLocaleTimeString();
     const originalValue = str.Value;
 
