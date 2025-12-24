@@ -447,7 +447,21 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number | null;
 		v4_AppointmentTime_UtcDateAndTime: Date | null;
 		v4_Birthday_TimezoneDateOnly: Date | null;
+		v4_Boolean: boolean | null;
 		v4_Categories: Array<OptionSet.Account.v4_Categories> | null;
+		v4_DateOnly_TimezoneDateOnly: Date | null;
+		v4_DateTime_UtcDateAndTime: Date | null;
+		v4_Decimal: number | null;
+		v4_Double: number | null;
+		v4_Integer: number | null;
+		v4_Lookup: string | null;
+		v4_Memo: string | null;
+		v4_Money: number | null;
+		/** Value of the Money in base currency. */
+		readonly v4_money_Base: number | null;
+		v4_MultiOptionSet: Array<OptionSet.Account.v4_MultiOptionSet> | null;
+		v4_OptionSet: OptionSet.Account.v4_OptionSet | null;
+		v4_String: string | null;
 		/** Version number of the account. */
 		readonly VersionNumber: number | null;
 		/** Type the account's website URL to get quick details about the company profile. */
@@ -752,7 +766,21 @@ declare namespace DevKit {
 			readonly UTCConversionTimeZoneCode: string;
 			readonly v4_AppointmentTime_UtcDateAndTime: string;
 			readonly v4_Birthday_TimezoneDateOnly: string;
+			readonly v4_Boolean: string;
 			readonly v4_Categories: Array<string>;
+			readonly v4_DateOnly_TimezoneDateOnly: string;
+			readonly v4_DateTime_UtcDateAndTime: string;
+			readonly v4_Decimal: string;
+			readonly v4_Double: string;
+			readonly v4_Integer: string;
+			readonly v4_Lookup: string;
+			readonly v4_Memo: string;
+			readonly v4_Money: string;
+			/** Value of the Money in base currency. */
+			readonly v4_money_Base: string;
+			readonly v4_MultiOptionSet: Array<string>;
+			readonly v4_OptionSet: string;
+			readonly v4_String: string;
 			/** Version number of the account. */
 			readonly VersionNumber: string;
 			/** Type the account's website URL to get quick details about the company profile. */

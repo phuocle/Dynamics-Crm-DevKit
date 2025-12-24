@@ -255,7 +255,20 @@ var DevKit;
 			UTCConversionTimeZoneCode: { a: 'utcconversiontimezonecode', g: 'Integer' },
 			v4_AppointmentTime_UtcDateAndTime: { a: 'v4_appointmenttime', g: 'DateTime' },
 			v4_Birthday_TimezoneDateOnly: { a: 'v4_birthday', g: 'DateTime' },
+			v4_Boolean: { a: 'v4_boolean', g: 'Boolean' },
 			v4_Categories: { a: 'v4_categories', g: 'MultiOptionSet' },
+			v4_DateOnly_TimezoneDateOnly: { a: 'v4_dateonly', g: 'DateTime' },
+			v4_DateTime_UtcDateAndTime: { a: 'v4_datetime', g: 'DateTime' },
+			v4_Decimal: { a: 'v4_decimal', g: 'Number' },
+			v4_Double: { a: 'v4_double', g: 'Number' },
+			v4_Integer: { a: 'v4_integer', g: 'Integer' },
+			v4_Lookup: { b: 'v4_Lookup', a: '_v4_lookup_value', c: 'contacts', d: 'contact' },
+			v4_Memo: { a: 'v4_memo' },
+			v4_Money: { a: 'v4_money', g: 'Number' },
+			v4_money_Base: { a: 'v4_money_base', r: true, g: 'Number' },
+			v4_MultiOptionSet: { a: 'v4_multioptionset', g: 'MultiOptionSet' },
+			v4_OptionSet: { a: 'v4_optionset', g: 'Integer' },
+			v4_String: { a: 'v4_string' },
 			VersionNumber: { a: 'versionnumber', r: true, g: 'Integer' },
 			WebSiteURL: { a: 'websiteurl' },
 			YomiName: { a: 'yominame' }
@@ -321,6 +334,8 @@ var OptionSet;
 		StatusCode : { Active: 1, Inactive: 2 },
 		TerritoryCode : { Default_Value: 1 },
 		v4_Categories : { Category_A: 100000000, Category_B: 100000001, Category_C: 100000002, Category_D: 100000003 },
+		v4_MultiOptionSet : { Category_A: 100000000, Category_B: 100000001, Category_C: 100000002, Category_D: 100000003 },
+		v4_OptionSet : { Category_A: 100000000, Category_B: 100000001, Category_C: 100000002, Category_D: 100000003 },
 		RollupState: { NotCalculated: 0, Calculated: 1, OverflowError: 2, OtherError: 3, RetryLimitExceeded: 4, HierarchicalRecursionLimitReached: 5, LoopDetected: 6 }
 	};
 })(OptionSet || (OptionSet = {}));
