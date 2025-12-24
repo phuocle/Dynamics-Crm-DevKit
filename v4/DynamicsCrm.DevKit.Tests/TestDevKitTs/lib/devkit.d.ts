@@ -14,6 +14,12 @@ declare namespace DevKit {
     type Guid = `${string}-${string}-${string}-${string}-${string}`;
 
     /**
+     * Callback function type for successful operations.
+     * @template T The type of result passed to the callback
+     */
+    type SuccessCallback<T> = (result: T) => void;
+
+    /**
      * Execution context interface for form event handlers.
      * The execution context defines the event context in which your code executes.
      * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/execution-context
@@ -224,7 +230,7 @@ declare namespace DevKit {
              * Returns a string value that represents the type of attribute
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getattributetype
              */
-            readonly AttributeType: string;
+            readonly AttributeType: 'boolean' | 'datetime' | 'decimal' | 'double' | 'integer' | 'lookup' | 'memo' | 'money' | 'multioptionset' | 'multiselectoptionset' | 'optionset' | 'string';
 
             /**
              * Returns the name assigned to the control
@@ -236,13 +242,13 @@ declare namespace DevKit {
              * Returns a string value that represents the type of control
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getcontroltype
              */
-            readonly ControlType: string;
+            readonly ControlType: 'standard' | 'iframe' | 'kbsearch' | 'lookup' | 'multiselectoptionset' | 'notes' | 'optionset' | 'quickform' | 'subgrid' | 'timercontrol' | 'timelinewall' | 'webresource';
 
             /**
              * Returns a string value that represents formatting options for the attribute
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getformat
              */
-            readonly Format: string;
+            readonly Format: 'date' | 'datetime' | 'duration' | 'email' | 'language' | 'none' | 'textarea' | 'text' | 'tickersymbol' | 'phone' | 'timezone' | 'url';
 
             /**
              * Returns a Boolean value indicating if there are unsaved changes to the attribute value
@@ -2916,7 +2922,7 @@ declare namespace DevKit {
          * Returns the integer value of the business process flow category
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formContext-data-process/stage/getCategory
          */
-        readonly Category: number;
+        readonly Category: 0 | 1 | 2 | 3 | 4 | 5 | 6;
         /**
          * Returns the logical name of the entity associated with the stage
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/stage/getentityname
