@@ -543,7 +543,7 @@ function loadCopilot(): DevKit.ICopilot {
     };
     return obj;
 }
-function loadFormV3<TBody = Record<string, any>, THeader = Record<string, any>, TTab = Record<string, any>, TGrid = Record<string, any>, TNavigation = Record<string, any>, TQuickForm = Record<string, any>, TProcess = any>(
+function loadFormV3<TBody = Record<string, any>, THeader = Record<string, any>, TGrid = Record<string, any>, TNavigation = Record<string, any>, TQuickForm = Record<string, any>, TProcess = any>(
     executionContext: any,
     defaultWebResourceName: string | undefined,
     formConfig: {
@@ -559,7 +559,6 @@ function loadFormV3<TBody = Record<string, any>, THeader = Record<string, any>, 
     ExecutionContext: DevKit.IExecutionContext;
     Body: TBody;
     Header: THeader;
-    Tab: TTab;
     Grid: TGrid;
     Navigation: TNavigation;
     QuickForm: TQuickForm;
@@ -1060,10 +1059,9 @@ function webApiReturnGet(data: any, type?: DevKit.WebApiFieldType): any {
     return parser ? parser(data) : data;
 }
 
-export class FormBase<TBody, THeader, TTab, TGrid, TNavigation, TQuickForm, TProcess = any> {
+export class FormBase<TBody, THeader, TGrid, TNavigation, TQuickForm, TProcess = any> {
     public Body: TBody;
     public Header: THeader;
-    public Tab: TTab;
     public Grid: TGrid;
     public Navigation: TNavigation;
     public QuickForm: TQuickForm;
@@ -1115,14 +1113,13 @@ export class FormBase<TBody, THeader, TTab, TGrid, TNavigation, TQuickForm, TPro
         defaultWebResourceName: string | undefined,
         formConfig: DevKit.IFormConfig
     ) {
-        const form = loadFormV3<TBody, THeader, TTab, TGrid, TNavigation, TQuickForm, TProcess>(
+        const form = loadFormV3<TBody, THeader, TGrid, TNavigation, TQuickForm, TProcess>(
             executionContext,
             defaultWebResourceName,
             formConfig
         );
         this.Body = form.Body;
         this.Header = form.Header;
-        this.Tab = form.Tab;
         this.Grid = form.Grid;
         this.Navigation = form.Navigation;
         this.QuickForm = form.QuickForm;
