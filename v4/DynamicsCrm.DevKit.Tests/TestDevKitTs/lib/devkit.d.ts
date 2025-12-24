@@ -1015,35 +1015,12 @@ declare namespace DevKit {
          * Interface for QuickView field controls (read-only fields in quick view forms)
          */
         interface QuickView {
-            /**
-             * Returns the attribute that the control is bound to
-             */
-            readonly Attribute: any;
-
-            /**
-             * Returns the name assigned to the control
-             */
-            readonly ControlName: string;
-
-            /**
-             * Returns the type of the control
-             */
-            readonly ControlType: string;
-
-            /**
-             * Returns a boolean value indicating whether the control is disabled
-             */
-            readonly Disabled: boolean;
-
-            /**
-             * Returns the label for the control
-             */
-            readonly Label: string;
-
-            /**
-             * Returns a value indicating whether the control is visible
-             */
-            readonly Visible: boolean;
+            /** Returns the value for the control */
+            readonly Value: any;
+            /** Get/Set the visibility of the control */
+            Visible: boolean;
+            /** Get/Set the label for the control */
+            Label: string;
         }
 
         /**

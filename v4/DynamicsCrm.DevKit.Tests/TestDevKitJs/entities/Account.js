@@ -13,7 +13,6 @@ var formAccount = (function () {
 	}
 	function registerEvents() {
 		if (form.ExecutionContext.IsInitialLoad()) {
-			form.QuickForm.contactquickform.Body.EMailAddress1.
 
 		}
 	}
