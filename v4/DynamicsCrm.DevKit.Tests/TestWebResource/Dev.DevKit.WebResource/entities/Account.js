@@ -14,6 +14,7 @@ var formAccount = (function () {
 	function registerEvents() {
 		if (form.ExecutionContext.IsInitialLoad()) {
 			var a = form.Process.AccountBPF.IndustryCode.Value;
+
 		}
 	}
 	//BEGIN ON LOAD ========================================================
