@@ -1,4 +1,4 @@
-import { AccountForm } from './generator/Account.form';
+import { FormAccount_DevKitV4 } from './generator/Account.form';
 import { TestControl } from './Account.TestControl';
 import { TestLookup } from './Account.TestLookup';
 import { TestMemo } from './Account.TestMemo';
@@ -27,20 +27,19 @@ import { TestKnowledge } from './Account.TestKnowledge';
 import { TestQuickView } from './Account.TestQuickView';
 import { TestProcess } from './Account.TestProcess';
 
-const formAccount = (function () {
+const formAccount_DevKitV4 = (function () {
     "use strict";
 
-    let form: AccountForm.Form;
+    let form: FormAccount_DevKitV4.Form;
 
     async function onLoad(executionContext: any): Promise<void> {
-        form = new AccountForm.Form(executionContext);
+        form = new FormAccount_DevKitV4.Form(executionContext);
         registerEvents();
         form.UiAddLoaded(UiAddLoaded);
     }
 
     function registerEvents(): void {
         if (form.ExecutionContext.IsInitialLoad()) {
-            //form.QuickForm.contactquickform.Body.EMailAddress1.
         }
     }
 
@@ -172,4 +171,4 @@ const formAccount = (function () {
     };
 })();
 
-export default formAccount;
+export default formAccount_DevKitV4;

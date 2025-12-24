@@ -1,4 +1,4 @@
-import { AccountForm } from './generator/Account.form';
+import { FormAccount_DevKitV4 } from './generator/Account.form';
 
 interface TestResult {
     Test: string;
@@ -22,7 +22,7 @@ interface TestResult {
  * 
  * Note: Copilot API is a Preview feature and may not be available in all environments
  */
-export function TestCopilot(form: AccountForm.Form): void {
+export function TestCopilot(form: FormAccount_DevKitV4.Form): void {
     const results: TestResult[] = [];         // ReadOnly (R-Index)
     const methodResults: TestResult[] = [];   // Setters & Methods (S-Index)
     const startTime = new Date().toLocaleTimeString();

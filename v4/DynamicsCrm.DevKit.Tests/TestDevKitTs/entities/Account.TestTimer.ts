@@ -1,4 +1,4 @@
-import { AccountForm } from './generator/Account.form';
+import { FormAccount_DevKitV4 } from './generator/Account.form';
 
 interface TestResult {
     Test: string;
@@ -11,7 +11,7 @@ interface TestResult {
  * TEST 23: Timer Control - v4_TimerSLA Field
  * Timer extends IControl with specific Refresh method and State property
  */
-export function TestTimer(form: AccountForm.Form): void {
+export function TestTimer(form: FormAccount_DevKitV4.Form): void {
     // NOTE: v4_TimerSLA field does NOT exist in the new Account.form.ts
     // This test is skipped until Timer control is added to the form
     console.log('⏭️ TEST 23: Timer Control - SKIPPED (v4_TimerSLA not on form)');

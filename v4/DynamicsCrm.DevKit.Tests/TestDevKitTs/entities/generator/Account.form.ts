@@ -16,7 +16,7 @@ import './OptionSet';
 // 1. Types
 // ============================================================================
 
-export namespace AccountForm {
+export namespace FormAccount_DevKitV4 {
 
     /**
      * Body controls interface

@@ -1,4 +1,4 @@
-import { AccountForm } from './generator/Account.form';
+import { FormAccount_DevKitV4 } from './generator/Account.form';
 import { AccountApi } from './generator/Account.webapi';
 import { OptionSet } from './generator/OptionSet';
 
@@ -17,7 +17,7 @@ interface TestResult {
  * - R-Index: ReadOnly properties / Promise-based tests (R1, R2, R3...)
  * - S-Index: Setters & Methods / Additional tests (S1, S2, S3...)
  */
-export async function TestWebApi(form: AccountForm.Form): Promise<void> {
+export async function TestWebApi(form: FormAccount_DevKitV4.Form): Promise<void> {
     const results: TestResult[] = [];
     const methodResults: TestResult[] = [];
     const startTime = new Date().toLocaleTimeString();

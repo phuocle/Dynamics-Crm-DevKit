@@ -1,4 +1,4 @@
-import { AccountForm } from './generator/Account.form';
+import { FormAccount_DevKitV4 } from './generator/Account.form';
 
 interface TestResult {
     Test: string;
@@ -11,7 +11,7 @@ interface TestResult {
  * TEST 26: Process Control (BPF) - v4_AccountBPF
  * Process extends IProcess (standard Client API) and includes BPF-specific fields
  */
-export function TestProcess(form: AccountForm.Form): void {
+export function TestProcess(form: FormAccount_DevKitV4.Form): void {
     const results: TestResult[] = [];
     const methodResults: TestResult[] = [];
     const process = form.Process;
@@ -49,10 +49,10 @@ export function TestProcess(form: AccountForm.Form): void {
     // Method: MoveNext / MovePrevious
     try {
         // Just calling to verify definition, callback logs status
-        process.MoveNext((result) => console.log("  📍 MoveNext Callback:", result));
+        process.MoveNext((result: any) => console.log("  📍 MoveNext Callback:", result));
         methodResults.push({ Test: "S1", Property: "MoveNext", Value: "Called", Status: "✓" });
 
-        process.MovePrevious((result) => console.log("  📍 MovePrevious Callback:", result));
+        process.MovePrevious((result: any) => console.log("  📍 MovePrevious Callback:", result));
         methodResults.push({ Test: "S2", Property: "MovePrevious", Value: "Called", Status: "✓" });
     } catch (e: any) {
         methodResults.push({ Test: "S1/S2", Property: "Move Nav", Value: e.message, Status: "✗" });
@@ -63,10 +63,10 @@ export function TestProcess(form: AccountForm.Form): void {
         // We pass empty strings or dummy IDs just to ensure method signature matches at runtime/compile time
         // In a real run, this might fail logic but we want to know if function exists
         const dummyId = "00000000-0000-0000-0000-000000000000";
-        process.SetActiveProcess(dummyId, (status) => console.log("  📍 SetActiveProcess:", status));
+        process.SetActiveProcess(dummyId, (status: any) => console.log("  📍 SetActiveProcess:", status));
         methodResults.push({ Test: "S3", Property: "SetActiveProcess", Value: "Called", Status: "✓" });
 
-        process.SetActiveStage(dummyId, (status) => console.log("  📍 SetActiveStage:", status));
+        process.SetActiveStage(dummyId, (status: any) => console.log("  📍 SetActiveStage:", status));
         methodResults.push({ Test: "S4", Property: "SetActiveStage", Value: "Called", Status: "✓" });
     } catch (e: any) {
         methodResults.push({ Test: "S3/S4", Property: "Set Active", Value: e.message, Status: "✗" });

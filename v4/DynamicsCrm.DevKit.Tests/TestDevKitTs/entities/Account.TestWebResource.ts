@@ -1,4 +1,4 @@
-import { AccountForm } from './generator/Account.form';
+import { FormAccount_DevKitV4 } from './generator/Account.form';
 
 interface TestResult {
     Test: string;
@@ -11,7 +11,7 @@ interface TestResult {
  * TEST 22: WebResource Control - v4_WebResourceHelp Field
  * WebResource extends IControl with specific properties: Src, Data, ContentWindow
  */
-export function TestWebResource(form: AccountForm.Form): void {
+export function TestWebResource(form: FormAccount_DevKitV4.Form): void {
     // NOTE: v4_WebResourceHelp field does NOT exist in the new Account.form.ts
     // This test is skipped until WebResource control is added to the form
     console.log('⏭️ TEST 22: WebResource Control - SKIPPED (v4_WebResourceHelp not on form)');
@@ -89,8 +89,8 @@ export function TestWebResource(form: AccountForm.Form): void {
     // Method: ContentWindow
     try {
         wr.ContentWindow(
-            (win) => console.log("  📍 WebResource ContentWindow Success", win),
-            (err) => console.log("  📍 WebResource ContentWindow Error", err)
+            (win: any) => console.log("  📍 WebResource ContentWindow Success", win),
+            (err: any) => console.log("  📍 WebResource ContentWindow Error", err)
         );
         methodResults.push({ Test: "S5", Property: "ContentWindow", Value: "Called", Status: "✓" });
     } catch (e: any) {

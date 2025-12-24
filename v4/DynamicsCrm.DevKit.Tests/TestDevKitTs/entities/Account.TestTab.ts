@@ -1,4 +1,4 @@
-import { AccountForm } from './generator/Account.form';
+import { FormAccount_DevKitV4 } from './generator/Account.form';
 
 interface TestResult {
     Test: string;
@@ -29,7 +29,7 @@ function stringify(value: any): any {
  * - R-Index: ReadOnly properties (R1, R2, R3...)
  * - S-Index: Setters & Methods (S1, S2, S3...)
  */
-export function TestTab(form: AccountForm.Form): void {
+export function TestTab(form: FormAccount_DevKitV4.Form): void {
     // NOTE: Form uses TAB_1/TAB_2 structure, not SUMMARY_TAB
     // This test is skipped pending form tab alignment
     console.log('⏭️ TEST 14: Tab Control - SKIPPED (Different tab structure)');

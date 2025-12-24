@@ -1,4 +1,4 @@
-import { AccountForm } from './generator/Account.form';
+import { FormAccount_DevKitV4 } from './generator/Account.form';
 
 interface TestResult {
     Test: string;
@@ -11,7 +11,7 @@ interface TestResult {
  * TEST 24: Knowledge Control - v4_KnowledgeSearch Field
  * Knowledge extends IControl with SearchQuery, SelectedResults and specific events
  */
-export function TestKnowledge(form: AccountForm.Form): void {
+export function TestKnowledge(form: FormAccount_DevKitV4.Form): void {
     // NOTE: v4_KnowledgeSearch field does NOT exist in the new Account.form.ts
     // This test is skipped until Knowledge control is added to the form
     console.log('⏭️ TEST 24: Knowledge Control - SKIPPED (v4_KnowledgeSearch not on form)');

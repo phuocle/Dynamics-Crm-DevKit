@@ -25,6 +25,7 @@
       "includefiles": [
         "css\\**.css",
         "entities\\*.js",
+        "entitiests\\*.js",
         "html\\**.html",
         "images\\**.png",
         "js\\**.js",

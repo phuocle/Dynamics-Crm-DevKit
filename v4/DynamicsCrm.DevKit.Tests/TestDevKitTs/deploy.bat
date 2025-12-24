@@ -13,7 +13,7 @@ set ENTITIES=Account
 
 REM === PATHS (hardcoded for testing) ===
 set SOURCE_DIR=%~dp0build
-set DEST_DIR=D:\github\Dynamics-Crm-DevKit\v4\DynamicsCrm.DevKit.Tests\TestAllInOne\Dev.DevKit.WebResource\entitiests
+set DEST_DIR=D:\github\Dynamics-Crm-DevKit\v4\DynamicsCrm.DevKit.Tests\TestWebResource\Dev.DevKit.WebResource\entitiests
 
 echo ============================================================
 echo  Copy Build Files to WebResource

@@ -1,4 +1,4 @@
-import { AccountForm } from './generator/Account.form';
+import { FormAccount_DevKitV4 } from './generator/Account.form';
 
 interface TestResult {
     Test: string;
@@ -16,7 +16,7 @@ interface TestResult {
  * - R-Index: ReadOnly properties (R1, R2, R3...)
  * - S-Index: Setters & Methods (S1, S2, S3...)
  */
-export function TestControl(form: AccountForm.Form): void {
+export function TestControl(form: FormAccount_DevKitV4.Form): void {
     const results: TestResult[] = [];
     const control = form.Body.v4_String;
     const startTime = new Date().toLocaleTimeString();

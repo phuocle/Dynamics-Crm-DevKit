@@ -53,6 +53,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <None Include="deploy.debug.bat" />
     <None Include="package.json" />
+    <Content Include="entitiests\Account.js" />
     <Content Include="entities\Account.form.js">
       <DependentUpon>Account.js</DependentUpon>
     </Content>

@@ -1,4 +1,4 @@
-import { AccountForm } from './generator/Account.form';
+import { FormAccount_DevKitV4 } from './generator/Account.form';
 
 interface TestResult {
     Test: string;
@@ -16,7 +16,7 @@ interface TestResult {
  * - R-Index: ReadOnly properties (R1, R2, R3...)
  * - S-Index: Setters & Methods (S1, S2, S3...)
  */
-export function TestOptionSet(form: AccountForm.Form): void {
+export function TestOptionSet(form: FormAccount_DevKitV4.Form): void {
     const results: TestResult[] = [];
     const methodResults: TestResult[] = [];
     const opt = form.Body.v4_OptionSet;
@@ -93,7 +93,7 @@ export function TestOptionSet(form: AccountForm.Form): void {
     // NOTE: AddOption adds to CONTROL, so we check ControlOptions (not Options which is from attribute)
     try {
         opt.AddOption("Test Option (AI)", 999999);
-        const hasNew = opt.ControlOptions?.some(o => o.value === 999999);
+        const hasNew = opt.ControlOptions?.some((o: any) => o.value === 999999);
         opt.RemoveOption(999999);
         methodResults.push({ Test: "S4", Property: "AddOption", Value: hasNew ? "Added→Removed" : "Not found", Status: hasNew ? "✓" : "⚠" });
     } catch (e: any) {

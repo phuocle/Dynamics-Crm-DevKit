@@ -1,4 +1,4 @@
-import { AccountForm } from './generator/Account.form';
+import { FormAccount_DevKitV4 } from './generator/Account.form';
 
 interface TestResult {
     Test: string;
@@ -11,7 +11,7 @@ interface TestResult {
  * TEST 21: IFrame Control - v4_IFrameExternal Field
  * IFrame extends IControl with specific properties: Src, InitialUrl, ContentWindow
  */
-export function TestIFrame(form: AccountForm.Form): void {
+export function TestIFrame(form: FormAccount_DevKitV4.Form): void {
     const results: TestResult[] = [];
     const methodResults: TestResult[] = [];
     const iframe = form.Body.IFRAME_PhuocLe;
@@ -77,8 +77,8 @@ export function TestIFrame(form: AccountForm.Form): void {
     // Method: ContentWindow
     try {
         iframe.ContentWindow(
-            (win) => console.log("  📍 IFrame ContentWindow Success", win),
-            (err) => console.log("  📍 IFrame ContentWindow Error", err)
+            (win: any) => console.log("  📍 IFrame ContentWindow Success", win),
+            (err: any) => console.log("  📍 IFrame ContentWindow Error", err)
         );
         methodResults.push({ Test: "S4", Property: "ContentWindow", Value: "Called", Status: "✓" });
     } catch (e: any) {
