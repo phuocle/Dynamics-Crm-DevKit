@@ -18,6 +18,17 @@ var formAccount = (function () {
 	//BEGIN ON LOAD ========================================================
 	/** @param {any} executionContext */
 	async function UiAddLoaded(executionContext) {
+		setTimeout(async () => {
+			console.clear();
+
+			// Test 0: IControl Interface (base for all controls)
+			TestControl();
+
+		}, 1000);
+	}
+
+	function TestControl() {
+		//code test control
 	}
 	//END ON LOAD ==========================================================
 	//BEGIN ON CHANGE ======================================================
