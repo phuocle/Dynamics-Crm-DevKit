@@ -1773,16 +1773,20 @@ declare namespace DevKit {
         /**
          * Saves the record
          * @param saveOptions Options to control the save behavior
+         * @param successCallback A function to call when the save completes successfully
+         * @param errorCallback A function to call when the save fails
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data/save
          */
-        Save(saveOptions?: { saveMode: number }): Promise<void>;
+        Save(saveOptions?: { saveMode: number }, successCallback?: () => void, errorCallback?: (error: any) => void): Promise<void> | void;
 
         /**
          * Asynchronously refreshes the data of the form without reloading the page
          * @param save A boolean value to indicate if data should be saved before it is refreshed
+         * @param successCallback A function to call when the refresh completes successfully
+         * @param errorCallback A function to call when the refresh fails
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data/refresh
          */
-        Refresh(save?: boolean): Promise<void>;
+        Refresh(save?: boolean, successCallback?: () => void, errorCallback?: (error: any) => void): Promise<void> | void;
 
         /**
          * Closes the form

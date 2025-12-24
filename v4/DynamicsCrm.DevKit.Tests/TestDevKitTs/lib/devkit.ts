@@ -579,8 +579,8 @@ function loadFormV3<TBody = Record<string, any>, THeader = Record<string, any>, 
     PrimaryAttributeValue: string;
     ViewPortHeight: number;
     ViewPortWidth: number;
-    Save: (saveOptions?: any) => Promise<void>;
-    Refresh: (save?: boolean) => Promise<void>;
+    Save: (saveOptions?: any, successCallback?: any, errorCallback?: any) => Promise<void> | void;
+    Refresh: (save?: boolean, successCallback?: any, errorCallback?: any) => Promise<void> | void;
     Close: () => void;
     SetFormNotification: (message: string, level: string, uniqueId: string) => boolean;
     ClearFormNotification: (uniqueId: string) => boolean;
@@ -1060,7 +1060,7 @@ function webApiReturnGet(data: any, type?: DevKit.WebApiFieldType): any {
     return parser ? parser(data) : data;
 }
 
-export class FormBase<TBody, THeader, TGrid, TNavigation, TQuickForm, TProcess = any, TDialog = any> {
+export class FormBase<TBody = any, THeader = any, TGrid = any, TNavigation = any, TQuickForm = any, TProcess = any, TDialog = any> {
     public Body: TBody;
     public Header: THeader;
     public Grid: TGrid;
@@ -1089,8 +1089,8 @@ export class FormBase<TBody, THeader, TGrid, TNavigation, TQuickForm, TProcess =
     public readonly PrimaryAttributeValue: string;
     public readonly ViewPortHeight: number;
     public readonly ViewPortWidth: number;
-    public Save: (saveOptions?: any) => Promise<void>;
-    public Refresh: (save?: boolean) => Promise<void>;
+    public Save: (saveOptions?: any, successCallback?: any, errorCallback?: any) => Promise<void> | void;
+    public Refresh: (save?: boolean, successCallback?: any, errorCallback?: any) => Promise<void> | void;
     public Close: () => void;
     public SetFormNotification: (message: string, level: string, uniqueId: string) => boolean;
     public ClearFormNotification: (uniqueId: string) => boolean;
