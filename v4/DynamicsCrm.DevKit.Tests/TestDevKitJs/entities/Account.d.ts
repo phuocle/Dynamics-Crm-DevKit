@@ -136,6 +136,12 @@ declare namespace DevKit {
 			ChildAccounts: DevKit.Controls.Grid;
 			Contacts: DevKit.Controls.Grid;
 		}
+		interface Dialog extends DevKit.Controls.IDialog {
+			/** Type the main phone number for this account. */
+			Telephone1: DevKit.Controls.Dialog.String;
+			/** Type the credit limit of the account. This is a useful reference when you address invoice and accounting issues with the customer. */
+			CreditLimit: DevKit.Controls.Dialog.Money;
+		}
 	}
 	export class FormAccount extends DevKit.IForm {
 		/**
@@ -156,6 +162,8 @@ declare namespace DevKit {
 		Process: DevKit.FormAccount.Process;
 		/** The Grid of form Account */
 		Grid: DevKit.FormAccount.Grid;
+		/** The Dialog of form Account */
+		Dialog: DevKit.FormAccount.Dialog;
 	}
 	export class AccountApi {
 		/**
