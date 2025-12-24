@@ -1,96 +1,55 @@
 ﻿//@ts-check
 ///<reference path="devkit.d.ts" />
 declare namespace DevKit {
-	namespace FormAccount {
+	namespace FormAccount_DevKitV4 {
 		interface Header extends DevKit.Controls.IHeader {
-			/** Type the number of employees that work at the account for use in marketing segmentation and demographic analysis. */
-			NumberOfEmployees: DevKit.Controls.Integer;
-			/** Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
-			OwnerId: DevKit.Controls.Lookup;
-			/** Type the annual revenue for the account, used as an indicator in financial performance analysis. */
-			Revenue: DevKit.Controls.Money;
+			v4_Integer: DevKit.Controls.Integer;
+			v4_Integer1: DevKit.Controls.Integer;
+			v4_OptionSet: DevKit.Controls.OptionSet;
+			v4_String: DevKit.Controls.String;
 		}
-		interface tab_DETAILS_TAB_Sections {
-			BILLING: DevKit.Controls.Section;
-			ChildAccounts: DevKit.Controls.Section;
-			COMPANY_PROFILE: DevKit.Controls.Section;
-			CONTACT_PREFERENCES: DevKit.Controls.Section;
-			DETAILS_TAB_section_6: DevKit.Controls.Section;
-			SHIPPING: DevKit.Controls.Section;
+		interface tab_TAB_1_Sections {
+			TAB_1_SECTION_1: DevKit.Controls.Section;
+			TAB_1_SECTION_2: DevKit.Controls.Section;
+			TAB_1_SECTION_3: DevKit.Controls.Section;
+			TAB_1_SECTION_4: DevKit.Controls.Section;
 		}
-		interface tab_SUMMARY_TAB_Sections {
-			ACCOUNT_INFORMATION: DevKit.Controls.Section;
-			ADDRESS: DevKit.Controls.Section;
-			MapSection: DevKit.Controls.Section;
-			SOCIAL_PANE_TAB: DevKit.Controls.Section;
-			Summary_section_6: DevKit.Controls.Section;
-			SUMMARY_TAB_section_6: DevKit.Controls.Section;
+		interface tab_TAB_2_Sections {
+			TAB_2_SECTION_1: DevKit.Controls.Section;
+			TAB_2_SECTION_2: DevKit.Controls.Section;
 		}
-		interface tab_DETAILS_TAB extends DevKit.Controls.ITab {
-			Section: tab_DETAILS_TAB_Sections;
+		interface tab_TAB_1 extends DevKit.Controls.ITab {
+			Section: tab_TAB_1_Sections;
 		}
-		interface tab_SUMMARY_TAB extends DevKit.Controls.ITab {
-			Section: tab_SUMMARY_TAB_Sections;
+		interface tab_TAB_2 extends DevKit.Controls.ITab {
+			Section: tab_TAB_2_Sections;
 		}
 		interface Tabs {
-			DETAILS_TAB: tab_DETAILS_TAB;
-			SUMMARY_TAB: tab_SUMMARY_TAB;
+			TAB_1: tab_TAB_1;
+			TAB_2: tab_TAB_2;
 		}
 		interface Body {
 			Tab: Tabs;
-			ActionCards: DevKit.Controls.ActionCards;
-			/** Shows the complete primary address. */
-			Address1_Composite: DevKit.Controls.String;
-			/** Select the freight terms for the primary address to make sure shipping orders are processed correctly. */
-			Address1_FreightTermsCode: DevKit.Controls.OptionSet;
-			/** Select a shipping method for deliveries sent to this address. */
-			Address1_ShippingMethodCode: DevKit.Controls.OptionSet;
-			/** Type the credit limit of the account. This is a useful reference when you address invoice and accounting issues with the customer. */
-			CreditLimit: DevKit.Controls.Money;
-			/** Select whether the credit for the account is on hold. This is a useful reference while addressing the invoice and accounting issues with the customer. */
-			CreditOnHold: DevKit.Controls.Boolean;
-			/** Type additional information to describe the account, such as an excerpt from the company's website. */
-			Description: DevKit.Controls.String;
-			/** Select whether the account allows bulk email sent through campaigns. If Do Not Allow is selected, the account can be added to marketing lists, but is excluded from email. */
-			DoNotBulkEMail: DevKit.Controls.Boolean;
-			/** Select whether the account allows direct email sent from Microsoft Dynamics 365. */
-			DoNotEMail: DevKit.Controls.Boolean;
-			/** Select whether the account allows faxes. If Do Not Allow is selected, the account will be excluded from fax activities distributed in marketing campaigns. */
-			DoNotFax: DevKit.Controls.Boolean;
-			/** Select whether the account allows phone calls. If Do Not Allow is selected, the account will be excluded from phone call activities distributed in marketing campaigns. */
-			DoNotPhone: DevKit.Controls.Boolean;
-			/** Select whether the account allows direct mail. If Do Not Allow is selected, the account will be excluded from letter activities distributed in marketing campaigns. */
-			DoNotPostalMail: DevKit.Controls.Boolean;
-			/** Type the fax number for the account. */
-			Fax: DevKit.Controls.String;
-			/** Information about whether to allow following email activity like opens, attachment views and link clicks for emails sent to the account. */
-			FollowEmail: DevKit.Controls.Boolean;
-			/** Select the account's primary industry for use in marketing segmentation and demographic analysis. */
-			IndustryCode: DevKit.Controls.OptionSet;
-			mapcontrol: DevKit.Controls.Map;
-			/** Type the company or business name. */
-			Name: DevKit.Controls.String;
-			notescontrol: DevKit.Controls.Note;
-			/** Select the account's ownership structure, such as public or private. */
-			OwnershipCode: DevKit.Controls.OptionSet;
-			/** Choose the parent account associated with this account to show parent and child businesses in reporting and analytics. */
-			ParentAccountId: DevKit.Controls.Lookup;
-			/** Select the payment terms to indicate when the customer needs to pay the total amount. */
-			PaymentTermsCode: DevKit.Controls.OptionSet;
-			/** Select the preferred method of contact. */
-			PreferredContactMethodCode: DevKit.Controls.OptionSet;
-			/** Choose the primary contact for the account to provide quick access to contact details. */
-			PrimaryContactId: DevKit.Controls.Lookup;
-			/** Type the Standard Industrial Classification (SIC) code that indicates the account's primary industry of business, for use in marketing segmentation and demographic analysis. */
-			SIC: DevKit.Controls.String;
-			/** Type the main phone number for this account. */
-			Telephone1: DevKit.Controls.String;
-			/** Type the stock exchange symbol for the account to track financial performance of the company. You can click the code entered in this field to access the latest trading information from MSN Money. */
-			TickerSymbol: DevKit.Controls.String;
-			/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
-			TransactionCurrencyId: DevKit.Controls.Lookup;
-			/** Type the account's website URL to get quick details about the company profile. */
-			WebSiteURL: DevKit.Controls.String;
+			/** Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
+			OwnerId: DevKit.Controls.Lookup;
+			IFRAME_PhuocLe: DevKit.Controls.IFrame;
+			/** Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
+			OwnerId1: DevKit.Controls.Lookup;
+			v4_Boolean: DevKit.Controls.Boolean;
+			v4_DateOnly: DevKit.Controls.Date;
+			v4_DateTime: DevKit.Controls.DateTime;
+			v4_Decimal: DevKit.Controls.Decimal;
+			v4_Double: DevKit.Controls.Double;
+			v4_Integer: DevKit.Controls.Integer;
+			v4_Lookup: DevKit.Controls.Lookup;
+			v4_Lookup1: DevKit.Controls.Lookup;
+			v4_Memo: DevKit.Controls.String;
+			v4_Money: DevKit.Controls.Money;
+			v4_MultiOptionSet: DevKit.Controls.MultiOptionSet;
+			v4_OptionSet: DevKit.Controls.OptionSet;
+			v4_String: DevKit.Controls.String;
+			v4_String1: DevKit.Controls.String;
+			v4_String2: DevKit.Controls.String;
 		}
 		interface Navigation {
 			account_adx_inviteredemptions: DevKit.Controls.NavigationItem;
@@ -109,15 +68,18 @@ declare namespace DevKit {
 			msa_account_managingpartner: DevKit.Controls.NavigationItem;
 			msa_contact_managingpartner: DevKit.Controls.NavigationItem;
 		}
-		interface quickForm_contactquickform_Body {
+		interface quickForm_ContactQuickForm_Body {
 			EMailAddress1: DevKit.Controls.QuickView;
-			Telephone1: DevKit.Controls.QuickView;
+			FirstName: DevKit.Controls.QuickView;
+			LastName: DevKit.Controls.QuickView;
+			MobilePhone: DevKit.Controls.QuickView;
+			ParentCustomerId: DevKit.Controls.QuickView;
 		}
-		interface quickForm_contactquickform extends DevKit.Controls.IQuickView {
-			Body: quickForm_contactquickform_Body;
+		interface quickForm_ContactQuickForm extends DevKit.Controls.IQuickView {
+			Body: quickForm_ContactQuickForm_Body;
 		}
 		interface QuickForm {
-			contactquickform: quickForm_contactquickform;
+			ContactQuickForm: quickForm_ContactQuickForm;
 		}
 		interface ProcessAccountBPF {
 			/** Select the account's primary industry for use in marketing segmentation and demographic analysis. */
@@ -133,37 +95,28 @@ declare namespace DevKit {
 			AccountBPF: ProcessAccountBPF;
 		}
 		interface Grid {
-			ChildAccounts: DevKit.Controls.Grid;
 			Contacts: DevKit.Controls.Grid;
 		}
-		interface Dialog extends DevKit.Controls.IDialog {
-			/** Type the main phone number for this account. */
-			Telephone1: DevKit.Controls.Dialog.String;
-			/** Type the credit limit of the account. This is a useful reference when you address invoice and accounting issues with the customer. */
-			CreditLimit: DevKit.Controls.Dialog.Money;
-		}
 	}
-	export class FormAccount extends DevKit.IForm {
+	export class FormAccount_DevKitV4 extends DevKit.IForm {
 		/**
-		* Account [Main Form]
+		* Account DevKitV4 [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
 		constructor(executionContext: any, defaultWebResourceName?: string);
-		/** The Body section of form Account */
-		Body: DevKit.FormAccount.Body;
-		/** The Header section of form Account */
-		Header: DevKit.FormAccount.Header;
-		/** The Navigation of form Account */
-		Navigation: DevKit.FormAccount.Navigation;
-		/** The QuickForm of form Account */
-		QuickForm: DevKit.FormAccount.QuickForm;
-		/** The Process of form Account */
-		Process: DevKit.FormAccount.Process;
-		/** The Grid of form Account */
-		Grid: DevKit.FormAccount.Grid;
-		/** The Dialog of form Account */
-		Dialog: DevKit.FormAccount.Dialog;
+		/** The Body section of form Account_DevKitV4 */
+		Body: DevKit.FormAccount_DevKitV4.Body;
+		/** The Header section of form Account_DevKitV4 */
+		Header: DevKit.FormAccount_DevKitV4.Header;
+		/** The Navigation of form Account_DevKitV4 */
+		Navigation: DevKit.FormAccount_DevKitV4.Navigation;
+		/** The QuickForm of form Account_DevKitV4 */
+		QuickForm: DevKit.FormAccount_DevKitV4.QuickForm;
+		/** The Process of form Account_DevKitV4 */
+		Process: DevKit.FormAccount_DevKitV4.Process;
+		/** The Grid of form Account_DevKitV4 */
+		Grid: DevKit.FormAccount_DevKitV4.Grid;
 	}
 	export class AccountApi {
 		/**
@@ -1042,6 +995,26 @@ declare namespace OptionSet {
 			Default_Value = 1
 		}
 		enum v4_Categories {
+			/** Category_A = 100000000*/
+			Category_A = 100000000,
+			/** Category_B = 100000001*/
+			Category_B = 100000001,
+			/** Category_C = 100000002*/
+			Category_C = 100000002,
+			/** Category_D = 100000003*/
+			Category_D = 100000003
+		}
+		enum v4_MultiOptionSet {
+			/** Category_A = 100000000*/
+			Category_A = 100000000,
+			/** Category_B = 100000001*/
+			Category_B = 100000001,
+			/** Category_C = 100000002*/
+			Category_C = 100000002,
+			/** Category_D = 100000003*/
+			Category_D = 100000003
+		}
+		enum v4_OptionSet {
 			/** Category_A = 100000000*/
 			Category_A = 100000000,
 			/** Category_B = 100000001*/

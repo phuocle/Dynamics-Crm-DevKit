@@ -3,11 +3,11 @@
 "use strict";
 var formAccount = (function () {
 	"use strict";
-	/** @type {DevKit.FormAccount} */
+	/** @type {DevKit.FormAccount_DevKitV4} */
 	let form;
 	/** @param {any} executionContext */
 	async function onLoad(executionContext) {
-		form = new DevKit.FormAccount(executionContext);
+		form = new DevKit.FormAccount_DevKitV4(executionContext);
 		registerEvents();
 		form.UiAddLoaded(UiAddLoaded);
 	}
