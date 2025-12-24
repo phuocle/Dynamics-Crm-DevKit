@@ -12,7 +12,7 @@ var DevKit;
 			quick: ["ContactQuickForm___EMailAddress1", "ContactQuickForm___FirstName", "ContactQuickForm___LastName", "ContactQuickForm___MobilePhone", "ContactQuickForm___ParentCustomerId"],
 			grid: ["Contacts"],
 			navigation: ["account_adx_inviteredemptions", "account_adx_portalcomments", "Account_Appointments", "account_DeletedItemReferences", "Account_Email_EmailSender", "Account_Email_SendersAccount", "Account_Emails", "account_parent_account", "Account_Phonecalls", "Account_Tasks", "adx_invitation_assigntoaccount", "bpf_account_v4_accountbpf", "contact_customer_accounts", "msa_account_managingpartner", "msa_contact_managingpartner"],
-			dialog: []
+			dialog: ["Telephone1"]
 		};
 		return devKit.LoadFormV2(executionContext, defaultWebResourceName, form);
 	};

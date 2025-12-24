@@ -13,7 +13,6 @@ var formAccount = (function () {
 	}
 	function registerEvents() {
 		if (form.ExecutionContext.IsInitialLoad()) {
-			var value = form.Dialog.Telephone1.Value;
 		}
 	}
 	//BEGIN ON LOAD ========================================================

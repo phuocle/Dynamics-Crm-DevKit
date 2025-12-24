@@ -97,6 +97,10 @@ declare namespace DevKit {
 		interface Grid {
 			Contacts: DevKit.Controls.Grid;
 		}
+		interface Dialog extends DevKit.Controls.IDialog {
+			/** Type the main phone number for this account. */
+			Telephone1: DevKit.Controls.Dialog.String;
+		}
 	}
 	export class FormAccount_DevKitV4 extends DevKit.IForm {
 		/**
@@ -117,6 +121,8 @@ declare namespace DevKit {
 		Process: DevKit.FormAccount_DevKitV4.Process;
 		/** The Grid of form Account_DevKitV4 */
 		Grid: DevKit.FormAccount_DevKitV4.Grid;
+		/** The Dialog of form Account_DevKitV4 */
+		Dialog: DevKit.FormAccount_DevKitV4.Dialog;
 	}
 	export class AccountApi {
 		/**
