@@ -96,15 +96,15 @@
     {
       "profile": "JS-FORM",
       "type": "JsForm",
-      "rootnamespace": "???",
-      "rootfolder": "???",
+      "rootnamespace": "DevKit",
+      "rootfolder": "",
       "entities": "folder"
     },
     {
       "profile": "JS-WEBAPI",
       "type": "JsWebApi",
-      "rootnamespace": "???",
-      "rootfolder": "???",
+      "rootnamespace": "DevKit",
+      "rootfolder": "",
       "entities": "folder"
     }
   ],

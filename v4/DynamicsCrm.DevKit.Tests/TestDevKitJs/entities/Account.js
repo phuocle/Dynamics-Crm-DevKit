@@ -13,7 +13,6 @@ var formAccount = (function () {
 	}
 	function registerEvents() {
 		if (form.ExecutionContext.IsInitialLoad()) {
-
 		}
 	}
 	//BEGIN ON LOAD ========================================================

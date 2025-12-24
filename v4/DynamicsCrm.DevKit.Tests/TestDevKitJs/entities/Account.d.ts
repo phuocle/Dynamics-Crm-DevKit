@@ -104,6 +104,7 @@ declare namespace DevKit {
 			Account_Phonecalls: DevKit.Controls.NavigationItem;
 			Account_Tasks: DevKit.Controls.NavigationItem;
 			adx_invitation_assigntoaccount: DevKit.Controls.NavigationItem;
+			bpf_account_v4_accountbpf: DevKit.Controls.NavigationItem;
 			contact_customer_accounts: DevKit.Controls.NavigationItem;
 			msa_account_managingpartner: DevKit.Controls.NavigationItem;
 			msa_contact_managingpartner: DevKit.Controls.NavigationItem;
@@ -117,6 +118,19 @@ declare namespace DevKit {
 		}
 		interface QuickForm {
 			contactquickform: quickForm_contactquickform;
+		}
+		interface ProcessAccountBPF {
+			/** Select the account's primary industry for use in marketing segmentation and demographic analysis. */
+			IndustryCode: DevKit.Controls.OptionSet;
+			/** Type the company or business name. */
+			Name: DevKit.Controls.String;
+			/** Choose the primary contact for the account to provide quick access to contact details. */
+			PrimaryContactId: DevKit.Controls.Lookup;
+			/** Type the annual revenue for the account, used as an indicator in financial performance analysis. */
+			Revenue: DevKit.Controls.Money;
+		}
+		interface Process extends DevKit.Controls.IProcess {
+			AccountBPF: ProcessAccountBPF;
 		}
 		interface Grid {
 			ChildAccounts: DevKit.Controls.Grid;
@@ -138,6 +152,8 @@ declare namespace DevKit {
 		Navigation: DevKit.FormAccount.Navigation;
 		/** The QuickForm of form Account */
 		QuickForm: DevKit.FormAccount.QuickForm;
+		/** The Process of form Account */
+		Process: DevKit.FormAccount.Process;
 		/** The Grid of form Account */
 		Grid: DevKit.FormAccount.Grid;
 	}

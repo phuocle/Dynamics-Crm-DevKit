@@ -13,8 +13,7 @@ var formAccount = (function () {
 	}
 	function registerEvents() {
 		if (form.ExecutionContext.IsInitialLoad()) {
-			form.QuickForm.contactquickform.Body.EMailAddress1.
-
+			var a = form.Process.AccountBPF.IndustryCode.Value;
 		}
 	}
 	//BEGIN ON LOAD ========================================================

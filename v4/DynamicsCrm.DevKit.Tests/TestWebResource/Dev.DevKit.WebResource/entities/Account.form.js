@@ -8,9 +8,52 @@ var DevKit;
 			body: ["ActionCards", "Address1_Composite", "Address1_FreightTermsCode", "Address1_ShippingMethodCode", "ChildAccounts", "Contacts", "CreditLimit", "CreditOnHold", "Description", "DoNotBulkEMail", "DoNotEMail", "DoNotFax", "DoNotPhone", "DoNotPostalMail", "Fax", "FollowEmail", "IndustryCode", "mapcontrol", "Name", "notescontrol", "OwnershipCode", "ParentAccountId", "PaymentTermsCode", "PreferredContactMethodCode", "PrimaryContactId", "PrimaryContactId1", "SIC", "Telephone1", "TickerSymbol", "TransactionCurrencyId", "WebSiteURL"],
 			tab: ["DETAILS_TAB___BILLING", "DETAILS_TAB___ChildAccounts", "DETAILS_TAB___COMPANY_PROFILE", "DETAILS_TAB___CONTACT_PREFERENCES", "DETAILS_TAB___DETAILS_TAB_section_6", "DETAILS_TAB___SHIPPING", "SUMMARY_TAB___ACCOUNT_INFORMATION", "SUMMARY_TAB___ADDRESS", "SUMMARY_TAB___MapSection", "SUMMARY_TAB___SOCIAL_PANE_TAB", "SUMMARY_TAB___Summary_section_6", "SUMMARY_TAB___SUMMARY_TAB_section_6"],
 			header: ["NumberOfEmployees", "OwnerId", "Revenue"],
+			bpf: ["AccountBPF___IndustryCode", "AccountBPF___Name", "AccountBPF___PrimaryContactId", "AccountBPF___Revenue", ],
 			quick: ["contactquickform___EMailAddress1", "contactquickform___Telephone1"],
 			grid: ["ChildAccounts", "Contacts"],
-			navigation: ["account_adx_inviteredemptions", "account_adx_portalcomments", "Account_Appointments", "account_DeletedItemReferences", "Account_Email_EmailSender", "Account_Email_SendersAccount", "Account_Emails", "account_parent_account", "Account_Phonecalls", "Account_Tasks", "adx_invitation_assigntoaccount", "contact_customer_accounts", "msa_account_managingpartner", "msa_contact_managingpartner"],
+			navigation: ["account_adx_inviteredemptions", "account_adx_portalcomments", "Account_Appointments", "account_DeletedItemReferences", "Account_Email_EmailSender", "Account_Email_SendersAccount", "Account_Emails", "account_parent_account", "Account_Phonecalls", "Account_Tasks", "adx_invitation_assigntoaccount", "bpf_account_v4_accountbpf", "contact_customer_accounts", "msa_account_managingpartner", "msa_contact_managingpartner"],
+		};
+		return devKit.LoadFormV2(executionContext, defaultWebResourceName, form);
+	};
+	DevKit.FormAccount_for_Interactive_experience = function(executionContext, defaultWebResourceName) {
+		const form = {
+			body: ["Address1_Composite", "Address1_FreightTermsCode", "Address1_ShippingMethodCode", "Contacts", "CreditLimit", "CreditOnHold", "Description", "DoNotBulkEMail", "DoNotEMail", "DoNotFax", "DoNotPhone", "DoNotPostalMail", "Fax", "FollowEmail", "IndustryCode", "Name", "notescontrol", "OwnershipCode", "ParentAccountId", "PaymentTermsCode", "PreferredContactMethodCode", "PrimaryContactId", "PrimaryContactId1", "SIC", "Telephone1", "TransactionCurrencyId", "WebSiteURL"],
+			tab: ["DETAILS_TAB___BILLING", "DETAILS_TAB___COMPANY_PROFILE", "DETAILS_TAB___CONTACT_PREFERENCES", "DETAILS_TAB___DETAILS_TAB_section_6", "DETAILS_TAB___SHIPPING", "SUMMARY_TAB___ACCOUNT_INFORMATION", "SUMMARY_TAB___Timeline"],
+			header: ["NumberOfEmployees", "OwnerId", "Revenue"],
+			bpf: ["AccountBPF___IndustryCode", "AccountBPF___Name", "AccountBPF___PrimaryContactId", "AccountBPF___Revenue", ],
+			quick: ["contactquickform___EMailAddress1", "contactquickform___Telephone1"],
+			grid: ["Contacts"],
+			navigation: ["account_adx_inviteredemptions", "account_adx_portalcomments", "Account_Appointments", "account_DeletedItemReferences", "Account_Email_EmailSender", "Account_Email_SendersAccount", "Account_Emails", "account_parent_account", "Account_Phonecalls", "Account_Tasks", "adx_invitation_assigntoaccount", "bpf_account_v4_accountbpf", "contact_customer_accounts", "msa_account_managingpartner", "msa_contact_managingpartner"],
+		};
+		return devKit.LoadFormV2(executionContext, defaultWebResourceName, form);
+	};
+	DevKit.FormAccount_TypeScript = function(executionContext, defaultWebResourceName) {
+		const form = {
+			body: ["ActionCards", "Address1_Composite", "Address1_FreightTermsCode", "Address1_ShippingMethodCode", "ChildAccounts", "Contacts", "CreditLimit", "CreditOnHold", "Description", "DoNotBulkEMail", "DoNotEMail", "DoNotFax", "DoNotPhone", "DoNotPostalMail", "Fax", "FollowEmail", "IndustryCode", "mapcontrol", "Name", "notescontrol", "OwnershipCode", "ParentAccountId", "PaymentTermsCode", "PreferredContactMethodCode", "PrimaryContactId", "PrimaryContactId1", "SIC", "Telephone1", "TickerSymbol", "TransactionCurrencyId", "v4_AppointmentTime", "v4_Birthday", "v4_Categories", "WebSiteURL"],
+			tab: ["DETAILS_TAB___BILLING", "DETAILS_TAB___ChildAccounts", "DETAILS_TAB___COMPANY_PROFILE", "DETAILS_TAB___CONTACT_PREFERENCES", "DETAILS_TAB___DETAILS_TAB_section_6", "DETAILS_TAB___SHIPPING", "SUMMARY_TAB___ACCOUNT_INFORMATION", "SUMMARY_TAB___ADDRESS", "SUMMARY_TAB___MapSection", "SUMMARY_TAB___SOCIAL_PANE_TAB", "SUMMARY_TAB___Summary_section_6", "SUMMARY_TAB___SUMMARY_TAB_section_6"],
+			header: ["NumberOfEmployees", "OwnerId", "Revenue"],
+			bpf: ["AccountBPF___IndustryCode", "AccountBPF___Name", "AccountBPF___PrimaryContactId", "AccountBPF___Revenue", ],
+			quick: ["contactquickform___EMailAddress1", "contactquickform___Telephone1"],
+			grid: ["ChildAccounts", "Contacts"],
+			navigation: ["account_adx_inviteredemptions", "account_adx_portalcomments", "Account_Appointments", "account_DeletedItemReferences", "Account_Email_EmailSender", "Account_Email_SendersAccount", "Account_Emails", "account_parent_account", "Account_Phonecalls", "Account_Tasks", "adx_invitation_assigntoaccount", "bpf_account_v4_accountbpf", "contact_customer_accounts", "msa_account_managingpartner", "msa_contact_managingpartner"],
+		};
+		return devKit.LoadFormV2(executionContext, defaultWebResourceName, form);
+	};
+	DevKit.FormAccount_Information = function(executionContext, defaultWebResourceName) {
+		const form = {
+			body: ["accountactivitiesgrid", "AccountCategoryCode", "accountContactsGrid", "AccountNumber", "Address1_AddressTypeCode", "Address1_City", "Address1_Country", "Address1_FreightTermsCode", "Address1_Line1", "Address1_Line2", "Address1_Line3", "Address1_Name", "Address1_PostalCode", "Address1_ShippingMethodCode", "Address1_StateOrProvince", "Address1_Telephone1", "CreditLimit", "CreditOnHold", "CustomerTypeCode", "Description", "DoNotBulkEMail", "DoNotEMail", "DoNotFax", "DoNotPhone", "DoNotPostalMail", "EMailAddress1", "Fax", "FollowEmail", "IndustryCode", "Name", "notescontrol", "NumberOfEmployees", "OwnerId", "OwnershipCode", "ParentAccountId", "PaymentTermsCode", "PreferredContactMethodCode", "PrimaryContactId", "Revenue", "SIC", "Telephone1", "Telephone2", "TickerSymbol", "TransactionCurrencyId", "WebSiteURL"],
+			tab: ["administration___contact_methods", "administration___internal_information", "contacts___contacts", "details___billing_information", "details___description_2", "details___professional_information", "general___account_information", "general___address", "general___description", "general___shipping_information", "notes_and_activities___activities", "notes_and_activities___notes"],
+			header: ["CreditLimit", "OwnerId", "PreferredContactMethodCode", "PrimaryContactId", "Revenue"],
+			bpf: ["AccountBPF___IndustryCode", "AccountBPF___Name", "AccountBPF___PrimaryContactId", "AccountBPF___Revenue", ],
+			grid: ["accountactivitiesgrid", "accountContactsGrid"],
+			navigation: ["account_adx_inviteredemptions", "account_adx_portalcomments", "Account_Appointments", "account_DeletedItemReferences", "Account_Email_EmailSender", "Account_Email_SendersAccount", "Account_Emails", "account_parent_account", "Account_Phonecalls", "Account_Tasks", "adx_invitation_assigntoaccount", "bpf_account_v4_accountbpf", "contact_customer_accounts", "msa_account_managingpartner", "msa_contact_managingpartner"],
+		};
+		return devKit.LoadFormV2(executionContext, defaultWebResourceName, form);
+	};
+	DevKit.FormAccount_Quick_Create = function(executionContext, defaultWebResourceName) {
+		const form = {
+			body: ["Address1_City", "Address1_Line1", "Address1_Line2", "Address1_PostalCode", "Description", "Name", "NumberOfEmployees", "PrimaryContactId", "Revenue", "Telephone1"],
+			tab: ["tab_1___tab_1_column_1_section_1", "tab_1___tab_1_column_2_section_1", "tab_1___tab_1_column_3_section_1"],
 		};
 		return devKit.LoadFormV2(executionContext, defaultWebResourceName, form);
 	};
