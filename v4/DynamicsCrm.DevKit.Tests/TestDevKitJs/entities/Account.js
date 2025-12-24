@@ -48,6 +48,18 @@ var formAccount_DevKitV4 = (function () {
 			// Test 8: Lookup Control
 			TestLookup();
 
+			// Test 9: OptionSet Control
+			TestOptionSet();
+
+			// Test 10: MultiOptionSet Control
+			TestMultiOptionSet();
+
+			// Test 11: DateOnly Control
+			TestDateOnly();
+
+			// Test 12: DateTime Control
+			TestDateTime();
+
 		}, 1000);
 	}
 
