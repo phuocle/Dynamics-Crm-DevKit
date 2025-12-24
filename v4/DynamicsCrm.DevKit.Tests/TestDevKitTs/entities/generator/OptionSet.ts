@@ -19,6 +19,112 @@ const AdvancedConfigSetting = {
     MaxIncidentMergeNumber: 'MaxIncidentMergeNumber'
 } as const;
 
+/** Structural property type for WebApi operations */
+const StructuralProperty = {
+    /** 0 */
+    Unknown: 0,
+    /** 1 */
+    PrimitiveType: 1,
+    /** 2 */
+    ComplexType: 2,
+    /** 3 */
+    EnumerationType: 3,
+    /** 4 */
+    Collection: 4,
+    /** 5 */
+    EntityType: 5
+} as const;
+
+/** Operation type for WebApi operations */
+const OperationType = {
+    /** 0 */
+    Action: 0,
+    /** 1 */
+    Function: 1,
+    /** 2 */
+    CRUD: 2
+} as const;
+
+/** The progress of the action step */
+const ProcessProgress = {
+    /** 0 */
+    None: 0,
+    /** 1 */
+    Processing: 1,
+    /** 2 */
+    Completed: 2,
+    /** 3 */
+    Failure: 3,
+    /** 4 */
+    Invalid: 4
+} as const;
+
+/** Describes the type of operation for the privilege */
+const PrivilegeType = {
+    /** 0 - Specifies no privilege */
+    None: 0,
+    /** 1 - The create privilege */
+    Create: 1,
+    /** 2 - The read privilege */
+    Read: 2,
+    /** 3 - The write privilege */
+    Write: 3,
+    /** 4 - The delete privilege */
+    Delete: 4,
+    /** 5 - The assign privilege */
+    Assign: 5,
+    /** 6 - The share privilege */
+    Share: 6,
+    /** 7 - The append privilege */
+    Append: 7,
+    /** 8 - The append to privilege */
+    AppendTo: 8
+} as const;
+
+/** File accept types */
+const FileAccept = {
+    /** "audio" */
+    Audio: 'audio',
+    /** "video" */
+    Video: 'video',
+    /** "image" */
+    Image: 'image'
+} as const;
+
+/** Form navigation bar display options */
+const FormNavBar = {
+    /** "on" - The navigation bar is displayed */
+    On: 'on',
+    /** "off" - The navigation bar is not displayed */
+    Off: 'off',
+    /** "entity" - Only the navigation options for related entities are available */
+    Entity: 'entity'
+} as const;
+
+/** Form window position options */
+const FormWindowPosition = {
+    /** 1 */
+    Center: 1,
+    /** 2 */
+    Side: 2
+} as const;
+
+/** Form relationship type */
+const FormRelationshipType = {
+    /** 0 */
+    OneToMany: 0,
+    /** 1 */
+    ManyToMany: 1
+} as const;
+
+/** Form relationship role type */
+const FormRelationshipRoleType = {
+    /** 1 */
+    Referencing: 1,
+    /** 2 */
+    AssociationEntity: 2
+} as const;
+
 /** Returns a value to indicate which client the script is executing in */
 const ClientName = {
     /** Web */
@@ -376,6 +482,15 @@ const Account = {
 export const OptionSet = {
     // Global OptionSets
     AdvancedConfigSetting,
+    StructuralProperty,
+    OperationType,
+    ProcessProgress,
+    PrivilegeType,
+    FileAccept,
+    FormNavBar,
+    FormWindowPosition,
+    FormRelationshipType,
+    FormRelationshipRoleType,
     ClientName,
     ClientState,
     FieldAttributeType,
@@ -402,3 +517,4 @@ export const OptionSet = {
     // Entity OptionSets
     Account
 } as const;
+

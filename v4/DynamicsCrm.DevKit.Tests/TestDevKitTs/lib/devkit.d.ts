@@ -1,4 +1,4 @@
-/**
+﻿/**
  * DynamicsCrm.DevKit TypeScript Definitions
  *
  * @version 4.0
@@ -1021,6 +1021,123 @@ declare namespace DevKit {
             Visible: boolean;
             /** Get/Set the label for the control */
             Label: string;
+        }
+
+        /**
+         * Dialog namespace for Dialog form field types
+         * These types are specific to quick create dialogs and other dialog forms
+         */
+        namespace Dialog {
+            enum FieldRequiredLevel {
+                None,
+                Required,
+                Recommended
+            }
+
+            interface IControlBase {
+                Disabled: boolean;
+                Label: string;
+                Visible: boolean;
+            }
+
+            interface IControl extends IControlBase {
+                AddOnChange(callback: (executionContext: any) => void): void;
+                RemoveOnChange(callback: (executionContext: any) => void): void;
+                FireOnChange(): void;
+                SetNotification(message: string, uniqueId?: string): boolean;
+                ClearNotification(uniqueId: string): boolean;
+                RequiredLevel: FieldRequiredLevel;
+                readonly IsDirty: boolean;
+                readonly IsValid: boolean;
+            }
+
+            interface IControlText extends IControl {
+                readonly MaxLength: number;
+                Value: string;
+            }
+
+            interface IControlNumber extends IControl {
+                readonly Max: number;
+                readonly Min: number;
+                Precision: number;
+                Value: number;
+            }
+
+            interface IControlSelectBase extends IControl {
+                readonly InitialValue: number;
+            }
+
+            interface IControlSelect extends IControlSelectBase {
+                AddOption(text: string, value: number, index?: number): void;
+                ClearOptions(): void;
+                RemoveOption(value: number): void;
+                readonly Options: Array<TextValueNumber>;
+                readonly ControlOptions: Array<TextValueNumber>;
+                readonly Text: string;
+            }
+
+            interface TextValueNumber {
+                readonly text: string;
+                readonly value: number;
+            }
+
+            interface String extends IControlText {
+            }
+
+            interface Memo extends IControlText {
+            }
+
+            interface Integer extends IControlNumber {
+            }
+
+            interface Decimal extends IControlNumber {
+            }
+
+            interface Double extends IControlNumber {
+            }
+
+            interface Money extends IControlNumber {
+            }
+
+            interface Button extends IControlBase {
+            }
+
+            interface Label extends IControlBase {
+            }
+
+            interface Boolean extends IControlSelectBase {
+                Value: boolean;
+            }
+
+            interface OptionSet extends IControlSelect {
+                readonly SelectedOption: TextValueNumber;
+                Value: number;
+            }
+
+            interface MultiOptionSet extends IControlSelect {
+                Value: Array<number>;
+            }
+
+            interface Lookup extends IControl {
+                AddCustomFilter(filter: string, entityLogicaName?: string): void;
+                AddCustomView(viewId: DevKit.Guid, entityName: string, viewDisplayName: string, fetchXml: string, layoutXml: string, isDefault: boolean): void;
+                AddPreSearch(callback: (executionContext: any) => void): void;
+                RemovePreSearch(callback: (executionContext: any) => void): void;
+                AddLookupTagClick(callback: (executionContext: any) => void): void;
+                RemoveLookupTagClick(callback: (executionContext: any) => void): void;
+                Value: Array<EntityReference>;
+                DefaultView: DevKit.Guid;
+                EntityTypes: Array<string>;
+            }
+
+            interface DateTime extends IControl {
+                ShowTime: boolean;
+                Value: any;
+            }
+
+            interface Date extends IControl {
+                Value: any;
+            }
         }
 
         /**
@@ -2539,5 +2656,267 @@ declare namespace DevKit {
         readonly FormattedValue: Record<string, any>;
         getAliasedValue(alias: string, isMultiOptionSet?: boolean): any;
         getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string | string[];
+    }
+
+    /**
+     * Key-value pair object
+     */
+    interface KeyValueObject {
+        [key: string]: any;
+    }
+
+    /**
+     * Collections interface for iterating over items
+     */
+    interface Collections<T> {
+        forEach(successCallback: (item: T, index: number) => void): void;
+        get(): Array<T>;
+        get(item: string): T;
+        get(index: number): T;
+        get(successCallback: (item: T, index: number) => void): Array<T>;
+        getLength(): number;
+    }
+
+    /**
+     * Entity reference object
+     */
+    interface EntityReference {
+        /** Entity type of the record */
+        entityType: string;
+        /** GUID of the record */
+        id: DevKit.Guid;
+        /** Name of the record */
+        name?: string;
+    }
+
+    /**
+     * Error callback type
+     */
+    type ErrorCallback = (error: { errorCode?: number; message?: string }) => void;
+
+    /**
+     * Organization settings interface
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings
+     */
+    interface OrganizationSettings {
+        /**
+         * Returns attributes and their values as key:value pairs that are available for the organization entity
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#attributes
+         */
+        readonly Attributes: Array<KeyValueObject>;
+        /**
+         * [Deprecated] Returns the ID of the base currency for the current organization
+         * @deprecated use {@link BaseCurrency}
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#basecurrencyid
+         */
+        readonly BaseCurrencyId: DevKit.Guid;
+        /**
+         * Returns a lookup object containing the ID, name, and entity type of the base currency for the current organization
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#basecurrency
+         */
+        readonly BaseCurrency: EntityReference;
+        /**
+         * Returns the default country/region code for phone numbers for the current organization
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#defaultcountrycode
+         */
+        readonly DefaultCountryCode: string;
+        /**
+         * Returns a number denoting the full name format selected in the system settings
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#fullnameconventioncode
+         */
+        readonly FullNameConventionCode: number;
+        /**
+         * Indicates whether the auto-save option is enabled for the current organization
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#isautosaveenabled
+         */
+        readonly IsAutoSaveEnabled: boolean;
+        /**
+         * Indicates whether the current organization is a trial organization
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#istrialorganization
+         */
+        readonly IsTrialOrganization: boolean;
+        /**
+         * Returns the preferred language ID for the current organization
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#languageid
+         */
+        readonly LanguageId: number;
+        /**
+         * Returns the expiry date for the current organization if it is a trial organization
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#organizationexpirydate
+         */
+        readonly OrganizationExpiryDate: Date;
+        /**
+         * Returns the ID of the current organization
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#organizationid
+         */
+        readonly OrganizationId: DevKit.Guid;
+        /**
+         * Returns the unique name of the current organization
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#uniquename
+         */
+        readonly UniqueName: string;
+        /**
+         * Indicates whether the Skype protocol is used for the current organization
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#useskypeprotocol
+         */
+        readonly UseSkypeProtocol: boolean;
+    }
+
+    /**
+     * Represents date formatting information for the current user
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#dateformattinginfo
+     */
+    interface DateFormattingInfo {
+        /** The abbreviated day names */
+        readonly AbbreviatedDayNames: Array<string>;
+        /** The abbreviated month names with genitive case */
+        readonly AbbreviatedMonthGenitiveNames: Array<string>;
+        /** The abbreviated month names */
+        readonly AbbreviatedMonthNames: Array<string>;
+        /** The AM designator */
+        readonly AMDesignator: string;
+        /** The calendar */
+        readonly Calendar: any;
+        /** The date separator */
+        readonly DateSeparator: string;
+        /** The day names */
+        readonly DayNames: Array<string>;
+        /** The first day of the week (0 = Sunday, 1 = Monday, etc.) */
+        readonly FirstDayOfWeek: number;
+        /** The full date/time pattern */
+        readonly FullDateTimePattern: string;
+        /** The long date pattern */
+        readonly LongDatePattern: string;
+        /** The long time pattern */
+        readonly LongTimePattern: string;
+        /** The month day pattern */
+        readonly MonthDayPattern: string;
+        /** The month genitive names */
+        readonly MonthGenitiveNames: Array<string>;
+        /** The month names */
+        readonly MonthNames: Array<string>;
+        /** The PM designator */
+        readonly PMDesignator: string;
+        /** The short date pattern */
+        readonly ShortDatePattern: string;
+        /** The shortest day names */
+        readonly ShortestDayNames: Array<string>;
+        /** The short time pattern */
+        readonly ShortTimePattern: string;
+        /** The sortable date/time pattern */
+        readonly SortableDateTimePattern: string;
+        /** The time separator */
+        readonly TimeSeparator: string;
+        /** The universal sortable date/time pattern */
+        readonly UniversalSortableDateTimePattern: string;
+        /** The year month pattern */
+        readonly YearMonthPattern: string;
+    }
+
+    /**
+     * Represents security role privilege information
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#getsecurityroleprivilegesinfo-method
+     */
+    interface SecurityRolePrivilegeInfo {
+        /** The security role privilege ID */
+        readonly id: string;
+        /** The business unit ID */
+        readonly businessUnitId: string;
+        /** The privilege name */
+        readonly privilegeName: string;
+        /** The depth of the privilege (1=User, 2=BusinessUnit, 4=ParentChildBusinessUnit, 8=Organization) */
+        readonly depth: number;
+    }
+
+    /**
+     * Provides information about the current user settings
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings
+     */
+    interface UserSettings {
+        /**
+         * Returns the date formatting information for the current user
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#dateformattinginfo
+         */
+        readonly DateFormattingInfo: DateFormattingInfo;
+        /**
+         * Returns the ID of the default dashboard for the current user
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#defaultdashboardid
+         */
+        readonly DefaultDashboardId: DevKit.Guid;
+        /**
+         * Indicates whether guided help is enabled for the current user
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#isguidedhelpenabled
+         */
+        readonly IsGuidedHelpEnabled: boolean;
+        /**
+         * Indicates whether high contrast is enabled for the current user
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#ishighcontrastenabled
+         */
+        readonly IsHighContrastEnabled: boolean;
+        /**
+         * Indicates whether the language for the current user is a right-to-left (RTL) language
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#isrtl
+         */
+        readonly IsRTL: boolean;
+        /**
+         * Returns the language ID for the current user
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#languageid
+         */
+        readonly LanguageId: number;
+        /**
+         * Returns a collection of lookup objects containing the GUID and display name of each of the security role or teams that the user is associated with.
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#roles
+         */
+        readonly Roles: Collections<EntityReference>;
+        /**
+         * Returns an array of strings that represent the GUID values of each of the security role privilege that the user is associated with
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#securityroleprivileges
+         */
+        readonly SecurityRolePrivileges: Array<DevKit.Guid>;
+        /**
+         * [Deprecated] Returns an array of strings that represent the GUID values of each of the security role privilege
+         * @deprecated use {@link SecurityRolePrivileges}
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#securityroles
+         */
+        readonly SecurityRoles: Array<DevKit.Guid>;
+        /**
+         * Returns a lookup object containing the ID, display name, and entity type of the transaction currency for the current user.
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#transactioncurrency
+         */
+        readonly TransactionCurrency: EntityReference;
+        /**
+         * [Deprecated] Returns the transaction currency ID for the current user.
+         * @deprecated use {@link TransactionCurrency}
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#transactioncurrencyid
+         */
+        readonly TransactionCurrencyId: DevKit.Guid;
+        /**
+         * Returns the GUID of the SystemUser.Id value for the current user
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#userid
+         */
+        readonly UserId: DevKit.Guid;
+        /**
+         * Returns the name of the current user
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#username
+         */
+        readonly UserName: string;
+        /**
+         * Returns the difference in minutes between the local time and Coordinated Universal Time (UTC)
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#gettimezoneoffsetminutes-method
+         */
+        readonly TimeZoneOffsetMinutes: number;
+        /**
+         * Returns a promise which resolves with an object whose keys are the security role privilege GUIDs
+         * @param successCallback A function to call when the operation succeeds
+         * @param errorCallback A function to call when the operation fails
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#getsecurityroleprivilegesinfo-method
+         */
+        GetSecurityRolePrivilegesInfo(successCallback: (rolePrivileges: { [key: string]: SecurityRolePrivilegeInfo }) => void, errorCallback?: ErrorCallback): void;
+        /**
+         * Returns a promise which resolves with an object whose keys are the security role privilege GUIDs
+         * @returns Promise that resolves with security role privilege information
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#getsecurityroleprivilegesinfo-method
+         */
+        GetSecurityRolePrivilegesInfo(): Promise<{ [key: string]: SecurityRolePrivilegeInfo }>;
     }
 }
