@@ -56,6 +56,24 @@ if exist "%DEVKIT_SOURCE%" (
     echo   ⚠ devkit.js not found in lib folder
 )
 
+REM Copy devkit.d.ts to entities folder
+echo.
+echo [STEP 3] Copying devkit.d.ts...
+echo   Source: %SOURCE_DIR%\devkit.d.ts
+echo   Dest:   %DEST_DIR%\devkit.d.ts
+echo.
+
+if exist "%SOURCE_DIR%\devkit.d.ts" (
+    copy /Y "%SOURCE_DIR%\devkit.d.ts" "%DEST_DIR%\devkit.d.ts" >nul
+    if !errorlevel! equ 0 (
+        echo   ✓ devkit.d.ts copied successfully!
+    ) else (
+        echo   ✗ Failed to copy devkit.d.ts
+    )
+) else (
+    echo   ⚠ devkit.d.ts not found in entities folder
+)
+
 echo.
 echo ============================================================
 echo  Deploy completed! Refresh CRM form to test.

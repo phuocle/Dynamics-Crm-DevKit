@@ -5,6 +5,9 @@
 		},
 		{
 			"path": "TestDevKitTs"
+		},
+		{
+			"path": "TestWebResource"
 		}
 	],
 	"settings": {}
