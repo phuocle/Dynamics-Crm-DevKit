@@ -3199,7 +3199,7 @@ var formAccount_DevKitV4 = (function () {
 		const warnings = allResults.filter(r => r.Status === "⚠").length;
 		const total = allResults.length;
 
-		console.groupCollapsed(`🎯 TEST 18: Copilot [${startTime}] - (Preview) - ${passed}/${total} (?${warnings})`);
+		console.groupCollapsed(`🎯 TEST 18: Copilot [${startTime}] - (Preview) - ${passed}/${total}`);
 		console.log("%c📋 ReadOnly Properties (R1-R4)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
 		console.table(results);
 		console.log("%c⚡ Setters & Methods (S1-S2)", "font-weight: bold; font-size: 14px; color: #2196F3;");
