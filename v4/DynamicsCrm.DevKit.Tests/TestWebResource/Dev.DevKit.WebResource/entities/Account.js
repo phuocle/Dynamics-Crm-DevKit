@@ -7,7 +7,6 @@ var formAccount_DevKitV4 = (function () {
 	let form;
 	/** @param {any} executionContext */
 	async function onLoad(executionContext) {
-		debugger;
 		form = new DevKit.FormAccount_DevKitV4(executionContext);
 		registerEvents();
 		form.UiAddLoaded(UiAddLoaded);
