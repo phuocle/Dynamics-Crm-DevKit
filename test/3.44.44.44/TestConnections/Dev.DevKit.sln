@@ -23,17 +23,17 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.Plugin.UserPass.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.Plugin.OOB.Account", "Dev.DevKit.Plugin.OOB.Account\Dev.DevKit.Plugin.OOB.Account.csproj", "{594D7B6A-5BD7-4AB3-A661-05B46FDBA133}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.SolutionPackager.OOB", "SP.OOB\Dev.DevKit.SolutionPackager.OOB.csproj", "{D90B3456-9333-4135-8A5D-7002BB2A0291}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.SolutionPackager.OOB", "Dev.DevKit.SolutionPackager.OOB\Dev.DevKit.SolutionPackager.OOB.csproj", "{D90B3456-9333-4135-8A5D-7002BB2A0291}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.SolutionPackager.ClientSecret", "SP.ClientSecret\Dev.DevKit.SolutionPackager.ClientSecret.csproj", "{7025B559-619A-48FB-B493-ACCC529D22A3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.SolutionPackager.ClientSecret", "Dev.DevKit.SolutionPackager.ClientSecret\Dev.DevKit.SolutionPackager.ClientSecret.csproj", "{7025B559-619A-48FB-B493-ACCC529D22A3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.SolutionPackager.UserPass", "SP.UserPass\Dev.DevKit.SolutionPackager.UserPass.csproj", "{07228302-8869-44D5-9B0F-E580CDC024D1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.SolutionPackager.UserPass", "Dev.DevKit.SolutionPackager.UserPass\Dev.DevKit.SolutionPackager.UserPass.csproj", "{07228302-8869-44D5-9B0F-E580CDC024D1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.Console.OnPremises", "Dev.DevKit.Console.OnPremises\Dev.DevKit.Console.OnPremises.csproj", "{4A306D16-D886-46CB-AC26-BFF34F931BC1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.Plugin.OnPremises.Account", "Dev.DevKit.Plugin.OnPremises.Account\Dev.DevKit.Plugin.OnPremises.Account.csproj", "{45224D36-107D-4E76-BE3A-B72008C80E6F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.SolutionPackager.OnPremises", "SP.OnPremises\Dev.DevKit.SolutionPackager.OnPremises.csproj", "{DBE1FA5C-DBD6-4F11-9F7C-662515CE816B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.SolutionPackager.OnPremises", "Dev.DevKit.SolutionPackager.OnPremises\Dev.DevKit.SolutionPackager.OnPremises.csproj", "{DBE1FA5C-DBD6-4F11-9F7C-662515CE816B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
