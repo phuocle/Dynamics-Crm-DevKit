@@ -136,6 +136,8 @@ export namespace FormAccount_DevKitV4 {
      * Contains navigation items
      */
     export interface INavigation {
+        navActivities: DevKit.Controls.NavigationItem;
+        navContacts: DevKit.Controls.NavigationItem;
         account_adx_inviteredemptions: DevKit.Controls.NavigationItem;
         account_adx_portalcomments: DevKit.Controls.NavigationItem;
         Account_Appointments: DevKit.Controls.NavigationItem;
@@ -262,6 +264,8 @@ export namespace FormAccount_DevKitV4 {
                     'Contacts'
                 ],
                 navigation: [
+                    'navActivities',
+                    'navContacts',
                     'account_adx_inviteredemptions',
                     'account_adx_portalcomments',
                     'Account_Appointments',
