@@ -293,21 +293,34 @@ const devKit = (function () {
         field.SetIsValid = (valid, message) => attribute?.setIsValid(valid, message);
         field.SetNotification = (message, uniqueId) => control?.setNotification(message, uniqueId);
     }
+    // Helper: find control by name using attribute.controls (works for lazy-loaded tabs)
+    function findControlFromAttribute(attribute, controlName) {
+        let foundControl = null;
+        const lowerName = controlName?.toLowerCase();
+        attribute?.controls?.forEach(ctrl => {
+            if (ctrl?.getName()?.toLowerCase() === lowerName) {
+                foundControl = ctrl;
+            }
+        });
+        return foundControl;
+    }
     function loadFields(formContext, body, type) {
         Object.keys(body).forEach(field => {
             const logicalName = type === undefined ? field?.toLowerCase() : (type + field)?.toLowerCase();
-            let control = formContext?.getControl(logicalName) ?? formContext?.getControl(field);
-            // Fallback: if control is null for numbered fields (OwnerId1, OwnerId2...), try base name (OwnerId)
-            if (!control) {
-                const baseFieldName = field.replace(/\d+$/, ''); // Strip trailing numbers
+            // Get attribute first (works for lazy-loaded tabs too)
+            let attribute = formContext?.getAttribute(logicalName);
+            // If no attribute, try base name for multi-control scenarios (OwnerId1 -> ownerid)
+            if (!attribute) {
+                const baseFieldName = field.replace(/\d+$/, '');
                 if (baseFieldName !== field) {
                     const baseLogicalName = type === undefined ? baseFieldName?.toLowerCase() : (type + baseFieldName)?.toLowerCase();
-                    control = formContext?.getControl(baseLogicalName) ?? formContext?.getControl(baseFieldName);
+                    attribute = formContext?.getAttribute(baseLogicalName);
                 }
             }
-            let attribute = formContext?.getAttribute(logicalName);
-            if (!attribute && control?.getAttribute) {
-                attribute = control.getAttribute();
+            // Get control: try getControl first, then fallback to attribute.controls (handles lazy-loaded tabs)
+            let control = formContext?.getControl(logicalName) ?? formContext?.getControl(field);
+            if (!control && attribute) {
+                control = findControlFromAttribute(attribute, logicalName) ?? findControlFromAttribute(attribute, field);
             }
             loadField(formContext, body[field], attribute, control);
         });
