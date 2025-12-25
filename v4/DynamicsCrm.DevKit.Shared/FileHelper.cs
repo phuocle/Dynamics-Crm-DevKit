@@ -94,20 +94,21 @@ namespace DynamicsCrm.DevKit.Shared
         {
             try
             {
-                var lines = new System.Collections.Generic.List<string>();
-                using (var reader = new StreamReader(file))
+                using var reader = new StreamReader(file);
+                for (int i = 0; i < 7; i++)
                 {
-                    string line;
-                    while ((line = await reader.ReadLineAsync()) != null)
-                    {
-                        lines.Add(line);
-                    }
+                    if (await reader.ReadLineAsync() == null) return string.Empty;
                 }
-                for (int i = 0; i < 7 && lines.Count > 0; i++)
+                var sb = new System.Text.StringBuilder();
+                string line;
+                var first = true;
+                while ((line = await reader.ReadLineAsync()) != null)
                 {
-                    lines.RemoveAt(0);
+                    if (!first) sb.Append("\r\n");
+                    sb.Append(line);
+                    first = false;
                 }
-                return string.Join("\r\n", lines);
+                return sb.ToString();
             }
             catch
             {
