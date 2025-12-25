@@ -52,21 +52,8 @@ declare namespace DevKit {
 			v4_String2: DevKit.Controls.String;
 		}
 		interface Navigation {
-			account_adx_inviteredemptions: DevKit.Controls.NavigationItem;
-			account_adx_portalcomments: DevKit.Controls.NavigationItem;
-			Account_Appointments: DevKit.Controls.NavigationItem;
-			account_DeletedItemReferences: DevKit.Controls.NavigationItem;
-			Account_Email_EmailSender: DevKit.Controls.NavigationItem;
-			Account_Email_SendersAccount: DevKit.Controls.NavigationItem;
-			Account_Emails: DevKit.Controls.NavigationItem;
-			account_parent_account: DevKit.Controls.NavigationItem;
-			Account_Phonecalls: DevKit.Controls.NavigationItem;
-			Account_Tasks: DevKit.Controls.NavigationItem;
-			adx_invitation_assigntoaccount: DevKit.Controls.NavigationItem;
-			bpf_account_v4_accountbpf: DevKit.Controls.NavigationItem;
-			contact_customer_accounts: DevKit.Controls.NavigationItem;
-			msa_account_managingpartner: DevKit.Controls.NavigationItem;
-			msa_contact_managingpartner: DevKit.Controls.NavigationItem;
+			navActivities: DevKit.Controls.NavigationItem;
+			navContacts: DevKit.Controls.NavigationItem;
 		}
 		interface quickForm_ContactQuickForm_Body {
 			EMailAddress1: DevKit.Controls.QuickView;

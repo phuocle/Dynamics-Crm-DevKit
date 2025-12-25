@@ -2887,6 +2887,13 @@ var formAccount_DevKitV4 = (function () {
 		console.groupEnd();
 	}
 
+	/**
+	 * TEST 15: NavigationItem Control - navContacts
+	 * 
+	 * Convention:
+	 * - R-Index: ReadOnly properties (R1, R2, R3...)
+	 * - S-Index: Setters & Methods (S1, S2, S3...)
+	 */
 	function TestNavigationItem() {
 		/** @type {Array<{Test: string, Property: string, Value: any, Status: string}>} */
 		const results = [];
@@ -2894,45 +2901,62 @@ var formAccount_DevKitV4 = (function () {
 		const methodResults = [];
 		const startTime = new Date().toLocaleTimeString();
 
+		// R1: Id
 		try {
-			results.push({ Test: "R1", Property: "Id", Value: form.Navigation.contact_customer_accounts.Id, Status: form.Navigation.contact_customer_accounts.Id ? "✓" : "⚠" });
-			results.push({ Test: "R2", Property: "Label", Value: form.Navigation.contact_customer_accounts.Label, Status: form.Navigation.contact_customer_accounts.Label ? "✓" : "⚠" });
-			results.push({ Test: "R3", Property: "Visible", Value: form.Navigation.contact_customer_accounts.Visible, Status: typeof form.Navigation.contact_customer_accounts.Visible === "boolean" ? "✓" : "⚠" });
-		} catch (/** @type {any} */ error) {
-			results.push({ Test: "ERR", Property: "Props Error", Value: error.message, Status: "✓" });
+			results.push({ Test: "R1", Property: "form.Navigation.navContacts.Id", Value: form.Navigation.navContacts.Id, Status: form.Navigation.navContacts.Id ? "✓" : "⚠" });
+		} catch (/** @type {any} */ e) {
+			results.push({ Test: "R1", Property: "form.Navigation.navContacts.Id", Value: e.message, Status: "✗" });
 		}
 
+		// R2: Label
 		try {
-			const origLabel = form.Navigation.contact_customer_accounts.Label;
-			form.Navigation.contact_customer_accounts.Label = origLabel + " (TEST)";
-			const check = form.Navigation.contact_customer_accounts.Label;
-			form.Navigation.contact_customer_accounts.Label = origLabel;
-			methodResults.push({ Test: "S1", Property: "Label (set)", Value: check.includes("(TEST)") ? "Set→Restored" : "Failed", Status: check.includes("(TEST)") ? "✓" : "⚠" });
+			results.push({ Test: "R2", Property: "form.Navigation.navContacts.Label", Value: form.Navigation.navContacts.Label, Status: form.Navigation.navContacts.Label ? "✓" : "⚠" });
 		} catch (/** @type {any} */ e) {
-			methodResults.push({ Test: "S1", Property: "Label (set)", Value: e.message, Status: "✗" });
+			results.push({ Test: "R2", Property: "form.Navigation.navContacts.Label", Value: e.message, Status: "✗" });
 		}
 
+		// R3: Visible
 		try {
-			const origVisible = form.Navigation.contact_customer_accounts.Visible;
-			form.Navigation.contact_customer_accounts.Visible = !origVisible;
-			form.Navigation.contact_customer_accounts.Visible = origVisible;
-			methodResults.push({ Test: "S2", Property: "Visible (set)", Value: "Set→Restored", Status: "✓" });
+			results.push({ Test: "R3", Property: "form.Navigation.navContacts.Visible", Value: form.Navigation.navContacts.Visible, Status: typeof form.Navigation.navContacts.Visible === "boolean" ? "✓" : "⚠" });
 		} catch (/** @type {any} */ e) {
-			methodResults.push({ Test: "S2", Property: "Visible (set)", Value: e.message, Status: "✗" });
+			results.push({ Test: "R3", Property: "form.Navigation.navContacts.Visible", Value: e.message, Status: "✗" });
 		}
 
+		// S1: Label (set)
 		try {
-			setTimeout(() => form.Navigation.contact_customer_accounts.Focus(), 1000);
-			methodResults.push({ Test: "S3", Property: "Focus", Value: "Scheduled (1s)", Status: "✓" });
+			const origLabel = form.Navigation.navContacts.Label;
+			form.Navigation.navContacts.Label = origLabel + " (TEST)";
+			const checkLabel = form.Navigation.navContacts.Label;
+			form.Navigation.navContacts.Label = origLabel;
+			methodResults.push({ Test: "S1", Property: "form.Navigation.navContacts.Label (set)", Value: checkLabel.includes("(TEST)") ? "Set -> Restored" : "Failed", Status: checkLabel.includes("(TEST)") ? "✓" : "⚠" });
 		} catch (/** @type {any} */ e) {
-			methodResults.push({ Test: "S3", Property: "Focus", Value: e.message, Status: "✗" });
+			methodResults.push({ Test: "S1", Property: "form.Navigation.navContacts.Label (set)", Value: e.message, Status: "✗" });
+		}
+
+		// S2: Visible (set)
+		try {
+			const origVisible = form.Navigation.navContacts.Visible;
+			form.Navigation.navContacts.Visible = !origVisible;
+			const checkVisible = form.Navigation.navContacts.Visible;
+			form.Navigation.navContacts.Visible = origVisible;
+			methodResults.push({ Test: "S2", Property: "form.Navigation.navContacts.Visible (set)", Value: "Set -> Restored", Status: "✓" });
+		} catch (/** @type {any} */ e) {
+			methodResults.push({ Test: "S2", Property: "form.Navigation.navContacts.Visible (set)", Value: e.message, Status: "✗" });
+		}
+
+		// S3: Focus
+		try {
+			setTimeout(() => form.Navigation.navContacts.Focus(), 1000);
+			methodResults.push({ Test: "S3", Property: "form.Navigation.navContacts.Focus()", Value: "Scheduled (1s)", Status: "✓" });
+		} catch (/** @type {any} */ e) {
+			methodResults.push({ Test: "S3", Property: "form.Navigation.navContacts.Focus()", Value: e.message, Status: "✗" });
 		}
 
 		const allResults = [...results, ...methodResults];
 		const passed = allResults.filter(r => r.Status === "✓").length;
 		const total = allResults.length;
 
-		console.groupCollapsed(`🎯 TEST 15: NavigationItem Control [${startTime}] - ${passed}/${total}`);
+		console.groupCollapsed(`🎯 TEST 15: NavigationItem [${startTime}] - Using: navContacts - ${passed}/${total}`);
 		console.log("%c📋 ReadOnly Properties (R1-R3)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
 		console.table(results);
 		console.log("%c⚡ Setters & Methods (S1-S3)", "font-weight: bold; font-size: 14px; color: #2196F3;");
