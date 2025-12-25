@@ -1,4 +1,4 @@
-//@ts-check
+﻿//@ts-check
 ///<reference path="Account.d.ts" />
 "use strict";
 var formAccount_DevKitV4 = (function () {
@@ -270,9 +270,9 @@ var formAccount_DevKitV4 = (function () {
 		// OUTPUT
 		// =====================================================
 		const allResults = [...results, ...setterResults];
-		const passed = allResults.filter(r => r.Status === "?").length;
-		const warnings = allResults.filter(r => r.Status === "?").length;
-		const failed = allResults.filter(r => r.Status === "?").length;
+		const passed = allResults.filter(r => r.Status === "✓").length;
+		const warnings = allResults.filter(r => r.Status === "⚠").length;
+		const failed = allResults.filter(r => r.Status === "✗").length;
 		const total = allResults.length;
 
 		console.groupCollapsed(`🎯 TEST 0: IControl Interface [${startTime}] - Using: v4_String field - ${passed}/${total}`);
@@ -428,9 +428,9 @@ var formAccount_DevKitV4 = (function () {
 		// OUTPUT
 		// =====================================================
 		const allResults = [...results, ...methodResults];
-		const passed = allResults.filter(r => r.Status === "?").length;
-		const warnings = allResults.filter(r => r.Status === "?").length;
-		const failed = allResults.filter(r => r.Status === "?").length;
+		const passed = allResults.filter(r => r.Status === "✓").length;
+		const warnings = allResults.filter(r => r.Status === "⚠").length;
+		const failed = allResults.filter(r => r.Status === "✗").length;
 		const total = allResults.length;
 
 		console.groupCollapsed(`🎯 TEST 1: String Control [${startTime}] - Using: v4_String field - ${passed}/${total}`);
@@ -590,9 +590,9 @@ var formAccount_DevKitV4 = (function () {
 		// OUTPUT
 		// =====================================================
 		const allResults = [...results, ...methodResults];
-		const passed = allResults.filter(r => r.Status === "?").length;
-		const warnings = allResults.filter(r => r.Status === "?").length;
-		const failed = allResults.filter(r => r.Status === "?").length;
+		const passed = allResults.filter(r => r.Status === "✓").length;
+		const warnings = allResults.filter(r => r.Status === "⚠").length;
+		const failed = allResults.filter(r => r.Status === "✗").length;
 		const total = allResults.length;
 
 		console.groupCollapsed(`🎯 TEST 2: Memo Control [${startTime}] - Using: v4_Memo field - ${passed}/${total}`);
@@ -623,9 +623,9 @@ var formAccount_DevKitV4 = (function () {
 		// READONLY PROPERTIES (R-Index)
 		// =====================================================
 		try {
-			// Boolean-specific properties (InitialValue can be boolean or 0/1)
+			// Boolean-specific properties (InitialValue can be boolean, 0, 1, or null for unset)
 			const initVal = form.Body.v4_Boolean.InitialValue;
-			const isValidInitValue = typeof initVal === "boolean" || initVal === 0 || initVal === 1;
+			const isValidInitValue = initVal === null || typeof initVal === "boolean" || initVal === 0 || initVal === 1;
 			results.push({ Test: "R1", Property: "InitialValue", Value: initVal, Status: isValidInitValue ? "✓" : "⚠" });
 			results.push({ Test: "R2", Property: "Value", Value: originalValue, Status: "✓" });
 
@@ -758,9 +758,9 @@ var formAccount_DevKitV4 = (function () {
 		// OUTPUT
 		// =====================================================
 		const allResults = [...results, ...methodResults];
-		const passed = allResults.filter(r => r.Status === "?").length;
-		const warnings = allResults.filter(r => r.Status === "?").length;
-		const failed = allResults.filter(r => r.Status === "?").length;
+		const passed = allResults.filter(r => r.Status === "✓").length;
+		const warnings = allResults.filter(r => r.Status === "⚠").length;
+		const failed = allResults.filter(r => r.Status === "✗").length;
 		const total = allResults.length;
 
 		console.groupCollapsed(`🎯 TEST 3: Boolean Control [${startTime}] - Using: v4_Boolean field - ${passed}/${total}`);
@@ -925,9 +925,9 @@ var formAccount_DevKitV4 = (function () {
 		// OUTPUT
 		// =====================================================
 		const allResults = [...results, ...methodResults];
-		const passed = allResults.filter(r => r.Status === "?").length;
-		const warnings = allResults.filter(r => r.Status === "?").length;
-		const failed = allResults.filter(r => r.Status === "?").length;
+		const passed = allResults.filter(r => r.Status === "✓").length;
+		const warnings = allResults.filter(r => r.Status === "⚠").length;
+		const failed = allResults.filter(r => r.Status === "✗").length;
 		const total = allResults.length;
 
 		console.groupCollapsed(`🎯 TEST 4: Integer Control [${startTime}] - Using: v4_Integer field - ${passed}/${total}`);
@@ -1280,9 +1280,9 @@ var formAccount_DevKitV4 = (function () {
 		// OUTPUT
 		// =====================================================
 		const allResults = [...results, ...methodResults];
-		const passed = allResults.filter(r => r.Status === "?").length;
-		const warnings = allResults.filter(r => r.Status === "?").length;
-		const failed = allResults.filter(r => r.Status === "?").length;
+		const passed = allResults.filter(r => r.Status === "✓").length;
+		const warnings = allResults.filter(r => r.Status === "⚠").length;
+		const failed = allResults.filter(r => r.Status === "✗").length;
 		const total = allResults.length;
 
 		console.groupCollapsed(`🎯 TEST 5: Decimal Control [${startTime}] - Using: v4_Decimal field - ${passed}/${total}`);
@@ -1457,9 +1457,9 @@ var formAccount_DevKitV4 = (function () {
 		// OUTPUT
 		// =====================================================
 		const allResults = [...results, ...methodResults];
-		const passed = allResults.filter(r => r.Status === "?").length;
-		const warnings = allResults.filter(r => r.Status === "?").length;
-		const failed = allResults.filter(r => r.Status === "?").length;
+		const passed = allResults.filter(r => r.Status === "✓").length;
+		const warnings = allResults.filter(r => r.Status === "⚠").length;
+		const failed = allResults.filter(r => r.Status === "✗").length;
 		const total = allResults.length;
 
 		console.groupCollapsed(`🎯 TEST 6: Double Control [${startTime}] - Using: v4_Double field - ${passed}/${total}`);
@@ -1641,9 +1641,9 @@ var formAccount_DevKitV4 = (function () {
 		// OUTPUT
 		// =====================================================
 		const allResults = [...results, ...methodResults];
-		const passed = allResults.filter(r => r.Status === "?").length;
-		const warnings = allResults.filter(r => r.Status === "?").length;
-		const failed = allResults.filter(r => r.Status === "?").length;
+		const passed = allResults.filter(r => r.Status === "✓").length;
+		const warnings = allResults.filter(r => r.Status === "⚠").length;
+		const failed = allResults.filter(r => r.Status === "✗").length;
 		const total = allResults.length;
 
 		console.groupCollapsed(`🎯 TEST 7: Money Control [${startTime}] - Using: v4_Money field - ${passed}/${total}`);
@@ -1796,9 +1796,9 @@ var formAccount_DevKitV4 = (function () {
 		// OUTPUT
 		// =====================================================
 		const allResults = [...results, ...methodResults];
-		const passed = allResults.filter(r => r.Status === "?").length;
-		const warnings = allResults.filter(r => r.Status === "?").length;
-		const failed = allResults.filter(r => r.Status === "?").length;
+		const passed = allResults.filter(r => r.Status === "✓").length;
+		const warnings = allResults.filter(r => r.Status === "⚠").length;
+		const failed = allResults.filter(r => r.Status === "✗").length;
 		const total = allResults.length;
 
 		console.groupCollapsed(`🎯 TEST 8: Lookup Control [${startTime}] - Using: v4_Lookup field - ${passed}/${total}`);
@@ -2155,9 +2155,9 @@ var formAccount_DevKitV4 = (function () {
 		// OUTPUT
 		// =====================================================
 		const allResults = [...results, ...methodResults];
-		const passed = allResults.filter(r => r.Status === "?").length;
-		const warnings = allResults.filter(r => r.Status === "?").length;
-		const failed = allResults.filter(r => r.Status === "?").length;
+		const passed = allResults.filter(r => r.Status === "✓").length;
+		const warnings = allResults.filter(r => r.Status === "⚠").length;
+		const failed = allResults.filter(r => r.Status === "✗").length;
 		const total = allResults.length;
 
 		console.groupCollapsed(`🎯 TEST 9: OptionSet Control [${startTime}] - Using: v4_OptionSet field - ${passed}/${total}`);
@@ -2359,9 +2359,9 @@ var formAccount_DevKitV4 = (function () {
 		// OUTPUT
 		// =====================================================
 		const allResults = [...results, ...methodResults];
-		const passed = allResults.filter(r => r.Status === "?").length;
-		const warnings = allResults.filter(r => r.Status === "?").length;
-		const failed = allResults.filter(r => r.Status === "?").length;
+		const passed = allResults.filter(r => r.Status === "✓").length;
+		const warnings = allResults.filter(r => r.Status === "⚠").length;
+		const failed = allResults.filter(r => r.Status === "✗").length;
 		const total = allResults.length;
 
 		console.groupCollapsed(`🎯 TEST 10: MultiOptionSet Control [${startTime}] - Using: v4_MultiOptionSet field - ${passed}/${total}`);
@@ -2525,9 +2525,9 @@ var formAccount_DevKitV4 = (function () {
 		// OUTPUT
 		// =====================================================
 		const allResults = [...results, ...methodResults];
-		const passed = allResults.filter(r => r.Status === "?").length;
-		const warnings = allResults.filter(r => r.Status === "?").length;
-		const failed = allResults.filter(r => r.Status === "?").length;
+		const passed = allResults.filter(r => r.Status === "✓").length;
+		const warnings = allResults.filter(r => r.Status === "⚠").length;
+		const failed = allResults.filter(r => r.Status === "✗").length;
 		const total = allResults.length;
 
 		console.groupCollapsed(`🎯 TEST 11: DateOnly Control [${startTime}] - Using: v4_DateOnly field - ${passed}/${total}`);
@@ -2703,9 +2703,9 @@ var formAccount_DevKitV4 = (function () {
 		// OUTPUT
 		// =====================================================
 		const allResults = [...results, ...methodResults];
-		const passed = allResults.filter(r => r.Status === "?").length;
-		const warnings = allResults.filter(r => r.Status === "?").length;
-		const failed = allResults.filter(r => r.Status === "?").length;
+		const passed = allResults.filter(r => r.Status === "✓").length;
+		const warnings = allResults.filter(r => r.Status === "⚠").length;
+		const failed = allResults.filter(r => r.Status === "✗").length;
 		const total = allResults.length;
 
 		console.groupCollapsed(`🎯 TEST 12: DateTime Control [${startTime}] - Using: v4_DateTime field - ${passed}/${total}`);
@@ -2785,7 +2785,7 @@ var formAccount_DevKitV4 = (function () {
 		}
 
 		const allResults = [...results, ...methodResults];
-		const passed = allResults.filter(r => r.Status === "?").length;
+		const passed = allResults.filter(r => r.Status === "✓").length;
 		const total = allResults.length;
 
 		console.groupCollapsed(`🎯 TEST 13: Grid Control [${startTime}] - Using: Contacts subgrid - ${passed}/${total}`);
@@ -2848,7 +2848,7 @@ var formAccount_DevKitV4 = (function () {
 		}
 
 		const allResults = [...results, ...methodResults];
-		const passed = allResults.filter(r => r.Status === "?").length;
+		const passed = allResults.filter(r => r.Status === "✓").length;
 		const total = allResults.length;
 
 		console.groupCollapsed(`🎯 TEST 14: QuickView Control [${startTime}] - Using: ContactQuickForm - ${passed}/${total}`);
@@ -2901,7 +2901,7 @@ var formAccount_DevKitV4 = (function () {
 		}
 
 		const allResults = [...results, ...methodResults];
-		const passed = allResults.filter(r => r.Status === "?").length;
+		const passed = allResults.filter(r => r.Status === "✓").length;
 		const total = allResults.length;
 
 		console.groupCollapsed(`🎯 TEST 15: NavigationItem Control [${startTime}] - ${passed}/${total}`);
@@ -2970,7 +2970,7 @@ var formAccount_DevKitV4 = (function () {
 		}
 
 		const allResults = [...results, ...methodResults];
-		const passed = allResults.filter(r => r.Status === "?").length;
+		const passed = allResults.filter(r => r.Status === "✓").length;
 		const total = allResults.length;
 
 		console.groupCollapsed(`🎯 TEST 16: ExecutionContext [${startTime}] - ${passed}/${total}`);
@@ -3023,7 +3023,7 @@ var formAccount_DevKitV4 = (function () {
 		}
 
 		const allResults = [...results, ...methodResults];
-		const passed = allResults.filter(r => r.Status === "?").length;
+		const passed = allResults.filter(r => r.Status === "✓").length;
 		const total = allResults.length;
 
 		console.groupCollapsed(`🎯 TEST 17: SidePanes [${startTime}] - ${passed}/${total}`);
@@ -3080,8 +3080,8 @@ var formAccount_DevKitV4 = (function () {
 		}
 
 		const allResults = [...results, ...methodResults];
-		const passed = allResults.filter(r => r.Status === "?").length;
-		const warnings = allResults.filter(r => r.Status === "?").length;
+		const passed = allResults.filter(r => r.Status === "✓").length;
+		const warnings = allResults.filter(r => r.Status === "⚠").length;
 		const total = allResults.length;
 
 		console.groupCollapsed(`🎯 TEST 18: Copilot [${startTime}] - (Preview) - ${passed}/${total} (?${warnings})`);
@@ -3161,7 +3161,7 @@ var formAccount_DevKitV4 = (function () {
 		}
 
 		const allResults = [...results, ...methodResults];
-		const passed = allResults.filter(r => r.Status === "?").length;
+		const passed = allResults.filter(r => r.Status === "✓").length;
 		const total = allResults.length;
 
 		console.groupCollapsed(`🎯 TEST 19: Process (BPF) [${startTime}] - ${passed}/${total}`);
@@ -3236,7 +3236,7 @@ var formAccount_DevKitV4 = (function () {
 		}
 
 		const allResults = [...results, ...methodResults];
-		const passed = allResults.filter(r => r.Status === "?").length;
+		const passed = allResults.filter(r => r.Status === "✓").length;
 		const total = allResults.length;
 
 		console.groupCollapsed(`🎯 TEST 20: IFrame Control [${startTime}] - ${passed}/${total}`);
@@ -3361,8 +3361,8 @@ var formAccount_DevKitV4 = (function () {
 		}
 
 		const allResults = [...results, ...methodResults];
-		const passed = allResults.filter(r => r.Status === "?").length;
-		const warnings = allResults.filter(r => r.Status === "?").length;
+		const passed = allResults.filter(r => r.Status === "✓").length;
+		const warnings = allResults.filter(r => r.Status === "⚠").length;
 		const total = allResults.length;
 
 		console.groupCollapsed(`🎯 TEST 21: Utility API [${startTime}] - ${passed}/${total}`);
