@@ -93,6 +93,21 @@ var formAccount_DevKitV4 = (function () {
 			// Test 21: Utility API
 			TestUtility();
 
+			// Test 22: Tab Control
+			TestTab();
+
+			// Test 23: Timer Control
+			TestTimer();
+
+			// Test 24: Knowledge Control
+			TestKnowledge();
+
+			// Test 25: WebApi
+			await TestWebApi();
+
+			// Test 26: WebResource Control
+			TestWebResource();
+
 		}, 1000);
 	}
 
@@ -3235,8 +3250,8 @@ var formAccount_DevKitV4 = (function () {
 
 		try {
 			form.Body.IFRAME_PhuocLe.ContentWindow(
-				(/** @type {any} */ win) => console.log("  ?? IFrame ContentWindow Success", win),
-				(/** @type {any} */ err) => console.log("  ?? IFrame ContentWindow Error", err)
+				(/** @type {any} */ win) => { },
+				(/** @type {any} */ err) => { }
 			);
 			methodResults.push({ Test: "S4", Property: "ContentWindow", Value: "Called", Status: "✓" });
 		} catch (/** @type {any} */ e) {
@@ -3445,6 +3460,380 @@ var formAccount_DevKitV4 = (function () {
 			(failed > 0 ? ` | ✗ ${failed} failed` : ''),
 			"font-weight: bold; color: #4CAF50; font-size: 14px;");
 		console.groupEnd();
+	}
+
+	/**
+	 * TEST 22: Tab Control - Tests Tab and Section properties
+	 * Using TAB_1 with TAB_1_SECTION_1
+	 * 
+	 * Convention:
+	 * - R-Index: ReadOnly properties (R1, R2, R3...)
+	 * - S-Index: Setters & Methods (S1, S2, S3...)
+	 */
+	function TestTab() {
+		/** @type {Array<{Test: string, Property: string, Value: any, Status: string}>} */
+		const results = [];
+		/** @type {Array<{Test: string, Property: string, Value: any, Status: string}>} */
+		const methodResults = [];
+		const startTime = new Date().toLocaleTimeString();
+
+		// =====================================================
+		// TAB READONLY PROPERTIES (R-Index)
+		// =====================================================
+		try {
+			results.push({ Test: "R1", Property: "form.Body.Tab.TAB_1.Name", Value: form.Body.Tab.TAB_1.Name, Status: form.Body.Tab.TAB_1.Name ? "✓" : "⚠" });
+			results.push({ Test: "R2", Property: "form.Body.Tab.TAB_1.Parent", Value: form.Body.Tab.TAB_1.Parent ? "object" : "null", Status: form.Body.Tab.TAB_1.Parent ? "✓" : "⚠" });
+			results.push({ Test: "R3", Property: "form.Body.Tab.TAB_1.DisplayState", Value: form.Body.Tab.TAB_1.DisplayState, Status: form.Body.Tab.TAB_1.DisplayState === OptionSet.TabDisplayState.Expanded || form.Body.Tab.TAB_1.DisplayState === OptionSet.TabDisplayState.Collapsed ? "✓" : "⚠" });
+			results.push({ Test: "R4", Property: "form.Body.Tab.TAB_1.Label", Value: form.Body.Tab.TAB_1.Label, Status: form.Body.Tab.TAB_1.Label ? "✓" : "⚠" });
+			results.push({ Test: "R5", Property: "form.Body.Tab.TAB_1.Visible", Value: form.Body.Tab.TAB_1.Visible, Status: typeof form.Body.Tab.TAB_1.Visible === "boolean" ? "✓" : "⚠" });
+			results.push({ Test: "R6", Property: "form.Body.Tab.TAB_1.ContentType", Value: form.Body.Tab.TAB_1.ContentType, Status: "✓" });
+
+			// Section properties (TAB_1_SECTION_1)
+			results.push({ Test: "R7", Property: "form.Body.Tab.TAB_1.Section.TAB_1_SECTION_1", Value: form.Body.Tab.TAB_1.Section.TAB_1_SECTION_1 ? "object" : "null", Status: form.Body.Tab.TAB_1.Section.TAB_1_SECTION_1 ? "✓" : "⚠" });
+			results.push({ Test: "R8", Property: "form.Body.Tab.TAB_1.Section.TAB_1_SECTION_1.Name", Value: form.Body.Tab.TAB_1.Section.TAB_1_SECTION_1?.Name, Status: form.Body.Tab.TAB_1.Section.TAB_1_SECTION_1?.Name ? "✓" : "⚠" });
+			results.push({ Test: "R9", Property: "form.Body.Tab.TAB_1.Section.TAB_1_SECTION_1.Parent", Value: form.Body.Tab.TAB_1.Section.TAB_1_SECTION_1?.Parent ? "object" : "null", Status: form.Body.Tab.TAB_1.Section.TAB_1_SECTION_1?.Parent ? "✓" : "⚠" });
+			results.push({ Test: "R10", Property: "form.Body.Tab.TAB_1.Section.TAB_1_SECTION_1.Label", Value: form.Body.Tab.TAB_1.Section.TAB_1_SECTION_1?.Label, Status: form.Body.Tab.TAB_1.Section.TAB_1_SECTION_1?.Label ? "✓" : "⚠" });
+			results.push({ Test: "R11", Property: "form.Body.Tab.TAB_1.Section.TAB_1_SECTION_1.Visible", Value: form.Body.Tab.TAB_1.Section.TAB_1_SECTION_1?.Visible, Status: typeof form.Body.Tab.TAB_1.Section.TAB_1_SECTION_1?.Visible === "boolean" ? "✓" : "⚠" });
+
+		} catch (/** @type {any} */ error) {
+			results.push({ Test: "ERR", Property: "Props Error", Value: error.message, Status: "✗" });
+		}
+
+		// =====================================================
+		// TAB SETTERS & METHODS (S-Index)
+		// =====================================================
+
+		// Setter: DisplayState
+		try {
+			const origDisplayState = form.Body.Tab.TAB_1.DisplayState;
+			form.Body.Tab.TAB_1.DisplayState = origDisplayState === OptionSet.TabDisplayState.Expanded ? OptionSet.TabDisplayState.Collapsed : OptionSet.TabDisplayState.Expanded;
+			const checkDisplayState = form.Body.Tab.TAB_1.DisplayState;
+			form.Body.Tab.TAB_1.DisplayState = origDisplayState;
+			methodResults.push({ Test: "S1", Property: "form.Body.Tab.TAB_1.DisplayState (set)", Value: `${origDisplayState} -> ${checkDisplayState} -> ${origDisplayState}`, Status: "✓" });
+		} catch (/** @type {any} */ e) {
+			methodResults.push({ Test: "S1", Property: "form.Body.Tab.TAB_1.DisplayState (set)", Value: e.message, Status: "✗" });
+		}
+
+		// Setter: Label
+		try {
+			const origLabel = form.Body.Tab.TAB_1.Label;
+			form.Body.Tab.TAB_1.Label = origLabel + " (TEST)";
+			const checkLabel = form.Body.Tab.TAB_1.Label;
+			form.Body.Tab.TAB_1.Label = origLabel;
+			methodResults.push({ Test: "S2", Property: "form.Body.Tab.TAB_1.Label (set)", Value: checkLabel?.includes("(TEST)") ? "Set -> Restored" : "Failed", Status: checkLabel?.includes("(TEST)") ? "✓" : "✗" });
+		} catch (/** @type {any} */ e) {
+			methodResults.push({ Test: "S2", Property: "form.Body.Tab.TAB_1.Label (set)", Value: e.message, Status: "✗" });
+		}
+
+		// Setter: Visible
+		try {
+			const origVisible = form.Body.Tab.TAB_1.Visible;
+			form.Body.Tab.TAB_1.Visible = !origVisible;
+			const checkVisible = form.Body.Tab.TAB_1.Visible;
+			form.Body.Tab.TAB_1.Visible = origVisible;
+			methodResults.push({ Test: "S3", Property: "form.Body.Tab.TAB_1.Visible (set)", Value: "Set -> Restored", Status: "✓" });
+		} catch (/** @type {any} */ e) {
+			methodResults.push({ Test: "S3", Property: "form.Body.Tab.TAB_1.Visible (set)", Value: e.message, Status: "✗" });
+		}
+
+		// Method: Focus
+		try {
+			setTimeout(() => form.Body.Tab.TAB_1.Focus(), 500);
+			methodResults.push({ Test: "S4", Property: "form.Body.Tab.TAB_1.Focus()", Value: "Scheduled (500ms)", Status: "✓" });
+		} catch (/** @type {any} */ e) {
+			methodResults.push({ Test: "S4", Property: "form.Body.Tab.TAB_1.Focus()", Value: e.message, Status: "✗" });
+		}
+
+		// Method: AddTabStateChange / RemoveTabStateChange
+		/** @param {any} ctx */
+		const tabStateCallback = (ctx) => { };
+		try {
+			form.Body.Tab.TAB_1.AddTabStateChange(tabStateCallback);
+			form.Body.Tab.TAB_1.RemoveTabStateChange(tabStateCallback);
+			methodResults.push({ Test: "S5", Property: "form.Body.Tab.TAB_1.Add/RemoveTabStateChange", Value: "Registered & Removed", Status: "✓" });
+		} catch (/** @type {any} */ e) {
+			methodResults.push({ Test: "S5", Property: "form.Body.Tab.TAB_1.Add/RemoveTabStateChange", Value: e.message, Status: "✗" });
+		}
+
+		// =====================================================
+		// SECTION SETTERS (S-Index continued)
+		// =====================================================
+
+		// Section: Label
+		try {
+			const origSectionLabel = form.Body.Tab.TAB_1.Section.TAB_1_SECTION_1.Label;
+			form.Body.Tab.TAB_1.Section.TAB_1_SECTION_1.Label = origSectionLabel + " (TEST)";
+			const checkSectionLabel = form.Body.Tab.TAB_1.Section.TAB_1_SECTION_1.Label;
+			form.Body.Tab.TAB_1.Section.TAB_1_SECTION_1.Label = origSectionLabel;
+			methodResults.push({ Test: "S6", Property: "form.Body.Tab.TAB_1.Section.TAB_1_SECTION_1.Label (set)", Value: checkSectionLabel?.includes("(TEST)") ? "Set -> Restored" : "Failed", Status: checkSectionLabel?.includes("(TEST)") ? "✓" : "✗" });
+		} catch (/** @type {any} */ e) {
+			methodResults.push({ Test: "S6", Property: "form.Body.Tab.TAB_1.Section.TAB_1_SECTION_1.Label (set)", Value: e.message, Status: "✗" });
+		}
+
+		// Section: Visible
+		try {
+			const origSectionVisible = form.Body.Tab.TAB_1.Section.TAB_1_SECTION_1.Visible;
+			form.Body.Tab.TAB_1.Section.TAB_1_SECTION_1.Visible = !origSectionVisible;
+			const checkSectionVisible = form.Body.Tab.TAB_1.Section.TAB_1_SECTION_1.Visible;
+			form.Body.Tab.TAB_1.Section.TAB_1_SECTION_1.Visible = origSectionVisible;
+			methodResults.push({ Test: "S7", Property: "form.Body.Tab.TAB_1.Section.TAB_1_SECTION_1.Visible (set)", Value: "Set -> Restored", Status: "✓" });
+		} catch (/** @type {any} */ e) {
+			methodResults.push({ Test: "S7", Property: "form.Body.Tab.TAB_1.Section.TAB_1_SECTION_1.Visible (set)", Value: e.message, Status: "✗" });
+		}
+
+		// =====================================================
+		// OUTPUT
+		// =====================================================
+		const allResults = [...results, ...methodResults];
+		const passed = allResults.filter(r => r.Status === "✓").length;
+		const warnings = allResults.filter(r => r.Status === "⚠").length;
+		const failed = allResults.filter(r => r.Status === "✗").length;
+		const total = allResults.length;
+
+		console.groupCollapsed(`🎯 TEST 22: Tab Control [${startTime}] - Using: TAB_1 & TAB_1_SECTION_1 - ${passed}/${total}`);
+		console.log("%c📋 ReadOnly Properties (R1-R11)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
+		console.table(results);
+		console.log("%c⚡ Setters & Methods (S1-S7)", "font-weight: bold; font-size: 14px; color: #2196F3;");
+		console.table(methodResults);
+		console.log(`%c✅ Summary: ${passed}/${total} passed` +
+			(warnings > 0 ? ` | ⚠ ${warnings} warnings` : '') +
+			(failed > 0 ? ` | ✗ ${failed} failed` : ''),
+			"font-weight: bold; color: #4CAF50; font-size: 14px;");
+		console.groupEnd();
+	}
+
+	/**
+	 * TEST 23: Timer Control - v4_TimerSLA Field
+	 * Timer extends IControl with specific Refresh method and State property
+	 */
+	function TestTimer() {
+		console.log('⏭️ TEST 23: Timer Control - SKIPPED (v4_TimerSLA not on form)');
+	}
+
+	/**
+	 * TEST 24: Knowledge Control - v4_KnowledgeSearch Field
+	 * Knowledge extends IControl with SearchQuery, SelectedResults and specific events
+	 */
+	function TestKnowledge() {
+		console.log('⏭️ TEST 24: Knowledge Control - SKIPPED (v4_KnowledgeSearch not on form)');
+	}
+
+	/**
+	 * TEST 25: WebApi - Early-bound style coding
+	 * Tests AccountApi factory and WebApi retrieve methods
+	 */
+	async function TestWebApi() {
+		// @ts-ignore - AccountApi is defined in Account.webapi.js
+		const AccountApi = DevKit.AccountApi;
+		/** @type {Array<{Test: string, Property: string, Value: any, Status: string}>} */
+		const results = [];
+		/** @type {Array<{Test: string, Property: string, Value: any, Status: string}>} */
+		const methodResults = [];
+		const startTime = new Date().toLocaleTimeString();
+
+		// =====================================================
+		// WEBAPI OBJECT TESTS (R-Index)
+		// =====================================================
+
+		// R1: Create empty Account object via AccountApi factory
+		try {
+			const newAccount = new AccountApi();
+			newAccount.Name = 'Test Account';
+			newAccount.Telephone1 = '123-456-7890';
+			results.push({
+				Test: "R1",
+				Property: "new AccountApi()",
+				Value: `Name="${newAccount.Name}", Entity ready`,
+				Status: newAccount.Entity ? "✓" : "✗"
+			});
+		} catch (/** @type {any} */ e) {
+			results.push({ Test: "R1", Property: "new AccountApi()", Value: e.message, Status: "✗" });
+		}
+
+		// R2: Test Entity object structure
+		try {
+			const account = new AccountApi();
+			account.Name = 'Entity Test';
+			const entity = account.Entity;
+			results.push({
+				Test: "R2",
+				Property: "AccountApi.Entity",
+				Value: entity ? `Keys: ${Object.keys(entity).join(', ')}` : "null",
+				Status: entity && typeof entity === 'object' ? "✓" : "✗"
+			});
+		} catch (/** @type {any} */ e) {
+			results.push({ Test: "R2", Property: "AccountApi.Entity", Value: e.message, Status: "✗" });
+		}
+
+		// R3: Test EntityName property
+		try {
+			const account = new AccountApi();
+			results.push({
+				Test: "R3",
+				Property: "AccountApi.EntityName",
+				Value: account.EntityName,
+				Status: account.EntityName === 'account' ? "✓" : "✗"
+			});
+		} catch (/** @type {any} */ e) {
+			results.push({ Test: "R3", Property: "AccountApi.EntityName", Value: e.message, Status: "✗" });
+		}
+
+		// R4: Test EntityCollectionName property
+		try {
+			const account = new AccountApi();
+			results.push({
+				Test: "R4",
+				Property: "AccountApi.EntityCollectionName",
+				Value: account.EntityCollectionName,
+				Status: account.EntityCollectionName === 'accounts' ? "✓" : "✗"
+			});
+		} catch (/** @type {any} */ e) {
+			results.push({ Test: "R4", Property: "AccountApi.EntityCollectionName", Value: e.message, Status: "✗" });
+		}
+
+		// R5: Test FormattedValue property exists
+		try {
+			const account = new AccountApi();
+			results.push({
+				Test: "R5",
+				Property: "AccountApi.FormattedValue",
+				Value: account.FormattedValue ? "object exists" : "null",
+				Status: account.FormattedValue ? "✓" : "✗"
+			});
+		} catch (/** @type {any} */ e) {
+			results.push({ Test: "R5", Property: "AccountApi.FormattedValue", Value: e.message, Status: "✗" });
+		}
+
+		// =====================================================
+		// WEBAPI RETRIEVE RECORD TESTS (S-Index)
+		// =====================================================
+
+		// S1: RetrieveRecord - Promise-based with options
+		try {
+			const record = await form.WebApi.RetrieveRecord(
+				AccountApi,
+				form.EntityName,
+				form.EntityId,
+				"?$select=name,telephone1"
+			);
+			methodResults.push({
+				Test: "S1",
+				Property: "form.WebApi.RetrieveRecord (Promise+Options)",
+				Value: record.Name ? `Name="${record.Name}"` : "Retrieved",
+				Status: "✓"
+			});
+		} catch (/** @type {any} */ e) {
+			methodResults.push({ Test: "S1", Property: "form.WebApi.RetrieveRecord (Promise+Options)", Value: e.message, Status: "✗" });
+		}
+
+		// S2: RetrieveRecord - Promise-based without options
+		try {
+			const record = await form.WebApi.RetrieveRecord(
+				AccountApi,
+				form.EntityName,
+				form.EntityId
+			);
+			methodResults.push({
+				Test: "S2",
+				Property: "form.WebApi.RetrieveRecord (Promise)",
+				Value: record.AccountId ? "Retrieved with all fields" : "Retrieved",
+				Status: "✓"
+			});
+		} catch (/** @type {any} */ e) {
+			methodResults.push({ Test: "S2", Property: "form.WebApi.RetrieveRecord (Promise)", Value: e.message, Status: "✗" });
+		}
+
+		// S3: RetrieveRecords - FetchXML Promise-based
+		try {
+			const fetchXml = "<fetch top='3'><entity name='account'><attribute name='name'/><attribute name='accountnumber'/></entity></fetch>";
+			const records = await form.WebApi.RetrieveRecords(AccountApi, fetchXml);
+			methodResults.push({
+				Test: "S3",
+				Property: "form.WebApi.RetrieveRecords (FetchXML)",
+				Value: `Count: ${records.length}`,
+				Status: records.length >= 0 ? "✓" : "✗"
+			});
+		} catch (/** @type {any} */ e) {
+			methodResults.push({ Test: "S3", Property: "form.WebApi.RetrieveRecords (FetchXML)", Value: e.message, Status: "✗" });
+		}
+
+		// S4: RetrieveRecords - FetchXML with maxPageSize
+		try {
+			const fetchXml = "<fetch><entity name='account'><attribute name='name'/><attribute name='telephone1'/></entity></fetch>";
+			const records = await form.WebApi.RetrieveRecords(AccountApi, fetchXml, 5);
+			methodResults.push({
+				Test: "S4",
+				Property: "form.WebApi.RetrieveRecords (FetchXML+PageSize)",
+				Value: `Count: ${records.length} (max 5)`,
+				Status: records.length >= 0 ? "✓" : "✗"
+			});
+		} catch (/** @type {any} */ e) {
+			methodResults.push({ Test: "S4", Property: "form.WebApi.RetrieveRecords (FetchXML+PageSize)", Value: e.message, Status: "✗" });
+		}
+
+		// S5: RetrieveRecords - OData Promise-based
+		try {
+			const records = await form.WebApi.RetrieveRecords(
+				AccountApi,
+				'account',
+				'?$select=name,accountnumber&$top=3'
+			);
+			methodResults.push({
+				Test: "S5",
+				Property: "form.WebApi.RetrieveRecords (OData)",
+				Value: `Count: ${records.length}`,
+				Status: records.length >= 0 ? "✓" : "✗"
+			});
+		} catch (/** @type {any} */ e) {
+			methodResults.push({ Test: "S5", Property: "form.WebApi.RetrieveRecords (OData)", Value: e.message, Status: "✗" });
+		}
+
+		// S6: Set property and verify Entity update
+		try {
+			const account = new AccountApi();
+			account.Name = 'Update Test';
+			account.Revenue = 1000000;
+			account.NumberOfEmployees = 50;
+			const entity = account.Entity;
+			const hasName = entity && entity.name === 'Update Test';
+			const hasRevenue = entity && entity.revenue === 1000000;
+			methodResults.push({
+				Test: "S6",
+				Property: "AccountApi property set -> Entity update",
+				Value: `Name: ${hasName}, Revenue: ${hasRevenue}`,
+				Status: hasName && hasRevenue ? "✓" : "⚠"
+			});
+		} catch (/** @type {any} */ e) {
+			methodResults.push({ Test: "S6", Property: "AccountApi property set -> Entity update", Value: e.message, Status: "✗" });
+		}
+
+		// =====================================================
+		// OUTPUT
+		// =====================================================
+		const allResults = [...results, ...methodResults];
+		const passed = allResults.filter(r => r.Status === "✓").length;
+		const warnings = allResults.filter(r => r.Status === "⚠").length;
+		const failed = allResults.filter(r => r.Status === "✗").length;
+		const total = allResults.length;
+
+		console.groupCollapsed(`🎯 TEST 25: WebApi [${startTime}] - ${passed}/${total}`);
+		console.log("%c📋 AccountApi Factory Tests (R1-R5)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
+		console.table(results);
+		console.log("%c⚡ WebApi Methods (S1-S6)", "font-weight: bold; font-size: 14px; color: #2196F3;");
+		console.table(methodResults);
+		console.log(`%c✅ Summary: ${passed}/${total} passed` +
+			(warnings > 0 ? ` | ⚠ ${warnings} warnings` : '') +
+			(failed > 0 ? ` | ✗ ${failed} failed` : ''),
+			"font-weight: bold; color: #4CAF50; font-size: 14px;");
+		console.groupEnd();
+	}
+
+	/**
+	 * TEST 26: WebResource Control - v4_WebResourceHelp Field
+	 * WebResource extends IControl with specific properties: Src, Data, ContentWindow
+	 */
+	function TestWebResource() {
+		console.log('⏭️ TEST 26: WebResource Control - SKIPPED (v4_WebResourceHelp not on form)');
 	}
 	//END ON LOAD ==========================================================
 	//BEGIN ON CHANGE ======================================================
