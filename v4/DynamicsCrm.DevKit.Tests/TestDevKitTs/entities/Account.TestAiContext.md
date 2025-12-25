@@ -146,6 +146,11 @@ npm run debug
 Copy-Item -Path "d:\github\Dynamics-Crm-DevKit\v4\DynamicsCrm.DevKit.Tests\TestDevKitJs\entities\Account.js" -Destination "D:\github\Dynamics-Crm-DevKit\v4\DynamicsCrm.DevKit.Tests\TestWebResource\Dev.DevKit.WebResource\entities\" -Force
 ```
 
+### Bước 5A: (Nếu update devkit.js) Copy devkit.js to lib folder
+```bash
+Copy-Item -Path "d:\github\Dynamics-Crm-DevKit\v4\DynamicsCrm.DevKit.Tests\TestDevKitJs\lib\devkit.js" -Destination "D:\github\Dynamics-Crm-DevKit\v4\DynamicsCrm.DevKit.Tests\TestWebResource\Dev.DevKit.WebResource\lib\" -Force
+```
+
 
 ---
 

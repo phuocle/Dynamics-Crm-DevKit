@@ -296,7 +296,15 @@ const devKit = (function () {
     function loadFields(formContext, body, type) {
         Object.keys(body).forEach(field => {
             const logicalName = type === undefined ? field?.toLowerCase() : (type + field)?.toLowerCase();
-            const control = formContext?.getControl(logicalName) ?? formContext?.getControl(field);
+            let control = formContext?.getControl(logicalName) ?? formContext?.getControl(field);
+            // Fallback: if control is null for numbered fields (OwnerId1, OwnerId2...), try base name (OwnerId)
+            if (!control) {
+                const baseFieldName = field.replace(/\d+$/, ''); // Strip trailing numbers
+                if (baseFieldName !== field) {
+                    const baseLogicalName = type === undefined ? baseFieldName?.toLowerCase() : (type + baseFieldName)?.toLowerCase();
+                    control = formContext?.getControl(baseLogicalName) ?? formContext?.getControl(baseFieldName);
+                }
+            }
             let attribute = formContext?.getAttribute(logicalName);
             if (!attribute && control?.getAttribute) {
                 attribute = control.getAttribute();

@@ -125,5 +125,25 @@ echo ============================================================
 echo  Done! Copied !COUNT! file(s)
 echo ============================================================
 
+REM ============================================================
+REM STEP 5: Copy devkit.js to lib folder (if modified)
+REM ============================================================
+echo.
+echo [STEP 5] Copying devkit.js to lib folder...
+set DEVKIT_SOURCE=D:\github\Dynamics-Crm-DevKit\v4\DynamicsCrm.DevKit.Tests\TestDevKitJs\lib\devkit.js
+set DEVKIT_DEST=D:\github\Dynamics-Crm-DevKit\v4\DynamicsCrm.DevKit.Tests\TestWebResource\Dev.DevKit.WebResource\lib\devkit.js
+
+if exist "%DEVKIT_SOURCE%" (
+    copy /Y "%DEVKIT_SOURCE%" "%DEVKIT_DEST%" >nul
+    if !errorlevel! equ 0 (
+        echo   ✓ devkit.js copied to lib folder
+    ) else (
+        echo   ✗ Failed to copy devkit.js
+    )
+) else (
+    echo   ⚠ devkit.js not found at source
+)
+echo.
+
 :end
 endlocal

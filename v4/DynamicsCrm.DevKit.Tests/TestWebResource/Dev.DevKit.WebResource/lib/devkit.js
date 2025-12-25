@@ -296,7 +296,15 @@ const devKit = (function () {
     function loadFields(formContext, body, type) {
         Object.keys(body).forEach(field => {
             const logicalName = type === undefined ? field?.toLowerCase() : (type + field)?.toLowerCase();
-            const control = formContext?.getControl(logicalName) ?? formContext?.getControl(field);
+            let control = formContext?.getControl(logicalName) ?? formContext?.getControl(field);
+            // Fallback: if control is null for numbered fields (OwnerId1, OwnerId2...), try base name (OwnerId)
+            if (!control) {
+                const baseFieldName = field.replace(/\d+$/, ''); // Strip trailing numbers
+                if (baseFieldName !== field) {
+                    const baseLogicalName = type === undefined ? baseFieldName?.toLowerCase() : (type + baseFieldName)?.toLowerCase();
+                    control = formContext?.getControl(baseLogicalName) ?? formContext?.getControl(baseFieldName);
+                }
+            }
             let attribute = formContext?.getAttribute(logicalName);
             if (!attribute && control?.getAttribute) {
                 attribute = control.getAttribute();
@@ -660,7 +668,7 @@ const devKit = (function () {
         const getWebApi = xrmInstance?.WebApi;
         const getOnline = xrmInstance?.WebApi?.online;
         const getOffline = xrmInstance?.WebApi?.offline;
-        const extractEntityName = function(fetchXml) {
+        const extractEntityName = function (fetchXml) {
             let cleanXml = fetchXml;
             const fetchXmlMatch = fetchXml.match(/fetchxml=/i);
             if (fetchXmlMatch) {
@@ -733,7 +741,7 @@ const devKit = (function () {
                 return promise;
             }
         };
-        obj.RetrieveRecords = function(apiConstructorOrFactory, entityLogicalNameOrOptions, optionsOrMaxPageSizeOrCallback, maxPageSizeOrSuccessCallback, successCallback, errorCallback) {
+        obj.RetrieveRecords = function (apiConstructorOrFactory, entityLogicalNameOrOptions, optionsOrMaxPageSizeOrCallback, maxPageSizeOrSuccessCallback, successCallback, errorCallback) {
             let entityLogicalName;
             let options;
             let maxPageSize;
@@ -741,8 +749,8 @@ const devKit = (function () {
             const isPlainFetchXml = entityLogicalNameOrOptions => typeof entityLogicalNameOrOptions === 'string' && entityLogicalNameOrOptions.trim().startsWith('<fetch');
             const secondParamIsFetchXmlOrOData = typeof entityLogicalNameOrOptions === 'string' &&
                 (hasFetchXml(entityLogicalNameOrOptions) ||
-                isPlainFetchXml(entityLogicalNameOrOptions) ||
-                (entityLogicalNameOrOptions.startsWith('?') && !hasFetchXml(entityLogicalNameOrOptions)));
+                    isPlainFetchXml(entityLogicalNameOrOptions) ||
+                    (entityLogicalNameOrOptions.startsWith('?') && !hasFetchXml(entityLogicalNameOrOptions)));
             if (secondParamIsFetchXmlOrOData) {
                 options = entityLogicalNameOrOptions;
                 if (isPlainFetchXml(options)) {
@@ -791,7 +799,7 @@ const devKit = (function () {
                 return promise;
             }
         };
-        obj.RetrieveRecord = function(apiConstructorOrFactory, entityLogicalName, id, options, successCallback, errorCallback) {
+        obj.RetrieveRecord = function (apiConstructorOrFactory, entityLogicalName, id, options, successCallback, errorCallback) {
             if (typeof options === 'function') {
                 errorCallback = successCallback;
                 successCallback = options;
