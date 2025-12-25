@@ -261,7 +261,7 @@ var formAccount_DevKitV4 = (function () {
 		try {
 			form.Body.v4_String.SetIsValid(false, "Test invalid message");
 			setTimeout(() => form.Body.v4_String.SetIsValid(true, ""), 2000);
-			setterResults.push({ Test: "S16", Property: "SetIsValid", Value: "Set?Restored (2s)", Status: "✓" });
+			setterResults.push({ Test: "S16", Property: "SetIsValid", Value: "Set→Restored (2s)", Status: "✓" });
 		} catch (/** @type {any} */ e) {
 			setterResults.push({ Test: "S16", Property: "SetIsValid", Value: e.message, Status: "✗" });
 		}
@@ -333,7 +333,7 @@ var formAccount_DevKitV4 = (function () {
 			form.Body.v4_String.Value = (originalValue || "") + " [TEST]";
 			const newValue = form.Body.v4_String.Value;
 			form.Body.v4_String.Value = originalValue;
-			methodResults.push({ Test: "S1", Property: "Value (set)", Value: newValue?.includes("[TEST]") ? "Set?Restored" : "Failed", Status: newValue?.includes("[TEST]") ? "✓" : "⚠" });
+			methodResults.push({ Test: "S1", Property: "Value (set)", Value: newValue?.includes("[TEST]") ? "Set→Restored" : "Failed", Status: newValue?.includes("[TEST]") ? "✓" : "⚠" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S1", Property: "Value (set)", Value: e.message, Status: "✗" });
 		}
@@ -343,7 +343,7 @@ var formAccount_DevKitV4 = (function () {
 			form.Body.v4_String.RequiredLevel = OptionSet.FieldRequiredLevel.Required;
 			const check = form.Body.v4_String.RequiredLevel;
 			form.Body.v4_String.RequiredLevel = origRequired;
-			methodResults.push({ Test: "S2", Property: "RequiredLevel (set)", Value: check === OptionSet.FieldRequiredLevel.Required ? "Set?Restored" : "Failed", Status: check === OptionSet.FieldRequiredLevel.Required ? "✓" : "⚠" });
+			methodResults.push({ Test: "S2", Property: "RequiredLevel (set)", Value: check === OptionSet.FieldRequiredLevel.Required ? "Set→Restored" : "Failed", Status: check === OptionSet.FieldRequiredLevel.Required ? "✓" : "⚠" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S2", Property: "RequiredLevel (set)", Value: e.message, Status: "✗" });
 		}
@@ -352,7 +352,7 @@ var formAccount_DevKitV4 = (function () {
 			const origDisabled = form.Body.v4_String.Disabled;
 			form.Body.v4_String.Disabled = !origDisabled;
 			form.Body.v4_String.Disabled = origDisabled;
-			methodResults.push({ Test: "S3", Property: "Disabled (set)", Value: "Set?Restored", Status: "✓" });
+			methodResults.push({ Test: "S3", Property: "Disabled (set)", Value: "Set→Restored", Status: "✓" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S3", Property: "Disabled (set)", Value: e.message, Status: "✗" });
 		}
@@ -362,7 +362,7 @@ var formAccount_DevKitV4 = (function () {
 			form.Body.v4_String.Label = origLabel + " (TEST)";
 			const check = form.Body.v4_String.Label;
 			form.Body.v4_String.Label = origLabel;
-			methodResults.push({ Test: "S4", Property: "Label (set)", Value: check.includes("(TEST)") ? "Set?Restored" : "Failed", Status: check.includes("(TEST)") ? "✓" : "⚠" });
+			methodResults.push({ Test: "S4", Property: "Label (set)", Value: check.includes("(TEST)") ? "Set→Restored" : "Failed", Status: check.includes("(TEST)") ? "✓" : "⚠" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S4", Property: "Label (set)", Value: e.message, Status: "✗" });
 		}
@@ -371,7 +371,7 @@ var formAccount_DevKitV4 = (function () {
 			const origVisible = form.Body.v4_String.Visible;
 			form.Body.v4_String.Visible = !origVisible;
 			form.Body.v4_String.Visible = origVisible;
-			methodResults.push({ Test: "S5", Property: "Visible (set)", Value: "Set?Restored", Status: "✓" });
+			methodResults.push({ Test: "S5", Property: "Visible (set)", Value: "Set→Restored", Status: "✓" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S5", Property: "Visible (set)", Value: e.message, Status: "✗" });
 		}
@@ -419,7 +419,7 @@ var formAccount_DevKitV4 = (function () {
 		try {
 			form.Body.v4_String.SetIsValid(false, "Test invalid");
 			setTimeout(() => form.Body.v4_String.SetIsValid(true, ""), 2000);
-			methodResults.push({ Test: "S11", Property: "SetIsValid", Value: "Set?Restored (2s)", Status: "✓" });
+			methodResults.push({ Test: "S11", Property: "SetIsValid", Value: "Set→Restored (2s)", Status: "✓" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S11", Property: "SetIsValid", Value: e.message, Status: "✗" });
 		}
@@ -491,7 +491,7 @@ var formAccount_DevKitV4 = (function () {
 			form.Body.v4_Memo.Value = (originalValue || "") + " [TEST]";
 			const newValue = form.Body.v4_Memo.Value;
 			form.Body.v4_Memo.Value = originalValue;
-			methodResults.push({ Test: "S1", Property: "Value (set)", Value: newValue?.includes("[TEST]") ? "Set?Restored" : "Failed", Status: newValue?.includes("[TEST]") ? "✓" : "⚠" });
+			methodResults.push({ Test: "S1", Property: "Value (set)", Value: newValue?.includes("[TEST]") ? "Set→Restored" : "Failed", Status: newValue?.includes("[TEST]") ? "✓" : "⚠" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S1", Property: "Value (set)", Value: e.message, Status: "✗" });
 		}
@@ -502,7 +502,7 @@ var formAccount_DevKitV4 = (function () {
 			form.Body.v4_Memo.RequiredLevel = OptionSet.FieldRequiredLevel.Required;
 			const check = form.Body.v4_Memo.RequiredLevel;
 			form.Body.v4_Memo.RequiredLevel = origRequired;
-			methodResults.push({ Test: "S2", Property: "RequiredLevel (set)", Value: check === OptionSet.FieldRequiredLevel.Required ? "Set?Restored" : "Failed", Status: check === OptionSet.FieldRequiredLevel.Required ? "✓" : "⚠" });
+			methodResults.push({ Test: "S2", Property: "RequiredLevel (set)", Value: check === OptionSet.FieldRequiredLevel.Required ? "Set→Restored" : "Failed", Status: check === OptionSet.FieldRequiredLevel.Required ? "✓" : "⚠" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S2", Property: "RequiredLevel (set)", Value: e.message, Status: "✗" });
 		}
@@ -512,7 +512,7 @@ var formAccount_DevKitV4 = (function () {
 			const origDisabled = form.Body.v4_Memo.Disabled;
 			form.Body.v4_Memo.Disabled = !origDisabled;
 			form.Body.v4_Memo.Disabled = origDisabled;
-			methodResults.push({ Test: "S3", Property: "Disabled (set)", Value: "Set?Restored", Status: "✓" });
+			methodResults.push({ Test: "S3", Property: "Disabled (set)", Value: "Set→Restored", Status: "✓" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S3", Property: "Disabled (set)", Value: e.message, Status: "✗" });
 		}
@@ -523,7 +523,7 @@ var formAccount_DevKitV4 = (function () {
 			form.Body.v4_Memo.Label = origLabel + " (TEST)";
 			const check = form.Body.v4_Memo.Label;
 			form.Body.v4_Memo.Label = origLabel;
-			methodResults.push({ Test: "S4", Property: "Label (set)", Value: check.includes("(TEST)") ? "Set?Restored" : "Failed", Status: check.includes("(TEST)") ? "✓" : "⚠" });
+			methodResults.push({ Test: "S4", Property: "Label (set)", Value: check.includes("(TEST)") ? "Set→Restored" : "Failed", Status: check.includes("(TEST)") ? "✓" : "⚠" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S4", Property: "Label (set)", Value: e.message, Status: "✗" });
 		}
@@ -533,7 +533,7 @@ var formAccount_DevKitV4 = (function () {
 			const origVisible = form.Body.v4_Memo.Visible;
 			form.Body.v4_Memo.Visible = !origVisible;
 			form.Body.v4_Memo.Visible = origVisible;
-			methodResults.push({ Test: "S5", Property: "Visible (set)", Value: "Set?Restored", Status: "✓" });
+			methodResults.push({ Test: "S5", Property: "Visible (set)", Value: "Set→Restored", Status: "✓" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S5", Property: "Visible (set)", Value: e.message, Status: "✗" });
 		}
@@ -581,7 +581,7 @@ var formAccount_DevKitV4 = (function () {
 		try {
 			form.Body.v4_Memo.SetIsValid(false, "Test invalid");
 			setTimeout(() => form.Body.v4_Memo.SetIsValid(true, ""), 2000);
-			methodResults.push({ Test: "S11", Property: "SetIsValid", Value: "Set?Restored (2s)", Status: "✓" });
+			methodResults.push({ Test: "S11", Property: "SetIsValid", Value: "Set→Restored (2s)", Status: "✓" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S11", Property: "SetIsValid", Value: e.message, Status: "✗" });
 		}
@@ -657,7 +657,7 @@ var formAccount_DevKitV4 = (function () {
 			form.Body.v4_Boolean.Value = testValue;
 			const newValue = form.Body.v4_Boolean.Value;
 			form.Body.v4_Boolean.Value = originalValue;
-			methodResults.push({ Test: "S1", Property: "Value (set)", Value: newValue === testValue ? "Set?Restored" : "Failed", Status: newValue === testValue ? "✓" : "⚠" });
+			methodResults.push({ Test: "S1", Property: "Value (set)", Value: newValue === testValue ? "Set→Restored" : "Failed", Status: newValue === testValue ? "✓" : "⚠" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S1", Property: "Value (set)", Value: e.message, Status: "✗" });
 		}
@@ -668,7 +668,7 @@ var formAccount_DevKitV4 = (function () {
 			form.Body.v4_Boolean.RequiredLevel = OptionSet.FieldRequiredLevel.Required;
 			const check = form.Body.v4_Boolean.RequiredLevel;
 			form.Body.v4_Boolean.RequiredLevel = origRequired;
-			methodResults.push({ Test: "S2", Property: "RequiredLevel (set)", Value: check === OptionSet.FieldRequiredLevel.Required ? "Set?Restored" : "Failed", Status: check === OptionSet.FieldRequiredLevel.Required ? "✓" : "⚠" });
+			methodResults.push({ Test: "S2", Property: "RequiredLevel (set)", Value: check === OptionSet.FieldRequiredLevel.Required ? "Set→Restored" : "Failed", Status: check === OptionSet.FieldRequiredLevel.Required ? "✓" : "⚠" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S2", Property: "RequiredLevel (set)", Value: e.message, Status: "✗" });
 		}
@@ -679,7 +679,7 @@ var formAccount_DevKitV4 = (function () {
 			form.Body.v4_Boolean.Disabled = !origDisabled;
 			const check = form.Body.v4_Boolean.Disabled;
 			form.Body.v4_Boolean.Disabled = origDisabled;
-			methodResults.push({ Test: "S3", Property: "Disabled (set)", Value: "Set?Restored", Status: "✓" });
+			methodResults.push({ Test: "S3", Property: "Disabled (set)", Value: "Set→Restored", Status: "✓" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S3", Property: "Disabled (set)", Value: e.message, Status: "✗" });
 		}
@@ -690,7 +690,7 @@ var formAccount_DevKitV4 = (function () {
 			form.Body.v4_Boolean.Label = origLabel + " (TEST)";
 			const check = form.Body.v4_Boolean.Label;
 			form.Body.v4_Boolean.Label = origLabel;
-			methodResults.push({ Test: "S4", Property: "Label (set)", Value: check.includes("(TEST)") ? "Set?Restored" : "Failed", Status: check.includes("(TEST)") ? "✓" : "⚠" });
+			methodResults.push({ Test: "S4", Property: "Label (set)", Value: check.includes("(TEST)") ? "Set→Restored" : "Failed", Status: check.includes("(TEST)") ? "✓" : "⚠" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S4", Property: "Label (set)", Value: e.message, Status: "✗" });
 		}
@@ -701,7 +701,7 @@ var formAccount_DevKitV4 = (function () {
 			form.Body.v4_Boolean.Visible = !origVisible;
 			const check = form.Body.v4_Boolean.Visible;
 			form.Body.v4_Boolean.Visible = origVisible;
-			methodResults.push({ Test: "S5", Property: "Visible (set)", Value: "Set?Restored", Status: "✓" });
+			methodResults.push({ Test: "S5", Property: "Visible (set)", Value: "Set→Restored", Status: "✓" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S5", Property: "Visible (set)", Value: e.message, Status: "✗" });
 		}
@@ -749,7 +749,7 @@ var formAccount_DevKitV4 = (function () {
 		try {
 			form.Body.v4_Boolean.SetIsValid(false, "Test invalid");
 			setTimeout(() => form.Body.v4_Boolean.SetIsValid(true, ""), 2000);
-			methodResults.push({ Test: "S11", Property: "SetIsValid", Value: "Set?Restored (2s)", Status: "✓" });
+			methodResults.push({ Test: "S11", Property: "SetIsValid", Value: "Set→Restored (2s)", Status: "✓" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S11", Property: "SetIsValid", Value: e.message, Status: "✗" });
 		}
@@ -824,7 +824,7 @@ var formAccount_DevKitV4 = (function () {
 			form.Body.v4_Integer.Value = testValue;
 			const newValue = form.Body.v4_Integer.Value;
 			form.Body.v4_Integer.Value = originalValue;
-			methodResults.push({ Test: "S1", Property: "Value (set)", Value: newValue === testValue ? "Set?Restored" : "Failed", Status: newValue === testValue ? "✓" : "⚠" });
+			methodResults.push({ Test: "S1", Property: "Value (set)", Value: newValue === testValue ? "Set→Restored" : "Failed", Status: newValue === testValue ? "✓" : "⚠" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S1", Property: "Value (set)", Value: e.message, Status: "✗" });
 		}
@@ -835,7 +835,7 @@ var formAccount_DevKitV4 = (function () {
 			form.Body.v4_Integer.RequiredLevel = OptionSet.FieldRequiredLevel.Required;
 			const check = form.Body.v4_Integer.RequiredLevel;
 			form.Body.v4_Integer.RequiredLevel = origRequired;
-			methodResults.push({ Test: "S2", Property: "RequiredLevel (set)", Value: check === OptionSet.FieldRequiredLevel.Required ? "Set?Restored" : "Failed", Status: check === OptionSet.FieldRequiredLevel.Required ? "✓" : "⚠" });
+			methodResults.push({ Test: "S2", Property: "RequiredLevel (set)", Value: check === OptionSet.FieldRequiredLevel.Required ? "Set→Restored" : "Failed", Status: check === OptionSet.FieldRequiredLevel.Required ? "✓" : "⚠" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S2", Property: "RequiredLevel (set)", Value: e.message, Status: "✗" });
 		}
@@ -846,7 +846,7 @@ var formAccount_DevKitV4 = (function () {
 			form.Body.v4_Integer.Disabled = !origDisabled;
 			const check = form.Body.v4_Integer.Disabled;
 			form.Body.v4_Integer.Disabled = origDisabled;
-			methodResults.push({ Test: "S3", Property: "Disabled (set)", Value: "Set?Restored", Status: "✓" });
+			methodResults.push({ Test: "S3", Property: "Disabled (set)", Value: "Set→Restored", Status: "✓" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S3", Property: "Disabled (set)", Value: e.message, Status: "✗" });
 		}
@@ -857,7 +857,7 @@ var formAccount_DevKitV4 = (function () {
 			form.Body.v4_Integer.Label = origLabel + " (TEST)";
 			const check = form.Body.v4_Integer.Label;
 			form.Body.v4_Integer.Label = origLabel;
-			methodResults.push({ Test: "S4", Property: "Label (set)", Value: check.includes("(TEST)") ? "Set?Restored" : "Failed", Status: check.includes("(TEST)") ? "✓" : "⚠" });
+			methodResults.push({ Test: "S4", Property: "Label (set)", Value: check.includes("(TEST)") ? "Set→Restored" : "Failed", Status: check.includes("(TEST)") ? "✓" : "⚠" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S4", Property: "Label (set)", Value: e.message, Status: "✗" });
 		}
@@ -868,7 +868,7 @@ var formAccount_DevKitV4 = (function () {
 			form.Body.v4_Integer.Visible = !origVisible;
 			const check = form.Body.v4_Integer.Visible;
 			form.Body.v4_Integer.Visible = origVisible;
-			methodResults.push({ Test: "S5", Property: "Visible (set)", Value: "Set?Restored", Status: "✓" });
+			methodResults.push({ Test: "S5", Property: "Visible (set)", Value: "Set→Restored", Status: "✓" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S5", Property: "Visible (set)", Value: e.message, Status: "✗" });
 		}
@@ -916,7 +916,7 @@ var formAccount_DevKitV4 = (function () {
 		try {
 			form.Body.v4_Integer.SetIsValid(false, "Test invalid");
 			setTimeout(() => form.Body.v4_Integer.SetIsValid(true, ""), 2000);
-			methodResults.push({ Test: "S11", Property: "SetIsValid", Value: "Set?Restored (2s)", Status: "✓" });
+			methodResults.push({ Test: "S11", Property: "SetIsValid", Value: "Set→Restored (2s)", Status: "✓" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S11", Property: "SetIsValid", Value: e.message, Status: "✗" });
 		}
@@ -1167,7 +1167,7 @@ var formAccount_DevKitV4 = (function () {
 			form.Body.v4_Decimal.Value = testValue;
 			const newValue = form.Body.v4_Decimal.Value;
 			form.Body.v4_Decimal.Value = originalValue;
-			methodResults.push({ Test: "S1", Property: "Value (set)", Value: newValue === testValue ? "Set?Restored" : "Failed", Status: newValue === testValue ? "✓" : "⚠" });
+			methodResults.push({ Test: "S1", Property: "Value (set)", Value: newValue === testValue ? "Set→Restored" : "Failed", Status: newValue === testValue ? "✓" : "⚠" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S1", Property: "Value (set)", Value: e.message, Status: "✗" });
 		}
@@ -1179,7 +1179,7 @@ var formAccount_DevKitV4 = (function () {
 			// Note: Precision setting might throw if not within allowed range or locked by system
 			// We will try to set it to current value just to test the setter exists/works without error
 			form.Body.v4_Decimal.Precision = origPrecision;
-			methodResults.push({ Test: "S2", Property: "Precision (set)", Value: "Set?Restored", Status: "✓" });
+			methodResults.push({ Test: "S2", Property: "Precision (set)", Value: "Set→Restored", Status: "✓" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S2", Property: "Precision (set)", Value: e.message, Status: "✗" });
 		}
@@ -1190,7 +1190,7 @@ var formAccount_DevKitV4 = (function () {
 			form.Body.v4_Decimal.RequiredLevel = OptionSet.FieldRequiredLevel.Required;
 			const check = form.Body.v4_Decimal.RequiredLevel;
 			form.Body.v4_Decimal.RequiredLevel = origRequired;
-			methodResults.push({ Test: "S3", Property: "RequiredLevel (set)", Value: check === OptionSet.FieldRequiredLevel.Required ? "Set?Restored" : "Failed", Status: check === OptionSet.FieldRequiredLevel.Required ? "✓" : "⚠" });
+			methodResults.push({ Test: "S3", Property: "RequiredLevel (set)", Value: check === OptionSet.FieldRequiredLevel.Required ? "Set→Restored" : "Failed", Status: check === OptionSet.FieldRequiredLevel.Required ? "✓" : "⚠" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S3", Property: "RequiredLevel (set)", Value: e.message, Status: "✗" });
 		}
@@ -1201,7 +1201,7 @@ var formAccount_DevKitV4 = (function () {
 			form.Body.v4_Decimal.Disabled = !origDisabled;
 			const check = form.Body.v4_Decimal.Disabled;
 			form.Body.v4_Decimal.Disabled = origDisabled;
-			methodResults.push({ Test: "S4", Property: "Disabled (set)", Value: "Set?Restored", Status: "✓" });
+			methodResults.push({ Test: "S4", Property: "Disabled (set)", Value: "Set→Restored", Status: "✓" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S4", Property: "Disabled (set)", Value: e.message, Status: "✗" });
 		}
@@ -1212,7 +1212,7 @@ var formAccount_DevKitV4 = (function () {
 			form.Body.v4_Decimal.Label = origLabel + " (TEST)";
 			const check = form.Body.v4_Decimal.Label;
 			form.Body.v4_Decimal.Label = origLabel;
-			methodResults.push({ Test: "S5", Property: "Label (set)", Value: check.includes("(TEST)") ? "Set?Restored" : "Failed", Status: check.includes("(TEST)") ? "✓" : "⚠" });
+			methodResults.push({ Test: "S5", Property: "Label (set)", Value: check.includes("(TEST)") ? "Set→Restored" : "Failed", Status: check.includes("(TEST)") ? "✓" : "⚠" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S5", Property: "Label (set)", Value: e.message, Status: "✗" });
 		}
@@ -1223,7 +1223,7 @@ var formAccount_DevKitV4 = (function () {
 			form.Body.v4_Decimal.Visible = !origVisible;
 			const check = form.Body.v4_Decimal.Visible;
 			form.Body.v4_Decimal.Visible = origVisible;
-			methodResults.push({ Test: "S6", Property: "Visible (set)", Value: "Set?Restored", Status: "✓" });
+			methodResults.push({ Test: "S6", Property: "Visible (set)", Value: "Set→Restored", Status: "✓" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S6", Property: "Visible (set)", Value: e.message, Status: "✗" });
 		}
@@ -1271,7 +1271,7 @@ var formAccount_DevKitV4 = (function () {
 		try {
 			form.Body.v4_Decimal.SetIsValid(false, "Test invalid");
 			setTimeout(() => form.Body.v4_Decimal.SetIsValid(true, ""), 2000);
-			methodResults.push({ Test: "S12", Property: "SetIsValid", Value: "Set?Restored (2s)", Status: "✓" });
+			methodResults.push({ Test: "S12", Property: "SetIsValid", Value: "Set→Restored (2s)", Status: "✓" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S12", Property: "SetIsValid", Value: e.message, Status: "✗" });
 		}
@@ -1347,7 +1347,7 @@ var formAccount_DevKitV4 = (function () {
 			form.Body.v4_Double.Value = testValue;
 			const newValue = form.Body.v4_Double.Value;
 			form.Body.v4_Double.Value = originalValue;
-			methodResults.push({ Test: "S1", Property: "Value (set)", Value: newValue === testValue ? "Set?Restored" : "Failed", Status: newValue === testValue ? "✓" : "⚠" });
+			methodResults.push({ Test: "S1", Property: "Value (set)", Value: newValue === testValue ? "Set→Restored" : "Failed", Status: newValue === testValue ? "✓" : "⚠" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S1", Property: "Value (set)", Value: e.message, Status: "✗" });
 		}
@@ -1356,7 +1356,7 @@ var formAccount_DevKitV4 = (function () {
 		try {
 			const origPrecision = form.Body.v4_Double.Precision;
 			form.Body.v4_Double.Precision = origPrecision;
-			methodResults.push({ Test: "S2", Property: "Precision (set)", Value: "Set?Restored", Status: "✓" });
+			methodResults.push({ Test: "S2", Property: "Precision (set)", Value: "Set→Restored", Status: "✓" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S2", Property: "Precision (set)", Value: e.message, Status: "✗" });
 		}
@@ -1367,7 +1367,7 @@ var formAccount_DevKitV4 = (function () {
 			form.Body.v4_Double.RequiredLevel = OptionSet.FieldRequiredLevel.Required;
 			const check = form.Body.v4_Double.RequiredLevel;
 			form.Body.v4_Double.RequiredLevel = origRequired;
-			methodResults.push({ Test: "S3", Property: "RequiredLevel (set)", Value: check === OptionSet.FieldRequiredLevel.Required ? "Set?Restored" : "Failed", Status: check === OptionSet.FieldRequiredLevel.Required ? "✓" : "⚠" });
+			methodResults.push({ Test: "S3", Property: "RequiredLevel (set)", Value: check === OptionSet.FieldRequiredLevel.Required ? "Set→Restored" : "Failed", Status: check === OptionSet.FieldRequiredLevel.Required ? "✓" : "⚠" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S3", Property: "RequiredLevel (set)", Value: e.message, Status: "✗" });
 		}
@@ -1378,7 +1378,7 @@ var formAccount_DevKitV4 = (function () {
 			form.Body.v4_Double.Disabled = !origDisabled;
 			const check = form.Body.v4_Double.Disabled;
 			form.Body.v4_Double.Disabled = origDisabled;
-			methodResults.push({ Test: "S4", Property: "Disabled (set)", Value: "Set?Restored", Status: "✓" });
+			methodResults.push({ Test: "S4", Property: "Disabled (set)", Value: "Set→Restored", Status: "✓" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S4", Property: "Disabled (set)", Value: e.message, Status: "✗" });
 		}
@@ -1389,7 +1389,7 @@ var formAccount_DevKitV4 = (function () {
 			form.Body.v4_Double.Label = origLabel + " (TEST)";
 			const check = form.Body.v4_Double.Label;
 			form.Body.v4_Double.Label = origLabel;
-			methodResults.push({ Test: "S5", Property: "Label (set)", Value: check.includes("(TEST)") ? "Set?Restored" : "Failed", Status: check.includes("(TEST)") ? "✓" : "⚠" });
+			methodResults.push({ Test: "S5", Property: "Label (set)", Value: check.includes("(TEST)") ? "Set→Restored" : "Failed", Status: check.includes("(TEST)") ? "✓" : "⚠" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S5", Property: "Label (set)", Value: e.message, Status: "✗" });
 		}
@@ -1400,7 +1400,7 @@ var formAccount_DevKitV4 = (function () {
 			form.Body.v4_Double.Visible = !origVisible;
 			const check = form.Body.v4_Double.Visible;
 			form.Body.v4_Double.Visible = origVisible;
-			methodResults.push({ Test: "S6", Property: "Visible (set)", Value: "Set?Restored", Status: "✓" });
+			methodResults.push({ Test: "S6", Property: "Visible (set)", Value: "Set→Restored", Status: "✓" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S6", Property: "Visible (set)", Value: e.message, Status: "✗" });
 		}
@@ -1448,7 +1448,7 @@ var formAccount_DevKitV4 = (function () {
 		try {
 			form.Body.v4_Double.SetIsValid(false, "Test invalid");
 			setTimeout(() => form.Body.v4_Double.SetIsValid(true, ""), 2000);
-			methodResults.push({ Test: "S12", Property: "SetIsValid", Value: "Set?Restored (2s)", Status: "✓" });
+			methodResults.push({ Test: "S12", Property: "SetIsValid", Value: "Set→Restored (2s)", Status: "✓" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S12", Property: "SetIsValid", Value: e.message, Status: "✗" });
 		}
@@ -1524,7 +1524,7 @@ var formAccount_DevKitV4 = (function () {
 			form.Body.v4_Money.Value = testValue;
 			const newValue = form.Body.v4_Money.Value;
 			form.Body.v4_Money.Value = originalValue;
-			methodResults.push({ Test: "S1", Property: "Value (set)", Value: newValue === testValue ? "Set?Restored" : "Failed", Status: newValue === testValue ? "✓" : "⚠" });
+			methodResults.push({ Test: "S1", Property: "Value (set)", Value: newValue === testValue ? "Set→Restored" : "Failed", Status: newValue === testValue ? "✓" : "⚠" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S1", Property: "Value (set)", Value: e.message, Status: "✗" });
 		}
@@ -1536,7 +1536,7 @@ var formAccount_DevKitV4 = (function () {
 			form.Body.v4_Money.Precision = testPrecision;
 			const check = form.Body.v4_Money.Precision;
 			form.Body.v4_Money.Precision = origPrecision;
-			methodResults.push({ Test: "S2", Property: "Precision (set)", Value: check === testPrecision ? "Set?Restored" : `Was ${check}`, Status: check === testPrecision ? "✓" : "⚠" });
+			methodResults.push({ Test: "S2", Property: "Precision (set)", Value: check === testPrecision ? "Set→Restored" : `Was ${check}`, Status: check === testPrecision ? "✓" : "⚠" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S2", Property: "Precision (set)", Value: e.message, Status: "✗" });
 		}
@@ -1547,7 +1547,7 @@ var formAccount_DevKitV4 = (function () {
 			form.Body.v4_Money.RequiredLevel = OptionSet.FieldRequiredLevel.Required;
 			const check = form.Body.v4_Money.RequiredLevel;
 			form.Body.v4_Money.RequiredLevel = origRequired;
-			methodResults.push({ Test: "S3", Property: "RequiredLevel (set)", Value: check === OptionSet.FieldRequiredLevel.Required ? "Set?Restored" : "Failed", Status: check === OptionSet.FieldRequiredLevel.Required ? "✓" : "⚠" });
+			methodResults.push({ Test: "S3", Property: "RequiredLevel (set)", Value: check === OptionSet.FieldRequiredLevel.Required ? "Set→Restored" : "Failed", Status: check === OptionSet.FieldRequiredLevel.Required ? "✓" : "⚠" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S3", Property: "RequiredLevel (set)", Value: e.message, Status: "✗" });
 		}
@@ -1558,7 +1558,7 @@ var formAccount_DevKitV4 = (function () {
 			form.Body.v4_Money.Disabled = !origDisabled;
 			const check = form.Body.v4_Money.Disabled;
 			form.Body.v4_Money.Disabled = origDisabled;
-			methodResults.push({ Test: "S4", Property: "Disabled (set)", Value: "Set?Restored", Status: "✓" });
+			methodResults.push({ Test: "S4", Property: "Disabled (set)", Value: "Set→Restored", Status: "✓" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S4", Property: "Disabled (set)", Value: e.message, Status: "✗" });
 		}
@@ -1573,7 +1573,7 @@ var formAccount_DevKitV4 = (function () {
 			if (origLabel !== undefined) {
 				form.Body.v4_Money.Label = origLabel;
 			}
-			methodResults.push({ Test: "S5", Property: "Label (set)", Value: setWorked ? "Set?Restored" : `Got: ${check}`, Status: setWorked ? "✓" : "⚠" });
+			methodResults.push({ Test: "S5", Property: "Label (set)", Value: setWorked ? "Set→Restored" : `Got: ${check}`, Status: setWorked ? "✓" : "⚠" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S5", Property: "Label (set)", Value: e.message, Status: "✗" });
 		}
@@ -1584,7 +1584,7 @@ var formAccount_DevKitV4 = (function () {
 			form.Body.v4_Money.Visible = !origVisible;
 			const check = form.Body.v4_Money.Visible;
 			form.Body.v4_Money.Visible = origVisible;
-			methodResults.push({ Test: "S6", Property: "Visible (set)", Value: "Set?Restored", Status: "✓" });
+			methodResults.push({ Test: "S6", Property: "Visible (set)", Value: "Set→Restored", Status: "✓" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S6", Property: "Visible (set)", Value: e.message, Status: "✗" });
 		}
@@ -1632,7 +1632,7 @@ var formAccount_DevKitV4 = (function () {
 		try {
 			form.Body.v4_Money.SetIsValid(false, "Test invalid");
 			setTimeout(() => form.Body.v4_Money.SetIsValid(true, ""), 2000);
-			methodResults.push({ Test: "S12", Property: "SetIsValid", Value: "Set?Restored (2s)", Status: "✓" });
+			methodResults.push({ Test: "S12", Property: "SetIsValid", Value: "Set→Restored (2s)", Status: "✓" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S12", Property: "SetIsValid", Value: e.message, Status: "✗" });
 		}
@@ -1719,7 +1719,7 @@ var formAccount_DevKitV4 = (function () {
 			form.Body.v4_Lookup.DefaultView = testViewId;
 			const newView = form.Body.v4_Lookup.DefaultView;
 			form.Body.v4_Lookup.DefaultView = originalDefaultView;
-			methodResults.push({ Test: "S1", Property: "DefaultView (set)", Value: "Set?Restored", Status: "✓" });
+			methodResults.push({ Test: "S1", Property: "DefaultView (set)", Value: "Set→Restored", Status: "✓" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S1", Property: "DefaultView (set)", Value: e.message, Status: "✗" });
 		}
@@ -1729,7 +1729,7 @@ var formAccount_DevKitV4 = (function () {
 			form.Body.v4_Lookup.EntityTypes = ["contact"];
 			const newTypes = form.Body.v4_Lookup.EntityTypes;
 			form.Body.v4_Lookup.EntityTypes = originalTypes;
-			methodResults.push({ Test: "S2", Property: "EntityTypes (set)", Value: "Set?Restored", Status: "✓" });
+			methodResults.push({ Test: "S2", Property: "EntityTypes (set)", Value: "Set→Restored", Status: "✓" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S2", Property: "EntityTypes (set)", Value: e.message, Status: "✗" });
 		}
@@ -2001,7 +2001,7 @@ var formAccount_DevKitV4 = (function () {
 				form.Body.v4_OptionSet.Value = newVal;
 				const check = form.Body.v4_OptionSet.Value;
 				form.Body.v4_OptionSet.Value = originalValue;
-				methodResults.push({ Test: "S1", Property: "Value (set)", Value: check === newVal ? "Set?Restored" : "Failed", Status: check === newVal ? "✓" : "⚠" });
+				methodResults.push({ Test: "S1", Property: "Value (set)", Value: check === newVal ? "Set→Restored" : "Failed", Status: check === newVal ? "✓" : "⚠" });
 			} else {
 				methodResults.push({ Test: "S1", Property: "Value (set)", Value: "No options available", Status: "✓" });
 			}
@@ -2065,7 +2065,7 @@ var formAccount_DevKitV4 = (function () {
 			form.Body.v4_OptionSet.RequiredLevel = OptionSet.FieldRequiredLevel.Required;
 			const check = form.Body.v4_OptionSet.RequiredLevel;
 			form.Body.v4_OptionSet.RequiredLevel = origRequired;
-			methodResults.push({ Test: "S7", Property: "RequiredLevel (set)", Value: check === OptionSet.FieldRequiredLevel.Required ? "Set?Restored" : "Failed", Status: check === OptionSet.FieldRequiredLevel.Required ? "✓" : "⚠" });
+			methodResults.push({ Test: "S7", Property: "RequiredLevel (set)", Value: check === OptionSet.FieldRequiredLevel.Required ? "Set→Restored" : "Failed", Status: check === OptionSet.FieldRequiredLevel.Required ? "✓" : "⚠" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S7", Property: "RequiredLevel (set)", Value: e.message, Status: "✗" });
 		}
@@ -2076,7 +2076,7 @@ var formAccount_DevKitV4 = (function () {
 			form.Body.v4_OptionSet.Disabled = !origDisabled;
 			const check = form.Body.v4_OptionSet.Disabled;
 			form.Body.v4_OptionSet.Disabled = origDisabled;
-			methodResults.push({ Test: "S8", Property: "Disabled (set)", Value: "Set?Restored", Status: "✓" });
+			methodResults.push({ Test: "S8", Property: "Disabled (set)", Value: "Set→Restored", Status: "✓" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S8", Property: "Disabled (set)", Value: e.message, Status: "✗" });
 		}
@@ -2087,7 +2087,7 @@ var formAccount_DevKitV4 = (function () {
 			form.Body.v4_OptionSet.Label = origLabel + " (TEST)";
 			const check = form.Body.v4_OptionSet.Label;
 			form.Body.v4_OptionSet.Label = origLabel;
-			methodResults.push({ Test: "S9", Property: "Label (set)", Value: check.includes("(TEST)") ? "Set?Restored" : "Failed", Status: check.includes("(TEST)") ? "✓" : "⚠" });
+			methodResults.push({ Test: "S9", Property: "Label (set)", Value: check.includes("(TEST)") ? "Set→Restored" : "Failed", Status: check.includes("(TEST)") ? "✓" : "⚠" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S9", Property: "Label (set)", Value: e.message, Status: "✗" });
 		}
@@ -2098,7 +2098,7 @@ var formAccount_DevKitV4 = (function () {
 			form.Body.v4_OptionSet.Visible = !origVisible;
 			const check = form.Body.v4_OptionSet.Visible;
 			form.Body.v4_OptionSet.Visible = origVisible;
-			methodResults.push({ Test: "S10", Property: "Visible (set)", Value: "Set?Restored", Status: "✓" });
+			methodResults.push({ Test: "S10", Property: "Visible (set)", Value: "Set→Restored", Status: "✓" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S10", Property: "Visible (set)", Value: e.message, Status: "✗" });
 		}
@@ -2146,7 +2146,7 @@ var formAccount_DevKitV4 = (function () {
 		try {
 			form.Body.v4_OptionSet.SetIsValid(false, "Test invalid");
 			setTimeout(() => form.Body.v4_OptionSet.SetIsValid(true, ""), 2000);
-			methodResults.push({ Test: "S16", Property: "SetIsValid", Value: "Set?Restored (2s)", Status: "✓" });
+			methodResults.push({ Test: "S16", Property: "SetIsValid", Value: "Set→Restored (2s)", Status: "✓" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S16", Property: "SetIsValid", Value: e.message, Status: "✗" });
 		}
@@ -2241,7 +2241,7 @@ var formAccount_DevKitV4 = (function () {
 			const newValue = form.Body.v4_MultiOptionSet.Value;
 			form.Body.v4_MultiOptionSet.Value = originalValue;
 			const success = Array.isArray(newValue) || newValue !== undefined;
-			methodResults.push({ Test: "S1", Property: "Value (set)", Value: success ? "Set?Restored" : "Failed", Status: success ? "✓" : "⚠" });
+			methodResults.push({ Test: "S1", Property: "Value (set)", Value: success ? "Set→Restored" : "Failed", Status: success ? "✓" : "⚠" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S1", Property: "Value (set)", Value: e.message, Status: "✗" });
 		}
@@ -2252,7 +2252,7 @@ var formAccount_DevKitV4 = (function () {
 			form.Body.v4_MultiOptionSet.RequiredLevel = OptionSet.FieldRequiredLevel.Required;
 			const check = form.Body.v4_MultiOptionSet.RequiredLevel;
 			form.Body.v4_MultiOptionSet.RequiredLevel = origRequired;
-			methodResults.push({ Test: "S2", Property: "RequiredLevel (set)", Value: check === OptionSet.FieldRequiredLevel.Required ? "Set?Restored" : "Failed", Status: check === OptionSet.FieldRequiredLevel.Required ? "✓" : "⚠" });
+			methodResults.push({ Test: "S2", Property: "RequiredLevel (set)", Value: check === OptionSet.FieldRequiredLevel.Required ? "Set→Restored" : "Failed", Status: check === OptionSet.FieldRequiredLevel.Required ? "✓" : "⚠" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S2", Property: "RequiredLevel (set)", Value: e.message, Status: "✗" });
 		}
@@ -2263,7 +2263,7 @@ var formAccount_DevKitV4 = (function () {
 			form.Body.v4_MultiOptionSet.Disabled = !origDisabled;
 			const check = form.Body.v4_MultiOptionSet.Disabled;
 			form.Body.v4_MultiOptionSet.Disabled = origDisabled;
-			methodResults.push({ Test: "S3", Property: "Disabled (set)", Value: "Set?Restored", Status: "✓" });
+			methodResults.push({ Test: "S3", Property: "Disabled (set)", Value: "Set→Restored", Status: "✓" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S3", Property: "Disabled (set)", Value: e.message, Status: "✗" });
 		}
@@ -2274,7 +2274,7 @@ var formAccount_DevKitV4 = (function () {
 			form.Body.v4_MultiOptionSet.Label = origLabel + " (TEST)";
 			const check = form.Body.v4_MultiOptionSet.Label;
 			form.Body.v4_MultiOptionSet.Label = origLabel;
-			methodResults.push({ Test: "S4", Property: "Label (set)", Value: check.includes("(TEST)") ? "Set?Restored" : "Failed", Status: check.includes("(TEST)") ? "✓" : "⚠" });
+			methodResults.push({ Test: "S4", Property: "Label (set)", Value: check.includes("(TEST)") ? "Set→Restored" : "Failed", Status: check.includes("(TEST)") ? "✓" : "⚠" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S4", Property: "Label (set)", Value: e.message, Status: "✗" });
 		}
@@ -2285,7 +2285,7 @@ var formAccount_DevKitV4 = (function () {
 			form.Body.v4_MultiOptionSet.Visible = !origVisible;
 			const check = form.Body.v4_MultiOptionSet.Visible;
 			form.Body.v4_MultiOptionSet.Visible = origVisible;
-			methodResults.push({ Test: "S5", Property: "Visible (set)", Value: "Set?Restored", Status: "✓" });
+			methodResults.push({ Test: "S5", Property: "Visible (set)", Value: "Set→Restored", Status: "✓" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S5", Property: "Visible (set)", Value: e.message, Status: "✗" });
 		}
@@ -2350,7 +2350,7 @@ var formAccount_DevKitV4 = (function () {
 		try {
 			form.Body.v4_MultiOptionSet.SetIsValid(false, "Test invalid");
 			setTimeout(() => form.Body.v4_MultiOptionSet.SetIsValid(true, ""), 2000);
-			methodResults.push({ Test: "S12", Property: "SetIsValid", Value: "Set?Restored (2s)", Status: "✓" });
+			methodResults.push({ Test: "S12", Property: "SetIsValid", Value: "Set→Restored (2s)", Status: "✓" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S12", Property: "SetIsValid", Value: e.message, Status: "✗" });
 		}
@@ -2424,7 +2424,7 @@ var formAccount_DevKitV4 = (function () {
 			const newValue = form.Body.v4_DateOnly.Value;
 			form.Body.v4_DateOnly.Value = originalValue;
 			const success = newValue !== null && newValue !== undefined;
-			methodResults.push({ Test: "S1", Property: "Value (set)", Value: success ? "Set?Restored" : "Failed", Status: success ? "✓" : "⚠" });
+			methodResults.push({ Test: "S1", Property: "Value (set)", Value: success ? "Set→Restored" : "Failed", Status: success ? "✓" : "⚠" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S1", Property: "Value (set)", Value: e.message, Status: "✗" });
 		}
@@ -2435,7 +2435,7 @@ var formAccount_DevKitV4 = (function () {
 			form.Body.v4_DateOnly.RequiredLevel = OptionSet.FieldRequiredLevel.Required;
 			const check = form.Body.v4_DateOnly.RequiredLevel;
 			form.Body.v4_DateOnly.RequiredLevel = origRequired;
-			methodResults.push({ Test: "S2", Property: "RequiredLevel (set)", Value: check === OptionSet.FieldRequiredLevel.Required ? "Set?Restored" : "Failed", Status: check === OptionSet.FieldRequiredLevel.Required ? "✓" : "⚠" });
+			methodResults.push({ Test: "S2", Property: "RequiredLevel (set)", Value: check === OptionSet.FieldRequiredLevel.Required ? "Set→Restored" : "Failed", Status: check === OptionSet.FieldRequiredLevel.Required ? "✓" : "⚠" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S2", Property: "RequiredLevel (set)", Value: e.message, Status: "✗" });
 		}
@@ -2446,7 +2446,7 @@ var formAccount_DevKitV4 = (function () {
 			form.Body.v4_DateOnly.Disabled = !origDisabled;
 			const check = form.Body.v4_DateOnly.Disabled;
 			form.Body.v4_DateOnly.Disabled = origDisabled;
-			methodResults.push({ Test: "S3", Property: "Disabled (set)", Value: "Set?Restored", Status: "✓" });
+			methodResults.push({ Test: "S3", Property: "Disabled (set)", Value: "Set→Restored", Status: "✓" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S3", Property: "Disabled (set)", Value: e.message, Status: "✗" });
 		}
@@ -2457,7 +2457,7 @@ var formAccount_DevKitV4 = (function () {
 			form.Body.v4_DateOnly.Label = origLabel + " (TEST)";
 			const check = form.Body.v4_DateOnly.Label;
 			form.Body.v4_DateOnly.Label = origLabel;
-			methodResults.push({ Test: "S4", Property: "Label (set)", Value: check.includes("(TEST)") ? "Set?Restored" : "Failed", Status: check.includes("(TEST)") ? "✓" : "⚠" });
+			methodResults.push({ Test: "S4", Property: "Label (set)", Value: check.includes("(TEST)") ? "Set→Restored" : "Failed", Status: check.includes("(TEST)") ? "✓" : "⚠" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S4", Property: "Label (set)", Value: e.message, Status: "✗" });
 		}
@@ -2468,7 +2468,7 @@ var formAccount_DevKitV4 = (function () {
 			form.Body.v4_DateOnly.Visible = !origVisible;
 			const check = form.Body.v4_DateOnly.Visible;
 			form.Body.v4_DateOnly.Visible = origVisible;
-			methodResults.push({ Test: "S5", Property: "Visible (set)", Value: "Set?Restored", Status: "✓" });
+			methodResults.push({ Test: "S5", Property: "Visible (set)", Value: "Set→Restored", Status: "✓" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S5", Property: "Visible (set)", Value: e.message, Status: "✗" });
 		}
@@ -2516,7 +2516,7 @@ var formAccount_DevKitV4 = (function () {
 		try {
 			form.Body.v4_DateOnly.SetIsValid(false, "Test invalid");
 			setTimeout(() => form.Body.v4_DateOnly.SetIsValid(true, ""), 2000);
-			methodResults.push({ Test: "S11", Property: "SetIsValid", Value: "Set?Restored (2s)", Status: "✓" });
+			methodResults.push({ Test: "S11", Property: "SetIsValid", Value: "Set→Restored (2s)", Status: "✓" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S11", Property: "SetIsValid", Value: e.message, Status: "✗" });
 		}
@@ -2591,7 +2591,7 @@ var formAccount_DevKitV4 = (function () {
 			const newValue = form.Body.v4_DateTime.Value;
 			form.Body.v4_DateTime.Value = originalValue;
 			const success = newValue !== null && newValue !== undefined;
-			methodResults.push({ Test: "S1", Property: "Value (set)", Value: success ? "Set?Restored" : "Failed", Status: success ? "✓" : "⚠" });
+			methodResults.push({ Test: "S1", Property: "Value (set)", Value: success ? "Set→Restored" : "Failed", Status: success ? "✓" : "⚠" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S1", Property: "Value (set)", Value: e.message, Status: "✗" });
 		}
@@ -2602,7 +2602,7 @@ var formAccount_DevKitV4 = (function () {
 			form.Body.v4_DateTime.ShowTime = !origShowTime;
 			const check = form.Body.v4_DateTime.ShowTime;
 			form.Body.v4_DateTime.ShowTime = origShowTime;
-			methodResults.push({ Test: "S2", Property: "ShowTime (set)", Value: "Set?Restored", Status: "✓" });
+			methodResults.push({ Test: "S2", Property: "ShowTime (set)", Value: "Set→Restored", Status: "✓" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S2", Property: "ShowTime (set)", Value: e.message, Status: "✗" });
 		}
@@ -2613,7 +2613,7 @@ var formAccount_DevKitV4 = (function () {
 			form.Body.v4_DateTime.RequiredLevel = OptionSet.FieldRequiredLevel.Required;
 			const check = form.Body.v4_DateTime.RequiredLevel;
 			form.Body.v4_DateTime.RequiredLevel = origRequired;
-			methodResults.push({ Test: "S3", Property: "RequiredLevel (set)", Value: check === OptionSet.FieldRequiredLevel.Required ? "Set?Restored" : "Failed", Status: check === OptionSet.FieldRequiredLevel.Required ? "✓" : "⚠" });
+			methodResults.push({ Test: "S3", Property: "RequiredLevel (set)", Value: check === OptionSet.FieldRequiredLevel.Required ? "Set→Restored" : "Failed", Status: check === OptionSet.FieldRequiredLevel.Required ? "✓" : "⚠" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S3", Property: "RequiredLevel (set)", Value: e.message, Status: "✗" });
 		}
@@ -2624,7 +2624,7 @@ var formAccount_DevKitV4 = (function () {
 			form.Body.v4_DateTime.Disabled = !origDisabled;
 			const check = form.Body.v4_DateTime.Disabled;
 			form.Body.v4_DateTime.Disabled = origDisabled;
-			methodResults.push({ Test: "S4", Property: "Disabled (set)", Value: "Set?Restored", Status: "✓" });
+			methodResults.push({ Test: "S4", Property: "Disabled (set)", Value: "Set→Restored", Status: "✓" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S4", Property: "Disabled (set)", Value: e.message, Status: "✗" });
 		}
@@ -2635,7 +2635,7 @@ var formAccount_DevKitV4 = (function () {
 			form.Body.v4_DateTime.Label = origLabel + " (TEST)";
 			const check = form.Body.v4_DateTime.Label;
 			form.Body.v4_DateTime.Label = origLabel;
-			methodResults.push({ Test: "S5", Property: "Label (set)", Value: check.includes("(TEST)") ? "Set?Restored" : "Failed", Status: check.includes("(TEST)") ? "✓" : "⚠" });
+			methodResults.push({ Test: "S5", Property: "Label (set)", Value: check.includes("(TEST)") ? "Set→Restored" : "Failed", Status: check.includes("(TEST)") ? "✓" : "⚠" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S5", Property: "Label (set)", Value: e.message, Status: "✗" });
 		}
@@ -2646,7 +2646,7 @@ var formAccount_DevKitV4 = (function () {
 			form.Body.v4_DateTime.Visible = !origVisible;
 			const check = form.Body.v4_DateTime.Visible;
 			form.Body.v4_DateTime.Visible = origVisible;
-			methodResults.push({ Test: "S6", Property: "Visible (set)", Value: "Set?Restored", Status: "✓" });
+			methodResults.push({ Test: "S6", Property: "Visible (set)", Value: "Set→Restored", Status: "✓" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S6", Property: "Visible (set)", Value: e.message, Status: "✗" });
 		}
@@ -2694,7 +2694,7 @@ var formAccount_DevKitV4 = (function () {
 		try {
 			form.Body.v4_DateTime.SetIsValid(false, "Test invalid");
 			setTimeout(() => form.Body.v4_DateTime.SetIsValid(true, ""), 2000);
-			methodResults.push({ Test: "S12", Property: "SetIsValid", Value: "Set?Restored (2s)", Status: "✓" });
+			methodResults.push({ Test: "S12", Property: "SetIsValid", Value: "Set→Restored (2s)", Status: "✓" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S12", Property: "SetIsValid", Value: e.message, Status: "✗" });
 		}
@@ -2757,7 +2757,7 @@ var formAccount_DevKitV4 = (function () {
 			const origVisible = form.Grid.Contacts.Visible;
 			form.Grid.Contacts.Visible = !origVisible;
 			form.Grid.Contacts.Visible = origVisible;
-			methodResults.push({ Test: "S2", Property: "Visible (set)", Value: "Set?Restored", Status: "✓" });
+			methodResults.push({ Test: "S2", Property: "Visible (set)", Value: "Set→Restored", Status: "✓" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S2", Property: "Visible (set)", Value: e.message, Status: "✗" });
 		}
@@ -2833,7 +2833,7 @@ var formAccount_DevKitV4 = (function () {
 			form.QuickForm.ContactQuickForm.Label = "New Label";
 			const check = form.QuickForm.ContactQuickForm.Label;
 			form.QuickForm.ContactQuickForm.Label = origLabel;
-			methodResults.push({ Test: "S3", Property: "Label (set)", Value: check === "New Label" ? "Set?Restored" : "Failed", Status: check === "New Label" ? "✓" : "⚠" });
+			methodResults.push({ Test: "S3", Property: "Label (set)", Value: check === "New Label" ? "Set→Restored" : "Failed", Status: check === "New Label" ? "✓" : "⚠" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S3", Property: "Label (set)", Value: e.message, Status: "✗" });
 		}
@@ -2842,7 +2842,7 @@ var formAccount_DevKitV4 = (function () {
 			const origVisible = form.QuickForm.ContactQuickForm.Visible;
 			form.QuickForm.ContactQuickForm.Visible = !origVisible;
 			form.QuickForm.ContactQuickForm.Visible = origVisible;
-			methodResults.push({ Test: "S4", Property: "Visible (set)", Value: "Set?Restored", Status: "✓" });
+			methodResults.push({ Test: "S4", Property: "Visible (set)", Value: "Set→Restored", Status: "✓" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S4", Property: "Visible (set)", Value: e.message, Status: "✗" });
 		}
@@ -2879,7 +2879,7 @@ var formAccount_DevKitV4 = (function () {
 			form.Navigation.contact_customer_accounts.Label = origLabel + " (TEST)";
 			const check = form.Navigation.contact_customer_accounts.Label;
 			form.Navigation.contact_customer_accounts.Label = origLabel;
-			methodResults.push({ Test: "S1", Property: "Label (set)", Value: check.includes("(TEST)") ? "Set?Restored" : "Failed", Status: check.includes("(TEST)") ? "✓" : "⚠" });
+			methodResults.push({ Test: "S1", Property: "Label (set)", Value: check.includes("(TEST)") ? "Set→Restored" : "Failed", Status: check.includes("(TEST)") ? "✓" : "⚠" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S1", Property: "Label (set)", Value: e.message, Status: "✗" });
 		}
@@ -2888,7 +2888,7 @@ var formAccount_DevKitV4 = (function () {
 			const origVisible = form.Navigation.contact_customer_accounts.Visible;
 			form.Navigation.contact_customer_accounts.Visible = !origVisible;
 			form.Navigation.contact_customer_accounts.Visible = origVisible;
-			methodResults.push({ Test: "S2", Property: "Visible (set)", Value: "Set?Restored", Status: "✓" });
+			methodResults.push({ Test: "S2", Property: "Visible (set)", Value: "Set→Restored", Status: "✓" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S2", Property: "Visible (set)", Value: e.message, Status: "✗" });
 		}
@@ -3155,7 +3155,7 @@ var formAccount_DevKitV4 = (function () {
 			process.Visible = !origVis;
 			process.DisplayState = origState;
 			process.Visible = origVis;
-			methodResults.push({ Test: "S5", Property: "DisplayState/Visible (set)", Value: "Set?Restored", Status: "✓" });
+			methodResults.push({ Test: "S5", Property: "DisplayState/Visible (set)", Value: "Set→Restored", Status: "✓" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S5", Property: "Props Set", Value: e.message, Status: "✗" });
 		}
@@ -3194,7 +3194,7 @@ var formAccount_DevKitV4 = (function () {
 		try {
 			const origSrc = form.Body.IFRAME_PhuocLe.Src;
 			form.Body.IFRAME_PhuocLe.Src = origSrc;
-			methodResults.push({ Test: "S1", Property: "Src (set)", Value: "Set?Restored", Status: "✓" });
+			methodResults.push({ Test: "S1", Property: "Src (set)", Value: "Set→Restored", Status: "✓" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S1", Property: "Src (set)", Value: e.message, Status: "✗" });
 		}
@@ -3204,7 +3204,7 @@ var formAccount_DevKitV4 = (function () {
 			form.Body.IFRAME_PhuocLe.Label = origLabel + " (TEST)";
 			const check = form.Body.IFRAME_PhuocLe.Label;
 			form.Body.IFRAME_PhuocLe.Label = origLabel;
-			methodResults.push({ Test: "S2", Property: "Label (set)", Value: check.includes("(TEST)") ? "Set?Restored" : "Failed", Status: check.includes("(TEST)") ? "✓" : "⚠" });
+			methodResults.push({ Test: "S2", Property: "Label (set)", Value: check.includes("(TEST)") ? "Set→Restored" : "Failed", Status: check.includes("(TEST)") ? "✓" : "⚠" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S2", Property: "Label (set)", Value: e.message, Status: "✗" });
 		}
@@ -3213,7 +3213,7 @@ var formAccount_DevKitV4 = (function () {
 			const origVisible = form.Body.IFRAME_PhuocLe.Visible;
 			form.Body.IFRAME_PhuocLe.Visible = !origVisible;
 			form.Body.IFRAME_PhuocLe.Visible = origVisible;
-			methodResults.push({ Test: "S3", Property: "Visible (set)", Value: "Set?Restored", Status: "✓" });
+			methodResults.push({ Test: "S3", Property: "Visible (set)", Value: "Set→Restored", Status: "✓" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S3", Property: "Visible (set)", Value: e.message, Status: "✗" });
 		}
