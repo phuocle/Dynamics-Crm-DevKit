@@ -694,15 +694,9 @@ const devKit = (function () {
         const getOnline = xrmInstance?.WebApi?.online;
         const getOffline = xrmInstance?.WebApi?.offline;
         const extractEntityName = function (fetchXml) {
-            let cleanXml = fetchXml;
-            const fetchXmlMatch = fetchXml.match(/fetchxml=/i);
-            if (fetchXmlMatch) {
-                const splitIndex = fetchXml.toLowerCase().indexOf('fetchxml=') + 'fetchxml='.length;
-                cleanXml = decodeURIComponent(fetchXml.substring(splitIndex));
-            }
-            else if (fetchXml.trim().startsWith('<')) {
-                cleanXml = fetchXml;
-            }
+            // This function is always called with ?fetchXml= prefix (line 782 ensures this)
+            const splitIndex = fetchXml.toLowerCase().indexOf('fetchxml=') + 'fetchxml='.length;
+            const cleanXml = decodeURIComponent(fetchXml.substring(splitIndex));
             const parser = new DOMParser();
             const xmlDoc = parser.parseFromString(cleanXml, "text/xml");
             const entityNode = xmlDoc.querySelector("entity");
@@ -726,14 +720,7 @@ const devKit = (function () {
                 return promise;
             }
         };
-        obj.RetrieveRecord = function (entityLogicalName, id, options, successCallback, errorCallback) {
-            const promise = getWebApi?.retrieveRecord(entityLogicalName, id, options);
-            if (successCallback) {
-                promise?.then(successCallback, errorCallback);
-            } else {
-                return promise;
-            }
-        };
+        // NOTE: obj.RetrieveRecord is defined later with factory pattern (line ~820)
         obj.RetrieveMultipleRecords = function (entityLogicalName, options, maxPageSize, successCallback, errorCallback) {
             const promise = getWebApi?.retrieveMultipleRecords(entityLogicalName, options, maxPageSize);
             if (successCallback) {

@@ -2463,4 +2463,390 @@ describe('devKit', () => {
         var form = devKit.LoadFormV2(executionContext, 'wr', { body: [] });
         expect(form).toBeDefined();
     });
+    // Tests for promise-based usage (else branches - no callbacks)
+    test('form.Refresh returns promise when no callback (line 72)', () => {
+        var mockPromise = { then: function (s, e) { return mockPromise; } };
+        var data = {
+            refresh: function (save) { return mockPromise; },
+            addOnLoad: function () { },
+            removeOnLoad: function () { }
+        };
+        var ui = new UiMock({ formSelector: new FormSelectorMock(new ItemCollectionMock([])) });
+        var formContext = { data: data, ui: ui };
+        var form = devKit.LoadForm(formContext);
+        // Call without callbacks - should return promise (line 72)
+        var result = form.Refresh(true);
+        expect(result).toBe(mockPromise);
+    });
+    test('form.Save returns promise when no callback (line 80)', () => {
+        var mockPromise = { then: function (s, e) { return mockPromise; } };
+        var data = {
+            save: function (opts) { return mockPromise; },
+            addOnLoad: function () { },
+            removeOnLoad: function () { }
+        };
+        var ui = new UiMock({ formSelector: new FormSelectorMock(new ItemCollectionMock([])) });
+        var formContext = { data: data, ui: ui };
+        var form = devKit.LoadForm(formContext);
+        // Call without callbacks - should return promise (line 80)
+        var result = form.Save({});
+        expect(result).toBe(mockPromise);
+    });
+    test('ContentWindow returns promise when no callback (line 278)', () => {
+        var mockPromise = { then: function (s, e) { return mockPromise; } };
+        var control = {
+            getContentWindow: function () { return mockPromise; },
+            getName: () => 'iframe1'
+        };
+        var formContext = {
+            getControl: (name) => control,
+            getAttribute: () => null
+        };
+        var body = { IframeField: {} };
+        devKit.LoadFields(formContext, body);
+        // Call without callbacks - should return promise (line 278)
+        var result = body.IframeField.ContentWindow();
+        expect(result).toBe(mockPromise);
+    });
+    test('utility promise-based returns (lines 579, 584, 589, 594, 599, 620, 626, 634, 640)', () => {
+        var mockPromise = { then: function (s, e) { return mockPromise; } };
+        global.Xrm = {
+            Utility: {
+                getGlobalContext: () => ({}),
+                getAllowedStatusTransitions: () => mockPromise,
+                getEntityMetadata: () => mockPromise,
+                invokeProcessAction: () => mockPromise,
+                lookupObjects: () => mockPromise
+            },
+            Device: {
+                getBarcodeValue: () => mockPromise,
+                captureAudio: () => mockPromise,
+                captureImage: () => mockPromise,
+                captureVideo: () => mockPromise,
+                getCurrentPosition: () => mockPromise
+            }
+        };
+        var utility = devKit.LoadUtility();
+        // All without callbacks - should return promises
+        expect(utility.AllowedStatusTransitions('account', 1)).toBe(mockPromise); // line 579
+        expect(utility.BarcodeValue()).toBe(mockPromise); // line 584
+        expect(utility.CaptureAudio()).toBe(mockPromise); // line 589
+        expect(utility.CaptureImage({})).toBe(mockPromise); // line 594
+        expect(utility.CaptureVideo()).toBe(mockPromise); // line 599
+        expect(utility.CurrentPosition()).toBe(mockPromise); // line 620
+        expect(utility.EntityMetadata('account', [])).toBe(mockPromise); // line 626
+        expect(utility.InvokeProcessAction('action', {})).toBe(mockPromise); // line 634
+        expect(utility.LookupObjects({})).toBe(mockPromise); // line 640
+    });
+    test('extractEntityName - xml starts with < (lines 703-704)', () => {
+        global.DOMParser = class {
+            parseFromString(str, type) {
+                return {
+                    querySelector: (sel) => ({ hasAttribute: () => true, getAttribute: () => 'account' })
+                };
+            }
+        };
+        var mockPromise = {
+            then: function (s, e) {
+                if (s) {
+                    var result = s({ entities: [{ id: '123' }] });
+                    return result && result.then ? result : { then: () => { } };
+                }
+                return { then: () => { } };
+            }
+        };
+        global.Xrm = {
+            WebApi: {
+                retrieveMultipleRecords: function (entity, opts, max) { return mockPromise; }
+            }
+        };
+        global.window = { Xrm: global.Xrm };
+        var webApi = devKit.LoadWebApi();
+        // Pass XML that starts with space+< to test lines 703-704
+        var result = webApi.RetrieveRecords((e) => e, '   <fetch><entity name="account"/></fetch>');
+        expect(result).toBeDefined();
+    });
+    test('WebApi.RetrieveRecord returns promise when no callback (lines 730-734)', () => {
+        var mockPromise = { then: function (s, e) { return mockPromise; } };
+        global.Xrm = {
+            WebApi: {
+                retrieveRecord: function (entity, id, opts) { return mockPromise; }
+            }
+        };
+        global.window = { Xrm: global.Xrm };
+        var webApi = devKit.LoadWebApi();
+        // Call without callbacks - should return promise (lines 730-734)
+        var result = webApi.RetrieveRecord('account', '123', '?$select=name');
+        expect(result).toBe(mockPromise);
+    });
+    test('extractEntityName with fetchXml= in query string (lines 672-673)', () => {
+        global.DOMParser = class {
+            parseFromString(str, type) {
+                return {
+                    querySelector: (sel) => ({ hasAttribute: () => true, getAttribute: () => 'contact' })
+                };
+            }
+        };
+        var mockPromise = {
+            then: function (s, e) {
+                if (s) {
+                    var result = s({ entities: [{ id: '456' }] });
+                    return result && result.then ? result : { then: () => { } };
+                }
+                return { then: () => { } };
+            }
+        };
+        global.Xrm = {
+            WebApi: {
+                retrieveMultipleRecords: function (entity, opts, max) { return mockPromise; }
+            }
+        };
+        global.window = { Xrm: global.Xrm };
+        var webApi = devKit.LoadWebApi();
+        // Pass query string with fetchXml= to test lines 672-673
+        var encodedFetchXml = encodeURIComponent('<fetch><entity name="contact"/></fetch>');
+        var result = webApi.RetrieveRecords((e) => e, '?fetchXml=' + encodedFetchXml);
+        expect(result).toBeDefined();
+    });
+    // Final tests to cover remaining lines
+    test('utility.PickFile returns promise when no callback (lines 672-673)', () => {
+        var mockPromise = { then: function (s, e) { return mockPromise; } };
+        global.Xrm = {
+            Utility: { getGlobalContext: () => ({}) },
+            Device: {
+                pickFile: () => mockPromise
+            }
+        };
+        var utility = devKit.LoadUtility();
+        // Call without callbacks - should return promise (lines 672-673)
+        var result = utility.PickFile({});
+        expect(result).toBe(mockPromise);
+    });
+    test('utility.PickFile with callback (lines 672 if branch)', () => {
+        var mockPromise = { then: function (s, e) { if (s) s(['file1']); return mockPromise; } };
+        global.Xrm = {
+            Utility: { getGlobalContext: () => ({}) },
+            Device: {
+                pickFile: () => mockPromise
+            }
+        };
+        var utility = devKit.LoadUtility();
+        var result = null;
+        utility.PickFile({}, function (r) { result = r; }, function () { });
+        expect(result).toEqual(['file1']);
+    });
+    test('extractEntityName - else if branch with trimmed XML (lines 703-704)', () => {
+        global.DOMParser = class {
+            parseFromString(str, type) {
+                return {
+                    querySelector: (sel) => ({ hasAttribute: () => true, getAttribute: () => 'lead' })
+                };
+            }
+        };
+        var mockPromise = {
+            then: function (s, e) {
+                if (s) {
+                    var result = s({ entities: [{ id: '789' }] });
+                    return result && result.then ? result : { then: () => { } };
+                }
+                return { then: () => { } };
+            }
+        };
+        global.Xrm = {
+            WebApi: {
+                retrieveMultipleRecords: function (entity, opts, max) { return mockPromise; }
+            }
+        };
+        global.window = { Xrm: global.Xrm };
+        var webApi = devKit.LoadWebApi();
+        // Pass XML WITHOUT fetchXml= prefix and WITH leading whitespace to test else if (lines 703-704)
+        var result = webApi.RetrieveRecords((e) => e, '  <fetch><entity name="lead"/></fetch>');
+        expect(result).toBeDefined();
+    });
+    // Additional promise tests for utility functions
+    test('utility.CurrentAppName returns promise when no callback', () => {
+        var mockPromise = { then: function (s, e) { return mockPromise; } };
+        global.Xrm = {
+            Utility: { getGlobalContext: () => ({ getCurrentAppName: () => mockPromise }) }
+        };
+        var utility = devKit.LoadUtility();
+        var result = utility.CurrentAppName();
+        expect(result).toBe(mockPromise);
+    });
+    test('utility.CurrentAppName with callback', () => {
+        var mockPromise = { then: function (s, e) { if (s) s('MyApp'); return mockPromise; } };
+        global.Xrm = {
+            Utility: { getGlobalContext: () => ({ getCurrentAppName: () => mockPromise }) }
+        };
+        var utility = devKit.LoadUtility();
+        var result = null;
+        utility.CurrentAppName(function (r) { result = r; }, function () { });
+        expect(result).toBe('MyApp');
+    });
+    test('utility.CurrentAppProperties returns promise when no callback', () => {
+        var mockPromise = { then: function (s, e) { return mockPromise; } };
+        global.Xrm = {
+            Utility: { getGlobalContext: () => ({ getCurrentAppProperties: () => mockPromise }) }
+        };
+        var utility = devKit.LoadUtility();
+        var result = utility.CurrentAppProperties();
+        expect(result).toBe(mockPromise);
+    });
+    test('utility.CurrentAppProperties with callback', () => {
+        var mockPromise = { then: function (s, e) { if (s) s({ appId: '123' }); return mockPromise; } };
+        global.Xrm = {
+            Utility: { getGlobalContext: () => ({ getCurrentAppProperties: () => mockPromise }) }
+        };
+        var utility = devKit.LoadUtility();
+        var result = null;
+        utility.CurrentAppProperties(function (r) { result = r; }, function () { });
+        expect(result.appId).toBe('123');
+    });
+    test('utility.AddGlobalNotification returns promise when no callback', () => {
+        var mockPromise = { then: function (s, e) { return mockPromise; } };
+        global.Xrm = {
+            Utility: { getGlobalContext: () => ({}) },
+            App: { addGlobalNotification: () => mockPromise }
+        };
+        var utility = devKit.LoadUtility();
+        var result = utility.AddGlobalNotification({});
+        expect(result).toBe(mockPromise);
+    });
+    test('utility.AddGlobalNotification with callback', () => {
+        var mockPromise = { then: function (s, e) { if (s) s('notif-id'); return mockPromise; } };
+        global.Xrm = {
+            Utility: { getGlobalContext: () => ({}) },
+            App: { addGlobalNotification: () => mockPromise }
+        };
+        var utility = devKit.LoadUtility();
+        var result = null;
+        utility.AddGlobalNotification({}, function (r) { result = r; }, function () { });
+        expect(result).toBe('notif-id');
+    });
+    test('utility.ClearGlobalNotification returns promise when no callback', () => {
+        var mockPromise = { then: function (s, e) { return mockPromise; } };
+        global.Xrm = {
+            Utility: { getGlobalContext: () => ({}) },
+            App: { clearGlobalNotification: () => mockPromise }
+        };
+        var utility = devKit.LoadUtility();
+        var result = utility.ClearGlobalNotification('notif-id');
+        expect(result).toBe(mockPromise);
+    });
+    test('utility.ClearGlobalNotification with callback', () => {
+        var mockPromise = { then: function (s, e) { if (s) s(true); return mockPromise; } };
+        global.Xrm = {
+            Utility: { getGlobalContext: () => ({}) },
+            App: { clearGlobalNotification: () => mockPromise }
+        };
+        var utility = devKit.LoadUtility();
+        var result = null;
+        utility.ClearGlobalNotification('notif-id', function (r) { result = r; }, function () { });
+        expect(result).toBe(true);
+    });
+    test('utility.NavigateTo returns promise when no callback', () => {
+        var mockPromise = { then: function (s, e) { return mockPromise; } };
+        global.Xrm = {
+            Utility: { getGlobalContext: () => ({}) },
+            Navigation: { navigateTo: () => mockPromise }
+        };
+        var utility = devKit.LoadUtility();
+        var result = utility.NavigateTo({}, {});
+        expect(result).toBe(mockPromise);
+    });
+    test('utility.NavigateTo with callback', () => {
+        var mockPromise = { then: function (s, e) { if (s) s('navigated'); return mockPromise; } };
+        global.Xrm = {
+            Utility: { getGlobalContext: () => ({}) },
+            Navigation: { navigateTo: () => mockPromise }
+        };
+        var utility = devKit.LoadUtility();
+        var result = null;
+        utility.NavigateTo({}, {}, function (r) { result = r; }, function () { });
+        expect(result).toBe('navigated');
+    });
+    test('utility.OpenAlertDialog returns promise when no callback', () => {
+        var mockPromise = { then: function (s, e) { return mockPromise; } };
+        global.Xrm = {
+            Utility: { getGlobalContext: () => ({}) },
+            Navigation: { openAlertDialog: () => mockPromise }
+        };
+        var utility = devKit.LoadUtility();
+        var result = utility.OpenAlertDialog({}, {});
+        expect(result).toBe(mockPromise);
+    });
+    test('utility.OpenAlertDialog with callback', () => {
+        var mockPromise = { then: function (s, e) { if (s) s('closed'); return mockPromise; } };
+        global.Xrm = {
+            Utility: { getGlobalContext: () => ({}) },
+            Navigation: { openAlertDialog: () => mockPromise }
+        };
+        var utility = devKit.LoadUtility();
+        var result = null;
+        utility.OpenAlertDialog({}, {}, function (r) { result = r; }, function () { });
+        expect(result).toBe('closed');
+    });
+    test('utility.OpenConfirmDialog returns promise when no callback', () => {
+        var mockPromise = { then: function (s, e) { return mockPromise; } };
+        global.Xrm = {
+            Utility: { getGlobalContext: () => ({}) },
+            Navigation: { openConfirmDialog: () => mockPromise }
+        };
+        var utility = devKit.LoadUtility();
+        var result = utility.OpenConfirmDialog({}, {});
+        expect(result).toBe(mockPromise);
+    });
+    test('utility.OpenConfirmDialog with callback', () => {
+        var mockPromise = { then: function (s, e) { if (s) s({ confirmed: true }); return mockPromise; } };
+        global.Xrm = {
+            Utility: { getGlobalContext: () => ({}) },
+            Navigation: { openConfirmDialog: () => mockPromise }
+        };
+        var utility = devKit.LoadUtility();
+        var result = null;
+        utility.OpenConfirmDialog({}, {}, function (r) { result = r; }, function () { });
+        expect(result.confirmed).toBe(true);
+    });
+    test('utility.OpenErrorDialog returns promise when no callback', () => {
+        var mockPromise = { then: function (s, e) { return mockPromise; } };
+        global.Xrm = {
+            Utility: { getGlobalContext: () => ({}) },
+            Navigation: { openErrorDialog: () => mockPromise }
+        };
+        var utility = devKit.LoadUtility();
+        var result = utility.OpenErrorDialog({});
+        expect(result).toBe(mockPromise);
+    });
+    test('utility.OpenErrorDialog with callback', () => {
+        var mockPromise = { then: function (s, e) { if (s) s('error-handled'); return mockPromise; } };
+        global.Xrm = {
+            Utility: { getGlobalContext: () => ({}) },
+            Navigation: { openErrorDialog: () => mockPromise }
+        };
+        var utility = devKit.LoadUtility();
+        var result = null;
+        utility.OpenErrorDialog({}, function (r) { result = r; }, function () { });
+        expect(result).toBe('error-handled');
+    });
+    test('utility.OpenForm returns promise when no callback', () => {
+        var mockPromise = { then: function (s, e) { return mockPromise; } };
+        global.Xrm = {
+            Utility: { getGlobalContext: () => ({}) },
+            Navigation: { openForm: () => mockPromise }
+        };
+        var utility = devKit.LoadUtility();
+        var result = utility.OpenForm({}, {});
+        expect(result).toBe(mockPromise);
+    });
+    test('utility.OpenForm with callback', () => {
+        var mockPromise = { then: function (s, e) { if (s) s({ savedEntityReference: {} }); return mockPromise; } };
+        global.Xrm = {
+            Utility: { getGlobalContext: () => ({}) },
+            Navigation: { openForm: () => mockPromise }
+        };
+        var utility = devKit.LoadUtility();
+        var result = null;
+        utility.OpenForm({}, {}, function (r) { result = r; }, function () { });
+        expect(result.savedEntityReference).toBeDefined();
+    });
 });
