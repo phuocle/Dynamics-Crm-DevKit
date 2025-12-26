@@ -1,33 +1,33 @@
 import { FormAccount_DevKitV4 } from './generator/Account.form';
-import { TestControl } from './Account.Test02Control';
-import { TestString } from './Account.Test24String';
-import { TestMemo } from './Account.Test16Memo';
-import { TestBoolean } from './Account.Test01Boolean';
-import { TestInteger } from './Account.Test12Integer';
-import { TestHeader } from './Account.Test10Header';
-import { TestDecimal } from './Account.Test06Decimal';
-import { TestDouble } from './Account.Test07Double';
-import { TestMoney } from './Account.Test17Money';
-import { TestLookup } from './Account.Test14Lookup';
-import { TestLookup1 } from './Account.Test15Lookup1';
-import { TestOptionSet } from './Account.Test20OptionSet';
-import { TestMultiOptionSet } from './Account.Test18MultiOptionSet';
-import { TestDateOnly } from './Account.Test04DateOnly';
-import { TestDateTime } from './Account.Test05DateTime';
-import { TestGrid } from './Account.Test09Grid';
-import { TestQuickView } from './Account.Test22QuickView';
-import { TestNavigationItem } from './Account.Test19NavigationItem';
-import { TestExecutionContext } from './Account.Test08ExecutionContext';
-import { TestSidePanes } from './Account.Test23SidePanes';
-import { TestCopilot } from './Account.Test03Copilot';
-import { TestProcess } from './Account.Test21Process';
-import { TestIFrame } from './Account.Test11IFrame';
-import { TestUtility } from './Account.Test27Utility';
-import { TestTab } from './Account.Test25Tab';
-import { TestTimer } from './Account.Test26Timer';
-import { TestKnowledge } from './Account.Test13Knowledge';
-import { TestWebApi } from './Account.Test28WebApi';
-import { TestWebResource } from './Account.Test29WebResource';
+import { TestControl } from './Account.Test00.Control';
+import { TestString } from './Account.Test01.String';
+import { TestMemo } from './Account.Test02.Memo';
+import { TestBoolean } from './Account.Test03.Boolean';
+import { TestInteger } from './Account.Test04.Integer';
+import { TestHeader } from './Account.Test04A.Header';
+import { TestDecimal } from './Account.Test05.Decimal';
+import { TestDouble } from './Account.Test06.Double';
+import { TestMoney } from './Account.Test07.Money';
+import { TestLookup } from './Account.Test08.Lookup';
+import { TestLookup1 } from './Account.Test08A.Lookup1';
+import { TestOptionSet } from './Account.Test09.OptionSet';
+import { TestMultiOptionSet } from './Account.Test10.MultiOptionSet';
+import { TestDateOnly } from './Account.Test11.DateOnly';
+import { TestDateTime } from './Account.Test12.DateTime';
+import { TestGrid } from './Account.Test13.Grid';
+import { TestQuickView } from './Account.Test14.QuickView';
+import { TestNavigationItem } from './Account.Test15.NavigationItem';
+import { TestExecutionContext } from './Account.Test16.ExecutionContext';
+import { TestSidePanes } from './Account.Test17.SidePanes';
+import { TestCopilot } from './Account.Test18.Copilot';
+import { TestProcess } from './Account.Test19.Process';
+import { TestIFrame } from './Account.Test20.IFrame';
+import { TestUtility } from './Account.Test21.Utility';
+import { TestTab } from './Account.Test22.Tab';
+import { TestTimer } from './Account.Test23.Timer';
+import { TestKnowledge } from './Account.Test24.Knowledge';
+import { TestWebApi } from './Account.Test25.WebApi';
+import { TestWebResource } from './Account.Test26.WebResource';
 
 const formAccount_DevKitV4 = (function () {
     "use strict";
@@ -57,7 +57,7 @@ const formAccount_DevKitV4 = (function () {
         setTimeout(async () => {
             console.clear();
 
-            // Test 0: IControl Interface (base for all controls)
+            // Test 0: Control - IControl Interface (base for all controls)
             TestControl(form);
 
             // Test 1: String Control
@@ -87,7 +87,7 @@ const formAccount_DevKitV4 = (function () {
             // Test 8: Lookup Control
             TestLookup(form);
 
-            // Test 8A: Lookup Control - Multi Control per Attribute (OwnerId has 2 controls: OwnerId, OwnerId1)
+            // Test 8A: Lookup1 Control - Multi Control per Attribute (OwnerId has 2 controls: OwnerId, OwnerId1)
             TestLookup1(form);
 
             // Test 9: OptionSet Control
