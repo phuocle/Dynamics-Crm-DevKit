@@ -718,6 +718,29 @@ declare namespace DevKit {
         }
 
         /**
+         * Collection of controls within a section
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/collections
+         */
+        interface ISectionControlsCollection {
+            /**
+             * Gets a control by index or name
+             * @param arg The index (number) or name (string) of the control to get
+             */
+            get(arg?: number | string): any;
+
+            /**
+             * Gets the number of controls in the section
+             */
+            getLength(): number;
+
+            /**
+             * Iterates over all controls in the section
+             * @param callback The function to call for each control
+             */
+            forEach(callback: (control: any, index: number) => void): void;
+        }
+
+        /**
          * Interface for Section controls
          */
         interface Section {
@@ -732,6 +755,12 @@ declare namespace DevKit {
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-sections/getparent
              */
             readonly Parent: any;
+
+            /**
+             * Get the controls within the section
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-sections
+             */
+            readonly Controls: ISectionControlsCollection;
 
             /**
              * Get/Set the label for the section

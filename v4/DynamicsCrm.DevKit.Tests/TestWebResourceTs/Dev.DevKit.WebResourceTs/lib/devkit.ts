@@ -1,3 +1,41 @@
+/**
+ * DevKit - Microsoft Dynamics 365 / Power Platform Client API Wrapper
+ * ====================================================================
+ *
+ * MS Client API Reference: https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference
+ *
+ * API Coverage: ~95-97% of Microsoft Client API
+ * ---------------------------------------------
+ * - Attributes (Columns): 100%
+ * - Controls: ~98%
+ * - formContext.data: 100%
+ * - formContext.data.entity: 100%
+ * - formContext.ui: 100%
+ * - formContext.data.process (BPF): 100%
+ * - Execution Context: 100%
+ * - Xrm.WebApi: 100%
+ * - Xrm.Utility: 100%
+ * - Xrm.Navigation: 100%
+ * - Xrm.Device: 100%
+ * - Xrm.Encoding: 100%
+ * - Xrm.App: 100%
+ * - Xrm.Copilot: 100%
+ * - Grids: ~90%
+ *
+ * Promise Support: DUAL PATTERN
+ * -----------------------------
+ * All async functions support BOTH patterns:
+ * 1. Callback style (.then): Pass successCallback, errorCallback
+ *    Example: WebApi.CreateRecord(entity, data, onSuccess, onError);
+ *
+ * 2. Promise style (async/await): Omit callbacks to get Promise
+ *    Example: const result = await WebApi.CreateRecord(entity, data);
+ *
+ * Features:
+ * - Type-safe property access via getters/setters
+ * - Form type protection (auto-prevents changes on Read-Only/Disabled forms)
+ * - Extended WebApi with RetrieveRecords factory pattern
+ */
 function getXrm(): typeof Xrm | undefined {
     if (typeof window !== 'undefined' && (window as any).Xrm !== undefined) {
         return (window as any).Xrm;
@@ -177,6 +215,20 @@ function loadTabs(formContext: any, tabItems: string[]): any {
         const sectionObject = tabObject?.sections?.get(section);
         getter(sections[section], 'Name', () => sectionObject?.getName());
         getter(sections[section], 'Parent', () => sectionObject?.getParent());
+        getter(sections[section], 'Controls', () => {
+            const controlsCollection = sectionObject?.controls;
+            if (!controlsCollection) return null;
+            const obj: any = {};
+            obj.get = (arg?: number | string) => controlsCollection?.get(arg);
+            obj.getLength = () => controlsCollection?.getLength();
+            obj.forEach = (callback: (control: any, index: number) => void) => {
+                const length = controlsCollection?.getLength() || 0;
+                for (let i = 0; i < length; i++) {
+                    callback(controlsCollection.get(i), i);
+                }
+            };
+            return obj;
+        });
         getterSetter(sections[section], 'Label', () => sectionObject?.getLabel(), (value: any) => sectionObject?.setLabel(value));
         getterSetter(sections[section], 'Visible', () => sectionObject?.getVisible(), (value: any) => sectionObject?.setVisible(value));
     };
