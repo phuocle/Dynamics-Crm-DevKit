@@ -2849,4 +2849,53 @@ describe('devKit', () => {
         utility.OpenForm({}, {}, function (r) { result = r; }, function () { });
         expect(result.savedEntityReference).toBeDefined();
     });
+
+    test('Outputs, AddOnOutputChange, RemoveOnOutputChange', () => {
+        // setup
+        var attributes = new ItemCollectionMock([
+            new AttributeMock({
+                name: "name"
+            })
+        ]);
+        var entity = new EntityMock({
+            attributes: attributes
+        });
+        var data = new DataMock(entity);
+        var mockOutputs = { "output1": "value1" };
+        var control = new StringControlMock({
+            attribute: new StringAttributeMock({
+                name: "name",
+                value: "LE VAN PHUOC"
+            }),
+            name: "name",
+            label: "Account Name"
+        });
+        // Add custom mocks for the missing methods
+        control.getOutputs = () => mockOutputs;
+        control.addOnOutputChange = (callback) => { control._outputChangeHandler = callback; };
+        control.removeOnOutputChange = (callback) => { if (control._outputChangeHandler === callback) delete control._outputChangeHandler; };
+
+        var ui = new UiMock({
+            controls: new ItemCollectionMock([control])
+        });
+        XrmMockGenerator.formContext = new FormContextMock(data, ui);
+        var executionContext = XrmMockGenerator.formContext;
+
+        // run
+        var body = {
+            name: {}
+        };
+        devKit.LoadFields(executionContext, body);
+        var field = body.name;
+
+        // result
+        expect(field.Outputs).toBe(mockOutputs);
+
+        var callback = () => { };
+        field.AddOnOutputChange(callback);
+        expect(control._outputChangeHandler).toBe(callback);
+
+        field.RemoveOnOutputChange(callback);
+        expect(control._outputChangeHandler).toBeUndefined();
+    });
 });
