@@ -98,6 +98,24 @@ export function TestUtility(form: FormAccount_DevKitV4.Form): void {
         results.push({ Test: "R39", Property: "User.UserId", Value: userSettings?.UserId, Status: userSettings?.UserId ? "✓" : "⚠" });
         results.push({ Test: "R40", Property: "User.UserName", Value: userSettings?.UserName, Status: userSettings?.UserName ? "✓" : "⚠" });
 
+        // ----------------------------------------
+        // DateFormattingInfo (all properties)
+        // ----------------------------------------
+        const dateInfo = userSettings?.DateFormattingInfo;
+        results.push({ Test: "R41", Property: "DateFormattingInfo.AMDesignator", Value: dateInfo?.AMDesignator, Status: dateInfo?.AMDesignator ? "✓" : "⚠" });
+        results.push({ Test: "R42", Property: "DateFormattingInfo.PMDesignator", Value: dateInfo?.PMDesignator, Status: dateInfo?.PMDesignator ? "✓" : "⚠" });
+        results.push({ Test: "R43", Property: "DateFormattingInfo.DateSeparator", Value: dateInfo?.DateSeparator, Status: dateInfo?.DateSeparator ? "✓" : "⚠" });
+        results.push({ Test: "R44", Property: "DateFormattingInfo.TimeSeparator", Value: dateInfo?.TimeSeparator, Status: dateInfo?.TimeSeparator ? "✓" : "⚠" });
+        results.push({ Test: "R45", Property: "DateFormattingInfo.ShortDatePattern", Value: dateInfo?.ShortDatePattern, Status: dateInfo?.ShortDatePattern ? "✓" : "⚠" });
+        results.push({ Test: "R46", Property: "DateFormattingInfo.LongDatePattern", Value: dateInfo?.LongDatePattern, Status: dateInfo?.LongDatePattern ? "✓" : "⚠" });
+        results.push({ Test: "R47", Property: "DateFormattingInfo.ShortTimePattern", Value: dateInfo?.ShortTimePattern, Status: dateInfo?.ShortTimePattern ? "✓" : "⚠" });
+        results.push({ Test: "R48", Property: "DateFormattingInfo.LongTimePattern", Value: dateInfo?.LongTimePattern, Status: dateInfo?.LongTimePattern ? "✓" : "⚠" });
+        results.push({ Test: "R49", Property: "DateFormattingInfo.FullDateTimePattern", Value: dateInfo?.FullDateTimePattern, Status: dateInfo?.FullDateTimePattern ? "✓" : "⚠" });
+        results.push({ Test: "R50", Property: "DateFormattingInfo.FirstDayOfWeek", Value: dateInfo?.FirstDayOfWeek, Status: typeof dateInfo?.FirstDayOfWeek === "number" ? "✓" : "⚠" });
+        results.push({ Test: "R51", Property: "DateFormattingInfo.DayNames", Value: dateInfo?.DayNames ? `Array[${dateInfo.DayNames.length}]` : "null", Status: dateInfo?.DayNames ? "✓" : "⚠" });
+        results.push({ Test: "R52", Property: "DateFormattingInfo.MonthNames", Value: dateInfo?.MonthNames ? `Array[${dateInfo.MonthNames.length}]` : "null", Status: dateInfo?.MonthNames ? "✓" : "⚠" });
+        results.push({ Test: "R53", Property: "DateFormattingInfo.Calendar", Value: dateInfo?.Calendar ? "object" : "null", Status: dateInfo?.Calendar ? "✓" : "⚠" });
+
     } catch (error: any) {
         results.push({ Test: "ERR", Property: "Props Error", Value: error.message, Status: "✗" });
     }
@@ -370,7 +388,7 @@ export function TestUtility(form: FormAccount_DevKitV4.Form): void {
 
     console.groupCollapsed(`✅ TEST 12: Utility API [${startTime}] - ${passed}/${total}`);
 
-    console.log("%c📋 ReadOnly Properties (R1-R40)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
+    console.log("%c📋 ReadOnly Properties (R1-R53)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
     console.table(results);
 
     console.log("%c⚡ Methods (S1-S37)", "font-weight: bold; font-size: 14px; color: #2196F3;");
