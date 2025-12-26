@@ -3655,37 +3655,39 @@ var formAccount_DevKitV4 = (function () {
 			// USER SETTINGS (form.Utility.UserSettings.*)
 			// =====================================================
 			const userSettings = form.Utility.UserSettings;
-			results.push({ Test: "R24", Property: "form.Utility.UserSettings.DefaultDashboardId", Value: userSettings?.DefaultDashboardId, Status: "✓" });
-			results.push({ Test: "R25", Property: "form.Utility.UserSettings.IsGuidedHelpEnabled", Value: userSettings?.IsGuidedHelpEnabled, Status: typeof userSettings?.IsGuidedHelpEnabled === "boolean" ? "✓" : "⚠" });
-			results.push({ Test: "R26", Property: "form.Utility.UserSettings.IsHighContrastEnabled", Value: userSettings?.IsHighContrastEnabled, Status: typeof userSettings?.IsHighContrastEnabled === "boolean" ? "✓" : "⚠" });
-			results.push({ Test: "R27", Property: "form.Utility.UserSettings.IsRTL", Value: userSettings?.IsRTL, Status: typeof userSettings?.IsRTL === "boolean" ? "✓" : "⚠" });
-			results.push({ Test: "R28", Property: "form.Utility.UserSettings.LanguageId", Value: userSettings?.LanguageId, Status: typeof userSettings?.LanguageId === "number" ? "✓" : "⚠" });
-			results.push({ Test: "R29", Property: "form.Utility.UserSettings.Roles", Value: userSettings?.Roles ? "Collection" : "null", Status: userSettings?.Roles ? "✓" : "⚠" });
-			results.push({ Test: "R30", Property: "form.Utility.UserSettings.SecurityRolePrivileges", Value: userSettings?.SecurityRolePrivileges ? `Array[${userSettings.SecurityRolePrivileges.length || 0}]` : "null", Status: userSettings?.SecurityRolePrivileges ? "✓" : "⚠" });
-			results.push({ Test: "R31", Property: "form.Utility.UserSettings.SecurityRoles", Value: userSettings?.SecurityRoles ? `Array[${userSettings.SecurityRoles.length || 0}]` : "null", Status: userSettings?.SecurityRoles ? "✓" : "⚠" });
-			results.push({ Test: "R32", Property: "form.Utility.UserSettings.TimeZoneOffsetMinutes", Value: userSettings?.TimeZoneOffsetMinutes, Status: typeof userSettings?.TimeZoneOffsetMinutes === "number" ? "✓" : "⚠" });
-			results.push({ Test: "R33", Property: "form.Utility.UserSettings.TransactionCurrency", Value: userSettings?.TransactionCurrency ? stringify(userSettings.TransactionCurrency) : "null", Status: userSettings?.TransactionCurrency ? "✓" : "⚠" });
-			results.push({ Test: "R34", Property: "form.Utility.UserSettings.TransactionCurrencyId", Value: userSettings?.TransactionCurrencyId, Status: userSettings?.TransactionCurrencyId ? "✓" : "⚠" });
-			results.push({ Test: "R35", Property: "form.Utility.UserSettings.UserId", Value: userSettings?.UserId, Status: userSettings?.UserId ? "✓" : "⚠" });
-			results.push({ Test: "R36", Property: "form.Utility.UserSettings.UserName", Value: userSettings?.UserName, Status: userSettings?.UserName ? "✓" : "⚠" });
+			results.push({ Test: "R24", Property: "form.Utility.UserSettings", Value: userSettings ? "object" : "null", Status: userSettings ? "✓" : "⚠" });
+			results.push({ Test: "R25", Property: "form.Utility.UserSettings.DateFormattingInfo", Value: userSettings?.DateFormattingInfo ? "object" : "null", Status: userSettings?.DateFormattingInfo ? "✓" : "⚠" });
+			results.push({ Test: "R26", Property: "form.Utility.UserSettings.DefaultDashboardId", Value: userSettings?.DefaultDashboardId, Status: "✓" });
+			results.push({ Test: "R27", Property: "form.Utility.UserSettings.IsGuidedHelpEnabled", Value: userSettings?.IsGuidedHelpEnabled, Status: typeof userSettings?.IsGuidedHelpEnabled === "boolean" ? "✓" : "⚠" });
+			results.push({ Test: "R28", Property: "form.Utility.UserSettings.IsHighContrastEnabled", Value: userSettings?.IsHighContrastEnabled, Status: typeof userSettings?.IsHighContrastEnabled === "boolean" ? "✓" : "⚠" });
+			results.push({ Test: "R29", Property: "form.Utility.UserSettings.IsRTL", Value: userSettings?.IsRTL, Status: typeof userSettings?.IsRTL === "boolean" ? "✓" : "⚠" });
+			results.push({ Test: "R30", Property: "form.Utility.UserSettings.LanguageId", Value: userSettings?.LanguageId, Status: typeof userSettings?.LanguageId === "number" ? "✓" : "⚠" });
+			results.push({ Test: "R31", Property: "form.Utility.UserSettings.Roles", Value: userSettings?.Roles ? "Collection" : "null", Status: userSettings?.Roles ? "✓" : "⚠" });
+			results.push({ Test: "R32", Property: "form.Utility.UserSettings.SecurityRolePrivileges", Value: userSettings?.SecurityRolePrivileges ? `Array[${userSettings.SecurityRolePrivileges.length || 0}]` : "null", Status: userSettings?.SecurityRolePrivileges ? "✓" : "⚠" });
+			results.push({ Test: "R33", Property: "form.Utility.UserSettings.SecurityRoles", Value: userSettings?.SecurityRoles ? `Array[${userSettings.SecurityRoles.length || 0}]` : "null", Status: userSettings?.SecurityRoles ? "✓" : "⚠" });
+			results.push({ Test: "R34", Property: "form.Utility.UserSettings.TimeZoneOffsetMinutes", Value: userSettings?.TimeZoneOffsetMinutes, Status: typeof userSettings?.TimeZoneOffsetMinutes === "number" ? "✓" : "⚠" });
+			results.push({ Test: "R35", Property: "form.Utility.UserSettings.TransactionCurrency", Value: userSettings?.TransactionCurrency ? stringify(userSettings.TransactionCurrency) : "null", Status: userSettings?.TransactionCurrency ? "✓" : "⚠" });
+			results.push({ Test: "R36", Property: "form.Utility.UserSettings.TransactionCurrencyId", Value: userSettings?.TransactionCurrencyId, Status: userSettings?.TransactionCurrencyId ? "✓" : "⚠" });
+			results.push({ Test: "R37", Property: "form.Utility.UserSettings.UserId", Value: userSettings?.UserId, Status: userSettings?.UserId ? "✓" : "⚠" });
+			results.push({ Test: "R38", Property: "form.Utility.UserSettings.UserName", Value: userSettings?.UserName, Status: userSettings?.UserName ? "✓" : "⚠" });
 
 			// =====================================================
 			// DATE FORMATTING INFO (form.Utility.UserSettings.DateFormattingInfo.*)
 			// =====================================================
 			const dateInfo = userSettings?.DateFormattingInfo;
-			results.push({ Test: "R37", Property: "form.Utility.UserSettings.DateFormattingInfo.AMDesignator", Value: dateInfo?.AMDesignator, Status: dateInfo?.AMDesignator ? "✓" : "⚠" });
-			results.push({ Test: "R38", Property: "form.Utility.UserSettings.DateFormattingInfo.PMDesignator", Value: dateInfo?.PMDesignator, Status: dateInfo?.PMDesignator ? "✓" : "⚠" });
-			results.push({ Test: "R39", Property: "form.Utility.UserSettings.DateFormattingInfo.DateSeparator", Value: dateInfo?.DateSeparator, Status: dateInfo?.DateSeparator ? "✓" : "⚠" });
-			results.push({ Test: "R40", Property: "form.Utility.UserSettings.DateFormattingInfo.TimeSeparator", Value: dateInfo?.TimeSeparator, Status: dateInfo?.TimeSeparator ? "✓" : "⚠" });
-			results.push({ Test: "R41", Property: "form.Utility.UserSettings.DateFormattingInfo.ShortDatePattern", Value: dateInfo?.ShortDatePattern, Status: dateInfo?.ShortDatePattern ? "✓" : "⚠" });
-			results.push({ Test: "R42", Property: "form.Utility.UserSettings.DateFormattingInfo.LongDatePattern", Value: dateInfo?.LongDatePattern, Status: dateInfo?.LongDatePattern ? "✓" : "⚠" });
-			results.push({ Test: "R43", Property: "form.Utility.UserSettings.DateFormattingInfo.ShortTimePattern", Value: dateInfo?.ShortTimePattern, Status: dateInfo?.ShortTimePattern ? "✓" : "⚠" });
-			results.push({ Test: "R44", Property: "form.Utility.UserSettings.DateFormattingInfo.LongTimePattern", Value: dateInfo?.LongTimePattern, Status: dateInfo?.LongTimePattern ? "✓" : "⚠" });
-			results.push({ Test: "R45", Property: "form.Utility.UserSettings.DateFormattingInfo.FullDateTimePattern", Value: dateInfo?.FullDateTimePattern, Status: dateInfo?.FullDateTimePattern ? "✓" : "⚠" });
-			results.push({ Test: "R46", Property: "form.Utility.UserSettings.DateFormattingInfo.FirstDayOfWeek", Value: dateInfo?.FirstDayOfWeek, Status: typeof dateInfo?.FirstDayOfWeek === "number" ? "✓" : "⚠" });
-			results.push({ Test: "R47", Property: "form.Utility.UserSettings.DateFormattingInfo.DayNames", Value: dateInfo?.DayNames ? `Array[${dateInfo.DayNames.length}]` : "null", Status: dateInfo?.DayNames ? "✓" : "⚠" });
-			results.push({ Test: "R48", Property: "form.Utility.UserSettings.DateFormattingInfo.MonthNames", Value: dateInfo?.MonthNames ? `Array[${dateInfo.MonthNames.length}]` : "null", Status: dateInfo?.MonthNames ? "✓" : "⚠" });
-			results.push({ Test: "R49", Property: "form.Utility.UserSettings.DateFormattingInfo.Calendar", Value: dateInfo?.Calendar ? "object" : "null", Status: dateInfo?.Calendar ? "✓" : "⚠" });
+			results.push({ Test: "R39", Property: "form.Utility.UserSettings.DateFormattingInfo.AMDesignator", Value: dateInfo?.AMDesignator, Status: dateInfo?.AMDesignator ? "✓" : "⚠" });
+			results.push({ Test: "R40", Property: "form.Utility.UserSettings.DateFormattingInfo.PMDesignator", Value: dateInfo?.PMDesignator, Status: dateInfo?.PMDesignator ? "✓" : "⚠" });
+			results.push({ Test: "R41", Property: "form.Utility.UserSettings.DateFormattingInfo.DateSeparator", Value: dateInfo?.DateSeparator, Status: dateInfo?.DateSeparator ? "✓" : "⚠" });
+			results.push({ Test: "R42", Property: "form.Utility.UserSettings.DateFormattingInfo.TimeSeparator", Value: dateInfo?.TimeSeparator, Status: dateInfo?.TimeSeparator ? "✓" : "⚠" });
+			results.push({ Test: "R43", Property: "form.Utility.UserSettings.DateFormattingInfo.ShortDatePattern", Value: dateInfo?.ShortDatePattern, Status: dateInfo?.ShortDatePattern ? "✓" : "⚠" });
+			results.push({ Test: "R44", Property: "form.Utility.UserSettings.DateFormattingInfo.LongDatePattern", Value: dateInfo?.LongDatePattern, Status: dateInfo?.LongDatePattern ? "✓" : "⚠" });
+			results.push({ Test: "R45", Property: "form.Utility.UserSettings.DateFormattingInfo.ShortTimePattern", Value: dateInfo?.ShortTimePattern, Status: dateInfo?.ShortTimePattern ? "✓" : "⚠" });
+			results.push({ Test: "R46", Property: "form.Utility.UserSettings.DateFormattingInfo.LongTimePattern", Value: dateInfo?.LongTimePattern, Status: dateInfo?.LongTimePattern ? "✓" : "⚠" });
+			results.push({ Test: "R47", Property: "form.Utility.UserSettings.DateFormattingInfo.FullDateTimePattern", Value: dateInfo?.FullDateTimePattern, Status: dateInfo?.FullDateTimePattern ? "✓" : "⚠" });
+			results.push({ Test: "R48", Property: "form.Utility.UserSettings.DateFormattingInfo.FirstDayOfWeek", Value: dateInfo?.FirstDayOfWeek, Status: typeof dateInfo?.FirstDayOfWeek === "number" ? "✓" : "⚠" });
+			results.push({ Test: "R49", Property: "form.Utility.UserSettings.DateFormattingInfo.DayNames", Value: dateInfo?.DayNames ? `Array[${dateInfo.DayNames.length}]` : "null", Status: dateInfo?.DayNames ? "✓" : "⚠" });
+			results.push({ Test: "R50", Property: "form.Utility.UserSettings.DateFormattingInfo.MonthNames", Value: dateInfo?.MonthNames ? `Array[${dateInfo.MonthNames.length}]` : "null", Status: dateInfo?.MonthNames ? "✓" : "⚠" });
+			results.push({ Test: "R51", Property: "form.Utility.UserSettings.DateFormattingInfo.Calendar", Value: dateInfo?.Calendar ? "object" : "null", Status: dateInfo?.Calendar ? "✓" : "⚠" });
 		} catch (/** @type {any} */ error) {
 			results.push({ Test: "ERR", Property: "Props Error", Value: error.message, Status: "✗" });
 		}
@@ -3773,6 +3775,7 @@ var formAccount_DevKitV4 = (function () {
 		methodResults.push({ Test: "M34", Property: "form.Utility.RefreshParentGrid", Value: typeof form.Utility.RefreshParentGrid === "function" ? "function" : "undefined", Status: typeof form.Utility.RefreshParentGrid === "function" ? "✓" : "⚠" });
 		methodResults.push({ Test: "M35", Property: "form.Utility.ResourceString", Value: typeof form.Utility.ResourceString === "function" ? "function" : "undefined", Status: typeof form.Utility.ResourceString === "function" ? "✓" : "⚠" });
 		methodResults.push({ Test: "M36", Property: "form.Utility.ShowProgressIndicator", Value: typeof form.Utility.ShowProgressIndicator === "function" ? "function" : "undefined", Status: typeof form.Utility.ShowProgressIndicator === "function" ? "✓" : "⚠" });
+		methodResults.push({ Test: "M37", Property: "form.Utility.LoadPanel", Value: typeof form.Utility.LoadPanel === "function" ? "function" : "undefined", Status: typeof form.Utility.LoadPanel === "function" ? "✓" : "⚠" });
 
 		const allResults = [...results, ...methodResults];
 		const passed = allResults.filter(r => r.Status === "✓").length;
@@ -3781,9 +3784,9 @@ var formAccount_DevKitV4 = (function () {
 		const total = allResults.length;
 
 		console.groupCollapsed(`🎯 TEST 21: Utility API [${startTime}] - ${passed}/${total}`);
-		console.log("%c📋 ReadOnly Properties (R1-R49)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
+		console.log("%c📋 ReadOnly Properties (R1-R51)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
 		console.table(results);
-		console.log("%c⚡ Methods (M1-M36)", "font-weight: bold; font-size: 14px; color: #2196F3;");
+		console.log("%c⚡ Methods (M1-M37)", "font-weight: bold; font-size: 14px; color: #2196F3;");
 		console.table(methodResults);
 		console.log(`%c✅ Summary: ${passed}/${total} passed` +
 			(warnings > 0 ? ` | ⚠ ${warnings} warnings` : '') +
@@ -4073,35 +4076,54 @@ var formAccount_DevKitV4 = (function () {
 			methodResults.push({ Test: "S2", Property: "form.WebApi.RetrieveRecord (Promise)", Value: e.message, Status: "✗" });
 		}
 
-		// S3: RetrieveRecords - FetchXML Promise-based
+		// S3: RetrieveRecord - Access FormattedValue
+		try {
+			const record = await form.WebApi.RetrieveRecord(
+				AccountApi,
+				form.EntityName,
+				form.EntityId,
+				"?$select=name,industrycode"
+			);
+			const formattedIndustry = record.FormattedValue?.IndustryCode;
+			methodResults.push({
+				Test: "S3",
+				Property: "form.WebApi.FormattedValue.IndustryCode",
+				Value: formattedIndustry ? `"${formattedIndustry}"` : "(empty)",
+				Status: "✓"
+			});
+		} catch (/** @type {any} */ e) {
+			methodResults.push({ Test: "S3", Property: "form.WebApi.FormattedValue.IndustryCode", Value: e.message, Status: "✗" });
+		}
+
+		// S4: RetrieveRecords - FetchXML Promise-based
 		try {
 			const fetchXml = "<fetch top='3'><entity name='account'><attribute name='name'/><attribute name='accountnumber'/></entity></fetch>";
 			const records = await form.WebApi.RetrieveRecords(AccountApi, fetchXml);
 			methodResults.push({
-				Test: "S3",
+				Test: "S4",
 				Property: "form.WebApi.RetrieveRecords (FetchXML)",
 				Value: `Count: ${records.length}`,
 				Status: records.length >= 0 ? "✓" : "✗"
 			});
 		} catch (/** @type {any} */ e) {
-			methodResults.push({ Test: "S3", Property: "form.WebApi.RetrieveRecords (FetchXML)", Value: e.message, Status: "✗" });
+			methodResults.push({ Test: "S4", Property: "form.WebApi.RetrieveRecords (FetchXML)", Value: e.message, Status: "✗" });
 		}
 
-		// S4: RetrieveRecords - FetchXML with maxPageSize
+		// S5: RetrieveRecords - FetchXML with maxPageSize
 		try {
 			const fetchXml = "<fetch><entity name='account'><attribute name='name'/><attribute name='telephone1'/></entity></fetch>";
 			const records = await form.WebApi.RetrieveRecords(AccountApi, fetchXml, 5);
 			methodResults.push({
-				Test: "S4",
+				Test: "S5",
 				Property: "form.WebApi.RetrieveRecords (FetchXML+PageSize)",
 				Value: `Count: ${records.length} (max 5)`,
 				Status: records.length >= 0 ? "✓" : "✗"
 			});
 		} catch (/** @type {any} */ e) {
-			methodResults.push({ Test: "S4", Property: "form.WebApi.RetrieveRecords (FetchXML+PageSize)", Value: e.message, Status: "✗" });
+			methodResults.push({ Test: "S5", Property: "form.WebApi.RetrieveRecords (FetchXML+PageSize)", Value: e.message, Status: "✗" });
 		}
 
-		// S5: RetrieveRecords - OData Promise-based
+		// S6: RetrieveRecords - OData Promise-based
 		try {
 			const records = await form.WebApi.RetrieveRecords(
 				AccountApi,
@@ -4109,16 +4131,34 @@ var formAccount_DevKitV4 = (function () {
 				'?$select=name,accountnumber&$top=3'
 			);
 			methodResults.push({
-				Test: "S5",
+				Test: "S6",
 				Property: "form.WebApi.RetrieveRecords (OData)",
 				Value: `Count: ${records.length}`,
 				Status: records.length >= 0 ? "✓" : "✗"
 			});
 		} catch (/** @type {any} */ e) {
-			methodResults.push({ Test: "S5", Property: "form.WebApi.RetrieveRecords (OData)", Value: e.message, Status: "✗" });
+			methodResults.push({ Test: "S6", Property: "form.WebApi.RetrieveRecords (OData)", Value: e.message, Status: "✗" });
 		}
 
-		// S6: Set property and verify Entity update
+		// S7: RetrieveRecords - OData with maxPageSize
+		try {
+			const records = await form.WebApi.RetrieveRecords(
+				AccountApi,
+				'account',
+				'?$select=name,telephone1',
+				5
+			);
+			methodResults.push({
+				Test: "S7",
+				Property: "form.WebApi.RetrieveRecords (OData+PageSize)",
+				Value: `Count: ${records.length} (max 5)`,
+				Status: records.length >= 0 ? "✓" : "✗"
+			});
+		} catch (/** @type {any} */ e) {
+			methodResults.push({ Test: "S7", Property: "form.WebApi.RetrieveRecords (OData+PageSize)", Value: e.message, Status: "✗" });
+		}
+
+		// S8: Set property and verify Entity update
 		try {
 			const account = new AccountApi();
 			account.Name = 'Update Test';
@@ -4128,13 +4168,13 @@ var formAccount_DevKitV4 = (function () {
 			const hasName = entity && entity.name === 'Update Test';
 			const hasRevenue = entity && entity.revenue === 1000000;
 			methodResults.push({
-				Test: "S6",
+				Test: "S8",
 				Property: "AccountApi property set -> Entity update",
 				Value: `Name: ${hasName}, Revenue: ${hasRevenue}`,
 				Status: hasName && hasRevenue ? "✓" : "⚠"
 			});
 		} catch (/** @type {any} */ e) {
-			methodResults.push({ Test: "S6", Property: "AccountApi property set -> Entity update", Value: e.message, Status: "✗" });
+			methodResults.push({ Test: "S8", Property: "AccountApi property set -> Entity update", Value: e.message, Status: "✗" });
 		}
 
 		// =====================================================
@@ -4149,7 +4189,7 @@ var formAccount_DevKitV4 = (function () {
 		console.groupCollapsed(`🎯 TEST 25: WebApi [${startTime}] - ${passed}/${total}`);
 		console.log("%c📋 AccountApi Factory Tests (R1-R5)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
 		console.table(results);
-		console.log("%c⚡ WebApi Methods (S1-S6)", "font-weight: bold; font-size: 14px; color: #2196F3;");
+		console.log("%c⚡ WebApi Methods (S1-S8)", "font-weight: bold; font-size: 14px; color: #2196F3;");
 		console.table(methodResults);
 		console.log(`%c✅ Summary: ${passed}/${total} passed` +
 			(warnings > 0 ? ` | ⚠ ${warnings} warnings` : '') +
