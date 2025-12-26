@@ -27,8 +27,6 @@ export function TestCopilot(form: FormAccount_DevKitV4.Form): void {
     const methodResults: TestResult[] = [];   // Setters & Methods (S-Index)
     const startTime = new Date().toLocaleTimeString();
 
-    const copilot = form.Copilot;
-
     // =====================================================
     // READONLY PROPERTIES (R-Index)
     // =====================================================
@@ -37,24 +35,24 @@ export function TestCopilot(form: FormAccount_DevKitV4.Form): void {
         results.push({
             Test: "R1",
             Property: "Copilot exists",
-            Value: copilot !== undefined && copilot !== null,
-            Status: copilot !== undefined && copilot !== null ? "✓" : "⚠"
+            Value: form.Copilot !== undefined && form.Copilot !== null,
+            Status: form.Copilot !== undefined && form.Copilot !== null ? "✓" : "⚠"
         });
 
         // R2: ExecuteEvent function exists
         results.push({
             Test: "R2",
             Property: "ExecuteEvent function exists",
-            Value: typeof copilot?.ExecuteEvent === 'function',
-            Status: typeof copilot?.ExecuteEvent === 'function' ? "✓" : "⚠"
+            Value: typeof form.Copilot?.ExecuteEvent === 'function',
+            Status: typeof form.Copilot?.ExecuteEvent === 'function' ? "✓" : "⚠"
         });
 
         // R3: ExecutePrompt function exists
         results.push({
             Test: "R3",
             Property: "ExecutePrompt function exists",
-            Value: typeof copilot?.ExecutePrompt === 'function',
-            Status: typeof copilot?.ExecutePrompt === 'function' ? "✓" : "⚠"
+            Value: typeof form.Copilot?.ExecutePrompt === 'function',
+            Status: typeof form.Copilot?.ExecutePrompt === 'function' ? "✓" : "⚠"
         });
 
         // R4: Check if Xrm.Copilot is available (Preview feature)
@@ -84,7 +82,7 @@ export function TestCopilot(form: FormAccount_DevKitV4.Form): void {
         try {
             // Note: This test only verifies the function can be called without throwing
             // Actual Copilot functionality requires Copilot to be enabled in the environment
-            const eventPromise = copilot?.ExecuteEvent("test_event", { testParam: "value" });
+            const eventPromise = form.Copilot?.ExecuteEvent("test_event", { testParam: "value" });
             if (eventPromise && typeof eventPromise.then === 'function') {
                 executeEventResult = "Promise returned";
             } else if (eventPromise === undefined) {
@@ -103,7 +101,7 @@ export function TestCopilot(form: FormAccount_DevKitV4.Form): void {
         // S2: ExecuteEvent with success callback
         let callbackResult = "Not called";
         try {
-            copilot?.ExecuteEvent("test_event_2", { id: 1 },
+            form.Copilot?.ExecuteEvent("test_event_2", { id: 1 },
                 (result: any) => { callbackResult = "Success callback invoked"; },
                 (error: any) => { callbackResult = "Error callback invoked"; }
             );
@@ -121,7 +119,7 @@ export function TestCopilot(form: FormAccount_DevKitV4.Form): void {
         // S3: ExecutePrompt with string (test structure only)
         let executePromptResult = "Not available";
         try {
-            const promptPromise = copilot?.ExecutePrompt("Summarize this account");
+            const promptPromise = form.Copilot?.ExecutePrompt("Summarize this account");
             if (promptPromise && typeof promptPromise.then === 'function') {
                 executePromptResult = "Promise returned";
             } else if (promptPromise === undefined) {
@@ -140,7 +138,7 @@ export function TestCopilot(form: FormAccount_DevKitV4.Form): void {
         // S4: ExecutePrompt with success callback
         let promptCallbackResult = "Not called";
         try {
-            copilot?.ExecutePrompt("Test prompt",
+            form.Copilot?.ExecutePrompt("Test prompt",
                 (result: any) => { promptCallbackResult = "Success callback invoked"; },
                 (error: any) => { promptCallbackResult = "Error callback invoked"; }
             );
@@ -172,7 +170,7 @@ export function TestCopilot(form: FormAccount_DevKitV4.Form): void {
     const warnings = allResults.filter(r => r.Status === "⚠").length;
     const total = allResults.length;
 
-    console.groupCollapsed(`🎯 TEST 18: Copilot [${startTime}] - Using: form.Copilot (Preview) - ${passed}/${total} (⚠${warnings})`);
+    console.groupCollapsed(`✅ TEST 18: Copilot [${startTime}] - Using: form.Copilot (Preview) - ${passed}/${total} (⚠${warnings})`);
 
     console.log("%c📋 ReadOnly Properties (R1-R4)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
     console.table(results);
@@ -187,3 +185,4 @@ export function TestCopilot(form: FormAccount_DevKitV4.Form): void {
         "font-weight: bold; color: #4CAF50; font-size: 14px;");
     console.groupEnd();
 }
+

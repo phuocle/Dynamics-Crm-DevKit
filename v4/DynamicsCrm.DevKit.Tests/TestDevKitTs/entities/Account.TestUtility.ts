@@ -368,7 +368,7 @@ export function TestUtility(form: FormAccount_DevKitV4.Form): void {
     const failed = allResults.filter(r => r.Status === "✗").length;
     const total = allResults.length;
 
-    console.groupCollapsed(`🔧 TEST 12: Utility API [${startTime}] - ${passed}/${total}`);
+    console.groupCollapsed(`✅ TEST 12: Utility API [${startTime}] - ${passed}/${total}`);
 
     console.log("%c📋 ReadOnly Properties (R1-R40)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
     console.table(results);

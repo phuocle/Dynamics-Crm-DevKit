@@ -197,9 +197,9 @@ Copy-Item -Path "d:\github\Dynamics-Crm-DevKit\v4\DynamicsCrm.DevKit.Tests\TestD
 
 ---
 
-## ⚠️ JavaScript Convention (TestDevKitJs)
+## ⚠️ JavaScript Convention for TestDevKitJs and TestDevKitTs
 
-Khi viết test cho **TestDevKitJs** (JavaScript), **KHÔNG** sử dụng shorthand variables:
+Khi viết test cho **TestDevKitJs** (JavaScript) va **TestDevKitTs** (TypeScript), **KHÔNG** sử dụng shorthand variables:
 
 ```javascript
 // ❌ KHÔNG DÙNG shorthand như này:

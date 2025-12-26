@@ -227,7 +227,7 @@ export function TestOptionSet(form: FormAccount_DevKitV4.Form): void {
     const failed = allResults.filter(r => r.Status === "✗").length;
     const total = allResults.length;
 
-    console.groupCollapsed(`📋 TEST 5: OptionSet Control [${startTime}] - Using: IndustryCode field - ${passed}/${total}`);
+    console.groupCollapsed(`✅ TEST 5: OptionSet Control [${startTime}] - Using: v4_OptionSet field - ${passed}/${total}`);
 
     console.log("%c📋 ReadOnly Properties (R1-R18)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
     console.table(results);
@@ -242,3 +242,4 @@ export function TestOptionSet(form: FormAccount_DevKitV4.Form): void {
 
     console.groupEnd();
 }
+

@@ -183,7 +183,7 @@ export function TestMoney(form: FormAccount_DevKitV4.Form): void {
     const failed = allResults.filter(r => r.Status === "✗").length;
     const total = allResults.length;
 
-    console.groupCollapsed(`💰 TEST 7: Money Control [${startTime}] - Using: Revenue field - ${passed}/${total}`);
+    console.groupCollapsed(`✅ TEST 7: Money Control [${startTime}] - Using: v4_Money field - ${passed}/${total}`);
 
     console.log("%c📋 ReadOnly Properties (R1-R17)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
     console.table(results);
@@ -198,3 +198,4 @@ export function TestMoney(form: FormAccount_DevKitV4.Form): void {
 
     console.groupEnd();
 }
+

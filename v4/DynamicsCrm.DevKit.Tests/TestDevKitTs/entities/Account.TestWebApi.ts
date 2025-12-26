@@ -246,7 +246,7 @@ export async function TestWebApi(form: FormAccount_DevKitV4.Form): Promise<void>
     const failed = allResults.filter(r => r.Status === "✗").length;
     const total = allResults.length;
 
-    console.groupCollapsed(`🌐 TEST 6: WebApi [${startTime}] - Early-bound style - ${passed}/${total}`);
+    console.groupCollapsed(`✅ TEST 6: WebApi [${startTime}] - Early-bound style - ${passed}/${total}`);
 
     console.log("%c📋 AccountApi Factory Tests (R1-R5)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
     console.table(results);

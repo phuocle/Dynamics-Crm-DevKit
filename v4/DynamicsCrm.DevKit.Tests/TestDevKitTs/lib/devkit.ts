@@ -113,11 +113,13 @@ function loadField(formContext: any, field: any, attribute: any, control: any): 
 function findControlFromAttribute(attribute: any, controlName: string): any {
     let foundControl: any = null;
     const lowerName = controlName?.toLowerCase();
-    attribute?.controls?.forEach((ctrl: any) => {
-        if (ctrl?.getName()?.toLowerCase() === lowerName) {
-            foundControl = ctrl;
-        }
-    });
+    if (attribute.controls) {
+        attribute.controls.forEach((ctrl: any) => {
+            if (ctrl?.getName()?.toLowerCase() === lowerName) {
+                foundControl = ctrl;
+            }
+        });
+    }
     return foundControl;
 }
 function loadFields(formContext: any, fields: string[], type?: string): any {
@@ -142,6 +144,9 @@ function loadFields(formContext: any, fields: string[], type?: string): any {
                     const baseLogicalName = type === undefined ? baseFieldName?.toLowerCase() : (type + baseFieldName)?.toLowerCase();
                     attribute = formContext?.getAttribute(baseLogicalName);
                 }
+            }
+            if (!attribute && control) {
+                attribute = control.getAttribute();
             }
         }
         // Fallback: if no control found, try attribute.controls (handles lazy-loaded tabs)

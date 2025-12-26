@@ -109,7 +109,7 @@ export function TestKnowledge(form: FormAccount_DevKitV4.Form): void {
     const failed = allResults.filter(r => r.Status === "✗").length;
     const total = allResults.length;
 
-    console.groupCollapsed(`📚 TEST 24: Knowledge Control [${startTime}] - Using: v4_KnowledgeSearch - ${passed}/${total}`);
+    console.groupCollapsed(`✅ TEST 24: Knowledge Control [${startTime}] - Using: v4_KnowledgeSearch - ${passed}/${total}`);
 
     console.log("%c📋 ReadOnly Properties (R1-R5)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
     console.table(results);

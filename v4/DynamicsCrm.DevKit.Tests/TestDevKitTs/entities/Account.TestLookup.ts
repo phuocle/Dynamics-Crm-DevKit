@@ -8,7 +8,7 @@ interface TestResult {
 }
 
 /**
- * TEST 1: Lookup Control - PrimaryContactId Field
+ * TEST 1: Lookup Control - v4_Lookup Field
  * Uses console.table for cleaner output
  * 
  * Convention:
@@ -17,33 +17,32 @@ interface TestResult {
  */
 export function TestLookup(form: FormAccount_DevKitV4.Form): void {
     const results: TestResult[] = [];
-    const lookup = form.Body.v4_Lookup;
     const startTime = new Date().toLocaleTimeString();
-    const originalDefaultView = lookup.DefaultView;
+    const originalDefaultView = form.Body.v4_Lookup.DefaultView;
 
     // =====================================================
     // READONLY PROPERTIES (R-Index)
     // =====================================================
     try {
-        const currentValue = lookup.Value;
+        const currentValue = form.Body.v4_Lookup.Value;
         const hasValue = currentValue && currentValue.length > 0;
 
         results.push({ Test: "R1", Property: "Value", Value: hasValue ? `${currentValue[0].name} (${currentValue[0].entityType})` : "(empty)", Status: "✓" });
-        results.push({ Test: "R2", Property: "IsPartyList", Value: lookup.IsPartyList, Status: lookup.IsPartyList === false ? "✓" : "⚠" });
-        results.push({ Test: "R3", Property: "EntityTypes", Value: JSON.stringify(lookup.EntityTypes), Status: "✓" });
+        results.push({ Test: "R2", Property: "IsPartyList", Value: form.Body.v4_Lookup.IsPartyList, Status: form.Body.v4_Lookup.IsPartyList === false ? "✓" : "⚠" });
+        results.push({ Test: "R3", Property: "EntityTypes", Value: JSON.stringify(form.Body.v4_Lookup.EntityTypes), Status: "✓" });
         results.push({ Test: "R4", Property: "DefaultView", Value: originalDefaultView, Status: "✓" });
-        results.push({ Test: "R5", Property: "Visible", Value: lookup.Visible, Status: "✓" });
-        results.push({ Test: "R6", Property: "Disabled", Value: lookup.Disabled, Status: "✓" });
-        results.push({ Test: "R7", Property: "ControlType", Value: lookup.ControlType, Status: lookup.ControlType === "lookup" ? "✓" : "⚠" });
-        results.push({ Test: "R8", Property: "ControlName", Value: lookup.ControlName, Status: "✓" });
-        results.push({ Test: "R9", Property: "AttributeName", Value: lookup.AttributeName, Status: "✓" });
-        results.push({ Test: "R10", Property: "AttributeType", Value: lookup.AttributeType, Status: "✓" });
-        results.push({ Test: "R11", Property: "RequiredLevel", Value: lookup.RequiredLevel, Status: "✓" });
-        results.push({ Test: "R12", Property: "SubmitMode", Value: lookup.SubmitMode, Status: "✓" });
-        results.push({ Test: "R13", Property: "IsValid", Value: lookup.IsValid, Status: "✓" });
-        results.push({ Test: "R14", Property: "IsDirty", Value: lookup.IsDirty, Status: "✓" });
-        results.push({ Test: "R15", Property: "Format", Value: lookup.Format, Status: "✓" });
-        results.push({ Test: "R16", Property: "Attribute", Value: lookup.Attribute ? "object" : "null", Status: lookup.Attribute ? "✓" : "⚠" });
+        results.push({ Test: "R5", Property: "Visible", Value: form.Body.v4_Lookup.Visible, Status: "✓" });
+        results.push({ Test: "R6", Property: "Disabled", Value: form.Body.v4_Lookup.Disabled, Status: "✓" });
+        results.push({ Test: "R7", Property: "ControlType", Value: form.Body.v4_Lookup.ControlType, Status: form.Body.v4_Lookup.ControlType === "lookup" ? "✓" : "⚠" });
+        results.push({ Test: "R8", Property: "ControlName", Value: form.Body.v4_Lookup.ControlName, Status: "✓" });
+        results.push({ Test: "R9", Property: "AttributeName", Value: form.Body.v4_Lookup.AttributeName, Status: "✓" });
+        results.push({ Test: "R10", Property: "AttributeType", Value: form.Body.v4_Lookup.AttributeType, Status: "✓" });
+        results.push({ Test: "R11", Property: "RequiredLevel", Value: form.Body.v4_Lookup.RequiredLevel, Status: "✓" });
+        results.push({ Test: "R12", Property: "SubmitMode", Value: form.Body.v4_Lookup.SubmitMode, Status: "✓" });
+        results.push({ Test: "R13", Property: "IsValid", Value: form.Body.v4_Lookup.IsValid, Status: "✓" });
+        results.push({ Test: "R14", Property: "IsDirty", Value: form.Body.v4_Lookup.IsDirty, Status: "✓" });
+        results.push({ Test: "R15", Property: "Format", Value: form.Body.v4_Lookup.Format, Status: "✓" });
+        results.push({ Test: "R16", Property: "Attribute", Value: form.Body.v4_Lookup.Attribute ? "object" : "null", Status: form.Body.v4_Lookup.Attribute ? "✓" : "⚠" });
 
     } catch (error: any) {
         results.push({ Test: "ERR", Property: "Error", Value: error.message, Status: "✗" });
@@ -56,7 +55,7 @@ export function TestLookup(form: FormAccount_DevKitV4.Form): void {
 
     const preSearchCallback = (ctx: any) => {
         const filterXml = "<filter type='and'><condition attribute='statecode' operator='eq' value='0' /></filter>";
-        lookup.AddCustomFilter(filterXml, "contact");
+        form.Body.v4_Lookup.AddCustomFilter(filterXml, "contact");
         console.log("  📍 PreSearch fired - filter applied");
     };
 
@@ -67,19 +66,19 @@ export function TestLookup(form: FormAccount_DevKitV4.Form): void {
     // Setters
     try {
         const testViewId = "{00000000-0000-0000-0000-000000000002}";
-        lookup.DefaultView = testViewId;
-        const newView = lookup.DefaultView;
-        lookup.DefaultView = originalDefaultView;
+        form.Body.v4_Lookup.DefaultView = testViewId;
+        const newView = form.Body.v4_Lookup.DefaultView;
+        form.Body.v4_Lookup.DefaultView = originalDefaultView;
         methodResults.push({ Test: "S1", Property: "DefaultView (set)", Value: "Set→Restored", Status: "✓" });
     } catch (e: any) {
         methodResults.push({ Test: "S1", Property: "DefaultView (set)", Value: e.message, Status: "✗" });
     }
 
     try {
-        const originalTypes = lookup.EntityTypes;
-        lookup.EntityTypes = ["contact"];
-        const newTypes = lookup.EntityTypes;
-        lookup.EntityTypes = originalTypes;
+        const originalTypes = form.Body.v4_Lookup.EntityTypes;
+        form.Body.v4_Lookup.EntityTypes = ["contact"];
+        const newTypes = form.Body.v4_Lookup.EntityTypes;
+        form.Body.v4_Lookup.EntityTypes = originalTypes;
         methodResults.push({ Test: "S2", Property: "EntityTypes (set)", Value: "Set→Restored", Status: "✓" });
     } catch (e: any) {
         methodResults.push({ Test: "S2", Property: "EntityTypes (set)", Value: e.message, Status: "✗" });
@@ -87,35 +86,35 @@ export function TestLookup(form: FormAccount_DevKitV4.Form): void {
 
     // Methods
     try {
-        lookup.AddPreSearch(preSearchCallback);
+        form.Body.v4_Lookup.AddPreSearch(preSearchCallback);
         methodResults.push({ Test: "S3", Property: "AddPreSearch", Value: "Registered", Status: "✓" });
     } catch (e: any) {
         methodResults.push({ Test: "S3", Property: "AddPreSearch", Value: e.message, Status: "✗" });
     }
 
     try {
-        lookup.RemovePreSearch(preSearchCallback);
+        form.Body.v4_Lookup.RemovePreSearch(preSearchCallback);
         methodResults.push({ Test: "S4", Property: "RemovePreSearch", Value: "Removed", Status: "✓" });
     } catch (e: any) {
         methodResults.push({ Test: "S4", Property: "RemovePreSearch", Value: e.message, Status: "✗" });
     }
 
     try {
-        lookup.AddLookupTagClick(tagClickCallback);
+        form.Body.v4_Lookup.AddLookupTagClick(tagClickCallback);
         methodResults.push({ Test: "S5", Property: "AddLookupTagClick", Value: "Registered", Status: "✓" });
     } catch (e: any) {
         methodResults.push({ Test: "S5", Property: "AddLookupTagClick", Value: e.message, Status: "✗" });
     }
 
     try {
-        lookup.RemoveLookupTagClick(tagClickCallback);
+        form.Body.v4_Lookup.RemoveLookupTagClick(tagClickCallback);
         methodResults.push({ Test: "S6", Property: "RemoveLookupTagClick", Value: "Removed", Status: "✓" });
     } catch (e: any) {
         methodResults.push({ Test: "S6", Property: "RemoveLookupTagClick", Value: e.message, Status: "✗" });
     }
 
     try {
-        lookup.AddCustomView(
+        form.Body.v4_Lookup.AddCustomView(
             "00000000-0000-0000-0000-000000000001",
             "contact",
             "Active Contacts (Custom View)",
@@ -129,15 +128,15 @@ export function TestLookup(form: FormAccount_DevKitV4.Form): void {
     }
 
     try {
-        lookup.SetNotification("Test notification", "TEST_1");
-        setTimeout(() => lookup.ClearNotification("TEST_1"), 3000);
+        form.Body.v4_Lookup.SetNotification("Test notification", "TEST_1");
+        setTimeout(() => form.Body.v4_Lookup.ClearNotification("TEST_1"), 3000);
         methodResults.push({ Test: "S8", Property: "SetNotification", Value: "Set (clears in 3s)", Status: "✓" });
     } catch (e: any) {
         methodResults.push({ Test: "S8", Property: "SetNotification", Value: e.message, Status: "✗" });
     }
 
     try {
-        setTimeout(() => lookup.Focus(), 4000);
+        setTimeout(() => form.Body.v4_Lookup.Focus(), 4000);
         methodResults.push({ Test: "S9", Property: "Focus", Value: "Scheduled (4s)", Status: "✓" });
     } catch (e: any) {
         methodResults.push({ Test: "S9", Property: "Focus", Value: e.message, Status: "✗" });
@@ -152,7 +151,7 @@ export function TestLookup(form: FormAccount_DevKitV4.Form): void {
     const failed = allResults.filter(r => r.Status === "✗").length;
     const total = allResults.length;
 
-    console.groupCollapsed(`🔍 TEST 1: Lookup Control [${startTime}] - Using: PrimaryContactId field - ${passed}/${total}`);
+    console.groupCollapsed(`✅ TEST 1: Lookup Control [${startTime}] - Using: v4_Lookup field - ${passed}/${total}`);
 
     console.log("%c📋 ReadOnly Properties (R1-R16)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
     console.table(results);
@@ -167,3 +166,4 @@ export function TestLookup(form: FormAccount_DevKitV4.Form): void {
 
     console.groupEnd();
 }
+

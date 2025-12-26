@@ -1096,6 +1096,284 @@ describe('loadFormV3 Tests', () => {
         });
     });
 
+    describe('loadFields - Control fallback from Attribute (lines 114-123, 152)', () => {
+        test('Should find control from attribute.controls when formContext.getControl returns null', () => {
+            const control = {
+                getName: () => 'lazycontrol',
+                getLabel: () => 'Lazy Control',
+                setLabel: () => { },
+                getVisible: () => true,
+                setVisible: () => { },
+                getDisabled: () => false,
+                setDisabled: () => { },
+                setFocus: () => { },
+                getControlType: () => 'standard',
+                getParent: () => ({}),
+                getAttribute: () => null,
+                clearNotification: () => true,
+                setNotification: () => true,
+                addNotification: () => { },
+                getOptions: () => [],
+                getInitialUrl: () => '',
+                getObject: () => null,
+                getOutputs: () => null,
+                getSelectedResults: () => null,
+                getState: () => null,
+                getTotalResultCount: () => 0,
+                getData: () => null,
+                setData: () => { },
+                getDefaultView: () => '',
+                setDefaultView: () => { },
+                getEntityTypes: () => [],
+                setEntityTypes: () => { },
+                getSearchQuery: () => '',
+                setSearchQuery: () => { },
+                getShowTime: () => false,
+                setShowTime: () => { },
+                getSrc: () => '',
+                setSrc: () => { }
+            };
+
+            const attribute = {
+                getName: () => 'lazycontrol',
+                getValue: () => 'lazy-value',
+                setValue: () => { },
+                getAttributeType: () => 'string',
+                controls: {
+                    forEach: (callback: any) => {
+                        callback(control);
+                    },
+                    get: (name: string) => name === 'lazycontrol' ? control : null
+                },
+                getParent: () => null,
+                getFormat: () => 'text',
+                getInitialValue: () => '',
+                getIsDirty: () => false,
+                getIsPartyList: () => false,
+                isValid: () => true,
+                getMax: () => 100,
+                getMaxLength: () => 100,
+                getMin: () => 0,
+                getOptions: () => [],
+                getSelectedOption: () => null,
+                getText: () => '',
+                getUserPrivilege: () => ({ canRead: true, canUpdate: true, canCreate: true }),
+                getPrecision: () => 0,
+                setPrecision: () => { },
+                getRequiredLevel: () => 'none',
+                setRequiredLevel: () => { },
+                getSubmitMode: () => 'dirty',
+                setSubmitMode: () => { },
+                addOnChange: () => { },
+                removeOnChange: () => { },
+                fireOnChange: () => { },
+                setIsValid: () => { },
+                getOption: () => null
+            };
+
+            const formContext = {
+                data: { getIsDirty: () => false, isValid: () => true, refresh: () => Promise.resolve(), save: () => Promise.resolve(), addOnLoad: () => { }, removeOnLoad: () => { }, entity: { attributes: { get: () => null, getLength: () => 0, forEach: () => { } }, getId: () => '', getEntityName: () => '', getIsDirty: () => false, isValid: () => true, getDataXml: () => '', getEntityReference: () => ({}), getPrimaryAttributeValue: () => '', addOnSave: () => { }, removeOnSave: () => { }, addOnPostSave: () => { }, removeOnPostSave: () => { } }, process: null },
+                ui: { getFormType: () => 2, controls: { get: () => null, getLength: () => 0, forEach: () => { } }, tabs: { get: () => null, getLength: () => 0, forEach: () => { } }, formSelector: { getCurrentItem: () => ({ getId: () => '', getLabel: () => '' }), items: { getLength: () => 0, get: () => null, forEach: () => { } } }, getViewPortHeight: () => 800, getViewPortWidth: () => 1200, clearFormNotification: () => true, setFormNotification: () => true, close: () => { }, refreshRibbon: () => { }, addLoaded: () => { }, removeLoaded: () => { }, addOnLoad: () => { }, removeOnLoad: () => { }, setFormEntityName: () => { }, process: null, quickForms: { get: () => null, getLength: () => 0 } },
+                getControl: () => null, // formContext.getControl returns null
+                getAttribute: (n: string) => n === 'lazycontrol' ? attribute : null,
+                getFormContext: function () { return this; }
+            };
+
+            const executionContext = { getFormContext: () => formContext };
+            const form = new FormBase(executionContext, 'test', { body: ['lazycontrol'] });
+
+            // The control should be retrieved via attribute.controls fallback
+            expect(form.Body.lazycontrol.ControlName).toBe('lazycontrol');
+            expect(form.Body.lazycontrol.Value).toBe('lazy-value');
+        });
+
+        test('Should handle attribute without controls property (line 117)', () => {
+            const attribute = {
+                getName: () => 'nocontrols',
+                getValue: () => 'val',
+                setValue: () => { },
+                getAttributeType: () => 'string',
+                controls: undefined, // undefined controls
+                getParent: () => null,
+                getFormat: () => 'text',
+                getInitialValue: () => '',
+                getIsDirty: () => false,
+                getIsPartyList: () => false,
+                isValid: () => true,
+                getMax: () => 100,
+                getMaxLength: () => 100,
+                getMin: () => 0,
+                getOptions: () => [],
+                getSelectedOption: () => null,
+                getText: () => '',
+                getUserPrivilege: () => ({ canRead: true, canUpdate: true, canCreate: true }),
+                getPrecision: () => 0,
+                setPrecision: () => { },
+                getRequiredLevel: () => 'none',
+                setRequiredLevel: () => { },
+                getSubmitMode: () => 'dirty',
+                setSubmitMode: () => { },
+                addOnChange: () => { },
+                removeOnChange: () => { },
+                fireOnChange: () => { },
+                setIsValid: () => { },
+                getOption: () => null
+            };
+
+            const formContext = {
+                data: { getIsDirty: () => false, isValid: () => true, refresh: () => Promise.resolve(), save: () => Promise.resolve(), addOnLoad: () => { }, removeOnLoad: () => { }, entity: { attributes: { get: () => null, getLength: () => 0, forEach: () => { } }, getId: () => '', getEntityName: () => '', getIsDirty: () => false, isValid: () => true, getDataXml: () => '', getEntityReference: () => ({}), getPrimaryAttributeValue: () => '', addOnSave: () => { }, removeOnSave: () => { }, addOnPostSave: () => { }, removeOnPostSave: () => { } }, process: null },
+                ui: { getFormType: () => 2, controls: { get: () => null, getLength: () => 0, forEach: () => { } }, tabs: { get: () => null, getLength: () => 0, forEach: () => { } }, formSelector: { getCurrentItem: () => ({ getId: () => '', getLabel: () => '' }), items: { getLength: () => 0, get: () => null, forEach: () => { } } }, getViewPortHeight: () => 800, getViewPortWidth: () => 1200, clearFormNotification: () => true, setFormNotification: () => true, close: () => { }, refreshRibbon: () => { }, addLoaded: () => { }, removeLoaded: () => { }, addOnLoad: () => { }, removeOnLoad: () => { }, setFormEntityName: () => { }, process: null, quickForms: { get: () => null, getLength: () => 0 } },
+                getControl: () => null,
+                getAttribute: (n: string) => n === 'nocontrols' ? attribute : null,
+                getFormContext: function () { return this; }
+            };
+
+            const executionContext = { getFormContext: () => formContext };
+            const form = new FormBase(executionContext, 'test', { body: ['nocontrols'] });
+
+            expect(form.Body.nocontrols.Value).toBe('val');
+        });
+
+        test('Should resolve base attribute name for multi-control fields (line 142)', () => {
+            const attribute = {
+                getName: () => 'ownerid',
+                getValue: () => 'owner-value',
+                setValue: () => { },
+                getAttributeType: () => 'lookup',
+                controls: [],
+                getParent: () => null,
+                getFormat: () => 'text',
+                getInitialValue: () => '',
+                getIsDirty: () => false,
+                getIsPartyList: () => false,
+                isValid: () => true,
+                getMax: () => 100,
+                getMaxLength: () => 100,
+                getMin: () => 0,
+                getOptions: () => [],
+                getSelectedOption: () => null,
+                getText: () => '',
+                getUserPrivilege: () => ({ canRead: true, canUpdate: true, canCreate: true }),
+                getPrecision: () => 0,
+                setPrecision: () => { },
+                getRequiredLevel: () => 'none',
+                setRequiredLevel: () => { },
+                getSubmitMode: () => 'dirty',
+                setSubmitMode: () => { },
+                addOnChange: () => { },
+                removeOnChange: () => { },
+                fireOnChange: () => { },
+                setIsValid: () => { },
+                getOption: () => null
+            };
+
+            const formContext = {
+                data: { getIsDirty: () => false, isValid: () => true, refresh: () => Promise.resolve(), save: () => Promise.resolve(), addOnLoad: () => { }, removeOnLoad: () => { }, entity: { attributes: { get: () => null, getLength: () => 0, forEach: () => { } }, getId: () => '', getEntityName: () => '', getIsDirty: () => false, isValid: () => true, getDataXml: () => '', getEntityReference: () => ({}), getPrimaryAttributeValue: () => '', addOnSave: () => { }, removeOnSave: () => { }, addOnPostSave: () => { }, removeOnPostSave: () => { } }, process: null },
+                ui: { getFormType: () => 2, controls: { get: () => null, getLength: () => 0, forEach: () => { } }, tabs: { get: () => null, getLength: () => 0, forEach: () => { } }, formSelector: { getCurrentItem: () => ({ getId: () => '', getLabel: () => '' }), items: { getLength: () => 0, get: () => null, forEach: () => { } } }, getViewPortHeight: () => 800, getViewPortWidth: () => 1200, clearFormNotification: () => true, setFormNotification: () => true, close: () => { }, refreshRibbon: () => { }, addLoaded: () => { }, removeLoaded: () => { }, addOnLoad: () => { }, removeOnLoad: () => { }, setFormEntityName: () => { }, process: null, quickForms: { get: () => null, getLength: () => 0 } },
+                getControl: () => null,
+                getAttribute: (n: string) => n === 'ownerid' ? attribute : null, // Returns attribute for base name
+                getFormContext: function () { return this; }
+            };
+
+            const executionContext = { getFormContext: () => formContext };
+            // Requesting 'ownerid1', should resolve to 'ownerid' attribute
+            const form = new FormBase(executionContext, 'test', { body: ['ownerid1'] });
+
+            expect(form.Body.ownerid1.Value).toBe('owner-value');
+        });
+
+        test('Should handle controls with null items or null names in findControlFromAttribute (line 118)', () => {
+            const controlWithNullName = {
+                getName: () => null,
+                getLabel: () => 'Null Name Control',
+                setLabel: () => { },
+                getVisible: () => true,
+                setVisible: () => { },
+                getDisabled: () => false,
+                setDisabled: () => { },
+                setFocus: () => { },
+                getControlType: () => 'standard',
+                getParent: () => ({}),
+                getAttribute: () => null,
+                clearNotification: () => true,
+                setNotification: () => true,
+                addNotification: () => { },
+                getOptions: () => [],
+                getInitialUrl: () => '',
+                getObject: () => null,
+                getOutputs: () => null,
+                getSelectedResults: () => null,
+                getState: () => null,
+                getTotalResultCount: () => 0,
+                getData: () => null,
+                setData: () => { },
+                getDefaultView: () => '',
+                setDefaultView: () => { },
+                getEntityTypes: () => [],
+                setEntityTypes: () => { },
+                getSearchQuery: () => '',
+                setSearchQuery: () => { },
+                getShowTime: () => false,
+                setShowTime: () => { },
+                getSrc: () => '',
+                setSrc: () => { }
+            };
+
+            const attribute = {
+                getName: () => 'attr',
+                getValue: () => 'val',
+                setValue: () => { },
+                getAttributeType: () => 'string',
+                controls: [
+                    null, // Null control in array
+                    controlWithNullName
+                ],
+                getParent: () => null,
+                getFormat: () => 'text',
+                getInitialValue: () => '',
+                getIsDirty: () => false,
+                getIsPartyList: () => false,
+                isValid: () => true,
+                getMax: () => 100,
+                getMaxLength: () => 100,
+                getMin: () => 0,
+                getOptions: () => [],
+                getSelectedOption: () => null,
+                getText: () => '',
+                getUserPrivilege: () => ({ canRead: true, canUpdate: true, canCreate: true }),
+                getPrecision: () => 0,
+                setPrecision: () => { },
+                getRequiredLevel: () => 'none',
+                setRequiredLevel: () => { },
+                getSubmitMode: () => 'dirty',
+                setSubmitMode: () => { },
+                addOnChange: () => { },
+                removeOnChange: () => { },
+                fireOnChange: () => { },
+                setIsValid: () => { },
+                getOption: () => null
+            };
+
+            const formContext = {
+                data: { getIsDirty: () => false, isValid: () => true, refresh: () => Promise.resolve(), save: () => Promise.resolve(), addOnLoad: () => { }, removeOnLoad: () => { }, entity: { attributes: { get: () => null, getLength: () => 0, forEach: () => { } }, getId: () => '', getEntityName: () => '', getIsDirty: () => false, isValid: () => true, getDataXml: () => '', getEntityReference: () => ({}), getPrimaryAttributeValue: () => '', addOnSave: () => { }, removeOnSave: () => { }, addOnPostSave: () => { }, removeOnPostSave: () => { } }, process: null },
+                ui: { getFormType: () => 2, controls: { get: () => null, getLength: () => 0, forEach: () => { } }, tabs: { get: () => null, getLength: () => 0, forEach: () => { } }, formSelector: { getCurrentItem: () => ({ getId: () => '', getLabel: () => '' }), items: { getLength: () => 0, get: () => null, forEach: () => { } } }, getViewPortHeight: () => 800, getViewPortWidth: () => 1200, clearFormNotification: () => true, setFormNotification: () => true, close: () => { }, refreshRibbon: () => { }, addLoaded: () => { }, removeLoaded: () => { }, addOnLoad: () => { }, removeOnLoad: () => { }, setFormEntityName: () => { }, process: null, quickForms: { get: () => null, getLength: () => 0 } },
+                getControl: () => null,
+                getAttribute: (n: string) => n === 'attr' ? attribute : null,
+                getFormContext: function () { return this; }
+            };
+
+            const executionContext = { getFormContext: () => formContext };
+            const form = new FormBase(executionContext, 'test', { body: ['attr'] });
+
+            // Should not crash, and control should be null (or whatever loadField does with null control)
+            // Since control is not found, loadField is called with null control.
+            // We can check if form.Body.attr exists (it should)
+            expect(form.Body.attr).toBeDefined();
+            // ControlName should be undefined if control is null
+            expect(form.Body.attr.ControlName).toBeUndefined();
+        });
+    });
+
     describe('loadFields - Header Section properties (lines 124-129)', () => {
         test('Header should have BodyVisible, CommandBarVisible, TabNavigatorVisible when type is header_', () => {
             let bodyVisible = true;

@@ -115,7 +115,7 @@ export function TestQuickView(form: FormAccount_DevKitV4.Form): void {
     const failed = allResults.filter(r => r.Status === "✗").length;
     const total = allResults.length;
 
-    console.groupCollapsed(`⚡ TEST 25: QuickView Control [${startTime}] - Using: ContactQuickForm - ${passed}/${total}`);
+    console.groupCollapsed(`✅ TEST 25: QuickView Control [${startTime}] - Using: ContactQuickForm - ${passed}/${total}`);
 
     console.log("%c📋 ReadOnly Properties (R1-R9)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
     console.table(results);

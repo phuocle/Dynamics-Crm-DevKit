@@ -159,7 +159,7 @@ export function TestString(form: FormAccount_DevKitV4.Form): void {
     const failed = allResults.filter(r => r.Status === "✗").length;
     const total = allResults.length;
 
-    console.groupCollapsed(`📄 TEST 3: String Control [${startTime}] - Using: Name field - ${passed}/${total}`);
+    console.groupCollapsed(`✅ TEST 3: String Control [${startTime}] - Using: v4_String field - ${passed}/${total}`);
 
     console.log("%c📋 ReadOnly Properties (R1-R15)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
     console.table(results);
@@ -174,3 +174,4 @@ export function TestString(form: FormAccount_DevKitV4.Form): void {
 
     console.groupEnd();
 }
+

@@ -199,7 +199,7 @@ export function TestMultiOptionSet(form: FormAccount_DevKitV4.Form): void {
     const failed = allResults.filter(r => r.Status === "✗").length;
     const total = allResults.length;
 
-    console.groupCollapsed(`🏷️ TEST 13: MultiOptionSet Control [${startTime}] - Using: v4_Categories field - ${passed}/${total}`);
+    console.groupCollapsed(`✅ TEST 13: MultiOptionSet Control [${startTime}] - Using: v4_MultiOptionSet field - ${passed}/${total}`);
 
     console.log("%c📋 ReadOnly Properties (R1-R18)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
     console.table(results);
@@ -214,3 +214,4 @@ export function TestMultiOptionSet(form: FormAccount_DevKitV4.Form): void {
 
     console.groupEnd();
 }
+

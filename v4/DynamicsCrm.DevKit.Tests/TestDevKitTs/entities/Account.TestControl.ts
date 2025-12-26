@@ -18,22 +18,21 @@ interface TestResult {
  */
 export function TestControl(form: FormAccount_DevKitV4.Form): void {
     const results: TestResult[] = [];
-    const control = form.Body.v4_String;
     const startTime = new Date().toLocaleTimeString();
-    const originalValue = control.Value;
+    const originalValue = form.Body.v4_String.Value;
 
     // =====================================================
     // READONLY PROPERTIES (R-Index)
     // =====================================================
     try {
-        results.push({ Test: "R1", Property: "Attribute", Value: control.Attribute ? "object" : "null", Status: control.Attribute ? "✓" : "⚠" });
-        results.push({ Test: "R2", Property: "AttributeName", Value: control.AttributeName, Status: control.AttributeName === "name" ? "✓" : "⚠" });
-        results.push({ Test: "R3", Property: "AttributeType", Value: control.AttributeType, Status: control.AttributeType === "string" ? "✓" : "⚠" });
-        results.push({ Test: "R4", Property: "ControlName", Value: control.ControlName, Status: "✓" });
-        results.push({ Test: "R5", Property: "ControlType", Value: control.ControlType, Status: "✓" });
-        results.push({ Test: "R6", Property: "Format", Value: control.Format, Status: "✓" });
-        results.push({ Test: "R7", Property: "IsDirty", Value: control.IsDirty, Status: "✓" });
-        results.push({ Test: "R8", Property: "IsValid", Value: control.IsValid, Status: "✓" });
+        results.push({ Test: "R1", Property: "Attribute", Value: form.Body.v4_String.Attribute ? "object" : "null", Status: form.Body.v4_String.Attribute ? "✓" : "⚠" });
+        results.push({ Test: "R2", Property: "AttributeName", Value: form.Body.v4_String.AttributeName, Status: form.Body.v4_String.AttributeName === "name" ? "✓" : "⚠" });
+        results.push({ Test: "R3", Property: "AttributeType", Value: form.Body.v4_String.AttributeType, Status: form.Body.v4_String.AttributeType === "string" ? "✓" : "⚠" });
+        results.push({ Test: "R4", Property: "ControlName", Value: form.Body.v4_String.ControlName, Status: "✓" });
+        results.push({ Test: "R5", Property: "ControlType", Value: form.Body.v4_String.ControlType, Status: "✓" });
+        results.push({ Test: "R6", Property: "Format", Value: form.Body.v4_String.Format, Status: "✓" });
+        results.push({ Test: "R7", Property: "IsDirty", Value: form.Body.v4_String.IsDirty, Status: "✓" });
+        results.push({ Test: "R8", Property: "IsValid", Value: form.Body.v4_String.IsValid, Status: "✓" });
 
     } catch (error: any) {
         results.push({ Test: "ERR", Property: "Properties Error", Value: error.message, Status: "✗" });
@@ -46,59 +45,59 @@ export function TestControl(form: FormAccount_DevKitV4.Form): void {
 
     // Setters
     try {
-        const origRequired = control.RequiredLevel;
-        control.RequiredLevel = "required";
-        const newRequired = control.RequiredLevel;
-        control.RequiredLevel = origRequired;
+        const origRequired = form.Body.v4_String.RequiredLevel;
+        form.Body.v4_String.RequiredLevel = "required";
+        const newRequired = form.Body.v4_String.RequiredLevel;
+        form.Body.v4_String.RequiredLevel = origRequired;
         setterResults.push({ Test: "S1", Property: "RequiredLevel (set)", Value: `${origRequired}→required→restored`, Status: newRequired === "required" ? "✓" : "✗" });
     } catch (e: any) {
         setterResults.push({ Test: "S1", Property: "RequiredLevel (set)", Value: e.message, Status: "✗" });
     }
 
     try {
-        const origSubmit = control.SubmitMode;
-        control.SubmitMode = "always";
-        const newSubmit = control.SubmitMode;
-        control.SubmitMode = origSubmit;
+        const origSubmit = form.Body.v4_String.SubmitMode;
+        form.Body.v4_String.SubmitMode = "always";
+        const newSubmit = form.Body.v4_String.SubmitMode;
+        form.Body.v4_String.SubmitMode = origSubmit;
         setterResults.push({ Test: "S2", Property: "SubmitMode (set)", Value: `${origSubmit}→always→restored`, Status: newSubmit === "always" ? "✓" : "✗" });
     } catch (e: any) {
         setterResults.push({ Test: "S2", Property: "SubmitMode (set)", Value: e.message, Status: "✗" });
     }
 
     try {
-        const origDisabled = control.Disabled;
-        control.Disabled = true;
-        const newDisabled = control.Disabled;
-        control.Disabled = origDisabled;
+        const origDisabled = form.Body.v4_String.Disabled;
+        form.Body.v4_String.Disabled = true;
+        const newDisabled = form.Body.v4_String.Disabled;
+        form.Body.v4_String.Disabled = origDisabled;
         setterResults.push({ Test: "S3", Property: "Disabled (set)", Value: `${origDisabled}→true→restored`, Status: newDisabled === true ? "✓" : "✗" });
     } catch (e: any) {
         setterResults.push({ Test: "S3", Property: "Disabled (set)", Value: e.message, Status: "✗" });
     }
 
     try {
-        const origLabel = control.Label;
-        control.Label = origLabel + " (TEST)";
-        const newLabel = control.Label;
-        control.Label = origLabel;
+        const origLabel = form.Body.v4_String.Label;
+        form.Body.v4_String.Label = origLabel + " (TEST)";
+        const newLabel = form.Body.v4_String.Label;
+        form.Body.v4_String.Label = origLabel;
         setterResults.push({ Test: "S4", Property: "Label (set)", Value: `"${origLabel}"→modified→restored`, Status: newLabel.includes("(TEST)") ? "✓" : "✗" });
     } catch (e: any) {
         setterResults.push({ Test: "S4", Property: "Label (set)", Value: e.message, Status: "✗" });
     }
 
     try {
-        const origVisible = control.Visible;
-        control.Visible = false;
-        const newVisible = control.Visible;
-        control.Visible = origVisible;
+        const origVisible = form.Body.v4_String.Visible;
+        form.Body.v4_String.Visible = false;
+        const newVisible = form.Body.v4_String.Visible;
+        form.Body.v4_String.Visible = origVisible;
         setterResults.push({ Test: "S5", Property: "Visible (set)", Value: `${origVisible}→false→restored`, Status: newVisible === false ? "✓" : "✗" });
     } catch (e: any) {
         setterResults.push({ Test: "S5", Property: "Visible (set)", Value: e.message, Status: "✗" });
     }
 
     try {
-        control.Value = originalValue + " (MODIFIED)";
-        const newValue = control.Value;
-        control.Value = originalValue;
+        form.Body.v4_String.Value = originalValue + " (MODIFIED)";
+        const newValue = form.Body.v4_String.Value;
+        form.Body.v4_String.Value = originalValue;
         setterResults.push({ Test: "S6", Property: "Value (set)", Value: `modified→restored`, Status: newValue?.includes("(MODIFIED)") ? "✓" : "✗" });
     } catch (e: any) {
         setterResults.push({ Test: "S6", Property: "Value (set)", Value: e.message, Status: "✗" });
@@ -107,14 +106,14 @@ export function TestControl(form: FormAccount_DevKitV4.Form): void {
     // Methods
     const onChangeCallback = (ctx: any) => console.log("  📍 OnChange fired");
     try {
-        control.AddOnChange(onChangeCallback);
+        form.Body.v4_String.AddOnChange(onChangeCallback);
         setterResults.push({ Test: "S7", Property: "AddOnChange", Value: "Registered", Status: "✓" });
     } catch (e: any) {
         setterResults.push({ Test: "S7", Property: "AddOnChange", Value: e.message, Status: "✗" });
     }
 
     try {
-        control.RemoveOnChange(onChangeCallback);
+        form.Body.v4_String.RemoveOnChange(onChangeCallback);
         setterResults.push({ Test: "S8", Property: "RemoveOnChange", Value: "Removed", Status: "✓" });
     } catch (e: any) {
         setterResults.push({ Test: "S8", Property: "RemoveOnChange", Value: e.message, Status: "✗" });
@@ -122,63 +121,63 @@ export function TestControl(form: FormAccount_DevKitV4.Form): void {
 
     const outputChangeCallback = (ctx: any) => console.log("  📍 OutputChange fired");
     try {
-        control.AddOnOutputChange(outputChangeCallback);
+        form.Body.v4_String.AddOnOutputChange(outputChangeCallback);
         setterResults.push({ Test: "S9", Property: "AddOnOutputChange", Value: "Registered", Status: "✓" });
     } catch (e: any) {
         setterResults.push({ Test: "S9", Property: "AddOnOutputChange", Value: e.message, Status: "✗" });
     }
 
     try {
-        control.RemoveOnOutputChange(outputChangeCallback);
+        form.Body.v4_String.RemoveOnOutputChange(outputChangeCallback);
         setterResults.push({ Test: "S10", Property: "RemoveOnOutputChange", Value: "Removed", Status: "✓" });
     } catch (e: any) {
         setterResults.push({ Test: "S10", Property: "RemoveOnOutputChange", Value: e.message, Status: "✗" });
     }
 
     try {
-        control.FireOnChange();
+        form.Body.v4_String.FireOnChange();
         setterResults.push({ Test: "S11", Property: "FireOnChange", Value: "Fired", Status: "✓" });
     } catch (e: any) {
         setterResults.push({ Test: "S11", Property: "FireOnChange", Value: e.message, Status: "✗" });
     }
 
     try {
-        setTimeout(() => control.Focus(), 1000);
+        setTimeout(() => form.Body.v4_String.Focus(), 1000);
         setterResults.push({ Test: "S12", Property: "Focus", Value: "Scheduled (1s)", Status: "✓" });
     } catch (e: any) {
         setterResults.push({ Test: "S12", Property: "Focus", Value: e.message, Status: "✗" });
     }
 
     try {
-        control.SetNotification("Test notification from IControl", "CTRL_TEST_1");
-        setTimeout(() => control.ClearNotification("CTRL_TEST_1"), 3000);
+        form.Body.v4_String.SetNotification("Test notification from IControl", "CTRL_TEST_1");
+        setTimeout(() => form.Body.v4_String.ClearNotification("CTRL_TEST_1"), 3000);
         setterResults.push({ Test: "S13", Property: "SetNotification", Value: "Set (clears 3s)", Status: "✓" });
     } catch (e: any) {
         setterResults.push({ Test: "S13", Property: "SetNotification", Value: e.message, Status: "✗" });
     }
 
     try {
-        const cleared = control.ClearNotification("NONEXISTENT");
+        const cleared = form.Body.v4_String.ClearNotification("NONEXISTENT");
         setterResults.push({ Test: "S14", Property: "ClearNotification", Value: `Result: ${cleared}`, Status: "✓" });
     } catch (e: any) {
         setterResults.push({ Test: "S14", Property: "ClearNotification", Value: e.message, Status: "✗" });
     }
 
     try {
-        control.AddNotification({
+        form.Body.v4_String.AddNotification({
             messages: ["Recommendation from test"],
             notificationLevel: "RECOMMENDATION",
             uniqueId: "CTRL_TEST_2"
         });
-        setTimeout(() => control.ClearNotification("CTRL_TEST_2"), 3000);
+        setTimeout(() => form.Body.v4_String.ClearNotification("CTRL_TEST_2"), 3000);
         setterResults.push({ Test: "S15", Property: "AddNotification", Value: "Added (clears 3s)", Status: "✓" });
     } catch (e: any) {
         setterResults.push({ Test: "S15", Property: "AddNotification", Value: e.message, Status: "✗" });
     }
 
     try {
-        control.SetIsValid(false, "Test invalid message");
-        setTimeout(() => control.SetIsValid(true), 2000);
+        form.Body.v4_String.SetIsValid(false, "Test invalid message");
+        setTimeout(() => form.Body.v4_String.SetIsValid(true), 2000);
         setterResults.push({ Test: "S16", Property: "SetIsValid", Value: "Set→Restored (2s)", Status: "✓" });
     } catch (e: any) {
         setterResults.push({ Test: "S16", Property: "SetIsValid", Value: e.message, Status: "✗" });
@@ -193,7 +192,7 @@ export function TestControl(form: FormAccount_DevKitV4.Form): void {
     const failed = allResults.filter(r => r.Status === "✗").length;
     const total = allResults.length;
 
-    console.groupCollapsed(`🎛️ TEST 0: IControl Interface [${startTime}] - Using: Name field - ${passed}/${total}`);
+    console.groupCollapsed(`✅ TEST 0: IControl Interface [${startTime}] - Using: Name field - ${passed}/${total}`);
 
     console.log("%c📋 ReadOnly Properties (R1-R8)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
     console.table(results);

@@ -114,7 +114,7 @@ export function TestWebResource(form: FormAccount_DevKitV4.Form): void {
     const failed = allResults.filter(r => r.Status === "✗").length;
     const total = allResults.length;
 
-    console.groupCollapsed(`🌐 TEST 22: WebResource Control [${startTime}] - Using: v4_WebResourceHelp - ${passed}/${total}`);
+    console.groupCollapsed(`✅ TEST 22: WebResource Control [${startTime}] - Using: v4_WebResourceHelp - ${passed}/${total}`);
 
     console.log("%c📋 ReadOnly Properties (R1-R7)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
     console.table(results);
