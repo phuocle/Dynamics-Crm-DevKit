@@ -18,14 +18,28 @@ async function build() {
         fs.mkdirSync(buildDir, { recursive: true });
     }
 
-    const files = fs.readdirSync(entitiesDir);
-    const tsFiles = files.filter(file =>
-        file.endsWith('.ts') &&
-        !file.endsWith('.form.ts') &&
-        !file.endsWith('.webapi.ts') &&
-        file !== 'devkit.ts' &&
-        file !== 'OptionSet.ts' // Just in case it's in entities
-    );
+    const targetEntity = process.argv[3];
+    let tsFiles = [];
+
+    if (targetEntity) {
+        const targetFile = `${targetEntity}.ts`;
+        const targetPath = path.join(entitiesDir, targetFile);
+        if (fs.existsSync(targetPath)) {
+            tsFiles = [targetFile];
+        } else {
+            console.error(`Entity file not found: ${targetPath}`);
+            process.exit(1);
+        }
+    } else {
+        const files = fs.readdirSync(entitiesDir);
+        tsFiles = files.filter(file =>
+            file.endsWith('.ts') &&
+            !file.endsWith('.form.ts') &&
+            !file.endsWith('.webapi.ts') &&
+            file !== 'devkit.ts' &&
+            file !== 'OptionSet.ts'
+        );
+    }
 
     console.log(`\n=== Building in ${isDebug ? 'DEBUG' : 'RELEASE'} mode ===\n`);
     console.log(`Found ${tsFiles.length} files to build...`);
