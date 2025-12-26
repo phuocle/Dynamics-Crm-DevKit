@@ -104,7 +104,7 @@ describe('OptionSet', () => {
         expect(OptionSet.FieldAttributeType.Lookup).toBe('lookup');
         expect(OptionSet.FieldAttributeType.Memo).toBe('memo');
         expect(OptionSet.FieldAttributeType.Money).toBe('money');
-        expect(OptionSet.FieldAttributeType.MultiOptionSet).toBe('multioptionset');
+        expect(OptionSet.FieldAttributeType.MultiOptionSet).toBe('multiselectoptionset');
         expect(OptionSet.FieldAttributeType.OptionSet).toBe('optionset');
         expect(OptionSet.FieldAttributeType.String).toBe('string');
     });

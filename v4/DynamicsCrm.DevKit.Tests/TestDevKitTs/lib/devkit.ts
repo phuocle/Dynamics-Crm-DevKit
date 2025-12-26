@@ -146,7 +146,7 @@ function loadFields(formContext: any, fields: string[], type?: string): any {
                 }
             }
             if (!attribute && control) {
-                attribute = control.getAttribute();
+                attribute = control.getAttribute?.();
             }
         }
         // Fallback: if no control found, try attribute.controls (handles lazy-loaded tabs)

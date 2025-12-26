@@ -328,7 +328,7 @@ const devKit = (function () {
             }
             // Fallback: get attribute from control if still null
             if (!attribute && control) {
-                attribute = control.getAttribute();
+                attribute = control.getAttribute?.();
             }
             // Fallback: if no control found, try attribute.controls (handles lazy-loaded tabs)
             if (!control && attribute) {

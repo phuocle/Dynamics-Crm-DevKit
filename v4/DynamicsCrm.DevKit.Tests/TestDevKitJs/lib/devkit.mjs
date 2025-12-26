@@ -293,13 +293,46 @@ const devKit = (function () {
         field.SetIsValid = (valid, message) => attribute?.setIsValid(valid, message);
         field.SetNotification = (message, uniqueId) => control?.setNotification(message, uniqueId);
     }
+    // Helper: find control by name using attribute.controls (works for lazy-loaded tabs)
+    function findControlFromAttribute(attribute, controlName) {
+        let foundControl = null;
+        const lowerName = controlName?.toLowerCase();
+        attribute?.controls?.forEach(ctrl => {
+            if (ctrl?.getName()?.toLowerCase() === lowerName) {
+                foundControl = ctrl;
+            }
+        });
+        return foundControl;
+    }
     function loadFields(formContext, body, type) {
         Object.keys(body).forEach(field => {
             const logicalName = type === undefined ? field?.toLowerCase() : (type + field)?.toLowerCase();
-            const control = formContext?.getControl(logicalName) ?? formContext?.getControl(field);
-            let attribute = formContext?.getAttribute(logicalName);
-            if (!attribute && control?.getAttribute) {
+            // Get control first (especially important for header_ type where control name has prefix)
+            let control = formContext?.getControl(logicalName) ?? formContext?.getControl(field);
+            // Get attribute: for header controls, get from control.getAttribute() since attribute name differs
+            let attribute = null;
+            if (type === "header_" && control) {
+                // Header controls: attribute name is WITHOUT "header_" prefix, get from control
                 attribute = control.getAttribute();
+            } else {
+                // Body controls: attribute name matches logical name
+                attribute = formContext?.getAttribute(logicalName);
+                // If no attribute, try base name for multi-control scenarios (OwnerId1 -> ownerid)
+                if (!attribute) {
+                    const baseFieldName = field.replace(/\d+$/, '');
+                    if (baseFieldName !== field) {
+                        const baseLogicalName = type === undefined ? baseFieldName?.toLowerCase() : (type + baseFieldName)?.toLowerCase();
+                        attribute = formContext?.getAttribute(baseLogicalName);
+                    }
+                }
+            }
+            // Fallback: get attribute from control if still null
+            if (!attribute && control) {
+                attribute = control.getAttribute?.();
+            }
+            // Fallback: if no control found, try attribute.controls (handles lazy-loaded tabs)
+            if (!control && attribute) {
+                control = findControlFromAttribute(attribute, logicalName) ?? findControlFromAttribute(attribute, field);
             }
             loadField(formContext, body[field], attribute, control);
         });
