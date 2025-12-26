@@ -2,15 +2,14 @@
 module.exports = {
     preset: 'ts-jest',
     testEnvironment: 'node',
-    roots: ['<rootDir>/testsAccount'],
+    roots: ['<rootDir>/testsAccount', '<rootDir>/test'],
     testMatch: ['**/*.test.ts'],
     collectCoverage: true,
     coverageDirectory: 'coverage',
     coverageReporters: ['text', 'text-summary', 'lcov', 'html'],
     coveragePathIgnorePatterns: [
         '/node_modules/',
-        '/testsAccount/',
-        '/test/'
+        '/testsAccount/'
     ],
     collectCoverageFrom: [
         'lib/devkit.ts',
