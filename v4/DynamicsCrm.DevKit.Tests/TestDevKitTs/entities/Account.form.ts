@@ -8,8 +8,8 @@
  * 3. Runtime - Form class with field configurations
  */
 
-/// <reference path="../../lib/devkit.d.ts" />
-import { FormBase } from '../../lib/devkit';
+/// <reference path="../lib/devkit.d.ts" />
+import { FormBase } from '../lib/devkit';
 import './OptionSet';
 
 // ============================================================================
@@ -302,3 +302,4 @@ export namespace FormAccount_DevKitV4 {
         }
     }
 }
+

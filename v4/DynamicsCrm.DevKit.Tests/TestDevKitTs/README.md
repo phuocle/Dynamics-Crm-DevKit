@@ -135,7 +135,7 @@ npm install
 
 ```typescript
 // entities/Lead.ts
-import { LeadForm, OptionSet } from './generator/Lead.form';
+import { LeadForm, OptionSet } from './Lead.form';
 
 const formLead = (function () {
     "use strict";
@@ -216,7 +216,7 @@ File `lib/devkit.d.ts` định nghĩa namespace `DevKit` với các interfaces:
 ## Ví dụ code với IntelliSense
 
 ```typescript
-import { AccountForm, OptionSet } from './generator/Account.form';
+import { AccountForm, OptionSet } from './Account.form';
 
 let form: AccountForm;
 
@@ -325,8 +325,8 @@ describe('loadFormV3 Tests', () => {
 | File | Mô tả |
 |------|-------|
 | `entities/[Entity].ts` | Developer code |
-| `entities/generator/[Entity].form.ts` | Generated form module |
-| `entities/generator/[Entity].webapi.ts` | Generated WebApi module |
+| `entities/[Entity].form.ts` | Generated form module |
+| `entities/[Entity].webapi.ts` | Generated WebApi module |
 | `lib/devkit.ts` | Core library implementation |
 | `lib/devkit.d.ts` | Type definitions |
 | `build/[Entity].js` | Bundled output để deploy |
@@ -375,7 +375,7 @@ var formAccount = (function () {
 ### Phương pháp mới (TypeScript Modules)
 
 ```typescript
-import { AccountForm, OptionSet } from './generator/Account.form';
+import { AccountForm, OptionSet } from './Account.form';
 
 const formAccount = (function () {
     let form: AccountForm;
@@ -402,4 +402,5 @@ export default formAccount;
 - File `lib/devkit.d.ts` định nghĩa tất cả interfaces trong namespace `DevKit`
 - Các tính năng khác có thể gọi trực tiếp: `Xrm.WebApi.createRecord(...)`
 - File `.form.ts` và `.webapi.ts` trong tương lai sẽ được tool tự động generate từ Dataverse metadata
+
 

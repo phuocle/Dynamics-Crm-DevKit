@@ -10,8 +10,8 @@ File này dùng để AI nắm bắt ngữ cảnh khi tiếp tục công việc 
 
 | File | Statements | Branches | Functions | Lines |
 |------|------------|----------|-----------|-------|
-| `entities/generator/Account.form.ts` | 100% | 100% | 100% | 100% |
-| `entities/generator/Account.webapi.ts` | 100% | 100% | 100% | 100% |
+| `entities/Account.form.ts` | 100% | 100% | 100% | 100% |
+| `entities/Account.webapi.ts` | 100% | 100% | 100% | 100% |
 | `lib/devkit.ts` | 42.13% | 33.77% | 14.69% | 57.14% |
 | **entities/Account.ts** | N/A | N/A | N/A | N/A |
 
@@ -33,7 +33,7 @@ TestDevKitTs/
 ├── lib/
 │   ├── devkit.ts                              # DevKit core (target: 100%)
 │   └── devkit.d.ts                            # Type definitions
-└── entities/generator/
+└── entities/
     ├── Account.form.ts                        # Form types (100% covered)
     └── Account.webapi.ts                      # WebApi types (100% covered)
 ```
@@ -224,3 +224,4 @@ function createFormContext(options = {}) {
 ---
 
 *Last updated: 2025-12-26*
+

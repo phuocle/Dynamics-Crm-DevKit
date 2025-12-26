@@ -1,4 +1,4 @@
-import { FormAccount_DevKitV4 } from './generator/Account.form';
+import { FormAccount_DevKitV4 } from './Account.form';
 
 interface TestResult {
     Test: string;
@@ -207,3 +207,4 @@ export function TestControl(form: FormAccount_DevKitV4.Form): void {
 
     console.groupEnd();
 }
+

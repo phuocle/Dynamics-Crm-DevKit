@@ -1,4 +1,4 @@
-import { FormAccount_DevKitV4 } from './generator/Account.form';
+import { FormAccount_DevKitV4 } from './Account.form';
 
 interface TestResult {
     Test: string;
@@ -185,4 +185,5 @@ export function TestCopilot(form: FormAccount_DevKitV4.Form): void {
         "font-weight: bold; color: #4CAF50; font-size: 14px;");
     console.groupEnd();
 }
+
 

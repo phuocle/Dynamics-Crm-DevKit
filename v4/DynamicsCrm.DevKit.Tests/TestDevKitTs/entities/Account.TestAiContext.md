@@ -49,7 +49,7 @@ ts/
 Tạo file `Account.Test{ControlType}.ts` trong `ts/entities/`:
 
 ```typescript
-import { AccountForm } from './generator/Account.form';
+import { AccountForm } from './Account.form';
 
 interface TestResult {
     Test: string;
@@ -292,3 +292,4 @@ form.Body.v4_String.AttributeType === "string"
 ---
 
 *Last updated: 2025-12-24*
+

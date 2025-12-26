@@ -8,6 +8,9 @@
 		},
 		{
 			"path": "TestWebResource"
+		},
+		{
+			"path": "TestWebResourceTs"
 		}
 	],
 	"settings": {}

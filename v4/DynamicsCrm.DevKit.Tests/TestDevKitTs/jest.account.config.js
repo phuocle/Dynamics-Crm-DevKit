@@ -14,10 +14,11 @@ module.exports = {
     collectCoverageFrom: [
         'lib/devkit.ts',
         'entities/Account.ts',
-        'entities/generator/Account.form.ts',
-        'entities/generator/Account.webapi.ts',
+        'entities/Account.form.ts',
+        'entities/Account.webapi.ts',
         '!**/*.d.ts'
     ],
     moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
     verbose: true
 };
+

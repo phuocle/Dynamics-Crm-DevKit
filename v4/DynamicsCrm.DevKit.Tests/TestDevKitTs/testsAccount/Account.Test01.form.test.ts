@@ -7,7 +7,7 @@
  * - Form configuration (body, header, tab, grid, navigation, quick, bpf)
  */
 import { XrmMockGenerator } from 'xrm-mock';
-import { FormAccount_DevKitV4 } from '../entities/generator/Account.form';
+import { FormAccount_DevKitV4 } from '../entities/Account.form';
 
 // Global setup
 let mockGlobalContext: any;
@@ -243,3 +243,4 @@ describe('Account.form.ts - Form Class', () => {
         });
     });
 });
+

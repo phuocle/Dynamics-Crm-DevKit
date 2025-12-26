@@ -2,7 +2,7 @@
  * OptionSet.ts - Centralized OptionSet definitions
  * Generated file - DO NOT MODIFY MANUALLY
  * 
- * Usage: import { OptionSet } from './generator/OptionSet';
+ * Usage: import { OptionSet } from './OptionSet';
  *        OptionSet.FormType.Create
  *        OptionSet.Account.IndustryCode.Consulting
  */
@@ -686,4 +686,5 @@ export const OptionSet = {
     // Entity OptionSets
     Account
 } as const;
+
 

@@ -1,5 +1,5 @@
-import { FormAccount_DevKitV4 } from './generator/Account.form';
-import { OptionSet } from './generator/OptionSet';
+import { FormAccount_DevKitV4 } from './Account.form';
+import { OptionSet } from './OptionSet';
 
 interface TestResult {
     Test: string;
@@ -150,3 +150,4 @@ export function TestTab(form: FormAccount_DevKitV4.Form): void {
 
     console.groupEnd();
 }
+

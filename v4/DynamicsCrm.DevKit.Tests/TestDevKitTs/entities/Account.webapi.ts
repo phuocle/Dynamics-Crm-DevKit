@@ -8,7 +8,7 @@
  * 3. Runtime - AccountFieldConfig, AccountApi factory
  */
 
-import { createWebApiEntity } from '../../lib/devkit';
+import { createWebApiEntity } from '../lib/devkit';
 
 // Use types from DevKit namespace (defined in devkit.d.ts)
 type Guid = DevKit.Guid;
@@ -673,4 +673,5 @@ export class AccountApi {
 export interface AccountApi extends IAccountApi { }
 
 export default AccountApi;
+
 

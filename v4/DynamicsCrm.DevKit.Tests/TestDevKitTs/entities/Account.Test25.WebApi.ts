@@ -1,6 +1,6 @@
-import { FormAccount_DevKitV4 } from './generator/Account.form';
-import { AccountApi } from './generator/Account.webapi';
-import { OptionSet } from './generator/OptionSet';
+import { FormAccount_DevKitV4 } from './Account.form';
+import { AccountApi } from './Account.webapi';
+import { OptionSet } from './OptionSet';
 
 interface TestResult {
     Test: string;
@@ -261,3 +261,4 @@ export async function TestWebApi(form: FormAccount_DevKitV4.Form): Promise<void>
 
     console.groupEnd();
 }
+

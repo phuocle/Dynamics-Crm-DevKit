@@ -1,4 +1,4 @@
-import { FormAccount_DevKitV4 } from './generator/Account.form';
+import { FormAccount_DevKitV4 } from './Account.form';
 import { TestControl } from './Account.Test00.Control';
 import { TestString } from './Account.Test01.String';
 import { TestMemo } from './Account.Test02.Memo';
