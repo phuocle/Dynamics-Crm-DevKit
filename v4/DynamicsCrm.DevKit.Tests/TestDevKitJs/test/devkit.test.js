@@ -1,4 +1,4 @@
-import { OptionSet, devKit } from '../lib/devkit.mjs';
+import { OptionSet, devKit } from '../lib/devkit.js';
 import {
     XrmMockGenerator, ContextMock, UserSettingsMock, ClientContextMock, LookupValueMock, DataMock, EntityMock, ItemCollectionMock, AttributeMock, StringControlMock,
     StringAttributeMock, UiMock, FormSelectorMock, FormItemMock, FormContextMock, OrganizationSettingsMock, EventContextMock, StageMock, StepMock, ProcessControlMock,
