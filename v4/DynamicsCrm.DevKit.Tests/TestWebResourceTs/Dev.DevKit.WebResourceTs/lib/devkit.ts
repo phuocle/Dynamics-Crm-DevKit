@@ -391,6 +391,13 @@ function loadGrids(formContext: any, gridItems: string[]): any {
             return obj;
         });
         getterSetter(grids[grid], 'Visible', () => gridControl?.getVisible(), (value: any) => { gridControl?.setVisible(value); });
+        // Additional subgrid control properties (MS API compliance)
+        getter(grids[grid], 'ControlType', () => gridControl?.getControlType());
+        getter(grids[grid], 'ControlName', () => gridControl?.getName());
+        getter(grids[grid], 'ControlParent', () => gridControl?.getParent());
+        getterSetter(grids[grid], 'Disabled', () => gridControl?.getDisabled(), (value: boolean) => { gridControl?.setDisabled(value); });
+        getterSetter(grids[grid], 'Label', () => gridControl?.getLabel(), (value: string) => { gridControl?.setLabel(value); });
+        grids[grid].Focus = () => gridControl?.setFocus();
         grids[grid].AddOnLoad = (callback: any) => gridControl?.addOnLoad(callback);
         grids[grid].OpenRelatedGrid = () => gridControl?.openRelatedGrid();
         grids[grid].Refresh = () => gridControl?.refresh();
