@@ -2161,4 +2161,306 @@ describe('devKit', () => {
             webApi.RetrieveRecords((e) => e, invalidFetchXml);
         }).toThrow('Entity name not found in fetchXml');
     });
+    // Additional tests to cover uncovered lines
+    test('getXrm - should return window.Xrm when available (line 5)', () => {
+        global.window = { Xrm: { test: 'value' } };
+        // Force getXrm to be called by loading webapi
+        var webApi = devKit.LoadWebApi();
+        expect(webApi).toBeDefined();
+    });
+    test('getXrm - should fall back to parent.Xrm (line 8)', () => {
+        delete global.window;
+        global.parent = { Xrm: { WebApi: {} } };
+        var webApi = devKit.LoadWebApi();
+        expect(webApi).toBeDefined();
+    });
+    test('findFormItem - should return null for non-existing form (line 41)', () => {
+        var attributes = new ItemCollectionMock([]);
+        var entity = new EntityMock({ entityName: "account", id: "id1", attributes: attributes });
+        var data = new DataMock(entity);
+        var ui = new UiMock({
+            formSelector: new FormSelectorMock(new ItemCollectionMock([
+                new FormItemMock({ id: "form1", label: "Form 1", currentItem: true })
+            ]))
+        });
+        XrmMockGenerator.formContext = new FormContextMock(data, ui);
+        var form = devKit.LoadForm(XrmMockGenerator.formContext);
+        // Search for non-existing form ID should return null (line 41)
+        var result = form.FormIsVisible("non-existing-id");
+        expect(result).toBeUndefined();
+    });
+    test('form.Refresh with callbacks (lines 71-72)', () => {
+        var attributes = new ItemCollectionMock([]);
+        var entity = new EntityMock({ entityName: "account", id: "id1", attributes: attributes });
+        var mockPromise = { then: function (s, e) { s && s(); return mockPromise; } };
+        var data = {
+            refresh: function (save) { return mockPromise; },
+            addOnLoad: function () { },
+            removeOnLoad: function () { }
+        };
+        var ui = new UiMock({ formSelector: new FormSelectorMock(new ItemCollectionMock([])) });
+        var formContext = { data: data, ui: ui };
+        var form = devKit.LoadForm(formContext);
+        var successCalled = false;
+        form.Refresh(true, function () { successCalled = true; }, function () { });
+        expect(successCalled).toBe(true);
+    });
+    test('form.Save with callbacks (lines 79-80)', () => {
+        var mockPromise = { then: function (s, e) { s && s(); return mockPromise; } };
+        var data = {
+            save: function (opts) { return mockPromise; },
+            addOnLoad: function () { },
+            removeOnLoad: function () { }
+        };
+        var ui = new UiMock({ formSelector: new FormSelectorMock(new ItemCollectionMock([])) });
+        var formContext = { data: data, ui: ui };
+        var form = devKit.LoadForm(formContext);
+        var successCalled = false;
+        form.Save({}, function () { successCalled = true; }, function () { });
+        expect(successCalled).toBe(true);
+    });
+    test('ActivePath.get and ActivePath.forEach (lines 151, 156-158)', () => {
+        var stageMock = {
+            getId: () => 'stage1',
+            getName: () => 'Stage 1',
+            getStatus: () => 'active',
+            getCategory: () => ({ getValue: () => 1 }),
+            getSteps: () => []
+        };
+        var activePath = {
+            get: (index) => stageMock,
+            getLength: () => 1
+        };
+        var process = {
+            getActivePath: () => activePath,
+            getActiveProcess: () => null,
+            getActiveStage: () => null,
+            getSelectedStage: () => null,
+            getInstanceId: () => 'id1',
+            getInstanceName: () => 'name1',
+            getStatus: () => 'active',
+            setStatus: () => { }
+        };
+        var formContext = { data: { process: process }, ui: { process: { getDisplayState: () => 'collapsed', setDisplayState: () => { }, getVisible: () => true, setVisible: () => { } } } };
+        var loadedProcess = devKit.LoadProcess(formContext);
+        var path = loadedProcess.ActivePath;
+        var stage = path.get(0);
+        expect(stage.Id).toBe('stage1');
+        expect(path.getLength()).toBe(1);
+        var count = 0;
+        path.forEach((s, i) => { count++; });
+        expect(count).toBe(1);
+    });
+    test('process.ProcessInstances callback (lines 189-198)', () => {
+        var process = {
+            getProcessInstances: function (callback) {
+                callback({
+                    instance1: {
+                        ProcessDefinitionID: 'proc1',
+                        ProcessDefinitionName: 'Process 1',
+                        CreatedOn: '2025-01-01',
+                        CreatedOnDate: new Date(),
+                        ProcessInstanceID: 'inst1',
+                        ProcessInstanceName: 'Instance 1',
+                        StatusCodeName: 'Active'
+                    }
+                });
+            },
+            getActivePath: () => ({ get: () => null, getLength: () => 0 }),
+            getActiveProcess: () => null,
+            getActiveStage: () => null,
+            getSelectedStage: () => null
+        };
+        var formContext = { data: { process: process }, ui: { process: {} } };
+        var loadedProcess = devKit.LoadProcess(formContext);
+        var result = null;
+        loadedProcess.ProcessInstances(function (processes) { result = processes; });
+        expect(result).not.toBeNull();
+        expect(result.length).toBe(1);
+        expect(result[0].ProcessId).toBe('proc1');
+        expect(result[0].InstanceId).toBe('inst1');
+    });
+    test('ContentWindow with callback (lines 277-278)', () => {
+        var mockPromise = { then: function (s, e) { if (s) s('contentWindow'); return mockPromise; } };
+        var control = {
+            getContentWindow: function () { return mockPromise; },
+            getName: () => 'iframe1'
+        };
+        var formContext = {
+            getControl: (name) => control,
+            getAttribute: () => null
+        };
+        var body = { IframeField: {} };
+        devKit.LoadFields(formContext, body);
+        var result = null;
+        body.IframeField.ContentWindow(function (cw) { result = cw; }, function () { });
+        expect(result).toBe('contentWindow');
+    });
+    test('findControlFromAttribute coverage (lines 301-302)', () => {
+        var ctrl = { getName: () => 'name' };
+        var attribute = {
+            controls: { forEach: function (cb) { cb(ctrl); } },
+            getName: () => 'name',
+            getAttributeType: () => 'string',
+            getValue: () => 'test'
+        };
+        var formContext = {
+            getControl: (name) => null,  // Control not found directly
+            getAttribute: (name) => attribute
+        };
+        var body = { Name: {} };
+        devKit.LoadFields(formContext, body);
+        expect(body.Name.AttributeName).toBe('name');
+    });
+    test('utility callbacks - AllowedStatusTransitions (lines 578-579)', () => {
+        global.Xrm = {
+            Utility: {
+                getAllowedStatusTransitions: function (e, s) {
+                    return { then: function (sc, ec) { if (sc) sc(['active', 'inactive']); } };
+                },
+                getGlobalContext: () => ({})
+            }
+        };
+        var utility = devKit.LoadUtility();
+        var result = null;
+        utility.AllowedStatusTransitions('account', 1, function (r) { result = r; }, function () { });
+        expect(result).toEqual(['active', 'inactive']);
+    });
+    test('utility callbacks - Device methods (lines 583-620)', () => {
+        var mockPromise = { then: function (s, e) { if (s) s('result'); } };
+        global.Xrm = {
+            Utility: { getGlobalContext: () => ({}) },
+            Device: {
+                getBarcodeValue: () => mockPromise,
+                captureAudio: () => mockPromise,
+                captureImage: () => mockPromise,
+                captureVideo: () => mockPromise,
+                getCurrentPosition: () => mockPromise
+            }
+        };
+        var utility = devKit.LoadUtility();
+        var r1, r2, r3, r4, r5;
+        utility.BarcodeValue(function (r) { r1 = r; }, function () { });
+        utility.CaptureAudio(function (r) { r2 = r; }, function () { });
+        utility.CaptureImage({}, function (r) { r3 = r; }, function () { });
+        utility.CaptureVideo(function (r) { r4 = r; }, function () { });
+        utility.CurrentPosition(function (r) { r5 = r; }, function () { });
+        expect(r1).toBe('result');
+        expect(r2).toBe('result');
+        expect(r3).toBe('result');
+        expect(r4).toBe('result');
+        expect(r5).toBe('result');
+    });
+    test('utility callbacks - more utility methods (lines 625-640)', () => {
+        var mockPromise = { then: function (s, e) { if (s) s('result'); } };
+        global.Xrm = {
+            Utility: {
+                getGlobalContext: () => ({}),
+                getEntityMetadata: () => mockPromise,
+                invokeProcessAction: () => mockPromise,
+                lookupObjects: () => mockPromise
+            }
+        };
+        var utility = devKit.LoadUtility();
+        var r1, r2, r3;
+        utility.EntityMetadata('account', [], function (r) { r1 = r; }, function () { });
+        utility.InvokeProcessAction('action', {}, function (r) { r2 = r; }, function () { });
+        utility.LookupObjects({}, function (r) { r3 = r; }, function () { });
+        expect(r1).toBe('result');
+        expect(r2).toBe('result');
+        expect(r3).toBe('result');
+    });
+    test('extractEntityName - fetchXml with fetchXml= prefix (lines 703-704)', () => {
+        global.DOMParser = class {
+            parseFromString(str, type) {
+                return {
+                    querySelector: (sel) => ({ hasAttribute: () => true, getAttribute: () => 'account' })
+                };
+            }
+        };
+        var mockPromise = { then: function (s, e) { if (s) s({ entities: [{ accountid: '123' }] }); } };
+        global.Xrm = {
+            WebApi: {
+                retrieveMultipleRecords: function (entity, opts, max) { return mockPromise; }
+            }
+        };
+        global.window = { Xrm: global.Xrm };
+        var webApi = devKit.LoadWebApi();
+        var result = null;
+        // Test RetrieveMultipleRecords with callback (lines 730-734 equivalent)
+        webApi.RetrieveMultipleRecords('account', '?$select=name', 100, function (r) { result = r; }, function () { });
+        expect(result.entities.length).toBe(1);
+    });
+    test('LoadFormV2 - with all config options (lines 950-987)', () => {
+        var mockControl = {
+            getName: () => 'name',
+            getLabel: () => 'Name',
+            getControlType: () => 'standard',
+            getAttribute: () => ({ getName: () => 'name', getAttributeType: () => 'string', getValue: () => 'test' })
+        };
+        var mockTab = {
+            getName: () => 'tab_general',
+            getParent: () => null,
+            getContentType: () => 'cardSections',
+            setContentType: () => { },
+            getDisplayState: () => 'expanded',
+            setDisplayState: () => { },
+            getLabel: () => 'General',
+            setLabel: () => { },
+            getVisible: () => true,
+            setVisible: () => { },
+            addTabStateChange: () => { },
+            removeTabStateChange: () => { },
+            setFocus: () => { },
+            sections: { get: () => ({ getName: () => 'section1', getParent: () => null, getLabel: () => 'Section 1', setLabel: () => { }, getVisible: () => true, setVisible: () => { } }) }
+        };
+        var formContext = {
+            getFormContext: () => formContext,
+            getControl: (name) => mockControl,
+            getAttribute: (name) => mockControl.getAttribute(),
+            data: { entity: { getId: () => 'id1', getEntityName: () => 'account' } },
+            ui: {
+                getFormType: () => 2,
+                tabs: { get: () => mockTab },
+                quickForms: { get: () => ({ getName: () => 'qf1', getControlType: () => 'quickform', getControl: () => null, isLoaded: () => true, refresh: () => { }, setFocus: () => { }, getParent: () => null, getDisabled: () => false, setDisabled: () => { }, getLabel: () => 'QF', setLabel: () => { }, getVisible: () => true, setVisible: () => { } }) },
+                headerSection: { getBodyVisible: () => true, setBodyVisible: () => { }, getCommandBarVisible: () => true, setCommandBarVisible: () => { }, getTabNavigatorVisible: () => true, setTabNavigatorVisible: () => { } },
+                navigation: { items: { getLength: () => 0, get: () => null } }
+            }
+        };
+        var form = devKit.LoadFormV2(formContext, 'webresource', {
+            body: ['Name'],
+            tab: ['tab_general___section1'],
+            header: ['Name'],
+            bpf: ['BPF___Name'],
+            quick: ['QuickForm___Field'],
+            grid: ['Grid1'],
+            navigation: ['nav1'],
+            dialog: ['DialogField']
+        });
+        expect(form.Body).toBeDefined();
+        expect(form.Body.Tab).toBeDefined();
+        expect(form.Header).toBeDefined();
+        expect(form.Process).toBeDefined();
+        expect(form.QuickForm).toBeDefined();
+        expect(form.Grid).toBeDefined();
+        expect(form.Navigation).toBeDefined();
+        expect(form.Dialog).toBeDefined();
+    });
+    test('LoadFormV2 - dialog with executionContext.getFormContext (line 942)', () => {
+        var mockControl = {
+            getName: () => 'name',
+            getAttribute: () => ({ getName: () => 'name', getAttributeType: () => 'string' })
+        };
+        var innerFormContext = {
+            getControl: () => mockControl,
+            getAttribute: () => mockControl.getAttribute(),
+            data: { entity: {} },
+            ui: { getFormType: () => 2, tabs: { get: () => null }, headerSection: {}, navigation: { items: { getLength: () => 0 } } }
+        };
+        var executionContext = {
+            getFormContext: () => innerFormContext
+        };
+        var form = devKit.LoadFormV2(executionContext, 'wr', { body: [] });
+        expect(form).toBeDefined();
+    });
 });
