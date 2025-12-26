@@ -636,7 +636,7 @@ function loadCopilot(): DevKit.ICopilot {
     };
     return obj;
 }
-function loadFormV3<TBody = Record<string, any>, THeader = Record<string, any>, TGrid = Record<string, any>, TNavigation = Record<string, any>, TQuickForm = Record<string, any>, TProcess = any, TDialog = any>(
+function loadFormV3<TBody = Record<string, any>, THeader = Record<string, any>, TGrid = Record<string, any>, TNavigation = Record<string, any>, TQuickForm = Record<string, any>, TProcess = any>(
     executionContext: any,
     defaultWebResourceName: string | undefined,
     formConfig: {
@@ -694,11 +694,11 @@ function loadFormV3<TBody = Record<string, any>, THeader = Record<string, any>, 
     FormSetVisible: (formId: string, visible: boolean) => void;
     SetFormEntityName: (name: string) => void;
     Process: TProcess;
-    Utility: any;
-    SidePanes: any;
-    WebApi: any;
-    Copilot: any;
-    Dialog: any;
+    Utility: DevKit.IUtility;
+    SidePanes: DevKit.ISidePanes;
+    WebApi: DevKit.IWebApi;
+    Copilot: DevKit.ICopilot;
+    Dialog: DevKit.IDialog;
 } {
     const formContext = executionContext?.getFormContext?.() ?? executionContext ?? null;
     const form: any = {};
@@ -1153,16 +1153,16 @@ function webApiReturnGet(data: any, type?: DevKit.WebApiFieldType): any {
     return parser ? parser(data) : data;
 }
 
-export class FormBase<TBody = any, THeader = any, TGrid = any, TNavigation = any, TQuickForm = any, TProcess = any, TDialog = any> {
+export class FormBase<TBody = any, THeader = any, TGrid = any, TNavigation = any, TQuickForm = any, TProcess = any> {
     public Body: TBody;
     public Header: THeader;
     public Grid: TGrid;
     public Navigation: TNavigation;
     public QuickForm: TQuickForm;
     public Process: TProcess;
-    public Dialog: TDialog;
+    public Dialog: DevKit.IDialog;
     public ExecutionContext: DevKit.IExecutionContext;
-    public Utility: any;
+    public Utility: DevKit.IUtility;
     public SidePanes: DevKit.ISidePanes;
     public WebApi: DevKit.IWebApi;
     public Copilot: DevKit.ICopilot;
@@ -1208,7 +1208,7 @@ export class FormBase<TBody = any, THeader = any, TGrid = any, TNavigation = any
         defaultWebResourceName: string | undefined,
         formConfig: DevKit.IFormConfig
     ) {
-        const form = loadFormV3<TBody, THeader, TGrid, TNavigation, TQuickForm, TProcess, TDialog>(
+        const form = loadFormV3<TBody, THeader, TGrid, TNavigation, TQuickForm, TProcess>(
             executionContext,
             defaultWebResourceName,
             formConfig
