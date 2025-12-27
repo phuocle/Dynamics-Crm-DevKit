@@ -1,4 +1,4 @@
-function getXrm(): any {
+function getXrm(): typeof Xrm | undefined {
     if (typeof window !== 'undefined' && (window as any).Xrm !== undefined) {
         return (window as any).Xrm;
     }
@@ -456,6 +456,7 @@ function loadWebApi(): DevKit.IWebApi {
         }
     };
     obj.Execute = function (request: any, successCallback?: any, errorCallback?: any) {
+        // @ts-ignore
         const promise = getWebApi?.execute(request);
         if (successCallback) {
             promise?.then(successCallback, errorCallback);
@@ -464,6 +465,7 @@ function loadWebApi(): DevKit.IWebApi {
         }
     };
     obj.ExecuteMultiple = function (requests: any[], successCallback?: any, errorCallback?: any) {
+        // @ts-ignore
         const promise = getWebApi?.executeMultiple(requests);
         if (successCallback) {
             promise?.then(successCallback, errorCallback);
@@ -552,6 +554,7 @@ function loadWebApi(): DevKit.IWebApi {
     getter(obj, 'Online', () => {
         const online: any = {};
         online.Execute = function (request: any, successCallback?: any, errorCallback?: any) {
+            // @ts-ignore
             const promise = getOnline?.execute(request);
             if (successCallback) {
                 promise?.then(successCallback, errorCallback);
@@ -560,6 +563,7 @@ function loadWebApi(): DevKit.IWebApi {
             }
         };
         online.ExecuteMultiple = function (requests: any[], successCallback?: any, errorCallback?: any) {
+            // @ts-ignore
             const promise = getOnline?.executeMultiple(requests);
             if (successCallback) {
                 promise?.then(successCallback, errorCallback);
@@ -571,6 +575,7 @@ function loadWebApi(): DevKit.IWebApi {
     });
     getter(obj, 'Offline', () => {
         const offline: any = {};
+        // @ts-ignore
         offline.IsAvailable = (entityLogicalName: string) => getOffline?.isAvailable(entityLogicalName);
         return offline;
     });
@@ -579,6 +584,7 @@ function loadWebApi(): DevKit.IWebApi {
 function loadCopilot(): DevKit.ICopilot {
     const obj: any = {};
     const xrm = getXrm();
+    // @ts-ignore
     const getCopilot = xrm?.Copilot;
     obj.ExecuteEvent = function (eventName: string, eventParameters: any, successCallback?: any, errorCallback?: any) {
         const promise = getCopilot?.executeEvent(eventName, eventParameters);
