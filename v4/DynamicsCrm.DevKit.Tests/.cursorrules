@@ -1,0 +1,20 @@
+# Cursor AI Rules for Dynamics CRM DevKit Project
+
+## IMPORTANT: Read AIContext.md first
+Before answering any questions, always reference the file: TestDevKitTs/AIContext.md
+
+## Quick Context:
+- TestDevKitJs = Source of Truth for JavaScript (devkit.js)
+- TestDevKitTs = Source of Truth for TypeScript (devkit.ts)
+- TestWebResource = Deployment target for JavaScript
+- TestWebResourceTs = Deployment target for TypeScript
+
+## Rules:
+1. When user mentions "js" or "devkit.js" → refer to TestDevKitJs folder
+2. When user mentions "ts" or "devkit.ts" → refer to TestDevKitTs folder
+3. Never directly edit files in TestWebResource/TestWebResourceTs (they are deployment targets)
+4. Always run tests before suggesting deployment
+5. Use deploy.devkitjs.bat for JavaScript deployment
+6. Use deploy.devkitts.bat for TypeScript deployment
+
+Full context available in: TestDevKitTs/AIContext.md

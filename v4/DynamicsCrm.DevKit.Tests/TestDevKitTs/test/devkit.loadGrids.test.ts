@@ -32,6 +32,8 @@ describe('loadGrids Tests', () => {
 
     function getGridForm(gridConfig: string[] = ['Contacts']): any {
         let gridVisible = true;
+        let gridDisabled = false;
+        let gridLabel = 'Contacts Grid';
         let currentView = { id: 'view-1', name: 'Active Contacts' };
         const onLoadCallbacks: any[] = [];
 
@@ -92,7 +94,7 @@ describe('loadGrids Tests', () => {
             getTotalRecordCount: () => rows.length
         };
 
-        // Grid control mock
+        // Grid control mock with subgrid properties
         const gridControl = {
             getEntityName: () => 'contact',
             getFetchXml: () => '<fetch><entity name="contact"/></fetch>',
@@ -111,7 +113,16 @@ describe('loadGrids Tests', () => {
             openRelatedGrid: () => { },
             refresh: () => { },
             refreshRibbon: () => { },
-            getUrl: (client: number) => `https://crm.dynamics.com/contacts?client=${client}`
+            getUrl: (client: number) => `https://crm.dynamics.com/contacts?client=${client}`,
+            // Subgrid control properties
+            getControlType: () => 'subgrid',
+            getName: () => 'Contacts',
+            getParent: () => ({ getName: () => 'SUMMARY_TAB' }),
+            getDisabled: () => gridDisabled,
+            setDisabled: (value: boolean) => { gridDisabled = value; },
+            getLabel: () => gridLabel,
+            setLabel: (value: string) => { gridLabel = value; },
+            setFocus: () => { }
         };
 
         // Create formContext mock
@@ -455,6 +466,56 @@ describe('loadGrids Tests', () => {
             const form = getGridForm();
             const url = form.Grid.Contacts.Url(1);
             expect(url).toContain('https://');
+        });
+    });
+
+    // ========================================================================
+    // TEST: Subgrid Control Properties
+    // ========================================================================
+
+    describe('Subgrid Control Properties', () => {
+        test('ControlType should return subgrid', () => {
+            const form = getGridForm();
+            expect(form.Grid.Contacts.ControlType).toBe('subgrid');
+        });
+
+        test('ControlName should return grid name', () => {
+            const form = getGridForm();
+            expect(form.Grid.Contacts.ControlName).toBe('Contacts');
+        });
+
+        test('ControlParent should return parent tab', () => {
+            const form = getGridForm();
+            const parent = form.Grid.Contacts.ControlParent;
+            expect(parent).toBeDefined();
+            expect(parent.getName()).toBe('SUMMARY_TAB');
+        });
+
+        test('Disabled getter should return false by default', () => {
+            const form = getGridForm();
+            expect(form.Grid.Contacts.Disabled).toBe(false);
+        });
+
+        test('Disabled setter should change disabled state', () => {
+            const form = getGridForm();
+            form.Grid.Contacts.Disabled = true;
+            expect(form.Grid.Contacts.Disabled).toBe(true);
+        });
+
+        test('Label getter should return grid label', () => {
+            const form = getGridForm();
+            expect(form.Grid.Contacts.Label).toBe('Contacts Grid');
+        });
+
+        test('Label setter should change label', () => {
+            const form = getGridForm();
+            form.Grid.Contacts.Label = 'New Label';
+            expect(form.Grid.Contacts.Label).toBe('New Label');
+        });
+
+        test('Focus should not throw', () => {
+            const form = getGridForm();
+            expect(() => form.Grid.Contacts.Focus()).not.toThrow();
         });
     });
 

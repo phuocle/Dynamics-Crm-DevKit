@@ -718,6 +718,29 @@ declare namespace DevKit {
         }
 
         /**
+         * Collection of controls within a section
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/collections
+         */
+        interface ISectionControlsCollection {
+            /**
+             * Gets a control by index or name
+             * @param arg The index (number) or name (string) of the control to get
+             */
+            get(arg?: number | string): any;
+
+            /**
+             * Gets the number of controls in the section
+             */
+            getLength(): number;
+
+            /**
+             * Iterates over all controls in the section
+             * @param callback The function to call for each control
+             */
+            forEach(callback: (control: any, index: number) => void): void;
+        }
+
+        /**
          * Interface for Section controls
          */
         interface Section {
@@ -732,6 +755,12 @@ declare namespace DevKit {
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-sections/getparent
              */
             readonly Parent: any;
+
+            /**
+             * Get the controls within the section
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-sections
+             */
+            readonly Controls: ISectionControlsCollection;
 
             /**
              * Get/Set the label for the section
@@ -946,6 +975,46 @@ declare namespace DevKit {
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/setvisible
              */
             Visible: boolean;
+
+            // Additional subgrid control properties
+
+            /**
+             * Returns the control type (for subgrids)
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getcontroltype
+             */
+            readonly ControlType: string;
+
+            /**
+             * Returns the name of the control (for subgrids)
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getname
+             */
+            readonly ControlName: string;
+
+            /**
+             * Returns the parent section containing the control (for subgrids)
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getparent
+             */
+            readonly ControlParent: any;
+
+            /**
+             * Get/Set whether the control is disabled (for subgrids)
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getdisabled
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/setdisabled
+             */
+            Disabled: boolean;
+
+            /**
+             * Get/Set the label of the control (for subgrids)
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getlabel
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/setlabel
+             */
+            Label: string;
+
+            /**
+             * Sets focus on the control (for subgrids)
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/setfocus
+             */
+            Focus(): void;
         }
 
         /**

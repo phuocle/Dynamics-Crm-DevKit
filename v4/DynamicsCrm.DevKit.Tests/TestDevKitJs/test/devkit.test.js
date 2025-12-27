@@ -965,8 +965,8 @@ describe('devKit', () => {
         form.QuickForm.contactquickform.Label = "Contact Quick Form New";
         expect(form.QuickForm.contactquickform.Label).toBe("Contact Quick Form New");
         expect(() => { form.QuickForm.contactquickform.Visible = false }).toThrow(new Error("Method not implemented."));
-        expect(() => { form.QuickForm.contactquickform.Body.EMailAddress1 }).toThrow(new Error("Method not implemented."));
-        expect(() => { form.QuickForm.contactquickform.Body.Telephone1 }).toThrow(new Error("Method not implemented."));
+        expect(form.QuickForm.contactquickform.Body.EMailAddress1).toBeUndefined();
+        expect(form.QuickForm.contactquickform.Body.Telephone1).toBeUndefined();
     });
     test('devKit.LoadField - subgrid', () => {
         var attributes = new ItemCollectionMock([
@@ -1209,6 +1209,61 @@ describe('devKit', () => {
         expect(form.Body.Tab.SUMMARY_TAB.Parent).toBeDefined();
         expect(() => { form.Body.Tab.SUMMARY_TAB.ContentType }).toThrow();
         expect(() => { form.Body.Tab.SUMMARY_TAB.ContentType = OptionSet.TabContentType.SingleComponent }).toThrow();
+        // Test Section.Controls collection (lines 354-365)
+        var controls = form.Body.Tab.SUMMARY_TAB.Section.ACCOUNT_INFORMATION.Controls;
+        expect(controls).toBeDefined();
+        if (controls !== null) {
+            expect(controls.getLength).toBeDefined();
+            expect(controls.get).toBeDefined();
+            expect(controls.forEach).toBeDefined();
+        }
+    });
+    test('Section.Controls - forEach coverage', () => {
+        // Create section with controls for forEach coverage
+        var sectionControls = new ItemCollectionMock([
+            new StringControlMock({ name: 'ctrl1', label: 'Control 1' }),
+            new StringControlMock({ name: 'ctrl2', label: 'Control 2' })
+        ]);
+        var sectionWithControls = {
+            getName: () => 'TEST_SECTION',
+            getLabel: () => 'Test Section',
+            setLabel: () => { },
+            getVisible: () => true,
+            setVisible: () => { },
+            getParent: () => ({}),
+            controls: sectionControls
+        };
+        var tabObject = {
+            getName: () => 'TEST_TAB',
+            sections: new ItemCollectionMock([sectionWithControls])
+        };
+        var formContext = {
+            ui: {
+                tabs: {
+                    get: () => tabObject
+                }
+            }
+        };
+        var tab = {
+            TEST_TAB: {
+                Section: {
+                    TEST_SECTION: {}
+                }
+            }
+        };
+        devKit.LoadTabs(formContext, tab);
+        // Test Section.Controls
+        var controls = tab.TEST_TAB.Section.TEST_SECTION.Controls;
+        expect(controls).toBeDefined();
+        expect(controls).not.toBeNull();
+        expect(controls.getLength()).toBe(2);
+        expect(controls.get(0)).toBeDefined();
+        var forEachCount = 0;
+        controls.forEach((ctrl, index) => {
+            forEachCount++;
+            expect(ctrl).toBeDefined();
+        });
+        expect(forEachCount).toBe(2);
     });
     test('Footer & Header', () => {
         //setup

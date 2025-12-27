@@ -1,0 +1,32 @@
+ {
+  "folders": [
+    {
+      "name": "TestDevKitJs",
+      "path": "TestDevKitJs"
+    },
+    {
+      "name": "TestDevKitTs", 
+      "path": "TestDevKitTs"
+    },
+    {
+      "name": "TestWebResource",
+      "path": "TestWebResource"
+    },
+    {
+      "name": "TestWebResourceTs",
+      "path": "TestWebResourceTs"
+    }
+  ],
+  "settings": {
+    "github.copilot.advanced": {
+      "context": [
+        "TestDevKitTs/AIContext.md"
+      ]
+    },
+    "files.watcherExclude": {
+      "**/node_modules/**": true,
+      "**/coverage/**": true,
+      "**/build/**": true
+    }
+  }
+}

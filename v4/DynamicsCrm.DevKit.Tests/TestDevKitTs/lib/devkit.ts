@@ -177,6 +177,20 @@ function loadTabs(formContext: any, tabItems: string[]): any {
         const sectionObject = tabObject?.sections?.get(section);
         getter(sections[section], 'Name', () => sectionObject?.getName());
         getter(sections[section], 'Parent', () => sectionObject?.getParent());
+        getter(sections[section], 'Controls', () => {
+            const controlsCollection = sectionObject?.controls;
+            if (!controlsCollection) return null;
+            const obj: any = {};
+            obj.get = (arg?: number | string) => controlsCollection?.get(arg);
+            obj.getLength = () => controlsCollection?.getLength();
+            obj.forEach = (callback: (control: any, index: number) => void) => {
+                const length = controlsCollection?.getLength() || 0;
+                for (let i = 0; i < length; i++) {
+                    callback(controlsCollection.get(i), i);
+                }
+            };
+            return obj;
+        });
         getterSetter(sections[section], 'Label', () => sectionObject?.getLabel(), (value: any) => sectionObject?.setLabel(value));
         getterSetter(sections[section], 'Visible', () => sectionObject?.getVisible(), (value: any) => sectionObject?.setVisible(value));
     };
@@ -229,18 +243,19 @@ function loadNavigations(formContext: any, navigationItems: string[]): any {
 }
 function loadQuickForms(formContext: any, quickItems: string[]): any {
     const quickForms: any = {};
+    const quickFormFields: Record<string, string[]> = {};
     quickItems.forEach((item: string) => {
         const [quickFormName, fieldName] = item.split('___');
         if (!quickForms[quickFormName]) {
             quickForms[quickFormName] = {};
+            quickFormFields[quickFormName] = [];
         }
         if (fieldName) {
-            quickForms[quickFormName][fieldName] = {};
+            quickFormFields[quickFormName].push(fieldName);
         }
     });
-    const excludedFields = new Set(["Body", "Controls", "IsLoaded", "Refresh", "Focus", "ControlType", "Disabled", "Label", "ControlName", "ControlParent", "Visible"]);
     const loadQuickForm = (formContext: any, quickForms: any, quickForm: string) => {
-        const fields = Object.keys(quickForms[quickForm]).filter(field => !excludedFields.has(field));
+        const fields = quickFormFields[quickForm];
         const quick = formContext?.ui?.quickForms?.get(quickForm);
         getter(quickForms[quickForm], 'Body', () => loadFormDialog(quick, fields));
         getter(quickForms[quickForm], 'ControlName', () => quick?.getName());
@@ -339,6 +354,13 @@ function loadGrids(formContext: any, gridItems: string[]): any {
             return obj;
         });
         getterSetter(grids[grid], 'Visible', () => gridControl?.getVisible(), (value: any) => { gridControl?.setVisible(value); });
+        // Additional subgrid control properties (MS API compliance)
+        getter(grids[grid], 'ControlType', () => gridControl?.getControlType());
+        getter(grids[grid], 'ControlName', () => gridControl?.getName());
+        getter(grids[grid], 'ControlParent', () => gridControl?.getParent());
+        getterSetter(grids[grid], 'Disabled', () => gridControl?.getDisabled(), (value: boolean) => { gridControl?.setDisabled(value); });
+        getterSetter(grids[grid], 'Label', () => gridControl?.getLabel(), (value: string) => { gridControl?.setLabel(value); });
+        grids[grid].Focus = () => gridControl?.setFocus();
         grids[grid].AddOnLoad = (callback: any) => gridControl?.addOnLoad(callback);
         grids[grid].OpenRelatedGrid = () => gridControl?.openRelatedGrid();
         grids[grid].Refresh = () => gridControl?.refresh();
@@ -435,7 +457,8 @@ function loadWebApi(): DevKit.IWebApi {
         }
     };
     obj.Execute = function (request: any, successCallback?: any, errorCallback?: any) {
-        const promise = (getWebApi as any)?.execute(request);
+        // @ts-ignore
+        const promise = getWebApi?.execute(request);
         if (successCallback) {
             promise?.then(successCallback, errorCallback);
         } else {
@@ -443,7 +466,8 @@ function loadWebApi(): DevKit.IWebApi {
         }
     };
     obj.ExecuteMultiple = function (requests: any[], successCallback?: any, errorCallback?: any) {
-        const promise = (getWebApi as any)?.executeMultiple(requests);
+        // @ts-ignore
+        const promise = getWebApi?.executeMultiple(requests);
         if (successCallback) {
             promise?.then(successCallback, errorCallback);
         } else {
@@ -539,6 +563,7 @@ function loadWebApi(): DevKit.IWebApi {
             }
         };
         online.ExecuteMultiple = function (requests: any[], successCallback?: any, errorCallback?: any) {
+            // @ts-ignore
             const promise = getOnline?.executeMultiple(requests);
             if (successCallback) {
                 promise?.then(successCallback, errorCallback);
@@ -550,7 +575,8 @@ function loadWebApi(): DevKit.IWebApi {
     });
     getter(obj, 'Offline', () => {
         const offline: any = {};
-        offline.IsAvailable = (entityLogicalName: string) => (getOffline as any)?.isAvailable(entityLogicalName);
+        // @ts-ignore
+        offline.IsAvailable = (entityLogicalName: string) => getOffline?.isAvailable(entityLogicalName);
         return offline;
     });
     return obj;
@@ -558,7 +584,8 @@ function loadWebApi(): DevKit.IWebApi {
 function loadCopilot(): DevKit.ICopilot {
     const obj: any = {};
     const xrm = getXrm();
-    const getCopilot = (xrm as any)?.Copilot;
+    // @ts-ignore
+    const getCopilot = xrm?.Copilot;
     obj.ExecuteEvent = function (eventName: string, eventParameters: any, successCallback?: any, errorCallback?: any) {
         const promise = getCopilot?.executeEvent(eventName, eventParameters);
         if (successCallback) {
@@ -635,11 +662,11 @@ function loadFormV3<TBody = Record<string, any>, THeader = Record<string, any>, 
     FormSetVisible: (formId: string, visible: boolean) => void;
     SetFormEntityName: (name: string) => void;
     Process: TProcess;
-    Utility: any;
-    SidePanes: any;
-    WebApi: any;
-    Copilot: any;
-    Dialog: any;
+    Utility: DevKit.IUtility;
+    SidePanes: DevKit.ISidePanes;
+    WebApi: DevKit.IWebApi;
+    Copilot: DevKit.ICopilot;
+    Dialog: TDialog;
 } {
     const formContext = executionContext?.getFormContext?.() ?? executionContext ?? null;
     const form: any = {};

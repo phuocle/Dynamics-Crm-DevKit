@@ -1705,6 +1705,185 @@ describe('loadFormV3 Tests', () => {
             expect(form.Body.Tab.MY_TAB.Section.SECTION_1.Name).toBe('SECTION_1');
             expect(form.Body.Tab.MY_TAB.Section.SECTION_2.Name).toBe('SECTION_2');
         });
+
+        // Test for Section.Controls collection (lines 180-193)
+        test('Section.Controls should return controls collection with get, getLength, forEach methods', () => {
+            const mockControl1 = { getName: () => 'control1', getLabel: () => 'Control 1' };
+            const mockControl2 = { getName: () => 'control2', getLabel: () => 'Control 2' };
+
+            const sectionObject = {
+                getName: () => 'SECTION_WITH_CONTROLS',
+                getLabel: () => 'Section With Controls',
+                setLabel: () => { },
+                getVisible: () => true,
+                setVisible: () => { },
+                getParent: () => ({ getName: () => 'TAB1' }),
+                controls: {
+                    get: (arg: number | string) => {
+                        if (typeof arg === 'number') {
+                            return [mockControl1, mockControl2][arg];
+                        }
+                        if (arg === 'control1') return mockControl1;
+                        if (arg === 'control2') return mockControl2;
+                        return null;
+                    },
+                    getLength: () => 2
+                }
+            };
+
+            const tabObject = {
+                getName: () => 'TAB1',
+                getLabel: () => 'Tab 1',
+                setLabel: () => { },
+                getVisible: () => true,
+                setVisible: () => { },
+                getParent: () => ({}),
+                getDisplayState: () => 'expanded',
+                setDisplayState: () => { },
+                getContentType: () => 'cardSections',
+                setContentType: () => { },
+                setFocus: () => { },
+                addTabStateChange: () => { },
+                removeTabStateChange: () => { },
+                sections: {
+                    get: (n: string) => n === 'SECTION_WITH_CONTROLS' ? sectionObject : null,
+                    getLength: () => 1
+                }
+            };
+
+            const tabsMap = new Map([['TAB1', tabObject]]);
+
+            const formContext = {
+                data: {
+                    getIsDirty: () => false,
+                    isValid: () => true,
+                    entity: {
+                        attributes: { get: () => null },
+                        getId: () => 'test-id',
+                        getEntityName: () => 'account',
+                        getIsDirty: () => false,
+                        isValid: () => true,
+                        getDataXml: () => '',
+                        getEntityReference: () => ({}),
+                        getPrimaryAttributeValue: () => ''
+                    }
+                },
+                ui: {
+                    getFormType: () => 2,
+                    controls: { get: () => null, getLength: () => 0, forEach: () => { } },
+                    tabs: { get: (n: string) => tabsMap.get(n), getLength: () => 1, forEach: () => { } },
+                    formSelector: { getCurrentItem: () => null, items: { getLength: () => 0 } },
+                    getViewPortHeight: () => 800,
+                    getViewPortWidth: () => 1200
+                },
+                getControl: () => null,
+                getAttribute: () => null,
+                getFormContext: function () { return this; }
+            };
+
+            const executionContext = { getFormContext: () => formContext };
+            const form = new FormBase(executionContext, 'test', {
+                tab: ['TAB1___SECTION_WITH_CONTROLS']
+            });
+
+            const section = form.Body.Tab.TAB1.Section.SECTION_WITH_CONTROLS;
+            expect(section).toBeDefined();
+            expect(section.Controls).toBeDefined();
+
+            // Test get() method with index (line 184)
+            expect(section.Controls.get(0)).toBe(mockControl1);
+            expect(section.Controls.get(1)).toBe(mockControl2);
+
+            // Test get() method with name (line 184)
+            expect(section.Controls.get('control1')).toBe(mockControl1);
+            expect(section.Controls.get('control2')).toBe(mockControl2);
+
+            // Test getLength() method (line 185)
+            expect(section.Controls.getLength()).toBe(2);
+
+            // Test forEach() method (lines 186-190)
+            const collectedControls: any[] = [];
+            section.Controls.forEach((control: any, index: number) => {
+                collectedControls.push({ control, index });
+            });
+            expect(collectedControls).toHaveLength(2);
+            expect(collectedControls[0].control).toBe(mockControl1);
+            expect(collectedControls[0].index).toBe(0);
+            expect(collectedControls[1].control).toBe(mockControl2);
+            expect(collectedControls[1].index).toBe(1);
+        });
+
+        test('Section.Controls should return null when section controls is undefined (line 182)', () => {
+            const sectionObject = {
+                getName: () => 'SECTION_NO_CONTROLS',
+                getLabel: () => 'Section No Controls',
+                setLabel: () => { },
+                getVisible: () => true,
+                setVisible: () => { },
+                getParent: () => ({ getName: () => 'TAB2' }),
+                controls: undefined // No controls
+            };
+
+            const tabObject = {
+                getName: () => 'TAB2',
+                getLabel: () => 'Tab 2',
+                setLabel: () => { },
+                getVisible: () => true,
+                setVisible: () => { },
+                getParent: () => ({}),
+                getDisplayState: () => 'expanded',
+                setDisplayState: () => { },
+                getContentType: () => 'cardSections',
+                setContentType: () => { },
+                setFocus: () => { },
+                addTabStateChange: () => { },
+                removeTabStateChange: () => { },
+                sections: {
+                    get: (n: string) => n === 'SECTION_NO_CONTROLS' ? sectionObject : null,
+                    getLength: () => 1
+                }
+            };
+
+            const tabsMap = new Map([['TAB2', tabObject]]);
+
+            const formContext = {
+                data: {
+                    getIsDirty: () => false,
+                    isValid: () => true,
+                    entity: {
+                        attributes: { get: () => null },
+                        getId: () => 'test-id',
+                        getEntityName: () => 'account',
+                        getIsDirty: () => false,
+                        isValid: () => true,
+                        getDataXml: () => '',
+                        getEntityReference: () => ({}),
+                        getPrimaryAttributeValue: () => ''
+                    }
+                },
+                ui: {
+                    getFormType: () => 2,
+                    controls: { get: () => null, getLength: () => 0, forEach: () => { } },
+                    tabs: { get: (n: string) => tabsMap.get(n), getLength: () => 1, forEach: () => { } },
+                    formSelector: { getCurrentItem: () => null, items: { getLength: () => 0 } },
+                    getViewPortHeight: () => 800,
+                    getViewPortWidth: () => 1200
+                },
+                getControl: () => null,
+                getAttribute: () => null,
+                getFormContext: function () { return this; }
+            };
+
+            const executionContext = { getFormContext: () => formContext };
+            const form = new FormBase(executionContext, 'test', {
+                tab: ['TAB2___SECTION_NO_CONTROLS']
+            });
+
+            const section = form.Body.Tab.TAB2.Section.SECTION_NO_CONTROLS;
+            expect(section).toBeDefined();
+            // Controls should be null when section.controls is undefined
+            expect(section.Controls).toBeNull();
+        });
     });
 
     // =========================================================================

@@ -350,6 +350,20 @@ const devKit = (function () {
             const sectionObject = tabObject?.sections?.get(section);
             getter(sections[section], 'Name', () => sectionObject?.getName());
             getter(sections[section], 'Parent', () => sectionObject?.getParent());
+            getter(sections[section], 'Controls', () => {
+                const controlsCollection = sectionObject?.controls;
+                if (!controlsCollection) return null;
+                const obj = {};
+                obj.get = (arg) => controlsCollection?.get(arg);
+                obj.getLength = () => controlsCollection?.getLength();
+                obj.forEach = (callback) => {
+                    const length = controlsCollection?.getLength() || 0;
+                    for (let i = 0; i < length; i++) {
+                        callback(controlsCollection.get(i), i);
+                    }
+                };
+                return obj;
+            });
             getterSetter(sections[section], 'Label', () => sectionObject?.getLabel(), value => sectionObject?.setLabel(value));
             getterSetter(sections[section], 'Visible', () => sectionObject?.getVisible(), value => sectionObject?.setVisible(value));
         }
@@ -396,10 +410,9 @@ const devKit = (function () {
             loadNavigation(formContext, navigations, navigation);
         });
     }
-    function loadQuickForms(formContext, quickForms) {
-        const excludedFields = new Set(["Body", "Controls", "IsLoaded", "Refresh", "Focus", "ControlType", "Disabled", "Label", "ControlName", "ControlParent", "Visible"]);
+    function loadQuickForms(formContext, quickForms, quickFormFields = {}) {
         const loadQuickForm = (formContext, quickForms, quickForm) => {
-            const fields = Object.keys(quickForms[quickForm]).filter(field => !excludedFields.has(field));
+            const fields = quickFormFields[quickForm] || [];
             const quick = formContext?.ui?.quickForms?.get(quickForm);
             getter(quickForms[quickForm], 'Body', () => loadFormDialog(quick, fields));
             getter(quickForms[quickForm], 'ControlName', () => quick?.getName());
@@ -495,6 +508,13 @@ const devKit = (function () {
                 return obj;
             });
             getterSetter(grids[grid], 'Visible', () => gridControl?.getVisible(), value => { gridControl?.setVisible(value); });
+            // Subgrid control properties
+            getter(grids[grid], 'ControlType', () => gridControl?.getControlType());
+            getter(grids[grid], 'ControlName', () => gridControl?.getName());
+            getter(grids[grid], 'ControlParent', () => gridControl?.getParent());
+            getterSetter(grids[grid], 'Disabled', () => gridControl?.getDisabled(), value => { gridControl?.setDisabled(value); });
+            getterSetter(grids[grid], 'Label', () => gridControl?.getLabel(), value => { gridControl?.setLabel(value); });
+            grids[grid].Focus = () => gridControl?.setFocus();
             grids[grid].AddOnLoad = callback => gridControl?.addOnLoad(callback);
             grids[grid].OpenRelatedGrid = () => gridControl?.openRelatedGrid();
             grids[grid].Refresh = () => gridControl?.refresh();
@@ -965,16 +985,19 @@ const devKit = (function () {
         }
         form.Process = process;
         const quickFormObj = {};
+        const quickFormFields = {};
         quick.forEach(item => {
             const [quickFormName, fieldName] = item.split('___');
             if (!quickFormObj[quickFormName]) {
                 quickFormObj[quickFormName] = {};
+                quickFormFields[quickFormName] = [];
             }
             if (fieldName) {
                 quickFormObj[quickFormName][fieldName] = {};
+                quickFormFields[quickFormName].push(fieldName);
             }
         });
-        loadQuickForms(formContext, quickFormObj);
+        loadQuickForms(formContext, quickFormObj, quickFormFields);
         form.QuickForm = quickFormObj;
         const gridObj = {};
         grid.forEach(item => gridObj[item] = {});
@@ -1038,3 +1061,4 @@ var OptionSet;
     OptionSet.TabDisplayState = Object.freeze({ Expanded: 'expanded', Collapsed: 'collapsed' });
     OptionSet.TimerState = Object.freeze({ NotSet: 1, InProgress: 2, Warning: 3, Violated: 4, Success: 5, Expired: 6, Canceled: 7, Paused: 8 });
 })(OptionSet || (OptionSet = {}));
+export { devKit, OptionSet };
