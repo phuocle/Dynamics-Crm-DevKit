@@ -1,4 +1,4 @@
-function getXrm(): typeof Xrm | undefined {
+function getXrm(): any {
     if (typeof window !== 'undefined' && (window as any).Xrm !== undefined) {
         return (window as any).Xrm;
     }
@@ -456,7 +456,7 @@ function loadWebApi(): DevKit.IWebApi {
         }
     };
     obj.Execute = function (request: any, successCallback?: any, errorCallback?: any) {
-        const promise = (getWebApi as any)?.execute(request);
+        const promise = getWebApi?.execute(request);
         if (successCallback) {
             promise?.then(successCallback, errorCallback);
         } else {
@@ -464,7 +464,7 @@ function loadWebApi(): DevKit.IWebApi {
         }
     };
     obj.ExecuteMultiple = function (requests: any[], successCallback?: any, errorCallback?: any) {
-        const promise = (getWebApi as any)?.executeMultiple(requests);
+        const promise = getWebApi?.executeMultiple(requests);
         if (successCallback) {
             promise?.then(successCallback, errorCallback);
         } else {
@@ -571,7 +571,7 @@ function loadWebApi(): DevKit.IWebApi {
     });
     getter(obj, 'Offline', () => {
         const offline: any = {};
-        offline.IsAvailable = (entityLogicalName: string) => (getOffline as any)?.isAvailable(entityLogicalName);
+        offline.IsAvailable = (entityLogicalName: string) => getOffline?.isAvailable(entityLogicalName);
         return offline;
     });
     return obj;
@@ -579,7 +579,7 @@ function loadWebApi(): DevKit.IWebApi {
 function loadCopilot(): DevKit.ICopilot {
     const obj: any = {};
     const xrm = getXrm();
-    const getCopilot = (xrm as any)?.Copilot;
+    const getCopilot = xrm?.Copilot;
     obj.ExecuteEvent = function (eventName: string, eventParameters: any, successCallback?: any, errorCallback?: any) {
         const promise = getCopilot?.executeEvent(eventName, eventParameters);
         if (successCallback) {
