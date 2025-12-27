@@ -11,6 +11,9 @@
 		},
 		{
 			"path": "TestWebResourceTs"
+		},
+		{
+			"path": "TestDevKitJs2"
 		}
 	],
 	"settings": {}
