@@ -979,6 +979,8 @@ describe('devKit', () => {
         });
         var data = new DataMock(entity);
 
+        var gridDisabled = false;
+        var gridLabel = "CONTACTS";
         var grid = new GridControlMock({
             name: "Contacts",
             controlType: "subgrid",
@@ -987,6 +989,15 @@ describe('devKit', () => {
             entityName: "contact",
             contextType: 4 //XrmEnum.GridControlContext.FormContextRelated,
         });
+        // Add subgrid control properties mock
+        grid.getControlType = () => "subgrid";
+        grid.getName = () => "Contacts";
+        grid.getParent = () => ({ getName: () => "SUMMARY_TAB" });
+        grid.getDisabled = () => gridDisabled;
+        grid.setDisabled = (value) => { gridDisabled = value; };
+        grid.getLabel = () => gridLabel;
+        grid.setLabel = (value) => { gridLabel = value; };
+        grid.setFocus = () => { };
 
         var viewSelector = new ViewSelectorMock(true);
         viewSelector.setCurrentView(new LookupValueMock("GUID-CONTACTS-I-FOLLOW", "1039", "Contacts I Follow"));
@@ -1106,6 +1117,18 @@ describe('devKit', () => {
         form.Grid.Contacts.SelectedRows.forEach(function (row, index) {
             expect(row).toBeDefined();
         });
+        // Test subgrid control properties (lines 514-520)
+        expect(form.Grid.Contacts.ControlType).toBe("subgrid");
+        expect(form.Grid.Contacts.ControlName).toBe("Contacts");
+        expect(form.Grid.Contacts.ControlParent).toBeDefined();
+        expect(form.Grid.Contacts.ControlParent.getName()).toBe("SUMMARY_TAB");
+        expect(form.Grid.Contacts.Disabled).toBe(false);
+        form.Grid.Contacts.Disabled = true;
+        expect(form.Grid.Contacts.Disabled).toBe(true);
+        expect(form.Grid.Contacts.Label).toBe("CONTACTS");
+        form.Grid.Contacts.Label = "NEW LABEL";
+        expect(form.Grid.Contacts.Label).toBe("NEW LABEL");
+        expect(() => form.Grid.Contacts.Focus()).not.toThrow();
         //expect(form.Grid.Contacts.Refresh).toBeDefined();
     });
     test('iframe control type', () => {
