@@ -242,18 +242,19 @@ function loadNavigations(formContext: any, navigationItems: string[]): any {
 }
 function loadQuickForms(formContext: any, quickItems: string[]): any {
     const quickForms: any = {};
+    const quickFormFields: Record<string, string[]> = {};
     quickItems.forEach((item: string) => {
         const [quickFormName, fieldName] = item.split('___');
         if (!quickForms[quickFormName]) {
             quickForms[quickFormName] = {};
+            quickFormFields[quickFormName] = [];
         }
         if (fieldName) {
-            quickForms[quickFormName][fieldName] = {};
+            quickFormFields[quickFormName].push(fieldName);
         }
     });
-    const excludedFields = new Set(["Body", "Controls", "IsLoaded", "Refresh", "Focus", "ControlType", "Disabled", "Label", "ControlName", "ControlParent", "Visible"]);
     const loadQuickForm = (formContext: any, quickForms: any, quickForm: string) => {
-        const fields = Object.keys(quickForms[quickForm]).filter(field => !excludedFields.has(field));
+        const fields = quickFormFields[quickForm];
         const quick = formContext?.ui?.quickForms?.get(quickForm);
         getter(quickForms[quickForm], 'Body', () => loadFormDialog(quick, fields));
         getter(quickForms[quickForm], 'ControlName', () => quick?.getName());
