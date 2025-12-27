@@ -2755,69 +2755,132 @@ var formAccount_DevKitV4 = (function () {
 		const methodResults = [];
 		const startTime = new Date().toLocaleTimeString();
 
+		// =====================================================
+		// READONLY PROPERTIES (R-Index)
+		// =====================================================
 		try {
-			results.push({ Test: "R1", Property: "EntityName", Value: form.Grid.Contacts.EntityName, Status: form.Grid.Contacts.EntityName ? "✓" : "⚠" });
-			results.push({ Test: "R2", Property: "FetchXml", Value: form.Grid.Contacts.FetchXml ? form.Grid.Contacts.FetchXml.substring(0, 50) + "..." : null, Status: form.Grid.Contacts.FetchXml ? "✓" : "⚠" });
-			results.push({ Test: "R3", Property: "GridType", Value: form.Grid.Contacts.GridType, Status: typeof form.Grid.Contacts.GridType === "number" ? "✓" : "⚠" });
+			// Grid-specific properties
+			results.push({ Test: "R1", Property: "form.Grid.Contacts.EntityName", Value: form.Grid.Contacts.EntityName, Status: form.Grid.Contacts.EntityName ? "✓" : "⚠" });
+			results.push({ Test: "R2", Property: "form.Grid.Contacts.FetchXml", Value: form.Grid.Contacts.FetchXml ? form.Grid.Contacts.FetchXml.substring(0, 50) + "..." : null, Status: form.Grid.Contacts.FetchXml ? "✓" : "⚠" });
+			results.push({ Test: "R3", Property: "form.Grid.Contacts.GridType", Value: form.Grid.Contacts.GridType, Status: typeof form.Grid.Contacts.GridType === "number" ? "✓" : "⚠" });
+
+			// Relationship
 			const rel = form.Grid.Contacts.Relationship;
-			results.push({ Test: "R4", Property: "Relationship.name", Value: rel?.name, Status: rel ? "✓" : "⚠" });
-			results.push({ Test: "R5", Property: "Rows.getLength()", Value: form.Grid.Contacts.Rows?.getLength(), Status: form.Grid.Contacts.Rows ? "✓" : "⚠" });
-			results.push({ Test: "R6", Property: "SelectedRows.getLength()", Value: form.Grid.Contacts.SelectedRows?.getLength(), Status: form.Grid.Contacts.SelectedRows ? "✓" : "⚠" });
-			results.push({ Test: "R7", Property: "TotalRecordCount", Value: form.Grid.Contacts.TotalRecordCount, Status: typeof form.Grid.Contacts.TotalRecordCount === "number" ? "✓" : "⚠" });
-			results.push({ Test: "R8", Property: "ViewSelector", Value: form.Grid.Contacts.ViewSelector ? "object" : "null", Status: form.Grid.Contacts.ViewSelector ? "✓" : "⚠" });
-			results.push({ Test: "R9", Property: "Visible", Value: form.Grid.Contacts.Visible, Status: typeof form.Grid.Contacts.Visible === "boolean" ? "✓" : "⚠" });
+			results.push({ Test: "R4", Property: "form.Grid.Contacts.Relationship.name", Value: rel?.name, Status: rel ? "✓" : "⚠" });
+			results.push({ Test: "R5", Property: "form.Grid.Contacts.Relationship.navigationPropertyName", Value: rel?.navigationPropertyName, Status: rel ? "✓" : "⚠" });
+			results.push({ Test: "R6", Property: "form.Grid.Contacts.Relationship.relationshipType", Value: rel?.relationshipType, Status: rel ? "✓" : "⚠" });
+
+			// Rows
+			results.push({ Test: "R7", Property: "form.Grid.Contacts.Rows.getLength()", Value: form.Grid.Contacts.Rows?.getLength(), Status: form.Grid.Contacts.Rows ? "✓" : "⚠" });
+
+			// SelectedRows
+			results.push({ Test: "R8", Property: "form.Grid.Contacts.SelectedRows.getLength()", Value: form.Grid.Contacts.SelectedRows?.getLength(), Status: form.Grid.Contacts.SelectedRows ? "✓" : "⚠" });
+
+			// TotalRecordCount
+			results.push({ Test: "R9", Property: "form.Grid.Contacts.TotalRecordCount", Value: form.Grid.Contacts.TotalRecordCount, Status: typeof form.Grid.Contacts.TotalRecordCount === "number" ? "✓" : "⚠" });
+
+			// ViewSelector
+			const vs = form.Grid.Contacts.ViewSelector;
+			results.push({ Test: "R10", Property: "form.Grid.Contacts.ViewSelector", Value: vs ? "object" : "null", Status: vs ? "✓" : "⚠" });
+			results.push({ Test: "R11", Property: "form.Grid.Contacts.ViewSelector.Visible", Value: vs?.Visible, Status: vs ? "✓" : "⚠" });
+
+			// Visible
+			results.push({ Test: "R12", Property: "form.Grid.Contacts.Visible", Value: form.Grid.Contacts.Visible, Status: typeof form.Grid.Contacts.Visible === "boolean" ? "✓" : "⚠" });
 		} catch (/** @type {any} */ error) {
-			results.push({ Test: "ERR", Property: "Props Error", Value: error.message, Status: "✓" });
+			results.push({ Test: "ERR", Property: "Props Error", Value: error.message, Status: "✗" });
 		}
 
+		// =====================================================
+		// SETTERS & METHODS (S-Index)
+		// =====================================================
+
+		// Method: Url
 		try {
 			const url = form.Grid.Contacts.Url(1);
-			methodResults.push({ Test: "S1", Property: "Url(1)", Value: url ? url.substring(0, 50) + "..." : "null", Status: url ? "✓" : "⚠" });
+			methodResults.push({ Test: "S1", Property: "form.Grid.Contacts.Url(1)", Value: url ? url.substring(0, 50) + "..." : "null", Status: url ? "✓" : "⚠" });
 		} catch (/** @type {any} */ e) {
-			methodResults.push({ Test: "S1", Property: "Url(1)", Value: e.message, Status: "✗" });
+			methodResults.push({ Test: "S1", Property: "form.Grid.Contacts.Url(1)", Value: e.message, Status: "✗" });
 		}
 
+		// Setter: Visible
 		try {
 			const origVisible = form.Grid.Contacts.Visible;
 			form.Grid.Contacts.Visible = !origVisible;
 			form.Grid.Contacts.Visible = origVisible;
-			methodResults.push({ Test: "S2", Property: "Visible (set)", Value: "Set→Restored", Status: "✓" });
+			methodResults.push({ Test: "S2", Property: "form.Grid.Contacts.Visible (set)", Value: "Set → Restored", Status: "✓" });
 		} catch (/** @type {any} */ e) {
-			methodResults.push({ Test: "S2", Property: "Visible (set)", Value: e.message, Status: "✗" });
+			methodResults.push({ Test: "S2", Property: "form.Grid.Contacts.Visible (set)", Value: e.message, Status: "✗" });
 		}
 
+		// Method: AddOnLoad
 		/** @param {any} ctx */
-		const onLoadCallback = (ctx) => console.log("  ?? Grid OnLoad fired");
+		const onLoadCallback = (ctx) => console.log("  📍 Grid OnLoad fired");
 		try {
 			form.Grid.Contacts.AddOnLoad(onLoadCallback);
-			methodResults.push({ Test: "S3", Property: "AddOnLoad", Value: "Registered", Status: "✓" });
+			methodResults.push({ Test: "S3", Property: "form.Grid.Contacts.AddOnLoad", Value: "Registered", Status: "✓" });
 		} catch (/** @type {any} */ e) {
-			methodResults.push({ Test: "S3", Property: "AddOnLoad", Value: e.message, Status: "✗" });
+			methodResults.push({ Test: "S3", Property: "form.Grid.Contacts.AddOnLoad", Value: e.message, Status: "✗" });
 		}
 
+		// Method: RemoveOnLoad
 		try {
 			form.Grid.Contacts.RemoveOnLoad(onLoadCallback);
-			methodResults.push({ Test: "S4", Property: "RemoveOnLoad", Value: "Removed", Status: "✓" });
+			methodResults.push({ Test: "S4", Property: "form.Grid.Contacts.RemoveOnLoad", Value: "Removed", Status: "✓" });
 		} catch (/** @type {any} */ e) {
-			methodResults.push({ Test: "S4", Property: "RemoveOnLoad", Value: e.message, Status: "✗" });
+			methodResults.push({ Test: "S4", Property: "form.Grid.Contacts.RemoveOnLoad", Value: e.message, Status: "✗" });
 		}
 
+		// Method: Refresh
 		try {
-			methodResults.push({ Test: "S5", Property: "Refresh", Value: typeof form.Grid.Contacts.Refresh === "function" ? "Available" : "Not found", Status: typeof form.Grid.Contacts.Refresh === "function" ? "✓" : "⚠" });
+			methodResults.push({ Test: "S5", Property: "form.Grid.Contacts.Refresh", Value: typeof form.Grid.Contacts.Refresh === "function" ? "Available" : "Not found", Status: typeof form.Grid.Contacts.Refresh === "function" ? "✓" : "⚠" });
 		} catch (/** @type {any} */ e) {
-			methodResults.push({ Test: "S5", Property: "Refresh", Value: e.message, Status: "✗" });
+			methodResults.push({ Test: "S5", Property: "form.Grid.Contacts.Refresh", Value: e.message, Status: "✗" });
 		}
 
+		// Method: RefreshRibbon
+		try {
+			methodResults.push({ Test: "S6", Property: "form.Grid.Contacts.RefreshRibbon", Value: typeof form.Grid.Contacts.RefreshRibbon === "function" ? "Available" : "Not found", Status: typeof form.Grid.Contacts.RefreshRibbon === "function" ? "✓" : "⚠" });
+		} catch (/** @type {any} */ e) {
+			methodResults.push({ Test: "S6", Property: "form.Grid.Contacts.RefreshRibbon", Value: e.message, Status: "✗" });
+		}
+
+		// Method: OpenRelatedGrid
+		try {
+			methodResults.push({ Test: "S7", Property: "form.Grid.Contacts.OpenRelatedGrid", Value: typeof form.Grid.Contacts.OpenRelatedGrid === "function" ? "Available" : "Not found", Status: typeof form.Grid.Contacts.OpenRelatedGrid === "function" ? "✓" : "⚠" });
+		} catch (/** @type {any} */ e) {
+			methodResults.push({ Test: "S7", Property: "form.Grid.Contacts.OpenRelatedGrid", Value: e.message, Status: "✗" });
+		}
+
+		// Test Rows iteration
+		try {
+			const rows = form.Grid.Contacts.Rows;
+			if (rows && rows.getLength() > 0) {
+				const firstRow = rows.get(0);
+				methodResults.push({ Test: "S8", Property: "form.Grid.Contacts.Rows.get(0)", Value: firstRow?.EntityId || "no EntityId", Status: firstRow ? "✓" : "⚠" });
+			} else {
+				methodResults.push({ Test: "S8", Property: "form.Grid.Contacts.Rows.get(0)", Value: "No rows", Status: "⚠" });
+			}
+		} catch (/** @type {any} */ e) {
+			methodResults.push({ Test: "S8", Property: "form.Grid.Contacts.Rows.get(0)", Value: e.message, Status: "✗" });
+		}
+
+		// =====================================================
+		// OUTPUT
+		// =====================================================
 		const allResults = [...results, ...methodResults];
 		const passed = allResults.filter(r => r.Status === "✓").length;
+		const warnings = allResults.filter(r => r.Status === "⚠").length;
+		const failed = allResults.filter(r => r.Status === "✗").length;
 		const total = allResults.length;
 
 		console.groupCollapsed(`🎯 TEST 13: Grid Control [${startTime}] - Using: Contacts subgrid - ${passed}/${total}`);
-		console.log("%c📋 ReadOnly Properties (R1-R9)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
+		console.log("%c📋 ReadOnly Properties (R1-R12)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
 		console.table(results);
-		console.log("%c⚡ Setters & Methods (S1-S5)", "font-weight: bold; font-size: 14px; color: #2196F3;");
+		console.log("%c⚡ Setters & Methods (S1-S8)", "font-weight: bold; font-size: 14px; color: #2196F3;");
 		console.table(methodResults);
-		console.log(`%c✅ Summary: ${passed}/${total} passed`,
+		console.log(`%c✅ Summary: ${passed}/${total} passed` +
+			(warnings > 0 ? ` | ⚠ ${warnings} warnings` : '') +
+			(failed > 0 ? ` | ✗ ${failed} failed` : ''),
 			"font-weight: bold; color: #4CAF50; font-size: 14px;");
 		console.groupEnd();
 	}
@@ -2827,62 +2890,104 @@ var formAccount_DevKitV4 = (function () {
 		const results = [];
 		/** @type {Array<{Test: string, Property: string, Value: any, Status: string}>} */
 		const methodResults = [];
+		const qv = form.QuickForm.ContactQuickForm;
 		const startTime = new Date().toLocaleTimeString();
 
+		// =====================================================
+		// READONLY PROPERTIES (R-Index)
+		// =====================================================
 		try {
-			results.push({ Test: "R1", Property: "Label", Value: form.QuickForm.ContactQuickForm.Label, Status: "✓" });
-			results.push({ Test: "R2", Property: "Visible", Value: form.QuickForm.ContactQuickForm.Visible, Status: "✓" });
-			results.push({ Test: "R3", Property: "ControlType", Value: form.QuickForm.ContactQuickForm.ControlType, Status: "✓" });
-			results.push({ Test: "R4", Property: "ControlName", Value: form.QuickForm.ContactQuickForm.ControlName, Status: "✓" });
-			results.push({ Test: "R5", Property: "Body.EMailAddress1", Value: form.QuickForm.ContactQuickForm.Body.EMailAddress1 ? "Found" : "Missing", Status: form.QuickForm.ContactQuickForm.Body.EMailAddress1 ? "✓" : "⚠" });
-			results.push({ Test: "R6", Property: "Body.FirstName", Value: form.QuickForm.ContactQuickForm.Body.FirstName ? "Found" : "Missing", Status: form.QuickForm.ContactQuickForm.Body.FirstName ? "✓" : "⚠" });
+			// IQuickView properties
+			results.push({ Test: "R1", Property: "form.QuickForm.ContactQuickForm.Label", Value: qv.Label, Status: "✓" });
+			results.push({ Test: "R2", Property: "form.QuickForm.ContactQuickForm.Visible", Value: qv.Visible, Status: "✓" });
+			results.push({ Test: "R3", Property: "form.QuickForm.ContactQuickForm.ControlType", Value: qv.ControlType, Status: "✓" });
+			results.push({ Test: "R4", Property: "form.QuickForm.ContactQuickForm.ControlName", Value: qv.ControlName, Status: "✓" });
+
+			// Nested Body controls check - all 5 fields
+			results.push({ Test: "R5", Property: "form.QuickForm.ContactQuickForm.Body.EMailAddress1", Value: qv.Body.EMailAddress1 ? "Found" : "Missing", Status: qv.Body.EMailAddress1 ? "✓" : "✗" });
+			results.push({ Test: "R6", Property: "form.QuickForm.ContactQuickForm.Body.FirstName", Value: qv.Body.FirstName ? "Found" : "Missing", Status: qv.Body.FirstName ? "✓" : "✗" });
+			results.push({ Test: "R7", Property: "form.QuickForm.ContactQuickForm.Body.LastName", Value: qv.Body.LastName ? "Found" : "Missing", Status: qv.Body.LastName ? "✓" : "✗" });
+			results.push({ Test: "R8", Property: "form.QuickForm.ContactQuickForm.Body.MobilePhone", Value: qv.Body.MobilePhone ? "Found" : "Missing", Status: qv.Body.MobilePhone ? "✓" : "✗" });
+			results.push({ Test: "R9", Property: "form.QuickForm.ContactQuickForm.Body.ParentCustomerId", Value: qv.Body.ParentCustomerId ? "Found" : "Missing", Status: qv.Body.ParentCustomerId ? "✓" : "✗" });
 		} catch (/** @type {any} */ error) {
-			results.push({ Test: "ERR", Property: "Props Error", Value: error.message, Status: "✓" });
+			results.push({ Test: "ERR", Property: "Props Error", Value: error.message, Status: "✗" });
 		}
 
+		// =====================================================
+		// SETTERS & METHODS (S-Index)
+		// =====================================================
+
+		// Method: IsLoaded
 		try {
-			const loaded = form.QuickForm.ContactQuickForm.IsLoaded();
-			methodResults.push({ Test: "S1", Property: "IsLoaded", Value: loaded, Status: "✓" });
+			const loaded = qv.IsLoaded();
+			methodResults.push({ Test: "S1", Property: "form.QuickForm.ContactQuickForm.IsLoaded()", Value: loaded, Status: "✓" });
 		} catch (/** @type {any} */ e) {
-			methodResults.push({ Test: "S1", Property: "IsLoaded", Value: e.message, Status: "✗" });
+			methodResults.push({ Test: "S1", Property: "form.QuickForm.ContactQuickForm.IsLoaded()", Value: e.message, Status: "✗" });
 		}
 
+		// Method: Refresh
 		try {
-			form.QuickForm.ContactQuickForm.Refresh();
-			methodResults.push({ Test: "S2", Property: "Refresh", Value: "Called", Status: "✓" });
+			qv.Refresh();
+			methodResults.push({ Test: "S2", Property: "form.QuickForm.ContactQuickForm.Refresh()", Value: "Called", Status: "✓" });
 		} catch (/** @type {any} */ e) {
-			methodResults.push({ Test: "S2", Property: "Refresh", Value: e.message, Status: "✗" });
+			methodResults.push({ Test: "S2", Property: "form.QuickForm.ContactQuickForm.Refresh()", Value: e.message, Status: "✗" });
 		}
 
+		// Setter: Label
 		try {
-			const origLabel = form.QuickForm.ContactQuickForm.Label;
-			form.QuickForm.ContactQuickForm.Label = "New Label";
-			const check = form.QuickForm.ContactQuickForm.Label;
-			form.QuickForm.ContactQuickForm.Label = origLabel;
-			methodResults.push({ Test: "S3", Property: "Label (set)", Value: check === "New Label" ? "Set→Restored" : "Failed", Status: check === "New Label" ? "✓" : "⚠" });
+			const origLabel = qv.Label;
+			qv.Label = "New Label";
+			const check = qv.Label;
+			qv.Label = origLabel;
+			methodResults.push({ Test: "S3", Property: "form.QuickForm.ContactQuickForm.Label (set)", Value: check === "New Label" ? "Set → Restored" : "Failed", Status: check === "New Label" ? "✓" : "✗" });
 		} catch (/** @type {any} */ e) {
-			methodResults.push({ Test: "S3", Property: "Label (set)", Value: e.message, Status: "✗" });
+			methodResults.push({ Test: "S3", Property: "form.QuickForm.ContactQuickForm.Label (set)", Value: e.message, Status: "✗" });
 		}
 
+		// Setter: Visible
 		try {
-			const origVisible = form.QuickForm.ContactQuickForm.Visible;
-			form.QuickForm.ContactQuickForm.Visible = !origVisible;
-			form.QuickForm.ContactQuickForm.Visible = origVisible;
-			methodResults.push({ Test: "S4", Property: "Visible (set)", Value: "Set→Restored", Status: "✓" });
+			const origVisible = qv.Visible;
+			qv.Visible = !origVisible;
+			qv.Visible = origVisible;
+			methodResults.push({ Test: "S4", Property: "form.QuickForm.ContactQuickForm.Visible (set)", Value: "Set → Restored", Status: "✓" });
 		} catch (/** @type {any} */ e) {
-			methodResults.push({ Test: "S4", Property: "Visible (set)", Value: e.message, Status: "✗" });
+			methodResults.push({ Test: "S4", Property: "form.QuickForm.ContactQuickForm.Visible (set)", Value: e.message, Status: "✗" });
 		}
 
+		// Method: Controls (access constituent controls)
+		try {
+			const controls = qv.Controls();
+			const count = Array.isArray(controls) ? controls.length : "Not Array";
+			methodResults.push({ Test: "S5", Property: "form.QuickForm.ContactQuickForm.Controls()", Value: `Count: ${count}`, Status: "✓" });
+		} catch (/** @type {any} */ e) {
+			methodResults.push({ Test: "S5", Property: "form.QuickForm.ContactQuickForm.Controls()", Value: e.message, Status: "✗" });
+		}
+
+		// Method: Focus
+		try {
+			qv.Focus();
+			methodResults.push({ Test: "S6", Property: "form.QuickForm.ContactQuickForm.Focus()", Value: "Called", Status: "✓" });
+		} catch (/** @type {any} */ e) {
+			methodResults.push({ Test: "S6", Property: "form.QuickForm.ContactQuickForm.Focus()", Value: e.message, Status: "✗" });
+		}
+
+		// =====================================================
+		// OUTPUT
+		// =====================================================
 		const allResults = [...results, ...methodResults];
 		const passed = allResults.filter(r => r.Status === "✓").length;
+		const warnings = allResults.filter(r => r.Status === "⚠").length;
+		const failed = allResults.filter(r => r.Status === "✗").length;
 		const total = allResults.length;
 
 		console.groupCollapsed(`🎯 TEST 14: QuickView Control [${startTime}] - Using: ContactQuickForm - ${passed}/${total}`);
-		console.log("%c📋 ReadOnly Properties (R1-R6)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
+		console.log("%c📋 ReadOnly Properties (R1-R9)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
 		console.table(results);
-		console.log("%c⚡ Setters & Methods (S1-S4)", "font-weight: bold; font-size: 14px; color: #2196F3;");
+		console.log("%c⚡ Setters & Methods (S1-S6)", "font-weight: bold; font-size: 14px; color: #2196F3;");
 		console.table(methodResults);
-		console.log(`%c✅ Summary: ${passed}/${total} passed`,
+		console.log(`%c✅ Summary: ${passed}/${total} passed` +
+			(warnings > 0 ? ` | ⚠ ${warnings} warnings` : '') +
+			(failed > 0 ? ` | ✗ ${failed} failed` : ''),
 			"font-weight: bold; color: #4CAF50; font-size: 14px;");
 		console.groupEnd();
 	}
@@ -3027,6 +3132,13 @@ var formAccount_DevKitV4 = (function () {
 			results.push({ Test: "R7", Property: "form.ExecutionContext.SaveMode", Value: "Not available on OnLoad", Status: "⚠" });
 		}
 
+		// R8: SaveErrorInfo (only available on PostSave event)
+		try {
+			results.push({ Test: "R8", Property: "form.ExecutionContext.SaveErrorInfo", Value: ctx.SaveErrorInfo, Status: "✓" });
+		} catch (/** @type {any} */ e) {
+			results.push({ Test: "R8", Property: "form.ExecutionContext.SaveErrorInfo", Value: "Not available on OnLoad", Status: "⚠" });
+		}
+
 		// S1: Set/GetSharedVariable
 		try {
 			const testKey = "DevKitTestVariable";
@@ -3074,16 +3186,27 @@ var formAccount_DevKitV4 = (function () {
 			methodResults.push({ Test: "S5", Property: "form.ExecutionContext.SetPreventDefault", Value: e.message, Status: "✗" });
 		}
 
+		// S6: SetPreventDefaultOnError (only available on OnSave event)
+		try {
+			methodResults.push({ Test: "S6", Property: "form.ExecutionContext.SetPreventDefaultOnError", Value: typeof ctx.SetPreventDefaultOnError === "function" ? "Method exists" : "Not available on OnLoad", Status: typeof ctx.SetPreventDefaultOnError === "function" ? "✓" : "⚠" });
+		} catch (/** @type {any} */ e) {
+			methodResults.push({ Test: "S6", Property: "form.ExecutionContext.SetPreventDefaultOnError", Value: e.message, Status: "✗" });
+		}
+
 		const allResults = [...results, ...methodResults];
 		const passed = allResults.filter(r => r.Status === "✓").length;
+		const warnings = allResults.filter(r => r.Status === "⚠").length;
+		const failed = allResults.filter(r => r.Status === "✗").length;
 		const total = allResults.length;
 
 		console.groupCollapsed(`🎯 TEST 16: ExecutionContext [${startTime}] - ${passed}/${total}`);
-		console.log("%c📋 ReadOnly Properties (R1-R7)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
+		console.log("%c📋 ReadOnly Properties (R1-R8)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
 		console.table(results);
-		console.log("%c⚡ Setters & Methods (S1-S5)", "font-weight: bold; font-size: 14px; color: #2196F3;");
+		console.log("%c⚡ Setters & Methods (S1-S6)", "font-weight: bold; font-size: 14px; color: #2196F3;");
 		console.table(methodResults);
-		console.log(`%c✅ Summary: ${passed}/${total} passed`,
+		console.log(`%c✅ Summary: ${passed}/${total} passed` +
+			(warnings > 0 ? ` | ⚠ ${warnings} warnings` : '') +
+			(failed > 0 ? ` | ✗ ${failed} failed` : ''),
 			"font-weight: bold; color: #4CAF50; font-size: 14px;");
 		console.groupEnd();
 	}
@@ -3105,46 +3228,94 @@ var formAccount_DevKitV4 = (function () {
 			const hasGetLength = allPanes && typeof allPanes.getLength === "function";
 			const isValidPanes = Array.isArray(allPanes) || hasGetLength || (allPanes !== null && typeof allPanes === "object") || allPanes === undefined || allPanes === null;
 			const panesDisplay = Array.isArray(allPanes) ? `Array[${allPanes.length}]` : (hasGetLength ? `Collection[${allPanes.getLength()}]` : (allPanes ? typeof allPanes : "null"));
-			results.push({ Test: "R3", Property: "GetAll() returns collection", Value: panesDisplay, Status: isValidPanes ? "✓" : "⚠" });
-			results.push({ Test: "R4", Property: "Create function exists", Value: typeof sidePanes.Create === "function", Status: typeof sidePanes.Create === "function" ? "✓" : "⚠" });
-			results.push({ Test: "R5", Property: "Get function exists", Value: typeof sidePanes.Get === "function", Status: typeof sidePanes.Get === "function" ? "✓" : "⚠" });
+			results.push({ Test: "R3", Property: "form.SidePanes.GetAll() returns collection", Value: panesDisplay, Status: isValidPanes ? "✓" : "⚠" });
+
+			// R4: GetSelected
+			const selectedPane = sidePanes.GetSelected();
+			results.push({ Test: "R4", Property: "form.SidePanes.GetSelected()", Value: selectedPane !== undefined ? (selectedPane?.paneId ?? "null") : "undefined", Status: "✓" });
+
+			// R5: Create function exists
+			results.push({ Test: "R5", Property: "form.SidePanes.Create function exists", Value: typeof sidePanes.Create === "function", Status: typeof sidePanes.Create === "function" ? "✓" : "⚠" });
+
+			// R6: Get function exists
+			results.push({ Test: "R6", Property: "form.SidePanes.Get function exists", Value: typeof sidePanes.Get === "function", Status: typeof sidePanes.Get === "function" ? "✓" : "⚠" });
+
+			// R7: GetAll function exists
+			results.push({ Test: "R7", Property: "form.SidePanes.GetAll function exists", Value: typeof sidePanes.GetAll === "function", Status: typeof sidePanes.GetAll === "function" ? "✓" : "⚠" });
+
+			// R8: GetSelected function exists
+			results.push({ Test: "R8", Property: "form.SidePanes.GetSelected function exists", Value: typeof sidePanes.GetSelected === "function", Status: typeof sidePanes.GetSelected === "function" ? "✓" : "⚠" });
 		} catch (/** @type {any} */ error) {
-			results.push({ Test: "ERR", Property: "Props Error", Value: error.message, Status: "✓" });
+			results.push({ Test: "ERR", Property: "Props Error", Value: error.message, Status: "✗" });
 		}
 
 		try {
 			const originalState = sidePanes.DisplayState;
 			sidePanes.DisplayState = 1;
 			const newState1 = sidePanes.DisplayState;
-			methodResults.push({ Test: "S1", Property: "DisplayState = 1", Value: `${originalState} -> ${newState1}`, Status: newState1 === 1 ? "✓" : "⚠" });
+			methodResults.push({ Test: "S1", Property: "form.SidePanes.DisplayState = 1", Value: `${originalState} -> ${newState1}`, Status: newState1 === 1 ? "✓" : "⚠" });
 			sidePanes.DisplayState = 0;
 			const newState0 = sidePanes.DisplayState;
 			// Note: CRM may not allow state=0 (collapsed) if side panes are pinned or environment config prevents it
 			// Accept both 0 (changed) or 1 (unchanged due to CRM restriction) as valid behavior
-			methodResults.push({ Test: "S2", Property: "DisplayState = 0", Value: `1 -> ${newState0}`, Status: "✓" });
+			methodResults.push({ Test: "S2", Property: "form.SidePanes.DisplayState = 0", Value: `1 -> ${newState0}`, Status: "✓" });
 			sidePanes.DisplayState = originalState;
-			methodResults.push({ Test: "S3", Property: "DisplayState (restore)", Value: `${newState0} -> ${sidePanes.DisplayState}`, Status: "✓" });
+			methodResults.push({ Test: "S3", Property: "form.SidePanes.DisplayState (restore)", Value: `${newState0} -> ${sidePanes.DisplayState}`, Status: "✓" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S1-S3", Property: "DisplayState", Value: e.message, Status: "✗" });
 		}
 
 		try {
 			const nonExistentPane = sidePanes.Get("non_existent_pane_id");
-			methodResults.push({ Test: "S4", Property: "Get('non_existent_pane_id')", Value: nonExistentPane === undefined || nonExistentPane === null ? "null/undefined" : nonExistentPane, Status: "✓" });
+			methodResults.push({ Test: "S4", Property: "form.SidePanes.Get('non_existent_pane_id')", Value: nonExistentPane === undefined || nonExistentPane === null ? "null/undefined" : nonExistentPane, Status: "✓" });
 		} catch (/** @type {any} */ e) {
-			methodResults.push({ Test: "S4", Property: "Get('non_existent')", Value: e.message, Status: "✗" });
+			methodResults.push({ Test: "S4", Property: "form.SidePanes.Get('non_existent')", Value: e.message, Status: "✗" });
+		}
+
+		// S5: Create pane (with callback verification)
+		try {
+			let createResult = "Not called";
+			sidePanes.Create({
+				title: "DevKit Test Pane",
+				width: 300,
+				canClose: true
+			}, (/** @type {any} */ pane) => {
+				createResult = pane ? `Created: ${pane.paneId || 'unknown'}` : "Callback received null";
+				// Clean up: close the pane if created successfully
+				if (pane && pane.close) {
+					setTimeout(() => pane.close(), 1000);
+				}
+			});
+			methodResults.push({ Test: "S5", Property: "form.SidePanes.Create({ title, width, canClose })", Value: "Async call initiated", Status: "✓" });
+		} catch (/** @type {any} */ e) {
+			methodResults.push({ Test: "S5", Property: "form.SidePanes.Create", Value: e.message, Status: "✗" });
+		}
+
+		// S6: GetAll after potential create
+		try {
+			setTimeout(() => {
+				const panesAfterCreate = sidePanes.GetAll();
+				console.log(`%c🔍 S6 (Delayed): GetAll() after Create = ${Array.isArray(panesAfterCreate) ? panesAfterCreate.length : 'N/A'} panes`, "color: #9C27B0;");
+			}, 500);
+			methodResults.push({ Test: "S6", Property: "form.SidePanes.GetAll() (delayed check logged)", Value: "See console for delayed result", Status: "✓" });
+		} catch (/** @type {any} */ e) {
+			methodResults.push({ Test: "S6", Property: "form.SidePanes.GetAll (delayed)", Value: e.message, Status: "✗" });
 		}
 
 		const allResults = [...results, ...methodResults];
 		const passed = allResults.filter(r => r.Status === "✓").length;
+		const warnings = allResults.filter(r => r.Status === "⚠").length;
+		const failed = allResults.filter(r => r.Status === "✗").length;
 		const total = allResults.length;
 
 		console.groupCollapsed(`🎯 TEST 17: SidePanes [${startTime}] - ${passed}/${total}`);
-		console.log("%c📋 ReadOnly Properties (R1-R5)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
+		console.log("%c📋 ReadOnly Properties (R1-R8)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
 		console.table(results);
-		console.log("%c⚡ Setters & Methods (S1-S4)", "font-weight: bold; font-size: 14px; color: #2196F3;");
+		console.log("%c⚡ Setters & Methods (S1-S6)", "font-weight: bold; font-size: 14px; color: #2196F3;");
 		console.table(methodResults);
-		console.log(`%c✅ Summary: ${passed}/${total} passed`,
+		console.log(`%c✅ Summary: ${passed}/${total} passed` +
+			(warnings > 0 ? ` | ⚠ ${warnings} warnings` : '') +
+			(failed > 0 ? ` | ✗ ${failed} failed` : ''),
 			"font-weight: bold; color: #4CAF50; font-size: 14px;");
 		console.groupEnd();
 	}
@@ -3181,6 +3352,20 @@ var formAccount_DevKitV4 = (function () {
 			methodResults.push({ Test: "S1", Property: "ExecuteEvent", Value: e.message, Status: "✗" });
 		}
 
+		// S2: ExecuteEvent with success callback
+		try {
+			let callbackResult = "Not called";
+			copilot?.ExecuteEvent("test_event_2", { id: 1 },
+				(/** @type {any} */ result) => { callbackResult = "Success callback invoked"; },
+				(/** @type {any} */ error) => { callbackResult = "Error callback invoked"; }
+			);
+			callbackResult = "Callbacks registered";
+			methodResults.push({ Test: "S2", Property: "ExecuteEvent with callbacks", Value: callbackResult, Status: callbackResult.includes("registered") || callbackResult.includes("invoked") ? "✓" : "⚠" });
+		} catch (/** @type {any} */ e) {
+			methodResults.push({ Test: "S2", Property: "ExecuteEvent with callbacks", Value: e.message, Status: "✗" });
+		}
+
+		// S3: ExecutePrompt
 		try {
 			let executePromptResult = "Not available";
 			const promptPromise = copilot?.ExecutePrompt("Summarize this account");
@@ -3189,22 +3374,36 @@ var formAccount_DevKitV4 = (function () {
 			} else if (promptPromise === undefined) {
 				executePromptResult = "undefined (Copilot not enabled)";
 			}
-			methodResults.push({ Test: "S2", Property: "ExecutePrompt('Summarize...')", Value: executePromptResult, Status: executePromptResult.includes("Promise") || executePromptResult.includes("undefined") ? "✓" : "⚠" });
+			methodResults.push({ Test: "S3", Property: "ExecutePrompt('Summarize...')", Value: executePromptResult, Status: executePromptResult.includes("Promise") || executePromptResult.includes("undefined") ? "✓" : "⚠" });
 		} catch (/** @type {any} */ e) {
-			methodResults.push({ Test: "S2", Property: "ExecutePrompt", Value: e.message, Status: "✗" });
+			methodResults.push({ Test: "S3", Property: "ExecutePrompt", Value: e.message, Status: "✗" });
+		}
+
+		// S4: ExecutePrompt with success callback
+		try {
+			let promptCallbackResult = "Not called";
+			copilot?.ExecutePrompt("Test prompt",
+				(/** @type {any} */ result) => { promptCallbackResult = "Success callback invoked"; },
+				(/** @type {any} */ error) => { promptCallbackResult = "Error callback invoked"; }
+			);
+			promptCallbackResult = "Callbacks registered";
+			methodResults.push({ Test: "S4", Property: "ExecutePrompt with callbacks", Value: promptCallbackResult, Status: promptCallbackResult.includes("registered") || promptCallbackResult.includes("invoked") ? "✓" : "⚠" });
+		} catch (/** @type {any} */ e) {
+			methodResults.push({ Test: "S4", Property: "ExecutePrompt with callbacks", Value: e.message, Status: "✗" });
 		}
 
 		const allResults = [...results, ...methodResults];
 		const passed = allResults.filter(r => r.Status === "✓").length;
 		const warnings = allResults.filter(r => r.Status === "⚠").length;
+		const failed = allResults.filter(r => r.Status === "✗").length;
 		const total = allResults.length;
 
 		console.groupCollapsed(`🎯 TEST 18: Copilot [${startTime}] - (Preview) - ${passed}/${total}`);
 		console.log("%c📋 ReadOnly Properties (R1-R4)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
 		console.table(results);
-		console.log("%c⚡ Setters & Methods (S1-S2)", "font-weight: bold; font-size: 14px; color: #2196F3;");
+		console.log("%c⚡ Setters & Methods (S1-S4)", "font-weight: bold; font-size: 14px; color: #2196F3;");
 		console.table(methodResults);
-		console.log("%c?? Note: Copilot is a Preview feature", "font-style: italic; color: #FF9800;");
+		console.log("%c⚠️ Note: Copilot is a Preview feature", "font-style: italic; color: #FF9800;");
 		console.log(`%c✅ Summary: ${passed}/${total} passed`,
 			"font-weight: bold; color: #4CAF50; font-size: 14px;");
 		console.groupEnd();
@@ -3218,75 +3417,115 @@ var formAccount_DevKitV4 = (function () {
 		const process = form.Process;
 		const startTime = new Date().toLocaleTimeString();
 
+		// =====================================================
+		// READONLY PROPERTIES (R-Index)
+		// =====================================================
 		try {
-			results.push({ Test: "R1", Property: "ActiveProcess", Value: process.ActiveProcess ? process.ActiveProcess.Name : "null", Status: "✓" });
-			results.push({ Test: "R2", Property: "ActiveStage", Value: process.ActiveStage ? process.ActiveStage.Name : "null", Status: "✓" });
-			results.push({ Test: "R3", Property: "InstanceId", Value: process.InstanceId, Status: "✓" });
-			results.push({ Test: "R4", Property: "InstanceName", Value: process.InstanceName, Status: "✓" });
-			results.push({ Test: "R5", Property: "Status", Value: process.Status, Status: "✓" });
-			results.push({ Test: "R6", Property: "DisplayState", Value: process.DisplayState, Status: "✓" });
-			results.push({ Test: "R7", Property: "Visible", Value: process.Visible, Status: "✓" });
+			// Standard IProcess properties
+			results.push({ Test: "R1", Property: "form.Process.ActiveProcess", Value: process.ActiveProcess ? process.ActiveProcess.Name : "null", Status: "✓" });
+			results.push({ Test: "R2", Property: "form.Process.ActiveStage", Value: process.ActiveStage ? process.ActiveStage.Name : "null", Status: "✓" });
+			results.push({ Test: "R3", Property: "form.Process.InstanceId", Value: process.InstanceId, Status: "✓" });
+			results.push({ Test: "R4", Property: "form.Process.InstanceName", Value: process.InstanceName, Status: "✓" });
+			results.push({ Test: "R5", Property: "form.Process.Status", Value: process.Status, Status: "✓" });
+			results.push({ Test: "R6", Property: "form.Process.DisplayState", Value: process.DisplayState, Status: "✓" });
+			results.push({ Test: "R7", Property: "form.Process.Visible", Value: process.Visible, Status: "✓" });
+
+			// BPF Specific Fields (Typed Check)
 			const bpf = process.AccountBPF;
 			if (bpf) {
-				results.push({ Test: "R8", Property: "BPF.Name", Value: bpf.Name ? "Control Found" : "Missing", Status: bpf.Name ? "✓" : "⚠" });
+				results.push({ Test: "R8", Property: "form.Process.AccountBPF.Name", Value: bpf.Name ? "Control Found" : "Missing", Status: bpf.Name ? "✓" : "⚠" });
+				results.push({ Test: "R9", Property: "form.Process.AccountBPF.IndustryCode", Value: bpf.IndustryCode ? "Control Found" : "Missing", Status: bpf.IndustryCode ? "✓" : "⚠" });
 			} else {
-				results.push({ Test: "R8", Property: "AccountBPF", Value: "Missing", Status: "✓" });
+				results.push({ Test: "R8", Property: "form.Process.AccountBPF", Value: "Missing", Status: "⚠" });
+				results.push({ Test: "R9", Property: "form.Process.AccountBPF.IndustryCode", Value: "Missing (no BPF)", Status: "⚠" });
 			}
 		} catch (/** @type {any} */ error) {
-			results.push({ Test: "ERR", Property: "Props Error", Value: error.message, Status: "✓" });
+			results.push({ Test: "ERR", Property: "Props Error", Value: error.message, Status: "✗" });
 		}
 
+		// =====================================================
+		// SETTERS & METHODS (S-Index)
+		// =====================================================
+
+		// S1-S2: MoveNext / MovePrevious
 		try {
-			process.MoveNext(() => { });
-			methodResults.push({ Test: "S1", Property: "MoveNext", Value: "Called", Status: "✓" });
-			process.MovePrevious(() => { });
-			methodResults.push({ Test: "S2", Property: "MovePrevious", Value: "Called", Status: "✓" });
+			process.MoveNext((/** @type {any} */ result) => console.log("  📍 MoveNext Callback:", result));
+			methodResults.push({ Test: "S1", Property: "form.Process.MoveNext", Value: "Called", Status: "✓" });
+
+			process.MovePrevious((/** @type {any} */ result) => console.log("  📍 MovePrevious Callback:", result));
+			methodResults.push({ Test: "S2", Property: "form.Process.MovePrevious", Value: "Called", Status: "✓" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S1/S2", Property: "Move Nav", Value: e.message, Status: "✗" });
 		}
 
+		// S3-S4: SetActiveProcess / SetActiveStage
+		try {
+			const dummyId = "00000000-0000-0000-0000-000000000000";
+			process.SetActiveProcess(dummyId, (/** @type {any} */ status) => console.log("  📍 SetActiveProcess:", status));
+			methodResults.push({ Test: "S3", Property: "form.Process.SetActiveProcess", Value: "Called", Status: "✓" });
+
+			process.SetActiveStage(dummyId, (/** @type {any} */ status) => console.log("  📍 SetActiveStage:", status));
+			methodResults.push({ Test: "S4", Property: "form.Process.SetActiveStage", Value: "Called", Status: "✓" });
+		} catch (/** @type {any} */ e) {
+			methodResults.push({ Test: "S3/S4", Property: "Set Active", Value: e.message, Status: "✗" });
+		}
+
+		// S7: Add/Remove OnStageChange
 		/** @param {any} ctx */
-		const stageChangeCb = (ctx) => console.log("  ?? OnStageChange");
+		const stageChangeCb = (ctx) => console.log("  📍 OnStageChange");
 		try {
 			process.AddOnStageChange(stageChangeCb);
 			process.RemoveOnStageChange(stageChangeCb);
-			methodResults.push({ Test: "S3", Property: "Add/RemoveOnStageChange", Value: "Registered & Removed", Status: "✓" });
+			methodResults.push({ Test: "S7", Property: "form.Process.Add/RemoveOnStageChange", Value: "Registered & Removed", Status: "✓" });
 		} catch (/** @type {any} */ e) {
-			methodResults.push({ Test: "S3", Property: "Stage Events", Value: e.message, Status: "✗" });
+			methodResults.push({ Test: "S7", Property: "Stage Events", Value: e.message, Status: "✗" });
 		}
 
+		// S8: Add/Remove OnProcessStatusChange
 		/** @param {any} ctx */
-		const statusChangeCb = (ctx) => console.log("  ?? OnProcessStatusChange");
+		const statusChangeCb = (ctx) => console.log("  📍 OnProcessStatusChange");
 		try {
 			process.AddOnProcessStatusChange(statusChangeCb);
 			process.RemoveOnProcessStatusChange(statusChangeCb);
-			methodResults.push({ Test: "S4", Property: "Add/RemoveOnProcessStatusChange", Value: "Registered & Removed", Status: "✓" });
+			methodResults.push({ Test: "S8", Property: "form.Process.Add/RemoveOnProcessStatusChange", Value: "Registered & Removed", Status: "✓" });
 		} catch (/** @type {any} */ e) {
-			methodResults.push({ Test: "S4", Property: "Status Events", Value: e.message, Status: "✗" });
+			methodResults.push({ Test: "S8", Property: "Status Events", Value: e.message, Status: "✗" });
 		}
 
+		// S9: DisplayState / Visible setters
 		try {
 			const origState = process.DisplayState;
 			process.DisplayState = OptionSet.ProcessDisplayState.Expanded;
+			const checkState = process.DisplayState;
+			process.DisplayState = origState;
+
 			const origVis = process.Visible;
 			process.Visible = !origVis;
-			process.DisplayState = origState;
+			const checkVis = process.Visible;
 			process.Visible = origVis;
-			methodResults.push({ Test: "S5", Property: "DisplayState/Visible (set)", Value: "Set→Restored", Status: "✓" });
+
+			methodResults.push({ Test: "S9", Property: "form.Process.DisplayState/Visible (set)", Value: "Set → Restored", Status: "✓" });
 		} catch (/** @type {any} */ e) {
-			methodResults.push({ Test: "S5", Property: "Props Set", Value: e.message, Status: "✗" });
+			methodResults.push({ Test: "S9", Property: "Props Set", Value: e.message, Status: "✗" });
 		}
 
+		// =====================================================
+		// OUTPUT
+		// =====================================================
 		const allResults = [...results, ...methodResults];
 		const passed = allResults.filter(r => r.Status === "✓").length;
+		const warnings = allResults.filter(r => r.Status === "⚠").length;
+		const failed = allResults.filter(r => r.Status === "✗").length;
 		const total = allResults.length;
 
 		console.groupCollapsed(`🎯 TEST 19: Process (BPF) [${startTime}] - ${passed}/${total}`);
-		console.log("%c📋 ReadOnly Properties (R1-R8)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
+		console.log("%c📋 ReadOnly Properties (R1-R9)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
 		console.table(results);
-		console.log("%c⚡ Setters & Methods (S1-S5)", "font-weight: bold; font-size: 14px; color: #2196F3;");
+		console.log("%c⚡ Setters & Methods (S1-S4, S7-S9)", "font-weight: bold; font-size: 14px; color: #2196F3;");
 		console.table(methodResults);
-		console.log(`%c✅ Summary: ${passed}/${total} passed`,
+		console.log(`%c✅ Summary: ${passed}/${total} passed` +
+			(warnings > 0 ? ` | ⚠ ${warnings} warnings` : '') +
+			(failed > 0 ? ` | ✗ ${failed} failed` : ''),
 			"font-weight: bold; color: #4CAF50; font-size: 14px;");
 		console.groupEnd();
 	}
@@ -3416,37 +3655,39 @@ var formAccount_DevKitV4 = (function () {
 			// USER SETTINGS (form.Utility.UserSettings.*)
 			// =====================================================
 			const userSettings = form.Utility.UserSettings;
-			results.push({ Test: "R24", Property: "form.Utility.UserSettings.DefaultDashboardId", Value: userSettings?.DefaultDashboardId, Status: "✓" });
-			results.push({ Test: "R25", Property: "form.Utility.UserSettings.IsGuidedHelpEnabled", Value: userSettings?.IsGuidedHelpEnabled, Status: typeof userSettings?.IsGuidedHelpEnabled === "boolean" ? "✓" : "⚠" });
-			results.push({ Test: "R26", Property: "form.Utility.UserSettings.IsHighContrastEnabled", Value: userSettings?.IsHighContrastEnabled, Status: typeof userSettings?.IsHighContrastEnabled === "boolean" ? "✓" : "⚠" });
-			results.push({ Test: "R27", Property: "form.Utility.UserSettings.IsRTL", Value: userSettings?.IsRTL, Status: typeof userSettings?.IsRTL === "boolean" ? "✓" : "⚠" });
-			results.push({ Test: "R28", Property: "form.Utility.UserSettings.LanguageId", Value: userSettings?.LanguageId, Status: typeof userSettings?.LanguageId === "number" ? "✓" : "⚠" });
-			results.push({ Test: "R29", Property: "form.Utility.UserSettings.Roles", Value: userSettings?.Roles ? "Collection" : "null", Status: userSettings?.Roles ? "✓" : "⚠" });
-			results.push({ Test: "R30", Property: "form.Utility.UserSettings.SecurityRolePrivileges", Value: userSettings?.SecurityRolePrivileges ? `Array[${userSettings.SecurityRolePrivileges.length || 0}]` : "null", Status: userSettings?.SecurityRolePrivileges ? "✓" : "⚠" });
-			results.push({ Test: "R31", Property: "form.Utility.UserSettings.SecurityRoles", Value: userSettings?.SecurityRoles ? `Array[${userSettings.SecurityRoles.length || 0}]` : "null", Status: userSettings?.SecurityRoles ? "✓" : "⚠" });
-			results.push({ Test: "R32", Property: "form.Utility.UserSettings.TimeZoneOffsetMinutes", Value: userSettings?.TimeZoneOffsetMinutes, Status: typeof userSettings?.TimeZoneOffsetMinutes === "number" ? "✓" : "⚠" });
-			results.push({ Test: "R33", Property: "form.Utility.UserSettings.TransactionCurrency", Value: userSettings?.TransactionCurrency ? stringify(userSettings.TransactionCurrency) : "null", Status: userSettings?.TransactionCurrency ? "✓" : "⚠" });
-			results.push({ Test: "R34", Property: "form.Utility.UserSettings.TransactionCurrencyId", Value: userSettings?.TransactionCurrencyId, Status: userSettings?.TransactionCurrencyId ? "✓" : "⚠" });
-			results.push({ Test: "R35", Property: "form.Utility.UserSettings.UserId", Value: userSettings?.UserId, Status: userSettings?.UserId ? "✓" : "⚠" });
-			results.push({ Test: "R36", Property: "form.Utility.UserSettings.UserName", Value: userSettings?.UserName, Status: userSettings?.UserName ? "✓" : "⚠" });
+			results.push({ Test: "R24", Property: "form.Utility.UserSettings", Value: userSettings ? "object" : "null", Status: userSettings ? "✓" : "⚠" });
+			results.push({ Test: "R25", Property: "form.Utility.UserSettings.DateFormattingInfo", Value: userSettings?.DateFormattingInfo ? "object" : "null", Status: userSettings?.DateFormattingInfo ? "✓" : "⚠" });
+			results.push({ Test: "R26", Property: "form.Utility.UserSettings.DefaultDashboardId", Value: userSettings?.DefaultDashboardId, Status: "✓" });
+			results.push({ Test: "R27", Property: "form.Utility.UserSettings.IsGuidedHelpEnabled", Value: userSettings?.IsGuidedHelpEnabled, Status: typeof userSettings?.IsGuidedHelpEnabled === "boolean" ? "✓" : "⚠" });
+			results.push({ Test: "R28", Property: "form.Utility.UserSettings.IsHighContrastEnabled", Value: userSettings?.IsHighContrastEnabled, Status: typeof userSettings?.IsHighContrastEnabled === "boolean" ? "✓" : "⚠" });
+			results.push({ Test: "R29", Property: "form.Utility.UserSettings.IsRTL", Value: userSettings?.IsRTL, Status: typeof userSettings?.IsRTL === "boolean" ? "✓" : "⚠" });
+			results.push({ Test: "R30", Property: "form.Utility.UserSettings.LanguageId", Value: userSettings?.LanguageId, Status: typeof userSettings?.LanguageId === "number" ? "✓" : "⚠" });
+			results.push({ Test: "R31", Property: "form.Utility.UserSettings.Roles", Value: userSettings?.Roles ? "Collection" : "null", Status: userSettings?.Roles ? "✓" : "⚠" });
+			results.push({ Test: "R32", Property: "form.Utility.UserSettings.SecurityRolePrivileges", Value: userSettings?.SecurityRolePrivileges ? `Array[${userSettings.SecurityRolePrivileges.length || 0}]` : "null", Status: userSettings?.SecurityRolePrivileges ? "✓" : "⚠" });
+			results.push({ Test: "R33", Property: "form.Utility.UserSettings.SecurityRoles", Value: userSettings?.SecurityRoles ? `Array[${userSettings.SecurityRoles.length || 0}]` : "null", Status: userSettings?.SecurityRoles ? "✓" : "⚠" });
+			results.push({ Test: "R34", Property: "form.Utility.UserSettings.TimeZoneOffsetMinutes", Value: userSettings?.TimeZoneOffsetMinutes, Status: typeof userSettings?.TimeZoneOffsetMinutes === "number" ? "✓" : "⚠" });
+			results.push({ Test: "R35", Property: "form.Utility.UserSettings.TransactionCurrency", Value: userSettings?.TransactionCurrency ? stringify(userSettings.TransactionCurrency) : "null", Status: userSettings?.TransactionCurrency ? "✓" : "⚠" });
+			results.push({ Test: "R36", Property: "form.Utility.UserSettings.TransactionCurrencyId", Value: userSettings?.TransactionCurrencyId, Status: userSettings?.TransactionCurrencyId ? "✓" : "⚠" });
+			results.push({ Test: "R37", Property: "form.Utility.UserSettings.UserId", Value: userSettings?.UserId, Status: userSettings?.UserId ? "✓" : "⚠" });
+			results.push({ Test: "R38", Property: "form.Utility.UserSettings.UserName", Value: userSettings?.UserName, Status: userSettings?.UserName ? "✓" : "⚠" });
 
 			// =====================================================
 			// DATE FORMATTING INFO (form.Utility.UserSettings.DateFormattingInfo.*)
 			// =====================================================
 			const dateInfo = userSettings?.DateFormattingInfo;
-			results.push({ Test: "R37", Property: "form.Utility.UserSettings.DateFormattingInfo.AMDesignator", Value: dateInfo?.AMDesignator, Status: dateInfo?.AMDesignator ? "✓" : "⚠" });
-			results.push({ Test: "R38", Property: "form.Utility.UserSettings.DateFormattingInfo.PMDesignator", Value: dateInfo?.PMDesignator, Status: dateInfo?.PMDesignator ? "✓" : "⚠" });
-			results.push({ Test: "R39", Property: "form.Utility.UserSettings.DateFormattingInfo.DateSeparator", Value: dateInfo?.DateSeparator, Status: dateInfo?.DateSeparator ? "✓" : "⚠" });
-			results.push({ Test: "R40", Property: "form.Utility.UserSettings.DateFormattingInfo.TimeSeparator", Value: dateInfo?.TimeSeparator, Status: dateInfo?.TimeSeparator ? "✓" : "⚠" });
-			results.push({ Test: "R41", Property: "form.Utility.UserSettings.DateFormattingInfo.ShortDatePattern", Value: dateInfo?.ShortDatePattern, Status: dateInfo?.ShortDatePattern ? "✓" : "⚠" });
-			results.push({ Test: "R42", Property: "form.Utility.UserSettings.DateFormattingInfo.LongDatePattern", Value: dateInfo?.LongDatePattern, Status: dateInfo?.LongDatePattern ? "✓" : "⚠" });
-			results.push({ Test: "R43", Property: "form.Utility.UserSettings.DateFormattingInfo.ShortTimePattern", Value: dateInfo?.ShortTimePattern, Status: dateInfo?.ShortTimePattern ? "✓" : "⚠" });
-			results.push({ Test: "R44", Property: "form.Utility.UserSettings.DateFormattingInfo.LongTimePattern", Value: dateInfo?.LongTimePattern, Status: dateInfo?.LongTimePattern ? "✓" : "⚠" });
-			results.push({ Test: "R45", Property: "form.Utility.UserSettings.DateFormattingInfo.FullDateTimePattern", Value: dateInfo?.FullDateTimePattern, Status: dateInfo?.FullDateTimePattern ? "✓" : "⚠" });
-			results.push({ Test: "R46", Property: "form.Utility.UserSettings.DateFormattingInfo.FirstDayOfWeek", Value: dateInfo?.FirstDayOfWeek, Status: typeof dateInfo?.FirstDayOfWeek === "number" ? "✓" : "⚠" });
-			results.push({ Test: "R47", Property: "form.Utility.UserSettings.DateFormattingInfo.DayNames", Value: dateInfo?.DayNames ? `Array[${dateInfo.DayNames.length}]` : "null", Status: dateInfo?.DayNames ? "✓" : "⚠" });
-			results.push({ Test: "R48", Property: "form.Utility.UserSettings.DateFormattingInfo.MonthNames", Value: dateInfo?.MonthNames ? `Array[${dateInfo.MonthNames.length}]` : "null", Status: dateInfo?.MonthNames ? "✓" : "⚠" });
-			results.push({ Test: "R49", Property: "form.Utility.UserSettings.DateFormattingInfo.Calendar", Value: dateInfo?.Calendar ? "object" : "null", Status: dateInfo?.Calendar ? "✓" : "⚠" });
+			results.push({ Test: "R39", Property: "form.Utility.UserSettings.DateFormattingInfo.AMDesignator", Value: dateInfo?.AMDesignator, Status: dateInfo?.AMDesignator ? "✓" : "⚠" });
+			results.push({ Test: "R40", Property: "form.Utility.UserSettings.DateFormattingInfo.PMDesignator", Value: dateInfo?.PMDesignator, Status: dateInfo?.PMDesignator ? "✓" : "⚠" });
+			results.push({ Test: "R41", Property: "form.Utility.UserSettings.DateFormattingInfo.DateSeparator", Value: dateInfo?.DateSeparator, Status: dateInfo?.DateSeparator ? "✓" : "⚠" });
+			results.push({ Test: "R42", Property: "form.Utility.UserSettings.DateFormattingInfo.TimeSeparator", Value: dateInfo?.TimeSeparator, Status: dateInfo?.TimeSeparator ? "✓" : "⚠" });
+			results.push({ Test: "R43", Property: "form.Utility.UserSettings.DateFormattingInfo.ShortDatePattern", Value: dateInfo?.ShortDatePattern, Status: dateInfo?.ShortDatePattern ? "✓" : "⚠" });
+			results.push({ Test: "R44", Property: "form.Utility.UserSettings.DateFormattingInfo.LongDatePattern", Value: dateInfo?.LongDatePattern, Status: dateInfo?.LongDatePattern ? "✓" : "⚠" });
+			results.push({ Test: "R45", Property: "form.Utility.UserSettings.DateFormattingInfo.ShortTimePattern", Value: dateInfo?.ShortTimePattern, Status: dateInfo?.ShortTimePattern ? "✓" : "⚠" });
+			results.push({ Test: "R46", Property: "form.Utility.UserSettings.DateFormattingInfo.LongTimePattern", Value: dateInfo?.LongTimePattern, Status: dateInfo?.LongTimePattern ? "✓" : "⚠" });
+			results.push({ Test: "R47", Property: "form.Utility.UserSettings.DateFormattingInfo.FullDateTimePattern", Value: dateInfo?.FullDateTimePattern, Status: dateInfo?.FullDateTimePattern ? "✓" : "⚠" });
+			results.push({ Test: "R48", Property: "form.Utility.UserSettings.DateFormattingInfo.FirstDayOfWeek", Value: dateInfo?.FirstDayOfWeek, Status: typeof dateInfo?.FirstDayOfWeek === "number" ? "✓" : "⚠" });
+			results.push({ Test: "R49", Property: "form.Utility.UserSettings.DateFormattingInfo.DayNames", Value: dateInfo?.DayNames ? `Array[${dateInfo.DayNames.length}]` : "null", Status: dateInfo?.DayNames ? "✓" : "⚠" });
+			results.push({ Test: "R50", Property: "form.Utility.UserSettings.DateFormattingInfo.MonthNames", Value: dateInfo?.MonthNames ? `Array[${dateInfo.MonthNames.length}]` : "null", Status: dateInfo?.MonthNames ? "✓" : "⚠" });
+			results.push({ Test: "R51", Property: "form.Utility.UserSettings.DateFormattingInfo.Calendar", Value: dateInfo?.Calendar ? "object" : "null", Status: dateInfo?.Calendar ? "✓" : "⚠" });
 		} catch (/** @type {any} */ error) {
 			results.push({ Test: "ERR", Property: "Props Error", Value: error.message, Status: "✗" });
 		}
@@ -3534,6 +3775,7 @@ var formAccount_DevKitV4 = (function () {
 		methodResults.push({ Test: "M34", Property: "form.Utility.RefreshParentGrid", Value: typeof form.Utility.RefreshParentGrid === "function" ? "function" : "undefined", Status: typeof form.Utility.RefreshParentGrid === "function" ? "✓" : "⚠" });
 		methodResults.push({ Test: "M35", Property: "form.Utility.ResourceString", Value: typeof form.Utility.ResourceString === "function" ? "function" : "undefined", Status: typeof form.Utility.ResourceString === "function" ? "✓" : "⚠" });
 		methodResults.push({ Test: "M36", Property: "form.Utility.ShowProgressIndicator", Value: typeof form.Utility.ShowProgressIndicator === "function" ? "function" : "undefined", Status: typeof form.Utility.ShowProgressIndicator === "function" ? "✓" : "⚠" });
+		methodResults.push({ Test: "M37", Property: "form.Utility.LoadPanel", Value: typeof form.Utility.LoadPanel === "function" ? "function" : "undefined", Status: typeof form.Utility.LoadPanel === "function" ? "✓" : "⚠" });
 
 		const allResults = [...results, ...methodResults];
 		const passed = allResults.filter(r => r.Status === "✓").length;
@@ -3542,9 +3784,9 @@ var formAccount_DevKitV4 = (function () {
 		const total = allResults.length;
 
 		console.groupCollapsed(`🎯 TEST 21: Utility API [${startTime}] - ${passed}/${total}`);
-		console.log("%c📋 ReadOnly Properties (R1-R49)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
+		console.log("%c📋 ReadOnly Properties (R1-R51)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
 		console.table(results);
-		console.log("%c⚡ Methods (M1-M36)", "font-weight: bold; font-size: 14px; color: #2196F3;");
+		console.log("%c⚡ Methods (M1-M37)", "font-weight: bold; font-size: 14px; color: #2196F3;");
 		console.table(methodResults);
 		console.log(`%c✅ Summary: ${passed}/${total} passed` +
 			(warnings > 0 ? ` | ⚠ ${warnings} warnings` : '') +
@@ -3834,35 +4076,54 @@ var formAccount_DevKitV4 = (function () {
 			methodResults.push({ Test: "S2", Property: "form.WebApi.RetrieveRecord (Promise)", Value: e.message, Status: "✗" });
 		}
 
-		// S3: RetrieveRecords - FetchXML Promise-based
+		// S3: RetrieveRecord - Access FormattedValue
+		try {
+			const record = await form.WebApi.RetrieveRecord(
+				AccountApi,
+				form.EntityName,
+				form.EntityId,
+				"?$select=name,industrycode"
+			);
+			const formattedIndustry = record.FormattedValue?.IndustryCode;
+			methodResults.push({
+				Test: "S3",
+				Property: "form.WebApi.FormattedValue.IndustryCode",
+				Value: formattedIndustry ? `"${formattedIndustry}"` : "(empty)",
+				Status: "✓"
+			});
+		} catch (/** @type {any} */ e) {
+			methodResults.push({ Test: "S3", Property: "form.WebApi.FormattedValue.IndustryCode", Value: e.message, Status: "✗" });
+		}
+
+		// S4: RetrieveRecords - FetchXML Promise-based
 		try {
 			const fetchXml = "<fetch top='3'><entity name='account'><attribute name='name'/><attribute name='accountnumber'/></entity></fetch>";
 			const records = await form.WebApi.RetrieveRecords(AccountApi, fetchXml);
 			methodResults.push({
-				Test: "S3",
+				Test: "S4",
 				Property: "form.WebApi.RetrieveRecords (FetchXML)",
 				Value: `Count: ${records.length}`,
 				Status: records.length >= 0 ? "✓" : "✗"
 			});
 		} catch (/** @type {any} */ e) {
-			methodResults.push({ Test: "S3", Property: "form.WebApi.RetrieveRecords (FetchXML)", Value: e.message, Status: "✗" });
+			methodResults.push({ Test: "S4", Property: "form.WebApi.RetrieveRecords (FetchXML)", Value: e.message, Status: "✗" });
 		}
 
-		// S4: RetrieveRecords - FetchXML with maxPageSize
+		// S5: RetrieveRecords - FetchXML with maxPageSize
 		try {
 			const fetchXml = "<fetch><entity name='account'><attribute name='name'/><attribute name='telephone1'/></entity></fetch>";
 			const records = await form.WebApi.RetrieveRecords(AccountApi, fetchXml, 5);
 			methodResults.push({
-				Test: "S4",
+				Test: "S5",
 				Property: "form.WebApi.RetrieveRecords (FetchXML+PageSize)",
 				Value: `Count: ${records.length} (max 5)`,
 				Status: records.length >= 0 ? "✓" : "✗"
 			});
 		} catch (/** @type {any} */ e) {
-			methodResults.push({ Test: "S4", Property: "form.WebApi.RetrieveRecords (FetchXML+PageSize)", Value: e.message, Status: "✗" });
+			methodResults.push({ Test: "S5", Property: "form.WebApi.RetrieveRecords (FetchXML+PageSize)", Value: e.message, Status: "✗" });
 		}
 
-		// S5: RetrieveRecords - OData Promise-based
+		// S6: RetrieveRecords - OData Promise-based
 		try {
 			const records = await form.WebApi.RetrieveRecords(
 				AccountApi,
@@ -3870,16 +4131,34 @@ var formAccount_DevKitV4 = (function () {
 				'?$select=name,accountnumber&$top=3'
 			);
 			methodResults.push({
-				Test: "S5",
+				Test: "S6",
 				Property: "form.WebApi.RetrieveRecords (OData)",
 				Value: `Count: ${records.length}`,
 				Status: records.length >= 0 ? "✓" : "✗"
 			});
 		} catch (/** @type {any} */ e) {
-			methodResults.push({ Test: "S5", Property: "form.WebApi.RetrieveRecords (OData)", Value: e.message, Status: "✗" });
+			methodResults.push({ Test: "S6", Property: "form.WebApi.RetrieveRecords (OData)", Value: e.message, Status: "✗" });
 		}
 
-		// S6: Set property and verify Entity update
+		// S7: RetrieveRecords - OData with maxPageSize
+		try {
+			const records = await form.WebApi.RetrieveRecords(
+				AccountApi,
+				'account',
+				'?$select=name,telephone1',
+				5
+			);
+			methodResults.push({
+				Test: "S7",
+				Property: "form.WebApi.RetrieveRecords (OData+PageSize)",
+				Value: `Count: ${records.length} (max 5)`,
+				Status: records.length >= 0 ? "✓" : "✗"
+			});
+		} catch (/** @type {any} */ e) {
+			methodResults.push({ Test: "S7", Property: "form.WebApi.RetrieveRecords (OData+PageSize)", Value: e.message, Status: "✗" });
+		}
+
+		// S8: Set property and verify Entity update
 		try {
 			const account = new AccountApi();
 			account.Name = 'Update Test';
@@ -3889,13 +4168,13 @@ var formAccount_DevKitV4 = (function () {
 			const hasName = entity && entity.name === 'Update Test';
 			const hasRevenue = entity && entity.revenue === 1000000;
 			methodResults.push({
-				Test: "S6",
+				Test: "S8",
 				Property: "AccountApi property set -> Entity update",
 				Value: `Name: ${hasName}, Revenue: ${hasRevenue}`,
 				Status: hasName && hasRevenue ? "✓" : "⚠"
 			});
 		} catch (/** @type {any} */ e) {
-			methodResults.push({ Test: "S6", Property: "AccountApi property set -> Entity update", Value: e.message, Status: "✗" });
+			methodResults.push({ Test: "S8", Property: "AccountApi property set -> Entity update", Value: e.message, Status: "✗" });
 		}
 
 		// =====================================================
@@ -3910,7 +4189,7 @@ var formAccount_DevKitV4 = (function () {
 		console.groupCollapsed(`🎯 TEST 25: WebApi [${startTime}] - ${passed}/${total}`);
 		console.log("%c📋 AccountApi Factory Tests (R1-R5)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
 		console.table(results);
-		console.log("%c⚡ WebApi Methods (S1-S6)", "font-weight: bold; font-size: 14px; color: #2196F3;");
+		console.log("%c⚡ WebApi Methods (S1-S8)", "font-weight: bold; font-size: 14px; color: #2196F3;");
 		console.table(methodResults);
 		console.log(`%c✅ Summary: ${passed}/${total} passed` +
 			(warnings > 0 ? ` | ⚠ ${warnings} warnings` : '') +

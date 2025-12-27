@@ -1,19 +1,24 @@
 {
 	"folders": [
 		{
+			"name": "TestDevKitJs",
 			"path": "TestDevKitJs"
 		},
 		{
+			"name": "TestDevKitJs2",
+			"path": "TestDevKitJs2"
+		},
+		{
+			"name": "TestDevKitTs",
 			"path": "TestDevKitTs"
 		},
 		{
+			"name": "TestWebResource",
 			"path": "TestWebResource"
 		},
 		{
+			"name": "TestWebResourceTs",
 			"path": "TestWebResourceTs"
-		},
-		{
-			"path": "TestDevKitJs2"
 		}
 	],
 	"settings": {}

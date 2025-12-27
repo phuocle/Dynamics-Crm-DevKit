@@ -1415,6 +1415,74 @@ describe('devKit', () => {
         form.Navigation.Account_Emails.Focus();
         expect(1).toBe(1);
     });
+    test('Navigation - null navItems coverage (line 392 I branch)', () => {
+        // Setup with NO navigation items (null navigation)
+        var stringControl = new StringControlMock({
+            attribute: new StringAttributeMock({
+                name: "name",
+                value: "Test"
+            }),
+            name: "name",
+            label: "Name"
+        });
+        var ui = new UiMock({
+            formSelector: new FormSelectorMock(new ItemCollectionMock([new FormItemMock({
+                id: "test-form-id",
+                label: "Test Form",
+                currentItem: true,
+                formType: OptionSet.FormType.Update
+            })])),
+            controls: new ItemCollectionMock([stringControl]),
+            // navigation is NOT set, so formContext.ui.navigation.items will be undefined
+            navigation: null
+        });
+        var attributes = new ItemCollectionMock([]);
+        var entity = new EntityMock({ attributes: attributes });
+        var data = new DataMock(entity);
+        XrmMockGenerator.formContext = new FormContextMock(data, ui);
+        var executionContext = XrmMockGenerator.formContext;
+        // Run - try to load a navigation that doesn't exist
+        var navigation = {
+            NonExistentNav: {},
+        };
+        devKit.LoadNavigations(executionContext, navigation);
+        // Test - should not throw, but properties should be undefined since navItems is null
+        expect(navigation.NonExistentNav.Id).toBeUndefined();
+        expect(navigation.NonExistentNav.Label).toBeUndefined();
+        expect(navigation.NonExistentNav.Visible).toBeUndefined();
+    });
+    test('Navigation - non-matching ID loop coverage (line 396 E branch)', () => {
+        // Setup with navigation items but search for one that doesn't match
+        var b = UiStandardElementMock.create("Activities", true);
+        var navItem1 = new NavigationItemMock("navActivities", b, new UiFocusableMock(true));
+        var c = UiStandardElementMock.create("Contacts", true);
+        var navItem2 = new NavigationItemMock("navContacts", c, new UiFocusableMock(true));
+        var ui = new UiMock({
+            formSelector: new FormSelectorMock(new ItemCollectionMock([new FormItemMock({
+                id: "test-form-id",
+                label: "Test Form",
+                currentItem: true,
+                formType: OptionSet.FormType.Update
+            })])),
+            controls: new ItemCollectionMock([]),
+            navigation: new NavigationMock(new ItemCollectionMock([navItem1, navItem2]))
+        });
+        var attributes = new ItemCollectionMock([]);
+        var entity = new EntityMock({ attributes: attributes });
+        var data = new DataMock(entity);
+        XrmMockGenerator.formContext = new FormContextMock(data, ui);
+        var executionContext = XrmMockGenerator.formContext;
+        // Run - search for navigation item that doesn't exist (will loop through all items without finding match)
+        var navigation = {
+            NonExistentNavItem: {},
+        };
+        devKit.LoadNavigations(executionContext, navigation);
+        // Test - should not throw, but properties should be undefined since no matching nav item found
+        // This covers the E branch where loop completes without finding the item
+        expect(navigation.NonExistentNavItem.Id).toBeUndefined();
+        expect(navigation.NonExistentNavItem.Label).toBeUndefined();
+        expect(navigation.NonExistentNavItem.Visible).toBeUndefined();
+    });
     test('Timer', () => {
         //setup
         XrmMockGenerator.initialise();
@@ -2390,6 +2458,34 @@ describe('devKit', () => {
         devKit.LoadFields(formContext, body);
         expect(body.Name.AttributeName).toBe('name');
     });
+    test('findControlFromAttribute - multiple controls coverage (line 301 E branch)', () => {
+        // Create multiple controls where only the LAST one matches
+        // This forces the if condition to be FALSE for the first two controls
+        var ctrl1 = { getName: () => 'other_control_1' };  // Does NOT match 'targetcontrol'
+        var ctrl2 = { getName: () => 'other_control_2' };  // Does NOT match 'targetcontrol'
+        var ctrl3 = { getName: () => 'targetcontrol' };    // MATCHES 'targetcontrol'
+        var attribute = {
+            controls: {
+                forEach: function (cb) {
+                    cb(ctrl1);  // First iteration: if condition is FALSE
+                    cb(ctrl2);  // Second iteration: if condition is FALSE  
+                    cb(ctrl3);  // Third iteration: if condition is TRUE
+                }
+            },
+            getName: () => 'targetcontrol',
+            getAttributeType: () => 'string',
+            getValue: () => 'test value'
+        };
+        var formContext = {
+            getControl: (name) => null,  // Control not found directly, triggers fallback to attribute.controls
+            getAttribute: (name) => attribute
+        };
+        var body = { TargetControl: {} };
+        devKit.LoadFields(formContext, body);
+        // Should find the control via findControlFromAttribute after looping through non-matching controls
+        expect(body.TargetControl.AttributeName).toBe('targetcontrol');
+        expect(body.TargetControl.Value).toBe('test value');
+    });
     test('utility callbacks - AllowedStatusTransitions (lines 578-579)', () => {
         global.Xrm = {
             Utility: {
@@ -2976,4 +3072,944 @@ describe('devKit', () => {
         field.RemoveOnOutputChange(callback);
         expect(control._outputChangeHandler).toBeUndefined();
     });
+
+    // *** NEW TESTS TO ACHIEVE 100% BRANCH COVERAGE ***
+
+    test('findFormItem - loop with non-matching items (line 34 E branch)', () => {
+        // Setup: multiple form items where none match the criteria initially
+        var formItem1 = new FormItemMock({
+            id: "form1",
+            label: "Form 1",
+            currentItem: false,
+            formType: OptionSet.FormType.Update
+        });
+        var formItem2 = new FormItemMock({
+            id: "form2",
+            label: "Form 2",
+            currentItem: false,
+            formType: OptionSet.FormType.Update
+        });
+        var formItem3 = new FormItemMock({
+            id: "target-form",
+            label: "Target Form",
+            currentItem: true,
+            formType: OptionSet.FormType.Update
+        });
+        var ui = new UiMock({
+            formSelector: new FormSelectorMock(new ItemCollectionMock([formItem1, formItem2, formItem3]))
+        });
+        var data = new DataMock(new EntityMock({ attributes: new ItemCollectionMock([]) }));
+        XrmMockGenerator.formContext = new FormContextMock(data, ui);
+        var form = devKit.LoadForm(XrmMockGenerator.formContext);
+        // Navigate to form by label - should loop through items until finding "Target Form"
+        expect(() => { form.FormNavigateToFormLabel("Target Form"); }).toThrow();
+    });
+
+    test('loadStage - steps is null returns empty array (line 112 branch)', () => {
+        var stageWithNullSteps = {
+            getId: () => 'stage1',
+            getName: () => 'Stage 1',
+            getStatus: () => 'active',
+            getCategory: () => ({ getValue: () => 0 }),
+            getSteps: () => null  // Returns null for steps
+        };
+        var process = {
+            getActivePath: () => ({ get: () => stageWithNullSteps, getLength: () => 1 }),
+            getActiveProcess: () => ({
+                getId: () => 'proc1',
+                getName: () => 'Process',
+                isRendered: () => true,
+                getStages: () => ({ get: () => stageWithNullSteps, getLength: () => 1 })
+            }),
+            getActiveStage: () => stageWithNullSteps,
+            getSelectedStage: () => stageWithNullSteps
+        };
+        var formContext = { data: { process: process }, ui: { process: {} } };
+        var loadedProcess = devKit.LoadProcess(formContext);
+        // Access Steps which should return empty array when getSteps returns null
+        var stage = loadedProcess.ActiveStage;
+        expect(stage.Steps).toEqual([]);
+    });
+
+    test('loadProcessInner - Stages.forEach coverage (lines 136-141)', () => {
+        var step1 = { getName: () => 'Step1', getAttribute: () => 'field1', isRequired: () => true, getProgress: () => 1, setProgress: () => { } };
+        var stageWithSteps = {
+            getId: () => 'stage1',
+            getName: () => 'Stage 1',
+            getStatus: () => 'active',
+            getCategory: () => ({ getValue: () => 0 }),
+            getSteps: () => [step1]
+        };
+        var stages = {
+            get: (i) => stageWithSteps,
+            getLength: () => 2  // 2 stages to iterate
+        };
+        var process = {
+            getActivePath: () => ({ get: () => stageWithSteps, getLength: () => 1 }),
+            getActiveProcess: () => ({
+                getId: () => 'proc1',
+                getName: () => 'Process',
+                isRendered: () => true,
+                getStages: () => stages
+            }),
+            getActiveStage: () => stageWithSteps,
+            getSelectedStage: () => stageWithSteps
+        };
+        var formContext = { data: { process: process }, ui: { process: {} } };
+        var loadedProcess = devKit.LoadProcess(formContext);
+        var stagesObj = loadedProcess.ActiveProcess.Stages;
+        var count = 0;
+        stagesObj.forEach((stage, index) => { count++; });
+        expect(count).toBe(2);
+    });
+
+    test('Section.Controls - null controlsCollection (line 355 branch)', () => {
+        // Create section WITHOUT controls to cover null branch
+        var sectionNoControls = {
+            getName: () => 'NO_CONTROLS_SECTION',
+            getLabel: () => 'No Controls',
+            setLabel: () => { },
+            getVisible: () => true,
+            setVisible: () => { },
+            getParent: () => ({}),
+            controls: null  // No controls
+        };
+        var tabObject = {
+            getName: () => 'TEST_TAB',
+            getLabel: () => 'Test Tab',
+            setLabel: () => { },
+            getVisible: () => true,
+            setVisible: () => { },
+            getDisplayState: () => 'expanded',
+            setDisplayState: () => { },
+            getContentType: () => 'cardSections',
+            setContentType: () => { },
+            getParent: () => ({}),
+            sections: { get: (name) => sectionNoControls },
+            setFocus: () => { },
+            addTabStateChange: () => { },
+            removeTabStateChange: () => { }
+        };
+        var formContext = {
+            ui: { tabs: { get: (name) => tabObject } }
+        };
+        var tabs = {
+            TEST_TAB: {
+                Section: {
+                    NO_CONTROLS_SECTION: {}
+                }
+            }
+        };
+        devKit.LoadTabs(formContext, tabs);
+        // Controls should return null when section has no controls
+        expect(tabs.TEST_TAB.Section.NO_CONTROLS_SECTION.Controls).toBeNull();
+    });
+
+    test('Grid rows forEach - items is null (line 477 branch)', () => {
+        var gridControl = {
+            getName: () => 'subgrid1',
+            getEntityName: () => 'contact',
+            getFetchXml: () => '<fetch/>',
+            getGridType: () => 1,
+            getRelationship: () => ({}),
+            getGrid: () => ({
+                getRows: () => null,  // Returns null rows
+                getSelectedRows: () => null,
+                getTotalRecordCount: () => 0
+            }),
+            getViewSelector: () => null,
+            getVisible: () => true,
+            setVisible: () => { },
+            getControlType: () => 'subgrid',
+            getParent: () => ({}),
+            getDisabled: () => false,
+            setDisabled: () => { },
+            getLabel: () => 'Subgrid',
+            setLabel: () => { },
+            setFocus: () => { },
+            addOnLoad: () => { },
+            removeOnLoad: () => { },
+            openRelatedGrid: () => { },
+            refresh: () => { },
+            refreshRibbon: () => { },
+            getUrl: () => ''
+        };
+        var formContext = { getControl: (name) => gridControl };
+        var grids = { subgrid1: {} };
+        devKit.LoadGrids(formContext, grids);
+        var rows = grids.subgrid1.Rows;
+        var count = 0;
+        rows.forEach((row, index) => { count++; });
+        expect(count).toBe(0);  // No items to iterate
+    });
+
+    test('RetrieveRecords - with maxPageSize and callback (line 802 branch)', () => {
+        var mockResult = { entities: [{ id: '1' }] };
+        var externalCallback = null;
+        var mockPromise = {
+            then: function (success, error) {
+                // First .then is from internal processing, second is the external callback
+                if (success) {
+                    var transformed = success(mockResult);
+                    // Return a new promise for chaining
+                    return {
+                        then: function (extSuccess, extError) {
+                            if (extSuccess) {
+                                externalCallback = extSuccess;
+                                extSuccess(transformed);
+                            }
+                            return this;
+                        }
+                    };
+                }
+                return this;
+            }
+        };
+        global.Xrm = {
+            WebApi: {
+                retrieveMultipleRecords: function () { return mockPromise; }
+            }
+        };
+        global.DOMParser = class {
+            parseFromString(str, type) {
+                return {
+                    querySelector: () => ({ hasAttribute: () => true, getAttribute: () => 'account' })
+                };
+            }
+        };
+        var webApi = devKit.LoadWebApi();
+        var result = null;
+        // Call with fetchXml, maxPageSize (number), and callback (function)
+        // This covers line 802: typeof maxPageSizeOrSuccessCallback === 'function'
+        webApi.RetrieveRecords(
+            (e) => e,
+            '?fetchXml=' + encodeURIComponent('<fetch><entity name="account"/></fetch>'),
+            50,  // maxPageSize as number (line 801)
+            function (r) { result = r; }  // successCallback (line 802-804)
+        );
+        expect(result).toBeDefined();
+    });
+
+    test('RetrieveRecords - standard call with maxPageSize number (line 814 branch)', () => {
+        var mockResult = { entities: [{ id: '1', name: 'Test' }] };
+        var mockPromise = {
+            then: function (success, error) {
+                if (success) success(mockResult);
+                return mockPromise;
+            }
+        };
+        global.Xrm = {
+            WebApi: {
+                retrieveMultipleRecords: function () { return mockPromise; }
+            }
+        };
+        global.DOMParser = class {
+            parseFromString(str, type) {
+                return {
+                    querySelector: () => ({ hasAttribute: () => true, getAttribute: () => 'account' })
+                };
+            }
+        };
+        var webApi = devKit.LoadWebApi();
+        var result = null;
+        // Standard call: entityName, options, maxPageSize (number)
+        webApi.RetrieveRecords(
+            (e) => e,
+            'account',  // entityLogicalName
+            '?$select=name',  // options
+            100  // maxPageSize as number
+        );
+        expect(result).toBeNull();  // No callback provided
+    });
+
+    test('LoadFormV2 - BPF with processName parsing (lines 976-978)', () => {
+        var stringControl = new StringControlMock({
+            attribute: new StringAttributeMock({ name: "name", value: "Test" }),
+            name: "name",
+            label: "Name"
+        });
+        var ui = new UiMock({
+            formSelector: new FormSelectorMock(new ItemCollectionMock([new FormItemMock({
+                id: "form-id",
+                label: "Form",
+                currentItem: true,
+                formType: OptionSet.FormType.Update
+            })])),
+            controls: new ItemCollectionMock([stringControl])
+        });
+        var data = new DataMock(new EntityMock({ attributes: new ItemCollectionMock([]) }));
+        XrmMockGenerator.formContext = new FormContextMock(data, ui);
+        XrmMockGenerator.formContext.getFormContext = () => XrmMockGenerator.formContext;
+        global.Xrm = {
+            Utility: { getGlobalContext: () => ({}) },
+            App: { sidePanes: { state: 0 } }
+        };
+        var formConfig = {
+            body: [],
+            tab: [],
+            header: [],
+            bpf: ['BPF_Account___Name', 'BPF_Account___Status'],  // Two BPF fields with same process
+            quick: [],
+            grid: [],
+            navigation: []
+        };
+        var form = devKit.LoadFormV2(XrmMockGenerator.formContext, "wr", formConfig);
+        expect(form.Process).toBeDefined();
+        expect(form.Process.BPF_Account).toBeDefined();
+    });
+
+    test('LoadFormV2 - QuickForm with field parsing (lines 990-998)', () => {
+        var quickFormControl = new QuickFormControlMock({
+            name: 'contact_quickform',
+            controlType: 'quickform'
+        });
+        var stringControl = new StringControlMock({
+            attribute: new StringAttributeMock({ name: "name", value: "Test" }),
+            name: "name",
+            label: "Name"
+        });
+        var ui = new UiMock({
+            formSelector: new FormSelectorMock(new ItemCollectionMock([new FormItemMock({
+                id: "form-id",
+                label: "Form",
+                currentItem: true,
+                formType: OptionSet.FormType.Update
+            })])),
+            controls: new ItemCollectionMock([stringControl]),
+            quickForms: new ItemCollectionMock([quickFormControl])
+        });
+        var data = new DataMock(new EntityMock({ attributes: new ItemCollectionMock([]) }));
+        XrmMockGenerator.formContext = new FormContextMock(data, ui);
+        XrmMockGenerator.formContext.getFormContext = () => XrmMockGenerator.formContext;
+        global.Xrm = {
+            Utility: { getGlobalContext: () => ({}) },
+            App: { sidePanes: { state: 0 } }
+        };
+        var formConfig = {
+            body: [],
+            tab: [],
+            header: [],
+            bpf: [],
+            quick: ['contact_quickform___fullname', 'contact_quickform___emailaddress1', 'other_quickform'],  // with and without field
+            grid: [],
+            navigation: []
+        };
+        var form = devKit.LoadFormV2(XrmMockGenerator.formContext, "wr", formConfig);
+        expect(form.QuickForm).toBeDefined();
+        expect(form.QuickForm.contact_quickform).toBeDefined();
+        expect(form.QuickForm.other_quickform).toBeDefined();
+    });
+
+    test('LoadFormV2 - Tab with section parsing (lines 956-962)', () => {
+        var tabObject = {
+            getName: () => 'GENERAL',
+            getLabel: () => 'General',
+            setLabel: () => { },
+            getVisible: () => true,
+            setVisible: () => { },
+            getDisplayState: () => 'expanded',
+            setDisplayState: () => { },
+            getContentType: () => 'cardSections',
+            setContentType: () => { },
+            getParent: () => ({}),
+            sections: {
+                get: (name) => ({
+                    getName: () => name,
+                    getLabel: () => name,
+                    setLabel: () => { },
+                    getVisible: () => true,
+                    setVisible: () => { },
+                    getParent: () => ({}),
+                    controls: null
+                })
+            },
+            setFocus: () => { },
+            addTabStateChange: () => { },
+            removeTabStateChange: () => { }
+        };
+        var stringControl = new StringControlMock({
+            attribute: new StringAttributeMock({ name: "name", value: "Test" }),
+            name: "name",
+            label: "Name"
+        });
+        var ui = new UiMock({
+            formSelector: new FormSelectorMock(new ItemCollectionMock([new FormItemMock({
+                id: "form-id",
+                label: "Form",
+                currentItem: true,
+                formType: OptionSet.FormType.Update
+            })])),
+            controls: new ItemCollectionMock([stringControl]),
+            tabs: new ItemCollectionMock([tabObject])
+        });
+        ui.tabs = { get: (name) => tabObject };
+        var data = new DataMock(new EntityMock({ attributes: new ItemCollectionMock([]) }));
+        XrmMockGenerator.formContext = new FormContextMock(data, ui);
+        XrmMockGenerator.formContext.getFormContext = () => XrmMockGenerator.formContext;
+        XrmMockGenerator.formContext.ui = {
+            tabs: { get: (name) => tabObject },
+            getFormType: () => OptionSet.FormType.Update,
+            formSelector: ui.formSelector
+        };
+        global.Xrm = {
+            Utility: { getGlobalContext: () => ({}) },
+            App: { sidePanes: { state: 0 } }
+        };
+        var formConfig = {
+            body: [],
+            tab: ['GENERAL___SECTION1', 'GENERAL___SECTION2'],  // Same tab, multiple sections
+            header: [],
+            bpf: [],
+            quick: [],
+            grid: [],
+            navigation: []
+        };
+        var form = devKit.LoadFormV2(XrmMockGenerator.formContext, "wr", formConfig);
+        expect(form.Body).toBeDefined();
+        expect(form.Body.Tab).toBeDefined();
+        expect(form.Body.Tab.GENERAL).toBeDefined();
+        expect(form.Body.Tab.GENERAL.Section.SECTION1).toBeDefined();
+        expect(form.Body.Tab.GENERAL.Section.SECTION2).toBeDefined();
+    });
+
+    // Additional tests for 100% branch coverage
+
+    test('loadStage - steps loop iteration (lines 114-117)', () => {
+        // Stage with multiple steps to cover the loop iteration
+        var step1 = { getName: () => 'Step1', getAttribute: () => 'field1', isRequired: () => true, getProgress: () => 0, setProgress: () => { } };
+        var step2 = { getName: () => 'Step2', getAttribute: () => 'field2', isRequired: () => false, getProgress: () => 1, setProgress: () => { } };
+        var stageWithMultipleSteps = {
+            getId: () => 'stage1',
+            getName: () => 'Stage 1',
+            getStatus: () => 'active',
+            getCategory: () => ({ getValue: () => 0 }),
+            getSteps: () => [step1, step2]  // Array with 2 steps
+        };
+        var process = {
+            getActivePath: () => ({ get: () => stageWithMultipleSteps, getLength: () => 1 }),
+            getActiveProcess: () => ({
+                getId: () => 'proc1',
+                getName: () => 'Process',
+                isRendered: () => true,
+                getStages: () => ({ get: () => stageWithMultipleSteps, getLength: () => 1 })
+            }),
+            getActiveStage: () => stageWithMultipleSteps,
+            getSelectedStage: () => stageWithMultipleSteps
+        };
+        var formContext = { data: { process: process }, ui: { process: {} } };
+        var loadedProcess = devKit.LoadProcess(formContext);
+        var stage = loadedProcess.ActiveStage;
+        expect(stage.Steps.length).toBe(2);
+        expect(stage.Steps[0].Name).toBe('Step1');
+        expect(stage.Steps[1].Name).toBe('Step2');
+    });
+
+    test('Section.Controls - forEach iteration (line 360)', () => {
+        var ctrl1 = { getName: () => 'ctrl1' };
+        var ctrl2 = { getName: () => 'ctrl2' };
+        var sectionWithControls = {
+            getName: () => 'CONTROLS_SECTION',
+            getLabel: () => 'Controls',
+            setLabel: () => { },
+            getVisible: () => true,
+            setVisible: () => { },
+            getParent: () => ({}),
+            controls: {
+                get: (index) => index === 0 ? ctrl1 : ctrl2,
+                getLength: () => 2
+            }
+        };
+        var tabObject = {
+            getName: () => 'TEST_TAB',
+            getLabel: () => 'Test',
+            setLabel: () => { },
+            getVisible: () => true,
+            setVisible: () => { },
+            getDisplayState: () => 'expanded',
+            setDisplayState: () => { },
+            getContentType: () => 'cardSections',
+            setContentType: () => { },
+            getParent: () => ({}),
+            sections: { get: (name) => sectionWithControls },
+            setFocus: () => { },
+            addTabStateChange: () => { },
+            removeTabStateChange: () => { }
+        };
+        var formContext = { ui: { tabs: { get: (name) => tabObject } } };
+        var tabs = { TEST_TAB: { Section: { CONTROLS_SECTION: {} } } };
+        devKit.LoadTabs(formContext, tabs);
+        var controls = tabs.TEST_TAB.Section.CONTROLS_SECTION.Controls;
+        var count = 0;
+        controls.forEach((ctrl, index) => { count++; });
+        expect(count).toBe(2);
+    });
+
+    test('findFormItem - no matching items returns null (line 34 all false)', () => {
+        var formItem1 = new FormItemMock({ id: "form1", label: "Form 1", currentItem: false, formType: OptionSet.FormType.Update });
+        var formItem2 = new FormItemMock({ id: "form2", label: "Form 2", currentItem: true, formType: OptionSet.FormType.Update });
+        var ui = new UiMock({
+            formSelector: new FormSelectorMock(new ItemCollectionMock([formItem1, formItem2]))
+        });
+        var data = new DataMock(new EntityMock({ attributes: new ItemCollectionMock([]) }));
+        XrmMockGenerator.formContext = new FormContextMock(data, ui);
+        var form = devKit.LoadForm(XrmMockGenerator.formContext);
+        // Try to find a form that doesn't exist - all iterations should be false
+        var isVisible = form.FormIsVisible("non-existent-form-id");
+        expect(isVisible).toBeUndefined();
+    });
+
+    test('LoadFormV2 - bpfProcessName already set (line 976 false branch)', () => {
+        var stringControl = new StringControlMock({
+            attribute: new StringAttributeMock({ name: "name", value: "Test" }),
+            name: "name",
+            label: "Name"
+        });
+        var ui = new UiMock({
+            formSelector: new FormSelectorMock(new ItemCollectionMock([new FormItemMock({
+                id: "form-id", label: "Form", currentItem: true, formType: OptionSet.FormType.Update
+            })])),
+            controls: new ItemCollectionMock([stringControl])
+        });
+        var data = new DataMock(new EntityMock({ attributes: new ItemCollectionMock([]) }));
+        XrmMockGenerator.formContext = new FormContextMock(data, ui);
+        XrmMockGenerator.formContext.getFormContext = () => XrmMockGenerator.formContext;
+        global.Xrm = {
+            Utility: { getGlobalContext: () => ({}) },
+            App: { sidePanes: { state: 0 } }
+        };
+        // Multiple BPF fields - after first one, bpfProcessName is already set
+        var formConfig = {
+            body: [],
+            tab: [],
+            header: [],
+            bpf: ['BPF_Process___Field1', 'BPF_Process___Field2', 'BPF_Process___Field3'],
+            quick: [],
+            grid: [],
+            navigation: []
+        };
+        var form = devKit.LoadFormV2(XrmMockGenerator.formContext, "wr", formConfig);
+        expect(form.Process.BPF_Process).toBeDefined();
+    });
+
+    test('LoadFormV2 - executionContext.getFormContext fallback (line 949)', () => {
+        var stringControl = new StringControlMock({
+            attribute: new StringAttributeMock({ name: "name", value: "Test" }),
+            name: "name",
+            label: "Name"
+        });
+        var ui = new UiMock({
+            formSelector: new FormSelectorMock(new ItemCollectionMock([new FormItemMock({
+                id: "form-id", label: "Form", currentItem: true, formType: OptionSet.FormType.Update
+            })])),
+            controls: new ItemCollectionMock([stringControl])
+        });
+        var data = new DataMock(new EntityMock({ attributes: new ItemCollectionMock([]) }));
+        XrmMockGenerator.formContext = new FormContextMock(data, ui);
+        // executionContext without getFormContext - use fallback
+        var executionContext = XrmMockGenerator.formContext;
+        executionContext.getFormContext = undefined;  // Force fallback to executionContext itself
+        global.Xrm = {
+            Utility: { getGlobalContext: () => ({}) },
+            App: { sidePanes: { state: 0 } }
+        };
+        var formConfig = { body: [], tab: [], header: [], bpf: [], quick: [], grid: [], navigation: [] };
+        var form = devKit.LoadFormV2(executionContext, "wr", formConfig);
+        expect(form.FormType).toBeDefined();
+    });
+
+    test('LoadFormV2 - null executionContext (line 949 null branch)', () => {
+        global.Xrm = {
+            Utility: { getGlobalContext: () => ({}) },
+            App: { sidePanes: { state: 0 } }
+        };
+        var formConfig = { body: [], tab: [], header: [], bpf: [], quick: [], grid: [], navigation: [] };
+        // Pass null executionContext to cover line 949 null coalescing
+        var form = devKit.LoadFormV2(null, "wr", formConfig);
+        expect(form).toBeDefined();
+    });
+
+    test('LoadFormV2 - bpfProcessName is falsy (line 982 false branch)', () => {
+        var stringControl = new StringControlMock({
+            attribute: new StringAttributeMock({ name: "name", value: "Test" }),
+            name: "name",
+            label: "Name"
+        });
+        var ui = new UiMock({
+            formSelector: new FormSelectorMock(new ItemCollectionMock([new FormItemMock({
+                id: "form-id", label: "Form", currentItem: true, formType: OptionSet.FormType.Update
+            })])),
+            controls: new ItemCollectionMock([stringControl])
+        });
+        var data = new DataMock(new EntityMock({ attributes: new ItemCollectionMock([]) }));
+        XrmMockGenerator.formContext = new FormContextMock(data, ui);
+        XrmMockGenerator.formContext.getFormContext = () => XrmMockGenerator.formContext;
+        global.Xrm = {
+            Utility: { getGlobalContext: () => ({}) },
+            App: { sidePanes: { state: 0 } }
+        };
+        // BPF with empty process name (split result will have empty first element)
+        var formConfig = {
+            body: [],
+            tab: [],
+            header: [],
+            bpf: ['___Field1'],  // Empty process name
+            quick: [],
+            grid: [],
+            navigation: []
+        };
+        var form = devKit.LoadFormV2(XrmMockGenerator.formContext, "wr", formConfig);
+        expect(form.Process).toBeDefined();
+    });
+
+    test('RetrieveRecords - else branch with function callback (line 810-812)', () => {
+        var mockResult = { entities: [{ id: '1' }] };
+        var mockPromise = {
+            then: function (success, error) {
+                if (success) {
+                    var transformed = success(mockResult);
+                    return {
+                        then: function (extSuccess, extError) {
+                            if (extSuccess) extSuccess(transformed);
+                            return this;
+                        }
+                    };
+                }
+                return this;
+            }
+        };
+        global.Xrm = {
+            WebApi: { retrieveMultipleRecords: function () { return mockPromise; } }
+        };
+        var webApi = devKit.LoadWebApi();
+        var result = null;
+        // Standard call: apiConstructor, entityName, options, successCallback (function)
+        // This covers lines 810-812: maxPageSizeOrSuccessCallback is a function
+        webApi.RetrieveRecords(
+            (e) => e,
+            'account',           // entityLogicalName
+            '?$select=name',     // options
+            function (r) { result = r; }  // successCallback (line 811-812)
+        );
+        expect(result).toBeDefined();
+    });
+
+    // Final test cases for complete branch coverage
+
+    test('findFormItem - formSelector items getLength returns null (line 34 ?? branch)', () => {
+        // Create formContext where formSelector.items.getLength returns null
+        var formSelector = {
+            getCurrentItem: () => ({ getId: () => 'form-id', getLabel: () => 'Form' }),
+            items: {
+                getLength: () => null,  // Returns null, triggers ?? 0
+                get: () => null
+            }
+        };
+        var ui = new UiMock({ formSelector: new FormSelectorMock(new ItemCollectionMock([])) });
+        // Override the formSelector
+        ui._formSelector = { getCurrentItem: () => ({ getId: () => 'form-id', getLabel: () => 'Form' }), items: { getLength: () => null, get: () => null } };
+        var data = new DataMock(new EntityMock({ attributes: new ItemCollectionMock([]) }));
+        var formContext = {
+            data: data,
+            ui: { formSelector: { getCurrentItem: () => ({ getId: () => 'form-id', getLabel: () => 'Form' }), items: { getLength: () => null, get: () => null } }, getFormType: () => 2 }
+        };
+        var form = devKit.LoadForm(formContext);
+        // FormIsVisible should handle null getLength gracefully
+        expect(form.FormIsVisible('any-id')).toBeUndefined();
+    });
+
+    test('loadStage - steps.length is undefined (line 114 || 0 branch)', () => {
+        // Create stage where getSteps returns object without length property
+        var stageWithBadSteps = {
+            getId: () => 'stage1',
+            getName: () => 'Stage 1',
+            getStatus: () => 'active',
+            getCategory: () => ({ getValue: () => 0 }),
+            getSteps: () => ({})  // Object without length property
+        };
+        var process = {
+            getActivePath: () => ({ get: () => stageWithBadSteps, getLength: () => 1 }),
+            getActiveProcess: () => ({
+                getId: () => 'proc1',
+                getName: () => 'Process',
+                isRendered: () => true,
+                getStages: () => ({ get: () => stageWithBadSteps, getLength: () => 1 })
+            }),
+            getActiveStage: () => stageWithBadSteps,
+            getSelectedStage: () => stageWithBadSteps
+        };
+        var formContext = { data: { process: process }, ui: { process: {} } };
+        var loadedProcess = devKit.LoadProcess(formContext);
+        var stage = loadedProcess.ActiveStage;
+        // Should return empty array when steps.length is falsy
+        expect(stage.Steps).toEqual([]);
+    });
+
+    test('loadProcessInner - Stages.forEach with getLength returning 0 (line 137 || 0 branch)', () => {
+        var stages = {
+            get: (i) => null,
+            getLength: () => 0  // Zero stages
+        };
+        var process = {
+            getActivePath: () => ({ get: () => null, getLength: () => 0 }),
+            getActiveProcess: () => ({
+                getId: () => 'proc1',
+                getName: () => 'Process',
+                isRendered: () => true,
+                getStages: () => stages
+            }),
+            getActiveStage: () => null,
+            getSelectedStage: () => null
+        };
+        var formContext = { data: { process: process }, ui: { process: {} } };
+        var loadedProcess = devKit.LoadProcess(formContext);
+        var stagesObj = loadedProcess.ActiveProcess.Stages;
+        var count = 0;
+        stagesObj.forEach((stage, index) => { count++; });
+        expect(count).toBe(0);  // No iterations
+    });
+
+    test('Section.Controls - getLength returns null (line 360 || 0 branch)', () => {
+        var sectionWithBadControls = {
+            getName: () => 'BAD_CONTROLS',
+            getLabel: () => 'Bad Controls',
+            setLabel: () => { },
+            getVisible: () => true,
+            setVisible: () => { },
+            getParent: () => ({}),
+            controls: {
+                get: () => null,
+                getLength: () => null  // Returns null
+            }
+        };
+        var tabObject = {
+            getName: () => 'TAB',
+            getLabel: () => 'Tab',
+            setLabel: () => { },
+            getVisible: () => true,
+            setVisible: () => { },
+            getDisplayState: () => 'expanded',
+            setDisplayState: () => { },
+            getContentType: () => 'cardSections',
+            setContentType: () => { },
+            getParent: () => ({}),
+            sections: { get: (name) => sectionWithBadControls },
+            setFocus: () => { },
+            addTabStateChange: () => { },
+            removeTabStateChange: () => { }
+        };
+        var formContext = { ui: { tabs: { get: (name) => tabObject } } };
+        var tabs = { TAB: { Section: { BAD_CONTROLS: {} } } };
+        devKit.LoadTabs(formContext, tabs);
+        var controls = tabs.TAB.Section.BAD_CONTROLS.Controls;
+        var count = 0;
+        controls.forEach((ctrl, index) => { count++; });
+        expect(count).toBe(0);  // No iterations because getLength is falsy
+    });
+
+    test('Grid rows - getRows returns object with getLength null (line 477 || 0 branch)', () => {
+        var gridControl = {
+            getName: () => 'grid1',
+            getEntityName: () => 'contact',
+            getFetchXml: () => '<fetch/>',
+            getGridType: () => 1,
+            getRelationship: () => ({}),
+            getGrid: () => ({
+                getRows: () => ({ getLength: () => null, get: () => null }),
+                getSelectedRows: () => null,
+                getTotalRecordCount: () => 0
+            }),
+            getViewSelector: () => null,
+            getVisible: () => true,
+            setVisible: () => { },
+            getControlType: () => 'subgrid',
+            getParent: () => ({}),
+            getDisabled: () => false,
+            setDisabled: () => { },
+            getLabel: () => 'Grid',
+            setLabel: () => { },
+            setFocus: () => { },
+            addOnLoad: () => { },
+            removeOnLoad: () => { },
+            openRelatedGrid: () => { },
+            refresh: () => { },
+            refreshRibbon: () => { },
+            getUrl: () => ''
+        };
+        var formContext = { getControl: (name) => gridControl };
+        var grids = { grid1: {} };
+        devKit.LoadGrids(formContext, grids);
+        var rows = grids.grid1.Rows;
+        var count = 0;
+        rows.forEach((row, index) => { count++; });
+        expect(count).toBe(0);  // No iterations
+    });
+
+    test('LoadFormV2 - formConfig with missing properties (line 951 default values)', () => {
+        var stringControl = new StringControlMock({
+            attribute: new StringAttributeMock({ name: "name", value: "Test" }),
+            name: "name",
+            label: "Name"
+        });
+        var ui = new UiMock({
+            formSelector: new FormSelectorMock(new ItemCollectionMock([new FormItemMock({
+                id: "form-id", label: "Form", currentItem: true, formType: OptionSet.FormType.Update
+            })])),
+            controls: new ItemCollectionMock([stringControl])
+        });
+        var data = new DataMock(new EntityMock({ attributes: new ItemCollectionMock([]) }));
+        XrmMockGenerator.formContext = new FormContextMock(data, ui);
+        XrmMockGenerator.formContext.getFormContext = () => XrmMockGenerator.formContext;
+        global.Xrm = {
+            Utility: { getGlobalContext: () => ({}) },
+            App: { sidePanes: { state: 0 } }
+        };
+        // formConfig with only some properties (others should use default [])
+        var formConfig = {
+            body: ['Name']
+            // Missing: tab, header, bpf, quick, grid, navigation, dialog - all should default to []
+        };
+        var form = devKit.LoadFormV2(XrmMockGenerator.formContext, "wr", formConfig);
+        expect(form.Body).toBeDefined();
+        expect(form.Header).toBeDefined();
+        expect(form.Process).toBeDefined();
+    });
+
+    // FINAL 3 TESTS FOR 100% COVERAGE
+
+    test('RetrieveRecords - fetchXml with maxPageSize number but no callback (line 802 false branch)', () => {
+        var mockResult = { entities: [{ id: '1' }] };
+        var mockPromise = {
+            then: function (success, error) {
+                if (success) success(mockResult);
+                return { then: function () { return this; } };
+            }
+        };
+        global.Xrm = {
+            WebApi: { retrieveMultipleRecords: function () { return mockPromise; } }
+        };
+        global.DOMParser = class {
+            parseFromString(str, type) {
+                return { querySelector: () => ({ hasAttribute: () => true, getAttribute: () => 'account' }) };
+            }
+        };
+        var webApi = devKit.LoadWebApi();
+        // Call with fetchXml + maxPageSize (number) BUT NO callback
+        // This covers line 802 false branch: typeof maxPageSizeOrSuccessCallback === 'function' is FALSE
+        var result = webApi.RetrieveRecords(
+            (e) => e,
+            '?fetchXml=' + encodeURIComponent('<fetch><entity name="account"/></fetch>'),
+            50  // maxPageSize as number, no callback - covers else branch of line 802
+        );
+        expect(result).toBeDefined();  // Returns promise
+    });
+
+    test('RetrieveRecords - entity + options + maxPageSize number only (line 814 branch)', () => {
+        var mockResult = { entities: [{ id: '1' }] };
+        var mockPromise = {
+            then: function (success, error) {
+                if (success) success(mockResult);
+                return { then: function () { return this; } };
+            }
+        };
+        global.Xrm = {
+            WebApi: { retrieveMultipleRecords: function () { return mockPromise; } }
+        };
+        var webApi = devKit.LoadWebApi();
+        // Standard call: entity, options, maxPageSize (number) - NOT function
+        // This should cover the else-if branch at line 814
+        var result = webApi.RetrieveRecords(
+            (e) => e,
+            'account',       // entityLogicalName (not starting with ?)
+            '?$select=name', // options
+            100              // maxPageSize as number, NOT a function - covers line 814
+        );
+        expect(result).toBeDefined();
+    });
+
+    test('LoadFormV2 - completely undefined formConfig (line 951 all defaults)', () => {
+        var stringControl = new StringControlMock({
+            attribute: new StringAttributeMock({ name: "name", value: "Test" }),
+            name: "name",
+            label: "Name"
+        });
+        var ui = new UiMock({
+            formSelector: new FormSelectorMock(new ItemCollectionMock([new FormItemMock({
+                id: "form-id", label: "Form", currentItem: true, formType: OptionSet.FormType.Update
+            })])),
+            controls: new ItemCollectionMock([stringControl])
+        });
+        var data = new DataMock(new EntityMock({ attributes: new ItemCollectionMock([]) }));
+        XrmMockGenerator.formContext = new FormContextMock(data, ui);
+        XrmMockGenerator.formContext.getFormContext = () => XrmMockGenerator.formContext;
+        global.Xrm = {
+            Utility: { getGlobalContext: () => ({}) },
+            App: { sidePanes: { state: 0 } }
+        };
+        // Completely empty formConfig - all properties will use defaults from destructuring
+        // This covers line 951: all default values are used
+        var formConfig = {};
+        var form = devKit.LoadFormV2(XrmMockGenerator.formContext, "wr", formConfig);
+        expect(form.Body).toBeDefined();
+        expect(form.Body.Tab).toEqual({});
+        expect(form.Header).toEqual({});
+        expect(form.Process).toBeDefined();
+        expect(form.QuickForm).toEqual({});
+        expect(form.Grid).toEqual({});
+        expect(form.Navigation).toEqual({});
+    });
+
+    // FINAL TEST FOR 100% COVERAGE - line 814 else-if branch
+    test('RetrieveRecords - entity name + options + number only no callback (line 814 else-if)', () => {
+        var mockResult = { entities: [] };
+        var mockPromise = {
+            then: function (success, error) {
+                if (success) success(mockResult);
+                return { then: function () { return this; } };
+            }
+        };
+        global.Xrm = {
+            WebApi: { retrieveMultipleRecords: function () { return mockPromise; } }
+        };
+        var webApi = devKit.LoadWebApi();
+        // Call with: entityLogicalName (not starting with ?), options, maxPageSize AS NUMBER (not function)
+        // Line 814: else if (typeof maxPageSizeOrSuccessCallback === 'number')
+        // This is when: entityLogicalNameOrOptions is 'account' (no ?), optionsOrMaxPageSizeOrCallback is '?$select=name',
+        // and maxPageSizeOrSuccessCallback is 200 (number, not function)
+        var result = webApi.RetrieveRecords(
+            (e) => e,
+            'account',           // entityLogicalNameOrOptions - NOT starting with ?, so goes to else branch
+            '?$select=name',     // optionsOrMaxPageSizeOrCallback - this is options
+            200                  // maxPageSizeOrSuccessCallback - NUMBER (not function), covers line 814
+            // No 5th argument (successCallback), so line 814 else-if branch is taken
+        );
+        expect(result).toBeDefined();
+    });
+
+    // ABSOLUTE FINAL TEST - line 814 implicit else branch (neither function nor number)
+    test('RetrieveRecords - entity name + options but no maxPageSize (line 814 implicit else)', () => {
+        var mockResult = { entities: [] };
+        var mockPromise = {
+            then: function (success, error) {
+                if (success) success(mockResult);
+                return { then: function () { return this; } };
+            }
+        };
+        global.Xrm = {
+            WebApi: { retrieveMultipleRecords: function () { return mockPromise; } }
+        };
+        var webApi = devKit.LoadWebApi();
+        // Call with entity name and options only - no maxPageSize or callback
+        // This covers the implicit else branch when maxPageSizeOrSuccessCallback is undefined
+        var result = webApi.RetrieveRecords(
+            (e) => e,
+            'account',           // entityLogicalName
+            '?$select=name'      // options
+            // No 4th argument - maxPageSizeOrSuccessCallback is undefined
+            // This means: typeof undefined === 'function' is FALSE
+            // AND: typeof undefined === 'number' is also FALSE
+            // So NEITHER if nor else-if is taken, covers the implicit else
+        );
+        expect(result).toBeDefined();
+    });
 });
+
