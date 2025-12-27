@@ -1,41 +1,3 @@
-/**
- * DevKit - Microsoft Dynamics 365 / Power Platform Client API Wrapper
- * ====================================================================
- *
- * MS Client API Reference: https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference
- *
- * API Coverage: ~95-97% of Microsoft Client API
- * ---------------------------------------------
- * - Attributes (Columns): 100%
- * - Controls: ~98%
- * - formContext.data: 100%
- * - formContext.data.entity: 100%
- * - formContext.ui: 100%
- * - formContext.data.process (BPF): 100%
- * - Execution Context: 100%
- * - Xrm.WebApi: 100%
- * - Xrm.Utility: 100%
- * - Xrm.Navigation: 100%
- * - Xrm.Device: 100%
- * - Xrm.Encoding: 100%
- * - Xrm.App: 100%
- * - Xrm.Copilot: 100%
- * - Grids: ~90%
- *
- * Promise Support: DUAL PATTERN
- * -----------------------------
- * All async functions support BOTH patterns:
- * 1. Callback style (.then): Pass successCallback, errorCallback
- *    Example: WebApi.CreateRecord(entity, data, onSuccess, onError);
- *
- * 2. Promise style (async/await): Omit callbacks to get Promise
- *    Example: const result = await WebApi.CreateRecord(entity, data);
- *
- * Features:
- * - Type-safe property access via getters/setters
- * - Form type protection (auto-prevents changes on Read-Only/Disabled forms)
- * - Extended WebApi with RetrieveRecords factory pattern
- */
 function getXrm(): typeof Xrm | undefined {
     if (typeof window !== 'undefined' && (window as any).Xrm !== undefined) {
         return (window as any).Xrm;
@@ -147,7 +109,6 @@ function loadField(formContext: any, field: any, attribute: any, control: any): 
     field.SetIsValid = (valid: boolean, message?: string) => attribute?.setIsValid(valid, message);
     field.SetNotification = (message: string, uniqueId: string) => control?.setNotification(message, uniqueId);
 }
-// Helper: find control by name using attribute.controls (works for lazy-loaded tabs)
 function findControlFromAttribute(attribute: any, controlName: string): any {
     let foundControl: any = null;
     const lowerName = controlName?.toLowerCase();
@@ -636,7 +597,7 @@ function loadCopilot(): DevKit.ICopilot {
     };
     return obj;
 }
-function loadFormV3<TBody = Record<string, any>, THeader = Record<string, any>, TGrid = Record<string, any>, TNavigation = Record<string, any>, TQuickForm = Record<string, any>, TProcess = any>(
+function loadFormV3<TBody = Record<string, any>, THeader = Record<string, any>, TGrid = Record<string, any>, TNavigation = Record<string, any>, TQuickForm = Record<string, any>, TProcess = any, TDialog = any>(
     executionContext: any,
     defaultWebResourceName: string | undefined,
     formConfig: {
@@ -698,7 +659,7 @@ function loadFormV3<TBody = Record<string, any>, THeader = Record<string, any>, 
     SidePanes: DevKit.ISidePanes;
     WebApi: DevKit.IWebApi;
     Copilot: DevKit.ICopilot;
-    Dialog: DevKit.IDialog;
+    Dialog: TDialog;
 } {
     const formContext = executionContext?.getFormContext?.() ?? executionContext ?? null;
     const form: any = {};
@@ -1153,14 +1114,14 @@ function webApiReturnGet(data: any, type?: DevKit.WebApiFieldType): any {
     return parser ? parser(data) : data;
 }
 
-export class FormBase<TBody = any, THeader = any, TGrid = any, TNavigation = any, TQuickForm = any, TProcess = any> {
+export class FormBase<TBody = any, THeader = any, TGrid = any, TNavigation = any, TQuickForm = any, TProcess = any, TDialog = any> {
     public Body: TBody;
     public Header: THeader;
     public Grid: TGrid;
     public Navigation: TNavigation;
     public QuickForm: TQuickForm;
     public Process: TProcess;
-    public Dialog: DevKit.IDialog;
+    public Dialog: TDialog;
     public ExecutionContext: DevKit.IExecutionContext;
     public Utility: DevKit.IUtility;
     public SidePanes: DevKit.ISidePanes;
@@ -1208,7 +1169,7 @@ export class FormBase<TBody = any, THeader = any, TGrid = any, TNavigation = any
         defaultWebResourceName: string | undefined,
         formConfig: DevKit.IFormConfig
     ) {
-        const form = loadFormV3<TBody, THeader, TGrid, TNavigation, TQuickForm, TProcess>(
+        const form = loadFormV3<TBody, THeader, TGrid, TNavigation, TQuickForm, TProcess, TDialog>(
             executionContext,
             defaultWebResourceName,
             formConfig
