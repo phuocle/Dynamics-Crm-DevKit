@@ -1884,6 +1884,90 @@ describe('loadFormV3 Tests', () => {
             // Controls should be null when section.controls is undefined
             expect(section.Controls).toBeNull();
         });
+
+        test('Section.Controls.forEach should handle undefined getLength (line 187 || 0 branch)', () => {
+            // Create controls collection where getLength returns undefined
+            const controlsCollectionWithUndefinedLength = {
+                get: (arg: any) => ({ name: 'ctrl1' }),
+                getLength: () => undefined // This triggers the || 0 branch
+            };
+
+            const sectionObject = {
+                getName: () => 'SECTION_UNDEFINED_LENGTH',
+                getLabel: () => 'Section Undefined Length',
+                setLabel: () => { },
+                getVisible: () => true,
+                setVisible: () => { },
+                getParent: () => ({ getName: () => 'TAB3' }),
+                controls: controlsCollectionWithUndefinedLength
+            };
+
+            const tabObject = {
+                getName: () => 'TAB3',
+                getLabel: () => 'Tab 3',
+                setLabel: () => { },
+                getVisible: () => true,
+                setVisible: () => { },
+                getDisplayState: () => 'expanded',
+                setDisplayState: () => { },
+                getParent: () => ({}),
+                getContentType: () => 'cardSections',
+                setContentType: () => { },
+                sections: {
+                    get: (n: string) => sectionObject,
+                    getLength: () => 1
+                },
+                addTabStateChange: () => { },
+                removeTabStateChange: () => { },
+                setFocus: () => { }
+            };
+
+            const tabsMap = new Map<string, any>();
+            tabsMap.set('TAB3', tabObject);
+
+            const formContext = {
+                data: {
+                    getIsDirty: () => false,
+                    isValid: () => true,
+                    entity: {
+                        attributes: { get: () => null },
+                        getId: () => 'test-id',
+                        getEntityName: () => 'account',
+                        getIsDirty: () => false,
+                        isValid: () => true,
+                        getDataXml: () => '',
+                        getEntityReference: () => ({}),
+                        getPrimaryAttributeValue: () => ''
+                    }
+                },
+                ui: {
+                    getFormType: () => 2,
+                    controls: { get: () => null, getLength: () => 0, forEach: () => { } },
+                    tabs: { get: (n: string) => tabsMap.get(n), getLength: () => 1, forEach: () => { } },
+                    formSelector: { getCurrentItem: () => null, items: { getLength: () => 0 } },
+                    getViewPortHeight: () => 800,
+                    getViewPortWidth: () => 1200
+                },
+                getControl: () => null,
+                getAttribute: () => null,
+                getFormContext: function () { return this; }
+            };
+
+            const executionContext = { getFormContext: () => formContext };
+            const form = new FormBase(executionContext, 'test', {
+                tab: ['TAB3___SECTION_UNDEFINED_LENGTH']
+            });
+
+            const section = form.Body.Tab.TAB3.Section.SECTION_UNDEFINED_LENGTH;
+            expect(section).toBeDefined();
+            expect(section.Controls).toBeDefined();
+            expect(section.Controls).not.toBeNull();
+
+            // forEach should not throw and iterate 0 times because getLength() is undefined -> fallback to 0
+            let count = 0;
+            section.Controls.forEach(() => { count++; });
+            expect(count).toBe(0); // Should be 0 because || 0 fallback
+        });
     });
 
     // =========================================================================
