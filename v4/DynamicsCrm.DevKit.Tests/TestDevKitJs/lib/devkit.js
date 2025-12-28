@@ -923,13 +923,13 @@ const devKit = (function () {
         return obj;
     }
     function loadSidePanes() {
-        const sidePanes = {};
-        getterSetter(sidePanes, 'DisplayState', () => Xrm?.App?.sidePanes?.state, value => { Xrm.App.sidePanes.state = value; });
-        sidePanes.Create = function (paneOptions, successCallback) { Xrm?.App?.sidePanes?.createPane(paneOptions)?.then(successCallback); };
-        sidePanes.Get = paneId => Xrm?.App?.sidePanes?.getPane(paneId);
-        sidePanes.GetAll = () => Xrm?.App?.sidePanes?.getAllPanes();
-        sidePanes.GetSelected = () => Xrm?.App?.sidePanes?.getSelectedPane();
-        return sidePanes;
+        const obj = {};
+        getterSetter(obj, 'DisplayState', () => Xrm?.App?.sidePanes?.state, value => { Xrm.App.sidePanes.state = value; });
+        obj.Create = function (paneOptions, successCallback) { Xrm?.App?.sidePanes?.createPane(paneOptions)?.then(successCallback); };
+        obj.Get = paneId => Xrm?.App?.sidePanes?.getPane(paneId);
+        obj.GetAll = () => Xrm?.App?.sidePanes?.getAllPanes();
+        obj.GetSelected = () => Xrm?.App?.sidePanes?.getSelectedPane();
+        return obj;
     }
     function loadOthers(formContext, form, defaultWebResourceName) {
         form.SidePanes = loadSidePanes();
