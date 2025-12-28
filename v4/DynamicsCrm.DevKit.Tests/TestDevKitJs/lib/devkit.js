@@ -588,6 +588,11 @@ const devKit = (function () {
         });
         return obj;
     }
+    function loadBody(formContext, body, tab) {
+        const bodyObj = loadFields(formContext, body);
+        bodyObj.Tab = loadTabs(formContext, tab);
+        return bodyObj;
+    }
     function loadUtility(defaultWebResourceName) {
         const obj = {};
         const getApp = Xrm?.App;
@@ -1016,9 +1021,7 @@ const devKit = (function () {
         const formContext = executionContext?.getFormContext?.() ?? executionContext ?? null;
         const form = loadForm(formContext);
         const { body = [], tab = [], header = [], bpf = [], quick = [], grid = [], navigation = [], dialog = [] } = formConfig;
-        const bodyObj = loadFields(formContext, body);
-        bodyObj.Tab = loadTabs(formContext, tab);
-        form.Body = bodyObj;
+        form.Body = loadBody(formContext, body, tab);
         form.Header = loadFields(formContext, header, 'header_');
         form.Process = loadProcess(formContext, bpf);
         form.QuickForm = loadQuickForms(formContext, quick);
