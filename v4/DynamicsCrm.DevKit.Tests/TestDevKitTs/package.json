@@ -6,8 +6,7 @@
     "debug": "node build.js debug",
     "release": "node build.js release",
     "check": "tsc --noEmit",
-    "devkit-test": "jest --coverage",
-    "account-test": "jest --config jest.account.config.js"
+    "devkit-test": "jest --coverage"
   },
   "devDependencies": {
     "@types/jest": "^30.0.0",

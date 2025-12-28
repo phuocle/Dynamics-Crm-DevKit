@@ -31,10 +31,15 @@ File này hướng dẫn AI hiểu rõ context và cấu trúc của dự án đ
   - `entities/*.ts` - TypeScript source files
   - `lib/devkit.ts` - Core DevKit TypeScript library
   - `build/*.js` - Compiled JavaScript files (từ TypeScript)
-  - `test/*.test.ts` - Unit tests
+  - `test/devkit/*.test.ts` - Unit tests cho devkit.ts
+  - `test/account/*.test.ts` - Unit tests cho Account entity
 
-**Build command:** `npm run debug` (debug mode) hoặc `npm run release` (production)  
-**Test command:** `npm run devkit-test`
+**Build command:**
+- `npm run debug` (Build All - debug)
+- `npm run debug Account` (Build Account - debug)
+- `npm run release` (Build All - release)
+
+**Test command:** `npm run devkit-test` (Test All - 100% coverage)
 
 ---
 
@@ -94,7 +99,7 @@ Thực hiện deploy JavaScript DevKit:
 
 ### `deploy.devkitts.bat` (TestDevKitTs)
 Thực hiện deploy TypeScript DevKit:
-1. Run unit tests
+1. Run `npm run devkit-test` (All tests with coverage)
 2. Build TypeScript files (`npm run debug`)
 3. Copy files sang TestWebResourceTs
 4. Thông báo hoàn thành
