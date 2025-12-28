@@ -931,11 +931,6 @@ const devKit = (function () {
         obj.GetSelected = () => Xrm?.App?.sidePanes?.getSelectedPane();
         return obj;
     }
-    function loadOthers(formContext, form, defaultWebResourceName) {
-        form.SidePanes = loadSidePanes();
-        form.WebApi = loadWebApi();
-        form.Copilot = loadCopilot();
-    }
     function loadFormDialog(formContext, fields) {
         const form = {};
         const fieldsLength = fields?.length || 0;
@@ -1016,7 +1011,9 @@ const devKit = (function () {
         }
         form.Utility = loadUtility(defaultWebResourceName);
         form.ExecutionContext = loadExecutionContext(executionContext);
-        loadOthers(formContext, form, defaultWebResourceName);
+        form.SidePanes = loadSidePanes();
+        form.WebApi = loadWebApi();
+        form.Copilot = loadCopilot();
         return form;
     }
     return {
@@ -1032,7 +1029,6 @@ const devKit = (function () {
         LoadWebApi: loadWebApi,
         LoadCopilot: loadCopilot,
         LoadExecutionContext: loadExecutionContext,
-        LoadOthers: loadOthers,
         LoadFormDialog: loadFormDialog,
         LoadSidePanes: loadSidePanes,
         LoadFormV2: loadFormV2

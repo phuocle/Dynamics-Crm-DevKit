@@ -1,4 +1,4 @@
-﻿import { OptionSet, devKit } from '../lib/devkit.js';
+import { OptionSet, devKit } from '../lib/devkit.js';
 import {
     XrmMockGenerator, ContextMock, UserSettingsMock, ClientContextMock, LookupValueMock, DataMock, EntityMock, ItemCollectionMock, AttributeMock, StringControlMock,
     StringAttributeMock, UiMock, FormSelectorMock, FormItemMock, FormContextMock, OrganizationSettingsMock, EventContextMock, StageMock, StepMock, ProcessControlMock,
@@ -519,16 +519,6 @@ describe('devKit', () => {
         expectXrmPromiseMock(form.Utility.AddGlobalNotification(null, null, null));
         expectXrmPromiseMock(form.Utility.ClearGlobalNotification(null, null, null));
 
-    });
-    test('devKit.LoadOthers', () => {
-        var form = {};
-        devKit.LoadOthers(null, form, null);
-        expect(() => { form.SidePanes.Get(null) }).toThrow(new Error("Method not implemented."));
-        expect(() => { form.SidePanes.GetSelected() }).toThrow(new Error("Method not implemented."));
-        expect(() => { form.SidePanes.GetAll() }).toThrow(new Error("Method not implemented."));
-        expect(() => { form.SidePanes.Create(null, null) }).toThrow(new Error("Method not implemented."));
-        form.SidePanes.DisplayState = 1;
-        expect(form.SidePanes.DisplayState).toBe(1);
     });
     test('devKit.LoadExecutionContext', () => {
         var save = new SaveEventArgumentsMock(1);
