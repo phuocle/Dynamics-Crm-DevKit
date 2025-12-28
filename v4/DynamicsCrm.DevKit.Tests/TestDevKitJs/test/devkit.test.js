@@ -1629,15 +1629,17 @@ describe('devKit', () => {
         webApi.UpdateRecord("account", "guid-123", { name: "Updated" }, successCallback, errorCallback);
 
         // Test Execute without callback
+        // NOTE: Execute now uses WebApi.online.execute per Microsoft docs
         webApi.Execute({ getMetadata: () => ({}) });
-        expect(executeCalled).toBe(true);
+        expect(onlineExecuteCalled).toBe(true);
 
         // Test Execute with callback
         webApi.Execute({ getMetadata: () => ({}) }, successCallback, errorCallback);
 
         // Test ExecuteMultiple without callback
+        // NOTE: ExecuteMultiple now uses WebApi.online.executeMultiple per Microsoft docs
         webApi.ExecuteMultiple([{ getMetadata: () => ({}) }]);
-        expect(executeMultipleCalled).toBe(true);
+        expect(onlineExecuteMultipleCalled).toBe(true);
 
         // Test ExecuteMultiple with callback
         webApi.ExecuteMultiple([{ getMetadata: () => ({}) }], successCallback, errorCallback);
@@ -1662,6 +1664,115 @@ describe('devKit', () => {
         var isAvailable = offline.IsAvailable("account");
         expect(offlineAvailableCalled).toBe(true);
         expect(isAvailable).toBe(true);
+    });
+    test('devKit.LoadWebApi - Execute/ExecuteMultiple offline mode handling', () => {
+        // Setup mock WebApi with offline mode enabled
+        let errorCallbackCalled = false;
+        let errorArg = null;
+        const errorCallback = function (err) { errorCallbackCalled = true; errorArg = err; };
+        const mockPromise = {
+            then: function (success, error) { return mockPromise; }
+        };
+
+        global.Xrm = {
+            WebApi: {
+                online: {
+                    execute: function () { return mockPromise; },
+                    executeMultiple: function () { return mockPromise; }
+                }
+            },
+            Utility: {
+                getGlobalContext: function () {
+                    return {
+                        client: {
+                            isOffline: function () { return true; }  // Simulate offline mode
+                        }
+                    };
+                }
+            }
+        };
+
+        var webApi = devKit.LoadWebApi();
+
+        // Test Execute returns undefined when offline
+        var result = webApi.Execute({ getMetadata: () => ({}) });
+        expect(result).toBeUndefined();
+
+        // Test Execute calls errorCallback when offline
+        webApi.Execute({ getMetadata: () => ({}) }, undefined, errorCallback);
+        expect(errorCallbackCalled).toBe(true);
+        expect(errorArg).toBeInstanceOf(Error);
+        expect(errorArg.message).toBe('Execute is not available in offline mode');
+
+        // Reset for ExecuteMultiple test
+        errorCallbackCalled = false;
+        errorArg = null;
+
+        // Test ExecuteMultiple returns undefined when offline
+        result = webApi.ExecuteMultiple([{}]);
+        expect(result).toBeUndefined();
+
+        // Test ExecuteMultiple calls errorCallback when offline
+        webApi.ExecuteMultiple([{}], undefined, errorCallback);
+        expect(errorCallbackCalled).toBe(true);
+        expect(errorArg).toBeInstanceOf(Error);
+        expect(errorArg.message).toBe('ExecuteMultiple is not available in offline mode');
+    });
+    test('devKit.LoadWebApi - isClientOffline returns false when isOffline is undefined', () => {
+        // Simulates environment where isOffline method doesn't exist
+        let onlineExecuteCalled = false;
+        const mockPromise = {
+            then: function (success, error) { return mockPromise; }
+        };
+
+        global.Xrm = {
+            WebApi: {
+                online: {
+                    execute: function () { onlineExecuteCalled = true; return mockPromise; },
+                    executeMultiple: function () { return mockPromise; }
+                }
+            },
+            Utility: {
+                getGlobalContext: function () {
+                    return {
+                        client: {
+                            // isOffline is undefined
+                        }
+                    };
+                }
+            }
+        };
+
+        var webApi = devKit.LoadWebApi();
+
+        // Should NOT return undefined since isOffline() is not true
+        var result = webApi.Execute({ getMetadata: () => ({}) });
+        expect(onlineExecuteCalled).toBe(true);
+    });
+    test('devKit.LoadWebApi - isClientOffline returns false when getGlobalContext throws (line 764 catch)', () => {
+        // Simulates environment where getGlobalContext throws an error
+        let onlineExecuteCalled = false;
+        const mockPromise = {
+            then: function (success, error) { return mockPromise; }
+        };
+
+        global.Xrm = {
+            WebApi: {
+                online: {
+                    execute: function () { onlineExecuteCalled = true; return mockPromise; },
+                    executeMultiple: function () { return mockPromise; }
+                }
+            },
+            Utility: {
+                getGlobalContext: function () { throw new Error('Not available in this context'); }
+            }
+        };
+
+        var webApi = devKit.LoadWebApi();
+
+        // Should NOT return undefined - catch block returns false, so Execute proceeds
+        var result = webApi.Execute({ getMetadata: () => ({}) });
+        expect(onlineExecuteCalled).toBe(true);
     });
     test('devKit.LoadWebApi - RetrieveRecords with fetchXml', () => {
         // Mock DOMParser for Node.js environment

@@ -757,8 +757,22 @@ const devKit = (function () {
                 return promise;
             }
         };
+        // Helper to check if client is offline (for execute methods that only work online)
+        const isClientOffline = () => {
+            try {
+                return xrmInstance?.Utility?.getGlobalContext?.()?.client?.isOffline?.() === true;
+            } catch { return false; }
+        };
         obj.Execute = function (request, successCallback, errorCallback) {
-            const promise = getWebApi?.execute(request);
+            // Execute only exists on Xrm.WebApi.online per Microsoft docs
+            // If client is offline, gracefully return undefined instead of throwing
+            if (isClientOffline()) {
+                if (errorCallback) {
+                    errorCallback(new Error('Execute is not available in offline mode'));
+                }
+                return undefined;
+            }
+            const promise = getOnline?.execute(request);
             if (successCallback) {
                 promise?.then(successCallback, errorCallback);
             } else {
@@ -766,7 +780,15 @@ const devKit = (function () {
             }
         };
         obj.ExecuteMultiple = function (requests, successCallback, errorCallback) {
-            const promise = getWebApi?.executeMultiple(requests);
+            // ExecuteMultiple only exists on Xrm.WebApi.online per Microsoft docs
+            // If client is offline, gracefully return undefined instead of throwing
+            if (isClientOffline()) {
+                if (errorCallback) {
+                    errorCallback(new Error('ExecuteMultiple is not available in offline mode'));
+                }
+                return undefined;
+            }
+            const promise = getOnline?.executeMultiple(requests);
             if (successCallback) {
                 promise?.then(successCallback, errorCallback);
             } else {
