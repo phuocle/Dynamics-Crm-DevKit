@@ -1754,7 +1754,7 @@ describe('devKit', () => {
                 }
             },
             Utility: {
-                getGlobalContext: function () { throw new Error('Not available in this context'); }
+                getGlobalContext: function () { return undefined; }
             }
         };
 
@@ -4113,95 +4113,95 @@ describe('devKit', () => {
         expect(result).toBeDefined();
     });
 
-// ===== Tests for getXrm() coverage - added to achieve 100% coverage =====
+    // ===== Tests for getXrm() coverage - added to achieve 100% coverage =====
 
-test("getXrm - parent.window.Xrm scenario (line 8)", () => {
-    const originalWindow = global.window;
-    const originalParent = global.parent;
-    const originalXrm = global.Xrm;
+    test("getXrm - parent.window.Xrm scenario (line 8)", () => {
+        const originalWindow = global.window;
+        const originalParent = global.parent;
+        const originalXrm = global.Xrm;
 
-    global.window = {};
-    global.parent = {
-        window: {
-            Xrm: {
-                WebApi: {
-                    createRecord: function () {},
-                     deleteRecord: function () {},
-                    retrieveMultipleRecords: function () {},
-                    updateRecord: function () {},
-                    online: { execute: function () {} }
-                }
-            }
-        }
-    };
-    global.Xrm = undefined;
-
-    var webApi = devKit.LoadWebApi();
-    expect(webApi).toBeDefined();
-
-    global.window = originalWindow;
-    global.parent = originalParent;
-    global.Xrm = originalXrm;
-});
-
-test("getXrm - parent.parent.window.Xrm scenario (line 11)", () => {
-    const originalWindow = global.window;
-    const originalParent = global.parent;
-    const originalXrm = global.Xrm;
-
-    global.window = {};
-    global.parent = {
-        window: {},
-        parent: {
+        global.window = {};
+        global.parent = {
             window: {
                 Xrm: {
                     WebApi: {
-                        createRecord: function () {},
-                        deleteRecord: function () {},
-                        retrieveMultipleRecords: function () {},
-                        updateRecord: function () {},
-                        online: { execute: function () {} }
+                        createRecord: function () { },
+                        deleteRecord: function () { },
+                        retrieveMultipleRecords: function () { },
+                        updateRecord: function () { },
+                        online: { execute: function () { } }
                     }
                 }
             }
-        }
-    };
-    global.Xrm = undefined;
+        };
+        global.Xrm = undefined;
 
-    var webApi = devKit.LoadWebApi();
-    expect(webApi).toBeDefined();
+        var webApi = devKit.LoadWebApi();
+        expect(webApi).toBeDefined();
 
-    global.window = originalWindow;
-    global.parent = originalParent;
-    global.Xrm = originalXrm;
-});
+        global.window = originalWindow;
+        global.parent = originalParent;
+        global.Xrm = originalXrm;
+    });
 
-test("getXrm - returns undefined, fallback to global Xrm (line 13)", () => {
-    const originalWindow = global.window;
-    const originalParent = global.parent;
-    const originalXrm = global.Xrm;
+    test("getXrm - parent.parent.window.Xrm scenario (line 11)", () => {
+        const originalWindow = global.window;
+        const originalParent = global.parent;
+        const originalXrm = global.Xrm;
 
-    global.window = {};
-    global.parent = {
-        window: {},
-        parent: { window: {} }
-    };
-    global.Xrm = {
-        WebApi: {
-            createRecord: function () {},
-            deleteRecord: function () {},
-            retrieveMultipleRecords: function () {},
-            updateRecord: function () {},
-            online: { execute: function () {} }
-        }
-    };
+        global.window = {};
+        global.parent = {
+            window: {},
+            parent: {
+                window: {
+                    Xrm: {
+                        WebApi: {
+                            createRecord: function () { },
+                            deleteRecord: function () { },
+                            retrieveMultipleRecords: function () { },
+                            updateRecord: function () { },
+                            online: { execute: function () { } }
+                        }
+                    }
+                }
+            }
+        };
+        global.Xrm = undefined;
 
-    var webApi = devKit.LoadWebApi();
-    expect(webApi).toBeDefined();
+        var webApi = devKit.LoadWebApi();
+        expect(webApi).toBeDefined();
 
-    global.window = originalWindow;
-    global.parent = originalParent;
-    global.Xrm = originalXrm;
-});
+        global.window = originalWindow;
+        global.parent = originalParent;
+        global.Xrm = originalXrm;
+    });
+
+    test("getXrm - returns undefined, fallback to global Xrm (line 13)", () => {
+        const originalWindow = global.window;
+        const originalParent = global.parent;
+        const originalXrm = global.Xrm;
+
+        global.window = {};
+        global.parent = {
+            window: {},
+            parent: { window: {} }
+        };
+        global.Xrm = {
+            WebApi: {
+                createRecord: function () { },
+                deleteRecord: function () { },
+                retrieveMultipleRecords: function () { },
+                updateRecord: function () { },
+                online: { execute: function () { } }
+            }
+        };
+
+        var webApi = devKit.LoadWebApi();
+        expect(webApi).toBeDefined();
+
+        global.window = originalWindow;
+        global.parent = originalParent;
+        global.Xrm = originalXrm;
+    });
 });
 

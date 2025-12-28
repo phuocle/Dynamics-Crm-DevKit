@@ -817,11 +817,7 @@ const devKit = (function () {
                 return promise;
             }
         };
-        const isClientOffline = () => {
-            try {
-                return xrmInstance?.Utility?.getGlobalContext?.()?.client?.isOffline?.() === true;
-            } catch { return false; }
-        };
+        const isClientOffline = () => xrmInstance?.Utility?.getGlobalContext?.()?.client?.isOffline?.() === true;
         obj.Execute = function (request, successCallback, errorCallback) {
             if (isClientOffline()) {
                 if (errorCallback) {
