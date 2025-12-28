@@ -1,4 +1,4 @@
-'use strict';
+﻿'use strict';
 const devKit = (function () {
     function getXrm() {
         if (typeof window !== 'undefined' && window.Xrm !== undefined) {
@@ -293,7 +293,6 @@ const devKit = (function () {
         field.SetIsValid = (valid, message) => attribute?.setIsValid(valid, message);
         field.SetNotification = (message, uniqueId) => control?.setNotification(message, uniqueId);
     }
-    // Helper: find control by name using attribute.controls (works for lazy-loaded tabs)
     function findControlFromAttribute(attribute, controlName) {
         let foundControl = null;
         const lowerName = controlName?.toLowerCase();
@@ -307,17 +306,12 @@ const devKit = (function () {
     function loadFields(formContext, body, type) {
         Object.keys(body).forEach(field => {
             const logicalName = type === undefined ? field?.toLowerCase() : (type + field)?.toLowerCase();
-            // Get control first (especially important for header_ type where control name has prefix)
             let control = formContext?.getControl(logicalName) ?? formContext?.getControl(field);
-            // Get attribute: for header controls, get from control.getAttribute() since attribute name differs
             let attribute = null;
             if (type === "header_" && control) {
-                // Header controls: attribute name is WITHOUT "header_" prefix, get from control
                 attribute = control.getAttribute();
             } else {
-                // Body controls: attribute name matches logical name
                 attribute = formContext?.getAttribute(logicalName);
-                // If no attribute, try base name for multi-control scenarios (OwnerId1 -> ownerid)
                 if (!attribute) {
                     const baseFieldName = field.replace(/\d+$/, '');
                     if (baseFieldName !== field) {
@@ -326,11 +320,9 @@ const devKit = (function () {
                     }
                 }
             }
-            // Fallback: get attribute from control if still null
             if (!attribute && control) {
                 attribute = control.getAttribute?.();
             }
-            // Fallback: if no control found, try attribute.controls (handles lazy-loaded tabs)
             if (!control && attribute) {
                 control = findControlFromAttribute(attribute, logicalName) ?? findControlFromAttribute(attribute, field);
             }
@@ -508,7 +500,6 @@ const devKit = (function () {
                 return obj;
             });
             getterSetter(grids[grid], 'Visible', () => gridControl?.getVisible(), value => { gridControl?.setVisible(value); });
-            // Subgrid control properties
             getter(grids[grid], 'ControlType', () => gridControl?.getControlType());
             getter(grids[grid], 'ControlName', () => gridControl?.getName());
             getter(grids[grid], 'ControlParent', () => gridControl?.getParent());
@@ -714,7 +705,6 @@ const devKit = (function () {
         const getOnline = xrmInstance?.WebApi?.online;
         const getOffline = xrmInstance?.WebApi?.offline;
         const extractEntityName = function (fetchXml) {
-            // This function is always called with ?fetchXml= prefix (line 782 ensures this)
             const splitIndex = fetchXml.toLowerCase().indexOf('fetchxml=') + 'fetchxml='.length;
             const cleanXml = decodeURIComponent(fetchXml.substring(splitIndex));
             const parser = new DOMParser();
@@ -740,7 +730,6 @@ const devKit = (function () {
                 return promise;
             }
         };
-        // NOTE: obj.RetrieveRecord is defined later with factory pattern (line ~820)
         obj.RetrieveMultipleRecords = function (entityLogicalName, options, maxPageSize, successCallback, errorCallback) {
             const promise = getWebApi?.retrieveMultipleRecords(entityLogicalName, options, maxPageSize);
             if (successCallback) {
@@ -757,15 +746,12 @@ const devKit = (function () {
                 return promise;
             }
         };
-        // Helper to check if client is offline (for execute methods that only work online)
         const isClientOffline = () => {
             try {
                 return xrmInstance?.Utility?.getGlobalContext?.()?.client?.isOffline?.() === true;
             } catch { return false; }
         };
         obj.Execute = function (request, successCallback, errorCallback) {
-            // Execute only exists on Xrm.WebApi.online per Microsoft docs
-            // If client is offline, gracefully return undefined instead of throwing
             if (isClientOffline()) {
                 if (errorCallback) {
                     errorCallback(new Error('Execute is not available in offline mode'));
@@ -780,8 +766,6 @@ const devKit = (function () {
             }
         };
         obj.ExecuteMultiple = function (requests, successCallback, errorCallback) {
-            // ExecuteMultiple only exists on Xrm.WebApi.online per Microsoft docs
-            // If client is offline, gracefully return undefined instead of throwing
             if (isClientOffline()) {
                 if (errorCallback) {
                     errorCallback(new Error('ExecuteMultiple is not available in offline mode'));
@@ -1083,3 +1067,5 @@ var OptionSet;
     OptionSet.TabDisplayState = Object.freeze({ Expanded: 'expanded', Collapsed: 'collapsed' });
     OptionSet.TimerState = Object.freeze({ NotSet: 1, InProgress: 2, Warning: 3, Violated: 4, Success: 5, Expired: 6, Canceled: 7, Paused: 8 });
 })(OptionSet || (OptionSet = {}));
+
+export { devKit, OptionSet };

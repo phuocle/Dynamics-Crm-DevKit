@@ -109,7 +109,6 @@ function loadField(formContext: any, field: any, attribute: any, control: any): 
     field.SetIsValid = (valid: boolean, message?: string) => attribute?.setIsValid(valid, message);
     field.SetNotification = (message: string, uniqueId: string) => control?.setNotification(message, uniqueId);
 }
-// Helper: find control by name using attribute.controls (works for lazy-loaded tabs)
 function findControlFromAttribute(attribute: any, controlName: string): any {
     let foundControl: any = null;
     const lowerName = controlName?.toLowerCase();
@@ -127,17 +126,12 @@ function loadFields(formContext: any, fields: string[], type?: string): any {
     fields.forEach(field => {
         body[field] = {};
         const logicalName = type === undefined ? field?.toLowerCase() : (type + field)?.toLowerCase();
-        // Get control first (especially important for header_ type where control name has prefix)
         let control = formContext?.getControl(logicalName) ?? formContext?.getControl(field);
-        // Get attribute: for header controls, get from control.getAttribute() since attribute name differs
         let attribute: any = null;
         if (type === "header_" && control) {
-            // Header controls: attribute name is WITHOUT "header_" prefix, get from control
             attribute = control.getAttribute();
         } else {
-            // Body controls: attribute name matches logical name
             attribute = formContext?.getAttribute(logicalName);
-            // If no attribute, try base name for multi-control scenarios (OwnerId1 -> ownerid)
             if (!attribute) {
                 const baseFieldName = field.replace(/\d+$/, '');
                 if (baseFieldName !== field) {
@@ -149,7 +143,6 @@ function loadFields(formContext: any, fields: string[], type?: string): any {
                 attribute = control.getAttribute?.();
             }
         }
-        // Fallback: if no control found, try attribute.controls (handles lazy-loaded tabs)
         if (!control && attribute) {
             control = findControlFromAttribute(attribute, logicalName) ?? findControlFromAttribute(attribute, field);
         }
@@ -354,7 +347,6 @@ function loadGrids(formContext: any, gridItems: string[]): any {
             return obj;
         });
         getterSetter(grids[grid], 'Visible', () => gridControl?.getVisible(), (value: any) => { gridControl?.setVisible(value); });
-        // Additional subgrid control properties (MS API compliance)
         getter(grids[grid], 'ControlType', () => gridControl?.getControlType());
         getter(grids[grid], 'ControlName', () => gridControl?.getName());
         getter(grids[grid], 'ControlParent', () => gridControl?.getParent());
@@ -410,7 +402,6 @@ function loadWebApi(): DevKit.IWebApi {
     const getOnline = xrm?.WebApi?.online;
     const getOffline = xrm?.WebApi?.offline;
     const extractEntityName = function (fetchXml: string): string {
-        // This function is always called with ?fetchXml= prefix (line 433-434 ensures this)
         const splitIndex = fetchXml.toLowerCase().indexOf('fetchxml=') + 'fetchxml='.length;
         const cleanXml = decodeURIComponent(fetchXml.substring(splitIndex));
         const parser = new DOMParser();
@@ -420,8 +411,6 @@ function loadWebApi(): DevKit.IWebApi {
             return entityNode.getAttribute("name")!;
         throw new Error("Entity name not found in fetchXml");
     };
-
-
     obj.CreateRecord = function (entityLogicalName: string, data: any, successCallback?: any, errorCallback?: any) {
         const promise = getWebApi?.createRecord(entityLogicalName, data);
         if (successCallback) {
@@ -438,8 +427,6 @@ function loadWebApi(): DevKit.IWebApi {
             return promise;
         }
     };
-    // NOTE: obj.RetrieveRecord is defined later with factory pattern (line ~480)
-
     obj.RetrieveMultipleRecords = function (entityLogicalName: string, options?: string, maxPageSize?: number, successCallback?: any, errorCallback?: any) {
         const promise = getWebApi?.retrieveMultipleRecords(entityLogicalName, options, maxPageSize);
         if (successCallback) {
@@ -456,16 +443,12 @@ function loadWebApi(): DevKit.IWebApi {
             return promise;
         }
     };
-    // Helper to check if client is offline (for execute methods that only work online)
     const isClientOffline = () => {
         try {
-            // @ts-ignore - getGlobalContext may not exist in all environments
             return xrm?.Utility?.getGlobalContext?.()?.client?.isOffline?.() === true;
         } catch { return false; }
     };
     obj.Execute = function (request: any, successCallback?: any, errorCallback?: any) {
-        // Execute only exists on Xrm.WebApi.online per Microsoft docs
-        // If client is offline, gracefully return undefined instead of throwing
         if (isClientOffline()) {
             if (errorCallback) {
                 errorCallback(new Error('Execute is not available in offline mode'));
@@ -480,8 +463,6 @@ function loadWebApi(): DevKit.IWebApi {
         }
     };
     obj.ExecuteMultiple = function (requests: any[], successCallback?: any, errorCallback?: any) {
-        // ExecuteMultiple only exists on Xrm.WebApi.online per Microsoft docs
-        // If client is offline, gracefully return undefined instead of throwing
         if (isClientOffline()) {
             if (errorCallback) {
                 errorCallback(new Error('ExecuteMultiple is not available in offline mode'));
@@ -584,7 +565,6 @@ function loadWebApi(): DevKit.IWebApi {
             }
         };
         online.ExecuteMultiple = function (requests: any[], successCallback?: any, errorCallback?: any) {
-            // @ts-ignore
             const promise = getOnline?.executeMultiple(requests);
             if (successCallback) {
                 promise?.then(successCallback, errorCallback);
@@ -596,7 +576,6 @@ function loadWebApi(): DevKit.IWebApi {
     });
     getter(obj, 'Offline', () => {
         const offline: any = {};
-        // @ts-ignore
         offline.IsAvailable = (entityLogicalName: string) => getOffline?.isAvailable(entityLogicalName);
         return offline;
     });
@@ -605,7 +584,6 @@ function loadWebApi(): DevKit.IWebApi {
 function loadCopilot(): DevKit.ICopilot {
     const obj: any = {};
     const xrm = getXrm();
-    // @ts-ignore
     const getCopilot = xrm?.Copilot;
     obj.ExecuteEvent = function (eventName: string, eventParameters: any, successCallback?: any, errorCallback?: any) {
         const promise = getCopilot?.executeEvent(eventName, eventParameters);
@@ -759,7 +737,6 @@ function loadFormV3<TBody = Record<string, any>, THeader = Record<string, any>, 
     form.QuickForm = quick.length > 0 ? loadQuickForms(formContext, quick) : {};
     form.Grid = grid.length > 0 ? loadGrids(formContext, grid) : {};
     form.Navigation = navigation.length > 0 ? loadNavigations(formContext, navigation) : {};
-
     form.Utility = loadUtility(defaultWebResourceName);
     form.ExecutionContext = loadExecutionContext(executionContext);
     form.SidePanes = loadSidePanes();
@@ -769,7 +746,6 @@ function loadFormV3<TBody = Record<string, any>, THeader = Record<string, any>, 
 }
 function loadProcess(formContext: any, bpf: string[]): any {
     const process: any = {};
-    // Parse BPF fields - bpf always has items since gatekeeper checks bpf.length > 0 before calling
     const bpfFieldNames: string[] = [];
     let bpfProcessName: string = '';
     bpf.forEach((item: string) => {
@@ -798,7 +774,7 @@ function loadProcess(formContext: any, bpf: string[]): any {
         getter(obj, 'EntityName', () => stage?.getEntityName());
         getter(obj, 'Id', () => stage?.getId());
         getter(obj, 'Name', () => stage?.getName());
-        getter(obj, 'Status', () => stage?.getStatus());
+        getter(obj, 'Status', () => stage?.getStatus()); 
         getter(obj, 'Steps', () => {
             const steps = stage?.getSteps();
             if (!steps) return [];
@@ -923,24 +899,19 @@ function loadUtility(defaultWebResourceName?: string): DevKit.IUtility {
     });
     getter(utility, 'ClientUrl', () => getGlobalContext?.getClientUrl());
     getter(utility, 'CurrentAppUrl', () => getGlobalContext?.getCurrentAppUrl());
-    // @ts-ignore - isOnPremises not in @types/Xrm
     getter(utility, 'IsOnPremises', () => getGlobalContext?.isOnPremises());
     getter(utility, 'LearningPathAttributeName', () => getUtility?.getLearningPathAttributeName());
     getter(utility, 'OrganizationSettings', () => {
         const obj: any = {};
         const organizationSettings = getGlobalContext?.organizationSettings;
-        // @ts-ignore - attributes not in @types/Xrm
         getter(obj, 'Attributes', () => organizationSettings?.attributes);
         getter(obj, 'BaseCurrency', () => organizationSettings?.baseCurrency);
         getter(obj, 'BaseCurrencyId', () => organizationSettings?.baseCurrencyId);
         getter(obj, 'DefaultCountryCode', () => organizationSettings?.defaultCountryCode);
-        // @ts-ignore - fullNameConventionCode not in @types/Xrm
         getter(obj, 'FullNameConventionCode', () => organizationSettings?.fullNameConventionCode);
         getter(obj, 'IsAutoSaveEnabled', () => organizationSettings?.isAutoSaveEnabled);
-        // @ts-ignore - isTrialOrganization not in @types/Xrm
         getter(obj, 'IsTrialOrganization', () => organizationSettings?.isTrialOrganization);
         getter(obj, 'LanguageId', () => organizationSettings?.languageId);
-        // @ts-ignore - organizationExpiryDate not in @types/Xrm
         getter(obj, 'OrganizationExpiryDate', () => organizationSettings?.organizationExpiryDate);
         getter(obj, 'OrganizationId', () => organizationSettings?.organizationId);
         getter(obj, 'UniqueName', () => organizationSettings?.uniqueName);
@@ -1020,7 +991,6 @@ function loadUtility(defaultWebResourceName?: string): DevKit.IUtility {
         if (successCallback) promise?.then(successCallback, errorCallback);
         else return promise;
     };
-    // @ts-ignore - getEntityMainFormDescriptor not in @types/Xrm
     utility.EntityMainFormDescriptor = (entityName: string, formId: string) => getUtility?.getEntityMainFormDescriptor(entityName, formId);
     utility.EntityMetadata = function (entityName: string, attributes?: string[], successCallback?: (result: any) => void, errorCallback?: (error: any) => void) {
         const promise = getUtility?.getEntityMetadata(entityName, attributes);
@@ -1076,7 +1046,6 @@ function loadUtility(defaultWebResourceName?: string): DevKit.IUtility {
     };
     utility.PrependOrgName = (sPath: string) => getGlobalContext?.prependOrgName(sPath);
     utility.RefreshParentGrid = (lookupOptions: any) => getUtility?.refreshParentGrid(lookupOptions);
-    // @ts-ignore - defaultWebResourceName may be undefined
     utility.Resource = (key: string) => getUtility?.getResourceString(defaultWebResourceName!, key);
     utility.ResourceString = (webResourceName: string, key: string) => getUtility?.getResourceString(webResourceName, key);
     utility.ShowProgressIndicator = (message: string) => getUtility?.showProgressIndicator(message);
@@ -1098,11 +1067,7 @@ function loadFormDialog(formContext: any, fields: string[]): any {
     form.Close = () => formContext?.ui?.close();
     return form;
 }
-
 function getWebApiTypeParsers(): Record<string, (value: any) => any> {
-    // Note: These parsers are called via webApiReturnGet which is only called after
-    // getValue in defineWebApiField has already filtered out null/undefined values.
-    // Therefore, null/undefined checks are NOT needed in individual parsers.
     return {
         DateTime: (value: any): Date | null => {
             if (value instanceof Date) return isNaN(value.getTime()) ? null : value;
@@ -1110,10 +1075,8 @@ function getWebApiTypeParsers(): Record<string, (value: any) => any> {
             if (trimmedString === '') return null;
             const timestamp = Date.parse(trimmedString);
             if (isNaN(timestamp)) return null;
-            // If Date.parse succeeded, new Date(timestamp) will always be valid
             return new Date(timestamp);
         },
-
         Integer: (value: any): number | null => {
             const parsed = parseInt(value, 10);
             return isNaN(parsed) ? null : parsed;
@@ -1135,13 +1098,10 @@ function getWebApiTypeParsers(): Record<string, (value: any) => any> {
     };
 }
 function webApiReturnGet(data: any, type?: DevKit.WebApiFieldType): any {
-    // Note: data is never null/undefined here - getValue in defineWebApiField
-    // already returns null before calling this function for null/undefined values.
     if (type === null || type === undefined) return data;
     const parser = getWebApiTypeParsers()[type];
     return parser ? parser(data) : data;
 }
-
 export class FormBase<TBody = any, THeader = any, TGrid = any, TNavigation = any, TQuickForm = any, TProcess = any, TDialog = any> {
     public Body: TBody;
     public Header: THeader;
@@ -1268,7 +1228,6 @@ export function defineWebApiField(obj: any, fieldName: string, entity: Record<st
             return '';
         }
         if (type === 'MultiOptionSet') {
-            // Note: formattedKey is already validated not null at line 1178, so ?? [] is not needed
             return entity[formattedKey].toString().split(';').map((item: string) => item.trim());
         }
         return entity?.[formattedKey];
@@ -1285,7 +1244,6 @@ export function defineWebApiField(obj: any, fieldName: string, entity: Record<st
             return null;
         }
         if (type === 'MultiOptionSet') {
-            // Note: logicalName is already validated not null at line 1194, so ?? [] is not needed
             return entity[logicalName].toString().split(',').map((item: string) => parseInt(item, 10));
         }
         return webApiReturnGet(entity?.[logicalName], type);
@@ -1344,7 +1302,6 @@ export function createWebApiEntity<T extends DevKit.IWebApiEntity>(entity: Recor
                 return '';
             }
             if (isMultiOptionSet) {
-                // Note: key is already validated not null at line 1259, so ?? [] is not needed
                 return e[key].toString().split(';').map((item: string) => item.trim());
             }
             return e?.[key];
