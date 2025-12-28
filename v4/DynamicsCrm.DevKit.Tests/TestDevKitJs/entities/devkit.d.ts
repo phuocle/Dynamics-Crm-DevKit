@@ -2090,15 +2090,52 @@ declare namespace DevKit {
          * */
         readonly Required: boolean;
     }
+    /**
+     * Represents a business process flow instance for a record
+     * @remarks All property values except CreatedOnDate are of String type
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/getprocessinstances
+     */
     interface ProcessInstance extends ProcessEnabled {
+        /**
+         * The date and time when the process instance was created (String format)
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/getprocessinstances
+         */
         readonly CreatedOn: string;
+        /**
+         * The date and time when the process instance was created (Date type)
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/getprocessinstances
+         */
         readonly CreatedOnDate: Date;
+        /**
+         * The unique identifier of the process instance
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/getprocessinstances
+         */
         readonly InstanceId: DevKit.Guid;
+        /**
+         * The name of the process instance
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/getprocessinstances
+         */
         readonly InstanceName: string;
+        /**
+         * The status of the process instance
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/getprocessinstances
+         */
         readonly Status: OptionSet.ProcessStatus;
     }
+    /**
+     * Represents the enabled process information for a record
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/getprocessinstances
+     */
     interface ProcessEnabled {
+        /**
+         * The unique identifier of the process definition
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/getprocessinstances
+         */
         readonly ProcessId: DevKit.Guid;
+        /**
+         * The name of the process definition
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/getprocessinstances
+         */
         readonly ProcessName: string;
     }
     interface ProcessProcess {
@@ -2123,24 +2160,75 @@ declare namespace DevKit {
          */
         Stages: DevKit.Collections<ProcessStage>;
     }
+    /**
+     * Provides information about the relationship used to filter a subgrid
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/gridcontrol/getrelationship
+     */
     interface GridRelationship {
-        /** Name of the attribute. */
+        /**
+         * Name of the attribute
+         */
         readonly attributeName: string,
-        /** Name of the relationship. */
+        /**
+         * Name of the relationship
+         */
         readonly name: string,
-        /** Name of the navigation property for this relationship. */
+        /**
+         * Name of the navigation property for this relationship
+         */
         readonly navigationPropertyName: string,
-        /** Returns one of the following values to indicate the relationship type. 0: OneToMany | 1: ManyToMany */
+        /**
+         * Returns one of the following values to indicate the relationship type. 0: OneToMany | 1: ManyToMany
+         */
         readonly relationshipType: 0 | 1,
-        /** Returns one of the following values to indicate the role type of relationship. 1: Referencing | 2: AssociationEntity */
+        /**
+         * Returns one of the following values to indicate the role type of relationship. 1: Referencing | 2: AssociationEntity
+         */
         readonly roleType: 1 | 2
     }
+    /**
+     * Collections are structures to provide access to data that represent an array, but without the ability to modify the data in the array
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/collections
+     */
     interface Collections<T> {
+        /**
+         * Applies the action contained in a delegate function to each item in the collection
+         * @param successCallback Delegate function with parameters for item and index
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/collections/foreach
+         */
         forEach(successCallback: (item: T, index: number) => void): void;
+        /**
+         * Gets all items in the collection as an array
+         * @returns An array of all items in the collection
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/collections/get
+         */
         get(): Array<T>;
+        /**
+         * Gets an item from the collection by its name
+         * @param item The name of the item to retrieve
+         * @returns The item with the specified name
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/collections/get
+         */
         get(item: string): T;
+        /**
+         * Gets an item from the collection by its index
+         * @param index The index of the item to retrieve
+         * @returns The item at the specified index
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/collections/get
+         */
         get(index: number): T;
+        /**
+         * Gets items from the collection that satisfy a delegate function
+         * @param successCallback Delegate function that returns true for items to include
+         * @returns An array of items that satisfy the delegate function
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/collections/get
+         */
         get(successCallback: (item: T, index: number) => void): Array<T>;
+        /**
+         * Gets the count of items in the collection
+         * @returns The number of items in the collection
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/collections/getlength
+         */
         getLength(): number;
     }
     interface ExecutionContext {
