@@ -3196,7 +3196,6 @@ declare namespace DevKit {
     /**
      * Configuration interface for form field definitions
      * Used to specify which fields, tabs, grids, etc. to load on a form
-     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-formselector
      */
     interface IFormConfig {
         /** Array of body field names */
@@ -3220,7 +3219,6 @@ declare namespace DevKit {
     /**
      * Interface for Dialog forms (quick create dialogs, etc.)
      * Dialog forms contain fields and a Close method
-     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/openform
      */
     interface IDialog {
         /** Closes the dialog */
@@ -3229,13 +3227,11 @@ declare namespace DevKit {
 
     /**
      * Supported WebApi field types for type conversion
-     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi/retrieverecord
      */
     type WebApiFieldType = 'Integer' | 'Number' | 'Boolean' | 'DateTime' | 'MultiOptionSet';
 
     /**
      * Configuration for a single WebApi field
-     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi/createRecord
      */
     interface IWebApiFieldConfig {
         /** The logical name of the field in Dataverse */
@@ -3254,7 +3250,6 @@ declare namespace DevKit {
 
     /**
      * Map of field names to their WebApi configurations
-     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi/createRecord
      */
     interface IWebApiFieldConfigMap {
         [fieldName: string]: IWebApiFieldConfig;
@@ -3263,7 +3258,6 @@ declare namespace DevKit {
     /**
      * Interface for WebApi entity with data access methods
      * Provides access to raw entity data, OData formatted data, and aliased values
-     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi/retrieverecord
      */
     interface IWebApiEntity {
         /** The raw entity data as key-value pairs */
@@ -3296,7 +3290,6 @@ declare namespace DevKit {
 
     /**
      * Key-value pair object
-     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/collections
      */
     interface KeyValueObject {
         [key: string]: any;
@@ -3474,7 +3467,6 @@ declare namespace DevKit {
 
     /**
      * Entity reference object
-     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/lookupobjects
      */
     interface EntityReference {
         /** Entity type of the record */
