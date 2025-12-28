@@ -90,8 +90,24 @@ const devKit = (function () {
         form.UiRemoveOnLoad = callback => contextUi?.removeOnLoad(callback);
         return form;
     }
-    function loadProcess(formContext) {
+    function loadProcess(formContext, bpf = []) {
         const obj = {};
+        // Process BPF fields if provided
+        if (bpf.length > 0) {
+            const bpfFieldNames = [];
+            let bpfProcessName = null;
+            bpf.forEach(item => {
+                const [processName, fieldName] = item.split('___');
+                if (!bpfProcessName) {
+                    bpfProcessName = processName;
+                }
+                bpfFieldNames.push(fieldName);
+            });
+            const bpfObj = loadFields(formContext, bpfFieldNames, 'header_process_');
+            if (bpfProcessName) {
+                obj[bpfProcessName] = bpfObj;
+            }
+        }
         const getProcess = formContext?.data?.process;
         const getProcessUi = formContext?.ui?.process;
         const loadStep = step => {
@@ -306,8 +322,16 @@ const devKit = (function () {
         });
         return foundControl;
     }
-    function loadFields(formContext, body, type) {
-        Object.keys(body).forEach(field => {
+    function loadFields(formContext, fieldsOrBody, type) {
+        // Support both new pattern (array) and legacy pattern (object) for backward compatibility
+        const isArray = Array.isArray(fieldsOrBody);
+        const body = isArray ? {} : fieldsOrBody;
+        const fields = isArray ? fieldsOrBody : Object.keys(fieldsOrBody);
+
+        fields.forEach(field => {
+            if (isArray) {
+                body[field] = {};
+            }
             const logicalName = type === undefined ? field?.toLowerCase() : (type + field)?.toLowerCase();
             let control = formContext?.getControl(logicalName) ?? formContext?.getControl(field);
             let attribute = null;
@@ -339,7 +363,20 @@ const devKit = (function () {
         }
         return body;
     }
-    function loadTabs(formContext, tabs) {
+    function loadTabs(formContext, tabItemsOrTabs) {
+        // Support both new pattern (array) and legacy pattern (object) for backward compatibility
+        const isArray = Array.isArray(tabItemsOrTabs);
+        const tabs = isArray ? {} : tabItemsOrTabs;
+
+        if (isArray) {
+            tabItemsOrTabs.forEach(item => {
+                const [tabName, sectionName] = item.split('___');
+                if (!tabs[tabName]) {
+                    tabs[tabName] = { Section: {} };
+                }
+                tabs[tabName].Section[sectionName] = {};
+            });
+        }
         const loadSection = (formContext, tab, sections, section) => {
             const tabObject = formContext?.ui?.tabs?.get(tab);
             const sectionObject = tabObject?.sections?.get(section);
@@ -380,8 +417,14 @@ const devKit = (function () {
         Object.keys(tabs).forEach(tab => {
             loadTab(formContext, tabs, tab);
         });
+        return tabs;
     }
-    function loadNavigations(formContext, navigations) {
+    function loadNavigations(formContext, navigationItemsOrObj) {
+        const isArray = Array.isArray(navigationItemsOrObj);
+        const obj = isArray ? {} : navigationItemsOrObj;
+        if (isArray) {
+            navigationItemsOrObj.forEach(item => obj[item] = {});
+        }
         const getNavigationItem = (navigation) => {
             const navItems = formContext?.ui?.navigation?.items;
             if (!navItems) return null;
@@ -401,11 +444,29 @@ const devKit = (function () {
             getterSetter(navigations[navigation], 'Visible', () => navigationItem?.getVisible(), value => navigationItem?.setVisible(value));
             navigations[navigation].Focus = () => navigationItem?.setFocus();
         }
-        Object.keys(navigations).forEach(navigation => {
-            loadNavigation(formContext, navigations, navigation);
+        Object.keys(obj).forEach(navigation => {
+            loadNavigation(formContext, obj, navigation);
         });
+        return obj;
     }
-    function loadQuickForms(formContext, quickForms, quickFormFields = {}) {
+    function loadQuickForms(formContext, quickItemsOrObj, legacyQuickFormFields) {
+        // Support both new pattern (array) and legacy pattern (object + quickFormFields) for backward compatibility
+        const isArray = Array.isArray(quickItemsOrObj);
+        const obj = isArray ? {} : quickItemsOrObj;
+        const quickFormFields = isArray ? {} : (legacyQuickFormFields || {});
+
+        if (isArray) {
+            quickItemsOrObj.forEach(item => {
+                const [quickFormName, fieldName] = item.split('___');
+                if (!obj[quickFormName]) {
+                    obj[quickFormName] = {};
+                    quickFormFields[quickFormName] = [];
+                }
+                if (fieldName) {
+                    quickFormFields[quickFormName].push(fieldName);
+                }
+            });
+        }
         const loadQuickForm = (formContext, quickForms, quickForm) => {
             const fields = quickFormFields[quickForm] || [];
             const quick = formContext?.ui?.quickForms?.get(quickForm);
@@ -421,11 +482,17 @@ const devKit = (function () {
             quickForms[quickForm].IsLoaded = () => quick?.isLoaded();
             quickForms[quickForm].Refresh = () => quick?.refresh();
         }
-        Object.keys(quickForms).forEach(quickForm => {
-            loadQuickForm(formContext, quickForms, quickForm);
+        Object.keys(obj).forEach(quickForm => {
+            loadQuickForm(formContext, obj, quickForm);
         });
+        return obj;
     }
-    function loadGrids(formContext, grids) {
+    function loadGrids(formContext, gridItemsOrObj) {
+        const isArray = Array.isArray(gridItemsOrObj);
+        const obj = isArray ? {} : gridItemsOrObj;
+        if (isArray) {
+            gridItemsOrObj.forEach(item => obj[item] = {});
+        }
         const loadGridRow = row => {
             const obj = {};
             getter(obj, 'Columns', () => {
@@ -502,23 +569,24 @@ const devKit = (function () {
                 getterSetter(obj, 'CurrentView', () => viewSelector?.getCurrentView(), value => viewSelector?.setCurrentView(value));
                 return obj;
             });
-            getterSetter(grids[grid], 'Visible', () => gridControl?.getVisible(), value => { gridControl?.setVisible(value); });
-            getter(grids[grid], 'ControlType', () => gridControl?.getControlType());
-            getter(grids[grid], 'ControlName', () => gridControl?.getName());
-            getter(grids[grid], 'ControlParent', () => gridControl?.getParent());
-            getterSetter(grids[grid], 'Disabled', () => gridControl?.getDisabled(), value => { gridControl?.setDisabled(value); });
-            getterSetter(grids[grid], 'Label', () => gridControl?.getLabel(), value => { gridControl?.setLabel(value); });
-            grids[grid].Focus = () => gridControl?.setFocus();
-            grids[grid].AddOnLoad = callback => gridControl?.addOnLoad(callback);
-            grids[grid].OpenRelatedGrid = () => gridControl?.openRelatedGrid();
-            grids[grid].Refresh = () => gridControl?.refresh();
-            grids[grid].RefreshRibbon = () => gridControl?.refreshRibbon();
-            grids[grid].RemoveOnLoad = callback => gridControl?.removeOnLoad(callback);
-            grids[grid].Url = client => gridControl?.getUrl(client);
+            getterSetter(obj[grid], 'Visible', () => gridControl?.getVisible(), value => { gridControl?.setVisible(value); });
+            getter(obj[grid], 'ControlType', () => gridControl?.getControlType());
+            getter(obj[grid], 'ControlName', () => gridControl?.getName());
+            getter(obj[grid], 'ControlParent', () => gridControl?.getParent());
+            getterSetter(obj[grid], 'Disabled', () => gridControl?.getDisabled(), value => { gridControl?.setDisabled(value); });
+            getterSetter(obj[grid], 'Label', () => gridControl?.getLabel(), value => { gridControl?.setLabel(value); });
+            obj[grid].Focus = () => gridControl?.setFocus();
+            obj[grid].AddOnLoad = callback => gridControl?.addOnLoad(callback);
+            obj[grid].OpenRelatedGrid = () => gridControl?.openRelatedGrid();
+            obj[grid].Refresh = () => gridControl?.refresh();
+            obj[grid].RefreshRibbon = () => gridControl?.refreshRibbon();
+            obj[grid].RemoveOnLoad = callback => gridControl?.removeOnLoad(callback);
+            obj[grid].Url = client => gridControl?.getUrl(client);
         }
-        Object.keys(grids).forEach(grid => {
-            loadGrid(formContext, grids, grid);
+        Object.keys(obj).forEach(grid => {
+            loadGrid(formContext, obj, grid);
         });
+        return obj;
     }
     function loadUtility(defaultWebResourceName) {
         const obj = {};
@@ -948,67 +1016,15 @@ const devKit = (function () {
         const formContext = executionContext?.getFormContext?.() ?? executionContext ?? null;
         const form = loadForm(formContext);
         const { body = [], tab = [], header = [], bpf = [], quick = [], grid = [], navigation = [], dialog = [] } = formConfig;
-        const bodyObj = {};
-        body.forEach(field => bodyObj[field] = {});
-        loadFields(formContext, bodyObj);
-        const tabObj = {};
-        tab.forEach(item => {
-            const [tabName, sectionName] = item.split('___');
-            if (!tabObj[tabName]) {
-                tabObj[tabName] = { Section: {} };
-            }
-            tabObj[tabName].Section[sectionName] = {};
-        });
-        loadTabs(formContext, tabObj);
-        bodyObj.Tab = tabObj;
+        const bodyObj = loadFields(formContext, body);
+        bodyObj.Tab = loadTabs(formContext, tab);
         form.Body = bodyObj;
-        const headerObj = {};
-        header.forEach(field => headerObj[field] = {});
-        loadFields(formContext, headerObj, 'header_');
-        form.Header = headerObj;
-        const process = loadProcess(formContext);
-        if (bpf.length > 0) {
-            const bpfObj = {};
-            let bpfProcessName = null;
-            bpf.forEach(item => {
-                const [processName, fieldName] = item.split('___');
-                if (!bpfProcessName) {
-                    bpfProcessName = processName;
-                }
-                bpfObj[fieldName] = {};
-            });
-            loadFields(formContext, bpfObj, 'header_process_');
-            if (bpfProcessName) {
-                process[bpfProcessName] = bpfObj;
-            }
-        }
-        form.Process = process;
-        const quickFormObj = {};
-        const quickFormFields = {};
-        quick.forEach(item => {
-            const [quickFormName, fieldName] = item.split('___');
-            if (!quickFormObj[quickFormName]) {
-                quickFormObj[quickFormName] = {};
-                quickFormFields[quickFormName] = [];
-            }
-            if (fieldName) {
-                quickFormObj[quickFormName][fieldName] = {};
-                quickFormFields[quickFormName].push(fieldName);
-            }
-        });
-        loadQuickForms(formContext, quickFormObj, quickFormFields);
-        form.QuickForm = quickFormObj;
-        const gridObj = {};
-        grid.forEach(item => gridObj[item] = {});
-        loadGrids(formContext, gridObj);
-        form.Grid = gridObj;
-        const navigationObj = {};
-        navigation.forEach(item => navigationObj[item] = {});
-        loadNavigations(formContext, navigationObj);
-        form.Navigation = navigationObj;
-        if (dialog.length > 0) {
-            form.Dialog = loadFormDialog(formContext, dialog);
-        }
+        form.Header = loadFields(formContext, header, 'header_');
+        form.Process = loadProcess(formContext, bpf);
+        form.QuickForm = loadQuickForms(formContext, quick);
+        form.Grid = loadGrids(formContext, grid);
+        form.Navigation = loadNavigations(formContext, navigation);
+        form.Dialog = loadFormDialog(formContext, dialog);
         form.Utility = loadUtility(defaultWebResourceName);
         form.ExecutionContext = loadExecutionContext(executionContext);
         form.SidePanes = loadSidePanes();
