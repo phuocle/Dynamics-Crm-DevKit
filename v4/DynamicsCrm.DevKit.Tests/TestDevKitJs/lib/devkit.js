@@ -28,7 +28,7 @@ const devKit = (function () {
         });
     }
     function loadForm(formContext) {
-        const form = {};
+        const obj = {};
         const contextData = formContext?.data;
         const contextDataEntity = formContext?.data?.entity;
         const contextUi = formContext?.ui;
@@ -43,52 +43,52 @@ const devKit = (function () {
             }
             return null;
         };
-        getter(form, 'Attributes', () => contextDataEntity?.attributes);
-        getter(form, 'Controls', () => contextUi?.controls);
-        getter(form, 'DataIsDirty', () => contextData?.getIsDirty());
-        getter(form, 'DataIsValid', () => contextData?.isValid());
-        getter(form, 'DataXml', () => contextDataEntity?.getDataXml());
-        getter(form, 'EntityId', () => contextDataEntity?.getId());
-        getter(form, 'EntityIsDirty', () => contextDataEntity?.getIsDirty());
-        getter(form, 'EntityIsValid', () => contextDataEntity?.isValid());
-        getter(form, 'EntityName', () => contextDataEntity?.getEntityName());
-        getter(form, 'EntityReference', () => contextDataEntity?.getEntityReference());
-        getter(form, 'FormId', () => contextUiFormSelector?.getCurrentItem()?.getId());
-        getter(form, 'FormLabel', () => contextUiFormSelector?.getCurrentItem()?.getLabel());
-        getter(form, 'FormType', () => contextUi?.getFormType());
-        getter(form, 'PrimaryAttributeValue', () => contextDataEntity?.getPrimaryAttributeValue());
-        getter(form, 'ViewPortHeight', () => contextUi?.getViewPortHeight());
-        getter(form, 'ViewPortWidth', () => contextUi?.getViewPortWidth());
-        form.AddOnPostSave = callback => contextDataEntity?.addOnPostSave(callback);
-        form.AddOnSave = callback => contextDataEntity?.addOnSave(callback);
-        form.ClearFormNotification = uniqueId => contextUi?.clearFormNotification(uniqueId);
-        form.Close = () => contextUi?.close();
-        form.DataAddOnLoad = callback => contextData?.addOnLoad(callback);
-        form.DataRemoveOnLoad = callback => contextData?.removeOnLoad(callback);
-        form.FormIsVisible = formId => { return findFormItem(item => item.getId(), formId)?.getVisible(); }
-        form.FormNavigateToFormId = formId => { findFormItem(item => item.getId(), formId)?.navigate(); };
-        form.FormNavigateToFormLabel = formLabel => { findFormItem(item => item.getLabel(), formLabel)?.navigate(); };
-        form.FormSetVisible = (formId, value) => { findFormItem(item => item.getId(), formId)?.setVisible(value); }
-        form.Refresh = (save, successCallback, errorCallback) => {
+        getter(obj, 'Attributes', () => contextDataEntity?.attributes);
+        getter(obj, 'Controls', () => contextUi?.controls);
+        getter(obj, 'DataIsDirty', () => contextData?.getIsDirty());
+        getter(obj, 'DataIsValid', () => contextData?.isValid());
+        getter(obj, 'DataXml', () => contextDataEntity?.getDataXml());
+        getter(obj, 'EntityId', () => contextDataEntity?.getId());
+        getter(obj, 'EntityIsDirty', () => contextDataEntity?.getIsDirty());
+        getter(obj, 'EntityIsValid', () => contextDataEntity?.isValid());
+        getter(obj, 'EntityName', () => contextDataEntity?.getEntityName());
+        getter(obj, 'EntityReference', () => contextDataEntity?.getEntityReference());
+        getter(obj, 'FormId', () => contextUiFormSelector?.getCurrentItem()?.getId());
+        getter(obj, 'FormLabel', () => contextUiFormSelector?.getCurrentItem()?.getLabel());
+        getter(obj, 'FormType', () => contextUi?.getFormType());
+        getter(obj, 'PrimaryAttributeValue', () => contextDataEntity?.getPrimaryAttributeValue());
+        getter(obj, 'ViewPortHeight', () => contextUi?.getViewPortHeight());
+        getter(obj, 'ViewPortWidth', () => contextUi?.getViewPortWidth());
+        obj.AddOnPostSave = callback => contextDataEntity?.addOnPostSave(callback);
+        obj.AddOnSave = callback => contextDataEntity?.addOnSave(callback);
+        obj.ClearFormNotification = uniqueId => contextUi?.clearFormNotification(uniqueId);
+        obj.Close = () => contextUi?.close();
+        obj.DataAddOnLoad = callback => contextData?.addOnLoad(callback);
+        obj.DataRemoveOnLoad = callback => contextData?.removeOnLoad(callback);
+        obj.FormIsVisible = formId => { return findFormItem(item => item.getId(), formId)?.getVisible(); }
+        obj.FormNavigateToFormId = formId => { findFormItem(item => item.getId(), formId)?.navigate(); };
+        obj.FormNavigateToFormLabel = formLabel => { findFormItem(item => item.getLabel(), formLabel)?.navigate(); };
+        obj.FormSetVisible = (formId, value) => { findFormItem(item => item.getId(), formId)?.setVisible(value); }
+        obj.Refresh = (save, successCallback, errorCallback) => {
             const promise = contextData?.refresh(save);
             if (successCallback) promise?.then(successCallback, errorCallback);
             else return promise;
         };
-        form.RefreshRibbon = refreshAll => contextUi?.refreshRibbon(refreshAll);
-        form.RemoveOnPostSave = callback => contextDataEntity?.removeOnPostSave(callback);
-        form.RemoveOnSave = callback => contextDataEntity?.removeOnSave(callback);
-        form.Save = (saveOptions, successCallback, errorCallback) => {
+        obj.RefreshRibbon = refreshAll => contextUi?.refreshRibbon(refreshAll);
+        obj.RemoveOnPostSave = callback => contextDataEntity?.removeOnPostSave(callback);
+        obj.RemoveOnSave = callback => contextDataEntity?.removeOnSave(callback);
+        obj.Save = (saveOptions, successCallback, errorCallback) => {
             const promise = contextData?.save(saveOptions);
             if (successCallback) promise?.then(successCallback, errorCallback);
             else return promise;
         };
-        form.SetFormEntityName = arg => contextUi?.setFormEntityName(arg);
-        form.SetFormNotification = (message, level, uniqueId) => contextUi?.setFormNotification(message, level, uniqueId);
-        form.UiAddLoaded = callback => contextUi?.addLoaded(callback);
-        form.UiAddOnLoad = callback => contextUi?.addOnLoad(callback);
-        form.UiRemoveLoaded = callback => contextUi?.removeLoaded(callback);
-        form.UiRemoveOnLoad = callback => contextUi?.removeOnLoad(callback);
-        return form;
+        obj.SetFormEntityName = arg => contextUi?.setFormEntityName(arg);
+        obj.SetFormNotification = (message, level, uniqueId) => contextUi?.setFormNotification(message, level, uniqueId);
+        obj.UiAddLoaded = callback => contextUi?.addLoaded(callback);
+        obj.UiAddOnLoad = callback => contextUi?.addOnLoad(callback);
+        obj.UiRemoveLoaded = callback => contextUi?.removeLoaded(callback);
+        obj.UiRemoveOnLoad = callback => contextUi?.removeOnLoad(callback);
+        return obj;
     }
     function loadProcess(formContext, bpf = []) {
         const obj = {};
@@ -589,9 +589,9 @@ const devKit = (function () {
         return obj;
     }
     function loadBody(formContext, body, tab) {
-        const bodyObj = loadFields(formContext, body);
-        bodyObj.Tab = loadTabs(formContext, tab);
-        return bodyObj;
+        const obj = loadFields(formContext, body);
+        obj.Tab = loadTabs(formContext, tab);
+        return obj;
     }
     function loadUtility(defaultWebResourceName) {
         const obj = {};
@@ -1005,22 +1005,22 @@ const devKit = (function () {
         return obj;
     }
     function loadFormDialog(formContext, fields) {
-        const form = {};
+        const obj = {};
         const fieldsLength = fields?.length || 0;
         for (let i = 0; i < fieldsLength; i++) {
             const field = fields[i];
             const attribute = formContext?.data?.entity?.attributes?.get(field);
             const control = formContext?.getControl(field);
-            form[field] = {};
-            devKit.LoadField(formContext, form[field], attribute, control);
+            obj[field] = {};
+            devKit.LoadField(formContext, obj[field], attribute, control);
         }
-        form.Close = () => formContext?.ui?.close();
-        return form;
+        obj.Close = () => formContext?.ui?.close();
+        return obj;
     }
     function loadFormV2(executionContext, defaultWebResourceName, formConfig) {
         const formContext = executionContext?.getFormContext?.() ?? executionContext ?? null;
-        const form = loadForm(formContext);
         const { body = [], tab = [], header = [], bpf = [], quick = [], grid = [], navigation = [], dialog = [] } = formConfig;
+        const form = loadForm(formContext);
         form.Body = loadBody(formContext, body, tab);
         form.Header = loadFields(formContext, header, 'header_');
         form.Process = loadProcess(formContext, bpf);
