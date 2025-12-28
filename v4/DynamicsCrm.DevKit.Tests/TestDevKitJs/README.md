@@ -1,110 +1,93 @@
-> **IMPORTANT — Quy trình chạy (BẮT BUỘC, theo thứ tự)**
+# TestDevKitJs - JavaScript DevKit Testing Project
 
-- Yêu cầu trước khi chạy:
-  - Cài đặt `Node.js` và `npm` (phiên bản tương thích với môi trường của bạn).
-  - Mở PowerShell với quyền cho phép chạy script hoặc tạm thời cho phép ExecutionPolicy.
-  - Mở terminal ở thư mục `TestDevKitJs` (thư mục chứa `package.json`).
+> **Source of Truth** for JavaScript DevKit Implementation
 
-- Cách chạy từng bước (chạy theo thứ tự):
+## Overview
 
-  1. Dọn sạch môi trường (xóa `node_modules`, `coverage`, `package-lock.json`, ...):
+This project provides unit testing and development environment for the DevKit JavaScript library used in Dynamics CRM web resources.
 
-      ```powershell
-      .\1.Clean.ps1
-      ```
-
-      - Kết quả mong đợi: các thư mục/ file cũ được xóa.
-
-  2. Sao chép/chuẩn bị file `devkit` cho tests (chuyển sang ES module nếu cần):
-
-      ```powershell
-      .\2.CopyDevKitJs.ps1
-      ```
-
-      - Kết quả mong đợi: file `lib/devkit.mjs` được tạo/ghi đè từ nguồn chung.
-
-  3. Cài đặt dependency và chạy tests:
-
-      ```powershell
-      .\3.Install.ps1
-      ```
-
-      - Kết quả mong đợi: `npm install` hoàn tất; tests chạy thành công.
-
-  4. Chạy unit tests với coverage và mở báo cáo HTML (bắt buộc popup):
-
-      ```powershell
-      .\4.RunCodeCoverage.ps1
-      ```
-
-      - Kết quả mong đợi: Jest chạy với `--coverage`; script sẽ tìm file `.html` trong `coverage/` và mở báo cáo trong trình duyệt.
-
-- Nếu bất kỳ bước nào lỗi, dừng lại, sửa lỗi (hoặc thông báo cho tôi) và sau khi sửa xong, chạy lại từ bước 1 cho tới khi bước 4 thành công và báo cáo coverage mở được.
-
----
-
-# JavaScript Modules cho Dynamics 365 / Dataverse (TestDevKitJs)
-
-## Tổng quan
-
-Phiên bản này là bộ kiểm thử JavaScript cho `devkit` dưới dạng ES module. Mục tiêu:
-
-- Chạy unit tests cho `lib/devkit.mjs` với `jest`.
-- Sinh báo cáo coverage HTML và mở báo cáo cuối cùng.
-
-## Cấu trúc project (TestDevKitJs)
+## Project Structure
 
 ```
 TestDevKitJs/
 ├── lib/
-│   └── devkit.mjs          # Core library (ES module)
+│   └── devkit.js          # Core DevKit JavaScript library
+├── entities/
+│   ├── devkit.d.ts        # TypeScript definitions
+│   ├── Account.js         # Entity implementation sample
+│   ├── Account.form.js    # Form implementation sample
+│   └── Account.webapi.js  # WebAPI implementation sample
 ├── test/
-│   └── devkit.test.js      # Unit tests (Jest)
-├── coverage/               # Coverage reports (generated)
-├── 1.Clean.ps1
-├── 2.CopyDevKitJs.ps1
-├── 3.Install.ps1
-├── 4.RunCodeCoverage.ps1
-├── package.json
-└── README.md
+│   ├── devkit.test.js     # Unit tests
+│   ├── sync-devkit.js     # Sync helper script
+│   └── restore-devkit.js  # Restore helper script
+└── coverage/              # Jest coverage reports
 ```
 
-## NPM Scripts (xem `package.json`)
+## Quick Start
 
-| Lệnh | Mô tả |
-|------|-------|
-| `npm test` | Chạy Jest tests |
-| `npm run coverage` | Chạy Jest với coverage và sinh báo cáo HTML |
+### Prerequisites
+- Node.js (v18+)
+- npm
 
-## Cách sử dụng nhanh
-
-1. Dọn sạch môi trường:
+### Setup & Run (Fresh Install)
 
 ```powershell
+# 1. Clean previous artifacts
 .\1.Clean.ps1
-```
 
-2. Chuẩn bị `devkit`:
-
-```powershell
+# 2. Copy devkit.js from shared resources (converts to ES module)
 .\2.CopyDevKitJs.ps1
-```
 
-3. Cài dependencies và chạy tests:
-
-```powershell
+# 3. Install dependencies & run tests
 .\3.Install.ps1
-```
 
-4. Sinh coverage và mở báo cáo HTML:
-
-```powershell
+# 4. Run code coverage
 .\4.RunCodeCoverage.ps1
 ```
 
-## Ghi chú
+## NPM Scripts
 
-- File `coverage/` là kết quả sinh ra — đã thêm vào `.gitignore` để tránh commit.
-- `4.RunCodeCoverage.ps1` sẽ cố gắng mở file HTML đầu tiên tìm thấy trong `coverage/`.
+| Command | Description |
+|---------|-------------|
+| `npm test` | Run unit tests |
+| `npm run coverage` | Run tests with coverage report |
+| `npm run test:debug` | Run tests in debug mode |
 
-Nếu cần mình có thể cập nhật thêm phần hướng dẫn deploy file `lib/devkit.mjs` lên Dataverse.
+## PowerShell Scripts
+
+| Script | Purpose |
+|--------|---------|
+| `1.Clean.ps1` | Clean `node_modules`, `coverage`, `.vs`, `.vscode`, `package-lock.json` |
+| `2.CopyDevKitJs.ps1` | Copy `devkit.js` from shared source, convert to ES module |
+| `3.Install.ps1` | Install npm dependencies and run tests |
+| `4.RunCodeCoverage.ps1` | Run coverage and open HTML report |
+
+## Deployment
+
+To deploy the JavaScript DevKit files to TestWebResource:
+
+```cmd
+deploy.devkitjs.bat
+```
+
+This script:
+1. Runs unit tests with coverage
+2. Copies files to `../TestWebResource/Dev.DevKit.WebResource/`:
+   - `lib/devkit.js` → `lib/devkit.js`
+   - `entities/devkit.d.ts` → `entities/devkit.d.ts`
+   - `entities/Account.js` → `entities/Account.js`
+   - `entities/Account.form.js` → `entities/Account.form.js`
+   - `entities/Account.webapi.js` → `entities/Account.webapi.js`
+
+## Architecture
+
+- Uses **ES Modules** (`type: "module"` in package.json)
+- Uses `loadFormV2` pattern (factory-based)
+- Exposes global `devKit` object via IIFE
+- Accesses global `Xrm` directly
+
+## Dependencies
+
+- **jest** - Testing framework
+- **xrm-mock** - Mock library for Xrm object
