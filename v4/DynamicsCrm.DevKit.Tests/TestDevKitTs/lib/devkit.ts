@@ -268,8 +268,8 @@ function loadQuickForms(formContext: any, quickItems: string[]): any {
     return obj;
 }
 function loadGrids(formContext: any, gridItems: string[]): any {
-    const grids: any = {};
-    gridItems.forEach((item: string) => grids[item] = {});
+    const obj: any = {};
+    gridItems.forEach((item: string) => obj[item] = {});
     const loadGridColumn = (col: any) => {
         const obj: any = {};
         getter(obj, 'Label', () => col?.controls?.get(0)?.getLabel());
@@ -305,7 +305,7 @@ function loadGrids(formContext: any, gridItems: string[]): any {
         getter(obj, 'PrimaryAttributeValue', () => row?.data?.entity?.getPrimaryAttributeValue());
         return obj;
     };
-    const loadGrid = (formContext: any, grids: any, grid: string) => {
+    const loadGrid = (formContext: any, obj: any, grid: string) => {
         const gridControl = formContext?.getControl(grid);
         const createCollectionObject = (getItemsFn: any, processItemFn: any) => {
             const obj: any = {};
@@ -320,50 +320,50 @@ function loadGrids(formContext: any, gridItems: string[]): any {
             };
             return obj;
         };
-        getter(grids[grid], 'EntityName', () => gridControl?.getEntityName());
-        getter(grids[grid], 'FetchXml', () => gridControl?.getFetchXml());
-        getter(grids[grid], 'GridType', () => gridControl?.getGridType());
-        getter(grids[grid], 'Relationship', () => gridControl?.getRelationship());
-        getter(grids[grid], 'Rows', () => {
+        getter(obj[grid], 'EntityName', () => gridControl?.getEntityName());
+        getter(obj[grid], 'FetchXml', () => gridControl?.getFetchXml());
+        getter(obj[grid], 'GridType', () => gridControl?.getGridType());
+        getter(obj[grid], 'Relationship', () => gridControl?.getRelationship());
+        getter(obj[grid], 'Rows', () => {
             const gridInstance = formContext?.getControl(grid)?.getGrid();
             return createCollectionObject(
                 () => gridInstance?.getRows(),
                 (row: any) => loadGridRow(row)
             );
         });
-        getter(grids[grid], 'SelectedRows', () => {
+        getter(obj[grid], 'SelectedRows', () => {
             const gridInstance = formContext?.getControl(grid)?.getGrid();
             return createCollectionObject(
                 () => gridInstance?.getSelectedRows(),
                 (row: any) => loadGridRow(row?.getData())
             );
         });
-        getter(grids[grid], 'TotalRecordCount', () => gridControl?.getGrid()?.getTotalRecordCount());
-        getter(grids[grid], 'ViewSelector', () => {
+        getter(obj[grid], 'TotalRecordCount', () => gridControl?.getGrid()?.getTotalRecordCount());
+        getter(obj[grid], 'ViewSelector', () => {
             const viewSelector = gridControl?.getViewSelector();
             const obj: any = {};
             getter(obj, 'Visible', () => viewSelector?.isVisible());
             getterSetter(obj, 'CurrentView', () => viewSelector?.getCurrentView(), (value: any) => viewSelector?.setCurrentView(value));
             return obj;
         });
-        getterSetter(grids[grid], 'Visible', () => gridControl?.getVisible(), (value: any) => { gridControl?.setVisible(value); });
-        getter(grids[grid], 'ControlType', () => gridControl?.getControlType());
-        getter(grids[grid], 'ControlName', () => gridControl?.getName());
-        getter(grids[grid], 'ControlParent', () => gridControl?.getParent());
-        getterSetter(grids[grid], 'Disabled', () => gridControl?.getDisabled(), (value: boolean) => { gridControl?.setDisabled(value); });
-        getterSetter(grids[grid], 'Label', () => gridControl?.getLabel(), (value: string) => { gridControl?.setLabel(value); });
-        grids[grid].Focus = () => gridControl?.setFocus();
-        grids[grid].AddOnLoad = (callback: any) => gridControl?.addOnLoad(callback);
-        grids[grid].OpenRelatedGrid = () => gridControl?.openRelatedGrid();
-        grids[grid].Refresh = () => gridControl?.refresh();
-        grids[grid].RefreshRibbon = () => gridControl?.refreshRibbon();
-        grids[grid].RemoveOnLoad = (callback: any) => gridControl?.removeOnLoad(callback);
-        grids[grid].Url = (client: number) => gridControl?.getUrl(client);
+        getterSetter(obj[grid], 'Visible', () => gridControl?.getVisible(), (value: any) => { gridControl?.setVisible(value); });
+        getter(obj[grid], 'ControlType', () => gridControl?.getControlType());
+        getter(obj[grid], 'ControlName', () => gridControl?.getName());
+        getter(obj[grid], 'ControlParent', () => gridControl?.getParent());
+        getterSetter(obj[grid], 'Disabled', () => gridControl?.getDisabled(), (value: boolean) => { gridControl?.setDisabled(value); });
+        getterSetter(obj[grid], 'Label', () => gridControl?.getLabel(), (value: string) => { gridControl?.setLabel(value); });
+        obj[grid].Focus = () => gridControl?.setFocus();
+        obj[grid].AddOnLoad = (callback: any) => gridControl?.addOnLoad(callback);
+        obj[grid].OpenRelatedGrid = () => gridControl?.openRelatedGrid();
+        obj[grid].Refresh = () => gridControl?.refresh();
+        obj[grid].RefreshRibbon = () => gridControl?.refreshRibbon();
+        obj[grid].RemoveOnLoad = (callback: any) => gridControl?.removeOnLoad(callback);
+        obj[grid].Url = (client: number) => gridControl?.getUrl(client);
     };
-    Object.keys(grids).forEach(grid => {
-        loadGrid(formContext, grids, grid);
+    Object.keys(obj).forEach(grid => {
+        loadGrid(formContext, obj, grid);
     });
-    return grids;
+    return obj;
 }
 function loadExecutionContext(executionContext: any): DevKit.IExecutionContext {
     const obj: any = {} as DevKit.IExecutionContext;
@@ -745,7 +745,7 @@ function loadFormV3<TBody = Record<string, any>, THeader = Record<string, any>, 
     return form;
 }
 function loadProcess(formContext: any, bpf: string[]): any {
-    const process: any = {};
+    const obj: any = {};
     const bpfFieldNames: string[] = [];
     let bpfProcessName: string = '';
     bpf.forEach((item: string) => {
@@ -756,7 +756,7 @@ function loadProcess(formContext: any, bpf: string[]): any {
         bpfFieldNames.push(fieldName);
     });
     const bpfObj = loadFields(formContext, bpfFieldNames, 'header_process_');
-    process[bpfProcessName] = bpfObj;
+    obj[bpfProcessName] = bpfObj;
     const getProcess = formContext?.data?.process;
     const getProcessUi = formContext?.ui?.process;
     const loadStep = (step: any) => {
@@ -812,7 +812,7 @@ function loadProcess(formContext: any, bpf: string[]): any {
         });
         return obj;
     };
-    getter(process, 'ActivePath', () => {
+    getter(obj, 'ActivePath', () => {
         const activePathObj: any = {};
         activePathObj.get = (index: number) => {
             const stage = getProcess?.getActivePath()?.get(index);
@@ -828,20 +828,20 @@ function loadProcess(formContext: any, bpf: string[]): any {
         };
         return activePathObj;
     });
-    getter(process, 'ActiveProcess', () => loadProcessInner(getProcess?.getActiveProcess()));
-    getter(process, 'ActiveStage', () => loadStage(getProcess?.getActiveStage()));
-    getter(process, 'InstanceId', () => getProcess?.getInstanceId());
-    getter(process, 'InstanceName', () => getProcess?.getInstanceName());
-    getter(process, 'SelectedStage', () => loadStage(getProcess?.getSelectedStage()));
-    getterSetter(process, 'DisplayState', () => getProcessUi?.getDisplayState(), (value: string) => { getProcessUi?.setDisplayState(value); });
-    getterSetter(process, 'Status', () => getProcess?.getStatus(), (value: string) => { getProcess?.setStatus(value); });
-    getterSetter(process, 'Visible', () => getProcessUi?.getVisible(), (value: boolean) => { getProcessUi?.setVisible(value); });
-    process.AddOnPreProcessStatusChange = (callback: any) => getProcess?.addOnPreProcessStatusChange(callback);
-    process.AddOnPreStageChange = (callback: any) => getProcess?.addOnPreStageChange(callback);
-    process.AddOnProcessStatusChange = (callback: any) => getProcess?.addOnProcessStatusChange(callback);
-    process.AddOnStageChange = (callback: any) => getProcess?.addOnStageChange(callback);
-    process.AddOnStageSelected = (callback: any) => getProcess?.addOnStageSelected(callback);
-    process.EnabledProcesses = (callback: (processes: any[]) => void) => {
+    getter(obj, 'ActiveProcess', () => loadProcessInner(getProcess?.getActiveProcess()));
+    getter(obj, 'ActiveStage', () => loadStage(getProcess?.getActiveStage()));
+    getter(obj, 'InstanceId', () => getProcess?.getInstanceId());
+    getter(obj, 'InstanceName', () => getProcess?.getInstanceName());
+    getter(obj, 'SelectedStage', () => loadStage(getProcess?.getSelectedStage()));
+    getterSetter(obj, 'DisplayState', () => getProcessUi?.getDisplayState(), (value: string) => { getProcessUi?.setDisplayState(value); });
+    getterSetter(obj, 'Status', () => getProcess?.getStatus(), (value: string) => { getProcess?.setStatus(value); });
+    getterSetter(obj, 'Visible', () => getProcessUi?.getVisible(), (value: boolean) => { getProcessUi?.setVisible(value); });
+    obj.AddOnPreProcessStatusChange = (callback: any) => getProcess?.addOnPreProcessStatusChange(callback);
+    obj.AddOnPreStageChange = (callback: any) => getProcess?.addOnPreStageChange(callback);
+    obj.AddOnProcessStatusChange = (callback: any) => getProcess?.addOnProcessStatusChange(callback);
+    obj.AddOnStageChange = (callback: any) => getProcess?.addOnStageChange(callback);
+    obj.AddOnStageSelected = (callback: any) => getProcess?.addOnStageSelected(callback);
+    obj.EnabledProcesses = (callback: (processes: any[]) => void) => {
         getProcess?.getEnabledProcesses((enabledProcesses: any) => {
             const processes = Object.entries(enabledProcesses).map(([processId, processName]) => ({
                 ProcessId: processId,
@@ -850,9 +850,9 @@ function loadProcess(formContext: any, bpf: string[]): any {
             callback(processes);
         });
     };
-    process.MoveNext = (callback: any) => getProcess?.moveNext(callback);
-    process.MovePrevious = (callback: any) => getProcess?.movePrevious(callback);
-    process.ProcessInstances = (callback: (processes: any[]) => void) => {
+    obj.MoveNext = (callback: any) => getProcess?.moveNext(callback);
+    obj.MovePrevious = (callback: any) => getProcess?.movePrevious(callback);
+    obj.ProcessInstances = (callback: (processes: any[]) => void) => {
         getProcess?.getProcessInstances((processInstances: any) => {
             const processes = Object.values(processInstances).map((proc: any) => ({
                 ProcessId: proc.ProcessDefinitionID,
@@ -866,19 +866,19 @@ function loadProcess(formContext: any, bpf: string[]): any {
             callback(processes);
         });
     };
-    process.Reflow = (updateUi: boolean, parentStage: string, nextStage: string) => getProcessUi?.reflow(updateUi, parentStage, nextStage);
-    process.RemoveOnPreProcessStatusChange = (callback: any) => getProcess?.removeOnPreProcessStatusChange(callback);
-    process.RemoveOnPreStageChange = (callback: any) => getProcess?.removeOnPreStageChange(callback);
-    process.RemoveOnProcessStatusChange = (callback: any) => getProcess?.removeOnProcessStatusChange(callback);
-    process.RemoveOnStageChange = (callback: any) => getProcess?.removeOnStageChange(callback);
-    process.RemoveOnStageSelected = (callback: any) => getProcess?.removeOnStageSelected(callback);
-    process.SetActiveProcess = (processId: string, callback: any) => getProcess?.setActiveProcess(processId, callback);
-    process.SetActiveProcessInstance = (processInstanceId: string, callback: any) => getProcess?.setActiveProcessInstance(processInstanceId, callback);
-    process.SetActiveStage = (stageId: string, callback: any) => getProcess?.setActiveStage(stageId, callback);
-    return process;
+    obj.Reflow = (updateUi: boolean, parentStage: string, nextStage: string) => getProcessUi?.reflow(updateUi, parentStage, nextStage);
+    obj.RemoveOnPreProcessStatusChange = (callback: any) => getProcess?.removeOnPreProcessStatusChange(callback);
+    obj.RemoveOnPreStageChange = (callback: any) => getProcess?.removeOnPreStageChange(callback);
+    obj.RemoveOnProcessStatusChange = (callback: any) => getProcess?.removeOnProcessStatusChange(callback);
+    obj.RemoveOnStageChange = (callback: any) => getProcess?.removeOnStageChange(callback);
+    obj.RemoveOnStageSelected = (callback: any) => getProcess?.removeOnStageSelected(callback);
+    obj.SetActiveProcess = (processId: string, callback: any) => getProcess?.setActiveProcess(processId, callback);
+    obj.SetActiveProcessInstance = (processInstanceId: string, callback: any) => getProcess?.setActiveProcessInstance(processInstanceId, callback);
+    obj.SetActiveStage = (stageId: string, callback: any) => getProcess?.setActiveStage(stageId, callback);
+    return obj;
 }
 function loadUtility(defaultWebResourceName?: string): DevKit.IUtility {
-    const utility: any = {} as DevKit.IUtility;
+    const obj: any = {} as DevKit.IUtility;
     const xrm = getXrm();
     const getApp = xrm?.App;
     const getDevice = xrm?.Device;
@@ -887,7 +887,7 @@ function loadUtility(defaultWebResourceName?: string): DevKit.IUtility {
     const getNavigation = xrm?.Navigation;
     const getPanel = xrm?.Panel;
     const getUtility = xrm?.Utility;
-    getter(utility, 'Client', () => {
+    getter(obj, 'Client', () => {
         const obj: any = {};
         const client = getGlobalContext?.client;
         getter(obj, 'ClientName', () => client?.getClient());
@@ -897,11 +897,11 @@ function loadUtility(defaultWebResourceName?: string): DevKit.IUtility {
         getter(obj, 'IsOffline', () => client?.isOffline());
         return obj;
     });
-    getter(utility, 'ClientUrl', () => getGlobalContext?.getClientUrl());
-    getter(utility, 'CurrentAppUrl', () => getGlobalContext?.getCurrentAppUrl());
-    getter(utility, 'IsOnPremises', () => getGlobalContext?.isOnPremises());
-    getter(utility, 'LearningPathAttributeName', () => getUtility?.getLearningPathAttributeName());
-    getter(utility, 'OrganizationSettings', () => {
+    getter(obj, 'ClientUrl', () => getGlobalContext?.getClientUrl());
+    getter(obj, 'CurrentAppUrl', () => getGlobalContext?.getCurrentAppUrl());
+    getter(obj, 'IsOnPremises', () => getGlobalContext?.isOnPremises());
+    getter(obj, 'LearningPathAttributeName', () => getUtility?.getLearningPathAttributeName());
+    getter(obj, 'OrganizationSettings', () => {
         const obj: any = {};
         const organizationSettings = getGlobalContext?.organizationSettings;
         getter(obj, 'Attributes', () => organizationSettings?.attributes);
@@ -918,8 +918,8 @@ function loadUtility(defaultWebResourceName?: string): DevKit.IUtility {
         getter(obj, 'UseSkypeProtocol', () => organizationSettings?.useSkypeProtocol);
         return obj;
     });
-    getter(utility, 'PageContext', () => getUtility?.getPageContext());
-    getter(utility, 'UserSettings', () => {
+    getter(obj, 'PageContext', () => getUtility?.getPageContext());
+    getter(obj, 'UserSettings', () => {
         const obj: any = {};
         const userSettings = getGlobalContext?.userSettings;
         getter(obj, 'DateFormattingInfo', () => userSettings?.dateFormattingInfo);
@@ -938,121 +938,121 @@ function loadUtility(defaultWebResourceName?: string): DevKit.IUtility {
         getter(obj, 'UserName', () => userSettings?.userName);
         return obj;
     });
-    getter(utility, 'Version', () => getGlobalContext?.getVersion());
-    utility.AddGlobalNotification = function (notification: any, successCallback?: (result: any) => void, errorCallback?: (error: any) => void) {
+    getter(obj, 'Version', () => getGlobalContext?.getVersion());
+    obj.AddGlobalNotification = function (notification: any, successCallback?: (result: any) => void, errorCallback?: (error: any) => void) {
         const promise = getApp?.addGlobalNotification(notification);
         if (successCallback) promise?.then(successCallback, errorCallback);
         else return promise;
     };
-    utility.AdvancedConfigSetting = (setting: string) => getGlobalContext?.getAdvancedConfigSetting(setting as "MaxChildIncidentNumber" | "MaxIncidentMergeNumber");
-    utility.AllowedStatusTransitions = function (entityName: string, stateCode: number, successCallback?: (result: any) => void, errorCallback?: (error: any) => void) {
+    obj.AdvancedConfigSetting = (setting: string) => getGlobalContext?.getAdvancedConfigSetting(setting as "MaxChildIncidentNumber" | "MaxIncidentMergeNumber");
+    obj.AllowedStatusTransitions = function (entityName: string, stateCode: number, successCallback?: (result: any) => void, errorCallback?: (error: any) => void) {
         const promise = getUtility?.getAllowedStatusTransitions(entityName, stateCode);
         if (successCallback) promise?.then(successCallback, errorCallback);
         else return promise;
     };
-    utility.BarcodeValue = function (successCallback?: (result: any) => void, errorCallback?: (error: any) => void) {
+    obj.BarcodeValue = function (successCallback?: (result: any) => void, errorCallback?: (error: any) => void) {
         const promise = getDevice?.getBarcodeValue();
         if (successCallback) promise?.then(successCallback, errorCallback);
         else return promise;
     };
-    utility.CaptureAudio = function (successCallback?: (result: any) => void, errorCallback?: (error: any) => void) {
+    obj.CaptureAudio = function (successCallback?: (result: any) => void, errorCallback?: (error: any) => void) {
         const promise = getDevice?.captureAudio();
         if (successCallback) promise?.then(successCallback, errorCallback);
         else return promise;
     };
-    utility.CaptureImage = function (imageOptions: any, successCallback?: (result: any) => void, errorCallback?: (error: any) => void) {
+    obj.CaptureImage = function (imageOptions: any, successCallback?: (result: any) => void, errorCallback?: (error: any) => void) {
         const promise = getDevice?.captureImage(imageOptions);
         if (successCallback) promise?.then(successCallback, errorCallback);
         else return promise;
     };
-    utility.CaptureVideo = function (successCallback?: (result: any) => void, errorCallback?: (error: any) => void) {
+    obj.CaptureVideo = function (successCallback?: (result: any) => void, errorCallback?: (error: any) => void) {
         const promise = getDevice?.captureVideo();
         if (successCallback) promise?.then(successCallback, errorCallback);
         else return promise;
     };
-    utility.ClearGlobalNotification = function (uniqueId: string, successCallback?: (result: any) => void, errorCallback?: (error: any) => void) {
+    obj.ClearGlobalNotification = function (uniqueId: string, successCallback?: (result: any) => void, errorCallback?: (error: any) => void) {
         const promise = getApp?.clearGlobalNotification(uniqueId);
         if (successCallback) promise?.then(successCallback, errorCallback);
         else return promise;
     };
-    utility.CloseProgressIndicator = () => getUtility?.closeProgressIndicator();
-    utility.CurrentAppName = function (successCallback?: (result: any) => void, errorCallback?: (error: any) => void) {
+    obj.CloseProgressIndicator = () => getUtility?.closeProgressIndicator();
+    obj.CurrentAppName = function (successCallback?: (result: any) => void, errorCallback?: (error: any) => void) {
         const promise = getGlobalContext?.getCurrentAppName();
         if (successCallback) promise?.then(successCallback, errorCallback);
         else return promise;
     };
-    utility.CurrentAppProperties = function (successCallback?: (result: any) => void, errorCallback?: (error: any) => void) {
+    obj.CurrentAppProperties = function (successCallback?: (result: any) => void, errorCallback?: (error: any) => void) {
         const promise = getGlobalContext?.getCurrentAppProperties();
         if (successCallback) promise?.then(successCallback, errorCallback);
         else return promise;
     };
-    utility.CurrentPosition = function (successCallback?: (result: any) => void, errorCallback?: (error: any) => void) {
+    obj.CurrentPosition = function (successCallback?: (result: any) => void, errorCallback?: (error: any) => void) {
         const promise = getDevice?.getCurrentPosition();
         if (successCallback) promise?.then(successCallback, errorCallback);
         else return promise;
     };
-    utility.EntityMainFormDescriptor = (entityName: string, formId: string) => getUtility?.getEntityMainFormDescriptor(entityName, formId);
-    utility.EntityMetadata = function (entityName: string, attributes?: string[], successCallback?: (result: any) => void, errorCallback?: (error: any) => void) {
+    obj.EntityMainFormDescriptor = (entityName: string, formId: string) => getUtility?.getEntityMainFormDescriptor(entityName, formId);
+    obj.EntityMetadata = function (entityName: string, attributes?: string[], successCallback?: (result: any) => void, errorCallback?: (error: any) => void) {
         const promise = getUtility?.getEntityMetadata(entityName, attributes);
         if (successCallback) promise?.then(successCallback, errorCallback);
         else return promise;
     };
-    utility.HtmlAttributeEncode = (arg: string) => getEncoding?.htmlAttributeEncode(arg);
-    utility.HtmlDecode = (arg: string) => getEncoding?.htmlDecode(arg);
-    utility.HtmlEncode = (arg: string) => getEncoding?.htmlEncode(arg);
-    utility.InvokeProcessAction = function (name: string, parameters: any, successCallback?: (result: any) => void, errorCallback?: (error: any) => void) {
+    obj.HtmlAttributeEncode = (arg: string) => getEncoding?.htmlAttributeEncode(arg);
+    obj.HtmlDecode = (arg: string) => getEncoding?.htmlDecode(arg);
+    obj.HtmlEncode = (arg: string) => getEncoding?.htmlEncode(arg);
+    obj.InvokeProcessAction = function (name: string, parameters: any, successCallback?: (result: any) => void, errorCallback?: (error: any) => void) {
         const promise = getUtility?.invokeProcessAction(name, parameters);
         if (successCallback) promise?.then(successCallback, errorCallback);
         else return promise;
     };
-    utility.LoadPanel = (url: string, title: string) => getPanel?.loadPanel(url, title);
-    utility.LookupObjects = function (lookupOptions: any, successCallback?: (result: any) => void, errorCallback?: (error: any) => void) {
+    obj.LoadPanel = (url: string, title: string) => getPanel?.loadPanel(url, title);
+    obj.LookupObjects = function (lookupOptions: any, successCallback?: (result: any) => void, errorCallback?: (error: any) => void) {
         const promise = getUtility?.lookupObjects(lookupOptions);
         if (successCallback) promise?.then(successCallback, errorCallback);
         else return promise;
     };
-    utility.NavigateTo = function (pageInput: any, navigationOptions: any, successCallback?: (result: any) => void, errorCallback?: (error: any) => void) {
+    obj.NavigateTo = function (pageInput: any, navigationOptions: any, successCallback?: (result: any) => void, errorCallback?: (error: any) => void) {
         const promise = getNavigation?.navigateTo(pageInput, navigationOptions);
         if (successCallback) promise?.then(successCallback, errorCallback);
         else return promise;
     };
-    utility.OpenAlertDialog = function (alertStrings: any, alertOptions: any, closeCallback?: () => void, errorCallback?: (error: any) => void) {
+    obj.OpenAlertDialog = function (alertStrings: any, alertOptions: any, closeCallback?: () => void, errorCallback?: (error: any) => void) {
         const promise = getNavigation?.openAlertDialog(alertStrings, alertOptions);
         if (closeCallback) promise?.then(closeCallback, errorCallback);
         else return promise;
     };
-    utility.OpenConfirmDialog = function (confirmStrings: any, confirmOptions: any, successCallback?: (result: any) => void, errorCallback?: (error: any) => void) {
+    obj.OpenConfirmDialog = function (confirmStrings: any, confirmOptions: any, successCallback?: (result: any) => void, errorCallback?: (error: any) => void) {
         const promise = getNavigation?.openConfirmDialog(confirmStrings, confirmOptions);
         if (successCallback) promise?.then(successCallback, errorCallback);
         else return promise;
     };
-    utility.OpenErrorDialog = function (errorOptions: any, successCallback?: (result: any) => void, errorCallback?: (error: any) => void) {
+    obj.OpenErrorDialog = function (errorOptions: any, successCallback?: (result: any) => void, errorCallback?: (error: any) => void) {
         const promise = getNavigation?.openErrorDialog(errorOptions);
         if (successCallback) promise?.then(successCallback, errorCallback);
         else return promise;
     };
-    utility.OpenFile = (file: any, openFileOptions?: any) => getNavigation?.openFile(file, openFileOptions);
-    utility.OpenForm = function (entityFormOptions: any, formParameters: any, successCallback?: (result: any) => void, errorCallback?: (error: any) => void) {
+    obj.OpenFile = (file: any, openFileOptions?: any) => getNavigation?.openFile(file, openFileOptions);
+    obj.OpenForm = function (entityFormOptions: any, formParameters: any, successCallback?: (result: any) => void, errorCallback?: (error: any) => void) {
         const promise = getNavigation?.openForm(entityFormOptions, formParameters);
         if (successCallback) promise?.then(successCallback, errorCallback);
         else return promise;
     };
-    utility.OpenUrl = (url: string, openUrlOptions?: any) => getNavigation?.openUrl(url, openUrlOptions);
-    utility.OpenWebResource = (webResourceName: string, windowOptions?: any, data?: string) => getNavigation?.openWebResource(webResourceName, windowOptions, data);
-    utility.PickFile = function (pickFileOptions: any, successCallback?: (result: any) => void, errorCallback?: (error: any) => void) {
+    obj.OpenUrl = (url: string, openUrlOptions?: any) => getNavigation?.openUrl(url, openUrlOptions);
+    obj.OpenWebResource = (webResourceName: string, windowOptions?: any, data?: string) => getNavigation?.openWebResource(webResourceName, windowOptions, data);
+    obj.PickFile = function (pickFileOptions: any, successCallback?: (result: any) => void, errorCallback?: (error: any) => void) {
         const promise = getDevice?.pickFile(pickFileOptions);
         if (successCallback) promise?.then(successCallback, errorCallback);
         else return promise;
     };
-    utility.PrependOrgName = (sPath: string) => getGlobalContext?.prependOrgName(sPath);
-    utility.RefreshParentGrid = (lookupOptions: any) => getUtility?.refreshParentGrid(lookupOptions);
-    utility.Resource = (key: string) => getUtility?.getResourceString(defaultWebResourceName!, key);
-    utility.ResourceString = (webResourceName: string, key: string) => getUtility?.getResourceString(webResourceName, key);
-    utility.ShowProgressIndicator = (message: string) => getUtility?.showProgressIndicator(message);
-    utility.WebResourceUrl = (webResourceName: string) => getGlobalContext?.getWebResourceUrl(webResourceName);
-    utility.XmlAttributeEncode = (arg: string) => getEncoding?.xmlAttributeEncode(arg);
-    utility.XmlEncode = (arg: string) => getEncoding?.xmlEncode(arg);
-    return utility;
+    obj.PrependOrgName = (sPath: string) => getGlobalContext?.prependOrgName(sPath);
+    obj.RefreshParentGrid = (lookupOptions: any) => getUtility?.refreshParentGrid(lookupOptions);
+    obj.Resource = (key: string) => getUtility?.getResourceString(defaultWebResourceName!, key);
+    obj.ResourceString = (webResourceName: string, key: string) => getUtility?.getResourceString(webResourceName, key);
+    obj.ShowProgressIndicator = (message: string) => getUtility?.showProgressIndicator(message);
+    obj.WebResourceUrl = (webResourceName: string) => getGlobalContext?.getWebResourceUrl(webResourceName);
+    obj.XmlAttributeEncode = (arg: string) => getEncoding?.xmlAttributeEncode(arg);
+    obj.XmlEncode = (arg: string) => getEncoding?.xmlEncode(arg);
+    return obj;
 }
 function loadFormDialog(formContext: any, fields: string[]): any {
     const form: any = {};
