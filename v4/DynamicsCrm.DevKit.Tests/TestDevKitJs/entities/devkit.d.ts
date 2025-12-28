@@ -3927,15 +3927,26 @@ declare namespace OptionSet {
         /** collapsed */
         Collapsed
     }
-    /** The full name conventionCode setting of the current organization */
+    /**
+     * The full name conventionCode setting of the current organization
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#fullnameconventioncode
+     */
     enum FullNameConventionCode {
+        /** 0 - Last Name, First Name (e.g., "Smith, John") */
         LastName_Comma_FirstName,
+        /** 1 - First Name Last Name (e.g., "John Smith") */
         FirstName_LastName,
+        /** 2 - Last Name, First Name Middle Initial (e.g., "Smith, John A.") */
         LastName_Comma_FirstName_MiddleInitial,
+        /** 3 - First Name Middle Initial Last Name (e.g., "John A. Smith") */
         FirstName_MiddleInitial_LastName,
+        /** 4 - Last Name, First Name Middle Name (e.g., "Smith, John Andrew") */
         LastName_Comma_FirstName_MiddleName,
+        /** 5 - First Name Middle Name Last Name (e.g., "John Andrew Smith") */
         FirstName_MiddleName_LastName,
+        /** 6 - Last Name First Name (e.g., "SmithJohn") */
         LastName_FirstName,
+        /** 7 - Last Name First Name (no space, e.g., "SmithJohn") */
         LastNameFirstName
     }
 }
