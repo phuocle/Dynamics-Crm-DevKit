@@ -996,6 +996,11 @@ declare namespace DevKit {
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-sections/setvisible
              */
             Visible: boolean;
+            /**
+             * A collection of one or more controls associated with the section
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/collections
+             */
+            readonly Controls: DevKit.Collections<DevKit.Controls.IControl>;
         }
         interface Grid {
             /**
@@ -1979,9 +1984,14 @@ declare namespace DevKit {
         readonly key: string,
         readonly value: number
     }
+    /**
+     * Represents a text-value pair for OptionSet options
+     */
     interface TextValueNumber {
-        readonly text: string,
-        readonly value: number
+        /** The display text of the option */
+        readonly text: string;
+        /** The numeric value of the option */
+        readonly value: number;
     }
     interface DialogResult {
         /** Indicates whether the confirm button was clicked to close the dialog */
@@ -1997,40 +2007,7 @@ declare namespace DevKit {
         /** Audio file MIME type */
         readonly mimeType: string;
     }
-    interface DateFormattingInfoCalendar {
-        readonly MinSupportedDateTime: Date;
-        readonly MaxSupportedDateTime: Date;
-        readonly AlgorithmType: number;
-        readonly CalendarType: number;
-        readonly Eras: Array<number>;
-        readonly TwoDigitYearMax: number;
-        readonly IsReadOnly: boolean;
-    }
-    interface DateFormattingInfo {
-        readonly AmDesignator: string;
-        readonly AbbreviatedDayNames: Array<string>;
-        readonly AbbreviatedMonthGenitiveNames: Array<string>;
-        readonly AbbreviatedMonthNames: Array<string>;
-        readonly Calendar: DateFormattingInfoCalendar;
-        readonly CalendarWeekRule: number;
-        readonly DateSeparator: string;
-        readonly DayNames: Array<string>;
-        readonly FirstDayOfWeek: number;
-        readonly FullDateTimePattern: string;
-        readonly LongDatePattern: string;
-        readonly LongTimePattern: string;
-        readonly MonthDayPattern: string;
-        readonly MonthGenitiveNames: Array<string>;
-        readonly MonthNames: Array<string>;
-        readonly PmDesignator: string;
-        readonly ShortDatePattern: string;
-        readonly ShortTimePattern: string;
-        readonly ShortestDayNames: Array<string>;
-        readonly SortableDateTimePattern: string;
-        readonly TimeSeparator: string;
-        readonly UniversalSortableDateTimePattern: string;
-        readonly YearMonthPattern: string;
-    }
+
     interface AppProperty {
         readonly appId: string;
         readonly displayName: string;
@@ -2832,6 +2809,26 @@ declare namespace DevKit {
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#useskypeprotocol
          */
         readonly UseSkypeProtocol: boolean;
+    }
+    /**
+     * Represents calendar information for date formatting
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#dateformattinginfo
+     */
+    interface DateFormattingInfoCalendar {
+        /** The minimum supported date/time */
+        readonly MinSupportedDateTime: Date;
+        /** The maximum supported date/time */
+        readonly MaxSupportedDateTime: Date;
+        /** The algorithm type */
+        readonly AlgorithmType: number;
+        /** The calendar type */
+        readonly CalendarType: number;
+        /** The eras in this calendar */
+        readonly Eras: Array<number>;
+        /** The two digit year max */
+        readonly TwoDigitYearMax: number;
+        /** Whether this calendar is read only */
+        readonly IsReadOnly: boolean;
     }
     /**
      * Represents date formatting information for the current user
