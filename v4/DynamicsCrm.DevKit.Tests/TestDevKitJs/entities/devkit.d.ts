@@ -1,4 +1,4 @@
-﻿/**
+/**
  * DynamicsCrm.DevKit TypeScript Definitions
  *
  * @version 4.0
@@ -67,12 +67,12 @@ declare namespace DevKit {
             AddNotification(notification: DevKit.FieldNotification): void;
             /**
              * Remove a message already displayed for a control
-             * @param uniqueId The ID to use to clear a specific message that was set using setNotification or addNotification. If the uniqueId parameter isn�t specified, the currently displayed notification will be cleared
+             * @param uniqueId The ID to use to clear a specific message that was set using setNotification or addNotification. If the uniqueId parameter isn?t specified, the currently displayed notification will be cleared
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/clearnotification
              */
             ClearNotification(uniqueId: string): boolean;
             /**
-             * Displays an error message for the control to indicate that data isn�t valid. When this method is used,  a red "X" icon appears next to the control. On Dynamics 365 for Customer Engagement apps mobile clients, tapping on the icon will display the message
+             * Displays an error message for the control to indicate that data isn?t valid. When this method is used,  a red "X" icon appears next to the control. On Dynamics 365 for Customer Engagement apps mobile clients, tapping on the icon will display the message
              * @param message The message to display
              * @param uniqueId The ID to use to clear this message when using the clearNotification method
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/setnotification
@@ -86,7 +86,7 @@ declare namespace DevKit {
              */
             SetIsValid(valid: boolean, message: string): void
             /**
-             * Returns the attribute that the control is bound to. Controls that aren�t bound to an attribute (subgrid, web resource, and IFRAME) don�t have this method. An error will be thrown if you attempt to use this method on one of these controls
+             * Returns the attribute that the control is bound to. Controls that aren?t bound to an attribute (subgrid, web resource, and IFRAME) don?t have this method. An error will be thrown if you attempt to use this method on one of these controls
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getattribute
              * */
             readonly Attribute: any
@@ -136,7 +136,7 @@ declare namespace DevKit {
              */
             readonly ControlParent: any;
             /**
-             * Returns an object with three Boolean properties corresponding to privileges indicating if the user can create, read or update data values for a attribute. This function is intended for use when Field Level Security modifies a user�s privileges for a particular attribute
+             * Returns an object with three Boolean properties corresponding to privileges indicating if the user can create, read or update data values for a attribute. This function is intended for use when Field Level Security modifies a user?s privileges for a particular attribute
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getuserprivilege
              */
             readonly UserPrivilege: DevKit.FieldUserPrivilege;
@@ -246,7 +246,7 @@ declare namespace DevKit {
             RemoveOnStageSelected(callback: (executionContext: any) => void): void;
             /**
              * Asynchronously retrieves the business process flows enabled for an entity that the current user can switch to
-             * @param callback The callback function must accept a parameter that contains an object with dictionary properties where the name of the property is the Id of the business process flow and the value of the property is the name of the business process flow. The enabled processes are filtered according to the user�s privileges. The list of enabled processes is the same ones a user can see in the UI if they want to change the process manually
+             * @param callback The callback function must accept a parameter that contains an object with dictionary properties where the name of the property is the Id of the business process flow and the value of the property is the name of the business process flow. The enabled processes are filtered according to the user?s privileges. The list of enabled processes is the same ones a user can see in the UI if they want to change the process manually
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/getenabledprocesses
              */
             EnabledProcesses(callback: (processes: Array<DevKit.ProcessEnabled>) => void): void;
@@ -712,14 +712,14 @@ declare namespace DevKit {
         }
         interface Lookup extends IControl {
             /**
-             * Adds filters to the results displayed in the lookup. Each filter will be combined with any previously added filters as an �AND� condition. This method can only be used in a function in an event handler for the Lookup Control PreSearch Event
+             * Adds filters to the results displayed in the lookup. Each filter will be combined with any previously added filters as an ?AND? condition. This method can only be used in a function in an event handler for the Lookup Control PreSearch Event
              * @param filter The fetchXml filter element to apply
              * @param entityLogicaName If this is set, the filter only applies to that entity type. Otherwise, it applies to all types of entities returned
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/addcustomfilter
              */
             AddCustomFilter(filter: string, entityLogicaName?: string): void;
             /**
-             * Adds a new view for the lookup dialog box. This method doesn�t work with Owner lookups. Owner lookups are used to assign user-owned records
+             * Adds a new view for the lookup dialog box. This method doesn?t work with Owner lookups. Owner lookups are used to assign user-owned records
              * @param viewId The string representation of a GUID for a view
              * @param entityName The name of the entity
              * @param viewDisplayName The name of the view
@@ -1108,7 +1108,7 @@ declare namespace DevKit {
         }
         interface GridColumn {
             /**
-             * [Editable grids] Displays an error message for a cell to indicate that data isn�t valid
+             * [Editable grids] Displays an error message for a cell to indicate that data isn?t valid
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/setnotification
              */
             SetNotification(message: string, uniqueId?: string): boolean;
@@ -1891,7 +1891,7 @@ declare namespace DevKit {
     interface EntityMetadata {
         /** Whether a custom activity should appear in the activity menus in the Web application. 0 indicates that the custom activity doesn't appear; 1 indicates that it does appear */
         readonly ActivityTypeMask: number;
-        /** Indicates whether to automatically move records to the owner�s default queue when a record of this type is created or assigned */
+        /** Indicates whether to automatically move records to the owner?s default queue when a record of this type is created or assigned */
         readonly AutoRouteToOwnerQueue: boolean;
         /** Indicates whether the entity can trigger a workflow process */
         readonly CanTriggerWorkflow: boolean;
@@ -3541,27 +3541,6 @@ declare namespace DevKit {
         navigate(pageInput: DevKit.PageInputEntityList | DevKit.PageInputHtmlWebResource | DevKit.PageInputEntityRecord | DevKit.PageInputDashboard, navigationOptions?: DevKit.NavigationOptions, successCallback?: (result: any) => void, errorCallback?: (error: DevKit.Error) => void): void,
         badge?: number
     }
-}
-
-// Provide a DevKitV4 namespace alias for backward compatibility and to support code that references DevKitV4
-declare namespace DevKitV4 {
-    export import Guid = DevKit.Guid;
-    export import SuccessCallback = DevKit.SuccessCallback;
-    export import ErrorCallback = DevKit.ErrorCallback;
-    export import Controls = DevKit.Controls;
-    export import WebApi = DevKit.WebApi;
-    export import EntityReference = DevKit.EntityReference;
-    export import Utility = DevKit.Utility;
-    export import Collections = DevKit.Collections;
-    export import ExecutionContext = DevKit.ExecutionContext;
-    export import IForm = DevKit.IForm;
-    export import KeyValueObject = DevKit.KeyValueObject;
-    export import TextValueNumber = DevKit.TextValueNumber;
-    export import FieldNotification = DevKit.FieldNotification;
-    export import OpenQuickCreateSuccessCallbackObject = DevKit.OpenQuickCreateSuccessCallbackObject;
-    export import SidePanes = DevKit.SidePanes;
-    export import Error = DevKit.Error;
-    export import FileData = DevKit.FileData;
 }
 
 /** DynamicsCrm.DevKit for namespace OptionSet */
