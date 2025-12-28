@@ -1722,30 +1722,38 @@ declare namespace DevKit {
 
         /**
          * Interface for ActionCards control
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
          */
         interface ActionCards {
             /**
              * Refreshes the action cards
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/refresh
              */
             Refresh(): void;
         }
 
         /**
          * Interface for Map control
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
          */
         interface Map {
             /**
              * Get/Set a value that indicates whether the map control is visible
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getvisible
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/setvisible
              */
             Visible: boolean;
         }
 
         /**
          * Interface for Note control
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
          */
         interface Note {
             /**
              * Get/Set a value that indicates whether the note control is visible
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getvisible
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/setvisible
              */
             Visible: boolean;
         }
@@ -1953,30 +1961,35 @@ declare namespace DevKit {
             /**
              * Removes an event handler from the OnPreProcessStatusChange event
              * @param callback The function to be removed
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/eventhandlers/removeonpreprocessstatuschange
              */
             RemoveOnPreProcessStatusChange(callback: (executionContext: any) => void): void;
 
             /**
              * Removes an event handler from the OnPreStageChange event
              * @param callback The function to be removed
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/eventhandlers/removeonprestagechange
              */
             RemoveOnPreStageChange(callback: (executionContext: any) => void): void;
 
             /**
              * Removes an event handler from the OnProcessStatusChange event
              * @param callback The function to be removed
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/eventhandlers/removeonprocessstatuschange
              */
             RemoveOnProcessStatusChange(callback: (executionContext: any) => void): void;
 
             /**
              * Removes an event handler from the OnStageChange event
              * @param callback The function to be removed
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/eventhandlers/removeonstagechange
              */
             RemoveOnStageChange(callback: (executionContext: any) => void): void;
 
             /**
              * Removes an event handler from the OnStageSelected event
              * @param callback The function to be removed
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/eventhandlers/removeonstageselected
              */
             RemoveOnStageSelected(callback: (executionContext: any) => void): void;
 
@@ -2448,30 +2461,35 @@ declare namespace DevKit {
         /**
          * Removes a handler from the OnPreProcessStatusChange event
          * @param callback The function to remove
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/eventhandlers/removeonpreprocessstatuschange
          */
         RemoveOnPreProcessStatusChange(callback: (executionContext: any) => void): void;
 
         /**
          * Removes a handler from the OnPreStageChange event
          * @param callback The function to remove
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/eventhandlers/removeonprestagechange
          */
         RemoveOnPreStageChange(callback: (executionContext: any) => void): void;
 
         /**
          * Removes a handler from the OnProcessStatusChange event
          * @param callback The function to remove
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/eventhandlers/removeonprocessstatuschange
          */
         RemoveOnProcessStatusChange(callback: (executionContext: any) => void): void;
 
         /**
          * Removes a handler from the OnStageChange event
          * @param callback The function to remove
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/eventhandlers/removeonstagechange
          */
         RemoveOnStageChange(callback: (executionContext: any) => void): void;
 
         /**
          * Removes a handler from the OnStageSelected event
          * @param callback The function to remove
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/eventhandlers/removeonstageselected
          */
         RemoveOnStageSelected(callback: (executionContext: any) => void): void;
 
@@ -2820,6 +2838,7 @@ declare namespace DevKit {
         /**
          * Gets the advanced configuration setting
          * @param setting The setting name
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getadvancedconfigsetting
          */
         AdvancedConfigSetting(setting: string): number;
 
@@ -2827,11 +2846,13 @@ declare namespace DevKit {
          * Gets the allowed status transitions for an entity
          * @param entityName The logical name of the entity
          * @param stateCode The state code
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getallowedstatustransitions
          */
         AllowedStatusTransitions(entityName: string, stateCode: number, successCallback?: (result: any) => void, errorCallback?: (error: any) => void): Promise<any> | void;
 
         /**
          * Gets the current app properties
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/getcurrentappproperties
          */
         CurrentAppProperties(successCallback?: (result: any) => void, errorCallback?: (error: any) => void): Promise<any> | void;
 
@@ -2839,29 +2860,34 @@ declare namespace DevKit {
          * Gets entity main form descriptor
          * @param entityName The logical name of the entity
          * @param formId The form ID
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getentitymainformdescriptor
          */
         EntityMainFormDescriptor(entityName: string, formId: string): any;
 
         /**
          * HTML attribute encode
          * @param arg The string to encode
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-encoding/htmlattributeencode
          */
         HtmlAttributeEncode(arg: string): string;
 
         /**
          * HTML decode
          * @param arg The string to decode
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-encoding/htmldecode
          */
         HtmlDecode(arg: string): string;
 
         /**
          * HTML encode
          * @param arg The string to encode
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-encoding/htmlencode
          */
         HtmlEncode(arg: string): string;
 
         /**
          * Gets learning path attribute name
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getlearningpathattributename
          */
         readonly LearningPathAttributeName: string;
 
@@ -2869,6 +2895,7 @@ declare namespace DevKit {
          * Loads a side panel
          * @param url The URL to load
          * @param title The title of the panel
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-panel/loadpanel
          */
         LoadPanel(url: string, title: string): void;
 
@@ -2876,41 +2903,48 @@ declare namespace DevKit {
          * Opens a file
          * @param file The file to open
          * @param openFileOptions Options for opening the file
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/openfile
          */
         OpenFile(file: any, openFileOptions?: any): void;
 
         /**
          * Gets page context
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getpagecontext
          */
         readonly PageContext: any;
 
         /**
          * Prepends the organization name to a path
          * @param sPath The path
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/prependorgname
          */
         PrependOrgName(sPath: string): string;
 
         /**
          * Refreshes the parent grid
          * @param lookupOptions The lookup options
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/refreshparentgrid
          */
         RefreshParentGrid(lookupOptions: any): void;
 
         /**
          * Gets a web resource URL
          * @param webResourceName The name of the web resource
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getwebresourceurl
          */
         WebResourceUrl(webResourceName: string): string;
 
         /**
          * XML attribute encode
          * @param arg The string to encode
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-encoding/xmlattributeencode
          */
         XmlAttributeEncode(arg: string): string;
 
         /**
          * XML encode
          * @param arg The string to encode
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-encoding/xmlencode
          */
         XmlEncode(arg: string): string;
     }
@@ -3263,13 +3297,39 @@ declare namespace DevKit {
 
     /**
      * Collections interface for iterating over items
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/collections
      */
     interface Collections<T> {
+        /**
+         * Applies the action function to each item in the collection
+         * @param successCallback The delegate function to apply to each item
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/collections/foreach
+         */
         forEach(successCallback: (item: T, index: number) => void): void;
+        /**
+         * Gets all items in the collection
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/collections/get
+         */
         get(): Array<T>;
+        /**
+         * Gets an item in the collection using its name
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/collections/get
+         */
         get(item: string): T;
+        /**
+         * Gets an item in the collection using its index
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/collections/get
+         */
         get(index: number): T;
+        /**
+         * Gets all items matching the delegate function
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/collections/get
+         */
         get(successCallback: (item: T, index: number) => void): Array<T>;
+        /**
+         * Gets the number of items in the collection
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/collections/getlength
+         */
         getLength(): number;
     }
 

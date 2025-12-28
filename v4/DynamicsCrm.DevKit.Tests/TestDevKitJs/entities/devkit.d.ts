@@ -1364,6 +1364,38 @@ declare namespace DevKit {
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/setvisible
              */
             Visible: boolean;
+            /**
+             * Returns the type of the control (subgrid)
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getcontroltype
+             */
+            readonly ControlType: string;
+            /**
+             * Returns the name of the control
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getname
+             */
+            readonly ControlName: string;
+            /**
+             * Returns the parent section containing the control
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getparent
+             */
+            readonly ControlParent: any;
+            /**
+             * Get/Set whether the control is disabled
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getdisabled
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/setdisabled
+             */
+            Disabled: boolean;
+            /**
+             * Get/Set the label of the control
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getlabel
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/setlabel
+             */
+            Label: string;
+            /**
+             * Sets focus on the control
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/setfocus
+             */
+            Focus(): void;
         }
         interface GridRow {
             /**

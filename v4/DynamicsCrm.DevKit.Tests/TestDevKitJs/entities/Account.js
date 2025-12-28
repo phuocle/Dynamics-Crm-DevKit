@@ -3675,7 +3675,7 @@ var formAccount_DevKitV4 = (function () {
 		try {
 			results.push({ Test: "R1", Property: "form.Body.Tab.TAB_1.Name", Value: form.Body.Tab.TAB_1.Name, Status: form.Body.Tab.TAB_1.Name ? "✓" : "⚠" });
 			results.push({ Test: "R2", Property: "form.Body.Tab.TAB_1.Parent", Value: form.Body.Tab.TAB_1.Parent ? "object" : "null", Status: form.Body.Tab.TAB_1.Parent ? "✓" : "⚠" });
-			results.push({ Test: "R3", Property: "form.Body.Tab.TAB_1.DisplayState", Value: form.Body.Tab.TAB_1.DisplayState, Status: form.Body.Tab.TAB_1.DisplayState === "expanded" || form.Body.Tab.TAB_1.DisplayState === "collapsed" ? "✓" : "⚠" });
+			results.push({ Test: "R3", Property: "form.Body.Tab.TAB_1.DisplayState", Value: form.Body.Tab.TAB_1.DisplayState, Status: form.Body.Tab.TAB_1.DisplayState === OptionSet.TabDisplayState.Expanded || form.Body.Tab.TAB_1.DisplayState === OptionSet.TabDisplayState.Collapsed ? "✓" : "⚠" });
 			results.push({ Test: "R4", Property: "form.Body.Tab.TAB_1.Label", Value: form.Body.Tab.TAB_1.Label, Status: form.Body.Tab.TAB_1.Label ? "✓" : "⚠" });
 			results.push({ Test: "R5", Property: "form.Body.Tab.TAB_1.Visible", Value: form.Body.Tab.TAB_1.Visible, Status: typeof form.Body.Tab.TAB_1.Visible === "boolean" ? "✓" : "⚠" });
 			results.push({ Test: "R6", Property: "form.Body.Tab.TAB_1.ContentType", Value: form.Body.Tab.TAB_1.ContentType, Status: "✓" });
@@ -3710,7 +3710,7 @@ var formAccount_DevKitV4 = (function () {
 		// Setter: DisplayState
 		try {
 			const origDisplayState = form.Body.Tab.TAB_1.DisplayState;
-			form.Body.Tab.TAB_1.DisplayState = origDisplayState === "expanded" ? "collapsed" : "expanded";
+			form.Body.Tab.TAB_1.DisplayState = origDisplayState === OptionSet.TabDisplayState.Expanded ? OptionSet.TabDisplayState.Collapsed : OptionSet.TabDisplayState.Expanded;
 			const checkDisplayState = form.Body.Tab.TAB_1.DisplayState;
 			form.Body.Tab.TAB_1.DisplayState = origDisplayState;
 			methodResults.push({ Test: "S1", Property: "form.Body.Tab.TAB_1.DisplayState (set)", Value: `${origDisplayState} → ${checkDisplayState} → ${origDisplayState}`, Status: "✓" });
