@@ -1108,116 +1108,407 @@ declare namespace DevKit {
         /**
          * Dialog namespace for Dialog form field types
          * These types are specific to quick create dialogs and other dialog forms
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/openform
          */
         namespace Dialog {
+            /**
+             * Indicates whether a value for the attribute is required or recommended
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/setrequiredlevel
+             */
             enum FieldRequiredLevel {
+                /** 0 - No value is required */
                 None,
+                /** 1 - A value is required before the record can be saved */
                 Required,
+                /** 2 - A value is recommended but not required */
                 Recommended
             }
 
+            /**
+             * Base interface for dialog controls providing basic UI properties
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
+             */
             interface IControlBase {
+                /**
+                 * Get/Set whether the control is disabled
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getdisabled
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/setdisabled
+                 */
                 Disabled: boolean;
+                /**
+                 * Get/Set the label for the control
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getlabel
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/setlabel
+                 */
                 Label: string;
+                /**
+                 * Get/Set a value that indicates whether the control is currently visible
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getvisible
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/setvisible
+                 */
                 Visible: boolean;
             }
 
+            /**
+             * Interface for dialog controls with change event and validation support
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
+             */
             interface IControl extends IControlBase {
+                /**
+                 * Sets a function to be called when the OnChange event occurs
+                 * @param callback The function to be executed on the OnChange event
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/addonchange
+                 */
                 AddOnChange(callback: (executionContext: any) => void): void;
+                /**
+                 * Removes a function from the OnChange event handler for an attribute
+                 * @param callback Specifies the function to be removed from the OnChange event
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/removeonchange
+                 */
                 RemoveOnChange(callback: (executionContext: any) => void): void;
+                /**
+                 * Causes the OnChange event to occur on the attribute
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/fireonchange
+                 */
                 FireOnChange(): void;
+                /**
+                 * Displays an error message for the control
+                 * @param message The message to display
+                 * @param uniqueId The ID to use to clear this message when using clearNotification
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/setnotification
+                 */
                 SetNotification(message: string, uniqueId?: string): boolean;
+                /**
+                 * Remove a message already displayed for a control
+                 * @param uniqueId The ID to use to clear a specific message
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/clearnotification
+                 */
                 ClearNotification(uniqueId: string): boolean;
+                /**
+                 * Get/Set a value indicating whether a value for the attribute is required
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getrequiredlevel
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/setrequiredlevel
+                 */
                 RequiredLevel: FieldRequiredLevel;
+                /**
+                 * Returns a Boolean value indicating if there are unsaved changes to the attribute value
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getisdirty
+                 */
                 readonly IsDirty: boolean;
+                /**
+                 * Returns a boolean value to indicate whether the value of an attribute is valid
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/isvalid
+                 */
                 readonly IsValid: boolean;
             }
 
+            /**
+             * Interface for dialog text controls (String, Memo)
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
+             */
             interface IControlText extends IControl {
+                /**
+                 * Returns a number indicating the maximum length of a string or memo attribute
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getmaxlength
+                 */
                 readonly MaxLength: number;
+                /**
+                 * Get/Set the data value for the text attribute
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getvalue
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/setvalue
+                 */
                 Value: string;
             }
 
+            /**
+             * Interface for dialog numeric controls (Integer, Decimal, Double, Money)
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
+             */
             interface IControlNumber extends IControl {
+                /**
+                 * Returns a number indicating the maximum allowed value for an attribute
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getmax
+                 */
                 readonly Max: number;
+                /**
+                 * Returns a number indicating the minimum allowed value for an attribute
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getmin
+                 */
                 readonly Min: number;
+                /**
+                 * Get/Set the number of digits allowed to the right of the decimal point
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getprecision
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/setprecision
+                 */
                 Precision: number;
+                /**
+                 * Get/Set the data value for the numeric attribute
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getvalue
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/setvalue
+                 */
                 Value: number;
             }
 
+            /**
+             * Base interface for dialog select controls with initial value
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
+             */
             interface IControlSelectBase extends IControl {
+                /**
+                 * Returns a value that represents the value set when the form is opened
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getinitialvalue
+                 */
                 readonly InitialValue: number;
             }
 
+            /**
+             * Interface for dialog select controls with option management
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
+             */
             interface IControlSelect extends IControlSelectBase {
+                /**
+                 * Adds an option to a control
+                 * @param text The label for the option
+                 * @param value The value for the option
+                 * @param index The index position to place the new option in
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/addoption
+                 */
                 AddOption(text: string, value: number, index?: number): void;
+                /**
+                 * Clears all options from a control
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/clearoptions
+                 */
                 ClearOptions(): void;
+                /**
+                 * Removes an option from a control
+                 * @param value The value of the option you want to remove
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/removeoption
+                 */
                 RemoveOption(value: number): void;
+                /**
+                 * Returns an array of option objects representing valid options for an attribute
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getoptions
+                 */
                 readonly Options: Array<TextValueNumber>;
+                /**
+                 * Returns an array of option objects representing the options available in the control
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getoptions
+                 */
                 readonly ControlOptions: Array<TextValueNumber>;
+                /**
+                 * Returns a string value of the text for the currently selected option
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/gettext
+                 */
                 readonly Text: string;
             }
 
+            /**
+             * Represents an option in an option set with text and numeric value
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getoptions
+             */
             interface TextValueNumber {
+                /** The label/text of the option */
                 readonly text: string;
+                /** The numeric value of the option */
                 readonly value: number;
             }
 
+            /**
+             * Interface for dialog String controls (single-line text)
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
+             */
             interface String extends IControlText {
             }
 
+            /**
+             * Interface for dialog Memo controls (multi-line text)
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
+             */
             interface Memo extends IControlText {
             }
 
+            /**
+             * Interface for dialog Integer controls (whole number)
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
+             */
             interface Integer extends IControlNumber {
             }
 
+            /**
+             * Interface for dialog Decimal controls
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
+             */
             interface Decimal extends IControlNumber {
             }
 
+            /**
+             * Interface for dialog Double controls (floating point)
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
+             */
             interface Double extends IControlNumber {
             }
 
+            /**
+             * Interface for dialog Money controls (currency)
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
+             */
             interface Money extends IControlNumber {
             }
 
+            /**
+             * Interface for dialog Button controls
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
+             */
             interface Button extends IControlBase {
             }
 
+            /**
+             * Interface for dialog Label controls (read-only display)
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
+             */
             interface Label extends IControlBase {
             }
 
+            /**
+             * Interface for dialog Boolean controls (Yes/No, True/False)
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
+             */
             interface Boolean extends IControlSelectBase {
+                /**
+                 * Get/Set the data value for the boolean attribute
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getvalue
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/setvalue
+                 */
                 Value: boolean;
             }
 
+            /**
+             * Interface for dialog OptionSet controls (single-select picklist)
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
+             */
             interface OptionSet extends IControlSelect {
+                /**
+                 * Returns the option object that is selected in an optionset attribute
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getselectedoption
+                 */
                 readonly SelectedOption: TextValueNumber;
+                /**
+                 * Get/Set the data value for the optionset attribute
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getvalue
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/setvalue
+                 */
                 Value: number;
             }
 
+            /**
+             * Interface for dialog MultiOptionSet controls (multi-select picklist)
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
+             */
             interface MultiOptionSet extends IControlSelect {
+                /**
+                 * Get/Set the data values for the multiselectoptionset attribute
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getvalue
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/setvalue
+                 */
                 Value: Array<number>;
             }
 
+            /**
+             * Interface for dialog Lookup controls
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
+             */
             interface Lookup extends IControl {
+                /**
+                 * Adds filters to the results displayed in the lookup
+                 * @param filter The fetchXml filter element to apply
+                 * @param entityLogicaName If this is set, the filter only applies to that entity type
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/addcustomfilter
+                 */
                 AddCustomFilter(filter: string, entityLogicaName?: string): void;
+                /**
+                 * Adds a new view for the lookup dialog box
+                 * @param viewId The string representation of a GUID for a view
+                 * @param entityName The name of the entity
+                 * @param viewDisplayName The name of the view
+                 * @param fetchXml The fetchXml query for the view
+                 * @param layoutXml The XML that defines the layout of the view
+                 * @param isDefault Indicates whether the view should be the default view
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/addcustomview
+                 */
                 AddCustomView(viewId: DevKit.Guid, entityName: string, viewDisplayName: string, fetchXml: string, layoutXml: string, isDefault: boolean): void;
+                /**
+                 * Applies changes to lookups based on values current just as the user is about to view results
+                 * @param callback The function that will be run just before the search to provide results
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/addpresearch
+                 */
                 AddPreSearch(callback: (executionContext: any) => void): void;
+                /**
+                 * Removes event handler functions that have previously been set for the PreSearch event
+                 * @param callback The function to remove
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/removepresearch
+                 */
                 RemovePreSearch(callback: (executionContext: any) => void): void;
+                /**
+                 * Adds an event handler to the OnLookupTagClick event
+                 * @param callback The function to add to the OnLookupTagClick event
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/addonlookuptagclick
+                 */
                 AddLookupTagClick(callback: (executionContext: any) => void): void;
+                /**
+                 * Removes an event handler from the OnLookupTagClick event
+                 * @param callback The function to be removed from the OnLookupTagClick event
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/removeonlookuptagclick
+                 */
                 RemoveLookupTagClick(callback: (executionContext: any) => void): void;
+                /**
+                 * Get/Set the data value for the lookup attribute
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getvalue
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/setvalue
+                 */
                 Value: Array<EntityReference>;
+                /**
+                 * Get/Set the ID value of the default lookup dialog view
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getdefaultview
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/setdefaultview
+                 */
                 DefaultView: DevKit.Guid;
+                /**
+                 * Get/Set the types of entities allowed in the lookup control
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getentitytypes
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/setentitytypes
+                 */
                 EntityTypes: Array<string>;
             }
 
+            /**
+             * Interface for dialog DateTime controls
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
+             */
             interface DateTime extends IControl {
+                /**
+                 * Get/Set whether a date control shows the time portion of the date
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getshowtime
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/setshowtime
+                 */
                 ShowTime: boolean;
+                /**
+                 * Get/Set the data value for the datetime attribute
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getvalue
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/setvalue
+                 */
                 Value: any;
             }
 
+            /**
+             * Interface for dialog Date controls (date only, no time)
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
+             */
             interface Date extends IControl {
+                /**
+                 * Get/Set the data value for the date attribute
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getvalue
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/setvalue
+                 */
                 Value: any;
             }
         }
@@ -2867,14 +3158,27 @@ declare namespace DevKit {
         ExecutePrompt(promptText: string, successCallback?: (result: any) => void, errorCallback?: (error: any) => void): Promise<any> | void;
     }
 
+
+    /**
+     * Configuration interface for form field definitions
+     * Used to specify which fields, tabs, grids, etc. to load on a form
+     */
     interface IFormConfig {
+        /** Array of body field names */
         body?: string[];
+        /** Array of header field names */
         header?: string[];
+        /** Array of tab names */
         tab?: string[];
+        /** Array of grid/subgrid names */
         grid?: string[];
+        /** Array of navigation item names */
         navigation?: string[];
+        /** Array of quick view form names */
         quick?: string[];
+        /** Array of business process flow field names */
         bpf?: string[];
+        /** Array of dialog field names */
         dialog?: string[];
     }
 
@@ -2887,29 +3191,66 @@ declare namespace DevKit {
         Close(): void;
     }
 
+    /**
+     * Supported WebApi field types for type conversion
+     */
     type WebApiFieldType = 'Integer' | 'Number' | 'Boolean' | 'DateTime' | 'MultiOptionSet';
 
+    /**
+     * Configuration for a single WebApi field
+     */
     interface IWebApiFieldConfig {
+        /** The logical name of the field in Dataverse */
         logicalName: string;
+        /** The schema name of the field (optional) */
         schemaName?: string;
+        /** The collection name of the related entity (for lookup fields) */
         entityCollectionName?: string;
+        /** The logical name of the related entity (for lookup fields) */
         entityLogicalName?: string;
+        /** Whether the field is read-only */
         readOnly?: boolean;
+        /** The data type of the field for proper conversion */
         type?: WebApiFieldType;
     }
 
+    /**
+     * Map of field names to their WebApi configurations
+     */
     interface IWebApiFieldConfigMap {
         [fieldName: string]: IWebApiFieldConfig;
     }
 
+    /**
+     * Interface for WebApi entity with data access methods
+     * Provides access to raw entity data, OData formatted data, and aliased values
+     */
     interface IWebApiEntity {
+        /** The raw entity data as key-value pairs */
         readonly Entity: Record<string, any>;
+        /** The OData formatted entity data ready for create/update operations */
         readonly ODataEntity: Record<string, any>;
+        /** The logical name of the entity */
         readonly EntityName: string;
+        /** The collection name of the entity for WebApi calls */
         readonly EntityCollectionName: string;
+        /** The ETag value for concurrency control */
         readonly '@odata.etag': string | undefined;
+        /** Object containing formatted values for fields */
         readonly FormattedValue: Record<string, any>;
+        /**
+         * Gets an aliased value from a linked entity
+         * @param alias The alias of the linked entity value
+         * @param isMultiOptionSet Whether the value is a multi-option set
+         * @returns The aliased value
+         */
         getAliasedValue(alias: string, isMultiOptionSet?: boolean): any;
+        /**
+         * Gets an aliased formatted value from a linked entity
+         * @param alias The alias of the linked entity value
+         * @param isMultiOptionSet Whether the value is a multi-option set
+         * @returns The formatted aliased value
+         */
         getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string | string[];
     }
 

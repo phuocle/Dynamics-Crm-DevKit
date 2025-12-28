@@ -11,7 +11,7 @@ declare namespace DevKit {
      * Represents a GUID (Globally Unique Identifier) value.
      * @example "00000000-0000-0000-0000-000000000000"
      */
-    type Guid = string;
+    type Guid = `${string}-${string}-${string}-${string}-${string}`;
 
     /**
      * Callback function type for successful operations.
