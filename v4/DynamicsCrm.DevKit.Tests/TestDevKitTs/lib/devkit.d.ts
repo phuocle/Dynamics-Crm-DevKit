@@ -715,6 +715,13 @@ declare namespace DevKit {
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-tabs/setvisible
              */
             Visible: boolean;
+
+            /**
+             * Get/Set the content type of the tab
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-tabs/getcontenttype
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-tabs/setcontenttype
+             */
+            ContentType: "cardSections" | "singleComponent";
         }
 
         /**

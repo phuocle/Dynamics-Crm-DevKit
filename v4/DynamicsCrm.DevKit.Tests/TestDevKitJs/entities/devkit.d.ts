@@ -2713,11 +2713,42 @@ declare namespace DevKit {
          */
         readonly Version: string;
     }
+    /**
+     * Provides methods for managing side panes in model-driven apps
+     * @remarks This API is not available for Dynamics 365 Customer Engagement on-premises deployments
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app-sidepanes
+     */
     interface SidePanes {
+        /**
+         * Creates a new side pane with the specified options
+         * @param paneOptions An object containing options for the side pane including title, paneId, canClose, imageSrc, hideHeader, isSelected, width, hidden, alwaysRender, and keepBadgeOnSelect
+         * @param successCallback A function to call when the pane is created successfully
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app/xrm-app-sidepanes/createpane
+         */
         Create(paneOptions: DevKit.SidePaneOptions, successCallback: (pane: DevKit.SidePane) => void): void;
+        /**
+         * Returns the side pane corresponding to the input ID. Returns undefined if the side pane does not exist
+         * @param paneId The ID of the pane to retrieve
+         * @returns The AppSidePane object if found, otherwise undefined
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app/xrm-app-sidepanes/getpane
+         */
         Get(paneId: string): DevKit.SidePane;
+        /**
+         * Returns the currently selected pane
+         * @returns The currently selected AppSidePane object
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app/xrm-app-sidepanes/getselectedpane
+         */
         GetSelected(): DevKit.SidePane;
+        /**
+         * Returns a collection containing all active panes
+         * @returns A collection of all active AppSidePane objects
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app/xrm-app-sidepanes/getallpanes
+         */
         GetAll(): DevKit.Collections<DevKit.SidePane>;
+        /**
+         * Gets or sets the state of the side panes. Use this property to programmatically collapse (0) or expand (1) the side pane
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app-sidepanes
+         */
         DisplayState: OptionSet.SidePaneState;
     }
     interface Client {

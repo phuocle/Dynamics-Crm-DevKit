@@ -198,8 +198,8 @@ describe('devkit.ts - Core Functions', () => {
 
             const result = createWebApiEntity(entity, 'account', 'accounts', fieldConfig);
 
-            expect(result.Name).toBe('Test Account');
-            expect(result.AccountId).toBe('guid-123');
+            expect((result as any).Name).toBe('Test Account');
+            expect((result as any).AccountId).toBe('guid-123');
         });
 
         test('should handle integer type fields', () => {
@@ -207,12 +207,12 @@ describe('devkit.ts - Core Functions', () => {
                 numberofemployees: 100
             };
             const fieldConfig = {
-                NumberOfEmployees: { logicalName: 'numberofemployees', type: 'Integer' }
+                NumberOfEmployees: { logicalName: 'numberofemployees', type: 'Integer' as const }
             };
 
             const result = createWebApiEntity(entity, 'account', 'accounts', fieldConfig);
 
-            expect(result.NumberOfEmployees).toBe(100);
+            expect((result as any).NumberOfEmployees).toBe(100);
         });
 
         test('should handle boolean type fields', () => {
@@ -220,12 +220,12 @@ describe('devkit.ts - Core Functions', () => {
                 creditonhold: true
             };
             const fieldConfig = {
-                CreditOnHold: { logicalName: 'creditonhold', type: 'Boolean' }
+                CreditOnHold: { logicalName: 'creditonhold', type: 'Boolean' as const }
             };
 
             const result = createWebApiEntity(entity, 'account', 'accounts', fieldConfig);
 
-            expect(result.CreditOnHold).toBe(true);
+            expect((result as any).CreditOnHold).toBe(true);
         });
 
         test('should handle formatted values', () => {
@@ -234,7 +234,7 @@ describe('devkit.ts - Core Functions', () => {
                 'statecode@OData.Community.Display.V1.FormattedValue': 'Active'
             };
             const fieldConfig = {
-                StateCode: { logicalName: 'statecode', type: 'Integer' }
+                StateCode: { logicalName: 'statecode', type: 'Integer' as const }
             };
 
             const result = createWebApiEntity(entity, 'account', 'accounts', fieldConfig);
@@ -258,7 +258,7 @@ describe('devkit.ts - Core Functions', () => {
 
             const result = createWebApiEntity(entity, 'account', 'accounts', fieldConfig);
 
-            expect(result.PrimaryContactId).toBe('contact-guid');
+            expect((result as any).PrimaryContactId).toBe('contact-guid');
         });
 
         test('should handle getAliasedValue', () => {
