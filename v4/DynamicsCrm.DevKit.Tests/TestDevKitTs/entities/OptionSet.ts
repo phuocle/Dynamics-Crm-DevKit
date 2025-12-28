@@ -11,337 +11,412 @@
 // Global OptionSets
 // ============================================================================
 
-/** Information about the advanced configuration settings for the organization */
+/**
+ * Advanced configuration settings for the organization
+ * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/getadvancedconfigsetting
+ */
 const AdvancedConfigSetting = {
-    /** MaxChildIncidentNumber */
+    /** Maximum number of child cases allowed for a parent case */
     MaxChildIncidentNumber: 'MaxChildIncidentNumber',
-    /** MaxIncidentMergeNumber */
+    /** Maximum number of cases that can be merged */
     MaxIncidentMergeNumber: 'MaxIncidentMergeNumber'
 } as const;
 
-/** Structural property type for WebApi operations */
+/**
+ * Defines the structural type of a parameter for Xrm.WebApi.online.execute
+ * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi/online/execute
+ */
 const StructuralProperty = {
-    /** 0 */
+    /** 0 - Unknown structural type */
     Unknown: 0,
-    /** 1 */
+    /** 1 - Primitive type (e.g., string, integer, boolean, guid) */
     PrimitiveType: 1,
-    /** 2 */
+    /** 2 - Complex type (structured object) */
     ComplexType: 2,
-    /** 3 */
+    /** 3 - Enumeration type */
     EnumerationType: 3,
-    /** 4 */
+    /** 4 - Collection (array of items) */
     Collection: 4,
-    /** 5 */
+    /** 5 - Entity type (reference to a Dynamics 365 record) */
     EntityType: 5
 } as const;
 
-/** Operation type for WebApi operations */
+/**
+ * Specifies the type of Web API operation for Xrm.WebApi.online.execute
+ * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi/online/execute
+ */
 const OperationType = {
-    /** 0 */
+    /** 0 - Action (custom or unbound action) */
     Action: 0,
-    /** 1 */
+    /** 1 - Function (custom or built-in function) */
     Function: 1,
-    /** 2 */
+    /** 2 - CRUD operation (Create, Retrieve, Update, Delete) */
     CRUD: 2
 } as const;
 
-/** The progress of the action step */
+/**
+ * The progress of an action step in a business process flow
+ * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/step/setprogress
+ */
 const ProcessProgress = {
-    /** 0 */
+    /** 0 - No progress set */
     None: 0,
-    /** 1 */
+    /** 1 - Action step is in progress */
     Processing: 1,
-    /** 2 */
+    /** 2 - Action step completed successfully */
     Completed: 2,
-    /** 3 */
+    /** 3 - Action step failed */
     Failure: 3,
-    /** 4 */
+    /** 4 - Action step is invalid */
     Invalid: 4
 } as const;
 
-/** Describes the type of operation for the privilege */
+/**
+ * Describes the type of privilege for security operations
+ * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getentitymetadata
+ */
 const PrivilegeType = {
-    /** 0 - Specifies no privilege */
+    /** 0 - No privilege assigned */
     None: 0,
-    /** 1 - The create privilege */
+    /** 1 - Create privilege - can create new records */
     Create: 1,
-    /** 2 - The read privilege */
+    /** 2 - Read privilege - can view records */
     Read: 2,
-    /** 3 - The write privilege */
+    /** 3 - Write privilege - can update records */
     Write: 3,
-    /** 4 - The delete privilege */
+    /** 4 - Delete privilege - can delete records */
     Delete: 4,
-    /** 5 - The assign privilege */
+    /** 5 - Assign privilege - can assign records to other users/teams */
     Assign: 5,
-    /** 6 - The share privilege */
+    /** 6 - Share privilege - can share records with other users/teams */
     Share: 6,
-    /** 7 - The append privilege */
+    /** 7 - Append privilege - can attach to this entity */
     Append: 7,
-    /** 8 - The append to privilege */
+    /** 8 - AppendTo privilege - can attach other entities to this */
     AppendTo: 8
 } as const;
 
-/** File accept types */
+/**
+ * Specifies the accepted file types for file picker
+ * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-device/pickfile
+ */
 const FileAccept = {
-    /** "audio" */
+    /** Audio files (mp3, wav, etc.) */
     Audio: 'audio',
-    /** "video" */
+    /** Video files (mp4, avi, etc.) */
     Video: 'video',
-    /** "image" */
+    /** Image files (jpg, png, gif, etc.) */
     Image: 'image'
 } as const;
 
-/** Form navigation bar display options */
+/**
+ * Controls whether the navigation bar is displayed
+ * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/openform
+ */
 const FormNavBar = {
-    /** "on" - The navigation bar is displayed */
+    /** "on" - The navigation bar is displayed (default) */
     On: 'on',
     /** "off" - The navigation bar is not displayed */
     Off: 'off',
-    /** "entity" - Only the navigation options for related entities are available */
+    /** "entity" - Only navigation options for related entities are available */
     Entity: 'entity'
 } as const;
 
-/** Form window position options */
+/**
+ * Specifies the position of a form window
+ * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/openform
+ */
 const FormWindowPosition = {
-    /** 1 */
+    /** 1 - Open the form in the center of the screen */
     Center: 1,
-    /** 2 */
+    /** 2 - Open the form on the side (as a side panel) */
     Side: 2
 } as const;
 
-/** Form relationship type */
+/**
+ * Specifies the type of entity relationship
+ * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/openform
+ */
 const FormRelationshipType = {
-    /** 0 */
+    /** 0 - One-to-Many relationship */
     OneToMany: 0,
-    /** 1 */
+    /** 1 - Many-to-Many relationship */
     ManyToMany: 1
 } as const;
 
-/** Form relationship role type */
+/**
+ * Specifies the role type in a relationship
+ * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/openform
+ */
 const FormRelationshipRoleType = {
-    /** 1 */
+    /** 1 - Referencing entity (the "many" side of 1:N) */
     Referencing: 1,
-    /** 2 */
+    /** 2 - Association entity (for N:N relationships) */
     AssociationEntity: 2
 } as const;
 
-/** Returns a value to indicate which client the script is executing in */
+/**
+ * Returns a value to indicate which client the script is executing in
+ * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/client#getclient
+ */
 const ClientName = {
-    /** Web */
+    /** Web browser client */
     Web: 'Web',
-    /** Outlook */
+    /** Outlook client (Dynamics 365 for Outlook) */
     Outlook: 'Outlook',
-    /** Mobile */
+    /** Mobile application (phone or tablet app) */
     Mobile: 'Mobile'
 } as const;
 
-/** Returns a value to indicate the state of the client */
+/**
+ * Returns a value to indicate the state of the client
+ * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/client#getclientstate
+ */
 const ClientState = {
-    /** Online */
+    /** The client is connected to the server (normal operation) */
     Online: 'Online',
-    /** Offline */
+    /** The client is in offline mode (mobile app with offline sync) */
     Offline: 'Offline'
 } as const;
 
-/** Returns a string value that represents the type of attribute */
+/**
+ * Returns the type of attribute
+ * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getattributetype
+ */
 const FieldAttributeType = {
-    /** boolean */
+    /** boolean - True/False attribute */
     Boolean: 'boolean',
-    /** datetime */
+    /** datetime - Date and time attribute */
     DateTime: 'datetime',
-    /** decimal */
+    /** decimal - Decimal number attribute */
     Decimal: 'decimal',
-    /** double */
+    /** double - Floating point number attribute */
     Double: 'double',
-    /** integer */
+    /** integer - Whole number attribute */
     Integer: 'integer',
-    /** lookup */
+    /** lookup - Lookup/reference to another record */
     Lookup: 'lookup',
-    /** memo */
+    /** memo - Multi-line text attribute */
     Memo: 'memo',
-    /** money */
+    /** money - Currency attribute */
     Money: 'money',
-    /** multiselectoptionset */
+    /** multiselectoptionset - Multi-select option set attribute */
     MultiOptionSet: 'multioptionset',
-    /** optionset */
+    /** optionset - Single-select option set attribute */
     OptionSet: 'optionset',
-    /** string */
+    /** string - Single-line text attribute */
     String: 'string'
 } as const;
 
-/** A value that categorizes controls */
+/**
+ * Categorizes the type of control
+ * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getcontroltype
+ */
 const FieldControlType = {
-    /** standard - A standard control */
+    /** A standard data-bound control */
     Standard: 'standard',
-    /** iframe - An IFRAME control */
+    /** An IFRAME control for embedding external content */
     Iframe: 'iframe',
-    /** kbsearch - A knowledge base search control */
+    /** A knowledge base search control */
     KbSearch: 'kbsearch',
-    /** lookup - A lookup control */
+    /** A lookup control for selecting related records */
     Lookup: 'lookup',
-    /** multiselectoptionset - A multi-select option set control */
+    /** A multi-select option set control */
     MultiSelectOptionset: 'multiselectoptionset',
-    /** notes - A notes control */
+    /** A notes/timeline control for activities */
     Notes: 'notes',
-    /** optionset - An option set control */
+    /** A single-select option set control */
     OptionSet: 'optionset',
-    /** quickform - A quick view control */
+    /** A quick view form control */
     QuickForm: 'quickform',
-    /** subgrid - A subgrid control */
+    /** A subgrid control for displaying related records */
     SubGrid: 'subgrid',
-    /** timercontrol - A timer control */
+    /** A timer control for SLA tracking */
     TimerControl: 'timercontrol',
-    /** timelinewall - A timeline control (for Unified Interface) */
+    /** A timeline wall control (Unified Interface) */
     TimelineWall: 'timelinewall',
-    /** webresource - A web resource control */
+    /** A web resource control */
     WebResource: 'webresource'
 } as const;
 
-/** Returns a string value that represents formatting options for the attribute */
+/**
+ * Returns formatting options for the attribute
+ * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getformat
+ */
 const FieldFormat = {
-    /** date */
+    /** Date only (no time component) */
     Date: 'date',
-    /** datetime */
+    /** Date and time */
     DateTime: 'datetime',
-    /** duration */
+    /** Duration in minutes */
     Duration: 'duration',
-    /** email */
+    /** Email address format */
     Email: 'email',
-    /** language */
+    /** Language code format */
     Language: 'language',
-    /** none */
+    /** No specific format */
     None: 'none',
-    /** textarea */
+    /** Multi-line text area */
     TextArea: 'textarea',
-    /** text */
+    /** Single-line text */
     Text: 'text',
-    /** tickersymbol */
+    /** Stock ticker symbol */
     TickerSymbol: 'tickersymbol',
-    /** phone */
+    /** Phone number format */
     Phone: 'phone',
-    /** timezone */
+    /** Time zone format */
     TimeZone: 'timezone',
-    /** url */
+    /** URL/web address format */
     Url: 'url'
 } as const;
 
-/** The type of notification */
+/**
+ * The type of field notification
+ * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/setnotification
+ */
 const FieldNotificationLevel = {
-    /** ERROR */
+    /** Error notification - prevents save until resolved */
     Error: 'ERROR',
-    /** RECOMMENDATION */
+    /** Recommendation notification - allows save but suggests action */
     Recommendation: 'RECOMMENDATION'
 } as const;
 
-/** Value indicating whether a value for the attribute is none or required or recommended */
+/**
+ * Value indicating whether a field value is required
+ * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getrequiredlevel
+ */
 const FieldRequiredLevel = {
-    /** none */
+    /** Field is optional */
     None: 'none',
-    /** required */
+    /** Field is required - form cannot be saved without a value */
     Required: 'required',
-    /** recommended */
+    /** Field is recommended - shows indicator but allows save */
     Recommended: 'recommended'
 } as const;
 
-/** Data from the attribute will be submitted when the record is saved */
+/**
+ * Controls when field data is submitted on save
+ * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getsubmitmode
+ */
 const FieldSubmitMode = {
-    /** always - The data is always sent with a save */
+    /** Data is always sent with a save, even if unchanged */
     Always: 'always',
-    /** never - The data is never sent with a save */
+    /** Data is never sent with a save (field becomes read-only) */
     Never: 'never',
-    /** dirty - Default behavior. The data is sent with the save when it has changed */
+    /** Default - Data is only sent when it has changed */
     Dirty: 'dirty'
 } as const;
 
-/** Returns information about the kind of device the user is using */
+/**
+ * Returns information about the kind of device the user is using
+ * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/client#getformfactor
+ */
 const FormFactor = {
-    /** 0 */
+    /** 0 - Unknown device type */
     Unknown: 0,
-    /** 1 */
+    /** 1 - Desktop (includes web browser, even from tablet) */
     Desktop: 1,
-    /** 2 */
+    /** 2 - Tablet application */
     Tablet: 2,
-    /** 3 */
+    /** 3 - Phone application */
     Phone: 3
 } as const;
 
-/** The level of the message, which defines how the message will be displayed */
+/**
+ * The level of form notification message
+ * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui/setformnotification
+ */
 const FormNotificationLevel = {
-    /** ERROR - Notification will use the system error icon */
+    /** Error notification with system error icon (red) */
     Error: 'ERROR',
-    /** WARNING - Notification will use the system warning icon */
+    /** Warning notification with system warning icon (yellow) */
     Warning: 'WARNING',
-    /** INFO - Notification will use the system info icon */
+    /** Informational notification with system info icon (blue) */
     Info: 'INFO'
 } as const;
 
-/** Gets the form type for the record */
+/**
+ * Gets the form type for the record
+ * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui/getformtype
+ */
 const FormType = {
-    /** 0 */
+    /** 0 - Form type is undefined */
     Undefined: 0,
-    /** 1 - Quick Create forms return 1 */
+    /** 1 - Create form (Quick Create forms also return 1) */
     Create: 1,
-    /** 2 */
+    /** 2 - Update form (editing an existing record) */
     Update: 2,
-    /** 3 */
+    /** 3 - Read-only form */
     ReadOnly: 3,
-    /** 4 */
+    /** 4 - Disabled form */
     Disabled: 4,
-    /** 5 */
+    /** 5 - Bulk edit form */
     BulkEdit: 5
 } as const;
 
-/** The full name conventionCode setting of the current organization */
+/**
+ * The full name conventionCode setting of the current organization
+ * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#fullnameconventioncode
+ */
 const FullNameConventionCode = {
-    /** 0 */
+    /** 0 - Last Name, First Name (e.g., "Smith, John") */
     LastName_Comma_FirstName: 0,
-    /** 1 */
+    /** 1 - First Name Last Name (e.g., "John Smith") */
     FirstName_LastName: 1,
-    /** 2 */
+    /** 2 - Last Name, First Name Middle Initial (e.g., "Smith, John A.") */
     LastName_Comma_FirstName_MiddleInitial: 2,
-    /** 3 */
+    /** 3 - First Name Middle Initial Last Name (e.g., "John A. Smith") */
     FirstName_MiddleInitial_LastName: 3,
-    /** 4 */
+    /** 4 - Last Name, First Name Middle Name (e.g., "Smith, John Andrew") */
     LastName_Comma_FirstName_MiddleName: 4,
-    /** 5 */
+    /** 5 - First Name Middle Name Last Name (e.g., "John Andrew Smith") */
     FirstName_MiddleName_LastName: 5,
-    /** 6 */
+    /** 6 - Last Name First Name (e.g., "SmithJohn") */
     LastName_FirstName: 6,
-    /** 7 */
+    /** 7 - Last Name First Name (no space) */
     LastNameFirstName: 7
 } as const;
 
-/** The type of grid */
+/**
+ * Specifies the type of grid control
+ * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/gridcontrol/getgridtype
+ */
 const GridType = {
-    /** 1 */
+    /** 1 - HomePageGrid (main entity list view) */
     HomePageGrid: 1,
-    /** 2 */
+    /** 2 - Subgrid (embedded grid on a form) */
     Subgrid: 2
 } as const;
 
-/** Describing whether to open or save the file */
+/**
+ * Describes whether to open or save a file
+ * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/openfile
+ */
 const OpenFileOption = {
-    /** 1 */
+    /** 1 - Open the file in a new browser tab */
     Open: 1,
-    /** 2 */
+    /** 2 - Download/save the file */
     Save: 2
 } as const;
 
-/** The integer value of the business process flow category */
+/**
+ * The integer value of the business process flow category for a stage
+ * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/stage/getcategory
+ */
 const ProcessCategory = {
-    /** 0 */
+    /** 0 - Qualify stage (typically for Lead entity) */
     Qualify: 0,
-    /** 1 */
+    /** 1 - Develop stage (sales process development phase) */
     Develop: 1,
-    /** 2 */
+    /** 2 - Propose stage (proposal phase in sales) */
     Propose: 2,
-    /** 3 */
+    /** 3 - Close stage (closing phase in sales) */
     Close: 3,
-    /** 4 */
+    /** 4 - Identify stage (service/case identification) */
     Identify: 4,
-    /** 5 */
+    /** 5 - Research stage (service/case research) */
     Research: 5,
-    /** 6 */
+    /** 6 - Resolve stage (service/case resolution) */
     Resolve: 6
 } as const;
 
