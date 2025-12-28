@@ -1012,7 +1012,7 @@ const devKit = (function () {
             const attribute = formContext?.data?.entity?.attributes?.get(field);
             const control = formContext?.getControl(field);
             obj[field] = {};
-            devKit.LoadField(formContext, obj[field], attribute, control);
+            loadField(formContext, obj[field], attribute, control);
         }
         obj.Close = () => formContext?.ui?.close();
         return obj;
