@@ -1,4 +1,4 @@
-﻿/**
+/**
  * DynamicsCrm.DevKit TypeScript Definitions
  *
  * @version 4.0
@@ -11,7 +11,7 @@ declare namespace DevKit {
      * Represents a GUID (Globally Unique Identifier) value.
      * @example "00000000-0000-0000-0000-000000000000"
      */
-    type Guid = string;
+    type Guid = `${string}-${string}-${string}-${string}-${string}`;
 
     /**
      * Callback function type for successful operations.
@@ -67,12 +67,12 @@ declare namespace DevKit {
             AddNotification(notification: DevKit.FieldNotification): void;
             /**
              * Remove a message already displayed for a control
-             * @param uniqueId The ID to use to clear a specific message that was set using setNotification or addNotification. If the uniqueId parameter isn�t specified, the currently displayed notification will be cleared
+             * @param uniqueId The ID to use to clear a specific message that was set using setNotification or addNotification. If the uniqueId parameter isn?t specified, the currently displayed notification will be cleared
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/clearnotification
              */
             ClearNotification(uniqueId: string): boolean;
             /**
-             * Displays an error message for the control to indicate that data isn�t valid. When this method is used,  a red "X" icon appears next to the control. On Dynamics 365 for Customer Engagement apps mobile clients, tapping on the icon will display the message
+             * Displays an error message for the control to indicate that data isn?t valid. When this method is used,  a red "X" icon appears next to the control. On Dynamics 365 for Customer Engagement apps mobile clients, tapping on the icon will display the message
              * @param message The message to display
              * @param uniqueId The ID to use to clear this message when using the clearNotification method
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/setnotification
@@ -86,7 +86,7 @@ declare namespace DevKit {
              */
             SetIsValid(valid: boolean, message: string): void
             /**
-             * Returns the attribute that the control is bound to. Controls that aren�t bound to an attribute (subgrid, web resource, and IFRAME) don�t have this method. An error will be thrown if you attempt to use this method on one of these controls
+             * Returns the attribute that the control is bound to. Controls that aren?t bound to an attribute (subgrid, web resource, and IFRAME) don?t have this method. An error will be thrown if you attempt to use this method on one of these controls
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getattribute
              * */
             readonly Attribute: any
@@ -136,7 +136,7 @@ declare namespace DevKit {
              */
             readonly ControlParent: any;
             /**
-             * Returns an object with three Boolean properties corresponding to privileges indicating if the user can create, read or update data values for a attribute. This function is intended for use when Field Level Security modifies a user�s privileges for a particular attribute
+             * Returns an object with three Boolean properties corresponding to privileges indicating if the user can create, read or update data values for a attribute. This function is intended for use when Field Level Security modifies a user?s privileges for a particular attribute
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getuserprivilege
              */
             readonly UserPrivilege: DevKit.FieldUserPrivilege;
@@ -246,7 +246,7 @@ declare namespace DevKit {
             RemoveOnStageSelected(callback: (executionContext: any) => void): void;
             /**
              * Asynchronously retrieves the business process flows enabled for an entity that the current user can switch to
-             * @param callback The callback function must accept a parameter that contains an object with dictionary properties where the name of the property is the Id of the business process flow and the value of the property is the name of the business process flow. The enabled processes are filtered according to the user�s privileges. The list of enabled processes is the same ones a user can see in the UI if they want to change the process manually
+             * @param callback The callback function must accept a parameter that contains an object with dictionary properties where the name of the property is the Id of the business process flow and the value of the property is the name of the business process flow. The enabled processes are filtered according to the user?s privileges. The list of enabled processes is the same ones a user can see in the UI if they want to change the process manually
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/getenabledprocesses
              */
             EnabledProcesses(callback: (processes: Array<DevKit.ProcessEnabled>) => void): void;
@@ -357,100 +357,382 @@ declare namespace DevKit {
         /**
          * Dialog namespace for Dialog form field types
          * These types are specific to quick create dialogs and other dialog forms
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/openform
          */
         namespace Dialog {
+            /**
+             * Enumeration of field requirement levels for dialog forms
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getrequiredlevel
+             */
             enum FieldRequiredLevel {
+                /** Field is not required */
                 None,
+                /** Field is required */
                 Required,
+                /** Field is recommended */
                 Recommended
             }
+            /**
+             * Base interface for all dialog controls with common visibility and state properties
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
+             */
             interface IControlBase {
+                /**
+                 * Gets or sets whether the control is disabled
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getdisabled
+                 */
                 Disabled: boolean;
+                /**
+                 * Gets or sets the label for the control
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getlabel
+                 */
                 Label: string;
+                /**
+                 * Gets or sets whether the control is visible
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getvisible
+                 */
                 Visible: boolean;
             }
+            /**
+             * Interface for standard dialog controls with change events and validation
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
+             */
             interface IControl extends IControlBase {
+                /**
+                 * Adds a function to be called when the OnChange event occurs
+                 * @param callback The function to execute on change
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/addonchange
+                 */
                 AddOnChange(callback: (executionContext: any) => void): void;
+                /**
+                 * Removes a function from the OnChange event
+                 * @param callback The function to remove
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/removeonchange
+                 */
                 RemoveOnChange(callback: (executionContext: any) => void): void;
+                /**
+                 * Causes the OnChange event to occur
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/fireonchange
+                 */
                 FireOnChange(): void;
+                /**
+                 * Displays an error message for the control
+                 * @param message The message to display
+                 * @param uniqueId Optional unique identifier for the notification
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/setnotification
+                 */
                 SetNotification(message: string, uniqueId?: string): boolean;
+                /**
+                 * Removes a notification from the control
+                 * @param uniqueId The ID of the notification to clear
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/clearnotification
+                 */
                 ClearNotification(uniqueId: string): boolean;
+                /**
+                 * Gets or sets the required level for the attribute
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getrequiredlevel
+                 */
                 RequiredLevel: FieldRequiredLevel;
+                /**
+                 * Returns whether there are unsaved changes to the attribute value
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getisdirty
+                 */
                 readonly IsDirty: boolean;
+                /**
+                 * Returns whether the attribute value is valid
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/isvalid
+                 */
                 readonly IsValid: boolean;
             }
+            /**
+             * Interface for text-based dialog controls (String, Memo)
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes
+             */
             interface IControlText extends IControl {
+                /**
+                 * Returns the maximum length of the string attribute
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getmaxlength
+                 */
                 readonly MaxLength: number;
+                /**
+                 * Gets or sets the string value
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getvalue
+                 */
                 Value: string;
             }
+            /**
+             * Interface for numeric dialog controls (Integer, Decimal, Double, Money)
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes
+             */
             interface IControlNumber extends IControl {
+                /**
+                 * Returns the maximum allowed value
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getmax
+                 */
                 readonly Max: number;
+                /**
+                 * Returns the minimum allowed value
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getmin
+                 */
                 readonly Min: number;
+                /**
+                 * Gets or sets the precision (decimal places)
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getprecision
+                 */
                 Precision: number;
+                /**
+                 * Gets or sets the numeric value
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getvalue
+                 */
                 Value: number;
             }
+            /**
+             * Base interface for selection-based dialog controls
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes
+             */
             interface IControlSelectBase extends IControl {
+                /**
+                 * Returns the initial value when the form was opened
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getinitialvalue
+                 */
                 readonly InitialValue: number;
             }
+            /**
+             * Interface for option set dialog controls
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
+             */
             interface IControlSelect extends IControlSelectBase {
+                /**
+                 * Adds an option to the control
+                 * @param text The label for the option
+                 * @param value The value for the option
+                 * @param index Optional index position
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/addoption
+                 */
                 AddOption(text: string, value: number, index?: number): void;
+                /**
+                 * Clears all options from the control
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/clearoptions
+                 */
                 ClearOptions(): void;
+                /**
+                 * Removes an option from the control
+                 * @param value The value of the option to remove
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/removeoption
+                 */
                 RemoveOption(value: number): void;
+                /**
+                 * Returns all valid options for the attribute
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getoptions
+                 */
                 readonly Options: Array<TextValueNumber>;
+                /**
+                 * Returns all options available in the control
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getoptions
+                 */
                 readonly ControlOptions: Array<TextValueNumber>;
+                /**
+                 * Returns the text of the currently selected option
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/gettext
+                 */
                 readonly Text: string;
             }
+            /**
+             * Represents an entity reference in a lookup field
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getvalue
+             */
             interface EntityReference {
+                /** The logical name of the entity type */
                 entityType: string;
+                /** The GUID of the record */
                 id: DevKit.Guid;
+                /** The display name of the record */
                 name?: string;
             }
+            /**
+             * Represents an option with text and numeric value
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getoption
+             */
             interface TextValueNumber {
+                /** The display text of the option */
                 readonly text: string,
+                /** The numeric value of the option */
                 readonly value: number
             }
+            /**
+             * Interface for single-line text controls in dialogs
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes
+             */
             interface String extends IControlText {
             }
+            /**
+             * Interface for multi-line text (memo) controls in dialogs
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes
+             */
             interface Memo extends IControlText {
             }
+            /**
+             * Interface for whole number controls in dialogs
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes
+             */
             interface Integer extends IControlNumber {
             }
+            /**
+             * Interface for decimal number controls in dialogs
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes
+             */
             interface Decimal extends IControlNumber {
             }
+            /**
+             * Interface for floating point number controls in dialogs
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes
+             */
             interface Double extends IControlNumber {
             }
+            /**
+             * Interface for currency controls in dialogs
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes
+             */
             interface Money extends IControlNumber {
             }
+            /**
+             * Interface for button controls in dialogs
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
+             */
             interface Button extends IControlBase {
             }
+            /**
+             * Interface for label controls in dialogs
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
+             */
             interface Label extends IControlBase {
             }
+            /**
+             * Interface for boolean (two option) controls in dialogs
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes
+             */
             interface Boolean extends IControlSelectBase {
+                /**
+                 * Gets or sets the boolean value
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getvalue
+                 */
                 Value: boolean;
             }
+            /**
+             * Interface for single-select option set controls in dialogs
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes
+             */
             interface OptionSet extends IControlSelect {
+                /**
+                 * Returns the currently selected option
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getselectedoption
+                 */
                 readonly SelectedOption: TextValueNumber;
+                /**
+                 * Gets or sets the selected option value
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getvalue
+                 */
                 Value: number;
             }
+            /**
+             * Interface for multi-select option set controls in dialogs
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes
+             */
             interface MultiOptionSet extends IControlSelect {
+                /**
+                 * Gets or sets the array of selected option values
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getvalue
+                 */
                 Value: Array<number>;
             }
+            /**
+             * Interface for lookup controls in dialogs
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
+             */
             interface Lookup extends IControl {
+                /**
+                 * Adds a custom filter to the lookup results
+                 * @param filter The fetchXml filter element
+                 * @param entityLogicaName Optional entity type to apply the filter to
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/addcustomfilter
+                 */
                 AddCustomFilter(filter: string, entityLogicaName?: string): void;
+                /**
+                 * Adds a custom view to the lookup dialog
+                 * @param viewId The GUID for the view
+                 * @param entityName The entity name
+                 * @param viewDisplayName The display name for the view
+                 * @param fetchXml The fetchXml query
+                 * @param layoutXml The layout XML
+                 * @param isDefault Whether this is the default view
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/addcustomview
+                 */
                 AddCustomView(viewId: DevKit.Guid, entityName: string, viewDisplayName: string, fetchXml: string, layoutXml: string, isDefault: boolean): void;
+                /**
+                 * Adds a function to be called before the lookup search
+                 * @param callback The function to call before search
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/addpresearch
+                 */
                 AddPreSearch(callback: (executionContext: any) => void): void;
+                /**
+                 * Removes a function from the pre-search event
+                 * @param callback The function to remove
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/removepresearch
+                 */
                 RemovePreSearch(callback: (executionContext: any) => void): void;
+                /**
+                 * Adds a function to be called when a lookup tag is clicked
+                 * @param callback The function to call
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/addonlookuptagclick
+                 */
                 AddLookupTagClick(callback: (executionContext: any) => void): void;
+                /**
+                 * Removes a function from the lookup tag click event
+                 * @param callback The function to remove
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/removeonlookuptagclick
+                 */
                 RemoveLookupTagClick(callback: (executionContext: any) => void): void;
+                /**
+                 * Gets or sets the lookup value as an array of entity references
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getvalue
+                 */
                 Value: Array<EntityReference>;
+                /**
+                 * Gets or sets the default view ID
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getdefaultview
+                 */
                 DefaultView: DevKit.Guid;
+                /**
+                 * Gets or sets the allowed entity types
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getentitytypes
+                 */
                 EntityTypes: Array<string>;
             }
+            /**
+             * Interface for date and time controls in dialogs
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
+             */
             interface DateTime extends IControl {
+                /**
+                 * Gets or sets whether the time portion is shown
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getshowtime
+                 */
                 ShowTime: boolean;
+                /**
+                 * Gets or sets the date/time value
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getvalue
+                 */
                 Value: any;
             }
+            /**
+             * Interface for date-only controls in dialogs
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
+             */
             interface Date extends IControl {
+                /**
+                 * Gets or sets the date value
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getvalue
+                 */
                 Value: any;
             }
         }
@@ -712,14 +994,14 @@ declare namespace DevKit {
         }
         interface Lookup extends IControl {
             /**
-             * Adds filters to the results displayed in the lookup. Each filter will be combined with any previously added filters as an �AND� condition. This method can only be used in a function in an event handler for the Lookup Control PreSearch Event
+             * Adds filters to the results displayed in the lookup. Each filter will be combined with any previously added filters as an ?AND? condition. This method can only be used in a function in an event handler for the Lookup Control PreSearch Event
              * @param filter The fetchXml filter element to apply
              * @param entityLogicaName If this is set, the filter only applies to that entity type. Otherwise, it applies to all types of entities returned
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/addcustomfilter
              */
             AddCustomFilter(filter: string, entityLogicaName?: string): void;
             /**
-             * Adds a new view for the lookup dialog box. This method doesn�t work with Owner lookups. Owner lookups are used to assign user-owned records
+             * Adds a new view for the lookup dialog box. This method doesn?t work with Owner lookups. Owner lookups are used to assign user-owned records
              * @param viewId The string representation of a GUID for a view
              * @param entityName The name of the entity
              * @param viewDisplayName The name of the view
@@ -996,6 +1278,11 @@ declare namespace DevKit {
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-sections/setvisible
              */
             Visible: boolean;
+            /**
+             * A collection of one or more controls associated with the section
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/collections
+             */
+            readonly Controls: DevKit.Collections<DevKit.Controls.IControl>;
         }
         interface Grid {
             /**
@@ -1077,6 +1364,38 @@ declare namespace DevKit {
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/setvisible
              */
             Visible: boolean;
+            /**
+             * Returns the type of the control (subgrid)
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getcontroltype
+             */
+            readonly ControlType: string;
+            /**
+             * Returns the name of the control
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getname
+             */
+            readonly ControlName: string;
+            /**
+             * Returns the parent section containing the control
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getparent
+             */
+            readonly ControlParent: any;
+            /**
+             * Get/Set whether the control is disabled
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getdisabled
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/setdisabled
+             */
+            Disabled: boolean;
+            /**
+             * Get/Set the label of the control
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getlabel
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/setlabel
+             */
+            Label: string;
+            /**
+             * Sets focus on the control
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/setfocus
+             */
+            Focus(): void;
         }
         interface GridRow {
             /**
@@ -1103,7 +1422,7 @@ declare namespace DevKit {
         }
         interface GridColumn {
             /**
-             * [Editable grids] Displays an error message for a cell to indicate that data isn�t valid
+             * [Editable grids] Displays an error message for a cell to indicate that data isn?t valid
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/setnotification
              */
             SetNotification(message: string, uniqueId?: string): boolean;
@@ -1141,6 +1460,10 @@ declare namespace DevKit {
              */
             Label: string;
         }
+        /**
+         * Interface for note controls that support refresh
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
+         */
         interface Note extends IControl {
             /**
              * Refreshes the data displayed in a timelinewall and timer control
@@ -1148,25 +1471,72 @@ declare namespace DevKit {
              */
             Refresh(): void;
         }
+        /**
+         * Interface for email engagement controls
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
+         */
         interface EmailEngagement {
         }
+        /**
+         * Interface for email recipient controls
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
+         */
         interface EmailRecipient {
         }
+        /**
+         * Interface for map controls
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
+         */
         interface Map {
         }
+        /**
+         * Interface for action card controls
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
+         */
         interface ActionCards {
         }
+        /**
+         * Interface for ACI widget controls
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
+         */
         interface AciWidget {
         }
+        /**
+         * Interface for Power BI controls
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
+         */
         interface PowerBi {
         }
+        /**
+         * Interface for file upload controls
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
+         */
         interface File extends IControl {
         }
+        /**
+         * Interface for image controls
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
+         */
         interface Image {
         }
+        /**
+         * Interface for quick view form controls
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms
+         */
         interface QuickView {
+            /**
+             * Returns the data value of the quick view control
+             */
             readonly Value: any;
+            /**
+             * Gets or sets whether the quick view control is visible
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/getvisible
+             */
             Visible: boolean;
+            /**
+             * Gets or sets the label for the quick view control
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/getlabel
+             */
             Label: string;
         }
     }
@@ -1806,53 +2176,113 @@ declare namespace DevKit {
          */
         ExecutePrompt(promptText: string): Promise<Array<any>>;
     }
+    /**
+     * Base interface for entity attribute metadata
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getentitymetadata
+     */
     interface IEntityBaseAttribute {
-        /** Type of an attribute */
+        /**
+         * Type of an attribute
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getentitymetadata
+         */
         readonly AttributeType: number;
-        /** Display name for the attribute */
+        /**
+         * Display name for the attribute
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getentitymetadata
+         */
         readonly DisplayName: string;
-        /** Logical name of the entity that contains the attribute */
+        /**
+         * Logical name of the entity that contains the attribute
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getentitymetadata
+         */
         readonly EntityLogicalName: string;
-        /** Logical name for the attribute */
+        /**
+         * Logical name for the attribute
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getentitymetadata
+         */
         readonly LogicalName: string;
     }
+    /**
+     * Interface for boolean attribute metadata
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getentitymetadata
+     */
     interface EntityBooleanAttribute extends IEntityBaseAttribute {
-        /** Default value for a Boolean option set */
+        /**
+         * Default value for a Boolean option set
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getentitymetadata
+         */
         readonly DefaultFormValue: boolean;
-        /** Options for the boolean attribute where each option is a key: value pair */
+        /**
+         * Options for the boolean attribute where each option is a key: value pair
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getentitymetadata
+         */
         readonly OptionSet: Array<KeyValueNumber>;
     }
+    /**
+     * Interface for enumeration attribute metadata
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getentitymetadata
+     */
     interface EntityEnumAttribute extends IEntityBaseAttribute {
-        /** Options for the boolean attribute where each option is a key: value pair */
+        /**
+         * Options for the boolean attribute where each option is a key: value pair
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getentitymetadata
+         */
         readonly OptionSet: Array<KeyValueNumber>;
     }
+    /**
+     * Interface for picklist (optionset) attribute metadata
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getentitymetadata
+     */
     interface EntityPicklistAttribute extends IEntityBaseAttribute {
-        /** Default value for a Number option set */
+        /**
+         * Default value for a Number option set
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getentitymetadata
+         */
         readonly DefaultFormValue: number;
-        /** Options for the boolean attribute where each option is a key: value pair */
+        /**
+         * Options for the boolean attribute where each option is a key: value pair
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getentitymetadata
+         */
         readonly OptionSet: Array<KeyValueNumber>;
     }
+    /**
+     * Interface for state attribute metadata
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getentitymetadata
+     */
     interface EntityStateAttribute extends IEntityBaseAttribute {
         /**
          * Returns the default status based on the passed in state value for an entity
          * @param arg statecode value
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getentitymetadata
          */
         getDefaultStatus(arg: number): number;
         /**
          * Returns possible status values (array of numbers) for a specified state value
          * @param arg statecode value
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getentitymetadata
          */
         getStatusValuesForState(arg: number): Array<number>;
-        /** Options for the boolean attribute where each option is a key: value pair */
+        /**
+         * Options for the boolean attribute where each option is a key: value pair
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getentitymetadata
+         */
         readonly OptionSet: Array<KeyValueNumber>;
     }
+    /**
+     * Interface for status attribute metadata
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getentitymetadata
+     */
     interface EntityStatusAttribute extends IEntityBaseAttribute {
         /**
          * Returns the state value (number) for the specified status value (number)
          * @param arg statuscode value
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getentitymetadata
          */
         getState(arg: number): Array<number>;
-        /** Options for the boolean attribute where each option is a key: value pair */
+        /**
+         * Options for the boolean attribute where each option is a key: value pair
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getentitymetadata
+         */
         readonly OptionSet: Array<KeyValueNumber>;
     }
     interface Error {
@@ -1886,7 +2316,7 @@ declare namespace DevKit {
     interface EntityMetadata {
         /** Whether a custom activity should appear in the activity menus in the Web application. 0 indicates that the custom activity doesn't appear; 1 indicates that it does appear */
         readonly ActivityTypeMask: number;
-        /** Indicates whether to automatically move records to the owner�s default queue when a record of this type is created or assigned */
+        /** Indicates whether to automatically move records to the owner?s default queue when a record of this type is created or assigned */
         readonly AutoRouteToOwnerQueue: boolean;
         /** Indicates whether the entity can trigger a workflow process */
         readonly CanTriggerWorkflow: boolean;
@@ -1979,9 +2409,14 @@ declare namespace DevKit {
         readonly key: string,
         readonly value: number
     }
+    /**
+     * Represents a text-value pair for OptionSet options
+     */
     interface TextValueNumber {
-        readonly text: string,
-        readonly value: number
+        /** The display text of the option */
+        readonly text: string;
+        /** The numeric value of the option */
+        readonly value: number;
     }
     interface DialogResult {
         /** Indicates whether the confirm button was clicked to close the dialog */
@@ -1997,40 +2432,7 @@ declare namespace DevKit {
         /** Audio file MIME type */
         readonly mimeType: string;
     }
-    interface DateFormattingInfoCalendar {
-        readonly MinSupportedDateTime: Date;
-        readonly MaxSupportedDateTime: Date;
-        readonly AlgorithmType: number;
-        readonly CalendarType: number;
-        readonly Eras: Array<number>;
-        readonly TwoDigitYearMax: number;
-        readonly IsReadOnly: boolean;
-    }
-    interface DateFormattingInfo {
-        readonly AmDesignator: string;
-        readonly AbbreviatedDayNames: Array<string>;
-        readonly AbbreviatedMonthGenitiveNames: Array<string>;
-        readonly AbbreviatedMonthNames: Array<string>;
-        readonly Calendar: DateFormattingInfoCalendar;
-        readonly CalendarWeekRule: number;
-        readonly DateSeparator: string;
-        readonly DayNames: Array<string>;
-        readonly FirstDayOfWeek: number;
-        readonly FullDateTimePattern: string;
-        readonly LongDatePattern: string;
-        readonly LongTimePattern: string;
-        readonly MonthDayPattern: string;
-        readonly MonthGenitiveNames: Array<string>;
-        readonly MonthNames: Array<string>;
-        readonly PmDesignator: string;
-        readonly ShortDatePattern: string;
-        readonly ShortTimePattern: string;
-        readonly ShortestDayNames: Array<string>;
-        readonly SortableDateTimePattern: string;
-        readonly TimeSeparator: string;
-        readonly UniversalSortableDateTimePattern: string;
-        readonly YearMonthPattern: string;
-    }
+
     interface AppProperty {
         readonly appId: string;
         readonly displayName: string;
@@ -2113,15 +2515,52 @@ declare namespace DevKit {
          * */
         readonly Required: boolean;
     }
+    /**
+     * Represents a business process flow instance for a record
+     * @remarks All property values except CreatedOnDate are of String type
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/getprocessinstances
+     */
     interface ProcessInstance extends ProcessEnabled {
+        /**
+         * The date and time when the process instance was created (String format)
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/getprocessinstances
+         */
         readonly CreatedOn: string;
+        /**
+         * The date and time when the process instance was created (Date type)
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/getprocessinstances
+         */
         readonly CreatedOnDate: Date;
+        /**
+         * The unique identifier of the process instance
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/getprocessinstances
+         */
         readonly InstanceId: DevKit.Guid;
+        /**
+         * The name of the process instance
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/getprocessinstances
+         */
         readonly InstanceName: string;
+        /**
+         * The status of the process instance
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/getprocessinstances
+         */
         readonly Status: OptionSet.ProcessStatus;
     }
+    /**
+     * Represents the enabled process information for a record
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/getprocessinstances
+     */
     interface ProcessEnabled {
+        /**
+         * The unique identifier of the process definition
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/getprocessinstances
+         */
         readonly ProcessId: DevKit.Guid;
+        /**
+         * The name of the process definition
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/getprocessinstances
+         */
         readonly ProcessName: string;
     }
     interface ProcessProcess {
@@ -2146,24 +2585,75 @@ declare namespace DevKit {
          */
         Stages: DevKit.Collections<ProcessStage>;
     }
+    /**
+     * Provides information about the relationship used to filter a subgrid
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/gridcontrol/getrelationship
+     */
     interface GridRelationship {
-        /** Name of the attribute. */
+        /**
+         * Name of the attribute
+         */
         readonly attributeName: string,
-        /** Name of the relationship. */
+        /**
+         * Name of the relationship
+         */
         readonly name: string,
-        /** Name of the navigation property for this relationship. */
+        /**
+         * Name of the navigation property for this relationship
+         */
         readonly navigationPropertyName: string,
-        /** Returns one of the following values to indicate the relationship type. 0: OneToMany | 1: ManyToMany */
+        /**
+         * Returns one of the following values to indicate the relationship type. 0: OneToMany | 1: ManyToMany
+         */
         readonly relationshipType: 0 | 1,
-        /** Returns one of the following values to indicate the role type of relationship. 1: Referencing | 2: AssociationEntity */
+        /**
+         * Returns one of the following values to indicate the role type of relationship. 1: Referencing | 2: AssociationEntity
+         */
         readonly roleType: 1 | 2
     }
+    /**
+     * Collections are structures to provide access to data that represent an array, but without the ability to modify the data in the array
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/collections
+     */
     interface Collections<T> {
+        /**
+         * Applies the action contained in a delegate function to each item in the collection
+         * @param successCallback Delegate function with parameters for item and index
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/collections/foreach
+         */
         forEach(successCallback: (item: T, index: number) => void): void;
+        /**
+         * Gets all items in the collection as an array
+         * @returns An array of all items in the collection
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/collections/get
+         */
         get(): Array<T>;
+        /**
+         * Gets an item from the collection by its name
+         * @param item The name of the item to retrieve
+         * @returns The item with the specified name
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/collections/get
+         */
         get(item: string): T;
+        /**
+         * Gets an item from the collection by its index
+         * @param index The index of the item to retrieve
+         * @returns The item at the specified index
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/collections/get
+         */
         get(index: number): T;
+        /**
+         * Gets items from the collection that satisfy a delegate function
+         * @param successCallback Delegate function that returns true for items to include
+         * @returns An array of items that satisfy the delegate function
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/collections/get
+         */
         get(successCallback: (item: T, index: number) => void): Array<T>;
+        /**
+         * Gets the count of items in the collection
+         * @returns The number of items in the collection
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/collections/getlength
+         */
         getLength(): number;
     }
     interface ExecutionContext {
@@ -2736,11 +3226,42 @@ declare namespace DevKit {
          */
         readonly Version: string;
     }
+    /**
+     * Provides methods for managing side panes in model-driven apps
+     * @remarks This API is not available for Dynamics 365 Customer Engagement on-premises deployments
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app-sidepanes
+     */
     interface SidePanes {
+        /**
+         * Creates a new side pane with the specified options
+         * @param paneOptions An object containing options for the side pane including title, paneId, canClose, imageSrc, hideHeader, isSelected, width, hidden, alwaysRender, and keepBadgeOnSelect
+         * @param successCallback A function to call when the pane is created successfully
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app/xrm-app-sidepanes/createpane
+         */
         Create(paneOptions: DevKit.SidePaneOptions, successCallback: (pane: DevKit.SidePane) => void): void;
+        /**
+         * Returns the side pane corresponding to the input ID. Returns undefined if the side pane does not exist
+         * @param paneId The ID of the pane to retrieve
+         * @returns The AppSidePane object if found, otherwise undefined
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app/xrm-app-sidepanes/getpane
+         */
         Get(paneId: string): DevKit.SidePane;
+        /**
+         * Returns the currently selected pane
+         * @returns The currently selected AppSidePane object
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app/xrm-app-sidepanes/getselectedpane
+         */
         GetSelected(): DevKit.SidePane;
+        /**
+         * Returns a collection containing all active panes
+         * @returns A collection of all active AppSidePane objects
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app/xrm-app-sidepanes/getallpanes
+         */
         GetAll(): DevKit.Collections<DevKit.SidePane>;
+        /**
+         * Gets or sets the state of the side panes. Use this property to programmatically collapse (0) or expand (1) the side pane
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app-sidepanes
+         */
         DisplayState: OptionSet.SidePaneState;
     }
     interface Client {
@@ -2832,6 +3353,26 @@ declare namespace DevKit {
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#useskypeprotocol
          */
         readonly UseSkypeProtocol: boolean;
+    }
+    /**
+     * Represents calendar information for date formatting
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#dateformattinginfo
+     */
+    interface DateFormattingInfoCalendar {
+        /** The minimum supported date/time */
+        readonly MinSupportedDateTime: Date;
+        /** The maximum supported date/time */
+        readonly MaxSupportedDateTime: Date;
+        /** The algorithm type */
+        readonly AlgorithmType: number;
+        /** The calendar type */
+        readonly CalendarType: number;
+        /** The eras in this calendar */
+        readonly Eras: Array<number>;
+        /** The two digit year max */
+        readonly TwoDigitYearMax: number;
+        /** Whether this calendar is read only */
+        readonly IsReadOnly: boolean;
     }
     /**
      * Represents date formatting information for the current user
@@ -3546,359 +4087,416 @@ declare namespace DevKit {
     }
 }
 
-// Provide a DevKitV4 namespace alias for backward compatibility and to support code that references DevKitV4
-declare namespace DevKitV4 {
-    export import Guid = DevKit.Guid;
-    export import SuccessCallback = DevKit.SuccessCallback;
-    export import ErrorCallback = DevKit.ErrorCallback;
-    export import Controls = DevKit.Controls;
-    export import WebApi = DevKit.WebApi;
-    export import EntityReference = DevKit.EntityReference;
-    export import Utility = DevKit.Utility;
-    export import Collections = DevKit.Collections;
-    export import ExecutionContext = DevKit.ExecutionContext;
-    export import IForm = DevKit.IForm;
-    export import KeyValueObject = DevKit.KeyValueObject;
-    export import TextValueNumber = DevKit.TextValueNumber;
-    export import FieldNotification = DevKit.FieldNotification;
-    export import OpenQuickCreateSuccessCallbackObject = DevKit.OpenQuickCreateSuccessCallbackObject;
-    export import SidePanes = DevKit.SidePanes;
-    export import Error = DevKit.Error;
-    export import FileData = DevKit.FileData;
-}
-
 /** DynamicsCrm.DevKit for namespace OptionSet */
 declare namespace OptionSet {
-    /**  */
+    /**
+     * Defines the structural type of a parameter for Xrm.WebApi.online.execute
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi/online/execute
+     */
     enum StructuralProperty {
-        /** 0 */
+        /** 0 - Unknown structural type */
         Unknown,
-        /** 1 */
+        /** 1 - Primitive type (e.g., string, integer, boolean, guid) */
         PrimitiveType,
-        /** 2 */
+        /** 2 - Complex type (structured object) */
         ComplexType,
-        /** 3 */
+        /** 3 - Enumeration type */
         EnumerationType,
-        /** 4 */
+        /** 4 - Collection (array of items) */
         Collection,
-        /** 5 */
+        /** 5 - Entity type (reference to a Dynamics 365 record) */
         EntityType
     }
-    /**  */
+    /**
+     * Specifies the type of Web API operation for Xrm.WebApi.online.execute
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi/online/execute
+     */
     enum OperationType {
-        /** 0 */
+        /** 0 - Action (custom or unbound action) */
         Action,
-        /** 1 */
+        /** 1 - Function (custom or built-in function) */
         Function,
-        /** 2 */
+        /** 2 - CRUD operation (Create, Retrieve, Update, Delete) */
         CRUD
     }
-    /** Returns information about the kind of device the user is using. */
+    /**
+     * Returns information about the kind of device the user is using
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/client#getformfactor
+     */
     enum FormFactor {
-        /** 0 */
+        /** 0 - Unknown device type */
         Unknown,
-        /** 1 */
+        /** 1 - Desktop (includes web browser, even from tablet) */
         Desktop,
-        /** 2 */
+        /** 2 - Tablet application */
         Tablet,
-        /** 3 */
+        /** 3 - Phone application */
         Phone,
     }
-    /** Returns a value to indicate the state of the client. */
+    /**
+     * Returns a value to indicate the state of the client
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/client#getclientstate
+     */
     enum ClientState {
-        /** Online */
+        /** The client is connected to the server (normal operation) */
         Online,
-        /** Offline */
+        /** The client is in offline mode (mobile app with offline sync) */
         Offline,
     }
-    /** Returns a value to indicate which client the script is executing in. */
+    /**
+     * Returns a value to indicate which client the script is executing in
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/client#getclient
+     */
     enum ClientName {
-        /** Web */
+        /** Web browser client */
         Web,
-        /** Outlook */
+        /** Outlook client (Dynamics 365 for Outlook) */
         Outlook,
-        /** Mobile */
+        /** Mobile application (phone or tablet app) */
         Mobile
     }
-    /** Gets the form type for the record. */
+    /**
+     * Gets the form type for the record
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui/getformtype
+     */
     enum FormType {
-        /** 0 */
+        /** 0 - Form type is undefined */
         Undefined,
-        /** 1 - Quick Create forms return 1 */
+        /** 1 - Create form (Quick Create forms also return 1) */
         Create,
-        /** 2 */
+        /** 2 - Update form (editing an existing record) */
         Update,
-        /** 3 */
+        /** 3 - Read-only form */
         ReadOnly,
-        /** 4 */
+        /** 4 - Disabled form */
         Disabled,
-        /** 5 */
+        /** 5 - Bulk edit form */
         BulkEdit,
     }
-    /** Specify options for saving the record. If no parameter is included in the method, the record will simply be saved. This is the equivalent of using the Save command */
+    /**
+     * Specify options for saving the record
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-entity/save
+     */
     enum SaveOption {
-        /** saveandclose - This is the equivalent of using the Save and Close command */
+        /** Save and close the form after saving */
         SaveAndClose,
-        /** saveandnew - This is the equivalent of the using the Save and New command */
+        /** Save and open a new blank form after saving */
         SaveAndNew
     }
-    /** Returns a value indicating how the save event was initiated by the user */
+    /**
+     * Returns a value indicating how the save event was initiated
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/save-event-arguments/getsavemode
+     */
     enum SaveMode {
-        /** 1 - All entities */
+        /** 1 - Standard save (all entities) */
         Save,
-        /** 2 - All entities */
+        /** 2 - Save and close (all entities) */
         SaveAndClose,
-        /** 5 - All entities */
+        /** 5 - Deactivate record (all entities) */
         Deactivate,
-        /** 6 - All entities */
+        /** 6 - Reactivate record (all entities) */
         Reactivate,
-        /** 7 - Email */
+        /** 7 - Send email (Email entity only) */
         Send,
-        /** 15 - Lead */
+        /** 15 - Disqualify lead (Lead entity only) */
         Disqualify,
-        /** 16 - Lead */
+        /** 16 - Qualify lead (Lead entity only) */
         Qualify,
-        /** 47 - User or Team */
+        /** 47 - Assign record (User or Team) */
         Assign,
-        /** 58 - Activities */
+        /** 58 - Save as completed (Activities only) */
         SaveAsCompleted,
-        /** 59 - All entities */
+        /** 59 - Save and new (all entities) */
         SaveAndNew,
-        /** 70 - All entities */
+        /** 70 - Auto-save triggered (all entities) */
         AutoSave
     }
-    /** The level of the message, which defines how the message will be displayed */
+    /**
+     * The level of form notification message
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui/setformnotification
+     */
     enum FormNotificationLevel {
-        /** ERROR - Notification will use the system error icon */
+        /** Error notification with system error icon (red) */
         Error,
-        /** WARNING - Notification will use the system warning icon */
+        /** Warning notification with system warning icon (yellow) */
         Warning,
-        /** INFO - Notification will use the system info icon */
+        /** Informational notification with system info icon (blue) */
         Info
     }
-    /** Display state of the tab */
+    /**
+     * Display state of a tab on the form
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-tabs/getdisplaystate
+     */
     enum TabDisplayState {
-        /** expanded */
+        /** Tab is expanded showing all sections */
         Expanded,
-        /** collapsed */
+        /** Tab is collapsed showing only the header */
         Collapsed
     }
-    /** The control type of tab */
+    /**
+     * The content type of a tab
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-tabs/getcontenttype
+     */
     enum TabContentType {
-        /** cardSections: The default tab behavior */
+        /** Default tab behavior with card sections */
         CardSections,
-        /** singleComponent: Maximizes the content of the first component in the tab */
+        /** Maximizes the first component in the tab */
         SingleComponent
     }
-    /** */
+    /**
+     * Display state of the business process flow control
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-process/getdisplaystate
+     */
     enum ProcessDisplayState {
-        /** expanded */
+        /** Process control is fully expanded */
         Expanded,
-        /** collapsed */
+        /** Process control is collapsed to a bar */
         Collapsed,
-        /** floating */
+        /** Process control is floating on the form */
         Floating
     }
-    /** Returns a string value that represents the type of attribute */
+    /**
+     * Returns the type of attribute
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getattributetype
+     */
     enum FieldAttributeType {
-        /** boolean */
+        /** boolean - True/False attribute */
         Boolean,
-        /** datetime */
+        /** datetime - Date and time attribute */
         DateTime,
-        /** decimal */
+        /** decimal - Decimal number attribute */
         Decimal,
-        /** double */
+        /** double - Floating point number attribute */
         Double,
-        /** integer */
+        /** integer - Whole number attribute */
         Integer,
-        /** lookup */
+        /** lookup - Lookup/reference to another record */
         Lookup,
-        /** memo */
+        /** memo - Multi-line text attribute */
         Memo,
-        /** money */
+        /** money - Currency attribute */
         Money,
-        /** multiselectoptionset */
+        /** multiselectoptionset - Multi-select option set attribute */
         MultiOptionSet,
-        /** optionset */
+        /** optionset - Single-select option set attribute */
         OptionSet,
-        /** string */
+        /** string - Single-line text attribute */
         String
     }
-    /** Returns a string value that represents formatting options for the attribute */
+    /**
+     * Returns formatting options for the attribute
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getformat
+     */
     enum FieldFormat {
-        /** null */
+        /** No format specified */
         Null,
-        /** date */
+        /** Date only (no time component) */
         Date,
-        /** datetime */
+        /** Date and time */
         DateTime,
-        /** duration */
+        /** Duration in minutes */
         Duration,
-        /** email */
+        /** Email address format */
         Email,
-        /** language */
+        /** Language code format */
         Language,
-        /** none */
+        /** No specific format */
         None,
-        /** textarea */
+        /** Multi-line text area */
         TextArea,
-        /** text */
+        /** Single-line text */
         Text,
-        /** tickersymbol */
+        /** Stock ticker symbol */
         TickerSymbol,
-        /** phone */
+        /** Phone number format */
         Phone,
-        /** timezone */
+        /** Time zone format */
         TimeZone,
-        /** url */
+        /** URL/web address format */
         Url
     }
-    /** Value indicating whether a value for the attribute is none or required or recommended */
+    /**
+     * Value indicating whether a field value is required
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getrequiredlevel
+     */
     enum FieldRequiredLevel {
-        /** none */
+        /** Field is optional */
         None,
-        /** required */
+        /** Field is required - form cannot be saved without a value */
         Required,
-        /** recommended */
+        /** Field is recommended - shows indicator but allows save */
         Recommended
     }
-    /** Data from the attribute will be submitted when the record is saved */
+    /**
+     * Controls when field data is submitted on save
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getsubmitmode
+     */
     enum FieldSubmitMode {
-        /** always - The data is always sent with a save */
+        /** Data is always sent with a save, even if unchanged */
         Always,
-        /** never - The data is never sent with a save. When this is used, the field(s) in the form for this attribute cannot be edited */
+        /** Data is never sent with a save (field becomes read-only) */
         Never,
-        /** dirty - Default behavior. The data is sent with the save when it has changed */
+        /** Default - Data is only sent when it has changed */
         Dirty
     }
-    /** A value that categorizes controls */
+    /**
+     * Categorizes the type of control
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getcontroltype
+     */
     enum FieldControlType {
-        /** standard - A standard control */
+        /** A standard data-bound control */
         Standard,
-        /** iframe - An IFRAME control */
+        /** An IFRAME control for embedding external content */
         Iframe,
-        /** kbsearch - A knowledge base search control */
+        /** A knowledge base search control */
         KbSearch,
-        /** lookup - A lookup control */
+        /** A lookup control for selecting related records */
         Lookup,
-        /** multiselectoptionset - A multi-select option set control */
+        /** A multi-select option set control */
         MultiSelectOptionset,
-        /** notes - A notes control */
+        /** A notes/timeline control for activities */
         Notes,
-        /** optionset - An option set control */
+        /** A single-select option set control */
         OptionSet,
-        /** quickform - A quick view control */
+        /** A quick view form control */
         QuickForm,
-        /** subgrid - A subgrid control */
+        /** A subgrid control for displaying related records */
         SubGrid,
-        /** timercontrol - A timer control */
+        /** A timer control for SLA tracking */
         TimerControl,
-        /** timelinewall - A timeline control (for Unified Interface) */
+        /** A timeline wall control (Unified Interface) */
         TimelineWall,
-        /** webresource - A web resource control */
+        /** A web resource control */
         WebResource
     }
-    /** The type of notification */
+    /**
+     * The type of field notification
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/setnotification
+     */
     enum FieldNotificationLevel {
-        /** ERROR */
+        /** Error notification - prevents save until resolved */
         Error,
-        /** RECOMMENDATION */
+        /** Recommendation notification - allows save but suggests action */
         Recommendation
     }
-    /** The integer value of the business process flow category */
+    /**
+     * The integer value of the business process flow category for a stage
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/stage/getcategory
+     */
     enum ProcessCategory {
-        /** 0 */
+        /** 0 - Qualify stage (typically for Lead entity) */
         Qualify,
-        /** 1 */
+        /** 1 - Develop stage (sales process development phase) */
         Develop,
-        /** 2 */
+        /** 2 - Propose stage (proposal phase in sales) */
         Propose,
-        /** 3 */
+        /** 3 - Close stage (closing phase in sales) */
         Close,
-        /** 4 */
+        /** 4 - Identify stage (service/case identification) */
         Identify,
-        /** 5 */
+        /** 5 - Research stage (service/case research) */
         Research,
-        /** 6 */
+        /** 6 - Resolve stage (service/case resolution) */
         Resolve
     }
-    /** The integer value status of the stage */
+    /**
+     * The status of a stage in the business process flow
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/stage/getstatus
+     */
     enum ProcessStatus {
-        /** active */
+        /** Stage is currently active */
         Active,
-        /** aborted */
+        /** Stage was aborted/skipped */
         Aborted,
-        /** finished */
+        /** Stage has been completed */
         Finished
     }
-    /** The progress of the action step */
+    /**
+     * The progress of an action step in a business process flow
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/step/setprogress
+     */
     enum ProcessProgress {
-        /** 0 */
+        /** 0 - No progress set */
         None,
-        /** 1 */
+        /** 1 - Action step is in progress */
         Processing,
-        /** 2 */
+        /** 2 - Action step completed successfully */
         Completed,
-        /** 3 */
+        /** 3 - Action step failed */
         Failure,
-        /** 4 */
+        /** 4 - Action step is invalid */
         Invalid
     }
-    /** The state of the timer control - This method is only supported for Unified Interface */
+    /**
+     * The state of a timer control (SLA timers) - Unified Interface only
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getstate
+     */
     enum TimerState {
-        /** 1 */
+        /** 1 - Timer state not set */
         NotSet,
-        /** 2 */
+        /** 2 - Timer is currently running */
         InProgress,
-        /** 3 */
+        /** 3 - Timer is in warning state (near expiration) */
         Warning,
-        /** 4 */
+        /** 4 - Timer has been violated (exceeded limit) */
         Violated,
-        /** 5 */
+        /** 5 - Timer completed successfully */
         Success,
-        /** 6 */
+        /** 6 - Timer has expired */
         Expired,
-        /** 7 */
+        /** 7 - Timer was canceled */
         Canceled,
-        /** 8 */
+        /** 8 - Timer is paused */
         Paused
     }
-    /** Information about the advanced configuration settings for the organization */
+    /**
+     * Advanced configuration settings for the organization
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/getadvancedconfigsetting
+     */
     enum AdvancedConfigSetting {
-        /** MaxChildIncidentNumber */
+        /** Maximum number of child cases allowed for a parent case */
         MaxChildIncidentNumber,
-        /** MaxIncidentMergeNumber */
+        /** Maximum number of cases that can be merged */
         MaxIncidentMergeNumber
     }
-    /** Describing whether to open or save the file */
+    /**
+     * Describes whether to open or save a file
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/openfile
+     */
     enum FileOption {
-        /** 1 */
+        /** 1 - Open the file in a new browser tab */
         Open,
-        /** 2 */
+        /** 2 - Download/save the file */
         Save
     }
-    /** Describes the type of operation for the privilege */
+    /**
+     * Describes the type of privilege for security operations
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getentitymetadata
+     */
     enum PrivilegeType {
-        /** 0 - Specifies no privilege. */
+        /** 0 - No privilege assigned */
         None,
-        /** 1 - The create privilege. */
+        /** 1 - Create privilege - can create new records */
         Create,
-        /** 2 - The read privilege. */
+        /** 2 - Read privilege - can view records */
         Read,
-        /** 3 - The write privilege. */
+        /** 3 - Write privilege - can update records */
         Write,
-        /** 4 -  The delete privilege. */
+        /** 4 - Delete privilege - can delete records */
         Delete,
-        /** 5 - The assign privilege. */
+        /** 5 - Assign privilege - can assign records to other users/teams */
         Assign,
-        /** 6 - The share privilege. */
+        /** 6 - Share privilege - can share records with other users/teams */
         Share,
-        /** 7 - The append privilege. */
+        /** 7 - Append privilege - can attach to this entity */
         Append,
-        /** 8 - The append to privilege. */
+        /** 8 - AppendTo privilege - can attach other entities to this */
         AppendTo
     }
-    /**  */
+    /**
+     * Controls whether the navigation bar is displayed
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/openform
+     */
     enum FormNavBar {
         /** "on" - The navigation bar is displayed. This is the default behavior if the navbar parameter is not used. */
         On,
@@ -3907,59 +4505,88 @@ declare namespace OptionSet {
         /** "entity" - On an entity form, only the navigation options for related entities are available. After navigating to a related entity, a back button is displayed in the navigation bar to allow returning to the original record. */
         Entity
     }
-    /**  */
+    /**
+     * Specifies the position of a form window
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/openform
+     */
     enum FormWindowPosition {
-        /** 1 */
+        /** 1 - Open the form in the center of the screen */
         Center,
-        /** 2 */
+        /** 2 - Open the form on the side (as a side panel) */
         Side
     }
-    /**  */
+    /**
+     * Specifies the type of entity relationship
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/openform
+     */
     enum FormRelationshipType {
-        /** 0 */
+        /** 0 - One-to-Many relationship */
         OneToMany,
-        /** 1 */
+        /** 1 - Many-to-Many relationship */
         ManyToMany
     }
-    /**  */
+    /**
+     * Specifies the role type in a relationship
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/openform
+     */
     enum FormRelationshipRoleType {
-        /** 1 */
+        /** 1 - Referencing entity (the "many" side of 1:N) */
         Referencing,
-        /** 2 */
+        /** 2 - Association entity (for N:N relationships) */
         AssociationEntity
     }
-    /**  */
+    /**
+     * Specifies the accepted file types for file picker
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-device/pickfile
+     */
     enum FileAccept {
-        /** "audio" */
+        /** Audio files (mp3, wav, etc.) */
         Audio,
-        /** "video" */
+        /** Video files (mp4, avi, etc.) */
         Video,
-        /** "image" */
+        /** Image files (jpg, png, gif, etc.) */
         Image
     }
-    /**  */
+    /**
+     * Specifies the type of grid control
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/gridcontrol/getgridtype
+     */
     enum GridType {
-        /** 1 */
+        /** 1 - HomePageGrid (main entity list view) */
         HomePageGrid,
-        /** 2 */
+        /** 2 - Subgrid (embedded grid on a form) */
         Subgrid
     }
-    /** Display state of the side pane */
+    /**
+     * Display state of the side pane
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app-sidepanes/state
+     */
     enum SidePaneState {
-        /** expanded */
+        /** Side pane is fully expanded and visible */
         Expanded,
-        /** collapsed */
+        /** Side pane is collapsed to a bar */
         Collapsed
     }
-    /** The full name conventionCode setting of the current organization */
+    /**
+     * The full name conventionCode setting of the current organization
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#fullnameconventioncode
+     */
     enum FullNameConventionCode {
+        /** 0 - Last Name, First Name (e.g., "Smith, John") */
         LastName_Comma_FirstName,
+        /** 1 - First Name Last Name (e.g., "John Smith") */
         FirstName_LastName,
+        /** 2 - Last Name, First Name Middle Initial (e.g., "Smith, John A.") */
         LastName_Comma_FirstName_MiddleInitial,
+        /** 3 - First Name Middle Initial Last Name (e.g., "John A. Smith") */
         FirstName_MiddleInitial_LastName,
+        /** 4 - Last Name, First Name Middle Name (e.g., "Smith, John Andrew") */
         LastName_Comma_FirstName_MiddleName,
+        /** 5 - First Name Middle Name Last Name (e.g., "John Andrew Smith") */
         FirstName_MiddleName_LastName,
+        /** 6 - Last Name First Name (e.g., "SmithJohn") */
         LastName_FirstName,
+        /** 7 - Last Name First Name (no space, e.g., "SmithJohn") */
         LastNameFirstName
     }
 }

@@ -6,7 +6,7 @@ echo.
 
 echo [1/3] Running unit tests...
 echo.
-call npm coverage
+call npm run coverage
 if errorlevel 1 (
     echo.
     echo [ERROR] Tests failed! Deployment aborted.

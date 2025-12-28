@@ -2786,6 +2786,13 @@ var formAccount_DevKitV4 = (function () {
 
 			// Visible
 			results.push({ Test: "R12", Property: "form.Grid.Contacts.Visible", Value: form.Grid.Contacts.Visible, Status: typeof form.Grid.Contacts.Visible === "boolean" ? "✓" : "⚠" });
+
+			// New Control Properties (from loadGrid enhancements)
+			results.push({ Test: "R13", Property: "form.Grid.Contacts.ControlType", Value: form.Grid.Contacts.ControlType, Status: form.Grid.Contacts.ControlType ? "✓" : "⚠" });
+			results.push({ Test: "R14", Property: "form.Grid.Contacts.ControlName", Value: form.Grid.Contacts.ControlName, Status: form.Grid.Contacts.ControlName ? "✓" : "⚠" });
+			results.push({ Test: "R15", Property: "form.Grid.Contacts.ControlParent", Value: form.Grid.Contacts.ControlParent ? "object" : "null", Status: form.Grid.Contacts.ControlParent ? "✓" : "⚠" });
+			results.push({ Test: "R16", Property: "form.Grid.Contacts.Disabled", Value: form.Grid.Contacts.Disabled, Status: typeof form.Grid.Contacts.Disabled === "boolean" ? "✓" : "⚠" });
+			results.push({ Test: "R17", Property: "form.Grid.Contacts.Label", Value: form.Grid.Contacts.Label, Status: form.Grid.Contacts.Label !== undefined ? "✓" : "⚠" });
 		} catch (/** @type {any} */ error) {
 			results.push({ Test: "ERR", Property: "Props Error", Value: error.message, Status: "✗" });
 		}
@@ -2864,6 +2871,45 @@ var formAccount_DevKitV4 = (function () {
 			methodResults.push({ Test: "S8", Property: "form.Grid.Contacts.Rows.get(0)", Value: e.message, Status: "✗" });
 		}
 
+		// Setter: Disabled
+		try {
+			const origDisabled = form.Grid.Contacts.Disabled;
+			form.Grid.Contacts.Disabled = !origDisabled;
+			form.Grid.Contacts.Disabled = origDisabled;
+			methodResults.push({ Test: "S9", Property: "form.Grid.Contacts.Disabled (set)", Value: "Set → Restored", Status: "✓" });
+		} catch (/** @type {any} */ e) {
+			methodResults.push({ Test: "S9", Property: "form.Grid.Contacts.Disabled (set)", Value: e.message, Status: "✗" });
+		}
+
+		// Setter: Label
+		try {
+			const origLabel = form.Grid.Contacts.Label;
+			form.Grid.Contacts.Label = origLabel + " (TEST)";
+			const checkLabel = form.Grid.Contacts.Label;
+			form.Grid.Contacts.Label = origLabel;
+			methodResults.push({ Test: "S10", Property: "form.Grid.Contacts.Label (set)", Value: checkLabel?.includes("(TEST)") ? "Set → Restored" : "Check failed", Status: checkLabel?.includes("(TEST)") ? "✓" : "⚠" });
+		} catch (/** @type {any} */ e) {
+			methodResults.push({ Test: "S10", Property: "form.Grid.Contacts.Label (set)", Value: e.message, Status: "✗" });
+		}
+
+		// Method: Focus
+		try {
+			methodResults.push({ Test: "S11", Property: "form.Grid.Contacts.Focus", Value: typeof form.Grid.Contacts.Focus === "function" ? "Available" : "Not found", Status: typeof form.Grid.Contacts.Focus === "function" ? "✓" : "⚠" });
+		} catch (/** @type {any} */ e) {
+			methodResults.push({ Test: "S11", Property: "form.Grid.Contacts.Focus", Value: e.message, Status: "✗" });
+		}
+
+		// Method: Rows.forEach
+		try {
+			const rows = form.Grid.Contacts.Rows;
+			/** @type {string[]} */
+			let entityIds = [];
+			rows?.forEach((/** @type {any} */ row, /** @type {number} */ idx) => { if (row?.EntityId) entityIds.push(row.EntityId); });
+			methodResults.push({ Test: "S12", Property: "form.Grid.Contacts.Rows.forEach()", Value: entityIds.length > 0 ? `${entityIds.length} rows` : "no rows", Status: "✓" });
+		} catch (/** @type {any} */ e) {
+			methodResults.push({ Test: "S12", Property: "form.Grid.Contacts.Rows.forEach()", Value: e.message, Status: "✗" });
+		}
+
 		// =====================================================
 		// OUTPUT
 		// =====================================================
@@ -2874,9 +2920,9 @@ var formAccount_DevKitV4 = (function () {
 		const total = allResults.length;
 
 		console.groupCollapsed(`🎯 TEST 13: Grid Control [${startTime}] - Using: Contacts subgrid - ${passed}/${total}`);
-		console.log("%c📋 ReadOnly Properties (R1-R12)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
+		console.log("%c📋 ReadOnly Properties (R1-R17)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
 		console.table(results);
-		console.log("%c⚡ Setters & Methods (S1-S8)", "font-weight: bold; font-size: 14px; color: #2196F3;");
+		console.log("%c⚡ Setters & Methods (S1-S12)", "font-weight: bold; font-size: 14px; color: #2196F3;");
 		console.table(methodResults);
 		console.log(`%c✅ Summary: ${passed}/${total} passed` +
 			(warnings > 0 ? ` | ⚠ ${warnings} warnings` : '') +
@@ -3603,6 +3649,157 @@ var formAccount_DevKitV4 = (function () {
 		console.log("%c⚡ Setters & Methods (S1-S5)", "font-weight: bold; font-size: 14px; color: #2196F3;");
 		console.table(methodResults);
 		console.log(`%c✅ Summary: ${passed}/${total} passed`,
+			"font-weight: bold; color: #4CAF50; font-size: 14px;");
+		console.groupEnd();
+	}
+
+	/**
+	 * TEST 22: Tab Control - TAB_1 & TAB_1_SECTION_1
+	 * ITab interface for form tabs with DisplayState, Label, Visible properties
+	 * Also tests Section within the tab
+	 *
+	 * Convention:
+	 * - R-Index: ReadOnly properties (R1, R2, R3...)
+	 * - S-Index: Setters & Methods (S1, S2, S3...)
+	 */
+	function TestTab() {
+		/** @type {Array<{Test: string, Property: string, Value: any, Status: string}>} */
+		const results = [];
+		/** @type {Array<{Test: string, Property: string, Value: any, Status: string}>} */
+		const methodResults = [];
+		const startTime = new Date().toLocaleTimeString();
+
+		// =====================================================
+		// TAB READONLY PROPERTIES (R-Index)
+		// =====================================================
+		try {
+			results.push({ Test: "R1", Property: "form.Body.Tab.TAB_1.Name", Value: form.Body.Tab.TAB_1.Name, Status: form.Body.Tab.TAB_1.Name ? "✓" : "⚠" });
+			results.push({ Test: "R2", Property: "form.Body.Tab.TAB_1.Parent", Value: form.Body.Tab.TAB_1.Parent ? "object" : "null", Status: form.Body.Tab.TAB_1.Parent ? "✓" : "⚠" });
+			results.push({ Test: "R3", Property: "form.Body.Tab.TAB_1.DisplayState", Value: form.Body.Tab.TAB_1.DisplayState, Status: form.Body.Tab.TAB_1.DisplayState === OptionSet.TabDisplayState.Expanded || form.Body.Tab.TAB_1.DisplayState === OptionSet.TabDisplayState.Collapsed ? "✓" : "⚠" });
+			results.push({ Test: "R4", Property: "form.Body.Tab.TAB_1.Label", Value: form.Body.Tab.TAB_1.Label, Status: form.Body.Tab.TAB_1.Label ? "✓" : "⚠" });
+			results.push({ Test: "R5", Property: "form.Body.Tab.TAB_1.Visible", Value: form.Body.Tab.TAB_1.Visible, Status: typeof form.Body.Tab.TAB_1.Visible === "boolean" ? "✓" : "⚠" });
+			results.push({ Test: "R6", Property: "form.Body.Tab.TAB_1.ContentType", Value: form.Body.Tab.TAB_1.ContentType, Status: "✓" });
+
+			// Section properties (TAB_1_SECTION_1)
+			results.push({ Test: "R7", Property: "form.Body.Tab.TAB_1.Section.TAB_1_SECTION_1", Value: form.Body.Tab.TAB_1.Section.TAB_1_SECTION_1 ? "object" : "null", Status: form.Body.Tab.TAB_1.Section.TAB_1_SECTION_1 ? "✓" : "⚠" });
+			results.push({ Test: "R8", Property: "form.Body.Tab.TAB_1.Section.TAB_1_SECTION_1.Name", Value: form.Body.Tab.TAB_1.Section.TAB_1_SECTION_1?.Name, Status: form.Body.Tab.TAB_1.Section.TAB_1_SECTION_1?.Name ? "✓" : "⚠" });
+			results.push({ Test: "R9", Property: "form.Body.Tab.TAB_1.Section.TAB_1_SECTION_1.Parent", Value: form.Body.Tab.TAB_1.Section.TAB_1_SECTION_1?.Parent ? "object" : "null", Status: form.Body.Tab.TAB_1.Section.TAB_1_SECTION_1?.Parent ? "✓" : "⚠" });
+			results.push({ Test: "R10", Property: "form.Body.Tab.TAB_1.Section.TAB_1_SECTION_1.Label", Value: form.Body.Tab.TAB_1.Section.TAB_1_SECTION_1?.Label, Status: form.Body.Tab.TAB_1.Section.TAB_1_SECTION_1?.Label ? "✓" : "⚠" });
+			results.push({ Test: "R11", Property: "form.Body.Tab.TAB_1.Section.TAB_1_SECTION_1.Visible", Value: form.Body.Tab.TAB_1.Section.TAB_1_SECTION_1?.Visible, Status: typeof form.Body.Tab.TAB_1.Section.TAB_1_SECTION_1?.Visible === "boolean" ? "✓" : "⚠" });
+
+			// Section Controls (TAB_1_SECTION_1.Controls)
+			const controls = form.Body.Tab.TAB_1.Section.TAB_1_SECTION_1?.Controls;
+			results.push({ Test: "R12", Property: "form.Body.Tab.TAB_1.Section.TAB_1_SECTION_1.Controls", Value: controls ? "object" : "null", Status: controls ? "✓" : "⚠" });
+			results.push({ Test: "R13", Property: "form.Body.Tab.TAB_1.Section.TAB_1_SECTION_1.Controls.getLength()", Value: controls?.getLength(), Status: typeof controls?.getLength() === "number" ? "✓" : "⚠" });
+			results.push({ Test: "R14", Property: "form.Body.Tab.TAB_1.Section.TAB_1_SECTION_1.Controls.get(0)", Value: controls?.get(0) ? "control" : "null", Status: "✓" });
+
+			// Test Controls.forEach
+			/** @type {string[]} */
+			let controlNames = [];
+			controls?.forEach((/** @type {any} */ ctrl, /** @type {number} */ idx) => { if (ctrl?.getName) controlNames.push(ctrl.getName()); });
+			results.push({ Test: "R15", Property: "form.Body.Tab.TAB_1.Section.TAB_1_SECTION_1.Controls.forEach()", Value: controlNames.length > 0 ? controlNames.join(", ") : "no controls", Status: "✓" });
+
+		} catch (/** @type {any} */ error) {
+			results.push({ Test: "ERR", Property: "Props Error", Value: error.message, Status: "✗" });
+		}
+
+		// =====================================================
+		// TAB SETTERS & METHODS (S-Index)
+		// =====================================================
+
+		// Setter: DisplayState
+		try {
+			const origDisplayState = form.Body.Tab.TAB_1.DisplayState;
+			form.Body.Tab.TAB_1.DisplayState = origDisplayState === OptionSet.TabDisplayState.Expanded ? OptionSet.TabDisplayState.Collapsed : OptionSet.TabDisplayState.Expanded;
+			const checkDisplayState = form.Body.Tab.TAB_1.DisplayState;
+			form.Body.Tab.TAB_1.DisplayState = origDisplayState;
+			methodResults.push({ Test: "S1", Property: "form.Body.Tab.TAB_1.DisplayState (set)", Value: `${origDisplayState} → ${checkDisplayState} → ${origDisplayState}`, Status: "✓" });
+		} catch (/** @type {any} */ e) {
+			methodResults.push({ Test: "S1", Property: "form.Body.Tab.TAB_1.DisplayState (set)", Value: e.message, Status: "✗" });
+		}
+
+		// Setter: Label
+		try {
+			const origLabel = form.Body.Tab.TAB_1.Label;
+			form.Body.Tab.TAB_1.Label = origLabel + " (TEST)";
+			const checkLabel = form.Body.Tab.TAB_1.Label;
+			form.Body.Tab.TAB_1.Label = origLabel;
+			methodResults.push({ Test: "S2", Property: "form.Body.Tab.TAB_1.Label (set)", Value: checkLabel?.includes("(TEST)") ? "Set → Restored" : "Failed", Status: checkLabel?.includes("(TEST)") ? "✓" : "✗" });
+		} catch (/** @type {any} */ e) {
+			methodResults.push({ Test: "S2", Property: "form.Body.Tab.TAB_1.Label (set)", Value: e.message, Status: "✗" });
+		}
+
+		// Setter: Visible
+		try {
+			const origVisible = form.Body.Tab.TAB_1.Visible;
+			form.Body.Tab.TAB_1.Visible = !origVisible;
+			form.Body.Tab.TAB_1.Visible = origVisible;
+			methodResults.push({ Test: "S3", Property: "form.Body.Tab.TAB_1.Visible (set)", Value: "Set → Restored", Status: "✓" });
+		} catch (/** @type {any} */ e) {
+			methodResults.push({ Test: "S3", Property: "form.Body.Tab.TAB_1.Visible (set)", Value: e.message, Status: "✗" });
+		}
+
+		// Method: Focus
+		try {
+			setTimeout(() => form.Body.Tab.TAB_1.Focus(), 500);
+			methodResults.push({ Test: "S4", Property: "form.Body.Tab.TAB_1.Focus()", Value: "Scheduled (500ms)", Status: "✓" });
+		} catch (/** @type {any} */ e) {
+			methodResults.push({ Test: "S4", Property: "form.Body.Tab.TAB_1.Focus()", Value: e.message, Status: "✗" });
+		}
+
+		// Method: AddTabStateChange / RemoveTabStateChange
+		/** @param {any} ctx */
+		const tabStateCallback = (ctx) => { };
+		try {
+			form.Body.Tab.TAB_1.AddTabStateChange(tabStateCallback);
+			form.Body.Tab.TAB_1.RemoveTabStateChange(tabStateCallback);
+			methodResults.push({ Test: "S5", Property: "form.Body.Tab.TAB_1.Add/RemoveTabStateChange", Value: "Registered & Removed", Status: "✓" });
+		} catch (/** @type {any} */ e) {
+			methodResults.push({ Test: "S5", Property: "form.Body.Tab.TAB_1.Add/RemoveTabStateChange", Value: e.message, Status: "✗" });
+		}
+
+		// =====================================================
+		// SECTION SETTERS (S-Index continued)
+		// =====================================================
+
+		// Section: Label
+		try {
+			const origSectionLabel = form.Body.Tab.TAB_1.Section.TAB_1_SECTION_1.Label;
+			form.Body.Tab.TAB_1.Section.TAB_1_SECTION_1.Label = origSectionLabel + " (TEST)";
+			const checkSectionLabel = form.Body.Tab.TAB_1.Section.TAB_1_SECTION_1.Label;
+			form.Body.Tab.TAB_1.Section.TAB_1_SECTION_1.Label = origSectionLabel;
+			methodResults.push({ Test: "S6", Property: "form.Body.Tab.TAB_1.Section.TAB_1_SECTION_1.Label (set)", Value: checkSectionLabel?.includes("(TEST)") ? "Set → Restored" : "Failed", Status: checkSectionLabel?.includes("(TEST)") ? "✓" : "✗" });
+		} catch (/** @type {any} */ e) {
+			methodResults.push({ Test: "S6", Property: "form.Body.Tab.TAB_1.Section.TAB_1_SECTION_1.Label (set)", Value: e.message, Status: "✗" });
+		}
+
+		// Section: Visible
+		try {
+			const origSectionVisible = form.Body.Tab.TAB_1.Section.TAB_1_SECTION_1.Visible;
+			form.Body.Tab.TAB_1.Section.TAB_1_SECTION_1.Visible = !origSectionVisible;
+			form.Body.Tab.TAB_1.Section.TAB_1_SECTION_1.Visible = origSectionVisible;
+			methodResults.push({ Test: "S7", Property: "form.Body.Tab.TAB_1.Section.TAB_1_SECTION_1.Visible (set)", Value: "Set → Restored", Status: "✓" });
+		} catch (/** @type {any} */ e) {
+			methodResults.push({ Test: "S7", Property: "form.Body.Tab.TAB_1.Section.TAB_1_SECTION_1.Visible (set)", Value: e.message, Status: "✗" });
+		}
+
+		// =====================================================
+		// OUTPUT
+		// =====================================================
+		const allResults = [...results, ...methodResults];
+		const passed = allResults.filter(r => r.Status === "✓").length;
+		const warnings = allResults.filter(r => r.Status === "⚠").length;
+		const failed = allResults.filter(r => r.Status === "✗").length;
+		const total = allResults.length;
+
+		console.groupCollapsed(`🎯 TEST 22: Tab Control [${startTime}] - Using: TAB_1 & TAB_1_SECTION_1 - ${passed}/${total}`);
+		console.log("%c📋 ReadOnly Properties (R1-R15)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
+		console.table(results);
+		console.log("%c⚡ Setters & Methods (S1-S7)", "font-weight: bold; font-size: 14px; color: #2196F3;");
+		console.table(methodResults);
+		console.log(`%c✅ Summary: ${passed}/${total} passed` +
+			(warnings > 0 ? ` | ⚠ ${warnings} warnings` : '') +
+			(failed > 0 ? ` | ✗ ${failed} failed` : ''),
 			"font-weight: bold; color: #4CAF50; font-size: 14px;");
 		console.groupEnd();
 	}

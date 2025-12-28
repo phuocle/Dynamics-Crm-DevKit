@@ -109,6 +109,7 @@ function loadField(formContext: any, field: any, attribute: any, control: any): 
     field.SetIsValid = (valid: boolean, message?: string) => attribute?.setIsValid(valid, message);
     field.SetNotification = (message: string, uniqueId: string) => control?.setNotification(message, uniqueId);
 }
+// Helper: find control by name using attribute.controls (works for lazy-loaded tabs)
 function findControlFromAttribute(attribute: any, controlName: string): any {
     let foundControl: any = null;
     const lowerName = controlName?.toLowerCase();
@@ -554,7 +555,6 @@ function loadWebApi(): DevKit.IWebApi {
     getter(obj, 'Online', () => {
         const online: any = {};
         online.Execute = function (request: any, successCallback?: any, errorCallback?: any) {
-            // @ts-ignore
             const promise = getOnline?.execute(request);
             if (successCallback) {
                 promise?.then(successCallback, errorCallback);
@@ -1130,7 +1130,7 @@ export class FormBase<TBody = any, THeader = any, TGrid = any, TNavigation = any
     public Process: TProcess;
     public Dialog: TDialog;
     public ExecutionContext: DevKit.IExecutionContext;
-    public Utility: DevKit.IUtility;
+    public Utility: any;
     public SidePanes: DevKit.ISidePanes;
     public WebApi: DevKit.IWebApi;
     public Copilot: DevKit.ICopilot;
