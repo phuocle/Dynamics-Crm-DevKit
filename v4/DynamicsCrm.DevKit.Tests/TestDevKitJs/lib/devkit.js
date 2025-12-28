@@ -4,10 +4,13 @@ const devKit = (function () {
         if (typeof window !== 'undefined' && window.Xrm !== undefined) {
             return window.Xrm;
         }
-        if (typeof parent !== 'undefined' && parent.Xrm !== undefined) {
-            return parent.Xrm;
+        if (typeof parent !== 'undefined' && typeof parent.window !== 'undefined' && parent.window.Xrm !== undefined) {
+            return parent.window.Xrm;
         }
-        throw new Error('Not found Xrm in the current context');
+        if (typeof parent !== 'undefined' && typeof parent.parent !== 'undefined' && typeof parent.parent.window !== 'undefined' && parent.parent.window.Xrm !== undefined) {
+            return parent.parent.window.Xrm;
+        }
+        return undefined;
     }
     function getter(obj, prop, getter) {
         Object.defineProperty(obj, prop, {
@@ -695,12 +698,7 @@ const devKit = (function () {
     }
     function loadWebApi() {
         const obj = {};
-        let xrmInstance;
-        try {
-            xrmInstance = getXrm();
-        } catch (e) {
-            xrmInstance = Xrm;
-        }
+        const xrmInstance = getXrm() ?? Xrm;
         const getWebApi = xrmInstance?.WebApi;
         const getOnline = xrmInstance?.WebApi?.online;
         const getOffline = xrmInstance?.WebApi?.offline;
@@ -1067,3 +1065,5 @@ var OptionSet;
     OptionSet.TabDisplayState = Object.freeze({ Expanded: 'expanded', Collapsed: 'collapsed' });
     OptionSet.TimerState = Object.freeze({ NotSet: 1, InProgress: 2, Warning: 3, Violated: 4, Success: 5, Expired: 6, Canceled: 7, Paused: 8 });
 })(OptionSet || (OptionSet = {}));
+
+export { devKit, OptionSet };

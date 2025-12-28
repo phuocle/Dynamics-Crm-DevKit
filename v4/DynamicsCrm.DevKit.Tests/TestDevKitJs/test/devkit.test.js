@@ -1,4 +1,4 @@
-import { OptionSet, devKit } from '../lib/devkit.js';
+﻿import { OptionSet, devKit } from '../lib/devkit.js';
 import {
     XrmMockGenerator, ContextMock, UserSettingsMock, ClientContextMock, LookupValueMock, DataMock, EntityMock, ItemCollectionMock, AttributeMock, StringControlMock,
     StringAttributeMock, UiMock, FormSelectorMock, FormItemMock, FormContextMock, OrganizationSettingsMock, EventContextMock, StageMock, StepMock, ProcessControlMock,
@@ -4122,5 +4122,96 @@ describe('devKit', () => {
         );
         expect(result).toBeDefined();
     });
+
+// ===== Tests for getXrm() coverage - added to achieve 100% coverage =====
+
+test("getXrm - parent.window.Xrm scenario (line 8)", () => {
+    const originalWindow = global.window;
+    const originalParent = global.parent;
+    const originalXrm = global.Xrm;
+
+    global.window = {};
+    global.parent = {
+        window: {
+            Xrm: {
+                WebApi: {
+                    createRecord: function () {},
+                     deleteRecord: function () {},
+                    retrieveMultipleRecords: function () {},
+                    updateRecord: function () {},
+                    online: { execute: function () {} }
+                }
+            }
+        }
+    };
+    global.Xrm = undefined;
+
+    var webApi = devKit.LoadWebApi();
+    expect(webApi).toBeDefined();
+
+    global.window = originalWindow;
+    global.parent = originalParent;
+    global.Xrm = originalXrm;
+});
+
+test("getXrm - parent.parent.window.Xrm scenario (line 11)", () => {
+    const originalWindow = global.window;
+    const originalParent = global.parent;
+    const originalXrm = global.Xrm;
+
+    global.window = {};
+    global.parent = {
+        window: {},
+        parent: {
+            window: {
+                Xrm: {
+                    WebApi: {
+                        createRecord: function () {},
+                        deleteRecord: function () {},
+                        retrieveMultipleRecords: function () {},
+                        updateRecord: function () {},
+                        online: { execute: function () {} }
+                    }
+                }
+            }
+        }
+    };
+    global.Xrm = undefined;
+
+    var webApi = devKit.LoadWebApi();
+    expect(webApi).toBeDefined();
+
+    global.window = originalWindow;
+    global.parent = originalParent;
+    global.Xrm = originalXrm;
+});
+
+test("getXrm - returns undefined, fallback to global Xrm (line 13)", () => {
+    const originalWindow = global.window;
+    const originalParent = global.parent;
+    const originalXrm = global.Xrm;
+
+    global.window = {};
+    global.parent = {
+        window: {},
+        parent: { window: {} }
+    };
+    global.Xrm = {
+        WebApi: {
+            createRecord: function () {},
+            deleteRecord: function () {},
+            retrieveMultipleRecords: function () {},
+            updateRecord: function () {},
+            online: { execute: function () {} }
+        }
+    };
+
+    var webApi = devKit.LoadWebApi();
+    expect(webApi).toBeDefined();
+
+    global.window = originalWindow;
+    global.parent = originalParent;
+    global.Xrm = originalXrm;
+});
 });
 
