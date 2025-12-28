@@ -1,22 +1,39 @@
 /**
- * Unit Tests for Account.form.ts
- * Test file: Account.Test01.form.test.ts
- * 
+ * Unit Tests for devkit.ts - Copilot and SidePanes Loading
+ * Test file: Account.Test08.copilot.sidepanes.test.ts
+ *
  * Coverage targets:
- * - FormAccount_DevKitV4.Form class constructor
- * - Form configuration (body, header, tab, grid, navigation, quick, bpf)
+ * - loadCopilot() function
+ * - loadSidePanes() function
  */
 import { XrmMockGenerator } from 'xrm-mock';
-import { FormAccount_DevKitV4 } from '../entities/Account.form';
+import { FormBase } from '../../lib/devkit';
 
 // Global setup
 let mockGlobalContext: any;
+let mockSidePanes: any;
+let mockCopilot: any;
 
-describe('Account.form.ts - Form Class', () => {
+describe('devkit.ts - Copilot and SidePanes Loading', () => {
     beforeEach(() => {
         (global as any).window = (global as any).window || {};
         XrmMockGenerator.initialise();
         (global as any).window.Xrm = (global as any).Xrm;
+
+        // Mock SidePanes
+        mockSidePanes = {
+            state: 0,
+            createPane: jest.fn().mockResolvedValue({ paneId: 'pane-1' }),
+            getPane: jest.fn().mockReturnValue({ paneId: 'pane-1', title: 'Test Pane' }),
+            getAllPanes: jest.fn().mockReturnValue([{ paneId: 'pane-1' }, { paneId: 'pane-2' }]),
+            getSelectedPane: jest.fn().mockReturnValue({ paneId: 'selected-pane' })
+        };
+
+        // Mock Copilot
+        mockCopilot = {
+            executeEvent: jest.fn().mockResolvedValue({ success: true }),
+            executePrompt: jest.fn().mockResolvedValue({ response: 'AI response' })
+        };
 
         mockGlobalContext = {
             client: { getClient: () => 'Web', getClientState: () => 'Online', getFormFactor: () => 1, isNetworkAvailable: () => true, isOffline: () => false },
@@ -32,13 +49,15 @@ describe('Account.form.ts - Form Class', () => {
             prependOrgName: (path: string) => `/org${path}`,
             getWebResourceUrl: () => '/webresources/test'
         };
+
         (Xrm.Utility as any).getGlobalContext = () => mockGlobalContext;
+        (Xrm as any).WebApi = { createRecord: jest.fn(), deleteRecord: jest.fn(), updateRecord: jest.fn(), retrieveRecord: jest.fn(), retrieveMultipleRecords: jest.fn(), execute: jest.fn(), executeMultiple: jest.fn(), online: { execute: jest.fn(), executeMultiple: jest.fn() }, offline: { isAvailable: jest.fn() } };
         (Xrm as any).Encoding = { htmlAttributeEncode: (a: string) => a, htmlDecode: (a: string) => a, htmlEncode: (a: string) => a, xmlAttributeEncode: (a: string) => a, xmlEncode: (a: string) => a };
         (Xrm as any).Navigation = { navigateTo: () => Promise.resolve(), openAlertDialog: () => Promise.resolve(), openConfirmDialog: () => Promise.resolve({ confirmed: true }), openErrorDialog: () => Promise.resolve(), openForm: () => Promise.resolve({ savedEntityReference: [] }), openFile: () => { }, openUrl: () => { }, openWebResource: () => { } };
-        (Xrm as any).App = { addGlobalNotification: () => Promise.resolve('id'), clearGlobalNotification: () => Promise.resolve(), sidePanes: { state: 0, createPane: () => Promise.resolve(), getPane: () => null, getAllPanes: () => [], getSelectedPane: () => null } };
+        (Xrm as any).App = { addGlobalNotification: () => Promise.resolve('id'), clearGlobalNotification: () => Promise.resolve(), sidePanes: mockSidePanes };
         (Xrm as any).Device = { captureAudio: () => Promise.resolve({}), captureImage: () => Promise.resolve({}), captureVideo: () => Promise.resolve({}), getBarcodeValue: () => Promise.resolve(''), getCurrentPosition: () => Promise.resolve({ coords: {} }), pickFile: () => Promise.resolve([]) };
         (Xrm as any).Panel = { loadPanel: () => { } };
-        (Xrm as any).Copilot = { executeEvent: () => Promise.resolve(), executePrompt: () => Promise.resolve() };
+        (Xrm as any).Copilot = mockCopilot;
         (Xrm.Utility as any).closeProgressIndicator = () => { };
         (Xrm.Utility as any).showProgressIndicator = () => { };
         (Xrm.Utility as any).getLearningPathAttributeName = () => 'lp';
@@ -52,7 +71,7 @@ describe('Account.form.ts - Form Class', () => {
         (Xrm.Utility as any).getEntityMainFormDescriptor = () => ({});
     });
 
-    // Helper: Create a formContext mock
+    // Helper: Create a minimal formContext
     function createFormContext() {
         return {
             data: {
@@ -64,13 +83,13 @@ describe('Account.form.ts - Form Class', () => {
                 removeOnLoad: () => { },
                 entity: {
                     attributes: { get: () => null, getLength: () => 0, forEach: () => { } },
-                    getId: () => 'account-guid',
+                    getId: () => 'entity-guid',
                     getEntityName: () => 'account',
                     getIsDirty: () => false,
                     isValid: () => true,
                     getDataXml: () => '<data/>',
-                    getEntityReference: () => ({ id: 'account-guid', entityType: 'account', name: 'Test Account' }),
-                    getPrimaryAttributeValue: () => 'Test Account',
+                    getEntityReference: () => ({ id: 'entity-guid', entityType: 'account' }),
+                    getPrimaryAttributeValue: () => 'Test',
                     addOnSave: () => { },
                     removeOnSave: () => { },
                     addOnPostSave: () => { },
@@ -83,7 +102,7 @@ describe('Account.form.ts - Form Class', () => {
                 controls: { get: () => null, getLength: () => 0, forEach: () => { } },
                 tabs: { get: () => null, getLength: () => 0, forEach: () => { } },
                 formSelector: {
-                    getCurrentItem: () => ({ getId: () => 'account-form-guid', getLabel: () => 'Account DevKitV4' }),
+                    getCurrentItem: () => ({ getId: () => 'form-guid', getLabel: () => 'Main Form' }),
                     items: { getLength: () => 0, get: () => null, forEach: () => { } }
                 },
                 getViewPortHeight: () => 800,
@@ -107,140 +126,148 @@ describe('Account.form.ts - Form Class', () => {
     }
 
     // =========================================================================
-    // Form Class Constructor Tests
+    // Copilot Tests
     // =========================================================================
-    describe('Form Constructor', () => {
-        test('Form should be instantiated with executionContext', () => {
+    describe('loadCopilot', () => {
+        test('should expose Copilot on FormBase', () => {
             const formContext = createFormContext();
             const executionContext = { getFormContext: () => formContext };
+            const form = new FormBase(executionContext, 'test', {});
 
-            const form = new FormAccount_DevKitV4.Form(executionContext);
-
-            expect(form).toBeDefined();
-            expect(form.EntityName).toBe('account');
+            expect(form.Copilot).toBeDefined();
         });
 
-        test('Form should accept optional defaultWebResourceName', () => {
+        test('ExecuteEvent should call Xrm.Copilot.executeEvent and return promise', async () => {
             const formContext = createFormContext();
             const executionContext = { getFormContext: () => formContext };
+            const form = new FormBase(executionContext, 'test', {});
 
-            const form = new FormAccount_DevKitV4.Form(executionContext, 'dev_/webresources/account');
+            const eventName = 'TestEvent';
+            const eventParameters = { param1: 'value1' };
+            const result = await form.Copilot.ExecuteEvent(eventName, eventParameters);
 
-            expect(form).toBeDefined();
+            expect(mockCopilot.executeEvent).toHaveBeenCalledWith(eventName, eventParameters);
+            expect(result).toEqual({ success: true });
         });
 
-        test('Form should expose Body property', () => {
+        test('ExecuteEvent with callbacks should invoke success callback', async () => {
             const formContext = createFormContext();
             const executionContext = { getFormContext: () => formContext };
+            const form = new FormBase(executionContext, 'test', {});
 
-            const form = new FormAccount_DevKitV4.Form(executionContext);
+            const successCallback = jest.fn();
+            const errorCallback = jest.fn();
+            const eventName = 'TestEvent';
+            const eventParameters = { param1: 'value1' };
 
-            expect(form.Body).toBeDefined();
+            form.Copilot.ExecuteEvent(eventName, eventParameters, successCallback, errorCallback);
+
+            await new Promise(resolve => setTimeout(resolve, 10));
+            expect(successCallback).toHaveBeenCalledWith({ success: true });
+            expect(errorCallback).not.toHaveBeenCalled();
         });
 
-        test('Form should expose Header property', () => {
+        test('ExecutePrompt should call Xrm.Copilot.executePrompt and return promise', async () => {
             const formContext = createFormContext();
             const executionContext = { getFormContext: () => formContext };
+            const form = new FormBase(executionContext, 'test', {});
 
-            const form = new FormAccount_DevKitV4.Form(executionContext);
+            const promptText = 'What is the weather today?';
+            const result = await form.Copilot.ExecutePrompt(promptText);
 
-            expect(form.Header).toBeDefined();
+            expect(mockCopilot.executePrompt).toHaveBeenCalledWith(promptText);
+            expect(result).toEqual({ response: 'AI response' });
         });
 
-        test('Form should expose Grid property', () => {
+        test('ExecutePrompt with callbacks should invoke success callback', async () => {
             const formContext = createFormContext();
             const executionContext = { getFormContext: () => formContext };
+            const form = new FormBase(executionContext, 'test', {});
 
-            const form = new FormAccount_DevKitV4.Form(executionContext);
+            const successCallback = jest.fn();
+            const errorCallback = jest.fn();
+            const promptText = 'Hello AI';
 
-            expect(form.Grid).toBeDefined();
-        });
+            form.Copilot.ExecutePrompt(promptText, successCallback, errorCallback);
 
-        test('Form should expose Navigation property', () => {
-            const formContext = createFormContext();
-            const executionContext = { getFormContext: () => formContext };
-
-            const form = new FormAccount_DevKitV4.Form(executionContext);
-
-            expect(form.Navigation).toBeDefined();
-        });
-
-        test('Form should expose QuickForm property', () => {
-            const formContext = createFormContext();
-            const executionContext = { getFormContext: () => formContext };
-
-            const form = new FormAccount_DevKitV4.Form(executionContext);
-
-            expect(form.QuickForm).toBeDefined();
-        });
-
-        test('Form should expose Process property', () => {
-            const formContext = createFormContext();
-            const executionContext = { getFormContext: () => formContext };
-
-            const form = new FormAccount_DevKitV4.Form(executionContext);
-
-            expect(form.Process).toBeDefined();
-        });
-
-        test('Form should expose ExecutionContext property', () => {
-            const formContext = createFormContext();
-            const executionContext = { getFormContext: () => formContext };
-
-            const form = new FormAccount_DevKitV4.Form(executionContext);
-
-            expect(form.ExecutionContext).toBeDefined();
-        });
-
-        test('Form should expose Utility property', () => {
-            const formContext = createFormContext();
-            const executionContext = { getFormContext: () => formContext };
-
-            const form = new FormAccount_DevKitV4.Form(executionContext);
-
-            expect(form.Utility).toBeDefined();
+            await new Promise(resolve => setTimeout(resolve, 10));
+            expect(successCallback).toHaveBeenCalledWith({ response: 'AI response' });
+            expect(errorCallback).not.toHaveBeenCalled();
         });
     });
 
     // =========================================================================
-    // Form Properties Tests
+    // SidePanes Tests
     // =========================================================================
-    describe('Form Properties', () => {
-        test('FormId should return the form ID', () => {
+    describe('loadSidePanes', () => {
+        test('should expose SidePanes on FormBase', () => {
             const formContext = createFormContext();
             const executionContext = { getFormContext: () => formContext };
+            const form = new FormBase(executionContext, 'test', {});
 
-            const form = new FormAccount_DevKitV4.Form(executionContext);
-
-            expect(form.FormId).toBe('account-form-guid');
+            expect(form.SidePanes).toBeDefined();
         });
 
-        test('FormLabel should return the form label', () => {
+        test('DisplayState getter should return sidePanes.state', () => {
             const formContext = createFormContext();
             const executionContext = { getFormContext: () => formContext };
+            const form = new FormBase(executionContext, 'test', {});
 
-            const form = new FormAccount_DevKitV4.Form(executionContext);
-
-            expect(form.FormLabel).toBe('Account DevKitV4');
+            expect(form.SidePanes.DisplayState).toBe(0);
         });
 
-        test('FormType should return the form type', () => {
+        test('DisplayState setter should update sidePanes.state', () => {
             const formContext = createFormContext();
             const executionContext = { getFormContext: () => formContext };
+            const form = new FormBase(executionContext, 'test', {});
 
-            const form = new FormAccount_DevKitV4.Form(executionContext);
-
-            expect(form.FormType).toBe(2);
+            form.SidePanes.DisplayState = 1;
+            expect(mockSidePanes.state).toBe(1);
         });
 
-        test('EntityId should return the entity ID', () => {
+        test('Create should call sidePanes.createPane', async () => {
             const formContext = createFormContext();
             const executionContext = { getFormContext: () => formContext };
+            const form = new FormBase(executionContext, 'test', {});
 
-            const form = new FormAccount_DevKitV4.Form(executionContext);
+            const paneOptions = { paneId: 'test-pane', title: 'Test Pane' };
+            const successCallback = jest.fn();
 
-            expect(form.EntityId).toBe('account-guid');
+            form.SidePanes.Create(paneOptions, successCallback);
+
+            await new Promise(resolve => setTimeout(resolve, 10));
+            expect(mockSidePanes.createPane).toHaveBeenCalledWith(paneOptions);
+            expect(successCallback).toHaveBeenCalledWith({ paneId: 'pane-1' });
+        });
+
+        test('Get should call sidePanes.getPane', () => {
+            const formContext = createFormContext();
+            const executionContext = { getFormContext: () => formContext };
+            const form = new FormBase(executionContext, 'test', {});
+
+            const result = form.SidePanes.Get('pane-1');
+            expect(mockSidePanes.getPane).toHaveBeenCalledWith('pane-1');
+            expect(result).toEqual({ paneId: 'pane-1', title: 'Test Pane' });
+        });
+
+        test('GetAll should call sidePanes.getAllPanes', () => {
+            const formContext = createFormContext();
+            const executionContext = { getFormContext: () => formContext };
+            const form = new FormBase(executionContext, 'test', {});
+
+            const result = form.SidePanes.GetAll();
+            expect(mockSidePanes.getAllPanes).toHaveBeenCalled();
+            expect(result).toEqual([{ paneId: 'pane-1' }, { paneId: 'pane-2' }]);
+        });
+
+        test('GetSelected should call sidePanes.getSelectedPane', () => {
+            const formContext = createFormContext();
+            const executionContext = { getFormContext: () => formContext };
+            const form = new FormBase(executionContext, 'test', {});
+
+            const result = form.SidePanes.GetSelected();
+            expect(mockSidePanes.getSelectedPane).toHaveBeenCalled();
+            expect(result).toEqual({ paneId: 'selected-pane' });
         });
     });
 });
-

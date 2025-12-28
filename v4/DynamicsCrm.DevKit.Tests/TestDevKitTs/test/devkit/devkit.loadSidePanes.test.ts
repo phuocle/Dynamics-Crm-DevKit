@@ -11,7 +11,7 @@
  * - Edge cases (null/undefined Xrm.App.sidePanes)
  */
 import { XrmMockGenerator } from 'xrm-mock';
-import { FormBase } from '../lib/devkit';
+import { FormBase } from '../../lib/devkit';
 
 describe('loadSidePanes Tests', () => {
     beforeEach(() => {

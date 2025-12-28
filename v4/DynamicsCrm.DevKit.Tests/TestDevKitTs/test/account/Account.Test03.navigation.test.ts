@@ -1,20 +1,18 @@
 /**
- * Unit Tests for devkit.ts - Additional Edge Cases
- * Test file: Account.Test12.edge.cases.test.ts
+ * Unit Tests for devkit.ts - Navigation Loading
+ * Test file: Account.Test03.navigation.test.ts
  *
  * Coverage targets:
- * - Lines 149: attribute from control fallback
- * - Lines 330: grid selectedRows with getData
- * - Lines 687-689, 695-697: Refresh/Save with callbacks
- * - Lines 1079-1085: Boolean parsing edge cases
+ * - loadNavigations() function
+ * - Navigation item getters and setters
  */
 import { XrmMockGenerator } from 'xrm-mock';
-import { FormBase, createWebApiEntity } from '../lib/devkit';
+import { FormBase } from '../../lib/devkit';
 
 // Global setup
 let mockGlobalContext: any;
 
-describe('devkit.ts - Edge Cases', () => {
+describe('devkit.ts - Navigation Loading', () => {
     beforeEach(() => {
         (global as any).window = (global as any).window || {};
         XrmMockGenerator.initialise();
@@ -35,7 +33,6 @@ describe('devkit.ts - Edge Cases', () => {
             getWebResourceUrl: () => '/webresources/test'
         };
         (Xrm.Utility as any).getGlobalContext = () => mockGlobalContext;
-        (Xrm as any).WebApi = { createRecord: jest.fn(), deleteRecord: jest.fn(), updateRecord: jest.fn(), retrieveRecord: jest.fn(), retrieveMultipleRecords: jest.fn(), execute: jest.fn(), executeMultiple: jest.fn(), online: { execute: jest.fn(), executeMultiple: jest.fn() }, offline: { isAvailable: jest.fn() } };
         (Xrm as any).Encoding = { htmlAttributeEncode: (a: string) => a, htmlDecode: (a: string) => a, htmlEncode: (a: string) => a, xmlAttributeEncode: (a: string) => a, xmlEncode: (a: string) => a };
         (Xrm as any).Navigation = { navigateTo: () => Promise.resolve(), openAlertDialog: () => Promise.resolve(), openConfirmDialog: () => Promise.resolve({ confirmed: true }), openErrorDialog: () => Promise.resolve(), openForm: () => Promise.resolve({ savedEntityReference: [] }), openFile: () => { }, openUrl: () => { }, openWebResource: () => { } };
         (Xrm as any).App = { addGlobalNotification: () => Promise.resolve('id'), clearGlobalNotification: () => Promise.resolve(), sidePanes: { state: 0, createPane: () => Promise.resolve(), getPane: () => null, getAllPanes: () => [], getSelectedPane: () => null } };
@@ -55,13 +52,28 @@ describe('devkit.ts - Edge Cases', () => {
         (Xrm.Utility as any).getEntityMainFormDescriptor = () => ({});
     });
 
-    function createFormContextWithCallbacks() {
+    // Helper: Create mock navigation items
+    function createMockNavigationItem(id: string, label: string, visible: boolean = true) {
+        let _label = label;
+        let _visible = visible;
+        return {
+            getId: () => id,
+            getLabel: () => _label,
+            setLabel: (val: string) => { _label = val; },
+            getVisible: () => _visible,
+            setVisible: (val: boolean) => { _visible = val; },
+            setFocus: jest.fn()
+        };
+    }
+
+    // Helper: Create a formContext with navigation items
+    function createFormContextWithNavigation(navigationItems: any[]) {
         return {
             data: {
                 getIsDirty: () => false,
                 isValid: () => true,
-                refresh: jest.fn().mockResolvedValue(undefined),
-                save: jest.fn().mockResolvedValue(undefined),
+                refresh: () => Promise.resolve(),
+                save: () => Promise.resolve(),
                 addOnLoad: () => { },
                 removeOnLoad: () => { },
                 entity: {
@@ -88,13 +100,11 @@ describe('devkit.ts - Edge Cases', () => {
                     getCurrentItem: () => ({ getId: () => 'form-guid', getLabel: () => 'Main Form' }),
                     items: { getLength: () => 0, get: () => null, forEach: () => { } }
                 },
-                headerSection: {
-                    getBodyVisible: () => true,
-                    setBodyVisible: jest.fn(),
-                    getCommandBarVisible: () => true,
-                    setCommandBarVisible: jest.fn(),
-                    getTabNavigatorVisible: () => true,
-                    setTabNavigatorVisible: jest.fn()
+                navigation: {
+                    items: {
+                        getLength: () => navigationItems.length,
+                        get: (index: number) => navigationItems[index]
+                    }
                 },
                 getViewPortHeight: () => 800,
                 getViewPortWidth: () => 1200,
@@ -116,9 +126,152 @@ describe('devkit.ts - Edge Cases', () => {
         };
     }
 
-    describe('Refresh and Save with Callbacks', () => {
-        test('Refresh with successCallback should call callback', async () => {
-            const formContext = createFormContextWithCallbacks();
+    describe('loadNavigations', () => {
+        test('should load navigation items and expose properties', () => {
+            const navItem1 = createMockNavigationItem('nav_contact', 'Contacts', true);
+            const navItem2 = createMockNavigationItem('nav_opportunity', 'Opportunities', false);
+            const formContext = createFormContextWithNavigation([navItem1, navItem2]);
+            const executionContext = { getFormContext: () => formContext };
+
+            const form = new FormBase(executionContext, 'test', {
+                body: [],
+                header: [],
+                tab: [],
+                grid: [],
+                navigation: ['nav_contact', 'nav_opportunity'],
+                quick: [],
+                bpf: []
+            });
+
+            expect(form.Navigation).toBeDefined();
+            expect(form.Navigation.nav_contact).toBeDefined();
+            expect(form.Navigation.nav_opportunity).toBeDefined();
+        });
+
+        test('should return correct Id property', () => {
+            const navItem = createMockNavigationItem('nav_contact', 'Contacts');
+            const formContext = createFormContextWithNavigation([navItem]);
+            const executionContext = { getFormContext: () => formContext };
+
+            const form = new FormBase(executionContext, 'test', {
+                body: [],
+                header: [],
+                tab: [],
+                grid: [],
+                navigation: ['nav_contact'],
+                quick: [],
+                bpf: []
+            });
+
+            expect(form.Navigation.nav_contact.Id).toBe('nav_contact');
+        });
+
+        test('should handle Label getter and setter', () => {
+            const navItem = createMockNavigationItem('nav_contact', 'Contacts');
+            const formContext = createFormContextWithNavigation([navItem]);
+            const executionContext = { getFormContext: () => formContext };
+
+            const form = new FormBase(executionContext, 'test', {
+                body: [],
+                header: [],
+                tab: [],
+                grid: [],
+                navigation: ['nav_contact'],
+                quick: [],
+                bpf: []
+            });
+
+            expect(form.Navigation.nav_contact.Label).toBe('Contacts');
+
+            form.Navigation.nav_contact.Label = 'Updated Label';
+            expect(form.Navigation.nav_contact.Label).toBe('Updated Label');
+        });
+
+        test('should handle Visible getter and setter', () => {
+            const navItem = createMockNavigationItem('nav_contact', 'Contacts', true);
+            const formContext = createFormContextWithNavigation([navItem]);
+            const executionContext = { getFormContext: () => formContext };
+
+            const form = new FormBase(executionContext, 'test', {
+                body: [],
+                header: [],
+                tab: [],
+                grid: [],
+                navigation: ['nav_contact'],
+                quick: [],
+                bpf: []
+            });
+
+            expect(form.Navigation.nav_contact.Visible).toBe(true);
+
+            form.Navigation.nav_contact.Visible = false;
+            expect(form.Navigation.nav_contact.Visible).toBe(false);
+        });
+
+        test('should call Focus method', () => {
+            const navItem = createMockNavigationItem('nav_contact', 'Contacts');
+            const formContext = createFormContextWithNavigation([navItem]);
+            const executionContext = { getFormContext: () => formContext };
+
+            const form = new FormBase(executionContext, 'test', {
+                body: [],
+                header: [],
+                tab: [],
+                grid: [],
+                navigation: ['nav_contact'],
+                quick: [],
+                bpf: []
+            });
+
+            form.Navigation.nav_contact.Focus();
+            expect(navItem.setFocus).toHaveBeenCalled();
+        });
+
+        test('should handle multiple navigation items', () => {
+            const items = [
+                createMockNavigationItem('nav_contact', 'Contacts'),
+                createMockNavigationItem('nav_opportunity', 'Opportunities'),
+                createMockNavigationItem('nav_case', 'Cases')
+            ];
+            const formContext = createFormContextWithNavigation(items);
+            const executionContext = { getFormContext: () => formContext };
+
+            const form = new FormBase(executionContext, 'test', {
+                body: [],
+                header: [],
+                tab: [],
+                grid: [],
+                navigation: ['nav_contact', 'nav_opportunity', 'nav_case'],
+                quick: [],
+                bpf: []
+            });
+
+            expect(form.Navigation.nav_contact.Id).toBe('nav_contact');
+            expect(form.Navigation.nav_opportunity.Id).toBe('nav_opportunity');
+            expect(form.Navigation.nav_case.Id).toBe('nav_case');
+        });
+
+        test('should handle navigation item not found', () => {
+            const formContext = createFormContextWithNavigation([]);
+            const executionContext = { getFormContext: () => formContext };
+
+            const form = new FormBase(executionContext, 'test', {
+                body: [],
+                header: [],
+                tab: [],
+                grid: [],
+                navigation: ['nav_nonexistent'],
+                quick: [],
+                bpf: []
+            });
+
+            // Should still create the navigation object, but getters return undefined
+            expect(form.Navigation.nav_nonexistent).toBeDefined();
+            expect(form.Navigation.nav_nonexistent.Id).toBeUndefined();
+        });
+
+        test('should handle no navigation items configured', () => {
+            const formContext = createFormContextWithNavigation([]);
             const executionContext = { getFormContext: () => formContext };
 
             const form = new FormBase(executionContext, 'test', {
@@ -131,187 +284,7 @@ describe('devkit.ts - Edge Cases', () => {
                 bpf: []
             });
 
-            const successCallback = jest.fn();
-            const errorCallback = jest.fn();
-
-            form.Refresh(true, successCallback, errorCallback);
-
-            await new Promise(resolve => setTimeout(resolve, 10));
-            expect(successCallback).toHaveBeenCalled();
-        });
-
-        test('Save with successCallback should call callback', async () => {
-            const formContext = createFormContextWithCallbacks();
-            const executionContext = { getFormContext: () => formContext };
-
-            const form = new FormBase(executionContext, 'test', {
-                body: [],
-                header: [],
-                tab: [],
-                grid: [],
-                navigation: [],
-                quick: [],
-                bpf: []
-            });
-
-            const successCallback = jest.fn();
-            const errorCallback = jest.fn();
-
-            form.Save({}, successCallback, errorCallback);
-
-            await new Promise(resolve => setTimeout(resolve, 10));
-            expect(successCallback).toHaveBeenCalled();
-        });
-
-        test('Refresh without callback should return promise', async () => {
-            const formContext = createFormContextWithCallbacks();
-            const executionContext = { getFormContext: () => formContext };
-
-            const form = new FormBase(executionContext, 'test', {
-                body: [],
-                header: [],
-                tab: [],
-                grid: [],
-                navigation: [],
-                quick: [],
-                bpf: []
-            });
-
-            const result = form.Refresh(false);
-            expect(result).toBeInstanceOf(Promise);
-            await result;
-        });
-
-        test('Save without callback should return promise', async () => {
-            const formContext = createFormContextWithCallbacks();
-            const executionContext = { getFormContext: () => formContext };
-
-            const form = new FormBase(executionContext, 'test', {
-                body: [],
-                header: [],
-                tab: [],
-                grid: [],
-                navigation: [],
-                quick: [],
-                bpf: []
-            });
-
-            const result = form.Save({});
-            expect(result).toBeInstanceOf(Promise);
-            await result;
-        });
-    });
-
-    describe('Attribute from Control Fallback', () => {
-        test('should get attribute from control when attribute not found directly', () => {
-            const attribute = {
-                getName: () => 'myfield',
-                getValue: () => 'Test Value',
-                setValue: jest.fn(),
-                getAttributeType: () => 'string',
-                getFormat: () => 'text',
-                getIsDirty: () => false,
-                isValid: () => true,
-                getParent: () => ({}),
-                getRequiredLevel: () => 'none',
-                setRequiredLevel: jest.fn(),
-                getSubmitMode: () => 'always',
-                setSubmitMode: jest.fn(),
-                addOnChange: jest.fn(),
-                removeOnChange: jest.fn(),
-                fireOnChange: jest.fn(),
-                controls: { forEach: jest.fn() }
-            };
-
-            const control = {
-                getName: () => 'myfield',
-                getLabel: () => 'My Field',
-                getControlType: () => 'standard',
-                getDisabled: () => false,
-                setDisabled: jest.fn(),
-                getVisible: () => true,
-                setVisible: jest.fn(),
-                setFocus: jest.fn(),
-                getAttribute: () => attribute,  // Control has attribute
-                getParent: () => ({ getName: () => 'section' })
-            };
-
-            // No attribute in getAttribute, but control exists and has getAttribute
-            const formContext = {
-                data: {
-                    getIsDirty: () => false,
-                    isValid: () => true,
-                    refresh: jest.fn().mockResolvedValue(undefined),
-                    save: jest.fn().mockResolvedValue(undefined),
-                    addOnLoad: () => { },
-                    removeOnLoad: () => { },
-                    entity: {
-                        attributes: { get: () => null, getLength: () => 0, forEach: () => { } },
-                        getId: () => 'entity-guid',
-                        getEntityName: () => 'account',
-                        getIsDirty: () => false,
-                        isValid: () => true,
-                        getDataXml: () => '<data/>',
-                        getEntityReference: () => ({ id: 'entity-guid', entityType: 'account' }),
-                        getPrimaryAttributeValue: () => 'Test',
-                        addOnSave: () => { },
-                        removeOnSave: () => { },
-                        addOnPostSave: () => { },
-                        removeOnPostSave: () => { }
-                    },
-                    process: null
-                },
-                ui: {
-                    getFormType: () => 2,
-                    controls: { get: () => null, getLength: () => 0, forEach: () => { } },
-                    tabs: { get: () => null, getLength: () => 0, forEach: () => { } },
-                    formSelector: {
-                        getCurrentItem: () => ({ getId: () => 'form-guid', getLabel: () => 'Main Form' }),
-                        items: { getLength: () => 0, get: () => null, forEach: () => { } }
-                    },
-                    headerSection: {
-                        getBodyVisible: () => true,
-                        setBodyVisible: jest.fn(),
-                        getCommandBarVisible: () => true,
-                        setCommandBarVisible: jest.fn(),
-                        getTabNavigatorVisible: () => true,
-                        setTabNavigatorVisible: jest.fn()
-                    },
-                    getViewPortHeight: () => 800,
-                    getViewPortWidth: () => 1200,
-                    clearFormNotification: () => true,
-                    setFormNotification: () => true,
-                    close: () => { },
-                    refreshRibbon: () => { },
-                    addLoaded: () => { },
-                    removeLoaded: () => { },
-                    addOnLoad: () => { },
-                    removeOnLoad: () => { },
-                    setFormEntityName: () => { },
-                    process: null,
-                    quickForms: { get: () => null, getLength: () => 0 }
-                },
-                getControl: (name: string) => name === 'myfield' ? control : null,
-                getAttribute: () => null, // No attribute directly
-                getFormContext: function () { return this; }
-            };
-
-            const executionContext = { getFormContext: () => formContext };
-
-            const form = new FormBase(executionContext, 'test', {
-                body: ['myfield'],
-                header: [],
-                tab: [],
-                grid: [],
-                navigation: [],
-                quick: [],
-                bpf: []
-            });
-
-            // Should still work because attribute is obtained from control.getAttribute()
-            expect(form.Body.myfield).toBeDefined();
-            expect(form.Body.myfield.Value).toBe('Test Value');
+            expect(form.Navigation).toEqual({});
         });
     });
 });
-

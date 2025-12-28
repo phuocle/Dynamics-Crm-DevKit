@@ -6,10 +6,20 @@ echo.
 
 echo [1/4] Running unit tests...
 echo.
+echo Running devkit-test (with coverage)...
 call npm run devkit-test
 if errorlevel 1 (
     echo.
-    echo [ERROR] Tests failed! Deployment aborted.
+    echo [ERROR] devkit-test failed! Deployment aborted.
+    pause
+    exit /b 1
+)
+echo.
+echo Running account-test (with coverage)...
+call npm run account-test
+if errorlevel 1 (
+    echo.
+    echo [ERROR] account-test failed! Deployment aborted.
     pause
     exit /b 1
 )

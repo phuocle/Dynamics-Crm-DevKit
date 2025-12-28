@@ -8,7 +8,7 @@
  * - Various utility methods (NavigateTo, OpenForm, etc.)
  */
 import { XrmMockGenerator } from 'xrm-mock';
-import { FormBase } from '../lib/devkit';
+import { FormBase } from '../../lib/devkit';
 
 // Global setup
 let mockGlobalContext: any;

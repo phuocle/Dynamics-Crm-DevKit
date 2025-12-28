@@ -10,7 +10,7 @@
  * - Body fields loading
  */
 import { XrmMockGenerator } from 'xrm-mock';
-import { FormBase } from '../lib/devkit';
+import { FormBase } from '../../lib/devkit';
 
 describe('loadQuickForms Tests', () => {
     beforeEach(() => {

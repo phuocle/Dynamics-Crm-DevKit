@@ -13,7 +13,7 @@
  * Reference: Account.form.ts navigation = ['nav_msa_account_managingpartner']
  */
 import { XrmMockGenerator } from 'xrm-mock';
-import { FormBase } from '../lib/devkit';
+import { FormBase } from '../../lib/devkit';
 
 describe('loadNavigations Tests', () => {
     beforeEach(() => {

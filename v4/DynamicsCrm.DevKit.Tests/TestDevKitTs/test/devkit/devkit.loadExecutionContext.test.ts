@@ -8,7 +8,7 @@
  * - Edge cases (null/undefined executionContext)
  */
 import { XrmMockGenerator } from 'xrm-mock';
-import { FormBase } from '../lib/devkit';
+import { FormBase } from '../../lib/devkit';
 
 describe('loadExecutionContext Tests', () => {
     beforeEach(() => {

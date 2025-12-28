@@ -8,7 +8,7 @@
  * - RetrieveRecords and RetrieveRecord with factory pattern
  */
 import { XrmMockGenerator } from 'xrm-mock';
-import { FormBase } from '../lib/devkit';
+import { FormBase } from '../../lib/devkit';
 
 // Global setup
 let mockGlobalContext: any;
@@ -227,15 +227,15 @@ describe('devkit.ts - WebApi Loading', () => {
             expect(successCallback).toHaveBeenCalled();
         });
 
-        test('Execute should call WebApi.execute', async () => {
+        test('Execute should call WebApi.online.execute', async () => {
             const formContext = createFormContext();
             const executionContext = { getFormContext: () => formContext };
             const form = new FormBase(executionContext, 'test', {});
 
             const request = { getMetadata: () => ({}) };
             const result = await form.WebApi.Execute(request);
-            expect(mockWebApi.execute).toHaveBeenCalledWith(request);
-            expect(result).toEqual({ response: 'ok' });
+            expect(mockWebApi.online.execute).toHaveBeenCalledWith(request);
+            expect(result).toEqual({ response: 'online-ok' });
         });
 
         test('Execute with callbacks should invoke success callback', async () => {
@@ -248,18 +248,18 @@ describe('devkit.ts - WebApi Loading', () => {
             form.WebApi.Execute(request, successCallback);
 
             await new Promise(resolve => setTimeout(resolve, 10));
-            expect(successCallback).toHaveBeenCalledWith({ response: 'ok' });
+            expect(successCallback).toHaveBeenCalledWith({ response: 'online-ok' });
         });
 
-        test('ExecuteMultiple should call WebApi.executeMultiple', async () => {
+        test('ExecuteMultiple should call WebApi.online.executeMultiple', async () => {
             const formContext = createFormContext();
             const executionContext = { getFormContext: () => formContext };
             const form = new FormBase(executionContext, 'test', {});
 
             const requests = [{ getMetadata: () => ({}) }];
             const result = await form.WebApi.ExecuteMultiple(requests);
-            expect(mockWebApi.executeMultiple).toHaveBeenCalledWith(requests);
-            expect(result).toEqual([{ response: 'ok' }]);
+            expect(mockWebApi.online.executeMultiple).toHaveBeenCalledWith(requests);
+            expect(result).toEqual([{ response: 'online-ok' }]);
         });
 
         test('ExecuteMultiple with callbacks should invoke success callback', async () => {
@@ -272,7 +272,7 @@ describe('devkit.ts - WebApi Loading', () => {
             form.WebApi.ExecuteMultiple(requests, successCallback);
 
             await new Promise(resolve => setTimeout(resolve, 10));
-            expect(successCallback).toHaveBeenCalledWith([{ response: 'ok' }]);
+            expect(successCallback).toHaveBeenCalledWith([{ response: 'online-ok' }]);
         });
 
         test('Online.Execute should call WebApi.online.execute', async () => {

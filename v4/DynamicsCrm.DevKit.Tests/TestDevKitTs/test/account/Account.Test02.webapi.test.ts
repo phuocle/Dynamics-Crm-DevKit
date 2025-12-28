@@ -7,8 +7,8 @@
  * - AccountFieldConfig object structure
  * - IAccountApi interface implementation
  */
-import { AccountApi, IAccountApi } from '../entities/Account.webapi';
-import { createWebApiEntity } from '../lib/devkit';
+import { AccountApi, IAccountApi } from '../../entities/Account.webapi';
+import { createWebApiEntity } from '../../lib/devkit';
 
 describe('Account.webapi.ts - WebApi Class', () => {
     // =========================================================================

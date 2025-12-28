@@ -9,7 +9,7 @@
  * - Lines 139-154: Attribute fallback scenarios
  */
 import { XrmMockGenerator } from 'xrm-mock';
-import { FormBase } from '../lib/devkit';
+import { FormBase } from '../../lib/devkit';
 
 // Global setup
 let mockGlobalContext: any;

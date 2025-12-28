@@ -14,7 +14,7 @@
  * Reference: Account.webapi.ts (AccountApi class)
  */
 import { XrmMockGenerator } from 'xrm-mock';
-import { FormBase } from '../lib/devkit';
+import { FormBase } from '../../lib/devkit';
 
 // Simple DOMParser mock for Node.js environment (required for FetchXML parsing in devkit.ts)
 class MockElement {
@@ -725,7 +725,7 @@ describe('loadWebApi Tests', () => {
 
     describe('Type Parsers - DateTime', () => {
         function createFieldWithType(entity: Record<string, any>, type?: string): any {
-            const { defineWebApiField } = require('../lib/devkit');
+            const { defineWebApiField } = require('../../lib/devkit');
             const obj: any = { FormattedValue: {} };
             const upsertEntity: Record<string, any> = {};
             defineWebApiField(obj, 'testField', entity, {
@@ -770,7 +770,7 @@ describe('loadWebApi Tests', () => {
 
     describe('Type Parsers - Integer', () => {
         function createFieldWithType(entity: Record<string, any>, type?: string): any {
-            const { defineWebApiField } = require('../lib/devkit');
+            const { defineWebApiField } = require('../../lib/devkit');
             const obj: any = { FormattedValue: {} };
             const upsertEntity: Record<string, any> = {};
             defineWebApiField(obj, 'testField', entity, {
@@ -802,7 +802,7 @@ describe('loadWebApi Tests', () => {
 
     describe('Type Parsers - Number', () => {
         function createFieldWithType(entity: Record<string, any>, type?: string): any {
-            const { defineWebApiField } = require('../lib/devkit');
+            const { defineWebApiField } = require('../../lib/devkit');
             const obj: any = { FormattedValue: {} };
             const upsertEntity: Record<string, any> = {};
             defineWebApiField(obj, 'testField', entity, {
@@ -828,7 +828,7 @@ describe('loadWebApi Tests', () => {
 
     describe('Type Parsers - Boolean', () => {
         function createFieldWithType(entity: Record<string, any>, type?: string): any {
-            const { defineWebApiField } = require('../lib/devkit');
+            const { defineWebApiField } = require('../../lib/devkit');
             const obj: any = { FormattedValue: {} };
             const upsertEntity: Record<string, any> = {};
             defineWebApiField(obj, 'testField', entity, {
@@ -882,7 +882,7 @@ describe('loadWebApi Tests', () => {
 
     describe('defineWebApiField', () => {
         function createField(entity: Record<string, any>, config: any): { obj: any; upsert: any } {
-            const { defineWebApiField } = require('../lib/devkit');
+            const { defineWebApiField } = require('../../lib/devkit');
             const obj: any = { FormattedValue: {} };
             const upsertEntity: Record<string, any> = {};
             defineWebApiField(obj, 'testField', entity, config, upsertEntity);
@@ -1108,7 +1108,7 @@ describe('loadWebApi Tests', () => {
 
     describe('createWebApiEntity', () => {
         test('should create entity with basic properties', () => {
-            const { createWebApiEntity } = require('../lib/devkit');
+            const { createWebApiEntity } = require('../../lib/devkit');
             const entity = {
                 accountid: 'acc-guid-123',
                 name: 'Test Account',
@@ -1129,7 +1129,7 @@ describe('loadWebApi Tests', () => {
         });
 
         test('should create entity with undefined entity (for create operations)', () => {
-            const { createWebApiEntity } = require('../lib/devkit');
+            const { createWebApiEntity } = require('../../lib/devkit');
             const fieldConfig = {
                 Name: { logicalName: 'name' }
             };
@@ -1142,7 +1142,7 @@ describe('loadWebApi Tests', () => {
         });
 
         test('should provide getAliasedValue for linked entity values', () => {
-            const { createWebApiEntity } = require('../lib/devkit');
+            const { createWebApiEntity } = require('../../lib/devkit');
             const entity = {
                 'contact_alias.fullname': 'John Doe',
                 'contact_alias.contactid': 'contact-guid'
@@ -1154,7 +1154,7 @@ describe('loadWebApi Tests', () => {
         });
 
         test('should provide getAliasedValue for MultiOptionSet', () => {
-            const { createWebApiEntity } = require('../lib/devkit');
+            const { createWebApiEntity } = require('../../lib/devkit');
             const entity = {
                 'alias.categories': '1,2,3'
             };
@@ -1164,7 +1164,7 @@ describe('loadWebApi Tests', () => {
         });
 
         test('should provide getAliasedFormattedValue', () => {
-            const { createWebApiEntity } = require('../lib/devkit');
+            const { createWebApiEntity } = require('../../lib/devkit');
             const entity = {
                 'alias.status@OData.Community.Display.V1.FormattedValue': 'Active'
             };
@@ -1175,7 +1175,7 @@ describe('loadWebApi Tests', () => {
         });
 
         test('should provide getAliasedFormattedValue for MultiOptionSet', () => {
-            const { createWebApiEntity } = require('../lib/devkit');
+            const { createWebApiEntity } = require('../../lib/devkit');
             const entity = {
                 'alias.cats@OData.Community.Display.V1.FormattedValue': 'Cat1; Cat2; Cat3'
             };
@@ -1185,7 +1185,7 @@ describe('loadWebApi Tests', () => {
         });
 
         test('should define fields from fieldConfig', () => {
-            const { createWebApiEntity } = require('../lib/devkit');
+            const { createWebApiEntity } = require('../../lib/devkit');
             const entity = {
                 numberofemployees: 100,
                 revenue: 1000000.50,
@@ -1213,7 +1213,7 @@ describe('loadWebApi Tests', () => {
 
     describe('AccountApi Integration (Account.webapi.ts style)', () => {
         test('should create AccountApi instance with entity data', () => {
-            const { createWebApiEntity } = require('../lib/devkit');
+            const { createWebApiEntity } = require('../../lib/devkit');
             const entity = {
                 accountid: 'acc-123',
                 name: 'Contoso Ltd',
@@ -1247,7 +1247,7 @@ describe('loadWebApi Tests', () => {
         });
 
         test('should create empty AccountApi for create operations', () => {
-            const { createWebApiEntity } = require('../lib/devkit');
+            const { createWebApiEntity } = require('../../lib/devkit');
             const fieldConfig = {
                 Name: { logicalName: 'name' },
                 Revenue: { logicalName: 'revenue', type: 'Number' }
@@ -1270,7 +1270,7 @@ describe('loadWebApi Tests', () => {
 
     describe('Type Parsers - DateTime with Invalid Date object (line 1026)', () => {
         function createFieldWithType(entity: Record<string, any>, type?: string): any {
-            const { defineWebApiField } = require('../lib/devkit');
+            const { defineWebApiField } = require('../../lib/devkit');
             const obj: any = { FormattedValue: {} };
             const upsertEntity: Record<string, any> = {};
             defineWebApiField(obj, 'testField', entity, {
@@ -1298,7 +1298,7 @@ describe('loadWebApi Tests', () => {
 
     describe('Type Parsers - Unknown Type Fallback (line 1060)', () => {
         function createFieldWithType(entity: Record<string, any>, type?: string): any {
-            const { defineWebApiField } = require('../lib/devkit');
+            const { defineWebApiField } = require('../../lib/devkit');
             const obj: any = { FormattedValue: {} };
             const upsertEntity: Record<string, any> = {};
             defineWebApiField(obj, 'testField', entity, {

@@ -18,7 +18,7 @@
  * - (parent.parent.window as any).Xrm !== undefined
  */
 import { XrmMockGenerator } from 'xrm-mock';
-import { FormBase } from '../lib/devkit';
+import { FormBase } from '../../lib/devkit';
 
 describe('getXrm Tests', () => {
     // Store original global state

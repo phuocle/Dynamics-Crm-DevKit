@@ -8,7 +8,7 @@
  * - Edge cases: null Copilot, undefined Xrm
  */
 import { XrmMockGenerator } from 'xrm-mock';
-import { FormBase } from '../lib/devkit';
+import { FormBase } from '../../lib/devkit';
 
 describe('loadCopilot Tests', () => {
     beforeEach(() => {

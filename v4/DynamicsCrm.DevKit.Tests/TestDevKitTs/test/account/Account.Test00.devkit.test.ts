@@ -9,7 +9,7 @@
  * - createWebApiEntity() function
  */
 import { XrmMockGenerator } from 'xrm-mock';
-import { FormBase, createWebApiEntity } from '../lib/devkit';
+import { FormBase, createWebApiEntity } from '../../lib/devkit';
 
 // Global setup
 let mockGlobalContext: any;

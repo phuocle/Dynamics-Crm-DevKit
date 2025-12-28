@@ -3,7 +3,7 @@
  * Using xrm-mock framework for Dynamics 365/Xrm API simulation
  */
 import { XrmMockGenerator } from 'xrm-mock';
-import { FormBase } from '../lib/devkit';
+import { FormBase } from '../../lib/devkit';
 
 // Global setup
 let mockGlobalContext: any;

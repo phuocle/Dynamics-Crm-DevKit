@@ -9,7 +9,7 @@ import { XrmMockGenerator } from 'xrm-mock';
 // which calls loadUtility internally
 
 // Import the devkit module to access FormBase
-import { FormBase } from '../lib/devkit';
+import { FormBase } from '../../lib/devkit';
 
 // Global context object shared across tests
 let mockGlobalContext: any;

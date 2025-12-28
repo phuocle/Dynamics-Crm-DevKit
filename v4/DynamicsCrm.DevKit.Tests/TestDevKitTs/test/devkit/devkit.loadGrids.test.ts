@@ -16,7 +16,7 @@
  * Reference: Account.form.ts grid = ['Contacts']
  */
 import { XrmMockGenerator } from 'xrm-mock';
-import { FormBase } from '../lib/devkit';
+import { FormBase } from '../../lib/devkit';
 
 describe('loadGrids Tests', () => {
     beforeEach(() => {
