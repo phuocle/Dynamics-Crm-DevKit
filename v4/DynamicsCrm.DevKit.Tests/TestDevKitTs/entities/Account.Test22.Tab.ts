@@ -41,6 +41,17 @@ export function TestTab(form: FormAccount_DevKitV4.Form): void {
         results.push({ Test: "R10", Property: "form.Body.Tab.TAB_1.Section.TAB_1_SECTION_1.Label", Value: form.Body.Tab.TAB_1.Section.TAB_1_SECTION_1?.Label, Status: form.Body.Tab.TAB_1.Section.TAB_1_SECTION_1?.Label ? "✓" : "⚠" });
         results.push({ Test: "R11", Property: "form.Body.Tab.TAB_1.Section.TAB_1_SECTION_1.Visible", Value: form.Body.Tab.TAB_1.Section.TAB_1_SECTION_1?.Visible, Status: typeof form.Body.Tab.TAB_1.Section.TAB_1_SECTION_1?.Visible === "boolean" ? "✓" : "⚠" });
 
+        // Section Controls (TAB_1_SECTION_1.Controls)
+        const controls = form.Body.Tab.TAB_1.Section.TAB_1_SECTION_1?.Controls;
+        results.push({ Test: "R12", Property: "form.Body.Tab.TAB_1.Section.TAB_1_SECTION_1.Controls", Value: controls ? "object" : "null", Status: controls ? "✓" : "⚠" });
+        results.push({ Test: "R13", Property: "form.Body.Tab.TAB_1.Section.TAB_1_SECTION_1.Controls.getLength()", Value: controls?.getLength(), Status: typeof controls?.getLength() === "number" ? "✓" : "⚠" });
+        results.push({ Test: "R14", Property: "form.Body.Tab.TAB_1.Section.TAB_1_SECTION_1.Controls.get(0)", Value: controls?.get(0) ? "control" : "null", Status: "✓" });
+
+        // Test Controls.forEach
+        let controlNames: string[] = [];
+        controls?.forEach((ctrl: any, idx: number) => { if (ctrl?.getName) controlNames.push(ctrl.getName()); });
+        results.push({ Test: "R15", Property: "form.Body.Tab.TAB_1.Section.TAB_1_SECTION_1.Controls.forEach()", Value: controlNames.length > 0 ? controlNames.join(", ") : "no controls", Status: "✓" });
+
     } catch (error: any) {
         results.push({ Test: "ERR", Property: "Props Error", Value: error.message, Status: "✗" });
     }
@@ -137,7 +148,7 @@ export function TestTab(form: FormAccount_DevKitV4.Form): void {
 
     console.groupCollapsed(`✅ TEST 22: Tab Control [${startTime}] - Using: TAB_1 & TAB_1_SECTION_1 - ${passed}/${total}`);
 
-    console.log("%c📋 ReadOnly Properties (R1-R11)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
+    console.log("%c📋 ReadOnly Properties (R1-R15)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
     console.table(results);
 
     console.log("%c⚡ Setters & Methods (S1-S7)", "font-weight: bold; font-size: 14px; color: #2196F3;");
