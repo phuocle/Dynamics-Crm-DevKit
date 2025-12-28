@@ -208,8 +208,8 @@ function loadTabs(formContext: any, tabItems: string[]): any {
     return tabs;
 }
 function loadNavigations(formContext: any, navigationItems: string[]): any {
-    const navigations: any = {};
-    navigationItems.forEach((item: string) => navigations[item] = {});
+    const obj: any = {};
+    navigationItems.forEach((item: string) => obj[item] = {});
     const getNavigationItem = (navigation: string) => {
         const navItems = formContext?.ui?.navigation?.items;
         if (!navItems) return null;
@@ -222,50 +222,50 @@ function loadNavigations(formContext: any, navigationItems: string[]): any {
         }
         return null;
     };
-    const loadNavigation = (formContext: any, navigations: any, navigation: string) => {
+    const loadNavigation = (formContext: any, obj: any, navigation: string) => {
         const navigationItem = getNavigationItem(navigation);
-        getter(navigations[navigation], 'Id', () => navigationItem?.getId());
-        getterSetter(navigations[navigation], 'Label', () => navigationItem?.getLabel(), (value: any) => navigationItem?.setLabel(value));
-        getterSetter(navigations[navigation], 'Visible', () => navigationItem?.getVisible(), (value: any) => navigationItem?.setVisible(value));
-        navigations[navigation].Focus = () => navigationItem?.setFocus();
+        getter(obj[navigation], 'Id', () => navigationItem?.getId());
+        getterSetter(obj[navigation], 'Label', () => navigationItem?.getLabel(), (value: any) => navigationItem?.setLabel(value));
+        getterSetter(obj[navigation], 'Visible', () => navigationItem?.getVisible(), (value: any) => navigationItem?.setVisible(value));
+        obj[navigation].Focus = () => navigationItem?.setFocus();
     };
-    Object.keys(navigations).forEach(navigation => {
-        loadNavigation(formContext, navigations, navigation);
+    Object.keys(obj).forEach(navigation => {
+        loadNavigation(formContext, obj, navigation);
     });
-    return navigations;
+    return obj;
 }
 function loadQuickForms(formContext: any, quickItems: string[]): any {
-    const quickForms: any = {};
+    const obj: any = {};
     const quickFormFields: Record<string, string[]> = {};
     quickItems.forEach((item: string) => {
         const [quickFormName, fieldName] = item.split('___');
-        if (!quickForms[quickFormName]) {
-            quickForms[quickFormName] = {};
+        if (!obj[quickFormName]) {
+            obj[quickFormName] = {};
             quickFormFields[quickFormName] = [];
         }
         if (fieldName) {
             quickFormFields[quickFormName].push(fieldName);
         }
     });
-    const loadQuickForm = (formContext: any, quickForms: any, quickForm: string) => {
+    const loadQuickForm = (formContext: any, obj: any, quickForm: string) => {
         const fields = quickFormFields[quickForm];
         const quick = formContext?.ui?.quickForms?.get(quickForm);
-        getter(quickForms[quickForm], 'Body', () => loadFormDialog(quick, fields));
-        getter(quickForms[quickForm], 'ControlName', () => quick?.getName());
-        getter(quickForms[quickForm], 'ControlParent', () => quick?.getParent());
-        getter(quickForms[quickForm], 'ControlType', () => quick?.getControlType());
-        getterSetter(quickForms[quickForm], 'Disabled', () => quick?.getDisabled(), (value: any) => { quick?.setDisabled(value); });
-        getterSetter(quickForms[quickForm], 'Label', () => quick?.getLabel(), (value: any) => { quick?.setLabel(value); });
-        getterSetter(quickForms[quickForm], 'Visible', () => quick?.getVisible(), (value: any) => { quick?.setVisible(value); });
-        quickForms[quickForm].Controls = (arg: any) => quick?.getControl(arg);
-        quickForms[quickForm].Focus = () => quick?.setFocus();
-        quickForms[quickForm].IsLoaded = () => quick?.isLoaded();
-        quickForms[quickForm].Refresh = () => quick?.refresh();
+        getter(obj[quickForm], 'Body', () => loadFormDialog(quick, fields));
+        getter(obj[quickForm], 'ControlName', () => quick?.getName());
+        getter(obj[quickForm], 'ControlParent', () => quick?.getParent());
+        getter(obj[quickForm], 'ControlType', () => quick?.getControlType());
+        getterSetter(obj[quickForm], 'Disabled', () => quick?.getDisabled(), (value: any) => { quick?.setDisabled(value); });
+        getterSetter(obj[quickForm], 'Label', () => quick?.getLabel(), (value: any) => { quick?.setLabel(value); });
+        getterSetter(obj[quickForm], 'Visible', () => quick?.getVisible(), (value: any) => { quick?.setVisible(value); });
+        obj[quickForm].Controls = (arg: any) => quick?.getControl(arg);
+        obj[quickForm].Focus = () => quick?.setFocus();
+        obj[quickForm].IsLoaded = () => quick?.isLoaded();
+        obj[quickForm].Refresh = () => quick?.refresh();
     };
-    Object.keys(quickForms).forEach(quickForm => {
-        loadQuickForm(formContext, quickForms, quickForm);
+    Object.keys(obj).forEach(quickForm => {
+        loadQuickForm(formContext, obj, quickForm);
     });
-    return quickForms;
+    return obj;
 }
 function loadGrids(formContext: any, gridItems: string[]): any {
     const grids: any = {};
