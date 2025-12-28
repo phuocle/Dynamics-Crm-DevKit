@@ -240,11 +240,14 @@ describe('loadWebApi Tests', () => {
     // ========================================================================
 
     describe('Execute', () => {
+        // NOTE: Execute only exists on Xrm.WebApi.online per Microsoft docs
+        // So Execute method in devkit.ts uses getOnline?.execute()
         test('Execute should return Promise when no callback', async () => {
             setupWebApiMock();
             const form = getForm();
             const result = await form.WebApi.Execute({ getMetadata: () => ({}) });
-            expect(result.responseText).toBe('success');
+            // Result comes from online.execute mock which returns { online: true }
+            expect(result.online).toBe(true);
         });
 
         test('Execute should call successCallback when provided', async () => {
@@ -262,11 +265,14 @@ describe('loadWebApi Tests', () => {
     // ========================================================================
 
     describe('ExecuteMultiple', () => {
+        // NOTE: ExecuteMultiple only exists on Xrm.WebApi.online per Microsoft docs
+        // So ExecuteMultiple method in devkit.ts uses getOnline?.executeMultiple()
         test('ExecuteMultiple should return Promise when no callback', async () => {
             setupWebApiMock();
             const form = getForm();
             const result = await form.WebApi.ExecuteMultiple([{}, {}]);
-            expect(result[0].success).toBe(true);
+            // Result comes from online.executeMultiple mock which returns [{ online: true }]
+            expect(result[0].online).toBe(true);
         });
 
         test('ExecuteMultiple should call successCallback when provided', async () => {
@@ -626,6 +632,90 @@ describe('loadWebApi Tests', () => {
 
             const form = getForm();
             expect(form.WebApi.Offline.IsAvailable('account')).toBeUndefined();
+        });
+    });
+
+    // ========================================================================
+    // TEST: Offline Mode Handling for Execute/ExecuteMultiple
+    // ========================================================================
+
+    describe('Offline Mode Handling', () => {
+        function setupOfflineMock() {
+            const mockWebApi = {
+                online: {
+                    execute: (request: any) => Promise.resolve({ online: true }),
+                    executeMultiple: (requests: any[]) => Promise.resolve([{ online: true }])
+                }
+            };
+            (global as any).Xrm = {
+                WebApi: mockWebApi,
+                Utility: {
+                    getGlobalContext: () => ({
+                        client: {
+                            isOffline: () => true  // Simulate offline mode
+                        }
+                    })
+                }
+            };
+            (global as any).window.Xrm = (global as any).Xrm;
+        }
+
+        test('Execute should return undefined when client is offline', () => {
+            setupOfflineMock();
+            const form = getForm();
+            const result = form.WebApi.Execute({ getMetadata: () => ({}) });
+            expect(result).toBeUndefined();
+        });
+
+        test('Execute should call errorCallback when client is offline', () => {
+            setupOfflineMock();
+            const form = getForm();
+            const errorCallback = jest.fn();
+            form.WebApi.Execute({ getMetadata: () => ({}) }, undefined, errorCallback);
+            expect(errorCallback).toHaveBeenCalled();
+            expect(errorCallback).toHaveBeenCalledWith(expect.any(Error));
+        });
+
+        test('ExecuteMultiple should return undefined when client is offline', () => {
+            setupOfflineMock();
+            const form = getForm();
+            const result = form.WebApi.ExecuteMultiple([{}, {}]);
+            expect(result).toBeUndefined();
+        });
+
+        test('ExecuteMultiple should call errorCallback when client is offline', () => {
+            setupOfflineMock();
+            const form = getForm();
+            const errorCallback = jest.fn();
+            form.WebApi.ExecuteMultiple([{}, {}], undefined, errorCallback);
+            expect(errorCallback).toHaveBeenCalled();
+            expect(errorCallback).toHaveBeenCalledWith(expect.any(Error));
+        });
+
+        test('isClientOffline should return false when isOffline method is undefined', async () => {
+            // Simulates browser environment where isOffline may not exist
+            const mockWebApi = {
+                online: {
+                    execute: (request: any) => Promise.resolve({ online: true }),
+                    executeMultiple: (requests: any[]) => Promise.resolve([{ online: true }])
+                }
+            };
+            (global as any).Xrm = {
+                WebApi: mockWebApi,
+                Utility: {
+                    getGlobalContext: () => ({
+                        client: {
+                            // isOffline is undefined - should not throw
+                        }
+                    })
+                }
+            };
+            (global as any).window.Xrm = (global as any).Xrm;
+
+            const form = getForm();
+            // Should NOT return undefined since isOffline() is not true
+            const result = await form.WebApi.Execute({});
+            expect(result.online).toBe(true);
         });
     });
 
