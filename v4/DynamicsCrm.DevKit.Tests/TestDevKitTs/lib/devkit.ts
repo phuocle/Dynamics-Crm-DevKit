@@ -366,7 +366,7 @@ function loadGrids(formContext: any, gridItems: string[]): any {
     return grids;
 }
 function loadExecutionContext(executionContext: any): DevKit.IExecutionContext {
-    const obj: any = {};
+    const obj: any = {} as DevKit.IExecutionContext;
     getter(obj, 'Depth', () => executionContext?.getDepth());
     getter(obj, 'EntityReference', () => executionContext?.getEventArgs()?.getEntityReference());
     getter(obj, 'EventArgs', () => executionContext?.getEventArgs());
@@ -385,15 +385,15 @@ function loadExecutionContext(executionContext: any): DevKit.IExecutionContext {
     return obj;
 }
 function loadSidePanes(): DevKit.ISidePanes {
-    const sidePanes: any = {};
+    const obj: any = {} as DevKit.ISidePanes;
     const xrm: any = getXrm();
     const getSidePanes = xrm?.App?.sidePanes;
-    getterSetter(sidePanes, 'DisplayState', () => getSidePanes?.state, (value: any) => { if (getSidePanes) getSidePanes.state = value; });
-    sidePanes.Create = function (paneOptions: any, successCallback?: any) { getSidePanes?.createPane(paneOptions)?.then(successCallback); };
-    sidePanes.Get = (paneId: string) => getSidePanes?.getPane(paneId);
-    sidePanes.GetAll = () => getSidePanes?.getAllPanes();
-    sidePanes.GetSelected = () => getSidePanes?.getSelectedPane();
-    return sidePanes;
+    getterSetter(obj, 'DisplayState', () => getSidePanes?.state, (value: any) => { if (getSidePanes) getSidePanes.state = value; });
+    obj.Create = function (paneOptions: any, successCallback?: any) { getSidePanes?.createPane(paneOptions)?.then(successCallback); };
+    obj.Get = (paneId: string) => getSidePanes?.getPane(paneId);
+    obj.GetAll = () => getSidePanes?.getAllPanes();
+    obj.GetSelected = () => getSidePanes?.getSelectedPane();
+    return obj;
 }
 function loadWebApi(): DevKit.IWebApi {
     const obj: any = {} as DevKit.IWebApi;
@@ -582,7 +582,7 @@ function loadWebApi(): DevKit.IWebApi {
     return obj;
 }
 function loadCopilot(): DevKit.ICopilot {
-    const obj: any = {};
+    const obj: any = {} as DevKit.ICopilot;
     const xrm = getXrm();
     const getCopilot = xrm?.Copilot;
     obj.ExecuteEvent = function (eventName: string, eventParameters: any, successCallback?: any, errorCallback?: any) {
@@ -774,7 +774,7 @@ function loadProcess(formContext: any, bpf: string[]): any {
         getter(obj, 'EntityName', () => stage?.getEntityName());
         getter(obj, 'Id', () => stage?.getId());
         getter(obj, 'Name', () => stage?.getName());
-        getter(obj, 'Status', () => stage?.getStatus()); 
+        getter(obj, 'Status', () => stage?.getStatus());
         getter(obj, 'Steps', () => {
             const steps = stage?.getSteps();
             if (!steps) return [];
@@ -878,7 +878,7 @@ function loadProcess(formContext: any, bpf: string[]): any {
     return process;
 }
 function loadUtility(defaultWebResourceName?: string): DevKit.IUtility {
-    const utility: any = {};
+    const utility: any = {} as DevKit.IUtility;
     const xrm = getXrm();
     const getApp = xrm?.App;
     const getDevice = xrm?.Device;
