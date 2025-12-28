@@ -57,6 +57,22 @@ if errorlevel 1 (
     exit /b 1
 )
 
+xcopy /Y "%SOURCE_DIR%entities\OptionSet.ts" "%TARGET_DIR%\entities\"
+if errorlevel 1 (
+    echo [ERROR] Failed to copy OptionSet.ts
+    pause
+    exit /b 1
+)
+
+:: Copy Account.Test*.ts files to entities folder
+echo Copying Account.Test*.ts files to entities folder...
+xcopy /Y "%SOURCE_DIR%entities\Account.Test*.ts" "%TARGET_DIR%\entities\"
+if errorlevel 1 (
+    echo [ERROR] Failed to copy Account.Test*.ts files
+    pause
+    exit /b 1
+)
+
 :: Copy devkit TypeScript files to lib folder
 echo Copying devkit TypeScript files to lib folder...
 
@@ -95,6 +111,8 @@ echo Summary - TypeScript Source Files:
 echo   - Account.ts copied to entities/
 echo   - Account.form.ts copied to entities/
 echo   - Account.webapi.ts copied to entities/
+echo   - OptionSet.ts copied to entities/
+echo   - Account.Test*.ts files copied to entities/
 echo   - devkit.ts copied to lib/
 echo   - devkit.d.ts copied to lib/
 echo.

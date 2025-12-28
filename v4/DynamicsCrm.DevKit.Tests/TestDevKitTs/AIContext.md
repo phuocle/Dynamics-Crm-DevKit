@@ -117,3 +117,22 @@ Thực hiện deploy TypeScript DevKit:
 2. **Phát triển TypeScript:** Edit files trong `TestDevKitTs` → Test → Build → Deploy bằng `deploy.devkitts.bat`
 3. **Verify:** Kiểm tra files đã được copy đúng vào TestWebResource/TestWebResourceTs
 4. **Deploy to CRM:** Sử dụng các tool deploy của project (DevKit CLI, deploy.debug.bat, etc.)
+
+## DevKit TS vs JS Architecture
+
+> [!IMPORTANT]
+> There is a fundamental architectural difference between the JavaScript and TypeScript implementations of DevKit.
+
+*   **TypeScript (`TestDevKitTs`)**:
+    *   Uses **`loadFormV3`** (Generic).
+    *   Returns a strongly typed **`FormBase`** class instance (`devkit.ts`).
+    *   Designed for module-based imports and strict typing.
+    *   Accesses global `Xrm` via a helper `getXrm()` for safety.
+
+*   **JavaScript (`TestDevKitJs`)**:
+    *   Uses **`loadFormV2`**.
+    *   Returns a plain JavaScript object constructed via a factory pattern (`devkit.js`).
+    *   Exposes a global `devKit` object (IIFE).
+    *   Often accesses global `Xrm` directly.
+
+**AI Instructions**: When working in `TestDevKitTs`, ALWAYS assume the `FormBase` class structure and `loadFormV3` pattern. Do NOT confuse it with the `loadFormV2` factory pattern from the legacy JS implementation.
