@@ -576,7 +576,7 @@ function loadWebApi(): DevKit.IWebApi {
     });
     getter(obj, 'Offline', () => {
         const offline: any = {};
-        offline.IsAvailable = (entityLogicalName: string) => getOffline?.isAvailable(entityLogicalName);
+        offline.IsAvailable = (entityLogicalName: string) => (getOffline as any)?.isAvailable(entityLogicalName);
         return offline;
     });
     return obj;
@@ -584,7 +584,7 @@ function loadWebApi(): DevKit.IWebApi {
 function loadCopilot(): DevKit.ICopilot {
     const obj: any = {} as DevKit.ICopilot;
     const xrm = getXrm();
-    const getCopilot = xrm?.Copilot;
+    const getCopilot = (xrm as any)?.Copilot;
     obj.ExecuteEvent = function (eventName: string, eventParameters: any, successCallback?: any, errorCallback?: any) {
         const promise = getCopilot?.executeEvent(eventName, eventParameters);
         if (successCallback) {
@@ -899,20 +899,20 @@ function loadUtility(defaultWebResourceName?: string): DevKit.IUtility {
     });
     getter(obj, 'ClientUrl', () => getGlobalContext?.getClientUrl());
     getter(obj, 'CurrentAppUrl', () => getGlobalContext?.getCurrentAppUrl());
-    getter(obj, 'IsOnPremises', () => getGlobalContext?.isOnPremises());
+    getter(obj, 'IsOnPremises', () => (getGlobalContext as any)?.isOnPremises());
     getter(obj, 'LearningPathAttributeName', () => getUtility?.getLearningPathAttributeName());
     getter(obj, 'OrganizationSettings', () => {
         const obj: any = {};
         const organizationSettings = getGlobalContext?.organizationSettings;
-        getter(obj, 'Attributes', () => organizationSettings?.attributes);
+        getter(obj, 'Attributes', () => (organizationSettings as any)?.attributes);
         getter(obj, 'BaseCurrency', () => organizationSettings?.baseCurrency);
         getter(obj, 'BaseCurrencyId', () => organizationSettings?.baseCurrencyId);
         getter(obj, 'DefaultCountryCode', () => organizationSettings?.defaultCountryCode);
-        getter(obj, 'FullNameConventionCode', () => organizationSettings?.fullNameConventionCode);
+        getter(obj, 'FullNameConventionCode', () => (organizationSettings as any)?.fullNameConventionCode);
         getter(obj, 'IsAutoSaveEnabled', () => organizationSettings?.isAutoSaveEnabled);
-        getter(obj, 'IsTrialOrganization', () => organizationSettings?.isTrialOrganization);
+        getter(obj, 'IsTrialOrganization', () => (organizationSettings as any)?.isTrialOrganization);
         getter(obj, 'LanguageId', () => organizationSettings?.languageId);
-        getter(obj, 'OrganizationExpiryDate', () => organizationSettings?.organizationExpiryDate);
+        getter(obj, 'OrganizationExpiryDate', () => (organizationSettings as any)?.organizationExpiryDate);
         getter(obj, 'OrganizationId', () => organizationSettings?.organizationId);
         getter(obj, 'UniqueName', () => organizationSettings?.uniqueName);
         getter(obj, 'UseSkypeProtocol', () => organizationSettings?.useSkypeProtocol);
@@ -991,7 +991,7 @@ function loadUtility(defaultWebResourceName?: string): DevKit.IUtility {
         if (successCallback) promise?.then(successCallback, errorCallback);
         else return promise;
     };
-    obj.EntityMainFormDescriptor = (entityName: string, formId: string) => getUtility?.getEntityMainFormDescriptor(entityName, formId);
+    obj.EntityMainFormDescriptor = (entityName: string, formId: string) => (getUtility as any)?.getEntityMainFormDescriptor(entityName, formId);
     obj.EntityMetadata = function (entityName: string, attributes?: string[], successCallback?: (result: any) => void, errorCallback?: (error: any) => void) {
         const promise = getUtility?.getEntityMetadata(entityName, attributes);
         if (successCallback) promise?.then(successCallback, errorCallback);
