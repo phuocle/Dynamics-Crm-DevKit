@@ -3545,336 +3545,414 @@ declare namespace DevKit {
 
 /** DynamicsCrm.DevKit for namespace OptionSet */
 declare namespace OptionSet {
-    /**  */
+    /**
+     * Defines the structural type of a parameter for Xrm.WebApi.online.execute
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi/online/execute
+     */
     enum StructuralProperty {
-        /** 0 */
+        /** 0 - Unknown structural type */
         Unknown,
-        /** 1 */
+        /** 1 - Primitive type (e.g., string, integer, boolean, guid) */
         PrimitiveType,
-        /** 2 */
+        /** 2 - Complex type (structured object) */
         ComplexType,
-        /** 3 */
+        /** 3 - Enumeration type */
         EnumerationType,
-        /** 4 */
+        /** 4 - Collection (array of items) */
         Collection,
-        /** 5 */
+        /** 5 - Entity type (reference to a Dynamics 365 record) */
         EntityType
     }
-    /**  */
+    /**
+     * Specifies the type of Web API operation for Xrm.WebApi.online.execute
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi/online/execute
+     */
     enum OperationType {
-        /** 0 */
+        /** 0 - Action (custom or unbound action) */
         Action,
-        /** 1 */
+        /** 1 - Function (custom or built-in function) */
         Function,
-        /** 2 */
+        /** 2 - CRUD operation (Create, Retrieve, Update, Delete) */
         CRUD
     }
-    /** Returns information about the kind of device the user is using. */
+    /**
+     * Returns information about the kind of device the user is using
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/client#getformfactor
+     */
     enum FormFactor {
-        /** 0 */
+        /** 0 - Unknown device type */
         Unknown,
-        /** 1 */
+        /** 1 - Desktop (includes web browser, even from tablet) */
         Desktop,
-        /** 2 */
+        /** 2 - Tablet application */
         Tablet,
-        /** 3 */
+        /** 3 - Phone application */
         Phone,
     }
-    /** Returns a value to indicate the state of the client. */
+    /**
+     * Returns a value to indicate the state of the client
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/client#getclientstate
+     */
     enum ClientState {
-        /** Online */
+        /** The client is connected to the server (normal operation) */
         Online,
-        /** Offline */
+        /** The client is in offline mode (mobile app with offline sync) */
         Offline,
     }
-    /** Returns a value to indicate which client the script is executing in. */
+    /**
+     * Returns a value to indicate which client the script is executing in
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/client#getclient
+     */
     enum ClientName {
-        /** Web */
+        /** Web browser client */
         Web,
-        /** Outlook */
+        /** Outlook client (Dynamics 365 for Outlook) */
         Outlook,
-        /** Mobile */
+        /** Mobile application (phone or tablet app) */
         Mobile
     }
-    /** Gets the form type for the record. */
+    /**
+     * Gets the form type for the record
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui/getformtype
+     */
     enum FormType {
-        /** 0 */
+        /** 0 - Form type is undefined */
         Undefined,
-        /** 1 - Quick Create forms return 1 */
+        /** 1 - Create form (Quick Create forms also return 1) */
         Create,
-        /** 2 */
+        /** 2 - Update form (editing an existing record) */
         Update,
-        /** 3 */
+        /** 3 - Read-only form */
         ReadOnly,
-        /** 4 */
+        /** 4 - Disabled form */
         Disabled,
-        /** 5 */
+        /** 5 - Bulk edit form */
         BulkEdit,
     }
-    /** Specify options for saving the record. If no parameter is included in the method, the record will simply be saved. This is the equivalent of using the Save command */
+    /**
+     * Specify options for saving the record
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-entity/save
+     */
     enum SaveOption {
-        /** saveandclose - This is the equivalent of using the Save and Close command */
+        /** Save and close the form after saving */
         SaveAndClose,
-        /** saveandnew - This is the equivalent of the using the Save and New command */
+        /** Save and open a new blank form after saving */
         SaveAndNew
     }
-    /** Returns a value indicating how the save event was initiated by the user */
+    /**
+     * Returns a value indicating how the save event was initiated
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/save-event-arguments/getsavemode
+     */
     enum SaveMode {
-        /** 1 - All entities */
+        /** 1 - Standard save (all entities) */
         Save,
-        /** 2 - All entities */
+        /** 2 - Save and close (all entities) */
         SaveAndClose,
-        /** 5 - All entities */
+        /** 5 - Deactivate record (all entities) */
         Deactivate,
-        /** 6 - All entities */
+        /** 6 - Reactivate record (all entities) */
         Reactivate,
-        /** 7 - Email */
+        /** 7 - Send email (Email entity only) */
         Send,
-        /** 15 - Lead */
+        /** 15 - Disqualify lead (Lead entity only) */
         Disqualify,
-        /** 16 - Lead */
+        /** 16 - Qualify lead (Lead entity only) */
         Qualify,
-        /** 47 - User or Team */
+        /** 47 - Assign record (User or Team) */
         Assign,
-        /** 58 - Activities */
+        /** 58 - Save as completed (Activities only) */
         SaveAsCompleted,
-        /** 59 - All entities */
+        /** 59 - Save and new (all entities) */
         SaveAndNew,
-        /** 70 - All entities */
+        /** 70 - Auto-save triggered (all entities) */
         AutoSave
     }
-    /** The level of the message, which defines how the message will be displayed */
+    /**
+     * The level of form notification message
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui/setformnotification
+     */
     enum FormNotificationLevel {
-        /** ERROR - Notification will use the system error icon */
+        /** Error notification with system error icon (red) */
         Error,
-        /** WARNING - Notification will use the system warning icon */
+        /** Warning notification with system warning icon (yellow) */
         Warning,
-        /** INFO - Notification will use the system info icon */
+        /** Informational notification with system info icon (blue) */
         Info
     }
-    /** Display state of the tab */
+    /**
+     * Display state of a tab on the form
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-tabs/getdisplaystate
+     */
     enum TabDisplayState {
-        /** expanded */
+        /** Tab is expanded showing all sections */
         Expanded,
-        /** collapsed */
+        /** Tab is collapsed showing only the header */
         Collapsed
     }
-    /** The control type of tab */
+    /**
+     * The content type of a tab
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-tabs/getcontenttype
+     */
     enum TabContentType {
-        /** cardSections: The default tab behavior */
+        /** Default tab behavior with card sections */
         CardSections,
-        /** singleComponent: Maximizes the content of the first component in the tab */
+        /** Maximizes the first component in the tab */
         SingleComponent
     }
-    /** */
+    /**
+     * Display state of the business process flow control
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-process/getdisplaystate
+     */
     enum ProcessDisplayState {
-        /** expanded */
+        /** Process control is fully expanded */
         Expanded,
-        /** collapsed */
+        /** Process control is collapsed to a bar */
         Collapsed,
-        /** floating */
+        /** Process control is floating on the form */
         Floating
     }
-    /** Returns a string value that represents the type of attribute */
+    /**
+     * Returns the type of attribute
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getattributetype
+     */
     enum FieldAttributeType {
-        /** boolean */
+        /** boolean - True/False attribute */
         Boolean,
-        /** datetime */
+        /** datetime - Date and time attribute */
         DateTime,
-        /** decimal */
+        /** decimal - Decimal number attribute */
         Decimal,
-        /** double */
+        /** double - Floating point number attribute */
         Double,
-        /** integer */
+        /** integer - Whole number attribute */
         Integer,
-        /** lookup */
+        /** lookup - Lookup/reference to another record */
         Lookup,
-        /** memo */
+        /** memo - Multi-line text attribute */
         Memo,
-        /** money */
+        /** money - Currency attribute */
         Money,
-        /** multiselectoptionset */
+        /** multiselectoptionset - Multi-select option set attribute */
         MultiOptionSet,
-        /** optionset */
+        /** optionset - Single-select option set attribute */
         OptionSet,
-        /** string */
+        /** string - Single-line text attribute */
         String
     }
-    /** Returns a string value that represents formatting options for the attribute */
+    /**
+     * Returns formatting options for the attribute
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getformat
+     */
     enum FieldFormat {
-        /** null */
+        /** No format specified */
         Null,
-        /** date */
+        /** Date only (no time component) */
         Date,
-        /** datetime */
+        /** Date and time */
         DateTime,
-        /** duration */
+        /** Duration in minutes */
         Duration,
-        /** email */
+        /** Email address format */
         Email,
-        /** language */
+        /** Language code format */
         Language,
-        /** none */
+        /** No specific format */
         None,
-        /** textarea */
+        /** Multi-line text area */
         TextArea,
-        /** text */
+        /** Single-line text */
         Text,
-        /** tickersymbol */
+        /** Stock ticker symbol */
         TickerSymbol,
-        /** phone */
+        /** Phone number format */
         Phone,
-        /** timezone */
+        /** Time zone format */
         TimeZone,
-        /** url */
+        /** URL/web address format */
         Url
     }
-    /** Value indicating whether a value for the attribute is none or required or recommended */
+    /**
+     * Value indicating whether a field value is required
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getrequiredlevel
+     */
     enum FieldRequiredLevel {
-        /** none */
+        /** Field is optional */
         None,
-        /** required */
+        /** Field is required - form cannot be saved without a value */
         Required,
-        /** recommended */
+        /** Field is recommended - shows indicator but allows save */
         Recommended
     }
-    /** Data from the attribute will be submitted when the record is saved */
+    /**
+     * Controls when field data is submitted on save
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getsubmitmode
+     */
     enum FieldSubmitMode {
-        /** always - The data is always sent with a save */
+        /** Data is always sent with a save, even if unchanged */
         Always,
-        /** never - The data is never sent with a save. When this is used, the field(s) in the form for this attribute cannot be edited */
+        /** Data is never sent with a save (field becomes read-only) */
         Never,
-        /** dirty - Default behavior. The data is sent with the save when it has changed */
+        /** Default - Data is only sent when it has changed */
         Dirty
     }
-    /** A value that categorizes controls */
+    /**
+     * Categorizes the type of control
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getcontroltype
+     */
     enum FieldControlType {
-        /** standard - A standard control */
+        /** A standard data-bound control */
         Standard,
-        /** iframe - An IFRAME control */
+        /** An IFRAME control for embedding external content */
         Iframe,
-        /** kbsearch - A knowledge base search control */
+        /** A knowledge base search control */
         KbSearch,
-        /** lookup - A lookup control */
+        /** A lookup control for selecting related records */
         Lookup,
-        /** multiselectoptionset - A multi-select option set control */
+        /** A multi-select option set control */
         MultiSelectOptionset,
-        /** notes - A notes control */
+        /** A notes/timeline control for activities */
         Notes,
-        /** optionset - An option set control */
+        /** A single-select option set control */
         OptionSet,
-        /** quickform - A quick view control */
+        /** A quick view form control */
         QuickForm,
-        /** subgrid - A subgrid control */
+        /** A subgrid control for displaying related records */
         SubGrid,
-        /** timercontrol - A timer control */
+        /** A timer control for SLA tracking */
         TimerControl,
-        /** timelinewall - A timeline control (for Unified Interface) */
+        /** A timeline wall control (Unified Interface) */
         TimelineWall,
-        /** webresource - A web resource control */
+        /** A web resource control */
         WebResource
     }
-    /** The type of notification */
+    /**
+     * The type of field notification
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/setnotification
+     */
     enum FieldNotificationLevel {
-        /** ERROR */
+        /** Error notification - prevents save until resolved */
         Error,
-        /** RECOMMENDATION */
+        /** Recommendation notification - allows save but suggests action */
         Recommendation
     }
-    /** The integer value of the business process flow category */
+    /**
+     * The integer value of the business process flow category for a stage
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/stage/getcategory
+     */
     enum ProcessCategory {
-        /** 0 */
+        /** 0 - Qualify stage (typically for Lead entity) */
         Qualify,
-        /** 1 */
+        /** 1 - Develop stage (sales process development phase) */
         Develop,
-        /** 2 */
+        /** 2 - Propose stage (proposal phase in sales) */
         Propose,
-        /** 3 */
+        /** 3 - Close stage (closing phase in sales) */
         Close,
-        /** 4 */
+        /** 4 - Identify stage (service/case identification) */
         Identify,
-        /** 5 */
+        /** 5 - Research stage (service/case research) */
         Research,
-        /** 6 */
+        /** 6 - Resolve stage (service/case resolution) */
         Resolve
     }
-    /** The integer value status of the stage */
+    /**
+     * The status of a stage in the business process flow
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/stage/getstatus
+     */
     enum ProcessStatus {
-        /** active */
+        /** Stage is currently active */
         Active,
-        /** aborted */
+        /** Stage was aborted/skipped */
         Aborted,
-        /** finished */
+        /** Stage has been completed */
         Finished
     }
-    /** The progress of the action step */
+    /**
+     * The progress of an action step in a business process flow
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/step/setprogress
+     */
     enum ProcessProgress {
-        /** 0 */
+        /** 0 - No progress set */
         None,
-        /** 1 */
+        /** 1 - Action step is in progress */
         Processing,
-        /** 2 */
+        /** 2 - Action step completed successfully */
         Completed,
-        /** 3 */
+        /** 3 - Action step failed */
         Failure,
-        /** 4 */
+        /** 4 - Action step is invalid */
         Invalid
     }
-    /** The state of the timer control - This method is only supported for Unified Interface */
+    /**
+     * The state of a timer control (SLA timers) - Unified Interface only
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getstate
+     */
     enum TimerState {
-        /** 1 */
+        /** 1 - Timer state not set */
         NotSet,
-        /** 2 */
+        /** 2 - Timer is currently running */
         InProgress,
-        /** 3 */
+        /** 3 - Timer is in warning state (near expiration) */
         Warning,
-        /** 4 */
+        /** 4 - Timer has been violated (exceeded limit) */
         Violated,
-        /** 5 */
+        /** 5 - Timer completed successfully */
         Success,
-        /** 6 */
+        /** 6 - Timer has expired */
         Expired,
-        /** 7 */
+        /** 7 - Timer was canceled */
         Canceled,
-        /** 8 */
+        /** 8 - Timer is paused */
         Paused
     }
-    /** Information about the advanced configuration settings for the organization */
+    /**
+     * Advanced configuration settings for the organization
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/getadvancedconfigsetting
+     */
     enum AdvancedConfigSetting {
-        /** MaxChildIncidentNumber */
+        /** Maximum number of child cases allowed for a parent case */
         MaxChildIncidentNumber,
-        /** MaxIncidentMergeNumber */
+        /** Maximum number of cases that can be merged */
         MaxIncidentMergeNumber
     }
-    /** Describing whether to open or save the file */
+    /**
+     * Describes whether to open or save a file
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/openfile
+     */
     enum FileOption {
-        /** 1 */
+        /** 1 - Open the file in a new browser tab */
         Open,
-        /** 2 */
+        /** 2 - Download/save the file */
         Save
     }
-    /** Describes the type of operation for the privilege */
+    /**
+     * Describes the type of privilege for security operations
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getentitymetadata
+     */
     enum PrivilegeType {
-        /** 0 - Specifies no privilege. */
+        /** 0 - No privilege assigned */
         None,
-        /** 1 - The create privilege. */
+        /** 1 - Create privilege - can create new records */
         Create,
-        /** 2 - The read privilege. */
+        /** 2 - Read privilege - can view records */
         Read,
-        /** 3 - The write privilege. */
+        /** 3 - Write privilege - can update records */
         Write,
-        /** 4 -  The delete privilege. */
+        /** 4 - Delete privilege - can delete records */
         Delete,
-        /** 5 - The assign privilege. */
+        /** 5 - Assign privilege - can assign records to other users/teams */
         Assign,
-        /** 6 - The share privilege. */
+        /** 6 - Share privilege - can share records with other users/teams */
         Share,
-        /** 7 - The append privilege. */
+        /** 7 - Append privilege - can attach to this entity */
         Append,
-        /** 8 - The append to privilege. */
+        /** 8 - AppendTo privilege - can attach other entities to this */
         AppendTo
     }
-    /**  */
+    /**
+     * Controls whether the navigation bar is displayed
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/openform
+     */
     enum FormNavBar {
         /** "on" - The navigation bar is displayed. This is the default behavior if the navbar parameter is not used. */
         On,
@@ -3883,48 +3961,66 @@ declare namespace OptionSet {
         /** "entity" - On an entity form, only the navigation options for related entities are available. After navigating to a related entity, a back button is displayed in the navigation bar to allow returning to the original record. */
         Entity
     }
-    /**  */
+    /**
+     * Specifies the position of a form window
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/openform
+     */
     enum FormWindowPosition {
-        /** 1 */
+        /** 1 - Open the form in the center of the screen */
         Center,
-        /** 2 */
+        /** 2 - Open the form on the side (as a side panel) */
         Side
     }
-    /**  */
+    /**
+     * Specifies the type of entity relationship
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/openform
+     */
     enum FormRelationshipType {
-        /** 0 */
+        /** 0 - One-to-Many relationship */
         OneToMany,
-        /** 1 */
+        /** 1 - Many-to-Many relationship */
         ManyToMany
     }
-    /**  */
+    /**
+     * Specifies the role type in a relationship
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/openform
+     */
     enum FormRelationshipRoleType {
-        /** 1 */
+        /** 1 - Referencing entity (the "many" side of 1:N) */
         Referencing,
-        /** 2 */
+        /** 2 - Association entity (for N:N relationships) */
         AssociationEntity
     }
-    /**  */
+    /**
+     * Specifies the accepted file types for file picker
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-device/pickfile
+     */
     enum FileAccept {
-        /** "audio" */
+        /** Audio files (mp3, wav, etc.) */
         Audio,
-        /** "video" */
+        /** Video files (mp4, avi, etc.) */
         Video,
-        /** "image" */
+        /** Image files (jpg, png, gif, etc.) */
         Image
     }
-    /**  */
+    /**
+     * Specifies the type of grid control
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/gridcontrol/getgridtype
+     */
     enum GridType {
-        /** 1 */
+        /** 1 - HomePageGrid (main entity list view) */
         HomePageGrid,
-        /** 2 */
+        /** 2 - Subgrid (embedded grid on a form) */
         Subgrid
     }
-    /** Display state of the side pane */
+    /**
+     * Display state of the side pane
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app-sidepanes/state
+     */
     enum SidePaneState {
-        /** expanded */
+        /** Side pane is fully expanded and visible */
         Expanded,
-        /** collapsed */
+        /** Side pane is collapsed to a bar */
         Collapsed
     }
     /**
