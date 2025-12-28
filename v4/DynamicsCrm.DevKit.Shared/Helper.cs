@@ -77,9 +77,20 @@ namespace DynamicsCrm.DevKit.Shared
             if (value1 == null && value2 == null) return true;
             if (value1 != null && value2 == null) return false;
             if (value1 == null && value2 != null) return false;
-            value1 = value1.Replace("\r\n", string.Empty).Replace("\r", string.Empty).Replace("\t", string.Empty).Replace(" ", string.Empty).Trim();
-            value2 = value2.Replace("\r\n", string.Empty).Replace("\r", string.Empty).Replace("\t", string.Empty).Replace(" ", string.Empty).Trim();
+            value1 = NormalizeString(value1);
+            value2 = NormalizeString(value2);
             return string.Equals(value1, value2, StringComparison.OrdinalIgnoreCase);
+        }
+
+        private static string NormalizeString(string value)
+        {
+            var sb = new StringBuilder(value.Length);
+            foreach (var c in value)
+            {
+                if (c != '\r' && c != '\n' && c != '\t' && c != ' ')
+                    sb.Append(c);
+            }
+            return sb.ToString().Trim();
         }
 
         public static async Task<string> ReadEmbeddedResourceAsync(string path)
