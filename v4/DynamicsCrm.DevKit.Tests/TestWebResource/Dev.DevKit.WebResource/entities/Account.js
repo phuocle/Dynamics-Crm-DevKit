@@ -3378,7 +3378,7 @@ var formAccount_DevKitV4 = (function () {
 			results.push({ Test: "R1", Property: "Copilot exists", Value: copilot !== undefined && copilot !== null, Status: copilot !== undefined && copilot !== null ? "✓" : "⚠" });
 			results.push({ Test: "R2", Property: "ExecuteEvent function exists", Value: typeof copilot?.ExecuteEvent === "function", Status: typeof copilot?.ExecuteEvent === "function" ? "✓" : "⚠" });
 			results.push({ Test: "R3", Property: "ExecutePrompt function exists", Value: typeof copilot?.ExecutePrompt === "function", Status: typeof copilot?.ExecutePrompt === "function" ? "✓" : "⚠" });
-			const xrmCopilotAvailable = typeof window.Xrm?.Copilot !== "undefined";
+			const xrmCopilotAvailable = typeof Reflect.get(window, "Xrm")?.Copilot !== "undefined";
 			results.push({ Test: "R4", Property: "Xrm.Copilot available (Preview)", Value: xrmCopilotAvailable, Status: xrmCopilotAvailable ? "✓" : "⚠" });
 		} catch (/** @type {any} */ error) {
 			results.push({ Test: "ERR", Property: "Props Error", Value: error.message, Status: "✓" });
