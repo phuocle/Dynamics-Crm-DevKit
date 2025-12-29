@@ -361,18 +361,6 @@ declare namespace DevKit {
          */
         namespace Dialog {
             /**
-             * Enumeration of field requirement levels for dialog forms
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getrequiredlevel
-             */
-            enum FieldRequiredLevel {
-                /** Field is not required */
-                None,
-                /** Field is required */
-                Required,
-                /** Field is recommended */
-                Recommended
-            }
-            /**
              * Base interface for all dialog controls with common visibility and state properties
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
              */
@@ -432,7 +420,7 @@ declare namespace DevKit {
                  * Gets or sets the required level for the attribute
                  * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getrequiredlevel
                  */
-                RequiredLevel: FieldRequiredLevel;
+                RequiredLevel: OptionSet.FieldRequiredLevel;
                 /**
                  * Returns whether there are unsaved changes to the attribute value
                  * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getisdirty
@@ -536,28 +524,6 @@ declare namespace DevKit {
                  * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/gettext
                  */
                 readonly Text: string;
-            }
-            /**
-             * Represents an entity reference in a lookup field
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getvalue
-             */
-            interface EntityReference {
-                /** The logical name of the entity type */
-                entityType: string;
-                /** The GUID of the record */
-                id: Guid;
-                /** The display name of the record */
-                name?: string;
-            }
-            /**
-             * Represents an option with text and numeric value
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getoption
-             */
-            interface TextValueNumber {
-                /** The display text of the option */
-                readonly text: string,
-                /** The numeric value of the option */
-                readonly value: number
             }
             /**
              * Interface for single-line text controls in dialogs

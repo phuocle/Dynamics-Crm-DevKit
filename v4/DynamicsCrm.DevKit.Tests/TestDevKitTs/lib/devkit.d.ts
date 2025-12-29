@@ -537,18 +537,6 @@ declare namespace DevKit {
         }
 
         /**
-         * Entity reference object for Lookup
-         */
-        interface EntityReference {
-            /** The GUID id value of the record */
-            id: string;
-            /** The name of the record */
-            name: string;
-            /** The logical name of the entity */
-            entityType: string;
-        }
-
-        /**
          * Interface for Lookup controls
          */
         interface Lookup extends IControl {
