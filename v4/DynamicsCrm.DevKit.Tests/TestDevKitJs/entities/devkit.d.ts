@@ -874,13 +874,40 @@ declare namespace DevKit {
              */
             Value: number;
         }
+        /**
+         * Collection of controls within a quick view form
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/getcontrol
+         */
+        interface IQuickViewControlsCollection {
+            /**
+             * Gets a control by index or name
+             * @param arg The index (number) or name (string) of the control to get
+             */
+            get(arg?: number | string): any;
+
+            /**
+             * Gets the number of controls in the quick view form
+             */
+            getLength(): number;
+
+            /**
+             * Iterates over all controls in the quick view form
+             * @param callback The function to call for each control
+             */
+            forEach(callback: (control: any, index: number) => void): void;
+        }
         interface IQuickView {
             /**
              * Gets the controls on a form or control on form by passing an argument
              * @param arg You can access a single control in the constituent controls collection by passing an argument as either the name or the index value of the constituent control in a quick view control
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/getcontrol
              */
-            Controls(arg?: string | number): Array<any> | any;
+            Controls(arg: string | number): any;
+            /**
+             * Gets all controls in the quick view form as a collection
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/getcontrol
+             */
+            Controls(): IQuickViewControlsCollection;
             /**
              * Returns whether the data binding for the constituent controls in a quick view control is complete
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/isloaded
