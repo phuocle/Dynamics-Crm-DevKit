@@ -434,52 +434,41 @@ const devKit = (function () {
         });
         return obj;
     }
-    function loadQuickForms(formContext, quickItemsOrObj, legacyQuickFormFields) {
-        const isArray = Array.isArray(quickItemsOrObj);
-        const obj = isArray ? {} : quickItemsOrObj;
-        const quickFormFields = isArray ? {} : (legacyQuickFormFields || {});
-
-        if (isArray) {
-            quickItemsOrObj.forEach(item => {
-                const [quickFormName, fieldName] = item.split('___');
-                if (!obj[quickFormName]) {
-                    obj[quickFormName] = {};
-                    quickFormFields[quickFormName] = [];
-                }
-                if (fieldName) {
-                    quickFormFields[quickFormName].push(fieldName);
-                }
-            });
-        }
-        const loadQuickForm = (formContext, quickForms, quickForm) => {
-            const fields = quickFormFields[quickForm] || [];
-            const quick = formContext?.ui?.quickForms?.get(quickForm);
-            getter(quickForms[quickForm], 'Body', () => loadFormDialog(quick, fields));
-            getter(quickForms[quickForm], 'ControlName', () => quick?.getName());
-            getter(quickForms[quickForm], 'ControlParent', () => quick?.getParent());
-            getter(quickForms[quickForm], 'ControlType', () => quick?.getControlType());
-            getterSetter(quickForms[quickForm], 'Disabled', () => quick?.getDisabled(), value => { quick?.setDisabled(value); });
-            getterSetter(quickForms[quickForm], 'Label', () => quick?.getLabel(), value => { quick?.setLabel(value); });
-            getterSetter(quickForms[quickForm], 'Visible', () => quick?.getVisible(), value => { quick?.setVisible(value); });
-            quickForms[quickForm].Controls = arg => quick?.getControl(arg);
-            quickForms[quickForm].Focus = () => quick?.setFocus();
-            quickForms[quickForm].IsLoaded = () => quick?.isLoaded();
-            quickForms[quickForm].Refresh = () => quick?.refresh();
-        }
+    function loadQuickForms(formContext, quickItems) {
+        const obj = {};
+        const quickFormFields = {};
+        quickItems.forEach(item => {
+            const [quickFormName, fieldName] = item.split('___');
+            if (!obj[quickFormName]) {
+                obj[quickFormName] = {};
+                quickFormFields[quickFormName] = [];
+            }
+            if (fieldName) {
+                quickFormFields[quickFormName].push(fieldName);
+            }
+        });
         Object.keys(obj).forEach(quickForm => {
-            loadQuickForm(formContext, obj, quickForm);
+            const fields = quickFormFields[quickForm];
+            const quick = formContext?.ui?.quickForms?.get(quickForm);
+            getter(obj[quickForm], 'Body', () => loadFormDialog(quick, fields));
+            getter(obj[quickForm], 'ControlName', () => quick?.getName());
+            getter(obj[quickForm], 'ControlParent', () => quick?.getParent());
+            getter(obj[quickForm], 'ControlType', () => quick?.getControlType());
+            getterSetter(obj[quickForm], 'Disabled', () => quick?.getDisabled(), value => { quick?.setDisabled(value); });
+            getterSetter(obj[quickForm], 'Label', () => quick?.getLabel(), value => { quick?.setLabel(value); });
+            getterSetter(obj[quickForm], 'Visible', () => quick?.getVisible(), value => { quick?.setVisible(value); });
+            obj[quickForm].Controls = arg => quick?.getControl(arg);
+            obj[quickForm].Focus = () => quick?.setFocus();
+            obj[quickForm].IsLoaded = () => quick?.isLoaded();
+            obj[quickForm].Refresh = () => quick?.refresh();
         });
         return obj;
     }
-    function loadGrids(formContext, gridItemsOrObj) {
-        const isArray = Array.isArray(gridItemsOrObj);
-        const obj = isArray ? {} : gridItemsOrObj;
-        if (isArray) {
-            gridItemsOrObj.forEach(item => obj[item] = {});
-        }
+    function loadGrids(formContext, gridItems) {
+        const obj = {};
         const loadGridRow = row => {
-            const obj = {};
-            getter(obj, 'Columns', () => {
+            const rowObj = {};
+            getter(rowObj, 'Columns', () => {
                 const columnsObj = {};
                 columnsObj.getLength = () => row?.data?.entity?.attributes?.getLength();
                 columnsObj.get = index => {
@@ -495,63 +484,64 @@ const devKit = (function () {
                 };
                 return columnsObj;
             });
-            getter(obj, 'EntityId', () => row?.data?.entity?.getId());
-            getter(obj, 'EntityName', () => row?.data?.entity?.getEntityName());
-            getter(obj, 'EntityReference', () => row?.data?.entity?.getEntityReference());
-            getter(obj, 'PrimaryAttributeValue', () => row?.data?.entity?.getPrimaryAttributeValue());
-            return obj;
+            getter(rowObj, 'EntityId', () => row?.data?.entity?.getId());
+            getter(rowObj, 'EntityName', () => row?.data?.entity?.getEntityName());
+            getter(rowObj, 'EntityReference', () => row?.data?.entity?.getEntityReference());
+            getter(rowObj, 'PrimaryAttributeValue', () => row?.data?.entity?.getPrimaryAttributeValue());
+            return rowObj;
         }
         const loadGridColumn = col => {
-            const obj = {};
-            getter(obj, 'Label', () => col?.controls?.get(0)?.getLabel());
-            getter(obj, 'Name', () => col?.getName());
-            getterSetter(obj, 'Disabled', () => col?.controls?.get(0)?.getDisabled(), value => { col?.controls?.get(0)?.setDisabled(value); });
-            getterSetter(obj, 'RequiredLevel', () => col?.getRequiredLevel(), value => { col?.setRequiredLevel(value); });
-            getterSetter(obj, 'Value', () => col?.getValue(), value => { col?.setValue(value); });
-            obj.ClearNotification = uniqueId => col?.controls?.get(0)?.clearNotification(uniqueId);
-            obj.SetNotification = (message, uniqueId) => col?.controls?.get(0)?.setNotification(message, uniqueId);
-            return obj;
+            const colObj = {};
+            getter(colObj, 'Label', () => col?.controls?.get(0)?.getLabel());
+            getter(colObj, 'Name', () => col?.getName());
+            getterSetter(colObj, 'Disabled', () => col?.controls?.get(0)?.getDisabled(), value => { col?.controls?.get(0)?.setDisabled(value); });
+            getterSetter(colObj, 'RequiredLevel', () => col?.getRequiredLevel(), value => { col?.setRequiredLevel(value); });
+            getterSetter(colObj, 'Value', () => col?.getValue(), value => { col?.setValue(value); });
+            colObj.ClearNotification = uniqueId => col?.controls?.get(0)?.clearNotification(uniqueId);
+            colObj.SetNotification = (message, uniqueId) => col?.controls?.get(0)?.setNotification(message, uniqueId);
+            return colObj;
         }
-        const loadGrid = (formContext, grids, grid) => {
-            const gridControl = formContext?.getControl(grid);
-            const createCollectionObject = (getItemsFn, processItemFn) => {
-                const obj = {};
-                obj.getLength = () => getItemsFn()?.getLength();
-                obj.get = index => processItemFn(getItemsFn()?.get(index));
-                obj.forEach = callback => {
-                    const items = getItemsFn();
-                    const length = items?.getLength() || 0;
-                    for (let index = 0; index < length; index++) {
-                        callback(processItemFn(items.get(index)), index);
-                    }
-                };
-                return obj;
+        const createCollectionObject = (getItemsFn, processItemFn) => {
+            const collObj = {};
+            collObj.getLength = () => getItemsFn()?.getLength();
+            collObj.get = index => processItemFn(getItemsFn()?.get(index));
+            collObj.forEach = callback => {
+                const items = getItemsFn();
+                const length = items?.getLength() || 0;
+                for (let index = 0; index < length; index++) {
+                    callback(processItemFn(items.get(index)), index);
+                }
             };
-            getter(grids[grid], 'EntityName', () => gridControl?.getEntityName());
-            getter(grids[grid], 'FetchXml', () => gridControl?.getFetchXml());
-            getter(grids[grid], 'GridType', () => gridControl?.getGridType());
-            getter(grids[grid], 'Relationship', () => gridControl?.getRelationship());
-            getter(grids[grid], 'Rows', () => {
+            return collObj;
+        };
+        gridItems.forEach(grid => {
+            obj[grid] = {};
+            const gridControl = formContext?.getControl(grid);
+            getter(obj[grid], 'EntityName', () => gridControl?.getEntityName());
+            getter(obj[grid], 'FetchXml', () => gridControl?.getFetchXml());
+            getter(obj[grid], 'GridType', () => gridControl?.getGridType());
+            getter(obj[grid], 'Relationship', () => gridControl?.getRelationship());
+            getter(obj[grid], 'Rows', () => {
                 const gridInstance = formContext?.getControl(grid)?.getGrid();
                 return createCollectionObject(
                     () => gridInstance?.getRows(),
                     row => loadGridRow(row)
                 );
             });
-            getter(grids[grid], 'SelectedRows', () => {
+            getter(obj[grid], 'SelectedRows', () => {
                 const gridInstance = formContext?.getControl(grid)?.getGrid();
                 return createCollectionObject(
                     () => gridInstance?.getSelectedRows(),
                     row => loadGridRow(row?.getData())
                 );
             });
-            getter(grids[grid], 'TotalRecordCount', () => gridControl?.getGrid()?.getTotalRecordCount());
-            getter(grids[grid], 'ViewSelector', () => {
+            getter(obj[grid], 'TotalRecordCount', () => gridControl?.getGrid()?.getTotalRecordCount());
+            getter(obj[grid], 'ViewSelector', () => {
                 const viewSelector = gridControl?.getViewSelector();
-                const obj = {};
-                getter(obj, 'Visible', () => viewSelector?.isVisible());
-                getterSetter(obj, 'CurrentView', () => viewSelector?.getCurrentView(), value => viewSelector?.setCurrentView(value));
-                return obj;
+                const vsObj = {};
+                getter(vsObj, 'Visible', () => viewSelector?.isVisible());
+                getterSetter(vsObj, 'CurrentView', () => viewSelector?.getCurrentView(), value => viewSelector?.setCurrentView(value));
+                return vsObj;
             });
             getterSetter(obj[grid], 'Visible', () => gridControl?.getVisible(), value => { gridControl?.setVisible(value); });
             getter(obj[grid], 'ControlType', () => gridControl?.getControlType());
@@ -566,9 +556,6 @@ const devKit = (function () {
             obj[grid].RefreshRibbon = () => gridControl?.refreshRibbon();
             obj[grid].RemoveOnLoad = callback => gridControl?.removeOnLoad(callback);
             obj[grid].Url = client => gridControl?.getUrl(client);
-        }
-        Object.keys(obj).forEach(grid => {
-            loadGrid(formContext, obj, grid);
         });
         return obj;
     }
