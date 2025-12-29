@@ -1396,7 +1396,7 @@ declare namespace DevKit {
                  * @param isDefault Indicates whether the view should be the default view
                  * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/addcustomview
                  */
-                AddCustomView(viewId: DevKit.Guid, entityName: string, viewDisplayName: string, fetchXml: string, layoutXml: string, isDefault: boolean): void;
+                AddCustomView(viewId: Guid, entityName: string, viewDisplayName: string, fetchXml: string, layoutXml: string, isDefault: boolean): void;
                 /**
                  * Applies changes to lookups based on values current just as the user is about to view results
                  * @param callback The function that will be run just before the search to provide results
@@ -1432,7 +1432,7 @@ declare namespace DevKit {
                  * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getdefaultview
                  * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/setdefaultview
                  */
-                DefaultView: DevKit.Guid;
+                DefaultView: Guid;
                 /**
                  * Get/Set the types of entities allowed in the lookup control
                  * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getentitytypes
@@ -1576,14 +1576,14 @@ declare namespace DevKit {
              * @param callback A function to call when the operation is complete
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/setactiveprocessinstance
              */
-            SetActiveProcessInstance(processInstanceId: DevKit.Guid, callback: (result: "success" | "invalid") => void): void;
+            SetActiveProcessInstance(processInstanceId: Guid, callback: (result: "success" | "invalid") => void): void;
             /**
              * Sets a Process as the active process
              * @param processId The Id of the process to set as the active process
              * @param callback A function to call when the operation is complete
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/activeprocess/setactiveprocess
              */
-            SetActiveProcess(processId: DevKit.Guid, callback: (result: "success" | "invalid") => void): void;
+            SetActiveProcess(processId: Guid, callback: (result: "success" | "invalid") => void): void;
             /**
              * Reflows the UI of the business process control
              * @param updateUi Specify true to update the UI of the process control
@@ -1611,7 +1611,7 @@ declare namespace DevKit {
              * Returns the unique identifier of the process instance
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/instance/getinstanceid
              */
-            readonly InstanceId: DevKit.Guid;
+            readonly InstanceId: Guid;
             /**
              * Returns the name of the process instance
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/instance/getinstancename
@@ -1878,186 +1878,6 @@ declare namespace DevKit {
              */
             SearchQuery: string;
         }
-
-        /**
-         * Interface for Business Process Flow (BPF) controls
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process
-         */
-        interface IProcess {
-            /**
-             * Adds a function as an event handler for the OnPreProcessStatusChange event
-             * @param callback The function to be executed
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/eventhandlers/addonpreprocessstatuschange
-             */
-            AddOnPreProcessStatusChange(callback: (executionContext: any) => void): void;
-
-            /**
-             * Adds a function as an event handler for the OnPreStageChange event
-             * @param callback The function that runs before the stage changes
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/eventhandlers/addonprestagechange
-             */
-            AddOnPreStageChange(callback: (executionContext: any) => void): void;
-
-            /**
-             * Adds a function as an event handler for the OnProcessStatusChange event
-             * @param callback The function to be executed when the status changes
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/eventhandlers/addonprocessstatuschange
-             */
-            AddOnProcessStatusChange(callback: (executionContext: any) => void): void;
-
-            /**
-             * Adds a function as an event handler for the OnStageChange event
-             * @param callback The function to be executed when the stage changes
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/eventhandlers/addonstagechange
-             */
-            AddOnStageChange(callback: (executionContext: any) => void): void;
-
-            /**
-             * Adds a function as an event handler for the OnStageSelected event
-             * @param callback The function to be executed when a stage is selected
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/eventhandlers/addonstageselected
-             */
-            AddOnStageSelected(callback: (executionContext: any) => void): void;
-
-            /**
-             * Removes an event handler from the OnPreProcessStatusChange event
-             * @param callback The function to be removed
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/eventhandlers/removeonpreprocessstatuschange
-             */
-            RemoveOnPreProcessStatusChange(callback: (executionContext: any) => void): void;
-
-            /**
-             * Removes an event handler from the OnPreStageChange event
-             * @param callback The function to be removed
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/eventhandlers/removeonprestagechange
-             */
-            RemoveOnPreStageChange(callback: (executionContext: any) => void): void;
-
-            /**
-             * Removes an event handler from the OnProcessStatusChange event
-             * @param callback The function to be removed
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/eventhandlers/removeonprocessstatuschange
-             */
-            RemoveOnProcessStatusChange(callback: (executionContext: any) => void): void;
-
-            /**
-             * Removes an event handler from the OnStageChange event
-             * @param callback The function to be removed
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/eventhandlers/removeonstagechange
-             */
-            RemoveOnStageChange(callback: (executionContext: any) => void): void;
-
-            /**
-             * Removes an event handler from the OnStageSelected event
-             * @param callback The function to be removed
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/eventhandlers/removeonstageselected
-             */
-            RemoveOnStageSelected(callback: (executionContext: any) => void): void;
-
-            /**
-             * Progresses to the next stage
-             * @param callback A function to call when the operation is complete
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/navigation/movenext
-             */
-            MoveNext(callback: (result: string) => void): void;
-
-            /**
-             * Moves to the previous stage
-             * @param callback A function to call when the operation is complete
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/navigation/moveprevious
-             */
-            MovePrevious(callback: (result: string) => void): void;
-
-            /**
-             * Sets a completed stage as the active stage
-             * @param stageId The ID of the completed stage for the entity to make the active stage
-             * @param callback A function to call when the operation is complete
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/activestage/setactivestage
-             */
-            SetActiveStage(stageId: string, callback: (result: string) => void): void;
-
-            /**
-             * Sets a Process as the active process
-             * @param processId The Id of the process to set as the active process
-             * @param callback A function to call when the operation is complete
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/activeprocess/setactiveprocess
-             */
-            SetActiveProcess(processId: string, callback: (result: string) => void): void;
-
-            /**
-             * Sets a process instance as the active instance
-             * @param processInstanceId The Id of the process instance to set as the active instance
-             * @param callback A function to call when the operation is complete
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/setactiveprocessinstance
-             */
-            SetActiveProcessInstance(processInstanceId: string, callback: (result: string) => void): void;
-
-            /**
-             * Reflows the UI of the business process control
-             * @param updateUi Specify true to update the UI of the process control
-             * @param parentStage Specify the ID of the parent stage in the GUID format
-             * @param nextStage Specify the ID of the next stage in the GUID format
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-process/reflow
-             */
-            Reflow(updateUi: boolean, parentStage: string, nextStage: string): void;
-
-            /**
-             * Returns a Process object representing the active process
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/activeprocess/getactiveprocess
-             */
-            readonly ActiveProcess: any;
-
-            /**
-             * Returns representing the active stage
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/activestage/getactivestage
-             */
-            readonly ActiveStage: any;
-
-            /**
-             * Gets the currently selected stage
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/getselectedstage
-             */
-            readonly SelectedStage: any;
-
-            /**
-             * Gets a collection of stages currently in the active path
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/activepath/getactivepath
-             */
-            readonly ActivePath: any;
-
-            /**
-             * Returns the unique identifier of the process instance
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/instance/getinstanceid
-             */
-            readonly InstanceId: string;
-
-            /**
-             * Returns the name of the process instance
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/instance/getinstancename
-             */
-            readonly InstanceName: string;
-
-            /**
-             * Get/Set the display state for the business process control
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-process/getdisplaystate
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-process/setdisplaystate
-             */
-            DisplayState: "expanded" | "collapsed" | "floating";
-
-            /**
-             * Get/Set the current status of the process instance
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/instance/getstatus
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/instance/setstatus
-             */
-            Status: "active" | "finished" | "aborted";
-
-            /**
-             * Get/Set a value indicating whether the business process control is visible
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-process/getvisible
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-process/setvisible
-             */
-            Visible: boolean;
-        }
     }
 
     /**
@@ -2261,200 +2081,6 @@ declare namespace DevKit {
          * @param callback Boolean value indicating whether to allow creating new records
          */
         AllowCreateNew(callback: boolean): void;
-    }
-
-    /**
-     * Interface for Business Process Flow
-     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process
-     */
-    interface IProcess {
-        /**
-         * Returns a collection of stages in the active path
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/activepath
-         */
-        readonly ActivePath: Collections<IStage>;
-
-        /**
-         * Returns the currently active process
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/activeprocess/getactiveprocess
-         */
-        readonly ActiveProcess: { Id: string; Name: string; IsRendered: boolean; Stages: any };
-
-        /**
-         * Returns the currently active stage
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/activestage/getactivestage
-         */
-        readonly ActiveStage: IStage;
-
-        /**
-         * Returns the unique identifier of the process instance
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/getinstanceid
-         */
-        readonly InstanceId: string;
-
-        /**
-         * Returns the name of the process instance
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/getinstancename
-         */
-        readonly InstanceName: string;
-
-        /**
-         * Returns the currently selected stage
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/getselectedstage
-         */
-        readonly SelectedStage: IStage;
-
-        /**
-         * Get/Set the display state of the process control: "expanded", "collapsed", or "floating"
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-process/getdisplaystate
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-process/setdisplaystate
-         */
-        DisplayState: "expanded" | "collapsed" | "floating";
-
-        /**
-         * Get/Set the status of the process: "active", "aborted", or "finished"
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/getstatus
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/setstatus
-         */
-        Status: "active" | "aborted" | "finished";
-
-        /**
-         * Get/Set whether the process control is visible
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-process/getvisible
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-process/setvisible
-         */
-        Visible: boolean;
-
-        /**
-         * Adds a handler for the OnPreProcessStatusChange event
-         * @param callback The function to call when the event occurs
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/addonpreprocessstatuschange
-         */
-        AddOnPreProcessStatusChange(callback: (executionContext: any) => void): void;
-
-        /**
-         * Adds a handler for the OnPreStageChange event
-         * @param callback The function to call when the event occurs
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/addonprestagechange
-         */
-        AddOnPreStageChange(callback: (executionContext: any) => void): void;
-
-        /**
-         * Adds a handler for the OnProcessStatusChange event
-         * @param callback The function to call when the event occurs
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/addonprocessstatuschange
-         */
-        AddOnProcessStatusChange(callback: (executionContext: any) => void): void;
-
-        /**
-         * Adds a handler for the OnStageChange event
-         * @param callback The function to call when the event occurs
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/addonstagechange
-         */
-        AddOnStageChange(callback: (executionContext: any) => void): void;
-
-        /**
-         * Adds a handler for the OnStageSelected event
-         * @param callback The function to call when the event occurs
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/addonstageselected
-         */
-        AddOnStageSelected(callback: (executionContext: any) => void): void;
-
-        /**
-         * Gets the enabled processes for the entity
-         * @param callback Function to receive the array of enabled processes
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/getenabledprocesses
-         */
-        EnabledProcesses(callback: (processes: { ProcessId: string; ProcessName: string }[]) => void): void;
-
-        /**
-         * Moves to the next stage
-         * @param callback Function to call on completion
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/movenext
-         */
-        MoveNext(callback: (status: string) => void): void;
-
-        /**
-         * Moves to the previous stage
-         * @param callback Function to call on completion
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/moveprevious
-         */
-        MovePrevious(callback: (status: string) => void): void;
-
-        /**
-         * Gets the process instances for the record
-         * @param callback Function to receive the array of process instances
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/getprocessinstances
-         */
-        ProcessInstances(callback: (processes: any[]) => void): void;
-
-        /**
-         * Reflows the UI of the business process flow control
-         * @param updateUi Boolean indicating whether to update the UI
-         * @param parentStage The ID of the parent stage
-         * @param nextStage The ID of the next stage
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-process/reflow
-         */
-        Reflow(updateUi: boolean, parentStage: string, nextStage: string): void;
-
-        /**
-         * Removes a handler from the OnPreProcessStatusChange event
-         * @param callback The function to remove
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/eventhandlers/removeonpreprocessstatuschange
-         */
-        RemoveOnPreProcessStatusChange(callback: (executionContext: any) => void): void;
-
-        /**
-         * Removes a handler from the OnPreStageChange event
-         * @param callback The function to remove
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/eventhandlers/removeonprestagechange
-         */
-        RemoveOnPreStageChange(callback: (executionContext: any) => void): void;
-
-        /**
-         * Removes a handler from the OnProcessStatusChange event
-         * @param callback The function to remove
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/eventhandlers/removeonprocessstatuschange
-         */
-        RemoveOnProcessStatusChange(callback: (executionContext: any) => void): void;
-
-        /**
-         * Removes a handler from the OnStageChange event
-         * @param callback The function to remove
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/eventhandlers/removeonstagechange
-         */
-        RemoveOnStageChange(callback: (executionContext: any) => void): void;
-
-        /**
-         * Removes a handler from the OnStageSelected event
-         * @param callback The function to remove
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/eventhandlers/removeonstageselected
-         */
-        RemoveOnStageSelected(callback: (executionContext: any) => void): void;
-
-        /**
-         * Sets the active process
-         * @param processId The ID of the process to set as active
-         * @param callback Function to call on completion
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/setactiveprocess
-         */
-        SetActiveProcess(processId: string, callback: (status: string) => void): void;
-
-        /**
-         * Sets the active process instance
-         * @param processInstanceId The ID of the process instance to set as active
-         * @param callback Function to call on completion
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/setactiveprocessinstance
-         */
-        SetActiveProcessInstance(processInstanceId: string, callback: (status: string) => void): void;
-
-        /**
-         * Sets the active stage
-         * @param stageId The ID of the stage to set as active
-         * @param callback Function to call on completion
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/setactivestage
-         */
-        SetActiveStage(stageId: string, callback: (status: string) => void): void;
     }
 
     // ============================================================================
@@ -3328,7 +2954,7 @@ declare namespace DevKit {
      */
     interface ProcessEnabled {
         /** The unique identifier of the process */
-        readonly ProcessId: DevKit.Guid;
+        readonly ProcessId: Guid;
         /** The name of the process */
         readonly ProcessName: string;
     }
@@ -3343,7 +2969,7 @@ declare namespace DevKit {
         /** The created on date */
         readonly CreatedOnDate: Date;
         /** The unique identifier of the process instance */
-        readonly InstanceId: DevKit.Guid;
+        readonly InstanceId: Guid;
         /** The name of the process instance */
         readonly InstanceName: string;
         /** The status of the process instance */
@@ -3359,7 +2985,7 @@ declare namespace DevKit {
          * Returns the unique identifier of the process
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/process/getid
          */
-        readonly Id: DevKit.Guid;
+        readonly Id: Guid;
         /**
          * Returns the name of the process
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/process/getname
@@ -3461,7 +3087,7 @@ declare namespace DevKit {
         /** Entity type of the record */
         entityType: string;
         /** GUID of the record */
-        id: DevKit.Guid;
+        id: Guid;
         /** Name of the record */
         name?: string;
     }
@@ -3486,7 +3112,7 @@ declare namespace DevKit {
          * @deprecated use {@link BaseCurrency}
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#basecurrencyid
          */
-        readonly BaseCurrencyId: DevKit.Guid;
+        readonly BaseCurrencyId: Guid;
         /**
          * Returns a lookup object containing the ID, name, and entity type of the base currency for the current organization
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#basecurrency
@@ -3526,7 +3152,7 @@ declare namespace DevKit {
          * Returns the ID of the current organization
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#organizationid
          */
-        readonly OrganizationId: DevKit.Guid;
+        readonly OrganizationId: Guid;
         /**
          * Returns the unique name of the current organization
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#uniquename
@@ -3619,7 +3245,7 @@ declare namespace DevKit {
          * Returns the ID of the default dashboard for the current user
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#defaultdashboardid
          */
-        readonly DefaultDashboardId: DevKit.Guid;
+        readonly DefaultDashboardId: Guid;
         /**
          * Indicates whether guided help is enabled for the current user
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#isguidedhelpenabled
@@ -3649,13 +3275,13 @@ declare namespace DevKit {
          * Returns an array of strings that represent the GUID values of each of the security role privilege that the user is associated with
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#securityroleprivileges
          */
-        readonly SecurityRolePrivileges: Array<DevKit.Guid>;
+        readonly SecurityRolePrivileges: Array<Guid>;
         /**
          * [Deprecated] Returns an array of strings that represent the GUID values of each of the security role privilege
          * @deprecated use {@link SecurityRolePrivileges}
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#securityroles
          */
-        readonly SecurityRoles: Array<DevKit.Guid>;
+        readonly SecurityRoles: Array<Guid>;
         /**
          * Returns a lookup object containing the ID, display name, and entity type of the transaction currency for the current user.
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#transactioncurrency
@@ -3666,12 +3292,12 @@ declare namespace DevKit {
          * @deprecated use {@link TransactionCurrency}
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#transactioncurrencyid
          */
-        readonly TransactionCurrencyId: DevKit.Guid;
+        readonly TransactionCurrencyId: Guid;
         /**
          * Returns the GUID of the SystemUser.Id value for the current user
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#userid
          */
-        readonly UserId: DevKit.Guid;
+        readonly UserId: Guid;
         /**
          * Returns the name of the current user
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#username
@@ -3697,3 +3323,4 @@ declare namespace DevKit {
         GetSecurityRolePrivilegesInfo(): Promise<{ [key: string]: SecurityRolePrivilegeInfo }>;
     }
 }
+
