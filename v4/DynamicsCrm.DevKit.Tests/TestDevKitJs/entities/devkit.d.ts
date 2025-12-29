@@ -901,14 +901,6 @@ declare namespace DevKit {
              */
             Visible: boolean;
         }
-        interface IFooter {
-            /**
-             * Get/Set the visibility of footer section
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-footersection/getvisible
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-footersection/setvisible
-             */
-            Visible: boolean;
-        }
         interface IHeader {
             /**
              * Get/Set the visibility of header section

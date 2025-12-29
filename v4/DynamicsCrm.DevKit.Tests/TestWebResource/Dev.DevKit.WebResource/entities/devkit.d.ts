@@ -1,4 +1,4 @@
-/**
+﻿/**
  * DynamicsCrm.DevKit TypeScript Definitions
  *
  * @version 4.0
@@ -22,7 +22,7 @@ declare namespace DevKit {
     /**
      * Callback function type for failed operations.
      */
-    type ErrorCallback = (error: DevKit.Error) => void;
+    type ErrorCallback = (error: Error) => void;
     namespace Controls {
         interface IControl {
             /**
@@ -64,7 +64,7 @@ declare namespace DevKit {
              * @param notification The notification to add
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/addnotification
              */
-            AddNotification(notification: DevKit.FieldNotification): void;
+            AddNotification(notification: FieldNotification): void;
             /**
              * Remove a message already displayed for a control
              * @param uniqueId The ID to use to clear a specific message that was set using setNotification or addNotification. If the uniqueId parameter isn?t specified, the currently displayed notification will be cleared
@@ -139,7 +139,7 @@ declare namespace DevKit {
              * Returns an object with three Boolean properties corresponding to privileges indicating if the user can create, read or update data values for a attribute. This function is intended for use when Field Level Security modifies a user?s privileges for a particular attribute
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getuserprivilege
              */
-            readonly UserPrivilege: DevKit.FieldUserPrivilege;
+            readonly UserPrivilege: FieldUserPrivilege;
             /**
              * Returns an array of objects, where each object has a name and value property. The array represents the current output parameter values for a custom control
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getoutputs
@@ -249,13 +249,13 @@ declare namespace DevKit {
              * @param callback The callback function must accept a parameter that contains an object with dictionary properties where the name of the property is the Id of the business process flow and the value of the property is the name of the business process flow. The enabled processes are filtered according to the user?s privileges. The list of enabled processes is the same ones a user can see in the UI if they want to change the process manually
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/getenabledprocesses
              */
-            EnabledProcesses(callback: (processes: Array<DevKit.ProcessEnabled>) => void): void;
+            EnabledProcesses(callback: (processes: Array<ProcessEnabled>) => void): void;
             /**
              * Returns all the process instances for the entity record that the calling user has access to.
              * @param callback The callback function is passed an object with the following attributes and their corresponding values as the key:value pair. All returned values are of string type except for CreatedOnDate
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/getprocessinstances
              */
-            ProcessInstances(callback: (processes: Array<DevKit.ProcessInstance>) => void): void;
+            ProcessInstances(callback: (processes: Array<ProcessInstance>) => void): void;
             /**
              * Sets a completed stage as the active stage
              * @param stageId The ID of the completed stage for the entity to make the active stage
@@ -281,14 +281,14 @@ declare namespace DevKit {
              * @param callback A function to call when the operation is complete
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/setactiveprocessinstance
              */
-            SetActiveProcessInstance(processInstanceId: DevKit.Guid, callback: (result: "success" | "invalid") => void): void;
+            SetActiveProcessInstance(processInstanceId: Guid, callback: (result: "success" | "invalid") => void): void;
             /**
              * Sets a Process as the active process. If there is an active instance of the process, the entity record is loaded with the process instance ID. If there is no active instance of the process, a new process instance is created and the entity record is loaded with the process instance ID. If there are multiple instances of the current process, the record is loaded with the first instance of the active process as per the defaulting logic, that is the most recently used process instance per user
              * @param processId The Id of the process to set as the active process
              * @param callback A function to call when the operation is complete. This callback function is passed one of the following string values to indicate whether the operation succeeded
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/activeprocess/setactiveprocess
              */
-            SetActiveProcess(processId: DevKit.Guid, callback: (result: "success" | "invalid") => void): void;
+            SetActiveProcess(processId: Guid, callback: (result: "success" | "invalid") => void): void;
             /**
              * Reflows the UI of the business process control
              * @param updateUi Specify true to update the UI of the process control; false otherwise
@@ -301,22 +301,22 @@ declare namespace DevKit {
              * Returns a Process object representing the active process
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/activeprocess/getactiveprocess
              */
-            readonly ActiveProcess: DevKit.ProcessProcess;
+            readonly ActiveProcess: ProcessProcess;
             /**
              * Gets the currently selected stage
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/getselectedstage
              */
-            readonly SelectedStage: DevKit.ProcessStage;
+            readonly SelectedStage: ProcessStage;
             /**
              * Returns representing the active stage
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/activestage/getactivestage
              */
-            readonly ActiveStage: DevKit.ProcessStage;
+            readonly ActiveStage: ProcessStage;
             /**
              * Returns the unique identifier of the process instance. Value represents the string representation of a GUID value
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/instance/getinstanceid
              */
-            readonly InstanceId: DevKit.Guid;
+            readonly InstanceId: Guid;
             /**
              * Returns the name of the process instance
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/instance/getinstancename
@@ -326,7 +326,7 @@ declare namespace DevKit {
              * Gets a collection of stages currently in the active path with methods to interact with the stages displayed in the business process flow control. The active path represents stages currently rendered in the process control based on the branching rules and current data in the record
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/activepath/getactivepath
              */
-            readonly ActivePath: DevKit.Collections<DevKit.ProcessStage>;
+            readonly ActivePath: Collections<ProcessStage>;
             /**
              * Get/Set the display state for the business process control
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-process/getdisplaystate
@@ -360,18 +360,6 @@ declare namespace DevKit {
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/openform
          */
         namespace Dialog {
-            /**
-             * Enumeration of field requirement levels for dialog forms
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getrequiredlevel
-             */
-            enum FieldRequiredLevel {
-                /** Field is not required */
-                None,
-                /** Field is required */
-                Required,
-                /** Field is recommended */
-                Recommended
-            }
             /**
              * Base interface for all dialog controls with common visibility and state properties
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
@@ -432,7 +420,7 @@ declare namespace DevKit {
                  * Gets or sets the required level for the attribute
                  * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getrequiredlevel
                  */
-                RequiredLevel: FieldRequiredLevel;
+                RequiredLevel: OptionSet.FieldRequiredLevel;
                 /**
                  * Returns whether there are unsaved changes to the attribute value
                  * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getisdirty
@@ -536,28 +524,6 @@ declare namespace DevKit {
                  * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/gettext
                  */
                 readonly Text: string;
-            }
-            /**
-             * Represents an entity reference in a lookup field
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getvalue
-             */
-            interface EntityReference {
-                /** The logical name of the entity type */
-                entityType: string;
-                /** The GUID of the record */
-                id: DevKit.Guid;
-                /** The display name of the record */
-                name?: string;
-            }
-            /**
-             * Represents an option with text and numeric value
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getoption
-             */
-            interface TextValueNumber {
-                /** The display text of the option */
-                readonly text: string,
-                /** The numeric value of the option */
-                readonly value: number
             }
             /**
              * Interface for single-line text controls in dialogs
@@ -667,7 +633,7 @@ declare namespace DevKit {
                  * @param isDefault Whether this is the default view
                  * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/addcustomview
                  */
-                AddCustomView(viewId: DevKit.Guid, entityName: string, viewDisplayName: string, fetchXml: string, layoutXml: string, isDefault: boolean): void;
+                AddCustomView(viewId: Guid, entityName: string, viewDisplayName: string, fetchXml: string, layoutXml: string, isDefault: boolean): void;
                 /**
                  * Adds a function to be called before the lookup search
                  * @param callback The function to call before search
@@ -701,7 +667,7 @@ declare namespace DevKit {
                  * Gets or sets the default view ID
                  * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getdefaultview
                  */
-                DefaultView: DevKit.Guid;
+                DefaultView: Guid;
                 /**
                  * Gets or sets the allowed entity types
                  * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getentitytypes
@@ -795,13 +761,13 @@ declare namespace DevKit {
              * @param label The label of the option
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getoption
              */
-            Option(label: string): DevKit.TextValueNumber;
+            Option(label: string): TextValueNumber;
             /**
              * Returns an option object with the value matching the argument (label or enumeration value) passed to the method
              * @param value The enumeration value of the option
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getoption
              */
-            Option(value: number): DevKit.TextValueNumber;
+            Option(value: number): TextValueNumber;
             /**
              * Adds an option to a control
              * @param text The label for the option
@@ -825,12 +791,12 @@ declare namespace DevKit {
              * Returns an array of option objects representing valid options for an attribute
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getoptions
              */
-            readonly Options: Array<DevKit.TextValueNumber>;
+            readonly Options: Array<TextValueNumber>;
             /**
              * Returns an array of option objects representing valid options available for a control, including a blank option and excluding any options that have been removed from the control using removeOption
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getoptions
             */
-            readonly ControlOptions: Array<DevKit.TextValueNumber>;
+            readonly ControlOptions: Array<TextValueNumber>;
             /**
              * Returns a string value of the text for the currently selected option for an optionset or multiselectoptionset attribute
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/gettext
@@ -874,28 +840,6 @@ declare namespace DevKit {
              */
             Value: number;
         }
-        /**
-         * Collection of controls within a quick view form
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/getcontrol
-         */
-        interface IQuickViewControlsCollection {
-            /**
-             * Gets a control by index or name
-             * @param arg The index (number) or name (string) of the control to get
-             */
-            get(arg?: number | string): any;
-
-            /**
-             * Gets the number of controls in the quick view form
-             */
-            getLength(): number;
-
-            /**
-             * Iterates over all controls in the quick view form
-             * @param callback The function to call for each control
-             */
-            forEach(callback: (control: any, index: number) => void): void;
-        }
         interface IQuickView {
             /**
              * Gets the controls on a form or control on form by passing an argument
@@ -907,7 +851,7 @@ declare namespace DevKit {
              * Gets all controls in the quick view form as a collection
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/getcontrol
              */
-            Controls(): IQuickViewControlsCollection;
+            Controls(): Collections<Controls.IControl>;
             /**
              * Returns whether the data binding for the constituent controls in a quick view control is complete
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/isloaded
@@ -954,14 +898,6 @@ declare namespace DevKit {
              * Get/Set a value that indicates whether the quick view control is currently visible. Or displays or hides a control
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/getvisible
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/setvisible
-             */
-            Visible: boolean;
-        }
-        interface IFooter {
-            /**
-             * Get/Set the visibility of footer section
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-footersection/getvisible
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-footersection/setvisible
              */
             Visible: boolean;
         }
@@ -1037,7 +973,7 @@ declare namespace DevKit {
              * @param isDefault Indicates whether the view should be the default view
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/addcustomview
              */
-            AddCustomView(viewId: DevKit.Guid, entityName: string, viewDisplayName: string, fetchXml: string, layoutXml: string, isDefault: boolean): void;
+            AddCustomView(viewId: Guid, entityName: string, viewDisplayName: string, fetchXml: string, layoutXml: string, isDefault: boolean): void;
             /**
              * Applies changes to lookups based on values current just as the user is about to view results for the lookup
              * @param callback The function that will be run just before the search to provide results for a lookup occurs. You can use this function to call one of the other lookup control functions and improve the results to be displayed in the lookup. The execution context is automatically passed as the first parameter to this function
@@ -1072,13 +1008,13 @@ declare namespace DevKit {
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getvalue
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/setvalue
              */
-            Value: Array<DevKit.EntityReference>;
+            Value: Array<EntityReference>;
             /**
              * Get/Set the ID value of the default lookup dialog view
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getdefaultview
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/setdefaultview
              */
-            DefaultView: DevKit.Guid;
+            DefaultView: Guid;
             /**
              * Get/Set the types of entities allowed in the lookup control
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getentitytypes
@@ -1154,7 +1090,7 @@ declare namespace DevKit {
             * @param errorCallback A function to call when the operation fails
             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getcontentwindow
             */
-            ContentWindow(successCallback: (contentWindow: any) => void, errorCallback?: (error: DevKit.Error) => void): void;
+            ContentWindow(successCallback: (contentWindow: any) => void, errorCallback?: (error: Error) => void): void;
             /**
             * Returns the content window that represents an IFRAME or web resource and returns a promise
             * @returns Promise that resolves with the content window
@@ -1186,7 +1122,7 @@ declare namespace DevKit {
             * @param errorCallback A function to call when the operation fails
             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getcontentwindow
             */
-            ContentWindow(successCallback?: (contentWindow: any) => void, errorCallback?: (error: DevKit.Error) => void): void;
+            ContentWindow(successCallback?: (contentWindow: any) => void, errorCallback?: (error: Error) => void): void;
             /**
              * Returns the default URL that an IFRAME control is configured to display
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getinitialurl
@@ -1236,7 +1172,7 @@ declare namespace DevKit {
              * Returns the option object or an array of option objects selected in an optionset or multiselectoptionset attribute respectively
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getselectedoption
              */
-            readonly SelectedOption: DevKit.TextValueNumber;
+            readonly SelectedOption: TextValueNumber;
             /**
              * Get/Set the data value for an attribute
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getvalue
@@ -1249,7 +1185,7 @@ declare namespace DevKit {
              * Returns the option object or an array of option objects selected in an optionset or multiselectoptionset attribute respectively
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getselectedoption
              */
-            readonly SelectedOption: Array<DevKit.TextValueNumber>
+            readonly SelectedOption: Array<TextValueNumber>
             /**
              * Get/Set the data value for an attribute
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getvalue
@@ -1309,7 +1245,7 @@ declare namespace DevKit {
              * A collection of one or more controls associated with the section
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/collections
              */
-            readonly Controls: DevKit.Collections<DevKit.Controls.IControl>;
+            readonly Controls: Collections<Controls.IControl>;
         }
         interface Grid {
             /**
@@ -1364,22 +1300,22 @@ declare namespace DevKit {
              * [Read-only and editable grids] Gets information about the relationship used to filter the subgrid
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/gridcontrol/getrelationship
              * */
-            readonly Relationship: DevKit.GridRelationship;
+            readonly Relationship: GridRelationship;
             /**
              * [Read-only grid] Provides methods to get or set information about the view selector of the subgrid control. If the subgrid control is not configured to display the view selector, calling the ViewSelector methods will throw an error
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/viewselector
              */
-            readonly ViewSelector: DevKit.ViewSelector;
+            readonly ViewSelector: ViewSelector;
             /**
              * [Read-only and editable grids] Returns a collection of every GridRow in the Grid
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/grid/getrows
              */
-            readonly Rows: DevKit.Collections<DevKit.Controls.GridRow>;
+            readonly Rows: Collections<Controls.GridRow>;
             /**
              * [Read-only and editable grids] Returns a collection of every selected GridRow in the Grid
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/grid/getselectedrows
              */
-            readonly SelectedRows: DevKit.Collections<DevKit.Controls.GridRow>;
+            readonly SelectedRows: Collections<Controls.GridRow>;
             /**
              * [Editable grids] Returns the total number of records that match the filter criteria of the view, not limited by the number visible in a single page
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/grid/gettotalrecordcount
@@ -1434,18 +1370,18 @@ declare namespace DevKit {
              * [Read-only and editable grids] Returns a Lookup value that references the record in the row
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/gridentity/getentityreference
              */
-            readonly EntityReference: DevKit.EntityReference;
+            readonly EntityReference: EntityReference;
             /**
              * [Read-only and editable grids] Returns the Id for the record in the row
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/gridentity/getid
              */
-            readonly EntityId: DevKit.Guid;
+            readonly EntityId: Guid;
             /**
              * [Read-only grid] Returns the primary attribute value for the record in the row
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/gridentity/getprimaryattributevalue
              */
             readonly PrimaryAttributeValue: string;
-            readonly Columns: DevKit.Collections<DevKit.Controls.GridColumn>;
+            readonly Columns: Collections<Controls.GridColumn>;
         }
         interface GridColumn {
             /**
@@ -1734,23 +1670,23 @@ declare namespace DevKit {
         }
         interface LookupValue {
             /** The guid value. E.g.: f55a0d1e-286b-e911-a997-000d3a802135 */
-            Value: DevKit.Guid;
+            Value: Guid;
             /** The name formatted text. E.g.: "A. Datum Corporation (sample)" */
             readonly FormattedValue: string;
         }
         interface LookupValueReadonly {
             /** The guid value. E.g.: f55a0d1e-286b-e911-a997-000d3a802135 */
-            readonly Value: DevKit.Guid;
+            readonly Value: Guid;
             /** The name formatted text. E.g.: "A. Datum Corporation (sample)" */
             readonly FormattedValue: string;
         }
         interface GuidValue {
             /** The guid value. E.g.: f55a0d1e-286b-e911-a997-000d3a802135 */
-            Value: DevKit.Guid;
+            Value: Guid;
         }
         interface GuidValueReadonly {
             /** The guid value. E.g.: f55a0d1e-286b-e911-a997-000d3a802135 */
-            Value: DevKit.Guid;
+            Value: Guid;
         }
         interface ManagedPropertyValue {
             Value: string;
@@ -1760,7 +1696,7 @@ declare namespace DevKit {
         }
         interface RetrieveMultipleResponse {
             /** An array of JSON objects, where each object represents the retrieved entity record containing attributes and their values as key: value pairs. The Id of the entity record is retrieved by default. */
-            entities: Array<DevKit.KeyValueObject>;
+            entities: Array<KeyValueObject>;
             /** If the number of records being retrieved is more than the value specified in the maxPageSize parameter in the request, this attribute returns the URL to return next set of records. */
             nextLink: string;
         }
@@ -1776,7 +1712,7 @@ declare namespace DevKit {
             /** The metadata for parameter types. */
             parameterTypes: {
                 /**  The metadata for enum types. The object has two string attributes: name and value */
-                enumProperties?: Array<DevKit.KeyValueObject>;
+                enumProperties?: Array<KeyValueObject>;
                 /** The category of the parameter type.  */
                 structuralProperty: OptionSet.StructuralProperty;
             }
@@ -1895,7 +1831,7 @@ declare namespace DevKit {
          * @param errorCallback The function that will be passed through and be called by a failed response.
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi/createrecord
          */
-        CreateRecord(entityLogicalName: string, data: any, successCallback: (result: DevKit.EntityReference) => void, errorCallback?: (error: DevKit.WebApi.ErrorCallbackObject) => void): void;
+        CreateRecord(entityLogicalName: string, data: any, successCallback: (result: EntityReference) => void, errorCallback?: (error: WebApi.ErrorCallbackObject) => void): void;
         /**
          * Creates an entity record and returns a promise
          * @param entityLogicalName Logical name of the entity you want to create. For example: "account".
@@ -1903,7 +1839,7 @@ declare namespace DevKit {
          * @returns Promise that resolves with the created entity reference
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi/createrecord
          */
-        CreateRecord(entityLogicalName: string, data: any): Promise<DevKit.EntityReference>;
+        CreateRecord(entityLogicalName: string, data: any): Promise<EntityReference>;
         /**
          * Deletes an entity record
          * @param entityLogicalName The entity logical name of the record you want to delete. For example: "account".
@@ -1912,7 +1848,7 @@ declare namespace DevKit {
          * @param errorCallback The function that will be passed through and be called by a failed response.
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi/deleterecord
          */
-        DeleteRecord(entityLogicalName: string, id: string, successCallback: (result: DevKit.EntityReference) => void, errorCallback?: (error: DevKit.WebApi.ErrorCallbackObject) => void): void;
+        DeleteRecord(entityLogicalName: string, id: string, successCallback: (result: EntityReference) => void, errorCallback?: (error: WebApi.ErrorCallbackObject) => void): void;
         /**
          * Deletes an entity record and returns a promise
          * @param entityLogicalName The entity logical name of the record you want to delete. For example: "account".
@@ -1920,7 +1856,7 @@ declare namespace DevKit {
          * @returns Promise that resolves with the deleted entity reference
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi/deleterecord
          */
-        DeleteRecord(entityLogicalName: string, id: string): Promise<DevKit.EntityReference>;
+        DeleteRecord(entityLogicalName: string, id: string): Promise<EntityReference>;
         /**
          * Retrieves an entity record
          * @param entityLogicalName The entity logical name of the record you want to retrieve. For example: "account".
@@ -1930,7 +1866,7 @@ declare namespace DevKit {
          * @param errorCallback The function that will be passed through and be called by a failed response.
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi/retrieverecord
          */
-        RetrieveRecord(entityLogicalName: string, id: string, options: string, successCallback: (result: any) => void, errorCallback?: (error: DevKit.WebApi.ErrorCallbackObject) => void): void;
+        RetrieveRecord(entityLogicalName: string, id: string, options: string, successCallback: (result: any) => void, errorCallback?: (error: WebApi.ErrorCallbackObject) => void): void;
         /**
          * Retrieves an entity record and returns a promise
          * @param entityLogicalName The entity logical name of the record you want to retrieve. For example: "account".
@@ -1949,7 +1885,7 @@ declare namespace DevKit {
          * @param errorCallback The function that will be passed through and be called by a failed response.
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi/retrievemultiplerecords
          */
-        RetrieveMultipleRecords(entityLogicalName: string, options: string, maxPageSize: number, successCallback: (result: DevKit.WebApi.RetrieveMultipleResponse) => void, errorCallback?: (error: DevKit.WebApi.ErrorCallbackObject) => void): void;
+        RetrieveMultipleRecords(entityLogicalName: string, options: string, maxPageSize: number, successCallback: (result: WebApi.RetrieveMultipleResponse) => void, errorCallback?: (error: WebApi.ErrorCallbackObject) => void): void;
         /**
          * Retrieves a collection of entity records and returns a promise
          * @param entityLogicalName The entity logical name of the records you want to retrieve. For example: "account".
@@ -1958,7 +1894,7 @@ declare namespace DevKit {
          * @returns Promise that resolves with the retrieved records
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi/retrievemultiplerecords
          */
-        RetrieveMultipleRecords(entityLogicalName: string, options?: string, maxPageSize?: number): Promise<DevKit.WebApi.RetrieveMultipleResponse>;
+        RetrieveMultipleRecords(entityLogicalName: string, options?: string, maxPageSize?: number): Promise<WebApi.RetrieveMultipleResponse>;
         /**
          * Updates an entity record
          * @param entityLogicalName The entity logical name of the record you want to update. For example: "account".
@@ -1968,7 +1904,7 @@ declare namespace DevKit {
          * @param errorCallback The function that will be passed through and be called by a failed response.
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi/updaterecord
          */
-        UpdateRecord(entityLogicalName: string, id: string, data: any, successCallback: (result: DevKit.EntityReference) => void, errorCallback?: (error: DevKit.WebApi.ErrorCallbackObject) => void): void;
+        UpdateRecord(entityLogicalName: string, id: string, data: any, successCallback: (result: EntityReference) => void, errorCallback?: (error: WebApi.ErrorCallbackObject) => void): void;
         /**
          * Updates an entity record and returns a promise
          * @param entityLogicalName The entity logical name of the record you want to update. For example: "account".
@@ -1977,7 +1913,7 @@ declare namespace DevKit {
          * @returns Promise that resolves with the updated entity reference
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi/updaterecord
          */
-        UpdateRecord(entityLogicalName: string, id: string, data: any): Promise<DevKit.EntityReference>;
+        UpdateRecord(entityLogicalName: string, id: string, data: any): Promise<EntityReference>;
         /**
          * Execute a single action, function, or CRUD operation
          * @param request Object that will be passed to the Web API endpoint to execute an action, function, or CRUD request.
@@ -1985,14 +1921,14 @@ declare namespace DevKit {
          * @param errorCallback The function that will be passed through and be called by a failed response.
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi/online/execute
          */
-        Execute(request: DevKit.WebApi.ExecuteRequest, successCallback: (result: DevKit.WebApi.ExecuteResponse) => void, errorCallback?: (error: DevKit.WebApi.ErrorCallbackObject) => void): void;
+        Execute(request: WebApi.ExecuteRequest, successCallback: (result: WebApi.ExecuteResponse) => void, errorCallback?: (error: WebApi.ErrorCallbackObject) => void): void;
         /**
          * Execute a single action, function, or CRUD operation and returns a promise
          * @param request Object that will be passed to the Web API endpoint to execute an action, function, or CRUD request.
          * @returns Promise that resolves with the execution response
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi/online/execute
          */
-        Execute(request: DevKit.WebApi.ExecuteRequest): Promise<DevKit.WebApi.ExecuteResponse>;
+        Execute(request: WebApi.ExecuteRequest): Promise<WebApi.ExecuteResponse>;
         /**
          * Execute a collection of action, function, or CRUD operations
          * @param requests An array of objects where each object is an action, function, or CRUD request that you want to execute.
@@ -2000,14 +1936,14 @@ declare namespace DevKit {
          * @param errorCallback The function that will be passed through and be called by a failed response.
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi/online/executemultiple
          */
-        ExecuteMultiple(requests: Array<DevKit.WebApi.ExecuteRequest>, successCallback: (result: Array<DevKit.WebApi.ExecuteResponse>) => void, errorCallback?: (error: DevKit.WebApi.ErrorCallbackObject) => void): void;
+        ExecuteMultiple(requests: Array<WebApi.ExecuteRequest>, successCallback: (result: Array<WebApi.ExecuteResponse>) => void, errorCallback?: (error: WebApi.ErrorCallbackObject) => void): void;
         /**
          * Execute a collection of action, function, or CRUD operations and returns a promise
          * @param requests An array of objects where each object is an action, function, or CRUD request that you want to execute.
          * @returns Promise that resolves with an array of execution responses
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi/online/executemultiple
          */
-        ExecuteMultiple(requests: Array<DevKit.WebApi.ExecuteRequest>): Promise<Array<DevKit.WebApi.ExecuteResponse>>;
+        ExecuteMultiple(requests: Array<WebApi.ExecuteRequest>): Promise<Array<WebApi.ExecuteResponse>>;
         /**
          * Retrieves multiple records and maps them using the provided constructor or factory function.
          * @template T The type of the entity to return
@@ -2020,7 +1956,7 @@ declare namespace DevKit {
          * @example
          * form.WebApi.RetrieveRecords(DevKitV4.AccountApi, 'account', '?$select=name&$top=3', 3, (rows) => { console.log(rows); });
          */
-        RetrieveRecords<T>(apiConstructorOrFactory: ((data: any) => T) | (new (data: any) => T), entityLogicalName: string, options: string, maxPageSize: number, successCallback: (result: T[]) => void, errorCallback?: (error: DevKit.WebApi.ErrorCallbackObject) => void): void;
+        RetrieveRecords<T>(apiConstructorOrFactory: ((data: any) => T) | (new (data: any) => T), entityLogicalName: string, options: string, maxPageSize: number, successCallback: (result: T[]) => void, errorCallback?: (error: WebApi.ErrorCallbackObject) => void): void;
         /**
          * Retrieves multiple records and maps them using the provided constructor or factory function.
          * @template T The type of the entity to return
@@ -2032,7 +1968,7 @@ declare namespace DevKit {
          * @example
          * form.WebApi.RetrieveRecords(DevKitV4.AccountApi, 'account', '?$select=name', (rows) => { console.log(rows); });
          */
-        RetrieveRecords<T>(apiConstructorOrFactory: ((data: any) => T) | (new (data: any) => T), entityLogicalName: string, options: string, successCallback: (result: T[]) => void, errorCallback?: (error: DevKit.WebApi.ErrorCallbackObject) => void): void;
+        RetrieveRecords<T>(apiConstructorOrFactory: ((data: any) => T) | (new (data: any) => T), entityLogicalName: string, options: string, successCallback: (result: T[]) => void, errorCallback?: (error: WebApi.ErrorCallbackObject) => void): void;
         /**
          * Retrieves multiple records using FetchXML and maps them using the provided constructor or factory function.
          * Entity name is automatically extracted from FetchXML.
@@ -2044,7 +1980,7 @@ declare namespace DevKit {
          * @example
          * form.WebApi.RetrieveRecords(DevKitV4.AccountApi, '?fetchXml=<fetch><entity name="account"/></fetch>', (rows) => { console.log(rows); });
          */
-        RetrieveRecords<T>(apiConstructorOrFactory: ((data: any) => T) | (new (data: any) => T), fetchXml: string, successCallback: (result: T[]) => void, errorCallback?: (error: DevKit.WebApi.ErrorCallbackObject) => void): void;
+        RetrieveRecords<T>(apiConstructorOrFactory: ((data: any) => T) | (new (data: any) => T), fetchXml: string, successCallback: (result: T[]) => void, errorCallback?: (error: WebApi.ErrorCallbackObject) => void): void;
         /**
          * Retrieves multiple records and maps them using the provided constructor or factory function (Promise-based).
          * @template T The type of the entity to return
@@ -2083,7 +2019,7 @@ declare namespace DevKit {
          * @example
          * form.WebApi.RetrieveRecord(DevKitV4.AccountApi, form.EntityName, form.EntityId, (record) => { console.log(record); });
          */
-        RetrieveRecord<T>(apiConstructorOrFactory: ((data: any) => T) | (new (data: any) => T), entityLogicalName: string, id: string, options: string, successCallback: (result: T) => void, errorCallback?: (error: DevKit.WebApi.ErrorCallbackObject) => void): void;
+        RetrieveRecord<T>(apiConstructorOrFactory: ((data: any) => T) | (new (data: any) => T), entityLogicalName: string, id: string, options: string, successCallback: (result: T) => void, errorCallback?: (error: WebApi.ErrorCallbackObject) => void): void;
         /**
          * Retrieves a single record and maps it using the provided constructor or factory function.
          * @template T The type of the entity to return
@@ -2095,7 +2031,7 @@ declare namespace DevKit {
          * @example
          * form.WebApi.RetrieveRecord(DevKitV4.AccountApi, form.EntityName, form.EntityId, (record) => { console.log(record); });
          */
-        RetrieveRecord<T>(apiConstructorOrFactory: ((data: any) => T) | (new (data: any) => T), entityLogicalName: string, id: string, successCallback: (result: T) => void, errorCallback?: (error: DevKit.WebApi.ErrorCallbackObject) => void): void;
+        RetrieveRecord<T>(apiConstructorOrFactory: ((data: any) => T) | (new (data: any) => T), entityLogicalName: string, id: string, successCallback: (result: T) => void, errorCallback?: (error: WebApi.ErrorCallbackObject) => void): void;
         /**
          * Retrieves a single record and maps it using the provided constructor or factory function (Promise-based).
          * @template T The type of the entity to return
@@ -2129,14 +2065,14 @@ declare namespace DevKit {
          * @param errorCallback The function that will be passed through and be called by a failed response.
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi/online/execute
          */
-        Execute(request: DevKit.WebApi.ExecuteRequest, successCallback: (result: DevKit.WebApi.ExecuteResponse) => void, errorCallback?: (error: DevKit.WebApi.ErrorCallbackObject) => void): void;
+        Execute(request: WebApi.ExecuteRequest, successCallback: (result: WebApi.ExecuteResponse) => void, errorCallback?: (error: WebApi.ErrorCallbackObject) => void): void;
         /**
          * Execute a single action, function, or CRUD operation that will be executed against the server even when the user is offline and returns a promise
          * @param request Object that will be passed to the Web API endpoint to execute an action, function, or CRUD request.
          * @returns Promise that resolves with the execution response
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi/online/execute
          */
-        Execute(request: DevKit.WebApi.ExecuteRequest): Promise<DevKit.WebApi.ExecuteResponse>;
+        Execute(request: WebApi.ExecuteRequest): Promise<WebApi.ExecuteResponse>;
         /**
          * Execute a collection of action, function, or CRUD operations that will be executed against the server even when the user is offline
          * @param requests An array of objects where each object is an action, function, or CRUD request that you want to execute.
@@ -2144,14 +2080,14 @@ declare namespace DevKit {
          * @param errorCallback The function that will be passed through and be called by a failed response.
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi/online/executemultiple
          */
-        ExecuteMultiple(requests: Array<DevKit.WebApi.ExecuteRequest>, successCallback: (result: Array<DevKit.WebApi.ExecuteResponse>) => void, errorCallback?: (error: DevKit.WebApi.ErrorCallbackObject) => void): void;
+        ExecuteMultiple(requests: Array<WebApi.ExecuteRequest>, successCallback: (result: Array<WebApi.ExecuteResponse>) => void, errorCallback?: (error: WebApi.ErrorCallbackObject) => void): void;
         /**
          * Execute a collection of action, function, or CRUD operations that will be executed against the server even when the user is offline and returns a promise
          * @param requests An array of objects where each object is an action, function, or CRUD request that you want to execute.
          * @returns Promise that resolves with an array of execution responses
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi/online/executemultiple
          */
-        ExecuteMultiple(requests: Array<DevKit.WebApi.ExecuteRequest>): Promise<Array<DevKit.WebApi.ExecuteResponse>>;
+        ExecuteMultiple(requests: Array<WebApi.ExecuteRequest>): Promise<Array<WebApi.ExecuteResponse>>;
     }
     /**
      * Contains methods to interact with the offline cache
@@ -2336,7 +2272,7 @@ declare namespace DevKit {
         /** The name of the privilege */
         readonly Name: string;
         /** The ID of the privilege */
-        readonly PrivilegeId: DevKit.Guid;
+        readonly PrivilegeId: Guid;
         /** The type of operation for the privilege */
         readonly PrivilegeType: OptionSet.PrivilegeType
     }
@@ -2465,9 +2401,9 @@ declare namespace DevKit {
         readonly displayName: string;
         readonly uniqueName: string;
         readonly url: string;
-        readonly webResourceId: DevKit.Guid;
+        readonly webResourceId: Guid;
         readonly webResourceName: string;
-        readonly welcomePageId: DevKit.Guid;
+        readonly welcomePageId: Guid;
         readonly welcomePageName: string;
     }
     interface FieldUserPrivilege {
@@ -2562,7 +2498,7 @@ declare namespace DevKit {
          * The unique identifier of the process instance
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/getprocessinstances
          */
-        readonly InstanceId: DevKit.Guid;
+        readonly InstanceId: Guid;
         /**
          * The name of the process instance
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/getprocessinstances
@@ -2583,7 +2519,7 @@ declare namespace DevKit {
          * The unique identifier of the process definition
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/getprocessinstances
          */
-        readonly ProcessId: DevKit.Guid;
+        readonly ProcessId: Guid;
         /**
          * The name of the process definition
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/getprocessinstances
@@ -2595,7 +2531,7 @@ declare namespace DevKit {
          * Returns the unique identifier of the process
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/process/getid
          */
-        readonly Id: DevKit.Guid;
+        readonly Id: Guid;
         /**
          * Returns the name of the process
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/process/getname
@@ -2610,7 +2546,7 @@ declare namespace DevKit {
          * Returns a collection of stages in the process
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/process/getstages
          */
-        Stages: DevKit.Collections<ProcessStage>;
+        Stages: Collections<ProcessStage>;
     }
     /**
      * Provides information about the relationship used to filter a subgrid
@@ -2731,7 +2667,7 @@ declare namespace DevKit {
          * Returns an object with methods to manage the events.
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/executioncontext/geteventargs
          */
-        readonly EventArgs: DevKit.ExecutionContextEventArgs;
+        readonly EventArgs: ExecutionContextEventArgs;
         /**
          * Returns a reference to the object that the event occurred on.
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/executioncontext/geteventsource
@@ -2751,7 +2687,7 @@ declare namespace DevKit {
         * Use this method to know information about an entity being saved/updated. It returns entity ID, and entity name if success.
         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/save-event-arguments/getentityreference
         */
-        readonly EntityReference: DevKit.EntityReference;
+        readonly EntityReference: EntityReference;
         /**
         * Use this method to know whether the OnSave operation is successful or failed.
         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/save-event-arguments/getissavesuccess
@@ -2788,7 +2724,7 @@ declare namespace DevKit {
         /**
          * When the form OnProcessStatusChange/OnStageSelected event occurs. Gets the stage object corresponding to the event triggered. Returns the selected stage in for the OnStageSelected event and next or previous stage objects for the OnStageChange event depending on direction moved.
          * */
-        getStage(): DevKit.ProcessStage;
+        getStage(): ProcessStage;
         /**
          * When the form OnProcessStatusChange/OnStageSelected event occurs. Gets the direction of the stage advance action. It returns a string value Next or Previous.
          * */
@@ -2814,7 +2750,7 @@ declare namespace DevKit {
          * @param errorCallback The function to execute when the operation fails.
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getallowedstatustransitions
          */
-        AllowedStatusTransitions(entityName: string, statusCode: number, successCallback: (statusCodes: Array<number>) => void, errorCallback?: (error: DevKit.Error) => void): void;
+        AllowedStatusTransitions(entityName: string, statusCode: number, successCallback: (statusCodes: Array<number>) => void, errorCallback?: (error: Error) => void): void;
         /**
          * Returns the valid status transitions for the specified entity type and state code and returns a promise
          * @param entityName The logical name of the entity.
@@ -2836,7 +2772,7 @@ declare namespace DevKit {
          * @param errorCallback A function to call when the operation fails. An error object with the message property (String) will be passed that describes the error details.
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-device/getbarcodevalue
          */
-        BarcodeValue(successCallback: (result: string) => void, errorCallback?: (error: DevKit.Error) => void): void;
+        BarcodeValue(successCallback: (result: string) => void, errorCallback?: (error: Error) => void): void;
         /**
          * Invokes the device camera to scan the barcode information and returns a promise
          * @returns Promise that resolves with the barcode value as a string
@@ -2849,13 +2785,13 @@ declare namespace DevKit {
          * @param errorCallback A function to call when the operation fails.
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-device/captureaudio
          */
-        CaptureAudio(successCallback: (result: DevKit.FileData) => void, errorCallback?: (error: DevKit.Error) => void): void;
+        CaptureAudio(successCallback: (result: FileData) => void, errorCallback?: (error: Error) => void): void;
         /**
          * Invokes the device microphone to record audio and returns a promise
          * @returns Promise that resolves with the audio file data
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-device/captureaudio
          */
-        CaptureAudio(): Promise<DevKit.FileData>;
+        CaptureAudio(): Promise<FileData>;
         /**
          * Invokes the device camera to capture an image. Note: This method is supported only for the mobile clients.
          * @param imageOption The image option.
@@ -2863,27 +2799,27 @@ declare namespace DevKit {
          * @param errorCallback A function to call when the operation fails.
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-device/captureimage
          */
-        CaptureImage(imageOption: DevKit.ImageOption, successCallback: (result: DevKit.FileData) => void, errorCallback?: (error: DevKit.Error) => void): void;
+        CaptureImage(imageOption: ImageOption, successCallback: (result: FileData) => void, errorCallback?: (error: Error) => void): void;
         /**
          * Invokes the device camera to capture an image and returns a promise
          * @param imageOption The image option.
          * @returns Promise that resolves with the image file data
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-device/captureimage
          */
-        CaptureImage(imageOption: DevKit.ImageOption): Promise<DevKit.FileData>;
+        CaptureImage(imageOption: ImageOption): Promise<FileData>;
         /**
          * Invokes the device camera to record video. Note: This method is supported only for the mobile clients.
          * @param successCallback A function to call when Video is returned. A base64 encoded video object attributes is passed to the function.
          * @param errorCallback A function to call when the operation fails.
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-device/capturevideo
          */
-        CaptureVideo(successCallback: (result: DevKit.FileData) => void, errorCallback?: (error: DevKit.Error) => void): void;
+        CaptureVideo(successCallback: (result: FileData) => void, errorCallback?: (error: Error) => void): void;
         /**
          * Invokes the device camera to record video and returns a promise
          * @returns Promise that resolves with the video file data
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-device/capturevideo
          */
-        CaptureVideo(): Promise<DevKit.FileData>;
+        CaptureVideo(): Promise<FileData>;
         /**
          * Closes a progress dialog box. If no progress dialog is displayed currently, this method will do nothing. You can display a progress dialog using the ShowProgressIndicator method.
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/closeprogressindicator
@@ -2895,7 +2831,7 @@ declare namespace DevKit {
          * @param errorCallback A function to call when the operation fails
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/getcurrentappname
          */
-        CurrentAppName(successCallback: (result: string) => void, errorCallback?: (error: DevKit.Error) => void): void;
+        CurrentAppName(successCallback: (result: string) => void, errorCallback?: (error: Error) => void): void;
         /**
          * Returns the name of the current business app in Customer Engagement and returns a promise
          * @returns Promise that resolves with the app name
@@ -2914,26 +2850,26 @@ declare namespace DevKit {
          * @param errorCallback A function to call when the operation fails
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/getcurrentappproperties
          */
-        CurrentAppProperties(successCallback: (result: DevKit.AppProperty) => void, errorCallback?: (error: DevKit.Error) => void): void;
+        CurrentAppProperties(successCallback: (result: AppProperty) => void, errorCallback?: (error: Error) => void): void;
         /**
          * Returns the properties of the current business app in Customer Engagement and returns a promise
          * @returns Promise that resolves with the app properties
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/getcurrentappproperties
          */
-        CurrentAppProperties(): Promise<DevKit.AppProperty>;
+        CurrentAppProperties(): Promise<AppProperty>;
         /**
          * Returns the current location using the device geolocation capability. Note: For the CurrentPosition method to work, the geolocation capability must be enabled on your mobile device, and the Dynamics 365 for Customer Engagement mobile clients must have permissions to access the device location, which isn't enabled by default. This method is supported only for the mobile clients.
          * @param successCallback A function to call when the current geolocation information is returned. A geolocation object attributes is passed to the function
          * @param errorCallback A function to call when the operation fails.
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-device/getcurrentposition
          */
-        CurrentPosition(successCallback: (result: DevKit.PositionData) => void, errorCallback?: (error: DevKit.Error) => void): void;
+        CurrentPosition(successCallback: (result: PositionData) => void, errorCallback?: (error: Error) => void): void;
         /**
          * Returns the current location using the device geolocation capability and returns a promise
          * @returns Promise that resolves with the position data
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-device/getcurrentposition
          */
-        CurrentPosition(): Promise<DevKit.PositionData>;
+        CurrentPosition(): Promise<PositionData>;
         /**
          * Returns the entity metadata for the specified entity.
          * @param entityName The logical name of the entity.
@@ -2942,7 +2878,7 @@ declare namespace DevKit {
          * @param errorCallback A function to call when the operation fails.
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getentitymetadata
          */
-        EntityMetadata(entityName: string, attributes: Array<string>, successCallback: (result: DevKit.EntityMetadata) => void, errorCallback?: (error: DevKit.Error) => void): void;
+        EntityMetadata(entityName: string, attributes: Array<string>, successCallback: (result: EntityMetadata) => void, errorCallback?: (error: Error) => void): void;
         /**
          * Returns the entity metadata for the specified entity and returns a promise
          * @param entityName The logical name of the entity.
@@ -2950,7 +2886,7 @@ declare namespace DevKit {
          * @returns Promise that resolves with the entity metadata
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getentitymetadata
          */
-        EntityMetadata(entityName: string, attributes?: Array<string>): Promise<DevKit.EntityMetadata>;
+        EntityMetadata(entityName: string, attributes?: Array<string>): Promise<EntityMetadata>;
         /**
          * Encodes the specified string so that it can be used in an HTML attribute.
          * @param arg String to be encoded.
@@ -2977,7 +2913,7 @@ declare namespace DevKit {
          * @param errorCallback A function to call when the operation fails.
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/invokeprocessaction
          */
-        InvokeProcessAction(name: string, parameter: any, successCallback: (result: any) => void, errorCallback?: (error: DevKit.Error) => void): void;
+        InvokeProcessAction(name: string, parameter: any, successCallback: (result: any) => void, errorCallback?: (error: Error) => void): void;
         /**
          * Invokes an action based on the specified parameters and returns a promise
          * @param name Name of the process action to invoke.
@@ -3000,14 +2936,14 @@ declare namespace DevKit {
          * @param cancelCallback A function to call when you cancel the lookup control or the operation fails
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/lookupobjects
          */
-        LookupObjects(lookupOption: DevKit.LookupOption, successCallback: (results: Array<DevKit.EntityReference>) => void, errorCallback?: (error: DevKit.Error) => void): void;
+        LookupObjects(lookupOption: LookupOption, successCallback: (results: Array<EntityReference>) => void, errorCallback?: (error: Error) => void): void;
         /**
          * Defines the options for opening the lookup dialog and returns a promise
          * @param lookupOption
          * @returns Promise that resolves with an array of selected entity references
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/lookupobjects
          */
-        LookupObjects(lookupOption: DevKit.LookupOption): Promise<Array<DevKit.EntityReference>>;
+        LookupObjects(lookupOption: LookupOption): Promise<Array<EntityReference>>;
         /**
          * Displays an alert dialog containing a message and a button.
          * @param alertOption The strings to be used in the alert dialog.
@@ -3016,7 +2952,7 @@ declare namespace DevKit {
          * @param errorCallback A function to execute when the operation fails.
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/openalertdialog
          */
-        OpenAlertDialog(alertOption: DevKit.DialogAlertOption, window: DevKit.Window, successCallback: (result: string) => void, errorCallback?: (error: DevKit.Error) => void): void;
+        OpenAlertDialog(alertOption: DialogAlertOption, window: Window, successCallback: (result: string) => void, errorCallback?: (error: Error) => void): void;
         /**
          * Displays an alert dialog containing a message and a button and returns a promise
          * @param alertOption The strings to be used in the alert dialog.
@@ -3024,7 +2960,7 @@ declare namespace DevKit {
          * @returns Promise that resolves when the dialog is closed
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/openalertdialog
          */
-        OpenAlertDialog(alertOption: DevKit.DialogAlertOption, window?: DevKit.Window): Promise<string>;
+        OpenAlertDialog(alertOption: DialogAlertOption, window?: Window): Promise<string>;
         /**
          * Displays a confirmation dialog box containing a message and two buttons.
          * @param confirmOption The strings to be used in the confirmation dialog.
@@ -3033,7 +2969,7 @@ declare namespace DevKit {
          * @param errorCallback A function to execute when the operation fails.
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/openconfirmdialog
          */
-        OpenConfirmDialog(confirmOption: DevKit.DialogConfirmOption, window: DevKit.Window, successCallback: (result: DevKit.DialogResult) => void, errorCallback?: (error: DevKit.Error) => void): void;
+        OpenConfirmDialog(confirmOption: DialogConfirmOption, window: Window, successCallback: (result: DialogResult) => void, errorCallback?: (error: Error) => void): void;
         /**
          * Displays a confirmation dialog box containing a message and two buttons and returns a promise
          * @param confirmOption The strings to be used in the confirmation dialog.
@@ -3041,7 +2977,7 @@ declare namespace DevKit {
          * @returns Promise that resolves with the dialog result
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/openconfirmdialog
          */
-        OpenConfirmDialog(confirmOption: DevKit.DialogConfirmOption, window?: DevKit.Window): Promise<DevKit.DialogResult>;
+        OpenConfirmDialog(confirmOption: DialogConfirmOption, window?: Window): Promise<DialogResult>;
         /**
          * Displays an error dialog.
          * @param errorOptions An object to specify the options for error dialog.
@@ -3049,21 +2985,21 @@ declare namespace DevKit {
          * @param errorCallback A function to execute when the operation fails.
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/openerrordialog
          */
-        OpenErrorDialog(errorOptions: DevKit.DialogError, successCallback: (result: string) => void, errorCallback?: (error: DevKit.Error) => void): void;
+        OpenErrorDialog(errorOptions: DialogError, successCallback: (result: string) => void, errorCallback?: (error: Error) => void): void;
         /**
          * Displays an error dialog and returns a promise
          * @param errorOptions An object to specify the options for error dialog.
          * @returns Promise that resolves when the dialog is closed
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/openerrordialog
          */
-        OpenErrorDialog(errorOptions: DevKit.DialogError): Promise<string>;
+        OpenErrorDialog(errorOptions: DialogError): Promise<string>;
         /**
          * Opens a file.
          * @param file An object describing the file to open.
          * @param fileOption An object describing whether to open or save the file.
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/openfile
          */
-        OpenFile(file: DevKit.FileData, fileOption?: DevKit.FileOption): void;
+        OpenFile(file: FileData, fileOption?: FileOption): void;
         /**
          * Opens an entity form or a quick create form.
          * @param formOption The open form option for opening the form.
@@ -3072,7 +3008,7 @@ declare namespace DevKit {
          * @param errorCallback A function to execute when the operation fails.
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/openform
          */
-        OpenForm(formOption: DevKit.FormOption, formParameters: any, successCallback: (result: DevKit.OpenQuickCreateSuccessCallbackObject) => void, errorCallback?: (error: DevKit.Error) => void): void;
+        OpenForm(formOption: FormOption, formParameters: any, successCallback: (result: OpenQuickCreateSuccessCallbackObject) => void, errorCallback?: (error: Error) => void): void;
         /**
          * Opens an entity form or a quick create form and returns a promise
          * @param formOption The open form option for opening the form.
@@ -3080,14 +3016,14 @@ declare namespace DevKit {
          * @returns Promise that resolves with the saved record information
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/openform
          */
-        OpenForm(formOption: DevKit.FormOption, formParameters?: any): Promise<DevKit.OpenQuickCreateSuccessCallbackObject>;
+        OpenForm(formOption: FormOption, formParameters?: any): Promise<OpenQuickCreateSuccessCallbackObject>;
         /**
          * Opens a URL, including file URLs.
          * @param url URL to open.
          * @param window Options to open the URL.
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/openurl
          */
-        OpenUrl(url: string, window?: DevKit.Window): void;
+        OpenUrl(url: string, window?: Window): void;
         /**
          * Opens an HTML web resource.
          * @param webResourceName Name of the HTML web resource to open.
@@ -3095,7 +3031,7 @@ declare namespace DevKit {
          * @param data Data to be passed into the data parameter.
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/openwebresource
          */
-        OpenWebResource(webResourceName: string, window?: DevKit.Window, data?: string): void;
+        OpenWebResource(webResourceName: string, window?: Window, data?: string): void;
         /**
          * Navigates to the specified page.
          * @param pageInput Input about the page to navigate to. The object definition changes depending on the type of page to navigate to: entity list or HTML web resource.
@@ -3104,7 +3040,7 @@ declare namespace DevKit {
          * @param errorCallback A function to execute when the operation fails.
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/navigateto
          */
-        NavigateTo(pageInput: DevKit.PageInputEntityList | DevKit.PageInputHtmlWebResource | DevKit.PageInputEntityRecord | DevKit.PageInputDashboard, navigationOptions?: DevKit.NavigationOptions, successCallback?: (result: any) => void, errorCallback?: (error: DevKit.Error) => void): void;
+        NavigateTo(pageInput: PageInputEntityList | PageInputHtmlWebResource | PageInputEntityRecord | PageInputDashboard, navigationOptions?: NavigationOptions, successCallback?: (result: any) => void, errorCallback?: (error: Error) => void): void;
         /**
          * Navigates to the specified page and returns a promise
          * @param pageInput Input about the page to navigate to. The object definition changes depending on the type of page to navigate to: entity list or HTML web resource.
@@ -3112,7 +3048,7 @@ declare namespace DevKit {
          * @returns Promise that resolves on successful navigation to the page when navigating inline and on closing the dialog when navigating to a dialog.
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/navigateto
          */
-        NavigateTo(pageInput: DevKit.PageInputEntityList | DevKit.PageInputHtmlWebResource | DevKit.PageInputEntityRecord | DevKit.PageInputDashboard, navigationOptions?: DevKit.NavigationOptions): Promise<any>;
+        NavigateTo(pageInput: PageInputEntityList | PageInputHtmlWebResource | PageInputEntityRecord | PageInputDashboard, navigationOptions?: NavigationOptions): Promise<any>;
         /**
          * Opens a dialog box to select files from your computer (web client) or mobile device (mobile clients).
          * @param filePickOption An object pick file option
@@ -3120,14 +3056,14 @@ declare namespace DevKit {
          * @param errorCallback A function to call when the operation fails.
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-device/pickfile
          */
-        PickFile(filePickOption: DevKit.FilePickOption, successCallback: (result: Array<DevKit.FileData>) => void, errorCallback?: (error: DevKit.Error) => void): void;
+        PickFile(filePickOption: FilePickOption, successCallback: (result: Array<FileData>) => void, errorCallback?: (error: Error) => void): void;
         /**
          * Opens a dialog box to select files from your computer (web client) or mobile device (mobile clients) and returns a promise
          * @param filePickOption An object pick file option
          * @returns Promise that resolves with an array of selected file data
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-device/pickfile
          */
-        PickFile(filePickOption: DevKit.FilePickOption): Promise<Array<DevKit.FileData>>;
+        PickFile(filePickOption: FilePickOption): Promise<Array<FileData>>;
         /**
          * Prefixes the current organization's unique name to a string, typically a URL path
          * @param path A local path to a resource
@@ -3139,7 +3075,7 @@ declare namespace DevKit {
          * @param lookupOption An object with the following properties to specify the record
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/refreshparentgrid
          */
-        RefreshParentGrid(lookupOption: DevKit.EntityReference): void;
+        RefreshParentGrid(lookupOption: EntityReference): void;
         /**
          * Returns the localized string for a given key associated with the default web resource
          * @param key The key for the localized string
@@ -3177,14 +3113,14 @@ declare namespace DevKit {
          * @param errorCallback A function to call when the operation fails.
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app/addglobalnotification
          */
-        AddGlobalNotification(notification: DevKit.GlobalNotification, successCallback: (result: string) => void, errorCallback?: (error: DevKit.Error) => void): void;
+        AddGlobalNotification(notification: GlobalNotification, successCallback: (result: string) => void, errorCallback?: (error: Error) => void): void;
         /**
          * Displays an error, information, warning, or success notification for an app and returns a promise
          * @param notification The notification to add.
          * @returns Promise that resolves with the notification GUID
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app/addglobalnotification
          */
-        AddGlobalNotification(notification: DevKit.GlobalNotification): Promise<string>;
+        AddGlobalNotification(notification: GlobalNotification): Promise<string>;
         /**
          * Clears a notification in the app.
          * @param uniqueId The ID to use to clear a specific notification that was set using addGlobalNotification.
@@ -3192,7 +3128,7 @@ declare namespace DevKit {
          * @param errorCallback A function to call when the operation fails.
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app/clearglobalnotification
          */
-        ClearGlobalNotification(uniqueId: string, successCallback: (result: string) => void, errorCallback?: (error: DevKit.Error) => void): void;
+        ClearGlobalNotification(uniqueId: string, successCallback: (result: string) => void, errorCallback?: (error: Error) => void): void;
         /**
          * Clears a notification in the app and returns a promise
          * @param uniqueId The ID to use to clear a specific notification that was set using addGlobalNotification.
@@ -3211,7 +3147,7 @@ declare namespace DevKit {
          *  Provides access to the methods to determine which client is being used, whether the client is connected to the server, and what kind of device is being used.
          *  @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/client
          */
-        readonly Client: DevKit.Client;
+        readonly Client: Client;
         /**
          * Returns the base URL that was used to access the application
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/getclienturl
@@ -3241,12 +3177,12 @@ declare namespace DevKit {
          *  Returns information about the current organization settings
          *  @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings
          */
-        readonly OrganizationSettings: DevKit.OrganizationSettings;
+        readonly OrganizationSettings: OrganizationSettings;
         /**
          * Returns information about the current user settings
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings
          */
-        readonly UserSettings: DevKit.UserSettings
+        readonly UserSettings: UserSettings
         /**
          * Returns the version number of the Dynamics 365 for Customer Engagement apps instance. E.g.: "9.0.0.1103"
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/getversion
@@ -3292,18 +3228,18 @@ declare namespace DevKit {
          * Returns attributes and their values as key:value pairs that are available for the organization entity. Additional values will be available as attributes if they are specified as attribute dependencies in the web resource dependency list. The key will be the attribute logical name
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#attributes
          */
-        readonly Attributes: Array<DevKit.KeyValueObject>;
+        readonly Attributes: Array<KeyValueObject>;
         /**
          * [Deprecated] Returns the ID of the base currency for the current organization
          * @deprecated use {@link BaseCurrency}
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#basecurrencyid
          */
-        readonly BaseCurrencyId: DevKit.Guid;
+        readonly BaseCurrencyId: Guid;
         /**
          * Returns a lookup object containing the ID, name, and entity type of the base currency for the current organization. This method is supported only on the Unified Interface.
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#basecurrency
          */
-        readonly BaseCurrency: DevKit.EntityReference;
+        readonly BaseCurrency: EntityReference;
         /**
          * Returns the default country/region code for phone numbers for the current organization
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#defaultcountrycode
@@ -3338,7 +3274,7 @@ declare namespace DevKit {
          * Returns the ID of the current organization
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#organizationid
          */
-        readonly OrganizationId: DevKit.Guid;
+        readonly OrganizationId: Guid;
         /**
          * Returns the unique name of the current organization
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#uniquename
@@ -3384,7 +3320,7 @@ declare namespace DevKit {
         /** The AM designator */
         readonly AMDesignator: string;
         /** The calendar */
-        readonly Calendar: DevKit.DateFormattingInfoCalendar;
+        readonly Calendar: DateFormattingInfoCalendar;
         /** The date separator */
         readonly DateSeparator: string;
         /** The day names */
@@ -3443,12 +3379,12 @@ declare namespace DevKit {
          * Returns the date formatting information for the current user
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#dateformattinginfo
          */
-        readonly DateFormattingInfo: DevKit.DateFormattingInfo;
+        readonly DateFormattingInfo: DateFormattingInfo;
         /**
          * Returns the ID of the default dashboard for the current user
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#defaultdashboardid
          */
-        readonly DefaultDashboardId: DevKit.Guid;
+        readonly DefaultDashboardId: Guid;
         /**
          * Indicates whether guided help is enabled for the current user
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#isguidedhelpenabled
@@ -3473,34 +3409,34 @@ declare namespace DevKit {
          * Returns a collection of lookup objects containing the GUID and display name of each of the security role or teams that the user is associated with.
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#roles
          */
-        readonly Roles: DevKit.Collections<DevKit.EntityReference>;
+        readonly Roles: Collections<EntityReference>;
         /**
          * Returns an array of strings that represent the GUID values of each of the security role privilege that the user is associated with or any teams that the user is associated with
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#securityroleprivileges
          */
-        readonly SecurityRolePrivileges: Array<DevKit.Guid>;
+        readonly SecurityRolePrivileges: Array<Guid>;
         /**
          * [Deprecated] Returns an array of strings that represent the GUID values of each of the security role privilege that the user is associated with or any teams that the user is associated with
          * @deprecated use {@link SecurityRolePrivileges}
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#securityroles
          */
-        readonly SecurityRoles: Array<DevKit.Guid>;
+        readonly SecurityRoles: Array<Guid>;
         /**
          * Returns a lookup object containing the ID, display name, and entity type of the transaction currency for the current user.
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#transactioncurrency
          */
-        readonly TransactionCurrency: DevKit.EntityReference;
+        readonly TransactionCurrency: EntityReference;
         /**
          * [Deprecated] Returns the transaction currency ID for the current user.
          * @deprecated use {@link TransactionCurrency}
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#transactioncurrencyid
          */
-        readonly TransactionCurrencyId: DevKit.Guid;
+        readonly TransactionCurrencyId: Guid;
         /**
          * Returns the GUID of the SystemUser.Id value for the current user
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#userid
          */
-        readonly UserId: DevKit.Guid;
+        readonly UserId: Guid;
         /**
          * Returns the name of the current user
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#username
@@ -3517,13 +3453,13 @@ declare namespace DevKit {
          * @param errorCallback A function to call when the operation fails
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#getsecurityroleprivilegesinfo-method
          */
-        GetSecurityRolePrivilegesInfo(successCallback: (rolePrivileges: { [key: string]: DevKit.SecurityRolePrivilegeInfo }) => void, errorCallback?: DevKit.ErrorCallback): void;
+        GetSecurityRolePrivilegesInfo(successCallback: (rolePrivileges: { [key: string]: SecurityRolePrivilegeInfo }) => void, errorCallback?: ErrorCallback): void;
         /**
          * Returns a promise which resolves with an object whose keys are the security role privilege GUIDs and values are objects containing the businessUnitId, depth, and privilegeName of the security role privilege.
          * @returns Promise that resolves with security role privilege information
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#getsecurityroleprivilegesinfo-method
          */
-        GetSecurityRolePrivilegesInfo(): Promise<{ [key: string]: DevKit.SecurityRolePrivilegeInfo }>;
+        GetSecurityRolePrivilegesInfo(): Promise<{ [key: string]: SecurityRolePrivilegeInfo }>;
     }
     abstract class IForm {
         /**
@@ -3572,7 +3508,7 @@ declare namespace DevKit {
          * @param formId The form Id that you want navigate
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-formselector/navigate
          */
-        FormNavigateToFormId(formId: DevKit.Guid): void;
+        FormNavigateToFormId(formId: Guid): void;
         /**
          * Opens the specified form. When you use the navigate method while unsaved changes exist, the user is prompted to save changes before the new form can be displayed. The Onload event occurs when the new form loads
          * @param formLabel The form Label that you want navigate
@@ -3584,13 +3520,13 @@ declare namespace DevKit {
          * @param formId The form Id that you want to check visible
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-formselector/getvisible
          */
-        FormIsVisible(formId: DevKit.Guid): boolean;
+        FormIsVisible(formId: Guid): boolean;
         /**
          * Sets a value that indicates whether the form is visible.
          * @param formId The form Id that you want to set visible
          * @param value Specify true to show the form; false to hide the form.
          */
-        FormSetVisible(formId: DevKit.Guid, value: boolean): void;
+        FormSetVisible(formId: Guid, value: boolean): void;
         /**
          * Asynchronously refreshes and optionally saves all the data of the form without reloading the page
          * @param save true if the data should be saved after it is refreshed, otherwise false
@@ -3598,7 +3534,7 @@ declare namespace DevKit {
          * @param errorCallback A function to call when the operation fails
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data/refresh
          */
-        Refresh(save: boolean, successCallback: (executionContext: any) => void, errorCallback?: (error: DevKit.Error) => void): void;
+        Refresh(save: boolean, successCallback: (executionContext: any) => void, errorCallback?: (error: Error) => void): void;
         /**
          * Asynchronously refreshes and optionally saves all the data of the form without reloading the page and returns a promise
          * @param save true if the data should be saved after it is refreshed, otherwise false
@@ -3649,14 +3585,14 @@ declare namespace DevKit {
          * @param errorCallback A function to call when the operation fails
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data/save
          */
-        Save(saveOption: DevKit.SaveOption, successCallback: (executionContext: any) => void, errorCallback?: (error: DevKit.Error) => void): void;
+        Save(saveOption: SaveOption, successCallback: (executionContext: any) => void, errorCallback?: (error: Error) => void): void;
         /**
          * Saves the record asynchronously and returns a promise
          * @param saveOption An object for specifying options for saving the record
          * @returns Promise that resolves when the save is complete
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data/save
          */
-        Save(saveOption?: DevKit.SaveOption): Promise<any>;
+        Save(saveOption?: SaveOption): Promise<any>;
         /**
          * Displays form level notifications
          * @param message The text of the message
@@ -3675,12 +3611,12 @@ declare namespace DevKit {
          *  The Attributes collections of form Account
          *  @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes
          * */
-        readonly Attributes: DevKit.Collections<any>;
+        readonly Attributes: Collections<any>;
         /**
          * A control represents an HTML element present on the form. Some controls are bound to a specific attribute, whereas others may represent unbound controls such as an IFRAME, Web resource, or a sub grid that has been added to the form
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
          */
-        readonly Controls: DevKit.Collections<any>;
+        readonly Controls: Collections<any>;
         /**
          * Returns a string representing the XML that will be sent to the server when the record is saved. Only data in fields that have changed are set to the server
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-entity/getdataxml
@@ -3690,7 +3626,7 @@ declare namespace DevKit {
          * Returns a string representing the GUID value for the record
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-entity/getid
          */
-        readonly EntityId: DevKit.Guid;
+        readonly EntityId: Guid;
         /**
          * Gets a boolean value indicating whether any fields in the form have been modified
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-entity/getisdirty
@@ -3710,12 +3646,12 @@ declare namespace DevKit {
          * Returns a lookup value that references the record
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-entity/getentityreference
          */
-        readonly EntityReference: DevKit.EntityReference;
+        readonly EntityReference: EntityReference;
         /**
          * Returns the ID of the form
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-formselector/getid
          */
-        readonly FormId: DevKit.Guid;
+        readonly FormId: Guid;
         /**
          * Returns the label of the form
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-formselector/getlabel
@@ -3755,24 +3691,24 @@ declare namespace DevKit {
          * The execution context defines the event context in which your code executes.
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/execution-context
          * */
-        readonly ExecutionContext: DevKit.ExecutionContext;
+        readonly ExecutionContext: ExecutionContext;
         /**
          * Provides methods to create and manage records using the Web API
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi
          */
-        readonly WebApi: DevKit.WebApi;
+        readonly WebApi: WebApi;
         /**
          * Provides methods to interact with Microsoft Copilot Studio topics (Preview feature)
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-copilot
          */
-        readonly Copilot: DevKit.Copilot;
+        readonly Copilot: Copilot;
         /**
          * Provides methods for managing a single side pane.
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app-appsidepane
          */
-        readonly SidePanes: DevKit.SidePanes;
+        readonly SidePanes: SidePanes;
         /** Utility functions/methods/objects for Dynamics 365 form */
-        readonly Utility: DevKit.Utility;
+        readonly Utility: Utility;
     }
     interface DialogError {
         /** Details about the error. When you specify this, the Download Log File button is available in the error message, and clicking it will let users download a text file with the content specified in this attribute */
@@ -3786,7 +3722,7 @@ declare namespace DevKit {
         /** Entity type of the record */
         entityType: string;
         /** GUID of the record */
-        id: DevKit.Guid;
+        id: Guid;
         /** Name of the record */
         name?: string;
     }
@@ -3794,7 +3730,7 @@ declare namespace DevKit {
         /**
          * A lookup value which identifies the record which has been created.
          */
-        savedEntityReference: Array<DevKit.EntityReference>;
+        savedEntityReference: Array<EntityReference>;
     }
     interface Window {
         /** Height of the window to display the resultant page in pixels */
@@ -3837,7 +3773,7 @@ declare namespace DevKit {
         /** The default entity type to use */
         defaultEntityType?: string;
         /** The default view to use */
-        defaultViewId?: DevKit.Guid;
+        defaultViewId?: Guid;
         /** Decides whether to display the most recently used(MRU) item. Available only for Unified Interface */
         disableMru?: boolean;
         /** The entity types to display */
@@ -3849,7 +3785,7 @@ declare namespace DevKit {
         /** Indicates whether the lookup control should show the barcode scanner in mobile clients */
         showBarcodeScanner?: boolean;
         /** The views to be available in the view picker. Only system views are supported */
-        viewIds?: Array<DevKit.Guid>;
+        viewIds?: Array<Guid>;
     }
     interface PageInputEntityList {
         /** Specify "entitylist" */
@@ -3857,7 +3793,7 @@ declare namespace DevKit {
         /** The logical name of the entity to load in the list control. */
         entityName: string;
         /** The ID of the view to load. If you don't specify it, navigates to the default main view for the entity. */
-        viewId?: DevKit.Guid;
+        viewId?: Guid;
         /**  Type of view to load. Specify "savedquery" or "userquery". */
         viewType?: "savedquery" | "userquery";
     }
@@ -3887,23 +3823,23 @@ declare namespace DevKit {
         /** Logical name of the entity to display the form for. */
         entityName: string,
         /** ID of the entity record to display the form for. If you don't specify this value, the form will be opened in create mode. */
-        entityId?: DevKit.Guid,
+        entityId?: Guid,
         /** Designates a record that will provide default values based on mapped attribute values. */
-        createFromEntity?: DevKit.EntityReference,
+        createFromEntity?: EntityReference,
         /** A dictionary object that passes extra parameters to the form. */
         data?: any,
         /** ID of the form instance to be displayed. */
-        formId?: DevKit.Guid,
+        formId?: Guid,
         /** Indicates whether the form is navigated to from a different entity using cross-entity business process flow. */
         isCrossEntityNavigate?: boolean,
         /** Indicates whether there are any offline sync errors. */
         isOfflineSyncError?: boolean,
         /** ID of the business process to be displayed on the form. */
-        processId?: DevKit.Guid,
+        processId?: Guid,
         /** ID of the business process instance to be displayed on the form. */
-        processInstanceId?: DevKit.Guid,
+        processInstanceId?: Guid,
         /** Define a relationship object to display the related records on the form. */
-        relationship?: DevKit.PageInputEntityRecordRelationship,
+        relationship?: PageInputEntityRecordRelationship,
         /** ID of the selected stage in business process instance. */
         selectedStageId?: string,
         /** Sets the focus on the tab of the form. */
@@ -3945,11 +3881,11 @@ declare namespace DevKit {
         /** Designates a record that will provide default values based on mapped attribute values */
         createFromEntity?: EntityReference;
         /** ID of the entity record to display the form for */
-        entityId?: DevKit.Guid;
+        entityId?: Guid;
         /** Logical name of the entity to display the form for */
         entityName?: string;
         /** ID of the form instance to be displayed */
-        formId?: DevKit.Guid;
+        formId?: Guid;
         /** Height of the form window to be displayed in pixels */
         height?: number;
         /** Controls whether the navigation bar is displayed and whether application navigation is available using the areas and subareas defined in the sitemap */
@@ -3959,9 +3895,9 @@ declare namespace DevKit {
         /** Specify one of the following values for the window position of the form on the screen */
         windowPosition?: OptionSet.FormWindowPosition;
         /**  ID of the business process to be displayed on the form */
-        processId?: DevKit.Guid;
+        processId?: Guid;
         /** ID of the business process instance to be displayed on the form */
-        processInstanceId?: DevKit.Guid;
+        processInstanceId?: Guid;
         /** Define a relationship object to display the related records on the form */
         relationship?: FormRelationship;
         /** ID of the selected stage in business process instance */
@@ -4044,7 +3980,7 @@ declare namespace DevKit {
     }
     interface ViewSelector {
         /** Reference to the current view. */
-        CurrentView: DevKit.EntityReference;
+        CurrentView: EntityReference;
         /** Returns a boolean value to indicate whether the view selector is visible */
         readonly Visible: boolean;
     }
@@ -4078,7 +4014,7 @@ declare namespace DevKit {
         /** Specify whether the pane should be selected or expanded. */
         select(): void,
         /** Opens a page within the selected pane. This is similar to the navigateTo method. */
-        navigate(pageInput: DevKit.PageInputEntityList | DevKit.PageInputHtmlWebResource | DevKit.PageInputEntityRecord | DevKit.PageInputDashboard, navigationOptions?: DevKit.NavigationOptions, successCallback?: (result: any) => void, errorCallback?: (error: DevKit.Error) => void): void,
+        navigate(pageInput: PageInputEntityList | PageInputHtmlWebResource | PageInputEntityRecord | PageInputDashboard, navigationOptions?: NavigationOptions, successCallback?: (result: any) => void, errorCallback?: (error: Error) => void): void,
         badge?: number
     }
     /**
@@ -4098,7 +4034,7 @@ declare namespace DevKit {
          * @param errorCallback Function called when there is an error
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app/xrm-app-sidepanes/createpane
          */
-        Create(paneOptions: ISidePaneOptions, successCallback?: (pane: ISidePane) => void, errorCallback?: (error: DevKit.Error) => void): Promise<ISidePane> | void;
+        Create(paneOptions: ISidePaneOptions, successCallback?: (pane: ISidePane) => void, errorCallback?: (error: Error) => void): Promise<ISidePane> | void;
         /**
          * Gets a pane by ID
          * @param paneId The ID of the pane to get
@@ -4109,7 +4045,7 @@ declare namespace DevKit {
          * Gets all panes
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app/xrm-app-sidepanes/getallpanes
          */
-        GetAll(): DevKit.Collections<ISidePane>;
+        GetAll(): Collections<ISidePane>;
         /**
          * Gets the currently selected pane
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app/xrm-app-sidepanes/getselectedpane

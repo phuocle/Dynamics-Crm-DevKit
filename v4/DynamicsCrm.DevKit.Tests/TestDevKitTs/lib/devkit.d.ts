@@ -1658,18 +1658,6 @@ declare namespace DevKit {
         }
 
         /**
-         * Interface for Footer controls
-         */
-        interface IFooter {
-            /**
-             * Get/Set the visibility of footer section
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-footersection/getvisible
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-footersection/setvisible
-             */
-            Visible: boolean;
-        }
-
-        /**
          * Interface for ActionCards control
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
          */

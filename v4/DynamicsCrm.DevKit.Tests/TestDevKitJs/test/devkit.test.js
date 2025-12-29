@@ -1233,7 +1233,7 @@ describe('devKit', () => {
         });
         expect(forEachCount).toBe(2);
     });
-    test('Footer & Header', () => {
+    test('Header', () => {
         //setup
         var stringControl = new StringControlMock({
             attribute: new StringAttributeMock({
