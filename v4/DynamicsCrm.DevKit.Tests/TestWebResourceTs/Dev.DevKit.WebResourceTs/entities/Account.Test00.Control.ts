@@ -1,4 +1,5 @@
 import { FormAccount_DevKitV4 } from './Account.form';
+import { OptionSet } from './OptionSet';
 
 interface TestResult {
     Test: string;
@@ -27,7 +28,7 @@ export function TestControl(form: FormAccount_DevKitV4.Form): void {
     try {
         results.push({ Test: "R1", Property: "Attribute", Value: form.Body.v4_String.Attribute ? "object" : "null", Status: form.Body.v4_String.Attribute ? "✓" : "⚠" });
         results.push({ Test: "R2", Property: "AttributeName", Value: form.Body.v4_String.AttributeName, Status: form.Body.v4_String.AttributeName === "name" ? "✓" : "⚠" });
-        results.push({ Test: "R3", Property: "AttributeType", Value: form.Body.v4_String.AttributeType, Status: form.Body.v4_String.AttributeType === "string" ? "✓" : "⚠" });
+        results.push({ Test: "R3", Property: "AttributeType", Value: form.Body.v4_String.AttributeType, Status: form.Body.v4_String.AttributeType === OptionSet.FieldAttributeType.String ? "✓" : "⚠" });
         results.push({ Test: "R4", Property: "ControlName", Value: form.Body.v4_String.ControlName, Status: "✓" });
         results.push({ Test: "R5", Property: "ControlType", Value: form.Body.v4_String.ControlType, Status: "✓" });
         results.push({ Test: "R6", Property: "Format", Value: form.Body.v4_String.Format, Status: "✓" });
@@ -46,20 +47,20 @@ export function TestControl(form: FormAccount_DevKitV4.Form): void {
     // Setters
     try {
         const origRequired = form.Body.v4_String.RequiredLevel;
-        form.Body.v4_String.RequiredLevel = "required";
+        form.Body.v4_String.RequiredLevel = OptionSet.FieldRequiredLevel.Required;
         const newRequired = form.Body.v4_String.RequiredLevel;
         form.Body.v4_String.RequiredLevel = origRequired;
-        setterResults.push({ Test: "S1", Property: "RequiredLevel (set)", Value: `${origRequired}→required→restored`, Status: newRequired === "required" ? "✓" : "✗" });
+        setterResults.push({ Test: "S1", Property: "RequiredLevel (set)", Value: `${origRequired}→required→restored`, Status: newRequired === OptionSet.FieldRequiredLevel.Required ? "✓" : "✗" });
     } catch (e: any) {
         setterResults.push({ Test: "S1", Property: "RequiredLevel (set)", Value: e.message, Status: "✗" });
     }
 
     try {
         const origSubmit = form.Body.v4_String.SubmitMode;
-        form.Body.v4_String.SubmitMode = "always";
+        form.Body.v4_String.SubmitMode = OptionSet.FieldSubmitMode.Always;
         const newSubmit = form.Body.v4_String.SubmitMode;
         form.Body.v4_String.SubmitMode = origSubmit;
-        setterResults.push({ Test: "S2", Property: "SubmitMode (set)", Value: `${origSubmit}→always→restored`, Status: newSubmit === "always" ? "✓" : "✗" });
+        setterResults.push({ Test: "S2", Property: "SubmitMode (set)", Value: `${origSubmit}→always→restored`, Status: newSubmit === OptionSet.FieldSubmitMode.Always ? "✓" : "✗" });
     } catch (e: any) {
         setterResults.push({ Test: "S2", Property: "SubmitMode (set)", Value: e.message, Status: "✗" });
     }

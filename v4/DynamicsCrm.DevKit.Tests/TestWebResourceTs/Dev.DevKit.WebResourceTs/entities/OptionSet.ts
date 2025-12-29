@@ -440,6 +440,17 @@ const ProcessStatus = {
     Finished: 'finished'
 } as const;
 
+/**
+ * Returns the status of the stage.
+ * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/stage/getstatus
+ */
+const ProcessStageStatus = {
+    /** Stage is currently active */
+    Active: 'active',
+    /** Stage is currently inactive */
+    Inactive: 'inactive'
+} as const;
+
 /** Returns a value indicating how the save event was initiated by the user */
 const SaveMode = {
     /** 1 - All entities */
@@ -752,6 +763,7 @@ export const OptionSet = {
     ProcessCategory,
     ProcessDisplayState,
     ProcessStatus,
+    ProcessStageStatus,
     SaveMode,
     SaveOption,
     SidePaneState,

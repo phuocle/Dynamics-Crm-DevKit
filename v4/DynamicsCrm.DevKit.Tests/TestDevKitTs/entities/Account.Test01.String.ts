@@ -1,4 +1,5 @@
 import { FormAccount_DevKitV4 } from './Account.form';
+import { OptionSet } from './OptionSet';
 
 interface TestResult {
     Test: string;
@@ -34,7 +35,7 @@ export function TestString(form: FormAccount_DevKitV4.Form): void {
         // Inherited from IControl
         results.push({ Test: "R3", Property: "Attribute", Value: str.Attribute ? "object" : "null", Status: str.Attribute ? "✓" : "⚠" });
         results.push({ Test: "R4", Property: "AttributeName", Value: str.AttributeName, Status: str.AttributeName === "name" ? "✓" : "⚠" });
-        results.push({ Test: "R5", Property: "AttributeType", Value: str.AttributeType, Status: str.AttributeType === "string" ? "✓" : "⚠" });
+        results.push({ Test: "R5", Property: "AttributeType", Value: str.AttributeType, Status: str.AttributeType === OptionSet.FieldAttributeType.String ? "✓" : "⚠" });
         results.push({ Test: "R6", Property: "ControlName", Value: str.ControlName, Status: "✓" });
         results.push({ Test: "R7", Property: "ControlType", Value: str.ControlType, Status: "✓" });
         results.push({ Test: "R8", Property: "Format", Value: str.Format, Status: "✓" });
@@ -65,10 +66,10 @@ export function TestString(form: FormAccount_DevKitV4.Form): void {
 
     try {
         const origRequired = str.RequiredLevel;
-        str.RequiredLevel = "required";
+        str.RequiredLevel = OptionSet.FieldRequiredLevel.Required;
         const check = str.RequiredLevel;
         str.RequiredLevel = origRequired;
-        methodResults.push({ Test: "S2", Property: "RequiredLevel (set)", Value: check === "required" ? "Set→Restored" : "Failed", Status: check === "required" ? "✓" : "✗" });
+        methodResults.push({ Test: "S2", Property: "RequiredLevel (set)", Value: check === OptionSet.FieldRequiredLevel.Required ? "Set→Restored" : "Failed", Status: check === OptionSet.FieldRequiredLevel.Required ? "✓" : "✗" });
     } catch (e: any) {
         methodResults.push({ Test: "S2", Property: "RequiredLevel (set)", Value: e.message, Status: "✗" });
     }

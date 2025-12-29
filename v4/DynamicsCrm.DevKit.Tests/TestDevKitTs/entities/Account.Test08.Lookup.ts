@@ -1,4 +1,5 @@
 import { FormAccount_DevKitV4 } from './Account.form';
+import { OptionSet } from './OptionSet';
 
 interface TestResult {
     Test: string;
@@ -33,7 +34,7 @@ export function TestLookup(form: FormAccount_DevKitV4.Form): void {
         results.push({ Test: "R4", Property: "DefaultView", Value: originalDefaultView, Status: "✓" });
         results.push({ Test: "R5", Property: "Visible", Value: form.Body.v4_Lookup.Visible, Status: "✓" });
         results.push({ Test: "R6", Property: "Disabled", Value: form.Body.v4_Lookup.Disabled, Status: "✓" });
-        results.push({ Test: "R7", Property: "ControlType", Value: form.Body.v4_Lookup.ControlType, Status: form.Body.v4_Lookup.ControlType === "lookup" ? "✓" : "⚠" });
+        results.push({ Test: "R7", Property: "ControlType", Value: form.Body.v4_Lookup.ControlType, Status: form.Body.v4_Lookup.ControlType === OptionSet.FieldControlType.Lookup ? "✓" : "⚠" });
         results.push({ Test: "R8", Property: "ControlName", Value: form.Body.v4_Lookup.ControlName, Status: "✓" });
         results.push({ Test: "R9", Property: "AttributeName", Value: form.Body.v4_Lookup.AttributeName, Status: "✓" });
         results.push({ Test: "R10", Property: "AttributeType", Value: form.Body.v4_Lookup.AttributeType, Status: "✓" });

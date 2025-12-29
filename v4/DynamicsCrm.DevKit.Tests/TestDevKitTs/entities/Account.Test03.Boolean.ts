@@ -1,4 +1,5 @@
 import { FormAccount_DevKitV4 } from './Account.form';
+import { OptionSet } from './OptionSet';
 
 interface TestResult {
     Test: string;
@@ -35,8 +36,7 @@ export function TestBoolean(form: FormAccount_DevKitV4.Form): void {
         // Inherited from IControl
         results.push({ Test: "R3", Property: "Attribute", Value: form.Body.v4_Boolean.Attribute ? "object" : "null", Status: form.Body.v4_Boolean.Attribute ? "✓" : "⚠" });
         results.push({ Test: "R4", Property: "AttributeName", Value: form.Body.v4_Boolean.AttributeName, Status: form.Body.v4_Boolean.AttributeName === "v4_boolean" ? "✓" : "⚠" });
-        // @ts-ignore - AttributeType comparison is valid at runtime
-        results.push({ Test: "R5", Property: "AttributeType", Value: form.Body.v4_Boolean.AttributeType, Status: form.Body.v4_Boolean.AttributeType === "boolean" ? "✓" : "⚠" });
+        results.push({ Test: "R5", Property: "AttributeType", Value: form.Body.v4_Boolean.AttributeType, Status: form.Body.v4_Boolean.AttributeType === OptionSet.FieldAttributeType.Boolean ? "✓" : "⚠" });
         results.push({ Test: "R6", Property: "ControlName", Value: form.Body.v4_Boolean.ControlName, Status: "✓" });
         results.push({ Test: "R7", Property: "ControlType", Value: form.Body.v4_Boolean.ControlType, Status: "✓" });
         results.push({ Test: "R8", Property: "Format", Value: form.Body.v4_Boolean.Format, Status: "✓" });
@@ -70,10 +70,10 @@ export function TestBoolean(form: FormAccount_DevKitV4.Form): void {
     // Setter: RequiredLevel
     try {
         const origRequired = form.Body.v4_Boolean.RequiredLevel;
-        form.Body.v4_Boolean.RequiredLevel = "required";
+        form.Body.v4_Boolean.RequiredLevel = OptionSet.FieldRequiredLevel.Required;
         const check = form.Body.v4_Boolean.RequiredLevel;
         form.Body.v4_Boolean.RequiredLevel = origRequired;
-        methodResults.push({ Test: "S2", Property: "RequiredLevel (set)", Value: check === "required" ? "Set→Restored" : "Failed", Status: check === "required" ? "✓" : "✗" });
+        methodResults.push({ Test: "S2", Property: "RequiredLevel (set)", Value: check === OptionSet.FieldRequiredLevel.Required ? "Set→Restored" : "Failed", Status: check === OptionSet.FieldRequiredLevel.Required ? "✓" : "✗" });
     } catch (e: any) {
         methodResults.push({ Test: "S2", Property: "RequiredLevel (set)", Value: e.message, Status: "✗" });
     }

@@ -1,4 +1,5 @@
 import { FormAccount_DevKitV4 } from './Account.form';
+import { OptionSet } from './OptionSet';
 
 interface TestResult {
     Test: string;
@@ -49,8 +50,8 @@ export function TestLookup1(form: FormAccount_DevKitV4.Form): void {
         // R8-R11: AttributeType and ControlType
         results.push({ Test: "R8", Property: "OwnerId.AttributeType", Value: form.Body.OwnerId.AttributeType, Status: "✓" });
         results.push({ Test: "R9", Property: "OwnerId1.AttributeType", Value: form.Body.OwnerId1.AttributeType, Status: "✓" });
-        results.push({ Test: "R10", Property: "OwnerId.ControlType", Value: form.Body.OwnerId.ControlType, Status: form.Body.OwnerId.ControlType === "lookup" ? "✓" : "⚠" });
-        results.push({ Test: "R11", Property: "OwnerId1.ControlType", Value: form.Body.OwnerId1.ControlType, Status: form.Body.OwnerId1.ControlType === "lookup" ? "✓" : "⚠" });
+        results.push({ Test: "R10", Property: "OwnerId.ControlType", Value: form.Body.OwnerId.ControlType, Status: form.Body.OwnerId.ControlType === OptionSet.FieldControlType.Lookup ? "✓" : "⚠" });
+        results.push({ Test: "R11", Property: "OwnerId1.ControlType", Value: form.Body.OwnerId1.ControlType, Status: form.Body.OwnerId1.ControlType === OptionSet.FieldControlType.Lookup ? "✓" : "⚠" });
 
         // R12-R17: Control-specific properties (can differ per control)
         results.push({ Test: "R12", Property: "OwnerId.Visible", Value: form.Body.OwnerId.Visible, Status: "✓" });

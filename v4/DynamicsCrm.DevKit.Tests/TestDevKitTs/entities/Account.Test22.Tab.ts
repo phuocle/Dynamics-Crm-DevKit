@@ -1,6 +1,7 @@
 import { FormAccount_DevKitV4 } from './Account.form';
 import { OptionSet } from './OptionSet';
 
+
 interface TestResult {
     Test: string;
     Property: string;
@@ -28,7 +29,6 @@ export function TestTab(form: FormAccount_DevKitV4.Form): void {
     try {
         results.push({ Test: "R1", Property: "form.Body.Tab.TAB_1.Name", Value: form.Body.Tab.TAB_1.Name, Status: form.Body.Tab.TAB_1.Name ? "✓" : "⚠" });
         results.push({ Test: "R2", Property: "form.Body.Tab.TAB_1.Parent", Value: form.Body.Tab.TAB_1.Parent ? "object" : "null", Status: form.Body.Tab.TAB_1.Parent ? "✓" : "⚠" });
-        // @ts-ignore - DisplayState comparison with OptionSet enum
         results.push({ Test: "R3", Property: "form.Body.Tab.TAB_1.DisplayState", Value: form.Body.Tab.TAB_1.DisplayState, Status: form.Body.Tab.TAB_1.DisplayState === OptionSet.TabDisplayState.Expanded || form.Body.Tab.TAB_1.DisplayState === OptionSet.TabDisplayState.Collapsed ? "✓" : "⚠" });
         results.push({ Test: "R4", Property: "form.Body.Tab.TAB_1.Label", Value: form.Body.Tab.TAB_1.Label, Status: form.Body.Tab.TAB_1.Label ? "✓" : "⚠" });
         results.push({ Test: "R5", Property: "form.Body.Tab.TAB_1.Visible", Value: form.Body.Tab.TAB_1.Visible, Status: typeof form.Body.Tab.TAB_1.Visible === "boolean" ? "✓" : "⚠" });

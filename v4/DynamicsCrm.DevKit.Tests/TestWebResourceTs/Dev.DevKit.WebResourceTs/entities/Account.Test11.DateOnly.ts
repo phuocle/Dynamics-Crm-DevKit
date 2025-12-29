@@ -1,4 +1,5 @@
 import { FormAccount_DevKitV4 } from './Account.form';
+import { OptionSet } from './OptionSet';
 
 interface TestResult {
     Test: string;
@@ -32,8 +33,7 @@ export function TestDateOnly(form: FormAccount_DevKitV4.Form): void {
         // Inherited from IControl
         results.push({ Test: "R2", Property: "Attribute", Value: form.Body.v4_DateOnly.Attribute ? "object" : "null", Status: form.Body.v4_DateOnly.Attribute ? "✓" : "⚠" });
         results.push({ Test: "R3", Property: "AttributeName", Value: form.Body.v4_DateOnly.AttributeName, Status: form.Body.v4_DateOnly.AttributeName === "v4_dateonly" ? "✓" : "⚠" });
-        // @ts-ignore - AttributeType comparison is valid at runtime
-        results.push({ Test: "R4", Property: "AttributeType", Value: form.Body.v4_DateOnly.AttributeType, Status: form.Body.v4_DateOnly.AttributeType === "datetime" ? "✓" : "⚠" });
+        results.push({ Test: "R4", Property: "AttributeType", Value: form.Body.v4_DateOnly.AttributeType, Status: form.Body.v4_DateOnly.AttributeType === OptionSet.FieldAttributeType.DateTime ? "✓" : "⚠" });
         results.push({ Test: "R5", Property: "ControlName", Value: form.Body.v4_DateOnly.ControlName, Status: "✓" });
         results.push({ Test: "R6", Property: "ControlType", Value: form.Body.v4_DateOnly.ControlType, Status: "✓" });
         results.push({ Test: "R7", Property: "Format", Value: form.Body.v4_DateOnly.Format, Status: "✓" });
@@ -69,10 +69,10 @@ export function TestDateOnly(form: FormAccount_DevKitV4.Form): void {
     // Setter: RequiredLevel
     try {
         const origRequired = form.Body.v4_DateOnly.RequiredLevel;
-        form.Body.v4_DateOnly.RequiredLevel = "required";
+        form.Body.v4_DateOnly.RequiredLevel = OptionSet.FieldRequiredLevel.Required;
         const check = form.Body.v4_DateOnly.RequiredLevel;
         form.Body.v4_DateOnly.RequiredLevel = origRequired;
-        methodResults.push({ Test: "S2", Property: "RequiredLevel (set)", Value: check === "required" ? "Set→Restored" : "Failed", Status: check === "required" ? "✓" : "✗" });
+        methodResults.push({ Test: "S2", Property: "RequiredLevel (set)", Value: check === OptionSet.FieldRequiredLevel.Required ? "Set→Restored" : "Failed", Status: check === OptionSet.FieldRequiredLevel.Required ? "✓" : "✗" });
     } catch (e: any) {
         methodResults.push({ Test: "S2", Property: "RequiredLevel (set)", Value: e.message, Status: "✗" });
     }

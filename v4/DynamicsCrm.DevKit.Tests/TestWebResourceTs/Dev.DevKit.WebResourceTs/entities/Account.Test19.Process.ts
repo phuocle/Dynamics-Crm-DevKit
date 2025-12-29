@@ -1,4 +1,5 @@
 import { FormAccount_DevKitV4 } from './Account.form';
+import { OptionSet } from './OptionSet';
 
 interface TestResult {
     Test: string;
@@ -16,6 +17,7 @@ export function TestProcess(form: FormAccount_DevKitV4.Form): void {
     const methodResults: TestResult[] = [];
     const process = form.Process;
     const startTime = new Date().toLocaleTimeString();
+    var a = form.Process.ActiveStage.Status;
 
     // =====================================================
     // READONLY PROPERTIES (R-Index)
@@ -97,7 +99,7 @@ export function TestProcess(form: FormAccount_DevKitV4.Form): void {
     // Setters: DisplayState, Visible
     try {
         const origState = process.DisplayState;
-        process.DisplayState = "expanded"; // Try setting
+        process.DisplayState = OptionSet.ProcessDisplayState.Expanded; // Try setting
         const checkState = process.DisplayState;
         process.DisplayState = origState; // Restore
 

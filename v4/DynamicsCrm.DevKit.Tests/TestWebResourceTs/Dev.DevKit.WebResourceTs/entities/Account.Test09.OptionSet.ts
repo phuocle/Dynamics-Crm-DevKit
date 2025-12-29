@@ -1,4 +1,5 @@
 import { FormAccount_DevKitV4 } from './Account.form';
+import { OptionSet } from './OptionSet';
 
 interface TestResult {
     Test: string;
@@ -37,7 +38,7 @@ export function TestOptionSet(form: FormAccount_DevKitV4.Form): void {
         // Inherited from IControl
         results.push({ Test: "R6", Property: "Attribute", Value: opt.Attribute ? "object" : "null", Status: opt.Attribute ? "✓" : "⚠" });
         results.push({ Test: "R7", Property: "AttributeName", Value: opt.AttributeName, Status: opt.AttributeName === "industrycode" ? "✓" : "⚠" });
-        results.push({ Test: "R8", Property: "AttributeType", Value: opt.AttributeType, Status: opt.AttributeType === "optionset" ? "✓" : "⚠" });
+        results.push({ Test: "R8", Property: "AttributeType", Value: opt.AttributeType, Status: opt.AttributeType === OptionSet.FieldAttributeType.OptionSet ? "✓" : "⚠" });
         results.push({ Test: "R9", Property: "ControlName", Value: opt.ControlName, Status: "✓" });
         results.push({ Test: "R10", Property: "ControlType", Value: opt.ControlType, Status: "✓" });
         results.push({ Test: "R11", Property: "Format", Value: opt.Format, Status: "✓" });
@@ -130,10 +131,10 @@ export function TestOptionSet(form: FormAccount_DevKitV4.Form): void {
     // Setter: RequiredLevel
     try {
         const origRequired = opt.RequiredLevel;
-        opt.RequiredLevel = "required";
+        opt.RequiredLevel = OptionSet.FieldRequiredLevel.Required;
         const check = opt.RequiredLevel;
         opt.RequiredLevel = origRequired;
-        methodResults.push({ Test: "S7", Property: "RequiredLevel (set)", Value: check === "required" ? "Set→Restored" : "Failed", Status: check === "required" ? "✓" : "✗" });
+        methodResults.push({ Test: "S7", Property: "RequiredLevel (set)", Value: check === OptionSet.FieldRequiredLevel.Required ? "Set→Restored" : "Failed", Status: check === OptionSet.FieldRequiredLevel.Required ? "✓" : "✗" });
     } catch (e: any) {
         methodResults.push({ Test: "S7", Property: "RequiredLevel (set)", Value: e.message, Status: "✗" });
     }

@@ -1,4 +1,5 @@
 import { FormAccount_DevKitV4 } from './Account.form';
+import { OptionSet } from './OptionSet';
 
 interface TestResult {
     Test: string;
@@ -50,7 +51,7 @@ export function TestMultiOptionSet(form: FormAccount_DevKitV4.Form): void {
         // Inherited from IControl
         results.push({ Test: "R6", Property: "Attribute", Value: mos.Attribute ? "object" : "null", Status: mos.Attribute ? "✓" : "⚠" });
         results.push({ Test: "R7", Property: "AttributeName", Value: mos.AttributeName, Status: mos.AttributeName === "v4_categories" ? "✓" : "⚠" });
-        results.push({ Test: "R8", Property: "AttributeType", Value: mos.AttributeType, Status: mos.AttributeType === "multiselectoptionset" ? "✓" : "⚠" });
+        results.push({ Test: "R8", Property: "AttributeType", Value: mos.AttributeType, Status: mos.AttributeType === OptionSet.FieldAttributeType.MultiOptionSet ? "✓" : "⚠" });
         results.push({ Test: "R9", Property: "ControlName", Value: mos.ControlName, Status: "✓" });
         results.push({ Test: "R10", Property: "ControlType", Value: mos.ControlType, Status: "✓" });
         results.push({ Test: "R11", Property: "Format", Value: mos.Format, Status: "✓" });
@@ -85,10 +86,10 @@ export function TestMultiOptionSet(form: FormAccount_DevKitV4.Form): void {
     // Setter: RequiredLevel
     try {
         const origRequired = mos.RequiredLevel;
-        mos.RequiredLevel = "required";
+        mos.RequiredLevel = OptionSet.FieldRequiredLevel.Required;
         const check = mos.RequiredLevel;
         mos.RequiredLevel = origRequired;
-        methodResults.push({ Test: "S2", Property: "RequiredLevel (set)", Value: check === "required" ? "Set→Restored" : "Failed", Status: check === "required" ? "✓" : "✗" });
+        methodResults.push({ Test: "S2", Property: "RequiredLevel (set)", Value: check === OptionSet.FieldRequiredLevel.Required ? "Set→Restored" : "Failed", Status: check === OptionSet.FieldRequiredLevel.Required ? "✓" : "✗" });
     } catch (e: any) {
         methodResults.push({ Test: "S2", Property: "RequiredLevel (set)", Value: e.message, Status: "✗" });
     }

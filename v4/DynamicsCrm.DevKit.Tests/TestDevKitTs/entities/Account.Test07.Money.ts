@@ -1,4 +1,5 @@
 import { FormAccount_DevKitV4 } from './Account.form';
+import { OptionSet } from './OptionSet';
 
 interface TestResult {
     Test: string;
@@ -36,7 +37,7 @@ export function TestMoney(form: FormAccount_DevKitV4.Form): void {
         // Inherited from IControl
         results.push({ Test: "R5", Property: "Attribute", Value: money.Attribute ? "object" : "null", Status: "✓" }); // Attribute can be null in some contexts
         results.push({ Test: "R6", Property: "AttributeName", Value: money.AttributeName, Status: money.AttributeName === "revenue" ? "✓" : "⚠" });
-        results.push({ Test: "R7", Property: "AttributeType", Value: money.AttributeType, Status: money.AttributeType === "money" ? "✓" : "⚠" });
+        results.push({ Test: "R7", Property: "AttributeType", Value: money.AttributeType, Status: money.AttributeType === OptionSet.FieldAttributeType.Money ? "✓" : "⚠" });
         results.push({ Test: "R8", Property: "ControlName", Value: money.ControlName, Status: "✓" });
         results.push({ Test: "R9", Property: "ControlType", Value: money.ControlType, Status: "✓" });
         results.push({ Test: "R10", Property: "Format", Value: money.Format, Status: "✓" });
@@ -82,10 +83,10 @@ export function TestMoney(form: FormAccount_DevKitV4.Form): void {
     // Setter: RequiredLevel
     try {
         const origRequired = money.RequiredLevel;
-        money.RequiredLevel = "required";
+        money.RequiredLevel = OptionSet.FieldRequiredLevel.Required;
         const check = money.RequiredLevel;
         money.RequiredLevel = origRequired;
-        methodResults.push({ Test: "S3", Property: "RequiredLevel (set)", Value: check === "required" ? "Set→Restored" : "Failed", Status: check === "required" ? "✓" : "✗" });
+        methodResults.push({ Test: "S3", Property: "RequiredLevel (set)", Value: check === OptionSet.FieldRequiredLevel.Required ? "Set→Restored" : "Failed", Status: check === OptionSet.FieldRequiredLevel.Required ? "✓" : "✗" });
     } catch (e: any) {
         methodResults.push({ Test: "S3", Property: "RequiredLevel (set)", Value: e.message, Status: "✗" });
     }
