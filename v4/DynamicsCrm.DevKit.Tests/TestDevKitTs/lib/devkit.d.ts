@@ -725,29 +725,6 @@ declare namespace DevKit {
         }
 
         /**
-         * Collection of controls within a section
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/collections
-         */
-        interface ISectionControlsCollection {
-            /**
-             * Gets a control by index or name
-             * @param arg The index (number) or name (string) of the control to get
-             */
-            get(arg?: number | string): any;
-
-            /**
-             * Gets the number of controls in the section
-             */
-            getLength(): number;
-
-            /**
-             * Iterates over all controls in the section
-             * @param callback The function to call for each control
-             */
-            forEach(callback: (control: any, index: number) => void): void;
-        }
-
-        /**
          * Interface for Section controls
          */
         interface Section {
@@ -767,7 +744,7 @@ declare namespace DevKit {
              * Get the controls within the section
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-sections
              */
-            readonly Controls: ISectionControlsCollection;
+            readonly Controls: Collections<IControl>;
 
             /**
              * Get/Set the label for the section
@@ -842,14 +819,7 @@ declare namespace DevKit {
          */
         interface GridRow {
             /** Collection of columns in the row */
-            readonly Columns: {
-                /** Get the number of columns */
-                getLength(): number;
-                /** Get a column by index */
-                get(index: number): GridColumn;
-                /** Iterate over all columns */
-                forEach(callback: (column: GridColumn, index: number) => void): void;
-            };
+            readonly Columns: Collections<GridColumn>;
             /** Get the GUID of the record */
             readonly EntityId: string;
             /** Get the logical name of the entity */
@@ -942,27 +912,13 @@ declare namespace DevKit {
              * Collection of rows in the grid
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/getrows
              */
-            readonly Rows: {
-                /** Get the number of rows */
-                getLength(): number;
-                /** Get a row by index */
-                get(index: number): GridRow;
-                /** Iterate over all rows */
-                forEach(callback: (row: GridRow, index: number) => void): void;
-            };
+            readonly Rows: Collections<GridRow>;
 
             /**
              * Collection of selected rows in the grid
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/getselectedrows
              */
-            readonly SelectedRows: {
-                /** Get the number of selected rows */
-                getLength(): number;
-                /** Get a selected row by index */
-                get(index: number): GridRow;
-                /** Iterate over all selected rows */
-                forEach(callback: (row: GridRow, index: number) => void): void;
-            };
+            readonly SelectedRows: Collections<GridRow>;
 
             /**
              * Get the total record count (limited to 5000)
@@ -1025,29 +981,6 @@ declare namespace DevKit {
         }
 
         /**
-         * Collection of controls within a quick view form
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/getcontrol
-         */
-        interface IQuickViewControlsCollection {
-            /**
-             * Gets a control by index or name
-             * @param arg The index (number) or name (string) of the control to get
-             */
-            get(arg?: number | string): any;
-
-            /**
-             * Gets the number of controls in the quick view form
-             */
-            getLength(): number;
-
-            /**
-             * Iterates over all controls in the quick view form
-             * @param callback The function to call for each control
-             */
-            forEach(callback: (control: any, index: number) => void): void;
-        }
-
-        /**
          * Interface for QuickView controls
          */
         interface IQuickView {
@@ -1061,7 +994,7 @@ declare namespace DevKit {
              * Gets all controls in the quick view form as a collection
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/getcontrol
              */
-            Controls(): IQuickViewControlsCollection;
+            Controls(): Collections<IControl>;
 
             /**
              * Returns whether the data binding for the constituent controls in a quick view control is complete
@@ -2331,28 +2264,6 @@ declare namespace DevKit {
     }
 
     /**
-     * Interface for the collection of stages in active path
-     */
-    interface IActivePathCollection {
-        /**
-         * Gets a stage at the specified index
-         * @param index The index of the stage to get
-         */
-        get(index: number): IStage;
-
-        /**
-         * Gets the count of stages in the active path
-         */
-        getLength(): number;
-
-        /**
-         * Iterates through all stages in the active path
-         * @param callback Function to call for each stage
-         */
-        forEach(callback: (stage: IStage, index: number) => void): void;
-    }
-
-    /**
      * Interface for Business Process Flow
      * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process
      */
@@ -2361,7 +2272,7 @@ declare namespace DevKit {
          * Returns a collection of stages in the active path
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/activepath
          */
-        readonly ActivePath: IActivePathCollection;
+        readonly ActivePath: Collections<IStage>;
 
         /**
          * Returns the currently active process
@@ -3012,7 +2923,7 @@ declare namespace DevKit {
          * Gets all panes
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app/xrm-app-sidepanes/getallpanes
          */
-        GetAll(): ISidePane[];
+        GetAll(): Collections<ISidePane>;
 
         /**
          * Gets the currently selected pane

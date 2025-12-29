@@ -874,28 +874,6 @@ declare namespace DevKit {
              */
             Value: number;
         }
-        /**
-         * Collection of controls within a quick view form
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/getcontrol
-         */
-        interface IQuickViewControlsCollection {
-            /**
-             * Gets a control by index or name
-             * @param arg The index (number) or name (string) of the control to get
-             */
-            get(arg?: number | string): any;
-
-            /**
-             * Gets the number of controls in the quick view form
-             */
-            getLength(): number;
-
-            /**
-             * Iterates over all controls in the quick view form
-             * @param callback The function to call for each control
-             */
-            forEach(callback: (control: any, index: number) => void): void;
-        }
         interface IQuickView {
             /**
              * Gets the controls on a form or control on form by passing an argument
@@ -907,7 +885,7 @@ declare namespace DevKit {
              * Gets all controls in the quick view form as a collection
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/getcontrol
              */
-            Controls(): IQuickViewControlsCollection;
+            Controls(): DevKit.Collections<DevKit.Controls.IControl>;
             /**
              * Returns whether the data binding for the constituent controls in a quick view control is complete
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/isloaded
@@ -4109,7 +4087,7 @@ declare namespace DevKit {
          * Gets all panes
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app/xrm-app-sidepanes/getallpanes
          */
-        GetAll(): ISidePane[];
+        GetAll(): DevKit.Collections<ISidePane>;
         /**
          * Gets the currently selected pane
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app/xrm-app-sidepanes/getselectedpane

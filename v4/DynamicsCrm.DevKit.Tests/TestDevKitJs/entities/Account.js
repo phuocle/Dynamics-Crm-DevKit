@@ -3040,7 +3040,7 @@ var formAccount_DevKitV4 = (function () {
 
 	/**
 	 * TEST 15: NavigationItem Control - navContacts
-	 * 
+	 *
 	 * Convention:
 	 * - R-Index: ReadOnly properties (R1, R2, R3...)
 	 * - S-Index: Setters & Methods (S1, S2, S3...)
@@ -3995,7 +3995,7 @@ var formAccount_DevKitV4 = (function () {
 	/**
 	 * TEST 22: Tab Control - Tests Tab and Section properties
 	 * Using TAB_1 with TAB_1_SECTION_1
-	 * 
+	 *
 	 * Convention:
 	 * - R-Index: ReadOnly properties (R1, R2, R3...)
 	 * - S-Index: Setters & Methods (S1, S2, S3...)
