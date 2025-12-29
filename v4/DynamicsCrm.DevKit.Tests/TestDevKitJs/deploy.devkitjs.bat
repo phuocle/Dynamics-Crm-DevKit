@@ -48,6 +48,15 @@ if errorlevel 1 (
     exit /b 1
 )
 
+:: Copy Account.d.ts to entities folder
+echo Copying Account.d.ts to entities folder...
+xcopy /Y "%SOURCE_DIR%entities\Account.d.ts" "%TARGET_DIR%\entities\"
+if errorlevel 1 (
+    echo [ERROR] Failed to copy Account.d.ts
+    pause
+    exit /b 1
+)
+
 :: Copy Account.form.js to entities folder
 echo Copying Account.form.js to entities folder...
 xcopy /Y "%SOURCE_DIR%entities\Account.form.js" "%TARGET_DIR%\entities\"
@@ -74,6 +83,7 @@ echo Summary:
 echo   - devkit.js copied to lib/
 echo   - devkit.d.ts copied to entities/
 echo   - Account.js copied to entities/
+echo   - Account.d.ts copied to entities/
 echo   - Account.form.js copied to entities/
 echo   - Account.webapi.js copied to entities/
 echo ========================================

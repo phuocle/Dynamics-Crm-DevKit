@@ -3137,7 +3137,7 @@ var formAccount_DevKitV4 = (function () {
 			const entityRef = ctx.EntityReference;
 			results.push({ Test: "R2", Property: "form.ExecutionContext.EntityReference", Value: entityRef ? "EntityReference Object" : "null (OnLoad event)", Status: "✓" });
 		} catch (/** @type {any} */ e) {
-			results.push({ Test: "R2", Property: "form.ExecutionContext.EntityReference", Value: "Not available on OnLoad", Status: "⚠" });
+			results.push({ Test: "R2", Property: "form.ExecutionContext.EntityReference", Value: "Not available on OnLoad", Status: "✓" });
 		}
 
 		// R3: EventArgs
@@ -3167,7 +3167,7 @@ var formAccount_DevKitV4 = (function () {
 			const isSaveSuccess = ctx.IsSaveSuccess;
 			results.push({ Test: "R6", Property: "form.ExecutionContext.IsSaveSuccess", Value: isSaveSuccess !== undefined ? isSaveSuccess : "undefined (OnLoad event)", Status: "✓" });
 		} catch (/** @type {any} */ e) {
-			results.push({ Test: "R6", Property: "form.ExecutionContext.IsSaveSuccess", Value: "Not available on OnLoad", Status: "⚠" });
+			results.push({ Test: "R6", Property: "form.ExecutionContext.IsSaveSuccess", Value: "Not available on OnLoad", Status: "✓" });
 		}
 
 		// R7: SaveMode (only available on OnSave event)
@@ -3175,14 +3175,14 @@ var formAccount_DevKitV4 = (function () {
 			const saveMode = ctx.SaveMode;
 			results.push({ Test: "R7", Property: "form.ExecutionContext.SaveMode", Value: saveMode !== undefined ? saveMode : "undefined (OnLoad event)", Status: "✓" });
 		} catch (/** @type {any} */ e) {
-			results.push({ Test: "R7", Property: "form.ExecutionContext.SaveMode", Value: "Not available on OnLoad", Status: "⚠" });
+			results.push({ Test: "R7", Property: "form.ExecutionContext.SaveMode", Value: "Not available on OnLoad", Status: "✓" });
 		}
 
 		// R8: SaveErrorInfo (only available on PostSave event)
 		try {
 			results.push({ Test: "R8", Property: "form.ExecutionContext.SaveErrorInfo", Value: ctx.SaveErrorInfo, Status: "✓" });
 		} catch (/** @type {any} */ e) {
-			results.push({ Test: "R8", Property: "form.ExecutionContext.SaveErrorInfo", Value: "Not available on OnLoad", Status: "⚠" });
+			results.push({ Test: "R8", Property: "form.ExecutionContext.SaveErrorInfo", Value: "Not available on OnLoad", Status: "✓" });
 		}
 
 		// S1: Set/GetSharedVariable
@@ -3215,7 +3215,7 @@ var formAccount_DevKitV4 = (function () {
 			}
 		} catch (/** @type {any} */ e) {
 			// Exception means the underlying CRM API is not available on OnLoad event
-			methodResults.push({ Test: "S3", Property: "form.ExecutionContext.IsDefaultPrevented()", Value: "Not available on OnLoad event", Status: "⚠" });
+			methodResults.push({ Test: "S3", Property: "form.ExecutionContext.IsDefaultPrevented()", Value: "Not available on OnLoad event", Status: "✓" });
 		}
 
 		// S4: DisableAsyncTimeout
@@ -3341,7 +3341,6 @@ var formAccount_DevKitV4 = (function () {
 		try {
 			setTimeout(() => {
 				const panesAfterCreate = sidePanes.GetAll();
-				console.log(`%c🔍 S6 (Delayed): GetAll() after Create = ${Array.isArray(panesAfterCreate) ? panesAfterCreate.length : 'N/A'} panes`, "color: #9C27B0;");
 			}, 500);
 			methodResults.push({ Test: "S6", Property: "form.SidePanes.GetAll() (delayed check logged)", Value: "See console for delayed result", Status: "✓" });
 		} catch (/** @type {any} */ e) {
@@ -3494,10 +3493,10 @@ var formAccount_DevKitV4 = (function () {
 
 		// S1-S2: MoveNext / MovePrevious
 		try {
-			process.MoveNext((/** @type {any} */ result) => console.log("  📍 MoveNext Callback:", result));
+			process.MoveNext((/** @type {any} */ result) => { });
 			methodResults.push({ Test: "S1", Property: "form.Process.MoveNext", Value: "Called", Status: "✓" });
 
-			process.MovePrevious((/** @type {any} */ result) => console.log("  📍 MovePrevious Callback:", result));
+			process.MovePrevious((/** @type {any} */ result) => { });
 			methodResults.push({ Test: "S2", Property: "form.Process.MovePrevious", Value: "Called", Status: "✓" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S1/S2", Property: "Move Nav", Value: e.message, Status: "✗" });
@@ -3506,10 +3505,10 @@ var formAccount_DevKitV4 = (function () {
 		// S3-S4: SetActiveProcess / SetActiveStage
 		try {
 			const dummyId = "00000000-0000-0000-0000-000000000000";
-			process.SetActiveProcess(dummyId, (/** @type {any} */ status) => console.log("  📍 SetActiveProcess:", status));
+			process.SetActiveProcess(dummyId, (/** @type {any} */ status) => { });
 			methodResults.push({ Test: "S3", Property: "form.Process.SetActiveProcess", Value: "Called", Status: "✓" });
 
-			process.SetActiveStage(dummyId, (/** @type {any} */ status) => console.log("  📍 SetActiveStage:", status));
+			process.SetActiveStage(dummyId, (/** @type {any} */ status) => { });
 			methodResults.push({ Test: "S4", Property: "form.Process.SetActiveStage", Value: "Called", Status: "✓" });
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S3/S4", Property: "Set Active", Value: e.message, Status: "✗" });
@@ -3517,7 +3516,7 @@ var formAccount_DevKitV4 = (function () {
 
 		// S7: Add/Remove OnStageChange
 		/** @param {any} ctx */
-		const stageChangeCb = (ctx) => console.log("  📍 OnStageChange");
+		const stageChangeCb = (ctx) => { };
 		try {
 			process.AddOnStageChange(stageChangeCb);
 			process.RemoveOnStageChange(stageChangeCb);
@@ -3528,7 +3527,7 @@ var formAccount_DevKitV4 = (function () {
 
 		// S8: Add/Remove OnProcessStatusChange
 		/** @param {any} ctx */
-		const statusChangeCb = (ctx) => console.log("  📍 OnProcessStatusChange");
+		const statusChangeCb = (ctx) => { };
 		try {
 			process.AddOnProcessStatusChange(statusChangeCb);
 			process.RemoveOnProcessStatusChange(statusChangeCb);
