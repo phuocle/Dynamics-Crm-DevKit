@@ -357,10 +357,8 @@ const devKit = (function () {
         return obj;
     }
     function loadTabs(formContext, tabItemsOrTabs) {
-        // Support both new pattern (array) and legacy pattern (object) for backward compatibility
         const isArray = Array.isArray(tabItemsOrTabs);
         const tabs = isArray ? {} : tabItemsOrTabs;
-
         if (isArray) {
             tabItemsOrTabs.forEach(item => {
                 const [tabName, sectionName] = item.split('___');
@@ -412,12 +410,9 @@ const devKit = (function () {
         });
         return tabs;
     }
-    function loadNavigations(formContext, navigationItemsOrObj) {
-        const isArray = Array.isArray(navigationItemsOrObj);
-        const obj = isArray ? {} : navigationItemsOrObj;
-        if (isArray) {
-            navigationItemsOrObj.forEach(item => obj[item] = {});
-        }
+    function loadNavigations(formContext, navigationItems) {
+        const obj = {};
+        navigationItems.forEach(item => obj[item] = {});
         const getNavigationItem = (navigation) => {
             const navItems = formContext?.ui?.navigation?.items;
             if (!navItems) return null;
@@ -437,7 +432,7 @@ const devKit = (function () {
             getterSetter(navigations[navigation], 'Visible', () => navigationItem?.getVisible(), value => navigationItem?.setVisible(value));
             navigations[navigation].Focus = () => navigationItem?.setFocus();
         }
-        Object.keys(obj).forEach(navigation => {
+        navigationItems.forEach(navigation => {
             loadNavigation(formContext, obj, navigation);
         });
         return obj;

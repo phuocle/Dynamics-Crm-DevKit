@@ -1366,10 +1366,7 @@ describe('devKit', () => {
         var executionContext = XrmMockGenerator.formContext;
         //run
         var form = {};
-        var navigation = {
-            Account_Emails: {},
-        };
-        devKit.LoadNavigations(executionContext, navigation);
+        var navigation = devKit.LoadNavigations(executionContext, ['Account_Emails']);
         form.Navigation = navigation;
         //result
         expect(form.Navigation.Account_Emails.Id).toBe("Account_Emails");
@@ -1409,10 +1406,7 @@ describe('devKit', () => {
         XrmMockGenerator.formContext = new FormContextMock(data, ui);
         var executionContext = XrmMockGenerator.formContext;
         // Run - try to load a navigation that doesn't exist
-        var navigation = {
-            NonExistentNav: {},
-        };
-        devKit.LoadNavigations(executionContext, navigation);
+        var navigation = devKit.LoadNavigations(executionContext, ['NonExistentNav']);
         // Test - should not throw, but properties should be undefined since navItems is null
         expect(navigation.NonExistentNav.Id).toBeUndefined();
         expect(navigation.NonExistentNav.Label).toBeUndefined();
@@ -1440,10 +1434,7 @@ describe('devKit', () => {
         XrmMockGenerator.formContext = new FormContextMock(data, ui);
         var executionContext = XrmMockGenerator.formContext;
         // Run - search for navigation item that doesn't exist (will loop through all items without finding match)
-        var navigation = {
-            NonExistentNavItem: {},
-        };
-        devKit.LoadNavigations(executionContext, navigation);
+        var navigation = devKit.LoadNavigations(executionContext, ['NonExistentNavItem']);
         // Test - should not throw, but properties should be undefined since no matching nav item found
         // This covers the E branch where loop completes without finding the item
         expect(navigation.NonExistentNavItem.Id).toBeUndefined();
