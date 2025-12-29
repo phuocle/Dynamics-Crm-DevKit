@@ -873,7 +873,7 @@ declare namespace DevKit {
              */
             readonly ControlType: OptionSet.FieldControlType;
             /**
-             * [ReadOnly] Returns the name assigned to the quick view control
+             * Returns the name assigned to the quick view control
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/getname
              */
             readonly ControlName: string;
@@ -1124,6 +1124,12 @@ declare namespace DevKit {
             */
             ContentWindow(successCallback?: (contentWindow: any) => void, errorCallback?: (error: Error) => void): void;
             /**
+            * Returns the content window that represents an IFRAME or web resource and returns a promise
+            * @returns Promise that resolves with the content window
+            * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getcontentwindow
+            */
+            ContentWindow(): Promise<any>;
+            /**
              * Returns the default URL that an IFRAME control is configured to display
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getinitialurl
              **/
@@ -1217,7 +1223,6 @@ declare namespace DevKit {
              */
             Visible: boolean;
         }
-
         interface Section {
             /**
              * Get the name of the section
@@ -1245,7 +1250,7 @@ declare namespace DevKit {
              * A collection of one or more controls associated with the section
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/collections
              */
-            readonly Controls: Collections<Controls.IControl>;
+            readonly Controls: Collections<IControl>;
         }
         interface Grid {
             /**
@@ -1381,7 +1386,7 @@ declare namespace DevKit {
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/gridentity/getprimaryattributevalue
              */
             readonly PrimaryAttributeValue: string;
-            readonly Columns: Collections<Controls.GridColumn>;
+            readonly Columns: Collections<GridColumn>;
         }
         interface GridColumn {
             /**
@@ -2364,12 +2369,23 @@ declare namespace DevKit {
         /** A collection of attribute metadata objects. The object returned depends on the type of attribute metadata */
         readonly Attributes: Array<IEntityBaseAttribute | EntityBooleanAttribute | EntityEnumAttribute | EntityPicklistAttribute | EntityStateAttribute | EntityStatusAttribute>;
     }
+    /**
+     * Represents a generic key-value pair with string key and any value type
+     */
     interface KeyValueObject {
+        /** The key identifier */
         readonly key: string,
+        /** The associated value of any type */
         readonly value: any
     }
+    /**
+     * Represents a key-value pair with string key and numeric value
+     * @remarks Used for OptionSet metadata where the key is the label and value is the numeric option value
+     */
     interface KeyValueNumber {
+        /** The key identifier (typically the option label) */
         readonly key: string,
+        /** The numeric value associated with the key */
         readonly value: number
     }
     /**
@@ -2395,20 +2411,39 @@ declare namespace DevKit {
         /** Audio file MIME type */
         readonly mimeType: string;
     }
-
+    /**
+     * Represents the properties of the current business app in model-driven apps
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/getcurrentappproperties
+     */
     interface AppProperty {
+        /** The ID of the app */
         readonly appId: string;
+        /** The display name of the app */
         readonly displayName: string;
+        /** The unique name of the app */
         readonly uniqueName: string;
+        /** The URL of the app */
         readonly url: string;
+        /** The ID of the web resource icon for the app */
         readonly webResourceId: Guid;
+        /** The name of the web resource icon for the app */
         readonly webResourceName: string;
+        /** The ID of the welcome page for the app */
         readonly welcomePageId: Guid;
+        /** The name of the welcome page for the app */
         readonly welcomePageName: string;
     }
+    /**
+     * Represents field-level security privileges for the current user on a specific field/column
+     * @remarks This is intended for use when Field Level Security modifies a user's privileges for a specific field
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getuserprivilege
+     */
     interface FieldUserPrivilege {
+        /** Whether the user has read privilege for this field */
         readonly canRead: boolean;
+        /** Whether the user has update privilege for this field */
         readonly canUpdate: boolean;
+        /** Whether the user has create privilege for this field */
         readonly canCreate: boolean;
     }
     interface ProcessStage {
@@ -2442,7 +2477,7 @@ declare namespace DevKit {
          * Returns the status of the stage
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/stage/getstatus
          */
-        readonly Status: "active" | "inactive";
+        readonly Status: OptionSet.ProcessStageStatus;
         /**
          * Returns a navigation behavior object for a stage that can be used to define whether the Create button is available for users to create other entity record in a cross-entity business process flow navigation scenario.
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/stage/getsteps
@@ -4367,16 +4402,26 @@ declare namespace OptionSet {
         Resolve
     }
     /**
-     * The status of a stage in the business process flow
-     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/stage/getstatus
+     * Returns the current status of the process instance.
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/instance/getstatus
      */
     enum ProcessStatus {
         /** Stage is currently active */
         Active,
-        /** Stage was aborted/skipped */
+        /** Stage was aborted */
         Aborted,
         /** Stage has been completed */
         Finished
+    }
+    /**
+     * Returns the status of the stage.
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/stage/getstatus
+     */
+    enum ProcessStageStatus {
+        /** Stage is currently active */
+        Active,
+        /** Stage is currently inactive */
+        Inactive
     }
     /**
      * The progress of an action step in a business process flow

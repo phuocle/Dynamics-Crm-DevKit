@@ -16,6 +16,7 @@ export function TestProcess(form: FormAccount_DevKitV4.Form): void {
     const methodResults: TestResult[] = [];
     const process = form.Process;
     const startTime = new Date().toLocaleTimeString();
+    var a = form.Process.ActiveStage.Status;
 
     // =====================================================
     // READONLY PROPERTIES (R-Index)
