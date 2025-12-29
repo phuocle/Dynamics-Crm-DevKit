@@ -373,7 +373,6 @@ describe('devkit.ts - WebApi Loading', () => {
             const errorCallback = jest.fn();
             const factory = (entity: any) => entity;
 
-            // @ts-ignore - testing callback overload
             form.WebApi.RetrieveRecord(factory, 'account', 'account-id', '?$select=name', successCallback, errorCallback);
 
             await new Promise(resolve => setTimeout(resolve, 10));
@@ -389,7 +388,6 @@ describe('devkit.ts - WebApi Loading', () => {
             const successCallback = jest.fn();
 
             // Pass function as 4th param (options position)
-            // @ts-ignore - testing callback overload
             form.WebApi.RetrieveRecord(factory, 'account', 'account-id', successCallback);
 
             await new Promise(resolve => setTimeout(resolve, 10));
@@ -432,7 +430,6 @@ describe('devkit.ts - WebApi Loading', () => {
             const errorCallback = jest.fn();
             const factory = (entity: any) => entity;
 
-            // @ts-ignore - testing callback overload
             form.WebApi.RetrieveRecords(factory, 'account', '?$select=name', successCallback, errorCallback);
 
             await new Promise(resolve => setTimeout(resolve, 10));

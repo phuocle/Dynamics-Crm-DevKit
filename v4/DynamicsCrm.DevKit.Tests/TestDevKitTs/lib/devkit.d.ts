@@ -2631,6 +2631,7 @@ declare namespace DevKit {
          * @param errorCallback Function called when the operation fails
          */
         RetrieveRecord<T>(apiConstructorOrFactory: ((data: any) => T) | (new (data: any) => T), entityLogicalName: string, id: string, successCallback: (result: T) => void, errorCallback?: (error: any) => void): void;
+        RetrieveRecord<T>(apiConstructorOrFactory: ((data: any) => T) | (new (data: any) => T), entityLogicalName: string, id: string, options: string, successCallback: (result: T) => void, errorCallback?: (error: any) => void): void;
 
         /**
          * Retrieves a collection of entity records
@@ -2663,6 +2664,8 @@ declare namespace DevKit {
          * @returns A promise that resolves to an array of typed instances
          */
         RetrieveRecords<T>(apiConstructorOrFactory: ((data: any) => T) | (new (data: any) => T), fetchXml: string, maxPageSize?: number): Promise<T[]>;
+        RetrieveRecords<T>(apiConstructorOrFactory: ((data: any) => T) | (new (data: any) => T), entityLogicalName: string, options: string, successCallback: (result: T[]) => void, errorCallback?: (error: any) => void): void;
+        RetrieveRecords<T>(apiConstructorOrFactory: ((data: any) => T) | (new (data: any) => T), entityLogicalName: string, options: string, maxPageSize: number, successCallback: (result: T[]) => void, errorCallback?: (error: any) => void): void;
 
         /**
          * Updates an entity record
