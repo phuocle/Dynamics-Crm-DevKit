@@ -559,7 +559,7 @@ describe('devKit', () => {
         });
         XrmMockGenerator.initialise({ process: process, ui: ui });
         //run
-        var process = devKit.LoadProcess(XrmMockGenerator.formContext);
+        var process = devKit.LoadProcess(XrmMockGenerator.formContext, []);
         var _BPF_Account = devKit.LoadFields(XrmMockGenerator.formContext, ['Name', 'Name_1'], "header_process_");
         process.BPF_Account = _BPF_Account;
         var form = {};
@@ -2441,7 +2441,7 @@ describe('devKit', () => {
             setStatus: () => { }
         };
         var formContext = { data: { process: process }, ui: { process: { getDisplayState: () => 'collapsed', setDisplayState: () => { }, getVisible: () => true, setVisible: () => { } } } };
-        var loadedProcess = devKit.LoadProcess(formContext);
+        var loadedProcess = devKit.LoadProcess(formContext, []);
         var path = loadedProcess.ActivePath;
         var stage = path.get(0);
         expect(stage.Id).toBe('stage1');
@@ -2471,7 +2471,7 @@ describe('devKit', () => {
             getSelectedStage: () => null
         };
         var formContext = { data: { process: process }, ui: { process: {} } };
-        var loadedProcess = devKit.LoadProcess(formContext);
+        var loadedProcess = devKit.LoadProcess(formContext, []);
         var result = null;
         loadedProcess.ProcessInstances(function (processes) { result = processes; });
         expect(result).not.toBeNull();
@@ -3171,7 +3171,7 @@ describe('devKit', () => {
             getSelectedStage: () => stageWithNullSteps
         };
         var formContext = { data: { process: process }, ui: { process: {} } };
-        var loadedProcess = devKit.LoadProcess(formContext);
+        var loadedProcess = devKit.LoadProcess(formContext, []);
         // Access Steps which should return empty array when getSteps returns null
         var stage = loadedProcess.ActiveStage;
         expect(stage.Steps).toEqual([]);
@@ -3202,7 +3202,7 @@ describe('devKit', () => {
             getSelectedStage: () => stageWithSteps
         };
         var formContext = { data: { process: process }, ui: { process: {} } };
-        var loadedProcess = devKit.LoadProcess(formContext);
+        var loadedProcess = devKit.LoadProcess(formContext, []);
         var stagesObj = loadedProcess.ActiveProcess.Stages;
         var count = 0;
         stagesObj.forEach((stage, index) => { count++; });
@@ -3542,7 +3542,7 @@ describe('devKit', () => {
             getSelectedStage: () => stageWithMultipleSteps
         };
         var formContext = { data: { process: process }, ui: { process: {} } };
-        var loadedProcess = devKit.LoadProcess(formContext);
+        var loadedProcess = devKit.LoadProcess(formContext, []);
         var stage = loadedProcess.ActiveStage;
         expect(stage.Steps.length).toBe(2);
         expect(stage.Steps[0].Name).toBe('Step1');
@@ -3783,7 +3783,7 @@ describe('devKit', () => {
             getSelectedStage: () => stageWithBadSteps
         };
         var formContext = { data: { process: process }, ui: { process: {} } };
-        var loadedProcess = devKit.LoadProcess(formContext);
+        var loadedProcess = devKit.LoadProcess(formContext, []);
         var stage = loadedProcess.ActiveStage;
         // Should return empty array when steps.length is falsy
         expect(stage.Steps).toEqual([]);
@@ -3806,7 +3806,7 @@ describe('devKit', () => {
             getSelectedStage: () => null
         };
         var formContext = { data: { process: process }, ui: { process: {} } };
-        var loadedProcess = devKit.LoadProcess(formContext);
+        var loadedProcess = devKit.LoadProcess(formContext, []);
         var stagesObj = loadedProcess.ActiveProcess.Stages;
         var count = 0;
         stagesObj.forEach((stage, index) => { count++; });

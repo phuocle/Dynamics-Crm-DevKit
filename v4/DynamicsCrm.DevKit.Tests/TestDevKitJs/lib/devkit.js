@@ -90,22 +90,20 @@ const devKit = (function () {
         obj.UiRemoveOnLoad = callback => contextUi?.removeOnLoad(callback);
         return obj;
     }
-    function loadProcess(formContext, bpf = []) {
+    function loadProcess(formContext, bpf) {
         const obj = {};
-        if (bpf.length > 0) {
-            const bpfFieldNames = [];
-            let bpfProcessName = null;
-            bpf.forEach(item => {
-                const [processName, fieldName] = item.split('___');
-                if (!bpfProcessName) {
-                    bpfProcessName = processName;
-                }
-                bpfFieldNames.push(fieldName);
-            });
-            const bpfObj = loadFields(formContext, bpfFieldNames, 'header_process_');
-            if (bpfProcessName) {
-                obj[bpfProcessName] = bpfObj;
+        const bpfFieldNames = [];
+        let bpfProcessName = null;
+        bpf.forEach(item => {
+            const [processName, fieldName] = item.split('___');
+            if (!bpfProcessName) {
+                bpfProcessName = processName;
             }
+            bpfFieldNames.push(fieldName);
+        });
+        if (bpfProcessName) {
+            const bpfObj = loadFields(formContext, bpfFieldNames, 'header_process_');
+            obj[bpfProcessName] = bpfObj;
         }
         const getProcess = formContext?.data?.process;
         const getProcessUi = formContext?.ui?.process;
