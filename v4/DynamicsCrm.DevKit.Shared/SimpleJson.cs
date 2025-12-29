@@ -1163,11 +1163,12 @@ namespace DynamicsCrm.DevKit.Shared
 
             builder.Append('"');
             var safeCharacterCount = 0;
-            var charArray = aString.ToCharArray();
+            // Optimisation: avoid creating a char array for every string we serialize
+            // var charArray = aString.ToCharArray();
 
-            for (var i = 0; i < charArray.Length; i++)
+            for (var i = 0; i < aString.Length; i++)
             {
-                var c = charArray[i];
+                var c = aString[i];
 
                 // Non ascii characters are fine, buffer them up and send them to the builder
                 // in larger chunks if possible. The escape table is a 1:1 translation table
@@ -1180,7 +1181,7 @@ namespace DynamicsCrm.DevKit.Shared
                 {
                     if (safeCharacterCount > 0)
                     {
-                        builder.Append(charArray, i - safeCharacterCount, safeCharacterCount);
+                        builder.Append(aString, i - safeCharacterCount, safeCharacterCount);
                         safeCharacterCount = 0;
                     }
 
@@ -1190,7 +1191,7 @@ namespace DynamicsCrm.DevKit.Shared
             }
 
             if (safeCharacterCount > 0)
-                builder.Append(charArray, charArray.Length - safeCharacterCount, safeCharacterCount);
+                builder.Append(aString, aString.Length - safeCharacterCount, safeCharacterCount);
 
             builder.Append('"');
             return true;
