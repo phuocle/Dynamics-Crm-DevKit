@@ -360,15 +360,23 @@ const devKit = (function () {
             const [tabName, sectionName] = item.split('___');
             if (!obj[tabName]) {
                 obj[tabName] = { Section: {} };
+                const tabObject = formContext?.ui?.tabs?.get(tabName);
+                getter(obj[tabName], 'Name', () => tabObject?.getName());
+                getter(obj[tabName], 'Parent', () => tabObject?.getParent());
+                getterSetter(obj[tabName], 'ContentType', () => tabObject?.getContentType(), value => { tabObject?.setContentType(value); });
+                getterSetter(obj[tabName], 'DisplayState', () => tabObject?.getDisplayState(), value => { tabObject?.setDisplayState(value); });
+                getterSetter(obj[tabName], 'Label', () => tabObject?.getLabel(), value => { tabObject?.setLabel(value); });
+                getterSetter(obj[tabName], 'Visible', () => tabObject?.getVisible(), value => { tabObject?.setVisible(value); });
+                obj[tabName].AddTabStateChange = callback => tabObject?.addTabStateChange(callback);
+                obj[tabName].Focus = () => tabObject?.setFocus();
+                obj[tabName].RemoveTabStateChange = callback => tabObject?.removeTabStateChange(callback);
             }
             obj[tabName].Section[sectionName] = {};
-        });
-        const loadSection = (formContext, tab, sections, section) => {
-            const tabObject = formContext?.ui?.tabs?.get(tab);
-            const sectionObject = tabObject?.sections?.get(section);
-            getter(sections[section], 'Name', () => sectionObject?.getName());
-            getter(sections[section], 'Parent', () => sectionObject?.getParent());
-            getter(sections[section], 'Controls', () => {
+            const tabObject = formContext?.ui?.tabs?.get(tabName);
+            const sectionObject = tabObject?.sections?.get(sectionName);
+            getter(obj[tabName].Section[sectionName], 'Name', () => sectionObject?.getName());
+            getter(obj[tabName].Section[sectionName], 'Parent', () => sectionObject?.getParent());
+            getter(obj[tabName].Section[sectionName], 'Controls', () => {
                 const controlsCollection = sectionObject?.controls;
                 if (!controlsCollection) return null;
                 const controlsObj = {};
@@ -382,23 +390,8 @@ const devKit = (function () {
                 };
                 return controlsObj;
             });
-            getterSetter(sections[section], 'Label', () => sectionObject?.getLabel(), value => sectionObject?.setLabel(value));
-            getterSetter(sections[section], 'Visible', () => sectionObject?.getVisible(), value => sectionObject?.setVisible(value));
-        }
-        Object.keys(obj).forEach(tab => {
-            const tabObject = formContext?.ui?.tabs?.get(tab);
-            getter(obj[tab], 'Name', () => tabObject?.getName());
-            getter(obj[tab], 'Parent', () => tabObject?.getParent());
-            getterSetter(obj[tab], 'ContentType', () => tabObject?.getContentType(), value => { tabObject?.setContentType(value); });
-            getterSetter(obj[tab], 'DisplayState', () => tabObject?.getDisplayState(), value => { tabObject?.setDisplayState(value); });
-            getterSetter(obj[tab], 'Label', () => tabObject?.getLabel(), value => { tabObject?.setLabel(value); });
-            getterSetter(obj[tab], 'Visible', () => tabObject?.getVisible(), value => { tabObject?.setVisible(value); });
-            obj[tab].AddTabStateChange = callback => tabObject?.addTabStateChange(callback);
-            obj[tab].Focus = () => tabObject?.setFocus();
-            obj[tab].RemoveTabStateChange = callback => tabObject?.removeTabStateChange(callback);
-            Object.keys(obj[tab].Section).forEach(section => {
-                loadSection(formContext, tab, obj[tab].Section, section);
-            });
+            getterSetter(obj[tabName].Section[sectionName], 'Label', () => sectionObject?.getLabel(), value => sectionObject?.setLabel(value));
+            getterSetter(obj[tabName].Section[sectionName], 'Visible', () => sectionObject?.getVisible(), value => sectionObject?.setVisible(value));
         });
         return obj;
     }
@@ -434,25 +427,22 @@ const devKit = (function () {
             if (!obj[quickFormName]) {
                 obj[quickFormName] = {};
                 quickFormFields[quickFormName] = [];
+                const quick = formContext?.ui?.quickForms?.get(quickFormName);
+                getter(obj[quickFormName], 'Body', () => loadFormDialog(quick, quickFormFields[quickFormName]));
+                getter(obj[quickFormName], 'ControlName', () => quick?.getName());
+                getter(obj[quickFormName], 'ControlParent', () => quick?.getParent());
+                getter(obj[quickFormName], 'ControlType', () => quick?.getControlType());
+                getterSetter(obj[quickFormName], 'Disabled', () => quick?.getDisabled(), value => { quick?.setDisabled(value); });
+                getterSetter(obj[quickFormName], 'Label', () => quick?.getLabel(), value => { quick?.setLabel(value); });
+                getterSetter(obj[quickFormName], 'Visible', () => quick?.getVisible(), value => { quick?.setVisible(value); });
+                obj[quickFormName].Controls = arg => quick?.getControl(arg);
+                obj[quickFormName].Focus = () => quick?.setFocus();
+                obj[quickFormName].IsLoaded = () => quick?.isLoaded();
+                obj[quickFormName].Refresh = () => quick?.refresh();
             }
             if (fieldName) {
                 quickFormFields[quickFormName].push(fieldName);
             }
-        });
-        Object.keys(obj).forEach(quickForm => {
-            const fields = quickFormFields[quickForm];
-            const quick = formContext?.ui?.quickForms?.get(quickForm);
-            getter(obj[quickForm], 'Body', () => loadFormDialog(quick, fields));
-            getter(obj[quickForm], 'ControlName', () => quick?.getName());
-            getter(obj[quickForm], 'ControlParent', () => quick?.getParent());
-            getter(obj[quickForm], 'ControlType', () => quick?.getControlType());
-            getterSetter(obj[quickForm], 'Disabled', () => quick?.getDisabled(), value => { quick?.setDisabled(value); });
-            getterSetter(obj[quickForm], 'Label', () => quick?.getLabel(), value => { quick?.setLabel(value); });
-            getterSetter(obj[quickForm], 'Visible', () => quick?.getVisible(), value => { quick?.setVisible(value); });
-            obj[quickForm].Controls = arg => quick?.getControl(arg);
-            obj[quickForm].Focus = () => quick?.setFocus();
-            obj[quickForm].IsLoaded = () => quick?.isLoaded();
-            obj[quickForm].Refresh = () => quick?.refresh();
         });
         return obj;
     }
