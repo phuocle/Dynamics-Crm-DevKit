@@ -2303,6 +2303,88 @@ describe('devKit', () => {
         expect(getSelectedCalled).toBe(true);
         expect(selectedPane.id).toBe('pane-1');
     });
+    test('devKit.LoadSidePanes.Create - with successCallback (branch coverage)', () => {
+        let successResult = null;
+        const mockPane = { id: 'created-pane', navigate: function () { } };
+        const mockPromise = {
+            then: function (successCb, errorCb) {
+                if (successCb) successCb(mockPane);
+                return this;
+            }
+        };
+        global.Xrm = {
+            App: {
+                sidePanes: {
+                    createPane: function (options) { return mockPromise; }
+                }
+            }
+        };
+
+        var sidePanes = devKit.LoadSidePanes();
+        sidePanes.Create({ paneId: 'test-pane', title: 'Test' }, function (pane) {
+            successResult = pane;
+        }, function (error) { });
+
+        expect(successResult).not.toBeNull();
+        expect(successResult.id).toBe('created-pane');
+    });
+    test('devKit.LoadSidePanes.Create - with errorCallback (branch coverage)', () => {
+        let errorResult = null;
+        const mockPromise = {
+            then: function (successCb, errorCb) {
+                if (errorCb) errorCb(new Error('Create pane failed'));
+                return this;
+            }
+        };
+        global.Xrm = {
+            App: {
+                sidePanes: {
+                    createPane: function (options) { return mockPromise; }
+                }
+            }
+        };
+
+        var sidePanes = devKit.LoadSidePanes();
+        sidePanes.Create({ paneId: 'test-pane', title: 'Test' }, function (pane) { }, function (error) {
+            errorResult = error;
+        });
+
+        expect(errorResult).not.toBeNull();
+        expect(errorResult.message).toBe('Create pane failed');
+    });
+    test('devKit.LoadSidePanes.Create - returns Promise when no callback (branch coverage)', () => {
+        const mockPane = { id: 'created-pane', navigate: function () { } };
+        const mockPromise = {
+            then: function (successCb, errorCb) {
+                if (successCb) successCb(mockPane);
+                return mockPromise;
+            }
+        };
+        global.Xrm = {
+            App: {
+                sidePanes: {
+                    createPane: function (options) { return mockPromise; }
+                }
+            }
+        };
+
+        var sidePanes = devKit.LoadSidePanes();
+        var result = sidePanes.Create({ paneId: 'test-pane', title: 'Test' });
+
+        expect(result).toBe(mockPromise);
+    });
+    test('devKit.LoadSidePanes.Create - handles undefined sidePanes (branch coverage)', () => {
+        global.Xrm = {
+            App: {
+                // sidePanes is undefined
+            }
+        };
+
+        var sidePanes = devKit.LoadSidePanes();
+        var result = sidePanes.Create({ paneId: 'test-pane', title: 'Test' });
+
+        expect(result).toBeUndefined();
+    });
     test('devKit.LoadWebApi - RetrieveRecords throws error for OData without entity', () => {
         global.Xrm = {
             WebApi: {

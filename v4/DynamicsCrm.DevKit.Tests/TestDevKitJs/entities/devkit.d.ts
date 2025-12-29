@@ -3228,42 +3228,11 @@ declare namespace DevKit {
     }
     /**
      * Provides methods for managing side panes in model-driven apps
-     * @remarks This API is not available for Dynamics 365 Customer Engagement on-premises deployments
+     * @remarks This API is not available for Dynamics 365 Customer Engagement on-premises deployments. Use ISidePanes interface instead.
      * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app-sidepanes
+     * @deprecated Use ISidePanes instead for proper async/await support
      */
-    interface SidePanes {
-        /**
-         * Creates a new side pane with the specified options
-         * @param paneOptions An object containing options for the side pane including title, paneId, canClose, imageSrc, hideHeader, isSelected, width, hidden, alwaysRender, and keepBadgeOnSelect
-         * @param successCallback A function to call when the pane is created successfully
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app/xrm-app-sidepanes/createpane
-         */
-        Create(paneOptions: DevKit.SidePaneOptions, successCallback: (pane: DevKit.SidePane) => void): void;
-        /**
-         * Returns the side pane corresponding to the input ID. Returns undefined if the side pane does not exist
-         * @param paneId The ID of the pane to retrieve
-         * @returns The AppSidePane object if found, otherwise undefined
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app/xrm-app-sidepanes/getpane
-         */
-        Get(paneId: string): DevKit.SidePane;
-        /**
-         * Returns the currently selected pane
-         * @returns The currently selected AppSidePane object
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app/xrm-app-sidepanes/getselectedpane
-         */
-        GetSelected(): DevKit.SidePane;
-        /**
-         * Returns a collection containing all active panes
-         * @returns A collection of all active AppSidePane objects
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app/xrm-app-sidepanes/getallpanes
-         */
-        GetAll(): DevKit.Collections<DevKit.SidePane>;
-        /**
-         * Gets or sets the state of the side panes. Use this property to programmatically collapse (0) or expand (1) the side pane
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app-sidepanes
-         */
-        DisplayState: OptionSet.SidePaneState;
-    }
+    type SidePanes = ISidePanes;
     interface Client {
         /**
         *  Returns a value to indicate which client the script is executing in.
@@ -4052,7 +4021,7 @@ declare namespace DevKit {
         /** Returns a boolean value to indicate whether the view selector is visible */
         readonly Visible: boolean;
     }
-    interface ISidePane {
+    interface ISidePaneBase {
         /** The title of the pane. Used in pane header and for tooltip. */
         title?: string,
         /** The ID of the new pane. If the value is not passed, the ID value is auto-generated. */
@@ -4070,13 +4039,13 @@ declare namespace DevKit {
         /** Prevents the badge from getting cleared when the pane becomes selected. */
         keepBadgeOnSelect?: boolean
     }
-    interface SidePaneOptions extends ISidePane {
+    interface ISidePaneOptions extends ISidePaneBase {
         /** Hides the header pane, including the title and close button. Default value is false. */
         hideHeader?: boolean,
         /** When set to false, the created pane is not selected and leaves the existing pane selected. It also does not expand the pane if collapsed. */
         isSelected?: boolean
     }
-    interface SidePane extends ISidePane {
+    interface ISidePane extends ISidePaneBase {
         /** Closes the side pane and removes it from the side bar. */
         close(): void,
         /** Specify whether the pane should be selected or expanded. */
@@ -4084,6 +4053,41 @@ declare namespace DevKit {
         /** Opens a page within the selected pane. This is similar to the navigateTo method. */
         navigate(pageInput: DevKit.PageInputEntityList | DevKit.PageInputHtmlWebResource | DevKit.PageInputEntityRecord | DevKit.PageInputDashboard, navigationOptions?: DevKit.NavigationOptions, successCallback?: (result: any) => void, errorCallback?: (error: DevKit.Error) => void): void,
         badge?: number
+    }
+    /**
+     * Interface for Side Panes API
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app/xrm-app-sidepanes
+     */
+    interface ISidePanes {
+        /**
+         * Get/Set the display state of the side panes: 0=Collapsed, 1=Expanded
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app/xrm-app-sidepanes#state
+         */
+        DisplayState: 0 | 1;
+        /**
+         * Creates a new side pane
+         * @param paneOptions Options for creating the pane
+         * @param successCallback Function called when the pane is created
+         * @param errorCallback Function called when there is an error
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app/xrm-app-sidepanes/createpane
+         */
+        Create(paneOptions: ISidePaneOptions, successCallback?: (pane: ISidePane) => void, errorCallback?: (error: DevKit.Error) => void): Promise<ISidePane> | void;
+        /**
+         * Gets a pane by ID
+         * @param paneId The ID of the pane to get
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app/xrm-app-sidepanes/getpane
+         */
+        Get(paneId: string): ISidePane | undefined;
+        /**
+         * Gets all panes
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app/xrm-app-sidepanes/getallpanes
+         */
+        GetAll(): ISidePane[];
+        /**
+         * Gets the currently selected pane
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app/xrm-app-sidepanes/getselectedpane
+         */
+        GetSelected(): ISidePane | undefined;
     }
 }
 

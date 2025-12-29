@@ -947,7 +947,11 @@ const devKit = (function () {
     function loadSidePanes() {
         const obj = {};
         getterSetter(obj, 'DisplayState', () => Xrm?.App?.sidePanes?.state, value => { Xrm.App.sidePanes.state = value; });
-        obj.Create = function (paneOptions, successCallback) { Xrm?.App?.sidePanes?.createPane(paneOptions)?.then(successCallback); };
+        obj.Create = function (paneOptions, successCallback, errorCallback) {
+            const promise = Xrm?.App?.sidePanes?.createPane(paneOptions);
+            if (successCallback) promise?.then(successCallback, errorCallback);
+            else return promise;
+        };
         obj.Get = paneId => Xrm?.App?.sidePanes?.getPane(paneId);
         obj.GetAll = () => Xrm?.App?.sidePanes?.getAllPanes();
         obj.GetSelected = () => Xrm?.App?.sidePanes?.getSelectedPane();
