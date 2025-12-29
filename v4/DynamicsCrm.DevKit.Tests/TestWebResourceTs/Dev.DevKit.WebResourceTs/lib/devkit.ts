@@ -389,7 +389,11 @@ function loadSidePanes(): DevKit.ISidePanes {
     const xrm: any = getXrm();
     const getSidePanes = xrm?.App?.sidePanes;
     getterSetter(obj, 'DisplayState', () => getSidePanes?.state, (value: any) => { if (getSidePanes) getSidePanes.state = value; });
-    obj.Create = function (paneOptions: any, successCallback?: any) { getSidePanes?.createPane(paneOptions)?.then(successCallback); };
+    obj.Create = function (paneOptions: any, successCallback?: any, errorCallback?: any) {
+        const promise = getSidePanes?.createPane(paneOptions);
+        if (successCallback) promise?.then(successCallback, errorCallback);
+        else return promise;
+    };
     obj.Get = (paneId: string) => getSidePanes?.getPane(paneId);
     obj.GetAll = () => getSidePanes?.getAllPanes();
     obj.GetSelected = () => getSidePanes?.getSelectedPane();

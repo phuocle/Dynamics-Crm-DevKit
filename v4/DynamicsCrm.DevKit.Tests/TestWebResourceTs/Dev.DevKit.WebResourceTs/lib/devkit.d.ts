@@ -2968,28 +2968,78 @@ declare namespace DevKit {
          * Creates a new side pane
          * @param paneOptions Options for creating the pane
          * @param successCallback Function called when the pane is created
+         * @param errorCallback Function called when there is an error
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app/xrm-app-sidepanes/createpane
          */
-        Create(paneOptions: { paneId?: string; title?: string; imageSrc?: string; hideHeader?: boolean; canClose?: boolean; width?: number }, successCallback?: (pane: any) => void): void;
+        Create(paneOptions: ISidePaneOptions, successCallback?: (pane: ISidePane) => void, errorCallback?: (error: any) => void): Promise<ISidePane> | void;
 
         /**
          * Gets a pane by ID
          * @param paneId The ID of the pane to get
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app/xrm-app-sidepanes/getpane
          */
-        Get(paneId: string): any;
+        Get(paneId: string): ISidePane | undefined;
 
         /**
          * Gets all panes
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app/xrm-app-sidepanes/getallpanes
          */
-        GetAll(): any[];
+        GetAll(): ISidePane[];
 
         /**
          * Gets the currently selected pane
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app/xrm-app-sidepanes/getselectedpane
          */
-        GetSelected(): any;
+        GetSelected(): ISidePane | undefined;
+    }
+
+    /**
+     * Base properties for a side pane
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app/xrm-app-sidepanes/createpane
+     */
+    interface ISidePaneBase {
+        /** The title of the pane. Used in pane header and for tooltip. */
+        title?: string;
+        /** The ID of the new pane. If the value is not passed, the ID value is auto-generated. */
+        paneId?: string;
+        /** Whether the pane header will show a close button or not. */
+        canClose?: boolean;
+        /** The path of the icon to show in the panel switcher control. */
+        imageSrc?: string;
+        /** The width of the pane in pixels. */
+        width?: number;
+        /** Hides the pane and tab. */
+        hidden?: boolean;
+        /** Prevents the pane from unmounting when it is hidden. */
+        alwaysRender?: boolean;
+        /** Prevents the badge from getting cleared when the pane becomes selected. */
+        keepBadgeOnSelect?: boolean;
+    }
+
+    /**
+     * Options for creating a side pane
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app/xrm-app-sidepanes/createpane
+     */
+    interface ISidePaneOptions extends ISidePaneBase {
+        /** Hides the header pane, including the title and close button. Default value is false. */
+        hideHeader?: boolean;
+        /** When set to false, the created pane is not selected and leaves the existing pane selected. It also does not expand the pane if collapsed. */
+        isSelected?: boolean;
+    }
+
+    /**
+     * Represents a side pane instance
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app/xrm-app-sidepanes
+     */
+    interface ISidePane extends ISidePaneBase {
+        /** Closes the side pane and removes it from the side bar. */
+        close(): void;
+        /** Specify whether the pane should be selected or expanded. */
+        select(): void;
+        /** Opens a page within the selected pane. This is similar to the navigateTo method. */
+        navigate(pageInput: any, navigationOptions?: any, successCallback?: (result: any) => void, errorCallback?: (error: any) => void): void;
+        /** Badge count to display on the pane tab. */
+        badge?: number;
     }
 
     // ============================================================================
