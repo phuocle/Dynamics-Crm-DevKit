@@ -1152,15 +1152,7 @@ describe('devKit', () => {
         //run
         var form = {};
         var body = {};
-        var tab = {
-            SUMMARY_TAB: {
-                Section: {
-                    ACCOUNT_INFORMATION: {},
-                    ADDRESS: {}
-                }
-            }
-        };
-        devKit.LoadTabs(executionContext, tab);
+        var tab = devKit.LoadTabs(executionContext, ['SUMMARY_TAB___ACCOUNT_INFORMATION', 'SUMMARY_TAB___ADDRESS']);
         body.Tab = tab;
         form.Body = body;
         //test
@@ -1227,14 +1219,7 @@ describe('devKit', () => {
                 }
             }
         };
-        var tab = {
-            TEST_TAB: {
-                Section: {
-                    TEST_SECTION: {}
-                }
-            }
-        };
-        devKit.LoadTabs(formContext, tab);
+        var tab = devKit.LoadTabs(formContext, ['TEST_TAB___TEST_SECTION']);
         // Test Section.Controls
         var controls = tab.TEST_TAB.Section.TEST_SECTION.Controls;
         expect(controls).toBeDefined();
@@ -3239,14 +3224,7 @@ describe('devKit', () => {
         var formContext = {
             ui: { tabs: { get: (name) => tabObject } }
         };
-        var tabs = {
-            TEST_TAB: {
-                Section: {
-                    NO_CONTROLS_SECTION: {}
-                }
-            }
-        };
-        devKit.LoadTabs(formContext, tabs);
+        var tabs = devKit.LoadTabs(formContext, ['TEST_TAB___NO_CONTROLS_SECTION']);
         // Controls should return null when section has no controls
         expect(tabs.TEST_TAB.Section.NO_CONTROLS_SECTION.Controls).toBeNull();
     });
@@ -3581,8 +3559,7 @@ describe('devKit', () => {
             removeTabStateChange: () => { }
         };
         var formContext = { ui: { tabs: { get: (name) => tabObject } } };
-        var tabs = { TEST_TAB: { Section: { CONTROLS_SECTION: {} } } };
-        devKit.LoadTabs(formContext, tabs);
+        var tabs = devKit.LoadTabs(formContext, ['TEST_TAB___CONTROLS_SECTION']);
         var controls = tabs.TEST_TAB.Section.CONTROLS_SECTION.Controls;
         var count = 0;
         controls.forEach((ctrl, index) => { count++; });
@@ -3843,8 +3820,7 @@ describe('devKit', () => {
             removeTabStateChange: () => { }
         };
         var formContext = { ui: { tabs: { get: (name) => tabObject } } };
-        var tabs = { TAB: { Section: { BAD_CONTROLS: {} } } };
-        devKit.LoadTabs(formContext, tabs);
+        var tabs = devKit.LoadTabs(formContext, ['TAB___BAD_CONTROLS']);
         var controls = tabs.TAB.Section.BAD_CONTROLS.Controls;
         var count = 0;
         controls.forEach((ctrl, index) => { count++; });

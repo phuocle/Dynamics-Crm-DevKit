@@ -354,18 +354,15 @@ const devKit = (function () {
         }
         return obj;
     }
-    function loadTabs(formContext, tabItemsOrTabs) {
-        const isArray = Array.isArray(tabItemsOrTabs);
-        const tabs = isArray ? {} : tabItemsOrTabs;
-        if (isArray) {
-            tabItemsOrTabs.forEach(item => {
-                const [tabName, sectionName] = item.split('___');
-                if (!tabs[tabName]) {
-                    tabs[tabName] = { Section: {} };
-                }
-                tabs[tabName].Section[sectionName] = {};
-            });
-        }
+    function loadTabs(formContext, tabItems) {
+        const obj = {};
+        tabItems.forEach(item => {
+            const [tabName, sectionName] = item.split('___');
+            if (!obj[tabName]) {
+                obj[tabName] = { Section: {} };
+            }
+            obj[tabName].Section[sectionName] = {};
+        });
         const loadSection = (formContext, tab, sections, section) => {
             const tabObject = formContext?.ui?.tabs?.get(tab);
             const sectionObject = tabObject?.sections?.get(section);
@@ -374,39 +371,36 @@ const devKit = (function () {
             getter(sections[section], 'Controls', () => {
                 const controlsCollection = sectionObject?.controls;
                 if (!controlsCollection) return null;
-                const obj = {};
-                obj.get = (arg) => controlsCollection?.get(arg);
-                obj.getLength = () => controlsCollection?.getLength();
-                obj.forEach = (callback) => {
+                const controlsObj = {};
+                controlsObj.get = (arg) => controlsCollection?.get(arg);
+                controlsObj.getLength = () => controlsCollection?.getLength();
+                controlsObj.forEach = (callback) => {
                     const length = controlsCollection?.getLength() || 0;
                     for (let i = 0; i < length; i++) {
                         callback(controlsCollection.get(i), i);
                     }
                 };
-                return obj;
+                return controlsObj;
             });
             getterSetter(sections[section], 'Label', () => sectionObject?.getLabel(), value => sectionObject?.setLabel(value));
             getterSetter(sections[section], 'Visible', () => sectionObject?.getVisible(), value => sectionObject?.setVisible(value));
         }
-        const loadTab = (formContext, tabs, tab) => {
+        Object.keys(obj).forEach(tab => {
             const tabObject = formContext?.ui?.tabs?.get(tab);
-            getter(tabs[tab], 'Name', () => tabObject?.getName());
-            getter(tabs[tab], 'Parent', () => tabObject?.getParent());
-            getterSetter(tabs[tab], 'ContentType', () => tabObject?.getContentType(), value => { tabObject?.setContentType(value); });
-            getterSetter(tabs[tab], 'DisplayState', () => tabObject?.getDisplayState(), value => { tabObject?.setDisplayState(value); });
-            getterSetter(tabs[tab], 'Label', () => tabObject?.getLabel(), value => { tabObject?.setLabel(value); });
-            getterSetter(tabs[tab], 'Visible', () => tabObject?.getVisible(), value => { tabObject?.setVisible(value); });
-            tabs[tab].AddTabStateChange = callback => tabObject?.addTabStateChange(callback);
-            tabs[tab].Focus = () => tabObject?.setFocus();
-            tabs[tab].RemoveTabStateChange = callback => tabObject?.removeTabStateChange(callback);
-            Object.keys(tabs[tab].Section).forEach(section => {
-                loadSection(formContext, tab, tabs[tab].Section, section);
+            getter(obj[tab], 'Name', () => tabObject?.getName());
+            getter(obj[tab], 'Parent', () => tabObject?.getParent());
+            getterSetter(obj[tab], 'ContentType', () => tabObject?.getContentType(), value => { tabObject?.setContentType(value); });
+            getterSetter(obj[tab], 'DisplayState', () => tabObject?.getDisplayState(), value => { tabObject?.setDisplayState(value); });
+            getterSetter(obj[tab], 'Label', () => tabObject?.getLabel(), value => { tabObject?.setLabel(value); });
+            getterSetter(obj[tab], 'Visible', () => tabObject?.getVisible(), value => { tabObject?.setVisible(value); });
+            obj[tab].AddTabStateChange = callback => tabObject?.addTabStateChange(callback);
+            obj[tab].Focus = () => tabObject?.setFocus();
+            obj[tab].RemoveTabStateChange = callback => tabObject?.removeTabStateChange(callback);
+            Object.keys(obj[tab].Section).forEach(section => {
+                loadSection(formContext, tab, obj[tab].Section, section);
             });
-        }
-        Object.keys(tabs).forEach(tab => {
-            loadTab(formContext, tabs, tab);
         });
-        return tabs;
+        return obj;
     }
     function loadNavigations(formContext, navigationItems) {
         const obj = {};
