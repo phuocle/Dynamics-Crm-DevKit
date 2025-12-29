@@ -412,7 +412,6 @@ const devKit = (function () {
     }
     function loadNavigations(formContext, navigationItems) {
         const obj = {};
-        navigationItems.forEach(item => obj[item] = {});
         const getNavigationItem = (navigation) => {
             const navItems = formContext?.ui?.navigation?.items;
             if (!navItems) return null;
@@ -425,20 +424,17 @@ const devKit = (function () {
             }
             return null;
         };
-        const loadNavigation = (formContext, navigations, navigation) => {
-            const navigationItem = getNavigationItem(navigation);
-            getter(navigations[navigation], 'Id', () => navigationItem?.getId());
-            getterSetter(navigations[navigation], 'Label', () => navigationItem?.getLabel(), value => navigationItem?.setLabel(value));
-            getterSetter(navigations[navigation], 'Visible', () => navigationItem?.getVisible(), value => navigationItem?.setVisible(value));
-            navigations[navigation].Focus = () => navigationItem?.setFocus();
-        }
         navigationItems.forEach(navigation => {
-            loadNavigation(formContext, obj, navigation);
+            obj[navigation] = {};
+            const navigationItem = getNavigationItem(navigation);
+            getter(obj[navigation], 'Id', () => navigationItem?.getId());
+            getterSetter(obj[navigation], 'Label', () => navigationItem?.getLabel(), value => navigationItem?.setLabel(value));
+            getterSetter(obj[navigation], 'Visible', () => navigationItem?.getVisible(), value => navigationItem?.setVisible(value));
+            obj[navigation].Focus = () => navigationItem?.setFocus();
         });
         return obj;
     }
     function loadQuickForms(formContext, quickItemsOrObj, legacyQuickFormFields) {
-        // Support both new pattern (array) and legacy pattern (object + quickFormFields) for backward compatibility
         const isArray = Array.isArray(quickItemsOrObj);
         const obj = isArray ? {} : quickItemsOrObj;
         const quickFormFields = isArray ? {} : (legacyQuickFormFields || {});
