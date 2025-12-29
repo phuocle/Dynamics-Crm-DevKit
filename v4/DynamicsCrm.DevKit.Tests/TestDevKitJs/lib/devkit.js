@@ -92,7 +92,6 @@ const devKit = (function () {
     }
     function loadProcess(formContext, bpf = []) {
         const obj = {};
-        // Process BPF fields if provided
         if (bpf.length > 0) {
             const bpfFieldNames = [];
             let bpfProcessName = null;
@@ -322,16 +321,10 @@ const devKit = (function () {
         });
         return foundControl;
     }
-    function loadFields(formContext, fieldsOrBody, type) {
-        // Support both new pattern (array) and legacy pattern (object) for backward compatibility
-        const isArray = Array.isArray(fieldsOrBody);
-        const body = isArray ? {} : fieldsOrBody;
-        const fields = isArray ? fieldsOrBody : Object.keys(fieldsOrBody);
-
+    function loadFields(formContext, fields, type) {
+        const obj = {};
         fields.forEach(field => {
-            if (isArray) {
-                body[field] = {};
-            }
+            obj[field] = {};
             const logicalName = type === undefined ? field?.toLowerCase() : (type + field)?.toLowerCase();
             let control = formContext?.getControl(logicalName) ?? formContext?.getControl(field);
             let attribute = null;
@@ -353,15 +346,15 @@ const devKit = (function () {
             if (!control && attribute) {
                 control = findControlFromAttribute(attribute, logicalName) ?? findControlFromAttribute(attribute, field);
             }
-            loadField(formContext, body[field], attribute, control);
+            loadField(formContext, obj[field], attribute, control);
         });
         if (type === "header_") {
             const getHeaderSection = formContext?.ui?.headerSection;
-            getterSetter(body, 'BodyVisible', () => getHeaderSection?.getBodyVisible(), value => { getHeaderSection?.setBodyVisible(value); });
-            getterSetter(body, 'CommandBarVisible', () => getHeaderSection?.getCommandBarVisible(), value => { getHeaderSection?.setCommandBarVisible(value); });
-            getterSetter(body, 'TabNavigatorVisible', () => getHeaderSection?.getTabNavigatorVisible(), value => { getHeaderSection?.setTabNavigatorVisible(value); });
+            getterSetter(obj, 'BodyVisible', () => getHeaderSection?.getBodyVisible(), value => { getHeaderSection?.setBodyVisible(value); });
+            getterSetter(obj, 'CommandBarVisible', () => getHeaderSection?.getCommandBarVisible(), value => { getHeaderSection?.setCommandBarVisible(value); });
+            getterSetter(obj, 'TabNavigatorVisible', () => getHeaderSection?.getTabNavigatorVisible(), value => { getHeaderSection?.setTabNavigatorVisible(value); });
         }
-        return body;
+        return obj;
     }
     function loadTabs(formContext, tabItemsOrTabs) {
         // Support both new pattern (array) and legacy pattern (object) for backward compatibility

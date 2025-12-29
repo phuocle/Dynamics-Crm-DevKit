@@ -296,10 +296,7 @@ describe('devKit', () => {
         var executionContext = XrmMockGenerator.formContext;
         //run
         var form = devKit.LoadForm(executionContext);
-        var body = {
-            Name: {}
-        };
-        devKit.LoadFields(executionContext, body);
+        var body = devKit.LoadFields(executionContext, ['Name']);
         form.Body = body;
         //test
         expect(form.FormType).toBe(OptionSet.FormType.Disabled);
@@ -563,11 +560,7 @@ describe('devKit', () => {
         XrmMockGenerator.initialise({ process: process, ui: ui });
         //run
         var process = devKit.LoadProcess(XrmMockGenerator.formContext);
-        var _BPF_Account = {
-            Name: {},
-            Name_1: {}
-        }
-        devKit.LoadFields(XrmMockGenerator.formContext, _BPF_Account, "header_process_");
+        var _BPF_Account = devKit.LoadFields(XrmMockGenerator.formContext, ['Name', 'Name_1'], "header_process_");
         process.BPF_Account = _BPF_Account;
         var form = {};
         form.Process = process;
@@ -734,17 +727,7 @@ describe('devKit', () => {
         });
         var executionContext = XrmMockGenerator.formContext;
         //run
-        var body = {
-            Name: {},
-            Name1: {},
-            PrimaryContactId: {},
-            CreatedOn: {},
-            ModifiedOn: {},
-            IndustryCode: {},
-            to: {},
-            NumberOfEmployees: {}
-        };
-        devKit.LoadFields(executionContext, body);
+        var body = devKit.LoadFields(executionContext, ['Name', 'Name1', 'PrimaryContactId', 'CreatedOn', 'ModifiedOn', 'IndustryCode', 'to', 'NumberOfEmployees']);
         var form = {};
         form.Body = body;
         //test
@@ -1147,10 +1130,7 @@ describe('devKit', () => {
         var executionContext = XrmMockGenerator.formContext;
         //run
         var form = {};
-        var body = {
-            IFRAME_PHUOCLE: {}
-        };
-        devKit.LoadFields(executionContext, body);
+        var body = devKit.LoadFields(executionContext, ['IFRAME_PHUOCLE']);
         form.Body = body;
         //result
         expect(() => { form.Body.IFRAME_PHUOCLE.ContentWindow(null, null) }).toThrow(new Error("getContentWindow not implemented."));
@@ -1323,10 +1303,7 @@ describe('devKit', () => {
         var executionContext = XrmMockGenerator.formContext;
         //run
         var form = {};
-        var header = {
-            NumberOfEmployees: {},
-        };
-        devKit.LoadFields(executionContext, header, "header_");
+        var header = devKit.LoadFields(executionContext, ['NumberOfEmployees'], "header_");
         form.Header = header;
         //result
         expect(form.Header.NumberOfEmployees.Label).toBe("Number of Employees");
@@ -1480,10 +1457,7 @@ describe('devKit', () => {
         var executionContext = XrmMockGenerator.formContext;
         //run
         var form = {};
-        var body = {
-            TIMMER: {}
-        };
-        devKit.LoadFields(executionContext, body);
+        var body = devKit.LoadFields(executionContext, ['TIMMER']);
         form.Body = body;
         //test
         expect(() => { form.Body.TIMMER.State }).toThrow(new Error("Method not implemented."));
@@ -1496,10 +1470,7 @@ describe('devKit', () => {
         var executionContext = XrmMockGenerator.formContext;
         //run
         var form = {};
-        var body = {
-            KB: {}
-        };
-        devKit.LoadFields(executionContext, body);
+        var body = devKit.LoadFields(executionContext, ['KB']);
         form.Body = body;
         //test
         expect(() => { form.Body.KB.TotalResultCount }).toThrow(new Error("Method not implemented."));
@@ -2537,8 +2508,7 @@ describe('devKit', () => {
             getControl: (name) => control,
             getAttribute: () => null
         };
-        var body = { IframeField: {} };
-        devKit.LoadFields(formContext, body);
+        var body = devKit.LoadFields(formContext, ['IframeField']);
         var result = null;
         body.IframeField.ContentWindow(function (cw) { result = cw; }, function () { });
         expect(result).toBe('contentWindow');
@@ -2555,8 +2525,7 @@ describe('devKit', () => {
             getControl: (name) => null,  // Control not found directly
             getAttribute: (name) => attribute
         };
-        var body = { Name: {} };
-        devKit.LoadFields(formContext, body);
+        var body = devKit.LoadFields(formContext, ['Name']);
         expect(body.Name.AttributeName).toBe('name');
     });
     test('findControlFromAttribute - multiple controls coverage (line 301 E branch)', () => {
@@ -2581,8 +2550,7 @@ describe('devKit', () => {
             getControl: (name) => null,  // Control not found directly, triggers fallback to attribute.controls
             getAttribute: (name) => attribute
         };
-        var body = { TargetControl: {} };
-        devKit.LoadFields(formContext, body);
+        var body = devKit.LoadFields(formContext, ['TargetControl']);
         // Should find the control via findControlFromAttribute after looping through non-matching controls
         expect(body.TargetControl.AttributeName).toBe('targetcontrol');
         expect(body.TargetControl.Value).toBe('test value');
@@ -2777,8 +2745,7 @@ describe('devKit', () => {
             getControl: (name) => control,
             getAttribute: () => null
         };
-        var body = { IframeField: {} };
-        devKit.LoadFields(formContext, body);
+        var body = devKit.LoadFields(formContext, ['IframeField']);
         // Call without callbacks - should return promise (line 278)
         var result = body.IframeField.ContentWindow();
         expect(result).toBe(mockPromise);
@@ -3157,10 +3124,7 @@ describe('devKit', () => {
         var executionContext = XrmMockGenerator.formContext;
 
         // run
-        var body = {
-            name: {}
-        };
-        devKit.LoadFields(executionContext, body);
+        var body = devKit.LoadFields(executionContext, ['name']);
         var field = body.name;
 
         // result
