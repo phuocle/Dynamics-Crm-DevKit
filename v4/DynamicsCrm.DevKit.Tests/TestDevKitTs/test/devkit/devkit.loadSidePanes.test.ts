@@ -136,6 +136,44 @@ describe('loadSidePanes Tests', () => {
             const form = getForm();
             expect(() => form.SidePanes.Create({ paneId: 'test-pane' })).not.toThrow();
         });
+
+        test('Create without callback should return Promise', () => {
+            setupSidePanesMock();
+            const form = getForm();
+            const result = form.SidePanes.Create({ paneId: 'test-pane' });
+            expect(result).toBeInstanceOf(Promise);
+        });
+
+        test('Create with errorCallback should handle errors', async () => {
+            // Setup mock that rejects
+            const errorMock = {
+                state: 'expanded',
+                createPane: () => Promise.reject(new Error('Create pane failed')),
+                getPane: () => null,
+                getAllPanes: () => [],
+                getSelectedPane: () => null
+            };
+            (global as any).Xrm = { App: { sidePanes: errorMock } };
+            (global as any).window.Xrm = (global as any).Xrm;
+
+            const form = getForm();
+            const successCallback = jest.fn();
+            const errorCallback = jest.fn();
+
+            form.SidePanes.Create({ paneId: 'test-pane' }, successCallback, errorCallback);
+
+            // Wait for promise to reject
+            await new Promise(resolve => setTimeout(resolve, 10));
+            expect(errorCallback).toHaveBeenCalled();
+            expect(successCallback).not.toHaveBeenCalled();
+        });
+
+        test('Create with callbacks should not return anything', () => {
+            setupSidePanesMock();
+            const form = getForm();
+            const result = form.SidePanes.Create({ paneId: 'test-pane' }, () => { }, () => { });
+            expect(result).toBeUndefined();
+        });
     });
 
     // ========================================================================
