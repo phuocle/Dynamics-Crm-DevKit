@@ -2631,6 +2631,7 @@ declare namespace DevKit {
          * @param errorCallback Function called when the operation fails
          */
         RetrieveRecord<T>(apiConstructorOrFactory: ((data: any) => T) | (new (data: any) => T), entityLogicalName: string, id: string, successCallback: (result: T) => void, errorCallback?: (error: any) => void): void;
+        RetrieveRecord<T>(apiConstructorOrFactory: ((data: any) => T) | (new (data: any) => T), entityLogicalName: string, id: string, options: string, successCallback: (result: T) => void, errorCallback?: (error: any) => void): void;
 
         /**
          * Retrieves a collection of entity records
@@ -2663,6 +2664,8 @@ declare namespace DevKit {
          * @returns A promise that resolves to an array of typed instances
          */
         RetrieveRecords<T>(apiConstructorOrFactory: ((data: any) => T) | (new (data: any) => T), fetchXml: string, maxPageSize?: number): Promise<T[]>;
+        RetrieveRecords<T>(apiConstructorOrFactory: ((data: any) => T) | (new (data: any) => T), entityLogicalName: string, options: string, successCallback: (result: T[]) => void, errorCallback?: (error: any) => void): void;
+        RetrieveRecords<T>(apiConstructorOrFactory: ((data: any) => T) | (new (data: any) => T), entityLogicalName: string, options: string, maxPageSize: number, successCallback: (result: T[]) => void, errorCallback?: (error: any) => void): void;
 
         /**
          * Updates an entity record
@@ -3293,86 +3296,32 @@ declare namespace OptionSet {
      * Defines the structural type of a parameter for Xrm.WebApi.online.execute
      * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi/online/execute
      */
-    enum StructuralProperty {
-        /** 0 - Unknown structural type */
-        Unknown,
-        /** 1 - Primitive type (e.g., string, integer, boolean, guid) */
-        PrimitiveType,
-        /** 2 - Complex type (structured object) */
-        ComplexType,
-        /** 3 - Enumeration type */
-        EnumerationType,
-        /** 4 - Collection (array of items) */
-        Collection,
-        /** 5 - Entity type (reference to a Dynamics 365 record) */
-        EntityType
-    }
+    type StructuralProperty = 0 | 1 | 2 | 3 | 4 | 5;
     /**
      * Specifies the type of Web API operation for Xrm.WebApi.online.execute
      * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi/online/execute
      */
-    enum OperationType {
-        /** 0 - Action (custom or unbound action) */
-        Action,
-        /** 1 - Function (custom or built-in function) */
-        Function,
-        /** 2 - CRUD operation (Create, Retrieve, Update, Delete) */
-        CRUD
-    }
+    type OperationType = 0 | 1 | 2;
     /**
      * Returns information about the kind of device the user is using
      * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/client#getformfactor
      */
-    enum FormFactor {
-        /** 0 - Unknown device type */
-        Unknown,
-        /** 1 - Desktop (includes web browser, even from tablet) */
-        Desktop,
-        /** 2 - Tablet application */
-        Tablet,
-        /** 3 - Phone application */
-        Phone,
-    }
+    type FormFactor = 0 | 1 | 2 | 3;
     /**
      * Returns a value to indicate the state of the client
      * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/client#getclientstate
      */
-    enum ClientState {
-        /** The client is connected to the server (normal operation) */
-        Online,
-        /** The client is in offline mode (mobile app with offline sync) */
-        Offline,
-    }
+    type ClientState = "Online" | "Offline";
     /**
      * Returns a value to indicate which client the script is executing in
      * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/client#getclient
      */
-    enum ClientName {
-        /** Web browser client */
-        Web,
-        /** Outlook client (Dynamics 365 for Outlook) */
-        Outlook,
-        /** Mobile application (phone or tablet app) */
-        Mobile
-    }
+    type ClientName = "Web" | "Outlook" | "Mobile";
     /**
      * Gets the form type for the record
      * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui/getformtype
      */
-    enum FormType {
-        /** 0 - Form type is undefined */
-        Undefined,
-        /** 1 - Create form (Quick Create forms also return 1) */
-        Create,
-        /** 2 - Update form (editing an existing record) */
-        Update,
-        /** 3 - Read-only form */
-        ReadOnly,
-        /** 4 - Disabled form */
-        Disabled,
-        /** 5 - Bulk edit form */
-        BulkEdit,
-    }
+    type FormType = 0 | 1 | 2 | 3 | 4 | 5;
     /**
      * Specify options for saving the record
      * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-entity/save
@@ -3382,30 +3331,7 @@ declare namespace OptionSet {
      * Returns a value indicating how the save event was initiated
      * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/save-event-arguments/getsavemode
      */
-    enum SaveMode {
-        /** 1 - Standard save (all entities) */
-        Save,
-        /** 2 - Save and close (all entities) */
-        SaveAndClose,
-        /** 5 - Deactivate record (all entities) */
-        Deactivate,
-        /** 6 - Reactivate record (all entities) */
-        Reactivate,
-        /** 7 - Send email (Email entity only) */
-        Send,
-        /** 15 - Disqualify lead (Lead entity only) */
-        Disqualify,
-        /** 16 - Qualify lead (Lead entity only) */
-        Qualify,
-        /** 47 - Assign record (User or Team) */
-        Assign,
-        /** 58 - Save as completed (Activities only) */
-        SaveAsCompleted,
-        /** 59 - Save and new (all entities) */
-        SaveAndNew,
-        /** 70 - Auto-save triggered (all entities) */
-        AutoSave
-    }
+    type SaveMode = 1 | 2 | 5 | 6 | 7 | 15 | 16 | 47 | 58 | 59 | 70;
     /**
      * The level of form notification message
      * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui/setformnotification
@@ -3460,22 +3386,7 @@ declare namespace OptionSet {
      * The integer value of the business process flow category for a stage
      * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/stage/getcategory
      */
-    enum ProcessCategory {
-        /** 0 - Qualify stage (typically for Lead entity) */
-        Qualify,
-        /** 1 - Develop stage (sales process development phase) */
-        Develop,
-        /** 2 - Propose stage (proposal phase in sales) */
-        Propose,
-        /** 3 - Close stage (closing phase in sales) */
-        Close,
-        /** 4 - Identify stage (service/case identification) */
-        Identify,
-        /** 5 - Research stage (service/case research) */
-        Research,
-        /** 6 - Resolve stage (service/case resolution) */
-        Resolve
-    }
+    type ProcessCategory = 0 | 1 | 2 | 3 | 4 | 5 | 6;
     /**
      * Returns the current status of the process instance.
      * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/instance/getstatus
@@ -3490,178 +3401,65 @@ declare namespace OptionSet {
      * The progress of an action step in a business process flow
      * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/step/setprogress
      */
-    enum ProcessProgress {
-        /** 0 - No progress set */
-        None,
-        /** 1 - Action step is in progress */
-        Processing,
-        /** 2 - Action step completed successfully */
-        Completed,
-        /** 3 - Action step failed */
-        Failure,
-        /** 4 - Action step is invalid */
-        Invalid
-    }
+    type ProcessProgress = 0 | 1 | 2 | 3 | 4;
     /**
      * The state of a timer control (SLA timers) - Unified Interface only
      * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getstate
      */
-    enum TimerState {
-        /** 1 - Timer state not set */
-        NotSet,
-        /** 2 - Timer is currently running */
-        InProgress,
-        /** 3 - Timer is in warning state (near expiration) */
-        Warning,
-        /** 4 - Timer has been violated (exceeded limit) */
-        Violated,
-        /** 5 - Timer completed successfully */
-        Success,
-        /** 6 - Timer has expired */
-        Expired,
-        /** 7 - Timer was canceled */
-        Canceled,
-        /** 8 - Timer is paused */
-        Paused
-    }
+    type TimerState = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
     /**
      * Advanced configuration settings for the organization
      * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/getadvancedconfigsetting
      */
-    enum AdvancedConfigSetting {
-        /** Maximum number of child cases allowed for a parent case */
-        MaxChildIncidentNumber,
-        /** Maximum number of cases that can be merged */
-        MaxIncidentMergeNumber
-    }
+    type AdvancedConfigSetting = "MaxChildIncidentNumber" | "MaxIncidentMergeNumber";
     /**
      * Describes whether to open or save a file
      * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/openfile
      */
-    enum FileOption {
-        /** 1 - Open the file in a new browser tab */
-        Open,
-        /** 2 - Download/save the file */
-        Save
-    }
+    type FileOption = 1 | 2;
     /**
      * Describes the type of privilege for security operations
      * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getentitymetadata
      */
-    enum PrivilegeType {
-        /** 0 - No privilege assigned */
-        None,
-        /** 1 - Create privilege - can create new records */
-        Create,
-        /** 2 - Read privilege - can view records */
-        Read,
-        /** 3 - Write privilege - can update records */
-        Write,
-        /** 4 - Delete privilege - can delete records */
-        Delete,
-        /** 5 - Assign privilege - can assign records to other users/teams */
-        Assign,
-        /** 6 - Share privilege - can share records with other users/teams */
-        Share,
-        /** 7 - Append privilege - can attach to this entity */
-        Append,
-        /** 8 - AppendTo privilege - can attach other entities to this */
-        AppendTo
-    }
+    type PrivilegeType = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
     /**
      * Controls whether the navigation bar is displayed
      * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/openform
      */
-    enum FormNavBar {
-        /** "on" - The navigation bar is displayed. This is the default behavior if the navbar parameter is not used. */
-        On,
-        /** "off" - The navigation bar is not displayed. People can navigate using other user interface elements or the back and forward buttons. */
-        Off,
-        /** "entity" - On an entity form, only the navigation options for related entities are available. After navigating to a related entity, a back button is displayed in the navigation bar to allow returning to the original record. */
-        Entity
-    }
+    type FormNavBar = "on" | "off" | "entity";
     /**
      * Specifies the position of a form window
      * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/openform
      */
-    enum FormWindowPosition {
-        /** 1 - Open the form in the center of the screen */
-        Center,
-        /** 2 - Open the form on the side (as a side panel) */
-        Side
-    }
+    type FormWindowPosition = 1 | 2;
     /**
      * Specifies the type of entity relationship
      * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/openform
      */
-    enum FormRelationshipType {
-        /** 0 - One-to-Many relationship */
-        OneToMany,
-        /** 1 - Many-to-Many relationship */
-        ManyToMany
-    }
+    type FormRelationshipType = 0 | 1;
     /**
      * Specifies the role type in a relationship
      * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/openform
      */
-    enum FormRelationshipRoleType {
-        /** 1 - Referencing entity (the "many" side of 1:N) */
-        Referencing,
-        /** 2 - Association entity (for N:N relationships) */
-        AssociationEntity
-    }
+    type FormRelationshipRoleType = 1 | 2;
     /**
      * Specifies the accepted file types for file picker
      * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-device/pickfile
      */
-    enum FileAccept {
-        /** Audio files (mp3, wav, etc.) */
-        Audio,
-        /** Video files (mp4, avi, etc.) */
-        Video,
-        /** Image files (jpg, png, gif, etc.) */
-        Image
-    }
+    type FileAccept = "audio" | "video" | "image";
     /**
      * Specifies the type of grid control
      * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/gridcontrol/getgridtype
      */
-    enum GridType {
-        /** 1 - HomePageGrid (main entity list view) */
-        HomePageGrid,
-        /** 2 - Subgrid (embedded grid on a form) */
-        Subgrid
-    }
+    type GridType = 1 | 2;
     /**
      * Display state of the side pane
      * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app-sidepanes/state
      */
-    enum SidePaneState {
-        /** Side pane is fully expanded and visible */
-        Expanded,
-        /** Side pane is collapsed to a bar */
-        Collapsed
-    }
+    type SidePaneState = 0 | 1;
     /**
      * The full name conventionCode setting of the current organization
      * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#fullnameconventioncode
      */
-    enum FullNameConventionCode {
-        /** 0 - Last Name, First Name (e.g., "Smith, John") */
-        LastName_Comma_FirstName,
-        /** 1 - First Name Last Name (e.g., "John Smith") */
-        FirstName_LastName,
-        /** 2 - Last Name, First Name Middle Initial (e.g., "Smith, John A.") */
-        LastName_Comma_FirstName_MiddleInitial,
-        /** 3 - First Name Middle Initial Last Name (e.g., "John A. Smith") */
-        FirstName_MiddleInitial_LastName,
-        /** 4 - Last Name, First Name Middle Name (e.g., "Smith, John Andrew") */
-        LastName_Comma_FirstName_MiddleName,
-        /** 5 - First Name Middle Name Last Name (e.g., "John Andrew Smith") */
-        FirstName_MiddleName_LastName,
-        /** 6 - Last Name First Name (e.g., "SmithJohn") */
-        LastName_FirstName,
-        /** 7 - Last Name First Name (no space, e.g., "SmithJohn") */
-        LastNameFirstName
-    }
+    type FullNameConventionCode = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7;
 }
