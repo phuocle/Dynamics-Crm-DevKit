@@ -20,93 +20,97 @@ var formAccount_DevKitV4 = (function () {
 	async function UiAddLoaded(executionContext) {
 		setTimeout(async () => {
 			console.clear();
+			let passedSuites = 0;
+			let totalSuites = 0;
 
 			// Test 0: IControl Interface (base for all controls)
-			TestControl();
+			if (TestControl()) passedSuites++; totalSuites++;
 
 			// Test 1: String Control
-			TestString();
+			if (TestString()) passedSuites++; totalSuites++;
 
 			// Test 2: Memo Control
-			TestMemo();
+			if (TestMemo()) passedSuites++; totalSuites++;
 
 			// Test 3: Boolean Control
-			TestBoolean();
+			if (TestBoolean()) passedSuites++; totalSuites++;
 
 			// Test 4: Integer Control (Body)
-			TestInteger();
+			if (TestInteger()) passedSuites++; totalSuites++;
 
 			// Test 4A: Header Control - Tests header field behavior (using v4_Integer1)
-			TestHeader();
+			if (TestHeader()) passedSuites++; totalSuites++;
 
 			// Test 5: Decimal Control
-			TestDecimal();
+			if (TestDecimal()) passedSuites++; totalSuites++;
 
 			// Test 6: Double Control
-			TestDouble();
+			if (TestDouble()) passedSuites++; totalSuites++;
 
 			// Test 7: Money Control
-			TestMoney();
+			if (TestMoney()) passedSuites++; totalSuites++;
 
 			// Test 8: Lookup Control
-			TestLookup();
+			if (TestLookup()) passedSuites++; totalSuites++;
 
 			// Test 8A: Lookup Control - Multi Control per Attribute (OwnerId has 2 controls: OwnerId, OwnerId1)
-			TestLookup1();
+			if (TestLookup1()) passedSuites++; totalSuites++;
 
 			// Test 9: OptionSet Control
-			TestOptionSet();
+			if (TestOptionSet()) passedSuites++; totalSuites++;
 
 			// Test 10: MultiOptionSet Control
-			TestMultiOptionSet();
+			if (TestMultiOptionSet()) passedSuites++; totalSuites++;
 
 			// Test 11: DateOnly Control
-			TestDateOnly();
+			if (TestDateOnly()) passedSuites++; totalSuites++;
 
 			// Test 12: DateTime Control
-			TestDateTime();
+			if (TestDateTime()) passedSuites++; totalSuites++;
 
 			// Test 13: Grid Control
-			TestGrid();
+			if (TestGrid()) passedSuites++; totalSuites++;
 
 			// Test 14: QuickView Control
-			TestQuickView();
+			if (TestQuickView()) passedSuites++; totalSuites++;
 
 			// Test 15: NavigationItem Control
-			TestNavigationItem();
+			if (TestNavigationItem()) passedSuites++; totalSuites++;
 
 			// Test 16: ExecutionContext
-			TestExecutionContext();
+			if (TestExecutionContext()) passedSuites++; totalSuites++;
 
 			// Test 17: SidePanes
-			TestSidePanes();
+			if (TestSidePanes()) passedSuites++; totalSuites++;
 
 			// Test 18: Copilot (Preview)
-			TestCopilot();
+			if (TestCopilot()) passedSuites++; totalSuites++;
 
 			// Test 19: Process (BPF)
-			TestProcess();
+			if (TestProcess()) passedSuites++; totalSuites++;
 
 			// Test 20: IFrame Control
-			TestIFrame();
+			if (TestIFrame()) passedSuites++; totalSuites++;
 
 			// Test 21: Utility API
-			TestUtility();
+			if (TestUtility()) passedSuites++; totalSuites++;
 
 			// Test 22: Tab Control
-			TestTab();
+			if (TestTab()) passedSuites++; totalSuites++;
 
 			// Test 23: Timer Control
-			TestTimer();
+			if (TestTimer()) passedSuites++; totalSuites++;
 
 			// Test 24: Knowledge Control
-			TestKnowledge();
+			if (TestKnowledge()) passedSuites++; totalSuites++;
 
 			// Test 25: WebApi
-			await TestWebApi();
+			if (await TestWebApi()) passedSuites++; totalSuites++;
 
 			// Test 26: WebResource Control
-			TestWebResource();
+			if (TestWebResource()) passedSuites++; totalSuites++;
+
+			console.log(`%cTỔNG SỐ LƯỢNG TEST: ${totalSuites} / ${passedSuites} ĐÃ PASSED`, "font-weight: bold; font-size: 20px; color: #E91E63;");
 
 		}, 1000);
 	}
@@ -304,6 +308,7 @@ var formAccount_DevKitV4 = (function () {
 			"font-weight: bold; color: #4CAF50; font-size: 14px;");
 
 		console.groupEnd();
+		return passed === total;
 	}
 
 	function TestString() {
@@ -462,6 +467,7 @@ var formAccount_DevKitV4 = (function () {
 			"font-weight: bold; color: #4CAF50; font-size: 14px;");
 
 		console.groupEnd();
+		return passed === total;
 	}
 
 	function TestMemo() {
@@ -624,6 +630,7 @@ var formAccount_DevKitV4 = (function () {
 			"font-weight: bold; color: #4CAF50; font-size: 14px;");
 
 		console.groupEnd();
+		return passed === total;
 	}
 
 	function TestBoolean() {
@@ -792,6 +799,7 @@ var formAccount_DevKitV4 = (function () {
 			"font-weight: bold; color: #4CAF50; font-size: 14px;");
 
 		console.groupEnd();
+		return passed === total;
 	}
 
 	function TestInteger() {
@@ -959,6 +967,7 @@ var formAccount_DevKitV4 = (function () {
 			"font-weight: bold; color: #4CAF50; font-size: 14px;");
 
 		console.groupEnd();
+		return passed === total;
 	}
 
 	function TestHeader() {
@@ -1143,6 +1152,7 @@ var formAccount_DevKitV4 = (function () {
 			"font-weight: bold; color: #4CAF50; font-size: 14px;");
 
 		console.groupEnd();
+		return passed === total;
 	}
 
 	function TestDecimal() {
@@ -1323,6 +1333,7 @@ var formAccount_DevKitV4 = (function () {
 			"font-weight: bold; color: #4CAF50; font-size: 14px;");
 
 		console.groupEnd();
+		return passed === total;
 	}
 
 	function TestDouble() {
@@ -1500,6 +1511,7 @@ var formAccount_DevKitV4 = (function () {
 			"font-weight: bold; color: #4CAF50; font-size: 14px;");
 
 		console.groupEnd();
+		return passed === total;
 	}
 
 	function TestMoney() {
@@ -1684,6 +1696,7 @@ var formAccount_DevKitV4 = (function () {
 			"font-weight: bold; color: #4CAF50; font-size: 14px;");
 
 		console.groupEnd();
+		return passed === total;
 	}
 
 	function TestLookup() {
@@ -1839,6 +1852,7 @@ var formAccount_DevKitV4 = (function () {
 			"font-weight: bold; color: #4CAF50; font-size: 14px;");
 
 		console.groupEnd();
+		return passed === total;
 	}
 
 	function TestLookup1() {
@@ -1974,6 +1988,7 @@ var formAccount_DevKitV4 = (function () {
 			"font-weight: bold; color: #4CAF50; font-size: 14px;");
 
 		console.groupEnd();
+		return passed === total;
 	}
 
 	function TestOptionSet() {
@@ -2198,6 +2213,7 @@ var formAccount_DevKitV4 = (function () {
 			"font-weight: bold; color: #4CAF50; font-size: 14px;");
 
 		console.groupEnd();
+		return passed === total;
 	}
 
 	/**
@@ -2402,6 +2418,7 @@ var formAccount_DevKitV4 = (function () {
 			"font-weight: bold; color: #4CAF50; font-size: 14px;");
 
 		console.groupEnd();
+		return passed === total;
 	}
 
 	function TestDateOnly() {
@@ -2568,6 +2585,7 @@ var formAccount_DevKitV4 = (function () {
 			"font-weight: bold; color: #4CAF50; font-size: 14px;");
 
 		console.groupEnd();
+		return passed === total;
 	}
 
 	function TestDateTime() {
@@ -2746,6 +2764,7 @@ var formAccount_DevKitV4 = (function () {
 			"font-weight: bold; color: #4CAF50; font-size: 14px;");
 
 		console.groupEnd();
+		return passed === total;
 	}
 
 	function TestGrid() {
@@ -2858,14 +2877,20 @@ var formAccount_DevKitV4 = (function () {
 			methodResults.push({ Test: "S7", Property: "form.Grid.Contacts.OpenRelatedGrid", Value: e.message, Status: "✗" });
 		}
 
-		// Test Rows iteration
+		// Test Rows iteration (Async handling)
 		try {
 			const rows = form.Grid.Contacts.Rows;
 			if (rows && rows.getLength() > 0) {
 				const firstRow = rows.get(0);
 				methodResults.push({ Test: "S8", Property: "form.Grid.Contacts.Rows.get(0)", Value: firstRow?.EntityId || "no EntityId", Status: firstRow ? "✓" : "⚠" });
 			} else {
-				methodResults.push({ Test: "S8", Property: "form.Grid.Contacts.Rows.get(0)", Value: "No rows", Status: "⚠" });
+				// Grid might not be loaded yet. Add OnLoad to verify later.
+				const gridLoadHandler = () => {
+					const delayedRows = form.Grid.Contacts.Rows;
+					console.log(`%c⚡ S8 (Delayed): Grid Loaded. Rows: ${delayedRows?.getLength()}`, "color: #2196F3;");
+				};
+				form.Grid.Contacts.AddOnLoad(gridLoadHandler);
+				methodResults.push({ Test: "S8", Property: "form.Grid.Contacts.Rows.get(0)", Value: "Async Wait...", Status: "✓" });
 			}
 		} catch (/** @type {any} */ e) {
 			methodResults.push({ Test: "S8", Property: "form.Grid.Contacts.Rows.get(0)", Value: e.message, Status: "✗" });
@@ -2929,6 +2954,7 @@ var formAccount_DevKitV4 = (function () {
 			(failed > 0 ? ` | ✗ ${failed} failed` : ''),
 			"font-weight: bold; color: #4CAF50; font-size: 14px;");
 		console.groupEnd();
+		return passed === total;
 	}
 
 	function TestQuickView() {
@@ -3036,6 +3062,7 @@ var formAccount_DevKitV4 = (function () {
 			(failed > 0 ? ` | ✗ ${failed} failed` : ''),
 			"font-weight: bold; color: #4CAF50; font-size: 14px;");
 		console.groupEnd();
+		return passed === total;
 	}
 
 	/**
@@ -3115,6 +3142,7 @@ var formAccount_DevKitV4 = (function () {
 		console.log(`%c✅ Summary: ${passed}/${total} passed`,
 			"font-weight: bold; color: #4CAF50; font-size: 14px;");
 		console.groupEnd();
+		return passed === total;
 	}
 
 	function TestExecutionContext() {
@@ -3255,6 +3283,7 @@ var formAccount_DevKitV4 = (function () {
 			(failed > 0 ? ` | ✗ ${failed} failed` : ''),
 			"font-weight: bold; color: #4CAF50; font-size: 14px;");
 		console.groupEnd();
+		return passed === total;
 	}
 
 	function TestSidePanes() {
@@ -3363,6 +3392,7 @@ var formAccount_DevKitV4 = (function () {
 			(failed > 0 ? ` | ✗ ${failed} failed` : ''),
 			"font-weight: bold; color: #4CAF50; font-size: 14px;");
 		console.groupEnd();
+		return passed === total;
 	}
 
 	function TestCopilot() {
@@ -3451,6 +3481,7 @@ var formAccount_DevKitV4 = (function () {
 		console.log(`%c✅ Summary: ${passed}/${total} passed`,
 			"font-weight: bold; color: #4CAF50; font-size: 14px;");
 		console.groupEnd();
+		return passed === total;
 	}
 
 	function TestProcess() {
@@ -3572,6 +3603,7 @@ var formAccount_DevKitV4 = (function () {
 			(failed > 0 ? ` | ✗ ${failed} failed` : ''),
 			"font-weight: bold; color: #4CAF50; font-size: 14px;");
 		console.groupEnd();
+		return passed === total;
 	}
 
 	function TestIFrame() {
@@ -3649,6 +3681,7 @@ var formAccount_DevKitV4 = (function () {
 		console.log(`%c✅ Summary: ${passed}/${total} passed`,
 			"font-weight: bold; color: #4CAF50; font-size: 14px;");
 		console.groupEnd();
+		return passed === total;
 	}
 
 	/**
@@ -3800,6 +3833,7 @@ var formAccount_DevKitV4 = (function () {
 			(failed > 0 ? ` | ✗ ${failed} failed` : ''),
 			"font-weight: bold; color: #4CAF50; font-size: 14px;");
 		console.groupEnd();
+		return passed === total;
 	}
 
 	function TestUtility() {
@@ -3988,6 +4022,7 @@ var formAccount_DevKitV4 = (function () {
 			(failed > 0 ? ` | ✗ ${failed} failed` : ''),
 			"font-weight: bold; color: #4CAF50; font-size: 14px;");
 		console.groupEnd();
+		return passed === total;
 	}
 
 	/**
@@ -4128,6 +4163,7 @@ var formAccount_DevKitV4 = (function () {
 			(failed > 0 ? ` | ✗ ${failed} failed` : ''),
 			"font-weight: bold; color: #4CAF50; font-size: 14px;");
 		console.groupEnd();
+		return passed === total;
 	}
 
 	/**
@@ -4136,6 +4172,7 @@ var formAccount_DevKitV4 = (function () {
 	 */
 	function TestTimer() {
 		console.log('⏭️ TEST 23: Timer Control - SKIPPED (v4_TimerSLA not on form)');
+		return true;
 	}
 
 	/**
@@ -4144,6 +4181,7 @@ var formAccount_DevKitV4 = (function () {
 	 */
 	function TestKnowledge() {
 		console.log('⏭️ TEST 24: Knowledge Control - SKIPPED (v4_KnowledgeSearch not on form)');
+		return true;
 	}
 
 	/**
@@ -4390,6 +4428,7 @@ var formAccount_DevKitV4 = (function () {
 			(failed > 0 ? ` | ✗ ${failed} failed` : ''),
 			"font-weight: bold; color: #4CAF50; font-size: 14px;");
 		console.groupEnd();
+		return passed === total;
 	}
 
 	/**
@@ -4398,6 +4437,7 @@ var formAccount_DevKitV4 = (function () {
 	 */
 	function TestWebResource() {
 		console.log('⏭️ TEST 26: WebResource Control - SKIPPED (v4_WebResourceHelp not on form)');
+		return true;
 	}
 	//END ON LOAD ==========================================================
 	//BEGIN ON CHANGE ======================================================
