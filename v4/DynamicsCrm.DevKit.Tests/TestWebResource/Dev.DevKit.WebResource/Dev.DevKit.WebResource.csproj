@@ -53,7 +53,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <None Include="deploy.debug.bat" />
     <None Include="package.json" />
-    <Content Include="entitiests\Account.js" />
     <Content Include="entities\Account.form.js">
       <DependentUpon>Account.js</DependentUpon>
     </Content>
@@ -62,6 +61,7 @@
       <DependentUpon>Account.js</DependentUpon>
     </Content>
     <Content Include="html\devkitv4.html" />
+    <Content Include="images\FormXml.xml" />
     <Content Include="lib\devkit.js" />
     <Content Include="entities\devkit.d.ts" />
     <None Include="entities\generator.form.bat" />
@@ -73,7 +73,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="css\" />
-    <Folder Include="images\" />
     <Folder Include="js\" />
     <Folder Include="resources\" />
   </ItemGroup>

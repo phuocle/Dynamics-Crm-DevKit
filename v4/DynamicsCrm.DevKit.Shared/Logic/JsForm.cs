@@ -272,25 +272,24 @@ namespace DynamicsCrm.DevKit.Shared.Logic
 
         private static string GetJsNavigationCode(string formXml)
         {
-            List<string> BlackList = new List<string> { "asyncoperation", "bulkdeletefailure", "mailboxtrackingfolder", "principalobjectattributeaccess", "processsession", "syncerror", "userentityinstancedata", "duplicaterecord",
-        "sharepointdocumentlocation", "sharepointdocument", "chat", "fax", "letter", "recurringappointmentmaster", "socialactivity", "activitypointer", "annotation", "slakpiinstance", "socialprofile", "postrole", "postregarding", "postfollow",
-        "customeraddress", "customerrelationship", "activityparty", "actioncard", "connection", "fileattachment", "owner", "createdby", "createdonbehalfby", "modifiedby", "modifiedonbehalfby"
-        };
-
             var code = string.Empty;
-            foreach (var relationship in EntityMetadata.OneToManyRelationships.OrderBy(x => x.SchemaName))
+            var xdoc = XDocument.Parse(formXml);
+            var navIds = (from x in xdoc
+                            .Descendants("Navigation")
+                            .Descendants("NavBar")
+                            .Descendants("NavBarByRelationshipItem")
+                            select x?.Attribute("Id")?.Value)
+                            .Where(id => !string.IsNullOrEmpty(id))
+                            .Distinct()
+                            .ToList();
+            if (EntityMetadata.IsActivityParty == true && !navIds.Contains("navActivities"))
             {
-                if (BlackList.Contains(relationship.ReferencingEntity)) continue;
-                if (BlackList.Contains(relationship.ReferencedEntity)) continue;
-                if (BlackList.Contains(relationship.ReferencedAttribute)) continue;
-                if (BlackList.Contains(relationship.ReferencingAttribute)) continue;
-                if (
-                    relationship.RelationshipType == RelationshipType.OneToManyRelationship &&
-                    (relationship.IsValidForAdvancedFind ?? false)
-                    )
-                {
-                    code += $"\"{relationship.SchemaName}\", ";
-                }
+                navIds.Add("navActivities");
+            }
+            navIds = navIds.OrderBy(x => x).ToList();
+            foreach (var navId in navIds)
+            {
+                code += $"\"{Helper.SafeIdentifier(navId)}\", ";
             }
             return code.TrimEnd($", ".ToCharArray());
         }
