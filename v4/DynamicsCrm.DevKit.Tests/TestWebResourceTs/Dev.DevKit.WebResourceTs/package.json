@@ -4,7 +4,8 @@
     "description": "TypeScript modules for Dynamics 365 WebResources",
     "scripts": {
         "debug": "node build.js debug",
-        "release": "node build.js release"
+        "release": "node build.js release",
+        "check": "tsc --noEmit"
     },
     "devDependencies": {
         "@types/xrm": "^9.0.88",
