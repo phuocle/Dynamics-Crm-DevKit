@@ -2226,6 +2226,88 @@ declare namespace DevKit {
     }
 
     /**
+     * Options for opening an entity form
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/openform
+     */
+    interface IEntityFormOptions {
+        /** Logical name of the entity to open */
+        entityName: string;
+        /** ID of the entity record to open (for existing records) */
+        entityId?: string;
+        /** Designates whether the form opens in create mode (true) or update mode (false) */
+        createFromEntity?: boolean;
+        /** ID of the form to open */
+        formId?: string;
+        /** Controls whether the navigation bar is displayed: "on", "off", or "entity" */
+        navBar?: OptionSet.FormNavBar;
+        /** Indicates whether to display the command bar */
+        cmdbar?: boolean;
+        /** Indicates whether to display the header */
+        header?: boolean;
+        /** Height of the form window in pixels */
+        height?: number;
+        /** Width of the form window in pixels */
+        width?: number;
+        /** Position of the form window: 1=center, 2=side */
+        windowPosition?: OptionSet.FormWindowPosition;
+        /** Indicates the form is opened in a new window */
+        openInNewWindow?: boolean;
+        /** ID of the process to start */
+        processId?: string;
+        /** ID of the process instance */
+        processInstanceId?: string;
+        /** Relationship information for related entity forms */
+        relationship?: {
+            attributeName: string;
+            name: string;
+            navigationPropertyName?: string;
+            relationshipType: OptionSet.FormRelationshipType;
+            roleType: OptionSet.FormRelationshipRoleType;
+        };
+        /** ID of the stage in the business process to open */
+        selectedStageId?: string;
+        /** Indicates whether to use quick create form */
+        useQuickCreateForm?: boolean;
+    }
+
+    /**
+     * Options for the file picker
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-device/pickfile
+     */
+    interface IPickFileOptions {
+        /** File types to accept: "audio", "video", or "image" */
+        accept?: OptionSet.FileAccept;
+        /** Indicates whether to allow selecting multiple files */
+        allowMultipleFiles?: boolean;
+        /** Maximum size of file(s) to be selected in bytes */
+        maximumAllowedFileSize?: number;
+    }
+
+    /**
+     * Represents file data from device file picker or for opening files
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-device/pickfile
+     */
+    interface IFileData {
+        /** Contents of the file as base64 encoded string */
+        fileContent: string;
+        /** Name of the file */
+        fileName: string;
+        /** Size of the file in bytes */
+        fileSize: number;
+        /** MIME type of the file */
+        mimeType: string;
+    }
+
+    /**
+     * Options for opening a file
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/openfile
+     */
+    interface IOpenFileOptions {
+        /** Specify whether to open (1) or save (2) the file */
+        openMode: OptionSet.FileOption;
+    }
+
+    /**
      * Interface for Xrm.Utility wrapper
      * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility
      */
@@ -2356,7 +2438,7 @@ declare namespace DevKit {
          * @param formParameters Parameters to pass to the form
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/openform
          */
-        OpenForm(entityFormOptions: any, formParameters?: any, successCallback?: (result: any) => void, errorCallback?: (error: any) => void): Promise<any> | void;
+        OpenForm(entityFormOptions: IEntityFormOptions, formParameters?: any, successCallback?: (result: any) => void, errorCallback?: (error: any) => void): Promise<any> | void;
 
         /**
          * Opens a URL
@@ -2428,7 +2510,7 @@ declare namespace DevKit {
          * @param pickFileOptions Options for the file picker
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-device/pickfile
          */
-        PickFile(pickFileOptions?: any, successCallback?: (result: any[]) => void, errorCallback?: (error: any) => void): Promise<any[]> | void;
+        PickFile(pickFileOptions?: IPickFileOptions, successCallback?: (result: IFileData[]) => void, errorCallback?: (error: any) => void): Promise<IFileData[]> | void;
 
         /**
          * Gets the current geographical position
@@ -2506,7 +2588,7 @@ declare namespace DevKit {
          * @param openFileOptions Options for opening the file
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/openfile
          */
-        OpenFile(file: any, openFileOptions?: any): void;
+        OpenFile(file: IFileData, openFileOptions?: IOpenFileOptions): void;
 
         /**
          * Gets page context
