@@ -14,6 +14,7 @@ TestDevKitJs/
 │   └── devkit.js          # Core DevKit JavaScript library
 ├── entities/
 │   ├── devkit.d.ts        # TypeScript definitions
+│   ├── Account.d.ts       # Account entity TypeScript definition
 │   ├── Account.js         # Entity implementation sample
 │   ├── Account.form.js    # Form implementation sample
 │   └── Account.webapi.js  # WebAPI implementation sample
@@ -76,16 +77,26 @@ This script:
 2. Copies files to `../TestWebResource/Dev.DevKit.WebResource/`:
    - `lib/devkit.js` → `lib/devkit.js`
    - `entities/devkit.d.ts` → `entities/devkit.d.ts`
+   - `entities/Account.d.ts` → `entities/Account.d.ts`
    - `entities/Account.js` → `entities/Account.js`
    - `entities/Account.form.js` → `entities/Account.form.js`
    - `entities/Account.webapi.js` → `entities/Account.webapi.js`
 
+### Deployment Target
+
+**TestWebResource** (`../TestWebResource/Dev.DevKit.WebResource/`) is the deployment target for JavaScript DevKit. Do NOT edit files directly in TestWebResource - always make changes in TestDevKitJs first, then deploy using the script.
+
 ## Architecture
 
+> **Important**: This is the JavaScript implementation using a different pattern from TypeScript.
+
 - Uses **ES Modules** (`type: "module"` in package.json)
-- Uses `loadFormV2` pattern (factory-based)
-- Exposes global `devKit` object via IIFE
-- Accesses global `Xrm` directly
+- Uses **`loadFormV2`** pattern (factory-based)
+- Exposes global **`devKit`** object via IIFE
+- Accesses global **`Xrm`** directly
+- Returns a plain JavaScript object constructed via factory pattern
+
+For comparison with the TypeScript implementation, see `TestDevKitTs/AIContext.md`.
 
 ## Dependencies
 
