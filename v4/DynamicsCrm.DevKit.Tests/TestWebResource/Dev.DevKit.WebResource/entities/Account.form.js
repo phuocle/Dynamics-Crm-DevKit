@@ -58,6 +58,12 @@ var DevKit;
 	DevKit.FormAccount_Quick_Create = function(executionContext, defaultWebResourceName) {
 		const form = {
 			body: ["Address1_City", "Address1_Line1", "Address1_Line2", "Address1_PostalCode", "Description", "Name", "NumberOfEmployees", "PrimaryContactId", "Revenue", "Telephone1"],
+			bpf: [],
+			dialog: [],
+			grid: [],
+			header: [],
+			navigation: [],
+			quick: [],
 			tab: ["tab_1___tab_1_column_1_section_1", "tab_1___tab_1_column_2_section_1", "tab_1___tab_1_column_3_section_1"]
 		};
 		return devKit.LoadFormV2(executionContext, defaultWebResourceName, form);

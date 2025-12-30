@@ -75,6 +75,12 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code += $"{TAB}{TAB}const form = {{{NEW_LINE}";
             var codeJsQuickFormBody = GetJsQuickViewCodeBody(form.FormXml);
             code += $"{TAB}{TAB}{TAB}body: [{codeJsQuickFormBody}],{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}bpf: [],{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}dialog: [],{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}grid: [],{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}header: [],{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}navigation: [],{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}quick: [],{NEW_LINE}";
             var tabCode = GetJsCodeTabs(form.FormXml);
             code += $"{TAB}{TAB}{TAB}tab: [{tabCode}],{NEW_LINE}";
             code = code.TrimEnd($",{NEW_LINE}".ToCharArray()) + NEW_LINE;
