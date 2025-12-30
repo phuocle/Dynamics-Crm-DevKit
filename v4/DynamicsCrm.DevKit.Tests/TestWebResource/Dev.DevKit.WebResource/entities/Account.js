@@ -3846,76 +3846,79 @@ var formAccount_DevKitV4 = (function () {
 			// =====================================================
 			// CLIENT PROPERTIES (form.Utility.Client.*)
 			// =====================================================
-			results.push({ Test: "R1", Property: "form.Utility.Client.ClientName", Value: form.Utility.Client?.ClientName, Status: form.Utility.Client?.ClientName ? "✓" : "⚠" });
-			results.push({ Test: "R2", Property: "form.Utility.Client.ClientState", Value: form.Utility.Client?.ClientState, Status: form.Utility.Client?.ClientState ? "✓" : "⚠" });
-			results.push({ Test: "R3", Property: "form.Utility.Client.FormFactor", Value: form.Utility.Client?.FormFactor, Status: typeof form.Utility.Client?.FormFactor === "number" ? "✓" : "⚠" });
-			results.push({ Test: "R4", Property: "form.Utility.Client.IsNetworkAvailable", Value: form.Utility.Client?.IsNetworkAvailable, Status: typeof form.Utility.Client?.IsNetworkAvailable === "boolean" ? "✓" : "⚠" });
-			results.push({ Test: "R5", Property: "form.Utility.Client.IsOffline", Value: form.Utility.Client?.IsOffline, Status: typeof form.Utility.Client?.IsOffline === "boolean" ? "✓" : "⚠" });
+			const client = form.Utility.Client;
+			results.push({ Test: "R1", Property: "form.Utility.Client", Value: client ? "object" : "null", Status: client ? "✓" : "⚠" });
+			results.push({ Test: "R2", Property: "form.Utility.Client.ClientName", Value: client?.ClientName, Status: client?.ClientName ? "✓" : "⚠" });
+			results.push({ Test: "R3", Property: "form.Utility.Client.ClientState", Value: client?.ClientState, Status: client?.ClientState ? "✓" : "⚠" });
+			results.push({ Test: "R4", Property: "form.Utility.Client.FormFactor", Value: client?.FormFactor, Status: typeof client?.FormFactor === "number" ? "✓" : "⚠" });
+			results.push({ Test: "R5", Property: "form.Utility.Client.IsNetworkAvailable", Value: client?.IsNetworkAvailable, Status: typeof client?.IsNetworkAvailable === "boolean" ? "✓" : "⚠" });
+			results.push({ Test: "R6", Property: "form.Utility.Client.IsOffline", Value: client?.IsOffline, Status: typeof client?.IsOffline === "boolean" ? "✓" : "⚠" });
 
 			// =====================================================
 			// GLOBAL CONTEXT PROPERTIES (form.Utility.*)
 			// =====================================================
-			results.push({ Test: "R6", Property: "form.Utility.ClientUrl", Value: form.Utility.ClientUrl, Status: form.Utility.ClientUrl ? "✓" : "⚠" });
-			results.push({ Test: "R7", Property: "form.Utility.CurrentAppUrl", Value: form.Utility.CurrentAppUrl, Status: form.Utility.CurrentAppUrl ? "✓" : "⚠" });
-			results.push({ Test: "R8", Property: "form.Utility.IsOnPremises", Value: form.Utility.IsOnPremises, Status: typeof form.Utility.IsOnPremises === "boolean" ? "✓" : "⚠" });
-			results.push({ Test: "R9", Property: "form.Utility.LearningPathAttributeName", Value: form.Utility.LearningPathAttributeName, Status: "✓" });
-			results.push({ Test: "R10", Property: "form.Utility.PageContext", Value: form.Utility.PageContext ? "object" : "null", Status: form.Utility.PageContext ? "✓" : "⚠" });
-			results.push({ Test: "R11", Property: "form.Utility.Version", Value: form.Utility.Version, Status: form.Utility.Version ? "✓" : "⚠" });
+			results.push({ Test: "R7", Property: "form.Utility.ClientUrl", Value: form.Utility.ClientUrl, Status: form.Utility.ClientUrl ? "✓" : "⚠" });
+			results.push({ Test: "R8", Property: "form.Utility.CurrentAppUrl", Value: form.Utility.CurrentAppUrl, Status: form.Utility.CurrentAppUrl ? "✓" : "⚠" });
+			results.push({ Test: "R9", Property: "form.Utility.IsOnPremises", Value: form.Utility.IsOnPremises, Status: typeof form.Utility.IsOnPremises === "boolean" ? "✓" : "⚠" });
+			results.push({ Test: "R10", Property: "form.Utility.LearningPathAttributeName", Value: form.Utility.LearningPathAttributeName, Status: "✓" });
+			results.push({ Test: "R11", Property: "form.Utility.PageContext", Value: form.Utility.PageContext ? "object" : "null", Status: form.Utility.PageContext ? "✓" : "⚠" });
+			results.push({ Test: "R12", Property: "form.Utility.Version", Value: form.Utility.Version, Status: form.Utility.Version ? "✓" : "⚠" });
 
 			// =====================================================
 			// ORGANIZATION SETTINGS (form.Utility.OrganizationSettings.*)
 			// =====================================================
 			const orgSettings = form.Utility.OrganizationSettings;
-			results.push({ Test: "R12", Property: "form.Utility.OrganizationSettings.Attributes", Value: orgSettings?.Attributes ? `Array[${orgSettings.Attributes.length || 0}]` : "null", Status: "✓" });
-			results.push({ Test: "R13", Property: "form.Utility.OrganizationSettings.BaseCurrency", Value: orgSettings?.BaseCurrency ? stringify(orgSettings.BaseCurrency) : "null", Status: orgSettings?.BaseCurrency ? "✓" : "⚠" });
-			results.push({ Test: "R14", Property: "form.Utility.OrganizationSettings.BaseCurrencyId", Value: orgSettings?.BaseCurrencyId, Status: orgSettings?.BaseCurrencyId ? "✓" : "⚠" });
-			results.push({ Test: "R15", Property: "form.Utility.OrganizationSettings.DefaultCountryCode", Value: orgSettings?.DefaultCountryCode, Status: "✓" });
-			results.push({ Test: "R16", Property: "form.Utility.OrganizationSettings.FullNameConventionCode", Value: orgSettings?.FullNameConventionCode, Status: typeof orgSettings?.FullNameConventionCode === "number" ? "✓" : "⚠" });
-			results.push({ Test: "R17", Property: "form.Utility.OrganizationSettings.IsAutoSaveEnabled", Value: orgSettings?.IsAutoSaveEnabled, Status: typeof orgSettings?.IsAutoSaveEnabled === "boolean" ? "✓" : "⚠" });
-			results.push({ Test: "R18", Property: "form.Utility.OrganizationSettings.IsTrialOrganization", Value: orgSettings?.IsTrialOrganization, Status: typeof orgSettings?.IsTrialOrganization === "boolean" ? "✓" : "⚠" });
-			results.push({ Test: "R19", Property: "form.Utility.OrganizationSettings.LanguageId", Value: orgSettings?.LanguageId, Status: typeof orgSettings?.LanguageId === "number" ? "✓" : "⚠" });
-			results.push({ Test: "R20", Property: "form.Utility.OrganizationSettings.OrganizationExpiryDate", Value: orgSettings?.OrganizationExpiryDate, Status: "✓" });
-			results.push({ Test: "R21", Property: "form.Utility.OrganizationSettings.OrganizationId", Value: orgSettings?.OrganizationId, Status: orgSettings?.OrganizationId ? "✓" : "⚠" });
-			results.push({ Test: "R22", Property: "form.Utility.OrganizationSettings.UniqueName", Value: orgSettings?.UniqueName, Status: orgSettings?.UniqueName ? "✓" : "⚠" });
-			results.push({ Test: "R23", Property: "form.Utility.OrganizationSettings.UseSkypeProtocol", Value: orgSettings?.UseSkypeProtocol, Status: typeof orgSettings?.UseSkypeProtocol === "boolean" ? "✓" : "⚠" });
+			results.push({ Test: "R13", Property: "form.Utility.OrganizationSettings", Value: orgSettings ? "object" : "null", Status: orgSettings ? "✓" : "⚠" });
+			results.push({ Test: "R14", Property: "form.Utility.OrganizationSettings.Attributes", Value: orgSettings?.Attributes ? `Array[${orgSettings.Attributes.length || 0}]` : "null", Status: "✓" });
+			results.push({ Test: "R15", Property: "form.Utility.OrganizationSettings.BaseCurrency", Value: orgSettings?.BaseCurrency ? (orgSettings.BaseCurrency.id || "object") : "null", Status: orgSettings?.BaseCurrency ? "✓" : "⚠" });
+			results.push({ Test: "R16", Property: "form.Utility.OrganizationSettings.BaseCurrencyId", Value: orgSettings?.BaseCurrencyId, Status: orgSettings?.BaseCurrencyId ? "✓" : "⚠" });
+			results.push({ Test: "R17", Property: "form.Utility.OrganizationSettings.DefaultCountryCode", Value: orgSettings?.DefaultCountryCode, Status: "✓" });
+			results.push({ Test: "R18", Property: "form.Utility.OrganizationSettings.FullNameConventionCode", Value: orgSettings?.FullNameConventionCode, Status: typeof orgSettings?.FullNameConventionCode === "number" ? "✓" : "⚠" });
+			results.push({ Test: "R19", Property: "form.Utility.OrganizationSettings.IsAutoSaveEnabled", Value: orgSettings?.IsAutoSaveEnabled, Status: typeof orgSettings?.IsAutoSaveEnabled === "boolean" ? "✓" : "⚠" });
+			results.push({ Test: "R20", Property: "form.Utility.OrganizationSettings.IsTrialOrganization", Value: orgSettings?.IsTrialOrganization, Status: typeof orgSettings?.IsTrialOrganization === "boolean" ? "✓" : "⚠" });
+			results.push({ Test: "R21", Property: "form.Utility.OrganizationSettings.LanguageId", Value: orgSettings?.LanguageId, Status: typeof orgSettings?.LanguageId === "number" ? "✓" : "⚠" });
+			results.push({ Test: "R22", Property: "form.Utility.OrganizationSettings.OrganizationExpiryDate", Value: orgSettings?.OrganizationExpiryDate, Status: "✓" });
+			results.push({ Test: "R23", Property: "form.Utility.OrganizationSettings.OrganizationId", Value: orgSettings?.OrganizationId, Status: orgSettings?.OrganizationId ? "✓" : "⚠" });
+			results.push({ Test: "R24", Property: "form.Utility.OrganizationSettings.UniqueName", Value: orgSettings?.UniqueName, Status: orgSettings?.UniqueName ? "✓" : "⚠" });
+			results.push({ Test: "R25", Property: "form.Utility.OrganizationSettings.UseSkypeProtocol", Value: orgSettings?.UseSkypeProtocol, Status: typeof orgSettings?.UseSkypeProtocol === "boolean" ? "✓" : "⚠" });
 
 			// =====================================================
 			// USER SETTINGS (form.Utility.UserSettings.*)
 			// =====================================================
 			const userSettings = form.Utility.UserSettings;
-			results.push({ Test: "R24", Property: "form.Utility.UserSettings", Value: userSettings ? "object" : "null", Status: userSettings ? "✓" : "⚠" });
-			results.push({ Test: "R25", Property: "form.Utility.UserSettings.DateFormattingInfo", Value: userSettings?.DateFormattingInfo ? "object" : "null", Status: userSettings?.DateFormattingInfo ? "✓" : "⚠" });
-			results.push({ Test: "R26", Property: "form.Utility.UserSettings.DefaultDashboardId", Value: userSettings?.DefaultDashboardId, Status: "✓" });
-			results.push({ Test: "R27", Property: "form.Utility.UserSettings.IsGuidedHelpEnabled", Value: userSettings?.IsGuidedHelpEnabled, Status: typeof userSettings?.IsGuidedHelpEnabled === "boolean" ? "✓" : "⚠" });
-			results.push({ Test: "R28", Property: "form.Utility.UserSettings.IsHighContrastEnabled", Value: userSettings?.IsHighContrastEnabled, Status: typeof userSettings?.IsHighContrastEnabled === "boolean" ? "✓" : "⚠" });
-			results.push({ Test: "R29", Property: "form.Utility.UserSettings.IsRTL", Value: userSettings?.IsRTL, Status: typeof userSettings?.IsRTL === "boolean" ? "✓" : "⚠" });
-			results.push({ Test: "R30", Property: "form.Utility.UserSettings.LanguageId", Value: userSettings?.LanguageId, Status: typeof userSettings?.LanguageId === "number" ? "✓" : "⚠" });
-			results.push({ Test: "R31", Property: "form.Utility.UserSettings.Roles", Value: userSettings?.Roles ? "Collection" : "null", Status: userSettings?.Roles ? "✓" : "⚠" });
-			results.push({ Test: "R32", Property: "form.Utility.UserSettings.SecurityRolePrivileges", Value: userSettings?.SecurityRolePrivileges ? `Array[${userSettings.SecurityRolePrivileges.length || 0}]` : "null", Status: userSettings?.SecurityRolePrivileges ? "✓" : "⚠" });
-			results.push({ Test: "R33", Property: "form.Utility.UserSettings.SecurityRoles", Value: userSettings?.SecurityRoles ? `Array[${userSettings.SecurityRoles.length || 0}]` : "null", Status: userSettings?.SecurityRoles ? "✓" : "⚠" });
-			results.push({ Test: "R34", Property: "form.Utility.UserSettings.TimeZoneOffsetMinutes", Value: userSettings?.TimeZoneOffsetMinutes, Status: typeof userSettings?.TimeZoneOffsetMinutes === "number" ? "✓" : "⚠" });
-			results.push({ Test: "R35", Property: "form.Utility.UserSettings.TransactionCurrency", Value: userSettings?.TransactionCurrency ? stringify(userSettings.TransactionCurrency) : "null", Status: userSettings?.TransactionCurrency ? "✓" : "⚠" });
-			results.push({ Test: "R36", Property: "form.Utility.UserSettings.TransactionCurrencyId", Value: userSettings?.TransactionCurrencyId, Status: userSettings?.TransactionCurrencyId ? "✓" : "⚠" });
-			results.push({ Test: "R37", Property: "form.Utility.UserSettings.UserId", Value: userSettings?.UserId, Status: userSettings?.UserId ? "✓" : "⚠" });
-			results.push({ Test: "R38", Property: "form.Utility.UserSettings.UserName", Value: userSettings?.UserName, Status: userSettings?.UserName ? "✓" : "⚠" });
+			results.push({ Test: "R26", Property: "form.Utility.UserSettings", Value: userSettings ? "object" : "null", Status: userSettings ? "✓" : "⚠" });
+			results.push({ Test: "R27", Property: "form.Utility.UserSettings.DateFormattingInfo", Value: userSettings?.DateFormattingInfo ? "object" : "null", Status: userSettings?.DateFormattingInfo ? "✓" : "⚠" });
+			results.push({ Test: "R28", Property: "form.Utility.UserSettings.DefaultDashboardId", Value: userSettings?.DefaultDashboardId, Status: "✓" });
+			results.push({ Test: "R29", Property: "form.Utility.UserSettings.IsGuidedHelpEnabled", Value: userSettings?.IsGuidedHelpEnabled, Status: typeof userSettings?.IsGuidedHelpEnabled === "boolean" ? "✓" : "⚠" });
+			results.push({ Test: "R30", Property: "form.Utility.UserSettings.IsHighContrastEnabled", Value: userSettings?.IsHighContrastEnabled, Status: typeof userSettings?.IsHighContrastEnabled === "boolean" ? "✓" : "⚠" });
+			results.push({ Test: "R31", Property: "form.Utility.UserSettings.IsRTL", Value: userSettings?.IsRTL, Status: typeof userSettings?.IsRTL === "boolean" ? "✓" : "⚠" });
+			results.push({ Test: "R32", Property: "form.Utility.UserSettings.LanguageId", Value: userSettings?.LanguageId, Status: typeof userSettings?.LanguageId === "number" ? "✓" : "⚠" });
+			results.push({ Test: "R33", Property: "form.Utility.UserSettings.Roles", Value: userSettings?.Roles ? "Collection" : "null", Status: userSettings?.Roles ? "✓" : "⚠" });
+			results.push({ Test: "R34", Property: "form.Utility.UserSettings.SecurityRolePrivileges", Value: userSettings?.SecurityRolePrivileges ? `Array[${userSettings.SecurityRolePrivileges.length || 0}]` : "null", Status: userSettings?.SecurityRolePrivileges ? "✓" : "⚠" });
+			results.push({ Test: "R35", Property: "form.Utility.UserSettings.SecurityRoles", Value: userSettings?.SecurityRoles ? `Array[${userSettings.SecurityRoles.length || 0}]` : "null", Status: userSettings?.SecurityRoles ? "✓" : "⚠" });
+			results.push({ Test: "R36", Property: "form.Utility.UserSettings.TimeZoneOffsetMinutes", Value: userSettings?.TimeZoneOffsetMinutes, Status: typeof userSettings?.TimeZoneOffsetMinutes === "number" ? "✓" : "⚠" });
+			results.push({ Test: "R37", Property: "form.Utility.UserSettings.TransactionCurrency", Value: userSettings?.TransactionCurrency ? (userSettings.TransactionCurrency.id || "object") : "null", Status: userSettings?.TransactionCurrency ? "✓" : "⚠" });
+			results.push({ Test: "R38", Property: "form.Utility.UserSettings.TransactionCurrencyId", Value: userSettings?.TransactionCurrencyId, Status: userSettings?.TransactionCurrencyId ? "✓" : "⚠" });
+			results.push({ Test: "R39", Property: "form.Utility.UserSettings.UserId", Value: userSettings?.UserId, Status: userSettings?.UserId ? "✓" : "⚠" });
+			results.push({ Test: "R40", Property: "form.Utility.UserSettings.UserName", Value: userSettings?.UserName, Status: userSettings?.UserName ? "✓" : "⚠" });
 
 			// =====================================================
 			// DATE FORMATTING INFO (form.Utility.UserSettings.DateFormattingInfo.*)
 			// =====================================================
 			const dateInfo = userSettings?.DateFormattingInfo;
-			results.push({ Test: "R39", Property: "form.Utility.UserSettings.DateFormattingInfo.AMDesignator", Value: dateInfo?.AMDesignator, Status: dateInfo?.AMDesignator ? "✓" : "⚠" });
-			results.push({ Test: "R40", Property: "form.Utility.UserSettings.DateFormattingInfo.PMDesignator", Value: dateInfo?.PMDesignator, Status: dateInfo?.PMDesignator ? "✓" : "⚠" });
-			results.push({ Test: "R41", Property: "form.Utility.UserSettings.DateFormattingInfo.DateSeparator", Value: dateInfo?.DateSeparator, Status: dateInfo?.DateSeparator ? "✓" : "⚠" });
-			results.push({ Test: "R42", Property: "form.Utility.UserSettings.DateFormattingInfo.TimeSeparator", Value: dateInfo?.TimeSeparator, Status: dateInfo?.TimeSeparator ? "✓" : "⚠" });
-			results.push({ Test: "R43", Property: "form.Utility.UserSettings.DateFormattingInfo.ShortDatePattern", Value: dateInfo?.ShortDatePattern, Status: dateInfo?.ShortDatePattern ? "✓" : "⚠" });
-			results.push({ Test: "R44", Property: "form.Utility.UserSettings.DateFormattingInfo.LongDatePattern", Value: dateInfo?.LongDatePattern, Status: dateInfo?.LongDatePattern ? "✓" : "⚠" });
-			results.push({ Test: "R45", Property: "form.Utility.UserSettings.DateFormattingInfo.ShortTimePattern", Value: dateInfo?.ShortTimePattern, Status: dateInfo?.ShortTimePattern ? "✓" : "⚠" });
-			results.push({ Test: "R46", Property: "form.Utility.UserSettings.DateFormattingInfo.LongTimePattern", Value: dateInfo?.LongTimePattern, Status: dateInfo?.LongTimePattern ? "✓" : "⚠" });
-			results.push({ Test: "R47", Property: "form.Utility.UserSettings.DateFormattingInfo.FullDateTimePattern", Value: dateInfo?.FullDateTimePattern, Status: dateInfo?.FullDateTimePattern ? "✓" : "⚠" });
-			results.push({ Test: "R48", Property: "form.Utility.UserSettings.DateFormattingInfo.FirstDayOfWeek", Value: dateInfo?.FirstDayOfWeek, Status: typeof dateInfo?.FirstDayOfWeek === "number" ? "✓" : "⚠" });
-			results.push({ Test: "R49", Property: "form.Utility.UserSettings.DateFormattingInfo.DayNames", Value: dateInfo?.DayNames ? `Array[${dateInfo.DayNames.length}]` : "null", Status: dateInfo?.DayNames ? "✓" : "⚠" });
-			results.push({ Test: "R50", Property: "form.Utility.UserSettings.DateFormattingInfo.MonthNames", Value: dateInfo?.MonthNames ? `Array[${dateInfo.MonthNames.length}]` : "null", Status: dateInfo?.MonthNames ? "✓" : "⚠" });
-			results.push({ Test: "R51", Property: "form.Utility.UserSettings.DateFormattingInfo.Calendar", Value: dateInfo?.Calendar ? "object" : "null", Status: dateInfo?.Calendar ? "✓" : "⚠" });
+			results.push({ Test: "R41", Property: "form.Utility.UserSettings.DateFormattingInfo.AMDesignator", Value: dateInfo?.AMDesignator, Status: dateInfo?.AMDesignator ? "✓" : "⚠" });
+			results.push({ Test: "R42", Property: "form.Utility.UserSettings.DateFormattingInfo.PMDesignator", Value: dateInfo?.PMDesignator, Status: dateInfo?.PMDesignator ? "✓" : "⚠" });
+			results.push({ Test: "R43", Property: "form.Utility.UserSettings.DateFormattingInfo.DateSeparator", Value: dateInfo?.DateSeparator, Status: dateInfo?.DateSeparator ? "✓" : "⚠" });
+			results.push({ Test: "R44", Property: "form.Utility.UserSettings.DateFormattingInfo.TimeSeparator", Value: dateInfo?.TimeSeparator, Status: dateInfo?.TimeSeparator ? "✓" : "⚠" });
+			results.push({ Test: "R45", Property: "form.Utility.UserSettings.DateFormattingInfo.ShortDatePattern", Value: dateInfo?.ShortDatePattern, Status: dateInfo?.ShortDatePattern ? "✓" : "⚠" });
+			results.push({ Test: "R46", Property: "form.Utility.UserSettings.DateFormattingInfo.LongDatePattern", Value: dateInfo?.LongDatePattern, Status: dateInfo?.LongDatePattern ? "✓" : "⚠" });
+			results.push({ Test: "R47", Property: "form.Utility.UserSettings.DateFormattingInfo.ShortTimePattern", Value: dateInfo?.ShortTimePattern, Status: dateInfo?.ShortTimePattern ? "✓" : "⚠" });
+			results.push({ Test: "R48", Property: "form.Utility.UserSettings.DateFormattingInfo.LongTimePattern", Value: dateInfo?.LongTimePattern, Status: dateInfo?.LongTimePattern ? "✓" : "⚠" });
+			results.push({ Test: "R49", Property: "form.Utility.UserSettings.DateFormattingInfo.FullDateTimePattern", Value: dateInfo?.FullDateTimePattern, Status: dateInfo?.FullDateTimePattern ? "✓" : "⚠" });
+			results.push({ Test: "R50", Property: "form.Utility.UserSettings.DateFormattingInfo.FirstDayOfWeek", Value: dateInfo?.FirstDayOfWeek, Status: typeof dateInfo?.FirstDayOfWeek === "number" ? "✓" : "⚠" });
+			results.push({ Test: "R51", Property: "form.Utility.UserSettings.DateFormattingInfo.DayNames", Value: dateInfo?.DayNames ? `Array[${dateInfo.DayNames.length}]` : "null", Status: dateInfo?.DayNames ? "✓" : "⚠" });
+			results.push({ Test: "R52", Property: "form.Utility.UserSettings.DateFormattingInfo.MonthNames", Value: dateInfo?.MonthNames ? `Array[${dateInfo.MonthNames.length}]` : "null", Status: dateInfo?.MonthNames ? "✓" : "⚠" });
+			results.push({ Test: "R53", Property: "form.Utility.UserSettings.DateFormattingInfo.Calendar", Value: dateInfo?.Calendar ? "object" : "null", Status: dateInfo?.Calendar ? "✓" : "⚠" });
 		} catch (/** @type {any} */ error) {
 			results.push({ Test: "ERR", Property: "Props Error", Value: error.message, Status: "✗" });
 		}
@@ -4012,7 +4015,7 @@ var formAccount_DevKitV4 = (function () {
 		const total = allResults.length;
 
 		console.groupCollapsed(`🎯 [JS] TEST 21: Utility API [${startTime}] - ${passed}/${total}`);
-		console.log("%c📋 ReadOnly Properties (R1-R51)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
+		console.log("%c📋 ReadOnly Properties (R1-R53)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
 		console.table(results);
 		console.log("%c⚡ Methods (M1-M37)", "font-weight: bold; font-size: 14px; color: #2196F3;");
 		console.table(methodResults);
@@ -4056,6 +4059,18 @@ var formAccount_DevKitV4 = (function () {
 			results.push({ Test: "R9", Property: "form.Body.Tab.TAB_1.Section.TAB_1_SECTION_1.Parent", Value: form.Body.Tab.TAB_1.Section.TAB_1_SECTION_1?.Parent ? "object" : "null", Status: form.Body.Tab.TAB_1.Section.TAB_1_SECTION_1?.Parent ? "✓" : "⚠" });
 			results.push({ Test: "R10", Property: "form.Body.Tab.TAB_1.Section.TAB_1_SECTION_1.Label", Value: form.Body.Tab.TAB_1.Section.TAB_1_SECTION_1?.Label, Status: form.Body.Tab.TAB_1.Section.TAB_1_SECTION_1?.Label ? "✓" : "⚠" });
 			results.push({ Test: "R11", Property: "form.Body.Tab.TAB_1.Section.TAB_1_SECTION_1.Visible", Value: form.Body.Tab.TAB_1.Section.TAB_1_SECTION_1?.Visible, Status: typeof form.Body.Tab.TAB_1.Section.TAB_1_SECTION_1?.Visible === "boolean" ? "✓" : "⚠" });
+
+			// Section Controls (TAB_1_SECTION_1.Controls)
+			const controls = form.Body.Tab.TAB_1.Section.TAB_1_SECTION_1?.Controls;
+			results.push({ Test: "R12", Property: "form.Body.Tab.TAB_1.Section.TAB_1_SECTION_1.Controls", Value: controls ? "object" : "null", Status: controls ? "✓" : "⚠" });
+			results.push({ Test: "R13", Property: "form.Body.Tab.TAB_1.Section.TAB_1_SECTION_1.Controls.getLength()", Value: controls?.getLength(), Status: typeof controls?.getLength() === "number" ? "✓" : "⚠" });
+			results.push({ Test: "R14", Property: "form.Body.Tab.TAB_1.Section.TAB_1_SECTION_1.Controls.get(0)", Value: controls?.get(0) ? "control" : "null", Status: "✓" });
+
+			// Test Controls.forEach
+			/** @type {string[]} */
+			let controlNames = [];
+			controls?.forEach((/** @type {any} */ ctrl, /** @type {number} */ idx) => { if (ctrl?.getName) controlNames.push(ctrl.getName()); });
+			results.push({ Test: "R15", Property: "form.Body.Tab.TAB_1.Section.TAB_1_SECTION_1.Controls.forEach()", Value: controlNames.length > 0 ? controlNames.join(", ") : "no controls", Status: "✓" });
 
 		} catch (/** @type {any} */ error) {
 			results.push({ Test: "ERR", Property: "Props Error", Value: error.message, Status: "✗" });

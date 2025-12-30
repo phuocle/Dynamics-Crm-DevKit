@@ -127,7 +127,7 @@ declare namespace DevKit {
         /** Array of strings. The message to display in the notification */
         messages: string[];
         /** Notification level: ERROR or RECOMMENDATION */
-        notificationLevel?: OptionSet.NotificationLevel;
+        notificationLevel?: OptionSet.FieldNotificationLevel;
         /** Unique identifier for the notification which can be used to clear this notification */
         uniqueId: string;
         /** Optional actions for the notification */

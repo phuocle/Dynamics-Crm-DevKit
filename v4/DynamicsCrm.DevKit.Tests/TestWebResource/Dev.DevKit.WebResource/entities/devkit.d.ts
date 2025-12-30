@@ -23,6 +23,13 @@ declare namespace DevKit {
      * Callback function type for failed operations.
      */
     type ErrorCallback = (error: Error) => void;
+    interface Collections<T> {
+        forEach(callback: (item: T, index: number) => void): void;
+        get(name: string): T;
+        get(index: number): T;
+        get(): Array<T>;
+        getLength(): number;
+    }
     namespace Controls {
         interface IControl {
             /**
