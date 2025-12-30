@@ -648,6 +648,156 @@ declare namespace DevKit {
         }
 
         /**
+         * Interface for WebResource controls
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
+         */
+        interface WebResource {
+            /**
+             * Sets the focus on the control
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/setfocus
+             */
+            Focus(): void;
+
+            /**
+             * Returns the content window that represents a web resource
+             * @param successCallback A function to call when operation is executed successfully
+             * @param errorCallback A function to call when the operation fails
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getcontentwindow
+             */
+            ContentWindow(successCallback: (contentWindow: any) => void, errorCallback?: (error: Error) => void): void;
+
+            /**
+             * Returns the content window that represents a web resource as a promise
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getcontentwindow
+             */
+            ContentWindow(): Promise<any>;
+
+            /**
+             * Returns a string value that represents the type of control
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getcontroltype
+             */
+            readonly ControlType: string;
+
+            /**
+             * Returns the name assigned to the control
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getname
+             */
+            readonly ControlName: string;
+
+            /**
+             * Returns the object in the form that represents the web resource (the IFrame element)
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getobject
+             */
+            readonly Object: any;
+
+            /**
+             * Get/Set the current URL being displayed in the web resource
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getsrc
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/setsrc
+             */
+            Src: string;
+
+            /**
+             * Get/Set whether the control is disabled
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getdisabled
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/setdisabled
+             */
+            Disabled: boolean;
+
+            /**
+             * Get/Set the label for the control
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getlabel
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/setlabel
+             */
+            Label: string;
+
+            /**
+             * Get/Set a value that indicates whether the control is currently visible
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getvisible
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/setvisible
+             */
+            Visible: boolean;
+        }
+
+        /**
+         * Interface for IFrame controls
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
+         */
+        interface IFrame {
+            /**
+             * Sets the focus on the control
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/setfocus
+             */
+            Focus(): void;
+
+            /**
+             * Returns the content window that represents an IFRAME
+             * @param successCallback A function to call when operation is executed successfully
+             * @param errorCallback A function to call when the operation fails
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getcontentwindow
+             */
+            ContentWindow(successCallback: (contentWindow: any) => void, errorCallback?: (error: Error) => void): void;
+
+            /**
+             * Returns the content window that represents an IFRAME as a promise
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getcontentwindow
+             */
+            ContentWindow(): Promise<any>;
+
+            /**
+             * Returns a string value that represents the type of control
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getcontroltype
+             */
+            readonly ControlType: string;
+
+            /**
+             * Returns the name assigned to the control
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getname
+             */
+            readonly ControlName: string;
+
+            /**
+             * Returns the default URL that an IFRAME control is configured to display
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getinitialurl
+             */
+            readonly InitialUrl: string;
+
+            /**
+             * Returns the object in the form that represents the IFRAME element
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getobject
+             */
+            readonly Object: any;
+
+            /**
+             * Get/Set the current URL being displayed in the IFRAME
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getsrc
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/setsrc
+             */
+            Src: string;
+
+            /**
+             * Get/Set whether the control is disabled
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getdisabled
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/setdisabled
+             */
+            Disabled: boolean;
+
+            /**
+             * Get/Set the label for the control
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getlabel
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/setlabel
+             */
+            Label: string;
+
+            /**
+             * Get/Set a value that indicates whether the control is currently visible
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getvisible
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/setvisible
+             */
+            Visible: boolean;
+        }
+
+        /**
          * Interface for Tab controls
          */
         interface ITab {

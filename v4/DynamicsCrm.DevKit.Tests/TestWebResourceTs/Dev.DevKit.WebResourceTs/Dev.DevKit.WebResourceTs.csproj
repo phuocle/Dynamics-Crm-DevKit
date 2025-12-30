@@ -61,6 +61,36 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="build.js" />
+    <Content Include="build\Account.js" />
+    <Content Include="build\Account.Test00.Control.js" />
+    <Content Include="build\Account.Test01.String.js" />
+    <Content Include="build\Account.Test02.Memo.js" />
+    <Content Include="build\Account.Test03.Boolean.js" />
+    <Content Include="build\Account.Test04.Integer.js" />
+    <Content Include="build\Account.Test04A.Header.js" />
+    <Content Include="build\Account.Test05.Decimal.js" />
+    <Content Include="build\Account.Test06.Double.js" />
+    <Content Include="build\Account.Test07.Money.js" />
+    <Content Include="build\Account.Test08.Lookup.js" />
+    <Content Include="build\Account.Test08A.Lookup1.js" />
+    <Content Include="build\Account.Test09.OptionSet.js" />
+    <Content Include="build\Account.Test10.MultiOptionSet.js" />
+    <Content Include="build\Account.Test11.DateOnly.js" />
+    <Content Include="build\Account.Test12.DateTime.js" />
+    <Content Include="build\Account.Test13.Grid.js" />
+    <Content Include="build\Account.Test14.QuickView.js" />
+    <Content Include="build\Account.Test15.NavigationItem.js" />
+    <Content Include="build\Account.Test16.ExecutionContext.js" />
+    <Content Include="build\Account.Test17.SidePanes.js" />
+    <Content Include="build\Account.Test18.Copilot.js" />
+    <Content Include="build\Account.Test19.Process.js" />
+    <Content Include="build\Account.Test20.IFrame.js" />
+    <Content Include="build\Account.Test21.Utility.js" />
+    <Content Include="build\Account.Test22.Tab.js" />
+    <Content Include="build\Account.Test23.Timer.js" />
+    <Content Include="build\Account.Test24.Knowledge.js" />
+    <Content Include="build\Account.Test25.WebApi.js" />
+    <Content Include="build\Account.Test26.WebResource.js" />
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="entities\Account.form.ts" />
