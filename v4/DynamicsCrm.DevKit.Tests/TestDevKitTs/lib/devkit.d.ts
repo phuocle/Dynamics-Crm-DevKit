@@ -961,13 +961,13 @@ declare namespace DevKit {
              * Get the grid type: 1=HomePageGrid, 2=Subgrid
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/getgridtype
              */
-            readonly GridType: number;
+            readonly GridType: OptionSet.GridType;
 
             /**
              * Get the relationship information for the subgrid
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/getrelationship
              */
-            readonly Relationship: { name: string; navigationPropertyName: string; relationshipType: number; roleType: number };
+            readonly Relationship: { name: string; navigationPropertyName: string; relationshipType: OptionSet.FormRelationshipType; roleType: OptionSet.FormRelationshipRoleType };
 
             /**
              * Collection of rows in the grid
@@ -1837,7 +1837,7 @@ declare namespace DevKit {
              * Returns the state of the timer control
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getstate
              */
-            readonly State: number;
+            readonly State: OptionSet.TimerState;
         }
 
         /**
@@ -1941,7 +1941,7 @@ declare namespace DevKit {
          * Gets the form type. Returns one of: 0=Undefined, 1=Create, 2=Update, 3=Read Only, 4=Disabled, 5=Quick Create, 6=Bulk Edit, 11=Read Optimized
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui/getformtype
          */
-        readonly FormType: number;
+        readonly FormType: OptionSet.FormType;
 
         /**
          * Gets the unique identifier of the entity record
@@ -2068,7 +2068,7 @@ declare namespace DevKit {
          * @param message The message to display in the progress indicator
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/step/setprogress
          */
-        SetProgress(stepProgress: number, message: string): void;
+        SetProgress(stepProgress: OptionSet.ProcessProgress, message: string): void;
     }
 
     /**
@@ -2173,7 +2173,7 @@ declare namespace DevKit {
         /** Default country code for the organization */
         readonly DefaultCountryCode: string;
         /** Full name convention code */
-        readonly FullNameConventionCode: number;
+        readonly FullNameConventionCode: OptionSet.FullNameConventionCode;
         /** Whether auto-save is enabled */
         readonly IsAutoSaveEnabled: boolean;
         /** Whether this is a trial organization */
@@ -2523,7 +2523,7 @@ declare namespace DevKit {
          * @param setting The setting name
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getadvancedconfigsetting
          */
-        AdvancedConfigSetting(setting: string): number;
+        AdvancedConfigSetting(setting: OptionSet.AdvancedConfigSetting): number;
 
         /**
          * Gets the allowed status transitions for an entity
@@ -2645,7 +2645,7 @@ declare namespace DevKit {
          * Get/Set the display state of the side panes: 0=Collapsed, 1=Expanded
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app/xrm-app-sidepanes#state
          */
-        DisplayState: 0 | 1;
+        DisplayState: OptionSet.SidePaneState;
 
         /**
          * Creates a new side pane
@@ -3221,7 +3221,7 @@ declare namespace DevKit {
          * @param message An optional message that is set as the Alt text on the icon for the step
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/step/setprogress
          */
-        SetProgress(stepProgress: number, message?: string): void;
+        SetProgress(stepProgress: OptionSet.ProcessProgress, message?: string): void;
         /**
          * Returns the logical name of the attribute associated to the step
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/step/getattribute
@@ -3291,7 +3291,7 @@ declare namespace DevKit {
          * Returns a number denoting the full name format selected in the system settings
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#fullnameconventioncode
          */
-        readonly FullNameConventionCode: number;
+        readonly FullNameConventionCode: OptionSet.FullNameConventionCode;
         /**
          * Indicates whether the auto-save option is enabled for the current organization
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#isautosaveenabled
