@@ -110,7 +110,7 @@ var formAccount_DevKitV4 = (function () {
 			// Test 26: WebResource Control
 			if (TestWebResource()) passedSuites++; totalSuites++;
 
-			console.log(`%cTỔNG SỐ LƯỢNG TEST: ${totalSuites} / ${passedSuites} ĐÃ PASSED`, "font-weight: bold; font-size: 20px; color: #E91E63;");
+			console.log(`%cTESTS PASSED: ${passedSuites} / ${totalSuites}`, "font-weight: bold; font-size: 20px; color: #E91E63;");
 
 		}, 1000);
 	}
@@ -294,7 +294,7 @@ var formAccount_DevKitV4 = (function () {
 		const failed = allResults.filter(r => r.Status === "✗").length;
 		const total = allResults.length;
 
-		console.groupCollapsed(`🎯 TEST 0: IControl Interface [${startTime}] - Using: v4_String field - ${passed}/${total}`);
+		console.groupCollapsed(`🎯 [JS] TEST 00: IControl Interface [${startTime}] - Using: v4_String field - ${passed}/${total}`);
 
 		console.log("%c📋 ReadOnly Properties (R1-R8)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
 		console.table(results);
@@ -453,7 +453,7 @@ var formAccount_DevKitV4 = (function () {
 		const failed = allResults.filter(r => r.Status === "✗").length;
 		const total = allResults.length;
 
-		console.groupCollapsed(`🎯 TEST 1: String Control [${startTime}] - Using: v4_String field - ${passed}/${total}`);
+		console.groupCollapsed(`🎯 [JS] TEST 01: String Control [${startTime}] - Using: v4_String field - ${passed}/${total}`);
 
 		console.log("%c📋 ReadOnly Properties (R1-R15)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
 		console.table(results);
@@ -616,7 +616,7 @@ var formAccount_DevKitV4 = (function () {
 		const failed = allResults.filter(r => r.Status === "✗").length;
 		const total = allResults.length;
 
-		console.groupCollapsed(`🎯 TEST 2: Memo Control [${startTime}] - Using: v4_Memo field - ${passed}/${total}`);
+		console.groupCollapsed(`🎯 [JS] TEST 02: Memo Control [${startTime}] - Using: v4_Memo field - ${passed}/${total}`);
 
 		console.log("%c📋 ReadOnly Properties (R1-R15)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
 		console.table(results);
@@ -785,7 +785,7 @@ var formAccount_DevKitV4 = (function () {
 		const failed = allResults.filter(r => r.Status === "✗").length;
 		const total = allResults.length;
 
-		console.groupCollapsed(`🎯 TEST 3: Boolean Control [${startTime}] - Using: v4_Boolean field - ${passed}/${total}`);
+		console.groupCollapsed(`🎯 [JS] TEST 03: Boolean Control [${startTime}] - Using: v4_Boolean field - ${passed}/${total}`);
 
 		console.log("%c📋 ReadOnly Properties (R1-R15)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
 		console.table(results);
@@ -953,7 +953,7 @@ var formAccount_DevKitV4 = (function () {
 		const failed = allResults.filter(r => r.Status === "✗").length;
 		const total = allResults.length;
 
-		console.groupCollapsed(`🎯 TEST 4: Integer Control [${startTime}] - Using: v4_Integer field - ${passed}/${total}`);
+		console.groupCollapsed(`🎯 [JS] TEST 04: Integer Control [${startTime}] - Using: v4_Integer field - ${passed}/${total}`);
 
 		console.log("%c📋 ReadOnly Properties (R1-R16)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
 		console.table(results);
@@ -1136,7 +1136,7 @@ var formAccount_DevKitV4 = (function () {
 		const failed = allResults.filter(r => r.Status === "✗").length;
 		const total = allResults.length;
 
-		console.groupCollapsed(`🎯 TEST 4A: Header Control [${startTime}] - Using: Header.v4_Integer1 field - ${passed}/${total}`);
+		console.groupCollapsed(`🎯 [JS] TEST 04A: Header Control [${startTime}] - Using: Header.v4_Integer1 field - ${passed}/${total}`);
 
 		console.log("%c📋 ReadOnly Properties (R1-R16)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
 		console.table(results);
@@ -1319,7 +1319,7 @@ var formAccount_DevKitV4 = (function () {
 		const failed = allResults.filter(r => r.Status === "✗").length;
 		const total = allResults.length;
 
-		console.groupCollapsed(`🎯 TEST 5: Decimal Control [${startTime}] - Using: v4_Decimal field - ${passed}/${total}`);
+		console.groupCollapsed(`🎯 [JS] TEST 05: Decimal Control [${startTime}] - Using: v4_Decimal field - ${passed}/${total}`);
 
 		console.log("%c📋 ReadOnly Properties (R1-R17)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
 		console.table(results);
@@ -1497,7 +1497,7 @@ var formAccount_DevKitV4 = (function () {
 		const failed = allResults.filter(r => r.Status === "✗").length;
 		const total = allResults.length;
 
-		console.groupCollapsed(`🎯 TEST 6: Double Control [${startTime}] - Using: v4_Double field - ${passed}/${total}`);
+		console.groupCollapsed(`🎯 [JS] TEST 06: Double Control [${startTime}] - Using: v4_Double field - ${passed}/${total}`);
 
 		console.log("%c📋 ReadOnly Properties (R1-R17)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
 		console.table(results);
@@ -1682,7 +1682,7 @@ var formAccount_DevKitV4 = (function () {
 		const failed = allResults.filter(r => r.Status === "✗").length;
 		const total = allResults.length;
 
-		console.groupCollapsed(`🎯 TEST 7: Money Control [${startTime}] - Using: v4_Money field - ${passed}/${total}`);
+		console.groupCollapsed(`🎯 [JS] TEST 07: Money Control [${startTime}] - Using: v4_Money field - ${passed}/${total}`);
 
 		console.log("%c📋 ReadOnly Properties (R1-R17)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
 		console.table(results);
@@ -1838,7 +1838,7 @@ var formAccount_DevKitV4 = (function () {
 		const failed = allResults.filter(r => r.Status === "✗").length;
 		const total = allResults.length;
 
-		console.groupCollapsed(`🎯 TEST 8: Lookup Control [${startTime}] - Using: v4_Lookup field - ${passed}/${total}`);
+		console.groupCollapsed(`🎯 [JS] TEST 08: Lookup Control [${startTime}] - Using: v4_Lookup field - ${passed}/${total}`);
 
 		console.log("%c📋 ReadOnly Properties (R1-R16)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
 		console.table(results);
@@ -1972,7 +1972,7 @@ var formAccount_DevKitV4 = (function () {
 		const failed = allResults.filter(r => r.Status === "✗").length;
 		const total = allResults.length;
 
-		console.groupCollapsed(`🎯 TEST 8A: Lookup Multi-Control [${startTime}] - OwnerId vs OwnerId1 - ${passed}/${total}`);
+		console.groupCollapsed(`🎯 [JS] TEST 08A: Lookup Multi-Control [${startTime}] - OwnerId vs OwnerId1 - ${passed}/${total}`);
 
 		console.log("%c📋 ReadOnly Properties (R1-R17) - Comparing both controls", "font-weight: bold; font-size: 14px; color: #4CAF50;");
 		console.table(results);
@@ -2199,7 +2199,7 @@ var formAccount_DevKitV4 = (function () {
 		const failed = allResults.filter(r => r.Status === "✗").length;
 		const total = allResults.length;
 
-		console.groupCollapsed(`🎯 TEST 9: OptionSet Control [${startTime}] - Using: v4_OptionSet field - ${passed}/${total}`);
+		console.groupCollapsed(`🎯 [JS] TEST 09: OptionSet Control [${startTime}] - Using: v4_OptionSet field - ${passed}/${total}`);
 
 		console.log("%c📋 ReadOnly Properties (R1-R18)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
 		console.table(results);
@@ -2404,7 +2404,7 @@ var formAccount_DevKitV4 = (function () {
 		const failed = allResults.filter(r => r.Status === "✗").length;
 		const total = allResults.length;
 
-		console.groupCollapsed(`🎯 TEST 10: MultiOptionSet Control [${startTime}] - Using: v4_MultiOptionSet field - ${passed}/${total}`);
+		console.groupCollapsed(`🎯 [JS] TEST 10: MultiOptionSet Control [${startTime}] - Using: v4_MultiOptionSet field - ${passed}/${total}`);
 
 		console.log("%c📋 ReadOnly Properties (R1-R18)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
 		console.table(results);
@@ -2571,7 +2571,7 @@ var formAccount_DevKitV4 = (function () {
 		const failed = allResults.filter(r => r.Status === "✗").length;
 		const total = allResults.length;
 
-		console.groupCollapsed(`🎯 TEST 11: DateOnly Control [${startTime}] - Using: v4_DateOnly field - ${passed}/${total}`);
+		console.groupCollapsed(`🎯 [JS] TEST 11: DateOnly Control [${startTime}] - Using: v4_DateOnly field - ${passed}/${total}`);
 
 		console.log("%c📋 ReadOnly Properties (R1-R14)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
 		console.table(results);
@@ -2750,7 +2750,7 @@ var formAccount_DevKitV4 = (function () {
 		const failed = allResults.filter(r => r.Status === "✗").length;
 		const total = allResults.length;
 
-		console.groupCollapsed(`🎯 TEST 12: DateTime Control [${startTime}] - Using: v4_DateTime field - ${passed}/${total}`);
+		console.groupCollapsed(`🎯 [JS] TEST 12: DateTime Control [${startTime}] - Using: v4_DateTime field - ${passed}/${total}`);
 
 		console.log("%c📋 ReadOnly Properties (R1-R15)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
 		console.table(results);
@@ -2887,7 +2887,6 @@ var formAccount_DevKitV4 = (function () {
 				// Grid might not be loaded yet. Add OnLoad to verify later.
 				const gridLoadHandler = () => {
 					const delayedRows = form.Grid.Contacts.Rows;
-					console.log(`%c⚡ S8 (Delayed): Grid Loaded. Rows: ${delayedRows?.getLength()}`, "color: #2196F3;");
 				};
 				form.Grid.Contacts.AddOnLoad(gridLoadHandler);
 				methodResults.push({ Test: "S8", Property: "form.Grid.Contacts.Rows.get(0)", Value: "Async Wait...", Status: "✓" });
@@ -2944,7 +2943,7 @@ var formAccount_DevKitV4 = (function () {
 		const failed = allResults.filter(r => r.Status === "✗").length;
 		const total = allResults.length;
 
-		console.groupCollapsed(`🎯 TEST 13: Grid Control [${startTime}] - Using: Contacts subgrid - ${passed}/${total}`);
+		console.groupCollapsed(`🎯 [JS] TEST 13: Grid Control [${startTime}] - Using: Contacts subgrid - ${passed}/${total}`);
 		console.log("%c📋 ReadOnly Properties (R1-R17)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
 		console.table(results);
 		console.log("%c⚡ Setters & Methods (S1-S12)", "font-weight: bold; font-size: 14px; color: #2196F3;");
@@ -3052,7 +3051,7 @@ var formAccount_DevKitV4 = (function () {
 		const failed = allResults.filter(r => r.Status === "✗").length;
 		const total = allResults.length;
 
-		console.groupCollapsed(`🎯 TEST 14: QuickView Control [${startTime}] - Using: ContactQuickForm - ${passed}/${total}`);
+		console.groupCollapsed(`🎯 [JS] TEST 14: QuickView Control [${startTime}] - Using: ContactQuickForm - ${passed}/${total}`);
 		console.log("%c📋 ReadOnly Properties (R1-R9)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
 		console.table(results);
 		console.log("%c⚡ Setters & Methods (S1-S6)", "font-weight: bold; font-size: 14px; color: #2196F3;");
@@ -3134,7 +3133,7 @@ var formAccount_DevKitV4 = (function () {
 		const passed = allResults.filter(r => r.Status === "✓").length;
 		const total = allResults.length;
 
-		console.groupCollapsed(`🎯 TEST 15: NavigationItem [${startTime}] - Using: navContacts - ${passed}/${total}`);
+		console.groupCollapsed(`🎯 [JS] TEST 15: NavigationItem [${startTime}] - Using: navContacts - ${passed}/${total}`);
 		console.log("%c📋 ReadOnly Properties (R1-R3)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
 		console.table(results);
 		console.log("%c⚡ Setters & Methods (S1-S3)", "font-weight: bold; font-size: 14px; color: #2196F3;");
@@ -3273,7 +3272,7 @@ var formAccount_DevKitV4 = (function () {
 		const failed = allResults.filter(r => r.Status === "✗").length;
 		const total = allResults.length;
 
-		console.groupCollapsed(`🎯 TEST 16: ExecutionContext [${startTime}] - ${passed}/${total}`);
+		console.groupCollapsed(`🎯 [JS] TEST 16: ExecutionContext [${startTime}] - ${passed}/${total}`);
 		console.log("%c📋 ReadOnly Properties (R1-R8)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
 		console.table(results);
 		console.log("%c⚡ Setters & Methods (S1-S6)", "font-weight: bold; font-size: 14px; color: #2196F3;");
@@ -3382,7 +3381,7 @@ var formAccount_DevKitV4 = (function () {
 		const failed = allResults.filter(r => r.Status === "✗").length;
 		const total = allResults.length;
 
-		console.groupCollapsed(`🎯 TEST 17: SidePanes [${startTime}] - ${passed}/${total}`);
+		console.groupCollapsed(`🎯 [JS] TEST 17: SidePanes [${startTime}] - ${passed}/${total}`);
 		console.log("%c📋 ReadOnly Properties (R1-R8)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
 		console.table(results);
 		console.log("%c⚡ Setters & Methods (S1-S6)", "font-weight: bold; font-size: 14px; color: #2196F3;");
@@ -3472,7 +3471,7 @@ var formAccount_DevKitV4 = (function () {
 		const failed = allResults.filter(r => r.Status === "✗").length;
 		const total = allResults.length;
 
-		console.groupCollapsed(`🎯 TEST 18: Copilot [${startTime}] - (Preview) - ${passed}/${total}`);
+		console.groupCollapsed(`🎯 [JS] TEST 18: Copilot [${startTime}] - (Preview) - ${passed}/${total}`);
 		console.log("%c📋 ReadOnly Properties (R1-R4)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
 		console.table(results);
 		console.log("%c⚡ Setters & Methods (S1-S4)", "font-weight: bold; font-size: 14px; color: #2196F3;");
@@ -3593,7 +3592,7 @@ var formAccount_DevKitV4 = (function () {
 		const failed = allResults.filter(r => r.Status === "✗").length;
 		const total = allResults.length;
 
-		console.groupCollapsed(`🎯 TEST 19: Process (BPF) [${startTime}] - ${passed}/${total}`);
+		console.groupCollapsed(`🎯 [JS] TEST 19: Process (BPF) [${startTime}] - ${passed}/${total}`);
 		console.log("%c📋 ReadOnly Properties (R1-R9)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
 		console.table(results);
 		console.log("%c⚡ Setters & Methods (S1-S4, S7-S9)", "font-weight: bold; font-size: 14px; color: #2196F3;");
@@ -3673,7 +3672,7 @@ var formAccount_DevKitV4 = (function () {
 		const passed = allResults.filter(r => r.Status === "✓").length;
 		const total = allResults.length;
 
-		console.groupCollapsed(`🎯 TEST 20: IFrame Control [${startTime}] - ${passed}/${total}`);
+		console.groupCollapsed(`🎯 [JS] TEST 20: IFrame Control [${startTime}] - ${passed}/${total}`);
 		console.log("%c📋 ReadOnly Properties (R1-R7)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
 		console.table(results);
 		console.log("%c⚡ Setters & Methods (S1-S5)", "font-weight: bold; font-size: 14px; color: #2196F3;");
@@ -3823,7 +3822,7 @@ var formAccount_DevKitV4 = (function () {
 		const failed = allResults.filter(r => r.Status === "✗").length;
 		const total = allResults.length;
 
-		console.groupCollapsed(`🎯 TEST 22: Tab Control [${startTime}] - Using: TAB_1 & TAB_1_SECTION_1 - ${passed}/${total}`);
+		console.groupCollapsed(`🎯 [JS] TEST 22: Tab Control [${startTime}] - Using: TAB_1 & TAB_1_SECTION_1 - ${passed}/${total}`);
 		console.log("%c📋 ReadOnly Properties (R1-R15)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
 		console.table(results);
 		console.log("%c⚡ Setters & Methods (S1-S7)", "font-weight: bold; font-size: 14px; color: #2196F3;");
@@ -4012,7 +4011,7 @@ var formAccount_DevKitV4 = (function () {
 		const failed = allResults.filter(r => r.Status === "✗").length;
 		const total = allResults.length;
 
-		console.groupCollapsed(`🎯 TEST 21: Utility API [${startTime}] - ${passed}/${total}`);
+		console.groupCollapsed(`🎯 [JS] TEST 21: Utility API [${startTime}] - ${passed}/${total}`);
 		console.log("%c📋 ReadOnly Properties (R1-R51)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
 		console.table(results);
 		console.log("%c⚡ Methods (M1-M37)", "font-weight: bold; font-size: 14px; color: #2196F3;");
@@ -4153,7 +4152,7 @@ var formAccount_DevKitV4 = (function () {
 		const failed = allResults.filter(r => r.Status === "✗").length;
 		const total = allResults.length;
 
-		console.groupCollapsed(`🎯 TEST 22: Tab Control [${startTime}] - Using: TAB_1 & TAB_1_SECTION_1 - ${passed}/${total}`);
+		console.groupCollapsed(`🎯 [JS] TEST 22: Tab Control [${startTime}] - Using: TAB_1 & TAB_1_SECTION_1 - ${passed}/${total}`);
 		console.log("%c📋 ReadOnly Properties (R1-R11)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
 		console.table(results);
 		console.log("%c⚡ Setters & Methods (S1-S7)", "font-weight: bold; font-size: 14px; color: #2196F3;");
@@ -4171,7 +4170,7 @@ var formAccount_DevKitV4 = (function () {
 	 * Timer extends IControl with specific Refresh method and State property
 	 */
 	function TestTimer() {
-		console.log('⏭️ TEST 23: Timer Control - SKIPPED (v4_TimerSLA not on form)');
+		console.log('🎯 [JS] TEST 23: Timer Control - SKIPPED (v4_TimerSLA not on form)');
 		return true;
 	}
 
@@ -4180,7 +4179,7 @@ var formAccount_DevKitV4 = (function () {
 	 * Knowledge extends IControl with SearchQuery, SelectedResults and specific events
 	 */
 	function TestKnowledge() {
-		console.log('⏭️ TEST 24: Knowledge Control - SKIPPED (v4_KnowledgeSearch not on form)');
+		console.log('🎯 [JS] TEST 24: Knowledge Control - SKIPPED (v4_KnowledgeSearch not on form)');
 		return true;
 	}
 
@@ -4418,7 +4417,7 @@ var formAccount_DevKitV4 = (function () {
 		const failed = allResults.filter(r => r.Status === "✗").length;
 		const total = allResults.length;
 
-		console.groupCollapsed(`🎯 TEST 25: WebApi [${startTime}] - ${passed}/${total}`);
+		console.groupCollapsed(`🎯 [JS] TEST 25: WebApi [${startTime}] - ${passed}/${total}`);
 		console.log("%c📋 AccountApi Factory Tests (R1-R5)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
 		console.table(results);
 		console.log("%c⚡ WebApi Methods (S1-S8)", "font-weight: bold; font-size: 14px; color: #2196F3;");
@@ -4545,7 +4544,7 @@ var formAccount_DevKitV4 = (function () {
 		const failed = allResults.filter(r => r.Status === "✗").length;
 		const total = allResults.length;
 
-		console.groupCollapsed(`🎯 TEST 26: WebResource Control [${startTime}] - Using: WebResource_DevKitV4 - ${passed}/${total}`);
+		console.groupCollapsed(`🎯 [JS] TEST 26: WebResource Control [${startTime}] - Using: WebResource_DevKitV4 - ${passed}/${total}`);
 		console.log("%c📋 ReadOnly Properties (R1-R8)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
 		console.table(results);
 		console.log("%c⚡ Setters & Methods (S1-S5)", "font-weight: bold; font-size: 14px; color: #2196F3;");
