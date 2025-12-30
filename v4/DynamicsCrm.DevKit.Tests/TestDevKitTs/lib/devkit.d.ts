@@ -1766,7 +1766,7 @@ declare namespace DevKit {
              * @param errorCallback A function to call when the operation fails
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getcontentwindow
              */
-            ContentWindow(successCallback?: (contentWindow: any) => void, errorCallback?: (error: any) => void): void;
+            ContentWindow(successCallback?: (contentWindow: any) => void, errorCallback?: (error: IXrmError) => void): void;
 
             /**
              * Returns the object in the form that represents a web resource
@@ -1800,7 +1800,7 @@ declare namespace DevKit {
              * @param errorCallback A function to call when the operation fails
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getcontentwindow
              */
-            ContentWindow(successCallback?: (contentWindow: any) => void, errorCallback?: (error: any) => void): void;
+            ContentWindow(successCallback?: (contentWindow: any) => void, errorCallback?: (error: IXrmError) => void): void;
 
             /**
              * Returns the default URL that an IFRAME control is configured to display
@@ -1974,7 +1974,7 @@ declare namespace DevKit {
          * @param errorCallback A function to call when the save fails
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data/save
          */
-        Save(saveOptions?: { saveMode: OptionSet.SaveMode }, successCallback?: () => void, errorCallback?: (error: any) => void): Promise<void> | void;
+        Save(saveOptions?: { saveMode: OptionSet.SaveMode }, successCallback?: () => void, errorCallback?: (error: IXrmError) => void): Promise<void> | void;
 
         /**
          * Asynchronously refreshes the data of the form without reloading the page
@@ -1983,7 +1983,7 @@ declare namespace DevKit {
          * @param errorCallback A function to call when the refresh fails
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data/refresh
          */
-        Refresh(save?: boolean, successCallback?: () => void, errorCallback?: (error: any) => void): Promise<void> | void;
+        Refresh(save?: boolean, successCallback?: () => void, errorCallback?: (error: IXrmError) => void): Promise<void> | void;
 
         /**
          * Closes the form
@@ -2160,14 +2160,69 @@ declare namespace DevKit {
     }
 
     /**
+     * Currency lookup object returned by organizationSettings.baseCurrency and userSettings.transactionCurrency
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#basecurrency
+     */
+    interface ICurrencyLookup {
+        /** GUID of the currency record */
+        id: string;
+        /** Entity type name (always "transactioncurrency") */
+        entityType: string;
+        /** Display name of the currency (e.g., "US Dollar") */
+        name: string;
+    }
+
+    /**
+     * Security role object returned by userSettings.roles
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#roles
+     */
+    interface ISecurityRole {
+        /** GUID of the security role or team */
+        id: string;
+        /** Name of the security role or team */
+        name: string;
+    }
+
+    /**
+     * Date formatting info returned by userSettings.dateFormattingInfo
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#dateformattinginfo
+     */
+    interface IDateFormattingInfo {
+        /** First day of the week (0=Sunday, 1=Monday, etc.) */
+        FirstDayOfWeek: number;
+        /** Long date pattern (e.g., "dddd, MMMM d, yyyy") */
+        LongDatePattern: string;
+        /** Month/day pattern (e.g., "MMMM d") */
+        MonthDayPattern: string;
+        /** Time separator (e.g., ":") */
+        TimeSeparator: string;
+        /** AM designator (e.g., "AM") */
+        AMDesignator: string;
+        /** PM designator (e.g., "PM") */
+        PMDesignator: string;
+        /** Short date pattern (e.g., "M/d/yyyy") */
+        ShortDatePattern: string;
+        /** Short time pattern (e.g., "h:mm tt") */
+        ShortTimePattern: string;
+        /** Long time pattern (e.g., "h:mm:ss tt") */
+        LongTimePattern: string;
+        /** Date separator (e.g., "/") */
+        DateSeparator: string;
+        /** Year/month pattern (e.g., "MMMM yyyy") */
+        YearMonthPattern: string;
+        /** Calendar type */
+        Calendar: { MinSupportedDateTime: string; MaxSupportedDateTime: string };
+    }
+
+    /**
      * Interface for Organization Settings
      * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings
      */
     interface IOrganizationSettings {
         /** Organization attributes */
-        readonly Attributes: any;
+        readonly Attributes: { [key: string]: any };
         /** Base currency of the organization */
-        readonly BaseCurrency: any;
+        readonly BaseCurrency: ICurrencyLookup;
         /** GUID of the base currency */
         readonly BaseCurrencyId: string;
         /** Default country code for the organization */
@@ -2196,7 +2251,7 @@ declare namespace DevKit {
      */
     interface IUserSettings {
         /** Date formatting information */
-        readonly DateFormattingInfo: any;
+        readonly DateFormattingInfo: IDateFormattingInfo;
         /** GUID of the default dashboard */
         readonly DefaultDashboardId: string;
         /** Whether guided help is enabled */
@@ -2208,7 +2263,7 @@ declare namespace DevKit {
         /** Language ID of the user */
         readonly LanguageId: number;
         /** User's security roles */
-        readonly Roles: any;
+        readonly Roles: ISecurityRole[];
         /** User's security role privileges */
         readonly SecurityRolePrivileges: string[];
         /** User's security roles */
@@ -2216,13 +2271,24 @@ declare namespace DevKit {
         /** User's time zone offset in minutes */
         readonly TimeZoneOffsetMinutes: number;
         /** User's transaction currency */
-        readonly TransactionCurrency: any;
+        readonly TransactionCurrency: ICurrencyLookup;
         /** GUID of the user's transaction currency */
         readonly TransactionCurrencyId: string;
         /** GUID of the user */
         readonly UserId: string;
         /** User's full name */
         readonly UserName: string;
+    }
+
+    /**
+     * Standard error object returned by Xrm API error callbacks
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility
+     */
+    interface IXrmError {
+        /** Numeric error code */
+        errorCode: number;
+        /** Error message describing the issue */
+        message: string;
     }
 
     /**
@@ -2357,7 +2423,7 @@ declare namespace DevKit {
          * @param errorCallback Function called if there is an error
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app/addglobalnotification
          */
-        AddGlobalNotification(notification: any, successCallback?: (id: string) => void, errorCallback?: (error: any) => void): Promise<string> | void;
+        AddGlobalNotification(notification: any, successCallback?: (id: string) => void, errorCallback?: (error: IXrmError) => void): Promise<string> | void;
 
         /**
          * Closes the progress indicator dialog
@@ -2370,13 +2436,13 @@ declare namespace DevKit {
          * @param uniqueId The ID of the notification to clear
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app/clearglobalnotification
          */
-        ClearGlobalNotification(uniqueId: string, successCallback?: () => void, errorCallback?: (error: any) => void): Promise<void> | void;
+        ClearGlobalNotification(uniqueId: string, successCallback?: () => void, errorCallback?: (error: IXrmError) => void): Promise<void> | void;
 
         /**
          * Gets the name of the current app
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/getcurrentappname
          */
-        CurrentAppName(successCallback?: (name: string) => void, errorCallback?: (error: any) => void): Promise<string> | void;
+        CurrentAppName(successCallback?: (name: string) => void, errorCallback?: (error: IXrmError) => void): Promise<string> | void;
 
         /**
          * Gets metadata for an entity
@@ -2384,7 +2450,7 @@ declare namespace DevKit {
          * @param attributes Array of attribute names to retrieve
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getentitymetadata
          */
-        EntityMetadata(entityName: string, attributes?: string[], successCallback?: (metadata: any) => void, errorCallback?: (error: any) => void): Promise<any> | void;
+        EntityMetadata(entityName: string, attributes?: string[], successCallback?: (metadata: any) => void, errorCallback?: (error: IXrmError) => void): Promise<any> | void;
 
         /**
          * Invokes a process action
@@ -2392,14 +2458,14 @@ declare namespace DevKit {
          * @param parameters Parameters to pass to the action
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/invokeprocessaction
          */
-        InvokeProcessAction(name: string, parameters: any, successCallback?: (result: any) => void, errorCallback?: (error: any) => void): Promise<any> | void;
+        InvokeProcessAction(name: string, parameters: any, successCallback?: (result: any) => void, errorCallback?: (error: IXrmError) => void): Promise<any> | void;
 
         /**
          * Opens a lookup dialog
          * @param lookupOptions Options for the lookup dialog
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/lookupobjects
          */
-        LookupObjects(lookupOptions: any, successCallback?: (result: any[]) => void, errorCallback?: (error: any) => void): Promise<any[]> | void;
+        LookupObjects(lookupOptions: any, successCallback?: (result: any[]) => void, errorCallback?: (error: IXrmError) => void): Promise<any[]> | void;
 
         /**
          * Navigates to the specified page
@@ -2407,7 +2473,7 @@ declare namespace DevKit {
          * @param navigationOptions Navigation options
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/navigateto
          */
-        NavigateTo(pageInput: any, navigationOptions: any, successCallback?: () => void, errorCallback?: (error: any) => void): Promise<void> | void;
+        NavigateTo(pageInput: any, navigationOptions: any, successCallback?: () => void, errorCallback?: (error: IXrmError) => void): Promise<void> | void;
 
         /**
          * Displays an alert dialog
@@ -2415,7 +2481,7 @@ declare namespace DevKit {
          * @param alertOptions Options for the alert dialog
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/openalertdialog
          */
-        OpenAlertDialog(alertStrings: { confirmButtonLabel?: string; text: string; title?: string }, alertOptions?: { height?: number; width?: number }, closeCallback?: () => void, errorCallback?: (error: any) => void): Promise<void> | void;
+        OpenAlertDialog(alertStrings: { confirmButtonLabel?: string; text: string; title?: string }, alertOptions?: { height?: number; width?: number }, closeCallback?: () => void, errorCallback?: (error: IXrmError) => void): Promise<void> | void;
 
         /**
          * Displays a confirm dialog
@@ -2423,14 +2489,14 @@ declare namespace DevKit {
          * @param confirmOptions Options for the confirm dialog
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/openconfirmdialog
          */
-        OpenConfirmDialog(confirmStrings: { cancelButtonLabel?: string; confirmButtonLabel?: string; subtitle?: string; text: string; title?: string }, confirmOptions?: { height?: number; width?: number }, successCallback?: (result: { confirmed: boolean }) => void, errorCallback?: (error: any) => void): Promise<{ confirmed: boolean }> | void;
+        OpenConfirmDialog(confirmStrings: { cancelButtonLabel?: string; confirmButtonLabel?: string; subtitle?: string; text: string; title?: string }, confirmOptions?: { height?: number; width?: number }, successCallback?: (result: { confirmed: boolean }) => void, errorCallback?: (error: IXrmError) => void): Promise<{ confirmed: boolean }> | void;
 
         /**
          * Displays an error dialog
          * @param errorOptions Options for the error dialog
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/openerrordialog
          */
-        OpenErrorDialog(errorOptions: { details?: string; errorCode?: number; message?: string }, successCallback?: () => void, errorCallback?: (error: any) => void): Promise<void> | void;
+        OpenErrorDialog(errorOptions: { details?: string; errorCode?: number; message?: string }, successCallback?: () => void, errorCallback?: (error: IXrmError) => void): Promise<void> | void;
 
         /**
          * Opens an entity form
@@ -2438,7 +2504,7 @@ declare namespace DevKit {
          * @param formParameters Parameters to pass to the form
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/openform
          */
-        OpenForm(entityFormOptions: IEntityFormOptions, formParameters?: any, successCallback?: (result: any) => void, errorCallback?: (error: any) => void): Promise<any> | void;
+        OpenForm(entityFormOptions: IEntityFormOptions, formParameters?: any, successCallback?: (result: any) => void, errorCallback?: (error: IXrmError) => void): Promise<any> | void;
 
         /**
          * Opens a URL
@@ -2485,38 +2551,38 @@ declare namespace DevKit {
          * @param imageOptions Options for the image capture
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-device/captureimage
          */
-        CaptureImage(imageOptions?: any, successCallback?: (result: any) => void, errorCallback?: (error: any) => void): Promise<any> | void;
+        CaptureImage(imageOptions?: any, successCallback?: (result: any) => void, errorCallback?: (error: IXrmError) => void): Promise<any> | void;
 
         /**
          * Captures audio using the device microphone
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-device/captureaudio
          */
-        CaptureAudio(successCallback?: (result: any) => void, errorCallback?: (error: any) => void): Promise<any> | void;
+        CaptureAudio(successCallback?: (result: any) => void, errorCallback?: (error: IXrmError) => void): Promise<any> | void;
 
         /**
          * Captures video using the device camera
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-device/capturevideo
          */
-        CaptureVideo(successCallback?: (result: any) => void, errorCallback?: (error: any) => void): Promise<any> | void;
+        CaptureVideo(successCallback?: (result: any) => void, errorCallback?: (error: IXrmError) => void): Promise<any> | void;
 
         /**
          * Gets the barcode value using the device camera
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-device/getbarcodevalue
          */
-        BarcodeValue(successCallback?: (result: string) => void, errorCallback?: (error: any) => void): Promise<string> | void;
+        BarcodeValue(successCallback?: (result: string) => void, errorCallback?: (error: IXrmError) => void): Promise<string> | void;
 
         /**
          * Opens a file picker dialog
          * @param pickFileOptions Options for the file picker
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-device/pickfile
          */
-        PickFile(pickFileOptions?: IPickFileOptions, successCallback?: (result: IFileData[]) => void, errorCallback?: (error: any) => void): Promise<IFileData[]> | void;
+        PickFile(pickFileOptions?: IPickFileOptions, successCallback?: (result: IFileData[]) => void, errorCallback?: (error: IXrmError) => void): Promise<IFileData[]> | void;
 
         /**
          * Gets the current geographical position
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-device/getcurrentposition
          */
-        CurrentPosition(successCallback?: (result: any) => void, errorCallback?: (error: any) => void): Promise<any> | void;
+        CurrentPosition(successCallback?: (result: any) => void, errorCallback?: (error: IXrmError) => void): Promise<any> | void;
 
         /**
          * Gets the advanced configuration setting
@@ -2531,13 +2597,13 @@ declare namespace DevKit {
          * @param stateCode The state code
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getallowedstatustransitions
          */
-        AllowedStatusTransitions(entityName: string, stateCode: number, successCallback?: (result: any) => void, errorCallback?: (error: any) => void): Promise<any> | void;
+        AllowedStatusTransitions(entityName: string, stateCode: number, successCallback?: (result: any) => void, errorCallback?: (error: IXrmError) => void): Promise<any> | void;
 
         /**
          * Gets the current app properties
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/getcurrentappproperties
          */
-        CurrentAppProperties(successCallback?: (result: any) => void, errorCallback?: (error: any) => void): Promise<any> | void;
+        CurrentAppProperties(successCallback?: (result: any) => void, errorCallback?: (error: IXrmError) => void): Promise<any> | void;
 
         /**
          * Gets entity main form descriptor
@@ -2654,7 +2720,7 @@ declare namespace DevKit {
          * @param errorCallback Function called when there is an error
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app/xrm-app-sidepanes/createpane
          */
-        Create(paneOptions: ISidePaneOptions, successCallback?: (pane: ISidePane) => void, errorCallback?: (error: any) => void): Promise<ISidePane> | void;
+        Create(paneOptions: ISidePaneOptions, successCallback?: (pane: ISidePane) => void, errorCallback?: (error: IXrmError) => void): Promise<ISidePane> | void;
 
         /**
          * Gets a pane by ID
@@ -2720,7 +2786,7 @@ declare namespace DevKit {
         /** Specify whether the pane should be selected or expanded. */
         select(): void;
         /** Opens a page within the selected pane. This is similar to the navigateTo method. */
-        navigate(pageInput: any, navigationOptions?: any, successCallback?: (result: any) => void, errorCallback?: (error: any) => void): void;
+        navigate(pageInput: any, navigationOptions?: any, successCallback?: (result: any) => void, errorCallback?: (error: IXrmError) => void): void;
         /** Badge count to display on the pane tab. */
         badge?: number;
     }
@@ -2785,7 +2851,7 @@ declare namespace DevKit {
          * @param errorCallback Function called when the operation fails
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi/createrecord
          */
-        CreateRecord(entityLogicalName: string, data: any, successCallback?: (result: { id: string; entityType: string }) => void, errorCallback?: (error: any) => void): Promise<{ id: string; entityType: string }> | void;
+        CreateRecord(entityLogicalName: string, data: any, successCallback?: (result: { id: string; entityType: string }) => void, errorCallback?: (error: IXrmError) => void): Promise<{ id: string; entityType: string }> | void;
 
         /**
          * Deletes an entity record
@@ -2795,7 +2861,7 @@ declare namespace DevKit {
          * @param errorCallback Function called when the operation fails
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi/deleterecord
          */
-        DeleteRecord(entityLogicalName: string, id: string, successCallback?: (result: { id: string; entityType: string }) => void, errorCallback?: (error: any) => void): Promise<{ id: string; entityType: string }> | void;
+        DeleteRecord(entityLogicalName: string, id: string, successCallback?: (result: { id: string; entityType: string }) => void, errorCallback?: (error: IXrmError) => void): Promise<{ id: string; entityType: string }> | void;
 
         /**
          * Retrieves an entity record
@@ -2806,7 +2872,7 @@ declare namespace DevKit {
          * @param errorCallback Function called when the operation fails
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi/retrieverecord
          */
-        RetrieveRecord(entityLogicalName: string, id: string, options?: string, successCallback?: (result: any) => void, errorCallback?: (error: any) => void): Promise<any> | void;
+        RetrieveRecord(entityLogicalName: string, id: string, options?: string, successCallback?: (result: any) => void, errorCallback?: (error: IXrmError) => void): Promise<any> | void;
 
         /**
          * Retrieves a single record and maps it using the provided constructor or factory function (Promise-based)
@@ -2828,8 +2894,8 @@ declare namespace DevKit {
          * @param successCallback Function called when the record is retrieved successfully
          * @param errorCallback Function called when the operation fails
          */
-        RetrieveRecord<T>(apiConstructorOrFactory: ((data: any) => T) | (new (data: any) => T), entityLogicalName: string, id: string, successCallback: (result: T) => void, errorCallback?: (error: any) => void): void;
-        RetrieveRecord<T>(apiConstructorOrFactory: ((data: any) => T) | (new (data: any) => T), entityLogicalName: string, id: string, options: string, successCallback: (result: T) => void, errorCallback?: (error: any) => void): void;
+        RetrieveRecord<T>(apiConstructorOrFactory: ((data: any) => T) | (new (data: any) => T), entityLogicalName: string, id: string, successCallback: (result: T) => void, errorCallback?: (error: IXrmError) => void): void;
+        RetrieveRecord<T>(apiConstructorOrFactory: ((data: any) => T) | (new (data: any) => T), entityLogicalName: string, id: string, options: string, successCallback: (result: T) => void, errorCallback?: (error: IXrmError) => void): void;
 
         /**
          * Retrieves a collection of entity records
@@ -2840,7 +2906,7 @@ declare namespace DevKit {
          * @param errorCallback Function called when the operation fails
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi/retrievemultiplerecords
          */
-        RetrieveMultipleRecords(entityLogicalName: string, options?: string, maxPageSize?: number, successCallback?: (result: { entities: any[]; nextLink?: string }) => void, errorCallback?: (error: any) => void): Promise<{ entities: any[]; nextLink?: string }> | void;
+        RetrieveMultipleRecords(entityLogicalName: string, options?: string, maxPageSize?: number, successCallback?: (result: { entities: any[]; nextLink?: string }) => void, errorCallback?: (error: IXrmError) => void): Promise<{ entities: any[]; nextLink?: string }> | void;
 
         /**
          * Retrieves multiple records and maps them using the provided constructor or factory function (Promise-based)
@@ -2862,8 +2928,8 @@ declare namespace DevKit {
          * @returns A promise that resolves to an array of typed instances
          */
         RetrieveRecords<T>(apiConstructorOrFactory: ((data: any) => T) | (new (data: any) => T), fetchXml: string, maxPageSize?: number): Promise<T[]>;
-        RetrieveRecords<T>(apiConstructorOrFactory: ((data: any) => T) | (new (data: any) => T), entityLogicalName: string, options: string, successCallback: (result: T[]) => void, errorCallback?: (error: any) => void): void;
-        RetrieveRecords<T>(apiConstructorOrFactory: ((data: any) => T) | (new (data: any) => T), entityLogicalName: string, options: string, maxPageSize: number, successCallback: (result: T[]) => void, errorCallback?: (error: any) => void): void;
+        RetrieveRecords<T>(apiConstructorOrFactory: ((data: any) => T) | (new (data: any) => T), entityLogicalName: string, options: string, successCallback: (result: T[]) => void, errorCallback?: (error: IXrmError) => void): void;
+        RetrieveRecords<T>(apiConstructorOrFactory: ((data: any) => T) | (new (data: any) => T), entityLogicalName: string, options: string, maxPageSize: number, successCallback: (result: T[]) => void, errorCallback?: (error: IXrmError) => void): void;
 
         /**
          * Updates an entity record
@@ -2874,7 +2940,7 @@ declare namespace DevKit {
          * @param errorCallback Function called when the operation fails
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi/updaterecord
          */
-        UpdateRecord(entityLogicalName: string, id: string, data: any, successCallback?: (result: { id: string; entityType: string }) => void, errorCallback?: (error: any) => void): Promise<{ id: string; entityType: string }> | void;
+        UpdateRecord(entityLogicalName: string, id: string, data: any, successCallback?: (result: { id: string; entityType: string }) => void, errorCallback?: (error: IXrmError) => void): Promise<{ id: string; entityType: string }> | void;
 
         /**
          * Executes a single action, function, or CRUD operation
@@ -2883,7 +2949,7 @@ declare namespace DevKit {
          * @param errorCallback Function called when the operation fails
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi/online/execute
          */
-        Execute(request: IWebApiRequest, successCallback?: (result: any) => void, errorCallback?: (error: any) => void): Promise<any> | void;
+        Execute(request: IWebApiRequest, successCallback?: (result: any) => void, errorCallback?: (error: IXrmError) => void): Promise<any> | void;
 
         /**
          * Executes a collection of action, function, or CRUD operations
@@ -2892,7 +2958,7 @@ declare namespace DevKit {
          * @param errorCallback Function called when the operation fails
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi/online/executemultiple
          */
-        ExecuteMultiple(requests: IWebApiRequest[], successCallback?: (result: any[]) => void, errorCallback?: (error: any) => void): Promise<any[]> | void;
+        ExecuteMultiple(requests: IWebApiRequest[], successCallback?: (result: any[]) => void, errorCallback?: (error: IXrmError) => void): Promise<any[]> | void;
 
         /**
          * Contains methods to execute operations that will be executed against the server even when the user is offline
@@ -2919,7 +2985,7 @@ declare namespace DevKit {
          * @param errorCallback The function that will be passed through and be called by a failed response
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi/online/execute
          */
-        Execute(request: IWebApiRequest, successCallback?: (result: any) => void, errorCallback?: (error: any) => void): Promise<any> | void;
+        Execute(request: IWebApiRequest, successCallback?: (result: any) => void, errorCallback?: (error: IXrmError) => void): Promise<any> | void;
 
         /**
          * Execute a collection of action, function, or CRUD operations that will be executed against the server even when the user is offline
@@ -2928,7 +2994,7 @@ declare namespace DevKit {
          * @param errorCallback The function that will be passed through and be called by a failed response
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi/online/executemultiple
          */
-        ExecuteMultiple(requests: IWebApiRequest[], successCallback?: (result: any[]) => void, errorCallback?: (error: any) => void): Promise<any[]> | void;
+        ExecuteMultiple(requests: IWebApiRequest[], successCallback?: (result: any[]) => void, errorCallback?: (error: IXrmError) => void): Promise<any[]> | void;
     }
 
     /**
@@ -2960,7 +3026,7 @@ declare namespace DevKit {
          * @param successCallback Function called on success
          * @param errorCallback Function called on error
          */
-        ExecuteEvent(eventName: string, eventParameters: any, successCallback?: (result: any) => void, errorCallback?: (error: any) => void): Promise<any> | void;
+        ExecuteEvent(eventName: string, eventParameters: any, successCallback?: (result: any) => void, errorCallback?: (error: IXrmError) => void): Promise<any> | void;
 
         /**
          * Executes a Copilot prompt
@@ -2968,7 +3034,7 @@ declare namespace DevKit {
          * @param successCallback Function called on success
          * @param errorCallback Function called on error
          */
-        ExecutePrompt(promptText: string, successCallback?: (result: any) => void, errorCallback?: (error: any) => void): Promise<any> | void;
+        ExecutePrompt(promptText: string, successCallback?: (result: any) => void, errorCallback?: (error: IXrmError) => void): Promise<any> | void;
     }
 
 
