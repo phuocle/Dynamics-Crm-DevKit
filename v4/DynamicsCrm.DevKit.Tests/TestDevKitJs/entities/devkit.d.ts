@@ -1475,12 +1475,20 @@ declare namespace DevKit {
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
          */
         interface File extends IControl {
+            /**
+             * Returns the data value of the file control
+             */
+            readonly Value: any;
         }
         /**
          * Interface for image controls
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
          */
-        interface Image {
+        interface Image extends IControl {
+            /**
+             * Returns the data value of the image control
+             */
+            readonly Value: any;
         }
         /**
          * Interface for quick view form controls
