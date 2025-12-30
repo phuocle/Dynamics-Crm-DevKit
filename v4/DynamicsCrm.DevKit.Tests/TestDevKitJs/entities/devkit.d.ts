@@ -12,18 +12,15 @@ declare namespace DevKit {
      * @example "00000000-0000-0000-0000-000000000000"
      */
     type Guid = `${string}-${string}-${string}-${string}-${string}`;
-
     /**
      * Callback function type for successful operations.
      * @template T The type of result passed to the callback
      */
     type SuccessCallback<T> = (result: T) => void;
-
     /**
      * Callback function type for failed operations.
      */
     type ErrorCallback = (error: Error) => void;
-
     namespace Controls {
         interface IControl {
             /**
@@ -73,7 +70,7 @@ declare namespace DevKit {
              */
             ClearNotification(uniqueId: string): boolean;
             /**
-             * Displays an error message for the control to indicate that data isn?t valid. When this method is used,  a red "X" icon appears next to the control. On Dynamics 365 for Customer Engagement apps mobile clients, tapping on the icon will display the message
+             * Displays an error message for the control to indicate that data isn't valid. When this method is used,  a red "X" icon appears next to the control. On Dynamics 365 for Customer Engagement apps mobile clients, tapping on the icon will display the message
              * @param message The message to display
              * @param uniqueId The ID to use to clear this message when using the clearNotification method
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/setnotification
@@ -87,7 +84,7 @@ declare namespace DevKit {
              */
             SetIsValid(valid: boolean, message: string): void
             /**
-             * Returns the attribute that the control is bound to. Controls that aren?t bound to an attribute (subgrid, web resource, and IFRAME) don?t have this method. An error will be thrown if you attempt to use this method on one of these controls
+             * Returns the attribute that the control is bound to. Controls that aren't bound to an attribute (subgrid, web resource, and IFRAME) don't have this method. An error will be thrown if you attempt to use this method on one of these controls
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getattribute
              * */
             readonly Attribute: any
@@ -347,6 +344,159 @@ declare namespace DevKit {
              */
             Status: OptionSet.ProcessStatus;
         }
+        /**
+         * Represents a stage in a business process flow
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/stage
+         */
+        interface ProcessStage {
+            /**
+             * Returns the status of the stage
+             * @param callback
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/stage/getnavigationbehavior
+             */
+            AllowCreateNew(callback: (executionContext: any) => boolean): void;
+            /**
+             * Returns the integer value of the business process flow category
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formContext-data-process/stage/getCategory
+             */
+            readonly Category: OptionSet.ProcessCategory;
+            /**
+             * Returns the logical name of the entity associated with the stage
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/stage/getentityname
+             */
+            readonly EntityName: String;
+            /**
+             * Returns the unique identifier of the stage
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/stage/getid
+             */
+            readonly Id: string;
+            /**
+             * Returns the name of the stage
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/stage/getname
+             */
+            readonly Name: string;
+            /**
+             * Returns the status of the stage
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/stage/getstatus
+             */
+            readonly Status: OptionSet.ProcessStageStatus;
+            /**
+             * Returns a navigation behavior object for a stage that can be used to define whether the Create button is available for users to create other entity record in a cross-entity business process flow navigation scenario.
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/stage/getsteps
+             */
+            Steps: Array<ProcessStep>;
+        }
+        /**
+ * Represents a step within a business process flow stage
+ * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/step
+ */
+        interface ProcessStep {
+            /**
+             * Updates the progress of the action step. This method is supported only for the action steps. Action steps are buttons on the business process stages that users can click to trigger an on-demand workflow or action. Action step is a preview feature introduced in the Dynamics 365 for Customer Engagement apps version 9.0 release
+             * @param stepProgress Specify the step progress
+             * @param message An optional message that is set as the Alt text on the icon for the step
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/step/setprogress
+             */
+            SetProgress(stepProgress: OptionSet.ProcessProgress, message?: string): void;
+            /**
+             * Returns the logical name of the attribute associated to the step
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/step/getattribute
+             */
+            readonly Attribute: string;
+            /**
+             * Returns the name of the step
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/step/getname
+             */
+            readonly Name: string;
+            /**
+             * Returns the progress of the action step. This method is supported only for the action steps; not for the data steps. Action steps are buttons on the business process stages that users can click to trigger an on-demand workflow or action. Action step is a preview feature introduced in the Dynamics 365 for Customer Engagement apps version 9.0 release
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/step/getprogress
+             */
+            readonly Progress: OptionSet.ProcessProgress;
+            /**
+             * Returns a boolean value indicating whether the step is required in the business process flow
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/step/isrequired
+             * */
+            readonly Required: boolean;
+        }
+        /**
+         * Represents a business process flow instance for a record
+         * @remarks All property values except CreatedOnDate are of String type
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/getprocessinstances
+         */
+        interface ProcessInstance extends ProcessEnabled {
+            /**
+             * The date and time when the process instance was created (String format)
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/getprocessinstances
+             */
+            readonly CreatedOn: string;
+            /**
+             * The date and time when the process instance was created (Date type)
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/getprocessinstances
+             */
+            readonly CreatedOnDate: Date;
+            /**
+             * The unique identifier of the process instance
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/getprocessinstances
+             */
+            readonly InstanceId: Guid;
+            /**
+             * The name of the process instance
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/getprocessinstances
+             */
+            readonly InstanceName: string;
+            /**
+             * The status of the process instance
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/getprocessinstances
+             */
+            readonly Status: OptionSet.ProcessStatus;
+        }
+        /**
+         * Represents the enabled process information for a record
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/getprocessinstances
+         */
+        interface ProcessEnabled {
+            /**
+             * The unique identifier of the process definition
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/getprocessinstances
+             */
+            readonly ProcessId: Guid;
+            /**
+             * The name of the process definition
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/getprocessinstances
+             */
+            readonly ProcessName: string;
+        }
+        /**
+         * Represents the current active business process flow definition
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/process
+         */
+        interface ProcessProcess {
+            /**
+             * Returns the unique identifier of the process
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/process/getid
+             */
+            readonly Id: Guid;
+            /**
+             * Returns the name of the process
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/process/getname
+             */
+            readonly Name: string;
+            /**
+             * Returns a boolean value indicating whether the process is rendered
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/process/isrendered
+             */
+            readonly IsRendered: boolean;
+            /**
+             * Returns a collection of stages in the process
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/process/getstages
+             */
+            Stages: Collections<ProcessStage>;
+        }
+        /**
+         * Provides information about the relationship used to filter a subgrid
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/gridcontrol/getrelationship
+         */
         /**
          * Interface for Dialog forms (quick create dialogs, etc.)
          * Dialog forms contain fields and a Close method
@@ -1771,7 +1921,6 @@ declare namespace DevKit {
              */
             logicalName: string;
         }
-
         /**
          * Object passed to OfflineErrorCallbackDelegate.
          */
@@ -1781,7 +1930,6 @@ declare namespace DevKit {
              */
             debugMessage: string;
         }
-
         /**
          * Interface for asynchronous promises. Based on JQuery Promise
          */
@@ -2457,159 +2605,6 @@ declare namespace DevKit {
         /** Whether the user has create privilege for this field */
         readonly canCreate: boolean;
     }
-    /**
-     * Represents a stage in a business process flow
-     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/stage
-     */
-    interface ProcessStage {
-        /**
-         * Returns the status of the stage
-         * @param callback
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/stage/getnavigationbehavior
-         */
-        AllowCreateNew(callback: (executionContext: any) => boolean): void;
-        /**
-         * Returns the integer value of the business process flow category
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formContext-data-process/stage/getCategory
-         */
-        readonly Category: OptionSet.ProcessCategory;
-        /**
-         * Returns the logical name of the entity associated with the stage
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/stage/getentityname
-         */
-        readonly EntityName: String;
-        /**
-         * Returns the unique identifier of the stage
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/stage/getid
-         */
-        readonly Id: string;
-        /**
-         * Returns the name of the stage
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/stage/getname
-         */
-        readonly Name: string;
-        /**
-         * Returns the status of the stage
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/stage/getstatus
-         */
-        readonly Status: OptionSet.ProcessStageStatus;
-        /**
-         * Returns a navigation behavior object for a stage that can be used to define whether the Create button is available for users to create other entity record in a cross-entity business process flow navigation scenario.
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/stage/getsteps
-         */
-        Steps: Array<ProcessStep>;
-    }
-    /**
-     * Represents a step within a business process flow stage
-     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/step
-     */
-    interface ProcessStep {
-        /**
-         * Updates the progress of the action step. This method is supported only for the action steps. Action steps are buttons on the business process stages that users can click to trigger an on-demand workflow or action. Action step is a preview feature introduced in the Dynamics 365 for Customer Engagement apps version 9.0 release
-         * @param stepProgress Specify the step progress
-         * @param message An optional message that is set as the Alt text on the icon for the step
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/step/setprogress
-         */
-        SetProgress(stepProgress: OptionSet.ProcessProgress, message?: string): void;
-        /**
-         * Returns the logical name of the attribute associated to the step
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/step/getattribute
-         */
-        readonly Attribute: string;
-        /**
-         * Returns the name of the step
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/step/getname
-         */
-        readonly Name: string;
-        /**
-         * Returns the progress of the action step. This method is supported only for the action steps; not for the data steps. Action steps are buttons on the business process stages that users can click to trigger an on-demand workflow or action. Action step is a preview feature introduced in the Dynamics 365 for Customer Engagement apps version 9.0 release
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/step/getprogress
-         */
-        readonly Progress: OptionSet.ProcessProgress;
-        /**
-         * Returns a boolean value indicating whether the step is required in the business process flow
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/step/isrequired
-         * */
-        readonly Required: boolean;
-    }
-    /**
-     * Represents a business process flow instance for a record
-     * @remarks All property values except CreatedOnDate are of String type
-     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/getprocessinstances
-     */
-    interface ProcessInstance extends ProcessEnabled {
-        /**
-         * The date and time when the process instance was created (String format)
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/getprocessinstances
-         */
-        readonly CreatedOn: string;
-        /**
-         * The date and time when the process instance was created (Date type)
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/getprocessinstances
-         */
-        readonly CreatedOnDate: Date;
-        /**
-         * The unique identifier of the process instance
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/getprocessinstances
-         */
-        readonly InstanceId: Guid;
-        /**
-         * The name of the process instance
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/getprocessinstances
-         */
-        readonly InstanceName: string;
-        /**
-         * The status of the process instance
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/getprocessinstances
-         */
-        readonly Status: OptionSet.ProcessStatus;
-    }
-    /**
-     * Represents the enabled process information for a record
-     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/getprocessinstances
-     */
-    interface ProcessEnabled {
-        /**
-         * The unique identifier of the process definition
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/getprocessinstances
-         */
-        readonly ProcessId: Guid;
-        /**
-         * The name of the process definition
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/getprocessinstances
-         */
-        readonly ProcessName: string;
-    }
-    /**
-     * Represents the current active business process flow definition
-     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/process
-     */
-    interface ProcessProcess {
-        /**
-         * Returns the unique identifier of the process
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/process/getid
-         */
-        readonly Id: Guid;
-        /**
-         * Returns the name of the process
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/process/getname
-         */
-        readonly Name: string;
-        /**
-         * Returns a boolean value indicating whether the process is rendered
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/process/isrendered
-         */
-        readonly IsRendered: boolean;
-        /**
-         * Returns a collection of stages in the process
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/process/getstages
-         */
-        Stages: Collections<ProcessStage>;
-    }
-    /**
-     * Provides information about the relationship used to filter a subgrid
-     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/gridcontrol/getrelationship
-     */
     interface GridRelationship {
         /**
          * Name of the attribute
@@ -2782,7 +2777,7 @@ declare namespace DevKit {
         /**
          * When the form OnProcessStatusChange/OnStageSelected event occurs. Gets the stage object corresponding to the event triggered. Returns the selected stage in for the OnStageSelected event and next or previous stage objects for the OnStageChange event depending on direction moved.
          * */
-        getStage(): ProcessStage;
+        getStage(): Controls.ProcessStage;
         /**
          * When the form OnProcessStatusChange/OnStageSelected event occurs. Gets the direction of the stage advance action. It returns a string value Next or Previous.
          * */
