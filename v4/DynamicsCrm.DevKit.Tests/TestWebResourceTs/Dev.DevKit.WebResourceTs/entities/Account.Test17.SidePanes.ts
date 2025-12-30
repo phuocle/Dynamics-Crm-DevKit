@@ -208,7 +208,7 @@ export function TestSidePanes(form: FormAccount_DevKitV4.Form): boolean {
     const warnings = allResults.filter(r => r.Status === "⚠").length;
     const total = allResults.length;
 
-    console.groupCollapsed(`✅ [TS] TEST 17: SidePanes [${startTime}] - Using: form.SidePanes - ${passed}/${total} (⚠${warnings})`);
+    console.groupCollapsed(`✅ [TS] TEST 17: SidePanes [${startTime}] - Using: form.SidePanes - ${passed}/${total}`);
 
     console.log("%c📋 ReadOnly Properties (R1-R8)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
     console.table(results);

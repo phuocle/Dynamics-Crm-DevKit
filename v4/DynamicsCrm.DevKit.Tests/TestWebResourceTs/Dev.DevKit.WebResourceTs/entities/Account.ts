@@ -146,7 +146,7 @@ const formAccount_DevKitV4 = (function () {
             // Test 26: WebResource Control
             if (TestWebResource(form)) passedSuites++; totalSuites++;
 
-            console.log(`%cTỔNG SỐ LƯỢNG TEST: ${totalSuites} / ${passedSuites} ĐÃ PASSED`, "font-weight: bold; font-size: 20px; color: #E91E63;");
+            console.log(`%cTESTS PASSED: ${passedSuites} / ${totalSuites}`, "font-weight: bold; font-size: 20px; color: #E91E63;");
 
         }, 1000);
 

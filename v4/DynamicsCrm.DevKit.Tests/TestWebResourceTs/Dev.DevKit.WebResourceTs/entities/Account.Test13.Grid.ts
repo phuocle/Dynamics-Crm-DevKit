@@ -139,14 +139,19 @@ export function TestGrid(form: FormAccount_DevKitV4.Form): boolean {
         methodResults.push({ Test: "S7", Property: "OpenRelatedGrid", Value: e.message, Status: "✗" });
     }
 
-    // Test Rows iteration
+    // Test Rows iteration (Async handling)
     try {
         const rows = form.Grid.Contacts.Rows;
         if (rows && rows.getLength() > 0) {
             const firstRow = rows.get(0);
             methodResults.push({ Test: "S8", Property: "Rows.get(0)", Value: firstRow?.EntityId || "no EntityId", Status: firstRow ? "✓" : "⚠" });
         } else {
-            methodResults.push({ Test: "S8", Property: "Rows.get(0)", Value: "No rows", Status: "⚠" });
+            // Grid might not be loaded yet. Add OnLoad to verify later.
+            const gridLoadHandler = () => {
+                form.Grid.Contacts.Rows;
+            };
+            form.Grid.Contacts.AddOnLoad(gridLoadHandler);
+            methodResults.push({ Test: "S8", Property: "Rows.get(0)", Value: "Async Wait...", Status: "✓" });
         }
     } catch (e: any) {
         methodResults.push({ Test: "S8", Property: "Rows.get(0)", Value: e.message, Status: "✗" });

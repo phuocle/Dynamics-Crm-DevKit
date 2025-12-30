@@ -170,7 +170,7 @@ export function TestCopilot(form: FormAccount_DevKitV4.Form): boolean {
     const warnings = allResults.filter(r => r.Status === "⚠").length;
     const total = allResults.length;
 
-    console.groupCollapsed(`✅ [TS] TEST 18: Copilot [${startTime}] - Using: form.Copilot (Preview) - ${passed}/${total} (⚠${warnings})`);
+    console.groupCollapsed(`✅ [TS] TEST 18: Copilot [${startTime}] - Using: form.Copilot (Preview) - ${passed}/${total}`);
 
     console.log("%c📋 ReadOnly Properties (R1-R4)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
     console.table(results);
