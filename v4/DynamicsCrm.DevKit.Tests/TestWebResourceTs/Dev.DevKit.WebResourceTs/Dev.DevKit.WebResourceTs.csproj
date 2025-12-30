@@ -51,14 +51,53 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <None Include="package-lock.json" />
+    <None Include="package.json" />
     <None Include="packages.config" />
+    <None Include="tsconfig.json" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\DynamicsCrm.DevKit.Analyzers.4.0.0\analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="entities\" />
-    <Folder Include="lib\" />
+    <Content Include="build.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <TypeScriptCompile Include="entities\Account.form.ts" />
+    <TypeScriptCompile Include="entities\Account.Test00.Control.ts" />
+    <TypeScriptCompile Include="entities\Account.Test01.String.ts" />
+    <TypeScriptCompile Include="entities\Account.Test02.Memo.ts" />
+    <TypeScriptCompile Include="entities\Account.Test03.Boolean.ts" />
+    <TypeScriptCompile Include="entities\Account.Test04.Integer.ts" />
+    <TypeScriptCompile Include="entities\Account.Test04A.Header.ts" />
+    <TypeScriptCompile Include="entities\Account.Test05.Decimal.ts" />
+    <TypeScriptCompile Include="entities\Account.Test06.Double.ts" />
+    <TypeScriptCompile Include="entities\Account.Test07.Money.ts" />
+    <TypeScriptCompile Include="entities\Account.Test08.Lookup.ts" />
+    <TypeScriptCompile Include="entities\Account.Test08A.Lookup1.ts" />
+    <TypeScriptCompile Include="entities\Account.Test09.OptionSet.ts" />
+    <TypeScriptCompile Include="entities\Account.Test10.MultiOptionSet.ts" />
+    <TypeScriptCompile Include="entities\Account.Test11.DateOnly.ts" />
+    <TypeScriptCompile Include="entities\Account.Test12.DateTime.ts" />
+    <TypeScriptCompile Include="entities\Account.Test13.Grid.ts" />
+    <TypeScriptCompile Include="entities\Account.Test14.QuickView.ts" />
+    <TypeScriptCompile Include="entities\Account.Test15.NavigationItem.ts" />
+    <TypeScriptCompile Include="entities\Account.Test16.ExecutionContext.ts" />
+    <TypeScriptCompile Include="entities\Account.Test17.SidePanes.ts" />
+    <TypeScriptCompile Include="entities\Account.Test18.Copilot.ts" />
+    <TypeScriptCompile Include="entities\Account.Test19.Process.ts" />
+    <TypeScriptCompile Include="entities\Account.Test20.IFrame.ts" />
+    <TypeScriptCompile Include="entities\Account.Test21.Utility.ts" />
+    <TypeScriptCompile Include="entities\Account.Test22.Tab.ts" />
+    <TypeScriptCompile Include="entities\Account.Test23.Timer.ts" />
+    <TypeScriptCompile Include="entities\Account.Test24.Knowledge.ts" />
+    <TypeScriptCompile Include="entities\Account.Test25.WebApi.ts" />
+    <TypeScriptCompile Include="entities\Account.Test26.WebResource.ts" />
+    <TypeScriptCompile Include="entities\Account.ts" />
+    <TypeScriptCompile Include="entities\Account.webapi.ts" />
+    <TypeScriptCompile Include="entities\OptionSet.ts" />
+    <TypeScriptCompile Include="lib\devkit.d.ts" />
+    <TypeScriptCompile Include="lib\devkit.ts" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v15.0\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />

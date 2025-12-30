@@ -1,7 +1,7 @@
 /**
  * Account.form.ts - Account Form for early-bound style form coding
  * Generated file - DO NOT MODIFY MANUALLY
- * 
+ *
  * Structure:
  * 1. Imports
  * 2. Types - IBody, IHeader, ITabs, IGrid, INavigation, IQuickForm, IProcess

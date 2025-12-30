@@ -2,7 +2,7 @@ const esbuild = require('esbuild');
 const fs = require('fs');
 const path = require('path');
 
-const entitiesDir = path.join(__dirname, 'Dev.DevKit.WebResourceTs', 'entities');
+const entitiesDir = path.join(__dirname, 'entities');
 const buildDir = path.join(__dirname, 'build');
 
 const mode = process.argv[2] || 'debug';
