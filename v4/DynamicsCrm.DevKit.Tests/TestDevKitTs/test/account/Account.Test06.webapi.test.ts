@@ -232,7 +232,14 @@ describe('devkit.ts - WebApi Loading', () => {
             const executionContext = { getFormContext: () => formContext };
             const form = new FormBase(executionContext, 'test', {});
 
-            const request = { getMetadata: () => ({}) };
+            const request = {
+                getMetadata: () => ({
+                    boundParameter: null,
+                    parameterTypes: {},
+                    operationType: 0 as any,
+                    operationName: 'test'
+                })
+            };
             const result = await form.WebApi.Execute(request);
             expect(mockWebApi.online.execute).toHaveBeenCalledWith(request);
             expect(result).toEqual({ response: 'online-ok' });
@@ -244,7 +251,14 @@ describe('devkit.ts - WebApi Loading', () => {
             const form = new FormBase(executionContext, 'test', {});
 
             const successCallback = jest.fn();
-            const request = { getMetadata: () => ({}) };
+            const request = {
+                getMetadata: () => ({
+                    boundParameter: null,
+                    parameterTypes: {},
+                    operationType: 0 as any,
+                    operationName: 'test'
+                })
+            };
             form.WebApi.Execute(request, successCallback);
 
             await new Promise(resolve => setTimeout(resolve, 10));
@@ -256,7 +270,14 @@ describe('devkit.ts - WebApi Loading', () => {
             const executionContext = { getFormContext: () => formContext };
             const form = new FormBase(executionContext, 'test', {});
 
-            const requests = [{ getMetadata: () => ({}) }];
+            const requests = [{
+                getMetadata: () => ({
+                    boundParameter: null,
+                    parameterTypes: {},
+                    operationType: 0 as any,
+                    operationName: 'test'
+                })
+            }];
             const result = await form.WebApi.ExecuteMultiple(requests);
             expect(mockWebApi.online.executeMultiple).toHaveBeenCalledWith(requests);
             expect(result).toEqual([{ response: 'online-ok' }]);
@@ -268,7 +289,14 @@ describe('devkit.ts - WebApi Loading', () => {
             const form = new FormBase(executionContext, 'test', {});
 
             const successCallback = jest.fn();
-            const requests = [{ getMetadata: () => ({}) }];
+            const requests = [{
+                getMetadata: () => ({
+                    boundParameter: null,
+                    parameterTypes: {},
+                    operationType: 0 as any,
+                    operationName: 'test'
+                })
+            }];
             form.WebApi.ExecuteMultiple(requests, successCallback);
 
             await new Promise(resolve => setTimeout(resolve, 10));
@@ -280,7 +308,14 @@ describe('devkit.ts - WebApi Loading', () => {
             const executionContext = { getFormContext: () => formContext };
             const form = new FormBase(executionContext, 'test', {});
 
-            const request = { getMetadata: () => ({}) };
+            const request = {
+                getMetadata: () => ({
+                    boundParameter: null,
+                    parameterTypes: {},
+                    operationType: 0 as any,
+                    operationName: 'test'
+                })
+            };
             const result = await form.WebApi.Online.Execute(request);
             expect(mockWebApi.online.execute).toHaveBeenCalledWith(request);
             expect(result).toEqual({ response: 'online-ok' });
@@ -292,7 +327,14 @@ describe('devkit.ts - WebApi Loading', () => {
             const form = new FormBase(executionContext, 'test', {});
 
             const successCallback = jest.fn();
-            const request = { getMetadata: () => ({}) };
+            const request = {
+                getMetadata: () => ({
+                    boundParameter: null,
+                    parameterTypes: {},
+                    operationType: 0 as any,
+                    operationName: 'test'
+                })
+            };
             form.WebApi.Online.Execute(request, successCallback);
 
             await new Promise(resolve => setTimeout(resolve, 10));
@@ -304,7 +346,14 @@ describe('devkit.ts - WebApi Loading', () => {
             const executionContext = { getFormContext: () => formContext };
             const form = new FormBase(executionContext, 'test', {});
 
-            const requests = [{ getMetadata: () => ({}) }];
+            const requests = [{
+                getMetadata: () => ({
+                    boundParameter: null,
+                    parameterTypes: {},
+                    operationType: 0 as any,
+                    operationName: 'test'
+                })
+            }];
             const result = await form.WebApi.Online.ExecuteMultiple(requests);
             expect(mockWebApi.online.executeMultiple).toHaveBeenCalledWith(requests);
             expect(result).toEqual([{ response: 'online-ok' }]);
@@ -316,7 +365,14 @@ describe('devkit.ts - WebApi Loading', () => {
             const form = new FormBase(executionContext, 'test', {});
 
             const successCallback = jest.fn();
-            const requests = [{ getMetadata: () => ({}) }];
+            const requests = [{
+                getMetadata: () => ({
+                    boundParameter: null,
+                    parameterTypes: {},
+                    operationType: 0 as any,
+                    operationName: 'test'
+                })
+            }];
             form.WebApi.Online.ExecuteMultiple(requests, successCallback);
 
             await new Promise(resolve => setTimeout(resolve, 10));

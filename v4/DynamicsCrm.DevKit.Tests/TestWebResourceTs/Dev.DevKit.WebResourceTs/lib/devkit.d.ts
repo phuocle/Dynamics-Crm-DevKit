@@ -127,7 +127,7 @@ declare namespace DevKit {
         /** Array of strings. The message to display in the notification */
         messages: string[];
         /** Notification level: ERROR or RECOMMENDATION */
-        notificationLevel?: OptionSet.NotificationLevel;
+        notificationLevel?: OptionSet.FieldNotificationLevel;
         /** Unique identifier for the notification which can be used to clear this notification */
         uniqueId: string;
         /** Optional actions for the notification */
@@ -647,17 +647,12 @@ declare namespace DevKit {
             Value: Date | null;
         }
 
+
         /**
          * Interface for WebResource controls
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
          */
         interface WebResource {
-            /**
-             * Sets the focus on the control
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/setfocus
-             */
-            Focus(): void;
-
             /**
              * Returns the content window that represents a web resource
              * @param successCallback A function to call when operation is executed successfully
@@ -673,18 +668,6 @@ declare namespace DevKit {
             ContentWindow(): Promise<any>;
 
             /**
-             * Returns a string value that represents the type of control
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getcontroltype
-             */
-            readonly ControlType: string;
-
-            /**
-             * Returns the name assigned to the control
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getname
-             */
-            readonly ControlName: string;
-
-            /**
              * Returns the object in the form that represents the web resource (the IFrame element)
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getobject
              */
@@ -696,27 +679,6 @@ declare namespace DevKit {
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/setsrc
              */
             Src: string;
-
-            /**
-             * Get/Set whether the control is disabled
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getdisabled
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/setdisabled
-             */
-            Disabled: boolean;
-
-            /**
-             * Get/Set the label for the control
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getlabel
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/setlabel
-             */
-            Label: string;
-
-            /**
-             * Get/Set a value that indicates whether the control is currently visible
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getvisible
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/setvisible
-             */
-            Visible: boolean;
         }
 
         /**
@@ -724,12 +686,6 @@ declare namespace DevKit {
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
          */
         interface IFrame {
-            /**
-             * Sets the focus on the control
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/setfocus
-             */
-            Focus(): void;
-
             /**
              * Returns the content window that represents an IFRAME
              * @param successCallback A function to call when operation is executed successfully
@@ -743,18 +699,6 @@ declare namespace DevKit {
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getcontentwindow
              */
             ContentWindow(): Promise<any>;
-
-            /**
-             * Returns a string value that represents the type of control
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getcontroltype
-             */
-            readonly ControlType: string;
-
-            /**
-             * Returns the name assigned to the control
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getname
-             */
-            readonly ControlName: string;
 
             /**
              * Returns the default URL that an IFRAME control is configured to display
@@ -774,27 +718,6 @@ declare namespace DevKit {
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/setsrc
              */
             Src: string;
-
-            /**
-             * Get/Set whether the control is disabled
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getdisabled
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/setdisabled
-             */
-            Disabled: boolean;
-
-            /**
-             * Get/Set the label for the control
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getlabel
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/setlabel
-             */
-            Label: string;
-
-            /**
-             * Get/Set a value that indicates whether the control is currently visible
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getvisible
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/setvisible
-             */
-            Visible: boolean;
         }
 
         /**
@@ -1038,13 +961,13 @@ declare namespace DevKit {
              * Get the grid type: 1=HomePageGrid, 2=Subgrid
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/getgridtype
              */
-            readonly GridType: number;
+            readonly GridType: OptionSet.GridType;
 
             /**
              * Get the relationship information for the subgrid
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/getrelationship
              */
-            readonly Relationship: { name: string; navigationPropertyName: string; relationshipType: number; roleType: number };
+            readonly Relationship: { name: string; navigationPropertyName: string; relationshipType: OptionSet.FormRelationshipType; roleType: OptionSet.FormRelationshipRoleType };
 
             /**
              * Collection of rows in the grid
@@ -1214,7 +1137,7 @@ declare namespace DevKit {
              * Base interface for dialog controls providing basic UI properties
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
              */
-            interface IControlBase {
+            interface IDialogControlBase {
                 /**
                  * Get/Set whether the control is disabled
                  * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getdisabled
@@ -1239,7 +1162,7 @@ declare namespace DevKit {
              * Interface for dialog controls with change event and validation support
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
              */
-            interface IControl extends IControlBase {
+            interface IControl extends IDialogControlBase {
                 /**
                  * Sets a function to be called when the OnChange event occurs
                  * @param callback The function to be executed on the OnChange event
@@ -1275,7 +1198,7 @@ declare namespace DevKit {
                  * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getrequiredlevel
                  * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/setrequiredlevel
                  */
-                RequiredLevel: FieldRequiredLevel;
+                RequiredLevel: OptionSet.FieldRequiredLevel;
                 /**
                  * Returns a Boolean value indicating if there are unsaved changes to the attribute value
                  * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getisdirty
@@ -1445,14 +1368,14 @@ declare namespace DevKit {
              * Interface for dialog Button controls
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
              */
-            interface Button extends IControlBase {
+            interface Button extends IDialogControlBase {
             }
 
             /**
              * Interface for dialog Label controls (read-only display)
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
              */
-            interface Label extends IControlBase {
+            interface Label extends IDialogControlBase {
             }
 
             /**
@@ -1843,7 +1766,7 @@ declare namespace DevKit {
              * @param errorCallback A function to call when the operation fails
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getcontentwindow
              */
-            ContentWindow(successCallback?: (contentWindow: any) => void, errorCallback?: (error: any) => void): void;
+            ContentWindow(successCallback?: (contentWindow: any) => void, errorCallback?: (error: IXrmError) => void): void;
 
             /**
              * Returns the object in the form that represents a web resource
@@ -1877,7 +1800,7 @@ declare namespace DevKit {
              * @param errorCallback A function to call when the operation fails
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getcontentwindow
              */
-            ContentWindow(successCallback?: (contentWindow: any) => void, errorCallback?: (error: any) => void): void;
+            ContentWindow(successCallback?: (contentWindow: any) => void, errorCallback?: (error: IXrmError) => void): void;
 
             /**
              * Returns the default URL that an IFRAME control is configured to display
@@ -1914,7 +1837,7 @@ declare namespace DevKit {
              * Returns the state of the timer control
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getstate
              */
-            readonly State: number;
+            readonly State: OptionSet.TimerState;
         }
 
         /**
@@ -2018,7 +1941,7 @@ declare namespace DevKit {
          * Gets the form type. Returns one of: 0=Undefined, 1=Create, 2=Update, 3=Read Only, 4=Disabled, 5=Quick Create, 6=Bulk Edit, 11=Read Optimized
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui/getformtype
          */
-        readonly FormType: number;
+        readonly FormType: OptionSet.FormType;
 
         /**
          * Gets the unique identifier of the entity record
@@ -2051,7 +1974,7 @@ declare namespace DevKit {
          * @param errorCallback A function to call when the save fails
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data/save
          */
-        Save(saveOptions?: { saveMode: OptionSet.SaveMode }, successCallback?: () => void, errorCallback?: (error: any) => void): Promise<void> | void;
+        Save(saveOptions?: { saveMode: OptionSet.SaveMode }, successCallback?: () => void, errorCallback?: (error: IXrmError) => void): Promise<void> | void;
 
         /**
          * Asynchronously refreshes the data of the form without reloading the page
@@ -2060,7 +1983,7 @@ declare namespace DevKit {
          * @param errorCallback A function to call when the refresh fails
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data/refresh
          */
-        Refresh(save?: boolean, successCallback?: () => void, errorCallback?: (error: any) => void): Promise<void> | void;
+        Refresh(save?: boolean, successCallback?: () => void, errorCallback?: (error: IXrmError) => void): Promise<void> | void;
 
         /**
          * Closes the form
@@ -2145,7 +2068,7 @@ declare namespace DevKit {
          * @param message The message to display in the progress indicator
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/step/setprogress
          */
-        SetProgress(stepProgress: number, message: string): void;
+        SetProgress(stepProgress: OptionSet.ProcessProgress, message: string): void;
     }
 
     /**
@@ -2237,20 +2160,75 @@ declare namespace DevKit {
     }
 
     /**
+     * Currency lookup object returned by organizationSettings.baseCurrency and userSettings.transactionCurrency
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#basecurrency
+     */
+    interface ICurrencyLookup {
+        /** GUID of the currency record */
+        id: string;
+        /** Entity type name (always "transactioncurrency") */
+        entityType: string;
+        /** Display name of the currency (e.g., "US Dollar") */
+        name: string;
+    }
+
+    /**
+     * Security role object returned by userSettings.roles
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#roles
+     */
+    interface ISecurityRole {
+        /** GUID of the security role or team */
+        id: string;
+        /** Name of the security role or team */
+        name: string;
+    }
+
+    /**
+     * Date formatting info returned by userSettings.dateFormattingInfo
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#dateformattinginfo
+     */
+    interface IDateFormattingInfo {
+        /** First day of the week (0=Sunday, 1=Monday, etc.) */
+        FirstDayOfWeek: number;
+        /** Long date pattern (e.g., "dddd, MMMM d, yyyy") */
+        LongDatePattern: string;
+        /** Month/day pattern (e.g., "MMMM d") */
+        MonthDayPattern: string;
+        /** Time separator (e.g., ":") */
+        TimeSeparator: string;
+        /** AM designator (e.g., "AM") */
+        AMDesignator: string;
+        /** PM designator (e.g., "PM") */
+        PMDesignator: string;
+        /** Short date pattern (e.g., "M/d/yyyy") */
+        ShortDatePattern: string;
+        /** Short time pattern (e.g., "h:mm tt") */
+        ShortTimePattern: string;
+        /** Long time pattern (e.g., "h:mm:ss tt") */
+        LongTimePattern: string;
+        /** Date separator (e.g., "/") */
+        DateSeparator: string;
+        /** Year/month pattern (e.g., "MMMM yyyy") */
+        YearMonthPattern: string;
+        /** Calendar type */
+        Calendar: { MinSupportedDateTime: string; MaxSupportedDateTime: string };
+    }
+
+    /**
      * Interface for Organization Settings
      * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings
      */
     interface IOrganizationSettings {
         /** Organization attributes */
-        readonly Attributes: any;
+        readonly Attributes: { [key: string]: any };
         /** Base currency of the organization */
-        readonly BaseCurrency: any;
+        readonly BaseCurrency: ICurrencyLookup;
         /** GUID of the base currency */
         readonly BaseCurrencyId: string;
         /** Default country code for the organization */
         readonly DefaultCountryCode: string;
         /** Full name convention code */
-        readonly FullNameConventionCode: number;
+        readonly FullNameConventionCode: OptionSet.FullNameConventionCode;
         /** Whether auto-save is enabled */
         readonly IsAutoSaveEnabled: boolean;
         /** Whether this is a trial organization */
@@ -2273,7 +2251,7 @@ declare namespace DevKit {
      */
     interface IUserSettings {
         /** Date formatting information */
-        readonly DateFormattingInfo: any;
+        readonly DateFormattingInfo: IDateFormattingInfo;
         /** GUID of the default dashboard */
         readonly DefaultDashboardId: string;
         /** Whether guided help is enabled */
@@ -2285,7 +2263,7 @@ declare namespace DevKit {
         /** Language ID of the user */
         readonly LanguageId: number;
         /** User's security roles */
-        readonly Roles: any;
+        readonly Roles: ISecurityRole[];
         /** User's security role privileges */
         readonly SecurityRolePrivileges: string[];
         /** User's security roles */
@@ -2293,13 +2271,537 @@ declare namespace DevKit {
         /** User's time zone offset in minutes */
         readonly TimeZoneOffsetMinutes: number;
         /** User's transaction currency */
-        readonly TransactionCurrency: any;
+        readonly TransactionCurrency: ICurrencyLookup;
         /** GUID of the user's transaction currency */
         readonly TransactionCurrencyId: string;
         /** GUID of the user */
         readonly UserId: string;
         /** User's full name */
         readonly UserName: string;
+    }
+
+    /**
+     * Standard error object returned by Xrm API error callbacks
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility
+     */
+    interface IXrmError {
+        /** Numeric error code */
+        errorCode: number;
+        /** Error message describing the issue */
+        message: string;
+    }
+
+    // ============================================================================
+    // Global Notification Interfaces
+    // ============================================================================
+
+    /**
+     * Action object for global notifications
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app/addglobalnotification
+     */
+    interface INotificationAction {
+        /** Label for the action button */
+        actionLabel?: string;
+        /** Function to execute when the action is clicked */
+        eventHandler?: () => void;
+    }
+
+    /**
+     * Notification object for AddGlobalNotification method
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app/addglobalnotification
+     */
+    interface INotification {
+        /** Action object with actionLabel and eventHandler */
+        action?: INotificationAction;
+        /** Notification level: 1=Success, 2=Error, 3=Warning, 4=Information */
+        level: OptionSet.NotificationLevel;
+        /** Message to display in the notification */
+        message: string;
+        /** Whether to show close button (default: true) */
+        showCloseButton?: boolean;
+        /** Notification type: 2=Toast notification (required) */
+        type: 2;
+    }
+
+    // ============================================================================
+    // Lookup Interfaces
+    // ============================================================================
+
+    /**
+     * Filter object for lookup dialogs
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/lookupobjects
+     */
+    interface ILookupFilter {
+        /** Logical name of the entity to filter */
+        entityLogicalName: string;
+        /** FetchXML filter to apply */
+        filterXml: string;
+    }
+
+    /**
+     * Options for the lookup dialog
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/lookupobjects
+     */
+    interface ILookupOptions {
+        /** Whether to allow selecting multiple records */
+        allowMultiSelect?: boolean;
+        /** Default entity type to display */
+        defaultEntityType?: string;
+        /** Default view ID to display */
+        defaultViewId?: string;
+        /** Whether to disable Most Recently Used items */
+        disableMru?: boolean;
+        /** Array of entity types to display in the lookup */
+        entityTypes: string[];
+        /** Array of filters to apply per entity type */
+        filters?: ILookupFilter[];
+        /** Initial search text */
+        searchText?: string;
+        /** Array of view IDs to display */
+        viewIds?: string[];
+    }
+
+    /**
+     * Result object returned from lookup dialog
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/lookupobjects
+     */
+    interface ILookupResult {
+        /** Entity type of the selected record */
+        entityType: string;
+        /** GUID of the selected record */
+        id: string;
+        /** Display name of the selected record */
+        name: string;
+    }
+
+    // ============================================================================
+    // Navigation Interfaces
+    // ============================================================================
+
+    /**
+     * Page input for navigating to an entity list
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/navigateto
+     */
+    interface IPageInputEntityList {
+        /** Page type: must be "entitylist" */
+        pageType: "entitylist";
+        /** Logical name of the entity */
+        entityName: string;
+        /** Optional view ID to display */
+        viewId?: string;
+        /** View type: "savedquery" for system views, "userquery" for personal views */
+        viewType?: "savedquery" | "userquery";
+    }
+
+    /**
+     * Page input for navigating to an entity record
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/navigateto
+     */
+    interface IPageInputEntityRecord {
+        /** Page type: must be "entityrecord" */
+        pageType: "entityrecord";
+        /** Logical name of the entity */
+        entityName: string;
+        /** GUID of the record to open (omit for new record) */
+        entityId?: string;
+        /** Lookup reference to create from */
+        createFromEntity?: { entityType: string; id: string; name?: string };
+        /** Data to pass to the form (field values or custom parameters) */
+        data?: { [key: string]: any };
+        /** Form ID to open */
+        formId?: string;
+        /** Whether this is a cross-entity navigation */
+        isCrossEntityNavigate?: boolean;
+        /** Whether this is an offline sync error scenario */
+        isOfflineSyncError?: boolean;
+        /** Business process flow ID to start */
+        processId?: string;
+        /** Business process flow instance ID */
+        processInstanceId?: string;
+        /** Relationship information for related entity forms */
+        relationship?: {
+            attributeName: string;
+            name: string;
+            navigationPropertyName?: string;
+            relationshipType: OptionSet.FormRelationshipType;
+            roleType: OptionSet.FormRelationshipRoleType;
+        };
+        /** Stage ID in the business process to open */
+        selectedStageId?: string;
+        /** Tab name to navigate to */
+        tabName?: string;
+    }
+
+    /**
+     * Page input for navigating to a dashboard
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/navigateto
+     */
+    interface IPageInputDashboard {
+        /** Page type: must be "dashboard" */
+        pageType: "dashboard";
+        /** GUID of the dashboard to open */
+        dashboardId: string;
+    }
+
+    /**
+     * Page input for navigating to an HTML web resource
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/navigateto
+     */
+    interface IPageInputWebResource {
+        /** Page type: must be "webresource" */
+        pageType: "webresource";
+        /** Name of the web resource to open */
+        webresourceName: string;
+        /** Data to pass to the web resource */
+        data?: string;
+    }
+
+    /**
+     * Page input for navigating to a custom page
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/navigateto
+     */
+    interface IPageInputCustom {
+        /** Page type: must be "custom" */
+        pageType: "custom";
+        /** Unique name of the custom page */
+        name: string;
+        /** Entity name accessible via Param("entityName") */
+        entityName?: string;
+        /** Record ID accessible via Param("recordId") */
+        recordId?: string;
+    }
+
+    /**
+     * Union type for all page input types used in NavigateTo
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/navigateto
+     */
+    type IPageInput = IPageInputEntityList | IPageInputEntityRecord | IPageInputDashboard | IPageInputWebResource | IPageInputCustom;
+
+    /**
+     * Navigation options for the NavigateTo method
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/navigateto
+     */
+    interface INavigationOptions {
+        /** Navigation target: 1=Inline (current page), 2=Dialog */
+        target: 1 | 2;
+        /** Width of the dialog */
+        width?: { value: number; unit: "%" | "px" };
+        /** Height of the dialog */
+        height?: { value: number; unit: "%" | "px" };
+        /** Position: 1=Center, 2=Side */
+        position?: 1 | 2;
+        /** Title of the dialog */
+        title?: string;
+    }
+
+    // ============================================================================
+    // Entity Metadata Interfaces
+    // ============================================================================
+
+    /**
+     * Security privilege object for entity metadata
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getentitymetadata
+     */
+    interface IPrivilege {
+        /** Whether basic access level is allowed */
+        CanBeBasic: boolean;
+        /** Whether deep access level is allowed */
+        CanBeDeep: boolean;
+        /** Whether entity reference access level is allowed */
+        CanBeEntityReference: boolean;
+        /** Whether global access level is allowed */
+        CanBeGlobal: boolean;
+        /** Whether local access level is allowed */
+        CanBeLocal: boolean;
+        /** Whether parent entity reference access level is allowed */
+        CanBeParentEntityReference: boolean;
+        /** Name of the privilege */
+        Name: string;
+        /** GUID of the privilege */
+        PrivilegeId: string;
+        /** Type of privilege (Create, Read, Write, Delete, etc.) */
+        PrivilegeType: number;
+    }
+
+    /**
+     * Attribute metadata object for entity metadata
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getentitymetadata
+     */
+    interface IAttributeMetadata {
+        /** Attribute type code */
+        AttributeType: number;
+        /** Display name of the attribute */
+        DisplayName: string;
+        /** Logical name of the entity */
+        EntityLogicalName: string;
+        /** Logical name of the attribute */
+        LogicalName: string;
+        /** OptionSet for Boolean/Choice/Status attributes */
+        OptionSet?: { [key: string]: any };
+        /** Default form value for Boolean/MultiSelect */
+        DefaultFormValue?: number | boolean;
+    }
+
+    /**
+     * Entity metadata object returned by getEntityMetadata
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getentitymetadata
+     */
+    interface IEntityMetadata {
+        /** Activity type mask: 0 for non-activity, 1 for activity */
+        ActivityTypeMask: number;
+        /** Whether records are auto-routed to owner's queue */
+        AutoRouteToOwnerQueue: boolean;
+        /** Whether sync to external search index can be enabled */
+        CanEnableSyncToExternalSearchIndex: boolean;
+        /** Whether entity can trigger workflows */
+        CanTriggerWorkflow: boolean;
+        /** Description of the entity */
+        Description: string;
+        /** Plural display name of the entity */
+        DisplayCollectionName: string;
+        /** Display name of the entity */
+        DisplayName: string;
+        /** Whether state transitions are enforced */
+        EnforceStateTransitions: boolean;
+        /** Color associated with the entity */
+        EntityColor: string;
+        /** Entity set name for Web API */
+        EntitySetName: string;
+        /** Whether entity has activities */
+        HasActivities: boolean;
+        /** Whether entity is an activity */
+        IsActivity: boolean;
+        /** Whether entity is an activity party */
+        IsActivityParty: boolean;
+        /** Whether business process is enabled */
+        IsBusinessProcessEnabled: boolean;
+        /** Whether entity is a business process flow entity */
+        IsBPFEntity: boolean;
+        /** Whether entity is a child entity */
+        IsChildEntity: boolean;
+        /** Whether connections are enabled */
+        IsConnectionsEnabled: boolean;
+        /** Whether entity is custom */
+        IsCustomEntity: boolean;
+        /** Whether entity is customizable */
+        IsCustomizable: boolean;
+        /** Whether document management is enabled */
+        IsDocumentManagementEnabled: boolean;
+        /** Whether document recommendations are enabled */
+        IsDocumentRecommendationsEnabled: boolean;
+        /** Whether duplicate detection is enabled */
+        IsDuplicateDetectionEnabled: boolean;
+        /** Whether charts are enabled */
+        IsEnabledForCharts: boolean;
+        /** Whether entity is importable */
+        IsImportable: boolean;
+        /** Whether interaction centric is enabled */
+        IsInteractionCentricEnabled: boolean;
+        /** Whether knowledge management is enabled */
+        IsKnowledgeManagementEnabled: boolean;
+        /** Whether mail merge is enabled */
+        IsMailMergeEnabled: boolean;
+        /** Whether entity is managed */
+        IsManaged: boolean;
+        /** Whether OneNote integration is enabled */
+        IsOneNoteIntegrationEnabled: boolean;
+        /** Whether optimistic concurrency is enabled */
+        IsOptimisticConcurrencyEnabled: boolean;
+        /** Whether quick create is enabled */
+        IsQuickCreateEnabled: boolean;
+        /** Whether entity is state model aware */
+        IsStateModelAware: boolean;
+        /** Whether entity is valid for advanced find */
+        IsValidForAdvancedFind: boolean;
+        /** Whether entity is visible in mobile client */
+        IsVisibleInMobileClient: boolean;
+        /** Whether entity is enabled in Unified Interface */
+        IsEnabledInUnifiedInterface: boolean;
+        /** Logical collection name of the entity */
+        LogicalCollectionName: string;
+        /** Logical name of the entity */
+        LogicalName: string;
+        /** Object type code of the entity */
+        ObjectTypeCode: number;
+        /** Ownership type: "UserOwned" or "OrganizationOwned" */
+        OwnershipType: "UserOwned" | "OrganizationOwned";
+        /** Primary ID attribute name */
+        PrimaryIdAttribute: string;
+        /** Primary image attribute name */
+        PrimaryImageAttribute: string;
+        /** Primary name attribute name */
+        PrimaryNameAttribute: string;
+        /** Array of privilege objects */
+        Privileges: IPrivilege[];
+        /** Array of attribute metadata objects */
+        Attributes: IAttributeMetadata[];
+    }
+
+    // ============================================================================
+    // Device API Interfaces
+    // ============================================================================
+
+    /**
+     * Options for capturing an image using the device camera
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-device/captureimage
+     */
+    interface ICaptureImageOptions {
+        /** Whether to allow editing the image before saving */
+        allowEdit?: boolean;
+        /** Quality of the image (1-100) */
+        quality?: number;
+        /** Target height of the image in pixels */
+        height?: number;
+        /** Target width of the image in pixels */
+        width?: number;
+    }
+
+    /**
+     * Coordinates object for geolocation
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-device/getcurrentposition
+     */
+    interface ICoordinates {
+        /** Latitude in decimal degrees */
+        latitude: number;
+        /** Longitude in decimal degrees */
+        longitude: number;
+        /** Accuracy of the position in meters */
+        accuracy?: number;
+        /** Altitude in meters above the WGS84 ellipsoid */
+        altitude?: number | null;
+        /** Accuracy of the altitude in meters */
+        altitudeAccuracy?: number | null;
+        /** Heading in degrees clockwise from true north */
+        heading?: number | null;
+        /** Speed in meters per second */
+        speed?: number | null;
+    }
+
+    /**
+     * Geolocation position object returned by getCurrentPosition
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-device/getcurrentposition
+     */
+    interface IPosition {
+        /** Coordinates object containing latitude, longitude, and other position data */
+        coords: ICoordinates;
+        /** Timestamp (milliseconds since epoch) when the position was obtained */
+        timestamp: number;
+    }
+
+    // ============================================================================
+    // Page Context Interfaces
+    // ============================================================================
+
+    /**
+     * Input object within page context
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getpagecontext
+     */
+    interface IPageContextInput {
+        /** Page type: "entityrecord" for forms, "entitylist" for views */
+        pageType: "entityrecord" | "entitylist";
+        /** Logical name of the entity */
+        entityName: string;
+        /** GUID of the record (entity form only) */
+        entityId?: string;
+        /** Form ID (entity form only) */
+        formId?: string;
+        /** Create from entity reference (entity form only) */
+        createFromEntity?: { entityType: string; id: string; name?: string };
+        /** View ID (entity list only) */
+        viewId?: string;
+        /** View type: "savedquery" or "userquery" (entity list only) */
+        viewType?: "savedquery" | "userquery";
+    }
+
+    /**
+     * Page context object returned by getPageContext
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getpagecontext
+     */
+    interface IPageContext {
+        /** Input object containing page information */
+        input: IPageContextInput;
+    }
+
+    /**
+     * Options for opening an entity form
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/openform
+     */
+    interface IEntityFormOptions {
+        /** Logical name of the entity to open */
+        entityName: string;
+        /** ID of the entity record to open (for existing records) */
+        entityId?: string;
+        /** Designates whether the form opens in create mode (true) or update mode (false) */
+        createFromEntity?: boolean;
+        /** ID of the form to open */
+        formId?: string;
+        /** Controls whether the navigation bar is displayed: "on", "off", or "entity" */
+        navBar?: OptionSet.FormNavBar;
+        /** Indicates whether to display the command bar */
+        cmdbar?: boolean;
+        /** Indicates whether to display the header */
+        header?: boolean;
+        /** Height of the form window in pixels */
+        height?: number;
+        /** Width of the form window in pixels */
+        width?: number;
+        /** Position of the form window: 1=center, 2=side */
+        windowPosition?: OptionSet.FormWindowPosition;
+        /** Indicates the form is opened in a new window */
+        openInNewWindow?: boolean;
+        /** ID of the process to start */
+        processId?: string;
+        /** ID of the process instance */
+        processInstanceId?: string;
+        /** Relationship information for related entity forms */
+        relationship?: {
+            attributeName: string;
+            name: string;
+            navigationPropertyName?: string;
+            relationshipType: OptionSet.FormRelationshipType;
+            roleType: OptionSet.FormRelationshipRoleType;
+        };
+        /** ID of the stage in the business process to open */
+        selectedStageId?: string;
+        /** Indicates whether to use quick create form */
+        useQuickCreateForm?: boolean;
+    }
+
+    /**
+     * Options for the file picker
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-device/pickfile
+     */
+    interface IPickFileOptions {
+        /** File types to accept: "audio", "video", or "image" */
+        accept?: OptionSet.FileAccept;
+        /** Indicates whether to allow selecting multiple files */
+        allowMultipleFiles?: boolean;
+        /** Maximum size of file(s) to be selected in bytes */
+        maximumAllowedFileSize?: number;
+    }
+
+    /**
+     * Represents file data from device file picker or for opening files
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-device/pickfile
+     */
+    interface IFileData {
+        /** Contents of the file as base64 encoded string */
+        fileContent: string;
+        /** Name of the file */
+        fileName: string;
+        /** Size of the file in bytes */
+        fileSize: number;
+        /** MIME type of the file */
+        mimeType: string;
+    }
+
+    /**
+     * Options for opening a file
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/openfile
+     */
+    interface IOpenFileOptions {
+        /** Specify whether to open (1) or save (2) the file */
+        openMode: OptionSet.FileOption;
     }
 
     /**
@@ -2352,7 +2854,7 @@ declare namespace DevKit {
          * @param errorCallback Function called if there is an error
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app/addglobalnotification
          */
-        AddGlobalNotification(notification: any, successCallback?: (id: string) => void, errorCallback?: (error: any) => void): Promise<string> | void;
+        AddGlobalNotification(notification: INotification, successCallback?: (id: string) => void, errorCallback?: (error: IXrmError) => void): Promise<string> | void;
 
         /**
          * Closes the progress indicator dialog
@@ -2365,13 +2867,13 @@ declare namespace DevKit {
          * @param uniqueId The ID of the notification to clear
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app/clearglobalnotification
          */
-        ClearGlobalNotification(uniqueId: string, successCallback?: () => void, errorCallback?: (error: any) => void): Promise<void> | void;
+        ClearGlobalNotification(uniqueId: string, successCallback?: () => void, errorCallback?: (error: IXrmError) => void): Promise<void> | void;
 
         /**
          * Gets the name of the current app
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/getcurrentappname
          */
-        CurrentAppName(successCallback?: (name: string) => void, errorCallback?: (error: any) => void): Promise<string> | void;
+        CurrentAppName(successCallback?: (name: string) => void, errorCallback?: (error: IXrmError) => void): Promise<string> | void;
 
         /**
          * Gets metadata for an entity
@@ -2379,7 +2881,7 @@ declare namespace DevKit {
          * @param attributes Array of attribute names to retrieve
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getentitymetadata
          */
-        EntityMetadata(entityName: string, attributes?: string[], successCallback?: (metadata: any) => void, errorCallback?: (error: any) => void): Promise<any> | void;
+        EntityMetadata(entityName: string, attributes?: string[], successCallback?: (metadata: IEntityMetadata) => void, errorCallback?: (error: IXrmError) => void): Promise<IEntityMetadata> | void;
 
         /**
          * Invokes a process action
@@ -2387,14 +2889,14 @@ declare namespace DevKit {
          * @param parameters Parameters to pass to the action
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/invokeprocessaction
          */
-        InvokeProcessAction(name: string, parameters: any, successCallback?: (result: any) => void, errorCallback?: (error: any) => void): Promise<any> | void;
+        InvokeProcessAction(name: string, parameters: any, successCallback?: (result: any) => void, errorCallback?: (error: IXrmError) => void): Promise<any> | void;
 
         /**
          * Opens a lookup dialog
          * @param lookupOptions Options for the lookup dialog
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/lookupobjects
          */
-        LookupObjects(lookupOptions: any, successCallback?: (result: any[]) => void, errorCallback?: (error: any) => void): Promise<any[]> | void;
+        LookupObjects(lookupOptions: ILookupOptions, successCallback?: (result: ILookupResult[]) => void, errorCallback?: (error: IXrmError) => void): Promise<ILookupResult[]> | void;
 
         /**
          * Navigates to the specified page
@@ -2402,7 +2904,7 @@ declare namespace DevKit {
          * @param navigationOptions Navigation options
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/navigateto
          */
-        NavigateTo(pageInput: any, navigationOptions: any, successCallback?: () => void, errorCallback?: (error: any) => void): Promise<void> | void;
+        NavigateTo(pageInput: IPageInput, navigationOptions?: INavigationOptions, successCallback?: () => void, errorCallback?: (error: IXrmError) => void): Promise<void> | void;
 
         /**
          * Displays an alert dialog
@@ -2410,7 +2912,7 @@ declare namespace DevKit {
          * @param alertOptions Options for the alert dialog
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/openalertdialog
          */
-        OpenAlertDialog(alertStrings: { confirmButtonLabel?: string; text: string; title?: string }, alertOptions?: { height?: number; width?: number }, closeCallback?: () => void, errorCallback?: (error: any) => void): Promise<void> | void;
+        OpenAlertDialog(alertStrings: { confirmButtonLabel?: string; text: string; title?: string }, alertOptions?: { height?: number; width?: number }, closeCallback?: () => void, errorCallback?: (error: IXrmError) => void): Promise<void> | void;
 
         /**
          * Displays a confirm dialog
@@ -2418,14 +2920,14 @@ declare namespace DevKit {
          * @param confirmOptions Options for the confirm dialog
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/openconfirmdialog
          */
-        OpenConfirmDialog(confirmStrings: { cancelButtonLabel?: string; confirmButtonLabel?: string; subtitle?: string; text: string; title?: string }, confirmOptions?: { height?: number; width?: number }, successCallback?: (result: { confirmed: boolean }) => void, errorCallback?: (error: any) => void): Promise<{ confirmed: boolean }> | void;
+        OpenConfirmDialog(confirmStrings: { cancelButtonLabel?: string; confirmButtonLabel?: string; subtitle?: string; text: string; title?: string }, confirmOptions?: { height?: number; width?: number }, successCallback?: (result: { confirmed: boolean }) => void, errorCallback?: (error: IXrmError) => void): Promise<{ confirmed: boolean }> | void;
 
         /**
          * Displays an error dialog
          * @param errorOptions Options for the error dialog
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/openerrordialog
          */
-        OpenErrorDialog(errorOptions: { details?: string; errorCode?: number; message?: string }, successCallback?: () => void, errorCallback?: (error: any) => void): Promise<void> | void;
+        OpenErrorDialog(errorOptions: { details?: string; errorCode?: number; message?: string }, successCallback?: () => void, errorCallback?: (error: IXrmError) => void): Promise<void> | void;
 
         /**
          * Opens an entity form
@@ -2433,7 +2935,7 @@ declare namespace DevKit {
          * @param formParameters Parameters to pass to the form
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/openform
          */
-        OpenForm(entityFormOptions: any, formParameters?: any, successCallback?: (result: any) => void, errorCallback?: (error: any) => void): Promise<any> | void;
+        OpenForm(entityFormOptions: IEntityFormOptions, formParameters?: any, successCallback?: (result: any) => void, errorCallback?: (error: IXrmError) => void): Promise<any> | void;
 
         /**
          * Opens a URL
@@ -2480,45 +2982,45 @@ declare namespace DevKit {
          * @param imageOptions Options for the image capture
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-device/captureimage
          */
-        CaptureImage(imageOptions?: any, successCallback?: (result: any) => void, errorCallback?: (error: any) => void): Promise<any> | void;
+        CaptureImage(imageOptions?: ICaptureImageOptions, successCallback?: (result: IFileData) => void, errorCallback?: (error: IXrmError) => void): Promise<IFileData> | void;
 
         /**
          * Captures audio using the device microphone
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-device/captureaudio
          */
-        CaptureAudio(successCallback?: (result: any) => void, errorCallback?: (error: any) => void): Promise<any> | void;
+        CaptureAudio(successCallback?: (result: any) => void, errorCallback?: (error: IXrmError) => void): Promise<any> | void;
 
         /**
          * Captures video using the device camera
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-device/capturevideo
          */
-        CaptureVideo(successCallback?: (result: any) => void, errorCallback?: (error: any) => void): Promise<any> | void;
+        CaptureVideo(successCallback?: (result: any) => void, errorCallback?: (error: IXrmError) => void): Promise<any> | void;
 
         /**
          * Gets the barcode value using the device camera
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-device/getbarcodevalue
          */
-        BarcodeValue(successCallback?: (result: string) => void, errorCallback?: (error: any) => void): Promise<string> | void;
+        BarcodeValue(successCallback?: (result: string) => void, errorCallback?: (error: IXrmError) => void): Promise<string> | void;
 
         /**
          * Opens a file picker dialog
          * @param pickFileOptions Options for the file picker
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-device/pickfile
          */
-        PickFile(pickFileOptions?: any, successCallback?: (result: any[]) => void, errorCallback?: (error: any) => void): Promise<any[]> | void;
+        PickFile(pickFileOptions?: IPickFileOptions, successCallback?: (result: IFileData[]) => void, errorCallback?: (error: IXrmError) => void): Promise<IFileData[]> | void;
 
         /**
          * Gets the current geographical position
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-device/getcurrentposition
          */
-        CurrentPosition(successCallback?: (result: any) => void, errorCallback?: (error: any) => void): Promise<any> | void;
+        CurrentPosition(successCallback?: (result: IPosition) => void, errorCallback?: (error: IXrmError) => void): Promise<IPosition> | void;
 
         /**
          * Gets the advanced configuration setting
          * @param setting The setting name
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getadvancedconfigsetting
          */
-        AdvancedConfigSetting(setting: string): number;
+        AdvancedConfigSetting(setting: OptionSet.AdvancedConfigSetting): number;
 
         /**
          * Gets the allowed status transitions for an entity
@@ -2526,13 +3028,13 @@ declare namespace DevKit {
          * @param stateCode The state code
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getallowedstatustransitions
          */
-        AllowedStatusTransitions(entityName: string, stateCode: number, successCallback?: (result: any) => void, errorCallback?: (error: any) => void): Promise<any> | void;
+        AllowedStatusTransitions(entityName: string, stateCode: number, successCallback?: (result: any) => void, errorCallback?: (error: IXrmError) => void): Promise<any> | void;
 
         /**
          * Gets the current app properties
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/getcurrentappproperties
          */
-        CurrentAppProperties(successCallback?: (result: any) => void, errorCallback?: (error: any) => void): Promise<any> | void;
+        CurrentAppProperties(successCallback?: (result: any) => void, errorCallback?: (error: IXrmError) => void): Promise<any> | void;
 
         /**
          * Gets entity main form descriptor
@@ -2583,13 +3085,13 @@ declare namespace DevKit {
          * @param openFileOptions Options for opening the file
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/openfile
          */
-        OpenFile(file: any, openFileOptions?: any): void;
+        OpenFile(file: IFileData, openFileOptions?: IOpenFileOptions): void;
 
         /**
          * Gets page context
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getpagecontext
          */
-        readonly PageContext: any;
+        readonly PageContext: IPageContext;
 
         /**
          * Prepends the organization name to a path
@@ -2640,7 +3142,7 @@ declare namespace DevKit {
          * Get/Set the display state of the side panes: 0=Collapsed, 1=Expanded
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app/xrm-app-sidepanes#state
          */
-        DisplayState: 0 | 1;
+        DisplayState: OptionSet.SidePaneState;
 
         /**
          * Creates a new side pane
@@ -2649,7 +3151,7 @@ declare namespace DevKit {
          * @param errorCallback Function called when there is an error
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app/xrm-app-sidepanes/createpane
          */
-        Create(paneOptions: ISidePaneOptions, successCallback?: (pane: ISidePane) => void, errorCallback?: (error: any) => void): Promise<ISidePane> | void;
+        Create(paneOptions: ISidePaneOptions, successCallback?: (pane: ISidePane) => void, errorCallback?: (error: IXrmError) => void): Promise<ISidePane> | void;
 
         /**
          * Gets a pane by ID
@@ -2715,9 +3217,52 @@ declare namespace DevKit {
         /** Specify whether the pane should be selected or expanded. */
         select(): void;
         /** Opens a page within the selected pane. This is similar to the navigateTo method. */
-        navigate(pageInput: any, navigationOptions?: any, successCallback?: (result: any) => void, errorCallback?: (error: any) => void): void;
+        navigate(pageInput: any, navigationOptions?: any, successCallback?: (result: any) => void, errorCallback?: (error: IXrmError) => void): void;
         /** Badge count to display on the pane tab. */
         badge?: number;
+    }
+
+    // ============================================================================
+    // WebApi Request Interfaces
+    // ============================================================================
+
+    /**
+     * Type information for a WebApi request parameter
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi/online/execute
+     */
+    interface IWebApiRequestParameterType {
+        /** Enum properties if the parameter is an enumeration type */
+        enumProperties?: Array<{ name: string; value: number }>;
+        /** Structural property type: 0=Unknown, 1=PrimitiveType, 2=ComplexType, 3=EnumerationType, 4=Collection, 5=EntityType */
+        structuralProperty: OptionSet.StructuralProperty;
+        /** The EDM type name of the parameter (e.g., "Edm.String", "mscrm.account") */
+        typeName: string;
+    }
+
+    /**
+     * Metadata object returned by getMetadata() for WebApi Execute requests
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi/online/execute
+     */
+    interface IWebApiRequestMetadata {
+        /** Parameter bound to the action. undefined for functions, null for unbound actions, "entity" for entity-bound actions */
+        boundParameter: string | null | undefined;
+        /** Name of the action, function, or CRUD operation. For CRUD operations: "Create", "Retrieve", "Update", "Delete" */
+        operationName: string;
+        /** Type of operation: 0=Action, 1=Function, 2=CRUD */
+        operationType: OptionSet.OperationType;
+        /** Object containing type information for each parameter, keyed by parameter name */
+        parameterTypes: { [parameterName: string]: IWebApiRequestParameterType };
+    }
+
+    /**
+     * Request object for Xrm.WebApi.online.execute() and executeMultiple()
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi/online/execute
+     */
+    interface IWebApiRequest {
+        /** Returns metadata about the request including operation type, name, and parameter types */
+        getMetadata(): IWebApiRequestMetadata;
+        /** Additional properties representing the request parameters - these vary by action/function */
+        [key: string]: any;
     }
 
     // ============================================================================
@@ -2737,7 +3282,7 @@ declare namespace DevKit {
          * @param errorCallback Function called when the operation fails
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi/createrecord
          */
-        CreateRecord(entityLogicalName: string, data: any, successCallback?: (result: { id: string; entityType: string }) => void, errorCallback?: (error: any) => void): Promise<{ id: string; entityType: string }> | void;
+        CreateRecord(entityLogicalName: string, data: any, successCallback?: (result: { id: string; entityType: string }) => void, errorCallback?: (error: IXrmError) => void): Promise<{ id: string; entityType: string }> | void;
 
         /**
          * Deletes an entity record
@@ -2747,7 +3292,7 @@ declare namespace DevKit {
          * @param errorCallback Function called when the operation fails
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi/deleterecord
          */
-        DeleteRecord(entityLogicalName: string, id: string, successCallback?: (result: { id: string; entityType: string }) => void, errorCallback?: (error: any) => void): Promise<{ id: string; entityType: string }> | void;
+        DeleteRecord(entityLogicalName: string, id: string, successCallback?: (result: { id: string; entityType: string }) => void, errorCallback?: (error: IXrmError) => void): Promise<{ id: string; entityType: string }> | void;
 
         /**
          * Retrieves an entity record
@@ -2758,7 +3303,7 @@ declare namespace DevKit {
          * @param errorCallback Function called when the operation fails
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi/retrieverecord
          */
-        RetrieveRecord(entityLogicalName: string, id: string, options?: string, successCallback?: (result: any) => void, errorCallback?: (error: any) => void): Promise<any> | void;
+        RetrieveRecord(entityLogicalName: string, id: string, options?: string, successCallback?: (result: any) => void, errorCallback?: (error: IXrmError) => void): Promise<any> | void;
 
         /**
          * Retrieves a single record and maps it using the provided constructor or factory function (Promise-based)
@@ -2780,8 +3325,8 @@ declare namespace DevKit {
          * @param successCallback Function called when the record is retrieved successfully
          * @param errorCallback Function called when the operation fails
          */
-        RetrieveRecord<T>(apiConstructorOrFactory: ((data: any) => T) | (new (data: any) => T), entityLogicalName: string, id: string, successCallback: (result: T) => void, errorCallback?: (error: any) => void): void;
-        RetrieveRecord<T>(apiConstructorOrFactory: ((data: any) => T) | (new (data: any) => T), entityLogicalName: string, id: string, options: string, successCallback: (result: T) => void, errorCallback?: (error: any) => void): void;
+        RetrieveRecord<T>(apiConstructorOrFactory: ((data: any) => T) | (new (data: any) => T), entityLogicalName: string, id: string, successCallback: (result: T) => void, errorCallback?: (error: IXrmError) => void): void;
+        RetrieveRecord<T>(apiConstructorOrFactory: ((data: any) => T) | (new (data: any) => T), entityLogicalName: string, id: string, options: string, successCallback: (result: T) => void, errorCallback?: (error: IXrmError) => void): void;
 
         /**
          * Retrieves a collection of entity records
@@ -2792,7 +3337,7 @@ declare namespace DevKit {
          * @param errorCallback Function called when the operation fails
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi/retrievemultiplerecords
          */
-        RetrieveMultipleRecords(entityLogicalName: string, options?: string, maxPageSize?: number, successCallback?: (result: { entities: any[]; nextLink?: string }) => void, errorCallback?: (error: any) => void): Promise<{ entities: any[]; nextLink?: string }> | void;
+        RetrieveMultipleRecords(entityLogicalName: string, options?: string, maxPageSize?: number, successCallback?: (result: { entities: any[]; nextLink?: string }) => void, errorCallback?: (error: IXrmError) => void): Promise<{ entities: any[]; nextLink?: string }> | void;
 
         /**
          * Retrieves multiple records and maps them using the provided constructor or factory function (Promise-based)
@@ -2814,8 +3359,8 @@ declare namespace DevKit {
          * @returns A promise that resolves to an array of typed instances
          */
         RetrieveRecords<T>(apiConstructorOrFactory: ((data: any) => T) | (new (data: any) => T), fetchXml: string, maxPageSize?: number): Promise<T[]>;
-        RetrieveRecords<T>(apiConstructorOrFactory: ((data: any) => T) | (new (data: any) => T), entityLogicalName: string, options: string, successCallback: (result: T[]) => void, errorCallback?: (error: any) => void): void;
-        RetrieveRecords<T>(apiConstructorOrFactory: ((data: any) => T) | (new (data: any) => T), entityLogicalName: string, options: string, maxPageSize: number, successCallback: (result: T[]) => void, errorCallback?: (error: any) => void): void;
+        RetrieveRecords<T>(apiConstructorOrFactory: ((data: any) => T) | (new (data: any) => T), entityLogicalName: string, options: string, successCallback: (result: T[]) => void, errorCallback?: (error: IXrmError) => void): void;
+        RetrieveRecords<T>(apiConstructorOrFactory: ((data: any) => T) | (new (data: any) => T), entityLogicalName: string, options: string, maxPageSize: number, successCallback: (result: T[]) => void, errorCallback?: (error: IXrmError) => void): void;
 
         /**
          * Updates an entity record
@@ -2826,7 +3371,7 @@ declare namespace DevKit {
          * @param errorCallback Function called when the operation fails
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi/updaterecord
          */
-        UpdateRecord(entityLogicalName: string, id: string, data: any, successCallback?: (result: { id: string; entityType: string }) => void, errorCallback?: (error: any) => void): Promise<{ id: string; entityType: string }> | void;
+        UpdateRecord(entityLogicalName: string, id: string, data: any, successCallback?: (result: { id: string; entityType: string }) => void, errorCallback?: (error: IXrmError) => void): Promise<{ id: string; entityType: string }> | void;
 
         /**
          * Executes a single action, function, or CRUD operation
@@ -2835,7 +3380,7 @@ declare namespace DevKit {
          * @param errorCallback Function called when the operation fails
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi/online/execute
          */
-        Execute(request: any, successCallback?: (result: any) => void, errorCallback?: (error: any) => void): Promise<any> | void;
+        Execute(request: IWebApiRequest, successCallback?: (result: any) => void, errorCallback?: (error: IXrmError) => void): Promise<any> | void;
 
         /**
          * Executes a collection of action, function, or CRUD operations
@@ -2844,7 +3389,7 @@ declare namespace DevKit {
          * @param errorCallback Function called when the operation fails
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi/online/executemultiple
          */
-        ExecuteMultiple(requests: any[], successCallback?: (result: any[]) => void, errorCallback?: (error: any) => void): Promise<any[]> | void;
+        ExecuteMultiple(requests: IWebApiRequest[], successCallback?: (result: any[]) => void, errorCallback?: (error: IXrmError) => void): Promise<any[]> | void;
 
         /**
          * Contains methods to execute operations that will be executed against the server even when the user is offline
@@ -2871,7 +3416,7 @@ declare namespace DevKit {
          * @param errorCallback The function that will be passed through and be called by a failed response
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi/online/execute
          */
-        Execute(request: any, successCallback?: (result: any) => void, errorCallback?: (error: any) => void): Promise<any> | void;
+        Execute(request: IWebApiRequest, successCallback?: (result: any) => void, errorCallback?: (error: IXrmError) => void): Promise<any> | void;
 
         /**
          * Execute a collection of action, function, or CRUD operations that will be executed against the server even when the user is offline
@@ -2880,7 +3425,7 @@ declare namespace DevKit {
          * @param errorCallback The function that will be passed through and be called by a failed response
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi/online/executemultiple
          */
-        ExecuteMultiple(requests: any[], successCallback?: (result: any[]) => void, errorCallback?: (error: any) => void): Promise<any[]> | void;
+        ExecuteMultiple(requests: IWebApiRequest[], successCallback?: (result: any[]) => void, errorCallback?: (error: IXrmError) => void): Promise<any[]> | void;
     }
 
     /**
@@ -2912,7 +3457,7 @@ declare namespace DevKit {
          * @param successCallback Function called on success
          * @param errorCallback Function called on error
          */
-        ExecuteEvent(eventName: string, eventParameters: any, successCallback?: (result: any) => void, errorCallback?: (error: any) => void): Promise<any> | void;
+        ExecuteEvent(eventName: string, eventParameters: any, successCallback?: (result: any) => void, errorCallback?: (error: IXrmError) => void): Promise<any> | void;
 
         /**
          * Executes a Copilot prompt
@@ -2920,7 +3465,7 @@ declare namespace DevKit {
          * @param successCallback Function called on success
          * @param errorCallback Function called on error
          */
-        ExecutePrompt(promptText: string, successCallback?: (result: any) => void, errorCallback?: (error: any) => void): Promise<any> | void;
+        ExecutePrompt(promptText: string, successCallback?: (result: any) => void, errorCallback?: (error: IXrmError) => void): Promise<any> | void;
     }
 
 
@@ -3173,7 +3718,7 @@ declare namespace DevKit {
          * @param message An optional message that is set as the Alt text on the icon for the step
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/step/setprogress
          */
-        SetProgress(stepProgress: number, message?: string): void;
+        SetProgress(stepProgress: OptionSet.ProcessProgress, message?: string): void;
         /**
          * Returns the logical name of the attribute associated to the step
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/step/getattribute
@@ -3243,7 +3788,7 @@ declare namespace DevKit {
          * Returns a number denoting the full name format selected in the system settings
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#fullnameconventioncode
          */
-        readonly FullNameConventionCode: number;
+        readonly FullNameConventionCode: OptionSet.FullNameConventionCode;
         /**
          * Indicates whether the auto-save option is enabled for the current organization
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#isautosaveenabled
@@ -3487,6 +4032,12 @@ declare namespace OptionSet {
      * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui/setformnotification
      */
     type FormNotificationLevel = "ERROR" | "WARNING" | "INFO";
+    /**
+     * The level of global notification (AddGlobalNotification)
+     * 1=Success, 2=Error, 3=Warning, 4=Information
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app/addglobalnotification
+     */
+    type NotificationLevel = 1 | 2 | 3 | 4;
     /**
      * Display state of a tab on the form
      * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-tabs/getdisplaystate
