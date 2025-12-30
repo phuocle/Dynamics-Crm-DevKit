@@ -2398,10 +2398,18 @@ declare namespace DevKit {
         /** The numeric value of the option */
         readonly value: number;
     }
+    /**
+     * The result from a confirm dialog
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/openconfirmdialog
+     */
     interface DialogResult {
         /** Indicates whether the confirm button was clicked to close the dialog */
         readonly confirmed: boolean;
     }
+    /**
+     * Represents file data returned from device capture methods (camera, microphone) or file picker
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-device/pickfile
+     */
     interface FileData {
         /** Contents of the audio file */
         readonly fileContent: string;
@@ -2447,6 +2455,10 @@ declare namespace DevKit {
         /** Whether the user has create privilege for this field */
         readonly canCreate: boolean;
     }
+    /**
+     * Represents a stage in a business process flow
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/stage
+     */
     interface ProcessStage {
         /**
          * Returns the status of the stage
@@ -2485,6 +2497,10 @@ declare namespace DevKit {
          */
         Steps: Array<ProcessStep>;
     }
+    /**
+     * Represents a step within a business process flow stage
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/step
+     */
     interface ProcessStep {
         /**
          * Updates the progress of the action step. This method is supported only for the action steps. Action steps are buttons on the business process stages that users can click to trigger an on-demand workflow or action. Action step is a preview feature introduced in the Dynamics 365 for Customer Engagement apps version 9.0 release
@@ -2562,6 +2578,10 @@ declare namespace DevKit {
          */
         readonly ProcessName: string;
     }
+    /**
+     * Represents the current active business process flow definition
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/process
+     */
     interface ProcessProcess {
         /**
          * Returns the unique identifier of the process
@@ -3232,6 +3252,10 @@ declare namespace DevKit {
      * @deprecated Use ISidePanes instead for proper async/await support
      */
     type SidePanes = ISidePanes;
+    /**
+     * Provides information about the client application
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/client
+     */
     interface Client {
         /**
         *  Returns a value to indicate which client the script is executing in.
@@ -3259,6 +3283,10 @@ declare namespace DevKit {
         */
         readonly IsNetworkAvailable: boolean;
     }
+    /**
+     * Provides information about the current organization settings
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings
+     */
     interface OrganizationSettings {
         /**
          * Returns attributes and their values as key:value pairs that are available for the organization entity. Additional values will be available as attributes if they are specified as attribute dependencies in the web resource dependency list. The key will be the attribute logical name
@@ -3754,6 +3782,10 @@ declare namespace DevKit {
         /** The message to be displayed in the error dialog */
         message?: string;
     }
+    /**
+     * An object that represents a reference to a Dynamics 365 record
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getvalue
+     */
     interface EntityReference {
         /** Entity type of the record */
         entityType: string;
@@ -3762,6 +3794,10 @@ declare namespace DevKit {
         /** Name of the record */
         name?: string;
     }
+    /**
+     * The object passed to the success callback after a quick create form saves a record
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/openform
+     */
     interface OpenQuickCreateSuccessCallbackObject {
         /**
          * A lookup value which identifies the record which has been created.
@@ -3997,6 +4033,10 @@ declare namespace DevKit {
         /** Array of functions. The corresponding actions for the message */
         actions?: Array<any>;
     }
+    /**
+     * Represents a global notification displayed at the top of the app
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app/addglobalnotification
+     */
     interface GlobalNotification {
         action?: GlobalNotificationAction,
         /** Defines the level of notification. Valid values are: 1: Success | 2: Error | 3: Warning | 4: Information */
@@ -4008,18 +4048,30 @@ declare namespace DevKit {
         /** Defines the type of notification. Currently, only a value of 2 is supported, which displays a message bar at the top of the app. */
         type: 2
     }
+    /**
+     * Defines an action button for a global notification
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app/addglobalnotification
+     */
     interface GlobalNotificationAction {
         /** The label for the action in the message. */
         actionLabel?: string,
         /** Function reference. The function to execute when the action label is clicked. */
         eventHandler?: string
     }
+    /**
+     * Provides methods to get or set information about the view selector of the subgrid control
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/viewselector
+     */
     interface ViewSelector {
         /** Reference to the current view. */
         CurrentView: EntityReference;
         /** Returns a boolean value to indicate whether the view selector is visible */
         readonly Visible: boolean;
     }
+    /**
+     * Base properties for a side pane
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app/xrm-app-sidepanes/createpane
+     */
     interface ISidePaneBase {
         /** The title of the pane. Used in pane header and for tooltip. */
         title?: string,
@@ -4038,12 +4090,20 @@ declare namespace DevKit {
         /** Prevents the badge from getting cleared when the pane becomes selected. */
         keepBadgeOnSelect?: boolean
     }
+    /**
+     * Options for creating a new side pane
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app/xrm-app-sidepanes/createpane
+     */
     interface ISidePaneOptions extends ISidePaneBase {
         /** Hides the header pane, including the title and close button. Default value is false. */
         hideHeader?: boolean,
         /** When set to false, the created pane is not selected and leaves the existing pane selected. It also does not expand the pane if collapsed. */
         isSelected?: boolean
     }
+    /**
+     * Represents a side pane instance with methods to control it
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app/xrm-app-appsidepane
+     */
     interface ISidePane extends ISidePaneBase {
         /** Closes the side pane and removes it from the side bar. */
         close(): void,
