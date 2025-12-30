@@ -36,7 +36,7 @@ export function TestMoney(form: FormAccount_DevKitV4.Form): boolean {
 
         // Inherited from IControl
         results.push({ Test: "R5", Property: "Attribute", Value: money.Attribute ? "object" : "null", Status: "✓" }); // Attribute can be null in some contexts
-        results.push({ Test: "R6", Property: "AttributeName", Value: money.AttributeName, Status: money.AttributeName === "revenue" ? "✓" : "⚠" });
+        results.push({ Test: "R6", Property: "AttributeName", Value: money.AttributeName, Status: money.AttributeName === "v4_money" ? "✓" : "⚠" });
         results.push({ Test: "R7", Property: "AttributeType", Value: money.AttributeType, Status: money.AttributeType === OptionSet.FieldAttributeType.Money ? "✓" : "⚠" });
         results.push({ Test: "R8", Property: "ControlName", Value: money.ControlName, Status: "✓" });
         results.push({ Test: "R9", Property: "ControlType", Value: money.ControlType, Status: "✓" });

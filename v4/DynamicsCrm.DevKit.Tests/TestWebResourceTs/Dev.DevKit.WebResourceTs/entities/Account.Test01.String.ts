@@ -34,7 +34,7 @@ export function TestString(form: FormAccount_DevKitV4.Form): boolean {
 
         // Inherited from IControl
         results.push({ Test: "R3", Property: "Attribute", Value: str.Attribute ? "object" : "null", Status: str.Attribute ? "✓" : "⚠" });
-        results.push({ Test: "R4", Property: "AttributeName", Value: str.AttributeName, Status: str.AttributeName === "name" ? "✓" : "⚠" });
+        results.push({ Test: "R4", Property: "AttributeName", Value: str.AttributeName, Status: str.AttributeName === "v4_string" ? "✓" : "⚠" });
         results.push({ Test: "R5", Property: "AttributeType", Value: str.AttributeType, Status: str.AttributeType === OptionSet.FieldAttributeType.String ? "✓" : "⚠" });
         results.push({ Test: "R6", Property: "ControlName", Value: str.ControlName, Status: "✓" });
         results.push({ Test: "R7", Property: "ControlType", Value: str.ControlType, Status: "✓" });

@@ -37,7 +37,7 @@ export function TestOptionSet(form: FormAccount_DevKitV4.Form): boolean {
 
         // Inherited from IControl
         results.push({ Test: "R6", Property: "Attribute", Value: opt.Attribute ? "object" : "null", Status: opt.Attribute ? "✓" : "⚠" });
-        results.push({ Test: "R7", Property: "AttributeName", Value: opt.AttributeName, Status: opt.AttributeName === "industrycode" ? "✓" : "⚠" });
+        results.push({ Test: "R7", Property: "AttributeName", Value: opt.AttributeName, Status: opt.AttributeName === "v4_optionset" ? "✓" : "⚠" });
         results.push({ Test: "R8", Property: "AttributeType", Value: opt.AttributeType, Status: opt.AttributeType === OptionSet.FieldAttributeType.OptionSet ? "✓" : "⚠" });
         results.push({ Test: "R9", Property: "ControlName", Value: opt.ControlName, Status: "✓" });
         results.push({ Test: "R10", Property: "ControlType", Value: opt.ControlType, Status: "✓" });

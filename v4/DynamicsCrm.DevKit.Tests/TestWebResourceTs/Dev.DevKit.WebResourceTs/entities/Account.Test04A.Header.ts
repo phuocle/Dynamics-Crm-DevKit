@@ -44,7 +44,7 @@ export function TestHeader(form: FormAccount_DevKitV4.Form): boolean {
         // Inherited from IControl (AttributeName/AttributeType may be undefined for Header controls)
         results.push({ Test: "R4", Property: "Attribute", Value: form.Header.v4_Integer1.Attribute ? "object" : "null", Status: form.Header.v4_Integer1.Attribute ? "✓" : "⚠" });
         const attrName = form.Header.v4_Integer1.AttributeName;
-        results.push({ Test: "R5", Property: "AttributeName", Value: attrName, Status: attrName === undefined || attrName === "v4_integer1" ? "✓" : "⚠" });
+        results.push({ Test: "R5", Property: "AttributeName", Value: attrName, Status: attrName === undefined || attrName === "v4_integer" ? "✓" : "⚠" });
         const attrType = form.Header.v4_Integer1.AttributeType;
         results.push({ Test: "R6", Property: "AttributeType", Value: attrType, Status: attrType === undefined || attrType === OptionSet.FieldAttributeType.Integer ? "✓" : "⚠" });
         results.push({ Test: "R7", Property: "ControlName", Value: form.Header.v4_Integer1.ControlName, Status: "✓" });

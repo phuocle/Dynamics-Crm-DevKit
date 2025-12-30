@@ -201,7 +201,7 @@ const FieldAttributeType = {
     /** money - Currency attribute */
     Money: 'money',
     /** multiselectoptionset - Multi-select option set attribute */
-    MultiOptionSet: 'multioptionset',
+    MultiOptionSet: 'multiselectoptionset',
     /** optionset - Single-select option set attribute */
     OptionSet: 'optionset',
     /** string - Single-line text attribute */
