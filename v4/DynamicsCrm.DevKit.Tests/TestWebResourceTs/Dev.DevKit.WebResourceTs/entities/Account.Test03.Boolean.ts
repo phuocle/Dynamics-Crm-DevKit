@@ -167,7 +167,7 @@ export function TestBoolean(form: FormAccount_DevKitV4.Form): boolean {
     const failed = allResults.filter(r => r.Status === "✗").length;
     const total = allResults.length;
 
-    console.groupCollapsed(`✅ [TS] TEST 3: Boolean Control [${startTime}] - Using: v4_Boolean field - ${passed}/${total}`);
+    console.groupCollapsed(`✅ [TS] TEST 03: Boolean Control [${startTime}] - Using: v4_Boolean field - ${passed}/${total}`);
 
     console.log("%c📋 ReadOnly Properties (R1-R15)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
     console.table(results);

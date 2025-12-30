@@ -166,7 +166,7 @@ export function TestInteger(form: FormAccount_DevKitV4.Form): boolean {
     const failed = allResults.filter(r => r.Status === "✗").length;
     const total = allResults.length;
 
-    console.groupCollapsed(`✅ [TS] TEST 4: Integer Control [${startTime}] - Using: v4_Integer field - ${passed}/${total}`);
+    console.groupCollapsed(`✅ [TS] TEST 04: Integer Control [${startTime}] - Using: v4_Integer field - ${passed}/${total}`);
 
     console.log("%c📋 ReadOnly Properties (R1-R16)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
     console.table(results);

@@ -133,7 +133,7 @@ export function TestLookup1(form: FormAccount_DevKitV4.Form): boolean {
     const failed = allResults.filter(r => r.Status === "✗").length;
     const total = allResults.length;
 
-    console.groupCollapsed(`✅ [TS] TEST 8A: Lookup Multi-Control [${startTime}] - OwnerId vs OwnerId1 - ${passed}/${total}`);
+    console.groupCollapsed(`✅ [TS] TEST 08A: Lookup Multi-Control [${startTime}] - OwnerId vs OwnerId1 - ${passed}/${total}`);
 
     console.log("%c📋 ReadOnly Properties (R1-R17) - Comparing both controls", "font-weight: bold; font-size: 14px; color: #4CAF50;");
     console.table(results);

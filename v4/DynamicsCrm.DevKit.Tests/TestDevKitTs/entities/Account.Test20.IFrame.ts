@@ -72,8 +72,8 @@ export function TestIFrame(form: FormAccount_DevKitV4.Form): boolean {
     // Method: ContentWindow
     try {
         form.Body.IFRAME_PhuocLe.ContentWindow(
-            (win: any) => console.log("  📍 IFrame ContentWindow Success", win),
-            (err: any) => console.log("  📍 IFrame ContentWindow Error", err)
+            () => { },
+            () => { }
         );
         methodResults.push({ Test: "S4", Property: "ContentWindow", Value: "Called", Status: "✓" });
     } catch (e: any) {

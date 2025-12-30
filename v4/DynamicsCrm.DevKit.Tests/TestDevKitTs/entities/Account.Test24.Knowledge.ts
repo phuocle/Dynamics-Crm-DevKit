@@ -14,7 +14,8 @@ interface TestResult {
 export function TestKnowledge(form: FormAccount_DevKitV4.Form): boolean {
     // NOTE: v4_KnowledgeSearch field does NOT exist in the new Account.form.ts
     // This test is skipped until Knowledge control is added to the form
-    console.log('⏭️ TEST 24: Knowledge Control - SKIPPED (v4_KnowledgeSearch not on form)');
+    console.groupCollapsed('✅ [TS] TEST 24: Knowledge Control - SKIPPED (v4_KnowledgeSearch not on form)');
+    console.groupEnd();
     return true;
 
     const results: TestResult[] = [];
@@ -63,7 +64,7 @@ export function TestKnowledge(form: FormAccount_DevKitV4.Form): boolean {
     }
 
     // Method: AddPostSearch / RemovePostSearch
-    const postSearchCallback = (ctx: any) => console.log("  📍 Grid PostSearch fired");
+    const postSearchCallback = () => { };
     try {
         kb.AddPostSearch(postSearchCallback);
         kb.RemovePostSearch(postSearchCallback);
@@ -73,7 +74,7 @@ export function TestKnowledge(form: FormAccount_DevKitV4.Form): boolean {
     }
 
     // Method: AddResultOpened / RemoveResultOpened
-    const resultOpenedCallback = (ctx: any) => console.log("  📍 Grid ResultOpened fired");
+    const resultOpenedCallback = () => { };
     try {
         kb.AddResultOpened(resultOpenedCallback);
         kb.RemoveResultOpened(resultOpenedCallback);
@@ -83,7 +84,7 @@ export function TestKnowledge(form: FormAccount_DevKitV4.Form): boolean {
     }
 
     // Method: AddSelection / RemoveSelection
-    const selectionCallback = (ctx: any) => console.log("  📍 Grid Selection fired");
+    const selectionCallback = () => { };
     try {
         kb.AddSelection(selectionCallback);
         kb.RemoveSelection(selectionCallback);

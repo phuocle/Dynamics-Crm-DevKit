@@ -176,7 +176,7 @@ export function TestDecimal(form: FormAccount_DevKitV4.Form): boolean {
     const failed = allResults.filter(r => r.Status === "✗").length;
     const total = allResults.length;
 
-    console.groupCollapsed(`✅ [TS] TEST 5: Decimal Control [${startTime}] - Using: v4_Decimal field - ${passed}/${total}`);
+    console.groupCollapsed(`✅ [TS] TEST 05: Decimal Control [${startTime}] - Using: v4_Decimal field - ${passed}/${total}`);
 
     console.log("%c📋 ReadOnly Properties (R1-R17)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
     console.table(results);

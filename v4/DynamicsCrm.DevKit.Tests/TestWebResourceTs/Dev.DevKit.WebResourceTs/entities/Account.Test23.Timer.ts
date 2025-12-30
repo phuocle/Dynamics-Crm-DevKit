@@ -14,7 +14,8 @@ interface TestResult {
 export function TestTimer(form: FormAccount_DevKitV4.Form): boolean {
     // NOTE: v4_TimerSLA field does NOT exist in the new Account.form.ts
     // This test is skipped until Timer control is added to the form
-    console.log('⏭️ TEST 23: Timer Control - SKIPPED (v4_TimerSLA not on form)');
+    console.groupCollapsed('✅ [TS] TEST 23: Timer Control - SKIPPED (v4_TimerSLA not on form)');
+    console.groupEnd();
     return true;
 
     const results: TestResult[] = [];

@@ -51,10 +51,10 @@ export function TestProcess(form: FormAccount_DevKitV4.Form): boolean {
     // Method: MoveNext / MovePrevious
     try {
         // Just calling to verify definition, callback logs status
-        process.MoveNext((result: any) => console.log("  📍 MoveNext Callback:", result));
+        process.MoveNext(() => { });
         methodResults.push({ Test: "S1", Property: "MoveNext", Value: "Called", Status: "✓" });
 
-        process.MovePrevious((result: any) => console.log("  📍 MovePrevious Callback:", result));
+        process.MovePrevious(() => { });
         methodResults.push({ Test: "S2", Property: "MovePrevious", Value: "Called", Status: "✓" });
     } catch (e: any) {
         methodResults.push({ Test: "S1/S2", Property: "Move Nav", Value: e.message, Status: "✗" });
@@ -65,10 +65,10 @@ export function TestProcess(form: FormAccount_DevKitV4.Form): boolean {
         // We pass empty strings or dummy IDs just to ensure method signature matches at runtime/compile time
         // In a real run, this might fail logic but we want to know if function exists
         const dummyId = "00000000-0000-0000-0000-000000000000";
-        process.SetActiveProcess(dummyId, (status: any) => console.log("  📍 SetActiveProcess:", status));
+        process.SetActiveProcess(dummyId, () => { });
         methodResults.push({ Test: "S3", Property: "SetActiveProcess", Value: "Called", Status: "✓" });
 
-        process.SetActiveStage(dummyId, (status: any) => console.log("  📍 SetActiveStage:", status));
+        process.SetActiveStage(dummyId, () => { });
         methodResults.push({ Test: "S4", Property: "SetActiveStage", Value: "Called", Status: "✓" });
     } catch (e: any) {
         methodResults.push({ Test: "S3/S4", Property: "Set Active", Value: e.message, Status: "✗" });
@@ -77,7 +77,7 @@ export function TestProcess(form: FormAccount_DevKitV4.Form): boolean {
 
 
     // Events: Add/Remove OnStageChange
-    const stageChangeCb = (ctx: any) => console.log("  📍 OnStageChange");
+    const stageChangeCb = () => { };
     try {
         process.AddOnStageChange(stageChangeCb);
         process.RemoveOnStageChange(stageChangeCb);
@@ -87,7 +87,7 @@ export function TestProcess(form: FormAccount_DevKitV4.Form): boolean {
     }
 
     // Events: Add/Remove OnProcessStatusChange
-    const statusChangeCb = (ctx: any) => console.log("  📍 OnProcessStatusChange");
+    const statusChangeCb = () => { };
     try {
         process.AddOnProcessStatusChange(statusChangeCb);
         process.RemoveOnProcessStatusChange(statusChangeCb);
