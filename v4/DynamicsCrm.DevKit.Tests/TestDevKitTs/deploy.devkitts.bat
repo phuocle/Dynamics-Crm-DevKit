@@ -90,18 +90,16 @@ if errorlevel 1 (
     exit /b 1
 )
 
-:: Copy built JavaScript files to build folder
-echo Copying built JavaScript files to build folder...
-
-:: Create build directory if it doesn't exist
-if not exist "%BUILD_TARGET%" mkdir "%BUILD_TARGET%"
-
-xcopy /Y "%SOURCE_DIR%build\Account.js" "%BUILD_TARGET%\"
-if errorlevel 1 (
-    echo [ERROR] Failed to copy Account.js
-    pause
-    exit /b 1
-)
+:: Copy built JavaScript files to build folder - SKIPPED AS REQUESTED
+:: echo Copying built JavaScript files to build folder...
+:: :: Create build directory if it doesn't exist
+:: if not exist "%BUILD_TARGET%" mkdir "%BUILD_TARGET%"
+:: xcopy /Y "%SOURCE_DIR%build\Account.js" "%BUILD_TARGET%\"
+:: if errorlevel 1 (
+::     echo [ERROR] Failed to copy Account.js
+::     pause
+::     exit /b 1
+:: )
 
 echo.
 echo [4/4] Deployment completed successfully!
@@ -117,12 +115,12 @@ echo   - devkit.ts copied to lib/
 echo   - devkit.d.ts copied to lib/
 echo.
 echo Summary - Built JavaScript Files:
-echo   - Account.js copied to build/
-echo ========================================
+echo   - Account.js copied to build/ (SKIPPED)
+========================================
 echo.
 echo Files are ready in:
 echo   TypeScript: %TARGET_DIR%
-echo   JavaScript: %BUILD_TARGET%
+echo.
 echo.
 
 pause
