@@ -74,12 +74,50 @@ namespace DynamicsCrm.DevKit.Shared
 
         public static bool IsTheSame(string value1, string value2)
         {
-            if (value1 == null && value2 == null) return true;
-            if (value1 != null && value2 == null) return false;
-            if (value1 == null && value2 != null) return false;
-            value1 = value1.Replace("\r\n", string.Empty).Replace("\r", string.Empty).Replace("\t", string.Empty).Replace(" ", string.Empty).Trim();
-            value2 = value2.Replace("\r\n", string.Empty).Replace("\r", string.Empty).Replace("\t", string.Empty).Replace(" ", string.Empty).Trim();
-            return string.Equals(value1, value2, StringComparison.OrdinalIgnoreCase);
+            if (ReferenceEquals(value1, value2)) return true;
+            if (value1 == null || value2 == null) return false;
+
+            var len1 = value1.Length;
+            var len2 = value2.Length;
+            var i1 = 0;
+            var i2 = 0;
+
+            while (i1 < len1 || i2 < len2)
+            {
+                // Skip ignorable characters in value1
+                while (i1 < len1 && IsIgnorable(value1[i1]))
+                {
+                    i1++;
+                }
+
+                // Skip ignorable characters in value2
+                while (i2 < len2 && IsIgnorable(value2[i2]))
+                {
+                    i2++;
+                }
+
+                // Check if we reached the end of both strings
+                if (i1 == len1 && i2 == len2) return true;
+
+                // If one string ended but the other didn't (and has non-ignorable content)
+                if (i1 == len1 || i2 == len2) return false;
+
+                // Compare characters
+                if (char.ToUpperInvariant(value1[i1]) != char.ToUpperInvariant(value2[i2]))
+                {
+                    return false;
+                }
+
+                i1++;
+                i2++;
+            }
+
+            return true;
+        }
+
+        private static bool IsIgnorable(char c)
+        {
+            return c == ' ' || c == '\t' || c == '\r' || c == '\n';
         }
 
         public static async Task<string> ReadEmbeddedResourceAsync(string path)
