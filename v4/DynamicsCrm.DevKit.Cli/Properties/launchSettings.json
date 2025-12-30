@@ -56,8 +56,8 @@
     },
     "BUG": {
       "commandName": "Project",
-      "commandLineArgs": "/conn:\"AuthType=ClientSecret;Url=https://org32a30558.crm.dynamics.com;ClientId=58f76dc4-3dca-4a25-9186-51a9322aa1c3;ClientSecret=9WXGRbNwEv/rTkdHIEpasg8HjjQvF1PBQk+YhIEiv5F6w8WHw67SHil9/Sq13e7g;\" /json:\"..\\DynamicsCrm.DevKit.Cli.json\" /type:\"solutionpackagers\" /profile:\"Extract-Both\" /version:\"9.1.0.179\"",
-      "workingDirectory": "D:\\azure\\phuocle\\PreSales\\ThaiAsiaPacific2\\Hs.Tap.SolutionPackager"
+      "commandLineArgs": "/conn:\"AuthType=ClientSecret;Url=https://dynamics-crm-devkit-v4.crm.dynamics.com;ClientId=1a60a5c2-d04c-4b26-8f86-9d6ce0616799;ClientSecret=4Y11hDyKJYQTqXC9cRDXnoJ2DytZDs/jYI1byYwKli57mRfjHcCPu6Qx5sxgtCWQ;\" /json:\"..\\..\\DynamicsCrm.DevKit.Cli.json\" /type:\"generators\" /profile:\"JS-FORM\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v4\\DynamicsCrm.DevKit.Tests\\TestWebResource\\Dev.DevKit.WebResource\\entities"
     },
     "WebResource": {
       "commandName": "Project",
