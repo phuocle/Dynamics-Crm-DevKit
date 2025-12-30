@@ -22,6 +22,10 @@ declare namespace DevKit {
      */
     type ErrorCallback = (error: Error) => void;
     namespace Controls {
+        /**
+         * Base interface for all form controls providing common methods and properties
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
+         */
         interface IControl {
             /**
              * Sets a function to be called when the OnChange event occurs
@@ -174,6 +178,10 @@ declare namespace DevKit {
              */
             Visible: boolean;
         }
+        /**
+         * Base interface for selection-based controls (OptionSet, Boolean, MultiOptionSet)
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes
+         */
         interface IControlSelectBase extends IControl {
             /**
              * Returns a value that represents the value set for a Boolean, OptionSet or MultiOptionSet attribute when the form is opened
@@ -493,10 +501,6 @@ declare namespace DevKit {
              */
             Stages: Collections<ProcessStage>;
         }
-        /**
-         * Provides information about the relationship used to filter a subgrid
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/gridcontrol/getrelationship
-         */
         /**
          * Interface for Dialog forms (quick create dialogs, etc.)
          * Dialog forms contain fields and a Close method
