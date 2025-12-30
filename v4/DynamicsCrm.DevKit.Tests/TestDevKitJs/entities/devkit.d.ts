@@ -853,6 +853,10 @@ declare namespace DevKit {
                 Value: any;
             }
         }
+        /**
+         * Represents a tab on a form
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-tabs
+         */
         interface ITab {
             /**
              * Adds a function to be called when the TabStateChange event occurs
@@ -906,6 +910,10 @@ declare namespace DevKit {
              */
             ContentType: OptionSet.TabContentType;
         }
+        /**
+         * Provides additional methods for option set controls beyond the base selection interface
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
+         */
         interface IControlSelect extends IControlSelectBase {
             /**
              * Returns an option object with the value matching the argument (label or enumeration value) passed to the method
@@ -954,6 +962,10 @@ declare namespace DevKit {
              */
             readonly Text: string;
         }
+        /**
+         * Interface for text-based controls (String, Memo)
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes
+         */
         interface IControlText extends IControl {
             /**
              * Returns a number indicating the maximum length of a string or memo attribute
@@ -967,6 +979,10 @@ declare namespace DevKit {
              */
             Value: string;
         }
+        /**
+         * Interface for numeric controls (Integer, Decimal, Double, Money)
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes
+         */
         interface IControlNumber extends IControl {
             /**
              * Returns a number indicating the maximum allowed value for an attribute
@@ -991,6 +1007,10 @@ declare namespace DevKit {
              */
             Value: number;
         }
+        /**
+         * Interface for quick view form controls
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms
+         */
         interface IQuickView {
             /**
              * Gets the controls on a form or control on form by passing an argument
@@ -1052,6 +1072,10 @@ declare namespace DevKit {
              */
             Visible: boolean;
         }
+        /**
+         * Provides methods to interact with the form header section
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-headersection
+         */
         interface IHeader {
             /**
              * Get/Set the visibility of header section
@@ -1072,18 +1096,46 @@ declare namespace DevKit {
              */
             TabNavigatorVisible: boolean;
         }
+        /**
+         * Interface for whole number (integer) controls
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes
+         */
         interface Integer extends IControlNumber {
         }
+        /**
+         * Interface for decimal number controls
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes
+         */
         interface Decimal extends IControlNumber {
         }
+        /**
+         * Interface for floating-point number controls
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes
+         */
         interface Double extends IControlNumber {
         }
+        /**
+         * Interface for currency (money) controls
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes
+         */
         interface Money extends IControlNumber {
         }
+        /**
+         * Interface for single-line text controls
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes
+         */
         interface String extends IControlText {
         }
+        /**
+         * Interface for multi-line text (memo) controls
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes
+         */
         interface Memo extends IControlText {
         }
+        /**
+         * Interface for date and time controls
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
+         */
         interface DateTime extends IControl {
             /**
              * Get/Set whether a date control shows the time portion of the date
@@ -1098,6 +1150,10 @@ declare namespace DevKit {
              */
             Value: any;
         }
+        /**
+         * Interface for date-only controls
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
+         */
         interface Date extends IControl {
             /**
              * Get/Set the data value for an attribute
@@ -1106,6 +1162,10 @@ declare namespace DevKit {
              */
             Value: any;
         }
+        /**
+         * Interface for lookup controls that select related records
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
+         */
         interface Lookup extends IControl {
             /**
              * Adds filters to the results displayed in the lookup. Each filter will be combined with any previously added filters as an ?AND? condition. This method can only be used in a function in an event handler for the Lookup Control PreSearch Event
@@ -1173,6 +1233,10 @@ declare namespace DevKit {
              */
             EntityTypes: Array<string>;
         }
+        /**
+         * Interface for knowledge base search controls
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
+         */
         interface Knowledge extends IControl {
             /**
              * Adds an event handler to the PostSearch event
@@ -1234,6 +1298,10 @@ declare namespace DevKit {
              */
             SearchQuery: string;
         }
+        /**
+         * Interface for web resource controls embedded in forms
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
+         */
         interface WebResource extends IControl {
             /**
             * Returns the content window that represents an IFRAME or web resource
@@ -1260,6 +1328,10 @@ declare namespace DevKit {
              */
             Src: string;
         }
+        /**
+         * Interface for IFrame controls that embed external content
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
+         */
         interface IFrame extends IControl {
             /**
             * Returns the content window that represents an IFRAME or web resource.
@@ -1291,6 +1363,10 @@ declare namespace DevKit {
              */
             Src: string;
         }
+        /**
+         * Interface for timer controls used in SLA tracking
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
+         */
         interface Timer extends IControl {
             /**
              * Refreshes the data displayed in a timelinewall and timer control
@@ -1303,6 +1379,10 @@ declare namespace DevKit {
              */
             readonly State: number;
         }
+        /**
+         * Interface for timeline wall controls showing activities
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
+         */
         interface TimelineWall extends IControl {
             /**
              * Refreshes the data displayed in a timelinewall and timer control
@@ -1310,6 +1390,10 @@ declare namespace DevKit {
              */
             Refresh(): void;
         }
+        /**
+         * Interface for two-option (Yes/No) controls
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes
+         */
         interface Boolean extends IControlSelectBase {
             /**
              * Get/Set the data value for an attribute
@@ -1318,6 +1402,10 @@ declare namespace DevKit {
              */
             Value: boolean;
         }
+        /**
+         * Interface for single-select option set controls
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
+         */
         interface OptionSet extends IControlSelect {
             /**
              * Returns the option object or an array of option objects selected in an optionset or multiselectoptionset attribute respectively
@@ -1331,6 +1419,10 @@ declare namespace DevKit {
              */
             Value: number;
         }
+        /**
+         * Interface for multi-select option set controls
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
+         */
         interface MultiOptionSet extends IControlSelect {
             /**
              * Returns the option object or an array of option objects selected in an optionset or multiselectoptionset attribute respectively
@@ -1344,6 +1436,10 @@ declare namespace DevKit {
              */
             Value: Array<number>;
         }
+        /**
+         * Interface for navigation items on a form
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-navigation
+         */
         interface NavigationItem {
             /**
              * Sets the focus on the item
@@ -1368,6 +1464,10 @@ declare namespace DevKit {
              */
             Visible: boolean;
         }
+        /**
+         * Interface for sections within a tab
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-sections
+         */
         interface Section {
             /**
              * Get the name of the section
@@ -1397,6 +1497,10 @@ declare namespace DevKit {
              */
             readonly Controls: Collections<IControl>;
         }
+        /**
+         * Interface for subgrid controls on forms
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids
+         */
         interface Grid {
             /**
              * [Read-only and editable grids] Adds event handlers to the Subgrid OnLoad event event
@@ -1510,6 +1614,10 @@ declare namespace DevKit {
              */
             Focus(): void;
         }
+        /**
+         * Interface for a row in a grid
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/gridrow
+         */
         interface GridRow {
             /**
              * [Read-only and editable grids] Returns the logical name for the record in the row
@@ -1533,6 +1641,10 @@ declare namespace DevKit {
             readonly PrimaryAttributeValue: string;
             readonly Columns: Collections<GridColumn>;
         }
+        /**
+         * Interface for a column/cell in a grid row
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/gridcell
+         */
         interface GridColumn {
             /**
              * [Editable grids] Displays an error message for a cell to indicate that data isn?t valid
@@ -2404,6 +2516,10 @@ declare namespace DevKit {
          */
         readonly OptionSet: Array<KeyValueNumber>;
     }
+    /**
+     * Represents an error returned by the Dataverse Web API or client-side operations
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi
+     */
     interface Error {
         /** The error code  */
         readonly code: number;
@@ -2412,6 +2528,10 @@ declare namespace DevKit {
         /** An error message describing the issue */
         readonly message: string;
     }
+    /**
+     * Represents entity privilege metadata
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getentitymetadata
+     */
     interface EntityPrivilege {
         /** Whether the privilege can be basic access level */
         readonly CanBeBasic: boolean;
@@ -2432,6 +2552,10 @@ declare namespace DevKit {
         /** The type of operation for the privilege */
         readonly PrivilegeType: OptionSet.PrivilegeType
     }
+    /**
+     * Represents entity metadata returned by getEntityMetadata
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getentitymetadata
+     */
     interface EntityMetadata {
         /** Whether a custom activity should appear in the activity menus in the Web application. 0 indicates that the custom activity doesn't appear; 1 indicates that it does appear */
         readonly ActivityTypeMask: number;
@@ -2605,6 +2729,10 @@ declare namespace DevKit {
         /** Whether the user has create privilege for this field */
         readonly canCreate: boolean;
     }
+    /**
+     * Represents the relationship information for a filtered subgrid
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/gridcontrol/getrelationship
+     */
     interface GridRelationship {
         /**
          * Name of the attribute
@@ -2672,6 +2800,10 @@ declare namespace DevKit {
          */
         getLength(): number;
     }
+    /**
+     * Defines the execution context for form and control event handlers
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/execution-context
+     */
     interface ExecutionContext {
         /**
          * Gets the state of the data load.
@@ -2752,6 +2884,10 @@ declare namespace DevKit {
         */
         readonly SaveErrorInfo: string;
     }
+    /**
+     * Provides event arguments for execution context events
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/executioncontext/geteventargs
+     */
     interface ExecutionContextEventArgs {
         /**
         *  When the form OnDataLoad/OnLoad event occurs. You can gets the state of the data load. It returns an enum with the following values:
@@ -2788,6 +2924,10 @@ declare namespace DevKit {
          * */
         getSaveMode(): OptionSet.SaveMode;
     }
+    /**
+     * Provides utility methods for common operations in model-driven apps
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility
+     */
     interface Utility {
         /**
          * Returns information about the advanced configuration settings for the organization
@@ -3764,6 +3904,10 @@ declare namespace DevKit {
         /** Utility functions/methods/objects for Dynamics 365 form */
         readonly Utility: Utility;
     }
+    /**
+     * Represents an error dialog displayed to the user
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/openerrordialog
+     */
     interface DialogError {
         /** Details about the error. When you specify this, the Download Log File button is available in the error message, and clicking it will let users download a text file with the content specified in this attribute */
         details?: string;
@@ -3794,21 +3938,37 @@ declare namespace DevKit {
          */
         savedEntityReference: Array<EntityReference>;
     }
+    /**
+     * Options for specifying window size
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/openform
+     */
     interface Window {
         /** Height of the window to display the resultant page in pixels */
         height?: number;
         /** Width of the window to display the resultant page in pixels */
         width?: number;
     }
+    /**
+     * Options for an alert dialog
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/openalertdialog
+     */
     interface DialogAlertOption {
         /** The confirm button label.If you do not specify the button label, OK is used as the button label */
         confirmButtonLabel?: string;
         /** The message to be displayed in the alert dialog */
         text: string;
     }
+    /**
+     * Options for opening a file
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/openfile
+     */
     interface FileOption {
         openMode: OptionSet.FileOption
     }
+    /**
+     * Options for a confirm dialog
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/openconfirmdialog
+     */
     interface DialogConfirmOption {
         /** The message to be displayed in the confirmation dialog */
         text: string;
@@ -3821,6 +3981,10 @@ declare namespace DevKit {
         /** The title to be displayed in the confirmation dialog */
         title?: string;
     }
+    /**
+     * Options for file picker
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-device/pickfile
+     */
     interface FilePickOption {
         /** Image file types to select */
         accept: OptionSet.FileAccept;
@@ -3829,6 +3993,10 @@ declare namespace DevKit {
         /** Maximum size of the files(s) to be selected */
         maximumAllowedFileSize: number;
     }
+    /**
+     * Options for opening a lookup dialog
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/lookupobjects
+     */
     interface LookupOption {
         /** Indicates whether the lookup allows more than one item to be selected */
         allowMultiSelect?: boolean;
@@ -3849,6 +4017,10 @@ declare namespace DevKit {
         /** The views to be available in the view picker. Only system views are supported */
         viewIds?: Array<Guid>;
     }
+    /**
+     * Page input for navigating to an entity list
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/navigateto
+     */
     interface PageInputEntityList {
         /** Specify "entitylist" */
         pageType: "entitylist";
@@ -3859,6 +4031,10 @@ declare namespace DevKit {
         /**  Type of view to load. Specify "savedquery" or "userquery". */
         viewType?: "savedquery" | "userquery";
     }
+    /**
+     * Page input for navigating to an HTML web resource
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/navigateto
+     */
     interface PageInputHtmlWebResource {
         /** Specify "webresource" */
         pageType: "webresource";
@@ -3867,6 +4043,10 @@ declare namespace DevKit {
         /** The data to pass to the web resource. */
         data?: string;
     }
+    /**
+     * Relationship information for PageInputEntityRecord
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/navigateto
+     */
     interface PageInputEntityRecordRelationship {
         /** Name of the attribute used for relationship. */
         attributeName: string,
@@ -3879,6 +4059,10 @@ declare namespace DevKit {
         /** Role type in relationship. Specify one of the following values: 1:Referencing | 2:AssociationEntity */
         roleType: 1 | 2;
     }
+    /**
+     * Page input for navigating to an entity record form
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/navigateto
+     */
     interface PageInputEntityRecord {
         /** Specify "entityrecord" */
         pageType: "entityrecord",
@@ -3907,12 +4091,20 @@ declare namespace DevKit {
         /** Sets the focus on the tab of the form. */
         tabName?: string
     }
+    /**
+     * Page input for navigating to a dashboard
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/navigateto
+     */
     interface PageInputDashboard {
         /** Specify "dashboard" */
         pageType: "dashboard",
         /** The ID of the dashboard to load. If you don't specify the ID, navigates to the default dashboard. */
         dashboardId: string
     }
+    /**
+     * Navigation options for navigateTo method
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/navigateto
+     */
     interface NavigationOptions {
         /** Specify 1 to open the page inline; 2 to open the page in a dialog. Entity lists can only be opened inline; web resources can be opened either inline or in a dialog. */
         target: 1 | 2;
@@ -3925,18 +4117,30 @@ declare namespace DevKit {
         /** The dialog title on top of the center or side dialog. */
         title?: string;
     }
+    /**
+     * Represents a size value with unit
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/navigateto
+     */
     interface SizeValue {
         /** The numerical value */
         value: number;
         /** The unit of measurement. Specify "%" or "px". Default value is "px" */
         unit: "%" | "px";
     }
+    /**
+     * Filter for lookup control
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/lookupobjects
+     */
     interface LookupFilter {
         /** The FetchXML filter element to apply */
         filterXml: string;
         /** The entity type to which to apply this filter */
         entityLogicalName: string
     }
+    /**
+     * Options for opening a form
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/openform
+     */
     interface FormOption {
         /** Indicates whether to display the command bar. If you do not specify this parameter, the command bar is displayed by default */
         cmdbar?: boolean;
@@ -3971,6 +4175,10 @@ declare namespace DevKit {
         /**  Indicates whether the form is navigated to from a different table using cross-table business process flow. */
         isCrossEntityNavigate?: boolean;
     }
+    /**
+     * Relationship object for form navigation
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/openform
+     */
     interface FormRelationship {
         /** Name of the attribute used for relationship */
         attributeName: string;
@@ -3983,6 +4191,10 @@ declare namespace DevKit {
         /** Role type in relationship.  */
         roleType: OptionSet.FormRelationshipRoleType;
     }
+    /**
+     * Options for image capture
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-device/captureimage
+     */
     interface ImageOption {
         /**  Indicates whether to edit the image before saving */
         allowEdit: boolean;
@@ -3995,18 +4207,30 @@ declare namespace DevKit {
         /** Width of the image to capture */
         width?: number;
     }
+    /**
+     * Represents position data from device geolocation
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-device/getcurrentposition
+     */
     interface PositionData {
         /** Contains a set of geographic coordinates along with associated accuracy as well as a set of other optional attributes such as altitude and speed */
         coords: any;
         /** Represents the time when the object was acquired and is represented as DOMTimeStamp */
         timestamp: any;
     }
+    /**
+     * Options for the save method
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-entity/save
+     */
     interface SaveOption {
         /** Specify a value indicating how the save event was initiated */
         saveMode?: OptionSet.SaveMode;
         /** Indicate whether to use the Book or Reschedule messages rather than the Create or Update messages. This option is only applicable when used with appointment, recurring appointment, or service activity records */
         useSchedulingEngine?: boolean;
     }
+    /**
+     * Notification to display on a field
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/addnotification
+     */
     interface FieldNotification {
         /** A collection of objects */
         actions?: Array<FieldNotificationAction>;
@@ -4017,6 +4241,10 @@ declare namespace DevKit {
         /** The ID to use to clear this notification when using the clearNotification method */
         uniqueId: string;
     }
+    /**
+     * Action for a field notification
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/addnotification
+     */
     interface FieldNotificationAction {
         /** The body message of the notification to be displayed to the user. Limit your message to 100 characters for optimal user experience */
         message?: string;
