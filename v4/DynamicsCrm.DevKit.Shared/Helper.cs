@@ -249,11 +249,11 @@ namespace DynamicsCrm.DevKit.Shared
                     var values = attribute.OptionSetValues();
                     if (values.Count == 0)
                     {
-                        code += $"{TAB}{TAB}{attribute.SchemaName} : {{ }},{NEW_LINE}";
+                        code += $"{TAB}{TAB}{attribute.SchemaName}: {{ }},{NEW_LINE}";
                     }
                     else
                     {
-                        code += $"{TAB}{TAB}{attribute.SchemaName} : {{ ";
+                        code += $"{TAB}{TAB}{attribute.SchemaName}: {{ ";
                         foreach (var value in values)
                         {
                             code += $"{value.Name}: {value.Value}, ";
