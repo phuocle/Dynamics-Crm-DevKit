@@ -2291,6 +2291,437 @@ declare namespace DevKit {
         message: string;
     }
 
+    // ============================================================================
+    // Global Notification Interfaces
+    // ============================================================================
+
+    /**
+     * Action object for global notifications
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app/addglobalnotification
+     */
+    interface INotificationAction {
+        /** Label for the action button */
+        actionLabel?: string;
+        /** Function to execute when the action is clicked */
+        eventHandler?: () => void;
+    }
+
+    /**
+     * Notification object for AddGlobalNotification method
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app/addglobalnotification
+     */
+    interface INotification {
+        /** Action object with actionLabel and eventHandler */
+        action?: INotificationAction;
+        /** Notification level: 1=Success, 2=Error, 3=Warning, 4=Information */
+        level: OptionSet.NotificationLevel;
+        /** Message to display in the notification */
+        message: string;
+        /** Whether to show close button (default: true) */
+        showCloseButton?: boolean;
+        /** Notification type: 2=Toast notification (required) */
+        type: 2;
+    }
+
+    // ============================================================================
+    // Lookup Interfaces
+    // ============================================================================
+
+    /**
+     * Filter object for lookup dialogs
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/lookupobjects
+     */
+    interface ILookupFilter {
+        /** Logical name of the entity to filter */
+        entityLogicalName: string;
+        /** FetchXML filter to apply */
+        filterXml: string;
+    }
+
+    /**
+     * Options for the lookup dialog
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/lookupobjects
+     */
+    interface ILookupOptions {
+        /** Whether to allow selecting multiple records */
+        allowMultiSelect?: boolean;
+        /** Default entity type to display */
+        defaultEntityType?: string;
+        /** Default view ID to display */
+        defaultViewId?: string;
+        /** Whether to disable Most Recently Used items */
+        disableMru?: boolean;
+        /** Array of entity types to display in the lookup */
+        entityTypes: string[];
+        /** Array of filters to apply per entity type */
+        filters?: ILookupFilter[];
+        /** Initial search text */
+        searchText?: string;
+        /** Array of view IDs to display */
+        viewIds?: string[];
+    }
+
+    /**
+     * Result object returned from lookup dialog
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/lookupobjects
+     */
+    interface ILookupResult {
+        /** Entity type of the selected record */
+        entityType: string;
+        /** GUID of the selected record */
+        id: string;
+        /** Display name of the selected record */
+        name: string;
+    }
+
+    // ============================================================================
+    // Navigation Interfaces
+    // ============================================================================
+
+    /**
+     * Page input for navigating to an entity list
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/navigateto
+     */
+    interface IPageInputEntityList {
+        /** Page type: must be "entitylist" */
+        pageType: "entitylist";
+        /** Logical name of the entity */
+        entityName: string;
+        /** Optional view ID to display */
+        viewId?: string;
+        /** View type: "savedquery" for system views, "userquery" for personal views */
+        viewType?: "savedquery" | "userquery";
+    }
+
+    /**
+     * Page input for navigating to an entity record
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/navigateto
+     */
+    interface IPageInputEntityRecord {
+        /** Page type: must be "entityrecord" */
+        pageType: "entityrecord";
+        /** Logical name of the entity */
+        entityName: string;
+        /** GUID of the record to open (omit for new record) */
+        entityId?: string;
+        /** Lookup reference to create from */
+        createFromEntity?: { entityType: string; id: string; name?: string };
+        /** Data to pass to the form (field values or custom parameters) */
+        data?: { [key: string]: any };
+        /** Form ID to open */
+        formId?: string;
+        /** Whether this is a cross-entity navigation */
+        isCrossEntityNavigate?: boolean;
+        /** Whether this is an offline sync error scenario */
+        isOfflineSyncError?: boolean;
+        /** Business process flow ID to start */
+        processId?: string;
+        /** Business process flow instance ID */
+        processInstanceId?: string;
+        /** Relationship information for related entity forms */
+        relationship?: {
+            attributeName: string;
+            name: string;
+            navigationPropertyName?: string;
+            relationshipType: OptionSet.FormRelationshipType;
+            roleType: OptionSet.FormRelationshipRoleType;
+        };
+        /** Stage ID in the business process to open */
+        selectedStageId?: string;
+        /** Tab name to navigate to */
+        tabName?: string;
+    }
+
+    /**
+     * Page input for navigating to a dashboard
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/navigateto
+     */
+    interface IPageInputDashboard {
+        /** Page type: must be "dashboard" */
+        pageType: "dashboard";
+        /** GUID of the dashboard to open */
+        dashboardId: string;
+    }
+
+    /**
+     * Page input for navigating to an HTML web resource
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/navigateto
+     */
+    interface IPageInputWebResource {
+        /** Page type: must be "webresource" */
+        pageType: "webresource";
+        /** Name of the web resource to open */
+        webresourceName: string;
+        /** Data to pass to the web resource */
+        data?: string;
+    }
+
+    /**
+     * Page input for navigating to a custom page
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/navigateto
+     */
+    interface IPageInputCustom {
+        /** Page type: must be "custom" */
+        pageType: "custom";
+        /** Unique name of the custom page */
+        name: string;
+        /** Entity name accessible via Param("entityName") */
+        entityName?: string;
+        /** Record ID accessible via Param("recordId") */
+        recordId?: string;
+    }
+
+    /**
+     * Union type for all page input types used in NavigateTo
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/navigateto
+     */
+    type IPageInput = IPageInputEntityList | IPageInputEntityRecord | IPageInputDashboard | IPageInputWebResource | IPageInputCustom;
+
+    /**
+     * Navigation options for the NavigateTo method
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/navigateto
+     */
+    interface INavigationOptions {
+        /** Navigation target: 1=Inline (current page), 2=Dialog */
+        target: 1 | 2;
+        /** Width of the dialog */
+        width?: { value: number; unit: "%" | "px" };
+        /** Height of the dialog */
+        height?: { value: number; unit: "%" | "px" };
+        /** Position: 1=Center, 2=Side */
+        position?: 1 | 2;
+        /** Title of the dialog */
+        title?: string;
+    }
+
+    // ============================================================================
+    // Entity Metadata Interfaces
+    // ============================================================================
+
+    /**
+     * Security privilege object for entity metadata
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getentitymetadata
+     */
+    interface IPrivilege {
+        /** Whether basic access level is allowed */
+        CanBeBasic: boolean;
+        /** Whether deep access level is allowed */
+        CanBeDeep: boolean;
+        /** Whether entity reference access level is allowed */
+        CanBeEntityReference: boolean;
+        /** Whether global access level is allowed */
+        CanBeGlobal: boolean;
+        /** Whether local access level is allowed */
+        CanBeLocal: boolean;
+        /** Whether parent entity reference access level is allowed */
+        CanBeParentEntityReference: boolean;
+        /** Name of the privilege */
+        Name: string;
+        /** GUID of the privilege */
+        PrivilegeId: string;
+        /** Type of privilege (Create, Read, Write, Delete, etc.) */
+        PrivilegeType: number;
+    }
+
+    /**
+     * Attribute metadata object for entity metadata
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getentitymetadata
+     */
+    interface IAttributeMetadata {
+        /** Attribute type code */
+        AttributeType: number;
+        /** Display name of the attribute */
+        DisplayName: string;
+        /** Logical name of the entity */
+        EntityLogicalName: string;
+        /** Logical name of the attribute */
+        LogicalName: string;
+        /** OptionSet for Boolean/Choice/Status attributes */
+        OptionSet?: { [key: string]: any };
+        /** Default form value for Boolean/MultiSelect */
+        DefaultFormValue?: number | boolean;
+    }
+
+    /**
+     * Entity metadata object returned by getEntityMetadata
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getentitymetadata
+     */
+    interface IEntityMetadata {
+        /** Activity type mask: 0 for non-activity, 1 for activity */
+        ActivityTypeMask: number;
+        /** Whether records are auto-routed to owner's queue */
+        AutoRouteToOwnerQueue: boolean;
+        /** Whether sync to external search index can be enabled */
+        CanEnableSyncToExternalSearchIndex: boolean;
+        /** Whether entity can trigger workflows */
+        CanTriggerWorkflow: boolean;
+        /** Description of the entity */
+        Description: string;
+        /** Plural display name of the entity */
+        DisplayCollectionName: string;
+        /** Display name of the entity */
+        DisplayName: string;
+        /** Whether state transitions are enforced */
+        EnforceStateTransitions: boolean;
+        /** Color associated with the entity */
+        EntityColor: string;
+        /** Entity set name for Web API */
+        EntitySetName: string;
+        /** Whether entity has activities */
+        HasActivities: boolean;
+        /** Whether entity is an activity */
+        IsActivity: boolean;
+        /** Whether entity is an activity party */
+        IsActivityParty: boolean;
+        /** Whether business process is enabled */
+        IsBusinessProcessEnabled: boolean;
+        /** Whether entity is a business process flow entity */
+        IsBPFEntity: boolean;
+        /** Whether entity is a child entity */
+        IsChildEntity: boolean;
+        /** Whether connections are enabled */
+        IsConnectionsEnabled: boolean;
+        /** Whether entity is custom */
+        IsCustomEntity: boolean;
+        /** Whether entity is customizable */
+        IsCustomizable: boolean;
+        /** Whether document management is enabled */
+        IsDocumentManagementEnabled: boolean;
+        /** Whether document recommendations are enabled */
+        IsDocumentRecommendationsEnabled: boolean;
+        /** Whether duplicate detection is enabled */
+        IsDuplicateDetectionEnabled: boolean;
+        /** Whether charts are enabled */
+        IsEnabledForCharts: boolean;
+        /** Whether entity is importable */
+        IsImportable: boolean;
+        /** Whether interaction centric is enabled */
+        IsInteractionCentricEnabled: boolean;
+        /** Whether knowledge management is enabled */
+        IsKnowledgeManagementEnabled: boolean;
+        /** Whether mail merge is enabled */
+        IsMailMergeEnabled: boolean;
+        /** Whether entity is managed */
+        IsManaged: boolean;
+        /** Whether OneNote integration is enabled */
+        IsOneNoteIntegrationEnabled: boolean;
+        /** Whether optimistic concurrency is enabled */
+        IsOptimisticConcurrencyEnabled: boolean;
+        /** Whether quick create is enabled */
+        IsQuickCreateEnabled: boolean;
+        /** Whether entity is state model aware */
+        IsStateModelAware: boolean;
+        /** Whether entity is valid for advanced find */
+        IsValidForAdvancedFind: boolean;
+        /** Whether entity is visible in mobile client */
+        IsVisibleInMobileClient: boolean;
+        /** Whether entity is enabled in Unified Interface */
+        IsEnabledInUnifiedInterface: boolean;
+        /** Logical collection name of the entity */
+        LogicalCollectionName: string;
+        /** Logical name of the entity */
+        LogicalName: string;
+        /** Object type code of the entity */
+        ObjectTypeCode: number;
+        /** Ownership type: "UserOwned" or "OrganizationOwned" */
+        OwnershipType: "UserOwned" | "OrganizationOwned";
+        /** Primary ID attribute name */
+        PrimaryIdAttribute: string;
+        /** Primary image attribute name */
+        PrimaryImageAttribute: string;
+        /** Primary name attribute name */
+        PrimaryNameAttribute: string;
+        /** Array of privilege objects */
+        Privileges: IPrivilege[];
+        /** Array of attribute metadata objects */
+        Attributes: IAttributeMetadata[];
+    }
+
+    // ============================================================================
+    // Device API Interfaces
+    // ============================================================================
+
+    /**
+     * Options for capturing an image using the device camera
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-device/captureimage
+     */
+    interface ICaptureImageOptions {
+        /** Whether to allow editing the image before saving */
+        allowEdit?: boolean;
+        /** Quality of the image (1-100) */
+        quality?: number;
+        /** Target height of the image in pixels */
+        height?: number;
+        /** Target width of the image in pixels */
+        width?: number;
+    }
+
+    /**
+     * Coordinates object for geolocation
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-device/getcurrentposition
+     */
+    interface ICoordinates {
+        /** Latitude in decimal degrees */
+        latitude: number;
+        /** Longitude in decimal degrees */
+        longitude: number;
+        /** Accuracy of the position in meters */
+        accuracy?: number;
+        /** Altitude in meters above the WGS84 ellipsoid */
+        altitude?: number | null;
+        /** Accuracy of the altitude in meters */
+        altitudeAccuracy?: number | null;
+        /** Heading in degrees clockwise from true north */
+        heading?: number | null;
+        /** Speed in meters per second */
+        speed?: number | null;
+    }
+
+    /**
+     * Geolocation position object returned by getCurrentPosition
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-device/getcurrentposition
+     */
+    interface IPosition {
+        /** Coordinates object containing latitude, longitude, and other position data */
+        coords: ICoordinates;
+        /** Timestamp (milliseconds since epoch) when the position was obtained */
+        timestamp: number;
+    }
+
+    // ============================================================================
+    // Page Context Interfaces
+    // ============================================================================
+
+    /**
+     * Input object within page context
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getpagecontext
+     */
+    interface IPageContextInput {
+        /** Page type: "entityrecord" for forms, "entitylist" for views */
+        pageType: "entityrecord" | "entitylist";
+        /** Logical name of the entity */
+        entityName: string;
+        /** GUID of the record (entity form only) */
+        entityId?: string;
+        /** Form ID (entity form only) */
+        formId?: string;
+        /** Create from entity reference (entity form only) */
+        createFromEntity?: { entityType: string; id: string; name?: string };
+        /** View ID (entity list only) */
+        viewId?: string;
+        /** View type: "savedquery" or "userquery" (entity list only) */
+        viewType?: "savedquery" | "userquery";
+    }
+
+    /**
+     * Page context object returned by getPageContext
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getpagecontext
+     */
+    interface IPageContext {
+        /** Input object containing page information */
+        input: IPageContextInput;
+    }
+
     /**
      * Options for opening an entity form
      * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/openform
@@ -2423,7 +2854,7 @@ declare namespace DevKit {
          * @param errorCallback Function called if there is an error
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app/addglobalnotification
          */
-        AddGlobalNotification(notification: any, successCallback?: (id: string) => void, errorCallback?: (error: IXrmError) => void): Promise<string> | void;
+        AddGlobalNotification(notification: INotification, successCallback?: (id: string) => void, errorCallback?: (error: IXrmError) => void): Promise<string> | void;
 
         /**
          * Closes the progress indicator dialog
@@ -2450,7 +2881,7 @@ declare namespace DevKit {
          * @param attributes Array of attribute names to retrieve
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getentitymetadata
          */
-        EntityMetadata(entityName: string, attributes?: string[], successCallback?: (metadata: any) => void, errorCallback?: (error: IXrmError) => void): Promise<any> | void;
+        EntityMetadata(entityName: string, attributes?: string[], successCallback?: (metadata: IEntityMetadata) => void, errorCallback?: (error: IXrmError) => void): Promise<IEntityMetadata> | void;
 
         /**
          * Invokes a process action
@@ -2465,7 +2896,7 @@ declare namespace DevKit {
          * @param lookupOptions Options for the lookup dialog
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/lookupobjects
          */
-        LookupObjects(lookupOptions: any, successCallback?: (result: any[]) => void, errorCallback?: (error: IXrmError) => void): Promise<any[]> | void;
+        LookupObjects(lookupOptions: ILookupOptions, successCallback?: (result: ILookupResult[]) => void, errorCallback?: (error: IXrmError) => void): Promise<ILookupResult[]> | void;
 
         /**
          * Navigates to the specified page
@@ -2473,7 +2904,7 @@ declare namespace DevKit {
          * @param navigationOptions Navigation options
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/navigateto
          */
-        NavigateTo(pageInput: any, navigationOptions: any, successCallback?: () => void, errorCallback?: (error: IXrmError) => void): Promise<void> | void;
+        NavigateTo(pageInput: IPageInput, navigationOptions?: INavigationOptions, successCallback?: () => void, errorCallback?: (error: IXrmError) => void): Promise<void> | void;
 
         /**
          * Displays an alert dialog
@@ -2551,7 +2982,7 @@ declare namespace DevKit {
          * @param imageOptions Options for the image capture
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-device/captureimage
          */
-        CaptureImage(imageOptions?: any, successCallback?: (result: any) => void, errorCallback?: (error: IXrmError) => void): Promise<any> | void;
+        CaptureImage(imageOptions?: ICaptureImageOptions, successCallback?: (result: IFileData) => void, errorCallback?: (error: IXrmError) => void): Promise<IFileData> | void;
 
         /**
          * Captures audio using the device microphone
@@ -2582,7 +3013,7 @@ declare namespace DevKit {
          * Gets the current geographical position
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-device/getcurrentposition
          */
-        CurrentPosition(successCallback?: (result: any) => void, errorCallback?: (error: IXrmError) => void): Promise<any> | void;
+        CurrentPosition(successCallback?: (result: IPosition) => void, errorCallback?: (error: IXrmError) => void): Promise<IPosition> | void;
 
         /**
          * Gets the advanced configuration setting
@@ -2660,7 +3091,7 @@ declare namespace DevKit {
          * Gets page context
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getpagecontext
          */
-        readonly PageContext: any;
+        readonly PageContext: IPageContext;
 
         /**
          * Prepends the organization name to a path
@@ -3601,6 +4032,12 @@ declare namespace OptionSet {
      * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui/setformnotification
      */
     type FormNotificationLevel = "ERROR" | "WARNING" | "INFO";
+    /**
+     * The level of global notification (AddGlobalNotification)
+     * 1=Success, 2=Error, 3=Warning, 4=Information
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app/addglobalnotification
+     */
+    type NotificationLevel = 1 | 2 | 3 | 4;
     /**
      * Display state of a tab on the form
      * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-tabs/getdisplaystate
