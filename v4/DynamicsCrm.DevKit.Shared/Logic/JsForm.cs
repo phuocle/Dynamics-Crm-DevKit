@@ -74,9 +74,10 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code += $"{TAB}{@namespace}.Form{Helper.SafeIdentifier(formName)} = function(executionContext, defaultWebResourceName) {{{NEW_LINE}";
             code += $"{TAB}{TAB}const form = {{{NEW_LINE}";
             var codeJsQuickFormBody = GetJsQuickViewCodeBody(form.FormXml);
-            if (codeJsQuickFormBody.Length > 0) code += $"{TAB}{TAB}{TAB}body: [{codeJsQuickFormBody}],{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}body: [{codeJsQuickFormBody}],{NEW_LINE}";
             var tabCode = GetJsCodeTabs(form.FormXml);
-            if (tabCode.Length > 0) code += $"{TAB}{TAB}{TAB}tab: [{tabCode}],{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}tab: [{tabCode}],{NEW_LINE}";
+            code = code.TrimEnd($",{NEW_LINE}".ToCharArray()) + NEW_LINE;
             code += $"{TAB}{TAB}}};{NEW_LINE}";
             code += $"{TAB}{TAB}return devKit.LoadFormV2(executionContext, defaultWebResourceName, form);{NEW_LINE}";
             code += $"{TAB}}};{NEW_LINE}";
@@ -91,23 +92,32 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code += $"{TAB}{@namespace}.Form{Helper.SafeIdentifier(formName)} = function(executionContext, defaultWebResourceName) {{{NEW_LINE}";
             code += $"{TAB}{TAB}const form = {{{NEW_LINE}";
             var bodyCode = GetJsCodeBody(form.FormXml);
-            if (bodyCode.Length > 0) code += $"{TAB}{TAB}{TAB}body: [{bodyCode}],{NEW_LINE}";
-            var tabCode = GetJsCodeTabs(form.FormXml);
-            if (tabCode.Length > 0) code += $"{TAB}{TAB}{TAB}tab: [{tabCode}],{NEW_LINE}";
-            var codeHeader = GetJsCodeHeader(form.FormXml);
-            if (codeHeader.Length > 0) code += $"{TAB}{TAB}{TAB}header: [{codeHeader}],{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}body: [{bodyCode}],{NEW_LINE}";
             var codeProcess = await GetJsProcessCodeAsync();
-            if (codeProcess.Length > 0) code += $"{TAB}{TAB}{TAB}bpf: [{codeProcess}],{NEW_LINE}";
-            var codeQuickForm = await GetJsQuickFormCodeAsync(form.FormXml);
-            if (codeQuickForm.Length > 0) code += $"{TAB}{TAB}{TAB}quick: [{codeQuickForm}],{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}bpf: [{codeProcess}],{NEW_LINE}";
+            var codeDialog = GetJsDialogCode(form.FormXml);
+            code += $"{TAB}{TAB}{TAB}dialog: [{codeDialog}],{NEW_LINE}";
             var codeGrid = GetJsGridCode(form.FormXml);
-            if (codeGrid.Length > 0) code += $"{TAB}{TAB}{TAB}grid: [{codeGrid}],{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}grid: [{codeGrid}],{NEW_LINE}";
+            var codeHeader = GetJsCodeHeader(form.FormXml);
+            code += $"{TAB}{TAB}{TAB}header: [{codeHeader}],{NEW_LINE}";
             var codeNavigation = GetJsNavigationCode(form.FormXml);
-            if (codeNavigation.Length > 0) code += $"{TAB}{TAB}{TAB}navigation: [{codeNavigation}],{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}navigation: [{codeNavigation}],{NEW_LINE}";
+            var codeQuickForm = await GetJsQuickFormCodeAsync(form.FormXml);
+            code += $"{TAB}{TAB}{TAB}quick: [{codeQuickForm}],{NEW_LINE}";
+            var tabCode = GetJsCodeTabs(form.FormXml);
+            code += $"{TAB}{TAB}{TAB}tab: [{tabCode}],{NEW_LINE}";
+            code = code.TrimEnd($",{NEW_LINE}".ToCharArray()) + NEW_LINE;
             code += $"{TAB}{TAB}}};{NEW_LINE}";
             code += $"{TAB}{TAB}return devKit.LoadFormV2(executionContext, defaultWebResourceName, form);{NEW_LINE}";
             code += $"{TAB}}};{NEW_LINE}";
             return code;
+        }
+
+        private static string GetJsDialogCode(string formXml)
+        {
+            var code = string.Empty;
+            return code.TrimEnd($", ".ToCharArray());
         }
 
         private static async Task<string> GetJsQuickFormCodeAsync(string formXml)
@@ -328,6 +338,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                 code += GetJsForListFields(fields, true, $"{name}___");
                 code += ", ";
             }
+            code = code.TrimEnd(", ".ToCharArray());
             return code;
         }
 
