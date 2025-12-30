@@ -93,21 +93,13 @@ declare namespace DevKit {
 			WebSiteURL: DevKit.Controls.String;
 		}
 		interface Navigation {
-			account_adx_inviteredemptions: DevKit.Controls.NavigationItem;
-			account_adx_portalcomments: DevKit.Controls.NavigationItem;
-			Account_Appointments: DevKit.Controls.NavigationItem;
-			account_DeletedItemReferences: DevKit.Controls.NavigationItem;
-			Account_Email_EmailSender: DevKit.Controls.NavigationItem;
-			Account_Email_SendersAccount: DevKit.Controls.NavigationItem;
-			Account_Emails: DevKit.Controls.NavigationItem;
-			account_parent_account: DevKit.Controls.NavigationItem;
-			Account_Phonecalls: DevKit.Controls.NavigationItem;
-			Account_Tasks: DevKit.Controls.NavigationItem;
-			adx_invitation_assigntoaccount: DevKit.Controls.NavigationItem;
-			bpf_account_v4_accountbpf: DevKit.Controls.NavigationItem;
-			contact_customer_accounts: DevKit.Controls.NavigationItem;
-			msa_account_managingpartner: DevKit.Controls.NavigationItem;
-			msa_contact_managingpartner: DevKit.Controls.NavigationItem;
+			navActivities: DevKit.Controls.NavigationItem;
+			navAddresses: DevKit.Controls.NavigationItem;
+			navAsyncOperations: DevKit.Controls.NavigationItem;
+			navCampaignsInSFA: DevKit.Controls.NavigationItem;
+			navProcessSessions: DevKit.Controls.NavigationItem;
+			navRelationships: DevKit.Controls.NavigationItem;
+			navSubAccts: DevKit.Controls.NavigationItem;
 		}
 		interface quickForm_contactquickform_Body {
 			EMailAddress1: DevKit.Controls.QuickView;
@@ -213,23 +205,20 @@ declare namespace DevKit {
 			WebResource_DevKitV4: DevKit.Controls.WebResource;
 		}
 		interface Navigation {
+			nav_adx_invitation_assigntoaccount: DevKit.Controls.NavigationItem;
+			nav_msa_account_managingpartner: DevKit.Controls.NavigationItem;
+			nav_msa_contact_managingpartner: DevKit.Controls.NavigationItem;
 			navActivities: DevKit.Controls.NavigationItem;
+			navAddresses: DevKit.Controls.NavigationItem;
+			navAsyncOperations: DevKit.Controls.NavigationItem;
+			navAudit: DevKit.Controls.NavigationItem;
+			navCampaignsInSFA: DevKit.Controls.NavigationItem;
+			navConnections: DevKit.Controls.NavigationItem;
 			navContacts: DevKit.Controls.NavigationItem;
-			account_adx_inviteredemptions: DevKit.Controls.NavigationItem;
-			account_adx_portalcomments: DevKit.Controls.NavigationItem;
-			Account_Appointments: DevKit.Controls.NavigationItem;
-			account_DeletedItemReferences: DevKit.Controls.NavigationItem;
-			Account_Email_EmailSender: DevKit.Controls.NavigationItem;
-			Account_Email_SendersAccount: DevKit.Controls.NavigationItem;
-			Account_Emails: DevKit.Controls.NavigationItem;
-			account_parent_account: DevKit.Controls.NavigationItem;
-			Account_Phonecalls: DevKit.Controls.NavigationItem;
-			Account_Tasks: DevKit.Controls.NavigationItem;
-			adx_invitation_assigntoaccount: DevKit.Controls.NavigationItem;
-			bpf_account_v4_accountbpf: DevKit.Controls.NavigationItem;
-			contact_customer_accounts: DevKit.Controls.NavigationItem;
-			msa_account_managingpartner: DevKit.Controls.NavigationItem;
-			msa_contact_managingpartner: DevKit.Controls.NavigationItem;
+			navProcessSessions: DevKit.Controls.NavigationItem;
+			navRelationships: DevKit.Controls.NavigationItem;
+			navSocialprofiles: DevKit.Controls.NavigationItem;
+			navSubAccts: DevKit.Controls.NavigationItem;
 		}
 		interface quickForm_ContactQuickForm_Body {
 			EMailAddress1: DevKit.Controls.QuickView;
@@ -365,21 +354,12 @@ declare namespace DevKit {
 			WebSiteURL: DevKit.Controls.String;
 		}
 		interface Navigation {
-			account_adx_inviteredemptions: DevKit.Controls.NavigationItem;
-			account_adx_portalcomments: DevKit.Controls.NavigationItem;
-			Account_Appointments: DevKit.Controls.NavigationItem;
-			account_DeletedItemReferences: DevKit.Controls.NavigationItem;
-			Account_Email_EmailSender: DevKit.Controls.NavigationItem;
-			Account_Email_SendersAccount: DevKit.Controls.NavigationItem;
-			Account_Emails: DevKit.Controls.NavigationItem;
-			account_parent_account: DevKit.Controls.NavigationItem;
-			Account_Phonecalls: DevKit.Controls.NavigationItem;
-			Account_Tasks: DevKit.Controls.NavigationItem;
-			adx_invitation_assigntoaccount: DevKit.Controls.NavigationItem;
-			bpf_account_v4_accountbpf: DevKit.Controls.NavigationItem;
-			contact_customer_accounts: DevKit.Controls.NavigationItem;
-			msa_account_managingpartner: DevKit.Controls.NavigationItem;
-			msa_contact_managingpartner: DevKit.Controls.NavigationItem;
+			navActivities: DevKit.Controls.NavigationItem;
+			navAddresses: DevKit.Controls.NavigationItem;
+			navAsyncOperations: DevKit.Controls.NavigationItem;
+			navProcessSessions: DevKit.Controls.NavigationItem;
+			navRelationships: DevKit.Controls.NavigationItem;
+			navSubAccts: DevKit.Controls.NavigationItem;
 		}
 		interface quickForm_contactquickform_Body {
 			EMailAddress1: DevKit.Controls.QuickView;
@@ -574,21 +554,11 @@ declare namespace DevKit {
 			WebSiteURL: DevKit.Controls.String;
 		}
 		interface Navigation {
-			account_adx_inviteredemptions: DevKit.Controls.NavigationItem;
-			account_adx_portalcomments: DevKit.Controls.NavigationItem;
-			Account_Appointments: DevKit.Controls.NavigationItem;
-			account_DeletedItemReferences: DevKit.Controls.NavigationItem;
-			Account_Email_EmailSender: DevKit.Controls.NavigationItem;
-			Account_Email_SendersAccount: DevKit.Controls.NavigationItem;
-			Account_Emails: DevKit.Controls.NavigationItem;
-			account_parent_account: DevKit.Controls.NavigationItem;
-			Account_Phonecalls: DevKit.Controls.NavigationItem;
-			Account_Tasks: DevKit.Controls.NavigationItem;
-			adx_invitation_assigntoaccount: DevKit.Controls.NavigationItem;
-			bpf_account_v4_accountbpf: DevKit.Controls.NavigationItem;
-			contact_customer_accounts: DevKit.Controls.NavigationItem;
-			msa_account_managingpartner: DevKit.Controls.NavigationItem;
-			msa_contact_managingpartner: DevKit.Controls.NavigationItem;
+			navActivities: DevKit.Controls.NavigationItem;
+			navActivityHistory: DevKit.Controls.NavigationItem;
+			navAddresses: DevKit.Controls.NavigationItem;
+			navRelationships: DevKit.Controls.NavigationItem;
+			navSubAct: DevKit.Controls.NavigationItem;
 		}
 		interface ProcessAccountBPF {
 			/** Select the account's primary industry for use in marketing segmentation and demographic analysis. */

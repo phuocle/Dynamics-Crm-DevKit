@@ -9,6 +9,10 @@
             "WebResource": "v4_/entities/Account.js"
         },
         {
+            "File": "\\Dev.DevKit.WebResource\\entities\\Account.webapi.js",
+            "WebResource": "v4_/entities/Account.webapi.js"
+        },
+        {
             "File": "\\Dev.DevKit.WebResource\\html\\devkitv4.html",
             "WebResource": "v4_/html/devkitv4.html"
         },
