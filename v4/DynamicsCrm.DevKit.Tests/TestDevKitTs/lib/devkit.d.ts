@@ -647,17 +647,12 @@ declare namespace DevKit {
             Value: Date | null;
         }
 
+
         /**
          * Interface for WebResource controls
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
          */
         interface WebResource {
-            /**
-             * Sets the focus on the control
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/setfocus
-             */
-            Focus(): void;
-
             /**
              * Returns the content window that represents a web resource
              * @param successCallback A function to call when operation is executed successfully
@@ -673,18 +668,6 @@ declare namespace DevKit {
             ContentWindow(): Promise<any>;
 
             /**
-             * Returns a string value that represents the type of control
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getcontroltype
-             */
-            readonly ControlType: string;
-
-            /**
-             * Returns the name assigned to the control
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getname
-             */
-            readonly ControlName: string;
-
-            /**
              * Returns the object in the form that represents the web resource (the IFrame element)
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getobject
              */
@@ -696,27 +679,6 @@ declare namespace DevKit {
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/setsrc
              */
             Src: string;
-
-            /**
-             * Get/Set whether the control is disabled
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getdisabled
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/setdisabled
-             */
-            Disabled: boolean;
-
-            /**
-             * Get/Set the label for the control
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getlabel
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/setlabel
-             */
-            Label: string;
-
-            /**
-             * Get/Set a value that indicates whether the control is currently visible
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getvisible
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/setvisible
-             */
-            Visible: boolean;
         }
 
         /**
@@ -724,12 +686,6 @@ declare namespace DevKit {
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
          */
         interface IFrame {
-            /**
-             * Sets the focus on the control
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/setfocus
-             */
-            Focus(): void;
-
             /**
              * Returns the content window that represents an IFRAME
              * @param successCallback A function to call when operation is executed successfully
@@ -743,18 +699,6 @@ declare namespace DevKit {
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getcontentwindow
              */
             ContentWindow(): Promise<any>;
-
-            /**
-             * Returns a string value that represents the type of control
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getcontroltype
-             */
-            readonly ControlType: string;
-
-            /**
-             * Returns the name assigned to the control
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getname
-             */
-            readonly ControlName: string;
 
             /**
              * Returns the default URL that an IFRAME control is configured to display
@@ -774,27 +718,6 @@ declare namespace DevKit {
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/setsrc
              */
             Src: string;
-
-            /**
-             * Get/Set whether the control is disabled
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getdisabled
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/setdisabled
-             */
-            Disabled: boolean;
-
-            /**
-             * Get/Set the label for the control
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getlabel
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/setlabel
-             */
-            Label: string;
-
-            /**
-             * Get/Set a value that indicates whether the control is currently visible
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getvisible
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/setvisible
-             */
-            Visible: boolean;
         }
 
         /**
@@ -1214,7 +1137,7 @@ declare namespace DevKit {
              * Base interface for dialog controls providing basic UI properties
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
              */
-            interface IControlBase {
+            interface IDialogControlBase {
                 /**
                  * Get/Set whether the control is disabled
                  * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getdisabled
@@ -1239,7 +1162,7 @@ declare namespace DevKit {
              * Interface for dialog controls with change event and validation support
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
              */
-            interface IControl extends IControlBase {
+            interface IControl extends IDialogControlBase {
                 /**
                  * Sets a function to be called when the OnChange event occurs
                  * @param callback The function to be executed on the OnChange event
@@ -1275,7 +1198,7 @@ declare namespace DevKit {
                  * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getrequiredlevel
                  * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/setrequiredlevel
                  */
-                RequiredLevel: FieldRequiredLevel;
+                RequiredLevel: OptionSet.FieldRequiredLevel;
                 /**
                  * Returns a Boolean value indicating if there are unsaved changes to the attribute value
                  * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getisdirty
@@ -1445,14 +1368,14 @@ declare namespace DevKit {
              * Interface for dialog Button controls
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
              */
-            interface Button extends IControlBase {
+            interface Button extends IDialogControlBase {
             }
 
             /**
              * Interface for dialog Label controls (read-only display)
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
              */
-            interface Label extends IControlBase {
+            interface Label extends IDialogControlBase {
             }
 
             /**
@@ -2721,6 +2644,49 @@ declare namespace DevKit {
     }
 
     // ============================================================================
+    // WebApi Request Interfaces
+    // ============================================================================
+
+    /**
+     * Type information for a WebApi request parameter
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi/online/execute
+     */
+    interface IWebApiRequestParameterType {
+        /** Enum properties if the parameter is an enumeration type */
+        enumProperties?: Array<{ name: string; value: number }>;
+        /** Structural property type: 0=Unknown, 1=PrimitiveType, 2=ComplexType, 3=EnumerationType, 4=Collection, 5=EntityType */
+        structuralProperty: OptionSet.StructuralProperty;
+        /** The EDM type name of the parameter (e.g., "Edm.String", "mscrm.account") */
+        typeName: string;
+    }
+
+    /**
+     * Metadata object returned by getMetadata() for WebApi Execute requests
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi/online/execute
+     */
+    interface IWebApiRequestMetadata {
+        /** Parameter bound to the action. undefined for functions, null for unbound actions, "entity" for entity-bound actions */
+        boundParameter: string | null | undefined;
+        /** Name of the action, function, or CRUD operation. For CRUD operations: "Create", "Retrieve", "Update", "Delete" */
+        operationName: string;
+        /** Type of operation: 0=Action, 1=Function, 2=CRUD */
+        operationType: OptionSet.OperationType;
+        /** Object containing type information for each parameter, keyed by parameter name */
+        parameterTypes: { [parameterName: string]: IWebApiRequestParameterType };
+    }
+
+    /**
+     * Request object for Xrm.WebApi.online.execute() and executeMultiple()
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi/online/execute
+     */
+    interface IWebApiRequest {
+        /** Returns metadata about the request including operation type, name, and parameter types */
+        getMetadata(): IWebApiRequestMetadata;
+        /** Additional properties representing the request parameters - these vary by action/function */
+        [key: string]: any;
+    }
+
+    // ============================================================================
     // WebApi Interface
     // ============================================================================
 
@@ -2835,7 +2801,7 @@ declare namespace DevKit {
          * @param errorCallback Function called when the operation fails
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi/online/execute
          */
-        Execute(request: any, successCallback?: (result: any) => void, errorCallback?: (error: any) => void): Promise<any> | void;
+        Execute(request: IWebApiRequest, successCallback?: (result: any) => void, errorCallback?: (error: any) => void): Promise<any> | void;
 
         /**
          * Executes a collection of action, function, or CRUD operations
@@ -2844,7 +2810,7 @@ declare namespace DevKit {
          * @param errorCallback Function called when the operation fails
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi/online/executemultiple
          */
-        ExecuteMultiple(requests: any[], successCallback?: (result: any[]) => void, errorCallback?: (error: any) => void): Promise<any[]> | void;
+        ExecuteMultiple(requests: IWebApiRequest[], successCallback?: (result: any[]) => void, errorCallback?: (error: any) => void): Promise<any[]> | void;
 
         /**
          * Contains methods to execute operations that will be executed against the server even when the user is offline
@@ -2871,7 +2837,7 @@ declare namespace DevKit {
          * @param errorCallback The function that will be passed through and be called by a failed response
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi/online/execute
          */
-        Execute(request: any, successCallback?: (result: any) => void, errorCallback?: (error: any) => void): Promise<any> | void;
+        Execute(request: IWebApiRequest, successCallback?: (result: any) => void, errorCallback?: (error: any) => void): Promise<any> | void;
 
         /**
          * Execute a collection of action, function, or CRUD operations that will be executed against the server even when the user is offline
@@ -2880,7 +2846,7 @@ declare namespace DevKit {
          * @param errorCallback The function that will be passed through and be called by a failed response
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi/online/executemultiple
          */
-        ExecuteMultiple(requests: any[], successCallback?: (result: any[]) => void, errorCallback?: (error: any) => void): Promise<any[]> | void;
+        ExecuteMultiple(requests: IWebApiRequest[], successCallback?: (result: any[]) => void, errorCallback?: (error: any) => void): Promise<any[]> | void;
     }
 
     /**
