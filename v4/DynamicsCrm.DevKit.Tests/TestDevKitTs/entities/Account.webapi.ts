@@ -671,7 +671,3 @@ export class AccountApi {
 
 // Type assertion to make AccountApi instances work as IAccountApi
 export interface AccountApi extends IAccountApi { }
-
-export default AccountApi;
-
-

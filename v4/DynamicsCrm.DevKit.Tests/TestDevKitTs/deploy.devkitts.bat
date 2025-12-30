@@ -31,7 +31,6 @@ echo.
 
 set SOURCE_DIR=%~dp0
 set TARGET_DIR=%~dp0..\TestWebResourceTs\Dev.DevKit.WebResourceTs
-set BUILD_TARGET=%~dp0..\TestWebResourceTs\build
 
 :: Copy TypeScript files to entities folder
 echo Copying TypeScript source files to entities folder...
@@ -90,16 +89,15 @@ if errorlevel 1 (
     exit /b 1
 )
 
-:: Copy built JavaScript files to build folder - SKIPPED AS REQUESTED
-:: echo Copying built JavaScript files to build folder...
-:: :: Create build directory if it doesn't exist
-:: if not exist "%BUILD_TARGET%" mkdir "%BUILD_TARGET%"
-:: xcopy /Y "%SOURCE_DIR%build\Account.js" "%BUILD_TARGET%\"
-:: if errorlevel 1 (
-::     echo [ERROR] Failed to copy Account.js
-::     pause
-::     exit /b 1
-:: )
+:: Copy build.js to root folder
+echo Copying build.js to root folder...
+
+xcopy /Y "%SOURCE_DIR%build.js" "%TARGET_DIR%\"
+if errorlevel 1 (
+    echo [ERROR] Failed to copy build.js
+    pause
+    exit /b 1
+)
 
 echo.
 echo [4/4] Deployment completed successfully!
@@ -113,10 +111,11 @@ echo   - OptionSet.ts copied to entities/
 echo   - Account.Test*.ts files copied to entities/
 echo   - devkit.ts copied to lib/
 echo   - devkit.d.ts copied to lib/
+echo   - build.js copied to root/
 echo.
 echo Summary - Built JavaScript Files:
 echo   - Account.js copied to build/ (SKIPPED)
-========================================
+echo ========================================
 echo.
 echo Files are ready in:
 echo   TypeScript: %TARGET_DIR%

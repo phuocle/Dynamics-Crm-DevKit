@@ -1,6 +1,10 @@
 ﻿{
     "WebResources": [
         {
+            "File": "\\Dev.DevKit.WebResourceTs\\build\\Account.js",
+            "WebResource": "v4_/build/Account.js"
+        },
+        {
             "File": "\\Dev.DevKit.WebResource\\entities\\Account.form.js",
             "WebResource": "v4_/entities/Account.form.js"
         },

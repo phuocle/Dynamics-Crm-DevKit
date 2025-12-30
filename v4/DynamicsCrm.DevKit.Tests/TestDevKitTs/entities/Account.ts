@@ -1,4 +1,4 @@
-import { FormAccount_DevKitV4 } from './Account.form';
+import { FormAccount_DevKitV4, FormAccount } from './Account.form';
 import { TestControl } from './Account.Test00.Control';
 import { TestString } from './Account.Test01.String';
 import { TestMemo } from './Account.Test02.Memo';
@@ -183,4 +183,19 @@ const formAccount_DevKitV4 = (function () {
     };
 })();
 
-export default formAccount_DevKitV4;
+const formAccount = (function () {
+    "use strict";
+
+    let form: FormAccount.Form;
+
+    async function onLoad(executionContext: any): Promise<void> {
+        debugger;
+        form = new FormAccount.Form(executionContext);
+    }
+
+    return {
+        OnLoad: onLoad
+    };
+})();
+
+export { formAccount_DevKitV4, formAccount };

@@ -54,7 +54,33 @@ async function buildEntity(file) {
     const entryPoint = path.join(entitiesDir, file);
     const outFile = path.join(buildDir, `${name}.js`);
     const globalName = `IIFE${name}`;
-    const footerCode = `(function(){if(typeof ${globalName}!=='undefined'&&${globalName}.default)window['form${name}']=${globalName}.default;})();`;
+
+    // Read the TypeScript file to extract all exported variable names from "export { ... }" statement
+    let exportedNames = [];
+    try {
+        const content = fs.readFileSync(entryPoint, 'utf8');
+        // Find pattern: export { name1, name2, ... };
+        const regex = /^export\s*\{\s*([^}]+)\s*\}\s*;?\s*$/gm;
+        let match;
+        while ((match = regex.exec(content)) !== null) {
+            // Split by comma and trim whitespace
+            const names = match[1].split(',').map(n => n.trim()).filter(n => n.length > 0);
+            exportedNames.push(...names);
+        }
+        // Fallback if no matches found
+        if (exportedNames.length === 0) {
+            exportedNames.push(`form${name}`);
+        }
+    } catch (readError) {
+        exportedNames.push(`form${name}`);
+    }
+
+    // Create footer code that exposes all named exports to window
+    // IIFEAccount.formAccount_DevKitV4 and IIFEAccount.formAccount both need to be exposed
+    const footerParts = exportedNames.map(exportedName =>
+        `if(typeof ${globalName}!=='undefined'&&${globalName}.${exportedName})window['${exportedName}']=${globalName}.${exportedName};`
+    );
+    const footerCode = `(function(){${footerParts.join('')}})();`;
 
     try {
         await esbuild.build({
@@ -72,7 +98,8 @@ async function buildEntity(file) {
 
         const stats = fs.statSync(outFile);
         const sizeKb = (stats.size / 1024).toFixed(1);
-        console.log(`  ✓ ${name}.js (${sizeKb} KB)`);
+        const exportList = exportedNames.map(n => `window['${n}']`).join(', ');
+        console.log(`  ✓ ${name}.js (${sizeKb} KB) → ${exportList}`);
         return true;
     } catch (error) {
         console.error(`  ✗ ${name}.ts - Build failed:`, error.message);
