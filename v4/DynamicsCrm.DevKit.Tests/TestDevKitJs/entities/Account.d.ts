@@ -93,8 +93,6 @@ declare namespace DevKit {
 			WebSiteURL: DevKit.Controls.String;
 		}
 		interface Navigation {
-			navActivities: DevKit.Controls.NavigationItem;
-			navContacts: DevKit.Controls.NavigationItem;
 			account_adx_inviteredemptions: DevKit.Controls.NavigationItem;
 			account_adx_portalcomments: DevKit.Controls.NavigationItem;
 			Account_Appointments: DevKit.Controls.NavigationItem;
@@ -215,6 +213,8 @@ declare namespace DevKit {
 			WebResource_DevKitV4: DevKit.Controls.WebResource;
 		}
 		interface Navigation {
+			navActivities: DevKit.Controls.NavigationItem;
+			navContacts: DevKit.Controls.NavigationItem;
 			account_adx_inviteredemptions: DevKit.Controls.NavigationItem;
 			account_adx_portalcomments: DevKit.Controls.NavigationItem;
 			Account_Appointments: DevKit.Controls.NavigationItem;
