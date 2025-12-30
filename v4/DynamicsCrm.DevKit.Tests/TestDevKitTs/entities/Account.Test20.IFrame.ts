@@ -11,7 +11,7 @@ interface TestResult {
  * TEST 21: IFrame Control - v4_IFrameExternal Field
  * IFrame extends IControl with specific properties: Src, InitialUrl, ContentWindow
  */
-export function TestIFrame(form: FormAccount_DevKitV4.Form): void {
+export function TestIFrame(form: FormAccount_DevKitV4.Form): boolean {
     const results: TestResult[] = [];
     const methodResults: TestResult[] = [];
     const startTime = new Date().toLocaleTimeString();
@@ -97,7 +97,7 @@ export function TestIFrame(form: FormAccount_DevKitV4.Form): void {
     const failed = allResults.filter(r => r.Status === "✗").length;
     const total = allResults.length;
 
-    console.groupCollapsed(`✅ TEST 21: IFrame Control [${startTime}] - Using: IFRAME_PhuocLe - ${passed}/${total}`);
+    console.groupCollapsed(`✅ [TS] TEST 20: IFrame Control [${startTime}] - Using: IFRAME_PhuocLe - ${passed}/${total}`);
 
     console.log("%c📋 ReadOnly Properties (R1-R7)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
     console.table(results);
@@ -111,6 +111,7 @@ export function TestIFrame(form: FormAccount_DevKitV4.Form): void {
         "font-weight: bold; color: #4CAF50; font-size: 14px;");
 
     console.groupEnd();
+    return passed === total;
 }
 
 

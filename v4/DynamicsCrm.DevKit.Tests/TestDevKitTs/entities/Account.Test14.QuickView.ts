@@ -12,7 +12,7 @@ interface TestResult {
  * QuickView extends IQuickView with IsLoaded, Refresh, Controls methods
  * Body fields: EMailAddress1, FirstName, LastName, MobilePhone, ParentCustomerId
  */
-export function TestQuickView(form: FormAccount_DevKitV4.Form): void {
+export function TestQuickView(form: FormAccount_DevKitV4.Form): boolean {
     const results: TestResult[] = [];
     const methodResults: TestResult[] = [];
     const qv = form.QuickForm.ContactQuickForm;
@@ -115,7 +115,7 @@ export function TestQuickView(form: FormAccount_DevKitV4.Form): void {
     const failed = allResults.filter(r => r.Status === "✗").length;
     const total = allResults.length;
 
-    console.groupCollapsed(`✅ TEST 25: QuickView Control [${startTime}] - Using: ContactQuickForm - ${passed}/${total}`);
+    console.groupCollapsed(`✅ [TS] TEST 14: QuickView Control [${startTime}] - Using: ContactQuickForm - ${passed}/${total}`);
 
     console.log("%c📋 ReadOnly Properties (R1-R9)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
     console.table(results);
@@ -129,5 +129,6 @@ export function TestQuickView(form: FormAccount_DevKitV4.Form): void {
         "font-weight: bold; color: #4CAF50; font-size: 14px;");
 
     console.groupEnd();
+    return passed === total;
 }
 

@@ -17,7 +17,7 @@ interface TestResult {
  * - R-Index: ReadOnly properties / Promise-based tests (R1, R2, R3...)
  * - S-Index: Setters & Methods / Additional tests (S1, S2, S3...)
  */
-export async function TestWebApi(form: FormAccount_DevKitV4.Form): Promise<void> {
+export async function TestWebApi(form: FormAccount_DevKitV4.Form): Promise<boolean> {
     const results: TestResult[] = [];
     const methodResults: TestResult[] = [];
     const startTime = new Date().toLocaleTimeString();
@@ -246,7 +246,7 @@ export async function TestWebApi(form: FormAccount_DevKitV4.Form): Promise<void>
     const failed = allResults.filter(r => r.Status === "✗").length;
     const total = allResults.length;
 
-    console.groupCollapsed(`✅ TEST 6: WebApi [${startTime}] - Early-bound style - ${passed}/${total}`);
+    console.groupCollapsed(`✅ [TS] TEST 25: WebApi [${startTime}] - Early-bound style - ${passed}/${total}`);
 
     console.log("%c📋 AccountApi Factory Tests (R1-R5)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
     console.table(results);
@@ -260,5 +260,6 @@ export async function TestWebApi(form: FormAccount_DevKitV4.Form): Promise<void>
         "font-weight: bold; color: #4CAF50; font-size: 14px;");
 
     console.groupEnd();
+    return passed === total;
 }
 

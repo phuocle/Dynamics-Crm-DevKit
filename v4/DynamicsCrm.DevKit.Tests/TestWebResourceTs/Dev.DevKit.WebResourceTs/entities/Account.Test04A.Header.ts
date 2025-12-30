@@ -17,7 +17,7 @@ interface TestResult {
  * - R-Index: ReadOnly properties (R1, R2, R3...)
  * - S-Index: Setters & Methods (S1, S2, S3...)
  */
-export function TestHeader(form: FormAccount_DevKitV4.Form): void {
+export function TestHeader(form: FormAccount_DevKitV4.Form): boolean {
     const results: TestResult[] = [];
     const methodResults: TestResult[] = [];
     const startTime = new Date().toLocaleTimeString();
@@ -180,7 +180,7 @@ export function TestHeader(form: FormAccount_DevKitV4.Form): void {
     const failed = allResults.filter(r => r.Status === "✗").length;
     const total = allResults.length;
 
-    console.groupCollapsed(`✅ TEST 4A: Header Control [${startTime}] - Using: Header.v4_Integer1 field - ${passed}/${total}`);
+    console.groupCollapsed(`✅ [TS] TEST 4A: Header Control [${startTime}] - Using: Header.v4_Integer1 field - ${passed}/${total}`);
 
     console.log("%c📋 ReadOnly Properties (R1-R16)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
     console.table(results);
@@ -196,5 +196,6 @@ export function TestHeader(form: FormAccount_DevKitV4.Form): void {
         "font-weight: bold; color: #4CAF50; font-size: 14px;");
 
     console.groupEnd();
+    return passed === total;
 }
 

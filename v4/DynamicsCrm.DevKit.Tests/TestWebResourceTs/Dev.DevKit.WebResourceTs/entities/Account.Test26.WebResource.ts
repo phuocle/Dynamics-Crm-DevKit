@@ -15,7 +15,7 @@ interface TestResult {
  * - R-Index: ReadOnly properties (R1, R2, R3...)
  * - S-Index: Setters & Methods (S1, S2, S3...)
  */
-export function TestWebResource(form: FormAccount_DevKitV4.Form): void {
+export function TestWebResource(form: FormAccount_DevKitV4.Form): boolean {
     const results: TestResult[] = [];
     const methodResults: TestResult[] = [];
     const startTime = new Date().toLocaleTimeString();
@@ -109,7 +109,7 @@ export function TestWebResource(form: FormAccount_DevKitV4.Form): void {
     const failed = allResults.filter(r => r.Status === "✗").length;
     const total = allResults.length;
 
-    console.groupCollapsed(`🎯 TEST 26: WebResource Control [${startTime}] - Using: WebResource_DevKitV4 - ${passed}/${total}`);
+    console.groupCollapsed(`✅ [TS] TEST 26: WebResource Control [${startTime}] - Using: WebResource_DevKitV4 - ${passed}/${total}`);
     console.log("%c📋 ReadOnly Properties (R1-R7)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
     console.table(results);
     console.log("%c⚡ Setters & Methods (S1-S5)", "font-weight: bold; font-size: 14px; color: #2196F3;");
@@ -119,6 +119,7 @@ export function TestWebResource(form: FormAccount_DevKitV4.Form): void {
         (failed > 0 ? ` | ✗ ${failed} failed` : ''),
         "font-weight: bold; color: #4CAF50; font-size: 14px;");
     console.groupEnd();
+    return passed === total;
 }
 
 

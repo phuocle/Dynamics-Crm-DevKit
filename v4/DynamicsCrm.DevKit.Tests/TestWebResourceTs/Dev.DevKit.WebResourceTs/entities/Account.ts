@@ -56,93 +56,97 @@ const formAccount_DevKitV4 = (function () {
         // Then clear console and run real tests
         setTimeout(async () => {
             console.clear();
+            let passedSuites = 0;
+            let totalSuites = 0;
 
             // Test 0: Control - IControl Interface (base for all controls)
-            TestControl(form);
+            if (TestControl(form)) passedSuites++; totalSuites++;
 
             // Test 1: String Control
-            TestString(form);
+            if (TestString(form)) passedSuites++; totalSuites++;
 
             // Test 2: Memo Control
-            TestMemo(form);
+            if (TestMemo(form)) passedSuites++; totalSuites++;
 
             // Test 3: Boolean Control
-            TestBoolean(form);
+            if (TestBoolean(form)) passedSuites++; totalSuites++;
 
             // Test 4: Integer Control (Body)
-            TestInteger(form);
+            if (TestInteger(form)) passedSuites++; totalSuites++;
 
             // Test 4A: Header Control - Tests header field behavior (using v4_Integer1)
-            TestHeader(form);
+            if (TestHeader(form)) passedSuites++; totalSuites++;
 
             // Test 5: Decimal Control
-            TestDecimal(form);
+            if (TestDecimal(form)) passedSuites++; totalSuites++;
 
             // Test 6: Double Control
-            TestDouble(form);
+            if (TestDouble(form)) passedSuites++; totalSuites++;
 
             // Test 7: Money Control
-            TestMoney(form);
+            if (TestMoney(form)) passedSuites++; totalSuites++;
 
             // Test 8: Lookup Control
-            TestLookup(form);
+            if (TestLookup(form)) passedSuites++; totalSuites++;
 
             // Test 8A: Lookup1 Control - Multi Control per Attribute (OwnerId has 2 controls: OwnerId, OwnerId1)
-            TestLookup1(form);
+            if (TestLookup1(form)) passedSuites++; totalSuites++;
 
             // Test 9: OptionSet Control
-            TestOptionSet(form);
+            if (TestOptionSet(form)) passedSuites++; totalSuites++;
 
             // Test 10: MultiOptionSet Control
-            TestMultiOptionSet(form);
+            if (TestMultiOptionSet(form)) passedSuites++; totalSuites++;
 
             // Test 11: DateOnly Control
-            TestDateOnly(form);
+            if (TestDateOnly(form)) passedSuites++; totalSuites++;
 
             // Test 12: DateTime Control
-            TestDateTime(form);
+            if (TestDateTime(form)) passedSuites++; totalSuites++;
 
             // Test 13: Grid Control
-            TestGrid(form);
+            if (TestGrid(form)) passedSuites++; totalSuites++;
 
             // Test 14: QuickView Control
-            TestQuickView(form);
+            if (TestQuickView(form)) passedSuites++; totalSuites++;
 
             // Test 15: NavigationItem Control
-            TestNavigationItem(form);
+            if (TestNavigationItem(form)) passedSuites++; totalSuites++;
 
             // Test 16: ExecutionContext
-            TestExecutionContext(form);
+            if (TestExecutionContext(form)) passedSuites++; totalSuites++;
 
             // Test 17: SidePanes
-            TestSidePanes(form);
+            if (TestSidePanes(form)) passedSuites++; totalSuites++;
 
             // Test 18: Copilot (Preview)
-            TestCopilot(form);
+            if (TestCopilot(form)) passedSuites++; totalSuites++;
 
             // Test 19: Process (BPF)
-            TestProcess(form);
+            if (TestProcess(form)) passedSuites++; totalSuites++;
 
             // Test 20: IFrame Control
-            TestIFrame(form);
+            if (TestIFrame(form)) passedSuites++; totalSuites++;
 
             // Test 21: Utility API
-            TestUtility(form);
+            if (TestUtility(form)) passedSuites++; totalSuites++;
 
             // Test 22: Tab Control
-            TestTab(form);
+            if (TestTab(form)) passedSuites++; totalSuites++;
 
             // Test 23: Timer Control
-            TestTimer(form);
+            if (TestTimer(form)) passedSuites++; totalSuites++;
 
             // Test 24: Knowledge Control
-            TestKnowledge(form);
+            if (TestKnowledge(form)) passedSuites++; totalSuites++;
 
             // Test 25: WebApi
-            await TestWebApi(form);
+            if (await TestWebApi(form)) passedSuites++; totalSuites++;
 
             // Test 26: WebResource Control
-            TestWebResource(form);
+            if (TestWebResource(form)) passedSuites++; totalSuites++;
+
+            console.log(`%cTỔNG SỐ LƯỢNG TEST: ${totalSuites} / ${passedSuites} ĐÃ PASSED`, "font-weight: bold; font-size: 20px; color: #E91E63;");
 
         }, 1000);
 

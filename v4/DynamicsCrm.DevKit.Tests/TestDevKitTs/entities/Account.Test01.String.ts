@@ -17,7 +17,7 @@ interface TestResult {
  * - R-Index: ReadOnly properties (R1, R2, R3...)
  * - S-Index: Setters & Methods (S1, S2, S3...)
  */
-export function TestString(form: FormAccount_DevKitV4.Form): void {
+export function TestString(form: FormAccount_DevKitV4.Form): boolean {
     const results: TestResult[] = [];
     const methodResults: TestResult[] = [];
     const str = form.Body.v4_String;
@@ -160,7 +160,7 @@ export function TestString(form: FormAccount_DevKitV4.Form): void {
     const failed = allResults.filter(r => r.Status === "✗").length;
     const total = allResults.length;
 
-    console.groupCollapsed(`✅ TEST 3: String Control [${startTime}] - Using: v4_String field - ${passed}/${total}`);
+    console.groupCollapsed(`✅ [TS] TEST 1: String Control [${startTime}] - Using: v4_String field - ${passed}/${total}`);
 
     console.log("%c📋 ReadOnly Properties (R1-R15)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
     console.table(results);
@@ -174,6 +174,7 @@ export function TestString(form: FormAccount_DevKitV4.Form): void {
         "font-weight: bold; color: #4CAF50; font-size: 14px;");
 
     console.groupEnd();
+    return passed === total;
 }
 
 

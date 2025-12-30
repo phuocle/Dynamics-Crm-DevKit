@@ -11,11 +11,11 @@ interface TestResult {
  * TEST 23: Timer Control - v4_TimerSLA Field
  * Timer extends IControl with specific Refresh method and State property
  */
-export function TestTimer(form: FormAccount_DevKitV4.Form): void {
+export function TestTimer(form: FormAccount_DevKitV4.Form): boolean {
     // NOTE: v4_TimerSLA field does NOT exist in the new Account.form.ts
     // This test is skipped until Timer control is added to the form
     console.log('⏭️ TEST 23: Timer Control - SKIPPED (v4_TimerSLA not on form)');
-    return;
+    return true;
 
     const results: TestResult[] = [];
     const methodResults: TestResult[] = [];
@@ -90,7 +90,7 @@ export function TestTimer(form: FormAccount_DevKitV4.Form): void {
     const failed = allResults.filter(r => r.Status === "✗").length;
     const total = allResults.length;
 
-    console.groupCollapsed(`✅ TEST 23: Timer Control [${startTime}] - Using: v4_TimerSLA - ${passed}/${total}`);
+    console.groupCollapsed(`✅ [TS] TEST 23: Timer Control [${startTime}] - Using: v4_TimerSLA - ${passed}/${total}`);
 
     console.log("%c📋 ReadOnly Properties (R1-R6)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
     console.table(results);

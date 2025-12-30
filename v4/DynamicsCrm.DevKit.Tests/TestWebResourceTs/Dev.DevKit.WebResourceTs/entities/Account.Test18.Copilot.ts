@@ -22,7 +22,7 @@ interface TestResult {
  * 
  * Note: Copilot API is a Preview feature and may not be available in all environments
  */
-export function TestCopilot(form: FormAccount_DevKitV4.Form): void {
+export function TestCopilot(form: FormAccount_DevKitV4.Form): boolean {
     const results: TestResult[] = [];         // ReadOnly (R-Index)
     const methodResults: TestResult[] = [];   // Setters & Methods (S-Index)
     const startTime = new Date().toLocaleTimeString();
@@ -170,7 +170,7 @@ export function TestCopilot(form: FormAccount_DevKitV4.Form): void {
     const warnings = allResults.filter(r => r.Status === "⚠").length;
     const total = allResults.length;
 
-    console.groupCollapsed(`✅ TEST 18: Copilot [${startTime}] - Using: form.Copilot (Preview) - ${passed}/${total} (⚠${warnings})`);
+    console.groupCollapsed(`✅ [TS] TEST 18: Copilot [${startTime}] - Using: form.Copilot (Preview) - ${passed}/${total} (⚠${warnings})`);
 
     console.log("%c📋 ReadOnly Properties (R1-R4)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
     console.table(results);
@@ -184,6 +184,7 @@ export function TestCopilot(form: FormAccount_DevKitV4.Form): void {
     console.log(`%c✅ Summary: ${passed}/${total} passed, ${warnings} warnings`,
         "font-weight: bold; color: #4CAF50; font-size: 14px;");
     console.groupEnd();
+    return passed === total;
 }
 
 
