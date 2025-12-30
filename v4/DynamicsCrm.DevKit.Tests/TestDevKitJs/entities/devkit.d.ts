@@ -23,13 +23,7 @@ declare namespace DevKit {
      * Callback function type for failed operations.
      */
     type ErrorCallback = (error: Error) => void;
-    interface Collections<T> {
-        forEach(callback: (item: T, index: number) => void): void;
-        get(name: string): T;
-        get(index: number): T;
-        get(): Array<T>;
-        getLength(): number;
-    }
+
     namespace Controls {
         interface IControl {
             /**
@@ -3246,13 +3240,6 @@ declare namespace DevKit {
         readonly Version: string;
     }
     /**
-     * Provides methods for managing side panes in model-driven apps
-     * @remarks This API is not available for Dynamics 365 Customer Engagement on-premises deployments. Use ISidePanes interface instead.
-     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app-sidepanes
-     * @deprecated Use ISidePanes instead for proper async/await support
-     */
-    type SidePanes = ISidePanes;
-    /**
      * Provides information about the client application
      * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/client
      */
@@ -3770,7 +3757,7 @@ declare namespace DevKit {
          * Provides methods for managing a single side pane.
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app-appsidepane
          */
-        readonly SidePanes: SidePanes;
+        readonly SidePanes: ISidePanes;
         /** Utility functions/methods/objects for Dynamics 365 form */
         readonly Utility: Utility;
     }
