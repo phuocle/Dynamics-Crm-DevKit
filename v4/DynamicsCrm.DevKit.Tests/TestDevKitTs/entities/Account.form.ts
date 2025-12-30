@@ -63,6 +63,8 @@ export namespace FormAccount_DevKitV4 {
         v4_String1: DevKit.Controls.String;
         /** Custom String field (3rd control) */
         v4_String2: DevKit.Controls.String;
+        /** WebResource control */
+        WebResource_DevKitV4: DevKit.Controls.WebResource;
         /** Form Tabs */
         Tab: ITabs;
     }
@@ -244,7 +246,8 @@ export namespace FormAccount_DevKitV4 {
                     'v4_OptionSet',
                     'v4_String',
                     'v4_String1',
-                    'v4_String2'
+                    'v4_String2',
+                    'WebResource_DevKitV4'
                 ],
                 header: [
                     'v4_Integer',

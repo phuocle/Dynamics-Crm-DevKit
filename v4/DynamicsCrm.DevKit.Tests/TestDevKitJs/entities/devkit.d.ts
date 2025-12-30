@@ -1103,12 +1103,6 @@ declare namespace DevKit {
               */
             readonly Object: any;
             /**
-             * Get/Set the value of the data query string parameter passed to a Silverlight web resource
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getdata
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/setdata
-             */
-            Data: string;
-            /**
              * Get/Set the current URL being displayed in an IFRAME or web resource
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getsrc
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/setsrc
