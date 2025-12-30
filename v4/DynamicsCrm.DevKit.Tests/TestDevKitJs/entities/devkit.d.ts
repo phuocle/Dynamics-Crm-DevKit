@@ -1,4 +1,4 @@
-﻿/**
+/**
  * DynamicsCrm.DevKit TypeScript Definitions
  *
  * @version 4.0
@@ -189,6 +189,10 @@ declare namespace DevKit {
              */
             readonly InitialValue: number;
         }
+        /**
+         * Interface for business process flow controls and events
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process
+         */
         interface IProcess {
             /**
              * Adds a function as an event handler for the OnPreProcessStatusChange event so that it will be called before the business process flow status changes
