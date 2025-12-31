@@ -4375,7 +4375,6 @@ declare namespace DevKit {
         GetSelected(): ISidePane | undefined;
     }
 }
-
 /** DynamicsCrm.DevKit for namespace OptionSet */
 declare namespace OptionSet {
     /**
