@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using System.Runtime.InteropServices;
 
 [assembly: AssemblyTitle("CSharpConsoleCoreProjectTemplate")]
@@ -15,5 +15,5 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCulture("en")]
 [assembly: ComVisible(false)]
 [assembly: Guid("2c597b0b-f648-486d-bc45-593f584b8bee")]
-[assembly: AssemblyVersion("4.00.00.00")]
-[assembly: AssemblyFileVersion("4.00.00.00")]
+[assembly: AssemblyVersion("4.12.34.56")]
+[assembly: AssemblyFileVersion("4.12.34.56")]

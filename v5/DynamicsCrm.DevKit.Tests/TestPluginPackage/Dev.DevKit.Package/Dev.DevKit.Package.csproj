@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<TargetFramework>net462</TargetFramework>
 		<PowerAppsTargetsPath>$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\PowerApps</PowerAppsTargetsPath>
@@ -24,8 +24,8 @@
 		<PackageOutputPath>..\Release\dll</PackageOutputPath>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="DynamicsCrm.DevKit.Analyzers" Version="4.0.0" PrivateAssets="All" />
-		<PackageReference Include="DynamicsCrm.DevKit.Cli" Version="4.0.0" />
+		<PackageReference Include="DynamicsCrm.DevKit.Analyzers" Version="4.12.34.56" PrivateAssets="All" />
+		<PackageReference Include="DynamicsCrm.DevKit.Cli" Version="4.12.34.56" />
 		<PackageReference Include="Microsoft.CrmSdk.CoreAssemblies" Version="9.0.2.60" PrivateAssets="All" />
 		<PackageReference Include="Microsoft.PowerApps.MSBuild.Plugin" Version="1.51.1" PrivateAssets="All" />
 		<PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="All" />

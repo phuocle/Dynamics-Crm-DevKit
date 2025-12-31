@@ -277,7 +277,7 @@
     <None Include="Dev.DevKit.UiTest.runsettings" />
   </ItemGroup>
   <ItemGroup>
-    <Analyzer Include="..\packages\DynamicsCrm.DevKit.Analyzers.4.0.0\analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />
+    <Analyzer Include="..\packages\DynamicsCrm.DevKit.Analyzers.4.12.34.56\analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />
     <Analyzer Include="..\packages\MSTest.Analyzers.4.0.2\analyzers\dotnet\cs\MSTest.Analyzers.CodeFixes.dll" />
     <Analyzer Include="..\packages\MSTest.Analyzers.4.0.2\analyzers\dotnet\cs\MSTest.Analyzers.dll" />
   </ItemGroup>

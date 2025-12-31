@@ -3,7 +3,7 @@
     <metadata>
         <id>DynamicsCrm.DevKit.Cli</id>
         <title>DynamicsCrm.DevKit.Cli - CLI for DynamicsCrm.DevKit tool</title>
-        <version>4.00.00.00</version>
+        <version>4.12.34.56</version>
         <authors>PhuocLe</authors>
         <license type="file">license\LICENSE.txt</license>
         <icon>images\icon.png</icon>
@@ -12,7 +12,7 @@
         <repository type="git" url="https://github.com/phuocle/Dynamics-Crm-DevKit.git" branch="main" />
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>Command Line Interface (CLI) for DynamicsCrm.DevKit, a comprehensive toolkit for Dynamics 365/Dataverse development. This tool helps automate common development tasks such as deploying plugins, workflows, web resources, and reports directly from the command line.</description>
-        <releaseNotes>Version 4.0.0:
+        <releaseNotes>Version 4.12.34.56:
 - Comprehensive CLI for Dynamics 365/Dataverse development automation
 - Deploy plugins, custom workflow activities, and web resources
 - Generate early-bound entity classes via CrmSvcUtil

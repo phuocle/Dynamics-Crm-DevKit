@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using System.Runtime.InteropServices;
 
 [assembly: AssemblyTitle("CSharpSolutionPackagerProjectTemplate")]
@@ -15,5 +15,5 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCulture("en")]
 [assembly: ComVisible(false)]
 [assembly: Guid("9172e6aa-6ad5-409e-82af-37c7d03d4a3d")]
-[assembly: AssemblyVersion("4.00.00.00")]
-[assembly: AssemblyFileVersion("4.00.00.00")]
+[assembly: AssemblyVersion("4.12.34.56")]
+[assembly: AssemblyFileVersion("4.12.34.56")]

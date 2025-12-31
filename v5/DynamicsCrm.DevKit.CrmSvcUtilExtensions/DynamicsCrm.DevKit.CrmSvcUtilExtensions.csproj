@@ -2,15 +2,15 @@
 	<PropertyGroup>
 		<TargetFramework>net48</TargetFramework>
 		<SignAssembly>True</SignAssembly>
-		<AssemblyVersion>4.00.00.00</AssemblyVersion>
-		<FileVersion>4.00.00.00</FileVersion>
+		<AssemblyVersion>4.12.34.56</AssemblyVersion>
+		<FileVersion>4.12.34.56</FileVersion>
 		<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
 		<RepositoryUrl>https://github.com/phuocle/Dynamics-Crm-DevKit</RepositoryUrl>
 		<Company>PhuocLe</Company>
 		<Product>DynamicsCrm.DevKit.CrmSvcUtilExtensions</Product>
 		<Copyright>Copyright © PhuocLe 2016 - 2036</Copyright>
 		<PackageProjectUrl>https://github.com/phuocle/Dynamics-Crm-DevKit</PackageProjectUrl>
-		<Version>4.00.00.00</Version>
+		<Version>4.12.34.56</Version>
 		<AssemblyTitle>DynamicsCrm.DevKit.CrmSvcUtilExtensions</AssemblyTitle>
 		<AssemblyDescription>DynamicsCrm.DevKit.CrmSvcUtilExtensions</AssemblyDescription>
 		<BaseOutputPath>bin</BaseOutputPath>

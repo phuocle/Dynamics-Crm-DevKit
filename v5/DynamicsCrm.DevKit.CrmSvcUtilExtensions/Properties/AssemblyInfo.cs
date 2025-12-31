@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using System.Runtime.InteropServices;
 
 [assembly: AssemblyTitle("DynamicsCrm.DevKit.CrmSvcUtilExtensions")]
@@ -14,5 +14,5 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTrademark("PhuocLe")]
 [assembly: ComVisible(false)]
 [assembly: Guid("af511858-3072-45d7-932d-c0d98470914e")]
-[assembly: AssemblyVersion("4.00.00.00")]
-[assembly: AssemblyFileVersion("4.00.00.00")]
+[assembly: AssemblyVersion("4.12.34.56")]
+[assembly: AssemblyFileVersion("4.12.34.56")]

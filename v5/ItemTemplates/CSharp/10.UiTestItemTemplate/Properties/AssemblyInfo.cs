@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using System.Runtime.InteropServices;
 
 [assembly: AssemblyTitle("CSharpUiTestItemTemplate")]
@@ -15,5 +15,5 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCulture("en")]
 [assembly: ComVisible(false)]
 [assembly: Guid("53392f2b-21c1-41bf-9073-2994b94e101e")]
-[assembly: AssemblyVersion("4.00.00.00")]
-[assembly: AssemblyFileVersion("4.00.00.00")]
+[assembly: AssemblyVersion("4.12.34.56")]
+[assembly: AssemblyFileVersion("4.12.34.56")]
