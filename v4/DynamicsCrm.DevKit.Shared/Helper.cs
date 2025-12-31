@@ -1,4 +1,4 @@
-﻿using DynamicsCrm.DevKit.Shared.Models;
+using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.CSharp;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk;
@@ -74,12 +74,59 @@ namespace DynamicsCrm.DevKit.Shared
 
         public static bool IsTheSame(string value1, string value2)
         {
-            if (value1 == null && value2 == null) return true;
-            if (value1 != null && value2 == null) return false;
-            if (value1 == null && value2 != null) return false;
-            value1 = value1.Replace("\r\n", string.Empty).Replace("\r", string.Empty).Replace("\t", string.Empty).Replace(" ", string.Empty).Trim();
-            value2 = value2.Replace("\r\n", string.Empty).Replace("\r", string.Empty).Replace("\t", string.Empty).Replace(" ", string.Empty).Trim();
-            return string.Equals(value1, value2, StringComparison.OrdinalIgnoreCase);
+            if (ReferenceEquals(value1, value2)) return true;
+            if (value1 == null || value2 == null) return false;
+
+            var l1 = value1.Length;
+            var l2 = value2.Length;
+            var i1 = 0;
+            var i2 = 0;
+
+            // Note: This implementation ignores all whitespace including single '\n',
+            // unlike the previous implementation which preserved internal '\n' but removed '\r\n'.
+            // This standardizes line ending handling across platforms.
+            while (i1 < l1 && i2 < l2)
+            {
+                var c1 = value1[i1];
+                if (char.IsWhiteSpace(c1))
+                {
+                    i1++;
+                    continue;
+                }
+                var c2 = value2[i2];
+                if (char.IsWhiteSpace(c2))
+                {
+                    i2++;
+                    continue;
+                }
+                if (char.ToUpperInvariant(c1) != char.ToUpperInvariant(c2)) return false;
+                i1++;
+                i2++;
+            }
+
+            while (i1 < l1)
+            {
+                var c1 = value1[i1];
+                if (char.IsWhiteSpace(c1))
+                {
+                    i1++;
+                    continue;
+                }
+                return false;
+            }
+
+            while (i2 < l2)
+            {
+                var c2 = value2[i2];
+                if (char.IsWhiteSpace(c2))
+                {
+                    i2++;
+                    continue;
+                }
+                return false;
+            }
+
+            return true;
         }
 
         public static async Task<string> ReadEmbeddedResourceAsync(string path)
