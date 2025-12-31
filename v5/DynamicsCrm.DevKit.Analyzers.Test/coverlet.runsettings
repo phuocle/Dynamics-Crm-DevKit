@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RunSettings>
+  <RunConfiguration>
+    <ResultsDirectory>TestResults</ResultsDirectory>
+  </RunConfiguration>
+  <DataCollectionRunSettings>
+    <DataCollectors>
+      <DataCollector friendlyName="XPlat Code Coverage">
+        <Configuration>
+          <Format>cobertura,json,lcov,opencover</Format>
+          <Include>[DynamicsCrm.DevKit.Analyzers]*</Include>
+          <IncludeByFile>**/CrmAnalyzers/UpdateMessageShouldHaveFilteringAttributesAnalyzer.cs</IncludeByFile>
+        </Configuration>
+      </DataCollector>
+    </DataCollectors>
+  </DataCollectionRunSettings>
+</RunSettings>

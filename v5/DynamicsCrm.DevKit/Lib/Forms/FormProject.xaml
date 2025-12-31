@@ -1,0 +1,85 @@
+﻿<forms:BaseDialogWindow  xmlns:forms="clr-namespace:DynamicsCrm.DevKit.Lib.Forms"
+        x:Class="DynamicsCrm.DevKit.Lib.Forms.FormProject"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:wpfcontrols="clr-namespace:DynamicsCrm.DevKit.Lib.WpfControls"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Width="500" SizeToContent="Height" SnapsToDevicePixels="True" UseLayoutRounding="True">
+    <forms:BaseDialogWindow.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="StyleResourceDictionary.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </forms:BaseDialogWindow.Resources>
+    <!-- Consistent 4-row Grid layout (Header / Connection / Content / ProgressBar) to keep progress bar pinned at bottom -->
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/> <!-- Header -->
+            <RowDefinition Height="Auto"/> <!-- Connection control -->
+            <RowDefinition Height="*"/>    <!-- Main content -->
+            <RowDefinition Height="5"/>    <!-- Bottom progress bar -->
+        </Grid.RowDefinitions>
+
+        <!-- Header / Help Link (text/link updated dynamically in code-behind) -->
+        <TextBlock Grid.Row="0" Padding="10,5,10,5" Background="Green">
+            <wpfcontrols:ExternalBrowserHyperlink x:Name="HELP" NavigateUri="https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Connection" Foreground="White">WIKI: Connection</wpfcontrols:ExternalBrowserHyperlink>
+        </TextBlock>
+
+        <!-- Connection user control (provides ServiceClient + CrmConnection) -->
+        <wpfcontrols:UserControlConnection Grid.Row="1" x:Name="CONNECTION" Connected="Connection_Connected" />
+
+        <!-- Main content area -->
+        <StackPanel Grid.Row="2" IsEnabled="{Binding IsConnected, ElementName=CONNECTION}" x:Name="StackPanelMain">
+            <!-- Project information container -->
+            <Border BorderBrush="Gray" BorderThickness="1" Padding="10,15,10,15" Margin="5,10,5,10">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <!-- Use Auto rows so window height adjusts naturally (avoids clipping at different DPI/scales) -->
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/> <!-- Project Name entry -->
+                        <RowDefinition Height="Auto"/> <!-- Final Project Name / Inline edit -->
+                    </Grid.RowDefinitions>
+
+                    <!-- Editable project suffix (disabled for templates that auto-generate) -->
+                    <Label x:Name="LabelProjectItemName" Grid.Row="0" Grid.Column="0" Margin="0,0,0,5" Content="Name" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                    <TextBox x:Name="TextboxProject" Grid.Row="0" Grid.Column="1" Margin="0,0,0,5" TextChanged="TextboxProject_TextChanged" VerticalContentAlignment="Center" />
+
+                    <!-- Display mode for final project name -->
+                    <Label x:Name="LabelFinalProjectItemName" Grid.Row="1" Grid.Column="0" Margin="0,0,0,5" Content="Project Name" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                    <StackPanel x:Name="PanelProjectNameDisplay" Grid.Row="1" Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                        <Label x:Name="LabelProjectName" Margin="0,0,6,0" Content="Name" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                        <TextBlock VerticalAlignment="Center" IsEnabled="{Binding IsEnabled, ElementName=TextboxProject}">
+                            <Hyperlink x:Name="EditProjectNameLink" IsEnabled="{Binding IsEnabled, ElementName=TextboxProject}" Click="EditProjectName_Click">Edit</Hyperlink>
+                        </TextBlock>
+                    </StackPanel>
+                    <!-- Inline edit TextBox (toggle visibility in code-behind) -->
+                    <TextBox x:Name="TextBoxProjectNameInline" Grid.Row="1" Grid.Column="1" Visibility="Collapsed" VerticalContentAlignment="Center" Margin="0,0,0,5" KeyDown="TextBoxProjectNameInline_KeyDown" Height="27"/>
+                </Grid>
+            </Border>
+
+            <!-- Action buttons -->
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="300"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <WrapPanel Grid.Row="0" Grid.Column="1" HorizontalAlignment="Right" Margin="5,0,8,10">
+                    <Button x:Name="buttonOK" Content="OK" Width="80" Height="30" Click="ButtonOK_Click"/>
+                    <Button x:Name="buttonCancel" Content="Cancel" Margin="5,0,0,0" Width="80" Height="30" IsCancel="True" Click="ButtonCancel_Click"/>
+                </WrapPanel>
+            </Grid>
+        </StackPanel>
+
+        <!-- Fixed bottom progress bar (visibility toggled in code-behind if future long-running operations added) -->
+        <ProgressBar Grid.Row="3" x:Name="progressBar" Height="5" IsIndeterminate="True" Visibility="Hidden" HorizontalAlignment="Stretch" />
+    </Grid>    
+</forms:BaseDialogWindow>

@@ -1,0 +1,21 @@
+﻿{
+  "ResourceGroup": "Dev-DevKit-Package-ManagedIdentity",
+  "Location": "southeastasia",
+  "KeyVaultName": "Package-ManagedIdentity",
+  "SecretName": "Package-ManagedIdentity",
+  "SecretValue": "Package-ManagedIdentity-VERY-IMPORTANT-DATA",
+  "CertificateFileName": "Package-ManagedIdentity",
+  "CertificatePassword": "pASSw0rd",
+  "CertificateValidityYears": 100,
+  "TenantId": "49528483-b79b-4b88-b86e-7d882ba68911",
+  "KeyVaultURL": "https://package-managedidentity.vault.azure.net/",
+  "CertificateThumbprint": "831D47EF079C3A8A9D580974CFBD310CDFACD5AF",
+  "CertificateSHA256Hash": "rrOQ2LeT4ozmiBv9LGE5Za6ZdKnAPYNPiG22O-WLSmA",
+  "ManagedIdentities": [
+    {
+      "AppName": "Dev-DevKit-Package-ManagedIdentity",
+      "AppId": "5db7e41f-8641-40ee-8276-1dc7e2517b58",
+      "EnvironmentId": "cbba8ce9-ea7c-e440-b083-0b9517496e17"
+    }
+  ]
+}

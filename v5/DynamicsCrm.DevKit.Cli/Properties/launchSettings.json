@@ -1,0 +1,68 @@
+{
+  "profiles": {
+    "NoArgs": {
+      "commandName": "Project",
+      "workingDirectory": "D:\\azure\\PL\\HSAPVN\\src\\Hs.Hsap.Shared\\Entities"
+    },
+    "DEVKITV4.Server": {
+      "commandName": "Project",
+      "commandLineArgs": "/conn:\"AuthType=ClientSecret;Url=https://dynamics-crm-devkit-2.crm.dynamics.com;ClientId=1a60a5c2-d04c-4b26-8f86-9d6ce0616799;ClientSecret=4Y11hDyKJYQTqXC9cRDXnoJ2DytZDs/jYI1byYwKli57mRfjHcCPu6Qx5sxgtCWQ;\" /json:\"..\\DynamicsCrm.DevKit.Cli.json\" /type:\"servers\" /profile:\"DEBUG\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\test\\4.00.00.00\\TestAllProjectsV4\\Dev.DevKitV4.Server"
+    },
+    "DEVKITV4.Server.OnlyUpdateAssembly": {
+      "commandName": "Project",
+      "commandLineArgs": "/conn:\"AuthType=ClientSecret;Url=https://dynamics-crm-devkit-2.crm.dynamics.com;ClientId=1a60a5c2-d04c-4b26-8f86-9d6ce0616799;ClientSecret=4Y11hDyKJYQTqXC9cRDXnoJ2DytZDs/jYI1byYwKli57mRfjHcCPu6Qx5sxgtCWQ;\" /json:\"..\\DynamicsCrm.DevKit.Cli.json\" /type:\"servers\" /profile:\"DEBUG\" /onlyupdateassembly:\"true\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\test\\4.00.00.00\\TestAllProjectsV4\\Dev.DevKitV4.Server"
+    },
+    "DEVKITV4.Server2.ManagedIdentity": {
+      "commandName": "Project",
+      "commandLineArgs": "/conn:\"AuthType=ClientSecret;Url=https://dynamics-crm-devkit-2.crm.dynamics.com;ClientId=1a60a5c2-d04c-4b26-8f86-9d6ce0616799;ClientSecret=4Y11hDyKJYQTqXC9cRDXnoJ2DytZDs/jYI1byYwKli57mRfjHcCPu6Qx5sxgtCWQ;\" /json:\"..\\DynamicsCrm.DevKit.Cli.json\" /type:\"servers\" /profile:\"DEBUG\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\test\\4.00.00.00\\TestAllProjectsV4\\Dev.DevKitV4.Server.2"
+    },
+    "DEVKITV4.Server2.ManagedIdentity.OnlyUpdateAssembly": {
+      "commandName": "Project",
+      "commandLineArgs": "/conn:\"AuthType=ClientSecret;Url=https://dynamics-crm-devkit-2.crm.dynamics.com;ClientId=1a60a5c2-d04c-4b26-8f86-9d6ce0616799;ClientSecret=4Y11hDyKJYQTqXC9cRDXnoJ2DytZDs/jYI1byYwKli57mRfjHcCPu6Qx5sxgtCWQ;\" /json:\"..\\DynamicsCrm.DevKit.Cli.json\" /type:\"servers\" /profile:\"DEBUG\" /onlyupdateassembly:\"true\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\test\\4.00.00.00\\TestAllProjectsV4\\Dev.DevKitV4.Server.2"
+    },
+    "DEVKITV4.Server.Package": {
+      "commandName": "Project",
+      "commandLineArgs": "/conn:\"AuthType=ClientSecret;Url=https://dynamics-crm-devkit-2.crm.dynamics.com;ClientId=1a60a5c2-d04c-4b26-8f86-9d6ce0616799;ClientSecret=4Y11hDyKJYQTqXC9cRDXnoJ2DytZDs/jYI1byYwKli57mRfjHcCPu6Qx5sxgtCWQ;\" /json:\"..\\DynamicsCrm.DevKit.Cli.json\" /type:\"servers\" /profile:\"DEBUG\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\test\\4.00.00.00\\TestAllProjectsV4\\Dev.DevKitV4.Package"
+    },
+    "DEVKITV4.Server.Package.OnlyUpdateAssembly": {
+      "commandName": "Project",
+      "commandLineArgs": "/conn:\"AuthType=ClientSecret;Url=https://dynamics-crm-devkit-2.crm.dynamics.com;ClientId=1a60a5c2-d04c-4b26-8f86-9d6ce0616799;ClientSecret=4Y11hDyKJYQTqXC9cRDXnoJ2DytZDs/jYI1byYwKli57mRfjHcCPu6Qx5sxgtCWQ;\" /json:\"..\\DynamicsCrm.DevKit.Cli.json\" /type:\"servers\" /profile:\"DEBUG\" /onlyupdateassembly:\"true\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\test\\4.00.00.00\\TestAllProjectsV4\\Dev.DevKitV4.Package"
+    },
+    "DEVKITV4.Package2.ManagedIdentity": {
+      "commandName": "Project",
+      "commandLineArgs": "/conn:\"AuthType=ClientSecret;Url=https://dynamics-crm-devkit-2.crm.dynamics.com;ClientId=1a60a5c2-d04c-4b26-8f86-9d6ce0616799;ClientSecret=4Y11hDyKJYQTqXC9cRDXnoJ2DytZDs/jYI1byYwKli57mRfjHcCPu6Qx5sxgtCWQ;\" /json:\"..\\DynamicsCrm.DevKit.Cli.json\" /type:\"servers\" /profile:\"DEBUG\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\test\\4.00.00.00\\TestAllProjectsV4\\Dev.DevKitV4.Package.2"
+    },
+    "DEVKITV4.Package2.ManagedIdentity.OnlyUpdateAssembly": {
+      "commandName": "Project",
+      "commandLineArgs": "/conn:\"AuthType=ClientSecret;Url=https://dynamics-crm-devkit-2.crm.dynamics.com;ClientId=1a60a5c2-d04c-4b26-8f86-9d6ce0616799;ClientSecret=4Y11hDyKJYQTqXC9cRDXnoJ2DytZDs/jYI1byYwKli57mRfjHcCPu6Qx5sxgtCWQ;\" /json:\"..\\DynamicsCrm.DevKit.Cli.json\" /type:\"servers\" /profile:\"DEBUG\" /onlyupdateassembly:\"true\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\test\\4.00.00.00\\TestAllProjectsV4\\Dev.DevKitV4.Package.2"
+    },
+    "DEVKITV4.RELEASE-Server-Server2-Package-Package2": {
+      "commandName": "Project",
+      "commandLineArgs": "/conn:\"AuthType=ClientSecret;Url=https://dynamics-crm-devkit-2.crm.dynamics.com;ClientId=1a60a5c2-d04c-4b26-8f86-9d6ce0616799;ClientSecret=4Y11hDyKJYQTqXC9cRDXnoJ2DytZDs/jYI1byYwKli57mRfjHcCPu6Qx5sxgtCWQ;\" /json:\"DynamicsCrm.DevKit.Cli.json\" /type:\"servers\" /profile:\"RELEASE\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\test\\4.00.00.00\\TestAllProjectsV4"
+    },
+    "DEBUG.Server": {
+      "commandName": "Project",
+      "commandLineArgs": "/conn:\"AuthType=ClientSecret;Url=https://hitachi-hsapvn-dev.crm5.dynamics.com;ClientId=b1b8cf05-cb06-4674-b93e-98c8c9a02e5a;ClientSecret=v+L6+3MvOrVPMNqGn86vi6qEG4qpCCLoLqgeUMjnGkY=;\" /json:\"..\\DynamicsCrm.DevKit.Cli.json\" /type:\"servers\" /profile:\"DEBUG\"",
+      "workingDirectory": "D:\\azure\\PL\\HSAPVN\\src\\Hs.Hsap.Server"
+    },
+    "BUG": {
+      "commandName": "Project",
+      "commandLineArgs": "/conn:\"AuthType=ClientSecret;Url=https://dynamics-crm-devkit-v4.crm.dynamics.com;ClientId=1a60a5c2-d04c-4b26-8f86-9d6ce0616799;ClientSecret=4Y11hDyKJYQTqXC9cRDXnoJ2DytZDs/jYI1byYwKli57mRfjHcCPu6Qx5sxgtCWQ;\" /json:\"..\\..\\DynamicsCrm.DevKit.Cli.json\" /type:\"generators\" /profile:\"JS-FORM\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v4\\DynamicsCrm.DevKit.Tests\\TestWebResource\\Dev.DevKit.WebResource\\entities"
+    },
+    "WebResource": {
+      "commandName": "Project",
+      "commandLineArgs": "/conn:\"AuthType=ClientSecret;Url=https://dynamics-crm-devkit.crm5.dynamics.com;ClientId=1a60a5c2-d04c-4b26-8f86-9d6ce0616799;ClientSecret=~je8Q~4DL221zUgKOaHq-EWMlowkpl3KEbZItccL;\" /json:\"..\\DynamicsCrm.DevKit.Cli.json\" /type:\"webresources\" /profile:\"DEBUG\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\test\\4.00.00.00\\TestWebResource\\Dev.DevKit.WebResource"
+    }
+  }
+}

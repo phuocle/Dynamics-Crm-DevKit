@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<VSTemplate Version="3.0.0" Type="Item" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
+	<TemplateData>
+		<Name>08. C# Data Provider Class</Name>
+		<Description>Creates a set of C# Dataverse Custom Data Provider operation classes: Retrieve, RetrieveMultiple, Create, Update, and Delete. Scaffolds structured to accelerate implementation of a virtual table data provider.</Description>
+		<DefaultName>Class.cs</DefaultName>
+		<TemplateID>AAAAAAAA-AAAA-AAAA-BBBB-000000000015</TemplateID>
+		<Icon>icon.png</Icon>
+		<ProjectType>CSharp</ProjectType>
+		<ProjectSubType>Visual C#</ProjectSubType>
+		<AppliesTo>CSharp</AppliesTo>
+		<RequiredFrameworkVersion>4.0</RequiredFrameworkVersion>
+		<NumberOfParentCategoriesToRollUp>0</NumberOfParentCategoriesToRollUp>
+		<SortOrder>180</SortOrder>
+	</TemplateData>
+	<TemplateContent>
+		<ProjectItem ReplaceParameters="true" TargetFileName="Retrieve.cs">Retrieve.cs</ProjectItem>
+		<ProjectItem ReplaceParameters="true" TargetFileName="RetrieveMultiple.cs">RetrieveMultiple.cs</ProjectItem>
+		<ProjectItem ReplaceParameters="true" TargetFileName="Create.cs">Create.cs</ProjectItem>
+		<ProjectItem ReplaceParameters="true" TargetFileName="Update.cs">Update.cs</ProjectItem>
+		<ProjectItem ReplaceParameters="true" TargetFileName="Delete.cs">Delete.cs</ProjectItem>
+	</TemplateContent>
+	<WizardExtension>
+		<Assembly>DynamicsCrm.DevKit, Version=4.00.00.00, Culture=Neutral, PublicKeyToken=null</Assembly>
+		<FullClassName>DynamicsCrm.DevKit.Wizard.ItemTemplates.DataProvider</FullClassName>
+	</WizardExtension>
+</VSTemplate>

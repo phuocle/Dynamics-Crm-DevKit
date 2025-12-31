@@ -1,0 +1,33 @@
+﻿using FakeXrmEasy.Plugins;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.Xrm.Sdk;
+using System.Linq;
+using <#=Context.PluginSharedNameSpace#>;
+using <#=Context.PluginSharedNameSpace#>.Test;
+
+namespace <#=Context.PluginNameSpace#>
+{
+    [TestClass]
+    public class <#=Context.Class#>Test : FakeXrmEasyTestBase
+    {
+        [TestMethod]
+        public void <#=Context.Class#>Test_00()
+        {
+            Assert.IsTrue(true);
+        }
+
+        [TestMethod]
+        public void <#=Context.Class#>Test_01()
+        {
+            ////setup
+            //var json = @"";
+            //var remote = TestHelper.DeserializeRemoteExecutionContext(json);
+            //var pluginContext = _context.GetDefaultPluginContext();
+            //pluginContext.SetXrmFakedContextPlugin(remote);
+            ////run
+            //_context.ExecutePluginWith<???> (pluginContext);
+            ////result
+            Assert.IsTrue(true);
+        }
+    }
+}

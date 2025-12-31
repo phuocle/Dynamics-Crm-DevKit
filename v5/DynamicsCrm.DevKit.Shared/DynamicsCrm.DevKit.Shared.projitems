@@ -1,0 +1,136 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects Condition="'$(MSBuildVersion)' == '' Or '$(MSBuildVersion)' &lt; '16.0'">$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>46fd4c93-2194-4d15-bf8c-97cd23722dda</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>DynamicsCrm.DevKit.Shared</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Const.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)FileHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)JsonHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Logic\CSharpLateBound.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Enum.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Logic\JsForm.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Logic\JsTypeScriptDeclaration.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Logic\JsWebApi.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\CliAction.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\CommentTypeScriptDeclaration.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\ConfigJson.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\ControlClassId.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\CrmConnection.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\CrmPluginRegistrationAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\CustomTemplate.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\DataProviderEvent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Dependency.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\DeployWebResource.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\DevKitConnections.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\DownloadFile.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\DynamcisCrmDevKitPluginManagedIdentityAssemblyAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\DynamcisCrmDevKitPluginAssemblyAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\IdName.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Json.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\JsonBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\JsonDataProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\JsonDataSource.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\JsonDownloadReport.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\JsonDownloadWebResource.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\JsonGenerator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\JsonPlugin.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\JsonProxyType.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\JsonServer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\JsonSolutionPackager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\JsonUploadReport.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\JsonWebResource.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\JsonWorkflow.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\NameValue.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\NameValueGuid.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\NameValueGuidExtend.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\OldCommentTypeScriptDeclaration.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\PluginInputOutputParameter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\ProcessForm.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\ReadSdkMessageProcessingStep.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\SystemForm.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\T4Context.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\WebResourceFile.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\XrmEntity.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)NuGetHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SimpleJson.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)XrmHelper.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\generator.latebound.bat" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\WebApi.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\plugin.deploy.debug.bat" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\plugin.deploy.debug.only.bat" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\DynamicsCrm.DevKit.Cli.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\webresource.deploy.debug.bat" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\devkit.d.ts" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\devkit.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\generator.form.bat" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\generator.webapi.bat" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\package.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\download.reports.bat" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\ReportProjectTemplate.rptproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\tt\CustomAction.tt" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\tt\CustomApi.tt" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\tt\DataProviderCreate.tt" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\tt\DataProviderDelete.tt" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\tt\DataProviderRetrieve.tt" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\tt\DataProviderRetrieveMultiple.tt" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\tt\DataProviderUpdate.tt" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\tt\TestCustomAction.tt" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\tt\TestCustomApi.tt" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\tt\TestPlugin.tt" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\tt\TestWorkflow.tt" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\tt\UiTest.tt" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\tt\Workflow.tt" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\tt\Plugin.tt" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\download.webresources.bat" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\deploy.datasource.bat" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Helper.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Program.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\TracingServiceFake.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Plugin-Managed-Identity-Config.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Plugin-Managed-Identity.ps1" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<managedidentity managedidentityid="5d8b415f-4c37-476b-b810-d18b6a2cc773" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <applicationid>{febff232-1ff5-4a5b-a34e-48624fa477bc}</applicationid>
+  <credentialsource>2</credentialsource>
+  <identitytype>0</identitytype>
+  <iscustomizable>1</iscustomizable>
+  <name>Dev.DevKitV4.Server.2-FEBFF232-1FF5-4A5B-A34E-48624FA477BC</name>
+  <statecode>0</statecode>
+  <statuscode>1</statuscode>
+  <subjectscope>1</subjectscope>
+  <tenantid>{49528483-b79b-4b88-b86e-7d882ba68911}</tenantid>
+</managedidentity>

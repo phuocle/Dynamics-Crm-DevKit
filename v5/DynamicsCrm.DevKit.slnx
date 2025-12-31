@@ -1,0 +1,118 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="arm64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Folder Name="/ItemTemplates/" />
+  <Folder Name="/ItemTemplates/CSharp/">
+    <Project Path="ItemTemplates/CSharp/01.LateBoundItemTemplate/01.LateBoundItemTemplate.csproj" Id="921403be-b301-40d8-b023-083c4747b50d">
+      <Platform Solution="*|arm64" Project="arm64" />
+      <Platform Solution="*|x86" Project="x86" />
+    </Project>
+    <Project Path="ItemTemplates/CSharp/02.JsFormItemTemplate/02.JsFormItemTemplate.csproj" Id="f3432efe-5fe3-46f4-9335-703e658c022e">
+      <Platform Solution="*|arm64" Project="arm64" />
+      <Platform Solution="*|x86" Project="x86" />
+    </Project>
+    <Project Path="ItemTemplates/CSharp/03.JsWebApiItemTemplate/03.JsWebApiItemTemplate.csproj" Id="ccbd1381-e6a6-4a57-9853-e93a27a33f11">
+      <Platform Solution="*|arm64" Project="arm64" />
+      <Platform Solution="*|x86" Project="x86" />
+    </Project>
+    <Project Path="ItemTemplates/CSharp/04.PluginItemTemplate/04.PluginItemTemplate.csproj" Id="6a978468-339c-4bd8-8aff-481de2038525">
+      <Platform Solution="*|arm64" Project="arm64" />
+      <Platform Solution="*|x86" Project="x86" />
+    </Project>
+    <Project Path="ItemTemplates/CSharp/05.CustomActionItemTemplate/05.CustomActionItemTemplate.csproj" Id="ca29675d-b211-46ec-9b16-2b9a4c2cc869">
+      <Platform Solution="*|arm64" Project="arm64" />
+      <Platform Solution="*|x86" Project="x86" />
+    </Project>
+    <Project Path="ItemTemplates/CSharp/06.CustomApiItemTemplate/06.CustomApiItemTemplate.csproj" Id="0329193a-a5b9-41d9-bbaf-c0fb0e6be7cc">
+      <Platform Solution="*|arm64" Project="arm64" />
+      <Platform Solution="*|x86" Project="x86" />
+    </Project>
+    <Project Path="ItemTemplates/CSharp/07.WorkflowItemTemplate/07.WorkflowItemTemplate.csproj" Id="6373a171-f07c-4153-bda2-c3730497889d">
+      <Platform Solution="*|arm64" Project="arm64" />
+      <Platform Solution="*|x86" Project="x86" />
+    </Project>
+    <Project Path="ItemTemplates/CSharp/08.DataProviderItemTemplate/08.DataProviderItemTemplate.csproj" Id="dbc500f9-934b-4a10-9f79-5658731fe77c">
+      <Platform Solution="*|arm64" Project="arm64" />
+      <Platform Solution="*|x86" Project="x86" />
+    </Project>
+    <Project Path="ItemTemplates/CSharp/09.TestItemTemplate/09.TestItemTemplate.csproj" Id="b7281e07-25a1-4f0f-9595-a1394211dcd4">
+      <Platform Solution="*|arm64" Project="arm64" />
+      <Platform Solution="*|x86" Project="x86" />
+    </Project>
+    <Project Path="ItemTemplates/CSharp/10.UiTestItemTemplate/10.UiTestItemTemplate.csproj" Id="53392f2b-21c1-41bf-9073-2994b94e101e">
+      <Platform Solution="*|arm64" Project="arm64" />
+      <Platform Solution="*|x86" Project="x86" />
+    </Project>
+    <Project Path="ItemTemplates/CSharp/11.ResourceStringItemTemplate/11.ResourceStringItemTemplate.csproj" Id="aec3bfcd-934b-48c6-8132-0acaa0ab42d0">
+      <Platform Solution="*|arm64" Project="arm64" />
+      <Platform Solution="*|x86" Project="x86" />
+    </Project>
+    <Project Path="ItemTemplates/CSharp/12.JsDevkitItemTemplate/12.JsDevkitItemTemplate.csproj" Id="ccbd1381-e6a6-4a57-9853-e93a27a33f12">
+      <Platform Solution="*|arm64" Project="arm64" />
+      <Platform Solution="*|x86" Project="x86" />
+    </Project>
+    <Project Path="ItemTemplates/CSharp/13.BatFileItemTemplate/13.BatFileItemTemplate.csproj" Id="99dd3cae-6d04-4bda-bb2d-c4d7b28ca1e0">
+      <Platform Solution="*|arm64" Project="arm64" />
+      <Platform Solution="*|x86" Project="x86" />
+    </Project>
+  </Folder>
+  <Folder Name="/ProjectTemplates/" />
+  <Folder Name="/ProjectTemplates/CSharp/">
+    <Project Path="ProjectTemplates/CSharp/01.SharedProjectTemplate/01.SharedProjectTemplate.csproj" Id="4170cd81-a77b-4c9a-bbae-29de390a4f9c">
+      <Platform Solution="*|arm64" Project="arm64" />
+      <Platform Solution="*|x86" Project="x86" />
+    </Project>
+    <Project Path="ProjectTemplates/CSharp/02.ConsoleProjectTemplate/02.ConsoleProjectTemplate.csproj" Id="2c597b0b-f648-486d-bc45-593f584b8bcc">
+      <Platform Solution="*|arm64" Project="arm64" />
+      <Platform Solution="*|x86" Project="x86" />
+    </Project>
+    <Project Path="ProjectTemplates/CSharp/03.ConsoleCoreProjectTemplate/03.ConsoleCoreProjectTemplate.csproj" Id="e782f991-afb7-4c71-b92a-373c6c018731">
+      <Platform Solution="*|arm64" Project="arm64" />
+      <Platform Solution="*|x86" Project="x86" />
+    </Project>
+    <Project Path="ProjectTemplates/CSharp/04.ServerProjectTemplate/04.ServerProjectTemplate.csproj" Id="b7876a9b-2b63-4967-8c44-060e2c65523a">
+      <Platform Solution="*|arm64" Project="arm64" />
+      <Platform Solution="*|x86" Project="x86" />
+    </Project>
+    <Project Path="ProjectTemplates/CSharp/05.PackageProjectTemplate/05.PackageProjectTemplate.csproj" Id="9d1f29b5-4a25-4642-879f-577fde4d5dd6">
+      <Platform Solution="*|arm64" Project="arm64" />
+      <Platform Solution="*|x86" Project="x86" />
+    </Project>
+    <Project Path="ProjectTemplates/CSharp/06.WebResourceProjectTemplate/06.WebResourceProjectTemplate.csproj" Id="67f16ea3-09bd-41bd-8cf7-48248c5d7b34">
+      <Platform Solution="*|arm64" Project="arm64" />
+      <Platform Solution="*|x86" Project="x86" />
+    </Project>
+    <Project Path="ProjectTemplates/CSharp/07.SharedTestProjectTemplate/07.SharedTestProjectTemplate.csproj" Id="60c9f3c9-29db-4714-a5c0-16e3732fce30">
+      <Platform Solution="*|arm64" Project="arm64" />
+      <Platform Solution="*|x86" Project="x86" />
+    </Project>
+    <Project Path="ProjectTemplates/CSharp/08.ProxyTypesProjectTemplate/08.ProxyTypesProjectTemplate.csproj" Id="9172e6aa-6ad5-409e-81af-37c7d03d4a3d">
+      <Platform Solution="*|arm64" Project="arm64" />
+      <Platform Solution="*|x86" Project="x86" />
+    </Project>
+    <Project Path="ProjectTemplates/CSharp/09.TestProjectTemplate/09.TestProjectTemplate.csproj" Id="547d1385-e9aa-47e5-a94b-d0b50719bbab">
+      <Platform Solution="*|arm64" Project="arm64" />
+      <Platform Solution="*|x86" Project="x86" />
+    </Project>
+    <Project Path="ProjectTemplates/CSharp/10.TestUiProjectTemplate/10.TestUiProjectTemplate.csproj" Id="5259082a-3733-4fbe-b50b-c9bba22d95aa">
+      <Platform Solution="*|arm64" Project="arm64" />
+      <Platform Solution="*|x86" Project="x86" />
+    </Project>
+    <Project Path="ProjectTemplates/CSharp/11.SolutionPackagerProjectTemplate/11.SolutionPackagerProjectTemplate.csproj" Id="c555420b-02d8-4388-aadf-375a9809acda">
+      <Platform Solution="*|arm64" Project="arm64" />
+      <Platform Solution="*|x86" Project="x86" />
+    </Project>
+    <Project Path="ProjectTemplates/CSharp/12.ReportProjectTemplate/12.ReportProjectTemplate.csproj" Id="acfb5f3d-6156-47f4-a879-c9552e7c334c">
+      <Platform Solution="*|arm64" Project="arm64" />
+      <Platform Solution="*|x86" Project="x86" />
+    </Project>
+  </Folder>
+  <Project Path="DynamicsCrm.DevKit.Shared/DynamicsCrm.DevKit.Shared.shproj" />
+  <Project Path="DynamicsCrm.DevKit/DynamicsCrm.DevKit.csproj" Id="a886e86e-65bc-40c1-8494-fe7e80b7e1a3">
+    <Platform Solution="*|arm64" Project="arm64" />
+    <Platform Solution="*|x86" Project="x86" />
+  </Project>
+</Solution>

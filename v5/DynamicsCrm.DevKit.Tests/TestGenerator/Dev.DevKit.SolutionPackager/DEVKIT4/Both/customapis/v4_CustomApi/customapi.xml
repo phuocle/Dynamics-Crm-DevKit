@@ -1,0 +1,18 @@
+<customapi uniquename="v4_CustomApi">
+  <allowedcustomprocessingsteptype>2</allowedcustomprocessingsteptype>
+  <bindingtype>0</bindingtype>
+  <description default="v4_CustomApi">
+    <label description="v4_CustomApi" languagecode="1033" />
+  </description>
+  <displayname default="v4_CustomApi">
+    <label description="v4_CustomApi" languagecode="1033" />
+  </displayname>
+  <iscustomizable>1</iscustomizable>
+  <isfunction>0</isfunction>
+  <isprivate>0</isprivate>
+  <name>v4_CustomApi</name>
+  <plugintypeid>
+    <plugintypeexportkey>785d189a-e5a8-f011-bbd2-0022480965a1</plugintypeexportkey>
+  </plugintypeid>
+  <workflowsdkstepenabled>1</workflowsdkstepenabled>
+</customapi>
