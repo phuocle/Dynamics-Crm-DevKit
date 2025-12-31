@@ -193,7 +193,7 @@ export function TestControl(form: FormAccount_DevKitV4.Form): boolean {
     const failed = allResults.filter(r => r.Status === "✗").length;
     const total = allResults.length;
 
-    console.groupCollapsed(`✅ [TS] TEST 00: IControl Interface [${startTime}] - Using: Name field - ${passed}/${total}`);
+    console.groupCollapsed(`✅ [TS] TEST 00: IControl Interface [${startTime}] - Using: v4_String field - ${passed}/${total}`);
 
     console.log("%c📋 ReadOnly Properties (R1-R8)", "font-weight: bold; font-size: 14px; color: #4CAF50;");
     console.table(results);

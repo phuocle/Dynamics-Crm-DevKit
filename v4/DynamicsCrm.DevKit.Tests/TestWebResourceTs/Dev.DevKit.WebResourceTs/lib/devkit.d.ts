@@ -3565,7 +3565,7 @@ declare namespace DevKit {
     }
 
     /**
-     * Key-value pair object
+     * A generic key-value pair object used for storing arbitrary data
      */
     interface KeyValueObject {
         [key: string]: any;
@@ -3742,7 +3742,8 @@ declare namespace DevKit {
     }
 
     /**
-     * Entity reference object
+     * An object that represents a reference to a Dynamics 365 record
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getvalue
      */
     interface EntityReference {
         /** Entity type of the record */
