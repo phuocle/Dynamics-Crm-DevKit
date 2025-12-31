@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
+	<TemplateData>
+		<Name>01. Shared Project (VB)</Name>
+		<Description>Shared Project Template for DynamicsCrm.DevKit (VB.NET). Provides a foundational structure for Dataverse development, including core utility classes, extension methods.</Description>
+		<DefaultName>SharedProject</DefaultName>
+		<TemplateID>DynamicsCrm.DevKit.VisualBasicSharedProject</TemplateID>
+		<TemplateGroupID>DynamicsCrm.DevKit</TemplateGroupID>
+		<Icon>icon.png</Icon>
+		<ProjectType>VisualBasic</ProjectType>
+		<RequiredFrameworkVersion>4.0</RequiredFrameworkVersion>
+		<CreateInPlace>true</CreateInPlace>
+		<ProjectTypeTag>DynamicsCrm.DevKit</ProjectTypeTag>
+		<LanguageTag>VisualBasic</LanguageTag>
+		<PlatformTag>Windows</PlatformTag>
+		<SortOrder>100</SortOrder>
+	</TemplateData>
+	<TemplateContent>
+		<Project TargetFileName="$SafeProjectName$.shproj" File="Shared.shproj" ReplaceParameters="true">
+			<Folder Name="Lib" TargetFolderName="Lib" />
+			<Folder Name="Entities" TargetFolderName="Entities" />
+			<ProjectItem TargetFileName="$NameSpace$.projitems" ReplaceParameters="true">Shared.projitems</ProjectItem>
+			<ProjectItem ReplaceParameters="false" TargetFileName="Lib\Date.vb">Date.vb</ProjectItem>
+			<ProjectItem ReplaceParameters="true" TargetFileName="Lib\PluginCore.vb">PluginCore.vb</ProjectItem>
+			<ProjectItem ReplaceParameters="true" TargetFileName="Lib\Extension.vb">Extension.vb</ProjectItem>
+			<ProjectItem ReplaceParameters="true" TargetFileName="Lib\EntityBase.vb">EntityBase.vb</ProjectItem>
+			<ProjectItem ReplaceParameters="true" TargetFileName="Entities\generator.bat">generator.bat</ProjectItem>
+		</Project>
+	</TemplateContent>
+	<WizardExtension>
+		<Assembly>DynamicsCrm.DevKit, Version=4.00.00.00, Culture=Neutral, PublicKeyToken=null</Assembly>
+		<FullClassName>DynamicsCrm.DevKit.Wizard.ProjectTemplates.Shared</FullClassName>
+	</WizardExtension>
+</VSTemplate>

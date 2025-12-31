@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>$guid1$</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>$NameSpace$</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)Entities\" />
+    <Folder Include="$(MSBuildThisFileDirectory)Lib\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Lib\Date.vb" />
+    <Compile Include="$(MSBuildThisFileDirectory)Lib\PluginCore.vb" />
+    <Compile Include="$(MSBuildThisFileDirectory)Lib\Extension.vb" />
+    <Compile Include="$(MSBuildThisFileDirectory)Lib\EntityBase.vb" />
+     <None Include="$(MSBuildThisFileDirectory)Entities\generator.bat" />
+  </ItemGroup>
+</Project>
