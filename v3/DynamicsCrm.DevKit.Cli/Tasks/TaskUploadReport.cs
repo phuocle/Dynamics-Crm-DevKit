@@ -93,12 +93,12 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                                 var report = reports.First();
                                 if (Utility.IsTheSame(report.Content, File.ReadAllText(file)))
                                 {
-                                    CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.DoNothing, ConsoleColor.White, language, ConsoleColor.Green, " report ", ConsoleColor.White, ".." + file.Substring(CurrentDirectory.Length), ConsoleColor.Green, " to ", ConsoleColor.White, fileName, ConsoleColor.Green, " report file name");
+                                    CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, language, ConsoleColor.Green, " report ", ConsoleColor.White, ".." + file.Substring(CurrentDirectory.Length), ConsoleColor.Green, " to ", ConsoleColor.White, fileName, ConsoleColor.Green, " report file name");
                                 }
                                 else
                                 {
                                     XrmHelper.DeployReport(CrmServiceClient, report.ObjectId, file);
-                                    CliLog.WriteLineWarning(ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.Deployed, ConsoleColor.White, language, ConsoleColor.Green, " report ", ConsoleColor.White, ".." + file.Substring(CurrentDirectory.Length), ConsoleColor.Green, " to ", ConsoleColor.White, fileName, ConsoleColor.Green, " report file name");
+                                    CliLog.WriteLineWarning(ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.DEPLOYED, ConsoleColor.White, language, ConsoleColor.Green, " report ", ConsoleColor.White, ".." + file.Substring(CurrentDirectory.Length), ConsoleColor.Green, " to ", ConsoleColor.White, fileName, ConsoleColor.Green, " report file name");
                                 }
                             }
                             i++;

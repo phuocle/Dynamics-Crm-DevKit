@@ -1,0 +1,33 @@
+# Code coverage reports
+**/CoverageReport/
+**/ReportGenerator_Summary/
+**/coverage/
+*.coverage
+*.cobertura.xml
+*.coveragexml
+coverage.json
+lcov.info
+*.opencover.xml
+
+# Test results
+**/TestResults/
+
+# Dependencies
+**/node_modules/
+**/package-lock.json
+
+# Build output
+**/build/
+**/bin/
+**/obj/
+
+# IDE
+**/.vscode/
+**/.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Specific test data
+DynamicsCrm.DevKit.Tests/TestAddCrmPluginRegistration/2.after/

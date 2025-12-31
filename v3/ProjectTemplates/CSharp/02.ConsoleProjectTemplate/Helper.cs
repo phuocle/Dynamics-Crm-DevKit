@@ -13,18 +13,20 @@ using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 using System.Text;
 
-namespace $NameSpace$.Debug
+namespace $NameSpace$.Lib
 {
     public static class Helper
     {
         private static RemoteExecutionContext DeserializeRemoteExecutionContext(string jsonString)
         {
-            var settings = new DataContractJsonSerializerSettings() { DateTimeFormat = new DateTimeFormat("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'") };
+            var settings = new DataContractJsonSerializerSettings { DateTimeFormat = new DateTimeFormat("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'") };
             var obj = Activator.CreateInstance<RemoteExecutionContext>();
-            MemoryStream ms = new MemoryStream(Encoding.Unicode.GetBytes(jsonString));
-            System.Runtime.Serialization.Json.DataContractJsonSerializer serializer = new System.Runtime.Serialization.Json.DataContractJsonSerializer(obj.GetType(), settings);
-            obj = (RemoteExecutionContext)serializer.ReadObject(ms);
-            ms.Close();
+            using (var ms = new MemoryStream(Encoding.Unicode.GetBytes(jsonString)))
+            {
+                var serializer = new DataContractJsonSerializer(obj.GetType(), settings);
+                var deserialized = serializer.ReadObject(ms);
+                obj = deserialized != null ? (RemoteExecutionContext)deserialized : obj;
+            }
             return obj;
         }
         public static IServiceProvider GetServiceProvider(string json, CrmServiceClient service)
@@ -116,7 +118,7 @@ namespace $NameSpace$.Debug
                         try
                         {
                             var er = entity.GetAttributeValue<EntityReference>(key);
-                            if (er != null && er?.Name == null)
+                            if (er?.Name == null)
                                 er.Name = "(No Name)";
                         }
                         catch { }

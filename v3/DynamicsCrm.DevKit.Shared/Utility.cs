@@ -1,11 +1,9 @@
-﻿//using Microsoft.CodeAnalysis.CSharp;
-using DynamicsCrm.DevKit.Shared.Models;
+﻿using DynamicsCrm.DevKit.Shared.Models;
 using EnvDTE;
 using Microsoft.CSharp;
+using Microsoft.VisualStudio.Shell;
 using Microsoft.Xrm.Sdk.Metadata;
 using System;
-using System.Activities.Expressions;
-using System.CodeDom;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -13,7 +11,6 @@ using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using static DynamicsCrm.DevKit.Shared.XrmHelper;
 
 namespace DynamicsCrm.DevKit.Shared
 {
@@ -751,6 +748,34 @@ namespace DynamicsCrm.DevKit.Shared
                 if (project.Name == projectName) return project;
             }
             return null;
+        }
+
+        public static string GetTestRunSettingsFile(DTE dte)
+        {
+            var solutionFullName = dte?.Solution?.FullName;
+            var dir = Path.GetDirectoryName(solutionFullName);
+            var file = $"{dir}\\VisualStudioTest.runsettings";
+            return file;
+        }
+
+        public static bool ProxyTypesProjectExist(DTE dte)
+        {
+            Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
+            var proxyTypesProjectName = Utility.GetProxyTypesProject(dte);
+            return Utility.ExistProject(dte, proxyTypesProjectName);
+        }
+
+        public static string GetProxyTypesProject(DTE dte)
+        {
+            var solutionFullName = dte?.Solution?.FullName;
+            if (solutionFullName.EndsWith(".Test.sln")) solutionFullName = solutionFullName.Substring(0, solutionFullName.Length - ".Test.sln".Length) + ".sln";
+            if (!File.Exists(solutionFullName)) solutionFullName = dte?.Solution?.FullName;
+            var fInfo = new FileInfo(solutionFullName);
+            var parts = fInfo.Name.Split(".".ToCharArray());
+            var value = string.Empty;
+            for (var i = 0; i < parts.Length - 1; i++)
+                value += parts[i] + ".";
+            return value + $"{ProjectType.ProxyTypes.ToString()}";
         }
     }
 }

@@ -43,6 +43,7 @@
         None,
         Shared,
         Console,
+        ConsoleCore,
         Server,
         Plugin,
         Workflow,

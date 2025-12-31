@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<VSTemplate Version="3.0.0" Type="Item" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
+	<TemplateData>
+		<Name>01. C# Late Bound Class</Name>
+		<Description>Generates a C# late-bound entity class scaffold for Microsoft Dataverse (Dynamics 365) server-side development.</Description>
+		<DefaultName>Class.cs</DefaultName>
+		<TemplateID>AAAAAAAA-AAAA-AAAA-BBBB-000000000001</TemplateID>
+		<Icon>icon.png</Icon>
+		<ProjectType>CSharp</ProjectType>
+		<ProjectSubType>Visual C#</ProjectSubType>
+		<AppliesTo>CSharp</AppliesTo>
+		<RequiredFrameworkVersion>4.0</RequiredFrameworkVersion>
+		<NumberOfParentCategoriesToRollUp>0</NumberOfParentCategoriesToRollUp>
+		<SortOrder>110</SortOrder>
+	</TemplateData>
+	<TemplateContent>
+		<ProjectItem ReplaceParameters="true" OpenInEditor="false" TargetFileName="$SchemaName$.cs">Class.cs</ProjectItem>
+		<ProjectItem ReplaceParameters="true" OpenInEditor="false" TargetFileName="$SchemaName$.generated.cs">GeneratedClass.cs</ProjectItem>
+	</TemplateContent>
+	<WizardExtension>
+		<Assembly>DynamicsCrm.DevKit, Version=4.00.00.00, Culture=Neutral, PublicKeyToken=null</Assembly>
+		<FullClassName>DynamicsCrm.DevKit.Wizard.ItemTemplates.LateBound</FullClassName>
+	</WizardExtension>
+</VSTemplate>

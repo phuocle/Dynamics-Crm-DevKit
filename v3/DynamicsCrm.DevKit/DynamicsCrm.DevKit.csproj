@@ -47,9 +47,9 @@
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
-	<PropertyGroup>
-		<NoWarn>CVSTBLD001</NoWarn>
-	</PropertyGroup>
+  <PropertyGroup>
+    <NoWarn>CVSTBLD001</NoWarn>
+  </PropertyGroup>
   <ItemGroup>
     <Compile Include="Commands\CommandAddCrmPluginRegistration.cs" />
     <Compile Include="Commands\CommandNewWebResource.cs" />
@@ -68,9 +68,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\.editorconfig">
-      <Link>.editorconfig</Link>
-    </None>
     <None Include="source.extension.vsixmanifest">
       <SubType>Designer</SubType>
       <LastGenOutput>source.extension.cs</LastGenOutput>
@@ -107,18 +104,18 @@
     <PackageReference Include="Microsoft.CrmSdk.XrmTooling.WpfControls">
       <Version>9.1.1.65</Version>
     </PackageReference>
-    <PackageReference Include="Microsoft.VisualStudio.SDK" Version="17.13.40008" ExcludeAssets="runtime">
+    <PackageReference Include="Microsoft.VisualStudio.SDK" Version="17.14.40265" ExcludeAssets="runtime">
       <IncludeAssets>compile; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.TextTemplating">
       <Version>17.10.40170</Version>
     </PackageReference>
-    <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="17.13.2126">
+    <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="17.14.2094">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="System.Text.Json">
-      <Version>9.0.3</Version>
+      <Version>9.0.8</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
@@ -178,9 +175,9 @@
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
     </ProjectReference>
-    <ProjectReference Include="..\ItemTemplates\CSharp\06.UiTestItemTemplate\06.UiTesttemTemplate.csproj">
+    <ProjectReference Include="..\ItemTemplates\CSharp\06.UiTestItemTemplate\06.UiTestItemTemplate.csproj">
       <Project>{53392F2B-21C1-41BF-9073-2994B94E101E}</Project>
-      <Name>06.UiTesttemTemplate</Name>
+      <Name>06.UiTestItemTemplate</Name>
       <VSIXSubPath>ItemTemplates</VSIXSubPath>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
@@ -349,6 +346,13 @@
     <ProjectReference Include="..\ProjectTemplates\CSharp\16.PackageProjectTemplate\16.PackageProjectTemplate.csproj">
       <Project>{9D1F29B5-4A25-4642-879F-577FDE4D5DD6}</Project>
       <Name>16.PackageProjectTemplate</Name>
+      <VSIXSubPath>ProjectTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\ProjectTemplates\CSharp\17.ConsoleCoreProjectTemplate\17.ConsoleCoreProjectTemplate.csproj">
+      <Project>{E782F991-AFB7-4C71-B92A-373C6C018731}</Project>
+      <Name>17.ConsoleCoreProjectTemplate</Name>
       <VSIXSubPath>ProjectTemplates</VSIXSubPath>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>

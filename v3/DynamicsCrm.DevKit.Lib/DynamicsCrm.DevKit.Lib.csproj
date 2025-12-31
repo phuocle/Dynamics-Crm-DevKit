@@ -4,16 +4,15 @@
     <TargetFramework>net48</TargetFramework>
     <IsPublishable>True</IsPublishable>
     <SignAssembly>True</SignAssembly>
-    <AssemblyOriginatorKeyFile>..\DynamicsCrm.DevKit.pfx</AssemblyOriginatorKeyFile>
-    <AssemblyVersion>3.45.67.89</AssemblyVersion>
-    <FileVersion>3.45.67.89</FileVersion>
+    <AssemblyVersion>3.66.66.66</AssemblyVersion>
+    <FileVersion>3.66.66.66</FileVersion>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
     <RepositoryUrl>https://github.com/phuocle/Dynamics-Crm-DevKit</RepositoryUrl>
     <Company>PhuocLe</Company>
     <Product>DynamicsCrm.DevKit</Product>
     <Copyright>Copyright © PhuocLe 2016 - 2036</Copyright>
     <PackageProjectUrl>https://github.com/phuocle/Dynamics-Crm-DevKit</PackageProjectUrl>
-    <Version>3.45.67.89</Version>
+    <Version>3.66.66.66</Version>
   </PropertyGroup>
 	<PropertyGroup>
 		<LangVersion>latest</LangVersion>
@@ -24,6 +23,7 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <PlatformTarget>x64</PlatformTarget>
+    <AssemblyOriginatorKeyFile>..\DynamicsCrm.DevKit.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -53,6 +53,7 @@
     <None Remove="Resources\TestPlugin.tt" />
     <None Remove="Resources\TestWorkflow.tt" />
     <None Remove="Resources\UiTest.tt" />
+    <None Remove="Resources\VsTest.runsettings" />
     <None Remove="Resources\WebApi.js" />
     <None Remove="Resources\WebApi2.js" />
     <None Remove="Resources\Workflow.tt" />
@@ -103,6 +104,7 @@
     <EmbeddedResource Include="Resources\Plugin.tt">
       <Generator></Generator>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\VsTest.runsettings" />
     <EmbeddedResource Include="Resources\WebApi.js" />
     <EmbeddedResource Include="Resources\WebApi2.js" />
     <EmbeddedResource Include="Resources\download.webresources.bat" />
@@ -151,12 +153,13 @@
     <PackageReference Include="Community.VisualStudio.Toolkit.17" Version="17.0.533" />
     <PackageReference Include="Microsoft.CrmSdk.XrmTooling.CoreAssembly" Version="9.1.1.65" />
     <PackageReference Include="Microsoft.CrmSdk.XrmTooling.WpfControls" Version="9.1.1.65" />
-    <PackageReference Include="Microsoft.VisualStudio.SDK" Version="17.13.40008" />
+    <PackageReference Include="Microsoft.PowerPlatform.Dataverse.ModelBuilderLib" Version="2.0.11" />
+    <PackageReference Include="Microsoft.VisualStudio.SDK" Version="17.14.40265" />
     <PackageReference Include="Microsoft.VisualStudio.TemplateWizardInterface" Version="17.10.40170" />
     <PackageReference Include="Microsoft.VisualStudio.TextTemplating" Version="17.10.40170" />
-    <PackageReference Include="NuGet.Protocol" Version="6.13.2" />
-    <PackageReference Include="NuGet.Versioning" Version="6.13.2" />
-    <PackageReference Include="System.Text.Json" Version="9.0.3" />
+    <PackageReference Include="NuGet.Protocol" Version="6.14.0" />
+    <PackageReference Include="NuGet.Versioning" Version="6.14.0" />
+    <PackageReference Include="System.Text.Json" Version="9.0.8" />
   </ItemGroup>
 
   <ItemGroup>

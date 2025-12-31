@@ -1,5 +1,4 @@
-﻿using Community.VisualStudio.Toolkit;
-using Microsoft.VisualStudio.Shell;
+﻿using Microsoft.VisualStudio.Shell;
 using NuGet.Common;
 using NuGet.Configuration;
 using NuGet.Packaging;
@@ -11,12 +10,9 @@ using NuGet.Versioning;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.IO.Packaging;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using static Microsoft.VisualStudio.Shell.ThreadedWaitDialogHelper;
 
 namespace DynamicsCrm.DevKit.Shared
 {
@@ -37,7 +33,7 @@ namespace DynamicsCrm.DevKit.Shared
             SourceRepository repository = Repository.Factory.GetCoreV3("https://api.nuget.org/v3/index.json");
             FindPackageByIdResource resource = await repository.GetResourceAsync<FindPackageByIdResource>();
             IEnumerable<NuGetVersion> versions = await resource.GetAllVersionsAsync(nuget, cache, logger, cancellationToken);
-            return versions.ToList();
+            return versions.Where(v => !v.IsPrerelease).ToList();
         }
 
         internal static string GetTargetFramework(string nuget, NuGetVersion version)

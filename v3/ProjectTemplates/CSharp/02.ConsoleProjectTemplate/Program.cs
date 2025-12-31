@@ -1,6 +1,5 @@
 ﻿using Microsoft.Crm.Sdk.Messages;$if$($IsOOBConnection$== 1)
 using System;$endif$
-using $NameSpace$.Debug;
 
 namespace $NameSpace$
 {

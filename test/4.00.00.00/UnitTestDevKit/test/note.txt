@@ -1,0 +1,6 @@
+How to debug devkit.mjs
+1. In Terminal window, run npm run test:debug
+2. Open Debug panel (CTRL+SHIFT+D), select Attach to Jest, then click the run button (green button)
+3. Debuger now come
+4. in devkit.mjs, add break point and start debug
+5. STOP debug, SHIFT+F5

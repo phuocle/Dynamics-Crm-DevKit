@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net9.0</TargetFramework>
+    <RootNamespace>$projectname$</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="DynamicsCrm.DevKit.Analyzers" Version="$DynamicsCrm.DevKit.Analyzers.version$" />
+    <PackageReference Include="DynamicsCrm.DevKit.Cli" Version="$DynamicsCrm.DevKit.Cli.version$" />
+    <PackageReference Include="Microsoft.PowerPlatform.Dataverse.Client" Version="$Microsoft.PowerPlatform.Dataverse.Client.version$" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="$Microsoft.Extensions.Configuration.version$" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="$Microsoft.Extensions.Configuration.Json.version$" />
+    <PackageReference Include="NSubstitute" Version="$NSubstitute.version$" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="AppSettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+</Project>

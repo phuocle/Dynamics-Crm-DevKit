@@ -157,7 +157,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             command.Append($"/nologo ");
             command.Append($"/SuppressGeneratedCodeAttribute ");
-            command.Append($"/generateActions ");
+            //command.Append($"/generateActions ");
             command.Append($"/emitfieldsclasses ");
             //command.Append($"/legacyMode ");
             command.Append($"/generateGlobalOptionSets ");
@@ -193,7 +193,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             command.Append($"/nologo ");
             command.Append($"/SuppressGeneratedCodeAttribute ");
-            command.Append($"/generateActions ");
+            //command.Append($"/generateActions ");
             command.Append($"/emitfieldsclasses ");
             //command.Append($"/legacyMode ");
             command.Append($"/generateGlobalOptionSets ");

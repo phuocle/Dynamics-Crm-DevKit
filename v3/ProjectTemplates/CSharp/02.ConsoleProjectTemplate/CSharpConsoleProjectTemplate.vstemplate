@@ -29,12 +29,12 @@
 			<ProjectItem ReplaceParameters="true" TargetFileName="App.config">App.config</ProjectItem>
 			<ProjectItem ReplaceParameters="true" TargetFileName="Login\LoginForm.xaml">LoginForm.xaml</ProjectItem>
 			<ProjectItem ReplaceParameters="true" TargetFileName="Login\LoginForm.xaml.cs">LoginForm.xaml.cs</ProjectItem>
-			<ProjectItem ReplaceParameters="true" TargetFileName="Debug\Helper.cs">Helper.cs</ProjectItem>
-			<ProjectItem ReplaceParameters="true" TargetFileName="Debug\TracingServiceFake.cs">TracingServiceFake.cs</ProjectItem>
+			<ProjectItem ReplaceParameters="true" TargetFileName="Lib\Helper.cs">Helper.cs</ProjectItem>
+			<ProjectItem ReplaceParameters="true" TargetFileName="Lib\TracingServiceFake.cs">TracingServiceFake.cs</ProjectItem>
 		</Project>
 	</TemplateContent>
 	<WizardExtension>
-		<Assembly>DynamicsCrm.DevKit.Lib, Version=3.45.67.89, Culture=Neutral, PublicKeyToken=98cbb7bd3db31604</Assembly>
+		<Assembly>DynamicsCrm.DevKit.Lib, Version=3.66.66.66, Culture=Neutral, PublicKeyToken=98cbb7bd3db31604</Assembly>
 		<FullClassName>DynamicsCrm.DevKit.Lib.Wizard.ProjectTemplates.Console</FullClassName>
 	</WizardExtension>
 </VSTemplate>

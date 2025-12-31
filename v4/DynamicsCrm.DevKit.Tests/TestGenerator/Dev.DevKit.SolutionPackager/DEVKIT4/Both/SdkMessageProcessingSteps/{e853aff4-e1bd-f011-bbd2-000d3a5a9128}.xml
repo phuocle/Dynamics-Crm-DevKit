@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<SdkMessageProcessingStep Name="Dev.DevKitV4.Server.Plugins.SystemUser.PreValidationAccountCreateSynchronous" SdkMessageProcessingStepId="{e853aff4-e1bd-f011-bbd2-000d3a5a9128}" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <SdkMessageId>9ebdbb1b-ea3e-db11-86a7-000a3a5473e8</SdkMessageId>
+  <PluginTypeName>Dev.DevKitV4.Server.Plugins.Account.PreValidationAccountCreateSynchronous, Dev.DevKitV4.Server, Version=1.0.0.0, Culture=neutral, PublicKeyToken=35bef6dd61f18c2a</PluginTypeName>
+  <PluginTypeId>dd53aff4-e1bd-f011-bbd2-000d3a5a9128</PluginTypeId>
+  <PrimaryEntity>systemuser</PrimaryEntity>
+  <AsyncAutoDelete>0</AsyncAutoDelete>
+  <FilteringAttributes></FilteringAttributes>
+  <InvocationSource>0</InvocationSource>
+  <Mode>0</Mode>
+  <Rank>1</Rank>
+  <EventHandlerTypeCode>4602</EventHandlerTypeCode>
+  <Stage>10</Stage>
+  <IsCustomizable>1</IsCustomizable>
+  <IsHidden>0</IsHidden>
+  <SupportedDeployment>0</SupportedDeployment>
+  <IntroducedVersion>1.0.0.4</IntroducedVersion>
+  <SdkMessageProcessingStepImages />
+</SdkMessageProcessingStep>

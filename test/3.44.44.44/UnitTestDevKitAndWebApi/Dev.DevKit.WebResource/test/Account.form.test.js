@@ -1077,7 +1077,7 @@ define(['xrm-mock'], function () {
                 expect(form.Utility.CurrentAppUrl).toBeUndefined();
                 expect(form.Utility.Version).toBe("10.0.0.0");
                 expect(form.Utility.WebResourceUrl(null)).toBeUndefined();
-                expect(() => { form.Utility.IsOnPremises; }).toThrow(new Error("getGlobalContext.isOnPremises is not a function"));
+                expect(() => { form.Utility.IsOnPremises; }).toThrow(new TypeError("getGlobalContext?.isOnPremises is not a function"));
                 expect(form.Utility.PrependOrgName("abc-")).toBe("abc-OrgUniqueName");
 
                 //var getPanel = Xrm.Panel;
@@ -1114,17 +1114,17 @@ define(['xrm-mock'], function () {
 
                 //Execution Context
                 expect(form.ExecutionContext.Depth).toBe(1);
-                expect(() => { form.ExecutionContext.EventArgs }).toThrow(new Error("executionContext.getEventArgs is not a function"));
+                expect(() => { form.ExecutionContext.EventArgs }).toThrow(new TypeError("executionContext?.getEventArgs is not a function"));
                 expect(() => { form.ExecutionContext.EventSource }).toThrow(new Error("no event source given"));
                 expect(form.ExecutionContext.FormContext).toBeDefined();
                 expect(form.ExecutionContext.GetSharedVariable("A")).toBeUndefined();
                 expect(form.ExecutionContext.SetSharedVariable("A", "B")).toBeUndefined();
-                expect(() => { form.ExecutionContext.SaveMode }).toThrow(new Error("executionContext.getEventArgs is not a function"));
-                expect(() => { form.ExecutionContext.IsDefaultPrevented() }).toThrow(new Error("executionContext.getEventArgs is not a function"));
-                expect(() => { form.ExecutionContext.SetPreventDefault() }).toThrow(new Error("executionContext.getEventArgs is not a function"));
-                expect(() => { form.ExecutionContext.EntityReference }).toThrow(new Error("executionContext.getEventArgs is not a function"));
-                expect(() => { form.ExecutionContext.IsSaveSuccess }).toThrow(new Error("executionContext.getEventArgs is not a function"));
-                expect(() => { form.ExecutionContext.SaveErrorInfo }).toThrow(new Error("executionContext.getEventArgs is not a function"));
+                expect(() => { form.ExecutionContext.SaveMode }).toThrow(new TypeError("executionContext?.getEventArgs is not a function"));
+                expect(() => { form.ExecutionContext.IsDefaultPrevented() }).toThrow(new TypeError("executionContext?.getEventArgs is not a function"));
+                expect(() => { form.ExecutionContext.SetPreventDefault() }).toThrow(new TypeError("executionContext?.getEventArgs is not a function"));
+                expect(() => { form.ExecutionContext.EntityReference }).toThrow(new TypeError("executionContext?.getEventArgs is not a function"));
+                expect(() => { form.ExecutionContext.IsSaveSuccess }).toThrow(new TypeError("executionContext?.getEventArgs is not a function"));
+                expect(() => { form.ExecutionContext.SaveErrorInfo }).toThrow(new TypeError("executionContext?.getEventArgs is not a function"));
 
             });
         });

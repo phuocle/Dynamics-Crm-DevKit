@@ -1,0 +1,3 @@
+[submodule "v4/DynamicsCrm.DevKit.Wiki"]
+	path = v4/DynamicsCrm.DevKit.Wiki
+	url = https://github.com/phuocle/Dynamics-Crm-DevKit.wiki.git

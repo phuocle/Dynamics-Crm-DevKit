@@ -1,0 +1,72 @@
+# EditorConfig for DynamicsCrm.DevKit.Analyzers
+# https://editorconfig.org
+
+root = true
+
+[*.cs]
+
+# ===========================================
+# DynamicsCrm.DevKit.Analyzers - Severity Configuration
+# ===========================================
+# Options: error, warning, suggestion, silent, none
+#
+# - error:      Build fails if this rule is violated
+# - warning:    Shows as warning in build output and Error List
+# - suggestion: Shows in IDE only (blue squiggle)
+# - silent:     Runs but produces no output
+# - none:       Rule is completely disabled
+# ===========================================
+
+# DEVKIT1001: Create/Update message should have filtering attributes
+dotnet_diagnostic.DEVKIT1001.severity = warning
+
+# DEVKIT1002: Don't use ColumnSet(true)
+dotnet_diagnostic.DEVKIT1002.severity = warning
+
+# DEVKIT1003: Plugin image validation
+dotnet_diagnostic.DEVKIT1003.severity = warning
+
+# DEVKIT1004: Use of deprecated SDK messages
+dotnet_diagnostic.DEVKIT1004.severity = warning
+
+# DEVKIT1005: EntityReference maybe null
+dotnet_diagnostic.DEVKIT1005.severity = warning
+
+# DEVKIT1006: Don't use batch request types in plug-ins
+dotnet_diagnostic.DEVKIT1006.severity = warning
+
+# DEVKIT1007: IPlugin implementations should be stateless
+dotnet_diagnostic.DEVKIT1007.severity = warning
+
+# DEVKIT1008: Don't use parallel execution in plug-ins
+dotnet_diagnostic.DEVKIT1008.severity = warning
+
+# DEVKIT1009: Set KeepAlive to false for external HTTP calls
+dotnet_diagnostic.DEVKIT1009.severity = warning
+
+# DEVKIT1010: Set Timeout for external HTTP calls
+dotnet_diagnostic.DEVKIT1010.severity = warning
+
+# DEVKIT1011: Use InvalidPluginExecutionException for errors
+dotnet_diagnostic.DEVKIT1011.severity = warning
+
+# DEVKIT1012: Consider using ITracingService in plug-ins
+dotnet_diagnostic.DEVKIT1012.severity = warning
+
+# DEVKIT1013: Avoid registering plugins on Retrieve/RetrieveMultiple
+dotnet_diagnostic.DEVKIT1013.severity = warning
+
+# DEVKIT1014: Avoid AppDomain event registration in plug-ins
+dotnet_diagnostic.DEVKIT1014.severity = warning
+
+# DEVKIT1015: Avoid blocking async patterns in plug-ins
+dotnet_diagnostic.DEVKIT1015.severity = warning
+
+# DEVKIT1016: Avoid retrieving unpublished metadata
+dotnet_diagnostic.DEVKIT1016.severity = warning
+
+# DEVKIT1017: Avoid Console output in plug-ins
+dotnet_diagnostic.DEVKIT1017.severity = warning
+
+# DEVKIT1018: Avoid File/IO operations in plug-ins
+dotnet_diagnostic.DEVKIT1018.severity = warning

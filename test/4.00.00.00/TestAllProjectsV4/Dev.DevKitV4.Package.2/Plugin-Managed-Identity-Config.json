@@ -1,0 +1,26 @@
+﻿{
+    "ResourceGroup":  "DEVKITV4-3",
+    "Location":  "southeastasia",
+    "KeyVaultName":  "kv-dataverse-devkitv4-3",
+    "SecretName":  "DEVKITV4-3",
+    "SecretValue":  "DEVKITV4-3",
+    "CertificateFileName":  "ManagedIdentityPackage",
+    "CertificatePassword":  "!123@abCDefPackage",
+    "CertificateValidityYears":  20,
+    "TenantId":  "49528483-b79b-4b88-b86e-7d882ba68911",
+    "KeyVaultURL":  "https://kv-dataverse-devkitv4-3.vault.azure.net/",
+    "CertificateThumbprint":  "A0BF98115B9847D8C9D075E478583E094E62BADA",
+    "CertificateSHA256Hash":  "rQHJPXgIBGpvQd97_PF6udGIqzE9CWLKqPQIekrNe1c",
+    "ManagedIdentities":  [
+                              {
+                                  "AppName":  "DEVKITV4-3-ManagedIdentity-DEV-Package",
+                                  "AppId":  "e4077ecd-47c1-4648-9592-6881b3f927d3",
+                                  "EnvironmentId":  "cbba8ce9-ea7c-e440-b083-0b9517496e17"
+                              },
+                              {
+                                  "AppName":  "DEVKITV4-3-ManagedIdentity-TEST-Package",
+                                  "AppId":  "58edd778-9308-40ed-8da9-69c03fcc9948",
+                                  "EnvironmentId":  "cbba8ce9-ea7c-e440-b083-0b9517496e17"
+                              }
+                          ]
+}

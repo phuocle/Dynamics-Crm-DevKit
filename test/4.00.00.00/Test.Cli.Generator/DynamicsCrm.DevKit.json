@@ -1,0 +1,19 @@
+﻿{
+    "DefaultCrmConnection": "ClientSecret",
+    "CrmConnections": [
+        {
+            "Name": "UserPass",
+            "Url": "https://contoso-pl.crm5.dynamics.com",
+            "UserName": "phuocle@phuocle.net",
+            "Password": "",
+            "Type": "OAuth"
+        },
+        {
+            "Name": "ClientSecret",
+            "Url": "https://contoso-pl.crm5.dynamics.com",
+            "UserName": "b1b8cf05-cb06-4674-b93e-98c8c9a02e5a",
+            "Password": "+Rybklkh/UTzAsDl0toScd7EhAwwKjwqyNeMxiR4DwjMsWC35b0ps12e0UjG3Pd5",
+            "Type": "ClientSecret"
+        }
+    ]
+}

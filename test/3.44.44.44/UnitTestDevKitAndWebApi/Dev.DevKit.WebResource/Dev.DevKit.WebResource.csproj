@@ -53,9 +53,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Content Include="..\..\UnitTestDevKit\lib\devkit.mjs">
-      <Link>lib\devkit.mjs</Link>
-    </Content>
     <Content Include="entities\Email.form.js">
       <DependentUpon>Email.js</DependentUpon>
     </Content>

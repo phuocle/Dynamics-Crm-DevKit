@@ -28,7 +28,7 @@ define(['xrm-mock', 'sinon'], function () {
             "statuscode@OData.Community.Display.V1.FormattedValue": "Active",
             "statuscode": 1,
             "donotemail@OData.Community.Display.V1.FormattedValue": "Allow",
-            "donotemail": false,
+            "donotemail": true,
             "accountid": "e295f09c-2aab-eb11-8236-000d3a808ce1",
             "creditlimit@OData.Community.Display.V1.FormattedValue": "$5,000.00",
             "creditlimit": 5000,
@@ -130,7 +130,7 @@ define(['xrm-mock', 'sinon'], function () {
             expect(webapi.CreditLimit).toBe(5000);
             expect(webapi.FormattedValue.CreditLimit).toBe("$5,000.00");
             expect(webapi.DoNotEMail).toBeDefined();
-            expect(webapi.DoNotEMail).toBeFalsy();
+            expect(webapi.DoNotEMail).toBeTruthy();
             expect(webapi.FormattedValue.DoNotEMail).toBe("Allow");
             expect(webapi.EMailAddress1).toBeDefined();
             expect(webapi.EMailAddress1).toBe("someone9@example.com");

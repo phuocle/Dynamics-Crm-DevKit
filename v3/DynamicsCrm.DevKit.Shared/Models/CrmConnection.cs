@@ -8,7 +8,7 @@ namespace DynamicsCrm.DevKit.Shared.Models
         public string Url { get; set; }
         public string UserName { get; set; }
         public string Password { get; set; }
-        public string Type { get; set; } = "Office365";
+        public string Type { get; set; } = "OAuth";
 
         public override string ToString()
         {

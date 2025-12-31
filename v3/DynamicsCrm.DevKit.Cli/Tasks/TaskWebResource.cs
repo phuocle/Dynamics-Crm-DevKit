@@ -164,7 +164,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     existingDependencyXml = rows.Entities[0].GetAttributeValue<string>("dependencyxml");
                 else
                 {
-                    CliLog.WriteLineError(ConsoleColor.Yellow, ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", current) + ": ", ConsoleColor.Green, CliAction.NotExisting, ConsoleColor.White, webResourceName);
+                    CliLog.WriteLineError(ConsoleColor.Yellow, ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", current) + ": ", ConsoleColor.Green, CliAction.NOT_EXISTING, ConsoleColor.White, webResourceName);
                     return;
                 }
                 if (!IsTheSameDependencyXml(dependency.dependencies, existingDependencyXml))
@@ -174,7 +174,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     {
                         ["dependencyxml"] = dependencyXml
                     };
-                    CliLog.WriteLineWarning(ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", current) + ": ", ConsoleColor.Green, CliAction.Updated, ConsoleColor.White, $"{webResourceName}", ConsoleColor.Green, " dependencies ", ConsoleColor.White, "with");
+                    CliLog.WriteLineWarning(ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", current) + ": ", ConsoleColor.Green, CliAction.UPDATED, ConsoleColor.White, $"{webResourceName}", ConsoleColor.Green, " dependencies ", ConsoleColor.White, "with");
                     foreach (var d in foundDependencies)
                         CliLog.WriteLineWarning(ConsoleColor.White, "\t" + d);
                     CrmServiceClient.Update(entity);
@@ -183,7 +183,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
                 else
                 {
-                    CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", current) + ": ", ConsoleColor.Green, CliAction.DoNothing, ConsoleColor.White, webResourceName, ConsoleColor.Green, " dependencies ", ConsoleColor.White, "with");
+                    CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", current) + ": ", ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, webResourceName, ConsoleColor.Green, " dependencies ", ConsoleColor.White, "with");
                     foreach (var d in foundDependencies)
                         CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.White, "\t" + d);
                 }
@@ -342,7 +342,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var fileContent = Convert.ToBase64String(File.ReadAllBytes(webResourceFile.file));
             if (fileContent == content)
             {
-                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", current) + ": ", ConsoleColor.Green, CliAction.DoNothing, ConsoleColor.White, webResourceFile.file.Substring(CurrentDirectory.Length + 1));
+                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", current) + ": ", ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, webResourceFile.file.Substring(CurrentDirectory.Length + 1));
                 AddWebResourceToSolution(new Entity("webresource")
                 {
                     ["name"] = webResourceFile.uniquename,
@@ -421,14 +421,14 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
                 if (webResourceId == Guid.Empty)
                 {
-                    CliLog.WriteLineWarning(ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", current) + ": ", ConsoleColor.Green, CliAction.Created, ConsoleColor.White, $"{webResourceFile.uniquename}", ConsoleColor.Green, " = ", ConsoleColor.White, $"{webResourceFile.file.Substring(CurrentDirectory.Length + 1)}");
+                    CliLog.WriteLineWarning(ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", current) + ": ", ConsoleColor.Green, CliAction.CREATED, ConsoleColor.White, $"{webResourceFile.uniquename}", ConsoleColor.Green, " = ", ConsoleColor.White, $"{webResourceFile.file.Substring(CurrentDirectory.Length + 1)}");
                     webResourceId = CrmServiceClient.Create(webResource);
                     webResource["webresourceid"] = webResourceId;
                 }
                 else
                 {
                     webResource["webresourceid"] = webResourceId;
-                    CliLog.WriteLineWarning(ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", current) + ": ", ConsoleColor.Green, CliAction.Updated, ConsoleColor.White, $"{webResourceFile.uniquename}", ConsoleColor.Green, " = ", ConsoleColor.White, $"{webResourceFile.file.Substring(CurrentDirectory.Length + 1)}");
+                    CliLog.WriteLineWarning(ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", current) + ": ", ConsoleColor.Green, CliAction.UPDATED, ConsoleColor.White, $"{webResourceFile.uniquename}", ConsoleColor.Green, " = ", ConsoleColor.White, $"{webResourceFile.file.Substring(CurrentDirectory.Length + 1)}");
                     CrmServiceClient.Update(webResource);
                 }
                 WebResourcesToPublish.Add(webResourceId);
@@ -468,7 +468,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 ComponentId = Guid.Parse(webResource["webresourceid"].ToString()),
                 SolutionUniqueName = Json.solution
             };
-            CliLog.WriteLineWarning("\t", ConsoleColor.Green, CliAction.Added, ConsoleColor.White, $"{webResource["name"]} ", ConsoleColor.Green, "to solution: ", ConsoleColor.White, $"{Json.solution}");
+            CliLog.WriteLineWarning("\t", ConsoleColor.Green, CliAction.ADDED, ConsoleColor.White, $"{webResource["name"]} ", ConsoleColor.Green, "to solution: ", ConsoleColor.White, $"{Json.solution}");
             CrmServiceClient.Execute(request);
         }
 

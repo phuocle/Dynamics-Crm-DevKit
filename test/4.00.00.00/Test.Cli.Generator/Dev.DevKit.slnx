@@ -1,0 +1,15 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="DynamicsCrm.DevKit.Cli.json" />
+    <File Path="DynamicsCrm.DevKit.json" />
+  </Folder>
+  <Project Path="Dev.DevKit.Console/Dev.DevKit.Console.csproj" Id="bddfc49c-205b-48d8-b2b3-63d225200592" />
+  <Project Path="Dev.DevKit.ConsoleCore/Dev.DevKit.ConsoleCore.csproj" />
+  <Project Path="Dev.DevKit.Package/Dev.DevKit.Package.csproj" />
+  <Project Path="Dev.DevKit.ProxyTypes/Dev.DevKit.ProxyTypes.csproj" Id="24f931d0-a884-4354-b3c5-47ac3a575d6a" />
+  <Project Path="Dev.DevKit.Server.Test/Dev.DevKit.Server.Test.csproj" Id="f65a9bcf-baa9-4795-ba5b-6d2b95e577b8" />
+  <Project Path="Dev.DevKit.Server/Dev.DevKit.Server.csproj" Id="6fe5f288-3382-474f-8d67-f19ef1387918" />
+  <Project Path="Dev.DevKit.Shared.Test/Dev.DevKit.Shared.Test.shproj" Id="17d6f13b-8cfa-4055-80bc-2dafe7dcff43" />
+  <Project Path="Dev.DevKit.Shared/Dev.DevKit.Shared.shproj" Id="ad9f8234-c374-4f5b-8606-53d152ae3a05" />
+  <Project Path="Dev.DevKit.WebResource/Dev.DevKit.WebResource.csproj" Id="32093477-e7e2-47ac-979e-0293a65207dc" />
+</Solution>
