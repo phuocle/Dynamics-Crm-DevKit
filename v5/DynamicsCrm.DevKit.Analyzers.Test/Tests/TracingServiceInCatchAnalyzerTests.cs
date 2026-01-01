@@ -41,6 +41,8 @@ public class TestPlugin : Microsoft.Xrm.Sdk.IPlugin
     {{
         {body}
     }}
+    private void DoSomething() {{ }}
+    private void ProcessData() {{ }}
 }}
 ";
 
@@ -52,6 +54,7 @@ public class TestWorkflow : System.Activities.CodeActivity
     {{
         {body}
     }}
+    private void ProcessWorkflow() {{ }}
 }}
 ";
 
@@ -74,7 +77,7 @@ public class RegularClass
             var src = WrapInPlugin(@"
 try
 {
-    var x = 1 / 0;
+    throw new System.Exception();
 }
 [|catch|] (System.Exception ex)
 {
@@ -90,7 +93,7 @@ try
             var src = WrapInWorkflow(@"
 try
 {
-    var x = 1 / 0;
+    throw new System.Exception();
 }
 [|catch|] (System.Exception ex)
 {
@@ -150,7 +153,7 @@ catch (System.ArgumentException ex)
 var tracingService = (Microsoft.Xrm.Sdk.ITracingService)serviceProvider.GetService(typeof(Microsoft.Xrm.Sdk.ITracingService));
 try
 {
-    var x = 1 / 0;
+    throw new System.Exception();
 }
 catch (System.Exception ex)
 {
@@ -184,7 +187,7 @@ catch (System.Exception ex)
             var src = WrapInRegularClass(@"
 try
 {
-    var x = 1 / 0;
+    throw new System.Exception();
 }
 catch (System.Exception ex)
 {
@@ -228,6 +231,76 @@ catch (System.Exception ex)
 }
 ");
             await CSharpAnalyzerVerifier<TracingServiceInCatchAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        [Fact]
+        public async Task NoDiagnostic_When_CatchBlock_Uses_CustomTracerClass()
+        {
+            var src = $@"
+{Stubs}
+public class CustomTracer : Microsoft.Xrm.Sdk.ITracingService
+{{
+    public void Trace(string format, params object[] args) {{ }}
+}}
+
+public class TestPlugin : Microsoft.Xrm.Sdk.IPlugin
+{{
+    public void Execute(System.IServiceProvider serviceProvider)
+    {{
+        var tracer = new CustomTracer();
+        try
+        {{
+            throw new System.Exception();
+        }}
+        catch (System.Exception ex)
+        {{
+            tracer.Trace(""Error: "" + ex.Message);
+        }}
+    }}
+}}
+";
+            await CSharpAnalyzerVerifier<TracingServiceInCatchAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+
+
+        [Fact]
+        public async Task Diagnostic_When_CatchBlock_Uses_Static_Trace_Method()
+        {
+            var src = $@"
+{Stubs}
+
+namespace CustomTest
+{{
+    public class MyLogger
+    {{
+        public static void Trace(string s) {{ }}
+    }}
+
+    public class TestPlugin : Microsoft.Xrm.Sdk.IPlugin
+    {{
+        public void Execute(System.IServiceProvider serviceProvider)
+        {{
+            try
+            {{
+                throw new System.Exception();
+            }}
+            [|catch|] (System.Exception ex)
+            {{
+                MyLogger.Trace(""Error"");
+            }}
+        }}
+    }}
+}}
+";
+            await CSharpAnalyzerVerifier<TracingServiceInCatchAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        [Fact]
+        public void Initialize_WithNullContext_ThrowsArgumentNullException()
+        {
+            var analyzer = new TracingServiceInCatchAnalyzer();
+            Assert.Throws<System.ArgumentNullException>(() => analyzer.Initialize(null));
         }
 
         #endregion

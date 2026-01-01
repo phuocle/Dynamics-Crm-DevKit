@@ -22,5 +22,6 @@
         public const string AvoidFileIO = "DEVKIT1018";
         public const string PluginDepthCheck = "DEVKIT1019";
         public const string DataProviderDataSource = "DEVKIT1020";
+        public const string UseTracingServiceInCatch = "DEVKIT1021";
     }
 }

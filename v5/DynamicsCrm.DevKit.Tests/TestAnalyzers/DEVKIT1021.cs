@@ -10,8 +10,7 @@ namespace TestAnalyzers
     /// </summary>
 
     // ❌ BAD: Catch block without ITracingService - exception details are lost
-    [CrmPluginRegistration("DEVKIT1021_NoTracingInCatch", "Update", "account", 
-        StageEnum.PostOperation, ExecutionModeEnum.Synchronous)]
+    [CrmPluginRegistration("Update", "account", StageEnum.PostOperation, ExecutionModeEnum.Synchronous, "name", "TestAnalyzers.DEVKIT1021_NoTracingInCatch", 1, IsolationModeEnum.Sandbox)]
     public class DEVKIT1021_NoTracingInCatch : IPlugin
     {
         public void Execute(IServiceProvider serviceProvider)
@@ -25,7 +24,7 @@ namespace TestAnalyzers
                 // Some operation that might fail
                 var entity = service.Retrieve("account", context.PrimaryEntityId, new Microsoft.Xrm.Sdk.Query.ColumnSet(true));
                 var name = entity.GetAttributeValue<string>("name");
-                
+
                 if (string.IsNullOrEmpty(name))
                 {
                     throw new InvalidOperationException("Account name is required");
@@ -40,8 +39,7 @@ namespace TestAnalyzers
     }
 
     // ❌ BAD: Multiple catch blocks, one without tracing
-    [CrmPluginRegistration("DEVKIT1021_PartialTracing", "Create", "contact", 
-        StageEnum.PostOperation, ExecutionModeEnum.Synchronous)]
+    [CrmPluginRegistration("Create", "contact", StageEnum.PostOperation, ExecutionModeEnum.Synchronous, "", "TestAnalyzers.DEVKIT1021_PartialTracing", 1, IsolationModeEnum.Sandbox)]
     public class DEVKIT1021_PartialTracing : IPlugin
     {
         public void Execute(IServiceProvider serviceProvider)
@@ -75,8 +73,7 @@ namespace TestAnalyzers
     }
 
     // ✅ GOOD: Proper use of ITracingService in catch block
-    [CrmPluginRegistration("DEVKIT1021_WithTracing", "Update", "account", 
-        StageEnum.PostOperation, ExecutionModeEnum.Synchronous)]
+    [CrmPluginRegistration("Update", "account", StageEnum.PostOperation, ExecutionModeEnum.Synchronous, "name", "TestAnalyzers.DEVKIT1021_WithTracing", 1, IsolationModeEnum.Sandbox)]
     public class DEVKIT1021_WithTracing : IPlugin
     {
         public void Execute(IServiceProvider serviceProvider)
@@ -89,15 +86,15 @@ namespace TestAnalyzers
             try
             {
                 tracingService.Trace("Starting account update processing");
-                
+
                 var entity = service.Retrieve("account", context.PrimaryEntityId, new Microsoft.Xrm.Sdk.Query.ColumnSet(true));
                 var name = entity.GetAttributeValue<string>("name");
-                
+
                 if (string.IsNullOrEmpty(name))
                 {
                     throw new InvalidOperationException("Account name is required");
                 }
-                
+
                 tracingService.Trace("Account update completed successfully");
             }
             catch (Exception ex)
@@ -107,15 +104,14 @@ namespace TestAnalyzers
                 tracingService.Trace($"Exception Message: {ex.Message}");
                 tracingService.Trace($"Stack Trace: {ex.StackTrace}");
                 tracingService.Trace($"Entity: account, Id: {context.PrimaryEntityId}");
-                
+
                 throw new InvalidPluginExecutionException($"Failed to process account: {ex.Message}", ex);
             }
         }
     }
 
     // ✅ GOOD: Comprehensive exception logging
-    [CrmPluginRegistration("DEVKIT1021_DetailedLogging", "Create", "opportunity", 
-        StageEnum.PreOperation, ExecutionModeEnum.Synchronous)]
+    [CrmPluginRegistration("Create", "opportunity", StageEnum.PreOperation, ExecutionModeEnum.Synchronous, "", "TestAnalyzers.DEVKIT1021_DetailedLogging", 1, IsolationModeEnum.Sandbox)]
     public class DEVKIT1021_DetailedLogging : IPlugin
     {
         private ITracingService _tracingService;
@@ -157,12 +153,12 @@ namespace TestAnalyzers
                 _tracingService.Trace($"Message: {ex.Message}");
                 _tracingService.Trace($"Source: {ex.Source}");
                 _tracingService.Trace($"Stack: {ex.StackTrace}");
-                
+
                 if (ex.InnerException != null)
                 {
                     _tracingService.Trace($"Inner Exception: {ex.InnerException.Message}");
                 }
-                
+
                 throw new InvalidPluginExecutionException("An unexpected error occurred while creating opportunity", ex);
             }
         }

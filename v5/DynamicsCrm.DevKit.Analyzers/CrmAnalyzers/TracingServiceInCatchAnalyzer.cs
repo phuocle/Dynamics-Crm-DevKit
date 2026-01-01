@@ -62,7 +62,7 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
                 return;
 
             // Check if the catch block uses ITracingService
-            if (UsesTracingServiceInCatch(catchClause))
+            if (UsesTracingServiceInCatch(catchClause, semanticModel))
                 return;
 
             // Report diagnostic on the catch keyword
@@ -71,19 +71,42 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
         }
 
         /// <summary>
-        /// Checks if the catch block uses ITracingService in its body.
+        /// Checks if the catch block uses ITracingService.Trace in its body.
         /// </summary>
-        private static bool UsesTracingServiceInCatch(CatchClauseSyntax catchClause)
+        private static bool UsesTracingServiceInCatch(CatchClauseSyntax catchClause, SemanticModel semanticModel)
         {
             if (catchClause.Block == null)
                 return false;
 
-            // Check for ITracingService in the catch block body
-            var allIdentifiers = catchClause.Block.DescendantNodes()
-                .OfType<IdentifierNameSyntax>()
-                .Select(id => id.Identifier.Text);
+            var invocations = catchClause.Block.DescendantNodes().OfType<InvocationExpressionSyntax>();
 
-            return allIdentifiers.Any(id => id == ITracingServiceName);
+            foreach (var invocation in invocations)
+            {
+                if (invocation.Expression is MemberAccessExpressionSyntax memberAccess &&
+                    memberAccess.Name.Identifier.Text == "Trace")
+                {
+                    var typeInfo = semanticModel.GetTypeInfo(memberAccess.Expression);
+                    if (IsITracingService(typeInfo.Type))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        private static bool IsITracingService(ITypeSymbol typeSymbol)
+        {
+            if (typeSymbol == null) return false;
+
+            if (typeSymbol.ToString() == "Microsoft.Xrm.Sdk.ITracingService" ||
+                typeSymbol.ToDisplayString() == "Microsoft.Xrm.Sdk.ITracingService")
+                return true;
+
+            return typeSymbol.AllInterfaces.Any(i => 
+                i.ToString() == "Microsoft.Xrm.Sdk.ITracingService" || 
+                i.ToDisplayString() == "Microsoft.Xrm.Sdk.ITracingService");
         }
     }
 }

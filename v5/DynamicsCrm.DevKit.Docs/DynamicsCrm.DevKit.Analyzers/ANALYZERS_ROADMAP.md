@@ -26,6 +26,7 @@ Based on research of [Microsoft's Dataverse Best Practices](https://learn.micros
 | DEVKIT1018 | Avoid File/IO operations in plugins | ❌ Error | Sandbox limitation |
 | DEVKIT1019 | Plugin depth check | ⚠️ Warning | Best practice |
 | DEVKIT1020 | DataProvider requires DataSource | ❌ Error | DataProvider configuration |
+| DEVKIT1021 | Use ITracingService in Catch Blocks | ⚠️ Warning | [Use ITracingService in plug-ins](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/use-itracingservice-plugins) |
 
 ---
 
@@ -35,7 +36,6 @@ Based on research of [Microsoft's Dataverse Best Practices](https://learn.micros
 
 | ID | Title | Suggested Severity | Description | MS Best Practice |
 |---|---|:---:|---|---|
-| DEVKIT1021 | All Query Types for PreOperation RetrieveMultiple | ⚠️ Warning | Handle FetchExpression, QueryExpression, QueryByAttribute | [Implement all types of queries](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/implement-all-types-of-queries-when-filtering-preoperation-retrievemultiple) |
 | DEVKIT1022 | Duplicate Plugin Step Registration | ⚠️ Warning | Detect duplicate `[CrmPluginRegistration]` attributes | [Don't duplicate plug-in step registration](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/do-not-duplicate-plugin-step-registration) |
 
 ### 🟡 Medium Priority
@@ -87,7 +87,7 @@ DynamicsCrm.DevKit.Analyzers uniquely focuses on:
 | DEVKIT1001-1018 | Current analyzers | ✅ Implemented |
 | DEVKIT1019 | Context depth check | ✅ Implemented |
 | DEVKIT1020 | DataProvider requires DataSource | ✅ Implemented |
-| DEVKIT1021 | Query type handling | 📋 Planned |
+| DEVKIT1021 | ITracingService in catch blocks | ✅ Implemented |
 | DEVKIT1022 | Duplicate step registration | 📋 Planned |
 | DEVKIT1023 | Reflection patterns | 📋 Planned |
 | DEVKIT1024 | Environment variables | 📋 Planned |
