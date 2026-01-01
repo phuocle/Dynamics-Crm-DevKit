@@ -14,7 +14,7 @@
         "paths": {
             "*": [
                 "node_modules/*",
-                "$ProjectName$/*"
+                "Dev.DevKit.WebResourceTs/*"
             ]
         }
     },

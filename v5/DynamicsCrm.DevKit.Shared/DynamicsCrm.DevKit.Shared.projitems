@@ -133,4 +133,9 @@
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Plugin-Managed-Identity.ps1" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\build.js" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\devkit.ts" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\devkitts.d.ts" />
+  </ItemGroup>
 </Project>

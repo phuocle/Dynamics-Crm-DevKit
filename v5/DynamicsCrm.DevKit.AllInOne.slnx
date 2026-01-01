@@ -109,13 +109,10 @@
       <Platform Solution="*|arm64" Project="arm64" />
       <Platform Solution="*|x86" Project="x86" />
     </Project>
-  </Folder>
-  <Folder Name="/Solution Items/">
-    <File Path="date.txt" />
-    <File Path="Release-DynamicsCrm-DevKit-CurrentDate.ps1" />
-    <File Path="Release-DynamicsCrm-DevKit.ps1" />
-    <File Path="Import-StrongNameKey.ps1" />
-    <File Path="version.txt" />
+    <Project Path="ProjectTemplates/CSharp/13.WebResourceTsProjectTemplate/13.WebResourceTsProjectTemplate.csproj" Id="a1b2c3d4-e5f6-4a5b-8c7d-9e8f7a6b5c4d">
+      <Platform Solution="*|arm64" Project="arm64" />
+      <Platform Solution="*|x86" Project="x86" />
+    </Project>
   </Folder>
   <Project Path="DynamicsCrm.DevKit.Analyzers/DynamicsCrm.DevKit.Analyzers.csproj" />
   <Project Path="DynamicsCrm.DevKit.Cli/DynamicsCrm.DevKit.Cli.csproj" />
