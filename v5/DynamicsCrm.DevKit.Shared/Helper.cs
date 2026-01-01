@@ -86,7 +86,7 @@ namespace DynamicsCrm.DevKit.Shared
         {
             string data;
             var assembly = typeof(Helper).Assembly;
-            Stream resourceStream = assembly.GetManifestResourceStream(path); ;
+            Stream resourceStream = assembly.GetManifestResourceStream(path);
             using (resourceStream)
             using (var reader = new StreamReader(resourceStream))
             {

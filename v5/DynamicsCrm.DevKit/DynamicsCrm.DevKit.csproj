@@ -130,6 +130,7 @@
     <Compile Include="Wizard\ProjectTemplates\Server.cs" />
     <Compile Include="Wizard\ProjectTemplates\SharedTest.cs" />
     <Compile Include="Wizard\ProjectTemplates\Shared.cs" />
+    <Compile Include="Wizard\ProjectTemplates\WebResourceTs.cs" />
     <Compile Include="Wizard\ProjectTemplates\WebResource.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -422,6 +423,13 @@
     <ProjectReference Include="..\ProjectTemplates\CSharp\12.ReportProjectTemplate\12.ReportProjectTemplate.csproj">
       <Project>{ACFB5F3D-6156-47F4-A879-C9552E7C334C}</Project>
       <Name>12.ReportProjectTemplate</Name>
+      <VSIXSubPath>ProjectTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\ProjectTemplates\CSharp\13.WebResourceTsProjectTemplate\13.WebResourceTsProjectTemplate.csproj">
+      <Project>{A1B2C3D4-E5F6-4A5B-8C7D-9E8F7A6B5C4D}</Project>
+      <Name>13.WebResourceTsProjectTemplate</Name>
       <VSIXSubPath>ProjectTemplates</VSIXSubPath>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>

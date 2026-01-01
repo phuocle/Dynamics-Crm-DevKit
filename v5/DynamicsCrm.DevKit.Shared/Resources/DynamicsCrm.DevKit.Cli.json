@@ -106,6 +106,20 @@
       "rootnamespace": "???",
       "rootfolder": "???",
       "entities": "folder"
+    },
+    {
+      "profile": "TS-FORM",
+      "type": "TsForm",
+      "rootnamespace": "???",
+      "rootfolder": "???",
+      "entities": "folder"
+    },
+    {
+      "profile": "TS-WEBAPI",
+      "type": "TsWebApi",
+      "rootnamespace": "???",
+      "rootfolder": "???",
+      "entities": "folder"
     }
   ],
   "downloadwebresources": [

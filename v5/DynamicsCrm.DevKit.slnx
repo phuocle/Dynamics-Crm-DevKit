@@ -109,6 +109,10 @@
       <Platform Solution="*|arm64" Project="arm64" />
       <Platform Solution="*|x86" Project="x86" />
     </Project>
+    <Project Path="ProjectTemplates/CSharp/13.WebResourceTsProjectTemplate/13.WebResourceTsProjectTemplate.csproj" Id="a1b2c3d4-e5f6-4a5b-8c7d-9e8f7a6b5c4d">
+      <Platform Solution="*|arm64" Project="arm64" />
+      <Platform Solution="*|x86" Project="x86" />
+    </Project>
   </Folder>
   <Project Path="DynamicsCrm.DevKit.Shared/DynamicsCrm.DevKit.Shared.shproj" />
   <Project Path="DynamicsCrm.DevKit/DynamicsCrm.DevKit.csproj" Id="a886e86e-65bc-40c1-8494-fe7e80b7e1a3">
