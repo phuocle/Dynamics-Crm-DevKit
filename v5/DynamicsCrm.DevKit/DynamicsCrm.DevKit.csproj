@@ -426,6 +426,13 @@
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
     </ProjectReference>
+    <ProjectReference Include="..\ProjectTemplates\CSharp\13.WebResourceTsProjectTemplate\13.WebResourceTsProjectTemplate.csproj">
+      <Project>{A1B2C3D4-E5F6-4A5B-8C7D-9E8F7A6B5C4D}</Project>
+      <Name>13.WebResourceTsProjectTemplate</Name>
+      <VSIXSubPath>ProjectTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="..\DynamicsCrm.DevKit.Shared\DynamicsCrm.DevKit.Shared.projitems" Label="Shared" />
