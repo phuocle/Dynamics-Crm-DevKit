@@ -75,4 +75,8 @@ dotnet_diagnostic.DEVKIT1018.severity = warning
 dotnet_diagnostic.DEVKIT1019.severity = warning
 
 # DEVKIT1020: DataProvider must have DataSource
-dotnet_diagnostic.DEVKIT1020.severity = error
+dotnet_diagnostic.DEVKIT1020.severity = warning
+
+# DEVKIT1020: DataProvider must have DataSource
+dotnet_diagnostic.DEVKIT1021.severity = warning
+

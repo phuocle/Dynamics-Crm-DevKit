@@ -82,6 +82,15 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                             LabelProjectName.Content = $"{solutionName}.WebResource";
                             LabelProjectName.Tag = LabelProjectName.Content;
                         }
+                        async Task WebResourceTsProjectAsync()
+                        {
+                            var solutionName = await VsixHelper.GetSolutionNameAsync();
+                            HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/WebResource-TypeScript-Project-Template");
+                            HELP.Inlines.Clear();
+                            HELP.Inlines.Add("WebResource TypeScript Project Template");
+                            LabelProjectName.Content = $"{solutionName}.WebResourceTs";
+                            LabelProjectName.Tag = LabelProjectName.Content;
+                        }
                         async Task SolutionPackagerProjectAsync()
                         {
                             var solutionName = await VsixHelper.GetSolutionNameAsync();
@@ -188,6 +197,9 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                                 break;
                             case ProjectType.Package:
                                 await PackageProjectAsync();
+                                break;
+                            case ProjectType.WebResourceTs:
+                                await WebResourceTsProjectAsync();
                                 break;
                         }
                     }

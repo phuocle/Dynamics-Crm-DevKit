@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
+	<TemplateData>
+		<Name>13. WebResource TypeScript Project</Name>
+		<Description>Template for Dataverse Web Resources using TypeScript, esbuild, and DynamicsCrm.DevKit tooling.</Description>
+		<DefaultName>WebResourceTsProject</DefaultName>
+		<TemplateID>DynamicsCrm.DevKit.CSharpWebResourceTsProject</TemplateID>
+		<TemplateGroupID>DynamicsCrm.DevKit</TemplateGroupID>
+		<Icon>icon.png</Icon>
+		<ProjectType>CSharp</ProjectType>
+		<RequiredFrameworkVersion>4.0</RequiredFrameworkVersion>
+		<CreateInPlace>true</CreateInPlace>
+		<ProjectTypeTag>DynamicsCrm.DevKit</ProjectTypeTag>
+		<LanguageTag>CSharp</LanguageTag>
+		<PlatformTag>Windows</PlatformTag>
+		<SortOrder>220</SortOrder>
+	</TemplateData>
+	<TemplateContent>
+		<Project TargetFileName="$SafeProjectName$.csproj" File="ProjectTemplate.csproj" ReplaceParameters="true">
+			<Folder Name="lib" />
+			<Folder Name="entities" />
+			<Folder Name="build" />
+			<Folder Name="images" />
+			<Folder Name="resources" />
+			<Folder Name="html" />
+			<Folder Name="css" />
+			<ProjectItem ReplaceParameters="true" TargetFileName="Properties\AssemblyInfo.cs">AssemblyInfo.cs</ProjectItem>
+			<ProjectItem ReplaceParameters="true" TargetFileName="deploy.debug.bat">deploy.debug.bat</ProjectItem>
+			<ProjectItem ReplaceParameters="true" TargetFileName="packages.config">_packages.config</ProjectItem>
+			<ProjectItem ReplaceParameters="true" TargetFileName="package.json">package.json</ProjectItem>
+			<ProjectItem ReplaceParameters="true" TargetFileName="tsconfig.json">tsconfig.json</ProjectItem>
+			<ProjectItem ReplaceParameters="true" TargetFileName="build.js">build.js</ProjectItem>
+			<ProjectItem ReplaceParameters="true" TargetFileName="lib\devkit.d.ts">devkitts.d.ts</ProjectItem>
+			<ProjectItem ReplaceParameters="true" TargetFileName="lib\devkit.ts">devkit.ts</ProjectItem>
+			<ProjectItem ReplaceParameters="true" TargetFileName="entities\generator.form.bat">generator.form.bat</ProjectItem>
+			<ProjectItem ReplaceParameters="true" TargetFileName="entities\generator.webapi.bat">generator.webapi.bat</ProjectItem>
+		</Project>
+	</TemplateContent>
+	<WizardExtension>
+		<Assembly>DynamicsCrm.DevKit, Version=4.00.00.00, Culture=Neutral, PublicKeyToken=null</Assembly>
+		<FullClassName>DynamicsCrm.DevKit.Wizard.ProjectTemplates.WebResourceTs</FullClassName>
+	</WizardExtension>
+</VSTemplate>

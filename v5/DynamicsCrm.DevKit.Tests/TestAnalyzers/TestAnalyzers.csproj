@@ -35,6 +35,7 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="DEVKIT1021.cs" />
     <Compile Include="Lib\Extension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <None Include=".editorconfig" />

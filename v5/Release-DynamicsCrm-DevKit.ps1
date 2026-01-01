@@ -182,7 +182,11 @@ try {
 
     $nugetExe = Join-Path $PSScriptRoot "DynamicsCrm.DevKit.Analyzers\Nuget\nuget.exe"
     if (-not (Test-Path $nugetExe)) {
-        throw "nuget.exe not found at $nugetExe"
+        Write-Host "NuGet.exe not found. Downloading..." -ForegroundColor Yellow
+        $nugetDir = Split-Path $nugetExe -Parent
+        if (-not (Test-Path $nugetDir)) { New-Item -Path $nugetDir -ItemType Directory -Force | Out-Null }
+        Invoke-WebRequest -Uri "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe" -OutFile $nugetExe
+        Write-Host "NuGet.exe downloaded successfully!" -ForegroundColor Green
     }
 
     $nugetPackages = @(

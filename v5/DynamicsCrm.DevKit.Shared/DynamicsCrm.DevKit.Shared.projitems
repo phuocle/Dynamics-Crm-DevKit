@@ -65,6 +65,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)XrmHelper.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\generator.webapi.ts_bat" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\generator.form.ts_bat" />
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\generator.latebound.bat" />
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\WebApi.js" />
   </ItemGroup>
@@ -77,6 +79,7 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\webresource.deploy.debug.bat" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\webresource.deploy.debug.ts_bat" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\devkit.d.ts" />
@@ -133,5 +136,10 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Plugin-Managed-Identity.ps1" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\build.js" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\devkit.ts" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\devkitts.d.ts" />
   </ItemGroup>
 </Project>

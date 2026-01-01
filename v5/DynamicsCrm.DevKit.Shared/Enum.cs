@@ -73,7 +73,8 @@
         UiTest,
         SharedTest,
         Report,
-        Package
+        Package,
+        WebResourceTs
     }
 
     public enum ItemType

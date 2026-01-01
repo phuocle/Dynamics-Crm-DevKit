@@ -264,5 +264,13 @@ namespace DynamicsCrm.DevKit.Analyzers
             "DataProvider plugin requires DataSource; DataSource cannot be empty",
             DiagnosticSeverity.Error,
             "When using PluginType.DataProvider, the DataSource parameter must be specified with a valid data source name. An empty DataSource will cause the plugin to fail at runtime.");
+
+        /// <summary>DEVKIT1021</summary>
+        public static readonly DiagnosticDescriptor UseTracingServiceInCatch = CreateDescriptor(
+            "DEVKIT1021",
+            "Use ITracingService in catch blocks",
+            "Catch block should use ITracingService to log exception details",
+            DiagnosticSeverity.Warning,
+            "When catching exceptions in plugins or workflow activities, use ITracingService.Trace() to log exception details. This helps with debugging and monitoring execution issues.");
     }
 }
