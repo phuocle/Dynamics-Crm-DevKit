@@ -75,13 +75,13 @@ namespace DynamicsCrm.DevKit.Shared.Logic
 
             foreach (var form in forms.Where(x => x.IsQuickCreate))
             {
-                code.Append(GetQuickCreateFormTsCode(form));
+                code.Append(await GetQuickCreateFormTsCodeAsync(form));
             }
 
             return code.ToString();
         }
 
-        private static string GetQuickCreateFormTsCode(SystemForm form)
+        private static async Task<string> GetQuickCreateFormTsCodeAsync(SystemForm form)
         {
             var formName = Helper.GetFormName(form.Name, EntityMetadata.SchemaName);
             formName = GetUniqueFormName(formName);
@@ -144,7 +144,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code.AppendLine();
             
             // Generate Form class
-            code.Append(GetFormClass(safeName, form.FormXml, true));
+            code.Append(await GetFormClassAsync(safeName, form.FormXml, true));
             
             code.AppendLine("}");
             code.AppendLine();
@@ -337,7 +337,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code.AppendLine();
             
             // Generate Form class
-            code.Append(GetFormClass(safeName, form.FormXml, false));
+            code.Append(await GetFormClassAsync(safeName, form.FormXml, false));
             
             code.AppendLine("}");
             code.AppendLine();
@@ -345,7 +345,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             return code.ToString();
         }
 
-        private static string GetFormClass(string formName, string formXml, bool isQuickCreate)
+        private static async Task<string> GetFormClassAsync(string formName, string formXml, bool isQuickCreate)
         {
             var code = new StringBuilder();
             
@@ -396,13 +396,13 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             if (!isQuickCreate)
             {
                 code.AppendLine($"{TAB4}quick: [");
-                var quickArray = GetQuickFormFieldNamesAsync(formXml).Result;
+                var quickArray = await GetQuickFormFieldNamesAsync(formXml);
                 code.AppendLine($"{TAB4}{TAB}{string.Join($",{NEW_LINE}{TAB4}{TAB}", quickArray.Select(x => $"'{x}'"))}");
                 code.AppendLine($"{TAB4}],");
                 
                 // BPF fields
                 code.AppendLine($"{TAB4}bpf: [");
-                var bpfArray = GetBpfFieldNamesAsync().Result;
+                var bpfArray = await GetBpfFieldNamesAsync();
                 code.AppendLine($"{TAB4}{TAB}{string.Join($",{NEW_LINE}{TAB4}{TAB}", bpfArray.Select(x => $"'{x}'"))}");
                 code.AppendLine($"{TAB4}],");
                 

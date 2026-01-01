@@ -278,7 +278,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var fileEndsWith = Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}{endsWith}");
                     var oldCode = await FileHelper.ReadAllTextAsync(fileEndsWith);
                     var isJsWebApiExist = File.Exists(Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}.webapi.js"));
-                    var newCode = await Logic.JsFormTs.GetJsFormTsCodeAsync(ServiceClient, entityMetadata, Json.rootnamespace, isJsWebApiExist);
+                    var newCode = await JsFormTs.GetJsFormTsCodeAsync(ServiceClient, entityMetadata, Json.rootnamespace, isJsWebApiExist);
                     if (Helper.IsTheSame(oldCode, newCode))
                     {
                         CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, $"{schemaName}{endsWith}");
