@@ -23,7 +23,31 @@ export namespace FormAccount_DevKitV4 {
 	 * Contains all controls on the form body
 	 */
 	export interface IBody {
-		/** Form Tabs */
+		/** Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
+		OwnerId: DevKit.Controls.Lookup;
+		IFRAME_PhuocLe: DevKit.Controls.IFrame;
+		/** Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
+		OwnerId1: DevKit.Controls.Lookup;
+		/** Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
+		OwnerId2: DevKit.Controls.Lookup;
+		/** Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
+		OwnerId3: DevKit.Controls.Lookup;
+		v4_Boolean: DevKit.Controls.Boolean;
+		v4_DateOnly: DevKit.Controls.DateOnly;
+		v4_DateTime: DevKit.Controls.DateTime;
+		v4_Decimal: DevKit.Controls.Decimal;
+		v4_Double: DevKit.Controls.Double;
+		v4_Integer: DevKit.Controls.Integer;
+		v4_Lookup: DevKit.Controls.Lookup;
+		v4_Lookup1: DevKit.Controls.Lookup;
+		v4_Memo: DevKit.Controls.String;
+		v4_Money: DevKit.Controls.Money;
+		v4_MultiOptionSet: DevKit.Controls.MultiOptionSet;
+		v4_OptionSet: DevKit.Controls.OptionSet;
+		v4_String: DevKit.Controls.String;
+		v4_String1: DevKit.Controls.String;
+		v4_String2: DevKit.Controls.String;
+		WebResource_DevKitV4: DevKit.Controls.WebResource;
 		Tab: ITabs;
 	}
 

@@ -949,7 +949,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             headers = headers.OrderBy(x => x.Name).ToList();
             if (headers.Count() == 0) return string.Empty;
             var _d_ts = Get_d_ts_ForListFields(formXml, headers, false);
-            if (_d_ts.EndsWith(",{NEW_LINE}")) _d_ts = _d_ts.TrimEnd($",{NEW_LINE}".ToCharArray()) + $"{NEW_LINE}";
+            if (_d_ts.EndsWith($",{NEW_LINE}")) _d_ts = _d_ts.TrimEnd($",{NEW_LINE}".ToCharArray()) + $"{NEW_LINE}";
             return _d_ts;
         }
 
@@ -1008,7 +1008,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                     {
                         if (dateTime.Format == DateTimeFormat.DateOnly)
                         {
-                            _d_ts += $"{jsdoc}{TAB}{TAB}{TAB}{name}: DevKit.Controls.Date;{NEW_LINE}";
+                            _d_ts += $"{jsdoc}{TAB}{TAB}{TAB}{name}: DevKit.Controls.DateOnly;{NEW_LINE}";
                         }
                         else
                         {

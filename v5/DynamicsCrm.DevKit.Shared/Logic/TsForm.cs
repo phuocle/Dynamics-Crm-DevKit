@@ -173,6 +173,8 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code.AppendLine($"{TAB} */");
             code.AppendLine($"{TAB}export interface IBody {{");
 
+            code.AppendLine(GetForm_d_ts_Body(form.FormXml));
+
             //var bodyFields = GetBodyFields(form.FormXml);
             //foreach (var field in bodyFields)
             //{
@@ -183,8 +185,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             //    }
             //    code.AppendLine($"{TAB2}{field.Name}: DevKit.Controls.{GetControlType(field)};");
             //}
-
-            code.AppendLine($"{TAB2}/** Form Tabs */");
+            //code.AppendLine($"{TAB2}/** Form Tabs */");
             code.AppendLine($"{TAB2}Tab: ITabs;");
             code.AppendLine($"{TAB}}}");
             code.AppendLine();
@@ -601,6 +602,34 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             return fields;
         }
 
+        private static string GetForm_d_ts_Body(string formXml)
+        {
+            var xdoc = XDocument.Parse(formXml);
+            var body = (from x in xdoc
+                          .Descendants("tabs")
+                          .Descendants("tab")
+                          .Descendants("columns")
+                          .Descendants("column")
+                          .Descendants("sections")
+                          .Descendants("section")
+                          .Descendants("rows")
+                          .Descendants("row")
+                          .Descendants("cell")
+                          .Descendants("control")
+                        select new IdName
+                        {
+                            Name = Helper.SafeIdentifier(x?.Attribute("datafieldname")?.Value) ?? Helper.SafeIdentifier(x?.Attribute("id")?.Value),
+                            Id = x?.Attribute("id").Value,
+                            ClassId = Helper.TrimGuid(x?.Attribute("classid")?.Value?.ToUpper()),
+                            ControlId = x?.Attribute("uniqueid")?.Value
+                        }).Distinct().ToList();
+            body = body.OrderBy(x => x.Id).ToList();
+            var _d_ts = Get_d_ts_ForListFields(formXml, body, false);
+            if (_d_ts.EndsWith($",{NEW_LINE}")) _d_ts = _d_ts.TrimEnd($",{NEW_LINE}".ToCharArray());
+            _d_ts = _d_ts.TrimEnd($"{NEW_LINE}".ToCharArray());
+            return _d_ts;
+        }
+
         private static string GetForm_d_ts_Header(string formXml)
         {
             var xdoc = XDocument.Parse(formXml);
@@ -678,7 +707,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                     {
                         if (dateTime.Format == DateTimeFormat.DateOnly)
                         {
-                            _d_ts += $"{jsdoc}{TAB}{TAB}{name}: DevKit.Controls.Date;{NEW_LINE}";
+                            _d_ts += $"{jsdoc}{TAB}{TAB}{name}: DevKit.Controls.DateOnly;{NEW_LINE}";
                         }
                         else
                         {
