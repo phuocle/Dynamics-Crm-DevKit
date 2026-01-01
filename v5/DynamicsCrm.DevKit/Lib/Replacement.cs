@@ -39,6 +39,7 @@ namespace DynamicsCrm.DevKit.Lib
             replacements["$devkit.d.ts$"] = await VsixHelper.ReadEmbeddedResourceAsync("devkit.d.ts");
             replacements["$devkit.js$"] = await VsixHelper.ReadEmbeddedResourceAsync("devkit.js");
             replacements["$devkit.ts$"] = await VsixHelper.ReadEmbeddedResourceAsync("devkit.ts");
+            replacements["$devkitts.d.ts$"] = await VsixHelper.ReadEmbeddedResourceAsync("devkitts.d.ts");
             replacements["$build.js$"] = await VsixHelper.ReadEmbeddedResourceAsync("build.js");
             replacements["$generator.form.bat$"] = await VsixHelper.ReadEmbeddedResourceAsync("generator.form.bat");
             replacements["$generator.webapi.bat$"] = await VsixHelper.ReadEmbeddedResourceAsync("generator.webapi.bat");
