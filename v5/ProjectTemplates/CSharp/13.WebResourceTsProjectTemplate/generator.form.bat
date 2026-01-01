@@ -1,1 +1,1 @@
-$generator.form.bat$
+$generator.form.ts.bat$

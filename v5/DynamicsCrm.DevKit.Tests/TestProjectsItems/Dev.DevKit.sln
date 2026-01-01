@@ -33,7 +33,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{F14B399A-7131-4C87-9E4B-1186C45EF12D}") = "Dev.DevKit.Report", "Dev.DevKit.Report\Dev.DevKit.Report.rptproj", "{44C72FF2-9813-24A6-661A-F3C0D238C0C1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.WebResourceTs", "Dev.DevKit.WebResourceTs\Dev.DevKit.WebResourceTs.csproj", "{CAD494F1-D9EC-47FA-80D0-202F9C5B5F22}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.WebResourceTs", "Dev.DevKit.WebResourceTs\Dev.DevKit.WebResourceTs.csproj", "{B802BDEE-BAEE-4BBC-B7BA-DF4396E3C82F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -83,10 +83,10 @@ Global
 		{44C72FF2-9813-24A6-661A-F3C0D238C0C1}.Release|Any CPU.ActiveCfg = Release
 		{44C72FF2-9813-24A6-661A-F3C0D238C0C1}.Release|Any CPU.Build.0 = Release
 		{44C72FF2-9813-24A6-661A-F3C0D238C0C1}.Release|Any CPU.Deploy.0 = Release
-		{CAD494F1-D9EC-47FA-80D0-202F9C5B5F22}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CAD494F1-D9EC-47FA-80D0-202F9C5B5F22}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CAD494F1-D9EC-47FA-80D0-202F9C5B5F22}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CAD494F1-D9EC-47FA-80D0-202F9C5B5F22}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B802BDEE-BAEE-4BBC-B7BA-DF4396E3C82F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B802BDEE-BAEE-4BBC-B7BA-DF4396E3C82F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B802BDEE-BAEE-4BBC-B7BA-DF4396E3C82F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B802BDEE-BAEE-4BBC-B7BA-DF4396E3C82F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

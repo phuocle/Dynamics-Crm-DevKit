@@ -8,7 +8,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion></ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{cad494f1-d9ec-47fa-80d0-202f9c5b5f22}</ProjectGuid>
+    <ProjectGuid>{b802bdee-baee-4bbc-b7ba-df4396e3c82f}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Dev.DevKit.WebResourceTs</RootNamespace>

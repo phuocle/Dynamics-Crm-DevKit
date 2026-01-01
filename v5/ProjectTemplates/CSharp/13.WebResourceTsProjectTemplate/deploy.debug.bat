@@ -1,1 +1,1 @@
-$webresource.deploy.debug.bat$
+$webresource.deploy.debug.ts.bat$

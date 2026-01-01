@@ -1,1 +1,1 @@
-$generator.webapi.bat$
+$generator.webapi.ts.bat$
