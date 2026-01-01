@@ -74,12 +74,51 @@ namespace DynamicsCrm.DevKit.Shared
 
         public static bool IsTheSame(string value1, string value2)
         {
-            if (value1 == null && value2 == null) return true;
-            if (value1 != null && value2 == null) return false;
-            if (value1 == null && value2 != null) return false;
-            value1 = value1.Replace("\r\n", string.Empty).Replace("\r", string.Empty).Replace("\t", string.Empty).Replace(" ", string.Empty).Trim();
-            value2 = value2.Replace("\r\n", string.Empty).Replace("\r", string.Empty).Replace("\t", string.Empty).Replace(" ", string.Empty).Trim();
-            return string.Equals(value1, value2, StringComparison.OrdinalIgnoreCase);
+            if (ReferenceEquals(value1, value2)) return true;
+            if (value1 == null || value2 == null) return false;
+            if (value1.Length == 0 && value2.Length == 0) return true;
+
+            int i1 = 0, i2 = 0;
+            int len1 = value1.Length, len2 = value2.Length;
+
+            while (i1 < len1 || i2 < len2)
+            {
+                // Skip whitespace in value1
+                while (i1 < len1 && (value1[i1] == '\r' || value1[i1] == '\n' || value1[i1] == '\t' || value1[i1] == ' '))
+                {
+                    i1++;
+                }
+
+                // Skip whitespace in value2
+                while (i2 < len2 && (value2[i2] == '\r' || value2[i2] == '\n' || value2[i2] == '\t' || value2[i2] == ' '))
+                {
+                    i2++;
+                }
+
+                // If one string is finished, the other must also be finished (or only contain whitespace)
+                if (i1 >= len1)
+                {
+                    return i2 >= len2;
+                }
+                if (i2 >= len2)
+                {
+                    return i1 >= len1;
+                }
+
+                // Compare characters (case-insensitive)
+                char c1 = char.ToUpperInvariant(value1[i1]);
+                char c2 = char.ToUpperInvariant(value2[i2]);
+
+                if (c1 != c2)
+                {
+                    return false;
+                }
+
+                i1++;
+                i2++;
+            }
+
+            return true;
         }
 
         public static async Task<string> ReadEmbeddedResourceAsync(string path)
@@ -104,13 +143,13 @@ namespace DynamicsCrm.DevKit.Shared
 
         private static string GetIdentifier(string name)
         {
-            var value = string.Empty;
+            var sb = new StringBuilder(name.Length);
             for (int i = 0; i < name.Length; ++i)
             {
                 if (char.IsLetterOrDigit(name[i]) || name[i] == ' ' || name[i] == '-' || name[i] == '_')
-                    value += name[i];
+                    sb.Append(name[i]);
             }
-            return value;
+            return sb.ToString();
         }
 
         public static string SafeIdentifier(string name)
