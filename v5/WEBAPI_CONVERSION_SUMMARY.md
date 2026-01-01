@@ -171,15 +171,15 @@ The conversion properly handles all Dynamics 365 field types:
 
 | CRM Type       | TypeScript Type      | Parser Function  |
 |----------------|----------------------|------------------|
-| String         | `string \| null`     | Direct           |
-| Integer        | `number \| null`     | `parseInt()`     |
-| Decimal/Double | `number \| null`     | `Number()`       |
-| Money          | `number \| null`     | `Number()`       |
-| Boolean        | `boolean \| null`    | Boolean parser   |
-| DateTime       | `Date \| null`       | Date parser      |
-| Lookup         | `Guid \| null`       | Direct           |
-| OptionSet      | `number \| null`     | `parseInt()`     |
-| MultiOptionSet | `number[] \| null`   | Array parser     |
+| String         | `string &#124; null`     | Direct           |
+| Integer        | `number &#124; null`     | `parseInt()`     |
+| Decimal/Double | `number &#124; null`     | `Number()`       |
+| Money          | `number &#124; null`     | `Number()`       |
+| Boolean        | `boolean &#124; null`    | Boolean parser   |
+| DateTime       | `Date &#124; null`       | Date parser      |
+| Lookup         | `Guid &#124; null`       | Direct           |
+| OptionSet      | `number &#124; null`     | `parseInt()`     |
+| MultiOptionSet | `number[] &#124; null`   | Array parser     |
 
 ## Readonly vs Writable Fields
 
