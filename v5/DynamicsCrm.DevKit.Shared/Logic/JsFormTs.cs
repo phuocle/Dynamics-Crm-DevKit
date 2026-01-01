@@ -773,14 +773,16 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                 var fields = new List<string>();
                 foreach (var row in rows2)
                 {
-                    var arr = row.DisplayName.Split(" ".ToCharArray());
+                    var arr = row.DisplayName.Split(' ');
                     if (arr.Length == 1 || arr[1] != EntityMetadata.LogicalName) continue;
-                    const string pattern = @"DataFieldName=""\w*""";
+                    const string pattern = @"DataFieldName=""([^""]+)""";
                     foreach (Match m in Regex.Matches(row.InnerText, pattern))
                     {
-                        var array = m.Value.Split("=".ToCharArray());
-                        var fieldName = array[1].Substring(1, array[1].Length - 2);
-                        fields.Add(fieldName);
+                        if (m.Groups.Count > 1)
+                        {
+                            var fieldName = m.Groups[1].Value;
+                            fields.Add(fieldName);
+                        }
                     }
                 }
                 
@@ -1066,21 +1068,23 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                 var processFields = new List<string>();
                 foreach (var row in rows2)
                 {
-                    var arr = row.DisplayName.Split(" ".ToCharArray());
+                    var arr = row.DisplayName.Split(' ');
                     if (arr.Length == 1 || arr[1] != EntityMetadata.LogicalName) continue;
-                    const string pattern = @"DataFieldName=""\w*""";
+                    const string pattern = @"DataFieldName=""([^""]+)""";
                     var fieldIndex = 0;
                     foreach (Match m in Regex.Matches(row.InnerText, pattern))
                     {
-                        var array = m.Value.Split("=".ToCharArray());
-                        var fieldName = array[1].Substring(1, array[1].Length - 2);
-                        var crmAttribute = EntityMetadata.Attributes.FirstOrDefault(x => x.LogicalName == fieldName);
-                        if (crmAttribute != null)
+                        if (m.Groups.Count > 1)
                         {
-                            var schemaName = Helper.SafeIdentifier(crmAttribute.SchemaName);
-                            var suffix = fieldIndex > 0 ? $"_{fieldIndex}" : "";
-                            processFields.Add($"{name}___{schemaName}{suffix}");
-                            fieldIndex++;
+                            var fieldName = m.Groups[1].Value;
+                            var crmAttribute = EntityMetadata.Attributes.FirstOrDefault(x => x.LogicalName == fieldName);
+                            if (crmAttribute != null)
+                            {
+                                var schemaName = Helper.SafeIdentifier(crmAttribute.SchemaName);
+                                var suffix = fieldIndex > 0 ? $"_{fieldIndex}" : "";
+                                processFields.Add($"{name}___{schemaName}{suffix}");
+                                fieldIndex++;
+                            }
                         }
                     }
                 }
