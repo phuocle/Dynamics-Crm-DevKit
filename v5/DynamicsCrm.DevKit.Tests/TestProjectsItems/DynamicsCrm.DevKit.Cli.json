@@ -96,8 +96,8 @@
     {
       "profile": "JS-FORM",
       "type": "JsForm",
-      "rootnamespace": "???",
-      "rootfolder": "???",
+      "rootnamespace": "DevKit",
+      "rootfolder": "",
       "entities": "folder"
     },
     {
@@ -105,6 +105,13 @@
       "type": "JsWebApi",
       "rootnamespace": "???",
       "rootfolder": "???",
+      "entities": "folder"
+    },
+    {
+      "profile": "TS-FORM",
+      "type": "TsForm",
+      "rootnamespace": "DevKit",
+      "rootfolder": "",
       "entities": "folder"
     }
   ],

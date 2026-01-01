@@ -1,4 +1,5 @@
 using DynamicsCrm.DevKit.Shared.Models;
+using EnvDTE;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk.Metadata;
 using System;
@@ -7,11 +8,12 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows.Markup;
 using System.Xml.Linq;
 
 namespace DynamicsCrm.DevKit.Shared.Logic
 {
-    public static class JsFormTs
+    public static class TsForm
     {
         private const string NEW_LINE = "\r\n";
         private const string TAB = "\t";
@@ -36,7 +38,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
         private static string RootNamespace { get; set; }
         private static List<string> FormNames;
 
-        public static async Task<string> GetJsFormTsCodeAsync(ServiceClient serviceClient, EntityMetadata entityMetadata, string rootNamespace, bool isJsWebApiExist)
+        public static async Task<string> GetTsFormCodeAsync(ServiceClient serviceClient, EntityMetadata entityMetadata, string rootNamespace, bool isJsWebApiExist)
         {
             FormNames = new List<string>();
             ServiceClient = serviceClient;
@@ -46,7 +48,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             var forms = await XrmHelper.GetEntityFormsAsync(serviceClient, entityMetadata.LogicalName);
 
             var code = new StringBuilder();
-            
+
             // Header comments
             code.AppendLine("/**");
             code.AppendLine($" * {entityMetadata.SchemaName}.form.ts - {entityMetadata.SchemaName} Form for early-bound style form coding");
@@ -73,10 +75,10 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                 code.Append(await GetMainFormTsCodeAsync(form));
             }
 
-            foreach (var form in forms.Where(x => x.IsQuickCreate))
-            {
-                code.Append(await GetQuickCreateFormTsCodeAsync(form));
-            }
+            //foreach (var form in forms.Where(x => x.IsQuickCreate))
+            //{
+            //    code.Append(await GetQuickCreateFormTsCodeAsync(form));
+            //}
 
             return code.ToString();
         }
@@ -86,69 +88,69 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             var formName = Helper.GetFormName(form.Name, EntityMetadata.SchemaName);
             formName = GetUniqueFormName(formName);
             var safeName = Helper.SafeIdentifier(formName);
-            
+
             var code = new StringBuilder();
-            
+
             code.AppendLine($"export namespace Form{safeName} {{");
             code.AppendLine();
-            
+
             // Generate IBody interface
             code.AppendLine($"{TAB}/**");
             code.AppendLine($"{TAB} * Body controls interface");
             code.AppendLine($"{TAB} * Contains all controls on the form body");
             code.AppendLine($"{TAB} */");
             code.AppendLine($"{TAB}export interface IBody {{");
-            
+
             var bodyFields = GetBodyFields(form.FormXml);
             foreach (var field in bodyFields)
             {
                 code.AppendLine($"{TAB2}{field.Name}: DevKit.Controls.{GetControlType(field)};");
             }
-            
+
             code.AppendLine($"{TAB2}/** Form Tabs */");
             code.AppendLine($"{TAB2}Tab: ITabs;");
             code.AppendLine($"{TAB}}}");
             code.AppendLine();
-            
+
             // Generate IHeader interface (empty for quick create)
             code.AppendLine($"{TAB}export interface IHeader {{");
             code.AppendLine($"{TAB}}}");
             code.AppendLine();
-            
+
             // Generate Tabs interfaces
             code.Append(GetTabsInterfaces(form.FormXml));
-            
+
             // Generate IGrid interface (empty for quick create)
             code.AppendLine($"{TAB}export interface IGrid {{");
             code.AppendLine($"{TAB}}}");
             code.AppendLine();
-            
+
             // Generate INavigation interface (empty for quick create)
             code.AppendLine($"{TAB}export interface INavigation {{");
             code.AppendLine($"{TAB}}}");
             code.AppendLine();
-            
+
             // Generate IQuickForm interface (empty for quick create)
             code.AppendLine($"{TAB}export interface IQuickForm {{");
             code.AppendLine($"{TAB}}}");
             code.AppendLine();
-            
+
             // Generate IProcess interface (empty for quick create)
             code.AppendLine($"{TAB}export interface IProcess extends DevKit.Controls.IProcess {{");
             code.AppendLine($"{TAB}}}");
             code.AppendLine();
-            
+
             // Generate IDialog interface (empty for quick create)
             code.AppendLine($"{TAB}export interface IDialog extends DevKit.IDialog {{");
             code.AppendLine($"{TAB}}}");
             code.AppendLine();
-            
+
             // Generate Form class
             code.Append(await GetFormClassAsync(safeName, form.FormXml, true));
-            
+
             code.AppendLine("}");
             code.AppendLine();
-            
+
             return code.ToString();
         }
 
@@ -156,92 +158,109 @@ namespace DynamicsCrm.DevKit.Shared.Logic
         {
             var formName = Helper.GetFormName(form.Name, EntityMetadata.SchemaName);
             formName = GetUniqueFormName(formName);
+            if (formName == "Account" || formName == "Account for Interactive experience" || formName == "Account Information") return string.Empty;
             var safeName = Helper.SafeIdentifier(formName);
-            
+
             var code = new StringBuilder();
-            
+
             code.AppendLine($"export namespace Form{safeName} {{");
             code.AppendLine();
-            
+
             // Generate IBody interface
             code.AppendLine($"{TAB}/**");
             code.AppendLine($"{TAB} * Body controls interface");
             code.AppendLine($"{TAB} * Contains all controls on the form body");
             code.AppendLine($"{TAB} */");
             code.AppendLine($"{TAB}export interface IBody {{");
-            
-            var bodyFields = GetBodyFields(form.FormXml);
-            foreach (var field in bodyFields)
-            {
-                var comment = GetFieldComment(field);
-                if (!string.IsNullOrEmpty(comment))
-                {
-                    code.AppendLine($"{TAB2}/** {comment} */");
-                }
-                code.AppendLine($"{TAB2}{field.Name}: DevKit.Controls.{GetControlType(field)};");
-            }
-            
+
+            //var bodyFields = GetBodyFields(form.FormXml);
+            //foreach (var field in bodyFields)
+            //{
+            //    var comment = GetFieldComment(field);
+            //    if (!string.IsNullOrEmpty(comment))
+            //    {
+            //        code.AppendLine($"{TAB2}/** {comment} */");
+            //    }
+            //    code.AppendLine($"{TAB2}{field.Name}: DevKit.Controls.{GetControlType(field)};");
+            //}
+
             code.AppendLine($"{TAB2}/** Form Tabs */");
             code.AppendLine($"{TAB2}Tab: ITabs;");
             code.AppendLine($"{TAB}}}");
             code.AppendLine();
-            
+
             // Generate IHeader interface
-            code.AppendLine($"{TAB}/**");
-            code.AppendLine($"{TAB} * Header controls interface");
-            code.AppendLine($"{TAB} * Contains controls displayed in the form header");
-            code.AppendLine($"{TAB} */");
-            code.AppendLine($"{TAB}export interface IHeader {{");
-            
-            var headerFields = GetHeaderFields(form.FormXml);
-            foreach (var field in headerFields)
+            //code.AppendLine($"{TAB}/**");
+            //code.AppendLine($"{TAB} * Header controls interface");
+            //code.AppendLine($"{TAB} * Contains controls displayed in the form header");
+            //code.AppendLine($"{TAB} */");
+            //code.AppendLine($"{TAB}export interface IHeader {{");
+
+            //var headerFields = GetHeaderFields(form.FormXml);
+            //foreach (var field in headerFields)
+            //{
+            //    var comment = GetFieldComment(field);
+            //    if (!string.IsNullOrEmpty(comment))
+            //    {
+            //        code.AppendLine($"{TAB2}/** {comment} */");
+            //    }
+            //    code.AppendLine($"{TAB2}{field.Name}: DevKit.Controls.{GetControlType(field)};");
+            //}
+
+            //code.AppendLine($"{TAB}}}");
+            //code.AppendLine();
+
+
+            var form_d_ts_Header = GetForm_d_ts_Header(form.FormXml);
+            if (form_d_ts_Header.Length > 0)
             {
-                var comment = GetFieldComment(field);
-                if (!string.IsNullOrEmpty(comment))
-                {
-                    code.AppendLine($"{TAB2}/** {comment} */");
-                }
-                code.AppendLine($"{TAB2}{field.Name}: DevKit.Controls.{GetControlType(field)};");
+                code.AppendLine($"{TAB}/**");
+                code.AppendLine($"{TAB} * Header controls interface");
+                code.AppendLine($"{TAB} * Contains controls displayed in the form header");
+                code.AppendLine($"{TAB} */");
+                code.AppendLine($"{TAB}export interface IHeader {{");
+                code.Append(form_d_ts_Header);
+                code.AppendLine($"{TAB}}}");
             }
-            
-            code.AppendLine($"{TAB}}}");
-            code.AppendLine();
-            
+
+
+
+
             // Generate Tabs interfaces
             code.Append(GetTabsInterfaces(form.FormXml));
-            
+
             // Generate IGrid interface
             code.AppendLine($"{TAB}/**");
             code.AppendLine($"{TAB} * Grid controls interface");
             code.AppendLine($"{TAB} * Contains all subgrid controls on the form");
             code.AppendLine($"{TAB} */");
             code.AppendLine($"{TAB}export interface IGrid {{");
-            
+
             var gridFields = GetGridFields(form.FormXml);
             foreach (var field in gridFields)
             {
                 code.AppendLine($"{TAB2}{field}: DevKit.Controls.Grid;");
             }
-            
+
             code.AppendLine($"{TAB}}}");
             code.AppendLine();
-            
+
             // Generate INavigation interface
             code.AppendLine($"{TAB}/**");
             code.AppendLine($"{TAB} * Navigation interface");
             code.AppendLine($"{TAB} * Contains navigation items");
             code.AppendLine($"{TAB} */");
             code.AppendLine($"{TAB}export interface INavigation {{");
-            
+
             var navigationFields = GetNavigationFields(form.FormXml);
             foreach (var field in navigationFields)
             {
                 code.AppendLine($"{TAB2}{field}: DevKit.Controls.NavigationItem;");
             }
-            
+
             code.AppendLine($"{TAB}}}");
             code.AppendLine();
-            
+
             // Generate IQuickForm interface
             var quickFormFields = await GetQuickFormFieldsAsync(form.FormXml);
             code.AppendLine($"{TAB}/**");
@@ -249,17 +268,17 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code.AppendLine($"{TAB} * Contains quick view form controls");
             code.AppendLine($"{TAB} */");
             code.AppendLine($"{TAB}export interface IQuickForm {{");
-            
+
             foreach (var qf in quickFormFields)
             {
                 code.AppendLine($"{TAB2}{qf.QuickFormName}: DevKit.Controls.IQuickView & {{");
                 code.AppendLine($"{TAB3}Body: I{qf.QuickFormName}Body;");
                 code.AppendLine($"{TAB2}}};");
             }
-            
+
             code.AppendLine($"{TAB}}}");
             code.AppendLine();
-            
+
             // Generate QuickForm body interfaces
             foreach (var qf in quickFormFields)
             {
@@ -267,16 +286,16 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                 code.AppendLine($"{TAB} * {qf.QuickFormName} quick view control body interface");
                 code.AppendLine($"{TAB} */");
                 code.AppendLine($"{TAB}export interface I{qf.QuickFormName}Body {{");
-                
+
                 foreach (var field in qf.Fields)
                 {
                     code.AppendLine($"{TAB2}{field}: DevKit.Controls.QuickView;");
                 }
-                
+
                 code.AppendLine($"{TAB}}}");
                 code.AppendLine();
             }
-            
+
             // Generate IProcess interface
             var processFields = await GetProcessFieldsAsync();
             code.AppendLine($"{TAB}/**");
@@ -284,16 +303,16 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code.AppendLine($"{TAB} * Contains business process flow definitions");
             code.AppendLine($"{TAB} */");
             code.AppendLine($"{TAB}export interface IProcess extends DevKit.Controls.IProcess {{");
-            
+
             foreach (var process in processFields)
             {
                 code.AppendLine($"{TAB2}/** {process.ProcessName} - {process.ProcessName} */");
                 code.AppendLine($"{TAB2}{process.ProcessName}: I{process.ProcessName};");
             }
-            
+
             code.AppendLine($"{TAB}}}");
             code.AppendLine();
-            
+
             // Generate Process field interfaces
             foreach (var process in processFields)
             {
@@ -301,54 +320,54 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                 code.AppendLine($"{TAB} * {process.ProcessName} Business Process Flow fields interface");
                 code.AppendLine($"{TAB} */");
                 code.AppendLine($"{TAB}export interface I{process.ProcessName} {{");
-                
+
                 foreach (var field in process.Fields)
                 {
                     var fieldInfo = GetProcessFieldInfo(field);
                     code.AppendLine($"{TAB2}/** BPF Field: {fieldInfo.DisplayName} */");
                     code.AppendLine($"{TAB2}{fieldInfo.Name}: DevKit.Controls.{fieldInfo.Type};");
                 }
-                
+
                 code.AppendLine($"{TAB}}}");
                 code.AppendLine();
             }
-            
+
             // Generate IDialog interface
             code.AppendLine($"{TAB}/**");
             code.AppendLine($"{TAB} * Dialog interface");
             code.AppendLine($"{TAB} * For quick create dialogs or other dialog forms");
             code.AppendLine($"{TAB} */");
             code.AppendLine($"{TAB}export interface IDialog extends DevKit.IDialog {{");
-            
+
             var dialogFields = GetDialogFields(form.FormXml);
             foreach (var field in dialogFields)
             {
                 code.AppendLine($"{TAB2}/** {field} field for dialog */");
                 code.AppendLine($"{TAB2}{field}: DevKit.Controls.String;");
             }
-            
+
             code.AppendLine($"{TAB}}}");
             code.AppendLine();
-            
+
             // Generate comment separator
             code.AppendLine($"{TAB}// ============================================================================");
             code.AppendLine($"{TAB}// 2. Runtime - Form Class");
             code.AppendLine($"{TAB}// ============================================================================");
             code.AppendLine();
-            
+
             // Generate Form class
             code.Append(await GetFormClassAsync(safeName, form.FormXml, false));
-            
+
             code.AppendLine("}");
             code.AppendLine();
-            
+
             return code.ToString();
         }
 
         private static async Task<string> GetFormClassAsync(string formName, string formXml, bool isQuickCreate)
         {
             var code = new StringBuilder();
-            
+
             code.AppendLine($"{TAB}/**");
             code.AppendLine($"{TAB} * {EntityMetadata.SchemaName} Form class");
             code.AppendLine($"{TAB} * Provides typed access to all form controls");
@@ -361,37 +380,37 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code.AppendLine($"{TAB2} */");
             code.AppendLine($"{TAB2}constructor(executionContext: any, defaultWebResourceName?: string) {{");
             code.AppendLine($"{TAB3}super(executionContext, defaultWebResourceName, {{");
-            
+
             // Body fields
             code.AppendLine($"{TAB4}body: [");
             var bodyArray = GetBodyFieldNames(formXml);
             code.AppendLine($"{TAB4}{TAB}{string.Join($",{NEW_LINE}{TAB4}{TAB}", bodyArray.Select(x => $"'{x}'"))}");
             code.AppendLine($"{TAB4}],");
-            
+
             // Header fields
             code.AppendLine($"{TAB4}header: [");
             var headerArray = GetHeaderFieldNames(formXml);
             code.AppendLine($"{TAB4}{TAB}{string.Join($",{NEW_LINE}{TAB4}{TAB}", headerArray.Select(x => $"'{x}'"))}");
             code.AppendLine($"{TAB4}],");
-            
+
             // Tab fields
             code.AppendLine($"{TAB4}tab: [");
             var tabArray = GetTabFieldNames(formXml);
             code.AppendLine($"{TAB4}{TAB}{string.Join($",{NEW_LINE}{TAB4}{TAB}", tabArray.Select(x => $"'{x}'"))}");
             code.AppendLine($"{TAB4}],");
-            
+
             // Grid fields
             code.AppendLine($"{TAB4}grid: [");
             var gridArray = GetGridFieldNames(formXml);
             code.AppendLine($"{TAB4}{TAB}{string.Join($",{NEW_LINE}{TAB4}{TAB}", gridArray.Select(x => $"'{x}'"))}");
             code.AppendLine($"{TAB4}],");
-            
+
             // Navigation fields
             code.AppendLine($"{TAB4}navigation: [");
             var navArray = GetNavigationFieldNames(formXml);
             code.AppendLine($"{TAB4}{TAB}{string.Join($",{NEW_LINE}{TAB4}{TAB}", navArray.Select(x => $"'{x}'"))}");
             code.AppendLine($"{TAB4}],");
-            
+
             // Quick form fields
             if (!isQuickCreate)
             {
@@ -399,13 +418,13 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                 var quickArray = await GetQuickFormFieldNamesAsync(formXml);
                 code.AppendLine($"{TAB4}{TAB}{string.Join($",{NEW_LINE}{TAB4}{TAB}", quickArray.Select(x => $"'{x}'"))}");
                 code.AppendLine($"{TAB4}],");
-                
+
                 // BPF fields
                 code.AppendLine($"{TAB4}bpf: [");
                 var bpfArray = await GetBpfFieldNamesAsync();
                 code.AppendLine($"{TAB4}{TAB}{string.Join($",{NEW_LINE}{TAB4}{TAB}", bpfArray.Select(x => $"'{x}'"))}");
                 code.AppendLine($"{TAB4}],");
-                
+
                 // Dialog fields
                 code.AppendLine($"{TAB4}dialog: [");
                 var dialogArray = GetDialogFieldNames(formXml);
@@ -418,11 +437,11 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                 code.AppendLine($"{TAB4}bpf: [],");
                 code.AppendLine($"{TAB4}dialog: []");
             }
-            
+
             code.AppendLine($"{TAB3}}});");
             code.AppendLine($"{TAB2}}}");
             code.AppendLine($"{TAB}}}");
-            
+
             return code.ToString();
         }
 
@@ -437,18 +456,18 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                            InnerText = x?.ToString()
                        };
             tabs = tabs.OrderBy(x => x.Name).ToList();
-            
+
             if (tabs.Count() == 0) return string.Empty;
-            
+
             var existTabs = new List<string>();
             var tabInterfaces = new List<(string tabName, List<string> sections)>();
-            
+
             foreach (var tab in tabs)
             {
                 if (string.IsNullOrEmpty(Helper.SafeIdentifier(tab.Name))) continue;
                 if (existTabs.Contains(Helper.SafeIdentifier(tab.Name))) continue;
                 existTabs.Add(Helper.SafeIdentifier(tab.Name));
-                
+
                 var tabName = Helper.SafeIdentifier(tab.Name);
                 var xdoc2 = XDocument.Parse(tab.InnerText);
                 var sections = from x2 in xdoc2
@@ -458,10 +477,10 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                                .Elements("section")
                                select x2?.Attribute("name")?.Value;
                 sections = sections.OrderBy(x => x).ToList();
-                
+
                 var sectionList = new List<string>();
                 var existSections = new List<string>();
-                
+
                 foreach (var section in sections)
                 {
                     if (section == null) continue;
@@ -469,16 +488,16 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                     if (string.IsNullOrEmpty(Helper.SafeIdentifier(section))) continue;
                     if (existSections.Contains(Helper.SafeIdentifier(section))) continue;
                     existSections.Add(Helper.SafeIdentifier(section));
-                    
+
                     sectionList.Add(Helper.SafeIdentifier(section));
                 }
-                
+
                 if (sectionList.Count > 0)
                 {
                     tabInterfaces.Add((tabName, sectionList));
                 }
             }
-            
+
             // Generate section interfaces
             foreach (var (tabName, sections) in tabInterfaces)
             {
@@ -486,16 +505,16 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                 code.AppendLine($"{TAB} * {tabName} sections interface");
                 code.AppendLine($"{TAB} */");
                 code.AppendLine($"{TAB}export interface I{tabName}TabSections {{");
-                
+
                 foreach (var section in sections)
                 {
                     code.AppendLine($"{TAB2}{section}: DevKit.Controls.Section;");
                 }
-                
+
                 code.AppendLine($"{TAB}}}");
                 code.AppendLine();
             }
-            
+
             // Generate tab interfaces
             foreach (var (tabName, _) in tabInterfaces)
             {
@@ -507,22 +526,22 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                 code.AppendLine($"{TAB}}}");
                 code.AppendLine();
             }
-            
+
             // Generate ITabs interface
             code.AppendLine($"{TAB}/**");
             code.AppendLine($"{TAB} * Tabs interface");
             code.AppendLine($"{TAB} * Contains all tabs on the form");
             code.AppendLine($"{TAB} */");
             code.AppendLine($"{TAB}export interface ITabs {{");
-            
+
             foreach (var (tabName, _) in tabInterfaces)
             {
                 code.AppendLine($"{TAB2}{tabName}: I{tabName}Tab;");
             }
-            
+
             code.AppendLine($"{TAB}}}");
             code.AppendLine();
-            
+
             return code.ToString();
         }
 
@@ -560,7 +579,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                               ClassId = Helper.TrimGuid(x?.Attribute("classid")?.Value?.ToUpper()),
                               ControlId = x?.Attribute("uniqueid")?.Value
                           }).Distinct().ToList();
-            
+
             fields = fields.Where(x => !string.IsNullOrEmpty(x.Name)).OrderBy(x => x.Name).ToList();
             return fields;
         }
@@ -577,10 +596,256 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                               ClassId = Helper.TrimGuid(x?.Attribute("classid")?.Value?.ToUpper()),
                               ControlId = x?.Attribute("uniqueid")?.Value
                           }).ToList();
-            
+
             fields = fields.Where(x => !string.IsNullOrEmpty(x.Name)).OrderBy(x => x.Name).ToList();
             return fields;
         }
+
+        private static string GetForm_d_ts_Header(string formXml)
+        {
+            var xdoc = XDocument.Parse(formXml);
+            var headers = (from x in xdoc.Descendants("header")
+                           .Descendants("rows")
+                           .Descendants("row")
+                           .Descendants("cell")
+                           .Descendants("control")
+                           select new IdName
+                           {
+                               Name = Helper.SafeIdentifier(x?.Attribute("datafieldname")?.Value),
+                               Id = Helper.SafeIdentifier(x?.Attribute("id").Value),
+                               ClassId = Helper.TrimGuid(x?.Attribute("classid")?.Value?.ToUpper()),
+                               ControlId = x?.Attribute("uniqueid")?.Value
+                           }).ToList();
+            headers = headers.OrderBy(x => x.Name).ToList();
+            if (headers.Count() == 0) return string.Empty;
+            var _d_ts = Get_d_ts_ForListFields(formXml, headers, false);
+            if (_d_ts.EndsWith(",{NEW_LINE}")) _d_ts = _d_ts.TrimEnd($",{NEW_LINE}".ToCharArray()) + $"{NEW_LINE}";
+            return _d_ts;
+        }
+
+        private static string Get_d_ts_ForListFields(string formXml, List<IdName> list, bool isBPF)
+        {
+            var code = string.Empty;
+            var previousName = string.Empty;
+            var previousCount = 0;
+
+            var listVirtualControls = new List<string>();
+            foreach (var item in list) item.Id = Helper.SafeIdentifier(item.Id);
+
+            foreach (var item in list)
+            {
+                var _d_ts = string.Empty;
+                item.ClassId = GetARealClassId(formXml, item.ClassId, item.ControlId);
+                if (item.Name != null && ControlClassId.CONTROLS.Contains(item.ClassId))
+                {
+                    var crmAttribute = EntityMetadata.Attributes.FirstOrDefault(x => x.LogicalName == item.Name);
+                    if (crmAttribute == null)
+                        continue;
+                    var name = Helper.SafeIdentifier(crmAttribute.SchemaName);
+                    if (name == previousName)
+                    {
+                        previousCount = previousCount + 1;
+                        if (isBPF)
+                            name = name + "_" + previousCount.ToString();
+                        else
+                            name = name + previousCount.ToString();
+                    }
+                    else
+                    {
+                        previousName = string.Empty;
+                        previousCount = 0;
+                    }
+                    previousName = Helper.SafeIdentifier(crmAttribute.SchemaName);
+                    var jsdoc = string.Empty;
+                    if (crmAttribute?.Description?.UserLocalizedLabel?.Label.Length > 0)
+                        jsdoc = $"{TAB}{TAB}/** {crmAttribute?.Description?.UserLocalizedLabel?.Label} */{NEW_LINE}";
+                    if (crmAttribute.AttributeType == AttributeTypeCode.Memo ||
+                        crmAttribute.AttributeType == AttributeTypeCode.String)
+                    {
+                        _d_ts += $"{jsdoc}{TAB}{TAB}{name}: DevKit.Controls.String;{NEW_LINE}";
+                    }
+                    else if (crmAttribute is MultiSelectPicklistAttributeMetadata)
+                    {
+                        _d_ts += $"{jsdoc}{TAB}{TAB}{name}: DevKit.Controls.MultiOptionSet;{NEW_LINE}";
+                    }
+                    else if (crmAttribute.AttributeType == AttributeTypeCode.Picklist ||
+                             crmAttribute.AttributeType == AttributeTypeCode.State ||
+                             crmAttribute.AttributeType == AttributeTypeCode.Status)
+                    {
+                        _d_ts += $"{jsdoc}{TAB}{TAB}{name}: DevKit.Controls.OptionSet;{NEW_LINE}";
+                    }
+                    else if (crmAttribute is DateTimeAttributeMetadata dateTime)
+                    {
+                        if (dateTime.Format == DateTimeFormat.DateOnly)
+                        {
+                            _d_ts += $"{jsdoc}{TAB}{TAB}{name}: DevKit.Controls.Date;{NEW_LINE}";
+                        }
+                        else
+                        {
+                            _d_ts += $"{jsdoc}{TAB}{TAB}{name}: DevKit.Controls.DateTime;{NEW_LINE}";
+                        }
+                    }
+                    else if (crmAttribute.AttributeType == AttributeTypeCode.Lookup ||
+                             crmAttribute.AttributeType == AttributeTypeCode.Owner ||
+                             crmAttribute.AttributeType == AttributeTypeCode.Customer ||
+                             crmAttribute.AttributeType == AttributeTypeCode.PartyList)
+                    {
+                        _d_ts += $"{jsdoc}{TAB}{TAB}{name}: DevKit.Controls.Lookup;{NEW_LINE}";
+                    }
+                    else if (crmAttribute.AttributeType == AttributeTypeCode.Boolean)
+                    {
+                        _d_ts += $"{jsdoc}{TAB}{TAB}{name}: DevKit.Controls.Boolean;{NEW_LINE}";
+                    }
+                    else if (crmAttribute.AttributeType == AttributeTypeCode.Money)
+                    {
+                        _d_ts += $"{jsdoc}{TAB}{TAB}{name}: DevKit.Controls.Money;{NEW_LINE}";
+                    }
+                    else if (crmAttribute.AttributeType == AttributeTypeCode.Integer)
+                    {
+                        _d_ts += $"{jsdoc}{TAB}{TAB}{name}: DevKit.Controls.Integer;{NEW_LINE}";
+                    }
+                    else if (crmAttribute.AttributeType == AttributeTypeCode.Double)
+                    {
+                        _d_ts += $"{jsdoc}{TAB}{TAB}{name}: DevKit.Controls.Double;{NEW_LINE}";
+                    }
+                    else if (crmAttribute.AttributeType == AttributeTypeCode.Decimal)
+                    {
+                        _d_ts += $"{jsdoc}{TAB}{TAB}{name}: DevKit.Controls.Decimal;{NEW_LINE}";
+                    }
+                    else if (crmAttribute.AttributeType == AttributeTypeCode.EntityName)
+                    {
+                        _d_ts += $"{jsdoc}{TAB}{TAB}{name}: DevKit.Controls.String;{NEW_LINE}";
+                    }
+                    else if (crmAttribute.AttributeType == AttributeTypeCode.Uniqueidentifier)
+                    {
+                        _d_ts += $"{jsdoc}{TAB}{TAB}{name}: DevKit.Controls.String;{NEW_LINE}";
+                    }
+                    else if (crmAttribute.AttributeType == AttributeTypeCode.ManagedProperty)
+                    {
+                        _d_ts += $"{jsdoc}{TAB}{TAB}{name}: DevKit.Controls.String;{NEW_LINE}";
+                    }
+                    else if (crmAttribute is ImageAttributeMetadata)
+                    {
+                        _d_ts += $"{jsdoc}{TAB}{TAB}{name}: DevKit.Controls.Image;{NEW_LINE}";
+                    }
+                    else if (crmAttribute is FileAttributeMetadata)
+                    {
+                        _d_ts += $"{jsdoc}{TAB}{TAB}{name}: DevKit.Controls.File;{NEW_LINE}";
+                    }
+                    else
+                    {
+                        _d_ts += $"{TAB}{TAB}{item.Name}: DevKit.Controls.ELSE1???;//{item.Id} - {item.ClassId} -- FOR DEBUG {NEW_LINE}";
+                    }
+                }
+                else if (ControlClassId.VIRTUAL_CONTROLS.Contains(item.ClassId))
+                {
+                    if (listVirtualControls.Contains(item.Id))
+                        continue;
+                    else
+                        listVirtualControls.Add(item.Id);
+                    if (item.ClassId == ControlClassId.IFRAME)
+                    {
+                        _d_ts += $"{TAB}{TAB}{item.Id}: DevKit.Controls.IFrame;{NEW_LINE}";
+                    }
+                    else if (item.ClassId == ControlClassId.WEB_RESOURCE)
+                    {
+                        _d_ts += $"{TAB}{TAB}{item.Id}: DevKit.Controls.WebResource;{NEW_LINE}";
+                    }
+                    else if (item.Id.ToLower() == "notescontrol" && item.ClassId == ControlClassId.NOTE)
+                    {
+                        _d_ts += $"{TAB}{TAB}{item.Id}: DevKit.Controls.Note;{NEW_LINE}";
+                    }
+                    else if (item.ClassId == ControlClassId.EMAIL_ENGAGEMENT_ACTIONS)
+                    {
+                        _d_ts += $"{TAB}{TAB}{item.Id}: DevKit.Controls.EmailEngagement;{NEW_LINE}";
+                    }
+                    else if (item.ClassId == ControlClassId.EMAIL_RECIPIENT_ACTIVITY)
+                    {
+                        _d_ts += $"{TAB}{TAB}{item.Id}: DevKit.Controls.EmailRecipient;{NEW_LINE}";
+                    }
+                    else if (item.ClassId == ControlClassId.TIMER)
+                    {
+                        _d_ts += $"{TAB}{TAB}{item.Id}: DevKit.Controls.Timer;{NEW_LINE}";
+                    }
+                    else if (item.ClassId == ControlClassId.ACI_WIDGET)
+                    {
+                        _d_ts += $"{TAB}{TAB}{item.Id}: DevKit.Controls.AciWidget;{NEW_LINE}";
+                    }
+                    else if (item.ClassId == ControlClassId.MAP_CONTROL)
+                    {
+                        _d_ts += $"{TAB}{TAB}{item.Id}: DevKit.Controls.Map;{NEW_LINE}";
+                    }
+                    else if (item.ClassId == ControlClassId.ACTION_CARDS)
+                    {
+                        _d_ts += $"{TAB}{TAB}{item.Id}: DevKit.Controls.ActionCards;{NEW_LINE}";
+                    }
+                    else if (item.ClassId == ControlClassId.POWERBI)
+                    {
+                        _d_ts += $"{TAB}{TAB}{item.Id}: DevKit.Controls.PowerBi;{NEW_LINE}";
+                    }
+                    else if (item.ClassId == ControlClassId.FILE)
+                    {
+                        _d_ts += $"{TAB}{TAB}{item.Id}: DevKit.Controls.File;{NEW_LINE}";
+                    }
+                    else if (item.ClassId == ControlClassId.IMAGE)
+                    {
+                        _d_ts += $"{TAB}{TAB}{item.Id}: DevKit.Controls.Image;{NEW_LINE}";
+                    }
+                    else if (item.ClassId == ControlClassId.UNKNOWN_1 ||
+                             item.ClassId == ControlClassId.UNKNOWN_2 ||
+                             item.ClassId == ControlClassId.UNKNOWN_3 ||
+                             item.ClassId == ControlClassId.UNKNOWN_4 ||
+                             item.ClassId == ControlClassId.UNKNOWN_5 ||
+                             item.ClassId == ControlClassId.UNKNOWN_6 ||
+                             item.ClassId == ControlClassId.UNKNOWN_7 ||
+                             item.ClassId == ControlClassId.UNKNOWN_8 ||
+                             item.ClassId == ControlClassId.UNKNOWN_9 ||
+                             item.ClassId == ControlClassId.UNKNOWN_10 ||
+                             item.ClassId == ControlClassId.UNKNOWN_11 ||
+                             item.ClassId == ControlClassId.UNKNOWN_12 ||
+                             item.ClassId == ControlClassId.UNKNOWN_13 ||
+                             item.ClassId == ControlClassId.UNKNOWN_14 ||
+                             item.ClassId == ControlClassId.UNKNOWN_15 ||
+                             item.ClassId == ControlClassId.UNKNOWN_16 ||
+                             item.ClassId == ControlClassId.UNKNOWN_17 ||
+                             item.ClassId == ControlClassId.UNKNOWN_18 ||
+                             item.ClassId == ControlClassId.SUB_GRID ||
+                             item.ClassId == ControlClassId.SUB_GRID_PANEL ||
+                             item.ClassId == ControlClassId.QUICK_VIEW_FORM ||
+                             item.ClassId == ControlClassId.CASERESEARCH_LINKCONTROL ||
+                             item.ClassId == ControlClassId.KBVIEWER ||
+                             item.ClassId == ControlClassId.CASE_KBSEARCHCONTROL ||
+                             item.ClassId == ControlClassId.ATTACHMENT ||
+                             item.ClassId == ControlClassId.ISMANAGED ||
+                             item.ClassId == ControlClassId.CONNECTIONROLEOBJECTTYPECODELIST ||
+                             item.ClassId == ControlClassId.DYNAMICPROPERTIESLIST_LINKCONTROL ||
+                             item.ClassId == ControlClassId.MSDYN_SESSIONTYPE ||
+                             item.ClassId == ControlClassId.MSDYN_NAME ||
+                             item.ClassId == ControlClassId.WEBRESOURCE_POSTCONVERSATIONSURVEYDISCLAIMER ||
+                             item.ClassId == ControlClassId.WEBRESOURCE_URL ||
+                             item.ClassId == ControlClassId.WEBRESOURCE_POSTCONVERSATIONSURVEYDISCLAIMER2 ||
+                             item.ClassId == ControlClassId.WEBRESOURCE_POSTCONVERSATIONSURVEYDISCLAIMER3 ||
+                             item.ClassId == ControlClassId.WEBRESOURCE_WECHATCALLBACKURL ||
+                             item.ClassId == ControlClassId.MSDYN_SOURCEENTITYNAME
+                             )
+                        continue;
+                    else
+                    {
+                        _d_ts += $"{TAB}{TAB}{item.Name}: DevKit.Controls.ELSE2???;//{item.Id} - {item.ClassId} -- FOR DEBUG {NEW_LINE}";
+                    }
+                }
+                else
+                {
+                    if (item.Name != null)
+                        _d_ts += $"{TAB}{TAB}{item.Name}: DevKit.Controls.ELSE3???;//{item.Id} - {item.ClassId} -- FOR DEBUG {NEW_LINE}";
+                }
+                code += _d_ts;
+            }
+            code = code.TrimEnd($",{NEW_LINE}".ToCharArray()) + $"{NEW_LINE}";
+            return code;
+        }
+
+
 
         private static List<string> GetGridFields(string formXml)
         {
@@ -595,7 +860,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                               ClassId = Helper.TrimGuid(x?.Attribute("classid")?.Value?.ToUpper()),
                               ControlId = x?.Attribute("uniqueid")?.Value
                           }).Distinct().ToList();
-            
+
             var gridFields = new List<string>();
             foreach (var field in fields.OrderBy(x => x.Id))
             {
@@ -603,7 +868,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                 if (classId != ControlClassId.SUB_GRID && classId != ControlClassId.SUB_GRID_PANEL) continue;
                 gridFields.Add(field.Id);
             }
-            
+
             return gridFields;
         }
 
@@ -618,12 +883,12 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                             .Where(id => !string.IsNullOrEmpty(id))
                             .Distinct()
                             .ToList();
-            
+
             if (EntityMetadata.IsActivityParty == true && !navIds.Contains("navActivities"))
             {
                 navIds.Add("navActivities");
             }
-            
+
             return navIds.OrderBy(x => x).Select(x => Helper.SafeIdentifier(x)).ToList();
         }
 
@@ -639,14 +904,14 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                              QuickForms = x?.Descendants("parameters").Descendants("QuickForms"),
                              id = (string)x?.Attribute("id")
                          };
-            
+
             var quickFormIds = (from f in fields
                                 where f.QuickForms.Count() != 0
                                 select f.id).ToList();
             quickFormIds.Sort();
-            
+
             if (quickFormIds.Count == 0) return quickForms;
-            
+
             foreach (var quickFormId in quickFormIds)
             {
                 var qfFields = await GetQuickFormBodyFieldsAsync(formXml, quickFormId);
@@ -659,7 +924,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                     });
                 }
             }
-            
+
             return quickForms;
         }
 
@@ -681,24 +946,24 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                        where x?.Attribute("id")?.Value == id &&
                              x?.Attribute("classid")?.Value == $"{{{ControlClassId.QUICK_VIEW_FORM}}}"
                        select x;
-            
+
             var node2 = (from x in node
                             .Descendants("parameters")
                             .Descendants("QuickForms")
                          select x.Value
                         ).FirstOrDefault();
-            
+
             if (node2 == null) return fields;
-            
+
             var xdoc2 = XDocument.Parse(node2);
             var quickViewXml = (from x in xdoc2.Descendants("QuickFormId")
                                 select new { formId = x.Value, entityLogicalName = x?.Attribute("entityname")?.Value }).FirstOrDefault();
-            
+
             if (quickViewXml == null) return fields;
-            
+
             var quickViewFormXml = await GetFormXmlAsync(quickViewXml.formId, quickViewXml.entityLogicalName);
             if (quickViewFormXml == string.Empty) return fields;
-            
+
             var xdoc3 = XDocument.Parse(quickViewFormXml);
             var qvFields = (from x in xdoc3
                           .Descendants("tabs")
@@ -718,15 +983,15 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                                ClassId = Helper.TrimGuid(x?.Attribute("classid")?.Value?.ToUpper()),
                                ControlId = x?.Attribute("uniqueid")?.Value
                            }).Distinct().ToList();
-            
+
             qvFields = qvFields.OrderBy(x => x.Name).ToList();
             await XrmHelper.EntitiesMetadata.AddIfNotExistAsync(ServiceClient, quickViewXml.entityLogicalName);
             var quickViewMetadata = XrmHelper.EntitiesMetadata.Where(x => x.LogicalName == quickViewXml.entityLogicalName).FirstOrDefault();
-            
+
             if (quickViewMetadata == null) return fields;
             if (quickViewMetadata.Attributes == null)
                 quickViewMetadata = await XrmHelper.FetchEntityMetadataAsync(ServiceClient, quickViewXml.entityLogicalName);
-            
+
             foreach (var field in qvFields)
             {
                 var fieldAttribute = quickViewMetadata.Attributes.Where(x => x.LogicalName == field.Id).FirstOrDefault();
@@ -735,7 +1000,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                     fields.Add(Helper.SafeIdentifier(fieldAttribute.SchemaName));
                 }
             }
-            
+
             return fields;
         }
 
@@ -755,9 +1020,9 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             var processList = new List<ProcessFields>();
             await XrmHelper.EntitiesProcessForm.AddIfNotExistAsync(ServiceClient, EntityMetadata.LogicalName);
             var processes = XrmHelper.EntitiesProcessForm.Where(x => x.EntityLogicalName == EntityMetadata.LogicalName).OrderBy(x => x.Name);
-            
+
             if (processes.Count() == 0) return processList;
-            
+
             foreach (var process in processes)
             {
                 var name = Helper.SafeIdentifier(process.Name);
@@ -769,7 +1034,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                                 DisplayName = x.Attribute("DisplayName")?.Value,
                                 InnerText = x.ToString()
                             };
-                
+
                 var fields = new List<string>();
                 foreach (var row in rows2)
                 {
@@ -785,23 +1050,23 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                         }
                     }
                 }
-                
+
                 fields.Sort();
-                
+
                 processList.Add(new ProcessFields
                 {
                     ProcessName = name,
                     Fields = fields
                 });
             }
-            
+
             return processList;
         }
 
         private static ProcessFieldInfo GetProcessFieldInfo(string fieldLogicalName)
         {
             var fieldInfo = new ProcessFieldInfo { Name = fieldLogicalName, DisplayName = fieldLogicalName, Type = "String" };
-            
+
             var crmAttribute = EntityMetadata.Attributes.FirstOrDefault(x => x.LogicalName == fieldLogicalName);
             if (crmAttribute != null)
             {
@@ -809,7 +1074,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                 fieldInfo.DisplayName = crmAttribute.DisplayName?.UserLocalizedLabel?.Label ?? crmAttribute.SchemaName;
                 fieldInfo.Type = GetAttributeType(crmAttribute);
             }
-            
+
             return fieldInfo;
         }
 
@@ -829,7 +1094,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                     .Where(x => !string.IsNullOrEmpty(x))
                     .Distinct()
                     .ToList();
-            
+
             fields.Sort();
             return fields;
         }
@@ -842,7 +1107,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                            select Helper.SafeIdentifier(x?.Attribute("datafieldname")?.Value ?? x?.Attribute("id")?.Value))
                     .Where(x => !string.IsNullOrEmpty(x))
                     .ToList();
-            
+
             headers.Sort();
             return headers;
         }
@@ -858,16 +1123,16 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                            InnerText = x?.ToString()
                        };
             tabs = tabs.OrderBy(x => x.Name).ToList();
-            
+
             if (tabs.Count() == 0) return fields;
-            
+
             var existTabs = new List<string>();
             foreach (var tab in tabs)
             {
                 if (string.IsNullOrEmpty(Helper.SafeIdentifier(tab.Name))) continue;
                 if (existTabs.Contains(Helper.SafeIdentifier(tab.Name))) continue;
                 existTabs.Add(Helper.SafeIdentifier(tab.Name));
-                
+
                 var tabName = Helper.SafeIdentifier(tab.Name);
                 var xdoc2 = XDocument.Parse(tab.InnerText);
                 var sections = from x2 in xdoc2
@@ -877,7 +1142,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                                .Elements("section")
                                select x2?.Attribute("name")?.Value;
                 sections = sections.OrderBy(x => x).ToList();
-                
+
                 var existSections = new List<string>();
                 foreach (var section in sections)
                 {
@@ -886,12 +1151,12 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                     if (string.IsNullOrEmpty(Helper.SafeIdentifier(section))) continue;
                     if (existSections.Contains(Helper.SafeIdentifier(section))) continue;
                     existSections.Add(Helper.SafeIdentifier(section));
-                    
+
                     var sectionName = Helper.SafeIdentifier(section);
                     fields.Add($"{tabName}___{sectionName}");
                 }
             }
-            
+
             return fields;
         }
 
@@ -908,7 +1173,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                               ClassId = Helper.TrimGuid(x?.Attribute("classid")?.Value?.ToUpper()),
                               ControlId = x?.Attribute("uniqueid")?.Value
                           }).Distinct().ToList();
-            
+
             var gridFields = new List<string>();
             foreach (var field in fields.OrderBy(x => x.Id))
             {
@@ -916,7 +1181,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                 if (classId != ControlClassId.SUB_GRID && classId != ControlClassId.SUB_GRID_PANEL) continue;
                 gridFields.Add(field.Id);
             }
-            
+
             return gridFields;
         }
 
@@ -931,12 +1196,12 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                             .Where(id => !string.IsNullOrEmpty(id))
                             .Distinct()
                             .ToList();
-            
+
             if (EntityMetadata.IsActivityParty == true && !navIds.Contains("navActivities"))
             {
                 navIds.Add("navActivities");
             }
-            
+
             return navIds.OrderBy(x => x).Select(x => Helper.SafeIdentifier(x)).ToList();
         }
 
@@ -952,20 +1217,20 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                                QuickForms = x?.Descendants("parameters").Descendants("QuickForms"),
                                id = (string)x?.Attribute("id")
                            };
-            
+
             var quickFormIds = (from f in controls
                                 where f.QuickForms.Count() != 0
                                 select f.id).ToList();
             quickFormIds.Sort();
-            
+
             if (quickFormIds.Count == 0) return fields;
-            
+
             foreach (var quickFormId in quickFormIds)
             {
                 var qfBodyFields = await GetQuickFormBodyFieldNamesAsync(formXml, quickFormId);
                 fields.AddRange(qfBodyFields);
             }
-            
+
             return fields;
         }
 
@@ -987,24 +1252,24 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                        where x?.Attribute("id")?.Value == id &&
                              x?.Attribute("classid")?.Value == $"{{{ControlClassId.QUICK_VIEW_FORM}}}"
                        select x;
-            
+
             var node2 = (from x in node
                             .Descendants("parameters")
                             .Descendants("QuickForms")
                          select x.Value
                         ).FirstOrDefault();
-            
+
             if (node2 == null) return fields;
-            
+
             var xdoc2 = XDocument.Parse(node2);
             var quickViewXml = (from x in xdoc2.Descendants("QuickFormId")
                                 select new { formId = x.Value, entityLogicalName = x?.Attribute("entityname")?.Value }).FirstOrDefault();
-            
+
             if (quickViewXml == null) return fields;
-            
+
             var quickViewFormXml = await GetFormXmlAsync(quickViewXml.formId, quickViewXml.entityLogicalName);
             if (quickViewFormXml == string.Empty) return fields;
-            
+
             var xdoc3 = XDocument.Parse(quickViewFormXml);
             var qvFields = (from x in xdoc3
                           .Descendants("tabs")
@@ -1024,15 +1289,15 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                                ClassId = Helper.TrimGuid(x?.Attribute("classid")?.Value?.ToUpper()),
                                ControlId = x?.Attribute("uniqueid")?.Value
                            }).Distinct().ToList();
-            
+
             qvFields = qvFields.OrderBy(x => x.Name).ToList();
             await XrmHelper.EntitiesMetadata.AddIfNotExistAsync(ServiceClient, quickViewXml.entityLogicalName);
             var quickViewMetadata = XrmHelper.EntitiesMetadata.Where(x => x.LogicalName == quickViewXml.entityLogicalName).FirstOrDefault();
-            
+
             if (quickViewMetadata == null) return fields;
             if (quickViewMetadata.Attributes == null)
                 quickViewMetadata = await XrmHelper.FetchEntityMetadataAsync(ServiceClient, quickViewXml.entityLogicalName);
-            
+
             foreach (var field in qvFields)
             {
                 var fieldAttribute = quickViewMetadata.Attributes.Where(x => x.LogicalName == field.Id).FirstOrDefault();
@@ -1041,7 +1306,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                     fields.Add($"{Helper.SafeIdentifier(id)}___{Helper.SafeIdentifier(fieldAttribute.SchemaName)}");
                 }
             }
-            
+
             return fields;
         }
 
@@ -1050,9 +1315,9 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             var fields = new List<string>();
             await XrmHelper.EntitiesProcessForm.AddIfNotExistAsync(ServiceClient, EntityMetadata.LogicalName);
             var processes = XrmHelper.EntitiesProcessForm.Where(x => x.EntityLogicalName == EntityMetadata.LogicalName).OrderBy(x => x.Name);
-            
+
             if (processes.Count() == 0) return fields;
-            
+
             foreach (var process in processes)
             {
                 var name = Helper.SafeIdentifier(process.Name);
@@ -1064,7 +1329,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                                 DisplayName = x.Attribute("DisplayName")?.Value,
                                 InnerText = x.ToString()
                             };
-                
+
                 var processFields = new List<string>();
                 foreach (var row in rows2)
                 {
@@ -1088,11 +1353,11 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                         }
                     }
                 }
-                
+
                 processFields.Sort();
                 fields.AddRange(processFields);
             }
-            
+
             return fields;
         }
 
@@ -1132,26 +1397,26 @@ namespace DynamicsCrm.DevKit.Shared.Logic
         private static string GetControlType(FieldInfo field)
         {
             if (field == null || string.IsNullOrEmpty(field.Id)) return "String";
-            
+
             // Check if it's a grid
             if (field.ClassId == ControlClassId.SUB_GRID || field.ClassId == ControlClassId.SUB_GRID_PANEL)
                 return "Grid";
-            
+
             // Check if it's an iframe
             if (field.ClassId == ControlClassId.IFRAME)
                 return "IFrame";
-            
+
             // Check if it's a web resource
             if (field.ClassId == ControlClassId.WEB_RESOURCE)
                 return "WebResource";
-            
+
             // Try to find the attribute in metadata
             var attribute = EntityMetadata.Attributes?.FirstOrDefault(x => x.LogicalName == field.Id.ToLower());
             if (attribute != null)
             {
                 return GetAttributeType(attribute);
             }
-            
+
             return "String";
         }
 
@@ -1195,13 +1460,13 @@ namespace DynamicsCrm.DevKit.Shared.Logic
         private static string GetFieldComment(FieldInfo field)
         {
             if (field == null || string.IsNullOrEmpty(field.Id)) return null;
-            
+
             var attribute = EntityMetadata.Attributes?.FirstOrDefault(x => x.LogicalName == field.Id.ToLower());
             if (attribute != null && attribute.DisplayName?.UserLocalizedLabel != null)
             {
                 return attribute.DisplayName.UserLocalizedLabel.Label;
             }
-            
+
             return null;
         }
 

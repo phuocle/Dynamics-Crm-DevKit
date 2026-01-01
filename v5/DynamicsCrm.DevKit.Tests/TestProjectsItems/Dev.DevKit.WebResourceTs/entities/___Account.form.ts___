@@ -16,6 +16,299 @@ import './OptionSet';
 // 1. Types
 // ============================================================================
 
+export namespace FormAccount {
+
+	/**
+	 * Body controls interface
+	 * Contains all controls on the form body
+	 */
+	export interface IBody {
+		ActionCards: DevKit.Controls.String;
+		/** Address 1 */
+		address1_composite: DevKit.Controls.Memo;
+		/** Address 1: Freight Terms */
+		address1_freighttermscode: DevKit.Controls.OptionSet;
+		/** Address 1: Shipping Method */
+		address1_shippingmethodcode: DevKit.Controls.OptionSet;
+		ChildAccounts: DevKit.Controls.Grid;
+		Contacts: DevKit.Controls.Grid;
+		/** Credit Limit */
+		creditlimit: DevKit.Controls.Money;
+		/** Credit Hold */
+		creditonhold: DevKit.Controls.Boolean;
+		/** Description */
+		description: DevKit.Controls.Memo;
+		/** Do not allow Bulk Emails */
+		donotbulkemail: DevKit.Controls.Boolean;
+		/** Do not allow Emails */
+		donotemail: DevKit.Controls.Boolean;
+		/** Do not allow Faxes */
+		donotfax: DevKit.Controls.Boolean;
+		/** Do not allow Phone Calls */
+		donotphone: DevKit.Controls.Boolean;
+		/** Do not allow Mails */
+		donotpostalmail: DevKit.Controls.Boolean;
+		/** Fax */
+		fax: DevKit.Controls.String;
+		/** Follow Email Activity */
+		followemail: DevKit.Controls.Boolean;
+		/** Industry */
+		industrycode: DevKit.Controls.OptionSet;
+		mapcontrol: DevKit.Controls.String;
+		/** Account Name */
+		name: DevKit.Controls.String;
+		notescontrol: DevKit.Controls.String;
+		/** Ownership */
+		ownershipcode: DevKit.Controls.OptionSet;
+		/** Parent Account */
+		parentaccountid: DevKit.Controls.Lookup;
+		/** Payment Terms */
+		paymenttermscode: DevKit.Controls.OptionSet;
+		/** Preferred Method of Contact */
+		preferredcontactmethodcode: DevKit.Controls.OptionSet;
+		/** Primary Contact */
+		primarycontactid: DevKit.Controls.Lookup;
+		primarycontactid: DevKit.Controls.String;
+		/** SIC Code */
+		sic: DevKit.Controls.String;
+		/** Main Phone */
+		telephone1: DevKit.Controls.String;
+		/** Ticker Symbol */
+		tickersymbol: DevKit.Controls.String;
+		/** Currency */
+		transactioncurrencyid: DevKit.Controls.Lookup;
+		/** Website */
+		websiteurl: DevKit.Controls.String;
+		/** Form Tabs */
+		Tab: ITabs;
+	}
+
+	/**
+	 * Header controls interface
+	 * Contains controls displayed in the form header
+	 */
+	export interface IHeader {
+		numberofemployees: DevKit.Controls.String;
+		ownerid: DevKit.Controls.String;
+		revenue: DevKit.Controls.String;
+	}
+
+	/**
+	 * DETAILS_TAB sections interface
+	 */
+	export interface IDETAILS_TABTabSections {
+		BILLING: DevKit.Controls.Section;
+		ChildAccounts: DevKit.Controls.Section;
+		COMPANY_PROFILE: DevKit.Controls.Section;
+		CONTACT_PREFERENCES: DevKit.Controls.Section;
+		DETAILS_TAB_section_6: DevKit.Controls.Section;
+		SHIPPING: DevKit.Controls.Section;
+	}
+
+	/**
+	 * SUMMARY_TAB sections interface
+	 */
+	export interface ISUMMARY_TABTabSections {
+		ACCOUNT_INFORMATION: DevKit.Controls.Section;
+		ADDRESS: DevKit.Controls.Section;
+		MapSection: DevKit.Controls.Section;
+		SOCIAL_PANE_TAB: DevKit.Controls.Section;
+		Summary_section_6: DevKit.Controls.Section;
+		SUMMARY_TAB_section_6: DevKit.Controls.Section;
+	}
+
+	/**
+	 * DETAILS_TAB tab interface
+	 */
+	export interface IDETAILS_TABTab extends DevKit.Controls.ITab {
+		Section: IDETAILS_TABTabSections;
+	}
+
+	/**
+	 * SUMMARY_TAB tab interface
+	 */
+	export interface ISUMMARY_TABTab extends DevKit.Controls.ITab {
+		Section: ISUMMARY_TABTabSections;
+	}
+
+	/**
+	 * Tabs interface
+	 * Contains all tabs on the form
+	 */
+	export interface ITabs {
+		DETAILS_TAB: IDETAILS_TABTab;
+		SUMMARY_TAB: ISUMMARY_TABTab;
+	}
+
+	/**
+	 * Grid controls interface
+	 * Contains all subgrid controls on the form
+	 */
+	export interface IGrid {
+		ChildAccounts: DevKit.Controls.Grid;
+		Contacts: DevKit.Controls.Grid;
+	}
+
+	/**
+	 * Navigation interface
+	 * Contains navigation items
+	 */
+	export interface INavigation {
+		navActivities: DevKit.Controls.NavigationItem;
+		navAddresses: DevKit.Controls.NavigationItem;
+		navAsyncOperations: DevKit.Controls.NavigationItem;
+		navCampaignsInSFA: DevKit.Controls.NavigationItem;
+		navProcessSessions: DevKit.Controls.NavigationItem;
+		navRelationships: DevKit.Controls.NavigationItem;
+		navSubAccts: DevKit.Controls.NavigationItem;
+	}
+
+	/**
+	 * QuickForm interface
+	 * Contains quick view form controls
+	 */
+	export interface IQuickForm {
+		contactquickform: DevKit.Controls.IQuickView & {
+			Body: IcontactquickformBody;
+		};
+	}
+
+	/**
+	 * contactquickform quick view control body interface
+	 */
+	export interface IcontactquickformBody {
+		EMailAddress1: DevKit.Controls.QuickView;
+		Telephone1: DevKit.Controls.QuickView;
+	}
+
+	/**
+	 * Process interface
+	 * Contains business process flow definitions
+	 */
+	export interface IProcess extends DevKit.Controls.IProcess {
+		/** AccountBPF - AccountBPF */
+		AccountBPF: IAccountBPF;
+	}
+
+	/**
+	 * AccountBPF Business Process Flow fields interface
+	 */
+	export interface IAccountBPF {
+		/** BPF Field: Industry */
+		IndustryCode: DevKit.Controls.OptionSet;
+		/** BPF Field: Account Name */
+		Name: DevKit.Controls.String;
+		/** BPF Field: Primary Contact */
+		PrimaryContactId: DevKit.Controls.Lookup;
+		/** BPF Field: Annual Revenue */
+		Revenue: DevKit.Controls.Money;
+	}
+
+	/**
+	 * Dialog interface
+	 * For quick create dialogs or other dialog forms
+	 */
+	export interface IDialog extends DevKit.IDialog {
+	}
+
+	// ============================================================================
+	// 2. Runtime - Form Class
+	// ============================================================================
+
+	/**
+	 * Account Form class
+	 * Provides typed access to all form controls
+	 */
+	export class Form extends FormBase<IBody, IHeader, IGrid, INavigation, IQuickForm, IProcess, IDialog> {
+		/**
+		 * Creates an Account Form instance
+		 * @param executionContext The execution context from form event
+		 * @param defaultWebResourceName Optional default web resource name
+		 */
+		constructor(executionContext: any, defaultWebResourceName?: string) {
+			super(executionContext, defaultWebResourceName, {
+				body: [
+					'ActionCards',
+					'address1_composite',
+					'address1_freighttermscode',
+					'address1_shippingmethodcode',
+					'ChildAccounts',
+					'Contacts',
+					'creditlimit',
+					'creditonhold',
+					'description',
+					'donotbulkemail',
+					'donotemail',
+					'donotfax',
+					'donotphone',
+					'donotpostalmail',
+					'fax',
+					'followemail',
+					'industrycode',
+					'mapcontrol',
+					'name',
+					'notescontrol',
+					'ownershipcode',
+					'parentaccountid',
+					'paymenttermscode',
+					'preferredcontactmethodcode',
+					'primarycontactid',
+					'sic',
+					'telephone1',
+					'tickersymbol',
+					'transactioncurrencyid',
+					'websiteurl'
+				],
+				header: [
+					'numberofemployees',
+					'ownerid',
+					'revenue'
+				],
+				tab: [
+					'DETAILS_TAB___BILLING',
+					'DETAILS_TAB___ChildAccounts',
+					'DETAILS_TAB___COMPANY_PROFILE',
+					'DETAILS_TAB___CONTACT_PREFERENCES',
+					'DETAILS_TAB___DETAILS_TAB_section_6',
+					'DETAILS_TAB___SHIPPING',
+					'SUMMARY_TAB___ACCOUNT_INFORMATION',
+					'SUMMARY_TAB___ADDRESS',
+					'SUMMARY_TAB___MapSection',
+					'SUMMARY_TAB___SOCIAL_PANE_TAB',
+					'SUMMARY_TAB___Summary_section_6',
+					'SUMMARY_TAB___SUMMARY_TAB_section_6'
+				],
+				grid: [
+					'ChildAccounts',
+					'Contacts'
+				],
+				navigation: [
+					'navActivities',
+					'navAddresses',
+					'navAsyncOperations',
+					'navCampaignsInSFA',
+					'navProcessSessions',
+					'navRelationships',
+					'navSubAccts'
+				],
+				quick: [
+					'contactquickform___EMailAddress1',
+					'contactquickform___Telephone1'
+				],
+				bpf: [
+					'AccountBPF___IndustryCode_1',
+					'AccountBPF___Name',
+					'AccountBPF___PrimaryContactId',
+					'AccountBPF___Revenue_1'
+				],
+				dialog: [
+					
+				]
+			});
+		}
+	}
+}
+
 export namespace FormAccount_DevKitV4 {
 
     /**
@@ -939,6 +1232,115 @@ export namespace FormAccount_Information {
 				dialog: [
 					
 				]
+			});
+		}
+	}
+}
+
+export namespace FormAccount_Quick_Create {
+
+	/**
+	 * Body controls interface
+	 * Contains all controls on the form body
+	 */
+	export interface IBody {
+		address1_city: DevKit.Controls.String;
+		address1_line1: DevKit.Controls.String;
+		address1_line2: DevKit.Controls.String;
+		address1_postalcode: DevKit.Controls.String;
+		description: DevKit.Controls.Memo;
+		name: DevKit.Controls.String;
+		numberofemployees: DevKit.Controls.Integer;
+		primarycontactid: DevKit.Controls.Lookup;
+		revenue: DevKit.Controls.Money;
+		telephone1: DevKit.Controls.String;
+		/** Form Tabs */
+		Tab: ITabs;
+	}
+
+	export interface IHeader {
+	}
+
+	/**
+	 * tab_1 sections interface
+	 */
+	export interface Itab_1TabSections {
+		tab_1_column_1_section_1: DevKit.Controls.Section;
+		tab_1_column_2_section_1: DevKit.Controls.Section;
+		tab_1_column_3_section_1: DevKit.Controls.Section;
+	}
+
+	/**
+	 * tab_1 tab interface
+	 */
+	export interface Itab_1Tab extends DevKit.Controls.ITab {
+		Section: Itab_1TabSections;
+	}
+
+	/**
+	 * Tabs interface
+	 * Contains all tabs on the form
+	 */
+	export interface ITabs {
+		tab_1: Itab_1Tab;
+	}
+
+	export interface IGrid {
+	}
+
+	export interface INavigation {
+	}
+
+	export interface IQuickForm {
+	}
+
+	export interface IProcess extends DevKit.Controls.IProcess {
+	}
+
+	export interface IDialog extends DevKit.IDialog {
+	}
+
+	/**
+	 * Account Form class
+	 * Provides typed access to all form controls
+	 */
+	export class Form extends FormBase<IBody, IHeader, IGrid, INavigation, IQuickForm, IProcess, IDialog> {
+		/**
+		 * Creates an Account Form instance
+		 * @param executionContext The execution context from form event
+		 * @param defaultWebResourceName Optional default web resource name
+		 */
+		constructor(executionContext: any, defaultWebResourceName?: string) {
+			super(executionContext, defaultWebResourceName, {
+				body: [
+					'address1_city',
+					'address1_line1',
+					'address1_line2',
+					'address1_postalcode',
+					'description',
+					'name',
+					'numberofemployees',
+					'primarycontactid',
+					'revenue',
+					'telephone1'
+				],
+				header: [
+					
+				],
+				tab: [
+					'tab_1___tab_1_column_1_section_1',
+					'tab_1___tab_1_column_2_section_1',
+					'tab_1___tab_1_column_3_section_1'
+				],
+				grid: [
+					
+				],
+				navigation: [
+					'navActivities'
+				],
+				quick: [],
+				bpf: [],
+				dialog: []
 			});
 		}
 	}

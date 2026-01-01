@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
 {
-    internal class JsFormTs : ItemTemplateBase, IWizard
+    internal class TsForm : ItemTemplateBase, IWizard
     {
         private string _TypeScriptForm_ { get; set; } = string.Empty;
         private EntityMetadata EntityMetadata { get; set; }
@@ -54,7 +54,7 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
         {
             ThreadHelper.JoinableTaskFactory.Run(async () =>
             {
-                var form = new FormItem(ItemType.JsFormTs);
+                var form = new FormItem(ItemType.TsForm);
                 var ok = form.ShowModal() ?? false;
                 if (ok)
                 {
@@ -62,7 +62,7 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
                     await VS.StatusBar.StartAnimationAsync(StatusAnimation.Deploy);
                     ItemName = form.ItemName;
                     EntityMetadata = XrmHelper.EntitiesMetadata.FirstOrDefault(x => x.SchemaName == ItemName);
-                    _TypeScriptForm_ = await DynamicsCrm.DevKit.Shared.Logic.JsFormTs.GetJsFormTsCodeAsync(form.ServiceClient, EntityMetadata, replacementsDictionary["$rootnamespace$"], await IsJsWebApiExistAsync());
+                    _TypeScriptForm_ = await DynamicsCrm.DevKit.Shared.Logic.TsForm.GetTsFormCodeAsync(form.ServiceClient, EntityMetadata, replacementsDictionary["$rootnamespace$"], await IsJsWebApiExistAsync());
                     replacementsDictionary["$TypeScriptForm$"] = _TypeScriptForm_;
                     await Replacement.SetAsync(replacementsDictionary, form);
                     await VS.StatusBar.EndAnimationAsync(StatusAnimation.Deploy);

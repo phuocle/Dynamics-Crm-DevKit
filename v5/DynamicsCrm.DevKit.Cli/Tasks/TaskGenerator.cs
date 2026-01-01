@@ -53,13 +53,13 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             if (
                 Json.type.ToLower() != nameof(GeneratorType.jsform) &&
-                Json.type.ToLower() != nameof(GeneratorType.jsformts) &&
+                Json.type.ToLower() != nameof(GeneratorType.tsform) &&
                 Json.type.ToLower() != nameof(GeneratorType.jswebapi) &&
                 Json.type.ToLower() != nameof(GeneratorType.csharp) /*&&
                 Json.type.ToLower() != nameof(GeneratorType.earlybound)*/
                 )
             {
-                CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'type' should be: 'JsForm' or 'JsFormTs' or 'JsWebApi' or 'CSharp' or 'EarlyBound'. Please check DynamicsCrm.DevKit.Cli.json file.");
+                CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'type' should be: 'JsForm' or 'TsForm' or 'JsWebApi' or 'CSharp' or 'EarlyBound'. Please check DynamicsCrm.DevKit.Cli.json file.");
                 return false;
             }
             await Helper.DelayAsync(1);
@@ -83,8 +83,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     await GeneratorLateBoundAsync(schemaNames);
                 else if (Json.type.ToLower() == nameof(GeneratorType.jsform))
                     await GeneratorJsFormAsync(schemaNames);
-                else if (Json.type.ToLower() == nameof(GeneratorType.jsformts))
-                    await GeneratorJsFormTsAsync(schemaNames);
+                else if (Json.type.ToLower() == nameof(GeneratorType.tsform))
+                    await GeneratorTsFormAsync(schemaNames);
                 else if (Json.type.ToLower() == nameof(GeneratorType.jswebapi))
                     await GeneratorWebApiAsync(schemaNames);
                 //else if (Json.type.ToLower() == nameof(GeneratorType.earlybound))
@@ -102,7 +102,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 endsWith = ".generated.cs";
             else if (Json.type.ToLower() == nameof(GeneratorType.jsform))
                 endsWith = ".form.js";
-            else if (Json.type.ToLower() == nameof(GeneratorType.jsformts))
+            else if (Json.type.ToLower() == nameof(GeneratorType.tsform))
                 endsWith = ".form.ts";
             else if (Json.type.ToLower() == nameof(GeneratorType.jswebapi))
                 endsWith = ".webapi.js";
@@ -262,7 +262,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
         }
 
-        private async Task GeneratorJsFormTsAsync(List<string> schemaNames)
+        private async Task GeneratorTsFormAsync(List<string> schemaNames)
         {
             const string endsWith = ".form.ts";
             var totalFiles = schemaNames.Count();
@@ -278,7 +278,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var fileEndsWith = Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}{endsWith}");
                     var oldCode = await FileHelper.ReadAllTextAsync(fileEndsWith);
                     var isJsWebApiExist = File.Exists(Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}.webapi.js"));
-                    var newCode = await JsFormTs.GetJsFormTsCodeAsync(ServiceClient, entityMetadata, Json.rootnamespace, isJsWebApiExist);
+                    var newCode = await TsForm.GetTsFormCodeAsync(ServiceClient, entityMetadata, Json.rootnamespace, isJsWebApiExist);
                     if (Helper.IsTheSame(oldCode, newCode))
                     {
                         CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, $"{schemaName}{endsWith}");
