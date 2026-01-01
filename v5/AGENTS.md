@@ -78,11 +78,13 @@ C. ANALYZER DEVELOPMENT WORKFLOW
    Step 1: Run Unit Tests
    Command: dotnet test ..\DynamicsCrm.DevKit.Analyzers.Test\DynamicsCrm.DevKit.Analyzers.Test.csproj
 
-   Step 2: Run VS Integration Tests
-   - Action: Build Analyzer in Debug.
-   - Action: Copy DLL to: DynamicsCrm.DevKit.Tests\TestAnalyzers\packages\...\analyzers\dotnet\cs\
-   - Action: Rebuild VS Test Project (DynamicsCrm.DevKit.Tests\TestAnalyzers\TestAnalyzers.csproj).
-   - Note: Close VS before copying to avoid file locks.
+    Step 2: Run VS Integration Tests
+    - Action: Build Analyzer in Debug. Use the Debug configuration (AI sessions should use Debug).
+    - Action: Determine the analyzer package version from `DynamicsCrm.DevKit.Tests\TestAnalyzers\packages.config` and set the destination path:
+       `DynamicsCrm.DevKit.Tests\TestAnalyzers\packages\DynamicsCrm.DevKit.Analyzers.<version>\analyzers\dotnet\cs\`
+    - Action: Create the destination folder if it does not exist, then copy the built `DynamicsCrm.DevKit.Analyzers.dll` into the `...\analyzers\dotnet\cs\` folder.
+    - Action: Rebuild the VS Test Project: `DynamicsCrm.DevKit.Tests\TestAnalyzers\TestAnalyzers.csproj`.
+    - Note: Close Visual Studio before copying to avoid file locks. Prefer copying the Debug build DLL matching the version specified in `packages.config`.
 
 D. CLI USAGE (DynamicsCrm.DevKit.Cli.json)
    - Deploy Plugins: type "servers"

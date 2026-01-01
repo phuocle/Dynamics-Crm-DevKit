@@ -165,8 +165,71 @@ try {
     if ($LASTEXITCODE -ne 0) { throw "Build failed with exit code $LASTEXITCODE" }
     Write-Host "Build Success (DEBUG mode)." -ForegroundColor Green
 
+    # 5. Create NuGet Packages
+    Write-Host "`nCreating NuGet Packages..." -ForegroundColor Yellow
+
+    $nugetExe = Join-Path $PSScriptRoot "DynamicsCrm.DevKit.Analyzers\Nuget\nuget.exe"
+    if (-not (Test-Path $nugetExe)) {
+        Write-Host "NuGet.exe not found. Downloading..." -ForegroundColor Yellow
+        $nugetDir = Split-Path $nugetExe -Parent
+        if (-not (Test-Path $nugetDir)) { New-Item -Path $nugetDir -ItemType Directory -Force | Out-Null }
+        Invoke-WebRequest -Uri "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe" -OutFile $nugetExe
+        Write-Host "NuGet.exe downloaded successfully!" -ForegroundColor Green
+    }
+
+    # Create Published folder for DEBUG output
+    $PublishedRoot = Join-Path $PSScriptRoot $Config.buildConfig.publishedRoot
+    $publishDir = Join-Path $PublishedRoot "$Version-Debug"
+    if (Test-Path $publishDir) { Remove-Item $publishDir -Recurse -Force }
+    New-Item -Path $publishDir -ItemType Directory -Force | Out-Null
+
+    $nugetPackages = @(
+        @{ Dir = "DynamicsCrm.DevKit.Analyzers\Nuget"; Nuspec = "DynamicsCrm.DevKit.Analyzers.nuspec" },
+        @{ Dir = "DynamicsCrm.DevKit.Cli\Nuget"; Nuspec = "DynamicsCrm.DevKit.Cli.nuspec" },
+        @{ Dir = "DynamicsCrm.DevKit.Tool\Nuget"; Nuspec = "DynamicsCrm.DevKit.Tool.nuspec" }
+    )
+
+    foreach ($pkg in $nugetPackages) {
+        $dir = Join-Path $PSScriptRoot $pkg.Dir
+        $nuspec = $pkg.Nuspec
+
+        Write-Host "Packing $nuspec in $dir..." -ForegroundColor DarkGray
+
+        Push-Location $dir
+        try {
+            Get-ChildItem -Filter "*.nupkg" | Remove-Item -Force -ErrorAction SilentlyContinue
+
+            $packArgs = @(
+                "pack",
+                $nuspec,
+                "-Tool",
+                "-Version", $Version,
+                "-OutputDirectory", $publishDir,
+                "-NoPackageAnalysis"
+            )
+
+            & $nugetExe $packArgs
+            if ($LASTEXITCODE -ne 0) { throw "NuGet pack failed for $nuspec" }
+        }
+        finally {
+            Pop-Location
+        }
+    }
+
+    # 6. Copy VSIX (DEBUG mode)
+    Write-Host "`nCopying VSIX (DEBUG)..." -ForegroundColor Yellow
+    $vsixSource = Join-Path $PSScriptRoot "DynamicsCrm.DevKit\bin\Debug\DynamicsCrm.DevKit.vsix"
+    if (Test-Path $vsixSource) {
+        $vsixDest = Join-Path $publishDir "DynamicsCrm.DevKit.$Version-Debug.vsix"
+        Copy-Item $vsixSource $vsixDest -Force
+        Write-Host "Copied VSIX to $vsixDest" -ForegroundColor Green
+    } else {
+        Write-Warning "VSIX file not found at $vsixSource (expected in DEBUG mode)"
+    }
+
     Write-Host "`n============================================================" -ForegroundColor Green
     Write-Host "  DEBUG build completed successfully!" -ForegroundColor Green
+    Write-Host "  Output folder: $publishDir" -ForegroundColor Cyan
     Write-Host "  Note: This is NOT for production release." -ForegroundColor Yellow
     Write-Host "  For production, use Release-DynamicsCrm-DevKit.ps1" -ForegroundColor Yellow
     Write-Host "============================================================" -ForegroundColor Green

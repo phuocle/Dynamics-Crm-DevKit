@@ -1,0 +1,17 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../DynamicsCrm.DevKit.Analyzers.Test"
+		},
+		{
+			"path": "../DynamicsCrm.DevKit.Tests/TestAnalyzers"
+		},
+		{
+			"path": "../DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit.Analyzers"
+		}
+	],
+	"settings": {}
+}
