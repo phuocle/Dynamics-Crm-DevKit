@@ -26,6 +26,7 @@
     public enum GeneratorType
     {
         jsform,
+        jsformts,
         jswebapi,
         csharp,
         //earlybound
@@ -80,6 +81,7 @@
         None,
         LateBound,
         JsForm,
+        JsFormTs,
         JsWebApi,
         Workflow,
         UiTest,
