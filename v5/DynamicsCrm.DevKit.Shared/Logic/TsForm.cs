@@ -75,10 +75,10 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                 code.Append(await GetMainFormTsCodeAsync(form));
             }
 
-            //foreach (var form in forms.Where(x => x.IsQuickCreate))
-            //{
-            //    code.Append(await GetQuickCreateFormTsCodeAsync(form));
-            //}
+            foreach (var form in forms.Where(x => x.IsQuickCreate))
+            {
+                code.Append(await GetQuickCreateFormTsCodeAsync(form));
+            }
 
             return code.ToString();
         }
@@ -158,7 +158,6 @@ namespace DynamicsCrm.DevKit.Shared.Logic
         {
             var formName = Helper.GetFormName(form.Name, EntityMetadata.SchemaName);
             formName = GetUniqueFormName(formName);
-            if (formName == "Account" || formName == "Account for Interactive experience" || formName == "Account Information") return string.Empty;
             var safeName = Helper.SafeIdentifier(formName);
 
             var code = new StringBuilder();
@@ -172,8 +171,6 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             //code.AppendLine($"{TAB} * Contains all controls on the form body");
             //code.AppendLine($"{TAB} */");
             code.AppendLine($"{TAB}export interface IBody {{");
-
-            //code.AppendLine(GetForm_d_ts_Body(form.FormXml));
 
             var bodyFields = GetBodyFields(form.FormXml);
             foreach (var field in bodyFields)
@@ -210,22 +207,6 @@ namespace DynamicsCrm.DevKit.Shared.Logic
 
             code.AppendLine($"{TAB}}}");
             code.AppendLine();
-
-
-            //var form_d_ts_Header = GetForm_d_ts_Header(form.FormXml);
-            //if (form_d_ts_Header.Length > 0)
-            //{
-            //    //code.AppendLine($"{TAB}/**");
-            //    //code.AppendLine($"{TAB} * Header controls interface");
-            //    //code.AppendLine($"{TAB} * Contains controls displayed in the form header");
-            //    //code.AppendLine($"{TAB} */");
-            //    code.AppendLine($"{TAB}export interface IHeader {{");
-            //    code.Append(form_d_ts_Header);
-            //    code.AppendLine($"{TAB}}}");
-            //}
-
-
-
 
             // Generate Tabs interfaces
             code.Append(GetTabsInterfaces(form.FormXml));
@@ -723,293 +704,6 @@ namespace DynamicsCrm.DevKit.Shared.Logic
 
             return result.OrderBy(x => x.SchemaName).ToList();
         }
-
-        private static List<string> BodyFields = new List<string>();
-
-        private static string GetForm_d_ts_Body(string formXml)
-        {
-            var xdoc = XDocument.Parse(formXml);
-            var body = (from x in xdoc
-                          .Descendants("tabs")
-                          .Descendants("tab")
-                          .Descendants("columns")
-                          .Descendants("column")
-                          .Descendants("sections")
-                          .Descendants("section")
-                          .Descendants("rows")
-                          .Descendants("row")
-                          .Descendants("cell")
-                          .Descendants("control")
-                        select new IdName
-                        {
-                            Name = Helper.SafeIdentifier(x?.Attribute("datafieldname")?.Value) ?? Helper.SafeIdentifier(x?.Attribute("id")?.Value),
-                            Id = x?.Attribute("id").Value,
-                            ClassId = Helper.TrimGuid(x?.Attribute("classid")?.Value?.ToUpper()),
-                            ControlId = x?.Attribute("uniqueid")?.Value
-                        }).Distinct().ToList();
-            body = body.OrderBy(x => x.Id).ToList();
-            var _d_ts = Get_d_ts_ForListFields(formXml, body, false, out BodyFields);
-            if (_d_ts.EndsWith($",{NEW_LINE}")) _d_ts = _d_ts.TrimEnd($",{NEW_LINE}".ToCharArray());
-            _d_ts = _d_ts.TrimEnd($"{NEW_LINE}".ToCharArray());
-            return _d_ts;
-        }
-
-        private static List<string> HeaderFields = new List<string>();
-
-        private static string GetForm_d_ts_Header(string formXml)
-        {
-            var xdoc = XDocument.Parse(formXml);
-            var headers = (from x in xdoc.Descendants("header")
-                           .Descendants("rows")
-                           .Descendants("row")
-                           .Descendants("cell")
-                           .Descendants("control")
-                           select new IdName
-                           {
-                               Name = Helper.SafeIdentifier(x?.Attribute("datafieldname")?.Value),
-                               Id = Helper.SafeIdentifier(x?.Attribute("id").Value),
-                               ClassId = Helper.TrimGuid(x?.Attribute("classid")?.Value?.ToUpper()),
-                               ControlId = x?.Attribute("uniqueid")?.Value
-                           }).ToList();
-            headers = headers.OrderBy(x => x.Name).ToList();
-            if (headers.Count() == 0) return string.Empty;
-            var _d_ts = Get_d_ts_ForListFields(formXml, headers, false, out HeaderFields);
-            if (_d_ts.EndsWith(",{NEW_LINE}")) _d_ts = _d_ts.TrimEnd($",{NEW_LINE}".ToCharArray()) + $"{NEW_LINE}";
-            return _d_ts;
-        }
-
-        private static string Get_d_ts_ForListFields(string formXml, List<IdName> list, bool isBPF, out List<string> names)
-        {
-            names = new List<string>();
-            var code = string.Empty;
-            var previousName = string.Empty;
-            var previousCount = 0;
-
-            var listVirtualControls = new List<string>();
-            foreach (var item in list) item.Id = Helper.SafeIdentifier(item.Id);
-
-            foreach (var item in list)
-            {
-                var _d_ts = string.Empty;
-                item.ClassId = GetARealClassId(formXml, item.ClassId, item.ControlId);
-                if (item.Name != null && ControlClassId.CONTROLS.Contains(item.ClassId))
-                {
-                    var crmAttribute = EntityMetadata.Attributes.FirstOrDefault(x => x.LogicalName == item.Name);
-                    if (crmAttribute == null)
-                        continue;
-                    var name = Helper.SafeIdentifier(crmAttribute.SchemaName);
-                    if (name == previousName)
-                    {
-                        previousCount = previousCount + 1;
-                        if (isBPF)
-                            name = name + "_" + previousCount.ToString();
-                        else
-                            name = name + previousCount.ToString();
-                    }
-                    else
-                    {
-                        previousName = string.Empty;
-                        previousCount = 0;
-                    }
-                    previousName = Helper.SafeIdentifier(crmAttribute.SchemaName);
-                    var jsdoc = string.Empty;
-                    if (crmAttribute?.Description?.UserLocalizedLabel?.Label.Length > 0)
-                        jsdoc = $"{TAB}{TAB}/** {crmAttribute?.Description?.UserLocalizedLabel?.Label} */{NEW_LINE}";
-
-                    jsdoc = string.Empty;
-
-                    names.Add(name);
-
-                    if (crmAttribute.AttributeType == AttributeTypeCode.Memo)
-                        _d_ts += $"{jsdoc}{TAB}{TAB}{name}: DevKit.Controls.Memo;{NEW_LINE}";
-                    else if (crmAttribute.AttributeType == AttributeTypeCode.String)
-                    {
-                        _d_ts += $"{jsdoc}{TAB}{TAB}{name}: DevKit.Controls.String;{NEW_LINE}";
-                    }
-                    else if (crmAttribute is MultiSelectPicklistAttributeMetadata)
-                    {
-                        _d_ts += $"{jsdoc}{TAB}{TAB}{name}: DevKit.Controls.MultiOptionSet;{NEW_LINE}";
-                    }
-                    else if (crmAttribute.AttributeType == AttributeTypeCode.Picklist ||
-                             crmAttribute.AttributeType == AttributeTypeCode.State ||
-                             crmAttribute.AttributeType == AttributeTypeCode.Status)
-                    {
-                        _d_ts += $"{jsdoc}{TAB}{TAB}{name}: DevKit.Controls.OptionSet;{NEW_LINE}";
-                    }
-                    else if (crmAttribute is DateTimeAttributeMetadata dateTime)
-                    {
-                        if (dateTime.Format == DateTimeFormat.DateOnly)
-                        {
-                            _d_ts += $"{jsdoc}{TAB}{TAB}{name}: DevKit.Controls.DateOnly;{NEW_LINE}";
-                        }
-                        else
-                        {
-                            _d_ts += $"{jsdoc}{TAB}{TAB}{name}: DevKit.Controls.DateTime;{NEW_LINE}";
-                        }
-                    }
-                    else if (crmAttribute.AttributeType == AttributeTypeCode.Lookup ||
-                             crmAttribute.AttributeType == AttributeTypeCode.Owner ||
-                             crmAttribute.AttributeType == AttributeTypeCode.Customer ||
-                             crmAttribute.AttributeType == AttributeTypeCode.PartyList)
-                    {
-                        _d_ts += $"{jsdoc}{TAB}{TAB}{name}: DevKit.Controls.Lookup;{NEW_LINE}";
-                    }
-                    else if (crmAttribute.AttributeType == AttributeTypeCode.Boolean)
-                    {
-                        _d_ts += $"{jsdoc}{TAB}{TAB}{name}: DevKit.Controls.Boolean;{NEW_LINE}";
-                    }
-                    else if (crmAttribute.AttributeType == AttributeTypeCode.Money)
-                    {
-                        _d_ts += $"{jsdoc}{TAB}{TAB}{name}: DevKit.Controls.Money;{NEW_LINE}";
-                    }
-                    else if (crmAttribute.AttributeType == AttributeTypeCode.Integer)
-                    {
-                        _d_ts += $"{jsdoc}{TAB}{TAB}{name}: DevKit.Controls.Integer;{NEW_LINE}";
-                    }
-                    else if (crmAttribute.AttributeType == AttributeTypeCode.Double)
-                    {
-                        _d_ts += $"{jsdoc}{TAB}{TAB}{name}: DevKit.Controls.Double;{NEW_LINE}";
-                    }
-                    else if (crmAttribute.AttributeType == AttributeTypeCode.Decimal)
-                    {
-                        _d_ts += $"{jsdoc}{TAB}{TAB}{name}: DevKit.Controls.Decimal;{NEW_LINE}";
-                    }
-                    else if (crmAttribute.AttributeType == AttributeTypeCode.EntityName)
-                    {
-                        _d_ts += $"{jsdoc}{TAB}{TAB}{name}: DevKit.Controls.String;{NEW_LINE}";
-                    }
-                    else if (crmAttribute.AttributeType == AttributeTypeCode.Uniqueidentifier)
-                    {
-                        _d_ts += $"{jsdoc}{TAB}{TAB}{name}: DevKit.Controls.String;{NEW_LINE}";
-                    }
-                    else if (crmAttribute.AttributeType == AttributeTypeCode.ManagedProperty)
-                    {
-                        _d_ts += $"{jsdoc}{TAB}{TAB}{name}: DevKit.Controls.String;{NEW_LINE}";
-                    }
-                    else if (crmAttribute is ImageAttributeMetadata)
-                    {
-                        _d_ts += $"{jsdoc}{TAB}{TAB}{name}: DevKit.Controls.Image;{NEW_LINE}";
-                    }
-                    else if (crmAttribute is FileAttributeMetadata)
-                    {
-                        _d_ts += $"{jsdoc}{TAB}{TAB}{name}: DevKit.Controls.File;{NEW_LINE}";
-                    }
-                    else
-                    {
-                        _d_ts += $"{TAB}{TAB}{item.Name}: DevKit.Controls.ELSE1???;//{item.Id} - {item.ClassId} -- FOR DEBUG {NEW_LINE}";
-                    }
-                }
-                else if (ControlClassId.VIRTUAL_CONTROLS.Contains(item.ClassId))
-                {
-                    if (listVirtualControls.Contains(item.Id))
-                        continue;
-                    else
-                        listVirtualControls.Add(item.Id);
-                    if (item.ClassId == ControlClassId.IFRAME)
-                    {
-                        _d_ts += $"{TAB}{TAB}{item.Id}: DevKit.Controls.IFrame;{NEW_LINE}";
-                    }
-                    else if (item.ClassId == ControlClassId.WEB_RESOURCE)
-                    {
-                        _d_ts += $"{TAB}{TAB}{item.Id}: DevKit.Controls.WebResource;{NEW_LINE}";
-                    }
-                    else if (item.Id.ToLower() == "notescontrol" && item.ClassId == ControlClassId.NOTE)
-                    {
-                        _d_ts += $"{TAB}{TAB}{item.Id}: DevKit.Controls.Note;{NEW_LINE}";
-                    }
-                    else if (item.ClassId == ControlClassId.EMAIL_ENGAGEMENT_ACTIONS)
-                    {
-                        _d_ts += $"{TAB}{TAB}{item.Id}: DevKit.Controls.EmailEngagement;{NEW_LINE}";
-                    }
-                    else if (item.ClassId == ControlClassId.EMAIL_RECIPIENT_ACTIVITY)
-                    {
-                        _d_ts += $"{TAB}{TAB}{item.Id}: DevKit.Controls.EmailRecipient;{NEW_LINE}";
-                    }
-                    else if (item.ClassId == ControlClassId.TIMER)
-                    {
-                        _d_ts += $"{TAB}{TAB}{item.Id}: DevKit.Controls.Timer;{NEW_LINE}";
-                    }
-                    else if (item.ClassId == ControlClassId.ACI_WIDGET)
-                    {
-                        _d_ts += $"{TAB}{TAB}{item.Id}: DevKit.Controls.AciWidget;{NEW_LINE}";
-                    }
-                    else if (item.ClassId == ControlClassId.MAP_CONTROL)
-                    {
-                        _d_ts += $"{TAB}{TAB}{item.Id}: DevKit.Controls.Map;{NEW_LINE}";
-                    }
-                    else if (item.ClassId == ControlClassId.ACTION_CARDS)
-                    {
-                        _d_ts += $"{TAB}{TAB}{item.Id}: DevKit.Controls.ActionCards;{NEW_LINE}";
-                    }
-                    else if (item.ClassId == ControlClassId.POWERBI)
-                    {
-                        _d_ts += $"{TAB}{TAB}{item.Id}: DevKit.Controls.PowerBi;{NEW_LINE}";
-                    }
-                    else if (item.ClassId == ControlClassId.FILE)
-                    {
-                        _d_ts += $"{TAB}{TAB}{item.Id}: DevKit.Controls.File;{NEW_LINE}";
-                    }
-                    else if (item.ClassId == ControlClassId.IMAGE)
-                    {
-                        _d_ts += $"{TAB}{TAB}{item.Id}: DevKit.Controls.Image;{NEW_LINE}";
-                    }
-                    else if (item.ClassId == ControlClassId.UNKNOWN_1 ||
-                             item.ClassId == ControlClassId.UNKNOWN_2 ||
-                             item.ClassId == ControlClassId.UNKNOWN_3 ||
-                             item.ClassId == ControlClassId.UNKNOWN_4 ||
-                             item.ClassId == ControlClassId.UNKNOWN_5 ||
-                             item.ClassId == ControlClassId.UNKNOWN_6 ||
-                             item.ClassId == ControlClassId.UNKNOWN_7 ||
-                             item.ClassId == ControlClassId.UNKNOWN_8 ||
-                             item.ClassId == ControlClassId.UNKNOWN_9 ||
-                             item.ClassId == ControlClassId.UNKNOWN_10 ||
-                             item.ClassId == ControlClassId.UNKNOWN_11 ||
-                             item.ClassId == ControlClassId.UNKNOWN_12 ||
-                             item.ClassId == ControlClassId.UNKNOWN_13 ||
-                             item.ClassId == ControlClassId.UNKNOWN_14 ||
-                             item.ClassId == ControlClassId.UNKNOWN_15 ||
-                             item.ClassId == ControlClassId.UNKNOWN_16 ||
-                             item.ClassId == ControlClassId.UNKNOWN_17 ||
-                             item.ClassId == ControlClassId.UNKNOWN_18 ||
-                             item.ClassId == ControlClassId.SUB_GRID ||
-                             item.ClassId == ControlClassId.SUB_GRID_PANEL ||
-                             item.ClassId == ControlClassId.QUICK_VIEW_FORM ||
-                             item.ClassId == ControlClassId.CASERESEARCH_LINKCONTROL ||
-                             item.ClassId == ControlClassId.KBVIEWER ||
-                             item.ClassId == ControlClassId.CASE_KBSEARCHCONTROL ||
-                             item.ClassId == ControlClassId.ATTACHMENT ||
-                             item.ClassId == ControlClassId.ISMANAGED ||
-                             item.ClassId == ControlClassId.CONNECTIONROLEOBJECTTYPECODELIST ||
-                             item.ClassId == ControlClassId.DYNAMICPROPERTIESLIST_LINKCONTROL ||
-                             item.ClassId == ControlClassId.MSDYN_SESSIONTYPE ||
-                             item.ClassId == ControlClassId.MSDYN_NAME ||
-                             item.ClassId == ControlClassId.WEBRESOURCE_POSTCONVERSATIONSURVEYDISCLAIMER ||
-                             item.ClassId == ControlClassId.WEBRESOURCE_URL ||
-                             item.ClassId == ControlClassId.WEBRESOURCE_POSTCONVERSATIONSURVEYDISCLAIMER2 ||
-                             item.ClassId == ControlClassId.WEBRESOURCE_POSTCONVERSATIONSURVEYDISCLAIMER3 ||
-                             item.ClassId == ControlClassId.WEBRESOURCE_WECHATCALLBACKURL ||
-                             item.ClassId == ControlClassId.MSDYN_SOURCEENTITYNAME
-                             )
-                        continue;
-                    else
-                    {
-                        _d_ts += $"{TAB}{TAB}{item.Name}: DevKit.Controls.ELSE2???;//{item.Id} - {item.ClassId} -- FOR DEBUG {NEW_LINE}";
-                    }
-                    names.Add(item.Id);
-                }
-                else
-                {
-                    if (item.Name != null)
-                        _d_ts += $"{TAB}{TAB}{item.Name}: DevKit.Controls.ELSE3???;//{item.Id} - {item.ClassId} -- FOR DEBUG {NEW_LINE}";
-                    names.Add(item.Name);
-                }
-                code += _d_ts;
-            }
-            code = code.TrimEnd($",{NEW_LINE}".ToCharArray()) + $"{NEW_LINE}";
-            return code;
-        }
-
-
 
         private static List<string> GetGridFields(string formXml)
         {
