@@ -104,7 +104,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             var bodyFields = GetBodyFields(form.FormXml);
             foreach (var field in bodyFields)
             {
-                code.AppendLine($"{TAB2}{field.Name}: DevKit.Controls.{GetControlType(field)};");
+                code.AppendLine($"{TAB2}{field.LogicalName}: DevKit.Controls.{GetControlType(field)};");
             }
 
             code.AppendLine($"{TAB2}/** Form Tabs */");
@@ -173,18 +173,18 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             //code.AppendLine($"{TAB} */");
             code.AppendLine($"{TAB}export interface IBody {{");
 
-            code.AppendLine(GetForm_d_ts_Body(form.FormXml));
+            //code.AppendLine(GetForm_d_ts_Body(form.FormXml));
 
-            //var bodyFields = GetBodyFields(form.FormXml);
-            //foreach (var field in bodyFields)
-            //{
-            //    var comment = GetFieldComment(field);
-            //    if (!string.IsNullOrEmpty(comment))
-            //    {
-            //        code.AppendLine($"{TAB2}/** {comment} */");
-            //    }
-            //    code.AppendLine($"{TAB2}{field.Name}: DevKit.Controls.{GetControlType(field)};");
-            //}
+            var bodyFields = GetBodyFields(form.FormXml);
+            foreach (var field in bodyFields)
+            {
+                var comment = GetFieldComment(field);
+                if (!string.IsNullOrEmpty(comment))
+                {
+                    code.AppendLine($"{TAB2}/** {comment} */");
+                }
+                code.AppendLine($"{TAB2}{field.SchemaName}: DevKit.Controls.{GetControlType(field)};");
+            }
             //code.AppendLine($"{TAB2}/** Form Tabs */");
             code.AppendLine($"{TAB2}Tab: ITabs;");
             code.AppendLine($"{TAB}}}");
@@ -195,34 +195,34 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             //code.AppendLine($"{TAB} * Header controls interface");
             //code.AppendLine($"{TAB} * Contains controls displayed in the form header");
             //code.AppendLine($"{TAB} */");
-            //code.AppendLine($"{TAB}export interface IHeader {{");
+            code.AppendLine($"{TAB}export interface IHeader {{");
 
-            //var headerFields = GetHeaderFields(form.FormXml);
-            //foreach (var field in headerFields)
-            //{
-            //    var comment = GetFieldComment(field);
-            //    if (!string.IsNullOrEmpty(comment))
-            //    {
-            //        code.AppendLine($"{TAB2}/** {comment} */");
-            //    }
-            //    code.AppendLine($"{TAB2}{field.Name}: DevKit.Controls.{GetControlType(field)};");
-            //}
-
-            //code.AppendLine($"{TAB}}}");
-            //code.AppendLine();
-
-
-            var form_d_ts_Header = GetForm_d_ts_Header(form.FormXml);
-            if (form_d_ts_Header.Length > 0)
+            var headerFields = GetHeaderFields(form.FormXml);
+            foreach (var field in headerFields)
             {
-                //code.AppendLine($"{TAB}/**");
-                //code.AppendLine($"{TAB} * Header controls interface");
-                //code.AppendLine($"{TAB} * Contains controls displayed in the form header");
-                //code.AppendLine($"{TAB} */");
-                code.AppendLine($"{TAB}export interface IHeader {{");
-                code.Append(form_d_ts_Header);
-                code.AppendLine($"{TAB}}}");
+                var comment = GetFieldComment(field);
+                if (!string.IsNullOrEmpty(comment))
+                {
+                    code.AppendLine($"{TAB2}/** {comment} */");
+                }
+                code.AppendLine($"{TAB2}{field.SchemaName}: DevKit.Controls.{GetControlType(field)};");
             }
+
+            code.AppendLine($"{TAB}}}");
+            code.AppendLine();
+
+
+            //var form_d_ts_Header = GetForm_d_ts_Header(form.FormXml);
+            //if (form_d_ts_Header.Length > 0)
+            //{
+            //    //code.AppendLine($"{TAB}/**");
+            //    //code.AppendLine($"{TAB} * Header controls interface");
+            //    //code.AppendLine($"{TAB} * Contains controls displayed in the form header");
+            //    //code.AppendLine($"{TAB} */");
+            //    code.AppendLine($"{TAB}export interface IHeader {{");
+            //    code.Append(form_d_ts_Header);
+            //    code.AppendLine($"{TAB}}}");
+            //}
 
 
 
@@ -322,12 +322,29 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                 //code.AppendLine($"{TAB} */");
                 code.AppendLine($"{TAB}export interface I{process.ProcessName} {{");
 
-                //foreach (var field in process.Fields)
-                //{
-                //    var fieldInfo = GetProcessFieldInfo(field);
-                //    //code.AppendLine($"{TAB2}/** BPF Field: {fieldInfo.DisplayName} */");
-                //    code.AppendLine($"{TAB2}{fieldInfo.Name}: DevKit.Controls.{fieldInfo.Type};");
-                //}
+                // Track used names for BPF duplicate handling (uses _1, _2 pattern)
+                var usedNames = new Dictionary<string, int>();
+
+                foreach (var field in process.Fields)
+                {
+                    var fieldInfo = GetProcessFieldInfo(field);
+                    var baseName = fieldInfo.Name;
+                    string schemaName;
+
+                    if (usedNames.ContainsKey(baseName))
+                    {
+                        usedNames[baseName]++;
+                        schemaName = baseName + "_" + usedNames[baseName].ToString();
+                    }
+                    else
+                    {
+                        usedNames[baseName] = 0;
+                        schemaName = baseName;
+                    }
+
+                    //code.AppendLine($"{TAB2}/** BPF Field: {fieldInfo.DisplayName} */");
+                    code.AppendLine($"{TAB2}{schemaName}: DevKit.Controls.{fieldInfo.Type};");
+                }
 
                 code.AppendLine($"{TAB}}}");
                 code.AppendLine();
@@ -387,14 +404,14 @@ namespace DynamicsCrm.DevKit.Shared.Logic
 
             // Body fields
             code.AppendLine($"{TAB4}body: [");
-            //var bodyArray = GetBodyFieldNames(formXml);
-            code.AppendLine($"{TAB4}{TAB}{string.Join($",{NEW_LINE}{TAB4}{TAB}", BodyFields.Select(x => $"'{x}'"))}");
+            var bodyArray = GetBodyFieldNames(formXml);
+            code.AppendLine($"{TAB4}{TAB}{string.Join($",{NEW_LINE}{TAB4}{TAB}", bodyArray.Select(x => $"'{x}'"))}");
             code.AppendLine($"{TAB4}],");
 
             // Header fields
             code.AppendLine($"{TAB4}header: [");
-            //var headerArray = GetHeaderFieldNames(formXml);
-            code.AppendLine($"{TAB4}{TAB}{string.Join($",{NEW_LINE}{TAB4}{TAB}", HeaderFields.Select(x => $"'{x}'"))}");
+            var headerArray = GetHeaderFieldNames(formXml);
+            code.AppendLine($"{TAB4}{TAB}{string.Join($",{NEW_LINE}{TAB4}{TAB}", headerArray.Select(x => $"'{x}'"))}");
             code.AppendLine($"{TAB4}],");
 
             // Tab fields
@@ -551,10 +568,11 @@ namespace DynamicsCrm.DevKit.Shared.Logic
 
         private class FieldInfo
         {
-            public string Name { get; set; }
+            public string SchemaName { get; set; }
             public string Id { get; set; }
             public string ClassId { get; set; }
             public string ControlId { get; set; }
+            public string LogicalName { get; set; }
         }
 
         private class ProcessFieldInfo
@@ -573,36 +591,104 @@ namespace DynamicsCrm.DevKit.Shared.Logic
         private static List<FieldInfo> GetBodyFields(string formXml)
         {
             var xdoc = XDocument.Parse(formXml);
-            var fields = (from x in xdoc.Descendants("tabs").Descendants("tab").Descendants("columns")
+            var rawFields = (from x in xdoc.Descendants("tabs").Descendants("tab").Descendants("columns")
                     .Descendants("column").Descendants("sections").Descendants("section").Descendants("rows")
                     .Descendants("row").Descendants("cell").Descendants("control")
                           select new FieldInfo
                           {
-                              Name = Helper.SafeIdentifier(x?.Attribute("datafieldname")?.Value ?? x?.Attribute("id")?.Value),
-                              Id = x?.Attribute("id")?.Value,
-                              ClassId = Helper.TrimGuid(x?.Attribute("classid")?.Value?.ToUpper()),
-                              ControlId = x?.Attribute("uniqueid")?.Value
-                          }).Distinct().ToList();
-
-            fields = fields.Where(x => !string.IsNullOrEmpty(x.Name)).OrderBy(x => x.Name).ToList();
-            return fields;
-        }
-
-        private static List<FieldInfo> GetHeaderFields(string formXml)
-        {
-            var xdoc = XDocument.Parse(formXml);
-            var fields = (from x in xdoc.Descendants("header").Descendants("rows").Descendants("row")
-                    .Descendants("cell").Descendants("control")
-                          select new FieldInfo
-                          {
-                              Name = Helper.SafeIdentifier(x?.Attribute("datafieldname")?.Value ?? x?.Attribute("id")?.Value),
+                              LogicalName = x?.Attribute("datafieldname")?.Value ?? x?.Attribute("id")?.Value,
                               Id = x?.Attribute("id")?.Value,
                               ClassId = Helper.TrimGuid(x?.Attribute("classid")?.Value?.ToUpper()),
                               ControlId = x?.Attribute("uniqueid")?.Value
                           }).ToList();
 
-            fields = fields.Where(x => !string.IsNullOrEmpty(x.Name)).OrderBy(x => x.Name).ToList();
-            return fields;
+            rawFields = rawFields.Where(x => !string.IsNullOrEmpty(x.LogicalName)).ToList();
+
+            // Map to SchemaName and handle duplicate names using Dictionary
+            var result = new List<FieldInfo>();
+            var usedNames = new Dictionary<string, int>();
+
+            foreach (var field in rawFields)
+            {
+                var crmAttribute = EntityMetadata?.Attributes?.FirstOrDefault(a => a.LogicalName == field.LogicalName);
+                if (crmAttribute == null) continue;
+
+                var baseName = Helper.SafeIdentifier(crmAttribute.SchemaName);
+                string schemaName;
+
+                if (usedNames.ContainsKey(baseName))
+                {
+                    usedNames[baseName]++;
+                    schemaName = baseName + usedNames[baseName].ToString();
+                }
+                else
+                {
+                    usedNames[baseName] = 0;
+                    schemaName = baseName;
+                }
+
+                result.Add(new FieldInfo
+                {
+                    SchemaName = schemaName,
+                    Id = field.Id,
+                    ClassId = field.ClassId,
+                    ControlId = field.ControlId,
+                    LogicalName = field.LogicalName
+                });
+            }
+
+            return result.OrderBy(x => x.SchemaName).ToList();
+        }
+
+        private static List<FieldInfo> GetHeaderFields(string formXml)
+        {
+            var xdoc = XDocument.Parse(formXml);
+            var rawFields = (from x in xdoc.Descendants("header").Descendants("rows").Descendants("row")
+                    .Descendants("cell").Descendants("control")
+                          select new FieldInfo
+                          {
+                              LogicalName = x?.Attribute("datafieldname")?.Value,
+                              Id = x?.Attribute("id")?.Value,
+                              ClassId = Helper.TrimGuid(x?.Attribute("classid")?.Value?.ToUpper()),
+                              ControlId = x?.Attribute("uniqueid")?.Value
+                          }).ToList();
+
+            rawFields = rawFields.Where(x => !string.IsNullOrEmpty(x.LogicalName)).ToList();
+
+            // Map to SchemaName and handle duplicate names using Dictionary
+            var result = new List<FieldInfo>();
+            var usedNames = new Dictionary<string, int>();
+
+            foreach (var field in rawFields)
+            {
+                var crmAttribute = EntityMetadata?.Attributes?.FirstOrDefault(a => a.LogicalName == field.LogicalName);
+                if (crmAttribute == null) continue;
+
+                var baseName = Helper.SafeIdentifier(crmAttribute.SchemaName);
+                string schemaName;
+
+                if (usedNames.ContainsKey(baseName))
+                {
+                    usedNames[baseName]++;
+                    schemaName = baseName + usedNames[baseName].ToString();
+                }
+                else
+                {
+                    usedNames[baseName] = 0;
+                    schemaName = baseName;
+                }
+
+                result.Add(new FieldInfo
+                {
+                    SchemaName = schemaName,
+                    Id = field.Id,
+                    ClassId = field.ClassId,
+                    ControlId = field.ControlId,
+                    LogicalName = field.LogicalName
+                });
+            }
+
+            return result.OrderBy(x => x.SchemaName).ToList();
         }
 
         private static List<string> BodyFields = new List<string>();
@@ -900,7 +986,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                     .Descendants("row").Descendants("cell").Descendants("control")
                           select new FieldInfo
                           {
-                              Name = Helper.SafeIdentifier(x?.Attribute("datafieldname")?.Value),
+                              LogicalName = Helper.SafeIdentifier(x?.Attribute("datafieldname")?.Value),
                               Id = x?.Attribute("id")?.Value,
                               ClassId = Helper.TrimGuid(x?.Attribute("classid")?.Value?.ToUpper()),
                               ControlId = x?.Attribute("uniqueid")?.Value
@@ -1131,30 +1217,14 @@ namespace DynamicsCrm.DevKit.Shared.Logic
 
         private static List<string> GetBodyFieldNames(string formXml)
         {
-            var xdoc = XDocument.Parse(formXml);
-            var fields = (from x in xdoc.Descendants("tabs").Descendants("tab").Descendants("columns")
-                    .Descendants("column").Descendants("sections").Descendants("section").Descendants("rows")
-                    .Descendants("row").Descendants("cell").Descendants("control")
-                          select Helper.SafeIdentifier(x?.Attribute("datafieldname")?.Value ?? x?.Attribute("id")?.Value))
-                    .Where(x => !string.IsNullOrEmpty(x))
-                    .Distinct()
-                    .ToList();
-
-            fields.Sort();
-            return fields;
+            var bodyFields = GetBodyFields(formXml);
+            return bodyFields.Select(x => x.SchemaName).ToList();
         }
 
         private static List<string> GetHeaderFieldNames(string formXml)
         {
-            var xdoc = XDocument.Parse(formXml);
-            var headers = (from x in xdoc.Descendants("header").Descendants("rows").Descendants("row")
-                    .Descendants("cell").Descendants("control")
-                           select Helper.SafeIdentifier(x?.Attribute("datafieldname")?.Value ?? x?.Attribute("id")?.Value))
-                    .Where(x => !string.IsNullOrEmpty(x))
-                    .ToList();
-
-            headers.Sort();
-            return headers;
+            var headerFields = GetHeaderFields(formXml);
+            return headerFields.Select(x => x.SchemaName).ToList();
         }
 
         private static List<string> GetTabFieldNames(string formXml)
@@ -1213,7 +1283,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                     .Descendants("row").Descendants("cell").Descendants("control")
                           select new FieldInfo
                           {
-                              Name = Helper.SafeIdentifier(x?.Attribute("datafieldname")?.Value),
+                              LogicalName = Helper.SafeIdentifier(x?.Attribute("datafieldname")?.Value),
                               Id = x?.Attribute("id")?.Value,
                               ClassId = Helper.TrimGuid(x?.Attribute("classid")?.Value?.ToUpper()),
                               ControlId = x?.Attribute("uniqueid")?.Value
@@ -1376,12 +1446,13 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                             };
 
                 var processFields = new List<string>();
+                var usedNames = new Dictionary<string, int>();
+
                 foreach (var row in rows2)
                 {
                     var arr = row.DisplayName.Split(' ');
                     if (arr.Length == 1 || arr[1] != EntityMetadata.LogicalName) continue;
                     const string pattern = @"DataFieldName=""([^""]+)""";
-                    var fieldIndex = 0;
                     foreach (Match m in Regex.Matches(row.InnerText, pattern))
                     {
                         if (m.Groups.Count > 1)
@@ -1391,9 +1462,21 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                             if (crmAttribute != null)
                             {
                                 var schemaName = Helper.SafeIdentifier(crmAttribute.SchemaName);
-                                var suffix = fieldIndex > 0 ? $"_{fieldIndex}" : "";
-                                processFields.Add($"{name}___{schemaName}{suffix}");
-                                fieldIndex++;
+                                var fullBaseName = $"{name}___{schemaName}";
+                                string outputName;
+
+                                if (usedNames.ContainsKey(fullBaseName))
+                                {
+                                    usedNames[fullBaseName]++;
+                                    outputName = $"{fullBaseName}_{usedNames[fullBaseName]}";
+                                }
+                                else
+                                {
+                                    usedNames[fullBaseName] = 0;
+                                    outputName = fullBaseName;
+                                }
+
+                                processFields.Add(outputName);
                             }
                         }
                     }
@@ -1456,7 +1539,8 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                 return "WebResource";
 
             // Try to find the attribute in metadata
-            var attribute = EntityMetadata.Attributes?.FirstOrDefault(x => x.LogicalName == field.Id.ToLower());
+            var logicalName = !string.IsNullOrEmpty(field.LogicalName) ? field.LogicalName : field.Id?.ToLower();
+            var attribute = EntityMetadata.Attributes?.FirstOrDefault(x => x.LogicalName == logicalName);
             if (attribute != null)
             {
                 return GetAttributeType(attribute);

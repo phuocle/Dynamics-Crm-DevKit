@@ -20,26 +20,43 @@ export namespace FormAccount_DevKitV4 {
 
 	export interface IBody {
 		OwnerId: DevKit.Controls.Lookup;
-		IFRAME_PhuocLe: DevKit.Controls.IFrame;
+		/** Owner */
 		OwnerId1: DevKit.Controls.Lookup;
+		/** Owner */
 		OwnerId2: DevKit.Controls.Lookup;
+		/** Owner */
 		OwnerId3: DevKit.Controls.Lookup;
+		/** Boolean */
 		v4_Boolean: DevKit.Controls.Boolean;
+		/** DateOnly */
 		v4_DateOnly: DevKit.Controls.DateOnly;
+		/** DateTime */
 		v4_DateTime: DevKit.Controls.DateTime;
+		/** Decimal */
 		v4_Decimal: DevKit.Controls.Decimal;
+		/** Double */
 		v4_Double: DevKit.Controls.Double;
+		/** Integer */
 		v4_Integer: DevKit.Controls.Integer;
+		/** Lookup */
 		v4_Lookup: DevKit.Controls.Lookup;
+		/** Lookup */
 		v4_Lookup1: DevKit.Controls.Lookup;
+		v4_Lookup2: DevKit.Controls.Lookup;
+		/** Memo */
 		v4_Memo: DevKit.Controls.Memo;
+		/** Money */
 		v4_Money: DevKit.Controls.Money;
+		/** MultiOptionSet */
 		v4_MultiOptionSet: DevKit.Controls.MultiOptionSet;
+		/** OptionSet */
 		v4_OptionSet: DevKit.Controls.OptionSet;
+		/** String */
 		v4_String: DevKit.Controls.String;
+		/** String */
 		v4_String1: DevKit.Controls.String;
+		/** String */
 		v4_String2: DevKit.Controls.String;
-		WebResource_DevKitV4: DevKit.Controls.WebResource;
 		Tab: ITabs;
 	}
 
@@ -49,6 +66,7 @@ export namespace FormAccount_DevKitV4 {
 		v4_OptionSet: DevKit.Controls.OptionSet;
 		v4_String: DevKit.Controls.String;
 	}
+
 	export interface ITAB_1TabSections {
 		TAB_1_SECTION_1: DevKit.Controls.Section;
 		TAB_1_SECTION_2: DevKit.Controls.Section;
@@ -114,6 +132,11 @@ export namespace FormAccount_DevKitV4 {
 	}
 
 	export interface IAccountBPF {
+		IndustryCode: DevKit.Controls.OptionSet;
+		Name: DevKit.Controls.String;
+		Name_1: DevKit.Controls.String;
+		PrimaryContactId: DevKit.Controls.Lookup;
+		Revenue: DevKit.Controls.Money;
 	}
 
 	export interface IDialog extends DevKit.IDialog {
@@ -137,7 +160,6 @@ export namespace FormAccount_DevKitV4 {
 			super(executionContext, defaultWebResourceName, {
 				body: [
 					'OwnerId',
-					'IFRAME_PhuocLe',
 					'OwnerId1',
 					'OwnerId2',
 					'OwnerId3',
@@ -149,14 +171,14 @@ export namespace FormAccount_DevKitV4 {
 					'v4_Integer',
 					'v4_Lookup',
 					'v4_Lookup1',
+					'v4_Lookup2',
 					'v4_Memo',
 					'v4_Money',
 					'v4_MultiOptionSet',
 					'v4_OptionSet',
 					'v4_String',
 					'v4_String1',
-					'v4_String2',
-					'WebResource_DevKitV4'
+					'v4_String2'
 				],
 				header: [
 					'v4_Integer',
@@ -199,11 +221,11 @@ export namespace FormAccount_DevKitV4 {
 					'ContactQuickForm___ParentCustomerId'
 				],
 				bpf: [
-					'AccountBPF___IndustryCode_1',
+					'AccountBPF___IndustryCode',
 					'AccountBPF___Name',
-					'AccountBPF___Name',
-					'AccountBPF___PrimaryContactId_1',
-					'AccountBPF___Revenue_2'
+					'AccountBPF___Name_1',
+					'AccountBPF___PrimaryContactId',
+					'AccountBPF___Revenue'
 				],
 				dialog: [
 					
