@@ -1,7 +1,7 @@
 ﻿/**
  * Account.form.ts - Account Form for early-bound style form coding
  * Generated file - DO NOT MODIFY MANUALLY
- * 
+ *
  * Structure:
  * 1. Imports
  * 2. Types - IBody, IHeader, ITabs, IGrid, INavigation, IQuickForm, IProcess
@@ -18,19 +18,11 @@ import './OptionSet';
 
 export namespace FormAccount_DevKitV4 {
 
-	/**
-	 * Body controls interface
-	 * Contains all controls on the form body
-	 */
 	export interface IBody {
-		/** Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
 		OwnerId: DevKit.Controls.Lookup;
 		IFRAME_PhuocLe: DevKit.Controls.IFrame;
-		/** Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
 		OwnerId1: DevKit.Controls.Lookup;
-		/** Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
 		OwnerId2: DevKit.Controls.Lookup;
-		/** Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
 		OwnerId3: DevKit.Controls.Lookup;
 		v4_Boolean: DevKit.Controls.Boolean;
 		v4_DateOnly: DevKit.Controls.DateOnly;
@@ -40,7 +32,7 @@ export namespace FormAccount_DevKitV4 {
 		v4_Integer: DevKit.Controls.Integer;
 		v4_Lookup: DevKit.Controls.Lookup;
 		v4_Lookup1: DevKit.Controls.Lookup;
-		v4_Memo: DevKit.Controls.String;
+		v4_Memo: DevKit.Controls.Memo;
 		v4_Money: DevKit.Controls.Money;
 		v4_MultiOptionSet: DevKit.Controls.MultiOptionSet;
 		v4_OptionSet: DevKit.Controls.OptionSet;
@@ -51,19 +43,12 @@ export namespace FormAccount_DevKitV4 {
 		Tab: ITabs;
 	}
 
-	/**
-	 * Header controls interface
-	 * Contains controls displayed in the form header
-	 */
 	export interface IHeader {
 		v4_Integer: DevKit.Controls.Integer;
 		v4_Integer1: DevKit.Controls.Integer;
 		v4_OptionSet: DevKit.Controls.OptionSet;
 		v4_String: DevKit.Controls.String;
 	}
-	/**
-	 * TAB_1 sections interface
-	 */
 	export interface ITAB_1TabSections {
 		TAB_1_SECTION_1: DevKit.Controls.Section;
 		TAB_1_SECTION_2: DevKit.Controls.Section;
@@ -71,49 +56,28 @@ export namespace FormAccount_DevKitV4 {
 		TAB_1_SECTION_4: DevKit.Controls.Section;
 	}
 
-	/**
-	 * TAB_2 sections interface
-	 */
 	export interface ITAB_2TabSections {
 		TAB_2_SECTION_1: DevKit.Controls.Section;
 		TAB_2_SECTION_2: DevKit.Controls.Section;
 	}
 
-	/**
-	 * TAB_1 tab interface
-	 */
 	export interface ITAB_1Tab extends DevKit.Controls.ITab {
 		Section: ITAB_1TabSections;
 	}
 
-	/**
-	 * TAB_2 tab interface
-	 */
 	export interface ITAB_2Tab extends DevKit.Controls.ITab {
 		Section: ITAB_2TabSections;
 	}
 
-	/**
-	 * Tabs interface
-	 * Contains all tabs on the form
-	 */
 	export interface ITabs {
 		TAB_1: ITAB_1Tab;
 		TAB_2: ITAB_2Tab;
 	}
 
-	/**
-	 * Grid controls interface
-	 * Contains all subgrid controls on the form
-	 */
 	export interface IGrid {
 		Contacts: DevKit.Controls.Grid;
 	}
 
-	/**
-	 * Navigation interface
-	 * Contains navigation items
-	 */
 	export interface INavigation {
 		nav_adx_invitation_assigntoaccount: DevKit.Controls.NavigationItem;
 		nav_msa_account_managingpartner: DevKit.Controls.NavigationItem;
@@ -131,19 +95,12 @@ export namespace FormAccount_DevKitV4 {
 		navSubAccts: DevKit.Controls.NavigationItem;
 	}
 
-	/**
-	 * QuickForm interface
-	 * Contains quick view form controls
-	 */
 	export interface IQuickForm {
 		ContactQuickForm: DevKit.Controls.IQuickView & {
 			Body: IContactQuickFormBody;
 		};
 	}
 
-	/**
-	 * ContactQuickForm quick view control body interface
-	 */
 	export interface IContactQuickFormBody {
 		EMailAddress1: DevKit.Controls.QuickView;
 		FirstName: DevKit.Controls.QuickView;
@@ -152,33 +109,17 @@ export namespace FormAccount_DevKitV4 {
 		ParentCustomerId: DevKit.Controls.QuickView;
 	}
 
-	/**
-	 * Process interface
-	 * Contains business process flow definitions
-	 */
 	export interface IProcess extends DevKit.Controls.IProcess {
-		/** AccountBPF - AccountBPF */
 		AccountBPF: IAccountBPF;
 	}
 
-	/**
-	 * AccountBPF Business Process Flow fields interface
-	 */
 	export interface IAccountBPF {
-		/** BPF Field: Industry */
 		IndustryCode: DevKit.Controls.OptionSet;
-		/** BPF Field: Account Name */
 		Name: DevKit.Controls.String;
-		/** BPF Field: Primary Contact */
 		PrimaryContactId: DevKit.Controls.Lookup;
-		/** BPF Field: Annual Revenue */
 		Revenue: DevKit.Controls.Money;
 	}
 
-	/**
-	 * Dialog interface
-	 * For quick create dialogs or other dialog forms
-	 */
 	export interface IDialog extends DevKit.IDialog {
 	}
 

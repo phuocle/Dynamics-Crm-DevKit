@@ -53,7 +53,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code.AppendLine("/**");
             code.AppendLine($" * {entityMetadata.SchemaName}.form.ts - {entityMetadata.SchemaName} Form for early-bound style form coding");
             code.AppendLine(" * Generated file - DO NOT MODIFY MANUALLY");
-            code.AppendLine(" * ");
+            code.AppendLine(" *");
             code.AppendLine(" * Structure:");
             code.AppendLine(" * 1. Imports");
             code.AppendLine(" * 2. Types - IBody, IHeader, ITabs, IGrid, INavigation, IQuickForm, IProcess");
@@ -167,10 +167,10 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code.AppendLine();
 
             // Generate IBody interface
-            code.AppendLine($"{TAB}/**");
-            code.AppendLine($"{TAB} * Body controls interface");
-            code.AppendLine($"{TAB} * Contains all controls on the form body");
-            code.AppendLine($"{TAB} */");
+            //code.AppendLine($"{TAB}/**");
+            //code.AppendLine($"{TAB} * Body controls interface");
+            //code.AppendLine($"{TAB} * Contains all controls on the form body");
+            //code.AppendLine($"{TAB} */");
             code.AppendLine($"{TAB}export interface IBody {{");
 
             code.AppendLine(GetForm_d_ts_Body(form.FormXml));
@@ -215,10 +215,10 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             var form_d_ts_Header = GetForm_d_ts_Header(form.FormXml);
             if (form_d_ts_Header.Length > 0)
             {
-                code.AppendLine($"{TAB}/**");
-                code.AppendLine($"{TAB} * Header controls interface");
-                code.AppendLine($"{TAB} * Contains controls displayed in the form header");
-                code.AppendLine($"{TAB} */");
+                //code.AppendLine($"{TAB}/**");
+                //code.AppendLine($"{TAB} * Header controls interface");
+                //code.AppendLine($"{TAB} * Contains controls displayed in the form header");
+                //code.AppendLine($"{TAB} */");
                 code.AppendLine($"{TAB}export interface IHeader {{");
                 code.Append(form_d_ts_Header);
                 code.AppendLine($"{TAB}}}");
@@ -231,10 +231,10 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code.Append(GetTabsInterfaces(form.FormXml));
 
             // Generate IGrid interface
-            code.AppendLine($"{TAB}/**");
-            code.AppendLine($"{TAB} * Grid controls interface");
-            code.AppendLine($"{TAB} * Contains all subgrid controls on the form");
-            code.AppendLine($"{TAB} */");
+            //code.AppendLine($"{TAB}/**");
+            //code.AppendLine($"{TAB} * Grid controls interface");
+            //code.AppendLine($"{TAB} * Contains all subgrid controls on the form");
+            //code.AppendLine($"{TAB} */");
             code.AppendLine($"{TAB}export interface IGrid {{");
 
             var gridFields = GetGridFields(form.FormXml);
@@ -247,10 +247,10 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code.AppendLine();
 
             // Generate INavigation interface
-            code.AppendLine($"{TAB}/**");
-            code.AppendLine($"{TAB} * Navigation interface");
-            code.AppendLine($"{TAB} * Contains navigation items");
-            code.AppendLine($"{TAB} */");
+            //code.AppendLine($"{TAB}/**");
+            //code.AppendLine($"{TAB} * Navigation interface");
+            //code.AppendLine($"{TAB} * Contains navigation items");
+            //code.AppendLine($"{TAB} */");
             code.AppendLine($"{TAB}export interface INavigation {{");
 
             var navigationFields = GetNavigationFields(form.FormXml);
@@ -264,10 +264,10 @@ namespace DynamicsCrm.DevKit.Shared.Logic
 
             // Generate IQuickForm interface
             var quickFormFields = await GetQuickFormFieldsAsync(form.FormXml);
-            code.AppendLine($"{TAB}/**");
-            code.AppendLine($"{TAB} * QuickForm interface");
-            code.AppendLine($"{TAB} * Contains quick view form controls");
-            code.AppendLine($"{TAB} */");
+            //code.AppendLine($"{TAB}/**");
+            //code.AppendLine($"{TAB} * QuickForm interface");
+            //code.AppendLine($"{TAB} * Contains quick view form controls");
+            //code.AppendLine($"{TAB} */");
             code.AppendLine($"{TAB}export interface IQuickForm {{");
 
             foreach (var qf in quickFormFields)
@@ -283,9 +283,9 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             // Generate QuickForm body interfaces
             foreach (var qf in quickFormFields)
             {
-                code.AppendLine($"{TAB}/**");
-                code.AppendLine($"{TAB} * {qf.QuickFormName} quick view control body interface");
-                code.AppendLine($"{TAB} */");
+                //code.AppendLine($"{TAB}/**");
+                //code.AppendLine($"{TAB} * {qf.QuickFormName} quick view control body interface");
+                //code.AppendLine($"{TAB} */");
                 code.AppendLine($"{TAB}export interface I{qf.QuickFormName}Body {{");
 
                 foreach (var field in qf.Fields)
@@ -299,15 +299,15 @@ namespace DynamicsCrm.DevKit.Shared.Logic
 
             // Generate IProcess interface
             var processFields = await GetProcessFieldsAsync();
-            code.AppendLine($"{TAB}/**");
-            code.AppendLine($"{TAB} * Process interface");
-            code.AppendLine($"{TAB} * Contains business process flow definitions");
-            code.AppendLine($"{TAB} */");
+            //code.AppendLine($"{TAB}/**");
+            //code.AppendLine($"{TAB} * Process interface");
+            //code.AppendLine($"{TAB} * Contains business process flow definitions");
+            //code.AppendLine($"{TAB} */");
             code.AppendLine($"{TAB}export interface IProcess extends DevKit.Controls.IProcess {{");
 
             foreach (var process in processFields)
             {
-                code.AppendLine($"{TAB2}/** {process.ProcessName} - {process.ProcessName} */");
+                //code.AppendLine($"{TAB2}/** {process.ProcessName} - {process.ProcessName} */");
                 code.AppendLine($"{TAB2}{process.ProcessName}: I{process.ProcessName};");
             }
 
@@ -317,15 +317,15 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             // Generate Process field interfaces
             foreach (var process in processFields)
             {
-                code.AppendLine($"{TAB}/**");
-                code.AppendLine($"{TAB} * {process.ProcessName} Business Process Flow fields interface");
-                code.AppendLine($"{TAB} */");
+                //code.AppendLine($"{TAB}/**");
+                //code.AppendLine($"{TAB} * {process.ProcessName} Business Process Flow fields interface");
+                //code.AppendLine($"{TAB} */");
                 code.AppendLine($"{TAB}export interface I{process.ProcessName} {{");
 
                 foreach (var field in process.Fields)
                 {
                     var fieldInfo = GetProcessFieldInfo(field);
-                    code.AppendLine($"{TAB2}/** BPF Field: {fieldInfo.DisplayName} */");
+                    //code.AppendLine($"{TAB2}/** BPF Field: {fieldInfo.DisplayName} */");
                     code.AppendLine($"{TAB2}{fieldInfo.Name}: DevKit.Controls.{fieldInfo.Type};");
                 }
 
@@ -334,10 +334,10 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             }
 
             // Generate IDialog interface
-            code.AppendLine($"{TAB}/**");
-            code.AppendLine($"{TAB} * Dialog interface");
-            code.AppendLine($"{TAB} * For quick create dialogs or other dialog forms");
-            code.AppendLine($"{TAB} */");
+            //code.AppendLine($"{TAB}/**");
+            //code.AppendLine($"{TAB} * Dialog interface");
+            //code.AppendLine($"{TAB} * For quick create dialogs or other dialog forms");
+            //code.AppendLine($"{TAB} */");
             code.AppendLine($"{TAB}export interface IDialog extends DevKit.IDialog {{");
 
             var dialogFields = GetDialogFields(form.FormXml);
@@ -502,9 +502,9 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             // Generate section interfaces
             foreach (var (tabName, sections) in tabInterfaces)
             {
-                code.AppendLine($"{TAB}/**");
-                code.AppendLine($"{TAB} * {tabName} sections interface");
-                code.AppendLine($"{TAB} */");
+                //code.AppendLine($"{TAB}/**");
+                //code.AppendLine($"{TAB} * {tabName} sections interface");
+                //code.AppendLine($"{TAB} */");
                 code.AppendLine($"{TAB}export interface I{tabName}TabSections {{");
 
                 foreach (var section in sections)
@@ -519,9 +519,9 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             // Generate tab interfaces
             foreach (var (tabName, _) in tabInterfaces)
             {
-                code.AppendLine($"{TAB}/**");
-                code.AppendLine($"{TAB} * {tabName} tab interface");
-                code.AppendLine($"{TAB} */");
+                //code.AppendLine($"{TAB}/**");
+                //code.AppendLine($"{TAB} * {tabName} tab interface");
+                //code.AppendLine($"{TAB} */");
                 code.AppendLine($"{TAB}export interface I{tabName}Tab extends DevKit.Controls.ITab {{");
                 code.AppendLine($"{TAB2}Section: I{tabName}TabSections;");
                 code.AppendLine($"{TAB}}}");
@@ -529,10 +529,10 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             }
 
             // Generate ITabs interface
-            code.AppendLine($"{TAB}/**");
-            code.AppendLine($"{TAB} * Tabs interface");
-            code.AppendLine($"{TAB} * Contains all tabs on the form");
-            code.AppendLine($"{TAB} */");
+            //code.AppendLine($"{TAB}/**");
+            //code.AppendLine($"{TAB} * Tabs interface");
+            //code.AppendLine($"{TAB} * Contains all tabs on the form");
+            //code.AppendLine($"{TAB} */");
             code.AppendLine($"{TAB}export interface ITabs {{");
 
             foreach (var (tabName, _) in tabInterfaces)
@@ -688,8 +688,12 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                     var jsdoc = string.Empty;
                     if (crmAttribute?.Description?.UserLocalizedLabel?.Label.Length > 0)
                         jsdoc = $"{TAB}{TAB}/** {crmAttribute?.Description?.UserLocalizedLabel?.Label} */{NEW_LINE}";
-                    if (crmAttribute.AttributeType == AttributeTypeCode.Memo ||
-                        crmAttribute.AttributeType == AttributeTypeCode.String)
+
+                    jsdoc = string.Empty;
+
+                    if (crmAttribute.AttributeType == AttributeTypeCode.Memo)
+                        _d_ts += $"{jsdoc}{TAB}{TAB}{name}: DevKit.Controls.Memo;{NEW_LINE}";
+                    else if (crmAttribute.AttributeType == AttributeTypeCode.String)
                     {
                         _d_ts += $"{jsdoc}{TAB}{TAB}{name}: DevKit.Controls.String;{NEW_LINE}";
                     }
