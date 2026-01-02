@@ -145,7 +145,6 @@ export namespace FormAccount_DevKitV4 {
         constructor(executionContext: any, defaultWebResourceName?: string) {
             super(executionContext, defaultWebResourceName, {
                 body: [
-                    'Contacts',
                     'IFRAME_PhuocLe',
                     'OwnerId',
                     'OwnerId1',
@@ -185,23 +184,20 @@ export namespace FormAccount_DevKitV4 {
                     'Contacts'
                 ],
                 navigation: [
+                    'nav_adx_invitation_assigntoaccount',
+                    'nav_msa_account_managingpartner',
+                    'nav_msa_contact_managingpartner',
                     'navActivities',
+                    'navAddresses',
+                    'navAsyncOperations',
+                    'navAudit',
+                    'navCampaignsInSFA',
+                    'navConnections',
                     'navContacts',
-                    'account_adx_inviteredemptions',
-                    'account_adx_portalcomments',
-                    'Account_Appointments',
-                    'account_DeletedItemReferences',
-                    'Account_Email_EmailSender',
-                    'Account_Email_SendersAccount',
-                    'Account_Emails',
-                    'account_parent_account',
-                    'Account_Phonecalls',
-                    'Account_Tasks',
-                    'adx_invitation_assigntoaccount',
-                    'bpf_account_v4_accountbpf',
-                    'contact_customer_accounts',
-                    'msa_account_managingpartner',
-                    'msa_contact_managingpartner'
+                    'navProcessSessions',
+                    'navRelationships',
+                    'navSocialprofiles',
+                    'navSubAccts'
                 ],
                 quick: [
                     'ContactQuickForm___EMailAddress1',

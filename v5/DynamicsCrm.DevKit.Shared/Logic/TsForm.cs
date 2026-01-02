@@ -384,14 +384,14 @@ namespace DynamicsCrm.DevKit.Shared.Logic
 
             // Body fields
             code.AppendLine($"{TAB4}body: [");
-            var bodyArray = GetBodyFieldNames(formXml);
-            code.AppendLine($"{TAB4}{TAB}{string.Join($",{NEW_LINE}{TAB4}{TAB}", bodyArray.Select(x => $"'{x}'"))}");
+            //var bodyArray = GetBodyFieldNames(formXml);
+            code.AppendLine($"{TAB4}{TAB}{string.Join($",{NEW_LINE}{TAB4}{TAB}", BodyFields.Select(x => $"'{x}'"))}");
             code.AppendLine($"{TAB4}],");
 
             // Header fields
             code.AppendLine($"{TAB4}header: [");
-            var headerArray = GetHeaderFieldNames(formXml);
-            code.AppendLine($"{TAB4}{TAB}{string.Join($",{NEW_LINE}{TAB4}{TAB}", headerArray.Select(x => $"'{x}'"))}");
+            //var headerArray = GetHeaderFieldNames(formXml);
+            code.AppendLine($"{TAB4}{TAB}{string.Join($",{NEW_LINE}{TAB4}{TAB}", HeaderFields.Select(x => $"'{x}'"))}");
             code.AppendLine($"{TAB4}],");
 
             // Tab fields
@@ -602,6 +602,8 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             return fields;
         }
 
+        private static List<string> BodyFields = new List<string>();
+
         private static string GetForm_d_ts_Body(string formXml)
         {
             var xdoc = XDocument.Parse(formXml);
@@ -624,11 +626,13 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                             ControlId = x?.Attribute("uniqueid")?.Value
                         }).Distinct().ToList();
             body = body.OrderBy(x => x.Id).ToList();
-            var _d_ts = Get_d_ts_ForListFields(formXml, body, false);
+            var _d_ts = Get_d_ts_ForListFields(formXml, body, false, out BodyFields);
             if (_d_ts.EndsWith($",{NEW_LINE}")) _d_ts = _d_ts.TrimEnd($",{NEW_LINE}".ToCharArray());
             _d_ts = _d_ts.TrimEnd($"{NEW_LINE}".ToCharArray());
             return _d_ts;
         }
+
+        private static List<string> HeaderFields = new List<string>();
 
         private static string GetForm_d_ts_Header(string formXml)
         {
@@ -647,13 +651,14 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                            }).ToList();
             headers = headers.OrderBy(x => x.Name).ToList();
             if (headers.Count() == 0) return string.Empty;
-            var _d_ts = Get_d_ts_ForListFields(formXml, headers, false);
+            var _d_ts = Get_d_ts_ForListFields(formXml, headers, false, out HeaderFields);
             if (_d_ts.EndsWith(",{NEW_LINE}")) _d_ts = _d_ts.TrimEnd($",{NEW_LINE}".ToCharArray()) + $"{NEW_LINE}";
             return _d_ts;
         }
 
-        private static string Get_d_ts_ForListFields(string formXml, List<IdName> list, bool isBPF)
+        private static string Get_d_ts_ForListFields(string formXml, List<IdName> list, bool isBPF, out List<string> names)
         {
+            names = new List<string>();
             var code = string.Empty;
             var previousName = string.Empty;
             var previousCount = 0;
@@ -690,6 +695,8 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                         jsdoc = $"{TAB}{TAB}/** {crmAttribute?.Description?.UserLocalizedLabel?.Label} */{NEW_LINE}";
 
                     jsdoc = string.Empty;
+
+                    names.Add(name);
 
                     if (crmAttribute.AttributeType == AttributeTypeCode.Memo)
                         _d_ts += $"{jsdoc}{TAB}{TAB}{name}: DevKit.Controls.Memo;{NEW_LINE}";
@@ -866,11 +873,13 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                     {
                         _d_ts += $"{TAB}{TAB}{item.Name}: DevKit.Controls.ELSE2???;//{item.Id} - {item.ClassId} -- FOR DEBUG {NEW_LINE}";
                     }
+                    names.Add(item.Id);
                 }
                 else
                 {
                     if (item.Name != null)
                         _d_ts += $"{TAB}{TAB}{item.Name}: DevKit.Controls.ELSE3???;//{item.Id} - {item.ClassId} -- FOR DEBUG {NEW_LINE}";
+                    names.Add(item.Name);
                 }
                 code += _d_ts;
             }

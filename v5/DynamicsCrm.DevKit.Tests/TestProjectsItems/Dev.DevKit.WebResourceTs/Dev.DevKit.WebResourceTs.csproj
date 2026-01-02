@@ -53,7 +53,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Content Include="entities\Account.form.js" />
     <None Include="deploy.debug.bat" />
-    <None Include="entities\___Account.form.ts___" />
+    <TypeScriptCompile Include="entities\_Account.form.ts" />
     <None Include="packages.config" />
     <None Include="package.json" />
     <None Include="tsconfig.json" />

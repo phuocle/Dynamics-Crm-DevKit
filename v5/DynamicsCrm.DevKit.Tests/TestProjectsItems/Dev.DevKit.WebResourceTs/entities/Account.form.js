@@ -6,7 +6,7 @@ var DevKit;
 	DevKit.FormAccount = function(executionContext, defaultWebResourceName) {
 		const form = {
 			body: ["ActionCards", "Address1_Composite", "Address1_FreightTermsCode", "Address1_ShippingMethodCode", "ChildAccounts", "Contacts", "CreditLimit", "CreditOnHold", "Description", "DoNotBulkEMail", "DoNotEMail", "DoNotFax", "DoNotPhone", "DoNotPostalMail", "Fax", "FollowEmail", "IndustryCode", "mapcontrol", "Name", "notescontrol", "OwnershipCode", "ParentAccountId", "PaymentTermsCode", "PreferredContactMethodCode", "PrimaryContactId", "PrimaryContactId1", "SIC", "Telephone1", "TickerSymbol", "TransactionCurrencyId", "WebSiteURL"],
-			bpf: ["AccountBPF___IndustryCode", "AccountBPF___Name", "AccountBPF___PrimaryContactId", "AccountBPF___Revenue"],
+			bpf: ["AccountBPF___IndustryCode", "AccountBPF___Name", "AccountBPF___Name_1", "AccountBPF___PrimaryContactId", "AccountBPF___Revenue"],
 			dialog: [],
 			grid: ["ChildAccounts", "Contacts"],
 			header: ["NumberOfEmployees", "OwnerId", "Revenue"],
@@ -19,7 +19,7 @@ var DevKit;
 	DevKit.FormAccount_DevKitV4 = function(executionContext, defaultWebResourceName) {
 		const form = {
 			body: ["Contacts", "IFRAME_PhuocLe", "OwnerId", "OwnerId1", "OwnerId2", "OwnerId3", "v4_Boolean", "v4_DateOnly", "v4_DateTime", "v4_Decimal", "v4_Double", "v4_Integer", "v4_Lookup", "v4_Lookup1", "v4_Lookup2", "v4_Memo", "v4_Money", "v4_MultiOptionSet", "v4_OptionSet", "v4_String", "v4_String1", "v4_String2", "WebResource_DevKitV4"],
-			bpf: ["AccountBPF___IndustryCode", "AccountBPF___Name", "AccountBPF___PrimaryContactId", "AccountBPF___Revenue"],
+			bpf: ["AccountBPF___IndustryCode", "AccountBPF___Name", "AccountBPF___Name_1", "AccountBPF___PrimaryContactId", "AccountBPF___Revenue"],
 			dialog: [],
 			grid: ["Contacts"],
 			header: ["v4_Integer", "v4_Integer1", "v4_OptionSet", "v4_String"],
@@ -32,7 +32,7 @@ var DevKit;
 	DevKit.FormAccount_for_Interactive_experience = function(executionContext, defaultWebResourceName) {
 		const form = {
 			body: ["Address1_Composite", "Address1_FreightTermsCode", "Address1_ShippingMethodCode", "Contacts", "CreditLimit", "CreditOnHold", "Description", "DoNotBulkEMail", "DoNotEMail", "DoNotFax", "DoNotPhone", "DoNotPostalMail", "Fax", "FollowEmail", "IndustryCode", "Name", "notescontrol", "OwnershipCode", "ParentAccountId", "PaymentTermsCode", "PreferredContactMethodCode", "PrimaryContactId", "PrimaryContactId1", "SIC", "Telephone1", "TransactionCurrencyId", "WebSiteURL"],
-			bpf: ["AccountBPF___IndustryCode", "AccountBPF___Name", "AccountBPF___PrimaryContactId", "AccountBPF___Revenue"],
+			bpf: ["AccountBPF___IndustryCode", "AccountBPF___Name", "AccountBPF___Name_1", "AccountBPF___PrimaryContactId", "AccountBPF___Revenue"],
 			dialog: [],
 			grid: ["Contacts"],
 			header: ["NumberOfEmployees", "OwnerId", "Revenue"],
@@ -45,7 +45,7 @@ var DevKit;
 	DevKit.FormAccount_Information = function(executionContext, defaultWebResourceName) {
 		const form = {
 			body: ["accountactivitiesgrid", "AccountCategoryCode", "accountContactsGrid", "AccountNumber", "Address1_AddressTypeCode", "Address1_City", "Address1_Country", "Address1_FreightTermsCode", "Address1_Line1", "Address1_Line2", "Address1_Line3", "Address1_Name", "Address1_PostalCode", "Address1_ShippingMethodCode", "Address1_StateOrProvince", "Address1_Telephone1", "CreditLimit", "CreditOnHold", "CustomerTypeCode", "Description", "DoNotBulkEMail", "DoNotEMail", "DoNotFax", "DoNotPhone", "DoNotPostalMail", "EMailAddress1", "Fax", "FollowEmail", "IndustryCode", "Name", "notescontrol", "NumberOfEmployees", "OwnerId", "OwnershipCode", "ParentAccountId", "PaymentTermsCode", "PreferredContactMethodCode", "PrimaryContactId", "Revenue", "SIC", "Telephone1", "Telephone2", "TickerSymbol", "TransactionCurrencyId", "WebSiteURL"],
-			bpf: ["AccountBPF___IndustryCode", "AccountBPF___Name", "AccountBPF___PrimaryContactId", "AccountBPF___Revenue"],
+			bpf: ["AccountBPF___IndustryCode", "AccountBPF___Name", "AccountBPF___Name_1", "AccountBPF___PrimaryContactId", "AccountBPF___Revenue"],
 			dialog: [],
 			grid: ["accountactivitiesgrid", "accountContactsGrid"],
 			header: ["CreditLimit", "OwnerId", "PreferredContactMethodCode", "PrimaryContactId", "Revenue"],
