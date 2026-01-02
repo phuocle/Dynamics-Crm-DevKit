@@ -114,10 +114,6 @@ export namespace FormAccount_DevKitV4 {
 	}
 
 	export interface IAccountBPF {
-		IndustryCode: DevKit.Controls.OptionSet;
-		Name: DevKit.Controls.String;
-		PrimaryContactId: DevKit.Controls.Lookup;
-		Revenue: DevKit.Controls.Money;
 	}
 
 	export interface IDialog extends DevKit.IDialog {
@@ -205,8 +201,9 @@ export namespace FormAccount_DevKitV4 {
 				bpf: [
 					'AccountBPF___IndustryCode_1',
 					'AccountBPF___Name',
-					'AccountBPF___PrimaryContactId',
-					'AccountBPF___Revenue_1'
+					'AccountBPF___Name',
+					'AccountBPF___PrimaryContactId_1',
+					'AccountBPF___Revenue_2'
 				],
 				dialog: [
 					

@@ -322,12 +322,12 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                 //code.AppendLine($"{TAB} */");
                 code.AppendLine($"{TAB}export interface I{process.ProcessName} {{");
 
-                foreach (var field in process.Fields)
-                {
-                    var fieldInfo = GetProcessFieldInfo(field);
-                    //code.AppendLine($"{TAB2}/** BPF Field: {fieldInfo.DisplayName} */");
-                    code.AppendLine($"{TAB2}{fieldInfo.Name}: DevKit.Controls.{fieldInfo.Type};");
-                }
+                //foreach (var field in process.Fields)
+                //{
+                //    var fieldInfo = GetProcessFieldInfo(field);
+                //    //code.AppendLine($"{TAB2}/** BPF Field: {fieldInfo.DisplayName} */");
+                //    code.AppendLine($"{TAB2}{fieldInfo.Name}: DevKit.Controls.{fieldInfo.Type};");
+                //}
 
                 code.AppendLine($"{TAB}}}");
                 code.AppendLine();
@@ -364,6 +364,9 @@ namespace DynamicsCrm.DevKit.Shared.Logic
 
             return code.ToString();
         }
+
+
+
 
         private static async Task<string> GetFormClassAsync(string formName, string formXml, bool isQuickCreate)
         {
