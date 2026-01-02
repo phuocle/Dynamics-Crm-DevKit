@@ -596,45 +596,78 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                     .Descendants("row").Descendants("cell").Descendants("control")
                           select new FieldInfo
                           {
-                              LogicalName = x?.Attribute("datafieldname")?.Value ?? x?.Attribute("id")?.Value,
+                              LogicalName = x?.Attribute("datafieldname")?.Value,
                               Id = x?.Attribute("id")?.Value,
                               ClassId = Helper.TrimGuid(x?.Attribute("classid")?.Value?.ToUpper()),
                               ControlId = x?.Attribute("uniqueid")?.Value
                           }).ToList();
 
-            rawFields = rawFields.Where(x => !string.IsNullOrEmpty(x.LogicalName)).ToList();
+            rawFields = rawFields.Where(x => !string.IsNullOrEmpty(x.Id)).ToList();
 
             // Map to SchemaName and handle duplicate names using Dictionary
             var result = new List<FieldInfo>();
             var usedNames = new Dictionary<string, int>();
+            var processedVirtualControls = new List<string>();
 
             foreach (var field in rawFields)
             {
-                var crmAttribute = EntityMetadata?.Attributes?.FirstOrDefault(a => a.LogicalName == field.LogicalName);
-                if (crmAttribute == null) continue;
+                // Get the real ClassId (may be overridden by virtual control)
+                var classId = GetARealClassId(formXml, field.ClassId, field.ControlId);
 
-                var baseName = Helper.SafeIdentifier(crmAttribute.SchemaName);
-                string schemaName;
-
-                if (usedNames.ContainsKey(baseName))
+                // Handle regular attribute controls
+                if (!string.IsNullOrEmpty(field.LogicalName) && ControlClassId.CONTROLS.Contains(classId))
                 {
-                    usedNames[baseName]++;
-                    schemaName = baseName + usedNames[baseName].ToString();
+                    var crmAttribute = EntityMetadata?.Attributes?.FirstOrDefault(a => a.LogicalName == field.LogicalName);
+                    if (crmAttribute == null) continue;
+
+                    var baseName = Helper.SafeIdentifier(crmAttribute.SchemaName);
+                    string schemaName;
+
+                    if (usedNames.ContainsKey(baseName))
+                    {
+                        usedNames[baseName]++;
+                        schemaName = baseName + usedNames[baseName].ToString();
+                    }
+                    else
+                    {
+                        usedNames[baseName] = 0;
+                        schemaName = baseName;
+                    }
+
+                    result.Add(new FieldInfo
+                    {
+                        SchemaName = schemaName,
+                        Id = field.Id,
+                        ClassId = classId,
+                        ControlId = field.ControlId,
+                        LogicalName = field.LogicalName
+                    });
                 }
-                else
+                // Handle virtual controls (IFRAME, WebResource, etc.) - only specific types, not QuickViewForm/SubGrid
+                else if (classId == ControlClassId.IFRAME ||
+                         classId == ControlClassId.WEB_RESOURCE ||
+                         classId == ControlClassId.NOTE ||
+                         classId == ControlClassId.TIMER ||
+                         classId == ControlClassId.EMAIL_ENGAGEMENT_ACTIONS ||
+                         classId == ControlClassId.EMAIL_RECIPIENT_ACTIVITY ||
+                         classId == ControlClassId.ACI_WIDGET ||
+                         classId == ControlClassId.MAP_CONTROL ||
+                         classId == ControlClassId.ACTION_CARDS ||
+                         classId == ControlClassId.POWERBI)
                 {
-                    usedNames[baseName] = 0;
-                    schemaName = baseName;
-                }
+                    var controlId = Helper.SafeIdentifier(field.Id);
+                    if (processedVirtualControls.Contains(controlId)) continue;
+                    processedVirtualControls.Add(controlId);
 
-                result.Add(new FieldInfo
-                {
-                    SchemaName = schemaName,
-                    Id = field.Id,
-                    ClassId = field.ClassId,
-                    ControlId = field.ControlId,
-                    LogicalName = field.LogicalName
-                });
+                    result.Add(new FieldInfo
+                    {
+                        SchemaName = controlId,
+                        Id = field.Id,
+                        ClassId = classId,
+                        ControlId = field.ControlId,
+                        LogicalName = field.LogicalName
+                    });
+                }
             }
 
             return result.OrderBy(x => x.SchemaName).ToList();

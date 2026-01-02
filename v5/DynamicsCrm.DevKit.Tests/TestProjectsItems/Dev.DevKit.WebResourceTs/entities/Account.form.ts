@@ -19,6 +19,7 @@ import './OptionSet';
 export namespace FormAccount_DevKitV4 {
 
 	export interface IBody {
+		IFRAME_PhuocLe: DevKit.Controls.IFrame;
 		OwnerId: DevKit.Controls.Lookup;
 		/** Owner */
 		OwnerId1: DevKit.Controls.Lookup;
@@ -42,7 +43,6 @@ export namespace FormAccount_DevKitV4 {
 		v4_Lookup: DevKit.Controls.Lookup;
 		/** Lookup */
 		v4_Lookup1: DevKit.Controls.Lookup;
-		v4_Lookup2: DevKit.Controls.Lookup;
 		/** Memo */
 		v4_Memo: DevKit.Controls.Memo;
 		/** Money */
@@ -57,6 +57,7 @@ export namespace FormAccount_DevKitV4 {
 		v4_String1: DevKit.Controls.String;
 		/** String */
 		v4_String2: DevKit.Controls.String;
+		WebResource_DevKitV4: DevKit.Controls.WebResource;
 		Tab: ITabs;
 	}
 
@@ -159,6 +160,7 @@ export namespace FormAccount_DevKitV4 {
 		constructor(executionContext: any, defaultWebResourceName?: string) {
 			super(executionContext, defaultWebResourceName, {
 				body: [
+					'IFRAME_PhuocLe',
 					'OwnerId',
 					'OwnerId1',
 					'OwnerId2',
@@ -171,14 +173,14 @@ export namespace FormAccount_DevKitV4 {
 					'v4_Integer',
 					'v4_Lookup',
 					'v4_Lookup1',
-					'v4_Lookup2',
 					'v4_Memo',
 					'v4_Money',
 					'v4_MultiOptionSet',
 					'v4_OptionSet',
 					'v4_String',
 					'v4_String1',
-					'v4_String2'
+					'v4_String2',
+					'WebResource_DevKitV4'
 				],
 				header: [
 					'v4_Integer',
@@ -228,7 +230,7 @@ export namespace FormAccount_DevKitV4 {
 					'AccountBPF___Revenue'
 				],
 				dialog: [
-					
+
 				]
 			});
 		}
