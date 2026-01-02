@@ -72,14 +72,39 @@ namespace DynamicsCrm.DevKit.Shared
             catch { return cipherText; }
         }
 
+        /// <summary>
+        /// Optimized comparison that ignores whitespace (Space, Tab, CR, LF) and performs a case-insensitive check.
+        /// This implementation is allocation-free (O(N)) compared to the previous Replace-based approach.
+        /// </summary>
         public static bool IsTheSame(string value1, string value2)
         {
-            if (value1 == null && value2 == null) return true;
-            if (value1 != null && value2 == null) return false;
-            if (value1 == null && value2 != null) return false;
-            value1 = value1.Replace("\r\n", string.Empty).Replace("\r", string.Empty).Replace("\t", string.Empty).Replace(" ", string.Empty).Trim();
-            value2 = value2.Replace("\r\n", string.Empty).Replace("\r", string.Empty).Replace("\t", string.Empty).Replace(" ", string.Empty).Trim();
-            return string.Equals(value1, value2, StringComparison.OrdinalIgnoreCase);
+            if (ReferenceEquals(value1, value2)) return true;
+            if (value1 == null || value2 == null) return false;
+
+            var len1 = value1.Length;
+            var len2 = value2.Length;
+            var i1 = 0;
+            var i2 = 0;
+
+            while (i1 < len1 || i2 < len2)
+            {
+                while (i1 < len1 && IsIgnoredChar(value1[i1])) i1++;
+                while (i2 < len2 && IsIgnoredChar(value2[i2])) i2++;
+
+                if (i1 == len1 && i2 == len2) return true;
+                if (i1 == len1 || i2 == len2) return false;
+
+                if (char.ToUpperInvariant(value1[i1]) != char.ToUpperInvariant(value2[i2])) return false;
+
+                i1++;
+                i2++;
+            }
+            return true;
+        }
+
+        private static bool IsIgnoredChar(char c)
+        {
+            return c == '\r' || c == '\n' || c == '\t' || c == ' ';
         }
 
         public static async Task<string> ReadEmbeddedResourceAsync(string path)
