@@ -26,21 +26,21 @@ export namespace FormEmail {
 		/** Type the number of minutes spent creating and sending the email. The duration is used in reporting. */
 		ActualDurationMinutes: DevKit.Controls.Integer;
 		/** Enter the recipients that are included on the email distribution, but are not displayed to other recipients. */
-		bcc: DevKit.Controls.String;
+		bcc: DevKit.Controls.Lookup;
 		/** Enter the recipients that should be copied on the email. */
-		cc: DevKit.Controls.String;
+		cc: DevKit.Controls.Lookup;
 		/** Type the greeting and message text of the email. */
 		Description: DevKit.Controls.Memo;
 		emailengagementactionscontrol: DevKit.Controls.EmailEngagement;
 		emailrecipientactivitycontrol: DevKit.Controls.EmailRecipient;
 		/** Enter the sender of the email. */
-		from: DevKit.Controls.String;
+		from: DevKit.Controls.Lookup;
 		/** Choose the record that the email relates to. */
 		RegardingObjectId: DevKit.Controls.Lookup;
 		/** Type a short description about the objective or primary topic of the email. */
 		Subject: DevKit.Controls.String;
 		/** Enter the account, contact, lead, queue, or user recipients for the email. */
-		to: DevKit.Controls.String;
+		to: DevKit.Controls.Lookup;
 		Tab: ITabs;
 	}
 
@@ -192,19 +192,19 @@ export namespace FormEmail_for_Interactive_experience {
 	 */
 	export interface IBody {
 		/** Enter the recipients that are included on the email distribution, but are not displayed to other recipients. */
-		bcc: DevKit.Controls.String;
+		bcc: DevKit.Controls.Lookup;
 		/** Enter the recipients that should be copied on the email. */
-		cc: DevKit.Controls.String;
+		cc: DevKit.Controls.Lookup;
 		/** Type the greeting and message text of the email. */
 		Description: DevKit.Controls.Memo;
 		/** Enter the sender of the email. */
-		from: DevKit.Controls.String;
+		from: DevKit.Controls.Lookup;
 		/** Choose the record that the email relates to. */
 		RegardingObjectId: DevKit.Controls.Lookup;
 		/** Type a short description about the objective or primary topic of the email. */
 		Subject: DevKit.Controls.String;
 		/** Enter the account, contact, lead, queue, or user recipients for the email. */
-		to: DevKit.Controls.String;
+		to: DevKit.Controls.Lookup;
 		Tab: ITabs;
 	}
 
@@ -342,19 +342,19 @@ export namespace FormEnhanced_Email {
 	 */
 	export interface IBody {
 		/** Enter the recipients that are included on the email distribution, but are not displayed to other recipients. */
-		bcc: DevKit.Controls.String;
+		bcc: DevKit.Controls.Lookup;
 		/** Enter the recipients that should be copied on the email. */
-		cc: DevKit.Controls.String;
+		cc: DevKit.Controls.Lookup;
 		/** Type the greeting and message text of the email. */
 		Description: DevKit.Controls.Memo;
 		/** Enter the sender of the email. */
-		from: DevKit.Controls.String;
+		from: DevKit.Controls.Lookup;
 		/** Choose the record that the email relates to. */
 		RegardingObjectId: DevKit.Controls.Lookup;
 		/** Type a short description about the objective or primary topic of the email. */
 		Subject: DevKit.Controls.String;
 		/** Enter the account, contact, lead, queue, or user recipients for the email. */
-		to: DevKit.Controls.String;
+		to: DevKit.Controls.Lookup;
 		Tab: ITabs;
 	}
 
@@ -490,13 +490,13 @@ export namespace FormEmail_Wizard {
 		/** Type the number of minutes spent creating and sending the email. The duration is used in reporting. */
 		ActualDurationMinutes: DevKit.Controls.Integer;
 		/** Enter the recipients that are included on the email distribution, but are not displayed to other recipients. */
-		bcc: DevKit.Controls.String;
+		bcc: DevKit.Controls.Lookup;
 		/** Enter the recipients that should be copied on the email. */
-		cc: DevKit.Controls.String;
+		cc: DevKit.Controls.Lookup;
 		/** Type the greeting and message text of the email. */
 		Description: DevKit.Controls.Memo;
 		/** Enter the sender of the email. */
-		from: DevKit.Controls.String;
+		from: DevKit.Controls.Lookup;
 		/** Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
 		OwnerId: DevKit.Controls.Lookup;
 		/** Choose the record that the email relates to. */
@@ -506,7 +506,7 @@ export namespace FormEmail_Wizard {
 		/** Type a short description about the objective or primary topic of the email. */
 		Subject: DevKit.Controls.String;
 		/** Enter the account, contact, lead, queue, or user recipients for the email. */
-		to: DevKit.Controls.String;
+		to: DevKit.Controls.Lookup;
 		Tab: ITabs;
 	}
 
