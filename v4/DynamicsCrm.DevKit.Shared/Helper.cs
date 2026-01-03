@@ -104,13 +104,16 @@ namespace DynamicsCrm.DevKit.Shared
 
         private static string GetIdentifier(string name)
         {
-            var value = string.Empty;
-            for (int i = 0; i < name.Length; ++i)
+            if (string.IsNullOrEmpty(name)) return string.Empty;
+            // ⚡ Bolt: Optimized from O(N^2) string concatenation to O(N) using StringBuilder
+            // This is critical for performance during large-scale code generation where this is called frequently
+            var sb = new StringBuilder(name.Length);
+            foreach (var c in name)
             {
-                if (char.IsLetterOrDigit(name[i]) || name[i] == ' ' || name[i] == '-' || name[i] == '_')
-                    value += name[i];
+                if (char.IsLetterOrDigit(c) || c == ' ' || c == '-' || c == '_')
+                    sb.Append(c);
             }
-            return value;
+            return sb.ToString();
         }
 
         public static string SafeIdentifier(string name)
