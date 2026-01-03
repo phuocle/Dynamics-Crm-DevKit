@@ -279,6 +279,15 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var oldCode = await FileHelper.ReadAllTextAsync(fileEndsWith);
                     var isJsWebApiExist = File.Exists(Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}.webapi.js"));
                     var newCode = await TsForm.GetTsFormCodeAsync(ServiceClient, entityMetadata, Json.rootnamespace, isJsWebApiExist);
+
+                    // Skip if no forms exist for this entity
+                    if (string.IsNullOrEmpty(newCode))
+                    {
+                        CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.DarkGray, CliAction.DO_NOTHING, ConsoleColor.White, $"{schemaName}{endsWith}", ConsoleColor.DarkGray, " (no forms)");
+                        i++;
+                        continue;
+                    }
+
                     if (Helper.IsTheSame(oldCode, newCode))
                     {
                         CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, $"{schemaName}{endsWith}");

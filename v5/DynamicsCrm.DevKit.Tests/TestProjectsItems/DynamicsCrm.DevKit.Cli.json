@@ -98,7 +98,7 @@
       "type": "JsForm",
       "rootnamespace": "DevKit",
       "rootfolder": "",
-      "entities": "folder"
+      "entities": "Email"
     },
     {
       "profile": "JS-WEBAPI",
@@ -112,7 +112,7 @@
       "type": "TsForm",
       "rootnamespace": "DevKit",
       "rootfolder": "",
-      "entities": "Account,Contact,Team,SystemUser,Task"
+      "entities": "Email"
     }
   ],
   "downloadwebresources": [

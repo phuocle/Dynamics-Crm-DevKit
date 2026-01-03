@@ -47,6 +47,12 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             RootNamespace = rootNamespace;
             var forms = await XrmHelper.GetEntityFormsAsync(serviceClient, entityMetadata.LogicalName);
 
+            // If no forms exist for this entity, return null to skip file generation
+            if (forms == null || forms.Count == 0)
+            {
+                return null;
+            }
+
             var code = new StringBuilder();
 
             // Header comments
@@ -235,9 +241,13 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code.AppendLine($"{TAB}export interface INavigation {{");
 
             var navigationFields = GetNavigationFields(form.FormXml);
-            foreach (var field in navigationFields)
+            foreach (var nav in navigationFields)
             {
-                code.AppendLine($"{TAB2}{field}: DevKit.Controls.NavigationItem;");
+                if (!string.IsNullOrEmpty(nav.Title))
+                {
+                    code.AppendLine($"{TAB2}/** {nav.Title} */");
+                }
+                code.AppendLine($"{TAB2}{nav.Id}: DevKit.Controls.NavigationItem;");
             }
 
             code.AppendLine($"{TAB}}}");
@@ -451,6 +461,19 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             return code.ToString();
         }
 
+        private class TabInfo
+        {
+            public string Name { get; set; }
+            public string Label { get; set; }
+            public List<SectionInfo> Sections { get; set; }
+        }
+
+        private class SectionInfo
+        {
+            public string Name { get; set; }
+            public string Label { get; set; }
+        }
+
         private static string GetTabsInterfaces(string formXml)
         {
             var code = new StringBuilder();
@@ -459,6 +482,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                        select new
                        {
                            Name = x?.Attribute("name")?.Value,
+                           Label = x?.Descendants("labels")?.Descendants("label")?.FirstOrDefault()?.Attribute("description")?.Value,
                            InnerText = x?.ToString()
                        };
             tabs = tabs.OrderBy(x => x.Name).ToList();
@@ -466,7 +490,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             if (tabs.Count() == 0) return string.Empty;
 
             var existTabs = new List<string>();
-            var tabInterfaces = new List<(string tabName, List<string> sections)>();
+            var tabInfos = new List<TabInfo>();
 
             foreach (var tab in tabs)
             {
@@ -481,40 +505,54 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                                .Descendants("column")
                                .Descendants("sections")
                                .Elements("section")
-                               select x2?.Attribute("name")?.Value;
-                sections = sections.OrderBy(x => x).ToList();
+                               select new
+                               {
+                                   Name = x2?.Attribute("name")?.Value,
+                                   Label = x2?.Descendants("labels")?.Descendants("label")?.FirstOrDefault()?.Attribute("description")?.Value
+                               };
+                sections = sections.OrderBy(x => x.Name).ToList();
 
-                var sectionList = new List<string>();
+                var sectionList = new List<SectionInfo>();
                 var existSections = new List<string>();
 
                 foreach (var section in sections)
                 {
-                    if (section == null) continue;
-                    if (section.StartsWith("ref_pan")) continue;
-                    if (string.IsNullOrEmpty(Helper.SafeIdentifier(section))) continue;
-                    if (existSections.Contains(Helper.SafeIdentifier(section))) continue;
-                    existSections.Add(Helper.SafeIdentifier(section));
+                    if (section.Name == null) continue;
+                    if (section.Name.StartsWith("ref_pan")) continue;
+                    if (string.IsNullOrEmpty(Helper.SafeIdentifier(section.Name))) continue;
+                    if (existSections.Contains(Helper.SafeIdentifier(section.Name))) continue;
+                    existSections.Add(Helper.SafeIdentifier(section.Name));
 
-                    sectionList.Add(Helper.SafeIdentifier(section));
+                    sectionList.Add(new SectionInfo
+                    {
+                        Name = Helper.SafeIdentifier(section.Name),
+                        Label = section.Label
+                    });
                 }
 
                 if (sectionList.Count > 0)
                 {
-                    tabInterfaces.Add((tabName, sectionList));
+                    tabInfos.Add(new TabInfo
+                    {
+                        Name = tabName,
+                        Label = tab.Label,
+                        Sections = sectionList
+                    });
                 }
             }
 
             // Generate section interfaces
-            foreach (var (tabName, sections) in tabInterfaces)
+            foreach (var tabInfo in tabInfos)
             {
-                //code.AppendLine($"{TAB}/**");
-                //code.AppendLine($"{TAB} * {tabName} sections interface");
-                //code.AppendLine($"{TAB} */");
-                code.AppendLine($"{TAB}export interface I{tabName}TabSections {{");
+                code.AppendLine($"{TAB}export interface I{tabInfo.Name}TabSections {{");
 
-                foreach (var section in sections)
+                foreach (var section in tabInfo.Sections)
                 {
-                    code.AppendLine($"{TAB2}{section}: DevKit.Controls.Section;");
+                    if (!string.IsNullOrEmpty(section.Label))
+                    {
+                        code.AppendLine($"{TAB2}/** {section.Label} */");
+                    }
+                    code.AppendLine($"{TAB2}{section.Name}: DevKit.Controls.Section;");
                 }
 
                 code.AppendLine($"{TAB}}}");
@@ -522,27 +560,28 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             }
 
             // Generate tab interfaces
-            foreach (var (tabName, _) in tabInterfaces)
+            foreach (var tabInfo in tabInfos)
             {
-                //code.AppendLine($"{TAB}/**");
-                //code.AppendLine($"{TAB} * {tabName} tab interface");
-                //code.AppendLine($"{TAB} */");
-                code.AppendLine($"{TAB}export interface I{tabName}Tab extends DevKit.Controls.ITab {{");
-                code.AppendLine($"{TAB2}Section: I{tabName}TabSections;");
+                if (!string.IsNullOrEmpty(tabInfo.Label))
+                {
+                    code.AppendLine($"{TAB}/** {tabInfo.Label} */");
+                }
+                code.AppendLine($"{TAB}export interface I{tabInfo.Name}Tab extends DevKit.Controls.ITab {{");
+                code.AppendLine($"{TAB2}Section: I{tabInfo.Name}TabSections;");
                 code.AppendLine($"{TAB}}}");
                 code.AppendLine();
             }
 
             // Generate ITabs interface
-            //code.AppendLine($"{TAB}/**");
-            //code.AppendLine($"{TAB} * Tabs interface");
-            //code.AppendLine($"{TAB} * Contains all tabs on the form");
-            //code.AppendLine($"{TAB} */");
             code.AppendLine($"{TAB}export interface ITabs {{");
 
-            foreach (var (tabName, _) in tabInterfaces)
+            foreach (var tabInfo in tabInfos)
             {
-                code.AppendLine($"{TAB2}{tabName}: I{tabName}Tab;");
+                if (!string.IsNullOrEmpty(tabInfo.Label))
+                {
+                    code.AppendLine($"{TAB2}/** {tabInfo.Label} */");
+                }
+                code.AppendLine($"{TAB2}{tabInfo.Name}: I{tabInfo.Name}Tab;");
             }
 
             code.AppendLine($"{TAB}}}");
@@ -740,24 +779,34 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             return gridFields;
         }
 
-        private static List<string> GetNavigationFields(string formXml)
+        private class NavigationInfo
+        {
+            public string Id { get; set; }
+            public string Title { get; set; }
+        }
+
+        private static List<NavigationInfo> GetNavigationFields(string formXml)
         {
             var xdoc = XDocument.Parse(formXml);
-            var navIds = (from x in xdoc
+            var navItems = (from x in xdoc
                             .Descendants("Navigation")
                             .Descendants("NavBar")
                             .Descendants("NavBarByRelationshipItem")
-                            select x?.Attribute("Id")?.Value)
-                            .Where(id => !string.IsNullOrEmpty(id))
-                            .Distinct()
-                            .ToList();
+                            let id = x?.Attribute("Id")?.Value
+                            let title = x?.Descendants("Titles")?.Descendants("Title")?.FirstOrDefault()?.Attribute("Text")?.Value
+                            where !string.IsNullOrEmpty(id)
+                            select new NavigationInfo
+                            {
+                                Id = Helper.SafeIdentifier(id),
+                                Title = title
+                            }).Distinct().ToList();
 
-            if (EntityMetadata.IsActivityParty == true && !navIds.Contains("navActivities"))
+            if (EntityMetadata.IsActivityParty == true && !navItems.Any(x => x.Id == "navActivities"))
             {
-                navIds.Add("navActivities");
+                navItems.Add(new NavigationInfo { Id = "navActivities", Title = "Activities" });
             }
 
-            return navIds.OrderBy(x => x).Select(x => Helper.SafeIdentifier(x)).ToList();
+            return navItems.OrderBy(x => x.Id).ToList();
         }
 
         private static async Task<List<QuickFormInfo>> GetQuickFormFieldsAsync(string formXml)
@@ -1071,22 +1120,8 @@ namespace DynamicsCrm.DevKit.Shared.Logic
 
         private static List<string> GetNavigationFieldNames(string formXml)
         {
-            var xdoc = XDocument.Parse(formXml);
-            var navIds = (from x in xdoc
-                            .Descendants("Navigation")
-                            .Descendants("NavBar")
-                            .Descendants("NavBarByRelationshipItem")
-                            select x?.Attribute("Id")?.Value)
-                            .Where(id => !string.IsNullOrEmpty(id))
-                            .Distinct()
-                            .ToList();
-
-            if (EntityMetadata.IsActivityParty == true && !navIds.Contains("navActivities"))
-            {
-                navIds.Add("navActivities");
-            }
-
-            return navIds.OrderBy(x => x).Select(x => Helper.SafeIdentifier(x)).ToList();
+            var navItems = GetNavigationFields(formXml);
+            return navItems.Select(x => x.Id).ToList();
         }
 
         private static async Task<List<string>> GetQuickFormFieldNamesAsync(string formXml)
@@ -1307,6 +1342,46 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             if (field.ClassId == ControlClassId.WEB_RESOURCE)
                 return "WebResource";
 
+            // Check for Note control
+            if (field.ClassId == ControlClassId.NOTE)
+                return "Note";
+
+            // Check for Map control
+            if (field.ClassId == ControlClassId.MAP_CONTROL)
+                return "Map";
+
+            // Check for ActionCards control
+            if (field.ClassId == ControlClassId.ACTION_CARDS)
+                return "ActionCards";
+
+            // Check for Timer control
+            if (field.ClassId == ControlClassId.TIMER)
+                return "Timer";
+
+            // Check for PowerBi control
+            if (field.ClassId == ControlClassId.POWERBI)
+                return "PowerBi";
+
+            // Check for EmailEngagement control
+            if (field.ClassId == ControlClassId.EMAIL_ENGAGEMENT_ACTIONS)
+                return "EmailEngagement";
+
+            // Check for EmailRecipient control
+            if (field.ClassId == ControlClassId.EMAIL_RECIPIENT_ACTIVITY)
+                return "EmailRecipient";
+
+            // Check for AciWidget control
+            if (field.ClassId == ControlClassId.ACI_WIDGET)
+                return "AciWidget";
+
+            // Check for File control
+            if (field.ClassId == ControlClassId.FILE)
+                return "File";
+
+            // Check for Image control
+            if (field.ClassId == ControlClassId.IMAGE)
+                return "Image";
+
             // Try to find the attribute in metadata
             var logicalName = !string.IsNullOrEmpty(field.LogicalName) ? field.LogicalName : field.Id?.ToLower();
             var attribute = EntityMetadata.Attributes?.FirstOrDefault(x => x.LogicalName == logicalName);
@@ -1337,6 +1412,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                 case AttributeTypeCode.Lookup:
                 case AttributeTypeCode.Customer:
                 case AttributeTypeCode.Owner:
+                case AttributeTypeCode.PartyList:
                     return "Lookup";
                 case AttributeTypeCode.Money:
                     return "Money";

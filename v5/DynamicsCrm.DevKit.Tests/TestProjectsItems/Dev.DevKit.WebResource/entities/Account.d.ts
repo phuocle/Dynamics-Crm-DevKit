@@ -93,20 +93,13 @@ declare namespace DevKit {
 			WebSiteURL: DevKit.Controls.String;
 		}
 		interface Navigation {
-			account_adx_inviteredemptions: DevKit.Controls.NavigationItem;
-			account_adx_portalcomments: DevKit.Controls.NavigationItem;
-			Account_Appointments: DevKit.Controls.NavigationItem;
-			account_DeletedItemReferences: DevKit.Controls.NavigationItem;
-			Account_Email_EmailSender: DevKit.Controls.NavigationItem;
-			Account_Email_SendersAccount: DevKit.Controls.NavigationItem;
-			Account_Emails: DevKit.Controls.NavigationItem;
-			account_parent_account: DevKit.Controls.NavigationItem;
-			Account_Phonecalls: DevKit.Controls.NavigationItem;
-			Account_Tasks: DevKit.Controls.NavigationItem;
-			adx_invitation_assigntoaccount: DevKit.Controls.NavigationItem;
-			contact_customer_accounts: DevKit.Controls.NavigationItem;
-			msa_account_managingpartner: DevKit.Controls.NavigationItem;
-			msa_contact_managingpartner: DevKit.Controls.NavigationItem;
+			navActivities: DevKit.Controls.NavigationItem;
+			navAddresses: DevKit.Controls.NavigationItem;
+			navAsyncOperations: DevKit.Controls.NavigationItem;
+			navCampaignsInSFA: DevKit.Controls.NavigationItem;
+			navProcessSessions: DevKit.Controls.NavigationItem;
+			navRelationships: DevKit.Controls.NavigationItem;
+			navSubAccts: DevKit.Controls.NavigationItem;
 		}
 		interface quickForm_contactquickform_Body {
 			EMailAddress1: DevKit.Controls.QuickView;
@@ -117,6 +110,21 @@ declare namespace DevKit {
 		}
 		interface QuickForm {
 			contactquickform: quickForm_contactquickform;
+		}
+		interface ProcessAccountBPF {
+			/** Select the account's primary industry for use in marketing segmentation and demographic analysis. */
+			IndustryCode: DevKit.Controls.OptionSet;
+			/** Type the company or business name. */
+			Name: DevKit.Controls.String;
+			/** Type the company or business name. */
+			Name_1: DevKit.Controls.String;
+			/** Choose the primary contact for the account to provide quick access to contact details. */
+			PrimaryContactId: DevKit.Controls.Lookup;
+			/** Type the annual revenue for the account, used as an indicator in financial performance analysis. */
+			Revenue: DevKit.Controls.Money;
+		}
+		interface Process extends DevKit.Controls.IProcess {
+			AccountBPF: ProcessAccountBPF;
 		}
 		interface Grid {
 			ChildAccounts: DevKit.Controls.Grid;
@@ -138,8 +146,133 @@ declare namespace DevKit {
 		Navigation: DevKit.FormAccount.Navigation;
 		/** The QuickForm of form Account */
 		QuickForm: DevKit.FormAccount.QuickForm;
+		/** The Process of form Account */
+		Process: DevKit.FormAccount.Process;
 		/** The Grid of form Account */
 		Grid: DevKit.FormAccount.Grid;
+	}
+	namespace FormAccount_DevKitV4 {
+		interface Header extends DevKit.Controls.IHeader {
+			v4_Integer: DevKit.Controls.Integer;
+			v4_Integer1: DevKit.Controls.Integer;
+			v4_OptionSet: DevKit.Controls.OptionSet;
+			v4_String: DevKit.Controls.String;
+		}
+		interface tab_TAB_1_Sections {
+			TAB_1_SECTION_1: DevKit.Controls.Section;
+			TAB_1_SECTION_2: DevKit.Controls.Section;
+			TAB_1_SECTION_3: DevKit.Controls.Section;
+			TAB_1_SECTION_4: DevKit.Controls.Section;
+		}
+		interface tab_TAB_2_Sections {
+			TAB_2_SECTION_1: DevKit.Controls.Section;
+			TAB_2_SECTION_2: DevKit.Controls.Section;
+		}
+		interface tab_TAB_1 extends DevKit.Controls.ITab {
+			Section: tab_TAB_1_Sections;
+		}
+		interface tab_TAB_2 extends DevKit.Controls.ITab {
+			Section: tab_TAB_2_Sections;
+		}
+		interface Tabs {
+			TAB_1: tab_TAB_1;
+			TAB_2: tab_TAB_2;
+		}
+		interface Body {
+			Tab: Tabs;
+			/** Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
+			OwnerId: DevKit.Controls.Lookup;
+			IFRAME_PhuocLe: DevKit.Controls.IFrame;
+			/** Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
+			OwnerId1: DevKit.Controls.Lookup;
+			/** Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
+			OwnerId2: DevKit.Controls.Lookup;
+			/** Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
+			OwnerId3: DevKit.Controls.Lookup;
+			v4_Boolean: DevKit.Controls.Boolean;
+			v4_DateOnly: DevKit.Controls.Date;
+			v4_DateTime: DevKit.Controls.DateTime;
+			v4_Decimal: DevKit.Controls.Decimal;
+			v4_Double: DevKit.Controls.Double;
+			v4_Integer: DevKit.Controls.Integer;
+			v4_Lookup: DevKit.Controls.Lookup;
+			v4_Lookup1: DevKit.Controls.Lookup;
+			v4_Memo: DevKit.Controls.String;
+			v4_Money: DevKit.Controls.Money;
+			v4_MultiOptionSet: DevKit.Controls.MultiOptionSet;
+			v4_OptionSet: DevKit.Controls.OptionSet;
+			v4_String: DevKit.Controls.String;
+			v4_String1: DevKit.Controls.String;
+			v4_String2: DevKit.Controls.String;
+			WebResource_DevKitV4: DevKit.Controls.WebResource;
+		}
+		interface Navigation {
+			nav_adx_invitation_assigntoaccount: DevKit.Controls.NavigationItem;
+			nav_msa_account_managingpartner: DevKit.Controls.NavigationItem;
+			nav_msa_contact_managingpartner: DevKit.Controls.NavigationItem;
+			navActivities: DevKit.Controls.NavigationItem;
+			navAddresses: DevKit.Controls.NavigationItem;
+			navAsyncOperations: DevKit.Controls.NavigationItem;
+			navAudit: DevKit.Controls.NavigationItem;
+			navCampaignsInSFA: DevKit.Controls.NavigationItem;
+			navConnections: DevKit.Controls.NavigationItem;
+			navContacts: DevKit.Controls.NavigationItem;
+			navProcessSessions: DevKit.Controls.NavigationItem;
+			navRelationships: DevKit.Controls.NavigationItem;
+			navSocialprofiles: DevKit.Controls.NavigationItem;
+			navSubAccts: DevKit.Controls.NavigationItem;
+		}
+		interface quickForm_ContactQuickForm_Body {
+			EMailAddress1: DevKit.Controls.QuickView;
+			FirstName: DevKit.Controls.QuickView;
+			LastName: DevKit.Controls.QuickView;
+			MobilePhone: DevKit.Controls.QuickView;
+			ParentCustomerId: DevKit.Controls.QuickView;
+		}
+		interface quickForm_ContactQuickForm extends DevKit.Controls.IQuickView {
+			Body: quickForm_ContactQuickForm_Body;
+		}
+		interface QuickForm {
+			ContactQuickForm: quickForm_ContactQuickForm;
+		}
+		interface ProcessAccountBPF {
+			/** Select the account's primary industry for use in marketing segmentation and demographic analysis. */
+			IndustryCode: DevKit.Controls.OptionSet;
+			/** Type the company or business name. */
+			Name: DevKit.Controls.String;
+			/** Type the company or business name. */
+			Name_1: DevKit.Controls.String;
+			/** Choose the primary contact for the account to provide quick access to contact details. */
+			PrimaryContactId: DevKit.Controls.Lookup;
+			/** Type the annual revenue for the account, used as an indicator in financial performance analysis. */
+			Revenue: DevKit.Controls.Money;
+		}
+		interface Process extends DevKit.Controls.IProcess {
+			AccountBPF: ProcessAccountBPF;
+		}
+		interface Grid {
+			Contacts: DevKit.Controls.Grid;
+		}
+	}
+	export class FormAccount_DevKitV4 extends DevKit.IForm {
+		/**
+		* Account DevKitV4 [Main Form]
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** The Body section of form Account_DevKitV4 */
+		Body: DevKit.FormAccount_DevKitV4.Body;
+		/** The Header section of form Account_DevKitV4 */
+		Header: DevKit.FormAccount_DevKitV4.Header;
+		/** The Navigation of form Account_DevKitV4 */
+		Navigation: DevKit.FormAccount_DevKitV4.Navigation;
+		/** The QuickForm of form Account_DevKitV4 */
+		QuickForm: DevKit.FormAccount_DevKitV4.QuickForm;
+		/** The Process of form Account_DevKitV4 */
+		Process: DevKit.FormAccount_DevKitV4.Process;
+		/** The Grid of form Account_DevKitV4 */
+		Grid: DevKit.FormAccount_DevKitV4.Grid;
 	}
 	namespace FormAccount_for_Interactive_experience {
 		interface Header extends DevKit.Controls.IHeader {
@@ -225,20 +358,12 @@ declare namespace DevKit {
 			WebSiteURL: DevKit.Controls.String;
 		}
 		interface Navigation {
-			account_adx_inviteredemptions: DevKit.Controls.NavigationItem;
-			account_adx_portalcomments: DevKit.Controls.NavigationItem;
-			Account_Appointments: DevKit.Controls.NavigationItem;
-			account_DeletedItemReferences: DevKit.Controls.NavigationItem;
-			Account_Email_EmailSender: DevKit.Controls.NavigationItem;
-			Account_Email_SendersAccount: DevKit.Controls.NavigationItem;
-			Account_Emails: DevKit.Controls.NavigationItem;
-			account_parent_account: DevKit.Controls.NavigationItem;
-			Account_Phonecalls: DevKit.Controls.NavigationItem;
-			Account_Tasks: DevKit.Controls.NavigationItem;
-			adx_invitation_assigntoaccount: DevKit.Controls.NavigationItem;
-			contact_customer_accounts: DevKit.Controls.NavigationItem;
-			msa_account_managingpartner: DevKit.Controls.NavigationItem;
-			msa_contact_managingpartner: DevKit.Controls.NavigationItem;
+			navActivities: DevKit.Controls.NavigationItem;
+			navAddresses: DevKit.Controls.NavigationItem;
+			navAsyncOperations: DevKit.Controls.NavigationItem;
+			navProcessSessions: DevKit.Controls.NavigationItem;
+			navRelationships: DevKit.Controls.NavigationItem;
+			navSubAccts: DevKit.Controls.NavigationItem;
 		}
 		interface quickForm_contactquickform_Body {
 			EMailAddress1: DevKit.Controls.QuickView;
@@ -249,6 +374,21 @@ declare namespace DevKit {
 		}
 		interface QuickForm {
 			contactquickform: quickForm_contactquickform;
+		}
+		interface ProcessAccountBPF {
+			/** Select the account's primary industry for use in marketing segmentation and demographic analysis. */
+			IndustryCode: DevKit.Controls.OptionSet;
+			/** Type the company or business name. */
+			Name: DevKit.Controls.String;
+			/** Type the company or business name. */
+			Name_1: DevKit.Controls.String;
+			/** Choose the primary contact for the account to provide quick access to contact details. */
+			PrimaryContactId: DevKit.Controls.Lookup;
+			/** Type the annual revenue for the account, used as an indicator in financial performance analysis. */
+			Revenue: DevKit.Controls.Money;
+		}
+		interface Process extends DevKit.Controls.IProcess {
+			AccountBPF: ProcessAccountBPF;
 		}
 		interface Grid {
 			Contacts: DevKit.Controls.Grid;
@@ -269,6 +409,8 @@ declare namespace DevKit {
 		Navigation: DevKit.FormAccount_for_Interactive_experience.Navigation;
 		/** The QuickForm of form Account_for_Interactive_experience */
 		QuickForm: DevKit.FormAccount_for_Interactive_experience.QuickForm;
+		/** The Process of form Account_for_Interactive_experience */
+		Process: DevKit.FormAccount_for_Interactive_experience.Process;
 		/** The Grid of form Account_for_Interactive_experience */
 		Grid: DevKit.FormAccount_for_Interactive_experience.Grid;
 	}
@@ -418,20 +560,26 @@ declare namespace DevKit {
 			WebSiteURL: DevKit.Controls.String;
 		}
 		interface Navigation {
-			account_adx_inviteredemptions: DevKit.Controls.NavigationItem;
-			account_adx_portalcomments: DevKit.Controls.NavigationItem;
-			Account_Appointments: DevKit.Controls.NavigationItem;
-			account_DeletedItemReferences: DevKit.Controls.NavigationItem;
-			Account_Email_EmailSender: DevKit.Controls.NavigationItem;
-			Account_Email_SendersAccount: DevKit.Controls.NavigationItem;
-			Account_Emails: DevKit.Controls.NavigationItem;
-			account_parent_account: DevKit.Controls.NavigationItem;
-			Account_Phonecalls: DevKit.Controls.NavigationItem;
-			Account_Tasks: DevKit.Controls.NavigationItem;
-			adx_invitation_assigntoaccount: DevKit.Controls.NavigationItem;
-			contact_customer_accounts: DevKit.Controls.NavigationItem;
-			msa_account_managingpartner: DevKit.Controls.NavigationItem;
-			msa_contact_managingpartner: DevKit.Controls.NavigationItem;
+			navActivities: DevKit.Controls.NavigationItem;
+			navActivityHistory: DevKit.Controls.NavigationItem;
+			navAddresses: DevKit.Controls.NavigationItem;
+			navRelationships: DevKit.Controls.NavigationItem;
+			navSubAct: DevKit.Controls.NavigationItem;
+		}
+		interface ProcessAccountBPF {
+			/** Select the account's primary industry for use in marketing segmentation and demographic analysis. */
+			IndustryCode: DevKit.Controls.OptionSet;
+			/** Type the company or business name. */
+			Name: DevKit.Controls.String;
+			/** Type the company or business name. */
+			Name_1: DevKit.Controls.String;
+			/** Choose the primary contact for the account to provide quick access to contact details. */
+			PrimaryContactId: DevKit.Controls.Lookup;
+			/** Type the annual revenue for the account, used as an indicator in financial performance analysis. */
+			Revenue: DevKit.Controls.Money;
+		}
+		interface Process extends DevKit.Controls.IProcess {
+			AccountBPF: ProcessAccountBPF;
 		}
 		interface Grid {
 			accountactivitiesgrid: DevKit.Controls.Grid;
@@ -451,6 +599,8 @@ declare namespace DevKit {
 		Header: DevKit.FormAccount_Information.Header;
 		/** The Navigation of form Account_Information */
 		Navigation: DevKit.FormAccount_Information.Navigation;
+		/** The Process of form Account_Information */
+		Process: DevKit.FormAccount_Information.Process;
 		/** The Grid of form Account_Information */
 		Grid: DevKit.FormAccount_Information.Grid;
 	}
@@ -505,7 +655,7 @@ declare namespace DevKit {
 		* DynamicsCrm.DevKit AccountApi
 		* @param entity The entity object from OData response
 		*/
-		constructor(entity?: Record<string, any>) : DevKit.AccountApi;
+		constructor(entity?: Record<string, any>)
 		/**
 		 * Get the raw value of an aliased field
 		 * @param alias The alias field name
@@ -821,6 +971,23 @@ declare namespace DevKit {
 		TraversedPath: string | null;
 		/** Time zone code that was in use when the record was created. */
 		UTCConversionTimeZoneCode: number | null;
+		v4_AppointmentTime_UtcDateAndTime: Date | null;
+		v4_Birthday_TimezoneDateOnly: Date | null;
+		v4_Boolean: boolean | null;
+		v4_Categories: Array<OptionSet.Account.v4_Categories> | null;
+		v4_DateOnly_TimezoneDateOnly: Date | null;
+		v4_DateTime_UtcDateAndTime: Date | null;
+		v4_Decimal: number | null;
+		v4_Double: number | null;
+		v4_Integer: number | null;
+		v4_Lookup: string | null;
+		v4_Memo: string | null;
+		v4_Money: number | null;
+		/** Value of the Money in base currency. */
+		readonly v4_money_Base: number | null;
+		v4_MultiOptionSet: Array<OptionSet.Account.v4_MultiOptionSet> | null;
+		v4_OptionSet: OptionSet.Account.v4_OptionSet | null;
+		v4_String: string | null;
 		/** Version number of the account. */
 		readonly VersionNumber: number | null;
 		/** Type the account's website URL to get quick details about the company profile. */
@@ -1123,6 +1290,23 @@ declare namespace DevKit {
 			readonly TraversedPath: string;
 			/** Time zone code that was in use when the record was created. */
 			readonly UTCConversionTimeZoneCode: string;
+			readonly v4_AppointmentTime_UtcDateAndTime: string;
+			readonly v4_Birthday_TimezoneDateOnly: string;
+			readonly v4_Boolean: string;
+			readonly v4_Categories: Array<string>;
+			readonly v4_DateOnly_TimezoneDateOnly: string;
+			readonly v4_DateTime_UtcDateAndTime: string;
+			readonly v4_Decimal: string;
+			readonly v4_Double: string;
+			readonly v4_Integer: string;
+			readonly v4_Lookup: string;
+			readonly v4_Memo: string;
+			readonly v4_Money: string;
+			/** Value of the Money in base currency. */
+			readonly v4_money_Base: string;
+			readonly v4_MultiOptionSet: Array<string>;
+			readonly v4_OptionSet: string;
+			readonly v4_String: string;
 			/** Version number of the account. */
 			readonly VersionNumber: string;
 			/** Type the account's website URL to get quick details about the company profile. */
@@ -1369,6 +1553,36 @@ declare namespace OptionSet {
 		enum TerritoryCode {
 			/** Default_Value = 1*/
 			Default_Value = 1
+		}
+		enum v4_Categories {
+			/** Category_A = 100000000*/
+			Category_A = 100000000,
+			/** Category_B = 100000001*/
+			Category_B = 100000001,
+			/** Category_C = 100000002*/
+			Category_C = 100000002,
+			/** Category_D = 100000003*/
+			Category_D = 100000003
+		}
+		enum v4_MultiOptionSet {
+			/** Category_A = 100000000*/
+			Category_A = 100000000,
+			/** Category_B = 100000001*/
+			Category_B = 100000001,
+			/** Category_C = 100000002*/
+			Category_C = 100000002,
+			/** Category_D = 100000003*/
+			Category_D = 100000003
+		}
+		enum v4_OptionSet {
+			/** Category_A = 100000000*/
+			Category_A = 100000000,
+			/** Category_B = 100000001*/
+			Category_B = 100000001,
+			/** Category_C = 100000002*/
+			Category_C = 100000002,
+			/** Category_D = 100000003*/
+			Category_D = 100000003
 		}
 		enum RollupState {
 			/** NotCalculated = 0 - Attribute value is yet to be calculated */

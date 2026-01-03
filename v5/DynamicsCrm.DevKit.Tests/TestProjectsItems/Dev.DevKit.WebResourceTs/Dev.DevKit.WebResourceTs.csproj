@@ -59,7 +59,6 @@
     <None Include="tsconfig.json" />
     <Content Include="build.js" />
     <TypeScriptCompile Include="entitiesjs\Account.d.ts" />
-    <TypeScriptCompile Include="entities\Account.form.ts" />
     <TypeScriptCompile Include="lib\devkit.d.ts" />
     <TypeScriptCompile Include="lib\devkit.ts" />
     <None Include="entities\generator.form.bat" />
