@@ -51,14 +51,14 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Content Include="entities\Account.form.js" />
+    <Content Include="entitiesjs\Account.form.js" />
     <None Include="deploy.debug.bat" />
-    <TypeScriptCompile Include="entities\_Account.form.ts" />
+    <TypeScriptCompile Include="entitiesjs\_Account.form.ts" />
     <None Include="packages.config" />
     <None Include="package.json" />
     <None Include="tsconfig.json" />
     <Content Include="build.js" />
-    <TypeScriptCompile Include="entities\Account.d.ts" />
+    <TypeScriptCompile Include="entitiesjs\Account.d.ts" />
     <TypeScriptCompile Include="entities\Account.form.ts" />
     <TypeScriptCompile Include="lib\devkit.d.ts" />
     <TypeScriptCompile Include="lib\devkit.ts" />

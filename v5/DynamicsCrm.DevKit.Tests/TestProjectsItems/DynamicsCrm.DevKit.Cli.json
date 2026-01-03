@@ -112,7 +112,7 @@
       "type": "TsForm",
       "rootnamespace": "DevKit",
       "rootfolder": "",
-      "entities": "folder"
+      "entities": "Account,Contact,Team,SystemUser,Task"
     }
   ],
   "downloadwebresources": [

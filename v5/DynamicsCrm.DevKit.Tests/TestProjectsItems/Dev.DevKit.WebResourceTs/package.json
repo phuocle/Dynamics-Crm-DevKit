@@ -5,7 +5,7 @@
     "scripts": {
         "debug": "node build.js debug",
         "release": "node build.js release",
-        "check": "tsc --noEmit"
+        "check": "npx tsc --noEmit"
     },
     "devDependencies": {
         "@types/xrm": "^9.0.88",

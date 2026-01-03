@@ -166,10 +166,10 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code.AppendLine();
 
             // Generate IBody interface
-            //code.AppendLine($"{TAB}/**");
-            //code.AppendLine($"{TAB} * Body controls interface");
-            //code.AppendLine($"{TAB} * Contains all controls on the form body");
-            //code.AppendLine($"{TAB} */");
+            code.AppendLine($"{TAB}/**");
+            code.AppendLine($"{TAB} * Body controls interface");
+            code.AppendLine($"{TAB} * Contains all controls on the form body");
+            code.AppendLine($"{TAB} */");
             code.AppendLine($"{TAB}export interface IBody {{");
 
             var bodyFields = GetBodyFields(form.FormXml);
@@ -188,10 +188,10 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code.AppendLine();
 
             // Generate IHeader interface
-            //code.AppendLine($"{TAB}/**");
-            //code.AppendLine($"{TAB} * Header controls interface");
-            //code.AppendLine($"{TAB} * Contains controls displayed in the form header");
-            //code.AppendLine($"{TAB} */");
+            code.AppendLine($"{TAB}/**");
+            code.AppendLine($"{TAB} * Header controls interface");
+            code.AppendLine($"{TAB} * Contains controls displayed in the form header");
+            code.AppendLine($"{TAB} */");
             code.AppendLine($"{TAB}export interface IHeader {{");
 
             var headerFields = GetHeaderFields(form.FormXml);
@@ -212,10 +212,10 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code.Append(GetTabsInterfaces(form.FormXml));
 
             // Generate IGrid interface
-            //code.AppendLine($"{TAB}/**");
-            //code.AppendLine($"{TAB} * Grid controls interface");
-            //code.AppendLine($"{TAB} * Contains all subgrid controls on the form");
-            //code.AppendLine($"{TAB} */");
+            code.AppendLine($"{TAB}/**");
+            code.AppendLine($"{TAB} * Grid controls interface");
+            code.AppendLine($"{TAB} * Contains all subgrid controls on the form");
+            code.AppendLine($"{TAB} */");
             code.AppendLine($"{TAB}export interface IGrid {{");
 
             var gridFields = GetGridFields(form.FormXml);
@@ -228,10 +228,10 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code.AppendLine();
 
             // Generate INavigation interface
-            //code.AppendLine($"{TAB}/**");
-            //code.AppendLine($"{TAB} * Navigation interface");
-            //code.AppendLine($"{TAB} * Contains navigation items");
-            //code.AppendLine($"{TAB} */");
+            code.AppendLine($"{TAB}/**");
+            code.AppendLine($"{TAB} * Navigation interface");
+            code.AppendLine($"{TAB} * Contains navigation items");
+            code.AppendLine($"{TAB} */");
             code.AppendLine($"{TAB}export interface INavigation {{");
 
             var navigationFields = GetNavigationFields(form.FormXml);
@@ -245,10 +245,10 @@ namespace DynamicsCrm.DevKit.Shared.Logic
 
             // Generate IQuickForm interface
             var quickFormFields = await GetQuickFormFieldsAsync(form.FormXml);
-            //code.AppendLine($"{TAB}/**");
-            //code.AppendLine($"{TAB} * QuickForm interface");
-            //code.AppendLine($"{TAB} * Contains quick view form controls");
-            //code.AppendLine($"{TAB} */");
+            code.AppendLine($"{TAB}/**");
+            code.AppendLine($"{TAB} * QuickForm interface");
+            code.AppendLine($"{TAB} * Contains quick view form controls");
+            code.AppendLine($"{TAB} */");
             code.AppendLine($"{TAB}export interface IQuickForm {{");
 
             foreach (var qf in quickFormFields)
@@ -264,14 +264,18 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             // Generate QuickForm body interfaces
             foreach (var qf in quickFormFields)
             {
-                //code.AppendLine($"{TAB}/**");
-                //code.AppendLine($"{TAB} * {qf.QuickFormName} quick view control body interface");
-                //code.AppendLine($"{TAB} */");
+                code.AppendLine($"{TAB}/**");
+                code.AppendLine($"{TAB} * {qf.QuickFormName} quick view control body interface");
+                code.AppendLine($"{TAB} */");
                 code.AppendLine($"{TAB}export interface I{qf.QuickFormName}Body {{");
 
                 foreach (var field in qf.Fields)
                 {
-                    code.AppendLine($"{TAB2}{field}: DevKit.Controls.QuickView;");
+                    if (!string.IsNullOrEmpty(field.Comment))
+                    {
+                        code.AppendLine($"{TAB2}/** {field.Comment} */");
+                    }
+                    code.AppendLine($"{TAB2}{field.Name}: DevKit.Controls.QuickView;");
                 }
 
                 code.AppendLine($"{TAB}}}");
@@ -280,10 +284,10 @@ namespace DynamicsCrm.DevKit.Shared.Logic
 
             // Generate IProcess interface
             var processFields = await GetProcessFieldsAsync();
-            //code.AppendLine($"{TAB}/**");
-            //code.AppendLine($"{TAB} * Process interface");
-            //code.AppendLine($"{TAB} * Contains business process flow definitions");
-            //code.AppendLine($"{TAB} */");
+            code.AppendLine($"{TAB}/**");
+            code.AppendLine($"{TAB} * Process interface");
+            code.AppendLine($"{TAB} * Contains business process flow definitions");
+            code.AppendLine($"{TAB} */");
             code.AppendLine($"{TAB}export interface IProcess extends DevKit.Controls.IProcess {{");
 
             foreach (var process in processFields)
@@ -298,9 +302,9 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             // Generate Process field interfaces
             foreach (var process in processFields)
             {
-                //code.AppendLine($"{TAB}/**");
-                //code.AppendLine($"{TAB} * {process.ProcessName} Business Process Flow fields interface");
-                //code.AppendLine($"{TAB} */");
+                code.AppendLine($"{TAB}/**");
+                code.AppendLine($"{TAB} * {process.ProcessName} Business Process Flow fields interface");
+                code.AppendLine($"{TAB} */");
                 code.AppendLine($"{TAB}export interface I{process.ProcessName} {{");
 
                 // Track used names for BPF duplicate handling (uses _1, _2 pattern)
@@ -323,7 +327,10 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                         schemaName = baseName;
                     }
 
-                    //code.AppendLine($"{TAB2}/** BPF Field: {fieldInfo.DisplayName} */");
+                    if (!string.IsNullOrEmpty(fieldInfo.DisplayName))
+                    {
+                        code.AppendLine($"{TAB2}/** {fieldInfo.DisplayName} */");
+                    }
                     code.AppendLine($"{TAB2}{schemaName}: DevKit.Controls.{fieldInfo.Type};");
                 }
 
@@ -332,10 +339,10 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             }
 
             // Generate IDialog interface
-            //code.AppendLine($"{TAB}/**");
-            //code.AppendLine($"{TAB} * Dialog interface");
-            //code.AppendLine($"{TAB} * For quick create dialogs or other dialog forms");
-            //code.AppendLine($"{TAB} */");
+            code.AppendLine($"{TAB}/**");
+            code.AppendLine($"{TAB} * Dialog interface");
+            code.AppendLine($"{TAB} * For quick create dialogs or other dialog forms");
+            code.AppendLine($"{TAB} */");
             code.AppendLine($"{TAB}export interface IDialog extends DevKit.IDialog {{");
 
             var dialogFields = GetDialogFields(form.FormXml);
@@ -362,9 +369,6 @@ namespace DynamicsCrm.DevKit.Shared.Logic
 
             return code.ToString();
         }
-
-
-
 
         private static async Task<string> GetFormClassAsync(string formName, string formXml, bool isQuickCreate)
         {
@@ -563,10 +567,16 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             public string Type { get; set; }
         }
 
+        private class QuickFormFieldInfo
+        {
+            public string Name { get; set; }
+            public string Comment { get; set; }
+        }
+
         private class QuickFormInfo
         {
             public string QuickFormName { get; set; }
-            public List<string> Fields { get; set; }
+            public List<QuickFormFieldInfo> Fields { get; set; }
         }
 
         private static List<FieldInfo> GetBodyFields(string formXml)
@@ -786,9 +796,9 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             return quickForms;
         }
 
-        private static async Task<List<string>> GetQuickFormBodyFieldsAsync(string formXml, string id)
+        private static async Task<List<QuickFormFieldInfo>> GetQuickFormBodyFieldsAsync(string formXml, string id)
         {
-            var fields = new List<string>();
+            var fields = new List<QuickFormFieldInfo>();
             var xdoc = XDocument.Parse(formXml);
             var node = from x in xdoc
                           .Descendants("tabs")
@@ -855,7 +865,26 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                 var fieldAttribute = quickViewMetadata.Attributes.Where(x => x.LogicalName == field.Id).FirstOrDefault();
                 if (fieldAttribute != null)
                 {
-                    fields.Add(Helper.SafeIdentifier(fieldAttribute.SchemaName));
+                    string comment = null;
+
+                    // Priority 1: Check Description first (per Microsoft SDK documentation)
+                    if (fieldAttribute.Description?.UserLocalizedLabel != null &&
+                        !string.IsNullOrWhiteSpace(fieldAttribute.Description.UserLocalizedLabel.Label))
+                    {
+                        comment = fieldAttribute.Description.UserLocalizedLabel.Label;
+                    }
+                    // Priority 2: Fallback to DisplayName if no Description
+                    else if (fieldAttribute.DisplayName?.UserLocalizedLabel != null &&
+                        !string.IsNullOrWhiteSpace(fieldAttribute.DisplayName.UserLocalizedLabel.Label))
+                    {
+                        comment = fieldAttribute.DisplayName.UserLocalizedLabel.Label;
+                    }
+
+                    fields.Add(new QuickFormFieldInfo
+                    {
+                        Name = Helper.SafeIdentifier(fieldAttribute.SchemaName),
+                        Comment = comment
+                    });
                 }
             }
 
@@ -923,13 +952,26 @@ namespace DynamicsCrm.DevKit.Shared.Logic
 
         private static ProcessFieldInfo GetProcessFieldInfo(string fieldLogicalName)
         {
-            var fieldInfo = new ProcessFieldInfo { Name = fieldLogicalName, DisplayName = fieldLogicalName, Type = "String" };
+            var fieldInfo = new ProcessFieldInfo { Name = fieldLogicalName, DisplayName = null, Type = "String" };
 
             var crmAttribute = EntityMetadata.Attributes.FirstOrDefault(x => x.LogicalName == fieldLogicalName);
             if (crmAttribute != null)
             {
                 fieldInfo.Name = Helper.SafeIdentifier(crmAttribute.SchemaName);
-                fieldInfo.DisplayName = crmAttribute.DisplayName?.UserLocalizedLabel?.Label ?? crmAttribute.SchemaName;
+
+                // Priority 1: Check Description first (per Microsoft SDK documentation)
+                if (crmAttribute.Description?.UserLocalizedLabel != null &&
+                    !string.IsNullOrWhiteSpace(crmAttribute.Description.UserLocalizedLabel.Label))
+                {
+                    fieldInfo.DisplayName = crmAttribute.Description.UserLocalizedLabel.Label;
+                }
+                // Priority 2: Fallback to DisplayName if no Description
+                else if (crmAttribute.DisplayName?.UserLocalizedLabel != null &&
+                    !string.IsNullOrWhiteSpace(crmAttribute.DisplayName.UserLocalizedLabel.Label))
+                {
+                    fieldInfo.DisplayName = crmAttribute.DisplayName.UserLocalizedLabel.Label;
+                }
+
                 fieldInfo.Type = GetAttributeType(crmAttribute);
             }
 
@@ -1315,12 +1357,56 @@ namespace DynamicsCrm.DevKit.Shared.Logic
 
         private static string GetFieldComment(FieldInfo field)
         {
-            if (field == null || string.IsNullOrEmpty(field.Id)) return null;
+            if (field == null) return null;
 
-            var attribute = EntityMetadata.Attributes?.FirstOrDefault(x => x.LogicalName == field.Id.ToLower());
-            if (attribute != null && attribute.DisplayName?.UserLocalizedLabel != null)
+            // Use LogicalName first (preferred), fallback to Id if LogicalName is empty
+            var logicalName = !string.IsNullOrEmpty(field.LogicalName) ? field.LogicalName : field.Id?.ToLower();
+            if (string.IsNullOrEmpty(logicalName)) return null;
+
+            var attribute = EntityMetadata.Attributes?.FirstOrDefault(x => x.LogicalName == logicalName);
+            if (attribute != null)
             {
-                return attribute.DisplayName.UserLocalizedLabel.Label;
+                // Priority 1: Check Description first (per Microsoft SDK documentation)
+                if (attribute.Description?.UserLocalizedLabel != null &&
+                    !string.IsNullOrWhiteSpace(attribute.Description.UserLocalizedLabel.Label))
+                {
+                    return attribute.Description.UserLocalizedLabel.Label;
+                }
+
+                // Priority 2: Fallback to DisplayName if no Description
+                if (attribute.DisplayName?.UserLocalizedLabel != null &&
+                    !string.IsNullOrWhiteSpace(attribute.DisplayName.UserLocalizedLabel.Label))
+                {
+                    return attribute.DisplayName.UserLocalizedLabel.Label;
+                }
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Gets the comment for a field by its logical name
+        /// </summary>
+        private static string GetFieldCommentByLogicalName(string logicalName)
+        {
+            if (string.IsNullOrEmpty(logicalName)) return null;
+
+            var attribute = EntityMetadata.Attributes?.FirstOrDefault(x => x.LogicalName == logicalName);
+            if (attribute != null)
+            {
+                // Priority 1: Check Description first (per Microsoft SDK documentation)
+                if (attribute.Description?.UserLocalizedLabel != null &&
+                    !string.IsNullOrWhiteSpace(attribute.Description.UserLocalizedLabel.Label))
+                {
+                    return attribute.Description.UserLocalizedLabel.Label;
+                }
+
+                // Priority 2: Fallback to DisplayName if no Description
+                if (attribute.DisplayName?.UserLocalizedLabel != null &&
+                    !string.IsNullOrWhiteSpace(attribute.DisplayName.UserLocalizedLabel.Label))
+                {
+                    return attribute.DisplayName.UserLocalizedLabel.Label;
+                }
             }
 
             return null;

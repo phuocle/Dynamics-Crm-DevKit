@@ -5,6 +5,9 @@
 		},
 		{
 			"path": "../DynamicsCrm.DevKit.Shared"
+		},
+		{
+			"path": "../DynamicsCrm.DevKit.Tests/TestProjectsItems/Dev.DevKit.WebResourceTs"
 		}
 	],
 	"settings": {}
