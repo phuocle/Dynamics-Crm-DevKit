@@ -1,4 +1,4 @@
-/**
+﻿/**
  * DynamicsCrm.DevKit TypeScript Definitions
  *
  * @version 4.0
@@ -647,6 +647,24 @@ declare namespace DevKit {
             Value: Date | null;
         }
 
+
+        /**
+         * Interface for EmailEngagement controls
+         * Used for email engagement actions control on Email forms
+         */
+        interface EmailEngagement {
+            /** Get/Set a value that indicates whether the control is currently visible */
+            Visible: boolean;
+        }
+
+        /**
+         * Interface for EmailRecipient controls
+         * Used for email recipient activity control on Email forms
+         */
+        interface EmailRecipient {
+            /** Get/Set a value that indicates whether the control is currently visible */
+            Visible: boolean;
+        }
 
         /**
          * Interface for WebResource controls
@@ -4165,4 +4183,3 @@ declare namespace OptionSet {
      */
     type FullNameConventionCode = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7;
 }
-

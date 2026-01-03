@@ -649,6 +649,24 @@ declare namespace DevKit {
 
 
         /**
+         * Interface for EmailEngagement controls
+         * Used for email engagement actions control on Email forms
+         */
+        interface EmailEngagement {
+            /** Get/Set a value that indicates whether the control is currently visible */
+            Visible: boolean;
+        }
+
+        /**
+         * Interface for EmailRecipient controls
+         * Used for email recipient activity control on Email forms
+         */
+        interface EmailRecipient {
+            /** Get/Set a value that indicates whether the control is currently visible */
+            Visible: boolean;
+        }
+
+        /**
          * Interface for WebResource controls
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
          */

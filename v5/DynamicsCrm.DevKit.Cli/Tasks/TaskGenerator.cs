@@ -304,6 +304,15 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         else
                         {
                             await FileHelper.ForceWriteAllTextAsync(fileEndsWith, newCode);
+                            var file = Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}.ts");
+                            if (!File.Exists(file))
+                            {
+                                var tsCode = await XrmHelper.GetDefaultTsFileWithFormAsync(ServiceClient, entityMetadata, Json.rootnamespace);
+                                if (!string.IsNullOrEmpty(tsCode))
+                                {
+                                    await FileHelper.ForceWriteAllTextAsync(file, tsCode);
+                                }
+                            }
                             CliLog.WriteLineWarning(ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.CREATED, ConsoleColor.White, $"{schemaName}{endsWith}");
                         }
                     }
