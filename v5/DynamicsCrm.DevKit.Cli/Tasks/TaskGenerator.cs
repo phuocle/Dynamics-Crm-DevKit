@@ -270,11 +270,13 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Found: ", ConsoleColor.Blue, totalFiles, ConsoleColor.Green, " entities");
             CliLog.WriteLine(ConsoleColor.White, "|");
             var i = 1;
+            var processedEntities = new List<EntityMetadata>();
             foreach (var schemaName in schemaNames)
             {
                 var entityMetadata = XrmHelper.EntitiesMetadata.FirstOrDefault(x => x.LogicalName == schemaName.ToLower());
                 if ((entityMetadata?.Attributes?.Length ?? 0) > 0)
                 {
+                    processedEntities.Add(entityMetadata);
                     var fileEndsWith = Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}{endsWith}");
                     var oldCode = await FileHelper.ReadAllTextAsync(fileEndsWith);
                     var isJsWebApiExist = File.Exists(Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}.webapi.js"));
@@ -312,7 +314,27 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
                 i++;
             }
+
+            // Generate OptionSet.ts after processing all entities
+            if (processedEntities.Count > 0)
+            {
+                var optionSetFile = Path.Combine(CurrentFolder, "OptionSet.ts");
+                var existingContent = await FileHelper.ReadAllTextAsync(optionSetFile);
+                var newOptionSetCode = await TsOptionSet.GetTsOptionSetCodeAsync(ServiceClient, processedEntities, existingContent);
+
+                if (Helper.IsTheSame(existingContent, newOptionSetCode))
+                {
+                    CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", " ") + "  ", ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, "OptionSet.ts");
+                }
+                else
+                {
+                    await FileHelper.ForceWriteAllTextAsync(optionSetFile, newOptionSetCode);
+                    var action = File.Exists(optionSetFile) ? CliAction.UPDATED : CliAction.CREATED;
+                    CliLog.WriteLineWarning(ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", " ") + "  ", ConsoleColor.Green, action, ConsoleColor.White, "OptionSet.ts");
+                }
+            }
         }
+
 
         //private async Task GeneratorEarlyBoundAsync(List<string> schemaNames)
         //{
