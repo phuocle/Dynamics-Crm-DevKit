@@ -681,6 +681,22 @@ const Email = {
 	RollupState: { NotCalculated: 0, Calculated: 1, OverflowError: 2, OtherError: 3, RetryLimitExceeded: 4, HierarchicalRecursionLimitReached: 5, LoopDetected: 6 }
 } as const;
 
+/** Fax entity OptionSets */
+const Fax = {
+	/** Activity Type */
+	ActivityTypeCode: { Appointment: 4201, Email: 4202, Fax: 4204, Invite_Redemption: 10407, Letter: 4207, Phone_Call: 4210, Portal_Comment: 10408, Recurring_Appointment: 4251, Task: 4212, Teams_chat: 10253 },
+	/** Priority */
+	PriorityCode: { High: 2, Low: 0, Normal: 1 },
+	/** RegardingObjectTypeCode */
+	RegardingObjectTypeCode: {},
+	/** Activity Status */
+	StateCode: { Canceled: 2, Completed: 1, Open: 0 },
+	/** Status Reason */
+	StatusCode: { Canceled: 5, Completed: 2, Open: 1, Received: 4, Sent: 3 },
+	/** Rollup State */
+	RollupState: { NotCalculated: 0, Calculated: 1, OverflowError: 2, OtherError: 3, RetryLimitExceeded: 4, HierarchicalRecursionLimitReached: 5, LoopDetected: 6 }
+} as const;
+
 /** PhoneCall entity OptionSets */
 const PhoneCall = {
 	/** Activity Type */
@@ -807,6 +823,7 @@ export const OptionSet = {
 	Account,
 	Contact,
 	Email,
+	Fax,
 	PhoneCall,
 	SystemUser,
 	Task,
