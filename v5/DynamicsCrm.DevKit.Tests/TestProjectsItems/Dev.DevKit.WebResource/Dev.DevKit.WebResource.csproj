@@ -58,6 +58,22 @@
     <None Include="bat\Plugin-Managed-Identity.ps1" />
     <None Include="deploy.debug.bat" />
     <None Include="package.json" />
+    <Content Include="entities\Account.form.js" />
+    <Content Include="entities\Account.js" />
+    <Content Include="entities\Contact.form.js" />
+    <Content Include="entities\Contact.js" />
+    <Content Include="entities\Email.form.js" />
+    <Content Include="entities\Email.js" />
+    <Content Include="entities\Fax.form.js" />
+    <Content Include="entities\Fax.js" />
+    <Content Include="entities\PhoneCall.form.js" />
+    <Content Include="entities\PhoneCall.js" />
+    <Content Include="entities\SystemUser.form.js" />
+    <Content Include="entities\SystemUser.js" />
+    <Content Include="entities\Task.form.js" />
+    <Content Include="entities\Task.js" />
+    <Content Include="entities\Team.form.js" />
+    <Content Include="entities\Team.js" />
     <Content Include="lib\devkit.js" />
     <Content Include="entities\devkit.d.ts" />
     <None Include="entities\generator.form.bat" />
@@ -75,6 +91,17 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="resources\Resource.1033.resx" />
+  </ItemGroup>
+  <ItemGroup>
+    <TypeScriptCompile Include="entities\Account.d.ts" />
+    <TypeScriptCompile Include="entities\Contact.d.ts" />
+    <TypeScriptCompile Include="entities\devkit.ts" />
+    <TypeScriptCompile Include="entities\Email.d.ts" />
+    <TypeScriptCompile Include="entities\Fax.d.ts" />
+    <TypeScriptCompile Include="entities\PhoneCall.d.ts" />
+    <TypeScriptCompile Include="entities\SystemUser.d.ts" />
+    <TypeScriptCompile Include="entities\Task.d.ts" />
+    <TypeScriptCompile Include="entities\Team.d.ts" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v15.0\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
