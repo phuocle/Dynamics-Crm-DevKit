@@ -145,7 +145,7 @@ namespace DynamicsCrm.DevKit.Cli
             if (args.Count() == 0)
             {
                 ShowHelp(true);
-                Console.ReadKey();
+                //Console.ReadKey();
             }
             else
             {
@@ -191,7 +191,7 @@ namespace DynamicsCrm.DevKit.Cli
             }
             CliLog.WriteLine(ConsoleColor.White, "|");
 #if DEBUG
-            Console.ReadKey();
+            //Console.ReadKey();
 #endif
         }
 
