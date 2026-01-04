@@ -83,7 +83,7 @@ export namespace FormAccount {
 	 * Header controls interface
 	 * Contains controls displayed in the form header
 	 */
-	export interface IHeader {
+	export interface IHeader extends DevKit.Controls.IHeader {
 		/** Type the number of employees that work at the account for use in marketing segmentation and demographic analysis. */
 		NumberOfEmployees: DevKit.Controls.Integer;
 		/** Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
@@ -370,7 +370,7 @@ export namespace FormAccount_DevKitV4 {
 	 * Header controls interface
 	 * Contains controls displayed in the form header
 	 */
-	export interface IHeader {
+	export interface IHeader extends DevKit.Controls.IHeader {
 		/** Integer */
 		v4_Integer: DevKit.Controls.Integer;
 		/** Integer */
@@ -673,7 +673,7 @@ export namespace FormAccount_for_Interactive_experience {
 	 * Header controls interface
 	 * Contains controls displayed in the form header
 	 */
-	export interface IHeader {
+	export interface IHeader extends DevKit.Controls.IHeader {
 		/** Type the number of employees that work at the account for use in marketing segmentation and demographic analysis. */
 		NumberOfEmployees: DevKit.Controls.Integer;
 		/** Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
@@ -983,7 +983,7 @@ export namespace FormAccount_Information {
 	 * Header controls interface
 	 * Contains controls displayed in the form header
 	 */
-	export interface IHeader {
+	export interface IHeader extends DevKit.Controls.IHeader {
 		/** Type the credit limit of the account. This is a useful reference when you address invoice and accounting issues with the customer. */
 		CreditLimit: DevKit.Controls.Money;
 		/** Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
@@ -1264,7 +1264,7 @@ export namespace FormAccount_Quick_Create {
 		Tab: ITabs;
 	}
 
-	export interface IHeader {
+	export interface IHeader extends DevKit.Controls.IHeader {
 	}
 
 	export interface Itab_1TabSections {

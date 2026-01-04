@@ -119,7 +119,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code.AppendLine();
 
             // Generate IHeader interface (empty for quick create)
-            code.AppendLine($"{TAB}export interface IHeader {{");
+            code.AppendLine($"{TAB}export interface IHeader extends DevKit.Controls.IHeader {{");
             code.AppendLine($"{TAB}}}");
             code.AppendLine();
 
@@ -198,7 +198,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code.AppendLine($"{TAB} * Header controls interface");
             code.AppendLine($"{TAB} * Contains controls displayed in the form header");
             code.AppendLine($"{TAB} */");
-            code.AppendLine($"{TAB}export interface IHeader {{");
+            code.AppendLine($"{TAB}export interface IHeader extends DevKit.Controls.IHeader {{");
 
             var headerFields = GetHeaderFields(form.FormXml);
             foreach (var field in headerFields)

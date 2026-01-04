@@ -42,7 +42,7 @@ export namespace FormApplication_User {
 	 * Header controls interface
 	 * Contains controls displayed in the form header
 	 */
-	export interface IHeader {
+	export interface IHeader extends DevKit.Controls.IHeader {
 	}
 
 	export interface ISUMMARY_TABTabSections {
@@ -217,7 +217,7 @@ export namespace FormUser {
 	 * Header controls interface
 	 * Contains controls displayed in the form header
 	 */
-	export interface IHeader {
+	export interface IHeader extends DevKit.Controls.IHeader {
 	}
 
 	export interface IADMINISTRATION_TABTabSections {
@@ -459,7 +459,7 @@ export namespace FormUser_form_Business {
 	 * Header controls interface
 	 * Contains controls displayed in the form header
 	 */
-	export interface IHeader {
+	export interface IHeader extends DevKit.Controls.IHeader {
 	}
 
 	export interface IADMINISTRATION_TABTabSections {

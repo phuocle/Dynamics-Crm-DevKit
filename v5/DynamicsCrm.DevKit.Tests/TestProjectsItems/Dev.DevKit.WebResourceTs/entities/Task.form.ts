@@ -38,7 +38,7 @@ export namespace FormTask {
 	 * Header controls interface
 	 * Contains controls displayed in the form header
 	 */
-	export interface IHeader {
+	export interface IHeader extends DevKit.Controls.IHeader {
 		/** Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
 		OwnerId: DevKit.Controls.Lookup;
 		/** Select the priority so that preferred customers or critical issues are handled quickly. */
@@ -182,7 +182,7 @@ export namespace FormTask_for_Interactive_experience {
 	 * Header controls interface
 	 * Contains controls displayed in the form header
 	 */
-	export interface IHeader {
+	export interface IHeader extends DevKit.Controls.IHeader {
 		/** Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
 		OwnerId: DevKit.Controls.Lookup;
 		/** Select the priority so that preferred customers or critical issues are handled quickly. */
@@ -319,7 +319,7 @@ export namespace FormTask_quick_create_form {
 		Tab: ITabs;
 	}
 
-	export interface IHeader {
+	export interface IHeader extends DevKit.Controls.IHeader {
 	}
 
 	export interface IcreatetaskTabSections {

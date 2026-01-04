@@ -1060,6 +1060,32 @@ declare namespace DevKit {
         }
 
         /**
+         * Interface for Header section controls
+         * Provides access to header visibility properties
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-headersection
+         */
+        interface IHeader {
+            /**
+             * Get/Set the visibility of the body of the header section
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-headersection/getbodyvisible
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-headersection/setbodyvisible
+             */
+            BodyVisible: boolean;
+            /**
+             * Get/Set the command bar visibility
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-headersection/getcommandbarvisible
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-headersection/setcommandbarvisible
+             */
+            CommandBarVisible: boolean;
+            /**
+             * Get/Set the tab navigator visibility
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-headersection/gettabnavigatorvisible
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-headersection/settabnavigatorvisible
+             */
+            TabNavigatorVisible: boolean;
+        }
+
+        /**
          * Interface for QuickView controls
          */
         interface IQuickView {
@@ -1706,33 +1732,6 @@ declare namespace DevKit {
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/instance/setstatus
              */
             Status: OptionSet.ProcessStatus;
-        }
-
-        /**
-         * Interface for Header controls
-
-         */
-        interface IHeader {
-            /**
-             * Get/Set the visibility of header body
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-headersection/getbodyvisible
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-headersection/setbodyvisible
-             */
-            BodyVisible: boolean;
-
-            /**
-             * Get/Set the command bar visibility
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-headersection/getcommandbarvisible
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-headersection/setcommandbarvisible
-             */
-            CommandBarVisible: boolean;
-
-            /**
-             * Get/Set the tab navigator visibility
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-headersection/gettabnavigatorvisible
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-headersection/settabnavigatorvisible
-             */
-            TabNavigatorVisible: boolean;
         }
 
         /**

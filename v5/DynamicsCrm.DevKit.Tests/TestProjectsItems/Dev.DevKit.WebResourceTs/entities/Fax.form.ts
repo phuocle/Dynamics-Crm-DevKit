@@ -46,7 +46,7 @@ export namespace FormFax {
 	 * Header controls interface
 	 * Contains controls displayed in the form header
 	 */
-	export interface IHeader {
+	export interface IHeader extends DevKit.Controls.IHeader {
 		/** Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
 		OwnerId: DevKit.Controls.Lookup;
 		/** Select the priority so that preferred customers or critical issues are handled quickly. */
@@ -151,19 +151,19 @@ export namespace FormFax {
 					'SUMMARY_TAB___tab_2_section_2'
 				],
 				grid: [
-
+					
 				],
 				navigation: [
-
+					
 				],
 				quick: [
-
+					
 				],
 				bpf: [
-
+					
 				],
 				dialog: [
-
+					
 				]
 			});
 		}

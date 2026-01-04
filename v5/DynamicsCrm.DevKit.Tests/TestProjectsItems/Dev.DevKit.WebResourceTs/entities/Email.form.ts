@@ -48,7 +48,7 @@ export namespace FormEmail {
 	 * Header controls interface
 	 * Contains controls displayed in the form header
 	 */
-	export interface IHeader {
+	export interface IHeader extends DevKit.Controls.IHeader {
 		/** Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
 		OwnerId: DevKit.Controls.Lookup;
 		/** Select the priority so that preferred customers or critical issues are handled quickly. */
@@ -212,7 +212,7 @@ export namespace FormEmail_for_Interactive_experience {
 	 * Header controls interface
 	 * Contains controls displayed in the form header
 	 */
-	export interface IHeader {
+	export interface IHeader extends DevKit.Controls.IHeader {
 		/** Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
 		OwnerId: DevKit.Controls.Lookup;
 		/** Select the priority so that preferred customers or critical issues are handled quickly. */
@@ -362,7 +362,7 @@ export namespace FormEnhanced_Email {
 	 * Header controls interface
 	 * Contains controls displayed in the form header
 	 */
-	export interface IHeader {
+	export interface IHeader extends DevKit.Controls.IHeader {
 		/** Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
 		OwnerId: DevKit.Controls.Lookup;
 		/** Select the priority so that preferred customers or critical issues are handled quickly. */
@@ -514,7 +514,7 @@ export namespace FormEmail_Wizard {
 	 * Header controls interface
 	 * Contains controls displayed in the form header
 	 */
-	export interface IHeader {
+	export interface IHeader extends DevKit.Controls.IHeader {
 		/** Select the priority so that preferred customers or critical issues are handled quickly. */
 		PriorityCode: DevKit.Controls.OptionSet;
 		/** Enter the expected due date and time for the activity to be completed to provide details about when the email will be sent. */

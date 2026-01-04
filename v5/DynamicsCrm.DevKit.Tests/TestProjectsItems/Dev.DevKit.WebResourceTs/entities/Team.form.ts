@@ -44,7 +44,7 @@ export namespace FormTeam {
 	 * Header controls interface
 	 * Contains controls displayed in the form header
 	 */
-	export interface IHeader {
+	export interface IHeader extends DevKit.Controls.IHeader {
 		/** Unique identifier of the default queue for the team. */
 		QueueId: DevKit.Controls.Lookup;
 	}
@@ -181,7 +181,7 @@ export namespace FormTeam_form_Business {
 	 * Header controls interface
 	 * Contains controls displayed in the form header
 	 */
-	export interface IHeader {
+	export interface IHeader extends DevKit.Controls.IHeader {
 	}
 
 	export interface IgeneralTabSections {

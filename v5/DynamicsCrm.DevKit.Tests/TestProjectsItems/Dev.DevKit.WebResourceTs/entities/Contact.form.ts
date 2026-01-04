@@ -89,7 +89,7 @@ export namespace FormContact {
 	 * Header controls interface
 	 * Contains controls displayed in the form header
 	 */
-	export interface IHeader {
+	export interface IHeader extends DevKit.Controls.IHeader {
 		/** Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
 		OwnerId: DevKit.Controls.Lookup;
 	}
@@ -385,7 +385,7 @@ export namespace FormContact_Information {
 	 * Header controls interface
 	 * Contains controls displayed in the form header
 	 */
-	export interface IHeader {
+	export interface IHeader extends DevKit.Controls.IHeader {
 		/** Type the primary email address for the contact. */
 		EMailAddress1: DevKit.Controls.String;
 		/** Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
@@ -631,7 +631,7 @@ export namespace FormInvite_Web_Form {
 	 * Header controls interface
 	 * Contains controls displayed in the form header
 	 */
-	export interface IHeader {
+	export interface IHeader extends DevKit.Controls.IHeader {
 	}
 
 	export interface ITabs {
@@ -864,7 +864,7 @@ export namespace FormPortal_Contact_Enhanced {
 	 * Header controls interface
 	 * Contains controls displayed in the form header
 	 */
-	export interface IHeader {
+	export interface IHeader extends DevKit.Controls.IHeader {
 		/** Type the primary email address for the contact. */
 		EMailAddress1: DevKit.Controls.String;
 		/** Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
@@ -1167,7 +1167,7 @@ export namespace FormProfile_Web_Form_Enhanced {
 	 * Header controls interface
 	 * Contains controls displayed in the form header
 	 */
-	export interface IHeader {
+	export interface IHeader extends DevKit.Controls.IHeader {
 	}
 
 	export interface ITabs {
@@ -1317,7 +1317,7 @@ export namespace FormProfile_Web_Form_Enhanced_Japanese {
 	 * Header controls interface
 	 * Contains controls displayed in the form header
 	 */
-	export interface IHeader {
+	export interface IHeader extends DevKit.Controls.IHeader {
 	}
 
 	export interface ITabs {
@@ -1452,7 +1452,7 @@ export namespace FormContact_Quick_Create {
 		Tab: ITabs;
 	}
 
-	export interface IHeader {
+	export interface IHeader extends DevKit.Controls.IHeader {
 	}
 
 	export interface Itab_1TabSections {

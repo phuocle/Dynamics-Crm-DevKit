@@ -10,7 +10,7 @@ var formAccount = (function () {
 		form = new DevKit.FormAccount(executionContext);
 		registerEvents();
 		form.UiAddLoaded(UiAddLoaded);
-		form.Attributes.
+		form.Header.
 	}
 	function registerEvents() {
 		if (form.ExecutionContext.IsInitialLoad()) {
