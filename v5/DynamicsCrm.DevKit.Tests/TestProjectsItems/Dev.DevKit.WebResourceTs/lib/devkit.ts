@@ -1107,55 +1107,268 @@ function webApiReturnGet(data: any, type?: DevKit.WebApiFieldType): any {
     const parser = getWebApiTypeParsers()[type];
     return parser ? parser(data) : data;
 }
+/**
+ * Base class for all generated Form classes
+ * Provides typed access to all form controls, data, and Xrm API wrappers
+ * @template TBody The type of the Body property (form body controls)
+ * @template THeader The type of the Header property (header controls)
+ * @template TGrid The type of the Grid property (subgrid controls)
+ * @template TNavigation The type of the Navigation property (navigation items)
+ * @template TQuickForm The type of the QuickForm property (quick view controls)
+ * @template TProcess The type of the Process property (business process flow controls)
+ * @template TDialog The type of the Dialog property (dialog controls)
+ */
 export class FormBase<TBody = any, THeader = any, TGrid = any, TNavigation = any, TQuickForm = any, TProcess = any, TDialog = any> {
+    /** The Body section of the form containing all body controls */
     public Body: TBody;
+    /** The Header section of the form containing header controls */
     public Header: THeader;
+    /** The Grid controls collection on the form */
     public Grid: TGrid;
+    /** The Navigation items collection on the form */
     public Navigation: TNavigation;
+    /** The QuickForm controls collection on the form */
     public QuickForm: TQuickForm;
+    /** The Process (Business Process Flow) controls on the form */
     public Process: TProcess;
+    /** The Dialog controls on the form */
     public Dialog: TDialog;
+    /**
+     * The execution context for the form event
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/execution-context
+     */
     public ExecutionContext: DevKit.IExecutionContext;
+    /** Utility methods for common operations */
     public Utility: any;
+    /**
+     * Provides methods to manage side panes
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app-sidepanes
+     */
     public SidePanes: DevKit.ISidePanes;
+    /**
+     * Provides methods to use Web API to create and manage records and execute Web API actions and functions
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi
+     */
     public WebApi: DevKit.IWebApi;
+    /**
+     * Provides methods to interact with Copilot functionality
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-copilot
+     */
     public Copilot: DevKit.ICopilot;
+    /**
+     * Returns the GUID ID of the current form
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-formselector/getid
+     */
     public readonly FormId: string;
+    /**
+     * Returns the label of the current form
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-formselector/getlabel
+     */
     public readonly FormLabel: string;
+    /**
+     * Returns the form type (Create=1, Update=2, ReadOnly=3, Disabled=4, BulkEdit=6)
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui/getformtype
+     */
     public readonly FormType: number;
+    /**
+     * Returns the GUID ID of the record
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-entity/getid
+     */
     public readonly EntityId: string;
+    /**
+     * Returns the logical name of the entity
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-entity/getentityname
+     */
     public readonly EntityName: string;
+    /**
+     * Returns whether any data in the form has been modified
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data/getisdirty
+     */
     public readonly DataIsDirty: boolean;
+    /**
+     * Returns whether all data in the form is valid
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data/isvalid
+     */
     public readonly DataIsValid: boolean;
-    public readonly Attributes: any;
-    public readonly Controls: any;
+    /**
+     * Returns the attributes collection for the record
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes
+     */
+    public readonly Attributes: DevKit.Collections<any>;
+    /**
+     * Returns the controls collection for the form
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
+     */
+    public readonly Controls: DevKit.Collections<any>;
+    /**
+     * Returns the entity data as XML
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-entity/getdataxml
+     */
     public readonly DataXml: string;
+    /**
+     * Returns whether any attribute in the entity has been modified
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-entity/getisdirty
+     */
     public readonly EntityIsDirty: boolean;
+    /**
+     * Returns whether all attributes in the entity are valid
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-entity/isvalid
+     */
     public readonly EntityIsValid: boolean;
+    /**
+     * Returns an entity reference for the record
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-entity/getentityreference
+     */
     public readonly EntityReference: any;
+    /**
+     * Returns the value of the primary attribute for the entity
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-entity/getprimaryattributevalue
+     */
     public readonly PrimaryAttributeValue: string;
+    /**
+     * Returns the height of the viewport in pixels
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui/getviewportheight
+     */
     public readonly ViewPortHeight: number;
+    /**
+     * Returns the width of the viewport in pixels
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui/getviewportwidth
+     */
     public readonly ViewPortWidth: number;
+    /**
+     * Saves the record asynchronously with the option to set callback functions
+     * @param saveOptions Options for saving the record
+     * @param successCallback A function to call when the operation succeeds
+     * @param errorCallback A function to call when the operation fails
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data/save
+     */
     public Save: (saveOptions?: any, successCallback?: any, errorCallback?: any) => Promise<void> | void;
+    /**
+     * Refreshes the data on the form asynchronously
+     * @param save Indicates whether to save any data in the form before refreshing
+     * @param successCallback A function to call when the operation succeeds
+     * @param errorCallback A function to call when the operation fails
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data/refresh
+     */
     public Refresh: (save?: boolean, successCallback?: any, errorCallback?: any) => Promise<void> | void;
+    /**
+     * Closes the form
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui/close
+     */
     public Close: () => void;
+    /**
+     * Displays a form level notification
+     * @param message The text of the message
+     * @param level The level of the message: ERROR, WARNING, or INFO
+     * @param uniqueId A unique identifier for the message used with ClearFormNotification
+     * @returns true if the notification was successfully set, otherwise false
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui/setformnotification
+     */
     public SetFormNotification: (message: string, level: string, uniqueId: string) => boolean;
+    /**
+     * Clears the form notification with the specified unique ID
+     * @param uniqueId The ID of the notification to clear
+     * @returns true if the notification was successfully cleared, otherwise false
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui/clearformnotification
+     */
     public ClearFormNotification: (uniqueId: string) => boolean;
+    /**
+     * Causes the ribbon to re-evaluate data that controls what is displayed in it
+     * @param refreshAll Indicates whether all the ribbon command bars on the current page are refreshed
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui/refreshribbon
+     */
     public RefreshRibbon: (refreshAll?: boolean) => void;
+    /**
+     * Adds an event handler to the form Loaded event. This event fires once when the form is fully loaded
+     * @param callback The function to add to the Loaded event
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui/addloaded
+     */
     public UiAddLoaded: (callback: (context: any) => void) => void;
+    /**
+     * Removes an event handler from the form Loaded event
+     * @param callback The function to remove from the Loaded event
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui/removeloaded
+     */
     public UiRemoveLoaded: (callback: (context: any) => void) => void;
+    /**
+     * Adds an event handler to the OnLoad event
+     * @param callback The function to be executed on the OnLoad event
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui/addonload
+     */
     public UiAddOnLoad: (callback: (context: any) => void) => void;
+    /**
+     * Removes an event handler from the OnLoad event
+     * @param callback The function to remove from the OnLoad event
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui/removeonload
+     */
     public UiRemoveOnLoad: (callback: (context: any) => void) => void;
+    /**
+     * Adds an event handler to the PostSave event
+     * @param callback The function to be added to the PostSave event after the record is saved with success or failure
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-entity/addonpostsave
+     */
     public AddOnPostSave: (callback: (context: any) => void) => void;
+    /**
+     * Adds an event handler to the OnSave event
+     * @param callback The function to be added to the OnSave event
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-entity/addonsave
+     */
     public AddOnSave: (callback: (context: any) => void) => void;
+    /**
+     * Removes an event handler from the PostSave event
+     * @param callback The function to remove from the PostSave event
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-entity/removeonpostsave
+     */
     public RemoveOnPostSave: (callback: (context: any) => void) => void;
+    /**
+     * Removes an event handler from the OnSave event
+     * @param callback The function to remove from the OnSave event
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-entity/removeonsave
+     */
     public RemoveOnSave: (callback: (context: any) => void) => void;
+    /**
+     * Adds an event handler to the data OnLoad event
+     * @param callback The function to be executed when data onload event occurs
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data/addonload
+     */
     public DataAddOnLoad: (callback: (context: any) => void) => void;
+    /**
+     * Removes an event handler from the data OnLoad event
+     * @param callback The function to remove from the data OnLoad event
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data/removeonload
+     */
     public DataRemoveOnLoad: (callback: (context: any) => void) => void;
+    /**
+     * Returns whether the form with the given ID is visible
+     * @param formId The ID of the form to check visibility
+     * @returns true if the form is visible, otherwise false
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-formselector
+     */
     public FormIsVisible: (formId: string) => boolean;
+    /**
+     * Navigates to the form with the specified form ID
+     * @param formId The ID of the form to navigate to
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-formselector/navigate
+     */
     public FormNavigateToFormId: (formId: string) => void;
+    /**
+     * Navigates to the form with the specified form label
+     * @param formLabel The label of the form to navigate to
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-formselector/navigate
+     */
     public FormNavigateToFormLabel: (formLabel: string) => void;
+    /**
+     * Sets the visibility of the form with the given ID
+     * @param formId The ID of the form
+     * @param visible true to make the form visible, false to hide it
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-formselector/setvisible
+     */
     public FormSetVisible: (formId: string, visible: boolean) => void;
+    /**
+     * Sets the name of the entity to be used for the form
+     * @param name The name of the entity
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui/setformentityname
+     */
     public SetFormEntityName: (name: string) => void;
     constructor(
         executionContext: any,

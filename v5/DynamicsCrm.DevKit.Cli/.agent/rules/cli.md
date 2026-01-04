@@ -20,3 +20,7 @@ Công việc đã xong, anh Phước kiểm tra lại nhé.
 # RUN PROFILE
 - Đảm bảo bạn phải build CLI và không có lỗi để biết được đường dẫn file .exe của cli
 - Khi bạn thấy yêu cầu run profile cli như ABC, bạn phải đọc file DynamicsCrm.DevKit.Cli.csproj\launchSettings.json để hiểu rõ thư mục (workingDirectory) cần run file cli và thông số: commandLineArgs.
+
+# CHỈ ĐỊNH FILE
+- *.js thì sẽ tìm ở folder Dev.DevKit.WebResource
+- *.ts thì sẽ tìm ở folder Dev.DevKit.WebResourceTs
