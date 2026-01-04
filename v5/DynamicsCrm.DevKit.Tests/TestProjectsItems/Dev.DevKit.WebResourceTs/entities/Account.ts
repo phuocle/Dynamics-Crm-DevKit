@@ -9,6 +9,7 @@ const formAccount = (function () {
 		form = new FormAccount.Form(executionContext);
 		registerEvents();
 		form.UiAddLoaded(UiAddLoaded);
+		form.
 	}
 
 	function registerEvents(): void {
