@@ -178,7 +178,8 @@ const formAccount = (function () {
 
 		var a76 = form.QuickForm.contactquickform.ControlName;
 		var a77 = form.QuickForm.contactquickform.ControlParent;
-		form.QuickForm.contactquickform.Controls.forEach((control, index) => { });
+		var a83 = form.QuickForm.contactquickform.Controls("A")
+		form.QuickForm.contactquickform.Controls().forEach((control, index) => { });
 		var a78 = form.QuickForm.contactquickform.ControlType;
 		var a79 = form.QuickForm.contactquickform.Disabled;
 		form.QuickForm.contactquickform.Focus();
