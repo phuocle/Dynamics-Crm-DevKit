@@ -29,9 +29,9 @@ var formAccount = (function () {
 		var a6 = form.EntityIsValid
 		var a7 = form.EntityName;
 		var a8 = form.EntityReference;
-		var a81 = form.EntityReference.entityType;
-		var a82 = form.EntityReference.id;
-		var a83 = form.EntityReference.name;
+		var a8_1 = form.EntityReference.entityType;
+		var a8_2 = form.EntityReference.id;
+		var a8_3 = form.EntityReference.name;
 		var a9 = form.FormId;
 		var a10 = form.FormIsVisible("ABC");
 		var a11 = form.FormLabel;
@@ -175,6 +175,20 @@ var formAccount = (function () {
 		form.Process.SetActiveStage("A-A-A-A-A", ok);
 		var a73 = form.Process.Status;
 		var a74 = form.Process.Visible;
+		var a75 = form.Process.AccountBPF.Name_1.Value;
+
+		var a76 = form.QuickForm.contactquickform.ControlName;
+		var a77 = form.QuickForm.contactquickform.ControlParent;
+		form.QuickForm.contactquickform.Controls.forEach((control, index) => { });
+		var a78 = form.QuickForm.contactquickform.ControlType;
+		var a79 = form.QuickForm.contactquickform.Disabled;
+		form.QuickForm.contactquickform.Focus();
+		var a81 = form.QuickForm.contactquickform.IsLoaded();
+		var a80 = form.QuickForm.contactquickform.Label
+		form.QuickForm.contactquickform.Refresh();
+		var a82 = form.QuickForm.contactquickform.Visible;
+
+
 
 		function AddOnStageSelected() { }
 		function AddOnStageChange() { }
