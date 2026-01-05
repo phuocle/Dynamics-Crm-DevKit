@@ -1,17 +1,12 @@
+---
+trigger: always_on
+---
+
 # DynamicsCrm.DevKit - Antigravity Rules
 
 ## Project Overview
 
 **DynamicsCrm.DevKit** is a development toolkit for Microsoft Dynamics 365 / Power Platform / Dataverse, including Visual Studio 2026 extensions (VSIX), CLI tools, and Roslyn analyzers.
-
----
-
-## Response Format
-
-- **Start with**: "Xin chào anh Phước, rất vui được giúp anh"
-- **End with**: "Công việc đã xong, vui lòng kiểm tra lại những gì tôi đã làm nhé anh Phước"
-
----
 
 ## AI Agent Build Rules
 
