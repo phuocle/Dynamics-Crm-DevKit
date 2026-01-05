@@ -883,7 +883,7 @@ declare namespace DevKit {
             /** Get/Set whether the column is disabled */
             Disabled: boolean;
             /** Get/Set the required level of the column */
-            RequiredLevel: string;
+            RequiredLevel: OptionSet.FieldRequiredLevel;
             /** Get/Set the value of the column */
             Value: any;
             /** Clear a notification for the column */

@@ -70,8 +70,25 @@ const formAccount = (function () {
 		var a21_3 = form.Grid.Contacts.Relationship.navigationPropertyName;
 		var a21_4 = form.Grid.Contacts.Relationship.relationshipType;
 		var a21_5 = form.Grid.Contacts.Relationship.roleType;
-
-
+		form.Grid.Contacts.RemoveOnLoad(AddOnLoad);
+		form.Grid.Contacts.Rows.forEach((row, indexRow) => {
+			row.Columns.forEach((column, indexColumn) => {
+				column.ClearNotification("ABC");
+				var a27 = column.Disabled;
+				var a28 = column.Label;
+				var a29 = column.Name;
+				var a30 = column.RequiredLevel;
+				column.SetNotification("ABC", "DEF");
+				var a31 = column.Value;
+			});
+			var a22 = row.EntityId;
+			var a23 = row.EntityName;
+			var a24 = row.EntityReference;
+			var a24_1 = row.EntityReference.id;
+			var a24_2 = row.EntityReference.entityType;
+			var a25_3 = row.EntityReference.name;
+			var a26 = row.PrimaryAttributeValue;
+		});
 		function ok() { }
 		function cancel() { }
 		function AddOnPostSave() { }

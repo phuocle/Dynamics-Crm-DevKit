@@ -73,9 +73,15 @@ var formAccount = (function () {
 		var a21_5 = form.Grid.Contacts.Relationship.roleType;
 		form.Grid.Contacts.RemoveOnLoad(AddOnLoad);
 		form.Grid.Contacts.Rows.forEach((row, indexRow) => {
-			row.Columns.forEach((column, indexColumn) => { }
-
-			);
+			row.Columns.forEach((column, indexColumn) => {
+				column.ClearNotification("ABC");
+				var a27 = column.Disabled;
+				var a28 = column.Label;
+				var a29 = column.Name;
+				var a30 = column.RequiredLevel;
+				column.SetNotification("ABC", "DEF");
+				var a31 = column.Value;
+			});
 			var a22 = row.EntityId;
 			var a23 = row.EntityName;
 			var a24 = row.EntityReference;
