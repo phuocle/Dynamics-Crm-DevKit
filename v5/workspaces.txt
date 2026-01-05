@@ -1,0 +1,2 @@
+Use VS Code or Antigravity to open correct workspace
++ devkit.js, devkit.d.ts, devkit.ts, devkit.d.ts, ==> DynamicsCrm.DevKit.Tests\TestClientCode\ClientCode.code-workspace
