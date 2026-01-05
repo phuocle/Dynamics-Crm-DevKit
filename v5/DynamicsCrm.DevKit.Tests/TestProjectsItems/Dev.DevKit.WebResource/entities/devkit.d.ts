@@ -4348,7 +4348,7 @@ declare namespace DevKit {
          * Get/Set the display state of the side panes: 0=Collapsed, 1=Expanded
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app/xrm-app-sidepanes#state
          */
-        DisplayState: 0 | 1;
+        DisplayState: OptionSet.SidePaneState;;
         /**
          * Creates a new side pane
          * @param paneOptions Options for creating the pane
