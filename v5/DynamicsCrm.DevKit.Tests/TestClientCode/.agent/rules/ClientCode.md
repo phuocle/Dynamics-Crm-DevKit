@@ -82,9 +82,20 @@ DynamicsCrm.DevKit.Shared\Resources\devkit.ts
 - Sync bằng các COPY và đè vào tương ứng như sau, luôn luôn làm, không cần hỏi và theo hướng dẫn dưới đây
 
 DynamicsCrm.DevKit.Tests\TestClientCode\05.DevKitJs-Vsix\Dev.DevKit.WebResource\entities\Account.form.js
-
-
-
+   --> DynamicsCrm.DevKit.Tests\TestClientCode\01.DevKitJs-UnitTest\entities\Account.form.js
+   --> DynamicsCrm.DevKit.Tests\TestClientCode\03.DevKitJs-AICode\Dev.DevKit.WebResource\entities\Account.form.js
+DynamicsCrm.DevKit.Tests\TestClientCode\05.DevKitJs-Vsix\Dev.DevKit.WebResource\entities\Account.webapi.js
+   --> DynamicsCrm.DevKit.Tests\TestClientCode\01.DevKitJs-UnitTest\entities\Account.webapi.js
+   --> DynamicsCrm.DevKit.Tests\TestClientCode\03.DevKitJs-AICode\Dev.DevKit.WebResource\entities\Account.webapi.js
+DynamicsCrm.DevKit.Tests\TestClientCode\05.DevKitJs-Vsix\Dev.DevKit.WebResource\entities\Account.d.ts
+   --> DynamicsCrm.DevKit.Tests\TestClientCode\01.DevKitJs-UnitTest\entities\Account.d.ts
+   --> DynamicsCrm.DevKit.Tests\TestClientCode\03.DevKitJs-AICode\Dev.DevKit.WebResource\entities\Account.d.ts
+DynamicsCrm.DevKit.Tests\TestClientCode\06.DevKitTs-Vsix\Dev.DevKit.WebResourceTs\entities\Account.form.ts
+   --> DynamicsCrm.DevKit.Tests\TestClientCode\02.DevKitTs-UnitTest\entities\Account.form.ts
+   --> DynamicsCrm.DevKit.Tests\TestClientCode\04.DevKitTs-AICode\Dev.DevKit.WebResourceTs\entities\Account.form.ts
+DynamicsCrm.DevKit.Tests\TestClientCode\06.DevKitTs-Vsix\Dev.DevKit.WebResourceTs\entities\OptionSet.ts
+   --> DynamicsCrm.DevKit.Tests\TestClientCode\02.DevKitTs-UnitTest\entities\OptionSet.ts
+   --> DynamicsCrm.DevKit.Tests\TestClientCode\04.DevKitTs-AICode\Dev.DevKit.WebResourceTs\entities\OptionSet.ts
 
 # DOCS / TEMP SCRIPT FILES #
 - các files .md nếu tạo ra, phải bỏ vào folder DynamicsCrm.DevKit.Docs và tương ứng với subfolder cần thiết
