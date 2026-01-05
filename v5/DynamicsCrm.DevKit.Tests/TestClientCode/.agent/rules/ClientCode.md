@@ -10,6 +10,7 @@ The following files are the **Source of Truth** for the project. Before making A
 2. **JS Definitions**: DynamicsCrm.DevKit.Shared\Resources\devkit.d.ts (nói nhanh devkit.d.ts js)
 3. **TS Runtime**: DynamicsCrm.DevKit.Shared\Resources\devkit.ts (nói nhanh devkit.ts)
 4. **TS Definitions**: DynamicsCrm.DevKit.Shared\Resources\devkitts.d.ts (nói nhanh devkit.d.ts ts)
+5. **TS Runtime**: DynamicsCrm.DevKit.Shared\Resources\build.js (nói nhanh build.js)
 **Do not edit these files without explicit instruction and assessing the impact on the entire toolkit.**
 
 # SOURCES OF TRUTH FILES GENERATOR #
@@ -24,10 +25,10 @@ The following files are the **Source of Truth** for the project. Before making A
 - Files sẽ được generator ra theo profile bên dưới và được SYNC vào đúng lại folder tương ứng
 
 # CLI PROFILE NAME GENNERATOR SOURCES OF TRUTH FILES #
-- SourceOfGenerator-JS-FORM
-- SourceOfGenerator-TS-FORM
-- SourceOfGenerator-JS-WEBAPI
-- SourceOfGenerator-TS-WEBAPI
+- TestClientCode-JS-FORM
+- TestClientCode-TS-FORM
+- TestClientCode-JS-WEBAPI
+- TestClientCode-TS-WEBAPI
 
 ==== KẾT THÚC QUAN TRỌNG
 
