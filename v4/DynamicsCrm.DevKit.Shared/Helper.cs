@@ -74,12 +74,35 @@ namespace DynamicsCrm.DevKit.Shared
 
         public static bool IsTheSame(string value1, string value2)
         {
-            if (value1 == null && value2 == null) return true;
-            if (value1 != null && value2 == null) return false;
-            if (value1 == null && value2 != null) return false;
-            value1 = value1.Replace("\r\n", string.Empty).Replace("\r", string.Empty).Replace("\t", string.Empty).Replace(" ", string.Empty).Trim();
-            value2 = value2.Replace("\r\n", string.Empty).Replace("\r", string.Empty).Replace("\t", string.Empty).Replace(" ", string.Empty).Trim();
-            return string.Equals(value1, value2, StringComparison.OrdinalIgnoreCase);
+            if (ReferenceEquals(value1, value2)) return true;
+            if (value1 == null || value2 == null) return false;
+
+            var len1 = value1.Length;
+            var len2 = value2.Length;
+            var i1 = 0;
+            var i2 = 0;
+
+            while (i1 < len1 || i2 < len2)
+            {
+                // Skip all whitespace to robustly handle formatting differences
+                while (i1 < len1 && char.IsWhiteSpace(value1[i1])) i1++;
+                while (i2 < len2 && char.IsWhiteSpace(value2[i2])) i2++;
+
+                if (i1 < len1 && i2 < len2)
+                {
+                    // Case-insensitive comparison
+                    if (char.ToUpperInvariant(value1[i1]) != char.ToUpperInvariant(value2[i2]))
+                        return false;
+                    i1++;
+                    i2++;
+                }
+                else if (i1 < len1 || i2 < len2)
+                {
+                    // One string still has non-whitespace content while the other ended
+                    return false;
+                }
+            }
+            return true;
         }
 
         public static async Task<string> ReadEmbeddedResourceAsync(string path)
@@ -104,13 +127,14 @@ namespace DynamicsCrm.DevKit.Shared
 
         private static string GetIdentifier(string name)
         {
-            var value = string.Empty;
+            if (string.IsNullOrEmpty(name)) return string.Empty;
+            var sb = new StringBuilder(name.Length);
             for (int i = 0; i < name.Length; ++i)
             {
                 if (char.IsLetterOrDigit(name[i]) || name[i] == ' ' || name[i] == '-' || name[i] == '_')
-                    value += name[i];
+                    sb.Append(name[i]);
             }
-            return value;
+            return sb.ToString();
         }
 
         public static string SafeIdentifier(string name)
