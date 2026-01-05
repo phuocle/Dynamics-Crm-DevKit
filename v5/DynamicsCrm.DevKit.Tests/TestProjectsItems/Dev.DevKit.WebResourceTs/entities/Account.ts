@@ -9,9 +9,9 @@ const formAccount = (function () {
 		form = new FormAccount.Form(executionContext);
 		registerEvents();
 		form.UiAddLoaded(UiAddLoaded);
-		TestTyping();
+		await TestTyping();
 	}
-	function TestTyping() {
+	async function TestTyping() {
 		form.AddOnPostSave(AddOnPostSave);
 		form.AddOnSave(AddOnSave);
 		form.Attributes.forEach((item, index) => { });
@@ -49,12 +49,19 @@ const formAccount = (function () {
 		form.UiRemoveOnLoad(UiAddLoaded);
 		var a14 = form.ViewPortHeight;
 		var a15 = form.ViewPortWidth;
-		function AddOnPostSave() {
-		}
-		function AddOnSave() {
-		}
-		function DataAddOnLoad() {
-		}
+
+		form.Copilot.ExecuteEvent("ABC", "DEF")?.then((data: any) => { });
+		form.Copilot.ExecuteEvent("ABC", "DEF", ok, cancel);
+		var a16 = await form.Copilot.ExecuteEvent("ABC", "DEF");
+		form.Copilot.ExecutePrompt("ABC")?.then(data => { });
+		form.Copilot.ExecutePrompt("ACB", ok, cancel);
+		var a17 = await form.Copilot.ExecutePrompt("ABC");
+
+		function ok() { }
+		function cancel() { }
+		function AddOnPostSave() { }
+		function AddOnSave() { }
+		function DataAddOnLoad() { }
 	}
 	function registerEvents(): void {
 		if (form.ExecutionContext.IsInitialLoad()) {
