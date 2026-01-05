@@ -1,4 +1,4 @@
----
+﻿---
 trigger: always_on
 ---
 
@@ -10,11 +10,20 @@ trigger: always_on
 + Trong câu nhắc, nếu bạn thấy JsForm (không phân biệt chữ thường/hoa) thì bạn phải đọc tiếp rules JsForm\rule.md
 + Khi bạn đọc đến đây, hãy output liền ra cho tôi để tôi hiểu là bạn có đọc file này như sau: "Xin chào anh Phước, tôi đã và đang đọc file cli.md".
 
+## SOURCE OF TRUTH (CRITICAL) ##
+The following files are the **Source of Truth** for the project. Before making ANY changes to core logic, type definitions, or runtime behavior, you **MUST** read and verify against these files:
+1.  **JS Definitions**: DynamicsCrm.DevKit.Shared\Resources\devkit.d.ts
+2.  **JS Runtime**: DynamicsCrm.DevKit.Shared\Resources\devkit.js
+3.  **TS Definitions**: DynamicsCrm.DevKit.Shared\Resources\devkitts.d.ts
+4.  **TS Runtime**: DynamicsCrm.DevKit.Shared\Resources\devkit.ts
+
+**Do not edit these files without explicit instruction and assessing the impact on the entire toolkit.**
+
 ## KẾT THÚC##
 Công việc đã xong, anh Phước kiểm tra lại nhé.
 
 # BUILD CLI
-- MSBuild Path: `C:\Program Files\Microsoft Visual Studio\18\Professional\MSBuild\Current\Bin\MSBuild.exe`
+- MSBuild Path: C:\Program Files\Microsoft Visual Studio\18\Professional\MSBuild\Current\Bin\MSBuild.exe
 - C# Project: DynamicsCrm.DevKit.Cli.csproj
 
 # RUN PROFILE

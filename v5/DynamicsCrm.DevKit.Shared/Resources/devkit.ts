@@ -1,3 +1,9 @@
+// -----------------------------------------------------------------------------------
+// --------------------------- SOURCE OF TRUTH ---------------------------------------
+// -----------------------------------------------------------------------------------
+// This file is a Source of Truth for the DynamicsCrm.DevKit project.
+// Do not edit without considering the impact on the entire toolkit.
+// -----------------------------------------------------------------------------------
 /// <reference path="./devkit.d.ts" />
 function getXrm(): typeof Xrm | undefined {
     if (typeof window !== 'undefined' && (window as any).Xrm !== undefined) {
