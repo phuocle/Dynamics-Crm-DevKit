@@ -1,32 +1,25 @@
-# TestDevKitTs - TypeScript DevKit Testing Project
+# DevKitTs UnitTest - TypeScript DevKit Testing Project
 
-> **Source of Truth** for TypeScript DevKit Implementation
+> **Source of Truth**: [ClientCode.md](../.agent/rules/ClientCode.md)
 
 ## Overview
 
-This project provides unit testing and development environment for the DevKit TypeScript library used in Dynamics CRM web resources.
-
-## AI Context
-
-For detailed AI assistant context and project architecture documentation, see **[AIContext.md](./AIContext.md)**.
+This project provides unit testing and code coverage for the DevKit TypeScript library used in Dynamics CRM web resources.
 
 ## Project Structure
 
 ```
-TestDevKitTs/
+02.DevKitTs-UnitTest/
 ├── lib/
 │   ├── devkit.ts          # Core DevKit TypeScript library
-│   └── devkit.d.ts        # TypeScript definitions
+│   └── devkit.d.ts        # TypeScript definitions (copy of devkit.ts)
 ├── entities/
-│   ├── Account.ts         # Entity implementation sample
-│   ├── Account.form.ts    # Form implementation sample
-│   ├── Account.webapi.ts  # WebAPI implementation sample
-│   ├── Account.Test*.ts   # Test files for Account form
+│   ├── Account.form.ts    # Form implementation
+│   ├── Account.webapi.ts  # WebAPI implementation
 │   └── OptionSet.ts       # OptionSet definitions
 ├── test/
 │   ├── devkit/            # DevKit core tests
 │   └── account/           # Account entity tests
-├── build/                 # Compiled JavaScript output
 └── coverage/              # Jest coverage reports
 ```
 
@@ -36,95 +29,54 @@ TestDevKitTs/
 - Node.js (v18+)
 - npm
 
-### Setup & Run (Fresh Install)
+### Setup & Run
 
 ```powershell
-# 1. Clean previous artifacts
+# 1. Clean previous artifacts (node_modules, coverage, etc.)
 .\1.Clean.ps1
 
-# 2. Install dependencies & run tests
-.\2.Install.ps1
+# 2. Sync devkit.ts + devkit.d.ts + build.js from Source of Truth (v5)
+.\2.Sync.ps1
 
-# 3. Build & Deploy
-.\deploy.devkitts.bat
+# 3. Install dependencies, run tests with coverage, open report
+.\3.RunCodeCoverage.ps1
 ```
-
-## Build Commands
-
-You can build **all entities** or a **specific entity**:
-
-| Command | Description | Output |
-|---------|-------------|--------|
-| `npm run debug` | Build **ALL** entities | Debug mode (Inline SourceMap) |
-| `npm run release` | Build **ALL** entities | Release mode (Minified) |
-| `npm run debug Account` | Build **ONLY** Account | Debug mode |
-| `npm run release Account` | Build **ONLY** Account | Release mode |
-
-## Test Commands
-
-| Command | Description |
-|---------|-------------|
-| `npm run devkit-test` | Run **ALL** tests (DevKit + Account) with coverage |
-| `npm run check` | Run TypeScript type checking |
 
 ## PowerShell Scripts
 
 | Script | Purpose |
 |--------|---------|
-| `1.Clean.ps1` | Clean `node_modules`, `coverage`, `build` |
-| `2.Install.ps1` | Install packages and run tests |
-| `3.RunBuildRelease.ps1` | Build TypeScript in release mode |
-| `4.RunCodeCoverage.ps1` | Run coverage and open HTML report |
-| `deploy.devkitts.bat` | Run tests → Build → Deploy to TestWebResourceTs |
+| `1.Clean.ps1` | Clean `node_modules`, `coverage`, `.vs`, `.vscode`, `package-lock.json` |
+| `2.Sync.ps1` | Sync `devkit.ts` → `lib/devkit.ts`, `lib/devkit.d.ts` and `build.js` from Source of Truth |
+| `3.RunCodeCoverage.ps1` | Install npm packages (if needed), run coverage, open HTML report |
 
-## Deployment
+## NPM Scripts
 
-To deploy the TypeScript DevKit files to TestWebResourceTs:
+| Command | Description |
+|---------|-------------|
+| `npm run check` | Run TypeScript type checking |
+| `npm run devkit-test` | Run tests with coverage report |
+| `npm run debug` | Build all entities in debug mode |
+| `npm run release` | Build all entities in release mode |
 
-```cmd
-deploy.devkitts.bat
-```
+## Source of Truth
 
-This script:
-1. Runs `npm run devkit-test` (All tests with coverage)
-2. Builds TypeScript files (`npm run debug`)
-3. Copies files to `../TestWebResourceTs/Dev.DevKit.WebResourceTs/`:
-   - `lib/devkit.ts` → `lib/devkit.ts`
-   - `lib/devkit.d.ts` → `lib/devkit.d.ts`
-   - `entities/Account.ts` → `entities/Account.ts`
-   - `entities/Account.form.ts` → `entities/Account.form.ts`
-   - `entities/Account.webapi.ts` → `entities/Account.webapi.ts`
-4. Copies compiled JavaScript to `../TestWebResourceTs/build/`:
-   - `build/Account.js` → `build/Account.js`
-
-### Deployment Target
-
-**TestWebResourceTs** (`../TestWebResourceTs/Dev.DevKit.WebResourceTs/`) is the deployment target for TypeScript DevKit. Do NOT edit files directly in TestWebResourceTs - always make changes in TestDevKitTs first, then deploy using the script.
+Files synced from `DynamicsCrm.DevKit.Shared\Resources\`:
+- `devkit.ts` → `lib\devkit.ts`
+- `devkit.ts` → `lib\devkit.d.ts`
+- `build.js` → `build.js`
 
 ## Architecture
 
-> **Important**: This is the TypeScript implementation with a fundamentally different architecture from JavaScript.
-
-- **TypeScript** based with strict typing
+- Uses **TypeScript** with strict typing
 - Uses **`loadFormV3`** pattern (Generic, class-based)
-- Returns a strongly typed **`FormBase`** class instance
+- Returns strongly typed **`FormBase`** class instance
 - Designed for module-based imports
-- Accesses global `Xrm` via helper **`getXrm()`** for safety
-
-### Comparison with JavaScript (TestDevKitJs)
-
-| Feature | TypeScript (TestDevKitTs) | JavaScript (TestDevKitJs) |
-|---------|---------------------------|---------------------------|
-| Pattern | `loadFormV3` (Generic) | `loadFormV2` (Factory) |
-| Return Type | `FormBase` class instance | Plain JS object |
-| Xrm Access | Helper `getXrm()` | Direct global `Xrm` |
-| Module | ES Module imports | IIFE global `devKit` |
-
-For detailed comparison, see **[AIContext.md](./AIContext.md)**.
+- Accesses global **`Xrm`** via helper **`getXrm()`**
 
 ## Dependencies
 
-- **typescript**
-- **esbuild**
-- **jest** + **ts-jest**
-- **xrm-mock**
+- **typescript** - TypeScript compiler
+- **esbuild** - Fast bundler
+- **jest** + **ts-jest** - Testing framework
+- **xrm-mock** - Mock library for Xrm object

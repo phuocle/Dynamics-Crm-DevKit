@@ -1,6 +1,6 @@
 # DevKitJs UnitTest - JavaScript DevKit Testing Project
 
-> **Source of Truth**: [ClientCode.md](.agent/rules/ClientCode.md)
+> **Source of Truth**: [ClientCode.md](../.agent/rules/ClientCode.md)
 
 ## Overview
 
