@@ -189,6 +189,8 @@ var formAccount = (function () {
 		form.QuickForm.contactquickform.Refresh();
 		var a82 = form.QuickForm.contactquickform.Visible;
 
+		form.SidePanes.Create({ alwaysRender: true }, ok);
+        var a84 = form.SidePanes.Create({ alwaysRender: false });
 
 
 		function AddOnStageSelected() { }

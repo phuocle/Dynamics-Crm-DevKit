@@ -2625,11 +2625,39 @@ declare namespace DevKit {
          */
         readonly Version: string;
     }
+    /**
+     * Interface for Side Panes API
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app/xrm-app-sidepanes
+     */
     interface SidePanes {
-        Create(paneOptions: DevKit.SidePaneOptions, successCallback: (pane: DevKit.SidePane) => void): void;
+        /**
+         * Creates a new side pane
+         * @param paneOptions Options for creating the pane
+         * @param successCallback Function called when the pane is created
+         * @param errorCallback Function called when there is an error
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app/xrm-app-sidepanes/createpane
+         */
+        Create(paneOptions: DevKit.SidePaneOptions, successCallback?: (pane: DevKit.SidePane) => void, errorCallback?: (error: DevKit.Error) => void): Promise<DevKit.SidePane> | void;
+        /**
+         * Gets a pane by ID
+         * @param paneId The ID of the pane to get
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app/xrm-app-sidepanes/getpane
+         */
         Get(paneId: string): DevKit.SidePane;
+        /**
+         * Gets the currently selected pane
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app/xrm-app-sidepanes/getselectedpane
+         */
         GetSelected(): DevKit.SidePane;
+        /**
+         * Gets all panes
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app/xrm-app-sidepanes/getallpanes
+         */
         GetAll(): DevKit.Collections<DevKit.SidePane>;
+        /**
+         * Get/Set the display state of the side panes: 0=Collapsed, 1=Expanded
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app/xrm-app-sidepanes#state
+         */
         DisplayState: OptionSet.SidePaneState;
     }
     interface Client {

@@ -95,7 +95,6 @@
   <ItemGroup>
     <TypeScriptCompile Include="entities\Account.d.ts" />
     <TypeScriptCompile Include="entities\Contact.d.ts" />
-    <TypeScriptCompile Include="entities\devkit.ts" />
     <TypeScriptCompile Include="entities\Email.d.ts" />
     <TypeScriptCompile Include="entities\Fax.d.ts" />
     <TypeScriptCompile Include="entities\PhoneCall.d.ts" />
