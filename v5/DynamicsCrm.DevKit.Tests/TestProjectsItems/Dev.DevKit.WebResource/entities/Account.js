@@ -102,16 +102,71 @@ var formAccount = (function () {
 		var a35_1_3 = form.Grid.Contacts.ViewSelector.CurrentView.name;
 		var a35_2 = form.Grid.Contacts.ViewSelector.Visible;
 
+		var a36 = form.Header.BodyVisible;
+		var a37 = form.Header.CommandBarVisible;
+		var a38 = form.Header.TabNavigatorVisible;
+		var a39 = form.Header.NumberOfEmployees.Value;
+
+		form.Navigation.navActivities.Focus();
+		var a40 = form.Navigation.navActivities.Id;
+		var a41 = form.Navigation.navActivities.Label;
+		var a42 = form.Navigation.navActivities.Visible;
+
+		form.Process.ActivePath.forEach((stage, indexStage) => {
+			var a43 = stage.AllowCreateNew;
+			var a44 = stage.Category;
+			var a45 = stage.EntityName;
+			var a46 = stage.Id;
+			var a47 = stage.Name;
+			var a48 = stage.Status;
+			stage.Steps.forEach((step, indexStep) => {
+				var a49 = step.Attribute;
+				var a50 = step.Name;
+				var a51 = step.Progress;
+				var a52 = step.Required;
+				step.SetProgress(OptionSet.ProcessProgress.Completed);
+			});
+		});
+		var a53 = form.Process.ActiveProcess;
+		var a53_1 = form.Process.ActiveProcess.Id;
+		var a53_2 = form.Process.ActiveProcess.IsRendered;
+		var a53_3 = form.Process.ActiveProcess.Name;
+		form.Process.ActiveProcess.Stages.forEach((stage, stageIndex) => {
+		});
+		var a54 = form.Process.ActiveStage.AllowCreateNew;
+		var a55 = form.Process.ActiveStage.Category;
+		var a56 = form.Process.ActiveStage.EntityName;
+		var a57 = form.Process.ActiveStage.Id;
+		var a58 = form.Process.ActiveStage.Name;
+		var a59 = form.Process.ActiveStage.Status;
+		form.Process.ActiveStage.Steps.forEach((step, stepIndex) => { });
+		form.Process.AddOnPreProcessStatusChange(AddOnPreProcessStatusChange);
+		form.Process.AddOnPreStageChange(AddOnPreStageChange);
+		form.Process.AddOnProcessStatusChange(AddOnProcessStatusChange);
+		form.Process.AddOnStageChange(AddOnStageChange);
+		form.Process.AddOnStageSelected(AddOnStageSelected);
+		form.Process.RemoveOnPreProcessStatusChange(AddOnPreProcessStatusChange);
+		form.Process.RemoveOnPreStageChange(AddOnPreStageChange);
+		form.Process.RemoveOnProcessStatusChange(AddOnProcessStatusChange);
+		form.Process.RemoveOnStageChange(AddOnStageChange);
+		form.Process.RemoveOnStageSelected(AddOnStageSelected);
+		var a60 = form.Process.DisplayState;
+		form.Process.EnabledProcesses((processes) => {
+			var a61 = processes[0].ProcessId;
+			var a62 = processes[0].ProcessName;
+		});
+		var a63 = form.Process.InstanceId;
+		var a64 = form.Process.InstanceName;
+		form.Process.MoveNext((value) => { });
+		form.Process.MovePrevious((value) => { });
 
 
 
-
-
-
-
-
-
-
+		function AddOnStageSelected() { }
+		function AddOnStageChange() { }
+		function AddOnProcessStatusChange() { }
+		function AddOnPreStageChange() { }
+		function AddOnPreProcessStatusChange() { }
 		function ok() { }
 		function cancel() { }
 		function AddOnPostSave() { }

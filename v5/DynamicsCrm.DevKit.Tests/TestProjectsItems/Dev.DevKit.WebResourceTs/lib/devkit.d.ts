@@ -2077,7 +2077,7 @@ declare namespace DevKit {
          * Returns the progress of the step
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/step/getprogress
          */
-        readonly Progress: number;
+        readonly Progress: OptionSet.ProcessProgress;
 
         /**
          * Returns whether the step is required
@@ -3756,7 +3756,7 @@ declare namespace DevKit {
          * Returns the progress of the action step
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/step/getprogress
          */
-        readonly Progress: number;
+        readonly Progress: OptionSet.ProcessProgress;
         /**
          * Returns a boolean value indicating whether the step is required in the business process flow
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/step/isrequired
