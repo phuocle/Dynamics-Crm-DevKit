@@ -1,27 +1,24 @@
-# TestDevKitJs - JavaScript DevKit Testing Project
+# DevKitJs UnitTest - JavaScript DevKit Testing Project
 
-> **Source of Truth** for JavaScript DevKit Implementation
+> **Source of Truth**: [ClientCode.md](.agent/rules/ClientCode.md)
 
 ## Overview
 
-This project provides unit testing and development environment for the DevKit JavaScript library used in Dynamics CRM web resources.
+This project provides unit testing and code coverage for the DevKit JavaScript library used in Dynamics CRM web resources.
 
 ## Project Structure
 
 ```
-TestDevKitJs/
+01.DevKitJs-UnitTest/
 ├── lib/
-│   └── devkit.js          # Core DevKit JavaScript library
+│   └── devkit.mjs         # Core DevKit JavaScript library (ES Module)
 ├── entities/
 │   ├── devkit.d.ts        # TypeScript definitions
 │   ├── Account.d.ts       # Account entity TypeScript definition
-│   ├── Account.js         # Entity implementation sample
-│   ├── Account.form.js    # Form implementation sample
-│   └── Account.webapi.js  # WebAPI implementation sample
+│   ├── Account.form.js    # Form implementation
+│   └── Account.webapi.js  # WebAPI implementation
 ├── test/
-│   ├── devkit.test.js     # Unit tests
-│   ├── sync-devkit.js     # Sync helper script
-│   └── restore-devkit.js  # Restore helper script
+│   └── devkit.test.js     # Unit tests
 └── coverage/              # Jest coverage reports
 ```
 
@@ -31,21 +28,26 @@ TestDevKitJs/
 - Node.js (v18+)
 - npm
 
-### Setup & Run (Fresh Install)
+### Setup & Run
 
 ```powershell
-# 1. Clean previous artifacts
+# 1. Clean previous artifacts (node_modules, coverage, etc.)
 .\1.Clean.ps1
 
-# 2. Copy devkit.js from shared resources (converts to ES module)
-.\2.CopyDevKitJs.ps1
+# 2. Sync devkit.js + devkit.d.ts from Source of Truth (v5)
+.\2.Sync.ps1
 
-# 3. Install dependencies & run tests
-.\3.Install.ps1
-
-# 4. Run code coverage
-.\4.RunCodeCoverage.ps1
+# 3. Install dependencies, run tests with coverage, open report
+.\3.RunCodeCoverage.ps1
 ```
+
+## PowerShell Scripts
+
+| Script | Purpose |
+|--------|---------|
+| `1.Clean.ps1` | Clean `node_modules`, `coverage`, `.vs`, `.vscode`, `package-lock.json` |
+| `2.Sync.ps1` | Sync `devkit.js` → `lib/devkit.mjs` and `devkit.d.ts` → `entities/devkit.d.ts` from Source of Truth |
+| `3.RunCodeCoverage.ps1` | Install npm packages (if needed), run coverage, open HTML report |
 
 ## NPM Scripts
 
@@ -55,48 +57,18 @@ TestDevKitJs/
 | `npm run coverage` | Run tests with coverage report |
 | `npm run test:debug` | Run tests in debug mode |
 
-## PowerShell Scripts
+## Source of Truth
 
-| Script | Purpose |
-|--------|---------|
-| `1.Clean.ps1` | Clean `node_modules`, `coverage`, `.vs`, `.vscode`, `package-lock.json` |
-| `2.CopyDevKitJs.ps1` | Copy `devkit.js` from shared source, convert to ES module |
-| `3.Install.ps1` | Install npm dependencies and run tests |
-| `4.RunCodeCoverage.ps1` | Run coverage and open HTML report |
-
-## Deployment
-
-To deploy the JavaScript DevKit files to TestWebResource:
-
-```cmd
-deploy.devkitjs.bat
-```
-
-This script:
-1. Runs unit tests with coverage
-2. Copies files to `../TestWebResource/Dev.DevKit.WebResource/`:
-   - `lib/devkit.js` → `lib/devkit.js`
-   - `entities/devkit.d.ts` → `entities/devkit.d.ts`
-   - `entities/Account.d.ts` → `entities/Account.d.ts`
-   - `entities/Account.js` → `entities/Account.js`
-   - `entities/Account.form.js` → `entities/Account.form.js`
-   - `entities/Account.webapi.js` → `entities/Account.webapi.js`
-
-### Deployment Target
-
-**TestWebResource** (`../TestWebResource/Dev.DevKit.WebResource/`) is the deployment target for JavaScript DevKit. Do NOT edit files directly in TestWebResource - always make changes in TestDevKitJs first, then deploy using the script.
+Files synced from `DynamicsCrm.DevKit.Shared\Resources\`:
+- `devkit.js` → `lib\devkit.mjs` (converted to ES module)
+- `devkit.d.ts` → `entities\devkit.d.ts`
 
 ## Architecture
-
-> **Important**: This is the JavaScript implementation using a different pattern from TypeScript.
 
 - Uses **ES Modules** (`type: "module"` in package.json)
 - Uses **`loadFormV2`** pattern (factory-based)
 - Exposes global **`devKit`** object via IIFE
 - Accesses global **`Xrm`** directly
-- Returns a plain JavaScript object constructed via factory pattern
-
-For comparison with the TypeScript implementation, see `TestDevKitTs/AIContext.md`.
 
 ## Dependencies
 

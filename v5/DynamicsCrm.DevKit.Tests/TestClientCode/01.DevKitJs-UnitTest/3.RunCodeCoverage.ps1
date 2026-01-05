@@ -1,5 +1,6 @@
-# RunCodeCoverage.ps1
-# Runs Jest code coverage and opens the HTML report
+# 3.RunCodeCoverage.ps1
+# Installs dependencies, runs Jest code coverage, and opens the HTML report
+# Source of Truth: ClientCode.md
 
 Write-Host "=== Running Code Coverage ===" -ForegroundColor Cyan
 
@@ -9,7 +10,36 @@ $scriptDir = $PSScriptRoot
 Push-Location $scriptDir
 
 try {
+    # Check if package.json exists
+    if (-not (Test-Path "package.json")) {
+        Write-Host "Error: package.json not found!" -ForegroundColor Red
+        exit 1
+    }
+
+    # Check if npm is available
+    $npmVersion = npm --version 2>$null
+    if (-not $npmVersion) {
+        Write-Host "Error: npm is not installed or not in PATH!" -ForegroundColor Red
+        exit 1
+    }
+    Write-Host "Using npm version: $npmVersion" -ForegroundColor Gray
+
+    # Check if node_modules exists, if not run npm install
+    if (-not (Test-Path "node_modules")) {
+        Write-Host ""
+        Write-Host "Installing npm packages..." -ForegroundColor Yellow
+        npm install
+        if ($LASTEXITCODE -ne 0) {
+            Write-Host "npm install failed!" -ForegroundColor Red
+            exit 1
+        }
+        Write-Host "npm packages installed successfully" -ForegroundColor Green
+    } else {
+        Write-Host "node_modules exists, skipping npm install" -ForegroundColor Gray
+    }
+
     # Run coverage
+    Write-Host ""
     Write-Host "Running npm coverage..." -ForegroundColor Yellow
     npm run coverage
     

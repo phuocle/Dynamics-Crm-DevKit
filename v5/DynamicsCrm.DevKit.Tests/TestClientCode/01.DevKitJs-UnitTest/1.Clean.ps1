@@ -1,5 +1,6 @@
-# Clean.ps1
+# 1.Clean.ps1
 # Script to clean up unused files and folders to reduce disk size
+# Source of Truth: ClientCode.md
 
 Write-Host "=== Cleaning up project ===" -ForegroundColor Cyan
 
