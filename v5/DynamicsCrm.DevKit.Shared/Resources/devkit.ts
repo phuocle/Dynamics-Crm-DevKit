@@ -630,7 +630,7 @@ function loadFormV3<TBody = Record<string, any>, THeader = Record<string, any>, 
     QuickForm: TQuickForm;
     FormId: string;
     FormLabel: string;
-    FormType: number;
+    FormType: OptionSet.FormType;
     EntityId: string;
     EntityName: string;
     DataIsDirty: boolean;
@@ -640,7 +640,7 @@ function loadFormV3<TBody = Record<string, any>, THeader = Record<string, any>, 
     DataXml: string;
     EntityIsDirty: boolean;
     EntityIsValid: boolean;
-    EntityReference: any;
+    EntityReference: DevKit.EntityReference;
     PrimaryAttributeValue: string;
     ViewPortHeight: number;
     ViewPortWidth: number;
@@ -1122,7 +1122,7 @@ export class FormBase<TBody = any, THeader = any, TGrid = any, TNavigation = any
     public Copilot: DevKit.ICopilot;
     public readonly FormId: string;
     public readonly FormLabel: string;
-    public readonly FormType: number;
+    public readonly FormType: OptionSet.FormType;
     public readonly EntityId: string;
     public readonly EntityName: string;
     public readonly DataIsDirty: boolean;
@@ -1132,7 +1132,7 @@ export class FormBase<TBody = any, THeader = any, TGrid = any, TNavigation = any
     public readonly DataXml: string;
     public readonly EntityIsDirty: boolean;
     public readonly EntityIsValid: boolean;
-    public readonly EntityReference: any;
+    public readonly EntityReference: DevKit.EntityReference;
     public readonly PrimaryAttributeValue: string;
     public readonly ViewPortHeight: number;
     public readonly ViewPortWidth: number;

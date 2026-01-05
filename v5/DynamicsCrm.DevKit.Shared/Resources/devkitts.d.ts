@@ -1974,6 +1974,12 @@ declare namespace DevKit {
         readonly EntityName: string;
 
         /**
+         * Returns a lookup value that references the record
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-entity/getentityreference
+         */
+        readonly EntityReference: EntityReference;
+
+        /**
          * Returns a boolean value indicating if any fields in the form have been modified
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data/getisdirty
          */

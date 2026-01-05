@@ -29,6 +29,22 @@ var formAccount = (function () {
 		var a6 = form.EntityIsValid
 		var a7 = form.EntityName;
 		var a8 = form.EntityReference;
+		var a81 = form.EntityReference.entityType;
+		var a82 = form.EntityReference.id;
+		var a83 = form.EntityReference.name;
+		var a9 = form.FormId;
+		var a10 = form.FormIsVisible("ABC");
+		var a11 = form.FormLabel;
+		form.FormNavigateToFormId("ABC");
+		form.FormNavigateToFormLabel("ABC");
+		form.FormSetVisible("ABC", false);
+		var a12 = form.FormType;
+		var a13 = form.PrimaryAttributeValue;
+		form.Refresh();
+		form.RefreshRibbon();
+		form.RemoveOnPostSave(AddOnPostSave);
+		form.Save();
+		form.SetFormEntityName("ABC");
 
 		function AddOnPostSave() {
 		}

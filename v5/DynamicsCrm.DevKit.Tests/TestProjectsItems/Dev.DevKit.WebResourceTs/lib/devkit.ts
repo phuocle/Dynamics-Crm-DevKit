@@ -630,7 +630,7 @@ function loadFormV3<TBody = Record<string, any>, THeader = Record<string, any>, 
     QuickForm: TQuickForm;
     FormId: string;
     FormLabel: string;
-    FormType: number;
+    FormType: OptionSet.FormType;
     EntityId: string;
     EntityName: string;
     DataIsDirty: boolean;
@@ -1169,7 +1169,7 @@ export class FormBase<TBody = any, THeader = any, TGrid = any, TNavigation = any
      * Returns the form type (Create=1, Update=2, ReadOnly=3, Disabled=4, BulkEdit=6)
      * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui/getformtype
      */
-    public readonly FormType: number;
+    public readonly FormType: OptionSet.FormType;
     /**
      * Returns the GUID ID of the record
      * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-entity/getid
@@ -1219,7 +1219,7 @@ export class FormBase<TBody = any, THeader = any, TGrid = any, TNavigation = any
      * Returns an entity reference for the record
      * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-entity/getentityreference
      */
-    public readonly EntityReference: any;
+    public readonly EntityReference: DevKit.EntityReference;
     /**
      * Returns the value of the primary attribute for the entity
      * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-entity/getprimaryattributevalue
