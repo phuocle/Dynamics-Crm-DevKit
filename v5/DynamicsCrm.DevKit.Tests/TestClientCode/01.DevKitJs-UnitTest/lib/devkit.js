@@ -1,4 +1,10 @@
-﻿'use strict';
+﻿// -----------------------------------------------------------------------------------
+// --------------------------- SOURCE OF TRUTH ---------------------------------------
+// -----------------------------------------------------------------------------------
+// This file is a Source of Truth for the DynamicsCrm.DevKit project.
+// Do not edit without considering the impact on the entire toolkit.
+// -----------------------------------------------------------------------------------
+'use strict';
 const devKit = (function () {
     function getXrm() {
         if (typeof window !== 'undefined' && window.Xrm !== undefined) {

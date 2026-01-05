@@ -17,11 +17,11 @@ The following files are the **Source of Truth** for the project. Before making A
 - Account.form.js => DynamicsCrm.DevKit.Tests\TestClientCode\05.DevKitJs-Vsix\Dev.DevKit.WebResource\entities\Account.form.js
 - Account.webapi.js => DynamicsCrm.DevKit.Tests\TestClientCode\05.DevKitJs-Vsix\Dev.DevKit.WebResource\entities\Account.webapi.js
 - Account.d.ts => DynamicsCrm.DevKit.Tests\TestClientCode\05.DevKitJs-Vsix\Dev.DevKit.WebResource\entities\Account.d.ts
-- Account.form.ts => DynamicsCrm.DevKit.Tests\TestClientCode\06.DevKitTs-Vsix\Dev.DevKit.WebResource\entities\Account.form.ts
-- Account.webapi.ts => DynamicsCrm.DevKit.Tests\TestClientCode\06.DevKitTs-Vsix\Dev.DevKit.WebResource\entities\Account.webapi.ts
+- Account.form.ts => DynamicsCrm.DevKit.Tests\TestClientCode\06.DevKitTs-Vsix\Dev.DevKit.WebResourceTs\entities\Account.form.ts
+- Account.webapi.ts => DynamicsCrm.DevKit.Tests\TestClientCode\06.DevKitTs-Vsix\Dev.DevKit.WebResourceTs\entities\Account.webapi.ts
 
 # NEVER, NEVER TOUCH CODE SOURCES OF TRUTH FILES GENERATOR #
-- Các files sources of generator KHÔNG bao giờ touch vào và edit. 
+- Các files sources of generator KHÔNG bao giờ touch vào và edit.
 - Files sẽ được generator ra theo profile bên dưới và được SYNC vào đúng lại folder tương ứng
 
 # CLI PROFILE NAME GENNERATOR SOURCES OF TRUTH FILES #
@@ -57,7 +57,7 @@ Công việc đã xong, anh Phước kiểm tra lại nhé.
 - Khi bug, thì sau khi xác định được bug và nguyên nhân, thì phải SỬA Ở FILES SOURCE OF TRUTH, sau đó mới SYNC
 
 # SYNC 5 CORE FILES SOURCE OF TRUTH #
-- 1 trong 4 files source of truth ở trên có thay đổi thì cần phải sync vào các folder tương ứng
+- 1 trong 5 files source of truth ở trên có thay đổi thì cần phải sync vào các folder tương ứng
 - sync bằng các COPY và đè vào tương ứng như sau, luôn luôn làm, không cần hỏi và theo hướng dẫn dưới đây
 
 DynamicsCrm.DevKit.Shared\Resources\devkit.js
@@ -69,17 +69,17 @@ DynamicsCrm.DevKit.Shared\Resources\devkit.d.ts
    --> DynamicsCrm.DevKit.Tests\TestClientCode\03.DevKitJs-AICode\Dev.DevKit.WebResource\entities\devkit.d.ts
    --> DynamicsCrm.DevKit.Tests\TestClientCode\05.DevKitJs-Vsix\Dev.DevKit.WebResource\entities\devkit.d.ts
 DynamicsCrm.DevKit.Shared\Resources\devkit.ts
-   -->DynamicsCrm.DevKit.Tests\TestClientCode\02.DevKitTs-UnitTest\lib\devkit.ts
+   --> DynamicsCrm.DevKit.Tests\TestClientCode\02.DevKitTs-UnitTest\lib\devkit.ts
    --> DynamicsCrm.DevKit.Tests\TestClientCode\04.DevKitJs-AICode\Dev.DevKit.WebResource\lib\devkit.ts
    --> DynamicsCrm.DevKit.Tests\TestClientCode\06.DevKitJs-Vsix\Dev.DevKit.WebResource\lib\devkit.ts
 DynamicsCrm.DevKit.Shared\Resources\devkit.ts
    -->DynamicsCrm.DevKit.Tests\TestClientCode\02.DevKitTs-UnitTest\lib\devkit.d.ts
-   --> DynamicsCrm.DevKit.Tests\TestClientCode\04.DevKitJs-AICode\Dev.DevKit.WebResource\lib\devkit.d.ts
-   --> DynamicsCrm.DevKit.Tests\TestClientCode\06.DevKitJs-Vsix\Dev.DevKit.WebResource\lib\devkit.d.ts
+   --> DynamicsCrm.DevKit.Tests\TestClientCode\04.DevKitJs-AICode\Dev.DevKit.WebResourceTs\lib\devkit.d.ts
+   --> DynamicsCrm.DevKit.Tests\TestClientCode\06.DevKitJs-Vsix\Dev.DevKit.WebResourceTs\lib\devkit.d.ts
 DynamicsCrm.DevKit.Shared\Resources\build.js
    -->DynamicsCrm.DevKit.Tests\TestClientCode\02.DevKitTs-UnitTest\build.js
-   --> DynamicsCrm.DevKit.Tests\TestClientCode\04.DevKitJs-AICode\Dev.DevKit.WebResource\build.js
-   --> DynamicsCrm.DevKit.Tests\TestClientCode\06.DevKitJs-Vsix\Dev.DevKit.WebResource\build.js
+   --> DynamicsCrm.DevKit.Tests\TestClientCode\04.DevKitJs-AICode\Dev.DevKit.WebResourceTs\build.js
+   --> DynamicsCrm.DevKit.Tests\TestClientCode\06.DevKitJs-Vsix\Dev.DevKit.WebResourceTs\build.js
 
 # SYNC SOURCE OF TRUTH FILES GENERATOR #
 - Run CLI profile tương ứng để generator ra files tương ứng

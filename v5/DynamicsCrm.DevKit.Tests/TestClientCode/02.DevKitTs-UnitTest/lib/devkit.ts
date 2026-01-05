@@ -1,3 +1,9 @@
+// -----------------------------------------------------------------------------------
+// --------------------------- SOURCE OF TRUTH ---------------------------------------
+// -----------------------------------------------------------------------------------
+// This file is a Source of Truth for the DynamicsCrm.DevKit project.
+// Do not edit without considering the impact on the entire toolkit.
+// -----------------------------------------------------------------------------------
 /// <reference path="./devkit.d.ts" />
 function getXrm(): typeof Xrm | undefined {
     if (typeof window !== 'undefined' && (window as any).Xrm !== undefined) {
@@ -630,7 +636,7 @@ function loadFormV3<TBody = Record<string, any>, THeader = Record<string, any>, 
     QuickForm: TQuickForm;
     FormId: string;
     FormLabel: string;
-    FormType: number;
+    FormType: OptionSet.FormType;
     EntityId: string;
     EntityName: string;
     DataIsDirty: boolean;
@@ -640,14 +646,14 @@ function loadFormV3<TBody = Record<string, any>, THeader = Record<string, any>, 
     DataXml: string;
     EntityIsDirty: boolean;
     EntityIsValid: boolean;
-    EntityReference: any;
+    EntityReference: DevKit.EntityReference;
     PrimaryAttributeValue: string;
     ViewPortHeight: number;
     ViewPortWidth: number;
     Save: (saveOptions?: any, successCallback?: any, errorCallback?: any) => Promise<void> | void;
     Refresh: (save?: boolean, successCallback?: any, errorCallback?: any) => Promise<void> | void;
     Close: () => void;
-    SetFormNotification: (message: string, level: string, uniqueId: string) => boolean;
+    SetFormNotification: (message: string, level: OptionSet.FormNotificationLevel, uniqueId: string) => boolean;
     ClearFormNotification: (uniqueId: string) => boolean;
     RefreshRibbon: (refreshAll?: boolean) => void;
     UiAddLoaded: (callback: (context: any) => void) => void;
@@ -1122,7 +1128,7 @@ export class FormBase<TBody = any, THeader = any, TGrid = any, TNavigation = any
     public Copilot: DevKit.ICopilot;
     public readonly FormId: string;
     public readonly FormLabel: string;
-    public readonly FormType: number;
+    public readonly FormType: OptionSet.FormType;
     public readonly EntityId: string;
     public readonly EntityName: string;
     public readonly DataIsDirty: boolean;
@@ -1132,14 +1138,14 @@ export class FormBase<TBody = any, THeader = any, TGrid = any, TNavigation = any
     public readonly DataXml: string;
     public readonly EntityIsDirty: boolean;
     public readonly EntityIsValid: boolean;
-    public readonly EntityReference: any;
+    public readonly EntityReference: DevKit.EntityReference;
     public readonly PrimaryAttributeValue: string;
     public readonly ViewPortHeight: number;
     public readonly ViewPortWidth: number;
     public Save: (saveOptions?: any, successCallback?: any, errorCallback?: any) => Promise<void> | void;
     public Refresh: (save?: boolean, successCallback?: any, errorCallback?: any) => Promise<void> | void;
     public Close: () => void;
-    public SetFormNotification: (message: string, level: string, uniqueId: string) => boolean;
+    public SetFormNotification: (message: string, level: OptionSet.FormNotificationLevel, uniqueId: string) => boolean;
     public ClearFormNotification: (uniqueId: string) => boolean;
     public RefreshRibbon: (refreshAll?: boolean) => void;
     public UiAddLoaded: (callback: (context: any) => void) => void;

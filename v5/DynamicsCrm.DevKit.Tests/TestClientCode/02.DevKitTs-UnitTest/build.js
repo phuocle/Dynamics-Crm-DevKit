@@ -1,9 +1,9 @@
 /**
  * Build script - Build entity .ts files
- * Usage: 
+ * Usage:
  *   node build.js [debug|release]           - Build ALL entities
  *   node build.js [debug|release] <Entity>  - Build SINGLE entity
- * 
+ *
  * Examples:
  *   node build.js debug           - Build all in debug mode
  *   node build.js release         - Build all in release mode
@@ -43,6 +43,8 @@ function getEntityFiles() {
     const files = fs.readdirSync(entitiesDir);
     return files.filter(file => {
         if (!file.endsWith('.ts')) return false;
+        // Skip .form.ts files - they are imported by main .ts files
+        if (file.endsWith('.form.ts')) return false;
         const filePath = path.join(entitiesDir, file);
         const stat = fs.statSync(filePath);
         return stat.isFile();

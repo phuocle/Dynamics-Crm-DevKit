@@ -1,9 +1,9 @@
-﻿/**
+/**
  * Build script - Build entity .ts files
- * Usage: 
+ * Usage:
  *   node build.js [debug|release]           - Build ALL entities
  *   node build.js [debug|release] <Entity>  - Build SINGLE entity
- * 
+ *
  * Examples:
  *   node build.js debug           - Build all in debug mode
  *   node build.js release         - Build all in release mode
@@ -151,4 +151,3 @@ build().catch(err => {
     console.error(err);
     process.exit(1);
 });
-

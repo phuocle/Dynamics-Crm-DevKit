@@ -116,6 +116,8 @@ declare namespace DevKit {
 			IndustryCode: DevKit.Controls.OptionSet;
 			/** Type the company or business name. */
 			Name: DevKit.Controls.String;
+			/** Type the company or business name. */
+			Name_1: DevKit.Controls.String;
 			/** Choose the primary contact for the account to provide quick access to contact details. */
 			PrimaryContactId: DevKit.Controls.Lookup;
 			/** Type the annual revenue for the account, used as an indicator in financial performance analysis. */
@@ -188,7 +190,7 @@ declare namespace DevKit {
 			/** Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
 			OwnerId3: DevKit.Controls.Lookup;
 			v4_Boolean: DevKit.Controls.Boolean;
-			v4_DateOnly: DevKit.Controls.Date;
+			v4_DateOnly: DevKit.Controls.DateOnly;
 			v4_DateTime: DevKit.Controls.DateTime;
 			v4_Decimal: DevKit.Controls.Decimal;
 			v4_Double: DevKit.Controls.Double;
@@ -238,6 +240,8 @@ declare namespace DevKit {
 			IndustryCode: DevKit.Controls.OptionSet;
 			/** Type the company or business name. */
 			Name: DevKit.Controls.String;
+			/** Type the company or business name. */
+			Name_1: DevKit.Controls.String;
 			/** Choose the primary contact for the account to provide quick access to contact details. */
 			PrimaryContactId: DevKit.Controls.Lookup;
 			/** Type the annual revenue for the account, used as an indicator in financial performance analysis. */
@@ -376,6 +380,8 @@ declare namespace DevKit {
 			IndustryCode: DevKit.Controls.OptionSet;
 			/** Type the company or business name. */
 			Name: DevKit.Controls.String;
+			/** Type the company or business name. */
+			Name_1: DevKit.Controls.String;
 			/** Choose the primary contact for the account to provide quick access to contact details. */
 			PrimaryContactId: DevKit.Controls.Lookup;
 			/** Type the annual revenue for the account, used as an indicator in financial performance analysis. */
@@ -565,6 +571,8 @@ declare namespace DevKit {
 			IndustryCode: DevKit.Controls.OptionSet;
 			/** Type the company or business name. */
 			Name: DevKit.Controls.String;
+			/** Type the company or business name. */
+			Name_1: DevKit.Controls.String;
 			/** Choose the primary contact for the account to provide quick access to contact details. */
 			PrimaryContactId: DevKit.Controls.Lookup;
 			/** Type the annual revenue for the account, used as an indicator in financial performance analysis. */

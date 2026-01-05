@@ -1,4 +1,10 @@
-﻿/**
+// -----------------------------------------------------------------------------------
+// --------------------------- SOURCE OF TRUTH ---------------------------------------
+// -----------------------------------------------------------------------------------
+// This file is a Source of Truth for the DynamicsCrm.DevKit project.
+// Do not edit without considering the impact on the entire toolkit.
+// -----------------------------------------------------------------------------------
+/**
  * DynamicsCrm.DevKit TypeScript Definitions
  *
  * @version 4.0
@@ -94,7 +100,7 @@ declare namespace DevKit {
 
         /**
          * Returns a value indicating whether the form data is loading for the first time.
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/save-event-arguments/getdataloadstate
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/save-event-arguments#getdataloadstate
          */
         IsInitialLoad(): boolean;
 
@@ -649,6 +655,24 @@ declare namespace DevKit {
 
 
         /**
+         * Interface for EmailEngagement controls
+         * Used for email engagement actions control on Email forms
+         */
+        interface EmailEngagement {
+            /** Get/Set a value that indicates whether the control is currently visible */
+            Visible: boolean;
+        }
+
+        /**
+         * Interface for EmailRecipient controls
+         * Used for email recipient activity control on Email forms
+         */
+        interface EmailRecipient {
+            /** Get/Set a value that indicates whether the control is currently visible */
+            Visible: boolean;
+        }
+
+        /**
          * Interface for WebResource controls
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
          */
@@ -909,94 +933,94 @@ declare namespace DevKit {
             /**
              * Adds an event handler to the OnLoad event
              * @param callback The function to be executed on the OnLoad event
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/gridonload
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/gridcontrol/addonload
              */
             AddOnLoad(callback: (executionContext: any) => void): void;
 
             /**
              * Removes an event handler from the OnLoad event
              * @param callback The function to be removed from the OnLoad event
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/removeonload
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/gridcontrol/removeonload
              */
             RemoveOnLoad(callback: (executionContext: any) => void): void;
 
             /**
              * Opens the related grid
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/openrelatedgrid
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/gridcontrol/openrelatedgrid
              */
             OpenRelatedGrid(): void;
 
             /**
              * Refreshes the data displayed in the grid
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/refresh
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/gridcontrol/refresh
              */
             Refresh(): void;
 
             /**
              * Refreshes the ribbon
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/refreshribbon
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/gridcontrol/refreshribbon
              */
             RefreshRibbon(): void;
 
             /**
              * Returns the URL for the current grid
              * @param client 1=Web, 2=Outlook
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/geturl
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/gridcontrol/geturl
              */
             Url(client?: number): string;
 
             /**
              * Get the logical name of the entity data displayed in the grid
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/getentityname
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/gridcontrol/getentityname
              */
             readonly EntityName: string;
 
             /**
              * Get the FetchXML query that represents the current data in the grid
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/getfetchxml
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/gridcontrol/getfetchxml
              */
             readonly FetchXml: string;
 
             /**
              * Get the grid type: 1=HomePageGrid, 2=Subgrid
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/getgridtype
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/gridcontrol/getgridtype
              */
             readonly GridType: OptionSet.GridType;
 
             /**
              * Get the relationship information for the subgrid
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/getrelationship
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/gridcontrol/getrelationship
              */
             readonly Relationship: { name: string; navigationPropertyName: string; relationshipType: OptionSet.FormRelationshipType; roleType: OptionSet.FormRelationshipRoleType };
 
             /**
              * Collection of rows in the grid
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/getrows
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/grid/getrows
              */
             readonly Rows: Collections<GridRow>;
 
             /**
              * Collection of selected rows in the grid
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/getselectedrows
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/grid/getselectedrows
              */
             readonly SelectedRows: Collections<GridRow>;
 
             /**
              * Get the total record count (limited to 5000)
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/gettotalrecordcount
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/grid/gettotalrecordcount
              */
             readonly TotalRecordCount: number;
 
             /**
              * Get the view selector for the grid
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/getviewselector
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/gridcontrol/getviewselector
              */
             readonly ViewSelector: ViewSelector;
 
             /**
              * Get/Set a value that indicates whether the grid is currently visible
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/getvisible
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/setvisible
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getvisible
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/setvisible
              */
             Visible: boolean;
 
@@ -1954,6 +1978,12 @@ declare namespace DevKit {
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-entity/getentityname
          */
         readonly EntityName: string;
+
+        /**
+         * Returns a lookup value that references the record
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-entity/getentityreference
+         */
+        readonly EntityReference: EntityReference;
 
         /**
          * Returns a boolean value indicating if any fields in the form have been modified
@@ -3018,7 +3048,7 @@ declare namespace DevKit {
         /**
          * Gets the advanced configuration setting
          * @param setting The setting name
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getadvancedconfigsetting
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/getadvancedconfigsetting
          */
         AdvancedConfigSetting(setting: OptionSet.AdvancedConfigSetting): number;
 
@@ -3110,7 +3140,7 @@ declare namespace DevKit {
         /**
          * Gets a web resource URL
          * @param webResourceName The name of the web resource
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getwebresourceurl
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/getwebresourceurl
          */
         WebResourceUrl(webResourceName: string): string;
 
@@ -3135,12 +3165,12 @@ declare namespace DevKit {
 
     /**
      * Interface for Side Panes API
-     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app/xrm-app-sidepanes
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app-sidepanes
      */
     interface ISidePanes {
         /**
          * Get/Set the display state of the side panes: 0=Collapsed, 1=Expanded
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app/xrm-app-sidepanes#state
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app-sidepanes#state
          */
         DisplayState: OptionSet.SidePaneState;
 
@@ -3209,7 +3239,7 @@ declare namespace DevKit {
 
     /**
      * Represents a side pane instance
-     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app/xrm-app-sidepanes
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app-sidepanes
      */
     interface ISidePane extends ISidePaneBase {
         /** Closes the side pane and removes it from the side bar. */
@@ -3436,7 +3466,7 @@ declare namespace DevKit {
         /**
          * Returns whether an entity is offline enabled
          * @param entityLogicalName Logical name of the entity. For example: "account"
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi/offline/isavailable
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi/isavailableoffline
          */
         IsAvailable(entityLogicalName: string): boolean;
     }
@@ -3639,7 +3669,7 @@ declare namespace DevKit {
 
     /**
      * Interface for process object
-     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/process
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process#process-methods
      */
     interface ProcessProcess {
         /**
@@ -3666,7 +3696,7 @@ declare namespace DevKit {
 
     /**
      * Interface for process stage
-     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/stage
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process#stage-methods
      */
     interface ProcessStage {
         /**
@@ -3709,7 +3739,7 @@ declare namespace DevKit {
 
     /**
      * Interface for process step
-     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/step
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process#step-methods
      */
     interface ProcessStep {
         /**
@@ -4156,7 +4186,7 @@ declare namespace OptionSet {
     type GridType = 1 | 2;
     /**
      * Display state of the side pane
-     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app-sidepanes/state
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app-sidepanes#state
      */
     type SidePaneState = 0 | 1;
     /**
