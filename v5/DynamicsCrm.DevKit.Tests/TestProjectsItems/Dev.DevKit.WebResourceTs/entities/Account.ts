@@ -190,7 +190,7 @@ const formAccount = (function () {
 
 		form.SidePanes.Create({ alwaysRender: true }, ok);
 		var a84 = form.SidePanes.Create({ alwaysRender: false });
-
+		form.SidePanes.DisplayState = OptionSet.SidePaneDisplayState.Collapsed;
 
 		function AddOnStageSelected() { }
 		function AddOnStageChange() { }

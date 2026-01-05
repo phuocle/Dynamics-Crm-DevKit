@@ -33,11 +33,11 @@ var formAccount = (function () {
 		var a8_2 = form.EntityReference.id;
 		var a8_3 = form.EntityReference.name;
 		var a9 = form.FormId;
-		var a10 = form.FormIsVisible("ABC");
+		var a10 = form.FormIsVisible("A-A-A-A-A");
 		var a11 = form.FormLabel;
-		form.FormNavigateToFormId("ABC");
+		form.FormNavigateToFormId("A-A-A-A-A");
 		form.FormNavigateToFormLabel("ABC");
-		form.FormSetVisible("ABC", false);
+		form.FormSetVisible("A-A-A-A-A", false);
 		var a12 = form.FormType;
 		var a13 = form.PrimaryAttributeValue;
 		form.Refresh();
@@ -190,8 +190,8 @@ var formAccount = (function () {
 		var a82 = form.QuickForm.contactquickform.Visible;
 
 		form.SidePanes.Create({ alwaysRender: true }, ok);
-        var a84 = form.SidePanes.Create({ alwaysRender: false });
-
+		var a84 = form.SidePanes.Create({ alwaysRender: false });
+        form.SidePanes.DisplayState = OptionSet.SidePaneDisplayState.Collapsed;
 
 		function AddOnStageSelected() { }
 		function AddOnStageChange() { }
