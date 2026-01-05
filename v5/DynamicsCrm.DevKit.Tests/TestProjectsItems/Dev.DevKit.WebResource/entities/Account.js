@@ -10,7 +10,33 @@ var formAccount = (function () {
 		form = new DevKit.FormAccount(executionContext);
 		registerEvents();
 		form.UiAddLoaded(UiAddLoaded);
-		form.Header.
+		TestTyping();
+	}
+	function TestTyping() {
+		form.AddOnPostSave(AddOnPostSave);
+		form.AddOnSave(AddOnSave);
+		form.Attributes.forEach((item, index) => { });
+		form.ClearFormNotification("ABC");
+		form.Close();
+		form.Controls.forEach((item, index) => { });
+		form.DataAddOnLoad(DataAddOnLoad);
+		var a1 = form.DataIsDirty;
+		var a2 = form.DataIsValid;
+		form.DataRemoveOnLoad(DataAddOnLoad);
+		var a3 = form.DataXml;
+		var a4 = form.EntityId;
+		var a5 = form.EntityIsDirty;
+		var a6 = form.EntityIsValid
+		var a7 = form.EntityName;
+		var a8 = form.EntityReference;
+
+		function AddOnPostSave() {
+		}
+		function AddOnSave() {
+		}
+		function DataAddOnLoad() {
+
+		}
 	}
 	function registerEvents() {
 		if (form.ExecutionContext.IsInitialLoad()) {
