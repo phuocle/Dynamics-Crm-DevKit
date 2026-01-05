@@ -57,11 +57,27 @@ const formAccount = (function () {
 		form.Copilot.ExecutePrompt("ACB", ok, cancel);
 		var a17 = await form.Copilot.ExecutePrompt("ABC");
 
+		form.Grid.Contacts.AddOnLoad(AddOnLoad);
+		var a18 = form.Grid.Contacts.EntityName;
+		var a19 = form.Grid.Contacts.FetchXml;
+		var a20 = form.Grid.Contacts.GridType;
+		form.Grid.Contacts.OpenRelatedGrid();
+		form.Grid.Contacts.Refresh();
+		form.Grid.Contacts.RefreshRibbon();
+		var a21 = form.Grid.Contacts.Relationship;
+		var a21_1 = form.Grid.Contacts.Relationship.attributeName;
+		var a21_2 = form.Grid.Contacts.Relationship.name;
+		var a21_3 = form.Grid.Contacts.Relationship.navigationPropertyName;
+		var a21_4 = form.Grid.Contacts.Relationship.relationshipType;
+		var a21_5 = form.Grid.Contacts.Relationship.roleType;
+
+
 		function ok() { }
 		function cancel() { }
 		function AddOnPostSave() { }
 		function AddOnSave() { }
 		function DataAddOnLoad() { }
+		function AddOnLoad() { }
 	}
 	function registerEvents(): void {
 		if (form.ExecutionContext.IsInitialLoad()) {

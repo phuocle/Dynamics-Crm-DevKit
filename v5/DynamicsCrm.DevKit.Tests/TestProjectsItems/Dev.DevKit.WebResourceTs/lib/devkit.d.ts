@@ -985,7 +985,7 @@ declare namespace DevKit {
              * Get the relationship information for the subgrid
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/getrelationship
              */
-            readonly Relationship: { name: string; navigationPropertyName: string; relationshipType: OptionSet.FormRelationshipType; roleType: OptionSet.FormRelationshipRoleType };
+            readonly Relationship: { attributeName: string; name: string; navigationPropertyName: string; relationshipType: OptionSet.FormRelationshipType; roleType: OptionSet.FormRelationshipRoleType };
 
             /**
              * Collection of rows in the grid
