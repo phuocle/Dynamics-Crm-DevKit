@@ -4,7 +4,7 @@ trigger: always_on
 
 ==== BẮT ĐẦU QUAN TRỌNG
 
-# 4 CORE SOURCES OF TRUTH (CRITICAL) #
+# 5 CORE SOURCES OF TRUTH (CRITICAL) #
 The following files are the **Source of Truth** for the project. Before making ANY changes to core logic, type definitions, or runtime behavior, you **MUST** read and verify against these files:
 1. **JS Runtime**: DynamicsCrm.DevKit.Shared\Resources\devkit.js (nói nhanh devkit.js)
 2. **JS Definitions**: DynamicsCrm.DevKit.Shared\Resources\devkit.d.ts (nói nhanh devkit.d.ts js)
@@ -56,7 +56,7 @@ Công việc đã xong, anh Phước kiểm tra lại nhé.
 # BUG #
 - Khi bug, thì sau khi xác định được bug và nguyên nhân, thì phải SỬA Ở FILES SOURCE OF TRUTH, sau đó mới SYNC
 
-# SYNC 4 CORE FILES SOURCE OF TRUTH #
+# SYNC 5 CORE FILES SOURCE OF TRUTH #
 - 1 trong 4 files source of truth ở trên có thay đổi thì cần phải sync vào các folder tương ứng
 - sync bằng các COPY và đè vào tương ứng như sau, luôn luôn làm, không cần hỏi và theo hướng dẫn dưới đây
 
@@ -76,6 +76,10 @@ DynamicsCrm.DevKit.Shared\Resources\devkit.ts
    -->DynamicsCrm.DevKit.Tests\TestClientCode\02.DevKitTs-UnitTest\lib\devkit.d.ts
    --> DynamicsCrm.DevKit.Tests\TestClientCode\04.DevKitJs-AICode\Dev.DevKit.WebResource\lib\devkit.d.ts
    --> DynamicsCrm.DevKit.Tests\TestClientCode\06.DevKitJs-Vsix\Dev.DevKit.WebResource\lib\devkit.d.ts
+DynamicsCrm.DevKit.Shared\Resources\build.js
+   -->DynamicsCrm.DevKit.Tests\TestClientCode\02.DevKitTs-UnitTest\build.js
+   --> DynamicsCrm.DevKit.Tests\TestClientCode\04.DevKitJs-AICode\Dev.DevKit.WebResource\build.js
+   --> DynamicsCrm.DevKit.Tests\TestClientCode\06.DevKitJs-Vsix\Dev.DevKit.WebResource\build.js
 
 # SYNC SOURCE OF TRUTH FILES GENERATOR #
 - Run CLI profile tương ứng để generator ra files tương ứng
