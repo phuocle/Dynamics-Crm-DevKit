@@ -487,10 +487,15 @@ declare namespace DevKit {
         interface IQuickView {
             /**
              * Gets the controls on a form or control on form by passing an argument
-             * @param arg You can access a single control in the constituent controls collection by passing an argument as either the name or the index value of the constituent control in a quick view control
+             * @param arg The name or index of the constituent control
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/getcontrol
              */
-            Controls(arg?: string | number): Array<any> | any;
+            Controls(arg: string | number): any;
+            /**
+             * Gets all controls in the quick view form as a collection
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/getcontrol
+             */
+            Controls(): DevKit.Collections<DevKit.Controls.IControl>;
             /**
              * Returns whether the data binding for the constituent controls in a quick view control is complete
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/isloaded
