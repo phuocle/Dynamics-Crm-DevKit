@@ -89,6 +89,17 @@ const formAccount = (function () {
 			var a25_3 = row.EntityReference.name;
 			var a26 = row.PrimaryAttributeValue;
 		});
+		form.Grid.Contacts.SelectedRows.forEach((row, index) => {
+		});
+		var a32 = form.Grid.Contacts.TotalRecordCount;
+		var a33 = form.Grid.Contacts.Url(0);
+		var a34 = form.Grid.Contacts.Url(1);
+		var a35 = form.Grid.Contacts.ViewSelector;
+		var a35_1 = form.Grid.Contacts.ViewSelector.CurrentView;
+		var a35_1_1 = form.Grid.Contacts.ViewSelector.CurrentView.entityType;
+		var a35_1_2 = form.Grid.Contacts.ViewSelector.CurrentView.id;
+		var a35_1_3 = form.Grid.Contacts.ViewSelector.CurrentView.name;
+		var a35_2 = form.Grid.Contacts.ViewSelector.Visible;
 		function ok() { }
 		function cancel() { }
 		function AddOnPostSave() { }
