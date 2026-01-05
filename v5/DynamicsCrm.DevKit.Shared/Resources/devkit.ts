@@ -647,7 +647,7 @@ function loadFormV3<TBody = Record<string, any>, THeader = Record<string, any>, 
     Save: (saveOptions?: any, successCallback?: any, errorCallback?: any) => Promise<void> | void;
     Refresh: (save?: boolean, successCallback?: any, errorCallback?: any) => Promise<void> | void;
     Close: () => void;
-    SetFormNotification: (message: string, level: string, uniqueId: string) => boolean;
+    SetFormNotification: (message: string, level: OptionSet.FormNotificationLevel, uniqueId: string) => boolean;
     ClearFormNotification: (uniqueId: string) => boolean;
     RefreshRibbon: (refreshAll?: boolean) => void;
     UiAddLoaded: (callback: (context: any) => void) => void;
@@ -1139,7 +1139,7 @@ export class FormBase<TBody = any, THeader = any, TGrid = any, TNavigation = any
     public Save: (saveOptions?: any, successCallback?: any, errorCallback?: any) => Promise<void> | void;
     public Refresh: (save?: boolean, successCallback?: any, errorCallback?: any) => Promise<void> | void;
     public Close: () => void;
-    public SetFormNotification: (message: string, level: string, uniqueId: string) => boolean;
+    public SetFormNotification: (message: string, level: OptionSet.FormNotificationLevel, uniqueId: string) => boolean;
     public ClearFormNotification: (uniqueId: string) => boolean;
     public RefreshRibbon: (refreshAll?: boolean) => void;
     public UiAddLoaded: (callback: (context: any) => void) => void;

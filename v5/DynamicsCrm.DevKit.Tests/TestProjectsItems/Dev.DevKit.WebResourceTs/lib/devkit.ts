@@ -647,7 +647,7 @@ function loadFormV3<TBody = Record<string, any>, THeader = Record<string, any>, 
     Save: (saveOptions?: any, successCallback?: any, errorCallback?: any) => Promise<void> | void;
     Refresh: (save?: boolean, successCallback?: any, errorCallback?: any) => Promise<void> | void;
     Close: () => void;
-    SetFormNotification: (message: string, level: string, uniqueId: string) => boolean;
+    SetFormNotification: (message: string, level: OptionSet.FormNotificationLevel, uniqueId: string) => boolean;
     ClearFormNotification: (uniqueId: string) => boolean;
     RefreshRibbon: (refreshAll?: boolean) => void;
     UiAddLoaded: (callback: (context: any) => void) => void;
@@ -1264,7 +1264,7 @@ export class FormBase<TBody = any, THeader = any, TGrid = any, TNavigation = any
      * @returns true if the notification was successfully set, otherwise false
      * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui/setformnotification
      */
-    public SetFormNotification: (message: string, level: string, uniqueId: string) => boolean;
+    public SetFormNotification: (message: string, level: OptionSet.FormNotificationLevel, uniqueId: string) => boolean;
     /**
      * Clears the form notification with the specified unique ID
      * @param uniqueId The ID of the notification to clear

@@ -1,5 +1,5 @@
 ﻿import { FormAccount, FormAccount_DevKitV4, FormAccount_for_Interactive_experience, FormAccount_Quick_Create, FormAccount_Information } from './Account.form';
-
+import { OptionSet } from './OptionSet';
 const formAccount = (function () {
 	"use strict";
 
@@ -44,15 +44,16 @@ const formAccount = (function () {
 		form.RemoveOnPostSave(AddOnPostSave);
 		form.Save();
 		form.SetFormEntityName("ABC");
-
-
-
+		form.SetFormNotification("ABC", OptionSet.FormNotificationLevel.Info, "ABC");
+		form.UiAddLoaded(UiAddLoaded);
+		form.UiRemoveOnLoad(UiAddLoaded);
+		var a14 = form.ViewPortHeight;
+		var a15 = form.ViewPortWidth;
 		function AddOnPostSave() {
 		}
 		function AddOnSave() {
 		}
 		function DataAddOnLoad() {
-
 		}
 	}
 	function registerEvents(): void {

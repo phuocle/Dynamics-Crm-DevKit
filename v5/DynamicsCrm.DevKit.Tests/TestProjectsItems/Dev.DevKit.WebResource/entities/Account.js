@@ -45,7 +45,11 @@ var formAccount = (function () {
 		form.RemoveOnPostSave(AddOnPostSave);
 		form.Save();
 		form.SetFormEntityName("ABC");
-
+		form.SetFormNotification("ABC", OptionSet.FormNotificationLevel.Info, "ABC");
+		form.UiAddLoaded(UiAddLoaded);
+		form.UiRemoveOnLoad(UiAddLoaded);
+		var a14 = form.ViewPortHeight;
+		var a15 = form.ViewPortWidth;
 		function AddOnPostSave() {
 		}
 		function AddOnSave() {
