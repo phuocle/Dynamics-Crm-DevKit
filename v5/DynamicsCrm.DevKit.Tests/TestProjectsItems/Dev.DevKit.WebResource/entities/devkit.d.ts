@@ -4337,6 +4337,7 @@ declare namespace DevKit {
         select(): void,
         /** Opens a page within the selected pane. This is similar to the navigateTo method. */
         navigate(pageInput: PageInputEntityList | PageInputHtmlWebResource | PageInputEntityRecord | PageInputDashboard, navigationOptions?: NavigationOptions, successCallback?: (result: any) => void, errorCallback?: (error: Error) => void): void,
+        /** The badge to be displayed on the pane. */
         badge?: number
     }
     /**
@@ -4348,7 +4349,7 @@ declare namespace DevKit {
          * Get/Set the display state of the side panes: 0=Collapsed, 1=Expanded
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app/xrm-app-sidepanes#state
          */
-        DisplayState: OptionSet.SidePaneState;;
+        DisplayState: OptionSet.SidePaneState;
         /**
          * Creates a new side pane
          * @param paneOptions Options for creating the pane

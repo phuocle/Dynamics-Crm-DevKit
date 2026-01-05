@@ -191,7 +191,23 @@ var formAccount = (function () {
 
 		form.SidePanes.Create({ alwaysRender: true }, ok);
 		var a84 = form.SidePanes.Create({ alwaysRender: false });
-        form.SidePanes.DisplayState = OptionSet.SidePaneState.Collapsed;
+		var a88 = form.SidePanes.DisplayState;
+		var a85 = form.SidePanes.Get("A");
+		var a86 = form.SidePanes.GetAll().forEach((pane, index) => { });
+		var a87 = form.SidePanes.GetSelected();
+		var a89 = form.SidePanes.GetSelected().alwaysRender;
+		var a90 = form.SidePanes.GetSelected().badge;
+		var a91 = form.SidePanes.GetSelected().canClose;
+		var a92 = form.SidePanes.GetSelected().close();
+		var a93 = form.SidePanes.GetSelected().hidden;
+		var a94 = form.SidePanes.GetSelected().imageSrc;
+		var a95 = form.SidePanes.GetSelected().keepBadgeOnSelect;
+		var a96 = form.SidePanes.GetSelected().navigate(null, null, ok, cancel);
+		var a97 = form.SidePanes.GetSelected().paneId;
+		var a98 = form.SidePanes.GetSelected().select();
+		var a99 = form.SidePanes.GetSelected().title;
+
+
 
 		function AddOnStageSelected() { }
 		function AddOnStageChange() { }

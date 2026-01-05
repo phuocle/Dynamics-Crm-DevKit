@@ -4337,6 +4337,7 @@ declare namespace DevKit {
         select(): void,
         /** Opens a page within the selected pane. This is similar to the navigateTo method. */
         navigate(pageInput: PageInputEntityList | PageInputHtmlWebResource | PageInputEntityRecord | PageInputDashboard, navigationOptions?: NavigationOptions, successCallback?: (result: any) => void, errorCallback?: (error: Error) => void): void,
+        /** The badge to be displayed on the pane. */
         badge?: number
     }
     /**
