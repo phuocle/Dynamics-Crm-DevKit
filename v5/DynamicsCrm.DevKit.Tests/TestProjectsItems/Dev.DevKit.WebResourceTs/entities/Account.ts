@@ -158,8 +158,22 @@ const formAccount = (function () {
 		var a64 = form.Process.InstanceName;
 		form.Process.MoveNext((value) => { });
 		form.Process.MovePrevious((value) => { });
-
-
+		form.Process.ProcessInstances((processes) => {
+			var a65 = processes[0].CreatedOn;
+			var a66 = processes[0].CreatedOnDate;
+			var a67 = processes[0].InstanceId;
+			var a68 = processes[0].InstanceName;
+			var a69 = processes[0].ProcessId;
+			var a70 = processes[0].ProcessName;
+			var a71 = processes[0].Status;
+		});
+		form.Process.Reflow(true, "ABC", "DEF");
+		var a72 = form.Process.SelectedStage.AllowCreateNew;
+		form.Process.SetActiveProcess("A-A-A-A-A", ok);
+		form.Process.SetActiveProcessInstance("A-A-A-A-A", ok);
+		form.Process.SetActiveStage("A-A-A-A-A", ok);
+		var a73 = form.Process.Status;
+		var a74 = form.Process.Visible;
 
 
 
