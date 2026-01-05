@@ -4007,6 +4007,100 @@ declare namespace DevKit {
          */
         GetSecurityRolePrivilegesInfo(): Promise<{ [key: string]: SecurityRolePrivilegeInfo }>;
     }
+
+    /**
+     * Interface for SidePane
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app-sidepanes/createpane
+     */
+    interface ISidePane {
+        /**
+         * The pane ID
+         */
+        paneId: string;
+        /**
+         * The title of the pane
+         */
+        title: string;
+        /**
+         * The image source of the pane
+         */
+        imageSrc: string;
+        /**
+         * Whether the pane can be closed
+         */
+        canClose: boolean;
+        /**
+         * Whether the pane is initially hidden
+         */
+        hidden: boolean;
+        /**
+         * Whether the pane is always rendered
+         */
+        alwaysRender: boolean;
+        /**
+         * The badge to display on the pane tab
+         */
+        badge: number | string;
+        /**
+         * Whether to keep the badge when the pane is selected
+         */
+        keepBadgeOnSelect: boolean;
+        /**
+         * Closes the side pane
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app-sidepanes/sidepane/close
+         */
+        close(): void;
+        /**
+         * Selects the side pane
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app-sidepanes/sidepane/select
+         */
+        select(): void;
+        /**
+         * Navigates the side pane to a new page
+         * @param pageInput The page input to navigate to
+         * @param navigationOptions The navigation options
+         * @param successCallback The success callback
+         * @param errorCallback The error callback
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app-sidepanes/sidepane/navigate
+         */
+        navigate(pageInput: any, navigationOptions?: any, successCallback?: any, errorCallback?: any): void;
+    }
+
+    /**
+     * Interface for SidePanes
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app-sidepanes
+     */
+    interface ISidePanes {
+        /**
+         * The display state of the side canes
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app-sidepanes/state
+         */
+        DisplayState: OptionSet.SidePaneState;
+        /**
+         * Creates a new side pane
+         * @param paneOptions The options for creating the pane
+         * @param successCallback The success callback (returns promise if not provided)
+         * @param errorCallback The error callback
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app-sidepanes/createpane
+         */
+        Create(paneOptions: any, successCallback?: (pane: ISidePane) => void, errorCallback?: ErrorCallback): Promise<ISidePane> | void;
+        /**
+         * Gets a side pane by ID
+         * @param paneId The ID of the pane to get
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app-sidepanes/getpane
+         */
+        Get(paneId: string): ISidePane;
+        /**
+         * Gets all side panes
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app-sidepanes/getallpanes
+         */
+        GetAll(): Collections<ISidePane>;
+        /**
+         * Gets the currently selected side pane
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app-sidepanes/getselectedpane
+         */
+        GetSelected(): ISidePane;
+    }
 }
 
 /** DynamicsCrm.DevKit for namespace OptionSet */

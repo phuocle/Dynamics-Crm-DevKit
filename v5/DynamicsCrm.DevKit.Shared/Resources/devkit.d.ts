@@ -358,7 +358,7 @@ declare namespace DevKit {
         }
         /**
          * Represents a stage in a business process flow
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/stage
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process#stage-methods
          */
         interface ProcessStage {
             /**
@@ -400,7 +400,7 @@ declare namespace DevKit {
         }
         /**
  * Represents a step within a business process flow stage
- * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/step
+ * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process#step-methods
  */
         interface ProcessStep {
             /**
@@ -481,7 +481,7 @@ declare namespace DevKit {
         }
         /**
          * Represents the current active business process flow definition
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/process
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process#process-methods
          */
         interface ProcessProcess {
             /**
@@ -1048,7 +1048,7 @@ declare namespace DevKit {
             Focus(): void;
             /**
              * Returns a string value that categorizes quick view controls
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/getcontrolhttps://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/getcontroltype
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/getcontroltype
              */
             readonly ControlType: OptionSet.FieldControlType;
             /**
@@ -2373,7 +2373,7 @@ declare namespace DevKit {
         /**
          * Returns whether an entity is offline enabled
          * @param entityLogicalName Logical name of the entity. For example: "account".
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi/offline/isavailable
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi/isavailableoffline
          */
         IsAvailable(entityLogicalName: string): boolean;
     }
@@ -4328,7 +4328,7 @@ declare namespace DevKit {
     }
     /**
      * Represents a side pane instance with methods to control it
-     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app/xrm-app-appsidepane
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app-appsidepane
      */
     interface ISidePane extends ISidePaneBase {
         /** Closes the side pane and removes it from the side bar. */
@@ -4342,12 +4342,12 @@ declare namespace DevKit {
     }
     /**
      * Interface for Side Panes API
-     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app/xrm-app-sidepanes
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app-sidepanes
      */
     interface ISidePanes {
         /**
          * Get/Set the display state of the side panes: 0=Collapsed, 1=Expanded
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app/xrm-app-sidepanes#state
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app-sidepanes#state
          */
         DisplayState: OptionSet.SidePaneState;
         /**
@@ -4858,7 +4858,7 @@ declare namespace OptionSet {
     }
     /**
      * Display state of the side pane
-     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app-sidepanes/state
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app-sidepanes#state
      */
     enum SidePaneState {
         /** Side pane is fully expanded and visible */
