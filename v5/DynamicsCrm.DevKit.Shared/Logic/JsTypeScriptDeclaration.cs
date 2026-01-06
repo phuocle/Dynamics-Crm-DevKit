@@ -625,21 +625,34 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                           .Descendants("rows")
                           .Descendants("row")
                           .Descendants("cell")
-                          .Descendants("control")
-                          select new IdName
+                          select new
                           {
-                              Name = Helper.SafeIdentifier(x?.Attribute("datafieldname")?.Value),
-                              Id = x?.Attribute("id").Value,
-                              ClassId = Helper.TrimGuid(x?.Attribute("classid")?.Value?.ToUpper()),
-                              ControlId = x?.Attribute("uniqueid")?.Value
-                          }).Distinct().ToList();
+                              Control = x.Descendants("control").FirstOrDefault(),
+                              // Get label from cell's labels element
+                              Label = x?.Descendants("labels")?.Descendants("label")?.FirstOrDefault()?.Attribute("description")?.Value
+                          })
+                          .Where(x => x.Control != null)
+                          .Select(x => new
+                          {
+                              Name = Helper.SafeIdentifier(x.Control?.Attribute("datafieldname")?.Value),
+                              Id = x.Control?.Attribute("id")?.Value,
+                              ClassId = Helper.TrimGuid(x.Control?.Attribute("classid")?.Value?.ToUpper()),
+                              ControlId = x.Control?.Attribute("uniqueid")?.Value,
+                              Label = x.Label
+                          })
+                          .Distinct().ToList();
             fields = fields.OrderBy(x => x.Id).ToList();
             var temp = string.Empty;
+            var addedGrids = new List<string>();
             foreach (var field in fields)
             {
                 var classId = GetARealClassId(formXml, field.ClassId, field.ControlId);
                 if (classId != ControlClassId.SUB_GRID && classId != ControlClassId.SUB_GRID_PANEL) continue;
-                if (temp.Contains($"{TAB}{TAB}{TAB}{field.Id}: DevKit.Controls.Grid;{NEW_LINE}")) continue;
+                if (addedGrids.Contains(field.Id)) continue;
+                addedGrids.Add(field.Id);
+                // Add JSDoc for grid label
+                if (!string.IsNullOrWhiteSpace(field.Label))
+                    temp += $"{TAB}{TAB}{TAB}/** {field.Label} */{NEW_LINE}";
                 temp += $"{TAB}{TAB}{TAB}{field.Id}: DevKit.Controls.Grid;{NEW_LINE}";
             }
             if (temp.Length > 0)
@@ -651,6 +664,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             }
             return string.Empty;
         }
+
 
         private static async Task<string> GetForm_d_ts_ProcessAsync(string formXml)
         {
@@ -812,9 +826,24 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                 var fieldAttribute = quickViewMetadata.Attributes.Where(x => x.LogicalName == field.Id).FirstOrDefault();
                 if (fieldAttribute != null)
                 {
-                    _d_ts += $"{TAB}{TAB}{TAB}{fieldAttribute.SchemaName}: DevKit.Controls.QuickView;{NEW_LINE}";
+                    // Add JSDoc for QuickView field
+                    var jsdoc = string.Empty;
+                    // Priority 1: Check Description first
+                    if (fieldAttribute?.Description?.UserLocalizedLabel != null &&
+                        !string.IsNullOrWhiteSpace(fieldAttribute.Description.UserLocalizedLabel.Label))
+                    {
+                        jsdoc = $"{TAB}{TAB}{TAB}/** {fieldAttribute.Description.UserLocalizedLabel.Label} */{NEW_LINE}";
+                    }
+                    // Priority 2: Fallback to DisplayName if no Description
+                    else if (fieldAttribute?.DisplayName?.UserLocalizedLabel != null &&
+                        !string.IsNullOrWhiteSpace(fieldAttribute.DisplayName.UserLocalizedLabel.Label))
+                    {
+                        jsdoc = $"{TAB}{TAB}{TAB}/** {fieldAttribute.DisplayName.UserLocalizedLabel.Label} */{NEW_LINE}";
+                    }
+                    _d_ts += $"{jsdoc}{TAB}{TAB}{TAB}{fieldAttribute.SchemaName}: DevKit.Controls.QuickView;{NEW_LINE}";
                 }
             }
+
             _d_ts += $"{TAB}{TAB}}}{NEW_LINE}";
             return _d_ts;
         }
@@ -834,25 +863,31 @@ namespace DynamicsCrm.DevKit.Shared.Logic
         {
             var _d_ts = string.Empty;
             var xdoc = XDocument.Parse(formXml);
-            var navIds = (from x in xdoc
+            var navItems = (from x in xdoc
                             .Descendants("Navigation")
                             .Descendants("NavBar")
                             .Descendants("NavBarByRelationshipItem")
-                            select x?.Attribute("Id")?.Value)
-                            .Where(id => !string.IsNullOrEmpty(id))
+                            let id = x?.Attribute("Id")?.Value
+                            let title = x?.Descendants("Titles")?.Descendants("Title")?.FirstOrDefault()?.Attribute("Text")?.Value
+                            where !string.IsNullOrEmpty(id)
+                            select new { Id = id, Title = title })
                             .Distinct()
                             .ToList();
-            if (EntityMetadata.IsActivityParty == true && !navIds.Contains("navActivities"))
+            if (EntityMetadata.IsActivityParty == true && !navItems.Any(n => n.Id == "navActivities"))
             {
-                navIds.Add("navActivities");
+                navItems.Add(new { Id = "navActivities", Title = "Activities" });
             }
-            navIds = navIds.OrderBy(x => x).ToList();
-            foreach (var navId in navIds)
+            navItems = navItems.OrderBy(x => x.Id).ToList();
+            foreach (var nav in navItems)
             {
-                _d_ts += $"{TAB}{TAB}{TAB}{Helper.SafeIdentifier(navId)}: DevKit.Controls.NavigationItem;{NEW_LINE}";
+                // Add JSDoc for navigation title
+                if (!string.IsNullOrWhiteSpace(nav.Title))
+                    _d_ts += $"{TAB}{TAB}{TAB}/** {nav.Title} */{NEW_LINE}";
+                _d_ts += $"{TAB}{TAB}{TAB}{Helper.SafeIdentifier(nav.Id)}: DevKit.Controls.NavigationItem;{NEW_LINE}";
             }
             return _d_ts;
         }
+
 
         private static string GetForm_d_ts_Body(string formXml)
         {
@@ -864,6 +899,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                        select new
                        {
                            Name = x?.Attribute("name")?.Value,
+                           Label = x?.Descendants("labels")?.Descendants("label")?.FirstOrDefault()?.Attribute("description")?.Value,
                            InnerText = x?.ToString()
                        };
             var existTabs = new List<string>();
@@ -872,6 +908,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             {
                 if (Helper.SafeIdentifier(row.Name).Length == 0) continue;
                 var tabName = row.Name;
+                var tabLabel = row.Label;
                 if (existTabs.Contains(Helper.SafeIdentifier(tabName))) continue; else existTabs.Add(Helper.SafeIdentifier(tabName));
                 part1 += $"{TAB}{TAB}interface tab_{Helper.SafeIdentifier(tabName)}_Sections {{{NEW_LINE}";
                 var xdoc2 = XDocument.Parse(row.InnerText);
@@ -879,7 +916,8 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                         .Elements("section")
                             select new
                             {
-                                name = x2.Attribute("name")?.Value
+                                name = x2.Attribute("name")?.Value,
+                                label = x2?.Descendants("labels")?.Descendants("label")?.FirstOrDefault()?.Attribute("description")?.Value
                             };
                 var existSections = new List<string>();
                 rows2 = rows2.OrderBy(x => x.name).ToList();
@@ -889,15 +927,25 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                     if (row2.name == null) continue;
 
                     var sectionName = row2.name;
+                    var sectionLabel = row2.label;
                     if (existSections.Contains(Helper.SafeIdentifier(sectionName))) continue; else existSections.Add(Helper.SafeIdentifier(sectionName));
+                    // Add JSDoc for section label
+                    if (!string.IsNullOrWhiteSpace(sectionLabel))
+                        part1 += $"{TAB}{TAB}{TAB}/** {sectionLabel} */{NEW_LINE}";
                     part1 += $"{TAB}{TAB}{TAB}{Helper.SafeIdentifier(sectionName)}: DevKit.Controls.Section;{NEW_LINE}";
                 }
                 part1 += $"{TAB}{TAB}}}{NEW_LINE}";
 
+                // Add JSDoc for tab label
+                if (!string.IsNullOrWhiteSpace(tabLabel))
+                    part2 += $"{TAB}{TAB}/** {tabLabel} */{NEW_LINE}";
                 part2 += $"{TAB}{TAB}interface tab_{Helper.SafeIdentifier(tabName)} extends DevKit.Controls.ITab {{{NEW_LINE}";
                 part2 += $"{TAB}{TAB}{TAB}Section: tab_{Helper.SafeIdentifier(tabName)}_Sections;{NEW_LINE}";
                 part2 += $"{TAB}{TAB}}}{NEW_LINE}";
 
+                // Add JSDoc for tab in Tabs interface
+                if (!string.IsNullOrWhiteSpace(tabLabel))
+                    part3 += $"{TAB}{TAB}{TAB}/** {tabLabel} */{NEW_LINE}";
                 part3 += $"{TAB}{TAB}{TAB}{Helper.SafeIdentifier(tabName)}: tab_{Helper.SafeIdentifier(tabName)};{NEW_LINE}";
             }
             part3 += $"{TAB}{TAB}}}{NEW_LINE}";
@@ -930,6 +978,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             _d_ts += $"{TAB}{TAB}}}{NEW_LINE}";
             return _d_ts;
         }
+
 
         private static string GetForm_d_ts_Header(string formXml)
         {

@@ -11,29 +11,44 @@ declare namespace DevKit {
 			Revenue: DevKit.Controls.Money;
 		}
 		interface tab_DETAILS_TAB_Sections {
+			/** BILLING */
 			BILLING: DevKit.Controls.Section;
+			/** CHILD ACCOUNTS */
 			ChildAccounts: DevKit.Controls.Section;
+			/** COMPANY PROFILE */
 			COMPANY_PROFILE: DevKit.Controls.Section;
+			/** CONTACT PREFERENCES */
 			CONTACT_PREFERENCES: DevKit.Controls.Section;
+			/** Description */
 			DETAILS_TAB_section_6: DevKit.Controls.Section;
+			/** SHIPPING */
 			SHIPPING: DevKit.Controls.Section;
 		}
 		interface tab_SUMMARY_TAB_Sections {
+			/** ACCOUNT INFORMATION */
 			ACCOUNT_INFORMATION: DevKit.Controls.Section;
+			/** ADDRESS */
 			ADDRESS: DevKit.Controls.Section;
 			MapSection: DevKit.Controls.Section;
+			/** SOCIAL PANE */
 			SOCIAL_PANE_TAB: DevKit.Controls.Section;
+			/** Assistant */
 			Summary_section_6: DevKit.Controls.Section;
+			/** Section */
 			SUMMARY_TAB_section_6: DevKit.Controls.Section;
 		}
+		/** Details */
 		interface tab_DETAILS_TAB extends DevKit.Controls.ITab {
 			Section: tab_DETAILS_TAB_Sections;
 		}
+		/** Summary */
 		interface tab_SUMMARY_TAB extends DevKit.Controls.ITab {
 			Section: tab_SUMMARY_TAB_Sections;
 		}
 		interface Tabs {
+			/** Details */
 			DETAILS_TAB: tab_DETAILS_TAB;
+			/** Summary */
 			SUMMARY_TAB: tab_SUMMARY_TAB;
 		}
 		interface Body {
@@ -93,16 +108,25 @@ declare namespace DevKit {
 			WebSiteURL: DevKit.Controls.String;
 		}
 		interface Navigation {
+			/** Activities */
 			navActivities: DevKit.Controls.NavigationItem;
+			/** Addresses */
 			navAddresses: DevKit.Controls.NavigationItem;
+			/** Workflows */
 			navAsyncOperations: DevKit.Controls.NavigationItem;
+			/** Campaigns */
 			navCampaignsInSFA: DevKit.Controls.NavigationItem;
+			/** Dialog Sessions */
 			navProcessSessions: DevKit.Controls.NavigationItem;
+			/** CustomerRelationship */
 			navRelationships: DevKit.Controls.NavigationItem;
+			/** Accounts */
 			navSubAccts: DevKit.Controls.NavigationItem;
 		}
 		interface quickForm_contactquickform_Body {
+			/** Type the primary email address for the contact. */
 			EMailAddress1: DevKit.Controls.QuickView;
+			/** Type the main phone number for this contact. */
 			Telephone1: DevKit.Controls.QuickView;
 		}
 		interface quickForm_contactquickform extends DevKit.Controls.IQuickView {
@@ -127,7 +151,9 @@ declare namespace DevKit {
 			AccountBPF: ProcessAccountBPF;
 		}
 		interface Grid {
+			/** Child Accounts */
 			ChildAccounts: DevKit.Controls.Grid;
+			/** CONTACTS */
 			Contacts: DevKit.Controls.Grid;
 		}
 	}
@@ -163,23 +189,33 @@ declare namespace DevKit {
 			v4_String: DevKit.Controls.String;
 		}
 		interface tab_TAB_1_Sections {
+			/** TAB_1_SECTION_1 */
 			TAB_1_SECTION_1: DevKit.Controls.Section;
+			/** TAB_1_SECTION_2 */
 			TAB_1_SECTION_2: DevKit.Controls.Section;
+			/** TAB_1_SECTION_3 */
 			TAB_1_SECTION_3: DevKit.Controls.Section;
+			/** TAB_1_SECTION_4 */
 			TAB_1_SECTION_4: DevKit.Controls.Section;
 		}
 		interface tab_TAB_2_Sections {
+			/** TAB_2_SECTION_1 */
 			TAB_2_SECTION_1: DevKit.Controls.Section;
+			/** TAB_2_SECTION_2 */
 			TAB_2_SECTION_2: DevKit.Controls.Section;
 		}
+		/** TAB_1 */
 		interface tab_TAB_1 extends DevKit.Controls.ITab {
 			Section: tab_TAB_1_Sections;
 		}
+		/** TAB_2 */
 		interface tab_TAB_2 extends DevKit.Controls.ITab {
 			Section: tab_TAB_2_Sections;
 		}
 		interface Tabs {
+			/** TAB_1 */
 			TAB_1: tab_TAB_1;
+			/** TAB_2 */
 			TAB_2: tab_TAB_2;
 		}
 		interface Body {
@@ -226,26 +262,45 @@ declare namespace DevKit {
 			WebResource_DevKitV4: DevKit.Controls.WebResource;
 		}
 		interface Navigation {
+			/** Invitations */
 			nav_adx_invitation_assigntoaccount: DevKit.Controls.NavigationItem;
+			/** Managed Accounts */
 			nav_msa_account_managingpartner: DevKit.Controls.NavigationItem;
+			/** Managed Contacts */
 			nav_msa_contact_managingpartner: DevKit.Controls.NavigationItem;
+			/** Activities */
 			navActivities: DevKit.Controls.NavigationItem;
+			/** Addresses */
 			navAddresses: DevKit.Controls.NavigationItem;
+			/** Workflows */
 			navAsyncOperations: DevKit.Controls.NavigationItem;
+			/** Audit History */
 			navAudit: DevKit.Controls.NavigationItem;
+			/** Campaigns */
 			navCampaignsInSFA: DevKit.Controls.NavigationItem;
+			/** Connections */
 			navConnections: DevKit.Controls.NavigationItem;
+			/** Contacts2 */
 			navContacts: DevKit.Controls.NavigationItem;
+			/** Dialog Sessions */
 			navProcessSessions: DevKit.Controls.NavigationItem;
+			/** CustomerRelationship */
 			navRelationships: DevKit.Controls.NavigationItem;
+			/** Social Profiles */
 			navSocialprofiles: DevKit.Controls.NavigationItem;
+			/** Accounts */
 			navSubAccts: DevKit.Controls.NavigationItem;
 		}
 		interface quickForm_ContactQuickForm_Body {
+			/** Type the primary email address for the contact. */
 			EMailAddress1: DevKit.Controls.QuickView;
+			/** Type the contact's first name to make sure the contact is addressed correctly in sales calls, email, and marketing campaigns. */
 			FirstName: DevKit.Controls.QuickView;
+			/** Type the contact's last name to make sure the contact is addressed correctly in sales calls, email, and marketing campaigns. */
 			LastName: DevKit.Controls.QuickView;
+			/** Type the mobile phone number for the contact. */
 			MobilePhone: DevKit.Controls.QuickView;
+			/** Select the parent account or parent contact for the contact to provide a quick link to additional details, such as financial information, activities, and opportunities. */
 			ParentCustomerId: DevKit.Controls.QuickView;
 		}
 		interface quickForm_ContactQuickForm extends DevKit.Controls.IQuickView {
@@ -270,6 +325,7 @@ declare namespace DevKit {
 			AccountBPF: ProcessAccountBPF;
 		}
 		interface Grid {
+			/** CONTACTS */
 			Contacts: DevKit.Controls.Grid;
 		}
 	}
@@ -303,25 +359,37 @@ declare namespace DevKit {
 			Revenue: DevKit.Controls.Money;
 		}
 		interface tab_DETAILS_TAB_Sections {
+			/** BILLING */
 			BILLING: DevKit.Controls.Section;
+			/** COMPANY PROFILE */
 			COMPANY_PROFILE: DevKit.Controls.Section;
+			/** CONTACT PREFERENCES */
 			CONTACT_PREFERENCES: DevKit.Controls.Section;
+			/** DESCRIPTION */
 			DETAILS_TAB_section_6: DevKit.Controls.Section;
+			/** SHIPPING */
 			SHIPPING: DevKit.Controls.Section;
 		}
 		interface tab_SUMMARY_TAB_Sections {
+			/** ACCOUNT INFORMATION */
 			ACCOUNT_INFORMATION: DevKit.Controls.Section;
+			/** RELATED */
 			ref_pan_SUMMARY_TAB_section_6: DevKit.Controls.Section;
+			/** TIMELINE */
 			Timeline: DevKit.Controls.Section;
 		}
+		/** Details */
 		interface tab_DETAILS_TAB extends DevKit.Controls.ITab {
 			Section: tab_DETAILS_TAB_Sections;
 		}
+		/** Summary */
 		interface tab_SUMMARY_TAB extends DevKit.Controls.ITab {
 			Section: tab_SUMMARY_TAB_Sections;
 		}
 		interface Tabs {
+			/** Details */
 			DETAILS_TAB: tab_DETAILS_TAB;
+			/** Summary */
 			SUMMARY_TAB: tab_SUMMARY_TAB;
 		}
 		interface Body {
@@ -377,15 +445,23 @@ declare namespace DevKit {
 			WebSiteURL: DevKit.Controls.String;
 		}
 		interface Navigation {
+			/** Activities */
 			navActivities: DevKit.Controls.NavigationItem;
+			/** Addresses */
 			navAddresses: DevKit.Controls.NavigationItem;
+			/** Workflows */
 			navAsyncOperations: DevKit.Controls.NavigationItem;
+			/** Dialog Sessions */
 			navProcessSessions: DevKit.Controls.NavigationItem;
+			/** CustomerRelationship */
 			navRelationships: DevKit.Controls.NavigationItem;
+			/** Accounts */
 			navSubAccts: DevKit.Controls.NavigationItem;
 		}
 		interface quickForm_contactquickform_Body {
+			/** Type the primary email address for the contact. */
 			EMailAddress1: DevKit.Controls.QuickView;
+			/** Type the main phone number for this contact. */
 			Telephone1: DevKit.Controls.QuickView;
 		}
 		interface quickForm_contactquickform extends DevKit.Controls.IQuickView {
@@ -410,6 +486,7 @@ declare namespace DevKit {
 			AccountBPF: ProcessAccountBPF;
 		}
 		interface Grid {
+			/** CONTACTS */
 			Contacts: DevKit.Controls.Grid;
 		}
 	}
@@ -447,47 +524,69 @@ declare namespace DevKit {
 			Revenue: DevKit.Controls.Money;
 		}
 		interface tab_administration_Sections {
+			/** Contact Methods */
 			contact_methods: DevKit.Controls.Section;
+			/** Internal Information */
 			internal_information: DevKit.Controls.Section;
 		}
 		interface tab_contacts_Sections {
+			/** Contacts */
 			contacts: DevKit.Controls.Section;
 		}
 		interface tab_details_Sections {
+			/** Billing Information */
 			billing_information: DevKit.Controls.Section;
+			/** Description */
 			description_2: DevKit.Controls.Section;
+			/** Professional Information */
 			professional_information: DevKit.Controls.Section;
 		}
 		interface tab_general_Sections {
+			/** Account Information */
 			account_information: DevKit.Controls.Section;
+			/** Address */
 			address: DevKit.Controls.Section;
+			/** Description */
 			description: DevKit.Controls.Section;
+			/** Shipping Information */
 			shipping_information: DevKit.Controls.Section;
 		}
 		interface tab_notes_and_activities_Sections {
+			/** Activities */
 			activities: DevKit.Controls.Section;
+			/** Notes */
 			notes: DevKit.Controls.Section;
 		}
+		/** Preferences */
 		interface tab_administration extends DevKit.Controls.ITab {
 			Section: tab_administration_Sections;
 		}
+		/** Contacts */
 		interface tab_contacts extends DevKit.Controls.ITab {
 			Section: tab_contacts_Sections;
 		}
+		/** Details */
 		interface tab_details extends DevKit.Controls.ITab {
 			Section: tab_details_Sections;
 		}
+		/** General */
 		interface tab_general extends DevKit.Controls.ITab {
 			Section: tab_general_Sections;
 		}
+		/** Notes & Activities */
 		interface tab_notes_and_activities extends DevKit.Controls.ITab {
 			Section: tab_notes_and_activities_Sections;
 		}
 		interface Tabs {
+			/** Preferences */
 			administration: tab_administration;
+			/** Contacts */
 			contacts: tab_contacts;
+			/** Details */
 			details: tab_details;
+			/** General */
 			general: tab_general;
+			/** Notes & Activities */
 			notes_and_activities: tab_notes_and_activities;
 		}
 		interface Body {
@@ -601,7 +700,9 @@ declare namespace DevKit {
 			AccountBPF: ProcessAccountBPF;
 		}
 		interface Grid {
+			/** Activities */
 			accountactivitiesgrid: DevKit.Controls.Grid;
+			/** Contacts */
 			accountContactsGrid: DevKit.Controls.Grid;
 		}
 	}
@@ -625,14 +726,19 @@ declare namespace DevKit {
 	}
 	namespace FormAccount_Quick_Create {
 		interface tab_tab_1_Sections {
+			/** Details */
 			tab_1_column_1_section_1: DevKit.Controls.Section;
+			/** Description */
 			tab_1_column_2_section_1: DevKit.Controls.Section;
+			/** Address */
 			tab_1_column_3_section_1: DevKit.Controls.Section;
 		}
+		/** Tab */
 		interface tab_tab_1 extends DevKit.Controls.ITab {
 			Section: tab_tab_1_Sections;
 		}
 		interface Tabs {
+			/** Tab */
 			tab_1: tab_tab_1;
 		}
 		interface Body {

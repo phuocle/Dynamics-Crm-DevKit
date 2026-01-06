@@ -143,7 +143,9 @@ export namespace FormAccount {
 	 * Contains all subgrid controls on the form
 	 */
 	export interface IGrid {
+		/** Child Accounts */
 		ChildAccounts: DevKit.Controls.Grid;
+		/** CONTACTS */
 		Contacts: DevKit.Controls.Grid;
 	}
 
@@ -309,7 +311,7 @@ export namespace FormAccount {
 					'AccountBPF___Revenue'
 				],
 				dialog: [
-					
+
 				]
 			});
 		}
@@ -421,6 +423,7 @@ export namespace FormAccount_DevKitV4 {
 	 * Contains all subgrid controls on the form
 	 */
 	export interface IGrid {
+		/** CONTACTS */
 		Contacts: DevKit.Controls.Grid;
 	}
 
@@ -603,7 +606,7 @@ export namespace FormAccount_DevKitV4 {
 					'AccountBPF___Revenue'
 				],
 				dialog: [
-					
+
 				]
 			});
 		}
@@ -724,6 +727,7 @@ export namespace FormAccount_for_Interactive_experience {
 	 * Contains all subgrid controls on the form
 	 */
 	export interface IGrid {
+		/** CONTACTS */
 		Contacts: DevKit.Controls.Grid;
 	}
 
@@ -877,7 +881,7 @@ export namespace FormAccount_for_Interactive_experience {
 					'AccountBPF___Revenue'
 				],
 				dialog: [
-					
+
 				]
 			});
 		}
@@ -1078,7 +1082,9 @@ export namespace FormAccount_Information {
 	 * Contains all subgrid controls on the form
 	 */
 	export interface IGrid {
+		/** Activities */
 		accountactivitiesgrid: DevKit.Controls.Grid;
+		/** Contacts */
 		accountContactsGrid: DevKit.Controls.Grid;
 	}
 
@@ -1226,7 +1232,7 @@ export namespace FormAccount_Information {
 					'navSubAct'
 				],
 				quick: [
-					
+
 				],
 				bpf: [
 					'AccountBPF___IndustryCode',
@@ -1236,7 +1242,7 @@ export namespace FormAccount_Information {
 					'AccountBPF___Revenue'
 				],
 				dialog: [
-					
+
 				]
 			});
 		}
@@ -1326,7 +1332,7 @@ export namespace FormAccount_Quick_Create {
 					'Telephone1'
 				],
 				header: [
-					
+
 				],
 				tab: [
 					'tab_1___tab_1_column_1_section_1',
@@ -1334,7 +1340,7 @@ export namespace FormAccount_Quick_Create {
 					'tab_1___tab_1_column_3_section_1'
 				],
 				grid: [
-					
+
 				],
 				navigation: [
 					'navActivities'

@@ -143,7 +143,9 @@ export namespace FormAccount {
 	 * Contains all subgrid controls on the form
 	 */
 	export interface IGrid {
+		/** Child Accounts */
 		ChildAccounts: DevKit.Controls.Grid;
+		/** CONTACTS */
 		Contacts: DevKit.Controls.Grid;
 	}
 
@@ -421,6 +423,7 @@ export namespace FormAccount_DevKitV4 {
 	 * Contains all subgrid controls on the form
 	 */
 	export interface IGrid {
+		/** CONTACTS */
 		Contacts: DevKit.Controls.Grid;
 	}
 
@@ -724,6 +727,7 @@ export namespace FormAccount_for_Interactive_experience {
 	 * Contains all subgrid controls on the form
 	 */
 	export interface IGrid {
+		/** CONTACTS */
 		Contacts: DevKit.Controls.Grid;
 	}
 
@@ -1078,7 +1082,9 @@ export namespace FormAccount_Information {
 	 * Contains all subgrid controls on the form
 	 */
 	export interface IGrid {
+		/** Activities */
 		accountactivitiesgrid: DevKit.Controls.Grid;
+		/** Contacts */
 		accountContactsGrid: DevKit.Controls.Grid;
 	}
 

@@ -227,8 +227,14 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             var gridFields = GetGridFields(form.FormXml);
             foreach (var field in gridFields)
             {
-                code.AppendLine($"{TAB2}{field}: DevKit.Controls.Grid;");
+                // Add JSDoc for grid label
+                if (!string.IsNullOrWhiteSpace(field.Label))
+                {
+                    code.AppendLine($"{TAB2}/** {field.Label} */");
+                }
+                code.AppendLine($"{TAB2}{field.Id}: DevKit.Controls.Grid;");
             }
+
 
             code.AppendLine($"{TAB}}}");
             code.AppendLine();
@@ -597,7 +603,9 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             public string ClassId { get; set; }
             public string ControlId { get; set; }
             public string LogicalName { get; set; }
+            public string Label { get; set; }
         }
+
 
         private class ProcessFieldInfo
         {
@@ -754,26 +762,45 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             return result.OrderBy(x => x.SchemaName).ToList();
         }
 
-        private static List<string> GetGridFields(string formXml)
+
+
+        private class GridInfo
+        {
+            public string Id { get; set; }
+            public string Label { get; set; }
+        }
+
+        private static List<GridInfo> GetGridFields(string formXml)
         {
             var xdoc = XDocument.Parse(formXml);
             var fields = (from x in xdoc.Descendants("tabs").Descendants("tab").Descendants("columns")
                     .Descendants("column").Descendants("sections").Descendants("section").Descendants("rows")
-                    .Descendants("row").Descendants("cell").Descendants("control")
-                          select new FieldInfo
+                    .Descendants("row").Descendants("cell")
+                          select new
                           {
-                              LogicalName = Helper.SafeIdentifier(x?.Attribute("datafieldname")?.Value),
-                              Id = x?.Attribute("id")?.Value,
-                              ClassId = Helper.TrimGuid(x?.Attribute("classid")?.Value?.ToUpper()),
-                              ControlId = x?.Attribute("uniqueid")?.Value
+                              Control = x.Descendants("control").FirstOrDefault(),
+                              // Get label from cell's labels element
+                              Label = x?.Descendants("labels")?.Descendants("label")?.FirstOrDefault()?.Attribute("description")?.Value
+                          })
+                          .Where(x => x.Control != null)
+                          .Select(x => new FieldInfo
+                          {
+                              LogicalName = Helper.SafeIdentifier(x.Control?.Attribute("datafieldname")?.Value),
+                              Id = x.Control?.Attribute("id")?.Value,
+                              ClassId = Helper.TrimGuid(x.Control?.Attribute("classid")?.Value?.ToUpper()),
+                              ControlId = x.Control?.Attribute("uniqueid")?.Value,
+                              Label = x.Label
                           }).Distinct().ToList();
 
-            var gridFields = new List<string>();
+            var gridFields = new List<GridInfo>();
+            var addedGrids = new List<string>();
             foreach (var field in fields.OrderBy(x => x.Id))
             {
                 var classId = GetARealClassId(formXml, field.ClassId, field.ControlId);
                 if (classId != ControlClassId.SUB_GRID && classId != ControlClassId.SUB_GRID_PANEL) continue;
-                gridFields.Add(field.Id);
+                if (addedGrids.Contains(field.Id)) continue;
+                addedGrids.Add(field.Id);
+                gridFields.Add(new GridInfo { Id = field.Id, Label = field.Label });
             }
 
             return gridFields;
@@ -784,6 +811,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             public string Id { get; set; }
             public string Title { get; set; }
         }
+
 
         private static List<NavigationInfo> GetNavigationFields(string formXml)
         {

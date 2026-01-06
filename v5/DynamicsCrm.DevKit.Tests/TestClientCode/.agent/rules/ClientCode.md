@@ -117,3 +117,12 @@ DynamicsCrm.DevKit.Tests\TestClientCode\06.DevKitTs-Vsix\Dev.DevKit.WebResourceT
    - Hiểu rõ bug và fix bug ở 1 trogn 4 files source of truth trên
    - SYNC 4 FILES SOURCE OF TRUTH
    - run untit-test, or npm run check để đảm bảo ok
+
+## CRITICAL: CÁCH RUN CLI ĐÚNG CÁCH (TRÁNH APP HANG) ##
+> [!CAUTION]
+> **KHÔNG BAO GIỜ** sử dụng `command_status` để theo dõi CLI command!
+
+**Quy tắc bắt buộc:**
+1. Chạy CLI với `WaitMsBeforeAsync=60000` (60 giây đủ để CLI hoàn thành)
+2. **KHÔNG** sử dụng background command cho CLI
+3. **KHÔNG** gọi `command_status` sau khi chạy CLI
