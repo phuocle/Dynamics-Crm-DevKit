@@ -2,17 +2,17 @@
 # Syncs devkit.js and devkit.d.ts from Source of Truth (v5) according to ClientCode.md
 #
 # Source of Truth files (from ClientCode.md):
-#   DynamicsCrm.DevKit.Shared\Resources\devkit.js --> lib\devkit.js (converted to devkit.mjs)
-#   DynamicsCrm.DevKit.Shared\Resources\devkit.d.ts --> entities\devkit.d.ts
+#   DynamicsCrm.DevKit.Shared\Resources\js\devkit.js --> lib\devkit.js (converted to devkit.mjs)
+#   DynamicsCrm.DevKit.Shared\Resources\js\devkit.d.ts --> entities\devkit.d.ts
 
 Write-Host "=== Syncing DevKit files from Source of Truth ===" -ForegroundColor Cyan
 
 $scriptDir = $PSScriptRoot
 $v5Root = (Get-Item $scriptDir).Parent.Parent.Parent.FullName  # Navigate up to v5 folder
 
-# Source files (Source of Truth)
-$sourceDevkitJs = Join-Path $v5Root "DynamicsCrm.DevKit.Shared\Resources\devkit.js"
-$sourceDevkitDts = Join-Path $v5Root "DynamicsCrm.DevKit.Shared\Resources\devkit.d.ts"
+# Source files (Source of Truth) - now in js/ subfolder
+$sourceDevkitJs = Join-Path $v5Root "DynamicsCrm.DevKit.Shared\Resources\js\devkit.js"
+$sourceDevkitDts = Join-Path $v5Root "DynamicsCrm.DevKit.Shared\Resources\js\devkit.d.ts"
 
 # Destination files
 $destDevkitMjs = Join-Path $scriptDir "lib\devkit.mjs"

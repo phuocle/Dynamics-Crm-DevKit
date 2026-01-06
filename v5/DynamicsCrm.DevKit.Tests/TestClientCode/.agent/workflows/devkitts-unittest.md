@@ -9,13 +9,13 @@ This workflow syncs source files and runs unit tests with code coverage for DevK
 ## Steps
 
 // turbo
-1. **Sync Source of Truth files** - Copy core files:
+1. **Sync Source of Truth files** - Copy core files from ts/ folder:
    ```powershell
-   # Sync 3 core files
+   # Sync 3 core files from ts/ folder
    cd d:\github\Dynamics-Crm-DevKit\v5
-   Copy-Item -Path "DynamicsCrm.DevKit.Shared\Resources\devkit.ts" -Destination "DynamicsCrm.DevKit.Tests\TestClientCode\02.DevKitTs-UnitTest\lib\devkit.ts" -Force
-   Copy-Item -Path "DynamicsCrm.DevKit.Shared\Resources\devkit.ts" -Destination "DynamicsCrm.DevKit.Tests\TestClientCode\02.DevKitTs-UnitTest\lib\devkit.d.ts" -Force
-   Copy-Item -Path "DynamicsCrm.DevKit.Shared\Resources\build.js" -Destination "DynamicsCrm.DevKit.Tests\TestClientCode\02.DevKitTs-UnitTest\build.js" -Force
+   Copy-Item -Path "DynamicsCrm.DevKit.Shared\Resources\ts\devkit.ts" -Destination "DynamicsCrm.DevKit.Tests\TestClientCode\02.DevKitTs-UnitTest\lib\devkit.ts" -Force
+   Copy-Item -Path "DynamicsCrm.DevKit.Shared\Resources\ts\devkit.ts" -Destination "DynamicsCrm.DevKit.Tests\TestClientCode\02.DevKitTs-UnitTest\lib\devkit.d.ts" -Force
+   Copy-Item -Path "DynamicsCrm.DevKit.Shared\Resources\ts\build.js" -Destination "DynamicsCrm.DevKit.Tests\TestClientCode\02.DevKitTs-UnitTest\build.js" -Force
    ```
 
 // turbo

@@ -11,10 +11,10 @@ This workflow syncs source files and runs unit tests with code coverage for DevK
 // turbo
 1. **Sync Source of Truth files** - Run the sync workflow:
    ```powershell
-   # Sync 5 core files
+   # Sync 2 core files from js/ folder
    cd d:\github\Dynamics-Crm-DevKit\v5
-   Copy-Item -Path "DynamicsCrm.DevKit.Shared\Resources\devkit.js" -Destination "DynamicsCrm.DevKit.Tests\TestClientCode\01.DevKitJs-UnitTest\lib\devkit.js" -Force
-   Copy-Item -Path "DynamicsCrm.DevKit.Shared\Resources\devkit.d.ts" -Destination "DynamicsCrm.DevKit.Tests\TestClientCode\01.DevKitJs-UnitTest\entities\devkit.d.ts" -Force
+   Copy-Item -Path "DynamicsCrm.DevKit.Shared\Resources\js\devkit.js" -Destination "DynamicsCrm.DevKit.Tests\TestClientCode\01.DevKitJs-UnitTest\lib\devkit.js" -Force
+   Copy-Item -Path "DynamicsCrm.DevKit.Shared\Resources\js\devkit.d.ts" -Destination "DynamicsCrm.DevKit.Tests\TestClientCode\01.DevKitJs-UnitTest\entities\devkit.d.ts" -Force
    ```
 
 // turbo
