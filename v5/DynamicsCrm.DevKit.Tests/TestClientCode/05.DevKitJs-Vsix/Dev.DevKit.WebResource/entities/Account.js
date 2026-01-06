@@ -45,6 +45,7 @@ var formAccount_DevKitV4 = (function () {
 	}
 	function registerEvents() {
 		if (form.ExecutionContext.IsInitialLoad()) {
+			var a = form.Body.v4_String.Value;
 		}
 	}
 	//BEGIN ON LOAD ========================================================

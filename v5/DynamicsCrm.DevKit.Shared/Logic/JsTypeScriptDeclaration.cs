@@ -987,8 +987,19 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                     }
                     previousName = Helper.SafeIdentifier(crmAttribute.SchemaName);
                     var jsdoc = string.Empty;
-                    if (crmAttribute?.Description?.UserLocalizedLabel?.Label.Length > 0)
-                        jsdoc = $"{TAB}{TAB}{TAB}/** {crmAttribute?.Description?.UserLocalizedLabel?.Label} */{NEW_LINE}";
+                    // Priority 1: Check Description first
+                    if (crmAttribute?.Description?.UserLocalizedLabel != null &&
+                        !string.IsNullOrWhiteSpace(crmAttribute.Description.UserLocalizedLabel.Label))
+                    {
+                        jsdoc = $"{TAB}{TAB}{TAB}/** {crmAttribute.Description.UserLocalizedLabel.Label} */{NEW_LINE}";
+                    }
+                    // Priority 2: Fallback to DisplayName if no Description
+                    else if (crmAttribute?.DisplayName?.UserLocalizedLabel != null &&
+                        !string.IsNullOrWhiteSpace(crmAttribute.DisplayName.UserLocalizedLabel.Label))
+                    {
+                        jsdoc = $"{TAB}{TAB}{TAB}/** {crmAttribute.DisplayName.UserLocalizedLabel.Label} */{NEW_LINE}";
+                    }
+
                     if (crmAttribute.AttributeType == AttributeTypeCode.Memo ||
                         crmAttribute.AttributeType == AttributeTypeCode.String)
                     {

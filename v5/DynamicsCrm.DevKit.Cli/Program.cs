@@ -64,10 +64,10 @@ namespace DynamicsCrm.DevKit.Cli
             {
                 await CliTask.RunAsync(arguments);
             }
-            CliLog.WriteLine(ConsoleColor.White, "|");
-#if DEBUG
-            //Console.ReadKey();
-#endif
+            //CliLog.WriteLine(ConsoleColor.White, "|");
+//#if DEBUG
+//            //Console.ReadKey();
+//#endif
         }
 
         private static async Task<bool> IsValidAsync(CommandLineArgs arguments)

@@ -83,9 +83,10 @@
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\webresource.deploy.debug.ts_bat" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\devkit.d.ts" />
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\devkit.js" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\js\devkit.d.ts" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\js\devkit.js" />
   </ItemGroup>
+
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\generator.form.bat" />
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\generator.webapi.bat" />
@@ -139,8 +140,8 @@
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Plugin-Managed-Identity.ps1" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\build.js" />
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\devkit.ts" />
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\devkitts.d.ts" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\ts\build.js" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\ts\devkit.ts" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\ts\devkit.d.ts" />
   </ItemGroup>
 </Project>

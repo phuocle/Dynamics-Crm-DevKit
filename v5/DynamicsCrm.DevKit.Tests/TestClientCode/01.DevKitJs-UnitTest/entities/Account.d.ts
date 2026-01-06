@@ -153,9 +153,13 @@ declare namespace DevKit {
 	}
 	namespace FormAccount_DevKitV4 {
 		interface Header extends DevKit.Controls.IHeader {
+			/** Integer */
 			v4_Integer: DevKit.Controls.Integer;
+			/** Integer */
 			v4_Integer1: DevKit.Controls.Integer;
+			/** OptionSet */
 			v4_OptionSet: DevKit.Controls.OptionSet;
+			/** String */
 			v4_String: DevKit.Controls.String;
 		}
 		interface tab_TAB_1_Sections {
@@ -189,20 +193,35 @@ declare namespace DevKit {
 			OwnerId2: DevKit.Controls.Lookup;
 			/** Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
 			OwnerId3: DevKit.Controls.Lookup;
+			/** Boolean */
 			v4_Boolean: DevKit.Controls.Boolean;
+			/** DateOnly */
 			v4_DateOnly: DevKit.Controls.DateOnly;
+			/** DateTime */
 			v4_DateTime: DevKit.Controls.DateTime;
+			/** Decimal */
 			v4_Decimal: DevKit.Controls.Decimal;
+			/** Double */
 			v4_Double: DevKit.Controls.Double;
+			/** Integer */
 			v4_Integer: DevKit.Controls.Integer;
+			/** Lookup */
 			v4_Lookup: DevKit.Controls.Lookup;
+			/** Lookup */
 			v4_Lookup1: DevKit.Controls.Lookup;
+			/** Memo */
 			v4_Memo: DevKit.Controls.String;
+			/** Money */
 			v4_Money: DevKit.Controls.Money;
+			/** MultiOptionSet */
 			v4_MultiOptionSet: DevKit.Controls.MultiOptionSet;
+			/** OptionSet */
 			v4_OptionSet: DevKit.Controls.OptionSet;
+			/** String */
 			v4_String: DevKit.Controls.String;
+			/** String */
 			v4_String1: DevKit.Controls.String;
+			/** String */
 			v4_String2: DevKit.Controls.String;
 			WebResource_DevKitV4: DevKit.Controls.WebResource;
 		}
