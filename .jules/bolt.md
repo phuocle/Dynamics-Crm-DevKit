@@ -1,0 +1,3 @@
+## 2024-05-23 - [Zero-Allocation String Comparison]
+**Learning:** String normalization using chained `.Replace()` calls (e.g., `str.Replace("\r", "").Replace("\n", "")`) is a common source of hidden allocations in C#. For high-frequency comparisons, especially in hot paths like code generation or diffing, replacing this with a character iterator that skips ignored characters is significantly more efficient.
+**Action:** When optimizing string comparisons that involve ignoring specific characters or whitespace, prioritize writing a custom iterator loop over using LINQ or `string.Replace` chains. Ensure to handle nulls and edge cases like strings containing only ignored characters.

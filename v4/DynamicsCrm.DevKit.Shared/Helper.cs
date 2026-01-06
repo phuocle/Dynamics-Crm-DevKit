@@ -72,14 +72,56 @@ namespace DynamicsCrm.DevKit.Shared
             catch { return cipherText; }
         }
 
+        private static bool IsIgnoredChar(char c)
+        {
+            // \r = 13, \n = 10, \t = 9, Space = 32
+            return c == '\r' || c == '\n' || c == '\t' || c == ' ';
+        }
+
+        /// <summary>
+        /// Optimized IsTheSame method that compares two strings ignoring whitespace and case.
+        /// Avoids string allocations by iterating characters directly.
+        /// Original logic: value.Replace("\r\n", "").Replace("\r", "").Replace("\t", "").Replace(" ", "").Trim()
+        /// </summary>
         public static bool IsTheSame(string value1, string value2)
         {
-            if (value1 == null && value2 == null) return true;
-            if (value1 != null && value2 == null) return false;
-            if (value1 == null && value2 != null) return false;
-            value1 = value1.Replace("\r\n", string.Empty).Replace("\r", string.Empty).Replace("\t", string.Empty).Replace(" ", string.Empty).Trim();
-            value2 = value2.Replace("\r\n", string.Empty).Replace("\r", string.Empty).Replace("\t", string.Empty).Replace(" ", string.Empty).Trim();
-            return string.Equals(value1, value2, StringComparison.OrdinalIgnoreCase);
+            if (ReferenceEquals(value1, value2)) return true;
+            if (value1 == null || value2 == null) return false;
+
+            int start1 = 0;
+            int end1 = value1.Length - 1;
+            int start2 = 0;
+            int end2 = value2.Length - 1;
+
+            // Find effective start and end by skipping all whitespace (equivalent to Trim() after Replace() logic analysis)
+            // Note: Original logic used Trim() which removes all whitespace at start/end.
+            // Replace() removed specific whitespaces (\r, \n, \t, space).
+            // Any IsIgnoredChar is also IsWhiteSpace.
+            while (start1 <= end1 && char.IsWhiteSpace(value1[start1])) start1++;
+            while (end1 >= start1 && char.IsWhiteSpace(value1[end1])) end1--;
+
+            while (start2 <= end2 && char.IsWhiteSpace(value2[start2])) start2++;
+            while (end2 >= start2 && char.IsWhiteSpace(value2[end2])) end2--;
+
+            int i1 = start1;
+            int i2 = start2;
+
+            while (i1 <= end1 || i2 <= end2)
+            {
+                // Skip ignored chars inside the range
+                while (i1 <= end1 && IsIgnoredChar(value1[i1])) i1++;
+                while (i2 <= end2 && IsIgnoredChar(value2[i2])) i2++;
+
+                if (i1 > end1 && i2 > end2) return true;
+                if (i1 > end1 || i2 > end2) return false;
+
+                if (char.ToUpperInvariant(value1[i1]) != char.ToUpperInvariant(value2[i2])) return false;
+
+                i1++;
+                i2++;
+            }
+
+            return true;
         }
 
         public static async Task<string> ReadEmbeddedResourceAsync(string path)
