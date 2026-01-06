@@ -237,82 +237,14 @@ export namespace FormAccount {
 		 */
 		constructor(executionContext: any, defaultWebResourceName?: string) {
 			super(executionContext, defaultWebResourceName, {
-				body: [
-					'ActionCards',
-					'Address1_Composite',
-					'Address1_FreightTermsCode',
-					'Address1_ShippingMethodCode',
-					'CreditLimit',
-					'CreditOnHold',
-					'Description',
-					'DoNotBulkEMail',
-					'DoNotEMail',
-					'DoNotFax',
-					'DoNotPhone',
-					'DoNotPostalMail',
-					'Fax',
-					'FollowEmail',
-					'IndustryCode',
-					'mapcontrol',
-					'Name',
-					'notescontrol',
-					'OwnershipCode',
-					'ParentAccountId',
-					'PaymentTermsCode',
-					'PreferredContactMethodCode',
-					'PrimaryContactId',
-					'SIC',
-					'Telephone1',
-					'TickerSymbol',
-					'TransactionCurrencyId',
-					'WebSiteURL'
-				],
-				header: [
-					'NumberOfEmployees',
-					'OwnerId',
-					'Revenue'
-				],
-				tab: [
-					'DETAILS_TAB___BILLING',
-					'DETAILS_TAB___ChildAccounts',
-					'DETAILS_TAB___COMPANY_PROFILE',
-					'DETAILS_TAB___CONTACT_PREFERENCES',
-					'DETAILS_TAB___DETAILS_TAB_section_6',
-					'DETAILS_TAB___SHIPPING',
-					'SUMMARY_TAB___ACCOUNT_INFORMATION',
-					'SUMMARY_TAB___ADDRESS',
-					'SUMMARY_TAB___MapSection',
-					'SUMMARY_TAB___SOCIAL_PANE_TAB',
-					'SUMMARY_TAB___Summary_section_6',
-					'SUMMARY_TAB___SUMMARY_TAB_section_6'
-				],
-				grid: [
-					'ChildAccounts',
-					'Contacts'
-				],
-				navigation: [
-					'navActivities',
-					'navAddresses',
-					'navAsyncOperations',
-					'navCampaignsInSFA',
-					'navProcessSessions',
-					'navRelationships',
-					'navSubAccts'
-				],
-				quick: [
-					'contactquickform___EMailAddress1',
-					'contactquickform___Telephone1'
-				],
-				bpf: [
-					'AccountBPF___IndustryCode',
-					'AccountBPF___Name',
-					'AccountBPF___Name_1',
-					'AccountBPF___PrimaryContactId',
-					'AccountBPF___Revenue'
-				],
-				dialog: [
-					
-				]
+				body: ['ActionCards', 'Address1_Composite', 'Address1_FreightTermsCode', 'Address1_ShippingMethodCode', 'CreditLimit', 'CreditOnHold', 'Description', 'DoNotBulkEMail', 'DoNotEMail', 'DoNotFax', 'DoNotPhone', 'DoNotPostalMail', 'Fax', 'FollowEmail', 'IndustryCode', 'mapcontrol', 'Name', 'notescontrol', 'OwnershipCode', 'ParentAccountId', 'PaymentTermsCode', 'PreferredContactMethodCode', 'PrimaryContactId', 'SIC', 'Telephone1', 'TickerSymbol', 'TransactionCurrencyId', 'WebSiteURL'],
+				header: ['NumberOfEmployees', 'OwnerId', 'Revenue'],
+				tab: ['DETAILS_TAB___BILLING', 'DETAILS_TAB___ChildAccounts', 'DETAILS_TAB___COMPANY_PROFILE', 'DETAILS_TAB___CONTACT_PREFERENCES', 'DETAILS_TAB___DETAILS_TAB_section_6', 'DETAILS_TAB___SHIPPING', 'SUMMARY_TAB___ACCOUNT_INFORMATION', 'SUMMARY_TAB___ADDRESS', 'SUMMARY_TAB___MapSection', 'SUMMARY_TAB___SOCIAL_PANE_TAB', 'SUMMARY_TAB___Summary_section_6', 'SUMMARY_TAB___SUMMARY_TAB_section_6'],
+				grid: ['ChildAccounts', 'Contacts'],
+				navigation: ['navActivities', 'navAddresses', 'navAsyncOperations', 'navCampaignsInSFA', 'navProcessSessions', 'navRelationships', 'navSubAccts'],
+				quick: ['contactquickform___EMailAddress1', 'contactquickform___Telephone1'],
+				bpf: ['AccountBPF___IndustryCode', 'AccountBPF___Name', 'AccountBPF___Name_1', 'AccountBPF___PrimaryContactId', 'AccountBPF___Revenue'],
+				dialog: []
 			});
 		}
 	}
@@ -535,79 +467,14 @@ export namespace FormAccount_DevKitV4 {
 		 */
 		constructor(executionContext: any, defaultWebResourceName?: string) {
 			super(executionContext, defaultWebResourceName, {
-				body: [
-					'IFRAME_PhuocLe',
-					'OwnerId',
-					'OwnerId1',
-					'OwnerId2',
-					'OwnerId3',
-					'v4_Boolean',
-					'v4_DateOnly',
-					'v4_DateTime',
-					'v4_Decimal',
-					'v4_Double',
-					'v4_Integer',
-					'v4_Lookup',
-					'v4_Lookup1',
-					'v4_Memo',
-					'v4_Money',
-					'v4_MultiOptionSet',
-					'v4_OptionSet',
-					'v4_String',
-					'v4_String1',
-					'v4_String2',
-					'WebResource_DevKitV4'
-				],
-				header: [
-					'v4_Integer',
-					'v4_Integer1',
-					'v4_OptionSet',
-					'v4_String'
-				],
-				tab: [
-					'TAB_1___TAB_1_SECTION_1',
-					'TAB_1___TAB_1_SECTION_2',
-					'TAB_1___TAB_1_SECTION_3',
-					'TAB_1___TAB_1_SECTION_4',
-					'TAB_2___TAB_2_SECTION_1',
-					'TAB_2___TAB_2_SECTION_2'
-				],
-				grid: [
-					'Contacts'
-				],
-				navigation: [
-					'nav_adx_invitation_assigntoaccount',
-					'nav_msa_account_managingpartner',
-					'nav_msa_contact_managingpartner',
-					'navActivities',
-					'navAddresses',
-					'navAsyncOperations',
-					'navAudit',
-					'navCampaignsInSFA',
-					'navConnections',
-					'navContacts',
-					'navProcessSessions',
-					'navRelationships',
-					'navSocialprofiles',
-					'navSubAccts'
-				],
-				quick: [
-					'ContactQuickForm___EMailAddress1',
-					'ContactQuickForm___FirstName',
-					'ContactQuickForm___LastName',
-					'ContactQuickForm___MobilePhone',
-					'ContactQuickForm___ParentCustomerId'
-				],
-				bpf: [
-					'AccountBPF___IndustryCode',
-					'AccountBPF___Name',
-					'AccountBPF___Name_1',
-					'AccountBPF___PrimaryContactId',
-					'AccountBPF___Revenue'
-				],
-				dialog: [
-					
-				]
+				body: ['IFRAME_PhuocLe', 'OwnerId', 'OwnerId1', 'OwnerId2', 'OwnerId3', 'v4_Boolean', 'v4_DateOnly', 'v4_DateTime', 'v4_Decimal', 'v4_Double', 'v4_Integer', 'v4_Lookup', 'v4_Lookup1', 'v4_Memo', 'v4_Money', 'v4_MultiOptionSet', 'v4_OptionSet', 'v4_String', 'v4_String1', 'v4_String2', 'WebResource_DevKitV4'],
+				header: ['v4_Integer', 'v4_Integer1', 'v4_OptionSet', 'v4_String'],
+				tab: ['TAB_1___TAB_1_SECTION_1', 'TAB_1___TAB_1_SECTION_2', 'TAB_1___TAB_1_SECTION_3', 'TAB_1___TAB_1_SECTION_4', 'TAB_2___TAB_2_SECTION_1', 'TAB_2___TAB_2_SECTION_2'],
+				grid: ['Contacts'],
+				navigation: ['nav_adx_invitation_assigntoaccount', 'nav_msa_account_managingpartner', 'nav_msa_contact_managingpartner', 'navActivities', 'navAddresses', 'navAsyncOperations', 'navAudit', 'navCampaignsInSFA', 'navConnections', 'navContacts', 'navProcessSessions', 'navRelationships', 'navSocialprofiles', 'navSubAccts'],
+				quick: ['ContactQuickForm___EMailAddress1', 'ContactQuickForm___FirstName', 'ContactQuickForm___LastName', 'ContactQuickForm___MobilePhone', 'ContactQuickForm___ParentCustomerId'],
+				bpf: ['AccountBPF___IndustryCode', 'AccountBPF___Name', 'AccountBPF___Name_1', 'AccountBPF___PrimaryContactId', 'AccountBPF___Revenue'],
+				dialog: []
 			});
 		}
 	}
@@ -817,72 +684,14 @@ export namespace FormAccount_for_Interactive_experience {
 		 */
 		constructor(executionContext: any, defaultWebResourceName?: string) {
 			super(executionContext, defaultWebResourceName, {
-				body: [
-					'Address1_Composite',
-					'Address1_FreightTermsCode',
-					'Address1_ShippingMethodCode',
-					'CreditLimit',
-					'CreditOnHold',
-					'Description',
-					'DoNotBulkEMail',
-					'DoNotEMail',
-					'DoNotFax',
-					'DoNotPhone',
-					'DoNotPostalMail',
-					'Fax',
-					'FollowEmail',
-					'IndustryCode',
-					'Name',
-					'notescontrol',
-					'OwnershipCode',
-					'ParentAccountId',
-					'PaymentTermsCode',
-					'PreferredContactMethodCode',
-					'PrimaryContactId',
-					'SIC',
-					'Telephone1',
-					'TransactionCurrencyId',
-					'WebSiteURL'
-				],
-				header: [
-					'NumberOfEmployees',
-					'OwnerId',
-					'Revenue'
-				],
-				tab: [
-					'DETAILS_TAB___BILLING',
-					'DETAILS_TAB___COMPANY_PROFILE',
-					'DETAILS_TAB___CONTACT_PREFERENCES',
-					'DETAILS_TAB___DETAILS_TAB_section_6',
-					'DETAILS_TAB___SHIPPING',
-					'SUMMARY_TAB___ACCOUNT_INFORMATION',
-					'SUMMARY_TAB___Timeline'
-				],
-				grid: [
-					'Contacts'
-				],
-				navigation: [
-					'navActivities',
-					'navAddresses',
-					'navAsyncOperations',
-					'navProcessSessions',
-					'navRelationships',
-					'navSubAccts'
-				],
-				quick: [
-					'contactquickform___EMailAddress1',
-					'contactquickform___Telephone1'
-				],
-				bpf: [
-					'AccountBPF___IndustryCode',
-					'AccountBPF___Name',
-					'AccountBPF___Name_1',
-					'AccountBPF___PrimaryContactId',
-					'AccountBPF___Revenue'
-				],
-				dialog: [
-					
-				]
+				body: ['Address1_Composite', 'Address1_FreightTermsCode', 'Address1_ShippingMethodCode', 'CreditLimit', 'CreditOnHold', 'Description', 'DoNotBulkEMail', 'DoNotEMail', 'DoNotFax', 'DoNotPhone', 'DoNotPostalMail', 'Fax', 'FollowEmail', 'IndustryCode', 'Name', 'notescontrol', 'OwnershipCode', 'ParentAccountId', 'PaymentTermsCode', 'PreferredContactMethodCode', 'PrimaryContactId', 'SIC', 'Telephone1', 'TransactionCurrencyId', 'WebSiteURL'],
+				header: ['NumberOfEmployees', 'OwnerId', 'Revenue'],
+				tab: ['DETAILS_TAB___BILLING', 'DETAILS_TAB___COMPANY_PROFILE', 'DETAILS_TAB___CONTACT_PREFERENCES', 'DETAILS_TAB___DETAILS_TAB_section_6', 'DETAILS_TAB___SHIPPING', 'SUMMARY_TAB___ACCOUNT_INFORMATION', 'SUMMARY_TAB___Timeline'],
+				grid: ['Contacts'],
+				navigation: ['navActivities', 'navAddresses', 'navAsyncOperations', 'navProcessSessions', 'navRelationships', 'navSubAccts'],
+				quick: ['contactquickform___EMailAddress1', 'contactquickform___Telephone1'],
+				bpf: ['AccountBPF___IndustryCode', 'AccountBPF___Name', 'AccountBPF___Name_1', 'AccountBPF___PrimaryContactId', 'AccountBPF___Revenue'],
+				dialog: []
 			});
 		}
 	}
@@ -1154,96 +963,14 @@ export namespace FormAccount_Information {
 		 */
 		constructor(executionContext: any, defaultWebResourceName?: string) {
 			super(executionContext, defaultWebResourceName, {
-				body: [
-					'AccountCategoryCode',
-					'AccountNumber',
-					'Address1_AddressTypeCode',
-					'Address1_City',
-					'Address1_Country',
-					'Address1_FreightTermsCode',
-					'Address1_Line1',
-					'Address1_Line2',
-					'Address1_Line3',
-					'Address1_Name',
-					'Address1_PostalCode',
-					'Address1_ShippingMethodCode',
-					'Address1_StateOrProvince',
-					'Address1_Telephone1',
-					'CreditLimit',
-					'CreditOnHold',
-					'CustomerTypeCode',
-					'Description',
-					'DoNotBulkEMail',
-					'DoNotEMail',
-					'DoNotFax',
-					'DoNotPhone',
-					'DoNotPostalMail',
-					'EMailAddress1',
-					'Fax',
-					'FollowEmail',
-					'IndustryCode',
-					'Name',
-					'notescontrol',
-					'NumberOfEmployees',
-					'OwnerId',
-					'OwnershipCode',
-					'ParentAccountId',
-					'PaymentTermsCode',
-					'PreferredContactMethodCode',
-					'PrimaryContactId',
-					'Revenue',
-					'SIC',
-					'Telephone1',
-					'Telephone2',
-					'TickerSymbol',
-					'TransactionCurrencyId',
-					'WebSiteURL'
-				],
-				header: [
-					'CreditLimit',
-					'OwnerId',
-					'PreferredContactMethodCode',
-					'PrimaryContactId',
-					'Revenue'
-				],
-				tab: [
-					'administration___contact_methods',
-					'administration___internal_information',
-					'contacts___contacts',
-					'details___billing_information',
-					'details___description_2',
-					'details___professional_information',
-					'general___account_information',
-					'general___address',
-					'general___description',
-					'general___shipping_information',
-					'notes_and_activities___activities',
-					'notes_and_activities___notes'
-				],
-				grid: [
-					'accountactivitiesgrid',
-					'accountContactsGrid'
-				],
-				navigation: [
-					'navActivities',
-					'navActivityHistory',
-					'navAddresses',
-					'navRelationships',
-					'navSubAct'
-				],
-				quick: [
-					
-				],
-				bpf: [
-					'AccountBPF___IndustryCode',
-					'AccountBPF___Name',
-					'AccountBPF___Name_1',
-					'AccountBPF___PrimaryContactId',
-					'AccountBPF___Revenue'
-				],
-				dialog: [
-					
-				]
+				body: ['AccountCategoryCode', 'AccountNumber', 'Address1_AddressTypeCode', 'Address1_City', 'Address1_Country', 'Address1_FreightTermsCode', 'Address1_Line1', 'Address1_Line2', 'Address1_Line3', 'Address1_Name', 'Address1_PostalCode', 'Address1_ShippingMethodCode', 'Address1_StateOrProvince', 'Address1_Telephone1', 'CreditLimit', 'CreditOnHold', 'CustomerTypeCode', 'Description', 'DoNotBulkEMail', 'DoNotEMail', 'DoNotFax', 'DoNotPhone', 'DoNotPostalMail', 'EMailAddress1', 'Fax', 'FollowEmail', 'IndustryCode', 'Name', 'notescontrol', 'NumberOfEmployees', 'OwnerId', 'OwnershipCode', 'ParentAccountId', 'PaymentTermsCode', 'PreferredContactMethodCode', 'PrimaryContactId', 'Revenue', 'SIC', 'Telephone1', 'Telephone2', 'TickerSymbol', 'TransactionCurrencyId', 'WebSiteURL'],
+				header: ['CreditLimit', 'OwnerId', 'PreferredContactMethodCode', 'PrimaryContactId', 'Revenue'],
+				tab: ['administration___contact_methods', 'administration___internal_information', 'contacts___contacts', 'details___billing_information', 'details___description_2', 'details___professional_information', 'general___account_information', 'general___address', 'general___description', 'general___shipping_information', 'notes_and_activities___activities', 'notes_and_activities___notes'],
+				grid: ['accountactivitiesgrid', 'accountContactsGrid'],
+				navigation: ['navActivities', 'navActivityHistory', 'navAddresses', 'navRelationships', 'navSubAct'],
+				quick: [],
+				bpf: ['AccountBPF___IndustryCode', 'AccountBPF___Name', 'AccountBPF___Name_1', 'AccountBPF___PrimaryContactId', 'AccountBPF___Revenue'],
+				dialog: []
 			});
 		}
 	}
@@ -1319,32 +1046,11 @@ export namespace FormAccount_Quick_Create {
 		 */
 		constructor(executionContext: any, defaultWebResourceName?: string) {
 			super(executionContext, defaultWebResourceName, {
-				body: [
-					'Address1_City',
-					'Address1_Line1',
-					'Address1_Line2',
-					'Address1_PostalCode',
-					'Description',
-					'Name',
-					'NumberOfEmployees',
-					'PrimaryContactId',
-					'Revenue',
-					'Telephone1'
-				],
-				header: [
-					
-				],
-				tab: [
-					'tab_1___tab_1_column_1_section_1',
-					'tab_1___tab_1_column_2_section_1',
-					'tab_1___tab_1_column_3_section_1'
-				],
-				grid: [
-					
-				],
-				navigation: [
-					'navActivities'
-				],
+				body: ['Address1_City', 'Address1_Line1', 'Address1_Line2', 'Address1_PostalCode', 'Description', 'Name', 'NumberOfEmployees', 'PrimaryContactId', 'Revenue', 'Telephone1'],
+				header: [],
+				tab: ['tab_1___tab_1_column_1_section_1', 'tab_1___tab_1_column_2_section_1', 'tab_1___tab_1_column_3_section_1'],
+				grid: [],
+				navigation: ['navActivities'],
 				quick: [],
 				bpf: [],
 				dialog: []

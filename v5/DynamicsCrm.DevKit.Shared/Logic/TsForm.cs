@@ -404,54 +404,38 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code.AppendLine($"{TAB3}super(executionContext, defaultWebResourceName, {{");
 
             // Body fields
-            code.AppendLine($"{TAB4}body: [");
             var bodyArray = GetBodyFieldNames(formXml);
-            code.AppendLine($"{TAB4}{TAB}{string.Join($",{NEW_LINE}{TAB4}{TAB}", bodyArray.Select(x => $"'{x}'"))}");
-            code.AppendLine($"{TAB4}],");
+            code.AppendLine($"{TAB4}body: [{string.Join(", ", bodyArray.Select(x => $"'{x}'"))}],");
 
             // Header fields
-            code.AppendLine($"{TAB4}header: [");
             var headerArray = GetHeaderFieldNames(formXml);
-            code.AppendLine($"{TAB4}{TAB}{string.Join($",{NEW_LINE}{TAB4}{TAB}", headerArray.Select(x => $"'{x}'"))}");
-            code.AppendLine($"{TAB4}],");
+            code.AppendLine($"{TAB4}header: [{string.Join(", ", headerArray.Select(x => $"'{x}'"))}],");
 
             // Tab fields
-            code.AppendLine($"{TAB4}tab: [");
             var tabArray = GetTabFieldNames(formXml);
-            code.AppendLine($"{TAB4}{TAB}{string.Join($",{NEW_LINE}{TAB4}{TAB}", tabArray.Select(x => $"'{x}'"))}");
-            code.AppendLine($"{TAB4}],");
+            code.AppendLine($"{TAB4}tab: [{string.Join(", ", tabArray.Select(x => $"'{x}'"))}],");
 
             // Grid fields
-            code.AppendLine($"{TAB4}grid: [");
             var gridArray = GetGridFieldNames(formXml);
-            code.AppendLine($"{TAB4}{TAB}{string.Join($",{NEW_LINE}{TAB4}{TAB}", gridArray.Select(x => $"'{x}'"))}");
-            code.AppendLine($"{TAB4}],");
+            code.AppendLine($"{TAB4}grid: [{string.Join(", ", gridArray.Select(x => $"'{x}'"))}],");
 
             // Navigation fields
-            code.AppendLine($"{TAB4}navigation: [");
             var navArray = GetNavigationFieldNames(formXml);
-            code.AppendLine($"{TAB4}{TAB}{string.Join($",{NEW_LINE}{TAB4}{TAB}", navArray.Select(x => $"'{x}'"))}");
-            code.AppendLine($"{TAB4}],");
+            code.AppendLine($"{TAB4}navigation: [{string.Join(", ", navArray.Select(x => $"'{x}'"))}],");
 
             // Quick form fields
             if (!isQuickCreate)
             {
-                code.AppendLine($"{TAB4}quick: [");
                 var quickArray = await GetQuickFormFieldNamesAsync(formXml);
-                code.AppendLine($"{TAB4}{TAB}{string.Join($",{NEW_LINE}{TAB4}{TAB}", quickArray.Select(x => $"'{x}'"))}");
-                code.AppendLine($"{TAB4}],");
+                code.AppendLine($"{TAB4}quick: [{string.Join(", ", quickArray.Select(x => $"'{x}'"))}],");
 
                 // BPF fields
-                code.AppendLine($"{TAB4}bpf: [");
                 var bpfArray = await GetBpfFieldNamesAsync();
-                code.AppendLine($"{TAB4}{TAB}{string.Join($",{NEW_LINE}{TAB4}{TAB}", bpfArray.Select(x => $"'{x}'"))}");
-                code.AppendLine($"{TAB4}],");
+                code.AppendLine($"{TAB4}bpf: [{string.Join(", ", bpfArray.Select(x => $"'{x}'"))}],");
 
                 // Dialog fields
-                code.AppendLine($"{TAB4}dialog: [");
                 var dialogArray = GetDialogFieldNames(formXml);
-                code.AppendLine($"{TAB4}{TAB}{string.Join($",{NEW_LINE}{TAB4}{TAB}", dialogArray.Select(x => $"'{x}'"))}");
-                code.AppendLine($"{TAB4}]");
+                code.AppendLine($"{TAB4}dialog: [{string.Join(", ", dialogArray.Select(x => $"'{x}'"))}]");
             }
             else
             {
