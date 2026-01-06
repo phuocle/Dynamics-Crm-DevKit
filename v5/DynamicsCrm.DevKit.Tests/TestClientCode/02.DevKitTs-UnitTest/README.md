@@ -32,23 +32,27 @@ This project provides unit testing and code coverage for the DevKit TypeScript l
 ### Setup & Run
 
 ```powershell
-# 1. Clean previous artifacts (node_modules, coverage, etc.)
-.\1.Clean.ps1
+# From TestClientCode folder:
 
-# 2. Sync devkit.ts + devkit.d.ts + build.js from Source of Truth (v5)
-.\2.Sync.ps1
+# 1. Install all dependencies (first time)
+.\Install-All.ps1
 
-# 3. Install dependencies, run tests with coverage, open report
-.\3.RunCodeCoverage.ps1
+# 2. Sync files from Source of Truth
+.\Sync-All.ps1
+
+# 3. Run tests with coverage (from this folder)
+cd 02.DevKitTs-UnitTest
+.\RunCodeCoverage.ps1
 ```
 
 ## PowerShell Scripts
 
-| Script | Purpose |
-|--------|---------|
-| `1.Clean.ps1` | Clean `node_modules`, `coverage`, `.vs`, `.vscode`, `package-lock.json` |
-| `2.Sync.ps1` | Sync `devkit.ts` → `lib/devkit.ts`, `lib/devkit.d.ts` and `build.js` from Source of Truth |
-| `3.RunCodeCoverage.ps1` | Install npm packages (if needed), run coverage, open HTML report |
+| Script | Location | Purpose |
+|--------|----------|---------|
+| `Install-All.ps1` | TestClientCode | Install npm packages for all 6 folders |
+| `Sync-All.ps1` | TestClientCode | Sync all source of truth files |
+| `Clean-All.ps1` | TestClientCode | Clean all generated files |
+| `RunCodeCoverage.ps1` | This folder | Run tests with coverage, open HTML report |
 
 ## NPM Scripts
 
@@ -62,9 +66,9 @@ This project provides unit testing and code coverage for the DevKit TypeScript l
 ## Source of Truth
 
 Files synced from `DynamicsCrm.DevKit.Shared\Resources\`:
-- `devkit.ts` → `lib\devkit.ts`
-- `devkit.ts` → `lib\devkit.d.ts`
-- `build.js` → `build.js`
+- `ts\devkit.ts` → `lib\devkit.ts`
+- `ts\devkit.ts` → `lib\devkit.d.ts`
+- `ts\build.js` → `build.js`
 
 ## Architecture
 
