@@ -27,10 +27,12 @@ foreach ($project in $projects) {
             npm run check
         }
         elseif ($project -eq "04.DevKitTs-AICode") {
+            Set-Location "Dev.DevKit.WebResourceTs"
             Write-Host "Running: npm run check"
             npm run check
         }
         elseif ($project -eq "06.DevKitTs-Vsix") {
+            Set-Location "Dev.DevKit.WebResourceTs"
             Write-Host "Running: npm run check"
             npm run check
         }

@@ -55,7 +55,12 @@ foreach ($folder in $foldersToClean) {
         foreach ($match in $matches) {
             try {
                 if ($match.PSIsContainer) {
-                    Remove-Item -Path $match.FullName -Recurse -Force -ErrorAction Stop
+                    # Use cmd /c rmdir for better long path support
+                    cmd /c "rmdir /s /q ""$($match.FullName)"""
+                    if (Test-Path $match.FullName) {
+                         Write-Host "  Retrying delete with Remove-Item: $($match.FullName)" -ForegroundColor Yellow
+                         Remove-Item -Path $match.FullName -Recurse -Force -ErrorAction Stop
+                    }
                     Write-Host "  Deleted folder: $($match.FullName.Replace($rootDir, '.'))" -ForegroundColor Green
                 } else {
                     Remove-Item -Path $match.FullName -Force -ErrorAction Stop
