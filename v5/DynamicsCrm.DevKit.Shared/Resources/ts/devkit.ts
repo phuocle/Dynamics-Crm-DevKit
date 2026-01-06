@@ -1114,54 +1114,170 @@ function webApiReturnGet(data: any, type?: DevKit.WebApiFieldType): any {
     return parser ? parser(data) : data;
 }
 export class FormBase<TBody = any, THeader = any, TGrid = any, TNavigation = any, TQuickForm = any, TProcess = any, TDialog = any> {
+    /** The Body section of the form */
     public Body: TBody;
+    /** The Header section of the form */
     public Header: THeader;
+    /** The Grid section of the form */
     public Grid: TGrid;
+    /** The Navigation section of the form */
     public Navigation: TNavigation;
+    /** The QuickForm section of the form */
     public QuickForm: TQuickForm;
+    /** The Process section of the form */
     public Process: TProcess;
+    /** The Dialog section of the form */
     public Dialog: TDialog;
+    /** The Execution Context */
     public ExecutionContext: DevKit.IExecutionContext;
-    public Utility: any;
+    /** The Utility section */
+    public Utility: DevKit.IUtility;
+    /** The SidePanes section */
     public SidePanes: DevKit.ISidePanes;
+    /** The WebApi section */
     public WebApi: DevKit.IWebApi;
+    /** The Copilot section */
     public Copilot: DevKit.ICopilot;
+    /** The Form Id */
     public readonly FormId: string;
+    /** The Form Label */
     public readonly FormLabel: string;
+    /** The Form Type */
     public readonly FormType: OptionSet.FormType;
+    /** The Entity Id */
     public readonly EntityId: string;
+    /** The Entity Name */
     public readonly EntityName: string;
+    /** Indicates if the data is dirty */
     public readonly DataIsDirty: boolean;
+    /** Indicates if the data is valid */
     public readonly DataIsValid: boolean;
+    /** The Attributes collection */
     public readonly Attributes: any;
+    /** The Controls collection */
     public readonly Controls: any;
+    /** The Data XML */
     public readonly DataXml: string;
+    /** Indicates if the entity is dirty */
     public readonly EntityIsDirty: boolean;
+    /** Indicates if the entity is valid */
     public readonly EntityIsValid: boolean;
+    /** The Entity Reference */
     public readonly EntityReference: DevKit.EntityReference;
+    /** The Primary Attribute Value */
     public readonly PrimaryAttributeValue: string;
+    /** The View Port Height */
     public readonly ViewPortHeight: number;
+    /** The View Port Width */
     public readonly ViewPortWidth: number;
+    /**
+     * Saves the record
+     * @param saveOptions The save options
+     * @param successCallback The success callback
+     * @param errorCallback The error callback
+     */
     public Save: (saveOptions?: any, successCallback?: any, errorCallback?: any) => Promise<void> | void;
+    /**
+     * Refreshes the form
+     * @param save Indicates if the record should be saved
+     * @param successCallback The success callback
+     * @param errorCallback The error callback
+     */
     public Refresh: (save?: boolean, successCallback?: any, errorCallback?: any) => Promise<void> | void;
+    /** Closes the form */
     public Close: () => void;
+    /**
+     * Sets a form notification
+     * @param message The message
+     * @param level The notification level
+     * @param uniqueId The unique Id
+     */
     public SetFormNotification: (message: string, level: OptionSet.FormNotificationLevel, uniqueId: string) => boolean;
+    /**
+     * Clears a form notification
+     * @param uniqueId The unique Id
+     */
     public ClearFormNotification: (uniqueId: string) => boolean;
+    /**
+     * Refreshes the ribbon
+     * @param refreshAll Indicates if all ribbons should be refreshed
+     */
     public RefreshRibbon: (refreshAll?: boolean) => void;
+    /**
+     * Adds a function to be called when the form is loaded
+     * @param callback The function to be executed
+     */
     public UiAddLoaded: (callback: (context: any) => void) => void;
+    /**
+     * Removes a function to be called when the form is loaded
+     * @param callback The function to be executed
+     */
     public UiRemoveLoaded: (callback: (context: any) => void) => void;
+    /**
+     * Adds a function to be called when the form is loaded
+     * @param callback The function to be executed
+     */
     public UiAddOnLoad: (callback: (context: any) => void) => void;
+    /**
+     * Removes a function to be called when the form is loaded
+     * @param callback The function to be executed
+     */
     public UiRemoveOnLoad: (callback: (context: any) => void) => void;
+    /**
+     * Adds a function to be called after the OnSave is complete
+     * @param callback The function to be executed
+     */
     public AddOnPostSave: (callback: (context: any) => void) => void;
+    /**
+     * Adds a function to be called when the OnSave event occurs
+     * @param callback The function to be executed
+     */
     public AddOnSave: (callback: (context: any) => void) => void;
+    /**
+     * Removes a function to be called after the OnSave is complete
+     * @param callback The function to be executed
+     */
     public RemoveOnPostSave: (callback: (context: any) => void) => void;
+    /**
+     * Removes a function to be called when the OnSave event occurs
+     * @param callback The function to be executed
+     */
     public RemoveOnSave: (callback: (context: any) => void) => void;
+    /**
+     * Adds a function to be called when the data is loaded
+     * @param callback The function to be executed
+     */
     public DataAddOnLoad: (callback: (context: any) => void) => void;
+    /**
+     * Removes a function to be called when the data is loaded
+     * @param callback The function to be executed
+     */
     public DataRemoveOnLoad: (callback: (context: any) => void) => void;
+    /**
+     * Checks if the form is visible
+     * @param formId The form Id
+     */
     public FormIsVisible: (formId: string) => boolean;
+    /**
+     * Navigates to a form by Id
+     * @param formId The form Id
+     */
     public FormNavigateToFormId: (formId: string) => void;
+    /**
+     * Navigates to a form by Label
+     * @param formLabel The form Label
+     */
     public FormNavigateToFormLabel: (formLabel: string) => void;
+    /**
+     * Sets the visibility of a form
+     * @param formId The form Id
+     * @param visible The visibility state
+     */
     public FormSetVisible: (formId: string, visible: boolean) => void;
+    /**
+     * Sets the form entity name
+     * @param name The entity name
+     */
     public SetFormEntityName: (name: string) => void;
     constructor(
         executionContext: any,

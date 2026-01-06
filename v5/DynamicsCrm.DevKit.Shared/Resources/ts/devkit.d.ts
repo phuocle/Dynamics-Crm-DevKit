@@ -356,24 +356,28 @@ declare namespace DevKit {
 
         /**
          * Interface for String controls
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes
          */
         interface String extends IControlText {
         }
 
         /**
          * Interface for Memo (multiline text) controls
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes
          */
         interface Memo extends IControlText {
         }
 
         /**
          * Interface for Integer controls (no Precision support)
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes
          */
         interface Integer extends IControlNumber {
         }
 
         /**
          * Interface for Decimal controls
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes
          */
         interface Decimal extends IControlNumber {
             /**
@@ -386,6 +390,7 @@ declare namespace DevKit {
 
         /**
          * Interface for Double (floating point) controls
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes
          */
         interface Double extends IControlNumber {
             /**
@@ -398,6 +403,7 @@ declare namespace DevKit {
 
         /**
          * Interface for Money controls
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes
          */
         interface Money extends IControlNumber {
             /**
@@ -410,6 +416,7 @@ declare namespace DevKit {
 
         /**
          * Interface for Boolean controls
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes
          */
         interface Boolean extends IControl {
             /**
@@ -485,6 +492,7 @@ declare namespace DevKit {
 
         /**
          * Interface for OptionSet controls
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes
          */
         interface OptionSet extends IControlOptionSet {
             /**
@@ -515,6 +523,7 @@ declare namespace DevKit {
 
         /**
          * Interface for MultiOptionSet controls
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes
          */
         interface MultiOptionSet extends IControlOptionSet {
             /**
@@ -545,6 +554,7 @@ declare namespace DevKit {
 
         /**
          * Interface for Lookup controls
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
          */
         interface Lookup extends IControl {
             /**
@@ -625,6 +635,7 @@ declare namespace DevKit {
 
         /**
          * Interface for DateTime controls
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes
          */
         interface DateTime extends IControl {
             /**
@@ -644,6 +655,7 @@ declare namespace DevKit {
 
         /**
          * Interface for DateOnly controls (without time)
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes
          */
         interface DateOnly extends IControl {
             /**

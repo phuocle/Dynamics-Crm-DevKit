@@ -65,7 +65,10 @@ const formAccount_DevKitV4 = (function () {
 
 	function registerEvents(): void {
 		if (form.ExecutionContext.IsInitialLoad()) {
-			var a = form.Body.v4_String.Value;
+			form.AddOnPostSave(AddOnPostSave);
+		}
+		function AddOnPostSave() {
+
 		}
 	}
 
