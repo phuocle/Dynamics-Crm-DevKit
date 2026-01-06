@@ -983,15 +983,25 @@ export namespace FormAccount_Quick_Create {
 	 * Contains all controls on the form body
 	 */
 	export interface IBody {
+		/** Type the city for the primary address. */
 		address1_city: DevKit.Controls.String;
+		/** Type the first line of the primary address. */
 		address1_line1: DevKit.Controls.String;
+		/** Type the second line of the primary address. */
 		address1_line2: DevKit.Controls.String;
+		/** Type the ZIP Code or postal code for the primary address. */
 		address1_postalcode: DevKit.Controls.String;
+		/** Type additional information to describe the account, such as an excerpt from the company's website. */
 		description: DevKit.Controls.Memo;
+		/** Type the company or business name. */
 		name: DevKit.Controls.String;
+		/** Type the number of employees that work at the account for use in marketing segmentation and demographic analysis. */
 		numberofemployees: DevKit.Controls.Integer;
+		/** Choose the primary contact for the account to provide quick access to contact details. */
 		primarycontactid: DevKit.Controls.Lookup;
+		/** Type the annual revenue for the account, used as an indicator in financial performance analysis. */
 		revenue: DevKit.Controls.Money;
+		/** Type the main phone number for this account. */
 		telephone1: DevKit.Controls.String;
 		/** Form Tabs */
 		Tab: ITabs;
@@ -1019,26 +1029,11 @@ export namespace FormAccount_Quick_Create {
 		tab_1: Itab_1Tab;
 	}
 
-	export interface IGrid {
-	}
-
-	export interface INavigation {
-	}
-
-	export interface IQuickForm {
-	}
-
-	export interface IProcess extends DevKit.Controls.IProcess {
-	}
-
-	export interface IDialog extends DevKit.IDialog {
-	}
-
 	/**
 	 * Account Form class
 	 * Provides typed access to all form controls
 	 */
-	export class Form extends FormBase<IBody, IHeader, IGrid, INavigation, IQuickForm, IProcess, IDialog> {
+	export class Form extends FormBase<IBody, IHeader, undefined, undefined, undefined, undefined, undefined> {
 		/**
 		 * Creates an Account Form instance
 		 * @param executionContext The execution context from form event

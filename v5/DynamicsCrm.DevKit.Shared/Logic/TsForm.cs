@@ -110,6 +110,11 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             var bodyFields = GetBodyFields(form.FormXml);
             foreach (var field in bodyFields)
             {
+                var comment = GetFieldComment(field);
+                if (!string.IsNullOrEmpty(comment))
+                {
+                    code.AppendLine($"{TAB2}/** {comment} */");
+                }
                 code.AppendLine($"{TAB2}{field.LogicalName}: DevKit.Controls.{GetControlType(field)};");
             }
 
@@ -126,30 +131,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             // Generate Tabs interfaces
             code.Append(GetTabsInterfaces(form.FormXml));
 
-            // Generate IGrid interface (empty for quick create)
-            code.AppendLine($"{TAB}export interface IGrid {{");
-            code.AppendLine($"{TAB}}}");
-            code.AppendLine();
 
-            // Generate INavigation interface (empty for quick create)
-            code.AppendLine($"{TAB}export interface INavigation {{");
-            code.AppendLine($"{TAB}}}");
-            code.AppendLine();
-
-            // Generate IQuickForm interface (empty for quick create)
-            code.AppendLine($"{TAB}export interface IQuickForm {{");
-            code.AppendLine($"{TAB}}}");
-            code.AppendLine();
-
-            // Generate IProcess interface (empty for quick create)
-            code.AppendLine($"{TAB}export interface IProcess extends DevKit.Controls.IProcess {{");
-            code.AppendLine($"{TAB}}}");
-            code.AppendLine();
-
-            // Generate IDialog interface (empty for quick create)
-            code.AppendLine($"{TAB}export interface IDialog extends DevKit.IDialog {{");
-            code.AppendLine($"{TAB}}}");
-            code.AppendLine();
 
             // Generate Form class
             code.Append(await GetFormClassAsync(safeName, form.FormXml, true));
@@ -394,7 +376,14 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code.AppendLine($"{TAB} * {EntityMetadata.SchemaName} Form class");
             code.AppendLine($"{TAB} * Provides typed access to all form controls");
             code.AppendLine($"{TAB} */");
-            code.AppendLine($"{TAB}export class Form extends FormBase<IBody, IHeader, IGrid, INavigation, IQuickForm, IProcess, IDialog> {{");
+            if (isQuickCreate)
+            {
+                code.AppendLine($"{TAB}export class Form extends FormBase<IBody, IHeader, undefined, undefined, undefined, undefined, undefined> {{");
+            }
+            else
+            {
+                code.AppendLine($"{TAB}export class Form extends FormBase<IBody, IHeader, IGrid, INavigation, IQuickForm, IProcess, IDialog> {{");
+            }
             code.AppendLine($"{TAB2}/**");
             code.AppendLine($"{TAB2} * Creates an {EntityMetadata.SchemaName} Form instance");
             code.AppendLine($"{TAB2} * @param executionContext The execution context from form event");
