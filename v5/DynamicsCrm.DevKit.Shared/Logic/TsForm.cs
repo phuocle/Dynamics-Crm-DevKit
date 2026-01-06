@@ -123,10 +123,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code.AppendLine($"{TAB}}}");
             code.AppendLine();
 
-            // Generate IHeader interface (empty for quick create)
-            code.AppendLine($"{TAB}export interface IHeader extends DevKit.Controls.IHeader {{");
-            code.AppendLine($"{TAB}}}");
-            code.AppendLine();
+
 
             // Generate Tabs interfaces
             code.Append(GetTabsInterfaces(form.FormXml));
@@ -378,7 +375,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code.AppendLine($"{TAB} */");
             if (isQuickCreate)
             {
-                code.AppendLine($"{TAB}export class Form extends FormBase<IBody, IHeader, undefined, undefined, undefined, undefined, undefined> {{");
+                code.AppendLine($"{TAB}export class Form extends FormBase<IBody, undefined, undefined, undefined, undefined, undefined, undefined> {{");
             }
             else
             {

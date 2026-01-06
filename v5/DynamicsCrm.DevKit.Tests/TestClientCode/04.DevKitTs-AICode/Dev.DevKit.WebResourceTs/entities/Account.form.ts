@@ -1007,9 +1007,6 @@ export namespace FormAccount_Quick_Create {
 		Tab: ITabs;
 	}
 
-	export interface IHeader extends DevKit.Controls.IHeader {
-	}
-
 	export interface Itab_1TabSections {
 		/** Details */
 		tab_1_column_1_section_1: DevKit.Controls.Section;
@@ -1033,7 +1030,7 @@ export namespace FormAccount_Quick_Create {
 	 * Account Form class
 	 * Provides typed access to all form controls
 	 */
-	export class Form extends FormBase<IBody, IHeader, undefined, undefined, undefined, undefined, undefined> {
+	export class Form extends FormBase<IBody, undefined, undefined, undefined, undefined, undefined, undefined> {
 		/**
 		 * Creates an Account Form instance
 		 * @param executionContext The execution context from form event
