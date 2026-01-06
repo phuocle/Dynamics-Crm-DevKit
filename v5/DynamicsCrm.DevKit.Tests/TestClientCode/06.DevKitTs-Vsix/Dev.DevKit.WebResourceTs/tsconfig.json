@@ -2,6 +2,7 @@
     "compilerOptions": {
         "target": "ES2020",
         "module": "CommonJS",
+        "moduleResolution": "node",
         "lib": [
             "ES2020",
             "DOM"
@@ -10,18 +11,13 @@
         "esModuleInterop": true,
         "skipLibCheck": true,
         "forceConsistentCasingInFileNames": true,
+        "noEmit": true,
         "baseUrl": ".",
-        "paths": {
-            "*": [
-                "node_modules/*",
-                "Dev.DevKit.WebResourceTs/*"
-            ]
-        }
+        "resolveJsonModule": true,
+        "allowSyntheticDefaultImports": true
     },
     "include": [
-        "**/*.ts",
-        "lib/**/*.ts",
-        "lib/**/*.d.ts"
+        "**/*.ts"
     ],
     "exclude": [
         "node_modules",
