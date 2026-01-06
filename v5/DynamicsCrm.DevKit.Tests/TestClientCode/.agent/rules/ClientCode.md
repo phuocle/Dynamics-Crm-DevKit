@@ -7,7 +7,7 @@ trigger: always_on
 # 5 CORE SOURCES OF TRUTH (CRITICAL) #
 The following files are the **Source of Truth** for the project. Before making ANY changes to core logic, type definitions, or runtime behavior, you **MUST** read and verify against these files:
 1. **JS Runtime**: DynamicsCrm.DevKit.Shared\Resources\js\devkit.js (nói nhanh devkit.js)
-2. **JS Definitions**: DynamicsCrm.DevKit.Shared\Resources\ts\devkit.d.ts (nói nhanh devkit.d.ts js)
+2. **JS Definitions**: DynamicsCrm.DevKit.Shared\Resources\js\devkit.d.ts (nói nhanh devkit.d.ts js)
 3. **TS Runtime**: DynamicsCrm.DevKit.Shared\Resources\ts\devkit.ts (nói nhanh devkit.ts)
 4. **TS Definitions**: DynamicsCrm.DevKit.Shared\Resources\ts\devkit.d.ts (nói nhanh devkit.d.ts ts)
 5. **TS Runtime**: DynamicsCrm.DevKit.Shared\Resources\ts\build.js (nói nhanh build.js)
@@ -64,7 +64,7 @@ DynamicsCrm.DevKit.Shared\Resources\js\devkit.js
    --> DynamicsCrm.DevKit.Tests\TestClientCode\01.DevKitJs-UnitTest\lib\devkit.js
    --> DynamicsCrm.DevKit.Tests\TestClientCode\03.DevKitJs-AICode\Dev.DevKit.WebResource\lib\devkit.js
    --> DynamicsCrm.DevKit.Tests\TestClientCode\05.DevKitJs-Vsix\Dev.DevKit.WebResource\lib\devkit.js
-DynamicsCrm.DevKit.Shared\Resources\ts\devkit.d.ts
+DynamicsCrm.DevKit.Shared\Resources\js\devkit.d.ts
    --> DynamicsCrm.DevKit.Tests\TestClientCode\01.DevKitJs-UnitTest\entities\devkit.d.ts
    --> DynamicsCrm.DevKit.Tests\TestClientCode\03.DevKitJs-AICode\Dev.DevKit.WebResource\entities\devkit.d.ts
    --> DynamicsCrm.DevKit.Tests\TestClientCode\05.DevKitJs-Vsix\Dev.DevKit.WebResource\entities\devkit.d.ts

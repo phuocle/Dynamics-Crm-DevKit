@@ -2,6 +2,7 @@
 // --------------------------- SOURCE OF TRUTH ---------------------------------------
 // -----------------------------------------------------------------------------------
 // This file is a Source of Truth for the DynamicsCrm.DevKit project.
+// This is devkit.d.ts for devkit.js
 // Do not edit without considering the impact on the entire toolkit.
 // -----------------------------------------------------------------------------------
 /**

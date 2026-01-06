@@ -38,7 +38,7 @@ foreach ($target in $targets) {
 }
 
 # devkit.d.ts (for JS projects)
-$source = Join-Path $sharedDir "ts\devkit.d.ts"
+$source = Join-Path $sharedDir "js\devkit.d.ts"
 $targets = @(
     "01.DevKitJs-UnitTest\entities\devkit.d.ts",
     "03.DevKitJs-AICode\Dev.DevKit.WebResource\entities\devkit.d.ts",
