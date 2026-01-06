@@ -67,7 +67,8 @@ foreach ($target in $targets) {
     }
 }
 
-# devkit.d.ts (for TS projects - copy from devkit.ts)
+# devkit.d.ts (for TS projects)
+$source = Join-Path $sharedDir "ts\devkit.d.ts"
 $targets = @(
     "02.DevKitTs-UnitTest\lib\devkit.d.ts",
     "04.DevKitTs-AICode\Dev.DevKit.WebResourceTs\lib\devkit.d.ts",
@@ -77,7 +78,7 @@ foreach ($target in $targets) {
     $targetPath = Join-Path $rootDir $target
     if (Test-Path $source) {
         Copy-Item -Path $source -Destination $targetPath -Force
-        Write-Host "  Copied: devkit.ts -> $target (as devkit.d.ts)" -ForegroundColor Green
+        Write-Host "  Copied: devkit.d.ts -> $target" -ForegroundColor Green
     }
 }
 
