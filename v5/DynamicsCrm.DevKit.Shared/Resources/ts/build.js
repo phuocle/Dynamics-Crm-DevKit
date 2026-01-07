@@ -195,14 +195,17 @@ async function buildEntity(file, devkitCode) {
 }
 
 /**
- * Cleanup: Delete devkit.js from build folder if exists
+ * Cleanup: Delete devkit.js and OptionSet.js from build folder if exists
  */
-function cleanupDevkitJs() {
-    const devkitJsPath = path.join(buildDir, 'devkit.js');
-    if (fs.existsSync(devkitJsPath)) {
-        fs.unlinkSync(devkitJsPath);
-        console.log('  ✓ Cleaned up devkit.js from build folder');
-    }
+function cleanupBuildFolder() {
+    const filesToClean = ['devkit.js', 'OptionSet.js'];
+    filesToClean.forEach(fileName => {
+        const filePath = path.join(buildDir, fileName);
+        if (fs.existsSync(filePath)) {
+            fs.unlinkSync(filePath);
+            console.log(`  ✓ Cleaned up ${fileName} from build folder`);
+        }
+    });
 }
 
 async function build() {
@@ -233,7 +236,7 @@ async function build() {
 
         console.log(`Step 2: Building entity: ${entityName}`);
         const success = await buildEntity(file, minifiedDevkitCode);
-        cleanupDevkitJs();
+        cleanupBuildFolder();
         console.log(`\nBuild completed. Output: build/\n`);
         process.exit(success ? 0 : 1);
     } else {
@@ -250,7 +253,7 @@ async function build() {
             await buildEntity(file, minifiedDevkitCode);
         }
 
-        cleanupDevkitJs();
+        cleanupBuildFolder();
         console.log(`\nBuild completed. Output: build/\n`);
     }
 }
