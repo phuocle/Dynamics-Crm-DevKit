@@ -113,6 +113,55 @@ foreach ($target in $targets) {
 
 Write-Host ""
 Write-Host "============================================="
+Write-Host "2. SYNC GENERATED FILES"
+Write-Host "============================================="
+
+# JS Generated Files (Account.form.js, Account.webapi.js, Account.d.ts)
+# Source: 05.DevKitJs-Vsix
+$jsSourceDir = Join-Path $rootDir "05.DevKitJs-Vsix\Dev.DevKit.WebResource\entities"
+$jsTargetDirs = @(
+    "01.DevKitJs-UnitTest\entities",
+    "03.DevKitJs-AICode\Dev.DevKit.WebResource\entities"
+)
+
+$jsFiles = @("Account.form.js", "Account.webapi.js", "Account.d.ts")
+
+foreach ($file in $jsFiles) {
+    $sourcePath = Join-Path $jsSourceDir $file
+    foreach ($targetDir in $jsTargetDirs) {
+        $targetPath = Join-Path $rootDir $targetDir
+        $targetFile = Join-Path $targetPath $file
+        if (Test-Path $sourcePath) {
+            Copy-Item -Path $sourcePath -Destination $targetPath -Force
+            Write-Host "  Copied: $file -> $targetDir\$file" -ForegroundColor Green
+        }
+    }
+}
+
+# TS Generated Files (Account.form.ts, Account.webapi.ts, OptionSet.ts)
+# Source: 06.DevKitTs-Vsix
+$tsSourceDir = Join-Path $rootDir "06.DevKitTs-Vsix\Dev.DevKit.WebResourceTs\entities"
+$tsTargetDirs = @(
+    "02.DevKitTs-UnitTest\entities",
+    "04.DevKitTs-AICode\Dev.DevKit.WebResourceTs\entities"
+)
+
+$tsFiles = @("Account.form.ts", "Account.webapi.ts", "OptionSet.ts")
+
+foreach ($file in $tsFiles) {
+    $sourcePath = Join-Path $tsSourceDir $file
+    foreach ($targetDir in $tsTargetDirs) {
+        $targetPath = Join-Path $rootDir $targetDir
+        $targetFile = Join-Path $targetPath $file
+        if (Test-Path $sourcePath) {
+            Copy-Item -Path $sourcePath -Destination $targetPath -Force
+            Write-Host "  Copied: $file -> $targetDir\$file" -ForegroundColor Green
+        }
+    }
+}
+
+Write-Host ""
+Write-Host "============================================="
 Write-Host "  SYNC COMPLETE"
 Write-Host "============================================="
 Write-Host ""

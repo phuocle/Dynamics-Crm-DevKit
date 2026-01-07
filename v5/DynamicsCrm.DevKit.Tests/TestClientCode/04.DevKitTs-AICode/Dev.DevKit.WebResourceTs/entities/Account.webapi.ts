@@ -9,10 +9,6 @@
  */
 
 import { createWebApiEntity } from '../lib/devkit';
-// Use types from DevKit namespace (defined in devkit.d.ts)
-type Guid = DevKit.Guid;
-type IWebApiEntity = DevKit.IWebApiEntity;
-type IWebApiFieldConfigMap = DevKit.IWebApiFieldConfigMap;
 
 // ============================================================================
 // 1. Types
@@ -194,7 +190,7 @@ export interface IAccountFormattedValue {
  * Account WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
-export interface IAccountApi extends IWebApiEntity {
+export interface IAccountApi extends DevKit.IWebApiEntity {
 	/** Formatted values for all fields */
 	readonly FormattedValue: IAccountFormattedValue;
 	/** Select a category to indicate whether the customer account is standard or preferred. */
@@ -202,13 +198,13 @@ export interface IAccountApi extends IWebApiEntity {
 	/** Select a classification code to indicate the potential value of the customer account based on the projected return on investment, cooperation level, sales cycle length or other criteria. */
 	AccountClassificationCode: number | null;
 	/** Unique identifier of the account. */
-	AccountId: Guid | null;
+	AccountId: DevKit.Guid | null;
 	/** Type an ID number or code for the account to quickly search and identify the account in system views. */
 	AccountNumber: string | null;
 	/** Select a rating to indicate the value of the customer account. */
 	AccountRatingCode: number | null;
 	/** Unique identifier for address 1. */
-	Address1_AddressId: Guid | null;
+	Address1_AddressId: DevKit.Guid | null;
 	/** Select the primary address type. */
 	Address1_AddressTypeCode: number | null;
 	/** Type the city for the primary address. */
@@ -256,7 +252,7 @@ export interface IAccountApi extends IWebApiEntity {
 	/** Select the time zone, or UTC offset, for this address so that other people can reference it when they contact someone at this address. */
 	Address1_UTCOffset: number | null;
 	/** Unique identifier for address 2. */
-	Address2_AddressId: Guid | null;
+	Address2_AddressId: DevKit.Guid | null;
 	/** Select the secondary address type. */
 	Address2_AddressTypeCode: number | null;
 	/** Type the city for the secondary address. */
@@ -303,9 +299,13 @@ export interface IAccountApi extends IWebApiEntity {
 	Address2_UPSZone: string | null;
 	/** Select the time zone, or UTC offset, for this address so that other people can reference it when they contact someone at this address. */
 	Address2_UTCOffset: number | null;
+	/** Created By (IP Address) */
 	Adx_CreatedByIPAddress: string | null;
+	/** Created By (User Name) */
 	Adx_CreatedByUsername: string | null;
+	/** Modified By (IP Address) */
 	Adx_ModifiedByIPAddress: string | null;
+	/** Modified By (User Name) */
 	Adx_ModifiedByUsername: string | null;
 	/** For system use only. */
 	readonly Aging30: number | null;
@@ -322,13 +322,13 @@ export interface IAccountApi extends IWebApiEntity {
 	/** Select the legal designation or other business type of the account for contracts or reporting purposes. */
 	BusinessTypeCode: number | null;
 	/** Shows who created the record. */
-	readonly CreatedBy: Guid | null;
+	readonly CreatedBy: DevKit.Guid | null;
 	/** Shows the external party who created the record. */
-	readonly CreatedByExternalParty: Guid | null;
+	readonly CreatedByExternalParty: DevKit.Guid | null;
 	/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
 	readonly CreatedOn_UtcDateAndTime: Date | null;
 	/** Shows who created the record on behalf of another user. */
-	readonly CreatedOnBehalfBy: Guid | null;
+	readonly CreatedOnBehalfBy: DevKit.Guid | null;
 	/** Type the credit limit of the account. This is a useful reference when you address invoice and accounting issues with the customer. */
 	CreditLimit: number | null;
 	/** Shows the credit limit converted to the system's default base currency for reporting purposes. */
@@ -364,7 +364,7 @@ export interface IAccountApi extends IWebApiEntity {
 	/** Shows the default image for the record. */
 	EntityImage: string | null;
 	/** For internal use only. */
-	readonly EntityImageId: Guid | null;
+	readonly EntityImageId: DevKit.Guid | null;
 	/** Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency. */
 	readonly ExchangeRate: number | null;
 	/** Type the fax number for the account. */
@@ -389,19 +389,19 @@ export interface IAccountApi extends IWebApiEntity {
 	/** Whether is only for marketing */
 	MarketingOnly: boolean | null;
 	/** Shows the master account that the account was merged with. */
-	readonly MasterId: Guid | null;
+	readonly MasterId: DevKit.Guid | null;
 	/** Shows whether the account has been merged with another account. */
 	readonly Merged: boolean | null;
 	/** Shows who last updated the record. */
-	readonly ModifiedBy: Guid | null;
+	readonly ModifiedBy: DevKit.Guid | null;
 	/** Shows the external party who modified the record. */
-	readonly ModifiedByExternalParty: Guid | null;
+	readonly ModifiedByExternalParty: DevKit.Guid | null;
 	/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
 	readonly ModifiedOn_UtcDateAndTime: Date | null;
 	/** Shows who created the record on behalf of another user. */
-	readonly ModifiedOnBehalfBy: Guid | null;
+	readonly ModifiedOnBehalfBy: DevKit.Guid | null;
 	/** Unique identifier for Account associated with Account. */
-	msa_managingpartnerid: Guid | null;
+	msa_managingpartnerid: DevKit.Guid | null;
 	/** Type the company or business name. */
 	Name: string | null;
 	/** Type the number of employees that work at the account for use in marketing segmentation and demographic analysis. */
@@ -411,17 +411,17 @@ export interface IAccountApi extends IWebApiEntity {
 	/** Date and time that the record was migrated. */
 	OverriddenCreatedOn_UtcDateOnly: Date | null;
 	/** Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
-	OwnerId: Guid | null;
+	OwnerId: DevKit.Guid | null;
 	/** Select the account's ownership structure, such as public or private. */
 	OwnershipCode: number | null;
 	/** Shows the business unit that the record owner belongs to. */
-	readonly OwningBusinessUnit: Guid | null;
+	readonly OwningBusinessUnit: DevKit.Guid | null;
 	/** Unique identifier of the team who owns the account. */
-	readonly OwningTeam: Guid | null;
+	readonly OwningTeam: DevKit.Guid | null;
 	/** Unique identifier of the user who owns the account. */
-	readonly OwningUser: Guid | null;
+	readonly OwningUser: DevKit.Guid | null;
 	/** Choose the parent account associated with this account to show parent and child businesses in reporting and analytics. */
-	ParentAccountId: Guid | null;
+	ParentAccountId: DevKit.Guid | null;
 	/** For system use only. Legacy Microsoft Dynamics CRM 3.0 workflow data. */
 	ParticipatesInWorkflow: boolean | null;
 	/** Select the payment terms to indicate when the customer needs to pay the total amount. */
@@ -433,15 +433,15 @@ export interface IAccountApi extends IWebApiEntity {
 	/** Select the preferred method of contact. */
 	PreferredContactMethodCode: number | null;
 	/** Choose the preferred service representative for reference when you schedule service activities for the account. */
-	PreferredSystemUserId: Guid | null;
+	PreferredSystemUserId: DevKit.Guid | null;
 	/** Choose the primary contact for the account to provide quick access to contact details. */
-	PrimaryContactId: Guid | null;
+	PrimaryContactId: DevKit.Guid | null;
 	/** Primary Satori ID for Account */
 	PrimarySatoriId: string | null;
 	/** Primary Twitter ID for Account */
 	PrimaryTwitterId: string | null;
 	/** Shows the ID of the process. */
-	ProcessId: Guid | null;
+	ProcessId: DevKit.Guid | null;
 	/** Type the annual revenue for the account, used as an indicator in financial performance analysis. */
 	Revenue: number | null;
 	/** Shows the annual revenue converted to the system's default base currency. The calculations use the exchange rate specified in the Currencies area. */
@@ -453,11 +453,11 @@ export interface IAccountApi extends IWebApiEntity {
 	/** Type the Standard Industrial Classification (SIC) code that indicates the account's primary industry of business, for use in marketing segmentation and demographic analysis. */
 	SIC: string | null;
 	/** Choose the service level agreement (SLA) that you want to apply to the Account record. */
-	SLAId: Guid | null;
+	SLAId: DevKit.Guid | null;
 	/** Last SLA that was applied to this case. This field is for internal use only. */
-	readonly SLAInvokedId: Guid | null;
+	readonly SLAInvokedId: DevKit.Guid | null;
 	/** Shows the ID of the stage. */
-	StageId: Guid | null;
+	StageId: DevKit.Guid | null;
 	/** Shows whether the account is active or inactive. Inactive accounts are read-only and can't be edited unless they are reactivated. */
 	StateCode: number | null;
 	/** Select the account's status. */
@@ -479,27 +479,42 @@ export interface IAccountApi extends IWebApiEntity {
 	/** For internal use only. */
 	TimeZoneRuleVersionNumber: number | null;
 	/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
-	TransactionCurrencyId: Guid | null;
+	TransactionCurrencyId: DevKit.Guid | null;
 	/** For internal use only. */
 	TraversedPath: string | null;
 	/** Time zone code that was in use when the record was created. */
 	UTCConversionTimeZoneCode: number | null;
+	/** Appointment Time */
 	v4_AppointmentTime_UtcDateAndTime: Date | null;
+	/** Birthday */
 	v4_Birthday_TimezoneDateOnly: Date | null;
+	/** Boolean */
 	v4_Boolean: boolean | null;
+	/** Categories */
 	v4_Categories: Array<number> | null;
+	/** DateOnly */
 	v4_DateOnly_TimezoneDateOnly: Date | null;
+	/** DateTime */
 	v4_DateTime_UtcDateAndTime: Date | null;
+	/** Decimal */
 	v4_Decimal: number | null;
+	/** Double */
 	v4_Double: number | null;
+	/** Integer */
 	v4_Integer: number | null;
-	v4_Lookup: Guid | null;
+	/** Lookup */
+	v4_Lookup: DevKit.Guid | null;
+	/** Memo */
 	v4_Memo: string | null;
+	/** Money */
 	v4_Money: number | null;
 	/** Value of the Money in base currency. */
 	readonly v4_money_Base: number | null;
+	/** MultiOptionSet */
 	v4_MultiOptionSet: Array<number> | null;
+	/** OptionSet */
 	v4_OptionSet: number | null;
+	/** String */
 	v4_String: string | null;
 	/** Version number of the account. */
 	readonly VersionNumber: number | null;
@@ -522,7 +537,7 @@ export interface IAccountApi extends IWebApiEntity {
  * - readOnly: whether the field is read-only
  * - type: field type for parsing (Integer, Number, Boolean, DateTime, MultiOptionSet)
  */
-const AccountFieldConfig: IWebApiFieldConfigMap = {
+const AccountFieldConfig: DevKit.IWebApiFieldConfigMap = {
 	AccountCategoryCode: { logicalName: 'accountcategorycode', type: 'Integer' },
 	AccountClassificationCode: { logicalName: 'accountclassificationcode', type: 'Integer' },
 	AccountId: { logicalName: 'accountid' },

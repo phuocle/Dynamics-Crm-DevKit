@@ -46,11 +46,6 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code += $" */{NEW_LINE}";
             code += $"{NEW_LINE}";
             code += $"import {{ createWebApiEntity }} from '../lib/devkit';{NEW_LINE}";
-
-            code += $"// Use types from DevKit namespace (defined in devkit.d.ts){NEW_LINE}";
-            code += $"type Guid = DevKit.Guid;{NEW_LINE}";
-            code += $"type IWebApiEntity = DevKit.IWebApiEntity;{NEW_LINE}";
-            code += $"type IWebApiFieldConfigMap = DevKit.IWebApiFieldConfigMap;{NEW_LINE}";
             code += $"{NEW_LINE}";
 
             // 2. Types - Formatted Value Interface
@@ -77,7 +72,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code += $" * {safeSchemaName} WebApi entity interface{NEW_LINE}";
             code += $" * Provides IntelliSense for early-bound style coding{NEW_LINE}";
             code += $" */{NEW_LINE}";
-            code += $"export interface I{safeSchemaName}Api extends IWebApiEntity {{{NEW_LINE}";
+            code += $"export interface I{safeSchemaName}Api extends DevKit.IWebApiEntity {{{NEW_LINE}";
             code += $"{TAB}/** Formatted values for all fields */{NEW_LINE}";
             code += $"{TAB}readonly FormattedValue: I{safeSchemaName}FormattedValue;{NEW_LINE}";
 
@@ -87,7 +82,14 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                 var name = Helper.SafeDeclareName(attribute.SchemaName, GeneratorType.tswebapi, EntityMetadata.SchemaName, attribute) + GetSuffix(attribute);
                 var type = GetTsType(attribute);
                 var readOnly = (attribute.IsValidForCreate == false && attribute.IsValidForUpdate == false) || attribute.IsReadOnly() ? "readonly " : "";
-                var desc = attribute.Description?.UserLocalizedLabel?.Label?.Replace("\r\n", " ") ?? "";
+                // Priority 1: Check Description first (per Microsoft SDK documentation)
+                // Priority 2: Fallback to DisplayName if no Description
+                var desc = attribute.Description?.UserLocalizedLabel?.Label;
+                if (string.IsNullOrWhiteSpace(desc))
+                {
+                    desc = attribute.DisplayName?.UserLocalizedLabel?.Label;
+                }
+                desc = desc?.Replace("\r\n", " ") ?? "";
                 if (!string.IsNullOrEmpty(desc))
                 {
                     code += $"{TAB}/** {desc} */{NEW_LINE}";
@@ -111,7 +113,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code += $" * - readOnly: whether the field is read-only{NEW_LINE}";
             code += $" * - type: field type for parsing (Integer, Number, Boolean, DateTime, MultiOptionSet){NEW_LINE}";
             code += $" */{NEW_LINE}";
-            code += $"const {safeSchemaName}FieldConfig: IWebApiFieldConfigMap = {{{NEW_LINE}";
+            code += $"const {safeSchemaName}FieldConfig: DevKit.IWebApiFieldConfigMap = {{{NEW_LINE}";
             code += await GeneratorCodeAsync();
             code += $"}};{NEW_LINE}";
             code += $"{NEW_LINE}";
@@ -169,7 +171,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                 case AttributeTypeCode.Owner:
                 case AttributeTypeCode.Customer:
                 case AttributeTypeCode.Uniqueidentifier:
-                    return "Guid | null";
+                    return "DevKit.Guid | null";
                 default: return "string | null";
             }
         }

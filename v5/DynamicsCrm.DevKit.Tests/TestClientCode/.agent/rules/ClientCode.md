@@ -30,6 +30,9 @@ The following files are the **Source of Truth** for the project. Before making A
 - TestClientCode-JS-WEBAPI
 - TestClientCode-TS-WEBAPI
 
+# CÁC MỤC SAU ĐÂY LUÔN LUÔN ĐÚNG - KHÔNG ĐƯỢC PHÉP CHỈNH SỬA, CHỈ ĐỌC
+- launchSettings.json
+
 ==== KẾT THÚC QUAN TRỌNG
 
 # BEGIN #

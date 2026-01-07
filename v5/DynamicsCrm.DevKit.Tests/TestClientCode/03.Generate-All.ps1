@@ -3,12 +3,21 @@ Write-Host "  GENERATING Source of Truth Entity Files"
 Write-Host "============================================="
 Write-Host ""
 
+# Build CLI
+Write-Host "Building CLI..." -ForegroundColor Cyan
+$msbuild = "C:\Program Files\Microsoft Visual Studio\18\Professional\MSBuild\Current\Bin\MSBuild.exe"
+$project = "..\..\DynamicsCrm.DevKit.Cli\DynamicsCrm.DevKit.Cli.csproj"
+& $msbuild -t:Build -p:Configuration=Release $project -restore -verbosity:minimal
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "[ERROR] Failed to build CLI" -ForegroundColor Red
+    exit 1
+}
+
 $cliPath = "D:\github\Dynamics-Crm-DevKit\v5\DynamicsCrm.DevKit.Cli\bin\Release\net48\DynamicsCrm.DevKit.Cli.exe"
 
 # Check if CLI exists
 if (-not (Test-Path $cliPath)) {
     Write-Host "[ERROR] CLI not found at: $cliPath" -ForegroundColor Red
-    Write-Host "Please build the CLI project first using: 04.Build-All.ps1" -ForegroundColor Yellow
     exit 1
 }
 
