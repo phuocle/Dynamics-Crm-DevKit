@@ -28,6 +28,8 @@
         jsform,
         tsform,
         jswebapi,
+        tswebapi,
+
         csharp,
         //earlybound
     }

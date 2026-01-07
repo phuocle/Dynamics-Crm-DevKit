@@ -89,7 +89,7 @@ export interface IAccountFormattedValue {
 	readonly BusinessTypeCode: string;
 	readonly CreatedBy: string;
 	readonly CreatedByExternalParty: string;
-	readonly CreatedOn_UtcDateAndTime: string;
+	readonly CreatedOn: string;
 	readonly CreatedOnBehalfBy: string;
 	readonly CreditLimit: string;
 	readonly CreditLimit_Base: string;
@@ -116,8 +116,8 @@ export interface IAccountFormattedValue {
 	readonly ImportSequenceNumber: string;
 	readonly IndustryCode: string;
 	readonly IsPrivate: string;
-	readonly LastOnHoldTime_UtcDateAndTime: string;
-	readonly LastUsedInCampaign_UtcDateOnly: string;
+	readonly LastOnHoldTime: string;
+	readonly LastUsedInCampaign: string;
 	readonly MarketCap: string;
 	readonly MarketCap_Base: string;
 	readonly MarketingOnly: string;
@@ -125,13 +125,13 @@ export interface IAccountFormattedValue {
 	readonly Merged: string;
 	readonly ModifiedBy: string;
 	readonly ModifiedByExternalParty: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
+	readonly ModifiedOn: string;
 	readonly ModifiedOnBehalfBy: string;
 	readonly msa_managingpartnerid: string;
 	readonly Name: string;
 	readonly NumberOfEmployees: string;
 	readonly OnHoldTime: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
+	readonly OverriddenCreatedOn: string;
 	readonly OwnerId: string;
 	readonly OwnershipCode: string;
 	readonly OwningBusinessUnit: string;
@@ -169,12 +169,12 @@ export interface IAccountFormattedValue {
 	readonly TransactionCurrencyId: string;
 	readonly TraversedPath: string;
 	readonly UTCConversionTimeZoneCode: string;
-	readonly v4_AppointmentTime_UtcDateAndTime: string;
-	readonly v4_Birthday_TimezoneDateOnly: string;
+	readonly v4_AppointmentTime: string;
+	readonly v4_Birthday: string;
 	readonly v4_Boolean: string;
 	readonly v4_Categories: string;
-	readonly v4_DateOnly_TimezoneDateOnly: string;
-	readonly v4_DateTime_UtcDateAndTime: string;
+	readonly v4_DateOnly: string;
+	readonly v4_DateTime: string;
 	readonly v4_Decimal: string;
 	readonly v4_Double: string;
 	readonly v4_Integer: string;
@@ -326,7 +326,7 @@ export interface IAccountApi extends IWebApiEntity {
 	/** Shows the external party who created the record. */
 	readonly CreatedByExternalParty: Guid | null;
 	/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-	readonly CreatedOn_UtcDateAndTime: Date | null;
+	readonly CreatedOn: Date | null;
 	/** Shows who created the record on behalf of another user. */
 	readonly CreatedOnBehalfBy: Guid | null;
 	/** Type the credit limit of the account. This is a useful reference when you address invoice and accounting issues with the customer. */
@@ -379,9 +379,9 @@ export interface IAccountApi extends IWebApiEntity {
 	IndustryCode: number | null;
 	readonly IsPrivate: boolean | null;
 	/** Contains the date and time stamp of the last on hold time. */
-	LastOnHoldTime_UtcDateAndTime: Date | null;
+	LastOnHoldTime: Date | null;
 	/** Shows the date when the account was last included in a marketing campaign or quick campaign. */
-	LastUsedInCampaign_UtcDateOnly: Date | null;
+	LastUsedInCampaign: Date | null;
 	/** Type the market capitalization of the account to identify the company's equity, used as an indicator in financial performance analysis. */
 	MarketCap: number | null;
 	/** Shows the market capitalization converted to the system's default base currency. */
@@ -397,7 +397,7 @@ export interface IAccountApi extends IWebApiEntity {
 	/** Shows the external party who modified the record. */
 	readonly ModifiedByExternalParty: Guid | null;
 	/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-	readonly ModifiedOn_UtcDateAndTime: Date | null;
+	readonly ModifiedOn: Date | null;
 	/** Shows who created the record on behalf of another user. */
 	readonly ModifiedOnBehalfBy: Guid | null;
 	/** Unique identifier for Account associated with Account. */
@@ -409,7 +409,7 @@ export interface IAccountApi extends IWebApiEntity {
 	/** Shows how long, in minutes, that the record was on hold. */
 	readonly OnHoldTime: number | null;
 	/** Date and time that the record was migrated. */
-	OverriddenCreatedOn_UtcDateOnly: Date | null;
+	OverriddenCreatedOn: Date | null;
 	/** Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
 	OwnerId: Guid | null;
 	/** Select the account's ownership structure, such as public or private. */
@@ -484,12 +484,12 @@ export interface IAccountApi extends IWebApiEntity {
 	TraversedPath: string | null;
 	/** Time zone code that was in use when the record was created. */
 	UTCConversionTimeZoneCode: number | null;
-	v4_AppointmentTime_UtcDateAndTime: Date | null;
-	v4_Birthday_TimezoneDateOnly: Date | null;
+	v4_AppointmentTime: Date | null;
+	v4_Birthday: Date | null;
 	v4_Boolean: boolean | null;
 	v4_Categories: Array<number> | null;
-	v4_DateOnly_TimezoneDateOnly: Date | null;
-	v4_DateTime_UtcDateAndTime: Date | null;
+	v4_DateOnly: Date | null;
+	v4_DateTime: Date | null;
 	v4_Decimal: number | null;
 	v4_Double: number | null;
 	v4_Integer: number | null;
@@ -589,7 +589,7 @@ const AccountFieldConfig: IWebApiFieldConfigMap = {
 	BusinessTypeCode: { logicalName: 'businesstypecode', type: 'Integer' },
 	CreatedBy: { schemaName: 'CreatedBy', logicalName: '_createdby_value', readOnly: true, entityCollectionName: 'systemusers', entityLogicalName: 'systemuser' },
 	CreatedByExternalParty: { schemaName: 'CreatedByExternalParty', logicalName: '_createdbyexternalparty_value', readOnly: true, entityCollectionName: 'externalparties', entityLogicalName: 'externalparty' },
-	CreatedOn_UtcDateAndTime: { logicalName: 'createdon', readOnly: true, type: 'DateTime' },
+	CreatedOn: { logicalName: 'createdon', readOnly: true, type: 'DateTime' },
 	CreatedOnBehalfBy: { schemaName: 'CreatedOnBehalfBy', logicalName: '_createdonbehalfby_value', readOnly: true, entityCollectionName: 'systemusers', entityLogicalName: 'systemuser' },
 	CreditLimit: { logicalName: 'creditlimit', type: 'Number' },
 	CreditLimit_Base: { logicalName: 'creditlimit_base', readOnly: true, type: 'Number' },
@@ -616,8 +616,8 @@ const AccountFieldConfig: IWebApiFieldConfigMap = {
 	ImportSequenceNumber: { logicalName: 'importsequencenumber', type: 'Integer' },
 	IndustryCode: { logicalName: 'industrycode', type: 'Integer' },
 	IsPrivate: { logicalName: 'isprivate', readOnly: true, type: 'Boolean' },
-	LastOnHoldTime_UtcDateAndTime: { logicalName: 'lastonholdtime', type: 'DateTime' },
-	LastUsedInCampaign_UtcDateOnly: { logicalName: 'lastusedincampaign', type: 'DateTime' },
+	LastOnHoldTime: { logicalName: 'lastonholdtime', type: 'DateTime' },
+	LastUsedInCampaign: { logicalName: 'lastusedincampaign', type: 'DateTime' },
 	MarketCap: { logicalName: 'marketcap', type: 'Number' },
 	MarketCap_Base: { logicalName: 'marketcap_base', readOnly: true, type: 'Number' },
 	MarketingOnly: { logicalName: 'marketingonly', type: 'Boolean' },
@@ -625,13 +625,13 @@ const AccountFieldConfig: IWebApiFieldConfigMap = {
 	Merged: { logicalName: 'merged', readOnly: true, type: 'Boolean' },
 	ModifiedBy: { schemaName: 'ModifiedBy', logicalName: '_modifiedby_value', readOnly: true, entityCollectionName: 'systemusers', entityLogicalName: 'systemuser' },
 	ModifiedByExternalParty: { schemaName: 'ModifiedByExternalParty', logicalName: '_modifiedbyexternalparty_value', readOnly: true, entityCollectionName: 'externalparties', entityLogicalName: 'externalparty' },
-	ModifiedOn_UtcDateAndTime: { logicalName: 'modifiedon', readOnly: true, type: 'DateTime' },
+	ModifiedOn: { logicalName: 'modifiedon', readOnly: true, type: 'DateTime' },
 	ModifiedOnBehalfBy: { schemaName: 'ModifiedOnBehalfBy', logicalName: '_modifiedonbehalfby_value', readOnly: true, entityCollectionName: 'systemusers', entityLogicalName: 'systemuser' },
 	msa_managingpartnerid: { schemaName: 'msa_managingpartnerid', logicalName: '_msa_managingpartnerid_value', entityCollectionName: 'accounts', entityLogicalName: 'account' },
 	Name: { logicalName: 'name' },
 	NumberOfEmployees: { logicalName: 'numberofemployees', type: 'Integer' },
 	OnHoldTime: { logicalName: 'onholdtime', readOnly: true, type: 'Integer' },
-	OverriddenCreatedOn_UtcDateOnly: { logicalName: 'overriddencreatedon', type: 'DateTime' },
+	OverriddenCreatedOn: { logicalName: 'overriddencreatedon', type: 'DateTime' },
 	OwnerId: { schemaName: 'OwnerId', logicalName: '_ownerid_value', entityCollectionName: 'systemusers', entityLogicalName: 'systemuser' },
 	OwnershipCode: { logicalName: 'ownershipcode', type: 'Integer' },
 	OwningBusinessUnit: { schemaName: 'OwningBusinessUnit', logicalName: '_owningbusinessunit_value', readOnly: true, entityCollectionName: 'businessunits', entityLogicalName: 'businessunit' },
@@ -669,12 +669,12 @@ const AccountFieldConfig: IWebApiFieldConfigMap = {
 	TransactionCurrencyId: { schemaName: 'TransactionCurrencyId', logicalName: '_transactioncurrencyid_value', entityCollectionName: 'transactioncurrencies', entityLogicalName: 'transactioncurrency' },
 	TraversedPath: { logicalName: 'traversedpath' },
 	UTCConversionTimeZoneCode: { logicalName: 'utcconversiontimezonecode', type: 'Integer' },
-	v4_AppointmentTime_UtcDateAndTime: { logicalName: 'v4_appointmenttime', type: 'DateTime' },
-	v4_Birthday_TimezoneDateOnly: { logicalName: 'v4_birthday', type: 'DateTime' },
+	v4_AppointmentTime: { logicalName: 'v4_appointmenttime', type: 'DateTime' },
+	v4_Birthday: { logicalName: 'v4_birthday', type: 'DateTime' },
 	v4_Boolean: { logicalName: 'v4_boolean', type: 'Boolean' },
 	v4_Categories: { logicalName: 'v4_categories', type: 'MultiOptionSet' },
-	v4_DateOnly_TimezoneDateOnly: { logicalName: 'v4_dateonly', type: 'DateTime' },
-	v4_DateTime_UtcDateAndTime: { logicalName: 'v4_datetime', type: 'DateTime' },
+	v4_DateOnly: { logicalName: 'v4_dateonly', type: 'DateTime' },
+	v4_DateTime: { logicalName: 'v4_datetime', type: 'DateTime' },
 	v4_Decimal: { logicalName: 'v4_decimal', type: 'Number' },
 	v4_Double: { logicalName: 'v4_double', type: 'Number' },
 	v4_Integer: { logicalName: 'v4_integer', type: 'Integer' },

@@ -20,6 +20,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Logic\TsOptionSet.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logic\JsTypeScriptDeclaration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logic\JsWebApi.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Logic\TsWebApi.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\CliAction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\CommentTypeScriptDeclaration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\ConfigJson.cs" />

@@ -55,6 +55,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 Json.type.ToLower() != nameof(GeneratorType.jsform) &&
                 Json.type.ToLower() != nameof(GeneratorType.tsform) &&
                 Json.type.ToLower() != nameof(GeneratorType.jswebapi) &&
+                Json.type.ToLower() != nameof(GeneratorType.tswebapi) &&
                 Json.type.ToLower() != nameof(GeneratorType.csharp) /*&&
                 Json.type.ToLower() != nameof(GeneratorType.earlybound)*/
                 )
@@ -87,6 +88,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     await GeneratorTsFormAsync(schemaNames);
                 else if (Json.type.ToLower() == nameof(GeneratorType.jswebapi))
                     await GeneratorWebApiAsync(schemaNames);
+                else if (Json.type.ToLower() == nameof(GeneratorType.tswebapi))
+                    await GeneratorTsWebApiAsync(schemaNames);
                 //else if (Json.type.ToLower() == nameof(GeneratorType.earlybound))
                 //    await GeneratorEarlyBoundAsync(schemaNames);
             }
@@ -190,6 +193,52 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                             {
                                 await FileHelper.ForceWriteAllTextAsync(file, Helper.GetDefaultFileWithWebApi(entityMetadata.SchemaName));
                             }
+                            CliLog.WriteLineWarning(ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.CREATED, ConsoleColor.White, $"{schemaName}{endsWith}");
+                        }
+                    }
+                }
+                else
+                {
+                    CliLog.WriteLineError(ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.ERROR, ConsoleColor.White, $"entity schema name: ", ConsoleColor.DarkMagenta, schemaName, ConsoleColor.White, " not found in the current instance !!!");
+                }
+
+                i++;
+            }
+        }
+
+        private async Task GeneratorTsWebApiAsync(List<string> schemaNames)
+        {
+            const string endsWith = ".webapi.ts";
+            var totalFiles = schemaNames.Count();
+            var len = totalFiles.ToString().Length;
+            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Found: ", ConsoleColor.Blue, totalFiles, ConsoleColor.Green, " entities");
+            CliLog.WriteLine(ConsoleColor.White, "|");
+            var i = 1;
+            foreach (var schemaName in schemaNames)
+            {
+                var entityMetadata = XrmHelper.EntitiesMetadata.FirstOrDefault(x => x.LogicalName == schemaName.ToLower());
+                if ((entityMetadata?.Attributes?.Length ?? 0) > 0)
+                {
+                    var file = Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}.ts");
+                    var fileEndsWith = Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}{endsWith}");
+                    var oldCode = await FileHelper.ReadAllTextAsync(fileEndsWith);
+                    var isJsFormExist = File.Exists(Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}.form.js"));
+                    var (newCode, _) = await TsWebApi.GetTsWebApiCodeAsync(ServiceClient, entityMetadata, Json.rootnamespace, isJsFormExist);
+
+                    if (Helper.IsTheSame(oldCode, newCode))
+                    {
+                        CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, $"{schemaName}{endsWith}");
+                    }
+                    else
+                    {
+                        if (File.Exists(fileEndsWith))
+                        {
+                            await FileHelper.ForceWriteAllTextAsync(fileEndsWith, newCode);
+                            CliLog.WriteLineWarning(ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.UPDATED, ConsoleColor.White, $"{schemaName}{endsWith}");
+                        }
+                        else
+                        {
+                            await FileHelper.ForceWriteAllTextAsync(fileEndsWith, newCode);
                             CliLog.WriteLineWarning(ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.CREATED, ConsoleColor.White, $"{schemaName}{endsWith}");
                         }
                     }
