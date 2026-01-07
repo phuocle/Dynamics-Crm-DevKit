@@ -23,5 +23,5 @@ This workflow builds all TypeScript projects in release mode for production depl
 // turbo
 ```powershell
 cd D:\github\Dynamics-Crm-DevKit\v5\DynamicsCrm.DevKit.Tests\TestClientCode
-.\04.Build-All.ps1
+.\05.Build-All.ps1
 ```

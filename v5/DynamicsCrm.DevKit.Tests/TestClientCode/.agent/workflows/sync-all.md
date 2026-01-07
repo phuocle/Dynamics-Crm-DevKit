@@ -23,5 +23,5 @@ This workflow syncs all source of truth files to the 6 TestClientCode folders.
 // turbo
 ```powershell
 cd D:\github\Dynamics-Crm-DevKit\v5\DynamicsCrm.DevKit.Tests\TestClientCode
-.\03.Sync-All.ps1
+.\04.Sync-All.ps1
 ```
