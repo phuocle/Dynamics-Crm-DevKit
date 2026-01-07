@@ -10,8 +10,7 @@ This directory contains 6 isolated project environments used for testing, valida
 .\02.Install-All.ps1    # Install npm packages
 .\03.Generate-All.ps1   # Generate entity files from CRM
 .\04.Sync-All.ps1       # Sync source of truth files
-.\05.Build-All.ps1      # Build TypeScript projects
-.\06.Test-All.ps1       # Run all tests
+.\05.Check-Build-Test.ps1 # Run checks, builds, and tests
 ```
 
 ## PowerShell Scripts
@@ -22,8 +21,7 @@ This directory contains 6 isolated project environments used for testing, valida
 | 02 | `02.Install-All.ps1` | Install npm packages for all 6 folders |
 | 03 | `03.Generate-All.ps1` | Run CLI to generate entity form/webapi files from CRM |
 | 04 | `04.Sync-All.ps1` | Sync all source of truth files from Shared resources |
-| 05 | `05.Build-All.ps1` | Build TypeScript projects in release mode |
-| 06 | `06.Test-All.ps1` | Run all unit tests with code coverage |
+| 05 | `05.Check-Build-Test.ps1` | Run checks, builds, and tests |
 
 ## Folder Structure
 

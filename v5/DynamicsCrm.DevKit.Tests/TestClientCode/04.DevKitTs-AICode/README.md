@@ -27,8 +27,7 @@ TypeScript testing project for Dynamics CRM DevKit controls.
 .\02.Install-All.ps1    # Install npm packages
 .\03.Generate-All.ps1   # Generate entity files from CRM
 .\04.Sync-All.ps1       # Sync source of truth files
-.\05.Build-All.ps1      # Build TypeScript projects
-.\06.Test-All.ps1       # Run tests
+.\05.Check-Build-Test.ps1 # Run checks, builds, and tests
 ```
 
 ## Architecture

@@ -46,11 +46,8 @@ This project provides unit testing and code coverage for the DevKit TypeScript l
 # 4. Sync files from Source of Truth
 .\04.Sync-All.ps1
 
-# 5. Build TypeScript projects
-.\05.Build-All.ps1
-
-# 6. Run tests
-.\06.Test-All.ps1
+# 5. Run checks, builds, and tests
+.\05.Check-Build-Test.ps1
 ```
 
 ## PowerShell Scripts
@@ -61,8 +58,7 @@ This project provides unit testing and code coverage for the DevKit TypeScript l
 | `02.Install-All.ps1` | Install npm packages for all 6 folders |
 | `03.Generate-All.ps1` | Run CLI to generate entity form/webapi files |
 | `04.Sync-All.ps1` | Sync all source of truth files |
-| `05.Build-All.ps1` | Build TypeScript projects |
-| `06.Test-All.ps1` | Run all tests |
+| `05.Check-Build-Test.ps1` | Run checks, builds, and tests |
 
 ## NPM Scripts
 
