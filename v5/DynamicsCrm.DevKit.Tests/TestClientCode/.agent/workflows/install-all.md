@@ -24,7 +24,7 @@ The following folders contain `package.json`:
 // turbo
 ```powershell
 cd D:\github\Dynamics-Crm-DevKit\v5\DynamicsCrm.DevKit.Tests\TestClientCode
-.\Install-All.ps1
+.\02.Install-All.ps1
 ```
 
 ## What Gets Installed

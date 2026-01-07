@@ -24,7 +24,7 @@ This workflow cleans all 6 TestClientCode folders (01-06) to restore them to a f
 // turbo
 ```powershell
 cd D:\github\Dynamics-Crm-DevKit\v5\DynamicsCrm.DevKit.Tests\TestClientCode
-.\Clean-All.ps1
+.\01.Clean-All.ps1
 ```
 
 ## Verify Clean
