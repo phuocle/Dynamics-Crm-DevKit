@@ -72,14 +72,39 @@ namespace DynamicsCrm.DevKit.Shared
             catch { return cipherText; }
         }
 
+        /// <summary>
+        /// Compares two strings for content equality, ignoring specific whitespace (\r, \n, \t, space).
+        /// Optimized to reduce memory allocations by using a single-pass character filter.
+        /// </summary>
         public static bool IsTheSame(string value1, string value2)
         {
-            if (value1 == null && value2 == null) return true;
-            if (value1 != null && value2 == null) return false;
-            if (value1 == null && value2 != null) return false;
-            value1 = value1.Replace("\r\n", string.Empty).Replace("\r", string.Empty).Replace("\t", string.Empty).Replace(" ", string.Empty).Trim();
-            value2 = value2.Replace("\r\n", string.Empty).Replace("\r", string.Empty).Replace("\t", string.Empty).Replace(" ", string.Empty).Trim();
+            if (ReferenceEquals(value1, value2)) return true;
+            if (value1 == null || value2 == null) return false;
+            // Optimization: Normalize strings using StringBuilder to avoid multiple string allocations from chained Replace() calls.
+            // Reduces allocations from ~5x string length to ~1x.
+            value1 = NormalizeString(value1);
+            value2 = NormalizeString(value2);
             return string.Equals(value1, value2, StringComparison.OrdinalIgnoreCase);
+        }
+
+        private static string NormalizeString(string value)
+        {
+            if (string.IsNullOrEmpty(value)) return value;
+            var sb = new StringBuilder(value.Length);
+            for (int i = 0; i < value.Length; i++)
+            {
+                var c = value[i];
+                // Skip \r and \r\n sequences
+                if (c == '\r')
+                {
+                    if (i + 1 < value.Length && value[i + 1] == '\n') i++;
+                    continue;
+                }
+                // Skip tabs and spaces
+                if (c == '\t' || c == ' ') continue;
+                sb.Append(c);
+            }
+            return sb.ToString().Trim();
         }
 
         public static async Task<string> ReadEmbeddedResourceAsync(string path)
