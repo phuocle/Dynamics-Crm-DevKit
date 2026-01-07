@@ -1,4 +1,4 @@
-import { FormAccount_DevKitV4 } from './Account.form';
+import { Account } from './Account.form';
 
 interface TestResult {
     Test: string;
@@ -12,7 +12,7 @@ interface TestResult {
  * QuickView extends IQuickView with IsLoaded, Refresh, Controls methods
  * Body fields: EMailAddress1, FirstName, LastName, MobilePhone, ParentCustomerId
  */
-export function TestQuickView(form: FormAccount_DevKitV4.Form): boolean {
+export function TestQuickView(form: Account.Account_DevKitV4): boolean {
     const results: TestResult[] = [];
     const methodResults: TestResult[] = [];
     const qv = form.QuickForm.ContactQuickForm;

@@ -1,4 +1,4 @@
-import { FormAccount_DevKitV4 } from './Account.form';
+import { Account } from './Account.form';
 
 interface TestResult {
     Test: string;
@@ -29,7 +29,7 @@ function stringify(value: any): any {
  * - R-Index: ReadOnly properties (R1, R2, R3...)
  * - S-Index: Setters & Methods (S1, S2, S3...)
  */
-export function TestUtility(form: FormAccount_DevKitV4.Form): boolean {
+export function TestUtility(form: Account.Account_DevKitV4): boolean {
     const results: TestResult[] = [];
     const methodResults: TestResult[] = [];
     const util = form.Utility;

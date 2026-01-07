@@ -325,7 +325,7 @@ describe('devkit.ts - Utility Loading', () => {
             const executionContext = { getFormContext: () => formContext };
             const form = new FormBase(executionContext, 'test', {});
 
-            const notification = { type: 2, message: 'Test' };
+            const notification = { type: 2 as any, level: 1 as any, message: 'Test' };
             const result = await form.Utility.AddGlobalNotification(notification);
             expect((Xrm as any).App.addGlobalNotification).toHaveBeenCalledWith(notification);
             expect(result).toBe('notification-id');
@@ -337,7 +337,7 @@ describe('devkit.ts - Utility Loading', () => {
             const form = new FormBase(executionContext, 'test', {});
 
             const successCallback = jest.fn();
-            form.Utility.AddGlobalNotification({ type: 2 }, successCallback);
+            form.Utility.AddGlobalNotification({ type: 2 as any, level: 1 as any, message: 'Test' }, successCallback);
 
             await new Promise(resolve => setTimeout(resolve, 10));
             expect(successCallback).toHaveBeenCalledWith('notification-id');
@@ -704,7 +704,7 @@ describe('devkit.ts - Utility Loading', () => {
             const form = new FormBase(executionContext, 'test', {});
 
             const successCallback = jest.fn();
-            form.Utility.LookupObjects({}, successCallback);
+            form.Utility.LookupObjects({ entityTypes: ['account'] }, successCallback);
 
             await new Promise(resolve => setTimeout(resolve, 10));
             expect(successCallback).toHaveBeenCalledWith([{ id: 'lookup-id' }]);
@@ -716,8 +716,8 @@ describe('devkit.ts - Utility Loading', () => {
             const executionContext = { getFormContext: () => formContext };
             const form = new FormBase(executionContext, 'test', {});
 
-            const pageInput = { pageType: 'entityrecord', entityName: 'account' };
-            const navOptions = { target: 1 };
+            const pageInput = { pageType: 'entityrecord' as 'entityrecord', entityName: 'account' };
+            const navOptions = { target: 1 as 1 };
             await form.Utility.NavigateTo(pageInput, navOptions);
             expect((Xrm as any).Navigation.navigateTo).toHaveBeenCalledWith(pageInput, navOptions);
         });
@@ -728,7 +728,7 @@ describe('devkit.ts - Utility Loading', () => {
             const form = new FormBase(executionContext, 'test', {});
 
             const successCallback = jest.fn();
-            form.Utility.NavigateTo({}, {}, successCallback);
+            form.Utility.NavigateTo({ pageType: 'entitylist', entityName: 'account' }, { target: 1 as 1 }, successCallback);
 
             await new Promise(resolve => setTimeout(resolve, 10));
             expect(successCallback).toHaveBeenCalled();
@@ -751,7 +751,7 @@ describe('devkit.ts - Utility Loading', () => {
             const form = new FormBase(executionContext, 'test', {});
 
             const closeCallback = jest.fn();
-            form.Utility.OpenAlertDialog({}, {}, closeCallback);
+            form.Utility.OpenAlertDialog({ text: 'test' }, {}, closeCallback);
 
             await new Promise(resolve => setTimeout(resolve, 10));
             expect(closeCallback).toHaveBeenCalled();
@@ -775,7 +775,7 @@ describe('devkit.ts - Utility Loading', () => {
             const form = new FormBase(executionContext, 'test', {});
 
             const successCallback = jest.fn();
-            form.Utility.OpenConfirmDialog({}, {}, successCallback);
+            form.Utility.OpenConfirmDialog({ text: 'test' }, {}, successCallback);
 
             await new Promise(resolve => setTimeout(resolve, 10));
             expect(successCallback).toHaveBeenCalledWith({ confirmed: true });
@@ -797,7 +797,7 @@ describe('devkit.ts - Utility Loading', () => {
             const form = new FormBase(executionContext, 'test', {});
 
             const successCallback = jest.fn();
-            form.Utility.OpenErrorDialog({}, successCallback);
+            form.Utility.OpenErrorDialog({ message: 'test' }, successCallback);
 
             await new Promise(resolve => setTimeout(resolve, 10));
             expect(successCallback).toHaveBeenCalled();
@@ -821,7 +821,7 @@ describe('devkit.ts - Utility Loading', () => {
             const form = new FormBase(executionContext, 'test', {});
 
             const successCallback = jest.fn();
-            form.Utility.OpenForm({}, {}, successCallback);
+            form.Utility.OpenForm({ entityName: 'account' }, {}, successCallback);
 
             await new Promise(resolve => setTimeout(resolve, 10));
             expect(successCallback).toHaveBeenCalledWith({ savedEntityReference: [] });
@@ -832,7 +832,7 @@ describe('devkit.ts - Utility Loading', () => {
             const executionContext = { getFormContext: () => formContext };
             const form = new FormBase(executionContext, 'test', {});
 
-            const file = { fileContent: 'base64content', fileName: 'test.txt' };
+            const file = { fileContent: 'base64content', fileName: 'test.txt', fileSize: 1024, mimeType: 'text/plain' };
             form.Utility.OpenFile(file, { openMode: 1 });
             expect((Xrm as any).Navigation.openFile).toHaveBeenCalledWith(file, { openMode: 1 });
         });

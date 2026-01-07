@@ -1,4 +1,4 @@
-import { FormAccount_DevKitV4 } from './Account.form';
+import { Account } from './Account.form';
 import { TestControl } from './Account.Test00.Control';
 import { TestString } from './Account.Test01.String';
 import { TestMemo } from './Account.Test02.Memo';
@@ -32,10 +32,10 @@ import { TestWebResource } from './Account.Test26.WebResource';
 const formAccount_DevKitV4 = (function () {
     "use strict";
 
-    let form: FormAccount_DevKitV4.Form;
+    let form: Account.Account_DevKitV4;
 
     async function onLoad(executionContext: any): Promise<void> {
-        form = new FormAccount_DevKitV4.Form(executionContext);
+        form = new Account.Account_DevKitV4(executionContext);
         registerEvents();
         form.UiAddLoaded(UiAddLoaded);
     }

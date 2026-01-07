@@ -1,4 +1,4 @@
-import { FormAccount_DevKitV4 } from './Account.form';
+import { Account } from './Account.form';
 
 interface TestResult {
     Test: string;
@@ -23,7 +23,7 @@ interface TestResult {
  * - GetAll(): any[]
  * - GetSelected(): any
  */
-export function TestSidePanes(form: FormAccount_DevKitV4.Form): boolean {
+export function TestSidePanes(form: Account.Account_DevKitV4): boolean {
     const results: TestResult[] = [];         // ReadOnly (R-Index)
     const methodResults: TestResult[] = [];   // Setters & Methods (S-Index)
     const startTime = new Date().toLocaleTimeString();

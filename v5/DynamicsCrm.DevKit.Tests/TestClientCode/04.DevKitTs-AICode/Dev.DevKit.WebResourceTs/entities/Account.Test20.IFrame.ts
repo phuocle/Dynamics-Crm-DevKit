@@ -1,4 +1,4 @@
-import { FormAccount_DevKitV4 } from './Account.form';
+import { Account } from './Account.form';
 
 interface TestResult {
     Test: string;
@@ -11,7 +11,7 @@ interface TestResult {
  * TEST 21: IFrame Control - v4_IFrameExternal Field
  * IFrame extends IControl with specific properties: Src, InitialUrl, ContentWindow
  */
-export function TestIFrame(form: FormAccount_DevKitV4.Form): boolean {
+export function TestIFrame(form: Account.Account_DevKitV4): boolean {
     const results: TestResult[] = [];
     const methodResults: TestResult[] = [];
     const startTime = new Date().toLocaleTimeString();

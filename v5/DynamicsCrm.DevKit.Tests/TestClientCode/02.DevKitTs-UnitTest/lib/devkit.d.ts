@@ -2582,30 +2582,50 @@ declare namespace DevKit {
      * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#dateformattinginfo
      */
     interface IDateFormattingInfo {
-        /** First day of the week (0=Sunday, 1=Monday, etc.) */
-        FirstDayOfWeek: number;
-        /** Long date pattern (e.g., "dddd, MMMM d, yyyy") */
-        LongDatePattern: string;
-        /** Month/day pattern (e.g., "MMMM d") */
-        MonthDayPattern: string;
-        /** Time separator (e.g., ":") */
-        TimeSeparator: string;
+        /** The abbreviated day names */
+        readonly AbbreviatedDayNames: Array<string>;
+        /** The abbreviated month names with genitive case */
+        readonly AbbreviatedMonthGenitiveNames: Array<string>;
+        /** The abbreviated month names */
+        readonly AbbreviatedMonthNames: Array<string>;
         /** AM designator (e.g., "AM") */
         AMDesignator: string;
+        /** Calendar type */
+        Calendar: { MinSupportedDateTime: string; MaxSupportedDateTime: string };
+        /** Date separator (e.g., "/") */
+        DateSeparator: string;
+        /** The day names */
+        readonly DayNames: Array<string>;
+        /** First day of the week (0=Sunday, 1=Monday, etc.) */
+        FirstDayOfWeek: number;
+        /** The full date/time pattern */
+        readonly FullDateTimePattern: string;
+        /** Long date pattern (e.g., "dddd, MMMM d, yyyy") */
+        LongDatePattern: string;
+        /** Long time pattern (e.g., "h:mm:ss tt") */
+        LongTimePattern: string;
+        /** Month/day pattern (e.g., "MMMM d") */
+        MonthDayPattern: string;
+        /** The month genitive names */
+        readonly MonthGenitiveNames: Array<string>;
+        /** The month names */
+        readonly MonthNames: Array<string>;
         /** PM designator (e.g., "PM") */
         PMDesignator: string;
         /** Short date pattern (e.g., "M/d/yyyy") */
         ShortDatePattern: string;
+        /** The shortest day names */
+        readonly ShortestDayNames: Array<string>;
         /** Short time pattern (e.g., "h:mm tt") */
         ShortTimePattern: string;
-        /** Long time pattern (e.g., "h:mm:ss tt") */
-        LongTimePattern: string;
-        /** Date separator (e.g., "/") */
-        DateSeparator: string;
+        /** The sortable date/time pattern */
+        readonly SortableDateTimePattern: string;
+        /** Time separator (e.g., ":") */
+        TimeSeparator: string;
+        /** The universal sortable date/time pattern */
+        readonly UniversalSortableDateTimePattern: string;
         /** Year/month pattern (e.g., "MMMM yyyy") */
         YearMonthPattern: string;
-        /** Calendar type */
-        Calendar: { MinSupportedDateTime: string; MaxSupportedDateTime: string };
     }
 
     /**
