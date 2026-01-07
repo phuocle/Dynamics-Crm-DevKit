@@ -1,18 +1,9 @@
 ﻿/**
  * Account.webapi.ts - Account WebApi for early-bound style coding
  * Generated file - DO NOT MODIFY MANUALLY
- * 
- * Structure:
- * 1. Imports
- * 2. Types - IAccountFormattedValue, IAccountApi
- * 3. Runtime - AccountFieldConfig, AccountApi factory
  */
 
 import { createWebApiEntity } from '../lib/devkit';
-
-// ============================================================================
-// 1. Types
-// ============================================================================
 
 /**
  * Formatted values interface for Account
@@ -524,19 +515,6 @@ export interface IAccountApi extends DevKit.IWebApiEntity {
 	YomiName: string | null;
 }
 
-// ============================================================================
-// 2. Runtime - Field Configuration
-// ============================================================================
-
-/**
- * Account field metadata configuration
- * - logicalName: attribute logical name (e.g. 'accountid')
- * - schemaName: schema name for lookup binding
- * - entityCollectionName: collection name for lookup (e.g. 'accounts')
- * - entityLogicalName: entity name for lookup (e.g. 'account')
- * - readOnly: whether the field is read-only
- * - type: field type for parsing (Integer, Number, Boolean, DateTime, MultiOptionSet)
- */
 const AccountFieldConfig: DevKit.IWebApiFieldConfigMap = {
 	AccountCategoryCode: { logicalName: 'accountcategorycode', type: 'Integer' },
 	AccountClassificationCode: { logicalName: 'accountclassificationcode', type: 'Integer' },
@@ -705,10 +683,6 @@ const AccountFieldConfig: DevKit.IWebApiFieldConfigMap = {
 	YomiName: { logicalName: 'yominame' },
 };
 
-// ============================================================================
-// 3. Runtime - Class (C# early-bound style with `new` keyword)
-// ============================================================================
-
 /**
  * Account WebApi class for early-bound style coding
  * Usage: const account = new AccountApi(entity);
@@ -717,10 +691,8 @@ const AccountFieldConfig: DevKit.IWebApiFieldConfigMap = {
 export class AccountApi {
 	constructor(entity?: Record<string, any>) {
 		const webApiEntity = createWebApiEntity<IAccountApi>(entity, 'account', 'accounts', AccountFieldConfig);
-		// Copy property descriptors to preserve getters/setters
 		Object.defineProperties(this, Object.getOwnPropertyDescriptors(webApiEntity));
 	}
 }
 
-// Type assertion to make AccountApi instances work as IAccountApi
 export interface AccountApi extends IAccountApi { }

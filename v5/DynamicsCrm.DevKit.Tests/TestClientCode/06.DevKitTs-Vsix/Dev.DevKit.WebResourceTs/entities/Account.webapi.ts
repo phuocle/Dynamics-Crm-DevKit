@@ -1,11 +1,6 @@
 ﻿/**
  * Account.webapi.ts - Account WebApi for early-bound style coding
  * Generated file - DO NOT MODIFY MANUALLY
- * 
- * Structure:
- * 1. Imports
- * 2. Types - IAccountFormattedValue, IAccountApi
- * 3. Runtime - AccountFieldConfig, AccountApi factory
  */
 
 import { createWebApiEntity } from '../lib/devkit';
