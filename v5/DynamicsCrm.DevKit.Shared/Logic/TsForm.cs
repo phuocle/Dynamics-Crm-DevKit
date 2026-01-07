@@ -531,13 +531,13 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             var gridArray = GetGridFieldNames(formXml);
             code.AppendLine($"{TAB4}grid: [{string.Join(", ", gridArray.Select(x => $"'{x}'"))}],");
 
-            // Navigation fields
-            var navArray = GetNavigationFieldNames(formXml);
-            code.AppendLine($"{TAB4}navigation: [{string.Join(", ", navArray.Select(x => $"'{x}'"))}],");
-
-            // Quick form fields
+            // Navigation, Quick form, BPF, Dialog fields
             if (!isQuickCreate)
             {
+                // Navigation fields
+                var navArray = GetNavigationFieldNames(formXml);
+                code.AppendLine($"{TAB4}navigation: [{string.Join(", ", navArray.Select(x => $"'{x}'"))}],");
+
                 var quickArray = await GetQuickFormFieldNamesAsync(formXml);
                 code.AppendLine($"{TAB4}quick: [{string.Join(", ", quickArray.Select(x => $"'{x}'"))}],");
 
@@ -551,6 +551,8 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             }
             else
             {
+                // Quick Create forms don't have navigation, quick forms, BPF, or dialogs
+                code.AppendLine($"{TAB4}navigation: [],");
                 code.AppendLine($"{TAB4}quick: [],");
                 code.AppendLine($"{TAB4}bpf: [],");
                 code.AppendLine($"{TAB4}dialog: []");

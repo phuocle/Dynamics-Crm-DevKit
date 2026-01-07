@@ -1051,7 +1051,7 @@ export namespace Account {
 				header: [],
 				tab: ['tab_1___tab_1_column_1_section_1', 'tab_1___tab_1_column_2_section_1', 'tab_1___tab_1_column_3_section_1'],
 				grid: [],
-				navigation: ['navActivities'],
+				navigation: [],
 				quick: [],
 				bpf: [],
 				dialog: []
