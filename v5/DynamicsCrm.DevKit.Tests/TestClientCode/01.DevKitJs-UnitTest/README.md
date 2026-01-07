@@ -1,6 +1,6 @@
 # DevKitJs UnitTest - JavaScript DevKit Testing Project
 
-> **Source of Truth**: [ClientCode.md](../.agent/rules/ClientCode.md)
+> **Source of Truth**: [ClientCode.md](../.github/copilot-instructions.md)
 
 ## Overview
 
@@ -11,7 +11,7 @@ This project provides unit testing and code coverage for the DevKit JavaScript l
 ```
 01.DevKitJs-UnitTest/
 ├── lib/
-│   └── devkit.mjs         # Core DevKit JavaScript library (ES Module)
+│   └── devkit.js          # Core DevKit JavaScript library
 ├── entities/
 │   ├── devkit.d.ts        # TypeScript definitions
 │   ├── Account.d.ts       # Account entity TypeScript definition
@@ -33,25 +33,35 @@ This project provides unit testing and code coverage for the DevKit JavaScript l
 ```powershell
 # From TestClientCode folder:
 
-# 1. Install all dependencies (first time)
-.\Install-All.ps1
+# 1. Clean (optional)
+.\01.Clean-All.ps1
 
-# 2. Sync files from Source of Truth
-.\Sync-All.ps1
+# 2. Install all dependencies
+.\02.Install-All.ps1
 
-# 3. Run tests with coverage (from this folder)
-cd 01.DevKitJs-UnitTest
-.\RunCodeCoverage.ps1
+# 3. Generate entity files from CRM
+.\03.Generate-All.ps1
+
+# 4. Sync files from Source of Truth
+.\04.Sync-All.ps1
+
+# 5. Build TypeScript projects
+.\05.Build-All.ps1
+
+# 6. Run tests
+.\06.Test-All.ps1
 ```
 
 ## PowerShell Scripts
 
-| Script | Location | Purpose |
-|--------|----------|---------|
-| `Install-All.ps1` | TestClientCode | Install npm packages for all 6 folders |
-| `Sync-All.ps1` | TestClientCode | Sync all source of truth files |
-| `Clean-All.ps1` | TestClientCode | Clean all generated files |
-| `RunCodeCoverage.ps1` | This folder | Run tests with coverage, open HTML report |
+| Script | Purpose |
+|--------|---------|
+| `01.Clean-All.ps1` | Clean all generated files |
+| `02.Install-All.ps1` | Install npm packages for all 6 folders |
+| `03.Generate-All.ps1` | Run CLI to generate entity form/webapi files |
+| `04.Sync-All.ps1` | Sync all source of truth files |
+| `05.Build-All.ps1` | Build TypeScript projects |
+| `06.Test-All.ps1` | Run all tests |
 
 ## NPM Scripts
 
@@ -59,13 +69,12 @@ cd 01.DevKitJs-UnitTest
 |---------|-------------|
 | `npm test` | Run unit tests |
 | `npm run coverage` | Run tests with coverage report |
-| `npm run test:debug` | Run tests in debug mode |
 
 ## Source of Truth
 
 Files synced from `DynamicsCrm.DevKit.Shared\Resources\`:
-- `js\devkit.js` → `lib\devkit.mjs` (converted to ES module)
-- `ts\devkit.d.ts` → `entities\devkit.d.ts`
+- `js\devkit.js` → `lib\devkit.js`
+- `js\devkit.d.ts` → `entities\devkit.d.ts`
 
 ## Architecture
 
