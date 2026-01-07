@@ -38,20 +38,9 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code += $"/**{NEW_LINE}";
             code += $" * {safeSchemaName}.webapi.ts - {safeSchemaName} WebApi for early-bound style coding{NEW_LINE}";
             code += $" * Generated file - DO NOT MODIFY MANUALLY{NEW_LINE}";
-            code += $" * {NEW_LINE}";
-            code += $" * Structure:{NEW_LINE}";
-            code += $" * 1. Imports{NEW_LINE}";
-            code += $" * 2. Types - I{safeSchemaName}FormattedValue, I{safeSchemaName}Api{NEW_LINE}";
-            code += $" * 3. Runtime - {safeSchemaName}FieldConfig, {safeSchemaName}Api factory{NEW_LINE}";
             code += $" */{NEW_LINE}";
             code += $"{NEW_LINE}";
             code += $"import {{ createWebApiEntity }} from '../lib/devkit';{NEW_LINE}";
-            code += $"{NEW_LINE}";
-
-            // 2. Types - Formatted Value Interface
-            code += $"// ============================================================================{NEW_LINE}";
-            code += $"// 1. Types{NEW_LINE}";
-            code += $"// ============================================================================{NEW_LINE}";
             code += $"{NEW_LINE}";
             code += $"/**{NEW_LINE}";
             code += $" * Formatted values interface for {safeSchemaName}{NEW_LINE}";
@@ -66,8 +55,6 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             }
             code += $"}}{NEW_LINE}";
             code += $"{NEW_LINE}";
-
-            // 2. Types - Entity Interface
             code += $"/**{NEW_LINE}";
             code += $" * {safeSchemaName} WebApi entity interface{NEW_LINE}";
             code += $" * Provides IntelliSense for early-bound style coding{NEW_LINE}";
@@ -99,29 +86,9 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code += $"}}{NEW_LINE}";
             code += $"{NEW_LINE}";
 
-            // 3. Runtime - Field Config
-            code += $"// ============================================================================{NEW_LINE}";
-            code += $"// 2. Runtime - Field Configuration{NEW_LINE}";
-            code += $"// ============================================================================{NEW_LINE}";
-            code += $"{NEW_LINE}";
-            code += $"/**{NEW_LINE}";
-            code += $" * {safeSchemaName} field metadata configuration{NEW_LINE}";
-            code += $" * - logicalName: attribute logical name (e.g. 'accountid'){NEW_LINE}";
-            code += $" * - schemaName: schema name for lookup binding{NEW_LINE}";
-            code += $" * - entityCollectionName: collection name for lookup (e.g. 'accounts'){NEW_LINE}";
-            code += $" * - entityLogicalName: entity name for lookup (e.g. 'account'){NEW_LINE}";
-            code += $" * - readOnly: whether the field is read-only{NEW_LINE}";
-            code += $" * - type: field type for parsing (Integer, Number, Boolean, DateTime, MultiOptionSet){NEW_LINE}";
-            code += $" */{NEW_LINE}";
             code += $"const {safeSchemaName}FieldConfig: DevKit.IWebApiFieldConfigMap = {{{NEW_LINE}";
             code += await GeneratorCodeAsync();
             code += $"}};{NEW_LINE}";
-            code += $"{NEW_LINE}";
-
-            // 4. Runtime - Class
-            code += $"// ============================================================================{NEW_LINE}";
-            code += $"// 3. Runtime - Class (C# early-bound style with `new` keyword){NEW_LINE}";
-            code += $"// ============================================================================{NEW_LINE}";
             code += $"{NEW_LINE}";
             code += $"/**{NEW_LINE}";
             code += $" * {safeSchemaName} WebApi class for early-bound style coding{NEW_LINE}";
@@ -131,14 +98,10 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code += $"export class {safeSchemaName}Api {{{NEW_LINE}";
             code += $"{TAB}constructor(entity?: Record<string, any>) {{{NEW_LINE}";
             code += $"{TAB}{TAB}const webApiEntity = createWebApiEntity<I{safeSchemaName}Api>(entity, '{EntityMetadata.LogicalName}', '{EntityMetadata.LogicalCollectionName}', {safeSchemaName}FieldConfig);{NEW_LINE}";
-            code += $"{TAB}{TAB}// Copy property descriptors to preserve getters/setters{NEW_LINE}";
             code += $"{TAB}{TAB}Object.defineProperties(this, Object.getOwnPropertyDescriptors(webApiEntity));{NEW_LINE}";
             code += $"{TAB}}}{NEW_LINE}";
             code += $"}}{NEW_LINE}";
             code += $"{NEW_LINE}";
-
-            // 5. Declaration Merging
-            code += $"// Type assertion to make {safeSchemaName}Api instances work as I{safeSchemaName}Api{NEW_LINE}";
             code += $"export interface {safeSchemaName}Api extends I{safeSchemaName}Api {{ }}{NEW_LINE}";
 
             return code;
