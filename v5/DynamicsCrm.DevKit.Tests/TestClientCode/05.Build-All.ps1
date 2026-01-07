@@ -31,21 +31,21 @@ foreach ($project in $tsProjects) {
         try {
             npm run release
             if ($LASTEXITCODE -eq 0) {
-                Write-Host "  ✓ Build successful" -ForegroundColor Green
+                Write-Host "  Build successful" -ForegroundColor Green
                 $successCount++
             } else {
-                Write-Host "  ✗ Build failed" -ForegroundColor Red
+                Write-Host "  Build failed" -ForegroundColor Red
                 $failCount++
             }
         } catch {
-            Write-Host "  ✗ Build failed: $_" -ForegroundColor Red
+            Write-Host "  Build failed: $_" -ForegroundColor Red
             $failCount++
         }
         Pop-Location
         
         Write-Host ""
     } else {
-        Write-Host "  ⚠ Project not found: $project" -ForegroundColor Yellow
+        Write-Host "  Project not found: $project" -ForegroundColor Yellow
     }
 }
 
