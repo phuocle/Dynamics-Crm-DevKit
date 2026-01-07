@@ -208,18 +208,12 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                 // Type
                 if (!string.IsNullOrEmpty(type)) properties += $", {type}";
 
-                // Schema Name override (if needed) - typically handled in Lookups, but also maybe if mismatch?
-                // In template 'CreatedBy' has schemaName: 'createdby'.
-                // If the key (attributeSchemaName) matches SchemaName then usually we don't need it unless it's a lookup alias.
+
                 
                 // Handle Lookups
                 if (attribute is LookupAttributeMetadata lookup)
                 {
-                     // For lookups, we often have different logicalName in config vs metadata attribute?
-                     // E.g. 'CreatedBy': logicalName is '_createdby_value'.
-                     // And we add entityLogicalName etc.
-                     // The Template:
-                     // CreatedBy: { schemaName: 'createdby', logicalName: '_createdby_value', entityCollectionName: 'systemusers', entityLogicalName: 'systemuser', readOnly: true },
+
 
                     if (lookup.Targets.Any()) {
                           var target = lookup.Targets[0];
@@ -237,27 +231,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                      // Owner special case
                      properties = properties.Replace($"logicalName: '{attribute.LogicalName}'", $"schemaName: '{attribute.SchemaName}', logicalName: '_{attribute.LogicalName}_value'");
                      properties += ", entityCollectionName: 'systemusers', entityLogicalName: 'systemuser'";
-                     // Owner is complex (team or user), template shows separate fields? 
-                     // OwnerId_systemuser: { schemaName: 'ownerid', logicalName: '_ownerid_value', ... }
-                     // OwnerId_team: { ... }
-                     // But the Attribute list has 'OwnerId'. 
-                     // The expansion happens in XrmHelper or somewhere else? 
-                     // The attribute list usually contains the "OwnerId" attribute. 
-                     // But the template shows "OwnerId_systemuser" and "OwnerId_team".
-                     // This implies the standard 'OwnerId' attribute is expanded or treated specially.
-                     // However, for standard simple generation, let's stick to what we have in metadata.
-                     // If metadata has OwnerId, we generate OwnerId.
-                     // IMPORTANT: The template has `OwnerId_systemuser` and `OwnerId_team`.
-                     // This usually means the input EntityMetadata has these attributes defined, OR we need to manually expand them.
-                     // existing `JsWebApi.cs` expands them?
-                     // Let's check `JsWebApi.cs`.
-                     // `JsWebApi.cs` iterates `EntityMetadata.Attributes`.
-                     // If `OwnerId` is there, it generates `OwnerId`.
-                     // The template seems to come from an environment where `OwnerId` is split?
-                     // Or maybe I should check if `OwnerId` exists in `EntityMetadata.Attributes`.
-                     // If it does, we produce it.
-                     // For now, I will treat Owner as simple OwnerId, unless I see specific logic in `JsWebApi` to split it.
-                     // *Looking at JsWebApi again*: It just iterates attributes.
+
                 }
 
                 code += $"{TAB}{attributeSchemaName}: {{ {properties} }},{NEW_LINE}";

@@ -165,6 +165,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var oldDTS = await FileHelper.ReadAllTextAsync(dtsFile);
                     var isJsFormExist = File.Exists(Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}.form.js"));
                     var (newCode, newDTS) = await JsWebApi.GetJsWebApiCodeAsync(ServiceClient, entityMetadata, Json.rootnamespace, isJsFormExist);
+                    if (!File.Exists(file))
+                    {
+                        await FileHelper.ForceWriteAllTextAsync(file, Helper.GetDefaultFileWithWebApi(entityMetadata.SchemaName));
+                    }
                     if (Helper.IsTheSame(oldCode, newCode))
                     {
                         if (oldCode?.Length > 0 && newCode?.Length > 0 && !Helper.IsTheSame(oldDTS, newDTS))
@@ -189,10 +193,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         {
                             await FileHelper.ForceWriteAllTextAsync(fileEndsWith, newCode);
                             await FileHelper.ForceWriteAllTextAsync(dtsFile, newDTS);
-                            if (!File.Exists(file))
-                            {
-                                await FileHelper.ForceWriteAllTextAsync(file, Helper.GetDefaultFileWithWebApi(entityMetadata.SchemaName));
-                            }
                             CliLog.WriteLineWarning(ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.CREATED, ConsoleColor.White, $"{schemaName}{endsWith}");
                         }
                     }
@@ -271,6 +271,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var oldDTS = await FileHelper.ReadAllTextAsync(dtsFile);
                     var isJsWebApiExist = File.Exists(Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}.webapi.js"));
                     var (newCode, newDTS) = await JsForm.GetJsFormCodeAsync(ServiceClient, entityMetadata, Json.rootnamespace, isJsWebApiExist);
+                    if (!File.Exists(file))
+                    {
+                        await FileHelper.ForceWriteAllTextAsync(file, await XrmHelper.GetDefaultFileWithFormAsync(ServiceClient, entityMetadata, Json.rootnamespace));
+                    }
                     if (Helper.IsTheSame(oldCode, newCode))
                     {
                         if (oldCode?.Length > 0 && newCode?.Length > 0 && !Helper.IsTheSame(oldDTS, newDTS))
@@ -295,10 +299,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         {
                             await FileHelper.ForceWriteAllTextAsync(fileEndsWith, newCode);
                             await FileHelper.ForceWriteAllTextAsync(dtsFile, newDTS);
-                            if (!File.Exists(file))
-                            {
-                                await FileHelper.ForceWriteAllTextAsync(file, await XrmHelper.GetDefaultFileWithFormAsync(ServiceClient, entityMetadata, Json.rootnamespace));
-                            }
                             CliLog.WriteLineWarning(ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.CREATED, ConsoleColor.White, $"{schemaName}{endsWith}");
                         }
                     }
@@ -339,6 +339,16 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         continue;
                     }
 
+                    var file = Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}.ts");
+                    if (!File.Exists(file))
+                    {
+                        var tsCode = await XrmHelper.GetDefaultTsFileWithFormAsync(ServiceClient, entityMetadata, Json.rootnamespace);
+                        if (!string.IsNullOrEmpty(tsCode))
+                        {
+                            await FileHelper.ForceWriteAllTextAsync(file, tsCode);
+                        }
+                    }
+
                     if (Helper.IsTheSame(oldCode, newCode))
                     {
                         CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, $"{schemaName}{endsWith}");
@@ -353,15 +363,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         else
                         {
                             await FileHelper.ForceWriteAllTextAsync(fileEndsWith, newCode);
-                            var file = Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}.ts");
-                            if (!File.Exists(file))
-                            {
-                                var tsCode = await XrmHelper.GetDefaultTsFileWithFormAsync(ServiceClient, entityMetadata, Json.rootnamespace);
-                                if (!string.IsNullOrEmpty(tsCode))
-                                {
-                                    await FileHelper.ForceWriteAllTextAsync(file, tsCode);
-                                }
-                            }
                             CliLog.WriteLineWarning(ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.CREATED, ConsoleColor.White, $"{schemaName}{endsWith}");
                         }
                     }

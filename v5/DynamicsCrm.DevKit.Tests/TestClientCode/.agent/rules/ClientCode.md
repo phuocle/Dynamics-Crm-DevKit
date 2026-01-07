@@ -33,6 +33,10 @@ The following files are the **Source of Truth** for the project. Before making A
 # CÁC MỤC SAU ĐÂY LUÔN LUÔN ĐÚNG - KHÔNG ĐƯỢC PHÉP CHỈNH SỬA, CHỈ ĐỌC
 - launchSettings.json
 
+# KHI BẠN EDIT CÁC FILE Ở FOLDER DynamicsCrm.DevKit.Cli VÀ/HOẶC DynamicsCrm.DevKit.Shared THÌ BẠN PHẢI LUÔN LUÔN RUN
+- Run file 03.Generate-All.ps1
+- Run file 04.Sync-All.ps1
+
 ==== KẾT THÚC QUAN TRỌNG
 
 # BEGIN #
@@ -60,8 +64,8 @@ Công việc đã xong, anh Phước kiểm tra lại nhé.
 - Khi bug, thì sau khi xác định được bug và nguyên nhân, thì phải SỬA Ở FILES SOURCE OF TRUTH, sau đó mới SYNC
 
 # SYNC 5 CORE FILES SOURCE OF TRUTH #
-- 1 trong 5 files source of truth ở trên có thay đổi thì cần phải sync vào các folder tương ứng
-- sync bằng các COPY và đè vào tương ứng như sau, luôn luôn làm, không cần hỏi và theo hướng dẫn dưới đây
+- Run file 03.Generate-All.ps1
+- Run file 04.Sync-All.ps1
 
 DynamicsCrm.DevKit.Shared\Resources\js\devkit.js
    --> DynamicsCrm.DevKit.Tests\TestClientCode\01.DevKitJs-UnitTest\lib\devkit.js
@@ -85,8 +89,8 @@ DynamicsCrm.DevKit.Shared\Resources\ts\build.js
    --> DynamicsCrm.DevKit.Tests\TestClientCode\06.DevKitJs-Vsix\Dev.DevKit.WebResourceTs\build.js
 
 # SYNC SOURCE OF TRUTH FILES GENERATOR #
-- Run CLI profile tương ứng để generator ra files tương ứng
-- Sync bằng các COPY và đè vào tương ứng như sau, luôn luôn làm, không cần hỏi và theo hướng dẫn dưới đây
+- Run file 03.Generate-All.ps1
+- Run file 04.Sync-All.ps1
 
 DynamicsCrm.DevKit.Tests\TestClientCode\05.DevKitJs-Vsix\Dev.DevKit.WebResource\entities\Account.form.js
    --> DynamicsCrm.DevKit.Tests\TestClientCode\01.DevKitJs-UnitTest\entities\Account.form.js

@@ -23,6 +23,19 @@ if (-not (Test-Path $cliPath)) {
 
 $connectionString = "AuthType=ClientSecret;Url=https://dynamics-crm-devkit-v4.crm.dynamics.com;ClientId=1a60a5c2-d04c-4b26-8f86-9d6ce0616799;ClientSecret=4Y11hDyKJYQTqXC9cRDXnoJ2DytZDs/jYI1byYwKli57mRfjHcCPu6Qx5sxgtCWQ;"
 
+# Clean up specific files before generation
+$filesToDelete = @(
+    "06.DevKitTs-Vsix\Dev.DevKit.WebResourceTs\entities\Account.ts",
+    "05.DevKitJs-Vsix\Dev.DevKit.WebResource\entities\Account.js"
+)
+
+foreach ($file in $filesToDelete) {
+    if (Test-Path $file) {
+        Write-Host "Deleting $file..." -ForegroundColor Yellow
+        Remove-Item $file -Force
+    }
+}
+
 # JS-FORM
 Write-Host "Generating: JS-FORM..." -ForegroundColor Cyan
 Push-Location "05.DevKitJs-Vsix\Dev.DevKit.WebResource\entities"

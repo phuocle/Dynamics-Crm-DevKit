@@ -828,7 +828,7 @@ namespace DynamicsCrm.DevKit.Shared
             var code = string.Empty;
             var formNames = new List<string>();
             var formClassNames = new List<string>();
-            
+             
             // Build list of form names first
             foreach (var form in forms)
             {
@@ -836,71 +836,126 @@ namespace DynamicsCrm.DevKit.Shared
                 formName = GetUnquieFormName(formNames, formName);
                 formClassNames.Add(formName);
             }
-            
+
             // Generate imports
-            code += $"import {{ {string.Join(", ", formClassNames.Select(f => $"Form{Helper.SafeIdentifier(f)}"))} }} from './{entityMetadata.SchemaName}.form';{NEW_LINE}";
+            code += $"import {{ {entityMetadata.SchemaName} }} from './{entityMetadata.SchemaName}.form';{NEW_LINE}";
             code += $"{NEW_LINE}";
-            
-            // Generate IIFE for each form
+
+            // Generate IIFE for each form (COMMENTED OUT)
             foreach (var formClassName in formClassNames)
             {
                 var safeFormName = Helper.SafeIdentifier(formClassName);
-                code += $"const form{safeFormName} = (function () {{{NEW_LINE}";
-                code += $"{TAB}\"use strict\";{NEW_LINE}";
-                code += $"{NEW_LINE}";
-                code += $"{TAB}let form: Form{safeFormName}.Form;{NEW_LINE}";
-                code += $"{NEW_LINE}";
-                code += $"{TAB}async function onLoad(executionContext: any): Promise<void> {{{NEW_LINE}";
-                code += $"{TAB}{TAB}form = new Form{safeFormName}.Form(executionContext);{NEW_LINE}";
-                code += $"{TAB}{TAB}registerEvents();{NEW_LINE}";
-                code += $"{TAB}{TAB}form.UiAddLoaded(UiAddLoaded);{NEW_LINE}";
-                code += $"{TAB}}}{NEW_LINE}";
-                code += $"{NEW_LINE}";
-                code += $"{TAB}function registerEvents(): void {{{NEW_LINE}";
-                code += $"{TAB}{TAB}if (form.ExecutionContext.IsInitialLoad()) {{{NEW_LINE}";
-                code += $"{TAB}{TAB}}}{NEW_LINE}";
-                code += $"{TAB}}}{NEW_LINE}";
-                code += $"{NEW_LINE}";
-                code += $"{TAB}// ========================================================================{NEW_LINE}";
-                code += $"{TAB}// BEGIN ON LOAD{NEW_LINE}";
-                code += $"{TAB}// ========================================================================{NEW_LINE}";
-                code += $"{NEW_LINE}";
-                code += $"{TAB}async function UiAddLoaded(executionContext: any): Promise<void> {{{NEW_LINE}";
-                code += $"{TAB}}}{NEW_LINE}";
-                code += $"{NEW_LINE}";
-                code += $"{TAB}// END ON LOAD{NEW_LINE}";
-                code += $"{TAB}// ========================================================================{NEW_LINE}";
-                code += $"{NEW_LINE}";
-                code += $"{TAB}// ========================================================================{NEW_LINE}";
-                code += $"{TAB}// BEGIN ON CHANGE{NEW_LINE}";
-                code += $"{TAB}// ========================================================================{NEW_LINE}";
-                code += $"{NEW_LINE}";
-                code += $"{TAB}// END ON CHANGE{NEW_LINE}";
-                code += $"{TAB}// ========================================================================{NEW_LINE}";
-                code += $"{NEW_LINE}";
-                code += $"{TAB}// ========================================================================{NEW_LINE}";
-                code += $"{TAB}// BEGIN PRE SEARCH{NEW_LINE}";
-                code += $"{TAB}// ========================================================================{NEW_LINE}";
-                code += $"{NEW_LINE}";
-                code += $"{TAB}// END PRE SEARCH{NEW_LINE}";
-                code += $"{TAB}// ========================================================================{NEW_LINE}";
-                code += $"{NEW_LINE}";
-                code += $"{TAB}// ========================================================================{NEW_LINE}";
-                code += $"{TAB}// BEGIN OTHERS{NEW_LINE}";
-                code += $"{TAB}// ========================================================================{NEW_LINE}";
-                code += $"{NEW_LINE}";
-                code += $"{TAB}// END OTHERS{NEW_LINE}";
-                code += $"{TAB}// ========================================================================{NEW_LINE}";
-                code += $"{NEW_LINE}";
-                code += $"{TAB}return {{{NEW_LINE}";
-                code += $"{TAB}{TAB}OnLoad: onLoad{NEW_LINE}";
-                code += $"{TAB}}};{NEW_LINE}";
-                code += $"}})();{NEW_LINE}";
+                code += $"//const form{safeFormName} = (function () {{{NEW_LINE}";
+                code += $"//{TAB}\"use strict\";{NEW_LINE}";
+                code += $"//{NEW_LINE}";
+                code += $"//{TAB}let form: {entityMetadata.SchemaName}.{safeFormName};{NEW_LINE}";
+                code += $"//{NEW_LINE}";
+                code += $"//{TAB}async function onLoad(executionContext: any): Promise<void> {{{NEW_LINE}";
+                code += $"//{TAB}{TAB}form = new {entityMetadata.SchemaName}.{safeFormName}(executionContext);{NEW_LINE}";
+                code += $"//{TAB}{TAB}registerEvents();{NEW_LINE}";
+                code += $"//{TAB}{TAB}form.UiAddLoaded(UiAddLoaded);{NEW_LINE}";
+                code += $"//{TAB}}}{NEW_LINE}";
+                code += $"//{NEW_LINE}";
+                code += $"//{TAB}function registerEvents(): void {{{NEW_LINE}";
+                code += $"//{TAB}{TAB}if (form.ExecutionContext.IsInitialLoad()) {{{NEW_LINE}";
+                code += $"//{TAB}{TAB}}}{NEW_LINE}";
+                code += $"//{TAB}}}{NEW_LINE}";
+                code += $"//{NEW_LINE}";
+                code += $"//{TAB}// ========================================================================{NEW_LINE}";
+                code += $"//{TAB}// BEGIN ON LOAD{NEW_LINE}";
+                code += $"//{TAB}// ========================================================================{NEW_LINE}";
+                code += $"//{NEW_LINE}";
+                code += $"//{TAB}async function UiAddLoaded(executionContext: any): Promise<void> {{{NEW_LINE}";
+                code += $"//{TAB}}}{NEW_LINE}";
+                code += $"//{NEW_LINE}";
+                code += $"//{TAB}// END ON LOAD{NEW_LINE}";
+                code += $"//{TAB}// ========================================================================{NEW_LINE}";
+                code += $"//{NEW_LINE}";
+                code += $"//{TAB}// ========================================================================{NEW_LINE}";
+                code += $"//{TAB}// BEGIN ON CHANGE{NEW_LINE}";
+                code += $"//{TAB}// ========================================================================{NEW_LINE}";
+                code += $"//{NEW_LINE}";
+                code += $"//{TAB}// END ON CHANGE{NEW_LINE}";
+                code += $"//{TAB}// ========================================================================{NEW_LINE}";
+                code += $"//{NEW_LINE}";
+                code += $"//{TAB}// ========================================================================{NEW_LINE}";
+                code += $"//{TAB}// BEGIN PRE SEARCH{NEW_LINE}";
+                code += $"//{TAB}// ========================================================================{NEW_LINE}";
+                code += $"//{NEW_LINE}";
+                code += $"//{TAB}// END PRE SEARCH{NEW_LINE}";
+                code += $"//{TAB}// ========================================================================{NEW_LINE}";
+                code += $"//{NEW_LINE}";
+                code += $"//{TAB}// ========================================================================{NEW_LINE}";
+                code += $"//{TAB}// BEGIN OTHERS{NEW_LINE}";
+                code += $"//{TAB}// ========================================================================{NEW_LINE}";
+                code += $"//{NEW_LINE}";
+                code += $"//{TAB}// END OTHERS{NEW_LINE}";
+                code += $"//{TAB}// ========================================================================{NEW_LINE}";
+                code += $"//{NEW_LINE}";
+                code += $"//{TAB}return {{{NEW_LINE}";
+                code += $"//{TAB}{TAB}OnLoad: onLoad{NEW_LINE}";
+                code += $"//{TAB}}};{NEW_LINE}";
+                code += $"//}})();{NEW_LINE}";
                 code += $"{NEW_LINE}";
             }
-            
+
+            // Generate IIFE for AllInOne (UNCOMMENTED)
+            code += $"const formAllInOne = (function () {{{NEW_LINE}";
+            code += $"{TAB}\"use strict\";{NEW_LINE}";
+            code += $"{NEW_LINE}";
+            code += $"{TAB}let form: {entityMetadata.SchemaName}.AllInOne;{NEW_LINE}";
+            code += $"{NEW_LINE}";
+            code += $"{TAB}async function onLoad(executionContext: any): Promise<void> {{{NEW_LINE}";
+            code += $"{TAB}{TAB}form = new {entityMetadata.SchemaName}.AllInOne(executionContext);{NEW_LINE}";
+            code += $"{TAB}{TAB}registerEvents();{NEW_LINE}";
+            code += $"{TAB}{TAB}form.UiAddLoaded(UiAddLoaded);{NEW_LINE}";
+            code += $"{TAB}}}{NEW_LINE}";
+            code += $"{NEW_LINE}";
+            code += $"{TAB}function registerEvents(): void {{{NEW_LINE}";
+            code += $"{TAB}{TAB}if (form.ExecutionContext.IsInitialLoad()) {{{NEW_LINE}";
+            code += $"{TAB}{TAB}}}{NEW_LINE}";
+            code += $"{TAB}}}{NEW_LINE}";
+            code += $"{NEW_LINE}";
+            code += $"{TAB}// ========================================================================{NEW_LINE}";
+            code += $"{TAB}// BEGIN ON LOAD{NEW_LINE}";
+            code += $"{TAB}// ========================================================================{NEW_LINE}";
+            code += $"{NEW_LINE}";
+            code += $"{TAB}async function UiAddLoaded(executionContext: any): Promise<void> {{{NEW_LINE}";
+            code += $"{TAB}}}{NEW_LINE}";
+            code += $"{NEW_LINE}";
+            code += $"{TAB}// END ON LOAD{NEW_LINE}";
+            code += $"{TAB}// ========================================================================{NEW_LINE}";
+            code += $"{NEW_LINE}";
+            code += $"{TAB}// ========================================================================{NEW_LINE}";
+            code += $"{TAB}// BEGIN ON CHANGE{NEW_LINE}";
+            code += $"{TAB}// ========================================================================{NEW_LINE}";
+            code += $"{NEW_LINE}";
+            code += $"{TAB}// END ON CHANGE{NEW_LINE}";
+            code += $"{TAB}// ========================================================================{NEW_LINE}";
+            code += $"{NEW_LINE}";
+            code += $"{TAB}// ========================================================================{NEW_LINE}";
+            code += $"{TAB}// BEGIN PRE SEARCH{NEW_LINE}";
+            code += $"{TAB}// ========================================================================{NEW_LINE}";
+            code += $"{NEW_LINE}";
+            code += $"{TAB}// END PRE SEARCH{NEW_LINE}";
+            code += $"{TAB}// ========================================================================{NEW_LINE}";
+            code += $"{NEW_LINE}";
+            code += $"{TAB}// ========================================================================{NEW_LINE}";
+            code += $"{TAB}// BEGIN OTHERS{NEW_LINE}";
+            code += $"{TAB}// ========================================================================{NEW_LINE}";
+            code += $"{NEW_LINE}";
+            code += $"{TAB}// END OTHERS{NEW_LINE}";
+            code += $"{TAB}// ========================================================================{NEW_LINE}";
+            code += $"{NEW_LINE}";
+            code += $"{TAB}return {{{NEW_LINE}";
+            code += $"{TAB}{TAB}OnLoad: onLoad{NEW_LINE}";
+            code += $"{TAB}}};{NEW_LINE}";
+            code += $"}})();{NEW_LINE}";
+            code += $"{NEW_LINE}";
+             
             // Generate export
-            code += $"export {{ {string.Join(", ", formClassNames.Select(f => $"form{Helper.SafeIdentifier(f)}"))} }};";
+            var exports = string.Join(" ", formClassNames.Select(f => $"/* form{Helper.SafeIdentifier(f)}, */"));
+            code += $"export {{ {exports} formAllInOne }};";
             return code;
         }
 
