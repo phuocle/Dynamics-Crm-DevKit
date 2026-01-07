@@ -1,4 +1,4 @@
-import { FormAccount_DevKitV4 } from './Account.form';
+import { Account } from './Account.form';
 import { OptionSet } from './OptionSet';
 
 interface TestResult {
@@ -12,7 +12,7 @@ interface TestResult {
  * TEST 26: Process Control (BPF) - v4_AccountBPF
  * Process extends IProcess (standard Client API) and includes BPF-specific fields
  */
-export function TestProcess(form: FormAccount_DevKitV4.Form): boolean {
+export function TestProcess(form: Account.Account_DevKitV4): boolean {
     const results: TestResult[] = [];
     const methodResults: TestResult[] = [];
     const process = form.Process;

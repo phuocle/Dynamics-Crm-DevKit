@@ -1,4 +1,4 @@
-import { FormAccount_DevKitV4 } from './Account.form';
+import { Account } from './Account.form';
 import { OptionSet } from './OptionSet';
 
 interface TestResult {
@@ -17,7 +17,7 @@ interface TestResult {
  * - R-Index: ReadOnly properties (R1, R2, R3...)
  * - S-Index: Setters & Methods (S1, S2, S3...)
  */
-export function TestDouble(form: FormAccount_DevKitV4.Form): boolean {
+export function TestDouble(form: Account.Account_DevKitV4): boolean {
     const results: TestResult[] = [];
     const methodResults: TestResult[] = [];
     const startTime = new Date().toLocaleTimeString();

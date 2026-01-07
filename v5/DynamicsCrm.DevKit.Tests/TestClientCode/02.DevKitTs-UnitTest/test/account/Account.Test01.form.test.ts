@@ -3,11 +3,11 @@
  * Test file: Account.Test01.form.test.ts
  * 
  * Coverage targets:
- * - FormAccount_DevKitV4.Form class constructor
+ * - Account.Account_DevKitV4 class constructor
  * - Form configuration (body, header, tab, grid, navigation, quick, bpf)
  */
 import { XrmMockGenerator } from 'xrm-mock';
-import { FormAccount_DevKitV4 } from '../../entities/Account.form';
+import { Account } from '../../entities/Account.form';
 
 // Global setup
 let mockGlobalContext: any;
@@ -114,7 +114,7 @@ describe('Account.form.ts - Form Class', () => {
             const formContext = createFormContext();
             const executionContext = { getFormContext: () => formContext };
 
-            const form = new FormAccount_DevKitV4.Form(executionContext);
+            const form = new Account.Account_DevKitV4(executionContext);
 
             expect(form).toBeDefined();
             expect(form.EntityName).toBe('account');
@@ -124,7 +124,7 @@ describe('Account.form.ts - Form Class', () => {
             const formContext = createFormContext();
             const executionContext = { getFormContext: () => formContext };
 
-            const form = new FormAccount_DevKitV4.Form(executionContext, 'dev_/webresources/account');
+            const form = new Account.Account_DevKitV4(executionContext, 'dev_/webresources/account');
 
             expect(form).toBeDefined();
         });
@@ -133,7 +133,7 @@ describe('Account.form.ts - Form Class', () => {
             const formContext = createFormContext();
             const executionContext = { getFormContext: () => formContext };
 
-            const form = new FormAccount_DevKitV4.Form(executionContext);
+            const form = new Account.Account_DevKitV4(executionContext);
 
             expect(form.Body).toBeDefined();
         });
@@ -142,7 +142,7 @@ describe('Account.form.ts - Form Class', () => {
             const formContext = createFormContext();
             const executionContext = { getFormContext: () => formContext };
 
-            const form = new FormAccount_DevKitV4.Form(executionContext);
+            const form = new Account.Account_DevKitV4(executionContext);
 
             expect(form.Header).toBeDefined();
         });
@@ -151,7 +151,7 @@ describe('Account.form.ts - Form Class', () => {
             const formContext = createFormContext();
             const executionContext = { getFormContext: () => formContext };
 
-            const form = new FormAccount_DevKitV4.Form(executionContext);
+            const form = new Account.Account_DevKitV4(executionContext);
 
             expect(form.Grid).toBeDefined();
         });
@@ -160,7 +160,7 @@ describe('Account.form.ts - Form Class', () => {
             const formContext = createFormContext();
             const executionContext = { getFormContext: () => formContext };
 
-            const form = new FormAccount_DevKitV4.Form(executionContext);
+            const form = new Account.Account_DevKitV4(executionContext);
 
             expect(form.Navigation).toBeDefined();
         });
@@ -169,7 +169,7 @@ describe('Account.form.ts - Form Class', () => {
             const formContext = createFormContext();
             const executionContext = { getFormContext: () => formContext };
 
-            const form = new FormAccount_DevKitV4.Form(executionContext);
+            const form = new Account.Account_DevKitV4(executionContext);
 
             expect(form.QuickForm).toBeDefined();
         });
@@ -178,7 +178,7 @@ describe('Account.form.ts - Form Class', () => {
             const formContext = createFormContext();
             const executionContext = { getFormContext: () => formContext };
 
-            const form = new FormAccount_DevKitV4.Form(executionContext);
+            const form = new Account.Account_DevKitV4(executionContext);
 
             expect(form.Process).toBeDefined();
         });
@@ -187,7 +187,7 @@ describe('Account.form.ts - Form Class', () => {
             const formContext = createFormContext();
             const executionContext = { getFormContext: () => formContext };
 
-            const form = new FormAccount_DevKitV4.Form(executionContext);
+            const form = new Account.Account_DevKitV4(executionContext);
 
             expect(form.ExecutionContext).toBeDefined();
         });
@@ -196,7 +196,7 @@ describe('Account.form.ts - Form Class', () => {
             const formContext = createFormContext();
             const executionContext = { getFormContext: () => formContext };
 
-            const form = new FormAccount_DevKitV4.Form(executionContext);
+            const form = new Account.Account_DevKitV4(executionContext);
 
             expect(form.Utility).toBeDefined();
         });
@@ -210,7 +210,7 @@ describe('Account.form.ts - Form Class', () => {
             const formContext = createFormContext();
             const executionContext = { getFormContext: () => formContext };
 
-            const form = new FormAccount_DevKitV4.Form(executionContext);
+            const form = new Account.Account_DevKitV4(executionContext);
 
             expect(form.FormId).toBe('account-form-guid');
         });
@@ -219,7 +219,7 @@ describe('Account.form.ts - Form Class', () => {
             const formContext = createFormContext();
             const executionContext = { getFormContext: () => formContext };
 
-            const form = new FormAccount_DevKitV4.Form(executionContext);
+            const form = new Account.Account_DevKitV4(executionContext);
 
             expect(form.FormLabel).toBe('Account DevKitV4');
         });
@@ -228,7 +228,7 @@ describe('Account.form.ts - Form Class', () => {
             const formContext = createFormContext();
             const executionContext = { getFormContext: () => formContext };
 
-            const form = new FormAccount_DevKitV4.Form(executionContext);
+            const form = new Account.Account_DevKitV4(executionContext);
 
             expect(form.FormType).toBe(2);
         });
@@ -237,7 +237,7 @@ describe('Account.form.ts - Form Class', () => {
             const formContext = createFormContext();
             const executionContext = { getFormContext: () => formContext };
 
-            const form = new FormAccount_DevKitV4.Form(executionContext);
+            const form = new Account.Account_DevKitV4(executionContext);
 
             expect(form.EntityId).toBe('account-guid');
         });

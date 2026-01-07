@@ -1,4 +1,4 @@
-import { FormAccount_DevKitV4 } from './Account.form';
+import { Account } from './Account.form';
 import { OptionSet } from './OptionSet';
 
 interface TestResult {
@@ -16,7 +16,7 @@ interface TestResult {
  * - R-Index: ReadOnly properties (R1, R2, R3...)
  * - S-Index: Setters & Methods (S1, S2, S3...)
  */
-export function TestLookup(form: FormAccount_DevKitV4.Form): boolean {
+export function TestLookup(form: Account.Account_DevKitV4): boolean {
     const results: TestResult[] = [];
     const startTime = new Date().toLocaleTimeString();
     const originalDefaultView = form.Body.v4_Lookup.DefaultView;
