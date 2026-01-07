@@ -1,12 +1,12 @@
-﻿import { FormAccount, FormAccount_DevKitV4, FormAccount_for_Interactive_experience, FormAccount_Quick_Create, FormAccount_Information } from './Account.form';
+﻿import { Account } from './Account.form';
 
 const formAccount = (function () {
 	"use strict";
 
-	let form: FormAccount.Form;
+	let form: Account.Account;
 
 	async function onLoad(executionContext: any): Promise<void> {
-		form = new FormAccount.Form(executionContext);
+		form = new Account.Account(executionContext);
 		registerEvents();
 		form.UiAddLoaded(UiAddLoaded);
 	}
@@ -55,10 +55,10 @@ const formAccount = (function () {
 const formAccount_DevKitV4 = (function () {
 	"use strict";
 
-	let form: FormAccount_DevKitV4.Form;
+	let form: Account.Account_DevKitV4;
 
 	async function onLoad(executionContext: any): Promise<void> {
-		form = new FormAccount_DevKitV4.Form(executionContext);
+		form = new Account.Account_DevKitV4(executionContext);
 		registerEvents();
 		form.UiAddLoaded(UiAddLoaded);
 	}
@@ -111,10 +111,10 @@ const formAccount_DevKitV4 = (function () {
 const formAccount_for_Interactive_experience = (function () {
 	"use strict";
 
-	let form: FormAccount_for_Interactive_experience.Form;
+	let form: Account.Account_for_Interactive_experience;
 
 	async function onLoad(executionContext: any): Promise<void> {
-		form = new FormAccount_for_Interactive_experience.Form(executionContext);
+		form = new Account.Account_for_Interactive_experience(executionContext);
 		registerEvents();
 		form.UiAddLoaded(UiAddLoaded);
 	}
@@ -163,10 +163,10 @@ const formAccount_for_Interactive_experience = (function () {
 const formAccount_Quick_Create = (function () {
 	"use strict";
 
-	let form: FormAccount_Quick_Create.Form;
+	let form: Account.Account_Quick_Create;
 
 	async function onLoad(executionContext: any): Promise<void> {
-		form = new FormAccount_Quick_Create.Form(executionContext);
+		form = new Account.Account_Quick_Create(executionContext);
 		registerEvents();
 		form.UiAddLoaded(UiAddLoaded);
 	}
@@ -215,10 +215,10 @@ const formAccount_Quick_Create = (function () {
 const formAccount_Information = (function () {
 	"use strict";
 
-	let form: FormAccount_Information.Form;
+	let form: Account.Account_Information;
 
 	async function onLoad(executionContext: any): Promise<void> {
-		form = new FormAccount_Information.Form(executionContext);
+		form = new Account.Account_Information(executionContext);
 		registerEvents();
 		form.UiAddLoaded(UiAddLoaded);
 	}

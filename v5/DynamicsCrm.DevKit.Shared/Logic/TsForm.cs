@@ -62,32 +62,36 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code.AppendLine(" *");
             code.AppendLine(" * Structure:");
             code.AppendLine(" * 1. Imports");
-            code.AppendLine(" * 2. Types - IBody, IHeader, ITabs, IGrid, INavigation, IQuickForm, IProcess");
-            code.AppendLine(" * 3. Runtime - Form class with field configurations");
+            code.AppendLine($" * 2. Namespace {entityMetadata.SchemaName} containing form classes: {entityMetadata.SchemaName}.FormClassName");
             code.AppendLine(" */");
             code.AppendLine();
             code.AppendLine("/// <reference path=\"../lib/devkit.d.ts\" />");
             code.AppendLine("import { FormBase } from '../lib/devkit';");
             code.AppendLine("import './OptionSet';");
             code.AppendLine();
-            code.AppendLine("// ============================================================================");
-            code.AppendLine("// 1. Types");
-            code.AppendLine("// ============================================================================");
+
+            // Open entity namespace - all forms will be inside this single namespace
+            code.AppendLine($"export namespace {entityMetadata.SchemaName} {{");
             code.AppendLine();
 
-            // Generate forms
+            // Generate main forms
             foreach (var form in forms.Where(x => !x.IsQuickCreate))
             {
                 code.Append(await GetMainFormTsCodeAsync(form));
             }
 
+            // Generate quick create forms
             foreach (var form in forms.Where(x => x.IsQuickCreate))
             {
                 code.Append(await GetQuickCreateFormTsCodeAsync(form));
             }
 
+            // Close entity namespace
+            code.AppendLine("}");
+
             return code.ToString();
         }
+
 
         private static async Task<string> GetQuickCreateFormTsCodeAsync(SystemForm form)
         {
@@ -97,15 +101,20 @@ namespace DynamicsCrm.DevKit.Shared.Logic
 
             var code = new StringBuilder();
 
-            code.AppendLine($"export namespace Form{safeName} {{");
+            // Start nested namespace for interfaces (e.g., Account.Account_Quick_Create)
+            code.AppendLine($"{TAB}// ========================================================================");
+            code.AppendLine($"{TAB}// Form: {safeName}");
+            code.AppendLine($"{TAB}// ========================================================================");
+            code.AppendLine();
+            code.AppendLine($"{TAB}export namespace {safeName} {{");
             code.AppendLine();
 
             // Generate IBody interface
-            code.AppendLine($"{TAB}/**");
-            code.AppendLine($"{TAB} * Body controls interface");
-            code.AppendLine($"{TAB} * Contains all controls on the form body");
-            code.AppendLine($"{TAB} */");
-            code.AppendLine($"{TAB}export interface IBody {{");
+            code.AppendLine($"{TAB2}/**");
+            code.AppendLine($"{TAB2} * Body controls interface");
+            code.AppendLine($"{TAB2} * Contains all controls on the form body");
+            code.AppendLine($"{TAB2} */");
+            code.AppendLine($"{TAB2}export interface IBody {{");
 
             var bodyFields = GetBodyFields(form.FormXml);
             foreach (var field in bodyFields)
@@ -113,31 +122,30 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                 var comment = GetFieldComment(field);
                 if (!string.IsNullOrEmpty(comment))
                 {
-                    code.AppendLine($"{TAB2}/** {comment} */");
+                    code.AppendLine($"{TAB3}/** {comment} */");
                 }
-                code.AppendLine($"{TAB2}{field.LogicalName}: DevKit.Controls.{GetControlType(field)};");
+                code.AppendLine($"{TAB3}{field.LogicalName}: DevKit.Controls.{GetControlType(field)};");
             }
 
-            code.AppendLine($"{TAB2}/** Form Tabs */");
-            code.AppendLine($"{TAB2}Tab: ITabs;");
+            code.AppendLine($"{TAB3}/** Form Tabs */");
+            code.AppendLine($"{TAB3}Tab: ITabs;");
+            code.AppendLine($"{TAB2}}}");
+            code.AppendLine();
+
+            // Generate Tabs interfaces (with extra indentation)
+            code.Append(GetTabsInterfacesNested(form.FormXml));
+
+            // Close nested namespace for interfaces
             code.AppendLine($"{TAB}}}");
             code.AppendLine();
 
-
-
-            // Generate Tabs interfaces
-            code.Append(GetTabsInterfaces(form.FormXml));
-
-
-
-            // Generate Form class
+            // Generate Form class at entity namespace level (using declaration merging)
             code.Append(await GetFormClassAsync(safeName, form.FormXml, true));
-
-            code.AppendLine("}");
             code.AppendLine();
 
             return code.ToString();
         }
+
 
         private static async Task<string> GetMainFormTsCodeAsync(SystemForm form)
         {
@@ -147,15 +155,20 @@ namespace DynamicsCrm.DevKit.Shared.Logic
 
             var code = new StringBuilder();
 
-            code.AppendLine($"export namespace Form{safeName} {{");
+            // Start nested namespace for interfaces (e.g., Account.Account_DevKitV4)
+            code.AppendLine($"{TAB}// ========================================================================");
+            code.AppendLine($"{TAB}// Form: {safeName}");
+            code.AppendLine($"{TAB}// ========================================================================");
+            code.AppendLine();
+            code.AppendLine($"{TAB}export namespace {safeName} {{");
             code.AppendLine();
 
             // Generate IBody interface
-            code.AppendLine($"{TAB}/**");
-            code.AppendLine($"{TAB} * Body controls interface");
-            code.AppendLine($"{TAB} * Contains all controls on the form body");
-            code.AppendLine($"{TAB} */");
-            code.AppendLine($"{TAB}export interface IBody {{");
+            code.AppendLine($"{TAB2}/**");
+            code.AppendLine($"{TAB2} * Body controls interface");
+            code.AppendLine($"{TAB2} * Contains all controls on the form body");
+            code.AppendLine($"{TAB2} */");
+            code.AppendLine($"{TAB2}export interface IBody {{");
 
             var bodyFields = GetBodyFields(form.FormXml);
             foreach (var field in bodyFields)
@@ -163,21 +176,20 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                 var comment = GetFieldComment(field);
                 if (!string.IsNullOrEmpty(comment))
                 {
-                    code.AppendLine($"{TAB2}/** {comment} */");
+                    code.AppendLine($"{TAB3}/** {comment} */");
                 }
-                code.AppendLine($"{TAB2}{field.SchemaName}: DevKit.Controls.{GetControlType(field)};");
+                code.AppendLine($"{TAB3}{field.SchemaName}: DevKit.Controls.{GetControlType(field)};");
             }
-            //code.AppendLine($"{TAB2}/** Form Tabs */");
-            code.AppendLine($"{TAB2}Tab: ITabs;");
-            code.AppendLine($"{TAB}}}");
+            code.AppendLine($"{TAB3}Tab: ITabs;");
+            code.AppendLine($"{TAB2}}}");
             code.AppendLine();
 
             // Generate IHeader interface
-            code.AppendLine($"{TAB}/**");
-            code.AppendLine($"{TAB} * Header controls interface");
-            code.AppendLine($"{TAB} * Contains controls displayed in the form header");
-            code.AppendLine($"{TAB} */");
-            code.AppendLine($"{TAB}export interface IHeader extends DevKit.Controls.IHeader {{");
+            code.AppendLine($"{TAB2}/**");
+            code.AppendLine($"{TAB2} * Header controls interface");
+            code.AppendLine($"{TAB2} * Contains controls displayed in the form header");
+            code.AppendLine($"{TAB2} */");
+            code.AppendLine($"{TAB2}export interface IHeader extends DevKit.Controls.IHeader {{");
 
             var headerFields = GetHeaderFields(form.FormXml);
             foreach (var field in headerFields)
@@ -185,124 +197,120 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                 var comment = GetFieldComment(field);
                 if (!string.IsNullOrEmpty(comment))
                 {
-                    code.AppendLine($"{TAB2}/** {comment} */");
+                    code.AppendLine($"{TAB3}/** {comment} */");
                 }
-                code.AppendLine($"{TAB2}{field.SchemaName}: DevKit.Controls.{GetControlType(field)};");
+                code.AppendLine($"{TAB3}{field.SchemaName}: DevKit.Controls.{GetControlType(field)};");
             }
 
-            code.AppendLine($"{TAB}}}");
+            code.AppendLine($"{TAB2}}}");
             code.AppendLine();
 
-            // Generate Tabs interfaces
-            code.Append(GetTabsInterfaces(form.FormXml));
+            // Generate Tabs interfaces (with extra indentation for nested namespace)
+            code.Append(GetTabsInterfacesNested(form.FormXml));
 
             // Generate IGrid interface
-            code.AppendLine($"{TAB}/**");
-            code.AppendLine($"{TAB} * Grid controls interface");
-            code.AppendLine($"{TAB} * Contains all subgrid controls on the form");
-            code.AppendLine($"{TAB} */");
-            code.AppendLine($"{TAB}export interface IGrid {{");
+            code.AppendLine($"{TAB2}/**");
+            code.AppendLine($"{TAB2} * Grid controls interface");
+            code.AppendLine($"{TAB2} * Contains all subgrid controls on the form");
+            code.AppendLine($"{TAB2} */");
+            code.AppendLine($"{TAB2}export interface IGrid {{");
 
             var gridFields = GetGridFields(form.FormXml);
             foreach (var field in gridFields)
             {
-                // Add JSDoc for grid label
                 if (!string.IsNullOrWhiteSpace(field.Label))
                 {
-                    code.AppendLine($"{TAB2}/** {field.Label} */");
+                    code.AppendLine($"{TAB3}/** {field.Label} */");
                 }
-                code.AppendLine($"{TAB2}{field.Id}: DevKit.Controls.Grid;");
+                code.AppendLine($"{TAB3}{field.Id}: DevKit.Controls.Grid;");
             }
 
-
-            code.AppendLine($"{TAB}}}");
+            code.AppendLine($"{TAB2}}}");
             code.AppendLine();
 
             // Generate INavigation interface
-            code.AppendLine($"{TAB}/**");
-            code.AppendLine($"{TAB} * Navigation interface");
-            code.AppendLine($"{TAB} * Contains navigation items");
-            code.AppendLine($"{TAB} */");
-            code.AppendLine($"{TAB}export interface INavigation {{");
+            code.AppendLine($"{TAB2}/**");
+            code.AppendLine($"{TAB2} * Navigation interface");
+            code.AppendLine($"{TAB2} * Contains navigation items");
+            code.AppendLine($"{TAB2} */");
+            code.AppendLine($"{TAB2}export interface INavigation {{");
 
             var navigationFields = GetNavigationFields(form.FormXml);
             foreach (var nav in navigationFields)
             {
                 if (!string.IsNullOrEmpty(nav.Title))
                 {
-                    code.AppendLine($"{TAB2}/** {nav.Title} */");
+                    code.AppendLine($"{TAB3}/** {nav.Title} */");
                 }
-                code.AppendLine($"{TAB2}{nav.Id}: DevKit.Controls.NavigationItem;");
+                code.AppendLine($"{TAB3}{nav.Id}: DevKit.Controls.NavigationItem;");
             }
 
-            code.AppendLine($"{TAB}}}");
+            code.AppendLine($"{TAB2}}}");
             code.AppendLine();
 
             // Generate IQuickForm interface
             var quickFormFields = await GetQuickFormFieldsAsync(form.FormXml);
-            code.AppendLine($"{TAB}/**");
-            code.AppendLine($"{TAB} * QuickForm interface");
-            code.AppendLine($"{TAB} * Contains quick view form controls");
-            code.AppendLine($"{TAB} */");
-            code.AppendLine($"{TAB}export interface IQuickForm {{");
+            code.AppendLine($"{TAB2}/**");
+            code.AppendLine($"{TAB2} * QuickForm interface");
+            code.AppendLine($"{TAB2} * Contains quick view form controls");
+            code.AppendLine($"{TAB2} */");
+            code.AppendLine($"{TAB2}export interface IQuickForm {{");
 
             foreach (var qf in quickFormFields)
             {
-                code.AppendLine($"{TAB2}{qf.QuickFormName}: DevKit.Controls.IQuickView & {{");
-                code.AppendLine($"{TAB3}Body: I{qf.QuickFormName}Body;");
-                code.AppendLine($"{TAB2}}};");
+                code.AppendLine($"{TAB3}{qf.QuickFormName}: DevKit.Controls.IQuickView & {{");
+                code.AppendLine($"{TAB4}Body: I{qf.QuickFormName}Body;");
+                code.AppendLine($"{TAB3}}};");
             }
 
-            code.AppendLine($"{TAB}}}");
+            code.AppendLine($"{TAB2}}}");
             code.AppendLine();
 
             // Generate QuickForm body interfaces
             foreach (var qf in quickFormFields)
             {
-                code.AppendLine($"{TAB}/**");
-                code.AppendLine($"{TAB} * {qf.QuickFormName} quick view control body interface");
-                code.AppendLine($"{TAB} */");
-                code.AppendLine($"{TAB}export interface I{qf.QuickFormName}Body {{");
+                code.AppendLine($"{TAB2}/**");
+                code.AppendLine($"{TAB2} * {qf.QuickFormName} quick view control body interface");
+                code.AppendLine($"{TAB2} */");
+                code.AppendLine($"{TAB2}export interface I{qf.QuickFormName}Body {{");
 
                 foreach (var field in qf.Fields)
                 {
                     if (!string.IsNullOrEmpty(field.Comment))
                     {
-                        code.AppendLine($"{TAB2}/** {field.Comment} */");
+                        code.AppendLine($"{TAB3}/** {field.Comment} */");
                     }
-                    code.AppendLine($"{TAB2}{field.Name}: DevKit.Controls.QuickView;");
+                    code.AppendLine($"{TAB3}{field.Name}: DevKit.Controls.QuickView;");
                 }
 
-                code.AppendLine($"{TAB}}}");
+                code.AppendLine($"{TAB2}}}");
                 code.AppendLine();
             }
 
             // Generate IProcess interface
             var processFields = await GetProcessFieldsAsync();
-            code.AppendLine($"{TAB}/**");
-            code.AppendLine($"{TAB} * Process interface");
-            code.AppendLine($"{TAB} * Contains business process flow definitions");
-            code.AppendLine($"{TAB} */");
-            code.AppendLine($"{TAB}export interface IProcess extends DevKit.Controls.IProcess {{");
+            code.AppendLine($"{TAB2}/**");
+            code.AppendLine($"{TAB2} * Process interface");
+            code.AppendLine($"{TAB2} * Contains business process flow definitions");
+            code.AppendLine($"{TAB2} */");
+            code.AppendLine($"{TAB2}export interface IProcess extends DevKit.Controls.IProcess {{");
 
             foreach (var process in processFields)
             {
-                //code.AppendLine($"{TAB2}/** {process.ProcessName} - {process.ProcessName} */");
-                code.AppendLine($"{TAB2}{process.ProcessName}: I{process.ProcessName};");
+                code.AppendLine($"{TAB3}{process.ProcessName}: I{process.ProcessName};");
             }
 
-            code.AppendLine($"{TAB}}}");
+            code.AppendLine($"{TAB2}}}");
             code.AppendLine();
 
             // Generate Process field interfaces
             foreach (var process in processFields)
             {
-                code.AppendLine($"{TAB}/**");
-                code.AppendLine($"{TAB} * {process.ProcessName} Business Process Flow fields interface");
-                code.AppendLine($"{TAB} */");
-                code.AppendLine($"{TAB}export interface I{process.ProcessName} {{");
+                code.AppendLine($"{TAB2}/**");
+                code.AppendLine($"{TAB2} * {process.ProcessName} Business Process Flow fields interface");
+                code.AppendLine($"{TAB2} */");
+                code.AppendLine($"{TAB2}export interface I{process.ProcessName} {{");
 
-                // Track used names for BPF duplicate handling (uses _1, _2 pattern)
                 var usedNames = new Dictionary<string, int>();
 
                 foreach (var field in process.Fields)
@@ -324,65 +332,64 @@ namespace DynamicsCrm.DevKit.Shared.Logic
 
                     if (!string.IsNullOrEmpty(fieldInfo.DisplayName))
                     {
-                        code.AppendLine($"{TAB2}/** {fieldInfo.DisplayName} */");
+                        code.AppendLine($"{TAB3}/** {fieldInfo.DisplayName} */");
                     }
-                    code.AppendLine($"{TAB2}{schemaName}: DevKit.Controls.{fieldInfo.Type};");
+                    code.AppendLine($"{TAB3}{schemaName}: DevKit.Controls.{fieldInfo.Type};");
                 }
 
-                code.AppendLine($"{TAB}}}");
+                code.AppendLine($"{TAB2}}}");
                 code.AppendLine();
             }
 
             // Generate IDialog interface
-            code.AppendLine($"{TAB}/**");
-            code.AppendLine($"{TAB} * Dialog interface");
-            code.AppendLine($"{TAB} * For quick create dialogs or other dialog forms");
-            code.AppendLine($"{TAB} */");
-            code.AppendLine($"{TAB}export interface IDialog extends DevKit.IDialog {{");
+            code.AppendLine($"{TAB2}/**");
+            code.AppendLine($"{TAB2} * Dialog interface");
+            code.AppendLine($"{TAB2} * For quick create dialogs or other dialog forms");
+            code.AppendLine($"{TAB2} */");
+            code.AppendLine($"{TAB2}export interface IDialog extends DevKit.IDialog {{");
 
             var dialogFields = GetDialogFields(form.FormXml);
             foreach (var field in dialogFields)
             {
-                code.AppendLine($"{TAB2}/** {field} field for dialog */");
-                code.AppendLine($"{TAB2}{field}: DevKit.Controls.String;");
+                code.AppendLine($"{TAB3}/** {field} field for dialog */");
+                code.AppendLine($"{TAB3}{field}: DevKit.Controls.String;");
             }
 
+            code.AppendLine($"{TAB2}}}");
+
+            // Close nested namespace for interfaces
             code.AppendLine($"{TAB}}}");
             code.AppendLine();
 
-            // Generate comment separator
-            code.AppendLine($"{TAB}// ============================================================================");
-            code.AppendLine($"{TAB}// 2. Runtime - Form Class");
-            code.AppendLine($"{TAB}// ============================================================================");
-            code.AppendLine();
-
-            // Generate Form class
+            // Generate Form class at entity namespace level (using declaration merging)
             code.Append(await GetFormClassAsync(safeName, form.FormXml, false));
-
-            code.AppendLine("}");
             code.AppendLine();
 
             return code.ToString();
         }
+
 
         private static async Task<string> GetFormClassAsync(string formName, string formXml, bool isQuickCreate)
         {
             var code = new StringBuilder();
 
             code.AppendLine($"{TAB}/**");
-            code.AppendLine($"{TAB} * {EntityMetadata.SchemaName} Form class");
+            code.AppendLine($"{TAB} * {formName} Form class");
             code.AppendLine($"{TAB} * Provides typed access to all form controls");
+            code.AppendLine($"{TAB} * Usage: new {EntityMetadata.SchemaName}.{formName}(executionContext)");
             code.AppendLine($"{TAB} */");
             if (isQuickCreate)
             {
-                code.AppendLine($"{TAB}export class Form extends FormBase<IBody, undefined, undefined, undefined, undefined, undefined, undefined> {{");
+                // Reference interfaces from nested namespace for quick create forms
+                code.AppendLine($"{TAB}export class {formName} extends FormBase<{formName}.IBody, undefined, undefined, undefined, undefined, undefined, undefined> {{");
             }
             else
             {
-                code.AppendLine($"{TAB}export class Form extends FormBase<IBody, IHeader, IGrid, INavigation, IQuickForm, IProcess, IDialog> {{");
+                // Reference interfaces from nested namespace for full forms
+                code.AppendLine($"{TAB}export class {formName} extends FormBase<{formName}.IBody, {formName}.IHeader, {formName}.IGrid, {formName}.INavigation, {formName}.IQuickForm, {formName}.IProcess, {formName}.IDialog> {{");
             }
             code.AppendLine($"{TAB2}/**");
-            code.AppendLine($"{TAB2} * Creates an {EntityMetadata.SchemaName} Form instance");
+            code.AppendLine($"{TAB2} * Creates a {formName} Form instance");
             code.AppendLine($"{TAB2} * @param executionContext The execution context from form event");
             code.AppendLine($"{TAB2} * @param defaultWebResourceName Optional default web resource name");
             code.AppendLine($"{TAB2} */");
@@ -561,6 +568,126 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             }
 
             code.AppendLine($"{TAB}}}");
+            code.AppendLine();
+
+            return code.ToString();
+        }
+
+        /// <summary>
+        /// Generates tab interfaces with extra indentation for nested namespace structure
+        /// Uses TAB2/TAB3/TAB4 instead of TAB/TAB2/TAB3
+        /// </summary>
+        private static string GetTabsInterfacesNested(string formXml)
+        {
+            var code = new StringBuilder();
+            var xdoc = XDocument.Parse(formXml);
+            var tabs = from x in xdoc.Descendants("tabs").Elements("tab")
+                       select new
+                       {
+                           Name = x?.Attribute("name")?.Value,
+                           Label = x?.Descendants("labels")?.Descendants("label")?.FirstOrDefault()?.Attribute("description")?.Value,
+                           InnerText = x?.ToString()
+                       };
+            tabs = tabs.OrderBy(x => x.Name).ToList();
+
+            if (tabs.Count() == 0) return string.Empty;
+
+            var existTabs = new List<string>();
+            var tabInfos = new List<TabInfo>();
+
+            foreach (var tab in tabs)
+            {
+                if (string.IsNullOrEmpty(Helper.SafeIdentifier(tab.Name))) continue;
+                if (existTabs.Contains(Helper.SafeIdentifier(tab.Name))) continue;
+                existTabs.Add(Helper.SafeIdentifier(tab.Name));
+
+                var tabName = Helper.SafeIdentifier(tab.Name);
+                var xdoc2 = XDocument.Parse(tab.InnerText);
+                var sections = from x2 in xdoc2
+                               .Descendants("columns")
+                               .Descendants("column")
+                               .Descendants("sections")
+                               .Elements("section")
+                               select new
+                               {
+                                   Name = x2?.Attribute("name")?.Value,
+                                   Label = x2?.Descendants("labels")?.Descendants("label")?.FirstOrDefault()?.Attribute("description")?.Value
+                               };
+                sections = sections.OrderBy(x => x.Name).ToList();
+
+                var sectionList = new List<SectionInfo>();
+                var existSections = new List<string>();
+
+                foreach (var section in sections)
+                {
+                    if (section.Name == null) continue;
+                    if (section.Name.StartsWith("ref_pan")) continue;
+                    if (string.IsNullOrEmpty(Helper.SafeIdentifier(section.Name))) continue;
+                    if (existSections.Contains(Helper.SafeIdentifier(section.Name))) continue;
+                    existSections.Add(Helper.SafeIdentifier(section.Name));
+
+                    sectionList.Add(new SectionInfo
+                    {
+                        Name = Helper.SafeIdentifier(section.Name),
+                        Label = section.Label
+                    });
+                }
+
+                if (sectionList.Count > 0)
+                {
+                    tabInfos.Add(new TabInfo
+                    {
+                        Name = tabName,
+                        Label = tab.Label,
+                        Sections = sectionList
+                    });
+                }
+            }
+
+            // Generate section interfaces (with extra indentation)
+            foreach (var tabInfo in tabInfos)
+            {
+                code.AppendLine($"{TAB2}export interface I{tabInfo.Name}TabSections {{");
+
+                foreach (var section in tabInfo.Sections)
+                {
+                    if (!string.IsNullOrEmpty(section.Label))
+                    {
+                        code.AppendLine($"{TAB3}/** {section.Label} */");
+                    }
+                    code.AppendLine($"{TAB3}{section.Name}: DevKit.Controls.Section;");
+                }
+
+                code.AppendLine($"{TAB2}}}");
+                code.AppendLine();
+            }
+
+            // Generate tab interfaces (with extra indentation)
+            foreach (var tabInfo in tabInfos)
+            {
+                if (!string.IsNullOrEmpty(tabInfo.Label))
+                {
+                    code.AppendLine($"{TAB2}/** {tabInfo.Label} */");
+                }
+                code.AppendLine($"{TAB2}export interface I{tabInfo.Name}Tab extends DevKit.Controls.ITab {{");
+                code.AppendLine($"{TAB3}Section: I{tabInfo.Name}TabSections;");
+                code.AppendLine($"{TAB2}}}");
+                code.AppendLine();
+            }
+
+            // Generate ITabs interface (with extra indentation)
+            code.AppendLine($"{TAB2}export interface ITabs {{");
+
+            foreach (var tabInfo in tabInfos)
+            {
+                if (!string.IsNullOrEmpty(tabInfo.Label))
+                {
+                    code.AppendLine($"{TAB3}/** {tabInfo.Label} */");
+                }
+                code.AppendLine($"{TAB3}{tabInfo.Name}: I{tabInfo.Name}Tab;");
+            }
+
+            code.AppendLine($"{TAB2}}}");
             code.AppendLine();
 
             return code.ToString();
