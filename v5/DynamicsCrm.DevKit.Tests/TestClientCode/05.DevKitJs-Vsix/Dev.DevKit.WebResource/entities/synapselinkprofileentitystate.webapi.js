@@ -1,7 +1,9 @@
 ﻿'use strict';
 /** @namespace DevKit */
+// @ts-ignore
 var DevKit;
-(function (DevKit) {
+(function (/** @type {any} */ DevKit) {
+	if (DevKit === undefined) DevKit = {};
 	DevKit.synapselinkprofileentitystateApi = function (e) {
 		const f = '@OData.Community.Display.V1.FormattedValue';
 		function webApiField(obj, field, entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, type) {
@@ -177,10 +179,11 @@ var DevKit;
 		};
 		return synapselinkprofileentitystate;
 	};
-})(DevKit || (DevKit = {}));
+})(DevKit || (DevKit = /** @type {any} */ ({})));
 /** @namespace OptionSet */
+// @ts-ignore
 var OptionSet;
-(function (OptionSet) {
+(function (/** @type {any} */ OptionSet) {
 	OptionSet.synapselinkprofileentitystate = {
 		EntitySource: { Dataverse: 0, FnOTables: 1 },
 		EntityType: { Requested: 0 },
@@ -192,4 +195,4 @@ var OptionSet;
 		SyncState: { Completed: 4, CompletedWithFailures: 8, InProgress: 2, None: 0, NotStarted: 1, Paused: 32, PostProcessing: 64, RequestedInitialData: 16 },
 		RollupState: { NotCalculated: 0, Calculated: 1, OverflowError: 2, OtherError: 3, RetryLimitExceeded: 4, HierarchicalRecursionLimitReached: 5, LoopDetected: 6 }
 	};
-})(OptionSet || (OptionSet = {}));
+})(OptionSet || (OptionSet = /** @type {any} */ ({})));

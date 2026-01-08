@@ -1,7 +1,8 @@
 ﻿'use strict';
 /** @namespace DevKit */
+// @ts-ignore
 var DevKit;
-(function (DevKit) {
+(function (/** @type {any} */ DevKit) {
 	'use strict';
 	DevKit.Formmsdyn_odatav4ds_Information = function(executionContext, defaultWebResourceName) {
 		const form = {
@@ -29,12 +30,13 @@ var DevKit;
 		};
 		return devKit.LoadFormV2(executionContext, defaultWebResourceName, form);
 	};
-})(DevKit || (DevKit = {}));
+})(DevKit || (DevKit = /** @type {any} */ ({})));
 /** @namespace OptionSet */
+// @ts-ignore
 var OptionSet;
-(function (OptionSet) {
+(function (/** @type {any} */ OptionSet) {
 	OptionSet.msdyn_odatav4ds = {
 		msdyn_paginationtype: { Client_side_Paging: 0, Server_side_Paging: 1 },
 		RollupState: { NotCalculated: 0, Calculated: 1, OverflowError: 2, OtherError: 3, RetryLimitExceeded: 4, HierarchicalRecursionLimitReached: 5, LoopDetected: 6 }
 	};
-})(OptionSet || (OptionSet = {}));
+})(OptionSet || (OptionSet = /** @type {any} */ ({})));

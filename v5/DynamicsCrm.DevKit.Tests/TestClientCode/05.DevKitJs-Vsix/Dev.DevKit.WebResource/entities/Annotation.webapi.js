@@ -1,7 +1,9 @@
 ﻿'use strict';
 /** @namespace DevKit */
+// @ts-ignore
 var DevKit;
-(function (DevKit) {
+(function (/** @type {any} */ DevKit) {
+	if (DevKit === undefined) DevKit = {};
 	DevKit.AnnotationApi = function (e) {
 		const f = '@OData.Community.Display.V1.FormattedValue';
 		function webApiField(obj, field, entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, type) {
@@ -168,13 +170,14 @@ var DevKit;
 		};
 		return annotation;
 	};
-})(DevKit || (DevKit = {}));
+})(DevKit || (DevKit = /** @type {any} */ ({})));
 /** @namespace OptionSet */
+// @ts-ignore
 var OptionSet;
-(function (OptionSet) {
+(function (/** @type {any} */ OptionSet) {
 	OptionSet.Annotation = {
 		ObjectIdTypeCode: { },
 		ObjectTypeCode: { Account: 1, Appointment: 4201, Bulk_Import: 4407, Calendar: 4003, Campaign: 4400, Campaign_Activity: 4402, Campaign_Response: 4401, Case: 112, Case_Resolution: 4206, Commitment: 4215, Competitor: 123, Contact: 2, Contract: 1010, Contract_Line: 1011, Email: 4202, FacilityEquipment: 4000, Fax: 4204, Invoice: 1090, Lead: 4, Letter: 4207, Marketing_List: 4300, Opportunity: 3, Opportunity_Close: 4208, Order: 1088, Order_Close: 4209, Phone_Call: 4210, Product: 1024, Quote: 1084, Quote_Close: 4211, Resource_Specification: 4006, Routing_Rule: 8181, Routing_Rule_Item: 8199, Service: 4001, Service_Activity: 4214, Task: 4212 },
 		RollupState: { NotCalculated: 0, Calculated: 1, OverflowError: 2, OtherError: 3, RetryLimitExceeded: 4, HierarchicalRecursionLimitReached: 5, LoopDetected: 6 }
 	};
-})(OptionSet || (OptionSet = {}));
+})(OptionSet || (OptionSet = /** @type {any} */ ({})));

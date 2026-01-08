@@ -1,7 +1,9 @@
 ﻿'use strict';
 /** @namespace DevKit */
+// @ts-ignore
 var DevKit;
-(function (DevKit) {
+(function (/** @type {any} */ DevKit) {
+	if (DevKit === undefined) DevKit = {};
 	DevKit.FederatedKnowledgeConfigurationApi = function (e) {
 		const f = '@OData.Community.Display.V1.FormattedValue';
 		function webApiField(obj, field, entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, type) {
@@ -170,14 +172,15 @@ var DevKit;
 		};
 		return federatedknowledgeconfiguration;
 	};
-})(DevKit || (DevKit = {}));
+})(DevKit || (DevKit = /** @type {any} */ ({})));
 /** @namespace OptionSet */
+// @ts-ignore
 var OptionSet;
-(function (OptionSet) {
+(function (/** @type {any} */ OptionSet) {
 	OptionSet.FederatedKnowledgeConfiguration = {
 		ComponentState: { Deleted: 2, Deleted_Unpublished: 3, Published: 0, Unpublished: 1 },
 		statecode: { Draft: 0, Failed: 2, Published: 1 },
 		statuscode: { ConnectionError: 2, Draft: 0, InternalError: 3, Success: 1 },
 		RollupState: { NotCalculated: 0, Calculated: 1, OverflowError: 2, OtherError: 3, RetryLimitExceeded: 4, HierarchicalRecursionLimitReached: 5, LoopDetected: 6 }
 	};
-})(OptionSet || (OptionSet = {}));
+})(OptionSet || (OptionSet = /** @type {any} */ ({})));

@@ -1,7 +1,9 @@
 ﻿'use strict';
 /** @namespace DevKit */
+// @ts-ignore
 var DevKit;
-(function (DevKit) {
+(function (/** @type {any} */ DevKit) {
+	if (DevKit === undefined) DevKit = {};
 	DevKit.SolutionApi = function (e) {
 		const f = '@OData.Community.Display.V1.FormattedValue';
 		function webApiField(obj, field, entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, type) {
@@ -172,13 +174,14 @@ var DevKit;
 		};
 		return solution;
 	};
-})(DevKit || (DevKit = {}));
+})(DevKit || (DevKit = /** @type {any} */ ({})));
 /** @namespace OptionSet */
+// @ts-ignore
 var OptionSet;
-(function (OptionSet) {
+(function (/** @type {any} */ OptionSet) {
 	OptionSet.Solution = {
 		SolutionType: { Internal: 2, None: 0, Snapshot: 1 },
 		SourceControlSyncStatus: { Committed: 4, Errors_in_initial_sync: 2, Initial_sync_in_progress: 1, Not_started: 0, Pending_changes_to_be_committed: 3 },
 		RollupState: { NotCalculated: 0, Calculated: 1, OverflowError: 2, OtherError: 3, RetryLimitExceeded: 4, HierarchicalRecursionLimitReached: 5, LoopDetected: 6 }
 	};
-})(OptionSet || (OptionSet = {}));
+})(OptionSet || (OptionSet = /** @type {any} */ ({})));

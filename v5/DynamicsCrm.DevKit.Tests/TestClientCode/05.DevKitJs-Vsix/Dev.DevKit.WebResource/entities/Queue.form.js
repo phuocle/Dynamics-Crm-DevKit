@@ -1,7 +1,8 @@
 ﻿'use strict';
 /** @namespace DevKit */
+// @ts-ignore
 var DevKit;
-(function (DevKit) {
+(function (/** @type {any} */ DevKit) {
 	'use strict';
 	DevKit.FormQueue_Information = function(executionContext, defaultWebResourceName) {
 		const form = {
@@ -29,10 +30,11 @@ var DevKit;
 		};
 		return devKit.LoadFormV2(executionContext, defaultWebResourceName, form);
 	};
-})(DevKit || (DevKit = {}));
+})(DevKit || (DevKit = /** @type {any} */ ({})));
 /** @namespace OptionSet */
+// @ts-ignore
 var OptionSet;
-(function (OptionSet) {
+(function (/** @type {any} */ OptionSet) {
 	OptionSet.Queue = {
 		EmailRouterAccessApproval: { Approved: 1, Empty: 0, Pending_Approval: 2, Rejected: 3 },
 		IncomingEmailDeliveryMethod: { Forward_Mailbox: 3, None: 0, Server_Side_Synchronization_or_Email_Router: 2 },
@@ -44,4 +46,4 @@ var OptionSet;
 		StatusCode: { Active: 1, Inactive: 2 },
 		RollupState: { NotCalculated: 0, Calculated: 1, OverflowError: 2, OtherError: 3, RetryLimitExceeded: 4, HierarchicalRecursionLimitReached: 5, LoopDetected: 6 }
 	};
-})(OptionSet || (OptionSet = {}));
+})(OptionSet || (OptionSet = /** @type {any} */ ({})));

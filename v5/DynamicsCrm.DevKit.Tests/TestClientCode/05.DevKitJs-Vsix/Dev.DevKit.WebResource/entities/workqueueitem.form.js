@@ -1,7 +1,8 @@
 ﻿'use strict';
 /** @namespace DevKit */
+// @ts-ignore
 var DevKit;
-(function (DevKit) {
+(function (/** @type {any} */ DevKit) {
 	'use strict';
 	DevKit.Formworkqueueitem_Information = function(executionContext, defaultWebResourceName) {
 		const form = {
@@ -16,10 +17,11 @@ var DevKit;
 		};
 		return devKit.LoadFormV2(executionContext, defaultWebResourceName, form);
 	};
-})(DevKit || (DevKit = {}));
+})(DevKit || (DevKit = /** @type {any} */ ({})));
 /** @namespace OptionSet */
+// @ts-ignore
 var OptionSet;
-(function (OptionSet) {
+(function (/** @type {any} */ OptionSet) {
 	OptionSet.workqueueitem = {
 		ComponentState: { Deleted: 2, Deleted_Unpublished: 3, Published: 0, Unpublished: 1 },
 		processortype: { Cloud_Flow: 1, Flow_Machine: 2, None: 0 },
@@ -28,4 +30,4 @@ var OptionSet;
 		statuscode: { BusinessException: 6, DeadLetter: 7, GenericException: 4, ITException: 5, Paused: 3, Processed: 2, Processing: 1, ProcessingTimeout: 8, Queued: 0 },
 		RollupState: { NotCalculated: 0, Calculated: 1, OverflowError: 2, OtherError: 3, RetryLimitExceeded: 4, HierarchicalRecursionLimitReached: 5, LoopDetected: 6 }
 	};
-})(OptionSet || (OptionSet = {}));
+})(OptionSet || (OptionSet = /** @type {any} */ ({})));

@@ -1,7 +1,9 @@
 ﻿'use strict';
 /** @namespace DevKit */
+// @ts-ignore
 var DevKit;
-(function (DevKit) {
+(function (/** @type {any} */ DevKit) {
+	if (DevKit === undefined) DevKit = {};
 	DevKit.flowlogApi = function (e) {
 		const f = '@OData.Community.Display.V1.FormattedValue';
 		function webApiField(obj, field, entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, type) {
@@ -168,14 +170,15 @@ var DevKit;
 		};
 		return flowlog;
 	};
-})(DevKit || (DevKit = {}));
+})(DevKit || (DevKit = /** @type {any} */ ({})));
 /** @namespace OptionSet */
+// @ts-ignore
 var OptionSet;
-(function (OptionSet) {
+(function (/** @type {any} */ OptionSet) {
 	OptionSet.flowlog = {
 		level: { Debug: 100000001, Error: 100000004, Info: 100000002, Verbose: 100000000, Warning: 100000003 },
 		parentobjectidIdType: { },
 		type: { CuaHumanInTheLoopRequest: 100000403, CuaReasoningStep: 100000401, CuaStartSession: 100000400, CuaWaitOrCompleteSession: 100000402, CustomLog: 100000000, DesktopFlowOrchestrationRepairSessionMismatchRequest: 100000300, DesktopFlowOrchestrationRepairSessionMismatchResponse: 100000301, DesktopFlowOrchestrationRepairWindowsIdentityIncorrectRequest: 100000310, DesktopFlowOrchestrationRepairWindowsIdentityIncorrectResponse: 100000311, DesktopFlowRunAction: 100000001, DesktopFlowRunQueueAssigned: 100000004, DesktopFlowRunQueueAssignFailed: 100000005, DesktopFlowRunQueued: 100000003, DesktopFlowRunQueuePriorityChanged: 100000002, DesktopFlowRunQueueRunCompleted: 100000007, DesktopFlowRunQueueRunConfirmed: 100000006, DesktopFlowRunUnattendedRepairUISelectorRequest: 100000100, DesktopFlowRunUnattendedRepairUISelectorResponse: 100000101, WorkqueueFlowSession: 100000200, WorkqueueProcessorLog: 100000201 },
 		RollupState: { NotCalculated: 0, Calculated: 1, OverflowError: 2, OtherError: 3, RetryLimitExceeded: 4, HierarchicalRecursionLimitReached: 5, LoopDetected: 6 }
 	};
-})(OptionSet || (OptionSet = {}));
+})(OptionSet || (OptionSet = /** @type {any} */ ({})));

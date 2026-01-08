@@ -1,7 +1,9 @@
 ﻿'use strict';
 /** @namespace DevKit */
+// @ts-ignore
 var DevKit;
-(function (DevKit) {
+(function (/** @type {any} */ DevKit) {
+	if (DevKit === undefined) DevKit = {};
 	DevKit.msdyn_flow_approvalApi = function (e) {
 		const f = '@OData.Community.Display.V1.FormattedValue';
 		function webApiField(obj, field, entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, type) {
@@ -189,10 +191,11 @@ var DevKit;
 		};
 		return msdyn_flow_approval;
 	};
-})(DevKit || (DevKit = {}));
+})(DevKit || (DevKit = /** @type {any} */ ({})));
 /** @namespace OptionSet */
+// @ts-ignore
 var OptionSet;
-(function (OptionSet) {
+(function (/** @type {any} */ OptionSet) {
 	OptionSet.msdyn_flow_approval = {
 		msdyn_flow_approval_priority: { Important: 192350001, Low: 192350003, Medium: 192350002, Urgent: 192350000 },
 		msdyn_flow_approval_requesttype: { Basic: 192350001, eSign: 192350002, Other: 192350000, Templates: 192350003 },
@@ -201,4 +204,4 @@ var OptionSet;
 		statuscode: { Abandoned: 192350007, Canceled: 192350006, Completed: 192350004, Created: 192350000, Expired: 192350005, Pending: 192350001, Suspended: 192350002 },
 		RollupState: { NotCalculated: 0, Calculated: 1, OverflowError: 2, OtherError: 3, RetryLimitExceeded: 4, HierarchicalRecursionLimitReached: 5, LoopDetected: 6 }
 	};
-})(OptionSet || (OptionSet = {}));
+})(OptionSet || (OptionSet = /** @type {any} */ ({})));

@@ -1,7 +1,9 @@
 ﻿'use strict';
 /** @namespace DevKit */
+// @ts-ignore
 var DevKit;
-(function (DevKit) {
+(function (/** @type {any} */ DevKit) {
+	if (DevKit === undefined) DevKit = {};
 	DevKit.msdyn_AIDataProcessingEventApi = function (e) {
 		const f = '@OData.Community.Display.V1.FormattedValue';
 		function webApiField(obj, field, entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, type) {
@@ -168,14 +170,15 @@ var DevKit;
 		};
 		return msdyn_aidataprocessingevent;
 	};
-})(DevKit || (DevKit = {}));
+})(DevKit || (DevKit = /** @type {any} */ ({})));
 /** @namespace OptionSet */
+// @ts-ignore
 var OptionSet;
-(function (OptionSet) {
+(function (/** @type {any} */ OptionSet) {
 	OptionSet.msdyn_AIDataProcessingEvent = {
 		msdyn_ProcessingStatus: { Exported: 375150005, Exporting_Failed: 375150006, Manual_Review: 375150004, New: 375150000, Processed: 375150001, Processing_Failed: 375150002, Rejected: 375150007, Validated: 375150003 },
 		statecode: { Active: 0, Inactive: 1 },
 		statuscode: { Active: 1, Inactive: 2 },
 		RollupState: { NotCalculated: 0, Calculated: 1, OverflowError: 2, OtherError: 3, RetryLimitExceeded: 4, HierarchicalRecursionLimitReached: 5, LoopDetected: 6 }
 	};
-})(OptionSet || (OptionSet = {}));
+})(OptionSet || (OptionSet = /** @type {any} */ ({})));

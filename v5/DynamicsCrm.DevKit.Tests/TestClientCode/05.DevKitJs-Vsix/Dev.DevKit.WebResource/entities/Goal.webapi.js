@@ -1,7 +1,9 @@
 ﻿'use strict';
 /** @namespace DevKit */
+// @ts-ignore
 var DevKit;
-(function (DevKit) {
+(function (/** @type {any} */ DevKit) {
+	if (DevKit === undefined) DevKit = {};
 	DevKit.GoalApi = function (e) {
 		const f = '@OData.Community.Display.V1.FormattedValue';
 		function webApiField(obj, field, entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, type) {
@@ -222,10 +224,11 @@ var DevKit;
 		};
 		return goal;
 	};
-})(DevKit || (DevKit = {}));
+})(DevKit || (DevKit = /** @type {any} */ ({})));
 /** @namespace OptionSet */
+// @ts-ignore
 var OptionSet;
-(function (OptionSet) {
+(function (/** @type {any} */ OptionSet) {
 	OptionSet.Goal = {
 		AmountDataType: { Decimal: 1, Integer: 2, Money: 0 },
 		FiscalPeriod: { Annual: 301, April: 104, August: 108, December: 112, February: 102, January: 101, July: 107, June: 106, March: 103, May: 105, November: 111, October: 110, P1: 401, P10: 410, P11: 411, P12: 412, P13: 413, P2: 402, P3: 403, P4: 404, P5: 405, P6: 406, P7: 407, P8: 408, P9: 409, Quarter_1: 1, Quarter_2: 2, Quarter_3: 3, Quarter_4: 4, Semester_1: 201, Semester_2: 202, September: 109 },
@@ -235,4 +238,4 @@ var OptionSet;
 		StatusCode: { Closed: 1, Discarded: 2, Open: 0 },
 		RollupState: { NotCalculated: 0, Calculated: 1, OverflowError: 2, OtherError: 3, RetryLimitExceeded: 4, HierarchicalRecursionLimitReached: 5, LoopDetected: 6 }
 	};
-})(OptionSet || (OptionSet = {}));
+})(OptionSet || (OptionSet = /** @type {any} */ ({})));

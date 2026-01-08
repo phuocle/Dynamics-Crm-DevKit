@@ -1,7 +1,8 @@
 ﻿'use strict';
 /** @namespace DevKit */
+// @ts-ignore
 var DevKit;
-(function (DevKit) {
+(function (/** @type {any} */ DevKit) {
 	'use strict';
 	DevKit.Formmspp_entitylist_Information = function(executionContext, defaultWebResourceName) {
 		const form = {
@@ -16,10 +17,11 @@ var DevKit;
 		};
 		return devKit.LoadFormV2(executionContext, defaultWebResourceName, form);
 	};
-})(DevKit || (DevKit = {}));
+})(DevKit || (DevKit = /** @type {any} */ ({})));
 /** @namespace OptionSet */
+// @ts-ignore
 var OptionSet;
-(function (OptionSet) {
+(function (/** @type {any} */ OptionSet) {
 	OptionSet.mspp_entitylist = {
 		mspp_calendar_initialview: { Day: 756150003, Month: 756150001, Week: 756150002, Year: 756150000 },
 		mspp_calendar_style: { Event_list: 756150001, Full_calendar: 756150000 },
@@ -31,4 +33,4 @@ var OptionSet;
 		statuscode: { Active: 1, Inactive: 2 },
 		RollupState: { NotCalculated: 0, Calculated: 1, OverflowError: 2, OtherError: 3, RetryLimitExceeded: 4, HierarchicalRecursionLimitReached: 5, LoopDetected: 6 }
 	};
-})(OptionSet || (OptionSet = {}));
+})(OptionSet || (OptionSet = /** @type {any} */ ({})));

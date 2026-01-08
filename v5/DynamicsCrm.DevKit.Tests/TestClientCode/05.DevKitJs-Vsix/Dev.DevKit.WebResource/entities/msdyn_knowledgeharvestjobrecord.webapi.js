@@ -1,7 +1,9 @@
 ﻿'use strict';
 /** @namespace DevKit */
+// @ts-ignore
 var DevKit;
-(function (DevKit) {
+(function (/** @type {any} */ DevKit) {
+	if (DevKit === undefined) DevKit = {};
 	DevKit.msdyn_knowledgeharvestjobrecordApi = function (e) {
 		const f = '@OData.Community.Display.V1.FormattedValue';
 		function webApiField(obj, field, entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, type) {
@@ -160,14 +162,15 @@ var DevKit;
 		};
 		return msdyn_knowledgeharvestjobrecord;
 	};
-})(DevKit || (DevKit = {}));
+})(DevKit || (DevKit = /** @type {any} */ ({})));
 /** @namespace OptionSet */
+// @ts-ignore
 var OptionSet;
-(function (OptionSet) {
+(function (/** @type {any} */ OptionSet) {
 	OptionSet.msdyn_knowledgeharvestjobrecord = {
 		msdyn_entityname: { Conversation: 1, Incident: 0 },
 		statecode: { Completed: 2, Failed: 3, MavenInvoked: 1, Ready: 0 },
 		statuscode: { ArticleCreated: 3, ArticleNOTCreated: 4, KBCreateFailed: 5, MavenInvoked: 2, Ready: 1 },
 		RollupState: { NotCalculated: 0, Calculated: 1, OverflowError: 2, OtherError: 3, RetryLimitExceeded: 4, HierarchicalRecursionLimitReached: 5, LoopDetected: 6 }
 	};
-})(OptionSet || (OptionSet = {}));
+})(OptionSet || (OptionSet = /** @type {any} */ ({})));

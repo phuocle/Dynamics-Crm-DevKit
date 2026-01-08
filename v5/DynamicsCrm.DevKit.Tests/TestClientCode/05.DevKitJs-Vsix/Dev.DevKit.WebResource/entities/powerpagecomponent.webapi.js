@@ -1,7 +1,9 @@
 ﻿'use strict';
 /** @namespace DevKit */
+// @ts-ignore
 var DevKit;
-(function (DevKit) {
+(function (/** @type {any} */ DevKit) {
+	if (DevKit === undefined) DevKit = {};
 	DevKit.powerpagecomponentApi = function (e) {
 		const f = '@OData.Community.Display.V1.FormattedValue';
 		function webApiField(obj, field, entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, type) {
@@ -171,10 +173,11 @@ var DevKit;
 		};
 		return powerpagecomponent;
 	};
-})(DevKit || (DevKit = {}));
+})(DevKit || (DevKit = /** @type {any} */ ({})));
 /** @namespace OptionSet */
+// @ts-ignore
 var OptionSet;
-(function (OptionSet) {
+(function (/** @type {any} */ OptionSet) {
 	OptionSet.powerpagecomponent = {
 		ComponentState: { Deleted: 2, Deleted_Unpublished: 3, Published: 0, Unpublished: 1 },
 		powerpagecomponenttype: { Ad_Placement: 26, Advanced_Form: 19, Advanced_Form_Metadata: 21, Advanced_Form_Step: 20, Basic_Form: 15, Basic_Form_Metadata: 16, Bot_Consumer: 27, Cloud_Flow: 33, Column_Permission: 29, Column_Permission_Profile: 28, Content_Snippet: 7, List: 17, Page_Template: 6, Poll_Placement: 24, Publishing_State: 1, Publishing_State_Transition_Rule: 31, Redirect: 30, Server_Logic: 35, Shortcut: 32, Site_Marker: 13, Site_Setting: 9, Table_Permission: 18, UX_Component: 34, Web_File: 3, Web_Link: 5, Web_Link_Set: 4, Web_Page: 2, Web_Page_Access_Control_Rule: 10, Web_Role: 11, Web_Template: 8, Website_Access: 12 },
@@ -182,4 +185,4 @@ var OptionSet;
 		statuscode: { Active: 1, Inactive: 2 },
 		RollupState: { NotCalculated: 0, Calculated: 1, OverflowError: 2, OtherError: 3, RetryLimitExceeded: 4, HierarchicalRecursionLimitReached: 5, LoopDetected: 6 }
 	};
-})(OptionSet || (OptionSet = {}));
+})(OptionSet || (OptionSet = /** @type {any} */ ({})));

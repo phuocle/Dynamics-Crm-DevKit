@@ -1,7 +1,9 @@
 ﻿'use strict';
 /** @namespace DevKit */
+// @ts-ignore
 var DevKit;
-(function (DevKit) {
+(function (/** @type {any} */ DevKit) {
+	if (DevKit === undefined) DevKit = {};
 	DevKit.msdyn_analysiscomponentApi = function (e) {
 		const f = '@OData.Community.Display.V1.FormattedValue';
 		function webApiField(obj, field, entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, type) {
@@ -176,10 +178,11 @@ var DevKit;
 		};
 		return msdyn_analysiscomponent;
 	};
-})(DevKit || (DevKit = {}));
+})(DevKit || (DevKit = /** @type {any} */ ({})));
 /** @namespace OptionSet */
+// @ts-ignore
 var OptionSet;
-(function (OptionSet) {
+(function (/** @type {any} */ OptionSet) {
 	OptionSet.msdyn_analysiscomponent = {
 		msdyn_AnalysisComponentType: { Component_Health: 192350001, Object_Health: 192350002, Organization_Health: 192350000 },
 		msdyn_ComponentType: { Configuration: 192350005, Entity: 192350001, Form: 192350003, Plugin: 192350004, Solution: 192350000, View: 192350002 },
@@ -187,4 +190,4 @@ var OptionSet;
 		statuscode: { Canceled: 2, Complete: 192350001, Completed_With_Exceptions: 192350003, Exception: 192350002, Pending: 1, Running: 192350000 },
 		RollupState: { NotCalculated: 0, Calculated: 1, OverflowError: 2, OtherError: 3, RetryLimitExceeded: 4, HierarchicalRecursionLimitReached: 5, LoopDetected: 6 }
 	};
-})(OptionSet || (OptionSet = {}));
+})(OptionSet || (OptionSet = /** @type {any} */ ({})));

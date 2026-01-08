@@ -1,7 +1,9 @@
 ﻿'use strict';
 /** @namespace DevKit */
+// @ts-ignore
 var DevKit;
-(function (DevKit) {
+(function (/** @type {any} */ DevKit) {
+	if (DevKit === undefined) DevKit = {};
 	DevKit.EmailServerProfileApi = function (e) {
 		const f = '@OData.Community.Display.V1.FormattedValue';
 		function webApiField(obj, field, entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, type) {
@@ -221,10 +223,11 @@ var DevKit;
 		};
 		return emailserverprofile;
 	};
-})(DevKit || (DevKit = {}));
+})(DevKit || (DevKit = /** @type {any} */ ({})));
 /** @namespace OptionSet */
+// @ts-ignore
 var OptionSet;
-(function (OptionSet) {
+(function (/** @type {any} */ OptionSet) {
 	OptionSet.EmailServerProfile = {
 		ExchangeVersion: { Exchange_2007: 0, Exchange_2007_SP1: 1, Exchange_2010: 2, Exchange_2010_SP1: 3, Exchange_2010_SP2: 4, Exchange_2013: 5 },
 		IncomingAuthenticationProtocol: { Auto_Detect: 0, Basic: 3, Negotiate: 1, NTLM: 2, OAuth: 4 },
@@ -240,4 +243,4 @@ var OptionSet;
 		StatusCode: { Active: 1, Inactive: 2 },
 		RollupState: { NotCalculated: 0, Calculated: 1, OverflowError: 2, OtherError: 3, RetryLimitExceeded: 4, HierarchicalRecursionLimitReached: 5, LoopDetected: 6 }
 	};
-})(OptionSet || (OptionSet = {}));
+})(OptionSet || (OptionSet = /** @type {any} */ ({})));

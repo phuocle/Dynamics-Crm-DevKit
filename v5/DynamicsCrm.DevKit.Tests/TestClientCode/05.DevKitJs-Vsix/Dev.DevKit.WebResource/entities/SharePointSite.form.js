@@ -1,7 +1,8 @@
 ﻿'use strict';
 /** @namespace DevKit */
+// @ts-ignore
 var DevKit;
-(function (DevKit) {
+(function (/** @type {any} */ DevKit) {
 	'use strict';
 	DevKit.FormSharePointSite_Information = function(executionContext, defaultWebResourceName) {
 		const form = {
@@ -16,10 +17,11 @@ var DevKit;
 		};
 		return devKit.LoadFormV2(executionContext, defaultWebResourceName, form);
 	};
-})(DevKit || (DevKit = {}));
+})(DevKit || (DevKit = /** @type {any} */ ({})));
 /** @namespace OptionSet */
+// @ts-ignore
 var OptionSet;
-(function (OptionSet) {
+(function (/** @type {any} */ OptionSet) {
 	OptionSet.SharePointSite = {
 		FolderStructureEntity: { Account: 1, Contact: 2, None: 0 },
 		ParentSiteObjectTypeCode: { },
@@ -30,4 +32,4 @@ var OptionSet;
 		ValidationStatusErrorCode: { Authentication_failure: 6, Invalid_certificates: 7, The_URL_could_not_be_accessed_because_of_Internet_Explorer_security_settings: 5, The_URL_schemes_of_Microsoft_Dynamics_365_and_SharePoint_are_different: 4, This_records_URL_has_not_been_validated: 1, This_records_URL_is_not_valid: 3, This_records_URL_is_valid: 2 },
 		RollupState: { NotCalculated: 0, Calculated: 1, OverflowError: 2, OtherError: 3, RetryLimitExceeded: 4, HierarchicalRecursionLimitReached: 5, LoopDetected: 6 }
 	};
-})(OptionSet || (OptionSet = {}));
+})(OptionSet || (OptionSet = /** @type {any} */ ({})));

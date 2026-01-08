@@ -1,7 +1,9 @@
 ﻿'use strict';
 /** @namespace DevKit */
+// @ts-ignore
 var DevKit;
-(function (DevKit) {
+(function (/** @type {any} */ DevKit) {
+	if (DevKit === undefined) DevKit = {};
 	DevKit.WorkflowApi = function (e) {
 		const f = '@OData.Community.Display.V1.FormattedValue';
 		function webApiField(obj, field, entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, type) {
@@ -227,10 +229,11 @@ var DevKit;
 		};
 		return workflow;
 	};
-})(DevKit || (DevKit = {}));
+})(DevKit || (DevKit = /** @type {any} */ ({})));
 /** @namespace OptionSet */
+// @ts-ignore
 var OptionSet;
-(function (OptionSet) {
+(function (/** @type {any} */ OptionSet) {
 	OptionSet.Workflow = {
 		BusinessProcessType: { Business_Flow: 0, Task_Flow: 1 },
 		Category: { Action: 3, AI_Flow: 7, Business_Process_Flow: 4, Business_Rule: 2, Desktop_Flow: 6, Dialog: 1, Modern_Flow: 5, Workflow: 0 },
@@ -252,4 +255,4 @@ var OptionSet;
 		UpdateStage: { Post_operation: 40, Pre_operation: 20 },
 		RollupState: { NotCalculated: 0, Calculated: 1, OverflowError: 2, OtherError: 3, RetryLimitExceeded: 4, HierarchicalRecursionLimitReached: 5, LoopDetected: 6 }
 	};
-})(OptionSet || (OptionSet = {}));
+})(OptionSet || (OptionSet = /** @type {any} */ ({})));

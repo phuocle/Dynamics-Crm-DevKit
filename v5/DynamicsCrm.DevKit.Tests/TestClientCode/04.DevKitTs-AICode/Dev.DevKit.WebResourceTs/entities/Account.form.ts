@@ -5,7 +5,7 @@
  * Structure:
  * 1. Imports
  * 2. Namespace Account containing form classes: Account.FormClassName
- * 3. Aggregate Form class: Account.Form (contains all fields from all forms)
+ * 3. Aggregate Form class: Account.AllInOne (contains all fields from all forms)
  */
 
 /// <reference path="../lib/devkit.d.ts" />
@@ -990,25 +990,25 @@ export namespace Account {
 		 */
 		export interface IBody {
 			/** Type the city for the primary address. */
-			address1_city: DevKit.Controls.String;
+			Address1_City: DevKit.Controls.String;
 			/** Type the first line of the primary address. */
-			address1_line1: DevKit.Controls.String;
+			Address1_Line1: DevKit.Controls.String;
 			/** Type the second line of the primary address. */
-			address1_line2: DevKit.Controls.String;
+			Address1_Line2: DevKit.Controls.String;
 			/** Type the ZIP Code or postal code for the primary address. */
-			address1_postalcode: DevKit.Controls.String;
+			Address1_PostalCode: DevKit.Controls.String;
 			/** Type additional information to describe the account, such as an excerpt from the company's website. */
-			description: DevKit.Controls.Memo;
+			Description: DevKit.Controls.Memo;
 			/** Type the company or business name. */
-			name: DevKit.Controls.String;
+			Name: DevKit.Controls.String;
 			/** Type the number of employees that work at the account for use in marketing segmentation and demographic analysis. */
-			numberofemployees: DevKit.Controls.Integer;
+			NumberOfEmployees: DevKit.Controls.Integer;
 			/** Choose the primary contact for the account to provide quick access to contact details. */
-			primarycontactid: DevKit.Controls.Lookup;
+			PrimaryContactId: DevKit.Controls.Lookup;
 			/** Type the annual revenue for the account, used as an indicator in financial performance analysis. */
-			revenue: DevKit.Controls.Money;
+			Revenue: DevKit.Controls.Money;
 			/** Type the main phone number for this account. */
-			telephone1: DevKit.Controls.String;
+			Telephone1: DevKit.Controls.String;
 			/** Form Tabs */
 			Tab: ITabs;
 		}

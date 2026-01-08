@@ -1,7 +1,9 @@
 ﻿'use strict';
 /** @namespace DevKit */
+// @ts-ignore
 var DevKit;
-(function (DevKit) {
+(function (/** @type {any} */ DevKit) {
+	if (DevKit === undefined) DevKit = {};
 	DevKit.packageApi = function (e) {
 		const f = '@OData.Community.Display.V1.FormattedValue';
 		function webApiField(obj, field, entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, type) {
@@ -103,7 +105,7 @@ var DevKit;
 				});
 			}
 		}
-		const _package = {
+		const __package = {
 			AppId: { a: 'appid' },
 			ApplicationName: { a: 'applicationname' },
 			CatalogId: { a: 'catalogid' },
@@ -134,18 +136,18 @@ var DevKit;
 		};
 		if (e === undefined) e = {};
 		const u = {};
-		const package = {};
-		package.ODataEntity = e;
-		package.FormattedValue = {};
-		for (const field in _package) {
-			const fieldConfig = _package[field];
-			webApiField(package, field, e, fieldConfig.a, fieldConfig.b, fieldConfig.c, fieldConfig.d, fieldConfig.r, u, fieldConfig.g);
+		const _package = {};
+		_package.ODataEntity = e;
+		_package.FormattedValue = {};
+		for (const field in __package) {
+			const fieldConfig = __package[field];
+			webApiField(_package, field, e, fieldConfig.a, fieldConfig.b, fieldConfig.c, fieldConfig.d, fieldConfig.r, u, fieldConfig.g);
 		}
-		package.Entity = u;
-		package.EntityName = 'package';
-		package.EntityCollectionName = 'packages';
-		package['@odata.etag'] = e?.['@odata.etag'];
-		package.getAliasedValue = function (alias, isMultiOptionSet = false) {
+		_package.Entity = u;
+		_package.EntityName = 'package';
+		_package.EntityCollectionName = 'packages';
+		_package['@odata.etag'] = e?.['@odata.etag'];
+		_package.getAliasedValue = function (alias, isMultiOptionSet = false) {
 			if (e?.[alias] === undefined || e?.[alias] === null) {
 				return null;
 			}
@@ -154,7 +156,7 @@ var DevKit;
 			}
 			return e?.[alias];
 		};
-		package.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
+		_package.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e?.[alias + f] === undefined || e?.[alias + f] === null) {
 				return '';
 			}
@@ -163,15 +165,16 @@ var DevKit;
 			}
 			return e?.[alias + f];
 		};
-		return package;
+		return _package;
 	};
-})(DevKit || (DevKit = {}));
+})(DevKit || (DevKit = /** @type {any} */ ({})));
 /** @namespace OptionSet */
+// @ts-ignore
 var OptionSet;
-(function (OptionSet) {
+(function (/** @type {any} */ OptionSet) {
 	OptionSet.package = {
 		statecode: { Active: 0, Inactive: 1 },
 		statuscode: { Active: 1, Inactive: 2 },
 		RollupState: { NotCalculated: 0, Calculated: 1, OverflowError: 2, OtherError: 3, RetryLimitExceeded: 4, HierarchicalRecursionLimitReached: 5, LoopDetected: 6 }
 	};
-})(OptionSet || (OptionSet = {}));
+})(OptionSet || (OptionSet = /** @type {any} */ ({})));

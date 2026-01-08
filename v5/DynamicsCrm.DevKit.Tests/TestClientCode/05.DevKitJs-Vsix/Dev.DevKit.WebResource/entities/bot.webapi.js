@@ -1,7 +1,9 @@
 ﻿'use strict';
 /** @namespace DevKit */
+// @ts-ignore
 var DevKit;
-(function (DevKit) {
+(function (/** @type {any} */ DevKit) {
+	if (DevKit === undefined) DevKit = {};
 	DevKit.botApi = function (e) {
 		const f = '@OData.Community.Display.V1.FormattedValue';
 		function webApiField(obj, field, entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, type) {
@@ -183,10 +185,11 @@ var DevKit;
 		};
 		return bot;
 	};
-})(DevKit || (DevKit = {}));
+})(DevKit || (DevKit = /** @type {any} */ ({})));
 /** @namespace OptionSet */
+// @ts-ignore
 var OptionSet;
-(function (OptionSet) {
+(function (/** @type {any} */ OptionSet) {
 	OptionSet.bot = {
 		accesscontrolpolicy: { Any: 0, Any_multi_tenant: 3, Copilot_readers: 1, Group_membership: 2 },
 		authenticationmode: { Custom_Azure_Active_Directory: 3, Generic_OAuth2: 4, Integrated: 2, None: 1, Unspecified: 0 },
@@ -199,4 +202,4 @@ var OptionSet;
 		SupportedLanguages: { Arabic: 1025, Chinese_Simplified: 2052, Chinese_Traditional: 1028, Czech: 1029, Danish: 1030, Dutch: 1043, English: 1033, English_Australia: 3081, English_United_Kingdom: 2057, Finnish: 1035, French: 1036, French_Canada: 3084, German: 1031, Greek: 1032, Hebrew: 1037, Hindi: 1081, Indonesian: 1057, Italian: 1040, Japanese: 1041, Korean: 1042, Norwegian: 1044, Polish: 1045, Portuguese_Brazilian: 1046, Portuguese_Portugal: 2070, Russian: 1049, Spanish: 1034, Spanish_United_States: 21514, Swedish: 1053, Thai: 1054, Turkish: 1055 },
 		RollupState: { NotCalculated: 0, Calculated: 1, OverflowError: 2, OtherError: 3, RetryLimitExceeded: 4, HierarchicalRecursionLimitReached: 5, LoopDetected: 6 }
 	};
-})(OptionSet || (OptionSet = {}));
+})(OptionSet || (OptionSet = /** @type {any} */ ({})));

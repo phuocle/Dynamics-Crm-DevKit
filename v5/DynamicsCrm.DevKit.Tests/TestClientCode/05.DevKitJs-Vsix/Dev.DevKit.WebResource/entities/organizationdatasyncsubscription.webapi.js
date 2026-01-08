@@ -1,7 +1,9 @@
 ﻿'use strict';
 /** @namespace DevKit */
+// @ts-ignore
 var DevKit;
-(function (DevKit) {
+(function (/** @type {any} */ DevKit) {
+	if (DevKit === undefined) DevKit = {};
 	DevKit.organizationdatasyncsubscriptionApi = function (e) {
 		const f = '@OData.Community.Display.V1.FormattedValue';
 		function webApiField(obj, field, entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, type) {
@@ -176,10 +178,11 @@ var DevKit;
 		};
 		return organizationdatasyncsubscription;
 	};
-})(DevKit || (DevKit = {}));
+})(DevKit || (DevKit = /** @type {any} */ ({})));
 /** @namespace OptionSet */
+// @ts-ignore
 var OptionSet;
-(function (OptionSet) {
+(function (/** @type {any} */ OptionSet) {
 	OptionSet.organizationdatasyncsubscription = {
 		BlobPartitionBy: { Day: 1, Month: 2, None: 0, Year: 3 },
 		DataEndpointPostingType: { DefaultEndpoint: 0, HTTPS: 2, ServiceBusEventHub: 3, ServiceBusTopic: 1 },
@@ -189,4 +192,4 @@ var OptionSet;
 		statuscode: { Activated: 4, Deactivated: 5, Uninitialized: 3 },
 		RollupState: { NotCalculated: 0, Calculated: 1, OverflowError: 2, OtherError: 3, RetryLimitExceeded: 4, HierarchicalRecursionLimitReached: 5, LoopDetected: 6 }
 	};
-})(OptionSet || (OptionSet = {}));
+})(OptionSet || (OptionSet = /** @type {any} */ ({})));

@@ -1,7 +1,8 @@
 ﻿'use strict';
 /** @namespace DevKit */
+// @ts-ignore
 var DevKit;
-(function (DevKit) {
+(function (/** @type {any} */ DevKit) {
 	'use strict';
 	DevKit.Formmspp_entityformmetadata_Information = function(executionContext, defaultWebResourceName) {
 		const form = {
@@ -16,10 +17,11 @@ var DevKit;
 		};
 		return devKit.LoadFormV2(executionContext, defaultWebResourceName, form);
 	};
-})(DevKit || (DevKit = {}));
+})(DevKit || (DevKit = /** @type {any} */ ({})));
 /** @namespace OptionSet */
+// @ts-ignore
 var OptionSet;
-(function (OptionSet) {
+(function (/** @type {any} */ OptionSet) {
 	OptionSet.mspp_entityformmetadata = {
 		mspp_controlstyle: { Code_component: 756150001, Group_Whole_Number_as_Constant_Sum: 100000003, Group_Whole_Number_as_Rank_Order_Scale_Allow_Ties: 100000005, Group_Whole_Number_as_Rank_Order_Scale_No_Ties: 100000004, Group_Whole_Number_as_Stack_Rank: 100000008, Multiple_Choice: 100000007, Multiple_Choice_Matrix: 100000006, Option_Set_as_Horizontal_Radio_Button_List: 100000001, Option_Set_as_Vertical_Radio_Button_List: 100000000, Render_Lookup_as_Dropdown: 756150000, Single_Line_of_Text_as_Geolocation_Lookup_Validator: 100000002 },
 		mspp_descriptionposition: { Above_the_field: 100000000, Above_the_label: 100000002, Below_the_field: 100000001 },
@@ -30,4 +32,4 @@ var OptionSet;
 		statuscode: { Active: 1, Inactive: 2 },
 		RollupState: { NotCalculated: 0, Calculated: 1, OverflowError: 2, OtherError: 3, RetryLimitExceeded: 4, HierarchicalRecursionLimitReached: 5, LoopDetected: 6 }
 	};
-})(OptionSet || (OptionSet = {}));
+})(OptionSet || (OptionSet = /** @type {any} */ ({})));

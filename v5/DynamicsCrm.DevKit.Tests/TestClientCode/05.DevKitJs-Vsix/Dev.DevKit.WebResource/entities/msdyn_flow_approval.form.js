@@ -1,7 +1,8 @@
 ﻿'use strict';
 /** @namespace DevKit */
+// @ts-ignore
 var DevKit;
-(function (DevKit) {
+(function (/** @type {any} */ DevKit) {
 	'use strict';
 	DevKit.Formmsdyn_flow_approval_Information = function(executionContext, defaultWebResourceName) {
 		const form = {
@@ -16,10 +17,11 @@ var DevKit;
 		};
 		return devKit.LoadFormV2(executionContext, defaultWebResourceName, form);
 	};
-})(DevKit || (DevKit = {}));
+})(DevKit || (DevKit = /** @type {any} */ ({})));
 /** @namespace OptionSet */
+// @ts-ignore
 var OptionSet;
-(function (OptionSet) {
+(function (/** @type {any} */ OptionSet) {
 	OptionSet.msdyn_flow_approval = {
 		msdyn_flow_approval_priority: { Important: 192350001, Low: 192350003, Medium: 192350002, Urgent: 192350000 },
 		msdyn_flow_approval_requesttype: { Basic: 192350001, eSign: 192350002, Other: 192350000, Templates: 192350003 },
@@ -28,4 +30,4 @@ var OptionSet;
 		statuscode: { Abandoned: 192350007, Canceled: 192350006, Completed: 192350004, Created: 192350000, Expired: 192350005, Pending: 192350001, Suspended: 192350002 },
 		RollupState: { NotCalculated: 0, Calculated: 1, OverflowError: 2, OtherError: 3, RetryLimitExceeded: 4, HierarchicalRecursionLimitReached: 5, LoopDetected: 6 }
 	};
-})(OptionSet || (OptionSet = {}));
+})(OptionSet || (OptionSet = /** @type {any} */ ({})));

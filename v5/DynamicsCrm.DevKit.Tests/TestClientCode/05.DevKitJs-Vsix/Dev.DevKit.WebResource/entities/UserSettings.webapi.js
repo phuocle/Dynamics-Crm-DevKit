@@ -1,7 +1,9 @@
 ﻿'use strict';
 /** @namespace DevKit */
+// @ts-ignore
 var DevKit;
-(function (DevKit) {
+(function (/** @type {any} */ DevKit) {
+	if (DevKit === undefined) DevKit = {};
 	DevKit.UserSettingsApi = function (e) {
 		const f = '@OData.Community.Display.V1.FormattedValue';
 		function webApiField(obj, field, entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, type) {
@@ -246,10 +248,11 @@ var DevKit;
 		};
 		return usersettings;
 	};
-})(DevKit || (DevKit = {}));
+})(DevKit || (DevKit = /** @type {any} */ ({})));
 /** @namespace OptionSet */
+// @ts-ignore
 var OptionSet;
-(function (OptionSet) {
+(function (/** @type {any} */ OptionSet) {
 	OptionSet.UserSettings = {
 		D365AutoInstallAttemptStatus: { Already_installed: 2, Auto_installed: 1, No_Graph_API: 6, No_Solution: 5, Not_attempted: 0, Resource_Disabled: 7, Teams_admin_blocked: 3, Unauthorized: 4 },
 		DataValidationModeForExportToExcel: { Full: 0, None: 1 },
@@ -261,4 +264,4 @@ var OptionSet;
 		VisualizationPaneLayout: { Side_by_side: 1, Top_bottom: 0 },
 		RollupState: { NotCalculated: 0, Calculated: 1, OverflowError: 2, OtherError: 3, RetryLimitExceeded: 4, HierarchicalRecursionLimitReached: 5, LoopDetected: 6 }
 	};
-})(OptionSet || (OptionSet = {}));
+})(OptionSet || (OptionSet = /** @type {any} */ ({})));

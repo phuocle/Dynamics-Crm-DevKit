@@ -1,7 +1,8 @@
 ﻿'use strict';
 /** @namespace DevKit */
+// @ts-ignore
 var DevKit;
-(function (DevKit) {
+(function (/** @type {any} */ DevKit) {
 	'use strict';
 	DevKit.Formmobileofflineprofileitemfilter_Information = function(executionContext, defaultWebResourceName) {
 		const form = {
@@ -16,14 +17,15 @@ var DevKit;
 		};
 		return devKit.LoadFormV2(executionContext, defaultWebResourceName, form);
 	};
-})(DevKit || (DevKit = {}));
+})(DevKit || (DevKit = /** @type {any} */ ({})));
 /** @namespace OptionSet */
+// @ts-ignore
 var OptionSet;
-(function (OptionSet) {
+(function (/** @type {any} */ OptionSet) {
 	OptionSet.mobileofflineprofileitemfilter = {
 		returnedtypecode: { },
 		subtype: { CUD_IN: 0, CUD_OUT: 4, FULL_SYNC: 5, RELATED_CUD_IN: 1, RELATED_ENTITIES: 6, RELATED_INTERSECT_ENTITIES: 7, RELATED_SHARED_IN: 3, SHARED_IN: 2 },
 		type: { DELTA_IN: 0, DELTA_OUT: 1, FULL_SYNC: 2, RELATED_ENTITIES: 4, TOP_1: 3 },
 		RollupState: { NotCalculated: 0, Calculated: 1, OverflowError: 2, OtherError: 3, RetryLimitExceeded: 4, HierarchicalRecursionLimitReached: 5, LoopDetected: 6 }
 	};
-})(OptionSet || (OptionSet = {}));
+})(OptionSet || (OptionSet = /** @type {any} */ ({})));

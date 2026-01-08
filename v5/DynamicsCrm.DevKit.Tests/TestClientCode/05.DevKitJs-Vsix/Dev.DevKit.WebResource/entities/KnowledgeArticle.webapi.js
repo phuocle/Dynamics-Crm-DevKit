@@ -1,7 +1,9 @@
 ﻿'use strict';
 /** @namespace DevKit */
+// @ts-ignore
 var DevKit;
-(function (DevKit) {
+(function (/** @type {any} */ DevKit) {
+	if (DevKit === undefined) DevKit = {};
 	DevKit.KnowledgeArticleApi = function (e) {
 		const f = '@OData.Community.Display.V1.FormattedValue';
 		function webApiField(obj, field, entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, type) {
@@ -213,10 +215,11 @@ var DevKit;
 		};
 		return knowledgearticle;
 	};
-})(DevKit || (DevKit = {}));
+})(DevKit || (DevKit = /** @type {any} */ ({})));
 /** @namespace OptionSet */
+// @ts-ignore
 var OptionSet;
-(function (OptionSet) {
+(function (/** @type {any} */ OptionSet) {
 	OptionSet.KnowledgeArticle = {
 		ExpiredReviewOptions: { Archive: 2, Needs_Updating: 0, Republish: 1 },
 		msdyn_agentreviewstatus: { Not_Reviewed: 100000000, Reviewed: 100000001 },
@@ -228,4 +231,4 @@ var OptionSet;
 		StatusCode: { Approved: 5, Archived: 12, Discarded: 13, Draft: 2, Expired: 10, In_review: 4, Needs_review_3: 3, Needs_review_8: 8, Proposed: 1, Published: 7, Rejected_11: 11, Rejected_14: 14, Scheduled: 6, Updating: 9 },
 		RollupState: { NotCalculated: 0, Calculated: 1, OverflowError: 2, OtherError: 3, RetryLimitExceeded: 4, HierarchicalRecursionLimitReached: 5, LoopDetected: 6 }
 	};
-})(OptionSet || (OptionSet = {}));
+})(OptionSet || (OptionSet = /** @type {any} */ ({})));

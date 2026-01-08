@@ -1,7 +1,9 @@
 ﻿'use strict';
 /** @namespace DevKit */
+// @ts-ignore
 var DevKit;
-(function (DevKit) {
+(function (/** @type {any} */ DevKit) {
+	if (DevKit === undefined) DevKit = {};
 	DevKit.mspcat_PackageStoreApi = function (e) {
 		const f = '@OData.Community.Display.V1.FormattedValue';
 		function webApiField(obj, field, entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, type) {
@@ -164,10 +166,11 @@ var DevKit;
 		};
 		return mspcat_packagestore;
 	};
-})(DevKit || (DevKit = {}));
+})(DevKit || (DevKit = /** @type {any} */ ({})));
 /** @namespace OptionSet */
+// @ts-ignore
 var OptionSet;
-(function (OptionSet) {
+(function (/** @type {any} */ OptionSet) {
 	OptionSet.mspcat_PackageStore = {
 		mspcat_IntendedDeploymentType: { Standard: 526430000, Template: 526430001 },
 		mspcat_Operation: { Create_Package: 958090001, Package_Upload: 526430001, Submit_To_Catalog: 958090000 },
@@ -175,4 +178,4 @@ var OptionSet;
 		statuscode: { Completed: 958090001, Draft: 958090003, Failed: 958090002, Inactive: 2, Pending: 1, Running: 958090000, Submitted: 958090004 },
 		RollupState: { NotCalculated: 0, Calculated: 1, OverflowError: 2, OtherError: 3, RetryLimitExceeded: 4, HierarchicalRecursionLimitReached: 5, LoopDetected: 6 }
 	};
-})(OptionSet || (OptionSet = {}));
+})(OptionSet || (OptionSet = /** @type {any} */ ({})));

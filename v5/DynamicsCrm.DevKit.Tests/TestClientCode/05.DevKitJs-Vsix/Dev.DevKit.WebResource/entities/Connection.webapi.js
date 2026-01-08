@@ -1,7 +1,9 @@
 ﻿'use strict';
 /** @namespace DevKit */
+// @ts-ignore
 var DevKit;
-(function (DevKit) {
+(function (/** @type {any} */ DevKit) {
+	if (DevKit === undefined) DevKit = {};
 	DevKit.ConnectionApi = function (e) {
 		const f = '@OData.Community.Display.V1.FormattedValue';
 		function webApiField(obj, field, entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, type) {
@@ -171,10 +173,11 @@ var DevKit;
 		};
 		return connection;
 	};
-})(DevKit || (DevKit = {}));
+})(DevKit || (DevKit = /** @type {any} */ ({})));
 /** @namespace OptionSet */
+// @ts-ignore
 var OptionSet;
-(function (OptionSet) {
+(function (/** @type {any} */ OptionSet) {
 	OptionSet.Connection = {
 		Record1IdObjectTypeCode: { },
 		Record1ObjectTypeCode: { Account: 1, Activity: 4200, Appointment: 4201, Channel_Access_Profile_Rule: 9400, Contact: 2, Email: 4202, Fax: 4204, Goal: 9600, Invitation: 10406, Invite_Redemption: 10407, Knowledge_Article: 9953, Knowledge_Base_Record: 9930, Letter: 4207, Phone_Call: 4210, Position: 50, Process_Session: 4710, Publishing_State_Transition_Rule: 10426, Recurring_Appointment: 4251, Shortcut: 10428, Social_Activity: 4216, Social_Profile: 99, Task: 4212, Team: 9, Territory: 2013, User: 8, Website: 10440 },
@@ -184,4 +187,4 @@ var OptionSet;
 		StatusCode: { Active: 1, Inactive: 2 },
 		RollupState: { NotCalculated: 0, Calculated: 1, OverflowError: 2, OtherError: 3, RetryLimitExceeded: 4, HierarchicalRecursionLimitReached: 5, LoopDetected: 6 }
 	};
-})(OptionSet || (OptionSet = {}));
+})(OptionSet || (OptionSet = /** @type {any} */ ({})));

@@ -158,6 +158,7 @@ namespace DynamicsCrm.DevKit.Shared
             return name switch
             {
                 "import" => true,
+                "package" => true,
                 _ => false,
             };
         }

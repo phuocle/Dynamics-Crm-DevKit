@@ -4,6 +4,7 @@
 // This file is a Source of Truth for the DynamicsCrm.DevKit project.
 // Do not edit without considering the impact on the entire toolkit.
 // -----------------------------------------------------------------------------------
+// @ts-nocheck
 'use strict';
 const devKit = (function () {
     function getXrm() {
@@ -1012,8 +1013,9 @@ const devKit = (function () {
         LoadFormV2: loadFormV2
     }
 })();
+// @ts-ignore
 var OptionSet;
-(function (OptionSet) {
+(function (/** @type {any} */ OptionSet) {
     OptionSet.AdvancedConfigSetting = Object.freeze({ MaxChildIncidentNumber: 'MaxChildIncidentNumber', MaxIncidentMergeNumber: 'MaxIncidentMergeNumber' });
     OptionSet.ClientName = Object.freeze({ Web: 'Web', Outlook: 'Outlook', Mobile: 'Mobile' });
     OptionSet.ClientState = Object.freeze({ Online: 'Online', Offline: 'Offline' });
@@ -1039,4 +1041,4 @@ var OptionSet;
     OptionSet.TabContentType = Object.freeze({ CardSections: 'cardSections', SingleComponent: 'singleComponent' });
     OptionSet.TabDisplayState = Object.freeze({ Expanded: 'expanded', Collapsed: 'collapsed' });
     OptionSet.TimerState = Object.freeze({ NotSet: 1, InProgress: 2, Warning: 3, Violated: 4, Success: 5, Expired: 6, Canceled: 7, Paused: 8 });
-})(OptionSet || (OptionSet = {}));
+})(OptionSet || (OptionSet = /** @type {any} */ ({})));
