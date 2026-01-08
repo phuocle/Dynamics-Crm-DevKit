@@ -33,22 +33,22 @@ namespace DynamicsCrm.DevKit.Lib
 
         private static async Task SetEmbeddedResourceAsync(Dictionary<string, string> replacements)
         {
-            replacements["$deploy.debug.bat$"] = await VsixHelper.ReadEmbeddedResourceAsync("plugin.deploy.debug.bat");
-            replacements["$deploy.debug.only.bat$"] = await VsixHelper.ReadEmbeddedResourceAsync("plugin.deploy.debug.only.bat");
-            replacements["$webresource.deploy.debug.bat$"] = await VsixHelper.ReadEmbeddedResourceAsync("webresource.deploy.debug.bat");
-            replacements["$webresource.deploy.debug.ts.bat$"] = await VsixHelper.ReadEmbeddedResourceAsync("webresource.deploy.debug.ts_bat");
+            replacements["$deploy.debug.bat$"] = await VsixHelper.ReadEmbeddedResourceAsync("bat.plugin.deploy.debug.bat");
+            replacements["$deploy.debug.only.bat$"] = await VsixHelper.ReadEmbeddedResourceAsync("bat.plugin.deploy.debug.only.bat");
+            replacements["$webresource.deploy.debug.bat$"] = await VsixHelper.ReadEmbeddedResourceAsync("bat.webresource.deploy.debug.bat");
+            replacements["$webresource.deploy.debug.ts.bat$"] = await VsixHelper.ReadEmbeddedResourceAsync("bat.webresource.deploy.debug.ts_bat");
             replacements["$devkit.d.ts$"] = await VsixHelper.ReadEmbeddedResourceAsync("js.devkit.d.ts");
             replacements["$devkit.js$"] = await VsixHelper.ReadEmbeddedResourceAsync("js.devkit.js");
             replacements["$devkit.ts$"] = await VsixHelper.ReadEmbeddedResourceAsync("ts.devkit.ts");
             replacements["$devkitts.d.ts$"] = await VsixHelper.ReadEmbeddedResourceAsync("ts.devkit.d.ts");
             replacements["$build.js$"] = await VsixHelper.ReadEmbeddedResourceAsync("ts.build.js");
-            replacements["$generator.form.bat$"] = await VsixHelper.ReadEmbeddedResourceAsync("generator.form.bat");
-            replacements["$generator.form.ts.bat$"] = await VsixHelper.ReadEmbeddedResourceAsync("generator.form.ts_bat");
-            replacements["$generator.webapi.bat$"] = await VsixHelper.ReadEmbeddedResourceAsync("generator.webapi.bat");
-            replacements["$generator.webapi.ts.bat$"] = await VsixHelper.ReadEmbeddedResourceAsync("generator.webapi.ts_bat");
+            replacements["$generator.form.bat$"] = await VsixHelper.ReadEmbeddedResourceAsync("bat.generator.form.bat");
+            replacements["$generator.form.ts.bat$"] = await VsixHelper.ReadEmbeddedResourceAsync("bat.generator.form.ts_bat");
+            replacements["$generator.webapi.bat$"] = await VsixHelper.ReadEmbeddedResourceAsync("bat.generator.webapi.bat");
+            replacements["$generator.webapi.ts.bat$"] = await VsixHelper.ReadEmbeddedResourceAsync("bat.generator.webapi.ts_bat");
             replacements["$package.json$"] = await VsixHelper.ReadEmbeddedResourceAsync("package.json");
-            replacements["$generator.latebound.bat$"] = await VsixHelper.ReadEmbeddedResourceAsync("generator.latebound.bat");
-            replacements["$download.reports.bat$"] = await VsixHelper.ReadEmbeddedResourceAsync("download.reports.bat");
+            replacements["$generator.latebound.bat$"] = await VsixHelper.ReadEmbeddedResourceAsync("bat.generator.latebound.bat");
+            replacements["$download.reports.bat$"] = await VsixHelper.ReadEmbeddedResourceAsync("bat.download.reports.bat");
             replacements["$Helper.cs$"] = await VsixHelper.ReadEmbeddedResourceAsync("Helper.cs");
             replacements["$Program.cs$"] = await VsixHelper.ReadEmbeddedResourceAsync("Program.cs");
             replacements["$TracingServiceFake.cs$"] = await VsixHelper.ReadEmbeddedResourceAsync("TracingServiceFake.cs");

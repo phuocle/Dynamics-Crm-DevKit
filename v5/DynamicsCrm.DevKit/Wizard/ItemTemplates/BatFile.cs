@@ -49,17 +49,17 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
                     switch (form.BatFileName)
                     {
                         case "download.reports.bat":
-                            var content = await VsixHelper.ReadEmbeddedResourceAsync("download.reports.bat");
+                            var content = await VsixHelper.ReadEmbeddedResourceAsync("bat.download.reports.bat");
                             content = content.Replace("$ConnectionString$", Helper.BuildConnectionString(form.CrmConnection, true));
                             replacementsDictionary.Add("$batfile.bat$", content);
                             break;
                         case "download.webresources.bat":
-                            var content2 = await VsixHelper.ReadEmbeddedResourceAsync("download.webresources.bat");
+                            var content2 = await VsixHelper.ReadEmbeddedResourceAsync("bat.download.webresources.bat");
                             content2 = content2.Replace("$ConnectionString$", Helper.BuildConnectionString(form.CrmConnection, true));
                             replacementsDictionary.Add("$batfile.bat$", content2);
                             break;
                         case "deploy.datasource.bat":
-                            var content3 = await VsixHelper.ReadEmbeddedResourceAsync("deploy.datasource.bat");
+                            var content3 = await VsixHelper.ReadEmbeddedResourceAsync("bat.deploy.datasource.bat");
                             content3 = content3.Replace("$ConnectionString$", Helper.BuildConnectionString(form.CrmConnection, true));
                             replacementsDictionary.Add("$batfile.bat$", content3);
                             break;
