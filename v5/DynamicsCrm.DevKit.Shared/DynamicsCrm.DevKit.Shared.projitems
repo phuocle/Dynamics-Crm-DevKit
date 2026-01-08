@@ -93,7 +93,8 @@
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\generator.webapi.bat" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\package.json" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\js\package.json" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\js\jsconfig.json" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\download.reports.bat" />

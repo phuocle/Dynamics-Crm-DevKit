@@ -238,28 +238,6 @@ declare namespace DevKit {
 		PriorityCode: OptionSet.Task.PriorityCode | null;
 		/** Shows the ID of the process. */
 		ProcessId: string | null;
-		/** Choose the record that the task relates to. */
-		regardingobjectid_account_task: string | null;
-		/** Choose the record that the task relates to. */
-		regardingobjectid_adx_invitation_task: string | null;
-		/** Choose the record that the task relates to. */
-		regardingobjectid_contact_task: string | null;
-		/** Choose the record that the task relates to. */
-		regardingobjectid_knowledgearticle_task: string | null;
-		/** Choose the record that the task relates to. */
-		regardingobjectid_knowledgebaserecord_task: string | null;
-		/** Choose the record that the task relates to. */
-		regardingobjectid_mspp_adplacement_task: string | null;
-		/** Choose the record that the task relates to. */
-		regardingobjectid_mspp_pollplacement_task: string | null;
-		/** Choose the record that the task relates to. */
-		regardingobjectid_mspp_publishingstatetransitionrule_task: string | null;
-		/** Choose the record that the task relates to. */
-		regardingobjectid_mspp_redirect_task: string | null;
-		/** Choose the record that the task relates to. */
-		regardingobjectid_mspp_shortcut_task: string | null;
-		/** Choose the record that the task relates to. */
-		regardingobjectid_mspp_website_task: string | null;
 		/** Scheduled duration of the task, specified in minutes. */
 		readonly ScheduledDurationMinutes: number | null;
 		/** Enter the expected due date and time. */
@@ -359,28 +337,6 @@ declare namespace DevKit {
 			readonly PriorityCode: string;
 			/** Shows the ID of the process. */
 			readonly ProcessId: string;
-			/** Choose the record that the task relates to. */
-			readonly regardingobjectid_account_task: string;
-			/** Choose the record that the task relates to. */
-			readonly regardingobjectid_adx_invitation_task: string;
-			/** Choose the record that the task relates to. */
-			readonly regardingobjectid_contact_task: string;
-			/** Choose the record that the task relates to. */
-			readonly regardingobjectid_knowledgearticle_task: string;
-			/** Choose the record that the task relates to. */
-			readonly regardingobjectid_knowledgebaserecord_task: string;
-			/** Choose the record that the task relates to. */
-			readonly regardingobjectid_mspp_adplacement_task: string;
-			/** Choose the record that the task relates to. */
-			readonly regardingobjectid_mspp_pollplacement_task: string;
-			/** Choose the record that the task relates to. */
-			readonly regardingobjectid_mspp_publishingstatetransitionrule_task: string;
-			/** Choose the record that the task relates to. */
-			readonly regardingobjectid_mspp_redirect_task: string;
-			/** Choose the record that the task relates to. */
-			readonly regardingobjectid_mspp_shortcut_task: string;
-			/** Choose the record that the task relates to. */
-			readonly regardingobjectid_mspp_website_task: string;
 			/** Scheduled duration of the task, specified in minutes. */
 			readonly ScheduledDurationMinutes: string;
 			/** Enter the expected due date and time. */

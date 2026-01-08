@@ -67,16 +67,6 @@ declare namespace DevKit {
 		readonly OwningUser: string | null;
 		/** Role of the person in the activity, such as sender, to, cc, bcc, required, optional, organizer, regarding, or owner. */
 		ParticipationTypeMask: OptionSet.ActivityParty.ParticipationTypeMask | null;
-		/** Unique identifier of the party associated with the activity. */
-		partyid_account: string | null;
-		/** Unique identifier of the party associated with the activity. */
-		partyid_contact: string | null;
-		/** Unique identifier of the party associated with the activity. */
-		partyid_knowledgearticle: string | null;
-		/** Unique identifier of the party associated with the activity. */
-		partyid_queue: string | null;
-		/** Unique identifier of the party associated with the activity. */
-		partyid_systemuser: string | null;
 		/** Scheduled end time of the activity. */
 		readonly ScheduledEnd_UtcDateOnly: Date | null;
 		/** Scheduled start time of the activity. */
@@ -125,16 +115,6 @@ declare namespace DevKit {
 			readonly OwningUser: string;
 			/** Role of the person in the activity, such as sender, to, cc, bcc, required, optional, organizer, regarding, or owner. */
 			readonly ParticipationTypeMask: string;
-			/** Unique identifier of the party associated with the activity. */
-			readonly partyid_account: string;
-			/** Unique identifier of the party associated with the activity. */
-			readonly partyid_contact: string;
-			/** Unique identifier of the party associated with the activity. */
-			readonly partyid_knowledgearticle: string;
-			/** Unique identifier of the party associated with the activity. */
-			readonly partyid_queue: string;
-			/** Unique identifier of the party associated with the activity. */
-			readonly partyid_systemuser: string;
 			/** Scheduled end time of the activity. */
 			readonly ScheduledEnd_UtcDateOnly: string;
 			/** Scheduled start time of the activity. */
