@@ -90,14 +90,14 @@
       "type": "TsForm",
       "rootnamespace": "DevKit",
       "rootfolder": "",
-      "entities": "*"
+      "entities": "Account,Contact,SystemUser,Team,Task,ActivityParty,Email"
     },
     {
       "profile": "TS-WEBAPI",
       "type": "TsWebApi",
       "rootnamespace": "DevKit",
       "rootfolder": "",
-      "entities": "*"
+      "entities": "Account,Contact,SystemUser,Team,Task,ActivityParty,Email"
     }
   ],
   "downloadwebresources": [

@@ -1169,6 +1169,10 @@ declare namespace DevKit {
 		Pager: string | null;
 		/** Unique identifier of the parent contact. */
 		readonly ParentContactId: string | null;
+		/** Select the parent account or parent contact for the contact to provide a quick link to additional details, such as financial information, activities, and opportunities. */
+		parentcustomerid_account: string | null;
+		/** Select the parent account or parent contact for the contact to provide a quick link to additional details, such as financial information, activities, and opportunities. */
+		parentcustomerid_contact: string | null;
 		/** Shows whether the contact participates in workflow rules. */
 		ParticipatesInWorkflow: boolean | null;
 		/** Select the payment terms to indicate when the customer needs to pay the total amount. */
@@ -1609,6 +1613,10 @@ declare namespace DevKit {
 			readonly Pager: string;
 			/** Unique identifier of the parent contact. */
 			readonly ParentContactId: string;
+			/** Select the parent account or parent contact for the contact to provide a quick link to additional details, such as financial information, activities, and opportunities. */
+			readonly parentcustomerid_account: string;
+			/** Select the parent account or parent contact for the contact to provide a quick link to additional details, such as financial information, activities, and opportunities. */
+			readonly parentcustomerid_contact: string;
 			/** Shows whether the contact participates in workflow rules. */
 			readonly ParticipatesInWorkflow: string;
 			/** Select the payment terms to indicate when the customer needs to pay the total amount. */

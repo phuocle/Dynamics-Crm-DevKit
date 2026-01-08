@@ -1,6 +1,153 @@
 ﻿//@ts-check
 ///<reference path="devkit.d.ts" />
 declare namespace DevKit {
+	namespace FormTask {
+		interface Header extends DevKit.Controls.IHeader {
+			/** Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
+			OwnerId: DevKit.Controls.Lookup;
+			/** Select the priority so that preferred customers or critical issues are handled quickly. */
+			PriorityCode: DevKit.Controls.OptionSet;
+			/** Enter the expected due date and time. */
+			ScheduledEnd: DevKit.Controls.DateTime;
+			/** Shows whether the task is open, completed, or canceled. Completed and canceled tasks are read-only and can't be edited. */
+			StateCode: DevKit.Controls.OptionSet;
+		}
+		interface tab_TASK_TAB_Sections {
+			/** Description */
+			Description: DevKit.Controls.Section;
+			tab_2_section_2: DevKit.Controls.Section;
+			/** TASK */
+			TASK: DevKit.Controls.Section;
+			/** Task Details */
+			task_details: DevKit.Controls.Section;
+		}
+		/** TASK */
+		interface tab_TASK_TAB extends DevKit.Controls.ITab {
+			Section: tab_TASK_TAB_Sections;
+		}
+		interface Tabs {
+			/** TASK */
+			TASK_TAB: tab_TASK_TAB;
+		}
+		interface Body {
+			Tab: Tabs;
+			/** Type the number of minutes spent on the task. The duration is used in reporting. */
+			ActualDurationMinutes: DevKit.Controls.Integer;
+			/** Type additional information to describe the task. */
+			Description: DevKit.Controls.String;
+			/** Choose the record that the task relates to. */
+			RegardingObjectId: DevKit.Controls.Lookup;
+			/** Type a short description about the objective or primary topic of the task. */
+			Subject: DevKit.Controls.String;
+		}
+	}
+	export class FormTask extends DevKit.IForm {
+		/**
+		* Task [Main Form]
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** The Body section of form Task */
+		Body: DevKit.FormTask.Body;
+		/** The Header section of form Task */
+		Header: DevKit.FormTask.Header;
+	}
+	namespace FormTask_for_Interactive_experience {
+		interface Header extends DevKit.Controls.IHeader {
+			/** Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
+			OwnerId: DevKit.Controls.Lookup;
+			/** Select the priority so that preferred customers or critical issues are handled quickly. */
+			PriorityCode: DevKit.Controls.OptionSet;
+			/** Enter the expected due date and time. */
+			ScheduledEnd: DevKit.Controls.DateTime;
+			/** Shows whether the task is open, completed, or canceled. Completed and canceled tasks are read-only and can't be edited. */
+			StateCode: DevKit.Controls.OptionSet;
+		}
+		interface tab_tab_4_Sections {
+			/** Description */
+			tab_3_section_3: DevKit.Controls.Section;
+			/** DETAILS */
+			tab_4_section_2: DevKit.Controls.Section;
+			/** Regarding */
+			tab_4_section_4: DevKit.Controls.Section;
+		}
+		/** TASK */
+		interface tab_tab_4 extends DevKit.Controls.ITab {
+			Section: tab_tab_4_Sections;
+		}
+		interface Tabs {
+			/** TASK */
+			tab_4: tab_tab_4;
+		}
+		interface Body {
+			Tab: Tabs;
+			/** Type the number of minutes spent on the task. The duration is used in reporting. */
+			ActualDurationMinutes: DevKit.Controls.Integer;
+			/** Type additional information to describe the task. */
+			Description: DevKit.Controls.String;
+			/** Choose the record that the task relates to. */
+			RegardingObjectId: DevKit.Controls.Lookup;
+			/** Choose the record that the task relates to. */
+			RegardingObjectId1: DevKit.Controls.Lookup;
+			/** Type a short description about the objective or primary topic of the task. */
+			Subject: DevKit.Controls.String;
+		}
+	}
+	export class FormTask_for_Interactive_experience extends DevKit.IForm {
+		/**
+		* Task for Interactive experience [Main Form]
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** The Body section of form Task_for_Interactive_experience */
+		Body: DevKit.FormTask_for_Interactive_experience.Body;
+		/** The Header section of form Task_for_Interactive_experience */
+		Header: DevKit.FormTask_for_Interactive_experience.Header;
+	}
+	namespace FormTask_quick_create_form {
+		interface tab_createtask_Sections {
+			task: DevKit.Controls.Section;
+			task_2: DevKit.Controls.Section;
+			task_3: DevKit.Controls.Section;
+		}
+		/** Create Task */
+		interface tab_createtask extends DevKit.Controls.ITab {
+			Section: tab_createtask_Sections;
+		}
+		interface Tabs {
+			/** Create Task */
+			createtask: tab_createtask;
+		}
+		interface Body {
+			Tab: Tabs;
+			/** Type the number of minutes spent on the task. The duration is used in reporting. */
+			ActualDurationMinutes: DevKit.Controls.Integer;
+			/** Type additional information to describe the task. */
+			Description: DevKit.Controls.String;
+			/** Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
+			OwnerId: DevKit.Controls.Lookup;
+			/** Select the priority so that preferred customers or critical issues are handled quickly. */
+			PriorityCode: DevKit.Controls.OptionSet;
+			/** Choose the record that the task relates to. */
+			RegardingObjectId: DevKit.Controls.Lookup;
+			/** Enter the expected due date and time. */
+			ScheduledEnd: DevKit.Controls.DateTime;
+			/** Type a short description about the objective or primary topic of the task. */
+			Subject: DevKit.Controls.String;
+		}
+	}
+	export class FormTask_quick_create_form extends DevKit.IForm {
+		/**
+		* Task quick create form. [Quick Create]
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** The Body section of form Task_quick_create_form */
+		Body: DevKit.FormTask_quick_create_form.Body;
+	}
 	export class TaskApi {
 		/**
 		* DynamicsCrm.DevKit TaskApi
@@ -91,6 +238,28 @@ declare namespace DevKit {
 		PriorityCode: OptionSet.Task.PriorityCode | null;
 		/** Shows the ID of the process. */
 		ProcessId: string | null;
+		/** Choose the record that the task relates to. */
+		regardingobjectid_account_task: string | null;
+		/** Choose the record that the task relates to. */
+		regardingobjectid_adx_invitation_task: string | null;
+		/** Choose the record that the task relates to. */
+		regardingobjectid_contact_task: string | null;
+		/** Choose the record that the task relates to. */
+		regardingobjectid_knowledgearticle_task: string | null;
+		/** Choose the record that the task relates to. */
+		regardingobjectid_knowledgebaserecord_task: string | null;
+		/** Choose the record that the task relates to. */
+		regardingobjectid_mspp_adplacement_task: string | null;
+		/** Choose the record that the task relates to. */
+		regardingobjectid_mspp_pollplacement_task: string | null;
+		/** Choose the record that the task relates to. */
+		regardingobjectid_mspp_publishingstatetransitionrule_task: string | null;
+		/** Choose the record that the task relates to. */
+		regardingobjectid_mspp_redirect_task: string | null;
+		/** Choose the record that the task relates to. */
+		regardingobjectid_mspp_shortcut_task: string | null;
+		/** Choose the record that the task relates to. */
+		regardingobjectid_mspp_website_task: string | null;
 		/** Scheduled duration of the task, specified in minutes. */
 		readonly ScheduledDurationMinutes: number | null;
 		/** Enter the expected due date and time. */
@@ -190,6 +359,28 @@ declare namespace DevKit {
 			readonly PriorityCode: string;
 			/** Shows the ID of the process. */
 			readonly ProcessId: string;
+			/** Choose the record that the task relates to. */
+			readonly regardingobjectid_account_task: string;
+			/** Choose the record that the task relates to. */
+			readonly regardingobjectid_adx_invitation_task: string;
+			/** Choose the record that the task relates to. */
+			readonly regardingobjectid_contact_task: string;
+			/** Choose the record that the task relates to. */
+			readonly regardingobjectid_knowledgearticle_task: string;
+			/** Choose the record that the task relates to. */
+			readonly regardingobjectid_knowledgebaserecord_task: string;
+			/** Choose the record that the task relates to. */
+			readonly regardingobjectid_mspp_adplacement_task: string;
+			/** Choose the record that the task relates to. */
+			readonly regardingobjectid_mspp_pollplacement_task: string;
+			/** Choose the record that the task relates to. */
+			readonly regardingobjectid_mspp_publishingstatetransitionrule_task: string;
+			/** Choose the record that the task relates to. */
+			readonly regardingobjectid_mspp_redirect_task: string;
+			/** Choose the record that the task relates to. */
+			readonly regardingobjectid_mspp_shortcut_task: string;
+			/** Choose the record that the task relates to. */
+			readonly regardingobjectid_mspp_website_task: string;
 			/** Scheduled duration of the task, specified in minutes. */
 			readonly ScheduledDurationMinutes: string;
 			/** Enter the expected due date and time. */

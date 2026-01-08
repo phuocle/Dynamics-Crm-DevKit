@@ -37,11 +37,11 @@ namespace DynamicsCrm.DevKit.Lib
             replacements["$deploy.debug.only.bat$"] = await VsixHelper.ReadEmbeddedResourceAsync("plugin.deploy.debug.only.bat");
             replacements["$webresource.deploy.debug.bat$"] = await VsixHelper.ReadEmbeddedResourceAsync("webresource.deploy.debug.bat");
             replacements["$webresource.deploy.debug.ts.bat$"] = await VsixHelper.ReadEmbeddedResourceAsync("webresource.deploy.debug.ts_bat");
-            replacements["$devkit.d.ts$"] = await VsixHelper.ReadEmbeddedResourceAsync("devkit.d.ts");
-            replacements["$devkit.js$"] = await VsixHelper.ReadEmbeddedResourceAsync("devkit.js");
-            replacements["$devkit.ts$"] = await VsixHelper.ReadEmbeddedResourceAsync("devkit.ts");
-            replacements["$devkitts.d.ts$"] = await VsixHelper.ReadEmbeddedResourceAsync("devkitts.d.ts");
-            replacements["$build.js$"] = await VsixHelper.ReadEmbeddedResourceAsync("build.js");
+            replacements["$devkit.d.ts$"] = await VsixHelper.ReadEmbeddedResourceAsync("js.devkit.d.ts");
+            replacements["$devkit.js$"] = await VsixHelper.ReadEmbeddedResourceAsync("js.devkit.js");
+            replacements["$devkit.ts$"] = await VsixHelper.ReadEmbeddedResourceAsync("ts.devkit.ts");
+            replacements["$devkitts.d.ts$"] = await VsixHelper.ReadEmbeddedResourceAsync("ts.devkit.d.ts");
+            replacements["$build.js$"] = await VsixHelper.ReadEmbeddedResourceAsync("ts.build.js");
             replacements["$generator.form.bat$"] = await VsixHelper.ReadEmbeddedResourceAsync("generator.form.bat");
             replacements["$generator.form.ts.bat$"] = await VsixHelper.ReadEmbeddedResourceAsync("generator.form.ts_bat");
             replacements["$generator.webapi.bat$"] = await VsixHelper.ReadEmbeddedResourceAsync("generator.webapi.bat");

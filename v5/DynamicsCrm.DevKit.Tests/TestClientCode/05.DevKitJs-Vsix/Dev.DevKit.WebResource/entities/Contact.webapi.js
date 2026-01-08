@@ -299,6 +299,8 @@ var DevKit;
 			OwningUser: { b: 'owninguser', a: '_owninguser_value', c: 'systemusers', d: 'systemuser', r: true },
 			Pager: { a: 'pager' },
 			ParentContactId: { b: 'parentcontactid', a: '_parentcontactid_value', c: 'contacts', d: 'contact', r: true },
+			parentcustomerid_account: { b: 'parentcustomerid_account', a: '_parentcustomerid_value', c: 'accounts', d: 'account' },
+			parentcustomerid_contact: { b: 'parentcustomerid_contact', a: '_parentcustomerid_value', c: 'contacts', d: 'contact' },
 			ParticipatesInWorkflow: { a: 'participatesinworkflow', g: 'Boolean' },
 			PaymentTermsCode: { a: 'paymenttermscode', g: 'Integer' },
 			PreferredAppointmentDayCode: { a: 'preferredappointmentdaycode', g: 'Integer' },

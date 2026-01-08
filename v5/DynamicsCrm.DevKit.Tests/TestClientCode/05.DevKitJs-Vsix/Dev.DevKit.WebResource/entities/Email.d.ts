@@ -353,6 +353,14 @@ declare namespace DevKit {
 		EmailReminderText: string | null;
 		/** Shows the type of the email reminder. */
 		EmailReminderType: OptionSet.Email.EmailReminderType | null;
+		/** Shows the sender of the email. */
+		readonly emailsender_account: string | null;
+		/** Shows the sender of the email. */
+		readonly emailsender_contact: string | null;
+		/** Shows the sender of the email. */
+		readonly emailsender_queue: string | null;
+		/** Shows the sender of the email. */
+		readonly emailsender_systemuser: string | null;
 		/** Email Tracking Id. */
 		EmailTrackingId: string | null;
 		/** Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency. */
@@ -433,6 +441,30 @@ declare namespace DevKit {
 		ReadReceiptRequested: boolean | null;
 		/** The Mailbox that Received the Email. */
 		ReceivingMailboxId: string | null;
+		/** Choose the record that the email relates to. */
+		regardingobjectid_account_email: string | null;
+		/** Choose the record that the email relates to. */
+		regardingobjectid_adx_invitation_email: string | null;
+		/** Choose the record that the email relates to. */
+		regardingobjectid_asyncoperation: string | null;
+		/** Choose the record that the email relates to. */
+		regardingobjectid_contact_email: string | null;
+		/** Choose the record that the email relates to. */
+		regardingobjectid_knowledgearticle_email: string | null;
+		/** Choose the record that the email relates to. */
+		regardingobjectid_knowledgebaserecord_email: string | null;
+		/** Choose the record that the email relates to. */
+		regardingobjectid_mspp_adplacement_email: string | null;
+		/** Choose the record that the email relates to. */
+		regardingobjectid_mspp_pollplacement_email: string | null;
+		/** Choose the record that the email relates to. */
+		regardingobjectid_mspp_publishingstatetransitionrule_email: string | null;
+		/** Choose the record that the email relates to. */
+		regardingobjectid_mspp_redirect_email: string | null;
+		/** Choose the record that the email relates to. */
+		regardingobjectid_mspp_shortcut_email: string | null;
+		/** Choose the record that the email relates to. */
+		regardingobjectid_mspp_website_email: string | null;
 		/** Reminder Action Card Id. */
 		ReminderActionCardId: string | null;
 		/** Shows the number of replies received for an email. */
@@ -560,6 +592,14 @@ declare namespace DevKit {
 			readonly EmailReminderText: string;
 			/** Shows the type of the email reminder. */
 			readonly EmailReminderType: string;
+			/** Shows the sender of the email. */
+			readonly emailsender_account: string;
+			/** Shows the sender of the email. */
+			readonly emailsender_contact: string;
+			/** Shows the sender of the email. */
+			readonly emailsender_queue: string;
+			/** Shows the sender of the email. */
+			readonly emailsender_systemuser: string;
 			/** Email Tracking Id. */
 			readonly EmailTrackingId: string;
 			/** Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency. */
@@ -640,6 +680,30 @@ declare namespace DevKit {
 			readonly ReadReceiptRequested: string;
 			/** The Mailbox that Received the Email. */
 			readonly ReceivingMailboxId: string;
+			/** Choose the record that the email relates to. */
+			readonly regardingobjectid_account_email: string;
+			/** Choose the record that the email relates to. */
+			readonly regardingobjectid_adx_invitation_email: string;
+			/** Choose the record that the email relates to. */
+			readonly regardingobjectid_asyncoperation: string;
+			/** Choose the record that the email relates to. */
+			readonly regardingobjectid_contact_email: string;
+			/** Choose the record that the email relates to. */
+			readonly regardingobjectid_knowledgearticle_email: string;
+			/** Choose the record that the email relates to. */
+			readonly regardingobjectid_knowledgebaserecord_email: string;
+			/** Choose the record that the email relates to. */
+			readonly regardingobjectid_mspp_adplacement_email: string;
+			/** Choose the record that the email relates to. */
+			readonly regardingobjectid_mspp_pollplacement_email: string;
+			/** Choose the record that the email relates to. */
+			readonly regardingobjectid_mspp_publishingstatetransitionrule_email: string;
+			/** Choose the record that the email relates to. */
+			readonly regardingobjectid_mspp_redirect_email: string;
+			/** Choose the record that the email relates to. */
+			readonly regardingobjectid_mspp_shortcut_email: string;
+			/** Choose the record that the email relates to. */
+			readonly regardingobjectid_mspp_website_email: string;
 			/** Reminder Action Card Id. */
 			readonly ReminderActionCardId: string;
 			/** Shows the number of replies received for an email. */

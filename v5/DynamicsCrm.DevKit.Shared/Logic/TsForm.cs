@@ -4,6 +4,7 @@ using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk.Metadata;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -50,8 +51,65 @@ namespace DynamicsCrm.DevKit.Shared.Logic
         private static Dictionary<string, ProcessFields> AggregateProcessFields;
         private static Dictionary<string, TabInfo> AggregateTabInfos;
 
+        // O(1) attribute lookup cache - built once per entity
+        private static Dictionary<string, AttributeMetadata> AttributesByLogicalName;
+
+        /// <summary>
+        /// Cached context for a single form to avoid re-parsing XML multiple times
+        /// Parse XML once, reuse for all field extraction methods
+        /// </summary>
+        private class FormContext
+        {
+            public XDocument XDoc { get; }
+            public string FormXml { get; }
+            private Dictionary<string, string> _controlIdToRealClassId;
+
+            public FormContext(string formXml)
+            {
+                FormXml = formXml;
+                XDoc = XDocument.Parse(formXml);
+            }
+
+            /// <summary>
+            /// Gets the real ClassId for a control, with caching to avoid repeated queries
+            /// </summary>
+            public string GetRealClassId(string classId, string controlId)
+            {
+                if (string.IsNullOrEmpty(controlId)) return classId;
+
+                // Lazy build the lookup dictionary on first access
+                if (_controlIdToRealClassId == null)
+                {
+                    _controlIdToRealClassId = new Dictionary<string, string>();
+                    var controlDescriptions = XDoc.Descendants("controlDescriptions").Elements("controlDescription");
+                    foreach (var desc in controlDescriptions)
+                    {
+                        var forControl = desc.Attribute("forControl")?.Value;
+                        if (string.IsNullOrEmpty(forControl)) continue;
+
+                        var customControl = desc.Elements("customControl")
+                            .FirstOrDefault(x => x.Attribute("id")?.Value != null);
+                        if (customControl != null)
+                        {
+                            var id = customControl.Attribute("id")?.Value;
+                            if (Guid.TryParse(id, out var guid))
+                            {
+                                _controlIdToRealClassId[forControl] = guid.ToString().ToUpper();
+                            }
+                        }
+                    }
+                }
+
+                return _controlIdToRealClassId.TryGetValue(controlId, out var realClassId) ? realClassId : classId;
+            }
+        }
+
         public static async Task<string> GetTsFormCodeAsync(ServiceClient serviceClient, EntityMetadata entityMetadata, string rootNamespace, bool isJsWebApiExist)
         {
+#if DEBUG
+            var stopwatch = Stopwatch.StartNew();
+            Console.WriteLine($"[TsForm] START: {entityMetadata.LogicalName}");
+#endif
             FormNames = new List<string>();
             ServiceClient = serviceClient;
             EntityMetadata = entityMetadata;
@@ -73,6 +131,11 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             AggregateQuickFormFields = new Dictionary<string, QuickFormInfo>();
             AggregateProcessFields = new Dictionary<string, ProcessFields>();
             AggregateTabInfos = new Dictionary<string, TabInfo>();
+
+            // Build O(1) attribute lookup dictionary once per entity
+            AttributesByLogicalName = EntityMetadata.Attributes?
+                .Where(a => a.LogicalName != null)
+                .ToDictionary(a => a.LogicalName, a => a) ?? new Dictionary<string, AttributeMetadata>();
 
             // Reserve "Form" name for aggregate class - this will cause any user form named "Form" to be renamed
             FormNames.Add(AGGREGATE_FORM_NAME);
@@ -119,6 +182,11 @@ namespace DynamicsCrm.DevKit.Shared.Logic
 
             // Close entity namespace
             code.AppendLine("}");
+
+#if DEBUG
+            stopwatch.Stop();
+            Console.WriteLine($"[TsForm] END: {EntityMetadata.LogicalName} - {stopwatch.ElapsedMilliseconds}ms");
+#endif
 
             return code.ToString();
         }
@@ -829,8 +897,12 @@ namespace DynamicsCrm.DevKit.Shared.Logic
 
         private static List<TabInfo> GetTabInfos(string formXml)
         {
-            var xdoc = XDocument.Parse(formXml);
-            var tabs = from x in xdoc.Descendants("tabs").Elements("tab")
+            return GetTabInfos(new FormContext(formXml));
+        }
+
+        private static List<TabInfo> GetTabInfos(FormContext ctx)
+        {
+            var tabs = from x in ctx.XDoc.Descendants("tabs").Elements("tab")
                        let tabName = x.Attribute("name")?.Value
                        where !string.IsNullOrEmpty(tabName)
                        select new TabInfo
@@ -984,9 +1056,13 @@ namespace DynamicsCrm.DevKit.Shared.Logic
         /// </summary>
         private static string GetTabsInterfacesNested(string formXml)
         {
+            return GetTabsInterfacesNested(new FormContext(formXml));
+        }
+
+        private static string GetTabsInterfacesNested(FormContext ctx)
+        {
             var code = new StringBuilder();
-            var xdoc = XDocument.Parse(formXml);
-            var tabs = from x in xdoc.Descendants("tabs").Elements("tab")
+            var tabs = from x in ctx.XDoc.Descendants("tabs").Elements("tab")
                        select new
                        {
                            Name = x?.Attribute("name")?.Value,
@@ -1130,8 +1206,12 @@ namespace DynamicsCrm.DevKit.Shared.Logic
 
         private static List<FieldInfo> GetBodyFields(string formXml)
         {
-            var xdoc = XDocument.Parse(formXml);
-            var rawFields = (from x in xdoc.Descendants("tabs").Descendants("tab").Descendants("columns")
+            return GetBodyFields(new FormContext(formXml));
+        }
+
+        private static List<FieldInfo> GetBodyFields(FormContext ctx)
+        {
+            var rawFields = (from x in ctx.XDoc.Descendants("tabs").Descendants("tab").Descendants("columns")
                     .Descendants("column").Descendants("sections").Descendants("section").Descendants("rows")
                     .Descendants("row").Descendants("cell").Descendants("control")
                           select new FieldInfo
@@ -1151,14 +1231,13 @@ namespace DynamicsCrm.DevKit.Shared.Logic
 
             foreach (var field in rawFields)
             {
-                // Get the real ClassId (may be overridden by virtual control)
-                var classId = GetARealClassId(formXml, field.ClassId, field.ControlId);
+                // Get the real ClassId (may be overridden by virtual control) - uses cached lookup
+                var classId = ctx.GetRealClassId(field.ClassId, field.ControlId);
 
                 // Handle regular attribute controls
                 if (!string.IsNullOrEmpty(field.LogicalName) && ControlClassId.CONTROLS.Contains(classId))
                 {
-                    var crmAttribute = EntityMetadata?.Attributes?.FirstOrDefault(a => a.LogicalName == field.LogicalName);
-                    if (crmAttribute == null) continue;
+                    if (!AttributesByLogicalName.TryGetValue(field.LogicalName, out var crmAttribute)) continue;
 
                     var baseName = Helper.SafeIdentifier(crmAttribute.SchemaName);
                     string schemaName;
@@ -1215,8 +1294,12 @@ namespace DynamicsCrm.DevKit.Shared.Logic
 
         private static List<FieldInfo> GetHeaderFields(string formXml)
         {
-            var xdoc = XDocument.Parse(formXml);
-            var rawFields = (from x in xdoc.Descendants("header").Descendants("rows").Descendants("row")
+            return GetHeaderFields(new FormContext(formXml));
+        }
+
+        private static List<FieldInfo> GetHeaderFields(FormContext ctx)
+        {
+            var rawFields = (from x in ctx.XDoc.Descendants("header").Descendants("rows").Descendants("row")
                     .Descendants("cell").Descendants("control")
                           select new FieldInfo
                           {
@@ -1234,8 +1317,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
 
             foreach (var field in rawFields)
             {
-                var crmAttribute = EntityMetadata?.Attributes?.FirstOrDefault(a => a.LogicalName == field.LogicalName);
-                if (crmAttribute == null) continue;
+                if (!AttributesByLogicalName.TryGetValue(field.LogicalName, out var crmAttribute)) continue;
 
                 var baseName = Helper.SafeIdentifier(crmAttribute.SchemaName);
                 string schemaName;
@@ -1274,8 +1356,12 @@ namespace DynamicsCrm.DevKit.Shared.Logic
 
         private static List<GridInfo> GetGridFields(string formXml)
         {
-            var xdoc = XDocument.Parse(formXml);
-            var fields = (from x in xdoc.Descendants("tabs").Descendants("tab").Descendants("columns")
+            return GetGridFields(new FormContext(formXml));
+        }
+
+        private static List<GridInfo> GetGridFields(FormContext ctx)
+        {
+            var fields = (from x in ctx.XDoc.Descendants("tabs").Descendants("tab").Descendants("columns")
                     .Descendants("column").Descendants("sections").Descendants("section").Descendants("rows")
                     .Descendants("row").Descendants("cell")
                           select new
@@ -1298,7 +1384,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             var addedGrids = new List<string>();
             foreach (var field in fields.OrderBy(x => x.Id))
             {
-                var classId = GetARealClassId(formXml, field.ClassId, field.ControlId);
+                var classId = ctx.GetRealClassId(field.ClassId, field.ControlId);
                 if (classId != ControlClassId.SUB_GRID && classId != ControlClassId.SUB_GRID_PANEL) continue;
                 if (addedGrids.Contains(field.Id)) continue;
                 addedGrids.Add(field.Id);
@@ -1317,8 +1403,12 @@ namespace DynamicsCrm.DevKit.Shared.Logic
 
         private static List<NavigationInfo> GetNavigationFields(string formXml)
         {
-            var xdoc = XDocument.Parse(formXml);
-            var navItems = (from x in xdoc
+            return GetNavigationFields(new FormContext(formXml));
+        }
+
+        private static List<NavigationInfo> GetNavigationFields(FormContext ctx)
+        {
+            var navItems = (from x in ctx.XDoc
                             .Descendants("Navigation")
                             .Descendants("NavBar")
                             .Descendants("NavBarByRelationshipItem")

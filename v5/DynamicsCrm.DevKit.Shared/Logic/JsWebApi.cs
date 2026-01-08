@@ -31,7 +31,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code += $"(function ({@namespace}) {{{NEW_LINE}";
             code += $"{TAB}{@namespace}.{entityMetadata.SchemaName}Api = function (e) {{{NEW_LINE}";
             code += $"{TAB}{TAB}const f = '@OData.Community.Display.V1.FormattedValue';{NEW_LINE}";
-            code += $"{await Helper.ReadEmbeddedResourceAsync($"{typeof(JsWebApi).Assembly.GetName().Name}.Resources.WebApi.js")}";
+            code += $"{await Helper.ReadEmbeddedResourceAsync($"{typeof(JsWebApi).Assembly.GetName().Name}.Resources.js.WebApi.js")}";
             code += $"{TAB}{TAB}const _{logicalName} = {{{NEW_LINE}";
             code += $"{await GeneratorCodeAsync()}";
             code += $"{TAB}{TAB}}};{NEW_LINE}";

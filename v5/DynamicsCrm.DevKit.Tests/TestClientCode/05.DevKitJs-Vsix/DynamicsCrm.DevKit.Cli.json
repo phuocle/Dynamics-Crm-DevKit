@@ -90,14 +90,14 @@
       "type": "JsForm",
       "rootnamespace": "DevKit",
       "rootfolder": "",
-      "entities": "*"
+      "entities": "Account,Contact,SystemUser,Team,Task,ActivityParty,Email"
     },
     {
       "profile": "JS-WEBAPI",
       "type": "JsWebApi",
       "rootnamespace": "DevKit",
       "rootfolder": "",
-      "entities": "*"
+      "entities": "Account,Contact,SystemUser,Team,Task,ActivityParty,Email"
     }
   ],
   "downloadwebresources": [

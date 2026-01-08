@@ -1,6 +1,128 @@
 ﻿//@ts-check
 ///<reference path="devkit.d.ts" />
 declare namespace DevKit {
+	namespace FormTeam {
+		interface Header extends DevKit.Controls.IHeader {
+			/** Unique identifier of the default queue for the team. */
+			QueueId: DevKit.Controls.Lookup;
+		}
+		interface tab_general_Sections {
+			/** DESCRIPTION */
+			Description: DevKit.Controls.Section;
+			/** GENERAL */
+			General: DevKit.Controls.Section;
+			/** TEAM MEMBERS */
+			TeamMembers: DevKit.Controls.Section;
+		}
+		/** General */
+		interface tab_general extends DevKit.Controls.ITab {
+			Section: tab_general_Sections;
+		}
+		interface Tabs {
+			/** General */
+			general: tab_general;
+		}
+		interface Body {
+			Tab: Tabs;
+			/** Unique identifier of the user primary responsible for the team. */
+			AdministratorId: DevKit.Controls.Lookup;
+			/** The object Id for a group. */
+			AzureActiveDirectoryObjectId: DevKit.Controls.String;
+			/** Unique identifier of the business unit with which the team is associated. */
+			BusinessUnitId: DevKit.Controls.Lookup;
+			/** Description of the team. */
+			Description: DevKit.Controls.String;
+			/** Membership Type */
+			MembershipType: DevKit.Controls.OptionSet;
+			/** Name of the team. */
+			Name: DevKit.Controls.String;
+			/** Select the team type. */
+			TeamType: DevKit.Controls.OptionSet;
+		}
+		interface Grid {
+			/** MEMBERS */
+			Members: DevKit.Controls.Grid;
+		}
+	}
+	export class FormTeam extends DevKit.IForm {
+		/**
+		* Team [Main Form]
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** The Body section of form Team */
+		Body: DevKit.FormTeam.Body;
+		/** The Header section of form Team */
+		Header: DevKit.FormTeam.Header;
+		/** The Grid of form Team */
+		Grid: DevKit.FormTeam.Grid;
+	}
+	namespace FormTeam_form_Business {
+		interface tab_general_Sections {
+			/** DESCRIPTION */
+			Description: DevKit.Controls.Section;
+			/** GENERAL */
+			General: DevKit.Controls.Section;
+			/** TEAM MEMBERS */
+			TeamMembers: DevKit.Controls.Section;
+		}
+		/** General */
+		interface tab_general extends DevKit.Controls.ITab {
+			Section: tab_general_Sections;
+		}
+		interface Tabs {
+			/** General */
+			general: tab_general;
+		}
+		interface Body {
+			Tab: Tabs;
+			/** Unique identifier of the user primary responsible for the team. */
+			AdministratorId: DevKit.Controls.Lookup;
+			/** Unique identifier of the business unit with which the team is associated. */
+			BusinessUnitId: DevKit.Controls.Lookup;
+			/** Description of the team. */
+			Description: DevKit.Controls.String;
+			/** Name of the team. */
+			Name: DevKit.Controls.String;
+			/** Select the team type. */
+			TeamType: DevKit.Controls.OptionSet;
+		}
+		interface Navigation {
+			/** Background Processes */
+			navAsyncOperations: DevKit.Controls.NavigationItem;
+			/** Audit History */
+			navAudit: DevKit.Controls.NavigationItem;
+			/** Connections */
+			navConnections: DevKit.Controls.NavigationItem;
+			/** Field Security Profiles */
+			navFieldSecurityProfiles: DevKit.Controls.NavigationItem;
+			/** Members */
+			navMembers: DevKit.Controls.NavigationItem;
+			/** Process Sessions */
+			navProcessSessions: DevKit.Controls.NavigationItem;
+			/** Security Roles */
+			navRoles: DevKit.Controls.NavigationItem;
+		}
+		interface Grid {
+			/** MEMBERS */
+			Members: DevKit.Controls.Grid;
+		}
+	}
+	export class FormTeam_form_Business extends DevKit.IForm {
+		/**
+		* Team form – Business [Main Form]
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** The Body section of form Team_form_Business */
+		Body: DevKit.FormTeam_form_Business.Body;
+		/** The Navigation of form Team_form_Business */
+		Navigation: DevKit.FormTeam_form_Business.Navigation;
+		/** The Grid of form Team_form_Business */
+		Grid: DevKit.FormTeam_form_Business.Grid;
+	}
 	export class TeamApi {
 		/**
 		* DynamicsCrm.DevKit TeamApi

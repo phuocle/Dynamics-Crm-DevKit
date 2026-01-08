@@ -70,7 +70,7 @@
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\generator.webapi.ts_bat" />
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\generator.form.ts_bat" />
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\generator.latebound.bat" />
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\WebApi.js" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\js\WebApi.js" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\plugin.deploy.debug.bat" />
