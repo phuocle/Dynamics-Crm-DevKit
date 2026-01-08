@@ -13,7 +13,6 @@ declare namespace DevKit {
 			Name: DevKit.Controls.String;
 			/** For ItemType Privilege: Name of the privilege */
 			PrivilegeName: DevKit.Controls.String;
-			taborder: DevKit.Controls.ELSE3???;//taborder - 5546E6CD-394C-4BEE-94A8-4425E17EF6C6 -- FOR DEBUG 
 		}
 	}
 	export class FormRoleEditorLayout_Information extends DevKit.IForm {

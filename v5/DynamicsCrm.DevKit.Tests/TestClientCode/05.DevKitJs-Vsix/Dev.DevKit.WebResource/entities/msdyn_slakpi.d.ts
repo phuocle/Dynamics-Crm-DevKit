@@ -29,8 +29,6 @@ declare namespace DevKit {
 			msdyn_pauseconfigurationxml: DevKit.Controls.ActionCards;
 			/** Owner Id */
 			OwnerId: DevKit.Controls.Lookup;
-			: DevKit.Controls.ELSE3???;//WebResource_preview - 6DC0B71D-E1F9-4118-8347-1CF35C38954D -- FOR DEBUG 
-			WebResource_preview: DevKit.Controls.WebResource;
 		}
 	}
 	export class Formmsdyn_slakpi_Information extends DevKit.IForm {
@@ -64,7 +62,6 @@ declare namespace DevKit {
 		}
 		interface Body {
 			Tab: Tabs;
-			msdyn_advancedpauseconfiguration: DevKit.Controls.ELSE3???;//msdyn_advancedpauseconfiguration - 67FAC785-CD58-4F9F-ABB3-4B7DDC6ED5EE -- FOR DEBUG 
 			/** Applicable From */
 			msdyn_ApplicableFromField: DevKit.Controls.String;
 			/** Entity */
@@ -73,11 +70,8 @@ declare namespace DevKit {
 			msdyn_KPIField: DevKit.Controls.String;
 			/** The name of the custom entity. */
 			msdyn_name: DevKit.Controls.String;
-			msdyn_pauseconfigurationxml: DevKit.Controls.ELSE3???;//msdyn_pauseconfigurationxml - F9A8A302-114E-466A-B582-6771B2AE0D93 -- FOR DEBUG 
 			/** Owner Id */
 			OwnerId: DevKit.Controls.Lookup;
-			: DevKit.Controls.ELSE3???;//WebResource_preview - 6E4367D6-894A-42A1-BD75-BAE93B2F823D -- FOR DEBUG 
-			: DevKit.Controls.ELSE3???;//WebResource_preview - 9FDF5F91-88B1-47F4-AD53-C11EFC01A01E -- FOR DEBUG 
 		}
 	}
 	export class Formmsdyn_slakpi_New_Form extends DevKit.IForm {

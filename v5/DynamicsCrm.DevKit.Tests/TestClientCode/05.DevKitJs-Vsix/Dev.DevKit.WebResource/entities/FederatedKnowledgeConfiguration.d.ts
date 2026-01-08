@@ -16,7 +16,7 @@ declare namespace DevKit {
 		}
 		interface Body {
 			Tab: Tabs;
-			name: DevKit.Controls.ELSE3???;//name - EBD0FB03-2DB0-40CF-BC9E-02587CF9B9EF -- FOR DEBUG 
+
 		}
 	}
 	export class FormFederatedKnowledgeConfiguration_main_form extends DevKit.IForm {

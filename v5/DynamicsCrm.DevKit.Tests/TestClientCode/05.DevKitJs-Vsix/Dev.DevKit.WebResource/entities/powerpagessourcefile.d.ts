@@ -5,14 +5,8 @@ declare namespace DevKit {
 		interface Tabs {
 		}
 		interface Body {
-			codetype: DevKit.Controls.ELSE3???;//codetype - 20CEBFB2-5C6B-4F2E-B3B9-9AD58D925692 -- FOR DEBUG 
-			content: DevKit.Controls.ELSE3???;//content - A26018FC-E0D6-4B80-AD31-B389A1411A8B -- FOR DEBUG 
 			/** File Content column contains portal web files e.g. png, css etc. */
 			filecontent: DevKit.Controls.File;
-			name: DevKit.Controls.ELSE3???;//name - 5DAAA372-6B8F-4BE7-BE14-48D5067B8F35 -- FOR DEBUG 
-			ownerid: DevKit.Controls.ELSE3???;//ownerid - 6AC03F21-B39A-468C-8F20-24F1930D7BFB -- FOR DEBUG 
-			powerpagesiteid: DevKit.Controls.ELSE3???;//powerpagesiteid - 6AC03F21-B39A-468C-8F20-24F1930D7BFB -- FOR DEBUG 
-			statecode: DevKit.Controls.ELSE3???;//statecode - 20CEBFB2-5C6B-4F2E-B3B9-9AD58D925692 -- FOR DEBUG 
 		}
 	}
 	export class Formpowerpagessourcefile_Information extends DevKit.IForm {

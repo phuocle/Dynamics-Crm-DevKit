@@ -73,6 +73,19 @@
         public const string UNKNOWN_16 = "3DE87A16-47A2-48C6-8939-EE111C83B9AD";
         public const string UNKNOWN_17 = "83ACFF84-DCE0-4E32-9DB9-99624A721DD0";
         public const string UNKNOWN_18 = "75ECD29C-0FBA-4C4B-83AE-5888A0437640";
+        public const string UNKNOWN_19 = "3273EDBD-AC1D-40D3-9FB2-095C621B552D"; // Similar to SINGLE_LINE_OF_TEXT but different
+        public const string UNKNOWN_20 = "EBD0FB03-2DB0-40CF-BC9E-02587CF9B9EF"; // FederatedKnowledgeConfiguration name
+        public const string UNKNOWN_21 = "5546E6CD-394C-4BEE-94A8-4425E17EF6C6"; // RoleEditorLayout taborder
+        public const string UNKNOWN_22 = "67FAC785-CD58-4F9F-ABB3-4B7DDC6ED5EE"; // Similar to TWO_OPTIONS but different last char
+        public const string UNKNOWN_23 = "6DC0B71D-E1F9-4118-8347-1CF35C38954D"; // WebResource_preview
+        public const string UNKNOWN_24 = "F9A8A302-114E-466A-B582-6771B2AE0D93"; // Similar to ACTION_CARDS but different last char
+        public const string UNKNOWN_25 = "6E4367D6-894A-42A1-BD75-BAE93B2F823D"; // msdyn_slakpi WebResource
+        public const string UNKNOWN_26 = "9FDF5F91-88B1-47F4-AD53-C11EFC01A01E"; // Similar to WEB_RESOURCE but different last char
+        public const string UNKNOWN_27 = "23EEF732-9268-4A22-B91E-DFA9358A65EE"; // PowerPagesScanReport filecontent
+        public const string UNKNOWN_28 = "20CEBFB2-5C6B-4F2E-B3B9-9AD58D925692"; // powerpagessourcefile codetype/statecode
+        public const string UNKNOWN_29 = "A26018FC-E0D6-4B80-AD31-B389A1411A8B"; // powerpagessourcefile content
+        public const string UNKNOWN_30 = "5DAAA372-6B8F-4BE7-BE14-48D5067B8F35"; // powerpagessourcefile name
+        public const string UNKNOWN_31 = "6AC03F21-B39A-468C-8F20-24F1930D7BFB"; // powerpagessourcefile ownerid/powerpagesiteid
 
         public const string CASERESEARCH_LINKCONTROL = "DFDF1CDE-837B-4AC9-98CF-AC74361FD89D";
         public const string KBVIEWER = "A62B6FA9-169E-406C-B1AA-EAB828CB6026";
@@ -183,7 +196,20 @@
             WEBRESOURCE_POSTCONVERSATIONSURVEYDISCLAIMER2,
             WEBRESOURCE_POSTCONVERSATIONSURVEYDISCLAIMER3,
             WEBRESOURCE_WECHATCALLBACKURL,
-            MSDYN_SOURCEENTITYNAME
+            MSDYN_SOURCEENTITYNAME,
+            UNKNOWN_19,
+            UNKNOWN_20,
+            UNKNOWN_21,
+            UNKNOWN_22,
+            UNKNOWN_23,
+            UNKNOWN_24,
+            UNKNOWN_25,
+            UNKNOWN_26,
+            UNKNOWN_27,
+            UNKNOWN_28,
+            UNKNOWN_29,
+            UNKNOWN_30,
+            UNKNOWN_31
         };
     }
 }

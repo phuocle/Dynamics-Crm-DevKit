@@ -1216,7 +1216,20 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                              item.ClassId == ControlClassId.WEBRESOURCE_POSTCONVERSATIONSURVEYDISCLAIMER2 ||
                              item.ClassId == ControlClassId.WEBRESOURCE_POSTCONVERSATIONSURVEYDISCLAIMER3 ||
                              item.ClassId == ControlClassId.WEBRESOURCE_WECHATCALLBACKURL ||
-                             item.ClassId == ControlClassId.MSDYN_SOURCEENTITYNAME
+                             item.ClassId == ControlClassId.MSDYN_SOURCEENTITYNAME ||
+                             item.ClassId == ControlClassId.UNKNOWN_19 ||
+                             item.ClassId == ControlClassId.UNKNOWN_20 ||
+                             item.ClassId == ControlClassId.UNKNOWN_21 ||
+                             item.ClassId == ControlClassId.UNKNOWN_22 ||
+                             item.ClassId == ControlClassId.UNKNOWN_23 ||
+                             item.ClassId == ControlClassId.UNKNOWN_24 ||
+                             item.ClassId == ControlClassId.UNKNOWN_25 ||
+                             item.ClassId == ControlClassId.UNKNOWN_26 ||
+                             item.ClassId == ControlClassId.UNKNOWN_27 ||
+                             item.ClassId == ControlClassId.UNKNOWN_28 ||
+                             item.ClassId == ControlClassId.UNKNOWN_29 ||
+                             item.ClassId == ControlClassId.UNKNOWN_30 ||
+                             item.ClassId == ControlClassId.UNKNOWN_31
                              )
                         continue;
                     else
@@ -1227,7 +1240,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                 else
                 {
                     if (item.Name != null)
-                        _d_ts += $"{TAB}{TAB}{TAB}{item.Name}: DevKit.Controls.ELSE3???;//{item.Id} - {item.ClassId} -- FOR DEBUG {NEW_LINE}";
+                        _d_ts += $"{TAB}{TAB}{TAB}{item.Name}: any;//{item.Id} - {item.ClassId} -- FOR DEBUG {NEW_LINE}";
                 }
                 code += _d_ts;
             }

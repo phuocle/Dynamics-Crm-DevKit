@@ -5,7 +5,6 @@ declare namespace DevKit {
 		interface Tabs {
 		}
 		interface Body {
-			filecontent: DevKit.Controls.ELSE3???;//filecontent - 23EEF732-9268-4A22-B91E-DFA9358A65EE -- FOR DEBUG 
 			/** Name */
 			Name: DevKit.Controls.String;
 			/** Owner Id */

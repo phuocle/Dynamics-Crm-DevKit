@@ -5,10 +5,7 @@ declare namespace DevKit {
 		interface Tabs {
 		}
 		interface Body {
-			columnlogicalname: DevKit.Controls.ELSE3???;//columnlogicalname - 3273EDBD-AC1D-40D3-9FB2-095C621B552D -- FOR DEBUG 
-			description: DevKit.Controls.ELSE3???;//description - 3273EDBD-AC1D-40D3-9FB2-095C621B552D -- FOR DEBUG 
-			skillentity: DevKit.Controls.ELSE3???;//skillentity - 3273EDBD-AC1D-40D3-9FB2-095C621B552D -- FOR DEBUG 
-			synonyms: DevKit.Controls.ELSE3???;//synonyms - 3273EDBD-AC1D-40D3-9FB2-095C621B552D -- FOR DEBUG 
+
 		}
 	}
 	export class FormCopilotSynonyms_main_form extends DevKit.IForm {
